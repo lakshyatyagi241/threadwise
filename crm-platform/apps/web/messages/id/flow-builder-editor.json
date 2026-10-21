@@ -2102,8 +2102,8 @@
           "description": "Tambah atau hapus tag"
         },
         "assign": {
-          "label": "Tugaskan agen",
-          "description": "Alihkan ke manusia"
+          "label": "Serah terima ke manusia",
+          "description": "Serahkan chat ke seseorang atau antrean"
         },
         "subflow": {
           "label": "Jalankan sub-alur",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Tugaskan ke agen",
-          "help": "Serahkan percakapan ke tim atau agen"
+          "label": "Serah terima ke manusia",
+          "help": "Serahkan percakapan ke seseorang, tim, atau aturan penugasan"
         },
         "message": {
           "label": "Pesan",
@@ -2563,7 +2563,7 @@
         "location": "Lokasi",
         "template": "Templat",
         "cta": "Tombol tautan",
-        "assign": "Tugaskan ke agen",
+        "assign": "Serah terima ke manusia",
         "carousel": "Carousel",
         "condition": "Kondisi",
         "faq": "Jawab dari FAQ",

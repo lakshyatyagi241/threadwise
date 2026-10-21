@@ -13,6 +13,7 @@ export const nav: NavItem[] = [
     href: '/crm',
     order: 0,
     icon: 'crm',
-    gates: { permission: 'record.deals.read', planFeature: 'sales_pipeline' },
+    // its own key so the Waboo migration can deny it (a migrated workspace keeps deals but never had this dashboard)
+    gates: { permission: 'dash.crm.read', planFeature: 'sales_pipeline' },
   },
 ];

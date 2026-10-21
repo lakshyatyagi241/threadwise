@@ -29,3 +29,4 @@ export {
   type CacheMetrics,
   type CacheSink,
 } from './cache-metrics';
+export { createDbSaturationMetrics, type PoolLike } from './db-saturation';

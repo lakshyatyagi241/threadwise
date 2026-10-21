@@ -1,9 +1,12 @@
 'use client';
 
 import { Button, Field, Input, Select, Spinner, Switch, Textarea, cn, useToast } from '@crm/ui';
+import { TimezoneCombobox } from '@/features/auth-registration-security/shared/timezone-combobox';
 import { useTranslations } from 'next-intl';
 import { useId, useMemo, useState, type FormEvent } from 'react';
 import {
+  BUSINESS_HOURS_DAY_KEYS,
+  WSP_ASSIGNMENT_STRATEGIES,
   WSP_TEAM_MAX_DEPTH,
   WSP_TEAM_NAME_MAX,
   type WspMember,
@@ -14,8 +17,10 @@ import { wspApi } from '../api/service';
 import { errorKind } from '../lib/errors';
 import { PRESENCE_DOT } from '../lib/roles';
 import {
+  defaultHours,
   emptyTeamForm,
   formFromTeam,
+  hoursProblem,
   memberChanges,
   nameProblem,
   sameColor,
@@ -69,6 +74,7 @@ export function TeamEditorForm({
 
   const [form, setForm] = useState<TeamForm>(team ? formFromTeam(team) : emptyTeamForm());
   const [nameError, setNameError] = useState<string | undefined>();
+  const [hoursError, setHoursError] = useState(false);
   const [busy, setBusy] = useState(false);
   const devicesShown = showsDevicePicker(devices);
   const patch = (p: Partial<TeamForm>) => setForm((f) => ({ ...f, ...p }));
@@ -102,6 +108,11 @@ export function TeamEditorForm({
       document.getElementById(`${ids}-name`)?.focus();
       return;
     }
+    if (hoursProblem(form.hours)) {
+      setHoursError(true);
+      document.getElementById(`${ids}-hours`)?.focus();
+      return;
+    }
     setBusy(true);
     try {
       const saved = team
@@ -128,6 +139,18 @@ export function TeamEditorForm({
   }
 
   const notUsed = unusedLines(team, tt);
+  const assigneeChoices = people.filter((m) => form.memberIds.includes(m.id));
+  const switchHours = (on: boolean) => {
+    setHoursError(false);
+    patch(
+      on
+        ? {
+            hours: defaultHours(),
+            timezone: form.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+          }
+        : { hours: null },
+    );
+  };
 
   return (
     <form onSubmit={(e) => void submit(e)} noValidate className="space-y-3">
@@ -384,7 +407,108 @@ export function TeamEditorForm({
         </fieldset>
       )}
 
-      {team && (
+      <fieldset
+        className="space-y-3 rounded-md border border-border p-3"
+        data-testid="team-handoff"
+      >
+        <legend className="px-1 text-sm font-medium">{t('handoff.title')}</legend>
+        <p className="text-xs text-muted-foreground">{t('handoff.hint')}</p>
+        <Field label={t('handoff.method')} htmlFor={`${ids}-method`} hint={t('handoff.methodHint')}>
+          <Select
+            id={`${ids}-method`}
+            value={form.assignmentStrategy}
+            onChange={(e) =>
+              patch({ assignmentStrategy: e.target.value as TeamForm['assignmentStrategy'] })
+            }
+          >
+            {WSP_ASSIGNMENT_STRATEGIES.map((s) => (
+              <option key={s} value={s}>
+                {tt(`strategies.${s}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field
+          label={t('handoff.defaultAssignee')}
+          htmlFor={`${ids}-default-assignee`}
+          hint={t('handoff.defaultAssigneeHint')}
+        >
+          <Select
+            id={`${ids}-default-assignee`}
+            value={form.defaultAssigneeId ?? ''}
+            onChange={(e) => patch({ defaultAssigneeId: e.target.value || null })}
+          >
+            <option value="">{t('handoff.noDefaultAssignee')}</option>
+            {assigneeChoices.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.fullName}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-sm font-medium">{t('handoff.hours')}</p>
+            <p className="text-xs text-muted-foreground">{t('handoff.hoursHint')}</p>
+          </div>
+          <Switch
+            checked={form.hours !== null}
+            onCheckedChange={switchHours}
+            label={t('handoff.hours')}
+          />
+        </div>
+        {form.hours && (
+          <div className="space-y-2" id={`${ids}-hours`} tabIndex={-1}>
+            <Field label={t('handoff.timezone')} htmlFor={`${ids}-timezone`}>
+              <TimezoneCombobox
+                id={`${ids}-timezone`}
+                value={form.timezone}
+                onChange={(zone) => patch({ timezone: zone })}
+              />
+            </Field>
+            {BUSINESS_HOURS_DAY_KEYS.map((k) => {
+              const day = form.hours![k];
+              const setDay = (p: Partial<typeof day>) => {
+                setHoursError(false);
+                patch({ hours: { ...form.hours!, [k]: { ...day, ...p } } });
+              };
+              return (
+                <div key={k} className="grid grid-cols-[6rem_1fr_1fr] items-center gap-2 text-sm">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={day.enabled}
+                      onChange={(e) => setDay({ enabled: e.target.checked })}
+                    />
+                    {t(`handoff.day.${k}`)}
+                  </label>
+                  <Input
+                    type="time"
+                    value={day.from}
+                    disabled={!day.enabled}
+                    aria-label={t('handoff.dayFrom', { day: t(`handoff.day.${k}`) })}
+                    onChange={(e) => setDay({ from: e.target.value })}
+                  />
+                  <Input
+                    type="time"
+                    value={day.to}
+                    disabled={!day.enabled}
+                    aria-label={t('handoff.dayTo', { day: t(`handoff.day.${k}`) })}
+                    onChange={(e) => setDay({ to: e.target.value })}
+                  />
+                </div>
+              );
+            })}
+            {hoursError && (
+              <p role="alert" className="text-xs text-danger">
+                {t('handoff.hoursProblem')}
+              </p>
+            )}
+          </div>
+        )}
+      </fieldset>
+
+      {notUsed.length > 0 && (
         <section
           className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground"
           data-testid="team-not-used"
@@ -424,24 +548,14 @@ export function TeamEditorForm({
 }
 
 /**
- * What the team stores that routing, hours and assignment do not read yet, as lines of text: always the strategy, and the rest only
- * when something is saved. Honest on purpose: a setting that does nothing is shown as such, never hidden.
+ * What the team stores that nothing reads yet: the devices it is limited to. (The method, hours, time zone and default assignee are
+ * read when a conversation is handed to the team, BL-396, and are edited above.) Honest on purpose: a setting that does nothing is
+ * shown as such, never hidden.
  */
 export function unusedLines(
   team: WspTeam | null,
   tt: (key: string, values?: Record<string, string | number>) => string,
 ): string[] {
-  if (!team) return [];
-  const lines = [tt('notUsed.strategy', { value: tt(`strategies.${team.assignmentStrategy}`) })];
-  if (team.deviceIds.length > 0)
-    lines.push(tt('notUsed.devices', { count: team.deviceIds.length }));
-  if (team.unusedSettings.businessHours) lines.push(tt('notUsed.businessHours'));
-  if (team.unusedSettings.timezone)
-    lines.push(tt('notUsed.timezone', { value: team.unusedSettings.timezone }));
-  if (team.unusedSettings.defaultAssignee) {
-    lines.push(
-      tt('notUsed.defaultAssignee', { name: team.unusedSettings.defaultAssignee.fullName }),
-    );
-  }
-  return lines;
+  if (!team || team.deviceIds.length === 0) return [];
+  return [tt('notUsed.devices', { count: team.deviceIds.length })];
 }

@@ -21,13 +21,11 @@
       "names": {
         "email": "E-mail",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Ligação de lembrete"
       },
       "about": {
         "email": "De uma caixa compartilhada do seu espaço. Nunca de uma caixa pessoal.",
         "whatsapp": "Texto livre dentro da janela de 24 horas; fora dela, apenas um modelo aprovado.",
-        "sms": "Texto simples do seu remetente de SMS conectado.",
         "voice": "Uma ligação automática que lembra o contato."
       },
       "status": {

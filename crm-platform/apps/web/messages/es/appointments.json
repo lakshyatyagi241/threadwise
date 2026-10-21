@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "antes de que empiece la cita",
-        "after": "después de que termine la cita"
+        "after": "después de que termine la cita",
+        "event": "cuando ocurre algo"
       },
       "editMessage": "Mensaje y canales",
       "hideMessage": "Ocultar",
@@ -1317,7 +1318,6 @@
       "channelsHint": "Se usa el primer canal que pueda entregar el mensaje y los siguientes son alternativas. Nadie recibe el mismo recordatorio dos veces.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "Correo electrónico"
       },
       "moveUp": "Probar {channel} antes",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "El mensaje es demasiado largo.",
         "subjectTooLong": "El asunto es demasiado largo.",
         "labelTooLong": "La etiqueta es demasiado larga.",
-        "tooMany": "Como máximo 8 recordatorios y seguimientos por tipo de reserva."
+        "tooMany": "Como máximo {max} recordatorios y seguimientos con hora por tipo de reserva.",
+        "fallbackInvalid": "Introduce un número entero de minutos de {min} a {maxMinutes}, o déjalo vacío."
       },
       "noneOn": "No hay recordatorios ni seguimientos activados para este tipo de reserva.",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "El proveedor lo rechazó.",
         "interrupted": "Se interrumpió y no se reintentó.",
         "internal_error": "Algo salió mal."
-      }
+      },
+      "steps": {
+        "confirmation": "Confirmación de la reserva",
+        "no_show": "Mensaje por inasistencia"
+      },
+      "notice": {
+        "smsRemoved": "Se eliminaron los recordatorios por SMS. Este paso se pasó a correo electrónico (o se desactivó); elige WhatsApp o correo electrónico."
+      },
+      "buttonsTitle": "Añadir los botones Confirmar, Reprogramar y Cancelar (WhatsApp)",
+      "skipIfConfirmed": "Omitir si el cliente ya confirmó",
+      "fallbackTitle": "Si no se entrega, probar el siguiente canal después de (minutos)",
+      "fallbackHint": "Déjalo vacío para desactivarlo. De {min} a {maxMinutes} minutos."
     }
   }
 }

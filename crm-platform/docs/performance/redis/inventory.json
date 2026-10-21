@@ -2,18 +2,18 @@
   "generatedBy": "node tools/redis-audit/inventory.mjs",
   "generatedFrom": "apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)",
   "totals": {
-    "sourceFilesUsingRedis": 112,
-    "commandCallSites": 372,
-    "keyFamilies": 149,
-    "familiesInFilesWhereEveryWriteHasATtl": 131,
-    "familiesInFilesToReview": 1,
+    "sourceFilesUsingRedis": 113,
+    "commandCallSites": 378,
+    "keyFamilies": 151,
+    "familiesInFilesWhereEveryWriteHasATtl": 134,
+    "familiesInFilesToReview": 0,
     "familiesInReadOnlyFiles": 12,
-    "orgScopedFamilies": 70,
+    "orgScopedFamilies": 71,
     "queues": 52,
-    "luaScripts": 13,
-    "clientConstructionSites": 5,
+    "luaScripts": 14,
+    "clientConstructionSites": 6,
     "redisCallsInsideLoops": 16,
-    "pipelineOrMultiUses": 28
+    "pipelineOrMultiUses": 30
   },
   "clients": [
     {
@@ -21,6 +21,12 @@
       "line": 30,
       "kind": "new",
       "options": "config.get('REDIS_URL', { infer: true }), { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
+    },
+    {
+      "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
+      "line": 24,
+      "kind": "new",
+      "options": "redisUrl, { lazyConnect: true, maxRetriesPerRequest: 1, connectTimeout: 2_000, commandTimeout: 2_000, retryStrategy: () => null, }"
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
@@ -1211,7 +1217,7 @@
         "apps/api/src/modules/auth/support/redis-keys.ts"
       ],
       "scope": "global",
-      "ttlStatus": "review"
+      "ttlStatus": "ttl"
     },
     {
       "template": "auth:footer-v:*",
@@ -1228,6 +1234,22 @@
       ],
       "scope": "global",
       "ttlStatus": "read-only"
+    },
+    {
+      "template": "auth:gate-gen:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:gate-gen:all",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
     },
     {
       "template": "auth:gate:*",
@@ -1881,7 +1903,8 @@
     {
       "template": "rbac:version:*",
       "files": [
-        "apps/api/src/kernel/rbac/rbac.service.ts"
+        "apps/api/src/kernel/rbac/rbac.service.ts",
+        "apps/api/src/kernel/rbac/roles-version-offline.ts"
       ],
       "scope": "org",
       "ttlStatus": "ttl"
@@ -2551,6 +2574,14 @@
       "ttlStatus": "ttl"
     },
     {
+      "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
+      "commands": [
+        "del"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
       "file": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts",
       "commands": [
         "del",
@@ -2697,12 +2728,12 @@
       ],
       "writes": [
         {
-          "line": 260,
+          "line": 262,
           "cmd": "setex",
           "ttl": "EX Ttl.workspaceChoiceSeconds"
         },
         {
-          "line": 403,
+          "line": 405,
           "cmd": "setex",
           "ttl": "EX Ttl.mfaChallengeSeconds"
         }
@@ -2907,16 +2938,34 @@
       "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
       "commands": [
         "del",
+        "eval",
+        "expire",
         "get",
+        "incr",
+        "mget",
         "scan",
-        "setex",
         "unlink"
       ],
       "writes": [
         {
-          "line": 92,
-          "cmd": "setex",
-          "ttl": "EX Ttl.gateSeconds"
+          "line": 136,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 137,
+          "cmd": "expire",
+          "ttl": "EXPIRE GENERATION_TTL_SECONDS"
+        },
+        {
+          "line": 151,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 152,
+          "cmd": "expire",
+          "ttl": "EXPIRE GENERATION_TTL_SECONDS"
         }
       ],
       "ttlStatus": "ttl"
@@ -3035,17 +3084,17 @@
       ],
       "writes": [
         {
-          "line": 56,
+          "line": 66,
           "cmd": "set",
-          "ttl": null
+          "ttl": "EX EPOCH_MIRROR_TTL_SECONDS"
         },
         {
-          "line": 67,
+          "line": 90,
           "cmd": "set",
-          "ttl": null
+          "ttl": "EX EPOCH_MIRROR_TTL_SECONDS"
         }
       ],
-      "ttlStatus": "review"
+      "ttlStatus": "ttl"
     },
     {
       "file": "apps/api/src/modules/auth/sessions/partner-agent-status.service.ts",
@@ -3845,12 +3894,12 @@
       ],
       "writes": [
         {
-          "line": 61,
+          "line": 66,
           "cmd": "zadd",
           "ttl": null
         },
         {
-          "line": 69,
+          "line": 75,
           "cmd": "set",
           "ttl": "PX window * 2"
         }
@@ -3915,17 +3964,13 @@
       "file": "apps/api/src/modules/roles-permissions/platform-rbac.service.ts",
       "commands": [
         "del",
+        "eval",
         "get",
         "setex"
       ],
       "writes": [
         {
-          "line": 58,
-          "cmd": "setex",
-          "ttl": "EX CACHE_TTL_SECONDS"
-        },
-        {
-          "line": 120,
+          "line": 59,
           "cmd": "setex",
           "ttl": "EX CACHE_TTL_SECONDS"
         }
@@ -4355,6 +4400,16 @@
       "setsTtl": true
     },
     {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+      "name": "SET_UNLESS_INVALIDATED_LUA",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": true,
+      "setsTtl": true
+    },
+    {
       "file": "apps/api/src/modules/auth/security/send-policy.service.ts",
       "name": "COUNT_UNLESS_AT_CAP",
       "commands": [
@@ -4413,7 +4468,7 @@
     "SCAN": [
       {
         "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
-        "line": 110,
+        "line": 156,
         "cmd": "scan",
         "args": "cursor, 'MATCH', 'auth:gate:*', 'COUNT', 500"
       },
@@ -4524,6 +4579,14 @@
     },
     {
       "file": "apps/api/src/modules/auth/flows/signup.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
       "kind": "multi"
     },
     {

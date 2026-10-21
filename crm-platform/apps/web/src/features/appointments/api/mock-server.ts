@@ -129,7 +129,7 @@ const emptyType = (
         label: '24h',
         isActive: true,
         kind: 'before',
-        channels: ['whatsapp', 'sms', 'email'],
+        channels: ['whatsapp', 'email'],
         subject: null,
         body: null,
         waTemplateId: null,

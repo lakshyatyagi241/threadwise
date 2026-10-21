@@ -85,7 +85,7 @@ dev seed for new ones; a running environment sees the keys when the 10-minute gr
       "offsetMinutes": 1440,
       "label": "24h",
       "isActive": true,
-      "channels": ["whatsapp", "sms", "email"],
+      "channels": ["whatsapp", "email"],
       "subject": null,
       "body": null,
       "waTemplateId": null
@@ -153,8 +153,9 @@ Template variables: `{{type}} {{slot}} {{name}} {{date}} {{time}} {{location}} {
 **Reminder rules** (`reminders`, BL-283). One item per rule; `kind` is `before` (`offsetMinutes` before the start) or `after` (`offsetMinutes`
 after the END: the after-visit follow-up); `offsetMinutes` is 1 to 43,200 (30 days) and `(kind, offsetMinutes)` is distinct within a type (the
 same minutes before and after are two rules); up to 8 per type. `isActive` defaults to **false**: a rule never sends until it is switched on.
-`channels` is an ordered preference over `whatsapp | sms | email` (1 to 3, no repeats; default all three): the first channel that can deliver is
-used, the others are fallbacks, a contact never gets two copies. `body` (up to 2000 characters) is the text with the placeholders `{{name}}`,
+`channels` is an ordered preference over `whatsapp | email` (1 or 2, no repeats; default `whatsapp, email`; SMS was removed from appointment messages and is
+refused with 422): the first channel that can deliver is used, the others are fallbacks, a contact never gets two copies. A rule is also a **step of a
+sequence**: see [appointment-reminder-sequences.md](appointment-reminder-sequences.md) for `stepKind`, the event steps, buttons and fallback records. `body` (up to 2000 characters) is the text with the placeholders `{{name}}`,
 `{{type}}`, `{{title}}`, `{{slot}}`, `{{date}}`, `{{time}}`, `{{location}}`, `{{join_link}}` and `{{manage_link}}`; empty means the type's own `reminder`
 message (before) or the built-in follow-up text (after). `subject` (up to 191) is the email subject. `waTemplateId` is an approved WhatsApp
 template of the workspace (422 when it is not); its numbered variables are filled in the order name, service, date, time, place, join link,
@@ -407,7 +408,7 @@ Every appointment event also carries `uuid`, `status`, `startsAt`, `endsAt`, `ti
   through the messenger and records the outcome (`sent` with the channel, `held` with when to look again, `skipped` or `failed` with a reason code)
   on the run, in the audit log (`appointment_reminder_runs`), on the contact's timeline (`appointment_reminder` activity; the outcome and reason,
   never the text or an address) and as `appointment.reminder_<outcome>`. A run found `sending` more than ten minutes after it was taken (a worker
-  died mid-delivery) is closed `failed / interrupted` and not retried: a duplicate SMS or email is worse than a missed one.
+  died mid-delivery) is closed `failed / interrupted` and not retried: a duplicate email is worse than a missed one.
 - **Lifecycle sweep**, every 60 s: expires reservations; flags confirmed bookings that ended 15+ minutes ago with no check-in as
   `needsReview` (it never guesses a no-show); completes checked-in ones; cancels unpaid pending bookings whose hold ran out
   (`cancelledBy: system`, reason `payment_timeout`); declines pending requests whose time has passed (reason `expired`). Changes go through
@@ -717,8 +718,8 @@ Override the token in a module (`{ provide: APPOINTMENT_MESSENGER, useClass: ...
   a template with a media header, a variable in its header or a link button, or named variables is `template_unavailable`). **Free text** goes
   only inside the 24 hour window on the Cloud API, anywhere on a QR number; otherwise WhatsApp is skipped as `template_required` and the rule
   falls to its next channel. The idempotency key becomes the message's `clientMessageId`, so a retry is the first message.
-- **SMS** and **email** through `EngineSenderRegistry` (the engines the broadcast screens use), from the primary connected SMS number and the
-  oldest connected **shared** mailbox (never a personal mailbox). No key at the engines, so the caller never retries an interrupted delivery.
+- **Email** through `EngineSenderRegistry` (the engine the broadcast screens use), from the oldest connected **shared** mailbox (never a personal
+  mailbox). SMS is not a channel of appointment messages (BL-420). No key at the engines, so the caller never retries an interrupted delivery.
 - **Before delivering**, in order: the address exists (`no_contact_point`); for a reminder or follow-up the **quiet hours** (`SendWindowService`,
   kind `message`): a hold becomes `held` with the instant they end, never a refusal, except a reminder they would push to within five minutes of
   the start or past it, which is skipped (`quiet_hours_too_late`); then the **ConsentGate** (`service_messaging` for a booking notice and a
@@ -751,17 +752,17 @@ types choose from. All routes are under `/v2`, behind the plan's `appointment_bo
 
 | Route | Key | What |
 | ----- | --- | ---- |
-| `GET /appointment-channels` | `record.booking-types.read` | `email`, `whatsapp`, `sms` and the reserved `voice`: `enabled`, `decided`, `source` (`owner` / `legacy_default` / null), `connection` (`connected` / `not_connected` / `coming_soon`), `usable` (enabled and connected), the connected `senders` and the chosen `defaultSenderId` |
+| `GET /appointment-channels` | `record.booking-types.read` | `email`, `whatsapp` and the reserved `voice`: `enabled`, `decided`, `source` (`owner` / `legacy_default` / null), `connection` (`connected` / `not_connected` / `coming_soon`), `usable` (enabled and connected), the connected `senders` and the chosen `defaultSenderId` |
 | `PUT /appointment-channels/:channel` | `appointments.channels.manage` | `{ enabled, defaultSenderId? }`; a default must be a connected sender of that channel (`422 APPT_CHANNEL_SENDER_INVALID`); `null` = the first connected one. `voice` answers `422 APPT_CHANNEL_COMING_SOON` (the database also refuses `enabled` for it). Audited (`appointment_channel_settings`). |
 
-Defaults: a workspace that existed when `20270120090000_appt_channels_templates.sql` ran has email, WhatsApp and SMS on with `source = legacy_default`
+Defaults: a workspace that existed when `20270120090000_appt_channels_templates.sql` ran had email, WhatsApp and SMS on with `source = legacy_default` (SMS was switched off by `20270320090000_appt_reminders_sms_removed.sql`)
 (what is not connected stays unusable), so nothing silently stops. A workspace created later has no rows: nothing is on until the owner chooses.
 
 **Enforcement.** A booking type may name only enabled channels: a lifecycle message row or an ACTIVE reminder rule that adds a channel that is off is
 `422 APPT_CHANNEL_NOT_ENABLED` (a channel the type already had is not asked again, so a type keeps saving after the owner switches one off). At send
 time the shared sender (`ChannelAppointmentMessenger`) asks again, before anything else: a channel that is off is skipped with the reason
 `channel_disabled` and the rule falls to its next channel. Quiet hours, the ConsentGate and the WhatsApp template rule are unchanged. The default
-sender is preferred when it is still connected (SMS number, shared mailbox, Cloud API number), else the first connected one.
+sender is preferred when it is still connected (shared mailbox, Cloud API number), else the first connected one.
 
 **Library** (`appointment_message_templates`: kind `confirmation | reminder | reschedule | cancellation | follow_up`, channel `email | whatsapp`,
 language, name, subject, body with `{{placeholders}}`, variables, link to the WhatsApp template, `predefined_key`, `is_active`):

@@ -2102,8 +2102,8 @@
           "description": "Dodaj lub usuń tag"
         },
         "assign": {
-          "label": "Przypisz konsultanta",
-          "description": "Przekaż człowiekowi"
+          "label": "Przekazanie człowiekowi",
+          "description": "Przekaż czat osobie lub kolejce"
         },
         "subflow": {
           "label": "Uruchom podprzepływ",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Przypisz do konsultanta",
-          "help": "Przekaż rozmowę zespołowi lub konsultantowi"
+          "label": "Przekazanie człowiekowi",
+          "help": "Przekaż rozmowę osobie, zespołowi lub regułom przypisywania"
         },
         "message": {
           "label": "Wiadomość",
@@ -2563,7 +2563,7 @@
         "location": "Lokalizacja",
         "template": "Szablon",
         "cta": "Przycisk z linkiem",
-        "assign": "Przypisz do konsultanta",
+        "assign": "Przekazanie człowiekowi",
         "carousel": "Karuzela",
         "condition": "Warunek",
         "faq": "Odpowiedz z FAQ",

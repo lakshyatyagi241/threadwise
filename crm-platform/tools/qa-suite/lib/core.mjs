@@ -128,6 +128,9 @@ export async function http(method, path, { body, headers = {}, token, timeout = 
     const r = await fetch(env.api + path, {
       method,
       signal: AbortSignal.timeout(timeout),
+      // a redirect is an answer, not a request to follow: the suite only talks to localhost, and a redirect to a service that is not running
+      // (the web app) used to look like a request that got no response at all
+      redirect: 'manual',
       headers: {
         ...(body ? { 'content-type': 'application/json' } : {}),
         ...(token ? { authorization: `Bearer ${token}` } : {}),

@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Brak w Twoim planie",
+      "upgradeHint": "Twój plan tego nie obejmuje. Poproś właściciela konta o zmianę planu na wyższy.",
+      "owner": {
+        "prompt": "Pytaj o właściciela kontaktu przy zmianie przypisania",
+        "promptHint": "Gdy czat jest ręcznie przekazany komuś innemu, zaproponuj ustawienie tej osoby także jako właściciela kontaktu.",
+        "window": "Zachowaj powracający kontakt przy ostatnim agencie",
+        "windowHint": "Kontakt, który pisze ponownie, trafia przez tyle dni do osoby, która obsługiwała jego ostatnią rozmowę. Wyłączone oznacza brak limitu.",
+        "windowDays": "Liczba dni",
+        "days": "dni"
+      },
+      "queue": {
+        "notify": "Powiadom zespół, gdy rozmowa czeka",
+        "notifyHint": "Członkowie zespołu lub wszyscy, którzy mogą odpowiadać na nieprzypisane czaty, dostają powiadomienie z powodem."
+      },
+      "teams": {
+        "body": "Każdy zespół ma własną metodę przypisywania, godziny otwarcia, strefę czasową i domyślnego odbiorcę. Są używane, gdy rozmowa jest przekazywana temu zespołowi.",
+        "link": "Otwórz Zespoły"
+      }
+    }
+  }
+}

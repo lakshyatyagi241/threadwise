@@ -776,8 +776,9 @@ export class ContactsRepository {
     return required.map((r) => ({
       key: r.key,
       label: r.label,
+      // A cascade link names no option and no value, so it is no condition: the property shows whatever its parent holds.
       conditions: deps
-        .filter((d) => d.fieldId === r.id)
+        .filter((d) => d.fieldId === r.id && (d.value !== null || d.optionValue !== null))
         .map((d) => ({ parentKey: d.parentKey, wanted: d.value ?? d.optionValue ?? null })),
     }));
   }

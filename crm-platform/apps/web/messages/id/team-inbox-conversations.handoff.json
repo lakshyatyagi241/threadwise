@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Menunggu"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Tidak ada yang menunggu orang",
+          "message": "Saat bot, alur, atau rekan tim meminta seseorang, percakapan menunggu di sini sampai ada yang mengambilnya."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Bot sedang menjawab",
+        "waiting": "Menunggu orang",
+        "with_person": "Bersama orang"
+      },
+      "ageMinutes": "{count}mnt",
+      "ageHours": "{count}j",
+      "ageDays": "{count}h",
+      "row": {
+        "waiting": "Menunggu",
+        "waitingFor": "Menunggu {age}",
+        "inTeam": "Di antrean {team}"
+      },
+      "assignedTo": "sekarang bersama {name}",
+      "inTeamQueue": "antrean {team}",
+      "cardFailed": "Detail serah terima tidak dapat dimuat.",
+      "claim": {
+        "button": "Ambil",
+        "done": "Anda mengambil percakapan ini.",
+        "doneOwner": "Anda mengambil percakapan ini dan sekarang menjadi pemilik kontak.",
+        "failed": "Percakapan tidak dapat diambil.",
+        "taken": "Orang lain mengambil percakapan ini lebih dulu."
+      },
+      "giveBack": {
+        "button": "Kembalikan ke bot",
+        "done": "Bot kembali menjawab percakapan ini.",
+        "failed": "Percakapan tidak dapat dikembalikan ke bot."
+      },
+      "send": {
+        "button": "Kirim ke antrean",
+        "buttonAgain": "Kirim ke antrean lagi",
+        "title": "Kirim ke seseorang",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "submit": "Kirim",
+        "intro": "Bot berhenti menjawab kontak ini. Percakapan dikirim ke orang atau tim yang Anda pilih, atau menunggu di antrean sampai ada yang mengambilnya.",
+        "where": "Kirim ke",
+        "whereRules": "Aturan penugasan, jika tidak ada maka antrean tunggu",
+        "whereQueueOnly": "Antrean tunggu (aturan penugasan tidak ada di paket Anda)",
+        "whereTeam": "Sebuah tim",
+        "wherePerson": "Satu orang",
+        "team": "Tim",
+        "pickTeam": "Pilih tim",
+        "person": "Orang",
+        "pickPerson": "Pilih orang",
+        "reason": "Mengapa perlu orang",
+        "note": "Catatan untuk yang mengambil",
+        "noteHint": "Ditampilkan di kartu serah terima. Maksimal 500 karakter.",
+        "refused": "Percakapan ini tidak dapat diserahkan (diarsipkan, spam, atau kotak surat pribadi).",
+        "failed": "Percakapan tidak dapat dikirim.",
+        "done": {
+          "assigned": "Terkirim: sekarang sudah ada yang menangani.",
+          "waiting": "Terkirim: menunggu di antrean.",
+          "unavailable": "Dikirim ke antrean: saat ini tidak ada yang tersedia."
+        }
+      },
+      "details": {
+        "show": "Detail",
+        "hide": "Sembunyikan detail"
+      },
+      "card": {
+        "source": "Diminta oleh",
+        "reason": "Alasan",
+        "priority": "Prioritas",
+        "summary": "Ringkasan",
+        "answers": "Yang disampaikan kontak kepada bot",
+        "trace": "Cara penugasan"
+      },
+      "source": {
+        "flow": "Sebuah alur",
+        "ai_agent": "Agen AI",
+        "keyword": "Permintaan kontak sendiri",
+        "bot_failure": "Bot yang tidak dapat membantu",
+        "manual": "Seorang rekan tim"
+      },
+      "reason": {
+        "customer_asked": "Kontak meminta bicara dengan orang",
+        "bot_could_not_help": "Bot tidak dapat membantu",
+        "sensitive_topic": "Topik sensitif",
+        "sales_lead": "Prospek penjualan",
+        "complaint": "Keluhan",
+        "other": "Lainnya"
+      },
+      "priority": {
+        "low": "Rendah",
+        "normal": "Normal",
+        "high": "Tinggi",
+        "urgent": "Mendesak"
+      },
+      "trace": {
+        "chosen": "Dipilih",
+        "skipped": "Dilewati",
+        "info": "Catatan"
+      }
+    }
+  }
+}

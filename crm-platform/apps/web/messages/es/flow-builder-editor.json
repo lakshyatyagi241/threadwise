@@ -2102,8 +2102,8 @@
           "description": "Añade o quita una etiqueta"
         },
         "assign": {
-          "label": "Asignar agente",
-          "description": "Pasa la conversación a una persona"
+          "label": "Traspaso a una persona",
+          "description": "Pasa el chat a una persona o a una cola"
         },
         "subflow": {
           "label": "Ejecutar subflujo",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Asignar a un agente",
-          "help": "Pasa la conversación a un equipo o a un agente"
+          "label": "Traspaso a una persona",
+          "help": "Pasa la conversación a una persona, un equipo o las reglas de asignación"
         },
         "message": {
           "label": "Mensaje",
@@ -2563,7 +2563,7 @@
         "location": "Ubicación",
         "template": "Plantilla",
         "cta": "Botón de enlace",
-        "assign": "Asignar a un agente",
+        "assign": "Traspaso a una persona",
         "carousel": "Carrusel",
         "condition": "Condición",
         "faq": "Responder con FAQ",

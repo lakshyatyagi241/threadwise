@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Transferência e atribuição",
+        "hint": "Usado quando um bot, um fluxo ou um colega transfere uma conversa para esta equipe.",
+        "method": "Como escolher uma pessoa",
+        "methodHint": "Manual: a conversa aguarda na fila da equipe até que alguém a assuma. Rodízio e Menor carga escolhem um membro para você e exigem um plano com regras de atribuição.",
+        "defaultAssignee": "Responsável padrão",
+        "defaultAssigneeHint": "Assume a conversa quando ninguém mais pode. Escolha um dos membros da equipe.",
+        "noDefaultAssignee": "Ninguém em particular",
+        "hours": "Horário de atendimento",
+        "hoursHint": "Desativado significa sempre aberto. Fora desse horário, a conversa continua aguardando na fila e o contato recebe a mensagem de fora do horário do fluxo.",
+        "timezone": "Fuso horário",
+        "dayFrom": "{day}, abre",
+        "dayTo": "{day}, fecha",
+        "hoursProblem": "Cada dia aberto precisa de um horário de abertura e um de fechamento diferentes.",
+        "day": {
+          "mon": "Segunda-feira",
+          "tue": "Terça-feira",
+          "wed": "Quarta-feira",
+          "thu": "Quinta-feira",
+          "fri": "Sexta-feira",
+          "sat": "Sábado",
+          "sun": "Domingo"
+        }
+      }
+    }
+  }
+}

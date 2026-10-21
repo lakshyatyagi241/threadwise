@@ -2102,8 +2102,8 @@
           "description": "Tag hinzufügen oder entfernen"
         },
         "assign": {
-          "label": "Agenten zuweisen",
-          "description": "An einen Menschen übergeben"
+          "label": "Übergabe an Mitarbeiter",
+          "description": "Chat an eine Person oder eine Warteschlange übergeben"
         },
         "subflow": {
           "label": "Unter-Flow ausführen",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Einem Agenten zuweisen",
-          "help": "Die Unterhaltung an ein Team oder einen Agenten übergeben"
+          "label": "Übergabe an Mitarbeiter",
+          "help": "Die Unterhaltung an eine Person, ein Team oder die Zuweisungsregeln übergeben"
         },
         "message": {
           "label": "Nachricht",
@@ -2563,7 +2563,7 @@
         "location": "Standort",
         "template": "Vorlage",
         "cta": "Link-Schaltfläche",
-        "assign": "Einem Agenten zuweisen",
+        "assign": "Übergabe an Mitarbeiter",
         "carousel": "Karussell",
         "condition": "Bedingung",
         "faq": "Antwort aus FAQ",

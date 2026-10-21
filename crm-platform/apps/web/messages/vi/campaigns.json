@@ -34,7 +34,10 @@
         "all": "Mọi lúc",
         "7d": "7 ngày",
         "30d": "30 ngày",
-        "90d": "90 ngày"
+        "90d": "90 ngày",
+        "custom": "Khoảng tùy chỉnh",
+        "from": "Từ ngày",
+        "to": "Đến ngày"
       },
       "search": "Tìm chiến dịch",
       "selectPage": "Chọn trang này",
@@ -1873,8 +1876,7 @@
         "list": "Danh sách",
         "blocks": "Khối"
       },
-      "showing": "Đang hiển thị {count} chiến dịch",
-      "legacy": "Chiến dịch gửi cũ ({count})"
+      "showing": "Đang hiển thị {count} chiến dịch"
     },
     "senderEmpty": {
       "loading": "Đang tải các số của bạn…",

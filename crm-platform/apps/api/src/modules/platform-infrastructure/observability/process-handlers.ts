@@ -1,3 +1,4 @@
+import { scrubError } from '../../../common/logging/http-logger';
 import { flushSentry, reportServerError, type ServiceName } from './sentry';
 
 let installed = false;
@@ -7,11 +8,11 @@ function fatal(service: ServiceName, kind: string, err: unknown): void {
   const e = err instanceof Error ? err : new Error(String(err));
   process.stderr.write(
     `${JSON.stringify({
-      level: 60,
-      time: Date.now(),
+      level: 'fatal',
+      time: new Date().toISOString(),
       service,
       msg: `${kind}: process is exiting`,
-      err: { type: e.name, message: e.message, stack: e.stack },
+      err: scrubError(e),
     })}\n`,
   );
 }

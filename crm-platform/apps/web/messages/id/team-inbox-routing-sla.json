@@ -19,25 +19,12 @@
     "page": {
       "back": "Otomatisasi dan AI",
       "title": "Penugasan otomatis percakapan",
-      "subtitle": "Berikan setiap percakapan baru ke agen yang tepat secara otomatis. Aturan dicoba berurutan, dari atas.",
       "noAccess": "Anda tidak memiliki izin untuk melihat pengaturan penugasan otomatis.",
-      "create": "Buat aturan",
       "limitUsed": "{used} dari {limit} aturan digunakan",
       "limitReached": "Anda telah menggunakan semua {limit} aturan yang diizinkan paket Anda.",
-      "keepTitle": "Pertahankan kontak yang kembali dengan agennya",
-      "keepBody": "Saat kontak yang sudah memiliki agen menulis lagi, percakapan baru diarahkan ke agen tersebut terlebih dahulu: pemilik kontak, atau siapa pun yang menangani percakapan terakhirnya, selama masih menjadi agen aktif. Jika tidak, aturan di bawah yang menentukan.",
-      "settingsFailed": "Pengaturan tidak dapat disimpan.",
-      "rulesTitle": "Aturan",
-      "searchPlaceholder": "Cari aturan",
-      "searchLabel": "Cari aturan berdasarkan nama",
-      "howItWorks": "Aturan pertama yang cocok dan menemukan agen yang tersedia akan mendapatkan percakapan. Aturan cadangan dipakai saat tidak ada aturan lain yang cocok. Jika tidak ada yang cocok, percakapan tetap belum ditugaskan.",
       "loading": "Memuat aturan",
       "loadFailed": "Aturan tidak dapat dimuat.",
       "retry": "Coba lagi",
-      "noMatchTitle": "Aturan tidak ditemukan",
-      "noMatch": "Tidak ada aturan bernama seperti “{q}”.",
-      "emptyTitle": "Belum ada aturan",
-      "empty": "Buat aturan untuk memberikan percakapan baru kepada agen Anda secara bergiliran, berdasarkan kata kunci, channel, bahasa, atau detail kontak.",
       "list": "Aturan penugasan otomatis berdasarkan prioritas",
       "loadMore": "Muat lainnya",
       "toggleFailed": "Aturan tidak dapat diubah.",
@@ -51,16 +38,14 @@
       "deleted": "Aturan dihapus.",
       "deleteFailed": "Aturan tidak dapat dihapus.",
       "businessHours": "Jam kerja",
-      "recordNote": "Ini menugaskan percakapan. Untuk memberikan {contacts}, perusahaan, dan {deals} baru ke pemilik penjualan, lihat <link>Aturan penugasan data</link>."
+      "recordNote": "Ini menugaskan percakapan. Untuk memberikan {contacts}, perusahaan, dan {deals} baru ke pemilik penjualan, lihat <link>Aturan penugasan data</link>.",
+      "subtitle": "Pilih siapa yang mendapat setiap chat baru. Sakelar sudah cukup untuk sebagian besar ruang kerja; tambahkan aturan hanya jika Anda butuh kontrol lebih."
     },
     "rules": {
       "someone": "seorang agen",
       "moveUp": "Pindahkan {name} ke atas",
       "moveDown": "Pindahkan {name} ke bawah",
       "priority": "Prioritas",
-      "active": "Aktif",
-      "off": "Nonaktif",
-      "fallback": "Cadangan",
       "continues": "Terus memeriksa",
       "unavailable": "{count, plural, other {# agen tidak tersedia}}",
       "activeFor": "Aturan “{name}” aktif",
@@ -74,7 +59,9 @@
         "languages": "Bahasa: {list}",
         "inside": "Dalam jam kerja",
         "outside": "Di luar jam kerja",
-        "always": "Setiap percakapan yang tidak cocok dengan aturan lain"
+        "always": "Setiap percakapan baru",
+        "contactNew": "Kontak baru",
+        "contactReturning": "Kontak kembali"
       },
       "strategy": {
         "round_robin": "Bergiliran",
@@ -122,7 +109,6 @@
         "name": "Masukkan nama untuk aturan ini.",
         "nameLong": "Nama terlalu panjang.",
         "descriptionLong": "Deskripsi terlalu panjang.",
-        "conditions": "Tambahkan minimal satu kondisi, atau tandai aturan ini sebagai cadangan.",
         "contactIncomplete": "Selesaikan atau hapus kondisi kontak yang belum lengkap.",
         "keywordsMany": "Gunakan paling banyak 20 kata.",
         "targets": "Pilih minimal satu agen atau tim.",
@@ -133,20 +119,17 @@
         "escalationAction": "Tugaskan ulang, atur prioritas, atau keduanya.",
         "escalationAgents": "Tugaskan ulang perlu agen di aturan ini: pilih di atas.",
         "autoReplyEmpty": "Tulis balasannya, atau hapus centang opsinya.",
-        "autoReplyLong": "Balasan terlalu panjang (maksimal 1024 karakter)."
+        "autoReplyLong": "Balasan terlalu panjang (maksimal 1024 karakter).",
+        "conditions": "Tambahkan setidaknya satu kondisi, atau nonaktifkan “Hanya untuk percakapan yang cocok dengan”."
       },
       "whenTitle": "Saat percakapan baru masuk",
-      "whenHint": "Setiap kondisi yang Anda atur harus cocok. Kosongkan bagian untuk mengabaikannya.",
       "contact": {
-        "title": "Kontak cocok dengan",
-        "hint": "Tag, pemilik, tahap siklus hidup, dan detail kontak lainnya, seperti pada Segmen.",
         "loading": "Memuat kolom kontak",
         "partial": "Sebagian daftar kontak tidak dapat dimuat, sehingga sebagian pilihan mungkin tidak tersedia.",
         "summary": "Kondisi",
         "none": "Tidak ada kondisi kontak."
       },
       "channel": {
-        "title": "Channel",
         "hint": "Hanya percakapan yang masuk melalui channel ini. Jika tidak ada yang dipilih, berlaku untuk channel mana pun."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Jam kerja",
         "hint": "Menggunakan jam kerja workspace Anda.",
-        "any": "Kapan saja",
         "inside": "Hanya dalam jam kerja",
         "outside": "Hanya di luar jam kerja"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Opsi",
       "stopOnMatch": "Berhenti saat aturan ini cocok",
       "stopOnMatchHint": "Aktif: aturan berikutnya tidak diperiksa. Nonaktif: aturan berikutnya yang cocok dapat mengambil alih percakapan.",
-      "fallback": "Aturan cadangan",
-      "fallbackHint": "Dipakai saat tidak ada aturan lain yang cocok. Hanya ada satu aturan cadangan; memilih yang ini akan menggantikan yang sebelumnya.",
       "cancel": "Batal",
       "save": "Simpan",
       "saveActivate": "Simpan dan aktifkan",
@@ -219,7 +199,8 @@
       "escalatePriority": "Lalu atur prioritas",
       "autoReply": "Kirim balasan otomatis",
       "autoReplyBody": "Teks balasan",
-      "autoReplyHint": "Dikirim kepada pelanggan atas nama bisnis. Di luar jendela 24 jam, balasan bebas tidak dikirim."
+      "autoReplyHint": "Dikirim kepada pelanggan atas nama bisnis. Di luar jendela 24 jam, balasan bebas tidak dikirim.",
+      "whenHint": "Setiap kondisi yang Anda tambahkan harus cocok."
     },
     "sla": {
       "back": "Kembali ke Pengaturan",

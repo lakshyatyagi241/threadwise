@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "atandı",
+        "waitingInQueue": "kuyrukta bekliyor",
+        "noAgentOutOfHours": "temsilci yok / mesai dışı"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "{stage}. adım: konuşmanın gideceği kişiyi seçin."
+      }
+    },
+    "simulator": {
+      "handoff": "bir kişiye devredildi (hedef: {destination}, ekip \"{team}\"); test sohbeti \"atandı\" çıkışını izler"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Devredilecek yer",
+          "handoffRules": "Atama kuralları",
+          "pickAgent": "— bir kişi seçin —"
+        }
+      },
+      "handoff": {
+        "legacy": "Bu adım eski “Temsilci ata” adımıdır.",
+        "upgradeHint": "Sohbeti bir ekibe verir ve devam eder. Neden, öncelik, kişiye mesajlar ve üç çıkış (atandı, kuyrukta bekliyor, temsilci yok veya mesai dışı) eklemek için İnsana devir adımına geçin. Önceden yaptığınız bağlantılar çalışmaya devam eder.",
+        "upgrade": "Devir özelliklerini kullan",
+        "destination": "Konuşmanın gönderileceği yer",
+        "dest": {
+          "team": "Bir ekip",
+          "person": "Bir kişi",
+          "rules": "Atama kuralları",
+          "rulesLocked": "Atama kuralları (planınızda yok)"
+        },
+        "destHint": {
+          "team": "Ekipteki birine gider veya ekibin kuyruğunda bekler.",
+          "person": "Üstlenebiliyorsa bu kişiye gider; aksi halde kuyrukta bekler.",
+          "rules": "Konuşma otomatik atama kurallarınızı kullanır; hiçbiri kimseyi bulamazsa kuyrukta bekler."
+        },
+        "lockHint": "Planınızda atama kuralları yok, bu yüzden buraya gönderilen konuşma, bir ekip arkadaşı üstlenene kadar Bekleme kuyruğunda bekler.",
+        "team": "Ekip",
+        "teamPick": "— bir ekip seçin —",
+        "teamNone": "Henüz ekip yok",
+        "teamOption": "{name} · {count, plural, one {# temsilci} other {# temsilci}}",
+        "teamHint": "<link>Ekipleri yönet →</link>",
+        "person": "Kişi",
+        "personPick": "— bir kişi seçin —",
+        "personHint": "Ekiplerinizden biri.",
+        "unknownMember": "{value} (bu çalışma alanında değil)",
+        "reason": "Neden",
+        "reasons": {
+          "customer_asked": "Kişi bir insan istedi",
+          "bot_could_not_help": "Bot yardımcı olamadı",
+          "sensitive_topic": "Hassas konu",
+          "sales_lead": "Satış adayı",
+          "complaint": "Şikâyet",
+          "other": "Diğer"
+        },
+        "priority": "Öncelik",
+        "priorityKeep": "Mevcut önceliği koru",
+        "priorities": {
+          "low": "Düşük",
+          "normal": "Normal",
+          "high": "Yüksek",
+          "urgent": "Acil"
+        },
+        "note": "Temsilci için not",
+        "noteHint": "Dahili. Devir kartında gösterilir; '{{'variables'}}' çalışır. En fazla 500 karakter.",
+        "customerMessage": "Kişiye mesaj",
+        "customerHint": "Konuşma devredildiğinde gönderilir. Hiçbir şey göndermemek için boş bırakın.",
+        "offHours": "Kimse müsait değilken mesaj",
+        "offHoursHint": "Ekip kapalıyken veya kimse üstlenemiyorsa bunun yerine gönderilir. Konuşma yine de kuyrukta bekler.",
+        "exits": "Bu adımın üç çıkışı var",
+        "exitAssigned": "atandı: konuşma artık bir kişide",
+        "exitWaiting": "kuyrukta bekliyor: biri üstlenene kadar bekler",
+        "exitUnavailable": "temsilci yok / mesai dışı: kimse üstlenemedi",
+        "simpleExits": "Sonraki adım, konuşma bir kişiye ulaştığında çalışır. Kuyrukta beklemesi gerekirse veya kimse müsait değilse bot burada durur ve bir kişi yanıtlar. Diğer çıkışları izlemek için Gelişmiş oluşturucuyu kullanın."
+      }
+    }
+  }
+}

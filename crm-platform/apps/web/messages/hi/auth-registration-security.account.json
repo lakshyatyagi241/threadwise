@@ -563,7 +563,8 @@
             "lead_scoring": "AI लीड स्कोरिंग",
             "record_assignment": "रिकॉर्ड असाइनमेंट नियम",
             "team_hierarchy": "टीम पदानुक्रम और प्रबंधक",
-            "custom_roles": "कस्टम भूमिकाएँ और दायरे"
+            "custom_roles": "कस्टम भूमिकाएँ और दायरे",
+            "inbox_assignment_sticky": "संपर्क का स्वामी और स्टिकी एजेंट"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

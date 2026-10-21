@@ -22,7 +22,8 @@ const tile = (
 
 export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Channels (these were the menu's Channels group)
-  tile('channels', 'channels', '/channels', 'channels', 0),
+  // its own key so the Waboo migration can deny the placeholder (every role holds it by default)
+  tile('channels', 'channels', '/channels', 'channels', 0, { permission: 'chn.channels.read' }),
   // its own key so a workspace can be configured without the placeholder (the Waboo migration denies it); every role holds it by default
   tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50, { permission: 'chn.tiktok.read' }),
 
@@ -33,5 +34,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Integrations is now the Marketplace tile (features/marketplace/settings.ts).
 
   // Data and security
-  tile('security', 'privacy', '/privacy', 'lock', 40),
+  // its own key so the Waboo migration can deny the placeholder (every role holds it by default)
+  tile('security', 'privacy', '/privacy', 'lock', 40, { permission: 'privacy.data.read' }),
 ];

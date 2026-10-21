@@ -251,24 +251,41 @@ describe('TeamDialog', () => {
     expect(out).not.toContain('data-testid="team-not-used"');
   });
 
-  it('shows what the team stores but nothing reads yet, instead of hiding it', () => {
+  it('shows the devices a team is limited to as stored but not used yet, instead of hiding them', () => {
+    const t = team(1, { assignmentStrategy: 'round_robin', deviceIds: ['d1', 'd2'] });
+    const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
+    expect(out).toContain('data-testid="team-not-used"');
+    expect(out).toContain('Stored, not used yet');
+    expect(out).toContain('Limited to 2 devices');
+    expect(out).not.toContain('Auto-assignment strategy');
+  });
+
+  it('edits the handoff settings a team keeps: method, default assignee and opening hours', () => {
     const t = team(1, {
       assignmentStrategy: 'round_robin',
-      deviceIds: ['d1', 'd2'],
       unusedSettings: {
-        businessHours: { mon: ['09:00', '17:00'] },
+        businessHours: {
+          days: {
+            mon: { enabled: true, from: '09:00', to: '17:00' },
+            tue: { enabled: true, from: '09:00', to: '17:00' },
+            wed: { enabled: true, from: '09:00', to: '17:00' },
+            thu: { enabled: true, from: '09:00', to: '17:00' },
+            fri: { enabled: true, from: '09:00', to: '17:00' },
+            sat: { enabled: false, from: '09:00', to: '17:00' },
+            sun: { enabled: false, from: '09:00', to: '17:00' },
+          },
+        },
         timezone: 'Asia/Kolkata',
         defaultAssignee: { id: 'u1', fullName: 'Asha Rao' },
       },
     });
     const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
-    expect(out).toContain('data-testid="team-not-used"');
-    expect(out).toContain('Stored, not used yet');
-    expect(out).toContain('Auto-assignment strategy: Round robin');
-    expect(out).toContain('Limited to 2 devices');
-    expect(out).toContain('Business hours: saved');
-    expect(out).toContain('Time zone: Asia/Kolkata');
-    expect(out).toContain('Default assignee: Asha Rao');
+    expect(out).toContain('data-testid="team-handoff"');
+    expect(out).toContain('Handoff and assignment');
+    expect(out).toContain('How to pick a person');
+    expect(out).toContain('Default assignee');
+    expect(out).toContain('Opening hours');
+    expect(out).not.toContain('data-testid="team-not-used"');
   });
 
   it('edits with Delete when the caller may manage teams', () => {

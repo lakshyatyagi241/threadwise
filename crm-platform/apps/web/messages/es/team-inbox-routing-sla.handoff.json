@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "No incluido en tu plan",
+      "upgradeHint": "Tu plan no incluye esta función. Pide al propietario de la cuenta que mejore el plan.",
+      "owner": {
+        "prompt": "Preguntar por el propietario del contacto al reasignar",
+        "promptHint": "Cuando un chat se pasa a otra persona manualmente, ofrece convertirla también en propietaria del contacto.",
+        "window": "Mantener a un contacto recurrente con su último agente",
+        "windowHint": "Un contacto que vuelve a escribir va a la persona que atendió su última conversación durante esta cantidad de días. Desactivado significa sin límite.",
+        "windowDays": "Número de días",
+        "days": "días"
+      },
+      "queue": {
+        "notify": "Avisar al equipo cuando una conversación está en espera",
+        "notifyHint": "Los miembros del equipo, o todos los que pueden responder chats sin asignar, reciben una notificación con el motivo."
+      },
+      "teams": {
+        "body": "Cada equipo tiene su propio método de asignación, horario de atención, zona horaria y responsable predeterminado. Se usan siempre que se traspasa una conversación a ese equipo.",
+        "link": "Abrir Equipos"
+      }
+    }
+  }
+}

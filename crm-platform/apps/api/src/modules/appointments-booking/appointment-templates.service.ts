@@ -3,6 +3,7 @@ import {
   ERROR_CODES,
   createTemplateInputSchema,
   type AdoptAppointmentTemplateInput,
+  type AppointmentMessageKind,
   type AppointmentTemplate,
   type AppointmentTemplateResult,
   type AppointmentTemplatesResponse,
@@ -28,6 +29,7 @@ import {
   PREDEFINED_TEMPLATES,
   WHATSAPP_PLACEHOLDERS,
   findPredefined,
+  libraryStatusOfWa,
   toWhatsappBody,
   unknownPlaceholders,
   variablesOf,
@@ -358,6 +360,200 @@ export class AppointmentTemplatesService {
         delta: { name: { old: row.name, new: null } },
       });
     });
+  }
+
+  // --- reminder packs (BL-424) --------------------------------------------------------------------------------------------------
+
+  /** Whether a Cloud API WhatsApp number is connected, so a template can be created and sent to Meta. */
+  async hasWhatsappConnection(): Promise<boolean> {
+    const { orgId } = RequestContextStore.require();
+    const dir = await this.db.tx((tx) => this.repo.senders(tx, orgId));
+    return dir.whatsapp.length > 0;
+  }
+
+  /** The library status of a WhatsApp template by its Meta name and language, read live; null when this workspace has none. */
+  async waStatusByName(
+    name: string,
+    language: string,
+  ): Promise<AppointmentTemplate['status'] | null> {
+    const { orgId } = RequestContextStore.require();
+    const row = await this.db.tx((tx) => this.findWaByName(tx, orgId, name, language));
+    if (!row) return null;
+    return libraryStatusOfWa({
+      status: row.status,
+      metaStatus: row.metaStatus,
+      pausedUntil: row.pausedUntil,
+      rejectionReason: row.rejectionReason,
+    }).status;
+  }
+
+  /**
+   * The email message of a pack step: made once per workspace (the key is `pack:<pack>:<step>`), active at once. A second booking type
+   * that adopts the same pack reuses it, and an owner's edit of it is never overwritten.
+   */
+  async ensurePackEmail(v: {
+    key: string;
+    kind: AppointmentMessageKind;
+    language: string;
+    name: string;
+    subject: string;
+    body: string;
+  }): Promise<{ uuid: string; created: boolean }> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const found = await this.findPackRow(tx, ctx.orgId, v.key, 'email', v.language);
+      if (found) return { uuid: found.uuid, created: false };
+      const id = await this.repo.insertLibrary(tx, ctx.orgId, {
+        kind: v.kind,
+        channel: 'email',
+        language: v.language,
+        name: v.name,
+        subject: v.subject,
+        body: v.body,
+        variables: variablesOf(v.subject, v.body),
+        waTemplateId: null,
+        predefinedKey: v.key,
+        userId: ctx.userId,
+      });
+      await this.audit.record(tx, {
+        module: MODULE,
+        recordId: id,
+        action: 'insert',
+        delta: { name: { old: null, new: v.name } },
+      });
+      return { uuid: (await this.repo.findLibraryById(tx, ctx.orgId, id))!.uuid, created: true };
+    });
+  }
+
+  /**
+   * The WhatsApp message of a pack step: a WhatsApp template named `appt_<pack>_<step>_<lang>` created ONCE per workspace as a draft
+   * and sent to Meta unless `submit` is false, plus the library row that links it. Created again by nobody: a second booking type finds
+   * the first one's template by its name. `metaError` is Meta's own sentence when the submission was refused (the template stays a
+   * draft). Needs the template permissions, like the library's own WhatsApp adoption.
+   */
+  async ensurePackWhatsapp(v: {
+    key: string;
+    kind: AppointmentMessageKind;
+    language: string;
+    name: string;
+    templateName: string;
+    body: string;
+    category: 'UTILITY' | 'MARKETING';
+    buttons: string[];
+    submit: boolean;
+  }): Promise<{ uuid: string; waUuid: string; created: boolean; metaError: string | null }> {
+    const ctx = RequestContextStore.require();
+    const have = await this.db.tx(async (tx) => {
+      const lib = await this.findPackRow(tx, ctx.orgId, v.key, 'whatsapp', v.language);
+      if (lib?.waUuid) return { uuid: lib.uuid, waUuid: lib.waUuid };
+      return null;
+    });
+    if (have) return { ...have, created: false, metaError: null };
+
+    this.requireWhatsappRights(v.submit);
+    const wa = toWhatsappBody(v.body);
+    if (!wa.ok) throw invalid(wa.problem, 'body');
+    // The template may already exist under that name (made by an earlier adoption whose library row was removed): link it.
+    const existing = await this.db.tx((tx) =>
+      this.findWaByName(tx, ctx.orgId, v.templateName, v.language),
+    );
+    let waUuid: string;
+    let metaError: string | null = null;
+    let waId: number;
+    if (existing) {
+      waUuid = existing.uuid;
+      waId = existing.id;
+    } else {
+      const connectionId = await this.connectionFor(undefined);
+      const created = await this.templates.create(
+        createTemplateInputSchema.parse({
+          name: v.templateName,
+          language: v.language,
+          metaCategory: v.category,
+          templateType: 'standard',
+          body: wa.body,
+          variableMap: wa.variableMap,
+          parameterFormat: 'POSITIONAL',
+          buttons: v.buttons.map((text) => ({ type: 'QUICK_REPLY', text })),
+          connectionId,
+          submit: v.submit,
+        }),
+      );
+      waUuid = created.template.id;
+      metaError = created.metaError;
+      const found = await this.db.tx((tx) =>
+        this.findWaByName(tx, ctx.orgId, v.templateName, v.language),
+      );
+      waId = found!.id;
+    }
+    const uuid = await this.db.tx(async (tx) => {
+      const id = await this.repo.insertLibrary(tx, ctx.orgId, {
+        kind: v.kind,
+        channel: 'whatsapp',
+        language: v.language,
+        name: v.name,
+        subject: null,
+        body: v.body,
+        variables: variablesOf(v.body),
+        waTemplateId: waId,
+        predefinedKey: v.key,
+        userId: ctx.userId,
+      });
+      await this.audit.record(tx, {
+        module: MODULE,
+        recordId: id,
+        action: 'insert',
+        delta: { name: { old: null, new: v.name } },
+      });
+      return (await this.repo.findLibraryById(tx, ctx.orgId, id))!.uuid;
+    });
+    return { uuid, waUuid, created: !existing, metaError };
+  }
+
+  private async findPackRow(
+    tx: Tx,
+    orgId: number,
+    key: string,
+    channel: 'email' | 'whatsapp',
+    language: string,
+  ): Promise<LibraryRow | undefined> {
+    const res = await tx.execute(sql`
+      SELECT uuid FROM appointment_message_templates
+      WHERE org_id = ${orgId} AND predefined_key = ${key} AND channel = ${channel} AND language = ${language} LIMIT 1`);
+    const uuid = (res.rows as Array<Record<string, unknown>>)[0]?.uuid as string | undefined;
+    return uuid ? this.repo.findLibrary(tx, orgId, uuid) : undefined;
+  }
+
+  private async findWaByName(
+    tx: Tx,
+    orgId: number,
+    name: string,
+    language: string,
+  ): Promise<
+    | {
+        id: number;
+        uuid: string;
+        status: string;
+        metaStatus: string | null;
+        pausedUntil: Date | null;
+        rejectionReason: string | null;
+      }
+    | undefined
+  > {
+    const res = await tx.execute(sql`
+      SELECT id, uuid, status, meta_status, paused_until, rejection_reason FROM wa_templates
+      WHERE org_id = ${orgId} AND template_name = ${name} AND language = ${language} ORDER BY id LIMIT 1`);
+    const r = (res.rows as Array<Record<string, unknown>>)[0];
+    return r
+      ? {
+          id: Number(r.id),
+          uuid: r.uuid as string,
+          status: r.status as string,
+          metaStatus: (r.meta_status as string | null) ?? null,
+          pausedUntil: r.paused_until ? new Date(r.paused_until as string) : null,
+          rejectionReason: (r.rejection_reason as string | null) ?? null,
+        }
+      : undefined;
   }
 
   // --- helpers ------------------------------------------------------------------------------------------------------------------

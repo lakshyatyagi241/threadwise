@@ -201,12 +201,8 @@
       },
       "notUsed": {
         "title": "Gespeichert, noch nicht verwendet",
-        "body": "Diese Einstellungen werden im Team gespeichert, aber noch von nichts gelesen. Sie greifen mit dem Routing-Update.",
-        "strategy": "Auto-Zuweisungsstrategie: {value}",
-        "devices": "{count, plural, one {Auf # Gerät beschränkt} other {Auf # Geräte beschränkt}}",
-        "businessHours": "Geschäftszeiten: gespeichert",
-        "timezone": "Zeitzone: {value}",
-        "defaultAssignee": "Standard-Bearbeiter: {name}"
+        "body": "Diese Einstellung wird im Team gespeichert, aber noch nicht verwendet.",
+        "devices": "{count, plural, one {Auf # Gerät beschränkt} other {Auf # Geräte beschränkt}}"
       },
       "deleteUsage": {
         "title": "Was sich ändert",

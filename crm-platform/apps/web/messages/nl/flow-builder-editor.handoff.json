@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "toegewezen",
+        "waitingInQueue": "wacht in wachtrij",
+        "noAgentOutOfHours": "geen medewerker / buiten openingstijden"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Stap {stage}: kies de persoon naar wie het gesprek gaat."
+      }
+    },
+    "simulator": {
+      "handoff": "overgedragen aan een medewerker (bestemming: {destination}, team \"{team}\"); de testchat neemt de uitgang \"toegewezen\""
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Overdragen aan",
+          "handoffRules": "Toewijzingsregels",
+          "pickAgent": "— kies een persoon —"
+        }
+      },
+      "handoff": {
+        "legacy": "Deze stap is de oudere “Medewerker toewijzen”.",
+        "upgradeHint": "Hij geeft de chat aan een team en gaat verder. Schakel over naar de Overdracht aan medewerker om een reden, een prioriteit, berichten voor het contact en drie uitgangen toe te voegen (toegewezen, wacht in wachtrij, geen medewerker of buiten openingstijden). Koppelingen die je al hebt gemaakt blijven werken.",
+        "upgrade": "Overdrachtsfuncties gebruiken",
+        "destination": "Het gesprek sturen naar",
+        "dest": {
+          "team": "Een team",
+          "person": "Eén persoon",
+          "rules": "De toewijzingsregels",
+          "rulesLocked": "De toewijzingsregels (niet in je abonnement)"
+        },
+        "destHint": {
+          "team": "Het gaat naar iemand in het team of wacht in de wachtrij van het team.",
+          "person": "Het gaat naar deze persoon als die het kan overnemen; anders wacht het in de wachtrij.",
+          "rules": "Gebruikt je regels voor automatische toewijzing van gesprekken; als geen enkele regel een persoon vindt, wacht het in de wachtrij."
+        },
+        "lockHint": "Je abonnement bevat geen toewijzingsregels, dus een hier naartoe gestuurd gesprek wacht in de wachtrij tot een collega het overneemt.",
+        "team": "Team",
+        "teamPick": "— kies een team —",
+        "teamNone": "Nog geen teams",
+        "teamOption": "{name} · {count, plural, one {# medewerker} other {# medewerkers}}",
+        "teamHint": "<link>Teams beheren →</link>",
+        "person": "Persoon",
+        "personPick": "— kies een persoon —",
+        "personHint": "Iemand uit je teams.",
+        "unknownMember": "{value} (niet in deze werkruimte)",
+        "reason": "Reden",
+        "reasons": {
+          "customer_asked": "Het contact vroeg om een medewerker",
+          "bot_could_not_help": "De bot kon niet helpen",
+          "sensitive_topic": "Gevoelig onderwerp",
+          "sales_lead": "Salesprospect",
+          "complaint": "Klacht",
+          "other": "Overig"
+        },
+        "priority": "Prioriteit",
+        "priorityKeep": "Huidige prioriteit behouden",
+        "priorities": {
+          "low": "Laag",
+          "normal": "Normaal",
+          "high": "Hoog",
+          "urgent": "Urgent"
+        },
+        "note": "Notitie voor de medewerker",
+        "noteHint": "Intern. Wordt getoond op de overdrachtskaart; '{{'variables'}}' werken. Maximaal 500 tekens.",
+        "customerMessage": "Bericht aan het contact",
+        "customerHint": "Wordt verstuurd wanneer het gesprek wordt overgedragen. Laat leeg om niets te versturen.",
+        "offHours": "Bericht als niemand beschikbaar is",
+        "offHoursHint": "Wordt in plaats daarvan verstuurd als het team gesloten is of niemand het kan overnemen. Het gesprek wacht nog steeds in de wachtrij.",
+        "exits": "Deze stap heeft drie uitgangen",
+        "exitAssigned": "toegewezen: een persoon heeft het gesprek nu",
+        "exitWaiting": "wacht in wachtrij: het wacht tot iemand het overneemt",
+        "exitUnavailable": "geen medewerker / buiten openingstijden: niemand kon het overnemen",
+        "simpleExits": "De volgende stap wordt uitgevoerd zodra een persoon het gesprek heeft. Moet het in de wachtrij wachten, of is niemand beschikbaar, dan stopt de bot hier en antwoordt een persoon. Gebruik de geavanceerde builder om de andere uitgangen te volgen."
+      }
+    }
+  }
+}

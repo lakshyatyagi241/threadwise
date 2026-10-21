@@ -88,7 +88,8 @@
       "lead_scoring": "ИИ-оценка лидов",
       "record_assignment": "Правила назначения записей",
       "team_hierarchy": "Иерархия команд и руководители",
-      "custom_roles": "Свои роли и области доступа"
+      "custom_roles": "Свои роли и области доступа",
+      "inbox_assignment_sticky": "Владелец контакта и закреплённый агент"
     },
     "limitGroups": {
       "messaging": "Переписка",

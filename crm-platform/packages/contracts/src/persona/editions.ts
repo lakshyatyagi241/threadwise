@@ -1,4 +1,8 @@
-import { GENERIC_PERSONA_DEFINITION, personaDefinitionSchema, type PersonaDefinition } from './definition';
+import {
+  GENERIC_PERSONA_DEFINITION,
+  personaDefinitionSchema,
+  type PersonaDefinition,
+} from './definition';
 
 /**
  * Edition presets (docs/specs/teams-unification.md 5.6 and phase T3, BL-383): three catalog personas that make ONE product look like a
@@ -91,6 +95,7 @@ export const CHAT_SIDE_MODULES = [
   'tile:inbox-tags',
   'tile:message-logs',
   'tile:auto-assignment',
+  'tile:assignment-settings',
   'tile:sla-policies',
   'tile:team-performance',
   'tile:auto-reply',
@@ -117,8 +122,7 @@ export const CHAT_SIDE_MODULES = [
 
 const NO_PRESETS = GENERIC_PERSONA_DEFINITION.presets;
 
-const hide = (ids: readonly string[]) =>
-  Object.fromEntries(ids.map((id) => [id, 'hide' as const]));
+const hide = (ids: readonly string[]) => Object.fromEntries(ids.map((id) => [id, 'hide' as const]));
 
 export const CHAT_TEAM_PERSONA_DEFINITION: PersonaDefinition = {
   schemaVersion: 1,
@@ -135,7 +139,9 @@ export const CHAT_TEAM_PERSONA_DEFINITION: PersonaDefinition = {
 export const SALES_TEAM_PERSONA_DEFINITION: PersonaDefinition = {
   schemaVersion: 1,
   label: { en: 'Sales team' },
-  summary: { en: 'Contacts, companies, deals and tasks. The inbox and chat channels stay out of the way.' },
+  summary: {
+    en: 'Contacts, companies, deals and tasks. The inbox and chat channels stay out of the way.',
+  },
   icon: 'briefcase',
   teamSizes: [],
   vocabulary: { nouns: {}, phrases: {} },

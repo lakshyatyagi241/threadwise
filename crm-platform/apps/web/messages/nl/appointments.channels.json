@@ -21,13 +21,11 @@
       "names": {
         "email": "E-mail",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Herinneringsoproep"
       },
       "about": {
         "email": "Vanuit een gedeelde mailbox van je werkruimte. Nooit vanuit een persoonlijke mailbox.",
         "whatsapp": "Vrije tekst binnen het venster van 24 uur; daarbuiten alleen een goedgekeurde sjabloon.",
-        "sms": "Platte tekst vanaf je verbonden sms-afzender.",
         "voice": "Een automatische uitgaande oproep die het contact herinnert."
       },
       "status": {

@@ -21,13 +21,11 @@
       "names": {
         "email": "Email",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Chiamata di promemoria"
       },
       "about": {
         "email": "Da una casella condivisa del tuo spazio. Mai da una casella personale.",
         "whatsapp": "Testo libero entro la finestra di 24 ore; fuori, solo un modello approvato.",
-        "sms": "Testo semplice dal tuo mittente SMS collegato.",
         "voice": "Una chiamata automatica in uscita che ricorda al contatto."
       },
       "status": {

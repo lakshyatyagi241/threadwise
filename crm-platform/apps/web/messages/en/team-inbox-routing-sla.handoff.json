@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Not in your plan",
+      "upgradeHint": "Your plan does not include this. Ask the account owner to upgrade the plan.",
+      "owner": {
+        "prompt": "Ask about the contact owner on reassign",
+        "promptHint": "When a chat is given to someone else by hand, offer to make them the contact owner too.",
+        "window": "Keep a returning contact with their last agent",
+        "windowHint": "A contact who writes again goes to the person who handled their last conversation, for this many days. Off means no limit.",
+        "windowDays": "Number of days",
+        "days": "days"
+      },
+      "queue": {
+        "notify": "Tell the team when a conversation is waiting",
+        "notifyHint": "Members of the team, or everyone who can answer unassigned chats, get a notification with the reason."
+      },
+      "teams": {
+        "body": "Each team has its own assignment method, opening hours, time zone and default assignee. They are used whenever a conversation is handed to that team.",
+        "link": "Open Teams"
+      }
+    }
+  }
+}

@@ -563,7 +563,8 @@
             "lead_scoring": "KI-Lead-Scoring",
             "record_assignment": "Regeln zur Datensatzzuweisung",
             "team_hierarchy": "Teamhierarchie und Manager",
-            "custom_roles": "Eigene Rollen und Bereiche"
+            "custom_roles": "Eigene Rollen und Bereiche",
+            "inbox_assignment_sticky": "Kontaktbesitzer und fester Agent"
           },
           "cta": {
             "continueFree": "Kostenlos fortfahren",

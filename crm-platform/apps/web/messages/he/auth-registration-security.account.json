@@ -563,7 +563,8 @@
             "lead_scoring": "דירוג לידים באמצעות AI",
             "record_assignment": "כללי הקצאת רשומות",
             "team_hierarchy": "היררכיית צוותים ומנהלים",
-            "custom_roles": "תפקידים מותאמים וטווחים"
+            "custom_roles": "תפקידים מותאמים וטווחים",
+            "inbox_assignment_sticky": "בעלים של איש קשר ונציג קבוע"
           },
           "cta": {
             "continueFree": "המשך בחינם",

@@ -19,25 +19,12 @@
     "page": {
       "back": "Automatisation et IA",
       "title": "Attribution automatique des conversations",
-      "subtitle": "Confiez automatiquement chaque nouvelle conversation au bon agent. Les règles sont appliquées dans l’ordre, de haut en bas.",
       "noAccess": "Vous n’avez pas l’autorisation d’afficher les paramètres d’attribution automatique.",
-      "create": "Créer une règle",
       "limitUsed": "{used} règles sur {limit} utilisées",
       "limitReached": "Vous avez utilisé les {limit} règles autorisées par votre offre.",
-      "keepTitle": "Confier les contacts récurrents à leur agent",
-      "keepBody": "Lorsqu’un contact qui a déjà un agent écrit à nouveau, la nouvelle conversation est d’abord confiée à cet agent : le responsable du contact, ou la personne qui a traité sa dernière conversation, tant qu’elle est toujours un agent actif. Sinon, les règles ci-dessous s’appliquent.",
-      "settingsFailed": "Impossible d’enregistrer le paramètre.",
-      "rulesTitle": "Règles",
-      "searchPlaceholder": "Rechercher des règles",
-      "searchLabel": "Rechercher des règles par nom",
-      "howItWorks": "La première règle qui correspond et trouve un agent disponible reçoit la conversation. La règle de repli est utilisée lorsqu’aucune autre règle ne correspond. Si aucune ne correspond, la conversation reste non assignée.",
       "loading": "Chargement des règles",
       "loadFailed": "Impossible de charger les règles.",
       "retry": "Réessayer",
-      "noMatchTitle": "Aucune règle trouvée",
-      "noMatch": "Aucune règle ne porte un nom proche de « {q} ».",
-      "emptyTitle": "Aucune règle pour le moment",
-      "empty": "Créez une règle pour confier les nouvelles conversations à vos agents à tour de rôle, selon un mot-clé, un canal, une langue ou les coordonnées du contact.",
       "list": "Règles d’attribution automatique par ordre de priorité",
       "loadMore": "Charger plus",
       "toggleFailed": "Impossible de changer l’état de la règle.",
@@ -51,16 +38,14 @@
       "deleted": "Règle supprimée.",
       "deleteFailed": "Impossible de supprimer la règle.",
       "businessHours": "Heures d'ouverture",
-      "recordNote": "Cette page attribue les conversations. Pour attribuer les nouveaux {contacts}, entreprises et {deals} aux responsables commerciaux, consultez <link>Règles d'attribution des enregistrements</link>."
+      "recordNote": "Cette page attribue les conversations. Pour attribuer les nouveaux {contacts}, entreprises et {deals} aux responsables commerciaux, consultez <link>Règles d'attribution des enregistrements</link>.",
+      "subtitle": "Choisissez qui reçoit chaque nouveau chat. Les commutateurs suffisent pour la plupart des espaces de travail ; n’ajoutez des règles que si vous avez besoin de plus de contrôle."
     },
     "rules": {
       "someone": "un agent",
       "moveUp": "Monter {name}",
       "moveDown": "Descendre {name}",
       "priority": "Priorité",
-      "active": "Active",
-      "off": "Désactivée",
-      "fallback": "Repli",
       "continues": "Continue de vérifier",
       "unavailable": "{count, plural, one {# agent indisponible} other {# agents indisponibles}}",
       "activeFor": "La règle « {name} » est active",
@@ -74,7 +59,9 @@
         "languages": "Langue : {list}",
         "inside": "Pendant les heures d’ouverture",
         "outside": "En dehors des heures d’ouverture",
-        "always": "Toute conversation sans correspondance"
+        "always": "Chaque nouvelle conversation",
+        "contactNew": "Nouveau contact",
+        "contactReturning": "Contact récurrent"
       },
       "strategy": {
         "round_robin": "Tour de rôle",
@@ -122,7 +109,6 @@
         "name": "Saisissez un nom pour la règle.",
         "nameLong": "Le nom est trop long.",
         "descriptionLong": "La description est trop longue.",
-        "conditions": "Ajoutez au moins une condition, ou marquez cette règle comme règle de repli.",
         "contactIncomplete": "Terminez ou retirez les conditions sur le contact qui sont incomplètes.",
         "keywordsMany": "Utilisez 20 mots au maximum.",
         "targets": "Choisissez au moins un agent ou une équipe.",
@@ -133,20 +119,17 @@
         "escalationAction": "La réattribuer, définir une priorité, ou les deux.",
         "escalationAgents": "La réattribution demande des agents dans cette règle : choisissez-les ci-dessus.",
         "autoReplyEmpty": "Rédigez la réponse, ou décochez l'option.",
-        "autoReplyLong": "La réponse est trop longue (1024 caractères au maximum)."
+        "autoReplyLong": "La réponse est trop longue (1024 caractères au maximum).",
+        "conditions": "Ajoutez au moins une condition, ou désactivez « Uniquement pour les conversations qui correspondent »."
       },
       "whenTitle": "Lorsqu’une nouvelle conversation arrive",
-      "whenHint": "Chaque condition définie doit être remplie. Laissez une partie vide pour l’ignorer.",
       "contact": {
-        "title": "Le contact correspond",
-        "hint": "Étiquettes, responsable, étape du cycle de vie et autres détails du contact, comme dans les segments.",
         "loading": "Chargement des champs de contact",
         "partial": "Certaines listes de contacts n’ont pas pu être chargées ; certains choix peuvent donc manquer.",
         "summary": "Conditions",
         "none": "Aucune condition sur le contact."
       },
       "channel": {
-        "title": "Canal",
         "hint": "Seules les conversations arrivant sur ces canaux. Si aucun n’est coché, tous les canaux sont concernés."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Heures d’ouverture",
         "hint": "Utilise les heures d’ouverture de votre espace de travail.",
-        "any": "À toute heure",
         "inside": "Uniquement pendant les heures d’ouverture",
         "outside": "Uniquement en dehors des heures d’ouverture"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Options",
       "stopOnMatch": "Arrêter lorsque cette règle correspond",
       "stopOnMatchHint": "Activé : les règles suivantes ne sont pas vérifiées. Désactivé : une règle suivante correspondante peut reprendre la conversation.",
-      "fallback": "Règle de repli",
-      "fallbackHint": "Utilisée lorsqu’aucune autre règle ne correspond. Il n’existe qu’une seule règle de repli ; en choisir une remplace la précédente.",
       "cancel": "Annuler",
       "save": "Enregistrer",
       "saveActivate": "Enregistrer et activer",
@@ -219,7 +199,8 @@
       "escalatePriority": "Puis définir la priorité",
       "autoReply": "Envoyer une réponse automatique",
       "autoReplyBody": "Texte de la réponse",
-      "autoReplyHint": "Envoyée au nom de l'entreprise au client. Hors de la fenêtre de 24 heures, une réponse libre n'est pas envoyée."
+      "autoReplyHint": "Envoyée au nom de l'entreprise au client. Hors de la fenêtre de 24 heures, une réponse libre n'est pas envoyée.",
+      "whenHint": "Chaque condition que vous ajoutez doit correspondre."
     },
     "sla": {
       "back": "Retour aux paramètres",

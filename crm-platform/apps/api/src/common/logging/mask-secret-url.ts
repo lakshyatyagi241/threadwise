@@ -17,6 +17,8 @@ const PATH_SECRETS = [
   /(\/public\/(?:invoices|sales-docs|booking-manage)\/)[^/?#\s]+/i,
   // The payment return address carries its token as `?o=<token>` (E8).
   /(\/payments\/return\/[^/?#\s]+\?(?:[^#\s]*&)?o=)[^&#\s]+/i,
+  // Credentials a caller puts in the query string (`?token=`, `?api_key=`, an OAuth `code`).
+  /([?&](?:[\w-]*(?:token|secret|password|passwd|signature|api[_-]?key|apikey|auth|code|otp|sig)|key)=)[^&#\s]+/gi,
 ];
 
 export function maskSecretUrl(url: string): string;

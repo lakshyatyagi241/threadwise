@@ -1,4 +1,11 @@
-import { Inject, Injectable, Logger, type OnApplicationShutdown } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  type OnApplicationShutdown,
+  type OnModuleInit,
+} from '@nestjs/common';
+import { createDbSaturationMetrics, getRuntimeMonitor } from '@crm/observability';
 import {
   withPrivileged,
   withTenant,
@@ -20,8 +27,9 @@ export const DB_CLIENT_PAIR = Symbol('DB_CLIENT_PAIR');
  * design exists to prevent.
  */
 @Injectable()
-export class DatabaseService implements OnApplicationShutdown {
+export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
   private readonly logger = new Logger(DatabaseService.name);
+  private poolTimer?: NodeJS.Timeout;
 
   constructor(@Inject(DB_CLIENT_PAIR) private readonly clients: DbClientPair) {}
 
@@ -91,7 +99,22 @@ export class DatabaseService implements OnApplicationShutdown {
    * Closed in `onApplicationShutdown`, the last shutdown step, not `onModuleDestroy`: a job still running while the worker drains
    * (WorkerDrainService) and a request still finishing need the pool until then.
    */
+  onModuleInit(): void {
+    const monitor = getRuntimeMonitor();
+    if (!monitor) return;
+    const m = createDbSaturationMetrics(monitor.metrics);
+    const tick = () => {
+      m.recordPool('primary', this.clients.primary.pool);
+      if (this.clients.replica !== this.clients.primary)
+        m.recordPool('replica', this.clients.replica.pool);
+    };
+    tick();
+    this.poolTimer = setInterval(tick, 10_000);
+    this.poolTimer.unref();
+  }
+
   async onApplicationShutdown(): Promise<void> {
+    if (this.poolTimer) clearInterval(this.poolTimer);
     this.logger.log('closing database pools');
     await this.clients.close();
   }

@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { team } from './fixtures';
 import {
   TEAM_SWATCHES,
+  defaultHours,
   emptyTeamForm,
   formFromTeam,
+  hoursProblem,
   memberChanges,
   nameProblem,
   sameColor,
@@ -33,6 +35,9 @@ describe('team form', () => {
       color: TEAM_SWATCHES[0],
       description: '',
       assignmentStrategy: 'manual',
+      defaultAssigneeId: null,
+      timezone: '',
+      hours: null,
       parentId: null,
       leadId: null,
       receivesConversations: true,
@@ -60,6 +65,9 @@ describe('team form', () => {
       color: '#13478A',
       description: 'Inbound',
       assignmentStrategy: 'sticky',
+      defaultAssigneeId: null,
+      timezone: '',
+      hours: null,
       parentId: 'p1',
       leadId: 'm1',
       receivesConversations: true,
@@ -176,5 +184,78 @@ describe('toggle', () => {
     expect(toggle(base, 'b')).toEqual(['a', 'b']);
     expect(toggle(base, 'a')).toEqual([]);
     expect(base).toEqual(['a']);
+  });
+});
+
+describe('handoff settings of a team (BL-396)', () => {
+  const week = Object.fromEntries(
+    ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((k) => [
+      k,
+      { enabled: k !== 'sun', from: '08:00', to: '16:00' },
+    ]),
+  );
+
+  it('reads the saved hours, time zone and default assignee back into the form', () => {
+    const t = team(1, {
+      unusedSettings: {
+        businessHours: { days: week },
+        timezone: 'Asia/Kolkata',
+        defaultAssignee: { id: 'u1', fullName: 'Asha' },
+      },
+    });
+    const form = formFromTeam(t);
+    expect(form.defaultAssigneeId).toBe('u1');
+    expect(form.timezone).toBe('Asia/Kolkata');
+    expect(form.hours?.mon).toEqual({ enabled: true, from: '08:00', to: '16:00' });
+    expect(form.hours?.sun.enabled).toBe(false);
+  });
+
+  it('no saved hours means always open, and a stored value this build cannot read starts from the default week', () => {
+    expect(formFromTeam(team(1)).hours).toBeNull();
+    const odd = team(1, {
+      unusedSettings: {
+        businessHours: { mon: ['09:00', '17:00'] },
+        timezone: null,
+        defaultAssignee: null,
+      },
+    });
+    expect(formFromTeam(odd).hours).toEqual(defaultHours());
+  });
+
+  it('sends the hours with their time zone, and null (always open) when they are off', () => {
+    const t = team(1, { rowVersion: 3 });
+    const on = {
+      ...formFromTeam(t),
+      memberIds: ['u1'],
+      defaultAssigneeId: 'u1',
+      timezone: 'Europe/London',
+      hours: defaultHours(),
+    };
+    const update = toUpdateInput(on, t, false);
+    expect(update.timezone).toBe('Europe/London');
+    expect(update.defaultAssigneeId).toBe('u1');
+    expect(update.businessHours?.days.mon).toEqual({ enabled: true, from: '09:00', to: '18:00' });
+    const off = toUpdateInput({ ...on, hours: null }, t, false);
+    expect(off.businessHours).toBeNull();
+    expect(off.timezone).toBeNull();
+  });
+
+  it('drops a default assignee who is no longer on the team', () => {
+    const t = team(1);
+    const form = { ...formFromTeam(t), memberIds: ['u2'], defaultAssigneeId: 'u1' };
+    expect(toUpdateInput(form, t, false).defaultAssigneeId).toBeNull();
+    expect(
+      toCreateInput({ ...emptyTeamForm(), name: 'A', defaultAssigneeId: 'u1' }).defaultAssigneeId,
+    ).toBeNull();
+  });
+
+  it('flags an open day with a missing or equal opening and closing time', () => {
+    expect(hoursProblem(null)).toBe(false);
+    expect(hoursProblem(defaultHours())).toBe(false);
+    const bad = defaultHours();
+    bad.mon = { enabled: true, from: '09:00', to: '09:00' };
+    expect(hoursProblem(bad)).toBe(true);
+    bad.mon = { enabled: false, from: '', to: '' };
+    expect(hoursProblem(bad)).toBe(false);
   });
 });

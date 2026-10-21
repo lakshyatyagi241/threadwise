@@ -201,12 +201,8 @@
       },
       "notUsed": {
         "title": "已存储,尚未使用",
-        "body": "这些设置已保存在团队中,但目前尚无任何功能读取它们。它们将随路由更新开始生效。",
-        "strategy": "自动分配策略:{value}",
-        "devices": "{count, plural, one {限制为 # 台设备} other {限制为 # 台设备}}",
-        "businessHours": "营业时间:已保存",
-        "timezone": "时区:{value}",
-        "defaultAssignee": "默认受理人:{name}"
+        "body": "此设置已保存在团队中，但目前尚未被任何功能使用。",
+        "devices": "{count, plural, one {限制为 # 台设备} other {限制为 # 台设备}}"
       },
       "deleteUsage": {
         "title": "将会发生的变化",

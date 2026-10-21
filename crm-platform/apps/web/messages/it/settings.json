@@ -355,11 +355,6 @@
         "description": "Imposta con quanta rapidità il tuo team deve rispondere e risolvere, e ricevi avvisi quando una conversazione manca il suo obiettivo.",
         "keywords": "sla, tempo di risposta, prima risposta, risoluzione, violazione, obiettivi, orario lavorativo"
       },
-      "team-performance": {
-        "label": "Prestazioni del team",
-        "description": "Scopri quanto è stato veloce ogni agente a rispondere e risolvere oggi, questa settimana o questo mese.",
-        "keywords": "report, analisi, agenti, tempo di risposta, prima risposta, risolte, carico, prestazioni"
-      },
       "privacy-requests": {
         "label": "Richieste sui dati",
         "description": "Rispondi a chi chiede cosa conservi su di loro: verifica dell'identità, esportazione, cancellazione con anteprima e una prova da conservare.",

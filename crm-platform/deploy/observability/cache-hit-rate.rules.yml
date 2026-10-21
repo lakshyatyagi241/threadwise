@@ -13,12 +13,14 @@
 groups:
   - name: cache-hit-rate
     rules:
+      # rate() drops the metric name, so hits, misses and errors of one cache collide when summed through a __name__ regex;
+      # each is tagged with an "outcome" label first so the three series stay distinct.
       - record: crm:cache_lookups:rate5m
-        expr: sum by (service, cache) (rate({__name__=~"crm_cache_(hits|misses|errors)_total"}[5m]))
+        expr: sum by (service, cache) (label_replace(rate(crm_cache_hits_total[5m]), "outcome", "hit", "", "") or label_replace(rate(crm_cache_misses_total[5m]), "outcome", "miss", "", "") or label_replace(rate(crm_cache_errors_total[5m]), "outcome", "error", "", ""))
       - record: crm:cache_hit_ratio:5m
         expr: sum by (service, cache) (rate(crm_cache_hits_total[5m])) / (crm:cache_lookups:rate5m > 0)
       - record: crm:cache_hit_ratio:1h
-        expr: sum by (service, cache) (rate(crm_cache_hits_total[1h])) / (sum by (service, cache) (rate({__name__=~"crm_cache_(hits|misses|errors)_total"}[1h])) > 0)
+        expr: sum by (service, cache) (rate(crm_cache_hits_total[1h])) / (sum by (service, cache) (label_replace(rate(crm_cache_hits_total[1h]), "outcome", "hit", "", "") or label_replace(rate(crm_cache_misses_total[1h]), "outcome", "miss", "", "") or label_replace(rate(crm_cache_errors_total[1h]), "outcome", "error", "", "")) > 0)
       - record: crm:cache_error_ratio:5m
         expr: sum by (service, cache) (rate(crm_cache_errors_total[5m])) / (crm:cache_lookups:rate5m > 0)
 

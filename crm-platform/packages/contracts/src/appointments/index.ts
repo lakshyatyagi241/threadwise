@@ -12,3 +12,4 @@ export * from './booking-tools';
 export * from './channels';
 export * from './public';
 export * from './booking-page';
+export * from './reminder-sequence';

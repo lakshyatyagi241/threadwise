@@ -130,6 +130,7 @@
       "colLeadScore": "リードスコア",
       "colLanguage": "言語",
       "colCreatedOn": "作成日",
+      "colModifiedOn": "更新日",
       "pagination": "ページ送り",
       "prevPage": "前のページ",
       "nextPage": "次のページ",
@@ -282,6 +283,7 @@
       "shortStage": "ステージ",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "作成日",
+      "shortModified": "更新日",
       "firstRun": {
         "title": "最初の連絡先を追加しましょう",
         "message": "やり取りしている相手を取り込みましょう。連絡先はメッセージ、キャンペーン、タスク、取引に使われます。",
@@ -446,7 +448,8 @@
       "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。",
       "searchOptions": "選択肢を検索",
       "searchOptionsFor": "{field}の選択肢を検索",
-      "noOptionsFound": "検索に一致する選択肢はありません。"
+      "noOptionsFound": "検索に一致する選択肢はありません。",
+      "cascadeWaiting": "選択肢を表示するには、先に {parent} を選んでください。"
     },
     "tags": {
       "title": "タグ",
@@ -1085,7 +1088,8 @@
         "moveDown": "{name}を下に移動",
         "edit": "{name}を編集",
         "deactivate": "{name}を無効化",
-        "reactivate": "再有効化"
+        "reactivate": "再有効化",
+        "dependsOn": "選択肢は {field} に依存"
       },
       "toast": {
         "conflict": "他のユーザーが変更しました。リストを更新したので、もう一度お試しください。",
@@ -1241,6 +1245,34 @@
         "manageStages": "ステージを管理",
         "manageGroups": "グループを管理",
         "locked": "固定"
+      },
+      "cascade": {
+        "open": "依存フィールド",
+        "title": "依存フィールド",
+        "close": "閉じる",
+        "intro": "依存フィールドは常に表示されます。その選択肢は親プロパティで選んだ値によって決まります。親の選択肢ごとに、許可する依存フィールドの選択肢にチェックを入れてください。",
+        "empty": "依存フィールドはまだありません。",
+        "add": "依存フィールドを追加",
+        "needTwoChoiceFields": "依存フィールドには、選択肢のリストを持つプロパティ（ドロップダウン、複数選択、ラジオ）が少なくとも2つ必要です。",
+        "dependsOn": "依存先: {parent}",
+        "editLabel": "{name} を編集",
+        "removeLabel": "{name} を削除",
+        "parent": "親プロパティ",
+        "child": "依存プロパティ",
+        "pickParent": "親プロパティを選択",
+        "pickChild": "依存プロパティを選択",
+        "allowed": "{parent} の各選択肢で許可される {child} の選択肢",
+        "noParentChoices": "親プロパティにはまだ選択肢がありません。",
+        "noChildChoices": "依存プロパティにはまだ選択肢がありません。",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "saved": "依存フィールドを保存しました。",
+        "cycle": "その依存関係だと、2つのプロパティが互いを待つことになります。",
+        "removeTitle": "{name} を依存フィールドから削除しますか？",
+        "removeMessage": "すべての選択肢が再び表示されます。親プロパティの下での選択肢設定は失われますが、連絡先が保持している値はそのまま残ります。",
+        "removeConfirm": "削除",
+        "removed": "依存フィールドを削除しました。",
+        "removeFailed": "依存フィールドを削除できませんでした。もう一度お試しください。"
       }
     },
     "lost": {

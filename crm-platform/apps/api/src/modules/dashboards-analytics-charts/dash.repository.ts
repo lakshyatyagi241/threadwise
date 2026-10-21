@@ -11,11 +11,12 @@ type Raw = Record<string, unknown>;
  * to the caller's workspace; the explicit `org_id` is the index prefix. Nothing is cached and nothing is pre-aggregated.
  */
 /**
- * A message is delivered once the provider said so: its status says delivered / read, or a delivery / read time was recorded (an
- * imported message keeps its history in the timestamps and may still read `sent`). A message that is only `sent` counts as sent.
+ * Delivered is Reference's delivered set (TW-DASH-002 rule 3): status delivered, read or sent, or a delivery / read time was recorded.
+ * A message that is only `sent` counts as delivered, as in Reference. A migrated message carries no receipt (the chat history has
+ * none; chat-delivery finds no billing-log match), so all migrated outbound history reads `sent`: without this its delivered rate is 0.
  */
 const DELIVERED = sql.raw(
-  `(status IN ('delivered','read') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
+  `(status IN ('delivered','read','sent') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
 );
 const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 /** Failed: the status says so, or a failure reason was recorded and nothing was ever delivered or read. */

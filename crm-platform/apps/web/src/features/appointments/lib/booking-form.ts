@@ -22,6 +22,7 @@ import {
   type WeeklyHours,
 } from './availability';
 import {
+  REMINDER_MAX_RULES,
   remindersFromType,
   remindersToInput,
   validateReminders,
@@ -51,7 +52,7 @@ export const LIMITS = {
   maxAdvanceMax: 365,
   maxPerDayMax: 500,
   capacityMax: 500,
-  reminders: 8,
+  reminders: REMINDER_MAX_RULES,
   reminderMax: 43_200,
   questions: 20,
   questionLabelMax: 191,
@@ -86,7 +87,7 @@ export interface QuestionDraft {
   map: string;
 }
 
-/** The channels a lifecycle message can be attached to in the editor (SMS and voice have no library message). */
+/** The channels a lifecycle message can be attached to in the editor (voice has no library message). */
 export type TemplateChannel = 'whatsapp' | 'email';
 
 export interface TemplateDraft {
@@ -309,6 +310,7 @@ const REMINDER_PROBLEM = {
   bodyTooLong: 'reminderBodyTooLong',
   subjectTooLong: 'reminderBodyTooLong',
   labelTooLong: 'reminderBodyTooLong',
+  fallbackInvalid: 'reminderInvalid',
   tooMany: 'remindersTooMany',
 } as const;
 
@@ -378,7 +380,7 @@ export function validateDraft(d: BookingTypeDraft): ProblemMap {
   const win = d.cancelWindow.trim() === '' ? 0 : int(d.cancelWindow);
   if (win === null || win > LIMITS.cancelWindowMax) p.cancelWindow = 'cancelWindowInvalid';
 
-  // reminders and follow-ups (BL-283): up to 8, distinct per kind and moment, each with a channel and a readable text
+  // reminders and follow-ups (BL-283): up to 5 with a time, distinct per kind and moment, each with a channel and a readable text
   for (const [key, problem] of Object.entries(validateReminders(d.reminders))) {
     p[key] = REMINDER_PROBLEM[problem];
   }

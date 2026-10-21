@@ -10,7 +10,7 @@ import {
   type UpdateFieldInput,
 } from '@crm/contracts';
 import { ATTRIBUTE_KEY, ATTRIBUTE_KEY_MAX } from './attribute-model';
-import { displayValue, ISO_INSTANT, type DisplayContext } from './field-values';
+import { displayValue, isCascadeLink, ISO_INSTANT, type DisplayContext } from './field-values';
 import { moveItem, valueFromLabel } from './stage-model';
 
 /**
@@ -154,6 +154,23 @@ export function emptyDraft(sectionId: string): PropertyDraft {
   };
 }
 
+/** The "show only when" rules of one property. A cascade link is not one: it lives in the Dependent fields dialog. */
+export const conditionRulesOf = (
+  fieldId: string,
+  dependencies: readonly FieldDependencyResponse[],
+): FieldDependencyResponse[] =>
+  dependencies.filter((d) => d.fieldId === fieldId && !isCascadeLink(d));
+
+/** The labels of the properties whose choices a property's choices depend on (its cascade parents), in list order. */
+export const cascadeParentLabels = (
+  fieldId: string,
+  dependencies: readonly FieldDependencyResponse[],
+  fieldsById: ReadonlyMap<string, FieldResponse>,
+): string[] =>
+  dependencies
+    .filter((d) => d.fieldId === fieldId && isCascadeLink(d))
+    .flatMap((d) => fieldsById.get(d.dependsOnFieldId)?.label ?? []);
+
 export function draftFromField(
   f: FieldResponse,
   dependencies: readonly FieldDependencyResponse[],
@@ -171,14 +188,12 @@ export function draftFromField(
     options: [...(f.options ?? [])]
       .sort((a, b) => a.position - b.position)
       .map((o) => ({ id: o.id, value: o.value, label: o.label })),
-    conditions: dependencies
-      .filter((d) => d.fieldId === f.id)
-      .map((d) => ({
-        id: d.id,
-        fieldId: d.dependsOnFieldId,
-        optionId: d.dependsOnOptionId,
-        value: d.dependsOnValue ?? '',
-      })),
+    conditions: conditionRulesOf(f.id, dependencies).map((d) => ({
+      id: d.id,
+      fieldId: d.dependsOnFieldId,
+      optionId: d.dependsOnOptionId,
+      value: d.dependsOnValue ?? '',
+    })),
   };
 }
 

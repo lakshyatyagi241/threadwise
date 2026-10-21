@@ -27,6 +27,7 @@ import {
 import { Funnel } from './funnel';
 import { LoadError, Panel, Trend } from './parts';
 import { QuickAccessTiles } from '@/features/admin-console-shell/quick-access/quick-access-tiles';
+import { CARD_PERMISSION, QUICK_ACCESS_PERMISSION, permitted } from '../card-permissions';
 import {
   CopilotCard,
   FlowsCard,
@@ -108,7 +109,9 @@ export function DashboardScreen() {
   const session = useSession();
   // The cards the workspace's persona hides (`card:dashboard.<id>`, ids in ../home-cards.ts) are not drawn; their data and API stay.
   const { isCardHidden } = usePersonaVisibility();
-  const showCard = (id: string) => !isCardHidden(id);
+  // A card the caller's permissions do not open is not drawn either (`CARD_PERMISSION`); its data is only fetched by the sections drawn.
+  const showCard = (id: string) => !isCardHidden(id) && permitted(session.permissions, CARD_PERMISSION[id]);
+  const tileVisible = (key: string) => permitted(session.permissions, QUICK_ACCESS_PERMISSION[key]);
   const [range, custom, setRange] = useRange();
   const [draft, setDraft] = useState<CustomDates>({});
   const summary = useSummary(range, custom);
@@ -255,12 +258,14 @@ export function DashboardScreen() {
               </Button>
             </form>
           )}
-          <Link
-            href="/campaigns/create"
-            className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground"
-          >
-            + {t('newCampaign')}
-          </Link>
+          {permitted(session.permissions, 'camp.campaigns.create') && (
+            <Link
+              href="/campaigns/create"
+              className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground"
+            >
+              + {t('newCampaign')}
+            </Link>
+          )}
           {summary.isFetching && <Spinner />}
         </div>
       </header>
@@ -335,7 +340,7 @@ export function DashboardScreen() {
 
           {showCard('instagram') && w?.instagram && <InstagramBand data={w.instagram} />}
 
-          {showCard('quick-access') && <QuickAccessTiles />}
+          {showCard('quick-access') && <QuickAccessTiles visible={tileVisible} />}
 
           {showCard('pipeline') && w?.pipeline && <PipelineStrip data={w.pipeline} />}
 

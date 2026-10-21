@@ -1,0 +1,668 @@
+{
+  "module": "install-update-licensing",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "verifySetupTokenRequestSchema",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "setupToken",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (256)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (256)",
+          "value": "\"a\" x 257",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (256)",
+          "value": "\"😀\" x 256",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "licenceVerifyRequestSchema",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "setupToken",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (256)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (256)",
+          "value": "\"a\" x 257",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (256)",
+          "value": "\"😀\" x 256",
+          "priority": "P2"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "setupDatabaseTestRequestSchema",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "setupToken",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (256)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (256)",
+          "value": "\"a\" x 257",
+          "priority": "P0"
+        },
+        {
+          "field": "setupToken",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (256)",
+          "value": "\"😀\" x 256",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "\"a\" x 255",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (255)",
+          "value": "\"a\" x 256",
+          "priority": "P2"
+        },
+        {
+          "field": "host",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (255)",
+          "value": "\"😀\" x 254",
+          "priority": "P2"
+        },
+        {
+          "field": "port",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "port",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "port",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "port",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (65535)",
+          "value": "65535",
+          "priority": "P2"
+        },
+        {
+          "field": "port",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (65535)",
+          "value": "65536",
+          "priority": "P2"
+        },
+        {
+          "field": "port",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (63)",
+          "value": "\"a\" x 63",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (63)",
+          "value": "\"a\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "database",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (63)",
+          "value": "\"😀\" x 62",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (63)",
+          "value": "\"a\" x 63",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (63)",
+          "value": "\"a\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "username",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (63)",
+          "value": "\"😀\" x 62",
+          "priority": "P2"
+        },
+        {
+          "field": "password",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (256)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (256)",
+          "value": "\"a\" x 257",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (256)",
+          "value": "\"😀\" x 256",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "setupRunRequestSchema",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "no valid body could be built from the schema (cross-field or pattern rule)",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "setupBootstrapRequestSchema",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "no valid body could be built from the schema (cross-field or pattern rule)",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "verifyLicenceRequestSchema",
+      "file": "apps/api/src/modules/install-update-licensing/system.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "purchaseCode",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P0"
+        },
+        {
+          "field": "purchaseCode",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

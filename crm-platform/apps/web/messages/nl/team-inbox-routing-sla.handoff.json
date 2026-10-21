@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Niet in je abonnement",
+      "upgradeHint": "Dit zit niet in je abonnement. Vraag de accounteigenaar om het abonnement te upgraden.",
+      "owner": {
+        "prompt": "Vragen naar de contacteigenaar bij hertoewijzing",
+        "promptHint": "Als een gesprek handmatig aan iemand anders wordt gegeven, bied dan aan die persoon ook contacteigenaar te maken.",
+        "window": "Terugkerend contact bij de laatste medewerker houden",
+        "windowHint": "Een contact dat opnieuw schrijft, gaat gedurende dit aantal dagen naar de persoon die het laatste gesprek behandelde. Uit betekent geen limiet.",
+        "windowDays": "Aantal dagen",
+        "days": "dagen"
+      },
+      "queue": {
+        "notify": "Het team waarschuwen als een gesprek wacht",
+        "notifyHint": "Teamleden, of iedereen die niet-toegewezen gesprekken kan beantwoorden, krijgen een melding met de reden."
+      },
+      "teams": {
+        "body": "Elk team heeft een eigen toewijzingsmethode, openingstijden, tijdzone en standaardontvanger. Ze worden gebruikt wanneer een gesprek aan dat team wordt overgedragen.",
+        "link": "Teams openen"
+      }
+    }
+  }
+}

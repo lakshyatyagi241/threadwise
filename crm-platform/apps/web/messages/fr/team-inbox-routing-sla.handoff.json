@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Non inclus dans votre offre",
+      "upgradeHint": "Votre offre n’inclut pas cette fonction. Demandez au propriétaire du compte de changer d’offre.",
+      "owner": {
+        "prompt": "Demander pour le propriétaire du contact lors d’une réassignation",
+        "promptHint": "Quand un chat est confié manuellement à quelqu’un d’autre, proposer de le nommer aussi propriétaire du contact.",
+        "window": "Garder un contact récurrent avec son dernier agent",
+        "windowHint": "Un contact qui écrit de nouveau va à la personne qui a traité sa dernière conversation, pendant ce nombre de jours. Désactivé signifie sans limite.",
+        "windowDays": "Nombre de jours",
+        "days": "jours"
+      },
+      "queue": {
+        "notify": "Prévenir l’équipe quand une conversation est en attente",
+        "notifyHint": "Les membres de l’équipe, ou tous ceux qui peuvent répondre aux chats non assignés, reçoivent une notification avec le motif."
+      },
+      "teams": {
+        "body": "Chaque équipe a sa propre méthode d’assignation, ses horaires d’ouverture, son fuseau horaire et son responsable par défaut. Ils sont utilisés chaque fois qu’une conversation est transférée à cette équipe.",
+        "link": "Ouvrir Équipes"
+      }
+    }
+  }
+}

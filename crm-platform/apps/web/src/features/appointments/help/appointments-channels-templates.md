@@ -9,7 +9,6 @@ keywords:
   [
     channels,
     whatsapp,
-    sms,
     email,
     template,
     predefined,
@@ -24,7 +23,7 @@ keywords:
 
 ## What it is for
 
-Appointment messages (confirmations, reminders, reschedule and cancellation notices, after-visit follow-ups) can go out on email, WhatsApp and SMS. The workspace owner or an admin decides which of these channels may be used. A booking type can use a channel only when it is **switched on** here and **connected**. Nothing is sent on a channel that is off, even for a booking type that was set up earlier.
+Appointment messages (confirmations, reminders, reschedule and cancellation notices, after-visit follow-ups) can go out on email and WhatsApp. The workspace owner or an admin decides which of these channels may be used. A booking type can use a channel only when it is **switched on** here and **connected**. Nothing is sent on a channel that is off, even for a booking type that was set up earlier.
 
 You can also add ready-made messages and edit them, so you do not start from a blank page.
 
@@ -34,7 +33,7 @@ You can also add ready-made messages and edit them, so you do not start from a b
 2. Switch on the channels your team may use. A channel that is on but not connected shows **Connect it in Settings** with a link.
 3. If you have more than one sender for a channel, pick the **default sender**. Otherwise the first connected one is used.
 
-A workspace that existed before this setting keeps working as it did: email, WhatsApp and SMS are on, and a channel with nothing connected stays unusable. A new workspace starts with nothing chosen, so no appointment message is sent until the owner chooses.
+A workspace that existed before this setting keeps working as it did: email and WhatsApp are on, and a channel with nothing connected stays unusable. A new workspace starts with nothing chosen, so no appointment message is sent until the owner chooses.
 
 **Reminder call** is shown but cannot be switched on. It is an outbound call that will arrive with the Voice bot, and it will then be switched on for each booking type.
 

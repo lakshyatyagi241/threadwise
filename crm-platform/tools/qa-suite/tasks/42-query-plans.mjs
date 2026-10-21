@@ -73,6 +73,7 @@ export default {
         [
           ...(q.equals ?? []).map((c) => `${c} = ${lit(c)}`),
           ...(q.range ?? []).map((c) => `${c} >= ${lit(c)}`),
+          ...(q.where ? [q.where] : []), // the fixed predicate the real query carries (a partial index only serves a query that states it)
         ].join(' AND ') || 'true';
       const sql = `SELECT * FROM ${q.table} WHERE ${where}${q.orderBy ? ' ORDER BY ' + q.orderBy.join(', ') : ''} LIMIT 50`;
       let plan;

@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Chattoewijzing",
+        "intro": "Vier schakelaars dekken de meeste werkruimtes: zet ze aan en je hoeft nooit een regel aan te maken.",
+        "order": "De volgorde voor een nieuwe chat: eerst contacteigenaar en Vaste medewerker, dan je regels (als je er hebt toegevoegd), dan Alle anderen en daarna de wachtrij.",
+        "readOnly": "Je kunt deze schakelaars zien, maar niet wijzigen.",
+        "saved": "Opgeslagen.",
+        "saveFailed": "De wijziging kon niet worden opgeslagen.",
+        "loading": "Toewijzingsinstellingen laden",
+        "loadFailed": "De toewijzingsinstellingen konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "notInPlan": "Niet in je abonnement",
+        "upgradeHint": "Dit zit niet in je abonnement. Vraag de accounteigenaar om het abonnement te upgraden.",
+        "stepFirst": "Wordt eerst gecontroleerd",
+        "stepMaster": "Hoofdschakelaar",
+        "stepAfter": "Na het oppakken",
+        "needsAuto": "Alleen in gebruik als Automatische toewijzing aan staat.",
+        "auto": {
+          "title": "Automatische toewijzing",
+          "body": "Nieuwe chats worden gelijk verdeeld over medewerkers die chats accepteren (niet offline, bezig of met verlof). Zodra elke medewerker zijn chatlimiet heeft bereikt, wachten nieuwe chats in de wachtrij.",
+          "limitHint": "Stel de chatlimiet per medewerker in via het profiel bij <link>Teamleden</link>.",
+          "off": "Uit: er wordt niets automatisch toegewezen, niet via een regel en niet via de contacteigenaar. Chats wachten in de wachtrij tot iemand ze oppakt of een flow een persoon aanwijst."
+        },
+        "sticky": {
+          "title": "Vaste medewerker",
+          "body": "Een terugkerend contact gaat terug naar de medewerker die de laatste chat behandelde, zolang die medewerker nog een actief lid is dat de inbox kan openen (de online status wordt niet gecontroleerd). Heeft het contact een eigenaar, dan wordt eerst de eigenaar geprobeerd.",
+          "withWindow": "Hoeveel dagen terug de laatste medewerker meetelt, stel je in onder Geavanceerd."
+        },
+        "owner": {
+          "title": "Chat toewijzen aan contacteigenaar",
+          "body": "Chats van een bekend contact gaan eerst naar de contacteigenaar, zodat de ondersteuning consistent en persoonlijk blijft. Is de eigenaar met verlof, dan neemt diens vervanger de chat over; is er geen eigenaar, dan beslist de volgende stap.",
+          "wins": "Als Vaste medewerker ook aan staat, wint de contacteigenaar nog steeds; de laatste medewerker is dan alleen de tweede keuze."
+        },
+        "claim": {
+          "title": "Medewerker als contacteigenaar instellen",
+          "body": "Wanneer een medewerker een chat uit de wachtrij oppakt en het contact nog geen eigenaar heeft, wordt die medewerker de contacteigenaar. Een bestaande eigenaar wordt nooit gewijzigd.",
+          "note": "Een chat die door een regel aan een medewerker is gegeven, bepaalt de eigenaar niet. Met Open chats bij de eigenaar houden (onder Geavanceerd) doet een overdracht dat wel."
+        }
+      },
+      "advanced": {
+        "title": "Geavanceerd",
+        "hint": "Chats synchroon houden met de contacteigenaar, het vaste-medewerkervenster, de melding bij hertoewijzing en wachtrijmeldingen.",
+        "sync": {
+          "title": "Open chats bij de eigenaar houden",
+          "body": "Wanneer de eigenaar van een contact verandert, volgen de open chats van dat contact die automatisch zijn toegewezen de nieuwe eigenaar. Een chat die iemand zelf heeft opgepakt, wordt nooit verplaatst. Een overdracht die een chat toewijst, stelt ook de eigenaar in als het contact er geen heeft.",
+          "needsOwner": "Zet eerst Chat toewijzen aan contacteigenaar aan."
+        }
+      },
+      "rules": {
+        "title": "Meer controle nodig? Voeg regels toe",
+        "intro": "Optioneel. Met regels stuur je bepaalde chats (een kanaal, woorden in het bericht, een nieuw contact...) naar bepaalde medewerkers of teams. Zijn de vier schakelaars genoeg, dan hoef je nooit een regel aan te maken.",
+        "locked": "Regels zitten niet in je abonnement. Je hebt nog steeds de wachtrij, het oppakken van chats en handmatige toewijzing. Vraag de accounteigenaar om het abonnement te upgraden.",
+        "pipelineTitle": "Hoe een nieuwe chat wordt toegewezen",
+        "pipeline": {
+          "agent": "1. Contacteigenaar en Vaste medewerker",
+          "rules": "2. Je regels, van boven naar beneden",
+          "rulesBody": "De eerste regel die past en een beschikbare medewerker vindt, krijgt de chat.",
+          "everyone": "3. Alle anderen",
+          "everyoneBody": "Neemt alles over wat geen regel heeft opgepakt.",
+          "queue": "4. Wachtrij",
+          "queueBody": "Als er niemand wordt gevonden, wacht de chat op het tabblad Wachtend tot een medewerker hem oppakt.",
+          "agentBody": "Ingesteld via de schakelaars hierboven."
+        },
+        "never": "Wat al is toegewezen door een flow, een persoon of een overdracht, wordt nooit door de regels gewijzigd.",
+        "add": "Regel toevoegen",
+        "emptyTitle": "Geen regels",
+        "empty": "Dat is prima. Je schakelaars hierboven en Alle anderen beslissen.",
+        "loading": "Regels laden",
+        "loadFailed": "De regels konden niet worden geladen.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "alle medewerkers",
+        "noAssign": "wijst niet toe",
+        "drag": "Sleep {name} om de volgorde te wijzigen",
+        "neverRuns": "Wordt nooit uitgevoerd",
+        "neverMatches": "Past nooit",
+        "neverMatchesHint": "De regel heeft geen voorwaarde en geldt niet voor elk gesprek. Bewerk de regel om dat op te lossen.",
+        "shadowed": "{count, plural, one {De regel onder} other {De regels onder}} “{blocker}” kan nooit worden uitgevoerd, tenzij niemand in “{blocker}” beschikbaar is: {names}. “{blocker}” geldt voor elk gesprek en stopt de controle daar. Verplaats de regel omlaag of zet “Stoppen wanneer deze regel past” erin uit.",
+        "reordered": "Volgorde opgeslagen."
+      },
+      "everyone": {
+        "title": "Alle anderen",
+        "pinned": "Altijd laatst",
+        "body": "Neemt elke chat over die geen enkele regel heeft opgepakt. Kies wie hem krijgt.",
+        "notSet": "Nog niet ingesteld: chats die geen regel oppakt, wachten in de wachtrij.",
+        "mode": "Wat er met die chats gebeurt",
+        "evenly": "Gelijk verdelen over alle medewerkers",
+        "evenlyHint": "Om de beurt of minst bezig onder iedereen die de inbox kan openen en beschikbaar is: niet offline, bezig, met verlof of op de chatlimiet.",
+        "listed": "Kies medewerkers of teams",
+        "listedNow": "Nu: {who}.",
+        "listedEdit": "De medewerkers of teams wijzigen",
+        "queue": "In de wachtrij laten staan",
+        "queueHint": "Er wordt niemand toegewezen. De chat wacht tot een medewerker hem oppakt.",
+        "strategy": "Verdelingsmethode",
+        "saved": "Opgeslagen.",
+        "failed": "De wijziging kon niet worden opgeslagen.",
+        "confirmTitle": "De gekozen medewerkers vervangen?",
+        "confirmBody": "Alle anderen geeft chats nu aan de medewerkers of teams die je hebt gekozen. Gelijk verdelen vervangt die keuze.",
+        "confirm": "Vervangen",
+        "ruleName": "Alle anderen"
+      },
+      "where": {
+        "title": "Waar dit geldt",
+        "applied": "Geldt wel",
+        "applied1": "Wanneer er een nieuwe chat binnenkomt (en wanneer een klant een afgesloten chat heropent die niemand heeft).",
+        "applied2": "Wanneer een stap Menselijke overdracht op “Toewijzingsregels” staat: dan wordt dezelfde lijst gecontroleerd, op basis van het contact, het kanaal en het laatste bericht van de klant, daarna Alle anderen en dan de wachtrij.",
+        "not": "Geldt niet",
+        "not1": "Een chat die al door een flow, een persoon of een overdracht is toegewezen.",
+        "not2": "Handmatig toewijzen of oppakken.",
+        "not3": "Een stap Menselijke overdracht die een persoon aanwijst (de regels worden genegeerd) of een team (de eigen methode van het team wordt gebruikt)."
+      },
+      "try": {
+        "title": "Uitproberen",
+        "body": "Kies een contact, een kanaal en een voorbeeldbericht om te zien wie de chat zou krijgen en waarom. Er wordt niets toegewezen, geteld of verstuurd.",
+        "contact": "Contact (optioneel)",
+        "noContact": "Geen contact gekozen: het voorbeeld is een gloednieuw contact. Voorwaarden op opgeslagen contactgegevens kunnen zonder echt contact niet worden gecontroleerd.",
+        "channel": "Kanaal",
+        "message": "Voorbeeldbericht",
+        "messagePlaceholder": "bijv. Ik wil graag mijn geld terug",
+        "run": "Laten zien wat er zou gebeuren",
+        "running": "Controleren",
+        "failed": "De test kon niet worden uitgevoerd.",
+        "result": "Resultaat",
+        "outcome": {
+          "sticky": "Bij de eigen medewerker houden beslist: {who}.",
+          "rule": "De regel “{rule}” beslist: {who}.",
+          "everyone": "Alle anderen beslist: {who}.",
+          "queue": "Er wordt niemand gevonden: de chat wacht in de wachtrij.",
+          "off": "Automatische toewijzing staat uit: er wordt niets automatisch toegewezen."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "een medewerker",
+          "team": "de wachtrij van {name}",
+          "teamUnknown": "een teamwachtrij"
+        },
+        "stepsTitle": "Stap voor stap",
+        "step": {
+          "switch": "Automatische toewijzing",
+          "sticky": "Contacteigenaar en Vaste medewerker",
+          "rule": "Regel “{name}”",
+          "everyone": "Alle anderen",
+          "queue": "Wachtrij"
+        },
+        "why": {
+          "auto_assign_off": "De schakelaar staat uit.",
+          "sticky_off": "Beide schakelaars staan uit, dus deze stap wordt overgeslagen.",
+          "no_contact": "Er is geen contact om op te zoeken.",
+          "no_agent_found": "Geen contacteigenaar of laatste medewerker kon de chat overnemen.",
+          "owner": "De contacteigenaar neemt de chat.",
+          "last_handler": "De medewerker van de laatste chat van het contact neemt de chat.",
+          "conditions_failed": "Past niet.",
+          "nobody_available": "Past, maar niemand naar wie de regel verwijst is beschikbaar.",
+          "agent_picked": "Past en heeft een medewerker gekozen.",
+          "team_queue": "Past; niemand was vrij, dus de chat gaat naar de wachtrij van het team.",
+          "no_assignment_in_rule": "Past; deze regel wijst niet toe (hij voert alleen zijn andere acties uit).",
+          "not_set": "Er is geen actieve regel Alle anderen, dus chats die niemand oppakt, wachten in de wachtrij."
+        },
+        "part": {
+          "contactKind": "Nieuw of terugkerend contact",
+          "contact": "Contactgegevens",
+          "channel": "Kanaal",
+          "keywords": "Woorden in het bericht",
+          "languages": "Taal",
+          "businessHours": "Zakelijke uren"
+        },
+        "partOk": "past",
+        "partWhy": {
+          "no_saved_value": "dit contact heeft dat niet opgeslagen, dus het past niet",
+          "no_contact": "er is geen contact",
+          "not_same_kind": "het contact is niet van dat type",
+          "channel_differs": "dit kanaal staat niet in de lijst",
+          "no_word": "geen van de woorden staat in het bericht",
+          "language_differs": "de taal is anders of onbekend",
+          "hours_differ": "het tijdstip valt niet in dat deel van de dag"
+        },
+        "contactLine": "Dit contact is {kind}. Fase: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "nieuw",
+          "returning": "terugkerend"
+        },
+        "hasOwner": "Het heeft een eigenaar.",
+        "noOwner": "Het heeft geen eigenaar.",
+        "tags": "{count, plural, =0 {Geen tags opgeslagen.} one {# tag opgeslagen.} other {# tags opgeslagen.}}",
+        "skippedTitle": "Overgeslagen",
+        "skip": {
+          "on_leave": "met verlof",
+          "offline_busy_or_at_capacity": "offline, bezig of op de chatlimiet",
+          "cannot_read": "kan de inbox niet openen",
+          "no_owner": "het contact heeft geen eigenaar",
+          "no_previous_handler_in_window": "geen eerdere medewerker voor dit contact",
+          "not_an_active_member": "geen actief lid"
+        },
+        "outside": "Doen alsof het buiten de zakelijke uren is",
+        "inside": "Doen alsof het binnen de zakelijke uren is",
+        "clock": "Zakelijke uren: de klok van nu gebruiken",
+        "skipStep": {
+          "owner": "Contacteigenaar",
+          "last_handler": "Laatste medewerker"
+        }
+      },
+      "form": {
+        "whenSwitch": "Alleen voor gesprekken die passen bij...",
+        "whenSwitchHint": "Uit: deze regel geldt voor elk nieuw gesprek.",
+        "everyConversation": "Deze regel geldt voor elk nieuw gesprek.",
+        "kept": "Je voorwaarden blijven bewaard, maar worden genegeerd zolang dit uit staat.",
+        "add": "Voorwaarde toevoegen",
+        "remove": "{name} verwijderen",
+        "name": {
+          "contactKind": "Nieuw of terugkerend contact",
+          "channel": "Kanaal",
+          "keywords": "Woorden in het bericht",
+          "language": "Taal van de klant",
+          "hours": "Zakelijke uren",
+          "contact": "Contactgegevens"
+        },
+        "kind": {
+          "title": "Nieuw of terugkerend contact",
+          "hint": "Een contact is terugkerend als het een eerdere chat heeft of meer dan 10 minuten vóór deze chat is opgeslagen.",
+          "new": "Nieuw contact (eerste chat)",
+          "returning": "Terugkerend contact"
+        },
+        "contactNote": "Past alleen bij contacten die dit al hebben opgeslagen. Een gloednieuw contact komt binnen zonder iets opgeslagen behalve de fase “Nieuw”, gebruik dus Nieuw of terugkerend contact voor nieuwe klanten.",
+        "everyoneElseNote": "Dit is de regel Alle anderen: hij neemt de chats over die geen enkele andere regel heeft opgepakt.",
+        "everyoneAgents": "Iedereen die de inbox kan openen",
+        "everyoneAgentsHint": "Verdeel de chats over alle beschikbare medewerkers in plaats van ze zelf te kiezen.",
+        "fallbackConditions": "Deze regel heeft eerder opgeslagen voorwaarden, dus hij neemt alleen de chats die daarbij passen. Zet de schakelaar hieronder aan om ze te bekijken, of verwijder ze."
+      }
+    }
+  }
+}

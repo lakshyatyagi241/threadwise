@@ -3,6 +3,7 @@
 #
 #   ./observability-up.sh        # first time: makes the token, asks where alerts go, starts prometheus, alertmanager and the probe
 #   docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d prometheus alertmanager probe   # afterwards
+#   Grafana is a separate, opt-in step (see "Grafana" below): `pull grafana` then `up -d grafana`.
 #
 # What it adds
 #   prometheus    scrapes api, worker, web and the probe, evaluates ../observability/event-loop.rules.yml, keeps 15 days (or 2 GB)
@@ -16,12 +17,25 @@
 # Prometheus finds the API and the web server by the network alias `api` / `web` that both slots carry, which resolves to running slots
 # only, so the idle slot is never a down target.
 #
-# Nothing is published and nothing is routed through Traefik: reach Prometheus and Alertmanager with
+# Nothing is published and Prometheus and Alertmanager are not routed through Traefik: reach them with
 #   docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/targets
 # or an SSH tunnel. Memory budget on the shared host: prometheus 384m, alertmanager 128m, probe 128m.
 #
-# The Prometheus and Alertmanager images are public images pulled from Docker Hub (the app images are loaded, not pulled): the host
-# needs one `docker compose pull prometheus alertmanager` with internet access.
+# Grafana (grafana/grafana-oss:11.3.0, 256m): dashboards from ../observability/grafana, behind a login (anonymous access and sign-up off),
+# at https://${GRAFANA_DOMAIN} (default grafana.${DOMAIN}). No published port. The route is a Traefik file, traefik-grafana.yml, that
+# observability-up.sh writes next to desk.yml; ci-entry.sh never touches it and a release never starts or stops grafana. The admin
+# password is generated into secrets/grafana_admin_password (never printed, never committed). Server owner, once:
+#   1. DNS: an A record for GRAFANA_DOMAIN pointing at this host.
+#   2. .env: GRAFANA_DOMAIN=grafana.example.com (or leave it out: grafana.${DOMAIN} is used and written by the script).
+#   3. ./observability-up.sh   (makes the password file and the Traefik route; also starts prometheus, alertmanager, probe)
+#   4. docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env pull grafana
+#      docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d grafana
+#   Log in as `admin` with the contents of secrets/grafana_admin_password. Rotate: delete that file, run ./observability-up.sh, then
+#   `up -d --force-recreate grafana`; Grafana keeps the password in its database, so also run
+#   `exec grafana grafana cli admin reset-admin-password --password-from-stdin < secrets/grafana_admin_password`.
+#
+# The Prometheus, Alertmanager and Grafana images are public images pulled from Docker Hub (the app images are loaded, not pulled): the host
+# needs one `docker compose pull prometheus alertmanager` (and `grafana`) with internet access.
 
 # Anchors do not cross compose files, so the base file's log rotation is repeated here (a shared host, logs must not grow forever).
 x-obs-logging: &obs-logging
@@ -69,6 +83,7 @@ services:
       - ../observability/queue-capacity.rules.yml:/etc/prometheus/queue-capacity.rules.yml:ro
       - ../observability/resource-limits.rules.yml:/etc/prometheus/resource-limits.rules.yml:ro
       - ../observability/cache-hit-rate.rules.yml:/etc/prometheus/cache-hit-rate.rules.yml:ro
+      - ../observability/p0-failure-modes.rules.yml:/etc/prometheus/p0-failure-modes.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
     depends_on:
@@ -89,7 +104,32 @@ services:
       - amdata:/alertmanager
     secrets: [alert_webhook_url]
 
+  grafana:
+    image: grafana/grafana-oss:11.3.0
+    container_name: desk-grafana
+    restart: unless-stopped
+    mem_limit: 256m
+    logging: *obs-logging
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_AUTH_ANONYMOUS_ENABLED: 'false'
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_ANALYTICS_REPORTING_ENABLED: 'false'
+      GF_SERVER_ROOT_URL: https://${GRAFANA_DOMAIN:-grafana.${DOMAIN:?DOMAIN is required}}
+    volumes:
+      # The data source (url http://prometheus:9090) already resolves here: prometheus is a service of this same compose project.
+      - ../observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    secrets: [grafana_admin_password]
+    networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-grafana:3000
+    depends_on:
+      - prometheus
+
 secrets:
+  grafana_admin_password:
+    file: ./secrets/grafana_admin_password
   obs_metrics_token:
     file: ./secrets/obs_metrics_token
   alert_webhook_url:
@@ -98,3 +138,4 @@ secrets:
 volumes:
   promdata:
   amdata:
+  grafanadata:

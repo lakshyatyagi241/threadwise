@@ -247,7 +247,7 @@ describe('createFatalHandler', () => {
     await vi.waitFor(() => expect(exit).toHaveBeenCalledWith(1));
     expect(lines).toHaveLength(1);
     expect(JSON.parse(lines[0]!)).toMatchObject({
-      level: 60,
+      level: 'fatal',
       service: 'worker',
       msg: 'uncaught exception: process is exiting',
       err: { type: 'Error', message: 'boom' },

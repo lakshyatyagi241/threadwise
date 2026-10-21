@@ -1,0 +1,31 @@
+{
+  "module": "company-briefs",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "generateCompanyBriefSchema",
+      "file": "apps/api/src/modules/company-briefs/company-briefs.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "regenerate",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "regenerate",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

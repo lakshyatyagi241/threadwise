@@ -563,7 +563,8 @@
             "lead_scoring": "AI-leadscoring",
             "record_assignment": "Regels voor recordtoewijzing",
             "team_hierarchy": "Teamhiërarchie en managers",
-            "custom_roles": "Eigen rollen en bereiken"
+            "custom_roles": "Eigen rollen en bereiken",
+            "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

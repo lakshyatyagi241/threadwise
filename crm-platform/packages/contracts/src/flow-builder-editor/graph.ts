@@ -96,7 +96,14 @@ export function flbNormalizeGraph(
     const nx = Number(nd.x);
     const ny = Number(nd.y);
     const pos = fallback === 'grid' ? flbGridPosition(i) : fallback;
-    const data = { ...flbDefaultNodeData(type), ...(isRecord(nd.data) ? nd.data : {}) };
+    const saved = isRecord(nd.data) ? nd.data : {};
+    // A node saved as the old Assign agent (no `handoff` marker) keeps its own fields and its single exit when it is opened: the Human
+    // handoff defaults are for a NEW node, and an old flow is only switched by the author's explicit click (BL-398).
+    const base =
+      type === 'assign' && saved.handoff === undefined
+        ? { team: '', userId: '', message: '' }
+        : flbDefaultNodeData(type);
+    const data = { ...base, ...saved };
     // A legacy Trigger carries `triggerMode` (TW-FLB-020 rule 4); the default `keywordMode` must not hide it.
     if (
       type === 'trigger' &&

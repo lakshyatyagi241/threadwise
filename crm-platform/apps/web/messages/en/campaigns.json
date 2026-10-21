@@ -86,7 +86,10 @@
         "all": "All time",
         "7d": "Last 7 days",
         "30d": "Last 30 days",
-        "90d": "Last 90 days"
+        "90d": "Last 90 days",
+        "custom": "Custom range",
+        "from": "From date",
+        "to": "To date"
       },
       "search": "Search campaigns…",
       "selectPage": "Select this page",
@@ -1910,7 +1913,6 @@
         "noRuns": "No run has started yet.",
         "cancel": "Cancel series"
       },
-      "legacy": "Legacy broadcasts ({count})",
       "view": {
         "label": "View",
         "list": "List",

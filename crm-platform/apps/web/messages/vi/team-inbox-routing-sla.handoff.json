@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Không có trong gói của bạn",
+      "upgradeHint": "Gói của bạn không bao gồm tính năng này. Hãy nhờ chủ tài khoản nâng cấp gói.",
+      "owner": {
+        "prompt": "Hỏi về chủ sở hữu liên hệ khi giao lại",
+        "promptHint": "Khi chat được giao thủ công cho người khác, đề nghị đặt họ làm chủ sở hữu liên hệ luôn.",
+        "window": "Giữ liên hệ quay lại với nhân viên gần nhất",
+        "windowHint": "Liên hệ nhắn lại sẽ được chuyển cho người đã xử lý cuộc trò chuyện gần nhất, trong số ngày này. Tắt nghĩa là không giới hạn.",
+        "windowDays": "Số ngày",
+        "days": "ngày"
+      },
+      "queue": {
+        "notify": "Báo cho nhóm khi có cuộc trò chuyện đang chờ",
+        "notifyHint": "Thành viên của nhóm, hoặc mọi người có thể trả lời chat chưa giao, sẽ nhận được thông báo kèm lý do."
+      },
+      "teams": {
+        "body": "Mỗi nhóm có phương thức giao việc, giờ làm việc, múi giờ và người nhận mặc định riêng. Chúng được dùng mỗi khi một cuộc trò chuyện được chuyển cho nhóm đó.",
+        "link": "Mở Nhóm"
+      }
+    }
+  }
+}

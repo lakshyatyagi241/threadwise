@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Wachtend"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Niemand wacht op een medewerker",
+          "message": "Wanneer een bot, een flow of een collega om een medewerker vraagt, wacht het gesprek hier tot iemand het overneemt."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "De bot antwoordt",
+        "waiting": "Wacht op een medewerker",
+        "with_person": "Bij een medewerker"
+      },
+      "ageMinutes": "{count}min",
+      "ageHours": "{count}u",
+      "ageDays": "{count}d",
+      "row": {
+        "waiting": "Wachtend",
+        "waitingFor": "Wacht al {age}",
+        "inTeam": "In de wachtrij van {team}"
+      },
+      "assignedTo": "nu bij {name}",
+      "inTeamQueue": "wachtrij van {team}",
+      "cardFailed": "De overdrachtsgegevens konden niet worden geladen.",
+      "claim": {
+        "button": "Overnemen",
+        "done": "Je hebt dit gesprek overgenomen.",
+        "doneOwner": "Je hebt dit gesprek overgenomen en bent nu de eigenaar van het contact.",
+        "failed": "Het gesprek kon niet worden overgenomen.",
+        "taken": "Iemand anders heeft dit gesprek als eerste overgenomen."
+      },
+      "giveBack": {
+        "button": "Terug naar bot",
+        "done": "De bot beantwoordt dit gesprek weer.",
+        "failed": "Het gesprek kon niet worden teruggegeven aan de bot."
+      },
+      "send": {
+        "button": "Naar wachtrij sturen",
+        "buttonAgain": "Opnieuw naar wachtrij sturen",
+        "title": "Naar een medewerker sturen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "submit": "Versturen",
+        "intro": "De bot beantwoordt dit contact niet meer. Het gesprek gaat naar de persoon of het team dat je kiest, of wacht in de wachtrij tot iemand het overneemt.",
+        "where": "Sturen naar",
+        "whereRules": "De toewijzingsregels, anders de wachtrij",
+        "whereQueueOnly": "De wachtrij (toewijzingsregels zitten niet in je abonnement)",
+        "whereTeam": "Een team",
+        "wherePerson": "Eén persoon",
+        "team": "Team",
+        "pickTeam": "Kies een team",
+        "person": "Persoon",
+        "pickPerson": "Kies een persoon",
+        "reason": "Waarom een medewerker nodig is",
+        "note": "Notitie voor wie het overneemt",
+        "noteHint": "Wordt getoond op de overdrachtskaart. Maximaal 500 tekens.",
+        "refused": "Dit gesprek kan niet worden overgedragen (het is gearchiveerd, spam of een persoonlijke mailbox).",
+        "failed": "Het gesprek kon niet worden verstuurd.",
+        "done": {
+          "assigned": "Verstuurd: iemand heeft het nu.",
+          "waiting": "Verstuurd: het wacht in de wachtrij.",
+          "unavailable": "Naar de wachtrij gestuurd: er is nu niemand beschikbaar."
+        }
+      },
+      "details": {
+        "show": "Details",
+        "hide": "Details verbergen"
+      },
+      "card": {
+        "source": "Gevraagd door",
+        "reason": "Reden",
+        "priority": "Prioriteit",
+        "summary": "Samenvatting",
+        "answers": "Wat het contact de bot heeft verteld",
+        "trace": "Hoe het is toegewezen"
+      },
+      "source": {
+        "flow": "Een flow",
+        "ai_agent": "Een AI-agent",
+        "keyword": "Het eigen verzoek van het contact",
+        "bot_failure": "Een bot die niet kon helpen",
+        "manual": "Een collega"
+      },
+      "reason": {
+        "customer_asked": "Het contact vroeg om een medewerker",
+        "bot_could_not_help": "De bot kon niet helpen",
+        "sensitive_topic": "Gevoelig onderwerp",
+        "sales_lead": "Salesprospect",
+        "complaint": "Klacht",
+        "other": "Overig"
+      },
+      "priority": {
+        "low": "Laag",
+        "normal": "Normaal",
+        "high": "Hoog",
+        "urgent": "Urgent"
+      },
+      "trace": {
+        "chosen": "Gekozen",
+        "skipped": "Overgeslagen",
+        "info": "Notitie"
+      }
+    }
+  }
+}

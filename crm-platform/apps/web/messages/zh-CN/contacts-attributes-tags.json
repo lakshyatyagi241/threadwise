@@ -130,6 +130,7 @@
       "colLeadScore": "线索评分",
       "colLanguage": "语言",
       "colCreatedOn": "创建时间",
+      "colModifiedOn": "修改时间",
       "pagination": "分页",
       "prevPage": "上一页",
       "nextPage": "下一页",
@@ -282,6 +283,7 @@
       "shortStage": "阶段",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "创建时间",
+      "shortModified": "修改时间",
       "firstRun": {
         "title": "添加您的第一批联系人",
         "message": "导入您常联系的人。联系人可用于消息、营销活动、任务和交易。",
@@ -446,7 +448,8 @@
       "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。",
       "searchOptions": "搜索选项",
       "searchOptionsFor": "搜索{field}的选项",
-      "noOptionsFound": "没有与搜索匹配的选项。"
+      "noOptionsFound": "没有与搜索匹配的选项。",
+      "cascadeWaiting": "请先选择 {parent} 以查看选项。"
     },
     "tags": {
       "title": "标签",
@@ -1085,7 +1088,8 @@
         "moveDown": "下移 {name}",
         "edit": "编辑 {name}",
         "deactivate": "停用 {name}",
-        "reactivate": "重新启用"
+        "reactivate": "重新启用",
+        "dependsOn": "选项取决于 {field}"
       },
       "toast": {
         "conflict": "其他人已做出更改。列表已刷新，请重试。",
@@ -1241,6 +1245,34 @@
         "manageStages": "管理阶段",
         "manageGroups": "管理群组",
         "locked": "固定"
+      },
+      "cascade": {
+        "open": "依赖字段",
+        "title": "依赖字段",
+        "close": "关闭",
+        "intro": "依赖字段始终显示。它的选项取决于父属性所选的值：对于父属性的每个选项，勾选它允许的依赖字段选项。",
+        "empty": "还没有依赖字段。",
+        "add": "添加依赖字段",
+        "needTwoChoiceFields": "依赖字段至少需要两个带选项列表的属性（下拉、多选或单选）。",
+        "dependsOn": "依赖于 {parent}",
+        "editLabel": "编辑 {name}",
+        "removeLabel": "移除 {name}",
+        "parent": "父属性",
+        "child": "依赖属性",
+        "pickParent": "选择父属性",
+        "pickChild": "选择依赖属性",
+        "allowed": "{parent} 的每个选项下允许的 {child} 选项",
+        "noParentChoices": "父属性还没有选项。",
+        "noChildChoices": "依赖属性还没有选项。",
+        "cancel": "取消",
+        "save": "保存",
+        "saved": "依赖字段已保存。",
+        "cycle": "这个依赖会让两个属性互相等待。",
+        "removeTitle": "从依赖字段中移除 {name}？",
+        "removeMessage": "它会重新显示所有选项。它在父属性下的选项设置会被清除，联系人已有的值会保留。",
+        "removeConfirm": "移除",
+        "removed": "依赖字段已移除。",
+        "removeFailed": "无法移除依赖字段，请重试。"
       }
     },
     "lost": {

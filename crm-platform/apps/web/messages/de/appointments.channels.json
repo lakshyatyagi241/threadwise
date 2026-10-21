@@ -21,13 +21,11 @@
       "names": {
         "email": "E-Mail",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Erinnerungsanruf"
       },
       "about": {
         "email": "Von einem gemeinsamen Postfach Ihres Workspace. Nie von einem persönlichen Postfach.",
         "whatsapp": "Freitext innerhalb des 24-Stunden-Fensters; außerhalb nur eine genehmigte Vorlage.",
-        "sms": "Reiner Text von Ihrem verbundenen SMS-Absender.",
         "voice": "Ein automatischer ausgehender Anruf, der den Kontakt erinnert."
       },
       "status": {

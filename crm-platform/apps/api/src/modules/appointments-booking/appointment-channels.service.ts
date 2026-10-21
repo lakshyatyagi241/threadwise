@@ -59,7 +59,7 @@ export function stateOf(
 }
 
 /**
- * The workspace's choice of channels for appointment messages (BL-350). The owner (or an admin) switches email, WhatsApp and SMS on or
+ * The workspace's choice of channels for appointment messages (BL-350). The owner (or an admin) switches email and WhatsApp on or
  * off and may pick a default sender per channel; voice is listed and cannot be switched on until the Voice bot exists.
  *
  * "Enabled" is the owner's decision; "connected" is the fact that a sender exists. A booking type can use a channel only when both hold,

@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "En attente"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Personne n’attend une intervention humaine",
+          "message": "Quand un bot, un flux ou un collègue demande une personne, la conversation attend ici que quelqu’un la prenne."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Le bot répond",
+        "waiting": "En attente d’une personne",
+        "with_person": "Avec une personne"
+      },
+      "ageMinutes": "{count}min",
+      "ageHours": "{count}h",
+      "ageDays": "{count}j",
+      "row": {
+        "waiting": "En attente",
+        "waitingFor": "En attente depuis {age}",
+        "inTeam": "Dans la file de {team}"
+      },
+      "assignedTo": "désormais avec {name}",
+      "inTeamQueue": "file de {team}",
+      "cardFailed": "Impossible de charger les détails du transfert.",
+      "claim": {
+        "button": "Prendre",
+        "done": "Vous avez pris cette conversation.",
+        "doneOwner": "Vous avez pris cette conversation et vous êtes maintenant le propriétaire du contact.",
+        "failed": "Impossible de prendre la conversation.",
+        "taken": "Quelqu’un d’autre a pris cette conversation en premier."
+      },
+      "giveBack": {
+        "button": "Rendre au bot",
+        "done": "Le bot répond de nouveau à cette conversation.",
+        "failed": "Impossible de rendre la conversation au bot."
+      },
+      "send": {
+        "button": "Envoyer dans la file",
+        "buttonAgain": "Renvoyer dans la file",
+        "title": "Envoyer à une personne",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "submit": "Envoyer",
+        "intro": "Le bot cesse de répondre à ce contact. La conversation va à la personne ou à l’équipe que vous choisissez, ou attend dans la file que quelqu’un la prenne.",
+        "where": "Envoyer à",
+        "whereRules": "Les règles d’assignation, sinon la file d’attente",
+        "whereQueueOnly": "La file d’attente (les règles d’assignation ne sont pas incluses dans votre offre)",
+        "whereTeam": "Une équipe",
+        "wherePerson": "Une personne",
+        "team": "Équipe",
+        "pickTeam": "Choisissez une équipe",
+        "person": "Personne",
+        "pickPerson": "Choisissez une personne",
+        "reason": "Pourquoi une personne est nécessaire",
+        "note": "Note pour la personne qui la prend",
+        "noteHint": "Affichée sur la carte de transfert. 500 caractères maximum.",
+        "refused": "Cette conversation ne peut pas être transférée (elle est archivée, c’est du spam ou une boîte mail personnelle).",
+        "failed": "Impossible d’envoyer la conversation.",
+        "done": {
+          "assigned": "Envoyée : quelqu’un l’a maintenant.",
+          "waiting": "Envoyée : elle attend dans la file.",
+          "unavailable": "Envoyée dans la file : personne n’est disponible pour le moment."
+        }
+      },
+      "details": {
+        "show": "Détails",
+        "hide": "Masquer les détails"
+      },
+      "card": {
+        "source": "Demandé par",
+        "reason": "Motif",
+        "priority": "Priorité",
+        "summary": "Résumé",
+        "answers": "Ce que le contact a dit au bot",
+        "trace": "Comment elle a été assignée"
+      },
+      "source": {
+        "flow": "Un flux",
+        "ai_agent": "Un agent IA",
+        "keyword": "Demande du contact lui-même",
+        "bot_failure": "Un bot qui n’a pas pu aider",
+        "manual": "Un collègue"
+      },
+      "reason": {
+        "customer_asked": "Le contact a demandé une personne",
+        "bot_could_not_help": "Le bot n’a pas pu aider",
+        "sensitive_topic": "Sujet sensible",
+        "sales_lead": "Prospect commercial",
+        "complaint": "Réclamation",
+        "other": "Autre"
+      },
+      "priority": {
+        "low": "Basse",
+        "normal": "Normale",
+        "high": "Haute",
+        "urgent": "Urgente"
+      },
+      "trace": {
+        "chosen": "Choisi",
+        "skipped": "Ignoré",
+        "info": "Note"
+      }
+    }
+  }
+}

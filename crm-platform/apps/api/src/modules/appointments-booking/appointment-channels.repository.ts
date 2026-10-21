@@ -31,7 +31,6 @@ export interface SenderRow {
 
 export interface SenderDirectory {
   whatsapp: SenderRow[];
-  sms: SenderRow[];
   email: SenderRow[];
   /** A connected WhatsApp number that is not the Cloud API (a QR device): it can send text, not templates. */
   whatsappDevice: boolean;
@@ -165,7 +164,7 @@ export class AppointmentChannelsRepository {
     const configs = await tx.execute(sql`
       SELECT id, uuid, provider, coalesce(nullif(display_label, ''), phone_number) AS label
       FROM wa_provider_configs
-      WHERE org_id = ${orgId} AND status = 'connected' AND provider IN ('waba', 'sms')
+      WHERE org_id = ${orgId} AND status = 'connected' AND provider = 'waba'
       ORDER BY is_primary DESC, id`);
     const mail = await tx.execute(sql`
       SELECT id, uuid, coalesce(nullif(display_name, ''), address::text) AS label
@@ -184,7 +183,6 @@ export class AppointmentChannelsRepository {
         }));
     return {
       whatsapp: pick('waba'),
-      sms: pick('sms'),
       email: (mail.rows as Raw[]).map((r) => ({
         id: Number(r.id),
         uuid: r.uuid as string,

@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "assignée",
+        "waitingInQueue": "en file d’attente",
+        "noAgentOutOfHours": "aucun agent / hors horaires"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Étape {stage} : choisissez la personne à qui va la conversation."
+      }
+    },
+    "simulator": {
+      "handoff": "transférée à une personne (destination : {destination}, équipe « {team} ») ; le chat de test prend la sortie « assignée »"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Transférer à",
+          "handoffRules": "Règles d’assignation",
+          "pickAgent": "— choisir une personne —"
+        }
+      },
+      "handoff": {
+        "legacy": "Cette étape est l’ancienne « Assigner un agent ».",
+        "upgradeHint": "Elle confie le chat à une équipe et continue. Passez au Transfert à un humain pour ajouter un motif, une priorité, des messages pour le contact et trois sorties (assignée, en file d’attente, aucun agent ou hors horaires). Les liaisons déjà créées continuent de fonctionner.",
+        "upgrade": "Utiliser les fonctions de transfert",
+        "destination": "Envoyer la conversation à",
+        "dest": {
+          "team": "Une équipe",
+          "person": "Une personne",
+          "rules": "Les règles d’assignation",
+          "rulesLocked": "Les règles d’assignation (non incluses dans votre offre)"
+        },
+        "destHint": {
+          "team": "Elle va à quelqu’un de l’équipe ou attend dans la file de l’équipe.",
+          "person": "Elle va à cette personne si elle peut la prendre ; sinon elle attend dans la file.",
+          "rules": "Utilise vos règles d’assignation automatique des conversations ; si aucune ne trouve de personne, elle attend dans la file."
+        },
+        "lockHint": "Votre offre n’inclut pas les règles d’assignation : une conversation envoyée ici attend dans la file En attente qu’un collègue la prenne.",
+        "team": "Équipe",
+        "teamPick": "— choisir une équipe —",
+        "teamNone": "Aucune équipe pour le moment",
+        "teamOption": "{name} · {count, plural, one {# agent} many {# d’agents} other {# agents}}",
+        "teamHint": "<link>Gérer les équipes →</link>",
+        "person": "Personne",
+        "personPick": "— choisir une personne —",
+        "personHint": "Quelqu’un de vos équipes.",
+        "unknownMember": "{value} (n’est pas dans cet espace de travail)",
+        "reason": "Motif",
+        "reasons": {
+          "customer_asked": "Le contact a demandé une personne",
+          "bot_could_not_help": "Le bot n’a pas pu aider",
+          "sensitive_topic": "Sujet sensible",
+          "sales_lead": "Prospect commercial",
+          "complaint": "Réclamation",
+          "other": "Autre"
+        },
+        "priority": "Priorité",
+        "priorityKeep": "Conserver la priorité actuelle",
+        "priorities": {
+          "low": "Basse",
+          "normal": "Normale",
+          "high": "Haute",
+          "urgent": "Urgente"
+        },
+        "note": "Note pour l’agent",
+        "noteHint": "Interne. Affichée sur la carte de transfert ; les '{{'variables'}}' fonctionnent. 500 caractères maximum.",
+        "customerMessage": "Message au contact",
+        "customerHint": "Envoyé quand la conversation est transférée. Laissez vide pour ne rien envoyer.",
+        "offHours": "Message quand personne n’est disponible",
+        "offHoursHint": "Envoyé à la place quand l’équipe est fermée ou que personne ne peut la prendre. La conversation attend toujours dans la file.",
+        "exits": "Cette étape a trois sorties",
+        "exitAssigned": "assignée : une personne a maintenant la conversation",
+        "exitWaiting": "en file d’attente : elle attend que quelqu’un la prenne",
+        "exitUnavailable": "aucun agent / hors horaires : personne n’a pu la prendre",
+        "simpleExits": "L’étape suivante s’exécute une fois qu’une personne a la conversation. Si elle doit attendre dans la file, ou si personne n’est disponible, le bot s’arrête ici et une personne répond. Utilisez le constructeur avancé pour suivre les autres sorties."
+      }
+    }
+  }
+}

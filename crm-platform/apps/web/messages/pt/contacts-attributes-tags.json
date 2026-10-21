@@ -130,6 +130,7 @@
       "colLeadScore": "Pontuação do lead",
       "colLanguage": "Idioma",
       "colCreatedOn": "Criado em",
+      "colModifiedOn": "Modificado em",
       "pagination": "Paginação",
       "prevPage": "Página anterior",
       "nextPage": "Próxima página",
@@ -282,6 +283,7 @@
       "shortStage": "Estágio",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Criado",
+      "shortModified": "Modificado",
       "firstRun": {
         "title": "Adicione seus primeiros contatos",
         "message": "Traga as pessoas com quem você conversa. Os contatos são usados em mensagens, campanhas, tarefas e negócios.",
@@ -446,7 +448,8 @@
       "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo.",
       "searchOptions": "Pesquisar opções",
       "searchOptionsFor": "Pesquisar nas opções de {field}",
-      "noOptionsFound": "Nenhuma opção corresponde à pesquisa."
+      "noOptionsFound": "Nenhuma opção corresponde à pesquisa.",
+      "cascadeWaiting": "Escolha primeiro {parent} para ver as opções."
     },
     "tags": {
       "title": "Tags",
@@ -1085,7 +1088,8 @@
         "moveDown": "Mover {name} para baixo",
         "edit": "Editar {name}",
         "deactivate": "Desativar {name}",
-        "reactivate": "Reativar"
+        "reactivate": "Reativar",
+        "dependsOn": "Opções dependem de {field}"
       },
       "toast": {
         "conflict": "Outra pessoa alterou isto. A lista foi atualizada; tente novamente.",
@@ -1241,6 +1245,34 @@
         "manageStages": "Gerenciar estágios",
         "manageGroups": "Gerenciar grupos",
         "locked": "Fixa"
+      },
+      "cascade": {
+        "open": "Campos dependentes",
+        "title": "Campos dependentes",
+        "close": "Fechar",
+        "intro": "Um campo dependente é sempre exibido. As opções dele dependem da escolha feita no campo pai: para cada opção do pai, marque as opções do campo dependente que ela permite.",
+        "empty": "Ainda não há campos dependentes.",
+        "add": "Adicionar campo dependente",
+        "needTwoChoiceFields": "Campos dependentes precisam de pelo menos duas propriedades com lista de opções (lista suspensa, seleção múltipla ou rádio).",
+        "dependsOn": "depende de {parent}",
+        "editLabel": "Editar {name}",
+        "removeLabel": "Remover {name}",
+        "parent": "Campo pai",
+        "child": "Campo dependente",
+        "pickParent": "Escolha o campo pai",
+        "pickChild": "Escolha o campo dependente",
+        "allowed": "Opções de {child} permitidas para cada opção de {parent}",
+        "noParentChoices": "O campo pai ainda não tem opções.",
+        "noChildChoices": "O campo dependente ainda não tem opções.",
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "saved": "Campo dependente salvo.",
+        "cycle": "Essa dependência faria duas propriedades esperarem uma pela outra.",
+        "removeTitle": "Remover {name} dos campos dependentes?",
+        "removeMessage": "Ele voltará a mostrar todas as suas opções. As opções que tinha sob o campo pai serão esquecidas; os valores que os contatos têm são mantidos.",
+        "removeConfirm": "Remover",
+        "removed": "Campo dependente removido.",
+        "removeFailed": "Não foi possível remover o campo dependente. Tente novamente."
       }
     },
     "lost": {

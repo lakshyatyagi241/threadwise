@@ -19,25 +19,12 @@
     "page": {
       "back": "Otomasyon ve yapay zekâ",
       "title": "Konuşmalarda otomatik atama",
-      "subtitle": "Her yeni konuşmayı otomatik olarak doğru temsilciye verin. Kurallar yukarıdan aşağıya sırayla denenir.",
       "noAccess": "Otomatik atama ayarlarını görüntüleme yetkiniz yok.",
-      "create": "Kural oluştur",
       "limitUsed": "{limit} kuraldan {used} tanesi kullanılıyor",
       "limitReached": "Planınızın izin verdiği {limit} kuralın tümünü kullandınız.",
-      "keepTitle": "Geri dönen kişileri kendi temsilcileriyle eşleştir",
-      "keepBody": "Temsilcisi olan bir kişi yeniden yazdığında, yeni konuşma önce o temsilciye gider: kişinin sahibi veya son konuşmasını yöneten, hâlâ aktif olan temsilci. Aksi halde aşağıdaki kurallar belirler.",
-      "settingsFailed": "Ayar kaydedilemedi.",
-      "rulesTitle": "Kurallar",
-      "searchPlaceholder": "Kurallarda ara",
-      "searchLabel": "Kuralları ada göre ara",
-      "howItWorks": "Eşleşen ve uygun bir temsilci bulan ilk kural konuşmayı alır. Yedek kural, başka hiçbir kural eşleşmediğinde kullanılır. Hiçbir kural eşleşmezse konuşma atanmamış kalır.",
       "loading": "Kurallar yükleniyor",
       "loadFailed": "Kurallar yüklenemedi.",
       "retry": "Yeniden dene",
-      "noMatchTitle": "Kural bulunamadı",
-      "noMatch": "\"{q}\" adıyla bir kural yok.",
-      "emptyTitle": "Henüz kural yok",
-      "empty": "Anahtar kelime, kanal, dil veya kişi bilgilerine göre yeni konuşmaları temsilcilerinize sırayla vermek için bir kural oluşturun.",
       "list": "Öncelik sırasına göre otomatik atama kuralları",
       "loadMore": "Daha fazla yükle",
       "toggleFailed": "Kural değiştirilemedi.",
@@ -51,16 +38,14 @@
       "deleted": "Kural silindi.",
       "deleteFailed": "Kural silinemedi.",
       "businessHours": "Çalışma saatleri",
-      "recordNote": "Bu özellik konuşmaları atar. Yeni {contacts}, şirketleri ve {deals} satış sahiplerine atamak için <link>Kayıt atama kuralları</link> sayfasına bakın."
+      "recordNote": "Bu özellik konuşmaları atar. Yeni {contacts}, şirketleri ve {deals} satış sahiplerine atamak için <link>Kayıt atama kuralları</link> sayfasına bakın.",
+      "subtitle": "Her yeni konuşmayı kimin alacağını seçin. Çoğu çalışma alanı için anahtarlar yeterlidir; kuralları yalnızca daha fazla denetim gerekirse ekleyin."
     },
     "rules": {
       "someone": "bir temsilci",
       "moveUp": "{name} kuralını yukarı taşı",
       "moveDown": "{name} kuralını aşağı taşı",
       "priority": "Öncelik",
-      "active": "Etkin",
-      "off": "Kapalı",
-      "fallback": "Yedek",
       "continues": "Denemeye devam eder",
       "unavailable": "{count, plural, other {# temsilci kullanılamıyor}}",
       "activeFor": "\"{name}\" kuralı etkin",
@@ -74,7 +59,9 @@
         "languages": "Dil: {list}",
         "inside": "Çalışma saatleri içinde",
         "outside": "Çalışma saatleri dışında",
-        "always": "Hiçbir kuralla eşleşmeyen her konuşma"
+        "always": "Her yeni konuşma",
+        "contactNew": "Yeni kişi",
+        "contactReturning": "Geri dönen kişi"
       },
       "strategy": {
         "round_robin": "Sırayla dağıtım",
@@ -122,7 +109,6 @@
         "name": "Kural için bir ad girin.",
         "nameLong": "Ad çok uzun.",
         "descriptionLong": "Açıklama çok uzun.",
-        "conditions": "En az bir koşul ekleyin veya bu kuralı yedek olarak işaretleyin.",
         "contactIncomplete": "Tamamlanmamış kişi koşullarını bitirin veya kaldırın.",
         "keywordsMany": "En fazla 20 kelime kullanın.",
         "targets": "En az bir temsilci veya ekip seçin.",
@@ -133,20 +119,17 @@
         "escalationAction": "Yeniden ata, önceliği ayarla veya ikisini de yap.",
         "escalationAgents": "Yeniden atama için bu kuralda temsilci gerekir: yukarıdan seçin.",
         "autoReplyEmpty": "Yanıtı yazın veya seçeneği kaldırın.",
-        "autoReplyLong": "Yanıt çok uzun (en fazla 1024 karakter)."
+        "autoReplyLong": "Yanıt çok uzun (en fazla 1024 karakter).",
+        "conditions": "En az bir koşul ekleyin veya “Yalnızca eşleşen konuşmalar için” seçeneğini kapatın."
       },
       "whenTitle": "Yeni bir konuşma geldiğinde",
-      "whenHint": "Ayarladığınız her koşul eşleşmelidir. Yok sayılması için bir bölümü boş bırakın.",
       "contact": {
-        "title": "Kişi şunlarla eşleşir",
-        "hint": "Segmentlerde olduğu gibi etiketler, sahip, yaşam döngüsü aşaması ve diğer kişi bilgileri.",
         "loading": "Kişi alanları yükleniyor",
         "partial": "Bazı kişi listeleri yüklenemedi; bu yüzden bazı seçenekler eksik olabilir.",
         "summary": "Koşullar",
         "none": "Kişi koşulu yok."
       },
       "channel": {
-        "title": "Kanal",
         "hint": "Yalnızca bu kanallara gelen konuşmalar. Hiçbiri işaretli değilse herhangi bir kanal."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Çalışma saatleri",
         "hint": "Çalışma alanınızın çalışma saatlerini kullanır.",
-        "any": "Her zaman",
         "inside": "Yalnızca çalışma saatleri içinde",
         "outside": "Yalnızca çalışma saatleri dışında"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Seçenekler",
       "stopOnMatch": "Bu kural eşleştiğinde dur",
       "stopOnMatchHint": "Açık: sonraki kurallar kontrol edilmez. Kapalı: sonraki eşleşen bir kural konuşmayı devralabilir.",
-      "fallback": "Yedek kural",
-      "fallbackHint": "Başka hiçbir kural eşleşmediğinde kullanılır. Yalnızca bir yedek kural olabilir; bu seçim öncekinin yerine geçer.",
       "cancel": "İptal",
       "save": "Kaydet",
       "saveActivate": "Kaydet ve etkinleştir",
@@ -219,7 +199,8 @@
       "escalatePriority": "Sonra önceliği ayarla",
       "autoReply": "Otomatik yanıt gönder",
       "autoReplyBody": "Yanıt metni",
-      "autoReplyHint": "Müşteriye işletme adına gönderilir. 24 saatlik pencerenin dışında serbest yanıt gönderilmez."
+      "autoReplyHint": "Müşteriye işletme adına gönderilir. 24 saatlik pencerenin dışında serbest yanıt gönderilmez.",
+      "whenHint": "Eklediğiniz her koşul eşleşmelidir."
     },
     "sla": {
       "back": "Ayarlara dön",

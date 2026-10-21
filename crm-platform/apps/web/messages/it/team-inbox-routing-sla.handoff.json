@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Non incluso nel tuo piano",
+      "upgradeHint": "Il tuo piano non lo include. Chiedi al proprietario dell’account di passare a un piano superiore.",
+      "owner": {
+        "prompt": "Chiedi del proprietario del contatto alla riassegnazione",
+        "promptHint": "Quando una chat viene passata a mano a qualcun altro, proponi di renderlo anche proprietario del contatto.",
+        "window": "Mantieni un contatto ricorrente con l’ultimo agente",
+        "windowHint": "Un contatto che scrive di nuovo va alla persona che ha gestito la sua ultima conversazione, per questo numero di giorni. Disattivato significa nessun limite.",
+        "windowDays": "Numero di giorni",
+        "days": "giorni"
+      },
+      "queue": {
+        "notify": "Avvisa il team quando una conversazione è in attesa",
+        "notifyHint": "I membri del team, o tutti quelli che possono rispondere alle chat non assegnate, ricevono una notifica con il motivo."
+      },
+      "teams": {
+        "body": "Ogni team ha il proprio metodo di assegnazione, orari di apertura, fuso orario e responsabile predefinito. Vengono usati ogni volta che una conversazione viene passata a quel team.",
+        "link": "Apri Team"
+      }
+    }
+  }
+}

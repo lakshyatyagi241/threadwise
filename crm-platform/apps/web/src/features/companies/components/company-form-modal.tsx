@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Field, Input, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 // The shared property inputs come from their own file, not the contacts domain's index (see `lib/properties.ts`).
+import { attributesAfterChange } from '@/features/contacts-attributes-tags/lib/cascade';
 import { CustomFieldsSection } from '@/features/contacts-attributes-tags/components/custom-fields-section';
 import { companiesApi, invalidateCompanies, useMembers } from '../api/companies';
 import { useCompanyProperties } from '../api/properties';
@@ -323,13 +324,26 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
               fields={props.fields}
               sections={props.sections}
               dependencies={props.dependencies}
+              optionDependencies={props.optionDependencies}
               values={inputs}
               errors={propErrors}
               idPrefix="company"
               looseTitle={t('propertiesTitle')}
               hint={t('propertiesHint')}
               onChange={(key, value) => {
-                setTyped((cur) => ({ ...cur, [key]: value }));
+                // While the cascades load, nothing can be told apart from "no cascade": no value is cleared on that account.
+                setTyped((cur) =>
+                  props.loading
+                    ? { ...cur, [key]: value }
+                    : attributesAfterChange(
+                        inputs,
+                        key,
+                        value,
+                        props.fields,
+                        props.dependencies,
+                        props.optionDependencies,
+                      ),
+                );
                 setPropErrors(({ [key]: _gone, ...rest }) => rest);
               }}
             />

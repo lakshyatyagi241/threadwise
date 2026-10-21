@@ -1960,8 +1960,8 @@
           "description": "Aggiungi o rimuovi un tag"
         },
         "assign": {
-          "label": "Assegna operatore",
-          "description": "Passa a un operatore umano"
+          "label": "Passaggio a un umano",
+          "description": "Passa la chat a una persona o a una coda"
         },
         "subflow": {
           "label": "Esegui sotto-Flow",
@@ -2321,8 +2321,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Assegna a un operatore",
-          "help": "Passa la conversazione a un team o a un operatore"
+          "label": "Passaggio a un umano",
+          "help": "Passa la conversazione a una persona, a un team o alle regole di assegnazione"
         },
         "message": {
           "label": "Messaggio",
@@ -2421,7 +2421,7 @@
         "location": "Posizione",
         "template": "Template",
         "cta": "Pulsante link",
-        "assign": "Assegna a un operatore",
+        "assign": "Passaggio a un umano",
         "carousel": "Carosello",
         "condition": "Condizione",
         "faq": "Rispondi da FAQ",

@@ -130,6 +130,7 @@
       "colLeadScore": "리드 점수",
       "colLanguage": "언어",
       "colCreatedOn": "생성일",
+      "colModifiedOn": "수정일",
       "pagination": "페이지 이동",
       "prevPage": "이전 페이지",
       "nextPage": "다음 페이지",
@@ -282,6 +283,7 @@
       "shortStage": "단계",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "생성일",
+      "shortModified": "수정일",
       "firstRun": {
         "title": "첫 연락처를 추가하세요",
         "message": "대화하는 사람들을 가져오세요. 연락처는 메시지, 캠페인, 작업, 거래에 사용됩니다.",
@@ -446,7 +448,8 @@
       "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요.",
       "searchOptions": "옵션 검색",
       "searchOptionsFor": "{field} 옵션 검색",
-      "noOptionsFound": "검색과 일치하는 옵션이 없습니다."
+      "noOptionsFound": "검색과 일치하는 옵션이 없습니다.",
+      "cascadeWaiting": "선택지를 보려면 먼저 {parent}을(를) 고르세요."
     },
     "tags": {
       "title": "태그",
@@ -1085,7 +1088,8 @@
         "moveDown": "{name} 아래로 이동",
         "edit": "{name} 수정",
         "deactivate": "{name} 비활성화",
-        "reactivate": "다시 활성화"
+        "reactivate": "다시 활성화",
+        "dependsOn": "선택지는 {field}에 따라 달라짐"
       },
       "toast": {
         "conflict": "다른 사용자가 변경했습니다. 목록을 새로 고쳤으니 다시 시도하세요.",
@@ -1241,6 +1245,34 @@
         "manageStages": "단계 관리",
         "manageGroups": "그룹 관리",
         "locked": "고정"
+      },
+      "cascade": {
+        "open": "종속 필드",
+        "title": "종속 필드",
+        "close": "닫기",
+        "intro": "종속 필드는 항상 표시됩니다. 선택지는 상위 속성에서 고른 값에 따라 달라집니다. 상위 속성의 선택지마다, 그 값에서 허용할 종속 필드의 선택지를 체크하세요.",
+        "empty": "아직 종속 필드가 없습니다.",
+        "add": "종속 필드 추가",
+        "needTwoChoiceFields": "종속 필드는 선택지 목록이 있는 속성(드롭다운, 다중 선택 또는 라디오)이 최소 두 개 필요합니다.",
+        "dependsOn": "{parent}에 종속",
+        "editLabel": "{name} 편집",
+        "removeLabel": "{name} 제거",
+        "parent": "상위 속성",
+        "child": "종속 속성",
+        "pickParent": "상위 속성 선택",
+        "pickChild": "종속 속성 선택",
+        "allowed": "{parent}의 각 선택지에서 허용되는 {child} 선택지",
+        "noParentChoices": "상위 속성에 아직 선택지가 없습니다.",
+        "noChildChoices": "종속 속성에 아직 선택지가 없습니다.",
+        "cancel": "취소",
+        "save": "저장",
+        "saved": "종속 필드를 저장했습니다.",
+        "cycle": "이 종속 관계는 두 속성이 서로를 기다리게 만듭니다.",
+        "removeTitle": "{name}을(를) 종속 필드에서 제거할까요?",
+        "removeMessage": "모든 선택지가 다시 표시됩니다. 상위 속성 아래에서 설정한 선택지는 잊히며, 연락처가 가진 값은 그대로 유지됩니다.",
+        "removeConfirm": "제거",
+        "removed": "종속 필드를 제거했습니다.",
+        "removeFailed": "종속 필드를 제거하지 못했습니다. 다시 시도하세요."
       }
     },
     "lost": {

@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Konuşma atama",
+        "intro": "Dört anahtar çoğu çalışma alanı için yeterlidir: bunları açın, hiç kural oluşturmanız gerekmez.",
+        "order": "Yeni bir konuşma için sıra: önce Kişi Sahibi ve Sabit Temsilci, sonra kurallarınız (eklediyseniz), sonra Diğer herkes, en son bekleme kuyruğu.",
+        "readOnly": "Bu anahtarları görebilirsiniz ama değiştiremezsiniz.",
+        "saved": "Kaydedildi.",
+        "saveFailed": "Değişiklik kaydedilemedi.",
+        "loading": "Atama ayarları yükleniyor",
+        "loadFailed": "Atama ayarları yüklenemedi.",
+        "retry": "Yeniden dene",
+        "notInPlan": "Planınızda yok",
+        "upgradeHint": "Planınız bunu içermiyor. Hesap sahibinden planı yükseltmesini isteyin.",
+        "stepFirst": "İlk kontrol edilir",
+        "stepMaster": "Ana anahtar",
+        "stepAfter": "Üstlenmeden sonra",
+        "needsAuto": "Yalnızca Otomatik Atama açıkken kullanılır.",
+        "auto": {
+          "title": "Otomatik Atama",
+          "body": "Yeni konuşmalar, konuşma kabul eden temsilciler (çevrimdışı, meşgul veya izinli olmayanlar) arasında eşit olarak paylaştırılır. Tüm temsilciler konuşma sınırına ulaştığında yeni konuşmalar kuyrukta bekler.",
+          "limitHint": "Her temsilcinin konuşma sınırını, profilinde <link>Ekip üyeleri</link> bölümünden ayarlayın.",
+          "off": "Kapalı: hiçbir şey otomatik atanmaz; ne bir kural ne de kişi sahibi tarafından. Konuşmalar, biri üstlenene ya da bir akış bir kişi belirleyene kadar kuyrukta bekler."
+        },
+        "sticky": {
+          "title": "Sabit Temsilci",
+          "body": "Geri dönen bir kişi, son konuşmasını yöneten temsilciye geri gider; yeter ki o temsilci hâlâ gelen kutusunu açabilen etkin bir üye olsun (çevrimiçi durumuna bakılmaz). Kişinin bir sahibi varsa önce sahibi denenir.",
+          "withWindow": "Son temsilcinin kaç gün geriye kadar geçerli sayılacağı Gelişmiş bölümünde ayarlanır."
+        },
+        "owner": {
+          "title": "Konuşmayı kişi sahibine ata",
+          "body": "Bilinen bir kişiden gelen konuşmalar önce kişi sahibine gider; böylece destek tutarlı ve kişisel kalır. Sahip izinliyse konuşmayı vekili alır; sahip yoksa sonraki adım karar verir.",
+          "wins": "Sabit Temsilci de açıksa kişi sahibi yine öncelikli olur; son temsilci yalnızca ikinci tercihtir."
+        },
+        "claim": {
+          "title": "Temsilciyi kişi sahibi yap",
+          "body": "Bir temsilci bekleme kuyruğundan bir konuşmayı üstlendiğinde ve kişinin henüz sahibi yoksa o temsilci kişi sahibi olur. Mevcut bir sahip asla değiştirilmez.",
+          "note": "Bir kuralla temsilciye verilen konuşma sahibi belirlemez. Gelişmiş bölümündeki Açık konuşmaları sahibiyle birlikte tut seçeneği açıksa devir de sahibi belirler."
+        }
+      },
+      "advanced": {
+        "title": "Gelişmiş",
+        "hint": "Konuşmaları kişi sahibiyle eşitleme, sabit temsilci süresi, yeniden atama istemi ve kuyruk uyarıları.",
+        "sync": {
+          "title": "Açık konuşmaları sahibiyle birlikte tut",
+          "body": "Bir kişinin sahibi değiştiğinde, otomatik atanmış açık konuşmaları yeni sahibi takip eder. Bir kişinin kendisinin üstlendiği konuşma asla taşınmaz. Konuşma atayan bir devir, kişinin sahibi yoksa sahibi de belirler.",
+          "needsOwner": "Önce “Konuşmayı kişi sahibine ata” seçeneğini açın."
+        }
+      },
+      "rules": {
+        "title": "Daha fazla denetim mi gerek? Kural ekleyin",
+        "intro": "İsteğe bağlı. Kurallar belirli konuşmaları (bir kanalı, mesajdaki sözcükleri, yeni bir kişiyi...) belirli temsilcilere veya ekiplere yönlendirir. Dört anahtar yeterliyse hiç kural oluşturmanız gerekmez.",
+        "locked": "Kurallar planınızda yok. Bekleme kuyruğu, üstlenme ve elle atama yine de kullanılabilir. Hesap sahibinden planı yükseltmesini isteyin.",
+        "pipelineTitle": "Yeni bir konuşma nasıl atanır",
+        "pipeline": {
+          "agent": "1. Kişi sahibi ve Sabit Temsilci",
+          "rules": "2. Kurallarınız, yukarıdan aşağı",
+          "rulesBody": "Eşleşen ve uygun bir temsilci bulan ilk kural konuşmayı alır.",
+          "everyone": "3. Diğer herkes",
+          "everyoneBody": "Hiçbir kuralın almadığı konuşmaları alır.",
+          "queue": "4. Bekleme kuyruğu",
+          "queueBody": "Kimse bulunamazsa konuşma, bir temsilci üstlenene kadar Bekleyenler sekmesinde bekler.",
+          "agentBody": "Yukarıdaki anahtarlarla belirlenir."
+        },
+        "never": "Bir akış, bir kişi veya bir devirle zaten atanmış hiçbir şeyi kurallar değiştirmez.",
+        "add": "Kural ekle",
+        "emptyTitle": "Kural yok",
+        "empty": "Sorun değil. Yukarıdaki anahtarlar ve Diğer herkes karar verir.",
+        "loading": "Kurallar yükleniyor",
+        "loadFailed": "Kurallar yüklenemedi.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "tüm temsilciler",
+        "noAssign": "atama yapmaz",
+        "drag": "Sırayı değiştirmek için {name} kuralını sürükleyin",
+        "neverRuns": "Hiç çalışmaz",
+        "neverMatches": "Hiç eşleşmez",
+        "neverMatchesHint": "Hiçbir koşulu yok ve her konuşmaya da uygulanmıyor. Düzeltmek için kuralı düzenleyin.",
+        "shadowed": "“{blocker}” kuralının altındaki {count, plural, other {kurallar}}, “{blocker}” içindeki kimse uygun değilse bile çalışamaz: {names}. “{blocker}” her konuşmaya uygulanır ve kontrolü orada durdurur. Onu aşağı taşıyın veya içindeki “Bu kural eşleşince dur” seçeneğini kapatın.",
+        "reordered": "Sıra kaydedildi."
+      },
+      "everyone": {
+        "title": "Diğer herkes",
+        "pinned": "En sona sabitlenir",
+        "body": "Hiçbir kuralın almadığı her konuşmayı alır. Kimin alacağını seçin.",
+        "notSet": "Henüz ayarlanmadı: hiçbir kuralın almadığı konuşmalar kuyrukta bekler.",
+        "mode": "Bu konuşmalara ne olur",
+        "evenly": "Tüm temsilciler arasında eşit dağıt",
+        "evenlyHint": "Gelen kutusunu açabilen ve uygun olan herkes arasında döngüsel dağıtım (round robin) veya en az meşgul: çevrimdışı, meşgul, izinli veya konuşma sınırında olanlar hariç.",
+        "listed": "Temsilci veya ekip seçin",
+        "listedNow": "Şu an: {who}.",
+        "listedEdit": "Temsilcileri veya ekipleri değiştir",
+        "queue": "Bekleme kuyruğunda bırak",
+        "queueHint": "Kimseye atanmaz. Konuşma, bir temsilci üstlenene kadar bekler.",
+        "strategy": "Nasıl paylaştırılsın",
+        "saved": "Kaydedildi.",
+        "failed": "Değişiklik kaydedilemedi.",
+        "confirmTitle": "Seçilen temsilciler değiştirilsin mi?",
+        "confirmBody": "Diğer herkes şu anda konuşmaları seçtiğiniz temsilcilere veya ekiplere veriyor. Eşit dağıtım bu seçimin yerini alır.",
+        "confirm": "Değiştir",
+        "ruleName": "Diğer herkes"
+      },
+      "where": {
+        "title": "Nerede geçerli",
+        "applied": "Uygulanır",
+        "applied1": "Yeni bir konuşma geldiğinde (ve bir müşteri kimsenin üstlenmediği, bitmiş bir konuşmayı yeniden açtığında).",
+        "applied2": "Bir Kişiye devir adımı “Atama kuralları” olarak ayarlandığında: aynı liste kişi, kanal ve müşterinin son mesajı kullanılarak kontrol edilir, sonra Diğer herkes, sonra bekleme kuyruğu gelir.",
+        "not": "Uygulanmaz",
+        "not1": "Bir akış, bir kişi veya bir devirle zaten atanmış konuşma.",
+        "not2": "Elle atama veya üstlenme.",
+        "not3": "Bir kişiyi (kurallar yok sayılır) ya da bir ekibi (ekibin kendi yöntemi kullanılır) belirten Kişiye devir adımı."
+      },
+      "try": {
+        "title": "Dene",
+        "body": "Konuşmayı kimin alacağını ve nedenini görmek için bir kişi, bir kanal ve örnek bir mesaj seçin. Hiçbir şey atanmaz, sayılmaz veya gönderilmez.",
+        "contact": "Kişi (isteğe bağlı)",
+        "noContact": "Kişi seçilmedi: örnek, yepyeni bir kişidir. Kayıtlı kişi bilgilerine bağlı koşullar gerçek bir kişi olmadan kontrol edilemez.",
+        "channel": "Kanal",
+        "message": "Örnek mesaj",
+        "messagePlaceholder": "örn. Para iadesi istiyorum",
+        "run": "Ne olacağını göster",
+        "running": "Kontrol ediliyor",
+        "failed": "Test çalıştırılamadı.",
+        "result": "Sonuç",
+        "outcome": {
+          "sticky": "“Kendi temsilcisinde tut” karar veriyor: {who}.",
+          "rule": "“{rule}” kuralı karar veriyor: {who}.",
+          "everyone": "Diğer herkes karar veriyor: {who}.",
+          "queue": "Kimse bulunamadı: konuşma kuyrukta bekler.",
+          "off": "Otomatik Atama kapalı: hiçbir şey otomatik atanmaz."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "bir temsilci",
+          "team": "{name} kuyruğu",
+          "teamUnknown": "bir ekip kuyruğu"
+        },
+        "stepsTitle": "Adım adım",
+        "step": {
+          "switch": "Otomatik Atama",
+          "sticky": "Kişi sahibi ve Sabit Temsilci",
+          "rule": "“{name}” kuralı",
+          "everyone": "Diğer herkes",
+          "queue": "Bekleme kuyruğu"
+        },
+        "why": {
+          "auto_assign_off": "Anahtar kapalı.",
+          "sticky_off": "İki anahtar da kapalı, bu yüzden bu adım atlanır.",
+          "no_contact": "Aranacak bir kişi yok.",
+          "no_agent_found": "Hiçbir kişi sahibi veya son temsilci üstlenemedi.",
+          "owner": "Kişi sahibi üstlenir.",
+          "last_handler": "Kişinin son konuşmasındaki temsilci üstlenir.",
+          "conditions_failed": "Eşleşmedi.",
+          "nobody_available": "Eşleşti ama işaret ettiği kişilerden hiçbiri uygun değil.",
+          "agent_picked": "Eşleşti ve bir temsilci seçti.",
+          "team_queue": "Eşleşti; kimse boş değildi, bu yüzden ekibin kuyruğuna gider.",
+          "no_assignment_in_rule": "Eşleşti; bu kural atama yapmaz (yalnızca diğer eylemlerini uygular).",
+          "not_set": "Etkin bir Diğer herkes kuralı yok, bu yüzden kimsenin almadığı konuşmalar kuyrukta bekler."
+        },
+        "part": {
+          "contactKind": "Yeni veya geri dönen kişi",
+          "contact": "Kişi bilgileri",
+          "channel": "Kanal",
+          "keywords": "Mesaj sözcükleri",
+          "languages": "Dil",
+          "businessHours": "Çalışma saatleri"
+        },
+        "partOk": "eşleşti",
+        "partWhy": {
+          "no_saved_value": "bu kişide bu bilgi kayıtlı değil, bu yüzden eşleşmedi",
+          "no_contact": "kişi yok",
+          "not_same_kind": "kişi bu türden değil",
+          "channel_differs": "bu kanal listede yok",
+          "no_word": "sözcüklerin hiçbiri mesajda yok",
+          "language_differs": "dil farklı veya bilinmiyor",
+          "hours_differ": "saat günün o bölümünde değil"
+        },
+        "contactLine": "Bu kişi {kind}. Aşama: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "yeni bir kişi",
+          "returning": "geri dönen bir kişi"
+        },
+        "hasOwner": "Bir sahibi var.",
+        "noOwner": "Sahibi yok.",
+        "tags": "{count, plural, =0 {Kayıtlı etiket yok.} other {# etiket kayıtlı.}}",
+        "skippedTitle": "Dışarıda bırakıldı",
+        "skip": {
+          "on_leave": "izinli",
+          "offline_busy_or_at_capacity": "çevrimdışı, meşgul veya konuşma sınırında",
+          "cannot_read": "gelen kutusunu açamıyor",
+          "no_owner": "kişinin sahibi yok",
+          "no_previous_handler_in_window": "bu kişi için önceki bir temsilci yok",
+          "not_an_active_member": "etkin bir üye değil"
+        },
+        "outside": "Çalışma saatleri dışındaymış gibi yap",
+        "inside": "Çalışma saatleri içindeymiş gibi yap",
+        "clock": "Çalışma saatleri: şimdiki saati kullan",
+        "skipStep": {
+          "owner": "Kişi sahibi",
+          "last_handler": "Son temsilci"
+        }
+      },
+      "form": {
+        "whenSwitch": "Yalnızca şununla eşleşen konuşmalar için...",
+        "whenSwitchHint": "Kapalı: bu kural her yeni konuşmaya uygulanır.",
+        "everyConversation": "Bu kural her yeni konuşmaya uygulanır.",
+        "kept": "Koşullarınız korunur ama bu seçenek kapalıyken yok sayılır.",
+        "add": "Koşul ekle",
+        "remove": "{name} koşulunu kaldır",
+        "name": {
+          "contactKind": "Yeni veya geri dönen kişi",
+          "channel": "Kanal",
+          "keywords": "Mesaj sözcükleri",
+          "language": "Müşteri dili",
+          "hours": "Çalışma saatleri",
+          "contact": "Kişi bilgileri"
+        },
+        "kind": {
+          "title": "Yeni veya geri dönen kişi",
+          "hint": "Bir kişinin daha önce bir konuşması varsa ya da bu konuşmadan 10 dakikadan uzun süre önce kaydedildiyse geri dönen kişi sayılır.",
+          "new": "Yeni kişi (ilk konuşma)",
+          "returning": "Geri dönen kişi"
+        },
+        "contactNote": "Yalnızca bu bilgisi zaten kayıtlı olan kişilerle eşleşir. Yepyeni bir kişi, “Yeni” aşaması dışında hiçbir kayıtlı bilgiyle gelmez; bu yüzden ilk kez gelen müşteriler için Yeni veya geri dönen kişi seçeneğini kullanın.",
+        "everyoneElseNote": "Bu, Diğer herkes kuralıdır: başka hiçbir kuralın almadığı konuşmaları alır.",
+        "everyoneAgents": "Gelen kutusunu açabilen herkes",
+        "everyoneAgentsHint": "Konuşmaları tek tek seçmek yerine uygun tüm temsilciler arasında paylaştırın.",
+        "fallbackConditions": "Bu kuralda önceden kaydedilmiş koşullar var, bu yüzden yalnızca onlarla eşleşen konuşmaları alır. İncelemek için aşağıdaki anahtarı açın ya da koşulları kaldırın."
+      }
+    }
+  }
+}

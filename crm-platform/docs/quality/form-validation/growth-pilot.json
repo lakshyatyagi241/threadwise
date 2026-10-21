@@ -1,0 +1,984 @@
+{
+  "module": "growth-pilot",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "updateGrowthSettingsSchema",
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "features",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.hotLeadConfidence",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.hotLeadConfidence",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.hotLeadConfidence",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0.5)",
+          "value": "0.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.hotLeadConfidence",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0.5)",
+          "value": "-0.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.hotLeadConfidence",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.hotLeadConfidence",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1)",
+          "value": "2",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (168)",
+          "value": "168",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (168)",
+          "value": "169",
+          "priority": "P2"
+        },
+        {
+          "field": "config.unansweredHours",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (7)",
+          "value": "7",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (7)",
+          "value": "6",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (730)",
+          "value": "730",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (730)",
+          "value": "731",
+          "priority": "P2"
+        },
+        {
+          "field": "config.lapsedDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (50)",
+          "value": "50",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (50)",
+          "value": "51",
+          "priority": "P2"
+        },
+        {
+          "field": "config.engagedOpens",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (50)",
+          "value": "50",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (50)",
+          "value": "51",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.minOpens",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (180)",
+          "value": "180",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (180)",
+          "value": "181",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.windowDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.requireGroup",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "config.stageRule.requireGroup",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.minConfidence",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.minConfidence",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.minConfidence",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0.8)",
+          "value": "0.8",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.minConfidence",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0.8)",
+          "value": "-0.19999999999999996",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.minConfidence",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.minConfidence",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1)",
+          "value": "2",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P2"
+        },
+        {
+          "field": "config.autoStage.dailyCap",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "config.statusFields",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.statusFields",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.statusFields",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 10 items",
+          "value": "array of 10",
+          "priority": "P2"
+        },
+        {
+          "field": "config.statusFields",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (10) items",
+          "value": "array of 11",
+          "priority": "P2"
+        },
+        {
+          "field": "config.serviceRules",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.serviceRules",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.serviceRules",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 10 items",
+          "value": "array of 10",
+          "priority": "P2"
+        },
+        {
+          "field": "config.serviceRules",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (10) items",
+          "value": "array of 11",
+          "priority": "P2"
+        },
+        {
+          "field": "config.customPhrases",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.customPhrases",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.customPhrases",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 100 items",
+          "value": "array of 100",
+          "priority": "P2"
+        },
+        {
+          "field": "config.customPhrases",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (100) items",
+          "value": "array of 101",
+          "priority": "P2"
+        },
+        {
+          "field": "config.extraMaskTerms",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "config.extraMaskTerms",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "config.extraMaskTerms",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 100 items",
+          "value": "array of 100",
+          "priority": "P2"
+        },
+        {
+          "field": "config.extraMaskTerms",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (100) items",
+          "value": "array of 101",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "syncAudienceSchema",
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "key",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "growthActionDecisionSchema",
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "action",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "action",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "action",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (dismiss)",
+          "value": "\"dismiss\"",
+          "priority": "P2"
+        },
+        {
+          "field": "ids",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "ids",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "ids",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P2"
+        },
+        {
+          "field": "ids",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 100 items",
+          "value": "array of 100",
+          "priority": "P2"
+        },
+        {
+          "field": "ids",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (100) items",
+          "value": "array of 101",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "broadcastAssistantSchema",
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "goal",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P2"
+        },
+        {
+          "field": "goal",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

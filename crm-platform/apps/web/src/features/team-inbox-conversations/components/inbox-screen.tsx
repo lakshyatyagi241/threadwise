@@ -712,6 +712,15 @@ export function InboxScreen() {
                 busy: assigning,
                 onAssign: (change) => void assign(change),
               }}
+              handoff={{
+                canClaim: can.assignSelf || can.assign,
+                canSend: can.assign,
+                canReturn: can.reply,
+                onPlaced: (row) => {
+                  list.placeRow(row);
+                  void detail.refetch();
+                },
+              }}
               onRetryDetail={() => void detail.refetch()}
             />
           ) : (
