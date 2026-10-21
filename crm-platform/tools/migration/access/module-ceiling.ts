@@ -43,6 +43,13 @@ export const MODULE_CEILING: Record<string, string[]> = {
   'unofficial-whatsapp': ['wa.devices.', 'wa.groups.'],
   // the TikTok channel (a "coming soon" tile today): not part of what a Waboo workspace had
   tiktok: ['chn.tiktok.'],
+  // the "All channels" hub (a "coming soon" tile today): not part of what a Waboo workspace had
+  channels: ['chn.channels.'],
+  // the CRM dashboard (the sidebar's CRM entry): a Desk page the Waboo workspace never had, though its deals stay
+  'crm-dashboard': ['dash.crm.'],
+  // the "Privacy and data" placeholder (Settings > Data and security): not part of what a Waboo workspace had; the live Data requests
+  // screen is privacy.requests.* and stays
+  'privacy-data': ['privacy.data.'],
   // the AI Studio start page: a Desk page that Waboo never had (always closed for a migrated workspace, see NEVER_KEPT)
   'ai-studio': ['flb.ai_studio.'],
 };

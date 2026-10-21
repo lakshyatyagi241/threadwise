@@ -14,11 +14,14 @@ const NS = 'admin-console-shell.quickAccess';
  * The dashboard's quick access section (TW-ASHELL-022): up to ten tiles, three, five or ten to a row by width, and an Edit
  * button that opens the shared editor. The dashboard domain places it; the shell owns what it shows.
  */
-export function QuickAccessTiles() {
+export function QuickAccessTiles({ visible }: { visible?: (key: string) => boolean } = {}) {
   const t = useTranslations(NS);
   const q = useQuickAccess();
   const [editing, setEditing] = useState(false);
-  const tiles = q.data?.tiles ?? [];
+  // the dashboard passes which catalogue pages the caller may open; own links are always shown
+  const tiles = (q.data?.tiles ?? []).filter(
+    (tile) => tile.custom || !visible || !tile.key || visible(tile.key),
+  );
   return (
     <section data-tour="quick-access" aria-labelledby="qa-title" className="space-y-3">
       <div className="flex items-center justify-between">
