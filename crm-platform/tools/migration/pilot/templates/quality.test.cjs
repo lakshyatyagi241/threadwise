@@ -4,9 +4,12 @@ const assert = require('node:assert/strict');
 const { normalizeQuality, wabaCredentials, fetchQualities } = require('./quality.cjs');
 
 test('a rating is stored as Meta words it, uppercase; anything else is UNKNOWN', () => {
-  assert.equal(normalizeQuality('HIGH'), 'HIGH');
-  assert.equal(normalizeQuality({ score: 'medium' }), 'MEDIUM');
-  assert.equal(normalizeQuality({ score: 'LOW' }), 'LOW');
+  assert.equal(normalizeQuality('GREEN'), 'GREEN');
+  assert.equal(normalizeQuality({ score: 'yellow' }), 'YELLOW');
+  assert.equal(normalizeQuality({ score: 'RED' }), 'RED');
+  assert.equal(normalizeQuality('HIGH'), 'GREEN');
+  assert.equal(normalizeQuality({ score: 'medium' }), 'YELLOW');
+  assert.equal(normalizeQuality({ score: 'LOW' }), 'RED');
   assert.equal(normalizeQuality(null), 'UNKNOWN');
   assert.equal(normalizeQuality({ score: 'SOMETHING_NEW' }), 'UNKNOWN');
   assert.equal(normalizeQuality(undefined), 'UNKNOWN');
@@ -34,7 +37,7 @@ test('paging follows paging.next and the token travels only in the header', asyn
   const seen = [];
   const pages = [
     {
-      data: [{ name: 'a', language: 'en', quality_score: { score: 'HIGH' } }],
+      data: [{ name: 'a', language: 'en', quality_score: { score: 'GREEN' } }],
       paging: { next: 'https://graph.facebook.com/v25.0/1/message_templates?after=x' },
     },
     { data: [{ name: 'b', language: 'en_GB', quality_score: null }] },
@@ -45,7 +48,7 @@ test('paging follows paging.next and the token travels only in the header', asyn
   };
   const rows = await fetchQualities({ wabaId: '1', accessToken: 'SECRET' }, fake);
   assert.deepEqual(rows, [
-    { name: 'a', language: 'en', quality: 'HIGH' },
+    { name: 'a', language: 'en', quality: 'GREEN' },
     { name: 'b', language: 'en_GB', quality: 'UNKNOWN' },
   ]);
   assert.equal(seen.length, 2);
