@@ -467,12 +467,20 @@ export class HandoffService {
     s: StoredHandoffSettings,
     available: HandoffSettings['available'],
   ): HandoffSettings {
+    // What is IN EFFECT, not what an earlier plan left stored: a workspace that was downgraded keeps its saved choices (they come back
+    // on upgrade) but the screen must not show a locked mode as selected when the engine ignores it.
+    const modeOpen =
+      s.ownerMode === 'owner_first'
+        ? available.ownerFirst
+        : s.ownerMode === 'keep_in_sync'
+          ? available.keepInSync
+          : true;
     return {
-      autoAssign: s.autoAssign,
+      autoAssign: s.autoAssign && available.autoAssign,
       claimSetsOwner: s.claimSetsOwner,
-      ownerMode: s.ownerMode,
-      continuityDays: s.continuityDays,
-      promptOwnerOnReassign: s.promptOwnerOnReassign,
+      ownerMode: modeOpen ? s.ownerMode : 'independent',
+      continuityDays: available.continuityWindow ? s.continuityDays : null,
+      promptOwnerOnReassign: s.promptOwnerOnReassign && available.promptOwnerOnReassign,
       notifyQueue: s.notifyQueue,
       available,
     };
