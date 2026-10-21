@@ -51,7 +51,7 @@ export function SavedReplyForm(props: SavedReplyFormProps) {
 
 function FormBody({ reply, onClose, onSaved }: SavedReplyFormProps) {
   const t = useTranslations('team-inbox-conversations.savedReplies.form');
-  const tk = useTranslations('team-inbox-conversations.savedReplies.channelKind');
+  const tk = useTranslations('team-inbox-conversations.channelKind');
   const tv = useTranslations('team-inbox-conversations.savedReplies.variable');
   const tg = useTranslations('team-inbox-conversations.savedReplies.variableGroup');
   const errorText = useErrorText();
