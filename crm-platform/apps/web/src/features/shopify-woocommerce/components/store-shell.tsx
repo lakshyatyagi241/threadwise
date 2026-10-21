@@ -214,7 +214,7 @@ export function StoreShell({
                 {tabLabel(tab)}
               </div>
               <h1 className="text-3xl font-normal leading-none tracking-tight sm:text-[40px]">
-                {name} <span className="italic text-brand">{tabLabel(tab).toLowerCase()}</span>
+                {name} <span className="not-italic text-brand">{tabLabel(tab).toLowerCase()}</span>
               </h1>
               <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
                 {t(`desc.${kind}.${tab}`)}

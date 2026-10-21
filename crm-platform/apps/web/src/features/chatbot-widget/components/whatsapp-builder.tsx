@@ -163,7 +163,7 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
                   {b('crumb')} / {t('crumb')}
                 </div>
                 <h1 className="truncate text-xl leading-tight">
-                  {t('title')} <span className="italic text-emerald-700">{t('titleAccent')}</span>
+                  {t('title')} <span className="not-italic text-emerald-700">{t('titleAccent')}</span>
                 </h1>
               </div>
             </div>

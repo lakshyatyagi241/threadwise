@@ -81,7 +81,7 @@ export function RbacHeader({
             className="break-words text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl"
           >
             {lead && `${lead} `}
-            <span className="italic text-primary">{accent}</span>
+            <span className="not-italic text-primary">{accent}</span>
           </h1>
           {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
