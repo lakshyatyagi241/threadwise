@@ -1,0 +1,18 @@
+{
+  "id": "session-token-security",
+  "sheetItem": 37,
+  "title": "Session and token security",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 1,
+    "full": 2
+  },
+  "heavy": false,
+  "needs": [
+    "node22",
+    "pnpm"
+  ],
+  "proves": "Cookie flags and lifetimes, no token in browser storage or URLs, JWT algorithm, issuer and audience pinning, token expiry, secret key ring.",
+  "doesNotProve": "No live login, refresh-rotation or session-revocation flow is exercised against a running API.",
+  "report": "docs/quality/security-testing-batch-1.md"
+}
