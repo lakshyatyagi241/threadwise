@@ -18,7 +18,8 @@
     "expo-doctor": "npx --yes expo-doctor@latest",
     "deps:check": "expo install --check",
     "bundle:check": "expo export --platform android --platform ios --output-dir .expo-export --clear",
-    "e2e": "maestro test .maestro"
+    "e2e": "maestro test .maestro",
+    "start:go": "EXPO_GO=1 expo start --go"
   },
   "dependencies": {
     "@crm/contracts": "workspace:*",
