@@ -130,6 +130,7 @@
       "colLeadScore": "Ocena leada",
       "colLanguage": "Język",
       "colCreatedOn": "Data utworzenia",
+      "colModifiedOn": "Data modyfikacji",
       "pagination": "Paginacja",
       "prevPage": "Poprzednia strona",
       "nextPage": "Następna strona",
@@ -282,6 +283,7 @@
       "shortStage": "Etap",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Utworzono",
+      "shortModified": "Zmodyfikowano",
       "firstRun": {
         "title": "Dodaj pierwsze kontakty",
         "message": "Dodaj osoby, z którymi rozmawiasz. Kontakty są używane w wiadomościach, kampaniach, zadaniach i transakcjach.",

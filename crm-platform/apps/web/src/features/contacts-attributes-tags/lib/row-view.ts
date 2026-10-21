@@ -47,6 +47,8 @@ export interface RowView {
   isMinor: boolean;
   /** ISO timestamp the contact was created. */
   createdAt: string;
+  /** ISO timestamp the contact was last changed. */
+  updatedAt: string;
   /** The lead score and who set it ('ai' = the AI lead scorer); null when the contact has none. */
   leadScore: number | null;
   leadScoreSource: 'manual' | 'ai' | null;
@@ -95,6 +97,7 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     dateOfBirth: row.dateOfBirth,
     isMinor: row.isMinor,
     createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
     leadScore: row.leadScore,
     leadScoreSource: row.leadScoreSource,
     leadScoredAt: row.leadScoredAt,

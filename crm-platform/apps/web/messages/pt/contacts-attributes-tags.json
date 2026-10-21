@@ -130,6 +130,7 @@
       "colLeadScore": "Pontuação do lead",
       "colLanguage": "Idioma",
       "colCreatedOn": "Criado em",
+      "colModifiedOn": "Modificado em",
       "pagination": "Paginação",
       "prevPage": "Página anterior",
       "nextPage": "Próxima página",
@@ -282,6 +283,7 @@
       "shortStage": "Estágio",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Criado",
+      "shortModified": "Modificado",
       "firstRun": {
         "title": "Adicione seus primeiros contatos",
         "message": "Traga as pessoas com quem você conversa. Os contatos são usados em mensagens, campanhas, tarefas e negócios.",

@@ -130,6 +130,7 @@
       "colLeadScore": "लीड स्कोर",
       "colLanguage": "भाषा",
       "colCreatedOn": "बनाने की तारीख",
+      "colModifiedOn": "संशोधन की तारीख",
       "pagination": "पेजिनेशन",
       "prevPage": "पिछला पेज",
       "nextPage": "अगला पेज",
@@ -282,6 +283,7 @@
       "shortStage": "चरण",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "बनाया",
+      "shortModified": "संशोधित",
       "firstRun": {
         "title": "अपने पहले संपर्क जोड़ें",
         "message": "उन लोगों को लाएँ जिनसे आप बात करते हैं। संपर्कों का उपयोग संदेशों, कैंपेन, टास्क और डील में होता है।",
