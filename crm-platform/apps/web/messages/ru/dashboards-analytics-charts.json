@@ -320,6 +320,7 @@
         "replyRate": "Доля ответов",
         "received": "Полученные сообщения",
         "conversationsOpen": "Открытые диалоги",
+        "conversationsResolved": "Решённые диалоги",
         "conversationsClosed": "Закрытые диалоги",
         "conversationsAssigned": "Назначенные",
         "conversationsUnassigned": "Не назначенные",
