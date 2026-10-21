@@ -6,7 +6,7 @@ One folder per tested area under [script-testing/](../../script-testing/), each 
 - Results: `qa-results/<timestamp>/summary.{html,md,json}`. Exit 0 all PASS, 1 any FAIL, 2 any ERROR.
 - Shared helper: `script-testing/_lib/common.sh` (one file, used by all runners). Baseline of files failing on pristine `main`: `script-testing/known-failures.json`.
 - Pending: `alerting` (branch `vedant/ops/alerting-tests`) has a placeholder `meta.json` and is skipped by `run-all.sh` until its runner lands.
-- `health-readiness` (Sheet3 #73): coverage-matrix ratchet, web route tests and a live fault-proxy test of `/health` and `/ready`; `bash script-testing/health-readiness/run.sh --quick`, about 3 minutes, not yet in the verified table below.
+- `health-readiness` (Sheet3 #73): compose coverage-matrix ratchet, web and probe unit tests, promtool/amtool over every rules and Alertmanager file, and a live fault-proxy test of `/health`, `/ready` and `crm_postgres_up`; `bash script-testing/health-readiness/run.sh --quick`, about 4 minutes. Rerun after any new service, compose change or health endpoint change.
 
 ## Last verified: 2026-10-21
 
@@ -14,6 +14,7 @@ One folder per tested area under [script-testing/](../../script-testing/), each 
 
 | Runner | Status | Seconds | Note |
 |---|---|---|---|
+| health-readiness | PASS | - | full mode run once on the #73 branch, not via run-all; timing not recorded here |
 | ssrf | PASS | 9 | |
 | session-token-security | PASS | 9 | |
 | csrf-cors-headers | PASS | 37 | |
