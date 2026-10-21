@@ -325,7 +325,7 @@
         "keywords": "toestemming, afmelden, aanmelden, uitschrijven, stop, start, avg, gdpr, compliance, privacy, marketing"
       },
       "inbox-tags": {
-        "label": "Gesprekstags",
+        "label": "Tags",
         "description": "Maak de tags aan die je team op gesprekken zet en waarmee de inbox wordt gefilterd. Het zijn dezelfde tags als bij contacten.",
         "keywords": "tags, categorieën, ordenen, filter, gesprekstags"
       },

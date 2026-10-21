@@ -341,7 +341,7 @@
         "keywords": "onay, abonelikten çıkma, abone olma, aboneliği iptal, stop, start, kvkk, gdpr, uyumluluk, gizlilik, pazarlama"
       },
       "inbox-tags": {
-        "label": "Sohbet etiketleri",
+        "label": "Etiketler",
         "description": "Ekibinizin sohbetlere eklediği ve gelen kutusunu filtrelediği etiketleri oluşturun. Kişilerde kullanılan etiketlerle aynıdır.",
         "keywords": "etiketler, sohbet etiketleri, kategoriler, düzenle, filtre"
       },

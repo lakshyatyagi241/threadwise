@@ -341,7 +341,7 @@
         "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
       },
       "inbox-tags": {
-        "label": "Tags da conversa",
+        "label": "Tags",
         "description": "Crie as tags que sua equipe aplica às conversas e usa para filtrar a caixa de entrada. São as mesmas tags usadas nos contatos.",
         "keywords": "tags, tag, categorias, organizar, filtrar, tags da conversa"
       },

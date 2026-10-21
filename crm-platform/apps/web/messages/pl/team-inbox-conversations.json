@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Wróć do skrzynki",
-        "title": "Tagi rozmowy",
+        "title": "Tagi",
         "intro": "Tagi rozmowy oznaczają wątek (rozliczenia, zwrot, pilne), aby zespół mógł sortować i filtrować skrzynkę. Pochodzą z tej samej biblioteki tagów co tagi kontaktu, które opisują osobę.",
         "newTitle": "Nowy tag",
         "editTitle": "Edytuj tag",

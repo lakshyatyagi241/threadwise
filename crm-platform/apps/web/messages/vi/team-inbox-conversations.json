@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Quay lại hộp thư",
-        "title": "Thẻ cuộc trò chuyện",
+        "title": "Thẻ",
         "intro": "Thẻ cuộc trò chuyện đánh dấu một luồng (thanh toán, hoàn tiền, khẩn cấp) để nhóm của bạn sắp xếp và lọc hộp thư. Chúng lấy từ cùng thư viện thẻ với thẻ liên hệ, vốn mô tả con người.",
         "newTitle": "Thẻ mới",
         "editTitle": "Sửa thẻ",

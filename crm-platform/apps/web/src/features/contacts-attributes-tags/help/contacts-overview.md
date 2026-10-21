@@ -68,7 +68,7 @@ Tags come from one workspace library and are used in two places, with two differ
 - A **contact tag** describes the person: VIP, lead, region. You put it on contacts from this screen (select rows, then **Tag**) or from the contact page. It follows the customer into every chat; the Team inbox shows it read-only under **Contact tags**.
 - A **conversation tag** describes one chat thread: billing, refund, urgent. You put it on a conversation in the Team inbox, under **Conversation tags**.
 
-A tag you create in one place is available in the other, and a tag deleted from either place is gone from both. See [Conversation tags](help:inbox-tags) and [Team inbox](help:team-inbox-overview).
+A tag you create in one place is available in the other, and a tag deleted from either place is gone from both. See [Tags](help:inbox-tags) and [Team inbox](help:team-inbox-overview).
 
 ## Time zone and quiet hours
 
