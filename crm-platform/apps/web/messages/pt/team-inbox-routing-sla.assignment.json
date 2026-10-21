@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Atribuição de chats",
+        "intro": "Quatro chaves cobrem a maioria dos espaços de trabalho: ative-as e você nunca precisará criar uma regra.",
+        "order": "A ordem para um chat novo: primeiro o responsável pelo contato e o Agente fixo, depois suas regras (se você adicionar alguma), depois Todos os demais e por último a fila de espera.",
+        "readOnly": "Você pode ver estas chaves, mas não pode alterá-las.",
+        "saved": "Salvo.",
+        "saveFailed": "Não foi possível salvar a alteração.",
+        "loading": "Carregando as configurações de atribuição",
+        "loadFailed": "Não foi possível carregar as configurações de atribuição.",
+        "retry": "Tentar novamente",
+        "notInPlan": "Não incluído no seu plano",
+        "upgradeHint": "Seu plano não inclui este recurso. Peça ao proprietário da conta para fazer upgrade do plano.",
+        "stepFirst": "Verificado primeiro",
+        "stepMaster": "Chave principal",
+        "stepAfter": "Depois de assumir",
+        "needsAuto": "Usado somente enquanto a Atribuição automática está ativada.",
+        "auto": {
+          "title": "Atribuição automática",
+          "body": "Os chats novos são divididos igualmente entre os agentes que estão aceitando chats (não offline, ocupados ou de licença). Quando todos os agentes atingem o limite de chats, os chats novos aguardam na fila.",
+          "limitHint": "Defina o limite de chats de cada agente no perfil dele, em <link>Membros da equipe</link>.",
+          "off": "Desativado: nada é atribuído automaticamente, nem por uma regra nem pelo responsável pelo contato. Os chats aguardam na fila até que alguém os assuma ou um fluxo indique uma pessoa."
+        },
+        "sticky": {
+          "title": "Agente fixo",
+          "body": "Um contato que volta retorna ao agente que atendeu o último chat dele, desde que esse agente ainda seja um membro ativo que possa abrir a caixa de entrada (o status online não é verificado). Se o contato tiver um responsável, ele é tentado primeiro.",
+          "withWindow": "Quantos dias para trás o último agente conta é definido em Avançado."
+        },
+        "owner": {
+          "title": "Atribuir o chat ao responsável pelo contato",
+          "body": "Os chats de um contato conhecido vão primeiro para o responsável pelo contato, para que o atendimento seja consistente e pessoal. Se o responsável estiver de licença, o substituto assume o chat; se não houver responsável, o próximo passo decide.",
+          "wins": "Se o Agente fixo também estiver ativado, o responsável pelo contato continua tendo prioridade; o último agente é apenas a segunda opção."
+        },
+        "claim": {
+          "title": "Atribuir o agente como responsável pelo contato",
+          "body": "Quando um agente assume um chat da fila de espera e o contato ainda não tem responsável, esse agente passa a ser o responsável pelo contato. Um responsável existente nunca é alterado.",
+          "note": "Um chat entregue a um agente por uma regra não define o responsável. Com Manter os chats abertos com o responsável (em Avançado), uma transferência também define."
+        }
+      },
+      "advanced": {
+        "title": "Avançado",
+        "hint": "Manter os chats sincronizados com o responsável pelo contato, o prazo do agente fixo, o aviso de reatribuição e os alertas da fila.",
+        "sync": {
+          "title": "Manter os chats abertos com o responsável",
+          "body": "Quando o responsável por um contato muda, os chats abertos dele atribuídos automaticamente passam para o novo responsável. Um chat que uma pessoa assumiu nunca é movido. Uma transferência que atribui um chat também define o responsável quando o contato não tem nenhum.",
+          "needsOwner": "Ative primeiro Atribuir o chat ao responsável pelo contato."
+        }
+      },
+      "rules": {
+        "title": "Precisa de mais controle? Adicione regras",
+        "intro": "Opcional. As regras enviam chats específicos (de um canal, com certas palavras na mensagem, de um contato novo...) para agentes ou equipes específicos. Se as quatro chaves forem suficientes, você nunca precisará criar uma.",
+        "locked": "As regras não estão no seu plano. Você ainda tem a fila de espera, a opção de assumir chats e a atribuição manual. Peça ao proprietário da conta para fazer upgrade do plano.",
+        "pipelineTitle": "Como um chat novo é atribuído",
+        "pipeline": {
+          "agent": "1. Responsável pelo contato e Agente fixo",
+          "rules": "2. Suas regras, de cima para baixo",
+          "rulesBody": "A primeira regra que corresponder e encontrar um agente disponível fica com o chat.",
+          "everyone": "3. Todos os demais",
+          "everyoneBody": "Recebe o que nenhuma regra assumiu.",
+          "queue": "4. Fila de espera",
+          "queueBody": "Se ninguém for encontrado, o chat aguarda na aba Em espera até que um agente o assuma.",
+          "agentBody": "Definido pelas chaves acima."
+        },
+        "never": "Algo que já foi atribuído por um fluxo, uma pessoa ou uma transferência nunca é alterado pelas regras.",
+        "add": "Adicionar uma regra",
+        "emptyTitle": "Nenhuma regra",
+        "empty": "Tudo bem. Suas chaves acima e Todos os demais decidem.",
+        "loading": "Carregando as regras",
+        "loadFailed": "Não foi possível carregar as regras.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "todos os agentes",
+        "noAssign": "não atribui",
+        "drag": "Arraste {name} para mudar a ordem",
+        "neverRuns": "Nunca é executada",
+        "neverMatches": "Nunca corresponde",
+        "neverMatchesHint": "Ela não tem condição e não se aplica a todas as conversas. Edite-a para corrigir isso.",
+        "shadowed": "{count, plural, one {A regra abaixo de “{blocker}” nunca pode ser executada} other {As regras abaixo de “{blocker}” nunca podem ser executadas}} a menos que ninguém em “{blocker}” esteja disponível: {names}. “{blocker}” se aplica a todas as conversas e interrompe a verificação ali. Mova-a para baixo ou desative “Parar quando esta regra corresponder” nela.",
+        "reordered": "Ordem salva."
+      },
+      "everyone": {
+        "title": "Todos os demais",
+        "pinned": "Sempre por último",
+        "body": "Recebe todos os chats que nenhuma regra assumiu. Escolha quem os recebe.",
+        "notSet": "Ainda não configurado: os chats que nenhuma regra assume aguardam na fila.",
+        "mode": "O que acontece com esses chats",
+        "evenly": "Distribuir igualmente entre todos os agentes",
+        "evenlyHint": "Rodízio ou menos ocupado entre todos que podem abrir a caixa de entrada e estão disponíveis: não offline, ocupados, de licença nem no limite de chats.",
+        "listed": "Escolher agentes ou equipes",
+        "listedNow": "Agora: {who}.",
+        "listedEdit": "Alterar os agentes ou equipes",
+        "queue": "Deixar na fila de espera",
+        "queueHint": "Ninguém é atribuído. O chat aguarda até que um agente o assuma.",
+        "strategy": "Como dividir",
+        "saved": "Salvo.",
+        "failed": "Não foi possível salvar a alteração.",
+        "confirmTitle": "Substituir os agentes escolhidos?",
+        "confirmBody": "Todos os demais agora entrega os chats aos agentes ou equipes que você escolheu. Distribuir igualmente substitui essa escolha.",
+        "confirm": "Substituir",
+        "ruleName": "Todos os demais"
+      },
+      "where": {
+        "title": "Onde isso se aplica",
+        "applied": "Aplicado",
+        "applied1": "Quando um chat novo chega (e quando um cliente reabre um chat encerrado que ninguém atende).",
+        "applied2": "Quando uma etapa de transferência para uma pessoa está definida como “Regras de atribuição”: a mesma lista é verificada então, usando o contato, o canal e a última mensagem do cliente, depois Todos os demais e por último a fila de espera.",
+        "not": "Não aplicado",
+        "not1": "Um chat que um fluxo, uma pessoa ou uma transferência já atribuiu.",
+        "not2": "Atribuir ou assumir manualmente.",
+        "not3": "Uma etapa de transferência para uma pessoa que indica uma pessoa (as regras são ignoradas) ou uma equipe (o método da própria equipe é usado)."
+      },
+      "try": {
+        "title": "Testar",
+        "body": "Escolha um contato, um canal e uma mensagem de exemplo para ver quem receberia o chat e por quê. Nada é atribuído, contado ou enviado.",
+        "contact": "Contato (opcional)",
+        "noContact": "Nenhum contato escolhido: o exemplo é um contato totalmente novo. As condições sobre dados salvos do contato não podem ser verificadas sem um contato real.",
+        "channel": "Canal",
+        "message": "Mensagem de exemplo",
+        "messagePlaceholder": "ex.: Gostaria de um reembolso",
+        "run": "Mostrar o que aconteceria",
+        "running": "Verificando",
+        "failed": "Não foi possível executar o teste.",
+        "result": "Resultado",
+        "outcome": {
+          "sticky": "Manter com o agente dele decide: {who}.",
+          "rule": "A regra “{rule}” decide: {who}.",
+          "everyone": "Todos os demais decide: {who}.",
+          "queue": "Ninguém foi encontrado: o chat aguarda na fila.",
+          "off": "A Atribuição automática está desativada: nada é atribuído automaticamente."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "um agente",
+          "team": "a fila de {name}",
+          "teamUnknown": "uma fila de equipe"
+        },
+        "stepsTitle": "Passo a passo",
+        "step": {
+          "switch": "Atribuição automática",
+          "sticky": "Responsável pelo contato e Agente fixo",
+          "rule": "Regra “{name}”",
+          "everyone": "Todos os demais",
+          "queue": "Fila de espera"
+        },
+        "why": {
+          "auto_assign_off": "A chave está desativada.",
+          "sticky_off": "As duas chaves estão desativadas, então esta etapa é ignorada.",
+          "no_contact": "Não há contato para consultar.",
+          "no_agent_found": "Nem o responsável pelo contato nem o último agente puderam assumir.",
+          "owner": "O responsável pelo contato assume.",
+          "last_handler": "O agente do último chat do contato assume.",
+          "conditions_failed": "Não correspondeu.",
+          "nobody_available": "Correspondeu, mas ninguém para quem ela aponta está disponível.",
+          "agent_picked": "Correspondeu e escolheu um agente.",
+          "team_queue": "Correspondeu; ninguém estava livre, então vai para a fila da equipe.",
+          "no_assignment_in_rule": "Correspondeu; esta regra não atribui (ela só executa as outras ações).",
+          "not_set": "Não há nenhuma regra Todos os demais ativa, então os chats que ninguém assume aguardam na fila."
+        },
+        "part": {
+          "contactKind": "Contato novo ou recorrente",
+          "contact": "Dados do contato",
+          "channel": "Canal",
+          "keywords": "Palavras da mensagem",
+          "languages": "Idioma",
+          "businessHours": "Horário comercial"
+        },
+        "partOk": "correspondeu",
+        "partWhy": {
+          "no_saved_value": "este contato não tem isso salvo, então não correspondeu",
+          "no_contact": "não há contato",
+          "not_same_kind": "o contato não é desse tipo",
+          "channel_differs": "este canal não está na lista",
+          "no_word": "nenhuma das palavras está na mensagem",
+          "language_differs": "o idioma é diferente ou desconhecido",
+          "hours_differ": "o horário não está nessa parte do dia"
+        },
+        "contactLine": "Este contato é {kind}. Etapa: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "novo",
+          "returning": "recorrente"
+        },
+        "hasOwner": "Tem um responsável.",
+        "noOwner": "Não tem responsável.",
+        "tags": "{count, plural, =0 {Nenhuma etiqueta salva.} one {# etiqueta salva.} other {# etiquetas salvas.}}",
+        "skippedTitle": "Excluídos",
+        "skip": {
+          "on_leave": "de licença",
+          "offline_busy_or_at_capacity": "offline, ocupado ou no limite de chats",
+          "cannot_read": "não pode abrir a caixa de entrada",
+          "no_owner": "o contato não tem responsável",
+          "no_previous_handler_in_window": "não há agente anterior para este contato",
+          "not_an_active_member": "não é um membro ativo"
+        },
+        "outside": "Simular que está fora do horário comercial",
+        "inside": "Simular que está dentro do horário comercial",
+        "clock": "Horário comercial: usar o relógio de agora",
+        "skipStep": {
+          "owner": "Responsável pelo contato",
+          "last_handler": "Último agente"
+        }
+      },
+      "form": {
+        "whenSwitch": "Somente para conversas que correspondam a...",
+        "whenSwitchHint": "Desativado: esta regra se aplica a todas as conversas novas.",
+        "everyConversation": "Esta regra se aplica a todas as conversas novas.",
+        "kept": "Suas condições são mantidas, mas ignoradas enquanto isto estiver desativado.",
+        "add": "Adicionar uma condição",
+        "remove": "Remover {name}",
+        "name": {
+          "contactKind": "Contato novo ou recorrente",
+          "channel": "Canal",
+          "keywords": "Palavras da mensagem",
+          "language": "Idioma do cliente",
+          "hours": "Horário comercial",
+          "contact": "Dados do contato"
+        },
+        "kind": {
+          "title": "Contato novo ou recorrente",
+          "hint": "Um contato é recorrente quando tem um chat anterior ou foi salvo mais de 10 minutos antes deste chat.",
+          "new": "Contato novo (primeiro chat)",
+          "returning": "Contato recorrente"
+        },
+        "contactNote": "Corresponde apenas a contatos que já têm isto salvo. Um contato totalmente novo chega sem nada salvo, exceto a etapa “Novo”, então use Contato novo ou recorrente para clientes que chegam pela primeira vez.",
+        "everyoneElseNote": "Esta é a regra Todos os demais: ela recebe os chats que nenhuma outra regra assumiu.",
+        "everyoneAgents": "Todos que podem abrir a caixa de entrada",
+        "everyoneAgentsHint": "Divida os chats entre todos os agentes disponíveis em vez de escolhê-los.",
+        "fallbackConditions": "Esta regra tem condições salvas de antes, então ela só recebe os chats que correspondem a elas. Ative a chave abaixo para revisá-las, ou remova-as."
+      }
+    }
+  }
+}

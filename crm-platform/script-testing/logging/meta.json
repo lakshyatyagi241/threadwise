@@ -1,0 +1,22 @@
+{
+  "id": "logging",
+  "sheetItem": 74,
+  "title": "Centralized structured logging",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 3,
+    "full": 3
+  },
+  "heavy": false,
+  "needs": [
+    "node22",
+    "pnpm",
+    "docker",
+    "curl",
+    "postgres",
+    "redis"
+  ],
+  "proves": "Unit specs plus a real boot: every log line is one JSON object with time, level, service and msg, planted secrets in URL, query and headers never appear, the health probe is silent at info, the request id is consistent.",
+  "doesNotProve": "Worker and web logging are not booted; tenant ids need a real login (not exercised live); free-text business logs are not scanned for secrets.",
+  "report": "docs/quality/logging/Sheet3-74-logging-REPORT.html"
+}

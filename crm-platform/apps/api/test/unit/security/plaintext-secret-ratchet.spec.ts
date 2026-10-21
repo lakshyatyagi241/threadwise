@@ -71,6 +71,7 @@ const ALLOW: Record<string, Reason> = {
 
   // --- public: an identifier, a public key or a name, not a credential ---
   'webauthn_credentials.public_key': 'public',
+  'booking_reminders.pack_key': 'public', // the name of the reminder template pack a step was made from (a catalogue id), not a secret
   'platform_webauthn_credentials.public_key': 'public',
   'web_forms.public_key': 'public', // printed in the form embed
   'marketplace_connections.public_key': 'public', // the path id of a portal address; its secret is secret_enc

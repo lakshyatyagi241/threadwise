@@ -25,7 +25,7 @@ keywords:
 
 ## What it is for
 
-Handing a conversation from a bot to a person works on every plan. What a plan adds is automation: picking the person for you, and linking the contact's owner to the chat's owner. This guide lists what each level gives, so you know why an option is marked **Not in your plan** on the [Handoff and assignment](help:handoff-settings) page.
+Handing a conversation from a bot to a person works on every plan. What a plan adds is automation: picking the person for you, and linking the contact's owner to the chat's owner. This guide lists what each level gives, so you know why an option is marked **Not in your plan** on the [Conversation auto-assignment](help:auto-assignment) page.
 
 ## On every plan
 

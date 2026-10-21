@@ -19,6 +19,7 @@ import {
   Checkbox,
   Field,
   Input,
+  Popover,
   Select,
   Spinner,
   Switch,
@@ -31,12 +32,14 @@ import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/pl
 import { useSegmentCatalog } from '@/features/segments/api/lookups';
 import { refresh, routingApi, useAssignees, useFlowChoices, useRule } from '../api/routing';
 import {
+  CONDITION_KEYS,
   editableOf,
   emptyForm,
   formFromRule,
   payloadFromForm,
   problemsOf,
   toggleId,
+  type ConditionKey,
   type FormProblem,
   type RuleForm,
 } from '../lib/form';
@@ -51,7 +54,7 @@ const reason = (e: unknown, fallback: string) =>
   e instanceof ApiError && e.message ? e.message : fallback;
 
 /** `/auto-assignment/new` and `/auto-assignment/:id`: one rule, as a form. Without an `id` it is a new rule. */
-export function RuleFormScreen({ id }: { id?: string }) {
+export function RuleFormScreen({ id, everyoneElse }: { id?: string; everyoneElse?: boolean }) {
   const t = useTranslations('team-inbox-routing-sla.form');
   const canManage = useCan('inbox.routing.manage');
   const pathname = usePathname();
@@ -97,13 +100,22 @@ export function RuleFormScreen({ id }: { id?: string }) {
   return (
     <section className="mx-auto max-w-3xl space-y-6">
       {back}
-      <RuleFormBody key={rule.data?.id ?? 'new'} rule={rule.data} />
+      <RuleFormBody key={rule.data?.id ?? 'new'} rule={rule.data} everyoneElse={everyoneElse} />
     </section>
   );
 }
 
-export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
+export function RuleFormBody({
+  rule,
+  everyoneElse = false,
+}: {
+  rule?: RoutingRule;
+  /** A new rule that is the "Everyone else" rule (opened from that row on the list). */
+  everyoneElse?: boolean;
+}) {
   const t = useTranslations('team-inbox-routing-sla.form');
+  const tf = useTranslations('team-inbox-routing-sla.assign.form');
+  const te = useTranslations('team-inbox-routing-sla.assign.everyone');
   const ts = useTranslations('team-inbox-routing-sla.rules.strategy');
   const tc = useTranslations('team-inbox-routing-sla.channels');
   const tp = useTranslations('team-inbox-conversations.list');
@@ -114,7 +126,14 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
   const lookups = useSegmentCatalog();
   const assignees = useAssignees();
   const flows = useFlowChoices();
-  const [form, setForm] = useState<RuleForm>(() => (rule ? formFromRule(rule) : emptyForm()));
+  const [form, setForm] = useState<RuleForm>(() =>
+    rule
+      ? formFromRule(rule)
+      : everyoneElse
+        ? { ...emptyForm(), isFallback: true, name: te('ruleName') }
+        : emptyForm(),
+  );
+  const [menuOpen, setMenuOpen] = useState(false);
   const [showProblems, setShowProblems] = useState(false);
   const [busy, setBusy] = useState<'save' | 'activate' | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -186,6 +205,143 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
     void submit(rule?.isActive ?? false);
   };
 
+  const missing = CONDITION_KEYS.filter((k) => !form.added.includes(k));
+  const addCondition = (key: ConditionKey) => {
+    setMenuOpen(false);
+    setForm((f) => ({
+      ...f,
+      onlyWhen: true,
+      added: f.added.includes(key) ? f.added : [...f.added, key],
+      // A condition that has no choice to make yet starts on a real one: New contact.
+      ...(key === 'contactKind' && f.contactKind === 'any' ? { contactKind: 'new' as const } : {}),
+      ...(key === 'hours' && f.businessHours === 'any'
+        ? { businessHours: 'outside' as const }
+        : {}),
+    }));
+  };
+  /** Takes a condition off: its card goes and its value is emptied (a removed condition is gone, unlike the switch, which keeps them). */
+  const removeCondition = (key: ConditionKey) =>
+    setForm((f) => {
+      const next = { ...f, added: f.added.filter((k) => k !== key) };
+      if (key === 'contactKind') next.contactKind = 'any';
+      if (key === 'contact') next.contact = emptyForm().contact;
+      if (key === 'channel') next.channelKinds = [];
+      if (key === 'keywords') next.keywords = '';
+      if (key === 'language') next.languages = '';
+      if (key === 'hours') next.businessHours = 'any';
+      return next;
+    });
+
+  const renderCondition = (key: ConditionKey): ReactNode => {
+    if (key === 'contactKind')
+      return (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">{tf('kind.hint')}</p>
+          <Select
+            value={form.contactKind === 'any' ? 'new' : form.contactKind}
+            aria-label={tf('kind.title')}
+            onChange={(e) => set('contactKind', e.target.value as RuleForm['contactKind'])}
+          >
+            <option value="new">{tf('kind.new')}</option>
+            <option value="returning">{tf('kind.returning')}</option>
+          </Select>
+        </div>
+      );
+    if (key === 'contact')
+      return (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">{tf('contactNote')}</p>
+          <ContactConditions
+            root={form.contact}
+            onChange={(root) => set('contact', root)}
+            showProblems={showProblems}
+            catalog={lookups.catalog}
+            ready={lookups.ready}
+            failed={lookups.failed}
+          />
+        </div>
+      );
+    if (key === 'channel')
+      return (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">{t('channel.hint')}</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {CHANNEL_KINDS.map((k) => (
+              <Checkbox
+                key={k}
+                id={`${uid}-ch-${k}`}
+                label={tc(k)}
+                checked={form.channelKinds.includes(k)}
+                onChange={() => set('channelKinds', toggleId(form.channelKinds, k))}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    if (key === 'keywords')
+      return (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">{t('keywords.hint')}</p>
+          <Textarea
+            id={`${uid}-kw`}
+            rows={2}
+            value={form.keywords}
+            placeholder={t('keywords.placeholder')}
+            aria-label={t('keywords.title')}
+            onChange={(e) => set('keywords', e.target.value)}
+          />
+          {has('keywordsMany') && (
+            <p role="alert" className="text-xs text-danger">
+              {t('problem.keywordsMany')}
+            </p>
+          )}
+          <div
+            className="flex flex-wrap gap-4 text-sm"
+            role="radiogroup"
+            aria-label={t('keywords.mode')}
+          >
+            {(['any', 'all'] as const).map((m) => (
+              <label key={m} className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name={`${uid}-kwmode`}
+                  checked={form.keywordMode === m}
+                  onChange={() => set('keywordMode', m)}
+                />
+                {t(`keywords.${m}`)}
+              </label>
+            ))}
+          </div>
+        </div>
+      );
+    if (key === 'language')
+      return (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">{t('language.hint')}</p>
+          <Input
+            value={form.languages}
+            dir="ltr"
+            placeholder="en, ar"
+            aria-label={t('language.title')}
+            onChange={(e) => set('languages', e.target.value)}
+          />
+        </div>
+      );
+    return (
+      <div className="space-y-2">
+        <p className="text-xs text-muted-foreground">{t('hours.hint')}</p>
+        <Select
+          value={form.businessHours === 'any' ? 'outside' : form.businessHours}
+          aria-label={t('hours.title')}
+          onChange={(e) => set('businessHours', e.target.value as RuleForm['businessHours'])}
+        >
+          <option value="inside">{t('hours.inside')}</option>
+          <option value="outside">{t('hours.outside')}</option>
+        </Select>
+      </div>
+    );
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-6" noValidate>
       {locked && (
@@ -233,90 +389,81 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
         </Field>
       </Card>
 
-      <Card title={t('whenTitle')} hint={t('whenHint')}>
-        {has('conditions') && <Alert tone="warning">{t('problem.conditions')}</Alert>}
-        {has('contactIncomplete') && <Alert tone="warning">{t('problem.contactIncomplete')}</Alert>}
-
-        <Section title={t('contact.title')} hint={t('contact.hint')}>
-          <ContactConditions
-            root={form.contact}
-            onChange={(root) => set('contact', root)}
-            showProblems={showProblems}
-            catalog={lookups.catalog}
-            ready={lookups.ready}
-            failed={lookups.failed}
-          />
-        </Section>
-
-        <Section title={t('channel.title')} hint={t('channel.hint')}>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {CHANNEL_KINDS.map((k) => (
-              <Checkbox
-                key={k}
-                id={`${uid}-ch-${k}`}
-                label={tc(k)}
-                checked={form.channelKinds.includes(k)}
-                onChange={() => set('channelKinds', toggleId(form.channelKinds, k))}
-              />
-            ))}
+      {(!form.isFallback || form.added.length > 0) && (
+        <Card title={t('whenTitle')} hint={tf('whenSwitchHint')}>
+          <div className="flex items-start gap-3">
+            <Switch
+              checked={form.onlyWhen}
+              onCheckedChange={(v) => set('onlyWhen', v)}
+              label={tf('whenSwitch')}
+            />
+            <div>
+              <p className="text-sm font-medium">{tf('whenSwitch')}</p>
+              <p className="text-xs text-muted-foreground">
+                {form.onlyWhen ? t('whenHint') : tf('everyConversation')}
+              </p>
+            </div>
           </div>
-        </Section>
-
-        <Section title={t('keywords.title')} hint={t('keywords.hint')}>
-          <Textarea
-            id={`${uid}-kw`}
-            rows={2}
-            value={form.keywords}
-            placeholder={t('keywords.placeholder')}
-            aria-label={t('keywords.title')}
-            onChange={(e) => set('keywords', e.target.value)}
-          />
-          {has('keywordsMany') && (
-            <p role="alert" className="text-xs text-danger">
-              {t('problem.keywordsMany')}
+          {form.isFallback && form.added.length > 0 && (
+            <p className="text-xs text-warning">{tf('fallbackConditions')}</p>
+          )}
+          {!form.onlyWhen && form.added.length > 0 && (
+            <p className="text-xs text-muted-foreground" data-testid="conditions-kept">
+              {tf('kept')}
             </p>
           )}
-          <div
-            className="flex flex-wrap gap-4 text-sm"
-            role="radiogroup"
-            aria-label={t('keywords.mode')}
-          >
-            {(['any', 'all'] as const).map((m) => (
-              <label key={m} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name={`${uid}-kwmode`}
-                  checked={form.keywordMode === m}
-                  onChange={() => set('keywordMode', m)}
-                />
-                {t(`keywords.${m}`)}
-              </label>
-            ))}
-          </div>
-        </Section>
+          {has('conditions') && <Alert tone="warning">{t('problem.conditions')}</Alert>}
+          {has('contactIncomplete') && (
+            <Alert tone="warning">{t('problem.contactIncomplete')}</Alert>
+          )}
 
-        <Section title={t('language.title')} hint={t('language.hint')}>
-          <Input
-            value={form.languages}
-            dir="ltr"
-            placeholder="en, ar"
-            aria-label={t('language.title')}
-            onChange={(e) => set('languages', e.target.value)}
-          />
-        </Section>
-
-        <Section title={t('hours.title')} hint={t('hours.hint')}>
-          <Select
-            value={form.businessHours}
-            aria-label={t('hours.title')}
-            onChange={(e) => set('businessHours', e.target.value as RuleForm['businessHours'])}
-          >
-            <option value="any">{t('hours.any')}</option>
-            <option value="inside">{t('hours.inside')}</option>
-            <option value="outside">{t('hours.outside')}</option>
-          </Select>
-        </Section>
-      </Card>
+          {form.onlyWhen && (
+            <>
+              {form.added.map((key) => (
+                <ConditionCard
+                  key={key}
+                  title={tf(`name.${key}`)}
+                  removeLabel={tf('remove', { name: tf(`name.${key}`) })}
+                  onRemove={() => removeCondition(key)}
+                >
+                  {renderCondition(key)}
+                </ConditionCard>
+              ))}
+              <div className="relative">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  data-testid="add-condition"
+                  disabled={missing.length === 0}
+                  aria-haspopup="true"
+                  aria-expanded={menuOpen}
+                  onClick={() => setMenuOpen((o) => !o)}
+                >
+                  + {tf('add')}
+                </Button>
+                <Popover
+                  open={menuOpen}
+                  onClose={() => setMenuOpen(false)}
+                  label={tf('add')}
+                  className="start-0 end-auto w-64 space-y-1"
+                >
+                  {missing.map((key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      data-testid={`add-${key}`}
+                      className="block w-full rounded px-2.5 py-2 text-start text-sm hover:bg-muted"
+                      onClick={() => addCondition(key)}
+                    >
+                      {tf(`name.${key}`)}
+                    </button>
+                  ))}
+                </Popover>
+              </div>
+            </>
+          )}
+        </Card>
+      )}
 
       <Card title={t('thenTitle')} hint={t('thenHint')}>
         <fieldset className="space-y-2">
@@ -458,6 +605,30 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
           )}
         </fieldset>
 
+        {form.isFallback && (
+          <p className="text-sm text-muted-foreground" data-testid="everyone-else-note">
+            {tf('everyoneElseNote')}
+          </p>
+        )}
+        {form.assigns && form.isFallback && (
+          <Checkbox
+            id={`${uid}-everyone`}
+            label={tf('everyoneAgents')}
+            checked={form.everyone}
+            onChange={() =>
+              setForm((f) => ({
+                ...f,
+                everyone: !f.everyone,
+                strategy: f.strategy === 'specific' ? 'round_robin' : f.strategy,
+                userIds: [],
+                teamIds: [],
+              }))
+            }
+          />
+        )}
+        {form.assigns && form.isFallback && form.everyone && (
+          <p className="text-xs text-muted-foreground">{tf('everyoneAgentsHint')}</p>
+        )}
         {form.assigns && (
           <>
             <Field
@@ -480,7 +651,7 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
                   }));
                 }}
               >
-                {STRATEGIES.map((s) => (
+                {STRATEGIES.filter((s) => !(form.everyone && s === 'specific')).map((s) => (
                   <option key={s} value={s}>
                     {ts(s)}
                   </option>
@@ -488,85 +659,87 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
               </Select>
             </Field>
 
-            <fieldset className="space-y-2">
-              <legend className="text-sm font-medium">{t('agents')} *</legend>
-              <p className="text-xs text-muted-foreground">{t('agentsHint')}</p>
-              {assignees.isPending ? (
-                <p className="text-sm text-muted-foreground" role="status">
-                  {t('loadingAgents')}
-                </p>
-              ) : assignees.isError ? (
-                <Alert tone="warning">{t('agentsFailed')}</Alert>
-              ) : rows.length === 0 ? (
-                <Alert tone="info">{t('noAgents')}</Alert>
-              ) : (
-                <ul className="max-h-72 space-y-1 overflow-y-auto rounded-md border border-border p-2">
-                  {rows
-                    .filter((r) => !specific || r.kind === 'user')
-                    .map((r) => {
-                      const list = r.kind === 'user' ? form.userIds : form.teamIds;
-                      const checked = list.includes(r.id);
-                      return (
-                        <li
-                          key={r.id}
-                          className="flex items-center justify-between gap-3 px-1 py-1"
-                        >
-                          <Checkbox
-                            id={`${uid}-t-${r.id}`}
-                            label={
-                              <span>
-                                {r.label}{' '}
-                                {r.kind === 'team' && (
-                                  <Badge tone="neutral">{t('teamBadge')}</Badge>
-                                )}
-                              </span>
-                            }
-                            checked={checked}
-                            onChange={() => {
-                              if (specific) {
-                                set('userIds', checked ? [] : [r.id]);
-                              } else if (r.kind === 'user') {
-                                set('userIds', toggleId(form.userIds, r.id));
-                              } else {
-                                set('teamIds', toggleId(form.teamIds, r.id));
+            {!form.everyone && (
+              <fieldset className="space-y-2">
+                <legend className="text-sm font-medium">{t('agents')} *</legend>
+                <p className="text-xs text-muted-foreground">{t('agentsHint')}</p>
+                {assignees.isPending ? (
+                  <p className="text-sm text-muted-foreground" role="status">
+                    {t('loadingAgents')}
+                  </p>
+                ) : assignees.isError ? (
+                  <Alert tone="warning">{t('agentsFailed')}</Alert>
+                ) : rows.length === 0 ? (
+                  <Alert tone="info">{t('noAgents')}</Alert>
+                ) : (
+                  <ul className="max-h-72 space-y-1 overflow-y-auto rounded-md border border-border p-2">
+                    {rows
+                      .filter((r) => !specific || r.kind === 'user')
+                      .map((r) => {
+                        const list = r.kind === 'user' ? form.userIds : form.teamIds;
+                        const checked = list.includes(r.id);
+                        return (
+                          <li
+                            key={r.id}
+                            className="flex items-center justify-between gap-3 px-1 py-1"
+                          >
+                            <Checkbox
+                              id={`${uid}-t-${r.id}`}
+                              label={
+                                <span>
+                                  {r.label}{' '}
+                                  {r.kind === 'team' && (
+                                    <Badge tone="neutral">{t('teamBadge')}</Badge>
+                                  )}
+                                </span>
                               }
-                            }}
-                          />
-                          <span className="text-xs text-muted-foreground">{r.note}</span>
-                        </li>
-                      );
-                    })}
-                </ul>
-              )}
-              {stale.length > 0 && (
-                <Alert tone="warning">
-                  {t('stale', { count: stale.length })}{' '}
-                  <button
-                    type="button"
-                    className="font-semibold underline"
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        userIds: f.userIds.filter((x) => known.has(x)),
-                        teamIds: f.teamIds.filter((x) => known.has(x)),
-                      }))
-                    }
-                  >
-                    {t('removeStale')}
-                  </button>
-                </Alert>
-              )}
-              {has('targets') && (
-                <p role="alert" className="text-xs text-danger">
-                  {t('problem.targets')}
-                </p>
-              )}
-              {has('specific') && (
-                <p role="alert" className="text-xs text-danger">
-                  {t('problem.specific')}
-                </p>
-              )}
-            </fieldset>
+                              checked={checked}
+                              onChange={() => {
+                                if (specific) {
+                                  set('userIds', checked ? [] : [r.id]);
+                                } else if (r.kind === 'user') {
+                                  set('userIds', toggleId(form.userIds, r.id));
+                                } else {
+                                  set('teamIds', toggleId(form.teamIds, r.id));
+                                }
+                              }}
+                            />
+                            <span className="text-xs text-muted-foreground">{r.note}</span>
+                          </li>
+                        );
+                      })}
+                  </ul>
+                )}
+                {stale.length > 0 && (
+                  <Alert tone="warning">
+                    {t('stale', { count: stale.length })}{' '}
+                    <button
+                      type="button"
+                      className="font-semibold underline"
+                      onClick={() =>
+                        setForm((f) => ({
+                          ...f,
+                          userIds: f.userIds.filter((x) => known.has(x)),
+                          teamIds: f.teamIds.filter((x) => known.has(x)),
+                        }))
+                      }
+                    >
+                      {t('removeStale')}
+                    </button>
+                  </Alert>
+                )}
+                {has('targets') && (
+                  <p role="alert" className="text-xs text-danger">
+                    {t('problem.targets')}
+                  </p>
+                )}
+                {has('specific') && (
+                  <p role="alert" className="text-xs text-danger">
+                    {t('problem.specific')}
+                  </p>
+                )}
+              </fieldset>
+            )}
           </>
         )}
 
@@ -595,30 +768,21 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
         </Field>
       </Card>
 
-      <Card title={t('optionsTitle')}>
-        <div className="flex items-start gap-3">
-          <Switch
-            checked={form.stopOnMatch}
-            onCheckedChange={(v) => set('stopOnMatch', v)}
-            label={t('stopOnMatch')}
-          />
-          <div>
-            <p className="text-sm font-medium">{t('stopOnMatch')}</p>
-            <p className="text-xs text-muted-foreground">{t('stopOnMatchHint')}</p>
+      {!form.isFallback && (
+        <Card title={t('optionsTitle')}>
+          <div className="flex items-start gap-3">
+            <Switch
+              checked={form.stopOnMatch}
+              onCheckedChange={(v) => set('stopOnMatch', v)}
+              label={t('stopOnMatch')}
+            />
+            <div>
+              <p className="text-sm font-medium">{t('stopOnMatch')}</p>
+              <p className="text-xs text-muted-foreground">{t('stopOnMatchHint')}</p>
+            </div>
           </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <Switch
-            checked={form.isFallback}
-            onCheckedChange={(v) => set('isFallback', v)}
-            label={t('fallback')}
-          />
-          <div>
-            <p className="text-sm font-medium">{t('fallback')}</p>
-            <p className="text-xs text-muted-foreground">{t('fallbackHint')}</p>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      )}
 
       <div className="flex flex-wrap justify-end gap-2">
         <Link href="/auto-assignment">
@@ -659,6 +823,7 @@ async function saveEdit(rule: RoutingRule, payload: ReturnType<typeof payloadFro
     triggerFlowId: payload.triggerFlowId,
     stopOnMatch: payload.stopOnMatch,
     isFallback: payload.isFallback,
+    appliesToAll: payload.appliesToAll,
     isActive: payload.isActive,
   };
   try {
@@ -671,6 +836,35 @@ async function saveEdit(rule: RoutingRule, payload: ReturnType<typeof payloadFro
   }
 }
 
+function ConditionCard({
+  title,
+  removeLabel,
+  onRemove,
+  children,
+}: {
+  title: string;
+  removeLabel: string;
+  onRemove: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <div className="space-y-2 rounded-lg border border-border p-3" data-testid="condition-card">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-medium">{title}</h3>
+        <button
+          type="button"
+          aria-label={removeLabel}
+          className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+          onClick={onRemove}
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      {children}
+    </div>
+  );
+}
+
 function Card({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
     <section className="space-y-4 rounded-xl border border-border bg-background p-4 sm:p-5">
@@ -680,15 +874,5 @@ function Card({ title, hint, children }: { title: string; hint?: string; childre
       </div>
       {children}
     </section>
-  );
-}
-
-function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
-  return (
-    <div className="space-y-2 border-t border-border pt-4 first:border-t-0 first:pt-0">
-      <h3 className="text-sm font-medium">{title}</h3>
-      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
-      {children}
-    </div>
   );
 }

@@ -75,6 +75,8 @@ export const routingRules = pgTable(
     stopOnMatch: boolean('stop_on_match').notNull().default(true),
     isActive: boolean('is_active').notNull().default(true),
     isFallback: boolean('is_fallback').notNull().default(false),
+    /** "Only for conversations that match" is off: the rule matches every conversation and its stored conditions are ignored. */
+    appliesToAll: boolean('applies_to_all').notNull().default(false),
     sort: integer('sort').notNull().default(0),
     firedCount: bigint('fired_count', { mode: 'number' }).notNull().default(0),
     lastFiredAt: timestamp('last_fired_at', { withTimezone: true }),

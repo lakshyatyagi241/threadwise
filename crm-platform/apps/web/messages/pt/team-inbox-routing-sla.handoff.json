@@ -1,44 +1,9 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "back": "Automação",
-      "title": "Transferência e atribuição",
-      "subtitle": "Como uma conversa chega a uma pessoa quando um bot, um fluxo ou um colega pede uma, e como o responsável pelo contato e o responsável pelo chat trabalham juntos.",
-      "noAccess": "Você não tem permissão para ver estas configurações. Peça ao proprietário ou a um administrador do workspace a permissão de configurações da caixa de entrada.",
-      "readOnly": "Você pode ver estas configurações, mas não alterá-las.",
-      "loading": "Carregando configurações",
-      "loadFailed": "Não foi possível carregar as configurações.",
-      "retry": "Tentar novamente",
-      "saved": "Configurações salvas.",
-      "saveFailed": "Não foi possível salvar as configurações.",
       "notInPlan": "Não incluído no seu plano",
       "upgradeHint": "Seu plano não inclui este recurso. Peça ao proprietário da conta que faça upgrade do plano.",
-      "auto": {
-        "title": "Atribuição automática",
-        "body": "Quando uma pessoa é necessária, as regras de atribuição podem escolhê-la para você. Sem elas, a conversa aguarda na aba Em espera até que um colega a assuma.",
-        "switch": "Atribuir automaticamente",
-        "switchHint": "Desative para parar as regras de atribuição, tanto em conversas novas quanto em transferências. As conversas então aguardam na fila ou vão para a pessoa ou equipe indicada por um fluxo."
-      },
       "owner": {
-        "title": "Responsável pelo contato e responsável pelo chat",
-        "body": "Um contato pode ter um responsável, e cada conversa tem a pessoa que a atende. Escolha como os dois se relacionam.",
-        "modeLabel": "Como o responsável pelo contato e o responsável pelo chat se relacionam",
-        "modes": {
-          "independent": {
-            "title": "Independentes",
-            "body": "O responsável pelo chat e o responsável pelo contato são separados. Alterar um não muda o outro."
-          },
-          "owner_first": {
-            "title": "Responsável primeiro",
-            "body": "Um novo chat vai primeiro para o responsável pelo contato, se ele puder atendê-lo; caso contrário, as regras habituais decidem."
-          },
-          "keep_in_sync": {
-            "title": "Manter sincronizados",
-            "body": "Como em Responsável primeiro e, quando o responsável de um contato muda, os chats abertos dele atribuídos automaticamente o acompanham. Um chat assumido por uma pessoa nunca é movido."
-          }
-        },
-        "claimSets": "Assumir torna você o responsável pelo contato",
-        "claimSetsHint": "Quando alguém assume uma conversa e o contato ainda não tem responsável, essa pessoa passa a ser o responsável.",
         "prompt": "Perguntar sobre o responsável pelo contato ao reatribuir",
         "promptHint": "Quando um chat é passado manualmente para outra pessoa, oferece torná-la também responsável pelo contato.",
         "window": "Manter um contato recorrente com o último agente",
@@ -47,13 +12,10 @@
         "days": "dias"
       },
       "queue": {
-        "title": "Fila de espera",
-        "body": "As conversas que ninguém pôde assumir aguardam na aba Em espera da caixa de entrada, com o motivo e há quanto tempo esperam.",
         "notify": "Avisar a equipe quando uma conversa estiver em espera",
         "notifyHint": "Os membros da equipe, ou todos que podem responder chats sem atribuição, recebem uma notificação com o motivo."
       },
       "teams": {
-        "title": "Equipes",
         "body": "Cada equipe tem seu próprio método de atribuição, horário de atendimento, fuso horário e responsável padrão. Eles são usados sempre que uma conversa é transferida para essa equipe.",
         "link": "Abrir Equipes"
       }

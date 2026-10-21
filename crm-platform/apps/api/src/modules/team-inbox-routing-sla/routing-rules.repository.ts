@@ -95,13 +95,14 @@ export class RoutingRulesRepository {
       stopOnMatch: boolean;
       isActive: boolean;
       isFallback: boolean;
+      appliesToAll: boolean;
       sort: number;
     },
   ): Promise<{ id: number; uuid: string }> {
     const res = await tx.execute(sql`
-      INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, sort)
+      INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, applies_to_all, sort)
       VALUES (${orgId}, ${v.name}, ${JSON.stringify(v.conditions)}::jsonb, ${JSON.stringify(v.actions)}::jsonb,
-              ${v.stopOnMatch}, ${v.isActive}, ${v.isFallback}, ${v.sort})
+              ${v.stopOnMatch}, ${v.isActive}, ${v.isFallback}, ${v.appliesToAll}, ${v.sort})
       RETURNING id, uuid`);
     const r = rowsOf(res)[0]!;
     return { id: Number(r.id), uuid: r.uuid as string };
@@ -120,6 +121,7 @@ export class RoutingRulesRepository {
       stopOnMatch?: boolean;
       isActive?: boolean;
       isFallback?: boolean;
+      appliesToAll?: boolean;
     },
   ): Promise<boolean> {
     const res = await tx.execute(sql`
@@ -129,7 +131,8 @@ export class RoutingRulesRepository {
         actions = COALESCE(${v.actions === undefined ? null : JSON.stringify(v.actions)}::jsonb, actions),
         stop_on_match = COALESCE(${v.stopOnMatch ?? null}::boolean, stop_on_match),
         is_active = COALESCE(${v.isActive ?? null}::boolean, is_active),
-        is_fallback = COALESCE(${v.isFallback ?? null}::boolean, is_fallback)
+        is_fallback = COALESCE(${v.isFallback ?? null}::boolean, is_fallback),
+        applies_to_all = COALESCE(${v.appliesToAll ?? null}::boolean, applies_to_all)
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);
     return rowsOf(res).length > 0;
@@ -253,9 +256,75 @@ export class RoutingRulesRepository {
   /** Active rules in the order they are tried (priority, then id), with the row version the engine reads them at. */
   async activeRules(tx: Tx, orgId: number): Promise<RuleRow[]> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, name, conditions, actions, stop_on_match, is_fallback, row_version
+      SELECT id, uuid, name, conditions, actions, stop_on_match, is_fallback, applies_to_all, row_version
       FROM routing_rules WHERE org_id = ${orgId} AND is_active ORDER BY sort, id`);
     return rowsOf(res);
+  }
+
+  /** The rule's actions without a lock: the dry run ("Try it") reads the cursor as it is and never moves it. */
+  async readActions(tx: Tx, orgId: number, id: number): Promise<unknown | null> {
+    const res = await tx.execute(
+      sql`SELECT actions FROM routing_rules WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    return rowsOf(res)[0]?.actions ?? null;
+  }
+
+  /** Every active member (internal ids), for the "Everyone else: distribute evenly" pool; the caller keeps those who can open the inbox. */
+  async allActiveUserIds(tx: Tx, orgId: number): Promise<number[]> {
+    const res = await tx.execute(
+      sql`SELECT id FROM users WHERE org_id = ${orgId} AND status = 'active' ORDER BY id`,
+    );
+    return rowsOf(res).map((r) => Number(r.id));
+  }
+
+  /**
+   * New or returning (H16): RETURNING when the contact has another conversation, or was saved more than `graceMinutes` ago. A contact the
+   * very chat created is NEW. `exceptConversationId` is the conversation being routed (null for the dry run, where none exists yet).
+   */
+  async contactKindOf(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    exceptConversationId: number | null,
+    graceMinutes: number,
+  ): Promise<'new' | 'returning' | null> {
+    const res = await tx.execute(sql`
+      SELECT (c.created_at < now() - (${graceMinutes} * interval '1 minute')) AS older,
+             EXISTS (SELECT 1 FROM conversations o WHERE o.org_id = c.org_id AND o.contact_id = c.id
+                       ${exceptConversationId === null ? sql`` : sql`AND o.id <> ${exceptConversationId}`}) AS has_other
+      FROM contacts c WHERE c.org_id = ${orgId} AND c.id = ${contactId}`);
+    const r = rowsOf(res)[0];
+    if (!r) return null;
+    return r.older === true || r.has_other === true ? 'returning' : 'new';
+  }
+
+  /** What is saved on the contact right now, for the "Try it" explanation (nothing is derived from it by the engine). */
+  async contactSnapshot(
+    tx: Tx,
+    orgId: number,
+    contactUuid: string,
+  ): Promise<{ id: number; stage: string | null; hasOwner: boolean; tagCount: number } | null> {
+    const res = await tx.execute(sql`
+      SELECT c.id, c.lifecycle_stage, c.owner_id IS NOT NULL AS has_owner,
+             (SELECT count(*)::int FROM contact_tags t WHERE t.org_id = c.org_id AND t.contact_id = c.id) AS tags
+      FROM contacts c WHERE c.org_id = ${orgId} AND c.uuid = ${contactUuid}::uuid`);
+    const r = rowsOf(res)[0];
+    if (!r) return null;
+    return {
+      id: Number(r.id),
+      stage: (r.lifecycle_stage as string | null) ?? null,
+      hasOwner: r.has_owner === true,
+      tagCount: Number(r.tags),
+    };
+  }
+
+  /** The text of the customer's latest incoming text message of this conversation, null when it has none. */
+  async latestCustomerText(tx: Tx, orgId: number, conversationId: number): Promise<string | null> {
+    const res = await tx.execute(sql`
+      SELECT body FROM messages
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'in' AND kind = 'text' AND deleted_at IS NULL
+      ORDER BY seq DESC LIMIT 1`);
+    return (rowsOf(res)[0]?.body as string | null | undefined) ?? null;
   }
 
   /** Locks one rule and returns its current actions (the cursor another conversation may have just moved). */

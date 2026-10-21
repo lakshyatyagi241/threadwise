@@ -73,4 +73,4 @@ Select **Return to bot** in the strip. The conversation is released and the flow
 - Conversations assigned to someone else stay theirs. You cannot claim a conversation that somebody holds.
 - The queue is only for people who may see it: if you only see your own conversations, the Waiting tab stays empty for you.
 
-See [Handoff and assignment](help:handoff-settings) for the workspace settings and [Human handoff](help:flows-human-handoff) for the flow step.
+See [Conversation auto-assignment](help:auto-assignment) for the workspace settings and [Human handoff](help:flows-human-handoff) for the flow step.

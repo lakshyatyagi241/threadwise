@@ -127,7 +127,9 @@ export class LoginService {
       org = orgs[0] ?? null;
     }
     if (!org || org.status !== 'active') {
-      // Same work and same answer as a wrong password: no organization oracle.
+      // Same work and same answer as a wrong password: no organization oracle. The per-IP ceiling applies here too, or an
+      // attacker spraying made-up addresses would never be throttled (VAPT DAST-LOGIN-THROTTLE).
+      await this.assertIpUnderCeiling('login', ip);
       await this.passwords.verifyOrDummy(null, req.password);
       await this.countIpFailure('login', ip);
       await this.audit.recordStandalone({

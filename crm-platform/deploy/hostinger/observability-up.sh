@@ -7,7 +7,10 @@
 #      secrets/obs_metrics_token
 #   2. asks where alerts go (webhook, Slack/Discord, PagerDuty) and the URL or key (hidden; Enter keeps the current one), writes
 #      secrets/alert_webhook_url and ALERTMANAGER_FILE to .env
-#   3. pulls the two public images and starts prometheus, alertmanager and the probe
+#   3. makes secrets/grafana_admin_password if there is none (random, never printed) and, when a GRAFANA_DOMAIN is set or DOMAIN is known,
+#      writes Traefik's route for Grafana (traefik-grafana.yml.template -> grafana.yml next to desk.yml). Grafana itself is NOT started
+#      here (see the Grafana steps in observability.compose.yml)
+#   4. pulls the two public images and starts prometheus, alertmanager and the probe
 # It does NOT restart the app. Releases are blue-green (ci-entry.sh): the API, web and worker containers read OBS_METRICS_PORT and
 # OBS_METRICS_TOKEN from .env when they are CREATED, so the next release (which creates the idle slot and recreates the worker) starts
 # serving /metrics, and Prometheus finds them as they appear. Until then the targets are simply absent, not down. To not wait for a
@@ -74,7 +77,24 @@ fi
 [ -s secrets/alert_webhook_url ] || { echo "no alert destination set: alerts would go nowhere" >&2; exit 1; }
 # 644 on purpose: a file-based compose secret is a bind mount that keeps the host file's mode, and prometheus and alertmanager run as
 # `nobody`, so a 600 file would be unreadable inside the container. The directory is 700, so other users on the host cannot reach them.
+# Grafana: the admin password lives only in this file (mounted as a docker secret); it is never echoed. Delete it and re-run to rotate.
+[ -s secrets/grafana_admin_password ] || { umask 077; printf '%s' "$(openssl rand -hex 18)" > secrets/grafana_admin_password; echo "made secrets/grafana_admin_password"; }
 chmod 644 secrets/*
+
+# Grafana's public route: a file of its own in Traefik's dynamic directory, so a release (which rewrites desk.yml) never touches it.
+if ! grep -q '^GRAFANA_DOMAIN=.\+' .env; then
+  domain="$(sed -n 's/^DOMAIN=//p' .env | head -n1)"
+  [ -n "$domain" ] && { grep -q '^GRAFANA_DOMAIN=' .env && sed -i "s/^GRAFANA_DOMAIN=.*/GRAFANA_DOMAIN=grafana.$domain/" .env || echo "GRAFANA_DOMAIN=grafana.$domain" >> .env; }
+fi
+gdomain="$(sed -n 's/^GRAFANA_DOMAIN=//p' .env | head -n1)"
+dyn_dir="$(dirname "${TRAEFIK_DYN:-/etc/dokploy/traefik/dynamic/desk.yml}")"
+if [ -n "$gdomain" ] && [ -d "$dyn_dir" ]; then
+  case "$gdomain" in *[!A-Za-z0-9.-]*) echo "GRAFANA_DOMAIN is not a host name" >&2; exit 1 ;; esac
+  sed "s/__GRAFANA_DOMAIN__/$gdomain/g" traefik-grafana.yml.template > "$dyn_dir/.grafana.tmp" && mv -f "$dyn_dir/.grafana.tmp" "$dyn_dir/grafana.yml"
+  echo "wrote $dyn_dir/grafana.yml for $gdomain (needs a DNS A record to this host)"
+else
+  echo "no Grafana route written (GRAFANA_DOMAIN unset or $dyn_dir missing)" >&2
+fi
 
 "${COMPOSE[@]}" pull prometheus alertmanager
 "${COMPOSE[@]}" up -d prometheus alertmanager probe

@@ -5,8 +5,9 @@
       "name": "contacts list, newest first",
       "table": "contacts",
       "equals": ["org_id"],
-      "orderBy": ["created_at", "id"],
-      "why": "contacts page"
+      "orderBy": ["created_at DESC", "id DESC"],
+      "why": "contacts page",
+      "where": "is_archived = false"
     },
     {
       "name": "contacts by owner",

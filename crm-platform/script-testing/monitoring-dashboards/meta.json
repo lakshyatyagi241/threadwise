@@ -1,0 +1,13 @@
+{
+  "id": "monitoring-dashboards",
+  "sheetItem": 76,
+  "title": "Monitoring stack: Prometheus, rules and every Grafana panel",
+  "script": "run.sh",
+  "estMinutes": {"quick": 6, "full": 10},
+  "heavy": false,
+  "needs": ["docker", "node22", "pnpm", "postgres", "redis"],
+  "ports": [3933, 59533, 59633, 59733, 59193, 53193],
+  "proves": "Real API, worker and probe expose /metrics; a private Prometheus (v2.55.0) scrapes them with the repo's own prometheus.yml and rule files; all targets are UP, no rule has health=err, every Grafana (11.3.0) dashboard loads and the query of every panel runs without error against live data.",
+  "doesNotProve": "Alert delivery (no Alertmanager), the web server job (not started), behaviour under production load, panels that need authenticated sockets, 5xx errors or release history (see expected-empty-panels.json).",
+  "report": "qa-results/<timestamp>/monitoring-dashboards/panels.json and screenshots/"
+}

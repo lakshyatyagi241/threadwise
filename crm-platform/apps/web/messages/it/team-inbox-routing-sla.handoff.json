@@ -1,44 +1,9 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "back": "Automazione",
-      "title": "Passaggio e assegnazione",
-      "subtitle": "Come una conversazione arriva a una persona quando un bot, un flusso o un collega ne chiede una, e come collaborano il proprietario del contatto e il responsabile della chat.",
-      "noAccess": "Non hai il permesso di vedere queste impostazioni. Chiedi a un Owner o Admin dello spazio di lavoro il permesso per le impostazioni della inbox.",
-      "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
-      "loading": "Caricamento delle impostazioni",
-      "loadFailed": "Impossibile caricare le impostazioni.",
-      "retry": "Riprova",
-      "saved": "Impostazioni salvate.",
-      "saveFailed": "Impossibile salvare le impostazioni.",
       "notInPlan": "Non incluso nel tuo piano",
       "upgradeHint": "Il tuo piano non lo include. Chiedi al proprietario dell’account di passare a un piano superiore.",
-      "auto": {
-        "title": "Assegnazione automatica",
-        "body": "Quando serve una persona, le regole di assegnazione possono sceglierla per te. Senza di esse, la conversazione resta nella scheda In attesa finché un collega la prende in carico.",
-        "switch": "Assegna automaticamente",
-        "switchHint": "Disattiva per fermare le regole di assegnazione, sia per le nuove conversazioni sia per i passaggi. Le conversazioni restano allora in coda o vanno alla persona o al team indicato da un flusso."
-      },
       "owner": {
-        "title": "Proprietario del contatto e responsabile della chat",
-        "body": "Un contatto può avere un proprietario, e ogni conversazione ha la persona che risponde. Scegli come i due si relazionano.",
-        "modeLabel": "Come si relazionano il proprietario del contatto e il responsabile della chat",
-        "modes": {
-          "independent": {
-            "title": "Indipendenti",
-            "body": "Il responsabile della chat e il proprietario del contatto sono separati. Cambiarne uno non modifica l’altro."
-          },
-          "owner_first": {
-            "title": "Prima il proprietario",
-            "body": "Una nuova chat va prima al proprietario del contatto, se può prenderla; altrimenti decidono le regole abituali."
-          },
-          "keep_in_sync": {
-            "title": "Mantieni sincronizzati",
-            "body": "Come Prima il proprietario e, quando cambia il proprietario di un contatto, le sue chat aperte assegnate automaticamente lo seguono. Una chat presa da una persona non viene mai spostata."
-          }
-        },
-        "claimSets": "Prendere in carico ti rende proprietario del contatto",
-        "claimSetsHint": "Quando qualcuno prende in carico una conversazione e il contatto non ha ancora un proprietario, ne diventa il proprietario.",
         "prompt": "Chiedi del proprietario del contatto alla riassegnazione",
         "promptHint": "Quando una chat viene passata a mano a qualcun altro, proponi di renderlo anche proprietario del contatto.",
         "window": "Mantieni un contatto ricorrente con l’ultimo agente",
@@ -47,13 +12,10 @@
         "days": "giorni"
       },
       "queue": {
-        "title": "Coda di attesa",
-        "body": "Le conversazioni che nessuno ha potuto prendere restano nella scheda In attesa della inbox, con il motivo e da quanto tempo aspettano.",
         "notify": "Avvisa il team quando una conversazione è in attesa",
         "notifyHint": "I membri del team, o tutti quelli che possono rispondere alle chat non assegnate, ricevono una notifica con il motivo."
       },
       "teams": {
-        "title": "Team",
         "body": "Ogni team ha il proprio metodo di assegnazione, orari di apertura, fuso orario e responsabile predefinito. Vengono usati ogni volta che una conversazione viene passata a quel team.",
         "link": "Apri Team"
       }

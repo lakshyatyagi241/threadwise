@@ -1,44 +1,9 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "back": "Otomatisasi",
-      "title": "Serah terima dan penugasan",
-      "subtitle": "Bagaimana percakapan sampai ke seseorang saat bot, alur, atau rekan tim memintanya, dan bagaimana pemilik kontak dan pemilik chat bekerja bersama.",
-      "noAccess": "Anda tidak memiliki izin untuk melihat pengaturan ini. Minta izin pengaturan inbox kepada Owner atau Admin workspace.",
-      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
-      "loading": "Memuat pengaturan",
-      "loadFailed": "Pengaturan tidak dapat dimuat.",
-      "retry": "Coba lagi",
-      "saved": "Pengaturan disimpan.",
-      "saveFailed": "Pengaturan tidak dapat disimpan.",
       "notInPlan": "Tidak ada di paket Anda",
       "upgradeHint": "Paket Anda tidak mencakup ini. Minta pemilik akun untuk meningkatkan paket.",
-      "auto": {
-        "title": "Penugasan otomatis",
-        "body": "Saat dibutuhkan seseorang, aturan penugasan dapat memilihkannya untuk Anda. Tanpa aturan, percakapan menunggu di tab Menunggu sampai rekan tim mengambilnya.",
-        "switch": "Tugaskan otomatis",
-        "switchHint": "Matikan untuk menghentikan aturan penugasan, baik untuk percakapan baru maupun serah terima. Percakapan lalu menunggu di antrean atau dikirim ke orang atau tim yang ditentukan alur."
-      },
       "owner": {
-        "title": "Pemilik kontak dan pemilik chat",
-        "body": "Kontak dapat memiliki pemilik, dan setiap percakapan memiliki orang yang menjawabnya. Pilih bagaimana keduanya berhubungan.",
-        "modeLabel": "Hubungan antara pemilik kontak dan pemilik chat",
-        "modes": {
-          "independent": {
-            "title": "Independen",
-            "body": "Pemilik chat dan pemilik kontak terpisah. Perubahan salah satunya tidak memengaruhi yang lain."
-          },
-          "owner_first": {
-            "title": "Pemilik lebih dulu",
-            "body": "Chat baru diarahkan ke pemilik kontak lebih dulu jika mereka bisa menerimanya; jika tidak, aturan biasa yang menentukan."
-          },
-          "keep_in_sync": {
-            "title": "Sinkronkan",
-            "body": "Seperti pemilik lebih dulu, dan saat pemilik kontak berubah, chat terbuka mereka yang ditugaskan otomatis ikut berpindah. Chat yang diambil seseorang tidak pernah dipindahkan."
-          }
-        },
-        "claimSets": "Mengambil menjadikan Anda pemilik kontak",
-        "claimSetsHint": "Saat seseorang mengambil percakapan dan kontak belum memiliki pemilik, orang itu menjadi pemiliknya.",
         "prompt": "Tanyakan soal pemilik kontak saat penugasan ulang",
         "promptHint": "Saat chat diberikan ke orang lain secara manual, tawarkan untuk menjadikannya pemilik kontak juga.",
         "window": "Pertahankan kontak yang kembali bersama agen terakhirnya",
@@ -47,13 +12,10 @@
         "days": "hari"
       },
       "queue": {
-        "title": "Antrean tunggu",
-        "body": "Percakapan yang tidak bisa diambil siapa pun menunggu di tab Menunggu di inbox, lengkap dengan alasan dan lama menunggu.",
         "notify": "Beri tahu tim saat ada percakapan menunggu",
         "notifyHint": "Anggota tim, atau semua orang yang dapat menjawab chat yang belum ditugaskan, mendapat notifikasi beserta alasannya."
       },
       "teams": {
-        "title": "Tim",
         "body": "Setiap tim memiliki metode penugasan, jam buka, zona waktu, dan penerima default sendiri. Semuanya dipakai setiap kali percakapan diserahkan ke tim itu.",
         "link": "Buka Tim"
       }

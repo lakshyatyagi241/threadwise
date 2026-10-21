@@ -1,8 +1,8 @@
 # Grafana dashboards (EL-B04)
 
 Five dashboards for the metrics the API, the worker, the web server and the probe export. Nothing here runs in production: the production
-overlay (`deploy/hostinger/observability.compose.yml`) does not start Grafana, because a fifth container on the shared host is the
-owner's call (see "Running it" below).
+overlay (`deploy/hostinger/observability.compose.yml`) defines Grafana but nothing starts it until the server owner follows the steps in
+that file's header (a fifth container on the shared host is the owner's call).
 
 | File                                     | uid                      | Answers                                                                                                                                                                         |
 | ---------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

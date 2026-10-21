@@ -1,0 +1,16 @@
+{
+  "comment": "Unit test files that fail on pristine main (measured 2026-10). A runner reports these as knownBaseline, not as its own failures. Match is by substring of the test file path.",
+  "files": [
+    "chatbot-widget/launcher",
+    "chatbot-widget/legacy-embed",
+    "dashboards-analytics-charts/health",
+    "dashboards-analytics-charts/quick-access",
+    "flow-builder-editor/editor-field-seam",
+    "google-account/google-capabilities",
+    "infra/boundaries.matrix",
+    "infra/s3-sigv4",
+    "redis-hygiene",
+    "roles-permissions/route-permission-coverage",
+    "storage-quota/storage-writes-guarded"
+  ]
+}

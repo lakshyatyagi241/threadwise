@@ -1,0 +1,22 @@
+{
+  "id": "metrics-golden-signals",
+  "sheetItem": 75,
+  "title": "Metrics golden signals",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 3,
+    "full": 4
+  },
+  "heavy": false,
+  "needs": [
+    "node22",
+    "pnpm",
+    "docker",
+    "curl",
+    "postgres",
+    "redis"
+  ],
+  "proves": "The golden-signal families marked present in golden-signals.json are really exposed by a booted API and worker behind a bearer token, with latency histogram samples and an error-class label.",
+  "doesNotProve": "Job metrics (queue duration, jobs_total, dead letters) only get samples when a job runs, so live they are noted, not asserted. Web, realtime and Redis exporter families are not checked live.",
+  "report": "docs/performance/metrics/Sheet3-75-metrics-REPORT.html"
+}
