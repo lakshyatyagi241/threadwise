@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { Logger as PinoLogger } from 'nestjs-pino';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule } from '@nestjs/swagger';
 import type { NextFunction, Request, Response } from 'express';
@@ -41,6 +42,8 @@ async function bootstrap(): Promise<void> {
     rawBody: true,
   });
 
+  // Every Nest `Logger` call goes through pino (JSON, redaction, request id); without this they print as coloured text.
+  app.useLogger(app.get(PinoLogger));
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('bootstrap');
 
