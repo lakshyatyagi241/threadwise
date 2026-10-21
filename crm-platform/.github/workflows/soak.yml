@@ -1,0 +1,36 @@
+name: memory-soak
+# Manual only (Sheet3 #58). 1440 minutes is the 24 h pre-release profile; 60 is the 1 h check.
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: 'Soak length in minutes (60 = 1 h, 1440 = 24 h)'
+        default: '60'
+jobs:
+  soak:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1500
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: crm, POSTGRES_PASSWORD: crm, POSTGRES_DB: crm_soak_mem }
+        ports: ['5432:5432']
+      redis:
+        image: redis:7
+        ports: ['56379:6379']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability --filter @crm/api build
+      - run: pnpm db:migrate && pnpm db:seed
+        env:
+          MIGRATION_DATABASE_URL: postgres://crm:crm@localhost:5432/crm_soak_mem
+          DATABASE_URL: postgres://crm_app_user:crm_app_dev@localhost:5432/crm_soak_mem
+      - run: node tools/perf/soak.mjs --minutes ${{ github.event.inputs.minutes }} --out perf/results/soak
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: soak, path: perf/results/soak }
