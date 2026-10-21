@@ -657,6 +657,7 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
   for (const n of nodes) {
     const b = built.get(n.id)!;
     const seen = new Map<string, number>();
+    const linked = new Set<string>();
     for (const e of n.edges) {
       const target = built.get(e.to);
       if (!target) {
@@ -664,6 +665,10 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
         continue;
       }
       const f = b.from(e.port);
+      // Several Waboo ports can leave by the same graph port (a trigger has one `out`): a link to the same step twice is one link.
+      const same = `${f.source}\u0000${f.handle}\u0000${target.entry}`;
+      if (linked.has(same)) continue; // the same link again: nothing is lost by keeping one
+      linked.add(same);
       const k = `${f.source}\u0000${f.handle}`;
       const c = (seen.get(k) ?? 0) + 1;
       seen.set(k, c);
