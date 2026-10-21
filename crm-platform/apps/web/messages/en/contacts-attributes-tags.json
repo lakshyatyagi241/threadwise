@@ -130,6 +130,7 @@
       "colLeadScore": "Lead score",
       "colLanguage": "Language",
       "colCreatedOn": "Created On",
+      "colModifiedOn": "Modified On",
       "pagination": "Pagination",
       "prevPage": "Previous page",
       "nextPage": "Next page",
@@ -286,6 +287,7 @@
       "shortStage": "Stage",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Created",
+      "shortModified": "Modified",
       "firstRun": {
         "title": "Add your first contacts",
         "message": "Bring in the people you talk to. Contacts are used for messages, campaigns, tasks and deals.",

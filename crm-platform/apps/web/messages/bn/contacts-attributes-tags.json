@@ -130,6 +130,7 @@
       "colLeadScore": "লিড স্কোর",
       "colLanguage": "ভাষা",
       "colCreatedOn": "তৈরির তারিখ",
+      "colModifiedOn": "পরিবর্তনের তারিখ",
       "pagination": "পেজিনেশন",
       "prevPage": "আগের পেজ",
       "nextPage": "পরের পেজ",
@@ -282,6 +283,7 @@
       "shortStage": "স্টেজ",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "তৈরি",
+      "shortModified": "পরিবর্তিত",
       "firstRun": {
         "title": "আপনার প্রথম কন্টাক্ট যোগ করুন",
         "message": "যাদের সঙ্গে আপনি কথা বলেন, তাদের নিয়ে আসুন। কন্টাক্ট মেসেজ, ক্যাম্পেইন, টাস্ক ও ডিলে ব্যবহার করা হয়।",

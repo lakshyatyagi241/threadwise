@@ -130,6 +130,7 @@
       "colLeadScore": "リードスコア",
       "colLanguage": "言語",
       "colCreatedOn": "作成日",
+      "colModifiedOn": "更新日",
       "pagination": "ページ送り",
       "prevPage": "前のページ",
       "nextPage": "次のページ",
@@ -282,6 +283,7 @@
       "shortStage": "ステージ",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "作成日",
+      "shortModified": "更新日",
       "firstRun": {
         "title": "最初の連絡先を追加しましょう",
         "message": "やり取りしている相手を取り込みましょう。連絡先はメッセージ、キャンペーン、タスク、取引に使われます。",

@@ -528,6 +528,44 @@ describe('TW-CAMP-001, 019: list and detail', () => {
     expect(b.status).toBe(201);
   });
 
+  it('a custom range keeps the campaigns made on the chosen workspace days, both ends included, and the tiles follow it', async () => {
+    const t = await api.signup('cc15');
+    // Kolkata is 5 h 30 min ahead of UTC: a day starts at 18:30 UTC the day before.
+    await h.owner.query(
+      `UPDATE organizations SET settings = jsonb_set(coalesce(settings, '{}'::jsonb), '{timezone}', '"Asia/Kolkata"') WHERE id = $1`,
+      [t.orgId],
+    );
+    const ids = await contacts(t, 1);
+    const made: Array<[string, string]> = [
+      ['Before', '2026-09-30T18:00:00Z'], // 30 Sep 23:30 IST
+      ['First instant', '2026-09-30T18:30:00Z'], // 1 Oct 00:00 IST
+      ['Last instant', '2026-10-19T18:29:59Z'], // 19 Oct 23:59 IST
+      ['After', '2026-10-19T18:30:00Z'], // 20 Oct 00:00 IST
+    ];
+    for (const [name, at] of made) {
+      const c = await post(t, '', base({ name, contactIds: ids }));
+      await h.owner.query(`UPDATE wpcampaigns SET created_at = $2 WHERE uuid = $1`, [
+        c.body.campaign.id,
+        at,
+      ]);
+    }
+
+    const names = (res: { body: { data: Array<{ name: string }> } }) =>
+      res.body.data.map((c) => c.name).sort();
+    const both = await get(t).query({ range: 'custom', from: '2026-10-01', to: '2026-10-19' });
+    expect(both.status).toBe(200);
+    expect(names(both)).toEqual(['First instant', 'Last instant']);
+    expect(both.body.stats).toMatchObject({ total: 2 });
+
+    const fromOnly = await get(t).query({ range: 'custom', from: '2026-10-19' });
+    expect(names(fromOnly)).toEqual(['After', 'Last instant']);
+    const reversed = await get(t).query({ range: 'custom', from: '2026-10-19', to: '2026-10-01' });
+    expect(names(reversed)).toEqual(['First instant', 'Last instant']);
+
+    const bad = await get(t).query({ range: 'custom', from: '2026-02-31' });
+    expect(bad.status).toBe(422);
+  });
+
   it('the detail has rates, funnel, outcomes, audience, failures and replies, all from the rows', async () => {
     const t = await api.signup('cc15');
     const ids = await contacts(t, 4);

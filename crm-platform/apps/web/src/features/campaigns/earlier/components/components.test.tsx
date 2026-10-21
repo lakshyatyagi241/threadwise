@@ -4,12 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import type {
-  BroadcastDetail,
-  BroadcastListItem,
-  BroadcastRecipient,
-} from '@crm/contracts';
-import { BroadcastsTable } from './broadcasts-table';
+import type { BroadcastDetail, BroadcastListItem, BroadcastRecipient } from '@crm/contracts';
 import { pageWindow } from '@/features/broadcasts/components/broadcasts-pagination';
 import { Donut, HBars } from '@/features/broadcasts/components/charts';
 import { EventsTab } from './events-tab';
@@ -53,68 +48,6 @@ const item = (over: Partial<BroadcastListItem> = {}): BroadcastListItem => ({
   createdAt: '2026-10-01T10:00:00.000Z',
   updatedAt: '2026-10-01T10:00:00.000Z',
   ...over,
-});
-
-const table = (
-  rows: BroadcastListItem[],
-  canExport = true,
-  canDeleteRows = true,
-  unofficial = false,
-) =>
-  html(
-    <BroadcastsTable
-      rows={rows}
-      unofficial={unofficial}
-      canExport={canExport}
-      canDeleteRows={canDeleteRows}
-      onExport={() => undefined}
-      onDelete={() => undefined}
-    />,
-  );
-
-describe('broadcast table', () => {
-  it('keeps a broadcast sent through the unofficial engine, labelled by the platform switch', () => {
-    const row = [item({ provider: 'baileys' })];
-    expect(table(row, true, true, false)).toContain('Unofficial (disabled)');
-    expect(table(row, true, true, true)).toContain('Unofficial API');
-    expect(table(row, true, true, true)).not.toContain('disabled');
-    // an official engine never reads "disabled"
-    expect(table([item()], true, true, false)).not.toContain('Unofficial (disabled)');
-  });
-
-  it('shows the name, engine chip, reference, template, counters and status', () => {
-    const out = table([item()]);
-    for (const s of [
-      'Diwali offer',
-      'WABA',
-      'Broadcast #BR-ABCDEF12',
-      'promo_oct',
-      '1,200',
-      '1,100',
-      'Completed',
-    ]) {
-      expect(out).toContain(s);
-    }
-  });
-
-  it('offers delete only for a scheduled broadcast, and only with the permission', () => {
-    expect(table([item({ status: 'scheduled' })])).toContain('aria-label="Delete"');
-    expect(table([item({ status: 'failed' })])).not.toContain('aria-label="Delete"');
-    expect(table([item({ status: 'processing' })])).not.toContain('aria-label="Delete"');
-    expect(table([item({ status: 'completed' })])).not.toContain('aria-label="Delete"');
-    expect(table([item({ status: 'failed' })], true, false)).not.toContain('aria-label="Delete"');
-  });
-
-  it('hides the export button without the permission; analytics always links to the detail page', () => {
-    const out = table([item()], false);
-    expect(out).not.toContain('aria-label="Export rows"');
-    expect(out).toContain('href="/campaigns/earlier/abcdef12-0000-4000-8000-000000000000"');
-  });
-
-  it('shows a dash for a missing template, provider or schedule', () => {
-    const out = table([item({ templateName: null, provider: null })]);
-    expect(out.match(/—/g)?.length).toBeGreaterThanOrEqual(3);
-  });
 });
 
 describe('page window', () => {

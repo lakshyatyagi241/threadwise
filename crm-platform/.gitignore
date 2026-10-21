@@ -6,6 +6,7 @@ coverage/
 .next/
 out/
 .turbo/
+qa-results/
 
 .env
 .env.*

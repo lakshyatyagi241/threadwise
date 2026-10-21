@@ -88,7 +88,10 @@ export function apiHttpLoggerOptions(level: string): Options {
       },
       err: (err: Error) =>
         // pino-http's own "failed with status code 5xx" error repeats what the exception filter already logged with the real stack.
-        err.message.startsWith('failed with status code') ? undefined : scrubError(err),
+        // A rejection with a non-Error reason has no message; reading it crashed the unhandled-rejection logger itself (found by the Sheet3 #76 live test).
+        String(err?.message ?? '').startsWith('failed with status code')
+          ? undefined
+          : scrubError(err),
     },
     // A 4xx is the caller's doing (info); a 5xx is already logged once at error by the exception filter, so its access line is a warn.
     customLogLevel: (_req, res) => (res.statusCode >= 500 ? 'warn' : 'info'),

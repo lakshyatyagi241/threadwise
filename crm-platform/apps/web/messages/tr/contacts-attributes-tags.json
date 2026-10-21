@@ -130,6 +130,7 @@
       "colLeadScore": "Potansiyel müşteri puanı",
       "colLanguage": "Dil",
       "colCreatedOn": "Oluşturulma tarihi",
+      "colModifiedOn": "Değiştirilme tarihi",
       "pagination": "Sayfalama",
       "prevPage": "Önceki sayfa",
       "nextPage": "Sonraki sayfa",
@@ -282,6 +283,7 @@
       "shortStage": "Aşama",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Oluşturuldu",
+      "shortModified": "Değiştirildi",
       "firstRun": {
         "title": "İlk kişilerinizi ekleyin",
         "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",

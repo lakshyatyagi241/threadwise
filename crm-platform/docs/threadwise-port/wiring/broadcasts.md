@@ -24,9 +24,8 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 
 Broadcast has no screen of its own since Campaigns absorbed it (see the campaigns map). The API above is read by these:
 
-- `/campaigns?source=earlier` (the earlier broadcasts view: list, status views, tiles, row actions) in `features/campaigns/earlier/`
-- `/campaigns/earlier/:id` (overview, recipients, failures, events, retry, resume, delete) in `features/campaigns/earlier/`
-- `/broadcasts`, `/broadcasts/create`, `/broadcasts/:id`, `/campaigns/history/legacy`: redirects only, kept for old links
+- `/campaigns/earlier/:id` (overview, recipients, failures, events, retry, resume, delete) in `features/campaigns/earlier/`; the notifications for a failed or finished broadcast link here
+- `/broadcasts`, `/broadcasts/create`, `/broadcasts/:id`: redirects only, kept for old links (`/broadcasts/:id` leads to the detail page above)
 - The shared kit in `features/broadcasts/` (channel chooser moved to `features/campaigns/components/new-campaign-button.tsx`; charts, upload, overrides, audience and compose model stay there)
 
 ## Tables read or written
