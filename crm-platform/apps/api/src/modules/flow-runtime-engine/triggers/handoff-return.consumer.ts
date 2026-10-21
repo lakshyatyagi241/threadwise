@@ -229,7 +229,7 @@ export class HandoffReturnConsumer implements OutboxSubscriber, OnModuleInit {
       await this.db.txAs({ orgId }, (tx) =>
         this.events.append(tx, orgId, {
           conversationId,
-          type: 'bot_resumed',
+          type: result === 'continued' ? 'bot_resumed' : 'bot_resume_skipped',
           actorKind: 'flow',
           payload: { result, ...(customer ? { customer } : {}) },
         }),

@@ -5,17 +5,19 @@ import {
   handoffProblem,
   isHandoffNode,
   peopleOf,
+  returnMessageHasNoExit,
   upgradeLegacy,
 } from './handoff-node';
 
 describe('the Human handoff node data', () => {
-  it('a new node is the Human handoff with three exits; an old Assign agent keeps its one exit', () => {
+  it('a new node is the Human handoff with three exits and an optional fourth (returned); an old Assign agent keeps its one exit', () => {
     const fresh = flbDefaultNodeData('assign');
     expect(isHandoffNode(fresh)).toBe(true);
     expect(flbPortsFor({ type: 'assign', data: fresh }).map((p) => p.id)).toEqual([
       'assigned',
       'waiting',
       'unavailable',
+      'returned',
     ]);
     const old = { team: 't1', userId: '', message: 'note' };
     expect(isHandoffNode(old)).toBe(false);
@@ -30,6 +32,7 @@ describe('the Human handoff node data', () => {
       message: 'hello',
       customerMessage: '',
       offHoursMessage: '',
+      returnMessage: '',
     });
     expect(upgradeLegacy({ team: 't1', userId: 'u1' })).toMatchObject({
       destination: 'person',
@@ -58,5 +61,16 @@ describe('the Human handoff node data', () => {
     const a = { id: 'u1', name: 'Asha' };
     const b = { id: 'u2', name: 'Ben' };
     expect(peopleOf([{ members: [a, b] }, { members: [b] }])).toEqual([a, b]);
+  });
+});
+
+describe('the message for when the bot is back', () => {
+  it('needs the returned exit: a message with no wire on it is reported, an empty one never is', () => {
+    const d = { handoff: 2, returnMessage: 'Hi, I am back' };
+    expect(returnMessageHasNoExit(d, false)).toBe(true);
+    expect(returnMessageHasNoExit(d, true)).toBe(false);
+    expect(returnMessageHasNoExit({ handoff: 2, returnMessage: '   ' }, false)).toBe(false);
+    // the older Assign agent step has no such exit and no message
+    expect(returnMessageHasNoExit({ returnMessage: 'x' }, false)).toBe(false);
   });
 });

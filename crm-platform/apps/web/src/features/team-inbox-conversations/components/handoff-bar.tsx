@@ -12,7 +12,7 @@ import {
 import { Alert, Badge, Button, Spinner, cn, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useHandoffActions, useHandoffCard } from '../api/handoff';
-import { AGE_KEY, waitAge } from '../lib/handoff';
+import { AGE_KEY, giveBackToastKey, waitAge } from '../lib/handoff';
 import { AlertIcon, ChatIcon, UserPlusIcon } from './icons';
 import { SendToQueueDialog } from './send-to-queue-dialog';
 
@@ -76,7 +76,7 @@ export function HandoffBar({
     giveBack.mutate(undefined, {
       onSuccess: (r) => {
         onPlaced(r.conversation);
-        toast(t('giveBack.done'));
+        toast(t(`giveBack.${giveBackToastKey(r)}`));
       },
       onError: (e) => toast(refused(e, t('giveBack.failed')), 'danger'),
     });

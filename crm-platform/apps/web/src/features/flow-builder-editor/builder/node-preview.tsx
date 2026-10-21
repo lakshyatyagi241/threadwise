@@ -425,6 +425,11 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
                 &quot;{cut(d.message, 40)}&quot;
               </div>
             ) : null}
+            {handoff && str(d.returnMessage).trim() ? (
+              <div className="mt-1 truncate text-[10.5px] text-muted-foreground">
+                {tp('returnBack')} &quot;{cut(str(d.returnMessage), 32)}&quot;
+              </div>
+            ) : null}
           </div>
         );
       }

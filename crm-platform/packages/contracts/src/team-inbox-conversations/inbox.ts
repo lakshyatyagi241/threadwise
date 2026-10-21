@@ -138,6 +138,7 @@ export const CONVERSATION_EVENT_TYPES = [
   'sla_breach',
   'handoff_returned',
   'bot_resumed',
+  'bot_resume_skipped',
 ] as const;
 export type ConversationEventType = (typeof CONVERSATION_EVENT_TYPES)[number];
 

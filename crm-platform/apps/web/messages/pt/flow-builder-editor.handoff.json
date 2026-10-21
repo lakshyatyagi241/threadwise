@@ -4,7 +4,8 @@
       "ports": {
         "assigned": "atribuída",
         "waitingInQueue": "em fila de espera",
-        "noAgentOutOfHours": "sem agente / fora do horário"
+        "noAgentOutOfHours": "sem agente / fora do horário",
+        "returnedToBot": "devolvida ao bot"
       }
     },
     "simpleModel": {
@@ -20,12 +21,13 @@
         "nodePreview": {
           "handoffTo": "Transferir para",
           "handoffRules": "Regras de atribuição",
-          "pickAgent": "— escolha uma pessoa —"
+          "pickAgent": "— escolha uma pessoa —",
+          "returnBack": "Quando o bot voltar:"
         }
       },
       "handoff": {
         "legacy": "Esta etapa é a antiga “Atribuir agente”.",
-        "upgradeHint": "Ela entrega o chat a uma equipe e segue em frente. Mude para a Transferência para humano para adicionar um motivo, uma prioridade, mensagens para o contato e três saídas (atribuída, em fila de espera, sem agente ou fora do horário). As ligações que você já fez continuam funcionando.",
+        "upgradeHint": "Entrega a conversa a uma equipe e continua. Mude para o encaminhamento a uma pessoa para adicionar um motivo, uma prioridade, mensagens para o contato e as saídas (atribuída, aguardando na fila, sem agente ou fora do horário e uma opcional para quando a conversa volta ao bot). As conexões que você já fez continuam funcionando.",
         "upgrade": "Usar recursos de transferência",
         "destination": "Enviar a conversa para",
         "dest": {
@@ -76,7 +78,15 @@
         "exitAssigned": "atribuída: uma pessoa já está com a conversa",
         "exitWaiting": "em fila de espera: aguarda alguém assumir",
         "exitUnavailable": "sem agente / fora do horário: ninguém pôde atender",
-        "simpleExits": "A próxima etapa é executada quando uma pessoa já está com a conversa. Se ela precisar aguardar na fila, ou ninguém estiver disponível, o bot para aqui e uma pessoa responde. Use o construtor avançado para seguir as outras saídas."
+        "simpleExits": "A próxima etapa é executada quando uma pessoa já está com a conversa. Se ela precisar aguardar na fila, ou ninguém estiver disponível, o bot para aqui e uma pessoa responde. Use o construtor avançado para seguir as outras saídas.",
+        "returnMessage": "Mensagem ao contato quando o bot voltar",
+        "returnMessageHint": "Opcional. Enviada uma vez, em nome da sua empresa, quando um colega clica em Devolver ao bot, antes de o fluxo continuar pela saída «devolvida». Não é enviada se a janela de 24 horas estiver fechada ou se o contato não tiver dado consentimento. Variáveis como '{{'name'}}' funcionam.",
+        "returnNeedsExit": "Esta mensagem só é enviada quando o fluxo continua após Devolver ao bot. Conecte a saída «devolvida» à etapa que deve vir a seguir.",
+        "exitReturned": "devolvida ao bot (opcional): um colega clicou em Devolver ao bot; o fluxo continua daqui",
+        "returnedStep": "Quando um colega devolve a conversa, continuar em",
+        "returnedStepHint": "Opcional. Escolha a etapa com que o fluxo continua quando alguém clica em Devolver ao bot. Deixe vazio e o bot aguarda a próxima mensagem do contato.",
+        "returnNone": "Nenhuma etapa: aguardar a próxima mensagem do contato",
+        "returnStepOption": "{stage}: {label}"
       }
     }
   }

@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Terug naar bot",
         "done": "De bot beantwoordt dit gesprek weer.",
-        "failed": "Het gesprek kon niet worden teruggegeven aan de bot."
+        "failed": "Het gesprek kon niet worden teruggegeven aan de bot.",
+        "doneFlow": "De bot zet de flow voort.",
+        "doneNextLive": "De bot beantwoordt het volgende bericht van de klant.",
+        "doneNextDefault": "De bot is weer actief. Hij beantwoordt het volgende bericht alleen als er een standaardflow is ingesteld.",
+        "already": "De bot heeft dit gesprek al."
       },
       "send": {
         "button": "Naar wachtrij sturen",
@@ -105,6 +109,36 @@
         "chosen": "Gekozen",
         "skipped": "Overgeslagen",
         "info": "Notitie"
+      },
+      "botLine": {
+        "system": "het systeem",
+        "pressed": {
+          "flow": "De bot is terug, teruggegeven door {name}. De flow gaat verder.",
+          "nextLive": "De bot is terug, teruggegeven door {name}. Hij beantwoordt het volgende bericht van de klant.",
+          "nextDefault": "De bot is terug, teruggegeven door {name}. Hij beantwoordt het volgende bericht alleen als er een standaardflow is ingesteld."
+        },
+        "result": {
+          "continued": "De flow ging verder bij de uitgang ‘teruggegeven’.",
+          "claimed_again": "De flow is niet hervat: een persoon heeft de chat opnieuw overgenomen.",
+          "flow_not_live": "De flow is niet hervat: hij is niet meer actief.",
+          "start_failed": "De flow kon niet worden hervat."
+        },
+        "customer": {
+          "sent": "Het bericht aan de klant is verstuurd.",
+          "window_closed": "Het bericht aan de klant is overgeslagen: het venster van 24 uur is gesloten.",
+          "no_consent": "Het bericht aan de klant is overgeslagen: geen toestemming.",
+          "failed": "Het bericht aan de klant kon niet worden verstuurd.",
+          "channel_unavailable": "Het bericht aan de klant is overgeslagen: het kanaal is niet beschikbaar."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Teruggegeven aan de bot door {actor}",
+          "bot_resumed": "De bot zette de flow voort",
+          "bot_resume_skipped": "De flow is niet hervat"
+        }
       }
     }
   }

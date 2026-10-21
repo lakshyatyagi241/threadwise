@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Devolver ao bot",
         "done": "O bot volta a responder esta conversa.",
-        "failed": "Não foi possível devolver a conversa ao bot."
+        "failed": "Não foi possível devolver a conversa ao bot.",
+        "doneFlow": "O bot continua o fluxo.",
+        "doneNextLive": "O bot responderá à próxima mensagem do cliente.",
+        "doneNextDefault": "O bot voltou a atender. Ele só responde à próxima mensagem se houver um fluxo padrão definido.",
+        "already": "O bot já está com esta conversa."
       },
       "send": {
         "button": "Enviar para a fila",
@@ -105,6 +109,36 @@
         "chosen": "Escolhido",
         "skipped": "Ignorado",
         "info": "Nota"
+      },
+      "botLine": {
+        "system": "o sistema",
+        "pressed": {
+          "flow": "O bot voltou, devolvido por {name}. O fluxo continua.",
+          "nextLive": "O bot voltou, devolvido por {name}. Ele responderá à próxima mensagem do cliente.",
+          "nextDefault": "O bot voltou, devolvido por {name}. Ele só responde à próxima mensagem se houver um fluxo padrão definido."
+        },
+        "result": {
+          "continued": "O fluxo continuou pela saída «devolvida».",
+          "claimed_again": "O fluxo não foi retomado: uma pessoa assumiu a conversa novamente.",
+          "flow_not_live": "O fluxo não foi retomado: ele não está mais ativo.",
+          "start_failed": "Não foi possível retomar o fluxo."
+        },
+        "customer": {
+          "sent": "A mensagem ao cliente foi enviada.",
+          "window_closed": "A mensagem ao cliente foi ignorada: a janela de 24 horas está fechada.",
+          "no_consent": "A mensagem ao cliente foi ignorada: sem consentimento.",
+          "failed": "Não foi possível enviar a mensagem ao cliente.",
+          "channel_unavailable": "A mensagem ao cliente foi ignorada: o canal está indisponível."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Devolvida ao bot por {actor}",
+          "bot_resumed": "O bot continuou o fluxo",
+          "bot_resume_skipped": "O fluxo não foi retomado"
+        }
       }
     }
   }

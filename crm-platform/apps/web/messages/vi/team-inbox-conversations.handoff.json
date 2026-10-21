@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Trả lại cho bot",
         "done": "Bot trả lời lại cuộc trò chuyện này.",
-        "failed": "Không thể trả cuộc trò chuyện lại cho bot."
+        "failed": "Không thể trả cuộc trò chuyện lại cho bot.",
+        "doneFlow": "Bot tiếp tục luồng.",
+        "doneNextLive": "Bot sẽ trả lời tin nhắn tiếp theo của khách.",
+        "doneNextDefault": "Bot đã hoạt động lại. Bot chỉ trả lời tin nhắn tiếp theo nếu đã đặt luồng mặc định.",
+        "already": "Bot đã nhận cuộc trò chuyện này."
       },
       "send": {
         "button": "Gửi vào hàng chờ",
@@ -105,6 +109,36 @@
         "chosen": "Đã chọn",
         "skipped": "Đã bỏ qua",
         "info": "Ghi chú"
+      },
+      "botLine": {
+        "system": "hệ thống",
+        "pressed": {
+          "flow": "Bot đã quay lại, do {name} trả lại. Luồng tiếp tục.",
+          "nextLive": "Bot đã quay lại, do {name} trả lại. Bot sẽ trả lời tin nhắn tiếp theo của khách.",
+          "nextDefault": "Bot đã quay lại, do {name} trả lại. Bot chỉ trả lời tin nhắn tiếp theo nếu đã đặt luồng mặc định."
+        },
+        "result": {
+          "continued": "Luồng đã tiếp tục từ lối ra “trả lại”.",
+          "claimed_again": "Luồng không được tiếp tục: có người đã nhận lại cuộc trò chuyện.",
+          "flow_not_live": "Luồng không được tiếp tục: luồng không còn hoạt động.",
+          "start_failed": "Không thể tiếp tục luồng."
+        },
+        "customer": {
+          "sent": "Đã gửi tin nhắn cho khách.",
+          "window_closed": "Bỏ qua tin nhắn cho khách: cửa sổ 24 giờ đã đóng.",
+          "no_consent": "Bỏ qua tin nhắn cho khách: không có sự đồng ý.",
+          "failed": "Không thể gửi tin nhắn cho khách.",
+          "channel_unavailable": "Bỏ qua tin nhắn cho khách: kênh không khả dụng."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "{actor} đã trả lại cho bot",
+          "bot_resumed": "Bot đã tiếp tục luồng",
+          "bot_resume_skipped": "Luồng không được tiếp tục"
+        }
       }
     }
   }

@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Kembalikan ke bot",
         "done": "Bot kembali menjawab percakapan ini.",
-        "failed": "Percakapan tidak dapat dikembalikan ke bot."
+        "failed": "Percakapan tidak dapat dikembalikan ke bot.",
+        "doneFlow": "Bot melanjutkan alur.",
+        "doneNextLive": "Bot akan menjawab pesan berikutnya dari pelanggan.",
+        "doneNextDefault": "Bot aktif kembali. Bot hanya menjawab pesan berikutnya jika ada alur default.",
+        "already": "Bot sudah menangani percakapan ini."
       },
       "send": {
         "button": "Kirim ke antrean",
@@ -105,6 +109,36 @@
         "chosen": "Dipilih",
         "skipped": "Dilewati",
         "info": "Catatan"
+      },
+      "botLine": {
+        "system": "sistem",
+        "pressed": {
+          "flow": "Bot kembali, dikembalikan oleh {name}. Alur dilanjutkan.",
+          "nextLive": "Bot kembali, dikembalikan oleh {name}. Bot akan menjawab pesan berikutnya dari pelanggan.",
+          "nextDefault": "Bot kembali, dikembalikan oleh {name}. Bot hanya menjawab pesan berikutnya jika ada alur default."
+        },
+        "result": {
+          "continued": "Alur dilanjutkan dari jalur keluar “dikembalikan”.",
+          "claimed_again": "Alur tidak dilanjutkan: seseorang mengambil chat lagi.",
+          "flow_not_live": "Alur tidak dilanjutkan: alur sudah tidak aktif.",
+          "start_failed": "Alur tidak dapat dilanjutkan."
+        },
+        "customer": {
+          "sent": "Pesan ke pelanggan terkirim.",
+          "window_closed": "Pesan ke pelanggan dilewati: jendela 24 jam tertutup.",
+          "no_consent": "Pesan ke pelanggan dilewati: tidak ada persetujuan.",
+          "failed": "Pesan ke pelanggan tidak dapat dikirim.",
+          "channel_unavailable": "Pesan ke pelanggan dilewati: kanal tidak tersedia."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Dikembalikan ke bot oleh {actor}",
+          "bot_resumed": "Bot melanjutkan alur",
+          "bot_resume_skipped": "Alur tidak dilanjutkan"
+        }
       }
     }
   }

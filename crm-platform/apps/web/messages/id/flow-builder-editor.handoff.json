@@ -4,7 +4,8 @@
       "ports": {
         "assigned": "ditugaskan",
         "waitingInQueue": "menunggu di antrean",
-        "noAgentOutOfHours": "tidak ada agen / di luar jam kerja"
+        "noAgentOutOfHours": "tidak ada agen / di luar jam kerja",
+        "returnedToBot": "dikembalikan ke bot"
       }
     },
     "simpleModel": {
@@ -20,12 +21,13 @@
         "nodePreview": {
           "handoffTo": "Serahkan ke",
           "handoffRules": "Aturan penugasan",
-          "pickAgent": "— pilih orang —"
+          "pickAgent": "— pilih orang —",
+          "returnBack": "Saat bot kembali:"
         }
       },
       "handoff": {
         "legacy": "Langkah ini adalah “Tugaskan agen” versi lama.",
-        "upgradeHint": "Langkah ini memberikan chat ke tim lalu melanjutkan. Beralihlah ke Serah terima ke manusia untuk menambahkan alasan, prioritas, pesan untuk kontak, dan tiga jalur keluar (ditugaskan, menunggu di antrean, tidak ada agen atau di luar jam kerja). Sambungan yang sudah Anda buat tetap berfungsi.",
+        "upgradeHint": "Menyerahkan chat ke tim lalu melanjutkan. Beralih ke serah terima ke manusia untuk menambahkan alasan, prioritas, pesan untuk kontak, dan jalur keluar (ditugaskan, menunggu di antrean, tidak ada agen atau di luar jam kerja, serta satu jalur opsional saat chat dikembalikan ke bot). Sambungan yang sudah Anda buat tetap berfungsi.",
         "upgrade": "Gunakan fitur serah terima",
         "destination": "Kirim percakapan ke",
         "dest": {
@@ -76,7 +78,15 @@
         "exitAssigned": "ditugaskan: sekarang sudah ada orang yang memegang percakapan",
         "exitWaiting": "menunggu di antrean: menunggu sampai ada yang mengambil",
         "exitUnavailable": "tidak ada agen / di luar jam kerja: tidak ada yang bisa mengambil",
-        "simpleExits": "Langkah berikutnya berjalan setelah seseorang memegang percakapan. Jika harus menunggu di antrean, atau tidak ada yang tersedia, bot berhenti di sini dan seseorang menjawab. Gunakan pembuat Lanjutan untuk mengikuti jalur keluar lainnya."
+        "simpleExits": "Langkah berikutnya berjalan setelah seseorang memegang percakapan. Jika harus menunggu di antrean, atau tidak ada yang tersedia, bot berhenti di sini dan seseorang menjawab. Gunakan pembuat Lanjutan untuk mengikuti jalur keluar lainnya.",
+        "returnMessage": "Pesan ke kontak saat bot kembali",
+        "returnMessageHint": "Opsional. Dikirim sekali, atas nama bisnis Anda, saat rekan tim menekan Kembalikan ke bot, sebelum alur dilanjutkan dari jalur keluar “dikembalikan”. Tidak dikirim jika jendela 24 jam tertutup atau kontak belum memberi persetujuan. Variabel seperti '{{'name'}}' dapat dipakai.",
+        "returnNeedsExit": "Pesan ini hanya dikirim jika alur dilanjutkan setelah Kembalikan ke bot. Hubungkan jalur keluar “dikembalikan” ke langkah berikutnya.",
+        "exitReturned": "dikembalikan ke bot (opsional): rekan tim menekan Kembalikan ke bot; alur dilanjutkan dari sini",
+        "returnedStep": "Saat rekan tim mengembalikan chat, lanjutkan di",
+        "returnedStepHint": "Opsional. Pilih langkah tempat alur dilanjutkan saat seseorang menekan Kembalikan ke bot. Biarkan kosong dan bot menunggu pesan berikutnya dari kontak.",
+        "returnNone": "Tanpa langkah: tunggu pesan berikutnya dari kontak",
+        "returnStepOption": "{stage}: {label}"
       }
     }
   }

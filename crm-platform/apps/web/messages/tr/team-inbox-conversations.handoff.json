@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Bota geri ver",
         "done": "Bot bu konuşmayı yeniden yanıtlıyor.",
-        "failed": "Konuşma bota geri verilemedi."
+        "failed": "Konuşma bota geri verilemedi.",
+        "doneFlow": "Bot akışı sürdürüyor.",
+        "doneNextLive": "Bot, müşterinin bir sonraki mesajını yanıtlayacak.",
+        "doneNextDefault": "Bot yeniden devrede. Bir sonraki mesajı yalnızca varsayılan bir akış ayarlıysa yanıtlar.",
+        "already": "Bu görüşme zaten botta."
       },
       "send": {
         "button": "Kuyruğa gönder",
@@ -105,6 +109,36 @@
         "chosen": "Seçildi",
         "skipped": "Atlandı",
         "info": "Not"
+      },
+      "botLine": {
+        "system": "sistem",
+        "pressed": {
+          "flow": "Bot geri döndü, geri veren: {name}. Akış devam ediyor.",
+          "nextLive": "Bot geri döndü, geri veren: {name}. Müşterinin bir sonraki mesajını yanıtlayacak.",
+          "nextDefault": "Bot geri döndü, geri veren: {name}. Bir sonraki mesajı yalnızca varsayılan bir akış ayarlıysa yanıtlar."
+        },
+        "result": {
+          "continued": "Akış “geri verildi” çıkışından devam etti.",
+          "claimed_again": "Akış yeniden başlatılmadı: bir kişi sohbeti tekrar devraldı.",
+          "flow_not_live": "Akış yeniden başlatılmadı: artık etkin değil.",
+          "start_failed": "Akış yeniden başlatılamadı."
+        },
+        "customer": {
+          "sent": "Müşteriye mesaj gönderildi.",
+          "window_closed": "Müşteriye mesaj atlandı: 24 saatlik pencere kapalı.",
+          "no_consent": "Müşteriye mesaj atlandı: izin yok.",
+          "failed": "Müşteriye mesaj gönderilemedi.",
+          "channel_unavailable": "Müşteriye mesaj atlandı: kanal kullanılamıyor."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "{actor} bota geri verdi",
+          "bot_resumed": "Bot akışı sürdürdü",
+          "bot_resume_skipped": "Akış yeniden başlatılmadı"
+        }
       }
     }
   }
