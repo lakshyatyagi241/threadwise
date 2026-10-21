@@ -215,7 +215,7 @@ export function BulkBar(props: BulkBarProps) {
             ))}
           </Select>
         )}
-        {can.tag && (tags.data?.data.length ?? 0) > 0 && (
+        {can.tag && (
           <Select
             aria-label={t('tag')}
             data-testid="inbox-bulk-tag"
