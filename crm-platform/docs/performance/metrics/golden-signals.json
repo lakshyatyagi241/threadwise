@@ -1,0 +1,65 @@
+{
+  "item": "Sheet3 #75",
+  "target": "100% services expose golden signals: latency, traffic, errors, saturation",
+  "statuses": "present = every listed metric name exists in code (enforced by golden-signals.spec.ts); missing = no metric yet, see reason; n/a = not applicable, see reason",
+  "newMetrics": [
+    "crm_db_pool_connections", "crm_db_pool_waiting", "crm_db_pool_max",
+    "crm_outbox_ready", "crm_outbox_oldest_due_seconds", "crm_outbox_dead"
+  ],
+  "services": {
+    "api": {
+      "latency": { "status": "present", "metrics": ["crm_http_request_duration_seconds"] },
+      "traffic": { "status": "present", "metrics": ["crm_http_request_duration_seconds"], "note": "rate of _count" },
+      "errors": { "status": "present", "metrics": ["crm_http_request_duration_seconds"], "note": "status label is the class, e.g. 5xx" },
+      "saturation": { "status": "present", "metrics": ["crm_event_loop_utilization_ratio", "crm_process_heap_used_bytes", "crm_process_rss_bytes"] }
+    },
+    "web": {
+      "latency": { "status": "present", "metrics": ["crm_http_request_duration_seconds"], "note": "service=web, route template via webRouteOf" },
+      "traffic": { "status": "present", "metrics": ["crm_http_request_duration_seconds"] },
+      "errors": { "status": "present", "metrics": ["crm_http_request_duration_seconds"] },
+      "saturation": { "status": "present", "metrics": ["crm_event_loop_utilization_ratio", "crm_process_heap_used_bytes"] }
+    },
+    "worker": {
+      "latency": { "status": "present", "metrics": ["crm_queue_job_duration_seconds", "crm_queue_job_wait_seconds"] },
+      "traffic": { "status": "present", "metrics": ["crm_queue_jobs_total"] },
+      "errors": { "status": "present", "metrics": ["crm_queue_jobs_total", "crm_dead_letter_captured_total"], "note": "outcome=failed" },
+      "saturation": { "status": "present", "metrics": ["crm_queue_jobs_pending", "crm_queue_oldest_waiting_seconds", "crm_event_loop_utilization_ratio"] }
+    },
+    "realtime": {
+      "latency": { "status": "present", "metrics": ["crm_realtime_publish_duration_seconds", "crm_realtime_delivery_lag_seconds"] },
+      "traffic": { "status": "present", "metrics": ["crm_realtime_events_published_total", "crm_realtime_connections_total"] },
+      "errors": { "status": "present", "metrics": ["crm_realtime_publish_failures_total"] },
+      "saturation": { "status": "present", "metrics": ["crm_realtime_sockets", "crm_realtime_rooms"] }
+    },
+    "postgres": {
+      "latency": { "status": "missing", "reason": "no per-query timing metric; only the HTTP and job histograms include DB time. Needs postgres_exporter or pg_stat_statements, outside this repo's code" },
+      "traffic": { "status": "missing", "reason": "no query counter (same as latency)" },
+      "errors": { "status": "missing", "reason": "no query error counter" },
+      "saturation": { "status": "present", "metrics": ["crm_db_pool_connections", "crm_db_pool_waiting", "crm_db_pool_max"], "new": true, "note": "client pool view, label pool=primary|replica" }
+    },
+    "redis": {
+      "latency": { "status": "present", "metrics": ["crm_probe_http_duration_seconds"], "note": "indirect: the readiness probe round trip; no command latency histogram" },
+      "traffic": { "status": "present", "metrics": ["crm_redis_ops_per_second"] },
+      "errors": { "status": "present", "metrics": ["crm_redis_rejected_connections_total", "crm_redis_evicted_keys_total"] },
+      "saturation": { "status": "present", "metrics": ["crm_redis_memory_used_bytes", "crm_redis_memory_max_bytes", "crm_redis_connected_clients"] }
+    },
+    "bullmq-queues": {
+      "latency": { "status": "present", "metrics": ["crm_queue_job_wait_seconds"] },
+      "traffic": { "status": "present", "metrics": ["crm_queue_jobs_total"] },
+      "errors": { "status": "present", "metrics": ["crm_queue_jobs_total", "crm_queue_job_retries_total"] },
+      "saturation": { "status": "present", "metrics": ["crm_queue_jobs_pending", "crm_queue_oldest_waiting_seconds"] }
+    },
+    "outbox": {
+      "latency": { "status": "present", "metrics": ["crm_outbox_oldest_due_seconds"], "new": true, "note": "age of the oldest due event; no per-event dispatch histogram" },
+      "traffic": { "status": "missing", "reason": "no processed-events counter; the drain only logs" },
+      "errors": { "status": "present", "metrics": ["crm_outbox_dead"], "new": true },
+      "saturation": { "status": "present", "metrics": ["crm_outbox_ready"], "new": true }
+    },
+    "node-bridge": {
+      "latency": { "status": "n/a", "reason": "no separate bridge service in the repo: Baileys (WhatsApp QR) runs inside the API process, covered by the api row" },
+      "traffic": { "status": "n/a", "reason": "same" },
+      "errors": { "status": "n/a", "reason": "same" },
+      "saturation": { "status": "n/a", "reason": "same" }
+    }
+  }
+}

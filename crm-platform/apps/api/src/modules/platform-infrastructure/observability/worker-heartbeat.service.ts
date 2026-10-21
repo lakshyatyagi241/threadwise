@@ -7,6 +7,7 @@ import {
   type OnApplicationShutdown,
 } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { createDbSaturationMetrics, getRuntimeMonitor } from '@crm/observability';
 import type { Redis } from 'ioredis';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
@@ -33,6 +34,8 @@ export class WorkerHeartbeatService implements OnApplicationBootstrap, OnApplica
   private readonly logger = new Logger(WorkerHeartbeatService.name);
   private readonly id = instanceId(hostname(), process.pid);
   private timer: NodeJS.Timeout | undefined;
+  private readonly monitor = getRuntimeMonitor();
+  private readonly outboxGauges = this.monitor ? createDbSaturationMetrics(this.monitor.metrics) : undefined;
 
   constructor(
     private readonly db: DatabaseService,
@@ -66,6 +69,7 @@ export class WorkerHeartbeatService implements OnApplicationBootstrap, OnApplica
     }
     try {
       const sample = await this.sampleOutbox(now);
+      this.outboxGauges?.recordOutbox(sample);
       await this.redis.set(OUTBOX_SAMPLE_KEY, JSON.stringify(sample), 'PX', window * 2);
     } catch (err) {
       this.logger.warn({ err }, 'outbox sample failed');
