@@ -3,6 +3,7 @@
 #   bash tools/perf/run-all.sh                 unit tests, tool tests, the analytics + History integration specs
 #   bash tools/perf/run-all.sh --qa            also `pnpm qa` (one runnable check per QA task)
 #   bash tools/perf/run-all.sh --stress        also the ramp stress test against a RUNNING API (API_URL, PERF_EMAIL, PERF_PASSWORD, PSQL_URL)
+#   bash tools/perf/run-all.sh --status        also the evidence-based status of Punya's QA items (tools/qa-suite/status)
 #   bash tools/perf/run-all.sh --reports       also rebuild the HTML reports into docs/quality/reports
 #   bash tools/perf/run-all.sh --only unit|tools|integration   run one stage
 # Needs: pnpm install, the workspace packages built (pnpm --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build),
@@ -11,10 +12,10 @@ set -u
 cd "$(dirname "$0")/../.."
 ROOT=$PWD
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
-WANT_QA=0; WANT_STRESS=0; WANT_REPORTS=0; ONLY=""
+WANT_QA=0; WANT_STRESS=0; WANT_REPORTS=0; WANT_STATUS=0; ONLY=""
 while [ $# -gt 0 ]; do
   case "$1" in
-    --qa) WANT_QA=1 ;; --stress) WANT_STRESS=1 ;; --reports) WANT_REPORTS=1 ;;
+    --qa) WANT_QA=1 ;; --stress) WANT_STRESS=1 ;; --reports) WANT_REPORTS=1 ;; --status) WANT_STATUS=1 ;;
     --only) ONLY="${2:-}"; shift ;;
     *) echo "unknown option: $1"; exit 2 ;;
   esac
@@ -42,6 +43,7 @@ stage tools tools
 stage integration integration
 [ $WANT_QA -eq 1 ] && stage qa bash -c 'cd "$0" && pnpm qa' "$ROOT"
 [ $WANT_STRESS -eq 1 ] && stage stress bash -c 'cd "$0" && mkdir -p perf && node tools/perf/stress-ramp.mjs --out perf/stress.json' "$ROOT"
+[ $WANT_STATUS -eq 1 ] && stage status node "$ROOT/tools/qa-suite/status/punya-status.mjs"
 [ $WANT_REPORTS -eq 1 ] && stage reports python3 "$ROOT/tools/perf/reports/gen.py"
 echo; echo "=== summary"
 FAILED=0
