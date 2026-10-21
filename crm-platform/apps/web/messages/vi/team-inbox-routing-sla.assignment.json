@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Phân công chat",
+        "intro": "Bốn công tắc này đáp ứng hầu hết không gian làm việc: bật lên là bạn không cần tạo quy tắc nào.",
+        "order": "Thứ tự cho chat mới: Chủ sở hữu liên hệ và Nhân viên cố định trước, rồi đến các quy tắc của bạn (nếu có), rồi Tất cả những người còn lại, rồi hàng đợi.",
+        "readOnly": "Bạn có thể xem các công tắc này nhưng không thể thay đổi.",
+        "saved": "Đã lưu.",
+        "saveFailed": "Không thể lưu thay đổi.",
+        "loading": "Đang tải cài đặt phân công",
+        "loadFailed": "Không thể tải cài đặt phân công.",
+        "retry": "Thử lại",
+        "notInPlan": "Không có trong gói của bạn",
+        "upgradeHint": "Gói của bạn không bao gồm tính năng này. Hãy nhờ chủ tài khoản nâng cấp gói.",
+        "stepFirst": "Được kiểm tra đầu tiên",
+        "stepMaster": "Công tắc chính",
+        "stepAfter": "Sau khi nhận chat",
+        "needsAuto": "Chỉ dùng khi Tự động phân công đang bật.",
+        "auto": {
+          "title": "Tự động phân công",
+          "body": "Chat mới được chia đều cho các nhân viên đang nhận chat (không ngoại tuyến, bận hoặc nghỉ phép). Khi mọi nhân viên đã đạt giới hạn chat, chat mới sẽ chờ trong hàng đợi.",
+          "limitHint": "Đặt giới hạn chat cho từng nhân viên trong hồ sơ của họ tại <link>Thành viên nhóm</link>.",
+          "off": "Tắt: không có gì được phân công tự động, dù bằng quy tắc hay bằng chủ sở hữu liên hệ. Chat chờ trong hàng đợi cho đến khi có người nhận hoặc một luồng chỉ định người xử lý."
+        },
+        "sticky": {
+          "title": "Nhân viên cố định",
+          "body": "Liên hệ quay lại sẽ được chuyển về nhân viên đã xử lý chat gần nhất của họ, miễn là nhân viên đó vẫn là thành viên đang hoạt động và có thể mở hộp thư (trạng thái trực tuyến không được kiểm tra). Nếu liên hệ có chủ sở hữu, chủ sở hữu được thử trước.",
+          "withWindow": "Số ngày tính ngược lại cho nhân viên gần nhất được đặt trong phần Nâng cao."
+        },
+        "owner": {
+          "title": "Giao chat cho chủ sở hữu liên hệ",
+          "body": "Chat từ một liên hệ đã biết sẽ được giao cho chủ sở hữu liên hệ trước, để hỗ trợ nhất quán và mang tính cá nhân. Nếu chủ sở hữu đang nghỉ phép, người được ủy quyền sẽ nhận chat; nếu chưa có chủ sở hữu, bước tiếp theo sẽ quyết định.",
+          "wins": "Nếu Nhân viên cố định cũng đang bật, chủ sở hữu liên hệ vẫn được ưu tiên; nhân viên gần nhất chỉ là lựa chọn thứ hai."
+        },
+        "claim": {
+          "title": "Đặt nhân viên làm chủ sở hữu liên hệ",
+          "body": "Khi một nhân viên nhận chat từ hàng đợi và liên hệ chưa có chủ sở hữu, nhân viên đó trở thành chủ sở hữu liên hệ. Chủ sở hữu hiện có sẽ không bao giờ bị đổi.",
+          "note": "Chat được quy tắc giao cho nhân viên sẽ không đặt chủ sở hữu. Khi bật Giữ chat đang mở cùng chủ sở hữu (trong Nâng cao), việc chuyển giao cũng sẽ đặt chủ sở hữu."
+        }
+      },
+      "advanced": {
+        "title": "Nâng cao",
+        "hint": "Giữ chat đồng bộ với chủ sở hữu liên hệ, khoảng thời gian cố định, lời nhắc giao lại và cảnh báo hàng đợi.",
+        "sync": {
+          "title": "Giữ chat đang mở cùng chủ sở hữu",
+          "body": "Khi chủ sở hữu của một liên hệ thay đổi, các chat đang mở được phân công tự động sẽ chuyển theo chủ sở hữu mới. Chat do một người nhận sẽ không bao giờ bị chuyển. Việc chuyển giao có giao chat cũng đặt chủ sở hữu khi liên hệ chưa có.",
+          "needsOwner": "Hãy bật Giao chat cho chủ sở hữu liên hệ trước."
+        }
+      },
+      "rules": {
+        "title": "Cần kiểm soát nhiều hơn? Thêm quy tắc",
+        "intro": "Tùy chọn. Quy tắc gửi những chat nhất định (một kênh, từ trong tin nhắn, liên hệ mới...) đến những nhân viên hoặc nhóm nhất định. Nếu bốn công tắc đã đủ, bạn không cần tạo quy tắc nào.",
+        "locked": "Gói của bạn không có quy tắc. Bạn vẫn có hàng đợi, nhận chat và phân công thủ công. Hãy nhờ chủ tài khoản nâng cấp gói.",
+        "pipelineTitle": "Cách chat mới được phân công",
+        "pipeline": {
+          "agent": "1. Chủ sở hữu liên hệ và Nhân viên cố định",
+          "rules": "2. Các quy tắc của bạn, từ trên xuống",
+          "rulesBody": "Quy tắc đầu tiên khớp và tìm được nhân viên sẵn sàng sẽ nhận chat.",
+          "everyone": "3. Tất cả những người còn lại",
+          "everyoneBody": "Nhận những chat mà không quy tắc nào nhận.",
+          "queue": "4. Hàng đợi",
+          "queueBody": "Nếu không tìm được ai, chat sẽ chờ trong tab Đang chờ cho đến khi có nhân viên nhận.",
+          "agentBody": "Được đặt bởi các công tắc ở trên."
+        },
+        "never": "Những chat đã được luồng, một người hoặc việc chuyển giao phân công sẽ không bao giờ bị quy tắc thay đổi.",
+        "add": "Thêm quy tắc",
+        "emptyTitle": "Chưa có quy tắc",
+        "empty": "Không sao cả. Các công tắc ở trên và Tất cả những người còn lại sẽ quyết định.",
+        "loading": "Đang tải quy tắc",
+        "loadFailed": "Không thể tải quy tắc.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "tất cả nhân viên",
+        "noAssign": "không phân công",
+        "drag": "Kéo {name} để đổi thứ tự",
+        "neverRuns": "Không bao giờ chạy",
+        "neverMatches": "Không bao giờ khớp",
+        "neverMatchesHint": "Quy tắc này không có điều kiện và không áp dụng cho mọi cuộc trò chuyện. Hãy chỉnh sửa để khắc phục.",
+        "shadowed": "{count, plural, other {Các quy tắc bên dưới}} “{blocker}” sẽ không bao giờ chạy trừ khi không ai trong “{blocker}” sẵn sàng: {names}. “{blocker}” áp dụng cho mọi cuộc trò chuyện và dừng việc kiểm tra tại đó. Hãy chuyển nó xuống dưới, hoặc tắt “Dừng khi quy tắc này khớp” trong đó.",
+        "reordered": "Đã lưu thứ tự."
+      },
+      "everyone": {
+        "title": "Tất cả những người còn lại",
+        "pinned": "Ghim ở cuối",
+        "body": "Nhận mọi chat mà không quy tắc nào nhận. Chọn người sẽ nhận chúng.",
+        "notSet": "Chưa thiết lập: chat mà không quy tắc nào nhận sẽ chờ trong hàng đợi.",
+        "mode": "Những chat đó sẽ được xử lý thế nào",
+        "evenly": "Chia đều cho tất cả nhân viên",
+        "evenlyHint": "Luân phiên hoặc ít việc nhất trong số mọi người có thể mở hộp thư và đang sẵn sàng: không ngoại tuyến, bận, nghỉ phép hay đạt giới hạn chat.",
+        "listed": "Chọn nhân viên hoặc nhóm",
+        "listedNow": "Hiện tại: {who}.",
+        "listedEdit": "Đổi nhân viên hoặc nhóm",
+        "queue": "Để trong hàng đợi",
+        "queueHint": "Không ai được phân công. Chat chờ cho đến khi có nhân viên nhận.",
+        "strategy": "Cách chia",
+        "saved": "Đã lưu.",
+        "failed": "Không thể lưu thay đổi.",
+        "confirmTitle": "Thay thế các nhân viên đã chọn?",
+        "confirmBody": "Tất cả những người còn lại hiện giao chat cho các nhân viên hoặc nhóm bạn đã chọn. Chia đều sẽ thay thế lựa chọn đó.",
+        "confirm": "Thay thế",
+        "ruleName": "Tất cả những người còn lại"
+      },
+      "where": {
+        "title": "Áp dụng ở đâu",
+        "applied": "Được áp dụng",
+        "applied1": "Khi có chat mới (và khi khách hàng mở lại một chat đã kết thúc mà không ai phụ trách).",
+        "applied2": "Khi bước Chuyển cho người thật được đặt là “Quy tắc phân công”: cùng danh sách này sẽ được kiểm tra, dựa trên liên hệ, kênh và tin nhắn mới nhất của khách, rồi đến Tất cả những người còn lại, rồi hàng đợi.",
+        "not": "Không được áp dụng",
+        "not1": "Chat mà một luồng, một người hoặc việc chuyển giao đã phân công.",
+        "not2": "Phân công hoặc nhận chat thủ công.",
+        "not3": "Bước Chuyển cho người thật chỉ định một người (quy tắc bị bỏ qua) hoặc một nhóm (dùng phương thức riêng của nhóm)."
+      },
+      "try": {
+        "title": "Dùng thử",
+        "body": "Chọn một liên hệ, một kênh và một tin nhắn mẫu để xem ai sẽ nhận chat và vì sao. Không có gì được phân công, tính hay gửi đi.",
+        "contact": "Liên hệ (tùy chọn)",
+        "noContact": "Chưa chọn liên hệ: tin nhắn mẫu được coi là một liên hệ hoàn toàn mới. Không thể kiểm tra điều kiện về chi tiết liên hệ đã lưu nếu không có liên hệ thật.",
+        "channel": "Kênh",
+        "message": "Tin nhắn mẫu",
+        "messagePlaceholder": "vd: Tôi muốn được hoàn tiền",
+        "run": "Xem điều gì sẽ xảy ra",
+        "running": "Đang kiểm tra",
+        "failed": "Không thể chạy thử.",
+        "result": "Kết quả",
+        "outcome": {
+          "sticky": "Giữ với nhân viên cũ quyết định: {who}.",
+          "rule": "Quy tắc “{rule}” quyết định: {who}.",
+          "everyone": "Tất cả những người còn lại quyết định: {who}.",
+          "queue": "Không tìm được ai: chat chờ trong hàng đợi.",
+          "off": "Tự động phân công đang tắt: không có gì được phân công tự động."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "một nhân viên",
+          "team": "hàng đợi của {name}",
+          "teamUnknown": "hàng đợi của nhóm"
+        },
+        "stepsTitle": "Từng bước",
+        "step": {
+          "switch": "Tự động phân công",
+          "sticky": "Chủ sở hữu liên hệ và Nhân viên cố định",
+          "rule": "Quy tắc “{name}”",
+          "everyone": "Tất cả những người còn lại",
+          "queue": "Hàng đợi"
+        },
+        "why": {
+          "auto_assign_off": "Công tắc đang tắt.",
+          "sticky_off": "Cả hai công tắc đều tắt nên bước này bị bỏ qua.",
+          "no_contact": "Không có liên hệ để tra cứu.",
+          "no_agent_found": "Không có chủ sở hữu liên hệ hay nhân viên gần nhất nào nhận được.",
+          "owner": "Chủ sở hữu liên hệ nhận chat.",
+          "last_handler": "Nhân viên của chat gần nhất của liên hệ nhận chat.",
+          "conditions_failed": "Không khớp.",
+          "nobody_available": "Khớp, nhưng không ai trong số được chỉ định đang sẵn sàng.",
+          "agent_picked": "Khớp và đã chọn một nhân viên.",
+          "team_queue": "Khớp; không ai rảnh nên chat chuyển vào hàng đợi của nhóm.",
+          "no_assignment_in_rule": "Khớp; quy tắc này không phân công (chỉ thực hiện các hành động khác).",
+          "not_set": "Không có quy tắc Tất cả những người còn lại đang hoạt động, nên chat không ai nhận sẽ chờ trong hàng đợi."
+        },
+        "part": {
+          "contactKind": "Liên hệ mới hoặc quay lại",
+          "contact": "Chi tiết liên hệ",
+          "channel": "Kênh",
+          "keywords": "Từ trong tin nhắn",
+          "languages": "Ngôn ngữ",
+          "businessHours": "Giờ làm việc"
+        },
+        "partOk": "khớp",
+        "partWhy": {
+          "no_saved_value": "liên hệ này chưa lưu thông tin đó nên không khớp",
+          "no_contact": "không có liên hệ",
+          "not_same_kind": "liên hệ không thuộc loại đó",
+          "channel_differs": "kênh này không có trong danh sách",
+          "no_word": "không có từ nào xuất hiện trong tin nhắn",
+          "language_differs": "ngôn ngữ khác hoặc không xác định",
+          "hours_differ": "thời gian không nằm trong khoảng đó của ngày"
+        },
+        "contactLine": "Liên hệ này: {kind}. Giai đoạn: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "mới",
+          "returning": "quay lại"
+        },
+        "hasOwner": "Có chủ sở hữu.",
+        "noOwner": "Chưa có chủ sở hữu.",
+        "tags": "{count, plural, =0 {Chưa lưu thẻ nào.} other {Đã lưu # thẻ.}}",
+        "skippedTitle": "Bị loại",
+        "skip": {
+          "on_leave": "đang nghỉ phép",
+          "offline_busy_or_at_capacity": "ngoại tuyến, bận hoặc đạt giới hạn chat",
+          "cannot_read": "không thể mở hộp thư",
+          "no_owner": "liên hệ chưa có chủ sở hữu",
+          "no_previous_handler_in_window": "liên hệ này chưa có nhân viên trước đó",
+          "not_an_active_member": "không phải thành viên đang hoạt động"
+        },
+        "outside": "Giả định đang ngoài giờ làm việc",
+        "inside": "Giả định đang trong giờ làm việc",
+        "clock": "Giờ làm việc: dùng đồng hồ hiện tại",
+        "skipStep": {
+          "owner": "Chủ sở hữu liên hệ",
+          "last_handler": "Nhân viên gần nhất"
+        }
+      },
+      "form": {
+        "whenSwitch": "Chỉ cho các cuộc trò chuyện khớp với...",
+        "whenSwitchHint": "Tắt: quy tắc này áp dụng cho mọi cuộc trò chuyện mới.",
+        "everyConversation": "Quy tắc này áp dụng cho mọi cuộc trò chuyện mới.",
+        "kept": "Các điều kiện của bạn vẫn được giữ nhưng bị bỏ qua khi tùy chọn này tắt.",
+        "add": "Thêm điều kiện",
+        "remove": "Xóa {name}",
+        "name": {
+          "contactKind": "Liên hệ mới hoặc quay lại",
+          "channel": "Kênh",
+          "keywords": "Từ trong tin nhắn",
+          "language": "Ngôn ngữ của khách hàng",
+          "hours": "Giờ làm việc",
+          "contact": "Chi tiết liên hệ"
+        },
+        "kind": {
+          "title": "Liên hệ mới hoặc quay lại",
+          "hint": "Một liên hệ được coi là quay lại khi đã có chat trước đó, hoặc được lưu hơn 10 phút trước chat này.",
+          "new": "Liên hệ mới (chat đầu tiên)",
+          "returning": "Liên hệ quay lại"
+        },
+        "contactNote": "Chỉ khớp với những liên hệ đã lưu thông tin này. Liên hệ hoàn toàn mới đến mà không có gì được lưu ngoài giai đoạn “Mới”, vì vậy hãy dùng Liên hệ mới hoặc quay lại cho khách hàng lần đầu.",
+        "everyoneElseNote": "Đây là quy tắc Tất cả những người còn lại: nó nhận những chat mà không quy tắc nào khác nhận.",
+        "everyoneAgents": "Mọi người có thể mở hộp thư",
+        "everyoneAgentsHint": "Chia chat cho tất cả nhân viên đang sẵn sàng thay vì chọn từng người.",
+        "fallbackConditions": "Quy tắc này có các điều kiện đã lưu từ trước, nên nó chỉ nhận những chat khớp với chúng. Hãy bật công tắc bên dưới để xem lại, hoặc xóa chúng."
+      }
+    }
+  }
+}

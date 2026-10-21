@@ -19,25 +19,12 @@
     "page": {
       "back": "Automatisierung und KI",
       "title": "Automatische Zuweisung von Unterhaltungen",
-      "subtitle": "Jede neue Unterhaltung automatisch dem passenden Agenten zuweisen. Die Regeln werden der Reihe nach von oben geprüft.",
       "noAccess": "Sie sind nicht berechtigt, die Einstellungen der automatischen Zuweisung anzusehen.",
-      "create": "Regel erstellen",
       "limitUsed": "{used} von {limit} Regeln genutzt",
       "limitReached": "Sie haben alle {limit} Regeln Ihres Tarifs genutzt.",
-      "keepTitle": "Wiederkehrende Kontakte bei ihrem Agenten belassen",
-      "keepBody": "Wenn ein Kontakt, der bereits einen Agenten hat, erneut schreibt, geht die neue Unterhaltung zuerst an diesen Agenten: den Verantwortlichen des Kontakts oder denjenigen, der die letzte Unterhaltung bearbeitet hat, sofern dieser noch ein aktiver Agent ist. Andernfalls entscheiden die folgenden Regeln.",
-      "settingsFailed": "Die Einstellung konnte nicht gespeichert werden.",
-      "rulesTitle": "Regeln",
-      "searchPlaceholder": "Regeln durchsuchen",
-      "searchLabel": "Regeln nach Name durchsuchen",
-      "howItWorks": "Die erste passende Regel, die einen verfügbaren Agenten findet, erhält die Unterhaltung. Die Ausweichregel wird verwendet, wenn keine andere Regel passt. Wenn nichts passt, bleibt die Unterhaltung nicht zugewiesen.",
       "loading": "Regeln werden geladen",
       "loadFailed": "Die Regeln konnten nicht geladen werden.",
       "retry": "Erneut versuchen",
-      "noMatchTitle": "Keine Regel gefunden",
-      "noMatch": "Es gibt keine Regel mit dem Namen „{q}“.",
-      "emptyTitle": "Noch keine Regeln",
-      "empty": "Erstellen Sie eine Regel, um neue Unterhaltungen nach Stichwort, Kanal, Sprache oder Kontaktdaten reihum an Ihre Agenten zu verteilen.",
       "list": "Regeln für die automatische Zuweisung in Prioritätsreihenfolge",
       "loadMore": "Mehr laden",
       "toggleFailed": "Die Regel konnte nicht umgeschaltet werden.",
@@ -51,16 +38,14 @@
       "deleted": "Regel gelöscht.",
       "deleteFailed": "Die Regel konnte nicht gelöscht werden.",
       "businessHours": "Geschäftszeiten",
-      "recordNote": "Hier werden Unterhaltungen zugewiesen. Informationen zur Zuweisung neuer {contacts}, Firmen und {deals} an Vertriebsverantwortliche finden Sie unter <link>Regeln zur Datensatzzuweisung</link>."
+      "recordNote": "Hier werden Unterhaltungen zugewiesen. Informationen zur Zuweisung neuer {contacts}, Firmen und {deals} an Vertriebsverantwortliche finden Sie unter <link>Regeln zur Datensatzzuweisung</link>.",
+      "subtitle": "Lege fest, wer jeden neuen Chat bekommt. Für die meisten Workspaces reichen die Schalter; lege Regeln nur an, wenn du mehr Kontrolle brauchst."
     },
     "rules": {
       "someone": "ein Agent",
       "moveUp": "{name} nach oben verschieben",
       "moveDown": "{name} nach unten verschieben",
       "priority": "Priorität",
-      "active": "Aktiv",
-      "off": "Aus",
-      "fallback": "Ausweichregel",
       "continues": "Prüft weiter",
       "unavailable": "{count, plural, one {# Agent nicht verfügbar} other {# Agenten nicht verfügbar}}",
       "activeFor": "Regel „{name}“ ist aktiv",
@@ -74,7 +59,9 @@
         "languages": "Sprache: {list}",
         "inside": "Innerhalb der Geschäftszeiten",
         "outside": "Außerhalb der Geschäftszeiten",
-        "always": "Jede Unterhaltung, auf die keine Regel passt"
+        "always": "Jede neue Unterhaltung",
+        "contactNew": "Neuer Kontakt",
+        "contactReturning": "Wiederkehrender Kontakt"
       },
       "strategy": {
         "round_robin": "Reihum",
@@ -122,7 +109,6 @@
         "name": "Geben Sie einen Namen für die Regel ein.",
         "nameLong": "Der Name ist zu lang.",
         "descriptionLong": "Die Beschreibung ist zu lang.",
-        "conditions": "Fügen Sie mindestens eine Bedingung hinzu oder markieren Sie diese Regel als Ausweichregel.",
         "contactIncomplete": "Vervollständigen oder entfernen Sie die unvollständigen Kontaktbedingungen.",
         "keywordsMany": "Verwenden Sie höchstens 20 Wörter.",
         "targets": "Wählen Sie mindestens einen Agenten oder ein Team aus.",
@@ -133,20 +119,17 @@
         "escalationAction": "Neu zuweisen, Priorität setzen oder beides.",
         "escalationAgents": "Neu zuweisen braucht Mitarbeitende in dieser Regel: oben auswählen.",
         "autoReplyEmpty": "Antwort schreiben oder die Option abwählen.",
-        "autoReplyLong": "Die Antwort ist zu lang (höchstens 1024 Zeichen)."
+        "autoReplyLong": "Die Antwort ist zu lang (höchstens 1024 Zeichen).",
+        "conditions": "Füge mindestens eine Bedingung hinzu oder schalte „Nur für Unterhaltungen, die passen“ aus."
       },
       "whenTitle": "Wenn eine neue Unterhaltung eingeht",
-      "whenHint": "Jede festgelegte Bedingung muss zutreffen. Lassen Sie einen Teil leer, um ihn zu ignorieren.",
       "contact": {
-        "title": "Der Kontakt passt",
-        "hint": "Tags, Verantwortlicher, Lifecycle-Phase und weitere Kontaktdetails, wie bei Segmenten.",
         "loading": "Kontaktfelder werden geladen",
         "partial": "Einige Kontaktlisten konnten nicht geladen werden, daher fehlen möglicherweise einige Auswahlmöglichkeiten.",
         "summary": "Bedingungen",
         "none": "Keine Kontaktbedingungen."
       },
       "channel": {
-        "title": "Kanal",
         "hint": "Nur Unterhaltungen, die über diese Kanäle eingehen. Ohne Auswahl gilt jeder Kanal."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Geschäftszeiten",
         "hint": "Verwendet die Geschäftszeiten Ihres Workspace.",
-        "any": "Jederzeit",
         "inside": "Nur innerhalb der Geschäftszeiten",
         "outside": "Nur außerhalb der Geschäftszeiten"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Optionen",
       "stopOnMatch": "Stoppen, wenn diese Regel passt",
       "stopOnMatchHint": "Ein: Spätere Regeln werden nicht geprüft. Aus: Eine spätere passende Regel kann die Unterhaltung übernehmen.",
-      "fallback": "Ausweichregel",
-      "fallbackHint": "Wird verwendet, wenn keine andere Regel passt. Es gibt nur eine Ausweichregel; wenn Sie diese wählen, ersetzt sie die bisherige.",
       "cancel": "Abbrechen",
       "save": "Speichern",
       "saveActivate": "Speichern und aktivieren",
@@ -219,7 +199,8 @@
       "escalatePriority": "Dann die Priorität setzen",
       "autoReply": "Eine automatische Antwort senden",
       "autoReplyBody": "Antworttext",
-      "autoReplyHint": "Wird im Namen des Unternehmens an den Kunden gesendet. Außerhalb des 24-Stunden-Fensters wird keine freie Antwort gesendet."
+      "autoReplyHint": "Wird im Namen des Unternehmens an den Kunden gesendet. Außerhalb des 24-Stunden-Fensters wird keine freie Antwort gesendet.",
+      "whenHint": "Jede Bedingung, die du hinzufügst, muss zutreffen."
     },
     "sla": {
       "back": "Zurück zu den Einstellungen",

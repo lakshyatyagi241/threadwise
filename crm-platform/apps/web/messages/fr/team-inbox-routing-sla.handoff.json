@@ -1,44 +1,9 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "back": "Automatisation",
-      "title": "Transfert et assignation",
-      "subtitle": "Comment une conversation parvient à une personne quand un bot, un flux ou un collègue en demande une, et comment le propriétaire du contact et le responsable du chat travaillent ensemble.",
-      "noAccess": "Vous n’avez pas l’autorisation de voir ces paramètres. Demandez à un propriétaire ou administrateur de l’espace de travail l’autorisation relative aux paramètres de la boîte de réception.",
-      "readOnly": "Vous pouvez voir ces paramètres, mais pas les modifier.",
-      "loading": "Chargement des paramètres",
-      "loadFailed": "Impossible de charger les paramètres.",
-      "retry": "Réessayer",
-      "saved": "Paramètres enregistrés.",
-      "saveFailed": "Impossible d’enregistrer les paramètres.",
       "notInPlan": "Non inclus dans votre offre",
       "upgradeHint": "Votre offre n’inclut pas cette fonction. Demandez au propriétaire du compte de changer d’offre.",
-      "auto": {
-        "title": "Assignation automatique",
-        "body": "Quand une personne est nécessaire, les règles d’assignation peuvent en choisir une pour vous. Sans elles, la conversation attend dans l’onglet En attente qu’un collègue la prenne.",
-        "switch": "Assigner automatiquement",
-        "switchHint": "Désactivez pour arrêter les règles d’assignation, pour les nouvelles conversations comme pour les transferts. Les conversations attendent alors dans la file ou vont à la personne ou à l’équipe indiquée par un flux."
-      },
       "owner": {
-        "title": "Propriétaire du contact et responsable du chat",
-        "body": "Un contact peut avoir un propriétaire, et chaque conversation a la personne qui y répond. Choisissez comment les deux sont liés.",
-        "modeLabel": "Lien entre le propriétaire du contact et le responsable du chat",
-        "modes": {
-          "independent": {
-            "title": "Indépendants",
-            "body": "Le responsable du chat et le propriétaire du contact sont distincts. Modifier l’un ne change pas l’autre."
-          },
-          "owner_first": {
-            "title": "Propriétaire d’abord",
-            "body": "Un nouveau chat va d’abord au propriétaire du contact s’il peut le prendre ; sinon, les règles habituelles décident."
-          },
-          "keep_in_sync": {
-            "title": "Garder synchronisés",
-            "body": "Comme Propriétaire d’abord et, quand le propriétaire d’un contact change, ses chats ouverts assignés automatiquement suivent. Un chat pris par une personne n’est jamais déplacé."
-          }
-        },
-        "claimSets": "Prendre un chat vous rend propriétaire du contact",
-        "claimSetsHint": "Quand quelqu’un prend une conversation et que le contact n’a pas encore de propriétaire, il le devient.",
         "prompt": "Demander pour le propriétaire du contact lors d’une réassignation",
         "promptHint": "Quand un chat est confié manuellement à quelqu’un d’autre, proposer de le nommer aussi propriétaire du contact.",
         "window": "Garder un contact récurrent avec son dernier agent",
@@ -47,13 +12,10 @@
         "days": "jours"
       },
       "queue": {
-        "title": "File d’attente",
-        "body": "Les conversations que personne n’a pu prendre attendent dans l’onglet En attente de la boîte de réception, avec le motif et la durée d’attente.",
         "notify": "Prévenir l’équipe quand une conversation est en attente",
         "notifyHint": "Les membres de l’équipe, ou tous ceux qui peuvent répondre aux chats non assignés, reçoivent une notification avec le motif."
       },
       "teams": {
-        "title": "Équipes",
         "body": "Chaque équipe a sa propre méthode d’assignation, ses horaires d’ouverture, son fuseau horaire et son responsable par défaut. Ils sont utilisés chaque fois qu’une conversation est transférée à cette équipe.",
         "link": "Ouvrir Équipes"
       }

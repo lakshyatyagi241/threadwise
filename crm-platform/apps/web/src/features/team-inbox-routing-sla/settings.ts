@@ -5,9 +5,8 @@ import { settingsTile } from '../_registry/settings-types';
  * read the inbox configuration; a plan without the `inbox_routing` feature sees it locked. Copy lives in `messages/<locale>/settings.json`
  * under `settings.tiles.auto-assignment`.
  *
- * Handoff and assignment (BL-396 to BL-404): how a conversation reaches a person after a bot asks for one, and how the contact owner and the
- * chat owner relate. Open to every plan (no plan gate): what a plan does not include shows a lock on the screen. Copy lives under
- * `settings.tiles.assignment-settings`.
+ * Handoff and assignment (BL-396 to BL-404) used to have a tile of its own; its settings are now the four switches and the Advanced part at the top
+ * of the Auto-assignment page (spec H14). The old /assignment-settings address redirects there.
  *
  * Record assignment rules (contacts, companies and deals) are a tile of the record-assignment domain.
  *
@@ -24,15 +23,6 @@ export const settings = [
     order: 25,
     shortcutFrom: ['/inbox'],
     gates: { permission: 'inbox.settings.read', planFeature: 'inbox_routing' },
-  }),
-  settingsTile({
-    id: 'assignment-settings',
-    section: 'automation',
-    href: '/assignment-settings',
-    icon: 'transfer',
-    order: 26,
-    shortcutFrom: ['/inbox'],
-    gates: { permission: 'inbox.settings.read' },
   }),
   settingsTile({
     id: 'sla-policies',
