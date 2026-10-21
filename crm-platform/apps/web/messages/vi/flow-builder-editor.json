@@ -858,7 +858,13 @@
             "choose": "Chọn một mẫu…",
             "buttons": "Nút",
             "variables": "Được điền từ thông tin liên hệ",
-            "variablesHint": "Mỗi số được điền khi gửi tin nhắn bằng thông tin liên hệ nêu ở đây. Hãy thay đổi trong mẫu."
+            "variablesHint": "Mỗi số được điền khi gửi tin nhắn bằng thông tin liên hệ nêu ở đây. Hãy thay đổi trong mẫu.",
+            "fills": "Điều gì điền vào mỗi số",
+            "fillsHint": "Chọn thông tin liên hệ hoặc biến của luồng, hoặc nhập văn bản của bạn. Để trống để dùng nội dung của mẫu.",
+            "fillPick": "Chèn thông tin…",
+            "headerMedia": "Tệp tiêu đề",
+            "headerMediaHint": "Hình ảnh, video hoặc tệp trong tiêu đề của mẫu này. Cần khi mẫu không có tệp riêng.",
+            "headerMediaMissing": "Hãy thêm tệp tiêu đề: mẫu này không có, và WhatsApp sẽ không gửi nếu thiếu."
           },
           "cta": {
             "buttonText": "Văn bản nút",
@@ -2617,7 +2623,8 @@
         "writeCode": "Bước {stage}: viết mã cần chạy.",
         "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
         "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
-        "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI."
+        "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI.",
+        "templateFile": "Bước {stage}: thêm tệp tiêu đề của mẫu."
       }
     },
     "waboImport": {

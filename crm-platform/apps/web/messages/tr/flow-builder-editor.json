@@ -858,7 +858,13 @@
             "choose": "Bir şablon seçin…",
             "buttons": "Düğmeler",
             "variables": "Kişi bilgisinden doldurulur",
-            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin.",
+            "fills": "Her numaranın neyle doldurulacağı",
+            "fillsHint": "Bir kişi bilgisi veya akış değişkeni seçin ya da kendi metninizi yazın. Şablondaki değeri kullanmak için boş bırakın.",
+            "fillPick": "Bilgi ekle…",
+            "headerMedia": "Üst bilgi dosyası",
+            "headerMediaHint": "Bu şablonun üst bilgisindeki resim, video veya dosya. Şablonun kendi dosyası yoksa gereklidir.",
+            "headerMediaMissing": "Üst bilgi dosyasını ekleyin: bu şablonda yok ve WhatsApp onsuz göndermez."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -2617,7 +2623,8 @@
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
         "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
         "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
-        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin.",
+        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin."
       }
     },
     "waboImport": {

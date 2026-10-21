@@ -858,7 +858,13 @@
             "choose": "Vorlage auswählen ...",
             "buttons": "Schaltflächen",
             "variables": "Wird aus dem Kontakt befüllt",
-            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage."
+            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage.",
+            "fills": "Womit jede Nummer gefüllt wird",
+            "fillsHint": "Wähle eine Kontaktangabe oder eine Ablaufvariable oder schreibe einen eigenen Text. Leer lassen, um die Vorgabe der Vorlage zu nutzen.",
+            "fillPick": "Angabe einfügen…",
+            "headerMedia": "Kopfzeilen-Datei",
+            "headerMediaHint": "Das Bild, Video oder die Datei in der Kopfzeile dieser Vorlage. Nötig, wenn die Vorlage keine eigene Datei hat.",
+            "headerMediaMissing": "Kopfzeilen-Datei hinzufügen: Diese Vorlage hat keine, und WhatsApp sendet sie ohne nicht."
           },
           "cta": {
             "buttonText": "Schaltflächentext",
@@ -2617,7 +2623,8 @@
         "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird.",
         "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
         "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
-        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten."
+        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten.",
+        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu."
       }
     },
     "waboImport": {

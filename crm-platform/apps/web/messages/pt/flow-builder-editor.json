@@ -858,7 +858,13 @@
             "choose": "Escolha um template…",
             "buttons": "Botões",
             "variables": "Preenchido com dados do contato",
-            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo."
+            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo.",
+            "fills": "O que preenche cada número",
+            "fillsHint": "Escolha um dado do contato ou uma variável do fluxo, ou escreva seu próprio texto. Deixe vazio para usar o que o modelo diz.",
+            "fillPick": "Inserir um dado…",
+            "headerMedia": "Arquivo do cabeçalho",
+            "headerMediaHint": "A imagem, o vídeo ou o arquivo do cabeçalho deste modelo. Necessário quando o modelo não tem arquivo próprio.",
+            "headerMediaMissing": "Adicione o arquivo do cabeçalho: este modelo não tem nenhum e o WhatsApp não o enviará sem ele."
           },
           "cta": {
             "buttonText": "Texto do botão",
@@ -2617,7 +2623,8 @@
         "writeCode": "Passo {stage}: escreva o código a executar.",
         "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
         "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
-        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA."
+        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA.",
+        "templateFile": "Etapa {stage}: adicione o arquivo do cabeçalho do modelo."
       }
     },
     "waboImport": {

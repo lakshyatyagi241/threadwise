@@ -858,7 +858,13 @@
             "choose": "Elige una plantilla…",
             "buttons": "Botones",
             "variables": "Se rellena con datos del contacto",
-            "variablesHint": "Cada número se rellena al enviar el mensaje con el dato del contacto indicado aquí. Cámbialo en la plantilla."
+            "variablesHint": "Cada número se rellena al enviar el mensaje con el dato del contacto indicado aquí. Cámbialo en la plantilla.",
+            "fills": "Qué rellena cada número",
+            "fillsHint": "Elige un dato del contacto o una variable del flujo, o escribe tu propio texto. Déjalo vacío para usar lo que dice la plantilla.",
+            "fillPick": "Insertar un dato…",
+            "headerMedia": "Archivo del encabezado",
+            "headerMediaHint": "La imagen, el vídeo o el archivo del encabezado de esta plantilla. Hace falta si la plantilla no tiene archivo propio.",
+            "headerMediaMissing": "Añade el archivo del encabezado: esta plantilla no tiene ninguno y WhatsApp no la enviará sin él."
           },
           "cta": {
             "buttonText": "Texto del botón",
@@ -2617,7 +2623,8 @@
         "writeCode": "Paso {stage}: escribe el código que se ejecutará.",
         "webhookUrl": "Paso {stage}: añade la dirección (URL) a la que llamar.",
         "chooseAiAgent": "Paso {stage}: elige el agente de IA que responde o cambia el paso a una configuración personalizada.",
-        "writeAiPrompt": "Paso {stage}: escribe las instrucciones para la IA o elige un agente de IA."
+        "writeAiPrompt": "Paso {stage}: escribe las instrucciones para la IA o elige un agente de IA.",
+        "templateFile": "Paso {stage}: añade el archivo del encabezado de la plantilla."
       }
     },
     "waboImport": {

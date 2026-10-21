@@ -9,6 +9,7 @@ import {
   templateComponents,
   templateText,
   templateValues,
+  withOverrides,
 } from './template-rules';
 
 const advance: NodeResult = { kind: 'advance', port: 1 };
@@ -66,12 +67,20 @@ export class TemplateNode {
       return advance;
     }
 
-    const header = templateValues(tpl, 'header', ctx.render);
-    const body = templateValues(tpl, 'body', ctx.render);
+    // The author's own fills for placeholders and the header file win over what the template maps.
+    const mine = withOverrides(
+      tpl,
+      (p.variableOverrides ?? {}) as Record<string, string>,
+      str(p.headerMediaUrl),
+      ctx.render,
+    );
+    const header = templateValues(mine.tpl, 'header', mine.render);
+    const body = templateValues(mine.tpl, 'body', mine.render);
     const text = templateText(tpl, header, body);
     const buttons = quickReplies(tpl, ctx.node.id);
     const wired = p.buttonsWired === true && buttons.length > 0;
-    const components = richComponents(tpl, ctx.render) ?? templateComponents(tpl, header, body);
+    const components =
+      richComponents(mine.tpl, mine.render) ?? templateComponents(tpl, header, body);
 
     const out = await ctx.send({
       kind: 'template',

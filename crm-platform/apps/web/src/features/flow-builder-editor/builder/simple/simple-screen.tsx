@@ -61,6 +61,7 @@ import {
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import { StepPreview } from './step-preview';
+import { TemplatePreview } from '../inspector/forms-core/previews';
 import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
 import { lookOf } from '../../lib/node-ui';
@@ -276,7 +277,10 @@ function Editor({
 
   const senderRequired = channel === 'chat' && ctx.senders.chat.length > 0;
   // What stops a publish.
-  const found = useMemo(() => problems(doc, { senderRequired }), [doc, senderRequired]);
+  const found = useMemo(
+    () => problems(doc, { senderRequired, templates: ctx.templates }),
+    [doc, senderRequired, ctx.templates],
+  );
   // Parts nothing leads to: they would never run, but they harm nothing, so they only warn (an imported flow has many).
   const notReached = useMemo(
     () =>
@@ -1623,9 +1627,15 @@ function StepCard(p: {
             title={t('clickToEdit')}
             className="block w-full border-t border-border px-4 pb-4 pt-3 text-start"
           >
-            <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
-              {bodyText || t('empty')}
-            </p>
+            {s.type === 'template' &&
+            p.ctx.templates.some((tp) => tp.name === String(s.data.tpl ?? '')) ? (
+              // A closed template step still shows the template as the customer gets it, not just its name.
+              <TemplatePreview d={s.data} templates={p.ctx.templates} />
+            ) : (
+              <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
+                {bodyText || t('empty')}
+              </p>
+            )}
             {exits.length > 0 ? (
               <div className="mt-3 space-y-2 rounded-lg bg-muted/60 p-3">
                 {exits.map((e, i) => (

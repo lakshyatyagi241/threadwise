@@ -858,7 +858,13 @@
             "choose": "Pilih templat…",
             "buttons": "Tombol",
             "variables": "Diisi dari data kontak",
-            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat."
+            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat.",
+            "fills": "Apa yang mengisi setiap nomor",
+            "fillsHint": "Pilih data kontak atau variabel alur, atau ketik teks Anda sendiri. Kosongkan untuk memakai isi templat.",
+            "fillPick": "Sisipkan data…",
+            "headerMedia": "File header",
+            "headerMediaHint": "Gambar, video, atau file di header templat ini. Diperlukan jika templat tidak punya file sendiri.",
+            "headerMediaMissing": "Tambahkan file header: templat ini tidak punya, dan WhatsApp tidak akan mengirimnya tanpa itu."
           },
           "cta": {
             "buttonText": "Teks tombol",
@@ -2617,7 +2623,8 @@
         "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",
         "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
         "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
-        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI."
+        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI.",
+        "templateFile": "Langkah {stage}: tambahkan file header templat."
       }
     },
     "waboImport": {
