@@ -361,7 +361,7 @@
         "keywords": "privacy, gdpr, data request, dsar, subject access, export data, erase, right to be forgotten, delete personal data, legal hold"
       },
       "inbox-tags": {
-        "label": "Conversation tags",
+        "label": "Tags",
         "description": "Create the tags your team puts on conversations and filters the inbox by. They are the same tags used on contacts.",
         "keywords": "tags, labels, categories, organize, filter, conversation tags"
       },

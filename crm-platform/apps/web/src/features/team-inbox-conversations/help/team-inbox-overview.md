@@ -28,7 +28,7 @@ The Team inbox gathers every customer conversation from your connected channels 
 9. To set one conversation aside, use **Snooze** in its header and pick 1 hour, 3 hours, tomorrow at 9:00 or next Monday at 9:00. It leaves the Open list and comes back by itself at that time, with an entry in its timeline. **Wake now** brings it back early. Use the **Priority** menu in the header to mark it Low, Normal, High or Urgent.
 10. For more than the boxes above the list, select the funnel button (a number on it says how many choices are on) to open the **Filters** window. It has **Chat status** (pick several at once; with none picked the list shows Open), **Conversation** (Assigned, Unassigned, or Unattended, which means it has messages nobody has read yet), **Tags**, **Channels**, **Agents** (conversations assigned to any of the people you tick), **Sort by** (Recent, or Old for the oldest activity first, which ignores pins) and a **Date range** of the last activity. Nothing changes until you select **Apply**; **Reset** clears all of them. The boxes above the list edit the same filters.
 
-11. To tag a conversation, open the side panel and use **Tag** in the **Conversation tags** group, tick the tags that apply, then use the **Tags** filter above the list to show only conversations with those tags. See [Conversation tags](help:inbox-tags).
+11. To tag a conversation, open the side panel and use **Tag** in the **Conversation tags** group, tick the tags that apply, then use the **Tags** filter above the list to show only conversations with those tags. See [Tags](help:inbox-tags).
 
 Keyboard shortcuts work when you are not typing: `j` and `k` move through the list, `e` resolves or reopens, and `/` jumps to search.
 
@@ -51,7 +51,7 @@ The side panel shows two separate groups of tags. Both come from the same worksp
 - **Contact tags** describe the person: VIP, lead, region. They belong to the contact, so they follow the customer into every conversation. Here they are read-only; select **Edit on contact** (if you may edit contacts) to change them.
 - **Conversation tags** describe this thread: billing, refund, urgent. They belong to the conversation only. Add them with **Tag** and take them off with the **×** next to a tag.
 
-The **Tags** filter above the list has a switch for **Conversation tags** and **Contact tags**, so you can find every thread that has a tag itself, or every thread with a person who has it. See [Conversation tags](help:inbox-tags) and [Contacts](help:contacts-overview).
+The **Tags** filter above the list has a switch for **Conversation tags** and **Contact tags**, so you can find every thread that has a tag itself, or every thread with a person who has it. See [Tags](help:inbox-tags) and [Contacts](help:contacts-overview).
 
 ## Plan and access
 

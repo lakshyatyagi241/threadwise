@@ -346,7 +346,7 @@
         "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
       },
       "inbox-tags": {
-        "label": "Tag percakapan",
+        "label": "Tag",
         "description": "Buat tag yang dipasang tim Anda pada percakapan dan dipakai untuk memfilter kotak masuk. Tag ini sama dengan yang digunakan pada kontak.",
         "keywords": "tag, kategori, atur, filter, tag percakapan"
       },
