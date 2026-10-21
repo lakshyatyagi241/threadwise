@@ -1,0 +1,45 @@
+# Automated VAPT (Sheet3 #25): audits + ZAP API scan + own DAST walker + live security tests against a local instance.
+# MANUAL TRIGGER ONLY. GitHub Actions cannot start runs on this account right now, so the `schedule:` block below is kept commented out;
+# until it can run, "recurring" is NOT achieved: someone has to run `bash tools/security/vapt.sh` (or this workflow) before each release.
+# When Actions works again: uncomment `schedule:` (weekly) and add this workflow as a required check on the release branch.
+name: vapt
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 3 * * 1' # Mondays 03:00 UTC
+jobs:
+  vapt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: crm-platform
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: crm, POSTGRES_PASSWORD: crm, POSTGRES_DB: postgres }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U crm" --health-interval 5s --health-retries 10
+      redis:
+        image: redis:7
+        ports: ['56379:6379']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: crm-platform/.nvmrc, cache: pnpm, cache-dependency-path: crm-platform/pnpm-lock.yaml }
+      - name: Install and build workspace packages
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
+          pnpm --filter @crm/api build
+      - name: Create the restricted app role the API runs as
+        run: PGPASSWORD=crm psql -h localhost -U crm -d postgres -c "CREATE ROLE crm_app_user LOGIN PASSWORD 'crm_app_dev' NOSUPERUSER NOBYPASSRLS" || true
+      - name: VAPT
+        run: |
+          docker pull ghcr.io/zaproxy/zaproxy:stable
+          VAPT_ZAP=1 bash tools/security/vapt.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: vapt-reports, path: 'crm-platform/reports/vapt/**' }
