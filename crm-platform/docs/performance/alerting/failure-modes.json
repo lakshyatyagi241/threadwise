@@ -22,38 +22,25 @@
       "id": "api-down",
       "failureMode": "API service down or not answering",
       "severity": "critical",
-      "alerts": [
-        "ApiProbeFailing",
-        "RuntimeMetricsTargetDown"
-      ],
+      "alerts": ["ApiProbeFailing", "RuntimeMetricsTargetDown"],
       "runbook": "docs/performance/event-loop/event-loop-observability-runbook.md",
       "status": "tested-live",
-      "liveCase": [
-        "api-stop",
-        "probe-dead-port"
-      ]
+      "liveCase": ["api-stop", "probe-dead-port"]
     },
     {
       "id": "worker-down",
       "failureMode": "Worker process down (queues stop being processed)",
       "severity": "critical",
-      "alerts": [
-        "RuntimeMetricsTargetDown"
-      ],
+      "alerts": ["RuntimeMetricsTargetDown"],
       "runbook": "docs/performance/event-loop/event-loop-observability-runbook.md",
       "status": "tested-live",
-      "liveCase": [
-        "worker-kill"
-      ]
+      "liveCase": ["worker-kill"]
     },
     {
       "id": "queue-backlog",
       "failureMode": "Queue not draining / oldest job age (inbound, interactive, automation, bulk)",
       "severity": "critical",
-      "alerts": [
-        "CriticalQueueOldestJobAge",
-        "BulkQueueBacklogNotDraining"
-      ],
+      "alerts": ["CriticalQueueOldestJobAge", "BulkQueueBacklogNotDraining"],
       "runbook": "docs/performance/queue-capacity/queue-observability-runbook.md",
       "status": "tested-promtool"
     },
@@ -74,48 +61,34 @@
       "id": "outbox-stuck",
       "failureMode": "Outbox not draining (oldest due event age)",
       "severity": "critical",
-      "alerts": [
-        "OutboxNotDraining"
-      ],
+      "alerts": ["OutboxNotDraining"],
       "runbook": "docs/runbooks/p0-failure-modes.md#outboxnotdraining",
       "status": "tested-live",
-      "liveCase": [
-        "outbox-stuck"
-      ]
+      "liveCase": ["outbox-stuck"]
     },
     {
       "id": "outbox-dead",
       "failureMode": "Outbox dead rows",
       "severity": "warning",
-      "alerts": [
-        "OutboxDeadRows"
-      ],
+      "alerts": ["OutboxDeadRows"],
       "runbook": "docs/runbooks/p0-failure-modes.md#outboxdeadrows",
       "status": "tested-live",
-      "liveCase": [
-        "outbox-dead"
-      ]
+      "liveCase": ["outbox-dead"]
     },
     {
       "id": "failed-work-open",
       "failureMode": "Failed webhook / provider send / job left unreplayed (durable failure store)",
       "severity": "warning",
-      "alerts": [
-        "DeadLetterOpenTooLong"
-      ],
+      "alerts": ["DeadLetterOpenTooLong"],
       "runbook": "docs/runbooks/p0-failure-modes.md#deadletteropentoolong",
       "status": "tested-live",
-      "liveCase": [
-        "dead-letter-old"
-      ]
+      "liveCase": ["dead-letter-old"]
     },
     {
       "id": "failed-work-lost",
       "failureMode": "Failed work cannot be recorded (replay data lost)",
       "severity": "critical",
-      "alerts": [
-        "DeadLetterCaptureFailing"
-      ],
+      "alerts": ["DeadLetterCaptureFailing"],
       "runbook": "docs/runbooks/p0-failure-modes.md#deadlettercapturefailing",
       "status": "tested-promtool",
       "note": "needs the capture to fail on purpose; not induced live"
@@ -124,24 +97,17 @@
       "id": "pg-down",
       "failureMode": "Postgres down or unreachable",
       "severity": "critical",
-      "alerts": [
-        "ApiProbeFailing",
-        "ApiHighErrorRate"
-      ],
+      "alerts": ["ApiProbeFailing", "ApiHighErrorRate"],
       "runbook": "docs/runbooks/p0-failure-modes.md#apihigherrorrate",
       "status": "tested-live",
-      "liveCase": [
-        "pg-down"
-      ],
+      "liveCase": ["pg-down"],
       "note": "detected by symptom (the /ready probe and 5xx); no direct crm_db_up gauge exists"
     },
     {
       "id": "pg-pool",
       "failureMode": "Postgres connection pool exhausted",
       "severity": "critical",
-      "alerts": [
-        "DbPoolExhausted"
-      ],
+      "alerts": ["DbPoolExhausted"],
       "runbook": "docs/runbooks/p0-failure-modes.md#dbpoolexhausted",
       "status": "tested-promtool",
       "note": "live: Pending reached, then the API process crashed (finding 8) so it never fired"
@@ -176,28 +142,19 @@
       "id": "redis-down",
       "failureMode": "Redis down",
       "severity": "critical",
-      "alerts": [
-        "RedisDown",
-        "CacheErrorRatioHigh"
-      ],
+      "alerts": ["RedisDown", "CacheErrorRatioHigh"],
       "runbook": "docs/runbooks/p0-failure-modes.md#redisdown",
       "status": "tested-live",
-      "liveCase": [
-        "redis-stop"
-      ]
+      "liveCase": ["redis-stop"]
     },
     {
       "id": "redis-oom",
       "failureMode": "Redis full (maxmemory) / high memory",
       "severity": "critical",
-      "alerts": [
-        "RedisMemoryNearMax"
-      ],
+      "alerts": ["RedisMemoryNearMax"],
       "runbook": "docs/runbooks/p0-failure-modes.md#redismemorynearmax",
       "status": "tested-live",
-      "liveCase": [
-        "redis-full"
-      ]
+      "liveCase": ["redis-full"]
     },
     {
       "id": "disk-full",
@@ -216,11 +173,7 @@
       "id": "container-oom",
       "failureMode": "Container OOM-killed / memory near limit",
       "severity": "critical",
-      "alerts": [
-        "ContainerOomKilled",
-        "ContainerMemoryCritical",
-        "ContainerMemoryNearLimit"
-      ],
+      "alerts": ["ContainerOomKilled", "ContainerMemoryCritical", "ContainerMemoryNearLimit"],
       "runbook": "docs/performance/resource-limits/README.md",
       "status": "tested-promtool",
       "note": "real cgroup limits not induced on the laptop"
@@ -229,9 +182,7 @@
       "id": "restart-loop",
       "failureMode": "Process restart loop",
       "severity": "critical",
-      "alerts": [
-        "ProcessRestartLoop"
-      ],
+      "alerts": ["ProcessRestartLoop"],
       "runbook": "docs/performance/resource-limits/README.md",
       "status": "tested-promtool"
     },
@@ -253,23 +204,16 @@
       "id": "http-5xx",
       "failureMode": "High 5xx error rate",
       "severity": "critical",
-      "alerts": [
-        "ApiHighErrorRate"
-      ],
+      "alerts": ["ApiHighErrorRate"],
       "runbook": "docs/runbooks/p0-failure-modes.md#apihigherrorrate",
       "status": "tested-live",
-      "liveCase": [
-        "pg-down"
-      ]
+      "liveCase": ["pg-down"]
     },
     {
       "id": "high-latency",
       "failureMode": "High request latency",
       "severity": "critical",
-      "alerts": [
-        "ApiCallerLatencyHigh",
-        "EventLoopBlockingWithImpact"
-      ],
+      "alerts": ["ApiCallerLatencyHigh", "EventLoopBlockingWithImpact"],
       "runbook": "docs/performance/event-loop/event-loop-observability-runbook.md",
       "status": "tested-promtool"
     },
@@ -277,11 +221,7 @@
       "id": "provider-send-failures",
       "failureMode": "WhatsApp / provider send failures",
       "severity": "critical",
-      "alerts": [
-        "QueueFailedJobsGrowing",
-        "InteractiveQueueOldestJobAge",
-        "DeadLetterOpenTooLong"
-      ],
+      "alerts": ["QueueFailedJobsGrowing", "InteractiveQueueOldestJobAge", "DeadLetterOpenTooLong"],
       "runbook": "docs/runbooks/p0-failure-modes.md#deadletteropentoolong",
       "status": "mapped-untested",
       "note": "covered by the generic queue and failed-work alerts; a send-failure RATE per provider needs crm_provider_send_total{provider,outcome}, which does not exist"
@@ -290,10 +230,7 @@
       "id": "webhook-delivery",
       "failureMode": "Inbound/outbound webhook delivery failures",
       "severity": "critical",
-      "alerts": [
-        "CriticalQueueOldestJobAge",
-        "DeadLetterOpenTooLong"
-      ],
+      "alerts": ["CriticalQueueOldestJobAge", "DeadLetterOpenTooLong"],
       "runbook": "docs/performance/queue-capacity/queue-observability-runbook.md",
       "status": "tested-promtool",
       "note": "webhook-ingest and webhook-retry are in the Critical queue class"
@@ -328,10 +265,7 @@
       "id": "deploy-failure",
       "failureMode": "Deploy / release failure",
       "severity": "critical",
-      "alerts": [
-        "ApiProbeFailing",
-        "RuntimeMetricsTargetDown"
-      ],
+      "alerts": ["ApiProbeFailing", "RuntimeMetricsTargetDown"],
       "runbook": "deploy/hostinger/README.md",
       "status": "mapped-untested",
       "note": "a failed release that leaves the old slot serving is NOT detected: needs crm_build_info{version} plus a deploy-result metric"
@@ -340,38 +274,49 @@
       "id": "backup-failure",
       "failureMode": "Backup failure / stale backup",
       "severity": "critical",
-      "alerts": [
-        "BackupStale",
-        "BackupMarkerMissing",
-        "OffsiteBackupStale"
-      ],
+      "alerts": ["BackupStale", "BackupMarkerMissing", "OffsiteBackupStale"],
       "runbook": "docs/runbooks/health-readiness.md#backupstale",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "postgres-unreachable",
+      "failureMode": "Postgres primary unreachable (direct gauge)",
+      "severity": "critical",
+      "alerts": ["PostgresDown"],
+      "runbook": "docs/runbooks/health-readiness.md#postgresdown",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "object-store-unreachable",
+      "failureMode": "Object store unreachable (not part of /ready)",
+      "severity": "warning",
+      "alerts": ["ObjectStoreUnreachable"],
+      "runbook": "docs/runbooks/health-readiness.md#objectstoreunreachable",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "monitoring-dead",
+      "failureMode": "Prometheus or Alertmanager dead (dead-man's-switch)",
+      "severity": "critical",
+      "alerts": ["Watchdog"],
+      "runbook": "docs/runbooks/health-readiness.md#watchdog",
       "status": "tested-promtool"
     },
     {
       "id": "metrics-pipeline-targets",
       "failureMode": "Metrics pipeline: exporter stale or target down",
       "severity": "critical",
-      "alerts": [
-        "RuntimeMetricsTargetDown",
-        "RuntimeMetricsStale"
-      ],
+      "alerts": ["RuntimeMetricsTargetDown", "RuntimeMetricsStale"],
       "runbook": "docs/performance/event-loop/event-loop-observability-runbook.md",
       "status": "tested-live",
-      "liveCase": [
-        "worker-kill",
-        "api-stop"
-      ]
+      "liveCase": ["worker-kill", "api-stop"]
     },
     {
       "id": "cache-health",
       "p0": false,
       "failureMode": "Cache hit ratio low / cache metrics missing (degradation, not an outage)",
       "severity": "warning",
-      "alerts": [
-        "CacheHitRatioLow",
-        "CacheMetricsMissing"
-      ],
+      "alerts": ["CacheHitRatioLow", "CacheMetricsMissing"],
       "runbook": "docs/runbooks/cache-hit-rate.md",
       "status": "tested-promtool"
     },
@@ -396,10 +341,7 @@
       "p0": false,
       "failureMode": "CPU throttling and PID limit early warnings",
       "severity": "warning",
-      "alerts": [
-        "ContainerCpuThrottled",
-        "ContainerPidsNearLimit"
-      ],
+      "alerts": ["ContainerCpuThrottled", "ContainerPidsNearLimit"],
       "runbook": "docs/performance/resource-limits/README.md",
       "status": "tested-promtool"
     },
@@ -415,36 +357,6 @@
         "reason": "needs a service outside this stack",
         "canInduceOnLaptop": true
       }
-    },
-    {
-      "id": "postgres-unreachable",
-      "failureMode": "Postgres primary unreachable (direct gauge)",
-      "severity": "critical",
-      "alerts": [
-        "PostgresDown"
-      ],
-      "runbook": "docs/runbooks/health-readiness.md#postgresdown",
-      "status": "tested-promtool"
-    },
-    {
-      "id": "object-store-unreachable",
-      "failureMode": "Object store unreachable (not part of /ready)",
-      "severity": "warning",
-      "alerts": [
-        "ObjectStoreUnreachable"
-      ],
-      "runbook": "docs/runbooks/health-readiness.md#objectstoreunreachable",
-      "status": "tested-promtool"
-    },
-    {
-      "id": "monitoring-dead",
-      "failureMode": "Prometheus or Alertmanager dead (dead-man's-switch)",
-      "severity": "critical",
-      "alerts": [
-        "Watchdog"
-      ],
-      "runbook": "docs/runbooks/health-readiness.md#watchdog",
-      "status": "tested-promtool"
     }
   ]
 }
