@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "閉じる"
     },
+    "list": {
+      "unofficialDisabled": "非公式(無効)"
+    },
     "detail": {
       "back": "戻る",
       "crumb": "一斉配信 / 分析 / #{ref}",

@@ -144,8 +144,7 @@ async function customerThread(thread: string, from: string) {
 }
 
 /** Sends a reply through the inbox API and waits for the provider to have it. Returns the Message-ID it went out with. */
-async function reply(conv: Record<string, any>, text = 'We are on it.') {
-  // eslint-disable-line @typescript-eslint/no-explicit-any
+async function reply(conv: Record<string, unknown>, text = 'We are on it.') {
   const before = rig.fake.sentTo(ADDR).length;
   const clientMessageId = randomUUID();
   const res = await rig.p.api

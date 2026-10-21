@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Dispensar"
     },
+    "list": {
+      "unofficialDisabled": "Não oficial (desativado)"
+    },
     "detail": {
       "back": "Voltar",
       "crumb": "Transmissões / Análises / #{ref}",

@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Back to the inbox",
-        "title": "Conversation tags",
+        "title": "Tags",
         "intro": "Conversation tags mark a thread (billing, refund, urgent) so your team can sort and filter the inbox. They come from the same tag library as contact tags, which describe the person.",
         "newTitle": "New tag",
         "editTitle": "Edit tag",

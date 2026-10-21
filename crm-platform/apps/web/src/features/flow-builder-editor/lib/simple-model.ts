@@ -1142,43 +1142,48 @@ function conditionSummary(d: Record<string, unknown>): string {
   return first ? [str(first.variable), str(first.operator), str(first.value)].join(' ').trim() : '';
 }
 
+/**
+ * The text a step sends as WhatsApp text, as the message box holds it: its marks (`*bold*`) and its line breaks. '' for a step that
+ * sends none of its own text.
+ */
+export function stepText(s: SimpleStep): string {
+  if (s.type === 'message') return str(s.data.text);
+  if (s.type === 'ask' || s.type === 'buttons' || s.type === 'list') return str(s.data.prompt);
+  return '';
+}
+
 export function stepSummary(s: SimpleStep, t: Translate): string {
   const d = s.data;
   const raw =
-    s.type === 'message'
-      ? str(d.text)
-      : s.type === 'ask'
-        ? str(d.prompt)
-        : s.type === 'buttons' || s.type === 'list'
-          ? str(d.prompt)
-          : s.type === 'media'
-            ? str(d.caption) || str(d.url)
-            : s.type === 'location'
-              ? str(d.title) || str(d.address) || coordsSummary(d)
-              : s.type === 'template'
-                ? str(d.tpl)
-                : s.type === 'condition'
-                  ? conditionSummary(d)
-                  : s.type === 'carousel'
-                    ? arr(d.cards)
-                        .map((c) => str((c as Record<string, unknown>).title))
-                        .filter(Boolean)
-                        .join(' · ')
-                    : s.type === 'cta'
-                      ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
-                      : s.type === 'delay'
-                        ? delaySummary(t, d)
-                        : s.type === 'assign'
-                          ? str(d.message)
-                          : s.type === 'api_library'
-                            ? str(d.apiName)
-                            : s.type === 'webhook'
-                              ? str(d.url)
-                              : s.type === 'code'
-                                ? str(d.save)
-                                : s.type === 'ai'
-                                  ? str(d.prompt)
-                                  : '';
+    stepText(s) ||
+    (s.type === 'media'
+      ? str(d.caption) || str(d.url)
+      : s.type === 'location'
+        ? str(d.title) || str(d.address) || coordsSummary(d)
+        : s.type === 'template'
+          ? str(d.tpl)
+          : s.type === 'condition'
+            ? conditionSummary(d)
+            : s.type === 'carousel'
+              ? arr(d.cards)
+                  .map((c) => str((c as Record<string, unknown>).title))
+                  .filter(Boolean)
+                  .join(' · ')
+              : s.type === 'cta'
+                ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
+                : s.type === 'delay'
+                  ? delaySummary(t, d)
+                  : s.type === 'assign'
+                    ? str(d.message)
+                    : s.type === 'api_library'
+                      ? str(d.apiName)
+                      : s.type === 'webhook'
+                        ? str(d.url)
+                        : s.type === 'code'
+                          ? str(d.save)
+                          : s.type === 'ai'
+                            ? str(d.prompt)
+                            : '');
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }

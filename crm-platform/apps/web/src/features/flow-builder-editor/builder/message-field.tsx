@@ -10,12 +10,11 @@ import { EMOJIS, searchEmoji } from '../lib/emoji-data';
 import {
   clip,
   toggleList,
-  toggleMark,
   variableToken,
   type ListKind,
   type MarkKind,
 } from '../lib/message-tools';
-import { htmlToMarks, marksToHtml, placeCaret } from '../lib/rich-text';
+import { htmlToMarks, marksToHtml, placeCaret, RICH_TEXT_CLASS } from '../lib/rich-text';
 
 type Panel = 'format' | 'emoji' | 'variable' | null;
 
@@ -133,6 +132,8 @@ export function MessageField({
     if (text !== value) onChange(text);
   };
   const run = (command: string, arg?: string) => {
+    // A shortcut arrives while the words are still selected: take that selection, not the one the last mouse or key left behind.
+    remember();
     if (!focusBox()) return;
     document.execCommand(command, false, arg);
     sync();
@@ -256,6 +257,15 @@ export function MessageField({
                 e.preventDefault();
                 document.execCommand('insertLineBreak');
                 sync();
+              } else if (
+                (e.ctrlKey || e.metaKey) &&
+                !e.altKey &&
+                !e.shiftKey &&
+                /^[bi]$/i.test(e.key)
+              ) {
+                // Ctrl/Cmd+B and Ctrl/Cmd+I are the toolbar's bold and italic, run here so they do not depend on the browser's own command.
+                e.preventDefault();
+                format(e.key.toLowerCase() === 'b' ? 'bold' : 'italic');
               } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
                 e.preventDefault();
                 run('strikeThrough');
@@ -268,7 +278,7 @@ export function MessageField({
               sync();
               remember();
             }}
-            className="block w-full resize-y overflow-auto whitespace-pre-wrap break-words rounded-t-lg bg-transparent px-3 pb-1 pt-2.5 text-[13px] outline-none [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-[12px]"
+            className={`block w-full resize-y overflow-auto whitespace-pre-wrap break-words rounded-t-lg bg-transparent px-3 pb-1 pt-2.5 text-[13px] outline-none ${RICH_TEXT_CLASS}`}
           />
         </div>
         <div

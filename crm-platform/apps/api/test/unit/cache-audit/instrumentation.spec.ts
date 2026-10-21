@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { loadRegister, type Register } from './checks';
+import { loadRegister, type CacheInstrumentation, type Register } from './checks';
 import {
   RULES_PATH,
   checkInstrumentation,
@@ -46,7 +46,12 @@ describe('part 2: each rule fails on bad input', () => {
 
   it('a new cache added to the register with no instrumentation entry fails', () => {
     const r = clone();
-    r.caches.push({ ...r.caches[0]!, id: 'X99', instrumentation: undefined });
+    // A cache with no instrumentation block at all; the type says it always has one, so the missing block is cast in.
+    r.caches.push({
+      ...r.caches[0]!,
+      id: 'X99',
+      instrumentation: undefined as unknown as CacheInstrumentation,
+    });
     const v = checkInstrumentation(r, real);
     expect(v.join('\n')).toContain('X99: no instrumentation entry');
   });

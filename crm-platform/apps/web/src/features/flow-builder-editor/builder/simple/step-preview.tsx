@@ -1,9 +1,29 @@
 import type { SimpleStep } from '../../lib/simple-model';
+import { marksToHtml, RICH_TEXT_CLASS } from '../../lib/rich-text';
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 const rec = (v: unknown): Record<string, unknown> =>
   v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
+
+/**
+ * A message-like step's text on its collapsed card: the marks drawn as bold, italic and so on, and every line break kept, as the box
+ * shows them. With no text, the one-line `fallback`.
+ */
+export function StepText({ text, fallback }: { text: string; fallback: string }) {
+  if (!text.trim())
+    return (
+      <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
+        {fallback}
+      </p>
+    );
+  return (
+    <p
+      className={`line-clamp-4 break-words text-[13px] text-muted-foreground ${RICH_TEXT_CLASS}`}
+      dangerouslySetInnerHTML={{ __html: marksToHtml(text.trimEnd()) }}
+    />
+  );
+}
 
 /**
  * What a Media, Carousel or Link step sends, drawn under its collapsed card: the picture / video / audio, the first card's picture
@@ -16,7 +36,6 @@ export function StepPreview({ step }: { step: SimpleStep }) {
     if (!url) return null;
     const kind = str(d.kind) || 'image';
     if (kind === 'image')
-      // eslint-disable-next-line @next/next/no-img-element
       return (
         <img
           src={url}
@@ -53,7 +72,6 @@ export function StepPreview({ step }: { step: SimpleStep }) {
     return (
       <div className="mt-3 flex items-center gap-2">
         {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={image}
             alt=""

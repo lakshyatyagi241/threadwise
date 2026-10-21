@@ -15,6 +15,11 @@ describe('rich text of the message box', () => {
     expect(marksToHtml('<b>&')).toBe('&lt;b&gt;&amp;');
   });
 
+  it('marks only at a word edge, so snake_case names stay as typed', () => {
+    expect(marksToHtml('set_user_name_now')).toBe('set_user_name_now');
+    expect(marksToHtml('*Hi*, _x_.')).toBe('<b>Hi</b>, <i>x</i>.');
+  });
+
   it('leaves a mark with a space inside as it was typed', () => {
     expect(marksToHtml('2 * 3 * 4')).toBe('2 * 3 * 4');
   });

@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Terug naar de inbox",
-        "title": "Gesprekstags",
+        "title": "Tags",
         "intro": "Gesprekstags markeren een conversatie (facturatie, terugbetaling, urgent) zodat je team de inbox kan sorteren en filteren. Ze komen uit dezelfde tagbibliotheek als contacttags, die de persoon beschrijven.",
         "newTitle": "Nieuwe tag",
         "editTitle": "Tag bewerken",

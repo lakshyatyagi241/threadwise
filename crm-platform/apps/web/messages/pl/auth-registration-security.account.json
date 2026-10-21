@@ -535,6 +535,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Lejek sprzedaży",
             "appointment_booking": "Spotkania",
+            "appointment_confirm_buttons": "Przyciski przypomnienia",
+            "appointment_rebook_steps": "Kroki ponownego umówienia",
             "chatbot_widgets": "Widżety chatbota",
             "wa_storefront": "Katalog WhatsApp",
             "inbox_sla": "SLA skrzynki odbiorczej",

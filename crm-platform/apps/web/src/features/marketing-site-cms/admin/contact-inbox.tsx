@@ -45,7 +45,7 @@ export function ContactInbox() {
   const summary = list.data?.pages[0]?.summary;
   const when = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    [locale, timeZone],
   );
 
   const setRead = useMutation({

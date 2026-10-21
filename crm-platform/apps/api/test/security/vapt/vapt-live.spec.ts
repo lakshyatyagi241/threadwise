@@ -20,11 +20,17 @@ const WHO = {
 };
 const GHOST = '00000000-0000-4000-8000-000000000001';
 
+/** The JSON bodies these checks read: a login's tokens, the id of a created record, and a refresh rotation's new token. */
+interface JsonBody {
+  id: string;
+  tokens?: { accessToken: string; refreshToken: string };
+  refreshToken?: string;
+}
 interface Res {
   status: number;
   headers: Headers;
   text: string;
-  json: any;
+  json: JsonBody | undefined;
 }
 const call = async (
   method: string,
@@ -44,7 +50,7 @@ const call = async (
     redirect: 'manual',
   });
   const text = await r.text();
-  let json: any;
+  let json: JsonBody | undefined;
   try {
     json = JSON.parse(text);
   } catch {
@@ -76,7 +82,7 @@ describe.skipIf(!local)('VAPT live checks', () => {
     const mk = async (k: string, path: string, body: unknown) => {
       const r = await call('POST', path, A, body);
       expect(r.status, `${path} -> ${r.text}`).toBe(201);
-      ids[k] = r.json.id;
+      ids[k] = r.json!.id;
     };
     await mk('contacts', '/v2/contacts', {
       name: 'Vapt IDOR',
@@ -148,8 +154,8 @@ describe.skipIf(!local)('VAPT live checks', () => {
       });
       expect(r.status === 201 || r.status === 422).toBe(true);
       if (r.status === 201) {
-        expect(r.json.id).not.toBe(GHOST);
-        expect((await call('GET', `/v2/contacts/${r.json.id}`, B)).status).toBe(404);
+        expect(r.json!.id).not.toBe(GHOST);
+        expect((await call('GET', `/v2/contacts/${r.json!.id}`, B)).status).toBe(404);
       }
     });
   });
@@ -171,13 +177,13 @@ describe.skipIf(!local)('VAPT live checks', () => {
       const r1 = await call('POST', '/v2/auth/refresh', undefined, { refreshToken: s.refresh });
       expect(r1.status).toBe(201);
       const r2 = await call('POST', '/v2/auth/refresh', undefined, {
-        refreshToken: r1.json.tokens?.refreshToken ?? r1.json.refreshToken,
+        refreshToken: r1.json!.tokens?.refreshToken ?? r1.json!.refreshToken,
       });
       expect(r2.status).toBe(201);
       expect(
         (await call('POST', '/v2/auth/refresh', undefined, { refreshToken: s.refresh })).status,
       ).toBe(401);
-      const live = r2.json.tokens?.refreshToken ?? r2.json.refreshToken;
+      const live = r2.json!.tokens?.refreshToken ?? r2.json!.refreshToken;
       expect(
         (await call('POST', '/v2/auth/refresh', undefined, { refreshToken: live })).status,
         'session revoked after reuse',
@@ -299,7 +305,13 @@ describe.skipIf(!local)('VAPT live checks', () => {
     it('spraying made-up addresses hits 429 at the per-IP ceiling', async () => {
       let hit = false;
       for (let i = 0; i < 45 && !hit; i++) {
-        hit = (await call('POST', '/v2/auth/login', undefined, { email: `nobody${i}@vapt.test`, password: `wrong-${i}` })).status === 429;
+        hit =
+          (
+            await call('POST', '/v2/auth/login', undefined, {
+              email: `nobody${i}@vapt.test`,
+              password: `wrong-${i}`,
+            })
+          ).status === 429;
       }
       expect(hit).toBe(true);
     });

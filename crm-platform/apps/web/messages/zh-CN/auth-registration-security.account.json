@@ -535,6 +535,8 @@
             "remove_branding": "白标",
             "sales_pipeline": "销售管道",
             "appointment_booking": "预约",
+            "appointment_confirm_buttons": "提醒按钮",
+            "appointment_rebook_steps": "再预约步骤",
             "chatbot_widgets": "聊天机器人小组件",
             "wa_storefront": "WhatsApp 商品目录",
             "inbox_sla": "收件箱 SLA",

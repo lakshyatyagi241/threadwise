@@ -19,6 +19,8 @@ import {
   STEP_KINDS,
   stageIn,
   stepLabel,
+  stepSummary,
+  stepText,
   removeStep,
   stageLabel,
   LINK_END,
@@ -1316,5 +1318,29 @@ describe('the Human handoff returned exit in the Simple builder (Return to bot)'
     const g = handoffGraph();
     g.flowEdges.push(edge('h', 'waiting', 'm'));
     expect(toSimple(g)).toMatchObject({ ok: false });
+  });
+});
+
+describe('the closed step card text', () => {
+  const withText = (type: 'message' | 'ask', data: Record<string, unknown>) => ({
+    ...newStep(type, []),
+    data,
+  });
+
+  it('keeps the marks and every line break for the message box to draw', () => {
+    expect(stepText(withText('message', { text: '*Welcome*\n\nHello _there_' }))).toBe(
+      '*Welcome*\n\nHello _there_',
+    );
+    expect(stepText(withText('ask', { prompt: '_Your name?_' }))).toBe('_Your name?_');
+  });
+
+  it('gives no text for a step that sends none of its own', () => {
+    expect(stepText(withText('ask', {}))).toBe('');
+    expect(stepText({ ...newStep('webhook', []), data: { url: 'https://x.test/a_b_c' } })).toBe('');
+  });
+
+  it('keeps the one-line summary: lines joined, cut at 40 characters', () => {
+    const s = withText('message', { text: '*Welcome to campaigns for geta.ai* _Hello\nthere_' });
+    expect(stepSummary(s, (key) => key)).toBe('*Welcome to campaigns for geta.ai* _Hell…');
   });
 });

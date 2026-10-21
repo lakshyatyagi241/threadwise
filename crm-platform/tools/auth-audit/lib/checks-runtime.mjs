@@ -597,6 +597,7 @@ const SECRET_PATTERNS = [
 ];
 const PLACEHOLDER =
   /(replace|example|changeme|change-me|your[_-]|placeholder|dummy|sample|test|fake|xxxx|\*\*\*|dev-only|redacted|localhost|process\.env|import\.meta|not-a-secret)/i;
+const ENV_VAR_NAME = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+$/;
 
 function listTracked() {
   return run('git', ['ls-files', '-z'], { cwd: REPO_ROOT, timeoutMs: 60000 }).then((r) => {
@@ -611,8 +612,10 @@ function listTracked() {
 
 const SKIP_FILE =
   /(^|\/)(pnpm-lock\.yaml|package-lock\.json|yarn\.lock)$|\.(png|jpe?g|gif|webp|ico|svg|woff2?|ttf|eot|pdf|zip|gz|mp4|mov|map|lock|snap|xlsx|docx|min\.js)$|(^|\/)(node_modules|dist|\.next)\//i;
+// tools/sast-report/baseline.json quotes the fake keys of the reviewed spec fixtures it suppresses (each entry says so), so it is
+// counted with the test fixtures, not as source.
 const TESTISH =
-  /(^|\/)(test|tests|e2e|__tests__|fixtures?|mocks?|docs?|examples?)\/|\.(spec|test)\.[tj]sx?$|\.example$|\.md$|(^|\/)[\w.-]*(fixtures?|mocks?|stubs?|demo|seed)[\w.-]*\.[tj]sx?$/i;
+  /(^|\/)(test|tests|e2e|__tests__|fixtures?|mocks?|docs?|examples?)\/|\.(spec|test)\.[tj]sx?$|\.example$|\.md$|(^|\/)[\w.-]*(fixtures?|mocks?|stubs?|demo|seed)[\w.-]*\.[tj]sx?$|^tools\/sast-report\/baseline\.json$/i;
 
 export async function runSecretScan(ctx) {
   const out = [];
@@ -660,6 +663,8 @@ export async function runSecretScan(ctx) {
         const value = p.value ? m[p.value] : m[0];
         if (PLACEHOLDER.test(line) || PLACEHOLDER.test(value ?? '')) continue;
         if (/^[A-Za-z]+$/.test(value ?? '') && (value ?? '').length < 24) continue;
+        // An environment variable name (ZOOM_CLIENT_SECRET) is the name an operator types, not the secret it names.
+        if (ENV_VAR_NAME.test(value ?? '')) continue;
         hits.push({
           file: f.path,
           line: i + 1,
