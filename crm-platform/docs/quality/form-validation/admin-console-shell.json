@@ -1,0 +1,448 @@
+{
+  "module": "admin-console-shell",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "saveQuickAccessRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/shell-user.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "items",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "items",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "items",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 200 items",
+          "value": "array of 200",
+          "priority": "P2"
+        },
+        {
+          "field": "items",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (200) items",
+          "value": "array of 201",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "saveNavLayoutRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/shell.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "bar",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "bar",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "bar",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 100 items",
+          "value": "array of 100",
+          "priority": "P2"
+        },
+        {
+          "field": "bar",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (100) items",
+          "value": "array of 101",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateWorkspaceSettingsRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/workspace-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "currency",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "currency",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "currency",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (10)",
+          "value": "\"aaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "currency",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (10)",
+          "value": "\"aaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "currency",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (10)",
+          "value": "\"😀😀😀😀😀\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateWorkingHoursSchema",
+      "file": "apps/api/src/modules/admin-console-shell/workspace-settings.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "no valid body could be built from the schema (cross-field or pattern rule)",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "saveNotificationPrefsRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/workspace-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "events",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "categories",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "slackWebhook",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "slackWebhook",
+          "reason": "union: only the base option is exercised",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "saveResidencyRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/workspace-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "residency",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "residency",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "residency",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (local)",
+          "value": "\"local\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "deleteWorkspaceRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/workspace-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "confirmName",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmName",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmName",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmName",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmName",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmName",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmName",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "password",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (256)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (256)",
+          "value": "\"a\" x 257",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (256)",
+          "value": "\"😀\" x 256",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "savePreferencesRequestSchema",
+      "file": "apps/api/src/modules/admin-console-shell/workspace-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "autoAiSummarize",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "autoAiSummarize",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

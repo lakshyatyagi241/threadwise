@@ -1,0 +1,77 @@
+{
+  "module": "google-account",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "googleConnectInputSchema",
+      "file": "apps/api/src/modules/google-account/google-account.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "capabilities",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "capabilities",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "capabilities",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P1"
+        },
+        {
+          "field": "capabilities",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 5 items",
+          "value": "[\"calendar\",\"calendar\",\"calendar\",\"calendar\",\"calendar\"]",
+          "priority": "P1"
+        },
+        {
+          "field": "capabilities",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (5) items",
+          "value": "[\"calendar\",\"calendar\",\"calendar\",\"calendar\",\"calendar\",\"calendar\"]",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "returnTo",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}

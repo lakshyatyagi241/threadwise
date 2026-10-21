@@ -32,6 +32,8 @@
     "qa:script-testing": "bash script-testing/run-all.sh",
     "qa:script-testing:list": "bash script-testing/run-all.sh --list",
     "qa:script-testing:quick": "bash script-testing/run-all.sh --quick",
+    "qa:form-validation": "node tools/quality/form-validation.mjs && node --test tools/quality/form-validation.test.mjs",
+    "qa:responsive": "pnpm --filter @crm/web exec playwright test e2e/responsive",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:nuke": "docker compose down -v",
