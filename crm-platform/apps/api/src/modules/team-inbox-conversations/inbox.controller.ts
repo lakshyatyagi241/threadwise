@@ -20,6 +20,7 @@ import type { Response } from 'express';
 import {
   createConversationNoteSchema,
   createMessageLogExportSchema,
+  inboxCountsQuerySchema,
   listConversationEventsQuerySchema,
   listConversationGroupMembersQuerySchema,
   listConversationNotesQuerySchema,
@@ -35,6 +36,7 @@ import {
   snoozeConversationSchema,
   type CreateConversationNoteInput,
   type CreateMessageLogExportInput,
+  type InboxCountsQuery,
   type ListConversationEventsQuery,
   type ListConversationGroupMembersQuery,
   type ListConversationNotesQuery,
@@ -103,9 +105,13 @@ export class InboxController {
 
   @Get('counts')
   @RequirePermission('inbox.conversation.read')
-  @ApiOperation({ summary: 'Tab badges and the archived count (the safety poll)' })
-  async counts() {
-    return this.conversations.counts();
+  @ApiOperation({
+    summary: 'Tab badges and the archived count (the safety poll)',
+    description:
+      'The list’s filters (status, channel, search, tags, assignment, agents, dates, archived; not the tab, sort or page). With none, the open threads. Each badge equals what its tab lists under the same filters.',
+  })
+  async counts(@Query(zodPipe(inboxCountsQuerySchema)) query: InboxCountsQuery) {
+    return this.conversations.counts(query);
   }
 
   @Post('media')

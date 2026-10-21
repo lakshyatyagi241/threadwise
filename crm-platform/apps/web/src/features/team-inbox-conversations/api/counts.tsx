@@ -32,7 +32,7 @@ export function useInboxUnreadCount(enabled: boolean): number | null {
   const interval = pollMsFor(useRealtimeStatus());
   const query = useQuery({
     queryKey: INBOX_COUNTS_KEY,
-    queryFn: ({ signal }) => inboxApi.counts(signal),
+    queryFn: ({ signal }) => inboxApi.counts(null, signal),
     meta: BACKGROUND_META,
     enabled,
     // Only while the tab is in front (and safe to evaluate on the server, where there is no document).

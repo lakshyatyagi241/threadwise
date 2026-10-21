@@ -12,7 +12,12 @@ import { migrationChecksum, recordedChecksumMatches } from './checksum';
  * Behaviour:
  *   - files apply in filename order, each inside its own transaction
  *   - a file whose first line is `-- @no-transaction` runs outside one
- *     (required for CREATE INDEX CONCURRENTLY and ALTER TYPE ... ADD VALUE)
+ *     (required for CREATE INDEX CONCURRENTLY and ALTER TYPE ... ADD VALUE).
+ *     Its statement and its record are two steps, so a crash between them
+ *     leaves the statement applied and unrecorded: such a file must be safe
+ *     to rerun (CREATE INDEX CONCURRENTLY IF NOT EXISTS). Before it runs, the
+ *     runner refuses while an index the file itself builds is INVALID, so
+ *     IF NOT EXISTS never skips a failed build
  *   - every applied file's sha256 is recorded; editing an applied migration
  *     is refused, because the database and the repo would silently disagree
  *   - a session advisory lock serialises concurrent runners (two app
@@ -51,6 +56,49 @@ export function loadMigrations(dir: string = MIGRATIONS_DIR): MigrationFile[] {
         noTransaction: /^\s*--\s*@no-transaction/m.test(sql.split('\n')[0] ?? ''),
       };
     });
+}
+
+const CONCURRENT_INDEX =
+  /\bCREATE\s+(?:UNIQUE\s+)?INDEX\s+CONCURRENTLY\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:(?:[A-Za-z_]\w*|"[^"]+")\s*\.\s*)?("[^"]+"|[A-Za-z_]\w*)/gi;
+
+/**
+ * Names of the indexes a file builds with CREATE INDEX CONCURRENTLY, read from its SQL with comments removed. Only these are
+ * checked before the file runs: an INVALID index elsewhere in the database belongs to some other build.
+ */
+function concurrentIndexNames(sql: string): string[] {
+  const code = sql.replace(/\/\*[\s\S]*?\*\//g, '').replace(/--.*$/gm, '');
+  const names = new Set<string>();
+  for (const match of code.matchAll(CONCURRENT_INDEX)) {
+    const token = match[1] ?? '';
+    names.add(token.startsWith('"') ? token.slice(1, -1) : token.toLowerCase());
+  }
+  return [...names];
+}
+
+/**
+ * A failed or interrupted CONCURRENTLY build leaves its index INVALID, and IF NOT EXISTS would skip that name without a word.
+ * The runner does not drop it (that would hide the failure): it stops before the statement and names the recovery. Nothing of
+ * the file has run at that point.
+ */
+async function assertNoInvalidIndex(client: Client, file: MigrationFile): Promise<void> {
+  const names = concurrentIndexNames(file.sql);
+  if (names.length === 0) return;
+  const { rows } = await client.query<{ name: string }>(
+    `SELECT c.relname AS name
+       FROM pg_index ix
+       JOIN pg_class c ON c.oid = ix.indexrelid
+       JOIN pg_namespace n ON n.oid = c.relnamespace
+      WHERE NOT ix.indisvalid AND n.nspname = current_schema() AND c.relname = ANY($1::text[])`,
+    [names],
+  );
+  if (rows.length === 0) return;
+  const recovery = rows.map((r) => `DROP INDEX CONCURRENTLY ${r.name};`).join(' ');
+  throw new Error(
+    `Migration ${file.id} did not run: ${rows.map((r) => r.name).join(', ')} ` +
+      `${rows.length === 1 ? 'is' : 'are'} INVALID, left by a CONCURRENTLY build that failed or was interrupted.\n` +
+      `Recovery, then rerun the migration: ${recovery}\n` +
+      `If the build is still running (pg_stat_progress_create_index), wait for it instead.`,
+  );
 }
 
 async function ensureMigrationsTable(client: Client): Promise<void> {
@@ -113,6 +161,7 @@ export async function runMigrations(
       log(`  applying ${file.id}${file.noTransaction ? ' (no transaction)' : ''}`);
 
       if (file.noTransaction) {
+        await assertNoInvalidIndex(client, file);
         await client.query(file.sql);
       } else {
         await client.query('BEGIN');

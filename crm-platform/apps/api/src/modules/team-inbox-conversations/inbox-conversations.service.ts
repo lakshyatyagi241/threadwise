@@ -12,6 +12,7 @@ import {
   type ConversationSummary,
   type InboxConversationDetail,
   type InboxCounts,
+  type InboxCountsQuery,
   type ListConversationsQuery,
   type MarkConversationReadInput,
   type MarkConversationReadResponse,
@@ -46,6 +47,7 @@ import {
   ConversationsRepository,
   decodeListCursor,
   encodeListCursor,
+  type CountFilter,
   type InboxConversationRow,
 } from './conversations.repository';
 import { NotificationsService } from '../notifications';
@@ -54,6 +56,16 @@ import { InboxRealtimePublisher } from './inbox-realtime.publisher';
 import { canActOn } from '../../kernel/rbac/scope';
 
 const MODULE_KEY = 'conversations';
+
+/** The badges when nothing matches (a channel of nobody): every count is zero, the archived one too. A fresh object each time. */
+const noCounts = (): InboxCounts => ({
+  all: 0,
+  mine: 0,
+  unassigned: 0,
+  unread: 0,
+  waiting: 0,
+  archived: 0,
+});
 
 /** What the composer is offered when a channel's adapter is not in this deployment: nothing can be sent through it. */
 const NO_CAPABILITIES: ChannelCapabilities = {
@@ -97,52 +109,19 @@ export class InboxConversationsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const viewer = await this.access.viewer(tx, ctx);
-
-      // A channel that is not in this workspace has no conversations: the filter must narrow to nothing, not be ignored.
-      let channelId: number | undefined;
-      if (query.channelId) {
-        const channel = await this.channels.findByUuid(tx, ctx.orgId, query.channelId);
-        if (!channel) {
-          return {
-            data: [],
-            page: { nextCursor: null, hasMore: false, limit: query.limit },
-            meta: { counts: await this.repo.counts(tx, ctx.orgId, viewer) },
-          };
-        }
-        channelId = channel.id;
-      }
-      // Several channels (the Filters window): one that is not in this workspace is skipped, and when none is, nothing matches.
-      let channelIds: number[] | undefined;
-      if (query.channelIds.length > 0) {
-        const found = await Promise.all(
-          [...new Set(query.channelIds)].map((u) => this.channels.findByUuid(tx, ctx.orgId, u)),
-        );
-        channelIds = found.filter((c) => c !== null && c !== undefined).map((c) => c!.id);
-        if (channelIds.length === 0) {
-          return {
-            data: [],
-            page: { nextCursor: null, hasMore: false, limit: query.limit },
-            meta: { counts: await this.repo.counts(tx, ctx.orgId, viewer) },
-          };
-        }
+      const scope = await this.scopeOf(tx, ctx.orgId, query);
+      if (!scope) {
+        return {
+          data: [],
+          page: { nextCursor: null, hasMore: false, limit: query.limit },
+          meta: { counts: noCounts() },
+        };
       }
 
       const rows = await this.repo.list(tx, ctx.orgId, viewer, {
+        ...scope,
         tab: query.tab,
-        status: query.status,
-        statuses: query.statuses,
-        assignment: query.assignment,
-        agentIds: [...new Set(query.agentIds)],
         sort: query.sort,
-        from: query.from,
-        to: query.to,
-        channelId,
-        channelIds,
-        // `labels` is the original name of the `tags` query parameter; both are read.
-        tagIds: [...new Set([...query.tags, ...query.labels])],
-        tagScope: query.tagScope,
-        q: query.q,
-        archived: query.archived,
         limit: query.limit,
         cursor: query.cursor ? decodeListCursor(query.cursor) : undefined,
       });
@@ -163,17 +142,60 @@ export class InboxConversationsService {
           hasMore,
           limit: query.limit,
         },
-        meta: { counts: await this.repo.counts(tx, ctx.orgId, viewer, channelId) },
+        meta: { counts: await this.repo.counts(tx, ctx.orgId, viewer, scope) },
       };
     });
   }
 
-  async counts(): Promise<InboxCounts> {
+  /** The tab badges for the filters on the query string, the same ones the list applies (`GET /inbox/counts`). */
+  async counts(query: InboxCountsQuery): Promise<InboxCounts> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const viewer = await this.access.viewer(tx, ctx);
-      return this.repo.counts(tx, ctx.orgId, viewer);
+      const scope = await this.scopeOf(tx, ctx.orgId, query);
+      return scope ? this.repo.counts(tx, ctx.orgId, viewer, scope) : noCounts();
     });
+  }
+
+  /**
+   * The filters the list and its badges share, read from the query string. A channel that is not in this workspace has no
+   * conversations, so the filter narrows to nothing (`null`), not to everything.
+   */
+  private async scopeOf(
+    tx: Tx,
+    orgId: number,
+    query: InboxCountsQuery,
+  ): Promise<CountFilter | null> {
+    let channelId: number | undefined;
+    if (query.channelId) {
+      const channel = await this.channels.findByUuid(tx, orgId, query.channelId);
+      if (!channel) return null;
+      channelId = channel.id;
+    }
+    // Several channels (the Filters window): one that is not in this workspace is skipped, and when none is, nothing matches.
+    let channelIds: number[] | undefined;
+    if (query.channelIds.length > 0) {
+      const found = await Promise.all(
+        [...new Set(query.channelIds)].map((u) => this.channels.findByUuid(tx, orgId, u)),
+      );
+      channelIds = found.filter((c) => c !== null && c !== undefined).map((c) => c!.id);
+      if (channelIds.length === 0) return null;
+    }
+    return {
+      status: query.status,
+      statuses: query.statuses,
+      assignment: query.assignment,
+      agentIds: [...new Set(query.agentIds)],
+      from: query.from,
+      to: query.to,
+      channelId,
+      channelIds,
+      // `labels` is the original name of the `tags` query parameter; both are read.
+      tagIds: [...new Set([...query.tags, ...query.labels])],
+      tagScope: query.tagScope,
+      q: query.q,
+      archived: query.archived,
+    };
   }
 
   /** The row as the list shows it, with no visibility check: for a caller that has already made one (the assignment service). */

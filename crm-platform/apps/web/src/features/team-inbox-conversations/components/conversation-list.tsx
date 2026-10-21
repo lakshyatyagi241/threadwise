@@ -226,7 +226,8 @@ export function ConversationList(props: ConversationListProps) {
           channels={channels}
         />
 
-        {list.counts && list.counts.archived > 0 && (
+        {/* The archive view keeps its way back even when the filters leave no archived thread. */}
+        {list.counts && (list.counts.archived > 0 || filters.archived) && (
           <button
             type="button"
             onClick={() => props.onFilters({ archived: !filters.archived })}

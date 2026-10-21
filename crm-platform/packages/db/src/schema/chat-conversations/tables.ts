@@ -170,6 +170,14 @@ export const conversations = pgTable(
     index('idx_conversations_waiting')
       .on(t.orgId, t.handlingSince)
       .where(sql`handling = 'waiting'`),
+    // The inbox's tab badges, index-only (migrations 20270323090000 and 20270323090100): the live open threads, and the archive.
+    // counts() in conversations.repository.ts reads exactly these key columns under these predicates; keep the two in step.
+    index('idx_conversations_live_badges')
+      .on(t.orgId, t.channelId, t.assigneeUserId, t.assigneeTeamId, t.unreadCount, t.handling)
+      .where(sql`archived = FALSE AND status = 'open' AND last_message_at IS NOT NULL`),
+    index('idx_conversations_archived_badges')
+      .on(t.orgId, t.channelId, t.assigneeUserId, t.assigneeTeamId, t.unreadCount, t.handling)
+      .where(sql`archived = TRUE AND last_message_at IS NOT NULL`),
     index('idx_conversations_snooze_due')
       .on(t.snoozedUntil)
       .where(sql`status = 'snoozed' AND snoozed_until IS NOT NULL`),

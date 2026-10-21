@@ -42,6 +42,8 @@ interface DbIndex {
   unique: boolean;
   columns: string[];
   partial: boolean;
+  /** False when a CREATE INDEX CONCURRENTLY failed and left the index behind: the planner never uses it. */
+  valid: boolean;
 }
 
 const DELETE_RULE: Record<string, string> = {
@@ -154,10 +156,11 @@ async function loadCatalog(client: Client): Promise<{
     table: string;
     unique: boolean;
     partial: boolean;
+    valid: boolean;
     columns: string[];
   }>(`
     SELECT i.relname AS name, t.relname AS "table", ix.indisunique AS "unique",
-           (ix.indpred IS NOT NULL) AS partial,
+           (ix.indpred IS NOT NULL) AS partial, ix.indisvalid AS valid,
            (SELECT array_agg(pg_get_indexdef(ix.indexrelid, k + 1, true) ORDER BY k)
               FROM generate_series(0, ix.indnkeyatts - 1) k) AS columns
     FROM pg_index ix
@@ -395,6 +398,14 @@ export async function verifySchema(client: Client): Promise<VerifyResult> {
     if (declaredNames.has(dbTable) || IGNORED_DB_TABLES.has(dbTable)) continue;
     if (/_(default|\d{6})$/.test(dbTable)) continue; // partitions
     warn(dbTable, 'exists in the database but has no Drizzle declaration');
+  }
+  for (const ix of cat.indexes) {
+    if (!ix.valid) {
+      err(
+        ix.table,
+        `index ${ix.name} is INVALID (a CREATE INDEX CONCURRENTLY failed): DROP INDEX CONCURRENTLY ${ix.name}, then rerun the migration`,
+      );
+    }
   }
   for (const [table, r] of cat.rls) {
     if (!r.hasOrgId || IGNORED_DB_TABLES.has(table)) continue;

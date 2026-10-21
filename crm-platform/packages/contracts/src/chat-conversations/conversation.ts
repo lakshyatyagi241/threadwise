@@ -183,6 +183,16 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
 });
 export type ListConversationsQuery = z.infer<typeof listConversationsQuerySchema>;
 
+/** The filters the tab badges count over: the list's query without the page, the sort and the tab (a badge counts every tab). */
+export const inboxCountsQuerySchema = listConversationsQuerySchema.omit({
+  tab: true,
+  sort: true,
+  limit: true,
+  cursor: true,
+  order: true,
+});
+export type InboxCountsQuery = z.infer<typeof inboxCountsQuerySchema>;
+
 /** Tab badges and the archived count; also what the safety poll of `GET /inbox/counts` returns. */
 export const inboxCountsSchema = z.object({
   all: z.number().int().nonnegative(),
