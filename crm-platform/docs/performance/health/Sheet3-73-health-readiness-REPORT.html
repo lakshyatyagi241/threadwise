@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #73 Health and readiness - report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#59636e;--card:#f4f6f8;--line:#d0d7de;--a:#1f5fbf;--b:#b4540a;--c:#6b7480;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9aa4af;--card:#161b22;--line:#30363d;--a:#6ea8fe;--b:#f0a05a;--c:#8b949e;--ok:#3fb950;--warn:#d29922;--bad:#ff7b72}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{font-size:1.05rem;margin:1.2em 0 .3em}
+.badge{display:inline-block;padding:.1em .6em;border-radius:1em;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.partly{color:var(--warn)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.meta{color:var(--mut);font-size:.92rem}.meta code{word-break:break-all}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile b{display:block;font-size:1.7rem;line-height:1.1}.tile span{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}
+blockquote{margin:8px 0;padding:6px 12px;border-left:4px solid var(--a);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+figure{margin:14px 0}figcaption{color:var(--mut);font-size:.88rem}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}svg .m{fill:var(--mut)}
+.warn{color:var(--warn)}.chip{font-size:.78rem;font-weight:700;padding:0 .45em;border:1px solid currentColor;border-radius:4px;white-space:nowrap}
+code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
+@media print{body{font-size:11pt}main{max-width:none}table,figure,.box,.tile{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body><main>
+<header><h1>Health and readiness checks</h1>
+<p><span class="badge partly">Partly met</span> &nbsp; Sheet3 item #73 &middot; P1 &middot; effort 2</p>
+<p class="meta">Branch <code>vedant/ops/health-readiness</code> &middot; local only, not pushed, no PR</p>
+<blockquote>Sheet target, word for word: "100% production services covered; automated evidence and alert ownership"</blockquote></header>
+<h2>In 60 seconds</h2>
+<div class="tiles"><div class="tile"><b>14 of 14</b><span>compose services have a healthcheck or a written exemption, an owner and a runbook</span></div>
+<div class="tile"><b>29 of 29</b><span>live fault checks pass (Postgres and Redis refused and black-holed)</span></div>
+<div class="tile"><b>2006 ms</b><span>/ready answer when a dependency is black-holed (deadline 2000 ms); /health stayed 200 in 4 to 8 ms</span></div>
+<div class="tile"><b>4</b><span>open gaps (no alert for backup, offsite; no watcher for the monitoring stack; no object-store probe)</span></div></div>
+<p><strong>Verdict: Partly met.</strong> Liveness, readiness, healthchecks and tests are in place for the API, web, worker, Postgres and Redis. Four things have no alert or probe, so "100%" with alert ownership is not met.</p>
+<h2>What this is</h2><p>Liveness asks "is the process alive" and must never look at dependencies. Readiness asks "can it serve traffic now" and checks the database and Redis. A restart fixes a dead process, not a dead database, so mixing them turns a database blip into a full outage.</p>
+<h2>Coverage matrix</h2><table><thead><tr><th>Service</th><th>Liveness</th><th>Readiness</th><th>Healthcheck</th><th>Alert</th><th>Runbook</th><th>Test</th></tr></thead><tbody><tr><td>api-blue</td><td>GET /health (no dependencies)</td><td>GET /ready (primary DB + Redis, 2 s deadline each)</td><td>compose: /ready, 10s/5s/6 retries, 30s grace</td><td>ApiProbeFailing</td><td>docs/runbooks/health-readiness.md#api</td><td>apps/api/test/unit/health-readiness/ + script-testing/health-readiness live fault proxy</td></tr>
+<tr><td>api-green</td><td>GET /health (no dependencies)</td><td>GET /ready (primary DB + Redis, 2 s deadline each)</td><td>compose: /ready, 10s/5s/6 retries, 30s grace</td><td>ApiProbeFailing</td><td>docs/runbooks/health-readiness.md#api</td><td>apps/api/test/unit/health-readiness/ + script-testing/health-readiness live fault proxy</td></tr>
+<tr><td>web-blue</td><td>GET /api/health (no API call)</td><td>GET /api/ready (API /health reachable, 2 s deadline)</td><td>compose: /login, 10s/5s/6 retries, 30s grace</td><td>ApiProbeFailing</td><td>docs/runbooks/health-readiness.md#web</td><td>apps/web/src/app/api/ready/route.test.ts</td></tr>
+<tr><td>web-green</td><td>GET /api/health (no API call)</td><td>GET /api/ready (API /health reachable, 2 s deadline)</td><td>compose: /login, 10s/5s/6 retries, 30s grace</td><td>ApiProbeFailing</td><td>docs/runbooks/health-readiness.md#web</td><td>apps/web/src/app/api/ready/route.test.ts</td></tr>
+<tr><td>worker</td><td>heartbeat in Redis (worker-probe.js)</td><td>same heartbeat (needs Redis; the API /ready also reports workers and outbox)</td><td>compose: worker-probe.js, 30s/5s/3 retries, 40s grace</td><td>RuntimeMetricsTargetDown</td><td>docs/runbooks/health-readiness.md#worker</td><td>apps/api/test/integration/platform-infrastructure/worker-status.spec.ts</td></tr>
+<tr><td>postgres</td><td>pg_isready</td><td>pg_isready</td><td>compose: pg_isready, 10s/5s/10</td><td>ApiProbeFailing (via /ready, no direct crm_db_up gauge)</td><td>docs/runbooks/health-readiness.md#postgres</td><td>live: DB fault proxy in script-testing/health-readiness</td></tr>
+<tr><td>redis</td><td>redis-cli ping</td><td>redis-cli ping</td><td>compose: redis-cli ping, 10s/3s/5</td><td>RedisDown</td><td>docs/runbooks/p0-failure-modes.md#redisdown</td><td>live: Redis fault proxy in script-testing/health-readiness</td></tr>
+<tr><td>backup</td><td>n/a</td><td>n/a</td><td>compose: .last-ok younger than 26 h, 5m/10s/1, 3m grace</td><td>none (no metric)</td><td>docs/runbooks/backup-restore.md</td><td>none</td></tr>
+<tr><td>offsite</td><td>n/a</td><td>n/a</td><td>compose: /tmp/offsite-ok younger than 2 h, 5m/10s/1, 10m grace</td><td>none (no metric)</td><td>docs/runbooks/backup-restore.md</td><td>none</td></tr>
+<tr><td>migrate</td><td>-</td><td>-</td><td>exempt: one-shot job: depends_on service_completed_successfully is its health gate</td><td>none</td><td>docs/runbooks/migrations.md</td><td>deploy/hostinger/tests/ci-entry.test.sh</td></tr>
+<tr><td>probe</td><td>metrics port scrape (crm-probe)</td><td>n/a</td><td>exempt: no healthcheck: RuntimeMetricsTargetDown fires when crm-probe stops being scraped</td><td>RuntimeMetricsTargetDown</td><td>docs/performance/event-loop/event-loop-observability-runbook.md</td><td>alerting runner live case probe-dead-port</td></tr>
+<tr><td>prometheus</td><td>-</td><td>-</td><td>exempt: monitoring plane; its image has no shell tools used here. Nothing watches the watcher: see gaps</td><td>none</td><td>deploy/hostinger/README.md</td><td>none</td></tr>
+<tr><td>alertmanager</td><td>-</td><td>-</td><td>exempt: monitoring plane; see prometheus</td><td>none</td><td>deploy/hostinger/README.md</td><td>alerting runner webhook delivery check</td></tr>
+<tr><td>grafana</td><td>-</td><td>-</td><td>exempt: dashboards only, not on the request path</td><td>none</td><td>deploy/hostinger/README.md</td><td>monitoring-dashboards runner</td></tr></tbody></table>
+<p>Not in compose: <strong>realtime-gateway</strong>: runs inside the API process: covered by the api-blue/api-green rows (no separate container) <strong>traefik</strong>: external (dokploy), not in these compose files: routes /health and /ready to the API (traefik-desk.yml.template); its own health is outside this repo <strong>s3-object-storage</strong>: external Cloudflare R2: deliberately NOT part of /ready (an R2 outage must not pull the API from rotation); no probe exists, see gaps</p>
+<h2>Live results (run 2026-10-21, local API on a throwaway database behind TCP fault proxies)</h2><table><thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead><tbody><tr><td>api boots behind the proxies</td><td>PASS</td><td></td></tr>
+<tr><td>healthy: /health 200 and /ready 200</td><td>PASS</td><td>ready 23 ms</td></tr>
+<tr><td>healthy: response time budget (<500 ms)</td><td>PASS</td><td>health 23 ms, ready 23 ms</td></tr>
+<tr><td>unauthenticated /ready is allowed and leaks no DSN/host/role/port</td><td>PASS</td><td>none</td></tr>
+<tr><td>burst of 200 concurrent /ready all 200</td><td>PASS</td><td>p50 236 ms, p95 385 ms, total 468 ms</td></tr>
+<tr><td>burst opens a bounded number of new database connections (<= 5, probes coalesce)</td><td>PASS</td><td>0 new connections for 200 requests (concurrent probes share one in-flight check)</td></tr>
+<tr><td>postgres refuse: /health stays 200 (liveness independent)</td><td>PASS</td><td>7 ms</td></tr>
+<tr><td>postgres refuse: /ready is 503 within deadline+slack</td><td>PASS</td><td>503 in 47 ms</td></tr>
+<tr><td>postgres refuse: body names the failed check with a fixed word and leaks nothing</td><td>PASS</td><td>primary=unreachable</td></tr>
+<tr><td>postgres refuse: 20 concurrent /ready never hang</td><td>PASS</td><td>max 43 ms</td></tr>
+<tr><td>postgres after refuse: /ready recovers to 200</td><td>PASS</td><td></td></tr>
+<tr><td>postgres blackhole: /health stays 200 (liveness independent)</td><td>PASS</td><td>5 ms</td></tr>
+<tr><td>postgres blackhole: /ready is 503 within deadline+slack</td><td>PASS</td><td>503 in 2005 ms</td></tr>
+<tr><td>postgres blackhole: body names the failed check with a fixed word and leaks nothing</td><td>PASS</td><td>primary=timeout</td></tr>
+<tr><td>postgres blackhole: 20 concurrent /ready never hang</td><td>PASS</td><td>max 2008 ms</td></tr>
+<tr><td>postgres after blackhole: /ready recovers to 200</td><td>PASS</td><td></td></tr>
+<tr><td>redis refuse: /health stays 200 (liveness independent)</td><td>PASS</td><td>5 ms</td></tr>
+<tr><td>redis refuse: /ready is 503 within deadline+slack</td><td>PASS</td><td>503 in 302 ms</td></tr>
+<tr><td>redis refuse: body names the failed check with a fixed word and leaks nothing</td><td>PASS</td><td>redis=unreachable</td></tr>
+<tr><td>redis refuse: 20 concurrent /ready never hang</td><td>PASS</td><td>max 1119 ms</td></tr>
+<tr><td>redis after refuse: /ready recovers to 200</td><td>PASS</td><td></td></tr>
+<tr><td>redis blackhole: /health stays 200 (liveness independent)</td><td>PASS</td><td>3 ms</td></tr>
+<tr><td>redis blackhole: /ready is 503 within deadline+slack</td><td>PASS</td><td>503 in 2006 ms</td></tr>
+<tr><td>redis blackhole: body names the failed check with a fixed word and leaks nothing</td><td>PASS</td><td>redis=unreachable</td></tr>
+<tr><td>redis blackhole: 20 concurrent /ready never hang</td><td>PASS</td><td>max 68 ms</td></tr>
+<tr><td>redis after blackhole: /ready recovers to 200</td><td>PASS</td><td></td></tr>
+<tr><td>worker probe: exit 0 while its heartbeat is fresh and Redis is reachable</td><td>PASS</td><td>192 ms</td></tr>
+<tr><td>worker probe: exit 1 within 5 s when Redis is refused</td><td>PASS</td><td>2156 ms</td></tr>
+<tr><td>worker probe: exit 1 within 5 s when Redis black-holes</td><td>PASS</td><td>3123 ms</td></tr></tbody></table>
+<h2>Findings</h2><table><thead><tr><th>Finding</th><th>Severity</th><th>Status</th></tr></thead><tbody>
+<tr><td>Web had no liveness or readiness endpoint; the probe only fetched robots.txt, so nothing watched web-to-API reachability</td><td>Medium</td><td>Fixed: /api/health, /api/ready, probe target webready (covered by ApiProbeFailing)</td></tr>
+<tr><td>/ready ran 2 queries per request with no sharing: a burst of 200 concurrent probes took p95 852 ms and opened 18 new database connections</td><td>Medium</td><td>Fixed: concurrent calls share one in-flight check; same burst p95 385 ms, 0 new connections</td></tr>
+<tr><td>Worker probe hung when Redis accepted the connection but never answered (left to docker's timeout)</td><td>Low</td><td>Fixed: exits 1 after 3 s (measured 3123 ms)</td></tr>
+<tr><td>Backup and offsite containers go unhealthy but nothing alerts (no metric)</td><td>High</td><td>Open</td></tr>
+<tr><td>Prometheus and Alertmanager have no healthcheck and no dead-man's-switch alert</td><td>Medium</td><td>Open</td></tr>
+<tr><td>Object store (R2) has no probe; deliberately not in /ready</td><td>Low</td><td>Open</td></tr>
+<tr><td>Postgres has no direct up gauge; detected through /ready probe only</td><td>Low</td><td>Open</td></tr></tbody></table>
+<h2>What this does NOT prove</h2><ul><li>Anything on staging or production, or Traefik behaviour.</li><li>That Docker marks containers unhealthy in time: compose values were checked for sanity, not run.</li><li>That alerts fire (that is the alerting runner, #76; it was not re-run here).</li><li>Web readiness was tested with a mocked fetch, not a live web server.</li><li>Only the API's own tsc/build was run; the full unit suite was not.</li></ul>
+<h2>Appendix: commands</h2><table><tbody><tr><td><code>bash script-testing/health-readiness/run.sh --quick</code></td><td>PASS (ratchet, ratchet_test, web_routes, live; 29 live checks)</td></tr><tr><td><code>node --test tools/health-readiness/check.test.mjs</code></td><td>2 pass</td></tr><tr><td><code>vitest run src/app/api/ready</code> (web)</td><td>4 pass</td></tr><tr><td><code>pnpm --filter @crm/api build</code></td><td>tsc 0 issues</td></tr></tbody></table>
+</main></body></html>
