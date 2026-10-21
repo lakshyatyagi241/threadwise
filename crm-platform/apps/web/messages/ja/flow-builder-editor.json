@@ -2502,30 +2502,6 @@
           "label": "質問",
           "help": "任意の質問をして回答を保存"
         },
-        "askName": {
-          "label": "名前",
-          "help": "名前を質問して確認"
-        },
-        "askEmail": {
-          "label": "メール",
-          "help": "メールアドレスを質問して確認"
-        },
-        "askPhone": {
-          "label": "電話番号",
-          "help": "電話番号を質問して確認"
-        },
-        "askNumber": {
-          "label": "数値",
-          "help": "数値を質問して確認"
-        },
-        "askAlphanumeric": {
-          "label": "英数字",
-          "help": "IDまたはコード（スペースや記号なし）"
-        },
-        "askDate": {
-          "label": "日付",
-          "help": "選んだ形式で日付を質問"
-        },
         "askFile": {
           "label": "ファイルまたは画像",
           "help": "写真、ドキュメント、動画、音声を待機"

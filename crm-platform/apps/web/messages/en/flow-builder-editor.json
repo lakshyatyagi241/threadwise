@@ -2501,30 +2501,6 @@
           "label": "Question",
           "help": "Ask anything and save the answer"
         },
-        "askName": {
-          "label": "Name",
-          "help": "Ask for a name and check it"
-        },
-        "askEmail": {
-          "label": "Email",
-          "help": "Ask for an email address and check it"
-        },
-        "askPhone": {
-          "label": "Phone number",
-          "help": "Ask for a phone number and check it"
-        },
-        "askNumber": {
-          "label": "Number",
-          "help": "Ask for a number and check it"
-        },
-        "askAlphanumeric": {
-          "label": "Letters and numbers",
-          "help": "An ID or code, no spaces or symbols"
-        },
-        "askDate": {
-          "label": "Date",
-          "help": "Ask for a date in the shape you choose"
-        },
         "askFile": {
           "label": "File or image",
           "help": "Wait for a photo, document, video or audio"

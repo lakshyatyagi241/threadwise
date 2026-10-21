@@ -2502,30 +2502,6 @@
           "label": "Pytanie",
           "help": "Zadaj dowolne pytanie i zapisz odpowiedź"
         },
-        "askName": {
-          "label": "Imię i nazwisko",
-          "help": "Poproś o imię i nazwisko i sprawdź je"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Poproś o adres e-mail i sprawdź go"
-        },
-        "askPhone": {
-          "label": "Numer telefonu",
-          "help": "Poproś o numer telefonu i sprawdź go"
-        },
-        "askNumber": {
-          "label": "Liczba",
-          "help": "Poproś o liczbę i sprawdź ją"
-        },
-        "askAlphanumeric": {
-          "label": "Litery i cyfry",
-          "help": "Identyfikator lub kod, bez spacji i symboli"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Poproś o datę w wybranym formacie"
-        },
         "askFile": {
           "label": "Plik lub obraz",
           "help": "Czekaj na zdjęcie, dokument, wideo lub audio"

@@ -2502,30 +2502,6 @@
           "label": "提问",
           "help": "提出任何问题并保存回答"
         },
-        "askName": {
-          "label": "姓名",
-          "help": "询问姓名并进行校验"
-        },
-        "askEmail": {
-          "label": "邮箱",
-          "help": "询问邮箱地址并进行校验"
-        },
-        "askPhone": {
-          "label": "电话号码",
-          "help": "询问电话号码并进行校验"
-        },
-        "askNumber": {
-          "label": "数字",
-          "help": "询问数字并进行校验"
-        },
-        "askAlphanumeric": {
-          "label": "字母和数字",
-          "help": "ID 或代码，不含空格或符号"
-        },
-        "askDate": {
-          "label": "日期",
-          "help": "按所选格式询问日期"
-        },
         "askFile": {
           "label": "文件或图片",
           "help": "等待照片、文档、视频或音频"

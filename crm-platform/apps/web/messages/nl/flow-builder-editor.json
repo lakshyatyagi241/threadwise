@@ -2360,30 +2360,6 @@
           "label": "Vraag",
           "help": "Iets vragen en het antwoord opslaan"
         },
-        "askName": {
-          "label": "Naam",
-          "help": "Naar een naam vragen en die controleren"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Naar een e-mailadres vragen en dat controleren"
-        },
-        "askPhone": {
-          "label": "Telefoonnummer",
-          "help": "Naar een telefoonnummer vragen en dat controleren"
-        },
-        "askNumber": {
-          "label": "Getal",
-          "help": "Naar een getal vragen en dat controleren"
-        },
-        "askAlphanumeric": {
-          "label": "Letters en cijfers",
-          "help": "Een ID of code, zonder spaties of symbolen"
-        },
-        "askDate": {
-          "label": "Datum",
-          "help": "Vraag om een datum in het formaat dat je kiest"
-        },
         "askFile": {
           "label": "Bestand of afbeelding",
           "help": "Wacht op een foto, document, video of audio"

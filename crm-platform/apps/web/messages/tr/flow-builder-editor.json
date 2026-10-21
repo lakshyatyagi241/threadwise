@@ -2502,30 +2502,6 @@
           "label": "Soru",
           "help": "Herhangi bir şey sorun ve yanıtı kaydedin"
         },
-        "askName": {
-          "label": "Ad",
-          "help": "Bir ad isteyin ve doğrulayın"
-        },
-        "askEmail": {
-          "label": "E-posta",
-          "help": "Bir e-posta adresi isteyin ve doğrulayın"
-        },
-        "askPhone": {
-          "label": "Telefon numarası",
-          "help": "Bir telefon numarası isteyin ve doğrulayın"
-        },
-        "askNumber": {
-          "label": "Sayı",
-          "help": "Bir sayı isteyin ve doğrulayın"
-        },
-        "askAlphanumeric": {
-          "label": "Harfler ve sayılar",
-          "help": "Boşluk veya sembol içermeyen bir kimlik veya kod"
-        },
-        "askDate": {
-          "label": "Tarih",
-          "help": "Seçtiğiniz biçimde bir tarih isteyin"
-        },
         "askFile": {
           "label": "Dosya veya görsel",
           "help": "Fotoğraf, belge, video veya ses bekle"

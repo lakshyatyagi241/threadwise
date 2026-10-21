@@ -2360,30 +2360,6 @@
           "label": "Domanda",
           "help": "Chiedi qualsiasi cosa e salva la risposta"
         },
-        "askName": {
-          "label": "Nome",
-          "help": "Chiedi un nome e lo verifica"
-        },
-        "askEmail": {
-          "label": "Email",
-          "help": "Chiedi un indirizzo email e lo verifica"
-        },
-        "askPhone": {
-          "label": "Numero di telefono",
-          "help": "Chiedi un numero di telefono e lo verifica"
-        },
-        "askNumber": {
-          "label": "Numero",
-          "help": "Chiedi un numero e lo verifica"
-        },
-        "askAlphanumeric": {
-          "label": "Lettere e numeri",
-          "help": "Un ID o un codice, senza spazi né simboli"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Chiedi una data nel formato scelto"
-        },
         "askFile": {
           "label": "File o immagine",
           "help": "Attendi una foto, un documento, un video o un audio"

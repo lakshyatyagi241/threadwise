@@ -2502,30 +2502,6 @@
           "label": "질문",
           "help": "무엇이든 질문하고 답변 저장"
         },
-        "askName": {
-          "label": "이름",
-          "help": "이름을 요청하고 확인"
-        },
-        "askEmail": {
-          "label": "이메일",
-          "help": "이메일 주소를 요청하고 확인"
-        },
-        "askPhone": {
-          "label": "전화번호",
-          "help": "전화번호를 요청하고 확인"
-        },
-        "askNumber": {
-          "label": "숫자",
-          "help": "숫자를 요청하고 확인"
-        },
-        "askAlphanumeric": {
-          "label": "문자와 숫자",
-          "help": "ID 또는 코드 (공백이나 기호 없음)"
-        },
-        "askDate": {
-          "label": "날짜",
-          "help": "선택한 형식으로 날짜 요청"
-        },
         "askFile": {
           "label": "파일 또는 이미지",
           "help": "사진, 문서, 동영상 또는 오디오를 기다림"
