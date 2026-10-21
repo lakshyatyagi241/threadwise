@@ -10,7 +10,7 @@ responses, allowed origin echoed with credentials, denied/null/suffix origins no
 Needs: node 22, pnpm, docker, curl, crm-platform-postgres and crm-platform-redis running. Exit 0 PASS, 1 FAIL, 2 ERROR.
 H
 }
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common-security.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm docker curl postgres redis
 if [ -z "${SEC_LIVE_ONLY:-}" ]; then # SEC_LIVE_ONLY=1 skips the unit specs (debugging the live part)

@@ -8,7 +8,7 @@ SSRF protection (sheet 29): address and URL matrices, outbound ratchet, guarded 
 Needs: node 22, pnpm, installed dependencies. No Docker or database. Exit 0 PASS, 1 FAIL, 2 ERROR.
 H
 }
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common-security.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm
 sec_vitest ssrf-matrices-and-ratchet api test/unit/ssrf

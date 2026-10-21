@@ -8,7 +8,7 @@ Session and token security (sheet 37): the session/token pieces of tools/quality
 Needs: node 22, pnpm, installed dependencies. No Docker or database. Exit 0 PASS, 1 FAIL, 2 ERROR.
 H
 }
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common-security.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm
 A=test/unit/auth-registration-security

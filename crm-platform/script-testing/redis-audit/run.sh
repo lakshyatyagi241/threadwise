@@ -6,7 +6,7 @@ RI_HELP="Runs the Redis audit of PR #713: the ratchets in test/unit/redis (no Re
 The shared Redis (port 6379/56379) is never touched; the tests refuse it.
 Needs: docker, node 22, pnpm.  Time: quick ~4 min, full ~12 min.
 Known baseline: redis-hygiene has 2 failing tests on pristine main; they are reported as known baseline, not as failures."
-source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common-integration.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common.sh"
 ri_init "$@"
 ri_prereqs docker node pnpm deps
 ri_build_packages

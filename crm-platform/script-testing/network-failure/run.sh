@@ -4,7 +4,7 @@ RI_ID=network-failure; RI_SHEET=18; RI_TITLE="Network failure testing (parts 1 a
 RI_HELP="Runs the network-failure tests of PRs #436 and #663: API unit specs (clients, dependency outage, timeout ratchet), the integration specs behind a TCP fault proxy (api-outage, recovery) on a throwaway database and a private Redis db index, and the web ratchets (fetch-ratchet, client-deadline).
 Needs: docker, node 22, pnpm, running crm-platform-postgres and crm-platform-redis (used only as servers).
 Time: quick ~3 min (skips recovery.spec), full ~8 min."
-source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common-integration.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common.sh"
 ri_init "$@"
 ri_prereqs docker node pnpm deps postgres redis
 ri_build_packages

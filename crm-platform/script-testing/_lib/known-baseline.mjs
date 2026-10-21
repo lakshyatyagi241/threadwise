@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-export const baseline = JSON.parse(fs.readFileSync(path.join(here, 'known-failures.json'), 'utf8')).files.map((f) => f.match);
+export const baseline = JSON.parse(fs.readFileSync(path.join(here, '..', 'known-failures.json'), 'utf8')).files;
 
 export function failingFiles(text) {
   try {

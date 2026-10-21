@@ -4,7 +4,7 @@ RI_ID=cache-hit-rate; RI_SHEET=65; RI_TITLE="Cache hit-rate monitoring"
 RI_HELP="Runs the checks of PRs #720 and #735: the instrumentation ratchet and counter tests (apps/api/test/unit/cache-audit), the packages/observability cache-metrics spec, 'promtool check rules' and 'promtool test rules' with the pinned image prom/prometheus:v2.55.0, AND a live rules check: a private Prometheus container loads deploy/observability/*.rules.yml, the API is booted (port 3932, metrics 59532, Redis db 8, throwaway database), traffic is generated, and every rule of the cache-hit-rate group must have health=ok with non-empty lookups / hit-ratio series. The promtool tests alone cannot catch the series-collision bug; the live check can.
 Needs: docker, node 22, pnpm, running crm-platform-postgres and crm-platform-redis; builds the API if apps/api/dist is missing (~2 min).
 Time: quick ~6 min (live traffic 45 s); full is the same set plus the micro-benchmark spec."
-source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common-integration.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common.sh"
 ri_init "$@"
 ri_prereqs docker node pnpm deps postgres redis
 ri_build_packages

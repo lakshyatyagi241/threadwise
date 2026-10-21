@@ -5,7 +5,7 @@ RI_HELP="Runs the cache-invalidation tests of PR #723: the writers ratchet (test
 --quick: ratchet + smoke + access-control + matrix check. Full: every integration spec.
 Needs: docker, node 22, pnpm, running crm-platform-postgres (server only).
 Time: quick ~3 min, full ~15 min."
-source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common-integration.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common.sh"
 ri_init "$@"
 ri_prereqs docker node pnpm deps postgres
 ri_build_packages

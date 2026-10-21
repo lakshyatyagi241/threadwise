@@ -6,7 +6,7 @@ RI_HELP="Runs the 14 suites in apps/api/test/e2e/concurrency (each starts its ow
 --jobs N: suites run N at a time (default 3); they are independent.
 Needs: docker (testcontainers pull postgres/redis images), node 22, pnpm.
 Time: quick ~15-25 min with --jobs 3, full ~60-120 min. A pass of 5 runs is evidence of stability, not proof."
-source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common-integration.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common.sh"
 ri_init "$@"
 ri_prereqs docker node pnpm deps
 ri_build_packages

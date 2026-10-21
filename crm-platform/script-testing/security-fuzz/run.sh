@@ -9,7 +9,7 @@ Security fuzz (sheet 38): seeded fuzz of schemas/parsers (and HTTP routes in ful
 Needs: node 22, pnpm, dependencies. Exit 0 PASS, 1 FAIL, 2 ERROR.
 H
 }
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common-security.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm
 sec_build_packages

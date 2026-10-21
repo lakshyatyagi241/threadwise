@@ -6,7 +6,7 @@ RI_HELP="Wraps 'node tools/perf/soak.mjs --minutes N' (PR #737): boots the built
 The runner creates a throwaway migrated + seeded database (dropped at the end), uses ports API 3932 (worker 3933) and Redis db 8.
 Output: soak.csv and soak.json under <out>/soak/. Needs: docker, node 22, pnpm, running crm-platform-postgres and crm-platform-redis; builds the API if apps/api/dist is missing (~2 min).
 IMPORTANT: a short run cannot settle a leak. 5 or 20 minutes only catches fast leaks; slow ones need the 24 h run (--minutes 1440), on a quiet machine."
-source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common-integration.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../_lib/common.sh"
 ri_init "$@"
 ri_prereqs docker node pnpm deps postgres redis
 ri_build_packages

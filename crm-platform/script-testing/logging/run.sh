@@ -11,7 +11,7 @@ is consistent between the response header and all log lines of that request.
 Needs: node 22, pnpm, docker, curl, crm-platform-postgres and crm-platform-redis running. Exit 0 PASS, 1 FAIL, 2 ERROR.
 H
 }
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common-security.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm docker curl postgres redis
 if [ -z "${SEC_LIVE_ONLY:-}" ]; then sec_vitest logging-unit api test/unit/logging; fi

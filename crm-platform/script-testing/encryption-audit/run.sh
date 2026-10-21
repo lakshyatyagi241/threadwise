@@ -10,7 +10,7 @@ seeded plaintext Telegram bot tokens in a throwaway database: dry-run, seal, rer
 Needs: node 22, pnpm, docker, container crm-platform-postgres running. Exit 0 PASS, 1 FAIL, 2 ERROR.
 H
 }
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common-security.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm docker postgres
 sec_build_packages

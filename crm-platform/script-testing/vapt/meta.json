@@ -1,1 +1,12 @@
-{"id":"vapt","sheetItem":25,"title":"VAPT baseline","status":"pending","note":"runner to be added from branch vedant/security/vapt-baseline"}
+{
+  "id": "vapt",
+  "sheetItem": 25,
+  "title": "VAPT baseline (audits, DAST, live attack tests, ZAP)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 8, "full": 25 },
+  "heavy": true,
+  "needs": ["docker", "node22", "pnpm", "postgres", "redis", "curl"],
+  "proves": "No NEW Critical/High from the repo audits, the DAST walker over every OpenAPI operation, and 18 live attack tests (tenant IDOR, privilege escalation, JWT, refresh replay, public tokens, webhook signatures, CSV injection, upload) on a local instance; full mode adds an authenticated ZAP API scan.",
+  "doesNotProve": "Anything about staging or production, the web front end, real provider callbacks, secrets in git history, or business-logic abuse. Known open items are tolerated via known-baseline.json, not fixed.",
+  "report": "docs/security/vapt/Sheet3-25-vapt-REPORT.html"
+}
