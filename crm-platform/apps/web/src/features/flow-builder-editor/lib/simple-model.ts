@@ -540,12 +540,6 @@ export const STEP_KINDS: readonly StepKind[] = [
   nodeKind('webhook', 'webhook', 'action'),
   kind('code', 'code', 'action'),
   kind('ask', 'ask', 'ask', 'text'),
-  kind('ask-name', 'ask', 'ask', 'name'),
-  kind('ask-email', 'ask', 'ask', 'email'),
-  kind('ask-phone', 'ask', 'ask', 'phone'),
-  kind('ask-number', 'ask', 'ask', 'number'),
-  kind('ask-alphanumeric', 'ask', 'ask', 'alphanumeric'),
-  kind('ask-date', 'ask', 'ask', 'date'),
   kind('ask-file', 'ask_file', 'ask'),
   kind('ask-location', 'ask_location', 'ask'),
 ];

@@ -2502,30 +2502,6 @@
           "label": "Pertanyaan",
           "help": "Tanyakan apa saja dan simpan jawabannya"
         },
-        "askName": {
-          "label": "Nama",
-          "help": "Minta nama dan periksa"
-        },
-        "askEmail": {
-          "label": "Email",
-          "help": "Minta alamat email dan periksa"
-        },
-        "askPhone": {
-          "label": "Nomor telepon",
-          "help": "Minta nomor telepon dan periksa"
-        },
-        "askNumber": {
-          "label": "Angka",
-          "help": "Minta angka dan periksa"
-        },
-        "askAlphanumeric": {
-          "label": "Huruf dan angka",
-          "help": "ID atau kode, tanpa spasi atau simbol"
-        },
-        "askDate": {
-          "label": "Tanggal",
-          "help": "Minta tanggal dengan format yang Anda pilih"
-        },
         "askFile": {
           "label": "File atau gambar",
           "help": "Tunggu foto, dokumen, video, atau audio"

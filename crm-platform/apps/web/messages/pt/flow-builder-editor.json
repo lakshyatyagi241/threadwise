@@ -2502,30 +2502,6 @@
           "label": "Pergunta",
           "help": "Pergunte qualquer coisa e salve a resposta"
         },
-        "askName": {
-          "label": "Nome",
-          "help": "Pedir um nome e validá-lo"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Pedir um endereço de e-mail e validá-lo"
-        },
-        "askPhone": {
-          "label": "Número de telefone",
-          "help": "Pedir um número de telefone e validá-lo"
-        },
-        "askNumber": {
-          "label": "Número",
-          "help": "Pedir um número e validá-lo"
-        },
-        "askAlphanumeric": {
-          "label": "Letras e números",
-          "help": "Um ID ou código, sem espaços nem símbolos"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Pedir uma data no formato escolhido"
-        },
         "askFile": {
           "label": "Arquivo ou imagem",
           "help": "Aguardar uma foto, documento, vídeo ou áudio"

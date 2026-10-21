@@ -2502,30 +2502,6 @@
           "label": "Câu hỏi",
           "help": "Hỏi bất kỳ điều gì và lưu câu trả lời"
         },
-        "askName": {
-          "label": "Họ tên",
-          "help": "Hỏi họ tên và kiểm tra"
-        },
-        "askEmail": {
-          "label": "Email",
-          "help": "Hỏi địa chỉ email và kiểm tra"
-        },
-        "askPhone": {
-          "label": "Số điện thoại",
-          "help": "Hỏi số điện thoại và kiểm tra"
-        },
-        "askNumber": {
-          "label": "Số",
-          "help": "Hỏi một số và kiểm tra"
-        },
-        "askAlphanumeric": {
-          "label": "Chữ và số",
-          "help": "Mã ID hoặc mã số, không có khoảng trắng hoặc ký hiệu"
-        },
-        "askDate": {
-          "label": "Ngày",
-          "help": "Hỏi ngày theo định dạng bạn chọn"
-        },
         "askFile": {
           "label": "Tệp hoặc hình ảnh",
           "help": "Chờ ảnh, tài liệu, video hoặc âm thanh"

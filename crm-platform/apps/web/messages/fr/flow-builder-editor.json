@@ -2502,30 +2502,6 @@
           "label": "Question",
           "help": "Poser n’importe quelle question et enregistrer la réponse"
         },
-        "askName": {
-          "label": "Nom",
-          "help": "Demander un nom et le valider"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Demander une adresse e-mail et la valider"
-        },
-        "askPhone": {
-          "label": "Numéro de téléphone",
-          "help": "Demander un numéro de téléphone et le valider"
-        },
-        "askNumber": {
-          "label": "Nombre",
-          "help": "Demander un nombre et le valider"
-        },
-        "askAlphanumeric": {
-          "label": "Lettres et chiffres",
-          "help": "Un identifiant ou un code, sans espaces ni symboles"
-        },
-        "askDate": {
-          "label": "Date",
-          "help": "Demander une date au format choisi"
-        },
         "askFile": {
           "label": "Fichier ou image",
           "help": "Attendre une photo, un document, une vidéo ou un audio"

@@ -414,7 +414,7 @@ describe('questions that check the answer', () => {
     expect(en(stepLabel(newStep('message', [])))).toBe('Message');
   });
 
-  it('the menu has an entry for every step type and one per question check', () => {
+  it('the menu has an entry for every step type and one Question (its answer type is chosen inside the step)', () => {
     const keys = STEP_KINDS.map((k) => k.key);
     expect(new Set(keys).size).toBe(keys.length);
     for (const t of ['message', 'media', 'buttons', 'list', 'ask_file', 'ask_location', 'delay']) {
@@ -423,15 +423,7 @@ describe('questions that check the answer', () => {
         t,
       ).toBe(true);
     }
-    expect(STEP_KINDS.filter((k) => k.type === 'ask').map((k) => k.preset)).toEqual([
-      'text',
-      'name',
-      'email',
-      'phone',
-      'number',
-      'alphanumeric',
-      'date',
-    ]);
+    expect(STEP_KINDS.filter((k) => k.type === 'ask').map((k) => k.preset)).toEqual(['text']);
   });
 
   it('a file and a location question continue into the next step like a message does', () => {
