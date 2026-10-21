@@ -160,7 +160,6 @@ describe('DashboardScreen', () => {
       await loaded(queryClient);
       expect(await screen.findByLabelText('Contacts Added in this period: 42')).toBeTruthy();
       expect(screen.getByLabelText('Tasks Open now: 10')).toBeTruthy();
-      expect(screen.getByLabelText('Messages Sent: 1,250')).toBeTruthy();
       expect(screen.getByRole('header', { name: 'Conversations' })).toBeTruthy();
       expect(screen.getByLabelText('Active: 9')).toBeTruthy();
       expect(screen.getByLabelText('Mine: 4')).toBeTruthy();
@@ -169,8 +168,37 @@ describe('DashboardScreen', () => {
       expect(screen.getByLabelText('Unread: 2')).toBeTruthy();
       expect(screen.getByLabelText('Archived: 1')).toBeTruthy();
       expect(screen.getByRole('header', { name: 'All messages' })).toBeTruthy();
+      expect(screen.getByLabelText('Sent: 1,250')).toBeTruthy();
       expect(screen.getByLabelText('Failed: 20')).toBeTruthy();
       expect(screen.getAllByLabelText(/^Delivered: /).length).toBeGreaterThan(0);
+    });
+
+    it('shows the conversation status of the window on the Summary, with its total', async () => {
+      arrange({
+        session: {
+          ...sessionAll,
+          permissions: { ...sessionAll.permissions, 'dash.analytics.read': 'all' },
+        } as typeof session,
+      });
+      statsCall.mockResolvedValue(conversationStats);
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(await screen.findByRole('header', { name: 'Conversation status' })).toBeTruthy();
+      expect(screen.getByLabelText('Open: 3')).toBeTruthy();
+      expect(screen.getByLabelText('Pending: 1')).toBeTruthy();
+      expect(screen.getByLabelText('Closed: 13')).toBeTruthy();
+      expect(screen.getByLabelText('Unattended: 2')).toBeTruthy();
+      expect(screen.getByText('17')).toBeTruthy();
+      // The whole workspace, not one person: the Summary never narrows to an agent.
+      expect(statsCall).toHaveBeenLastCalledWith(expect.anything(), undefined, expect.anything());
+    });
+
+    it('leaves the conversation status out, and asks nothing, without the analytics permission', async () => {
+      arrange({ session: sessionAll });
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(statsCall).not.toHaveBeenCalled();
+      expect(screen.queryByRole('header', { name: 'Conversation status' })).toBeNull();
     });
 
     it('asks for no contacts, tasks or inbox numbers without the permission, and shows a dash', async () => {

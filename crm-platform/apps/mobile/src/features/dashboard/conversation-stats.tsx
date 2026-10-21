@@ -1,5 +1,6 @@
 import type { AnalyticsConversations, ConversationStatusCounts } from '@crm/contracts';
 import type { UseQueryResult } from '@tanstack/react-query';
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -22,6 +23,50 @@ interface Props {
   rangeName: string;
   onRetry: () => void;
 }
+
+/** The six status tiles (open, pending, closed, assigned, unassigned, unattended), for the Agent view and for the Summary. */
+export const conversationStatusTiles = (
+  c: ConversationStatusCounts,
+  t: TFunction,
+  n: (value: number) => string,
+): GridItem[] => [
+  {
+    key: 'open',
+    icon: 'lock-open-outline',
+    label: t('dashboard.agents.status.open'),
+    value: n(c.open),
+  },
+  {
+    key: 'pending',
+    icon: 'time-outline',
+    label: t('dashboard.agents.status.pending'),
+    value: n(c.pending),
+  },
+  {
+    key: 'closed',
+    icon: 'lock-closed-outline',
+    label: t('dashboard.agents.status.closed'),
+    value: n(c.closed),
+  },
+  {
+    key: 'assigned',
+    icon: 'person-circle-outline',
+    label: t('dashboard.agents.status.assigned'),
+    value: n(c.assigned),
+  },
+  {
+    key: 'unassigned',
+    icon: 'person-remove-outline',
+    label: t('dashboard.agents.status.unassigned'),
+    value: n(c.unassigned),
+  },
+  {
+    key: 'unattended',
+    icon: 'alert-circle-outline',
+    label: t('dashboard.agents.status.unattended'),
+    value: n(c.unattended),
+  },
+];
 
 /** The value of the "everyone" choice of the agent picker. */
 const EVERYONE = 'all';
@@ -61,44 +106,7 @@ export function ConversationStats({ query, agent, onAgent, role, rangeName, onRe
     ...data.agents.map((a) => ({ value: a.userUuid, label: a.name })),
   ];
   const picked = data.agents.find((a) => a.userUuid === (byAgent ?? data.agents[0]?.userUuid));
-  const tiles = (c: ConversationStatusCounts): GridItem[] => [
-    {
-      key: 'open',
-      icon: 'lock-open-outline',
-      label: t('dashboard.agents.status.open'),
-      value: n(c.open),
-    },
-    {
-      key: 'pending',
-      icon: 'time-outline',
-      label: t('dashboard.agents.status.pending'),
-      value: n(c.pending),
-    },
-    {
-      key: 'closed',
-      icon: 'lock-closed-outline',
-      label: t('dashboard.agents.status.closed'),
-      value: n(c.closed),
-    },
-    {
-      key: 'assigned',
-      icon: 'person-circle-outline',
-      label: t('dashboard.agents.status.assigned'),
-      value: n(c.assigned),
-    },
-    {
-      key: 'unassigned',
-      icon: 'person-remove-outline',
-      label: t('dashboard.agents.status.unassigned'),
-      value: n(c.unassigned),
-    },
-    {
-      key: 'unattended',
-      icon: 'alert-circle-outline',
-      label: t('dashboard.agents.status.unattended'),
-      value: n(c.unattended),
-    },
-  ];
+  const tiles = (c: ConversationStatusCounts) => conversationStatusTiles(c, t, n);
   return (
     <>
       <SelectField

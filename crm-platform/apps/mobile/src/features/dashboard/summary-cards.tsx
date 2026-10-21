@@ -3,18 +3,11 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { Text } from '@/components/ui/text';
-import { MIN_TOUCH_TARGET, radius, spacing, type ThemeColors } from '@/lib/theme/tokens';
+import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
-/** The coloured pairs an icon tile is drawn in: the strong colour for the icon, its soft one behind it. */
+/** The colour of an icon tile: a solid block of the tone with a light icon on it, as the Geta app draws them. */
 export type SummaryTone = 'primary' | 'success' | 'warning' | 'instagram' | 'danger';
-const SOFT: Record<SummaryTone, keyof ThemeColors> = {
-  primary: 'primarySoft',
-  success: 'successSoft',
-  warning: 'warningSoft',
-  instagram: 'instagramSoft',
-  danger: 'dangerSoft',
-};
 
 /** A flat white card: a hairline edge and no shadow, as the Summary of the reference app draws its cards. */
 function FlatCard({ children }: { children: ReactNode }) {
@@ -61,8 +54,8 @@ function Stat({ title, subtitle, value, icon, tone, onPress, label }: StatProps)
         <Text variant="display" style={styles.value} numberOfLines={1}>
           {value}
         </Text>
-        <View style={[styles.tile, { backgroundColor: colors[SOFT[tone]] }]}>
-          <Icon name={icon} size={20} color={tone} />
+        <View style={[styles.tile, { backgroundColor: colors[tone] }]}>
+          <Icon name={icon} size={20} color="onPrimary" />
         </View>
       </View>
     </>
@@ -201,6 +194,51 @@ export function StatusGrid({ items }: { items: readonly GridItem[] }) {
   );
 }
 
+export interface FigureItem {
+  key: string;
+  label: string;
+  /** The figure as shown, short ("2.2k"). */
+  value: string;
+  /** The figure as a screen reader says it ("2,250"). */
+  spoken: string;
+  icon: IconName;
+  tone: SummaryTone;
+}
+
+/** One row per figure: the name over a large number, its icon tile at the end, and a dashed line between the rows. */
+export function FigureRows({ items }: { items: readonly FigureItem[] }) {
+  const { colors } = useTheme();
+  return (
+    <View>
+      {items.map((item, index) => (
+        <View
+          key={item.key}
+          accessible
+          accessibilityLabel={`${item.label}: ${item.spoken}`}
+          style={[
+            styles.figureRow,
+            index < items.length - 1 && {
+              borderBottomWidth: 1,
+              borderStyle: 'dashed',
+              borderColor: colors.borderStrong,
+            },
+          ]}
+        >
+          <View style={styles.statTitles}>
+            <Text variant="body">{item.label}</Text>
+            <Text variant="display" numberOfLines={1}>
+              {item.value}
+            </Text>
+          </View>
+          <View style={[styles.tile, { backgroundColor: colors[item.tone] }]}>
+            <Icon name={item.icon} size={20} color="onPrimary" />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export interface BarItem {
   key: string;
   label: string;
@@ -278,6 +316,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   center: { textAlign: 'center' },
+  figureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+    paddingVertical: spacing.md,
+  },
   bars: { gap: spacing.lg },
   barRow: { gap: spacing.sm },
   barLine: { flexDirection: 'row', justifyContent: 'space-between' },

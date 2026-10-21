@@ -11,7 +11,7 @@ import { NotificationBell } from '@/components/ui/notification-bell';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
 import { messageForError } from '@/lib/api/error-message';
-import { formatCount } from '@/lib/format/numbers';
+import { compact, formatCount } from '@/lib/format/numbers';
 import { identifyUser } from '@/lib/observability/sentry';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
@@ -20,6 +20,7 @@ import { AgentView } from './agent-view';
 import { BotView } from './bot-view';
 import { CampaignsCard, TemplatesCard } from './campaign-cards';
 import { DevicesCard, InstagramBand, IntegrationsCard } from './channel-cards';
+import { conversationStatusTiles } from './conversation-stats';
 import { asDashView, DASH_VIEWS, type DashView } from './dash-views';
 import { DEFAULT_PRESET, presetRange, todayIn, type DateRange } from './date-range';
 import { DateRangePill, DateRangeSheet } from './date-range-sheet';
@@ -29,11 +30,11 @@ import { AutopilotCard, ContactsCard, ReadRateCard, SentCard, WalletCard } from 
 import { PipelineCard } from './pipeline-card';
 import { windowLabel } from './ranges';
 import {
-  BarRows,
+  FigureRows,
   PairCard,
   StatusGrid,
   TitledCard,
-  type BarItem,
+  type FigureItem,
   type GridItem,
 } from './summary-cards';
 import { ActivityCard, FlowsCard, InboxCard } from './team-cards';
@@ -97,6 +98,8 @@ export function DashboardScreen() {
   const team = useTeamPanel(win, canAnalytics && view === 'agent');
   const [agent, setAgent] = useState<string | undefined>(undefined);
   const conversationStats = useConversationStats(win, agent, canAnalytics && view === 'agent');
+  // The Summary shows the same status counts for the whole workspace, so a person who may read analytics sees them there too.
+  const summaryStats = useConversationStats(win, undefined, canAnalytics && view === 'summary');
   const taskCounts = useTaskCounts(canTasks);
   const inboxCounts = useInboxCounts(canInbox);
   const wallet = useWalletSummary(can(session.data, 'wallet.balance.read'));
@@ -117,6 +120,7 @@ export function DashboardScreen() {
       wallet.refetch(),
       session.refetch(),
       ...(canAnalytics && view === 'agent' ? [team.refetch(), conversationStats.refetch()] : []),
+      ...(canAnalytics && view === 'summary' ? [summaryStats.refetch()] : []),
       ...(canContacts ? [newContacts.refetch()] : []),
       ...(canTasks ? [taskCounts.refetch()] : []),
       ...(canInbox ? [inboxCounts.refetch()] : []),
@@ -174,41 +178,45 @@ export function DashboardScreen() {
       value: n(counts?.archived),
     },
   ];
-  const messageItems: BarItem[] = s
-    ? (
-        [
-          {
-            key: 'sent',
-            label: t('summary.allMessages.sent'),
-            value: s.current.sent,
-            tone: 'primary',
-          },
-          {
-            key: 'delivered',
-            label: t('summary.allMessages.delivered'),
-            value: s.current.delivered,
-            tone: 'success',
-          },
-          {
-            key: 'received',
-            label: t('summary.allMessages.received'),
-            value: s.current.replies,
-            tone: 'primary',
-          },
-          {
-            key: 'read',
-            label: t('summary.allMessages.read'),
-            value: s.current.read,
-            tone: 'success',
-          },
-          {
-            key: 'failed',
-            label: t('summary.allMessages.failed'),
-            value: s.current.failed,
-            tone: 'danger',
-          },
-        ] satisfies Omit<BarItem, 'text'>[]
-      ).map((item) => ({ ...item, text: n(item.value) }))
+  const figure = (value: number) => ({ value: compact(value), spoken: n(value) });
+  const messageItems: FigureItem[] = s
+    ? [
+        {
+          key: 'sent',
+          label: t('summary.allMessages.sent'),
+          icon: 'paper-plane-outline',
+          tone: 'warning',
+          ...figure(s.current.sent),
+        },
+        {
+          key: 'delivered',
+          label: t('summary.allMessages.delivered'),
+          icon: 'checkmark-done-outline',
+          tone: 'instagram',
+          ...figure(s.current.delivered),
+        },
+        {
+          key: 'received',
+          label: t('summary.allMessages.received'),
+          icon: 'thumbs-up-outline',
+          tone: 'success',
+          ...figure(s.current.replies),
+        },
+        {
+          key: 'read',
+          label: t('summary.allMessages.read'),
+          icon: 'eye-outline',
+          tone: 'primary',
+          ...figure(s.current.read),
+        },
+        {
+          key: 'failed',
+          label: t('summary.allMessages.failed'),
+          icon: 'alert-circle-outline',
+          tone: 'danger',
+          ...figure(s.current.failed),
+        },
+      ]
     : [];
 
   return (
@@ -288,22 +296,15 @@ export function DashboardScreen() {
                 onPress: canTasks ? () => router.push('/tasks') : undefined,
               }}
             />
-            <PairCard
-              left={{
-                title: t('summary.messages'),
-                subtitle: t('summary.sentNote'),
-                value: n(s?.current.sent),
-                icon: 'paper-plane-outline',
-                tone: 'warning',
-              }}
-              right={{
-                title: t('summary.messages'),
-                subtitle: t('summary.receivedNote'),
-                value: n(s?.current.replies),
-                icon: 'chatbubble-ellipses-outline',
-                tone: 'instagram',
-              }}
-            />
+            {summaryStats.data ? (
+              <TitledCard
+                title={t('dashboard.agents.statusTitle')}
+                note={rangeName}
+                trailing={n(summaryStats.data.counts.total)}
+              >
+                <StatusGrid items={conversationStatusTiles(summaryStats.data.counts, t, n)} />
+              </TitledCard>
+            ) : null}
             {canInbox ? (
               <TitledCard
                 title={t('summary.conversations')}
@@ -314,12 +315,20 @@ export function DashboardScreen() {
               </TitledCard>
             ) : null}
             {s ? (
-              <TitledCard title={t('summary.allMessages.title')} trailing={n(s.current.sent)}>
-                <BarRows items={messageItems} />
+              <TitledCard title={t('summary.allMessages.title')} note={rangeName}>
+                <FigureRows items={messageItems} />
               </TitledCard>
             ) : (
               <ActivityIndicator accessibilityLabel={t('common.loading')} />
             )}
+
+            <ThroughputPanel
+              rangeName={rangeName}
+              summary={s}
+              throughput={throughput.data}
+              failed={Boolean(throughput.error)}
+              timezone={timezone}
+            />
 
             <Text variant="overline" muted style={styles.more}>
               {t('summary.moreTitle')}
@@ -331,14 +340,6 @@ export function DashboardScreen() {
 
             {w?.instagram ? <InstagramBand data={w.instagram} /> : null}
             {w?.pipeline ? <PipelineCard data={w.pipeline} /> : null}
-
-            <ThroughputPanel
-              rangeName={rangeName}
-              summary={s}
-              throughput={throughput.data}
-              failed={Boolean(throughput.error)}
-              timezone={timezone}
-            />
 
             {w ? (
               <>
