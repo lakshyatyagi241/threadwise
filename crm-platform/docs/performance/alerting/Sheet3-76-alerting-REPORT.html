@@ -150,4 +150,12 @@ node --test tools/alerting/check-alert-runbooks.test.mjs   -> 8 pass (the repo p
 <p>Webhook notifications received (status, alert, severity, runbook): none, see section 3.</p>
 <pre style="overflow-x:auto;background:var(--card);padding:10px;border:1px solid var(--line)">none recorded in the second run</pre>
 <p class="meta">Private containers (Redis, Prometheus, Alertmanager) and the throwaway database were removed at the end. The shared Postgres, Redis, crm-mon containers and the processes on ports 3000, 59464 to 59466 were not touched. Some cases did not fire: see the table.</p>
+<h2>9. Update: runner, hang re-check, webhook</h2>
+<ul>
+<li><strong>Runner:</strong> <code>bash script-testing/alerting/run.sh --quick</code> (exit 0/1/2, <code>result.json</code>, own ports, throwaway DB dropped on exit). Quick run result: <strong>PASS</strong> (promtool check, promtool test, ratchet, ratchet test, webhook delivery, live). Live table: worker-kill 8.5 s Pending / 28.5 s Firing; probe-dead-port 5 / 25; redis-full 9 / 29; outbox-dead 10.8 / 30.9; pg-blackhole (<code>DbPoolExhausted</code>) 4.7 / 24.7 (shortened <code>for</code>). Copy: <code>script-testing-quick-result.json</code>.</li>
+<li><strong>Postgres hang re-verified:</strong> after rebuilding the API with the <code>http-logger.ts</code> fix, with Postgres hanging through the TCP fault proxy the API stayed alive (<code>apiAliveAfterHang: true</code>) and <code>DbPoolExhausted</code> fired live. Finding 8 is closed for this one run (single run; I did not run the old build side by side again).</li>
+<li><strong>Webhook delivery proven:</strong> <code>webhook-delivery-check.mjs</code> delivered a critical <code>RedisDown</code> alert to the local receiver in 10 s with <code>runbook: docs/runbooks/p0-failure-modes.md#redisdown</code> (critical route group_wait 10 s). The earlier two failures had no identified cause (I suspect a leftover process on the ports); finding 9 is closed only as "works now", not explained.</li>
+<li><strong>New observation:</strong> in one earlier quick run the API process died while Redis was at maxmemory (<code>OOM command not allowed</code> on the socket.io psubscribe, fatal exit); in the passing run it did not. Intermittent, not investigated: open.</li>
+<li><strong>Metric gaps: none closed</strong> (skipped for time). All 7 remain open with the metric names above.</li>
+</ul>
 </main></body></html>

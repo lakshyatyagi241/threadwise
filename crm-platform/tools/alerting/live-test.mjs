@@ -146,6 +146,10 @@ const results = process.env.PRIOR ? JSON.parse(fs.readFileSync(process.env.PRIOR
 const ONLY = process.env.ONLY?.split(',');
 async function induce(id, desc, expect, doIt, undo, waitMs = 120000) {
   if (ONLY && !ONLY.includes(id)) return;
+  // a process that died in an earlier case (seen: the API exits when Redis is at maxmemory) is restarted so cases stay independent
+  const revived = [];
+  for (const n of ['api', 'worker']) if (procs[n] && procs[n].exitCode !== null) { revived.push(n); (n === 'api' ? startApi({ DB_POOL_MAX: '2' }) : startWorker()); }
+  if (revived.length) { log('REVIVED dead process(es) before', id, revived.join(',')); await sleep(25000); }
   phase = id;
   const before = await firing();
   log('==', id, desc, '| firing before:', before.join(',') || 'none');
@@ -160,6 +164,7 @@ async function induce(id, desc, expect, doIt, undo, waitMs = 120000) {
     id, desc, expectedAlert: expect.alert, fired: Boolean(hit?.firingAt),
     secondsToPending: hit?.pendingAt ? +((hit.pendingAt - t1) / 1000).toFixed(1) : null,
     secondsToFiring: hit?.firingAt ? +((hit.firingAt - t1) / 1000).toFixed(1) : null,
+    revivedBefore: revived,
     inductionTookSeconds: +((t1 - t0) / 1000).toFixed(1),
     firingBefore: before,
     alsoFired: mine.filter((e) => e.firingAt && e !== hit).map((e) => e.alert + (e.labels.job ? `{${e.labels.job}}` : '')),
@@ -199,6 +204,7 @@ async function main() {
   await induce('redis-full', 'fill the private Redis to maxmemory (8 MB, noeviction)', { alert: 'RedisMemoryNearMax' },
     async () => { dk('exec', names.redis, 'sh', '-c', fillSh); },
     async () => { dk('exec', names.redis, 'redis-cli', 'flushall'); });
+  { const r = results.find((x) => x.id === 'redis-full'); if (r) r.apiCrashedWhileRedisFull = procs.api.exitCode !== null; }
   await induce('redis-stop', 'stop the private Redis container', { alert: 'RedisDown' }, async () => { dk('stop', names.redis); }, async () => { dk('start', names.redis); await sleep(5000); });
 
   // outbox / dead letter, with the database reachable
