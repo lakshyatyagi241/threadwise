@@ -5,6 +5,17 @@ describe('contact filters', () => {
     expect(activeFilterCount({})).toBe(0);
     expect(activeFilterCount({ q: 'aar', lifecycleStage: 'new', unsubscribed: false })).toBe(2);
     expect(activeFilterCount({ source: '' })).toBe(0);
+    // The stage and the status are two groups.
+    expect(activeFilterCount({ lifecycleStage: 'qualified', status: 'Hot' })).toBe(2);
+    expect(activeFilterCount({ status: '' })).toBe(0);
+  });
+
+  it('keeps the status, and drops it when empty', () => {
+    expect(cleanFilters({ status: 'Hot', lifecycleStage: 'qualified' })).toEqual({
+      status: 'Hot',
+      lifecycleStage: 'qualified',
+    });
+    expect(cleanFilters({ status: '' })).toEqual({});
   });
 
   it('counts the owner and the created date once each', () => {

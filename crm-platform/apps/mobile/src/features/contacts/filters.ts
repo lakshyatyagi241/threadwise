@@ -18,6 +18,7 @@ export function activeFilterCount(filters: ContactFilters): number {
   return [
     filters.ownerIds || filters.unassigned || undefined,
     filters.lifecycleStage,
+    filters.status,
     filters.createdFrom || filters.createdTo || undefined,
     filters.source,
     filters.unsubscribed,
@@ -30,6 +31,7 @@ export function cleanFilters(filters: ContactFilters): ContactFilters {
   return {
     ...(filters.q?.trim() ? { q: filters.q.trim() } : {}),
     ...(filters.lifecycleStage ? { lifecycleStage: filters.lifecycleStage } : {}),
+    ...(filters.status ? { status: filters.status } : {}),
     ...(source ? { source } : {}),
     ...(filters.unsubscribed !== undefined ? { unsubscribed: filters.unsubscribed } : {}),
     ...(filters.ownerId ? { ownerId: filters.ownerId } : {}),

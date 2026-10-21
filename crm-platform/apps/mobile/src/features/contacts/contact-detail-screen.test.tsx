@@ -313,7 +313,13 @@ describe('ContactDetailScreen', () => {
       await show();
       await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
       expect(screen.getByLabelText('Name').props.value).toBe('Aarav Sharma');
-      expect(screen.getByLabelText('Phone').props.value).toBe('+919812345678');
+      // The number box holds the digits after the country code, which the code button shows.
+      expect(screen.getByLabelText('Phone').props.value).toBe('9812345678');
+      expect(screen.getByRole('button', { name: 'Country code' }).props.accessibilityValue).toEqual(
+        {
+          text: '+91',
+        },
+      );
       await fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
       await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       await waitFor(() =>
@@ -378,9 +384,7 @@ describe('ContactDetailScreen', () => {
       await fireEvent.changeText(screen.getByLabelText('Phone'), '+910000000');
       await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       expect(
-        await screen.findByText(
-          'Enter the phone number with the country code, for example +919876543210.',
-        ),
+        await screen.findByText('Enter a valid phone number for the country code shown.'),
       ).toBeTruthy();
       expect(updateCall).toHaveBeenCalledTimes(1);
     });

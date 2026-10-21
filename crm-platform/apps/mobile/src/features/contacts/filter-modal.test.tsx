@@ -3,16 +3,19 @@ import { fetchSession } from '@/lib/session/api';
 import { priya, rohan, sessionProps, statusOptions } from '@/test/contact-properties-fixtures';
 import { renderApp } from '@/test/render';
 import { initI18n } from '@/lib/i18n';
+import * as contactsApi from './api';
 import type { ContactFilters } from './api';
 import { FilterModal } from './filter-modal';
 import * as propertiesApi from './properties-api';
 
+jest.mock('./api');
 jest.mock('./properties-api');
 jest.mock('@/lib/session/api');
 
 const sessionCall = jest.mocked(fetchSession);
 const assigneesCall = jest.mocked(propertiesApi.listAssignees);
 const statusCall = jest.mocked(propertiesApi.listContactStatusOptions);
+const heldCall = jest.mocked(contactsApi.getContactFilterValues);
 const onApply = jest.fn();
 const onClose = jest.fn();
 
@@ -31,14 +34,16 @@ beforeEach(() => {
   sessionCall.mockResolvedValue(sessionProps);
   assigneesCall.mockResolvedValue([priya, rohan]);
   statusCall.mockResolvedValue(statusOptions);
+  heldCall.mockResolvedValue({ lifecycleStages: [], statuses: [] });
 });
 
 describe('FilterModal (contacts)', () => {
-  it('offers the five categories, like the Geta app', async () => {
+  it('offers the categories of the Geta app, with the contact status beside the stage', async () => {
     await show();
     for (const name of [
       'Contact owner',
       'Lifecycle stage',
+      'Status',
       'Created date',
       'Source',
       'Marketing messages',
@@ -83,6 +88,52 @@ describe('FilterModal (contacts)', () => {
     await fireEvent.press(await screen.findByRole('radio', { name: 'Qualified' }));
     await apply();
     expect(applied()).toEqual({ lifecycleStage: 'qualified' });
+  });
+
+  it("filters by the workspace's statuses, sending the status value", async () => {
+    await show();
+    await tab('Status');
+    // The ones of the workspace, retired ones left out, with an "Any" to clear it.
+    expect(await screen.findByRole('radio', { name: 'Open' })).toBeTruthy();
+    expect(screen.getByRole('radio', { name: 'Hot lead' })).toBeTruthy();
+    expect(screen.queryByRole('radio', { name: 'Retired' })).toBeNull();
+    await fireEvent.press(screen.getByRole('radio', { name: 'Hot lead' }));
+    await apply();
+    expect(applied()).toEqual({ status: 'Hot' });
+  });
+
+  it('also offers a stage and a status contacts hold that the workspace does not list', async () => {
+    heldCall.mockResolvedValue({
+      lifecycleStages: ['qualified', 'on_hold'],
+      statuses: ['Won', 'Open'],
+    });
+    await show();
+    await tab('Lifecycle stage');
+    // Listed ones once, the unlisted one added in words.
+    expect(await screen.findByRole('radio', { name: 'On Hold' })).toBeTruthy();
+    expect(screen.getAllByRole('radio', { name: 'Qualified' })).toHaveLength(1);
+    await tab('Status');
+    expect(await screen.findByRole('radio', { name: 'Won' })).toBeTruthy();
+    expect(screen.getAllByRole('radio', { name: 'Open' })).toHaveLength(1);
+  });
+
+  it('offers the four built-in statuses when the workspace has none', async () => {
+    statusCall.mockResolvedValue([]);
+    await show();
+    await tab('Status');
+    for (const name of ['Active', 'Prospect', 'Customer', 'VIP']) {
+      expect(await screen.findByRole('radio', { name })).toBeTruthy();
+    }
+  });
+
+  it('starts from the applied status and sends it back', async () => {
+    await show({ status: 'Hot', lifecycleStage: 'qualified' });
+    await tab('Status');
+    expect(
+      (await screen.findByRole('radio', { name: 'Hot lead' })).props.accessibilityState.checked,
+    ).toBe(true);
+    await apply();
+    expect(applied()).toEqual({ status: 'Hot', lifecycleStage: 'qualified' });
   });
 
   it('sends the created window as createdFrom and createdTo', async () => {

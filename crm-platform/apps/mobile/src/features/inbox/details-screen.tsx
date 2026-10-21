@@ -35,6 +35,7 @@ import {
 } from './thread-actions';
 import { useConversationActions } from './use-conversation-actions';
 import { useConversationDetail } from './use-inbox';
+import { useLifecycleNames } from './use-lifecycle-names';
 import { useNow } from './use-now';
 
 type Sheet = 'status' | 'priority' | 'snooze' | 'agent' | 'labels' | null;
@@ -53,6 +54,7 @@ export function ConversationDetailsScreen() {
   const now = useNow(60_000);
 
   const session = useSession();
+  const { stageName, statusName } = useLifecycleNames();
   const canRead = can(session.data, 'inbox.conversation.read');
   const canResolve = can(session.data, 'inbox.conversation.resolve');
   const canAssign = can(session.data, 'inbox.conversation.assign');
@@ -185,8 +187,14 @@ export function ConversationDetailsScreen() {
           {contact ? (
             <View style={styles.facts}>
               <Fact label={t('inbox.details.email')} value={contact.email} />
-              <Fact label={t('inbox.details.stage')} value={contact.lifecycleStage} />
-              <Fact label={t('inbox.details.contactStatus')} value={contact.status} />
+              <Fact
+                label={t('inbox.details.stage')}
+                value={contact.lifecycleStage ? stageName(contact.lifecycleStage) : null}
+              />
+              <Fact
+                label={t('inbox.details.contactStatus')}
+                value={contact.status ? statusName(contact.status) : null}
+              />
               <Fact label={t('inbox.details.owner')} value={contact.ownerName} />
               <Fact label={t('inbox.details.source')} value={contact.source} />
               <Fact

@@ -8,6 +8,7 @@ import {
   deleteContact,
   detachContactTag,
   getContact,
+  getContactFilterValues,
   getContactTags,
   listContacts,
   updateContact,
@@ -19,6 +20,17 @@ beforeEach(async () => {
 });
 
 describe('contacts api', () => {
+  it('reads the stages and statuses contacts hold for the filter lists', async () => {
+    const held = { lifecycleStages: ['new', 'qualified'], statuses: ['Open'] };
+    const http = mockFetch(jsonResponse(200, held));
+    await expect(getContactFilterValues()).resolves.toEqual(held);
+    expect(new URL(http.calls[0]!.url).pathname).toBe('/v2/contacts/filter-values');
+    mockFetch(jsonResponse(200, { lifecycleStages: 'new' }));
+    await expect(getContactFilterValues()).rejects.toMatchObject({
+      code: 'CLIENT_CONTRACT_MISMATCH',
+    });
+  });
+
   it('lists a page with the tags expanded and sends only the filters that are set', async () => {
     const http = mockFetch(jsonResponse(200, page([aarav], 'cursor-2', { total: 1 })));
     const result = await listContacts({

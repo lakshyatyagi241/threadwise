@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
+import { PhoneField } from '@/components/ui/phone-field';
 import { TextField, type TextFieldHandle } from '@/components/ui/text-field';
+import { DEFAULT_COUNTRY } from '@/lib/phone/countries';
 import { spacing } from '@/lib/theme/tokens';
 import { validateContact, type ContactField, type ContactFormValues } from './contact-validation';
 
@@ -40,7 +42,7 @@ export function ContactForm({
   extra,
   beforeSubmit,
 }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [values, setValues] = useState(initial);
   const [checked, setChecked] = useState<Partial<Record<ContactField, string>>>({});
   const phoneInput = useRef<TextFieldHandle>(null);
@@ -72,6 +74,7 @@ export function ContactForm({
       {banner ? <Banner tone="danger" message={banner} /> : null}
       <TextField
         label={t('contacts.form.name')}
+        placeholder={t('contacts.form.namePlaceholder')}
         value={values.name}
         onChangeText={(v) => change('name', v)}
         error={error('name')}
@@ -82,16 +85,21 @@ export function ContactForm({
         submitBehavior="submit"
         onSubmitEditing={() => phoneInput.current?.focus()}
       />
-      <TextField
+      <PhoneField
         label={t('contacts.form.phone')}
-        hint={t('contacts.form.phoneHint')}
         value={values.phone}
         onChangeText={(v) => change('phone', v)}
+        defaultCountry={DEFAULT_COUNTRY}
+        placeholder={t('contacts.form.phonePlaceholder')}
+        locale={i18n.language}
         error={error('phone')}
         inputRef={phoneInput}
+        codeLabel={t('contacts.form.countryCode')}
+        searchLabel={t('contacts.form.countrySearch')}
+        clearLabel={t('common.clear')}
+        closeLabel={t('common.back')}
+        emptyLabel={t('common.filters.noMatch')}
         autoComplete="tel"
-        inputMode="tel"
-        keyboardType="phone-pad"
         textContentType="telephoneNumber"
         returnKeyType="next"
         submitBehavior="submit"
@@ -99,6 +107,7 @@ export function ContactForm({
       />
       <TextField
         label={t('contacts.form.email')}
+        placeholder={t('auth.emailPlaceholder')}
         value={values.email}
         onChangeText={(v) => change('email', v)}
         error={error('email')}

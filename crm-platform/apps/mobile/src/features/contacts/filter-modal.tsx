@@ -2,8 +2,14 @@ import { useTranslation } from 'react-i18next';
 import { FilterPanes, type FilterCategory } from '@/components/ui/filter-panes';
 import { can, useSession } from '@/lib/session/use-session';
 import type { ContactFilters } from './api';
-import { LIFECYCLE_STAGES, cleanFilters } from './filters';
-import { STAGE_GROUP, optionsOfGroup } from './property-values';
+import { cleanFilters } from './filters';
+import {
+  stageChoices,
+  statusChoices,
+  titleCaseKey,
+  type LifecycleChoice,
+} from './property-values';
+import { useContactFilterValues } from './use-contacts';
 import { useAssignees, useStatusOptions } from './use-properties';
 
 interface Props {
@@ -34,15 +40,35 @@ export function FilterModal({ filters, onApply, onClose }: Props) {
   const { t } = useTranslation();
   const session = useSession();
   const people = useAssignees(can(session.data, 'record.contacts.read'));
-  const workspaceStages = optionsOfGroup(
-    useStatusOptions(can(session.data, 'record.contact-properties.read')).data ?? [],
-    [STAGE_GROUP],
-  );
+  const options = useStatusOptions(can(session.data, 'record.contact-properties.read')).data;
+  const held = useContactFilterValues(can(session.data, 'record.contacts.read')).data;
 
-  const stages =
-    workspaceStages.length > 0
-      ? workspaceStages.map((o) => ({ value: o.value, label: o.label }))
-      : LIFECYCLE_STAGES.map((stage) => ({ value: stage, label: t(`contacts.stage.${stage}`) }));
+  const stageName = (value: string) =>
+    t(`contacts.stage.${value}`, { defaultValue: titleCaseKey(value) });
+  const statusName = (value: string) =>
+    t(`contactProps.lifecycle.fallbackStatus.${value}`, { defaultValue: titleCaseKey(value) });
+  // The workspace's own stages and statuses (or the built-in ones when it has none), then any value contacts hold that the list lacks
+  // (the platform default `new`, a status from before the workspace configured its own), so a filter can pick those too.
+  const withHeld = (
+    base: readonly LifecycleChoice[],
+    heldValues: readonly string[] | undefined,
+    name: (value: string) => string,
+  ) => [
+    ...base,
+    ...(heldValues ?? [])
+      .filter((v) => v.trim() !== '' && !base.some((c) => c.value === v))
+      .map((value) => ({ value, label: name(value) })),
+  ];
+  const stages = withHeld(
+    stageChoices(options, stageName, null),
+    held?.lifecycleStages,
+    stageName,
+  ).map(({ value, label }) => ({ value, label }));
+  const statuses = withHeld(
+    statusChoices(options, undefined, statusName, null),
+    held?.statuses,
+    statusName,
+  ).map(({ value, label }) => ({ value, label }));
 
   const categories: FilterCategory[] = [
     {
@@ -60,6 +86,12 @@ export function FilterModal({ filters, onApply, onClose }: Props) {
       title: t('contacts.filter.stage'),
       kind: 'single',
       options: [{ value: '', label: t('contacts.filter.any') }, ...stages],
+    },
+    {
+      key: 'status',
+      title: t('contacts.filter.status'),
+      kind: 'single',
+      options: [{ value: '', label: t('contacts.filter.any') }, ...statuses],
     },
     { key: 'created', title: t('contacts.filter.created'), kind: 'dates', maxDate: today() },
     {
@@ -93,6 +125,7 @@ export function FilterModal({ filters, onApply, onClose }: Props) {
       value={{
         owner: owners.join(','),
         stage: filters.lifecycleStage ?? '',
+        status: filters.status ?? '',
         created: `${filters.createdFrom ?? ''},${filters.createdTo ?? ''}`,
         source: filters.source ?? '',
         marketing: toMarketing(filters.unsubscribed),
@@ -106,6 +139,7 @@ export function FilterModal({ filters, onApply, onClose }: Props) {
             ownerIds: chosen.filter((id) => id !== NO_OWNER).join(','),
             unassigned: chosen.includes(NO_OWNER) ? true : undefined,
             lifecycleStage: picked.stage || undefined,
+            status: picked.status || undefined,
             createdFrom: createdFrom || undefined,
             createdTo: createdTo || undefined,
             source: picked.source,

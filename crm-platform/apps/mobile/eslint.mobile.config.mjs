@@ -134,6 +134,7 @@ export default [
       'apps/mobile/src/components/ui/text.tsx',
       'apps/mobile/src/components/ui/text-field.tsx',
       'apps/mobile/src/components/ui/search-field.tsx',
+      'apps/mobile/src/components/ui/phone-field.tsx',
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

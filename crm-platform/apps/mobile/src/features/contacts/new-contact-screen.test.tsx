@@ -87,15 +87,24 @@ describe('NewContactScreen', () => {
     expect(createCall).not.toHaveBeenCalled();
   });
 
+  it('shows what to type in each box, and starts the phone on India', async () => {
+    await show();
+    expect((await screen.findByLabelText('Name')).props.placeholder).toBe('Full name');
+    expect(screen.getByLabelText('Phone').props.placeholder).toBe('9876543210');
+    expect(screen.getByLabelText('Email').props.placeholder).toBe('you@company.com');
+    expect(screen.getByRole('button', { name: 'Country code' }).props.accessibilityValue).toEqual({
+      text: '+91',
+    });
+  });
+
   it('checks the shape of the phone and the email before sending', async () => {
     await show();
-    await fireEvent.changeText(await screen.findByLabelText('Phone'), '9812345678');
+    // Too short for any number: with the country code the field adds, "+91123" is not one.
+    await fireEvent.changeText(await screen.findByLabelText('Phone'), '123');
     await fireEvent.changeText(screen.getByLabelText('Email'), 'not-an-email');
     await save();
     expect(
-      await screen.findByText(
-        'Enter the phone number with the country code, for example +919876543210.',
-      ),
+      await screen.findByText('Enter a valid phone number for the country code shown.'),
     ).toBeTruthy();
     expect(screen.getByText('Enter a valid email address.')).toBeTruthy();
     expect(createCall).not.toHaveBeenCalled();

@@ -16,6 +16,7 @@ import {
   deleteContact,
   detachContactTag,
   getContact,
+  getContactFilterValues,
   getContactTags,
   listContacts,
   updateContact,
@@ -65,6 +66,18 @@ export const useContact = (id: string, enabled = true) =>
     queryKey: contactKey(id),
     queryFn: ({ signal }) => getContact(id, signal),
     enabled: enabled && id !== '',
+  });
+
+export const contactFilterValuesKey = ['contacts', 'filter-values'] as const;
+
+/** The stages and statuses contacts hold right now, for the filter sheet. No request while `enabled` is false; a refusal is not retried. */
+export const useContactFilterValues = (enabled = true) =>
+  useQuery({
+    queryKey: contactFilterValuesKey,
+    queryFn: ({ signal }) => getContactFilterValues(signal),
+    enabled,
+    retry: false,
+    staleTime: 60_000,
   });
 
 export const useContactTags = (id: string, enabled = true) =>

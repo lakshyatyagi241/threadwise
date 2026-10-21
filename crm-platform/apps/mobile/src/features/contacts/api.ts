@@ -1,4 +1,5 @@
 import {
+  contactFilterValuesSchema,
   contactResponseSchema,
   pageResponseSchema,
   tagResponseSchema,
@@ -23,6 +24,7 @@ export type ContactFilters = Pick<
   ListContactsQuery,
   | 'q'
   | 'lifecycleStage'
+  | 'status'
   | 'source'
   | 'unsubscribed'
   | 'ownerId'
@@ -34,6 +36,10 @@ export type ContactFilters = Pick<
   /** Contacts owned by any of these people: their ids, comma-joined as the query string takes them. */
   ownerIds?: string;
 };
+
+/** The stages and statuses the contacts the caller can see actually hold, for the filter lists (a value the workspace no longer lists still counts). */
+export const getContactFilterValues = (signal?: AbortSignal) =>
+  apiFetch('/v2/contacts/filter-values', { schema: contactFilterValuesSchema, signal });
 
 export type ContactListParams = ContactFilters & { limit: number; cursor?: string };
 
