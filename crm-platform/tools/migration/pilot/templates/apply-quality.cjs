@@ -11,7 +11,7 @@
  */
 const fs = require('node:fs');
 
-const LEVELS = new Set(['HIGH', 'MEDIUM', 'LOW', 'UNKNOWN']);
+const LEVELS = new Set(['GREEN', 'YELLOW', 'RED', 'UNKNOWN']);
 
 function args(argv) {
   const get = (k) => {

@@ -14,13 +14,16 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const GRAPH = process.env.META_API_VERSION || 'v25.0';
-const LEVELS = new Set(['HIGH', 'MEDIUM', 'LOW', 'UNKNOWN']);
+const LEVELS = new Set(['GREEN', 'YELLOW', 'RED', 'UNKNOWN']);
+/** The older names of the same three levels, read as their colour (Meta now says GREEN, YELLOW, RED). */
+const LEGACY = { HIGH: 'GREEN', MEDIUM: 'YELLOW', LOW: 'RED' };
 
-/** The rating as Desk stores it: Meta's word, uppercase. Anything else (missing, unknown word) is UNKNOWN. */
+/** The rating as Desk stores it: Meta's word, uppercase (GREEN, YELLOW, RED, UNKNOWN). Anything else (missing, unknown word) is UNKNOWN. */
 function normalizeQuality(q) {
   const s = typeof q === 'string' ? q : q && typeof q === 'object' ? q.score : null;
   const u = typeof s === 'string' ? s.trim().toUpperCase() : '';
-  return LEVELS.has(u) ? u : 'UNKNOWN';
+  const word = LEGACY[u] || u;
+  return LEVELS.has(word) ? word : 'UNKNOWN';
 }
 
 /**
