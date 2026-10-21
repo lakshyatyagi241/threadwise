@@ -41,6 +41,7 @@ async function bootstrap(): Promise<void> {
     // them (key order, whitespace, number formatting).
     rawBody: true,
   });
+  app.disable('x-powered-by'); // VAPT: do not advertise the framework
 
   // Every Nest `Logger` call goes through pino (JSON, redaction, request id); without this they print as coloured text.
   app.useLogger(app.get(PinoLogger));

@@ -1,0 +1,82 @@
+# Alerts for the P0 failure modes that had no alert (Sheet3 #76). Matrix: docs/performance/alerting/failure-modes.json.
+# Every alert carries a `runbook` annotation: a repo path plus #anchor into docs/runbooks/p0-failure-modes.md (checked by
+# tools/alerting/check-alert-runbooks.mjs). Tested with promtool: p0-failure-modes.rules.test.yml, and live (see the report).
+groups:
+  - name: p0-failure-modes
+    rules:
+      - alert: RedisDown
+        expr: crm_redis_up == 0
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Redis INFO has failed for 2 minutes (seen by {{ $labels.service }})'
+          description: 'Queues, cache, sessions and rate limits depend on Redis. Jobs are not processed while it is down.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#redisdown'
+
+      - alert: RedisMemoryNearMax
+        expr: max by (service) (crm_redis_memory_used_bytes) / (max by (service) (crm_redis_memory_max_bytes) > 0) > 0.9
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Redis memory above 90% of maxmemory for 5 min'
+          description: 'At maxmemory Redis evicts or rejects writes; BullMQ jobs can be lost or enqueue can fail.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#redismemorynearmax'
+
+      - alert: DbPoolExhausted
+        expr: max by (service, pool) (crm_db_pool_waiting) > 0
+        for: 3m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Callers have waited for a {{ $labels.pool }} Postgres connection for 3 min on {{ $labels.service }}'
+          description: 'The client pool is exhausted: requests queue behind it and time out. Either Postgres is slow or connections leak.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#dbpoolexhausted'
+
+      - alert: OutboxNotDraining
+        expr: max(crm_outbox_oldest_due_seconds) > 300
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'The oldest due outbox event has waited {{ $value | humanizeDuration }}'
+          description: 'Automations, notifications and counters are not being produced. Business data is still correct.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#outboxnotdraining'
+
+      - alert: OutboxDeadRows
+        expr: max(crm_outbox_dead) > 0
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: '{{ $value }} outbox events exhausted their retries'
+          description: 'Those side effects will never happen until someone replays them.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#outboxdeadrows'
+
+      - alert: DeadLetterOpenTooLong
+        expr: max by (queue) (crm_dead_letter_oldest_open_seconds) > 3600
+        for: 15m
+        labels: { severity: warning }
+        annotations:
+          summary: 'A failed operation on {{ $labels.queue }} has been open for over an hour'
+          description: 'Failed webhook, provider-send and job operations are recorded here; nobody has replayed or closed them.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#deadletteropentoolong'
+
+      - alert: ApiHighErrorRate
+        expr: |
+          (
+            sum by (service) (rate(crm_http_request_duration_seconds_count{status="5xx"}[5m]))
+              / sum by (service) (rate(crm_http_request_duration_seconds_count[5m])) > 0.05
+          )
+          and sum by (service) (rate(crm_http_request_duration_seconds_count[5m])) > 0.1
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'More than 5% of {{ $labels.service }} requests answer 5xx'
+          description: 'Ignored below 0.1 request/s so a single failure on an idle service does not page.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#apihigherrorrate'
+
+      - alert: DeadLetterCaptureFailing
+        expr: sum by (service) (increase(crm_dead_letter_capture_failures_total[10m])) > 0
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Failed work on {{ $labels.service }} could not be written to the durable failure store'
+          description: 'A job or webhook failed and its record was lost: nobody can find or replay it later. Usually the database is down or the table is locked.'
+          runbook: 'docs/runbooks/p0-failure-modes.md#deadlettercapturefailing'
