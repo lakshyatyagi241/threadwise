@@ -6,7 +6,7 @@
 // Live checks (running API, seeded database) run when their env vars are set (see tools/qa-suite/README.md); without them an item that
 // needs a live run is "needs a run", never "done". `--reuse` reads the last results.json instead of running the suite again.
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -202,7 +202,7 @@ table{border-collapse:collapse;width:100%;font-size:13px;display:block;overflow-
       ? `<table><tr><th>Item</th><th>Computed</th><th>Sheet says</th><th>Target</th><th>Why / evidence</th><th>How to rerun</th></tr>${list
           .map(
             (r) =>
-              `<tr><td>${esc(r.item)}</td><td class="${r.verdict}">${esc(VERDICT[r.verdict])}</td><td>${esc(r.claimed)}${r.claimed === 'Completed' && !isDone(r.verdict) ? ' <span class="open">(differs)</span>' : ''}</td><td>${esc(r.target)}</td><td>${reasons(r)}</td><td><code>${esc(r.rerun)}</code></td></tr>`,
+              `<tr><td>${esc(r.item)}</td><td class="${r.verdict}">${esc(VERDICT[r.verdict])}</td><td>${esc(r.claimed)}${r.claimed === 'Completed' && !isDone(r.verdict) ? ' <span class="open">(differs)</span>' : ''}</td><td>${esc(r.target)}${r.runAt ? `<br><span class="mut">result of run ${esc(r.runAt)}</span>` : ''}</td><td>${reasons(r)}</td><td><code>${esc(r.rerun)}</code></td></tr>`,
           )
           .join('')}</table>`
       : '<p class="mut">None.</p>';
@@ -215,20 +215,50 @@ table{border-collapse:collapse;width:100%;font-size:13px;display:block;overflow-
 <h2>Done items</h2>${table(rows.filter((r) => isDone(r.verdict)))}</body></html>`;
 }
 
+/** Each task's newest stored result (reports/qa-suite/<timestamp>/results.json), so a live run of a few tasks does not hide the rest. */
+export function latestPerTask(dir = join(ROOT, 'reports/qa-suite')) {
+  const byTask = new Map();
+  const runs = existsSync(dir)
+    ? readdirSync(dir)
+        .filter((d) => /^\d{4}-\d\d-\d\dT/.test(d))
+        .sort()
+        .reverse()
+    : [];
+  for (const run of runs) {
+    const file = join(dir, run, 'results.json');
+    if (!existsSync(file)) continue;
+    const res = JSON.parse(readFileSync(file, 'utf8'));
+    for (const r of res.results) {
+      if (!byTask.has(r.task.id))
+        byTask.set(r.task.id, {
+          ...r,
+          runAt: run,
+          live: !!res.meta?.live?.db || !!res.meta?.live?.api,
+        });
+    }
+  }
+  return byTask;
+}
+
+const OWN_FLAGS = new Set(['--reuse', '--out', '--owner']);
+
 function main() {
   const owner = arg('--owner', 'Punya');
   const items = json('tools/qa-suite/status/sheet-claims.json').items;
   if (!process.argv.includes('--reuse')) {
+    // every other flag (--run-unit, --stress, ...) goes to the suite; its env (API_URL, DATABASE_URL, ...) decides whether live checks run
+    const raw = process.argv.slice(2);
+    const pass = raw.filter((a, i) => !OWN_FLAGS.has(a) && !OWN_FLAGS.has(raw[i - 1]));
     const ids = [...new Set(items.map((i) => i.task).filter((t) => t != null))];
-    spawnSync('node', [join(ROOT, 'tools/qa-suite/run.mjs'), ...ids.map(String)], {
+    spawnSync('node', [join(ROOT, 'tools/qa-suite/run.mjs'), ...ids.map(String), ...pass], {
       cwd: ROOT,
       stdio: 'inherit',
       env: process.env,
     });
   }
+  const byTask = latestPerTask();
+  if (!byTask.size) throw new Error('no stored QA results: run without --reuse first');
   const res = json('reports/qa-suite/latest/results.json');
-  if (!res) throw new Error('no reports/qa-suite/latest/results.json: run without --reuse first');
-  const byTask = new Map(res.results.map((r) => [r.task.id, r]));
   const extra = evidenceItems();
   const rows = items.map((i) => {
     const r = i.task != null ? byTask.get(i.task) : undefined;
@@ -243,6 +273,7 @@ function main() {
       verdict: verdictOf({ built, checks, target }),
       targetText: target.text ?? '',
       notes: notesFor(i.item),
+      runAt: r?.runAt ?? null,
       failing: checks.filter((c) => c.status === 'fail'),
       skipped: checks.filter((c) => c.status === 'skip').length,
       rerun: i.task != null ? `pnpm qa ${i.task}` : (RERUN_EXTRA[i.item] ?? ''),
@@ -250,7 +281,7 @@ function main() {
   });
   const meta = {
     owner,
-    commit: res.meta?.commit ?? '?',
+    commit: res?.meta?.commit ?? '?',
     generatedAt: new Date().toISOString(),
     live: !!process.env.API_URL || !!process.env.DATABASE_URL,
   };
