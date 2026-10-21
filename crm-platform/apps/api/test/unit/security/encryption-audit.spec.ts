@@ -191,6 +191,7 @@ describe('source guards', () => {
       'infra/providers/platform-payment-gateways/us.drivers.ts', // the gateway's own request hash, fixed by its API
       'infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts', // short key for a recipient in a rate-limit counter, not a protection
       'modules/team-inbox-routing-sla/routing-engine.service.ts', // a deterministic uuid (v5 shape) from a seed, not a protection
+      'modules/team-inbox-routing-sla/handoff.service.ts', // the same deterministic uuid (v5 shape) from a seed so a retry sends nothing twice, not a protection
     ]);
     const bad = ALL.filter(
       ({ p, s }) => /create(Hash|Hmac)\(\s*['"](md5|sha1)['"]/.test(s) && !ALLOWED.has(p),
