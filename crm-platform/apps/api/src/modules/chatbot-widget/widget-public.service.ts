@@ -1,7 +1,9 @@
 import { pickChatLocale } from './chat-page-text';
 import { chatWindowLocale } from './chat-window-locale';
 import { isAssetSlot } from './asset-slots';
-import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { HandoffService } from '../team-inbox-routing-sla';
+import { readHandoff } from './ai-prompt';
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import {
@@ -128,6 +130,7 @@ export class WidgetPublicService {
     private readonly consentIntake: ConsentIntakeService,
     private readonly privacy: ContactPrivacyService,
     private readonly minors: MinorDetectionService,
+    @Optional() private readonly handoff?: HandoffService,
   ) {}
 
   /** The widget behind a token, whatever its status; undefined for a malformed, unknown or rotated token. */
@@ -440,6 +443,14 @@ export class WidgetPublicService {
       });
     }
 
+    // The model (or the visitor's keyword) asked for a person: the same handoff a flow node makes (BL-399). The marker never reaches the visitor.
+    let handoffAsked: { reason: string | null } | null = null;
+    if (stored.assistant && replyText !== null) {
+      const read = readHandoff(stored.assistant, data.body, replyText);
+      replyText = read.reply;
+      if (read.handoff) handoffAsked = { reason: read.reason };
+    }
+
     // 3. The reply joins the thread.
     const reply =
       replyText === null
@@ -455,6 +466,34 @@ export class WidgetPublicService {
             );
             return { id: out.id, body: replyText!, at: out.sentAt.toISOString() };
           });
+
+    if (handoffAsked && this.handoff) {
+      try {
+        const uuid = await this.db.txAs({ orgId }, async (tx) => {
+          const r = await tx.execute(
+            sql`SELECT uuid FROM conversations WHERE org_id = ${orgId} AND id = ${stored.conversation.id}`,
+          );
+          return (r.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
+        });
+        if (uuid) {
+          await this.handoff.handoff({
+            orgId,
+            conversationUuid: uuid,
+            source: 'ai_agent',
+            reason: 'customer_asked',
+            reasonText: handoffAsked.reason,
+            summary: handoffAsked.reason,
+            destination: { kind: 'rules' },
+            idempotencyKey: `ai:${stored.inbound.id}`,
+            messageText: data.body,
+            actor: { kind: 'bot' },
+          });
+        }
+      } catch (err) {
+        // A failed handoff never costs the visitor their answer; the conversation stays where it is.
+        this.logger.warn({ widget: widget.uuid, err: String(err) }, '[WGT] handoff failed');
+      }
+    }
 
     return { ok: true, inbound: { id: stored.inbound.id }, reply };
   }

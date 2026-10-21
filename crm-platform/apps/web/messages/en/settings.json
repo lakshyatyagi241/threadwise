@@ -106,7 +106,7 @@
         "keywords": "text message, sender id, dlt, twilio, mobile"
       },
       "email": {
-        "label": "Email",
+        "label": "Support email",
         "description": "Connect Gmail or Google Workspace mailboxes so your team can read and answer customer email in the shared inbox.",
         "keywords": "mailbox, gmail, google workspace, shared inbox, support email, outlook, imap"
       },

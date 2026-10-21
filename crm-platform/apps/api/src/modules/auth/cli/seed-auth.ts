@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
+import { bumpRolesVersionOffline } from '../../../kernel/rbac/roles-version-offline';
 
 loadEnv({ path: resolve(__dirname, '../../../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
@@ -315,6 +316,14 @@ async function main(): Promise<void> {
     const plansCreated = await seedPlans(client);
 
     await client.query('COMMIT');
+    // New role links: a running API must not keep serving the grant sets it cached before them (R-64-04).
+    const rbac = await bumpRolesVersionOffline(client, [
+      ...new Set(users.rows.map((u) => u.org_id)),
+    ]);
+    if (!rbac.redisCleared)
+      console.log(
+        'note: Redis was not cleared; a running API picks up the new roles within 10 minutes.',
+      );
     console.log(
       `plans:    starter (free, 14-day trial, sign-up default), growth, scale  (${plansCreated} created)`,
     );

@@ -101,7 +101,7 @@
         "keywords": "문자 메시지, 발신자 ID, dlt, twilio, 모바일"
       },
       "email": {
-        "label": "이메일",
+        "label": "지원 이메일",
         "description": "Gmail 또는 Google Workspace 사서함을 연결해 팀이 공유 수신함에서 고객 이메일을 읽고 답장할 수 있도록 하세요.",
         "keywords": "사서함, gmail, google workspace, 공유 수신함, 지원 이메일, outlook, imap"
       },

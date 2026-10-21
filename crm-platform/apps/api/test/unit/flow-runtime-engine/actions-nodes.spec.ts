@@ -294,6 +294,7 @@ describe('the executor', () => {
         d.tags as never,
         d.deals as never,
         d.assignment as never,
+        { handoff: async () => ({ outcome: 'assigned', trace: [], duplicate: false }) } as never,
         d.numbers as never,
         d.conversationsRepo as never,
         d.events as never,

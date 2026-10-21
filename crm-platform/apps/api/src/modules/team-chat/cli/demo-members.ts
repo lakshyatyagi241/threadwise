@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { hash } from '@node-rs/argon2';
 import type { Client } from 'pg';
+import { bumpRolesVersionOffline } from '../../../kernel/rbac/roles-version-offline';
 
 /**
  * Demo teammates for local work (TW-TCHAT-032, Reference's TeamChatDemoMembersSeeder): ten fictional people, eight agents and
@@ -69,6 +70,8 @@ export async function seedDemoMembers(
       [orgId],
     );
     await client.query('COMMIT');
+    // Role links were added: a running API must not keep the grant sets it cached before them (R-64-04).
+    await bumpRolesVersionOffline(client, [orgId]);
     return { usersCreated, linksCreated, members: Number(total.rows[0]!.n) };
   } catch (e) {
     await client.query('ROLLBACK');

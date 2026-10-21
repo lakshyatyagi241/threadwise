@@ -1,3 +1,5 @@
+import { SET_UNLESS_INVALIDATED_LUA } from '../../../src/modules/auth/security/account-gate.service';
+
 /**
  * A small in-memory stand-in for the ioredis client, with a clock the test controls and switches for the failures a cache must survive.
  * It implements only the commands the audited caches call, with Redis semantics for expiry (EX/PX/NX/XX/KEEPTTL, EXPIRE ... NX).
@@ -147,6 +149,31 @@ export class FakeRedis {
     return 1;
   }
 
+  /**
+   * Lua is not emulated, with one exception: the gate's "set unless invalidated" script, whose logic is four lines (see
+   * SET_UNLESS_INVALIDATED_LUA in account-gate.service.ts; the real script runs against a real Redis in the cache-invalidation specs).
+   */
+  async eval(script: string, _n: number, ...a: string[]): Promise<number> {
+    await this.enter('eval');
+    if (script !== SET_UNLESS_INVALIDATED_LUA) throw new Error('fake redis: Lua is not emulated');
+    const [key, genKey, allKey, seenUser, seenAll, ttl, json] = a as [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ];
+    if (
+      (this.live(genKey)?.value ?? '') !== seenUser ||
+      (this.live(allKey)?.value ?? '') !== seenAll
+    )
+      return 0;
+    this.setSync(key, json, ['EX', Number(ttl)]);
+    return 1;
+  }
+
   async scan(cursor: string, _match: 'MATCH', pattern: string): Promise<[string, string[]]> {
     await this.enter('scan');
     const re = new RegExp(
@@ -164,6 +191,10 @@ export class FakeRedis {
   async runBatch(ops: Array<[string, unknown[]]>): Promise<Array<[Error | null, unknown]>> {
     await this.enter('exec');
     return ops.map(([cmd, args]) => {
+      if (cmd === 'del') {
+        for (const k of args as string[]) this.store.delete(k);
+        return [null, 1];
+      }
       if (cmd === 'incr') return [null, this.incrSync(args[0] as string)];
       if (cmd === 'expire')
         return [
@@ -178,6 +209,10 @@ export class FakeRedis {
 class FakeMulti {
   private readonly ops: Array<[string, unknown[]]> = [];
   constructor(private readonly r: FakeRedis) {}
+  del(...keys: string[]): this {
+    this.ops.push(['del', keys]);
+    return this;
+  }
   incr(key: string): this {
     this.ops.push(['incr', [key]]);
     return this;

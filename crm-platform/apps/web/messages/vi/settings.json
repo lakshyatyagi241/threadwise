@@ -101,7 +101,7 @@
         "keywords": "tin nhắn văn bản, sender id, dlt, twilio, di động"
       },
       "email": {
-        "label": "Email",
+        "label": "Email hỗ trợ",
         "description": "Kết nối hộp thư Gmail hoặc Google Workspace để nhóm của bạn đọc và trả lời email khách hàng trong hộp thư đến dùng chung.",
         "keywords": "hộp thư, gmail, google workspace, hộp thư đến dùng chung, email hỗ trợ, outlook, imap"
       },

@@ -19,6 +19,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -83,6 +84,11 @@ export const conversations = pgTable(
     lastInboundAt: timestamp('last_inbound_at', { withTimezone: true }),
     lastOutboundAt: timestamp('last_outbound_at', { withTimezone: true }),
     unreadCount: integer('unread_count').notNull().default(0),
+    /** Handoff (BL-396, migration 20270301090000): who handles the thread. NULL = not tracked, behaves as before. */
+    handling: text('handling').$type<'with_bot' | 'waiting' | 'with_person'>(),
+    handlingSince: timestamp('handling_since', { withTimezone: true }),
+    /** Who set the current assignee (manual, claim, handoff_named, rule, owner, sticky, sync, system). */
+    assignedSource: text('assigned_source'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -161,6 +167,9 @@ export const conversations = pgTable(
       .where(
         sql`status = 'open' AND NOT archived AND muted_at IS NULL AND assignee_user_id IS NULL AND assignee_team_id IS NULL AND assignee_agent_id IS NULL AND waiting_since IS NOT NULL AND unread_count > 0`,
       ),
+    index('idx_conversations_waiting')
+      .on(t.orgId, t.handlingSince)
+      .where(sql`handling = 'waiting'`),
     index('idx_conversations_snooze_due')
       .on(t.snoozedUntil)
       .where(sql`status = 'snoozed' AND snoozed_until IS NOT NULL`),
@@ -256,6 +265,94 @@ export const conversationNotes = pgTable(
     ),
   ],
 );
+
+/** One row per handoff: the card the agent reads and the run log (migration 20270301090000). */
+export const conversationHandoffs = pgTable(
+  'conversation_handoffs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    conversationId: idColumn('conversation_id').notNull(),
+    source: text('source').notNull(),
+    reason: text('reason').notNull().default('other'),
+    reasonText: text('reason_text'),
+    summary: text('summary'),
+    answers: jsonb('answers')
+      .$type<Record<string, string>>()
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    destinationKind: text('destination_kind').notNull(),
+    destinationTeamId: idColumn('destination_team_id'),
+    destinationUserId: idColumn('destination_user_id'),
+    priority: text('priority'),
+    status: text('status').notNull().default('waiting'),
+    outcome: text('outcome').notNull().default('waiting'),
+    assignedUserId: idColumn('assigned_user_id'),
+    assignedTeamId: idColumn('assigned_team_id'),
+    trace: jsonb('trace')
+      .$type<Array<Record<string, unknown>>>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    idempotencyKey: text('idempotency_key'),
+    flowRunId: idColumn('flow_run_id'),
+    nodeId: text('node_id'),
+    requestedBy: idColumn('requested_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_conversation_handoffs_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_conversation_handoffs_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_conversation',
+      columns: [t.orgId, t.conversationId],
+      foreignColumns: [conversations.orgId, conversations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_dest_team',
+      columns: [t.orgId, t.destinationTeamId],
+      foreignColumns: [teams.orgId, teams.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_dest_user',
+      columns: [t.orgId, t.destinationUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_assigned_user',
+      columns: [t.orgId, t.assignedUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_assigned_team',
+      columns: [t.orgId, t.assignedTeamId],
+      foreignColumns: [teams.orgId, teams.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_requested_by',
+      columns: [t.orgId, t.requestedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    uniqueIndex('uq_conversation_handoffs_live')
+      .on(t.orgId, t.conversationId)
+      .where(sql`status IN ('waiting', 'assigned')`),
+    uniqueIndex('uq_conversation_handoffs_idem')
+      .on(t.orgId, t.idempotencyKey)
+      .where(sql`idempotency_key IS NOT NULL`),
+    index('idx_conversation_handoffs_conv').on(t.orgId, t.conversationId, t.createdAt.desc()),
+  ],
+);
+
+export type ConversationHandoffsRow = typeof conversationHandoffs.$inferSelect;
+export type NewConversationHandoffsRow = typeof conversationHandoffs.$inferInsert;
 
 export type ConversationNotesRow = typeof conversationNotes.$inferSelect;
 export type NewConversationNotesRow = typeof conversationNotes.$inferInsert;

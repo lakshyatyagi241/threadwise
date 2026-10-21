@@ -29,6 +29,38 @@ export function assignConfig(
   };
 }
 
+/**
+ * What the Human handoff node saved (`data.handoff === 2`, BL-398): the destination, why, what the agent should know and what the
+ * customer is told. A node without that marker is the old Assign agent and keeps `assignConfig`.
+ */
+export function handoffConfig(
+  d: Bag,
+  render: (t: unknown) => string,
+): {
+  destination: 'team' | 'person' | 'rules';
+  teamId: string;
+  userId: string;
+  reason: string;
+  priority: string;
+  note: string;
+  summary: string;
+  customerMessage: string;
+  offHoursMessage: string;
+} {
+  const kind = str(d.destination).toLowerCase();
+  return {
+    destination: kind === 'person' ? 'person' : kind === 'rules' ? 'rules' : 'team',
+    teamId: str(d.team ?? d.teamId).trim(),
+    userId: str(d.userId).trim(),
+    reason: str(d.reason).trim() || 'other',
+    priority: str(d.priority).trim(),
+    note: render(d.message ?? d.noteForAgent).trim(),
+    summary: render(d.summary).trim(),
+    customerMessage: render(d.customerMessage).trim(),
+    offHoursMessage: render(d.offHoursMessage).trim(),
+  };
+}
+
 export const DEFAULT_DEAL_NAME = '{{contact_name}} — deal';
 
 export function dealConfig(

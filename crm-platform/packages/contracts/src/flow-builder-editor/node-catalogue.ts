@@ -137,7 +137,7 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   // Not a Reference node: the FAQ knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
   def('faq', 'Answer from FAQ', 'AI', 'Match a message to your FAQs', SOCIAL_AND_CHAT),
   def('tag', 'Tag contact', 'Contact', 'Add or remove a tag'),
-  def('assign', 'Assign agent', 'Contact', 'Hand off to a human'),
+  def('assign', 'Human handoff', 'Contact', 'Hand the chat to a person or a queue'),
   def('subflow', 'Run sub-flow', 'Logic', 'Call another flow'),
   def('end', 'End', 'Start', 'Stop the flow here', ALL, { terminal: true }),
   def('cta', 'Call to action', 'Engage', 'Send a CTA button', ['chat', 'web']),
@@ -571,7 +571,19 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'tag':
       return { action: 'add', tag: '', tagId: '' };
     case 'assign':
-      return { team: '', userId: '', message: '' };
+      // `handoff: 2` marks the node as the Human handoff of BL-398; a node saved without it is the old Assign agent and keeps its one exit.
+      return {
+        handoff: 2,
+        destination: 'team',
+        team: '',
+        userId: '',
+        reason: 'customer_asked',
+        priority: '',
+        message: '',
+        summary: '',
+        customerMessage: '',
+        offHoursMessage: '',
+      };
     case 'subflow':
       return { flow: '' };
     case 'end':
@@ -815,8 +827,16 @@ export function flbPortsFor(
     case 'message':
     case 'media':
     case 'sequence':
-    case 'tag':
     case 'assign':
+      // The Human handoff has three exits; a node saved before it existed (no `handoff: 2`) keeps its single exit.
+      return d.handoff === 2
+        ? [
+            { id: 'assigned', label: 'assigned', kind: 'flow' },
+            { id: 'waiting', label: 'waiting in queue', kind: 'flow' },
+            { id: 'unavailable', label: 'no agent / out of hours', kind: 'no' },
+          ]
+        : out('next');
+    case 'tag':
     case 'update_contact':
     case 'list_member':
     case 'cta':
@@ -993,6 +1013,8 @@ export const flbIsMultiPort = (
 
 const HANDLE_PORT: Record<string, Record<string, number>> = {
   condition: { yes: 1, no: 2 },
+  // Human handoff (BL-398): the old single exit (`out`) stays port 1.
+  assign: { assigned: 1, waiting: 2, unavailable: 3 },
   book_appointment: { booked: 1, no_slots: 2 },
   whatsapp_shop: { purchased: 1, abandoned: 2 },
   woocommerce: { purchased: 1, abandoned: 2 },

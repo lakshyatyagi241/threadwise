@@ -101,7 +101,7 @@
         "keywords": "टेक्स्ट मैसेज, sender id, dlt, twilio, मोबाइल"
       },
       "email": {
-        "label": "ईमेल",
+        "label": "सपोर्ट ईमेल",
         "description": "Gmail या Google Workspace मेलबॉक्स कनेक्ट करें, ताकि आपकी टीम साझा इनबॉक्स में ग्राहकों के ईमेल पढ़ सके और उनका जवाब दे सके।",
         "keywords": "मेलबॉक्स, gmail, google workspace, साझा इनबॉक्स, सपोर्ट ईमेल, outlook, imap"
       },

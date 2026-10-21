@@ -33,6 +33,7 @@ const lc = (s: string) => s.trim().toLowerCase();
 @Injectable()
 export class FlowInboundService implements InboundMessageListener, OnModuleInit {
   readonly name = 'flow-runtime';
+  readonly bot = true as const;
   private readonly logger = new Logger(FlowInboundService.name);
 
   constructor(

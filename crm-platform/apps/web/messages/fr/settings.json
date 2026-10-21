@@ -101,7 +101,7 @@
         "keywords": "SMS, identifiant d’expéditeur, dlt, twilio, mobile"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail d'assistance",
         "description": "Connectez des boîtes Gmail ou Google Workspace pour que votre équipe lise et réponde aux e-mails des clients dans la boîte de réception partagée.",
         "keywords": "boîte e-mail, gmail, google workspace, boîte de réception partagée, e-mail de support, outlook, imap"
       },

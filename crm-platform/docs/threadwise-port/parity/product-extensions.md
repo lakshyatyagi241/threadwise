@@ -704,3 +704,16 @@ under it", and no team on a record. Owner direction (2026-10-19, [specs/teams-un
 - **Stored, not used yet:** `teams.is_scope_boundary`. Not built here: a Team filter on companies; stamps on invoices, sales documents and appointments (their reports read the owner's primary team).
 - **Not verified / open:** the 20 non-English locales are machine drafts (matrix labels, the warning, the Team filter, the permission help text, the help guides); a run with a real mobile client;
   the downgrade fallback (`team_and_below` resolves as `team` without the plan feature) is covered by unit tests, not by a browser run.
+
+## Conversation handoff, the waiting queue and contact owner alignment (BL-396 to BL-404): beyond Reference
+
+- **What is new:** one handoff action used by the flow node ("Human handoff", formerly "Assign agent"), the AI agent / website assistant, and a person's "send to queue"; an explicit handling state
+  (waiting, with a person, with the bot) that mutes the bot; a "Waiting for a person" inbox view with claim; the handoff card (reason, summary, answers, why this person); automatic assignment at
+  handoff behind the plan feature `inbox_routing`; workspace modes for the contact owner and the chat owner behind `inbox_assignment_sticky`; team method, hours, time zone and default assignee now used.
+  Wiring [wiring/conversation-handoff.md](../wiring/conversation-handoff.md), API [api/conversation-handoff.md](../../api/conversation-handoff.md), spec [specs/conversation-handoff-and-assignment.md](../../specs/conversation-handoff-and-assignment.md).
+- **Intended differences from Reference:** Reference's Assign agent step only named a person or team and the bot kept answering afterwards; here a handoff mutes the bot until the conversation is given back.
+  Old Assign agent nodes keep their one exit and their exact behaviour (the new behaviour is opt-in per node: saving it as "Human handoff" adds the three exits).
+- **Basic plans:** no automatic assignment of any kind, not even from a bot handoff: the conversation waits in the team queue (or the named person's), agents claim it and managers assign it.
+- **Not built (backlog BL-405..BL-410):** capacity limits as a setting and accept-or-return timers, reassign on offline or leave, overflow chains, skills and weights, assignment reports, a test box and log screen,
+  unifying the Unassigned tab with the queue, a rules builder for "customer asks for a person", return to bot at a chosen node, queue visibility for `own`-scope readers, the "also make X the contact owner?" prompt (the setting is stored).
+- **Not verified / open:** the 20 non-English locales are machine drafts; the website assistant uses the keyword and a `[[handoff: reason]]` marker because the AI port has no tool calling.

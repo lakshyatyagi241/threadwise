@@ -274,7 +274,7 @@ describe('TTL expiry and Redis failure for each P0 cache', () => {
     redis.down = true;
     const epoch = new EpochService(
       redis as never,
-      { get: async () => 4, set: async () => undefined } as never,
+      { get: async () => 4, set: async () => undefined, invalidate: () => undefined } as never,
     );
     expect(await epoch.current()).toBe(4);
     const limiter = new RateLimiter(redis as never);

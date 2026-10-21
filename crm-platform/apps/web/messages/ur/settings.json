@@ -101,7 +101,7 @@
         "keywords": "ٹیکسٹ پیغام، sender id، dlt، twilio، موبائل"
       },
       "email": {
-        "label": "ای میل",
+        "label": "سپورٹ ای میل",
         "description": "Gmail یا Google Workspace میل باکس جوڑیں تاکہ آپ کی ٹیم مشترکہ ان باکس میں صارفین کی ای میل پڑھ اور ان کا جواب دے سکے۔",
         "keywords": "میل باکس، gmail، google workspace، مشترکہ ان باکس، سپورٹ ای میل، outlook، imap"
       },

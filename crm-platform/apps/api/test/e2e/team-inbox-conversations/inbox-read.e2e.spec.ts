@@ -180,7 +180,14 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
 
   it('meta.counts and GET /counts equal what the tabs list, and the archived count is separate', async () => {
     const p = await list(agent.token);
-    expect(p.meta.counts).toEqual({ all: 4, mine: 1, unassigned: 2, unread: 1, archived: 1 });
+    expect(p.meta.counts).toEqual({
+      all: 4,
+      mine: 1,
+      unassigned: 2,
+      unread: 1,
+      waiting: 0,
+      archived: 1,
+    });
     const res = await api.as(agent.token).get('/v2/inbox/counts');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(p.meta.counts);
@@ -189,7 +196,14 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     }
     // Narrowed by channel, the badges follow.
     const second = await list(agent.token, `?channelId=${ch2.id}`);
-    expect(second.meta.counts).toEqual({ all: 1, mine: 0, unassigned: 0, unread: 0, archived: 0 });
+    expect(second.meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 0,
+      unread: 0,
+      waiting: 0,
+      archived: 0,
+    });
   });
 
   it('a limit above the maximum is a validation error, and limit 2 pages the whole set without repeats or gaps', async () => {

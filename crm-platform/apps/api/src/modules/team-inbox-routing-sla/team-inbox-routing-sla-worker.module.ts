@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ChatConversationsModule } from '../chat-conversations';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
+import { OwnerSyncConsumer } from './owner-sync.consumer';
 import { RoutingEscalationSweep } from './routing-escalation-sweep.service';
 import { RoutingInboundListener } from './routing-inbound.listener';
 import { SlaInboundListener } from './sla-inbound.listener';
@@ -19,6 +20,12 @@ import { TeamInboxRoutingSlaModule } from './team-inbox-routing-sla.module';
     TeamInboxConversationsModule,
     PlansCoreModule,
   ],
-  providers: [RoutingInboundListener, SlaInboundListener, SlaSweepService, RoutingEscalationSweep],
+  providers: [
+    OwnerSyncConsumer,
+    RoutingInboundListener,
+    SlaInboundListener,
+    SlaSweepService,
+    RoutingEscalationSweep,
+  ],
 })
 export class TeamInboxRoutingSlaWorkerModule {}

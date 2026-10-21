@@ -12,6 +12,7 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { AuthAuditService, PlatformSettingsService } from '../auth';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { DEFAULT_COUNTRIES } from './checkout-settings.service';
 import { INVOICE_LOGO_MIMES, sniffImage } from './image-sniff';
 
@@ -84,6 +85,7 @@ export class BillingSettingsService {
   constructor(
     private readonly settings: PlatformSettingsService,
     private readonly audit: AuthAuditService,
+    private readonly plans: PlanEntitlementService,
   ) {}
 
   private async rows(tx: Tx): Promise<Rows> {
@@ -217,6 +219,8 @@ export class BillingSettingsService {
         },
       });
     });
+    // The entitlement resolver keeps `billing.grace_days` for 30 s: this process must not go on using the old number after a save.
+    this.plans.forgetGrace();
     return this.read();
   }
 

@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Canais",
-      "title": "E-mail",
+      "title": "E-mail de suporte",
       "titleAccent": "caixas de e-mail",
       "intro": "Conecte seu Gmail, Microsoft 365 ou qualquer caixa IMAP. Os e-mails dos clientes chegam na caixa de entrada da equipe, uma conversa por thread, e suas respostas saem do mesmo endereço.",
       "inbox": "Abrir caixa de entrada",
