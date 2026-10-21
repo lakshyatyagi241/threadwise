@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Tambah langkah untuk “{title}”",
-        "faqEnds": "Langkah yang dihentikan ini mengakhiri bagian ini: alur selalu berlanjut lewat jalur keluar Tidak cocok."
+        "faqEnds": "Langkah yang dihentikan ini mengakhiri bagian ini: alur selalu berlanjut lewat jalur keluar Tidak cocok.",
+        "flowMenu": "Opsi untuk {name}",
+        "renameFlow": "Ganti nama alur"
       },
       "formsCore": {
         "helpers": {

@@ -6,7 +6,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, Drawer, Field, Input, Select, useToast } from '@crm/ui';
+import {
+  Badge,
+  Button,
+  ConfirmDialog,
+  Drawer,
+  Field,
+  Input,
+  Menu,
+  MenuItem,
+  Modal,
+  Select,
+  useToast,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { ApiError } from '@/lib/api/errors';
@@ -257,6 +269,8 @@ function Editor({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [showProblems, setShowProblems] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+  /** The flow being renamed from the sidebar's ⋮ menu, with the name as typed. */
+  const [renaming, setRenaming] = useState<{ index: number; name: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<{
     doc: SimpleDoc;
@@ -827,7 +841,7 @@ function Editor({
                 return (
                   <div
                     key={g.key}
-                    className={`mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
+                    className={`group mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
                       i === gIndex ? 'bg-muted font-semibold' : 'hover:bg-muted/60'
                     }`}
                   >
@@ -850,6 +864,77 @@ function Editor({
                         </span>
                       ) : null}
                     </button>
+                    {/* Out of the row until it is hovered or focused, so it leaves no gap and the duplicate icon and the count stay where they are. */}
+                    <div className="hidden group-focus-within:block group-hover:block">
+                      <Menu
+                        label={t('flowMenu', { name: groupText(g, tf) })}
+                        align="end"
+                        className="w-max min-w-0 rounded-xl p-1 shadow-xl"
+                        triggerClassName="size-7 rounded-md border-transparent px-0"
+                        triggerProps={{ 'aria-label': t('flowMenu', { name: groupText(g, tf) }) }}
+                        trigger={
+                          <svg
+                            viewBox="0 0 16 16"
+                            className="size-4 text-muted-foreground"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <circle cx="8" cy="3" r="1.3" />
+                            <circle cx="8" cy="8" r="1.3" />
+                            <circle cx="8" cy="13" r="1.3" />
+                          </svg>
+                        }
+                      >
+                        <div className="flex gap-1">
+                          <MenuItem
+                            className="relative size-9 justify-center rounded-lg p-0 text-foreground"
+                            onSelect={() =>
+                              setRenaming({
+                                index: i,
+                                name: g.placeholder && i > 0 ? '' : groupText(g, tf),
+                              })
+                            }
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              className="size-[18px]"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M10.5 2.5l3 3L5.5 13.5l-3.5.5.5-3.5 8-8z" />
+                            </svg>
+                            <span className="absolute inset-0" title={t('renameFlow')} />
+                            <span className="sr-only">{t('renameFlow')}</span>
+                          </MenuItem>
+                          {i > 0 ? (
+                            <MenuItem
+                              danger
+                              className="relative size-9 justify-center rounded-lg p-0 hover:bg-danger/10 focus-visible:bg-danger/10"
+                              onSelect={() => setConfirmDelete(i)}
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                className="size-4"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4M6.8 7v4M9.2 7v4" />
+                              </svg>
+                              <span className="absolute inset-0" title={t('deleteFlow')} />
+                              <span className="sr-only">{t('deleteFlow')}</span>
+                            </MenuItem>
+                          ) : null}
+                        </div>
+                      </Menu>
+                    </div>
                     <button
                       type="button"
                       aria-label={t('duplicateNamed', { name: groupText(g, tf) })}
@@ -924,9 +1009,26 @@ function Editor({
                   />
                 </Field>
                 {gIndex > 0 ? (
-                  <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(gIndex)}>
-                    {t('deleteFlow')}
-                  </Button>
+                  <button
+                    type="button"
+                    aria-label={t('deleteFlow')}
+                    title={t('deleteFlow')}
+                    onClick={() => setConfirmDelete(gIndex)}
+                    className="grid size-10 shrink-0 place-items-center rounded-lg border border-border bg-background text-muted-foreground outline-none transition hover:border-danger hover:text-danger focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4M6.8 7v4M9.2 7v4" />
+                    </svg>
+                  </button>
                 ) : null}
               </div>
 
@@ -1095,6 +1197,44 @@ function Editor({
             canEdit={canEditFlow}
           />
         ) : null}
+
+        <Modal
+          open={renaming !== null}
+          onClose={() => setRenaming(null)}
+          title={t('renameFlow')}
+          closeLabel={tCommon('dismiss')}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setRenaming(null)}>
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                onClick={() => {
+                  if (renaming) change(renameGroup(doc, renaming.index, renaming.name));
+                  setRenaming(null);
+                }}
+              >
+                {t('save')}
+              </Button>
+            </>
+          }
+        >
+          <Field label={t('flowName')}>
+            <Input
+              autoFocus
+              value={renaming?.name ?? ''}
+              placeholder={t('flowPlaceholder', { n: (renaming?.index ?? 0) + 1 })}
+              onChange={(e) => setRenaming((r) => (r ? { ...r, name: e.target.value } : r))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && renaming) {
+                  e.preventDefault();
+                  change(renameGroup(doc, renaming.index, renaming.name));
+                  setRenaming(null);
+                }
+              }}
+            />
+          </Field>
+        </Modal>
 
         <ConfirmDialog
           open={confirmDelete !== null}

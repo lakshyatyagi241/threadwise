@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Schritt für „{title}“ hinzufügen",
-        "faqEnds": "Dieser eingestellte Schritt beendet diesen Abschnitt: Der Ablauf geht immer über seinen Ausgang „Keine Übereinstimmung“ weiter."
+        "faqEnds": "Dieser eingestellte Schritt beendet diesen Abschnitt: Der Ablauf geht immer über seinen Ausgang „Keine Übereinstimmung“ weiter.",
+        "flowMenu": "Optionen für {name}",
+        "renameFlow": "Ablauf umbenennen"
       },
       "formsCore": {
         "helpers": {

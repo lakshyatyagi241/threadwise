@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "为“{title}”添加步骤",
-        "faqEnds": "这个已停用的步骤会结束这一部分：流程始终从它的“无匹配”出口继续。"
+        "faqEnds": "这个已停用的步骤会结束这一部分：流程始终从它的“无匹配”出口继续。",
+        "flowMenu": "{name} 的选项",
+        "renameFlow": "重命名流程"
       },
       "formsCore": {
         "helpers": {
