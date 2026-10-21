@@ -1,44 +1,9 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "back": "Otomasyon",
-      "title": "Devir ve atama",
-      "subtitle": "Bir bot, akış veya ekip arkadaşı kişi istediğinde konuşmanın bir kişiye nasıl ulaştığı ve kişi sahibi ile sohbet sahibinin birlikte nasıl çalıştığı.",
-      "noAccess": "Bu ayarları görme izniniz yok. Çalışma alanı Sahibinden veya Yöneticisinden gelen kutusu ayarları iznini isteyin.",
-      "readOnly": "Bu ayarları görebilirsiniz ancak değiştiremezsiniz.",
-      "loading": "Ayarlar yükleniyor",
-      "loadFailed": "Ayarlar yüklenemedi.",
-      "retry": "Tekrar dene",
-      "saved": "Ayarlar kaydedildi.",
-      "saveFailed": "Ayarlar kaydedilemedi.",
       "notInPlan": "Planınızda yok",
       "upgradeHint": "Planınız bunu içermiyor. Hesap sahibinden planı yükseltmesini isteyin.",
-      "auto": {
-        "title": "Otomatik atama",
-        "body": "Bir kişi gerektiğinde atama kuralları sizin yerinize birini seçebilir. Kurallar olmadan konuşma, bir ekip arkadaşı üstlenene kadar Bekleyen sekmesinde bekler.",
-        "switch": "Otomatik ata",
-        "switchHint": "Atama kurallarının hem yeni konuşmalar hem de devirler için çalışmasını durdurmak için kapatın. Konuşmalar bu durumda kuyrukta bekler veya bir akışın belirttiği kişiye ya da ekibe gider."
-      },
       "owner": {
-        "title": "Kişi sahibi ve sohbet sahibi",
-        "body": "Bir kişinin sahibi olabilir ve her konuşmanın onu yanıtlayan bir kişisi vardır. İkisinin nasıl ilişkilendirileceğini seçin.",
-        "modeLabel": "Kişi sahibi ile sohbet sahibinin ilişkisi",
-        "modes": {
-          "independent": {
-            "title": "Bağımsız",
-            "body": "Sohbet sahibi ile kişi sahibi ayrıdır. Biri değişince diğeri etkilenmez."
-          },
-          "owner_first": {
-            "title": "Önce sahip",
-            "body": "Yeni bir sohbet, üstlenebiliyorsa önce kişinin sahibine gider; aksi halde olağan kurallar belirler."
-          },
-          "keep_in_sync": {
-            "title": "Senkronize tut",
-            "body": "Önce sahip gibi çalışır; ayrıca bir kişinin sahibi değiştiğinde otomatik atanmış açık sohbetleri de ona geçer. Bir kişinin üstlendiği sohbet asla taşınmaz."
-          }
-        },
-        "claimSets": "Üstlenen kişi sahibi olur",
-        "claimSetsHint": "Biri bir konuşmayı üstlendiğinde ve kişinin henüz sahibi yoksa, üstlenen kişi sahibi olur.",
         "prompt": "Yeniden atamada kişi sahibini sor",
         "promptHint": "Bir sohbet elle başkasına verildiğinde, onu kişi sahibi de yapmayı öner.",
         "window": "Geri dönen kişiyi son temsilcisinde tut",
@@ -47,13 +12,10 @@
         "days": "gün"
       },
       "queue": {
-        "title": "Bekleme kuyruğu",
-        "body": "Kimsenin üstlenemediği konuşmalar, nedeni ve bekleme süresiyle birlikte gelen kutusunun Bekleyen sekmesinde bekler.",
         "notify": "Bir konuşma beklediğinde ekibe haber ver",
         "notifyHint": "Ekip üyeleri veya atanmamış sohbetleri yanıtlayabilen herkes nedenle birlikte bildirim alır."
       },
       "teams": {
-        "title": "Ekipler",
         "body": "Her ekibin kendi atama yöntemi, çalışma saatleri, saat dilimi ve varsayılan atananı vardır. Bir konuşma o ekibe devredildiğinde kullanılırlar.",
         "link": "Ekipleri aç"
       }

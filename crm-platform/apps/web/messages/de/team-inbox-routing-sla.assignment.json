@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Chat-Zuweisung",
+        "intro": "Vier Schalter decken die meisten Workspaces ab: Schalte sie ein, und du musst keine Regel anlegen.",
+        "order": "Die Reihenfolge für einen neuen Chat: zuerst Kontaktbesitzer und Stammagent, dann deine Regeln (falls du welche anlegst), dann „Alle anderen“, dann die Warteschlange.",
+        "readOnly": "Du kannst diese Schalter sehen, aber nicht ändern.",
+        "saved": "Gespeichert.",
+        "saveFailed": "Die Änderung konnte nicht gespeichert werden.",
+        "loading": "Zuweisungseinstellungen werden geladen",
+        "loadFailed": "Die Zuweisungseinstellungen konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "notInPlan": "Nicht in deinem Tarif",
+        "upgradeHint": "Dein Tarif enthält das nicht. Bitte den Kontoinhaber, den Tarif zu upgraden.",
+        "stepFirst": "Wird zuerst geprüft",
+        "stepMaster": "Hauptschalter",
+        "stepAfter": "Nach der Übernahme",
+        "needsAuto": "Wird nur verwendet, solange die automatische Zuweisung eingeschaltet ist.",
+        "auto": {
+          "title": "Automatische Zuweisung",
+          "body": "Neue Chats werden gleichmäßig auf Agenten verteilt, die Chats annehmen (nicht offline, nicht beschäftigt und nicht abwesend). Wenn alle Agenten ihr Chat-Limit erreicht haben, warten neue Chats in der Warteschlange.",
+          "limitHint": "Das Chat-Limit pro Agent legst du im jeweiligen Profil unter <link>Teammitglieder</link> fest.",
+          "off": "Aus: Es wird nichts automatisch zugewiesen, weder durch eine Regel noch über den Kontaktbesitzer. Chats warten in der Warteschlange, bis jemand sie übernimmt oder ein Ablauf eine Person nennt."
+        },
+        "sticky": {
+          "title": "Stammagent",
+          "body": "Ein wiederkehrender Kontakt geht zurück an den Agenten, der seinen letzten Chat bearbeitet hat, solange dieser Agent noch aktives Mitglied ist und den Posteingang öffnen kann (sein Online-Status wird nicht geprüft). Hat der Kontakt einen Besitzer, wird zuerst der Besitzer versucht.",
+          "withWindow": "Wie viele Tage zurück der letzte Agent zählt, legst du unter „Erweitert“ fest."
+        },
+        "owner": {
+          "title": "Chat dem Kontaktbesitzer zuweisen",
+          "body": "Chats von einem bekannten Kontakt gehen zuerst an dessen Kontaktbesitzer, damit der Support konsistent und persönlich bleibt. Ist der Besitzer abwesend, übernimmt seine Vertretung den Chat; gibt es keinen Besitzer, entscheidet der nächste Schritt.",
+          "wins": "Ist auch „Stammagent“ eingeschaltet, hat der Kontaktbesitzer trotzdem Vorrang; der letzte Agent ist nur die zweite Wahl."
+        },
+        "claim": {
+          "title": "Agent als Kontaktbesitzer festlegen",
+          "body": "Wenn ein Agent einen Chat aus der Warteschlange übernimmt und der Kontakt noch keinen Besitzer hat, wird dieser Agent zum Kontaktbesitzer. Ein bestehender Besitzer wird nie geändert.",
+          "note": "Ein Chat, den eine Regel einem Agenten gibt, legt keinen Besitzer fest. Mit „Offene Chats beim Besitzer halten“ (unter „Erweitert“) tut das auch eine Übergabe."
+        }
+      },
+      "advanced": {
+        "title": "Erweitert",
+        "hint": "Chats mit dem Kontaktbesitzer synchron halten, Zeitfenster für den Stammagenten, Neuzuweisungs-Hinweis und Warteschlangen-Benachrichtigungen.",
+        "sync": {
+          "title": "Offene Chats beim Besitzer halten",
+          "body": "Wenn sich der Besitzer eines Kontakts ändert, folgen seine offenen, automatisch zugewiesenen Chats dem neuen Besitzer. Ein Chat, den eine Person übernommen hat, wird nie verschoben. Eine Übergabe, die einen Chat zuweist, legt auch den Besitzer fest, wenn der Kontakt keinen hat.",
+          "needsOwner": "Schalte zuerst „Chat dem Kontaktbesitzer zuweisen“ ein."
+        }
+      },
+      "rules": {
+        "title": "Mehr Kontrolle nötig? Regeln hinzufügen",
+        "intro": "Optional. Mit Regeln lenkst du bestimmte Chats (einen Kanal, Wörter in der Nachricht, einen neuen Kontakt ...) an bestimmte Agenten oder Teams. Wenn dir die vier Schalter genügen, musst du nie eine Regel anlegen.",
+        "locked": "Regeln sind nicht in deinem Tarif enthalten. Die Warteschlange, die Übernahme und die manuelle Zuweisung stehen dir weiterhin zur Verfügung. Bitte den Kontoinhaber, den Tarif zu upgraden.",
+        "pipelineTitle": "So wird ein neuer Chat zugewiesen",
+        "pipeline": {
+          "agent": "1. Kontaktbesitzer und Stammagent",
+          "rules": "2. Deine Regeln, von oben nach unten",
+          "rulesBody": "Die erste Regel, die passt und einen verfügbaren Agenten findet, übernimmt den Chat.",
+          "everyone": "3. Alle anderen",
+          "everyoneBody": "Übernimmt, was keine Regel übernommen hat.",
+          "queue": "4. Warteschlange",
+          "queueBody": "Wird niemand gefunden, wartet der Chat im Tab „Wartend“, bis ein Agent ihn übernimmt.",
+          "agentBody": "Wird über die Schalter oben festgelegt."
+        },
+        "never": "Was bereits durch einen Ablauf, eine Person oder eine Übergabe zugewiesen wurde, wird von den Regeln nie geändert.",
+        "add": "Regel hinzufügen",
+        "emptyTitle": "Keine Regeln",
+        "empty": "Das ist in Ordnung. Deine Schalter oben und „Alle anderen“ entscheiden.",
+        "loading": "Regeln werden geladen",
+        "loadFailed": "Die Regeln konnten nicht geladen werden.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "alle Agenten",
+        "noAssign": "weist nicht zu",
+        "drag": "{name} ziehen, um die Reihenfolge zu ändern",
+        "neverRuns": "Wird nie ausgeführt",
+        "neverMatches": "Trifft nie zu",
+        "neverMatchesHint": "Sie hat keine Bedingung und gilt nicht für jede Unterhaltung. Bearbeite sie, um das zu beheben.",
+        "shadowed": "{count, plural, one {Die Regel unter “{blocker}” kann} other {Die Regeln unter “{blocker}” können}} nie ausgeführt werden, es sei denn, alle Agenten in “{blocker}” sind nicht verfügbar: {names}. “{blocker}” gilt für jede Unterhaltung und beendet die Prüfung. Verschiebe die Regel nach unten oder schalte darin „Stoppen, wenn diese Regel passt“ aus.",
+        "reordered": "Reihenfolge gespeichert."
+      },
+      "everyone": {
+        "title": "Alle anderen",
+        "pinned": "Immer zuletzt",
+        "body": "Übernimmt jeden Chat, den keine Regel übernommen hat. Lege fest, wer ihn bekommt.",
+        "notSet": "Noch nicht eingerichtet: Chats, die keine Regel übernimmt, warten in der Warteschlange.",
+        "mode": "Was mit diesen Chats passiert",
+        "evenly": "Gleichmäßig auf alle Agenten verteilen",
+        "evenlyHint": "Reihum oder geringste Auslastung unter allen, die den Posteingang öffnen können und verfügbar sind: nicht offline, nicht beschäftigt, nicht abwesend und noch unter dem Chat-Limit.",
+        "listed": "Agenten oder Teams auswählen",
+        "listedNow": "Aktuell: {who}.",
+        "listedEdit": "Agenten oder Teams ändern",
+        "queue": "In der Warteschlange lassen",
+        "queueHint": "Niemand wird zugewiesen. Der Chat wartet, bis ein Agent ihn übernimmt.",
+        "strategy": "So wird verteilt",
+        "saved": "Gespeichert.",
+        "failed": "Die Änderung konnte nicht gespeichert werden.",
+        "confirmTitle": "Ausgewählte Agenten ersetzen?",
+        "confirmBody": "„Alle anderen“ gibt Chats jetzt an die Agenten oder Teams, die du ausgewählt hast. Gleichmäßiges Verteilen ersetzt diese Auswahl.",
+        "confirm": "Ersetzen",
+        "ruleName": "Alle anderen"
+      },
+      "where": {
+        "title": "Wo das gilt",
+        "applied": "Angewendet",
+        "applied1": "Wenn ein neuer Chat eintrifft (und wenn ein Kunde einen beendeten Chat wieder öffnet, den niemand bearbeitet).",
+        "applied2": "Wenn ein Schritt „Übergabe an einen Mitarbeiter“ auf „Zuweisungsregeln“ steht: Dann wird dieselbe Liste geprüft, anhand von Kontakt, Kanal und der letzten Nachricht des Kunden, danach „Alle anderen“, danach die Warteschlange.",
+        "not": "Nicht angewendet",
+        "not1": "Ein Chat, den ein Ablauf, eine Person oder eine Übergabe bereits zugewiesen hat.",
+        "not2": "Manuelles Zuweisen oder Übernehmen.",
+        "not3": "Ein Schritt „Übergabe an einen Mitarbeiter“, der eine Person nennt (die Regeln werden ignoriert) oder ein Team (die eigene Methode des Teams wird verwendet)."
+      },
+      "try": {
+        "title": "Ausprobieren",
+        "body": "Wähle einen Kontakt, einen Kanal und eine Beispielnachricht, um zu sehen, wer den Chat bekommen würde und warum. Es wird nichts zugewiesen, gezählt oder gesendet.",
+        "contact": "Kontakt (optional)",
+        "noContact": "Kein Kontakt ausgewählt: Das Beispiel ist ein ganz neuer Kontakt. Bedingungen zu gespeicherten Kontaktdaten lassen sich ohne echten Kontakt nicht prüfen.",
+        "channel": "Kanal",
+        "message": "Beispielnachricht",
+        "messagePlaceholder": "z. B. Ich möchte eine Rückerstattung",
+        "run": "Ergebnis anzeigen",
+        "running": "Wird geprüft",
+        "failed": "Der Test konnte nicht ausgeführt werden.",
+        "result": "Ergebnis",
+        "outcome": {
+          "sticky": "Der Stammagent entscheidet: {who}.",
+          "rule": "Die Regel “{rule}” entscheidet: {who}.",
+          "everyone": "„Alle anderen“ entscheidet: {who}.",
+          "queue": "Niemand gefunden: Der Chat wartet in der Warteschlange.",
+          "off": "Die automatische Zuweisung ist ausgeschaltet: Es wird nichts automatisch zugewiesen."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "ein Agent",
+          "team": "die Warteschlange von {name}",
+          "teamUnknown": "eine Team-Warteschlange"
+        },
+        "stepsTitle": "Schritt für Schritt",
+        "step": {
+          "switch": "Automatische Zuweisung",
+          "sticky": "Kontaktbesitzer und Stammagent",
+          "rule": "Regel “{name}”",
+          "everyone": "Alle anderen",
+          "queue": "Warteschlange"
+        },
+        "why": {
+          "auto_assign_off": "Der Schalter ist aus.",
+          "sticky_off": "Beide Schalter sind aus, daher wird dieser Schritt übersprungen.",
+          "no_contact": "Es gibt keinen Kontakt zum Nachschlagen.",
+          "no_agent_found": "Weder Kontaktbesitzer noch letzter Agent konnten den Chat übernehmen.",
+          "owner": "Der Kontaktbesitzer übernimmt ihn.",
+          "last_handler": "Der Agent aus dem letzten Chat des Kontakts übernimmt ihn.",
+          "conditions_failed": "Hat nicht gepasst.",
+          "nobody_available": "Hat gepasst, aber niemand, auf den die Regel verweist, ist verfügbar.",
+          "agent_picked": "Hat gepasst und einen Agenten ausgewählt.",
+          "team_queue": "Hat gepasst; niemand war frei, daher geht der Chat in die Warteschlange des Teams.",
+          "no_assignment_in_rule": "Hat gepasst; diese Regel weist nicht zu (sie führt nur ihre anderen Aktionen aus).",
+          "not_set": "Es gibt keine aktive Regel „Alle anderen“, daher warten Chats, die niemand übernimmt, in der Warteschlange."
+        },
+        "part": {
+          "contactKind": "Neuer oder wiederkehrender Kontakt",
+          "contact": "Kontaktdaten",
+          "channel": "Kanal",
+          "keywords": "Wörter in der Nachricht",
+          "languages": "Sprache",
+          "businessHours": "Geschäftszeiten"
+        },
+        "partOk": "hat gepasst",
+        "partWhy": {
+          "no_saved_value": "dieser Kontakt hat das nicht gespeichert, daher hat es nicht gepasst",
+          "no_contact": "es gibt keinen Kontakt",
+          "not_same_kind": "der Kontakt gehört nicht zu dieser Art",
+          "channel_differs": "dieser Kanal steht nicht in der Liste",
+          "no_word": "keines der Wörter kommt in der Nachricht vor",
+          "language_differs": "die Sprache ist anders oder unbekannt",
+          "hours_differ": "die Uhrzeit liegt nicht in diesem Teil des Tages"
+        },
+        "contactLine": "Dieser Kontakt ist {kind}. Phase: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "neu",
+          "returning": "wiederkehrend"
+        },
+        "hasOwner": "Er hat einen Besitzer.",
+        "noOwner": "Er hat keinen Besitzer.",
+        "tags": "{count, plural, =0 {Keine Tags gespeichert.} one {# Tag gespeichert.} other {# Tags gespeichert.}}",
+        "skippedTitle": "Ausgeschlossen",
+        "skip": {
+          "on_leave": "abwesend",
+          "offline_busy_or_at_capacity": "offline, beschäftigt oder am Chat-Limit",
+          "cannot_read": "kann den Posteingang nicht öffnen",
+          "no_owner": "der Kontakt hat keinen Besitzer",
+          "no_previous_handler_in_window": "kein früherer Agent für diesen Kontakt",
+          "not_an_active_member": "kein aktives Mitglied"
+        },
+        "outside": "So tun, als wäre es außerhalb der Geschäftszeiten",
+        "inside": "So tun, als wäre es innerhalb der Geschäftszeiten",
+        "clock": "Geschäftszeiten: aktuelle Uhrzeit verwenden",
+        "skipStep": {
+          "owner": "Kontaktbesitzer",
+          "last_handler": "Letzter Agent"
+        }
+      },
+      "form": {
+        "whenSwitch": "Nur für Unterhaltungen, die passen ...",
+        "whenSwitchHint": "Aus: Diese Regel gilt für jede neue Unterhaltung.",
+        "everyConversation": "Diese Regel gilt für jede neue Unterhaltung.",
+        "kept": "Deine Bedingungen bleiben erhalten, werden aber ignoriert, solange dies ausgeschaltet ist.",
+        "add": "Bedingung hinzufügen",
+        "remove": "{name} entfernen",
+        "name": {
+          "contactKind": "Neuer oder wiederkehrender Kontakt",
+          "channel": "Kanal",
+          "keywords": "Wörter in der Nachricht",
+          "language": "Sprache des Kunden",
+          "hours": "Geschäftszeiten",
+          "contact": "Kontaktdaten"
+        },
+        "kind": {
+          "title": "Neuer oder wiederkehrender Kontakt",
+          "hint": "Ein Kontakt gilt als wiederkehrend, wenn er einen früheren Chat hat oder mehr als 10 Minuten vor diesem Chat gespeichert wurde.",
+          "new": "Neuer Kontakt (erster Chat)",
+          "returning": "Wiederkehrender Kontakt"
+        },
+        "contactNote": "Trifft nur auf Kontakte zu, bei denen das bereits gespeichert ist. Ein ganz neuer Kontakt kommt ohne gespeicherte Angaben außer der Phase „Neu“, nutze daher für Erstkunden „Neuer oder wiederkehrender Kontakt“.",
+        "everyoneElseNote": "Dies ist die Regel „Alle anderen“: Sie übernimmt die Chats, die keine andere Regel übernommen hat.",
+        "everyoneAgents": "Alle, die den Posteingang öffnen können",
+        "everyoneAgentsHint": "Die Chats auf alle verfügbaren Agenten verteilen, statt sie auszuwählen.",
+        "fallbackConditions": "Diese Regel hat Bedingungen von früher gespeichert, daher übernimmt sie nur die Chats, die dazu passen. Schalte unten den Schalter ein, um sie zu prüfen, oder entferne sie."
+      }
+    }
+  }
+}

@@ -16,18 +16,6 @@ import { runMigrations } from '@crm/db';
  *  - the seven redundant indexes are gone (migration 20261211110000), the wider index that replaced each is still there, and the
  *    planner still serves the old query shapes from an index.
  */
-/** Constraints deliberately left NOT VALID until a later migration validates them (see the guard that uses it). */
-const NOT_VALID_UNTIL_VALIDATED: ReadonlySet<string> = new Set([
-  'storefront_cart_recoveries.chk_cart_recoveries_status',
-  'shopify_stock_waitlist.chk_shopify_waitlist_status',
-  'woocommerce_stock_waitlist.chk_woocommerce_waitlist_status',
-  'wa_pending_orders.chk_wa_pending_orders_status',
-  'ai_training_sources.chk_ai_training_sources_kind',
-  'ai_training_sources.chk_ai_training_sources_status',
-  'users.chk_users_status',
-  'event_outbox.chk_event_outbox_status',
-]);
-
 describe('database guards', () => {
   let container: StartedPostgreSqlContainer;
   let db: Client;
@@ -140,17 +128,9 @@ describe('database guards', () => {
         `SELECT conrelid::regclass::text || '.' || conname AS name FROM pg_constraint WHERE NOT convalidated ORDER BY 1`,
       );
       const left = rows.map((r) => r.name as string);
-      // Reviewed exceptions: the closed-set status/kind checks of 20270131090000_con_enum_checks_closed_sets were added NOT VALID on
-      // purpose. users and event_outbox are large and written by live traffic, and a status written before the set was closed would make
-      // VALIDATE CONSTRAINT fail the deploy; each is validated by its own later migration once the live table has been checked clean.
-      // The list is exact in both directions: a constraint missing from it fails the guard, and an entry that has since been validated
-      // fails too, so it has to be deleted here when its VALIDATE migration lands.
-      // event_outbox is partitioned (a month per partition, plus a default): each partition carries its own copy of the constraint, under
-      // the partition's name, which changes every month. Such a copy counts as its parent's.
-      const parentOf = (n: string) => n.replace(/^(event_outbox)_(?:\d{6}|default)\./, '$1.');
-      const leftParents = new Set(left.map(parentOf));
-      expect(left.filter((n) => !NOT_VALID_UNTIL_VALIDATED.has(parentOf(n)))).toEqual([]);
-      expect([...NOT_VALID_UNTIL_VALIDATED].filter((n) => !leftParents.has(n))).toEqual([]);
+      // The closed-set status/kind checks of 20270131090000 were added NOT VALID; 20270321090000_validate_deferred_checks validates them
+      // (on a live database only where no stored row violates them, so a real environment can still list one here until its data is fixed).
+      expect(left).toEqual([]);
     });
   });
 

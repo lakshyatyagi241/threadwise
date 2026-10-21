@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -19,6 +20,7 @@ import {
   createFieldSchema,
   fieldUsageQuerySchema,
   listFieldsQuerySchema,
+  replaceCascadeSchema,
   reorderFieldOptionsSchema,
   reorderFieldsSchema,
   searchFieldOptionsQuerySchema,
@@ -31,6 +33,7 @@ import {
   type FieldUsageQuery,
   type ListFieldsQuery,
   type ReorderFieldOptionsInput,
+  type ReplaceCascadeInput,
   type ReorderFieldsInput,
   type SearchFieldOptionsQuery,
   type UpdateFieldInput,
@@ -72,6 +75,15 @@ export class FieldsController {
   @ApiOperation({ summary: 'Every dependency between the fields of a module' })
   async listModuleDependencies(@Query(zodPipe(fieldUsageQuerySchema)) query: FieldUsageQuery) {
     return this.fields.listModuleDependencies(query);
+  }
+
+  @Get('option-dependencies')
+  @RequirePermission(...anyPropertyPermission('read'))
+  @ApiOperation({ summary: 'Every option-level (cascade) pair of the fields of a module' })
+  async listModuleOptionDependencies(
+    @Query(zodPipe(fieldUsageQuerySchema)) query: FieldUsageQuery,
+  ) {
+    return this.fields.listModuleOptionDependencies(query);
   }
 
   @Get(':id')
@@ -218,6 +230,31 @@ export class FieldsController {
     @Param('dependencyId', ParseUUIDPipe) dependencyId: string,
   ): Promise<void> {
     await this.fields.removeDependency(dependencyId);
+  }
+
+  @Put(':id/cascade')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermission(...anyPropertyPermission('update'))
+  @ApiOperation({
+    summary: "Set a field's cascade: its choices depend on another field's choices",
+    description:
+      'Replaces the whole cascade of the field. Rejected with 409 DEPENDENCY_CYCLE_DETECTED if it would close a cycle.',
+  })
+  async replaceCascade(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(replaceCascadeSchema)) body: ReplaceCascadeInput,
+  ): Promise<void> {
+    await this.fields.replaceCascade(id, body);
+  }
+
+  @Delete(':id/cascade')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermission(...anyPropertyPermission('delete'))
+  @ApiOperation({
+    summary: "Remove a field's cascade (its choices stop depending on another field)",
+  })
+  async removeCascade(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.fields.removeCascade(id);
   }
 
   @Get('options/:optionId/dependencies')

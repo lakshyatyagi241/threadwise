@@ -355,11 +355,6 @@
         "description": "Ekibinizin ne kadar hızlı yanıtlaması ve çözmesi gerektiğini (SLA) belirleyin; görüşme hedefini kaçırınca uyarı alın.",
         "keywords": "sla, yanıt süresi, ilk yanıt, çözüm, ihlal, hedefler, çalışma saatleri"
       },
-      "team-performance": {
-        "label": "Ekip performansı",
-        "description": "Her temsilcinin bugün, bu hafta veya bu ay ne kadar hızlı yanıtlayıp çözdüğünü görün.",
-        "keywords": "raporlar, analiz, temsilciler, yanıt süresi, ilk yanıt, çözüldü, iş yükü, performans"
-      },
       "privacy-requests": {
         "label": "Veri talepleri",
         "description": "Haklarında ne tuttuğunuzu soranlara yanıt verin: kimlik kontrolü, dışa aktarma, önizlemeli silme ve saklayabileceğiniz bir kanıt.",

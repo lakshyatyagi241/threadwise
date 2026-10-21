@@ -1,0 +1,30 @@
+name: sast
+# QA task 26: SAST on every pull request and nightly. Fails on any unresolved High or Critical finding (a finding is resolved by a fix or by a
+# reasoned entry in crm-platform/tools/sast-report/baseline.json). Needs no database and no secrets.
+on:
+  pull_request:
+  schedule:
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: crm-platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit:sast -- --fail-on high
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-report
+          path: crm-platform/reports/sast/latest

@@ -365,11 +365,6 @@
         "description": "Set how fast your team should reply and resolve, and get alerted when a conversation misses its target.",
         "keywords": "sla, response time, first reply, resolution, breach, targets, business hours"
       },
-      "team-performance": {
-        "label": "Team performance",
-        "description": "See how fast each agent replied and resolved today, this week or this month.",
-        "keywords": "reports, analytics, agents, response time, first reply, resolved, workload, performance"
-      },
       "record-assignment": {
         "label": "Record assignment rules",
         "description": "Automatically give new contacts, companies and deals to your sales owners, by priority rules.",

@@ -30,3 +30,6 @@ __pycache__/
 
 # Generated workbook
 /_work/out/
+
+# Server-side secret files made by deploy/hostinger/observability-up.sh
+crm-platform/deploy/hostinger/secrets/

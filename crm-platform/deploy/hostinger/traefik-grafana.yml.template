@@ -1,0 +1,24 @@
+# Public route for Grafana, written by observability-up.sh (never by ci-entry.sh, so a release cannot touch it) next to desk.yml in
+# Traefik's dynamic directory. Traefik watches that directory: no restart. observability-up.sh fills in __GRAFANA_DOMAIN__.
+http:
+  routers:
+    grafana:
+      rule: Host(`__GRAFANA_DOMAIN__`)
+      entryPoints: [websecure]
+      service: grafana
+      tls:
+        certResolver: letsencrypt
+    grafana-http:
+      rule: Host(`__GRAFANA_DOMAIN__`)
+      entryPoints: [web]
+      service: grafana
+      middlewares: [grafana-https]
+  middlewares:
+    grafana-https:
+      redirectScheme:
+        scheme: https
+  services:
+    grafana:
+      loadBalancer:
+        servers:
+          - url: http://desk-grafana:3000

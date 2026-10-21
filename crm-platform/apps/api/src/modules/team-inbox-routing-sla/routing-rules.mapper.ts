@@ -90,6 +90,7 @@ export function decodeActions(raw: unknown): StoredActions {
         strategy: a.strategy,
         userIds: a.userIds,
         teamIds: a.teamIds,
+        everyone: a.everyone === true,
       })
     : null;
   const cursor = a && typeof a.rrCursor === 'number' ? a.rrCursor : null;
@@ -149,6 +150,7 @@ export function toRoutingRule(
     stopOnMatch: r.stop_on_match === true,
     isActive: r.is_active === true,
     isFallback: r.is_fallback === true,
+    appliesToAll: r.applies_to_all === true,
     position: Number(r.position),
     firedCount: Number(r.fired_count),
     lastFiredAt: r.last_fired_at ? iso(r.last_fired_at) : null,

@@ -2,7 +2,7 @@
  * Stand-in for `testcontainers` when TEST_NO_DOCKER=1 (vitest alias). Only the `redis:*` images the specs use are supported (a real
  * redis-server in WSL). Any other image (greenmail ...) throws a clear "needs Docker" error: run those specs without TEST_NO_DOCKER.
  */
-import { startRedis, stop, type Handle } from './wsl-runtime';
+import { startRedis, stop, type Handle } from './runtime';
 
 export const Wait = {
   forLogMessage: (..._a: unknown[]) => ({ kind: 'log' }),

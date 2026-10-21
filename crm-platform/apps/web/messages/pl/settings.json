@@ -355,11 +355,6 @@
         "description": "Ustaw, jak szybko zespół ma odpowiadać i rozwiązywać sprawy (SLA), i otrzymuj alerty, gdy rozmowa nie spełni celu.",
         "keywords": "sla, czas odpowiedzi, pierwsza odpowiedź, rozwiązanie, naruszenie, cele, godziny pracy"
       },
-      "team-performance": {
-        "label": "Wydajność zespołu",
-        "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
-        "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
-      },
       "privacy-requests": {
         "label": "Wnioski o dane",
         "description": "Odpowiadaj osobom pytającym, co o nich przechowujesz: sprawdzenie tożsamości, eksport, usunięcie z podglądem i dowód, który możesz zachować.",

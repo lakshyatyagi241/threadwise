@@ -1,0 +1,79 @@
+{
+  "module": "dashboards-analytics-charts",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "quickAccessUpdateSchema",
+      "file": "apps/api/src/modules/dashboards-analytics-charts/dash.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "clearQueueRequestSchema",
+      "file": "apps/api/src/modules/dashboards-analytics-charts/health.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "queue",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "queue",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "queue",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "queue",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "queue",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "queue",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P2"
+        },
+        {
+          "field": "queue",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

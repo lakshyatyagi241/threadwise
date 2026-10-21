@@ -448,7 +448,8 @@
       "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
       "searchOptions": "Opties zoeken",
       "searchOptionsFor": "Zoeken in de opties van {field}",
-      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht."
+      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht.",
+      "cascadeWaiting": "Kies eerst {parent} om de keuzes te zien."
     },
     "tags": {
       "title": "Tags",
@@ -1087,7 +1088,8 @@
         "moveDown": "{name} omlaag verplaatsen",
         "edit": "{name} bewerken",
         "deactivate": "{name} deactiveren",
-        "reactivate": "Opnieuw activeren"
+        "reactivate": "Opnieuw activeren",
+        "dependsOn": "Keuzes hangen af van {field}"
       },
       "toast": {
         "conflict": "Iemand anders heeft dit gewijzigd. De lijst is vernieuwd; probeer het opnieuw.",
@@ -1243,6 +1245,34 @@
         "manageStages": "Fasen beheren",
         "manageGroups": "Groepen beheren",
         "locked": "Vast"
+      },
+      "cascade": {
+        "open": "Afhankelijke velden",
+        "title": "Afhankelijke velden",
+        "close": "Sluiten",
+        "intro": "Een afhankelijk veld wordt altijd getoond. De keuzes ervan hangen af van de keuze in het bovenliggende veld: vink voor elke keuze van het bovenliggende veld de keuzes van het afhankelijke veld aan die erbij horen.",
+        "empty": "Nog geen afhankelijke velden.",
+        "add": "Afhankelijk veld toevoegen",
+        "needTwoChoiceFields": "Afhankelijke velden hebben minstens twee eigenschappen met een keuzelijst nodig (keuzemenu, meervoudige keuze of radio).",
+        "dependsOn": "hangt af van {parent}",
+        "editLabel": "{name} bewerken",
+        "removeLabel": "{name} verwijderen",
+        "parent": "Bovenliggende eigenschap",
+        "child": "Afhankelijke eigenschap",
+        "pickParent": "Kies de bovenliggende eigenschap",
+        "pickChild": "Kies de afhankelijke eigenschap",
+        "allowed": "Keuzes van {child} die per keuze van {parent} zijn toegestaan",
+        "noParentChoices": "De bovenliggende eigenschap heeft nog geen keuzes.",
+        "noChildChoices": "De afhankelijke eigenschap heeft nog geen keuzes.",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "saved": "Afhankelijk veld opgeslagen.",
+        "cycle": "Die afhankelijkheid zou twee eigenschappen op elkaar laten wachten.",
+        "removeTitle": "{name} uit de afhankelijke velden verwijderen?",
+        "removeMessage": "Alle keuzes worden weer getoond. De koppeling met de bovenliggende eigenschap wordt vergeten; de waarden van contacten blijven bewaard.",
+        "removeConfirm": "Verwijderen",
+        "removed": "Afhankelijk veld verwijderd.",
+        "removeFailed": "Het afhankelijke veld kon niet worden verwijderd. Probeer het opnieuw."
       }
     },
     "lost": {

@@ -4,7 +4,7 @@
  * killed before its own cleanup ran. A hard kill of the whole run is covered by `pnpm test:nodocker:clean` and the 3 h reaper.
  */
 import { randomBytes } from 'node:crypto';
-import { cleanRun } from './wsl-runtime';
+import { cleanRun } from './runtime';
 
 export default function setup(): () => Promise<void> {
   const tag = `r${randomBytes(3).toString('hex')}`;

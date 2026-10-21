@@ -64,5 +64,29 @@
     "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
     "contains": "UPDATE ${q(t.table)}",
     "reason": "same: identifiers from the static column list, quoted by q(); reviewed 2026-10-21"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/api/src/common/errors/sanitize-error.spec.ts",
+    "contains": "sk_live_1234567890abcdef",
+    "reason": "a fake key used as the INPUT of the error sanitiser test (it proves such a value is redacted); not a credential; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/api/test/unit/logging/logging.spec.ts",
+    "contains": "sk_live_SUPERSECRET0123456789",
+    "reason": "a fake key the logging test asserts is redacted from log output; not a credential; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
+    "contains": "FROM ${q(t.table)} WHERE ${where}",
+    "reason": "table and column names come from the SEAL_TARGETS registry; q() throws on anything but a plain identifier (unit test); reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
+    "contains": "FROM ${q(t.table)} WHERE ${pending(t)}",
+    "reason": "same registry-only identifiers, quoted by the validating q(); pending() is built from them; reviewed 2026-10-21"
   }
 ]

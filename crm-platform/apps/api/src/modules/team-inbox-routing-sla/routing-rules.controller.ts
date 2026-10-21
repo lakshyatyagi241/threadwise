@@ -18,12 +18,14 @@ import {
   updateBusinessHoursSchema,
   listRoutingRulesQuerySchema,
   reorderRoutingRulesSchema,
+  routingTestRequestSchema,
   updateRoutingRuleSchema,
   updateRoutingSettingsSchema,
   type CreateRoutingRuleInput,
   type ListRoutingRulesQuery,
   type UpdateBusinessHoursInput,
   type ReorderRoutingRulesInput,
+  type RoutingTestRequest,
   type UpdateRoutingRuleInput,
   type UpdateRoutingSettingsInput,
 } from '@crm/contracts';
@@ -115,6 +117,18 @@ export class RoutingRulesController {
   })
   duplicate(@Param('id', ParseUUIDPipe) id: string) {
     return this.rules.duplicate(id);
+  }
+
+  @Post('test')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.settings.read')
+  @ApiOperation({
+    summary: 'Try it: which step would decide for this contact, channel and message',
+    description:
+      'Runs the arrival decision (contact agent, rules in order, Everyone else, waiting queue) in a read-only transaction. Assigns nothing, counts nothing, moves no round robin cursor, writes no event.',
+  })
+  test(@Body(zodPipe(routingTestRequestSchema)) body: RoutingTestRequest) {
+    return this.rules.test(body);
   }
 
   @Get('settings')

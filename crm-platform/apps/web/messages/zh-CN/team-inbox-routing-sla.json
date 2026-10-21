@@ -19,25 +19,12 @@
     "page": {
       "back": "自动化与 AI",
       "title": "会话自动分配",
-      "subtitle": "自动将每个新会话分配给合适的客服。规则按从上到下的顺序依次匹配。",
       "noAccess": "您没有查看自动分配设置的权限。",
-      "create": "创建规则",
       "limitUsed": "已使用 {used} / {limit} 条规则",
       "limitReached": "您已用完套餐允许的全部 {limit} 条规则。",
-      "keepTitle": "让回访联系人保持与原客服对接",
-      "keepBody": "已有客服的联系人再次发消息时，新会话会优先分配给该客服：即联系人的负责人，或上次处理其会话的客服（只要仍是活跃客服）。否则由下列规则决定。",
-      "settingsFailed": "无法保存设置。",
-      "rulesTitle": "规则",
-      "searchPlaceholder": "搜索规则",
-      "searchLabel": "按名称搜索规则",
-      "howItWorks": "第一条匹配且有可用客服的规则会分配会话。当没有其他规则匹配时使用兜底规则。若均不匹配，会话将保持未分配状态。",
       "loading": "正在加载规则",
       "loadFailed": "无法加载规则。",
       "retry": "重试",
-      "noMatchTitle": "未找到规则",
-      "noMatch": "没有名为“{q}”的规则。",
-      "emptyTitle": "暂无规则",
-      "empty": "创建规则，按关键词、渠道、语言或联系人信息轮流将新会话分配给客服。",
       "list": "按优先级排序的自动分配规则",
       "loadMore": "加载更多",
       "toggleFailed": "无法切换规则。",
@@ -51,16 +38,14 @@
       "deleted": "规则已删除。",
       "deleteFailed": "无法删除规则。",
       "businessHours": "营业时间",
-      "recordNote": "此功能分配会话。如需将新的{contacts}、公司和{deals}分配给销售负责人，请参阅<link>记录分配规则</link>。"
+      "recordNote": "此功能分配会话。如需将新的{contacts}、公司和{deals}分配给销售负责人，请参阅<link>记录分配规则</link>。",
+      "subtitle": "选择由谁接收每个新会话。对大多数工作区来说开关就够了；只有需要更多控制时才添加规则。"
     },
     "rules": {
       "someone": "某位客服",
       "moveUp": "上移 {name}",
       "moveDown": "下移 {name}",
       "priority": "优先级",
-      "active": "启用",
-      "off": "关闭",
-      "fallback": "兜底",
       "continues": "持续检查",
       "unavailable": "{count, plural, other {# 位客服不可用}}",
       "activeFor": "规则“{name}”已启用",
@@ -74,7 +59,9 @@
         "languages": "语言：{list}",
         "inside": "营业时间内",
         "outside": "营业时间外",
-        "always": "所有未匹配的会话"
+        "always": "每个新会话",
+        "contactNew": "新联系人",
+        "contactReturning": "回访联系人"
       },
       "strategy": {
         "round_robin": "轮询",
@@ -122,7 +109,6 @@
         "name": "请输入规则名称。",
         "nameLong": "名称过长。",
         "descriptionLong": "描述过长。",
-        "conditions": "请至少添加一个条件，或将此规则设为兜底规则。",
         "contactIncomplete": "请完成或删除未填写完整的联系人条件。",
         "keywordsMany": "最多使用 20 个词。",
         "targets": "请至少选择一名客服或一个团队。",
@@ -133,20 +119,17 @@
         "escalationAction": "重新分配、设置优先级，或两者都做。",
         "escalationAgents": "重新分配需要本规则中的客服，请在上方选择。",
         "autoReplyEmpty": "请填写回复内容，或取消勾选此项。",
-        "autoReplyLong": "回复太长（最多 1024 个字符）。"
+        "autoReplyLong": "回复太长（最多 1024 个字符）。",
+        "conditions": "请至少添加一个条件，或关闭“仅适用于符合条件的会话”。"
       },
       "whenTitle": "有新会话到达时",
-      "whenHint": "您设置的每个条件都必须匹配。留空的部分将被忽略。",
       "contact": {
-        "title": "联系人符合",
-        "hint": "标签、负责人、生命周期阶段及其他联系人信息，与细分相同。",
         "loading": "正在加载联系人字段",
         "partial": "部分联系人列表无法加载，因此部分选项可能缺失。",
         "summary": "条件",
         "none": "无联系人条件。"
       },
       "channel": {
-        "title": "渠道",
         "hint": "仅适用于通过这些渠道到达的会话。不勾选则适用于所有渠道。"
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "营业时间",
         "hint": "使用工作区的营业时间。",
-        "any": "任何时间",
         "inside": "仅营业时间内",
         "outside": "仅营业时间外"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "选项",
       "stopOnMatch": "匹配此规则时停止",
       "stopOnMatchHint": "开启：不再检查后续规则。关闭：后续匹配的规则可以接管该会话。",
-      "fallback": "兜底规则",
-      "fallbackHint": "当没有其他规则匹配时使用。兜底规则只能有一条；选择此规则将替换之前的兜底规则。",
       "cancel": "取消",
       "save": "保存",
       "saveActivate": "保存并启用",
@@ -219,7 +199,8 @@
       "escalatePriority": "然后设置优先级",
       "autoReply": "发送自动回复",
       "autoReplyBody": "回复内容",
-      "autoReplyHint": "以企业名义发送给客户。超出 24 小时窗口时，自由格式回复不会发送。"
+      "autoReplyHint": "以企业名义发送给客户。超出 24 小时窗口时，自由格式回复不会发送。",
+      "whenHint": "您添加的每个条件都必须匹配。"
     },
     "sla": {
       "back": "返回设置",

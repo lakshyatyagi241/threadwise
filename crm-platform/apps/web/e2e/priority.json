@@ -13,6 +13,8 @@
     "developer-rest-api-v1": "P1",
     "help-center": "P1",
     "whatsapp-devices-baileys": "P1",
-    "cross-browser": "P0"
+    "cross-browser": "P0",
+    "responsive": "P1",
+    "form-validation": "P0"
   }
 }
