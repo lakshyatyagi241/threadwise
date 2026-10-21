@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Passaggio e assegnazione",
+        "hint": "Usato quando un bot, un flusso o un collega passa una conversazione a questo team.",
+        "method": "Come scegliere una persona",
+        "methodHint": "Manuale: la conversazione resta nella coda del team finché qualcuno la prende in carico. A rotazione e Meno carico scelgono un membro per te e richiedono un piano con regole di assegnazione.",
+        "defaultAssignee": "Responsabile predefinito",
+        "defaultAssigneeHint": "Prende la conversazione quando nessun altro può. Scegli uno dei membri del team.",
+        "noDefaultAssignee": "Nessuno in particolare",
+        "hours": "Orari di apertura",
+        "hoursHint": "Disattivato significa sempre aperto. Fuori da questi orari la conversazione resta comunque in coda e il contatto riceve il messaggio di fuori orario del flusso.",
+        "timezone": "Fuso orario",
+        "dayFrom": "{day}, apre",
+        "dayTo": "{day}, chiude",
+        "hoursProblem": "Ogni giorno di apertura richiede un orario di apertura e uno di chiusura diversi.",
+        "day": {
+          "mon": "Lunedì",
+          "tue": "Martedì",
+          "wed": "Mercoledì",
+          "thu": "Giovedì",
+          "fri": "Venerdì",
+          "sat": "Sabato",
+          "sun": "Domenica"
+        }
+      }
+    }
+  }
+}

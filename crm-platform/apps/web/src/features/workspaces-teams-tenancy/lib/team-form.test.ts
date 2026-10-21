@@ -35,6 +35,9 @@ describe('team form', () => {
       color: TEAM_SWATCHES[0],
       description: '',
       assignmentStrategy: 'manual',
+      defaultAssigneeId: null,
+      timezone: '',
+      hours: null,
       parentId: null,
       leadId: null,
       receivesConversations: true,
@@ -62,6 +65,9 @@ describe('team form', () => {
       color: '#13478A',
       description: 'Inbound',
       assignmentStrategy: 'sticky',
+      defaultAssigneeId: null,
+      timezone: '',
+      hours: null,
       parentId: 'p1',
       leadId: 'm1',
       receivesConversations: true,
@@ -207,7 +213,11 @@ describe('handoff settings of a team (BL-396)', () => {
   it('no saved hours means always open, and a stored value this build cannot read starts from the default week', () => {
     expect(formFromTeam(team(1)).hours).toBeNull();
     const odd = team(1, {
-      unusedSettings: { businessHours: { mon: ['09:00', '17:00'] }, timezone: null, defaultAssignee: null },
+      unusedSettings: {
+        businessHours: { mon: ['09:00', '17:00'] },
+        timezone: null,
+        defaultAssignee: null,
+      },
     });
     expect(formFromTeam(odd).hours).toEqual(defaultHours());
   });
@@ -234,7 +244,9 @@ describe('handoff settings of a team (BL-396)', () => {
     const t = team(1);
     const form = { ...formFromTeam(t), memberIds: ['u2'], defaultAssigneeId: 'u1' };
     expect(toUpdateInput(form, t, false).defaultAssigneeId).toBeNull();
-    expect(toCreateInput({ ...emptyTeamForm(), name: 'A', defaultAssigneeId: 'u1' }).defaultAssigneeId).toBeNull();
+    expect(
+      toCreateInput({ ...emptyTeamForm(), name: 'A', defaultAssigneeId: 'u1' }).defaultAssigneeId,
+    ).toBeNull();
   });
 
   it('flags an open day with a missing or equal opening and closing time', () => {

@@ -79,7 +79,8 @@
       "lead_scoring": "تقييم العملاء المحتملين بالذكاء الاصطناعي",
       "record_assignment": "قواعد تعيين السجلات",
       "team_hierarchy": "التسلسل الهرمي للفرق والمديرون",
-      "custom_roles": "أدوار مخصصة ونطاقات"
+      "custom_roles": "أدوار مخصصة ونطاقات",
+      "inbox_assignment_sticky": "مالك جهة الاتصال والوكيل الثابت"
     },
     "limitGroups": {
       "messaging": "المراسلة",

@@ -416,7 +416,8 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               <Mono cls="truncate">
                 {kind === 'rules'
                   ? tp('handoffRules')
-                  : (person?.name ?? (d.userId ? tp('agentNumber', { id: str(d.userId) }) : tp('pickAgent')))}
+                  : (person?.name ??
+                    (d.userId ? tp('agentNumber', { id: str(d.userId) }) : tp('pickAgent')))}
               </Mono>
             </div>
             {d.message ? (

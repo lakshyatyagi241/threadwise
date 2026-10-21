@@ -2102,8 +2102,8 @@
           "description": "タグを追加または削除"
         },
         "assign": {
-          "label": "担当者を割り当て",
-          "description": "人間の担当者に引き継ぐ"
+          "label": "有人引き継ぎ",
+          "description": "チャットを担当者またはキューに引き継ぐ"
         },
         "subflow": {
           "label": "サブフローを実行",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "担当者に割り当て",
-          "help": "会話をチームまたは担当者に引き継ぐ"
+          "label": "有人引き継ぎ",
+          "help": "会話を担当者、チーム、または割り当てルールに引き継ぐ"
         },
         "message": {
           "label": "メッセージ",
@@ -2563,7 +2563,7 @@
         "location": "位置情報",
         "template": "テンプレート",
         "cta": "リンクボタン",
-        "assign": "担当者に割り当て",
+        "assign": "有人引き継ぎ",
         "carousel": "カルーセル",
         "condition": "条件",
         "faq": "FAQから回答",

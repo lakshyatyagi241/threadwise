@@ -201,7 +201,7 @@
       },
       "notUsed": {
         "title": "Disimpan, belum digunakan",
-        "body": "Pengaturan ini disimpan pada tim, tetapi belum ada yang membacanya. Pengaturan mulai berlaku dengan pembaruan perutean.",
+        "body": "Pengaturan ini disimpan di tim, tetapi belum ada yang membacanya.",
         "devices": "{count, plural, one {Dibatasi # perangkat} other {Dibatasi # perangkat}}"
       },
       "deleteUsage": {

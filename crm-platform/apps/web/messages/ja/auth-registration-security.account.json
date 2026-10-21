@@ -563,7 +563,8 @@
             "lead_scoring": "AIリードスコアリング",
             "record_assignment": "レコード割り当てルール",
             "team_hierarchy": "チーム階層とマネージャー",
-            "custom_roles": "カスタムロールとスコープ"
+            "custom_roles": "カスタムロールとスコープ",
+            "inbox_assignment_sticky": "連絡先の担当者と固定担当"
           },
           "cta": {
             "continueFree": "無料で続ける",

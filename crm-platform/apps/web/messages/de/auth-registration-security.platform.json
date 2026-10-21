@@ -1444,7 +1444,8 @@
             "lead_scoring": "Bewertet Kontakte mit KI und steuert den Growth-Piloten. Die App KI-Lead-Scoring besitzt diesen Schalter.",
             "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu.",
             "team_hierarchy": "Übergeordnete Teams, Teamleiter und Manager, die ihr Team und die darunterliegenden Teams sehen.",
-            "custom_roles": "Rollen erstellen und bearbeiten und für jede Berechtigung einen Bereich wählen (eigene, Team oder alle Datensätze)."
+            "custom_roles": "Rollen erstellen und bearbeiten und für jede Berechtigung einen Bereich wählen (eigene, Team oder alle Datensätze).",
+            "inbox_assignment_sticky": "Zuweisung nach dem Prinzip „Besitzer zuerst“ und Synchronisierung zwischen Kontaktbesitzer und Chat-Besitzer, Zeitfenster für wiederkehrende Kontakte und Rückfrage bei Neuzuweisung. Arbeitet zusammen mit dem Posteingangs-Routing."
           },
           "units": {
             "days": "Tage",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "KI-Lead-Scoring",
             "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)",
             "team_hierarchy": "Teamhierarchie und Manager",
-            "custom_roles": "Eigene Rollen und Bereiche"
+            "custom_roles": "Eigene Rollen und Bereiche",
+            "inbox_assignment_sticky": "Kontaktbesitzer und fester Agent"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",

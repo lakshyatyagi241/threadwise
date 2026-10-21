@@ -68,7 +68,11 @@ export function HandoffSettingsScreen() {
       {q.isError && (
         <Alert tone="danger">
           {t('loadFailed')}{' '}
-          <button type="button" className="font-semibold underline" onClick={() => void q.refetch()}>
+          <button
+            type="button"
+            className="font-semibold underline"
+            onClick={() => void q.refetch()}
+          >
             {t('retry')}
           </button>
         </Alert>

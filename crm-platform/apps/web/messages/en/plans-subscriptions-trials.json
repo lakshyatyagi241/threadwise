@@ -64,6 +64,7 @@
       "wa_storefront": "WhatsApp catalog",
       "inbox_sla": "SLA policies",
       "inbox_routing": "Routing rules",
+      "inbox_assignment_sticky": "Contact owner and sticky agent",
       "waba_calling": "WhatsApp calling",
       "inbox_kanban": "Kanban view",
       "team_performance": "Team performance",

@@ -44,14 +44,17 @@ describe('team handoff settings', () => {
   it('creates a team with hours, a time zone and a default assignee who is on it, and returns them', async () => {
     const ana = await api.member(t, 'Ana', [['team.read']]);
     const anaUuid = await uuidOf(ana.userId);
-    const res = await api.as(t.admin).post('/v2/workspace/teams').send({
-      name: 'Support',
-      memberIds: [anaUuid],
-      assignmentStrategy: 'round_robin',
-      defaultAssigneeId: anaUuid,
-      timezone: 'Asia/Kolkata',
-      businessHours: { days: week('09:00', '18:00') },
-    });
+    const res = await api
+      .as(t.admin)
+      .post('/v2/workspace/teams')
+      .send({
+        name: 'Support',
+        memberIds: [anaUuid],
+        assignmentStrategy: 'round_robin',
+        defaultAssigneeId: anaUuid,
+        timezone: 'Asia/Kolkata',
+        businessHours: { days: week('09:00', '18:00') },
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const team = res.body as Team;
     expect(team.unusedSettings.timezone).toBe('Asia/Kolkata');
@@ -70,7 +73,7 @@ describe('team handoff settings', () => {
     ).rows[0];
     expect(row.timezone).toBe('Asia/Kolkata');
     expect(row.assignment_strategy).toBe('round_robin');
-    expect(row.default_assignee_id).toBe(String(ana.userId));
+    expect(Number(row.default_assignee_id)).toBe(Number(ana.userId));
     expect(row.business_hours.days.fri.to).toBe('18:00');
   });
 
@@ -115,15 +118,12 @@ describe('team handoff settings', () => {
     expect(after.unusedSettings.timezone).toBe('Europe/London');
     expect(after.unusedSettings.businessHours?.days.tue.from).toBe('08:00');
 
-    const cleared = await api
-      .as(t.admin)
-      .patch(`/v2/workspace/teams/${team.id}`)
-      .send({
-        rowVersion: after.rowVersion,
-        defaultAssigneeId: null,
-        timezone: null,
-        businessHours: null,
-      });
+    const cleared = await api.as(t.admin).patch(`/v2/workspace/teams/${team.id}`).send({
+      rowVersion: after.rowVersion,
+      defaultAssigneeId: null,
+      timezone: null,
+      businessHours: null,
+    });
     expect(cleared.status, JSON.stringify(cleared.body)).toBe(200);
     expect((cleared.body as Team).unusedSettings).toMatchObject({
       businessHours: null,

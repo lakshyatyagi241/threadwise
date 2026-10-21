@@ -4,7 +4,7 @@ title: Human handoff step
 summary: Hand a conversation from a flow to a person, a team or the assignment rules, with a reason, a note and three exits.
 area: automation
 order: 12
-documents: []
+documents: [nav:flows]
 keywords:
   [
     human handoff,

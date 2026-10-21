@@ -201,7 +201,7 @@
       },
       "notUsed": {
         "title": "Enregistré, pas encore utilisé",
-        "body": "Ces paramètres sont enregistrés sur l'équipe, mais rien ne les lit encore. Ils s'appliqueront avec la mise à jour du routage.",
+        "body": "Ce paramètre est enregistré sur l’équipe, mais rien ne l’utilise pour l’instant.",
         "devices": "{count, plural, one {Limité à # appareil} other {Limité à # appareils}}"
       },
       "deleteUsage": {

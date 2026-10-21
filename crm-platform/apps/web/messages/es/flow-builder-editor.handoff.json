@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "asignado",
+        "waitingInQueue": "en cola de espera",
+        "noAgentOutOfHours": "sin agente / fuera de horario"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Paso {stage}: elige la persona a la que va la conversación."
+      }
+    },
+    "simulator": {
+      "handoff": "traspasada a una persona (destino: {destination}, equipo \"{team}\"); el chat de prueba toma la salida \"asignado\""
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Traspasar a",
+          "handoffRules": "Reglas de asignación",
+          "pickAgent": "— elige una persona —"
+        }
+      },
+      "handoff": {
+        "legacy": "Este paso es el antiguo “Asignar agente”.",
+        "upgradeHint": "Entrega el chat a un equipo y continúa. Cambia al Traspaso a una persona para añadir un motivo, una prioridad, mensajes para el contacto y tres salidas (asignado, en cola de espera, sin agente o fuera de horario). Las conexiones que ya hiciste siguen funcionando.",
+        "upgrade": "Usar funciones de traspaso",
+        "destination": "Enviar la conversación a",
+        "dest": {
+          "team": "Un equipo",
+          "person": "Una persona",
+          "rules": "Las reglas de asignación",
+          "rulesLocked": "Las reglas de asignación (no incluidas en tu plan)"
+        },
+        "destHint": {
+          "team": "Va a alguien del equipo o espera en la cola del equipo.",
+          "person": "Va a esta persona si puede atenderla; si no, espera en la cola.",
+          "rules": "Usa tus reglas de asignación automática de conversaciones; si ninguna encuentra a una persona, espera en la cola."
+        },
+        "lockHint": "Tu plan no incluye reglas de asignación, así que una conversación enviada aquí espera en la cola En espera hasta que un compañero la tome.",
+        "team": "Equipo",
+        "teamPick": "— elige un equipo —",
+        "teamNone": "Aún no hay equipos",
+        "teamOption": "{name} · {count, plural, one {# agente} other {# agentes}}",
+        "teamHint": "<link>Gestionar equipos →</link>",
+        "person": "Persona",
+        "personPick": "— elige una persona —",
+        "personHint": "Alguien de tus equipos.",
+        "unknownMember": "{value} (no está en este espacio de trabajo)",
+        "reason": "Motivo",
+        "reasons": {
+          "customer_asked": "El contacto pidió hablar con una persona",
+          "bot_could_not_help": "El bot no pudo ayudar",
+          "sensitive_topic": "Tema sensible",
+          "sales_lead": "Cliente potencial de ventas",
+          "complaint": "Queja",
+          "other": "Otro"
+        },
+        "priority": "Prioridad",
+        "priorityKeep": "Mantener la prioridad actual",
+        "priorities": {
+          "low": "Baja",
+          "normal": "Normal",
+          "high": "Alta",
+          "urgent": "Urgente"
+        },
+        "note": "Nota para el agente",
+        "noteHint": "Interna. Se muestra en la tarjeta de traspaso; las '{{'variables'}}' funcionan. Hasta 500 caracteres.",
+        "customerMessage": "Mensaje para el contacto",
+        "customerHint": "Se envía cuando se traspasa la conversación. Déjalo vacío para no enviar nada.",
+        "offHours": "Mensaje cuando nadie está disponible",
+        "offHoursHint": "Se envía en su lugar cuando el equipo está cerrado o nadie puede atenderla. La conversación sigue esperando en la cola.",
+        "exits": "Este paso tiene tres salidas",
+        "exitAssigned": "asignado: una persona ya tiene la conversación",
+        "exitWaiting": "en cola de espera: espera a que alguien la tome",
+        "exitUnavailable": "sin agente / fuera de horario: nadie pudo atenderla",
+        "simpleExits": "El siguiente paso se ejecuta cuando una persona ya tiene la conversación. Si debe esperar en la cola o nadie está disponible, el bot se detiene aquí y responde una persona. Usa el constructor avanzado para seguir las otras salidas."
+      }
+    }
+  }
+}

@@ -2102,8 +2102,8 @@
           "description": "태그 추가 또는 제거"
         },
         "assign": {
-          "label": "에이전트 배정",
-          "description": "상담원에게 전환"
+          "label": "상담원 인계",
+          "description": "채팅을 상담원 또는 대기열로 넘기기"
         },
         "subflow": {
           "label": "하위 플로우 실행",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "상담원에게 배정",
-          "help": "팀 또는 상담원에게 대화 넘기기"
+          "label": "상담원 인계",
+          "help": "대화를 상담원, 팀 또는 배정 규칙으로 넘기기"
         },
         "message": {
           "label": "메시지",
@@ -2563,7 +2563,7 @@
         "location": "위치",
         "template": "템플릿",
         "cta": "링크 버튼",
-        "assign": "상담원에게 배정",
+        "assign": "상담원 인계",
         "carousel": "캐러셀",
         "condition": "조건",
         "faq": "FAQ로 답변",

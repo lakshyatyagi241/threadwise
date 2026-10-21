@@ -407,7 +407,10 @@ export function TeamEditorForm({
         </fieldset>
       )}
 
-      <fieldset className="space-y-3 rounded-md border border-border p-3" data-testid="team-handoff">
+      <fieldset
+        className="space-y-3 rounded-md border border-border p-3"
+        data-testid="team-handoff"
+      >
         <legend className="px-1 text-sm font-medium">{t('handoff.title')}</legend>
         <p className="text-xs text-muted-foreground">{t('handoff.hint')}</p>
         <Field label={t('handoff.method')} htmlFor={`${ids}-method`} hint={t('handoff.methodHint')}>

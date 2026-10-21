@@ -17,10 +17,12 @@
         "waiting": "Waiting for a person",
         "with_person": "With a person"
       },
-      "age": "{count}{unit, select, m {m} h {h} other {d}}",
+      "ageMinutes": "{count}m",
+      "ageHours": "{count}h",
+      "ageDays": "{count}d",
       "row": {
         "waiting": "Waiting",
-        "waitingFor": "Waiting {count}{unit, select, m {m} h {h} other {d}}",
+        "waitingFor": "Waiting {age}",
         "inTeam": "In the queue of {team}"
       },
       "assignedTo": "now with {name}",

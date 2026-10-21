@@ -88,7 +88,8 @@
       "lead_scoring": "การให้คะแนนลีดด้วย AI",
       "record_assignment": "กฎการมอบหมายระเบียน",
       "team_hierarchy": "ลำดับชั้นทีมและผู้จัดการ",
-      "custom_roles": "บทบาทที่กำหนดเองและขอบเขต"
+      "custom_roles": "บทบาทที่กำหนดเองและขอบเขต",
+      "inbox_assignment_sticky": "เจ้าของผู้ติดต่อและเจ้าหน้าที่ประจำ"
     },
     "limitGroups": {
       "messaging": "การส่งข้อความ",

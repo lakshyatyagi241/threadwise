@@ -201,7 +201,7 @@
       },
       "notUsed": {
         "title": "Đã lưu, chưa được dùng",
-        "body": "Các cài đặt này được lưu trên nhóm nhưng chưa có gì đọc chúng. Chúng sẽ bắt đầu áp dụng cùng bản cập nhật định tuyến.",
+        "body": "Cài đặt này được lưu trên nhóm, nhưng hiện chưa có gì đọc nó.",
         "devices": "{count, plural, one {Giới hạn # thiết bị} other {Giới hạn # thiết bị}}"
       },
       "deleteUsage": {

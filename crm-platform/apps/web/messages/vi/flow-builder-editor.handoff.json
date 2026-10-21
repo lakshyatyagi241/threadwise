@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "đã giao",
+        "waitingInQueue": "chờ trong hàng chờ",
+        "noAgentOutOfHours": "không có nhân viên / ngoài giờ"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Bước {stage}: chọn người nhận cuộc trò chuyện."
+      }
+    },
+    "simulator": {
+      "handoff": "đã chuyển cho một người (đích: {destination}, nhóm \"{team}\"); chat thử đi theo nhánh \"đã giao\""
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Chuyển giao cho",
+          "handoffRules": "Quy tắc giao việc",
+          "pickAgent": "— chọn một người —"
+        }
+      },
+      "handoff": {
+        "legacy": "Bước này là “Giao cho nhân viên” bản cũ.",
+        "upgradeHint": "Bước này giao chat cho một nhóm rồi tiếp tục. Hãy chuyển sang Chuyển giao cho người thật để thêm lý do, mức ưu tiên, tin nhắn cho liên hệ và ba nhánh ra (đã giao, chờ trong hàng chờ, không có nhân viên hoặc ngoài giờ). Các kết nối bạn đã tạo vẫn hoạt động.",
+        "upgrade": "Dùng tính năng chuyển giao",
+        "destination": "Gửi cuộc trò chuyện tới",
+        "dest": {
+          "team": "Một nhóm",
+          "person": "Một người",
+          "rules": "Quy tắc giao việc",
+          "rulesLocked": "Quy tắc giao việc (không có trong gói của bạn)"
+        },
+        "destHint": {
+          "team": "Cuộc trò chuyện chuyển cho một người trong nhóm, hoặc chờ trong hàng chờ của nhóm.",
+          "person": "Cuộc trò chuyện chuyển cho người này nếu họ có thể nhận; nếu không sẽ chờ trong hàng chờ.",
+          "rules": "Dùng quy tắc tự động giao cuộc trò chuyện của bạn; khi không quy tắc nào tìm được người, cuộc trò chuyện chờ trong hàng chờ."
+        },
+        "lockHint": "Gói của bạn không có quy tắc giao việc, nên cuộc trò chuyện gửi đến đây sẽ chờ trong hàng chờ cho đến khi một đồng nghiệp nhận.",
+        "team": "Nhóm",
+        "teamPick": "— chọn một nhóm —",
+        "teamNone": "Chưa có nhóm nào",
+        "teamOption": "{name} · {count, plural, other {# nhân viên}}",
+        "teamHint": "<link>Quản lý nhóm →</link>",
+        "person": "Người",
+        "personPick": "— chọn một người —",
+        "personHint": "Một người trong các nhóm của bạn.",
+        "unknownMember": "{value} (không thuộc không gian làm việc này)",
+        "reason": "Lý do",
+        "reasons": {
+          "customer_asked": "Liên hệ yêu cầu gặp người thật",
+          "bot_could_not_help": "Bot không thể hỗ trợ",
+          "sensitive_topic": "Chủ đề nhạy cảm",
+          "sales_lead": "Khách hàng tiềm năng",
+          "complaint": "Khiếu nại",
+          "other": "Khác"
+        },
+        "priority": "Mức ưu tiên",
+        "priorityKeep": "Giữ mức ưu tiên hiện tại",
+        "priorities": {
+          "low": "Thấp",
+          "normal": "Bình thường",
+          "high": "Cao",
+          "urgent": "Khẩn cấp"
+        },
+        "note": "Ghi chú cho nhân viên",
+        "noteHint": "Nội bộ. Hiển thị trên thẻ chuyển giao; '{{'variables'}}' dùng được. Tối đa 500 ký tự.",
+        "customerMessage": "Tin nhắn cho liên hệ",
+        "customerHint": "Được gửi khi cuộc trò chuyện được chuyển giao. Để trống nếu không muốn gửi gì.",
+        "offHours": "Tin nhắn khi không có ai sẵn sàng",
+        "offHoursHint": "Được gửi thay thế khi nhóm đóng cửa hoặc không ai nhận được. Cuộc trò chuyện vẫn chờ trong hàng chờ.",
+        "exits": "Bước này có ba nhánh ra",
+        "exitAssigned": "đã giao: hiện đã có người nhận cuộc trò chuyện",
+        "exitWaiting": "chờ trong hàng chờ: chờ cho đến khi có người nhận",
+        "exitUnavailable": "không có nhân viên / ngoài giờ: không ai nhận được",
+        "simpleExits": "Bước tiếp theo chạy khi đã có người nhận cuộc trò chuyện. Nếu phải chờ trong hàng chờ, hoặc không có ai sẵn sàng, bot dừng tại đây và một người sẽ trả lời. Dùng trình tạo Nâng cao để theo các nhánh còn lại."
+      }
+    }
+  }
+}

@@ -2102,8 +2102,8 @@
           "description": "Adicionar ou remover uma tag"
         },
         "assign": {
-          "label": "Atribuir atendente",
-          "description": "Transferir para um humano"
+          "label": "Transferência para humano",
+          "description": "Passe o chat para uma pessoa ou uma fila"
         },
         "subflow": {
           "label": "Executar subfluxo",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Atribuir a um atendente",
-          "help": "Passe a conversa para uma equipe ou um atendente"
+          "label": "Transferência para humano",
+          "help": "Passe a conversa para uma pessoa, uma equipe ou as regras de atribuição"
         },
         "message": {
           "label": "Mensagem",
@@ -2563,7 +2563,7 @@
         "location": "Localização",
         "template": "Modelo",
         "cta": "Botão de link",
-        "assign": "Atribuir a um atendente",
+        "assign": "Transferência para humano",
         "carousel": "Carrossel",
         "condition": "Condição",
         "faq": "Responder com FAQ",

@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Transferência e atribuição",
+        "description": "Defina como uma conversa chega a uma pessoa depois que um bot pede uma, e como o responsável pelo contato e o responsável pelo chat trabalham juntos.",
+        "keywords": "transferência, transferir, fila de espera, assumir, humano, agente, atribuir, atribuição, responsável pelo contato, responsável pelo chat, agente fixo, continuidade, devolver ao bot"
+      }
+    }
+  }
+}

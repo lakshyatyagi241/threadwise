@@ -201,7 +201,7 @@
       },
       "notUsed": {
         "title": "Opgeslagen, nog niet in gebruik",
-        "body": "Deze instellingen zijn op het team opgeslagen, maar er leest nog niets ze uit. Ze gaan gelden met de routeringsupdate.",
+        "body": "Deze instelling wordt op het team opgeslagen, maar wordt nog nergens gebruikt.",
         "devices": "{count, plural, one {Beperkt tot # apparaat} other {Beperkt tot # apparaten}}"
       },
       "deleteUsage": {

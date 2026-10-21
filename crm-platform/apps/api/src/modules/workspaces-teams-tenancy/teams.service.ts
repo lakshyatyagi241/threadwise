@@ -141,7 +141,12 @@ export class TeamsService {
       }
       await this.repo.settlePrimary(tx, ctx.orgId, touched);
       if (input.defaultAssigneeId) {
-        const assignee = await this.resolveDefaultAssignee(tx, ctx.orgId, id, input.defaultAssigneeId);
+        const assignee = await this.resolveDefaultAssignee(
+          tx,
+          ctx.orgId,
+          id,
+          input.defaultAssigneeId,
+        );
         await this.repo.setDefaultAssignee(tx, ctx.orgId, id, assignee);
       }
 
@@ -280,7 +285,10 @@ export class TeamsService {
       if (input.timezone !== undefined && (input.timezone ?? null) !== team.timezone)
         delta.timezone = { old: team.timezone, new: input.timezone ?? null };
       if (input.businessHours !== undefined)
-        delta.businessHours = { old: team.businessHours !== null, new: input.businessHours !== null };
+        delta.businessHours = {
+          old: team.businessHours !== null,
+          new: input.businessHours !== null,
+        };
       if (after.defaultAssigneeUuid !== team.defaultAssigneeUuid)
         delta.defaultAssignee = { old: team.defaultAssigneeUuid, new: after.defaultAssigneeUuid };
       if (memberIds !== undefined) delta.members = { old: null, new: memberIds.length };

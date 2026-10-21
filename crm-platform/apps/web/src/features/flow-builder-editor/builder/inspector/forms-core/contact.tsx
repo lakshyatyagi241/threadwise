@@ -94,7 +94,9 @@ function HandoffForm({ data: d, set, setMany, env }: FormProps) {
       { v: '', l: teams.length ? t('teamPick') : t('teamNone') },
       ...teams.map((team) => ({
         v: team.id,
-        l: team.members.length ? t('teamOption', { name: team.name, count: team.members.length }) : team.name,
+        l: team.members.length
+          ? t('teamOption', { name: team.name, count: team.members.length })
+          : team.name,
       })),
     ],
     d.team,
@@ -124,12 +126,19 @@ function HandoffForm({ data: d, set, setMany, env }: FormProps) {
         />
       </Field>
       {kind === 'rules' && !rulesInPlan && (
-        <p role="note" data-testid="flb-handoff-plan-lock" className="-mt-2 mb-4 rounded-lg bg-warning/10 p-2.5 text-[11px]">
+        <p
+          role="note"
+          data-testid="flb-handoff-plan-lock"
+          className="-mt-2 mb-4 rounded-lg bg-warning/10 p-2.5 text-[11px]"
+        >
           {t('lockHint')}
         </p>
       )}
       {kind === 'team' && (
-        <Field label={t('team')} hint={t.rich('teamHint', { link: (chunks) => <Link href="/teams">{chunks}</Link> })}>
+        <Field
+          label={t('team')}
+          hint={t.rich('teamHint', { link: (chunks) => <Link href="/teams">{chunks}</Link> })}
+        >
           <SelectInput
             value={d.team}
             options={teamOpts}
@@ -153,10 +162,19 @@ function HandoffForm({ data: d, set, setMany, env }: FormProps) {
         <SelectInput value={d.reason} options={reasonOpts} onChange={(v) => set('reason', v)} />
       </Field>
       <Field label={t('priority')}>
-        <SelectInput value={d.priority} options={priorityOpts} onChange={(v) => set('priority', v)} />
+        <SelectInput
+          value={d.priority}
+          options={priorityOpts}
+          onChange={(v) => set('priority', v)}
+        />
       </Field>
       <Field label={t('note')} hint={t('noteHint')}>
-        <TextArea value={d.message} rows={3} maxLength={HANDOFF_NOTE_MAX} onChange={(v) => set('message', v)} />
+        <TextArea
+          value={d.message}
+          rows={3}
+          maxLength={HANDOFF_NOTE_MAX}
+          onChange={(v) => set('message', v)}
+        />
       </Field>
       <Field label={t('customerMessage')} hint={t('customerHint')}>
         <TextArea
@@ -174,7 +192,10 @@ function HandoffForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('offHoursMessage', v)}
         />
       </Field>
-      <div className="mb-4 rounded-lg border border-border p-3 text-[11px]" data-testid="flb-handoff-exits">
+      <div
+        className="mb-4 rounded-lg border border-border p-3 text-[11px]"
+        data-testid="flb-handoff-exits"
+      >
         <p className="font-semibold">{t('exits')}</p>
         <ul className="mt-1 space-y-0.5 text-muted-foreground">
           <li>{t('exitAssigned')}</li>

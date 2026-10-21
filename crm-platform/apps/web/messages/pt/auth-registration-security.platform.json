@@ -1444,7 +1444,8 @@
             "lead_scoring": "Pontua contatos com IA e alimenta o piloto de crescimento. O app Pontuação de leads com IA controla este botão.",
             "record_assignment": "Atribui novos contatos, empresas e negócios ao responsável de vendas certo por regras de prioridade.",
             "team_hierarchy": "Equipes pai, líderes de equipe e gestores que veem sua equipe e as equipes abaixo dela.",
-            "custom_roles": "Crie e edite funções e escolha um escopo (próprios, da equipe ou todos os registros) para cada permissão."
+            "custom_roles": "Crie e edite funções e escolha um escopo (próprios, da equipe ou todos os registros) para cada permissão.",
+            "inbox_assignment_sticky": "Atribuição com prioridade ao responsável e sincronizada entre o responsável pelo contato e o responsável pelo chat, a janela de contato recorrente e o aviso de reatribuição. Funciona junto com o roteamento da caixa de entrada."
           },
           "units": {
             "days": "Dias",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "Pontuação de leads com IA",
             "record_assignment": "Regras de atribuição de registros (atribuir contatos, empresas e negócios automaticamente)",
             "team_hierarchy": "Hierarquia de equipes e gestores",
-            "custom_roles": "Funções personalizadas e escopos"
+            "custom_roles": "Funções personalizadas e escopos",
+            "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
           },
           "problems": {
             "required": "Este campo é obrigatório.",

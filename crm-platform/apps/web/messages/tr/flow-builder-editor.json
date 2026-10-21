@@ -2102,8 +2102,8 @@
           "description": "Etiket ekle veya kaldır"
         },
         "assign": {
-          "label": "Temsilci ata",
-          "description": "Bir insana devret"
+          "label": "İnsana devir",
+          "description": "Sohbeti bir kişiye veya kuyruğa devret"
         },
         "subflow": {
           "label": "Alt akış çalıştır",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Bir temsilciye ata",
-          "help": "Görüşmeyi bir ekibe veya temsilciye devret"
+          "label": "İnsana devir",
+          "help": "Konuşmayı bir kişiye, ekibe veya atama kurallarına devret"
         },
         "message": {
           "label": "Mesaj",
@@ -2563,7 +2563,7 @@
         "location": "Konum",
         "template": "Şablon",
         "cta": "Bağlantı düğmesi",
-        "assign": "Bir temsilciye ata",
+        "assign": "İnsana devir",
         "carousel": "Karusel",
         "condition": "Koşul",
         "faq": "FAQ ile yanıtla",

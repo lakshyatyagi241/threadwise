@@ -9,6 +9,9 @@ export function waitAge(sinceIso: string, nowMs: number): { count: number; unit:
   return hours < 48 ? { count: hours, unit: 'h' } : { count: Math.floor(hours / 24), unit: 'd' };
 }
 
+/** The message of the handoff namespace that writes each unit of a wait ("12m"), so a language can use its own short form. */
+export const AGE_KEY = { m: 'ageMinutes', h: 'ageHours', d: 'ageDays' } as const;
+
 export type QueueDestinationKind = 'rules' | 'team' | 'person';
 
 export interface SendDraft {

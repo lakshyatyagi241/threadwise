@@ -12,7 +12,7 @@ import {
 import { Alert, Badge, Button, Spinner, cn, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useHandoffActions, useHandoffCard } from '../api/handoff';
-import { waitAge } from '../lib/handoff';
+import { AGE_KEY, waitAge } from '../lib/handoff';
 import { AlertIcon, ChatIcon, UserPlusIcon } from './icons';
 import { SendToQueueDialog } from './send-to-queue-dialog';
 
@@ -106,7 +106,7 @@ export function HandoffBar({
               {t(`state.${handling}`)}
               {age && (
                 <Badge tone="warning" data-testid="inbox-handoff-age">
-                  {t('age', age)}
+                  {t(AGE_KEY[age.unit], { count: age.count })}
                 </Badge>
               )}
             </span>
@@ -238,7 +238,9 @@ type T = ReturnType<typeof useTranslations>;
 
 /** "Customer asked for a person: wants a refund" - the picklist reason, then the free text next to it. */
 function reasonText(t: T, c: HandoffCard): string {
-  const label = KNOWN_REASONS.includes(c.reason) ? t(`reason.${c.reason as HandoffReason}`) : c.reason;
+  const label = KNOWN_REASONS.includes(c.reason)
+    ? t(`reason.${c.reason as HandoffReason}`)
+    : c.reason;
   return c.reasonText ? `${label}: ${c.reasonText}` : label;
 }
 

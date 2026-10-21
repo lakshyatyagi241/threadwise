@@ -1444,7 +1444,8 @@
             "lead_scoring": "Menilai kontak dengan AI dan menjalankan pilot pertumbuhan. Aplikasi Penilaian prospek dengan AI mengatur sakelar ini.",
             "record_assignment": "Menugaskan kontak, perusahaan, dan transaksi baru ke pemilik penjualan yang tepat berdasarkan aturan prioritas.",
             "team_hierarchy": "Tim induk, ketua tim, dan manajer yang melihat timnya serta tim di bawahnya.",
-            "custom_roles": "Buat dan ubah peran, lalu pilih cakupan (milik sendiri, tim, atau semua data) untuk setiap izin."
+            "custom_roles": "Buat dan ubah peran, lalu pilih cakupan (milik sendiri, tim, atau semua data) untuk setiap izin.",
+            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron antara pemilik kontak dan pemilik chat, jendela kontak yang kembali, dan prompt penugasan ulang. Bekerja bersama Perutean inbox."
           },
           "units": {
             "days": "Hari",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "Penilaian prospek dengan AI",
             "record_assignment": "Aturan penugasan data (tugaskan otomatis kontak, perusahaan, dan transaksi)",
             "team_hierarchy": "Hierarki tim dan manajer",
-            "custom_roles": "Peran kustom dan cakupan"
+            "custom_roles": "Peran kustom dan cakupan",
+            "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",

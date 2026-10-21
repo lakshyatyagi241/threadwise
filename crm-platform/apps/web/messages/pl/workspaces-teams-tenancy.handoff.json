@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Przekazanie i przypisywanie",
+        "hint": "Używane, gdy bot, przepływ lub współpracownik przekazuje rozmowę temu zespołowi.",
+        "method": "Jak wybrać osobę",
+        "methodHint": "Ręcznie: rozmowa czeka w kolejce zespołu, aż ktoś ją przejmie. Round robin i Najmniej obciążony wybierają członka za Ciebie i wymagają planu z regułami przypisywania.",
+        "defaultAssignee": "Domyślny odbiorca",
+        "defaultAssigneeHint": "Przejmuje rozmowę, gdy nikt inny nie może. Wybierz jednego z członków zespołu.",
+        "noDefaultAssignee": "Nikt konkretny",
+        "hours": "Godziny otwarcia",
+        "hoursHint": "Wyłączone oznacza zawsze otwarte. Poza tymi godzinami rozmowa nadal czeka w kolejce, a kontakt dostaje wiadomość przepływu o czasie poza godzinami.",
+        "timezone": "Strefa czasowa",
+        "dayFrom": "{day}, otwarcie",
+        "dayTo": "{day}, zamknięcie",
+        "hoursProblem": "Każdy dzień otwarty wymaga godziny otwarcia i zamknięcia, które się różnią.",
+        "day": {
+          "mon": "Poniedziałek",
+          "tue": "Wtorek",
+          "wed": "Środa",
+          "thu": "Czwartek",
+          "fri": "Piątek",
+          "sat": "Sobota",
+          "sun": "Niedziela"
+        }
+      }
+    }
+  }
+}

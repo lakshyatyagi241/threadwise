@@ -8,7 +8,7 @@ import {
   type ConversationPriority,
   type ConversationSummary,
 } from '@crm/contracts';
-import { waitAge } from '../lib/handoff';
+import { AGE_KEY, waitAge } from '../lib/handoff';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
@@ -72,6 +72,7 @@ export const ConversationRow = memo(function ConversationRow({
   const [menu, setMenu] = useState(false);
   const t = useTranslations('team-inbox-conversations.list');
   const th = useTranslations('team-inbox-conversations.handoff.row');
+  const tha = useTranslations('team-inbox-conversations.handoff');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const unread = row.unreadCount > 0;
@@ -79,6 +80,10 @@ export const ConversationRow = memo(function ConversationRow({
   const chip = rowWindowChip(row.windowExpiresAt, nowMs, hasWindowRule);
   const left = chip?.msLeft != null ? formatWindowLeft(chip.msLeft) : null;
   const assignee = row.assignment.user?.name ?? row.assignment.team?.name ?? null;
+  const ageText = (since: string) => {
+    const age = waitAge(since, nowMs);
+    return tha(AGE_KEY[age.unit], { count: age.count });
+  };
 
   const label = [
     row.title,
@@ -244,7 +249,7 @@ export const ConversationRow = memo(function ConversationRow({
                 className="rounded-full bg-warning/15 px-1.5 py-0.5 text-[10px] font-medium text-warning"
               >
                 {row.handlingSince
-                  ? th('waitingFor', waitAge(row.handlingSince, nowMs))
+                  ? th('waitingFor', { age: ageText(row.handlingSince) })
                   : th('waiting')}
               </span>
             ) : assignee ? (

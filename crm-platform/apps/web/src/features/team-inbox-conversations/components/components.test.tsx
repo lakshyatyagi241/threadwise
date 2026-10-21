@@ -1,11 +1,10 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { MessageResponse } from '@crm/contracts';
+import { loadMessages } from '@/i18n/messages';
 import { detail, id, message, note, outbound, summary } from '../lib/fixtures';
 import { DEFAULT_FILTERS, EMPTY_COUNTS, EMPTY_LIST, listReducer } from '../lib/list';
 import { Composer } from './composer';
@@ -15,13 +14,9 @@ import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { Ticks } from './parts';
 import { LocationCard } from './media';
 
-const messages = JSON.parse(
-  readFileSync(join(process.cwd(), 'messages', 'en', 'team-inbox-conversations.json'), 'utf8'),
-) as Record<string, unknown>;
-
-const messagesAr = JSON.parse(
-  readFileSync(join(process.cwd(), 'messages', 'ar', 'team-inbox-conversations.json'), 'utf8'),
-) as Record<string, unknown>;
+// The merged messages of the locale, as the app loads them (the main file and the slices: Imported marker, handoff queue).
+const messages = loadMessages('en') as Record<string, unknown>;
+const messagesAr = loadMessages('ar') as Record<string, unknown>;
 
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
@@ -559,7 +554,9 @@ describe('ConversationList states', () => {
   });
 
   it('says there are no conversations yet once a channel exists', () => {
-    const out = render(props({ channels: [{ id: id(900), capabilities: { windowHours: null } } as never] }));
+    const out = render(
+      props({ channels: [{ id: id(900), capabilities: { windowHours: null } } as never] }),
+    );
     expect(out).toContain('No conversations yet');
   });
 

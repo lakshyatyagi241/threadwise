@@ -1,0 +1,62 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "back": "Automatyzacja",
+      "title": "Przekazanie i przypisywanie",
+      "subtitle": "Jak rozmowa trafia do osoby, gdy bot, przepływ lub współpracownik o to poprosi, oraz jak współpracują właściciel kontaktu i właściciel czatu.",
+      "noAccess": "Nie masz uprawnień do wyświetlania tych ustawień. Poproś właściciela lub administratora obszaru roboczego o uprawnienie do ustawień skrzynki.",
+      "readOnly": "Możesz zobaczyć te ustawienia, ale nie możesz ich zmieniać.",
+      "loading": "Wczytywanie ustawień",
+      "loadFailed": "Nie udało się wczytać ustawień.",
+      "retry": "Spróbuj ponownie",
+      "saved": "Ustawienia zapisane.",
+      "saveFailed": "Nie udało się zapisać ustawień.",
+      "notInPlan": "Brak w Twoim planie",
+      "upgradeHint": "Twój plan tego nie obejmuje. Poproś właściciela konta o zmianę planu na wyższy.",
+      "auto": {
+        "title": "Automatyczne przypisywanie",
+        "body": "Gdy potrzebna jest osoba, reguły przypisywania mogą wybrać ją za Ciebie. Bez nich rozmowa czeka na karcie Oczekujące, aż współpracownik ją przejmie.",
+        "switch": "Przypisuj automatycznie",
+        "switchHint": "Wyłącz, aby zatrzymać reguły przypisywania, zarówno dla nowych rozmów, jak i przekazań. Rozmowy czekają wtedy w kolejce lub trafiają do osoby albo zespołu wskazanego w przepływie."
+      },
+      "owner": {
+        "title": "Właściciel kontaktu i właściciel czatu",
+        "body": "Kontakt może mieć właściciela, a każda rozmowa ma osobę, która na nią odpowiada. Wybierz, jak te role są powiązane.",
+        "modeLabel": "Jak powiązani są właściciel kontaktu i właściciel czatu",
+        "modes": {
+          "independent": {
+            "title": "Niezależnie",
+            "body": "Właściciel czatu i właściciel kontaktu są oddzielni. Zmiana jednego nie zmienia drugiego."
+          },
+          "owner_first": {
+            "title": "Najpierw właściciel",
+            "body": "Nowy czat trafia najpierw do właściciela kontaktu, jeśli może go przejąć; w przeciwnym razie decydują zwykłe reguły."
+          },
+          "keep_in_sync": {
+            "title": "Synchronizuj",
+            "body": "Jak w opcji „Najpierw właściciel”, a gdy zmieni się właściciel kontaktu, jego otwarte czaty przypisane automatycznie podążają za nim. Czat przejęty przez osobę nigdy nie jest przenoszony."
+          }
+        },
+        "claimSets": "Przejęcie czyni Cię właścicielem kontaktu",
+        "claimSetsHint": "Gdy ktoś przejmie rozmowę, a kontakt nie ma jeszcze właściciela, ta osoba zostaje właścicielem.",
+        "prompt": "Pytaj o właściciela kontaktu przy zmianie przypisania",
+        "promptHint": "Gdy czat jest ręcznie przekazany komuś innemu, zaproponuj ustawienie tej osoby także jako właściciela kontaktu.",
+        "window": "Zachowaj powracający kontakt przy ostatnim agencie",
+        "windowHint": "Kontakt, który pisze ponownie, trafia przez tyle dni do osoby, która obsługiwała jego ostatnią rozmowę. Wyłączone oznacza brak limitu.",
+        "windowDays": "Liczba dni",
+        "days": "dni"
+      },
+      "queue": {
+        "title": "Kolejka oczekujących",
+        "body": "Rozmowy, których nikt nie mógł przejąć, czekają na karcie Oczekujące w skrzynce, z powodem i czasem oczekiwania.",
+        "notify": "Powiadom zespół, gdy rozmowa czeka",
+        "notifyHint": "Członkowie zespołu lub wszyscy, którzy mogą odpowiadać na nieprzypisane czaty, dostają powiadomienie z powodem."
+      },
+      "teams": {
+        "title": "Zespoły",
+        "body": "Każdy zespół ma własną metodę przypisywania, godziny otwarcia, strefę czasową i domyślnego odbiorcę. Są używane, gdy rozmowa jest przekazywana temu zespołowi.",
+        "link": "Otwórz Zespoły"
+      }
+    }
+  }
+}

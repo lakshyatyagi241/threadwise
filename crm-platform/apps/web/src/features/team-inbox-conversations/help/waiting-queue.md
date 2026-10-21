@@ -4,7 +4,7 @@ title: Waiting queue and claiming
 summary: See the conversations a bot, a flow or a teammate handed over, claim one, send one to the queue, or give it back to the bot.
 area: inbox
 order: 12
-documents: []
+documents: [nav:inbox]
 keywords:
   [
     waiting,

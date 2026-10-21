@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Overdracht en toewijzing",
+        "hint": "Wordt gebruikt wanneer een bot, een flow of een collega een gesprek aan dit team overdraagt.",
+        "method": "Hoe een persoon wordt gekozen",
+        "methodHint": "Handmatig: het gesprek wacht in de wachtrij van het team tot iemand het overneemt. Om de beurt en Minst belast kiezen een lid voor je en vereisen een abonnement met toewijzingsregels.",
+        "defaultAssignee": "Standaardontvanger",
+        "defaultAssigneeHint": "Neemt het gesprek over als niemand anders kan. Kies een van de teamleden.",
+        "noDefaultAssignee": "Niemand in het bijzonder",
+        "hours": "Openingstijden",
+        "hoursHint": "Uit betekent altijd open. Buiten deze tijden wacht een gesprek nog steeds in de wachtrij en krijgt het contact het buiten-openingstijdenbericht van de flow.",
+        "timezone": "Tijdzone",
+        "dayFrom": "{day}, opent",
+        "dayTo": "{day}, sluit",
+        "hoursProblem": "Elke open dag heeft een openings- en een sluitingstijd nodig die verschillen.",
+        "day": {
+          "mon": "Maandag",
+          "tue": "Dinsdag",
+          "wed": "Woensdag",
+          "thu": "Donderdag",
+          "fri": "Vrijdag",
+          "sat": "Zaterdag",
+          "sun": "Zondag"
+        }
+      }
+    }
+  }
+}

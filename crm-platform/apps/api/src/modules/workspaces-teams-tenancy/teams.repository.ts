@@ -267,7 +267,12 @@ export class TeamsRepository {
   }
 
   /** Names the person who takes what nobody else can (`null` clears it). Called after the members are saved, so the caller checked they are on the team. */
-  async setDefaultAssignee(tx: Tx, orgId: number, id: number, userId: number | null): Promise<void> {
+  async setDefaultAssignee(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    userId: number | null,
+  ): Promise<void> {
     await tx.execute(
       sql`UPDATE teams SET default_assignee_id = ${userId} WHERE org_id = ${orgId} AND id = ${id}`,
     );

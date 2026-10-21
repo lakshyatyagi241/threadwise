@@ -1444,7 +1444,8 @@
             "lead_scoring": "Scoort contacten met AI en voedt de groeipilot. De app AI-leadscoring beheert deze schakelaar.",
             "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar.",
             "team_hierarchy": "Bovenliggende teams, teamleiders en managers die hun team en de teams eronder zien.",
-            "custom_roles": "Maak en bewerk rollen en kies per recht een bereik (eigen, team of alle records)."
+            "custom_roles": "Maak en bewerk rollen en kies per recht een bereik (eigen, team of alle records).",
+            "inbox_assignment_sticky": "Toewijzing met eigenaar eerst en gelijk houden tussen de contacteigenaar en de gesprekseigenaar, het venster voor terugkerende contacten en de vraag bij hertoewijzing. Werkt samen met de inboxroutering."
           },
           "units": {
             "days": "Dagen",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "AI-leadscoring",
             "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)",
             "team_hierarchy": "Teamhiërarchie en managers",
-            "custom_roles": "Eigen rollen en bereiken"
+            "custom_roles": "Eigen rollen en bereiken",
+            "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
           },
           "problems": {
             "required": "Dit veld is verplicht.",

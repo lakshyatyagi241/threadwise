@@ -1960,8 +1960,8 @@
           "description": "Een tag toevoegen of verwijderen"
         },
         "assign": {
-          "label": "Medewerker toewijzen",
-          "description": "Overdragen aan een mens"
+          "label": "Overdracht aan medewerker",
+          "description": "Draag de chat over aan een persoon of een wachtrij"
         },
         "subflow": {
           "label": "Sub-flow uitvoeren",
@@ -2321,8 +2321,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Toewijzen aan een medewerker",
-          "help": "Het gesprek aan een team of medewerker overdragen"
+          "label": "Overdracht aan medewerker",
+          "help": "Draag het gesprek over aan een persoon, een team of de toewijzingsregels"
         },
         "message": {
           "label": "Bericht",
@@ -2421,7 +2421,7 @@
         "location": "Locatie",
         "template": "Sjabloon",
         "cta": "Linkknop",
-        "assign": "Toewijzen aan een medewerker",
+        "assign": "Overdracht aan medewerker",
         "carousel": "Carrousel",
         "condition": "Voorwaarde",
         "faq": "Antwoord uit FAQ",

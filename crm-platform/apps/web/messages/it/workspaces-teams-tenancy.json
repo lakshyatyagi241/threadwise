@@ -201,7 +201,7 @@
       },
       "notUsed": {
         "title": "Salvato, non ancora usato",
-        "body": "Queste impostazioni sono salvate sul team, ma per ora nulla le legge. Inizieranno ad applicarsi con l'aggiornamento dell'instradamento.",
+        "body": "Questa impostazione è salvata sul team, ma per ora nulla la utilizza.",
         "devices": "{count, plural, one {Limitato a # dispositivo} other {Limitato a # dispositivi}}"
       },
       "deleteUsage": {

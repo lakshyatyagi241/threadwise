@@ -1179,7 +1179,10 @@ function HandoffEditor({ step, ctx, set }: EditorProps) {
       )}
       <div className="grid grid-cols-2 gap-3">
         <Field label={t('reason')}>
-          <Select value={str(d.reason) || 'other'} onChange={(e) => set({ reason: e.target.value })}>
+          <Select
+            value={str(d.reason) || 'other'}
+            onChange={(e) => set({ reason: e.target.value })}
+          >
             {HANDOFF_REASON_CHOICES.map((r) => (
               <option key={r} value={r}>
                 {t(`reasons.${r}`)}
@@ -1221,7 +1224,11 @@ function HandoffEditor({ step, ctx, set }: EditorProps) {
           onChange={(e) => set({ offHoursMessage: e.target.value })}
         />
       </Field>
-      <p role="note" data-testid="flb-handoff-exits" className="rounded-xl bg-muted p-2.5 text-[12px]">
+      <p
+        role="note"
+        data-testid="flb-handoff-exits"
+        className="rounded-xl bg-muted p-2.5 text-[12px]"
+      >
         {t('simpleExits')}
       </p>
     </div>

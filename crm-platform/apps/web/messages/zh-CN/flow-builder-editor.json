@@ -2102,8 +2102,8 @@
           "description": "添加或移除标签"
         },
         "assign": {
-          "label": "分配客服",
-          "description": "转交人工"
+          "label": "转人工",
+          "description": "将聊天转给人工或队列"
         },
         "subflow": {
           "label": "运行子流程",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "分配给客服",
-          "help": "将对话交给团队或客服"
+          "label": "转人工",
+          "help": "将会话转给人员、团队或分配规则"
         },
         "message": {
           "label": "消息",
@@ -2563,7 +2563,7 @@
         "location": "位置",
         "template": "模板",
         "cta": "链接按钮",
-        "assign": "分配给客服",
+        "assign": "转人工",
         "carousel": "轮播",
         "condition": "条件",
         "faq": "FAQ 回答",

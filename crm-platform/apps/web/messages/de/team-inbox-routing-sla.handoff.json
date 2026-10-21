@@ -1,0 +1,62 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "back": "Automatisierung",
+      "title": "Übergabe und Zuweisung",
+      "subtitle": "Wie eine Unterhaltung zu einem Mitarbeiter gelangt, sobald ein Bot, ein Flow oder ein Teamkollege einen anfordert, und wie Kontaktbesitzer und Chat-Besitzer zusammenspielen.",
+      "noAccess": "Du hast keine Berechtigung, diese Einstellungen zu sehen. Bitte einen Inhaber oder Admin des Workspace um die Berechtigung für die Posteingangs-Einstellungen.",
+      "readOnly": "Du kannst diese Einstellungen sehen, aber nicht ändern.",
+      "loading": "Einstellungen werden geladen",
+      "loadFailed": "Die Einstellungen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "saved": "Einstellungen gespeichert.",
+      "saveFailed": "Die Einstellungen konnten nicht gespeichert werden.",
+      "notInPlan": "Nicht in deinem Tarif",
+      "upgradeHint": "Dein Tarif enthält das nicht. Bitte den Kontoinhaber, den Tarif zu upgraden.",
+      "auto": {
+        "title": "Automatische Zuweisung",
+        "body": "Wenn ein Mitarbeiter benötigt wird, können die Zuweisungsregeln einen für dich auswählen. Ohne sie wartet die Unterhaltung im Tab „Wartend“, bis ein Teamkollege sie übernimmt.",
+        "switch": "Automatisch zuweisen",
+        "switchHint": "Ausschalten, um die Zuweisungsregeln zu stoppen, sowohl für neue Unterhaltungen als auch für Übergaben. Unterhaltungen warten dann in der Warteschlange oder gehen an die Person oder das Team, das ein Flow nennt."
+      },
+      "owner": {
+        "title": "Kontaktbesitzer und Chat-Besitzer",
+        "body": "Ein Kontakt kann einen Besitzer haben, und jede Unterhaltung hat die Person, die sie beantwortet. Lege fest, wie beide zusammenhängen.",
+        "modeLabel": "Wie Kontaktbesitzer und Chat-Besitzer zusammenhängen",
+        "modes": {
+          "independent": {
+            "title": "Unabhängig",
+            "body": "Chat-Besitzer und Kontaktbesitzer sind getrennt. Eine Änderung des einen wirkt sich nicht auf den anderen aus."
+          },
+          "owner_first": {
+            "title": "Besitzer zuerst",
+            "body": "Ein neuer Chat geht zuerst an den Besitzer des Kontakts, wenn dieser ihn übernehmen kann; sonst entscheiden die üblichen Regeln."
+          },
+          "keep_in_sync": {
+            "title": "Synchron halten",
+            "body": "Wie „Besitzer zuerst“, und wenn sich der Besitzer eines Kontakts ändert, folgen seine offenen Chats, die automatisch zugewiesen wurden. Ein Chat, den eine Person übernommen hat, wird nie verschoben."
+          }
+        },
+        "claimSets": "Übernehmen macht dich zum Kontaktbesitzer",
+        "claimSetsHint": "Wenn jemand eine Unterhaltung übernimmt und der Kontakt noch keinen Besitzer hat, wird diese Person Besitzer.",
+        "prompt": "Bei Neuzuweisung nach dem Kontaktbesitzer fragen",
+        "promptHint": "Wenn ein Chat manuell an jemand anderen gegeben wird, anbieten, diese Person auch zum Kontaktbesitzer zu machen.",
+        "window": "Wiederkehrenden Kontakt beim letzten Agenten halten",
+        "windowHint": "Ein Kontakt, der erneut schreibt, geht für diese Anzahl von Tagen an die Person, die seine letzte Unterhaltung bearbeitet hat. Aus bedeutet keine Begrenzung.",
+        "windowDays": "Anzahl der Tage",
+        "days": "Tage"
+      },
+      "queue": {
+        "title": "Warteschlange",
+        "body": "Unterhaltungen, die niemand übernehmen konnte, warten im Tab „Wartend“ des Posteingangs, mit Grund und Wartezeit.",
+        "notify": "Das Team benachrichtigen, wenn eine Unterhaltung wartet",
+        "notifyHint": "Mitglieder des Teams oder alle, die nicht zugewiesene Chats beantworten können, erhalten eine Benachrichtigung mit dem Grund."
+      },
+      "teams": {
+        "title": "Teams",
+        "body": "Jedes Team hat eine eigene Zuweisungsmethode, Öffnungszeiten, Zeitzone und einen Standardempfänger. Sie gelten, wenn eine Unterhaltung an dieses Team übergeben wird.",
+        "link": "Teams öffnen"
+      }
+    }
+  }
+}

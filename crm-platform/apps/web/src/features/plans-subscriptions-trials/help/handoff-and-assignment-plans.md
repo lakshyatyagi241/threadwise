@@ -2,8 +2,8 @@
 id: handoff-and-assignment-plans
 title: What your plan includes for handoff and assignment
 summary: Which handoff and assignment options every plan has, and which need assignment rules or the contact-owner features.
-area: settings
-order: 64
+area: getting-started
+order: 86
 documents: []
 features: [inbox_assignment_sticky]
 keywords:
