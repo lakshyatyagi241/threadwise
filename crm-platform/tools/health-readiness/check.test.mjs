@@ -15,6 +15,10 @@ test('a service missing from the matrix, and a missing healthcheck, are caught',
   fs.cpSync(path.join(root, 'deploy'), path.join(tmp, 'deploy'), { recursive: true });
   fs.cpSync(path.join(root, 'docs/runbooks'), path.join(tmp, 'docs/runbooks'), { recursive: true });
   fs.cpSync(path.join(root, 'docs/performance/event-loop'), path.join(tmp, 'docs/performance/event-loop'), { recursive: true });
+  for (const f of ['packages/observability/src/db-saturation.ts', 'apps/api/src/infra/db/database.service.ts']) {
+    fs.mkdirSync(path.dirname(path.join(tmp, f)), { recursive: true });
+    fs.copyFileSync(path.join(root, f), path.join(tmp, f));
+  }
   fs.symlinkSync(path.join(root, 'node_modules'), path.join(tmp, 'node_modules'));
   fs.mkdirSync(path.join(tmp, 'docs/performance/health'), { recursive: true });
   const m = JSON.parse(fs.readFileSync(path.join(root, 'docs/performance/health/coverage-matrix.json'), 'utf8'));
