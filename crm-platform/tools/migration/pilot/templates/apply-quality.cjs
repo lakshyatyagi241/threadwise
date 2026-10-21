@@ -54,6 +54,8 @@ async function main(argv) {
     let changed = 0;
     let matched = 0;
     try {
+      // organizations is under FORCE row-level security: the lookup runs privileged, as the credential import's does
+      await db.query(`SELECT set_config('app.privileged', 'on', true)`);
       // the migrated organization: slug matches AND it carries the marker of THIS client (as the credential import checks)
       const org = (
         await db.query(
