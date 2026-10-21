@@ -60,7 +60,7 @@ services:
       # probe also times a request that goes out of the stack and back through Traefik. ApiCallerLatencyHigh covers every target. From the
       # host itself this includes the ingress but not the internet; to see the internet, run this probe on a second host with only the
       # public URLs in PROBE_TARGETS and scrape it from here.
-      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt${PROBE_EXTRA_TARGETS:+,}${PROBE_EXTRA_TARGETS:-}
+      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt,webready=http://web:3001/api/ready${PROBE_EXTRA_TARGETS:+,}${PROBE_EXTRA_TARGETS:-}
       PROBE_INTERVAL_SECONDS: '10'
       PROBE_TIMEOUT_SECONDS: '10'
       OBS_METRICS_PORT: '9464'
