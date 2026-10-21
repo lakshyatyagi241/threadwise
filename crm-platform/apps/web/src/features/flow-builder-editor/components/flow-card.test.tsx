@@ -17,6 +17,7 @@ const flow = (over: Partial<FlowSummary> = {}): FlowSummary => ({
   id: '11111111-1111-4111-8111-111111111111',
   name: 'Welcome',
   flowType: 'chat',
+  builder: 'simple',
   category: 'welcome',
   state: 'live',
   isPublished: true,
@@ -44,6 +45,13 @@ const card = (over: Partial<FlowSummary> = {}) =>
   renderToStaticMarkup(<FlowCard flow={flow(over)} actions={actions} />);
 
 describe('flow card (TW-FLB-001)', () => {
+  it('a WhatsApp bot carries the WhatsApp mark, an Advanced messaging flow the automation mark instead', () => {
+    expect(card()).not.toContain('flow-card-automation');
+    const advanced = card({ builder: 'advanced' });
+    expect(advanced).toContain('data-testid="flow-card-automation"');
+    expect(advanced).not.toContain('bg-[#25D366]');
+  });
+
   it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
     const html = card();
     expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
