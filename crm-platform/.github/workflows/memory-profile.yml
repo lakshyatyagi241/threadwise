@@ -1,0 +1,41 @@
+name: memory-profile
+# Manual only (Sheet3 #57). Profiles API + worker memory (boot, warm-up, load p50/p95/p99, heap spaces, per-endpoint delta,
+# heap snapshots), uploads memory-profile.json + snapshots as an artifact, then fails when perf/memory-budget.json is exceeded.
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: 'Profile length in minutes (3 min warm-up included)'
+        default: '11'
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: crm, POSTGRES_PASSWORD: crm, POSTGRES_DB: crm_soak_mem }
+        ports: ['5432:5432']
+      redis:
+        image: redis:7
+        ports: ['56379:6379']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability --filter @crm/api build
+      - run: pnpm db:migrate && pnpm db:seed
+        env:
+          MIGRATION_DATABASE_URL: postgres://crm:crm@localhost:5432/crm_soak_mem
+          DATABASE_URL: postgres://crm_app_user:crm_app_dev@localhost:5432/crm_soak_mem
+      - run: node tools/perf/soak.mjs --profile --snapshots --minutes ${{ github.event.inputs.minutes }} --interval 5 --out perf/results/memory
+        env:
+          NODE_ENV: production
+        continue-on-error: true # soak exits 1 on growth; the budget check below is this workflow's gate
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: memory-profile, path: perf/results/memory, retention-days: 30 }
+      - run: node tools/perf/memory-budget-check.mjs perf/results/memory/memory-profile.json perf/memory-budget.json

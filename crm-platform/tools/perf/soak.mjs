@@ -8,6 +8,8 @@ import { createRequire } from 'node:module';
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadavg, cpus } from 'node:os';
+import { summarize, analyzeSnapshot } from './memory-profile.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -23,6 +25,7 @@ const NUM = {
   port: 'port',
   'threshold-mb-h': 'thresholdMbH',
   sockets: 'sockets',
+  calls: 'calls',
 };
 const STR = { out: 'out', email: 'email', password: 'password' };
 
@@ -40,10 +43,14 @@ export function parseArgs(argv) {
     password: 'Passw0rd!',
     worker: true,
     snapshots: false,
+    profile: false,
+    calls: 200,
   };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i].replace(/^--/, '');
     if (k === 'no-worker') o.worker = false;
+    else if (k === 'profile')
+      o.profile = true; // writes memory-profile.json: boot sample, p50/p95/p99, heap spaces, per-endpoint delta
     else if (k === 'snapshots')
       o.snapshots = true; // opt in: writing a snapshot of a big heap pauses the process for seconds
     else if (k in NUM) o[NUM[k]] = Number(argv[++i]);
@@ -99,7 +106,8 @@ export function snapshotByName(path) {
   return m;
 }
 export function diffSnapshots(a, b, top = 15) {
-  const rows = [];
+  const rows = [],
+    lastSpaces = {};
   for (const [k, e] of b) {
     const p = a.get(k) || { n: 0, bytes: 0 };
     rows.push({ name: k, dCount: e.n - p.n, dBytes: e.bytes - p.bytes });
@@ -189,6 +197,17 @@ async function main() {
       await new Promise((r) => setTimeout(r, 1000));
     }
   }
+  const boot = {},
+    snaps = {};
+  if (o.profile)
+    for (const p of procs) {
+      boot[p.name] = await p.ask({ gc: true, spaces: true });
+      if (o.snapshots)
+        await p.ask(
+          { snapshot: (snaps[`${p.name}-boot`] = join(o.out, `heap-${p.name}-boot.heapsnapshot`)) },
+          300000,
+        );
+    }
   let ipn = 0;
   const hdr = (t) => ({
     'content-type': 'application/json',
@@ -303,7 +322,8 @@ async function main() {
       (await pg.query('select count(*) c from pg_stat_activity where datname=$1', [db])).rows[0].c,
     );
     for (const p of procs) {
-      const s = await p.ask({ gc });
+      const s = await p.ask({ gc, spaces: o.profile && gc });
+      if (s?.spaces) lastSpaces[p.name] = s.spaces;
       if (s)
         rows.push({
           t: Math.round(el),
@@ -327,7 +347,18 @@ async function main() {
       cleanup();
       process.exit(1);
     }
-    if (o.snapshots && !snapA && el >= o.warmup * 60) {
+    if (o.profile && o.snapshots && !snaps.warm && el >= o.warmup * 60) {
+      snaps.warm = true;
+      for (const p of procs)
+        await p.ask(
+          {
+            gc: true,
+            snapshot: (snaps[`${p.name}-warm`] = join(o.out, `heap-${p.name}-warm.heapsnapshot`)),
+          },
+          300000,
+        );
+    }
+    if (!o.profile && o.snapshots && !snapA && el >= o.warmup * 60) {
       snapA = join(o.out, 'heap-start.heapsnapshot');
       await procs[0].ask({ gc: true, snapshot: snapA }, 300000);
     }
@@ -337,6 +368,52 @@ async function main() {
   }
   stop = true;
   await Promise.all(loops);
+  const endpoints = {};
+  if (o.profile) {
+    const csv = [
+      'name,email,phone',
+      ...Array.from(
+        { length: 200 },
+        (_, i) => `Prof ${i},prof${i}@prof.example.test,+9198${10000000 + i}`,
+      ),
+    ].join('\n');
+    const eps = {
+      'GET /v2/contacts?limit=100 (large page)': () =>
+        fetch(`${base}/v2/contacts?limit=100`, { headers: hdr(token) }),
+      'GET /v2/contacts?search=a (search)': () =>
+        fetch(`${base}/v2/contacts?limit=20&search=a`, { headers: hdr(token) }),
+      'GET /v2/companies/export (CSV export)': () =>
+        fetch(`${base}/v2/companies/export`, { headers: hdr(token) }),
+      'POST /v2/contacts/import/preview (200 rows)': () => {
+        const f = new FormData();
+        f.append('file', new Blob([csv], { type: 'text/csv' }), 'prof.csv');
+        const h = hdr(token);
+        delete h['content-type'];
+        return fetch(`${base}/v2/contacts/import/preview`, { method: 'POST', headers: h, body: f });
+      },
+    };
+    for (const [name, fn] of Object.entries(eps)) {
+      const a = await procs[0].ask({ gc: true }),
+        codes = {};
+      for (let i = 0; i < o.calls; i++) {
+        try {
+          const r = await fn();
+          await r.arrayBuffer();
+          codes[r.status] = (codes[r.status] || 0) + 1;
+        } catch {
+          codes.error = (codes.error || 0) + 1;
+        }
+      }
+      const b = await procs[0].ask({ gc: true });
+      endpoints[name] = {
+        calls: o.calls,
+        statuses: codes,
+        heapUsedDeltaMb: +mb(b.heapUsed - a.heapUsed).toFixed(2),
+        rssDeltaMb: +mb(b.rss - a.rss).toFixed(2),
+        heapUsedKbPerCall: +((b.heapUsed - a.heapUsed) / 1024 / o.calls).toFixed(2),
+      };
+    }
+  }
   let top = [];
   if (snapA) {
     const snapB = join(o.out, 'heap-end.heapsnapshot');
@@ -351,6 +428,56 @@ async function main() {
   rd.disconnect();
   await pg.end();
 
+  if (o.profile) {
+    const snapshots = {};
+    for (const [k, f] of Object.entries(snaps))
+      if (typeof f === 'string') snapshots[k] = analyzeSnapshot(f);
+    const mem = (x) =>
+      x &&
+      Object.fromEntries(
+        ['rss', 'heapUsed', 'heapTotal', 'external', 'arrayBuffers', 'mallocedMemory'].map((k) => [
+          `${k}Mb`,
+          +mb(x[k]).toFixed(1),
+        ]),
+      );
+    writeFileSync(
+      join(o.out, 'memory-profile.json'),
+      JSON.stringify(
+        {
+          schema: 1,
+          generatedAt: new Date().toISOString(),
+          node: process.version,
+          nodeEnv: env.NODE_ENV || '(unset: dev defaults)',
+          options: {
+            minutes: o.minutes,
+            warmup: o.warmup,
+            interval: o.interval,
+            gcEvery: o.gcEvery,
+            rate: o.rate,
+            calls: o.calls,
+          },
+          machine: { loadavg: loadavg(), cpus: cpus().length },
+          requests: stats,
+          bootMb: Object.fromEntries(Object.entries(boot).map(([k, v]) => [k, mem(v)])),
+          loadWindow: summarize(rows, o.warmup * 60),
+          heapSpacesMb: Object.fromEntries(
+            Object.entries(lastSpaces).map(([k, v]) => [
+              k,
+              v.map((x) => ({
+                space: x.n,
+                usedMb: +mb(x.used).toFixed(1),
+                sizeMb: +mb(x.size).toFixed(1),
+              })),
+            ]),
+          ),
+          endpoints,
+          snapshots,
+        },
+        null,
+        1,
+      ),
+    );
+  }
   const cols = Object.keys(rows[0] || {});
   writeFileSync(
     join(o.out, 'soak.csv'),
