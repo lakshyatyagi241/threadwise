@@ -363,7 +363,8 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
     const conf = Buffer.from(
       JSON.stringify({
         allowedHosts: cfg.mediaHosts || ['assets.getalabs.com'],
-        maxFileMB: 50,
+        // the largest media file the copy downloads: the client config may raise it (maxFileMB, a positive number of MB); 50 by default
+        maxFileMB: Number(cfg.maxFileMB) > 0 ? Number(cfg.maxFileMB) : 50,
         timeoutMs: 60000,
       }) + '\n',
     );
