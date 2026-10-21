@@ -75,6 +75,10 @@ describe('HandoffSettingsScreen', () => {
     can = false;
     const out = html();
     can = true;
-    expect(out).toContain(loadMessages('en')['team-inbox-routing-sla'].handoffSettings.readOnly);
+    // loadMessages returns the untyped message tree; narrow the section to the keys this test reads
+    const section = loadMessages('en')['team-inbox-routing-sla'] as {
+      handoffSettings: { readOnly: string };
+    };
+    expect(out).toContain(section.handoffSettings.readOnly);
   });
 });
