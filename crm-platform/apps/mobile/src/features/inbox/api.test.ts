@@ -20,10 +20,13 @@ import {
   markConversationRead,
   markConversationSpam,
   retryMessage,
+  sendMediaMessage,
   sendTextMessage,
   setConversationPriority,
   setConversationStatus,
   snoozeConversation,
+  uploadInboxMedia,
+  uploadTimeoutMs,
 } from './api';
 import { DEFAULT_FILTERS } from './filters';
 
@@ -45,6 +48,28 @@ describe('inbox api', () => {
     expect(url).not.toContain('status=');
     expect(url).not.toContain('q=');
     expect(url).not.toContain('cursor=');
+  });
+
+  it('sends the chosen agents and the oldest-first order, and leaves the default order out', async () => {
+    const http = mockFetch(
+      jsonResponse(200, list([summary()])),
+      jsonResponse(200, list([summary()])),
+    );
+    await fetchConversations(
+      {
+        ...DEFAULT_FILTERS,
+        agentIds: ['agent-1', 'agent-2'],
+        sort: 'old',
+      },
+      undefined,
+    );
+    const url = http.calls[0]?.url ?? '';
+    expect(url).toContain('agentIds=agent-1%2Cagent-2');
+    expect(url).toContain('sort=old');
+    await fetchConversations(DEFAULT_FILTERS, undefined);
+    const plain = http.calls[1]?.url ?? '';
+    expect(plain).not.toContain('agentIds=');
+    expect(plain).not.toContain('sort=');
   });
 
   it('sends the status, the search words and the cursor when they are set', async () => {
@@ -209,5 +234,63 @@ describe('inbox api', () => {
     const http = mockFetch(jsonResponse(200, { data: [channelRow()] }));
     await expect(fetchChannels()).resolves.toMatchObject({ data: [{ name: 'Support line' }] });
     expect(http.calls[0]?.url).toContain('/v2/channels');
+  });
+
+  it('uploads a file as multipart field "file" and answers the stored upload', async () => {
+    const upload = {
+      id: '33333333-3333-4333-8333-333333333333',
+      kind: 'image',
+      mime: 'image/jpeg',
+      name: 'p.jpg',
+      sizeBytes: 1234,
+      previewUrl: '/api/v2/media/x',
+      expiresAt: '2026-10-22T10:00:00.000Z',
+    };
+    const http = mockFetch(jsonResponse(201, upload));
+    await expect(
+      uploadInboxMedia(
+        { uri: 'file:///p.jpg', name: 'p.jpg', mime: 'image/jpeg', sizeBytes: 1234, kind: 'image' },
+        'upload-key',
+      ),
+    ).resolves.toMatchObject({ id: upload.id, kind: 'image' });
+    const [call] = http.calls;
+    expect(call?.url).toContain('/v2/inbox/media');
+    expect(call?.init.method).toBe('POST');
+    expect(call?.headers['Idempotency-Key']).toBe('upload-key');
+    expect(call?.headers['Content-Type']).toBeUndefined();
+    expect(call?.init.body).toBeInstanceOf(FormData);
+  });
+
+  it('sends an uploaded file as a media message with its caption, trimmed, and the client id as the key', async () => {
+    const http = mockFetch(jsonResponse(202, outgoing(5, { status: 'queued' })));
+    await sendMediaMessage(CONVERSATION_ID, 'client-1', 'media-1', '  Your invoice  ');
+    const [call] = http.calls;
+    expect(call?.url).toContain(`/v2/inbox/conversations/${CONVERSATION_ID}/messages`);
+    expect(call?.body).toEqual({
+      kind: 'media',
+      clientMessageId: 'client-1',
+      mediaId: 'media-1',
+      caption: 'Your invoice',
+    });
+    expect(call?.headers['Idempotency-Key']).toBe('client-1');
+  });
+
+  it('leaves the caption out when it is only spaces', async () => {
+    const http = mockFetch(jsonResponse(202, outgoing(5, { status: 'queued' })));
+    await sendMediaMessage(CONVERSATION_ID, 'client-2', 'media-2', '   ');
+    expect(http.calls[0]?.body).toEqual({
+      kind: 'media',
+      clientMessageId: 'client-2',
+      mediaId: 'media-2',
+    });
+  });
+});
+
+describe('uploadTimeoutMs', () => {
+  it('is two minutes for a small file, longer for a big one, and never more than twenty minutes', () => {
+    expect(uploadTimeoutMs(null)).toBe(120_000);
+    expect(uploadTimeoutMs(1024)).toBeGreaterThan(120_000);
+    expect(uploadTimeoutMs(50 * 1024 * 1024)).toBeGreaterThan(uploadTimeoutMs(5 * 1024 * 1024));
+    expect(uploadTimeoutMs(100 * 1024 * 1024)).toBeLessThanOrEqual(20 * 60_000);
   });
 });

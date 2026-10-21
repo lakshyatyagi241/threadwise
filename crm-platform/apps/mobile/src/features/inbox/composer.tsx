@@ -18,6 +18,8 @@ interface Props {
   busy?: boolean;
   /** Opens the saved replies; the button shows only when this is given (replies only). */
   onOpenReplies?: () => void;
+  /** Opens the attach sheet (photo, camera, document); the paperclip shows only when this is given (replies only). */
+  onOpenAttach?: () => void;
   /** Opens the template list (a template can be sent inside the 24-hour window too); the button shows only when this is given (replies only). */
   onOpenTemplates?: () => void;
   /** Switches between a reply and a private note (the lock beside the box); the lock shows only when this is given. */
@@ -26,7 +28,7 @@ interface Props {
 
 /**
  * The box at the bottom of a thread. Sending is possible only for a non-empty text within the length limit. In reply mode a
- * lightning-bolt button opens the saved replies and a document button the template list; in note mode the box is tinted and the button says "Add note".
+ * lightning-bolt button opens the saved replies, a paperclip the attach sheet (photo, camera, document) and a document button the template list; in note mode the box is tinted and the button says "Add note".
  */
 export function Composer({
   value,
@@ -35,6 +37,7 @@ export function Composer({
   mode = 'reply',
   busy,
   onOpenReplies,
+  onOpenAttach,
   onOpenTemplates,
   onToggleNote,
 }: Props) {
@@ -67,6 +70,16 @@ export function Composer({
           style={styles.tool}
         >
           <Icon name="flash-outline" size={24} color="primary" />
+        </Pressable>
+      ) : null}
+      {!note && onOpenAttach ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('inbox.attach.open')}
+          onPress={onOpenAttach}
+          style={styles.tool}
+        >
+          <Icon name="attach" size={24} color="primary" />
         </Pressable>
       ) : null}
       {!note && onOpenTemplates ? (

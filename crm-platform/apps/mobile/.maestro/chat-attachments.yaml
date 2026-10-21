@@ -1,0 +1,37 @@
+# A person with the reply right opens a conversation with an open reply window, taps the paperclip, chooses a document from the phone's
+# file browser, adds a caption and sends it. The file then shows in the thread as a tile.
+# Needs an account with `inbox.conversation.reply`, a seeded open conversation, and a file named "report.pdf" in the emulator's Downloads
+# (the system file browser is outside the app, so this flow picks it by name).
+#   maestro test apps/mobile/.maestro/chat-attachments.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Inbox'
+- tapOn:
+    index: 0
+    text: '.*'
+    below: 'Inbox'
+- tapOn: 'Attach a file'
+- assertVisible: 'Photo or video'
+- assertVisible: 'Camera'
+- assertVisible: 'Document'
+- tapOn: 'Document'
+- tapOn: 'report.pdf'
+- assertVisible: 'Send attachment'
+- assertVisible: 'report.pdf'
+- tapOn: 'Caption (optional)'
+- inputText: 'Maestro attachment'
+- hideKeyboard
+- tapOn:
+    text: 'Send'
+    index: 1
+- assertNotVisible: 'Send attachment'
+- assertVisible: 'report.pdf'

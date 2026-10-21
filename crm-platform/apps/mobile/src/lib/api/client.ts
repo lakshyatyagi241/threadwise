@@ -12,10 +12,9 @@ const MUTATING: ReadonlySet<Method> = new Set(['POST', 'PUT', 'PATCH', 'DELETE']
 /** A phone on a bad connection should fail in a way the screen can show, not hang. */
 const DEFAULT_TIMEOUT_MS = 30_000;
 
-export interface ApiRequest<T> {
+interface ApiRequestBase<T> {
   method?: Method;
   query?: Record<string, string | number | boolean | undefined>;
-  body?: unknown;
   /** Parsed at the boundary: the server can be older or newer than this build. Omit for 204 responses. */
   schema?: z.ZodType<T, z.ZodTypeDef, unknown>;
   /** Reuse one key across the retries of the same user action; a fresh one is made when omitted. */
@@ -25,6 +24,14 @@ export interface ApiRequest<T> {
   /** false for the public doors (sign-in, MFA, workspace pick): no bearer token, no refresh-and-retry on 401. */
   auth?: boolean;
 }
+
+/** A JSON `body` or a multipart `formData`, never both. */
+export type ApiRequest<T> = ApiRequestBase<T> &
+  (
+    | { body?: unknown; formData?: undefined }
+    /** A file upload: sent as it is, with the boundary the platform makes. */
+    | { formData: FormData; body?: undefined }
+  );
 
 function qs(query: ApiRequest<unknown>['query']): string {
   if (!query) return '';
@@ -66,7 +73,9 @@ async function send<T>(
   const token = authenticated ? await getAccessToken() : null;
 
   const headers: Record<string, string> = clientHeaders();
-  if (req.body !== undefined) headers['Content-Type'] = 'application/json';
+  // A multipart request must not name its Content-Type: fetch adds it together with the boundary.
+  if (req.body !== undefined && req.formData === undefined)
+    headers['Content-Type'] = 'application/json';
   if (req.idempotencyKey) headers['Idempotency-Key'] = req.idempotencyKey;
   if (token) headers.Authorization = `Bearer ${token}`;
 
@@ -84,7 +93,7 @@ async function send<T>(
     res = await fetch(`${env.apiUrl}${path}${qs(req.query)}`, {
       method: req.method,
       headers,
-      body: req.body === undefined ? undefined : JSON.stringify(req.body),
+      body: req.formData ?? (req.body === undefined ? undefined : JSON.stringify(req.body)),
       signal: controller.signal,
     });
     text = await res.text();

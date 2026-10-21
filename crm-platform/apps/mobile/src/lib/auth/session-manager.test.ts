@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import { clearReceivedFiles } from '@/lib/device/received-files';
 import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
 import {
   endSession,
@@ -9,6 +10,8 @@ import {
   restoreSession,
   startSession,
 } from './session-manager';
+
+jest.mock('@/lib/device/received-files', () => ({ clearReceivedFiles: jest.fn() }));
 
 const stored = () => (SecureStore as unknown as { __store: Map<string, string> }).__store;
 
@@ -60,6 +63,13 @@ describe('startSession / endSession', () => {
     await endSession();
     expect(getSnapshot()).toEqual({ status: 'signedOut', tokens: null });
     expect(stored().size).toBe(0);
+  });
+
+  it('removes the customer files opened during the session, whichever way it ends', async () => {
+    jest.mocked(clearReceivedFiles).mockClear();
+    await startSession(TOKEN_PAIR(1));
+    await endSession();
+    expect(clearReceivedFiles).toHaveBeenCalledTimes(1);
   });
 });
 

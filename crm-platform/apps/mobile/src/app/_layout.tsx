@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useFirstRunPermissions } from '@/features/onboarding/use-first-run-permissions';
+import { clearReceivedFiles } from '@/lib/device/received-files';
 import { i18n, initI18n } from '@/lib/i18n';
 import { getSnapshot, restoreSession, subscribe } from '@/lib/auth/session-manager';
 import { log } from '@/lib/observability/logger';
@@ -34,6 +35,8 @@ function RootLayout() {
   const fontsDone = fontsLoaded || fontError !== null;
 
   useEffect(() => {
+    // Files opened from conversations in an earlier run (the app may have been closed while one was open) are removed at start.
+    clearReceivedFiles();
     // The language and the stored session are both needed before the first screen, or it flashes the wrong one.
     Promise.all([initI18n(), restoreSession()])
       .catch((e: unknown) => log.exception(e, 'app.boot_failed'))

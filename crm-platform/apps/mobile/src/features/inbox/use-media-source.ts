@@ -19,6 +19,10 @@ export const mediaUri = (link: string, apiUrl: string): string => {
   return `${base}${link.replace(/^\/api(?=\/)/, '')}`;
 };
 
+/** Whether an address is on the API itself (where the person's token may be sent) and not some other site a link could name. */
+export const isApiAddress = (uri: string, apiUrl: string): boolean =>
+  uri.startsWith(`${apiUrl.replace(/\/$/, '')}/`);
+
 /** The source to give an Image for `link`, or null while the token is being read (and when signed out). */
 export function useMediaSource(link: string | null): MediaSource | null {
   const [token, setToken] = useState<string | null>(null);

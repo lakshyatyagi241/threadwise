@@ -56,6 +56,29 @@ jest.mock('expo-image-picker', () => ({
     granted: true,
     canAskAgain: true,
   })),
+  // The pictures a test "chooses": each test says what comes back.
+  launchImageLibraryAsync: jest.fn(async () => ({ canceled: true, assets: null })),
+  launchCameraAsync: jest.fn(async () => ({ canceled: true, assets: null })),
+}));
+// The app's files: the cache folder, a folder that can be listed and emptied, and a file that can be deleted or downloaded.
+jest.mock('expo-file-system', () => ({
+  Paths: { cache: { uri: 'file:///cache/' } },
+  Directory: jest.fn().mockImplementation(() => ({
+    exists: false,
+    create: jest.fn(),
+    delete: jest.fn(),
+    list: () => [],
+  })),
+  File: Object.assign(
+    jest.fn().mockImplementation(() => ({ delete: jest.fn() })),
+    { downloadFileAsync: jest.fn() },
+  ),
+}));
+jest.mock('expo-file-system/legacy', () => ({ getContentUriAsync: jest.fn() }));
+jest.mock('expo-sharing', () => ({ isAvailableAsync: jest.fn(), shareAsync: jest.fn() }));
+// The system file browser: nothing is chosen until a test says so.
+jest.mock('expo-document-picker', () => ({
+  getDocumentAsync: jest.fn(async () => ({ canceled: true, assets: null })),
 }));
 jest.mock('expo-intent-launcher', () => ({ startActivityAsync: jest.fn(async () => ({})) }));
 

@@ -5,6 +5,7 @@ import {
   conversationSummarySchema,
   inboxAssigneesResponseSchema,
   inboxConversationDetailSchema,
+  inboxMediaUploadSchema,
   inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
@@ -15,6 +16,7 @@ import {
   type SnoozeConversationInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api';
+import type { PickedAttachment } from './attachment';
 import type { InboxFilters } from './filters';
 
 export const CONVERSATIONS_PAGE_SIZE = 20;
@@ -33,6 +35,8 @@ export const fetchConversations = (
       status: filters.status === 'default' ? undefined : filters.status,
       channelId: filters.channelId || undefined,
       labels: filters.labels.length > 0 ? filters.labels.join(',') : undefined,
+      agentIds: filters.agentIds.length > 0 ? filters.agentIds.join(',') : undefined,
+      sort: filters.sort === 'recent' ? undefined : filters.sort,
       archived: filters.archived ? 'true' : undefined,
       q: filters.q.trim() || undefined,
       cursor,
@@ -60,6 +64,54 @@ export const sendTextMessage = (id: string, clientMessageId: string, body: strin
   apiFetch(`/v2/inbox/conversations/${id}/messages`, {
     method: 'POST',
     body: { kind: 'text', clientMessageId, body },
+    idempotencyKey: clientMessageId,
+    schema: messageResponseSchema,
+  });
+
+/**
+ * How long an upload may take: two minutes, plus what the file needs at a slow 1 Mbit/s (about 128 KB a second), at most twenty
+ * minutes. A fixed short limit would cut a large document on a mobile connection off every time; the person can cancel meanwhile.
+ */
+export const uploadTimeoutMs = (sizeBytes: number | null): number =>
+  Math.min(20 * 60_000, 120_000 + Math.ceil(((sizeBytes ?? 0) / (128 * 1024)) * 1000));
+
+/**
+ * Puts a file on the server before the message that carries it (`POST /inbox/media`, multipart field `file`). The answer's `id` is what
+ * the media message names. The server checks the type by content and the size by kind; the same `idempotencyKey` repeats the same upload.
+ */
+export const uploadInboxMedia = (
+  file: PickedAttachment,
+  idempotencyKey: string,
+  signal?: AbortSignal,
+) => {
+  const form = new FormData();
+  // React Native reads the file from its address when the request is sent; this object form is how it is told what to read.
+  form.append('file', { uri: file.uri, name: file.name, type: file.mime } as unknown as Blob);
+  return apiFetch('/v2/inbox/media', {
+    method: 'POST',
+    formData: form,
+    idempotencyKey,
+    timeoutMs: uploadTimeoutMs(file.sizeBytes),
+    schema: inboxMediaUploadSchema,
+    signal,
+  });
+};
+
+/** Sends an uploaded file as a message, with an optional caption. Like a text, the `clientMessageId` is the idempotency key. */
+export const sendMediaMessage = (
+  id: string,
+  clientMessageId: string,
+  mediaId: string,
+  caption: string,
+) =>
+  apiFetch(`/v2/inbox/conversations/${id}/messages`, {
+    method: 'POST',
+    body: {
+      kind: 'media',
+      clientMessageId,
+      mediaId,
+      ...(caption.trim() ? { caption: caption.trim() } : {}),
+    },
     idempotencyKey: clientMessageId,
     schema: messageResponseSchema,
   });

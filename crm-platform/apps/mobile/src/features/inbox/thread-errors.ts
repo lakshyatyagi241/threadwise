@@ -25,3 +25,16 @@ export function sendErrorMessage(error: unknown, t: TFunction): string {
   }
   return messageForError(error, t);
 }
+
+/**
+ * The words for a failed attachment: the upload's own refusals (a file type that is not allowed, a file too big for the server, an
+ * upload that expired before it was sent) first, then whatever a failed send says.
+ */
+export function attachErrorMessage(error: unknown, t: TFunction): string {
+  if (isApiError(error)) {
+    if (error.code === ERROR_CODES.AUTH_UPLOAD_REJECTED) return t('inbox.attach.rejected');
+    if (error.code === ERROR_CODES.MESSAGE_MEDIA_NOT_FOUND) return t('inbox.attach.expired');
+    if (error.status === 413) return t('inbox.attach.serverTooLarge');
+  }
+  return sendErrorMessage(error, t);
+}

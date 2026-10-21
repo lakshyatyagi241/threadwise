@@ -52,6 +52,29 @@ describe('apiFetch requests', () => {
     expect(f.calls[1]?.headers['Idempotency-Key']).toBe('mine');
   });
 
+  it('sends a file upload as it is, without a JSON Content-Type, and repeats it after a token rotation', async () => {
+    const form = new FormData();
+    form.append('file', 'x');
+    const f = mockFetch(
+      jsonResponse(401, problem(401, 'AUTH_TOKEN_EXPIRED')),
+      jsonResponse(200, TOKEN_PAIR(2)),
+      jsonResponse(200, { ok: true }),
+    );
+    await apiFetch('/v2/inbox/media', {
+      method: 'POST',
+      formData: form,
+      idempotencyKey: 'up-1',
+      schema: okSchema,
+    });
+    const uploads = f.calls.filter((c) => c.url.endsWith('/v2/inbox/media'));
+    expect(uploads).toHaveLength(2);
+    for (const call of uploads) {
+      expect(call.init.body).toBe(form);
+      expect(call.headers['Content-Type']).toBeUndefined();
+      expect(call.headers['Idempotency-Key']).toBe('up-1');
+    }
+  });
+
   it('sends no bearer token to a public door (auth: false)', async () => {
     const f = mockFetch(jsonResponse(200, { ok: true }));
     await apiFetch('/v2/auth/login', { method: 'POST', body: {}, schema: okSchema, auth: false });

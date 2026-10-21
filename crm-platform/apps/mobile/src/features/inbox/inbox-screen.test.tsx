@@ -72,6 +72,7 @@ beforeEach(() => {
   listCall.mockResolvedValue(list([rohan, meera]));
   channelsCall.mockResolvedValue({ data: [channelRow()] });
   libraryCall.mockResolvedValue([]);
+  assigneesCall.mockResolvedValue({ users: [], teams: [] });
 });
 afterEach(async () => {
   if (client) {
@@ -361,6 +362,85 @@ describe('InboxScreen', () => {
       expect(await screen.findByRole('button', { name: 'Remove filter: Archived' })).toBeTruthy();
       await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
       await waitFor(() => expect(lastFilters()).toMatchObject({ archived: false }));
+    });
+
+    const agent = (over: Record<string, unknown> = {}) => ({
+      id: 'aaaaaaaa-1111-4000-8000-000000000001',
+      name: 'Asha Verma',
+      email: 'asha@example.test',
+      availability: 'online' as const,
+      openConversations: 3,
+      isMe: false,
+      onLeave: null,
+      ...over,
+    });
+
+    it('narrows the list to conversations assigned to any of the chosen agents, and names them in the chip', async () => {
+      assigneesCall.mockResolvedValue({
+        users: [
+          agent(),
+          agent({
+            id: 'aaaaaaaa-1111-4000-8000-000000000002',
+            name: null,
+            email: 'kabir@example.test',
+            isMe: true,
+          }),
+        ],
+        teams: [],
+      });
+      await open();
+      await category('Agent');
+      await fireEvent.press(await screen.findByRole('checkbox', { name: /^Asha Verma/ }));
+      await fireEvent.press(screen.getByRole('checkbox', { name: /^kabir@example.test/ }));
+      await save();
+      await waitFor(() =>
+        expect(lastFilters()?.agentIds).toEqual([
+          'aaaaaaaa-1111-4000-8000-000000000001',
+          'aaaaaaaa-1111-4000-8000-000000000002',
+        ]),
+      );
+      const chip = await screen.findByRole('button', {
+        name: 'Remove filter: Agent: Asha Verma, kabir@example.test',
+      });
+      await fireEvent.press(chip);
+      await waitFor(() => expect(lastFilters()?.agentIds).toEqual([]));
+    });
+
+    it('sorts the oldest first, shows it as a chip, and goes back to the newest first when the chip is removed', async () => {
+      await open();
+      await category('Sort by');
+      expect(
+        (await screen.findByRole('radio', { name: 'Recent first' })).props.accessibilityState
+          .checked,
+      ).toBe(true);
+      await fireEvent.press(screen.getByRole('radio', { name: /^Oldest first/ }));
+      await save();
+      await waitFor(() => expect(lastFilters()).toMatchObject({ sort: 'old' }));
+      const chip = await screen.findByRole('button', { name: 'Remove filter: Sort: Oldest first' });
+      await fireEvent.press(chip);
+      await waitFor(() => expect(lastFilters()).toMatchObject({ sort: 'recent' }));
+    });
+
+    it('starts on the newest first with no agent chosen, and clears both with Clear all', async () => {
+      assigneesCall.mockResolvedValue({ users: [agent()], teams: [] });
+      expect(lastFilters()).toBeUndefined();
+      await open();
+      expect(lastFilters()).toMatchObject({ agentIds: [], sort: 'recent' });
+      await category('Agent');
+      await fireEvent.press(await screen.findByRole('checkbox', { name: /^Asha Verma/ }));
+      await category('Sort by');
+      await fireEvent.press(await screen.findByRole('radio', { name: /^Oldest first/ }));
+      await save();
+      await waitFor(() => expect(lastFilters()).toMatchObject({ sort: 'old' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Clear all' }));
+      await waitFor(() => expect(lastFilters()).toMatchObject({ agentIds: [], sort: 'recent' }));
+    });
+
+    it('has no agent category when nobody can be assigned', async () => {
+      await open();
+      await screen.findByRole('radio', { name: 'Snoozed' });
+      expect(screen.queryByRole('tab', { name: 'Agent' })).toBeNull();
+      expect(screen.getByRole('tab', { name: 'Sort by' })).toBeTruthy();
     });
 
     it('has no channel or label category when the workspace has neither', async () => {

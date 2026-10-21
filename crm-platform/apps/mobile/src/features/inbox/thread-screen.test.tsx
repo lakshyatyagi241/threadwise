@@ -1,10 +1,11 @@
-import type { InboxTemplateOption, MessageResponse } from '@crm/contracts';
+import type { MessageResponse } from '@crm/contracts';
 import type { QueryClient } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as Linking from 'expo-linking';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { ApiError } from '@/lib/api';
+import { openPermissionSettings } from '@/lib/device/open-settings';
 import { fetchSession } from '@/lib/session/api';
 import {
   CONVERSATION_ID,
@@ -23,12 +24,15 @@ import { reachEnd } from '@/test/scroll';
 import * as api from './api';
 import * as labels from './labels-api';
 import * as notesApi from './notes-api';
+import * as pickers from './pick-attachment';
 import * as savedApi from './saved-replies-api';
 import { ThreadScreen } from './thread-screen';
 
 jest.mock('./api');
 jest.mock('./labels-api');
 jest.mock('./notes-api');
+jest.mock('./pick-attachment');
+jest.mock('@/lib/device/open-settings', () => ({ openPermissionSettings: jest.fn() }));
 jest.mock('./saved-replies-api');
 jest.mock('@/lib/session/api');
 jest.mock('expo-linking', () => ({ openURL: jest.fn() }));
@@ -47,7 +51,6 @@ const detailCall = jest.mocked(api.fetchConversation);
 const messagesCall = jest.mocked(api.fetchMessages);
 const sendCall = jest.mocked(api.sendTextMessage);
 const templatesCall = jest.mocked(api.fetchInboxTemplates);
-const sendTemplateCall = jest.mocked(api.sendTemplateMessage);
 const readCall = jest.mocked(api.markConversationRead);
 const statusCall = jest.mocked(api.setConversationStatus);
 const spamCall = jest.mocked(api.markConversationSpam);
@@ -62,6 +65,8 @@ const libraryCall = jest.mocked(labels.fetchLabelLibrary);
 const applyCall = jest.mocked(labels.applyLabel);
 const withdrawCall = jest.mocked(labels.withdrawLabel);
 const back = jest.fn();
+const push = jest.fn();
+const navigate = jest.fn();
 
 let client: QueryClient | undefined;
 async function show() {
@@ -108,7 +113,9 @@ const type = async (text: string) =>
 beforeEach(() => {
   jest.resetAllMocks();
   client = undefined;
-  jest.mocked(useRouter).mockReturnValue({ back } as unknown as ReturnType<typeof useRouter>);
+  jest
+    .mocked(useRouter)
+    .mockReturnValue({ back, push, navigate } as unknown as ReturnType<typeof useRouter>);
   jest.mocked(useLocalSearchParams).mockReturnValue({ id: CONVERSATION_ID });
   sessionCall.mockResolvedValue(inboxSession);
 });
@@ -314,28 +321,6 @@ describe('ThreadScreen', () => {
     const CLOSED = { window: { open: false, expiresAt: null } } as const;
     const NOTICE =
       'The customer has not spoken to you in the last 24 hours. You can only send pre-approved templates.';
-    const option = (over: Partial<InboxTemplateOption> = {}): InboxTemplateOption => ({
-      id: '22222222-2222-4222-8222-222222222222',
-      name: 'order_update',
-      language: 'en',
-      category: 'UTILITY',
-      header: null,
-      body: 'Your order is on the way.',
-      footer: null,
-      buttons: [],
-      slots: [],
-      sendable: true,
-      reason: null,
-      ...over,
-    });
-    const offer = (data: InboxTemplateOption[], hasMore = false) =>
-      templatesCall.mockResolvedValue({ data, hasMore });
-    const open = async () => {
-      arrange({ detail: detail(CLOSED) });
-      await show();
-      await loaded();
-      await fireEvent.press(await screen.findByRole('button', { name: 'Send Template' }));
-    };
 
     it('shows the reason and a Send Template button instead of the message box', async () => {
       arrange({ detail: detail(CLOSED) });
@@ -355,124 +340,27 @@ describe('ThreadScreen', () => {
       expect(screen.queryByText(NOTICE)).toBeNull();
     });
 
+    it('opens the Choose Template page from Send Template, for this conversation', async () => {
+      arrange({ detail: detail(CLOSED) });
+      await show();
+      await loaded();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Send Template' }));
+      expect(navigate).toHaveBeenCalledWith({
+        pathname: '/template-picker',
+        params: { id: CONVERSATION_ID },
+      });
+    });
+
     it('still lets the agent send a template from the message box while the window is open', async () => {
-      offer([option()]);
       arrange();
       await show();
       await loaded();
       expect(templatesCall).not.toHaveBeenCalled();
       await fireEvent.press(screen.getByRole('button', { name: 'Send Template' }));
-      expect(await screen.findByRole('button', { name: 'order_update' })).toBeTruthy();
-      expect(templatesCall).toHaveBeenCalledWith(CONVERSATION_ID, '', expect.anything());
-    });
-
-    it('lists the templates of the number, greying out the ones the app cannot fill in with the reason', async () => {
-      offer([
-        option(),
-        option({
-          id: '33333333-3333-4333-8333-333333333333',
-          name: 'photo_offer',
-          sendable: false,
-          reason: 'media_header',
-        }),
-      ]);
-      await open();
-      expect(await screen.findByRole('button', { name: 'order_update' })).toBeTruthy();
-      const blocked = screen.getByRole('button', { name: 'photo_offer' });
-      expect(blocked.props.accessibilityState.disabled).toBe(true);
-      expect(
-        screen.getByText("Has an image, video or document header, which the app can't send yet."),
-      ).toBeTruthy();
-      expect(templatesCall).toHaveBeenCalledWith(CONVERSATION_ID, '', expect.anything());
-    });
-
-    it('sends a template with no variables as soon as it is pressed, then closes the list', async () => {
-      offer([option()]);
-      sendTemplateCall.mockResolvedValue(outgoing(4, { body: 'Your order is on the way.' }));
-      await open();
-      await fireEvent.press(await screen.findByRole('button', { name: 'order_update' }));
-      await waitFor(() =>
-        expect(sendTemplateCall).toHaveBeenCalledWith(
-          CONVERSATION_ID,
-          expect.any(String),
-          '22222222-2222-4222-8222-222222222222',
-          {},
-        ),
-      );
-      await waitFor(() => expect(screen.queryByText('Send a template')).toBeNull());
-    });
-
-    it('asks for each variable first, and sends them by their key once all are filled', async () => {
-      offer([
-        option({
-          name: 'welcome',
-          body: 'Hello {{1}}, your code is {{2}}.',
-          slots: [
-            { key: '1', label: 'Name', example: 'Rohan' },
-            { key: '2', label: 'Code', example: null },
-          ],
-        }),
-      ]);
-      sendTemplateCall.mockResolvedValue(outgoing(4, { body: 'Hello Rohan, your code is 42.' }));
-      await open();
-      await fireEvent.press(await screen.findByRole('button', { name: 'welcome' }));
-      expect(sendTemplateCall).not.toHaveBeenCalled();
-      const submit = screen.getByRole('button', { name: 'Send' });
-      expect(submit.props.accessibilityState.disabled).toBe(true);
-      await fireEvent.changeText(screen.getByLabelText('Name'), 'Rohan');
-      expect(screen.getByRole('button', { name: 'Send' }).props.accessibilityState.disabled).toBe(
-        true,
-      );
-      await fireEvent.changeText(screen.getByLabelText('Code'), '42');
-      await fireEvent.press(screen.getByRole('button', { name: 'Send' }));
-      await waitFor(() =>
-        expect(sendTemplateCall).toHaveBeenCalledWith(
-          CONVERSATION_ID,
-          expect.any(String),
-          '22222222-2222-4222-8222-222222222222',
-          { '1': 'Rohan', '2': '42' },
-        ),
-      );
-    });
-
-    it('says why when the server refuses the template, and keeps the list open', async () => {
-      offer([option()]);
-      sendTemplateCall.mockRejectedValue(
-        new ApiError(422, 'CHANNEL_DISCONNECTED', 'This channel is not connected'),
-      );
-      await open();
-      await fireEvent.press(await screen.findByRole('button', { name: 'order_update' }));
-      expect(
-        await screen.findByText(
-          'This channel is disconnected. Reconnect it on the web, then try again.',
-        ),
-      ).toBeTruthy();
-      expect(screen.getByText('Send a template')).toBeTruthy();
-    });
-
-    it('sends the search words to the API and says when more templates exist', async () => {
-      offer([option()], true);
-      await open();
-      expect(await screen.findByText(/There are more templates/)).toBeTruthy();
-      await fireEvent.changeText(screen.getByLabelText('Search templates'), 'promo');
-      await waitFor(() =>
-        expect(templatesCall).toHaveBeenLastCalledWith(CONVERSATION_ID, 'promo', expect.anything()),
-      );
-    });
-
-    it('says the number has no approved templates when the list is empty', async () => {
-      offer([]);
-      await open();
-      expect(await screen.findByText('No approved templates for this number yet.')).toBeTruthy();
-    });
-
-    it('says no template matches when a search finds nothing', async () => {
-      offer([option()]);
-      await open();
-      await screen.findByRole('button', { name: 'order_update' });
-      offer([]);
-      await fireEvent.changeText(screen.getByLabelText('Search templates'), 'zzz');
-      expect(await screen.findByText('No templates match your search.')).toBeTruthy();
+      expect(navigate).toHaveBeenCalledWith({
+        pathname: '/template-picker',
+        params: { id: CONVERSATION_ID },
+      });
     });
   });
 
@@ -1580,5 +1468,241 @@ describe('ThreadScreen: private notes', () => {
     expect(await screen.findByLabelText('Private note')).toBeTruthy();
     expect(screen.queryByLabelText('Message')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Back to a reply' })).toBeNull();
+  });
+});
+
+describe('ThreadScreen: attachments', () => {
+  const PHOTO = {
+    uri: 'file:///cache/photo.jpg',
+    name: 'photo.jpg',
+    mime: 'image/jpeg',
+    sizeBytes: 120_000,
+    kind: 'image',
+  } as const;
+  const REPORT = {
+    uri: 'file:///cache/report.pdf',
+    name: 'report.pdf',
+    mime: 'application/pdf',
+    sizeBytes: 2 * 1024 * 1024,
+    kind: 'document',
+  } as const;
+  const UPLOAD_ID = '33333333-3333-4333-8333-333333333333';
+  const upload = (over: Partial<Awaited<ReturnType<typeof api.uploadInboxMedia>>> = {}) => ({
+    id: UPLOAD_ID,
+    kind: 'image' as const,
+    mime: 'image/jpeg',
+    name: 'photo.jpg',
+    sizeBytes: 120_000,
+    previewUrl: '/api/v2/media/x',
+    expiresAt: '2026-10-22T10:00:00.000Z',
+    ...over,
+  });
+  const uploadCall = jest.mocked(api.uploadInboxMedia);
+  const sendMediaCall = jest.mocked(api.sendMediaMessage);
+  const library = jest.mocked(pickers.pickFromLibrary);
+  const cameraPick = jest.mocked(pickers.pickFromCamera);
+  const documentPick = jest.mocked(pickers.pickDocument);
+  let platform: { restore: () => void };
+
+  // The sheet waits for its own "dismissed" event on iOS before the picker opens; Android starts the picker at once.
+  beforeEach(() => {
+    platform = jest.replaceProperty(Platform, 'OS', 'android');
+  });
+  afterEach(() => platform.restore());
+
+  // The message box has a Send too; the sheet is drawn over it, so its button is the last one.
+  const sheetSend = () => screen.getAllByRole('button', { name: 'Send' }).at(-1)!;
+  const openMenu = async () => {
+    arrange();
+    await show();
+    await loaded();
+    await fireEvent.press(screen.getByRole('button', { name: 'Attach a file' }));
+  };
+  /** Picks a file through the sheet and reaches the preview. */
+  const reachPreview = async (file: typeof PHOTO | typeof REPORT = PHOTO) => {
+    if (file === PHOTO) library.mockResolvedValue({ status: 'picked', attachment: PHOTO });
+    else documentPick.mockResolvedValue({ status: 'picked', attachment: REPORT });
+    await openMenu();
+    await fireEvent.press(
+      await screen.findByRole('button', { name: file === PHOTO ? 'Photo or video' : 'Document' }),
+    );
+    await screen.findByText('Send attachment');
+  };
+
+  it('puts a paperclip beside the message box and opens the three choices', async () => {
+    await openMenu();
+    expect(await screen.findByRole('button', { name: 'Photo or video' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Camera' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Document' })).toBeTruthy();
+  });
+
+  it('has no paperclip for a person who may not reply, nor on a closed reply window', async () => {
+    arrange({ detail: detail({ window: { open: false, expiresAt: null } }) });
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: 'Attach a file' })).toBeNull();
+  });
+
+  it('uploads the chosen photo, then sends it with the caption, and closes the sheet', async () => {
+    uploadCall.mockResolvedValue(upload());
+    sendMediaCall.mockResolvedValue(outgoing(4, { status: 'queued' }));
+    await reachPreview();
+    expect(screen.getByTestId('attach-preview-image')).toBeTruthy();
+    await fireEvent.changeText(screen.getByLabelText('Caption (optional)'), 'Here you go');
+    await fireEvent.press(sheetSend());
+    await waitFor(() =>
+      expect(sendMediaCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        expect.any(String),
+        UPLOAD_ID,
+        'Here you go',
+      ),
+    );
+    expect(uploadCall).toHaveBeenCalledWith(PHOTO, expect.any(String), expect.anything());
+    await waitFor(() => expect(screen.queryByText('Send attachment')).toBeNull());
+  });
+
+  it('shows a document as a tile with its name and size instead of a picture', async () => {
+    await reachPreview(REPORT);
+    expect(screen.queryByTestId('attach-preview-image')).toBeNull();
+    expect(screen.getByText('report.pdf')).toBeTruthy();
+    expect(screen.getByText('2 MB')).toBeTruthy();
+  });
+
+  it('does nothing when the person goes back from the picker', async () => {
+    library.mockResolvedValue({ status: 'canceled' });
+    await openMenu();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Photo or video' }));
+    await waitFor(() => expect(library).toHaveBeenCalled());
+    expect(screen.queryByText('Send attachment')).toBeNull();
+    expect(uploadCall).not.toHaveBeenCalled();
+  });
+
+  it('says a file is too big for its kind before uploading anything', async () => {
+    documentPick.mockResolvedValue({
+      status: 'picked',
+      attachment: { ...REPORT, sizeBytes: 101 * 1024 * 1024 },
+    });
+    await openMenu();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Document' }));
+    expect(
+      await screen.findByText('This file is larger than 100 MB. Choose a smaller one.'),
+    ).toBeTruthy();
+    expect(screen.queryByText('Send attachment')).toBeNull();
+    expect(uploadCall).not.toHaveBeenCalled();
+  });
+
+  it('says so, and offers the phone settings, when the camera is off', async () => {
+    cameraPick.mockResolvedValue({ status: 'cameraDenied', canAskAgain: false });
+    await openMenu();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Camera' }));
+    expect(
+      await screen.findByText(
+        "The camera is off. Turn it on in your phone's settings to take a photo.",
+      ),
+    ).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Open settings' }));
+    expect(openPermissionSettings).toHaveBeenCalled();
+  });
+
+  it('says why when the server refuses the file type, and keeps the sheet open', async () => {
+    uploadCall.mockRejectedValue(new ApiError(422, 'AUTH_UPLOAD_REJECTED', 'not allowed'));
+    await reachPreview();
+    await fireEvent.press(sheetSend());
+    expect(
+      await screen.findByText(
+        "This file can't be sent. Its type may not be allowed, or it may be too large.",
+      ),
+    ).toBeTruthy();
+    expect(screen.getByText('Send attachment')).toBeTruthy();
+    expect(sendMediaCall).not.toHaveBeenCalled();
+  });
+
+  it('does not upload again when only the send failed, and repeats the same message', async () => {
+    uploadCall.mockResolvedValue(upload());
+    sendMediaCall
+      .mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'Could not reach the server'))
+      .mockResolvedValueOnce(outgoing(4, { status: 'queued' }));
+    await reachPreview();
+    await fireEvent.press(sheetSend());
+    await waitFor(() => expect(sendMediaCall).toHaveBeenCalledTimes(1));
+    await screen.findByRole('alert');
+    await fireEvent.press(sheetSend());
+    await waitFor(() => expect(sendMediaCall).toHaveBeenCalledTimes(2));
+    expect(uploadCall).toHaveBeenCalledTimes(1);
+    expect(sendMediaCall.mock.calls[1]?.[1]).toBe(sendMediaCall.mock.calls[0]?.[1]);
+    await waitFor(() => expect(screen.queryByText('Send attachment')).toBeNull());
+  });
+
+  it('uploads the file again when the earlier upload has expired', async () => {
+    uploadCall.mockResolvedValue(upload());
+    sendMediaCall
+      .mockRejectedValueOnce(new ApiError(422, 'MESSAGE_MEDIA_NOT_FOUND', 'gone'))
+      .mockResolvedValueOnce(outgoing(4, { status: 'queued' }));
+    await reachPreview();
+    await fireEvent.press(sheetSend());
+    expect(
+      await screen.findByText('The upload expired. Press Send to upload it again.'),
+    ).toBeTruthy();
+    await fireEvent.press(sheetSend());
+    await waitFor(() => expect(sendMediaCall).toHaveBeenCalledTimes(2));
+    expect(uploadCall).toHaveBeenCalledTimes(2);
+    expect(uploadCall.mock.calls[1]?.[1]).not.toBe(uploadCall.mock.calls[0]?.[1]);
+    // The first message was never made, so the second is a new one: the old id must not be reused with a different file.
+    expect(sendMediaCall.mock.calls[1]?.[1]).not.toBe(sendMediaCall.mock.calls[0]?.[1]);
+  });
+
+  it('keeps Send off for a caption over the limit', async () => {
+    await reachPreview();
+    await fireEvent.changeText(screen.getByLabelText('Caption (optional)'), 'x'.repeat(1025));
+    expect(screen.getByText('The caption can be at most 1024 characters.')).toBeTruthy();
+    expect(sheetSend().props.accessibilityState).toMatchObject({
+      disabled: true,
+    });
+  });
+
+  it('closes the preview without sending when the person cancels', async () => {
+    await reachPreview();
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Close' })[0]!);
+    await waitFor(() => expect(screen.queryByText('Send attachment')).toBeNull());
+    expect(uploadCall).not.toHaveBeenCalled();
+  });
+
+  it('fixes the caption once the message has been sent, so a retry repeats the same words', async () => {
+    uploadCall.mockResolvedValue(upload());
+    sendMediaCall.mockRejectedValueOnce(
+      new ApiError(0, 'CLIENT_NETWORK', 'Could not reach the server'),
+    );
+    await reachPreview();
+    await fireEvent.changeText(screen.getByLabelText('Caption (optional)'), 'First words');
+    await fireEvent.press(sheetSend());
+    await screen.findByRole('alert');
+    expect(screen.getByLabelText('Caption (optional)').props.editable).toBe(false);
+  });
+
+  it('cancels the upload and closes the sheet when the person closes it while the file is going up', async () => {
+    let signal: AbortSignal | undefined;
+    uploadCall.mockImplementation(
+      (_file, _key, s) =>
+        new Promise((_resolve, reject) => {
+          signal = s;
+          s?.addEventListener('abort', () =>
+            reject(new ApiError(0, 'CLIENT_ABORTED', 'Request cancelled')),
+          );
+        }),
+    );
+    await reachPreview();
+    await fireEvent.press(sheetSend());
+    await waitFor(() => expect(uploadCall).toHaveBeenCalled());
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Close' })[0]!);
+    await waitFor(() => expect(signal?.aborted).toBe(true));
+    await waitFor(() => expect(screen.queryByText('Send attachment')).toBeNull());
+    expect(sendMediaCall).not.toHaveBeenCalled();
+  });
+
+  it('removes the app’s copy of the file when the sheet is closed', async () => {
+    await reachPreview();
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Close' })[0]!);
+    await waitFor(() => expect(pickers.discardAttachment).toHaveBeenCalledWith(PHOTO));
   });
 });

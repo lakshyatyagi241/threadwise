@@ -1,4 +1,10 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import type { InfiniteData } from '@tanstack/react-query';
 import type {
   MarkSpamConversationInput,
@@ -19,13 +25,16 @@ import {
   markConversationRead,
   markConversationSpam,
   retryMessage,
+  sendMediaMessage,
   sendTemplateMessage,
   sendTextMessage,
   setConversationPriority,
   setConversationStatus,
   snoozeConversation,
+  uploadInboxMedia,
 } from './api';
 import type { AssignInput } from './api';
+import type { PickedAttachment } from './attachment';
 import type { InboxFilters } from './filters';
 import { withMessage } from './thread-model';
 
@@ -37,7 +46,8 @@ export const INBOX_POLL_MS = 15_000;
 
 export const listKey = ['inbox', 'conversations'] as const;
 export const detailKey = (id: string) => ['inbox', 'conversation', id] as const;
-export const messagesKey = (id: string) => ['inbox', 'messages', id] as const;
+export const messagesRoot = ['inbox', 'messages'] as const;
+export const messagesKey = (id: string) => [...messagesRoot, id] as const;
 
 /**
  * The conversation list, a page at a time. No request at all while `enabled` is false (the person may not read the inbox). While
@@ -53,6 +63,9 @@ export const useConversations = (filters: InboxFilters, enabled: boolean, pollin
       filters.channelId,
       filters.labels.join(','),
       filters.archived,
+      // The same agents in another order are the same list.
+      [...filters.agentIds].sort().join(','),
+      filters.sort,
     ],
     queryFn: ({ pageParam, signal }) => fetchConversations(filters, pageParam, signal),
     initialPageParam: undefined as string | undefined,
@@ -189,6 +202,8 @@ export const useInboxTemplates = (id: string, q: string, enabled: boolean) =>
     queryFn: ({ signal }) => fetchInboxTemplates(id, q, signal),
     staleTime: 60_000,
     enabled,
+    // Typing in the search box keeps the rows on screen until the new ones arrive, instead of flashing a spinner at each word.
+    placeholderData: keepPreviousData,
   });
 
 /** Sends a template. Like a text, the stored message goes straight into the thread and the detail is read again either way. */
@@ -201,6 +216,29 @@ export function useSendTemplate(id: string) {
       templateId: string;
       variables: Record<string, string>;
     }) => sendTemplateMessage(id, draft.clientMessageId, draft.templateId, draft.variables),
+    onSuccess: (stored) => {
+      queryClient.setQueryData<InfiniteData<MessageListResponse>>(messagesKey(id), (data) =>
+        withMessage(data, stored),
+      );
+    },
+    onSettled: refresh,
+  });
+}
+
+/** Uploads the file that is about to be sent (the first half of sending an attachment). */
+export const useUploadMedia = () =>
+  useMutation({
+    mutationFn: (draft: { file: PickedAttachment; idempotencyKey: string; signal?: AbortSignal }) =>
+      uploadInboxMedia(draft.file, draft.idempotencyKey, draft.signal),
+  });
+
+/** Sends an uploaded file as a message. Like a text, the stored message goes straight into the thread and the detail is read again either way. */
+export function useSendMedia(id: string) {
+  const queryClient = useQueryClient();
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: (draft: { clientMessageId: string; mediaId: string; caption: string }) =>
+      sendMediaMessage(id, draft.clientMessageId, draft.mediaId, draft.caption),
     onSuccess: (stored) => {
       queryClient.setQueryData<InfiniteData<MessageListResponse>>(messagesKey(id), (data) =>
         withMessage(data, stored),

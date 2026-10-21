@@ -28,12 +28,15 @@ import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { AssignmentStrip } from './assignment-strip';
 import { AssignSheet } from './assign-sheet';
+import { AttachMenu } from './attach-menu';
+import { AttachPreviewSheet } from './attach-preview-sheet';
+import { formatBytes } from './message-parts';
+import { ATTACHMENT_MAX_BYTES } from './attachment';
 import { BotBar } from './bot-bar';
 import { ChoiceSheet } from './choice-sheet';
 import { Composer } from './composer';
 import { LabelsSheet } from './labels-sheet';
 import { TemplateBar } from './template-bar';
-import { TemplateSheet } from './template-sheet';
 import { Bubble, MessageBubble } from './message-bubble';
 import { NoteBubble } from './note-bubble';
 import { SavedRepliesSheet } from './saved-replies-sheet';
@@ -53,6 +56,7 @@ import {
   type PendingMessage,
   type ThreadItem,
 } from './thread-model';
+import { useAttachFlow } from './use-attach-flow';
 import { useConversationActions } from './use-conversation-actions';
 import { useThreadLive } from './use-live';
 import { useNotes, useChangeNotes } from './use-notes';
@@ -124,7 +128,7 @@ export function ThreadScreen() {
   const [pending, setPending] = useState<PendingMessage[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
   const [labelsOpen, setLabelsOpen] = useState(false);
-  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const attach = useAttachFlow();
   // Which of the "pick one, then Save" sheets is open, and why its last save failed.
   const [sheet, setSheet] = useState<'agent' | 'status' | null>(null);
   const [sheetError, setSheetError] = useState<string | null>(null);
@@ -247,6 +251,8 @@ export function ThreadScreen() {
   };
 
   const openDetails = () => router.push({ pathname: '/conversation-details', params: { id } });
+  /** Sending a template takes three pages (choose, set variables, preview), not a sheet over the thread. */
+  const openTemplates = () => router.navigate({ pathname: '/template-picker', params: { id } });
   const MENU_ITEM: Record<MenuAction, Omit<ThreadMenuItem, 'key'>> = {
     details: {
       label: t('inbox.thread.menu.details'),
@@ -424,6 +430,28 @@ export function ThreadScreen() {
           <Banner tone="danger" message={notice} />
         </View>
       ) : null}
+      {attach.notice ? (
+        <View style={styles.pad}>
+          <Banner
+            tone="danger"
+            message={
+              attach.notice.kind === 'tooLarge'
+                ? t('inbox.attach.tooLarge', {
+                    limit: formatBytes(ATTACHMENT_MAX_BYTES[attach.notice.attachment.kind]),
+                  })
+                : t(`inbox.attach.notice.${attach.notice.kind}`)
+            }
+          />
+          {attach.notice.kind === 'cameraOff' ? (
+            <Button
+              variant="link"
+              align="start"
+              label={t('inbox.attach.openSettings')}
+              onPress={attach.openSettings}
+            />
+          ) : null}
+        </View>
+      ) : null}
       {warning ? (
         <View style={styles.pad}>
           <Banner tone="warning" message={warning} />
@@ -477,14 +505,15 @@ export function ThreadScreen() {
           />
         ) : canReply ? (
           windowClosed ? (
-            <TemplateBar onOpen={() => setTemplatesOpen(true)} />
+            <TemplateBar onOpen={openTemplates} />
           ) : (
             <Composer
               value={draft}
               onChange={setDraft}
               onSend={onSend}
               onOpenReplies={() => setRepliesOpen(true)}
-              onOpenTemplates={() => setTemplatesOpen(true)}
+              onOpenAttach={attach.open}
+              onOpenTemplates={openTemplates}
               onToggleNote={canNote ? () => setMode('note') : undefined}
             />
           )
@@ -501,10 +530,18 @@ export function ThreadScreen() {
         />
       ) : null}
       {conversation && canReply ? (
-        <TemplateSheet
-          visible={templatesOpen}
+        <AttachMenu
+          visible={attach.menuOpen}
+          onChoose={attach.choose}
+          onClose={attach.closeMenu}
+          onDismiss={attach.onMenuDismissed}
+        />
+      ) : null}
+      {conversation && canReply ? (
+        <AttachPreviewSheet
+          file={attach.file}
           conversationId={conversation.id}
-          onClose={() => setTemplatesOpen(false)}
+          onClose={attach.closeFile}
         />
       ) : null}
       {conversation && canAssign ? (

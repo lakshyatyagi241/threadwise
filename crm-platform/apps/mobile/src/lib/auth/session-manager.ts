@@ -2,6 +2,7 @@ import { tokenPairSchema, type TokenPair } from '@crm/contracts';
 import { env } from '@/config/env';
 import { ApiError, CLIENT_ERROR_CODES, toApiError } from '@/lib/api/errors';
 import { clientHeaders } from '@/lib/api/client-headers';
+import { clearReceivedFiles } from '@/lib/device/received-files';
 import { clearTokens, readTokens, writeTokens, type StoredTokens } from './token-store';
 
 /**
@@ -63,6 +64,8 @@ export async function startSession(pair: TokenPair): Promise<void> {
 /** Ends the session on this phone. Callers that can also tell the server do so first (see `signOut` in features/auth). */
 export async function endSession(): Promise<void> {
   refreshing = null;
+  // Every way a session ends (sign-out, a refused refresh) removes the customer files opened during it, even if clearing the keychain then fails.
+  clearReceivedFiles();
   await clearTokens();
   set({ status: 'signedOut', tokens: null });
 }

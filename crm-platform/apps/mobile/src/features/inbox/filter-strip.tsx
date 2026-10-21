@@ -38,10 +38,14 @@ interface Props {
   channelName: string | null;
   /** The names of the chosen labels, in the order chosen. */
   labelNames: readonly string[];
+  /** The names of the chosen agents, in the order chosen. */
+  agentNames: readonly string[];
   onClearStatus: () => void;
   onClearSearch: () => void;
   onClearChannel: () => void;
   onClearLabels: () => void;
+  onClearAgents: () => void;
+  onClearSort: () => void;
   onClearArchived: () => void;
   onClearAll: () => void;
 }
@@ -51,10 +55,13 @@ export function FilterStrip({
   filters,
   channelName,
   labelNames,
+  agentNames,
   onClearStatus,
   onClearSearch,
   onClearChannel,
   onClearLabels,
+  onClearAgents,
+  onClearSort,
   onClearArchived,
   onClearAll,
 }: Props) {
@@ -89,6 +96,28 @@ export function FilterStrip({
         names: labelNames.length > 0 ? labelNames.join(', ') : String(filters.labels.length),
       }),
       onRemove: onClearLabels,
+    });
+  }
+  if (filters.agentIds.length > 0) {
+    chips.push({
+      key: 'agents',
+      text: t('inbox.filter.agentChip', {
+        // The names that are known, and how many more are on (an agent can have left the list since they were chosen).
+        names:
+          agentNames.length === 0
+            ? String(filters.agentIds.length)
+            : agentNames.length < filters.agentIds.length
+              ? `${agentNames.join(', ')} +${filters.agentIds.length - agentNames.length}`
+              : agentNames.join(', '),
+      }),
+      onRemove: onClearAgents,
+    });
+  }
+  if (filters.sort !== 'recent') {
+    chips.push({
+      key: 'sort',
+      text: t('inbox.filter.sortChip', { name: t(`inbox.filter.sort_${filters.sort}`) }),
+      onRemove: onClearSort,
     });
   }
   if (filters.q.trim()) {

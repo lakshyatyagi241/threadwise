@@ -19,6 +19,7 @@ import {
   Place,
   type BubbleButton,
 } from './message-parts';
+import { OpenFileTile } from './file-open-tile';
 import { formatClock } from './time';
 
 const STATUS_ICON: Record<MessageStatus, IconName | null> = {
@@ -181,7 +182,8 @@ function drawMessage(message: MessageResponse, kindWord: string, t: TFunction): 
       .join(' · ');
     return {
       top: (
-        <FileTile
+        <OpenFileTile
+          media={media}
           icon={FILE_ICON[message.kind] ?? 'document-outline'}
           label={media.name ?? kindWord}
           detail={detail}

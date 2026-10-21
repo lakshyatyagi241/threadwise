@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
+import { clearReceivedFiles } from '@/lib/device/received-files';
 import { log } from '@/lib/observability/logger';
 import { identifyUser } from '@/lib/observability/sentry';
 import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
@@ -6,6 +7,7 @@ import { getSnapshot, resetSessionForTests, startSession } from './session-manag
 import { signOut } from './sign-out';
 
 jest.mock('@/lib/observability/sentry', () => ({ identifyUser: jest.fn() }));
+jest.mock('@/lib/device/received-files', () => ({ clearReceivedFiles: jest.fn() }));
 
 beforeEach(async () => {
   resetSessionForTests();
@@ -26,6 +28,8 @@ describe('signOut', () => {
     expect(getSnapshot().status).toBe('signedOut');
     expect(queryClient.getQueryData(['session'])).toBeUndefined();
     expect(identifyUser).toHaveBeenCalledWith(null);
+    // A document opened from a conversation does not stay on the phone for the next person.
+    expect(clearReceivedFiles).toHaveBeenCalled();
   });
 
   it('signs out without an error report when the server answers with no body at all', async () => {

@@ -31,9 +31,16 @@ import { BulkSheets, useBulkInstant } from './bulk-sheets';
 import { ConversationRow } from './conversation-row';
 import { ConversationSkeleton } from './conversation-skeleton';
 import { FilterStrip } from './filter-strip';
-import { hasActiveFilter, TABS, type InboxFilters, type StatusFilter } from './filters';
+import {
+  DEFAULT_FILTERS,
+  hasActiveFilter,
+  TABS,
+  type InboxFilters,
+  type SortFilter,
+  type StatusFilter,
+} from './filters';
 import { FiltersSheet } from './filters-sheet';
-import { useChannels, useConversations } from './use-inbox';
+import { useAssignees, useChannels, useConversations } from './use-inbox';
 import { useInboxLive } from './use-live';
 import { useLabelLibrary } from './use-labels';
 import { useDebouncedValue } from './use-debounced-value';
@@ -55,6 +62,8 @@ export function InboxScreen() {
   const [channelId, setChannelId] = useState('');
   const [labelIds, setLabelIds] = useState<readonly string[]>([]);
   const [archived, setArchived] = useState(false);
+  const [agentIds, setAgentIds] = useState<readonly string[]>([]);
+  const [sort, setSort] = useState<SortFilter>('recent');
   const [searchOpen, setSearchOpen] = useState(false);
   const [typed, setTyped] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -85,19 +94,33 @@ export function InboxScreen() {
   // Emptying the box shows the full list straight away; only typing waits for a pause.
   const q = typed.trim() === '' ? '' : debounced;
   const filters = useMemo<InboxFilters>(
-    () => ({ tab, status, q, channelId, labels: labelIds, archived }),
-    [tab, status, q, channelId, labelIds, archived],
+    () => ({ tab, status, q, channelId, labels: labelIds, archived, agentIds, sort }),
+    [tab, status, q, channelId, labelIds, archived, agentIds, sort],
   );
   const active = hasActiveFilter(filters);
   // The sheet's own filters (not the search words): the dot on the filter button says one of them is on.
-  const sheetActive =
-    active && (status !== 'default' || channelId !== '' || labelIds.length > 0 || archived);
+  const sheetActive = hasActiveFilter({
+    ...DEFAULT_FILTERS,
+    status,
+    channelId,
+    labels: labelIds,
+    archived,
+    agentIds,
+    sort,
+  });
   // The chips name a channel and its labels, which the filters hold only as ids.
   const channelList = useChannels(allowed && channelId !== '');
   const labelLibrary = useLabelLibrary(allowed && labelIds.length > 0);
+  const agentList = useAssignees(allowed && agentIds.length > 0);
   const channelName = channelList.data?.data.find((c) => c.id === channelId)?.name ?? null;
   const labelNames = labelIds
     .map((id) => labelLibrary.data?.find((l) => l.id === id)?.name)
+    .filter((name): name is string => Boolean(name));
+  const agentNames = agentIds
+    .map((id) => {
+      const member = agentList.data?.users.find((m) => m.id === id);
+      return member ? (member.name ?? member.email) : undefined;
+    })
     .filter((name): name is string => Boolean(name));
 
   // The tab is in front: ask for news on a timer, and stop when another tab or a conversation covers it.
@@ -162,10 +185,12 @@ export function InboxScreen() {
     setSearchOpen(!searchOpen);
   };
   const clearAll = () => {
-    setStatus('default');
-    setChannelId('');
-    setLabelIds([]);
-    setArchived(false);
+    setStatus(DEFAULT_FILTERS.status);
+    setChannelId(DEFAULT_FILTERS.channelId);
+    setLabelIds(DEFAULT_FILTERS.labels);
+    setArchived(DEFAULT_FILTERS.archived);
+    setAgentIds(DEFAULT_FILTERS.agentIds);
+    setSort(DEFAULT_FILTERS.sort);
     clearSearch();
   };
 
@@ -330,10 +355,13 @@ export function InboxScreen() {
           filters={filters}
           channelName={channelName}
           labelNames={labelNames}
+          agentNames={agentNames}
           onClearStatus={() => setStatus('default')}
           onClearSearch={clearSearch}
           onClearChannel={() => setChannelId('')}
           onClearLabels={() => setLabelIds([])}
+          onClearAgents={() => setAgentIds([])}
+          onClearSort={() => setSort('recent')}
           onClearArchived={() => setArchived(false)}
           onClearAll={clearAll}
         />
@@ -388,12 +416,14 @@ export function InboxScreen() {
 
       <FiltersSheet
         visible={sheetOpen}
-        value={{ status, channelId, labels: labelIds, archived }}
+        value={{ status, channelId, labels: labelIds, archived, agentIds, sort }}
         onApply={(next) => {
           setStatus(next.status);
           setChannelId(next.channelId);
           setLabelIds(next.labels);
           setArchived(next.archived);
+          setAgentIds(next.agentIds);
+          setSort(next.sort);
           setSheetOpen(false);
         }}
         onClose={() => setSheetOpen(false)}
