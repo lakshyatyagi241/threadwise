@@ -106,9 +106,11 @@ describe('explainFacts (the Try it box)', () => {
       { part: 'languages', matched: false, why: 'language_differs' },
       { part: 'businessHours', matched: false, why: 'hours_differ' },
     ]);
-    expect(
-      explainFacts(cond({ contactKind: 'new' }), facts({ contactKind: null }))[0],
-    ).toEqual({ part: 'contactKind', matched: false, why: 'no_contact' });
+    expect(explainFacts(cond({ contactKind: 'new' }), facts({ contactKind: null }))[0]).toEqual({
+      part: 'contactKind',
+      matched: false,
+      why: 'no_contact',
+    });
   });
 });
 

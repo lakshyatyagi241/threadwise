@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -10,7 +9,6 @@ import { Alert, Badge, Button, ConfirmDialog, Spinner, Switch, useToast } from '
 import { ApiError } from '@/lib/api/errors';
 import { useVocab } from '@/features/persona-vocabulary';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { refresh, routingApi, updateRuleFresh, useAssignees, useRules } from '../api/routing';
 import {
   everyoneElseOf,
@@ -47,7 +45,6 @@ export function AutoAssignmentScreen() {
   const canManage = useCan('inbox.routing.manage');
   const qc = useQueryClient();
   const { toast } = useToast();
-  const pathname = usePathname();
   const rules = useRules('', canRead);
   const assignees = useAssignees(canRead);
   const [busy, setBusy] = useState<string | null>(null);
@@ -129,9 +126,6 @@ export function AutoAssignmentScreen() {
 
   return (
     <section className="mx-auto max-w-4xl space-y-8">
-      {locked && (
-        <PlanPaywall gates={[{ href: pathname, feature: 'inbox_routing' }]} enabled={[]} />
-      )}
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
           <Link
@@ -277,10 +271,6 @@ export function AutoAssignmentScreen() {
                   </ol>
                 )}
                 <EveryoneElseRow rule={everyoneElse} names={names} canManage={canManage} />
-                <p className="rounded-xl border border-border bg-muted/40 p-3 text-sm">
-                  <span className="font-semibold">{tr('pipeline.queue')}</span>{' '}
-                  <span className="text-muted-foreground">{tr('pipeline.queueBody')}</span>
-                </p>
               </>
             )}
           </>
@@ -329,7 +319,7 @@ function Pipeline() {
   return (
     <div className="rounded-xl border border-border bg-muted/40 p-3" data-testid="pipeline">
       <h3 className="text-sm font-semibold">{tr('pipelineTitle')}</h3>
-      <ol className="mt-2 grid gap-2 text-sm sm:grid-cols-4">
+      <ol className="mt-2 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
         {steps.map(([key, body]) => (
           <li key={key} className="rounded-lg border border-border bg-background p-2">
             <span className="block font-medium">{tr(`pipeline.${key}`)}</span>

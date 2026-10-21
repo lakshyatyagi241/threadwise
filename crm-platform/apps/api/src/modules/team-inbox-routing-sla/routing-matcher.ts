@@ -1,7 +1,4 @@
-import type {
-  RoutingConditions,
-  RoutingTestCondition,
-} from '@crm/contracts';
+import type { RoutingConditions, RoutingTestCondition } from '@crm/contracts';
 
 /** What the engine knows about the conversation that just arrived, for the parts of a rule that are not contact fields. */
 export interface RoutingFacts {

@@ -156,7 +156,7 @@
           "agent_picked": "Matched and picked an agent.",
           "team_queue": "Matched; nobody was free, so it goes to the team's queue.",
           "no_assignment_in_rule": "Matched; this rule does not assign (it only does its other actions).",
-          "not_set": "Not set up, so chats nobody takes wait in the queue."
+          "not_set": "There is no active Everyone else rule, so chats nobody takes wait in the queue."
         },
         "part": {
           "contactKind": "New or returning contact",
@@ -207,7 +207,6 @@
         "everyConversation": "This rule applies to every new conversation.",
         "kept": "Your conditions are kept but ignored while this is off.",
         "add": "Add a condition",
-        "addNone": "All conditions are added",
         "remove": "Remove {name}",
         "name": {
           "contactKind": "New or returning contact",

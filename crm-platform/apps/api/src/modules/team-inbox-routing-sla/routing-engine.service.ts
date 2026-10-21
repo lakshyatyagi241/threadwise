@@ -8,7 +8,6 @@ import {
   type ConversationPriority,
   type RoutingAssign,
   type RoutingAutoReply,
-  type RoutingConditions,
   type RoutingTag,
   type RoutingTestCondition,
   type RoutingTestRequest,
@@ -739,14 +738,7 @@ export class RoutingEngine {
 
     // 3 and 4. the rules, then the fallback when no other rule fired
     const run = async (rule: RuleRow, kind: 'rule' | 'everyone_else'): Promise<boolean> => {
-      const verdict = await this.ruleMatches(
-        tx,
-        orgId,
-        rule,
-        inp.rf,
-        inp.contactId,
-        inp.dry,
-      );
+      const verdict = await this.ruleMatches(tx, orgId, rule, inp.rf, inp.contactId, inp.dry);
       if (!verdict.matched) {
         step(kind, 'passed', 'conditions_failed', rule, verdict.parts);
         return false;
@@ -902,7 +894,9 @@ export class RoutingEngine {
   ): Promise<RuleTurn | null> {
     const ruleId = Number(rule.id);
     const stored = decodeActions(
-      dry ? await this.repo.readActions(tx, orgId, ruleId) : await this.repo.lockActions(tx, orgId, ruleId),
+      dry
+        ? await this.repo.readActions(tx, orgId, ruleId)
+        : await this.repo.lockActions(tx, orgId, ruleId),
     );
     const pick = stored.assign
       ? await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen, cal, trace)
@@ -1060,7 +1054,9 @@ export class RoutingEngine {
     trace?: HandoffTraceLine[],
   ): Promise<Pick | null> {
     const users = a.everyone
-      ? new Map((await this.repo.allActiveUserIds(tx, orgId)).map((id) => [String(id), id] as const))
+      ? new Map(
+          (await this.repo.allActiveUserIds(tx, orgId)).map((id) => [String(id), id] as const),
+        )
       : await this.repo.activeUsers(tx, orgId, a.userIds);
     const teams = await this.repo.teams(tx, orgId, a.teamIds, { receivingOnly: true });
     const teamIds = a.teamIds.filter((t) => teams.has(t)).map((t) => teams.get(t)!);

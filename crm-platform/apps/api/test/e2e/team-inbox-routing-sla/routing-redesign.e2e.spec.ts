@@ -57,8 +57,7 @@ const rulesApi = (token: string) => ({
     p.api.as(token).post('/v2/inbox/routing/test').send(body),
 });
 const live = async (t: Tenant, r: Rule) =>
-  (await rulesApi(t.admin).update(r.id, { rowVersion: r.rowVersion, isActive: true }))
-    .body as Rule;
+  (await rulesApi(t.admin).update(r.id, { rowVersion: r.rowVersion, isActive: true })).body as Rule;
 const reread = async (t: Tenant, id: string) =>
   (await p.api.as(t.admin).get(`/v2/inbox/routing/rules/${id}`)).body as Rule;
 const ruleRow = async (id: string) =>
@@ -132,7 +131,10 @@ describe('a rule that applies to every conversation (H13)', () => {
     await p.h.owner.query(
       `INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, sort)
        VALUES ($1, 'Hand edited', '{}'::jsonb, $2::jsonb, true, true, false, 99)`,
-      [t.orgId, JSON.stringify([{ type: 'assign', strategy: 'specific', userIds: [u1], teamIds: [] }])],
+      [
+        t.orgId,
+        JSON.stringify([{ type: 'assign', strategy: 'specific', userIds: [u1], teamIds: [] }]),
+      ],
     );
     const row = (
       await p.h.owner.query(`SELECT applies_to_all FROM routing_rules WHERE name = 'Hand edited'`)
@@ -177,7 +179,12 @@ describe('new and returning contacts, saved details (H16, H17)', () => {
               type: 'group',
               combinator: 'and',
               children: [
-                { type: 'condition', field: 'lifecycleStage', operator: 'equals', value: 'customer' },
+                {
+                  type: 'condition',
+                  field: 'lifecycleStage',
+                  operator: 'equals',
+                  value: 'customer',
+                },
               ],
             },
           },
@@ -244,9 +251,10 @@ describe('Everyone else: distribute evenly, and no silent change (H15, H19)', ()
   it('a workspace that never set a fallback keeps leaving conversations unassigned, and nothing creates a rule behind its back', async () => {
     expect((await customer(t, ch, 'hello')).assignee).toBeNull();
     expect((await customer(t, ch, 'hello 2')).assignee).toBeNull();
-    const n = await p.h.owner.query(`SELECT count(*)::int AS n FROM routing_rules WHERE org_id = $1`, [
-      t.orgId,
-    ]);
+    const n = await p.h.owner.query(
+      `SELECT count(*)::int AS n FROM routing_rules WHERE org_id = $1`,
+      [t.orgId],
+    );
     expect(n.rows[0].n).toBe(0);
     const probe = await rulesApi(t.admin).test({ channelKind: 'simulator', messageText: 'hello' });
     expect(probe.body.outcome).toBe('queue');
@@ -279,7 +287,11 @@ describe('Everyone else: distribute evenly, and no silent change (H15, H19)', ()
     const bad = await rulesApi(t.admin).create({
       name: 'Bad',
       appliesToAll: true,
-      assign: { strategy: 'round_robin', everyone: true, userIds: [await uuidOf(agents[0]!.userId)] },
+      assign: {
+        strategy: 'round_robin',
+        everyone: true,
+        userIds: [await uuidOf(agents[0]!.userId)],
+      },
     });
     expect(bad.status).toBe(422);
   });
@@ -370,14 +382,21 @@ describe('Try it writes nothing (H20)', () => {
        ON CONFLICT (org_id) DO UPDATE SET routing_keep_contact_agent = true`,
       [t.orgId],
     );
-    await p.h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE id = $1`, [contactId, a2.userId]);
+    await p.h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE id = $1`, [
+      contactId,
+      a2.userId,
+    ]);
     const afterSetup = await snapshot();
     const sticky = await api.test({
       contactId: contactUuid,
       channelKind: 'simulator',
       messageText: 'refund',
     });
-    expect(sticky.body).toMatchObject({ outcome: 'sticky', assigneeUserId: u2, how: 'contact_agent' });
+    expect(sticky.body).toMatchObject({
+      outcome: 'sticky',
+      assigneeUserId: u2,
+      how: 'contact_agent',
+    });
     expect(sticky.body.steps[0]).toMatchObject({ kind: 'sticky', result: 'decided', why: 'owner' });
     // what the setup itself changed is not the dry run's doing: compare from here on
     expect(await snapshot()).toEqual(afterSetup);
@@ -403,12 +422,16 @@ describe('Try it writes nothing (H20)', () => {
       'offline_busy_or_at_capacity',
     );
     // nobody at all: the waiting queue
-    await p.h.owner.query(`UPDATE agent_statuses SET status = 'offline' WHERE org_id = $1 AND user_id = $2`, [
-      t.orgId,
-      t.adminUserId,
-    ]);
+    await p.h.owner.query(
+      `UPDATE agent_statuses SET status = 'offline' WHERE org_id = $1 AND user_id = $2`,
+      [t.orgId, t.adminUserId],
+    );
     const queue = await api.test({ channelKind: 'simulator', messageText: 'refund' });
-    expect(queue.body).toMatchObject({ outcome: 'queue', assigneeUserId: null, assigneeTeamId: null });
+    expect(queue.body).toMatchObject({
+      outcome: 'queue',
+      assigneeUserId: null,
+      assigneeTeamId: null,
+    });
     expect(await snapshot()).toEqual({
       ...afterOffline,
       // the admin's status row above is setup, not a dry-run effect; the tables compared here are untouched either way
@@ -436,7 +459,10 @@ describe('Try it writes nothing (H20)', () => {
     const nobody = await p.api.member(t, 'rdn4n', [['record.contacts.read', 'all']]);
     const denied = await rulesApi(nobody.token).test({ channelKind: 'simulator' });
     expect(denied.status).toBe(403);
-    const missing = await rulesApi(t.admin).test({ contactId: randomUUID(), channelKind: 'simulator' });
+    const missing = await rulesApi(t.admin).test({
+      contactId: randomUUID(),
+      channelKind: 'simulator',
+    });
     expect(missing.status).toBe(404);
   });
 });
@@ -464,7 +490,12 @@ describe('rules at handoff time (H18)', () => {
               type: 'group',
               combinator: 'and',
               children: [
-                { type: 'condition', field: 'lifecycleStage', operator: 'equals', value: 'customer' },
+                {
+                  type: 'condition',
+                  field: 'lifecycleStage',
+                  operator: 'equals',
+                  value: 'customer',
+                },
               ],
             },
           },

@@ -79,11 +79,7 @@ export function TryItPanel({ names }: { names: ReadonlyMap<string, string> }) {
           />
         </Field>
         <Field label={t('part.businessHours')} htmlFor="try-hours">
-          <Select
-            id="try-hours"
-            value={hours}
-            onChange={(e) => setHours(e.target.value as Hours)}
-          >
+          <Select id="try-hours" value={hours} onChange={(e) => setHours(e.target.value as Hours)}>
             <option value="clock">{t('clock')}</option>
             <option value="inside">{t('inside')}</option>
             <option value="outside">{t('outside')}</option>
@@ -221,7 +217,10 @@ function StepLine({ step }: { step: RoutingTestStep }) {
         ? t('step.everyone')
         : t(`step.${step.kind}`);
   return (
-    <li className="rounded-lg border border-border p-3 text-sm" data-testid={`try-step-${step.kind}`}>
+    <li
+      className="rounded-lg border border-border p-3 text-sm"
+      data-testid={`try-step-${step.kind}`}
+    >
       <p className="flex flex-wrap items-center gap-2">
         <span className="font-medium">{label}</span>
         <Badge tone={step.result === 'decided' ? 'success' : 'neutral'}>

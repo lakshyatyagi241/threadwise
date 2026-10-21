@@ -414,7 +414,13 @@ export const routingTestConditionSchema = z.object({
 });
 export type RoutingTestCondition = z.infer<typeof routingTestConditionSchema>;
 
-export const ROUTING_TEST_STEP_KINDS = ['switch', 'sticky', 'rule', 'everyone_else', 'queue'] as const;
+export const ROUTING_TEST_STEP_KINDS = [
+  'switch',
+  'sticky',
+  'rule',
+  'everyone_else',
+  'queue',
+] as const;
 export const routingTestStepSchema = z.object({
   kind: z.enum(ROUTING_TEST_STEP_KINDS),
   /** `decided`: this step gave the conversation away. `passed`: it looked and moved on. `info`: a note. */

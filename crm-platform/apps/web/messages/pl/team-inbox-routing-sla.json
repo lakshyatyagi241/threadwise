@@ -19,25 +19,12 @@
     "page": {
       "back": "Automatyzacja i AI",
       "title": "Automatyczne przypisywanie rozmów",
-      "subtitle": "Automatycznie przydzielaj każdą nową rozmowę właściwemu agentowi. Reguły są sprawdzane po kolei, od góry.",
       "noAccess": "Nie masz uprawnień do wyświetlania ustawień automatycznego przypisywania.",
-      "create": "Utwórz regułę",
       "limitUsed": "Użyto reguł: {used} z {limit}",
       "limitReached": "Wykorzystano wszystkie {limit} reguł dostępnych w Twoim planie.",
-      "keepTitle": "Zachowuj powracające kontakty przy ich agencie",
-      "keepBody": "Gdy kontakt, który ma już agenta, napisze ponownie, nowa rozmowa trafi najpierw do tego agenta: właściciela kontaktu lub osoby, która prowadziła jego ostatnią rozmowę, o ile nadal jest aktywnym agentem. W przeciwnym razie decydują poniższe reguły.",
-      "settingsFailed": "Nie udało się zapisać ustawienia.",
-      "rulesTitle": "Reguły",
-      "searchPlaceholder": "Szukaj reguł",
-      "searchLabel": "Szukaj reguł po nazwie",
-      "howItWorks": "Pierwsza pasująca reguła, która znajdzie dostępnego agenta, przydziela rozmowę. Reguła awaryjna jest używana, gdy żadna inna nie pasowała. Jeśli nic nie pasuje, rozmowa pozostaje nieprzypisana.",
       "loading": "Wczytywanie reguł",
       "loadFailed": "Nie udało się wczytać reguł.",
       "retry": "Spróbuj ponownie",
-      "noMatchTitle": "Nie znaleziono reguły",
-      "noMatch": "Żadna reguła nie nazywa się podobnie do „{q}”.",
-      "emptyTitle": "Brak reguł",
-      "empty": "Utwórz regułę, aby przydzielać nowe rozmowy agentom po kolei, według słów kluczowych, kanału, języka lub danych kontaktu.",
       "list": "Reguły automatycznego przypisywania według priorytetu",
       "loadMore": "Wczytaj więcej",
       "toggleFailed": "Nie udało się przełączyć reguły.",
@@ -51,16 +38,14 @@
       "deleted": "Reguła usunięta.",
       "deleteFailed": "Nie udało się usunąć reguły.",
       "businessHours": "Godziny pracy",
-      "recordNote": "Tu przypisywane są rozmowy. Aby przypisywać nowe rekordy ({contacts}, firmy, {deals}) opiekunom sprzedaży, zobacz <link>Reguły przypisywania rekordów</link>."
+      "recordNote": "Tu przypisywane są rozmowy. Aby przypisywać nowe rekordy ({contacts}, firmy, {deals}) opiekunom sprzedaży, zobacz <link>Reguły przypisywania rekordów</link>.",
+      "subtitle": "Wybierz, kto dostaje każdy nowy czat. Przełączniki wystarczają w większości przestrzeni roboczych; reguły dodawaj tylko wtedy, gdy potrzebujesz większej kontroli."
     },
     "rules": {
       "someone": "agent",
       "moveUp": "Przesuń „{name}” wyżej",
       "moveDown": "Przesuń „{name}” niżej",
       "priority": "Priorytet",
-      "active": "Aktywna",
-      "off": "Wyłączona",
-      "fallback": "Awaryjna",
       "continues": "Sprawdza dalej",
       "unavailable": "{count, plural, one {# agent niedostępny} few {# agenci niedostępni} many {# agentów niedostępnych} other {# agenta niedostępnego}}",
       "activeFor": "Reguła „{name}” jest aktywna",
@@ -74,7 +59,9 @@
         "languages": "Język: {list}",
         "inside": "W godzinach pracy",
         "outside": "Poza godzinami pracy",
-        "always": "Każda rozmowa, do której nic nie pasowało"
+        "always": "Każda nowa rozmowa",
+        "contactNew": "Nowy kontakt",
+        "contactReturning": "Powracający kontakt"
       },
       "strategy": {
         "round_robin": "Po kolei",
@@ -122,7 +109,6 @@
         "name": "Wpisz nazwę reguły.",
         "nameLong": "Nazwa jest zbyt długa.",
         "descriptionLong": "Opis jest zbyt długi.",
-        "conditions": "Dodaj co najmniej jeden warunek lub oznacz tę regułę jako awaryjną.",
         "contactIncomplete": "Dokończ lub usuń niekompletne warunki kontaktu.",
         "keywordsMany": "Użyj najwyżej 20 słów.",
         "targets": "Wybierz co najmniej jednego agenta lub zespół.",
@@ -133,20 +119,17 @@
         "escalationAction": "Przypisz ponownie, ustaw priorytet lub oba.",
         "escalationAgents": "Ponowne przypisanie wymaga konsultantów w tej regule: wybierz ich powyżej.",
         "autoReplyEmpty": "Napisz odpowiedź lub odznacz opcję.",
-        "autoReplyLong": "Odpowiedź jest za długa (najwyżej 1024 znaki)."
+        "autoReplyLong": "Odpowiedź jest za długa (najwyżej 1024 znaki).",
+        "conditions": "Dodaj co najmniej jeden warunek albo wyłącz opcję „Tylko dla rozmów, które pasują do”."
       },
       "whenTitle": "Gdy nadejdzie nowa rozmowa",
-      "whenHint": "Każdy ustawiony warunek musi być spełniony. Pozostaw część pustą, aby ją zignorować.",
       "contact": {
-        "title": "Kontakt spełnia",
-        "hint": "Tagi, właściciel, etap cyklu życia i inne dane kontaktu, jak w segmentach.",
         "loading": "Wczytywanie pól kontaktu",
         "partial": "Nie udało się wczytać niektórych list kontaktów, więc część opcji może brakować.",
         "summary": "Warunki",
         "none": "Brak warunków kontaktu."
       },
       "channel": {
-        "title": "Kanał",
         "hint": "Tylko rozmowy przychodzące na te kanały. Brak zaznaczenia oznacza dowolny kanał."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Godziny pracy",
         "hint": "Używa godzin pracy Twojej przestrzeni roboczej.",
-        "any": "Cały czas",
         "inside": "Tylko w godzinach pracy",
         "outside": "Tylko poza godzinami pracy"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Opcje",
       "stopOnMatch": "Zatrzymaj, gdy ta reguła pasuje",
       "stopOnMatchHint": "Włączone: kolejne reguły nie są sprawdzane. Wyłączone: późniejsza pasująca reguła może przejąć rozmowę.",
-      "fallback": "Reguła awaryjna",
-      "fallbackHint": "Używana, gdy żadna inna reguła nie pasowała. Może być tylko jedna reguła awaryjna; wybranie tej zastępuje poprzednią.",
       "cancel": "Anuluj",
       "save": "Zapisz",
       "saveActivate": "Zapisz i aktywuj",
@@ -219,7 +199,8 @@
       "escalatePriority": "Następnie ustaw priorytet",
       "autoReply": "Wyślij automatyczną odpowiedź",
       "autoReplyBody": "Treść odpowiedzi",
-      "autoReplyHint": "Wysyłana do klienta w imieniu firmy. Poza 24-godzinnym oknem wolna odpowiedź nie jest wysyłana."
+      "autoReplyHint": "Wysyłana do klienta w imieniu firmy. Poza 24-godzinnym oknem wolna odpowiedź nie jest wysyłana.",
+      "whenHint": "Każdy dodany warunek musi być spełniony."
     },
     "sla": {
       "back": "Wróć do ustawień",

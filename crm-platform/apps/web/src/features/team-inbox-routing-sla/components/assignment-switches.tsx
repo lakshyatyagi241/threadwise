@@ -27,11 +27,7 @@ import {
  * `onAutoEnabled` lets the page create the "Everyone else: distribute evenly" row when the admin turns Auto Assignment on and the workspace
  * has no such row yet; nothing is ever created at deploy time.
  */
-export function AssignmentSwitches({
-  onAutoEnabled,
-}: {
-  onAutoEnabled: () => Promise<void>;
-}) {
+export function AssignmentSwitches({ onAutoEnabled }: { onAutoEnabled: () => Promise<void> }) {
   const t = useTranslations('team-inbox-routing-sla.assign.switches');
   const ta = useTranslations('team-inbox-routing-sla.assign.advanced');
   const th = useTranslations('team-inbox-routing-sla.handoffSettings');
@@ -49,15 +45,9 @@ export function AssignmentSwitches({
     toast(e instanceof ApiError && e.message ? e.message : t('saveFailed'), 'danger');
   const change = (patch: UpdateHandoffSettingsInput, after?: () => Promise<void>) =>
     save.mutate(patch, {
-      onSuccess: async () => {
+      onSuccess: () => {
         toast(t('saved'));
-        if (after) {
-          try {
-            await after();
-          } catch (e) {
-            failed(e);
-          }
-        }
+        if (after) after().catch(failed);
       },
       onError: failed,
     });
@@ -100,7 +90,11 @@ export function AssignmentSwitches({
   const planAuto = data.available.autoAssign;
 
   return (
-    <section className="space-y-4" data-testid="assignment-switches" aria-labelledby="switches-title">
+    <section
+      className="space-y-4"
+      data-testid="assignment-switches"
+      aria-labelledby="switches-title"
+    >
       <div>
         <h2 id="switches-title" className="text-lg font-semibold">
           {t('title')}
@@ -124,9 +118,7 @@ export function AssignmentSwitches({
               label={t('auto.title')}
               checked={data.autoAssign}
               disabled={!canManage || busy || !planAuto}
-              onCheckedChange={(on) =>
-                change({ autoAssign: on }, on ? onAutoEnabled : undefined)
-              }
+              onCheckedChange={(on) => change({ autoAssign: on }, on ? onAutoEnabled : undefined)}
             />
           }
         >

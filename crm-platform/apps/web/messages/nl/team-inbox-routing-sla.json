@@ -19,25 +19,12 @@
     "page": {
       "back": "Automatisering en AI",
       "title": "Automatische toewijzing van gesprekken",
-      "subtitle": "Geef elk nieuw gesprek automatisch aan de juiste medewerker. Regels worden in volgorde van boven naar beneden gecontroleerd.",
       "noAccess": "Je hebt geen toestemming om de instellingen voor automatisch toewijzen te bekijken.",
-      "create": "Regel aanmaken",
       "limitUsed": "{used} van {limit} regels gebruikt",
       "limitReached": "Je hebt alle {limit} regels gebruikt die je abonnement toestaat.",
-      "keepTitle": "Terugkerende contacten houden bij hun medewerker",
-      "keepBody": "Wanneer een contact dat al een medewerker heeft opnieuw schrijft, gaat het nieuwe gesprek eerst naar die medewerker: de eigenaar van het contact, of wie het vorige gesprek afhandelde, zolang die nog een actieve medewerker is. Anders bepalen de regels hieronder.",
-      "settingsFailed": "De instelling kon niet worden opgeslagen.",
-      "rulesTitle": "Regels",
-      "searchPlaceholder": "Regels zoeken",
-      "searchLabel": "Regels zoeken op naam",
-      "howItWorks": "De eerste regel die past en een beschikbare medewerker vindt, krijgt het gesprek. De terugvalregel wordt gebruikt wanneer geen andere regel paste. Als niets past, blijft het gesprek niet toegewezen.",
       "loading": "Regels laden",
       "loadFailed": "De regels konden niet worden geladen.",
       "retry": "Opnieuw proberen",
-      "noMatchTitle": "Geen regel gevonden",
-      "noMatch": "Er is geen regel met de naam \"{q}\".",
-      "emptyTitle": "Nog geen regels",
-      "empty": "Maak een regel aan om nieuwe gesprekken om de beurt aan je medewerkers te geven, op basis van trefwoord, kanaal, taal of contactgegevens.",
       "list": "Regels voor automatisch toewijzen in prioriteitsvolgorde",
       "loadMore": "Meer laden",
       "toggleFailed": "De regel kon niet worden omgezet.",
@@ -51,16 +38,14 @@
       "deleted": "Regel verwijderd.",
       "deleteFailed": "De regel kon niet worden verwijderd.",
       "businessHours": "Werktijden",
-      "recordNote": "Dit wijst gesprekken toe. Om nieuwe {contacts}, bedrijven en {deals} aan verkoopeigenaren toe te wijzen, zie <link>Regels voor recordtoewijzing</link>."
+      "recordNote": "Dit wijst gesprekken toe. Om nieuwe {contacts}, bedrijven en {deals} aan verkoopeigenaren toe te wijzen, zie <link>Regels voor recordtoewijzing</link>.",
+      "subtitle": "Kies wie elke nieuwe chat krijgt. De schakelaars zijn voor de meeste werkruimtes genoeg; voeg alleen regels toe als je meer controle nodig hebt."
     },
     "rules": {
       "someone": "een medewerker",
       "moveUp": "{name} omhoog verplaatsen",
       "moveDown": "{name} omlaag verplaatsen",
       "priority": "Prioriteit",
-      "active": "Actief",
-      "off": "Uit",
-      "fallback": "Terugval",
       "continues": "Blijft controleren",
       "unavailable": "{count, plural, one {# medewerker niet beschikbaar} other {# medewerkers niet beschikbaar}}",
       "activeFor": "Regel \"{name}\" is actief",
@@ -74,7 +59,9 @@
         "languages": "Taal: {list}",
         "inside": "Binnen zakelijke uren",
         "outside": "Buiten zakelijke uren",
-        "always": "Elk gesprek waar niemand aan voldeed"
+        "always": "Elk nieuw gesprek",
+        "contactNew": "Nieuw contact",
+        "contactReturning": "Terugkerend contact"
       },
       "strategy": {
         "round_robin": "Om de beurt",
@@ -122,7 +109,6 @@
         "name": "Voer een naam voor de regel in.",
         "nameLong": "De naam is te lang.",
         "descriptionLong": "De beschrijving is te lang.",
-        "conditions": "Voeg minstens één voorwaarde toe, of markeer deze regel als terugval.",
         "contactIncomplete": "Maak de contactvoorwaarden die niet compleet zijn af of verwijder ze.",
         "keywordsMany": "Gebruik maximaal 20 woorden.",
         "targets": "Kies minstens één medewerker of team.",
@@ -133,20 +119,17 @@
         "escalationAction": "Opnieuw toewijzen, een prioriteit instellen, of beide.",
         "escalationAgents": "Opnieuw toewijzen heeft medewerkers in deze regel nodig: kies ze hierboven.",
         "autoReplyEmpty": "Schrijf het antwoord, of vink de optie uit.",
-        "autoReplyLong": "Het antwoord is te lang (maximaal 1024 tekens)."
+        "autoReplyLong": "Het antwoord is te lang (maximaal 1024 tekens).",
+        "conditions": "Voeg minstens één voorwaarde toe, of zet “Alleen voor gesprekken die passen bij” uit."
       },
       "whenTitle": "Wanneer een nieuw gesprek binnenkomt",
-      "whenHint": "Elke voorwaarde die je instelt moet kloppen. Laat een onderdeel leeg om het te negeren.",
       "contact": {
-        "title": "Het contact voldoet aan",
-        "hint": "Tags, eigenaar, levensfase en andere contactgegevens, zoals bij segmenten.",
         "loading": "Contactvelden laden",
         "partial": "Sommige contactlijsten konden niet worden geladen, dus sommige keuzes ontbreken mogelijk.",
         "summary": "Voorwaarden",
         "none": "Geen contactvoorwaarden."
       },
       "channel": {
-        "title": "Kanaal",
         "hint": "Alleen gesprekken die binnenkomen via deze kanalen. Niets aangevinkt betekent elk kanaal."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Zakelijke uren",
         "hint": "Gebruikt de zakelijke uren van je workspace.",
-        "any": "Elk moment",
         "inside": "Alleen binnen zakelijke uren",
         "outside": "Alleen buiten zakelijke uren"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Opties",
       "stopOnMatch": "Stoppen wanneer deze regel past",
       "stopOnMatchHint": "Aan: latere regels worden niet gecontroleerd. Uit: een latere passende regel kan het gesprek overnemen.",
-      "fallback": "Terugvalregel",
-      "fallbackHint": "Wordt gebruikt wanneer geen andere regel paste. Er is maar één terugvalregel; als je deze kiest, vervangt die de vorige.",
       "cancel": "Annuleren",
       "save": "Opslaan",
       "saveActivate": "Opslaan en activeren",
@@ -219,7 +199,8 @@
       "escalatePriority": "Dan de prioriteit instellen",
       "autoReply": "Een automatisch antwoord sturen",
       "autoReplyBody": "Tekst van het antwoord",
-      "autoReplyHint": "Wordt namens het bedrijf naar de klant gestuurd. Buiten het venster van 24 uur wordt een vrij antwoord niet verstuurd."
+      "autoReplyHint": "Wordt namens het bedrijf naar de klant gestuurd. Buiten het venster van 24 uur wordt een vrij antwoord niet verstuurd.",
+      "whenHint": "Elke voorwaarde die je toevoegt, moet passen."
     },
     "sla": {
       "back": "Terug naar instellingen",

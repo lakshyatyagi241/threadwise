@@ -93,7 +93,9 @@ export function EveryoneElseRow({
 
   const who = (() => {
     if (!rule?.assign || rule.assign.everyone) return '';
-    const people = [...rule.assign.userIds, ...rule.assign.teamIds].map((id) => names.get(id) ?? '…');
+    const people = [...rule.assign.userIds, ...rule.assign.teamIds].map(
+      (id) => names.get(id) ?? '…',
+    );
     const { shown, more } = namesSummary(people);
     return more > 0 ? `${shown.join(', ')} +${more}` : shown.join(', ');
   })();

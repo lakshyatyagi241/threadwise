@@ -214,7 +214,9 @@ export function RuleFormBody({
       added: f.added.includes(key) ? f.added : [...f.added, key],
       // A condition that has no choice to make yet starts on a real one: New contact.
       ...(key === 'contactKind' && f.contactKind === 'any' ? { contactKind: 'new' as const } : {}),
-      ...(key === 'hours' && f.businessHours === 'any' ? { businessHours: 'outside' as const } : {}),
+      ...(key === 'hours' && f.businessHours === 'any'
+        ? { businessHours: 'outside' as const }
+        : {}),
     }));
   };
   /** Takes a condition off: its card goes and its value is emptied (a removed condition is gone, unlike the switch, which keeps them). */
@@ -658,85 +660,85 @@ export function RuleFormBody({
             </Field>
 
             {!form.everyone && (
-            <fieldset className="space-y-2">
-              <legend className="text-sm font-medium">{t('agents')} *</legend>
-              <p className="text-xs text-muted-foreground">{t('agentsHint')}</p>
-              {assignees.isPending ? (
-                <p className="text-sm text-muted-foreground" role="status">
-                  {t('loadingAgents')}
-                </p>
-              ) : assignees.isError ? (
-                <Alert tone="warning">{t('agentsFailed')}</Alert>
-              ) : rows.length === 0 ? (
-                <Alert tone="info">{t('noAgents')}</Alert>
-              ) : (
-                <ul className="max-h-72 space-y-1 overflow-y-auto rounded-md border border-border p-2">
-                  {rows
-                    .filter((r) => !specific || r.kind === 'user')
-                    .map((r) => {
-                      const list = r.kind === 'user' ? form.userIds : form.teamIds;
-                      const checked = list.includes(r.id);
-                      return (
-                        <li
-                          key={r.id}
-                          className="flex items-center justify-between gap-3 px-1 py-1"
-                        >
-                          <Checkbox
-                            id={`${uid}-t-${r.id}`}
-                            label={
-                              <span>
-                                {r.label}{' '}
-                                {r.kind === 'team' && (
-                                  <Badge tone="neutral">{t('teamBadge')}</Badge>
-                                )}
-                              </span>
-                            }
-                            checked={checked}
-                            onChange={() => {
-                              if (specific) {
-                                set('userIds', checked ? [] : [r.id]);
-                              } else if (r.kind === 'user') {
-                                set('userIds', toggleId(form.userIds, r.id));
-                              } else {
-                                set('teamIds', toggleId(form.teamIds, r.id));
+              <fieldset className="space-y-2">
+                <legend className="text-sm font-medium">{t('agents')} *</legend>
+                <p className="text-xs text-muted-foreground">{t('agentsHint')}</p>
+                {assignees.isPending ? (
+                  <p className="text-sm text-muted-foreground" role="status">
+                    {t('loadingAgents')}
+                  </p>
+                ) : assignees.isError ? (
+                  <Alert tone="warning">{t('agentsFailed')}</Alert>
+                ) : rows.length === 0 ? (
+                  <Alert tone="info">{t('noAgents')}</Alert>
+                ) : (
+                  <ul className="max-h-72 space-y-1 overflow-y-auto rounded-md border border-border p-2">
+                    {rows
+                      .filter((r) => !specific || r.kind === 'user')
+                      .map((r) => {
+                        const list = r.kind === 'user' ? form.userIds : form.teamIds;
+                        const checked = list.includes(r.id);
+                        return (
+                          <li
+                            key={r.id}
+                            className="flex items-center justify-between gap-3 px-1 py-1"
+                          >
+                            <Checkbox
+                              id={`${uid}-t-${r.id}`}
+                              label={
+                                <span>
+                                  {r.label}{' '}
+                                  {r.kind === 'team' && (
+                                    <Badge tone="neutral">{t('teamBadge')}</Badge>
+                                  )}
+                                </span>
                               }
-                            }}
-                          />
-                          <span className="text-xs text-muted-foreground">{r.note}</span>
-                        </li>
-                      );
-                    })}
-                </ul>
-              )}
-              {stale.length > 0 && (
-                <Alert tone="warning">
-                  {t('stale', { count: stale.length })}{' '}
-                  <button
-                    type="button"
-                    className="font-semibold underline"
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        userIds: f.userIds.filter((x) => known.has(x)),
-                        teamIds: f.teamIds.filter((x) => known.has(x)),
-                      }))
-                    }
-                  >
-                    {t('removeStale')}
-                  </button>
-                </Alert>
-              )}
-              {has('targets') && (
-                <p role="alert" className="text-xs text-danger">
-                  {t('problem.targets')}
-                </p>
-              )}
-              {has('specific') && (
-                <p role="alert" className="text-xs text-danger">
-                  {t('problem.specific')}
-                </p>
-              )}
-            </fieldset>
+                              checked={checked}
+                              onChange={() => {
+                                if (specific) {
+                                  set('userIds', checked ? [] : [r.id]);
+                                } else if (r.kind === 'user') {
+                                  set('userIds', toggleId(form.userIds, r.id));
+                                } else {
+                                  set('teamIds', toggleId(form.teamIds, r.id));
+                                }
+                              }}
+                            />
+                            <span className="text-xs text-muted-foreground">{r.note}</span>
+                          </li>
+                        );
+                      })}
+                  </ul>
+                )}
+                {stale.length > 0 && (
+                  <Alert tone="warning">
+                    {t('stale', { count: stale.length })}{' '}
+                    <button
+                      type="button"
+                      className="font-semibold underline"
+                      onClick={() =>
+                        setForm((f) => ({
+                          ...f,
+                          userIds: f.userIds.filter((x) => known.has(x)),
+                          teamIds: f.teamIds.filter((x) => known.has(x)),
+                        }))
+                      }
+                    >
+                      {t('removeStale')}
+                    </button>
+                  </Alert>
+                )}
+                {has('targets') && (
+                  <p role="alert" className="text-xs text-danger">
+                    {t('problem.targets')}
+                  </p>
+                )}
+                {has('specific') && (
+                  <p role="alert" className="text-xs text-danger">
+                    {t('problem.specific')}
+                  </p>
+                )}
+              </fieldset>
             )}
           </>
         )}
