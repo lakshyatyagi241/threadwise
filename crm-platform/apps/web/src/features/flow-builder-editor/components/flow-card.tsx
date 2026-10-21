@@ -435,7 +435,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
           {t('eyebrow')}
         </div>
-        <h2 className="font-serif text-[26px] leading-[1.05] font-normal tracking-tight sm:text-[32px] lg:text-[36px]">
+        <h2 className="font-[family-name:var(--font-inter)] text-[32px] leading-[1.05] font-semibold tracking-tight">
           {flow.name}
         </h2>
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[12.5px] text-muted-foreground">
