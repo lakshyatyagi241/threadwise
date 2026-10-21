@@ -167,7 +167,9 @@ sec_boot_api() {
   sec_db_create; sec_db_migrate
   local redis; redis="$(sec_envval REDIS_URL)"; redis="${redis%/}"; redis="${redis%/[0-9]*}/$SEC_REDIS_DB"
   sec_spawn api-server PORT="$SEC_API_PORT" DATABASE_URL="$SEC_DB_URL" MIGRATION_DATABASE_URL="$SEC_DB_ADMIN_URL" REDIS_URL="$redis" \
-    REDIS_KEY_PREFIX="$SEC_REDIS_PREFIX" "$@" node dist/src/main.js
+    REDIS_KEY_PREFIX="$SEC_REDIS_PREFIX" JWT_ACCESS_SECRET="$(head -c48 /dev/urandom | base64 -w0)" \
+    JWT_REFRESH_SECRET="$(head -c48 /dev/urandom | base64 -w0)" CREDENTIALS_ENCRYPTION_KEY="$(head -c32 /dev/urandom | base64 -w0)" \
+    CHANNEL_SIMULATOR_ENABLED=false "$@" node dist/src/main.js
   SEC_API_PID=${SEC_PIDS[${#SEC_PIDS[@]}-1]}
   sec_wait_http "$SEC_API/health" 90 '^200$' || { tail -n 15 "$SEC_OUT/logs/api-server.log" >&2; sec_fatal "API did not become healthy on $SEC_API_PORT, see logs/api-server.log"; }
   sec_check api-boot PASS "port $SEC_API_PORT, database $SEC_DB, redis db $SEC_REDIS_DB"
