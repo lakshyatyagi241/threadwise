@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Modal,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -78,7 +77,9 @@ function SheetBody({ conversationId, channelKind, onInsert, onClose }: Props) {
   return (
     <KeyboardAvoidingView
       style={styles.fill}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      // A sheet is a modal window, which the phone does not resize for the keyboard (Android leaves it under the keys), so the sheet
+      // lifts itself: padding on both platforms.
+      behavior="padding"
     >
       <Pressable
         accessibilityRole="button"
