@@ -91,7 +91,15 @@ function readWabaDocs(db) {
     maxBuffer: 64 * 1024 * 1024,
   });
   if (r.status !== 0) throw new Error(`the Waboo read failed (exit ${r.status}); nothing was printed`);
-  const m = /^@@WABA@@(.*)$/m.exec(r.stdout || '');
+  return parseWabaOutput(r.stdout || '');
+}
+
+/**
+ * The `waba` query's output: the marker, then one JSON line. mongo-eval prints the result after the shell's prompt ("> @@WABA@@{...}"),
+ * so the marker is looked for anywhere on its line, not only at the start.
+ */
+function parseWabaOutput(stdout) {
+  const m = /@@WABA@@(.*)$/m.exec(stdout);
   if (!m) throw new Error('the Waboo read gave no WhatsApp document list');
   return JSON.parse(m[1]).docs;
 }
@@ -129,7 +137,7 @@ async function main(argv) {
   );
 }
 
-module.exports = { normalizeQuality, wabaCredentials, fetchQualities };
+module.exports = { normalizeQuality, wabaCredentials, fetchQualities, parseWabaOutput };
 
 if (require.main === module)
   main(process.argv.slice(2)).catch((e) => {
