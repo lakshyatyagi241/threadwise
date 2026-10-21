@@ -176,6 +176,8 @@ export const appointmentResponseSchema = z.object({
   checkedInAt: z.string().datetime().nullable(),
   statusChangedAt: z.string().datetime(),
   cancelledAt: z.string().datetime().nullable(),
+  /** When the customer tapped Confirm on a reminder (a second fact next to the business confirming the booking); null until they do. */
+  customerConfirmedAt: z.string().datetime().nullable().optional(),
   cancelledBy: appointmentCancellerSchema.nullable(),
   cancelReason: z.string().nullable(),
   calendar: z.object({

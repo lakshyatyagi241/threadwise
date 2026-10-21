@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ERROR_CODES } from '@crm/contracts';
 import {
   FOLLOW_UP_GRACE_MS,
+  attemptLogOf,
   REMINDER_MIN_LEAD_MS,
   REMINDER_RETRY_MS,
   dueAtOf,
@@ -25,7 +26,8 @@ const ARMED = T('2026-11-01T08:00:00Z');
 const facts = (patch: Partial<RunFacts> = {}): RunFacts => ({
   runStatus: 'sending',
   kind: 'before',
-  rule: { isActive: true },
+  stepKind: null,
+  rule: { isActive: true, skipIfConfirmed: false },
   runArmedAtMs: ARMED.getTime(),
   bookingArmedAtMs: ARMED.getTime(),
   bookingStatus: 'confirmed',
@@ -54,7 +56,7 @@ describe('gateRun', () => {
       status: 'cancelled',
       reason: 'rule_removed',
     });
-    expect(gateRun(facts({ rule: { isActive: false } }))).toEqual({
+    expect(gateRun(facts({ rule: { isActive: false, skipIfConfirmed: false } }))).toEqual({
       go: false,
       status: 'cancelled',
       reason: 'rule_off',
@@ -139,11 +141,11 @@ describe('settleChannels', () => {
       settleChannels(
         [
           { channel: 'whatsapp', outcome: skip('template_required') },
-          { channel: 'sms', outcome: sent },
+          { channel: 'email', outcome: sent },
         ],
         NOW,
       ),
-    ).toEqual({ status: 'sent', reason: null, channel: 'sms' });
+    ).toEqual({ status: 'sent', reason: null, channel: 'email' });
   });
 
   it('holds on a held channel and keeps the preference, with the time it gave or a retry delay', () => {
@@ -160,7 +162,7 @@ describe('settleChannels', () => {
       until: T(until),
     });
     const noTime = settleChannels(
-      [{ channel: 'sms', outcome: { status: 'held', reason: 'channel_unavailable' } }],
+      [{ channel: 'email', outcome: { status: 'held', reason: 'channel_unavailable' } }],
       NOW,
     );
     expect(noTime.status === 'held' && noTime.until?.getTime()).toBe(
@@ -168,23 +170,34 @@ describe('settleChannels', () => {
     );
   });
 
-  it('stops at a failure instead of falling to another channel (it may already have gone)', () => {
+  it('falls to the next channel when one fails (the owner chose failure as a reason to fall back), and logs both', () => {
+    const tried = [
+      { channel: 'whatsapp' as const, outcome: { status: 'failed', reason: 'provider_error' } as ChannelOutcome },
+      { channel: 'email' as const, outcome: sent },
+    ];
+    expect(settleChannels(tried, NOW)).toEqual({ status: 'sent', reason: null, channel: 'email' });
+    expect(attemptLogOf(tried)).toEqual([
+      { channel: 'whatsapp', status: 'failed', reason: 'provider_error' },
+      { channel: 'email', status: 'sent', reason: null },
+    ]);
+  });
+
+  it('reports the failure when every channel failed', () => {
     const r = settleChannels(
       [
-        { channel: 'sms', outcome: { status: 'failed', reason: 'provider_error' } },
-        { channel: 'email', outcome: sent },
+        { channel: 'whatsapp', outcome: { status: 'failed', reason: 'provider_error' } },
+        { channel: 'email', outcome: skip('no_sender') },
       ],
       NOW,
     );
-    expect(r).toEqual({ status: 'failed', reason: 'provider_error', channel: 'sms' });
+    expect(r).toEqual({ status: 'failed', reason: 'provider_error', channel: 'whatsapp' });
   });
 
   it('when every channel is skipped, says the most telling reason, not "nothing to send to"', () => {
     expect(
       settleChannels(
         [
-          { channel: 'whatsapp', outcome: skip('no_contact_point') },
-          { channel: 'sms', outcome: skip('opted_out') },
+          { channel: 'whatsapp', outcome: skip('opted_out') },
           { channel: 'email', outcome: skip('no_sender') },
         ],
         NOW,
@@ -310,7 +323,7 @@ describe('remindersOf (what a booking shows)', () => {
     armedAt: ARMED,
     status: 'sent' as const,
     reason: null,
-    channel: 'sms' as const,
+    channel: 'whatsapp' as const,
     sentAt: T('2026-11-09T10:00:05Z'),
     ...patch,
   });
@@ -337,7 +350,7 @@ describe('remindersOf (what a booking shows)', () => {
       T('2026-11-09T12:00:00Z').getTime(),
     );
     expect(shown).toHaveLength(1);
-    expect(shown[0]).toMatchObject({ status: 'sent', channel: 'sms' });
+    expect(shown[0]).toMatchObject({ status: 'sent', channel: 'whatsapp' });
   });
 
   it('does not schedule a before-rule that is already past or that falls before the booking was made', () => {
@@ -385,10 +398,133 @@ describe('timelineEntry', () => {
       body: 'The contact opted out.',
     });
     expect(
-      timelineEntry('after', 'held', 'sms', 'quiet_hours', T('2026-11-09T14:00:00Z')).body,
+      timelineEntry('after', 'held', 'whatsapp', 'quiet_hours', T('2026-11-09T14:00:00Z')).body,
     ).toContain('2026-11-09T14:00:00.000Z');
-    expect(timelineEntry('before', 'failed', 'sms', 'provider_error').title).toBe(
-      'Reminder failed on SMS',
+    expect(timelineEntry('before', 'failed', 'whatsapp', 'provider_error').title).toBe(
+      'Reminder failed on WhatsApp',
     );
+  });
+});
+
+describe('gateRun: the steps of a sequence', () => {
+  const NOW_AT = T('2026-11-09T10:01:00Z').getTime();
+  const step = (stepKind: RunFacts['stepKind'], kind: RunFacts['kind'], patch: Partial<RunFacts> = {}) =>
+    facts({ stepKind, kind, nowMs: NOW_AT, ...patch });
+
+  it('the 15 minute reminder needs a join link and is skipped without one', () => {
+    expect(gateRun(step('reminder_15m', 'before', { hasJoinLink: true }))).toEqual({ go: true });
+    expect(gateRun(step('reminder_15m', 'before', { hasJoinLink: false }))).toEqual({
+      go: false,
+      status: 'skipped',
+      reason: 'no_join_link',
+    });
+  });
+
+  it('"skip Reminder 2 if already confirmed" only skips when the rule asks for it and the customer confirmed', () => {
+    const asks = { isActive: true, skipIfConfirmed: true };
+    expect(gateRun(step('reminder_2h', 'before', { rule: asks, customerConfirmed: true }))).toEqual({
+      go: false,
+      status: 'skipped',
+      reason: 'already_confirmed',
+    });
+    expect(gateRun(step('reminder_2h', 'before', { rule: asks, customerConfirmed: false }))).toEqual({
+      go: true,
+    });
+    expect(gateRun(step('reminder_2h', 'before', { customerConfirmed: true }))).toEqual({ go: true });
+  });
+
+  it('a reminder is never sent at or after the start', () => {
+    const g = gateRun(step('reminder_24h', 'before', { nowMs: START.getTime() }));
+    expect(g).toEqual({ go: false, status: 'skipped', reason: 'started' });
+  });
+
+  it('a cancel, a decline or a move stops every step of the sequence', () => {
+    for (const [stepKind, kind] of [
+      ['reminder_24h', 'before'],
+      ['after_visit', 'after'],
+      ['rebook', 'after'],
+      ['confirmation', 'event'],
+    ] as const) {
+      const g = gateRun(step(stepKind, kind, { bookingStatus: 'cancelled' }));
+      expect(g).toMatchObject({ go: false, status: 'cancelled', reason: 'booking_cancelled' });
+    }
+    expect(gateRun(step('reminder_24h', 'before', { bookingArmedAtMs: ARMED.getTime() + 1 }))).toMatchObject({
+      reason: 'rescheduled',
+    });
+  });
+
+  it('the confirmation goes for a confirmed booking that has not started, never after the start', () => {
+    expect(gateRun(step('confirmation', 'event'))).toEqual({ go: true });
+    expect(gateRun(step('confirmation', 'event', { nowMs: START.getTime() + 1 }))).toMatchObject({
+      reason: 'started',
+    });
+  });
+
+  it('the no-show message goes only when the booking was marked no-show', () => {
+    expect(gateRun(step('no_show', 'event', { bookingStatus: 'no_show' }))).toEqual({ go: true });
+    expect(gateRun(step('no_show', 'event', { bookingStatus: 'confirmed' }))).toMatchObject({
+      go: false,
+      reason: 'booking_not_confirmed',
+    });
+  });
+
+  it('a rebook follows a completed visit only, and may be a day late, not more', () => {
+    const due = T('2027-05-09T10:00:00Z').getTime();
+    const base = { dueAtMs: due, nowMs: due + 60_000 };
+    expect(gateRun(step('rebook', 'after', { ...base, bookingStatus: 'completed' }))).toEqual({ go: true });
+    expect(gateRun(step('rebook', 'after', { ...base, bookingStatus: 'confirmed' }))).toMatchObject({
+      reason: 'visit_not_completed',
+    });
+    expect(
+      gateRun(step('rebook', 'after', { dueAtMs: due, nowMs: due + 25 * 3_600_000, bookingStatus: 'completed' })),
+    ).toMatchObject({ reason: 'expired' });
+  });
+});
+
+describe('the channel log: why a channel was used or skipped', () => {
+  const NOW = T('2026-11-09T10:00:00Z');
+  const cases: Array<[string, ChannelOutcome]> = [
+    ['no_contact_point', { status: 'skipped', reason: 'no_contact_point' }],
+    ['no_consent', { status: 'skipped', reason: 'no_consent' }],
+    ['template_unavailable', { status: 'skipped', reason: 'template_unavailable' }],
+    ['provider_error', { status: 'failed', reason: 'provider_error' }],
+  ];
+  it.each(cases)('WhatsApp %s hands over to email and the log says why', (reason, outcome) => {
+    const tried = [
+      { channel: 'whatsapp' as const, outcome },
+      { channel: 'email' as const, outcome: { status: 'sent' } as ChannelOutcome },
+    ];
+    expect(settleChannels(tried, NOW)).toEqual({ status: 'sent', reason: null, channel: 'email' });
+    expect(attemptLogOf(tried)).toEqual([
+      { channel: 'whatsapp', status: outcome.status, reason },
+      { channel: 'email', status: 'sent', reason: null },
+    ]);
+  });
+
+  it('quiet hours HOLD: the run waits with its preference and does not move to email', () => {
+    const tried = [
+      {
+        channel: 'whatsapp' as const,
+        outcome: { status: 'held', reason: 'quiet_hours', until: '2026-11-09T14:00:00.000Z' } as ChannelOutcome,
+      },
+    ];
+    expect(settleChannels(tried, NOW)).toMatchObject({ status: 'held', channel: 'whatsapp', reason: 'quiet_hours' });
+  });
+
+  it('the timeline wording for a fallback reason is readable', () => {
+    expect(timelineEntry('before', 'sent', 'email', null, undefined, 'reminder_24h').title).toBe('Reminder sent on email');
+    expect(timelineEntry('event', 'skipped', null, 'no_consent', undefined, 'no_show').title).toBe('No-show message not sent');
+  });
+});
+
+describe('a stored rule that still lists the removed SMS', () => {
+  it('reads without it: a rule with only sms falls back to WhatsApp then email, one with others keeps them in order', async () => {
+    const { liveChannels } = await import(
+      '../../../src/modules/appointments-booking/appointment-reminders.repository'
+    );
+    expect(liveChannels(['sms'])).toEqual(['whatsapp', 'email']);
+    expect(liveChannels(['sms', 'email'])).toEqual(['email']);
+    expect(liveChannels(['email', 'sms', 'whatsapp'])).toEqual(['email', 'whatsapp']);
+    expect(liveChannels(null)).toEqual(['whatsapp', 'email']);
   });
 });
