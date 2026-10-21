@@ -213,12 +213,8 @@
       },
       "notUsed": {
         "title": "Stored, not used yet",
-        "body": "These settings are saved on the team, but nothing reads them yet. They start to apply with the routing update.",
-        "strategy": "Auto-assignment strategy: {value}",
-        "devices": "{count, plural, one {Limited to # device} other {Limited to # devices}}",
-        "businessHours": "Business hours: saved",
-        "timezone": "Time zone: {value}",
-        "defaultAssignee": "Default assignee: {name}"
+        "body": "This setting is saved on the team, but nothing reads it yet.",
+        "devices": "{count, plural, one {Limited to # device} other {Limited to # devices}}"
       }
     },
     "teamDialog": {

@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "Opgeslagen, nog niet in gebruik",
         "body": "Deze instellingen zijn op het team opgeslagen, maar er leest nog niets ze uit. Ze gaan gelden met de routeringsupdate.",
-        "strategy": "Strategie voor automatisch toewijzen: {value}",
-        "devices": "{count, plural, one {Beperkt tot # apparaat} other {Beperkt tot # apparaten}}",
-        "businessHours": "Openingstijden: opgeslagen",
-        "timezone": "Tijdzone: {value}",
-        "defaultAssignee": "Standaardbehandelaar: {name}"
+        "devices": "{count, plural, one {Beperkt tot # apparaat} other {Beperkt tot # apparaten}}"
       },
       "deleteUsage": {
         "title": "Wat er verandert",

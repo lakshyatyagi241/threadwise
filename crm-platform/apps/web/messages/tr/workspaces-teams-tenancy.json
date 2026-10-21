@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "Saklandı, henüz kullanılmıyor",
         "body": "Bu ayarlar ekipte kaydedilir ancak henüz hiçbir şey bunları okumaz. Yönlendirme güncellemesiyle uygulanmaya başlar.",
-        "strategy": "Otomatik atama stratejisi: {value}",
-        "devices": "{count, plural, one {# cihazla sınırlı} other {# cihazla sınırlı}}",
-        "businessHours": "Çalışma saatleri: kaydedildi",
-        "timezone": "Saat dilimi: {value}",
-        "defaultAssignee": "Varsayılan atanan: {name}"
+        "devices": "{count, plural, one {# cihazla sınırlı} other {# cihazla sınırlı}}"
       },
       "deleteUsage": {
         "title": "Neler değişecek",

@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "Zapisane, jeszcze nieużywane",
         "body": "Te ustawienia są zapisane w zespole, ale nic jeszcze ich nie odczytuje. Zaczną działać wraz z aktualizacją routingu.",
-        "strategy": "Strategia automatycznego przypisywania: {value}",
-        "devices": "{count, plural, one {Ograniczone do # urządzenia} few {Ograniczone do # urządzeń} many {Ograniczone do # urządzeń} other {Ograniczone do # urządzenia}}",
-        "businessHours": "Godziny pracy: zapisane",
-        "timezone": "Strefa czasowa: {value}",
-        "defaultAssignee": "Domyślna osoba przypisana: {name}"
+        "devices": "{count, plural, one {Ograniczone do # urządzenia} few {Ograniczone do # urządzeń} many {Ograniczone do # urządzeń} other {Ograniczone do # urządzenia}}"
       },
       "deleteUsage": {
         "title": "Co się zmieni",

@@ -12,6 +12,7 @@ import {
   flbCondProblems,
   flbReadLocation,
 } from '@crm/contracts';
+import { handoffProblem } from './handoff-node';
 import { conditionTreeOf } from './condition-tree';
 import { ctaLinkProblem } from './cta-link';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
@@ -951,7 +952,10 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       }
       if (s.type === 'location' && !flbReadLocation(d).ok) bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
-      if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
+      if (s.type === 'assign') {
+        const problem = handoffProblem(d);
+        if (problem) bad(problem);
+      }
       if (
         s.type === 'buttons' &&
         Object.values(rec(d.handoffs)).some((h) => !str(rec(h).team).trim())

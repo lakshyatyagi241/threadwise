@@ -104,6 +104,7 @@ const stored: PlanAdminItem = {
     wa_storefront: false,
     inbox_sla: false,
     inbox_routing: true,
+    inbox_assignment_sticky: true,
     waba_calling: true,
     inbox_kanban: true,
     team_performance: true,

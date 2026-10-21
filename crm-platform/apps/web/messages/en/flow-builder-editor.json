@@ -2101,8 +2101,8 @@
           "description": "Add or remove a tag"
         },
         "assign": {
-          "label": "Assign agent",
-          "description": "Hand off to a human"
+          "label": "Human handoff",
+          "description": "Hand the chat to a person or a queue"
         },
         "subflow": {
           "label": "Run sub-flow",
@@ -2462,8 +2462,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Assign to an agent",
-          "help": "Hand the conversation to a team or an agent"
+          "label": "Human handoff",
+          "help": "Hand the conversation to a person, a team or the assignment rules"
         },
         "message": {
           "label": "Message",
@@ -2562,7 +2562,7 @@
         "location": "Location",
         "template": "Template",
         "cta": "Link button",
-        "assign": "Assign to an agent",
+        "assign": "Human handoff",
         "carousel": "Carousel",
         "condition": "Condition",
         "faq": "Answer from FAQ",

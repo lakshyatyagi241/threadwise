@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "保存済み、未使用",
         "body": "これらの設定はチームに保存されますが、まだ何にも読み込まれていません。ルーティングの更新で適用が始まります。",
-        "strategy": "自動割り当て方式: {value}",
-        "devices": "{count, plural, one {#台のデバイスに制限} other {#台のデバイスに制限}}",
-        "businessHours": "営業時間: 保存済み",
-        "timezone": "タイムゾーン: {value}",
-        "defaultAssignee": "デフォルトの担当者: {name}"
+        "devices": "{count, plural, one {#台のデバイスに制限} other {#台のデバイスに制限}}"
       },
       "deleteUsage": {
         "title": "変更される内容",

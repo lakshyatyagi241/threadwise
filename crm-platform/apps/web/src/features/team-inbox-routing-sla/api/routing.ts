@@ -1,14 +1,23 @@
 'use client';
 
-import { useInfiniteQuery, useQuery, type QueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from '@tanstack/react-query';
 import {
   businessHoursSchema,
+  handoffSettingsSchema,
   inboxAssigneesResponseSchema,
   routingRuleListResponseSchema,
   routingRuleSchema,
   routingSettingsSchema,
   type CreateRoutingRuleInput,
+  type HandoffSettings,
   type UpdateBusinessHoursInput,
+  type UpdateHandoffSettingsInput,
   type UpdateRoutingRuleInput,
 } from '@crm/contracts';
 import { z } from 'zod';
@@ -22,6 +31,7 @@ export const KEYS = {
   settings: ['routing-rules', 'settings'] as const,
   businessHours: ['routing-rules', 'business-hours'] as const,
   assignees: ['routing-rules', 'assignees'] as const,
+  handoffSettings: ['inbox', 'handoff-settings'] as const,
 };
 
 const PAGE = 50;
@@ -140,5 +150,29 @@ export function useAssignees(enabled = true) {
     retry: false,
     staleTime: 30_000,
     queryFn: ({ signal }) => routingApi.assignees(signal),
+  });
+}
+
+/** The handoff and assignment settings (BL-396..BL-404) with what the plan includes; open to every plan, so no paywall here. */
+export function useHandoffSettings(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.handoffSettings,
+    enabled,
+    retry: false,
+    queryFn: ({ signal }) =>
+      apiFetch('/inbox/handoff-settings', { schema: handoffSettingsSchema, signal }),
+  });
+}
+
+export function useUpdateHandoffSettings() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UpdateHandoffSettingsInput) =>
+      apiFetch('/inbox/handoff-settings', {
+        method: 'PUT',
+        body: input,
+        schema: handoffSettingsSchema,
+      }),
+    onSuccess: (data: HandoffSettings) => qc.setQueryData(KEYS.handoffSettings, data),
   });
 }

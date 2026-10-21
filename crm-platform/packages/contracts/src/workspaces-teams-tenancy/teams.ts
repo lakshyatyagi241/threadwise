@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
+import {
+  businessHoursDaysSchema,
+  businessHoursHolidaysSchema,
+  isIanaZone,
+} from '../team-inbox-routing-sla/business-hours';
 import { wspDisplayName } from './members';
 
 /**
@@ -58,8 +63,24 @@ export const wspTeamUsageSchema = z.object({
 export type WspTeamUsage = z.infer<typeof wspTeamUsageSchema>;
 
 /**
- * Settings the team stores that no part of the product reads yet (business hours, time zone, default assignee: they arrive with
- * the routing update). Shown read-only on the Teams screen, never silently ignored.
+ * A team's own opening hours: the weekly schedule of the workspace's Working hours (same shape), read when a conversation is handed to
+ * the team (BL-396). No schedule = always open.
+ */
+export const wspTeamHoursSchema = z
+  .object({ days: businessHoursDaysSchema, holidays: businessHoursHolidaysSchema.optional() })
+  .strict();
+export type WspTeamHours = z.infer<typeof wspTeamHoursSchema>;
+export const wspTeamTimezoneSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(64)
+  .refine(isIanaZone, { message: 'Not an IANA timezone.' });
+
+/**
+ * What the team keeps for handoff and assignment (BL-396): its opening hours (`businessHours`, null = always open), the time zone
+ * they are read in, and the person who takes a conversation when nobody else can (`defaultAssignee`). The name is the one the field had
+ * while nothing read it; the wire shape is unchanged.
  */
 export const wspTeamUnusedSettingsSchema = z.object({
   businessHours: z.unknown().nullable(),
@@ -109,6 +130,10 @@ export const createWspTeamSchema = z.object({
   color: wspTeamColorSchema.default(WSP_TEAM_DEFAULT_COLOR),
   description: z.string().trim().max(WSP_TEAM_DESCRIPTION_MAX).nullish(),
   assignmentStrategy: wspAssignmentStrategySchema.default('manual'),
+  /** Handoff and assignment (BL-396): the person who takes a conversation when nobody else can; must be on the team. */
+  defaultAssigneeId: uuidSchema.nullish(),
+  timezone: wspTeamTimezoneSchema.nullish(),
+  businessHours: wspTeamHoursSchema.nullish(),
   memberIds: z.array(uuidSchema).max(500).default([]),
   deviceIds: z.array(uuidSchema).max(200).default([]),
   parentId: uuidSchema.nullish(),
@@ -128,6 +153,10 @@ export const updateWspTeamSchema = z.object({
   color: wspTeamColorSchema.optional(),
   description: z.string().trim().max(WSP_TEAM_DESCRIPTION_MAX).nullish(),
   assignmentStrategy: wspAssignmentStrategySchema.optional(),
+  /** `null` clears the default assignee, the time zone and the hours (always open). */
+  defaultAssigneeId: uuidSchema.nullish(),
+  timezone: wspTeamTimezoneSchema.nullish(),
+  businessHours: wspTeamHoursSchema.nullish(),
   memberIds: z.array(uuidSchema).max(500).optional(),
   deviceIds: z.array(uuidSchema).max(200).optional(),
   parentId: uuidSchema.nullish(),

@@ -132,6 +132,10 @@ export interface TeamChanges {
   leadUserId?: number | null;
   receivesConversations?: boolean;
   receivesRecords?: boolean;
+  /** Handoff and assignment (BL-396): hours (null = always open), their time zone and the person who takes what nobody else can. */
+  businessHours?: unknown | null;
+  timezone?: string | null;
+  defaultAssigneeId?: number | null;
 }
 
 /** Data access for teams and their members. Every method runs inside the tenant transaction it is handed. */
@@ -209,14 +213,17 @@ export class TeamsRepository {
       parentId: number | null;
       receivesConversations: boolean;
       receivesRecords: boolean;
+      businessHours?: unknown | null;
+      timezone?: string | null;
     },
   ): Promise<number> {
     const res = await tx.execute(sql`
       INSERT INTO teams (org_id, name, slug, color, description, assignment_strategy, device_ids, parent_team_id,
-                         receives_conversations, receives_records)
+                         receives_conversations, receives_records, business_hours, timezone)
       VALUES (${orgId}, ${v.name}, ${v.slug}, ${v.color}, ${v.description}, ${v.assignmentStrategy},
               ${v.deviceIds.length > 0 ? JSON.stringify(v.deviceIds) : null}::jsonb, ${v.parentId},
-              ${v.receivesConversations}, ${v.receivesRecords})
+              ${v.receivesConversations}, ${v.receivesRecords},
+              ${v.businessHours ? JSON.stringify(v.businessHours) : null}::jsonb, ${v.timezone ?? null})
       RETURNING id`);
     return Number((res.rows[0] as Raw).id);
   }
@@ -245,10 +252,25 @@ export class TeamsRepository {
     if (v.receivesConversations !== undefined)
       sets.push(sql`receives_conversations = ${v.receivesConversations}`);
     if (v.receivesRecords !== undefined) sets.push(sql`receives_records = ${v.receivesRecords}`);
+    if (v.businessHours !== undefined) {
+      sets.push(
+        sql`business_hours = ${v.businessHours ? JSON.stringify(v.businessHours) : null}::jsonb`,
+      );
+    }
+    if (v.timezone !== undefined) sets.push(sql`timezone = ${v.timezone}`);
+    if (v.defaultAssigneeId !== undefined)
+      sets.push(sql`default_assignee_id = ${v.defaultAssigneeId}`);
     const res = await tx.execute(sql`
       UPDATE teams SET ${sql.join(sets, sql`, `)}
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${expected} RETURNING id`);
     return res.rows.length > 0;
+  }
+
+  /** Names the person who takes what nobody else can (`null` clears it). Called after the members are saved, so the caller checked they are on the team. */
+  async setDefaultAssignee(tx: Tx, orgId: number, id: number, userId: number | null): Promise<void> {
+    await tx.execute(
+      sql`UPDATE teams SET default_assignee_id = ${userId} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   /** Sets or clears the manager without the optimistic-lock check (a member change that must keep the manager consistent). */

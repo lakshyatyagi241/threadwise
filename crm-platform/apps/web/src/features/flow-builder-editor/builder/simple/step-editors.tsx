@@ -38,6 +38,18 @@ import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
 import { AiForm, CodeForm, ConditionGroupEditor, WebhookForm } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
+import { usePlanFeature } from '@/lib/plan-features';
+import {
+  destinationOf,
+  HANDOFF_DESTINATIONS,
+  HANDOFF_MESSAGE_MAX,
+  HANDOFF_NOTE_MAX,
+  HANDOFF_PRIORITY_CHOICES,
+  HANDOFF_REASON_CHOICES,
+  isHandoffNode,
+  peopleOf,
+  upgradeLegacy,
+} from '../../lib/handoff-node';
 import { Field, Input, Select, Textarea, useToast } from '@crm/ui';
 import { NewPropertyInline } from '../new-property';
 import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
@@ -1090,12 +1102,151 @@ function FaqEditor({ step, doc, link }: EditorProps) {
   );
 }
 
-function AssignEditor({ step, ctx, set }: EditorProps) {
+function AssignEditor(p: EditorProps) {
+  return isHandoffNode(p.step.data) ? <HandoffEditor {...p} /> : <LegacyAssignEditor {...p} />;
+}
+
+/** The Human handoff step (BL-398): where the chat goes, why, the note for the agent and the words the customer reads. */
+function HandoffEditor({ step, ctx, set }: EditorProps) {
+  const t = useTranslations('flb.builder.handoff');
+  const teams = ctx.teams;
+  const rulesInPlan = usePlanFeature('inbox_routing');
+  const d = step.data;
+  const kind = destinationOf(d);
+  const people = peopleOf(teams);
+  const team = teams.find((x) => x.id === str(d.team));
+  return (
+    <div className="space-y-3">
+      <Field label={t('destination')} hint={t(`destHint.${kind}`)}>
+        <Select
+          data-testid="flb-handoff-destination"
+          value={kind}
+          onChange={(e) => set({ destination: e.target.value })}
+        >
+          {HANDOFF_DESTINATIONS.map((k) => (
+            <option key={k} value={k}>
+              {k === 'rules' && !rulesInPlan ? t('dest.rulesLocked') : t(`dest.${k}`)}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      {kind === 'rules' && !rulesInPlan && (
+        <p
+          role="note"
+          data-testid="flb-handoff-plan-lock"
+          className="rounded-xl bg-warning/10 p-2.5 text-[12px]"
+        >
+          {t('lockHint')}
+        </p>
+      )}
+      {kind === 'team' && (
+        <Field label={t('team')}>
+          <Select value={str(d.team)} onChange={(e) => set({ team: e.target.value, userId: '' })}>
+            <option value="">{teams.length ? t('teamPick') : t('teamNone')}</option>
+            {teams.map((tm) => (
+              <option key={tm.id} value={tm.id}>
+                {tm.members.length
+                  ? t('teamOption', { name: tm.name, count: tm.members.length })
+                  : tm.name}
+              </option>
+            ))}
+            {str(d.team) && !team ? (
+              <option value={str(d.team)}>{t('unknownMember', { value: str(d.team) })}</option>
+            ) : null}
+          </Select>
+        </Field>
+      )}
+      {kind === 'person' && (
+        <Field label={t('person')} hint={t('personHint')}>
+          <Select
+            value={str(d.userId)}
+            onChange={(e) => {
+              const owner = teams.find((tm) => tm.members.some((m) => m.id === e.target.value));
+              set({ userId: e.target.value, team: owner?.id ?? str(d.team) });
+            }}
+          >
+            <option value="">{t('personPick')}</option>
+            {people.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name}
+              </option>
+            ))}
+            {str(d.userId) && !people.some((m) => m.id === str(d.userId)) ? (
+              <option value={str(d.userId)}>{t('unknownMember', { value: str(d.userId) })}</option>
+            ) : null}
+          </Select>
+        </Field>
+      )}
+      <div className="grid grid-cols-2 gap-3">
+        <Field label={t('reason')}>
+          <Select value={str(d.reason) || 'other'} onChange={(e) => set({ reason: e.target.value })}>
+            {HANDOFF_REASON_CHOICES.map((r) => (
+              <option key={r} value={r}>
+                {t(`reasons.${r}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('priority')}>
+          <Select value={str(d.priority)} onChange={(e) => set({ priority: e.target.value })}>
+            {HANDOFF_PRIORITY_CHOICES.map((pr) => (
+              <option key={pr} value={pr}>
+                {pr === '' ? t('priorityKeep') : t(`priorities.${pr}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      </div>
+      <Field label={t('note')} hint={t('noteHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_NOTE_MAX}
+          value={str(d.message)}
+          onChange={(e) => set({ message: e.target.value })}
+        />
+      </Field>
+      <Field label={t('customerMessage')} hint={t('customerHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_MESSAGE_MAX}
+          value={str(d.customerMessage)}
+          onChange={(e) => set({ customerMessage: e.target.value })}
+        />
+      </Field>
+      <Field label={t('offHours')} hint={t('offHoursHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_MESSAGE_MAX}
+          value={str(d.offHoursMessage)}
+          onChange={(e) => set({ offHoursMessage: e.target.value })}
+        />
+      </Field>
+      <p role="note" data-testid="flb-handoff-exits" className="rounded-xl bg-muted p-2.5 text-[12px]">
+        {t('simpleExits')}
+      </p>
+    </div>
+  );
+}
+
+function LegacyAssignEditor({ step, ctx, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const th = useTranslations('flb.builder.handoff');
   const teams = ctx.teams;
   const team = teams.find((x) => x.id === str(step.data.team));
   return (
     <div className="space-y-3">
+      <div className="rounded-xl border border-border bg-muted/40 p-2.5 text-[12px]">
+        <p className="font-semibold">{th('legacy')}</p>
+        <p className="mt-1 text-muted-foreground">{th('upgradeHint')}</p>
+        <button
+          type="button"
+          data-testid="flb-handoff-upgrade"
+          onClick={() => set(upgradeLegacy(step.data))}
+          className="mt-2 rounded-lg bg-brand px-3 py-1.5 text-[12px] font-semibold text-brand-foreground hover:opacity-90"
+        >
+          {th('upgrade')}
+        </button>
+      </div>
       <Field label={t('assign.team')} hint={t('assign.teamHint')}>
         <Select
           value={str(step.data.team)}

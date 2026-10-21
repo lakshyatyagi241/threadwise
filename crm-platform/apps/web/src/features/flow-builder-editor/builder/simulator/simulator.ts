@@ -422,6 +422,11 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         );
         return advance('out');
       case 'assign':
+        if (d.handoff === 2) {
+          // The test chat takes the "assigned" exit (a real run picks by who is free); a flow wired only for "waiting" says so.
+          sys(tx('handoff', { team: str(d.team) || '?', destination: str(d.destination) || 'team' }));
+          return advance(edges.some((x) => x.source === node.id && x.sourceHandle === 'assigned') ? 'assigned' : 'out');
+        }
         sys(
           d.userId
             ? tx('assignedUser', { team: str(d.team) || '?', user: str(d.userId) })

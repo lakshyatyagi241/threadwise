@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "Salvato, non ancora usato",
         "body": "Queste impostazioni sono salvate sul team, ma per ora nulla le legge. Inizieranno ad applicarsi con l'aggiornamento dell'instradamento.",
-        "strategy": "Strategia di assegnazione automatica: {value}",
-        "devices": "{count, plural, one {Limitato a # dispositivo} other {Limitato a # dispositivi}}",
-        "businessHours": "Orari di lavoro: salvati",
-        "timezone": "Fuso orario: {value}",
-        "defaultAssignee": "Assegnatario predefinito: {name}"
+        "devices": "{count, plural, one {Limitato a # dispositivo} other {Limitato a # dispositivi}}"
       },
       "deleteUsage": {
         "title": "Cosa cambierà",

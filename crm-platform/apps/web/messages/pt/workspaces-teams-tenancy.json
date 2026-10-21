@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "Salvo, ainda não usado",
         "body": "Estas configurações ficam salvas na equipe, mas nada as lê ainda. Elas passam a valer com a atualização de roteamento.",
-        "strategy": "Estratégia de atribuição automática: {value}",
-        "devices": "{count, plural, one {Limitado a # dispositivo} other {Limitado a # dispositivos}}",
-        "businessHours": "Horário comercial: salvo",
-        "timezone": "Fuso horário: {value}",
-        "defaultAssignee": "Responsável padrão: {name}"
+        "devices": "{count, plural, one {Limitado a # dispositivo} other {Limitado a # dispositivos}}"
       },
       "deleteUsage": {
         "title": "O que vai mudar",

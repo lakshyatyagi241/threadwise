@@ -202,11 +202,7 @@
       "notUsed": {
         "title": "Guardado, aún sin uso",
         "body": "Estos ajustes se guardan en el equipo, pero todavía nada los lee. Empezarán a aplicarse con la actualización de enrutamiento.",
-        "strategy": "Estrategia de asignación automática: {value}",
-        "devices": "{count, plural, one {Limitado a # dispositivo} other {Limitado a # dispositivos}}",
-        "businessHours": "Horario laboral: guardado",
-        "timezone": "Zona horaria: {value}",
-        "defaultAssignee": "Responsable predeterminado: {name}"
+        "devices": "{count, plural, one {Limitado a # dispositivo} other {Limitado a # dispositivos}}"
       },
       "deleteUsage": {
         "title": "Qué cambiará",

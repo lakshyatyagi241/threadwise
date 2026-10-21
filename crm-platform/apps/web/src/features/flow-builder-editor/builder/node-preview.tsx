@@ -10,6 +10,7 @@ import {
   type FlbNodeData,
 } from '@crm/contracts';
 import { condSummary } from '../lib/contract-text';
+import { destinationOf, isHandoffNode, peopleOf } from '../lib/handoff-node';
 import { useFlb } from '../lib/msg';
 import { findTemplate } from '../lib/templates';
 import { FlowImage } from './flow-image';
@@ -403,6 +404,29 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           ? (team.members.find((m) => m.id === str(d.userId))?.name ??
             tp('agentNumber', { id: str(d.userId) }))
           : null;
+      const handoff = isHandoffNode(d);
+      const kind = destinationOf(d);
+      if (handoff && kind !== 'team') {
+        // Human handoff to one person or to the assignment rules: the card says where, not which team.
+        const person = peopleOf(ctx.teams).find((m) => m.id === str(d.userId));
+        return (
+          <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
+            <div className="flex items-center gap-2">
+              <Muted>{tp('handoffTo')}</Muted>
+              <Mono cls="truncate">
+                {kind === 'rules'
+                  ? tp('handoffRules')
+                  : (person?.name ?? (d.userId ? tp('agentNumber', { id: str(d.userId) }) : tp('pickAgent')))}
+              </Mono>
+            </div>
+            {d.message ? (
+              <div className="mt-1 truncate text-[10.5px] italic text-muted-foreground">
+                &quot;{cut(d.message, 40)}&quot;
+              </div>
+            ) : null}
+          </div>
+        );
+      }
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <div className="flex items-center gap-2">
