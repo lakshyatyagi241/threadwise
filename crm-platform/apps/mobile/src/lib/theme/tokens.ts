@@ -3,7 +3,7 @@
  * here are placeholders until the design handover (docs/mobile/handover.md); change them here and the whole app follows.
  *
  * Reading guide: `placeholder` is the hint text inside an empty field: lighter than `textMuted` so it never reads as typed text, still 4.5:1 on a field's surface; `border` is for dividers, `borderStrong` for the edge of a control (a field, a checkbox: 3:1 against the page, as
- * WCAG asks of anything a person must find to use), `brand*` colours are the deep band behind the logo on the sign-in and sign-up screens, `*Soft` colours are the
+ * WCAG asks of anything a person must find to use), `logo` is the blue of the Geta logo (sampled from the app icon) and `onLogo` what is drawn on it, used by the tab bar, `brand*` colours are the deep band behind the logo on the sign-in and sign-up screens, `*Soft` colours are the
  * quiet backgrounds of banners, badges and selected rows (always paired with the strong colour of the same name for the text on them),
  * `success` is a change for the better, a connected thing or a finished job, `instagram` and `whatsapp` are those channels' accents, `chartSent` and `chartDelivered` are two blues far enough apart in lightness to tell apart side by side (3:1 against the card).
  */
@@ -21,6 +21,8 @@ export const palette = {
     primary: '#1A56DB',
     onPrimary: '#FFFFFF',
     primarySoft: '#E3ECFC',
+    logo: '#0916C3',
+    onLogo: '#FFFFFF',
     brand: '#0B2A5C',
     onBrand: '#FFFFFF',
     onBrandMuted: '#C2D3F0',
@@ -53,6 +55,8 @@ export const palette = {
     primary: '#6C9CFF',
     onPrimary: '#06173A',
     primarySoft: '#16264A',
+    logo: '#0916C3',
+    onLogo: '#FFFFFF',
     brand: '#0A1F44',
     onBrand: '#E8EEF8',
     onBrandMuted: '#A9BEE0',

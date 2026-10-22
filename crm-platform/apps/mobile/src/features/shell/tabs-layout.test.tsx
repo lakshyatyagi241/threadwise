@@ -101,16 +101,16 @@ beforeEach(() => {
 });
 
 describe('the look of the tab bar', () => {
-  it('is the theme blue, with the words on it in the colour made for that blue', async () => {
+  it('is the blue of the Geta logo, with the words on it in the colour made for that blue', async () => {
     await renderRouter(structure, { initialUrl: '/' });
     const backgrounds: unknown[] = [];
     for (let node = screen.getByLabelText('Inbox').parent; node; node = node.parent) {
       if (typeof node.type !== 'string') continue;
       backgrounds.push(StyleSheet.flatten(node.props.style)?.backgroundColor);
     }
-    expect(backgrounds).toContain(palette.light.primary);
+    expect(backgrounds).toContain(palette.light.logo);
     const label = StyleSheet.flatten(screen.getByText('Inbox').props.style);
-    expect(label.color).toBe(palette.light.onPrimary);
+    expect(label.color).toBe(palette.light.onLogo);
   });
 
   it('draws the tab that is not open a little softer than the open one', async () => {
@@ -174,8 +174,8 @@ describe('the tab bar in the dark theme', () => {
 
   it('keeps the light theme as it was: the blue bar with white words', async () => {
     await renderRouter(structure, { initialUrl: '/' });
-    expect(barBackground()?.backgroundColor).toBe(palette.light.primary);
-    expect(colorOf('Inbox')).toBe(palette.light.onPrimary);
-    expect(colorOf('Dashboard')).toBe(palette.light.onPrimary);
+    expect(barBackground()?.backgroundColor).toBe(palette.light.logo);
+    expect(colorOf('Inbox')).toBe(palette.light.onLogo);
+    expect(colorOf('Dashboard')).toBe(palette.light.onLogo);
   });
 });

@@ -11,8 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const FADED = 0.4;
 
 /**
- * Light theme: the bar is the theme's blue (`primary`), with `onPrimary` for the icons and words on it. A tab that is not the current
- * one is drawn a little softer than the current one (0.8 keeps its text above 4.5:1 contrast on the blue), and only the current one has
+ * Light theme: the bar is the blue of the Geta logo (`logo`), with `onLogo` for the icons and words on it. A tab that is not the current
+ * one is drawn a little softer than the current one (0.8 keeps its text above 4.5:1 contrast on the logo blue), and only the current one has
  * bold words.
  *
  * Dark theme (an experiment, to see how it looks): a light bar under the dark app, the dark palette's own near-white (`text`) with its
@@ -68,8 +68,8 @@ export function TabsLayout() {
   const { t } = useTranslation();
   const { colors, scheme } = useTheme();
   const dark = scheme === 'dark';
-  const activeColor = 'onPrimary';
-  const inactiveColor = 'onPrimary';
+  const activeColor = dark ? 'onPrimary' : 'onLogo';
+  const inactiveColor = activeColor;
   const inactive = INACTIVE_LIGHT;
   const insets = useSafeAreaInsets();
   const session = useSession();
@@ -84,7 +84,7 @@ export function TabsLayout() {
         tabBarStyle: {
           height: 56 + insets.bottom,
           paddingHorizontal: 8,
-          backgroundColor: dark ? colors.text : colors.primary,
+          backgroundColor: dark ? colors.text : colors.logo,
           borderTopWidth: 0,
         },
         tabBarItemStyle: { paddingBottom: 8, gap: 3 },
