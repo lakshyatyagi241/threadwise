@@ -33,8 +33,13 @@ class Api(http.server.BaseHTTPRequestHandler):
         if self.headers.get("Authorization") != "Bearer " + TOKEN: return self._send(401, {})
         m = re.match(r"/repos/o/r/compare/(\w+)\.\.\.(\w+)$", self.path)
         if m: return self._send(200, {"commits": FIX.get("compare", [])})
+        # Like the real GitHub: the commit->pulls LIST has no merged_by; only GET /pulls/<n> (the full PR) carries it.
         m = re.match(r"/repos/o/r/commits/(\w+)/pulls$", self.path)
-        if m: return self._send(200, FIX.get("pulls", {}).get(m.group(1), []))
+        if m: return self._send(200, [{k: v for k, v in p.items() if k != "merged_by"} for p in FIX.get("pulls", {}).get(m.group(1), [])])
+        m = re.match(r"/repos/o/r/pulls/(\d+)$", self.path)
+        if m:
+            full = [p for ps in FIX.get("pulls", {}).values() for p in ps if p.get("number") == int(m.group(1))]
+            return self._send(200, full[0]) if full else self._send(404, {})
         m = re.match(r"/repos/o/r/commits/(\w+)$", self.path)
         if m: return self._send(200, FIX.get("single", {}))
         self._send(404, {})
@@ -80,7 +85,7 @@ out, _ = run("live", A, B, "88")
 check("merge commit: PR number, title, URL", '#12 "Fix the thing"' in out and "https://github.com/o/r/pull/12" in out, out)
 check("merge commit: author and merger differ", "Author: @alice" in out and "Deployed by: @bob" in out, out)
 check("live title and versions", out.startswith("✅ *Release live*") and "`bbbbbbbbb` (was `aaaaaaaaa`)" in out and "/commit/bbbbbbbbb" in out and "Took 88s" in out and "UTC" in out, out)
-check("only needed API calls (no call for branch commit)", sum("/pulls" in h[0] for h in hits) == 1, str(hits))
+check("only needed API calls (no call for branch commit)", sum(bool(re.search(r"/commits/\w+/pulls$", h[0])) for h in hits) == 1 and sum(bool(re.search(r"/pulls/\d+$", h[0])) for h in hits) == 1, str(hits))
 n = len(hits); out2, _ = run("live", A, B, "88", fresh=False)
 check("second run served from 1h cache", len(hits) == 0 and out2.split("\n")[1:4] == out.split("\n")[1:4], str(len(hits)))
 

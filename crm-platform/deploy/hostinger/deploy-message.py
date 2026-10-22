@@ -103,7 +103,9 @@ def prs_between(prev, new):
             n = p.get("number")
             if isinstance(n, int) and n not in seen:
                 seen.add(n)
-                prs.append({"n": n, "title": clean(p.get("title")), "author": who(p.get("user")), "merger": who(p.get("merged_by"))})
+                # GitHub's commit->pulls list has no merged_by; the PR's own record does. One extra read per PR (the list is already capped).
+                full = p if p.get("merged_by") else (get(f"/repos/{REPO}/pulls/{n}") or {})
+                prs.append({"n": n, "title": clean(p.get("title")), "author": who(p.get("user")), "merger": who(full.get("merged_by") or p.get("merged_by"))})
     return prs, direct
 
 
@@ -114,7 +116,7 @@ def build(ev, prev, new, secs, note):
     ver = f"Version: `{new or 'unknown'}`" + (f" (was `{prev}`)" if prev else "")
     link = f"{WEB}/commit/{new}" if sha_ok(new) else ""
     tail = []
-    if secs and str(secs).isdigit():
+    if secs and str(secs).isdigit() and int(secs) > 0:
         tail.append(f"Took {secs}s")
     tail.append(time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()))
     plain = head + [ver + (f" {link}" if link else "")]
