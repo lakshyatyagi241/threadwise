@@ -234,6 +234,27 @@
         "otherReason": "Another reason",
         "buttonsLocked": "The Confirm, Reschedule and Cancel button results belong to the Appointments upgrade tier, so they are not counted on your plan.",
         "emailNote": "Delivered comes from WhatsApp only: email has no delivery report, so an email counts as sent. Counts only; no names, numbers or messages are shown."
+      },
+      "history": {
+        "fallback": "Sent by {channel} because the first channel could not deliver it.",
+        "delivery": {
+          "delivered": "WhatsApp reported it as delivered.",
+          "failed": "WhatsApp reported that it failed.",
+          "undelivered": "WhatsApp did not deliver it in time."
+        },
+        "tried": "Channels tried, in order",
+        "attempt": {
+          "sent": "sent",
+          "skipped": "not used",
+          "held": "waiting",
+          "failed": "failed"
+        },
+        "buttons": "Replies with the buttons",
+        "button": {
+          "confirm": "Tapped Confirm",
+          "reschedule": "Tapped Reschedule",
+          "cancel": "Tapped Cancel"
+        }
       }
     }
   }

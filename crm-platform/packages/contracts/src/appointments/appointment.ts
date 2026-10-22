@@ -122,6 +122,13 @@ export const appointmentReminderAttemptSchema = z.object({
 });
 export type AppointmentReminderAttempt = z.infer<typeof appointmentReminderAttemptSchema>;
 
+/** A tap on one of the Confirm / Reschedule / Cancel buttons of a reminder that did something, and when. */
+export const appointmentReminderButtonReplySchema = z.object({
+  action: z.enum(['confirm', 'reschedule', 'cancel']),
+  at: z.string().datetime(),
+});
+export type AppointmentReminderButtonReply = z.infer<typeof appointmentReminderButtonReplySchema>;
+
 export const appointmentReminderSchema = z.object({
   kind: z.enum(['before', 'after', 'event']),
   stepKind: bookingReminderStepKindSchema.nullable().default(null),
@@ -137,6 +144,8 @@ export const appointmentReminderSchema = z.object({
   attempts: z.array(appointmentReminderAttemptSchema).default([]),
   /** What the provider reported for the message afterwards (WhatsApp only): `unknown` while nothing is known. */
   delivery: z.enum(['unknown', 'delivered', 'failed', 'undelivered']).default('unknown'),
+  /** The button taps of this message that did something (oldest first). A recorded fact of the booking, so it is listed on every plan. */
+  buttonReplies: z.array(appointmentReminderButtonReplySchema).default([]),
 });
 export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
 
