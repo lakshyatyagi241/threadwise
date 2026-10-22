@@ -34,8 +34,17 @@ const sink = new Writable({
     cb();
   },
 });
-const parsed = () => lines.map((l) => JSON.parse(l) as Record<string, any>);
-const since = (n: number) => lines.slice(n).map((l) => JSON.parse(l) as Record<string, any>);
+/** The fields of a captured log line that these assertions read. */
+interface LogLine {
+  level: string;
+  msg: string;
+  requestId?: string;
+  orgId?: number;
+  req?: { id?: string };
+  res?: unknown;
+}
+const parsed = () => lines.map((l) => JSON.parse(l) as LogLine);
+const since = (n: number) => lines.slice(n).map((l) => JSON.parse(l) as LogLine);
 
 const SECRET = 'sk_live_SUPERSECRET0123456789';
 

@@ -1,14 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { callLogStatus } from '../../../src/modules/calling-voice/call-logs.rules';
 import { seedDemoCalls } from '../../../src/modules/calling-voice/cli/demo-calls';
-import {
-  addNumber,
-  enableRecording,
-  grantConsentRow,
-  startCallPipeline,
-  type CallNumber,
-  type CallPipeline,
-} from './support';
+import { addNumber, startCallPipeline, type CallNumber, type CallPipeline } from './support';
 
 /**
  * The call log and the call analytics (TW-CALL-022 onward) against the real API, real Postgres (restricted role) and the real private
@@ -25,15 +18,6 @@ afterAll(async () => {
 let seq = 0;
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
-// The first bytes of a WebM file: an EBML header declaring the document type "webm", padded.
-const WEBM = Buffer.concat([
-  Buffer.from(
-    '1a45dfa39f4286810142f7810142f2810442f3810842820477656 26d'.replace(/ /g, '') +
-      '4287810442858102',
-    'hex',
-  ),
-  Buffer.alloc(400, 0x7f),
-]);
 
 interface CallSeed {
   direction?: 'USER_INITIATED' | 'BUSINESS_INITIATED';
@@ -159,7 +143,7 @@ describe('the list', () => {
   it('filters by status, direction, number, teammate and search text', async () => {
     const { t, number } = await setup('cfilt');
     const second = await addNumber(p, t, { phone: '+919700000001' });
-    const agent = await p.api.member(t, 'PriyaAgent', [['call.calls.use']]);
+    const agent = await p.api.member(t, 'PriyaAgent', []);
     const [contact] = await p.api.seedContacts(t, [
       { name: 'Rahul Sharma', phone: '+919811100123' },
     ]);
@@ -276,7 +260,7 @@ describe('who sees which calls', () => {
   it('needs the key; the plan feature closes only what is WhatsApp’s (BL-257), the log itself is open to every plan', async () => {
     const { t, number } = await setup('cgate');
     const id = await addCall(t, number, { durationSec: 5 });
-    const none = await p.api.member(t, 'nokey', [['call.calls.use']]);
+    const none = await p.api.member(t, 'nokey', [['call.logs.create']]);
     for (const path of ['', '/filters', '/analytics', `/${id}`]) {
       expect((await read(none.token, path)).status, path).toBe(403);
     }
@@ -295,15 +279,12 @@ describe('who sees which calls', () => {
         const r = await read(t.admin, path);
         expect(r.status, path).toBe(200);
       }
-      // What is WhatsApp's keeps the plan-locked problem: the filter by number and playing a recording.
+      // What is WhatsApp's keeps the plan-locked problem: the filter by number.
       for (const path of [`?numberId=${number.uuid}`, `/analytics?numberId=${number.uuid}`]) {
         const r = await read(t.admin, path);
         expect(r.status, path).toBe(422);
         expect(r.body.code, path).toBe('PLAN_FEATURE_LOCKED');
       }
-      const play = await p.api.as(t.admin).post(`/v2/calling/call-logs/${id}/playback`);
-      expect(play.status).toBe(422);
-      expect(play.body.code).toBe('PLAN_FEATURE_LOCKED');
       // The numbers the filter bar offers are WhatsApp's: none without the feature.
       expect((await read(t.admin, '/filters')).body.numbers).toEqual([]);
     } finally {
@@ -359,8 +340,9 @@ describe('who sees which calls', () => {
     await addCall(mine.t, mine.number, { durationSec: 7 });
     expect((await read(mine.t.admin, '')).body.total).toBe(1);
     expect((await read(mine.t.admin, `/${id}`)).status).toBe(404);
+    // No role holds call.recordings.play any more, so the playback is refused before the tenant check; the GET above is the wall.
     expect((await p.api.as(mine.t.admin).post(`/v2/calling/call-logs/${id}/playback`)).status).toBe(
-      404,
+      403,
     );
     expect((await read(mine.t.admin, `?numberId=${theirs.number.uuid}`)).body.total).toBe(0);
     expect(
@@ -449,89 +431,11 @@ describe('one call', () => {
 });
 
 describe('playing a recording', () => {
-  const play = (token: string, id: string) =>
-    p.api.as(token).post(`/v2/calling/call-logs/${id}/playback`);
-
-  async function recorded(label: string) {
-    const { t, number } = await setup(label);
-    // The real path: a call row, then the operator's own upload into the private store.
+  it('no role holds call.recordings.play any more, so even the admin is refused and nothing is audited', async () => {
+    const { t, number } = await setup('cplaygone');
     const id = await addCall(t, number, { durationSec: 40, handlerUserId: t.adminUserId });
-    await enableRecording(p, t);
-    await grantConsentRow(p, t, id);
-    const up = await p.api
-      .as(t.admin)
-      .post(`/v2/calling/calls/${id}/recording`)
-      .attach('recording', WEBM, 'call.webm');
-    expect(up.status, JSON.stringify(up.body)).toBe(200);
-    return { t, number, id };
-  }
-
-  it('gives a short-lived link that plays in ranges for that person only, and audits every play', async () => {
-    const { t, id } = await recorded('cplay');
-    const detail = await read(t.admin, `/${id}`);
-    expect(detail.body.call.hasRecording).toBe(true);
-    expect(detail.body.recording).toMatchObject({ available: true, mime: 'audio/webm' });
-
-    const before = await p.api.auditCount(t.orgId, 'wa_calls', 'read');
-    const first = await play(t.admin, id);
-    expect(first.status, JSON.stringify(first.body)).toBe(200);
-    expect(first.body.url).toMatch(/^\/v2\/media\/[A-Za-z0-9_-]{40,}$/);
-    expect(first.body.mime).toBe('audio/webm');
-    const left = new Date(first.body.expiresAt).getTime() - Date.now();
-    expect(left).toBeGreaterThan(200_000);
-    expect(left).toBeLessThanOrEqual(300_000);
-
-    const bytes = await p.api
-      .as(t.admin)
-      .get(first.body.url)
-      .buffer(true)
-      .parse((res, cb) => {
-        const chunks: Buffer[] = [];
-        res.on('data', (c: Buffer) => chunks.push(c));
-        res.on('end', () => cb(null, Buffer.concat(chunks)));
-      });
-    expect(bytes.status).toBe(200);
-    expect((bytes.body as Buffer).length).toBe(WEBM.length);
-    expect(bytes.headers['accept-ranges']).toBe('bytes');
-    const part = await p.api.as(t.admin).get(first.body.url).set('Range', 'bytes=0-9');
-    expect(part.status).toBe(206);
-    expect(part.headers['content-range']).toBe(`bytes 0-9/${WEBM.length}`);
-
-    // The link is for the person it was made for: a teammate with the same rights cannot use it, nor can another workspace.
-    const mate = await p.api.member(t, 'mate', [['call.logs.read'], ['call.recordings.play']]);
-    expect((await p.api.as(mate.token).get(first.body.url)).status).toBe(404);
-    const other = await p.api.signup('cplayother');
-    expect((await p.api.as(other.admin).get(first.body.url)).status).toBe(404);
-    expect((await p.api.http().get(first.body.url)).status).toBe(401);
-
-    await play(t.admin, id);
-    expect(await p.api.auditCount(t.orgId, 'wa_calls', 'read')).toBe(before + 2);
-  });
-
-  it('needs the playback key as well as the log key, and the call in the person’s scope', async () => {
-    const { t, id } = await recorded('cplaykey');
-    const reader = await p.api.member(t, 'readonly', [['call.logs.read']]);
-    expect((await read(reader.token, `/${id}`)).status).toBe(200);
-    const denied = await play(reader.token, id);
-    expect(denied.status).toBe(403);
-
-    const own = await p.api.member(t, 'ownplay', [
-      ['call.logs.read', 'own'],
-      ['call.recordings.play'],
-    ]);
-    expect((await play(own.token, id)).status).toBe(404); // not their call
-    const allowed = await p.api.member(t, 'allplay', [
-      ['call.logs.read'],
-      ['call.recordings.play'],
-    ]);
-    expect((await play(allowed.token, id)).status).toBe(200);
-  });
-
-  it('a call with no recording has nothing to play', async () => {
-    const { t, number } = await setup('cplaynone');
-    const id = await addCall(t, number, { durationSec: 5 });
-    const r = await play(t.admin, id);
-    expect(r.status).toBe(404);
+    const r = await p.api.as(t.admin).post(`/v2/calling/call-logs/${id}/playback`);
+    expect(r.status).toBe(403);
     expect(await p.api.auditCount(t.orgId, 'wa_calls', 'read')).toBe(0);
   });
 });
@@ -539,7 +443,7 @@ describe('playing a recording', () => {
 describe('analytics', () => {
   it('counts calls per day, the answered rate, by teammate, by hour of the week and the average handle time', async () => {
     const { t, number } = await setup('cana');
-    const agent = await p.api.member(t, 'DevAgent', [['call.calls.use']]);
+    const agent = await p.api.member(t, 'DevAgent', []);
     const today = new Date();
     const at = (daysAgo: number, hour: number) => {
       const d = new Date(
@@ -729,7 +633,6 @@ describe('the query plan on a few thousand calls', () => {
 
     const all = await explain('all');
     const own = await explain('own');
-    // eslint-disable-next-line no-console
     console.log('PLAN all\n' + all + '\nPLAN own\n' + own);
     expect(all).toContain('idx_wa_calls_org_started_at');
     expect(all).not.toMatch(/Seq Scan on wa_calls/);

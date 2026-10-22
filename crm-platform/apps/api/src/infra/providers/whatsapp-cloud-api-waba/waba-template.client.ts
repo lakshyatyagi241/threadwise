@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-api-waba.env';
 import type { WabaConnection } from './waba-admin.port';
 import { WabaHttp, type WabaAuth } from './waba-http';
+import { uploadMediaHandle } from './waba-media-upload';
 import type {
   CreateRemoteTemplate,
   CreatedRemoteTemplate,
@@ -163,54 +164,6 @@ export class WabaTemplateClient implements WabaTemplatePort {
   }
 
   async uploadHeaderMedia(conn: WabaConnection, media: MediaUpload): Promise<string> {
-    if (conn.registry) {
-      // The resumable upload and Interakt's media handle are two provider-specific flows; a registry provider declares neither, so
-      // a header example cannot be uploaded through it. Better a clear refusal than a call to the wrong host.
-      throw new Error(
-        'Uploading a template header example is not available through this WhatsApp provider. Use a header without media, or a text header.',
-      );
-    }
-    if (conn.provider === 'interakt') {
-      // One multipart call, only on Interakt's older API version.
-      const form = new FormData();
-      form.set(
-        'file',
-        new Blob([media.bytes as unknown as ArrayBuffer], { type: media.mimeType }),
-        media.fileName,
-      );
-      form.set('messaging_product', 'whatsapp');
-      form.set('type', media.mimeType);
-      const res = await this.http.call<{ h?: string }>(authOf(conn, true), {
-        method: 'POST',
-        path: `/${conn.phoneNumberId}/media_handle`,
-        form,
-        apiVersion: this.env.INTERAKT_MEDIA_API_VERSION,
-      });
-      if (!res.h) throw new Error('Interakt returned no media handle');
-      return res.h;
-    }
-
-    const appId = this.env.META_APP_ID;
-    if (!appId) throw new Error('META_APP_ID is needed to upload a header example');
-    const token = conn.accessToken ?? '';
-    const session = await this.http.graph<{ id?: string }>(null, {
-      method: 'POST',
-      path: `/${appId}/uploads`,
-      query: {
-        file_name: media.fileName,
-        file_length: media.bytes.byteLength,
-        file_type: media.mimeType,
-      },
-      headers: { authorization: `OAuth ${token}` },
-    });
-    if (!session.id) throw new Error('Meta returned no upload session');
-    const done = await this.http.graph<{ h?: string }>(null, {
-      method: 'POST',
-      path: `/${session.id}`,
-      headers: { authorization: `OAuth ${token}`, file_offset: '0' },
-      body: media.bytes,
-    });
-    if (!done.h) throw new Error('Meta returned no media handle');
-    return done.h;
+    return uploadMediaHandle(this.http, this.env, conn, media, 'a template header example');
   }
 }

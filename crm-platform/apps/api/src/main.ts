@@ -27,6 +27,7 @@ import { buildOpenApiDocument } from './common/openapi';
 import { overloadGuard } from './common/http/overload-guard';
 import { responseCompression } from './common/http/response-compression';
 import type { Env } from './config/env.schema';
+import { parseTrustProxy } from './config/trust-proxy';
 
 async function bootstrap(): Promise<void> {
   // First, so a failure while the application is still being built is reported too (TW-INFRA-018).
@@ -53,11 +54,7 @@ async function bootstrap(): Promise<void> {
   const trust = config.get('TRUST_PROXY', { infer: true });
   (app.getHttpAdapter().getInstance() as { set: (k: string, v: unknown) => void }).set(
     'trust proxy',
-    /^\d+$/.test(trust)
-      ? Number(trust)
-      : trust.includes(',')
-        ? trust.split(',').map((s) => s.trim())
-        : trust,
+    parseTrustProxy(trust),
   );
 
   // Times every response by route template, so a loop stall can be matched to the requests that were running.

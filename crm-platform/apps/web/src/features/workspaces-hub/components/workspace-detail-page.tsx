@@ -330,7 +330,6 @@ function PlanTab({
 function WalletTab({ detail }: { detail: WorkspaceHubDetail }) {
   const t = useTranslations('workspaces-hub.detail.walletTab');
   const locale = useLocale();
-  const timeZone = useTimeZone();
   const toast = useToast();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);

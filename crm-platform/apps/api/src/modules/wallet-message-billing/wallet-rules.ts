@@ -1,7 +1,9 @@
 import {
   priceFromMargin,
   type MarginSource,
+  type MessageContext,
   type PricingMode,
+  type StatementDetailColumn,
   WALLET_CATEGORIES,
   normalizeWalletCategory,
   normalizeWalletCountry,
@@ -438,20 +440,26 @@ export const TYPE_LABELS: Record<string, string> = {
   admin_adjust: 'Adjustment',
 };
 
-export const CSV_HEADER = [
-  'Date',
-  'Type',
-  'Description',
-  'Channel',
-  'Recipient',
-  'Template',
-  'Country',
-  'Category',
-  'Engine',
-  'Money in',
-  'Money out',
-  'Balance after',
-] as const;
+/** The CSV header of each optional statement column (TW-WALLET-022). */
+export const CSV_DETAIL_HEADER: Record<StatementDetailColumn, string> = {
+  channel: 'Channel',
+  recipient: 'Recipient',
+  template: 'Template',
+  country: 'Country',
+  category: 'Category',
+  engine: 'Engine',
+};
+
+/** The CSV cell of each optional statement column for one row. Text is formula-safe; codes are written as they are. */
+export const CSV_DETAIL_CELL: Record<StatementDetailColumn, (c: MessageContext | null) => string> =
+  {
+    channel: (c) => csvSafe([c?.channel, c?.campaignName].filter(Boolean).join(' · ')),
+    recipient: (c) => csvSafe(c?.recipient),
+    template: (c) => csvSafe(c?.template),
+    country: (c) => csvSafe(c?.country),
+    category: (c) => csvSafe(c?.category),
+    engine: (c) => csvSafe(c?.engine),
+  };
 
 /** The most rows one export carries: Reference had no cap and no rate limit (TW-WALLET-022 rule 5). */
 export const CSV_MAX_ROWS = 50_000;

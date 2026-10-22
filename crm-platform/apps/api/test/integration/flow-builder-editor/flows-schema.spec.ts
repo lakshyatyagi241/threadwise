@@ -87,11 +87,7 @@ describe('flows: schema, constraints and isolation', () => {
 
   describe('row-level security', () => {
     it('RLS is enabled and forced with a tenant policy on every tenant flows table, and flow_templates is read-all, operator-write', async () => {
-      for (const table of [
-        'flows',
-        'flow_subscribers',
-        'flow_retry_logs',
-      ]) {
+      for (const table of ['flows', 'flow_subscribers', 'flow_retry_logs']) {
         const res = await owner.query(
           `SELECT relrowsecurity, relforcerowsecurity,
                   (SELECT count(*) FROM pg_policies p WHERE p.tablename = $1 AND p.policyname = 'tenant_isolation')::int AS policies
@@ -335,6 +331,7 @@ describe('flows: schema, constraints and isolation', () => {
         `SELECT key FROM permission_defs WHERE key LIKE 'flb.%' ORDER BY key`,
       );
       expect(keys.rows.map((r) => r.key)).toEqual([
+        'flb.ai_studio.read',
         'flb.flows.create',
         'flb.flows.delete',
         'flb.flows.publish',

@@ -60,6 +60,8 @@
       "remove_branding": "ব্র্যান্ডিং সরান",
       "sales_pipeline": "সেলস পাইপলাইন",
       "appointment_booking": "অ্যাপয়েন্টমেন্ট বুকিং",
+      "appointment_confirm_buttons": "রিমাইন্ডারের বোতাম (নিশ্চিত / পুনঃনির্ধারণ / বাতিল)",
+      "appointment_rebook_steps": "পুনর্বুকিং (রিকল) ধাপ",
       "chatbot_widgets": "চ্যাটবট উইজেট",
       "wa_storefront": "WhatsApp ক্যাটালগ",
       "inbox_sla": "SLA নীতি",

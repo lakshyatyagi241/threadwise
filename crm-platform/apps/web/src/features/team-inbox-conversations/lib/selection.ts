@@ -54,6 +54,14 @@ export function allInViewSelected(
   return rows.length > 0 && rows.every((r) => selection.has(r.id));
 }
 
+/** Select all in view, or clear the selection when every row in view is already picked. */
+export function toggleAllInView(
+  rows: ReadonlyArray<{ id: string }>,
+  selection: Selection,
+): Selection {
+  return allInViewSelected(rows, selection) ? EMPTY_SELECTION : selectAllInView(rows);
+}
+
 /** Ids of the selection that are still in the list (a row that left the view, resolved out of it for example, is no longer selected). */
 export function pruneSelection(
   selection: Selection,

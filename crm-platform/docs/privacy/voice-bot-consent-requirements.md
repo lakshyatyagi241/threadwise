@@ -91,6 +91,6 @@ ConsentGate.check({ subject, channel: 'voice', purpose: 'marketing_messaging',  
 - [ ] Spoken and DTMF opt-out work and write ledger events.
 - [ ] Calling windows, DNC and STOP enforced by the gate.
 - [ ] PCI pause tested.
-- [ ] Retention sweep and erasure handlers registered and tested. (Recordings: done, `test/e2e/calling-voice/call-recording-consent.e2e.spec.ts`; transcripts: none stored yet.)
+- [ ] Retention sweep and erasure handlers registered and tested. (Recordings: done, `test/e2e/calling-voice/call-recording-consent.e2e.spec.ts`, deleted with WhatsApp calling (migration `20270324090000`); transcripts: none stored yet.)
 - [ ] Vendors in the sub-processor register with DPA status.
 - [ ] Counsel has reviewed scripts and regional rules.

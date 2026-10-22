@@ -164,12 +164,16 @@
         "in": "收入",
         "out": "支出",
         "balance": "余额",
-        "none": "无"
+        "none": "无",
+        "channel": "频道",
+        "recipient": "收件人",
+        "template": "模板",
+        "country": "国家",
+        "category": "类别",
+        "engine": "发动机"
       },
       "context": {
-        "reason": "原因",
-        "to": "收件人",
-        "template": "模板"
+        "reason": "原因"
       },
       "channels": {
         "campaign": "营销活动",

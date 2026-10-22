@@ -10,8 +10,11 @@ import {
   Patch,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   connectEmbeddedInputSchema,
   connectManualInputSchema,
@@ -20,8 +23,10 @@ import {
   verifyCodeInputSchema,
   setTokenInputSchema,
   updateBusinessProfileInputSchema,
+  updateComplianceInfoInputSchema,
   updateConnectionInputSchema,
   verifyTokenInputSchema,
+  WABA_LOGO_MAX_BYTES,
   type ConnectEmbeddedInput,
   type ConnectManualInput,
   type RegisterNumberInput,
@@ -29,6 +34,7 @@ import {
   type VerifyCodeInput,
   type SetTokenInput,
   type UpdateBusinessProfileInput,
+  type UpdateComplianceInfoInput,
   type UpdateConnectionInput,
   type VerifyTokenInput,
 } from '@crm/contracts';
@@ -196,6 +202,36 @@ export class WabaConnectionsController {
     @Body(zodPipe(updateBusinessProfileInputSchema)) body: UpdateBusinessProfileInput,
   ) {
     return this.connections.updateProfile(id, body);
+  }
+
+  @Post('numbers/:id/profile/logo')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('waba.numbers.manage')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: WABA_LOGO_MAX_BYTES, files: 1 } }))
+  @ApiOperation({ summary: 'Upload the profile picture to Meta and set it on the number' })
+  uploadLogo(
+    @Param('id', ParseUUIDPipe) id: string,
+    @UploadedFile() file: { originalname: string; buffer: Buffer } | undefined,
+  ) {
+    return this.connections.uploadLogo(id, file);
+  }
+
+  @Get('numbers/:id/compliance')
+  @RequirePermission('waba.numbers.read')
+  getCompliance(@Param('id', ParseUUIDPipe) id: string) {
+    return this.connections.getCompliance(id);
+  }
+
+  @Put('numbers/:id/compliance')
+  @Idempotent()
+  @RequirePermission('waba.numbers.manage')
+  updateCompliance(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(updateComplianceInfoInputSchema)) body: UpdateComplianceInfoInput,
+  ) {
+    return this.connections.updateCompliance(id, body);
   }
 
   @Post('numbers/:id/disconnect')

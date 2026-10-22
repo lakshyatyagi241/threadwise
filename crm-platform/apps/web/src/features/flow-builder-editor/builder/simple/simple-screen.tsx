@@ -2,7 +2,15 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
@@ -50,6 +58,7 @@ import {
   duplicateGroup,
   stageIn,
   stepSummary,
+  stepText,
   toGraph,
   toSimple,
   unreachable,
@@ -71,7 +80,7 @@ import {
   type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
-import { StepPreview } from './step-preview';
+import { StepPreview, StepText } from './step-preview';
 import { TemplatePreview } from '../inspector/forms-core/previews';
 import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
@@ -437,10 +446,13 @@ function Editor({
   const testGraph = useMemo(() => toGraph(doc), [doc]);
 
   // --- save / publish -------------------------------------------------------------------------------------------------
+  // A queued save reads the latest doc and name when it runs, so the refs follow each commit (set in a layout effect, not in render).
   const docRef = useRef(doc);
-  docRef.current = doc;
   const nameRef = useRef(name);
-  nameRef.current = name;
+  useLayoutEffect(() => {
+    docRef.current = doc;
+    nameRef.current = name;
+  }, [doc, name]);
   const payload = () => {
     const g = toGraph(docRef.current);
     return {
@@ -1105,7 +1117,7 @@ function Editor({
                                 })}
                           </p>
                         ) : null}
-                        {s.type === 'buttons' || s.type === 'list' ? (
+                        {OPTION_STEPS.has(s.type) ? (
                           <>
                             <AddMenu
                               channel={channel}
@@ -1378,14 +1390,16 @@ function AddMenu({
     setQ('');
     modal?.onDismiss();
   };
+  // An effect event always runs the latest close, so the listeners below do not need it in their dependencies.
+  const closeFromPage = useEffectEvent(() => close());
   // The menu closes when the page outside it is clicked, or on Escape (a click inside it, on a step or the + button, is handled there).
   useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (!box.current?.contains(e.target as Node)) close();
+      if (!box.current?.contains(e.target as Node)) closeFromPage();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') closeFromPage();
     };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
@@ -1603,6 +1617,7 @@ function StepCard(p: {
   const property =
     s.data.saveProperty === true && str(s.data.propertyKey).trim() ? str(s.data.propertyKey) : '';
   const bodyText = stepSummary(s, tf);
+  const text = stepText(s);
   const tools = () => (
     <>
       {p.active ? (
@@ -1711,9 +1726,7 @@ function StepCard(p: {
               // A closed template step still shows the template as the customer gets it, not just its name.
               <TemplatePreview d={s.data} templates={p.ctx.templates} />
             ) : (
-              <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
-                {bodyText || t('empty')}
-              </p>
+              <StepText text={text} fallback={bodyText || t('empty')} />
             )}
             {exits.length > 0 ? (
               <div className="mt-3 space-y-2 rounded-lg bg-muted/60 p-3">

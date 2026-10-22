@@ -574,6 +574,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Sales pipeline",
             "appointment_booking": "Appointments",
+            "appointment_confirm_buttons": "Reminder buttons",
+            "appointment_rebook_steps": "Rebook steps",
             "chatbot_widgets": "Chatbot widgets",
             "wa_storefront": "WhatsApp catalog",
             "inbox_sla": "Inbox SLA",

@@ -60,6 +60,8 @@
       "remove_branding": "Remove branding",
       "sales_pipeline": "Sales pipeline",
       "appointment_booking": "Appointment booking",
+      "appointment_confirm_buttons": "Reminder buttons (Confirm / Reschedule / Cancel)",
+      "appointment_rebook_steps": "Rebook (recall) steps",
       "chatbot_widgets": "Chatbot widgets",
       "wa_storefront": "WhatsApp catalog",
       "inbox_sla": "SLA policies",

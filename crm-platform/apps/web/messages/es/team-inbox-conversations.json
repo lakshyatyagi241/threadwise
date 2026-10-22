@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Volver a la bandeja",
-        "title": "Etiquetas de conversación",
+        "title": "Etiquetas",
         "intro": "Las etiquetas de conversación marcan un hilo (facturación, reembolso, urgente) para que tu equipo pueda ordenar y filtrar la bandeja. Salen de la misma biblioteca de etiquetas que las etiquetas de contacto, que describen a la persona.",
         "newTitle": "Nueva etiqueta",
         "editTitle": "Editar etiqueta",

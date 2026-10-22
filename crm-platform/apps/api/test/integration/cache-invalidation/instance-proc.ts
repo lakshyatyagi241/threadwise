@@ -10,7 +10,8 @@ const inst: Instance = buildInstance(
   process.env.CI66_NAME ?? 'child',
 );
 
-const ops: Record<string, (...a: any[]) => Promise<unknown>> = {
+/** Each op keeps the parameter types of its own signature; `never[]` lets them share one table, and `handle` calls them with the IPC args as unknown. */
+const ops: Record<string, (...a: never[]) => Promise<unknown>> = {
   'epoch.current': () => inst.epoch.current(),
   'epoch.bump': (by: number) => inst.epoch.bump(by),
   'settings.get': (key: string) => inst.settings.get(key),
@@ -36,7 +37,7 @@ const ops: Record<string, (...a: any[]) => Promise<unknown>> = {
 process.on('message', (m: { id: number; op: string; args?: unknown[] }) => void handle(m));
 async function handle(m: { id: number; op: string; args?: unknown[] }): Promise<void> {
   try {
-    const fn = ops[m.op];
+    const fn = ops[m.op] as ((...a: unknown[]) => Promise<unknown>) | undefined;
     if (!fn) throw new Error(`unknown op ${m.op}`);
     const value = await fn(...(m.args ?? []));
     process.send!({ id: m.id, ok: true, value });

@@ -97,7 +97,7 @@ function LicenceCard({ data }: { data: SystemStatusResponse }) {
 
   const when = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    [locale, timeZone],
   );
 
   return (
@@ -187,7 +187,7 @@ export function SystemView() {
   });
   const when = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'medium' }),
-    [locale],
+    [locale, timeZone],
   );
   const stamp = (iso: string | null) => (iso ? when.format(new Date(iso)) : t('release.none'));
   const data = q.data;

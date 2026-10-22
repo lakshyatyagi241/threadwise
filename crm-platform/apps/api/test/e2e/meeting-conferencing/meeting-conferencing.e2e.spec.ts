@@ -46,9 +46,10 @@ const KEYS = [
   'GOOGLE_RETRY_BASE_MS',
   'GOOGLE_BUSY_CACHE_SECONDS',
 ];
-const STATE_KEY = deriveStateKey(Buffer.alloc(32, 7).toString('base64'));
+let STATE_KEY: Buffer;
 
 beforeAll(async () => {
+  STATE_KEY = await deriveStateKey(Buffer.alloc(32, 7).toString('base64'));
   fakeGoogle = await FakeGoogle.start();
   for (const k of [...KEYS, ...Object.keys(fakeGoogle.env())]) saved[k] = process.env[k];
   Object.assign(process.env, fakeGoogle.env(), {

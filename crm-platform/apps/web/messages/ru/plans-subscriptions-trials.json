@@ -60,6 +60,8 @@
       "remove_branding": "Убрать брендинг",
       "sales_pipeline": "Воронка продаж",
       "appointment_booking": "Онлайн-запись",
+      "appointment_confirm_buttons": "Кнопки напоминания («Подтвердить», «Перенести», «Отменить»)",
+      "appointment_rebook_steps": "Шаги повторной записи (реактивация)",
       "chatbot_widgets": "Виджеты чат-бота",
       "wa_storefront": "Каталог WhatsApp",
       "inbox_sla": "Политики SLA",

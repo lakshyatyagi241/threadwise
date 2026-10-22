@@ -60,6 +60,8 @@
       "remove_branding": "ब्रांडिंग हटाएँ",
       "sales_pipeline": "बिक्री पाइपलाइन",
       "appointment_booking": "अपॉइंटमेंट बुकिंग",
+      "appointment_confirm_buttons": "रिमाइंडर बटन (पुष्टि / पुनर्निर्धारण / रद्द)",
+      "appointment_rebook_steps": "दोबारा बुकिंग (रीकॉल) चरण",
       "chatbot_widgets": "चैटबॉट विजेट",
       "wa_storefront": "WhatsApp कैटलॉग",
       "inbox_sla": "SLA नीतियाँ",
