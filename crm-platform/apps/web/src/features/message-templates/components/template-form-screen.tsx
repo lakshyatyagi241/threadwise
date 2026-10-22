@@ -220,7 +220,7 @@ export function TemplateFormScreen({
 function copyState(d: TemplateDetail): FormState {
   return {
     ...stateFromDetail(d),
-    name: `${d.name}_copy`.slice(0, 512),
+    name: `${d.name.slice(0, 512 - '_copy'.length)}_copy`,
     headerSampleUrl: '',
     headerPreviewUrl: '',
   };

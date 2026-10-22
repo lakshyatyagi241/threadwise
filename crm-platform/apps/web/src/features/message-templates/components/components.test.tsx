@@ -315,6 +315,15 @@ describe('library card', () => {
     expect(out).toContain('href="/templates/22222222-2222-4222-8222-222222222222/edit"');
   });
 
+  it('offers Duplicate on an approved template only, and it opens a copy', () => {
+    const copy = 'href="/templates/new?from=22222222-2222-4222-8222-222222222222"';
+    expect(card(summary())).toContain(copy);
+    expect(card(summary())).toContain('aria-label="Duplicate sample_purchase_feedback"');
+    expect(card(summary(), { mayEdit: false })).not.toContain(copy);
+    expect(card(summary({ status: 'pending' }))).not.toContain(copy);
+    expect(card(summary({ status: 'paused' }))).not.toContain(copy);
+  });
+
   it('follows permissions and what the status allows', () => {
     expect(card(summary(), { mayEdit: false })).not.toContain('Edit template');
     expect(card(summary(), { mayDelete: false })).not.toContain('Delete sample');

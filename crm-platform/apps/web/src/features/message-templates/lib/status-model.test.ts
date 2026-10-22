@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { tplStatusSchema } from '@crm/contracts';
 import {
   STATUSES,
+  canDuplicate,
   canEdit,
   isLive,
   statusGroupOf,
@@ -55,6 +56,17 @@ describe('status model', () => {
     expect(isLive('paused', 'M1')).toBe(true);
     expect(isLive('approved', null)).toBe(false);
     expect(isLive('rejected', 'M1')).toBe(false);
+  });
+
+  it('duplicates an approved template, and only one the API can build', () => {
+    expect(canDuplicate('approved')).toBe(true);
+    expect(canDuplicate('approved', 'media')).toBe(true);
+    expect(canDuplicate('approved', 'carousel')).toBe(false);
+    expect(
+      ['draft', 'pending', 'rejected', 'paused', 'disabled'].some((st) =>
+        canDuplicate(st as never),
+      ),
+    ).toBe(false);
   });
 
   it("groups statuses the way the library's tabs count them", () => {
