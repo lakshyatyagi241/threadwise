@@ -167,6 +167,8 @@ x-web-slot: &web-slot
 x-web-env: &web-env
   NODE_ENV: production
   TZ: UTC
+  # The traced server binds to $HOSTNAME, which Docker sets to the container id unless it is given here; the healthcheck calls 127.0.0.1.
+  HOSTNAME: 0.0.0.0
   NODE_OPTIONS: --max-old-space-size=512
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   REALTIME_URL: https://${DOMAIN}/realtime

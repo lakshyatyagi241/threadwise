@@ -1,5 +1,6 @@
 import { withSentryConfig } from '@sentry/nextjs/config';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { resolve } from 'node:path';
 import type { NextConfig } from 'next';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
@@ -28,6 +29,18 @@ const NO_STORE_PAGES = [
 ];
 
 const nextConfig: NextConfig = {
+  // The production image runs the traced server (`.next/standalone`) instead of the whole repo plus node_modules: the image went
+  // from about 3 GB to a few hundred MB, which is what every release ships over SSH. The trace root is the monorepo root so the
+  // workspace packages (@crm/contracts, @crm/ui, ...) are traced too.
+  output: 'standalone',
+  outputFileTracingRoot: resolve(__dirname, '../..'),
+  // Sentry registers a vendored hook by URL at start-up, which the file trace cannot see; without it the traced server logs
+  // "Failed to register diagnostics-channel injection hooks" and its channel-based integrations record no spans.
+  outputFileTracingIncludes: {
+    '/*': [
+      '../../node_modules/.pnpm/@sentry+server-runtime-injection@*/node_modules/@sentry/server-runtime-injection/build/**/*',
+    ],
+  },
   transpilePackages: ['@crm/ui'],
   // Dev only: lets HMR and hydration work when the app is opened by IP instead of `localhost`.
   allowedDevOrigins: ['127.0.0.1', '*.localhost'],
