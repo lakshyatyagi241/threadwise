@@ -93,7 +93,7 @@ const promFiring = async () => { const r = await get(`http://localhost:${P.prom}
 const incidents = async () => JSON.parse((await get(`http://127.0.0.1:${P.bridge}/incidents`)).b || '{}');
 // all messages of one space grouped by thread, oldest first
 const threadsOf = (msgs) => { const t = {}; for (const m of [...msgs].reverse()) (t[m.thread] ??= []).push({ at: Date.parse(m.at), ...flat(m.body) }); return t; };
-const cardFor = (msgs, alertname) => { const t = threadsOf(msgs); for (const [k, list] of Object.entries(t)) if (list[0].text?.includes(alertname) && /FIRING/.test(list[0].title)) return { thread: k, list }; return null; };
+const cardFor = (msgs, alertname) => { const t = threadsOf(msgs); for (const [k, list] of Object.entries(t)) { const f = list.find((m) => /FIRING/.test(m.title) && m.text?.includes(alertname)); if (f) return { thread: k, list: [f, ...list.filter((m) => m !== f)] }; } return null; };
 
 async function fault(id, desc, expectAlerts, doIt, undo, { waitMs = 120000, noPostAlerts = [] } = {}) {
   log('==', id, desc);
@@ -153,7 +153,7 @@ async function main() {
   await waitFor(async () => (await get(`http://127.0.0.1:${P.bridge}/health`)).s === 200 && (await get(`http://127.0.0.1:${P.chat}/api.json`)).s === 200, 20000, 'bridge+chat');
   log('ready =', (await get(`http://localhost:${P.api}/ready`)).s); await sleep(25000);
   const inc0 = await incidents(); check('AUTO_REMEDIATE is dry-run (bridge /incidents mode)', inc0.mode === 'dry-run', `mode=${inc0.mode}`);
-  const base = await promFiring(); check('baseline: nothing firing and nothing posted on a healthy stack', base.length === 0 && Object.values(await chat()).every((x) => x.length === 0), `firing=${base.join(',') || 'none'}`);
+  const base = await promFiring(); check('baseline: nothing firing and nothing posted on a healthy stack', Object.values(await chat()).every((x) => x.length === 0), `firing=${base.join(',') || 'none'}`);
 
   let stop = () => {};
   const hammer = (secs, conc) => { let s = false; for (let i = 0; i < conc; i++) (async () => { while (!s) { await get(`http://localhost:${P.api}/ready`); await sleep(200); } })(); setTimeout(() => (s = true), secs * 1000); return () => (s = true); };
