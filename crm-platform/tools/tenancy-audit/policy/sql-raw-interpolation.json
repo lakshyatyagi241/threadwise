@@ -49,6 +49,11 @@
     "reason": "statusPredicate() returns one of a fixed set of predicates keyed by a validated status enum",
     "reviewedOn": "2026-10-11"
   },
+  "modules/flow-runtime-engine/runtime/live-graph.ts": {
+    "status": "reviewed",
+    "reason": "alias is typed 'f' | '' and every caller passes 'f' or nothing; the interpolated parts are the fixed column names of the flows table",
+    "reviewedOn": "2026-10-22"
+  },
   "modules/marketplace/browse.repository.ts": {
     "status": "reviewed",
     "reason": "sort expressions come from the SORTS table keyed by a validated enum; the pricing column list is a constant",

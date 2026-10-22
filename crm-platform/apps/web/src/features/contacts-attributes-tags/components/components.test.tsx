@@ -397,9 +397,11 @@ describe('ContactsTable', () => {
         {...handlers()}
       />,
     );
-    for (const short of ['Phone', 'Email', 'Stage', 'WhatsApp', 'Owner', 'Created']) {
+    for (const short of ['Phone', 'Email', 'Stage', 'WhatsApp', 'Owner']) {
       expect(out, short).toContain(`<span class="truncate">${short}</span>`);
     }
+    // Created On fits its column, so its heading is the same name as the picker's and the tooltip's
+    expect(out).toContain('<span class="truncate">Created On</span>');
     expect(out).not.toContain('<span class="truncate">Phone Number</span>');
     expect(out).not.toContain('<span class="truncate">Lifecycle Stage</span>');
     // the full label is still one hover away
