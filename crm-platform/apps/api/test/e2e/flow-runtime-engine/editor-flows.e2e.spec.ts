@@ -117,12 +117,13 @@ async function saveFlow(
   trig.data = { ...trig.data, kind: 'keyword', keywords: keyword ?? 'never-typed-' + name };
   const created = await p.api.as(t.admin).post('/v2/flows').send({ name, graph: g });
   expect(created.status, JSON.stringify(created.body)).toBe(201);
-  const published = await p.api.as(t.admin).post(`/v2/flows/${created.body.id}/publish`);
-  expect(published.status, JSON.stringify(published.body)).toBe(200);
+  // The engine is stamped on the draft before Publish: a live flow runs the engine it was published with.
   const row = await p.h.owner.query(
     `UPDATE flows SET provider = 'simulator' WHERE org_id = $1 AND uuid = $2 RETURNING id`,
     [t.orgId, created.body.id],
   );
+  const published = await p.api.as(t.admin).post(`/v2/flows/${created.body.id}/publish`);
+  expect(published.status, JSON.stringify(published.body)).toBe(200);
   return { uuid: String(created.body.id), id: Number(row.rows[0].id) };
 }
 
