@@ -809,6 +809,7 @@
         "onlyStatus": "Alleen berichten met status {status}",
         "requestedAt": "Aangevraagd {date}",
         "lines": "{count, plural, one {# regel} other {# regels}}",
+        "noLines": "Geen gebeurtenissen in deze periode",
         "until": "Beschikbaar tot {date}",
         "download": "Downloaden",
         "status": {

@@ -809,6 +809,7 @@
         "onlyStatus": "केवल {status} संदेश",
         "requestedAt": "अनुरोध की तारीख {date}",
         "lines": "{count, plural, one {# पंक्ति} other {# पंक्तियाँ}}",
+        "noLines": "इस अवधि में कोई घटना नहीं है",
         "until": "{date} तक उपलब्ध",
         "download": "डाउनलोड करें",
         "status": {

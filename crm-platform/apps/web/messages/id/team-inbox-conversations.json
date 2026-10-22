@@ -809,6 +809,7 @@
         "onlyStatus": "Hanya pesan {status}",
         "requestedAt": "Diminta {date}",
         "lines": "{count, plural, other {# baris}}",
+        "noLines": "Tidak ada peristiwa pada rentang ini",
         "until": "Tersedia hingga {date}",
         "download": "Unduh",
         "status": {

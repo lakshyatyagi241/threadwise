@@ -809,6 +809,7 @@
         "onlyStatus": "仅限{status}的消息",
         "requestedAt": "发起于 {date}",
         "lines": "{count, plural, other {# 行}}",
+        "noLines": "该时间段内没有事件",
         "until": "可用至 {date}",
         "download": "下载",
         "status": {

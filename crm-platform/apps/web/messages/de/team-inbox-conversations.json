@@ -809,6 +809,7 @@
         "onlyStatus": "Nur Nachrichten mit Status {status}",
         "requestedAt": "Angefordert {date}",
         "lines": "{count, plural, one {# Zeile} other {# Zeilen}}",
+        "noLines": "Keine Ereignisse in diesem Zeitraum",
         "until": "Verfügbar bis {date}",
         "download": "Herunterladen",
         "status": {
