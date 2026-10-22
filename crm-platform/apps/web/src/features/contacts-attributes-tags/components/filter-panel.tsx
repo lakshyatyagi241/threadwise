@@ -87,6 +87,8 @@ export interface FilterPanelProps {
   conditionCount: number;
   /** Opens the panel on a section from outside; each new `nonce` opens it again. */
   request?: { section: FilterSection; nonce: number } | null;
+  /** Opens the condition builder on one field from outside (a column header's "Filter" on name, phone or email). */
+  fieldRequest?: { field: string; nonce: number } | null;
 }
 
 const row =
@@ -133,6 +135,14 @@ export function FilterPanel(p: FilterPanelProps) {
     setView(p.request.section);
     setOpen(true);
   }, [p.request]);
+
+  const seenField = useRef(0);
+  useEffect(() => {
+    if (!p.fieldRequest || p.fieldRequest.nonce === seenField.current) return;
+    seenField.current = p.fieldRequest.nonce;
+    setOpen(false);
+    setBuilder(true);
+  }, [p.fieldRequest]);
 
   const f = p.filters;
   // Suggestions use this workspace's own first tag and stage, so they read like something the person would really ask.
@@ -200,9 +210,7 @@ export function FilterPanel(p: FilterPanelProps) {
             ? t('myContacts')
             : (p.owners.find((o) => o.id === owners[0])?.fullName ?? t('ownerFormer'));
   const teamName =
-    f.team === ''
-      ? undefined
-      : (p.teams.find((x) => x.id === f.team)?.name ?? t('teamFormer'));
+    f.team === '' ? undefined : (p.teams.find((x) => x.id === f.team)?.name ?? t('teamFormer'));
   const stageName = p.stages.find((s) => s.value === f.lifecycleStage)?.label;
   const statusName = p.statuses.find((s) => s.value === f.status)?.label;
   const minorName = f.minor === 'yes' ? t('minorYes') : f.minor === 'no' ? t('minorNo') : undefined;
@@ -622,6 +630,7 @@ export function FilterPanel(p: FilterPanelProps) {
         open={builder}
         onOpenChange={setBuilder}
         hideTrigger
+        start={p.fieldRequest}
       />
     </div>
   );
