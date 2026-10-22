@@ -247,23 +247,7 @@
         "title": "اکثر پوچھے جانے والے سوالات"
       },
       "addons": {
-        "title": "ایڈ آنز",
-        "owned": "آپ کی ملکیت کے ایڈ آنز",
-        "oneTime": "ایک بار",
-        "buy": "ایڈ آن خریدیں",
-        "buyAgain": "دوبارہ خریدیں",
-        "active": "فعال",
-        "included": "آپ کے پلان میں شامل",
-        "includedOwned": "یہ ایڈ آن آپ کے پاس بھی ہے۔ آپ کے پلان میں اب یہ شامل ہے، اس لیے آپ اسے منسوخ کر سکتے ہیں۔ کوئی رقم خود بخود واپس نہیں ہوتی۔",
-        "includedEnds": "آپ کے پلان میں شامل۔ آپ کا ایڈ آن {date} کو ختم ہوگا اور اس کی تجدید نہیں ہوگی۔",
-        "unlimitedBullet": "غیر محدود {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ دن} other {/ {count} دن}}",
-          "weeks": "{count, plural, one {/ ہفتہ} other {/ {count} ہفتے}}",
-          "months": "{count, plural, one {/ مہینہ} other {/ {count} مہینے}}",
-          "years": "{count, plural, one {/ سال} other {/ {count} سال}}"
-        }
+        "title": "ایڈ آنز"
       },
       "renewal": {
         "renewsOn": "آپ کا پلان {date} کو خودکار طور پر تجدید ہوگا۔",

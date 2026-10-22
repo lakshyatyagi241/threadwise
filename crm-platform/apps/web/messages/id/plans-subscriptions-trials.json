@@ -247,23 +247,7 @@
         "title": "Pertanyaan yang sering diajukan"
       },
       "addons": {
-        "title": "Add-on",
-        "owned": "Add-on yang Anda miliki",
-        "oneTime": "sekali bayar",
-        "buy": "Beli add-on",
-        "buyAgain": "Beli lagi",
-        "active": "Aktif",
-        "included": "Termasuk dalam paket Anda",
-        "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
-        "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
-        "unlimitedBullet": "{label} tanpa batas",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} hari}}",
-          "weeks": "{count, plural, other {/ {count} minggu}}",
-          "months": "{count, plural, other {/ {count} bulan}}",
-          "years": "{count, plural, other {/ {count} tahun}}"
-        }
+        "title": "Add-on"
       },
       "renewal": {
         "renewsOn": "Paket Anda diperpanjang otomatis pada {date}.",

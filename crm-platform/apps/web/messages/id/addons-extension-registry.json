@@ -124,7 +124,8 @@
           "billingMode": "Penagihan",
           "sortOrder": "Urutan",
           "isActive": "Aktif",
-          "isLifetime": "Seumur hidup (sekali bayar)"
+          "isLifetime": "Seumur hidup (sekali bayar)",
+          "period": "Periode penagihan"
         },
         "modes": {
           "one_time": "Sekali bayar (beli lagi setelah berakhir)",
@@ -144,8 +145,18 @@
           "billingDuration": "Masukkan bilangan bulat 1 atau lebih.",
           "sortOrder": "Masukkan bilangan bulat.",
           "limits": "Batas berupa bilangan bulat, atau -1 untuk tanpa batas.",
-          "form": "Periksa kolom yang disorot."
-        }
+          "form": "Periksa kolom yang disorot.",
+          "amountPositive": "Add-on adalah langganan bulanan atau tahunan, jadi harga harus di atas nol."
+        },
+        "legacy": {
+          "title": "Paket lama",
+          "body": "Paket ini dibuat sebelum add-on menjadi langganan. Paket ini tetap dijual persis seperti sebelumnya (penagihannya ditampilkan tetapi tidak dapat diubah), dan ruang kerja yang memilikinya tidak terpengaruh. Anda masih dapat mengubah nama, harga, fitur, dan batasnya, atau menghentikan penjualannya. Paket baru berupa langganan bulanan atau tahunan."
+        },
+        "periods": {
+          "months": "Langganan bulanan",
+          "years": "Langganan tahunan"
+        },
+        "periodHint": "Add-on adalah langganan. Ruang kerja pada gateway online diperpanjang otomatis; dengan transfer bank atau pembayaran offline, mereka membayar lagi saat periode berakhir."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Add-on",
       "description": "Paket fitur tambahan yang Anda beli di luar langganan.",
-      "needPlanTitle": "Add-on membutuhkan paket aktif",
-      "needPlanBody": "Add-on adalah paket fitur tambahan yang Anda beli di luar langganan. Pilih paket terlebih dahulu, lalu kembali ke sini untuk menambah fitur.",
-      "viewPlans": "Lihat paket",
-      "noneTitle": "Tidak ada add-on tersedia",
-      "noneBody": "Saat ini tidak ada add-on yang ditawarkan. Periksa lagi nanti.",
-      "ownedTitle": "Add-on Anda",
-      "ownedBody": "Paket aktif yang digabungkan ke paket Anda saat ini.",
-      "ends": "Berakhir {date}",
-      "lifetime": "Seumur hidup",
-      "autoRenews": "Perpanjang otomatis",
       "renewal": {
         "cancel": "Batalkan perpanjangan",
         "confirmTitle": "Batalkan perpanjangan?",
@@ -277,37 +278,63 @@
         "forbidden": "Anda tidak memiliki izin untuk mengubah paket.",
         "none": "Tidak ada langganan aktif yang dapat dibatalkan.",
         "failed": "Kami tidak dapat membatalkan perpanjangan. Silakan coba lagi."
-      },
-      "active": "Aktif",
-      "included": "Termasuk dalam paket Anda",
-      "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
-      "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-on",
-      "catalogBody": "Buka fitur tambahan di atas paket Anda saat ini. Tidak perlu mengganti paket.",
-      "count": "{count, plural, other {# add-on}}",
-      "free": "Gratis",
-      "lifetimePrice": "sekali bayar",
-      "per": "/ {unit}",
-      "units": {
-        "days": "hari",
-        "weeks": "minggu",
-        "months": "bulan",
-        "years": "tahun"
-      },
-      "buy": "Tambah ke paket",
-      "buyAgain": "Beli lagi",
-      "owned": "Dimiliki ×{count} · membeli lagi menambah jumlahnya",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} tanpa batas",
-        "add": "+{amount} {name}"
-      },
-      "error": "Add-on tidak dapat dimuat."
+      }
     },
     "planFields": {
       "fromModule": "dari modul yang terpasang",
       "unlimited": "Tak terbatas"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-on memerlukan paket berbayar yang aktif",
+        "free_plan": "Anda berada di paket gratis. Add-on adalah tambahan yang dibeli di atas paket berbayar.",
+        "plan_expired": "Paket berbayar Anda telah berakhir, sehingga add-on dijeda. Perpanjang paket Anda untuk membeli atau memperpanjang add-on.",
+        "no_plan": "Ruang kerja Anda belum memiliki paket. Pilih paket berbayar untuk menggunakan add-on.",
+        "cta": "Lihat paket"
+      },
+      "unavailableCard": "Memerlukan paket berbayar yang aktif",
+      "empty": {
+        "title": "Tidak ada add-on yang dijual",
+        "body": "Saat ini tidak ada add-on yang ditawarkan. Periksa lagi nanti."
+      },
+      "listLabel": "Add-on yang dijual",
+      "owned": {
+        "title": "Add-on yang Anda miliki",
+        "renews": "Diperpanjang pada {date}",
+        "ends": "Aktif hingga {date}. Tidak akan diperpanjang otomatis.",
+        "lifetime": "Seumur hidup"
+      },
+      "state": {
+        "included": "Termasuk dalam paket Anda",
+        "includedSupport": "Diaktifkan oleh manajer akun Anda.",
+        "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
+        "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
+        "active": "Aktif",
+        "ownedCount": "Dimiliki ×{count} · membeli lagi menambah jumlahnya"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "sekali bayar",
+        "per": {
+          "days": "{count, plural, other {/ {count} hari}}",
+          "weeks": "{count, plural, other {/ {count} minggu}}",
+          "months": "{count, plural, other {/ {count} bulan}}",
+          "years": "{count, plural, other {/ {count} tahun}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Diperpanjang setiap periode. Dibayar otomatis dengan kartu; dengan transfer bank atau pembayaran offline, Anda membayar lagi saat periode berakhir.",
+        "oneTime": "Pembelian sekali bayar. Tidak diperpanjang."
+      },
+      "buy": "Beli add-on",
+      "buyAgain": "Beli lagi",
+      "cannotBuyHint": "Tanyakan kepada pemilik akun Anda. Hanya orang yang boleh membeli untuk ruang kerja ini yang dapat memulai pembelian.",
+      "bullets": {
+        "unlimited": "{name} tanpa batas",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Butuh kredit pesan? Isi ulang dompet Anda; kredit bukan add-on.",
+      "walletLink": "Isi ulang dompet"
     }
   }
 }

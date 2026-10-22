@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { AddonCard, OwnedAddon, WorkspaceAddonsResponse } from '@crm/contracts';
+import type {
+  AddonCard,
+  AddonUnavailableReason,
+  OwnedAddon,
+  WorkspaceAddonsResponse,
+} from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanEntitlementService, planKind } from '../plans-subscriptions-trials';
@@ -8,13 +13,14 @@ import {
   addonLiveSql,
   cardState,
   grantBullets,
+  isIncludedInPlan,
   missingGrants,
   readGrants,
   titledKey,
 } from './addon-grants';
 import { ModuleRegistryService } from './module-registry.service';
 
-interface PlanStateRow {
+export interface PlanStateRow {
   plan_found: boolean;
   is_free: boolean | null;
   is_custom_quote: boolean | null;
@@ -41,6 +47,22 @@ interface CardRow {
 }
 
 /**
+ * Why a workspace cannot buy a plain add-on, or null when it can: it needs an active PAID catalogue plan (not free, not a custom quote, not run
+ * out). A paid plan that has run out falls back to free entitlements, which is what `plan_expired` tells the buyer to fix by renewing.
+ */
+export function unavailableReason(st: PlanStateRow | undefined): AddonUnavailableReason | null {
+  if (!st?.plan_found) return 'no_plan';
+  const kind = planKind({
+    isFree: st.is_free ?? false,
+    isCustomQuote: st.is_custom_quote ?? false,
+    amount: st.amount ?? '0',
+  });
+  if (kind === 'free') return 'free_plan';
+  if (st.plan_ends_at !== null && new Date(st.plan_ends_at) <= new Date()) return 'plan_expired';
+  return null;
+}
+
+/**
  * What a workspace sees of the add-on catalogue (TW-ADD-033): the packs on sale, what each grants, what the
  * workspace already owns, and whether it may buy at all. Visibility is decided here, on the server: a workspace
  * without an active paid plan gets `eligible: false` and an empty catalogue, so the answer does not depend on the
@@ -55,8 +77,8 @@ export class WorkspaceAddonsService {
     private readonly plans: PlanEntitlementService,
   ) {}
 
-  async forCurrentWorkspace(): Promise<WorkspaceAddonsResponse> {
-    return this.forWorkspace(RequestContextStore.require().orgId);
+  async forCurrentWorkspace(canBuy = true): Promise<WorkspaceAddonsResponse> {
+    return this.forWorkspace(RequestContextStore.require().orgId, canBuy);
   }
 
   /**
@@ -64,7 +86,7 @@ export class WorkspaceAddonsService {
    * states cannot differ. A card is `included` when the PLAN already grants every feature of the pack (see `isIncludedInPlan`), and a
    * partly covered pack lists only what is still missing.
    */
-  async forWorkspace(orgId: number): Promise<WorkspaceAddonsResponse> {
+  async forWorkspace(orgId: number, canBuy = true): Promise<WorkspaceAddonsResponse> {
     const live = sql.raw(addonLiveSql(await this.plans.graceDays()));
     return this.db.tx(async (tx) => {
       const stateRes = await tx.execute(sql`
@@ -77,15 +99,8 @@ export class WorkspaceAddonsService {
       `);
       const st = stateRes.rows[0] as unknown as PlanStateRow | undefined;
       // "Active paid plan": a catalogue plan that is not free and has not run out.
-      const eligible =
-        Boolean(st?.plan_found) &&
-        planKind({
-          isFree: st!.is_free ?? false,
-          isCustomQuote: st!.is_custom_quote ?? false,
-          amount: st!.amount ?? '0',
-        }) !== 'free' &&
-        (st!.plan_ends_at === null || new Date(st!.plan_ends_at) > new Date());
-      if (!eligible) return { eligible: false, owned: [], catalog: [] };
+      const reason = unavailableReason(st);
+      const eligible = reason === null;
 
       // A module's own labels win; a core key is spelled out.
       const [mf, ml] = await Promise.all([
@@ -132,7 +147,7 @@ export class WorkspaceAddonsService {
         FROM plans WHERE kind = 'addon' AND is_active AND marketplace_app_id IS NULL ORDER BY sort_order ASC, amount ASC, slug ASC
       `);
       const packRows = catRes.rows as unknown as CardRow[];
-      const included = await this.plans.includedByPlan(
+      const { included, support } = await this.plans.includedByPlanDetailed(
         orgId,
         packRows.flatMap((r) => readGrants(r.features, r.limits).features),
       );
@@ -156,7 +171,12 @@ export class WorkspaceAddonsService {
           ownedCount: owned,
           ownedEndsAt: latestEnd.get(r.id) ?? null,
           ownedRenews: renewing.has(r.id),
-          state: cardState(grants, owned, included),
+          state: cardState(grants, owned, included, eligible),
+          includedVia: isIncludedInPlan(grants, included)
+            ? grants.features.some((k) => support.has(k))
+              ? 'support'
+              : 'plan'
+            : null,
         };
       });
       const owned: OwnedAddon[] = ownedRows.map((r) => ({
@@ -167,7 +187,7 @@ export class WorkspaceAddonsService {
         endsAt: r.ends_at ? new Date(r.ends_at).toISOString() : null,
         renews: r.renews,
       }));
-      return { eligible: true, owned, catalog };
+      return { eligible, unavailableReason: reason, canBuy, owned, catalog };
     });
   }
 }

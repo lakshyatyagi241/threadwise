@@ -124,7 +124,8 @@
           "billingMode": "Facturación",
           "sortOrder": "Orden",
           "isActive": "Activo",
-          "isLifetime": "De por vida (pago único)"
+          "isLifetime": "De por vida (pago único)",
+          "period": "Periodo de facturación"
         },
         "modes": {
           "one_time": "Pago único (se vuelve a comprar al terminar)",
@@ -144,8 +145,18 @@
           "billingDuration": "Introduce un número entero igual o mayor que 1.",
           "sortOrder": "Introduce un número entero.",
           "limits": "Los límites son números enteros, o -1 para ilimitado.",
-          "form": "Revisa los campos resaltados."
-        }
+          "form": "Revisa los campos resaltados.",
+          "amountPositive": "Los complementos son suscripciones mensuales o anuales, así que el precio debe ser mayor que cero."
+        },
+        "legacy": {
+          "title": "Paquete heredado",
+          "body": "Este paquete se creó antes de que los complementos fueran suscripciones. Sigue vendiéndose exactamente igual (su facturación se muestra pero no se puede cambiar) y los espacios de trabajo que lo tienen no se ven afectados. Aún puedes editar su nombre, precio, funciones y límites, o retirarlo de la venta. Los paquetes nuevos son suscripciones mensuales o anuales."
+        },
+        "periods": {
+          "months": "Suscripción mensual",
+          "years": "Suscripción anual"
+        },
+        "periodHint": "Los complementos son suscripciones. Los espacios de trabajo con una pasarela en línea se renuevan automáticamente; con transferencia bancaria o pago manual pagan de nuevo al terminar el periodo."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Complementos",
       "description": "Paquetes de funciones adicionales que compras además de tu suscripción.",
-      "needPlanTitle": "Los complementos requieren un plan activo",
-      "needPlanBody": "Los complementos son paquetes de funciones adicionales que compras además de tu suscripción. Elige primero un plan y luego vuelve aquí para añadir funciones.",
-      "viewPlans": "Ver planes",
-      "noneTitle": "No hay complementos disponibles",
-      "noneBody": "Ahora mismo no hay complementos en oferta. Vuelve a consultar más tarde.",
-      "ownedTitle": "Tus complementos",
-      "ownedBody": "Paquetes activos combinados con tu plan actual.",
-      "ends": "Termina el {date}",
-      "lifetime": "De por vida",
-      "autoRenews": "Se renueva automáticamente",
       "renewal": {
         "cancel": "Cancelar renovación",
         "confirmTitle": "¿Cancelar la renovación?",
@@ -277,37 +278,63 @@
         "forbidden": "No tienes permiso para cambiar el plan.",
         "none": "No hay ninguna suscripción activa que cancelar.",
         "failed": "No pudimos cancelar la renovación. Inténtalo de nuevo."
-      },
-      "active": "Activo",
-      "included": "Incluido en tu plan",
-      "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
-      "includedEnds": "Incluido en tu plan. Tu complemento termina el {date} y no se renovará.",
-      "cardEyebrow": "Complemento",
-      "catalogTitle": "Complementos",
-      "catalogBody": "Desbloquea funciones adicionales sobre tu plan actual. No necesitas cambiar de plan.",
-      "count": "{count, plural, one {# complemento} many {# complementos} other {# complementos}}",
-      "free": "Gratis",
-      "lifetimePrice": "pago único",
-      "per": "/ {unit}",
-      "units": {
-        "days": "días",
-        "weeks": "semanas",
-        "months": "meses",
-        "years": "años"
-      },
-      "buy": "Añadir al plan",
-      "buyAgain": "Comprar de nuevo",
-      "owned": "Tienes ×{count} · comprar de nuevo suma más",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} ilimitado",
-        "add": "+{amount} {name}"
-      },
-      "error": "No se pudieron cargar los complementos."
+      }
     },
     "planFields": {
       "fromModule": "desde un módulo instalado",
       "unlimited": "Ilimitado"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Los complementos necesitan un plan de pago activo",
+        "free_plan": "Estás en un plan gratuito. Los complementos son extras que compras sobre un plan de pago.",
+        "plan_expired": "Tu plan de pago ha terminado, así que los complementos están en pausa. Renueva tu plan para comprar o renovar complementos.",
+        "no_plan": "Tu espacio de trabajo aún no tiene plan. Elige un plan de pago para usar complementos.",
+        "cta": "Ver planes"
+      },
+      "unavailableCard": "Necesita un plan de pago activo",
+      "empty": {
+        "title": "No hay complementos a la venta",
+        "body": "Ahora mismo no se ofrece ningún complemento. Vuelve a mirar más tarde."
+      },
+      "listLabel": "Complementos a la venta",
+      "owned": {
+        "title": "Complementos que tienes",
+        "renews": "Se renueva el {date}",
+        "ends": "Activo hasta el {date}. No se renovará automáticamente.",
+        "lifetime": "De por vida"
+      },
+      "state": {
+        "included": "Incluido en tu plan",
+        "includedSupport": "Activado por tu gestor de cuenta.",
+        "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
+        "includedEnds": "Incluido en tu plan. Tu complemento termina el {date} y no se renovará.",
+        "active": "Activo",
+        "ownedCount": "Tienes ×{count} · comprar de nuevo suma más"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "pago único",
+        "per": {
+          "days": "{count, plural, one {/ día} other {/ {count} días}}",
+          "weeks": "{count, plural, one {/ semana} other {/ {count} semanas}}",
+          "months": "{count, plural, one {/ mes} other {/ {count} meses}}",
+          "years": "{count, plural, one {/ año} other {/ {count} años}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Se renueva en cada periodo. Se paga automáticamente con tarjeta; con transferencia bancaria o pago manual vuelves a pagar cuando termina el periodo.",
+        "oneTime": "Compra única. No se renueva."
+      },
+      "buy": "Comprar complemento",
+      "buyAgain": "Comprar de nuevo",
+      "cannotBuyHint": "Pregunta al propietario de tu cuenta. Solo quien puede comprar para este espacio de trabajo puede iniciar una compra.",
+      "bullets": {
+        "unlimited": "{name} ilimitado",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "¿Necesitas créditos de mensajes? Recarga tu monedero; los créditos no son un complemento.",
+      "walletLink": "Recargar monedero"
     }
   }
 }

@@ -1,4 +1,9 @@
-import { coreFeatureDefault, type AddonBullet, type AddonGrants } from '@crm/contracts';
+import {
+  coreFeatureDefault,
+  resolveOwnership,
+  type AddonBullet,
+  type AddonGrants,
+} from '@crm/contracts';
 
 /**
  * The pure rules of add-on grants (TW-ADD-028 rules 2 and 3, TW-ADD-031, TW-ADD-033). No database, no clock, no
@@ -117,9 +122,18 @@ export function cardState(
   ownedCount: number,
   /** The feature keys the workspace's plan (and override) already grants, without any pack. */
   includedByPlan: ReadonlySet<string> = new Set(),
-): 'buy' | 'active' | 'buy_again' | 'included' {
-  if (isIncludedInPlan(g, includedByPlan)) return 'included';
-  if (ownedCount === 0) return 'buy';
+  /** The workspace is on an active paid plan, so a pack can be bought. */
+  eligible = true,
+): 'buy' | 'active' | 'buy_again' | 'included' | 'unavailable' {
+  // One resolver for every paid thing (contracts `resolveOwnership`); this only maps its four answers onto the card's words.
+  const o = resolveOwnership({
+    includedByPlan: isIncludedInPlan(g, includedByPlan),
+    owned: ownedCount > 0,
+    purchasable: eligible,
+  });
+  if (o === 'included') return 'included';
+  if (o === 'unavailable') return 'unavailable';
+  if (o === 'buyable') return 'buy';
   return isStackable(g) ? 'buy_again' : 'active';
 }
 

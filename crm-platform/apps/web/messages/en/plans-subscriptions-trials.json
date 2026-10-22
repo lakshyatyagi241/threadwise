@@ -247,23 +247,7 @@
         "title": "Frequently asked questions"
       },
       "addons": {
-        "title": "Add-ons",
-        "owned": "Add-ons you own",
-        "oneTime": "one-time",
-        "buy": "Buy add-on",
-        "buyAgain": "Buy again",
-        "active": "Active",
-        "included": "Included in your plan",
-        "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
-        "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
-        "unlimitedBullet": "Unlimited {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ day} other {/ {count} days}}",
-          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
-          "months": "{count, plural, one {/ month} other {/ {count} months}}",
-          "years": "{count, plural, one {/ year} other {/ {count} years}}"
-        }
+        "title": "Add-ons"
       },
       "renewal": {
         "renewsOn": "Your plan renews automatically on {date}.",

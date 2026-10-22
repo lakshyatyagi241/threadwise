@@ -112,7 +112,7 @@ export function PlansPicker() {
 
             <PlanAddons addons={q.data.visibleAddons} />
 
-            <AddonsSection canManage={q.data.canManage} />
+            <AddonsSection />
 
             <CompareTable plans={q.data.data} />
 

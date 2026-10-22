@@ -124,7 +124,8 @@
           "billingMode": "Abrechnung",
           "sortOrder": "Sortierreihenfolge",
           "isActive": "Aktiv",
-          "isLifetime": "Lebenslang (einmalig)"
+          "isLifetime": "Lebenslang (einmalig)",
+          "period": "Abrechnungszeitraum"
         },
         "modes": {
           "one_time": "Einmalig (nach Ablauf erneut kaufen)",
@@ -144,8 +145,18 @@
           "billingDuration": "Geben Sie eine ganze Zahl ab 1 ein.",
           "sortOrder": "Geben Sie eine ganze Zahl ein.",
           "limits": "Limits sind ganze Zahlen oder -1 für unbegrenzt.",
-          "form": "Prüfen Sie die markierten Felder."
-        }
+          "form": "Prüfen Sie die markierten Felder.",
+          "amountPositive": "Add-ons sind monatliche oder jährliche Abonnements, daher muss der Preis über null liegen."
+        },
+        "legacy": {
+          "title": "Altes Paket",
+          "body": "Dieses Paket wurde erstellt, bevor Add-ons Abonnements wurden. Es wird genau wie bisher verkauft (seine Abrechnung wird angezeigt, kann aber nicht geändert werden), und Workspaces, die es besitzen, sind nicht betroffen. Name, Preis, Funktionen und Limits lassen sich weiterhin bearbeiten, oder Sie nehmen es aus dem Verkauf. Neue Pakete sind monatliche oder jährliche Abonnements."
+        },
+        "periods": {
+          "months": "Monatliches Abonnement",
+          "years": "Jährliches Abonnement"
+        },
+        "periodHint": "Add-ons sind Abonnements. Workspaces mit einem Online-Zahlungsanbieter verlängern sich automatisch; bei Banküberweisung oder Offline-Zahlung zahlen sie am Ende der Laufzeit erneut."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Add-ons",
       "description": "Zusätzliche Funktionspakete, die Sie zu Ihrem Abonnement dazukaufen.",
-      "needPlanTitle": "Add-ons erfordern einen aktiven Tarif",
-      "needPlanBody": "Add-ons sind zusätzliche Funktionspakete, die Sie zu Ihrem Abonnement dazukaufen. Wählen Sie zuerst einen Tarif und kehren Sie dann hierher zurück, um Funktionen hinzuzufügen.",
-      "viewPlans": "Tarife ansehen",
-      "noneTitle": "Keine Add-ons verfügbar",
-      "noneBody": "Derzeit werden keine Add-ons angeboten. Schauen Sie später noch einmal vorbei.",
-      "ownedTitle": "Ihre Add-ons",
-      "ownedBody": "Aktive Pakete, die mit Ihrem aktuellen Tarif zusammengeführt sind.",
-      "ends": "Endet am {date}",
-      "lifetime": "Lebenslang",
-      "autoRenews": "Verlängert sich automatisch",
       "renewal": {
         "cancel": "Verlängerung kündigen",
         "confirmTitle": "Verlängerung kündigen?",
@@ -277,37 +278,63 @@
         "forbidden": "Sie haben keine Berechtigung, den Tarif zu ändern.",
         "none": "Es gibt kein aktives Abonnement, das gekündigt werden könnte.",
         "failed": "Die Verlängerung konnte nicht gekündigt werden. Bitte versuchen Sie es erneut."
-      },
-      "active": "Aktiv",
-      "included": "In deinem Tarif enthalten",
-      "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
-      "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-ons",
-      "catalogBody": "Schalten Sie zusätzliche Funktionen zu Ihrem aktuellen Tarif frei. Ein Tarifwechsel ist nicht nötig.",
-      "count": "{count, plural, one {# Add-on} other {# Add-ons}}",
-      "free": "Kostenlos",
-      "lifetimePrice": "einmalig",
-      "per": "/ {unit}",
-      "units": {
-        "days": "Tage",
-        "weeks": "Wochen",
-        "months": "Monate",
-        "years": "Jahre"
-      },
-      "buy": "Zum Tarif hinzufügen",
-      "buyAgain": "Erneut kaufen",
-      "owned": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Unbegrenzt {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "Die Add-ons konnten nicht geladen werden."
+      }
     },
     "planFields": {
       "fromModule": "aus einem installierten Modul",
       "unlimited": "Unbegrenzt"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-ons brauchen einen aktiven kostenpflichtigen Tarif",
+        "free_plan": "Sie haben einen kostenlosen Tarif. Add-ons sind Extras, die Sie zusätzlich zu einem kostenpflichtigen Tarif kaufen.",
+        "plan_expired": "Ihr kostenpflichtiger Tarif ist abgelaufen, daher sind Add-ons pausiert. Verlängern Sie Ihren Tarif, um Add-ons zu kaufen oder zu verlängern.",
+        "no_plan": "Ihr Workspace hat noch keinen Tarif. Wählen Sie einen kostenpflichtigen Tarif, um Add-ons zu nutzen.",
+        "cta": "Tarife ansehen"
+      },
+      "unavailableCard": "Braucht einen aktiven kostenpflichtigen Tarif",
+      "empty": {
+        "title": "Keine Add-ons im Angebot",
+        "body": "Derzeit werden keine Add-ons angeboten. Schauen Sie später noch einmal vorbei."
+      },
+      "listLabel": "Add-ons im Angebot",
+      "owned": {
+        "title": "Ihre Add-ons",
+        "renews": "Verlängert sich am {date}",
+        "ends": "Aktiv bis {date}. Es verlängert sich nicht automatisch.",
+        "lifetime": "Lebenslang"
+      },
+      "state": {
+        "included": "In deinem Tarif enthalten",
+        "includedSupport": "Von Ihrem Account-Manager aktiviert.",
+        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
+        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
+        "active": "Aktiv",
+        "ownedCount": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu"
+      },
+      "price": {
+        "free": "Kostenlos",
+        "oneTime": "einmalig",
+        "per": {
+          "days": "{count, plural, one {/ Tag} other {/ {count} Tage}}",
+          "weeks": "{count, plural, one {/ Woche} other {/ {count} Wochen}}",
+          "months": "{count, plural, one {/ Monat} other {/ {count} Monate}}",
+          "years": "{count, plural, one {/ Jahr} other {/ {count} Jahre}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Verlängert sich in jeder Laufzeit. Bei Kartenzahlung wird automatisch bezahlt; bei Banküberweisung oder Offline-Zahlung zahlen Sie am Ende der Laufzeit erneut.",
+        "oneTime": "Einmalkauf. Er verlängert sich nicht."
+      },
+      "buy": "Add-on kaufen",
+      "buyAgain": "Erneut kaufen",
+      "cannotBuyHint": "Fragen Sie den Inhaber Ihres Kontos. Nur wer für diesen Workspace kaufen darf, kann einen Kauf starten.",
+      "bullets": {
+        "unlimited": "Unbegrenzt {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Brauchen Sie Nachrichten-Guthaben? Laden Sie stattdessen Ihr Wallet auf; Guthaben ist kein Add-on.",
+      "walletLink": "Wallet aufladen"
     }
   }
 }
