@@ -39,7 +39,9 @@ export function AdminOverviewScreen({ window }: { window: AdminOverviewWindow })
           aria-label={t('window.label')}
           className="w-auto"
           value={window}
-          onChange={(e) => router.replace(`${pathname}?window=${e.target.value}`)}
+          onChange={(e) =>
+            router.replace(`${pathname}?window=${e.target.value}`, { scroll: false })
+          }
         >
           {ADMIN_OVERVIEW_WINDOWS.map((w) => (
             <option key={w} value={w}>
