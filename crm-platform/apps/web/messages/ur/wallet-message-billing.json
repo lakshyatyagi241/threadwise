@@ -99,7 +99,8 @@
         "fullStatement": "مکمل اسٹیٹمنٹ کھولیں",
         "emptyTitle": "ابھی کوئی سرگرمی نہیں",
         "emptyBody": "ٹاپ اپس، پیغام چارجز اور ریفنڈز یہاں ظاہر ہوتے ہیں۔"
-      }
+      },
+      "messageExpenses": "پیغامات کے اخراجات"
     },
     "activity": {
       "description": "تفصیل",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "پیغامات کے اخراجات",
+      "subtitle": "ہر پیغام کی لاگت، وہ کس سانچے کے ساتھ بھیجا گیا اور کیا واپس ہوا۔ کل رقم میں وہ سب شامل ہے جو فلٹرز سے مطابقت رکھتا ہے۔",
+      "back": "والیٹ پر واپس جائیں",
+      "breadcrumbLabel": "نیویگیشن کا راستہ",
+      "breadcrumbWallet": "والیٹ",
+      "breadcrumbExpenses": "پیغامات کے اخراجات",
+      "fullStatement": "مکمل اسٹیٹمنٹ",
+      "summary": {
+        "messages": "پیغامات",
+        "charged": "چارج کیا گیا",
+        "refunded": "ریفنڈ کیا گیا",
+        "net": "خالص لاگت",
+        "notBilled": "بل نہیں کیا گیا"
+      },
+      "filters": {
+        "status": "حیثیت",
+        "statusAll": "سب",
+        "statusCharged": "چارج کیا گیا",
+        "statusFree": "بل نہیں کیا گیا",
+        "statusRefunded": "ریفنڈ کیا گیا",
+        "template": "سانچہ",
+        "templatePlaceholder": "سانچے کا نام",
+        "channel": "چینل",
+        "category": "زمرہ",
+        "allChannels": "تمام چینلز",
+        "allCategories": "تمام زمرے",
+        "from": "سے",
+        "to": "تک",
+        "apply": "لاگو کریں",
+        "reset": "ری سیٹ کریں",
+        "rangeInverted": "اختتامی تاریخ ابتدائی تاریخ سے پہلے ہے۔"
+      },
+      "breakdown": {
+        "title": "لاگت بذریعہ",
+        "groupBy": {
+          "template": "سانچہ",
+          "source": "چینل",
+          "category": "زمرہ",
+          "country": "ملک"
+        },
+        "group": "گروپ",
+        "notRecorded": "ریکارڈ نہیں ہوا",
+        "truncated": "سب سے بڑے {count} گروپ دکھائے جا رہے ہیں۔ باقی دیکھنے کے لیے تاریخیں محدود کریں۔",
+        "empty": "ان فلٹرز سے کوئی پیغام مطابقت نہیں رکھتا۔"
+      },
+      "columns": {
+        "date": "تاریخ",
+        "template": "سانچہ",
+        "campaign": "مہم یا براڈکاسٹ",
+        "channel": "چینل",
+        "category": "زمرہ",
+        "country": "ملک",
+        "status": "حیثیت",
+        "charged": "چارج کیا گیا",
+        "refunded": "ریفنڈ کیا گیا",
+        "net": "خالص",
+        "messages": "پیغامات",
+        "notBilled": "بل نہیں کیا گیا"
+      },
+      "status": {
+        "charged": "چارج کیا گیا",
+        "free": "بل نہیں کیا گیا",
+        "refunded": "ریفنڈ کیا گیا",
+        "refundedOn": "{date} کو واپس کیا گیا"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "آپ کے پلان میں شامل",
+        "wallet_empty": "والیٹ خالی تھا",
+        "rate_is_zero": "ریٹ صفر ہے",
+        "no_wallet_owner": "والیٹ کا کوئی مالک نہیں"
+      },
+      "uncollected": "{amount} وصول نہیں ہوا",
+      "emptyTitle": "ابھی کوئی پیغام نہیں",
+      "emptyBody": "مہموں، براڈکاسٹس، شیڈول اور چیٹس سے بھیجے گئے پیغامات اپنے سانچے اور لاگت کے ساتھ یہاں ظاہر ہوں گے۔",
+      "emptyFiltered": "ان فلٹرز سے کچھ بھی مطابقت نہیں رکھتا۔ انہیں تبدیل کریں یا ری سیٹ کریں۔"
     },
     "admin": {
       "admin": "ایڈمن",

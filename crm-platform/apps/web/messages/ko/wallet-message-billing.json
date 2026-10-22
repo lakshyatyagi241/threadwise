@@ -99,7 +99,8 @@
         "fullStatement": "전체 명세서 열기",
         "emptyTitle": "아직 활동이 없습니다",
         "emptyBody": "충전, 메시지 요금 및 환불 내역이 여기에 표시됩니다."
-      }
+      },
+      "messageExpenses": "메시지 비용"
     },
     "activity": {
       "description": "설명",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "메시지 비용",
+      "subtitle": "각 메시지의 비용, 발송에 사용한 템플릿, 환불된 금액을 보여줍니다. 합계에는 필터와 일치하는 모든 항목이 포함됩니다.",
+      "back": "지갑으로 돌아가기",
+      "breadcrumbLabel": "탐색 경로",
+      "breadcrumbWallet": "지갑",
+      "breadcrumbExpenses": "메시지 비용",
+      "fullStatement": "전체 명세서",
+      "summary": {
+        "messages": "메시지",
+        "charged": "청구됨",
+        "refunded": "환불됨",
+        "net": "순비용",
+        "notBilled": "청구 안 됨"
+      },
+      "filters": {
+        "status": "상태",
+        "statusAll": "전체",
+        "statusCharged": "청구됨",
+        "statusFree": "청구 안 됨",
+        "statusRefunded": "환불됨",
+        "template": "템플릿",
+        "templatePlaceholder": "템플릿 이름",
+        "channel": "채널",
+        "category": "카테고리",
+        "allChannels": "모든 채널",
+        "allCategories": "모든 카테고리",
+        "from": "시작",
+        "to": "종료",
+        "apply": "적용",
+        "reset": "초기화",
+        "rangeInverted": "종료일이 시작일보다 앞입니다."
+      },
+      "breakdown": {
+        "title": "기준별 비용",
+        "groupBy": {
+          "template": "템플릿",
+          "source": "채널",
+          "category": "카테고리",
+          "country": "국가"
+        },
+        "group": "그룹",
+        "notRecorded": "기록 없음",
+        "truncated": "가장 큰 {count}개 그룹을 표시합니다. 나머지를 보려면 기간을 좁히세요.",
+        "empty": "이 필터와 일치하는 메시지가 없습니다."
+      },
+      "columns": {
+        "date": "날짜",
+        "template": "템플릿",
+        "campaign": "캠페인 또는 브로드캐스트",
+        "channel": "채널",
+        "category": "카테고리",
+        "country": "국가",
+        "status": "상태",
+        "charged": "청구됨",
+        "refunded": "환불됨",
+        "net": "순액",
+        "messages": "메시지",
+        "notBilled": "청구 안 됨"
+      },
+      "status": {
+        "charged": "청구됨",
+        "free": "청구 안 됨",
+        "refunded": "환불됨",
+        "refundedOn": "{date}에 환불됨"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "요금제에 포함됨",
+        "wallet_empty": "지갑 잔액이 없었습니다",
+        "rate_is_zero": "요금이 0입니다",
+        "no_wallet_owner": "지갑 소유자가 없습니다"
+      },
+      "uncollected": "{amount} 미징수",
+      "emptyTitle": "아직 메시지가 없습니다",
+      "emptyBody": "캠페인, 브로드캐스트, 예약 발송, 채팅에서 보낸 메시지가 템플릿 및 비용과 함께 여기에 표시됩니다.",
+      "emptyFiltered": "이 필터와 일치하는 항목이 없습니다. 필터를 바꾸거나 초기화하세요."
     },
     "admin": {
       "admin": "관리자",

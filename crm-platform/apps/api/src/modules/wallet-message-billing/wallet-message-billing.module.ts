@@ -13,6 +13,7 @@ import { PlatformWalletController } from './platform-wallet.controller';
 import { PlatformWalletService } from './platform-wallet.service';
 import { RateCardService } from './rate-card.service';
 import { WalletController } from './wallet.controller';
+import { WalletExpensesService } from './wallet-expenses.service';
 import { WalletExportService } from './wallet-export.service';
 import { WalletGateService } from './wallet-gate.service';
 import { WalletLedgerService } from './wallet-ledger.service';
@@ -32,6 +33,7 @@ const SERVICES = [
   AiChargeService,
   WalletQueryService,
   WalletExportService,
+  WalletExpensesService,
   PlatformWalletService,
   PlatformRatesService,
   MetaRateCardService,
