@@ -136,14 +136,15 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     }
     await step(inc, 'VERIFIED', `condition stayed cleared for ${fmtDur(verifyMs)} (same check as the detection)`);
     inc.state = 'resolved'; count(inc.playbook, 'resolved');
-    await step(inc, 'RESOLVED', `resolved by ${inc.playbook}, after ${fmtDur(now() - inc.startedAt)}`);
+    const how = inc.playbook === 'cancel_select' ? `cancelling pid ${c.row.pid} (pg_cancel_backend, not terminated)` : inc.playbook === 'terminate_idle' ? `terminating idle-in-transaction pid ${c.row.pid}` : inc.playbook;
+    await step(inc, 'RESOLVED', `resolved by ${how}, after ${fmtDur(now() - inc.startedAt)}`);
     return inc;
   }
 
   // handle({playbook, threadKey, channel, key, diagnosis, ...ctx}) -> promise (not awaited by callers on the hot path; use settle() in tests).
   function handle(spec) {
     if (mode === 'off') return Promise.resolve(null);
-    const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && ['open', 'needs_fix'].includes(i.state));
+    const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && ['open', 'needs_fix', 'recovered_no_release'].includes(i.state));
     if (dup) return Promise.resolve(dup);
     const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
     incidents.set(inc.id, inc); if (incidents.size > 200) incidents.delete(incidents.keys().next().value);
@@ -151,18 +152,28 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     pending.add(p); return p;
   }
   // (d) the watcher reports a recurring slow statement is fast again; a release marker makes it "resolved by release <sha>".
+  const resolveByRelease = async (inc) => {
+    inc.state = 'resolved'; count('code_fix', 'resolved');
+    try { fs.mkdirSync(path.join(dir, 'resolved'), { recursive: true }); fs.renameSync(path.join(dir, 'open', `${inc.id}.json`), path.join(dir, 'resolved', `${inc.id}.json`)); } catch { /* file optional */ }
+    await step(inc, 'RESOLVED', `statement is fast again (mean under threshold for the verification polls); resolved by release ${release.sha}, after ${fmtDur(now() - inc.startedAt)}`);
+  };
+  // Recovery WITHOUT a release recorded since the incident opened is NOT a resolution (a data change, a cache or a one-off may explain it):
+  // the incident stays open (file stays in incidents/open) for review until POST /release arrives.
   async function statementRecovered(key) {
     const inc = [...incidents.values()].find((i) => i.key === key && i.state === 'needs_fix');
     if (!inc) return false;
-    inc.state = 'resolved'; count('code_fix', 'resolved');
-    try { fs.mkdirSync(path.join(dir, 'resolved'), { recursive: true }); fs.renameSync(path.join(dir, 'open', `${inc.id}.json`), path.join(dir, 'resolved', `${inc.id}.json`)); } catch { /* file optional */ }
-    const by = release && release.at >= inc.startedAt ? `release ${release.sha}` : 'itself (no release was recorded)';
-    await step(inc, 'RESOLVED', `statement is fast again (mean under threshold for the verification polls); resolved by ${by}, after ${fmtDur(now() - inc.startedAt)}`);
+    if (release && release.at >= inc.startedAt) { await resolveByRelease(inc); return true; }
+    inc.state = 'recovered_no_release'; count('code_fix', 'recovered_no_release');
+    await step(inc, 'RECOVERED', `statement is fast again, but recovered, no release recorded: the incident stays OPEN for review (${path.join(dir, 'open', `${inc.id}.json`)}); it resolves when POST /release arrives or a human closes it`);
     return true;
+  }
+  async function setRelease(sha) {
+    release = { sha: String(sha).slice(0, 40), at: now() };
+    for (const inc of incidents.values()) if (inc.state === 'recovered_no_release') await resolveByRelease(inc);
   }
   return {
     mode, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
-    setRelease: (sha) => { release = { sha: String(sha).slice(0, 40), at: now() }; },
+    setRelease,
     byKey: (k) => [...incidents.values()].find((i) => i.key === k),
     list: () => [...incidents.values()].map(({ id, playbook, state, threadKey, startedAt, events }) => ({ id, playbook, state, threadKey, startedAt, events: events.map((e) => ({ t: e.t, label: e.label })) })),
   };
