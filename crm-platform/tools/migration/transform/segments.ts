@@ -246,8 +246,16 @@ export const savedViews: HandlerSpec = {
   mapCollection: 'contact_saved_views',
   tables: {
     contact_views: {
-      columns: [c('name', 'text'), c('filter', 'jsonb'), c('position', 'integer'), c('is_shared', 'boolean'), c('created_by', 'bigint'), ...TS_COLS],
-      fp: ['name', 'filter', 'position', 'is_shared'],
+      columns: [
+        c('name', 'text'),
+        c('filter', 'jsonb'),
+        c('position', 'integer'),
+        c('is_shared', 'boolean'),
+        c('share_mode', 'text'),
+        c('created_by', 'bigint'),
+        ...TS_COLS,
+      ],
+      fp: ['name', 'filter', 'position', 'is_shared', 'share_mode'],
       constants: { row_version: 1 },
     },
   },
@@ -262,7 +270,7 @@ export const savedViews: HandlerSpec = {
     mongodb_query: 'drop:the machine copy of filter_query',
     position: 'col:position',
     access_type: 'drop:can_view / can_edit: WaDesk shares a view read-only or keeps it private; edit rights are not carried',
-    shared_with: 'col:is_shared (everyone = shared, me = private to its creator)',
+    shared_with: 'col:share_mode and is_shared (everyone = shared, me = private to its creator)',
     created_by: 'col:created_by (the migrated user, when the id resolves)',
     updated_by: 'drop:last editor; contact_views has no such column',
     created_time: 'col:created_at',
@@ -318,6 +326,8 @@ export const savedViews: HandlerSpec = {
             filter,
             position: Math.max(0, Math.trunc(num(doc.position) ?? 0)),
             is_shared: isShared,
+            // the service keeps share_mode and is_shared in step; without it the column default 'me' hides a shared view from everyone else
+            share_mode: isShared ? 'everyone' : 'me',
             created_by: owner?.id ?? null,
             created_at: t.created,
             updated_at: t.updated,
