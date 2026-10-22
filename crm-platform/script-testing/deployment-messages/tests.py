@@ -170,11 +170,22 @@ check("--dry-run prints message, posts nothing", "#34" in p.stdout and len(chat_
 D = tempfile.mkdtemp(); BIN = tempfile.mkdtemp()
 open(f"{D}/.slot", "w").write("blue\n"); open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={A[:9]}\nIMAGE_TAG={B[:9]}\n")
 open(f"{D}/url", "w").write(f"http://127.0.0.1:{chat.server_port}/hook\n")
-open(f"{BIN}/pgrep", "w").write(f"#!/bin/sh\n[ -f {D}/running ]\n"); os.chmod(f"{BIN}/pgrep", 0o755)
-wenv = {**ENV, "PATH": f"{BIN}:{os.environ['PATH']}", "DESK_DIR": D, "DESK_WATCH_URL_FILE": f"{D}/url", "DESK_WATCH_POLL": "1", "DESK_WATCH_SETTLE": "0"}
+open(f"{BIN}/pgrep", "w").write(f"#!/bin/sh\n[ -f {D}/running ] && echo 4242\n"); os.chmod(f"{BIN}/pgrep", 0o755)
+wenv = {**ENV, "PATH": f"{BIN}:{os.environ['PATH']}", "DESK_DIR": D, "DESK_WATCH_URL_FILE": f"{D}/url", "DESK_WATCH_POLL": "1", "DESK_WATCH_SETTLE": "0", "DESK_WATCH_PROC": f"{D}/proc"}
+def deploy_call(cmd):
+    """a running ci-entry.sh as sshd starts it: the forced command's argument is in SSH_ORIGINAL_COMMAND"""
+    os.makedirs(f"{D}/proc/4242", exist_ok=True)
+    open(f"{D}/proc/4242/environ", "wb").write(b"HOME=/root\0SSH_ORIGINAL_COMMAND=" + cmd.encode() + b"\0")
+    open(f"{D}/running", "w").close()
 chat_posts.clear(); shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
 w = subprocess.Popen(["bash", WATCH], env=wenv, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-time.sleep(1.5); open(f"{D}/running", "w").close(); time.sleep(3)
+time.sleep(1.5)
+# one deploy = sync, load, release: the first two must post NOTHING (no new version known yet), only release announces, once
+deploy_call("sync"); time.sleep(2.5); os.remove(f"{D}/running"); time.sleep(1.5)
+deploy_call("load"); time.sleep(2.5); os.remove(f"{D}/running"); time.sleep(1.5)
+check("watcher: sync and load calls post nothing (no duplicate 'in progress')", len(chat_posts) == 0, str(chat_posts))
+deploy_call(f"release {B[:9]}"); time.sleep(3)
+check("watcher: the release call announces once, with the NEW version as attempted", len(chat_posts) == 1 and chat_posts[0]["text"].startswith("🚀") and f"`{B[:9]}`" in chat_posts[0]["text"] and f"(was `{A[:9]}`)" in chat_posts[0]["text"], str(chat_posts))
 # fake docker: slow (2 s) on purpose, records args + stdin; fails when D/docker_fail exists
 open(f"{BIN}/docker", "w").write(f'#!/bin/sh\nsleep 2\nb=$(cat)\necho "ARGS $*" >> {D}/docker.log\necho "BODY $b" >> {D}/docker.log\n[ ! -f {D}/docker_fail ]\n'); os.chmod(f"{BIN}/docker", 0o755)
 def wait_for(cond, secs):
@@ -194,7 +205,7 @@ C = "c" * 40
 for fail in (False, True):
     chat_posts.clear(); open(f"{D}/docker.log", "w").close()
     if fail: open(f"{D}/docker_fail", "w").close()
-    open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={C}\n"); open(f"{D}/running", "w").close(); time.sleep(2.5)
+    open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={C}\n"); deploy_call(f"release {C}"); time.sleep(2.5)
     os.remove(f"{D}/running"); wait_for(lambda: any(p["text"].startswith("⚠️") for p in chat_posts), 8)
     posted = any("did not change" in p["text"] for p in chat_posts)
     wait_for(lambda: "BODY" in open(f"{D}/docker.log").read(), 8); dl = open(f"{D}/docker.log").read()

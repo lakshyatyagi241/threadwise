@@ -64,24 +64,35 @@ case "${1:-}" in
 esac
 
 deploy_running() { pgrep -f "$DESK/ci-entry.sh" >/dev/null 2>&1; }
+# One deploy calls ci-entry.sh several times (sync, load, release). Only the `release <sha>` call knows the NEW version, so a deploy is
+# announced once, when that call starts, with the attempted sha read from its SSH_ORIGINAL_COMMAND. sync/load alone post nothing.
+release_tag() {
+  local pid t
+  for pid in $(pgrep -f "$DESK/ci-entry.sh" 2>/dev/null); do
+    t=$(tr '\0' '\n' < "${DESK_WATCH_PROC:-/proc}/$pid/environ" 2>/dev/null | sed -n 's/^SSH_ORIGINAL_COMMAND=release \([0-9a-fA-F]\{7,40\}\)$/\1/p' | head -n1)
+    [ -n "$t" ] && { printf '%s' "$t"; return 0; }
+  done
+  return 1
+}
 POLL=${DESK_WATCH_POLL:-10}; SETTLE=${DESK_WATCH_SETTLE:-20}
-prev_running=0; tag_before=$(live_tag || true); started=0
+active=0; attempted=""; tag_before=$(live_tag || true); started=0
 echo "$(date -u +%FT%TZ) watcher started, live tag ${tag_before:-unknown}" >> "$STATE/watch.log"
 while true; do
   if deploy_running; then
-    if [ "$prev_running" = 0 ]; then
-      prev_running=1; started=$(date +%s); tag_before=$(live_tag || true)
-      post "$(msg started "$tag_before" "$(env_get IMAGE_TAG)")"
+    rt=$(release_tag || true)
+    if [ -n "$rt" ] && [ "$active" = 0 ]; then
+      active=1; attempted=$rt; started=$(date +%s); tag_before=$(live_tag || true)
+      post "$(msg started "$tag_before" "$attempted")"
     fi
-  elif [ "$prev_running" = 1 ]; then
+  elif [ "$active" = 1 ]; then
     sleep "$SETTLE"   # let the slot switch and .env settle
-    prev_running=0; now=$(live_tag || true); dur=$(( $(date +%s) - started ))
-    if [ -n "$now" ] && [ "$now" != "$tag_before" ]; then
+    active=0; now=$(live_tag || true); dur=$(( $(date +%s) - started ))
+    if [ -n "$now" ] && [ "${now:0:7}" = "${attempted:0:7}" ]; then
       post "$(msg live "$tag_before" "$now" "$dur")"
       bridge_bg live "$tag_before" "$now" "$dur"
     else
-      post "$(msg unchanged "$now" "$(env_get IMAGE_TAG)" "$dur" "It was rolled back or refused. Check the build server log.")"
-      bridge_bg unchanged "$now" "$(env_get IMAGE_TAG)" "$dur"
+      post "$(msg unchanged "$now" "$attempted" "$dur" "It was rolled back or refused. Check the build server log.")"
+      bridge_bg unchanged "$now" "$attempted" "$dur"
     fi
   fi
   sleep "$POLL"
