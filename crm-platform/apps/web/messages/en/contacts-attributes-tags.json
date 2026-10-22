@@ -566,6 +566,8 @@
         "timezone": "Time zone (e.g. Asia/Kolkata)"
       },
       "notInFile": "Not in file",
+      "customProperties": "Custom properties",
+      "customPropertiesHint": "A column whose header is the property's name, or attr:key as the export writes it, fills that property. A blank cell keeps the value the contact already has.",
       "columnN": "Column {n}",
       "applyTitle": "Apply to every imported contact",
       "status": "Status",
@@ -623,7 +625,8 @@
         "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
         "duplicate_in_file": "repeated number, merged into an earlier row",
         "invalid_timezone": "invalid time zone",
-        "legal_hold": "protected record, not changed"
+        "legal_hold": "protected record, not changed",
+        "invalid_property_value": "custom property value does not fit its type or options"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",

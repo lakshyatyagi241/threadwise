@@ -623,7 +623,8 @@
         "invalid_date_of_birth": "la date de naissance n'est pas une date avec l'année en premier pouvant être une date de naissance",
         "duplicate_in_file": "numéro répété, fusionné avec une ligne précédente",
         "invalid_timezone": "fuseau horaire non valide",
-        "legal_hold": "enregistrement protégé, non modifié"
+        "legal_hold": "enregistrement protégé, non modifié",
+        "invalid_property_value": "la valeur de la propriété personnalisée ne correspond pas à son type ni à ses options"
       },
       "statusHint": "Appliqué aux contacts créés par ce fichier.",
       "queued": "En attente de démarrage...",
@@ -641,7 +642,9 @@
       "groupNew": "Un nouveau groupe",
       "groupPick": "Choisir un groupe",
       "groupNewPlaceholder": "Nom du nouveau groupe",
-      "groupRequiredHint": "Chaque contact importé rejoint ce groupe unique. La colonne de groupe du fichier est ignorée, sauf si vous l’associez ci-dessus."
+      "groupRequiredHint": "Chaque contact importé rejoint ce groupe unique. La colonne de groupe du fichier est ignorée, sauf si vous l’associez ci-dessus.",
+      "customProperties": "Propriétés personnalisées",
+      "customPropertiesHint": "Une colonne dont l'en-tête est le nom de la propriété, ou attr:key tel qu'écrit par l'export, remplit cette propriété. Une cellule vide conserve la valeur que le contact possède déjà."
     },
     "detail": {
       "back": "Tous les contacts",

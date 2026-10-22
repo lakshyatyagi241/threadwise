@@ -623,7 +623,8 @@
         "invalid_date_of_birth": "data urodzenia nie jest datą z rokiem na początku, która może być datą urodzenia",
         "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem",
         "invalid_timezone": "nieprawidłowa strefa czasowa",
-        "legal_hold": "rekord chroniony, bez zmian"
+        "legal_hold": "rekord chroniony, bez zmian",
+        "invalid_property_value": "wartość właściwości niestandardowej nie pasuje do jej typu ani opcji"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",
@@ -641,7 +642,9 @@
       "groupNew": "Nowej grupy",
       "groupPick": "Wybierz grupę",
       "groupNewPlaceholder": "Nazwa nowej grupy",
-      "groupRequiredHint": "Każdy zaimportowany kontakt trafia do tej jednej grupy. Kolumna grupy z pliku jest ignorowana, chyba że zmapujesz ją powyżej."
+      "groupRequiredHint": "Każdy zaimportowany kontakt trafia do tej jednej grupy. Kolumna grupy z pliku jest ignorowana, chyba że zmapujesz ją powyżej.",
+      "customProperties": "Właściwości niestandardowe",
+      "customPropertiesHint": "Kolumna, której nagłówek to nazwa właściwości (lub attr:key, tak jak zapisuje ją eksport), wypełnia tę właściwość. Pusta komórka zachowuje wartość, którą kontakt już ma."
     },
     "detail": {
       "back": "Wszystkie kontakty",

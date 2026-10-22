@@ -23,7 +23,7 @@ import {
 
 export type ImportOptions = Pick<
   ContactImportOptions,
-  'mapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
+  'mapping' | 'propertyMapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
 > & {
   consentConfirmed?: boolean;
   /** The notice the file's contacts agreed under, and its version (kept as proof with each recorded consent). */
