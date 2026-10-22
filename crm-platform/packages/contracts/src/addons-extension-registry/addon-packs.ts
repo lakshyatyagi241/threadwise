@@ -51,8 +51,12 @@ const addonFieldsShape = {
     .regex(/^[A-Z]{3}$/, 'Use a three-letter currency code.'),
   billingUnit: planBillingUnitSchema.default('months'),
   billingDuration: z.number().int().min(1).max(120).default(1),
-  /** `recurring` renews by autopay; a lifetime or free pack can only be one-time (checked in the request refinement). */
-  billingMode: z.enum(['one_time', 'recurring']).default('one_time'),
+  /**
+   * `recurring` is how an add-on is sold: a monthly or yearly subscription (autopay where the gateway can, otherwise the buyer pays again at the
+   * end of each term). Left out on CREATE it becomes `recurring` for a priced pack and `one_time` only for a lifetime or zero-priced one (the
+   * legacy shapes an older client may still send; see `createAddonRequestSchema`). A lifetime or free pack cannot be recurring.
+   */
+  billingMode: z.enum(['one_time', 'recurring']).optional(),
   isLifetime: z.boolean().default(false),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().min(0).max(100_000).default(0),
@@ -87,12 +91,40 @@ export function checkAddonRules(
   return out;
 }
 
-export const createAddonRequestSchema = z.object(addonFieldsShape).superRefine((value, ctx) => {
-  for (const issue of checkAddonRules(value)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
-  }
-});
+/**
+ * New packs are recurring by default (owner decision 2026-10-22). Backward compatible: a client that sends `billingMode` is taken at its word
+ * (so the rules below still apply), and one that sends none gets `recurring` when the pack is priced and not lifetime, and `one_time` for the
+ * legacy lifetime / zero-priced shapes, which could never recur. Existing packs are not touched.
+ */
+export const defaultAddonBillingMode = (p: {
+  amount: string;
+  isLifetime?: boolean;
+}): 'one_time' | 'recurring' =>
+  p.isLifetime || moneyCents(p.amount) === 0 ? 'one_time' : 'recurring';
+
+export const createAddonRequestSchema = z
+  .object(addonFieldsShape)
+  .superRefine((value, ctx) => {
+    for (const issue of checkAddonRules(value)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
+    }
+  })
+  .transform((value) => ({
+    ...value,
+    billingMode: value.billingMode ?? defaultAddonBillingMode(value),
+  }));
 export type CreateAddonRequest = z.input<typeof createAddonRequestSchema>;
+
+/** A pack the operator can no longer create but that keeps selling: one-time, lifetime, or on a billing period that is not one month or one year. */
+export const isLegacyAddonPack = (p: {
+  billingMode: 'one_time' | 'recurring';
+  isLifetime: boolean;
+  billingUnit: string;
+  billingDuration: number;
+}): boolean =>
+  p.billingMode !== 'recurring' ||
+  p.isLifetime ||
+  !((p.billingUnit === 'months' || p.billingUnit === 'years') && p.billingDuration === 1);
 export type CreateAddonPayload = z.output<typeof createAddonRequestSchema>;
 
 /** Any subset of the fields; `rowVersion` is the optimistic lock. The service re-checks the merged result. */
@@ -179,7 +211,12 @@ export const addonCardSchema = z.object({
    * already granted by the plan and the pack adds no cap: nothing to buy; a workspace that owns it may cancel it).
    * `grantBullets` lists only what the plan does not already give.
    */
-  state: z.enum(['buy', 'active', 'buy_again', 'included']),
+  state: z.enum(['buy', 'active', 'buy_again', 'included', 'unavailable']),
+  /**
+   * Under `included`: who made it free. `plan` = the plan's own features, `support` = a workspace override or platform-owned status (the card says
+   * "enabled by your account manager"). Null otherwise.
+   */
+  includedVia: z.enum(['plan', 'support']).nullable().default(null),
 });
 export type AddonCard = z.infer<typeof addonCardSchema>;
 
@@ -195,10 +232,64 @@ export const ownedAddonSchema = z.object({
 });
 export type OwnedAddon = z.infer<typeof ownedAddonSchema>;
 
+/** Why the workspace cannot buy add-ons right now (it is not on an active paid plan). */
+export const ADDON_UNAVAILABLE_REASONS = ['free_plan', 'plan_expired', 'no_plan'] as const;
+export type AddonUnavailableReason = (typeof ADDON_UNAVAILABLE_REASONS)[number];
+
 export const workspaceAddonsResponseSchema = z.object({
-  /** An add-on needs an active paid plan (TW-ADD-033): otherwise the catalogue is withheld. */
+  /**
+   * An add-on is bought on top of an active paid plan (TW-ADD-033). When false, `catalog` still lists the packs on sale, every card in the
+   * `unavailable` state (or `included` when the plan already grants it), and `unavailableReason` says why.
+   */
   eligible: z.boolean(),
+  unavailableReason: z.enum(ADDON_UNAVAILABLE_REASONS).nullable().default(null),
+  /** The caller may start a purchase (`paygw.checkout.create`). Anyone may see the list; without this the buy button is disabled. */
+  canBuy: z.boolean().default(true),
   owned: z.array(ownedAddonSchema),
   catalog: z.array(addonCardSchema),
 });
 export type WorkspaceAddonsResponse = z.infer<typeof workspaceAddonsResponseSchema>;
+
+// --- one ownership state for every paid thing --------------------------------------------------------------------------------------------
+
+/**
+ * The four things a workspace can be told about ANYTHING it could pay for (a plain add-on pack, or a paid Marketplace app):
+ *   included    the plan (or an override) already gives everything it gives: no charge, nothing to buy
+ *   owned       the workspace holds a live purchase of it
+ *   buyable     it can be bought now
+ *   unavailable it cannot be bought now (no active paid plan for a plain pack; not on sale for an app)
+ * Order matters and is the whole rule: included beats owned (a held purchase of something the plan now includes is only ending), owned
+ * beats buyable, and unavailable is only what is left when it is neither included nor owned.
+ */
+export type OwnershipState = 'included' | 'owned' | 'buyable' | 'unavailable';
+
+export function resolveOwnership(f: {
+  /** The plan already grants everything the item gives (and the item sells no cap on top). */
+  includedByPlan: boolean;
+  /** The workspace holds a live purchase. */
+  owned: boolean;
+  /** It could be bought if the workspace wanted. */
+  purchasable: boolean;
+}): OwnershipState {
+  if (f.includedByPlan) return 'included';
+  if (f.owned) return 'owned';
+  return f.purchasable ? 'buyable' : 'unavailable';
+}
+
+/** A Marketplace app's `access` (see `accessFor`) as the same four states, so the two lists speak one language. */
+export function ownershipFromAccess(
+  access: 'free' | 'included' | 'entitled' | 'subscription_required' | 'not_for_sale',
+): OwnershipState | 'free' {
+  switch (access) {
+    case 'free':
+      return 'free';
+    case 'included':
+      return 'included';
+    case 'entitled':
+      return 'owned';
+    case 'subscription_required':
+      return 'buyable';
+    case 'not_for_sale':
+      return 'unavailable';
+  }
+}

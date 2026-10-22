@@ -4,6 +4,7 @@ import {
   accessFor,
   availabilityFor,
   includedBy,
+  isMarketEntitlementKey,
   marketCheckoutPath,
   marketEntitlementKey,
   marketPackSlug,
@@ -94,6 +95,12 @@ export class PricingAccess {
     return async (f) => {
       if (f.pricing.pricingModel === 'free')
         return { access: 'free', availability: 'open', includedBy: null, entitled: false };
+      // The app adds nothing the PLAN does not already carry: every plan feature it would grant is on from the plan alone (its own
+      // `mkt_` key aside, and ignoring every add-on and app, or a subscribed app would "include" itself).
+      const grantKeys = f.pricing.grantsPlanFeatures.filter((k) => !isMarketEntitlementKey(k));
+      const planCarriesGrants =
+        grantKeys.length > 0 &&
+        (await this.plans.includedByPlan(orgId, grantKeys)).size === grantKeys.length;
       const needsPlan = f.pricing.includedMinPlan !== null;
       const p = needsPlan ? await planFacts() : null;
       const by = includedBy({
@@ -105,6 +112,7 @@ export class PricingAccess {
         orgPlanSlug: p?.slug ?? null,
         planLapsed: p?.lapsed ?? false,
         catalogue: p?.catalogue ?? [],
+        planCarriesGrants,
       });
       const entitled = by ? false : await feature(marketEntitlementKey(f.slug));
       return {

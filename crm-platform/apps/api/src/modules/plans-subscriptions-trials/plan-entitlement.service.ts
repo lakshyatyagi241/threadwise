@@ -333,6 +333,28 @@ export class PlanEntitlementService {
     return out;
   }
 
+  /**
+   * `includedByPlan` plus which of those keys the workspace has only because someone at the platform switched it on: an override set to true,
+   * or platform-owned status, while the plan row itself does not grant it. The add-on card words these as "enabled by your account manager".
+   */
+  async includedByPlanDetailed(
+    orgId: number,
+    keys: readonly string[],
+  ): Promise<{ included: Set<string>; support: Set<string> }> {
+    const e = await this.forOrg(orgId, { ignorePacks: true });
+    const included = new Set<string>();
+    const support = new Set<string>();
+    if (!e) return { included, support };
+    for (const k of keys) {
+      if (!isPlanFeatureKey(k) || !resolveFeature(e, k)) continue;
+      included.add(k);
+      const viaPlanRow = e.planKnown && storedFeature(e.planFeatures, k);
+      const bySupport = e.platformOwned || e.overrides.features?.[k] === true;
+      if (bySupport && !viaPlanRow) support.add(k);
+    }
+    return { included, support };
+  }
+
   /** The cap on `key`; 0 means unlimited. */
   async limit(orgId: number, key: PlanLimitKey): Promise<number> {
     const e = await this.forOrg(orgId);
