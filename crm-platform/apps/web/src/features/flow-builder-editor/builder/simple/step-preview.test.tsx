@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { newStep, stepText } from '../../lib/simple-model';
-import { StepText } from './step-preview';
+import { StepPreview, StepText } from './step-preview';
 
 describe('the closed card text of a message-like step', () => {
   it('shows the question of a closed Ask for file step, not the empty fallback', () => {
@@ -25,5 +25,28 @@ describe('the closed card text of a message-like step', () => {
   it('shows the fallback when the text is blank', () => {
     const html = renderToStaticMarkup(<StepText text="   " fallback="Empty" />);
     expect(html).toContain('>Empty<');
+  });
+});
+
+describe('the closed card of a carousel step', () => {
+  const card = (n: number) => ({
+    image: n % 2 ? `https://cdn.example/${n}.png` : '',
+    title: `Card ${n}`,
+    buttons: [{ type: 'reply', label: `Pick ${n}` }],
+  });
+
+  it('shows every card, not only the first', () => {
+    const step = { ...newStep('carousel', []), data: { cards: [1, 2, 3, 4, 5].map(card) } };
+    const html = renderToStaticMarkup(<StepPreview step={step} />);
+    expect(html.match(/data-testid="carousel-card"/g)).toHaveLength(5);
+    for (const n of [1, 2, 3, 4, 5]) {
+      expect(html).toContain(`Card ${n}`);
+      expect(html).toContain(`Pick ${n}`);
+    }
+  });
+
+  it('draws nothing for a carousel with no card', () => {
+    const step = { ...newStep('carousel', []), data: { cards: [] } };
+    expect(renderToStaticMarkup(<StepPreview step={step} />)).toBe('');
   });
 });

@@ -67,18 +67,42 @@ export function StepPreview({ step }: { step: SimpleStep }) {
   }
   if (step.type === 'carousel') {
     const cards = arr(d.cards).map(rec);
-    const image = str(cards[0]?.image).trim();
-    if (!image && cards.length === 0) return null;
+    if (cards.length === 0) return null;
+    // Every card, side by side (up to ten): its picture, its title and its buttons, so nothing has to be opened to see them.
     return (
-      <div className="mt-3 flex items-center gap-2">
-        {image ? (
-          <img
-            src={image}
-            alt=""
-            className="h-14 w-20 rounded-md border border-border object-cover"
-          />
-        ) : null}
-        <span className="text-[12px] text-muted-foreground">{cards.length} ×</span>
+      <div className="mt-3 flex gap-2 overflow-x-auto pb-1" data-testid="carousel-cards">
+        {cards.map((c, i) => {
+          const image = str(c.image).trim();
+          const buttons = arr(c.buttons)
+            .map((b) => str(rec(b).label).trim())
+            .filter(Boolean);
+          return (
+            <div
+              key={i}
+              data-testid="carousel-card"
+              className="w-28 shrink-0 overflow-hidden rounded-lg border border-border bg-background"
+            >
+              {image ? (
+                <img src={image} alt="" className="h-16 w-full object-cover" />
+              ) : (
+                <div className="h-16 w-full bg-muted" aria-hidden="true" />
+              )}
+              <div className="space-y-1 p-1.5">
+                <div className="line-clamp-2 text-[11.5px] font-semibold leading-tight">
+                  {str(c.title).trim() || `#${i + 1}`}
+                </div>
+                {buttons.map((label, j) => (
+                  <div
+                    key={j}
+                    className="truncate rounded border border-border px-1 py-0.5 text-center text-[10.5px] text-brand"
+                  >
+                    {label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   }
