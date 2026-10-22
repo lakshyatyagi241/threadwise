@@ -82,14 +82,16 @@
         "priority": "Öncelik",
         "summary": "Özet",
         "answers": "Kişinin bota söyledikleri",
-        "trace": "Nasıl atandı"
+        "trace": "Nasıl atandı",
+        "timers": "Bekleme kuyruğu adımları"
       },
       "source": {
         "flow": "Bir akış",
         "ai_agent": "Bir yapay zekâ temsilcisi",
         "keyword": "Kişinin kendi isteği",
         "bot_failure": "Yardımcı olamayan bir bot",
-        "manual": "Bir ekip arkadaşı"
+        "manual": "Bir ekip arkadaşı",
+        "arrival": "Yönlendirme: kimse üstlenemedi"
       },
       "reason": {
         "customer_asked": "Kişi bir insan istedi",
@@ -130,6 +132,12 @@
           "failed": "Müşteriye mesaj gönderilemedi.",
           "channel_unavailable": "Müşteriye mesaj atlandı: kanal kullanılamıyor."
         }
+      },
+      "timers": {
+        "reminded": "{at} saatinde hatırlatıldı",
+        "offered": "{at} saatinde bu ekibe önerildi",
+        "messaged": "{at} saatinde müşteriye mesaj gönderildi",
+        "gaveBack": "{at} saatinde bota geri verildi"
       }
     },
     "panel": {

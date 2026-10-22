@@ -584,7 +584,11 @@
           "sla_breach": "فات موعد الرد",
           "spam_flagged": "علّمها {actor} كرسالة مزعجة",
           "escalated": "تم التصعيد",
-          "unknown": "{what} ({actor})"
+          "unknown": "{what} ({actor})",
+          "handoff_requested": "سلّمها {actor} إلى شخص",
+          "queue_reminded": "تم تذكير الفريق",
+          "queue_offered": "عُرضت على فريق آخر",
+          "queue_customer_message": "أُرسلت رسالة إلى العميل"
         },
         "actors": {
           "user": "أحد الزملاء",

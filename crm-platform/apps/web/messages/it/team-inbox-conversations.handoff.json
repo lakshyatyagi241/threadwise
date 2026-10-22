@@ -82,14 +82,16 @@
         "priority": "Priorità",
         "summary": "Riepilogo",
         "answers": "Cosa ha detto il contatto al bot",
-        "trace": "Come è stata assegnata"
+        "trace": "Come è stata assegnata",
+        "timers": "Passaggi della coda d'attesa"
       },
       "source": {
         "flow": "Un flusso",
         "ai_agent": "Un agente IA",
         "keyword": "Richiesta del contatto stesso",
         "bot_failure": "Un bot che non ha potuto aiutare",
-        "manual": "Un collega"
+        "manual": "Un collega",
+        "arrival": "L'instradamento: nessuno poteva prenderla"
       },
       "reason": {
         "customer_asked": "Il contatto ha chiesto una persona",
@@ -130,6 +132,12 @@
           "failed": "Non è stato possibile inviare il messaggio al cliente.",
           "channel_unavailable": "Il messaggio al cliente è stato saltato: il canale non è disponibile."
         }
+      },
+      "timers": {
+        "reminded": "Sollecito alle {at}",
+        "offered": "Offerta a questo team alle {at}",
+        "messaged": "Messaggio inviato al cliente alle {at}",
+        "gaveBack": "Restituita al bot alle {at}"
       }
     },
     "panel": {

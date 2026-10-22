@@ -82,14 +82,16 @@
         "priority": "Prioriteit",
         "summary": "Samenvatting",
         "answers": "Wat het contact de bot heeft verteld",
-        "trace": "Hoe het is toegewezen"
+        "trace": "Hoe het is toegewezen",
+        "timers": "Stappen van de wachtrij"
       },
       "source": {
         "flow": "Een flow",
         "ai_agent": "Een AI-agent",
         "keyword": "Het eigen verzoek van het contact",
         "bot_failure": "Een bot die niet kon helpen",
-        "manual": "Een collega"
+        "manual": "Een collega",
+        "arrival": "De routering: niemand kon hem oppakken"
       },
       "reason": {
         "customer_asked": "Het contact vroeg om een medewerker",
@@ -130,6 +132,12 @@
           "failed": "Het bericht aan de klant kon niet worden verstuurd.",
           "channel_unavailable": "Het bericht aan de klant is overgeslagen: het kanaal is niet beschikbaar."
         }
+      },
+      "timers": {
+        "reminded": "Herinnerd om {at}",
+        "offered": "Aangeboden aan dit team om {at}",
+        "messaged": "Bericht naar de klant gestuurd om {at}",
+        "gaveBack": "Teruggegeven aan de bot om {at}"
       }
     },
     "panel": {

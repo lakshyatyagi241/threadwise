@@ -82,14 +82,16 @@
         "priority": "Mức ưu tiên",
         "summary": "Tóm tắt",
         "answers": "Những gì liên hệ đã nói với bot",
-        "trace": "Cách được giao"
+        "trace": "Cách được giao",
+        "timers": "Các bước của hàng chờ"
       },
       "source": {
         "flow": "Một luồng",
         "ai_agent": "Một tác nhân AI",
         "keyword": "Yêu cầu của chính liên hệ",
         "bot_failure": "Một bot không thể hỗ trợ",
-        "manual": "Một đồng nghiệp"
+        "manual": "Một đồng nghiệp",
+        "arrival": "Định tuyến: không ai nhận được"
       },
       "reason": {
         "customer_asked": "Liên hệ yêu cầu gặp người thật",
@@ -130,6 +132,12 @@
           "failed": "Không thể gửi tin nhắn cho khách.",
           "channel_unavailable": "Bỏ qua tin nhắn cho khách: kênh không khả dụng."
         }
+      },
+      "timers": {
+        "reminded": "Nhắc lúc {at}",
+        "offered": "Đề nghị cho nhóm này lúc {at}",
+        "messaged": "Gửi tin nhắn cho khách lúc {at}",
+        "gaveBack": "Trả lại cho bot lúc {at}"
       }
     },
     "panel": {

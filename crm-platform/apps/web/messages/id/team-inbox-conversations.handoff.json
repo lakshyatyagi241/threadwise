@@ -82,14 +82,16 @@
         "priority": "Prioritas",
         "summary": "Ringkasan",
         "answers": "Yang disampaikan kontak kepada bot",
-        "trace": "Cara penugasan"
+        "trace": "Cara penugasan",
+        "timers": "Langkah antrean tunggu"
       },
       "source": {
         "flow": "Sebuah alur",
         "ai_agent": "Agen AI",
         "keyword": "Permintaan kontak sendiri",
         "bot_failure": "Bot yang tidak dapat membantu",
-        "manual": "Seorang rekan tim"
+        "manual": "Seorang rekan tim",
+        "arrival": "Perutean: tidak ada yang bisa mengambil"
       },
       "reason": {
         "customer_asked": "Kontak meminta bicara dengan orang",
@@ -130,6 +132,12 @@
           "failed": "Pesan ke pelanggan tidak dapat dikirim.",
           "channel_unavailable": "Pesan ke pelanggan dilewati: kanal tidak tersedia."
         }
+      },
+      "timers": {
+        "reminded": "Diingatkan pukul {at}",
+        "offered": "Ditawarkan ke tim ini pukul {at}",
+        "messaged": "Pesan ke pelanggan dikirim pukul {at}",
+        "gaveBack": "Dikembalikan ke bot pukul {at}"
       }
     },
     "panel": {

@@ -82,14 +82,16 @@
         "priority": "Priorität",
         "summary": "Zusammenfassung",
         "answers": "Was der Kontakt dem Bot mitgeteilt hat",
-        "trace": "Wie zugewiesen wurde"
+        "trace": "Wie zugewiesen wurde",
+        "timers": "Schritte der Warteschlange"
       },
       "source": {
         "flow": "Ein Flow",
         "ai_agent": "Ein KI-Agent",
         "keyword": "Der Wunsch des Kontakts",
         "bot_failure": "Ein Bot, der nicht helfen konnte",
-        "manual": "Ein Teamkollege"
+        "manual": "Ein Teamkollege",
+        "arrival": "Das Routing: niemand konnte ihn übernehmen"
       },
       "reason": {
         "customer_asked": "Der Kontakt hat einen Mitarbeiter verlangt",
@@ -130,6 +132,12 @@
           "failed": "Die Nachricht an den Kunden konnte nicht gesendet werden.",
           "channel_unavailable": "Die Nachricht an den Kunden wurde übersprungen: Der Kanal ist nicht verfügbar."
         }
+      },
+      "timers": {
+        "reminded": "Erinnert um {at}",
+        "offered": "Diesem Team angeboten um {at}",
+        "messaged": "Nachricht an den Kunden gesendet um {at}",
+        "gaveBack": "An den Bot zurückgegeben um {at}"
       }
     },
     "panel": {

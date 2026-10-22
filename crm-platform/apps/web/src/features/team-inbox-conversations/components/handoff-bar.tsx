@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import {
   HANDOFF_REASONS,
@@ -248,6 +248,19 @@ function reasonText(t: T, c: HandoffCard): string {
 function HandoffDetails({ card }: { card: HandoffCard }) {
   const t = useTranslations('team-inbox-conversations.handoff');
   const answers = Object.entries(card.answers);
+  const fmt = useFormatter();
+  const at = (iso: string) =>
+    fmt.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' });
+  const steps = [
+    card.timers.remindedAt ? t('timers.reminded', { at: at(card.timers.remindedAt) }) : null,
+    card.timers.offeredAt ? t('timers.offered', { at: at(card.timers.offeredAt) }) : null,
+    card.timers.finalAt && card.timers.finalAction === 'message'
+      ? t('timers.messaged', { at: at(card.timers.finalAt) })
+      : null,
+    card.timers.finalAt && card.timers.finalAction === 'bot'
+      ? t('timers.gaveBack', { at: at(card.timers.finalAt) })
+      : null,
+  ].filter((x): x is string => x !== null);
   return (
     <div
       data-testid="inbox-handoff-card"
@@ -282,6 +295,16 @@ function HandoffDetails({ card }: { card: HandoffCard }) {
               </div>
             ))}
           </dl>
+        </div>
+      )}
+      {steps.length > 0 && (
+        <div data-testid="inbox-handoff-timers">
+          <p className="mb-1 font-medium">{t('card.timers')}</p>
+          <ul className="space-y-0.5">
+            {steps.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
         </div>
       )}
       {card.trace.length > 0 && (

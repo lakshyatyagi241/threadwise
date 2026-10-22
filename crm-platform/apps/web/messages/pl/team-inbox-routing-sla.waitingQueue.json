@@ -1,0 +1,31 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Kolejka oczekujących",
+      "intro": "Czaty, których nikt nie przejął, czekają na karcie Oczekujące. Te opcjonalne kroki pomagają je obsłużyć. Każdy krok uruchamia się raz na czat, liczy tylko minuty, gdy zespół jest otwarty, i kończy się, gdy ktoś przejmie czat.",
+      "remind": "Przypomnij zespołowi",
+      "remindBody": "Powiadamia osoby, które mogą przejąć czat.",
+      "overflow": "Zaproponuj innemu zespołowi",
+      "overflowBody": "Przenosi czat do kolejki tego zespołu, jednorazowo.",
+      "team": "Zespół",
+      "teamPick": "Wybierz zespół",
+      "final": "Ostatni krok",
+      "finalBody": "Jeśli do tego czasu nikt nie przejął czatu:",
+      "action": "Co się dzieje",
+      "actionMessage": "Wyślij wiadomość do klienta",
+      "actionBot": "Oddaj czat botowi",
+      "message": "Wiadomość",
+      "messageHint": "Możesz użyć '{{name}}' i '{{first_name}}'.",
+      "afterMinutes": "Po (minuty)",
+      "save": "Zapisz",
+      "saved": "Zapisano ustawienia kolejki oczekujących.",
+      "saveFailed": "Nie udało się zapisać ustawień kolejki oczekujących.",
+      "readOnly": "Możesz zobaczyć te ustawienia, ale nie możesz ich zmienić.",
+      "problems": {
+        "minutes": "Podaj liczbę od 1 do 1440.",
+        "team": "Wybierz zespół.",
+        "message": "Napisz wiadomość."
+      }
+    }
+  }
+}

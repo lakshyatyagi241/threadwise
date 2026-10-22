@@ -584,7 +584,11 @@
           "sla_breach": "已错过回复期限",
           "spam_flagged": "由 {actor} 标记为垃圾信息",
           "escalated": "已升级",
-          "unknown": "{actor} 执行：{what}"
+          "unknown": "{actor} 执行：{what}",
+          "handoff_requested": "由 {actor} 移交给某人",
+          "queue_reminded": "已提醒团队",
+          "queue_offered": "已转给另一个团队",
+          "queue_customer_message": "已向客户发送消息"
         },
         "actors": {
           "user": "某位团队成员",

@@ -1,4 +1,8 @@
-import { QUEUE_TIMER_MAX_MINUTES, type QueueTimers, type QueueUnclaimedAction } from '@crm/contracts';
+import {
+  QUEUE_TIMER_MAX_MINUTES,
+  type QueueTimers,
+  type QueueUnclaimedAction,
+} from '@crm/contracts';
 
 /** The Waiting queue section as the person edits it: three optional steps, each with its minutes. */
 export interface QueueForm {
@@ -14,11 +18,7 @@ export interface QueueForm {
 }
 
 export type QueueProblem =
-  | 'remindMinutes'
-  | 'overflowMinutes'
-  | 'overflowTeam'
-  | 'finalMinutes'
-  | 'finalMessage';
+  'remindMinutes' | 'overflowMinutes' | 'overflowTeam' | 'finalMinutes' | 'finalMessage';
 
 const text = (n: number | null, fallback: string) => (n === null ? fallback : String(n));
 

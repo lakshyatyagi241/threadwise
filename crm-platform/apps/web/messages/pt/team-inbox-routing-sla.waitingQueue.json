@@ -1,0 +1,31 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Fila de espera",
+      "intro": "As conversas que ninguém assumiu esperam na aba Em espera. Estes passos opcionais ajudam a atendê-las. Cada passo roda uma vez por conversa, conta só os minutos em que a equipe está aberta e para assim que alguém assume a conversa.",
+      "remind": "Lembrar a equipe",
+      "remindBody": "Avisa quem pode assumir a conversa.",
+      "overflow": "Oferecer a outra equipe",
+      "overflowBody": "Move a conversa para a fila desta equipe, uma vez.",
+      "team": "Equipe",
+      "teamPick": "Escolha uma equipe",
+      "final": "Último passo",
+      "finalBody": "Se ninguém tiver assumido a conversa até lá:",
+      "action": "O que acontece",
+      "actionMessage": "Enviar uma mensagem ao cliente",
+      "actionBot": "Devolver a conversa ao bot",
+      "message": "Mensagem",
+      "messageHint": "Você pode usar '{{name}}' e '{{first_name}}'.",
+      "afterMinutes": "Depois de (minutos)",
+      "save": "Salvar",
+      "saved": "Configurações da fila de espera salvas.",
+      "saveFailed": "Não foi possível salvar as configurações da fila de espera.",
+      "readOnly": "Você pode ver estas configurações, mas não alterá-las.",
+      "problems": {
+        "minutes": "Digite um número de 1 a 1440.",
+        "team": "Escolha uma equipe.",
+        "message": "Escreva a mensagem."
+      }
+    }
+  }
+}

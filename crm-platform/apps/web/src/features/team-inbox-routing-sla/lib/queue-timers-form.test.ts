@@ -31,15 +31,41 @@ describe('the waiting queue form', () => {
   });
 
   it('switching a step off clears its minutes and companion in the request', () => {
-    const f = formFromTimers({ ...OFF, overflowMinutes: 15, overflowTeamId: 'team-b', unclaimedMinutes: 40, unclaimedAction: 'bot' });
+    const f = formFromTimers({
+      ...OFF,
+      overflowMinutes: 15,
+      overflowTeamId: 'team-b',
+      unclaimedMinutes: 40,
+      unclaimedAction: 'bot',
+    });
     const off = { ...f, overflow: false, final: false };
     expect(toQueueInput(off)).toEqual(OFF);
   });
 
   it('names what blocks a save', () => {
-    const f = { ...formFromTimers(OFF), remind: true, remindMinutes: '0', overflow: true, final: true, finalMinutes: '2000' };
-    expect(queueProblems(f).sort()).toEqual(['finalMessage', 'finalMinutes', 'overflowTeam', 'remindMinutes']);
-    expect(queueProblems({ ...f, remindMinutes: '5', overflowTeamId: 't', finalMinutes: '60', finalAction: 'bot' })).toEqual([]);
+    const f = {
+      ...formFromTimers(OFF),
+      remind: true,
+      remindMinutes: '0',
+      overflow: true,
+      final: true,
+      finalMinutes: '2000',
+    };
+    expect(queueProblems(f).sort()).toEqual([
+      'finalMessage',
+      'finalMinutes',
+      'overflowTeam',
+      'remindMinutes',
+    ]);
+    expect(
+      queueProblems({
+        ...f,
+        remindMinutes: '5',
+        overflowTeamId: 't',
+        finalMinutes: '60',
+        finalAction: 'bot',
+      }),
+    ).toEqual([]);
   });
 
   it('knows when nothing changed', () => {

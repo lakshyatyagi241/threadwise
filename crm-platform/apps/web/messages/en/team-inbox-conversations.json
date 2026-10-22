@@ -584,7 +584,11 @@
           "sla_breach": "Response deadline missed",
           "spam_flagged": "Marked as spam by {actor}",
           "escalated": "Escalated",
-          "unknown": "{what} by {actor}"
+          "unknown": "{what} by {actor}",
+          "handoff_requested": "Handed to a person by {actor}",
+          "queue_reminded": "The team was reminded",
+          "queue_offered": "Offered to another team",
+          "queue_customer_message": "A message was sent to the customer"
         },
         "actors": {
           "user": "A teammate",

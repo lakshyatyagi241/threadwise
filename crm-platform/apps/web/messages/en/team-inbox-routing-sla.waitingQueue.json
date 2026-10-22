@@ -1,0 +1,31 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Waiting queue",
+      "intro": "Chats nobody has taken wait in the Waiting tab. These optional steps help them get answered. Each step runs once per chat, counts only the minutes the team is open, and stops as soon as someone takes the chat.",
+      "remind": "Remind the team",
+      "remindBody": "Tell the people who can take the chat.",
+      "overflow": "Offer to another team",
+      "overflowBody": "Move the chat to this team's queue, once.",
+      "team": "Team",
+      "teamPick": "Choose a team",
+      "final": "Last step",
+      "finalBody": "If nobody has taken the chat by then:",
+      "action": "What happens",
+      "actionMessage": "Send a message to the customer",
+      "actionBot": "Give the chat back to the bot",
+      "message": "Message",
+      "messageHint": "You can use '{{name}}' and '{{first_name}}'.",
+      "afterMinutes": "After (minutes)",
+      "save": "Save",
+      "saved": "Waiting queue settings saved.",
+      "saveFailed": "Could not save the waiting queue settings.",
+      "readOnly": "You can see these settings but not change them.",
+      "problems": {
+        "minutes": "Enter a number from 1 to 1440.",
+        "team": "Choose a team.",
+        "message": "Write the message."
+      }
+    }
+  }
+}

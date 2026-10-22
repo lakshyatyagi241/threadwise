@@ -82,14 +82,16 @@
         "priority": "優先度",
         "summary": "概要",
         "answers": "連絡先がボットに伝えた内容",
-        "trace": "割り当て方法"
+        "trace": "割り当て方法",
+        "timers": "待機キューの手順"
       },
       "source": {
         "flow": "フロー",
         "ai_agent": "AIエージェント",
         "keyword": "連絡先自身の希望",
         "bot_failure": "対応できなかったボット",
-        "manual": "チームメンバー"
+        "manual": "チームメンバー",
+        "arrival": "ルーティング: 誰も引き受けられませんでした"
       },
       "reason": {
         "customer_asked": "連絡先が担当者を希望しました",
@@ -130,6 +132,12 @@
           "failed": "お客様へのメッセージを送信できませんでした。",
           "channel_unavailable": "お客様へのメッセージをスキップしました: チャネルを利用できません。"
         }
+      },
+      "timers": {
+        "reminded": "{at}に通知",
+        "offered": "{at}にこのチームへ回しました",
+        "messaged": "{at}に顧客へメッセージを送信",
+        "gaveBack": "{at}にボットへ戻しました"
       }
     },
     "panel": {

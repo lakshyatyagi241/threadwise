@@ -584,7 +584,11 @@
           "sla_breach": "พลาดกำหนดเวลาตอบกลับ",
           "spam_flagged": "ทำเครื่องหมายเป็นสแปมโดย {actor}",
           "escalated": "ยกระดับแล้ว",
-          "unknown": "{what} โดย {actor}"
+          "unknown": "{what} โดย {actor}",
+          "handoff_requested": "ส่งต่อให้บุคคลโดย {actor}",
+          "queue_reminded": "เตือนทีมแล้ว",
+          "queue_offered": "เสนอให้ทีมอื่นแล้ว",
+          "queue_customer_message": "ส่งข้อความถึงลูกค้าแล้ว"
         },
         "actors": {
           "user": "เพื่อนร่วมทีม",

@@ -1,0 +1,31 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Wachtrij",
+      "intro": "Chats die niemand heeft opgepakt wachten op het tabblad Wachtend. Deze optionele stappen helpen om ze te beantwoorden. Elke stap loopt één keer per chat, telt alleen de minuten dat het team open is en stopt zodra iemand de chat oppakt.",
+      "remind": "Het team herinneren",
+      "remindBody": "Waarschuwt de mensen die de chat kunnen oppakken.",
+      "overflow": "Aanbieden aan een ander team",
+      "overflowBody": "Verplaatst de chat eenmalig naar de wachtrij van dit team.",
+      "team": "Team",
+      "teamPick": "Kies een team",
+      "final": "Laatste stap",
+      "finalBody": "Als niemand de chat tegen die tijd heeft opgepakt:",
+      "action": "Wat gebeurt er",
+      "actionMessage": "Een bericht naar de klant sturen",
+      "actionBot": "De chat teruggeven aan de bot",
+      "message": "Bericht",
+      "messageHint": "Je kunt '{{name}}' en '{{first_name}}' gebruiken.",
+      "afterMinutes": "Na (minuten)",
+      "save": "Opslaan",
+      "saved": "Instellingen van de wachtrij opgeslagen.",
+      "saveFailed": "De instellingen van de wachtrij konden niet worden opgeslagen.",
+      "readOnly": "Je kunt deze instellingen zien maar niet wijzigen.",
+      "problems": {
+        "minutes": "Voer een getal van 1 tot 1440 in.",
+        "team": "Kies een team.",
+        "message": "Schrijf het bericht."
+      }
+    }
+  }
+}

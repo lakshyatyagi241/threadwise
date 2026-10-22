@@ -1,0 +1,31 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "File d'attente",
+      "intro": "Les conversations que personne n'a prises attendent dans l'onglet En attente. Ces étapes facultatives aident à les traiter. Chaque étape s'exécute une fois par conversation, ne compte que les minutes où l'équipe est ouverte et s'arrête dès que quelqu'un prend la conversation.",
+      "remind": "Rappeler l'équipe",
+      "remindBody": "Prévient les personnes qui peuvent prendre la conversation.",
+      "overflow": "Proposer à une autre équipe",
+      "overflowBody": "Déplace la conversation vers la file de cette équipe, une seule fois.",
+      "team": "Équipe",
+      "teamPick": "Choisir une équipe",
+      "final": "Dernière étape",
+      "finalBody": "Si personne n'a pris la conversation d'ici là :",
+      "action": "Ce qui se passe",
+      "actionMessage": "Envoyer un message au client",
+      "actionBot": "Rendre la conversation au bot",
+      "message": "Message",
+      "messageHint": "Vous pouvez utiliser '{{name}}' et '{{first_name}}'.",
+      "afterMinutes": "Après (minutes)",
+      "save": "Enregistrer",
+      "saved": "Paramètres de la file d'attente enregistrés.",
+      "saveFailed": "Impossible d'enregistrer les paramètres de la file d'attente.",
+      "readOnly": "Vous pouvez voir ces paramètres sans les modifier.",
+      "problems": {
+        "minutes": "Saisissez un nombre de 1 à 1440.",
+        "team": "Choisissez une équipe.",
+        "message": "Écrivez le message."
+      }
+    }
+  }
+}
