@@ -93,7 +93,7 @@ Under the events, **This browser** has the sound switch and the desktop alerts c
 
 ## If something looks wrong
 
-- The page shows **Live updates are paused**: the live connection to the server is down, so new alerts can arrive up to a minute late and the tab title may change without a pop-up. Reload the page to reconnect; if it keeps showing, tell your administrator.
+- The page shows **Live updates are paused**: the live connection is down, so new alerts can arrive up to a minute late and the tab title may change without a pop-up. Reload the page to reconnect; if it keeps showing, tell your administrator.
 - A switch will not move: it is grey because the bell for that event is off. Turn the bell on first.
 - The page says it could not load your preferences: select **Try again**. Until it loads, alerts follow each event's default.
 - A pop-up you turned off still appeared: reload the page so every tab picks up your latest choices.

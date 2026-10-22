@@ -110,7 +110,7 @@ Temporary copies built from the person's records do not outlive the erasure. Rev
 
 ### The proof
 
-After an erasure the request shows a **proof**: the totals, what was done per table, the registry digest, a SHA-256 and the limits of the erasure, such as backups. Select **Download proof** to save it as a JSON file. The proof contains no personal data.
+After an erasure the request shows a **proof**: the totals, what was removed from each area, a fingerprint of the result and the limits of the erasure, such as backups. Select **Download proof** to save it as a file. The proof contains no personal data.
 
 ## Rejecting or completing
 
@@ -122,9 +122,9 @@ Deleting a contact from the contacts list or their profile now erases their conv
 
 ## Permissions
 
-- **privacy.requests.read** lists and opens requests.
-- **privacy.requests.manage** creates requests, records verification and holds, prepares and downloads exports, rejects, completes, and changes the deadline.
-- **privacy.erase.execute** runs the erasure.
+- The permission to see privacy requests lists and opens requests.
+- The permission to manage privacy requests creates requests, records verification and holds, prepares and downloads exports, rejects, completes, and changes the deadline.
+- The permission to run erasures runs the erasure.
 
 ## If something looks wrong
 

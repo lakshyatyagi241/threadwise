@@ -18,7 +18,7 @@ keywords: [lead ads, webhook, zapier, make, forms, capture, attribution, campaig
 2. Select **New source** and work through the wizard:
    1. **Basics**: a name, a platform label, an optional shared secret and how long to keep raw lead data.
    2. **What happens to a lead**: default country code, starting lifecycle stage, tag, owner, optional deal and notifications. Select **Create source**.
-   3. **Connect your sender**: copy the URL and token into your tool. They are shown only once. The URL is complete, with your platform's public address in front. If the platform's public API address has not been set (or points at a private address), you see only the path and a warning; ask whoever runs your platform to set it, then rotate the token to get the full URL.
+   3. **Connect your sender**: copy the URL and token into your tool. They are shown only once. The URL is complete, with your platform's public address in front. If the platform's public address has not been set, you see only part of the URL and a warning; ask whoever runs your platform to set it, then rotate the token to get the full URL.
    4. **Map the fields**: say where each value sits in your tool's data. The **Live preview** shows the result as you type.
 3. Select **Save and finish**, or **Skip for now** to map later.
 
@@ -103,10 +103,9 @@ The tile needs the **Lead sources** plan feature and permission to read lead sou
 
 A lead does not mean the person agreed to marketing, so a lead records no consent on its own, except where a Meta lead form has a consent checkbox of its own: the picker marks those forms, and a ticked checkbox is recorded as proof of consent with its wording. If your form tool or ad platform already holds the person's agreement, it can send it with the lead and it is recorded on the contact:
 
-- Put a `consent` object in the body: `given` (true or yes), and at least one of `text` (the wording the person saw), `version`, `form_id` or `ad_id`. You can also send `at` (when they agreed) and `channels` (`whatsapp`, `sms`, `email`).
-- Flat keys work too: `consent_given`, `consent_text`, `consent_version`, `consent_at`, `consent_form_id`, `consent_ad_id`, `consent_channels`.
-- Without `channels`, a phone number is recorded for WhatsApp and an email address for email. SMS is recorded only when you name it.
-- A `given` that is not a yes, or a yes with no wording, version, form or ad, records nothing.
+- Your sender must say that the person agreed, plus at least one of: the wording the person saw, a version, a form id or an ad id. It can also say when they agreed and for which channels (WhatsApp, SMS, email). Ask whoever builds your sender for the exact field names.
+- Without channels, a phone number is recorded for WhatsApp and an email address for email. SMS is recorded only when named.
+- Anything that is not a clear yes, or a yes with no wording, version, form or ad, records nothing.
 - **Send test lead** never records consent. A person who opted out is never turned back on.
 
 The Consent card of the contact shows the record with the source **Lead capture**.
