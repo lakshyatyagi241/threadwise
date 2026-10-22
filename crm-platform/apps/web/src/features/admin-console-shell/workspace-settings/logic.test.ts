@@ -11,6 +11,7 @@ import {
   TAB_GROUPS,
   TAB_LINKS,
   canSubmitDelete,
+  filterTimeZones,
   parseTab,
   timeZoneList,
   toMatrix,
@@ -67,6 +68,20 @@ describe('General tab (TW-ASHELL-033)', () => {
     expect(zones[0]).toBe('UTC');
     expect(zones[1]).toBe('Asia/Kolkata');
     expect(new Set(zones).size).toBe(zones.length);
+  });
+
+  it('filters zones by a search that ignores case and reads _ as a space', () => {
+    const zones = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Asia/Kolkata'];
+    expect(filterTimeZones(zones, 'new york')).toEqual(['America/New_York']);
+    expect(filterTimeZones(zones, 'AMERICA/')).toEqual(['America/New_York', 'America/Los_Angeles']);
+    expect(filterTimeZones(zones, '  kolkata ')).toEqual(['Asia/Kolkata']);
+    expect(filterTimeZones(zones, 'mars')).toEqual([]);
+  });
+
+  it('keeps every zone, in order, when the search is empty', () => {
+    const zones = ['UTC', 'Asia/Kolkata'];
+    expect(filterTimeZones(zones, '')).toEqual(zones);
+    expect(filterTimeZones(zones, '   ')).toEqual(zones);
   });
 
   it('keeps Asia/Kolkata selectable after the workspace moves off it, even when the browser lists only Asia/Calcutta', () => {

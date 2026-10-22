@@ -282,7 +282,9 @@
           "save": "Salvar",
           "saved": "Preferência salva.",
           "saveFailed": "Não foi possível salvar a preferência."
-        }
+        },
+        "timezoneSearch": "Pesquisar fusos horários",
+        "timezoneNoMatch": "Nenhum fuso horário corresponde."
       },
       "notifications": {
         "title": "Notificações do espaço de trabalho",

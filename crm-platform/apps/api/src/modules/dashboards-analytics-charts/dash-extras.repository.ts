@@ -5,9 +5,18 @@ import type { Tx } from '@crm/db';
 
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number => Number(v ?? 0);
-
-/** Reference shows "n / 12" (a conceptual total, 12 integrations on its catalog page); we count the ten that have connection tables here. */
-export const INTEGRATION_CATALOG_SIZE = 12;
+/** The integrations the card counts. Typed, so a misspelt key fails to compile instead of skewing `total`. */
+type IntegrationFlag =
+  | 'woo'
+  | 'shopify'
+  | 'sheets'
+  | 'meta'
+  | 'hubspot'
+  | 'slack'
+  | 'trello'
+  | 'webhooks'
+  | 'incoming'
+  | 'instagram';
 
 /**
  * The dashboard cards that read other domains' tables (Instagram band, flow counters, integration status). Read-only, RLS-scoped; each
@@ -109,7 +118,8 @@ export class DashExtrasRepository {
           EXISTS (SELECT 1 FROM incoming_webhooks WHERE org_id = ${orgId} AND is_active) AS incoming,
           EXISTS (SELECT 1 FROM workspace_ig_accounts WHERE org_id = ${orgId}) AS instagram`)
     ).rows[0] as Raw;
-    const flags = [
+    // Every integration this workspace can connect that has a connection table here. The card's total is this list's length, so it reads connected / available.
+    const flags: IntegrationFlag[] = [
       'woo',
       'shopify',
       'sheets',
@@ -123,7 +133,7 @@ export class DashExtrasRepository {
     ];
     return {
       connected: flags.filter((k) => r[k] === true).length,
-      total: INTEGRATION_CATALOG_SIZE,
+      total: flags.length,
       rows: [
         { code: 'woocommerce', connected: r.woo === true, events7d: n(r.woo_events) },
         { code: 'shopify', connected: r.shopify === true, events7d: null },

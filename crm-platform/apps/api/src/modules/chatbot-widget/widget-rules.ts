@@ -211,3 +211,17 @@ export const historyFrom = (agentId: number | null): 'agent' | 'assistant' =>
 
 /** `source` marker on every message the widget's own assistant writes; anything else outbound is a person. */
 export const AI_SOURCE = 'ai_chat_assistant';
+
+/**
+ * The origin the embed script and the chat page point back at. Never the request's own `Host`: behind the website's proxy that is the
+ * API container's name (`desk-api-green:3000`), which a visitor's browser cannot resolve. The configured widget address wins, then
+ * `APP_URL` (the same two the snippet shown to the owner is built from); only without either is the request's host used.
+ */
+export function widgetBaseUrl(
+  env: { widgetPublicBase?: string | null; appUrl?: string | null },
+  req: { protocol: string; get(name: string): string | undefined },
+): string {
+  const configured = env.widgetPublicBase?.trim() || env.appUrl?.trim();
+  if (configured) return configured.replace(/\/+$/, '');
+  return `${req.protocol}://${req.get('host')}`;
+}

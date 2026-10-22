@@ -30,6 +30,8 @@ x-api-env: &api-env
   HEALTH_DB_POOL_MAX: '2'
   APP_URL: https://${DOMAIN}
   WEB_APP_URL: https://${DOMAIN}
+  # The origin the chat widget's embed script and chat page point back at; the API container's own name must never end up in a snippet.
+  WIDGET_PUBLIC_BASE_URL: https://${DOMAIN}
   CORS_ORIGINS: https://${DOMAIN}
   APP_NAME: ${APP_NAME}
   TRUST_PROXY: loopback,linklocal,uniquelocal
