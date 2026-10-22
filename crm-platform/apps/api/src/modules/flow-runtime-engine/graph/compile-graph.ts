@@ -213,6 +213,8 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
         savePropertyKey: str(data.savePropertyKey),
+        // Like the Buttons node: the list stays tappable after a leaf branch unless the author turned this off.
+        keepMenuOpen: data.keepMenuOpen !== false,
       };
     }
     case 'carousel': {

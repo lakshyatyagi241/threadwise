@@ -408,6 +408,44 @@ describe('List and Poll', () => {
     expect(bodies(byTitle.sent).slice(-1)).toEqual(['B']);
   });
 
+  describe('a list stays tappable after a leaf branch', () => {
+    const mk = (extra: Record<string, unknown> = {}) =>
+      newRun({
+        nodes: [
+          n('l', 'list', {
+            prompt: 'Main Menu',
+            button: 'Open',
+            options: [{ title: 'Website bot' }, { title: 'Campaigns' }, { title: 'WhatsApp bot' }],
+            ...extra,
+          }),
+          n('a', 'message', { text: 'website info' }),
+          n('b', 'message', { text: 'campaign info' }),
+          n('g', 'message', { text: 'whatsapp info' }),
+        ],
+        edges: [e('l', 'a', 'p0'), e('l', 'b', 'p1'), e('l', 'g', 'p2')],
+      });
+
+    it('a second and third pick on the same list still continue the flow', async () => {
+      const run = mk();
+      const h = harness(run);
+      await h.start();
+      const t1 = await h.reply(tap('list_l_p0', 'Website bot'));
+      expect(t1.t).toBe('wait'); // the branch ran out of nodes: the list is re-armed, not ended
+      expect(run.status).toBe('waiting');
+      await h.reply(tap('list_l_p1', 'Campaigns'));
+      await h.reply(tap('list_l_p2', 'WhatsApp bot'));
+      expect(bodies(h.sent).slice(1)).toEqual(['website info', 'campaign info', 'whatsapp info']);
+    });
+
+    it('ends on the first pick when the author turned keepMenuOpen off', async () => {
+      const run = mk({ keepMenuOpen: false });
+      const h = harness(run);
+      await h.start();
+      const t1 = await h.reply(tap('list_l_p0', 'Website bot'));
+      expect(t1).toMatchObject({ t: 'end', status: 'completed' });
+    });
+  });
+
   it('a poll routes the chosen option', async () => {
     const run = newRun({
       nodes: [
