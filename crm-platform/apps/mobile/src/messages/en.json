@@ -1127,7 +1127,9 @@
       "deleted": "This message was deleted",
       "retry": "Retry sending",
       "mediaPending": "The file is still being downloaded.",
-      "mediaFailed": "The file couldn't be downloaded."
+      "mediaFailed": "The file couldn't be downloaded.",
+      "templateCopyCode": "Copy code",
+      "templateButtonUnnamed": "Button"
     },
     "kind": {
       "text": "Message",
@@ -1229,7 +1231,10 @@
       "channelDisconnected": "This channel is disconnected. Reconnect it on the web, then try again.",
       "planLimit": "Your plan's message limit has been reached.",
       "forbidden": "You don't have permission to do that.",
-      "notFound": "This conversation is no longer available."
+      "notFound": "This conversation is no longer available.",
+      "templateNotSendable": "This template can't be sent from this conversation. Choose another one.",
+      "validation": "Some of the details are not valid. Check them and try again.",
+      "withCode": "{{message}} (Code: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

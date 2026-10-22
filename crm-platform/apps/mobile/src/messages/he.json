@@ -1149,7 +1149,9 @@
       "deleted": "ההודעה הזו נמחקה",
       "retry": "ניסיון שליחה חוזר",
       "mediaPending": "הקובץ עדיין בהורדה.",
-      "mediaFailed": "אי אפשר היה להוריד את הקובץ."
+      "mediaFailed": "אי אפשר היה להוריד את הקובץ.",
+      "templateCopyCode": "העתק קוד",
+      "templateButtonUnnamed": "כפתור"
     },
     "kind": {
       "text": "הודעה",
@@ -1251,7 +1253,10 @@
       "channelDisconnected": "הערוץ הזה מנותק. חברו אותו מחדש באתר ונסו שוב.",
       "planLimit": "הגעתם למגבלת ההודעות של החבילה.",
       "forbidden": "אין לכם הרשאה לבצע זאת.",
-      "notFound": "השיחה הזו כבר אינה זמינה."
+      "notFound": "השיחה הזו כבר אינה זמינה.",
+      "templateNotSendable": "לא ניתן לשלוח תבנית זו מהשיחה הזו. בחרו תבנית אחרת.",
+      "validation": "חלק מהפרטים אינם תקינים. בדקו אותם ונסו שוב.",
+      "withCode": "{{message}} (קוד: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -21,9 +21,19 @@ export function sendErrorMessage(error: unknown, t: TFunction): string {
         return t('inbox.thread.conflict');
       case ERROR_CODES.CONVERSATION_STATUS_INVALID:
         return t('inbox.thread.statusInvalid');
+      case ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE:
+        return t('inbox.errors.templateNotSendable');
+      case ERROR_CODES.VALIDATION_FAILED:
+        return t('inbox.errors.validation');
     }
   }
-  return messageForError(error, t);
+  const message = messageForError(error, t);
+  // An answer the app has no words for says which one it was, so a person can read it out to support: the code is the server's stable
+  // identifier (never its text), shown only where the app-wide message would otherwise hide what happened.
+  if (isApiError(error) && error.status >= 400 && message === t('errors.generic')) {
+    return t('inbox.errors.withCode', { message, code: error.code });
+  }
+  return message;
 }
 
 /**

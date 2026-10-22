@@ -1171,7 +1171,9 @@
       "deleted": "Ta wiadomość została usunięta",
       "retry": "Ponów wysyłanie",
       "mediaPending": "Plik jest jeszcze pobierany.",
-      "mediaFailed": "Nie udało się pobrać pliku."
+      "mediaFailed": "Nie udało się pobrać pliku.",
+      "templateCopyCode": "Kopiuj kod",
+      "templateButtonUnnamed": "Przycisk"
     },
     "kind": {
       "text": "Wiadomość",
@@ -1273,7 +1275,10 @@
       "channelDisconnected": "Ten kanał jest rozłączony. Połącz go ponownie w wersji internetowej i spróbuj jeszcze raz.",
       "planLimit": "Osiągnięto limit wiadomości w Twoim planie.",
       "forbidden": "Nie masz uprawnień do tej czynności.",
-      "notFound": "Ta rozmowa nie jest już dostępna."
+      "notFound": "Ta rozmowa nie jest już dostępna.",
+      "templateNotSendable": "Tego szablonu nie można wysłać z tej rozmowy. Wybierz inny.",
+      "validation": "Niektóre dane są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
+      "withCode": "{{message}} (Kod: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -144,12 +144,12 @@ export interface BubbleButton {
   key: string;
   label: string;
   icon?: IconName | null;
-  /** A link the person can open; without one the button is only drawn (a template does not say where it goes). */
+  /** A web link or `tel:` number the person can open; without one the button is only drawn. */
   url?: string | null;
 }
 
-/** Only web links are opened from a message: never another app's scheme. */
-const isWebLink = (url: string) => /^https?:\/\//i.test(url);
+/** Only web links and phone numbers are opened from a message: never another app's scheme. */
+const isOpenable = (url: string) => /^https?:\/\//i.test(url) || /^tel:\+?\d{4,20}$/.test(url);
 
 /** The buttons under a message, one full-width row each, as they look to the customer. */
 export function ButtonRows({ buttons }: { buttons: readonly BubbleButton[] }) {
@@ -166,7 +166,7 @@ export function ButtonRows({ buttons }: { buttons: readonly BubbleButton[] }) {
           </>
         );
         const style = [styles.button, { backgroundColor: colors.surfaceMuted }];
-        return button.url && isWebLink(button.url) ? (
+        return button.url && isOpenable(button.url) ? (
           <Pressable
             key={button.key}
             accessibilityRole="link"

@@ -1105,7 +1105,9 @@
       "deleted": "このメッセージは削除されました",
       "retry": "送信を再試行",
       "mediaPending": "ファイルをダウンロード中です。",
-      "mediaFailed": "ファイルをダウンロードできませんでした。"
+      "mediaFailed": "ファイルをダウンロードできませんでした。",
+      "templateCopyCode": "コードをコピー",
+      "templateButtonUnnamed": "ボタン"
     },
     "kind": {
       "text": "メッセージ",
@@ -1207,7 +1209,10 @@
       "channelDisconnected": "このチャネルは切断されています。ウェブで再接続してから、もう一度お試しください。",
       "planLimit": "ご利用のプランのメッセージ上限に達しました。",
       "forbidden": "この操作を行う権限がありません。",
-      "notFound": "この会話は利用できなくなりました。"
+      "notFound": "この会話は利用できなくなりました。",
+      "templateNotSendable": "このテンプレートはこの会話から送信できません。別のテンプレートを選んでください。",
+      "validation": "入力内容に無効な項目があります。確認してもう一度お試しください。",
+      "withCode": "{{message}} (コード: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -1105,7 +1105,9 @@
       "deleted": "Pesan ini telah dihapus",
       "retry": "Coba kirim lagi",
       "mediaPending": "File masih diunduh.",
-      "mediaFailed": "File tidak dapat diunduh."
+      "mediaFailed": "File tidak dapat diunduh.",
+      "templateCopyCode": "Salin kode",
+      "templateButtonUnnamed": "Tombol"
     },
     "kind": {
       "text": "Pesan",
@@ -1207,7 +1209,10 @@
       "channelDisconnected": "Saluran ini terputus. Hubungkan kembali di web, lalu coba lagi.",
       "planLimit": "Batas pesan paket Anda telah tercapai.",
       "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
-      "notFound": "Percakapan ini tidak lagi tersedia."
+      "notFound": "Percakapan ini tidak lagi tersedia.",
+      "templateNotSendable": "Templat ini tidak dapat dikirim dari percakapan ini. Pilih templat lain.",
+      "validation": "Sebagian detail tidak valid. Periksa lalu coba lagi.",
+      "withCode": "{{message}} (Kode: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

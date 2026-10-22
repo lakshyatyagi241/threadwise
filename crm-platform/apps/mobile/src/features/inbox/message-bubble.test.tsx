@@ -207,6 +207,39 @@ describe('MessageBubble: templates and buttons', () => {
     expect(screen.getByText('Big sale')).toBeTruthy();
   });
 
+  it('opens the link of a sent template button and dials its number; the rest are only drawn', async () => {
+    await renderApp(
+      <MessageBubble
+        message={outgoing(1, {
+          kind: 'template',
+          body: 'Your offer',
+          template: template({
+            header: null,
+            footer: null,
+            buttons: [
+              { type: 'url', text: 'Check details', url: 'https://example.test/offer' },
+              { type: 'url', text: 'Track order' },
+              { type: 'phone', text: 'Call us', phone: '+91 99999 99999' },
+              { type: 'quick_reply', text: 'Not interested' },
+              { type: 'copy_code', text: '' },
+              { type: 'other', text: '' },
+            ],
+          }) as never,
+        })}
+      />,
+    );
+    await fireEvent.press(screen.getByRole('link', { name: 'Check details' }));
+    expect(Linking.openURL).toHaveBeenCalledWith('https://example.test/offer');
+    await fireEvent.press(screen.getByRole('link', { name: 'Call us' }));
+    expect(Linking.openURL).toHaveBeenCalledWith('tel:+919999999999');
+    // A link with no fixed address (it is made at send time), a quick reply and the unnamed ones are drawn, not opened.
+    expect(screen.queryByRole('link', { name: 'Track order' })).toBeNull();
+    expect(screen.getByLabelText('Track order')).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Not interested' })).toBeNull();
+    expect(screen.getByLabelText('Copy code')).toBeTruthy();
+    expect(screen.getByLabelText('Button')).toBeTruthy();
+  });
+
   it('opens a web link button the agent sent, and never another kind of address', async () => {
     await renderApp(
       <MessageBubble

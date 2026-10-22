@@ -1127,7 +1127,9 @@
       "deleted": "Dit bericht is verwijderd",
       "retry": "Opnieuw verzenden",
       "mediaPending": "Het bestand wordt nog gedownload.",
-      "mediaFailed": "Het bestand kon niet worden gedownload."
+      "mediaFailed": "Het bestand kon niet worden gedownload.",
+      "templateCopyCode": "Code kopiëren",
+      "templateButtonUnnamed": "Knop"
     },
     "kind": {
       "text": "Bericht",
@@ -1229,7 +1231,10 @@
       "channelDisconnected": "Dit kanaal is losgekoppeld. Verbind het opnieuw op het web en probeer het dan nog eens.",
       "planLimit": "De berichtlimiet van je abonnement is bereikt.",
       "forbidden": "Je hebt geen toestemming om dat te doen.",
-      "notFound": "Dit gesprek is niet meer beschikbaar."
+      "notFound": "Dit gesprek is niet meer beschikbaar.",
+      "templateNotSendable": "Deze sjabloon kan niet vanuit dit gesprek worden verzonden. Kies een andere.",
+      "validation": "Sommige gegevens zijn ongeldig. Controleer ze en probeer het opnieuw.",
+      "withCode": "{{message}} (Foutcode: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

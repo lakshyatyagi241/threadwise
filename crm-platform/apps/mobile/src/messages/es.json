@@ -1149,7 +1149,9 @@
       "deleted": "Este mensaje fue eliminado",
       "retry": "Reintentar envío",
       "mediaPending": "El archivo aún se está descargando.",
-      "mediaFailed": "No se pudo descargar el archivo."
+      "mediaFailed": "No se pudo descargar el archivo.",
+      "templateCopyCode": "Copiar código",
+      "templateButtonUnnamed": "Botón"
     },
     "kind": {
       "text": "Mensaje",
@@ -1251,7 +1253,10 @@
       "channelDisconnected": "Este canal está desconectado. Vuelve a conectarlo en la web e inténtalo de nuevo.",
       "planLimit": "Se alcanzó el límite de mensajes de tu plan.",
       "forbidden": "No tienes permiso para hacer eso.",
-      "notFound": "Esta conversación ya no está disponible."
+      "notFound": "Esta conversación ya no está disponible.",
+      "templateNotSendable": "Esta plantilla no se puede enviar desde esta conversación. Elige otra.",
+      "validation": "Algunos datos no son válidos. Revísalos e inténtalo de nuevo.",
+      "withCode": "{{message}} (Código: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

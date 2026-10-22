@@ -1105,7 +1105,9 @@
       "deleted": "此消息已被删除",
       "retry": "重新发送",
       "mediaPending": "文件仍在下载中。",
-      "mediaFailed": "文件下载失败。"
+      "mediaFailed": "文件下载失败。",
+      "templateCopyCode": "复制代码",
+      "templateButtonUnnamed": "按钮"
     },
     "kind": {
       "text": "消息",
@@ -1207,7 +1209,10 @@
       "channelDisconnected": "此渠道已断开连接。请在网页端重新连接后再试。",
       "planLimit": "已达到您套餐的消息上限。",
       "forbidden": "您没有权限执行此操作。",
-      "notFound": "此会话已不存在。"
+      "notFound": "此会话已不存在。",
+      "templateNotSendable": "无法从此对话发送该模板，请选择其他模板。",
+      "validation": "部分信息无效，请检查后重试。",
+      "withCode": "{{message}} (代码: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

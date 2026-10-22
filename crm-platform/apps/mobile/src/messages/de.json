@@ -1127,7 +1127,9 @@
       "deleted": "Diese Nachricht wurde gelöscht",
       "retry": "Senden wiederholen",
       "mediaPending": "Die Datei wird noch heruntergeladen.",
-      "mediaFailed": "Die Datei konnte nicht heruntergeladen werden."
+      "mediaFailed": "Die Datei konnte nicht heruntergeladen werden.",
+      "templateCopyCode": "Code kopieren",
+      "templateButtonUnnamed": "Schaltfläche"
     },
     "kind": {
       "text": "Nachricht",
@@ -1229,7 +1231,10 @@
       "channelDisconnected": "Dieser Kanal ist getrennt. Verbinden Sie ihn im Web erneut und versuchen Sie es dann noch einmal.",
       "planLimit": "Das Nachrichtenlimit Ihres Tarifs ist erreicht.",
       "forbidden": "Sie haben dafür keine Berechtigung.",
-      "notFound": "Diese Unterhaltung ist nicht mehr verfügbar."
+      "notFound": "Diese Unterhaltung ist nicht mehr verfügbar.",
+      "templateNotSendable": "Diese Vorlage kann aus dieser Unterhaltung nicht gesendet werden. Wähle eine andere.",
+      "validation": "Einige Angaben sind ungültig. Prüfe sie und versuche es erneut.",
+      "withCode": "{{message}} (Fehlercode: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

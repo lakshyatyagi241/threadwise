@@ -15,6 +15,7 @@ import {
   type SetConversationStatusInput,
   type SnoozeConversationInput,
 } from '@crm/contracts';
+import { File } from 'expo-file-system';
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api';
 import type { PickedAttachment } from './attachment';
@@ -77,6 +78,13 @@ export const uploadTimeoutMs = (sizeBytes: number | null): number =>
   Math.min(20 * 60_000, 120_000 + Math.ceil(((sizeBytes ?? 0) / (128 * 1024)) * 1000));
 
 /**
+ * The name a file goes up under. The multipart encoder writes a name percent-encoded ("My photo.jpg" becomes "My%20photo.jpg") and the
+ * server keeps it as it arrives, so the customer would read the percent signs; anything but letters, digits, dots, dashes and
+ * underscores is made an underscore instead.
+ */
+export const uploadName = (name: string): string => name.replace(/[^A-Za-z0-9._-]+/g, '_');
+
+/**
  * Puts a file on the server before the message that carries it (`POST /inbox/media`, multipart field `file`). The answer's `id` is what
  * the media message names. The server checks the type by content and the size by kind; the same `idempotencyKey` repeats the same upload.
  */
@@ -86,8 +94,13 @@ export const uploadInboxMedia = (
   signal?: AbortSignal,
 ) => {
   const form = new FormData();
-  // React Native reads the file from its address when the request is sent; this object form is how it is told what to read.
-  form.append('file', { uri: file.uri, name: file.name, type: file.mime } as unknown as Blob);
+  // The app's fetch (expo/fetch) builds the multipart body itself and refuses React Native's `{ uri, name, type }` file object
+  // ("Unsupported FormDataPart"), which `apiFetch` reported as an unreachable server. A part it accepts has `name`, `type` and `bytes()`.
+  form.append('file', {
+    name: uploadName(file.name),
+    type: file.mime,
+    bytes: () => new File(file.uri).bytes(),
+  } as unknown as Blob);
   return apiFetch('/v2/inbox/media', {
     method: 'POST',
     formData: form,

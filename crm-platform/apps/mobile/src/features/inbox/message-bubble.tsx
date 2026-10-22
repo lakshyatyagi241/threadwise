@@ -21,6 +21,7 @@ import {
 } from './message-parts';
 import { OpenFileTile } from './file-open-tile';
 import { formatClock } from './time';
+import { templateButtonHref } from './template-button';
 
 const STATUS_ICON: Record<MessageStatus, IconName | null> = {
   received: null,
@@ -208,11 +209,22 @@ function drawMessage(message: MessageResponse, kindWord: string, t: TFunction): 
     return {
       top,
       footer: template.footer,
-      buttons: template.buttons.map((b, i) => ({
-        key: `${i}-${b.text}`,
-        label: b.text,
-        icon: iconForButton(b.type),
-      })),
+      buttons: template.buttons.map((b, i) => {
+        // A button the template left unnamed (a copy-code one) is still told apart, as on the web.
+        const label =
+          b.text.trim() ||
+          t(
+            b.type === 'copy_code'
+              ? 'inbox.message.templateCopyCode'
+              : 'inbox.message.templateButtonUnnamed',
+          );
+        return {
+          key: `${i}-${label}`,
+          label,
+          icon: iconForButton(b.type),
+          url: templateButtonHref(b),
+        };
+      }),
       replacesLabel: true,
     };
   }

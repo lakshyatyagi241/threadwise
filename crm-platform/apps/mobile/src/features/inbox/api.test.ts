@@ -1,3 +1,5 @@
+import { File } from 'expo-file-system';
+import { convertFormDataAsync } from 'expo/src/winter/fetch/convertFormData';
 import { resetSessionForTests, startSession } from '@/lib/auth/session-manager';
 import {
   channelRow,
@@ -259,6 +261,50 @@ describe('inbox api', () => {
     expect(call?.headers['Idempotency-Key']).toBe('upload-key');
     expect(call?.headers['Content-Type']).toBeUndefined();
     expect(call?.init.body).toBeInstanceOf(FormData);
+  });
+
+  it('builds a multipart body that the real fetch encoder accepts, with the file bytes, name and type', async () => {
+    // On the phone `FormData` is React Native's, patched by expo/winter at start; the test environment has another one, so use the phone's.
+    const webFormData = globalThis.FormData;
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const PhoneFormData = require('react-native/Libraries/Network/FormData')
+      .default as typeof FormData;
+    // expo/winter's patch makes `entries()` yield the parts as they were appended; written out here so the test does not depend on its transpiling.
+    const patched = PhoneFormData.prototype as unknown as { entries?: () => unknown };
+    patched.entries = function entries(this: { _parts: unknown[] }) {
+      return this._parts[Symbol.iterator]();
+    };
+    globalThis.FormData = PhoneFormData;
+    jest
+      .mocked(File)
+      .mockImplementationOnce(
+        () => ({ bytes: async () => new Uint8Array([1, 2, 3]) }) as unknown as File,
+      );
+    const http = mockFetch(jsonResponse(201, {}));
+    try {
+      await uploadInboxMedia(
+        {
+          uri: 'file:///p.jpg',
+          name: 'My photo 1.jpg',
+          mime: 'image/jpeg',
+          sizeBytes: 3,
+          kind: 'image',
+        },
+        'upload-key',
+      ).catch(() => undefined);
+    } finally {
+      globalThis.FormData = webFormData;
+    }
+    const body = http.calls[0]?.init.body as FormData;
+    // The same function expo/fetch runs on a FormData body before sending it: it throws for a file part it cannot read.
+    const { body: bytes, boundary } = await convertFormDataAsync(body).finally(() => {
+      delete patched.entries;
+    });
+    const text = new TextDecoder().decode(bytes);
+    expect(text).toContain(`--${boundary}`);
+    expect(text).toContain('name="file"; filename="My_photo_1.jpg"');
+    expect(text).toContain('content-type: image/jpeg');
+    expect(Array.from(bytes.slice(bytes.indexOf(1), bytes.indexOf(1) + 3))).toEqual([1, 2, 3]);
   });
 
   it('sends an uploaded file as a media message with its caption, trimmed, and the client id as the key', async () => {

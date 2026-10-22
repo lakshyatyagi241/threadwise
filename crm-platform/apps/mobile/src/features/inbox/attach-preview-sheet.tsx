@@ -18,6 +18,7 @@ import { Icon, type IconName } from '@/components/ui/icon';
 import { TextField } from '@/components/ui/text-field';
 import { Text } from '@/components/ui/text';
 import { CLIENT_ERROR_CODES, isApiError } from '@/lib/api';
+import { log } from '@/lib/observability/logger';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import type { PickedAttachment } from './attachment';
@@ -139,6 +140,13 @@ function SheetBody({
         clientMessageId.current = Crypto.randomUUID();
         setLocked(false);
       }
+      // Only the kind of failure is logged (never the file's name or address), so a failed upload can be told apart afterwards.
+      log.warn('inbox.attach_send_failed', {
+        stage: uploadedId.current ? 'send' : 'upload',
+        status: isApiError(error) ? error.status : 0,
+        code: isApiError(error) ? error.code : 'unknown',
+        kind: file.kind,
+      });
       setFailed(attachErrorMessage(error, t));
     }
   };

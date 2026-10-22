@@ -1127,7 +1127,9 @@
       "deleted": "Bu mesaj silindi",
       "retry": "Göndermeyi yeniden dene",
       "mediaPending": "Dosya hâlâ indiriliyor.",
-      "mediaFailed": "Dosya indirilemedi."
+      "mediaFailed": "Dosya indirilemedi.",
+      "templateCopyCode": "Kodu kopyala",
+      "templateButtonUnnamed": "Düğme"
     },
     "kind": {
       "text": "Mesaj",
@@ -1229,7 +1231,10 @@
       "channelDisconnected": "Bu kanalın bağlantısı kesildi. Web'den yeniden bağlayıp tekrar deneyin.",
       "planLimit": "Planınızın mesaj limitine ulaşıldı.",
       "forbidden": "Bunu yapmaya izniniz yok.",
-      "notFound": "Bu konuşma artık mevcut değil."
+      "notFound": "Bu konuşma artık mevcut değil.",
+      "templateNotSendable": "Bu şablon bu görüşmeden gönderilemez. Başka bir tane seçin.",
+      "validation": "Bazı bilgiler geçerli değil. Kontrol edip tekrar deneyin.",
+      "withCode": "{{message}} (Kod: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",

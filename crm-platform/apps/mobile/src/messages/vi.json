@@ -1105,7 +1105,9 @@
       "deleted": "Tin nhắn này đã bị xóa",
       "retry": "Thử gửi lại",
       "mediaPending": "Tệp vẫn đang được tải xuống.",
-      "mediaFailed": "Không thể tải tệp xuống."
+      "mediaFailed": "Không thể tải tệp xuống.",
+      "templateCopyCode": "Sao chép mã",
+      "templateButtonUnnamed": "Nút"
     },
     "kind": {
       "text": "Tin nhắn",
@@ -1207,7 +1209,10 @@
       "channelDisconnected": "Kênh này đã bị ngắt kết nối. Hãy kết nối lại trên web rồi thử lại.",
       "planLimit": "Đã đạt giới hạn tin nhắn của gói.",
       "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
-      "notFound": "Cuộc trò chuyện này không còn nữa."
+      "notFound": "Cuộc trò chuyện này không còn nữa.",
+      "templateNotSendable": "Không thể gửi mẫu này từ cuộc trò chuyện này. Hãy chọn mẫu khác.",
+      "validation": "Một số thông tin không hợp lệ. Hãy kiểm tra và thử lại.",
+      "withCode": "{{message}} (Mã: {{code}})"
     },
     "channel": {
       "whatsapp": "WhatsApp",
