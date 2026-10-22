@@ -73,6 +73,12 @@ import { TeamsService } from './teams.service';
     LifecycleRepository,
     LifecycleService,
   ],
-  exports: [MembersService, TeamsService, TeamsPlanService, PlatformWorkspacesService, LifecycleService],
+  exports: [
+    MembersService,
+    TeamsService,
+    TeamsPlanService,
+    PlatformWorkspacesService,
+    LifecycleService,
+  ],
 })
 export class WorkspacesTeamsTenancyModule {}

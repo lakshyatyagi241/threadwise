@@ -584,7 +584,11 @@
           "sla_breach": "Scadenza di risposta mancata",
           "spam_flagged": "Segnata come spam da {actor}",
           "escalated": "Escalata",
-          "unknown": "{what} da {actor}"
+          "unknown": "{what} da {actor}",
+          "handoff_requested": "Passata a una persona da {actor}",
+          "queue_reminded": "Il team è stato sollecitato",
+          "queue_offered": "Offerta a un altro team",
+          "queue_customer_message": "È stato inviato un messaggio al cliente"
         },
         "actors": {
           "user": "Un collega",

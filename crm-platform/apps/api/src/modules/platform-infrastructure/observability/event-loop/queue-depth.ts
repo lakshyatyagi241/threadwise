@@ -34,5 +34,11 @@ export async function sampleQueueDepth(queue: DepthQueue, now = Date.now()): Pro
     const [oldest] = await queue.getJobs(['waiting'], 0, 0, true);
     if (oldest?.timestamp) oldestWaitingSeconds = Math.max(0, (now - oldest.timestamp) / 1000);
   }
-  return { waiting, active: c.active ?? 0, delayed: c.delayed ?? 0, failed: c.failed ?? 0, oldestWaitingSeconds };
+  return {
+    waiting,
+    active: c.active ?? 0,
+    delayed: c.delayed ?? 0,
+    failed: c.failed ?? 0,
+    oldestWaitingSeconds,
+  };
 }

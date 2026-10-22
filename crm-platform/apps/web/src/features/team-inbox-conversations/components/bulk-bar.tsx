@@ -38,6 +38,7 @@ export interface BulkBarProps {
  */
 export function BulkBar(props: BulkBarProps) {
   const t = useTranslations('team-inbox-conversations.bulk');
+  const ta = useTranslations('team-inbox-conversations.panel.assignee');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const tp = useTranslations('team-inbox-conversations.list');
@@ -157,7 +158,7 @@ export function BulkBar(props: BulkBarProps) {
                 .filter((u) => !u.isMe)
                 .map((u) => (
                   <option key={u.id} value={`u:${u.id}`}>
-                    {u.name ?? u.email}
+                    {u.name ?? u.email} · {ta(`availability.${u.availability}`)}
                     {u.onLeave
                       ? ` · ${u.onLeave.until ? t('onLeaveUntil', { date: leaveDayText(u.onLeave.until, locale) }) : t('onLeave')}`
                       : ''}

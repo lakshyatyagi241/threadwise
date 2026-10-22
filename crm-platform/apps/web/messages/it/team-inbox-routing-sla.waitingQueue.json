@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Coda d'attesa",
+      "intro": "Le chat che nessuno ha preso restano nella scheda In attesa. Questi passaggi facoltativi aiutano a rispondere. Ogni passaggio viene eseguito una volta per chat, conta solo i minuti in cui il team è aperto e si ferma appena qualcuno prende la chat.",
+      "remind": "Ricorda al team",
+      "remindBody": "Avvisa chi può prendere la chat.",
+      "overflow": "Offri a un altro team",
+      "overflowBody": "Sposta la chat nella coda di questo team, una volta sola.",
+      "team": "Team",
+      "teamPick": "Scegli un team",
+      "final": "Ultimo passaggio",
+      "finalBody": "Se nessuno ha preso la chat entro allora:",
+      "action": "Cosa succede",
+      "actionMessage": "Invia un messaggio al cliente",
+      "actionBot": "Restituisci la chat al bot",
+      "message": "Messaggio",
+      "messageHint": "Puoi usare '{{name}}' e '{{first_name}}'.",
+      "afterMinutes": "Dopo (minuti)",
+      "save": "Salva",
+      "saved": "Impostazioni della coda d'attesa salvate.",
+      "saveFailed": "Impossibile salvare le impostazioni della coda d'attesa.",
+      "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
+      "problems": {
+        "minutes": "Inserisci un numero da 1 a 1440.",
+        "team": "Scegli un team.",
+        "message": "Scrivi il messaggio."
+      },
+      "away": "Restituisci le chat senza risposta quando qualcuno si assenta",
+      "awayBody": "Quando una persona passa a Offline o inizia un'assenza, le chat che ha in carico e per cui il cliente aspetta ancora tornano nella coda del team.",
+      "offline": "Imposta Offline chi è inattivo",
+      "offlineBody": "Una persona Disponibile che non ha fatto nulla per questo tempo passa a Offline. Si rimette Disponibile da sola."
+    }
+  }
+}

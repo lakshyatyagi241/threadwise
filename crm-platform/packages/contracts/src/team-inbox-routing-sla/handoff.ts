@@ -44,7 +44,18 @@ export const HUMAN_ASSIGNED_SOURCES: readonly AssignedSource[] = [
 
 // --- the request ----------------------------------------------------------------------------------------------------------
 
-export const HANDOFF_SOURCES = ['flow', 'ai_agent', 'keyword', 'bot_failure', 'manual'] as const;
+/**
+ * Who asked for a person. `arrival` is the routing engine itself: a new chat that no rule and no agent could take enters the waiting
+ * queue (only when automatic assignment is on); it does not mute the bot, because nobody has decided a person must answer yet.
+ */
+export const HANDOFF_SOURCES = [
+  'flow',
+  'ai_agent',
+  'keyword',
+  'bot_failure',
+  'manual',
+  'arrival',
+] as const;
 export const handoffSourceSchema = z.enum(HANDOFF_SOURCES);
 export type HandoffSource = z.infer<typeof handoffSourceSchema>;
 
@@ -98,7 +109,11 @@ export const requestHandoffSchema = z.object({
 });
 export type RequestHandoffInput = z.infer<typeof requestHandoffSchema>;
 
-export const claimConversationSchema = z.object({ rowVersion: z.number().int().positive() });
+export const claimConversationSchema = z.object({
+  rowVersion: z.number().int().positive(),
+  /** The person saw the chat-limit warning (INBOX_CLAIM_OVER_LIMIT) and takes the chat anyway. */
+  acknowledgeLimit: z.boolean().optional(),
+});
 export type ClaimConversationInput = z.infer<typeof claimConversationSchema>;
 
 export const returnToBotSchema = z.object({ note: z.string().trim().max(500).optional() });
@@ -175,6 +190,15 @@ export const handoffCardSchema = z.object({
     team: z.object({ id: uuidSchema, name: z.string() }).nullable(),
   }),
   trace: z.array(handoffTraceLineSchema),
+  /** Where the waiting queue's timers have got to for this wait (all null while nothing has fired). */
+  timers: z.object({
+    remindedAt: z.string().datetime().nullable(),
+    offeredAt: z.string().datetime().nullable(),
+    /** The team the chat was taken from when it was offered to the overflow team. */
+    offeredFrom: z.object({ id: uuidSchema, name: z.string() }).nullable(),
+    finalAt: z.string().datetime().nullable(),
+    finalAction: z.enum(['message', 'bot']).nullable(),
+  }),
   createdAt: z.string().datetime(),
   completedAt: z.string().datetime().nullable(),
 });
@@ -196,6 +220,9 @@ export type HandoffResult = z.infer<typeof handoffResultSchema>;
 
 /** Outbox event written when a handoff is recorded; payload `conversationId`, `handoffId`, `source`, `reason`, `outcome`, `toUserId`, `toTeamId` (uuids). */
 export const CONVERSATION_HANDOFF_REQUESTED = 'conversation.handoff_requested';
+/** Outbox events of the waiting queue's timers; payload `conversationId`, `handoffId`, `teamId` (uuid or null), `minutes`. */
+export const CONVERSATION_QUEUE_REMINDER = 'conversation.queue_reminder';
+export const CONVERSATION_QUEUE_OFFERED = 'conversation.queue_offered';
 /** Realtime hint to the audience of the queue: a conversation entered or left it. Ids only. */
 export const REALTIME_HANDOFF_EVENT = 'inbox.handoff';
 
@@ -216,8 +243,51 @@ export const HANDOFF_GATES = {
   keepInSync: 'inbox_assignment_sticky',
   continuityWindow: 'inbox_assignment_sticky',
   promptOwnerOnReassign: 'inbox_assignment_sticky',
+  /** The waiting queue's reminder, overflow team and last step: part of automatic assignment, so the same plan feature. */
+  queueTimers: 'inbox_routing',
+  /** Returning unanswered chats when someone goes offline or on leave, and setting inactive people offline. */
+  away: 'inbox_routing',
 } as const;
 export type HandoffGate = keyof typeof HANDOFF_GATES;
+
+/** What happens when nobody has taken a chat after the last timer: keep waiting (today), tell the customer, or give it back to the bot. */
+export const QUEUE_UNCLAIMED_ACTIONS = ['keep', 'message', 'bot'] as const;
+export const queueUnclaimedActionSchema = z.enum(QUEUE_UNCLAIMED_ACTIONS);
+export type QueueUnclaimedAction = z.infer<typeof queueUnclaimedActionSchema>;
+
+/** The longest wait a timer can be set to (a day); the minutes count only while the destination team is open. */
+export const QUEUE_TIMER_MAX_MINUTES = 1440;
+export const QUEUE_MESSAGE_MAX = 1000;
+const timerMinutes = z.number().int().min(1).max(QUEUE_TIMER_MAX_MINUTES).nullable();
+
+/**
+ * The waiting queue's timers (Auto-assignment > Waiting queue). Every step is off by default and only ever runs once per wait:
+ *  - `remindMinutes`: tell the destination team's members (the leads when the chat has no team) after this many minutes;
+ *  - `overflowMinutes` + `overflowTeamId`: offer the chat to another team (one hop, never a chain);
+ *  - `unclaimedMinutes` + `unclaimedAction`: the last step, `message` sends `unclaimedMessage` to the customer (variables allowed),
+ *    `bot` gives the chat back to the bot. `keep` does nothing.
+ */
+export const queueTimersSchema = z.object({
+  remindMinutes: timerMinutes,
+  overflowMinutes: timerMinutes,
+  overflowTeamId: uuidSchema.nullable(),
+  unclaimedMinutes: timerMinutes,
+  unclaimedAction: queueUnclaimedActionSchema,
+  unclaimedMessage: z.string().max(QUEUE_MESSAGE_MAX),
+});
+export type QueueTimers = z.infer<typeof queueTimersSchema>;
+
+/**
+ * Away rules (Auto-assignment > Waiting queue; Smart routing, both off by default): `returnUnanswered` puts the open chats a person holds whose
+ * customer is still waiting for a reply back in the team's queue when that person goes Offline or starts a leave; `autoOfflineMinutes` sets an
+ * Available person Offline after that many minutes without activity (null = never).
+ */
+export const AWAY_MAX_MINUTES = 1440;
+export const awaySchema = z.object({
+  returnUnanswered: z.boolean(),
+  autoOfflineMinutes: z.number().int().min(1).max(AWAY_MAX_MINUTES).nullable(),
+});
+export type AwayRules = z.infer<typeof awaySchema>;
 
 export const handoffSettingsSchema = z.object({
   /** Automatic assignment on or off (arrival routing and the "assignment rules" destination). Default on = today. */
@@ -230,6 +300,10 @@ export const handoffSettingsSchema = z.object({
   /** Manual reassignment of a chat offers "also make X the contact owner?". */
   promptOwnerOnReassign: z.boolean(),
   notifyQueue: z.boolean(),
+  /** The waiting queue's timers; when the plan lacks `available.queueTimers` they read as off (what is stored comes back on upgrade). */
+  queueTimers: queueTimersSchema,
+  /** The away rules; read as off when the plan lacks `available.away` (what was saved comes back on upgrade). */
+  away: awaySchema,
   /** Per capability: false when the plan does not include it (the UI shows a lock and an upgrade hint, never a silent no-op). */
   available: z.object({
     autoAssign: z.boolean(),
@@ -237,12 +311,15 @@ export const handoffSettingsSchema = z.object({
     keepInSync: z.boolean(),
     continuityWindow: z.boolean(),
     promptOwnerOnReassign: z.boolean(),
+    queueTimers: z.boolean(),
+    away: z.boolean(),
   }),
 });
 export type HandoffSettings = z.infer<typeof handoffSettingsSchema>;
 
 export const updateHandoffSettingsSchema = handoffSettingsSchema
-  .omit({ available: true })
+  .omit({ available: true, queueTimers: true, away: true })
+  .extend({ queueTimers: queueTimersSchema.partial(), away: awaySchema.partial() })
   .partial()
   .refine((v) => Object.keys(v).length > 0, { message: 'Nothing to change' });
 export type UpdateHandoffSettingsInput = z.infer<typeof updateHandoffSettingsSchema>;

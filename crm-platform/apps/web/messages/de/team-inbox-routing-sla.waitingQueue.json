@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Warteschlange",
+      "intro": "Chats, die niemand übernommen hat, warten im Tab Wartend. Diese optionalen Schritte helfen, sie zu beantworten. Jeder Schritt läuft einmal pro Chat, zählt nur die Minuten, in denen das Team geöffnet ist, und endet, sobald jemand den Chat übernimmt.",
+      "remind": "Team erinnern",
+      "remindBody": "Benachrichtigt die Personen, die den Chat übernehmen können.",
+      "overflow": "Einem anderen Team anbieten",
+      "overflowBody": "Verschiebt den Chat einmalig in die Warteschlange dieses Teams.",
+      "team": "Team",
+      "teamPick": "Team wählen",
+      "final": "Letzter Schritt",
+      "finalBody": "Wenn bis dahin niemand den Chat übernommen hat:",
+      "action": "Was passiert",
+      "actionMessage": "Dem Kunden eine Nachricht senden",
+      "actionBot": "Den Chat an den Bot zurückgeben",
+      "message": "Nachricht",
+      "messageHint": "Du kannst '{{name}}' und '{{first_name}}' verwenden.",
+      "afterMinutes": "Nach (Minuten)",
+      "save": "Speichern",
+      "saved": "Einstellungen der Warteschlange gespeichert.",
+      "saveFailed": "Die Einstellungen der Warteschlange konnten nicht gespeichert werden.",
+      "readOnly": "Du kannst diese Einstellungen sehen, aber nicht ändern.",
+      "problems": {
+        "minutes": "Gib eine Zahl von 1 bis 1440 ein.",
+        "team": "Wähle ein Team.",
+        "message": "Schreibe die Nachricht."
+      },
+      "away": "Unbeantwortete Chats zurückgeben, wenn jemand abwesend ist",
+      "awayBody": "Wenn jemand auf Offline wechselt oder eine Abwesenheit beginnt, gehen die Chats, auf die der Kunde noch wartet, zurück in die Warteschlange des Teams.",
+      "offline": "Inaktive Personen auf Offline setzen",
+      "offlineBody": "Eine verfügbare Person, die so lange nichts getan hat, wird auf Offline gesetzt. Sie schaltet sich selbst wieder auf Verfügbar."
+    }
+  }
+}

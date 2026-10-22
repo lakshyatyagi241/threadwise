@@ -584,7 +584,11 @@
           "sla_breach": "Đã quá hạn phản hồi",
           "spam_flagged": "Đã đánh dấu spam bởi {actor}",
           "escalated": "Đã leo thang",
-          "unknown": "{what} bởi {actor}"
+          "unknown": "{what} bởi {actor}",
+          "handoff_requested": "Được chuyển cho một người bởi {actor}",
+          "queue_reminded": "Đã nhắc nhóm",
+          "queue_offered": "Đã đề nghị cho nhóm khác",
+          "queue_customer_message": "Đã gửi tin nhắn cho khách hàng"
         },
         "actors": {
           "user": "Một đồng nghiệp",

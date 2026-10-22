@@ -584,7 +584,11 @@
           "sla_breach": "उत्तर की समय सीमा चूक गई",
           "spam_flagged": "{actor} ने स्पैम के रूप में चिह्नित किया",
           "escalated": "बढ़ाया गया",
-          "unknown": "{actor} द्वारा {what}"
+          "unknown": "{actor} द्वारा {what}",
+          "handoff_requested": "{actor} द्वारा किसी व्यक्ति को सौंपा गया",
+          "queue_reminded": "टीम को याद दिलाया गया",
+          "queue_offered": "दूसरी टीम को ऑफ़र किया गया",
+          "queue_customer_message": "ग्राहक को संदेश भेजा गया"
         },
         "actors": {
           "user": "एक साथी",

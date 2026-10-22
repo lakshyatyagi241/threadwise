@@ -584,7 +584,11 @@
           "sla_breach": "Срок ответа пропущен",
           "spam_flagged": "Отмечено как спам: {actor}",
           "escalated": "Эскалировано",
-          "unknown": "{what}: {actor}"
+          "unknown": "{what}: {actor}",
+          "handoff_requested": "Передал человеку: {actor}",
+          "queue_reminded": "Команде напомнили",
+          "queue_offered": "Предложено другой команде",
+          "queue_customer_message": "Клиенту отправлено сообщение"
         },
         "actors": {
           "user": "Коллега",

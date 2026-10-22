@@ -17,7 +17,18 @@ const base: HandoffSettings = {
   continuityDays: null,
   promptOwnerOnReassign: false,
   notifyQueue: true,
+  away: { returnUnanswered: false, autoOfflineMinutes: null },
+  queueTimers: {
+    remindMinutes: null,
+    overflowMinutes: null,
+    overflowTeamId: null,
+    unclaimedMinutes: null,
+    unclaimedAction: 'keep',
+    unclaimedMessage: '',
+  },
   available: {
+    queueTimers: true,
+    away: true,
     autoAssign: true,
     ownerFirst: true,
     keepInSync: true,
@@ -96,6 +107,8 @@ describe('the four switches', () => {
     data = {
       ...base,
       available: {
+        queueTimers: false,
+        away: false,
         autoAssign: false,
         ownerFirst: false,
         keepInSync: false,

@@ -104,7 +104,8 @@ export const inboxMessages = defineHolder({
       order: 30,
       categories: ['content'],
       pii: ['reason_text', 'summary', 'answers'],
-      retention: 'The handoff card and run log of the thread (what the customer told the bot, why a person was asked for).',
+      retention:
+        'The handoff card and run log of the thread (what the customer told the bot, why a person was asked for).',
     },
     {
       table: 'csat_responses',

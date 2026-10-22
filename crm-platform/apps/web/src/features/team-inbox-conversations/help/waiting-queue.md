@@ -42,6 +42,8 @@ You see the queue of the teams you belong to. If your role may read unassigned c
 
 If a teammate claimed it a moment earlier, you are told so and nothing changes. You need the right to assign conversations to yourself.
 
+If you already hold as many open conversations as your own chat limit (set on your profile under Team members), Claim asks first: **You are at your chat limit**. Choose **Take it anyway** to take it, or cancel. The limit never stops you; it only keeps automatic assignment from choosing you.
+
 If your workspace turned on **Claiming makes you the contact owner** in the handoff settings, claiming also makes you the contact's owner when the contact has none.
 
 ## Read the handoff card
@@ -74,6 +76,16 @@ Select **Return to bot** in the strip. The conversation is released, the bot is 
 Right after you press it, a grey line appears in the thread: **Bot is back, returned by (the name of the person).** It says whether the flow continues or the bot waits for the next message. A moment later a second line says what happened to the flow (**The flow continued from the "returned" exit**) and to the message for the contact, for example **The message to the customer was skipped: the 24 hour window is closed**. These lines are for your team only; the contact never sees them.
 
 The flow is not resumed, and the line says why, when a teammate took the conversation again in the meantime, or when the flow was switched off, unpublished or deleted. The message for the contact follows the usual rules: it is not sent when the 24 hour window is closed or the contact has not given consent. You need the right to reply.
+
+## What happens to a chat nobody takes
+
+A new chat that automatic assignment could not give to anybody also waits here, with its age and a card that says "The routing: nobody could take it". The bot that was answering keeps answering until a person takes it. If the workspace uses **Smart routing**, the Auto-assignment page has a **Waiting queue** section with optional steps for chats that keep waiting:
+
+- **Remind the team** after some minutes: the people who can take the chat get a notification.
+- **Offer to another team** after some minutes: the chat moves, once, to that team's queue.
+- **Last step** after some minutes: send the customer a message, or give the chat back to the bot.
+
+Each step runs once per chat, counts only the minutes the team is open, and stops the moment somebody takes the chat, resolves it or gives it back to the bot. The handoff card lists the steps that ran. Without Smart routing these controls are shown locked and nothing runs.
 
 ## Good to know
 

@@ -584,7 +584,11 @@
           "sla_breach": "Yanıt süresi kaçırıldı",
           "spam_flagged": "{actor} tarafından spam olarak işaretlendi",
           "escalated": "Yükseltildi",
-          "unknown": "{actor} tarafından: {what}"
+          "unknown": "{actor} tarafından: {what}",
+          "handoff_requested": "{actor} tarafından bir kişiye devredildi",
+          "queue_reminded": "Ekibe hatırlatıldı",
+          "queue_offered": "Başka bir ekibe önerildi",
+          "queue_customer_message": "Müşteriye mesaj gönderildi"
         },
         "actors": {
           "user": "Bir ekip arkadaşı",

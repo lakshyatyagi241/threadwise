@@ -33,7 +33,11 @@
         "done": "You took this conversation.",
         "doneOwner": "You took this conversation and you are now the contact's owner.",
         "failed": "The conversation could not be claimed.",
-        "taken": "Somebody else took this conversation first."
+        "taken": "Somebody else took this conversation first.",
+        "overLimitTitle": "You are at your chat limit",
+        "overLimitMessage": "You already hold {open} open conversations and your limit is {limit}. Take this one anyway?",
+        "overLimitConfirm": "Take it anyway",
+        "overLimitCancel": "Cancel"
       },
       "giveBack": {
         "button": "Return to bot",
@@ -82,14 +86,16 @@
         "priority": "Priority",
         "summary": "Summary",
         "answers": "What the contact told the bot",
-        "trace": "How it was assigned"
+        "trace": "How it was assigned",
+        "timers": "Waiting queue steps"
       },
       "source": {
         "flow": "A flow",
         "ai_agent": "An AI agent",
         "keyword": "The contact's own request",
         "bot_failure": "A bot that could not help",
-        "manual": "A teammate"
+        "manual": "A teammate",
+        "arrival": "The routing: nobody could take it"
       },
       "reason": {
         "customer_asked": "The contact asked for a person",
@@ -130,6 +136,12 @@
           "failed": "The message to the customer could not be sent.",
           "channel_unavailable": "The message to the customer was skipped: the channel is unavailable."
         }
+      },
+      "timers": {
+        "reminded": "Reminded at {at}",
+        "offered": "Offered to this team at {at}",
+        "messaged": "Message sent to the customer at {at}",
+        "gaveBack": "Given back to the bot at {at}"
       }
     },
     "panel": {

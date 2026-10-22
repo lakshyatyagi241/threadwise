@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Hàng chờ",
+      "intro": "Các cuộc trò chuyện chưa ai nhận sẽ chờ ở tab Đang chờ. Những bước tùy chọn này giúp chúng được trả lời. Mỗi bước chạy một lần cho mỗi cuộc trò chuyện, chỉ tính số phút nhóm đang mở cửa và dừng ngay khi có người nhận.",
+      "remind": "Nhắc nhóm",
+      "remindBody": "Báo cho những người có thể nhận cuộc trò chuyện.",
+      "overflow": "Đề nghị cho nhóm khác",
+      "overflowBody": "Chuyển cuộc trò chuyện sang hàng chờ của nhóm này, một lần.",
+      "team": "Nhóm",
+      "teamPick": "Chọn một nhóm",
+      "final": "Bước cuối",
+      "finalBody": "Nếu đến lúc đó chưa ai nhận:",
+      "action": "Điều gì xảy ra",
+      "actionMessage": "Gửi tin nhắn cho khách hàng",
+      "actionBot": "Trả cuộc trò chuyện cho bot",
+      "message": "Tin nhắn",
+      "messageHint": "Bạn có thể dùng '{{name}}' và '{{first_name}}'.",
+      "afterMinutes": "Sau (phút)",
+      "save": "Lưu",
+      "saved": "Đã lưu cài đặt hàng chờ.",
+      "saveFailed": "Không thể lưu cài đặt hàng chờ.",
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "problems": {
+        "minutes": "Nhập một số từ 1 đến 1440.",
+        "team": "Chọn một nhóm.",
+        "message": "Hãy viết tin nhắn."
+      },
+      "away": "Trả lại cuộc trò chuyện chưa trả lời khi ai đó vắng mặt",
+      "awayBody": "Khi ai đó chuyển Ngoại tuyến hoặc bắt đầu nghỉ phép, các cuộc trò chuyện họ giữ mà khách vẫn đang chờ sẽ quay lại hàng chờ của nhóm.",
+      "offline": "Đặt người không hoạt động sang Ngoại tuyến",
+      "offlineBody": "Người đang Sẵn sàng nhưng không làm gì trong khoảng này sẽ bị đặt Ngoại tuyến. Họ tự chuyển lại Sẵn sàng."
+    }
+  }
+}

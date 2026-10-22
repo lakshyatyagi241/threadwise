@@ -584,7 +584,11 @@
           "sla_breach": "Przekroczono termin odpowiedzi",
           "spam_flagged": "Oznaczono jako spam przez {actor}",
           "escalated": "Eskalowano",
-          "unknown": "{what}, przez {actor}"
+          "unknown": "{what}, przez {actor}",
+          "handoff_requested": "Przekazane osobie przez {actor}",
+          "queue_reminded": "Przypomniano zespołowi",
+          "queue_offered": "Zaproponowano innemu zespołowi",
+          "queue_customer_message": "Wysłano wiadomość do klienta"
         },
         "actors": {
           "user": "Członek zespołu",

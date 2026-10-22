@@ -584,7 +584,11 @@
           "sla_breach": "جواب کی آخری تاریخ گزر گئی",
           "spam_flagged": "{actor} نے اسپام کے طور پر نشان زد کیا",
           "escalated": "اضافہ کیا گیا",
-          "unknown": "{actor} کی طرف سے {what}"
+          "unknown": "{actor} کی طرف سے {what}",
+          "handoff_requested": "{actor} نے ایک فرد کو سونپا",
+          "queue_reminded": "ٹیم کو یاد دلایا گیا",
+          "queue_offered": "دوسری ٹیم کو پیش کیا گیا",
+          "queue_customer_message": "صارف کو پیغام بھیجا گیا"
         },
         "actors": {
           "user": "ایک ساتھی",

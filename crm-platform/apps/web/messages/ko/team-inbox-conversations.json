@@ -584,7 +584,11 @@
           "sla_breach": "응답 기한 초과",
           "spam_flagged": "{actor}님이 스팸으로 표시",
           "escalated": "에스컬레이션됨",
-          "unknown": "{actor} 님: {what}"
+          "unknown": "{actor} 님: {what}",
+          "handoff_requested": "{actor} 님이 사람에게 인계",
+          "queue_reminded": "팀에 알렸습니다",
+          "queue_offered": "다른 팀에 제안했습니다",
+          "queue_customer_message": "고객에게 메시지를 보냈습니다"
         },
         "actors": {
           "user": "팀원",

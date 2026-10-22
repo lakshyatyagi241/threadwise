@@ -93,11 +93,18 @@ export class InboundMessageHooks {
     try {
       const res = await this.db.txAs({ orgId: event.orgId }, (tx) =>
         tx.execute(
-          sql`SELECT handling FROM conversations WHERE org_id = ${event.orgId} AND id = ${event.conversationId}`,
+          // A chat the routing engine put in the queue because nobody could take it (`source = 'arrival'`) is not yet a person's: no
+          // one has decided a person must answer, so a bot that was answering it keeps answering until one takes it.
+          sql`SELECT c.handling,
+                     EXISTS (SELECT 1 FROM conversation_handoffs h WHERE h.org_id = c.org_id AND h.conversation_id = c.id
+                               AND h.status = 'waiting' AND h.source = 'arrival') AS arrival
+              FROM conversations c WHERE c.org_id = ${event.orgId} AND c.id = ${event.conversationId}`,
         ),
       );
-      const h = (res as unknown as { rows: Array<{ handling: string | null }> }).rows[0]?.handling;
-      return h === 'waiting' || h === 'with_person';
+      const row = (res as unknown as { rows: Array<{ handling: string | null; arrival: boolean }> })
+        .rows[0];
+      if (row?.handling === 'waiting') return row.arrival !== true;
+      return row?.handling === 'with_person';
     } catch (err) {
       // Never fail ingest for this: when unsure, the bot answers as it always did.
       this.logger.warn({ orgId: event.orgId, err }, 'could not read the handling state');

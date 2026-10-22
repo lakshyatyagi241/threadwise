@@ -33,7 +33,11 @@
         "done": "Du hast diese Unterhaltung übernommen.",
         "doneOwner": "Du hast diese Unterhaltung übernommen und bist jetzt Besitzer des Kontakts.",
         "failed": "Die Unterhaltung konnte nicht übernommen werden.",
-        "taken": "Jemand anderes hat diese Unterhaltung zuerst übernommen."
+        "taken": "Jemand anderes hat diese Unterhaltung zuerst übernommen.",
+        "overLimitTitle": "Du hast dein Chat-Limit erreicht",
+        "overLimitMessage": "Du hast bereits {open} offene Unterhaltungen und dein Limit liegt bei {limit}. Diese trotzdem übernehmen?",
+        "overLimitConfirm": "Trotzdem übernehmen",
+        "overLimitCancel": "Abbrechen"
       },
       "giveBack": {
         "button": "An Bot zurückgeben",
@@ -82,14 +86,16 @@
         "priority": "Priorität",
         "summary": "Zusammenfassung",
         "answers": "Was der Kontakt dem Bot mitgeteilt hat",
-        "trace": "Wie zugewiesen wurde"
+        "trace": "Wie zugewiesen wurde",
+        "timers": "Schritte der Warteschlange"
       },
       "source": {
         "flow": "Ein Flow",
         "ai_agent": "Ein KI-Agent",
         "keyword": "Der Wunsch des Kontakts",
         "bot_failure": "Ein Bot, der nicht helfen konnte",
-        "manual": "Ein Teamkollege"
+        "manual": "Ein Teamkollege",
+        "arrival": "Das Routing: niemand konnte ihn übernehmen"
       },
       "reason": {
         "customer_asked": "Der Kontakt hat einen Mitarbeiter verlangt",
@@ -130,6 +136,12 @@
           "failed": "Die Nachricht an den Kunden konnte nicht gesendet werden.",
           "channel_unavailable": "Die Nachricht an den Kunden wurde übersprungen: Der Kanal ist nicht verfügbar."
         }
+      },
+      "timers": {
+        "reminded": "Erinnert um {at}",
+        "offered": "Diesem Team angeboten um {at}",
+        "messaged": "Nachricht an den Kunden gesendet um {at}",
+        "gaveBack": "An den Bot zurückgegeben um {at}"
       }
     },
     "panel": {

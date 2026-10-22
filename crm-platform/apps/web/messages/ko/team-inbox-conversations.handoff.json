@@ -33,7 +33,11 @@
         "done": "이 대화를 맡았습니다.",
         "doneOwner": "이 대화를 맡았고 이제 연락처 담당자입니다.",
         "failed": "대화를 맡지 못했습니다.",
-        "taken": "다른 사람이 먼저 이 대화를 맡았습니다."
+        "taken": "다른 사람이 먼저 이 대화를 맡았습니다.",
+        "overLimitTitle": "채팅 한도에 도달했습니다",
+        "overLimitMessage": "이미 열린 대화가 {open}개 있고 한도는 {limit}개입니다. 그래도 이 대화를 맡으시겠습니까?",
+        "overLimitConfirm": "그래도 맡기",
+        "overLimitCancel": "취소"
       },
       "giveBack": {
         "button": "봇에게 돌려주기",
@@ -82,14 +86,16 @@
         "priority": "우선순위",
         "summary": "요약",
         "answers": "연락처가 봇에게 말한 내용",
-        "trace": "배정 방식"
+        "trace": "배정 방식",
+        "timers": "대기열 단계"
       },
       "source": {
         "flow": "플로우",
         "ai_agent": "AI 에이전트",
         "keyword": "연락처의 직접 요청",
         "bot_failure": "도움을 주지 못한 봇",
-        "manual": "팀원"
+        "manual": "팀원",
+        "arrival": "라우팅: 아무도 맡지 못했습니다"
       },
       "reason": {
         "customer_asked": "연락처가 상담원을 요청했습니다",
@@ -130,6 +136,12 @@
           "failed": "고객에게 메시지를 보내지 못했습니다.",
           "channel_unavailable": "고객에게 보내는 메시지를 건너뜀: 채널을 사용할 수 없습니다."
         }
+      },
+      "timers": {
+        "reminded": "{at}에 알림",
+        "offered": "{at}에 이 팀에 제안됨",
+        "messaged": "{at}에 고객에게 메시지 전송",
+        "gaveBack": "{at}에 봇에게 반환됨"
       }
     },
     "panel": {

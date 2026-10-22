@@ -49,7 +49,7 @@ export class HandoffController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(claimConversationSchema)) body: ClaimConversationInput,
   ) {
-    const out = await this.handoff.claim(id, body.rowVersion);
+    const out = await this.handoff.claim(id, body.rowVersion, body.acknowledgeLimit === true);
     return { conversation: out.summary, ownerSet: out.ownerSet };
   }
 

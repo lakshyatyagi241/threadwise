@@ -27,7 +27,8 @@ export interface WaFormRow {
   row_version: number;
 }
 
-const COLUMNS = sql.raw(`id, uuid, title, purpose, slug, audience_type, submission_cap, cap_reached_note,
+const COLUMNS =
+  sql.raw(`id, uuid, title, purpose, slug, audience_type, submission_cap, cap_reached_note,
   send_button_label, thank_you_note, definition_json, status, meta_flow_id, provider_config_id, published_at,
   publish_error, submission_count, created_at, row_version,
   to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
@@ -43,8 +44,9 @@ const toRow = (r: Record<string, unknown>): WaFormRow => ({
   cap_reached_note: (r.cap_reached_note as string | null) ?? null,
   send_button_label: String(r.send_button_label),
   thank_you_note: (r.thank_you_note as string | null) ?? null,
-  definition_json:
-    (r.definition_json as WaFormRow['definition_json']) ?? { screens: [{ id: 'A', fields: [] }] },
+  definition_json: (r.definition_json as WaFormRow['definition_json']) ?? {
+    screens: [{ id: 'A', fields: [] }],
+  },
   status: String(r.status),
   meta_flow_id: (r.meta_flow_id as string | null) ?? null,
   provider_config_id: r.provider_config_id == null ? null : Number(r.provider_config_id),
@@ -108,7 +110,10 @@ export class WaFormsRepository {
   }
 
   /** Published forms only, for the flow builder's picker — `GET /v2/wa-forms/picker`. */
-  async pickable(tx: Tx, orgId: number): Promise<Array<Pick<WaFormRow, 'uuid' | 'title' | 'status' | 'meta_flow_id'>>> {
+  async pickable(
+    tx: Tx,
+    orgId: number,
+  ): Promise<Array<Pick<WaFormRow, 'uuid' | 'title' | 'status' | 'meta_flow_id'>>> {
     const res = await tx.execute(sql`
       SELECT uuid, title, status, meta_flow_id FROM wa_forms WHERE org_id = ${orgId} ORDER BY id DESC`);
     return res.rows.map((r) => ({
@@ -192,13 +197,25 @@ export class WaFormsRepository {
    * Without this, a form with `meta_flow_id = NULL` that fails validation on every retry mints a fresh, orphaned
    * Meta Flow object on every attempt instead of reusing the one already created.
    */
-  async saveFlowId(tx: Tx, orgId: number, id: number, metaFlowId: string, providerConfigId: number): Promise<void> {
+  async saveFlowId(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    metaFlowId: string,
+    providerConfigId: number,
+  ): Promise<void> {
     await tx.execute(sql`
       UPDATE wa_forms SET meta_flow_id = ${metaFlowId}, provider_config_id = ${providerConfigId}
        WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
-  async markPublished(tx: Tx, orgId: number, id: number, metaFlowId: string, providerConfigId: number): Promise<void> {
+  async markPublished(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    metaFlowId: string,
+    providerConfigId: number,
+  ): Promise<void> {
     await tx.execute(sql`
       UPDATE wa_forms SET status = 'published', meta_flow_id = ${metaFlowId}, provider_config_id = ${providerConfigId},
         published_at = now(), publish_error = NULL
@@ -210,7 +227,13 @@ export class WaFormsRepository {
       UPDATE wa_forms SET publish_error = ${error.slice(0, 1000)} WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
-  async duplicate(tx: Tx, orgId: number, userId: number | null, source: WaFormRow, newSlug: string): Promise<WaFormRow> {
+  async duplicate(
+    tx: Tx,
+    orgId: number,
+    userId: number | null,
+    source: WaFormRow,
+    newSlug: string,
+  ): Promise<WaFormRow> {
     const res = await tx.execute(sql`
       INSERT INTO wa_forms (org_id, user_id, title, purpose, slug, audience_type, submission_cap, cap_reached_note,
                              send_button_label, thank_you_note, definition_json, status)
