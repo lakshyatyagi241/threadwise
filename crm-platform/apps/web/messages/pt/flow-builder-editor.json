@@ -747,7 +747,8 @@
           "storedIn": "Os valores serão salvos na propriedade <b>{property}</b> do contato",
           "actions": "Ações",
           "actionsHint": "Adicione um passo que roda logo depois deste.",
-          "actionsBlocked": "Um passo que encerra sua parte não pode ter outro depois."
+          "actionsBlocked": "Um passo que encerra sua parte não pode ter outro depois.",
+          "fromSteps": "Alcançado a partir da etapa {stages}"
         },
         "editors": {
           "linkLabel": "Para onde isto leva",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
         "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
         "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA.",
-        "templateFile": "Etapa {stage}: adicione o arquivo do cabeçalho do modelo."
+        "templateFile": "Etapa {stage}: adicione o arquivo do cabeçalho do modelo.",
+        "fileLinkInvalid": "Etapa {stage}: o link do arquivo deve começar com https://"
       }
     },
     "waboImport": {

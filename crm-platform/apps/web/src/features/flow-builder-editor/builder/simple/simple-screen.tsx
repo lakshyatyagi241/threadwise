@@ -48,6 +48,7 @@ import {
   groupIndexOf,
   groupsOf,
   groupText,
+  incomingStages,
   insertStep,
   moveStep,
   newStep,
@@ -1079,6 +1080,7 @@ function Editor({
                           ctx={ctx}
                           flowId={flowId}
                           stage={stageIn(doc, ci, si)}
+                          from={incomingStages(doc, s.id)}
                           active={activeId === s.id}
                           editing={activeId !== null}
                           bad={badSteps.has(s.id)}
@@ -1549,6 +1551,8 @@ function StepCard(p: {
   /** The saved flow (null before the first save): the FAQ step reads this flow's FAQs. */
   flowId: string | null;
   stage: string;
+  /** The stage numbers of the steps that lead here. */
+  from?: string[];
   active: boolean;
   /** A step is open somewhere: only that one shows its tools, hovering the others does not add theirs beside it. */
   editing: boolean;
@@ -1708,6 +1712,15 @@ function StepCard(p: {
             <span className="min-w-0 flex-1 truncate text-[14px] font-medium">
               {m(stepLabel(s))}
             </span>
+            {p.from && p.from.length > 0 ? (
+              <span
+                className="shrink-0 font-mono text-[11px] text-muted-foreground"
+                title={t('fromSteps', { stages: p.from.join(', ') })}
+                data-testid="step-from"
+              >
+                ← {p.from.join(', ')}
+              </span>
+            ) : null}
             <span className="shrink-0 font-mono text-[12px] text-muted-foreground">{p.stage}</span>
           </button>
           <div className="flex shrink-0 items-center gap-0.5 text-muted-foreground lg:hidden">

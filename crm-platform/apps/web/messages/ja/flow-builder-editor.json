@@ -747,7 +747,8 @@
           "storedIn": "値は連絡先の <b>{property}</b> プロパティに保存されます",
           "actions": "アクション",
           "actionsHint": "このステップの直後に実行されるステップを追加します。",
-          "actionsBlocked": "自分の部分を終えるステップの後には、ステップを続けられません。"
+          "actionsBlocked": "自分の部分を終えるステップの後には、ステップを続けられません。",
+          "fromSteps": "ステップ {stages} から到達します"
         },
         "editors": {
           "linkLabel": "この後の移動先",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。",
         "chooseAiAgent": "ステップ {stage}: 回答するAIエージェントを選ぶか、ステップをカスタム設定に切り替えてください。",
         "writeAiPrompt": "ステップ {stage}: AIへの指示を書くか、AIエージェントを選んでください。",
-        "templateFile": "ステップ {stage}：テンプレートのヘッダーファイルを追加してください。"
+        "templateFile": "ステップ {stage}：テンプレートのヘッダーファイルを追加してください。",
+        "fileLinkInvalid": "ステップ {stage}：ファイルのリンクは https:// で始めてください"
       }
     },
     "waboImport": {

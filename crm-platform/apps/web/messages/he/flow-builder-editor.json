@@ -747,7 +747,8 @@
           "storedIn": "הערכים יישמרו במאפיין <b>{property}</b> של איש הקשר",
           "actions": "פעולות",
           "actionsHint": "הוספת שלב שרץ מיד אחרי השלב הזה.",
-          "actionsBlocked": "אחרי שלב שמסיים את החלק שלו לא יכול לבוא שלב נוסף."
+          "actionsBlocked": "אחרי שלב שמסיים את החלק שלו לא יכול לבוא שלב נוסף.",
+          "fromSteps": "מגיעים לכאן משלב {stages}"
         },
         "editors": {
           "linkLabel": "לאן זה מוביל",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "שלב {stage}: הוסיפו את הכתובת (URL) להתקשרות.",
         "chooseAiAgent": "שלב {stage}: בחרו את סוכן ה-AI שעונה, או העבירו את השלב להגדרה מותאמת אישית.",
         "writeAiPrompt": "שלב {stage}: כתבו הוראות ל-AI או בחרו סוכן AI.",
-        "templateFile": "שלב {stage}: הוסיפו את קובץ הכותרת של התבנית."
+        "templateFile": "שלב {stage}: הוסיפו את קובץ הכותרת של התבנית.",
+        "fileLinkInvalid": "שלב {stage}: קישור הקובץ חייב להתחיל ב-https://"
       }
     },
     "waboImport": {
