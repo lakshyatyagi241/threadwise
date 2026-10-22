@@ -58,6 +58,7 @@ function alertWidgets(a, grafanaUrl) {
   if (where) w.push({ decoratedText: { topLabel: 'Instance / job', text: esc(trunc(where, 200)) } });
   const t = [`started ${fmtTime(a.startsAt)}`, resolved && fmtTime(a.endsAt) ? `ended ${fmtTime(a.endsAt)}` : ''].filter(Boolean).join(', ');
   if (t) w.push({ decoratedText: { topLabel: 'Time', text: t } });
+  if ((n.runbook || n.runbook_url) && !safeUrl(n.runbook_url ?? n.runbook)) w.push({ decoratedText: { topLabel: 'Runbook', text: esc(trunc(n.runbook_url ?? n.runbook, 300)), wrapText: true } }); // repo path, no link possible
   const buttons = [];
   if (n.runbook_url || n.runbook) buttons.push({ text: 'Runbook', onClick: { openLink: { url: safeUrl(n.runbook_url ?? n.runbook) } } });
   const g = n.dashboard_url ?? (grafanaUrl ? `${grafanaUrl.replace(/\/$/, '')}/alerting/list` : '');

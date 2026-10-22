@@ -147,6 +147,32 @@ Safety model: `AUTO_REMEDIATE=off|dry-run|on`, default **dry-run** (an unknown v
 
 **Env vars (bridge service).** `PROMETHEUS_URL`, `SLOW_EXCLUDE_APP_REGEX`, `SLOW_EXCLUDE_USER_REGEX`, `SLOW_IDLE_TX_SECONDS` 60, `CRITICAL_SLOW_SECONDS` 60, `CRITICAL_BLOCK_SECONDS` 30, `AUTO_REMEDIATE` dry-run, `HARD_CANCEL_SECONDS` 120, `CANCEL_BLOCKER_SECONDS` 30, `IDLE_BLOCKER_SECONDS` 60, `VERIFY_SECONDS` 120, `VERIFY_POLL_MS` 2000, `AUTO_REMEDIATE_MAX_PER_HOUR` 3, `STMT_RECURRING_POLLS` 3, `INCIDENTS_DIR` (default `./incidents`, needs a writable volume for code-fix files), `SLOW_CANCEL_PG_URL_FILE` (default `/run/secrets/slow_query_cancel_pg_url`, optional).
 
+## Critical-path drill (real faults, fake Chat) - measured on a local stack
+
+Runner: `bash script-testing/critical-path-drill/run.sh [--quick]`. Real Prometheus v2.55.0 with the repo rules (`for:` 20 s), real Alertmanager v0.27.0
+with `alertmanager.gchat.yml` (critical `group_interval` 15 s instead of 2 m), real bridge, FAKE Chat with three distinct space URLs. Never contacts Google.
+Measured in one full run (production latency = these + the real `for:` + up to the real group_interval):
+
+| Fault | Alert (critical) | Fault start to card in Critical | Fault end to RESOLVED reply (same thread) |
+|---|---|---|---|
+| Postgres black-hole, pool 2, 8 callers | DbPoolExhausted | 46.9 s | 9.8 s ("RESOLVED after 40s") |
+| same | PostgresDown | 38.8 s | 16.6 s |
+| Redis refused behind a TCP proxy | RedisDown | 38.3 s | 9.2 s |
+| probe aimed at a dead port | ApiProbeFailing | 31 s (1 repeat reply in the thread) | 9.9 s |
+| API metrics target dead (warning only) | CacheMetricsMissing (warning) | no post (logged `alert_not_routed`) | n/a |
+
+Behaviour: one top-level card per fingerprint (thread `am-<fingerprint>`), repeats are replies ("Still firing"), Slow Queries 0 and Deployments 0
+messages, no warning card, no critical swallowed (Alertmanager inhibited only the warning). Card: title `FIRING: <alert>`, "(firing, critical)", Summary, Description,
+Time, What it means, Likely causes, Live evidence (Prometheus), e.g. `DB pool waiting: 16.00`, What to check, Suggested action (never auto-executed), Runbook row.
+
+Resolver: AUTO_REMEDIATE stays `dry-run`. The `service` and `db_pool` playbooks post `DIAGNOSED` then `ACTION: DRY-RUN: would ...` and the incident stays `dry-run`;
+ESCALATED appears only with AUTO_REMEDIATE=on and no executor (not run). Nothing was cancelled or terminated.
+
+Found and fixed: (1) the resolver DIAGNOSED reply could be posted before the FIRING card (now sent after the card post returned; unit test);
+(2) a repo-path runbook annotation was dropped from the card (no http link possible), now shown as a "Runbook" row; (3) ApiProbeFailing had no runbook annotation, added.
+Environment note: a stale `apps/api/dist` lacks `crm_postgres_up` and `crm_db_pool_waiting`, so DbPoolExhausted/PostgresDown cannot fire: build the API from the branch under test.
+Not proven: real Google Chat, production thresholds/durations, the ApiProbeFailing runbook row after fix (only rule check + ratchet run), ESCALATED path.
+
 ## Resolver drill on a dedicated Postgres (measured, scaled thresholds)
 Harness: `tools/chat-bridge/accuracy/drill.mjs` (own container, pg_stat_statements preloaded). Enable steps: [resolver-enable-on-production.md](resolver-enable-on-production.md). `run.sh --own-postgres` runs the suite on a private container.
 
