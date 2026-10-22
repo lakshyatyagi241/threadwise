@@ -209,12 +209,22 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
   it('lists the plain add-ons in their own section with a switch, apart from the Marketplace apps', () => {
     const html = render(
       createElement(AddonsTab, {
-        state: state({ features: { ...newPlanDraft().features, inbox_routing: true, inbox_assignment_sticky: true } }),
+        state: state({
+          features: {
+            ...newPlanDraft().features,
+            inbox_routing: true,
+            inbox_assignment_sticky: true,
+          },
+        }),
         addons: addons({ options: [pack({ id: A })] }),
         included: included({
           packs: [
             plain({ id: SMART }),
-            plain({ id: LIMITS_ONLY, name: 'More teams', grants: { features: [], limits: { teams: 5 } } }),
+            plain({
+              id: LIMITS_ONLY,
+              name: 'More teams',
+              grants: { features: [], limits: { teams: 5 } },
+            }),
           ],
         }),
         savedFeatures: SAVED,
@@ -245,7 +255,9 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
     expect(partial).toContain('<button');
     const teams = render(
       createElement(AddonsTab, {
-        state: state({ features: { ...newPlanDraft().features, team_hierarchy: true, custom_roles: true } }),
+        state: state({
+          features: { ...newPlanDraft().features, team_hierarchy: true, custom_roles: true },
+        }),
         addons: addons({}),
         included: included({
           packs: [
@@ -268,7 +280,13 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
     expect(teams).not.toContain('role="status"');
     const stops = render(
       createElement(AddonsTab, {
-        state: state({ features: { ...newPlanDraft().features, inbox_routing: true, inbox_assignment_sticky: true } }),
+        state: state({
+          features: {
+            ...newPlanDraft().features,
+            inbox_routing: true,
+            inbox_assignment_sticky: true,
+          },
+        }),
         addons: addons({}),
         included: included({ packs: [plain({ id: SMART })], impact: new Map([[SMART, 4]]) }),
         savedFeatures: SAVED,
@@ -292,7 +310,9 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
       }),
       locale,
     );
-    expect(html).toMatch(/<button[^>]*role="switch"[^>]*disabled|<button[^>]*disabled[^>]*role="switch"/);
+    expect(html).toMatch(
+      /<button[^>]*role="switch"[^>]*disabled|<button[^>]*disabled[^>]*role="switch"/,
+    );
   });
 
   it('puts counts and an error dot on the tabs', () => {

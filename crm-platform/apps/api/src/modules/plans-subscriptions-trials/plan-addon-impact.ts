@@ -12,7 +12,10 @@ type Raw = Record<string, unknown>;
  * The same status list as the job (`active`, `past_due`) so the figure and the effect cannot drift. Runs in the operator's privileged
  * transaction (the plan store's), like the other cross-tenant counts of this module.
  */
-export async function addonRenewalImpact(tx: Tx, planSlug: string): Promise<PlanAddonImpactResponse> {
+export async function addonRenewalImpact(
+  tx: Tx,
+  planSlug: string,
+): Promise<PlanAddonImpactResponse> {
   const res = await tx.execute(sql`
     SELECT p.uuid AS pack_id, count(DISTINCT s.org_id)::int AS renewing
     FROM organizations o

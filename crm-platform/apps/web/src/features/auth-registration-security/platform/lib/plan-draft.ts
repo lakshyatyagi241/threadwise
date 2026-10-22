@@ -432,10 +432,7 @@ export interface PackGrants {
 
 export type PackCoverageState =
   /** The pack grants no feature (limits only): there is nothing to include. */
-  | 'noFeatures'
-  | 'none'
-  | 'partial'
-  | 'full';
+  'noFeatures' | 'none' | 'partial' | 'full';
 
 export interface PackCoverage {
   state: PackCoverageState;

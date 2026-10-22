@@ -2,7 +2,12 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { PLAN_FEATURE_KEYS, PLAN_LIMIT_KEYS, type AddonPack, type PlanAddonOption } from '@crm/contracts';
+import {
+  PLAN_FEATURE_KEYS,
+  PLAN_LIMIT_KEYS,
+  type AddonPack,
+  type PlanAddonOption,
+} from '@crm/contracts';
 import { Alert, Badge, Button, Checkbox, Input, Spinner, Switch } from '@crm/ui';
 import { formatMoney } from '../../account/plans/plan-format';
 import {
@@ -80,7 +85,12 @@ export function AddonsTab({
         />
       </Section>
       <Section title={t('marketplace.title')}>
-        <MarketplaceAddons state={state} addons={addons} readOnly={readOnly} onTouched={onTouched} />
+        <MarketplaceAddons
+          state={state}
+          addons={addons}
+          readOnly={readOnly}
+          onTouched={onTouched}
+        />
       </Section>
     </div>
   );
