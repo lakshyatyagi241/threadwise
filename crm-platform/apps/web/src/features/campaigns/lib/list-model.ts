@@ -7,6 +7,7 @@ import {
   type CampaignStatus,
   type CampaignTypeFilter,
 } from '@crm/contracts';
+import { customDayRange } from '@/lib/date-filter';
 
 /** What the campaigns list decides without the network (TW-CAMP-001, 016, 017). Pure. */
 
@@ -46,21 +47,17 @@ export const DEFAULT_STATE: ListState = {
 const oneOf = <T extends string>(list: readonly T[], v: string | null, fallback: T): T =>
   v !== null && (list as readonly string[]).includes(v) ? (v as T) : fallback;
 
-/** A day from the address when it names a real day, else empty (an open side). */
-const dayOf = (v: string | null): string =>
-  v !== null && calendarDaySchema.safeParse(v).success ? v : '';
-
 /** The address is the single source of truth for the filters: a bad value falls back to its default. */
 export function parseState(p: URLSearchParams): ListState {
   const page = Number(p.get('page'));
   const range = oneOf(CAMPAIGN_RANGES, p.get('range'), 'all');
-  const custom = range === 'custom';
+  const days = customDayRange(range === 'custom', p.get('from'), p.get('to'), calendarDaySchema);
   return {
     status: oneOf(STATUS_VIEWS, p.get('status'), 'all'),
     type: oneOf(CAMPAIGN_TYPE_FILTERS, p.get('type'), 'all'),
     range,
-    from: custom ? dayOf(p.get('from')) : '',
-    to: custom ? dayOf(p.get('to')) : '',
+    from: days.from,
+    to: days.to,
     q: (p.get('q') ?? '').trim(),
     page: Number.isInteger(page) && page >= 1 ? page : 1,
   };

@@ -46,7 +46,7 @@ export function useTemplateGallery(
 
 export type LibraryFilters = Pick<
   ListTemplatesQuery,
-  'statusGroup' | 'category' | 'connectionId' | 'q' | 'sort'
+  'statusGroup' | 'category' | 'connectionId' | 'q' | 'sort' | 'range' | 'from' | 'to'
 >;
 
 /** The library: server-side filters, cursor "load more", no totals. */
@@ -58,6 +58,9 @@ export function useTemplateList(filters: LibraryFilters) {
     category: filters.category,
     connectionId: filters.connectionId,
     q: filters.q || undefined,
+    range: filters.range === 'all' ? undefined : filters.range,
+    from: filters.from || undefined,
+    to: filters.to || undefined,
   });
 }
 
@@ -71,6 +74,9 @@ export function useTemplateCounts(filters: LibraryFilters) {
       filters.category,
       filters.connectionId,
       filters.q,
+      filters.range,
+      filters.from,
+      filters.to,
     ],
     queryFn: ({ signal }) =>
       templatesApi.counts(
@@ -79,6 +85,9 @@ export function useTemplateCounts(filters: LibraryFilters) {
           category: filters.category,
           connectionId: filters.connectionId,
           q: filters.q,
+          range: filters.range,
+          from: filters.from || undefined,
+          to: filters.to || undefined,
         },
         signal,
       ),

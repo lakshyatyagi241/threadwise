@@ -135,6 +135,16 @@
         "name-asc": "Nama A→Z",
         "name-desc": "Nama Z→A"
       },
+      "dateRange": "Rentang tanggal",
+      "range": {
+        "all": "Sepanjang waktu",
+        "7d": "7 hari",
+        "30d": "30 hari",
+        "90d": "90 hari",
+        "custom": "Rentang kustom",
+        "from": "Dari tanggal",
+        "to": "Sampai tanggal"
+      },
       "showing": "Menampilkan",
       "of": "dari",
       "filteredTemplates": "template yang difilter",

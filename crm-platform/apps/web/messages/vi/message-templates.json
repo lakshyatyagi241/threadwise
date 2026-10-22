@@ -135,6 +135,16 @@
         "name-asc": "Tên A→Z",
         "name-desc": "Tên Z→A"
       },
+      "dateRange": "Khoảng thời gian",
+      "range": {
+        "all": "Mọi lúc",
+        "7d": "7 ngày",
+        "30d": "30 ngày",
+        "90d": "90 ngày",
+        "custom": "Khoảng tùy chỉnh",
+        "from": "Từ ngày",
+        "to": "Đến ngày"
+      },
       "showing": "Hiển thị",
       "of": "trong",
       "filteredTemplates": "mẫu tin đã lọc",

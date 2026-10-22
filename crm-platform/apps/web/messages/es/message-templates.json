@@ -135,6 +135,16 @@
         "name-asc": "Nombre A→Z",
         "name-desc": "Nombre Z→A"
       },
+      "dateRange": "Rango de fechas",
+      "range": {
+        "all": "Todo el tiempo",
+        "7d": "7 días",
+        "30d": "30 días",
+        "90d": "90 días",
+        "custom": "Rango personalizado",
+        "from": "Fecha de inicio",
+        "to": "Fecha de fin"
+      },
       "showing": "Mostrando",
       "of": "de",
       "filteredTemplates": "plantillas filtradas",

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
-import type { TemplateSummary, TplMetaCategory } from '@crm/contracts';
+import { TEMPLATE_RANGES, type TemplateSummary, type TplMetaCategory } from '@crm/contracts';
 import { Button, EmptyState, Spinner, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
@@ -14,6 +14,7 @@ import {
   useTemplateCounts,
   useTemplateList,
 } from '../api/hooks';
+import { dateFilterOf } from '../lib/date-range';
 import { CATEGORIES, SORTS, STATUS_TABS, type StatusTab } from '../lib/status-model';
 import { connectionLabel, summarizeSync, syncTargets } from '../lib/sync';
 import { DeleteTemplateDialog } from './delete-dialog';
@@ -62,6 +63,7 @@ export function TemplatesScreen() {
   const sort = isSort(urlSort) ? urlSort : 'newest';
   const category = CATEGORIES.find((c) => c === params.get('category')?.toUpperCase()) ?? 'all';
   const connectionId = params.get('number') ?? '';
+  const dates = dateFilterOf(params.get('range'), params.get('from'), params.get('to'));
   const [search, setSearch] = useState(params.get('q') ?? '');
   const q = useDebounced(search.trim(), 250);
 
@@ -87,6 +89,9 @@ export function TemplatesScreen() {
     connectionId: connectionId || undefined,
     q,
     sort,
+    range: dates.range,
+    from: dates.from,
+    to: dates.to,
   };
   const connections = useConnections();
   const list = useTemplateList(filters);
@@ -106,7 +111,12 @@ export function TemplatesScreen() {
   const total = counts.data?.statuses.all ?? 0;
   const filtered = counts.data?.filtered ?? list.items.length;
   const empty = !list.isPending && !list.isError && list.items.length === 0;
-  const anyFilter = status !== 'all' || category !== 'all' || connectionId !== '' || q !== '';
+  const anyFilter =
+    status !== 'all' ||
+    category !== 'all' ||
+    connectionId !== '' ||
+    q !== '' ||
+    dates.range !== 'all';
   const tabs: Array<{ key: string; label: string; count: number }> = [
     { key: 'all', label: t('tabAll'), count: counts.data?.categories.all ?? 0 },
     ...CATEGORIES.filter((c) => (counts.data?.categories[c] ?? 0) > 0).map((c) => ({
@@ -328,6 +338,43 @@ export function TemplatesScreen() {
                     </option>
                   ))}
                 </select>
+              )}
+              <select
+                aria-label={t('dateRange')}
+                title={t('dateRange')}
+                className={PILL_SELECT}
+                value={dates.range}
+                onChange={(e) => put({ range: e.target.value, from: '', to: '' })}
+              >
+                {TEMPLATE_RANGES.map((r) => (
+                  <option key={r} value={r}>
+                    {t(`range.${r}`)}
+                  </option>
+                ))}
+              </select>
+              {dates.range === 'custom' && (
+                <>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {t('range.from')}
+                    <input
+                      type="date"
+                      className={PILL_SELECT}
+                      value={dates.from}
+                      max={dates.to || undefined}
+                      onChange={(e) => put({ from: e.target.value })}
+                    />
+                  </label>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {t('range.to')}
+                    <input
+                      type="date"
+                      className={PILL_SELECT}
+                      value={dates.to}
+                      min={dates.from || undefined}
+                      onChange={(e) => put({ to: e.target.value })}
+                    />
+                  </label>
+                </>
               )}
               <select
                 aria-label={t('sortLabel')}
