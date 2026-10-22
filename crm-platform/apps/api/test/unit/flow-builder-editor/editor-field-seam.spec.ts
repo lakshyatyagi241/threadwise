@@ -391,12 +391,15 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
     reads: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', variable: 'res' },
   },
   faq: {
-    save: { query: '{{answer}}', save: '{{hit}}', minScore: '0.6', category: ' billing ' },
+    save: {
+      query: '{{answer}}',
+      save: '{{hit}}',
+      assistant: '3f0c2a1e-9b7d-4c55-8a2e-1d6f0b9c7a42',
+    },
     reads: {
       query: '{{answer}}',
       variable: 'hit',
-      minScore: 0.6,
-      category: 'billing',
+      assistant: '3f0c2a1e-9b7d-4c55-8a2e-1d6f0b9c7a42',
       sendAnswer: true,
     },
   },

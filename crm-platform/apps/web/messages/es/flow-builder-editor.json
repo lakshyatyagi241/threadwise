@@ -555,7 +555,8 @@
           "cardCount": "{count} tarjeta(s)",
           "payLink": "Enlace de pago",
           "invoice": "Factura",
-          "faqRetired": "Retirado · sale por sin coincidencia"
+          "faqAgent": "Responde desde {agent}",
+          "faqNoAgent": "Elige un agente de IA"
         },
         "overlays": {
           "startPinned": "Este es el punto de inicio (clic para desfijar)",
@@ -914,12 +915,14 @@
             "hint": "El visitante pasa a este equipo con tu nota. No hace falta conectar nada después de este botón."
           },
           "faq": {
-            "exit": "Continuar con",
-            "exitHint": "El flujo siempre continúa aquí."
+            "exit": "Cuando nada coincide",
+            "exitHint": "A dónde va el flujo cuando ninguna entrada responde.",
+            "matched": "Cuando responde",
+            "matchedHint": "A dónde va el flujo después de enviar la respuesta."
           }
         },
         "branchAdd": "Añadir un paso para “{title}”",
-        "faqEnds": "Este paso retirado termina esta parte: el flujo siempre continúa por su salida Sin coincidencia.",
+        "faqEnds": "Este paso cierra esta parte: el flujo continúa por su salida Respondida o Sin coincidencia.",
         "flowMenu": "Opciones de {name}",
         "renameFlow": "Renombrar flujo"
       },
@@ -1869,7 +1872,13 @@
           "waitUntilPaid": "Esperar al pago y continuar"
         },
         "faq": {
-          "retired": "Este paso está retirado y ya no busca nada. El flujo siempre continúa por Sin coincidencia. Para responder con tu propio conocimiento, usa un paso de asistente de IA y elige un agente de IA."
+          "agent": "Agente de IA",
+          "agentHint": "El agente cuya base de conocimiento se consulta. Añade preguntas frecuentes en Entrenamiento de IA.",
+          "query": "Buscar",
+          "queryHint": "Qué buscar. Normalmente el último mensaje del cliente.",
+          "sendAnswer": "Enviar la respuesta al cliente",
+          "variable": "Guardar la respuesta como",
+          "variableHint": "Los pasos siguientes leen la respuesta con este nombre, por ejemplo faq.answer."
         }
       },
       "attrPicker": {
@@ -2716,7 +2725,7 @@
       "simPurchase": "Compra simulada: {name} → puerto «purchased»",
       "simAbandon": "Abandono simulado → puerto «abandoned»",
       "locationSkipped": "(ubicación) omitida: no hay coordenadas válidas",
-      "faqRetired": "(simulado) Responder desde preguntas frecuentes está retirado: se toma \"sin coincidencia\"."
+      "faqLine": "(simulado) Responder desde preguntas frecuentes: la base de conocimiento no se consulta en el chat de prueba, se toma \"sin coincidencia\"."
     }
   }
 }

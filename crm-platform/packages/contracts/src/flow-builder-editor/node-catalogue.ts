@@ -134,7 +134,7 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('code', 'Run code (JS)', 'Logic', 'Sandboxed JavaScript transform', ['chat', 'call']),
   def('mysql', 'MySQL Query', 'Logic', 'Run a read-only SQL query'),
   def('ai', 'AI assistant', 'AI', 'Reply with ChatGPT or Gemini', WEB_CAPABLE),
-  // Not a Reference node: the FAQ knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
+  // Not a Reference node: an AI agent's knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
   def('faq', 'Answer from FAQ', 'AI', 'Match a message to your FAQs', SOCIAL_AND_CHAT),
   def('tag', 'Tag contact', 'Contact', 'Add or remove a tag'),
   def('assign', 'Human handoff', 'Contact', 'Hand the chat to a person or a queue'),
@@ -639,8 +639,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'faq':
       return {
         query: '{{user_message}}',
-        category: '',
-        minScore: null,
+        assistant: '',
         sendAnswer: true,
         save: 'faq',
       };

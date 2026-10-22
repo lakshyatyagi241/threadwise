@@ -574,7 +574,13 @@
           "waitUntilPaid": "Wacht tot betaald, ga dan verder"
         },
         "faq": {
-          "retired": "Deze stap is buiten gebruik en zoekt niets meer op. De flow gaat altijd verder via Geen overeenkomst. Gebruik een AI-assistentstap en kies een AI-agent om uit je eigen kennis te antwoorden."
+          "agent": "AI-agent",
+          "agentHint": "De agent in wiens kennisbank wordt gezocht. Voeg veelgestelde vragen toe in AI-training.",
+          "query": "Zoeken naar",
+          "queryHint": "Waarnaar gezocht wordt. Meestal het laatste bericht van de klant.",
+          "sendAnswer": "Antwoord naar de klant sturen",
+          "variable": "Antwoord opslaan als",
+          "variableHint": "Latere stappen lezen het antwoord onder deze naam, bijvoorbeeld faq.answer."
         }
       },
       "attrPicker": {
@@ -902,7 +908,8 @@
           "cardCount": "{count} kaart(en)",
           "payLink": "Betaallink",
           "invoice": "Factuur",
-          "faqRetired": "Buiten gebruik · verlaat via geen overeenkomst"
+          "faqAgent": "Antwoordt uit {agent}",
+          "faqNoAgent": "Kies een AI-agent"
         },
         "overlays": {
           "startPinned": "Dit is het startpunt (klik om los te maken)",
@@ -1261,12 +1268,14 @@
             "hint": "De bezoeker gaat met je notitie naar dit team. Na deze knop hoeft niets te worden gekoppeld."
           },
           "faq": {
-            "exit": "Doorgaan met",
-            "exitHint": "De flow gaat altijd hier verder."
+            "exit": "Als niets overeenkomt",
+            "exitHint": "Waar de flow heen gaat als geen item antwoordt.",
+            "matched": "Als er antwoord is",
+            "matchedHint": "Waar de flow heen gaat nadat het antwoord is verstuurd."
           }
         },
         "branchAdd": "Stap toevoegen voor “{title}”",
-        "faqEnds": "Deze stap die buiten gebruik is, beëindigt dit deel: de flow gaat altijd verder via de uitgang Geen overeenkomst.",
+        "faqEnds": "Deze stap beëindigt dit deel: de flow gaat verder via de uitgang Beantwoord of Geen match.",
         "flowMenu": "Opties voor {name}",
         "renameFlow": "Flow hernoemen"
       },
@@ -2716,7 +2725,7 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten",
-      "faqRetired": "(gesimuleerd) Antwoord uit veelgestelde vragen is buiten gebruik: \"geen overeenkomst\" wordt genomen."
+      "faqLine": "(gesimuleerd) Antwoord uit FAQ: in de testchat wordt de kennisbank niet doorzocht, \"geen match\" wordt gekozen."
     }
   }
 }

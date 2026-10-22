@@ -74,6 +74,7 @@ describe('KbRetrievalService', () => {
     expect(await svc.retrieve(1, 7, 'something unrelated entirely')).toEqual({
       grounded: true,
       passages: [],
+      hits: 0,
     });
   });
 

@@ -37,6 +37,7 @@ import {
 } from '../../lib/contract-text';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
+import { FaqForm } from '../inspector/forms-channels/faq';
 import { AiForm, CodeForm, ConditionGroupEditor, WebhookForm } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { usePlanFeature } from '@/lib/plan-features';
@@ -1083,17 +1084,23 @@ function VarField({
 }
 
 /**
- * "Answer from FAQ" is retired (FAQs are entries in an AI agent's knowledge now). A flow that still has the step keeps working: it
- * always leaves by "no match", so only that exit can be changed here.
+ * The Answer from FAQ step: the same form as the Advanced builder (AI agent, search text, send, variable), then where the flow goes
+ * when an entry answers and when none does.
  */
-function FaqEditor({ step, doc, link }: EditorProps) {
-  const t = useTranslations('flb.builder.formsChannels.faq');
+function FaqEditor(p: EditorProps) {
+  const { step, doc, link } = p;
   const ts = useTranslations('flb.builder.simple.editors.faq');
   return (
     <div className="space-y-3">
-      <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
-        {t('retired')}
-      </p>
+      <NodeFormEditor {...p} Form={FaqForm} />
+      <Field label={ts('matched')} hint={ts('matchedHint')}>
+        <LinkSelect
+          doc={doc}
+          stepId={step.id}
+          value={step.links[0] ?? null}
+          onChange={(target) => link(0, target)}
+        />
+      </Field>
       <Field label={ts('exit')} hint={ts('exitHint')}>
         <LinkSelect
           doc={doc}

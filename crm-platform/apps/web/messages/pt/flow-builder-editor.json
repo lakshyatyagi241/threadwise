@@ -555,7 +555,8 @@
           "cardCount": "{count} cartão(ões)",
           "payLink": "Link de pagamento",
           "invoice": "Fatura",
-          "faqRetired": "Descontinuado · sai por sem correspondência"
+          "faqAgent": "Responde com {agent}",
+          "faqNoAgent": "Escolha um agente de IA"
         },
         "overlays": {
           "startPinned": "Este é o ponto de partida (clique para desafixar)",
@@ -914,12 +915,14 @@
             "hint": "O visitante é passado a esta equipe com a sua nota. Não é preciso conectar nada depois deste botão."
           },
           "faq": {
-            "exit": "Continuar com",
-            "exitHint": "O fluxo sempre continua aqui."
+            "exit": "Quando nada corresponde",
+            "exitHint": "Para onde o fluxo vai quando nenhuma entrada responde.",
+            "matched": "Quando responde",
+            "matchedHint": "Para onde o fluxo vai depois de enviar a resposta."
           }
         },
         "branchAdd": "Adicionar um passo para “{title}”",
-        "faqEnds": "Esta etapa descontinuada encerra esta parte: o fluxo sempre segue pela saída Sem correspondência.",
+        "faqEnds": "Esta etapa encerra esta parte: o fluxo segue pela saída Respondida ou Sem correspondência.",
         "flowMenu": "Opções de {name}",
         "renameFlow": "Renomear fluxo"
       },
@@ -1869,7 +1872,13 @@
           "waitUntilPaid": "Aguardar o pagamento e depois continuar"
         },
         "faq": {
-          "retired": "Esta etapa foi descontinuada e não busca mais nada. O fluxo sempre segue por Sem correspondência. Para responder com seu próprio conhecimento, use uma etapa de assistente de IA e escolha um agente de IA."
+          "agent": "Agente de IA",
+          "agentHint": "O agente cuja base de conhecimento é pesquisada. Adicione perguntas frequentes em Treinamento de IA.",
+          "query": "Pesquisar por",
+          "queryHint": "O que procurar. Normalmente a última mensagem do cliente.",
+          "sendAnswer": "Enviar a resposta ao cliente",
+          "variable": "Salvar a resposta como",
+          "variableHint": "As etapas seguintes leem a resposta com este nome, por exemplo faq.answer."
         }
       },
       "attrPicker": {
@@ -2716,7 +2725,7 @@
       "simPurchase": "Compra simulada: {name} → saída \"comprado\"",
       "simAbandon": "Abandono simulado → saída \"abandonado\"",
       "locationSkipped": "(localização) ignorada: sem coordenadas válidas",
-      "faqRetired": "(simulado) Responder pelas perguntas frequentes foi descontinuado: seguindo por \"sem correspondência\"."
+      "faqLine": "(simulado) Responder com perguntas frequentes: a base de conhecimento não é pesquisada no chat de teste, seguindo \"sem correspondência\"."
     }
   }
 }

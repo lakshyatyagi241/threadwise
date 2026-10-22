@@ -564,8 +564,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return advance('success');
       }
       case 'faq':
-        // Retired: FAQs are entries in an AI agent's knowledge now. A flow that still has the step leaves by "no match".
-        sys(tx('faqRetired'));
+        // The knowledge base search needs the workspace's AI agent; the test chat does not run it and leaves by "no match".
+        sys(tx('faqLine'));
         return advance('no_match');
       case 'end':
         sys(tx('flowEnded'));

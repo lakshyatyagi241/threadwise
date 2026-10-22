@@ -53,7 +53,7 @@ export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
 /**
  * The steps that end their journey: what happens next depends on what the customer taps (buttons, list, a carousel's reply buttons),
- * on a condition's answer, or on whether a retired "Answer from FAQ" step answered (`faq`; it now always leaves by no match).
+ * on a condition's answer, or on whether an "Answer from FAQ" step found an answer in its AI agent's knowledge base (`faq`).
  */
 export const BRANCHING: ReadonlySet<string> = new Set([
   'buttons',
@@ -548,6 +548,7 @@ const nodeKind = (key: string, type: SimpleType, group: StepKind['group']): Step
 
 export const STEP_KINDS: readonly StepKind[] = [
   nodeKind('ai', 'ai', 'answer'),
+  nodeKind('faq', 'faq', 'answer'),
   kind('assign', 'assign', 'handoff'),
   kind('message', 'message', 'send'),
   kind('media', 'media', 'send'),
