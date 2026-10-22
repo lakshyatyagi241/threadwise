@@ -125,10 +125,13 @@ export class WalletExpensesService {
       const where = filterSql(orgId, query, unit, platform);
       const dayOf = sql`((uc.created_at AT TIME ZONE ${query.timeZone})::date)`;
       // One extra day tells whether there is an older page, the same way the log's extra row does.
+      // The name is only needed when the template filter reads it, so the day queries skip the per-charge name lookup otherwise.
+      const names = Boolean(query.template);
+      // A day before the cursor's day is a charge before the cursor's local midnight: the same cut, on created_at, so the scan stops there.
       const dayRes = await tx.execute(sql`
         SELECT DISTINCT ${dayOf}::text AS day
-          ${fromSql(where)}
-          ${query.cursor ? sql`AND ${dayOf} < ${query.cursor}::date` : sql``}
+          ${fromSql(where, names)}
+          ${query.cursor ? sql`AND uc.created_at < (${query.cursor}::date::timestamp AT TIME ZONE ${query.timeZone})` : sql``}
          ORDER BY day DESC
          LIMIT ${query.limit + 1}`);
       const found = (dayRes.rows as unknown as { day: string }[]).map((r) => r.day);
@@ -150,7 +153,7 @@ export class WalletExpensesService {
         WITH msgs AS (
           SELECT (uc.created_at AT TIME ZONE ${query.timeZone})::date AS day, uc.status, ${CHANNEL} AS source, uc.category,
                  ch.amount AS charged_amount, rf.amount AS refunded_amount
-            ${fromSql(where)}
+            ${fromSql(where, names)}
              AND uc.created_at >= (${oldest}::date::timestamp AT TIME ZONE ${query.timeZone})
              AND uc.created_at < ((${newest}::date + 1)::timestamp AT TIME ZONE ${query.timeZone})
         )
@@ -277,12 +280,11 @@ function sourceSql(source: string): SQL {
  * The charge with its ledger lines: the money out (shown positive) and the money back. Both joins are by the wallet row, not by id alone.
  * `legacy` is the name the statement shows for a message: the broadcast or campaign that holds it, found by its provider message id. It
  * is read only for a charge with no name on it (sent before the name was copied onto the charge).
+ * `legacyNames` false leaves that join out: only a query that reads or filters by the name needs it (`where` refers to `legacy`).
  */
-function fromSql(where: SQL): SQL {
-  return sql`FROM usage_charges uc
-    LEFT JOIN wallet_transactions ch ON ch.org_id = uc.org_id AND ch.id = uc.wallet_tx_id
-    LEFT JOIN wallet_transactions rf ON rf.org_id = uc.org_id AND rf.id = uc.refund_tx_id
-    LEFT JOIN LATERAL (
+function fromSql(where: SQL, legacyNames = true): SQL {
+  const legacy = legacyNames
+    ? sql`LEFT JOIN LATERAL (
       SELECT n.template_name, n.subject_name FROM (
         SELECT t.template_name, b.name AS subject_name, 0 AS pref
           FROM broadcast_contacts bc
@@ -298,7 +300,12 @@ function fromSql(where: SQL): SQL {
       ) n
       ORDER BY n.pref
       LIMIT 1
-    ) legacy ON uc.template_name IS NULL OR uc.subject_name IS NULL
+    ) legacy ON uc.template_name IS NULL OR uc.subject_name IS NULL`
+    : sql``;
+  return sql`FROM usage_charges uc
+    LEFT JOIN wallet_transactions ch ON ch.org_id = uc.org_id AND ch.id = uc.wallet_tx_id
+    LEFT JOIN wallet_transactions rf ON rf.org_id = uc.org_id AND rf.id = uc.refund_tx_id
+    ${legacy}
     WHERE ${where}`;
 }
 
