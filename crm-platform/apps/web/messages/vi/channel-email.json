@@ -197,6 +197,8 @@
       "date": "Ngày",
       "imagesBlocked": "Hình ảnh từ internet đã bị ẩn.",
       "loadImages": "Tải hình ảnh",
+      "showQuoted": "Hiện văn bản trích dẫn",
+      "hideQuoted": "Ẩn văn bản trích dẫn",
       "frameTitle": "Email: {subject}",
       "truncated": "Email này dài nên chỉ hiển thị phần đầu.",
       "noBody": "Email này không có nội dung văn bản.",

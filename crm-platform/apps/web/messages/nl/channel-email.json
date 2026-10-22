@@ -197,6 +197,8 @@
       "date": "Datum",
       "imagesBlocked": "Afbeeldingen van internet zijn verborgen.",
       "loadImages": "Afbeeldingen laden",
+      "showQuoted": "Geciteerde tekst tonen",
+      "hideQuoted": "Geciteerde tekst verbergen",
       "frameTitle": "E-mail: {subject}",
       "truncated": "Deze e-mail was lang, dus alleen het eerste deel wordt getoond.",
       "noBody": "Deze e-mail bevat geen tekst.",

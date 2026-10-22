@@ -197,6 +197,8 @@
       "date": "日期",
       "imagesBlocked": "来自互联网的图片已隐藏。",
       "loadImages": "加载图片",
+      "showQuoted": "显示引用内容",
+      "hideQuoted": "隐藏引用内容",
       "frameTitle": "邮件：{subject}",
       "truncated": "此邮件较长，仅显示前面一部分。",
       "noBody": "此邮件没有文本内容。",
