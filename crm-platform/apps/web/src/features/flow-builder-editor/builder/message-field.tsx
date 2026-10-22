@@ -264,7 +264,7 @@ export function MessageField({
                 !e.shiftKey &&
                 /^[bi]$/i.test(e.key)
               ) {
-                // Ctrl/Cmd+B and Ctrl/Cmd+I are the toolbar's bold and italic, run here so they do not depend on the browser's own command.
+                // Ctrl/Cmd+B and Ctrl/Cmd+I are the toolbar's bold and italic.
                 e.preventDefault();
                 format(e.key.toLowerCase() === 'b' ? 'bold' : 'italic');
               } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
