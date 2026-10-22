@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Akıllı yönlendirme",
         "teamsPermissions": "Ekipler ve izinler"
-      }
+      },
+      "addonsTabHint": "Eklentiler için planınızda Pazar yeri olması gerekmez. Planlar ve eklentiler bölümünden sahip olduklarınızı görebilir ve eklenti satın alabilirsiniz.",
+      "addonsTabLink": "Planlar ve eklentileri aç"
     },
     "lock": {
       "link": "Planları ve eklentileri gör"

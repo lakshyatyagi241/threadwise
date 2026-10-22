@@ -11,7 +11,8 @@
       "installed": "설치됨 · 마켓플레이스",
       "manage": "앱 관리 · 마켓플레이스",
       "requests": "요청 · 마켓플레이스",
-      "addons": "부가 기능 · 마켓플레이스"
+      "addons": "부가 기능 · 마켓플레이스",
+      "developer": "개발자 · 마켓플레이스"
     },
     "common": {
       "dismiss": "닫기",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "미니 앱",
         "integration": "연동",
-        "addon": "부가 기능"
+        "addon": "부가 기능",
+        "developer": "개발자"
       },
       "installed": "설치됨",
       "installedLimit": "설치됨 ({installed}/{limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "열기",
       "empty": {
-        "title": "사용할 수 있는 부가 기능이 없습니다",
-        "message": "역할과 요금제에 포함된 부가 기능이 여기에 표시됩니다."
+        "title": "사용할 수 있는 개발자 도구가 없습니다",
+        "message": "역할과 요금제에 포함된 개발자 도구가 여기에 표시됩니다."
       },
       "soon": "출시 예정",
       "upgrade": "업그레이드"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "결제가 취소되었습니다",
         "message": "요금이 청구되지 않았습니다. 준비되면 언제든 다시 구독하세요."
+      }
+    },
+    "addonsTab": {
+      "intro": "요금제에 더해 구매하는 추가 기능 팩입니다. 요금제에 이미 포함된 항목은 표시되며 비용이 청구되지 않습니다.",
+      "developerHint": "REST API, 웹훅 또는 다른 개발자 도구를 찾고 계신가요?",
+      "developerLink": "개발자 탭 열기"
+    },
+    "developerTab": {
+      "intro": "개발자와 기술 관리자를 위한 도구: API 키, 웹훅, 게시, 번역. 역할과 요금제에서 허용하는 도구만 표시됩니다."
+    },
+    "connector": {
+      "builtIn": "기본 제공",
+      "status": {
+        "connected": "연결됨",
+        "notConnected": "연결 안 됨",
+        "upgrade": "업그레이드",
+        "soon": "출시 예정"
+      },
+      "cta": {
+        "open": "열기",
+        "manage": "관리",
+        "connect": "연결"
       }
     }
   }

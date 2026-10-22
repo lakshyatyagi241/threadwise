@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "스마트 라우팅",
         "teamsPermissions": "팀 및 권한"
-      }
+      },
+      "addonsTabHint": "부가 기능은 요금제에 마켓플레이스가 없어도 쓸 수 있습니다. 요금제 및 부가 기능에서 보유 현황을 보고 부가 기능을 구매할 수 있습니다.",
+      "addonsTabLink": "요금제 및 부가 기능 열기"
     },
     "lock": {
       "link": "요금제 및 애드온 보기"

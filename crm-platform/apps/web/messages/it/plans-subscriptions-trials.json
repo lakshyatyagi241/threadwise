@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Instradamento intelligente",
         "teamsPermissions": "Team e autorizzazioni"
-      }
+      },
+      "addonsTabHint": "I componenti aggiuntivi non richiedono il Marketplace nel tuo piano. Da Piani e componenti aggiuntivi puoi comunque vedere cosa possiedi e acquistarne altri.",
+      "addonsTabLink": "Apri Piani e componenti aggiuntivi"
     },
     "lock": {
       "link": "Vedi piani e componenti aggiuntivi"

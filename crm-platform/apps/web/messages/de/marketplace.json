@@ -11,7 +11,8 @@
       "installed": "Installiert · Marketplace",
       "manage": "App verwalten · Marketplace",
       "requests": "Anfragen · Marketplace",
-      "addons": "Add-ons · Marketplace"
+      "addons": "Add-ons · Marketplace",
+      "developer": "Entwickler · Marketplace"
     },
     "common": {
       "dismiss": "Schließen",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini-Apps",
         "integration": "Integrationen",
-        "addon": "Add-ons"
+        "addon": "Add-ons",
+        "developer": "Entwickler"
       },
       "installed": "Installiert",
       "installedLimit": "Installiert ({installed} von {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Öffnen",
       "empty": {
-        "title": "Keine Add-ons verfügbar",
-        "message": "Die Add-ons, die Ihre Rolle und Ihr Tarif enthalten, erscheinen hier."
+        "title": "Keine Entwicklertools verfügbar",
+        "message": "Die Entwicklertools, die Ihre Rolle und Ihr Tarif enthalten, erscheinen hier."
       },
       "soon": "Demnächst",
       "upgrade": "Upgrade"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Zahlung abgebrochen",
         "message": "Es wurde nichts abgebucht. Abonnieren Sie erneut, wann immer Sie bereit sind."
+      }
+    },
+    "addonsTab": {
+      "intro": "Zusätzliche Funktionspakete, die Sie zu Ihrem Tarif dazukaufen. Was Ihr Tarif schon enthält, ist markiert und kostet nichts.",
+      "developerHint": "Sie suchen die REST-API, Webhooks oder andere Entwicklertools?",
+      "developerLink": "Tab „Entwickler“ öffnen"
+    },
+    "developerTab": {
+      "intro": "Tools für Entwickler und technische Admins: API-Schlüssel, Webhooks, Veröffentlichung und Übersetzung. Sie sehen nur, was Ihre Rolle und Ihr Tarif erlauben."
+    },
+    "connector": {
+      "builtIn": "Integriert",
+      "status": {
+        "connected": "Verbunden",
+        "notConnected": "Nicht verbunden",
+        "upgrade": "Upgrade",
+        "soon": "Demnächst"
+      },
+      "cta": {
+        "open": "Öffnen",
+        "manage": "Verwalten",
+        "connect": "Verbinden"
       }
     }
   }

@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Perutean cerdas",
         "teamsPermissions": "Tim dan izin"
-      }
+      },
+      "addonsTabHint": "Pengaya tidak memerlukan Marketplace pada paket Anda. Anda tetap bisa melihat yang Anda miliki dan membeli pengaya dari Paket dan pengaya.",
+      "addonsTabLink": "Buka Paket dan pengaya"
     },
     "lock": {
       "link": "Lihat paket dan add-on"

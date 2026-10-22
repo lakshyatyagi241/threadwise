@@ -11,7 +11,8 @@
       "installed": "Đã cài đặt · Marketplace",
       "manage": "Quản lý ứng dụng · Marketplace",
       "requests": "Yêu cầu · Marketplace",
-      "addons": "Tiện ích bổ sung · Marketplace"
+      "addons": "Tiện ích bổ sung · Marketplace",
+      "developer": "Nhà phát triển · Marketplace"
     },
     "common": {
       "dismiss": "Bỏ qua",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Ứng dụng mini",
         "integration": "Tích hợp",
-        "addon": "Tiện ích bổ sung"
+        "addon": "Tiện ích bổ sung",
+        "developer": "Nhà phát triển"
       },
       "installed": "Đã cài đặt",
       "installedLimit": "Đã cài đặt ({installed} trên {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Mở",
       "empty": {
-        "title": "Không có tiện ích bổ sung nào",
-        "message": "Các tiện ích bổ sung có trong vai trò và gói của bạn sẽ xuất hiện ở đây."
+        "title": "Không có công cụ nhà phát triển nào",
+        "message": "Các công cụ nhà phát triển có trong vai trò và gói của bạn sẽ hiện ở đây."
       },
       "soon": "Sắp ra mắt",
       "upgrade": "Nâng cấp"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Đã hủy thanh toán",
         "message": "Không có khoản nào bị tính phí. Hãy đăng ký lại bất cứ khi nào bạn sẵn sàng."
+      }
+    },
+    "addonsTab": {
+      "intro": "Các gói tính năng bổ sung bạn mua thêm ngoài gói của mình. Những gì gói của bạn đã bao gồm được đánh dấu và không bị tính phí.",
+      "developerHint": "Bạn đang tìm REST API, webhook hay công cụ dành cho nhà phát triển khác?",
+      "developerLink": "Mở tab Nhà phát triển"
+    },
+    "developerTab": {
+      "intro": "Công cụ cho nhà phát triển và quản trị viên kỹ thuật: khóa API, webhook, xuất bản và dịch. Bạn chỉ thấy những công cụ mà vai trò và gói của bạn cho phép."
+    },
+    "connector": {
+      "builtIn": "Tích hợp sẵn",
+      "status": {
+        "connected": "Đã kết nối",
+        "notConnected": "Chưa kết nối",
+        "upgrade": "Nâng cấp",
+        "soon": "Sắp ra mắt"
+      },
+      "cta": {
+        "open": "Mở",
+        "manage": "Quản lý",
+        "connect": "Kết nối"
       }
     }
   }

@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Intelligentes Routing",
         "teamsPermissions": "Teams und Berechtigungen"
-      }
+      },
+      "addonsTabHint": "Für Add-ons braucht Ihr Tarif den Marketplace nicht. Unter „Tarife und Add-ons“ sehen Sie weiterhin, was Sie besitzen, und können Add-ons kaufen.",
+      "addonsTabLink": "Tarife und Add-ons öffnen"
     },
     "lock": {
       "link": "Tarife und Add-ons ansehen"

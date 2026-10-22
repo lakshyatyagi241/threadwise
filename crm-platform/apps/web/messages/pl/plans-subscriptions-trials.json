@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Inteligentne kierowanie",
         "teamsPermissions": "Zespoły i uprawnienia"
-      }
+      },
+      "addonsTabHint": "Dodatki nie wymagają Marketplace w Twoim planie. W sekcji Plany i dodatki nadal zobaczysz, co posiadasz, i kupisz dodatki.",
+      "addonsTabLink": "Otwórz Plany i dodatki"
     },
     "lock": {
       "link": "Zobacz plany i dodatki"
