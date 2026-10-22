@@ -18,8 +18,11 @@ export const VIEWER_ROLE = role('viewer', 'Viewer', 5);
 const base: Omit<WspMember, 'id' | 'fullName' | 'email' | 'tier' | 'roles' | 'isOwner' | 'status'> =
   {
     avatarUrl: null,
+    phone: null,
+    chatLimit: null,
     presence: 'online',
     lastSeenAt: null,
+    lastLoginAt: null,
     invitedAt: '2026-09-01T08:00:00.000Z',
     joinedAt: '2026-09-02T08:00:00.000Z',
     teamIds: [],

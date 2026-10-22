@@ -989,7 +989,8 @@
       "all": "Alle",
       "mine": "Van mij",
       "unassigned": "Niet toegewezen",
-      "unread": "Ongelezen"
+      "unread": "Ongelezen",
+      "waiting": "Wachtend"
     },
     "search": {
       "open": "Gesprekken zoeken",

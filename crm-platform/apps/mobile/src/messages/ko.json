@@ -968,7 +968,8 @@
       "all": "전체",
       "mine": "내 대화",
       "unassigned": "미배정",
-      "unread": "읽지 않음"
+      "unread": "읽지 않음",
+      "waiting": "대기 중"
     },
     "search": {
       "open": "대화 검색",

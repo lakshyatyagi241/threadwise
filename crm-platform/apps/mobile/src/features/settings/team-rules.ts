@@ -55,6 +55,9 @@ export const toCreateInput = (draft: TeamDraft): CreateWspTeamInput => ({
   assignmentStrategy: draft.assignmentStrategy,
   memberIds: draft.memberIds,
   deviceIds: [],
+  // The server's own defaults; the app has no switch for them, so a new team behaves as before.
+  receivesConversations: true,
+  receivesRecords: true,
 });
 
 /**

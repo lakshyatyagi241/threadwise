@@ -38,6 +38,8 @@ describe('the teams API', () => {
       assignmentStrategy: 'manual',
       memberIds: [],
       deviceIds: [],
+      receivesConversations: true,
+      receivesRecords: true,
     });
     await updateTeam(sales.id, { name: 'Sales EU', memberIds: [], rowVersion: 4 });
     await deleteTeam(sales.id);

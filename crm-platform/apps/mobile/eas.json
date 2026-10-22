@@ -34,10 +34,13 @@
       "channel": "production",
       "environment": "production",
       "autoIncrement": true,
-      "env": { "APP_VARIANT": "production" }
+      "env": { "APP_VARIANT": "production" },
+      "android": { "buildType": "app-bundle" }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": { "track": "internal", "releaseStatus": "draft" }
+    }
   }
 }

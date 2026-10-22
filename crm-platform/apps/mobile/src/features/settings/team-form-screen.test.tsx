@@ -63,6 +63,8 @@ describe('TeamFormScreen: a new team', () => {
         assignmentStrategy: 'least_loaded',
         memberIds: [agent.id],
         deviceIds: [],
+        receivesConversations: true,
+        receivesRecords: true,
       }),
     );
     await waitFor(() => expect(router.back).toHaveBeenCalled());

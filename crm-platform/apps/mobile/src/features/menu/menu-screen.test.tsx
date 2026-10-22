@@ -43,7 +43,7 @@ const links = (privacy: string) =>
   >;
 
 async function show(
-  permissions: Record<string, 'all' | 'team' | 'own'> = session.permissions,
+  permissions: Record<string, 'all' | 'team' | 'team_and_below' | 'own'> = session.permissions,
   theme: (typeof session)['user']['theme'] = 'paper',
 ) {
   sessionCall.mockResolvedValue({ ...session, permissions, user: { ...session.user, theme } });

@@ -989,7 +989,8 @@
       "all": "All",
       "mine": "Mine",
       "unassigned": "Unassigned",
-      "unread": "Unread"
+      "unread": "Unread",
+      "waiting": "Waiting"
     },
     "search": {
       "open": "Search conversations",

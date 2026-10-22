@@ -1010,7 +1010,8 @@
       "all": "Toutes",
       "mine": "Les miennes",
       "unassigned": "Non assignées",
-      "unread": "Non lues"
+      "unread": "Non lues",
+      "waiting": "En attente"
     },
     "search": {
       "open": "Rechercher des conversations",

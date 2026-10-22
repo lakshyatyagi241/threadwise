@@ -989,7 +989,8 @@
       "all": "Alle",
       "mine": "Meine",
       "unassigned": "Nicht zugewiesen",
-      "unread": "Ungelesen"
+      "unread": "Ungelesen",
+      "waiting": "Wartend"
     },
     "search": {
       "open": "Unterhaltungen durchsuchen",

@@ -989,7 +989,8 @@
       "all": "Tümü",
       "mine": "Benim",
       "unassigned": "Atanmamış",
-      "unread": "Okunmamış"
+      "unread": "Okunmamış",
+      "waiting": "Bekleyen"
     },
     "search": {
       "open": "Konuşmalarda ara",

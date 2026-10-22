@@ -968,7 +968,8 @@
       "all": "すべて",
       "mine": "自分",
       "unassigned": "未割り当て",
-      "unread": "未読"
+      "unread": "未読",
+      "waiting": "待機中"
     },
     "search": {
       "open": "会話を検索",

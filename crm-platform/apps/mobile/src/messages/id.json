@@ -968,7 +968,8 @@
       "all": "Semua",
       "mine": "Milik saya",
       "unassigned": "Belum ditetapkan",
-      "unread": "Belum dibaca"
+      "unread": "Belum dibaca",
+      "waiting": "Menunggu"
     },
     "search": {
       "open": "Cari percakapan",

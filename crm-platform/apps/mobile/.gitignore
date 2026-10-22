@@ -4,3 +4,10 @@
 
 expo-env.d.ts
 # @end expo-cli
+# Signing and store credentials never go in git (EAS holds the upload key; Play service-account keys are kept in EAS credentials).
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+play-service-account*.json

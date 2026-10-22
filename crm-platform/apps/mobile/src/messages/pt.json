@@ -1010,7 +1010,8 @@
       "all": "Todas",
       "mine": "Minhas",
       "unassigned": "Não atribuídas",
-      "unread": "Não lidas"
+      "unread": "Não lidas",
+      "waiting": "Em espera"
     },
     "search": {
       "open": "Buscar conversas",

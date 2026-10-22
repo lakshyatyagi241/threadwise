@@ -60,6 +60,8 @@ describe('the team form rules', () => {
       assignmentStrategy: 'manual',
       memberIds: ['x'],
       deviceIds: [],
+      receivesConversations: true,
+      receivesRecords: true,
     });
   });
 

@@ -968,7 +968,8 @@
       "all": "Tất cả",
       "mine": "Của tôi",
       "unassigned": "Chưa phân công",
-      "unread": "Chưa đọc"
+      "unread": "Chưa đọc",
+      "waiting": "Đang chờ"
     },
     "search": {
       "open": "Tìm cuộc trò chuyện",

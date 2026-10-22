@@ -1010,7 +1010,8 @@
       "all": "Todas",
       "mine": "Mías",
       "unassigned": "Sin asignar",
-      "unread": "Sin leer"
+      "unread": "Sin leer",
+      "waiting": "En espera"
     },
     "search": {
       "open": "Buscar conversaciones",
