@@ -43,6 +43,7 @@ A workspace that existed before this setting keeps working as it did: email and 
 2. Click **Preview** to read it, then **Add to my messages**. The predefined texts are in English; edit them to your language.
 3. An **email** message is ready at once.
 4. A **WhatsApp** message is added as a **draft**. When you are happy with it, click **Send to Meta for approval**. It shows **In review at Meta** until Meta decides, then **Approved** or **Rejected** with Meta's reason. Fix a rejected message and send it again.
+   If no WhatsApp number is connected, adding or sending a WhatsApp message is refused with a note to connect a WhatsApp number in **Settings** first.
 
 Only an **approved** WhatsApp message can be chosen for a booking type, and outside the 24 hour window WhatsApp sends nothing else. A WhatsApp message can use only the placeholders `name`, `type`, `date`, `time`, `location`, `join_link` and `manage_link`, in that order without skipping one, because WhatsApp numbers its variables.
 

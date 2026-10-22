@@ -72,7 +72,7 @@ A second link imports only if you choose it again before you scan. The same chat
 
 ## Who can do what
 
-You need permission to see the numbers (**wa.devices.read**) to see the card, and the permission to link numbers (**wa.devices.pair**) to choose the import and to stop it. By default only workspace admins have them.
+You need permission to see the numbers (the permission to see numbers) to see the card, and the permission to link numbers (the permission to link numbers) to choose the import and to stop it. By default only workspace admins have them.
 
 ## If something looks wrong
 

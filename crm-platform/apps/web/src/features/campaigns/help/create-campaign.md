@@ -145,6 +145,7 @@ For each step, choose when it fires and how long to count:
 
 - **Replies** or **Reads the message:** the contact is watched for the time you set. The step fires the moment they reply to, or read, the previous message. If the time runs out first, the sequence ends there.
 - **Has not replied** or **Has not read the message:** we wait the time you set, then fire if they have not. If they did reply or read, the sequence ends there.
+- A reply counts only when the contact writes back on the WhatsApp number the campaign was sent from. A message from the same person on another number or channel does not count.
 
 Set the time as a number of minutes, hours or days (from 1 minute up to 7 days). Step 1 counts from the campaign message, step 2 from the message of step 1, and so on. Then choose **Send a template** (any approved template) or **Start a flow** (one of your flows), and pick it. Each step needs its template or flow before you can continue, and **Remove** deletes a step. The summary in step 3 lists the follow-ups in words. A contact who opted out, whose message failed, or who stopped receiving the chain does not get a later step. A recurring campaign carries its follow-ups to every run.
 

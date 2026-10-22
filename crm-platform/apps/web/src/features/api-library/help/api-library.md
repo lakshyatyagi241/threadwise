@@ -52,7 +52,7 @@ Tick **Secret** on a header that holds a key or token. Headers named like Author
 
 ## Function to process the payload
 
-For a JSON payload, tick **Add function to process payload** to reshape it before it is sent. The code must define `function processPayload(payload)` and return the payload to send. Select **Run code** to try it on the payload you typed. The code runs on the server in a sandbox with no network or file access and a 3 second limit, and you must run it successfully before you can test the API.
+For a JSON payload, tick **Add function to process payload** to reshape it before it is sent. The code must define `function processPayload(payload)` and return the payload to send. Select **Run code** to try it on the payload you typed. The code runs in a safe space with no network or file access and a 3 second limit, and you must run it successfully before you can test the API.
 
 ## Use in flow and contact properties
 
@@ -66,7 +66,7 @@ A value inside a list offers **this item** (`items[0].name`) or **every item** (
 
 ## Logs
 
-**Logs** on a row lists the runs of that API, newest first. **All logs** lists every run, with filters for the API, result, status code, source (test or flow) and dates, and a search over the URL, API name and error. Select a run to see its request, response, status, duration and, for a flow run, the flow and contact. Secrets are masked before a log is stored, and logs are kept for 30 days.
+**Logs** on a row lists the runs of that API, newest first. **All logs** lists every run, with filters for the API, result, status, source (test or flow) and dates, and a search over the URL, API name and error. Select a run to see its request, response, status, duration and, for a flow run, the flow and contact. Secrets are masked before a log is stored, and logs are kept for 30 days.
 
 ## Deleting
 
@@ -74,12 +74,12 @@ A value inside a list offers **this item** (`items[0].name`) or **every item** (
 
 ## Using it in a flow
 
-In the flow builder, add the **API (from library)** step from the Integrations group, pick the API, and fill in any variable you want to set for this step. The step leaves by **success** when the API answers 2xx and by **error** for anything else.
+In the flow builder, add the **API (from library)** step from the Integrations group, pick the API, and fill in any variable you want to set for this step. The step leaves by **success** when the other system answers with a success and by **error** for anything else.
 
 ## If something looks wrong
 
-- **Address blocked**: the server only calls public addresses. A private or local address is refused.
-- **Not a 2xx answer**: the other system replied with an error. Check the URL, headers and payload on the Request tab of the test.
+- **Address blocked**: only public addresses can be called. A private or local address is refused.
+- **Not a success answer**: the other system replied with an error. Check the URL, headers and payload on the Request tab of the test.
 - **You cannot save**: run a test that passes first; if the form uses a function, run the code first. Your role also needs the permission to test APIs.
 - **Someone else changed this API**: load the latest version, then make your changes again.
 - You cannot see **API Library**: your role needs the API Library permission.

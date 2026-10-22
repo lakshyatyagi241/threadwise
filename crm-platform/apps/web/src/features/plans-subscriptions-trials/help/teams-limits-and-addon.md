@@ -23,7 +23,7 @@ Plans that existed before these options keep everything: no team limit, hierarch
 - **Solo plan (limit 0).** Creating a team is refused with the message "Your plan doesn't include teams". Nothing else about the workspace changes.
 - **Plan with a limit (for example 3).** You can create teams until you reach it. After that the message says how many your plan allows. Delete a team, or upgrade, to add more. Teams you already have are never removed when a plan changes.
 - **Roles without custom roles.** The Roles screen still lists every role and people keep the access they have. The **Add role** button turns into an upgrade link and role pages are read only.
-- **Hierarchy.** Parent teams and managers arrive with the Teams update. The plan switch is already in place and ready for it: with it off, those fields will not be offered. Today it changes nothing you can see.
+- **Hierarchy.** Without it, you cannot give a team a **Parent team** or a **Manager**, and the record scope **My team and sub-teams** is not offered on the Roles screen. A team that already has them keeps them, and you can still clear them.
 
 ## The Teams and permissions add-on
 

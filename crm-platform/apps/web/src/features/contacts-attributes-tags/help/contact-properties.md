@@ -53,7 +53,7 @@ Opening the screen needs permission to read contact properties. Adding needs the
 
 - **Create a section first.** A property cannot be added until a section exists.
 - **A property is missing on the contact form.** It may be inactive, not visible, or waiting on a **Show only when** condition.
-- **The key is taken or reserved.** Use another: lowercase letters, digits and underscores, starting with a letter.
+- **The key is taken or reserved.** Keys such as `memo`, `lifecycle_stage` and `opt_out` already exist on every contact, so they cannot be reused. Use another: lowercase letters, digits and underscores, starting with a letter.
 - **A dependent field offers no choices.** Choose its parent first. A parent choice with no ticked choices offers none.
 - **A dependency would make two properties wait for each other.** The dialog refuses it. Remove one of the two dependencies first.
 - **A property is missing from the dependent fields dialog.** Only dropdown, multi-select and radio properties whose choices are all in the list can take part. A property with a very long list is not offered.
