@@ -10,7 +10,7 @@ const ACTIVE_SQL = `select pid, datname, usename, application_name, extract(epoc
   and application_name<>'gchat-watcher' and now()-query_start >= make_interval(secs => $1) order by query_start limit 20`;
 const STMT_SQL = `select s.queryid::text as queryid, d.datname, r.rolname, s.calls::float8 as calls, s.total_exec_time, s.mean_exec_time, s.max_exec_time, s.rows::float8 as rows, s.query
   from pg_stat_statements s left join pg_database d on d.oid=s.dbid left join pg_roles r on r.oid=s.userid
-  where s.mean_exec_time >= $1 and s.query not ilike '%pg_stat_statements%' and s.query not ilike '%pg_stat_activity%' order by s.total_exec_time desc limit 50`;
+  where s.mean_exec_time >= $1 and s.query not ilike '%pg_stat_statements%' and s.query not ilike '%pg_stat_activity%' order by s.mean_exec_time desc limit 200`;
 
 export const cfg = (env) => ({
   intervalMs: Number(env.SLOW_POLL_SECONDS ?? 15) * 1000,
@@ -55,12 +55,13 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
         const st = await query(STMT_SQL, [c.meanMs]);
         metrics.set('pg_stat_statements_available', 'gauge', 1);
         for (const r of st.rows) {
-          const p = prev.get(r.queryid);
-          prev.set(r.queryid, { calls: Number(r.calls), total: Number(r.total_exec_time) });
+          const key = `${r.queryid}|${r.datname}|${r.rolname}`; // one queryid appears once per database and role
+          const p = prev.get(key);
+          prev.set(key, { calls: Number(r.calls), total: Number(r.total_exec_time) });
           if (!baselined || !p || Number(r.calls) <= p.calls) continue; // first sight or reset: baseline only
           const dCalls = Number(r.calls) - p.calls, dMean = (Number(r.total_exec_time) - p.total) / dCalls;
           maxSecs = Math.max(maxSecs, Number(r.max_exec_time) / 1000);
-          await emit('statement', `st:${r.queryid}`, card(`Slow statement: mean ${fmt(r.mean_exec_time, 0)} ms`, [
+          await emit('statement', `st:${key}`, card(`Slow statement: mean ${fmt(r.mean_exec_time, 0)} ms`, [
             ['Calls since last poll', dCalls], ['Mean (lifetime / since poll)', `${fmt(r.mean_exec_time, 0)} ms / ${fmt(dMean, 0)} ms`], ['Max', `${fmt(r.max_exec_time, 0)} ms`], ['Rows (lifetime)', r.rows],
             ['Database', r.datname ?? '-'], ['Role', r.rolname ?? '-'], ['Query (normalized)', sanitizeSql(r.query, 800)],
           ]));
