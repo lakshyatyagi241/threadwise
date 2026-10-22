@@ -151,7 +151,7 @@ export class DeploymentsStore {
   listReleases(): Promise<{ rows: Raw[]; live: Raw | null }> {
     return this.db.privileged(async (tx: Tx) => {
       const rows = await tx.execute(sql`
-        SELECT attempt, tag, state, step, error, started_at, updated_at, finished_at,
+        SELECT attempt, tag, state, step, error, changes, started_at, updated_at, finished_at,
                (state IN ('building', 'shipping', 'releasing')
                  AND updated_at < now() - make_interval(mins => ${RELEASE_STALL_MINUTES}::int)) AS stalled
         FROM platform_releases
