@@ -1546,7 +1546,9 @@
         "selected": "已选列",
         "selectAll": "全选",
         "reorder": "拖动以重新排序列",
-        "remove": "移除 {name}"
+        "remove": "移除 {name}",
+        "nameShort": "视图名称至少需要 {min} 个字符。",
+        "nameLong": "视图名称最多 {max} 个字符。"
       },
       "presets": {
         "myContacts": "我的联系人",

@@ -1546,7 +1546,9 @@
         "selected": "Colonne selezionate",
         "selectAll": "Seleziona tutto",
         "reorder": "Trascina per riordinare le colonne",
-        "remove": "Rimuovi {name}"
+        "remove": "Rimuovi {name}",
+        "nameShort": "Il nome della vista deve avere almeno {min} caratteri.",
+        "nameLong": "Il nome della vista può avere al massimo {max} caratteri."
       },
       "presets": {
         "myContacts": "I miei contatti",

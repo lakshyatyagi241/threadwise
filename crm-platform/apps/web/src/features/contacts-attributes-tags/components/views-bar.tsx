@@ -5,11 +5,15 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useStoredValue } from '@/lib/use-stored-value';
-import type { ContactViewResponse } from '@crm/contracts';
+import {
+  CONTACT_VIEW_NAME_MAX,
+  CONTACT_VIEW_NAME_MIN,
+  type ContactViewResponse,
+} from '@crm/contracts';
 import { Button, ConfirmDialog, Drawer, Input, Popover, cn, useToast } from '@crm/ui';
 import type { ContactFilters } from '../api/contacts';
 import { useContactViews, useViewMutations } from '../api/views';
-import { pickerViews, tabViews, viewChanged, viewFilterOf } from '../lib/views';
+import { pickerViews, tabViews, viewChanged, viewFilterOf, viewNameProblem } from '../lib/views';
 import { ChevronDownIcon, PlusIcon } from './icons';
 import { RowMenu, RowMenuItem, RowMenuSeparator } from './row-menu';
 
@@ -109,7 +113,10 @@ export function ViewsBar({
           onClick={() => setPickerOpen((o) => !o)}
           className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <span className="truncate">
+          <span
+            className="max-w-[14rem] truncate"
+            title={activeId === '' ? undefined : all.find((v) => v.id === activeId)?.name}
+          >
             {activeId === ''
               ? preset
                 ? t(`presets.${preset}`)
@@ -427,7 +434,9 @@ function Picker({
         aria-current={v.id === activeId ? 'true' : undefined}
         className={row(v.id === activeId)}
       >
-        <span className="min-w-0 truncate">{v.name}</span>
+        <span className="min-w-0 truncate" title={v.name}>
+          {v.name}
+        </span>
       </button>
       {star(v.isFavorite, () => onToggleFav(v), v.name)}
     </li>
@@ -519,10 +528,13 @@ function ViewDrawer({
   const t = useTranslations(NS);
   const editing = drawing?.view ?? null;
   const [name, setName] = useState(editing?.name ?? '');
-  const valid = name.trim().length > 0 && name.trim().length <= 255;
+  const problem = viewNameProblem(name);
+  const valid = problem === null;
+  const [touched, setTouched] = useState(false);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
+    setTouched(true);
     if (valid && !busy) onSubmit({ name: name.trim() });
   };
 
@@ -552,11 +564,24 @@ function ViewDrawer({
           <Input
             id="view-name"
             value={name}
-            maxLength={255}
+            maxLength={CONTACT_VIEW_NAME_MAX}
             placeholder={t('drawer.namePlaceholder')}
+            aria-invalid={touched && !valid}
             onChange={(e) => setName(e.target.value)}
             autoFocus
           />
+          <div className="flex items-start justify-between gap-3">
+            {touched && problem ? (
+              <p role="alert" className="text-xs text-danger">
+                {t(`editor.${problem}`, { min: CONTACT_VIEW_NAME_MIN, max: CONTACT_VIEW_NAME_MAX })}
+              </p>
+            ) : (
+              <span />
+            )}
+            <span className="shrink-0 font-mono text-[11px] text-muted-foreground">
+              {name.trim().length}/{CONTACT_VIEW_NAME_MAX}
+            </span>
+          </div>
         </div>
       </form>
     </Drawer>

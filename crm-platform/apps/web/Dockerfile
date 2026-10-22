@@ -4,7 +4,7 @@
 #   docker build -f apps/web/Dockerfile .
 # The public/realtime URLs are read at runtime (API_URL, REALTIME_URL), so one image serves any host.
 
-FROM node:25-alpine AS base
+FROM node:22-alpine AS base
 RUN npm install -g --force corepack && corepack enable pnpm
 WORKDIR /app
 
