@@ -32,7 +32,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
 
   const step = (inc, label, text, channel) => {
     inc.events.push({ t: now(), label, text: String(text).slice(0, 500) });
-    const body = { text: `${label}: ${text}`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title: label, subtitle: `incident ${inc.id} (${inc.playbook})` }, sections: [{ widgets: [{ decoratedText: { text: String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;'), wrapText: true } }] }] } }] };
+    const body = { text: (label ? `${label}: ${text}` : String(text)).slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title: label || 'Incident update', subtitle: `incident ${inc.id} (${inc.playbook})` }, sections: [{ widgets: [{ decoratedText: { text: String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;'), wrapText: true } }] }] } }] };
     return Promise.all((channel ? [channel] : inc.channels).map((ch) => post(ch, body, { threadKey: inc.threadKey })));
   };
   const escalate = async (inc, why) => {
@@ -147,7 +147,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (mode === 'off') return Promise.resolve(null);
     const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && i.state !== 'resolved');
     if (dup) return Promise.resolve(dup);
-    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
+    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), notes: [], events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
     incidents.set(inc.id, inc); if (incidents.size > 200) incidents.delete(incidents.keys().next().value);
     const p = run(inc, spec).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p));
     pending.add(p); return p;
@@ -156,6 +156,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const resolveByRelease = async (inc) => {
     inc.state = 'resolved'; count('code_fix', 'resolved');
     try { fs.mkdirSync(path.join(dir, 'resolved'), { recursive: true }); fs.renameSync(path.join(dir, 'open', `${inc.id}.json`), path.join(dir, 'resolved', `${inc.id}.json`)); } catch { /* file optional */ }
+    if (inc.prUrl) return step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${release.sha}, after ${fmtDur(now() - inc.startedAt)}`);
     await step(inc, 'RESOLVED', `statement is fast again (mean under threshold for the verification polls); resolved by release ${release.sha}, after ${fmtDur(now() - inc.startedAt)}`);
   };
   // Recovery WITHOUT a release recorded since the incident opened is NOT a resolution (a data change, a cache or a one-off may explain it):
@@ -170,11 +171,56 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   }
   async function setRelease(sha) {
     release = { sha: String(sha).slice(0, 40), at: now() };
-    for (const inc of incidents.values()) if (inc.state === 'recovered_no_release') await resolveByRelease(inc);
+    for (const inc of incidents.values()) if (inc.state === 'recovered_no_release' || (inc.prUrl && inc.state !== 'resolved' && inc.prAt <= release.at)) await resolveByRelease(inc);
+  }
+
+  // ---- team claim flow (docs/runbooks/team-incident-flow.md). Claims are checked and set synchronously (no await in between), so two racing callers cannot both win.
+  const ttlMs = () => Math.max(0.01, Number(env.INCIDENT_CLAIM_TTL_HOURS ?? 4)) * 3600e3;
+  const hhmm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
+  const held = (inc) => !!inc.owner && (!!inc.prUrl || inc.claimExpiresAt > now());
+  const statusOf = (inc) => inc.state === 'resolved' ? 'resolved' : inc.prUrl ? 'pr_raised' : held(inc) ? 'claimed' : inc.state === 'escalated' ? 'escalated' : 'open';
+  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
+  const sweepClaims = async () => {
+    for (const inc of incidents.values()) if (inc.owner && !inc.prUrl && inc.state !== 'resolved' && inc.claimExpiresAt <= now()) { inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; await step(inc, '', '\u23F0 claim expired, incident is open again'); }
+  };
+  const mutate = (id, who, fn) => {
+    const inc = incidents.get(id);
+    if (!inc) return { code: 404, error: 'unknown incident' };
+    if (inc.state === 'resolved') return { code: 409, error: 'incident already resolved' };
+    const r = fn(inc); return r.error ? r : { code: 200, inc: view(inc), post: r.post };
+  };
+  const done = async (r, inc) => { if (r.post) await step(incidents.get(inc ?? r.inc.id), '', r.post); delete r.post; return r; };
+  const claim = (id, who) => done(mutate(id, who, (inc) => {
+    if (held(inc) && inc.owner !== who) return { code: 409, error: `already claimed by ${inc.owner}`, owner: inc.owner };
+    const fresh = !held(inc); inc.owner = who; if (fresh) inc.claimedAt = now(); inc.claimExpiresAt = now() + ttlMs();
+    return { post: fresh ? `\uD83D\uDC40 ${who} is working on this (claimed ${hhmm(inc.claimedAt)})` : undefined };
+  }), id);
+  const releaseClaim = (id, who) => done(mutate(id, who, (inc) => {
+    if (!held(inc) || inc.owner !== who) return { code: 409, error: 'not claimed by you' };
+    inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; return { post: `\uD83E\uDD1D ${who} released this incident` };
+  }), id);
+  const raisePr = (id, who, { url, number, summary }) => done(mutate(id, who, (inc) => {
+    if (held(inc) && inc.owner !== who) return { code: 409, error: `claimed by ${inc.owner}`, owner: inc.owner };
+    inc.owner = who; inc.claimedAt ??= now(); inc.prUrl = url; inc.prNumber = number; inc.prAt = now(); inc.claimExpiresAt = null;
+    return { post: `\uD83D\uDD27 PR #${number} raised by ${who} at ${hhmm(now())}: ${summary} ${url}` };
+  }), id);
+  const addNote = (id, who, text) => done(mutate(id, who, (inc) => {
+    if (held(inc) && inc.owner !== who) return { code: 409, error: `claimed by ${inc.owner}`, owner: inc.owner };
+    inc.notes.push({ t: now(), who, text }); if (inc.notes.length > 50) inc.notes.shift();
+    if (held(inc) && !inc.prUrl) inc.claimExpiresAt = now() + ttlMs(); // activity renews the claim
+    return { post: `\uD83D\uDCDD ${who}: ${text}` };
+  }), id);
+  // The alert cleared (verified by Alertmanager's resolved) after a PR was raised: resolved by that PR.
+  async function alertCleared(key) {
+    const inc = [...incidents.values()].find((i) => i.key === key && i.prUrl && i.state !== 'resolved');
+    if (!inc) return false;
+    inc.state = 'resolved'; await step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`); return true;
   }
   return {
     mode, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
-    setRelease,
+    setRelease, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
+    get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
+    listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),
     byKey: (k) => [...incidents.values()].find((i) => i.key === k),
     list: () => [...incidents.values()].map(({ id, playbook, state, threadKey, startedAt, events }) => ({ id, playbook, state, threadKey, startedAt, events: events.map((e) => ({ t: e.t, label: e.label })) })),
   };

@@ -25,6 +25,8 @@ st_run promtool_check $PT check rules /r/slow-query.rules.yml
 st_run promtool_test $PT test rules slow-query.rules.test.yml
 st_run amtool_gchat $AM check-config /r/alertmanager.gchat.yml
 st_run runbook_ratchet node tools/alerting/check-alert-runbooks.mjs
+st_run team_flow_e2e node tools/chat-bridge/team-e2e.mjs
+st_run traefik_incidents_proof bash script-testing/chat-alerts/traefik-proof.sh
 st_run bash_syntax bash -n deploy/hostinger/observability-up.sh
 st_run compose_config env OBS_METRICS_TOKEN=x bash -c "cd deploy/hostinger && docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env.example config -q"
 
