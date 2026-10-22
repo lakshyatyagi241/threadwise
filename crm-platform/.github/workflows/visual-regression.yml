@@ -32,8 +32,12 @@ jobs:
       - run: pnpm infra:up
         if: github.event_name != 'pull_request' && github.event.inputs.mode != 'quick'
       - name: Visual regression
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_MODE: ${{ github.event.inputs.mode }}
         run: |
-          mode="${{ github.event_name == 'pull_request' && 'quick' || github.event.inputs.mode || 'full' }}"
+          mode=full
+          if [ "$EVENT" = pull_request ]; then mode=quick; elif [ -n "$INPUT_MODE" ]; then mode="$INPUT_MODE"; fi
           if [ "$mode" = quick ]; then bash script-testing/visual-regression/run.sh --quick; else bash script-testing/visual-regression/run.sh; fi
       - uses: actions/upload-artifact@v4
         if: always()
