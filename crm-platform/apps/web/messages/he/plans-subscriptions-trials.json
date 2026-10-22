@@ -580,7 +580,16 @@
       "back": "חזרה",
       "compare": "השוואת כל התוכניות",
       "appHint": "{feature} נמכר גם כאפליקציה ב־Marketplace.",
-      "appLink": "הצגת האפליקציה"
+      "appLink": "הצגת האפליקציה",
+      "addonHint": "אפשר גם להוסיף אותו לחבילה הנוכחית שלך עם התוסף {addon}.",
+      "addonLink": "לצפייה בתוספים",
+      "addons": {
+        "smartRouting": "ניתוב חכם",
+        "teamsPermissions": "צוותים והרשאות"
+      }
+    },
+    "lock": {
+      "link": "לצפייה בחבילות ובתוספים"
     }
   }
 }

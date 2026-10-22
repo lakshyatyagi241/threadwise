@@ -34,14 +34,14 @@
           "team": "Bir ekip",
           "person": "Bir kişi",
           "rules": "Atama kuralları",
-          "rulesLocked": "Atama kuralları (planınızda yok)"
+          "rulesLocked": "Atama kuralları (Akıllı yönlendirme eklentisi)"
         },
         "destHint": {
           "team": "Ekipteki birine gider veya ekibin kuyruğunda bekler.",
           "person": "Üstlenebiliyorsa bu kişiye gider; aksi halde kuyrukta bekler.",
           "rules": "Konuşma otomatik atama kurallarınızı kullanır; hiçbiri kimseyi bulamazsa kuyrukta bekler."
         },
-        "lockHint": "Planınızda atama kuralları yok, bu yüzden buraya gönderilen konuşma, bir ekip arkadaşı üstlenene kadar Bekleme kuyruğunda bekler.",
+        "lockHint": "Atama kuralları Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır; buraya gönderilen sohbet bir ekip arkadaşı üstlenene kadar bekleme kuyruğunda bekler.",
         "team": "Ekip",
         "teamPick": "— bir ekip seçin —",
         "teamNone": "Henüz ekip yok",

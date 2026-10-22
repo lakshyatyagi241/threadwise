@@ -580,7 +580,16 @@
       "back": "Zurück",
       "compare": "Alle Tarife vergleichen",
       "appHint": "{feature} wird auch als App im Marketplace verkauft.",
-      "appLink": "App ansehen"
+      "appLink": "App ansehen",
+      "addonHint": "Du kannst es auch mit dem Add-on {addon} zu deinem aktuellen Tarif hinzufügen.",
+      "addonLink": "Add-ons ansehen",
+      "addons": {
+        "smartRouting": "Intelligentes Routing",
+        "teamsPermissions": "Teams und Berechtigungen"
+      }
+    },
+    "lock": {
+      "link": "Tarife und Add-ons ansehen"
     }
   }
 }

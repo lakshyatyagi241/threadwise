@@ -580,7 +580,16 @@
       "appHint": "{feature} is also sold as an app in the Marketplace.",
       "appLink": "See the app",
       "back": "Go back",
-      "compare": "Compare all plans"
+      "compare": "Compare all plans",
+      "addonHint": "You can also add it to your current plan with the {addon} add-on.",
+      "addonLink": "See add-ons",
+      "addons": {
+        "smartRouting": "Smart routing",
+        "teamsPermissions": "Teams and permissions"
+      }
+    },
+    "lock": {
+      "link": "See plans and add-ons"
     }
   }
 }

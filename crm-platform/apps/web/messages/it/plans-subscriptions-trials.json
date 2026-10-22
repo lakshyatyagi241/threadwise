@@ -580,7 +580,16 @@
       "back": "Torna indietro",
       "compare": "Confronta tutti i piani",
       "appHint": "{feature} è venduto anche come app nel Marketplace.",
-      "appLink": "Vedi l’app"
+      "appLink": "Vedi l’app",
+      "addonHint": "Puoi anche aggiungerlo al tuo piano attuale con il componente {addon}.",
+      "addonLink": "Vedi componenti aggiuntivi",
+      "addons": {
+        "smartRouting": "Instradamento intelligente",
+        "teamsPermissions": "Team e autorizzazioni"
+      }
+    },
+    "lock": {
+      "link": "Vedi piani e componenti aggiuntivi"
     }
   }
 }

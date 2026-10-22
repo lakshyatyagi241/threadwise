@@ -9,6 +9,7 @@ import { Alert, Badge, Button, ConfirmDialog, Spinner, Switch, useToast } from '
 import { ApiError } from '@/lib/api/errors';
 import { useVocab } from '@/features/persona-vocabulary';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
 import { refresh, routingApi, updateRuleFresh, useAssignees, useRules } from '../api/routing';
 import {
   everyoneElseOf,
@@ -192,7 +193,11 @@ export function AutoAssignmentScreen() {
         </div>
 
         {locked ? (
-          <Alert tone="info">{tr('locked')}</Alert>
+          <Alert tone="info">
+            <span data-testid="rules-locked">
+              {tr('locked')} <AddonLockLink />
+            </span>
+          </Alert>
         ) : (
           <>
             <Pipeline />

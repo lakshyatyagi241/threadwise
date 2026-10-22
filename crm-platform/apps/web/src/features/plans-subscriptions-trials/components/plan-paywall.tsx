@@ -5,7 +5,12 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { isPlanFeatureKey, type BillingPlan, type PlanFeatureKey } from '@crm/contracts';
+import {
+  PACK_GRANTABLE_FEATURES,
+  isPlanFeatureKey,
+  type BillingPlan,
+  type PlanFeatureKey,
+} from '@crm/contracts';
 import { listingPathFor } from '@/features/_registry/app-listings';
 import { fetchBillingPlans } from '../api';
 import { PLANS_PATH, SALES_PATH, formatMoney } from '../lib/format';
@@ -15,6 +20,14 @@ export interface PaywallGate {
   href: string;
   feature: string;
 }
+
+/** The add-on that sells a plan feature a pack may grant (PACK_GRANTABLE_FEATURES): the paywall says so next to the plans. */
+const ADDON_OF_FEATURE: Record<string, 'smartRouting' | 'teamsPermissions' | undefined> = {
+  inbox_routing: 'smartRouting',
+  inbox_assignment_sticky: 'smartRouting',
+  team_hierarchy: 'teamsPermissions',
+  custom_roles: 'teamsPermissions',
+};
 
 /** The feature a path needs: the longest gate whose path is a prefix of it (TW-PLAN-020: a page's feature comes from the route, not a separate map). */
 export function gateFor(pathname: string, gates: readonly PaywallGate[]): PaywallGate | null {
@@ -66,6 +79,7 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
   useEffect(() => ref.current?.focus(), []);
   const plans: BillingPlan[] = q.data?.data ?? [];
   const listing = canBrowseApps ? listingPathFor(feature) : null;
+  const addon = PACK_GRANTABLE_FEATURES.includes(feature) ? ADDON_OF_FEATURE[feature] : undefined;
 
   return (
     <div
@@ -134,6 +148,14 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
               </div>
             ))}
           </div>
+        )}
+        {addon && (
+          <p className="text-sm text-muted-foreground" data-testid="paywall-addon">
+            {t('addonHint', { addon: t(`addons.${addon}`) })}{' '}
+            <Link href={PLANS_PATH} className="font-medium text-primary hover:underline">
+              {t('addonLink')}
+            </Link>
+          </p>
         )}
         {listing && (
           <p className="text-sm text-muted-foreground" data-testid="paywall-app">

@@ -54,7 +54,7 @@
         "intro": "Bot przestaje odpowiadać temu kontaktowi. Rozmowa trafia do wybranej osoby lub zespołu albo czeka w kolejce, aż ktoś ją przejmie.",
         "where": "Wyślij do",
         "whereRules": "Reguły przypisywania, a w razie braku – kolejka oczekujących",
-        "whereQueueOnly": "Kolejka oczekujących (reguły przypisywania nie są w Twoim planie)",
+        "whereQueueOnly": "Kolejka oczekujących (reguły przydzielania wymagają dodatku Inteligentne kierowanie)",
         "whereTeam": "Zespół",
         "wherePerson": "Jedna osoba",
         "team": "Zespół",

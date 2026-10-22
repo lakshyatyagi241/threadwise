@@ -5,7 +5,7 @@
         "title": "Transferência e atribuição",
         "hint": "Usado quando um bot, um fluxo ou um colega transfere uma conversa para esta equipe.",
         "method": "Como escolher uma pessoa",
-        "methodHint": "Manual: a conversa aguarda na fila da equipe até que alguém a assuma. Rodízio e Menor carga escolhem um membro para você e exigem um plano com regras de atribuição.",
+        "methodHint": "Manual: a conversa espera na fila da equipe até alguém assumi-la. Rodízio e Menos carregado escolhem um membro para você e fazem parte do complemento Roteamento inteligente.",
         "defaultAssignee": "Responsável padrão",
         "defaultAssigneeHint": "Assume a conversa quando ninguém mais pode. Escolha um dos membros da equipe.",
         "noDefaultAssignee": "Ninguém em particular",
@@ -23,7 +23,9 @@
           "fri": "Sexta-feira",
           "sat": "Sábado",
           "sun": "Domingo"
-        }
+        },
+        "methodLocked": "{method} (exige Roteamento inteligente)",
+        "methodLockHint": "Os métodos automáticos fazem parte do complemento Roteamento inteligente ou de um plano superior."
       }
     }
   }

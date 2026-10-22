@@ -580,7 +580,16 @@
       "back": "Terug",
       "compare": "Alle abonnementen vergelijken",
       "appHint": "{feature} wordt ook als app verkocht in de Marktplaats.",
-      "appLink": "Bekijk de app"
+      "appLink": "Bekijk de app",
+      "addonHint": "Je kunt het ook aan je huidige abonnement toevoegen met de add-on {addon}.",
+      "addonLink": "Add-ons bekijken",
+      "addons": {
+        "smartRouting": "Slimme routering",
+        "teamsPermissions": "Teams en machtigingen"
+      }
+    },
+    "lock": {
+      "link": "Abonnementen en add-ons bekijken"
     }
   }
 }

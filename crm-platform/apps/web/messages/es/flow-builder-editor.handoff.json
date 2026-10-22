@@ -34,14 +34,14 @@
           "team": "Un equipo",
           "person": "Una persona",
           "rules": "Las reglas de asignación",
-          "rulesLocked": "Las reglas de asignación (no incluidas en tu plan)"
+          "rulesLocked": "Las reglas de asignación (complemento Enrutamiento inteligente)"
         },
         "destHint": {
           "team": "Va a alguien del equipo o espera en la cola del equipo.",
           "person": "Va a esta persona si puede atenderla; si no, espera en la cola.",
           "rules": "Usa tus reglas de asignación automática de conversaciones; si ninguna encuentra a una persona, espera en la cola."
         },
-        "lockHint": "Tu plan no incluye reglas de asignación, así que una conversación enviada aquí espera en la cola En espera hasta que un compañero la tome.",
+        "lockHint": "Las reglas de asignación forman parte del complemento Enrutamiento inteligente o de un plan superior, así que una conversación enviada aquí espera en la cola de espera hasta que un compañero la reclame.",
         "team": "Equipo",
         "teamPick": "— elige un equipo —",
         "teamNone": "Aún no hay equipos",

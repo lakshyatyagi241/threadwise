@@ -54,7 +54,7 @@
         "intro": "Der Bot antwortet diesem Kontakt nicht mehr. Die Unterhaltung geht an die Person oder das Team, das du auswählst, oder wartet in der Warteschlange, bis jemand sie übernimmt.",
         "where": "Senden an",
         "whereRules": "Die Zuweisungsregeln, sonst die Warteschlange",
-        "whereQueueOnly": "Die Warteschlange (Zuweisungsregeln sind nicht in deinem Tarif enthalten)",
+        "whereQueueOnly": "Die Warteschlange (Zuweisungsregeln benötigen das Add-on Intelligentes Routing)",
         "whereTeam": "Ein Team",
         "wherePerson": "Eine Person",
         "team": "Team",

@@ -54,7 +54,7 @@
         "intro": "The bot stops answering this contact. The conversation goes to the person or team you choose, or waits in the queue until someone claims it.",
         "where": "Send it to",
         "whereRules": "The assignment rules, otherwise the waiting queue",
-        "whereQueueOnly": "The waiting queue (assignment rules are not in your plan)",
+        "whereQueueOnly": "The waiting queue (assignment rules need the Smart routing add-on)",
         "whereTeam": "A team",
         "wherePerson": "One person",
         "team": "Team",

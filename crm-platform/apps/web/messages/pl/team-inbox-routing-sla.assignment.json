@@ -12,7 +12,7 @@
         "loadFailed": "Nie udało się wczytać ustawień przypisywania.",
         "retry": "Spróbuj ponownie",
         "notInPlan": "Brak w Twoim planie",
-        "upgradeHint": "Twój plan tego nie obejmuje. Poproś właściciela konta o zmianę planu na wyższy.",
+        "upgradeHint": "W dodatku Inteligentne kierowanie lub w wyższym planie.",
         "stepFirst": "Sprawdzane najpierw",
         "stepMaster": "Główny przełącznik",
         "stepAfter": "Po przejęciu czatu",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Potrzebujesz większej kontroli? Dodaj reguły",
         "intro": "Opcjonalne. Reguły kierują wybrane czaty (z danego kanału, ze słowami w wiadomości, od nowego kontaktu...) do wybranych agentów lub zespołów. Jeśli cztery przełączniki wystarczają, nie musisz tworzyć żadnej reguły.",
-        "locked": "Reguły nie są dostępne w Twoim planie. Nadal masz kolejkę oczekujących, przejmowanie i ręczne przypisywanie. Poproś właściciela konta o zmianę planu na wyższy.",
+        "locked": "Reguły są częścią dodatku Inteligentne kierowanie lub wyższego planu. Nadal masz kolejkę oczekujących, przejmowanie czatów i ręczne przydzielanie.",
         "pipelineTitle": "Jak przypisywany jest nowy czat",
         "pipeline": {
           "agent": "1. Właściciel kontaktu i Stały agent",

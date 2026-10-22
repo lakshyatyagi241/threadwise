@@ -580,7 +580,16 @@
       "back": "Kembali",
       "compare": "Bandingkan semua paket",
       "appHint": "{feature} juga dijual sebagai aplikasi di Marketplace.",
-      "appLink": "Lihat aplikasi"
+      "appLink": "Lihat aplikasi",
+      "addonHint": "Anda juga dapat menambahkannya ke paket saat ini dengan add-on {addon}.",
+      "addonLink": "Lihat add-on",
+      "addons": {
+        "smartRouting": "Perutean cerdas",
+        "teamsPermissions": "Tim dan izin"
+      }
+    },
+    "lock": {
+      "link": "Lihat paket dan add-on"
     }
   }
 }

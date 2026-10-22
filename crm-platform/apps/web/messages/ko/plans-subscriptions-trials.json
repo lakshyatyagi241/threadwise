@@ -580,7 +580,16 @@
       "back": "뒤로 가기",
       "compare": "모든 요금제 비교",
       "appHint": "{feature}은(는) 마켓플레이스에서 앱으로도 판매됩니다.",
-      "appLink": "앱 보기"
+      "appLink": "앱 보기",
+      "addonHint": "{addon} 애드온으로 현재 요금제에 추가할 수도 있습니다.",
+      "addonLink": "애드온 보기",
+      "addons": {
+        "smartRouting": "스마트 라우팅",
+        "teamsPermissions": "팀 및 권한"
+      }
+    },
+    "lock": {
+      "link": "요금제 및 애드온 보기"
     }
   }
 }

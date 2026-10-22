@@ -580,7 +580,16 @@
       "back": "Geri dön",
       "compare": "Tüm planları karşılaştır",
       "appHint": "{feature}, Pazar yerinde uygulama olarak da satılır.",
-      "appLink": "Uygulamayı gör"
+      "appLink": "Uygulamayı gör",
+      "addonHint": "Bunu {addon} eklentisiyle mevcut planınıza da ekleyebilirsiniz.",
+      "addonLink": "Eklentileri gör",
+      "addons": {
+        "smartRouting": "Akıllı yönlendirme",
+        "teamsPermissions": "Ekipler ve izinler"
+      }
+    },
+    "lock": {
+      "link": "Planları ve eklentileri gör"
     }
   }
 }

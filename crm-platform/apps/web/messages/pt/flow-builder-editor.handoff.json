@@ -34,14 +34,14 @@
           "team": "Uma equipe",
           "person": "Uma pessoa",
           "rules": "As regras de atribuição",
-          "rulesLocked": "As regras de atribuição (não incluídas no seu plano)"
+          "rulesLocked": "As regras de atribuição (complemento Roteamento inteligente)"
         },
         "destHint": {
           "team": "Vai para alguém da equipe ou aguarda na fila da equipe.",
           "person": "Vai para esta pessoa se ela puder atender; caso contrário, aguarda na fila.",
           "rules": "Usa suas regras de atribuição automática de conversas; se nenhuma encontrar uma pessoa, a conversa aguarda na fila."
         },
-        "lockHint": "Seu plano não inclui regras de atribuição, então uma conversa enviada aqui aguarda na fila Em espera até que um colega a assuma.",
+        "lockHint": "As regras de atribuição fazem parte do complemento Roteamento inteligente ou de um plano superior; uma conversa enviada aqui espera na fila de espera até um colega assumi-la.",
         "team": "Equipe",
         "teamPick": "— escolha uma equipe —",
         "teamNone": "Nenhuma equipe ainda",

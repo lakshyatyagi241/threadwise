@@ -5,7 +5,7 @@
         "title": "Overdracht en toewijzing",
         "hint": "Wordt gebruikt wanneer een bot, een flow of een collega een gesprek aan dit team overdraagt.",
         "method": "Hoe een persoon wordt gekozen",
-        "methodHint": "Handmatig: het gesprek wacht in de wachtrij van het team tot iemand het overneemt. Om de beurt en Minst belast kiezen een lid voor je en vereisen een abonnement met toewijzingsregels.",
+        "methodHint": "Handmatig: het gesprek wacht in de wachtrij van het team tot iemand het claimt. Round robin en Minst belast kiezen een lid voor je en maken deel uit van de add-on Slimme routering.",
         "defaultAssignee": "Standaardontvanger",
         "defaultAssigneeHint": "Neemt het gesprek over als niemand anders kan. Kies een van de teamleden.",
         "noDefaultAssignee": "Niemand in het bijzonder",
@@ -23,7 +23,9 @@
           "fri": "Vrijdag",
           "sat": "Zaterdag",
           "sun": "Zondag"
-        }
+        },
+        "methodLocked": "{method} (vereist Slimme routering)",
+        "methodLockHint": "Automatische methoden maken deel uit van de add-on Slimme routering of een hoger abonnement."
       }
     }
   }

@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "不在你的套餐中",
-      "upgradeHint": "你的套餐不包含此功能。请联系账户所有者升级套餐。",
+      "upgradeHint": "包含在智能路由附加组件或更高套餐中。",
       "owner": {
         "prompt": "重新分配时询问联系人负责人",
         "promptHint": "手动将聊天转给他人时，询问是否同时将其设为联系人负责人。",

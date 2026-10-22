@@ -5,7 +5,7 @@
         "title": "Übergabe und Zuweisung",
         "hint": "Wird verwendet, wenn ein Bot, ein Flow oder ein Teamkollege eine Unterhaltung an dieses Team übergibt.",
         "method": "Wie eine Person ausgewählt wird",
-        "methodHint": "Manuell: Die Unterhaltung wartet in der Warteschlange des Teams, bis jemand sie übernimmt. Rundlauf und Geringste Auslastung wählen ein Mitglied für dich aus und benötigen einen Tarif mit Zuweisungsregeln.",
+        "methodHint": "Manuell: Die Unterhaltung wartet in der Warteschlange des Teams, bis jemand sie übernimmt. Reihum und Geringste Auslastung wählen ein Mitglied für dich aus und sind Teil des Add-ons Intelligentes Routing.",
         "defaultAssignee": "Standardempfänger",
         "defaultAssigneeHint": "Übernimmt die Unterhaltung, wenn sonst niemand kann. Wähle ein Mitglied des Teams.",
         "noDefaultAssignee": "Niemand Bestimmtes",
@@ -23,7 +23,9 @@
           "fri": "Freitag",
           "sat": "Samstag",
           "sun": "Sonntag"
-        }
+        },
+        "methodLocked": "{method} (benötigt Intelligentes Routing)",
+        "methodLockHint": "Automatische Methoden sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs."
       }
     }
   }

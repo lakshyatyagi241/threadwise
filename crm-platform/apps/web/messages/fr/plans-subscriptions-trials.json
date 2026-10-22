@@ -580,7 +580,16 @@
       "back": "Retour",
       "compare": "Comparer tous les forfaits",
       "appHint": "{feature} est aussi vendu comme application dans le Marketplace.",
-      "appLink": "Voir l’application"
+      "appLink": "Voir l’application",
+      "addonHint": "Vous pouvez aussi l'ajouter à votre offre actuelle avec le module {addon}.",
+      "addonLink": "Voir les modules",
+      "addons": {
+        "smartRouting": "Routage intelligent",
+        "teamsPermissions": "Équipes et autorisations"
+      }
+    },
+    "lock": {
+      "link": "Voir les offres et modules"
     }
   }
 }

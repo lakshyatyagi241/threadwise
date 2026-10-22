@@ -5,7 +5,7 @@
         "title": "Chuyển giao và giao việc",
         "hint": "Được dùng khi bot, luồng hoặc đồng nghiệp chuyển cuộc trò chuyện cho nhóm này.",
         "method": "Cách chọn người",
-        "methodHint": "Thủ công: cuộc trò chuyện chờ trong hàng chờ của nhóm cho đến khi có người nhận. Luân phiên và Ít việc nhất chọn giúp bạn một thành viên và cần gói có quy tắc giao việc.",
+        "methodHint": "Thủ công: cuộc trò chuyện chờ trong hàng của nhóm cho đến khi có người nhận. Xoay vòng và Ít việc nhất chọn thành viên giúp bạn và thuộc tiện ích Định tuyến thông minh.",
         "defaultAssignee": "Người nhận mặc định",
         "defaultAssigneeHint": "Nhận cuộc trò chuyện khi không ai khác nhận được. Chọn một thành viên của nhóm.",
         "noDefaultAssignee": "Không ai cụ thể",
@@ -23,7 +23,9 @@
           "fri": "Thứ Sáu",
           "sat": "Thứ Bảy",
           "sun": "Chủ Nhật"
-        }
+        },
+        "methodLocked": "{method} (cần Định tuyến thông minh)",
+        "methodLockHint": "Các phương thức tự động thuộc tiện ích Định tuyến thông minh hoặc gói cao hơn."
       }
     }
   }

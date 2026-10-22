@@ -580,7 +580,16 @@
       "back": "Quay lại",
       "compare": "So sánh tất cả gói",
       "appHint": "{feature} cũng được bán dưới dạng ứng dụng trong Chợ ứng dụng.",
-      "appLink": "Xem ứng dụng"
+      "appLink": "Xem ứng dụng",
+      "addonHint": "Bạn cũng có thể thêm vào gói hiện tại bằng tiện ích {addon}.",
+      "addonLink": "Xem tiện ích",
+      "addons": {
+        "smartRouting": "Định tuyến thông minh",
+        "teamsPermissions": "Nhóm và quyền"
+      }
+    },
+    "lock": {
+      "link": "Xem gói và tiện ích"
     }
   }
 }

@@ -580,7 +580,16 @@
       "back": "戻る",
       "compare": "すべてのプランを比較",
       "appHint": "{feature}はマーケットプレイスでアプリとしても販売されています。",
-      "appLink": "アプリを見る"
+      "appLink": "アプリを見る",
+      "addonHint": "{addon}アドオンで、現在のプランに追加することもできます。",
+      "addonLink": "アドオンを見る",
+      "addons": {
+        "smartRouting": "スマートルーティング",
+        "teamsPermissions": "チームと権限"
+      }
+    },
+    "lock": {
+      "link": "プランとアドオンを見る"
     }
   }
 }

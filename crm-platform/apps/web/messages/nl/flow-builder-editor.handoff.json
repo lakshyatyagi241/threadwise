@@ -34,14 +34,14 @@
           "team": "Een team",
           "person": "Eén persoon",
           "rules": "De toewijzingsregels",
-          "rulesLocked": "De toewijzingsregels (niet in je abonnement)"
+          "rulesLocked": "De toewijzingsregels (add-on Slimme routering)"
         },
         "destHint": {
           "team": "Het gaat naar iemand in het team of wacht in de wachtrij van het team.",
           "person": "Het gaat naar deze persoon als die het kan overnemen; anders wacht het in de wachtrij.",
           "rules": "Gebruikt je regels voor automatische toewijzing van gesprekken; als geen enkele regel een persoon vindt, wacht het in de wachtrij."
         },
-        "lockHint": "Je abonnement bevat geen toewijzingsregels, dus een hier naartoe gestuurd gesprek wacht in de wachtrij tot een collega het overneemt.",
+        "lockHint": "Toewijzingsregels maken deel uit van de add-on Slimme routering of een hoger abonnement. Een hier verzonden gesprek wacht in de wachtrij tot een collega het claimt.",
         "team": "Team",
         "teamPick": "— kies een team —",
         "teamNone": "Nog geen teams",

@@ -580,7 +580,16 @@
       "back": "返回",
       "compare": "比较全部套餐",
       "appHint": "{feature}也在应用市场以应用形式出售。",
-      "appLink": "查看应用"
+      "appLink": "查看应用",
+      "addonHint": "你也可以通过{addon}附加组件将其加入当前套餐。",
+      "addonLink": "查看附加组件",
+      "addons": {
+        "smartRouting": "智能路由",
+        "teamsPermissions": "团队和权限"
+      }
+    },
+    "lock": {
+      "link": "查看套餐和附加组件"
     }
   }
 }

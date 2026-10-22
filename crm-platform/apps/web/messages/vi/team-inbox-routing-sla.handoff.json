@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "Không có trong gói của bạn",
-      "upgradeHint": "Gói của bạn không bao gồm tính năng này. Hãy nhờ chủ tài khoản nâng cấp gói.",
+      "upgradeHint": "Có trong tiện ích Định tuyến thông minh hoặc gói cao hơn.",
       "owner": {
         "prompt": "Hỏi về chủ sở hữu liên hệ khi giao lại",
         "promptHint": "Khi chat được giao thủ công cho người khác, đề nghị đặt họ làm chủ sở hữu liên hệ luôn.",

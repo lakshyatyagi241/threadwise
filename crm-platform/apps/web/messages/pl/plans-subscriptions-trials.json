@@ -580,7 +580,16 @@
       "back": "Wróć",
       "compare": "Porównaj wszystkie plany",
       "appHint": "{feature} jest też sprzedawane jako aplikacja w Marketplace.",
-      "appLink": "Zobacz aplikację"
+      "appLink": "Zobacz aplikację",
+      "addonHint": "Możesz też dodać go do obecnego planu jako dodatek {addon}.",
+      "addonLink": "Zobacz dodatki",
+      "addons": {
+        "smartRouting": "Inteligentne kierowanie",
+        "teamsPermissions": "Zespoły i uprawnienia"
+      }
+    },
+    "lock": {
+      "link": "Zobacz plany i dodatki"
     }
   }
 }

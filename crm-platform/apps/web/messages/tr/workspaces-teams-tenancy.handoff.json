@@ -5,7 +5,7 @@
         "title": "Devir ve atama",
         "hint": "Bir bot, akış veya ekip arkadaşı konuşmayı bu ekibe devrettiğinde kullanılır.",
         "method": "Kişi nasıl seçilir",
-        "methodHint": "Manuel: konuşma, biri üstlenene kadar ekibin kuyruğunda bekler. Sırayla dağıtım ve En az yüklü sizin için bir üye seçer ve atama kuralları içeren bir plan gerektirir.",
+        "methodHint": "Elle: sohbet, biri üstlenene kadar ekibin kuyruğunda bekler. Sırayla ve En az yüklü sizin için bir üye seçer ve Akıllı yönlendirme eklentisinin parçasıdır.",
         "defaultAssignee": "Varsayılan atanan",
         "defaultAssigneeHint": "Başka kimse alamadığında konuşmayı üstlenir. Ekip üyelerinden birini seçin.",
         "noDefaultAssignee": "Belirli biri değil",
@@ -23,7 +23,9 @@
           "fri": "Cuma",
           "sat": "Cumartesi",
           "sun": "Pazar"
-        }
+        },
+        "methodLocked": "{method} (Akıllı yönlendirme gerekir)",
+        "methodLockHint": "Otomatik yöntemler Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır."
       }
     }
   }
