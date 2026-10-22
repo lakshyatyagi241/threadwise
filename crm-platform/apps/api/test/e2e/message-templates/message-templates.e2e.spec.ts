@@ -359,7 +359,7 @@ describe('create and submit (TW-TPL-007, 024, 025)', () => {
 });
 
 describe('edit (TW-TPL-018, 019)', () => {
-  it('edits a rejected template, replaces the Meta copy on submit, and checks the row version', async () => {
+  it('edits a rejected template on Meta in place (no replacement), and checks the row version', async () => {
     const t = await api.signup('te');
     const conn = await seedConnection(t);
     const row = await seedTemplate(t, conn, {
@@ -369,6 +369,10 @@ describe('edit (TW-TPL-018, 019)', () => {
       template_name: 'order_update',
     });
     const detail = await api.as(t.admin).get(`/v2/templates/${row.uuid}`);
+    meta = (c) =>
+      c.method === 'POST' && new URL(c.url).pathname.endsWith('/OLD1')
+        ? { status: 200, body: { success: true } }
+        : { status: 404, body: { error: { message: 'unstubbed', code: 1 } } };
 
     const stale = await send(t.admin, 'put', `/v2/templates/${row.uuid}`, {
       ...form(conn.uuid),
@@ -384,13 +388,12 @@ describe('edit (TW-TPL-018, 019)', () => {
       rowVersion: detail.body.rowVersion,
     });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
-    expect(ok.body.template).toMatchObject({ status: 'pending', metaTemplateId: 'M1' });
-    const methods = calls.map((c) => c.method);
-    expect(methods.indexOf('DELETE')).toBeGreaterThanOrEqual(0);
-    expect(methods.indexOf('DELETE')).toBeLessThan(methods.indexOf('POST'));
-    expect(new URL(calls.find((c) => c.method === 'DELETE')!.url).searchParams.get('hsm_id')).toBe(
-      'OLD1',
-    );
+    // Meta's edit endpoint takes a rejected template again under the same id; the name cannot change, so nothing is deleted.
+    expect(ok.body.template).toMatchObject({ status: 'pending', metaTemplateId: 'OLD1' });
+    expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+    expect(
+      calls.some((c) => c.method === 'POST' && new URL(c.url).pathname.endsWith('/OLD1')),
+    ).toBe(true);
   });
 
   it('a disabled template cannot be edited', async () => {

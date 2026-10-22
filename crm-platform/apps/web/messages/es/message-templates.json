@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Esta plantilla no tiene un número de WhatsApp conectado para enviarla. Conecta primero un número.",
       "TPL_IN_USE": "Esta plantilla no se puede eliminar porque la usa una difusión en curso o programada.",
       "TPL_NOT_EDITABLE": "Solo se puede editar una plantilla que Meta todavía no haya aprobado o que haya rechazado.",
+      "TPL_EDIT_LIMIT": "Meta permite una edición cada 24 horas y diez cada 30 días en una plantilla aprobada. Inténtalo más tarde.",
       "ROW_VERSION_CONFLICT": "Otra persona cambió esta plantilla mientras editabas. Recarga para ver la versión más reciente y vuelve a aplicar tu cambio.",
       "VALIDATION_FAILED": "Algunos campos no son válidos. Revisa los campos de abajo.",
       "INTERNAL": "El servidor no pudo procesar esta solicitud. Inténtalo de nuevo en unos minutos."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Actualizar ahora",
       "editTemplate": "Editar plantilla",
+      "editBlockedTitle": "Esta plantilla no se puede editar ahora",
+      "editBlocked": "{reason, select, in_review {Meta está revisando esta plantilla. Se podrá editar de nuevo cuando termine la revisión.} daily_limit {Meta permite una edición cada 24 horas en una plantilla aprobada. Podrás editarla de nuevo después de {when}.} monthly_limit {Meta permite diez ediciones en 30 días en una plantilla aprobada. Podrás editarla de nuevo después de {when}.} other {}}",
       "duplicateTemplate": "Duplicar plantilla",
       "editResubmit": "Editar y reenviar",
       "submitToMeta": "Enviar a Meta",

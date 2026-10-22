@@ -50,6 +50,8 @@ export const waTemplates = pgTable(
     submittedAt: timestamp('submitted_at', { withTimezone: true }),
     lastSyncedAt: timestamp('last_synced_at', { withTimezone: true }),
     pausedUntil: timestamp('paused_until', { withTimezone: true }),
+    /** ISO times of the edits sent to Meta in the last 30 days (Meta allows 1 per 24 hours and 10 per 30 days on an approved template). */
+    metaEditLog: jsonb('meta_edit_log').$type<string[]>().notNull().default([]),
     providerConfigId: idColumn('provider_config_id'),
     metaTemplateId: text('meta_template_id'),
     twilioContentSid: text('twilio_content_sid'),

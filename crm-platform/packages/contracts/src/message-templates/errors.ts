@@ -13,4 +13,6 @@ export const TPL_ERROR_CODES = {
   TPL_IN_USE: 'TPL_IN_USE',
   /** Only a template Meta has not approved yet, or one that was rejected, can be edited in place. */
   TPL_NOT_EDITABLE: 'TPL_NOT_EDITABLE',
+  /** Meta's edit limit is reached on an approved template (one edit in 24 hours, ten in 30 days). The message says when it opens. */
+  TPL_EDIT_LIMIT: 'TPL_EDIT_LIMIT',
 } as const;

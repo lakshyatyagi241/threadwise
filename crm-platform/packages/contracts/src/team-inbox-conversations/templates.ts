@@ -50,6 +50,8 @@ export const inboxTemplateOptionSchema = z.object({
   slots: z.array(inboxTemplateSlotSchema),
   sendable: z.boolean(),
   reason: inboxTemplateBlockReasonSchema.nullable(),
+  /** Whether the template can be opened for editing now: Meta's edit limit and review allow it (a copy is always possible). */
+  editable: z.boolean(),
 });
 export type InboxTemplateOption = z.infer<typeof inboxTemplateOptionSchema>;
 

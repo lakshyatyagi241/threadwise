@@ -22,7 +22,12 @@ import {
   type OutboundContent,
 } from '../chat-conversations';
 import { EmailTemplatesReader } from '../email-templates';
-import { TemplatesRepository, TemplatesService } from '../message-templates';
+import {
+  BUILDABLE_TYPES,
+  TemplatesRepository,
+  TemplatesService,
+  metaEditBlockOf,
+} from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import {
@@ -273,6 +278,7 @@ export class InboxThreadService {
           slots: bodySlots(t.templateBody, t.variableMap),
           sendable: reason === null,
           reason,
+          editable: BUILDABLE_TYPES.has(t.templateType) && metaEditBlockOf(t, now) === null,
         };
       });
       return { data, hasMore };

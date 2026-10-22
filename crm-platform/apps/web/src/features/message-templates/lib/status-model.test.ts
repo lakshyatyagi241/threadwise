@@ -51,22 +51,20 @@ describe('status model', () => {
     expect(canEdit('approved', 'media')).toBe(true);
   });
 
-  it('edits a live template in place only once Meta holds it', () => {
+  it('keeps the name of a template Meta holds in an approved, paused or rejected status', () => {
     expect(isLive('approved', 'M1')).toBe(true);
     expect(isLive('paused', 'M1')).toBe(true);
+    expect(isLive('rejected', 'M1')).toBe(true);
     expect(isLive('approved', null)).toBe(false);
-    expect(isLive('rejected', 'M1')).toBe(false);
+    expect(isLive('draft', 'M1')).toBe(false);
   });
 
-  it('duplicates an approved template, and only one the API can build', () => {
-    expect(canDuplicate('approved')).toBe(true);
-    expect(canDuplicate('approved', 'media')).toBe(true);
-    expect(canDuplicate('approved', 'carousel')).toBe(false);
-    expect(
-      ['draft', 'pending', 'rejected', 'paused', 'disabled'].some((st) =>
-        canDuplicate(st as never),
-      ),
-    ).toBe(false);
+  it('duplicates a template Meta holds, and only one the API can build', () => {
+    expect(canDuplicate('approved', 'M1')).toBe(true);
+    expect(canDuplicate('pending', 'M1', 'media')).toBe(true);
+    expect(canDuplicate('approved', 'M1', 'carousel')).toBe(false);
+    expect(canDuplicate('draft', null)).toBe(false);
+    expect(canDuplicate('deleted', 'M1')).toBe(false);
   });
 
   it("groups statuses the way the library's tabs count them", () => {

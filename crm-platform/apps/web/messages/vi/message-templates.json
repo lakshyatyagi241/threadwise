@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Mẫu này không có số WhatsApp nào được kết nối để gửi. Hãy kết nối một số trước.",
       "TPL_IN_USE": "Không thể xóa mẫu này vì có chiến dịch Gửi hàng loạt đang chạy hoặc đã lên lịch đang dùng nó.",
       "TPL_NOT_EDITABLE": "Chỉ có thể chỉnh sửa mẫu chưa được Meta duyệt hoặc mẫu bị Meta từ chối.",
+      "TPL_EDIT_LIMIT": "Meta cho phép một lần chỉnh sửa trong 24 giờ và mười lần trong 30 ngày đối với mẫu đã được duyệt. Hãy thử lại sau.",
       "ROW_VERSION_CONFLICT": "Người khác đã thay đổi mẫu này trong lúc bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản mới nhất, rồi áp dụng lại thay đổi của bạn.",
       "VALIDATION_FAILED": "Một số trường không hợp lệ. Hãy kiểm tra các trường bên dưới.",
       "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Làm mới ngay",
       "editTemplate": "Sửa mẫu tin",
+      "editBlockedTitle": "Hiện không thể chỉnh sửa mẫu này",
+      "editBlocked": "{reason, select, in_review {Meta đang duyệt mẫu này. Mẫu có thể được chỉnh sửa lại sau khi quá trình duyệt kết thúc.} daily_limit {Meta cho phép chỉnh sửa một lần trong 24 giờ đối với mẫu đã được duyệt. Có thể chỉnh sửa lại sau {when}.} monthly_limit {Meta cho phép mười lần chỉnh sửa trong 30 ngày đối với mẫu đã được duyệt. Có thể chỉnh sửa lại sau {when}.} other {}}",
       "duplicateTemplate": "Nhân bản mẫu",
       "editResubmit": "Sửa và gửi lại",
       "submitToMeta": "Gửi lên Meta",
