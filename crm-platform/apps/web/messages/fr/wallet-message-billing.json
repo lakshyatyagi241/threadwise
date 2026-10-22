@@ -266,7 +266,20 @@
       "uncollected": "{amount} non encaissés",
       "emptyTitle": "Aucun message pour le moment",
       "emptyBody": "Les messages envoyés depuis les campagnes, les diffusions, les planifications et les conversations apparaissent ici avec leur modèle et leur coût.",
-      "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les."
+      "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
+      "days": {
+        "title": "Journal quotidien",
+        "subtitle": "Messages regroupées par jour, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
+        "messagesOnDay": "{count} messages",
+        "viewDetails": "Voir les détails",
+        "actions": "Actions",
+        "empty": "Aucun message ces jours-là."
+      },
+      "log": {
+        "title": "Messages",
+        "forDay": "Messages du {date}",
+        "showAllDays": "Afficher tous les jours"
+      }
     },
     "admin": {
       "admin": "Admin",

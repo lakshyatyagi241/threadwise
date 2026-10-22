@@ -266,7 +266,20 @@
       "uncollected": "{amount} nicht eingezogen",
       "emptyTitle": "Noch keine Nachrichten",
       "emptyBody": "Nachrichten aus Kampagnen, Broadcasts, Zeitplänen und Chats erscheinen hier mit Vorlage und Kosten.",
-      "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen."
+      "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen.",
+      "days": {
+        "title": "Tagesprotokoll",
+        "subtitle": "Nachrichten nach Tag, Status, Kanal und Kategorie gruppiert. Öffnen Sie einen Tag, um jede Nachricht zu sehen.",
+        "messagesOnDay": "{count} Nachrichten",
+        "viewDetails": "Details anzeigen",
+        "actions": "Aktionen",
+        "empty": "An diesen Tagen gibt es keine Nachrichten."
+      },
+      "log": {
+        "title": "Nachrichten",
+        "forDay": "Nachrichten vom {date}",
+        "showAllDays": "Alle Tage anzeigen"
+      }
     },
     "admin": {
       "admin": "Administration",

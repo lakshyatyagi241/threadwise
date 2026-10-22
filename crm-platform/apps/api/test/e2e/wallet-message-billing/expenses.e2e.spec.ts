@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  expenseDaysResponseSchema,
   expenseListResponseSchema,
   expenseSummaryResponseSchema,
   walletExactAmount,
@@ -280,5 +281,97 @@ describe('names for charges sent before the name was copied onto them', () => {
       (await get(legacy, '/expenses?template=OLD+PROMO&limit=100')).body,
     );
     expect(body.data.map((r) => r.id)).toEqual(['wamid.L.1']);
+  });
+});
+
+/** The calendar day of an instant in a time zone, `YYYY-MM-DD`: the day the log and its filters cut by. */
+const dayIn = (timeZone: string, at: Date): string =>
+  new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(at);
+
+describe('the day log', () => {
+  let days: Tenant;
+  const now = new Date();
+  // 23:00 UTC three days back: the next calendar day in Kiritimati (UTC+14), the same day in Pago Pago (UTC-11).
+  const lateOn = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 3, 23),
+  );
+
+  beforeAll(async () => {
+    days = await newTenant(h, 'expenses-days');
+    // Charges with no ledger lines: the day log counts them by their own day, status, channel and category.
+    const charge = (wamid: string, source: string, category: string, at: Date) =>
+      h.owner.query(
+        `INSERT INTO usage_charges (org_id, wamid, status, free_reason, source, category, to_country, billing_mode, created_at)
+         VALUES ($1, $2, 'free', 'rate_is_zero', $3, $4, 'IN', 'plan', $5)`,
+        [days.orgId, wamid, source, category, at.toISOString()],
+      );
+    await charge('wamid.D.1', 'broadcast', 'marketing', now);
+    await charge('wamid.D.2', 'broadcast', 'marketing', now);
+    await charge('wamid.D.3', 'chat', 'utility', lateOn);
+  }, 60_000);
+
+  it('groups the messages of each day by status, channel and category, newest day first', async () => {
+    const body = expenseDaysResponseSchema.parse(
+      (await get(days, '/expenses/days?timeZone=UTC')).body,
+    );
+    expect(body.currency).toBe('USD');
+    expect(body.data).toEqual([
+      expect.objectContaining({
+        day: dayIn('UTC', now),
+        status: 'free',
+        source: 'broadcast',
+        category: 'marketing',
+        messages: 2,
+      }),
+      expect.objectContaining({
+        day: dayIn('UTC', lateOn),
+        status: 'free',
+        source: 'chat',
+        category: 'utility',
+        messages: 1,
+      }),
+    ]);
+    expect(body.page).toEqual({ nextCursor: null, hasMore: false, limit: 14 });
+  });
+
+  it('pages one day at a time, and the cursor is the last day of the page', async () => {
+    const first = expenseDaysResponseSchema.parse((await get(days, '/expenses/days?limit=1')).body);
+    expect(first.data.map((g) => g.day)).toEqual([dayIn('UTC', now)]);
+    expect(first.page).toEqual({ nextCursor: dayIn('UTC', now), hasMore: true, limit: 1 });
+
+    const second = expenseDaysResponseSchema.parse(
+      (await get(days, `/expenses/days?limit=1&cursor=${first.page.nextCursor}`)).body,
+    );
+    expect(second.data.map((g) => g.day)).toEqual([dayIn('UTC', lateOn)]);
+    expect(second.page).toEqual({ nextCursor: null, hasMore: false, limit: 1 });
+  });
+
+  it('cuts the days in the viewer time zone, the same zone the dates are read in', async () => {
+    const zone = 'Pacific/Kiritimati';
+    const body = expenseDaysResponseSchema.parse(
+      (await get(days, `/expenses/days?timeZone=${zone}`)).body,
+    );
+    expect(dayIn(zone, lateOn)).not.toBe(dayIn('UTC', lateOn));
+    expect(body.data.find((g) => g.source === 'chat')?.day).toBe(dayIn(zone, lateOn));
+
+    // The from and to dates take the same zone, so the day the log shows is the day the filter finds.
+    const day = dayIn(zone, lateOn);
+    const inZone = expenseListResponseSchema.parse(
+      (await get(days, `/expenses?from=${day}&to=${day}&timeZone=${zone}`)).body,
+    );
+    expect(inZone.data.map((r) => r.id)).toEqual(['wamid.D.3']);
+    const inUtc = expenseListResponseSchema.parse(
+      (await get(days, `/expenses?from=${day}&to=${day}`)).body,
+    );
+    expect(inUtc.data).toEqual([]);
+  });
+
+  it('rejects a time zone it does not know', async () => {
+    expect((await get(days, '/expenses/days?timeZone=Mars/Olympus')).status).toBe(422);
   });
 });

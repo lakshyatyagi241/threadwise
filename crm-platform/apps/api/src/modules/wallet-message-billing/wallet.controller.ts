@@ -2,11 +2,13 @@ import { Controller, Get, Query, Res, StreamableFile } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import {
+  expenseDaysQuerySchema,
   expenseListQuerySchema,
   expenseSummaryQuerySchema,
   messagePricingQuerySchema,
   statementQuerySchema,
   walletLedgerQuerySchema,
+  type ExpenseDaysQuery,
   type ExpenseListQuery,
   type ExpenseSummaryQuery,
   type StatementQuery,
@@ -104,6 +106,18 @@ export class WalletController {
   })
   async expenseSummary(@Query(zodPipe(expenseSummaryQuerySchema)) q: ExpenseSummaryQuery) {
     return this.expenses.summary(q);
+  }
+
+  @Get('expenses/days')
+  @RequirePermission('wallet.statement.read')
+  @ApiOperation({
+    summary:
+      'Message expenses grouped by calendar day, status, channel and category (cursor paginated by day)',
+    description:
+      'Days are in `timeZone` (default UTC). A row is one day with one status, channel and category, with the messages, amounts and net of that group. Pass the `nextCursor` as `cursor` for the older days.',
+  })
+  async expenseDays(@Query(zodPipe(expenseDaysQuerySchema)) q: ExpenseDaysQuery) {
+    return this.expenses.days(q);
   }
 
   @Get('pricing')
