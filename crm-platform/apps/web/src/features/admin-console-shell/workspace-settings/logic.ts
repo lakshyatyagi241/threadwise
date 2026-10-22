@@ -7,6 +7,7 @@ import {
   type NotificationPrefsResponse,
   type SaveNotificationPrefsRequest,
 } from '@crm/contracts';
+import { modernZoneList } from '@/lib/timezones';
 
 export const SETTINGS_TABS = [
   'general',
@@ -44,12 +45,6 @@ export const TAB_LINKS: Partial<Record<SettingsTab, string>> = {
 export const parseTab = (raw: string | null | undefined): SettingsTab =>
   (SETTINGS_TABS as readonly string[]).includes(raw ?? '') ? (raw as SettingsTab) : 'general';
 
-/** ICU lists a few zones under their old name (Asia/Calcutta), so the modern id has to be added by hand. */
-const MODERN_ZONE: Readonly<Record<string, string>> = { 'Asia/Calcutta': 'Asia/Kolkata' };
-
-/** Zones the browser may leave out of its list; always offered, so a workspace can be set back to them. */
-const ALWAYS_OFFERED = ['Asia/Kolkata'];
-
 /** Every IANA zone the browser knows, UTC first; a short fallback list on a runtime that cannot list them. */
 export function timeZoneList(current: string): string[] {
   let zones: string[] = [];
@@ -60,8 +55,7 @@ export function timeZoneList(current: string): string[] {
   } catch {
     zones = ['Asia/Kolkata', 'Asia/Dubai', 'Europe/London', 'America/New_York'];
   }
-  const rest = [...new Set([...zones.map((z) => MODERN_ZONE[z] ?? z), ...ALWAYS_OFFERED])].sort();
-  return [...new Set(['UTC', current, ...rest])];
+  return [...new Set(['UTC', current, ...modernZoneList(zones, current)])];
 }
 
 /** The zones whose name contains what was typed: case and `_` ignored, so "new york" finds America/New_York. Empty search keeps all. */
