@@ -197,6 +197,43 @@
         "queued": "The test email is on its way to {address}. The result also arrives in your notifications.",
         "skipped": "Nothing was sent: your user has no email address.",
         "noWhatsapp": "WhatsApp messages cannot be tested from here."
+      },
+      "report": {
+        "title": "Reminder report",
+        "description": "What the reminders did: how many were sent, delivered, failed or skipped, and how many went by another channel.",
+        "type": "Booking type",
+        "allTypes": "All booking types",
+        "range": "Period",
+        "ranges": {
+          "7": "Last 7 days",
+          "30": "Last 30 days",
+          "90": "Last 90 days",
+          "custom": "Choose dates"
+        },
+        "from": "From",
+        "to": "To",
+        "refresh": "Refresh",
+        "pickDates": "Choose a start and an end date to see the report.",
+        "loading": "Loading the report",
+        "empty": "No reminder was due in this period. Once reminders are sent, their results appear here.",
+        "caption": "Reminder results for {name}",
+        "col": {
+          "step": "Step",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "failed": "Failed",
+          "fallback": "Sent by another channel",
+          "skipped": "Skipped",
+          "confirmed": "Confirmed",
+          "rescheduled": "Reschedule asked",
+          "cancelled": "Cancelled",
+          "total": "Total"
+        },
+        "rates": "Of {count, plural, one {# appointment} other {# appointments}} that got a reminder: {confirmed}% confirmed, {cancelled}% cancelled, {noShow}% no-show.",
+        "why": "Why",
+        "otherReason": "Another reason",
+        "buttonsLocked": "The Confirm, Reschedule and Cancel button results belong to the Appointments upgrade tier, so they are not counted on your plan.",
+        "emailNote": "Delivered comes from WhatsApp only: email has no delivery report, so an email counts as sent. Counts only; no names, numbers or messages are shown."
       }
     }
   }
