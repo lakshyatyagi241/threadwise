@@ -49,6 +49,33 @@ const channelKey = (source: string): Channel | null => {
   return (CHANNELS as readonly string[]).includes(source) ? (source as Channel) : null;
 };
 
+/** A charge's channel as the statement labels it; `notRecorded` when the charge has none. */
+const channelLabel = (
+  source: string | null,
+  notRecorded: string,
+  tch: (key: Channel) => string,
+): string => {
+  if (source === null) return notRecorded;
+  const c = channelKey(source);
+  return c ? tch(c) : source;
+};
+
+/** A charge's pricing category as the statement labels it; `notRecorded` when the charge has none. */
+const categoryLabel = (
+  category: string | null,
+  notRecorded: string,
+  tcat: (key: Category) => string,
+): string => {
+  if (category === null) return notRecorded;
+  return (CATEGORIES as readonly string[]).includes(category)
+    ? tcat(category as Category)
+    : category;
+};
+
+/** The badge tone of a message's status: a charge reads as a cost, a free message as good news. */
+const statusTone = (status: ExpenseEvent['status']): 'danger' | 'success' | 'neutral' =>
+  status === 'charged' ? 'danger' : status === 'free' ? 'success' : 'neutral';
+
 /** A calendar day (`YYYY-MM-DD`) as the viewer's locale shows it. It is already the viewer's own day, so it is formatted in UTC, which cannot shift it. */
 const formatDay = (day: string, locale: string): string =>
   new Intl.DateTimeFormat(locale, {
@@ -340,15 +367,9 @@ export function GroupTable({
   const tcat = useTranslations('wallet-message-billing.categories');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   const label = (key: string | null): string => {
-    if (key === null) return t('breakdown.notRecorded');
-    if (groupBy === 'source') {
-      const c = channelKey(key);
-      return c ? tch(c) : key;
-    }
-    if (groupBy === 'category') {
-      return (CATEGORIES as readonly string[]).includes(key) ? tcat(key as Category) : key;
-    }
-    return key;
+    if (groupBy === 'source') return channelLabel(key, t('breakdown.notRecorded'), tch);
+    if (groupBy === 'category') return categoryLabel(key, t('breakdown.notRecorded'), tcat);
+    return key ?? t('breakdown.notRecorded');
   };
   if (groups.length === 0) {
     return <p className="text-sm text-muted-foreground">{t('breakdown.empty')}</p>;
@@ -534,17 +555,6 @@ export function DayTable({
   const tcat = useTranslations('wallet-message-billing.categories');
   const tstatus = useTranslations('wallet-message-billing.expenses.status');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
-  const channelLabel = (source: string | null): string => {
-    if (source === null) return t('breakdown.notRecorded');
-    const c = channelKey(source);
-    return c ? tch(c) : source;
-  };
-  const categoryLabel = (category: string | null): string => {
-    if (category === null) return t('breakdown.notRecorded');
-    return (CATEGORIES as readonly string[]).includes(category)
-      ? tcat(category as Category)
-      : category;
-  };
   if (groups.length === 0) {
     return <p className="text-sm text-muted-foreground">{t('days.empty')}</p>;
   }
@@ -603,23 +613,13 @@ export function DayTable({
                 >
                   <td className="px-2 py-2" />
                   <td className="px-2 py-2">
-                    <Badge
-                      tone={
-                        r.status === 'charged'
-                          ? 'danger'
-                          : r.status === 'free'
-                            ? 'success'
-                            : 'neutral'
-                      }
-                    >
-                      {tstatus(r.status)}
-                    </Badge>
+                    <Badge tone={statusTone(r.status)}>{tstatus(r.status)}</Badge>
                   </td>
                   <td className={cn('px-2 py-2', r.source === null && 'text-muted-foreground')}>
-                    {channelLabel(r.source)}
+                    {channelLabel(r.source, t('breakdown.notRecorded'), tch)}
                   </td>
                   <td className={cn('px-2 py-2', r.category === null && 'text-muted-foreground')}>
-                    {categoryLabel(r.category)}
+                    {categoryLabel(r.category, t('breakdown.notRecorded'), tcat)}
                   </td>
                   <td className="px-2 py-2 text-end tabular-nums">{r.messages}</td>
                   <td className="px-2 py-2 text-end tabular-nums">
@@ -684,7 +684,6 @@ export function ExpenseTable({
         </thead>
         <tbody>
           {rows.map((r) => {
-            const channel = r.source ? channelKey(r.source) : null;
             return (
               <tr key={r.id} className="border-b border-border/60 align-top last:border-0">
                 <td className="px-2 py-2 whitespace-nowrap">
@@ -697,27 +696,15 @@ export function ExpenseTable({
                   {r.subjectName ?? t('breakdown.notRecorded')}
                 </td>
                 <td className="px-2 py-2">
-                  {channel ? tch(channel) : (r.source ?? t('breakdown.notRecorded'))}
+                  {channelLabel(r.source, t('breakdown.notRecorded'), tch)}
                 </td>
                 <td className="px-2 py-2">
-                  {r.category && (CATEGORIES as readonly string[]).includes(r.category)
-                    ? tcat(r.category as Category)
-                    : (r.category ?? t('breakdown.notRecorded'))}
+                  {categoryLabel(r.category, t('breakdown.notRecorded'), tcat)}
                 </td>
                 <td className="px-2 py-2">{r.country ?? t('breakdown.notRecorded')}</td>
                 <td className="px-2 py-2">
                   <div className="flex flex-col gap-1">
-                    <Badge
-                      tone={
-                        r.status === 'charged'
-                          ? 'danger'
-                          : r.status === 'free'
-                            ? 'success'
-                            : 'neutral'
-                      }
-                    >
-                      {tstatus(r.status)}
-                    </Badge>
+                    <Badge tone={statusTone(r.status)}>{tstatus(r.status)}</Badge>
                     {r.status === 'free' && r.freeReason && (
                       <span className="text-xs text-muted-foreground">{tfree(r.freeReason)}</span>
                     )}

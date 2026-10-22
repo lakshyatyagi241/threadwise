@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { timeZoneSchema } from '../appointments/booking-type';
 import { pageInfoSchema } from '../common/pagination';
+import { timeZoneSchema } from '../common/time-zone';
 import { exactAmountSchema, walletBillingModeSchema } from './wallet';
 
 /**
@@ -25,8 +25,14 @@ export type ExpenseFreeReason = z.infer<typeof expenseFreeReasonSchema>;
 export const expenseGroupBySchema = z.enum(['template', 'source', 'category', 'country']);
 export type ExpenseGroupBy = z.infer<typeof expenseGroupBySchema>;
 
-/** A calendar day, `YYYY-MM-DD`. */
-const isoDay = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+/** A calendar day, `YYYY-MM-DD`, that exists: `2026-13-45` is refused here, not left to fail as a database error. */
+const isoDay = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine((s) => {
+    const d = new Date(`${s}T00:00:00Z`);
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }, 'day must be a real calendar date');
 
 /** `all` plus the three statuses: what the status filter takes. */
 export const expenseStatusFilterSchema = z.enum(['all', 'charged', 'free', 'refunded']);

@@ -371,6 +371,10 @@ describe('the day log', () => {
     expect(inUtc.data).toEqual([]);
   });
 
+  it('refuses a cursor that is not a day on the calendar', async () => {
+    expect((await get(days, '/expenses/days?cursor=2026-13-45')).status).toBe(422);
+  });
+
   it('rejects a time zone it does not know', async () => {
     expect((await get(days, '/expenses/days?timeZone=Mars/Olympus')).status).toBe(422);
   });
