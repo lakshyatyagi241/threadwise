@@ -297,7 +297,8 @@
       "teamLabel": "ٹیم",
       "teamFilter": "ٹیم کے مطابق فلٹر کریں",
       "allTeams": "تمام ٹیمیں",
-      "teamFormer": "سابقہ ٹیم"
+      "teamFormer": "سابقہ ٹیم",
+      "unhideColumn": "کالم دکھائیں"
     },
     "bulk": {
       "label": "منتخب رابطوں کے لیے اقدامات",

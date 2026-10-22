@@ -297,7 +297,8 @@
       "teamLabel": "Team",
       "teamFilter": "Filteren op team",
       "allTeams": "Alle teams",
-      "teamFormer": "Voormalig team"
+      "teamFormer": "Voormalig team",
+      "unhideColumn": "Kolom tonen"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
