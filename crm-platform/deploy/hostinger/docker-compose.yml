@@ -357,6 +357,8 @@ services:
       OFFSITE_SYNC_MINUTES: ${OFFSITE_SYNC_MINUTES:-30}
     volumes:
       - ./backups:/backups:ro
+      # /tmp holds the offsite-ok marker; as a named volume the probe (observability.compose.yml) can read its age (OffsiteBackupStale).
+      - offsite_state:/tmp
     # Healthy while a whole pass has succeeded in the last two hours.
     healthcheck:
       test: ['CMD-SHELL', 'find /tmp/offsite-ok -mmin -120 2>/dev/null | grep -q .']
@@ -478,3 +480,4 @@ networks:
 volumes:
   pgdata:
   redisdata:
+  offsite_state:

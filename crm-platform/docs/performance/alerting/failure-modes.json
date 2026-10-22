@@ -274,14 +274,33 @@
       "id": "backup-failure",
       "failureMode": "Backup failure / stale backup",
       "severity": "critical",
-      "alerts": [],
-      "runbook": "docs/runbooks/backup-restore.md",
-      "status": "gap",
-      "gap": {
-        "missingMetric": "crm_backup_last_success_timestamp_seconds",
-        "reason": "backup scripts write no metric; the runbook says to check by hand",
-        "canInduceOnLaptop": true
-      }
+      "alerts": ["BackupStale", "BackupMarkerMissing", "OffsiteBackupStale"],
+      "runbook": "docs/runbooks/health-readiness.md#backupstale",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "postgres-unreachable",
+      "failureMode": "Postgres primary unreachable (direct gauge)",
+      "severity": "critical",
+      "alerts": ["PostgresDown"],
+      "runbook": "docs/runbooks/health-readiness.md#postgresdown",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "object-store-unreachable",
+      "failureMode": "Object store unreachable (not part of /ready)",
+      "severity": "warning",
+      "alerts": ["ObjectStoreUnreachable"],
+      "runbook": "docs/runbooks/health-readiness.md#objectstoreunreachable",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "monitoring-dead",
+      "failureMode": "Prometheus or Alertmanager dead (dead-man's-switch)",
+      "severity": "critical",
+      "alerts": ["Watchdog"],
+      "runbook": "docs/runbooks/health-readiness.md#watchdog",
+      "status": "tested-promtool"
     },
     {
       "id": "metrics-pipeline-targets",
