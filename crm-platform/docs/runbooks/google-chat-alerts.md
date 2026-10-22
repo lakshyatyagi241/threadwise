@@ -11,7 +11,7 @@ Pieces: `tools/chat-bridge` (bridge + slow-query watcher, one Node process, serv
 | Slow-query watcher post, or label `group=slow_query`, any severity (a critical one shows `CRITICAL` inside the card) | Slow Queries & Warnings only. No Critical copy, no pointer reply |
 | `severity=critical`, not slow query (21 app rules plus `ChatBridgeDeliveryFailing`, `ChatBridgeNoWatchdog`) | Critical only |
 | `SlowQueryWatcherDown` (`group=slow_query`, warning) | Slow Queries & Warnings |
-| `test=true` | Slow Queries & Warnings, TEST card |
+| `test=true` | Not posted (dropped by default, counted in `crm_chat_bridge_dropped_total{reason="test"}`). Demo only: `TEST_ALERTS_CHANNEL=slowquery` |
 | Any other warning/info | Not posted. Counted in `crm_chat_bridge_dropped_total{reason="not_routed"}` and logged |
 | `Watchdog` | Never posted (heartbeat only) |
 | Deploy | Only the release watcher and `notify-chat.sh` post to Deployments; routing never picks it |
@@ -102,7 +102,7 @@ Open http://localhost:59611 (fake Chat, refreshes every 3 s), http://localhost:5
 Notes: the Grafana alert rules are provisioned, so they are read-only in the UI (copy to edit). The Watchdog is dropped by the bridge by design; it shows as `crm_chat_bridge_last_watchdog_timestamp_seconds`. Identical statements that differ only in literals are one normalized query (deduped for the 15 min cooldown), so use different statements to see several cards.
 
 ## Autonomy: threads, diagnosis, accuracy, resolver
-**Test alerts.** An alert with label `test="true"` is posted as a plain card titled `🧪 TEST - ...` whose first line says "Test message, not a real alert", always in the slowquery space (even with severity critical); it is never counted as an incident, never starts the resolver or remediation, never escalates, and gets no thread or diagnosis. Use it with severity warning for post-deploy smoke tests.
+**Test alerts.** An alert with label `test="true"` is dropped by default and never reaches a production space (a test card once landed in Slow Queries & Warnings). Only for a local demo or tests, set `TEST_ALERTS_CHANNEL=slowquery|critical` (default `none`; `/route-check` honours it) and it is posted as a plain card titled `🧪 TEST - ...` whose first line says "Test message, not a real alert". Test alerts are never counted as an incident, never starts the resolver or remediation, never escalates, and gets no thread or diagnosis. Post-deploy smoke tests must not use it against production; check routing with `/route-check` instead.
 
 **Channels.** Three spaces only: `critical`, `slowquery`, `deploy` (`/run/secrets/gchat_{critical,slowquery,deploy}_url`). Slow-query cards and all non-critical alerts go to `slowquery` and are shown as CRITICAL in the slowquery card when a query runs >= `CRITICAL_SLOW_SECONDS` (60) or a session holds others waiting >= `CRITICAL_BLOCK_SECONDS` (30); they only escalate to the critical space when `SLOW_QUERY_ESCALATE_TO_CRITICAL=true`. Metric names `crm_slow_query_*` are unchanged.
 

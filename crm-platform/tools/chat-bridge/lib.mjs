@@ -27,10 +27,13 @@ export const isTest = (a) => a?.labels?.test === 'true';
 
 export const isSlowQuery = (a) => a?.labels?.group === 'slow_query' || a?.labels?.kind === 'slow_query';
 
-// Routing: test -> slowquery; slow_query (any severity) -> slowquery; severity=critical -> critical; the rest -> NON_CRITICAL_CHANNEL
+// Routing: test -> none (TEST_ALERTS_CHANNEL=none|slowquery|critical, demos/tests only); slow_query (any severity) -> slowquery; severity=critical -> critical; the rest -> NON_CRITICAL_CHANNEL
 // (none|slowquery, default none = dropped). The deploy channel is never chosen here (release watcher and notify-chat.sh only).
 export function routeFor(a, env = process.env) {
-  if (isTest(a)) return { channel: 'slowquery', reason: 'test alert' };
+  if (isTest(a)) { // test alerts never reach a production channel unless a demo/test opts in
+    const c = env.TEST_ALERTS_CHANNEL;
+    return c === 'slowquery' || c === 'critical' ? { channel: c, reason: `test alert: TEST_ALERTS_CHANNEL=${c}` } : { channel: 'none', reason: 'test alert: not posted to production channels' };
+  }
   if (isSlowQuery(a)) return { channel: 'slowquery', reason: 'slow query (any severity)' };
   if (a?.labels?.severity === 'critical') return { channel: 'critical', reason: 'severity=critical' };
   if (env.NON_CRITICAL_CHANNEL === 'slowquery') return { channel: 'slowquery', reason: 'NON_CRITICAL_CHANNEL=slowquery' };
@@ -183,7 +186,7 @@ export function createMetrics() {
       fam('crm_chat_bridge_received_total', 'counter', 'Alertmanager webhook calls received.', [`crm_chat_bridge_received_total ${g.received}`]);
       fam('crm_chat_bridge_last_received_timestamp_seconds', 'gauge', 'Unix time of the last Alertmanager call.', [`crm_chat_bridge_last_received_timestamp_seconds ${g.lastReceived}`]);
       fam('crm_chat_bridge_last_watchdog_timestamp_seconds', 'gauge', 'Unix time the Watchdog alert last reached the bridge (dead-man).', [`crm_chat_bridge_last_watchdog_timestamp_seconds ${g.lastWatchdog}`]);
-      fam('crm_chat_bridge_dropped_total', 'counter', 'Alerts dropped on purpose (Watchdog, or not routed to any channel).', ['watchdog', 'not_routed'].map((r) => `crm_chat_bridge_dropped_total{reason="${r}"} ${g.dropped[r] ?? 0}`));
+      fam('crm_chat_bridge_dropped_total', 'counter', 'Alerts dropped on purpose (Watchdog, or not routed to any channel).', ['watchdog', 'not_routed', 'test'].map((r) => `crm_chat_bridge_dropped_total{reason="${r}"} ${g.dropped[r] ?? 0}`));
       for (const [n, e] of extra) fam(n, e.type, n, [...e.samples].map(([l, v]) => `${n}${l ? `{${l}}` : ''} ${v}`));
       return `${L.join('\n')}\n`;
     },

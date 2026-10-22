@@ -25,7 +25,11 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
-    if (isTest(a)) return send('slowquery', alertCard(a, { grafanaUrl })); // test=true: plain card, no thread/diagnosis/resolver/escalation, not an incident
+    if (isTest(a)) { // never an incident/resolver call; dropped unless TEST_ALERTS_CHANNEL opts in
+      const ch = channelFor(a, env);
+      if (ch === 'none') { metrics.dropped('test'); log({ evt: 'alert_test_dropped', alertname: a.labels?.alertname }); return { ok: true }; }
+      return send(ch, alertCard(a, { grafanaUrl }));
+    } // test=true: plain card, no thread/diagnosis/resolver/escalation, not an incident
     if (channelFor(a, env) === 'none') { metrics.dropped('not_routed'); log({ evt: 'alert_not_routed', alertname: a.labels?.alertname, severity: a.labels?.severity }); return { ok: true }; }
     const fp = a.fingerprint || createHash('sha1').update(JSON.stringify(a.labels ?? {})).digest('hex').slice(0, 16);
     const threadKey = `am-${fp}`, ch = channelFor(a, env), t0 = Date.parse(a.startsAt), known = threads.get(fp);

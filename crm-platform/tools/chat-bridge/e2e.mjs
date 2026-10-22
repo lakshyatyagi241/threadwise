@@ -25,7 +25,7 @@ const recv = http.createServer((req, res) => {
 }).listen(RP, '127.0.0.1');
 
 const env = {
-  ...process.env, PORT: String(BP), CHAT_ALLOW_ANY_HOST: '1', CHAT_RETRY_BASE_MS: '50',
+  ...process.env, TEST_ALERTS_CHANNEL: 'slowquery', PORT: String(BP), CHAT_ALLOW_ANY_HOST: '1', CHAT_RETRY_BASE_MS: '50',
   GCHAT_CRITICAL_URL: `http://127.0.0.1:${RP}/critical?token=${SECRET}`, GCHAT_SLOWQUERY_URL: `http://127.0.0.1:${RP}/slowquery?token=${SECRET}`,
   SLOW_PG_URL: `${admin.replace('postgres://crm:crm@', `postgres://${ro}:ropw@`)}/${db}`, SLOW_POLL_SECONDS: '2', SLOW_RUNNING_SECONDS: '5', SLOW_MEAN_MS: '300', SLOW_COOLDOWN_SECONDS: '600', SLOW_MAX_PER_MINUTE: '10',
 };
