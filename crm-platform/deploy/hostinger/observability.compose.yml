@@ -171,13 +171,10 @@ services:
       AUTO_REMEDIATE_MAX_PER_HOUR: ${AUTO_REMEDIATE_MAX_PER_HOUR:-3}
       STMT_RECURRING_POLLS: ${STMT_RECURRING_POLLS:-3}
       INCIDENTS_DIR: /data/incidents
-<<<<<<< HEAD
       # Google Chat app (docs/runbooks/google-chat-app.md). Off by default: webhooks only, exactly as before.
       CHAT_APP_ENABLED: ${CHAT_APP_ENABLED:-false}
       CHAT_APP_AUDIENCE: ${CHAT_APP_AUDIENCE:-}
-=======
       INCIDENT_CLAIM_TTL_HOURS: ${INCIDENT_CLAIM_TTL_HOURS:-4}
->>>>>>> origin/vedant/ops/team-incident-flow
     # The image runs as the non-root user `app`, so a fresh named volume would be root-owned and unwritable: a small tmpfs instead
     # (incident files then reset when the container restarts; /incidents and the Chat threads keep the history that matters).
     tmpfs:
