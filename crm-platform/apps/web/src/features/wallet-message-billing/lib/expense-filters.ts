@@ -72,3 +72,7 @@ export function toExpenseSearch(f: ExpenseFilters): string {
 /** A range that ends before it starts matches nothing: the form says so instead of sending it. */
 export const expenseRangeInverted = (f: ExpenseFilters): boolean =>
   Boolean(f.from && f.to && f.from > f.to);
+
+/** The one day the log is narrowed to (what a day's "View details" sets), or '' when the range is not a single day. */
+export const expenseSingleDay = (f: ExpenseFilters): string =>
+  f.from && f.from === f.to ? f.from : '';

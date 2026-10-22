@@ -266,7 +266,20 @@
       "uncollected": "{amount} não cobrados",
       "emptyTitle": "Ainda não há mensagens",
       "emptyBody": "As mensagens enviadas por campanhas, transmissões, agendamentos e conversas aparecem aqui com o modelo e o custo.",
-      "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os."
+      "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os.",
+      "days": {
+        "title": "Registo diário",
+        "subtitle": "Mensagens agrupadas por dia, estado, canal e categoria. Abra um dia para ver cada mensagem.",
+        "messagesOnDay": "{count} mensagens",
+        "viewDetails": "Ver detalhes",
+        "actions": "Ações",
+        "empty": "Não há mensagens nestes dias."
+      },
+      "log": {
+        "title": "Mensagens",
+        "forDay": "Mensagens de {date}",
+        "showAllDays": "Mostrar todos os dias"
+      }
     },
     "admin": {
       "admin": "Administrador",

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   EMPTY_EXPENSE_FILTERS,
   expenseRangeInverted,
+  expenseSingleDay,
   parseExpenseFilters,
   toExpenseApiQuery,
   toExpenseSearch,
@@ -69,5 +70,15 @@ describe('expense filters in the address', () => {
     expect(
       expenseRangeInverted({ ...EMPTY_EXPENSE_FILTERS, from: '2026-10-01', to: '2026-10-05' }),
     ).toBe(false);
+  });
+
+  it('names the day only when the range is one day (what View details sets)', () => {
+    expect(
+      expenseSingleDay({ ...EMPTY_EXPENSE_FILTERS, from: '2026-10-19', to: '2026-10-19' }),
+    ).toBe('2026-10-19');
+    expect(
+      expenseSingleDay({ ...EMPTY_EXPENSE_FILTERS, from: '2026-10-18', to: '2026-10-19' }),
+    ).toBe('');
+    expect(expenseSingleDay(EMPTY_EXPENSE_FILTERS)).toBe('');
   });
 });

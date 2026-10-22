@@ -266,7 +266,20 @@
       "uncollected": "{amount} non riscossi",
       "emptyTitle": "Nessun messaggio per ora",
       "emptyBody": "I messaggi inviati da campagne, broadcast, pianificazioni e chat compaiono qui con il loro modello e il loro costo.",
-      "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali."
+      "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
+      "days": {
+        "title": "Registro giornaliero",
+        "subtitle": "Messaggi raggruppati per giorno, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
+        "messagesOnDay": "{count} messaggi",
+        "viewDetails": "Visualizza dettagli",
+        "actions": "Azioni",
+        "empty": "Nessun messaggio in questi giorni."
+      },
+      "log": {
+        "title": "Messaggi",
+        "forDay": "Messaggi del {date}",
+        "showAllDays": "Mostra tutti i giorni"
+      }
     },
     "admin": {
       "admin": "Admin",

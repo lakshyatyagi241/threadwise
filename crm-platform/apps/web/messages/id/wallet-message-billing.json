@@ -266,7 +266,20 @@
       "uncollected": "{amount} belum tertagih",
       "emptyTitle": "Belum ada pesan",
       "emptyBody": "Pesan yang dikirim dari kampanye, siaran, jadwal, dan chat akan muncul di sini beserta templat dan biayanya.",
-      "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter."
+      "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter.",
+      "days": {
+        "title": "Log harian",
+        "subtitle": "Pesan dikelompokkan menurut hari, status, saluran, dan kategori. Buka satu hari untuk melihat setiap pesan.",
+        "messagesOnDay": "{count} pesan",
+        "viewDetails": "Lihat detail",
+        "actions": "Tindakan",
+        "empty": "Tidak ada pesan pada hari-hari ini."
+      },
+      "log": {
+        "title": "Pesan",
+        "forDay": "Pesan pada {date}",
+        "showAllDays": "Tampilkan semua hari"
+      }
     },
     "admin": {
       "admin": "Admin",

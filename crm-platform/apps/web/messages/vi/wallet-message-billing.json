@@ -266,7 +266,20 @@
       "uncollected": "{amount} chưa thu",
       "emptyTitle": "Chưa có tin nhắn nào",
       "emptyBody": "Tin nhắn gửi từ chiến dịch, tin phát, lịch gửi và trò chuyện sẽ hiện ở đây cùng bản mẫu và chi phí.",
-      "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại."
+      "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại.",
+      "days": {
+        "title": "Nhật ký theo ngày",
+        "subtitle": "Tin nhắn được nhóm theo ngày, trạng thái, kênh và danh mục. Mở một ngày để xem từng tin nhắn.",
+        "messagesOnDay": "{count} tin nhắn",
+        "viewDetails": "Xem chi tiết",
+        "actions": "Thao tác",
+        "empty": "Không có tin nhắn nào trong những ngày này."
+      },
+      "log": {
+        "title": "Tin nhắn",
+        "forDay": "Tin nhắn ngày {date}",
+        "showAllDays": "Hiển thị tất cả các ngày"
+      }
     },
     "admin": {
       "admin": "Quản trị",

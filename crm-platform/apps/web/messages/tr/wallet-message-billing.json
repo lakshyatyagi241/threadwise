@@ -266,7 +266,20 @@
       "uncollected": "{amount} tahsil edilmedi",
       "emptyTitle": "Henüz mesaj yok",
       "emptyBody": "Kampanyalar, yayınlar, planlamalar ve sohbetlerden gönderilen mesajlar şablonu ve maliyetiyle burada görünür.",
-      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın."
+      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın.",
+      "days": {
+        "title": "Günlük kayıt",
+        "subtitle": "Mesajlar gün, durum, kanal ve kategoriye göre gruplandı. Her mesajı görmek için bir günü açın.",
+        "messagesOnDay": "{count} mesaj",
+        "viewDetails": "Ayrıntıları gör",
+        "actions": "İşlemler",
+        "empty": "Bu günlerde mesaj yok."
+      },
+      "log": {
+        "title": "Mesajlar",
+        "forDay": "{date} tarihli mesajlar",
+        "showAllDays": "Tüm günleri göster"
+      }
     },
     "admin": {
       "admin": "Yönetici",

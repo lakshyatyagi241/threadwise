@@ -266,7 +266,20 @@
       "uncollected": "{amount} niet geïncasseerd",
       "emptyTitle": "Nog geen berichten",
       "emptyBody": "Berichten die via campagnes, broadcasts, planningen en chats zijn verzonden, verschijnen hier met hun sjabloon en kosten.",
-      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze."
+      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
+      "days": {
+        "title": "Dagelijks logboek",
+        "subtitle": "Berichten gegroepeerd per dag, status, kanaal en categorie. Open een dag om elk bericht te zien.",
+        "messagesOnDay": "{count} berichten",
+        "viewDetails": "Details bekijken",
+        "actions": "Acties",
+        "empty": "Er zijn op deze dagen geen berichten."
+      },
+      "log": {
+        "title": "Berichten",
+        "forDay": "Berichten van {date}",
+        "showAllDays": "Alle dagen tonen"
+      }
     },
     "admin": {
       "admin": "Beheerder",
