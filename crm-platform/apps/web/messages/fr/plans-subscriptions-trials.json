@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Routage intelligent",
         "teamsPermissions": "Équipes et autorisations"
-      }
+      },
+      "addonsTabHint": "Les modules complémentaires n’exigent pas le Marketplace dans votre offre. Vous pouvez quand même voir ce que vous possédez et en acheter depuis Offres et modules complémentaires.",
+      "addonsTabLink": "Ouvrir Offres et modules complémentaires"
     },
     "lock": {
       "link": "Voir les offres et modules"

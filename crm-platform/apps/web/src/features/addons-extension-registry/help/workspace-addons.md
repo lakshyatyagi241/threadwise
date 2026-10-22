@@ -10,7 +10,7 @@ keywords: [add-on, addon, extra, pack, feature pack, buy, upgrade, boost]
 
 ## What it is for
 
-Add-ons are extra feature packs you buy on top of a paid plan, without changing the plan itself. A pack can switch on a feature your plan does not include, or raise a limit, for example by adding more of something your plan caps. Add-ons are monthly or yearly subscriptions. The same list appears on the Add-ons page and under the plans on the Plans page.
+Add-ons are extra feature packs you buy on top of a paid plan, without changing the plan itself. A pack can switch on a feature your plan does not include, or raise a limit, for example by adding more of something your plan caps. Add-ons are monthly or yearly subscriptions. The same list appears on the Add-ons page, on the **Add-ons** tab of the Marketplace and under the plans on the Plans page.
 
 ## How to use it
 
@@ -45,7 +45,7 @@ Credits for sending messages are not an add-on. Use **Top up wallet** (the link 
 
 ## Plan and access
 
-Add-ons need an active paid plan. They do not need the Marketplace feature on your plan: the list is available on every paid plan. Add-ons that belong to a Marketplace app are not listed here; they are sold on the app's own page in the [Marketplace](help:marketplace-overview).
+Add-ons need an active paid plan. They do not need the Marketplace feature on your plan: the list is available on every paid plan from the Plans page, while the **Add-ons** tab of the Marketplace needs the Marketplace on your plan like every Marketplace tab. Add-ons that belong to a Marketplace app are not listed here; they are sold on the app's own page in the [Marketplace](help:marketplace-overview).
 
 ## If something looks wrong
 

@@ -43,9 +43,10 @@ export interface StoreOverview {
 }
 
 /** The store page's first read (never a credential). */
-export const useOverview = (kind: Kind) =>
+export const useOverview = (kind: Kind, enabled = true) =>
   useQuery<StoreOverview>({
     queryKey: KEYS.overview(kind),
+    enabled,
     queryFn: async ({ signal }) => {
       if (kind === 'shopify')
         return apiFetch('/shopify', { schema: shopifyOverviewSchema, signal });

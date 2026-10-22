@@ -11,7 +11,8 @@
       "installed": "Yüklü · Pazar yeri",
       "manage": "Uygulamayı yönet · Pazar yeri",
       "requests": "İstekler · Pazar yeri",
-      "addons": "Eklentiler · Pazar yeri"
+      "addons": "Eklentiler · Pazar yeri",
+      "developer": "Geliştirici · Pazar yeri"
     },
     "common": {
       "dismiss": "Kapat",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini uygulamalar",
         "integration": "Entegrasyonlar",
-        "addon": "Eklentiler"
+        "addon": "Eklentiler",
+        "developer": "Geliştirici"
       },
       "installed": "Kurulu",
       "installedLimit": "Kurulu ({installed} / {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Aç",
       "empty": {
-        "title": "Kullanılabilir eklenti yok",
-        "message": "Rolünüzün ve planınızın içerdiği eklentiler burada görünür."
+        "title": "Kullanılabilir geliştirici aracı yok",
+        "message": "Rolünüzün ve planınızın içerdiği geliştirici araçları burada görünür."
       },
       "soon": "Yakında",
       "upgrade": "Yükselt"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Ödeme iptal edildi",
         "message": "Hiçbir ücret alınmadı. Hazır olduğunuzda yeniden abone olabilirsiniz."
+      }
+    },
+    "addonsTab": {
+      "intro": "Planınızın üzerine satın aldığınız ek özellik paketleri. Planınızın zaten içerdiği paketler işaretlidir ve ücretlendirilmez.",
+      "developerHint": "REST API, webhook veya diğer geliştirici araçlarını mı arıyorsunuz?",
+      "developerLink": "Geliştirici sekmesini aç"
+    },
+    "developerTab": {
+      "intro": "Geliştiriciler ve teknik yöneticiler için araçlar: API anahtarları, webhook’lar, yayınlama ve çeviri. Yalnızca rolünüzün ve planınızın izin verdiklerini görürsünüz."
+    },
+    "connector": {
+      "builtIn": "Yerleşik",
+      "status": {
+        "connected": "Bağlı",
+        "notConnected": "Bağlı değil",
+        "upgrade": "Yükselt",
+        "soon": "Yakında"
+      },
+      "cta": {
+        "open": "Aç",
+        "manage": "Yönet",
+        "connect": "Bağlan"
       }
     }
   }

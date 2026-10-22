@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Smart routing",
         "teamsPermissions": "Teams and permissions"
-      }
+      },
+      "addonsTabHint": "Add-ons do not need the Marketplace on your plan. You can still see what you own and buy add-ons from Plans and add-ons.",
+      "addonsTabLink": "Open Plans and add-ons"
     },
     "lock": {
       "link": "See plans and add-ons"

@@ -11,7 +11,8 @@
       "installed": "Instalado · Marketplace",
       "manage": "Gerenciar app · Marketplace",
       "requests": "Solicitações · Marketplace",
-      "addons": "Complementos · Marketplace"
+      "addons": "Complementos · Marketplace",
+      "developer": "Desenvolvedor · Marketplace"
     },
     "common": {
       "dismiss": "Dispensar",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini apps",
         "integration": "Integrações",
-        "addon": "Complementos"
+        "addon": "Complementos",
+        "developer": "Desenvolvedor"
       },
       "installed": "Instalado",
       "installedLimit": "Instalados ({installed} de {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Abrir",
       "empty": {
-        "title": "Nenhum complemento disponível",
-        "message": "Os complementos incluídos no seu perfil e plano aparecerão aqui."
+        "title": "Nenhuma ferramenta para desenvolvedores disponível",
+        "message": "As ferramentas para desenvolvedores incluídas no seu perfil e no seu plano aparecerão aqui."
       },
       "soon": "Em breve",
       "upgrade": "Fazer upgrade"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Pagamento cancelado",
         "message": "Nada foi cobrado. Assine novamente quando quiser."
+      }
+    },
+    "addonsTab": {
+      "intro": "Pacotes de recursos extras que você compra além do seu plano. O que o plano já inclui aparece marcado e não é cobrado.",
+      "developerHint": "Procurando a API REST, webhooks ou outras ferramentas para desenvolvedores?",
+      "developerLink": "Abrir a aba Desenvolvedor"
+    },
+    "developerTab": {
+      "intro": "Ferramentas para desenvolvedores e administradores técnicos: chaves de API, webhooks, publicação e tradução. Você só vê as que seu perfil e seu plano permitem."
+    },
+    "connector": {
+      "builtIn": "Integrado",
+      "status": {
+        "connected": "Conectado",
+        "notConnected": "Não conectado",
+        "upgrade": "Fazer upgrade",
+        "soon": "Em breve"
+      },
+      "cta": {
+        "open": "Abrir",
+        "manage": "Gerenciar",
+        "connect": "Conectar"
       }
     }
   }

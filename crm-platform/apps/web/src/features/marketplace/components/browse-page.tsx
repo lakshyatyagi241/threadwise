@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { marketAppCardSchema, type MarketAppKind } from '@crm/contracts';
@@ -26,13 +26,14 @@ import {
   showShelves,
   type BrowseFilters,
 } from '../lib/browse';
+import { connectorCategoryCounts, filterConnectors, mergeGrid } from '../lib/connectors';
 import { isPlanGate, mktError } from '../lib/errors';
-import { AppCard } from './app-card';
+import { AppCard, ConnectorCard } from './app-card';
 import { CategoryList, RequestBox, Shelves } from './browse-parts';
 import { SearchIcon } from './icons';
 import { MarketplaceHeader } from './marketplace-header';
-import { ToolCards } from './tool-cards';
-import { ErrorPanel, LoadingBlock, PAGE, TEXT_LINK } from './ui';
+import { useConnectorEntries } from './use-connectors';
+import { CARD_GRID, ErrorPanel, LoadingBlock, PAGE, TEXT_LINK } from './ui';
 
 const DEBOUNCE_MS = 300;
 
@@ -40,6 +41,9 @@ const DEBOUNCE_MS = 300;
  * One tab of the Marketplace (`/marketplace/apps` or `/marketplace/integrations`): category list, search, the availability chips (All, Available add-ons, Installed), the
  * sort, the Popular / New / Featured shelves while nothing narrows the list, the results grid with "Load more" (the API has no
  * total), and the request box. Every filter lives in the address, so a view can be shared and the back button works.
+ *
+ * The Integrations tab also lists the built-in connectors (Shopify, Google, Email...) in the same grid, as `ConnectorCard`s, under the
+ * same search, category, Installed filter and sort. Shelves hold Marketplace listings only, so a connector is never shown twice.
  */
 export function BrowsePage({ kind }: { kind: MarketAppKind }) {
   const t = useTranslations('marketplace.browse');
@@ -85,6 +89,15 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
     BROWSE_RETRY,
   );
 
+  // Built-in connectors: only on the Integrations tab, and read before the plan-gate return below so the hooks keep their order.
+  const connectorAll = useConnectorEntries(kind === 'integration');
+  const connectors = useMemo(
+    () => filterConnectors(connectorAll, filters),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `filters` is rebuilt on every render; its fields are the dependencies
+    [connectorAll, filters.category, filters.q, filters.installed, filters.addons],
+  );
+  const connectorCounts = useMemo(() => connectorCategoryCounts(connectorAll), [connectorAll]);
+
   // The whole Marketplace is behind a plan feature: one clear panel instead of two failed regions.
   const gate = [categories.error, list.error].find((e) => e && isPlanGate(mktError(e)));
   if (gate) {
@@ -102,6 +115,8 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
   const moreError = list.isFetchNextPageError ? list.error : null;
   // Add-ons are picked from the loaded cards (the list API has no availability filter), so a page with none may still have more.
   const items = filters.addons ? list.items.filter(isAddonCard) : list.items;
+  const grid = mergeGrid(items, connectors, filters.sort, list.hasNextPage);
+  const categoryName = (slug: string) => cats.find((c) => c.slug === slug)?.name ?? null;
 
   return (
     <div className={PAGE}>
@@ -171,7 +186,7 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
           ) : categories.isError ? (
             <ErrorPanel error={categories.error} onRetry={() => void categories.refetch()} />
           ) : (
-            <CategoryList kind={kind} categories={cats} filters={filters} />
+            <CategoryList kind={kind} categories={cats} filters={filters} extra={connectorCounts} />
           )}
         </div>
 
@@ -185,8 +200,6 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
             </Alert>
           )}
 
-          {kind === 'integration' && showShelves(filters) && <ToolCards tab="integrations" />}
-
           {showShelves(filters) && <Shelves kind={kind} />}
 
           <section aria-labelledby="mkt-results" className="space-y-3">
@@ -194,14 +207,28 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
               {filtered ? t('resultsFiltered') : t('resultsAll')}
             </h2>
             <p aria-live="polite" className="sr-only">
-              {list.isSuccess ? t('loadedCount', { count: items.length }) : ''}
+              {list.isSuccess ? t('loadedCount', { count: grid.length }) : ''}
             </p>
 
             {list.isPending ? (
               <LoadingBlock />
             ) : list.isError ? (
-              <ErrorPanel error={list.error} onRetry={() => void list.refetch()} />
-            ) : items.length === 0 && !list.hasNextPage ? (
+              <>
+                <ErrorPanel error={list.error} onRetry={() => void list.refetch()} />
+                {/* The connectors do not come from this call, so a failed list does not take them away. */}
+                {connectors.length > 0 && (
+                  <div className={CARD_GRID}>
+                    {connectors.map((entry) => (
+                      <ConnectorCard
+                        key={entry.id}
+                        entry={entry}
+                        categoryName={categoryName(entry.categorySlug)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : grid.length === 0 && !list.hasNextPage ? (
               <EmptyState
                 title={t(`empty.${emptyReason(filters)}.title`)}
                 message={t(`empty.${emptyReason(filters)}.message`)}
@@ -222,10 +249,18 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
               />
             ) : (
               <>
-                <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {items.map((card) => (
-                    <AppCard key={card.id} card={card} />
-                  ))}
+                <div className={CARD_GRID}>
+                  {grid.map((item) =>
+                    item.type === 'card' ? (
+                      <AppCard key={item.card.id} card={item.card} />
+                    ) : (
+                      <ConnectorCard
+                        key={`connector-${item.connector.id}`}
+                        entry={item.connector}
+                        categoryName={categoryName(item.connector.categorySlug)}
+                      />
+                    ),
+                  )}
                 </div>
                 {list.hasNextPage && (
                   <div className="flex justify-center">

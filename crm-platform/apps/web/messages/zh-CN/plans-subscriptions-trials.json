@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "智能路由",
         "teamsPermissions": "团队和权限"
-      }
+      },
+      "addonsTabHint": "使用附加功能不需要套餐包含应用市场。你仍可在“套餐与附加功能”中查看已拥有的内容并购买附加功能。",
+      "addonsTabLink": "打开“套餐与附加功能”"
     },
     "lock": {
       "link": "查看套餐和附加组件"

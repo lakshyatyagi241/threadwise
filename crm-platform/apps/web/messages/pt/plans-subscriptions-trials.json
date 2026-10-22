@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Roteamento inteligente",
         "teamsPermissions": "Equipes e permissões"
-      }
+      },
+      "addonsTabHint": "Os complementos não exigem o Marketplace no seu plano. Você ainda pode ver o que tem e comprar complementos em Planos e complementos.",
+      "addonsTabLink": "Abrir Planos e complementos"
     },
     "lock": {
       "link": "Ver planos e complementos"

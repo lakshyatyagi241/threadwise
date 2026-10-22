@@ -573,7 +573,9 @@
       "addons": {
         "smartRouting": "Định tuyến thông minh",
         "teamsPermissions": "Nhóm và quyền"
-      }
+      },
+      "addonsTabHint": "Tiện ích bổ sung không cần gói của bạn có Marketplace. Bạn vẫn có thể xem những gì mình có và mua tiện ích bổ sung trong Gói và tiện ích bổ sung.",
+      "addonsTabLink": "Mở Gói và tiện ích bổ sung"
     },
     "lock": {
       "link": "Xem gói và tiện ích"

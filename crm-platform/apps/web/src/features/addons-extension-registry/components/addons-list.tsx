@@ -12,8 +12,8 @@ import { ErrorBlock, LoadingBlock } from './ui';
 const NS = 'addons-extension-registry.list';
 
 /**
- * THE add-ons list: one component and one card style for every place a workspace sees add-ons (the Plans page today, the Marketplace
- * Add-ons tab next). It owns its data (`GET /addons`), so a mount is one line. Visibility is decided by the API, not here:
+ * THE add-ons list: one component and one card style for every place a workspace sees add-ons (the Plans page, `/addons` and the Marketplace
+ * Add-ons tab). It owns its data (`GET /addons`), so a mount is one line. Visibility is decided by the API, not here:
  * every card is in exactly one state (`AddonCard.state`):
  *   included     the plan already grants everything the add-on gives: "Included in your plan", no button
  *   active       held: renewal or end date; "Buy again" appears only for stackable limit boosts (state `buy_again`)
