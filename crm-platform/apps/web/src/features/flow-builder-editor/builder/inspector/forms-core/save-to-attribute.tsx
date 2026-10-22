@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { flbCleanVarName } from '@crm/contracts';
 import { Check, controlClass, Field, TextInput } from '../kit';
 import type { FormProps } from '../types';
+import { compatiblePropertyTypes } from '../../../lib/property-types';
 import { NewPropertyInline } from '../../new-property';
 import { savePropertyOptions } from '../../../lib/property-options';
 
@@ -59,7 +60,13 @@ export function SaveToAttributeField({
               </option>
             ))}
           </select>
-          <NewPropertyInline onCreated={(k) => set('propertyKey', k)} />
+          <NewPropertyInline
+            onCreated={(k) => set('propertyKey', k)}
+            types={compatiblePropertyTypes(
+              noun,
+              typeof d.inputType === 'string' ? d.inputType : undefined,
+            )}
+          />
           {key === '' ? (
             <div role="alert" className="mt-1 text-[10.5px] font-semibold text-[#E87A5D]">
               {t('propertyRequired')}

@@ -120,6 +120,7 @@ a.chip { text-decoration: none; }
 .chip .ico { border-radius: var(--rb, 50%); }
 body[data-icons="off"] .chip .ico:not(.pic) { display: none; }
 .chip .ico.pic { background: transparent; overflow: hidden; }
+.chip.menu.picked { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 .chip .ico img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; display: block; }
 .chip .lico { width: 18px; height: 18px; border-radius: 5px; object-fit: cover; }
 body[data-icons="off"] .chip.menu { padding: 8px 15px; }
@@ -759,8 +760,7 @@ const SCRIPT = `
     if (dir === 'in' && settled) blip();
     if (dir === 'in' && settled && text && CHAT.speak && !voiceOn && window.speechSynthesis) { try { window.speechSynthesis.speak(new SpeechSynthesisUtterance(plain(text))); } catch (e) {} }
     if (extras && extras.id) row.dataset.id = extras.id;
-    // Reply buttons only stay on the newest line: any new line (a tap, a typed answer, the bot's next message) retires them.
-    clearChips();
+    // Reply buttons stay where the bot put them, also after one is tapped (the run keeps an old menu tappable): the tapped one is marked.
     m.appendChild(row);
     if (extras && extras.buttons && extras.buttons.length) addChips(extras.buttons);
     if (stick) toBottom(); else $('latest').style.display = 'flex';
@@ -801,7 +801,7 @@ const SCRIPT = `
       var cb = document.createElement('div');
       cb.className = 'cb';
       if (c.title) { var ct = document.createElement('div'); ct.className = 'ct'; ct.textContent = c.title; cb.appendChild(ct); }
-      if (c.text) { var tx = document.createElement('div'); tx.className = 'tx'; tx.textContent = c.text; cb.appendChild(tx); }
+      if (c.text) { var tx = document.createElement('div'); tx.className = 'tx'; fmtInto(tx, c.text); cb.appendChild(tx); }
       el.appendChild(cb);
       var bt = document.createElement('div');
       bt.className = 'bt';
@@ -875,15 +875,21 @@ const SCRIPT = `
       var c = document.createElement('button');
       c.type = 'button';
       c.className = 'chip menu';
-      var ico = document.createElement('span');
-      ico.className = 'ico';
-      // The author's own small picture replaces the arrow when the button has one.
+      // The author's own small picture, and only that: a button without one has no icon.
       var pic = imgUrl(btn.icon);
-      if (pic) { var im = document.createElement('img'); im.src = pic; im.alt = ''; ico.appendChild(im); ico.classList.add('pic'); }
-      else ico.appendChild(svg(14, ['M5 12h14', 'M13 6l6 6-6 6']));
-      c.appendChild(ico);
+      if (pic) {
+        var ico = document.createElement('span');
+        ico.className = 'ico pic';
+        var im = document.createElement('img'); im.src = pic; im.alt = ''; ico.appendChild(im);
+        c.appendChild(ico);
+      }
       c.appendChild(document.createTextNode(btn.title));
-      c.onclick = function () { send(btn.title, btn.id); };
+      c.onclick = function () {
+        var sib = box.querySelectorAll('.chip.menu');
+        for (var k = 0; k < sib.length; k++) sib[k].classList.remove('picked');
+        c.classList.add('picked');
+        send(btn.title, btn.id);
+      };
       box.appendChild(c);
     });
     $('msgs').appendChild(box);

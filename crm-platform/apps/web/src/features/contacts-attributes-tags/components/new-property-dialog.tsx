@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import type { FieldType } from '@crm/contracts';
 import { useFieldDependencies, useFieldSections, useModuleFields } from '../api/properties';
 import { PropertyModal } from './property-modal';
 
@@ -12,10 +13,13 @@ export function NewPropertyDialog({
   open,
   onClose,
   onCreated,
+  types,
 }: {
   open: boolean;
   onClose: () => void;
   onCreated: (key: string) => void;
+  /** Offer only these property types. */
+  types?: readonly FieldType[];
 }) {
   const fields = useModuleFields('contacts', true, open);
   const sections = useFieldSections('contacts', open);
@@ -33,6 +37,7 @@ export function NewPropertyDialog({
       sections={allSections}
       fields={allFields}
       dependencies={deps.data ?? []}
+      allowedTypes={types}
       onSaved={(f) => onCreated(f.key)}
       onClose={onClose}
     />
