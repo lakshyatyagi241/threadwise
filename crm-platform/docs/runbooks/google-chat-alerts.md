@@ -146,3 +146,16 @@ Overall (3 trials): **precision 1.000, recall 1.000**, TP 18, FN 0, FP 0. Pass t
 Safety model: `AUTO_REMEDIATE=off|dry-run|on`, default **dry-run** (an unknown value also means dry-run): the thread gets "DRY-RUN: would cancel pid N (SELECT ..., running 143 s) - set AUTO_REMEDIATE=on to enable" and nothing runs. Even with `on`, nothing happens unless `secrets/slow_query_cancel_pg_url` exists (role from `create-cancel-role.sql`: `pg_signal_backend`, no table access); without it the incident is "suggested" and ESCALATED. Per playbook rate limit `AUTO_REMEDIATE_MAX_PER_HOUR` (3), every decision is one `remediation_audit` JSON log line (no query literals). Nothing destructive is enabled by default. Known gap: a SELECT that calls a volatile function with side effects cannot be detected by text.
 
 **Env vars (bridge service).** `PROMETHEUS_URL`, `SLOW_EXCLUDE_APP_REGEX`, `SLOW_EXCLUDE_USER_REGEX`, `SLOW_IDLE_TX_SECONDS` 60, `CRITICAL_SLOW_SECONDS` 60, `CRITICAL_BLOCK_SECONDS` 30, `AUTO_REMEDIATE` dry-run, `HARD_CANCEL_SECONDS` 120, `CANCEL_BLOCKER_SECONDS` 30, `IDLE_BLOCKER_SECONDS` 60, `VERIFY_SECONDS` 120, `VERIFY_POLL_MS` 2000, `AUTO_REMEDIATE_MAX_PER_HOUR` 3, `STMT_RECURRING_POLLS` 3, `INCIDENTS_DIR` (default `./incidents`, needs a writable volume for code-fix files), `SLOW_CANCEL_PG_URL_FILE` (default `/run/secrets/slow_query_cancel_pg_url`, optional).
+
+## Critical-path drill (real faults, fake Chat) - measured on a local stack
+
+Runner: `bash script-testing/critical-path-drill/run.sh [--quick]` (for: 20 s, group_interval 15 s; never contacts Google).
+
+| Fault | Result in the --quick run |
+|---|---|
+| Postgres black-hole (pool max 2, 8 callers) | ApiProbeFailing / ApiHighErrorRate / ApiCallerLatencyHigh critical cards reached the Critical space about 50 s after fault start (first card at +53 s). DbPoolExhausted and PostgresDown did NOT fire in this run (unexplained, open; the drill expectation fails on purpose). |
+| Warning only (CacheMetricsMissing) | Fired in Prometheus, logged `alert_not_routed`, nothing posted. |
+| Leaks | Slow Queries 0, Deployments 0. |
+| Resolver | Every incident ended in `dry-run` with a DIAGNOSED + "ACTION: DRY-RUN" reply; nothing auto-acted. ESCALATED only appears with AUTO_REMEDIATE=on (not run). |
+| Observation | The resolver's DIAGNOSED reply can land in the thread before the FIRING card (the card is sent after resolver.handle starts). |
+| Not run | Redis refused, probe at dead port, RESOLVED-in-same-thread timing (full mode), card text capture. |
