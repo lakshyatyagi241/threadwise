@@ -122,7 +122,7 @@ const STATS_KEY = 'cat:contacts:stats';
 
 const num = (n: number | undefined) => (n === undefined ? '—' : n.toLocaleString());
 
-/** Which part of the Filter panel a column header's "Filter" opens; the name, phone and email columns use the search box instead. */
+/** Which part of the Filter panel a column header's "Filter" opens; the name, phone and email columns open the condition builder on that field instead. */
 const COLUMN_FILTER: Partial<Record<ColumnId, FilterSection>> = {
   stage: 'stage',
   status: 'status',
@@ -340,7 +340,9 @@ export function ContactsScreen() {
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? [])
+        .filter((a) => a.active && !a.hidden)
+        .map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).
@@ -415,11 +417,12 @@ export function ContactsScreen() {
     section: FilterSection;
     nonce: number;
   } | null>(null);
-  const [focusSearch, setFocusSearch] = useState(0);
+  const [fieldRequest, setFieldRequest] = useState<{ field: string; nonce: number } | null>(null);
   const filterColumn = (id: ColumnId) => {
     const section = COLUMN_FILTER[id];
     if (section) setFilterRequest({ section, nonce: (filterRequest?.nonce ?? 0) + 1 });
-    else setFocusSearch((n) => n + 1);
+    // Name, phone and email have no quick filter: the condition builder opens with that field ready to fill.
+    else setFieldRequest({ field: id, nonce: (fieldRequest?.nonce ?? 0) + 1 });
   };
 
   // selection
@@ -808,7 +811,6 @@ export function ContactsScreen() {
           <ContactsToolbar
             q={q}
             onQ={setQ}
-            focusSearch={focusSearch}
             filter={{
               filters,
               onChange: (patch) => setFilters(patch),
@@ -835,6 +837,7 @@ export function ContactsScreen() {
               onAiSummary: (rules, summary) => setAiSummary({ rules, summary }),
               conditionCount: conditions,
               request: filterRequest,
+              fieldRequest,
             }}
             allColumns={allCols}
             columnIds={columnIds}

@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Drawer, cn } from '@crm/ui';
 import { useSegmentCatalog } from '../api/lookups';
-import { ruleReducer, type RuleAction } from '../lib/builder';
+import { ruleReducer, withFieldCondition, type RuleAction } from '../lib/builder';
 import { kindLookup, type FieldDef } from '../lib/fields';
 import {
   MAX_CONDITIONS,
@@ -45,6 +45,7 @@ export function AdvancedFilter({
   open: openProp,
   onOpenChange,
   hideTrigger,
+  start,
 }: {
   value: string;
   onApply: (rulesJson: string) => void;
@@ -54,6 +55,8 @@ export function AdvancedFilter({
   onOpenChange?: (open: boolean) => void;
   /** The parent has its own way in: draw only the drawer. */
   hideTrigger?: boolean;
+  /** Opens with a condition on this field ready to fill (a column header's "Filter"); each new `nonce` adds one if it has none yet. */
+  start?: { field: string; nonce: number } | null;
 }) {
   const t = useTranslations('segments.advancedFilter');
   const tfields = useTranslations('segments.fields');
@@ -78,9 +81,20 @@ export function AdvancedFilter({
   }
   const applied = appliedConditionCount(value);
 
+  // Opened for one field: that field's condition is added (unless one is already there), once per request.
+  const [seeded, setSeeded] = useState(0);
+  const wanted =
+    open && ready && start && start.nonce !== seeded && catalog.some((f) => f.id === start.field)
+      ? start
+      : null;
+  if (wanted) {
+    setSeeded(wanted.nonce);
+    setDraft((r) => withFieldCondition(r, wanted.field, catalog));
+  }
+
   // An empty builder opens with one condition ready to fill, so the person sees field, operator and value at once.
   // (State adjusted while rendering, guarded so it settles after one pass: not an effect.)
-  if (open && ready && draft.children.length === 0 && catalog.length > 0)
+  if (open && ready && !wanted && draft.children.length === 0 && catalog.length > 0)
     setDraft((r) => ruleReducer(r, { type: 'addCondition', groupId: r.id }, catalog));
 
   const dispatch = (a: RuleAction) => setDraft((r) => ruleReducer(r, a, catalog));
