@@ -281,6 +281,7 @@
       "active": "Active",
       "included": "Included in your plan",
       "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
+      "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-ons",
       "catalogBody": "Unlock extra features on top of your current plan. No plan change needed.",

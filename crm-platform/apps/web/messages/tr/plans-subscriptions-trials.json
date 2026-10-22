@@ -255,6 +255,7 @@
         "active": "Etkin",
         "included": "Planınıza dahil",
         "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
+        "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
         "unlimitedBullet": "Sınırsız {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {

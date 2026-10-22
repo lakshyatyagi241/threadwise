@@ -281,6 +281,7 @@
       "active": "Aktiv",
       "included": "In deinem Tarif enthalten",
       "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
+      "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-ons",
       "catalogBody": "Schalten Sie zusätzliche Funktionen zu Ihrem aktuellen Tarif frei. Ein Tarifwechsel ist nicht nötig.",

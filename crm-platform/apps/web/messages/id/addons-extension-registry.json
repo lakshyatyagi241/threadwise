@@ -281,6 +281,7 @@
       "active": "Aktif",
       "included": "Termasuk dalam paket Anda",
       "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
+      "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-on",
       "catalogBody": "Buka fitur tambahan di atas paket Anda saat ini. Tidak perlu mengganti paket.",

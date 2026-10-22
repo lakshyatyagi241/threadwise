@@ -66,3 +66,19 @@ leave and delegate, availability.
 - "Rules stopped after we changed the plan": expected; they are kept, and work again when the flag returns.
 - "SLA business hours cannot be edited": needs `inbox_sla` or `inbox_routing`.
 - A workspace override (`org_plan_state.overrides.features`) beats both the plan and the add-on, in both directions.
+
+## 5. When a plan starts to include an add-on a workspace already pays for
+
+The add-on card becomes "Included in your plan" and the workspace cannot buy it again (checkout answers 422 `PAYGW_ADDON_INCLUDED`). A purchase it already holds
+keeps running to the end of the paid term and then stops: the renewal is ended at the cycle end (no refund, no early removal), the workspace's billing admins get a
+notice and an email, and the card reads "Included in your plan. Your add-on ends on <date> and will not renew." You do not need to do anything.
+
+- It runs right after a plan payment and every 10 minutes. After you **edit a plan's Features tab** to add the flags, workspaces on that plan are evaluated one by one on the next pass
+  (about 10 minutes); nothing is cancelled in bulk at edit time and there is no extra button.
+- Switching a workspace back to a plan that does not cover the add-on does not restart a stopped renewal; the workspace buys it again if it wants it.
+- A pack that adds a cap (Teams: +10 teams) is never stopped, because the plan does not give that cap.
+
+## 6. Owner decision needed: free plans see no add-ons
+
+Add-ons are offered only on an active PAID plan (TW-ADD-033, `eligible` in the add-ons screen and checked in checkout). A **free** Basic plan therefore sees no add-ons at all, so
+Smart routing could not be bought on it. Either make Basic a small paid plan, or change this rule. It has not been changed.

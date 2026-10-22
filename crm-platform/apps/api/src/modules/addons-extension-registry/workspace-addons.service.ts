@@ -113,6 +113,15 @@ export class WorkspaceAddonsService {
         package_id: number;
         renews: boolean;
       }>;
+      const latestEnd = new Map<number, string | null>();
+      const renewing = new Set<number>();
+      for (const r of ownedRows) {
+        if (r.renews) renewing.add(r.package_id);
+        const end = r.ends_at ? new Date(r.ends_at).toISOString() : null;
+        const have = latestEnd.get(r.package_id);
+        if (have === undefined || (end !== null && (have === null || end > have)))
+          latestEnd.set(r.package_id, end);
+      }
       const ownedCount = new Map<number, number>();
       for (const r of ownedRows)
         ownedCount.set(r.package_id, (ownedCount.get(r.package_id) ?? 0) + 1);
@@ -145,6 +154,8 @@ export class WorkspaceAddonsService {
           billingDuration: r.billing_duration,
           grantBullets: grantBullets(missingGrants(grants, included), labelOf),
           ownedCount: owned,
+          ownedEndsAt: latestEnd.get(r.id) ?? null,
+          ownedRenews: renewing.has(r.id),
           state: cardState(grants, owned, included),
         };
       });

@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { AddonRedundancyService } from '../../../src/modules/platform-payment-gateways/addon-redundancy.service';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { WorkspaceAddonsService } from '../../../src/modules/addons-extension-registry/workspace-addons.service';
 import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials';
@@ -724,5 +725,154 @@ describe('an add-on the plan already includes is not offered, and cannot be boug
     expect(viaService.catalog.map((c) => [c.slug, c.state])).toEqual(
       viaHttp.catalog.map((c) => [c.slug, c.state]),
     );
+  });
+});
+
+describe('an add-on the plan starts to include stops renewing at the end of its term', () => {
+  const svc = () => get(AddonRedundancyService);
+  /** Buys the pack for a term of 20 days and, unless `oneTime`, gives it a renewing subscription row with no provider id (nothing to call). */
+  async function owned(t: Tenant, pack: number, status = 'active', oneTime = false) {
+    const wa = await q(
+      `INSERT INTO workspace_addons (org_id, package_id, status, starts_at, ends_at) VALUES ($1, $2, 'active', now(), now() + interval '20 days') RETURNING id`,
+      [t.orgId, pack],
+    );
+    const waId = Number(wa.rows[0].id);
+    if (oneTime) return { waId, subId: null as number | null };
+    const sub = await q(
+      `INSERT INTO subscriptions (org_id, plan_id, kind, workspace_addon_id, gateway, gateway_subscription_id, billing_cycle, status, amount, currency)
+       VALUES ($1, 'smart_routing', 'addon', $2, 'razorpay', NULL, 'monthly', $3, 9, 'USD') RETURNING id`,
+      [t.orgId, waId, status],
+    );
+    return { waId, subId: Number(sub.rows[0].id) };
+  }
+  const statusOf = async (id: number) =>
+    (await q(`SELECT status, meta FROM subscriptions WHERE id = $1`, [id])).rows[0] as {
+      status: string;
+      meta: { cancel?: { reason_code?: string; at_cycle_end?: boolean } };
+    };
+  const endsAt = async (waId: number) =>
+    new Date(
+      (await q(`SELECT ends_at FROM workspace_addons WHERE id = $1`, [waId])).rows[0].ends_at,
+    );
+  const stoppedEvents = async (orgId: number) =>
+    q(
+      `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'paygw.addon.renewal_stopped'`,
+      [orgId],
+    );
+  const smartCard = async (t: Tenant) =>
+    (await p.api.as(t.admin).get('/v2/addons')).body.catalog.find(
+      (c: { slug: string }) => c.slug === 'smart_routing',
+    );
+
+  it('upgrade to a plan that includes it: the renewal stops, the term keeps running, one notification, an audit row; a second pass changes nothing', async () => {
+    const t = await p.api.signup('rd1');
+    await onPlan(t, 'sr_basic');
+    const { waId, subId } = await owned(t, packId);
+    expect(await svc().stopForWorkspace(t.orgId)).toBe(0); // the plan does not cover it yet
+    const before = await endsAt(waId);
+
+    await onPlan(t, 'sr_pro');
+    expect(await svc().stopForWorkspace(t.orgId)).toBe(1);
+    const s = await statusOf(subId!);
+    expect(s.status).toBe('canceled');
+    expect(s.meta.cancel).toMatchObject({ reason_code: 'plan_includes', at_cycle_end: true });
+    expect(await endsAt(waId)).toEqual(before); // no early removal
+    const live = await q(
+      `SELECT 1 FROM workspace_addons WHERE id = $1 AND status = 'active' AND ends_at > now()`,
+      [waId],
+    );
+    expect(live.rowCount).toBe(1);
+    const ev = await stoppedEvents(t.orgId);
+    expect(ev.rows).toHaveLength(1);
+    expect(ev.rows[0].payload).toMatchObject({ pack: 'smart_routing', plan: 'sr_pro' });
+    const audit = await q(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'subscriptions' AND record_id = $2`,
+      [t.orgId, subId],
+    );
+    expect(JSON.stringify(audit.rows)).toContain('plan_includes');
+
+    expect(await svc().stopForWorkspace(t.orgId)).toBe(0); // idempotent
+    expect((await stoppedEvents(t.orgId)).rowCount).toBe(1);
+
+    const card = await smartCard(t);
+    expect(card).toMatchObject({ state: 'included', ownedCount: 1, ownedRenews: false });
+    expect(card.ownedEndsAt).not.toBeNull();
+  });
+
+  it('switching back to a plan that no longer covers it does not re-enable the renewal', async () => {
+    const t = await p.api.signup('rd2');
+    await onPlan(t, 'sr_pro');
+    const { subId } = await owned(t, packId);
+    await svc().stopForWorkspace(t.orgId);
+    await onPlan(t, 'sr_basic');
+    await svc().stopForWorkspace(t.orgId);
+    expect((await statusOf(subId!)).status).toBe('canceled');
+    const card = await smartCard(t);
+    expect(card.state).toBe('active'); // inside the paid term, and never renewing again by itself
+    expect(card.ownedRenews).toBe(false);
+  });
+
+  it('past due, stacked purchases and one-time packs', async () => {
+    const t = await p.api.signup('rd3');
+    await onPlan(t, 'sr_pro');
+    const a = await owned(t, packId, 'past_due');
+    const b = await owned(t, packId, 'active');
+    const c = await owned(t, packId, 'active', true); // one-time: no subscription, nothing to stop
+    expect(c.subId).toBeNull();
+    expect(await svc().stopForWorkspace(t.orgId)).toBe(2);
+    expect((await statusOf(a.subId!)).status).toBe('canceled');
+    expect((await statusOf(b.subId!)).status).toBe('canceled');
+    expect(await endsAt(c.waId)).toBeInstanceOf(Date);
+  });
+
+  it('a lifetime pack has no subscription: nothing happens', async () => {
+    const t = await p.api.signup('rd4');
+    await onPlan(t, 'sr_pro');
+    await q(
+      `INSERT INTO workspace_addons (org_id, package_id, status, starts_at, ends_at) VALUES ($1, $2, 'active', now(), NULL)`,
+      [t.orgId, packId],
+    );
+    expect(await svc().stopForWorkspace(t.orgId)).toBe(0);
+  });
+
+  it('an override or platform-owned status that covers it stops too; a pack with a cap (Teams +10) is never stopped', async () => {
+    const t = await p.api.signup('rd5');
+    await onPlan(t, 'sr_basic');
+    const { subId } = await owned(t, packId);
+    await override(t, { inbox_routing: true, inbox_assignment_sticky: true });
+    expect(await svc().stopForWorkspace(t.orgId)).toBe(1);
+    expect((await statusOf(subId!)).status).toBe('canceled');
+
+    const t2 = await p.api.signup('rd6');
+    await onPlan(t2, 'sr_pro');
+    const wa = await q(
+      `INSERT INTO workspace_addons (org_id, package_id, status, starts_at, ends_at) VALUES ($1, $2, 'active', now(), now() + interval '20 days') RETURNING id`,
+      [t2.orgId, teamsPackId],
+    );
+    await q(
+      `INSERT INTO subscriptions (org_id, plan_id, kind, workspace_addon_id, gateway, billing_cycle, status, amount, currency)
+       VALUES ($1, 'teams_permissions', 'addon', $2, 'razorpay', 'monthly', 'active', 9, 'USD')`,
+      [t2.orgId, wa.rows[0].id],
+    );
+    expect(await svc().stopForWorkspace(t2.orgId)).toBe(0);
+
+    const t3 = await p.api.signup('rd7');
+    await onPlan(t3, 'sr_basic');
+    const own3 = await owned(t3, packId);
+    await q(
+      `INSERT INTO org_plan_state (org_id, platform_owned) VALUES ($1, true) ON CONFLICT (org_id) DO UPDATE SET platform_owned = true`,
+      [t3.orgId],
+    );
+    expect(await svc().stopForWorkspace(t3.orgId)).toBe(1);
+    expect((await statusOf(own3.subId!)).status).toBe('canceled');
+  });
+
+  it('the sweep finds the workspaces by itself (an operator switched the plan)', async () => {
+    const t = await p.api.signup('rd8');
+    await onPlan(t, 'sr_basic');
+    const { subId } = await owned(t, packId);
+    await onPlan(t, 'sr_pro');
+    expect(await svc().sweep()).toBeGreaterThanOrEqual(1);
+    expect((await statusOf(subId!)).status).toBe('canceled');
   });
 });

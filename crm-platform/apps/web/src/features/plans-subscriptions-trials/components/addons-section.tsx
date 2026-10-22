@@ -112,7 +112,15 @@ function AddonCardView({
             {t('included')}
           </Badge>
           {card.ownedCount > 0 && (
-            <p className="text-xs text-muted-foreground">{t('includedOwned')}</p>
+            <p className="text-xs text-muted-foreground" data-testid={`addon-${card.slug}-note`}>
+              {!card.ownedRenews && card.ownedEndsAt
+                ? t('includedEnds', {
+                    date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
+                      new Date(card.ownedEndsAt),
+                    ),
+                  })
+                : t('includedOwned')}
+            </p>
           )}
         </div>
       ) : blocked ? (

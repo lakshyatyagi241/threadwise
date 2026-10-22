@@ -281,6 +281,7 @@
       "active": "Attivo",
       "included": "Incluso nel tuo piano",
       "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
+      "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-on",
       "catalogBody": "Sblocca funzionalità extra in aggiunta al tuo piano attuale. Nessun cambio di piano necessario.",

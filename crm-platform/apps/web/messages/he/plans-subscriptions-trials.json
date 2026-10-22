@@ -255,6 +255,7 @@
         "active": "פעיל",
         "included": "כלול בחבילה שלך",
         "includedOwned": "יש לך גם את התוסף הזה. החבילה שלך כוללת אותו עכשיו, ולכן אפשר לבטל את התוסף. לא מתבצע החזר אוטומטי.",
+        "includedEnds": "כלול בחבילה שלך. התוסף שלך מסתיים ב-{date} ולא יחודש.",
         "unlimitedBullet": "{label} ללא הגבלה",
         "addBullet": "+{amount, number} {label}",
         "per": {

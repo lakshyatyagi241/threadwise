@@ -255,6 +255,7 @@
         "active": "有効",
         "included": "ご利用のプランに含まれています",
         "includedOwned": "このアドオンもご契約中です。プランに含まれるようになったため、アドオンは解約できます。自動での返金はありません。",
+        "includedEnds": "ご利用のプランに含まれています。アドオンは{date}に終了し、更新されません。",
         "unlimitedBullet": "無制限の{label}",
         "addBullet": "+{amount, number} {label}",
         "per": {

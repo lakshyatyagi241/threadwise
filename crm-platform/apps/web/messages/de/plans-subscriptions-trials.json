@@ -255,6 +255,7 @@
         "active": "Aktiv",
         "included": "In deinem Tarif enthalten",
         "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
+        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
         "unlimitedBullet": "{label} unbegrenzt",
         "addBullet": "+{amount, number} {label}",
         "per": {

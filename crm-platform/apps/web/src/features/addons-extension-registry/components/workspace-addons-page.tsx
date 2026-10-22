@@ -194,7 +194,13 @@ function CatalogCard({ card: c }: { card: AddonCard }) {
             {t('included')}
           </span>
           {c.ownedCount > 0 && (
-            <p className="text-[10.5px] text-muted-foreground">{t('includedOwned')}</p>
+            <p className="text-[10.5px] text-muted-foreground" data-testid={`addon-${c.slug}-note`}>
+              {!c.ownedRenews && c.ownedEndsAt
+                ? t('includedEnds', {
+                    date: fmt.dateTime(new Date(c.ownedEndsAt), { dateStyle: 'medium' }),
+                  })
+                : t('includedOwned')}
+            </p>
           )}
         </div>
       ) : c.state === 'active' ? (

@@ -281,6 +281,7 @@
       "active": "Actif",
       "included": "Inclus dans votre offre",
       "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
+      "includedEnds": "Inclus dans votre offre. Votre module se termine le {date} et ne sera pas renouvelé.",
       "cardEyebrow": "Module complémentaire",
       "catalogTitle": "Modules complémentaires",
       "catalogBody": "Débloquez des fonctionnalités supplémentaires en plus de votre forfait actuel. Aucun changement de forfait nécessaire.",

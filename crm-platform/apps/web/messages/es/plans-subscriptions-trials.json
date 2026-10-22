@@ -255,6 +255,7 @@
         "active": "Activo",
         "included": "Incluido en tu plan",
         "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
+        "includedEnds": "Incluido en tu plan. Tu complemento termina el {date} y no se renovará.",
         "unlimitedBullet": "{label} ilimitados",
         "addBullet": "+{amount, number} {label}",
         "per": {

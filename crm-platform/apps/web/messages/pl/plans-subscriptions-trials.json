@@ -255,6 +255,7 @@
         "active": "Aktywny",
         "included": "W cenie Twojego planu",
         "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
+        "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
         "unlimitedBullet": "Bez limitu: {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
