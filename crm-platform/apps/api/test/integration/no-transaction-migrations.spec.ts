@@ -208,6 +208,65 @@ describe('@no-transaction migrations rerun safely', () => {
     }
   });
 
+  it('a valid index of the same name but another definition is refused, not adopted', async () => {
+    const dir = fixtureDir('other-definition');
+    writeFileSync(join(dir, '0001_probe.sql'), 'CREATE TABLE probe (x integer NOT NULL);\n');
+    const url = await createDatabase('other_definition');
+    await runMigrations(url, { dir, ...quiet });
+    writeProbeMigrations(dir);
+
+    const db = await connect('other_definition');
+    try {
+      // Built by hand with another predicate: valid, and not the index migration 0002 builds.
+      await db.query('CREATE INDEX CONCURRENTLY idx_probe_x ON probe (x) WHERE x > 0');
+
+      await expect(runMigrations(url, { dir, ...quiet })).rejects.toThrow(
+        /idx_probe_x already exists and is valid, but its definition is not the one this migration builds[\s\S]*DROP INDEX CONCURRENTLY idx_probe_x;/,
+      );
+      // Nothing was recorded or built, and the hand-made index is still there.
+      expect(await recordedIds(db)).toEqual(['0001_probe']);
+      expect(await tableExists(db, 'probe_after')).toBe(false);
+      expect(await tableExists(db, 'idx_probe_x')).toBe(true);
+
+      // The recovery the message names, then a rerun.
+      await db.query('DROP INDEX CONCURRENTLY idx_probe_x');
+      const result = await runMigrations(url, { dir, ...quiet });
+      expect(result.applied).toEqual(['0002_probe_index', '0003_probe_after']);
+    } finally {
+      await db.end();
+    }
+  });
+
+  it('a quoted index name containing "--" is read as a name, so its leftover still stops the run', async () => {
+    const dir = fixtureDir('quoted-name');
+    writeFileSync(join(dir, '0001_probe.sql'), 'CREATE TABLE probe (x integer NOT NULL);\n');
+    const url = await createDatabase('quoted_name');
+    await runMigrations(url, { dir, ...quiet });
+    writeFileSync(
+      join(dir, '0002_quoted_index.sql'),
+      '-- @no-transaction\nCREATE INDEX CONCURRENTLY IF NOT EXISTS "idx -- odd"\n  ON probe (x);\n',
+    );
+
+    const db = await connect('quoted_name');
+    try {
+      await db.query('INSERT INTO probe VALUES (1), (1)');
+      await expect(
+        db.query('CREATE UNIQUE INDEX CONCURRENTLY "idx -- odd" ON probe (x)'),
+      ).rejects.toThrow();
+
+      await expect(runMigrations(url, { dir, ...quiet })).rejects.toThrow(
+        'DROP INDEX CONCURRENTLY "idx -- odd";',
+      );
+      expect(await recordedIds(db)).toEqual(['0001_probe']);
+
+      await db.query('DROP INDEX CONCURRENTLY "idx -- odd"');
+      const result = await runMigrations(url, { dir, ...quiet });
+      expect(result.applied).toEqual(['0002_quoted_index']);
+    } finally {
+      await db.end();
+    }
+  });
+
   it(
     'a clean database still migrates from zero, and a rerun applies nothing',
     async () => {

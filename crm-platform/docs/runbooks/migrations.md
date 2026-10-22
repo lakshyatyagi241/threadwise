@@ -81,11 +81,18 @@ on it.
 **What the runner does** (`packages/db/src/migrator.ts`):
 
 - Before it runs such a file, it reads the index names the file creates. If one
-  of them is **INVALID**, it stops with the recovery text and runs nothing from
-  that file. It never drops the index itself.
+  of them is **INVALID**, or still being built by another session, it stops with
+  the recovery text and runs nothing from that file. It never drops the index
+  itself.
 - Invalid indexes the file does not create are not checked.
-- A **valid** index left unrecorded is skipped by `IF NOT EXISTS`. The file is
-  recorded and the run continues. No manual step.
+- A **valid** index left unrecorded is adopted: `IF NOT EXISTS` skips the build,
+  the file is recorded and the run continues. No manual step. Adoption happens
+  only when the index's definition is the one the file builds (checked on an
+  empty temporary copy of the table, rolled back). A valid index of the same
+  name with another definition stops the run and is not adopted. Drop it with
+  `DROP INDEX CONCURRENTLY` if it is not wanted, then rerun.
+- A statement the runner cannot read (a `CREATE INDEX CONCURRENTLY` that is
+  schema-qualified, for example) stops the run. Write it unqualified.
 
 **A failed build** (a `CONCURRENTLY` build that errors or is interrupted) leaves
 an **invalid index** behind. The planner never uses it. Find every one:
