@@ -17,19 +17,19 @@ test('sanitizer handles unterminated quote and truncates to 800', () => {
 });
 test('router', () => {
   assert.equal(channelFor({ labels: { severity: 'critical' } }), 'critical');
-  assert.equal(channelFor({ labels: { severity: 'warning' } }), 'other');
+  assert.equal(channelFor({ labels: { severity: 'warning' } }), 'slowquery');
   assert.equal(channelFor({ labels: { severity: 'critical', group: 'slow_query' } }), 'critical');
-  assert.equal(channelFor({ labels: { severity: 'warning', group: 'slow_query' } }), 'other');
-  assert.equal(channelFor({ labels: {} }), 'other');
+  assert.equal(channelFor({ labels: { severity: 'warning', group: 'slow_query' } }), 'slowquery');
+  assert.equal(channelFor({ labels: {} }), 'slowquery');
 });
 test('formatter drops Watchdog, splits large payloads, escapes html, keeps messages small', () => {
   const mk = (i, st = 'firing') => ({ status: st, labels: { alertname: `A${i}`, severity: 'warning', instance: 'x' }, annotations: { summary: '<b>' + 's'.repeat(3000), description: 'd'.repeat(3000), runbook_url: 'https://r/x' }, startsAt: '2026-01-01T00:00:00Z', endsAt: '0001-01-01T00:00:00Z' });
   const out = formatAlertmanager({ alerts: [{ status: 'firing', labels: { alertname: 'Watchdog' } }, ...Array.from({ length: 20 }, (_, i) => mk(i)), mk(99, 'resolved')] });
-  assert.deepEqual(Object.keys(out), ['other']);
-  assert.ok(out.other.length > 1);
-  for (const m of out.other) { assert.ok(JSON.stringify(m).length < 30000); assert.ok(m.text.length <= 300); }
+  assert.deepEqual(Object.keys(out), ['slowquery']);
+  assert.ok(out.slowquery.length > 1);
+  for (const m of out.slowquery) { assert.ok(JSON.stringify(m).length < 30000); assert.ok(m.text.length <= 300); }
   assert.ok(!JSON.stringify(out).includes('<b>sss'));
-  assert.match(JSON.stringify(out.other.at(-1)), /resolved/);
+  assert.match(JSON.stringify(out.slowquery.at(-1)), /resolved/);
 });
 test('gate: cooldown, rate limit', () => {
   let t = 0; const g = createGate({ cooldownMs: 1000, perMinute: 2, now: () => t });
@@ -38,10 +38,10 @@ test('gate: cooldown, rate limit', () => {
 });
 test('sender retries 429/5xx, not 4xx, never leaks url', async () => {
   const calls = []; const logs = [];
-  const mk = (codes) => createSender({ urls: { other: 'https://chat.example/SECRETTOKEN' }, metrics: createMetrics(), log: (o) => logs.push(o), sleep: async () => {}, fetchImpl: async () => { calls.push(1); return { ok: codes[0] < 300, status: codes.shift(), headers: new Map() }; } });
-  assert.equal((await mk([500, 429, 200])('other', {})).attempts, 3);
-  calls.length = 0; assert.equal((await mk([400])('other', {})).ok, false); assert.equal(calls.length, 1);
-  calls.length = 0; assert.equal((await mk([500, 500, 500, 500, 500])('other', {})).ok, false); assert.equal(calls.length, 4);
+  const mk = (codes) => createSender({ urls: { slowquery: 'https://chat.example/SECRETTOKEN' }, metrics: createMetrics(), log: (o) => logs.push(o), sleep: async () => {}, fetchImpl: async () => { calls.push(1); return { ok: codes[0] < 300, status: codes.shift(), headers: new Map() }; } });
+  assert.equal((await mk([500, 429, 200])('slowquery', {})).attempts, 3);
+  calls.length = 0; assert.equal((await mk([400])('slowquery', {})).ok, false); assert.equal(calls.length, 1);
+  calls.length = 0; assert.equal((await mk([500, 500, 500, 500, 500])('slowquery', {})).ok, false); assert.equal(calls.length, 4);
   assert.ok(!JSON.stringify(logs).includes('SECRET'));
 });
 test('watcher: running query + statement delta + dedup + missing extension', async () => {

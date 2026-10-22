@@ -1,6 +1,6 @@
 // LOCAL FAKE of Google Chat: POST /hook/<space> stores the card; GET / renders 4 spaces.
 import http from 'node:http';
-const SP = { critical: 'Critical', other: 'Other', deploy: 'Deployments' };
+const SP = { critical: 'Critical', slowquery: 'Slow Queries & Warnings', deploy: 'Deployments' };
 const msgs = Object.fromEntries(Object.keys(SP).map((k) => [k, []]));
 const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
 const text = (m) => {

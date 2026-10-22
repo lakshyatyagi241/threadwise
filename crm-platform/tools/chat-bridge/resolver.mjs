@@ -30,9 +30,10 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const count = (playbook, outcome) => metrics?.inc('crm_incident_total', `playbook="${playbook}",outcome="${outcome}"`);
   const audit = (o) => log({ evt: 'remediation_audit', mode, ...o });
 
-  const step = (inc, label, text, channel = inc.channel) => {
+  const step = (inc, label, text, channel) => {
     inc.events.push({ t: now(), label, text: String(text).slice(0, 500) });
-    return post(channel, { text: `${label}: ${text}`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title: label, subtitle: `incident ${inc.id} (${inc.playbook})` }, sections: [{ widgets: [{ decoratedText: { text: String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;'), wrapText: true } }] }] } }] }, { threadKey: inc.threadKey });
+    const body = { text: `${label}: ${text}`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title: label, subtitle: `incident ${inc.id} (${inc.playbook})` }, sections: [{ widgets: [{ decoratedText: { text: String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;'), wrapText: true } }] }] } }] };
+    return Promise.all((channel ? [channel] : inc.channels).map((ch) => post(ch, body, { threadKey: inc.threadKey })));
   };
   const escalate = async (inc, why) => {
     inc.state = 'escalated'; count(inc.playbook, 'escalated'); audit({ id: inc.id, playbook: inc.playbook, result: 'escalated', why });
@@ -144,7 +145,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (mode === 'off') return Promise.resolve(null);
     const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && ['open', 'needs_fix'].includes(i.state));
     if (dup) return Promise.resolve(dup);
-    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'other', state: 'open', startedAt: now(), events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
+    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
     incidents.set(inc.id, inc); if (incidents.size > 200) incidents.delete(incidents.keys().next().value);
     const p = run(inc, spec).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p));
     pending.add(p); return p;

@@ -1,6 +1,6 @@
 // Slow-query watcher: polls pg_stat_activity (running too long) and pg_stat_statements (slow statements whose calls grew) with a
 // READ-ONLY role. Every row is CLASSIFIED before alerting (slow / blocked / idle_in_tx; autovacuum, replication, backups, migrations and
-// the watcher itself are excluded), posted to Other (or Critical when severe) as a thread, and handed to the resolver (resolver.mjs).
+// the watcher itself are excluded), posted to Slow Queries & Warnings (or Critical when severe) as a thread, and handed to the resolver (resolver.mjs).
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -103,7 +103,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
         const ok = `${r.pid}:${iso(r.query_start)}:${k.kind}`; seen.add(ok);
         const o = open.get(ok); if (o) o.peak = Math.max(o.peak, secs);
         offenders.push({ kind: k.kind, row: r, text, waiterSecs: waiter[r.pid] ?? 0 });
-        const channel = k.severity === 'critical' ? 'critical' : 'other', h = sha(`${r.datname}|${k.kind}|${text}`), threadKey = `sq-${h.slice(0, 16)}`;
+        const channel = k.severity === 'critical' ? 'critical' : 'slowquery', h = sha(`${r.datname}|${k.kind}|${text}`), threadKey = `sq-${h.slice(0, 16)}`;
         const blk = (r.blockers ?? []).map((p) => byPid.get(p)).filter(Boolean)[0];
         const rowsOut = [['Verdict', k.verdict], ['Duration', `${fmt(secs)} s (${k.kind === 'idle_in_tx' ? 'time idle in transaction' : 'now() - query_start'})`], ['Database / role / app', `${r.datname} / ${r.usename} / ${r.application_name || '-'}`],
           ['Evidence (verify in psql)', `pid ${r.pid}, query_start ${iso(r.query_start)}, state ${r.state}, wait_event ${r.wait_event_type ?? '-'}/${r.wait_event ?? '-'}, xact age ${r.xact_secs == null ? '-' : fmt(r.xact_secs, 0)} s`]];
@@ -112,16 +112,20 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
         rowsOut.push(['Query (normalized)', text]);
         const title = k.kind === 'idle_in_tx' ? `Idle in transaction ${fmt(secs, 0)} s` : k.kind === 'blocked' ? `Blocked query waiting ${fmt(secs)} s` : `Slow query running ${fmt(secs)} s`;
         const sent = await emit(k.kind === 'slow' ? 'running' : k.kind, `act:${h}|${k.severity}`, card(`${k.severity === 'critical' ? 'CRITICAL: ' : ''}${title}`, rowsOut), { channel, threadKey, meta: { kind: k.kind, severity: k.severity, app: r.application_name, pid: r.pid, secs } });
-        if (sent && !o) open.set(ok, { rkey: `${k.kind}:${r.pid}:${iso(r.query_start)}`, threadKey, channel, start: now(), peak: secs, title, kind: k.kind });
+        if (sent && o && !o.channels.has(channel)) { // escalated: thread in Critical, pointer reply in the earlier thread
+          if (channel === 'critical') await send('slowquery', card(`Escalated to Critical at ${fmt(secs, 0)} s`, [['Where', 'see the thread in the Critical space']]), { threadKey, meta: { kind: 'pointer' } });
+          o.channels.add(channel);
+        }
+        if (sent && !o) open.set(ok, { rkey: `${k.kind}:${r.pid}:${iso(r.query_start)}`, threadKey, channels: new Set([channel]), start: now(), peak: secs, title, kind: k.kind });
         const act = (k.kind === 'slow' && secs >= c.hardSecs) || (k.kind === 'idle_in_tx' && secs >= c.idleBlockSecs && (waiter[r.pid] ?? 0) > 0);
-        if (act && resolver) resolver.handle({ playbook: k.kind === 'slow' ? 'cancel_select' : 'terminate_idle', key: `${k.kind}:${r.pid}:${iso(r.query_start)}`, threadKey, channel, row: r, text, waiterSecs: waiter[r.pid] ?? 0, diagnosis: `${k.verdict}. ${rowsOut[3][1]}`, suggestion: 'cancel the query / fix the application transaction handling', evidence: rowsOut[3][1] });
+        if (act && resolver) resolver.handle({ playbook: k.kind === 'slow' ? 'cancel_select' : 'terminate_idle', key: `${k.kind}:${r.pid}:${iso(r.query_start)}`, threadKey, channel, channels: [...(open.get(ok)?.channels ?? [channel])], row: r, text, waiterSecs: waiter[r.pid] ?? 0, diagnosis: `${k.verdict}. ${rowsOut[3][1]}`, suggestion: 'cancel the query / fix the application transaction handling', evidence: rowsOut[3][1] });
       }
       // alerts whose session is gone: reply in their thread (skipped when the resolver already owns the incident)
       for (const [ok, o] of open) {
         if (seen.has(ok)) continue;
         open.delete(ok);
         if (resolver?.byKey(o.rkey)) continue;
-        await send(o.channel, card(`RESOLVED after ${fmtDur(now() - o.start)} (finished on its own)`, [['What it was', o.title], ['Peak observed', `${fmt(o.peak)} s`], ['How it ended', 'the session is no longer active/idle-in-transaction at the next poll; the exact end time is within one poll interval']]), { threadKey: o.threadKey, meta: { kind: 'ended', ok } });
+        for (const ch of o.channels) await send(ch, card(`RESOLVED after ${fmtDur(now() - o.start)} (finished on its own)`, [['What it was', o.title], ['Peak observed', `${fmt(o.peak)} s`], ['How it ended', 'the session is no longer active/idle-in-transaction at the next poll; the exact end time is within one poll interval']]), { threadKey: o.threadKey, meta: { kind: 'ended', ok } });
       }
       try {
         const st = await query(STMT_SQL, [c.meanMs]);
@@ -140,8 +144,8 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
           const threadKey = `st-${sha(key).slice(0, 16)}`;
           await emit('statement', `st:${key}`, card(`Slow statement: mean ${fmt(r.mean_exec_time, 0)} ms`, [
             ['Verdict', 'Slow execution (statement mean over threshold, new calls also slow)'], ['Calls since last poll', dCalls], ['Mean (lifetime / since poll)', `${fmt(r.mean_exec_time, 0)} ms / ${fmt(dMean, 0)} ms`], ['Max', `${fmt(r.max_exec_time, 0)} ms`], ['Rows (lifetime)', r.rows],
-            ['Database', r.datname ?? '-'], ['Role', r.rolname ?? '-'], ['Query (normalized)', text]]), { channel: 'other', threadKey, meta: { kind: 'statement' } });
-          if (rcc.slow >= c.recurPolls && resolver) resolver.handle({ playbook: 'code_fix', key: `st:${key}`, threadKey, channel: 'other', text, diagnosis: `Recurring slow statement: new calls averaged ${fmt(dMean, 0)} ms for ${rcc.slow} polls`, suggestion: 'add an index / rewrite the query', file: { normalized_query: text, queryid: r.queryid, database: r.datname, calls: r.calls, mean_ms: Number(r.mean_exec_time), max_ms: Number(r.max_exec_time), first_seen: new Date(rcc.first).toISOString(), last_seen: new Date(now()).toISOString(), verdict: 'recurring slow statement' } });
+            ['Database', r.datname ?? '-'], ['Role', r.rolname ?? '-'], ['Query (normalized)', text]]), { channel: 'slowquery', threadKey, meta: { kind: 'statement' } });
+          if (rcc.slow >= c.recurPolls && resolver) resolver.handle({ playbook: 'code_fix', key: `st:${key}`, threadKey, channel: 'slowquery', text, diagnosis: `Recurring slow statement: new calls averaged ${fmt(dMean, 0)} ms for ${rcc.slow} polls`, suggestion: 'add an index / rewrite the query', file: { normalized_query: text, queryid: r.queryid, database: r.datname, calls: r.calls, mean_ms: Number(r.mean_exec_time), max_ms: Number(r.max_exec_time), first_seen: new Date(rcc.first).toISOString(), last_seen: new Date(now()).toISOString(), verdict: 'recurring slow statement' } });
         }
         for (const [key, rc] of recur) if (!present.has(key) && ++rc.quiet >= c.recurPolls) { if (resolver) await resolver.statementRecovered(`st:${key}`); recur.delete(key); }
         baselined = true;
@@ -152,7 +156,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
         } else throw e;
       }
       if (suppressed > 0 && gate.allow('digest:' + Math.floor(now() / 60000)) === 'send') {
-        await send('other', { text: `${suppressed} more slow-query events were held back by the rate limit (max ${c.perMinute}/min). See the Threadwise slow queries dashboard.` });
+        await send('slowquery', { text: `${suppressed} more slow-query events were held back by the rate limit (max ${c.perMinute}/min). See the Threadwise slow queries dashboard.` });
         metrics.inc('crm_slow_query_events_total', 'kind="digest"'); suppressed = 0;
       }
       metrics.set('crm_slow_query_max_seconds', 'gauge', maxSecs);

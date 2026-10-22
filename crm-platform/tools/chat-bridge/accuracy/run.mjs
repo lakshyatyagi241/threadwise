@@ -31,7 +31,7 @@ await setup.query('create extension if not exists pg_stat_statements').catch(() 
 const S = (name, o) => ({ name, expect: [], allow: [], ...o });
 const scenarios = [
   S('fast queries', { run: async (c, m) => { for (let i = 0; i < 20; i++) await c.query(`select pg_sleep(0.05) as ${m}`); } }),
-  S('slow pg_sleep 6 s (<critical)', { expect: ['slow'], channel: 'other', noCritical: true, allow: ['statement'], run: (c, m) => c.query(`select pg_sleep(6) as ${m}`), resolveReply: true }),
+  S('slow pg_sleep 6 s (<critical)', { expect: ['slow'], channel: 'slowquery', noCritical: true, allow: ['statement'], run: (c, m) => c.query(`select pg_sleep(6) as ${m}`), resolveReply: true }),
   S('heavy aggregate', { expect: ['slow'], allow: ['statement'], run: (c, m) => c.query(`select count(*) as ${m} from generate_series(1,40000000) x where x%7=0`) }),
   S('critical slow 11 s (>=critical)', { expect: ['slow'], channel: 'critical', allow: ['statement'], run: (c, m) => c.query(`select pg_sleep(11) as ${m}`) }),
   S('lock wait: waiter', { expect: ['blocked'], channel: 'critical', app: 'lockB', special: 'lock' }),
@@ -83,7 +83,7 @@ async function trial(n) {
     const lat = {};
     for (const k of kinds) lat[k] = (mine.find((x) => x.kind === k).t - st) / 1000;
     const ended = s.resolveReply ? cards.some((x) => x.kind === 'ended' && mine.some((m) => m.threadKey === x.threadKey)) : null;
-    const crit = mine.some((x) => x.channel === 'critical'), other = mine.some((x) => x.channel === 'other');
+    const crit = mine.some((x) => x.channel === 'critical'), other = mine.some((x) => x.channel === 'slowquery');
     const lost = s.expect.includes('statement') && ![...present].some((q) => q.includes(s.mark));
     return { s, kinds, lat, ended, crit, other, nCards: mine.length, lost };
   });
@@ -114,14 +114,14 @@ console.log(`\nprecision ${precision.toFixed(3)}  recall ${recall.toFixed(3)}  T
 check('precision >= 0.95', precision >= 0.95, precision.toFixed(3));
 check('recall >= 0.9', recall >= 0.9, recall.toFixed(3));
 check('zero false positives on negative scenarios', real.filter((r) => !r.expect.length).every((r) => r.FP === 0), `FP total ${FP}`);
-check('escalation: critical/other channels as expected', real.every((r) => r.channelOk === r.channelRuns), real.filter((r) => r.channelRuns).map((r) => `${r.channelOk}/${r.channelRuns}`).join(' '));
+check('escalation: critical/slowquery channels as expected', real.every((r) => r.channelOk === r.channelRuns), real.filter((r) => r.channelRuns).map((r) => `${r.channelOk}/${r.channelRuns}`).join(' '));
 check('resolve reply posted in the same thread when the slow query ends', real.every((r) => r.endedOk === r.endedRuns), '');
 
 // ---- classifier at PRODUCTION defaults (the harness runs scaled thresholds; defaults are asserted on the pure function) ----
 {
   const c = cfg({}), base = { state: 'active', application_name: 'api', usename: 'app', blockers: [] };
   check('defaults: 70 s slow query -> critical', classify({ ...base, secs: 70 }, c, {}).severity === 'critical');
-  check('defaults: 7 s slow query -> warning (Other)', classify({ ...base, secs: 7 }, c, {}).severity === 'warning');
+  check('defaults: 7 s slow query -> warning (slowquery)', classify({ ...base, secs: 7 }, c, {}).severity === 'warning');
   check('defaults: blocker with a 40 s waiter -> critical', classify({ ...base, secs: 8 }, c, {}, 40).severity === 'critical');
   check('defaults: waiter blocked 40 s -> critical blocked', (({ kind, severity }) => kind === 'blocked' && severity === 'critical')(classify({ ...base, secs: 40, blockers: [9] }, c, {})));
   check('defaults: idle in tx 30 s is not reported, 90 s is idle_in_tx', classify({ ...base, state: 'idle in transaction', state_secs: 30 }, c, {}) === null && classify({ ...base, state: 'idle in transaction', state_secs: 90 }, c, {}).kind === 'idle_in_tx');
@@ -141,7 +141,7 @@ const REN = { HARD_CANCEL_SECONDS: '1', VERIFY_SECONDS: '1', VERIFY_POLL_MS: '30
 const mkR = (env, extra = {}) => createResolver({ env: { ...REN, ...env }, post, log: () => {}, metrics: createMetrics(), db: mkDb(extra.db), ...extra.rest });
 const victim = async (app, sql) => { const c = await mk(app); const pr = c.query(sql).then(() => 'done', (e) => e.code); const pid = (await c.query('select pg_backend_pid() as p').catch(() => null))?.rows?.[0]?.p; return { c, pr, pid }; };
 const startSleep = async (app, sql = 'select pg_sleep(40)') => { const c = await mk(app); const { rows } = await c.query('select pg_backend_pid() as p'); const pr = c.query(sql).then(() => 'done', (e) => e.code); await sleep(1500); return { c, pr, pid: rows[0].p }; };
-const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); return { playbook: 'cancel_select', key, threadKey: key, channel: 'other', row, text: 'select pg_sleep(?)', waiterSecs: 0, diagnosis: 'Slow execution', suggestion: 'cancel', evidence: `pid ${v.pid}`, ...extra }; };
+const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); return { playbook: 'cancel_select', key, threadKey: key, channel: 'slowquery', row, text: 'select pg_sleep(?)', waiterSecs: 0, diagnosis: 'Slow execution', suggestion: 'cancel', evidence: `pid ${v.pid}`, ...extra }; };
 
 { // cancel works
   const v = await startSleep('acc-rem1'); const r = mkR({ AUTO_REMEDIATE: 'on' });
@@ -193,11 +193,11 @@ const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); ret
   const A = await mk('acc-idleA'); await A.query('begin'); await A.query('lock table t_acc in access exclusive mode'); const pidA = (await A.query('select pg_backend_pid() as p')).rows[0].p; A.on('error', () => {});
   const B = await mk('acc-idleB'); const bp = B.query('select count(*) from t_acc').then(() => 'done', (e) => e.code); await sleep(2500);
   const row = await rowOf(pidA), r = mkR({ AUTO_REMEDIATE: 'on' });
-  await r.handle({ playbook: 'terminate_idle', key: 'r10', threadKey: 'r10', channel: 'other', row, text: 'lock table', waiterSecs: 2.5, diagnosis: 'Idle in transaction, blocking', suggestion: 'fix app', evidence: 'x' }); await r.settle();
+  await r.handle({ playbook: 'terminate_idle', key: 'r10', threadKey: 'r10', channel: 'slowquery', row, text: 'lock table', waiterSecs: 2.5, diagnosis: 'Idle in transaction, blocking', suggestion: 'fix app', evidence: 'x' }); await r.settle();
   check('idle-in-tx blocker terminated, waiter proceeds, RESOLVED after verify', labels('r10') === 'DIAGNOSED>ACTION>VERIFIED>RESOLVED' && (await bp) === 'done', labels('r10'));
   const w = await startSleep('acc-writer', 'update t_acc set a = a where (select pg_sleep(40)) is null');
   const rr = mkR({ AUTO_REMEDIATE: 'on' }); const wr = { ...(await rowOf(w.pid)), state: 'active' };
-  await rr.handle({ playbook: 'terminate_idle', key: 'r11', threadKey: 'r11', channel: 'other', row: wr, text: 'update', waiterSecs: 9, diagnosis: 'x', suggestion: 'x', evidence: 'x' }); await rr.settle();
+  await rr.handle({ playbook: 'terminate_idle', key: 'r11', threadKey: 'r11', channel: 'slowquery', row: wr, text: 'update', waiterSecs: 9, diagnosis: 'x', suggestion: 'x', evidence: 'x' }); await rr.settle();
   check('active writer is NEVER terminated (ESCALATED)', (await stillActive(w.pid)) && /ESCALATED/.test(labels('r11')), labels('r11'));
   await setup.query('select pg_cancel_backend($1)', [w.pid]); await w.pr; w.c.end().catch(() => {}); B.end().catch(() => {});
 }
@@ -214,9 +214,9 @@ const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); ret
 }
 { // code_fix + release
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'inc-')); const file = { normalized_query: 'select * from t where a = ?', queryid: '1', calls: 9, mean_ms: 900, max_ms: 1500, first_seen: 'x', last_seen: 'y', verdict: 'recurring' };
-  const dry = mkR({ AUTO_REMEDIATE: 'dry-run', INCIDENTS_DIR: dir }); await dry.handle({ playbook: 'code_fix', key: 'st:1', threadKey: 'r14', channel: 'other', text: 'select', file, diagnosis: 'd', suggestion: 's' }); await dry.settle();
+  const dry = mkR({ AUTO_REMEDIATE: 'dry-run', INCIDENTS_DIR: dir }); await dry.handle({ playbook: 'code_fix', key: 'st:1', threadKey: 'r14', channel: 'slowquery', text: 'select', file, diagnosis: 'd', suggestion: 's' }); await dry.settle();
   check('code_fix dry-run writes no incident file', !fs.existsSync(path.join(dir, 'open')));
-  const r = mkR({ AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }); await r.handle({ playbook: 'code_fix', key: 'st:2', threadKey: 'r15', channel: 'other', text: 'select', file, diagnosis: 'd', suggestion: 's' }); await r.settle();
+  const r = mkR({ AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }); await r.handle({ playbook: 'code_fix', key: 'st:2', threadKey: 'r15', channel: 'slowquery', text: 'select', file, diagnosis: 'd', suggestion: 's' }); await r.settle();
   const f = fs.readdirSync(path.join(dir, 'open'));
   check('code_fix writes incidents/open/<id>.json and posts "needs a code/index fix: ticket opened"', f.length === 1 && posts.some((p) => p.tk === 'r15' && /needs a code\/index fix: ticket opened/.test(p.text)) && JSON.parse(fs.readFileSync(path.join(dir, 'open', f[0]))).queryid === '1', f.join());
   r.setRelease('abc1234'); await r.statementRecovered('st:2');

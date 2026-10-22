@@ -1,7 +1,7 @@
 // Pure helpers for the Google Chat bridge and the slow-query watcher: sanitizer, router, formatter, sender, dedup, rate limit.
 // No dependencies. Webhook URLs are secrets: nothing here logs or returns them.
 
-export const CHANNELS = ['critical', 'other', 'deploy'];
+export const CHANNELS = ['critical', 'slowquery', 'deploy'];
 const MAX_TEXT = 3500; // Chat caps a message text at 4096 chars; cards are counted by the text they hold, keep a margin.
 const MAX_WIDGETS = 40;
 
@@ -24,7 +24,7 @@ export function isWatchdog(a) {
 }
 
 export function channelFor(a) {
-  return a?.labels?.severity === 'critical' ? 'critical' : 'other';
+  return a?.labels?.severity === 'critical' ? 'critical' : 'slowquery';
 }
 
 const ICON = { critical: '🔴', warning: '🟠', info: '🔵', resolved: '✅' };
@@ -57,7 +57,7 @@ const safeUrl = (u) => (/^https?:\/\//.test(String(u ?? '')) ? String(u).slice(0
 
 const size = (ws) => JSON.stringify(ws).length;
 
-// -> { critical: [msg...], other: [...] }; each msg is a Chat cardsV2 message body under the size limits.
+// -> { critical: [msg...], slowquery: [...] }; each msg is a Chat cardsV2 message body under the size limits.
 export function formatAlertmanager(payload, { grafanaUrl = '' } = {}) {
   const per = {};
   for (const a of payload?.alerts ?? []) {
