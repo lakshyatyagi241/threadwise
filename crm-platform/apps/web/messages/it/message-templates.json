@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Questo template non ha un numero WhatsApp collegato con cui inviarlo. Collega prima un numero.",
       "TPL_IN_USE": "Questo template non può essere eliminato perché lo usa un broadcast in corso o programmato.",
       "TPL_NOT_EDITABLE": "Si può modificare solo un template che Meta non ha ancora approvato, o uno che ha rifiutato.",
+      "TPL_EDIT_LIMIT": "Meta consente una modifica ogni 24 ore e dieci in 30 giorni per un modello approvato. Riprova più tardi.",
       "ROW_VERSION_CONFLICT": "Qualcuno ha modificato questo template mentre lo stavi modificando. Ricarica la pagina per vedere la versione più recente, poi applica di nuovo la modifica.",
       "VALIDATION_FAILED": "Alcuni campi non sono validi. Controlla i campi qui sotto.",
       "INTERNAL": "Il server non è riuscito a gestire questa richiesta. Riprova tra poco."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Aggiorna ora",
       "editTemplate": "Modifica template",
+      "editBlockedTitle": "Questo modello non può essere modificato al momento",
+      "editBlocked": "{reason, select, in_review {Meta sta esaminando questo modello. Potrà essere modificato di nuovo al termine della revisione.} daily_limit {Meta consente una modifica ogni 24 ore per un modello approvato. Potrà essere modificato di nuovo dopo {when}.} monthly_limit {Meta consente dieci modifiche in 30 giorni per un modello approvato. Potrà essere modificato di nuovo dopo {when}.} other {}}",
       "duplicateTemplate": "Duplica modello",
       "editResubmit": "Modifica e reinvia",
       "submitToMeta": "Invia a Meta",

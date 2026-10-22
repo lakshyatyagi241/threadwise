@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Este modelo não tem um número de WhatsApp conectado para envio. Conecte um número primeiro.",
       "TPL_IN_USE": "Este modelo não pode ser excluído porque uma transmissão em andamento ou agendada o utiliza.",
       "TPL_NOT_EDITABLE": "Somente um modelo que a Meta ainda não aprovou, ou que rejeitou, pode ser editado.",
+      "TPL_EDIT_LIMIT": "A Meta permite uma edição a cada 24 horas e dez a cada 30 dias em um modelo aprovado. Tente novamente mais tarde.",
       "ROW_VERSION_CONFLICT": "Outra pessoa alterou este modelo enquanto você editava. Recarregue para ver a versão mais recente e aplique sua alteração novamente.",
       "VALIDATION_FAILED": "Alguns campos são inválidos. Verifique os campos abaixo.",
       "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Atualizar agora",
       "editTemplate": "Editar modelo",
+      "editBlockedTitle": "Este modelo não pode ser editado agora",
+      "editBlocked": "{reason, select, in_review {A Meta está analisando este modelo. Ele poderá ser editado de novo quando a análise terminar.} daily_limit {A Meta permite uma edição a cada 24 horas em um modelo aprovado. Você poderá editá-lo de novo após {when}.} monthly_limit {A Meta permite dez edições em 30 dias em um modelo aprovado. Você poderá editá-lo de novo após {when}.} other {}}",
       "duplicateTemplate": "Duplicar modelo",
       "editResubmit": "Editar e reenviar",
       "submitToMeta": "Enviar à Meta",

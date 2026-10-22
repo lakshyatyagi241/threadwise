@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Bu şablonun gönderileceği bağlı bir WhatsApp numarası yok. Önce bir numara bağlayın.",
       "TPL_IN_USE": "Bu şablon, çalışan veya zamanlanmış bir toplu gönderim tarafından kullanıldığı için silinemez.",
       "TPL_NOT_EDITABLE": "Yalnızca Meta'nın henüz onaylamadığı veya reddettiği şablonlar düzenlenebilir.",
+      "TPL_EDIT_LIMIT": "Meta, onaylı bir şablonda 24 saatte bir ve 30 günde on düzenlemeye izin verir. Daha sonra tekrar deneyin.",
       "ROW_VERSION_CONFLICT": "Düzenlerken bu şablonu biri değiştirdi. En son sürümü görmek için yenileyin, ardından değişikliğinizi yeniden uygulayın.",
       "VALIDATION_FAILED": "Bazı alanlar geçerli değil. Aşağıdaki alanları kontrol edin.",
       "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Şimdi yenile",
       "editTemplate": "Şablonu düzenle",
+      "editBlockedTitle": "Bu şablon şu anda düzenlenemez",
+      "editBlocked": "{reason, select, in_review {Meta bu şablonu inceliyor. İnceleme bitince yeniden düzenlenebilir.} daily_limit {Meta, onaylı bir şablonda 24 saatte bir düzenlemeye izin verir. {when} tarihinden sonra yeniden düzenlenebilir.} monthly_limit {Meta, onaylı bir şablonda 30 günde on düzenlemeye izin verir. {when} tarihinden sonra yeniden düzenlenebilir.} other {}}",
       "duplicateTemplate": "Şablonu çoğalt",
       "editResubmit": "Düzenle ve yeniden gönder",
       "submitToMeta": "Meta'ya gönder",

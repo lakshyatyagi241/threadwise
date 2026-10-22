@@ -75,6 +75,16 @@ export const templateSummarySchema = z.object({
   /** Meta's reason code (`INVALID_FORMAT`, `PROMOTIONAL`...), when it sent one; `NONE` is not reported. */
   rejectionReasonCode: z.string().nullable(),
   metaTemplateId: z.string().nullable(),
+  /**
+   * Why Meta does not let this template be edited right now: its review (`in_review`), or the edit limit of an approved template
+   * (`daily_limit` one per 24 hours, `monthly_limit` ten per 30 days, with `until` when it opens). Null when it can be edited.
+   */
+  editBlock: z
+    .object({
+      reason: z.enum(['in_review', 'daily_limit', 'monthly_limit']),
+      until: z.string().datetime().nullable(),
+    })
+    .nullable(),
   /** The WhatsApp number it is submitted through (uuid of the connection). */
   connectionId: uuidSchema.nullable(),
   pausedUntil: z.string().datetime().nullable(),
