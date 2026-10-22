@@ -3,11 +3,12 @@ import { and, asc, eq, inArray } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import {
   ERROR_CODES,
+  PQL_IGNORED_ITEM_MAX,
+  PQL_IGNORED_MAX,
   segmentKindForFieldType,
   fieldTypeSchema,
   type PqlRequest,
   type PqlResult,
-  type SegmentGroup,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -115,21 +116,24 @@ export class PqlService {
       })
       .catch((err) => this.logger.warn({ orgId, err }, 'pql usage not recorded'));
 
-    const parsed = parsePql(completion.text);
-    if (!parsed) {
+    const answer = parsePql(completion.text);
+    if (!answer) {
       throw new AppError(
         ERROR_CODES.PQL_PROVIDER_FAILED,
         'English search got an answer it could not use. Try rewording the search.',
         HttpStatus.BAD_GATEWAY,
       );
     }
-    if (!parsed.rules) return parsed;
-    const pruned = pruneRules(parsed.rules as unknown as SegmentGroup, catalog);
+    if (answer.rules === null)
+      return { rules: null, summary: answer.summary, ignored: answer.ignored };
+    const pruned = pruneRules(answer.rules, catalog);
     return {
       rules: pruned.rules as PqlResult['rules'],
       // The model's sentence describes every condition it wrote; once any was dropped it would overstate the filter.
-      summary: pruned.dropped.length > 0 ? '' : parsed.summary,
-      ignored: [...parsed.ignored, ...pruned.dropped.map((f) => `unknown ${f}`)].slice(0, 10),
+      summary: pruned.dropped.length > 0 ? '' : answer.summary,
+      ignored: [...answer.ignored, ...pruned.dropped.map((f) => `unknown ${f}`)]
+        .map((s) => s.slice(0, PQL_IGNORED_ITEM_MAX))
+        .slice(0, PQL_IGNORED_MAX),
     };
   }
 
