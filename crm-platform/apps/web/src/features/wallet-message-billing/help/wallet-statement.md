@@ -22,6 +22,8 @@ The wallet screen shows your message balance and how it has moved in the last 30
 5. On the statement, choose a type, a from and to date, or words to search for, then select **Apply**. **Reset** clears them.
 6. Select **Export CSV** to download the rows that match the filters.
 
+> To see which template each message went out with and what each message cost, open **Message expenses** from the wallet screen. See [Message expenses](help:message-expenses).
+
 > The totals on the statement cover everything that matches the filters, not only the rows on the page. Amounts are shown exactly as the wallet holds them, up to three or four decimals (for example 0.958), so the rows, the totals and the balance add up. "Messages used this month" is the same number you see on the plan page and in Analytics.
 
 ## Options and settings

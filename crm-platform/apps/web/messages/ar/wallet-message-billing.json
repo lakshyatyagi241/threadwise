@@ -99,7 +99,8 @@
         "fullStatement": "فتح كشف الحساب الكامل",
         "emptyTitle": "لا يوجد نشاط بعد",
         "emptyBody": "تظهر هنا عمليات الشحن ورسوم الرسائل والاسترداد."
-      }
+      },
+      "messageExpenses": "مصروفات الرسائل"
     },
     "activity": {
       "description": "الوصف",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "مصروفات الرسائل",
+      "subtitle": "تكلفة كل رسالة والقالب الذي أُرسلت به وما تم استرداده منها. تشمل الإجماليات كل ما يطابق عوامل التصفية.",
+      "back": "العودة إلى المحفظة",
+      "breadcrumbLabel": "مسار التنقل",
+      "breadcrumbWallet": "المحفظة",
+      "breadcrumbExpenses": "مصروفات الرسائل",
+      "fullStatement": "كشف الحساب الكامل",
+      "summary": {
+        "messages": "الرسائل",
+        "charged": "المخصوم",
+        "refunded": "المسترد",
+        "net": "صافي التكلفة",
+        "notBilled": "غير محتسب"
+      },
+      "filters": {
+        "status": "الحالة",
+        "statusAll": "الكل",
+        "statusCharged": "المخصوم",
+        "statusFree": "غير محتسب",
+        "statusRefunded": "المسترد",
+        "template": "القالب",
+        "templatePlaceholder": "اسم القالب",
+        "channel": "القناة",
+        "category": "الفئة",
+        "allChannels": "كل القنوات",
+        "allCategories": "كل الفئات",
+        "from": "من",
+        "to": "إلى",
+        "apply": "تطبيق",
+        "reset": "إعادة ضبط",
+        "rangeInverted": "تاريخ الانتهاء قبل تاريخ البداية."
+      },
+      "breakdown": {
+        "title": "التكلفة حسب",
+        "groupBy": {
+          "template": "القالب",
+          "source": "القناة",
+          "category": "الفئة",
+          "country": "الدولة"
+        },
+        "group": "المجموعة",
+        "notRecorded": "غير مسجّل",
+        "truncated": "عرض أكبر {count} مجموعات. ضيّق التواريخ لعرض الباقي.",
+        "empty": "لا توجد رسائل تطابق عوامل التصفية هذه."
+      },
+      "columns": {
+        "date": "التاريخ",
+        "template": "القالب",
+        "campaign": "الحملة أو البث",
+        "channel": "القناة",
+        "category": "الفئة",
+        "country": "الدولة",
+        "status": "الحالة",
+        "charged": "المخصوم",
+        "refunded": "المسترد",
+        "net": "الصافي",
+        "messages": "الرسائل",
+        "notBilled": "غير محتسب"
+      },
+      "status": {
+        "charged": "المخصوم",
+        "free": "غير محتسب",
+        "refunded": "المسترد",
+        "refundedOn": "أُعيد في {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "مشمولة في خطتك",
+        "wallet_empty": "كانت المحفظة فارغة",
+        "rate_is_zero": "السعر صفر",
+        "no_wallet_owner": "لا يوجد مالك للمحفظة"
+      },
+      "uncollected": "لم يتم تحصيل {amount}",
+      "emptyTitle": "لا توجد رسائل بعد",
+      "emptyBody": "تظهر هنا الرسائل المُرسلة من الحملات والبثوث والجداول والمحادثات مع قالبها وتكلفتها.",
+      "emptyFiltered": "لا يوجد ما يطابق عوامل التصفية هذه. غيّرها أو أعد ضبطها."
     },
     "admin": {
       "admin": "مشرف",

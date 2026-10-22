@@ -40,11 +40,18 @@ export function WalletPage() {
           <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
         </div>
         {canStatement && (
-          <Link href="/billing/wallet/statement">
-            <Button variant="secondary" size="sm">
-              {t('fullStatement')}
-            </Button>
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/billing/wallet/expenses">
+              <Button variant="secondary" size="sm">
+                {t('messageExpenses')}
+              </Button>
+            </Link>
+            <Link href="/billing/wallet/statement">
+              <Button variant="secondary" size="sm">
+                {t('fullStatement')}
+              </Button>
+            </Link>
+          </div>
         )}
       </header>
       {!allowed ? (
