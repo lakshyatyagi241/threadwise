@@ -1,6 +1,13 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { WidgetApi, widgetBody, type Tenant } from '../chatbot-widget/support';
-import { eventsConsumer, node, startFlowPipeline, system, until, type FlowPipeline } from './support';
+import {
+  eventsConsumer,
+  node,
+  startFlowPipeline,
+  system,
+  until,
+  type FlowPipeline,
+} from './support';
 
 /**
  * A live flow keeps matching on the trigger it was published with. A keyword, a schedule and a contact event typed or saved into the
@@ -79,7 +86,12 @@ describe('a keyword edited in the draft waits for Publish', () => {
     const keywordGraph = (word: string) =>
       graph(
         [
-          node('t', 'trigger', { kind: 'keyword', keywordMode: 'keywords', keywords: word }, { isStart: true }),
+          node(
+            't',
+            'trigger',
+            { kind: 'keyword', keywordMode: 'keywords', keywords: word },
+            { isStart: true },
+          ),
           node('m', 'message', { text: 'Version A' }),
         ],
         [edge('t', 'm')],
@@ -186,16 +198,22 @@ describe('a contact event matches the published trigger only', () => {
     const contactOf = async (phone: string) =>
       Number(
         (
-          await p.h.owner.query(`SELECT id FROM contacts WHERE org_id = $1 AND normalized_phone = $2`, [
-            t.orgId,
-            phone,
-          ])
+          await p.h.owner.query(
+            `SELECT id FROM contacts WHERE org_id = $1 AND normalized_phone = $2`,
+            [t.orgId, phone],
+          )
         ).rows[0].id,
       );
     const asha = await contactOf('+919811200301');
     const ravi = await contactOf('+919811200302');
     const eventGraph = (kind: string) =>
-      graph([node('t', 'trigger', { kind }, { isStart: true }), node('m', 'message', { text: 'Welcome' })], [edge('t', 'm')]);
+      graph(
+        [
+          node('t', 'trigger', { kind }, { isStart: true }),
+          node('m', 'message', { text: 'Welcome' }),
+        ],
+        [edge('t', 'm')],
+      );
     const created = await api
       .as(t.admin)
       .post('/v2/flows')
