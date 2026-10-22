@@ -1546,7 +1546,9 @@
         "selected": "Wybrane kolumny",
         "selectAll": "Zaznacz wszystko",
         "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
-        "remove": "Usuń: {name}"
+        "remove": "Usuń: {name}",
+        "nameShort": "Nazwa widoku musi mieć co najmniej {min} znaki.",
+        "nameLong": "Nazwa widoku może mieć najwyżej {max} znaków."
       },
       "presets": {
         "myContacts": "Moje kontakty",

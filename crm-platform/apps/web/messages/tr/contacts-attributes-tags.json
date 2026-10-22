@@ -1546,7 +1546,9 @@
         "selected": "Seçilen sütunlar",
         "selectAll": "Tümünü seç",
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
-        "remove": "{name} öğesini kaldır"
+        "remove": "{name} öğesini kaldır",
+        "nameShort": "Görünüm adı en az {min} karakter olmalı.",
+        "nameLong": "Görünüm adı en fazla {max} karakter olabilir."
       },
       "presets": {
         "myContacts": "Kişilerim",

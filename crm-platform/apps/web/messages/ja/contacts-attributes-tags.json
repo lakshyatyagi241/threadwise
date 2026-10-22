@@ -1546,7 +1546,9 @@
         "selected": "選択した列",
         "selectAll": "すべて選択",
         "reorder": "ドラッグして列の順序を変更",
-        "remove": "{name} を削除"
+        "remove": "{name} を削除",
+        "nameShort": "ビュー名は{min}文字以上で入力してください。",
+        "nameLong": "ビュー名は{max}文字以内で入力してください。"
       },
       "presets": {
         "myContacts": "自分の連絡先",
