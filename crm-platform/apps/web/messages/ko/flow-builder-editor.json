@@ -2353,6 +2353,7 @@
         "number": "숫자",
         "alphanumeric": "문자와 숫자",
         "date": "날짜",
+        "datetime": "날짜 및 시간",
         "age": "나이",
         "date_of_birth": "생년월일"
       },
@@ -2364,6 +2365,7 @@
         "number": "올바른 숫자를 입력해 주세요",
         "alphanumeric": "문자와 숫자만 사용해 주세요",
         "date": "올바른 날짜를 입력해 주세요 ({format})",
+        "datetime": "올바른 날짜와 시간을 입력해 주세요 ({format} HH:MM)",
         "age": "나이를 정수로 입력해 주세요",
         "date_of_birth": "올바른 날짜를 입력해 주세요 ({format})"
       },

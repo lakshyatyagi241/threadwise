@@ -271,6 +271,7 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       {checked ? (
         <>
           {flbCleanAskInputType(d.validate) === 'date' ||
+          flbCleanAskInputType(d.validate) === 'datetime' ||
           flbCleanAskInputType(d.validate) === 'date_of_birth' ? (
             <Field label={t('askDateFormat')} hint={t('askDateFormatHint')}>
               <SelectInput

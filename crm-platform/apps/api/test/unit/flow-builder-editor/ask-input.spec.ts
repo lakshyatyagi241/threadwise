@@ -6,6 +6,7 @@ import {
   flbAskNeedsInputCheck,
   flbCleanAskInputType,
   flbParseDate,
+  flbParseDateTime,
   flbToRuntimeData,
 } from '@crm/contracts';
 import { compileGraph } from '../../../src/modules/flow-runtime-engine/graph/compile-graph';
@@ -78,6 +79,23 @@ describe('checked answers (the console runtime rules, plus phone, alphanumeric a
     for (const f of FLB_DATE_FORMATS) expect(flbParseDate('abc', f)).toBeNull();
     expect(ok('date', '15-08-2026', { dateFormat: 'dd-mm-yyyy' })).toBe(true);
     expect(ok('date', '15-08-2026', { dateFormat: 'mm/dd/yyyy' })).toBe(false);
+  });
+
+  it('date and time: the date in the chosen shape, then a 24-hour or am/pm time', () => {
+    const ok = (raw: string, fmt = 'yyyy-mm-dd') =>
+      flbAskInputCheck('datetime', raw, { dateFormat: fmt }).ok;
+    expect(ok('2026-08-15 14:30')).toBe(true);
+    expect(ok('2026-08-15 2:30 pm')).toBe(true);
+    expect(ok('2026-08-15')).toBe(false);
+    expect(ok('2026-08-15 25:00')).toBe(false);
+    expect(ok('2026-08-15 13:00 pm')).toBe(false);
+    expect(ok('15-08-2026 14:30')).toBe(false);
+    expect(ok('15-08-2026 09:05', 'dd-mm-yyyy')).toBe(true);
+    expect(flbParseDateTime('2026-08-15 2:30 pm', 'yyyy-mm-dd')).toBe('2026-08-15T14:30');
+    expect(flbParseDateTime('2026-08-15 12:05 am', 'yyyy-mm-dd')).toBe('2026-08-15T00:05');
+    expect(flbAskInputWrongText('datetime', 'yyyy-mm-dd')).toBe(
+      'Please enter a valid date and time (YYYY-MM-DD HH:MM)',
+    );
   });
 
   it('the ready-made wrong-answer texts: the console ones verbatim, and the date one names the shape', () => {

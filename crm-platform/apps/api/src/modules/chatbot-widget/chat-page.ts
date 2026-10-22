@@ -232,22 +232,22 @@ const SCRIPT = `
   // What the newest bot question waits for: the keyboard, a date picker or an attach button. It follows the newest bot line, so a
   // retry after a wrong answer (which carries the same input) keeps it.
   var hint = null;
-  function fmtDate(iso, fmt) {
-    var m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(iso);
-    if (!m) return iso;
-    return String(fmt || 'dd-mm-yyyy').replace('yyyy', m[1]).replace('yy', m[1].slice(2)).replace('dd', m[3]).replace('mm', m[2]);
+  // A date or date-time answer is typed in the question's own shape (a native date picker would show the browser's shape instead).
+  function dateShape(h) {
+    var f = String((h && h.format) || 'dd-mm-yyyy').toUpperCase();
+    return h && h.type === 'datetime' ? f + ' HH:MM' : f;
   }
   function setHint(h) {
     hint = h && h.type && h.type !== 'text' && h.type !== 'alphanumeric' ? h : null;
     var t = $('txt'), row = document.querySelector('.input-row'), type = hint ? hint.type : 'text';
     t.value = ''; syncSend();
-    t.type = type === 'email' ? 'email' : type === 'phone' ? 'tel' : type === 'date' ? 'date' : 'text';
+    t.type = type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'text';
     if (type === 'number') t.setAttribute('inputmode', 'decimal');
     else if (type === 'phone') t.setAttribute('inputmode', 'tel');
     else if (type === 'email') t.setAttribute('inputmode', 'email');
     else t.removeAttribute('inputmode');
     t.setAttribute('autocomplete', type === 'name' ? 'name' : type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'off');
-    t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' ? '' : tx('typeMessage', 'Type a message\\u2026');
+    t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
     row.className = 'input-row' + (type === 'file' ? ' file' : '');
     var f = $('file');
     f.accept = type === 'file' && hint.accept && hint.accept.length ? hint.accept.map(function (e) { return '.' + e; }).join(',') : '';
@@ -1185,7 +1185,6 @@ const SCRIPT = `
     var txt = $('txt');
     var body = typeof tapTitle === 'string' ? tapTitle : (txt.value || '').trim();
     if (!body) return;
-    if (hint && hint.type === 'date' && typeof tapTitle !== 'string') body = fmtDate(body, hint.format);
     visitorSpeaks();
     toParent({ wgt: 'activity' });
     if (typeof tapTitle !== 'string') txt.value = '';
