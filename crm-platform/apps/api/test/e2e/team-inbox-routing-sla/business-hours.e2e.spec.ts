@@ -30,15 +30,21 @@ afterAll(async () => {
 });
 
 const WEEK_OPEN = (from: string, to: string) =>
-  Object.fromEntries(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((d) => [d, { enabled: true, from, to }]));
+  Object.fromEntries(
+    ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((d) => [d, { enabled: true, from, to }]),
+  );
 
 const WEEK_CLOSED = Object.fromEntries(
-  ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((d) => [d, { enabled: false, from: '09:00', to: '18:00' }]),
+  ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((d) => [
+    d,
+    { enabled: false, from: '09:00', to: '18:00' },
+  ]),
 );
 
 const hoursApi = (token: string) => ({
   get: () => p.api.as(token).get('/v2/inbox/routing/business-hours'),
-  put: (body: Record<string, unknown>) => p.api.as(token).put('/v2/inbox/routing/business-hours').send(body),
+  put: (body: Record<string, unknown>) =>
+    p.api.as(token).put('/v2/inbox/routing/business-hours').send(body),
 });
 
 describe('business hours API', () => {
@@ -68,21 +74,34 @@ describe('business hours API', () => {
   it('reading needs inbox.settings.read; saving needs inbox.routing.manage', async () => {
     expect((await hoursApi(reader.token).get()).status).toBe(200);
     expect((await hoursApi(agent.token).get()).status).toBe(403);
-    expect((await hoursApi(reader.token).put({ days: WEEK_OPEN('09:00', '18:00') })).status).toBe(403);
-    expect((await hoursApi(agent.token).put({ days: WEEK_OPEN('09:00', '18:00') })).status).toBe(403);
+    expect((await hoursApi(reader.token).put({ days: WEEK_OPEN('09:00', '18:00') })).status).toBe(
+      403,
+    );
+    expect((await hoursApi(agent.token).put({ days: WEEK_OPEN('09:00', '18:00') })).status).toBe(
+      403,
+    );
   });
 
   it('refuses a closing time not after the opening one, a bad time and an unknown zone', async () => {
-    const bad = { ...WEEK_OPEN('09:00', '18:00'), tue: { enabled: true, from: '18:00', to: '09:00' } };
+    const bad = {
+      ...WEEK_OPEN('09:00', '18:00'),
+      tue: { enabled: true, from: '18:00', to: '09:00' },
+    };
     expect((await hoursApi(t.admin).put({ days: bad })).status).toBe(422);
-    expect((await hoursApi(t.admin).put({ days: { ...WEEK_OPEN('9:00', '18:00') } })).status).toBe(422);
+    expect((await hoursApi(t.admin).put({ days: { ...WEEK_OPEN('9:00', '18:00') } })).status).toBe(
+      422,
+    );
     expect(
-      (await hoursApi(t.admin).put({ timezone: 'Mars/Olympus', days: WEEK_OPEN('09:00', '18:00') })).status,
+      (await hoursApi(t.admin).put({ timezone: 'Mars/Olympus', days: WEEK_OPEN('09:00', '18:00') }))
+        .status,
     ).toBe(422);
   });
 
   it('the owner saves the schedule and the zone; the zone is the workspace zone everywhere', async () => {
-    const res = await hoursApi(t.admin).put({ timezone: 'Asia/Kolkata', days: WEEK_OPEN('10:00', '18:30') });
+    const res = await hoursApi(t.admin).put({
+      timezone: 'Asia/Kolkata',
+      days: WEEK_OPEN('10:00', '18:30'),
+    });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body).toMatchObject({ timezone: 'Asia/Kolkata', canEditTimezone: true });
     expect(res.body.days.sun).toEqual({ enabled: true, from: '10:00', to: '18:30' });
@@ -91,7 +110,10 @@ describe('business hours API', () => {
     expect(again.body.timezone).toBe('Asia/Kolkata');
     expect(again.body.days.fri).toEqual({ enabled: true, from: '10:00', to: '18:30' });
 
-    const org = await p.h.owner.query(`SELECT settings ->> 'timezone' AS tz FROM organizations WHERE id = $1`, [t.orgId]);
+    const org = await p.h.owner.query(
+      `SELECT settings ->> 'timezone' AS tz FROM organizations WHERE id = $1`,
+      [t.orgId],
+    );
     expect(org.rows[0].tz).toBe('Asia/Kolkata');
     expect(await p.api.auditCount(t.orgId, 'business_hours', 'update')).toBeGreaterThan(0);
   });
@@ -100,7 +122,10 @@ describe('business hours API', () => {
     const res = await hoursApi(manager.token).get();
     expect(res.body).toMatchObject({ timezone: 'Asia/Kolkata', canEditTimezone: false });
 
-    const put = await hoursApi(manager.token).put({ timezone: 'Europe/Paris', days: WEEK_OPEN('08:00', '17:00') });
+    const put = await hoursApi(manager.token).put({
+      timezone: 'Europe/Paris',
+      days: WEEK_OPEN('08:00', '17:00'),
+    });
     expect(put.status).toBe(200);
     expect(put.body).toMatchObject({ timezone: 'Asia/Kolkata', canEditTimezone: false });
     expect(put.body.days.wed).toEqual({ enabled: true, from: '08:00', to: '17:00' });
@@ -121,7 +146,8 @@ describe('business hours: the engine follows the saved schedule', () => {
       ['inbox.conversation.reply', 'all'],
       ['inbox.conversation.assign_self', 'all'],
     ]);
-    u1 = (await p.h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [a1.userId])).rows[0].uuid as string;
+    u1 = (await p.h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [a1.userId])).rows[0]
+      .uuid as string;
     const rule = await p.api
       .as(t.admin)
       .post('/v2/inbox/routing/rules')
@@ -150,7 +176,9 @@ describe('business hours: the engine follows the saved schedule', () => {
   });
 
   it('once the schedule is open all the time, the same rule no longer matches', async () => {
-    expect((await hoursApi(t.admin).put({ timezone: 'UTC', days: WEEK_OPEN('00:00', '23:59') })).status).toBe(200);
+    expect(
+      (await hoursApi(t.admin).put({ timezone: 'UTC', days: WEEK_OPEN('00:00', '23:59') })).status,
+    ).toBe(200);
     const conv = await writes('919900000102');
     expect(conv.assignee_user_id).toBeNull();
   });

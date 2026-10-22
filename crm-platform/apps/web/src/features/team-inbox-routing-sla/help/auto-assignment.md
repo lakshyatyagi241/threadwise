@@ -122,6 +122,10 @@ Under the list, **Try it** answers "who would get this chat, and why?". Pick a c
 
 It does not apply to a chat that someone, a flow or a handoff already assigned, to assigning or claiming by hand, or to a Human handoff step that names a person (the rules are ignored) or a team (the team's own method is used). Rules do not run again for later messages of a chat that is already open, except the extras a rule can do for each message (tags, an automatic reply or a flow); a rule that applies to every conversation never does these on later messages.
 
+## Waiting queue (Smart routing)
+
+Under the switches, **Waiting queue** has three optional steps for chats nobody has taken: remind the team, offer the chat to another team, and a last step (a message to the customer, or the chat given back to the bot). Every step is off until you switch it on, runs once per chat, counts only the minutes the team is open, and stops when someone takes the chat. A step that needs a team or a message cannot be saved without it. Two more rules sit in the same section, both off by default: **Return unanswered chats when someone goes away** (when a person goes Offline or starts a leave, the chats they hold that the customer is still waiting on go back to the team's queue) and **Set inactive people Offline** (an Available person with no activity for the number of minutes you choose is set Offline; they switch themselves back). All of this is part of Smart routing: without it the section is shown locked with a link to Plans, your saved choices are kept, and nothing runs.
+
 ## Business hours
 
 Select **Business hours** at the top of the page to set when your team is open. Each day has a switch, an opening time and a closing time. A day that is switched off is closed all day. A closing time before the opening time is a night shift that runs into the next morning. Breaks and holidays are set under **Settings > General > Working hours**, which edits this same schedule.

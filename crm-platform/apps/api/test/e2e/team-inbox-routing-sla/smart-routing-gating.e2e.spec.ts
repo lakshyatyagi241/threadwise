@@ -135,6 +135,8 @@ const ALL_OFF = {
   keepInSync: false,
   continuityWindow: false,
   promptOwnerOnReassign: false,
+  queueTimers: false,
+  away: false,
 };
 const ALL_ON = {
   autoAssign: true,
@@ -142,6 +144,8 @@ const ALL_ON = {
   keepInSync: true,
   continuityWindow: true,
   promptOwnerOnReassign: true,
+  queueTimers: true,
+  away: true,
 };
 const AGENT: Array<[string, 'all']> = [
   ['inbox.conversation.read', 'all'],
