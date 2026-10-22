@@ -1338,7 +1338,7 @@
         "closePicker": "Kapat",
         "changed": "Değiştirilecek özellikler",
         "clear": "Temizle",
-        "keep": "Koru",
+        "remove": "{name} alanını kaldır",
         "setValue": "Değer ayarla",
         "willClear": "{count, plural, one {Seçili kişide} other {seçili # kişinin tümünde}} boşaltılacak.",
         "requiredNoClear": "Zorunlu bir özellik temizlenemez.",
