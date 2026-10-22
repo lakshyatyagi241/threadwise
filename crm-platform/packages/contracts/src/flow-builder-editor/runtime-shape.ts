@@ -571,6 +571,9 @@ const SHAPERS: Record<string, Shaper> = {
     longitude: flbParseCoordinate(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
+    // The link the author pasted, kept as written: a step made from a link sends that link, not a pin that Maps looks up by its name.
+    locMode: s(d.locMode),
+    mapsUrl: s(d.mapsUrl),
   }),
 
   poll: (d) => ({

@@ -359,6 +359,8 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         longitude: flbParseCoordinate(data.longitude),
         title: str(data.title ?? data.locationName ?? data.name),
         address: str(data.address),
+        locMode: str(data.locMode),
+        mapsUrl: str(data.mapsUrl),
       };
     default:
       // A node type without a compiler keeps its raw data: its executor (when it is built) reads it from here.

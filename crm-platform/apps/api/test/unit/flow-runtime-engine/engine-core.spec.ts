@@ -581,6 +581,23 @@ describe('Location: coordinates and optional name / address', () => {
     expect(sent).toEqual([{ kind: 'location', latitude: 18.5204, longitude: 73.8567 }]);
   });
 
+  it('a step made from a pasted Maps link sends that link, not a pin Maps would look up by its name', async () => {
+    const { sent } = await sendOf({
+      locMode: 'link',
+      mapsUrl: 'https://maps.app.goo.gl/AbCd123',
+      lat: '18.5204',
+      lng: '73.8567',
+      title: 'Our office',
+      address: 'MG Road',
+    });
+    expect(sent).toEqual([
+      { kind: 'text', body: '📍 *Our office*\nMG Road\nhttps://maps.app.goo.gl/AbCd123' },
+    ]);
+    // Typed coordinates still go as a pin.
+    const typed = await sendOf({ locMode: 'coords', lat: '18.5204', lng: '73.8567', title: 'HQ' });
+    expect(typed.sent[0]).toMatchObject({ kind: 'location', name: 'HQ' });
+  });
+
   it('reads a decimal comma the way the builder does', async () => {
     const { sent } = await sendOf({ lat: '18,5204', lng: '73,8567' });
     expect(sent[0]).toMatchObject({ kind: 'location', latitude: 18.5204, longitude: 73.8567 });

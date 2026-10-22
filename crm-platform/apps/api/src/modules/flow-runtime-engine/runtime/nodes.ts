@@ -510,6 +510,20 @@ const location: NodeExecutor = {
     const longitude = flbParseCoordinate(p.longitude)!;
     const name = ctx.render(p.title);
     const address = ctx.render(p.address);
+    // A step made from a pasted Maps link sends THAT link. A pin carries a name and an address, and Maps then looks the place up by
+    // them and can open a different spot than the one in the link; the link opens exactly what its author chose.
+    const entered = str(p.mapsUrl).trim();
+    if (str(p.locMode) === 'link' && /^https?:\/\/\S+$/i.test(entered)) {
+      const sent = await ctx.send({
+        kind: 'text',
+        body: [name ? `📍 *${name}*` : '📍 Location', address, entered].filter(Boolean).join('\n'),
+      });
+      if (!sent.ok) {
+        const stop = failed(sent, 'skip', ctx);
+        if (stop) return stop;
+      }
+      return advance;
+    }
     let out = await ctx.send({
       kind: 'location',
       latitude,
