@@ -756,7 +756,8 @@
           "storedIn": "Values will be stored in <b>{property}</b> property of contact",
           "actions": "Actions",
           "actionsHint": "Add a step that runs right after this one.",
-          "actionsBlocked": "A step that ends its part cannot have a step after it."
+          "actionsBlocked": "A step that ends its part cannot have a step after it.",
+          "fromSteps": "Reached from step {stages}"
         },
         "editors": {
           "linkLabel": "Where this leads",
@@ -2601,7 +2602,8 @@
         "webhookUrl": "Step {stage}: add the address (URL) to call.",
         "chooseAiAgent": "Step {stage}: choose the AI agent that answers, or switch the step to a custom setup.",
         "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent.",
-        "templateFile": "Step {stage}: add the template's header file."
+        "templateFile": "Step {stage}: add the template's header file.",
+        "fileLinkInvalid": "Step {stage}: the file link must start with https://"
       }
     },
     "waboImport": {

@@ -491,6 +491,52 @@ describe('CTA and Location', () => {
     expect((h.sent[0] as { body: string }).body).toContain('☏ Call: +911234');
   });
 
+  it('three web links are three buttons on WhatsApp, in three messages', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'cta', {
+          valueText: 'Pick a page',
+          ctaActions: [
+            { type: 'url', label: 'Pricing', value: 'https://x.test/pricing' },
+            { type: 'url', label: 'Docs', value: 'https://x.test/docs' },
+            { type: 'url', label: 'Blog', value: 'https://x.test/blog' },
+          ],
+        }),
+      ],
+      edges: [],
+    });
+    const h = harness(run);
+    await h.start();
+    expect(h.sent.map((m) => (m as { text?: string }).text)).toEqual(['Pricing', 'Docs', 'Blog']);
+  });
+
+  it('every web link of a CTA is a button on WhatsApp: the first with the message, each other in a message of its own', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'cta', {
+          valueText: 'Pick a page',
+          ctaActions: [
+            { type: 'url', label: 'Pricing', value: 'https://x.test/pricing' },
+            { type: 'phone', label: 'Call', value: 'tel:+911234' },
+            { type: 'url', label: 'Docs', value: 'https://x.test/docs' },
+          ],
+        }),
+      ],
+      edges: [],
+    });
+    const h = harness(run);
+    await h.start();
+    const buttons = h.sent.filter((m) => m.kind === 'cta_url');
+    expect(buttons.map((m) => (m as { text: string }).text)).toEqual(['Pricing', 'Docs']);
+    expect(buttons.map((m) => (m as { url: string }).url)).toEqual([
+      'https://x.test/pricing',
+      'https://x.test/docs',
+    ]);
+    // The call cannot be a button: it stays a line in the first message, and no web link is repeated as text.
+    expect((buttons[0] as { body: string }).body).toContain('☏ Call: +911234');
+    expect((buttons[0] as { body: string }).body).not.toContain('x.test/docs');
+  });
+
   it('a location falls back to a maps link when the pin cannot be sent', async () => {
     const run = newRun({
       nodes: [n('l', 'location', { latitude: 1.5, longitude: 2.5, title: 'HQ' })],

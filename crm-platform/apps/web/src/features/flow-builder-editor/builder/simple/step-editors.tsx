@@ -1518,7 +1518,7 @@ const CTA_DEFAULT_LABEL: Record<string, string> = {
 
 /**
  * The buttons of a Link button step: up to three, each opening a web page, a phone call or an email. The website chat window draws
- * all of them; WhatsApp sends the first web link as its button and the rest as lines of text.
+ * all of them; WhatsApp shows one link button per message, so the first web link is the message's button and each other web link follows as a button message of its own (a call or an email stays a line of text).
  */
 function CtaEditor({ step, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');

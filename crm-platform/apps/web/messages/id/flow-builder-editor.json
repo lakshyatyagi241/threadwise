@@ -746,7 +746,8 @@
           "storedIn": "Nilai akan disimpan di properti <b>{property}</b> milik kontak",
           "actions": "Aksi",
           "actionsHint": "Tambahkan langkah yang berjalan tepat setelah langkah ini.",
-          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain."
+          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain.",
+          "fromSteps": "Dicapai dari langkah {stages}"
         },
         "editors": {
           "linkLabel": "Tujuan",
@@ -2602,7 +2603,8 @@
         "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
         "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
         "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI.",
-        "templateFile": "Langkah {stage}: tambahkan file header templat."
+        "templateFile": "Langkah {stage}: tambahkan file header templat.",
+        "fileLinkInvalid": "Langkah {stage}: tautan file harus diawali https://"
       }
     },
     "waboImport": {

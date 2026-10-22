@@ -746,7 +746,8 @@
           "storedIn": "Giá trị sẽ được lưu vào thuộc tính <b>{property}</b> của liên hệ",
           "actions": "Hành động",
           "actionsHint": "Thêm một bước chạy ngay sau bước này.",
-          "actionsBlocked": "Bước kết thúc phần của nó không thể có bước nào sau đó."
+          "actionsBlocked": "Bước kết thúc phần của nó không thể có bước nào sau đó.",
+          "fromSteps": "Đến từ bước {stages}"
         },
         "editors": {
           "linkLabel": "Nơi này dẫn tới",
@@ -2602,7 +2603,8 @@
         "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
         "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
         "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI.",
-        "templateFile": "Bước {stage}: thêm tệp tiêu đề của mẫu."
+        "templateFile": "Bước {stage}: thêm tệp tiêu đề của mẫu.",
+        "fileLinkInvalid": "Bước {stage}: liên kết tệp phải bắt đầu bằng https://"
       }
     },
     "waboImport": {

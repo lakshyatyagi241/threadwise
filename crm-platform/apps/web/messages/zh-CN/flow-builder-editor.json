@@ -746,7 +746,8 @@
           "storedIn": "值将保存到联系人的 <b>{property}</b> 属性中",
           "actions": "操作",
           "actionsHint": "添加一个紧接在此步骤之后运行的步骤。",
-          "actionsBlocked": "结束本部分的步骤后面不能再接其他步骤。"
+          "actionsBlocked": "结束本部分的步骤后面不能再接其他步骤。",
+          "fromSteps": "从步骤 {stages} 到达"
         },
         "editors": {
           "linkLabel": "后续去向",
@@ -2602,7 +2603,8 @@
         "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。",
         "chooseAiAgent": "步骤 {stage}：请选择负责回复的 AI 智能体，或将此步骤切换为自定义设置。",
         "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。",
-        "templateFile": "步骤 {stage}：添加模板的标题文件。"
+        "templateFile": "步骤 {stage}：添加模板的标题文件。",
+        "fileLinkInvalid": "步骤 {stage}：文件链接必须以 https:// 开头"
       }
     },
     "waboImport": {
