@@ -68,5 +68,6 @@ node --test tools/chat-bridge/chat-bridge.unit.test.mjs   # 8 pass
 node tools/alerting/check-alert-runbooks.mjs; node --test tools/alerting/check-alert-runbooks.test.mjs   # ok, 8 pass
 bash deploy/hostinger/tests/ci-entry.test.sh      # 113 passed</pre>
 </main>
+<h2>Resolver drill on a dedicated Postgres</h2><p>Recurring slow statement: 10/10 detected, alert 2.6 s, incident file 4.6 s, file complete and literal-free, recovery without release stays open as "recovered, no release recorded" (bug fixed), 0 false positives in the clean run. Cancel matrix: SELECT and CTE cancelled with pg_cancel_backend; UPDATE/DELETE/INSERT/COPY/nextval/advisory/allow-listed never cancelled; superuser refused (42501); idle blocker terminated only when it blocks; dry-run only says "would cancel". NOT proven: DDL and FOR UPDATE refusal and the rate limit (harness problems in the last run), full-run repeat of the false-positive table. See docs/runbooks/google-chat-alerts.md.</p>
 </body>
 </html>

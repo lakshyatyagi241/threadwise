@@ -8,7 +8,12 @@ OWN=0; ARGS=(); for a in "$@"; do [ "$a" = --own-postgres ] && OWN=1 || ARGS+=("
 st_parse_args "${ARGS[@]}"
 cd "$ST_ROOT"
 st_need docker; st_need port:59611; st_need port:59612
-docker ps --format '{{.Names}}' | grep -qx crm-platform-postgres || st_error "crm-platform-postgres is not running"
+PGC=crm-platform-postgres; PGPORT=5432
+if [ "$OWN" = 1 ]; then # private postgres:16 with pg_stat_statements preloaded; the shared one is never touched
+  PGC="chat-drill-$RANDOM"; PGPORT=$(shuf -i 55000-58000 -n1)
+  docker run -d --name "$PGC" -p 127.0.0.1:$PGPORT:5432 -e POSTGRES_USER=crm -e POSTGRES_PASSWORD=crm postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c compute_query_id=on >/dev/null || st_error "cannot start own postgres"
+  st_cleanup_add "docker rm -f $PGC"; for i in $(seq 30); do docker exec "$PGC" pg_isready -U crm >/dev/null 2>&1 && break; sleep 1; done; sleep 2
+else docker ps --format '{{.Names}}' | grep -qx crm-platform-postgres || st_error "crm-platform-postgres is not running"; fi
 DB="chat_alerts_$$"; RO="chat_e2e_ro_$$"; OBS="$ST_ROOT/deploy/observability"
 psql_a() { docker exec -i $PGC psql -U crm -v ON_ERROR_STOP=1 "$@"; }
 st_cleanup_add "docker exec $PGC psql -U crm -d postgres -c 'DROP DATABASE IF EXISTS $DB WITH (FORCE)'; docker exec $PGC psql -U crm -d postgres -c 'DROP ROLE IF EXISTS $RO'"
