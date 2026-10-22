@@ -99,7 +99,8 @@
         "fullStatement": "Otwórz pełne zestawienie",
         "emptyTitle": "Brak aktywności",
         "emptyBody": "Tutaj pojawiają się doładowania, opłaty za wiadomości i zwroty."
-      }
+      },
+      "messageExpenses": "Koszty wiadomości"
     },
     "activity": {
       "description": "Opis",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "Koszty wiadomości",
+      "subtitle": "Ile kosztowała każda wiadomość, szablon, z którym ją wysłano, i co zostało zwrócone. Sumy obejmują wszystko, co pasuje do filtrów.",
+      "back": "Wróć do portfela",
+      "breadcrumbLabel": "Ścieżka nawigacji",
+      "breadcrumbWallet": "Portfel",
+      "breadcrumbExpenses": "Koszty wiadomości",
+      "fullStatement": "Pełne zestawienie",
+      "summary": {
+        "messages": "Wiadomości",
+        "charged": "Obciążono",
+        "refunded": "Zwrócono",
+        "net": "Koszt netto",
+        "notBilled": "Nie naliczono"
+      },
+      "filters": {
+        "status": "Stan rozliczenia",
+        "statusAll": "Wszystkie",
+        "statusCharged": "Obciążono",
+        "statusFree": "Nie naliczono",
+        "statusRefunded": "Zwrócono",
+        "template": "Szablon",
+        "templatePlaceholder": "Nazwa szablonu",
+        "channel": "Kanał",
+        "category": "Kategoria",
+        "allChannels": "Wszystkie kanały",
+        "allCategories": "Wszystkie kategorie",
+        "from": "Od",
+        "to": "Do",
+        "apply": "Zastosuj",
+        "reset": "Resetuj",
+        "rangeInverted": "Data końcowa jest wcześniejsza niż początkowa."
+      },
+      "breakdown": {
+        "title": "Koszt wg",
+        "groupBy": {
+          "template": "Szablon",
+          "source": "Kanał",
+          "category": "Kategoria",
+          "country": "Kraj"
+        },
+        "group": "Grupa",
+        "notRecorded": "Nie zarejestrowano",
+        "truncated": "Pokazano {count} największych grup. Zawęź daty, aby zobaczyć resztę.",
+        "empty": "Żadne wiadomości nie pasują do tych filtrów."
+      },
+      "columns": {
+        "date": "Data",
+        "template": "Szablon",
+        "campaign": "Kampania lub rozgłoszenie",
+        "channel": "Kanał",
+        "category": "Kategoria",
+        "country": "Kraj",
+        "status": "Stan rozliczenia",
+        "charged": "Obciążono",
+        "refunded": "Zwrócono",
+        "net": "Netto",
+        "messages": "Wiadomości",
+        "notBilled": "Nie naliczono"
+      },
+      "status": {
+        "charged": "Obciążono",
+        "free": "Nie naliczono",
+        "refunded": "Zwrócono",
+        "refundedOn": "Zwrócono {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Wliczone w Twój plan",
+        "wallet_empty": "Portfel był pusty",
+        "rate_is_zero": "Stawka wynosi zero",
+        "no_wallet_owner": "Brak właściciela portfela"
+      },
+      "uncollected": "Nieściągnięte: {amount}",
+      "emptyTitle": "Brak wiadomości",
+      "emptyBody": "Wiadomości wysłane z kampanii, rozgłoszeń, harmonogramów i czatów pojawią się tutaj wraz z szablonem i kosztem.",
+      "emptyFiltered": "Nic nie pasuje do tych filtrów. Zmień je lub zresetuj."
     },
     "admin": {
       "admin": "Administrator",

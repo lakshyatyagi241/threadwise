@@ -99,7 +99,8 @@
         "fullStatement": "Открыть полную выписку",
         "emptyTitle": "Активности пока нет",
         "emptyBody": "Здесь отображаются пополнения, списания за сообщения и возвраты."
-      }
+      },
+      "messageExpenses": "Расходы на сообщения"
     },
     "activity": {
       "description": "Описание",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "Расходы на сообщения",
+      "subtitle": "Сколько стоило каждое сообщение, по какому шаблону оно отправлено и что было возвращено. Итоги учитывают всё, что подходит под фильтры.",
+      "back": "Назад к кошельку",
+      "breadcrumbLabel": "Навигация",
+      "breadcrumbWallet": "Кошелёк",
+      "breadcrumbExpenses": "Расходы на сообщения",
+      "fullStatement": "Полная выписка",
+      "summary": {
+        "messages": "Сообщения",
+        "charged": "Списано",
+        "refunded": "Возвращено",
+        "net": "Чистая стоимость",
+        "notBilled": "Не списано"
+      },
+      "filters": {
+        "status": "Статус",
+        "statusAll": "Все",
+        "statusCharged": "Списано",
+        "statusFree": "Не списано",
+        "statusRefunded": "Возвращено",
+        "template": "Шаблон",
+        "templatePlaceholder": "Название шаблона",
+        "channel": "Канал",
+        "category": "Категория",
+        "allChannels": "Все каналы",
+        "allCategories": "Все категории",
+        "from": "С",
+        "to": "По",
+        "apply": "Применить",
+        "reset": "Сбросить",
+        "rangeInverted": "Дата окончания раньше даты начала."
+      },
+      "breakdown": {
+        "title": "Стоимость по",
+        "groupBy": {
+          "template": "Шаблон",
+          "source": "Канал",
+          "category": "Категория",
+          "country": "Страна"
+        },
+        "group": "Группа",
+        "notRecorded": "Не записано",
+        "truncated": "Показано {count} самых крупных групп. Сузьте даты, чтобы увидеть остальные.",
+        "empty": "Нет сообщений, подходящих под эти фильтры."
+      },
+      "columns": {
+        "date": "Дата",
+        "template": "Шаблон",
+        "campaign": "Кампания или рассылка",
+        "channel": "Канал",
+        "category": "Категория",
+        "country": "Страна",
+        "status": "Статус",
+        "charged": "Списано",
+        "refunded": "Возвращено",
+        "net": "Итого",
+        "messages": "Сообщения",
+        "notBilled": "Не списано"
+      },
+      "status": {
+        "charged": "Списано",
+        "free": "Не списано",
+        "refunded": "Возвращено",
+        "refundedOn": "Возвращено {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Входит в ваш тариф",
+        "wallet_empty": "Кошелёк был пуст",
+        "rate_is_zero": "Тариф равен нулю",
+        "no_wallet_owner": "Нет владельца кошелька"
+      },
+      "uncollected": "Не взыскано: {amount}",
+      "emptyTitle": "Сообщений пока нет",
+      "emptyBody": "Здесь появятся сообщения, отправленные из кампаний, рассылок, расписаний и чатов, с их шаблоном и стоимостью.",
+      "emptyFiltered": "Ничего не подходит под эти фильтры. Измените их или сбросьте."
     },
     "admin": {
       "admin": "Администратор",

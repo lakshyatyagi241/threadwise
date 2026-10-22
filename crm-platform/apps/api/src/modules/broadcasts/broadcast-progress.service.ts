@@ -89,7 +89,7 @@ export class BroadcastProgressService {
     status: WalletDeliveryStatus,
   ): Promise<void> {
     const res = await tx.execute(sql`
-      SELECT b.provider, coalesce(t.meta_category, t.category) AS category, c.phone, c.country_code
+      SELECT b.provider, b.name AS subject_name, t.template_name, coalesce(t.meta_category, t.category) AS category, c.phone, c.country_code
       FROM broadcasts b
       JOIN contacts c ON c.org_id = b.org_id AND c.id = ${contactId}
       LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id
@@ -97,6 +97,8 @@ export class BroadcastProgressService {
     const r = res.rows[0] as
       | {
           provider: string | null;
+          subject_name: string | null;
+          template_name: string | null;
           category: string | null;
           phone: string | null;
           country_code: string | null;
@@ -117,6 +119,8 @@ export class BroadcastProgressService {
         recipient: assemblePhone(r.phone, r.country_code) || null,
         category: r.category,
         source: 'broadcast',
+        templateName: r.template_name,
+        subjectName: r.subject_name,
       },
     });
   }
