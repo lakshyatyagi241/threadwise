@@ -57,6 +57,9 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
   const c = cfg(env);
   const gate = createGate({ cooldownMs: c.cooldownMs, perMinute: c.perMinute, now });
   const prev = new Map(), recur = new Map(), open = new Map(); // statement baselines, recurring statements, alerts awaiting their end
+  // pg_stat_statements has no application name, so a backup or migration statement would pass the allow-list there. Remember the query ids the
+  // activity pass excluded (by app/user), and also skip plain maintenance statements by text.
+  const excludedQ = new Map(), MAINT = new RegExp(env.SLOW_EXCLUDE_STATEMENT_REGEX ?? '^\\s*(copy|vacuum|analyze|reindex|cluster|create|alter|drop|truncate|refresh\\s+materialized|checkpoint|lock\\s+table|set\\s|show\\s|begin|commit)\\b', 'i');
   let baselined = false, suppressed = 0, warnedNoStmts = false, offenders = [];
   metrics.set('crm_slow_query_max_seconds', 'gauge', 0);
   metrics.set('pg_stat_statements_available', 'gauge', 0);
@@ -97,7 +100,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
       const seen = new Set(); offenders = [];
       for (const r of rows) {
         const k = classify(r, c, env, waiter[r.pid] ?? 0);
-        if (!k) { if (isExcluded(r, env)) metrics.inc('crm_slow_query_events_total', 'kind="excluded"'); continue; }
+        if (!k) { if (isExcluded(r, env)) { metrics.inc('crm_slow_query_events_total', 'kind="excluded"'); if (r.query_id) excludedQ.set(String(r.query_id), now()); } continue; }
         const text = sanitizeSql(r.query, 800), secs = Number(k.kind === 'idle_in_tx' ? r.state_secs : r.secs);
         if (k.kind === 'slow') maxSecs = Math.max(maxSecs, secs);
         const ok = `${r.pid}:${iso(r.query_start)}:${k.kind}`; seen.add(ok);
@@ -136,6 +139,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
           const p = prev.get(key);
           prev.set(key, { calls: Number(r.calls), total: Number(r.total_exec_time) });
           if (!baselined || !p || Number(r.calls) <= p.calls) continue; // first sight or reset: baseline only
+          if (excludedQ.has(String(r.queryid)) || MAINT.test(String(r.query ?? ''))) { metrics.inc('crm_slow_query_events_total', 'kind="excluded"'); continue; } // backup, migration, maintenance
           const dCalls = Number(r.calls) - p.calls, dMean = (Number(r.total_exec_time) - p.total) / dCalls;
           const rc = recur.get(key);
           if (dMean < c.meanMs) { if (rc && ++rc.quiet >= c.recurPolls && resolver) { await resolver.statementRecovered(`st:${key}`); recur.delete(key); } continue; } // lifetime mean is high, but NEW calls are fast: not a live problem
