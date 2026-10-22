@@ -693,7 +693,6 @@ export const appointmentReminderRuns = pgTable(
       columns: [t.orgId, t.reminderId],
       foreignColumns: [bookingReminders.orgId, bookingReminders.id],
     }).onDelete('set null'),
-    index('idx_appointment_reminder_runs_appointment').on(t.orgId, t.appointmentId),
   ],
 );
 

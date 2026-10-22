@@ -45,7 +45,6 @@ export const contactTags = pgTable(
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.contactId, t.tagId] }),
-    index('idx_contact_tags_contact').on(t.orgId, t.contactId),
     index('idx_contact_tags_tag').on(t.orgId, t.tagId),
   ],
 );
@@ -84,10 +83,7 @@ export const contactViewFavorites = pgTable(
     userId: idColumn('user_id').notNull(),
     createdAt: createdAt(),
   },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.viewId, t.userId] }),
-    index('idx_contact_view_favorites_view').on(t.orgId, t.viewId),
-  ],
+  (t) => [primaryKey({ columns: [t.orgId, t.viewId, t.userId] })],
 );
 
 export const contactViewUsers = pgTable(

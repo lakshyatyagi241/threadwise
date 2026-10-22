@@ -157,7 +157,6 @@ export const savedReplies = pgTable(
     check('chk_saved_replies_channel_kinds', sql`cardinality(${t.channelKinds}) <= 20`),
     index('idx_saved_replies_usage').on(t.orgId, t.usedCount.desc(), t.id),
     index('idx_saved_replies_shortcut').on(t.orgId, t.shortcut),
-    index('idx_saved_replies_user_id').on(t.orgId, t.userId),
     // NULLS NOT DISTINCT: one shared (ownerless) reply per shortcut. Drizzle cannot express it; the SQL migration is the truth.
     uniqueIndex('uq_saved_replies_owner_shortcut').on(t.orgId, t.userId, t.shortcut),
   ],
