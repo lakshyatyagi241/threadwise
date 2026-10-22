@@ -253,6 +253,8 @@
         "buy": "Mua tiện ích bổ sung",
         "buyAgain": "Mua lại",
         "active": "Đang hoạt động",
+        "included": "Đã có trong gói của bạn",
+        "includedOwned": "Bạn cũng đang có tiện ích này. Gói của bạn giờ đã bao gồm nó nên bạn có thể hủy tiện ích. Không có khoản nào được hoàn tự động.",
         "unlimitedBullet": "{label} không giới hạn",
         "addBullet": "+{amount, number} {label}",
         "per": {

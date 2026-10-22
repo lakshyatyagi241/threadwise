@@ -279,6 +279,8 @@
         "failed": "Non è stato possibile annullare il rinnovo. Riprova."
       },
       "active": "Attivo",
+      "included": "Incluso nel tuo piano",
+      "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-on",
       "catalogBody": "Sblocca funzionalità extra in aggiunta al tuo piano attuale. Nessun cambio di piano necessario.",

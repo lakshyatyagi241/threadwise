@@ -92,10 +92,33 @@ export function grantBullets(
 }
 
 /**
+ * A pack is "included" when it grants features, every one of them is already granted by the plan, and it adds no cap (a pack with only
+ * limit deltas, like Teams +10, still has something to sell). Used by the catalogue card and, server-side, by checkout.
+ */
+export function isIncludedInPlan(g: AddonGrants, includedByPlan: ReadonlySet<string>): boolean {
+  return (
+    g.features.length > 0 &&
+    Object.keys(g.limits).length === 0 &&
+    g.features.every((k) => includedByPlan.has(k))
+  );
+}
+
+/** What the plan does not already give: the features still missing, and every cap delta. A partly covered pack lists only this. */
+export function missingGrants(g: AddonGrants, includedByPlan: ReadonlySet<string>): AddonGrants {
+  return { features: g.features.filter((k) => !includedByPlan.has(k)), limits: g.limits };
+}
+
+/**
  * The card's button (TW-ADD-033): a feature-only pack the workspace already owns reads "active" (no button), a
  * stackable pack it owns offers "buy again", anything else is a plain "buy".
  */
-export function cardState(g: AddonGrants, ownedCount: number): 'buy' | 'active' | 'buy_again' {
+export function cardState(
+  g: AddonGrants,
+  ownedCount: number,
+  /** The feature keys the workspace's plan (and override) already grants, without any pack. */
+  includedByPlan: ReadonlySet<string> = new Set(),
+): 'buy' | 'active' | 'buy_again' | 'included' {
+  if (isIncludedInPlan(g, includedByPlan)) return 'included';
   if (ownedCount === 0) return 'buy';
   return isStackable(g) ? 'buy_again' : 'active';
 }

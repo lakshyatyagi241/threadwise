@@ -273,6 +273,8 @@
         "buy": "شراء إضافة",
         "buyAgain": "الشراء مرة أخرى",
         "active": "نشط",
+        "included": "مشمول في باقتك",
+        "includedOwned": "لديك هذه الإضافة أيضاً. باقتك تشملها الآن، لذا يمكنك إلغاء الإضافة. لا يُردّ أي مبلغ تلقائياً.",
         "unlimitedBullet": "{label} غير محدود",
         "addBullet": "+{amount, number} {label}",
         "per": {

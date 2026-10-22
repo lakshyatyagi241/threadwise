@@ -279,6 +279,8 @@
         "failed": "We konden de verlenging niet annuleren. Probeer het opnieuw."
       },
       "active": "Actief",
+      "included": "Inbegrepen in je abonnement",
+      "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-ons",
       "catalogBody": "Ontgrendel extra functies bovenop je huidige abonnement. Geen abonnementswijziging nodig.",

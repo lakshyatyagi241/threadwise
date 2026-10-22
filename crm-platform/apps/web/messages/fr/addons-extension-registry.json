@@ -279,6 +279,8 @@
         "failed": "Nous n’avons pas pu annuler le renouvellement. Veuillez réessayer."
       },
       "active": "Actif",
+      "included": "Inclus dans votre offre",
+      "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
       "cardEyebrow": "Module complémentaire",
       "catalogTitle": "Modules complémentaires",
       "catalogBody": "Débloquez des fonctionnalités supplémentaires en plus de votre forfait actuel. Aucun changement de forfait nécessaire.",

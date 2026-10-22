@@ -78,6 +78,7 @@ function AddonCardView({
         : t('addBullet', { amount: b.amount ?? 0, label: b.label }),
   );
   const blocked = card.state === 'active';
+  const included = card.state === 'included';
   return (
     <div
       className="flex flex-col gap-3 rounded-xl border border-border bg-background p-5"
@@ -105,7 +106,16 @@ function AddonCardView({
           </li>
         ))}
       </ul>
-      {blocked ? (
+      {included ? (
+        <div className="space-y-1" data-testid={`addon-${card.slug}-included`}>
+          <Badge tone="success" className="self-start">
+            {t('included')}
+          </Badge>
+          {card.ownedCount > 0 && (
+            <p className="text-xs text-muted-foreground">{t('includedOwned')}</p>
+          )}
+        </div>
+      ) : blocked ? (
         <Badge tone="success" className="self-start">
           {t('active')}
         </Badge>

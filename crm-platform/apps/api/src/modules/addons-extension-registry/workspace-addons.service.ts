@@ -4,7 +4,14 @@ import type { AddonCard, OwnedAddon, WorkspaceAddonsResponse } from '@crm/contra
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanEntitlementService, planKind } from '../plans-subscriptions-trials';
-import { addonLiveSql, cardState, grantBullets, readGrants, titledKey } from './addon-grants';
+import {
+  addonLiveSql,
+  cardState,
+  grantBullets,
+  missingGrants,
+  readGrants,
+  titledKey,
+} from './addon-grants';
 import { ModuleRegistryService } from './module-registry.service';
 
 interface PlanStateRow {
@@ -49,7 +56,15 @@ export class WorkspaceAddonsService {
   ) {}
 
   async forCurrentWorkspace(): Promise<WorkspaceAddonsResponse> {
-    const orgId = RequestContextStore.require().orgId;
+    return this.forWorkspace(RequestContextStore.require().orgId);
+  }
+
+  /**
+   * The catalogue as one workspace sees it. The workspace screen and any operator view of the same workspace call this one function, so the
+   * states cannot differ. A card is `included` when the PLAN already grants every feature of the pack (see `isIncludedInPlan`), and a
+   * partly covered pack lists only what is still missing.
+   */
+  async forWorkspace(orgId: number): Promise<WorkspaceAddonsResponse> {
     const live = sql.raw(addonLiveSql(await this.plans.graceDays()));
     return this.db.tx(async (tx) => {
       const stateRes = await tx.execute(sql`
@@ -107,7 +122,12 @@ export class WorkspaceAddonsService {
                currency, is_free, is_lifetime, billing_unit, billing_duration, billing_mode, features, limits
         FROM plans WHERE kind = 'addon' AND is_active AND marketplace_app_id IS NULL ORDER BY sort_order ASC, amount ASC, slug ASC
       `);
-      const catalog: AddonCard[] = (catRes.rows as unknown as CardRow[]).map((r) => {
+      const packRows = catRes.rows as unknown as CardRow[];
+      const included = await this.plans.includedByPlan(
+        orgId,
+        packRows.flatMap((r) => readGrants(r.features, r.limits).features),
+      );
+      const catalog: AddonCard[] = packRows.map((r) => {
         const grants = readGrants(r.features, r.limits);
         const owned = ownedCount.get(r.id) ?? 0;
         return {
@@ -123,9 +143,9 @@ export class WorkspaceAddonsService {
           billingUnit: r.billing_unit,
           billingMode: r.billing_mode,
           billingDuration: r.billing_duration,
-          grantBullets: grantBullets(grants, labelOf),
+          grantBullets: grantBullets(missingGrants(grants, included), labelOf),
           ownedCount: owned,
-          state: cardState(grants, owned),
+          state: cardState(grants, owned, included),
         };
       });
       const owned: OwnedAddon[] = ownedRows.map((r) => ({

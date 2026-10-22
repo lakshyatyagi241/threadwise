@@ -253,6 +253,8 @@
         "buy": "רכישת תוסף",
         "buyAgain": "רכישה חוזרת",
         "active": "פעיל",
+        "included": "כלול בחבילה שלך",
+        "includedOwned": "יש לך גם את התוסף הזה. החבילה שלך כוללת אותו עכשיו, ולכן אפשר לבטל את התוסף. לא מתבצע החזר אוטומטי.",
         "unlimitedBullet": "{label} ללא הגבלה",
         "addBullet": "+{amount, number} {label}",
         "per": {

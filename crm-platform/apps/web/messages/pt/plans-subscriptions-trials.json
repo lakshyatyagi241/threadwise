@@ -253,6 +253,8 @@
         "buy": "Comprar complemento",
         "buyAgain": "Comprar novamente",
         "active": "Ativo",
+        "included": "Incluído no seu plano",
+        "includedOwned": "Você também tem este complemento. Seu plano agora o inclui, então você pode cancelá-lo. Nada é reembolsado automaticamente.",
         "unlimitedBullet": "{label} ilimitados",
         "addBullet": "+{amount, number} {label}",
         "per": {

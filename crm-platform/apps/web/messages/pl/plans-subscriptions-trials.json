@@ -253,6 +253,8 @@
         "buy": "Kup dodatek",
         "buyAgain": "Kup ponownie",
         "active": "Aktywny",
+        "included": "W cenie Twojego planu",
+        "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
         "unlimitedBullet": "Bez limitu: {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {

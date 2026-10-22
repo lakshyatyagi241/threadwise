@@ -279,6 +279,8 @@
         "failed": "We couldn't cancel the renewal. Please try again."
       },
       "active": "Active",
+      "included": "Included in your plan",
+      "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-ons",
       "catalogBody": "Unlock extra features on top of your current plan. No plan change needed.",

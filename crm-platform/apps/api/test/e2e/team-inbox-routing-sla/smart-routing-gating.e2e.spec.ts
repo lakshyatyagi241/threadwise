@@ -1,5 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { RequestContextStore } from '../../../src/common/context/request-context';
+import { WorkspaceAddonsService } from '../../../src/modules/addons-extension-registry/workspace-addons.service';
+import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials';
 import { RoutingEngine } from '../../../src/modules/team-inbox-routing-sla/routing-engine.service';
 import { OwnerSyncConsumer } from '../../../src/modules/team-inbox-routing-sla/owner-sync.consumer';
 import type { Tenant } from '../contacts-attributes-tags/support';
@@ -600,5 +603,126 @@ describe('workspace business hours are read by the rules and by SLA clocks', () 
     // Smart routing alone is enough too
     await override(t, { inbox_routing: true });
     expect((await get()).status).toBe(200);
+  });
+});
+
+describe('an add-on the plan already includes is not offered, and cannot be bought', () => {
+  const packs = async () => {
+    // put the draft packs on sale with a price; add one that is only partly covered by a Pro plan
+    await q(
+      `UPDATE plans SET is_active = true, is_free = false, amount = 9 WHERE slug IN ('smart_routing', 'teams_permissions')`,
+    );
+    await q(
+      `INSERT INTO plans (slug, name, kind, amount, currency, billing_unit, billing_duration, is_free, is_active, sort_order, limits, features)
+       VALUES ('sr_partial', 'Partial', 'addon', 5, 'USD', 'months', 1, false, true, 920, '{}'::jsonb,
+               '{"inbox_routing": true, "calling": true}'::jsonb) ON CONFLICT (slug) DO NOTHING`,
+    );
+  };
+  const catalog = async (t: Tenant) => {
+    const res = await p.api.as(t.admin).get('/v2/addons');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return res.body as {
+      eligible: boolean;
+      owned: unknown[];
+      catalog: Array<{
+        slug: string;
+        state: string;
+        ownedCount: number;
+        grantBullets: Array<{ key: string }>;
+      }>;
+    };
+  };
+  const card = (c: Awaited<ReturnType<typeof catalog>>, slug: string) =>
+    c.catalog.find((x) => x.slug === slug)!;
+  const quote = (t: Tenant, slug: string) =>
+    p.api.as(t.admin).get(`/v2/billing/checkout/plans/${slug}/quote`);
+
+  it('included: every feature granted by the plan, no cap: state included, nothing listed, checkout refuses', async () => {
+    await packs();
+    const t = await p.api.signup('sri');
+    await onPlan(t, 'sr_pro');
+    const c = await catalog(t);
+    expect(c.eligible).toBe(true);
+    expect(card(c, 'smart_routing')).toMatchObject({ state: 'included', grantBullets: [] });
+    const q1 = await quote(t, 'smart_routing');
+    expect(q1.status).toBe(422);
+    expect(q1.body.code).toBe('PAYGW_ADDON_INCLUDED');
+    // the order path runs the same `assertPurchasable` as the quote (see CheckoutService), so a crafted order is refused identically
+  });
+
+  it('partial: stays buyable and lists only what is still missing; a cap-only boost stays buyable', async () => {
+    const t = await p.api.signup('srp2');
+    await onPlan(t, 'sr_pro');
+    const c = await catalog(t);
+    const partial = card(c, 'sr_partial');
+    expect(partial.state).toBe('buy');
+    expect(partial.grantBullets.map((b) => b.key)).toEqual(['calling']);
+    // Teams: the features are on the plan by default, but +10 teams is still something to sell
+    expect(card(c, 'teams_permissions').state).toBe('buy');
+    expect((await quote(t, 'sr_partial')).body.code).not.toBe('PAYGW_ADDON_INCLUDED');
+  });
+
+  it('on a plan without the feature the pack is a plain buy, and an owner of it reads active', async () => {
+    const t = await p.api.signup('srb2');
+    await onPlan(t, 'sr_basic');
+    expect(card(await catalog(t), 'smart_routing').state).toBe('buy');
+    await buy(t, packId);
+    const c = await catalog(t);
+    expect(card(c, 'smart_routing')).toMatchObject({ state: 'active', ownedCount: 1 });
+  });
+
+  it('owned, then the plan starts including it: the card reads included and still shows it is owned', async () => {
+    const t = await p.api.signup('sro');
+    await onPlan(t, 'sr_basic');
+    await buy(t, packId);
+    await onPlan(t, 'sr_pro');
+    const c = await catalog(t);
+    expect(card(c, 'smart_routing')).toMatchObject({ state: 'included', ownedCount: 1 });
+  });
+
+  it('a platform-owned workspace and a workspace override ON read included; override OFF does not', async () => {
+    const t = await p.api.signup('srpo');
+    await onPlan(t, 'sr_basic');
+    await q(
+      `INSERT INTO org_plan_state (org_id, platform_owned) VALUES ($1, true)
+       ON CONFLICT (org_id) DO UPDATE SET platform_owned = true`,
+      [t.orgId],
+    );
+    expect(card(await catalog(t), 'smart_routing').state).toBe('included');
+    await q(`UPDATE org_plan_state SET platform_owned = false WHERE org_id = $1`, [t.orgId]);
+    await override(t, { inbox_routing: true, inbox_assignment_sticky: true });
+    expect(card(await catalog(t), 'smart_routing').state).toBe('included');
+    await override(t, { inbox_routing: false, inbox_assignment_sticky: false });
+    expect(card(await catalog(t), 'smart_routing').state).toBe('buy');
+  });
+
+  it('a lapsed paid plan falls back to the free plan: the plan grants nothing, and (lapsed) no add-ons are offered', async () => {
+    const t = await p.api.signup('srl');
+    await onPlan(t, 'sr_pro', new Date(Date.now() - 3_600_000).toISOString());
+    const inc = await get(PlanEntitlementService).includedByPlan(t.orgId, ['inbox_routing']);
+    expect(inc.size).toBe(0);
+    expect((await catalog(t)).eligible).toBe(false);
+  });
+
+  it('owner decision: a FREE plan sees no add-ons at all (an add-on needs an active paid plan)', async () => {
+    const t = await p.api.signup('srf');
+    await onPlan(t, 'sr_free');
+    expect(await catalog(t)).toEqual({ eligible: false, owned: [], catalog: [] });
+    const q2 = await quote(t, 'sr_partial');
+    expect(q2.status).toBe(422);
+    expect(q2.body.code).toBe('PAYGW_PLAN_NOT_PURCHASABLE');
+  });
+
+  it('the operator view of a workspace is the same function, so the same states', async () => {
+    const t = await p.api.signup('sro2');
+    await onPlan(t, 'sr_pro');
+    const viaHttp = await catalog(t);
+    const viaService = await RequestContextStore.run(
+      { requestId: 'op-view', orgId: t.orgId, actorType: 'system', actorId: null, userId: null },
+      () => get(WorkspaceAddonsService).forWorkspace(t.orgId),
+    );
+    expect(viaService.catalog.map((c) => [c.slug, c.state])).toEqual(
+      viaHttp.catalog.map((c) => [c.slug, c.state]),
+    );
   });
 });

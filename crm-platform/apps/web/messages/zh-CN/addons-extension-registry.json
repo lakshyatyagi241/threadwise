@@ -279,6 +279,8 @@
         "failed": "无法取消续订，请重试。"
       },
       "active": "已启用",
+      "included": "已包含在你的套餐中",
+      "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
       "cardEyebrow": "附加包",
       "catalogTitle": "附加包",
       "catalogBody": "在当前套餐基础上解锁额外功能，无需更换套餐。",

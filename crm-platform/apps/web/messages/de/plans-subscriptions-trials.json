@@ -253,6 +253,8 @@
         "buy": "Add-on kaufen",
         "buyAgain": "Erneut kaufen",
         "active": "Aktiv",
+        "included": "In deinem Tarif enthalten",
+        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
         "unlimitedBullet": "{label} unbegrenzt",
         "addBullet": "+{amount, number} {label}",
         "per": {

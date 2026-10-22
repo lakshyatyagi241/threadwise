@@ -279,6 +279,8 @@
         "failed": "No pudimos cancelar la renovación. Inténtalo de nuevo."
       },
       "active": "Activo",
+      "included": "Incluido en tu plan",
+      "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
       "cardEyebrow": "Complemento",
       "catalogTitle": "Complementos",
       "catalogBody": "Desbloquea funciones adicionales sobre tu plan actual. No necesitas cambiar de plan.",

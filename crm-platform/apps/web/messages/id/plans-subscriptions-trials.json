@@ -253,6 +253,8 @@
         "buy": "Beli add-on",
         "buyAgain": "Beli lagi",
         "active": "Aktif",
+        "included": "Termasuk dalam paket Anda",
+        "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
         "unlimitedBullet": "{label} tanpa batas",
         "addBullet": "+{amount, number} {label}",
         "per": {

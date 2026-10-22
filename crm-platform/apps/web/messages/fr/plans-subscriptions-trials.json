@@ -253,6 +253,8 @@
         "buy": "Acheter le module",
         "buyAgain": "Racheter",
         "active": "Actif",
+        "included": "Inclus dans votre offre",
+        "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
         "unlimitedBullet": "Illimité : {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
