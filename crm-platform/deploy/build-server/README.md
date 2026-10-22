@@ -130,6 +130,13 @@ Needs Docker (with the Dokploy Traefik running), Python 3, git, and root. From t
 6. Verify: `curl https://<CI_HOST>/hooks/health` returns `ok`; an unsigned `POST /hooks/github` returns 401; GitHub's "Redeliver" of the
    ping shows 200; `sudo -u deskci ssh -F /etc/desk-ci/ssh_config desk "id"` answers `unsupported command` (the forced command refused it).
 
+7. **Deployments chat (optional):** in Google Chat open the Deployments space, Apps and integrations, Webhooks, create one, then on the server
+   `install -m 640 -o root -g deskci /dev/null /etc/desk-ci/gchat_deploy_url`, put the webhook URL in it (one line) and re-run `install.sh` so
+   `notify-chat.sh` is installed next to `deploy-main.sh`. Test: `curl -sS --max-time 5 -H 'Content-Type: application/json' -d '{"text":"test from the build server"}' "$(sudo cat /etc/desk-ci/gchat_deploy_url)"`.
+   With the file missing nothing is posted and nothing fails. Cards are sent on release started, succeeded, failed (or rolled back) and skipped
+   (already released, or nothing changed under `crm-platform/`); `notify-chat.sh` times out after 5 s, runs in the background, and its failures are logged
+   to `webhook.log` without the URL. Override the file with `DESK_CI_GCHAT_URL_FILE`. There is no memory gate in `deploy-main.sh`, so no card for one.
+
 Checks that need no server: `deploy/build-server/tests/checks.test.sh` (webhook signature and filter self-test, shell syntax).
 
 ## Rotating

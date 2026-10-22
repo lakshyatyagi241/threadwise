@@ -1,0 +1,39 @@
+# Four Google Chat spaces. The webhook URLs are secrets: they come from environment variables of the Grafana container, never from git.
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: gchat-critical
+    receivers:
+      - uid: gchat-critical
+        type: googlechat
+        settings:
+          url: $__env{GRAFANA_GCHAT_CRITICAL_URL}
+          title: '{{ template "gchat.title" . }}'
+          message: '{{ template "gchat.message" . }}'
+  - orgId: 1
+    name: gchat-other
+    receivers:
+      - uid: gchat-other
+        type: googlechat
+        settings:
+          url: $__env{GRAFANA_GCHAT_OTHER_URL}
+          title: '{{ template "gchat.title" . }}'
+          message: '{{ template "gchat.message" . }}'
+  - orgId: 1
+    name: gchat-slowquery
+    receivers:
+      - uid: gchat-slowquery
+        type: googlechat
+        settings:
+          url: $__env{GRAFANA_GCHAT_SLOWQUERY_URL}
+          title: '{{ template "gchat.title" . }}'
+          message: '{{ template "gchat.message" . }}'
+  - orgId: 1
+    name: gchat-deploy
+    receivers:
+      - uid: gchat-deploy
+        type: googlechat
+        settings:
+          url: $__env{GRAFANA_GCHAT_DEPLOY_URL}
+          title: '{{ template "gchat.title" . }}'
+          message: '{{ template "gchat.message" . }}'
