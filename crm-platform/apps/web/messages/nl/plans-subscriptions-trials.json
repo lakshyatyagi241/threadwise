@@ -253,6 +253,9 @@
         "buy": "Add-on kopen",
         "buyAgain": "Opnieuw kopen",
         "active": "Actief",
+        "included": "Inbegrepen in je abonnement",
+        "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
+        "includedEnds": "Inbegrepen in je abonnement. Je add-on eindigt op {date} en wordt niet verlengd.",
         "unlimitedBullet": "Onbeperkt {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {

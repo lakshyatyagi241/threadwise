@@ -226,3 +226,32 @@ can read and change:
 | Waiting-queue timers (once built), offline return                     | tier with `inbox_routing`, else Basic | `smart_routing`     | none                                                            |
 
 Check after migrating: `GET /v2/inbox/handoff-settings` as the workspace admin shows `available` for every capability; compare it with the table above.
+
+## 8. Add-on offering rules (included, owned, free plans)
+
+1. **A workspace is never offered what its plan already gives.** A card is `included` ("Included in your plan", no buy button) when the pack grants features,
+   EVERY one is granted by the plan resolver without the pack (plan row, registry default, workspace override, platform-owned), and the pack adds no cap.
+   A pack with only caps (or features plus a cap, like Teams +10) stays buyable. A partly covered pack stays buyable and lists only what is still missing.
+2. **Server-side guard.** Checkout (quote and order share `assertPurchasable`) refuses an included pack with 422 `PAYGW_ADDON_INCLUDED`, so a crafted request cannot buy it.
+3. **A plan starts to include an add-on the workspace already holds** (upgrade, operator plan switch, a plan edited to add the flag, an override):
+   the renewal stops at the end of the paid term, no refund, no early removal. Implementation: `AddonRedundancyService` reuses
+   `SubscriptionCancelService.endOne` with `atCycleEnd: true` and reason `plan_includes` (the gateway is told to stop at the cycle end, the row is marked cancelled,
+   audited, announced), then emits `paygw.addon.renewal_stopped`, which `SubscriptionNotificationsConsumer` turns into an in-app notification and one email to
+   the workspace's billing admins ("... is now included in your <Plan> plan, so your add-on will not renew; nothing changes for you and you will not be charged again for it").
+   The card reads "Included in your plan. Your add-on ends on <date> and will not renew."
+4. **When it runs.** Right after a plan payment is applied, and every 10 minutes for every workspace with a renewing plain add-on. An operator editing a plan's
+   Features tab does **not** cancel anything in bulk at edit time; each workspace is evaluated on its own at the next pass (decision: no mass cancellation from one click, and the
+   evaluation uses the workspace's own state, overrides included). There is no separate operator action.
+5. **Safe to switch back.** Nothing ever re-enables a stopped renewal. If a later plan no longer covers the add-on, the card is buyable again (still `active` inside the paid term).
+6. **Free plans see no add-ons.** `eligible` in `WorkspaceAddonsService` requires an ACTIVE PAID plan (TW-ADD-033), so a free Basic plan sees an empty catalogue and checkout answers
+   `PAYGW_PLAN_NOT_PURCHASABLE`. **Owner decision needed:** either Basic is a small paid plan, or this rule changes. It was NOT changed here; a test records the current behaviour.
+
+| Case                                                                                                       | Result                                                                                                         |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Included / partial / owned / cap-only / lapsed (falls back to free) / platform-owned / override on and off | tested                                                                                                         |
+| Stop: active, past due, several stacked purchases                                                          | each subscription stopped once                                                                                 |
+| One-time (no subscription) and lifetime packs                                                              | nothing to stop, term untouched                                                                                |
+| Second pass; plan switched back                                                                            | no second notification, no re-enable                                                                           |
+| Pack with a cap (Teams +10)                                                                                | never stopped                                                                                                  |
+| Operator view of a workspace                                                                               | the same function (`forWorkspace`) as the workspace screen; no separate operator panel lists plain packs today |
+| Notification consumer branch (in-app + email)                                                              | typed and reviewed; not exercised end to end (the worker consumer is not mounted in the e2e app)               |

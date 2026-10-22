@@ -253,6 +253,9 @@
         "buy": "Buy add-on",
         "buyAgain": "Buy again",
         "active": "Active",
+        "included": "Included in your plan",
+        "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
+        "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
         "unlimitedBullet": "Unlimited {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {

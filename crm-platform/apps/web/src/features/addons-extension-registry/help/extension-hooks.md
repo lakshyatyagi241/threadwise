@@ -7,7 +7,21 @@ order: 50
 audience: operator
 documents: []
 routes: [/admin/extensions]
-keywords: [extension, module, extension.json, init, event, hook, outbox, subscriber, addon, provider, port, requires module]
+keywords:
+  [
+    extension,
+    module,
+    extension.json,
+    init,
+    event,
+    hook,
+    outbox,
+    subscriber,
+    addon,
+    provider,
+    port,
+    requires module,
+  ]
 ---
 
 ## What it is for

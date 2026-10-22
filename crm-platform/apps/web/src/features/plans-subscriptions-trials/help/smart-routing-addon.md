@@ -41,6 +41,10 @@ Inbox, assigning by hand, the Waiting tab and Claim, the Human handoff step to a
 
 Open **Plans** from the account menu and look for **Smart routing** among the add-ons, or ask the account owner to. Some higher plans include it. Every locked option in the product links there. It does not need the Teams and permissions add-on: a rule can assign to people. Only a destination that is a team needs teams on your plan.
 
+## If your plan starts to include it
+
+If you upgrade to a plan that includes Smart routing while you hold the add-on, the add-on stays active until the end of the term you paid for and then does not renew. You are not charged again for it and nothing is refunded early. Its card shows **Included in your plan** and the date it ends, and the account's billing admins get a notice.
+
 ## If it ends
 
 Nothing is deleted. Your rules, switches, team methods and owner mode stay saved but stop being applied: new conversations wait for a claim, chats already waiting or assigned stay where they are, and timers that were counting stop. Everything works again, as you left it, when Smart routing returns.

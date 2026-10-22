@@ -253,6 +253,9 @@
         "buy": "Acquista add-on",
         "buyAgain": "Acquista di nuovo",
         "active": "Attivo",
+        "included": "Incluso nel tuo piano",
+        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
+        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
         "unlimitedBullet": "{label} illimitati",
         "addBullet": "+{amount, number} {label}",
         "per": {

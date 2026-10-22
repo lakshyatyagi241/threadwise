@@ -253,6 +253,9 @@
         "buy": "购买附加包",
         "buyAgain": "再次购买",
         "active": "有效",
+        "included": "已包含在你的套餐中",
+        "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
+        "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
         "unlimitedBullet": "无限{label}",
         "addBullet": "+{amount, number} {label}",
         "per": {

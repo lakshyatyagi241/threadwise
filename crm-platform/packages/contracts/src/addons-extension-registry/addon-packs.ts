@@ -171,8 +171,15 @@ export const addonCardSchema = z.object({
   /** At most five. */
   grantBullets: z.array(addonBulletSchema).max(5),
   ownedCount: z.number().int().nonnegative(),
-  /** buy | active (a feature-only pack already owned) | buy_again (a pack with limits stacks). */
-  state: z.enum(['buy', 'active', 'buy_again']),
+  /** Of the live purchases of this pack: the latest end (null = none, or a lifetime one), and whether any of them still renews. */
+  ownedEndsAt: z.string().datetime().nullable(),
+  ownedRenews: z.boolean(),
+  /**
+   * buy | active (a feature-only pack already owned) | buy_again (a pack with limits stacks) | included (every feature of the pack is
+   * already granted by the plan and the pack adds no cap: nothing to buy; a workspace that owns it may cancel it).
+   * `grantBullets` lists only what the plan does not already give.
+   */
+  state: z.enum(['buy', 'active', 'buy_again', 'included']),
 });
 export type AddonCard = z.infer<typeof addonCardSchema>;
 

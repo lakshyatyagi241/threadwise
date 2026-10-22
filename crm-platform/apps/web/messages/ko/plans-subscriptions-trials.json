@@ -253,6 +253,9 @@
         "buy": "추가 기능 구매",
         "buyAgain": "다시 구매",
         "active": "활성",
+        "included": "현재 요금제에 포함됨",
+        "includedOwned": "이 애드온도 보유 중입니다. 이제 요금제에 포함되어 있으므로 애드온을 해지할 수 있습니다. 자동 환불은 없습니다.",
+        "includedEnds": "현재 요금제에 포함됨. 애드온은 {date}에 종료되며 갱신되지 않습니다.",
         "unlimitedBullet": "{label} 무제한",
         "addBullet": "+{amount, number} {label}",
         "per": {
