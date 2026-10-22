@@ -584,6 +584,16 @@
     "reason": "due-escalation sweep; each due row runs inside RequestContextStore for its own workspace, so the audit rows name it",
     "reviewedOn": "2026-10-19"
   },
+  "modules/team-inbox-routing-sla/queue-timers.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (QueueTimersSweep is registered by TeamInboxRoutingSlaWorkerModule alone; no controller injects QueueTimersService). The one privileged read lists the org ids that set a waiting-queue timer and nothing else; every step then runs in txAs({ orgId }) inside RequestContextStore for that workspace, and every statement filters on org_id",
+    "reviewedOn": "2026-10-22"
+  },
+  "modules/team-inbox-routing-sla/away.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron and outbox only (AwaySweep and AwayConsumer are registered by TeamInboxRoutingSlaWorkerModule alone; no controller injects AwayService). The one privileged read lists the org id and the inactivity limit that workspaces set; every per-workspace step runs in txAs({ orgId }) and every statement filters on org_id",
+    "reviewedOn": "2026-10-22"
+  },
   "modules/knowledge-base/kb-embed.worker.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; markStale is an intentional platform-wide model-change heal",
