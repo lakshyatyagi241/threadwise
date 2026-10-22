@@ -378,6 +378,16 @@ export const widgetFeedbackRequestSchema = z.object({
 });
 export type WidgetFeedbackRequest = z.infer<typeof widgetFeedbackRequestSchema>;
 
+/**
+ * `POST /widget/<token>/api/rating`: the visitor's stars (and a few words) when they end the chat. "Restart chat" sends the default five
+ * stars on its own. The team sees it as one line on the thread; a second one on the same thread is ignored.
+ */
+export const widgetRatingRequestSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().trim().max(1000).optional(),
+});
+export type WidgetRatingRequest = z.infer<typeof widgetRatingRequestSchema>;
+
 /** The kinds of file a flow bot can show in the chat window. */
 export const WIDGET_MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 export type WidgetMediaKind = (typeof WIDGET_MEDIA_KINDS)[number];

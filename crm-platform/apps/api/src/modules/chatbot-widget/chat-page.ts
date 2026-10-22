@@ -57,8 +57,24 @@ body { display: flex; flex-direction: column; background: #fff; }
 .pop[hidden] { display: none; }
 .pop.at-start { inset-inline-end: auto; inset-inline-start: 10px; }
 .pop .mi { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; text-align: start; font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 10px; border-radius: 10px; cursor: pointer; color: inherit; text-decoration: none; }
-#endpop { width: auto; min-width: 210px; gap: 2px; }
-#endpop .mi svg { flex: none; opacity: .75; }
+/* The cross asks before it ends the chat, then asks for a rating. */
+.modal { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(32,34,46,.42); backdrop-filter: blur(3px); }
+.modal[hidden] { display: none; }
+.sheet { width: min(330px, 100%); max-height: 100%; overflow-y: auto; background: #fff; color: #20222e; border-radius: 22px; padding: 24px 20px 16px; text-align: center; box-shadow: 0 20px 50px rgba(30,32,60,.3); display: flex; flex-direction: column; align-items: center; }
+.sheet .wi { width: 44px; height: 44px; border-radius: 50%; background: #fdeceb; color: #d24b43; display: grid; place-items: center; margin-bottom: 14px; }
+.sheet .q { margin: 0 0 16px; font-weight: 600; font-size: 15.5px; line-height: 1.4; overflow-wrap: anywhere; }
+.sheet button { width: 100%; min-height: 44px; border-radius: 12px; font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; padding: 9px 12px; white-space: normal; overflow-wrap: anywhere; }
+.sheet .danger { border: 0; background: #d64a41; color: #fff; }
+.sheet .danger:hover { background: #bf3d35; }
+.sheet .outline { margin-top: 8px; min-height: 42px; font-size: 14px; font-weight: 500; border: 1px solid #e3e5f0; background: #fff; color: #20222e; }
+.sheet .outline:hover { background: #f6f7fc; }
+.sheet .ghost { margin-top: 8px; min-height: 36px; font-size: 13px; font-weight: 500; border: 0; background: transparent; color: #6b7088; }
+.sheet .accent { border: 0; background: var(--accent); color: var(--accent-ink); }
+.sheet textarea { width: 100%; min-height: 84px; resize: none; border: 1px solid var(--accent); border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 14px; margin-bottom: 14px; color: inherit; }
+.stars { display: flex; gap: 6px; margin: 2px 0 6px; }
+.sheet .stars button { width: 34px; min-height: 34px; padding: 0; border: 0; background: transparent; color: #d8dbe6; font-size: 30px; line-height: 1; }
+.sheet .stars button.on { color: #f5a623; }
+.rlabel { min-height: 18px; margin-bottom: 14px; font-size: 13px; font-weight: 600; color: var(--accent); }
 .pop .mi:hover { background: var(--accent-soft); color: var(--accent); }
 .pop .mi img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; flex: none; }
 .pop.blocks { display: grid; grid-template-columns: 1fr 1fr; }
@@ -212,6 +228,7 @@ const SCRIPT = `
   var API_HIS = BASE + 'history';
   var API_UP = BASE + 'upload';
   var API_FB = BASE + 'feedback';
+  var API_RATE = BASE + 'rating';
 
   // The visitor id lives in the iframe's own localStorage, not only in a cookie: the page runs in a cross-site frame where
   // third-party cookies are often blocked, and without it every visit would start a new conversation.
@@ -426,7 +443,7 @@ const SCRIPT = `
   }
 
   var popsBound = false;
-  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; $('endpop').hidden = true; }
+  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; }
   // Close this chat / Restart this chat: the server makes a fresh visitor (a fresh conversation), the window keeps its id and
   // loads again. Close also asks the site to hide the panel. The Customize preview has no conversation, so it only hides.
   function startOver(hide) {
@@ -441,6 +458,92 @@ const SCRIPT = `
       .then(function (j) { if (j && j.visitor_uuid) storeUuid(j.visitor_uuid); })
       .catch(function () {})
       .then(done);
+  }
+  // The cross asks first. "End conversation" then asks for a rating and closes the chat; "Restart chat" gives the default five stars and
+  // closes it too (the next visit starts fresh); "Not now" only closes the question.
+  function rate(stars, comment) {
+    if (PREVIEW) return Promise.resolve();
+    var payload = { rating: stars };
+    if (comment) payload.comment = comment;
+    var vid = storedUuid();
+    if (vid) payload.visitor_uuid = vid;
+    return fetch(API_RATE, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(function () {});
+  }
+  function sheet(build) {
+    var m = $('endmodal');
+    m.textContent = '';
+    var sh = document.createElement('div');
+    sh.className = 'sheet';
+    sh.setAttribute('role', 'dialog');
+    sh.setAttribute('aria-modal', 'true');
+    build(sh);
+    m.appendChild(sh);
+    m.hidden = false;
+    var first = sh.querySelector('button');
+    if (first) first.focus();
+  }
+  function closeSheet() { var m = $('endmodal'); m.hidden = true; m.textContent = ''; }
+  function sheetButton(cls, label, fn) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.textContent = label; b.onclick = fn;
+    return b;
+  }
+  function openEnd() {
+    sheet(function (sh) {
+      var wi = document.createElement('div');
+      wi.className = 'wi';
+      wi.appendChild(svg(22, ['M12 9v4', 'M12 17h.01', 'M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z']));
+      sh.appendChild(wi);
+      var q = document.createElement('p');
+      q.className = 'q';
+      q.id = 'endq';
+      q.textContent = tx('endTitle', 'Are you sure you want to end conversation?');
+      sh.setAttribute('aria-labelledby', 'endq');
+      sh.appendChild(q);
+      sh.appendChild(sheetButton('danger', tx('endConversation', 'End conversation'), openRating));
+      sh.appendChild(sheetButton('outline', tx('restartChat', 'Restart chat'), function () { closeSheet(); rate(5).then(function () { startOver(true); }); }));
+      sh.appendChild(sheetButton('ghost', tx('notNow', 'Not now'), closeSheet));
+    });
+  }
+  function openRating() {
+    var stars = 5;
+    sheet(function (sh) {
+      var t = document.createElement('p');
+      t.className = 'q';
+      t.textContent = tx('rateTitle', 'Please rate your experience with us.');
+      sh.appendChild(t);
+      var row = document.createElement('div');
+      row.className = 'stars';
+      row.setAttribute('role', 'radiogroup');
+      var lab = document.createElement('div');
+      lab.className = 'rlabel';
+      lab.setAttribute('role', 'status');
+      var names = [tx('rate1', 'Very poor'), tx('rate2', 'Poor'), tx('rate3', 'Average'), tx('rate4', 'Good'), tx('rate5', 'Excellent')];
+      var bs = [];
+      function paint() {
+        bs.forEach(function (b, i) { b.className = i < stars ? 'on' : ''; b.setAttribute('aria-checked', String(i + 1 === stars)); });
+        lab.textContent = names[stars - 1];
+      }
+      for (var i = 1; i <= 5; i++) (function (n) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('role', 'radio');
+        b.setAttribute('aria-label', tx('rateStar', '{n} / 5').replace('{n}', String(n)));
+        b.textContent = '\u2605';
+        b.onclick = function () { stars = n; paint(); };
+        bs.push(b);
+        row.appendChild(b);
+      })(i);
+      sh.appendChild(row);
+      sh.appendChild(lab);
+      var ta = document.createElement('textarea');
+      ta.maxLength = 1000;
+      ta.placeholder = tx('suggestPh', 'Type your suggestions here...');
+      sh.appendChild(ta);
+      sh.appendChild(sheetButton('accent', tx('submitFeedback', 'Submit feedback'), function () { closeSheet(); rate(stars, ta.value.trim()).then(function () { startOver(true); }); }));
+      sh.appendChild(sheetButton('ghost', tx('noThanks', 'No, thanks'), function () { closeSheet(); startOver(true); }));
+      paint();
+    });
   }
   // The header's bell (notification cards) and menu (rows or blocks).
   function paintHeaderPops(hdr) {
@@ -967,27 +1070,26 @@ const SCRIPT = `
       };
       hdr.appendChild(ex);
     }
-    // Inside the site's panel (any website bot) the window has its own cross. It opens two choices: close this chat (the panel hides
-    // and the next visit starts fresh) or restart this chat (a fresh conversation right now).
+    // Inside the site's panel (any website bot) the window has its own cross. It asks whether to end the conversation (see openEnd).
     if (window.parent !== window) {
       var x = document.createElement('button');
       x.type = 'button';
       x.className = 'hx';
       x.dataset.end = '1';
       x.setAttribute('aria-label', tx('closeChat', 'Close chat'));
-      x.setAttribute('aria-haspopup', 'true');
+      x.setAttribute('aria-haspopup', 'dialog');
       x.appendChild(svg(20, ['M6 6l12 12', 'M18 6L6 18']));
-      var ep = $('endpop');
-      ep.textContent = '';
-      [['closeThis', 'Close this chat', true, ['M6 6l12 12', 'M18 6L6 18']], ['restartThis', 'Restart this chat', false, ['M3 12a9 9 0 1 0 3-6.7', 'M3 4v5h5']]].forEach(function (o) {
-        var mi = document.createElement('button');
-        mi.type = 'button'; mi.className = 'mi'; mi.setAttribute('role', 'menuitem');
-        mi.appendChild(svg(16, o[3]));
-        var sp = document.createElement('span'); sp.textContent = tx(o[0], o[1]); mi.appendChild(sp);
-        mi.onclick = function () { startOver(o[2]); };
-        ep.appendChild(mi);
-      });
-      x.onclick = function (e) { e.stopPropagation(); var on = ep.hidden; closePops(); ep.hidden = !on; };
+      x.onclick = function (e) { e.stopPropagation(); closePops(); openEnd(); };
+      // Minimize: the panel folds back into the launcher ball and the conversation stays as it is.
+      var mn = document.createElement('button');
+      mn.type = 'button';
+      mn.className = 'hx';
+      mn.dataset.minimize = '1';
+      mn.setAttribute('aria-label', tx('minimize', 'Minimize'));
+      mn.title = tx('minimize', 'Minimize');
+      mn.appendChild(svg(20, ['M6 19h12']));
+      mn.onclick = function (e) { e.stopPropagation(); closePops(); try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (err) {} };
+      hdr.appendChild(mn);
       hdr.appendChild(x);
     }
     var acc = cfg.button_bg || '#5B4DDB';
@@ -1352,7 +1454,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <body>
 <header class="header" id="hdr"></header>
 <div class="pop" id="menupop" hidden role="menu"></div>
-<div class="pop" id="endpop" hidden role="menu"></div>
+<div class="modal" id="endmodal" hidden></div>
 <div class="pop" id="noticepop" hidden></div>
 <div class="banner" id="banner" hidden></div>
 <div class="stage">
