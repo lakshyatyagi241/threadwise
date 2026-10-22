@@ -197,6 +197,8 @@
       "date": "날짜",
       "imagesBlocked": "인터넷의 이미지는 숨겨져 있습니다.",
       "loadImages": "이미지 불러오기",
+      "showQuoted": "인용된 텍스트 보기",
+      "hideQuoted": "인용된 텍스트 숨기기",
       "frameTitle": "이메일: {subject}",
       "truncated": "이메일이 길어 앞부분만 표시됩니다.",
       "noBody": "이 이메일에는 텍스트가 없습니다.",

@@ -197,6 +197,7 @@ export class CheckoutService {
             const e = await this.plans.forOrg(orgId);
             return e === null || appVisibleOnPlan(e, appId);
           },
+          async (keys) => (await this.plans.includedByPlan(orgId, keys)).size,
         )
       )
         return;

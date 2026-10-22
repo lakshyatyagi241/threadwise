@@ -247,23 +247,7 @@
         "title": "שאלות נפוצות"
       },
       "addons": {
-        "title": "תוספים",
-        "owned": "התוספים שברשותך",
-        "oneTime": "חד־פעמי",
-        "buy": "רכישת תוסף",
-        "buyAgain": "רכישה חוזרת",
-        "active": "פעיל",
-        "included": "כלול בחבילה שלך",
-        "includedOwned": "יש לך גם את התוסף הזה. החבילה שלך כוללת אותו עכשיו, ולכן אפשר לבטל את התוסף. לא מתבצע החזר אוטומטי.",
-        "includedEnds": "כלול בחבילה שלך. התוסף שלך מסתיים ב-{date} ולא יחודש.",
-        "unlimitedBullet": "{label} ללא הגבלה",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ יום} two {/ יומיים} other {/ {count} ימים}}",
-          "weeks": "{count, plural, one {/ שבוע} two {/ שבועיים} other {/ {count} שבועות}}",
-          "months": "{count, plural, one {/ חודש} two {/ חודשיים} other {/ {count} חודשים}}",
-          "years": "{count, plural, one {/ שנה} two {/ שנתיים} other {/ {count} שנים}}"
-        }
+        "title": "תוספים"
       },
       "renewal": {
         "renewsOn": "התוכנית שלך תתחדש אוטומטית ב־{date}.",

@@ -2211,6 +2211,7 @@
         "number": "Getal",
         "alphanumeric": "Letters en cijfers",
         "date": "Datum",
+        "datetime": "Datum en tijd",
         "age": "Leeftijd",
         "date_of_birth": "Geboortedatum"
       },
@@ -2222,6 +2223,7 @@
         "number": "Voer een geldig getal in",
         "alphanumeric": "Gebruik alleen letters en cijfers",
         "date": "Voer een geldige datum in ({format})",
+        "datetime": "Voer een geldige datum en tijd in ({format} HH:MM)",
         "age": "Voer je leeftijd in als geheel getal",
         "date_of_birth": "Voer een geldige datum in ({format})"
       },

@@ -10,6 +10,7 @@ import {
   judgeAgeAnswer,
   toPublicLauncher,
   widgetFeedbackRequestSchema,
+  widgetRatingRequestSchema,
   widgetMessageRequestSchema,
   type AgeVerdict,
   type WidgetHistoryResponse,
@@ -854,6 +855,26 @@ export class WidgetPublicService {
       }),
     );
     return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
+  /** The visitor's stars when they end the chat (`POST api/rating`). A visitor with no thread yet has nothing to rate. */
+  async rate(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
+    const parsed = widgetRatingRequestSchema.safeParse(rawBody ?? {});
+    if (!parsed.success)
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      if (!resolved || resolved.visitor.conversationId === null) return;
+      await this.inbox.recordRating(
+        tx,
+        orgId,
+        resolved.visitor.conversationId,
+        parsed.data.rating,
+        parsed.data.comment ?? '',
+      );
+    });
+    return { ok: true };
   }
 
   async feedback(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {

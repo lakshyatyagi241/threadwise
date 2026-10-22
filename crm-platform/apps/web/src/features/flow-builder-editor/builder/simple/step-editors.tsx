@@ -960,7 +960,7 @@ function AskEditor({ step, doc, set }: EditorProps) {
           ))}
         </Select>
       </Field>
-      {type === 'date' || type === 'date_of_birth' ? (
+      {type === 'date' || type === 'datetime' || type === 'date_of_birth' ? (
         <Field label={t('ask.dateFormat')} hint={t('ask.dateFormatHint')}>
           <Select
             value={flbCleanDateFormat(step.data.dateFormat)}

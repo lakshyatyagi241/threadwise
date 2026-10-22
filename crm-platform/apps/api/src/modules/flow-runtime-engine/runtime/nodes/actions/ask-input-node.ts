@@ -13,6 +13,7 @@ import {
   flbCleanMinAge,
   flbIsAgeInput,
   flbParseDate,
+  flbParseDateTime,
   judgeAgeAnswer,
   type AgeVerdict,
   type FlbAskInputType,
@@ -55,7 +56,8 @@ const HANDLER = 'AskInput';
 /** What the channel's input hint is told: an age is a number, a date of birth a date (the same pickers as the plain kinds). */
 const wireType = (t: FlbAskInputType): string =>
   t === 'date_of_birth' ? 'date' : t === 'age' ? 'number' : t;
-const takesDateFormat = (t: FlbAskInputType): boolean => t === 'date' || t === 'date_of_birth';
+const takesDateFormat = (t: FlbAskInputType): boolean =>
+  t === 'date' || t === 'datetime' || t === 'date_of_birth';
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' : String(v));
 const num = (v: unknown, fallback: number): number => {
@@ -133,7 +135,12 @@ export class AskInputNode implements NodeExecutor {
         if (verify) return this.startCode(ctx, value, variable, 0);
         await this.ensureContact(ctx, type, value);
         await this.saveProperty(ctx, str(p.savePropertyKey), value);
-        const iso = type === 'date' ? flbParseDate(value, dateFormat) : null;
+        const iso =
+          type === 'date'
+            ? flbParseDate(value, dateFormat)
+            : type === 'datetime'
+              ? flbParseDateTime(value, dateFormat)
+              : null;
         return {
           action: 'route',
           port: 1,

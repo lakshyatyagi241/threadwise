@@ -247,23 +247,7 @@
         "title": "Domande frequenti"
       },
       "addons": {
-        "title": "Add-on",
-        "owned": "Add-on posseduti",
-        "oneTime": "una tantum",
-        "buy": "Acquista add-on",
-        "buyAgain": "Acquista di nuovo",
-        "active": "Attivo",
-        "included": "Incluso nel tuo piano",
-        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
-        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
-        "unlimitedBullet": "{label} illimitati",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ giorno} other {/ {count} giorni}}",
-          "weeks": "{count, plural, one {/ settimana} other {/ {count} settimane}}",
-          "months": "{count, plural, one {/ mese} other {/ {count} mesi}}",
-          "years": "{count, plural, one {/ anno} other {/ {count} anni}}"
-        }
+        "title": "Add-on"
       },
       "renewal": {
         "renewsOn": "Il tuo piano si rinnova automaticamente il {date}.",

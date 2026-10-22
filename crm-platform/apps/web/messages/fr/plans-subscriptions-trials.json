@@ -247,23 +247,7 @@
         "title": "Questions fréquentes"
       },
       "addons": {
-        "title": "Modules complémentaires",
-        "owned": "Modules complémentaires acquis",
-        "oneTime": "unique",
-        "buy": "Acheter le module",
-        "buyAgain": "Racheter",
-        "active": "Actif",
-        "included": "Inclus dans votre offre",
-        "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
-        "includedEnds": "Inclus dans votre offre. Votre module se termine le {date} et ne sera pas renouvelé.",
-        "unlimitedBullet": "Illimité : {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ jour} other {/ {count} jours}}",
-          "weeks": "{count, plural, one {/ semaine} other {/ {count} semaines}}",
-          "months": "{count, plural, one {/ mois} other {/ {count} mois}}",
-          "years": "{count, plural, one {/ an} other {/ {count} ans}}"
-        }
+        "title": "Modules complémentaires"
       },
       "renewal": {
         "renewsOn": "Votre forfait se renouvelle automatiquement le {date}.",

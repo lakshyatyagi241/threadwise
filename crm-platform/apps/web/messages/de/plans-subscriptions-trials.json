@@ -247,23 +247,7 @@
         "title": "Häufig gestellte Fragen"
       },
       "addons": {
-        "title": "Add-ons",
-        "owned": "Ihre Add-ons",
-        "oneTime": "einmalig",
-        "buy": "Add-on kaufen",
-        "buyAgain": "Erneut kaufen",
-        "active": "Aktiv",
-        "included": "In deinem Tarif enthalten",
-        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
-        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
-        "unlimitedBullet": "{label} unbegrenzt",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ Tag} other {/ {count} Tage}}",
-          "weeks": "{count, plural, one {/ Woche} other {/ {count} Wochen}}",
-          "months": "{count, plural, one {/ Monat} other {/ {count} Monate}}",
-          "years": "{count, plural, one {/ Jahr} other {/ {count} Jahre}}"
-        }
+        "title": "Add-ons"
       },
       "renewal": {
         "renewsOn": "Ihr Tarif verlängert sich automatisch am {date}.",

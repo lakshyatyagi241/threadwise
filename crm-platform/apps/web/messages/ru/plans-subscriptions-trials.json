@@ -247,23 +247,7 @@
         "title": "Частые вопросы"
       },
       "addons": {
-        "title": "Дополнения",
-        "owned": "Ваши дополнения",
-        "oneTime": "разово",
-        "buy": "Купить дополнение",
-        "buyAgain": "Купить снова",
-        "active": "Активно",
-        "included": "Входит в ваш тариф",
-        "includedOwned": "У вас также есть это дополнение. Теперь оно входит в ваш тариф, поэтому его можно отменить. Деньги автоматически не возвращаются.",
-        "includedEnds": "Входит в ваш тариф. Ваше дополнение закончится {date} и не будет продлено.",
-        "unlimitedBullet": "Без ограничений: {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ # день} few {/ # дня} many {/ # дней} other {/ # дня}}",
-          "weeks": "{count, plural, one {/ # неделю} few {/ # недели} many {/ # недель} other {/ # недели}}",
-          "months": "{count, plural, one {/ # месяц} few {/ # месяца} many {/ # месяцев} other {/ # месяца}}",
-          "years": "{count, plural, one {/ # год} few {/ # года} many {/ # лет} other {/ # года}}"
-        }
+        "title": "Дополнения"
       },
       "renewal": {
         "renewsOn": "Ваш тариф автоматически продлится {date}.",

@@ -22,6 +22,8 @@ export const FLB_ASK_INPUT_TYPES = [
   'number',
   'alphanumeric',
   'date',
+  // A date and a time of day (an appointment, a delivery slot): the date in the chosen date format, then the time as HH:MM or h:mm am/pm.
+  'datetime',
   // The age question (BL-218, spec 11.10): an age in whole years, or a date of birth written in the chosen date format. The answer is
   // judged against the workspace's minor age (or the node's own) and written to the contact; see `FLB_AGE_*` below.
   'age',
@@ -54,6 +56,7 @@ export const FLB_ASK_INPUT_LABELS: Record<FlbAskInputType, string> = {
   number: 'Number',
   alphanumeric: 'Letters and numbers',
   date: 'Date',
+  datetime: 'Date and time',
   age: 'Age',
   date_of_birth: 'Date of birth',
 };
@@ -123,6 +126,8 @@ export function flbAskInputWrongText(type: FlbAskInputType, dateFormat?: unknown
     case 'date':
     case 'date_of_birth':
       return `Please enter a valid date (${flbCleanDateFormat(dateFormat).toUpperCase()})`;
+    case 'datetime':
+      return `Please enter a valid date and time (${flbCleanDateFormat(dateFormat).toUpperCase()} HH:MM)`;
     case 'age':
       return 'Please enter your age as a whole number';
     default:
@@ -178,6 +183,26 @@ export function flbParseDate(raw: string, format: FlbDateFormat): string | null 
   return `${String(y).padStart(4, '0')}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
 
+/**
+ * "04-05-1990 14:30" or "04-05-1990 2:30 pm": the date in `format`, a space, then a 24-hour or am/pm time. Returns `YYYY-MM-DDTHH:MM`,
+ * or null when either half does not read.
+ */
+export function flbParseDateTime(raw: string, format: FlbDateFormat): string | null {
+  const m = /^(\S+)\s+(\d{1,2}):(\d{2})\s*([ap]m)?$/i.exec(raw.trim());
+  if (!m) return null;
+  const date = flbParseDate(m[1]!, format);
+  if (date === null) return null;
+  let h = Number(m[2]);
+  const min = Number(m[3]);
+  const mer = m[4]?.toLowerCase();
+  if (min > 59) return null;
+  if (mer) {
+    if (h < 1 || h > 12) return null;
+    h = (h % 12) + (mer === 'pm' ? 12 : 0);
+  } else if (h > 23) return null;
+  return `${date}T${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+}
+
 export type FlbAskInputResult = { ok: true; value: string } | { ok: false };
 
 /**
@@ -210,6 +235,10 @@ export function flbAskInputCheck(
     }
     case 'date':
       return flbParseDate(text, flbCleanDateFormat(opts.dateFormat)) !== null
+        ? { ok: true, value: text }
+        : { ok: false };
+    case 'datetime':
+      return flbParseDateTime(text, flbCleanDateFormat(opts.dateFormat)) !== null
         ? { ok: true, value: text }
         : { ok: false };
     case 'age': {

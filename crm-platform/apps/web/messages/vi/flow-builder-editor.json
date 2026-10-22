@@ -2353,6 +2353,7 @@
         "number": "Số",
         "alphanumeric": "Chữ và số",
         "date": "Ngày",
+        "datetime": "Ngày và giờ",
         "age": "Tuổi",
         "date_of_birth": "Ngày sinh"
       },
@@ -2364,6 +2365,7 @@
         "number": "Vui lòng nhập số hợp lệ",
         "alphanumeric": "Vui lòng chỉ dùng chữ và số",
         "date": "Vui lòng nhập ngày hợp lệ ({format})",
+        "datetime": "Vui lòng nhập ngày và giờ hợp lệ ({format} HH:MM)",
         "age": "Vui lòng nhập tuổi của bạn bằng một số nguyên",
         "date_of_birth": "Vui lòng nhập một ngày hợp lệ ({format})"
       },

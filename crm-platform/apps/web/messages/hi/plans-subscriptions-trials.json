@@ -247,23 +247,7 @@
         "title": "अक्सर पूछे जाने वाले प्रश्न"
       },
       "addons": {
-        "title": "ऐड-ऑन",
-        "owned": "आपके स्वामित्व वाले ऐड-ऑन",
-        "oneTime": "एक बार",
-        "buy": "ऐड-ऑन खरीदें",
-        "buyAgain": "फिर से खरीदें",
-        "active": "सक्रिय",
-        "included": "आपके प्लान में शामिल",
-        "includedOwned": "यह ऐड-ऑन आपके पास भी है। आपके प्लान में अब यह शामिल है, इसलिए आप ऐड-ऑन रद्द कर सकते हैं। कोई राशि अपने-आप वापस नहीं होती।",
-        "includedEnds": "आपके प्लान में शामिल। आपका ऐड-ऑन {date} को समाप्त होगा और नवीनीकृत नहीं होगा।",
-        "unlimitedBullet": "असीमित {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ दिन} other {/ {count} दिन}}",
-          "weeks": "{count, plural, one {/ सप्ताह} other {/ {count} सप्ताह}}",
-          "months": "{count, plural, one {/ माह} other {/ {count} माह}}",
-          "years": "{count, plural, one {/ वर्ष} other {/ {count} वर्ष}}"
-        }
+        "title": "ऐड-ऑन"
       },
       "renewal": {
         "renewsOn": "आपका प्लान {date} को अपने आप नवीनीकृत होगा।",
