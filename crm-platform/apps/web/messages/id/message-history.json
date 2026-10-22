@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Kotak masuk",
+      "contact": "Kontak",
       "flow": "Alur",
       "auto_reply": "Balasan otomatis",
+      "automation": "Otomasi",
       "ai": "Asisten AI",
       "api": "API",
       "broadcast": "Siaran",
+      "broadcast_test": "Kirim uji coba siaran",
       "campaign": "Kampanye",
       "scheduled": "Terjadwal",
       "other": "Lainnya"
@@ -171,6 +174,7 @@
         "contact": "Kontak",
         "message": "Pesan",
         "type": "Jenis",
+        "source": "Sumber",
         "status": "Status",
         "open": "Buka"
       },
@@ -228,11 +232,13 @@
       "source": "Dikirim oleh",
       "sourceValue": {
         "inbox": "Kotak masuk",
+        "contact": "Kontak",
         "flow": "Alur",
         "auto_reply": "Balasan otomatis",
         "ai": "Asisten AI",
         "api": "API",
         "broadcast": "Siaran",
+        "broadcast_test": "Kirim uji coba siaran",
         "campaign": "Kampanye",
         "scheduled": "Pesan terjadwal",
         "other": "Lainnya"

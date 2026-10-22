@@ -252,7 +252,11 @@ export class OutboundService {
         replyToMessageUuid: replyTo?.uuid ?? null,
         templateId: fields.templateId,
         // A message to a Cloud API group remembers how many people it was addressed to, for the "delivered to X of N" tally.
-        meta: groupMembers === null ? fields.meta : { ...fields.meta, group_members: groupMembers },
+        meta: {
+          ...fields.meta,
+          ...(input.origin ? { source: input.origin } : {}),
+          ...(groupMembers === null ? {} : { group_members: groupMembers }),
+        },
       });
       await this.messages.insertEvent(
         tx,

@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "ان باکس",
+      "contact": "رابطہ",
       "flow": "فلو",
       "auto_reply": "خودکار جواب",
+      "automation": "خودکاری",
       "ai": "اے آئی اسسٹنٹ",
       "api": "API",
       "broadcast": "براڈکاسٹ",
+      "broadcast_test": "براڈکاسٹ ٹیسٹ بھیجنا",
       "campaign": "مہم",
       "scheduled": "طے شدہ",
       "other": "دیگر"
@@ -171,6 +174,7 @@
         "contact": "رابطہ",
         "message": "پیغام",
         "type": "قسم",
+        "source": "ماخذ",
         "status": "حالت",
         "open": "کھولیں"
       },
@@ -228,11 +232,13 @@
       "source": "بھیجنے والا",
       "sourceValue": {
         "inbox": "ان باکس",
+        "contact": "رابطہ",
         "flow": "فلو",
         "auto_reply": "خودکار جواب",
         "ai": "اے آئی اسسٹنٹ",
         "api": "API",
         "broadcast": "براڈکاسٹ",
+        "broadcast_test": "براڈکاسٹ ٹیسٹ بھیجنا",
         "campaign": "مہم",
         "scheduled": "طے شدہ پیغام",
         "other": "دیگر"
