@@ -152,7 +152,7 @@ services:
       - ../observability/grafana/provisioning:/etc/grafana/provisioning:ro
       - ../observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafanadata:/var/lib/grafana
-    secrets: [grafana_admin_password]
+    secrets: [grafana_admin_password, gchat_critical_url, gchat_other_url, gchat_slowquery_url, gchat_deploy_url]
     networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-grafana:3000
     depends_on:
       - prometheus
