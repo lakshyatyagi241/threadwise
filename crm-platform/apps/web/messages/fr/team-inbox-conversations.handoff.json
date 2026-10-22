@@ -54,7 +54,7 @@
         "intro": "Le bot cesse de répondre à ce contact. La conversation va à la personne ou à l’équipe que vous choisissez, ou attend dans la file que quelqu’un la prenne.",
         "where": "Envoyer à",
         "whereRules": "Les règles d’assignation, sinon la file d’attente",
-        "whereQueueOnly": "La file d’attente (les règles d’assignation ne sont pas incluses dans votre offre)",
+        "whereQueueOnly": "La file d'attente (les règles d'attribution nécessitent le module Routage intelligent)",
         "whereTeam": "Une équipe",
         "wherePerson": "Une personne",
         "team": "Équipe",

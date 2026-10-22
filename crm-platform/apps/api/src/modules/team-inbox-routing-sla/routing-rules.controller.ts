@@ -15,7 +15,6 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createRoutingRuleSchema,
-  updateBusinessHoursSchema,
   listRoutingRulesQuerySchema,
   reorderRoutingRulesSchema,
   routingTestRequestSchema,
@@ -23,7 +22,6 @@ import {
   updateRoutingSettingsSchema,
   type CreateRoutingRuleInput,
   type ListRoutingRulesQuery,
-  type UpdateBusinessHoursInput,
   type ReorderRoutingRulesInput,
   type RoutingTestRequest,
   type UpdateRoutingRuleInput,
@@ -32,11 +30,10 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
-import { BusinessHoursService } from './business-hours.service';
 import { RoutingRulesService } from './routing-rules.service';
 
 /**
- * Auto-assignment: the routing rules, their settings and the business hours they read (TW-TIB2-001, 004 to 009). Every route needs the plan feature `inbox_routing` (422
+ * Auto-assignment: the routing rules and their settings (TW-TIB2-004 to 009; the business hours are `BusinessHoursController`). Every route needs the plan feature `inbox_routing` (422
  * PLAN_FEATURE_LOCKED, reads included); reading needs `inbox.settings.read`, writing `inbox.routing.manage` (Owner and Admin by default).
  * The literal `rules/reorder` is declared before `rules/:id`: Express matches in registration order.
  */
@@ -45,10 +42,7 @@ import { RoutingRulesService } from './routing-rules.service';
 @RequirePlanFeature('inbox_routing')
 @Controller({ path: 'inbox/routing', version: '2' })
 export class RoutingRulesController {
-  constructor(
-    private readonly rules: RoutingRulesService,
-    private readonly businessHours: BusinessHoursService,
-  ) {}
+  constructor(private readonly rules: RoutingRulesService) {}
 
   @Get('rules')
   @RequirePermission('inbox.settings.read')
@@ -144,28 +138,5 @@ export class RoutingRulesController {
   @ApiOperation({ summary: 'Change the auto-assignment settings' })
   updateSettings(@Body(zodPipe(updateRoutingSettingsSchema)) body: UpdateRoutingSettingsInput) {
     return this.rules.updateSettings(body);
-  }
-
-  @Get('business-hours')
-  @RequirePermission('inbox.settings.read')
-  @ApiOperation({
-    summary: 'The workspace business hours: the weekly schedule and the time zone',
-    description:
-      'Shows Mon-Fri 09:00-18:00 when no schedule has been saved. Until one is saved the workspace counts as open all the time.',
-  })
-  getBusinessHours() {
-    return this.businessHours.get();
-  }
-
-  @Put('business-hours')
-  @Idempotent()
-  @RequirePermission('inbox.routing.manage')
-  @ApiOperation({
-    summary: 'Save the business hours',
-    description:
-      'Replaces the seven day windows. The time zone is kept only when the caller is the workspace owner; for anyone else it is ignored.',
-  })
-  updateBusinessHours(@Body(zodPipe(updateBusinessHoursSchema)) body: UpdateBusinessHoursInput) {
-    return this.businessHours.update(body);
   }
 }

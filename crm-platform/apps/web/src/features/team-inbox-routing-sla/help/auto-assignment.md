@@ -130,7 +130,7 @@ The **Time zone** is the one your workspace uses for every day and time. Only th
 
 ## Plan and access
 
-Your plan must include Routing rules to use rules, Everyone else, Try it and Auto Assignment; without it the switches your plan allows still work (Assign Agent as Contact Owner works on every plan) and chats wait in the queue to be claimed or assigned by hand. The rule limit counts rules that are switched off too.
+Rules, Everyone else, Try it and Auto Assignment are part of Smart routing, which comes with some plans or as an add-on ([Smart routing add-on](help:smart-routing-addon)). Each locked control says so and links to Plans and add-ons. Without it the switches your plan allows still work (Assign Agent as Contact Owner works on every plan) and chats wait in the queue to be claimed or assigned by hand. The rule limit counts rules that are switched off too.
 
 ## If something looks wrong
 

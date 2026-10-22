@@ -56,7 +56,7 @@
       "chatbot_widgets": "أدوات الدردشة للمواقع",
       "wa_storefront": "كتالوج واتساب",
       "inbox_sla": "سياسات مستوى الخدمة",
-      "inbox_routing": "قواعد التوجيه",
+      "inbox_routing": "التوجيه الذكي: الإسناد التلقائي والقواعد",
       "waba_calling": "اتصالات واتساب",
       "inbox_kanban": "عرض كانبان",
       "team_performance": "أداء الفريق",
@@ -82,7 +82,7 @@
       "record_assignment": "قواعد تعيين السجلات",
       "team_hierarchy": "التسلسل الهرمي للفرق والمديرون",
       "custom_roles": "أدوار مخصصة ونطاقات",
-      "inbox_assignment_sticky": "مالك جهة الاتصال والوكيل الثابت"
+      "inbox_assignment_sticky": "التوجيه الذكي: مالك جهة الاتصال والوكيل الثابت"
     },
     "limitGroups": {
       "messaging": "المراسلة",
@@ -580,7 +580,16 @@
       "back": "رجوع",
       "compare": "مقارنة كل الخطط",
       "appHint": "يُباع {feature} أيضًا كتطبيق في سوق التطبيقات.",
-      "appLink": "عرض التطبيق"
+      "appLink": "عرض التطبيق",
+      "addonHint": "يمكنك أيضاً إضافتها إلى باقتك الحالية عبر إضافة {addon}.",
+      "addonLink": "عرض الإضافات",
+      "addons": {
+        "smartRouting": "التوجيه الذكي",
+        "teamsPermissions": "الفرق والصلاحيات"
+      }
+    },
+    "lock": {
+      "link": "عرض الباقات والإضافات"
     }
   }
 }

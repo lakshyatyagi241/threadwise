@@ -5,7 +5,7 @@
         "title": "Serah terima dan penugasan",
         "hint": "Dipakai saat bot, alur, atau rekan tim menyerahkan percakapan ke tim ini.",
         "method": "Cara memilih orang",
-        "methodHint": "Manual: percakapan menunggu di antrean tim sampai ada yang mengambilnya. Round robin dan Paling sedikit beban memilihkan anggota untuk Anda dan memerlukan paket dengan aturan penugasan.",
+        "methodHint": "Manual: percakapan menunggu di antrean tim sampai ada yang mengambilnya. Round robin dan Paling sedikit beban memilihkan anggota untuk Anda dan merupakan bagian dari add-on Perutean cerdas.",
         "defaultAssignee": "Penerima default",
         "defaultAssigneeHint": "Mengambil percakapan saat tidak ada orang lain yang bisa. Pilih salah satu anggota tim.",
         "noDefaultAssignee": "Tidak ada yang khusus",
@@ -23,7 +23,10 @@
           "fri": "Jumat",
           "sat": "Sabtu",
           "sun": "Minggu"
-        }
+        },
+        "methodLocked": "{method} (memerlukan Perutean cerdas)",
+        "methodLockHint": "Metode otomatis adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi.",
+        "defaultAssigneeLocked": "Penerima default hanya dipakai dengan metode tim otomatis, yang merupakan bagian dari add-on Perutean cerdas atau paket yang lebih tinggi."
       }
     }
   }

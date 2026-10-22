@@ -388,7 +388,17 @@ export class RoutingEngine {
     conversationUuid: string,
     now: Date = new Date(),
   ): Promise<boolean> {
-    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) return false;
+    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) {
+      // The plan (or the Smart routing add-on) is gone: the timer stops. Dropping the schedule is what ends it; leaving it set would make
+      // the sweep pick the same conversation every 30 seconds for ever and, as the oldest due rows, crowd out other workspaces' escalations.
+      // Nothing else is touched: the chat keeps its assignee and priority. The rule that scheduled it is still stored and works again
+      // for a NEW conversation once the feature is back.
+      await this.db.txAs({ orgId }, async (tx) => {
+        const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);
+        if (locked) await this.repo.clearEscalation(tx, orgId, locked.id);
+      });
+      return false;
+    }
     const canOpen = await this.inboxPeople(orgId);
     const done = await this.db.txAs({ orgId }, async (tx) => {
       const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);

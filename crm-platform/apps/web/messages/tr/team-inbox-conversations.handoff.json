@@ -54,7 +54,7 @@
         "intro": "Bot bu kişiye yanıt vermeyi bırakır. Konuşma seçtiğiniz kişiye veya ekibe gider ya da biri üstlenene kadar kuyrukta bekler.",
         "where": "Gönderilecek yer",
         "whereRules": "Atama kuralları, yoksa bekleme kuyruğu",
-        "whereQueueOnly": "Bekleme kuyruğu (atama kuralları planınızda yok)",
+        "whereQueueOnly": "Bekleme kuyruğu (atama kuralları için Akıllı yönlendirme eklentisi gerekir)",
         "whereTeam": "Bir ekip",
         "wherePerson": "Bir kişi",
         "team": "Ekip",

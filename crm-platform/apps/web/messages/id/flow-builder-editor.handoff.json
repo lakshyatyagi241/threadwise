@@ -34,14 +34,14 @@
           "team": "Sebuah tim",
           "person": "Satu orang",
           "rules": "Aturan penugasan",
-          "rulesLocked": "Aturan penugasan (tidak ada di paket Anda)"
+          "rulesLocked": "Aturan penugasan (add-on Perutean cerdas)"
         },
         "destHint": {
           "team": "Percakapan diberikan ke seseorang di tim, atau menunggu di antrean tim.",
           "person": "Percakapan diberikan ke orang ini jika bisa menerimanya; jika tidak, menunggu di antrean.",
           "rules": "Memakai aturan penugasan otomatis percakapan Anda; jika tidak ada yang menemukan orang, percakapan menunggu di antrean."
         },
-        "lockHint": "Paket Anda tidak mencakup aturan penugasan, jadi percakapan yang dikirim ke sini menunggu di antrean Menunggu sampai rekan tim mengambilnya.",
+        "lockHint": "Aturan penugasan adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi, jadi percakapan yang dikirim ke sini menunggu di antrean tunggu sampai rekan mengambilnya.",
         "team": "Tim",
         "teamPick": "— pilih tim —",
         "teamNone": "Belum ada tim",

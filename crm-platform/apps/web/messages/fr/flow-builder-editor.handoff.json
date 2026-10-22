@@ -34,14 +34,14 @@
           "team": "Une équipe",
           "person": "Une personne",
           "rules": "Les règles d’assignation",
-          "rulesLocked": "Les règles d’assignation (non incluses dans votre offre)"
+          "rulesLocked": "Les règles d'attribution (module Routage intelligent)"
         },
         "destHint": {
           "team": "Elle va à quelqu’un de l’équipe ou attend dans la file de l’équipe.",
           "person": "Elle va à cette personne si elle peut la prendre ; sinon elle attend dans la file.",
           "rules": "Utilise vos règles d’assignation automatique des conversations ; si aucune ne trouve de personne, elle attend dans la file."
         },
-        "lockHint": "Votre offre n’inclut pas les règles d’assignation : une conversation envoyée ici attend dans la file En attente qu’un collègue la prenne.",
+        "lockHint": "Les règles d'attribution font partie du module Routage intelligent ou d'une offre supérieure : une conversation envoyée ici attend dans la file d'attente qu'un collègue la prenne.",
         "team": "Équipe",
         "teamPick": "— choisir une équipe —",
         "teamNone": "Aucune équipe pour le moment",

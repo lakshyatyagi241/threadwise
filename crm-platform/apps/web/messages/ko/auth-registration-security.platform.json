@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "웹사이트 챗봇 위젯 빌더입니다.",
             "wa_storefront": "WhatsApp 카탈로그 및 스토어프론트 영역입니다.",
             "inbox_sla": "팀 인박스의 SLA 정책 및 기한입니다.",
-            "inbox_routing": "인박스 대화를 자동으로 배정하는 라우팅 규칙입니다.",
+            "inbox_routing": "새 채팅 자동 배정: 라우팅 규칙, 나머지 전체, 대기열 타이머. 스마트 라우팅 애드온의 일부입니다.",
             "waba_calling": "인박스에서의 WhatsApp 통화: 통화 번호, 통화 권한, 전화 걸기 및 받기입니다.",
             "inbox_kanban": "팀 인박스의 칸반 보드 보기입니다.",
             "team_performance": "팀 성과 보고서입니다.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "우선순위 규칙에 따라 새 연락처, 회사, 거래를 알맞은 영업 담당자에게 배정합니다.",
             "team_hierarchy": "상위 팀, 팀 리더, 그리고 자기 팀과 하위 팀을 볼 수 있는 매니저입니다.",
             "custom_roles": "역할을 만들고 수정하며, 권한마다 범위(내 기록, 팀 기록 또는 전체 기록)를 선택합니다.",
-            "inbox_assignment_sticky": "연락처 담당자와 채팅 담당자 간의 담당자 우선 및 동기화 유지 배정, 재방문 연락처 기간, 재배정 확인 창. 받은편지함 라우팅과 함께 동작합니다."
+            "inbox_assignment_sticky": "소유자 우선 및 동기화 배정, 재방문 연락처 기간, 재배정 시 확인. 스마트 라우팅 애드온의 일부입니다."
           },
           "units": {
             "days": "일",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "웹사이트 챗봇 위젯",
             "wa_storefront": "WhatsApp 스토어프론트 및 카탈로그",
             "inbox_sla": "인박스 SLA 정책",
-            "inbox_routing": "인박스 라우팅 규칙 및 영업 시간",
+            "inbox_routing": "스마트 라우팅: 자동 배정 및 규칙",
             "waba_calling": "인박스에서 WhatsApp 통화 걸기 및 받기",
             "inbox_kanban": "인박스 칸반 보드",
             "team_performance": "팀 성과 보고서",
@@ -1642,7 +1642,7 @@
             "record_assignment": "레코드 배정 규칙 (연락처, 회사, 거래 자동 배정)",
             "team_hierarchy": "팀 계층 및 매니저",
             "custom_roles": "사용자 지정 역할 및 범위",
-            "inbox_assignment_sticky": "연락처 담당자와 고정 배정"
+            "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원"
           },
           "problems": {
             "required": "필수 입력 항목입니다.",

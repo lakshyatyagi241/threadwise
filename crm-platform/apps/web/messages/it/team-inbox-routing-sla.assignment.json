@@ -12,7 +12,7 @@
         "loadFailed": "Impossibile caricare le impostazioni di assegnazione.",
         "retry": "Riprova",
         "notInPlan": "Non incluso nel tuo piano",
-        "upgradeHint": "Il tuo piano non include questa funzione. Chiedi al proprietario dell’account di passare a un piano superiore.",
+        "upgradeHint": "Incluso nel componente aggiuntivo Instradamento intelligente o in un piano superiore.",
         "stepFirst": "Controllato per primo",
         "stepMaster": "Interruttore principale",
         "stepAfter": "Dopo una presa in carico",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Serve più controllo? Aggiungi regole",
         "intro": "Facoltativo. Le regole inviano conversazioni specifiche (un canale, parole nel messaggio, un nuovo contatto...) ad agenti o team specifici. Se i quattro interruttori bastano, non devi crearne nessuna.",
-        "locked": "Le regole non sono incluse nel tuo piano. Hai comunque la coda di attesa, la presa in carico e l’assegnazione manuale. Chiedi al proprietario dell’account di passare a un piano superiore.",
+        "locked": "Le regole fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore. Restano disponibili la coda d'attesa, la presa in carico e l'assegnazione manuale.",
         "pipelineTitle": "Come viene assegnata una nuova conversazione",
         "pipeline": {
           "agent": "1. Responsabile del contatto e Agente abituale",

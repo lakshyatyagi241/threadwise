@@ -65,7 +65,7 @@
       "chatbot_widgets": "Chatbotwidgets",
       "wa_storefront": "WhatsApp-catalogus",
       "inbox_sla": "SLA-beleid",
-      "inbox_routing": "Routeringsregels",
+      "inbox_routing": "Slimme routering: automatische toewijzing en regels",
       "waba_calling": "WhatsApp-bellen",
       "inbox_kanban": "Kanbanweergave",
       "team_performance": "Teamprestaties",
@@ -91,7 +91,7 @@
       "record_assignment": "Regels voor recordtoewijzing",
       "team_hierarchy": "Teamhiërarchie en managers",
       "custom_roles": "Eigen rollen en bereiken",
-      "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
+      "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -580,7 +580,16 @@
       "back": "Terug",
       "compare": "Alle abonnementen vergelijken",
       "appHint": "{feature} wordt ook als app verkocht in de Marktplaats.",
-      "appLink": "Bekijk de app"
+      "appLink": "Bekijk de app",
+      "addonHint": "Je kunt het ook aan je huidige abonnement toevoegen met de add-on {addon}.",
+      "addonLink": "Add-ons bekijken",
+      "addons": {
+        "smartRouting": "Slimme routering",
+        "teamsPermissions": "Teams en machtigingen"
+      }
+    },
+    "lock": {
+      "link": "Abonnementen en add-ons bekijken"
     }
   }
 }

@@ -54,7 +54,7 @@
         "intro": "Il bot smette di rispondere a questo contatto. La conversazione va alla persona o al team che scegli, oppure resta in coda finché qualcuno la prende in carico.",
         "where": "Invia a",
         "whereRules": "Le regole di assegnazione, altrimenti la coda di attesa",
-        "whereQueueOnly": "La coda di attesa (le regole di assegnazione non sono nel tuo piano)",
+        "whereQueueOnly": "La coda d'attesa (le regole di assegnazione richiedono il componente Instradamento intelligente)",
         "whereTeam": "Un team",
         "wherePerson": "Una persona",
         "team": "Team",

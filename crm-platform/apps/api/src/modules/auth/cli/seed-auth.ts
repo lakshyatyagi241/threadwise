@@ -96,7 +96,14 @@ const SAMPLE_PLANS: SeedPlan[] = [
       ai_token_limit_monthly: 50000,
     },
     // WhatsApp groups is a paid plan feature (owner decision 2026-10-08, BL-094); the demo plans carry it so local testing works.
-    features: { ...FEATURES_OFF, waba_groups: true, help_agent: true },
+    // Smart routing (automatic assignment) is an upper-tier feature: the entry plan has neither flag.
+    features: {
+      ...FEATURES_OFF,
+      waba_groups: true,
+      help_agent: true,
+      inbox_routing: false,
+      inbox_assignment_sticky: false,
+    },
   },
   {
     slug: 'growth',
@@ -145,6 +152,8 @@ const SAMPLE_PLANS: SeedPlan[] = [
       shopify: true,
       waba_groups: true,
       help_agent: true,
+      inbox_routing: true,
+      inbox_assignment_sticky: true,
     },
   },
   {
@@ -197,6 +206,8 @@ const SAMPLE_PLANS: SeedPlan[] = [
       sales_pipeline: true,
       waba_groups: true,
       help_agent: true,
+      inbox_routing: true,
+      inbox_assignment_sticky: true,
     },
   },
 ];

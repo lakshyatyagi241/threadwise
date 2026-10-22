@@ -115,6 +115,8 @@ export class TeamsService {
       await this.plan.assertCanCreate(tx, ctx.orgId);
       // A parent team or a lead/manager needs the plan feature `team_hierarchy`; leaving them empty is always allowed.
       if (input.parentId || input.leadId) await this.plan.assertHierarchy(ctx.orgId);
+      // An automatic method (round robin, least loaded) needs `inbox_routing` (Smart routing); Manual is on every plan.
+      await this.plan.assertAssignmentMethod(ctx.orgId, input.assignmentStrategy, 'manual');
       if (await this.repo.nameTaken(tx, ctx.orgId, input.name)) throw this.nameTaken(input.name);
       const memberIds = await this.resolveMembers(tx, ctx.orgId, input.memberIds);
       const deviceIds = await this.resolveDevices(tx, ctx.orgId, input.deviceIds);
@@ -195,8 +197,20 @@ export class TeamsService {
         input.deviceIds === undefined
           ? undefined
           : await this.resolveDevices(tx, ctx.orgId, input.deviceIds);
-      // Setting a parent or a manager needs `team_hierarchy`; clearing one (null) stays allowed.
-      if (input.parentId || input.leadId) await this.plan.assertHierarchy(ctx.orgId);
+      // Setting a NEW parent or manager needs `team_hierarchy`; clearing one (null) stays allowed, and so does saving the team with the
+      // parent and manager it already has (a workspace that lost the feature keeps its teams and can still edit them).
+      if (
+        (input.parentId && input.parentId !== team.parentUuid) ||
+        (input.leadId && input.leadId !== team.leadUuid)
+      ) {
+        await this.plan.assertHierarchy(ctx.orgId);
+      }
+      // A different automatic method needs `inbox_routing` (Smart routing); keeping the stored one, or choosing Manual, is always allowed.
+      await this.plan.assertAssignmentMethod(
+        ctx.orgId,
+        input.assignmentStrategy,
+        team.assignmentStrategy,
+      );
       const parentId =
         input.parentId === undefined
           ? undefined

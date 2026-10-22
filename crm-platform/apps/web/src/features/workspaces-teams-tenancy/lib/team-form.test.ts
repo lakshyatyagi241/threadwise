@@ -6,6 +6,7 @@ import {
   emptyTeamForm,
   formFromTeam,
   hoursProblem,
+  isMethodLocked,
   memberChanges,
   nameProblem,
   sameColor,
@@ -257,5 +258,16 @@ describe('handoff settings of a team (BL-396)', () => {
     expect(hoursProblem(bad)).toBe(true);
     bad.mon = { enabled: false, from: '', to: '' };
     expect(hoursProblem(bad)).toBe(false);
+  });
+});
+
+describe('the team method lock (Smart routing)', () => {
+  it('closes the automatic methods without the feature, keeps Manual and the stored method open', () => {
+    expect(isMethodLocked(false, 'round_robin', 'manual')).toBe(true);
+    expect(isMethodLocked(false, 'least_loaded', 'manual')).toBe(true);
+    expect(isMethodLocked(false, 'manual', 'round_robin')).toBe(false);
+    // a team that already stores a method keeps it selectable, so a downgraded workspace can still save the team
+    expect(isMethodLocked(false, 'round_robin', 'round_robin')).toBe(false);
+    expect(isMethodLocked(true, 'least_loaded', 'manual')).toBe(false);
   });
 });

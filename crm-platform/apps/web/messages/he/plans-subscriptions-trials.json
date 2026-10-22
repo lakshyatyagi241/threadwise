@@ -65,7 +65,7 @@
       "chatbot_widgets": "ווידג׳טים של צ׳אטבוט",
       "wa_storefront": "קטלוג WhatsApp",
       "inbox_sla": "מדיניות SLA",
-      "inbox_routing": "כללי ניתוב",
+      "inbox_routing": "ניתוב חכם: הקצאה אוטומטית וכללים",
       "waba_calling": "שיחות WhatsApp",
       "inbox_kanban": "תצוגת קנבן",
       "team_performance": "ביצועי צוות",
@@ -91,7 +91,7 @@
       "record_assignment": "כללי הקצאת רשומות",
       "team_hierarchy": "היררכיית צוותים ומנהלים",
       "custom_roles": "תפקידים מותאמים וטווחים",
-      "inbox_assignment_sticky": "בעלים של איש קשר ונציג קבוע"
+      "inbox_assignment_sticky": "ניתוב חכם: בעל איש הקשר והנציג הקבוע"
     },
     "limitGroups": {
       "messaging": "הודעות",
@@ -580,7 +580,16 @@
       "back": "חזרה",
       "compare": "השוואת כל התוכניות",
       "appHint": "{feature} נמכר גם כאפליקציה ב־Marketplace.",
-      "appLink": "הצגת האפליקציה"
+      "appLink": "הצגת האפליקציה",
+      "addonHint": "אפשר גם להוסיף אותו לחבילה הנוכחית שלך עם התוסף {addon}.",
+      "addonLink": "לצפייה בתוספים",
+      "addons": {
+        "smartRouting": "ניתוב חכם",
+        "teamsPermissions": "צוותים והרשאות"
+      }
+    },
+    "lock": {
+      "link": "לצפייה בחבילות ובתוספים"
     }
   }
 }

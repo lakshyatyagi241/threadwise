@@ -414,6 +414,13 @@
       "hint": "While you are offline, no new chats are assigned to you automatically. Chats you already have stay yours.",
       "failed": "Could not change"
     },
+    "myLeave": {
+      "label": "Time off",
+      "onLeaveUntil": "On leave until {date}",
+      "onLeaveOpen": "On leave",
+      "hint": "Tell your team you are away. While you are on leave, no new chats are assigned to you automatically.",
+      "title": "Your time off"
+    },
     "deactivate": {
       "eyebrow": "Team members",
       "title": "Deactivate member",

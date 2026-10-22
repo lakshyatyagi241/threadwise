@@ -5,6 +5,7 @@ import { TeamAnalyticsService } from './team-analytics.service';
 import { ChatConversationsModule } from '../chat-conversations';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { AssigneesService } from './assignees.service';
+import { BusinessHoursController } from './business-hours.controller';
 import { BusinessHoursService } from './business-hours.service';
 import { AssignmentController } from './assignment.controller';
 import { HandoffController } from './handoff.controller';
@@ -37,6 +38,7 @@ import { RoutingRulesService } from './routing-rules.service';
     AssignmentController,
     HandoffController,
     RoutingRulesController,
+    BusinessHoursController,
     SlaPoliciesController,
     TeamAnalyticsController,
   ],

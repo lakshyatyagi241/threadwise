@@ -414,6 +414,13 @@
       "hint": "Enquanto você estiver offline, nenhum chat novo é atribuído a você automaticamente. Os chats que você já tem continuam seus.",
       "failed": "Não foi possível alterar"
     },
+    "myLeave": {
+      "label": "Folga",
+      "onLeaveUntil": "De licença até {date}",
+      "onLeaveOpen": "De licença",
+      "hint": "Avise sua equipe de que você está ausente. Durante a licença, nenhuma conversa nova é atribuída a você automaticamente.",
+      "title": "Sua folga"
+    },
     "deactivate": {
       "eyebrow": "Membros da equipe",
       "title": "Desativar membro",

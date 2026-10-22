@@ -105,7 +105,10 @@ describe('the four switches', () => {
     };
     const out = switches();
     expect(out).toContain('Not in your plan');
-    expect(out).toMatch(/upgrade/i);
+    // Every locked control names the add-on that unlocks it and links to where it is bought.
+    expect(out).toContain('Smart routing add-on');
+    expect(out).toContain('href="/account/plans"');
+    expect((out.match(/data-testid="switch-(auto|sticky|owner)-lock"/g) ?? []).length).toBe(3);
     const claim = out.slice(
       out.indexOf('data-testid="switch-claim"'),
       out.indexOf('data-testid="advanced"'),

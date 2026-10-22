@@ -5,7 +5,7 @@
         "title": "Handoff and assignment",
         "hint": "Used when a bot, a flow or a teammate hands a conversation to this team.",
         "method": "How to pick a person",
-        "methodHint": "Manual: the conversation waits in the team's queue until someone claims it. Round robin and Least loaded pick a member for you and need a plan with assignment rules.",
+        "methodHint": "Manual: the conversation waits in the team's queue until someone claims it. Round robin and Least loaded pick a member for you and are part of the Smart routing add-on.",
         "defaultAssignee": "Default assignee",
         "defaultAssigneeHint": "Takes the conversation when nobody else can. Pick one of the team's members.",
         "noDefaultAssignee": "Nobody in particular",
@@ -23,7 +23,10 @@
           "fri": "Friday",
           "sat": "Saturday",
           "sun": "Sunday"
-        }
+        },
+        "methodLocked": "{method} (needs Smart routing)",
+        "methodLockHint": "Automatic methods are part of the Smart routing add-on or a higher plan.",
+        "defaultAssigneeLocked": "The default assignee is used only with an automatic team method, which is part of the Smart routing add-on or a higher plan."
       }
     }
   }

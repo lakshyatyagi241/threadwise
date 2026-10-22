@@ -540,7 +540,7 @@
             "chatbot_widgets": "Виджеты чат-бота",
             "wa_storefront": "Каталог WhatsApp",
             "inbox_sla": "SLA входящих",
-            "inbox_routing": "Маршрутизация входящих",
+            "inbox_routing": "Умная маршрутизация",
             "waba_calling": "Звонки WhatsApp",
             "inbox_kanban": "Канбан входящих",
             "team_performance": "Эффективность команды",
@@ -566,7 +566,7 @@
             "record_assignment": "Правила назначения записей",
             "team_hierarchy": "Иерархия команд и руководители",
             "custom_roles": "Свои роли и области доступа",
-            "inbox_assignment_sticky": "Владелец контакта и закреплённый агент"
+            "inbox_assignment_sticky": "Умная маршрутизация: владелец контакта и закреплённый агент"
           },
           "cta": {
             "continueFree": "Продолжить бесплатно",

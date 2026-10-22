@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "Nicht in deinem Tarif",
-      "upgradeHint": "Dein Tarif enthält das nicht. Bitte den Kontoinhaber, den Tarif zu upgraden.",
+      "upgradeHint": "Enthalten im Add-on Intelligentes Routing oder in einem höheren Tarif.",
       "owner": {
         "prompt": "Bei Neuzuweisung nach dem Kontaktbesitzer fragen",
         "promptHint": "Wenn ein Chat manuell an jemand anderen gegeben wird, anbieten, diese Person auch zum Kontaktbesitzer zu machen.",

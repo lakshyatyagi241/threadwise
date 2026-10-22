@@ -13,6 +13,7 @@ import { PlanPaywall } from './plan-paywall';
 const GATES = [
   { href: '/ai-crm', feature: 'ai_crm_copilot' },
   { href: '/analytics', feature: 'analytics' },
+  { href: '/auto-assignment/new', feature: 'inbox_routing' },
 ];
 
 function render(
@@ -30,6 +31,19 @@ function render(
     </NextIntlClientProvider>,
   );
 }
+
+describe('the paywall of a feature that is sold as an add-on', () => {
+  it('says which add-on unlocks it and links to the plans and add-ons page', () => {
+    const html = render('/auto-assignment/new', ['marketplace'], false);
+    expect(html).toContain('data-testid="paywall-addon"');
+    expect(html).toContain('Smart routing add-on');
+    expect(html).toContain('href="/account/plans"');
+  });
+
+  it('shows no add-on line for a feature no pack grants', () => {
+    expect(render('/analytics', ['marketplace'], false)).not.toContain('paywall-addon');
+  });
+});
 
 describe('the paywall of a feature that is also sold as an app', () => {
   it('links to the app page for a person who may open the Marketplace', () => {

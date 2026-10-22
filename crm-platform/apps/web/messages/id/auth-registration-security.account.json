@@ -540,7 +540,7 @@
             "chatbot_widgets": "Widget chatbot",
             "wa_storefront": "Katalog WhatsApp",
             "inbox_sla": "SLA kotak masuk",
-            "inbox_routing": "Perutean kotak masuk",
+            "inbox_routing": "Perutean cerdas",
             "waba_calling": "Panggilan WhatsApp",
             "inbox_kanban": "Kanban kotak masuk",
             "team_performance": "Performa tim",
@@ -566,7 +566,7 @@
             "record_assignment": "Aturan penugasan data",
             "team_hierarchy": "Hierarki tim dan manajer",
             "custom_roles": "Peran kustom dan cakupan",
-            "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
+            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

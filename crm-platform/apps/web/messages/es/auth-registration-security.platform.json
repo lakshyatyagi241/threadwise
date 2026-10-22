@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "El creador de widgets de chatbot para el sitio web.",
             "wa_storefront": "El área de catálogo y tienda de WhatsApp.",
             "inbox_sla": "Políticas y plazos de SLA en la bandeja de equipo.",
-            "inbox_routing": "Reglas de enrutamiento que asignan automáticamente las conversaciones de la bandeja.",
+            "inbox_routing": "Asignación automática de chats nuevos: reglas de enrutamiento, Todos los demás y temporizadores de la cola de espera. Forma parte del complemento Enrutamiento inteligente.",
             "waba_calling": "Llamadas de WhatsApp desde la bandeja: números de llamada, permisos de llamada, realizar y contestar llamadas.",
             "inbox_kanban": "La vista de tablero Kanban de la bandeja de equipo.",
             "team_performance": "Los informes de rendimiento del equipo.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "Asigna los nuevos contactos, empresas y negocios al responsable de ventas adecuado mediante reglas por prioridad.",
             "team_hierarchy": "Equipos padre, líderes de equipo y gerentes que ven su equipo y los equipos inferiores.",
             "custom_roles": "Crea y edita roles, y elige un alcance (propios, del equipo o todos los registros) para cada permiso.",
-            "inbox_assignment_sticky": "Asignación con prioridad al propietario y sincronizada entre el propietario del contacto y el responsable del chat, la ventana de contacto recurrente y el aviso de reasignación. Funciona junto con el enrutamiento de la bandeja."
+            "inbox_assignment_sticky": "Asignación con prioridad al propietario y sincronizada, ventana de contacto recurrente y aviso al reasignar. Forma parte del complemento Enrutamiento inteligente."
           },
           "units": {
             "days": "Días",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "Widgets de chatbot para el sitio web",
             "wa_storefront": "Tienda y catálogo de WhatsApp",
             "inbox_sla": "Políticas de SLA de la bandeja",
-            "inbox_routing": "Reglas de enrutamiento y horarios de atención de la bandeja",
+            "inbox_routing": "Enrutamiento inteligente: asignación automática y reglas",
             "waba_calling": "Realizar y contestar llamadas de WhatsApp desde la bandeja",
             "inbox_kanban": "Tablero Kanban de la bandeja",
             "team_performance": "Informes de rendimiento del equipo",
@@ -1642,7 +1642,7 @@
             "record_assignment": "Reglas de asignación de registros (asignar automáticamente contactos, empresas y negocios)",
             "team_hierarchy": "Jerarquía de equipos y gerentes",
             "custom_roles": "Roles personalizados y alcances",
-            "inbox_assignment_sticky": "Propietario del contacto y agente fijo"
+            "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo"
           },
           "problems": {
             "required": "Este campo es obligatorio.",

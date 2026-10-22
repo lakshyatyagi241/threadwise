@@ -65,7 +65,7 @@
       "chatbot_widgets": "چیٹ بوٹ ویجٹس",
       "wa_storefront": "WhatsApp کیٹلاگ",
       "inbox_sla": "SLA پالیسیاں",
-      "inbox_routing": "روٹنگ قواعد",
+      "inbox_routing": "اسمارٹ روٹنگ: خودکار تفویض اور اصول",
       "waba_calling": "WhatsApp کالنگ",
       "inbox_kanban": "کانبان ویو",
       "team_performance": "ٹیم کی کارکردگی",
@@ -91,7 +91,7 @@
       "record_assignment": "ریکارڈ تفویض کے اصول",
       "team_hierarchy": "ٹیم کا درجہ بندی اور مینیجرز",
       "custom_roles": "حسبِ ضرورت کردار اور دائرہ کار",
-      "inbox_assignment_sticky": "رابطے کا مالک اور اسٹکی ایجنٹ"
+      "inbox_assignment_sticky": "اسمارٹ روٹنگ: رابطے کا مالک اور مستقل ایجنٹ"
     },
     "limitGroups": {
       "messaging": "میسجنگ",
@@ -580,7 +580,16 @@
       "back": "واپس جائیں",
       "compare": "تمام پلانز کا موازنہ کریں",
       "appHint": "{feature} مارکیٹ پلیس میں ایپ کے طور پر بھی فروخت ہوتا ہے۔",
-      "appLink": "ایپ دیکھیں"
+      "appLink": "ایپ دیکھیں",
+      "addonHint": "آپ اسے {addon} ایڈ آن کے ساتھ اپنے موجودہ پلان میں بھی شامل کر سکتے ہیں۔",
+      "addonLink": "ایڈ آنز دیکھیں",
+      "addons": {
+        "smartRouting": "اسمارٹ روٹنگ",
+        "teamsPermissions": "ٹیمیں اور اجازتیں"
+      }
+    },
+    "lock": {
+      "link": "پلان اور ایڈ آنز دیکھیں"
     }
   }
 }

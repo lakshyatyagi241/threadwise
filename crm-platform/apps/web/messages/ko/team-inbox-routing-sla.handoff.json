@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "현재 요금제에 없음",
-      "upgradeHint": "현재 요금제에는 이 기능이 포함되어 있지 않습니다. 계정 소유자에게 요금제 업그레이드를 요청하세요.",
+      "upgradeHint": "스마트 라우팅 애드온 또는 상위 요금제에 포함되어 있습니다.",
       "owner": {
         "prompt": "재배정 시 연락처 담당자 여부 묻기",
         "promptHint": "채팅을 수동으로 다른 사람에게 넘길 때 그 사람을 연락처 담당자로도 지정할지 묻습니다.",
