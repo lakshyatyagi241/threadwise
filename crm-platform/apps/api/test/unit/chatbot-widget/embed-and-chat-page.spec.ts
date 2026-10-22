@@ -462,6 +462,12 @@ describe('the chat window draws a bot line the way WhatsApp does', () => {
     expect(draw('<b>x</b> *y*')).toBe('<b>x</b> <b>y</b>');
   });
 
+  it('keeps reply buttons on screen after one is tapped, marks the tapped one, and gives a button no icon of its own', () => {
+    expect(script).not.toContain('clearChips();\n    m.appendChild(row);');
+    expect(script).toContain("c.classList.add('picked')");
+    expect(script).not.toContain('M5 12h14');
+  });
+
   it('draws no picture for an empty icon address (it used to resolve to the page itself)', () => {
     expect(page).toContain("if (!String(v || '').trim()) return '';");
   });
