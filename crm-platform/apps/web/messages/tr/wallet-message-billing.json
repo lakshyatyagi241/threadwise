@@ -99,7 +99,8 @@
         "fullStatement": "Tam ekstreyi aç",
         "emptyTitle": "Henüz etkinlik yok",
         "emptyBody": "Yüklemeler, mesaj ücretleri ve iadeler burada görünür."
-      }
+      },
+      "messageExpenses": "Mesaj harcamaları"
     },
     "activity": {
       "description": "Açıklama",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "Mesaj harcamaları",
+      "subtitle": "Her mesajın maliyetini, gönderildiği şablonu ve geri ödenen tutarı gösterir. Toplamlar filtrelerle eşleşen her şeyi kapsar.",
+      "back": "Cüzdana dön",
+      "breadcrumbLabel": "Gezinti yolu",
+      "breadcrumbWallet": "Cüzdan",
+      "breadcrumbExpenses": "Mesaj harcamaları",
+      "fullStatement": "Tam ekstre",
+      "summary": {
+        "messages": "Mesajlar",
+        "charged": "Ücretlendirildi",
+        "refunded": "İade edildi",
+        "net": "Net maliyet",
+        "notBilled": "Ücretlendirilmedi"
+      },
+      "filters": {
+        "status": "Durum",
+        "statusAll": "Tümü",
+        "statusCharged": "Ücretlendirildi",
+        "statusFree": "Ücretlendirilmedi",
+        "statusRefunded": "İade edildi",
+        "template": "Şablon",
+        "templatePlaceholder": "Şablon adı",
+        "channel": "Kanal",
+        "category": "Kategori",
+        "allChannels": "Tüm kanallar",
+        "allCategories": "Tüm kategoriler",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "apply": "Uygula",
+        "reset": "Sıfırla",
+        "rangeInverted": "Bitiş tarihi başlangıç tarihinden önce."
+      },
+      "breakdown": {
+        "title": "Maliyet ölçütü",
+        "groupBy": {
+          "template": "Şablon",
+          "source": "Kanal",
+          "category": "Kategori",
+          "country": "Ülke"
+        },
+        "group": "Grup",
+        "notRecorded": "Kaydedilmedi",
+        "truncated": "En büyük {count} grup gösteriliyor. Kalanları görmek için tarihleri daraltın.",
+        "empty": "Bu filtrelerle eşleşen mesaj yok."
+      },
+      "columns": {
+        "date": "Tarih",
+        "template": "Şablon",
+        "campaign": "Kampanya veya yayın",
+        "channel": "Kanal",
+        "category": "Kategori",
+        "country": "Ülke",
+        "status": "Durum",
+        "charged": "Ücretlendirildi",
+        "refunded": "İade edildi",
+        "net": "Net tutar",
+        "messages": "Mesajlar",
+        "notBilled": "Ücretlendirilmedi"
+      },
+      "status": {
+        "charged": "Ücretlendirildi",
+        "free": "Ücretlendirilmedi",
+        "refunded": "İade edildi",
+        "refundedOn": "{date} tarihinde iade edildi"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Paketinize dahil",
+        "wallet_empty": "Cüzdan boştu",
+        "rate_is_zero": "Ücret sıfır",
+        "no_wallet_owner": "Cüzdan sahibi yok"
+      },
+      "uncollected": "{amount} tahsil edilmedi",
+      "emptyTitle": "Henüz mesaj yok",
+      "emptyBody": "Kampanyalar, yayınlar, planlamalar ve sohbetlerden gönderilen mesajlar şablonu ve maliyetiyle burada görünür.",
+      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın."
     },
     "admin": {
       "admin": "Yönetici",

@@ -140,7 +140,7 @@ export class ScheduledReceiptsService {
     status: WalletDeliveryStatus,
   ): Promise<void> {
     const res = await tx.execute(sql`
-      SELECT m.provider, t.category, t.meta_category, c.phone
+      SELECT m.provider, m.schedule_name AS subject_name, t.template_name, t.category, t.meta_category, c.phone
         FROM scheduled_message_contacts c
         JOIN scheduled_messages m ON m.org_id = c.org_id AND m.id = c.scheduled_message_id
         LEFT JOIN wa_templates t ON t.org_id = m.org_id AND t.id = m.template_id
@@ -148,6 +148,8 @@ export class ScheduledReceiptsService {
     const r = res.rows[0] as
       | {
           provider: string | null;
+          subject_name: string | null;
+          template_name: string | null;
           category: string | null;
           meta_category: string | null;
           phone: string | null;
@@ -169,6 +171,8 @@ export class ScheduledReceiptsService {
         category:
           r.category || r.meta_category ? effectiveCategory(r.meta_category, r.category) : null,
         source: 'scheduled',
+        templateName: r.template_name,
+        subjectName: r.subject_name,
       },
     });
   }

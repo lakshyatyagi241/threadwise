@@ -52,7 +52,7 @@ export class AssignmentController {
   @RequirePermission('inbox.conversation.bulk')
   @ApiOperation({
     summary:
-      'Apply one action to up to 200 conversations (status, assign, mark read, priority, snooze)',
+      'Apply one action to up to 200 conversations (status, assign, mark read or unread, priority, snooze, spam, tag)',
     description:
       'Needs `inbox.conversation.bulk` and the permission of the action itself. Each conversation is checked on its own (visibility, scope, state machine); the answer lists every conversation as done, unchanged or failed with the problem code. A failure never undoes the others.',
   })

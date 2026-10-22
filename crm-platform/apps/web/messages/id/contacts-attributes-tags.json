@@ -1338,7 +1338,7 @@
         "closePicker": "Tutup",
         "changed": "Properti yang diubah",
         "clear": "Kosongkan",
-        "keep": "Pertahankan",
+        "remove": "Hapus {name}",
         "setValue": "Atur nilai",
         "willClear": "Akan dikosongkan pada {count, plural, one {kontak yang dipilih} other {semua # kontak yang dipilih}}.",
         "requiredNoClear": "Properti wajib tidak dapat dikosongkan.",

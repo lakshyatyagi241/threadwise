@@ -7,6 +7,14 @@ import {
   type InboxTab,
 } from '@crm/contracts';
 
+/** True when the row is assigned to this person (never when nobody is signed in). */
+export function isMine(
+  row: Pick<ConversationSummary, 'assignment'>,
+  meId: string | null | undefined,
+): boolean {
+  return !!meId && row.assignment.user?.id === meId;
+}
+
 /**
  * The conversation list as a pure reducer: what is loaded, how a row that changed over a socket is placed, and which tab a row
  * belongs to. The server is the authority (scope, row-level security); this only keeps the rows already on screen in the order
@@ -201,7 +209,7 @@ export function matchesFilters(
   }
   switch (f.tab) {
     case 'mine':
-      if (!meId || row.assignment.user?.id !== meId) return false;
+      if (!isMine(row, meId)) return false;
       break;
     case 'unassigned':
       if (row.assignment.user) return false;

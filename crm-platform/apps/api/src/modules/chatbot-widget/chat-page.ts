@@ -938,7 +938,8 @@ const SCRIPT = `
       var el = document.createElement('div');
       el.className = 'card';
       el.setAttribute('role', 'listitem');
-      if (c.image && /^https?:\\/\\//i.test(c.image)) {
+      var cardImg = imgUrl(c.image);
+      if (cardImg) {
         var img = document.createElement('img');
         img.alt = c.title || '';
         img.loading = 'lazy';
@@ -948,9 +949,9 @@ const SCRIPT = `
           if (img.dataset.retry) { img.remove(); return; }
           img.dataset.retry = '1';
           img.referrerPolicy = 'origin';
-          img.src = c.image;
+          img.src = cardImg;
         };
-        img.src = c.image;
+        img.src = cardImg;
         el.appendChild(img);
       }
       var cb = document.createElement('div');

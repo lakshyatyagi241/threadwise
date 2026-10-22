@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { liveFlowData } from './runtime/live-graph';
 import {
   ERROR_CODES,
   FLOW_ENROLL_MAX_CONTACTS,
@@ -748,7 +749,7 @@ export class FlowRuntimeService {
       const res = await tx.execute(sql`
         SELECT r.id, r.uuid, r.peer_key, r.source, r.status, r.end_reason, r.failure_reason, r.halt_reason, r.current_node_id,
                r.started_at, r.last_activity_at, r.ended_at, r.resume_at, r.trigger_text, r.vars, r.wait, r.expires_at,
-               COALESCE(r.graph, gv.graph) AS run_graph, f.flow_data AS current_flow_data,
+               COALESCE(r.graph, gv.graph) AS run_graph, ${liveFlowData('f')} AS current_flow_data,
                f.uuid AS flow_uuid, f.flow_name, c.uuid AS contact_uuid, c.name AS contact_name,
                ch.uuid AS channel_uuid, ch.name AS channel_name, ch.kind AS channel_kind,
                CASE WHEN r.node_count > 0 THEN r.node_count

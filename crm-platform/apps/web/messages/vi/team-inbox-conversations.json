@@ -1059,7 +1059,10 @@
       "tagRemove": "Bỏ thẻ",
       "onLeave": "đang nghỉ phép",
       "onLeaveUntil": "nghỉ phép đến {date}",
-      "spam": "Đánh dấu là spam"
+      "spam": "Đánh dấu là spam",
+      "markUnread": "Đánh dấu chưa đọc",
+      "unsnooze": "Hủy tạm ẩn",
+      "notSpam": "Đánh dấu là không phải spam"
     },
     "tags": {
       "tag": "Thẻ",

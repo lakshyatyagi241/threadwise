@@ -53,6 +53,14 @@ afterEach(() => {
   host.remove();
 });
 
+describe('useBulkSelection picked', () => {
+  it('holds the picked rows, as the list has them, in list order', () => {
+    act(() => bulk().select('c', false));
+    act(() => bulk().select('a', false));
+    expect(bulk().picked).toEqual([rows[0], rows[2]]);
+  });
+});
+
 describe('useBulkSelection toggleAll', () => {
   it('select all then select all again clears, and a Select-button mode stays on', () => {
     act(() => bulk().toggleSelecting());
