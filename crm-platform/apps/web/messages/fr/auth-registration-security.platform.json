@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "Le créateur de widgets de chatbot pour site web.",
             "wa_storefront": "La zone du catalogue et de la boutique WhatsApp.",
             "inbox_sla": "Politiques et échéances SLA dans la boîte de réception d’équipe.",
-            "inbox_routing": "Règles de routage qui attribuent automatiquement les conversations de la boîte de réception.",
+            "inbox_routing": "Attribution automatique des nouvelles conversations : règles de routage, Tous les autres et minuteurs de la file d'attente. Fait partie du module Routage intelligent.",
             "waba_calling": "Appels WhatsApp depuis la boîte de réception : numéros d’appel, autorisations d’appel, émission et réponse aux appels.",
             "inbox_kanban": "La vue tableau Kanban de la boîte de réception d’équipe.",
             "team_performance": "Les rapports de performance de l’équipe.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité.",
             "team_hierarchy": "Équipes parentes, responsables d'équipe et managers qui voient leur équipe et les équipes en dessous.",
             "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation.",
-            "inbox_assignment_sticky": "Assignation propriétaire d’abord et synchronisée entre le propriétaire du contact et le responsable du chat, fenêtre des contacts récurrents et invite de réassignation. Fonctionne avec le routage de la boîte de réception."
+            "inbox_assignment_sticky": "Attribution propriétaire d'abord et synchronisée, fenêtre de contact récurrent et invite de réattribution. Fait partie du module Routage intelligent."
           },
           "units": {
             "days": "Jours",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "Widgets de chatbot pour site web",
             "wa_storefront": "Boutique et catalogue WhatsApp",
             "inbox_sla": "Politiques SLA de la boîte de réception",
-            "inbox_routing": "Règles de routage de la boîte de réception et horaires d’ouverture",
+            "inbox_routing": "Routage intelligent: attribution automatique et règles",
             "waba_calling": "Passer et recevoir des appels WhatsApp depuis la boîte de réception",
             "inbox_kanban": "Tableau Kanban de la boîte de réception",
             "team_performance": "Rapports de performance de l’équipe",
@@ -1642,7 +1642,7 @@
             "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)",
             "team_hierarchy": "Hiérarchie des équipes et managers",
             "custom_roles": "Rôles personnalisés et périmètres",
-            "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
+            "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",

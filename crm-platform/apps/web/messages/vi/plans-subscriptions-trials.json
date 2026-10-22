@@ -65,7 +65,7 @@
       "chatbot_widgets": "Tiện ích chatbot",
       "wa_storefront": "Danh mục WhatsApp",
       "inbox_sla": "Chính sách SLA",
-      "inbox_routing": "Quy tắc định tuyến",
+      "inbox_routing": "Định tuyến thông minh: tự động giao và quy tắc",
       "waba_calling": "Gọi qua WhatsApp",
       "inbox_kanban": "Chế độ xem Kanban",
       "team_performance": "Hiệu suất nhóm",
@@ -91,7 +91,7 @@
       "record_assignment": "Quy tắc phân công bản ghi",
       "team_hierarchy": "Phân cấp nhóm và quản lý",
       "custom_roles": "Vai trò tùy chỉnh và phạm vi",
-      "inbox_assignment_sticky": "Chủ sở hữu liên hệ và nhân viên cố định"
+      "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",

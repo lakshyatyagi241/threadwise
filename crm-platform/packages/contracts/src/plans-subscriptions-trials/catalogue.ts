@@ -114,9 +114,26 @@ export const limitZeroIsNone = (key: string): boolean =>
 /**
  * The keys a plain add-on pack (one that is not a Marketplace app) may grant inside the one entitlement resolver every gate asks. The list is
  * deliberately short: any other pack keeps going through the add-on registry's own resolver, exactly as before. The "Teams and permissions"
- * add-on (BL-383) grants the two features and raises the `teams` cap.
+ * add-on (BL-383) grants the two features and raises the `teams` cap; the "Smart routing" add-on grants `inbox_routing` (automatic assignment)
+ * and `inbox_assignment_sticky` (contact owner and sticky agent), docs/specs/packaging-teams-and-smart-routing.md.
  */
-export const PACK_GRANTABLE_FEATURES: readonly string[] = ['team_hierarchy', 'custom_roles'];
+export const PACK_GRANTABLE_FEATURES: readonly string[] = [
+  'team_hierarchy',
+  'custom_roles',
+  'inbox_routing',
+  'inbox_assignment_sticky',
+];
+
+/**
+ * Flags a NEW plan starts without in the operator's plan form (everything else starts on). They are NOT the stored default: `default` in the
+ * registry above is what a plan row that predates a key is taken to grant, and flipping it would silently lock every existing plan row that
+ * lacks the key. These two are sold as the "Smart routing" add-on (or switched on per plan), so a plan the operator creates today starts
+ * without them and an existing plan, saved or not, keeps what it has.
+ */
+export const NEW_PLAN_FEATURES_OFF: readonly string[] = [
+  'inbox_routing',
+  'inbox_assignment_sticky',
+];
 export const PACK_GRANTABLE_LIMITS: readonly string[] = ['teams'];
 
 export const PLAN_FEATURE_GROUPS = ['messaging', 'aiCalling', 'integrations', 'advanced'] as const;
@@ -161,6 +178,8 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'wa_storefront', group: 'messaging', productLine: 'chat', default: false },
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', productLine: 'chat', default: false },
+  // Sold as the "Smart routing" add-on (a pack may grant it) or switched on per plan. Default stays TRUE for plan rows that predate the key:
+  // flipping it would lock existing plans (see NEW_PLAN_FEATURES_OFF for how a NEW plan starts without it).
   { key: 'inbox_routing', group: 'messaging', productLine: 'chat', default: true },
   // Owner first, keep in sync and the continuity window for the last handler (BL-402, docs/specs/conversation-handoff-and-assignment.md 7).
   // Effective only together with `inbox_routing`. Default true: a plan row that predates the key and has routing gets it, so Standard keeps one
@@ -244,8 +263,8 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   chatbot_widgets: 'Chatbot widgets',
   wa_storefront: 'WhatsApp catalog',
   inbox_sla: 'SLA policies',
-  inbox_routing: 'Routing rules',
-  inbox_assignment_sticky: 'Contact owner and sticky agent for conversations',
+  inbox_routing: 'Smart routing: auto-assignment and rules',
+  inbox_assignment_sticky: 'Smart routing: contact owner and sticky agent',
   waba_calling: 'WhatsApp calling',
   inbox_kanban: 'Kanban view',
   team_performance: 'Team performance',

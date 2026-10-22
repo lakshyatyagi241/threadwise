@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "Web sitesi sohbet botu widget oluşturucusu.",
             "wa_storefront": "WhatsApp kataloğu ve mağaza vitrini alanı.",
             "inbox_sla": "Ekip gelen kutusundaki SLA politikaları ve son tarihler.",
-            "inbox_routing": "Gelen kutusu görüşmelerini otomatik atayan yönlendirme kuralları.",
+            "inbox_routing": "Yeni sohbetlerin otomatik atanması: yönlendirme kuralları, Diğer herkes ve bekleme kuyruğu zamanlayıcıları. Akıllı yönlendirme eklentisinin parçasıdır.",
             "waba_calling": "Gelen kutusundan WhatsApp aramaları: arama numaraları, arama izinleri, arama yapma ve yanıtlama.",
             "inbox_kanban": "Ekip gelen kutusunun Kanban pano görünümü.",
             "team_performance": "Ekip performans raporları.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar.",
             "team_hierarchy": "Kendi ekibini ve altındaki ekipleri gören üst ekipler, ekip liderleri ve yöneticiler.",
             "custom_roles": "Rolleri oluşturun ve düzenleyin, her izin için bir kapsam seçin (kendi, ekip veya tüm kayıtlar).",
-            "inbox_assignment_sticky": "Kişi sahibi ile sohbet sahibi arasında önce sahip ve senkronize tut atamaları, geri dönen kişi süresi ve yeniden atama istemi. Gelen kutusu yönlendirmesiyle birlikte çalışır."
+            "inbox_assignment_sticky": "Önce sahip ve eşitlenmiş atama, geri dönen kişi penceresi ve yeniden atama sorusu. Akıllı yönlendirme eklentisinin parçasıdır."
           },
           "units": {
             "days": "Gün",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "Web sitesi sohbet botu widget'ları",
             "wa_storefront": "WhatsApp mağaza vitrini ve kataloğu",
             "inbox_sla": "Gelen kutusu SLA politikaları",
-            "inbox_routing": "Gelen kutusu yönlendirme kuralları ve çalışma saatleri",
+            "inbox_routing": "Akıllı yönlendirme: otomatik atama ve kurallar",
             "waba_calling": "Gelen kutusundan WhatsApp aramaları yapın ve yanıtlayın",
             "inbox_kanban": "Gelen kutusu Kanban panosu",
             "team_performance": "Ekip performans raporları",
@@ -1642,7 +1642,7 @@
             "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)",
             "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
             "custom_roles": "Özel roller ve kapsamlar",
-            "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
+            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci"
           },
           "problems": {
             "required": "Bu alan zorunludur.",

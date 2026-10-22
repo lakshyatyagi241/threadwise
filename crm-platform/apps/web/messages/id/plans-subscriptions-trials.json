@@ -65,7 +65,7 @@
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Kebijakan SLA",
-      "inbox_routing": "Aturan perutean",
+      "inbox_routing": "Perutean cerdas: penugasan otomatis dan aturan",
       "waba_calling": "Panggilan WhatsApp",
       "inbox_kanban": "Tampilan Kanban",
       "team_performance": "Performa tim",
@@ -91,7 +91,7 @@
       "record_assignment": "Aturan penugasan data",
       "team_hierarchy": "Hierarki tim dan manajer",
       "custom_roles": "Peran kustom dan cakupan",
-      "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
+      "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
     },
     "limitGroups": {
       "messaging": "Pesan",

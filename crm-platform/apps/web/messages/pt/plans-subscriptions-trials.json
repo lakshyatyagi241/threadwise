@@ -65,7 +65,7 @@
       "chatbot_widgets": "Widgets de chatbot",
       "wa_storefront": "Catálogo do WhatsApp",
       "inbox_sla": "Políticas de SLA",
-      "inbox_routing": "Regras de roteamento",
+      "inbox_routing": "Roteamento inteligente: atribuição automática e regras",
       "waba_calling": "Chamadas do WhatsApp",
       "inbox_kanban": "Visualização Kanban",
       "team_performance": "Desempenho da equipe",
@@ -91,7 +91,7 @@
       "record_assignment": "Regras de atribuição de registros",
       "team_hierarchy": "Hierarquia de equipes e gestores",
       "custom_roles": "Funções personalizadas e escopos",
-      "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
+      "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo"
     },
     "limitGroups": {
       "messaging": "Mensagens",

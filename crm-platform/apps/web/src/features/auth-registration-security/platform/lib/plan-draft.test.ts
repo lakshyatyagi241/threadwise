@@ -143,10 +143,15 @@ const stored: PlanAdminItem = {
 };
 
 describe('newPlanDraft', () => {
-  it("starts the way Reference's wizard does: active, every feature on, every limit blank", () => {
+  it("starts the way Reference's wizard does (active, every limit blank, features on) except the Smart routing flags, which start off", () => {
     const d = newPlanDraft();
     expect(d.isActive).toBe(true);
-    expect(Object.values(d.features).every(Boolean)).toBe(true);
+    expect(
+      Object.entries(d.features)
+        .filter(([, on]) => !on)
+        .map(([k]) => k)
+        .sort(),
+    ).toEqual(['inbox_assignment_sticky', 'inbox_routing']);
     expect(Object.keys(d.features).sort()).toEqual([...PLAN_FEATURE_KEYS].sort());
     expect(Object.values(d.limits).every((v) => v === '')).toBe(true);
     expect(Object.keys(d.limits).sort()).toEqual([...PLAN_LIMIT_KEYS].sort());
@@ -385,7 +390,7 @@ describe('limits: unlimited <-> 0', () => {
 
 describe('features: counts and group toggles', () => {
   it('counts the features that are on', () => {
-    expect(countFeaturesOn(newPlanDraft().features)).toBe(PLAN_FEATURE_KEYS.length);
+    expect(countFeaturesOn(newPlanDraft().features)).toBe(PLAN_FEATURE_KEYS.length - 2);
     const off = toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
     expect(countFeaturesOn(off)).toBe(0);
   });

@@ -65,7 +65,7 @@
       "chatbot_widgets": "चैटबॉट विजेट",
       "wa_storefront": "WhatsApp कैटलॉग",
       "inbox_sla": "SLA नीतियाँ",
-      "inbox_routing": "रूटिंग नियम",
+      "inbox_routing": "स्मार्ट रूटिंग: ऑटो-असाइनमेंट और नियम",
       "waba_calling": "WhatsApp कॉलिंग",
       "inbox_kanban": "कानबन व्यू",
       "team_performance": "टीम प्रदर्शन",
@@ -91,7 +91,7 @@
       "record_assignment": "रिकॉर्ड असाइनमेंट नियम",
       "team_hierarchy": "टीम पदानुक्रम और प्रबंधक",
       "custom_roles": "कस्टम भूमिकाएँ और दायरे",
-      "inbox_assignment_sticky": "संपर्क का स्वामी और स्टिकी एजेंट"
+      "inbox_assignment_sticky": "स्मार्ट रूटिंग: संपर्क का मालिक और स्थायी एजेंट"
     },
     "limitGroups": {
       "messaging": "मैसेजिंग",

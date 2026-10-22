@@ -65,7 +65,7 @@
       "chatbot_widgets": "Sohbet botu widget'ları",
       "wa_storefront": "WhatsApp kataloğu",
       "inbox_sla": "SLA politikaları",
-      "inbox_routing": "Yönlendirme kuralları",
+      "inbox_routing": "Akıllı yönlendirme: otomatik atama ve kurallar",
       "waba_calling": "WhatsApp aramaları",
       "inbox_kanban": "Kanban görünümü",
       "team_performance": "Ekip performansı",
@@ -91,7 +91,7 @@
       "record_assignment": "Kayıt atama kuralları",
       "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
       "custom_roles": "Özel roller ve kapsamlar",
-      "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
+      "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",

@@ -65,7 +65,7 @@
       "chatbot_widgets": "チャットボットウィジェット",
       "wa_storefront": "WhatsAppカタログ",
       "inbox_sla": "SLAポリシー",
-      "inbox_routing": "ルーティングルール",
+      "inbox_routing": "スマートルーティング: 自動割り当てとルール",
       "waba_calling": "WhatsApp通話",
       "inbox_kanban": "カンバン表示",
       "team_performance": "チームのパフォーマンス",
@@ -91,7 +91,7 @@
       "record_assignment": "レコード割り当てルール",
       "team_hierarchy": "チーム階層とマネージャー",
       "custom_roles": "カスタムロールとスコープ",
-      "inbox_assignment_sticky": "連絡先の担当者と固定担当"
+      "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者"
     },
     "limitGroups": {
       "messaging": "メッセージング",
