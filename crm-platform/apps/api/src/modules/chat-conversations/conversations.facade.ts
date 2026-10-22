@@ -173,8 +173,14 @@ export interface ConversationsFacade {
    *
    * Also the Retry of a customer's message whose file failed to download (`mediaState: 'failed'`): the download is queued again and the
    * message comes back `mediaState: 'pending'`. An inbound message with no failed file is `MESSAGE_NOT_RETRYABLE`.
+   *
+   * `templateComponents` (optional) are the Cloud API components rebuilt for a template message sent before they were stored; they are
+   * stored with the message before it is queued again.
    */
-  retryOutbound(messageId: string): Promise<MessageResponse>;
+  retryOutbound(
+    messageId: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse>;
 
   /**
    * `GET /inbox/conversations/:id/messages`: a thread page, ascending by `seq`, gap-free. Media carry a short-lived authenticated

@@ -103,6 +103,22 @@ describe('body (TW-BCAST-017: exactly the declared parameter count)', () => {
   });
 });
 
+describe('a placeholder used twice is one parameter (Meta counts variables)', () => {
+  it('sends one body parameter for a variable the body uses twice', () => {
+    const p = buildSend(tpl({ templateBody: 'Hi {{1}}, {{1}} is your code' }), { body: ['Ana'] });
+    expect(comp(p, 'body')).toEqual([
+      { type: 'body', parameters: [{ type: 'text', text: 'Ana' }] },
+    ]);
+  });
+
+  it('sends one header parameter for a header variable the header uses twice', () => {
+    const p = buildSend(tpl({ header: '{{1}} and {{1}}' }), { header: 'Ana' });
+    expect(comp(p, 'header')).toEqual([
+      { type: 'header', parameters: [{ type: 'text', text: 'Ana' }] },
+    ]);
+  });
+});
+
 describe('header', () => {
   it('has none for a text header without a placeholder', () => {
     expect(comp(buildSend(tpl({ header: 'Welcome' }), { header: 'stray' }), 'header')).toEqual([]);

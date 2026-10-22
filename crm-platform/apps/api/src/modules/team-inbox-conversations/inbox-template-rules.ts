@@ -5,7 +5,15 @@ import type {
   MessageTemplateHeader,
   MessageTemplatePreview,
 } from '@crm/contracts';
-import { buttonKindOf, headerFormatOf } from '../../infra/providers/whatsapp/template-vocab';
+import { bodyComponents } from '../../infra/providers/whatsapp/meta-outbound';
+import { buttonComponents, type ButtonVar } from '../../infra/providers/whatsapp/meta-send-payload';
+import {
+  buttonExample,
+  buttonKindOf,
+  headerFormatOf,
+  kindOfButton,
+  sendKindOf,
+} from '../../infra/providers/whatsapp/template-vocab';
 import { tokensOf, type VariableMap } from '../message-templates';
 
 /**
@@ -121,6 +129,35 @@ export function cleanVariables(
   variables: Record<string, string>,
 ): Record<string, string> {
   return Object.fromEntries(slots.map((s) => [s.key, (variables[s.key] ?? '').trim()]));
+}
+
+/**
+ * The Cloud API components of an inbox send: the body values, then a parameter for each copy-code button. The inbox has no value to
+ * type for a copy-code button, so it sends the code the template holds (its example), as a broadcast does. Without the parameter Meta
+ * refuses the send: "requires a non-empty parameter coupon_code".
+ */
+export function sendComponentsOf(
+  t: Pick<TemplateFacts, 'buttons'>,
+  variables: Record<string, string>,
+): Array<Record<string, unknown>> {
+  const buttons = Array.isArray(t.buttons) ? t.buttons : [];
+  const copyCode = buttons.flatMap((b, index): ButtonVar[] =>
+    sendKindOf(kindOfButton(b)) === 'copy_code'
+      ? [{ index, subType: 'copy_code', value: buttonExample(b) }]
+      : [],
+  );
+  return [...bodyComponents(variables), ...buttonComponents(copyCode, buttons)];
+}
+
+/**
+ * Whether a copy-code button has no code. The inbox cannot type one and the stored example is the only code, so such a template is
+ * refused rather than sent with the placeholder "-" that the send falls back to.
+ */
+export function hasBlankCopyCode(buttons: unknown): boolean {
+  return (
+    Array.isArray(buttons) &&
+    buttons.some((b) => sendKindOf(kindOfButton(b)) === 'copy_code' && buttonExample(b) === '')
+  );
 }
 
 /** The body as the customer reads it: each `{{token}}` replaced by its value. A token without a value is left as written. */
