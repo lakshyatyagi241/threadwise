@@ -59,14 +59,18 @@ export const useConversations = (filters: InboxFilters, enabled: boolean, pollin
     queryKey: [
       ...listKey,
       filters.tab,
-      filters.status,
+      // The same statuses or channels in another order are the same list.
+      [...filters.statuses].sort().join(','),
+      filters.assignment,
       filters.q,
-      filters.channelId,
+      [...filters.channelIds].sort().join(','),
       filters.labels.join(','),
       filters.archived,
       // The same agents in another order are the same list.
       [...filters.agentIds].sort().join(','),
       filters.sort,
+      filters.from,
+      filters.to,
     ],
     queryFn: ({ pageParam, signal }) => fetchConversations(filters, pageParam, signal),
     initialPageParam: undefined as string | undefined,

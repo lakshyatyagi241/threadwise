@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "फिल्टर",
-      "sheet": "संभाषणाची स्थिती",
+      "sheet": "चॅटची स्थिती",
       "close": "बंद करा",
       "applied": "लागू केलेले फिल्टर",
       "clearAll": "सर्व काढा",
@@ -1012,7 +1012,6 @@
       "viewActive": "संभाषणे",
       "viewArchived": "संग्रहित",
       "channel": "चॅनल",
-      "allChannels": "सर्व चॅनल",
       "labels": "लेबल",
       "searchLabels": "लेबल शोधा",
       "agent": "एजंट",
@@ -1026,14 +1025,21 @@
       "sortChip": "क्रम: {{name}}",
       "channelChip": "चॅनल: {{name}}",
       "labelsChip": "लेबल: {{names}}",
-      "archivedChip": "संग्रहित"
+      "archivedChip": "संग्रहित",
+      "conversation": "संभाषण",
+      "conversationAny": "कोणतेही",
+      "conversation_assigned": "नियुक्त",
+      "conversation_unassigned": "नियुक्त नसलेले",
+      "conversation_unattended": "दुर्लक्षित",
+      "dates": "तारखेची श्रेणी (शेवटची हालचाल)",
+      "assignmentChip": "संभाषण: {{name}}",
+      "datesChip": "तारखेची श्रेणी (शेवटची हालचाल): {{range}}"
     },
     "statusFilter": {
-      "default": "खुली",
-      "snoozed": "स्नूझ केलेली",
-      "resolved": "निराकरण झालेली",
-      "closed": "बंद",
-      "all": "सर्व स्थिती"
+      "open": "खुले",
+      "snoozed": "स्नूझ केलेले",
+      "resolved": "निराकरण झालेले",
+      "spam": "स्पॅम"
     },
     "status": {
       "open": "खुले",
@@ -1234,7 +1240,9 @@
       "notFound": "हे संभाषण आता उपलब्ध नाही.",
       "templateNotSendable": "हा टेम्पलेट या संभाषणातून पाठवता येणार नाही. दुसरा निवडा.",
       "validation": "काही तपशील अवैध आहेत. ते तपासा आणि पुन्हा प्रयत्न करा.",
-      "withCode": "{{message}} (कोड: {{code}})"
+      "withCode": "{{message}} (कोड: {{code}})",
+      "contactOptedOut": "या संपर्काने मार्केटिंग संदेशांची सदस्यता रद्द केली आहे, त्यामुळे संदेश पाठवला गेला नाही.",
+      "consentRequired": "या वर्कस्पेसमध्ये मार्केटिंग संदेशांसाठी नोंदवलेली संमती आवश्यक आहे आणि या संपर्काची संमती नाही, त्यामुळे संदेश पाठवला गेला नाही."
     },
     "channel": {
       "whatsapp": "व्हॉट्सअ‍ॅप",

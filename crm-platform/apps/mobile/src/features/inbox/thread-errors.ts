@@ -21,6 +21,10 @@ export function sendErrorMessage(error: unknown, t: TFunction): string {
         return t('inbox.thread.conflict');
       case ERROR_CODES.CONVERSATION_STATUS_INVALID:
         return t('inbox.thread.statusInvalid');
+      case ERROR_CODES.CONSENT_OPTED_OUT:
+        return t('inbox.errors.contactOptedOut');
+      case ERROR_CODES.CONSENT_SEND_DENIED:
+        return t('inbox.errors.consentRequired');
       case ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE:
         return t('inbox.errors.templateNotSendable');
       case ERROR_CODES.VALIDATION_FAILED:

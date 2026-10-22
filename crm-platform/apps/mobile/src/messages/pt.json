@@ -1021,7 +1021,7 @@
     },
     "filter": {
       "open": "Filtros",
-      "sheet": "Status da conversa",
+      "sheet": "Estado do chat",
       "close": "Fechar",
       "applied": "Filtros aplicados",
       "clearAll": "Limpar tudo",
@@ -1033,7 +1033,6 @@
       "viewActive": "Conversas",
       "viewArchived": "Arquivadas",
       "channel": "Canal",
-      "allChannels": "Todos os canais",
       "labels": "Rótulos",
       "searchLabels": "Buscar rótulos",
       "agent": "Agente",
@@ -1047,14 +1046,21 @@
       "sortChip": "Ordem: {{name}}",
       "channelChip": "Canal: {{name}}",
       "labelsChip": "Rótulos: {{names}}",
-      "archivedChip": "Arquivadas"
+      "archivedChip": "Arquivadas",
+      "conversation": "Conversa",
+      "conversationAny": "Qualquer",
+      "conversation_assigned": "Atribuída",
+      "conversation_unassigned": "Não atribuída",
+      "conversation_unattended": "Sem atendimento",
+      "dates": "Intervalo de datas (última atividade)",
+      "assignmentChip": "Conversa: {{name}}",
+      "datesChip": "Intervalo de datas (última atividade): {{range}}"
     },
     "statusFilter": {
-      "default": "Abertas",
-      "snoozed": "Adiadas",
-      "resolved": "Resolvidas",
-      "closed": "Fechadas",
-      "all": "Todos os status"
+      "open": "Aberta",
+      "snoozed": "Adiada",
+      "resolved": "Resolvida",
+      "spam": "Spam"
     },
     "status": {
       "open": "Aberta",
@@ -1256,7 +1262,9 @@
       "notFound": "Esta conversa não está mais disponível.",
       "templateNotSendable": "Este modelo não pode ser enviado a partir desta conversa. Escolha outro.",
       "validation": "Alguns dados não são válidos. Verifique-os e tente novamente.",
-      "withCode": "{{message}} (Código: {{code}})"
+      "withCode": "{{message}} (Código: {{code}})",
+      "contactOptedOut": "Este contato cancelou a inscrição nas mensagens de marketing, por isso a mensagem não foi enviada.",
+      "consentRequired": "Este espaço de trabalho exige um consentimento registrado para mensagens de marketing e este contato não tem, por isso a mensagem não foi enviada."
     },
     "channel": {
       "whatsapp": "WhatsApp",

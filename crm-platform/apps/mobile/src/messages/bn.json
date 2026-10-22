@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "ফিল্টার",
-      "sheet": "কথোপকথনের স্ট্যাটাস",
+      "sheet": "চ্যাটের অবস্থা",
       "close": "বন্ধ করুন",
       "applied": "প্রয়োগ করা ফিল্টার",
       "clearAll": "সব মুছুন",
@@ -1012,7 +1012,6 @@
       "viewActive": "কথোপকথন",
       "viewArchived": "আর্কাইভ করা",
       "channel": "চ্যানেল",
-      "allChannels": "সব চ্যানেল",
       "labels": "লেবেল",
       "searchLabels": "লেবেল খুঁজুন",
       "agent": "এজেন্ট",
@@ -1026,14 +1025,21 @@
       "sortChip": "সাজানো: {{name}}",
       "channelChip": "চ্যানেল: {{name}}",
       "labelsChip": "লেবেল: {{names}}",
-      "archivedChip": "আর্কাইভ করা"
+      "archivedChip": "আর্কাইভ করা",
+      "conversation": "কথোপকথন",
+      "conversationAny": "যেকোনো",
+      "conversation_assigned": "অ্যাসাইন করা",
+      "conversation_unassigned": "অ্যাসাইন করা নয়",
+      "conversation_unattended": "উত্তরহীন",
+      "dates": "তারিখের পরিসর (শেষ কার্যকলাপ)",
+      "assignmentChip": "কথোপকথন: {{name}}",
+      "datesChip": "তারিখের পরিসর (শেষ কার্যকলাপ): {{range}}"
     },
     "statusFilter": {
-      "default": "খোলা",
+      "open": "খোলা",
       "snoozed": "স্নুজ করা",
       "resolved": "সমাধান হয়েছে",
-      "closed": "বন্ধ",
-      "all": "সব স্ট্যাটাস"
+      "spam": "স্প্যাম"
     },
     "status": {
       "open": "খোলা",
@@ -1234,7 +1240,9 @@
       "notFound": "এই কথোপকথনটি আর পাওয়া যাচ্ছে না।",
       "templateNotSendable": "এই কথোপকথন থেকে এই টেমপ্লেটটি পাঠানো যাবে না। অন্য একটি বেছে নিন।",
       "validation": "কিছু তথ্য সঠিক নয়। সেগুলো যাচাই করে আবার চেষ্টা করুন।",
-      "withCode": "{{message}} (কোড: {{code}})"
+      "withCode": "{{message}} (কোড: {{code}})",
+      "contactOptedOut": "এই পরিচিতি বিপণন বার্তা থেকে আনসাবস্ক্রাইব করেছেন, তাই বার্তাটি পাঠানো হয়নি।",
+      "consentRequired": "এই ওয়ার্কস্পেসে বিপণন বার্তার জন্য নথিভুক্ত সম্মতি লাগে এবং এই পরিচিতির তা নেই, তাই বার্তাটি পাঠানো হয়নি।"
     },
     "channel": {
       "whatsapp": "WhatsApp",

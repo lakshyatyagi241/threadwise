@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "Filters",
-      "sheet": "Conversation status",
+      "sheet": "Chat status",
       "close": "Close",
       "applied": "Applied filters",
       "clearAll": "Clear all",
@@ -1012,7 +1012,6 @@
       "viewActive": "Conversations",
       "viewArchived": "Archived",
       "channel": "Channel",
-      "allChannels": "All channels",
       "labels": "Labels",
       "searchLabels": "Search labels",
       "agent": "Agent",
@@ -1026,14 +1025,21 @@
       "sortChip": "Sort: {{name}}",
       "channelChip": "Channel: {{name}}",
       "labelsChip": "Labels: {{names}}",
-      "archivedChip": "Archived"
+      "archivedChip": "Archived",
+      "conversation": "Conversation",
+      "conversationAny": "Any",
+      "conversation_assigned": "Assigned",
+      "conversation_unassigned": "Unassigned",
+      "conversation_unattended": "Unattended",
+      "dates": "Date range (last activity)",
+      "assignmentChip": "Conversation: {{name}}",
+      "datesChip": "Date range (last activity): {{range}}"
     },
     "statusFilter": {
-      "default": "Open",
+      "open": "Open",
       "snoozed": "Snoozed",
       "resolved": "Resolved",
-      "closed": "Closed",
-      "all": "All statuses"
+      "spam": "Spam"
     },
     "status": {
       "open": "Open",
@@ -1234,7 +1240,9 @@
       "notFound": "This conversation is no longer available.",
       "templateNotSendable": "This template can't be sent from this conversation. Choose another one.",
       "validation": "Some of the details are not valid. Check them and try again.",
-      "withCode": "{{message}} (Code: {{code}})"
+      "withCode": "{{message}} (Code: {{code}})",
+      "contactOptedOut": "This contact has unsubscribed from marketing messages, so the message was not sent.",
+      "consentRequired": "This workspace requires a recorded consent for marketing messages and this contact has none, so the message was not sent."
     },
     "channel": {
       "whatsapp": "WhatsApp",

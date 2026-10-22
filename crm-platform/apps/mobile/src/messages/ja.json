@@ -979,7 +979,7 @@
     },
     "filter": {
       "open": "フィルター",
-      "sheet": "会話のステータス",
+      "sheet": "チャットの状態",
       "close": "閉じる",
       "applied": "適用中のフィルター",
       "clearAll": "すべてクリア",
@@ -991,7 +991,6 @@
       "viewActive": "会話",
       "viewArchived": "アーカイブ済み",
       "channel": "チャネル",
-      "allChannels": "すべてのチャネル",
       "labels": "ラベル",
       "searchLabels": "ラベルを検索",
       "agent": "担当者",
@@ -1005,14 +1004,21 @@
       "sortChip": "並べ替え：{{name}}",
       "channelChip": "チャネル: {{name}}",
       "labelsChip": "ラベル: {{names}}",
-      "archivedChip": "アーカイブ済み"
+      "archivedChip": "アーカイブ済み",
+      "conversation": "会話",
+      "conversationAny": "すべて",
+      "conversation_assigned": "割り当て済み",
+      "conversation_unassigned": "未割り当て",
+      "conversation_unattended": "未対応",
+      "dates": "期間（最終アクティビティ）",
+      "assignmentChip": "会話: {{name}}",
+      "datesChip": "期間（最終アクティビティ）: {{range}}"
     },
     "statusFilter": {
-      "default": "未解決",
+      "open": "未対応",
       "snoozed": "スヌーズ中",
       "resolved": "解決済み",
-      "closed": "クローズ",
-      "all": "すべてのステータス"
+      "spam": "スパム"
     },
     "status": {
       "open": "未解決",
@@ -1212,7 +1218,9 @@
       "notFound": "この会話は利用できなくなりました。",
       "templateNotSendable": "このテンプレートはこの会話から送信できません。別のテンプレートを選んでください。",
       "validation": "入力内容に無効な項目があります。確認してもう一度お試しください。",
-      "withCode": "{{message}} (コード: {{code}})"
+      "withCode": "{{message}} (コード: {{code}})",
+      "contactOptedOut": "この連絡先はマーケティングメッセージの配信を停止しているため、送信されませんでした。",
+      "consentRequired": "このワークスペースではマーケティングメッセージに記録された同意が必要ですが、この連絡先には同意がないため、送信されませんでした。"
     },
     "channel": {
       "whatsapp": "WhatsApp",

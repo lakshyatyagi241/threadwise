@@ -34,18 +34,20 @@ function Chip({ text, removeLabel, onRemove }: ChipProps) {
 
 interface Props {
   filters: InboxFilters;
-  /** The channel's name, when a channel is chosen (the filter holds only its id). */
-  channelName: string | null;
+  /** The names of the chosen channels (the filter holds only their ids). */
+  channelNames: readonly string[];
   /** The names of the chosen labels, in the order chosen. */
   labelNames: readonly string[];
   /** The names of the chosen agents, in the order chosen. */
   agentNames: readonly string[];
   onClearStatus: () => void;
+  onClearAssignment: () => void;
   onClearSearch: () => void;
   onClearChannel: () => void;
   onClearLabels: () => void;
   onClearAgents: () => void;
   onClearSort: () => void;
+  onClearDates: () => void;
   onClearArchived: () => void;
   onClearAll: () => void;
 }
@@ -53,26 +55,39 @@ interface Props {
 /** What is narrowing the list right now, each with a way to take it off, and one button for all of them. */
 export function FilterStrip({
   filters,
-  channelName,
+  channelNames,
   labelNames,
   agentNames,
   onClearStatus,
+  onClearAssignment,
   onClearSearch,
   onClearChannel,
   onClearLabels,
   onClearAgents,
   onClearSort,
+  onClearDates,
   onClearArchived,
   onClearAll,
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const chips: { key: string; text: string; onRemove: () => void }[] = [];
-  if (filters.status !== 'default') {
+  if (filters.statuses.length > 0) {
     chips.push({
       key: 'status',
-      text: t('inbox.filter.statusChip', { name: t(`inbox.statusFilter.${filters.status}`) }),
+      text: t('inbox.filter.statusChip', {
+        name: filters.statuses.map((s) => t(`inbox.statusFilter.${s}`)).join(', '),
+      }),
       onRemove: onClearStatus,
+    });
+  }
+  if (filters.assignment) {
+    chips.push({
+      key: 'assignment',
+      text: t('inbox.filter.assignmentChip', {
+        name: t(`inbox.filter.conversation_${filters.assignment}`),
+      }),
+      onRemove: onClearAssignment,
     });
   }
   if (filters.archived) {
@@ -82,10 +97,12 @@ export function FilterStrip({
       onRemove: onClearArchived,
     });
   }
-  if (filters.channelId) {
+  if (filters.channelIds.length > 0) {
     chips.push({
       key: 'channel',
-      text: t('inbox.filter.channelChip', { name: channelName ?? t('inbox.filter.channel') }),
+      text: t('inbox.filter.channelChip', {
+        name: channelNames.length > 0 ? channelNames.join(', ') : String(filters.channelIds.length),
+      }),
       onRemove: onClearChannel,
     });
   }
@@ -118,6 +135,13 @@ export function FilterStrip({
       key: 'sort',
       text: t('inbox.filter.sortChip', { name: t(`inbox.filter.sort_${filters.sort}`) }),
       onRemove: onClearSort,
+    });
+  }
+  if (filters.from || filters.to) {
+    chips.push({
+      key: 'dates',
+      text: t('inbox.filter.datesChip', { range: `${filters.from || '…'} – ${filters.to || '…'}` }),
+      onRemove: onClearDates,
     });
   }
   if (filters.q.trim()) {

@@ -36,8 +36,9 @@ import {
   hasActiveFilter,
   TABS,
   type InboxFilters,
+  type AssignmentFilter,
   type SortFilter,
-  type StatusFilter,
+  type StatusChoice,
 } from './filters';
 import { FiltersSheet } from './filters-sheet';
 import { useAssignees, useChannels, useConversations } from './use-inbox';
@@ -58,8 +59,11 @@ export function InboxScreen() {
   const allowed = can(session.data, 'inbox.conversation.read');
 
   const [tab, setTab] = useState<InboxTab>('all');
-  const [status, setStatus] = useState<StatusFilter>('default');
-  const [channelId, setChannelId] = useState('');
+  const [statuses, setStatuses] = useState<readonly StatusChoice[]>([]);
+  const [assignment, setAssignment] = useState<AssignmentFilter>('');
+  const [channelIds, setChannelIds] = useState<readonly string[]>([]);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
   const [labelIds, setLabelIds] = useState<readonly string[]>([]);
   const [archived, setArchived] = useState(false);
   const [agentIds, setAgentIds] = useState<readonly string[]>([]);
@@ -94,25 +98,42 @@ export function InboxScreen() {
   // Emptying the box shows the full list straight away; only typing waits for a pause.
   const q = typed.trim() === '' ? '' : debounced;
   const filters = useMemo<InboxFilters>(
-    () => ({ tab, status, q, channelId, labels: labelIds, archived, agentIds, sort }),
-    [tab, status, q, channelId, labelIds, archived, agentIds, sort],
+    () => ({
+      tab,
+      statuses,
+      assignment,
+      q,
+      channelIds,
+      labels: labelIds,
+      archived,
+      agentIds,
+      sort,
+      from,
+      to,
+    }),
+    [tab, statuses, assignment, q, channelIds, labelIds, archived, agentIds, sort, from, to],
   );
   const active = hasActiveFilter(filters);
   // The sheet's own filters (not the search words): the dot on the filter button says one of them is on.
   const sheetActive = hasActiveFilter({
     ...DEFAULT_FILTERS,
-    status,
-    channelId,
+    statuses,
+    assignment,
+    channelIds,
     labels: labelIds,
     archived,
     agentIds,
     sort,
+    from,
+    to,
   });
   // The chips name a channel and its labels, which the filters hold only as ids.
-  const channelList = useChannels(allowed && channelId !== '');
+  const channelList = useChannels(allowed && channelIds.length > 0);
   const labelLibrary = useLabelLibrary(allowed && labelIds.length > 0);
   const agentList = useAssignees(allowed && agentIds.length > 0);
-  const channelName = channelList.data?.data.find((c) => c.id === channelId)?.name ?? null;
+  const channelNames = channelIds
+    .map((id) => channelList.data?.data.find((c) => c.id === id)?.name)
+    .filter((name): name is string => Boolean(name));
   const labelNames = labelIds
     .map((id) => labelLibrary.data?.find((l) => l.id === id)?.name)
     .filter((name): name is string => Boolean(name));
@@ -185,8 +206,11 @@ export function InboxScreen() {
     setSearchOpen(!searchOpen);
   };
   const clearAll = () => {
-    setStatus(DEFAULT_FILTERS.status);
-    setChannelId(DEFAULT_FILTERS.channelId);
+    setStatuses(DEFAULT_FILTERS.statuses);
+    setAssignment(DEFAULT_FILTERS.assignment);
+    setChannelIds(DEFAULT_FILTERS.channelIds);
+    setFrom(DEFAULT_FILTERS.from);
+    setTo(DEFAULT_FILTERS.to);
     setLabelIds(DEFAULT_FILTERS.labels);
     setArchived(DEFAULT_FILTERS.archived);
     setAgentIds(DEFAULT_FILTERS.agentIds);
@@ -353,15 +377,20 @@ export function InboxScreen() {
       {active ? (
         <FilterStrip
           filters={filters}
-          channelName={channelName}
+          channelNames={channelNames}
           labelNames={labelNames}
           agentNames={agentNames}
-          onClearStatus={() => setStatus('default')}
+          onClearStatus={() => setStatuses([])}
+          onClearAssignment={() => setAssignment('')}
           onClearSearch={clearSearch}
-          onClearChannel={() => setChannelId('')}
+          onClearChannel={() => setChannelIds([])}
           onClearLabels={() => setLabelIds([])}
           onClearAgents={() => setAgentIds([])}
           onClearSort={() => setSort('recent')}
+          onClearDates={() => {
+            setFrom('');
+            setTo('');
+          }}
           onClearArchived={() => setArchived(false)}
           onClearAll={clearAll}
         />
@@ -416,10 +445,23 @@ export function InboxScreen() {
 
       <FiltersSheet
         visible={sheetOpen}
-        value={{ status, channelId, labels: labelIds, archived, agentIds, sort }}
+        value={{
+          statuses,
+          assignment,
+          channelIds,
+          labels: labelIds,
+          archived,
+          agentIds,
+          sort,
+          from,
+          to,
+        }}
         onApply={(next) => {
-          setStatus(next.status);
-          setChannelId(next.channelId);
+          setStatuses(next.statuses);
+          setAssignment(next.assignment);
+          setChannelIds(next.channelIds);
+          setFrom(next.from);
+          setTo(next.to);
           setLabelIds(next.labels);
           setArchived(next.archived);
           setAgentIds(next.agentIds);

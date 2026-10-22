@@ -15,6 +15,15 @@ describe('sendErrorMessage', () => {
     );
   });
 
+  it('says why a marketing message to a contact without consent was refused', () => {
+    expect(sendErrorMessage(refusal(422, ERROR_CODES.CONSENT_SEND_DENIED), t)).toBe(
+      'inbox.errors.consentRequired',
+    );
+    expect(sendErrorMessage(refusal(422, ERROR_CODES.CONSENT_OPTED_OUT), t)).toBe(
+      'inbox.errors.contactOptedOut',
+    );
+  });
+
   it('names invalid values instead of the app-wide message', () => {
     expect(sendErrorMessage(refusal(422, ERROR_CODES.VALIDATION_FAILED), t)).toBe(
       'inbox.errors.validation',

@@ -155,7 +155,7 @@ describe('InboxScreen', () => {
   it('asks for the tab the person picks', async () => {
     await show();
     await screen.findByText('Rohan Mehta');
-    expect(lastFilters()).toMatchObject({ tab: 'all', status: 'default', q: '' });
+    expect(lastFilters()).toMatchObject({ tab: 'all', statuses: [], q: '' });
     await fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
     await fireEvent.press(await screen.findByRole('menuitem', { name: 'Unread, 1' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ tab: 'unread' }));
@@ -184,12 +184,12 @@ describe('InboxScreen', () => {
     await show();
     await screen.findByText('Rohan Mehta');
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
-    await fireEvent.press(await screen.findByRole('radio', { name: 'Snoozed' }));
+    await fireEvent.press(await screen.findByRole('checkbox', { name: 'Snoozed' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
-    await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'snoozed' }));
+    await waitFor(() => expect(lastFilters()).toMatchObject({ statuses: ['snoozed'] }));
     const chip = await screen.findByRole('button', { name: 'Remove filter: Status: Snoozed' });
     await fireEvent.press(chip);
-    await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'default' }));
+    await waitFor(() => expect(lastFilters()).toMatchObject({ statuses: [] }));
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: /^Remove filter/ })).toBeNull(),
     );
@@ -200,13 +200,15 @@ describe('InboxScreen', () => {
     await show();
     await screen.findByText('Rohan Mehta');
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
-    await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
+    await fireEvent.press(await screen.findByRole('checkbox', { name: 'Resolved' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
     await fireEvent.changeText(screen.getByLabelText('Search'), 'meera');
-    await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'resolved', q: 'meera' }));
+    await waitFor(() =>
+      expect(lastFilters()).toMatchObject({ statuses: ['resolved'], q: 'meera' }),
+    );
     await fireEvent.press(await screen.findByRole('button', { name: 'Clear all' }));
-    await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'default', q: '' }));
+    await waitFor(() => expect(lastFilters()).toMatchObject({ statuses: [], q: '' }));
     expect(screen.queryByRole('button', { name: 'Clear all' })).toBeNull();
   });
 
@@ -216,7 +218,7 @@ describe('InboxScreen', () => {
     expect(await screen.findByText('No conversations')).toBeTruthy();
     expect(screen.getByText('Messages from your customers will show up here.')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
-    await fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
+    await fireEvent.press(await screen.findByRole('checkbox', { name: 'Spam' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
     expect(
       await screen.findByText('Nothing matches these filters. Try clearing them.'),
@@ -303,19 +305,19 @@ describe('InboxScreen', () => {
     const category = async (name: string) =>
       await fireEvent.press(await screen.findByRole('tab', { name }));
 
-    it('narrows the list to one channel, and names it in the chip', async () => {
+    it('narrows the list to the chosen channels, and names them in the chip', async () => {
       await open();
       await category('Channel');
       await fireEvent.press(
-        await screen.findByRole('radio', { name: 'Support line, +91 98000 00001' }),
+        await screen.findByRole('checkbox', { name: 'Support line, +91 98000 00001' }),
       );
       await save();
-      await waitFor(() => expect(lastFilters()).toMatchObject({ channelId: channelRow().id }));
+      await waitFor(() => expect(lastFilters()).toMatchObject({ channelIds: [channelRow().id] }));
       const chip = await screen.findByRole('button', {
         name: 'Remove filter: Channel: Support line',
       });
       await fireEvent.press(chip);
-      await waitFor(() => expect(lastFilters()).toMatchObject({ channelId: '' }));
+      await waitFor(() => expect(lastFilters()).toMatchObject({ channelIds: [] }));
     });
 
     it('narrows the list to conversations with any of the chosen labels', async () => {
@@ -438,7 +440,7 @@ describe('InboxScreen', () => {
 
     it('has no agent category when nobody can be assigned', async () => {
       await open();
-      await screen.findByRole('radio', { name: 'Snoozed' });
+      await screen.findByRole('checkbox', { name: 'Snoozed' });
       expect(screen.queryByRole('tab', { name: 'Agent' })).toBeNull();
       expect(screen.getByRole('tab', { name: 'Sort by' })).toBeTruthy();
     });
@@ -446,8 +448,8 @@ describe('InboxScreen', () => {
     it('has no channel or label category when the workspace has neither', async () => {
       channelsCall.mockResolvedValue({ data: [] });
       await open();
-      await screen.findByRole('radio', { name: 'Snoozed' });
-      expect(screen.getByRole('tab', { name: 'Conversation status' })).toBeTruthy();
+      await screen.findByRole('checkbox', { name: 'Snoozed' });
+      expect(screen.getByRole('tab', { name: 'Chat status' })).toBeTruthy();
       expect(screen.getByRole('tab', { name: 'View' })).toBeTruthy();
       expect(screen.queryByRole('tab', { name: 'Channel' })).toBeNull();
       expect(screen.queryByRole('tab', { name: 'Labels' })).toBeNull();
@@ -455,16 +457,16 @@ describe('InboxScreen', () => {
 
     it('takes the choices off and applies at once with Clear all', async () => {
       await open();
-      await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
+      await fireEvent.press(await screen.findByRole('checkbox', { name: 'Resolved' }));
       await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
-      expect(lastFilters()).toMatchObject({ status: 'default' });
+      expect(lastFilters()).toMatchObject({ statuses: [] });
     });
 
     it('says when the channels could not be loaded, and still lets the rest be chosen', async () => {
       channelsCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
       await open();
       expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
-      expect(screen.getByRole('radio', { name: 'Snoozed' })).toBeTruthy();
+      expect(screen.getByRole('checkbox', { name: 'Snoozed' })).toBeTruthy();
     });
   });
 

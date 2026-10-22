@@ -5,19 +5,25 @@ import { FilterStrip } from './filter-strip';
 import { DEFAULT_FILTERS, type InboxFilters } from './filters';
 
 const noop = () => undefined;
-const show = (filters: InboxFilters, agentNames: readonly string[] = []) =>
+const show = (
+  filters: InboxFilters,
+  agentNames: readonly string[] = [],
+  channelNames: readonly string[] = [],
+) =>
   renderApp(
     <FilterStrip
       filters={filters}
-      channelName={null}
+      channelNames={channelNames}
       labelNames={[]}
       agentNames={agentNames}
       onClearStatus={noop}
+      onClearAssignment={noop}
       onClearSearch={noop}
       onClearChannel={noop}
       onClearLabels={noop}
       onClearAgents={noop}
       onClearSort={noop}
+      onClearDates={noop}
       onClearArchived={noop}
       onClearAll={noop}
     />,
@@ -51,20 +57,55 @@ describe('FilterStrip: agents and sort', () => {
     ).toBeTruthy();
     await view.rerender(
       <FilterStrip
-        filters={{ ...DEFAULT_FILTERS, status: 'resolved' }}
-        channelName={null}
+        filters={{ ...DEFAULT_FILTERS, statuses: ['resolved'] }}
+        channelNames={[]}
         labelNames={[]}
         agentNames={[]}
         onClearStatus={noop}
+        onClearAssignment={noop}
         onClearSearch={noop}
         onClearChannel={noop}
         onClearLabels={noop}
         onClearAgents={noop}
         onClearSort={noop}
+        onClearDates={noop}
         onClearArchived={noop}
         onClearAll={noop}
       />,
     );
     expect(screen.queryByRole('button', { name: /Sort:/ })).toBeNull();
+  });
+});
+
+describe('FilterStrip: the filters the web has', () => {
+  it('names every chosen status, in one chip', async () => {
+    await show({ ...DEFAULT_FILTERS, statuses: ['snoozed', 'spam'] });
+    expect(
+      await screen.findByRole('button', { name: 'Remove filter: Status: Snoozed, Spam' }),
+    ).toBeTruthy();
+  });
+  it('names who has the conversation', async () => {
+    await show({ ...DEFAULT_FILTERS, assignment: 'unattended' });
+    expect(
+      await screen.findByRole('button', { name: 'Remove filter: Conversation: Unattended' }),
+    ).toBeTruthy();
+  });
+  it('names the chosen channels', async () => {
+    await show({ ...DEFAULT_FILTERS, channelIds: ['c1', 'c2'] }, [], ['Sales', 'Support']);
+    expect(
+      await screen.findByRole('button', { name: 'Remove filter: Channel: Sales, Support' }),
+    ).toBeTruthy();
+  });
+  it('counts the channels when their names are not known yet', async () => {
+    await show({ ...DEFAULT_FILTERS, channelIds: ['c1', 'c2'] });
+    expect(await screen.findByRole('button', { name: 'Remove filter: Channel: 2' })).toBeTruthy();
+  });
+  it('shows the date range, open at either end', async () => {
+    await show({ ...DEFAULT_FILTERS, from: '2026-10-01', to: '' });
+    expect(
+      await screen.findByRole('button', {
+        name: /Remove filter: Date range \(last activity\): 2026-10-01/,
+      }),
+    ).toBeTruthy();
   });
 });

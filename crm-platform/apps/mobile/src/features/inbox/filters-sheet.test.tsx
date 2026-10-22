@@ -15,12 +15,15 @@ const channelsCall = jest.mocked(api.fetchChannels);
 const libraryCall = jest.mocked(labelsApi.fetchLabelLibrary);
 
 const value = (over: Partial<SheetFilters> = {}): SheetFilters => ({
-  status: DEFAULT_FILTERS.status,
-  channelId: '',
+  statuses: DEFAULT_FILTERS.statuses,
+  assignment: DEFAULT_FILTERS.assignment,
+  channelIds: [],
   labels: [],
   archived: false,
   agentIds: [],
   sort: 'recent',
+  from: '',
+  to: '',
   ...over,
 });
 
@@ -75,5 +78,84 @@ describe('FiltersSheet: the agent filter survives an Apply when the agents are n
     );
     await fireEvent.press(await screen.findByRole('tab', { name: 'Sort by' }));
     expect(await screen.findByText('Pinned conversations are not kept on top.')).toBeTruthy();
+  });
+});
+
+describe('FiltersSheet: the same filters as the web', () => {
+  it('lists chat status, conversation, sort by and the date range, then the channels the workspace has', async () => {
+    await renderApp(
+      <FiltersSheet visible value={value()} onApply={jest.fn()} onClose={jest.fn()} />,
+    );
+    const names = (await screen.findAllByRole('tab')).map((tab) => tab.props.accessibilityLabel);
+    expect(names.slice(0, 4)).toEqual([
+      'Chat status',
+      'Conversation',
+      'Sort by',
+      'Date range (last activity)',
+    ]);
+    expect(names).toContain('Channel');
+    expect(names[names.length - 1]).toBe('View');
+  });
+
+  it('offers resolved and spam but no separate "Closed", and takes several statuses at once', async () => {
+    const onApply = jest.fn();
+    await renderApp(<FiltersSheet visible value={value()} onApply={onApply} onClose={jest.fn()} />);
+    expect(await screen.findByRole('checkbox', { name: 'Spam' })).toBeTruthy();
+    expect(screen.queryByRole('checkbox', { name: 'Closed' })).toBeNull();
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Spam' }));
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Snoozed' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(onApply).toHaveBeenCalledTimes(1));
+    // In the order the window lists them, whatever order they were ticked in.
+    expect(onApply).toHaveBeenCalledWith(
+      expect.objectContaining({ statuses: ['snoozed', 'spam'] }),
+    );
+  });
+
+  it('applies who has the conversation, and "Any" takes it off', async () => {
+    const onApply = jest.fn();
+    await renderApp(
+      <FiltersSheet
+        visible
+        value={value({ assignment: 'assigned' })}
+        onApply={onApply}
+        onClose={jest.fn()}
+      />,
+    );
+    await fireEvent.press(await screen.findByRole('tab', { name: 'Conversation' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Unattended' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(onApply).toHaveBeenCalledTimes(1));
+    expect(onApply).toHaveBeenLastCalledWith(expect.objectContaining({ assignment: 'unattended' }));
+
+    onApply.mockClear();
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Any' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(onApply).toHaveBeenCalledTimes(1));
+    expect(onApply).toHaveBeenLastCalledWith(expect.objectContaining({ assignment: '' }));
+  });
+
+  it('keeps the chosen channels and dates when only the sort changes', async () => {
+    const onApply = jest.fn();
+    await renderApp(
+      <FiltersSheet
+        visible
+        value={value({ channelIds: ['ch1'], from: '2026-10-01', to: '2026-10-20' })}
+        onApply={onApply}
+        onClose={jest.fn()}
+      />,
+    );
+    await fireEvent.press(await screen.findByRole('tab', { name: 'Sort by' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: /Oldest first/ }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(onApply).toHaveBeenCalledTimes(1));
+    expect(onApply).toHaveBeenCalledWith(
+      expect.objectContaining({
+        channelIds: ['ch1'],
+        from: '2026-10-01',
+        to: '2026-10-20',
+        sort: 'old',
+      }),
+    );
   });
 });

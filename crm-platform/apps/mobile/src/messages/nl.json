@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "Filters",
-      "sheet": "Gespreksstatus",
+      "sheet": "Chatstatus",
       "close": "Sluiten",
       "applied": "Toegepaste filters",
       "clearAll": "Alles wissen",
@@ -1012,7 +1012,6 @@
       "viewActive": "Gesprekken",
       "viewArchived": "Gearchiveerd",
       "channel": "Kanaal",
-      "allChannels": "Alle kanalen",
       "labels": "Labels",
       "searchLabels": "Labels zoeken",
       "agent": "Medewerker",
@@ -1026,14 +1025,21 @@
       "sortChip": "Sortering: {{name}}",
       "channelChip": "Kanaal: {{name}}",
       "labelsChip": "Labels: {{names}}",
-      "archivedChip": "Gearchiveerd"
+      "archivedChip": "Gearchiveerd",
+      "conversation": "Gesprek",
+      "conversationAny": "Alle",
+      "conversation_assigned": "Toegewezen",
+      "conversation_unassigned": "Niet toegewezen",
+      "conversation_unattended": "Onbeantwoord",
+      "dates": "Periode (laatste activiteit)",
+      "assignmentChip": "Gesprek: {{name}}",
+      "datesChip": "Periode (laatste activiteit): {{range}}"
     },
     "statusFilter": {
-      "default": "Open",
-      "snoozed": "Uitgesteld",
+      "open": "Open",
+      "snoozed": "Gesnoozed",
       "resolved": "Opgelost",
-      "closed": "Gesloten",
-      "all": "Alle statussen"
+      "spam": "Spam"
     },
     "status": {
       "open": "Open",
@@ -1234,7 +1240,9 @@
       "notFound": "Dit gesprek is niet meer beschikbaar.",
       "templateNotSendable": "Deze sjabloon kan niet vanuit dit gesprek worden verzonden. Kies een andere.",
       "validation": "Sommige gegevens zijn ongeldig. Controleer ze en probeer het opnieuw.",
-      "withCode": "{{message}} (Foutcode: {{code}})"
+      "withCode": "{{message}} (Foutcode: {{code}})",
+      "contactOptedOut": "Dit contact heeft zich afgemeld voor marketingberichten, dus het bericht is niet verzonden.",
+      "consentRequired": "Deze werkruimte vereist een vastgelegde toestemming voor marketingberichten en dit contact heeft die niet, dus het bericht is niet verzonden."
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "Filtreler",
-      "sheet": "Konuşma durumu",
+      "sheet": "Sohbet durumu",
       "close": "Kapat",
       "applied": "Uygulanan filtreler",
       "clearAll": "Tümünü temizle",
@@ -1012,7 +1012,6 @@
       "viewActive": "Konuşmalar",
       "viewArchived": "Arşivlenenler",
       "channel": "Kanal",
-      "allChannels": "Tüm kanallar",
       "labels": "Etiketler",
       "searchLabels": "Etiketlerde ara",
       "agent": "Temsilci",
@@ -1026,14 +1025,21 @@
       "sortChip": "Sıralama: {{name}}",
       "channelChip": "Kanal: {{name}}",
       "labelsChip": "Etiketler: {{names}}",
-      "archivedChip": "Arşivlenen"
+      "archivedChip": "Arşivlenen",
+      "conversation": "Konuşma",
+      "conversationAny": "Herhangi",
+      "conversation_assigned": "Atanmış",
+      "conversation_unassigned": "Atanmamış",
+      "conversation_unattended": "İlgilenilmemiş",
+      "dates": "Tarih aralığı (son etkinlik)",
+      "assignmentChip": "Konuşma: {{name}}",
+      "datesChip": "Tarih aralığı (son etkinlik): {{range}}"
     },
     "statusFilter": {
-      "default": "Açık",
+      "open": "Açık",
       "snoozed": "Ertelendi",
       "resolved": "Çözüldü",
-      "closed": "Kapalı",
-      "all": "Tüm durumlar"
+      "spam": "Spam"
     },
     "status": {
       "open": "Açık",
@@ -1234,7 +1240,9 @@
       "notFound": "Bu konuşma artık mevcut değil.",
       "templateNotSendable": "Bu şablon bu görüşmeden gönderilemez. Başka bir tane seçin.",
       "validation": "Bazı bilgiler geçerli değil. Kontrol edip tekrar deneyin.",
-      "withCode": "{{message}} (Kod: {{code}})"
+      "withCode": "{{message}} (Kod: {{code}})",
+      "contactOptedOut": "Bu kişi pazarlama iletilerinden çıktığı için ileti gönderilmedi.",
+      "consentRequired": "Bu çalışma alanı pazarlama iletileri için kayıtlı onay gerektiriyor ve bu kişinin onayı yok, bu yüzden ileti gönderilmedi."
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -979,7 +979,7 @@
     },
     "filter": {
       "open": "筛选",
-      "sheet": "会话状态",
+      "sheet": "聊天状态",
       "close": "关闭",
       "applied": "已应用的筛选条件",
       "clearAll": "全部清除",
@@ -991,7 +991,6 @@
       "viewActive": "会话",
       "viewArchived": "已归档",
       "channel": "渠道",
-      "allChannels": "所有渠道",
       "labels": "标签",
       "searchLabels": "搜索标签",
       "agent": "客服",
@@ -1005,14 +1004,21 @@
       "sortChip": "排序：{{name}}",
       "channelChip": "渠道：{{name}}",
       "labelsChip": "标签：{{names}}",
-      "archivedChip": "已归档"
+      "archivedChip": "已归档",
+      "conversation": "会话",
+      "conversationAny": "任意",
+      "conversation_assigned": "已分配",
+      "conversation_unassigned": "未分配",
+      "conversation_unattended": "未处理",
+      "dates": "日期范围（最后活动）",
+      "assignmentChip": "会话: {{name}}",
+      "datesChip": "日期范围（最后活动）: {{range}}"
     },
     "statusFilter": {
-      "default": "进行中",
-      "snoozed": "已搁置",
+      "open": "打开",
+      "snoozed": "已暂停",
       "resolved": "已解决",
-      "closed": "已关闭",
-      "all": "所有状态"
+      "spam": "垃圾信息"
     },
     "status": {
       "open": "进行中",
@@ -1212,7 +1218,9 @@
       "notFound": "此会话已不存在。",
       "templateNotSendable": "无法从此对话发送该模板，请选择其他模板。",
       "validation": "部分信息无效，请检查后重试。",
-      "withCode": "{{message}} (代码: {{code}})"
+      "withCode": "{{message}} (代码: {{code}})",
+      "contactOptedOut": "该联系人已退订营销消息，因此消息未发送。",
+      "consentRequired": "此工作区要求营销消息必须有已记录的同意，而该联系人没有，因此消息未发送。"
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "فلٹرز",
-      "sheet": "گفتگو کی حالت",
+      "sheet": "چیٹ کی حالت",
       "close": "بند کریں",
       "applied": "لاگو فلٹرز",
       "clearAll": "سب صاف کریں",
@@ -1012,7 +1012,6 @@
       "viewActive": "گفتگوئیں",
       "viewArchived": "آرکائیو شدہ",
       "channel": "چینل",
-      "allChannels": "تمام چینلز",
       "labels": "لیبلز",
       "searchLabels": "لیبلز تلاش کریں",
       "agent": "ایجنٹ",
@@ -1026,14 +1025,21 @@
       "sortChip": "ترتیب: {{name}}",
       "channelChip": "چینل: {{name}}",
       "labelsChip": "لیبلز: {{names}}",
-      "archivedChip": "آرکائیو شدہ"
+      "archivedChip": "آرکائیو شدہ",
+      "conversation": "گفتگو",
+      "conversationAny": "کوئی بھی",
+      "conversation_assigned": "تفویض شدہ",
+      "conversation_unassigned": "غیر تفویض شدہ",
+      "conversation_unattended": "غیر توجہ شدہ",
+      "dates": "تاریخ کی حد (آخری سرگرمی)",
+      "assignmentChip": "گفتگو: {{name}}",
+      "datesChip": "تاریخ کی حد (آخری سرگرمی): {{range}}"
     },
     "statusFilter": {
-      "default": "کھلی",
-      "snoozed": "مؤخر",
+      "open": "کھلی",
+      "snoozed": "ملتوی",
       "resolved": "حل شدہ",
-      "closed": "بند",
-      "all": "تمام حالتیں"
+      "spam": "اسپیم"
     },
     "status": {
       "open": "کھلی",
@@ -1234,7 +1240,9 @@
       "notFound": "یہ گفتگو اب دستیاب نہیں۔",
       "templateNotSendable": "یہ ٹیمپلیٹ اس گفتگو سے نہیں بھیجا جا سکتا۔ کوئی دوسرا منتخب کریں۔",
       "validation": "کچھ تفصیلات درست نہیں ہیں۔ انہیں چیک کریں اور دوبارہ کوشش کریں۔",
-      "withCode": "{{message}} (کوڈ: {{code}})"
+      "withCode": "{{message}} (کوڈ: {{code}})",
+      "contactOptedOut": "اس رابطے نے مارکیٹنگ پیغامات کی سبسکرپشن ختم کر دی ہے، اس لیے پیغام نہیں بھیجا گیا۔",
+      "consentRequired": "اس ورک اسپیس میں مارکیٹنگ پیغامات کے لیے درج شدہ رضامندی درکار ہے اور اس رابطے کی نہیں ہے، اس لیے پیغام نہیں بھیجا گیا۔"
     },
     "channel": {
       "whatsapp": "WhatsApp",

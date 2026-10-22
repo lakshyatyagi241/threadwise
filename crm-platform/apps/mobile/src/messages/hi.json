@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "फ़िल्टर",
-      "sheet": "बातचीत की स्थिति",
+      "sheet": "चैट की स्थिति",
       "close": "बंद करें",
       "applied": "लागू किए गए फ़िल्टर",
       "clearAll": "सभी हटाएँ",
@@ -1012,7 +1012,6 @@
       "viewActive": "बातचीतें",
       "viewArchived": "संग्रहित",
       "channel": "चैनल",
-      "allChannels": "सभी चैनल",
       "labels": "लेबल",
       "searchLabels": "लेबल खोजें",
       "agent": "एजेंट",
@@ -1026,14 +1025,21 @@
       "sortChip": "क्रम: {{name}}",
       "channelChip": "चैनल: {{name}}",
       "labelsChip": "लेबल: {{names}}",
-      "archivedChip": "संग्रहित"
+      "archivedChip": "संग्रहित",
+      "conversation": "बातचीत",
+      "conversationAny": "कोई भी",
+      "conversation_assigned": "असाइन की गई",
+      "conversation_unassigned": "असाइन नहीं",
+      "conversation_unattended": "अनदेखी",
+      "dates": "तारीख़ सीमा (आख़िरी गतिविधि)",
+      "assignmentChip": "बातचीत: {{name}}",
+      "datesChip": "तारीख़ सीमा (आख़िरी गतिविधि): {{range}}"
     },
     "statusFilter": {
-      "default": "खुली",
+      "open": "खुली",
       "snoozed": "स्नूज़ की गई",
-      "resolved": "हल हुई",
-      "closed": "बंद",
-      "all": "सभी स्थितियाँ"
+      "resolved": "हल की गई",
+      "spam": "स्पैम"
     },
     "status": {
       "open": "खुली",
@@ -1234,7 +1240,9 @@
       "notFound": "यह बातचीत अब उपलब्ध नहीं है।",
       "templateNotSendable": "यह टेम्पलेट इस बातचीत से नहीं भेजा जा सकता। कोई दूसरा चुनें।",
       "validation": "कुछ जानकारी मान्य नहीं है। उसे जाँचें और फिर कोशिश करें।",
-      "withCode": "{{message}} (कोड: {{code}})"
+      "withCode": "{{message}} (कोड: {{code}})",
+      "contactOptedOut": "इस संपर्क ने मार्केटिंग संदेशों की सदस्यता रद्द कर दी है, इसलिए संदेश नहीं भेजा गया।",
+      "consentRequired": "इस वर्कस्पेस में मार्केटिंग संदेशों के लिए दर्ज सहमति ज़रूरी है और इस संपर्क की सहमति नहीं है, इसलिए संदेश नहीं भेजा गया।"
     },
     "channel": {
       "whatsapp": "व्हाट्सऐप",

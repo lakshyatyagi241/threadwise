@@ -979,7 +979,7 @@
     },
     "filter": {
       "open": "Bộ lọc",
-      "sheet": "Trạng thái cuộc trò chuyện",
+      "sheet": "Trạng thái chat",
       "close": "Đóng",
       "applied": "Bộ lọc đã áp dụng",
       "clearAll": "Xóa tất cả",
@@ -991,7 +991,6 @@
       "viewActive": "Cuộc trò chuyện",
       "viewArchived": "Đã lưu trữ",
       "channel": "Kênh",
-      "allChannels": "Tất cả kênh",
       "labels": "Nhãn",
       "searchLabels": "Tìm nhãn",
       "agent": "Nhân viên",
@@ -1005,14 +1004,21 @@
       "sortChip": "Sắp xếp: {{name}}",
       "channelChip": "Kênh: {{name}}",
       "labelsChip": "Nhãn: {{names}}",
-      "archivedChip": "Đã lưu trữ"
+      "archivedChip": "Đã lưu trữ",
+      "conversation": "Cuộc trò chuyện",
+      "conversationAny": "Bất kỳ",
+      "conversation_assigned": "Đã giao",
+      "conversation_unassigned": "Chưa giao",
+      "conversation_unattended": "Chưa xử lý",
+      "dates": "Khoảng ngày (hoạt động cuối)",
+      "assignmentChip": "Cuộc trò chuyện: {{name}}",
+      "datesChip": "Khoảng ngày (hoạt động cuối): {{range}}"
     },
     "statusFilter": {
-      "default": "Mở",
+      "open": "Đang mở",
       "snoozed": "Tạm hoãn",
       "resolved": "Đã giải quyết",
-      "closed": "Đã đóng",
-      "all": "Tất cả trạng thái"
+      "spam": "Thư rác"
     },
     "status": {
       "open": "Mở",
@@ -1212,7 +1218,9 @@
       "notFound": "Cuộc trò chuyện này không còn nữa.",
       "templateNotSendable": "Không thể gửi mẫu này từ cuộc trò chuyện này. Hãy chọn mẫu khác.",
       "validation": "Một số thông tin không hợp lệ. Hãy kiểm tra và thử lại.",
-      "withCode": "{{message}} (Mã: {{code}})"
+      "withCode": "{{message}} (Mã: {{code}})",
+      "contactOptedOut": "Liên hệ này đã hủy đăng ký tin nhắn tiếp thị nên tin nhắn không được gửi.",
+      "consentRequired": "Không gian làm việc này yêu cầu sự đồng ý được ghi lại cho tin nhắn tiếp thị và liên hệ này chưa có, nên tin nhắn không được gửi."
     },
     "channel": {
       "whatsapp": "WhatsApp",

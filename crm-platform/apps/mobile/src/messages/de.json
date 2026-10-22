@@ -1000,7 +1000,7 @@
     },
     "filter": {
       "open": "Filter",
-      "sheet": "Unterhaltungsstatus",
+      "sheet": "Chat-Status",
       "close": "Schließen",
       "applied": "Angewendete Filter",
       "clearAll": "Alle zurücksetzen",
@@ -1012,7 +1012,6 @@
       "viewActive": "Unterhaltungen",
       "viewArchived": "Archiviert",
       "channel": "Kanal",
-      "allChannels": "Alle Kanäle",
       "labels": "Labels",
       "searchLabels": "Labels suchen",
       "agent": "Mitarbeiter",
@@ -1026,14 +1025,21 @@
       "sortChip": "Sortierung: {{name}}",
       "channelChip": "Kanal: {{name}}",
       "labelsChip": "Labels: {{names}}",
-      "archivedChip": "Archiviert"
+      "archivedChip": "Archiviert",
+      "conversation": "Konversation",
+      "conversationAny": "Beliebig",
+      "conversation_assigned": "Zugewiesen",
+      "conversation_unassigned": "Nicht zugewiesen",
+      "conversation_unattended": "Unbeachtet",
+      "dates": "Zeitraum (letzte Aktivität)",
+      "assignmentChip": "Konversation: {{name}}",
+      "datesChip": "Zeitraum (letzte Aktivität): {{range}}"
     },
     "statusFilter": {
-      "default": "Offen",
+      "open": "Offen",
       "snoozed": "Zurückgestellt",
       "resolved": "Gelöst",
-      "closed": "Geschlossen",
-      "all": "Alle Status"
+      "spam": "Spam"
     },
     "status": {
       "open": "Offen",
@@ -1234,7 +1240,9 @@
       "notFound": "Diese Unterhaltung ist nicht mehr verfügbar.",
       "templateNotSendable": "Diese Vorlage kann aus dieser Unterhaltung nicht gesendet werden. Wähle eine andere.",
       "validation": "Einige Angaben sind ungültig. Prüfe sie und versuche es erneut.",
-      "withCode": "{{message}} (Fehlercode: {{code}})"
+      "withCode": "{{message}} (Fehlercode: {{code}})",
+      "contactOptedOut": "Dieser Kontakt hat Marketing-Nachrichten abbestellt, daher wurde die Nachricht nicht gesendet.",
+      "consentRequired": "Dieser Arbeitsbereich verlangt eine dokumentierte Einwilligung für Marketing-Nachrichten und dieser Kontakt hat keine, daher wurde die Nachricht nicht gesendet."
     },
     "channel": {
       "whatsapp": "WhatsApp",

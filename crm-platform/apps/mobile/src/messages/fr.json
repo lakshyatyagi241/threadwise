@@ -1021,7 +1021,7 @@
     },
     "filter": {
       "open": "Filtres",
-      "sheet": "Statut de la conversation",
+      "sheet": "Statut du chat",
       "close": "Fermer",
       "applied": "Filtres appliqués",
       "clearAll": "Tout effacer",
@@ -1033,7 +1033,6 @@
       "viewActive": "Conversations",
       "viewArchived": "Archivées",
       "channel": "Canal",
-      "allChannels": "Tous les canaux",
       "labels": "Étiquettes",
       "searchLabels": "Rechercher des étiquettes",
       "agent": "Agent",
@@ -1047,14 +1046,21 @@
       "sortChip": "Tri : {{name}}",
       "channelChip": "Canal : {{name}}",
       "labelsChip": "Étiquettes : {{names}}",
-      "archivedChip": "Archivées"
+      "archivedChip": "Archivées",
+      "conversation": "Conversation",
+      "conversationAny": "Toutes",
+      "conversation_assigned": "Assignée",
+      "conversation_unassigned": "Non assignée",
+      "conversation_unattended": "Sans réponse",
+      "dates": "Période (dernière activité)",
+      "assignmentChip": "Conversation: {{name}}",
+      "datesChip": "Période (dernière activité): {{range}}"
     },
     "statusFilter": {
-      "default": "Ouvertes",
-      "snoozed": "Mises en veille",
-      "resolved": "Résolues",
-      "closed": "Fermées",
-      "all": "Tous les statuts"
+      "open": "Ouverte",
+      "snoozed": "Reportée",
+      "resolved": "Résolue",
+      "spam": "Spam"
     },
     "status": {
       "open": "Ouverte",
@@ -1256,7 +1262,9 @@
       "notFound": "Cette conversation n’est plus disponible.",
       "templateNotSendable": "Ce modèle ne peut pas être envoyé depuis cette conversation. Choisissez-en un autre.",
       "validation": "Certaines informations ne sont pas valides. Vérifiez-les et réessayez.",
-      "withCode": "{{message}} (Code d'erreur: {{code}})"
+      "withCode": "{{message}} (Code d'erreur: {{code}})",
+      "contactOptedOut": "Ce contact s'est désabonné des messages marketing ; le message n'a donc pas été envoyé.",
+      "consentRequired": "Cet espace de travail exige un consentement enregistré pour les messages marketing et ce contact n'en a pas ; le message n'a donc pas été envoyé."
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -5,12 +5,15 @@ describe('hasActiveFilter', () => {
     expect(hasActiveFilter(DEFAULT_FILTERS)).toBe(false);
   });
   it('is on for each thing that narrows or reorders the list', () => {
-    expect(hasActiveFilter({ ...DEFAULT_FILTERS, status: 'resolved' })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, statuses: ['resolved'] })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, q: 'meera' })).toBe(true);
-    expect(hasActiveFilter({ ...DEFAULT_FILTERS, channelId: 'c1' })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, channelIds: ['c1'] })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, labels: ['l1'] })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, archived: true })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, agentIds: ['a1'] })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, assignment: 'unattended' })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, from: '2026-10-01' })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, to: '2026-10-20' })).toBe(true);
   });
   it('is on for the oldest-first order alone, so its chip and the filter dot show', () => {
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, sort: 'old' })).toBe(true);

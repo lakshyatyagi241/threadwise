@@ -1021,7 +1021,7 @@
     },
     "filter": {
       "open": "Filtros",
-      "sheet": "Estado de la conversación",
+      "sheet": "Estado del chat",
       "close": "Cerrar",
       "applied": "Filtros aplicados",
       "clearAll": "Borrar todo",
@@ -1033,7 +1033,6 @@
       "viewActive": "Conversaciones",
       "viewArchived": "Archivadas",
       "channel": "Canal",
-      "allChannels": "Todos los canales",
       "labels": "Etiquetas",
       "searchLabels": "Buscar etiquetas",
       "agent": "Agente",
@@ -1047,14 +1046,21 @@
       "sortChip": "Orden: {{name}}",
       "channelChip": "Canal: {{name}}",
       "labelsChip": "Etiquetas: {{names}}",
-      "archivedChip": "Archivadas"
+      "archivedChip": "Archivadas",
+      "conversation": "Conversación",
+      "conversationAny": "Cualquiera",
+      "conversation_assigned": "Asignada",
+      "conversation_unassigned": "Sin asignar",
+      "conversation_unattended": "Sin atender",
+      "dates": "Rango de fechas (última actividad)",
+      "assignmentChip": "Conversación: {{name}}",
+      "datesChip": "Rango de fechas (última actividad): {{range}}"
     },
     "statusFilter": {
-      "default": "Abiertas",
-      "snoozed": "Pospuestas",
-      "resolved": "Resueltas",
-      "closed": "Cerradas",
-      "all": "Todos los estados"
+      "open": "Abierta",
+      "snoozed": "Pospuesta",
+      "resolved": "Resuelta",
+      "spam": "Spam"
     },
     "status": {
       "open": "Abierta",
@@ -1256,7 +1262,9 @@
       "notFound": "Esta conversación ya no está disponible.",
       "templateNotSendable": "Esta plantilla no se puede enviar desde esta conversación. Elige otra.",
       "validation": "Algunos datos no son válidos. Revísalos e inténtalo de nuevo.",
-      "withCode": "{{message}} (Código: {{code}})"
+      "withCode": "{{message}} (Código: {{code}})",
+      "contactOptedOut": "Este contacto se dio de baja de los mensajes de marketing, por lo que el mensaje no se envió.",
+      "consentRequired": "Este espacio de trabajo exige un consentimiento registrado para mensajes de marketing y este contacto no lo tiene, por lo que el mensaje no se envió."
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -1021,7 +1021,7 @@
     },
     "filter": {
       "open": "מסננים",
-      "sheet": "סטטוס שיחה",
+      "sheet": "סטטוס צ׳אט",
       "close": "סגירה",
       "applied": "מסננים פעילים",
       "clearAll": "ניקוי הכול",
@@ -1033,7 +1033,6 @@
       "viewActive": "שיחות",
       "viewArchived": "בארכיון",
       "channel": "ערוץ",
-      "allChannels": "כל הערוצים",
       "labels": "תוויות",
       "searchLabels": "חיפוש תוויות",
       "agent": "נציג",
@@ -1047,14 +1046,21 @@
       "sortChip": "מיון: {{name}}",
       "channelChip": "ערוץ: {{name}}",
       "labelsChip": "תוויות: {{names}}",
-      "archivedChip": "בארכיון"
+      "archivedChip": "בארכיון",
+      "conversation": "שיחה",
+      "conversationAny": "הכול",
+      "conversation_assigned": "משויכת",
+      "conversation_unassigned": "לא משויכת",
+      "conversation_unattended": "ללא מענה",
+      "dates": "טווח תאריכים (פעילות אחרונה)",
+      "assignmentChip": "שיחה: {{name}}",
+      "datesChip": "טווח תאריכים (פעילות אחרונה): {{range}}"
     },
     "statusFilter": {
-      "default": "פתוחות",
+      "open": "פתוחה",
       "snoozed": "בהשהיה",
-      "resolved": "נפתרו",
-      "closed": "סגורות",
-      "all": "כל הסטטוסים"
+      "resolved": "נפתרה",
+      "spam": "ספאם"
     },
     "status": {
       "open": "פתוחה",
@@ -1256,7 +1262,9 @@
       "notFound": "השיחה הזו כבר אינה זמינה.",
       "templateNotSendable": "לא ניתן לשלוח תבנית זו מהשיחה הזו. בחרו תבנית אחרת.",
       "validation": "חלק מהפרטים אינם תקינים. בדקו אותם ונסו שוב.",
-      "withCode": "{{message}} (קוד: {{code}})"
+      "withCode": "{{message}} (קוד: {{code}})",
+      "contactOptedOut": "איש הקשר ביטל הרשמה להודעות שיווקיות, ולכן ההודעה לא נשלחה.",
+      "consentRequired": "סביבת העבודה הזו דורשת הסכמה מתועדת להודעות שיווקיות ולאיש הקשר אין, ולכן ההודעה לא נשלחה."
     },
     "channel": {
       "whatsapp": "WhatsApp",

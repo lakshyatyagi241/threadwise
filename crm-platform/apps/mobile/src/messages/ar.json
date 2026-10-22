@@ -1084,7 +1084,7 @@
     },
     "filter": {
       "open": "عوامل التصفية",
-      "sheet": "حالة المحادثة",
+      "sheet": "حالة الدردشة",
       "close": "إغلاق",
       "applied": "عوامل التصفية المطبقة",
       "clearAll": "مسح الكل",
@@ -1096,7 +1096,6 @@
       "viewActive": "المحادثات",
       "viewArchived": "المؤرشفة",
       "channel": "القناة",
-      "allChannels": "كل القنوات",
       "labels": "التسميات",
       "searchLabels": "البحث في التسميات",
       "agent": "الوكيل",
@@ -1110,14 +1109,21 @@
       "sortChip": "الترتيب: {{name}}",
       "channelChip": "القناة: {{name}}",
       "labelsChip": "التسميات: {{names}}",
-      "archivedChip": "مؤرشفة"
+      "archivedChip": "مؤرشفة",
+      "conversation": "المحادثة",
+      "conversationAny": "أي",
+      "conversation_assigned": "معيّنة",
+      "conversation_unassigned": "غير معيّنة",
+      "conversation_unattended": "بلا رد",
+      "dates": "النطاق الزمني (آخر نشاط)",
+      "assignmentChip": "المحادثة: {{name}}",
+      "datesChip": "النطاق الزمني (آخر نشاط): {{range}}"
     },
     "statusFilter": {
-      "default": "مفتوحة",
+      "open": "مفتوحة",
       "snoozed": "مؤجلة",
       "resolved": "تم حلها",
-      "closed": "مغلقة",
-      "all": "كل الحالات"
+      "spam": "رسائل مزعجة"
     },
     "status": {
       "open": "مفتوحة",
@@ -1322,7 +1328,9 @@
       "notFound": "هذه المحادثة لم تعد متاحة.",
       "templateNotSendable": "لا يمكن إرسال هذا القالب من هذه المحادثة. اختر قالبًا آخر.",
       "validation": "بعض التفاصيل غير صالحة. تحقق منها وحاول مرة أخرى.",
-      "withCode": "{{message}} (الرمز: {{code}})"
+      "withCode": "{{message}} (الرمز: {{code}})",
+      "contactOptedOut": "ألغت جهة الاتصال هذه اشتراكها في الرسائل التسويقية، لذا لم تُرسل الرسالة.",
+      "consentRequired": "تتطلب مساحة العمل هذه موافقة مسجّلة على الرسائل التسويقية وليس لدى جهة الاتصال هذه موافقة، لذا لم تُرسل الرسالة."
     },
     "channel": {
       "whatsapp": "WhatsApp",

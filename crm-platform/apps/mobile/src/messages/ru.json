@@ -1042,7 +1042,7 @@
     },
     "filter": {
       "open": "Фильтры",
-      "sheet": "Статус диалога",
+      "sheet": "Статус чата",
       "close": "Закрыть",
       "applied": "Применённые фильтры",
       "clearAll": "Сбросить все",
@@ -1054,7 +1054,6 @@
       "viewActive": "Диалоги",
       "viewArchived": "Архив",
       "channel": "Канал",
-      "allChannels": "Все каналы",
       "labels": "Метки",
       "searchLabels": "Поиск меток",
       "agent": "Сотрудник",
@@ -1068,14 +1067,21 @@
       "sortChip": "Сортировка: {{name}}",
       "channelChip": "Канал: {{name}}",
       "labelsChip": "Метки: {{names}}",
-      "archivedChip": "Архив"
+      "archivedChip": "Архив",
+      "conversation": "Диалог",
+      "conversationAny": "Любой",
+      "conversation_assigned": "Назначен",
+      "conversation_unassigned": "Не назначен",
+      "conversation_unattended": "Без ответа",
+      "dates": "Период (последняя активность)",
+      "assignmentChip": "Диалог: {{name}}",
+      "datesChip": "Период (последняя активность): {{range}}"
     },
     "statusFilter": {
-      "default": "Открытые",
-      "snoozed": "Отложенные",
-      "resolved": "Решённые",
-      "closed": "Закрытые",
-      "all": "Все статусы"
+      "open": "Открыт",
+      "snoozed": "Отложен",
+      "resolved": "Закрыт",
+      "spam": "Спам"
     },
     "status": {
       "open": "Открыт",
@@ -1278,7 +1284,9 @@
       "notFound": "Этот диалог больше недоступен.",
       "templateNotSendable": "Этот шаблон нельзя отправить из этого чата. Выберите другой.",
       "validation": "Некоторые данные недопустимы. Проверьте их и повторите попытку.",
-      "withCode": "{{message}} (Код: {{code}})"
+      "withCode": "{{message}} (Код: {{code}})",
+      "contactOptedOut": "Этот контакт отписался от маркетинговых сообщений, поэтому сообщение не отправлено.",
+      "consentRequired": "Это рабочее пространство требует записанного согласия на маркетинговые сообщения, а у этого контакта его нет, поэтому сообщение не отправлено."
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -979,7 +979,7 @@
     },
     "filter": {
       "open": "Filter",
-      "sheet": "Status percakapan",
+      "sheet": "Status chat",
       "close": "Tutup",
       "applied": "Filter diterapkan",
       "clearAll": "Hapus semua",
@@ -991,7 +991,6 @@
       "viewActive": "Percakapan",
       "viewArchived": "Diarsipkan",
       "channel": "Saluran",
-      "allChannels": "Semua saluran",
       "labels": "Label",
       "searchLabels": "Cari label",
       "agent": "Agen",
@@ -1005,14 +1004,21 @@
       "sortChip": "Urutan: {{name}}",
       "channelChip": "Saluran: {{name}}",
       "labelsChip": "Label: {{names}}",
-      "archivedChip": "Diarsipkan"
+      "archivedChip": "Diarsipkan",
+      "conversation": "Percakapan",
+      "conversationAny": "Apa saja",
+      "conversation_assigned": "Ditugaskan",
+      "conversation_unassigned": "Belum ditugaskan",
+      "conversation_unattended": "Belum ditangani",
+      "dates": "Rentang tanggal (aktivitas terakhir)",
+      "assignmentChip": "Percakapan: {{name}}",
+      "datesChip": "Rentang tanggal (aktivitas terakhir): {{range}}"
     },
     "statusFilter": {
-      "default": "Terbuka",
+      "open": "Terbuka",
       "snoozed": "Ditunda",
       "resolved": "Selesai",
-      "closed": "Ditutup",
-      "all": "Semua status"
+      "spam": "Spam"
     },
     "status": {
       "open": "Terbuka",
@@ -1212,7 +1218,9 @@
       "notFound": "Percakapan ini tidak lagi tersedia.",
       "templateNotSendable": "Templat ini tidak dapat dikirim dari percakapan ini. Pilih templat lain.",
       "validation": "Sebagian detail tidak valid. Periksa lalu coba lagi.",
-      "withCode": "{{message}} (Kode: {{code}})"
+      "withCode": "{{message}} (Kode: {{code}})",
+      "contactOptedOut": "Kontak ini telah berhenti berlangganan pesan pemasaran, jadi pesan tidak dikirim.",
+      "consentRequired": "Ruang kerja ini mewajibkan persetujuan tercatat untuk pesan pemasaran dan kontak ini belum memilikinya, jadi pesan tidak dikirim."
     },
     "channel": {
       "whatsapp": "WhatsApp",

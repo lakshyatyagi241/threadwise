@@ -74,14 +74,15 @@ describe('inbox api', () => {
     expect(plain).not.toContain('sort=');
   });
 
-  it('sends the status, the search words and the cursor when they are set', async () => {
+  it('sends the statuses, the search words and the cursor when they are set', async () => {
     const http = mockFetch(jsonResponse(200, list([])));
     await fetchConversations(
-      { ...DEFAULT_FILTERS, tab: 'unread', status: 'resolved', q: ' rohan ' },
+      { ...DEFAULT_FILTERS, tab: 'unread', statuses: ['resolved', 'spam'], q: ' rohan ' },
       'c2',
     );
     const url = http.calls[0]?.url ?? '';
-    expect(url).toContain('status=resolved');
+    expect(url).toContain('statuses=resolved%2Cspam');
+    expect(url).not.toContain('status=');
     expect(url).toContain('q=rohan');
     expect(url).toContain('cursor=c2');
     expect(url).toContain('tab=unread');
@@ -215,7 +216,10 @@ describe('inbox api', () => {
     await fetchConversations(
       {
         ...DEFAULT_FILTERS,
-        channelId: '22222222-2222-4222-8222-222222222222',
+        channelIds: [
+          '22222222-2222-4222-8222-222222222222',
+          '33333333-3333-4333-8333-333333333333',
+        ],
         labels: ['aaaaaaaa-0000-4000-8000-000000000001', 'aaaaaaaa-0000-4000-8000-000000000002'],
         archived: true,
       },
@@ -223,13 +227,32 @@ describe('inbox api', () => {
     );
     await fetchConversations(DEFAULT_FILTERS, undefined);
     const set = http.calls[0]?.url ?? '';
-    expect(set).toContain('channelId=22222222-2222-4222-8222-222222222222');
+    expect(set).toContain(
+      'channelIds=22222222-2222-4222-8222-222222222222%2C33333333-3333-4333-8333-333333333333',
+    );
     expect(set).toContain(
       'labels=aaaaaaaa-0000-4000-8000-000000000001%2Caaaaaaaa-0000-4000-8000-000000000002',
     );
     expect(set).toContain('archived=true');
     const plain = http.calls[1]?.url ?? '';
-    for (const name of ['channelId=', 'labels=', 'archived=']) expect(plain).not.toContain(name);
+    for (const name of ['channelIds=', 'labels=', 'archived=']) expect(plain).not.toContain(name);
+  });
+
+  it('sends who has the conversation and the dates of the last activity, and leaves them out when they are not set', async () => {
+    const http = mockFetch(jsonResponse(200, list([])), jsonResponse(200, list([])));
+    await fetchConversations(
+      { ...DEFAULT_FILTERS, assignment: 'unattended', from: '2026-10-01', to: '2026-10-20' },
+      undefined,
+    );
+    await fetchConversations(DEFAULT_FILTERS, undefined);
+    const set = http.calls[0]?.url ?? '';
+    expect(set).toContain('assignment=unattended');
+    expect(set).toContain('from=2026-10-01');
+    expect(set).toContain('to=2026-10-20');
+    const plain = http.calls[1]?.url ?? '';
+    for (const name of ['statuses=', 'assignment=', 'from=', 'to=']) {
+      expect(plain).not.toContain(name);
+    }
   });
 
   it('reads the workspace channels', async () => {

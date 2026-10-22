@@ -1042,7 +1042,7 @@
     },
     "filter": {
       "open": "Filtry",
-      "sheet": "Status rozmowy",
+      "sheet": "Status czatu",
       "close": "Zamknij",
       "applied": "Zastosowane filtry",
       "clearAll": "Wyczyść wszystko",
@@ -1054,7 +1054,6 @@
       "viewActive": "Rozmowy",
       "viewArchived": "Zarchiwizowane",
       "channel": "Kanał",
-      "allChannels": "Wszystkie kanały",
       "labels": "Etykiety",
       "searchLabels": "Szukaj etykiet",
       "agent": "Agent",
@@ -1068,14 +1067,21 @@
       "sortChip": "Sortowanie: {{name}}",
       "channelChip": "Kanał: {{name}}",
       "labelsChip": "Etykiety: {{names}}",
-      "archivedChip": "Zarchiwizowane"
+      "archivedChip": "Zarchiwizowane",
+      "conversation": "Rozmowa",
+      "conversationAny": "Dowolna",
+      "conversation_assigned": "Przypisana",
+      "conversation_unassigned": "Nieprzypisana",
+      "conversation_unattended": "Bez obsługi",
+      "dates": "Zakres dat (ostatnia aktywność)",
+      "assignmentChip": "Rozmowa: {{name}}",
+      "datesChip": "Zakres dat (ostatnia aktywność): {{range}}"
     },
     "statusFilter": {
-      "default": "Otwarte",
-      "snoozed": "Odłożone",
-      "resolved": "Rozwiązane",
-      "closed": "Zamknięte",
-      "all": "Wszystkie statusy"
+      "open": "Otwarte",
+      "snoozed": "Odroczone",
+      "resolved": "Zakończone",
+      "spam": "Spam"
     },
     "status": {
       "open": "Otwarta",
@@ -1278,7 +1284,9 @@
       "notFound": "Ta rozmowa nie jest już dostępna.",
       "templateNotSendable": "Tego szablonu nie można wysłać z tej rozmowy. Wybierz inny.",
       "validation": "Niektóre dane są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
-      "withCode": "{{message}} (Kod: {{code}})"
+      "withCode": "{{message}} (Kod: {{code}})",
+      "contactOptedOut": "Ten kontakt wypisał się z wiadomości marketingowych, więc wiadomość nie została wysłana.",
+      "consentRequired": "Ta przestrzeń robocza wymaga zarejestrowanej zgody na wiadomości marketingowe, a ten kontakt jej nie ma, więc wiadomość nie została wysłana."
     },
     "channel": {
       "whatsapp": "WhatsApp",

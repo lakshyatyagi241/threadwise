@@ -979,7 +979,7 @@
     },
     "filter": {
       "open": "필터",
-      "sheet": "대화 상태",
+      "sheet": "채팅 상태",
       "close": "닫기",
       "applied": "적용된 필터",
       "clearAll": "모두 지우기",
@@ -991,7 +991,6 @@
       "viewActive": "대화",
       "viewArchived": "보관됨",
       "channel": "채널",
-      "allChannels": "모든 채널",
       "labels": "라벨",
       "searchLabels": "라벨 검색",
       "agent": "담당자",
@@ -1005,14 +1004,21 @@
       "sortChip": "정렬: {{name}}",
       "channelChip": "채널: {{name}}",
       "labelsChip": "라벨: {{names}}",
-      "archivedChip": "보관됨"
+      "archivedChip": "보관됨",
+      "conversation": "대화",
+      "conversationAny": "전체",
+      "conversation_assigned": "배정됨",
+      "conversation_unassigned": "미배정",
+      "conversation_unattended": "미확인",
+      "dates": "기간 (마지막 활동)",
+      "assignmentChip": "대화: {{name}}",
+      "datesChip": "기간 (마지막 활동): {{range}}"
     },
     "statusFilter": {
-      "default": "열림",
-      "snoozed": "다시 알림",
-      "resolved": "해결됨",
-      "closed": "종료됨",
-      "all": "모든 상태"
+      "open": "진행 중",
+      "snoozed": "보류",
+      "resolved": "완료",
+      "spam": "스팸"
     },
     "status": {
       "open": "열림",
@@ -1212,7 +1218,9 @@
       "notFound": "이 대화는 더 이상 사용할 수 없습니다.",
       "templateNotSendable": "이 템플릿은 이 대화에서 보낼 수 없습니다. 다른 템플릿을 선택하세요.",
       "validation": "일부 내용이 올바르지 않습니다. 확인한 후 다시 시도하세요.",
-      "withCode": "{{message}} (코드: {{code}})"
+      "withCode": "{{message}} (코드: {{code}})",
+      "contactOptedOut": "이 연락처는 마케팅 메시지를 수신 거부했으므로 메시지가 전송되지 않았습니다.",
+      "consentRequired": "이 워크스페이스는 마케팅 메시지에 기록된 동의를 요구하며 이 연락처에는 동의가 없어 메시지가 전송되지 않았습니다."
     },
     "channel": {
       "whatsapp": "WhatsApp",

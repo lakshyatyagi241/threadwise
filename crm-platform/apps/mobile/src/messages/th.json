@@ -979,7 +979,7 @@
     },
     "filter": {
       "open": "ตัวกรอง",
-      "sheet": "สถานะการสนทนา",
+      "sheet": "สถานะแชท",
       "close": "ปิด",
       "applied": "ตัวกรองที่ใช้อยู่",
       "clearAll": "ล้างทั้งหมด",
@@ -991,7 +991,6 @@
       "viewActive": "การสนทนา",
       "viewArchived": "เก็บถาวร",
       "channel": "ช่องทาง",
-      "allChannels": "ทุกช่องทาง",
       "labels": "ป้ายกำกับ",
       "searchLabels": "ค้นหาป้ายกำกับ",
       "agent": "เจ้าหน้าที่",
@@ -1005,14 +1004,21 @@
       "sortChip": "เรียง: {{name}}",
       "channelChip": "ช่องทาง: {{name}}",
       "labelsChip": "ป้ายกำกับ: {{names}}",
-      "archivedChip": "เก็บถาวร"
+      "archivedChip": "เก็บถาวร",
+      "conversation": "การสนทนา",
+      "conversationAny": "ทั้งหมด",
+      "conversation_assigned": "มอบหมายแล้ว",
+      "conversation_unassigned": "ยังไม่มอบหมาย",
+      "conversation_unattended": "ยังไม่ได้ดูแล",
+      "dates": "ช่วงวันที่ (กิจกรรมล่าสุด)",
+      "assignmentChip": "การสนทนา: {{name}}",
+      "datesChip": "ช่วงวันที่ (กิจกรรมล่าสุด): {{range}}"
     },
     "statusFilter": {
-      "default": "เปิดอยู่",
-      "snoozed": "เลื่อนไว้ก่อน",
-      "resolved": "แก้ไขแล้ว",
-      "closed": "ปิดแล้ว",
-      "all": "ทุกสถานะ"
+      "open": "เปิดอยู่",
+      "snoozed": "พักไว้",
+      "resolved": "ปิดสำเร็จแล้ว",
+      "spam": "สแปม"
     },
     "status": {
       "open": "เปิดอยู่",
@@ -1212,7 +1218,9 @@
       "notFound": "ไม่พบการสนทนานี้แล้ว",
       "templateNotSendable": "ไม่สามารถส่งเทมเพลตนี้จากการสนทนานี้ได้ โปรดเลือกเทมเพลตอื่น",
       "validation": "ข้อมูลบางส่วนไม่ถูกต้อง โปรดตรวจสอบแล้วลองอีกครั้ง",
-      "withCode": "{{message}} (รหัส: {{code}})"
+      "withCode": "{{message}} (รหัส: {{code}})",
+      "contactOptedOut": "ผู้ติดต่อรายนี้ยกเลิกการรับข้อความการตลาดแล้ว จึงไม่ได้ส่งข้อความ",
+      "consentRequired": "พื้นที่ทำงานนี้ต้องมีความยินยอมที่บันทึกไว้สำหรับข้อความการตลาด และผู้ติดต่อรายนี้ไม่มี จึงไม่ได้ส่งข้อความ"
     },
     "channel": {
       "whatsapp": "WhatsApp",
