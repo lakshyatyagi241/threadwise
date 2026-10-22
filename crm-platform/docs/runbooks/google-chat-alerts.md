@@ -38,3 +38,40 @@ No poll for 2 min. Check `docker logs` of `gchat-bridge` (events `watcher_poll_e
 
 ## ChatBridgeNoWatchdog
 See Watchdog above: check prometheus rules loaded (`slow-query.rules.yml` mounted), alertmanager config is the gchat one, and `gchat-bridge` is healthy.
+
+## Run the live local demo
+Everything local, with a fake Chat page standing in for Google Chat (`tools/chat-bridge/fake-chat.mjs`; never calls chat.googleapis.com). Needs Docker, node, the dev Postgres with `pg_stat_statements`. Use a work dir `W` outside git.
+```bash
+W=/tmp/chatlive; mkdir -p $W/secrets $W/prom $W/am; R=$PWD   # R = crm-platform/
+# 1. read-only role on the dev DB (skip the REVOKE line: it would lock out other users of a shared DB)
+PW=$(openssl rand -hex 12); grep -v 'REVOKE ALL' tools/chat-bridge/create-readonly-role.sql | sed 's/slow_query_ro/chatlive_ro/g' \
+  | docker exec -i crm-platform-postgres psql -U crm -v ON_ERROR_STOP=1 -d crm -v pw="'$PW'" -v dbname=crm
+echo -n "postgres://chatlive_ro:$PW@localhost:5432/crm" > $W/secrets/slow_query_pg_url
+for c in critical other slowquery deploy; do echo -n "http://127.0.0.1:59611/hook/$c" > $W/secrets/gchat_${c}_url; done
+openssl rand -hex 12 | tr -d '\n' > $W/grafana-admin-password
+# 2. fake Chat (59611), bridge + watcher (59612; run from apps/api so `pg` resolves)
+setsid nohup node tools/chat-bridge/fake-chat.mjs >$W/fake.log 2>&1 </dev/null &
+(cd apps/api && PORT=59612 CHAT_ALLOW_ANY_HOST=1 GCHAT_SECRETS_DIR=$W/secrets SLOW_PG_URL_FILE=$W/secrets/slow_query_pg_url GRAFANA_URL=http://localhost:53100 setsid nohup node $R/tools/chat-bridge/index.mjs >$W/bridge.log 2>&1 </dev/null &)
+# 3. Prometheus (59090, all *.rules.yml), Alertmanager (59093), Grafana (53100), host network so localhost works
+cat > $W/prom/prometheus.yml <<'Y'
+global: { scrape_interval: 5s, evaluation_interval: 5s }
+rule_files: [/rules/*.rules.yml]
+alerting: { alertmanagers: [{ static_configs: [{ targets: ['localhost:59093'] }] }] }
+scrape_configs:
+  - { job_name: prometheus, static_configs: [{ targets: ['localhost:59090'] }] }
+  - { job_name: crm-chat-bridge, static_configs: [{ targets: ['localhost:59612'] }] }
+Y
+sed 's#http://gchat-bridge:9095#http://localhost:59612#' deploy/observability/alertmanager.gchat.yml > $W/am/alertmanager.yml
+cp -r deploy/observability/grafana/provisioning $W/prov && sed -i 's#http://prometheus:9090#http://localhost:59090#' $W/prov/datasources/prometheus.yml
+chmod -R a+rX $W/prov $W/secrets
+docker run -d --name chatlive-prometheus --network host -v $W/prom:/c -v $R/deploy/observability:/rules:ro prom/prometheus:v2.55.0 --config.file=/c/prometheus.yml --web.listen-address=:59090 --storage.tsdb.path=/tmp/d
+docker run -d --name chatlive-alertmanager --network host -v $W/am:/c:ro prom/alertmanager:v0.27.0 --config.file=/c/alertmanager.yml --web.listen-address=:59093 --cluster.listen-address= --storage.path=/tmp/a
+docker run -d --name chatlive-grafana --network host -e GF_SERVER_HTTP_PORT=53100 -e GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/pw -e GF_AUTH_ANONYMOUS_ENABLED=false \
+  -v $W/prov:/etc/grafana/provisioning:ro -v $R/deploy/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro -v $W/grafana-admin-password:/run/secrets/pw:ro \
+  $(for c in critical other slowquery deploy; do echo -v $W/secrets/gchat_${c}_url:/run/secrets/gchat_${c}_url:ro; done) grafana/grafana-oss:11.3.0
+# 4. trigger: a query the watcher sees (poll is 15 s, so keep it > 20 s) and a test alert
+docker exec -d crm-platform-postgres psql -U crm -d crm -c "select pg_sleep(80)"
+curl -XPOST localhost:59093/api/v2/alerts -H 'content-type: application/json' -d '[{"labels":{"alertname":"Demo","severity":"critical"},"annotations":{"summary":"test"}}]'
+```
+Open http://localhost:59611 (fake Chat, refreshes every 3 s), http://localhost:53100 (admin, password in `$W/grafana-admin-password`), :59090, :59093. Stop: `docker rm -f chatlive-prometheus chatlive-alertmanager chatlive-grafana; pkill -f chat-bridge/index.mjs; pkill -f fake-chat.mjs; DROP ROLE chatlive_ro`.
+Notes: the Grafana alert rules are provisioned, so they are read-only in the UI (copy to edit). The Watchdog is dropped by the bridge by design; it shows as `crm_chat_bridge_last_watchdog_timestamp_seconds`. Identical statements that differ only in literals are one normalized query (deduped for the 15 min cooldown), so use different statements to see several cards.
