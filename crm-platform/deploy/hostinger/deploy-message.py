@@ -134,10 +134,9 @@ def build(ev, prev, new, secs, note):
         extra = prs[:-1][::-1]
         if extra:
             lines.append("Also in this release:")
-            body = lines + [" · ".join(tail)]
             for q in extra[:8]:
                 row = f'• #{q["n"]} "{q["title"]}" {q["author"]}'
-                if len("\n".join(body + [row])) + 12 > MAXLEN:
+                if len("\n".join(lines + [row, " · ".join(tail)])) + 40 > MAXLEN:
                     lines.append("• …and more")
                     break
                 lines.append(row)
