@@ -175,6 +175,14 @@ export class HandoffRepository {
     };
   }
 
+  /** A team by its internal id, with what a queue timer needs to know about it (does it take conversations, its uuid). */
+  async teamFactsById(tx: Tx, orgId: number, id: number): Promise<TeamFacts | null> {
+    const res = await tx.execute(sql`
+      SELECT uuid FROM teams WHERE org_id = ${orgId} AND id = ${id}`);
+    const uuid = rowsOf(res)[0]?.uuid;
+    return typeof uuid === 'string' ? this.teamByUuid(tx, orgId, uuid) : null;
+  }
+
   async teamById(
     tx: Tx,
     orgId: number,
