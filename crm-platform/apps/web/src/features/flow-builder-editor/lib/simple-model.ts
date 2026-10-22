@@ -621,6 +621,7 @@ const PRESET_VAR: Record<string, string> = {
   number: 'number',
   alphanumeric: 'code',
   date: 'date',
+  datetime: 'date_time',
   age: 'age',
   date_of_birth: 'date_of_birth',
 };
