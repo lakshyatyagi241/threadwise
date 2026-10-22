@@ -17,9 +17,9 @@ describe('api key scopes: create contract', () => {
     expect(API_SCOPES.slice(0, 2)).toEqual(['account:read', 'account:write']);
   });
 
-  it('accepts a name alone: no scopes is full access, as in Reference', () => {
-    expect(createApiKeySchema.parse({ name: 'Prod' })).toEqual({ name: 'Prod' });
-    expect(createApiKeySchema.parse({ name: 'Prod', scopes: [] }).scopes).toEqual([]);
+  it('refuses a key with no scopes: a name alone, or an empty list (AUTH-073)', () => {
+    expect(createApiKeySchema.safeParse({ name: 'Prod' }).success).toBe(false);
+    expect(createApiKeySchema.safeParse({ name: 'Prod', scopes: [] }).success).toBe(false);
   });
 
   it('accepts known scopes', () => {
@@ -35,6 +35,7 @@ describe('api key scopes: create contract', () => {
 
   it('refuses a scope nobody defined, a wrong shape and a list longer than the catalogue', () => {
     for (const scopes of [
+      [],
       ['nonsense:read'],
       ['contacts:delete'],
       ['contacts'],
@@ -66,14 +67,14 @@ describe('api key scopes: response', () => {
       createdAt: new Date('2026-10-01T09:00:00.000Z'),
     }) as unknown as ApiKeyRow;
 
-  it('shows the stored scopes, and an empty list for a full-access key', () => {
+  it('shows the stored scopes', () => {
     expect(toApiKeyResponse(row(['contacts:read', 'deals:write'])).scopes).toEqual([
       'contacts:read',
       'deals:write',
     ]);
-    const full = toApiKeyResponse(row([]));
-    expect(full.scopes).toEqual([]);
-    expect(apiKeyResponseSchema.safeParse(full).success).toBe(true);
+    const none = toApiKeyResponse(row([]));
+    expect(none.scopes).toEqual([]);
+    expect(apiKeyResponseSchema.safeParse(none).success).toBe(true);
   });
 
   it('drops a stored name the console cannot show, so the answer still satisfies the contract', () => {
