@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { liveFlowData } from './live-graph';
 import type { Tx } from '@crm/db';
 import type { FlowRunEndReason, FlowRunSource, FlowRunStatus } from '@crm/contracts';
 import type { RuntimeGraph } from '../graph/runtime-graph';
@@ -222,7 +223,7 @@ export class RunRepository {
     // The editor may store the flow's number (Reference) or its public uuid.
     const by = typeof ref === 'number' ? sql`id = ${ref}` : sql`uuid = ${ref}::uuid`;
     const res = await tx.execute(
-      sql`SELECT id, flow_data, is_published, is_active FROM flows WHERE org_id = ${orgId} AND ${by}`,
+      sql`SELECT id, ${liveFlowData()} AS flow_data, is_published, is_active FROM flows WHERE org_id = ${orgId} AND ${by}`,
     );
     const r = rowsOf(res)[0];
     return r

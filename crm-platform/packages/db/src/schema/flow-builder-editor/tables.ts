@@ -30,6 +30,8 @@ export const flows = pgTable(
     userId: idColumn('user_id'),
     flowName: text('flow_name').notNull(),
     flowData: jsonb('flow_data'),
+    // 2028_flows_published_flow_data.sql: the graph as it was when the flow was last published; a published flow runs this copy.
+    publishedFlowData: jsonb('published_flow_data'),
     flowFilePath: text('flow_file_path'),
     category: text('category'),
     triggerKind: text('trigger_kind').notNull().default('keyword'),

@@ -357,8 +357,8 @@ export class FlowsRepository {
   async setPublished(tx: Tx, orgId: number, id: number, published: boolean): Promise<void> {
     await tx.execute(
       published
-        ? sql`UPDATE flows SET is_published = true, published_at = now() WHERE org_id = ${orgId} AND id = ${id}`
-        : sql`UPDATE flows SET is_published = false, published_at = NULL WHERE org_id = ${orgId} AND id = ${id}`,
+        ? sql`UPDATE flows SET is_published = true, published_at = now(), published_flow_data = flow_data WHERE org_id = ${orgId} AND id = ${id}`
+        : sql`UPDATE flows SET is_published = false, published_at = NULL, published_flow_data = NULL WHERE org_id = ${orgId} AND id = ${id}`,
     );
   }
 

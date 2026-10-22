@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { liveFlowData } from '../runtime/live-graph';
 import { ERROR_CODES, HANDOFF_RETURNED_TO_BOT, flbHandoffReturnPlan } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
@@ -110,7 +111,7 @@ export class HandoffReturnConsumer implements OutboxSubscriber, OnModuleInit {
         FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
         WHERE c.org_id = ${orgId} AND c.uuid = ${a.conversationUuid}::uuid`)) as unknown as Rows;
       const flow = (await tx.execute(sql`
-        SELECT id, is_active, is_published, flow_data FROM flows WHERE org_id = ${orgId} AND uuid = ${a.flowUuid}::uuid`)) as unknown as Rows;
+        SELECT id, is_active, is_published, ${liveFlowData()} AS flow_data FROM flows WHERE org_id = ${orgId} AND uuid = ${a.flowUuid}::uuid`)) as unknown as Rows;
       const f = flow.rows[0];
       const started = f
         ? ((await tx.execute(sql`
