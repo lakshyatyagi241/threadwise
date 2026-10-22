@@ -8,7 +8,11 @@ import {
 } from '@/features/auth-registration-security/account/render-test-utils';
 import { sendKeys } from '../api/single-send';
 import type { RowView } from '../lib/row-view';
-import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
+import {
+  AssignedElsewhereNotice,
+  SingleSendDrawer,
+  type SingleSendTarget,
+} from './single-send-drawer';
 
 const row = (over: Partial<RowView> = {}): RowView => ({
   id: '294dca7c-5806-4548-9035-dcca9befc7b1',
@@ -128,5 +132,16 @@ describe('SingleSendDrawer — sms', () => {
     expect(html).not.toContain('href="sms:');
     expect(html).toContain('aria-disabled="true"');
     expect(html).toContain('Number is hidden for your role.');
+  });
+});
+
+describe('SingleSendDrawer — WhatsApp chat assigned to another agent', () => {
+  it('says why no template is offered and links to the chat in the inbox', () => {
+    const html = renderAccount(<AssignedElsewhereNotice conversationId="conv-1" />, {
+      session: makeSession(),
+    });
+    expect(html).toContain('This chat is with another agent');
+    expect(html).toContain('href="/inbox?c=conv-1"');
+    expect(html).toContain('Open the chat in the inbox');
   });
 });

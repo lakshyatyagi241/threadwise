@@ -1431,6 +1431,8 @@
       "template": "WhatsAppテンプレート",
       "templatePlaceholder": "テンプレートを選択",
       "noTemplates": "この番号で承認済みのテンプレートがありません。",
+      "assignedElsewhere": "このチャットは別の担当者に割り当てられているため、ここからテンプレートは送信できません。先に受信トレイで開いて自分に割り当ててください。",
+      "openInInbox": "受信トレイでチャットを開く",
       "notSendable": "このテンプレートはここでは入力できません（{reason}）。",
       "variables": "テンプレート変数",
       "preview": "プレビュー",

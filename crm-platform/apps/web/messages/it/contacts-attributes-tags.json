@@ -1431,6 +1431,8 @@
       "template": "Template WhatsApp",
       "templatePlaceholder": "Seleziona un template",
       "noTemplates": "Nessun template approvato per questo numero.",
+      "assignedElsewhere": "Questa chat è assegnata a un altro agente, quindi da qui non si può inviare nessun modello. Aprila prima nella posta in arrivo e assegnala a te.",
+      "openInInbox": "Apri la chat nella posta in arrivo",
       "notSendable": "Questo template non può essere compilato qui ({reason}).",
       "variables": "Variabili del template",
       "preview": "Anteprima",

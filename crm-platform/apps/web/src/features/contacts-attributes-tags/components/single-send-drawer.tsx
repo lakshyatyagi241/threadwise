@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
+import { Alert, Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton, useCallEligibility, useDirectCall } from '@/features/calling-voice';
 import {
@@ -22,6 +23,7 @@ import {
   whatsappChannels,
   type SendChannel,
 } from '../lib/single-send';
+import { errorKind } from '../lib/errors';
 import type { RowView } from '../lib/row-view';
 import { isMaskedPhone } from '../lib/row-actions';
 import { ErrorLine } from './error-line';
@@ -186,6 +188,22 @@ function Body({ target, onClose }: { target: SingleSendTarget; onClose: () => vo
   );
 }
 
+/** The chat belongs to another agent, so its templates are refused: say why, and link to the chat where it can be assigned. */
+export function AssignedElsewhereNotice({ conversationId }: { conversationId: string }) {
+  const t = useTranslations(NS);
+  return (
+    <Alert tone="warning">
+      <p>{t('assignedElsewhere')}</p>
+      <Link
+        href={`/inbox?c=${conversationId}`}
+        className="mt-2 inline-block font-medium text-primary underline"
+      >
+        {t('openInInbox')}
+      </Link>
+    </Alert>
+  );
+}
+
 function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   const t = useTranslations(NS);
   const { toast } = useToast();
@@ -302,9 +320,12 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
             <p className="text-xs text-muted-foreground">{t('noTemplates')}</p>
           )}
           {/* The list can be refused (no reply right, or the chat is another agent's): say so, instead of an empty list. */}
-          {templates.isError && (
-            <ErrorLine error={templates.error} onRetry={() => void templates.refetch()} />
-          )}
+          {templates.isError &&
+            (errorKind(templates.error) === 'assignedToOther' ? (
+              <AssignedElsewhereNotice conversationId={conversation.data.id} />
+            ) : (
+              <ErrorLine error={templates.error} onRetry={() => void templates.refetch()} />
+            ))}
         </div>
       )}
 

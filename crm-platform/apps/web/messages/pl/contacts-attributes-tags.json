@@ -1431,6 +1431,8 @@
       "template": "Szablon WhatsApp",
       "templatePlaceholder": "Wybierz szablon",
       "noTemplates": "Brak zatwierdzonych szablonów dla tego numeru.",
+      "assignedElsewhere": "Ten czat jest przypisany do innego agenta, więc nie można stąd wysłać szablonu. Najpierw otwórz go w skrzynce i przypisz sobie.",
+      "openInInbox": "Otwórz czat w skrzynce odbiorczej",
       "notSendable": "Tego szablonu nie można tutaj wypełnić ({reason}).",
       "variables": "Zmienne szablonu",
       "preview": "Podgląd",
