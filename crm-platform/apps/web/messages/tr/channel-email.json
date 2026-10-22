@@ -197,6 +197,8 @@
       "date": "Tarih",
       "imagesBlocked": "İnternetten gelen görseller gizlendi.",
       "loadImages": "Görselleri yükle",
+      "showQuoted": "Alıntılanan metni göster",
+      "hideQuoted": "Alıntılanan metni gizle",
       "frameTitle": "E-posta: {subject}",
       "truncated": "Bu e-posta uzundu, bu yüzden yalnızca ilk bölümü gösteriliyor.",
       "noBody": "Bu e-postada metin yok.",
