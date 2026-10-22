@@ -120,7 +120,12 @@
         "keep": "Giữ tệp",
         "deleted": "Đã gỡ tệp",
         "deleteFailed": "Không thể gỡ tệp. Hãy thử lại.",
-        "forbidden": "Bạn không có quyền gỡ tệp."
+        "forbidden": "Bạn không có quyền gỡ tệp.",
+        "upload": "Thêm tệp",
+        "uploading": "Đang tải tệp lên",
+        "added": "Đã thêm tệp",
+        "uploadFailed": "Không thể thêm tệp. Vui lòng thử lại.",
+        "uploadRejected": "Loại tệp này không được phép, hoặc tệp quá lớn."
       }
     }
   }

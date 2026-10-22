@@ -120,7 +120,12 @@
         "keep": "Datei behalten",
         "deleted": "Datei entfernt",
         "deleteFailed": "Die Datei konnte nicht entfernt werden. Versuchen Sie es erneut.",
-        "forbidden": "Sie haben keine Berechtigung, Dateien zu entfernen."
+        "forbidden": "Sie haben keine Berechtigung, Dateien zu entfernen.",
+        "upload": "Datei hinzufügen",
+        "uploading": "Datei wird hochgeladen",
+        "added": "Datei hinzugefügt",
+        "uploadFailed": "Die Datei konnte nicht hinzugefügt werden. Versuchen Sie es erneut.",
+        "uploadRejected": "Dieser Dateityp ist nicht erlaubt, oder die Datei ist zu groß."
       }
     }
   }
