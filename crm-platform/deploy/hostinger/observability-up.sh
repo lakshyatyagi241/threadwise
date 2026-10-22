@@ -51,7 +51,7 @@ printf '%s' "$(grep '^OBS_METRICS_TOKEN=' .env | head -n1 | cut -d= -f2-)" > sec
 # /slack to its webhook URL) or PagerDuty (the secret is then the Events API v2 integration key, not a URL).
 current_file="$(grep '^ALERTMANAGER_FILE=' .env | head -n1 | cut -d= -f2- || true)"
 case "${current_file:-alertmanager.yml}" in alertmanager.slack.yml) current_kind=slack ;; alertmanager.pagerduty.yml) current_kind=pagerduty ;; alertmanager.gchat.yml) current_kind=gchat ;; *) current_kind=webhook ;; esac
-read -rp "Destination type: webhook, slack (also Discord), pagerduty or gchat [$current_kind]: " kind
+if [ -n "${GCHAT_URL_DIR:-}" ]; then kind=gchat; else read -rp "Destination type: webhook, slack (also Discord), pagerduty or gchat [$current_kind]: " kind; fi
 kind="${kind:-$current_kind}"
 case "$kind" in
   webhook) file=alertmanager.yml ;;
@@ -62,16 +62,19 @@ case "$kind" in
 esac
 if grep -q '^ALERTMANAGER_FILE=' .env; then sed -i "s/^ALERTMANAGER_FILE=.*/ALERTMANAGER_FILE=$file/" .env; else echo "ALERTMANAGER_FILE=$file" >> .env; fi
 if [ "$kind" = gchat ]; then
-  # Four Google Chat incoming-webhook URLs, hidden, written to secrets/gchat_*_url (read by the gchat-bridge only, never printed).
+  # Non-interactive: GCHAT_URL_DIR=<dir> with critical.url other.url deploy.url (a missing/empty file falls back to the prompt).
+  # Three Google Chat incoming-webhook URLs, hidden, written to secrets/gchat_*_url (read by the gchat-bridge only, never printed).
   # Enter keeps a current one; an empty file is created for a space left blank (that channel is then reported as unconfigured).
-  for ch in critical other slowquery deploy; do
+  for ch in critical other deploy; do
     f="secrets/gchat_${ch}_url"
-    read -rsp "Google Chat webhook URL for the $ch space (hidden, Enter to keep/skip): " u; echo
+    if [ -n "${GCHAT_URL_DIR:-}" ] && [ -s "$GCHAT_URL_DIR/$ch.url" ]; then u="$(tr -d '\r\n' < "$GCHAT_URL_DIR/$ch.url")"
+    else read -rsp "Google Chat webhook URL for the $ch space (hidden, Enter to keep/skip): " u || u=""; echo; fi
     if [ -n "${u:-}" ]; then
       case "$u" in https://chat.googleapis.com/*) printf '%s' "$u" > "$f" ;; *) echo "that is not a https://chat.googleapis.com/ URL" >&2; exit 1 ;; esac
     fi
     [ -f "$f" ] || : > "$f"
   done
+  [ -s secrets/gchat_slowquery_url ] && echo "note: secrets/gchat_slowquery_url is ignored (slow queries go to other, critical ones to critical)"
   [ -f secrets/slow_query_pg_url ] || : > secrets/slow_query_pg_url
   [ -s secrets/alert_webhook_url ] || printf '%s' 'http://gchat-bridge:9095/alertmanager' > secrets/alert_webhook_url
   url=""
@@ -97,19 +100,28 @@ fi
 [ -s secrets/grafana_admin_password ] || { umask 077; printf '%s' "$(openssl rand -hex 18)" > secrets/grafana_admin_password; echo "made secrets/grafana_admin_password"; }
 chmod 644 secrets/*
 
-# Grafana's public route: a file of its own in Traefik's dynamic directory, so a release (which rewrites desk.yml) never touches it.
-if ! grep -q '^GRAFANA_DOMAIN=.\+' .env; then
-  domain="$(sed -n 's/^DOMAIN=//p' .env | head -n1)"
-  [ -n "$domain" ] && { grep -q '^GRAFANA_DOMAIN=' .env && sed -i "s/^GRAFANA_DOMAIN=.*/GRAFANA_DOMAIN=grafana.$domain/" .env || echo "GRAFANA_DOMAIN=grafana.$domain" >> .env; }
-fi
+# Public routes (Traefik file provider, files of their own so a release, which rewrites desk.yml, never touches them): Grafana and
+# Prometheus. Defaults are fixed names, nothing is derived from sslip.io or DOMAIN. Prometheus has no login, so its route has basicAuth
+# (user `prometheus`, apr1 hash from secrets/prometheus_basic_password, never printed).
+setenv() { grep -q "^$1=.\+" .env || { grep -q "^$1=" .env && sed -i "s/^$1=.*/$1=$2/" .env || echo "$1=$2" >> .env; }; }
+setenv GRAFANA_DOMAIN grafana-desk.wabo.ai
+setenv PROMETHEUS_DOMAIN prometheus-desk.wabo.ai
 gdomain="$(sed -n 's/^GRAFANA_DOMAIN=//p' .env | head -n1)"
+pdomain="$(sed -n 's/^PROMETHEUS_DOMAIN=//p' .env | head -n1)"
+[ -s secrets/prometheus_basic_password ] || { printf '%s' "$(openssl rand -hex 18)" > secrets/prometheus_basic_password; echo "made secrets/prometheus_basic_password"; }
+chmod 644 secrets/prometheus_basic_password
 dyn_dir="$(dirname "${TRAEFIK_DYN:-/etc/dokploy/traefik/dynamic/desk.yml}")"
-if [ -n "$gdomain" ] && [ -d "$dyn_dir" ]; then
-  case "$gdomain" in *[!A-Za-z0-9.-]*) echo "GRAFANA_DOMAIN is not a host name" >&2; exit 1 ;; esac
+if [ -d "$dyn_dir" ]; then
+  for d in "$gdomain" "$pdomain"; do case "$d" in ""|*[!A-Za-z0-9.-]*) echo "GRAFANA_DOMAIN/PROMETHEUS_DOMAIN is not a host name" >&2; exit 1 ;; esac; done
   sed "s/__GRAFANA_DOMAIN__/$gdomain/g" traefik-grafana.yml.template > "$dyn_dir/.grafana.tmp" && mv -f "$dyn_dir/.grafana.tmp" "$dyn_dir/grafana.yml"
-  echo "wrote $dyn_dir/grafana.yml for $gdomain (needs a DNS A record to this host)"
+  # apr1 hashes contain `$` and `/`: pass through awk with -v after escaping nothing, and double `$` is NOT needed in Traefik file provider.
+  hash="$(openssl passwd -apr1 "$(cat secrets/prometheus_basic_password)")"
+  awk -v d="$pdomain" -v u="prometheus:$hash" '{gsub(/__PROMETHEUS_DOMAIN__/,d); if ($0 ~ /__PROMETHEUS_USERS__/) sub(/__PROMETHEUS_USERS__/, "\"" u "\""); print}' traefik-prometheus.yml.template > "$dyn_dir/.prometheus.tmp"
+  chmod 600 "$dyn_dir/.prometheus.tmp"; mv -f "$dyn_dir/.prometheus.tmp" "$dyn_dir/prometheus.yml"
+  unset hash
+  echo "wrote $dyn_dir/grafana.yml ($gdomain) and prometheus.yml ($pdomain, basicAuth user prometheus); DNS A records needed for both"
 else
-  echo "no Grafana route written (GRAFANA_DOMAIN unset or $dyn_dir missing)" >&2
+  echo "no Traefik routes written ($dyn_dir missing)" >&2
 fi
 
 "${COMPOSE[@]}" pull prometheus alertmanager

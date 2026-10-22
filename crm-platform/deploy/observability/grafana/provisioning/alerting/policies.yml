@@ -10,6 +10,3 @@ policies:
       - receiver: gchat-critical
         object_matchers: [["severity", "=", "critical"]]
         repeat_interval: 1h
-      - receiver: gchat-slowquery
-        object_matchers: [["group", "=", "slow_query"]]
-        group_wait: 10s

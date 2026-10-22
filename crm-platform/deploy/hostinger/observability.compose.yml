@@ -17,16 +17,16 @@
 # Prometheus finds the API and the web server by the network alias `api` / `web` that both slots carry, which resolves to running slots
 # only, so the idle slot is never a down target.
 #
-# Nothing is published and Prometheus and Alertmanager are not routed through Traefik: reach them with
+# Nothing is published. Alertmanager is not routed through Traefik (Prometheus is, with basicAuth): reach it with
 #   docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/targets
 # or an SSH tunnel. Memory budget on the shared host: prometheus 384m, alertmanager 128m, probe 128m.
 #
 # Grafana (grafana/grafana-oss:11.3.0, 256m): dashboards from ../observability/grafana, behind a login (anonymous access and sign-up off),
-# at https://${GRAFANA_DOMAIN} (default grafana.${DOMAIN}). No published port. The route is a Traefik file, traefik-grafana.yml, that
+# at https://${GRAFANA_DOMAIN} (default grafana-desk.wabo.ai); Prometheus at https://${PROMETHEUS_DOMAIN} (default prometheus-desk.wabo.ai) behind Traefik basicAuth, user `prometheus`, password in secrets/prometheus_basic_password. No published port. The route is a Traefik file, traefik-grafana.yml, that
 # observability-up.sh writes next to desk.yml; ci-entry.sh never touches it and a release never starts or stops grafana. The admin
 # password is generated into secrets/grafana_admin_password (never printed, never committed). Server owner, once:
 #   1. DNS: an A record for GRAFANA_DOMAIN pointing at this host.
-#   2. .env: GRAFANA_DOMAIN=grafana.example.com (or leave it out: grafana.${DOMAIN} is used and written by the script).
+#   2. .env: GRAFANA_DOMAIN=grafana.example.com (or leave it out: the default grafana-desk.wabo.ai is written by the script).
 #   3. ./observability-up.sh   (makes the password file and the Traefik route; also starts prometheus, alertmanager, probe)
 #   4. docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env pull grafana
 #      docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d grafana
@@ -70,10 +70,13 @@ services:
   prometheus:
     image: prom/prometheus:v2.55.0
     restart: unless-stopped
+    container_name: desk-prometheus
     mem_limit: 384m
     logging: *obs-logging
     command:
       - --config.file=/etc/prometheus/prometheus.yml
+      # Links in Grafana alerts and Alertmanager (generatorURL) point here; the route is behind basicAuth (traefik-prometheus.yml.template).
+      - --web.external-url=https://${PROMETHEUS_DOMAIN:-prometheus-desk.wabo.ai}
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=15d
       - --storage.tsdb.retention.size=2GB
@@ -88,6 +91,7 @@ services:
       - ../observability/slow-query.rules.yml:/etc/prometheus/slow-query.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
+    networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-prometheus:9090; no published port
     depends_on:
       - alertmanager
 
@@ -119,7 +123,7 @@ services:
       NODE_ENV: production
       TZ: UTC
       PORT: '9095'
-      GRAFANA_URL: https://${GRAFANA_DOMAIN:-grafana.${DOMAIN:-example.invalid}}
+      GRAFANA_URL: https://${GRAFANA_DOMAIN:-grafana-desk.wabo.ai}
       SLOW_RUNNING_SECONDS: ${SLOW_RUNNING_SECONDS:-5}
       SLOW_MEAN_MS: ${SLOW_MEAN_MS:-500}
       SLOW_POLL_SECONDS: ${SLOW_POLL_SECONDS:-15}
@@ -132,7 +136,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    secrets: [gchat_critical_url, gchat_other_url, gchat_slowquery_url, gchat_deploy_url, slow_query_pg_url]
+    secrets: [gchat_critical_url, gchat_other_url, gchat_deploy_url, slow_query_pg_url]
 
   grafana:
     image: grafana/grafana-oss:11.3.0
@@ -146,13 +150,14 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: 'false'
       GF_USERS_ALLOW_SIGN_UP: 'false'
       GF_ANALYTICS_REPORTING_ENABLED: 'false'
-      GF_SERVER_ROOT_URL: https://${GRAFANA_DOMAIN:-grafana.${DOMAIN:?DOMAIN is required}}
+      GF_SERVER_DOMAIN: ${GRAFANA_DOMAIN:-grafana-desk.wabo.ai}
+      GF_SERVER_ROOT_URL: https://${GRAFANA_DOMAIN:-grafana-desk.wabo.ai}
     volumes:
       # The data source (url http://prometheus:9090) already resolves here: prometheus is a service of this same compose project.
       - ../observability/grafana/provisioning:/etc/grafana/provisioning:ro
       - ../observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafanadata:/var/lib/grafana
-    secrets: [grafana_admin_password, gchat_critical_url, gchat_other_url, gchat_slowquery_url, gchat_deploy_url]
+    secrets: [grafana_admin_password, gchat_critical_url, gchat_other_url, gchat_deploy_url]
     networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-grafana:3000
     depends_on:
       - prometheus
@@ -162,8 +167,6 @@ secrets:
     file: ./secrets/gchat_critical_url
   gchat_other_url:
     file: ./secrets/gchat_other_url
-  gchat_slowquery_url:
-    file: ./secrets/gchat_slowquery_url
   gchat_deploy_url:
     file: ./secrets/gchat_deploy_url
   slow_query_pg_url:
