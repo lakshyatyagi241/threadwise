@@ -2354,6 +2354,7 @@
         "alphanumeric": "Harfler ve sayılar",
         "date": "Tarih",
         "datetime": "Tarih ve saat",
+        "time": "Saat",
         "age": "Yaş",
         "date_of_birth": "Doğum tarihi"
       },
@@ -2366,6 +2367,7 @@
         "alphanumeric": "Lütfen yalnızca harf ve rakam kullanın",
         "date": "Lütfen geçerli bir tarih girin ({format})",
         "datetime": "Lütfen geçerli bir tarih ve saat girin ({format} HH:MM)",
+        "time": "Lütfen geçerli bir saat girin (HH:MM)",
         "age": "Lütfen yaşınızı tam sayı olarak girin",
         "date_of_birth": "Lütfen geçerli bir tarih girin ({format})"
       },

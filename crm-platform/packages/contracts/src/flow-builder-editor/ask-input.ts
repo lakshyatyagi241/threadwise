@@ -24,6 +24,8 @@ export const FLB_ASK_INPUT_TYPES = [
   'date',
   // A date and a time of day (an appointment, a delivery slot): the date in the chosen date format, then the time as HH:MM or h:mm am/pm.
   'datetime',
+  // A time of day alone (an opening hour, a call-back slot): HH:MM or h:mm am/pm.
+  'time',
   // The age question (BL-218, spec 11.10): an age in whole years, or a date of birth written in the chosen date format. The answer is
   // judged against the workspace's minor age (or the node's own) and written to the contact; see `FLB_AGE_*` below.
   'age',
@@ -48,6 +50,27 @@ export const flbCleanMinAge = (v: unknown): number | null => {
   return Number.isInteger(n) && n >= MIN_GATE_AGE && n <= MAX_GATE_AGE ? n : null;
 };
 
+/**
+ * What the builders offer under "Validate as". Letters and numbers repeats Free text, Age is the age gate's own setting and Date of
+ * birth repeats Date, so a new question no longer picks them; one that already uses one keeps it (see `flbAskInputChoices`).
+ */
+export const FLB_ASK_INPUT_PICKER: readonly FlbAskInputType[] = [
+  'text',
+  'name',
+  'email',
+  'phone',
+  'number',
+  'date',
+  'datetime',
+  'time',
+];
+
+/** The picker, plus the question's current type when it is one of the retired ones, so opening an old question changes nothing. */
+export const flbAskInputChoices = (current: unknown): readonly FlbAskInputType[] => {
+  const now = flbCleanAskInputType(current);
+  return FLB_ASK_INPUT_PICKER.includes(now) ? FLB_ASK_INPUT_PICKER : [...FLB_ASK_INPUT_PICKER, now];
+};
+
 export const FLB_ASK_INPUT_LABELS: Record<FlbAskInputType, string> = {
   text: 'Free text',
   name: 'Name',
@@ -57,6 +80,7 @@ export const FLB_ASK_INPUT_LABELS: Record<FlbAskInputType, string> = {
   alphanumeric: 'Letters and numbers',
   date: 'Date',
   datetime: 'Date and time',
+  time: 'Time',
   age: 'Age',
   date_of_birth: 'Date of birth',
 };
@@ -126,6 +150,8 @@ export function flbAskInputWrongText(type: FlbAskInputType, dateFormat?: unknown
     case 'date':
     case 'date_of_birth':
       return `Please enter a valid date (${flbCleanDateFormat(dateFormat).toUpperCase()})`;
+    case 'time':
+      return 'Please enter a valid time (HH:MM)';
     case 'datetime':
       return `Please enter a valid date and time (${flbCleanDateFormat(dateFormat).toUpperCase()} HH:MM)`;
     case 'age':
@@ -203,6 +229,21 @@ export function flbParseDateTime(raw: string, format: FlbDateFormat): string | n
   return `${date}T${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
 }
 
+/** "14:30" or "2:30 pm" -> `HH:MM` (24-hour), or null when it does not read. */
+export function flbParseTime(raw: string): string | null {
+  const m = /^(\d{1,2}):(\d{2})\s*([ap]m)?$/i.exec(raw.trim());
+  if (!m) return null;
+  let h = Number(m[1]);
+  const min = Number(m[2]);
+  const mer = m[3]?.toLowerCase();
+  if (min > 59) return null;
+  if (mer) {
+    if (h < 1 || h > 12) return null;
+    h = (h % 12) + (mer === 'pm' ? 12 : 0);
+  } else if (h > 23) return null;
+  return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+}
+
 export type FlbAskInputResult = { ok: true; value: string } | { ok: false };
 
 /**
@@ -237,6 +278,8 @@ export function flbAskInputCheck(
       return flbParseDate(text, flbCleanDateFormat(opts.dateFormat)) !== null
         ? { ok: true, value: text }
         : { ok: false };
+    case 'time':
+      return flbParseTime(text) !== null ? { ok: true, value: text } : { ok: false };
     case 'datetime':
       return flbParseDateTime(text, flbCleanDateFormat(opts.dateFormat)) !== null
         ? { ok: true, value: text }

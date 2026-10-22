@@ -23,7 +23,7 @@ import {
   FLB_CAROUSEL_MAX_CARDS,
   FLB_ASK_FILE_GROUPS,
   FLB_WA_LIMITS,
-  FLB_ASK_INPUT_TYPES,
+  flbAskInputChoices,
   FLB_DATE_FORMATS,
   flbCleanAskFileExtensions,
   flbCleanAskInputType,
@@ -953,7 +953,7 @@ function AskEditor({ step, doc, set }: EditorProps) {
       </Field>
       <Field label={t('ask.accept')} hint={checked ? t('ask.checkedHint') : t('ask.anyTextHint')}>
         <Select value={type} onChange={(e) => set({ validate: e.target.value })}>
-          {FLB_ASK_INPUT_TYPES.map((v) => (
+          {flbAskInputChoices(step.data.validate).map((v) => (
             <option key={v} value={v}>
               {askInputLabel(tf, v)}
             </option>

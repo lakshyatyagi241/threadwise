@@ -2354,6 +2354,7 @@
         "alphanumeric": "Lettres et chiffres",
         "date": "Date",
         "datetime": "Date et heure",
+        "time": "Heure",
         "age": "Âge",
         "date_of_birth": "Date de naissance"
       },
@@ -2366,6 +2367,7 @@
         "alphanumeric": "Veuillez n’utiliser que des lettres et des chiffres",
         "date": "Veuillez saisir une date valide ({format})",
         "datetime": "Veuillez saisir une date et une heure valides ({format} HH:MM)",
+        "time": "Veuillez saisir une heure valide (HH:MM)",
         "age": "Veuillez saisir votre âge sous forme de nombre entier",
         "date_of_birth": "Veuillez saisir une date valide ({format})"
       },

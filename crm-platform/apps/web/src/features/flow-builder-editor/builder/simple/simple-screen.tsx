@@ -713,7 +713,12 @@ function Editor({
             >
               {t('save')}
             </Button>
-            <Button variant="brand" size="sm" disabled={busy} onClick={() => void onPublish()}>
+            <Button
+              variant={published && !dirty ? 'secondary' : 'brand'}
+              size="sm"
+              disabled={busy || (published && !dirty)}
+              onClick={() => void onPublish()}
+            >
               {published ? t('publishChanges') : t('publish')}
             </Button>
           </div>

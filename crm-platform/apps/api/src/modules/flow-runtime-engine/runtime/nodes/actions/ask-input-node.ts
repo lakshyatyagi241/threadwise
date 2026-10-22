@@ -14,6 +14,7 @@ import {
   flbIsAgeInput,
   flbParseDate,
   flbParseDateTime,
+  flbParseTime,
   judgeAgeAnswer,
   type AgeVerdict,
   type FlbAskInputType,
@@ -140,7 +141,9 @@ export class AskInputNode implements NodeExecutor {
             ? flbParseDate(value, dateFormat)
             : type === 'datetime'
               ? flbParseDateTime(value, dateFormat)
-              : null;
+              : type === 'time'
+                ? flbParseTime(value)
+                : null;
         return {
           action: 'route',
           port: 1,
