@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
-import { imageProblem } from './image-integrity';
+import { imageProblem } from '../../../common/image-integrity';
 import { scannerFromEnv, type UploadScanner } from './upload-scanner';
 
 const BLOCKED_EXTENSIONS = new Set([

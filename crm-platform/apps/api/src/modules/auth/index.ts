@@ -19,7 +19,7 @@ export { SendGuardModule } from './security/send-guard.module';
 export { HtmlSanitizerService } from './security/html-sanitizer.service';
 export { PasswordService } from './security/password.service';
 export { SendPolicyService, type ScreenContext } from './security/send-policy.service';
-export { UploadPolicyService, type UploadKind } from './security/upload-policy.service';
+export { UploadPolicyService, scanUpload, type UploadKind } from './security/upload-policy.service';
 export { SecurityPolicyService } from './platform/security-policy.service';
 export { PlatformSettingsService } from './platform/platform-settings.service';
 export { PlatformStore } from './platform/platform-store';

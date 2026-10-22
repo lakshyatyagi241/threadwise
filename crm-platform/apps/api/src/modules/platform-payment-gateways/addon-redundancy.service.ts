@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { isIncludedInPlan, readGrants } from '../addons-extension-registry/addon-grants';
+import { isIncludedInPlan, readGrants } from '../addons-extension-registry';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { PaygwStore } from './paygw.store';
 import { SubscriptionCancelService } from './subscription-cancel.service';

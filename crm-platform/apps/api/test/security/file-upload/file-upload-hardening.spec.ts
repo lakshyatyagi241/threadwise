@@ -105,9 +105,7 @@ describe('antivirus hook (fake clamd)', () => {
   const fake = (reply: string | null): Promise<number> =>
     new Promise((res) => {
       srv = createServer((s) => {
-        let n = 0;
-        s.on('data', (d) => {
-          n += d.length;
+        s.on('data', (d: Buffer) => {
           if (d.subarray(-4).equals(Buffer.alloc(4)) && reply !== null) {
             s.end(reply);
           }

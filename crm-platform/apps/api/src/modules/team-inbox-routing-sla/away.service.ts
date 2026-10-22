@@ -60,8 +60,12 @@ export class AwayService {
     if (!(await this.entitled(orgId))) return 0;
     const target = await this.db.txAs({ orgId }, async (tx) => {
       if (!(await this.repo.settings(tx, orgId)).away.returnUnanswered) return [];
-      // A stale event must not take chats from somebody who is back: the person must still be away.
-      if (reason !== 'leave' && !(await this.isOffline(tx, orgId, userId))) return [];
+      // A stale event must not take chats from somebody who is back: the person must still be away, offline or on an active leave.
+      const stillAway =
+        reason === 'leave'
+          ? await this.onLeave(tx, orgId, userId)
+          : await this.isOffline(tx, orgId, userId);
+      if (!stillAway) return [];
       const res = await tx.execute(sql`
         SELECT c.uuid FROM conversations c
         WHERE c.org_id = ${orgId} AND c.assignee_user_id = ${userId} AND c.status = 'open' AND NOT c.archived
@@ -88,6 +92,14 @@ export class AwayService {
       }
     }
     return returned;
+  }
+
+  /** A leave is `active` from its start until it ends or is cancelled (leave.service); a stale leave event finds none once it is over. */
+  private async onLeave(tx: Tx, orgId: number, userId: number): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM member_leaves WHERE org_id = ${orgId} AND user_id = ${userId} AND status = 'active' LIMIT 1`,
+    );
+    return rowsOf(res).length > 0;
   }
 
   private async isOffline(tx: Tx, orgId: number, userId: number): Promise<boolean> {
@@ -202,14 +214,20 @@ export class AwayService {
             sql`, `,
           )})`),
       );
+      // The live sessions' activity marks in one round trip (MGET), not one GET per session. A failed read counts as no mark.
+      const live = sessions.filter((s) => s.live === true);
+      const marks = live.length
+        ? await this.redis
+            .mget(...live.map((s) => AuthKeys.activity(String(s.uuid))))
+            .catch(() => null)
+        : null;
+      const markOf = new Map(live.map((s, i) => [String(s.uuid), marks?.[i] ?? null]));
       const last = new Map<number, number>();
       for (const s of sessions) {
         const uid = Number(s.user_id);
         let at = ms(s.last_used_at);
-        if (s.live === true) {
-          const raw = await this.redis.get(AuthKeys.activity(String(s.uuid))).catch(() => null);
-          if (raw) at = Math.max(at, Number(raw));
-        }
+        const raw = markOf.get(String(s.uuid));
+        if (raw) at = Math.max(at, Number(raw));
         last.set(uid, Math.max(last.get(uid) ?? 0, at));
       }
       const cutoff = now.getTime() - minutes * 60_000;

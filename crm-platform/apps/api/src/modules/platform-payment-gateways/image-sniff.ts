@@ -1,4 +1,4 @@
-import { imageProblem } from '../auth/security/image-integrity';
+import { imageProblem } from '../../common/image-integrity';
 import { isSafeSvg } from '../../common/svg-safe';
 /**
  * The file's real type from its first bytes (the client's claimed type and file name are never trusted). Used for the invoice
