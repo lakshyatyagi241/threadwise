@@ -34,14 +34,14 @@
           "team": "Ein Team",
           "person": "Eine Person",
           "rules": "Die Zuweisungsregeln",
-          "rulesLocked": "Die Zuweisungsregeln (nicht in deinem Tarif)"
+          "rulesLocked": "Die Zuweisungsregeln (Add-on Intelligentes Routing)"
         },
         "destHint": {
           "team": "Sie geht an jemanden im Team oder wartet in der Warteschlange des Teams.",
           "person": "Sie geht an diese Person, wenn sie sie übernehmen kann; sonst wartet sie in der Warteschlange.",
           "rules": "Nutzt deine Regeln für die automatische Zuweisung von Unterhaltungen; findet keine Regel eine Person, wartet sie in der Warteschlange."
         },
-        "lockHint": "Dein Tarif enthält keine Zuweisungsregeln. Eine hierher gesendete Unterhaltung wartet daher in der Warteschlange, bis ein Teamkollege sie übernimmt.",
+        "lockHint": "Zuweisungsregeln sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs. Eine hierher gesendete Unterhaltung wartet in der Warteschlange, bis ein Teammitglied sie übernimmt.",
         "team": "Team",
         "teamPick": "— Team auswählen —",
         "teamNone": "Noch keine Teams",

@@ -54,7 +54,7 @@
         "intro": "De bot beantwoordt dit contact niet meer. Het gesprek gaat naar de persoon of het team dat je kiest, of wacht in de wachtrij tot iemand het overneemt.",
         "where": "Sturen naar",
         "whereRules": "De toewijzingsregels, anders de wachtrij",
-        "whereQueueOnly": "De wachtrij (toewijzingsregels zitten niet in je abonnement)",
+        "whereQueueOnly": "De wachtrij (toewijzingsregels vereisen de add-on Slimme routering)",
         "whereTeam": "Een team",
         "wherePerson": "Eén persoon",
         "team": "Team",

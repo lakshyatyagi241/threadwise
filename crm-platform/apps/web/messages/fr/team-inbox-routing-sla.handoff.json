@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "Non inclus dans votre offre",
-      "upgradeHint": "Votre offre n’inclut pas cette fonction. Demandez au propriétaire du compte de changer d’offre.",
+      "upgradeHint": "Inclus dans le module Routage intelligent ou dans une offre supérieure.",
       "owner": {
         "prompt": "Demander pour le propriétaire du contact lors d’une réassignation",
         "promptHint": "Quand un chat est confié manuellement à quelqu’un d’autre, proposer de le nommer aussi propriétaire du contact.",

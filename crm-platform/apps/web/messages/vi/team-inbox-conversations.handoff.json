@@ -54,7 +54,7 @@
         "intro": "Bot sẽ ngừng trả lời liên hệ này. Cuộc trò chuyện chuyển đến người hoặc nhóm bạn chọn, hoặc chờ trong hàng chờ cho đến khi có người nhận.",
         "where": "Gửi tới",
         "whereRules": "Quy tắc giao việc, nếu không có thì hàng chờ",
-        "whereQueueOnly": "Hàng chờ (gói của bạn không có quy tắc giao việc)",
+        "whereQueueOnly": "Hàng chờ (quy tắc giao cần tiện ích Định tuyến thông minh)",
         "whereTeam": "Một nhóm",
         "wherePerson": "Một người",
         "team": "Nhóm",

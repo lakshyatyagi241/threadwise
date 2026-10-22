@@ -60,6 +60,25 @@ export class TeamsPlanService {
   }
 
   /**
+   * A team's assignment method other than Manual (round robin, least loaded) is automatic assignment, which is the `inbox_routing` feature
+   * (the "Smart routing" add-on or a plan that includes it). Choosing one without it is 422 PLAN_FEATURE_LOCKED instead of being stored and
+   * silently ignored by the handoff. Manual is always allowed, and so is keeping the method the team already stores (a workspace that
+   * lost the feature keeps its teams as they are; the handoff skips the method with the trace line `not_in_plan`).
+   */
+  async assertAssignmentMethod(
+    orgId: number,
+    next: string | undefined,
+    current: string,
+  ): Promise<void> {
+    if (next === undefined || next === 'manual' || next === current) return;
+    await this.entitlements.assertFeature(
+      orgId,
+      'inbox_routing',
+      'Round robin and least loaded are automatic assignment, which is not on your plan. Upgrade your plan, or ask for the Smart routing add-on, to use them.',
+    );
+  }
+
+  /**
    * Teams v2 (T1) calls this when a request sets a parent team, a lead/manager or the `team_and_below` scope: 422 PLAN_FEATURE_LOCKED with
    * feature `team_hierarchy` when the plan (or the add-on) does not have it. Setting these fields back to empty is always allowed, so a
    * workspace that lost the feature can still clear what it set.

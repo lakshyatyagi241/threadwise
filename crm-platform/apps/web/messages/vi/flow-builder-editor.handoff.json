@@ -34,14 +34,14 @@
           "team": "Một nhóm",
           "person": "Một người",
           "rules": "Quy tắc giao việc",
-          "rulesLocked": "Quy tắc giao việc (không có trong gói của bạn)"
+          "rulesLocked": "Quy tắc giao (tiện ích Định tuyến thông minh)"
         },
         "destHint": {
           "team": "Cuộc trò chuyện chuyển cho một người trong nhóm, hoặc chờ trong hàng chờ của nhóm.",
           "person": "Cuộc trò chuyện chuyển cho người này nếu họ có thể nhận; nếu không sẽ chờ trong hàng chờ.",
           "rules": "Dùng quy tắc tự động giao cuộc trò chuyện của bạn; khi không quy tắc nào tìm được người, cuộc trò chuyện chờ trong hàng chờ."
         },
-        "lockHint": "Gói của bạn không có quy tắc giao việc, nên cuộc trò chuyện gửi đến đây sẽ chờ trong hàng chờ cho đến khi một đồng nghiệp nhận.",
+        "lockHint": "Quy tắc giao thuộc tiện ích Định tuyến thông minh hoặc gói cao hơn, nên cuộc trò chuyện gửi đến đây sẽ chờ trong hàng chờ cho đến khi đồng nghiệp nhận.",
         "team": "Nhóm",
         "teamPick": "— chọn một nhóm —",
         "teamNone": "Chưa có nhóm nào",

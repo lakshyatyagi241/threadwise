@@ -34,14 +34,14 @@
           "team": "A team",
           "person": "One person",
           "rules": "The assignment rules",
-          "rulesLocked": "The assignment rules (not in your plan)"
+          "rulesLocked": "The assignment rules (Smart routing add-on)"
         },
         "destHint": {
           "team": "It goes to someone in the team, or waits in the team's queue.",
           "person": "It goes to this person if they can take it; otherwise it waits in the queue.",
           "rules": "Uses your Conversation auto-assignment rules; when none finds a person it waits in the queue."
         },
-        "lockHint": "Your plan does not include assignment rules, so a conversation sent here waits in the Waiting queue until a teammate claims it.",
+        "lockHint": "Assignment rules are part of the Smart routing add-on or a higher plan, so a conversation sent here waits in the Waiting queue until a teammate claims it.",
         "team": "Team",
         "teamPick": "— pick a team —",
         "teamNone": "No teams yet",

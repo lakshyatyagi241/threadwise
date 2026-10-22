@@ -65,7 +65,7 @@
       "chatbot_widgets": "चैटबॉट विजेट",
       "wa_storefront": "WhatsApp कैटलॉग",
       "inbox_sla": "SLA नीतियाँ",
-      "inbox_routing": "रूटिंग नियम",
+      "inbox_routing": "स्मार्ट रूटिंग: ऑटो-असाइनमेंट और नियम",
       "waba_calling": "WhatsApp कॉलिंग",
       "inbox_kanban": "कानबन व्यू",
       "team_performance": "टीम प्रदर्शन",
@@ -91,7 +91,7 @@
       "record_assignment": "रिकॉर्ड असाइनमेंट नियम",
       "team_hierarchy": "टीम पदानुक्रम और प्रबंधक",
       "custom_roles": "कस्टम भूमिकाएँ और दायरे",
-      "inbox_assignment_sticky": "संपर्क का स्वामी और स्टिकी एजेंट"
+      "inbox_assignment_sticky": "स्मार्ट रूटिंग: संपर्क का मालिक और स्थायी एजेंट"
     },
     "limitGroups": {
       "messaging": "मैसेजिंग",
@@ -253,6 +253,9 @@
         "buy": "ऐड-ऑन खरीदें",
         "buyAgain": "फिर से खरीदें",
         "active": "सक्रिय",
+        "included": "आपके प्लान में शामिल",
+        "includedOwned": "यह ऐड-ऑन आपके पास भी है। आपके प्लान में अब यह शामिल है, इसलिए आप ऐड-ऑन रद्द कर सकते हैं। कोई राशि अपने-आप वापस नहीं होती।",
+        "includedEnds": "आपके प्लान में शामिल। आपका ऐड-ऑन {date} को समाप्त होगा और नवीनीकृत नहीं होगा।",
         "unlimitedBullet": "असीमित {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -580,7 +583,16 @@
       "back": "वापस जाएँ",
       "compare": "सभी प्लान की तुलना करें",
       "appHint": "{feature} मार्केटप्लेस में ऐप के रूप में भी बेचा जाता है।",
-      "appLink": "ऐप देखें"
+      "appLink": "ऐप देखें",
+      "addonHint": "आप इसे {addon} ऐड-ऑन के साथ अपने मौजूदा प्लान में भी जोड़ सकते हैं।",
+      "addonLink": "ऐड-ऑन देखें",
+      "addons": {
+        "smartRouting": "स्मार्ट रूटिंग",
+        "teamsPermissions": "टीमें और अनुमतियाँ"
+      }
+    },
+    "lock": {
+      "link": "प्लान और ऐड-ऑन देखें"
     }
   }
 }

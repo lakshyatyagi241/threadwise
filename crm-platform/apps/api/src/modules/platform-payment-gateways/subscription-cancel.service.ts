@@ -8,7 +8,7 @@ import { PaygwStore } from './paygw.store';
 import { toSub, type SubRow } from './subscription-row';
 
 /** Why a subscription is being ended by us (the provider ending it is `SubscriptionLifecycleService`'s business). */
-export type EndReason = 'user' | 'superseded' | 'downgrade' | 'operator';
+export type EndReason = 'user' | 'superseded' | 'downgrade' | 'operator' | 'plan_includes';
 
 export interface RemoteOutcome {
   result: 'ok' | 'failed' | 'unsupported';
@@ -161,7 +161,9 @@ export class SubscriptionCancelService {
         },
       });
       // The Marketplace's ledger of an add-on that sells an app learns that its card renewal is over.
-      await announceAddonTerm(tx, this.hooks, sub, 'ended', { reason: opts.reason });
+      await announceAddonTerm(tx, this.hooks, sub, 'ended', {
+        reason: opts.reason === 'plan_includes' ? 'superseded' : opts.reason,
+      });
       return true;
     });
     if (withOutcome) return changed ? remote : null;

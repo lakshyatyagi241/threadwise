@@ -54,7 +54,7 @@
         "intro": "Bot berhenti menjawab kontak ini. Percakapan dikirim ke orang atau tim yang Anda pilih, atau menunggu di antrean sampai ada yang mengambilnya.",
         "where": "Kirim ke",
         "whereRules": "Aturan penugasan, jika tidak ada maka antrean tunggu",
-        "whereQueueOnly": "Antrean tunggu (aturan penugasan tidak ada di paket Anda)",
+        "whereQueueOnly": "Antrean tunggu (aturan penugasan memerlukan add-on Perutean cerdas)",
         "whereTeam": "Sebuah tim",
         "wherePerson": "Satu orang",
         "team": "Tim",

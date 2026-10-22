@@ -19,6 +19,7 @@ import { Field, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import { agentLabel, str, withCurrent } from './helpers';
 import { Link } from './parts';
+import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
 
 export function TagForm({ data: d, set, setMany, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.contact');
@@ -136,7 +137,7 @@ function HandoffForm({ node, data: d, set, setMany, env }: FormProps) {
           data-testid="flb-handoff-plan-lock"
           className="-mt-2 mb-4 rounded-lg bg-warning/10 p-2.5 text-[11px]"
         >
-          {t('lockHint')}
+          {t('lockHint')} <AddonLockLink />
         </p>
       )}
       {kind === 'team' && (

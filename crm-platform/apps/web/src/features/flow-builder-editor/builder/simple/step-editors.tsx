@@ -58,6 +58,7 @@ import { NewPropertyInline } from '../new-property';
 import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
 import { TemplatePreview } from '../inspector/forms-core/previews';
 import type { FormComponent, FormEnv } from '../inspector/types';
+import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
 import { MediaUpload } from './media-upload';
 import { LocationPicker } from '../location-picker';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
@@ -1140,7 +1141,7 @@ function HandoffEditor({ step, doc, ctx, set }: EditorProps) {
           data-testid="flb-handoff-plan-lock"
           className="rounded-xl bg-warning/10 p-2.5 text-[12px]"
         >
-          {t('lockHint')}
+          {t('lockHint')} <AddonLockLink />
         </p>
       )}
       {kind === 'team' && (

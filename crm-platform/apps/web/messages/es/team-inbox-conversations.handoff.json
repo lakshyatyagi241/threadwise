@@ -54,7 +54,7 @@
         "intro": "El bot deja de responder a este contacto. La conversación pasa a la persona o al equipo que elijas, o espera en la cola hasta que alguien la tome.",
         "where": "Enviar a",
         "whereRules": "Las reglas de asignación; si no, la cola de espera",
-        "whereQueueOnly": "La cola de espera (las reglas de asignación no están en tu plan)",
+        "whereQueueOnly": "La cola de espera (las reglas de asignación necesitan el complemento Enrutamiento inteligente)",
         "whereTeam": "Un equipo",
         "wherePerson": "Una persona",
         "team": "Equipo",
