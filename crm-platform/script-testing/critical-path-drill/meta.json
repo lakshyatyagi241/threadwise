@@ -1,0 +1,12 @@
+{
+  "id": "critical-path-drill",
+  "sheetItem": 76,
+  "title": "Critical path drill (real faults to the fake Google Chat Critical space)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 6, "full": 14 },
+  "heavy": true,
+  "needs": ["docker", "node22", "pnpm", "postgres", "built apps/api"],
+  "proves": "On a local stack, a Postgres hang, a refused Redis and a probe at a dead port make the real Prometheus rules fire, the real Alertmanager route to the real chat-bridge, and one card per fingerprint appear in the Critical space of a fake Chat receiver with live evidence and a runbook; a warning-only condition posts nothing; nothing reaches Slow Queries or Deploy; each fault's end posts RESOLVED in the same thread; the resolver stays dry-run.",
+  "doesNotProve": "Delivery to real Google Chat (never called), production thresholds and durations (for: is shortened to 20 s, group_interval to 15 s), the real webhook URLs or secrets, or anything on staging or production.",
+  "report": "docs/runbooks/google-chat-alerts.md"
+}
