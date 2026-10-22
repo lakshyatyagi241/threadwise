@@ -33,19 +33,29 @@ const ToastContext = createContext<ToastApi | null>(null);
 
 const LIFETIME_MS: Record<ToastTone, number> = { success: 5000, info: 5000, danger: 9000 };
 
-const TONES: Record<ToastTone, string> = {
-  success: 'border-success/40 text-success',
-  info: 'border-border text-foreground',
-  danger: 'border-danger/40 text-danger',
+/** Each tone: the accent edge of the card and the tint of its icon. */
+const TONES: Record<ToastTone, { edge: string; badge: string }> = {
+  success: { edge: 'border-s-success', badge: 'bg-success/15 text-success' },
+  info: { edge: 'border-s-primary', badge: 'bg-primary/15 text-primary' },
+  danger: { edge: 'border-s-danger', badge: 'bg-danger/15 text-danger' },
+};
+
+const ICONS: Record<ToastTone, string[]> = {
+  success: ['M5 12.5l4.5 4.5L19 7.5'],
+  info: ['M12 11v5', 'M12 7.5h.01'],
+  danger: ['M12 7v6', 'M12 16.5h.01'],
 };
 
 /** Hosts the toast region. Wrap the screens that raise toasts once; `useToast()` works anywhere below. */
 export function ToastProvider({
   children,
   dismissLabel = 'Dismiss',
+  placement = 'bottom',
 }: {
   children: ReactNode;
   dismissLabel?: string;
+  /** Where the messages stack: the bottom corner (the default) or just under the page's top bar, beside its buttons. */
+  placement?: 'bottom' | 'top';
 }) {
   const [items, setItems] = useState<ToastItem[]>([]);
   const seq = useRef(0);
@@ -85,23 +95,49 @@ export function ToastProvider({
       {children}
       <div
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-4 bottom-4 z-[60] flex flex-col items-center gap-2 sm:inset-x-auto sm:end-4 sm:items-end"
+        className={cn(
+          'pointer-events-none fixed inset-x-4 z-[60] flex flex-col items-center gap-2 sm:inset-x-auto sm:end-4 sm:items-end',
+          placement === 'top' ? 'top-16' : 'bottom-4',
+        )}
       >
         {items.map((i) => (
           <div
             key={i.id}
             role={i.tone === 'danger' ? 'alert' : 'status'}
             className={cn(
-              'pointer-events-auto flex max-w-sm items-start gap-3 rounded-md border bg-background px-4 py-2.5 text-sm shadow-lg',
-              TONES[i.tone],
+              'crm-toast pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border border-s-4 border-border bg-background py-2.5 ps-3 pe-2 text-sm shadow-lg',
+              TONES[i.tone].edge,
             )}
           >
-            <span className="min-w-0 flex-1">{i.message}</span>
+            <span
+              aria-hidden="true"
+              className={cn(
+                'mt-px flex size-6 shrink-0 items-center justify-center rounded-full',
+                TONES[i.tone].badge,
+              )}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="size-3.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {ICONS[i.tone].map((d) => (
+                  <path key={d} d={d} />
+                ))}
+              </svg>
+            </span>
+            <span className="min-w-0 flex-1 break-words py-0.5 font-medium leading-snug text-foreground">
+              {i.message}
+            </span>
             <button
               type="button"
               onClick={() => dismiss(i.id)}
               aria-label={dismissLabel}
-              className="-me-1 shrink-0 rounded text-muted-foreground hover:text-foreground"
+              className="shrink-0 rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <svg
                 viewBox="0 0 24 24"
