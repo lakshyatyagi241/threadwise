@@ -485,7 +485,10 @@ export class HandoffService {
     const stored = await this.db.tx(async (tx) => {
       const { queueTimers: qIn, ...rest } = input;
       const queueTimers = qIn ? await this.queueTimersToStore(tx, ctx.orgId, qIn) : undefined;
-      await this.repo.updateSettings(tx, ctx.orgId, { ...rest, ...(queueTimers ? { queueTimers } : {}) });
+      await this.repo.updateSettings(tx, ctx.orgId, {
+        ...rest,
+        ...(queueTimers ? { queueTimers } : {}),
+      });
       await this.audit.record(tx, {
         module: 'workspace_settings',
         recordId: ctx.orgId,

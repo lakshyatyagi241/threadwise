@@ -1,11 +1,7 @@
 import { createHash } from 'node:crypto';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import {
-  CONVERSATION_QUEUE_REMINDER,
-  HANDOFF_GATES,
-  type HandoffTraceLine,
-} from '@crm/contracts';
+import { CONVERSATION_QUEUE_REMINDER, HANDOFF_GATES, type HandoffTraceLine } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -32,7 +28,8 @@ import {
 
 type Rows = { rows: Array<Record<string, unknown>> };
 const rowsOf = (r: unknown): Array<Record<string, unknown>> => (r as Rows).rows;
-const dateOf = (v: unknown): Date | null => (v === null || v === undefined ? null : new Date(v as string));
+const dateOf = (v: unknown): Date | null =>
+  v === null || v === undefined ? null : new Date(v as string);
 
 const uuidFrom = (seed: string): string => {
   const h = createHash('sha256').update(seed).digest('hex');
@@ -95,7 +92,9 @@ export class QueueTimersService {
     for (const orgId of orgs) {
       try {
         if (!(await this.entitled(orgId))) continue;
-        const uuids = await this.db.txAs({ orgId }, (tx) => this.candidates(tx, orgId, perWorkspace));
+        const uuids = await this.db.txAs({ orgId }, (tx) =>
+          this.candidates(tx, orgId, perWorkspace),
+        );
         for (const uuid of uuids) {
           try {
             const ran = await RequestContextStore.run(
@@ -147,7 +146,11 @@ export class QueueTimersService {
   }
 
   /** Runs whatever is due for one waiting chat. Safe to call any number of times. */
-  async runFor(orgId: number, conversationUuid: string, now: Date = new Date()): Promise<QueueTimerRun> {
+  async runFor(
+    orgId: number,
+    conversationUuid: string,
+    now: Date = new Date(),
+  ): Promise<QueueTimerRun> {
     if (!(await this.entitled(orgId))) return { steps: [], skipped: 'plan' };
 
     let change: AssignmentChange | null = null;
@@ -156,7 +159,12 @@ export class QueueTimersService {
 
     const steps = await this.db.txAs({ orgId }, async (tx) => {
       let locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);
-      if (!locked || locked.status !== 'open' || locked.handling !== 'waiting' || locked.assigneeUserId !== null)
+      if (
+        !locked ||
+        locked.status !== 'open' ||
+        locked.handling !== 'waiting' ||
+        locked.assigneeUserId !== null
+      )
         return null;
       const card = await this.card(tx, orgId, locked.id);
       if (!card) return null;
@@ -168,7 +176,10 @@ export class QueueTimersService {
       };
       const need = longestPending(cfg, progress);
       if (need === 0 || card.since === null) return [] as QueueStep[];
-      const team = locked.assigneeTeamId !== null ? await this.teamOpening(tx, orgId, locked.assigneeTeamId) : null;
+      const team =
+        locked.assigneeTeamId !== null
+          ? await this.teamOpening(tx, orgId, locked.assigneeTeamId)
+          : null;
       const waited = waitedOpenMinutes(card.since, now, team, need);
       const due = dueSteps(cfg, progress, waited);
       if (due.length === 0) return [] as QueueStep[];
@@ -201,7 +212,10 @@ export class QueueTimersService {
           });
           done.push('remind');
         } else if (step === 'offer') {
-          const to = cfg.overflowTeamId !== null ? await this.repo.teamFactsById(tx, orgId, cfg.overflowTeamId) : null;
+          const to =
+            cfg.overflowTeamId !== null
+              ? await this.repo.teamFactsById(tx, orgId, cfg.overflowTeamId)
+              : null;
           if (!(await this.claimStep(tx, orgId, card.id, 'offered_at'))) continue;
           if (!to || !to.receives) {
             await this.repo.appendTrace(tx, orgId, card.id, [
@@ -230,10 +244,19 @@ export class QueueTimersService {
             payload: { toTeamId: to.uuid, minutes: cfg.overflowMinutes },
           });
           await this.repo.appendTrace(tx, orgId, card.id, [
-            { step: 'queue_timer', who: to.uuid, result: 'chosen', why: 'offered_to_team' } as HandoffTraceLine,
+            {
+              step: 'queue_timer',
+              who: to.uuid,
+              result: 'chosen',
+              why: 'offered_to_team',
+            } as HandoffTraceLine,
           ]);
           // The chat is now in the overflow team's queue: read it again so what follows sees the new team and row version.
-          locked = (await this.conversations.lockByUuid(tx, orgId, conversationUuid)) as LockedConversation;
+          locked = (await this.conversations.lockByUuid(
+            tx,
+            orgId,
+            conversationUuid,
+          )) as LockedConversation;
           done.push('offer');
         } else {
           if (!(await this.claimFinal(tx, orgId, card.id, cfg.unclaimedAction))) continue;
@@ -313,11 +336,19 @@ export class QueueTimersService {
     );
     const r = rowsOf(res)[0];
     return r
-      ? { uuid: String(r.uuid), hours: r.business_hours ?? null, timezone: (r.timezone as string | null) ?? null }
+      ? {
+          uuid: String(r.uuid),
+          hours: r.business_hours ?? null,
+          timezone: (r.timezone as string | null) ?? null,
+        }
       : null;
   }
 
-  private async contactName(tx: Tx, orgId: number, contactId: number | null): Promise<string | null> {
+  private async contactName(
+    tx: Tx,
+    orgId: number,
+    contactId: number | null,
+  ): Promise<string | null> {
     if (contactId === null) return null;
     const res = await tx.execute(
       sql`SELECT name FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
@@ -345,7 +376,12 @@ export class QueueTimersService {
     return rowsOf(res).length > 0;
   }
 
-  private async claimFinal(tx: Tx, orgId: number, cardId: number, action: string): Promise<boolean> {
+  private async claimFinal(
+    tx: Tx,
+    orgId: number,
+    cardId: number,
+    action: string,
+  ): Promise<boolean> {
     const res = await tx.execute(sql`
       UPDATE conversation_handoffs SET final_at = now(), final_action = ${action}
       WHERE org_id = ${orgId} AND id = ${cardId} AND status = 'waiting' AND final_at IS NULL RETURNING id`);
@@ -353,7 +389,11 @@ export class QueueTimersService {
   }
 
   /** The message to the customer, after the commit: a deterministic client id, so a retry never sends it twice. */
-  private async say(orgId: number, conversationUuid: string, m: { handoffId: string; text: string }) {
+  private async say(
+    orgId: number,
+    conversationUuid: string,
+    m: { handoffId: string; text: string },
+  ) {
     try {
       await this.facade.enqueueOutbound({
         conversationId: conversationUuid,

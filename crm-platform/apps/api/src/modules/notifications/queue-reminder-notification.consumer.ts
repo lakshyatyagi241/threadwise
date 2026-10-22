@@ -77,22 +77,35 @@ export class QueueReminderNotificationConsumer implements OutboxSubscriber, OnMo
           }
         | undefined;
       // Still waiting for somebody, or this is late news.
-      if (!r || r.status !== 'open' || r.archived || r.handling !== 'waiting' || r.assignee_user_id !== null)
+      if (
+        !r ||
+        r.status !== 'open' ||
+        r.archived ||
+        r.handling !== 'waiting' ||
+        r.assignee_user_id !== null
+      )
         return [];
       const teamId = r.assignee_team_id === null ? null : Number(r.assignee_team_id);
       const record = {
         assigneeUserId: null,
         assigneeTeamId: teamId,
-        channelOwnerUserId: r.channel_owner_user_id === null ? null : Number(r.channel_owner_user_id),
+        channelOwnerUserId:
+          r.channel_owner_user_id === null ? null : Number(r.channel_owner_user_id),
       };
       const who =
         teamId !== null
-          ? recipientsForAssignment({ toUserId: null, toTeamId: teamId, byUserId: null }, record, readers)
-              .userIds
+          ? recipientsForAssignment(
+              { toUserId: null, toTeamId: teamId, byUserId: null },
+              record,
+              readers,
+            ).userIds
           : recipientsForNewChat(record, readers, leads);
       const capped = capRecipients(who, notifyConfig().maxRecipients);
       if (capped.truncated) {
-        this.logger.warn({ orgId, conversationId: conversationUuid }, 'queue reminder truncated to the recipient cap');
+        this.logger.warn(
+          { orgId, conversationId: conversationUuid },
+          'queue reminder truncated to the recipient cap',
+        );
       }
       const name = senderName(r);
       const link = `/inbox?c=${conversationUuid}`;

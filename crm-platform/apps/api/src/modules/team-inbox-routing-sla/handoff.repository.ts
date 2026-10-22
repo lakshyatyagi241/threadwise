@@ -136,7 +136,9 @@ export class HandoffRepository {
       q.overflowMinutes !== undefined
         ? sql`handoff_wq_overflow_minutes = ${q.overflowMinutes}`
         : null,
-      q.overflowTeamId !== undefined ? sql`handoff_wq_overflow_team_id = ${q.overflowTeamId}` : null,
+      q.overflowTeamId !== undefined
+        ? sql`handoff_wq_overflow_team_id = ${q.overflowTeamId}`
+        : null,
       q.unclaimedMinutes !== undefined
         ? sql`handoff_wq_unclaimed_minutes = ${q.unclaimedMinutes}`
         : null,
