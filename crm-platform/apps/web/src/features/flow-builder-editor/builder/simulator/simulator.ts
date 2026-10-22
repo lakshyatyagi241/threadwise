@@ -461,8 +461,12 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           bot(tx('locationSkipped'));
           return advance('out');
         }
+        // A link-mode pin carries no name or address; they follow as a text (see the runtime's location executor).
+        const linkMode = str(d.locMode) === 'link';
         const place = { name: str(d.title) || str(d.name), address: str(d.address) };
-        bot(tx('locationCoords', { ...place, lat: String(where.lat), lng: String(where.lng) }));
+        const pin = linkMode ? { name: '', address: '' } : place;
+        bot(tx('locationCoords', { ...pin, lat: String(where.lat), lng: String(where.lng) }));
+        if (linkMode && (place.name || place.address)) bot(tx('location', place));
         return advance('out');
       }
       case 'chatbot':
