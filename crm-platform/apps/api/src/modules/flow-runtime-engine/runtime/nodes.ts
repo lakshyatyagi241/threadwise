@@ -282,13 +282,20 @@ const list: NodeExecutor = {
       sections,
     });
     if (!out.ok) return failed(out, 'end', ctx)!;
+    const variable = str(p.variable) || 'choice';
+    // Like the Buttons menu, the list stays tappable after a leaf branch finishes (unless `keepMenuOpen` is off): without this the run
+    // ended on the first pick and every later tap on the same list did nothing.
+    const keepOpen = p.keepMenuOpen !== false;
+    if (keepOpen)
+      ctx.run.menus.latest = { nodeId: ctx.node.id, variable, answerItems: [], listItems: rows };
     return {
       kind: 'wait',
       wait: {
         nodeId: ctx.node.id,
-        variable: str(p.variable) || 'choice',
+        variable,
         kind: 'List',
         listItems: rows,
+        persistent: keepOpen,
       },
     };
   },
