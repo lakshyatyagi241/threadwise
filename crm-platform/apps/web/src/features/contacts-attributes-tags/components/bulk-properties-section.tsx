@@ -67,12 +67,13 @@ export function BulkPropertiesSection({
           {rows.map((f) => {
             const change = changes[f.key]!;
             const problem = problems[f.key];
+            const removeLabel = t('properties.remove', { name: f.label });
             return (
               <li key={f.key} className="relative rounded-md border border-border p-2.5 pe-9">
                 <button
                   type="button"
-                  aria-label={t('properties.remove', { name: f.label })}
-                  title={t('properties.remove', { name: f.label })}
+                  aria-label={removeLabel}
+                  title={removeLabel}
                   onClick={() => remove(f.key)}
                   className="absolute end-1.5 top-1.5 rounded p-1 text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
                 >
