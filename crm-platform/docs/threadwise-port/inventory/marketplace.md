@@ -441,7 +441,7 @@ Status values describe this repo: `implemented` (built and tested, usually again
 ### TW-MKT-030 - Web: workspace screens
 
 - **Status:** implemented
-- **Screens (`apps/web/src/app/(app)/(marketplace)`):** `/marketplace` (home with shelves), `/marketplace/apps`, `/marketplace/integrations`, `/marketplace/addons` (billing add-ons tab), `/marketplace/app/[slug]` (app page), `/marketplace/app/[slug]/install` (consent and setup),
+- **Screens (`apps/web/src/app/(app)/(marketplace)`):** `/marketplace` (home with shelves), `/marketplace/apps`, `/marketplace/integrations`, `/marketplace/addons` (the shared add-ons list), `/marketplace/developer` (developer tool cards), `/marketplace/app/[slug]` (app page), `/marketplace/app/[slug]/install` (consent and setup),
   `/marketplace/installed`, `/marketplace/installed/[id]` (manage), `/marketplace/requests`. `/integrations` redirects to `/marketplace/integrations`.
 - **UX notes:** price on cards and the app page, Subscribe and Start free trial, the subscription panel, the "Subscription ended" banner, the payment return banner, the uninstall warning, one-time reveal of the connection secret and of the full path address, Open link to the app's own screen, a maturity badge and notice, a help guide (`marketplace-overview`).
   The nav entry is in the `apps` group, gated by `market.apps.read` and plan feature `marketplace`; a plan without the feature keeps the entry visible but locked, with a paywall over every `/marketplace/*` page.
