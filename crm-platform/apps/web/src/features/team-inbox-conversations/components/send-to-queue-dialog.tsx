@@ -32,6 +32,7 @@ export function SendToQueueDialog({
   onPlaced: (row: ConversationSummary) => void;
 }) {
   const t = useTranslations('team-inbox-conversations.handoff');
+  const ta = useTranslations('team-inbox-conversations.panel.assignee');
   const { toast } = useToast();
   const { send } = useHandoffActions(conversationId);
   const assignees = useAssignees(true);
@@ -128,7 +129,7 @@ export function SendToQueueDialog({
               <option value="">{t('send.pickPerson')}</option>
               {(assignees.data?.users ?? []).map((u) => (
                 <option key={u.id} value={u.id}>
-                  {u.name ?? u.email}
+                  {u.name ?? u.email} · {ta(`availability.${u.availability}`)}
                 </option>
               ))}
             </Select>
