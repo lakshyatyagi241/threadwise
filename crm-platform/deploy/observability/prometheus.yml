@@ -16,6 +16,7 @@ rule_files:
   - /etc/prometheus/p0-failure-modes.rules.yml
   - /etc/prometheus/health.rules.yml
   - /etc/prometheus/webhook-ingest.rules.yml
+  - /etc/prometheus/slow-query.rules.yml
 
 alerting:
   alertmanagers:
@@ -69,3 +70,9 @@ scrape_configs:
       credentials_file: /run/secrets/obs_metrics_token
     static_configs:
       - targets: ['probe:9464']
+
+  # The Google Chat bridge + slow-query watcher (tools/chat-bridge). Internal network only, no token (it exposes counters, no data).
+  - job_name: crm-chat-bridge
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['gchat-bridge:9095']

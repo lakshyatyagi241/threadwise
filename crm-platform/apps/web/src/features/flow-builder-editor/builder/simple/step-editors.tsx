@@ -6,6 +6,7 @@ import { ctaLinkProblem } from '../../lib/cta-link';
 import { flowVariables } from '../../lib/flow-variables';
 import { attrEntries } from '../inspector/attr-picker';
 import { savePropertyOptions } from '../../lib/property-options';
+import { compatiblePropertyTypes } from '../../lib/property-types';
 import { ButtonActionPicker } from '../button-action-picker';
 import {
   buttonActionContinues,
@@ -506,18 +507,15 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                   onChange={(e) => patchCard(ci, { title: e.target.value })}
                 />
               </Field>
-              <Field
-                label={
-                  <span className="flex items-center justify-between">
-                    {t('carousel.text')}{' '}
-                    <Counter value={str(c.text)} max={FLB_CAROUSEL_LIMITS.text} />
-                  </span>
-                }
-              >
-                <Textarea
+              <Field label={t('carousel.text')}>
+                {/* The same text box as a message: emoji, formatting and variables, with its own counter. */}
+                <MessageField
                   rows={2}
+                  label={t('carousel.text')}
                   value={str(c.text)}
-                  onChange={(e) => patchCard(ci, { text: e.target.value })}
+                  max={FLB_CAROUSEL_LIMITS.text}
+                  variables={flowVariables(doc)}
+                  onChange={(v) => patchCard(ci, { text: v })}
                 />
               </Field>
               <div className="text-[12px] font-medium">{t('carousel.buttons')}</div>
@@ -922,7 +920,13 @@ function SavePropertyField({
               </option>
             ))}
           </Select>
-          <NewPropertyInline onCreated={(key) => set({ propertyKey: key })} />
+          <NewPropertyInline
+            onCreated={(key) => set({ propertyKey: key })}
+            types={compatiblePropertyTypes(
+              noun === 'answer' ? 'answer' : 'choice',
+              str(step.data.validate) || str(step.data.inputType),
+            )}
+          />
         </>
       ) : null}
     </Field>

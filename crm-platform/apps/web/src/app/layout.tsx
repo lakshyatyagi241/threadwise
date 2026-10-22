@@ -4,6 +4,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { dirOf } from '@/i18n/locales';
+import { pickMessages, profileFor } from '@/i18n/message-profiles';
+import { requestPath } from '@/lib/auth/server';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
 import { appFontVariables } from '@/lib/fonts';
 import { getSiteConfig } from '@/features/platform-settings-branding-storage/site/site-config';
@@ -30,13 +32,21 @@ export async function generateViewport(): Promise<Viewport> {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
   const messages = await getMessages();
+  // Guest pages get the part of the catalogue they use, not all of it (see i18n/message-profiles.ts).
+  const profile = profileFor(await requestPath());
+  const clientMessages = profile
+    ? (pickMessages(
+        messages as Parameters<typeof pickMessages>[0],
+        profile.namespaces,
+      ) as typeof messages)
+    : messages;
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   const site = await getSiteConfig();
   return (
     <html lang={locale} dir={dirOf(locale)} data-theme={theme}>
       <head>{site && <SiteHead cfg={site} />}</head>
       <body className={`${appFontVariables} bg-background font-sans text-foreground antialiased`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={clientMessages}>
           <Providers>{children}</Providers>
           {site && <SiteRuntime banner={site.cookieBanner} analytics={site.analytics} />}
         </NextIntlClientProvider>

@@ -43,23 +43,22 @@ RUN --mount=type=secret,id=sentry_auth_token,required=false \
     NODE_OPTIONS=--max-old-space-size=6144 \
     pnpm --filter @crm/web build
 
-FROM build AS runtime
-ENV NODE_ENV=production
-# The build stage holds everything `next build` needed (the compiler, the test runner, their dependencies, a cached copy of pnpm and
-# the npm that ships with the base image). `next start` needs none of it, and the image scan flagged about 75 high and critical
-# findings in those tools (QA task 39). So the runtime keeps the production dependencies only and starts Next with `node`, not pnpm,
-# which lets pnpm, its cache, npm and corepack be removed. CI=true lets pnpm replace the modules directory without asking (there is no
-# terminal to answer); --ignore-scripts skips the repository's husky `prepare` hook, which is not installed any more; --filter keeps only
-# the web app and what it depends on (the API's git-hosted packages are not in this stage's store, and the web app does not use them).
-# Take the fixed Alpine packages (OpenSSL etc.) that are newer than the node base image; see the API Dockerfile.
-# No --offline: the deps stage keeps its pnpm store in a BuildKit cache mount, which is not part of the image, so this stage has no store to
-# read from (it failed with ERR_PNPM_NO_OFFLINE_TARBALL on chalk@6.0.0). It downloads the production packages from the registry instead.
-RUN apk upgrade --no-cache
-RUN CI=true pnpm install --prod --frozen-lockfile --ignore-scripts --filter "@crm/web..." \
- && rm -rf /root/.cache /root/.local/share/pnpm/store \
-      /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
-      /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/pnpm /usr/local/bin/pnpx \
-      /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-*
+# The runtime is a clean image holding only Next's traced server (`output: 'standalone'` in next.config.ts): the compiled server, the
+# production dependencies the trace found, the static assets and `public`. It used to be the whole build stage plus a production install
+# (about 3 GB: the repo sources, every workspace, the build cache and the compiler), which every release shipped over SSH. Nothing in
+# it needs pnpm, npm or corepack, so none is installed; `apk upgrade` takes the fixed Alpine packages (OpenSSL etc.) that are newer
+# than the node base image, as the API Dockerfile does.
+FROM node:22-alpine AS runtime
+ENV NODE_ENV=production \
+    PORT=3001 \
+    HOSTNAME=0.0.0.0
+RUN apk upgrade --no-cache \
+ && rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+      /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-*
+WORKDIR /app
+COPY --from=build /app/apps/web/.next/standalone ./
+COPY --from=build /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=build /app/apps/web/public ./apps/web/public
 WORKDIR /app/apps/web
 EXPOSE 3001
-CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "3001"]
+CMD ["node", "server.js"]

@@ -641,6 +641,47 @@ export class ContactsService {
   }
 
   /**
+   * The contact of a chat visitor who has just given an email or a phone number inside a flow (the website chat makes no contact before
+   * that, so trying the bot out leaves no empty record): found by the visitor's id on the channel or by the phone, else made, and tied
+   * to the thread when it has none. Null when the contact could not be made (the plan's cap, an unusable value).
+   */
+  async ensureChannelContact(
+    orgId: number,
+    input: {
+      channel: string;
+      peerKey: string;
+      conversationId: number | null;
+      email?: string | null;
+      phone?: string | null;
+    },
+  ): Promise<number | null> {
+    const digits = (input.phone ?? '').replace(/\D/g, '');
+    return this.db.txAs({ orgId }, async (tx) => {
+      const r = await this.resolveOrCreateByIdentity(tx, orgId, {
+        kind: 'channel_uid',
+        channel: input.channel,
+        value: input.peerKey,
+        name: null,
+        firstName: null,
+        email: input.email?.trim() || null,
+        phone: digits === '' ? null : `+${digits}`,
+        matchPhoneFirst: true,
+        ownerId: null,
+        source: input.channel,
+        quiet: true,
+      } as Parameters<ContactsService['resolveOrCreateByIdentity']>[2]);
+      if (r.outcome !== 'found' && r.outcome !== 'created') return null;
+      if (input.conversationId !== null) {
+        await tx.execute(
+          sql`UPDATE conversations SET contact_id = ${r.contactId}
+              WHERE org_id = ${orgId} AND id = ${input.conversationId} AND contact_id IS NULL`,
+        );
+      }
+      return r.contactId;
+    });
+  }
+
+  /**
    * `resolveOrCreateByIdentity` for many inputs, in the order given. A phone number or email that already belongs to a contact is answered
    * from two queries for the whole list (the identity and its contact), exactly as the single call answers it; every other input (new,
    * healed from a stored number, over the plan cap, unusable, or a channel id) goes through the single call unchanged, so locking, quota,

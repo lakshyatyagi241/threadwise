@@ -157,6 +157,14 @@ const toLine = (r: LineRow): InboxLine => ({
  * contacts domains export services for it. Every method runs in the caller's tenant transaction. A message takes the next
  * `msg_seq` of its thread, which also takes the thread's row lock, so two writers on one thread never interleave.
  */
+/**
+ * Whether a visitor has told us who they are: a usable phone number or an email. Only then is there a contact to keep; a visitor who has
+ * only chatted (a person trying the bot out) is a conversation, never an empty contact record.
+ */
+export function visitorHasIdentity(v: { phone: string | null; email: string | null }): boolean {
+  return phoneDigits(v.phone) !== '' || (v.email ?? '').trim() !== '';
+}
+
 @Injectable()
 export class SqlInboxGateway implements InboxGateway {
   private readonly logger = new Logger(SqlInboxGateway.name);
@@ -174,7 +182,12 @@ export class SqlInboxGateway implements InboxGateway {
         SELECT id FROM conversations WHERE org_id = ${orgId} AND id = ${visitor.conversationId}`);
       const row = existing.rows[0] as { id: number | string } | undefined;
       // A deleted thread is replaced by a new one and the visitor is pointed at it (TW-WGT-015 rule 1).
-      if (row) return { id: Number(row.id), created: false };
+      if (row) {
+        // The visitor may have given an email or a phone since the thread began: that is when the contact is made.
+        if (visitorHasIdentity(visitor))
+          await this.linkContactIfMissing(tx, orgId, widget, visitor, Number(row.id));
+        return { id: Number(row.id), created: false };
+      }
     }
 
     const channelId = await this.ensureChannel(tx, orgId, widget);
@@ -282,6 +295,22 @@ export class SqlInboxGateway implements InboxGateway {
    * contact whose phone matches, else a stable per-visitor row keyed by the widget channel. Only empty fields are filled.
    * Any failure is logged and leaves the thread without a contact; it never fails the message (TW-WGT-015 rule 2).
    */
+  /** Makes the contact for a thread that has none yet (the visitor gave an email or a phone after it began). */
+  private async linkContactIfMissing(
+    tx: Tx,
+    orgId: number,
+    widget: WidgetForInbox,
+    visitor: VisitorForInbox,
+    conversationId: number,
+  ): Promise<void> {
+    const res = await tx.execute(
+      sql`SELECT contact_id FROM conversations WHERE org_id = ${orgId} AND id = ${conversationId}`,
+    );
+    const has = (res.rows[0] as { contact_id: number | string | null } | undefined)?.contact_id;
+    if (has === null || has === undefined)
+      await this.linkContact(tx, orgId, widget, visitor, conversationId);
+  }
+
   private async linkContact(
     tx: Tx,
     orgId: number,
@@ -289,6 +318,7 @@ export class SqlInboxGateway implements InboxGateway {
     visitor: VisitorForInbox,
     conversationId: number,
   ): Promise<void> {
+    if (!visitorHasIdentity(visitor)) return;
     try {
       await tx.transaction(async (sp) => {
         const digits = phoneDigits(visitor.phone);

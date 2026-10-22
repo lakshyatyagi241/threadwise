@@ -1,0 +1,32 @@
+# Thresholds are plain numbers in the "C" expression node: change them in the UI (Alerting, Alert rules) without editing this file;
+# Provisioned rules are read-only in the UI: use "Export / copy" to edit a copy, or change the number here. keep_firing_for needs Grafana 11.4+; add it after the upgrade.
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: slow-queries
+    folder: Threadwise alerts
+    interval: 30s
+    rules:
+      - uid: slow-query-running
+        title: Slow query running
+        condition: C
+        for: 30s
+        noDataState: OK
+        execErrState: Error
+        labels: { severity: warning, group: slow_query }
+        annotations:
+          summary: A database query has been running for 5 seconds or more
+          duration: '{{ with $values.B }}{{ printf "%.1f" .Value }} s{{ end }}'
+          description: 'Longest running database query is at or above the alert threshold (default 5 s, edit it in Alerting). Values: {{ $values }}'
+          runbook_url: docs/runbooks/google-chat-alerts-grafana-deploy.md
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: crm-prometheus
+            model: { refId: A, expr: max(crm_slow_query_max_seconds), instant: true, intervalMs: 1000, maxDataPoints: 43200 }
+          - refId: B
+            datasourceUid: __expr__
+            model: { refId: B, type: reduce, expression: A, reducer: last, settings: { mode: dropNN }, datasource: { type: __expr__, uid: __expr__ } }
+          - refId: C
+            datasourceUid: __expr__
+            model: { refId: C, type: threshold, expression: B, conditions: [{ evaluator: { type: gt, params: [4.999] } }], datasource: { type: __expr__, uid: __expr__ } }

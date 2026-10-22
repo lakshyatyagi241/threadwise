@@ -74,6 +74,8 @@ export interface PropertyModalProps {
   moduleKey?: ModuleKey;
   /** Called with the property once it is saved (made or changed), before the dialog closes. */
   onSaved?: (field: FieldResponse) => void;
+  /** Offer only these types for a new property (the bot builder asks for ones that can hold what a step collects). */
+  allowedTypes?: readonly FieldType[];
   onClose: () => void;
 }
 
@@ -102,6 +104,7 @@ function PropertyForm({
   dependencies,
   moduleKey = 'contacts',
   onSaved,
+  allowedTypes,
   onClose,
 }: PropertyModalProps) {
   const t = useTranslations('contacts-attributes-tags.properties');
@@ -115,7 +118,14 @@ function PropertyForm({
   const lazyOptions = field !== undefined && hasLazyOptions(field);
 
   const [draft, setDraft] = useState<PropertyDraft>(() =>
-    field ? draftFromField(field, dependencies) : emptyDraft(sectionId ?? sections[0]?.id ?? ''),
+    field
+      ? draftFromField(field, dependencies)
+      : {
+          ...emptyDraft(sectionId ?? sections[0]?.id ?? ''),
+          ...(allowedTypes?.length && !allowedTypes.includes('text')
+            ? { type: allowedTypes[0]! }
+            : {}),
+        },
   );
   const [keyTouched, setKeyTouched] = useState(false);
   const [newOption, setNewOption] = useState('');
@@ -275,7 +285,7 @@ function PropertyForm({
             {editing && !(CREATABLE_TYPES as readonly string[]).includes(draft.type) && (
               <option value={draft.type}>{t(`types.${draft.type}`)}</option>
             )}
-            {CREATABLE_TYPES.map((x) => (
+            {CREATABLE_TYPES.filter((x) => !allowedTypes || allowedTypes.includes(x)).map((x) => (
               <option key={x} value={x}>
                 {t(`types.${x}`)}
               </option>

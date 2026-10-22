@@ -35,3 +35,4 @@ One folder per tested area under [script-testing/](../../script-testing/), each 
 | memory-soak | FAIL | 329 | verdict GROWTH in the 5-minute quick profile: RSS slope api 33 MB/h, worker 50 MB/h flagged; heap fits are NaN (3 samples). A 5-minute window cannot tell warm-up from a leak; run `--full` before treating it as a leak |
 | vapt | not re-run | - | was passing before the merge; skipped for time |
 | alerting | not re-run | - | was passing before the merge; skipped for time |
+- `chat-alerts` (Google Chat bridge + slow-query watcher, fake Chat receiver): PASS in full mode (65 s, 28 checks); it is new and not yet part of the table above.
