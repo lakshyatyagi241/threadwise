@@ -45,7 +45,7 @@ export class PlatformPlansController {
   @Get(':id/addon-impact')
   @ApiOperation({
     summary:
-      'How many of this plan�s workspaces still pay for each plain add-on pack (what including it in the plan would stop renewing)',
+      'How many workspaces on this plan still pay for each plain add-on pack (what including it in the plan would stop renewing)',
   })
   async addonImpact(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.plans.addonImpact(id);
