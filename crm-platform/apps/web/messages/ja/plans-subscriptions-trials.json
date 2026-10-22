@@ -247,23 +247,7 @@
         "title": "よくある質問"
       },
       "addons": {
-        "title": "アドオン",
-        "owned": "所有しているアドオン",
-        "oneTime": "一回払い",
-        "buy": "アドオンを購入",
-        "buyAgain": "再購入",
-        "active": "有効",
-        "included": "ご利用のプランに含まれています",
-        "includedOwned": "このアドオンもご契約中です。プランに含まれるようになったため、アドオンは解約できます。自動での返金はありません。",
-        "includedEnds": "ご利用のプランに含まれています。アドオンは{date}に終了し、更新されません。",
-        "unlimitedBullet": "無制限の{label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} 日}}",
-          "weeks": "{count, plural, other {/ {count} 週}}",
-          "months": "{count, plural, other {/ {count} か月}}",
-          "years": "{count, plural, other {/ {count} 年}}"
-        }
+        "title": "アドオン"
       },
       "renewal": {
         "renewsOn": "プランは{date}に自動更新されます。",

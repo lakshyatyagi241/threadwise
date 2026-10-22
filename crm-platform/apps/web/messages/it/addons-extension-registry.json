@@ -124,7 +124,8 @@
           "billingMode": "Fatturazione",
           "sortOrder": "Ordine",
           "isActive": "Attivo",
-          "isLifetime": "A vita (una tantum)"
+          "isLifetime": "A vita (una tantum)",
+          "period": "Periodo di fatturazione"
         },
         "modes": {
           "one_time": "Una tantum (riacquistabile alla scadenza)",
@@ -144,8 +145,18 @@
           "billingDuration": "Inserisci un numero intero pari o superiore a 1.",
           "sortOrder": "Inserisci un numero intero.",
           "limits": "I limiti sono numeri interi, oppure -1 per illimitato.",
-          "form": "Controlla i campi evidenziati."
-        }
+          "form": "Controlla i campi evidenziati.",
+          "amountPositive": "I componenti aggiuntivi sono abbonamenti mensili o annuali, quindi il prezzo deve essere maggiore di zero."
+        },
+        "legacy": {
+          "title": "Pacchetto precedente",
+          "body": "Questo pacchetto è stato creato prima che i componenti aggiuntivi diventassero abbonamenti. Continua a essere venduto esattamente come prima (la fatturazione è mostrata ma non modificabile) e gli spazi di lavoro che lo possiedono non sono toccati. Puoi ancora modificarne nome, prezzo, funzioni e limiti, o toglierlo dalla vendita. I nuovi pacchetti sono abbonamenti mensili o annuali."
+        },
+        "periods": {
+          "months": "Abbonamento mensile",
+          "years": "Abbonamento annuale"
+        },
+        "periodHint": "I componenti aggiuntivi sono abbonamenti. Gli spazi di lavoro con un gateway online si rinnovano automaticamente; con bonifico bancario o pagamento offline pagano di nuovo alla fine del periodo."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Add-on",
       "description": "Pacchetti di funzionalità extra da acquistare in aggiunta al tuo abbonamento.",
-      "needPlanTitle": "Gli add-on richiedono un piano attivo",
-      "needPlanBody": "Gli add-on sono pacchetti di funzionalità extra da acquistare in aggiunta al tuo abbonamento. Scegli prima un piano, poi torna qui per aggiungere funzionalità.",
-      "viewPlans": "Vedi i piani",
-      "noneTitle": "Nessun add-on disponibile",
-      "noneBody": "Al momento non ci sono add-on in offerta. Riprova più tardi.",
-      "ownedTitle": "I tuoi add-on",
-      "ownedBody": "Pacchetti attivi uniti al tuo piano attuale.",
-      "ends": "Scade il {date}",
-      "lifetime": "A vita",
-      "autoRenews": "Rinnovo automatico",
       "renewal": {
         "cancel": "Annulla rinnovo",
         "confirmTitle": "Annullare il rinnovo?",
@@ -277,37 +278,63 @@
         "forbidden": "Non hai l'autorizzazione per modificare il piano.",
         "none": "Non c'è alcun abbonamento attivo da annullare.",
         "failed": "Non è stato possibile annullare il rinnovo. Riprova."
-      },
-      "active": "Attivo",
-      "included": "Incluso nel tuo piano",
-      "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
-      "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-on",
-      "catalogBody": "Sblocca funzionalità extra in aggiunta al tuo piano attuale. Nessun cambio di piano necessario.",
-      "count": "{count, plural, one {# add-on} many {# add-on} other {# add-on}}",
-      "free": "Gratis",
-      "lifetimePrice": "una tantum",
-      "per": "/ {unit}",
-      "units": {
-        "days": "giorni",
-        "weeks": "settimane",
-        "months": "mesi",
-        "years": "anni"
-      },
-      "buy": "Aggiungi al piano",
-      "buyAgain": "Riacquista",
-      "owned": "Posseduto ×{count} · riacquistando se ne aggiungono altri",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} illimitati",
-        "add": "+{amount} {name}"
-      },
-      "error": "Impossibile caricare gli add-on."
+      }
     },
     "planFields": {
       "fromModule": "da un modulo installato",
       "unlimited": "Illimitato"
+    },
+    "list": {
+      "unavailable": {
+        "title": "I componenti aggiuntivi richiedono un piano a pagamento attivo",
+        "free_plan": "Sei su un piano gratuito. I componenti aggiuntivi sono extra che acquisti in più rispetto a un piano a pagamento.",
+        "plan_expired": "Il tuo piano a pagamento è terminato, quindi i componenti aggiuntivi sono in pausa. Rinnova il piano per acquistare o rinnovare componenti.",
+        "no_plan": "Il tuo spazio di lavoro non ha ancora un piano. Scegli un piano a pagamento per usare i componenti aggiuntivi.",
+        "cta": "Vedi i piani"
+      },
+      "unavailableCard": "Richiede un piano a pagamento attivo",
+      "empty": {
+        "title": "Nessun componente aggiuntivo in vendita",
+        "body": "Al momento non c’è nessun componente aggiuntivo in offerta. Riprova più tardi."
+      },
+      "listLabel": "Componenti aggiuntivi in vendita",
+      "owned": {
+        "title": "I tuoi componenti aggiuntivi",
+        "renews": "Si rinnova il {date}",
+        "ends": "Attivo fino al {date}. Non si rinnoverà automaticamente.",
+        "lifetime": "A vita"
+      },
+      "state": {
+        "included": "Incluso nel tuo piano",
+        "includedSupport": "Attivato dal tuo account manager.",
+        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
+        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
+        "active": "Attivo",
+        "ownedCount": "Posseduto ×{count} · riacquistando se ne aggiungono altri"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "una tantum",
+        "per": {
+          "days": "{count, plural, one {/ giorno} other {/ {count} giorni}}",
+          "weeks": "{count, plural, one {/ settimana} other {/ {count} settimane}}",
+          "months": "{count, plural, one {/ mese} other {/ {count} mesi}}",
+          "years": "{count, plural, one {/ anno} other {/ {count} anni}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Si rinnova a ogni periodo. Pagato automaticamente con carta; con bonifico bancario o pagamento offline paghi di nuovo alla fine del periodo.",
+        "oneTime": "Acquisto una tantum. Non si rinnova."
+      },
+      "buy": "Acquista add-on",
+      "buyAgain": "Riacquista",
+      "cannotBuyHint": "Chiedi al proprietario del tuo account. Solo chi può acquistare per questo spazio di lavoro può avviare un acquisto.",
+      "bullets": {
+        "unlimited": "{name} illimitati",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Ti servono crediti messaggi? Ricarica invece il tuo portafoglio; i crediti non sono un componente aggiuntivo.",
+      "walletLink": "Ricarica il portafoglio"
     }
   }
 }

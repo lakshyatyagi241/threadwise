@@ -1,5 +1,7 @@
 import {
   createAddonRequestSchema,
+  isLegacyAddonPack,
+  moneyCents,
   type AddonPack,
   type CreateAddonPayload,
   type PlanBillingUnit,
@@ -17,6 +19,11 @@ export interface PackDraft {
   billingDuration: string;
   billingMode: 'one_time' | 'recurring';
   isLifetime: boolean;
+  /**
+   * A pack sold before add-ons became subscriptions only (one-time, lifetime, or on a period that is not one month / one year). It keeps
+   * selling as it is and its billing fields are read-only; a new pack, or a monthly / yearly recurring one, is edited with the period picker.
+   */
+  legacy: boolean;
   isActive: boolean;
   sortOrder: string;
   features: string[];
@@ -33,8 +40,9 @@ export const newPackDraft = (): PackDraft => ({
   currency: 'USD',
   billingUnit: 'months',
   billingDuration: '1',
-  billingMode: 'one_time',
+  billingMode: 'recurring',
   isLifetime: false,
+  legacy: false,
   isActive: true,
   sortOrder: '0',
   features: [],
@@ -52,6 +60,7 @@ export const packToDraft = (p: AddonPack): PackDraft => ({
   billingDuration: String(p.billingDuration),
   billingMode: p.billingMode,
   isLifetime: p.isLifetime,
+  legacy: isLegacyAddonPack(p),
   isActive: p.isActive,
   sortOrder: String(p.sortOrder),
   features: [...p.grants.features],
@@ -61,6 +70,7 @@ export const packToDraft = (p: AddonPack): PackDraft => ({
 export type PackField =
   | 'name'
   | 'amount'
+  | 'amountPositive'
   | 'offerAmount'
   | 'currency'
   | 'billingDuration'
@@ -76,6 +86,7 @@ export type BuildResult =
 const FIELDS: readonly PackField[] = [
   'name',
   'amount',
+  'amountPositive',
   'offerAmount',
   'currency',
   'billingDuration',
@@ -97,6 +108,13 @@ export function buildPackRequest(d: PackDraft): BuildResult {
     }
     limits[k] = Number(v);
   }
+  // New add-ons are subscriptions (owner decision 2026-10-22): monthly or yearly, recurring, never lifetime, so a price is required.
+  // A legacy pack is saved exactly as it is.
+  const legacy = d.legacy;
+  const unit = legacy ? d.billingUnit : d.billingUnit === 'years' ? 'years' : 'months';
+  if (!legacy && /^\d+(\.\d+)?$/.test(d.amount.trim()) && moneyCents(d.amount.trim()) === 0) {
+    bad.amountPositive = true;
+  }
   const parsed = createAddonRequestSchema.safeParse({
     name: d.name,
     subtitle: d.subtitle,
@@ -104,10 +122,14 @@ export function buildPackRequest(d: PackDraft): BuildResult {
     amount: d.amount,
     offerAmount: d.offerAmount,
     currency: d.currency,
-    billingUnit: d.billingUnit,
-    billingDuration: /^\d+$/.test(d.billingDuration) ? Number(d.billingDuration) : Number.NaN,
-    billingMode: d.isLifetime ? 'one_time' : d.billingMode,
-    isLifetime: d.isLifetime,
+    billingUnit: unit,
+    billingDuration: legacy
+      ? /^\d+$/.test(d.billingDuration)
+        ? Number(d.billingDuration)
+        : Number.NaN
+      : 1,
+    billingMode: legacy ? (d.isLifetime ? 'one_time' : d.billingMode) : 'recurring',
+    isLifetime: legacy ? d.isLifetime : false,
     isActive: d.isActive,
     sortOrder: /^\d+$/.test(d.sortOrder) ? Number(d.sortOrder) : Number.NaN,
     features: d.features,
@@ -116,6 +138,8 @@ export function buildPackRequest(d: PackDraft): BuildResult {
   if (!parsed.success) {
     for (const issue of parsed.error.issues) {
       const root = String(issue.path[0] ?? 'form') as PackField;
+      // A zero price on a subscription already has its own, clearer message.
+      if (root === 'billingMode' && bad.amountPositive) continue;
       bad[FIELDS.includes(root) ? root : 'form'] = true;
     }
     return { ok: false, problems: bad };

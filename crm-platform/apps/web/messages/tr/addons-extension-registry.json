@@ -124,7 +124,8 @@
           "billingMode": "Faturalama",
           "sortOrder": "Sıralama",
           "isActive": "Etkin",
-          "isLifetime": "Ömür boyu (tek seferlik)"
+          "isLifetime": "Ömür boyu (tek seferlik)",
+          "period": "Faturalama dönemi"
         },
         "modes": {
           "one_time": "Tek seferlik (bittikten sonra tekrar satın alınır)",
@@ -144,8 +145,18 @@
           "billingDuration": "1 veya daha büyük bir tam sayı girin.",
           "sortOrder": "Bir tam sayı girin.",
           "limits": "Limitler tam sayı olmalıdır; sınırsız için -1 girin.",
-          "form": "Vurgulanan alanları kontrol edin."
-        }
+          "form": "Vurgulanan alanları kontrol edin.",
+          "amountPositive": "Eklentiler aylık veya yıllık aboneliktir, bu yüzden fiyat sıfırdan büyük olmalıdır."
+        },
+        "legacy": {
+          "title": "Eski paket",
+          "body": "Bu paket, eklentiler abonelik olmadan önce oluşturuldu. Tıpkı eskisi gibi satılmaya devam eder (faturalaması gösterilir ancak değiştirilemez) ve onu kullanan çalışma alanları etkilenmez. Adını, fiyatını, özelliklerini ve limitlerini yine düzenleyebilir veya satıştan kaldırabilirsiniz. Yeni paketler aylık veya yıllık aboneliktir."
+        },
+        "periods": {
+          "months": "Aylık abonelik",
+          "years": "Yıllık abonelik"
+        },
+        "periodHint": "Eklentiler aboneliktir. Çevrimiçi ödeme ağ geçidindeki çalışma alanları otomatik yenilenir; banka havalesi veya çevrimdışı ödemede dönem bitince yeniden öderler."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Eklentiler",
       "description": "Aboneliğinize ek olarak satın aldığınız özellik paketleri.",
-      "needPlanTitle": "Eklentiler için etkin bir plan gerekir",
-      "needPlanBody": "Eklentiler, aboneliğinize ek olarak satın aldığınız özellik paketleridir. Önce bir plan seçin, ardından özellik eklemek için buraya dönün.",
-      "viewPlans": "Planları gör",
-      "noneTitle": "Kullanılabilir eklenti yok",
-      "noneBody": "Şu anda sunulan eklenti yok. Daha sonra tekrar kontrol edin.",
-      "ownedTitle": "Eklentileriniz",
-      "ownedBody": "Mevcut planınıza eklenen etkin paketler.",
-      "ends": "Bitiş: {date}",
-      "lifetime": "Ömür boyu",
-      "autoRenews": "Otomatik yenilenir",
       "renewal": {
         "cancel": "Yenilemeyi iptal et",
         "confirmTitle": "Yenileme iptal edilsin mi?",
@@ -277,37 +278,63 @@
         "forbidden": "Planı değiştirme izniniz yok.",
         "none": "İptal edilecek etkin bir abonelik yok.",
         "failed": "Yenilemeyi iptal edemedik. Lütfen tekrar deneyin."
-      },
-      "active": "Etkin",
-      "included": "Planınıza dahil",
-      "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
-      "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
-      "cardEyebrow": "Eklenti",
-      "catalogTitle": "Eklentiler",
-      "catalogBody": "Mevcut planınızın üzerine ek özelliklerin kilidini açın. Plan değişikliği gerekmez.",
-      "count": "{count, plural, one {# eklenti} other {# eklenti}}",
-      "free": "Ücretsiz",
-      "lifetimePrice": "tek seferlik",
-      "per": "/ {unit}",
-      "units": {
-        "days": "gün",
-        "weeks": "hafta",
-        "months": "ay",
-        "years": "yıl"
-      },
-      "buy": "Plana ekle",
-      "buyAgain": "Tekrar satın al",
-      "owned": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Sınırsız {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "Eklentiler yüklenemedi."
+      }
     },
     "planFields": {
       "fromModule": "yüklü bir modülden",
       "unlimited": "Sınırsız"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Eklentiler için etkin bir ücretli plan gerekir",
+        "free_plan": "Ücretsiz plandasınız. Eklentiler, ücretli planın üzerine satın aldığınız ek özelliklerdir.",
+        "plan_expired": "Ücretli planınız sona erdi, bu yüzden eklentiler duraklatıldı. Eklenti satın almak veya yenilemek için planınızı yenileyin.",
+        "no_plan": "Çalışma alanınızın henüz bir planı yok. Eklentileri kullanmak için ücretli bir plan seçin.",
+        "cta": "Planları gör"
+      },
+      "unavailableCard": "Etkin bir ücretli plan gerekir",
+      "empty": {
+        "title": "Satışta eklenti yok",
+        "body": "Şu anda sunulan eklenti yok. Daha sonra tekrar bakın."
+      },
+      "listLabel": "Satıştaki eklentiler",
+      "owned": {
+        "title": "Sahip olduğunuz eklentiler",
+        "renews": "{date} tarihinde yenilenir",
+        "ends": "{date} tarihine kadar etkin. Otomatik olarak yenilenmeyecek.",
+        "lifetime": "Ömür boyu"
+      },
+      "state": {
+        "included": "Planınıza dahil",
+        "includedSupport": "Hesap yöneticiniz tarafından etkinleştirildi.",
+        "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
+        "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
+        "active": "Etkin",
+        "ownedCount": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler"
+      },
+      "price": {
+        "free": "Ücretsiz",
+        "oneTime": "tek seferlik",
+        "per": {
+          "days": "{count, plural, other {/ {count} gün}}",
+          "weeks": "{count, plural, other {/ {count} hafta}}",
+          "months": "{count, plural, other {/ {count} ay}}",
+          "years": "{count, plural, other {/ {count} yıl}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Her dönem yenilenir. Kartla ödemede otomatik ödenir; banka havalesi veya çevrimdışı ödemede dönem bitince yeniden ödersiniz.",
+        "oneTime": "Tek seferlik satın alma. Yenilenmez."
+      },
+      "buy": "Eklenti satın al",
+      "buyAgain": "Tekrar satın al",
+      "cannotBuyHint": "Hesap sahibinize danışın. Yalnızca bu çalışma alanı için satın alma yetkisi olanlar satın alma başlatabilir.",
+      "bullets": {
+        "unlimited": "Sınırsız {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Mesaj kredisi mi lazım? Bunun yerine cüzdanınıza yükleme yapın; krediler eklenti değildir.",
+      "walletLink": "Cüzdana yükle"
     }
   }
 }

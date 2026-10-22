@@ -124,7 +124,8 @@
           "billingMode": "Billing",
           "sortOrder": "Sort order",
           "isActive": "Active",
-          "isLifetime": "Lifetime (one-time)"
+          "isLifetime": "Lifetime (one-time)",
+          "period": "Billing period"
         },
         "modes": {
           "one_time": "One-time (buy again after it ends)",
@@ -144,8 +145,18 @@
           "billingDuration": "Enter a whole number of 1 or more.",
           "sortOrder": "Enter a whole number.",
           "limits": "Limits are whole numbers, or -1 for unlimited.",
-          "form": "Check the highlighted fields."
-        }
+          "form": "Check the highlighted fields.",
+          "amountPositive": "Add-ons are monthly or yearly subscriptions, so the price must be above zero."
+        },
+        "legacy": {
+          "title": "Legacy pack",
+          "body": "This pack was created before add-ons became subscriptions. It keeps selling exactly as before (its billing is shown but cannot be changed), and workspaces that own it are not affected. You can still edit its name, price, features and limits, or put it off sale. New packs are monthly or yearly subscriptions."
+        },
+        "periods": {
+          "months": "Monthly subscription",
+          "years": "Yearly subscription"
+        },
+        "periodHint": "Add-ons are subscriptions. Workspaces on an online gateway are renewed automatically; with bank transfer or offline payment they pay again when the term ends."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Add-ons",
       "description": "Extra feature packs you buy on top of your subscription.",
-      "needPlanTitle": "Add-ons need an active plan",
-      "needPlanBody": "Add-ons are extra feature packs you buy on top of your subscription. Choose a plan first, then come back here to add features.",
-      "viewPlans": "View plans",
-      "noneTitle": "No add-ons available",
-      "noneBody": "There are no add-ons offered right now. Check back later.",
-      "ownedTitle": "Your add-ons",
-      "ownedBody": "Active packs merged onto your current plan.",
-      "ends": "Ends {date}",
-      "lifetime": "Lifetime",
-      "autoRenews": "Auto-renews",
       "renewal": {
         "cancel": "Cancel renewal",
         "confirmTitle": "Cancel renewal?",
@@ -277,37 +278,63 @@
         "forbidden": "You don't have permission to change the plan.",
         "none": "There is no active subscription to cancel.",
         "failed": "We couldn't cancel the renewal. Please try again."
-      },
-      "active": "Active",
-      "included": "Included in your plan",
-      "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
-      "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-ons",
-      "catalogBody": "Unlock extra features on top of your current plan. No plan change needed.",
-      "count": "{count, plural, one {# add-on} other {# add-ons}}",
-      "free": "Free",
-      "lifetimePrice": "one-time",
-      "per": "/ {unit}",
-      "units": {
-        "days": "days",
-        "weeks": "weeks",
-        "months": "months",
-        "years": "years"
-      },
-      "buy": "Add to plan",
-      "buyAgain": "Buy again",
-      "owned": "Owned ×{count} · buying again adds more",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Unlimited {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "The add-ons could not be loaded."
+      }
     },
     "planFields": {
       "fromModule": "from an installed module",
       "unlimited": "Unlimited"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-ons need an active paid plan",
+        "free_plan": "You are on a free plan. Add-ons are extras you buy on top of a paid plan.",
+        "plan_expired": "Your paid plan has ended, so add-ons are paused. Renew your plan to buy or renew add-ons.",
+        "no_plan": "Your workspace has no plan yet. Choose a paid plan to use add-ons.",
+        "cta": "View plans"
+      },
+      "unavailableCard": "Needs an active paid plan",
+      "empty": {
+        "title": "No add-ons on sale",
+        "body": "There are no add-ons offered right now. Check back later."
+      },
+      "listLabel": "Add-ons on sale",
+      "owned": {
+        "title": "Add-ons you own",
+        "renews": "Renews on {date}",
+        "ends": "Active until {date}. It will not renew automatically.",
+        "lifetime": "Lifetime"
+      },
+      "state": {
+        "included": "Included in your plan",
+        "includedSupport": "Enabled by your account manager.",
+        "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
+        "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
+        "active": "Active",
+        "ownedCount": "Owned ×{count} · buying again adds more"
+      },
+      "price": {
+        "free": "Free",
+        "oneTime": "one-time",
+        "per": {
+          "days": "{count, plural, one {/ day} other {/ {count} days}}",
+          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
+          "months": "{count, plural, one {/ month} other {/ {count} months}}",
+          "years": "{count, plural, one {/ year} other {/ {count} years}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Renews every term. Paid automatically with card payments; with bank transfer or offline payment you pay again when the term ends.",
+        "oneTime": "One-time purchase. It does not renew."
+      },
+      "buy": "Buy add-on",
+      "buyAgain": "Buy again",
+      "cannotBuyHint": "Ask your account owner. Only people who can buy for this workspace can start a purchase.",
+      "bullets": {
+        "unlimited": "Unlimited {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Need message credits? Top up your wallet instead; credits are not an add-on.",
+      "walletLink": "Top up wallet"
     }
   }
 }
