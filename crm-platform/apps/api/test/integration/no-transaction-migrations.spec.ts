@@ -1,6 +1,14 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { Client } from 'pg';
-import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -84,7 +92,10 @@ describe('@no-transaction migrations rerun safely', () => {
   }
 
   async function tableExists(db: Client, name: string): Promise<boolean> {
-    const { rows } = await db.query<{ exists: boolean }>('SELECT to_regclass($1) IS NOT NULL AS exists', [name]);
+    const { rows } = await db.query<{ exists: boolean }>(
+      'SELECT to_regclass($1) IS NOT NULL AS exists',
+      [name],
+    );
     return rows[0]?.exists === true;
   }
 
@@ -151,7 +162,9 @@ describe('@no-transaction migrations rerun safely', () => {
     try {
       await db.query('INSERT INTO probe VALUES (1), (1)');
       // A unique build over duplicate rows fails, and CONCURRENTLY leaves idx_probe_x behind INVALID.
-      await expect(db.query('CREATE UNIQUE INDEX CONCURRENTLY idx_probe_x ON probe (x)')).rejects.toThrow();
+      await expect(
+        db.query('CREATE UNIQUE INDEX CONCURRENTLY idx_probe_x ON probe (x)'),
+      ).rejects.toThrow();
       expect(await invalidIndexes(db)).toEqual(['idx_probe_x']);
 
       await expect(runMigrations(url, { dir, ...quiet })).rejects.toThrow(
@@ -181,7 +194,9 @@ describe('@no-transaction migrations rerun safely', () => {
     const db = await connect('unrelated_invalid');
     try {
       await db.query('INSERT INTO probe VALUES (1), (1)');
-      await expect(db.query('CREATE UNIQUE INDEX CONCURRENTLY probe_other_idx ON probe (x)')).rejects.toThrow();
+      await expect(
+        db.query('CREATE UNIQUE INDEX CONCURRENTLY probe_other_idx ON probe (x)'),
+      ).rejects.toThrow();
 
       const result = await runMigrations(url, { dir, ...quiet });
 
