@@ -378,6 +378,35 @@ describe('the reminder pack dialog', () => {
     expect(document.querySelector('a[href="/account/plans"]')).not.toBeNull();
   });
 
+  // A spy keeps its own copy of a rejected promise and reports it as unhandled, so a failing call is a plain function here.
+  it('shows a failed list of sequences, with a retry, and nothing to apply', async () => {
+    const spy = api.packs;
+    api.packs = (() => Promise.reject(new ApiError(403, 'FORBIDDEN', 'x'))) as never;
+    try {
+      mount();
+      await flush();
+      expect(document.querySelector('[role="alert"]')).not.toBeNull();
+      expect(byText('Try again')).toBeTruthy();
+      expect(applyButton().disabled).toBe(true);
+    } finally {
+      api.packs = spy;
+    }
+  });
+
+  it('shows a failed preview with a retry and keeps Apply held', async () => {
+    const spy = api.previewPack;
+    api.previewPack = (() => Promise.reject(new ApiError(403, 'FORBIDDEN', 'x'))) as never;
+    try {
+      mount();
+      await flush();
+      await pick('Clinic and doctor');
+      expect(document.querySelector('[role="alert"]')).not.toBeNull();
+      expect(applyButton().disabled).toBe(true);
+    } finally {
+      api.previewPack = spy;
+    }
+  });
+
   it('reloads the preview when the server says a step would be replaced', async () => {
     api.adoptPack.mockRejectedValue(new ApiError(409, ERROR_CODES.CONFLICT, 'conflict'));
     mount();
