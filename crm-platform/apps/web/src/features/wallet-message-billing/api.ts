@@ -21,6 +21,8 @@ import {
   saveRatesResultSchema,
   seedRatesResultSchema,
   setWorkspaceCurrencyResultSchema,
+  expenseListResponseSchema,
+  expenseSummaryResponseSchema,
   statementResponseSchema,
   syncMetaResultSchema,
   walletLedgerResponseSchema,
@@ -43,12 +45,16 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { fileNameFromDisposition } from './lib/download';
 import { toApiQuery, type StatementFilters } from './lib/statement-filters';
+import { toExpenseApiQuery, type ExpenseFilters } from './lib/expense-filters';
 
 export const KEYS = {
   summary: ['wallet', 'summary'] as const,
   ledger: (cursor: string | undefined) => ['wallet', 'ledger', cursor ?? 'first'] as const,
   statement: (filters: StatementFilters, cursor: string | undefined) =>
     ['wallet', 'statement', filters, cursor ?? 'first'] as const,
+  expenses: (filters: ExpenseFilters, cursor: string | undefined) =>
+    ['wallet', 'expenses', filters, cursor ?? 'first'] as const,
+  expenseSummary: (filters: ExpenseFilters) => ['wallet', 'expenses', 'summary', filters] as const,
   pricing: (country: string | undefined) => ['wallet', 'pricing', country ?? 'any'] as const,
   overview: ['wallet', 'platform', 'overview'] as const,
   settings: ['wallet', 'platform', 'settings'] as const,
@@ -86,6 +92,25 @@ export const customerApi = {
     apiFetch('/wallet/statement', {
       query: { ...toApiQuery(filters), limit, cursor },
       schema: statementResponseSchema,
+      signal,
+    }),
+  /** The message expense log, one row per billable message. */
+  expenses: (
+    filters: ExpenseFilters,
+    cursor: string | undefined,
+    limit: number,
+    signal?: AbortSignal,
+  ) =>
+    apiFetch('/wallet/expenses', {
+      query: { ...toExpenseApiQuery(filters), limit, cursor },
+      schema: expenseListResponseSchema,
+      signal,
+    }),
+  /** Message expenses grouped by the chosen dimension, with totals over the whole filtered set. */
+  expenseSummary: (filters: ExpenseFilters, signal?: AbortSignal) =>
+    apiFetch('/wallet/expenses/summary', {
+      query: { ...toExpenseApiQuery(filters), groupBy: filters.groupBy },
+      schema: expenseSummaryResponseSchema,
       signal,
     }),
   pricing: (country: string | undefined, signal?: AbortSignal) =>

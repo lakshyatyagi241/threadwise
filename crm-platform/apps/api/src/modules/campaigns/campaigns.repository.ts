@@ -974,9 +974,15 @@ export class CampaignsRepository {
     orgId: number,
     campaignId: number,
     contactId: number,
-  ): Promise<{ provider: string | null; category: string | null; phone: string | null } | null> {
+  ): Promise<{
+    provider: string | null;
+    category: string | null;
+    phone: string | null;
+    templateName: string | null;
+    campaignName: string | null;
+  } | null> {
     const res = await tx.execute(sql`
-      SELECT w.provider, coalesce(t.meta_category, t.category) AS category, c.phone, c.country_code
+      SELECT w.provider, w.campaign_name, t.template_name, coalesce(t.meta_category, t.category) AS category, c.phone, c.country_code
       FROM wpcampaigns w
       JOIN wp_campaign_contacts r ON r.org_id = w.org_id AND r.campaign_id = w.id AND r.contact_id = ${contactId}
       JOIN contacts c ON c.org_id = w.org_id AND c.id = r.contact_id
@@ -986,6 +992,8 @@ export class CampaignsRepository {
     const r = res.rows[0] as
       | {
           provider: string | null;
+          campaign_name: string | null;
+          template_name: string | null;
           category: string | null;
           phone: string | null;
           country_code: string | null;
@@ -996,6 +1004,8 @@ export class CampaignsRepository {
       provider: r.provider,
       category: r.category,
       phone: assemblePhone(r.phone, r.country_code) || null,
+      templateName: r.template_name,
+      campaignName: r.campaign_name,
     };
   }
 

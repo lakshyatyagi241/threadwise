@@ -2,6 +2,7 @@
 export interface ScheduledRow {
   id: number | string;
   uuid: string;
+  schedule_name: string;
   status: string;
   schedule_type: string;
   scheduled_time: Date | string;

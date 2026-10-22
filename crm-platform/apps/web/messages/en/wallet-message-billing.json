@@ -99,7 +99,8 @@
         "fullStatement": "Open the full statement",
         "emptyTitle": "No activity yet",
         "emptyBody": "Top-ups, message charges and refunds appear here."
-      }
+      },
+      "messageExpenses": "Message expenses"
     },
     "activity": {
       "description": "Description",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "Message expenses",
+      "subtitle": "What each message cost, the template it went out with and what came back. The totals cover everything that matches the filters.",
+      "back": "Back to wallet",
+      "breadcrumbLabel": "Breadcrumb",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Message expenses",
+      "fullStatement": "Full statement",
+      "summary": {
+        "messages": "Messages",
+        "charged": "Charged",
+        "refunded": "Refunded",
+        "net": "Net cost",
+        "notBilled": "Not billed"
+      },
+      "filters": {
+        "status": "Status",
+        "statusAll": "All",
+        "statusCharged": "Charged",
+        "statusFree": "Not billed",
+        "statusRefunded": "Refunded",
+        "template": "Template",
+        "templatePlaceholder": "Template name",
+        "channel": "Channel",
+        "category": "Category",
+        "allChannels": "All channels",
+        "allCategories": "All categories",
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "reset": "Reset",
+        "rangeInverted": "The end date is before the start date."
+      },
+      "breakdown": {
+        "title": "Cost by",
+        "groupBy": {
+          "template": "Template",
+          "source": "Channel",
+          "category": "Category",
+          "country": "Country"
+        },
+        "group": "Group",
+        "notRecorded": "Not recorded",
+        "truncated": "Showing the {count} largest groups. Narrow the dates to see the rest.",
+        "empty": "No messages match these filters."
+      },
+      "columns": {
+        "date": "Date",
+        "template": "Template",
+        "campaign": "Campaign or broadcast",
+        "channel": "Channel",
+        "category": "Category",
+        "country": "Country",
+        "status": "Status",
+        "charged": "Charged",
+        "refunded": "Refunded",
+        "net": "Net",
+        "messages": "Messages",
+        "notBilled": "Not billed"
+      },
+      "status": {
+        "charged": "Charged",
+        "free": "Not billed",
+        "refunded": "Refunded",
+        "refundedOn": "Returned {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Included in your plan",
+        "wallet_empty": "Wallet was empty",
+        "rate_is_zero": "Rate is zero",
+        "no_wallet_owner": "No wallet owner"
+      },
+      "uncollected": "{amount} not collected",
+      "emptyTitle": "No messages yet",
+      "emptyBody": "Messages sent from campaigns, broadcasts, schedules and chats appear here with their template and cost.",
+      "emptyFiltered": "Nothing matches these filters. Change or reset them."
     },
     "admin": {
       "admin": "Admin",

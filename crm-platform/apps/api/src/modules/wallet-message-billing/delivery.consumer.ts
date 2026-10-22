@@ -63,6 +63,8 @@ export class DeliveryBillingConsumer implements OutboxSubscriber, OnModuleInit {
           recipient: d.recipient ?? null,
           category: d.category ?? null,
           source: d.source ?? null,
+          templateName: d.templateName ?? null,
+          subjectName: d.subjectName ?? null,
         });
         if (out.status === 'charged')
           await this.realtime.balanceChanged(event.orgId, out.balanceAfterMinor, 'charge');
