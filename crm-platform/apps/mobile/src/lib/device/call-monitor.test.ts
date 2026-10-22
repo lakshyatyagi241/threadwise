@@ -47,7 +47,7 @@ describe('startCallMonitor', () => {
         name: 'Aarav Sharma',
         phone: '+919800000001',
         subtitle: 'Contact',
-        appName: 'GetaDesk',
+        appName: 'Geta',
         returnUrl: 'crm-dev://call-summary?contactId=c1&name=Aarav+Sharma',
         primaryColor: expect.stringMatching(/^#[0-9A-F]{6}$/i),
       }),

@@ -3,7 +3,7 @@ import { useTheme } from '@/lib/theme/use-theme';
 import logo from '@/assets/images/logo.png';
 
 /**
- * The GetaDesk logo on a white tile, so it reads on the deep-blue band of the sign-in screens. Decorative: the product name is
+ * The Geta logo on a white tile, so it reads on the deep-blue band of the sign-in screens. Decorative: the product name is
  * written next to it, so screen readers skip it.
  */
 export function BrandMark({ size = 56 }: { size?: number }) {

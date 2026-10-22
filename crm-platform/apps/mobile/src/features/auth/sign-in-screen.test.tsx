@@ -223,7 +223,7 @@ describe('SignInScreen', () => {
 describe('SignInScreen: what comes from the platform settings', () => {
   it('shows the name of the app, the sign-up link and the terms line while registration is open', async () => {
     await renderScreen();
-    expect(await screen.findByText('GetaDesk')).toBeTruthy();
+    expect(await screen.findByText('Geta')).toBeTruthy();
     expect(screen.getByText('New here?')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Terms' })).toBeTruthy();
     // The privacy address is a path and no web address is configured, so it stays plain text.
@@ -241,7 +241,7 @@ describe('SignInScreen: what comes from the platform settings', () => {
       .mocked(api.fetchRegistrationConfig)
       .mockResolvedValue({ ...config, registrationOpen: false });
     await renderScreen();
-    expect(await screen.findByText('GetaDesk')).toBeTruthy();
+    expect(await screen.findByText('Geta')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Create an account' })).toBeNull();
     expect(screen.queryByText('New here?')).toBeNull();
   });

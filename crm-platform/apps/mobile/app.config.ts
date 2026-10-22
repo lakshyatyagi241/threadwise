@@ -24,7 +24,7 @@ function variantOf(raw: string | undefined): Variant {
 // PLACEHOLDER until the owner picks the store identity. A bundle id cannot change after the first store upload.
 const BASE_BUNDLE_ID = process.env.APP_BUNDLE_ID ?? 'ai.geta.crm';
 // The name under the icon. The same name is written in src/config/brand.ts for the screens inside the app.
-const APP_NAME = process.env.APP_NAME ?? 'GetaDesk';
+const APP_NAME = process.env.APP_NAME ?? 'Geta';
 
 /** Source-map upload at build time; needs the Sentry org and project. Without them the app still reports errors, minified. */
 function sentryPlugin(): NonNullable<ExpoConfig['plugins']> {
@@ -53,7 +53,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     ...config,
     name: `${APP_NAME}${v.nameSuffix}`,
     slug: 'crm-mobile',
-    version: '0.1.0',
+    version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: v.scheme,
@@ -113,9 +113,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         'expo-image-picker',
         {
           cameraPermission:
-            'GetaDesk uses the camera so you can take a photo to share in a conversation or attach to a contact.',
+            'Geta uses the camera so you can take a photo to share in a conversation or attach to a contact.',
           photosPermission:
-            'GetaDesk reads a photo you choose so you can share it in a conversation or attach it to a contact.',
+            'Geta reads a photo you choose so you can share it in a conversation or attach it to a contact.',
           microphonePermission: false,
         },
       ],

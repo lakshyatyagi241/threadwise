@@ -124,7 +124,7 @@ describe('SignUpScreen: before the form', () => {
   it('shows the form with the name of the app and the live password rules once the settings are known', async () => {
     await renderScreen();
     expect(await screen.findByText('Create your account')).toBeTruthy();
-    expect(screen.getByText('GetaDesk')).toBeTruthy();
+    expect(screen.getByText('Geta')).toBeTruthy();
     expect(await screen.findByText('Minimum length: 12.')).toBeTruthy();
     expect(screen.getByText('Mix upper and lower case letters.')).toBeTruthy();
     expect(screen.getByText('Include a number.')).toBeTruthy();

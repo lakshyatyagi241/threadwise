@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react-native';
 import { BrandMark } from './brand-mark';
 
 describe('BrandMark', () => {
-  it('shows the GetaDesk logo, sized to the tile it sits on', async () => {
+  it('shows the Geta logo, sized to the tile it sits on', async () => {
     await render(<BrandMark size={100} />);
     const logo = screen.getByTestId('brand-logo', { includeHiddenElements: true });
     expect(logo.props.source).toBeTruthy();
