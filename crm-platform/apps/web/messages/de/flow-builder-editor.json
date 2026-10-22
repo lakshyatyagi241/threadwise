@@ -2353,6 +2353,8 @@
         "number": "Zahl",
         "alphanumeric": "Buchstaben und Zahlen",
         "date": "Datum",
+        "datetime": "Datum und Uhrzeit",
+        "time": "Uhrzeit",
         "age": "Alter",
         "date_of_birth": "Geburtsdatum"
       },
@@ -2364,6 +2366,8 @@
         "number": "Bitte geben Sie eine gültige Zahl ein",
         "alphanumeric": "Bitte verwenden Sie nur Buchstaben und Zahlen",
         "date": "Bitte geben Sie ein gültiges Datum ein ({format})",
+        "datetime": "Bitte gib ein gültiges Datum und eine gültige Uhrzeit ein ({format} HH:MM)",
+        "time": "Bitte gib eine gültige Uhrzeit ein (HH:MM)",
         "age": "Bitte geben Sie Ihr Alter als ganze Zahl ein",
         "date_of_birth": "Bitte geben Sie ein gültiges Datum ein ({format})"
       },

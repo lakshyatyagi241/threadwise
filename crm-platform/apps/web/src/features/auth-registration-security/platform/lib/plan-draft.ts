@@ -1,5 +1,6 @@
 import {
   NEW_PLAN_FEATURES_OFF,
+  PACK_GRANTABLE_FEATURES,
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
   PLAN_UNLIMITED_FROM,
@@ -416,6 +417,73 @@ export function toggleFeatures(
   const next = { ...features };
   for (const k of keys) next[k] = on;
   return next;
+}
+
+// --- plain add-on packs included in the plan (Add-ons tab, "Included add-ons") ---------------------------------------------------
+//
+// "Included in this plan" is not a stored list: it is DERIVED from `draft.features`. A pack is included when every feature key it grants
+// is on in the plan, which is the exact rule the workspace's add-on card and checkout use (`isIncludedInPlan`). So the switch, the Features
+// tab and the saved plan can never disagree: both tabs write the same keys.
+
+/** The part of an add-on pack (`AddonPack` from the API) these helpers read. */
+export interface PackGrants {
+  grants: { features: readonly string[]; limits: Readonly<Record<string, number>> };
+}
+
+export type PackCoverageState =
+  /** The pack grants no feature (limits only): there is nothing to include. */
+  'noFeatures' | 'none' | 'partial' | 'full';
+
+export interface PackCoverage {
+  state: PackCoverageState;
+  /** How many of the pack's feature keys are on in the plan. */
+  on: number;
+  total: number;
+  /** The pack's feature keys the plan does not have on. */
+  missing: string[];
+}
+
+/** How much of a pack the plan's features already cover. Pure; reads only `features`. */
+export function packCoverage(pack: PackGrants, features: PlanDraft['features']): PackCoverage {
+  const keys = [...new Set(pack.grants.features)];
+  const missing = keys.filter((k) => features[k] !== true);
+  const on = keys.length - missing.length;
+  const state: PackCoverageState =
+    keys.length === 0 ? 'noFeatures' : on === keys.length ? 'full' : on === 0 ? 'none' : 'partial';
+  return { state, on, total: keys.length, missing };
+}
+
+/**
+ * Include the pack in the plan (every feature key on) or take it out (every feature key explicitly OFF, not deleted: a plan row that
+ * does not store a key falls back to the catalogue default, and the editor always stores every key, so "off" is written as false).
+ * Switching on and then off therefore does not restore what a key was before; it ends at false. Limits are never touched (a pack's cap
+ * deltas such as Teams +N are not part of plan inclusion; the cap is set on the Limits tab), nor are the Marketplace selection or any
+ * feature the pack does not grant. A pack with no feature keys changes nothing.
+ */
+export function setPackIncluded(draft: PlanDraft, pack: PackGrants, on: boolean): PlanDraft {
+  if (pack.grants.features.length === 0) return draft;
+  return { ...draft, features: toggleFeatures(draft.features, pack.grants.features, on) };
+}
+
+/** How many of the packs the plan fully includes (a partly covered pack is not counted). */
+export function includedPackCount(
+  packs: readonly PackGrants[],
+  features: PlanDraft['features'],
+): number {
+  return packs.filter((p) => packCoverage(p, features).state === 'full').length;
+}
+
+/** Feature keys a pack grants that the shared entitlement resolver does not merge from a live pack (they still work on a plan). */
+export function unlistedPackFeatures(pack: PackGrants): string[] {
+  return pack.grants.features.filter((k) => !PACK_GRANTABLE_FEATURES.includes(k));
+}
+
+/** The Add-ons tab's total: Marketplace apps offered plus plain add-ons fully included. */
+export function addonsSelectedCount(
+  draft: Pick<PlanDraft, 'features' | 'visibleAddons'>,
+  packs: readonly PackGrants[],
+): number {
+  return draft.visibleAddons.length + includedPackCount(packs, draft.features);
 }
 
 /** One add-on ticked or unticked. */

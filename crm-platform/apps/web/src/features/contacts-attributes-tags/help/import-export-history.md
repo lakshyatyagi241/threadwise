@@ -5,7 +5,7 @@ summary: Every contact import and export of the workspace: who did it, when, how
 area: settings
 order: 26
 documents: [tile:import-export]
-keywords: [import, export, history, csv, upload, download, rejected rows, audit]
+keywords: [import, export, history, csv, upload, download, rejected rows, audit, custom properties, custom fields]
 ---
 
 ## What it is for
@@ -52,3 +52,15 @@ When you tick **I have consent to message these contacts**, two optional boxes a
 ## Date of birth and minor columns
 
 Map a column to **Date of birth** to save it on the contact. Write it as year first, for example 2010-05-04. A row whose date of birth is not a real, believable date is rejected and listed with the reason; a blank cell is simply no date. A contact whose date of birth shows they are under your workspace's age is flagged as a minor with the source "date of birth". Map a column to **Minor (yes / no)** to flag the rows that say yes, with the file as proof. A no, a blank cell or an unknown word changes nothing, and a file never clears a minor flag.
+
+## Custom property columns
+
+A column whose header is the name of one of your [contact properties](help:contact-properties), or its key, fills that property. The export writes the header as `attr:` followed by the key, for example `attr:loyalty_points`, and that header is read the same way. The preview lists every property the import can fill, with the column it reads. Choose another column for it, or pick **Not in file** to leave it alone.
+
+- A dropdown or multi-select must hold one of its options. Capitals do not matter, and a list is separated by commas, semicolons or pipes.
+- A number must be a number. A date must be written year first, for example 2026-03-31. A checkbox takes yes or no.
+- A value that does not fit its property rejects that row, with the reason "custom property value does not fit its type or options". The row is not imported.
+- A blank cell does not clear what the contact already has. A file never removes a value, and a contact keeps every property the file does not name.
+- Hidden, read only, inactive and calculated properties are not listed, because an import cannot fill them.
+
+> An import does not check required properties yet. A contact created from a file can be saved without a value for a property marked required, so fill those in on the contact afterwards.

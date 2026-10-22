@@ -809,6 +809,7 @@
         "onlyStatus": "صرف {status} پیغامات",
         "requestedAt": "درخواست کی تاریخ {date}",
         "lines": "{count, plural, one {# لائن} other {# لائنیں}}",
+        "noLines": "اس مدت میں کوئی واقعہ نہیں",
         "until": "{date} تک دستیاب",
         "download": "ڈاؤن لوڈ",
         "status": {

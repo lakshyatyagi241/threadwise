@@ -171,6 +171,12 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
       />
 
       {!canEdit && <Alert tone="info">{tc('readOnly')}</Alert>}
+      {pack && draft.legacy && (
+        <Alert tone="info" className="rounded-2xl px-4 py-3" data-testid="legacy-pack-notice">
+          <div className="mb-1 font-semibold">{t('legacy.title')}</div>
+          <p>{t('legacy.body')}</p>
+        </Alert>
+      )}
       {(errorKey || problemList.length > 0) && (
         <Alert tone="danger" className="rounded-2xl px-4 py-3">
           <div className="mb-1 font-semibold">{t('fixTitle')}</div>
@@ -268,54 +274,83 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
                     ))}
                   </Select>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                {draft.legacy ? (
+                  <>
+                    {/* A legacy pack keeps selling as it is: its billing is shown, not editable. */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="addon-duration" className={LABEL}>
+                          {t('fields.billingDuration')}
+                        </label>
+                        <Input
+                          id="addon-duration"
+                          className={cn(inputCls, 'font-mono')}
+                          value={draft.billingDuration}
+                          readOnly
+                          disabled
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="addon-unit" className={LABEL}>
+                          {t('fields.billingUnit')}
+                        </label>
+                        <Select
+                          id="addon-unit"
+                          className="h-auto py-2.5 text-[13px]"
+                          value={draft.billingUnit}
+                          disabled
+                        >
+                          {UNITS.map((u) => (
+                            <option key={u} value={u}>
+                              {t(`units.${u}`)}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="addon-mode" className={LABEL}>
+                        {t('fields.billingMode')}
+                      </label>
+                      <Select
+                        id="addon-mode"
+                        className="h-auto py-2.5 text-[13px]"
+                        value={draft.isLifetime ? 'one_time' : draft.billingMode}
+                        disabled
+                      >
+                        <option value="one_time">{t('modes.one_time')}</option>
+                        <option value="recurring">{t('modes.recurring')}</option>
+                      </Select>
+                    </div>
+                  </>
+                ) : (
                   <div>
-                    <label htmlFor="addon-duration" className={LABEL}>
-                      {t('fields.billingDuration')}
-                    </label>
-                    <Input
-                      id="addon-duration"
-                      className={cn(inputCls, 'font-mono')}
-                      inputMode="numeric"
-                      required
-                      invalid={!!problems.billingDuration}
-                      value={draft.billingDuration}
-                      onChange={(e) => set('billingDuration', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="addon-unit" className={LABEL}>
-                      {t('fields.billingUnit')}
+                    <label htmlFor="addon-period" className={LABEL}>
+                      {t('fields.period')}
                     </label>
                     <Select
-                      id="addon-unit"
+                      id="addon-period"
                       className="h-auto py-2.5 text-[13px]"
-                      value={draft.billingUnit}
-                      onChange={(e) => set('billingUnit', e.target.value as PlanBillingUnit)}
+                      value={draft.billingUnit === 'years' ? 'years' : 'months'}
+                      onChange={(e) =>
+                        setDraft((d) => ({
+                          ...d,
+                          billingUnit: e.target.value === 'years' ? 'years' : 'months',
+                          billingDuration: '1',
+                          billingMode: 'recurring',
+                          isLifetime: false,
+                        }))
+                      }
+                      aria-describedby="addon-period-hint"
                     >
-                      {UNITS.map((u) => (
-                        <option key={u} value={u}>
-                          {t(`units.${u}`)}
-                        </option>
-                      ))}
+                      <option value="months">{t('periods.months')}</option>
+                      <option value="years">{t('periods.years')}</option>
                     </Select>
+                    <p id="addon-period-hint" className="mt-1 text-[11px] text-muted-foreground">
+                      {t('periodHint')}
+                    </p>
                   </div>
-                </div>
-                <div>
-                  <label htmlFor="addon-mode" className={LABEL}>
-                    {t('fields.billingMode')}
-                  </label>
-                  <Select
-                    id="addon-mode"
-                    className="h-auto py-2.5 text-[13px]"
-                    value={draft.billingMode}
-                    onChange={(e) => set('billingMode', e.target.value as 'one_time' | 'recurring')}
-                    disabled={draft.isLifetime}
-                  >
-                    <option value="one_time">{t('modes.one_time')}</option>
-                    <option value="recurring">{t('modes.recurring')}</option>
-                  </Select>
-                </div>
+                )}
                 <div>
                   <label htmlFor="addon-sort" className={LABEL}>
                     {t('fields.sortOrder')}
@@ -337,13 +372,16 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
                     onChange={(e) => set('isActive', e.target.checked)}
                     className="items-center text-[12.5px]"
                   />
-                  <Checkbox
-                    id="addon-lifetime"
-                    label={t('fields.isLifetime')}
-                    checked={draft.isLifetime}
-                    onChange={(e) => set('isLifetime', e.target.checked)}
-                    className="items-center text-[12.5px]"
-                  />
+                  {draft.legacy && draft.isLifetime && (
+                    <Checkbox
+                      id="addon-lifetime"
+                      label={t('fields.isLifetime')}
+                      checked
+                      disabled
+                      onChange={() => undefined}
+                      className="items-center text-[12.5px]"
+                    />
+                  )}
                 </div>
               </div>
             </Section>

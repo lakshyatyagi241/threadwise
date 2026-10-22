@@ -14,6 +14,7 @@ const GATES = [
   { href: '/ai-crm', feature: 'ai_crm_copilot' },
   { href: '/analytics', feature: 'analytics' },
   { href: '/auto-assignment/new', feature: 'inbox_routing' },
+  { href: '/marketplace', feature: 'marketplace' },
 ];
 
 function render(
@@ -76,5 +77,43 @@ describe('the paywall of a feature that is also sold as an app', () => {
   it('shows nothing when the workspace has the feature, or while the plan is unknown', () => {
     expect(render('/ai-crm', ['ai_crm_copilot'], true)).toBe('');
     expect(render('/ai-crm', null, true)).toBe('');
+  });
+});
+
+describe('the paywall of a plan without the Marketplace', () => {
+  it('covers every tab, and on Add-ons points to Plans and add-ons, where the same list stays available', () => {
+    for (const path of [
+      '/marketplace/apps',
+      '/marketplace/integrations',
+      '/marketplace/addons',
+      '/marketplace/developer',
+    ]) {
+      expect(render(path, [], false)).toContain('data-testid="plan-paywall"');
+    }
+    const addons = render('/marketplace/addons', [], false);
+    expect(addons).toContain('data-testid="paywall-addons-tab"');
+    expect(addons).toContain('Open Plans and add-ons');
+    expect(addons).toContain('href="/account/plans"');
+  });
+
+  it('says that only on the Add-ons tab', () => {
+    for (const path of [
+      '/marketplace/apps',
+      '/marketplace/integrations',
+      '/marketplace/developer',
+    ]) {
+      expect(render(path, [], false)).not.toContain('paywall-addons-tab');
+    }
+  });
+
+  it('shows nothing on any tab when the plan has the Marketplace', () => {
+    expect(render('/marketplace/addons', ['marketplace'], false)).toBe('');
+    expect(render('/marketplace/developer', ['marketplace'], false)).toBe('');
+  });
+
+  it('says it in Arabic too', () => {
+    const html = render('/marketplace/addons', [], false, 'ar');
+    expect(html).toContain('paywall-addons-tab');
+    expect(html).not.toContain('Open Plans and add-ons');
   });
 });

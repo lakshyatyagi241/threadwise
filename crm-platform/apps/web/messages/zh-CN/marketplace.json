@@ -11,7 +11,8 @@
       "installed": "已安装 · 应用市场",
       "manage": "管理应用 · 应用市场",
       "requests": "请求 · 应用市场",
-      "addons": "附加功能 · 应用市场"
+      "addons": "附加功能 · 应用市场",
+      "developer": "开发者 · 应用市场"
     },
     "common": {
       "dismiss": "关闭",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "迷你应用",
         "integration": "集成",
-        "addon": "附加功能"
+        "addon": "附加功能",
+        "developer": "开发者"
       },
       "installed": "已安装",
       "installedLimit": "已安装（{installed}/{limit}）",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "打开",
       "empty": {
-        "title": "没有可用的附加功能",
-        "message": "您的角色和套餐包含的附加功能将显示在这里。"
+        "title": "没有可用的开发者工具",
+        "message": "你的角色和套餐包含的开发者工具会显示在这里。"
       },
       "soon": "即将推出",
       "upgrade": "升级"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "付款已取消",
         "message": "未产生任何扣款。准备好后可随时重新订阅。"
+      }
+    },
+    "addonsTab": {
+      "intro": "在套餐之外另行购买的附加功能包。套餐已包含的会有标记，不再收费。",
+      "developerHint": "在找 REST API、Webhook 或其他开发者工具？",
+      "developerLink": "打开“开发者”标签页"
+    },
+    "developerTab": {
+      "intro": "面向开发者和技术管理员的工具：API 密钥、Webhook、发布和翻译。你只会看到角色和套餐允许使用的工具。"
+    },
+    "connector": {
+      "builtIn": "内置",
+      "status": {
+        "connected": "已连接",
+        "notConnected": "未连接",
+        "upgrade": "升级",
+        "soon": "即将推出"
+      },
+      "cta": {
+        "open": "打开",
+        "manage": "管理",
+        "connect": "连接"
       }
     }
   }

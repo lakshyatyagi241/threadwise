@@ -118,8 +118,12 @@ export function Toolbar({
       <button
         type="button"
         onClick={onPublish}
-        disabled={busy}
-        className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-[11.5px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60"
+        disabled={busy || isPublished}
+        className={
+          isPublished
+            ? 'inline-flex cursor-not-allowed items-center gap-1.5 rounded-full bg-muted px-3.5 py-1.5 text-[11.5px] font-semibold text-muted-foreground'
+            : 'inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-[11.5px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60'
+        }
       >
         <Icon d="M2 8l5 5 7-9" className="h-3 w-3" />
         {t('publish')}

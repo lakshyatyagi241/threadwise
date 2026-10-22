@@ -14,7 +14,7 @@ When you press **Publish** in the flow builder, the flow is published here first
 
 ## How to use it
 
-1. Open **Marketplace**, select the **Add-ons** tab and open **Geta publishing**.
+1. Open **Marketplace**, select the **Developer** tab and open **Geta publishing**.
 2. Enter the **Base URL** of your Geta connection, for example `https://api-core-sandbox.geta.ai`.
 3. Optionally enter the **Console origin**, for example `https://app-sandbox.geta.ai`. Leave it empty if Geta did not give you one.
 4. Enter the **Authorization token** and the **geta-host token** exactly as Geta gave them. The authorization token is sent as it is, so include `Bearer ` yourself if Geta expects it.

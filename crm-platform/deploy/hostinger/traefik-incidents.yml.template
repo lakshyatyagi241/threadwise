@@ -1,0 +1,24 @@
+# Public route for the team incident API of the chat bridge (tools/chat-bridge/incidents-api.mjs) on the Prometheus host, path /incidents only.
+# Two locks: Traefik basicAuth (user `incidents`, apr1 hash from secrets/incidents_basic_password) AND the app-level X-Incident-Token header.
+# priority 100 beats the Prometheus router (whose priority is its rule length), so /incidents never reaches Prometheus; everything else on
+# the host (/api/v1 ...) still goes to Prometheus with ITS own basicAuth. Rendered by observability-up.sh; the hash never leaves the host.
+http:
+  routers:
+    incidents:
+      rule: Host(`__PROMETHEUS_DOMAIN__`) && PathPrefix(`/incidents`)
+      priority: 100
+      entryPoints: [websecure]
+      service: incidents
+      middlewares: [incidents-auth]
+      tls:
+        certResolver: letsencrypt
+  middlewares:
+    incidents-auth:
+      basicAuth:
+        users:
+          - __INCIDENTS_USERS__
+  services:
+    incidents:
+      loadBalancer:
+        servers:
+          - url: http://desk-gchat-bridge:9095

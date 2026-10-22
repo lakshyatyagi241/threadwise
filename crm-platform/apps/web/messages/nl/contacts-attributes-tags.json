@@ -297,7 +297,8 @@
       "teamLabel": "Team",
       "teamFilter": "Filteren op team",
       "allTeams": "Alle teams",
-      "teamFormer": "Voormalig team"
+      "teamFormer": "Voormalig team",
+      "unhideColumn": "Kolom tonen"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -623,7 +624,8 @@
         "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn",
         "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
         "invalid_timezone": "ongeldige tijdzone",
-        "legal_hold": "beschermd record, niet gewijzigd"
+        "legal_hold": "beschermd record, niet gewijzigd",
+        "invalid_property_value": "de waarde van de aangepaste eigenschap past niet bij het type of de opties ervan"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -641,7 +643,9 @@
       "groupNew": "Een nieuwe groep",
       "groupPick": "Kies een groep",
       "groupNewPlaceholder": "Naam van nieuwe groep",
-      "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt."
+      "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt.",
+      "customProperties": "Aangepaste eigenschappen",
+      "customPropertiesHint": "Een kolom waarvan de kop de naam van de eigenschap is (of attr:key, zoals de export die schrijft), vult die eigenschap. Een lege cel behoudt de waarde die het contact al heeft."
     },
     "detail": {
       "back": "Alle contacten",
@@ -1430,6 +1434,7 @@
       "template": "WhatsApp-sjabloon",
       "templatePlaceholder": "Selecteer een sjabloon",
       "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
+      "openInInbox": "Chat openen in de inbox",
       "notSendable": "Dit sjabloon kan hier niet worden ingevuld ({reason}).",
       "variables": "Sjabloonvariabelen",
       "preview": "Voorbeeld",

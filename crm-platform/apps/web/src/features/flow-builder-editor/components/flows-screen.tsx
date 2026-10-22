@@ -133,6 +133,7 @@ export function FlowsScreen() {
 
   const actions: CardActions = {
     can: { update: canUpdate, create: canCreate, remove: canDelete },
+    builderMode,
     onToggle: async (f) => {
       try {
         const r = await flowsApi.toggle(f.id);
@@ -150,7 +151,7 @@ export function FlowsScreen() {
       try {
         const copy = await flowsApi.duplicate(f.id);
         flash(tt('duplicated'));
-        router.push(openHref(copy.id, copy.flowType));
+        router.push(openHref(copy.id, copy.flowType, builderMode));
       } catch (e) {
         duplicating.current.delete(f.id);
         fail(e);
@@ -221,7 +222,7 @@ export function FlowsScreen() {
           : {},
       );
       flash(tt('imported'));
-      router.push(openHref(created.id, created.flowType));
+      router.push(openHref(created.id, created.flowType, builderMode));
     } catch (e) {
       setImportError(e instanceof ApiError ? e.message : t('importFailed'));
     } finally {

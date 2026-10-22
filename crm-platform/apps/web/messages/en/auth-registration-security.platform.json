@@ -1404,7 +1404,8 @@
             "packInactive": "The add-on pack is switched off, so nobody can buy it.",
             "appUnpublished": "The app is not published, so workspaces cannot see it yet.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# add-on selected} other {# add-ons selected}}"
           },
           "featureHints": {
             "automation": "The flow builder and automations that reply to and act on conversations.",
@@ -1705,6 +1706,33 @@
             "chat": "Chat",
             "crm": "Sales CRM",
             "platform": "Shared by both"
+          },
+          "marketplace": {
+            "title": "Marketplace apps offered to workspaces on this plan"
+          },
+          "included": {
+            "title": "Add-ons included in this plan",
+            "intro": "Switch an add-on on to include it: workspaces on this plan get it at no charge and its add-on card says \"Included in your plan\". This ticks exactly the add-on's features on the Features tab, and ticking them there flips the switch. Add-ons that are not included are still sold at their own price to every workspace on an active paid plan.",
+            "readOnly": "You can view this plan but not change it, so these switches are locked.",
+            "loading": "Loading add-ons",
+            "loadFailed": "The add-ons could not be loaded. Nothing was changed.",
+            "empty": "No add-ons exist yet",
+            "emptyHint": "Add-ons such as Smart routing and Teams and permissions are created under Add-ons in the operator console.",
+            "stateFull": "Included",
+            "statePartial": "Partly included",
+            "stateNone": "Not included",
+            "noPrice": "No price set",
+            "gives": "Gives: {features}",
+            "switchLabel": "Include {name} in this plan",
+            "noFeatures": "This add-on only adds limits, so there is no feature to include. Its limits are not part of plan inclusion; set the plan's own limits on the Limits tab.",
+            "partial": "Partly included: {count} of {total} features are on in this plan. Still off: {missing}.",
+            "includeFully": "Include fully",
+            "limitsNote": "This add-on also adds extra limits ({limits}). The extra limit is not part of plan inclusion and nothing here changes it: set the plan's own limit on the Limits tab. Workspaces still buy the add-on for the extra limit.",
+            "unlistedNote": "Some of its features ({features}) are outside the standard add-on list. They can still be switched on for the plan; only buying this add-on as a pack works differently.",
+            "inactiveNote": "This add-on is a draft or switched off, so nobody can buy it yet. Including it in the plan still works.",
+            "impactCount": "{count, plural, one {# workspace already pays for this add-on.} other {# workspaces already pay for this add-on.}} Their renewal will stop at the end of the current term, nothing is refunded and nothing is cancelled today.",
+            "impactUnknown": "Workspaces on this plan that already pay for this add-on will stop renewing it at the end of their current term. Nothing is refunded and nothing is cancelled today. The number could not be loaded.",
+            "offNote": "Switched off: workspaces on this plan lose these features unless they buy the add-on, and it becomes buyable for them at its price."
           }
         }
       },

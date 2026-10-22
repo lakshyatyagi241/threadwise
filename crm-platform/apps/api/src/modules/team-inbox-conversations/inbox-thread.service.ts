@@ -220,6 +220,11 @@ export class InboxThreadService {
         content,
         replyToMessageId:
           input.kind === 'reaction' ? input.targetMessageId : input.replyToMessageId,
+        // Only the kinds that take `origin` (text, media, template) can come from a contact's drawer.
+        origin:
+          input.kind === 'text' || input.kind === 'media' || input.kind === 'template'
+            ? input.origin
+            : undefined,
       });
       return (await this.withTemplatePreviews([message]))[0]!;
     } catch (err) {

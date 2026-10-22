@@ -71,6 +71,12 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
   const tf = useTranslations('plans-subscriptions-trials.features');
   const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  // The Marketplace's Add-ons tab sits behind the Marketplace feature, but the add-ons list does not (it is also on the Plans page):
+  // say so there, so a plan without the Marketplace is not left thinking add-ons are out of reach.
+  const onAddonsTab =
+    feature === 'marketplace' &&
+    (pathname === '/marketplace/addons' || pathname.startsWith('/marketplace/addons/'));
   const q = useQuery({
     queryKey: ['billing', 'plans', 'unlocks', feature],
     queryFn: ({ signal }) => fetchBillingPlans(signal, feature),
@@ -148,6 +154,14 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
               </div>
             ))}
           </div>
+        )}
+        {onAddonsTab && (
+          <p className="text-sm text-muted-foreground" data-testid="paywall-addons-tab">
+            {t('addonsTabHint')}{' '}
+            <Link href={PLANS_PATH} className="font-medium text-primary hover:underline">
+              {t('addonsTabLink')}
+            </Link>
+          </p>
         )}
         {addon && (
           <p className="text-sm text-muted-foreground" data-testid="paywall-addon">

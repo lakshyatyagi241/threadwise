@@ -1102,6 +1102,11 @@ export function ContactsTable({
                           key !== null && onSortTo ? (order) => onSortTo(key, order) : undefined
                         }
                         onHide={() => columnTools.onHide(c.id)}
+                        unhide={{
+                          groups: columnTools.addable,
+                          onAdd: columnTools.onAdd,
+                          onAddField: columnTools.onAddField,
+                        }}
                         onFilter={
                           columnTools.hasFilter(c.id) ? () => columnTools.onFilter(c.id) : undefined
                         }

@@ -135,6 +135,16 @@
         "name-asc": "Naam A→Z",
         "name-desc": "Naam Z→A"
       },
+      "dateRange": "Datumbereik",
+      "range": {
+        "all": "Alle tijd",
+        "7d": "7 dagen",
+        "30d": "30 dagen",
+        "90d": "90 dagen",
+        "custom": "Aangepast bereik",
+        "from": "Vanaf datum",
+        "to": "Tot datum"
+      },
       "showing": "Weergave van",
       "of": "van",
       "filteredTemplates": "gefilterde sjablonen",

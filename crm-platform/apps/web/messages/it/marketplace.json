@@ -11,7 +11,8 @@
       "installed": "Installata · Marketplace",
       "manage": "Gestisci app · Marketplace",
       "requests": "Richieste · Marketplace",
-      "addons": "Componenti aggiuntivi · Marketplace"
+      "addons": "Componenti aggiuntivi · Marketplace",
+      "developer": "Sviluppatori · Marketplace"
     },
     "common": {
       "dismiss": "Ignora",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini app",
         "integration": "Integrazioni",
-        "addon": "Componenti aggiuntivi"
+        "addon": "Componenti aggiuntivi",
+        "developer": "Sviluppatori"
       },
       "installed": "Installate",
       "installedLimit": "Installate ({installed} di {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Apri",
       "empty": {
-        "title": "Nessun componente aggiuntivo disponibile",
-        "message": "I componenti inclusi nel tuo ruolo e nel tuo piano appariranno qui."
+        "title": "Nessuno strumento per sviluppatori disponibile",
+        "message": "Gli strumenti per sviluppatori inclusi nel tuo ruolo e nel tuo piano appariranno qui."
       },
       "soon": "In arrivo",
       "upgrade": "Passa a un piano superiore"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Pagamento annullato",
         "message": "Non è stato addebitato nulla. Abbonati di nuovo quando vuoi."
+      }
+    },
+    "addonsTab": {
+      "intro": "Pacchetti di funzioni extra che acquisti oltre al tuo piano. Ciò che il piano include già è segnalato e non si paga.",
+      "developerHint": "Cerchi l’API REST, i webhook o altri strumenti per sviluppatori?",
+      "developerLink": "Apri la scheda Sviluppatori"
+    },
+    "developerTab": {
+      "intro": "Strumenti per sviluppatori e amministratori tecnici: chiavi API, webhook, pubblicazione e traduzione. Vedi solo quelli consentiti dal tuo ruolo e dal tuo piano."
+    },
+    "connector": {
+      "builtIn": "Integrato",
+      "status": {
+        "connected": "Connesso",
+        "notConnected": "Non connesso",
+        "upgrade": "Passa a un piano superiore",
+        "soon": "In arrivo"
+      },
+      "cta": {
+        "open": "Apri",
+        "manage": "Gestisci",
+        "connect": "Connetti"
       }
     }
   }

@@ -135,6 +135,16 @@
         "name-asc": "Name A→Z",
         "name-desc": "Name Z→A"
       },
+      "dateRange": "Zeitraum",
+      "range": {
+        "all": "Gesamte Zeit",
+        "7d": "7 Tage",
+        "30d": "30 Tage",
+        "90d": "90 Tage",
+        "custom": "Benutzerdefinierter Zeitraum",
+        "from": "Von-Datum",
+        "to": "Bis-Datum"
+      },
       "showing": "Angezeigt werden",
       "of": "von",
       "filteredTemplates": "gefilterte Vorlagen",

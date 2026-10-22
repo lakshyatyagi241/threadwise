@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "ইনবক্স",
+      "contact": "পরিচিতি",
       "flow": "ফ্লো",
       "auto_reply": "স্বয়ংক্রিয় উত্তর",
+      "automation": "অটোমেশন",
       "ai": "এআই সহকারী",
       "api": "API",
       "broadcast": "ব্রডকাস্ট",
+      "broadcast_test": "ব্রডকাস্ট টেস্ট সেন্ড",
       "campaign": "ক্যাম্পেইন",
       "scheduled": "নির্ধারিত",
       "other": "অন্যান্য"
@@ -171,6 +174,7 @@
         "contact": "কন্টাক্ট",
         "message": "বার্তা",
         "type": "ধরন",
+        "source": "উৎস",
         "status": "অবস্থা",
         "open": "খুলুন"
       },
@@ -228,11 +232,13 @@
       "source": "প্রেরক",
       "sourceValue": {
         "inbox": "ইনবক্স",
+        "contact": "পরিচিতি",
         "flow": "ফ্লো",
         "auto_reply": "স্বয়ংক্রিয় উত্তর",
         "ai": "এআই সহকারী",
         "api": "API",
         "broadcast": "ব্রডকাস্ট",
+        "broadcast_test": "ব্রডকাস্ট টেস্ট সেন্ড",
         "campaign": "ক্যাম্পেইন",
         "scheduled": "নির্ধারিত বার্তা",
         "other": "অন্যান্য"

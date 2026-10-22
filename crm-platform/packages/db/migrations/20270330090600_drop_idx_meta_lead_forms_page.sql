@@ -1,0 +1,12 @@
+-- @no-transaction
+-- Why this migration exists: idx_meta_lead_forms_page on meta_lead_forms(org_id, page_id) is a strict left prefix of uq_meta_lead_forms_form, so every lookup it could serve is
+-- already served by that index. It only costs: one extra btree write on every insert, update of those columns and delete, plus its disk
+-- and shared_buffers.
+--
+-- Evidence (catalog, 2026-10-22): pg_index shows the same leading columns, opclasses and sort options, no WHERE predicate on either,
+-- idx_meta_lead_forms_page is neither unique nor constraint-backed, and has no INCLUDE columns. The foreign key it indexed stays covered by the leading columns of
+-- uq_meta_lead_forms_form. Nothing in apps/ or packages/ names this index (no hint, no ON CONFLICT ON CONSTRAINT).
+--
+-- Reversible: CREATE INDEX CONCURRENTLY idx_meta_lead_forms_page ON meta_lead_forms (org_id, page_id);
+-- CONCURRENTLY so the live table is not locked; this file holds exactly one statement, so it runs outside a transaction.
+DROP INDEX CONCURRENTLY IF EXISTS idx_meta_lead_forms_page;

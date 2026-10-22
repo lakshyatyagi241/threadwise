@@ -2352,6 +2352,8 @@
         "number": "Number",
         "alphanumeric": "Letters and numbers",
         "date": "Date",
+        "datetime": "Date and time",
+        "time": "Time",
         "age": "Age",
         "date_of_birth": "Date of birth"
       },
@@ -2363,6 +2365,8 @@
         "number": "Please enter a valid number",
         "alphanumeric": "Please use letters and numbers only",
         "date": "Please enter a valid date ({format})",
+        "datetime": "Please enter a valid date and time ({format} HH:MM)",
+        "time": "Please enter a valid time (HH:MM)",
         "age": "Please enter your age as a whole number",
         "date_of_birth": "Please enter a valid date ({format})"
       },

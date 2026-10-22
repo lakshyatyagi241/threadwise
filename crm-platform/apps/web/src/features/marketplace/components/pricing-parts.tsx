@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { MarketCardPricing } from '@crm/contracts';
+import { ownershipFromAccess, type MarketCardPricing } from '@crm/contracts';
 import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
 import { acquireFor, priceChip, priceLine, pricingView } from '../lib/pricing';
 import { ErrorLine, Section } from './ui';
@@ -26,6 +26,7 @@ export function PriceText({
     <span
       data-testid="price-line"
       data-access={pricing.access}
+      data-ownership={ownershipFromAccess(pricing.access)}
       data-availability={pricing.availability}
       className={cn('inline-flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1', className)}
     >

@@ -12,8 +12,15 @@ import { mktRoutes } from './routes';
 /** Browse: the two tabs, the filters kept in the address (`?category=&q=&installed=true&sort=`) and the category list of a tab. */
 
 export type BrowseSort = (typeof MARKET_APP_SORTS)[number];
-export const DEFAULT_SORT: BrowseSort = 'featured';
-export const SORT_OPTIONS = MARKET_APP_SORTS;
+/**
+ * One default for Mini apps and Integrations: most installed first (the API breaks ties by id; connectors, which have no install
+ * count, follow the listings A-Z, see `mergeGrid`). The options are what the API supports, in one order on both tabs.
+ */
+export const DEFAULT_SORT: BrowseSort = 'popular';
+export const SORT_OPTIONS: readonly BrowseSort[] = [
+  'popular',
+  ...MARKET_APP_SORTS.filter((s) => s !== 'popular'),
+];
 export const PAGE_SIZE = 24;
 /**
  * The browse screens retry a failed read once, quickly, so a person sees "Could not load this / Try again" in about a second
@@ -33,6 +40,23 @@ export interface BrowseTab {
 export const BROWSE_TABS: readonly BrowseTab[] = [
   { kind: 'mini_app', segment: 'apps', href: mktRoutes.apps },
   { kind: 'integration', segment: 'integrations', href: mktRoutes.integrations },
+];
+
+/**
+ * The four header tabs, in order: two lists of Marketplace listings (Mini apps, Integrations), the workspace's add-on packs and the
+ * developer tools. Installed and Requests are not tabs; they sit in the header's "more" links. `labelKey` is under
+ * `marketplace.header.tabs`.
+ */
+export type MarketTabSection = 'apps' | 'integrations' | 'addons' | 'developer';
+export const MARKET_TABS: ReadonlyArray<{
+  section: MarketTabSection;
+  href: string;
+  labelKey: 'mini_app' | 'integration' | 'addon' | 'developer';
+}> = [
+  { section: 'apps', href: mktRoutes.apps, labelKey: 'mini_app' },
+  { section: 'integrations', href: mktRoutes.integrations, labelKey: 'integration' },
+  { section: 'addons', href: mktRoutes.addons, labelKey: 'addon' },
+  { section: 'developer', href: mktRoutes.developer, labelKey: 'developer' },
 ];
 
 /** The kinds the tabs stand for, from the contract: a third kind there would fail this at build time. */
@@ -134,6 +158,8 @@ export function categoryItems(
   kind: MarketAppKind,
   categories: readonly Pick<MarketCategory, 'slug' | 'name' | 'appCount' | 'sortOrder'>[],
   filters: BrowseFilters,
+  /** Extra rows per category slug that are not API listings (the built-in connectors of the Integrations tab). */
+  extra: Readonly<Record<string, number>> = {},
 ): CategoryItem[] {
   const ordered = [...categories].sort(
     (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name),
@@ -148,14 +174,14 @@ export function categoryItems(
     {
       slug: null,
       name: null,
-      count: ordered.reduce((n, c) => n + c.appCount, 0),
+      count: ordered.reduce((n, c) => n + c.appCount + (extra[c.slug] ?? 0), 0),
       selected: filters.category === null,
       href: browseHref(kind, rest),
     },
     ...ordered.map((c) => ({
       slug: c.slug,
       name: c.name,
-      count: c.appCount,
+      count: c.appCount + (extra[c.slug] ?? 0),
       selected: filters.category === c.slug,
       href: browseHref(kind, { ...rest, category: c.slug }),
     })),

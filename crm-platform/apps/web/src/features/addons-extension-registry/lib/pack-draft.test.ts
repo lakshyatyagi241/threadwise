@@ -40,6 +40,84 @@ describe('buildPackRequest', () => {
     expect(ok.ok && ok.body.limits).toEqual({ users: -1 });
   });
 
+  it('a new pack is a recurring monthly subscription: period picker only, never one-time or lifetime', () => {
+    const d = newPackDraft();
+    expect(d.billingMode).toBe('recurring');
+    expect(d.legacy).toBe(false);
+    const r = buildPackRequest({
+      ...draft({
+        billingUnit: 'weeks',
+        billingDuration: '7',
+        isLifetime: true,
+        billingMode: 'one_time',
+      }),
+    });
+    expect(r.ok && r.body).toMatchObject({
+      billingMode: 'recurring',
+      isLifetime: false,
+      billingUnit: 'months',
+      billingDuration: 1,
+    });
+    const yearly = buildPackRequest(draft({ billingUnit: 'years' }));
+    expect(yearly.ok && yearly.body).toMatchObject({ billingUnit: 'years', billingDuration: 1 });
+  });
+
+  it('a new pack needs a price above zero (a free add-on cannot renew)', () => {
+    expect(buildPackRequest(draft({ amount: '0' }))).toEqual({
+      ok: false,
+      problems: { amountPositive: true },
+    });
+  });
+
+  it('a legacy pack keeps its own billing exactly as it is (one-time, lifetime, odd period)', () => {
+    const stored = {
+      id: '00000000-0000-4000-8000-000000000002',
+      slug: 'old',
+      name: 'Old pack',
+      subtitle: null,
+      detail: null,
+      amount: '50.00',
+      offerAmount: null,
+      currency: 'USD',
+      billingUnit: 'days' as const,
+      billingDuration: 90,
+      billingMode: 'one_time' as const,
+      isFree: false,
+      isLifetime: false,
+      isActive: true,
+      sortOrder: 0,
+      grants: { features: ['analytics'], limits: {} },
+      activePurchases: 3,
+      rowVersion: 4,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const d = packToDraft(stored);
+    expect(d.legacy).toBe(true);
+    const r = buildPackRequest(d);
+    expect(r.ok && r.body).toMatchObject({
+      billingMode: 'one_time',
+      billingUnit: 'days',
+      billingDuration: 90,
+    });
+    const life = buildPackRequest(
+      packToDraft({ ...stored, isLifetime: true, billingUnit: 'months', billingDuration: 1 }),
+    );
+    expect(life.ok && life.body).toMatchObject({ billingMode: 'one_time', isLifetime: true });
+    const free = buildPackRequest(packToDraft({ ...stored, amount: '0.00' }));
+    expect(free.ok).toBe(true);
+    // an inactive draft nobody holds can be converted to a subscription
+    expect(packToDraft({ ...stored, isActive: false, activePurchases: 0 }).legacy).toBe(false);
+    expect(packToDraft({ ...stored, isActive: false, activePurchases: 2 }).legacy).toBe(true);
+    const monthly = packToDraft({
+      ...stored,
+      billingUnit: 'months',
+      billingDuration: 1,
+      billingMode: 'recurring',
+    });
+    expect(monthly.legacy).toBe(false);
+  });
+
   it('round-trips a stored pack through the draft', () => {
     const d = packToDraft({
       id: '00000000-0000-4000-8000-000000000001',

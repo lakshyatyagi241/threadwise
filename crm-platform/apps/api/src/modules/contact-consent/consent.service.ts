@@ -210,7 +210,7 @@ export class ContactConsentService {
         }
         return;
       }
-      await this.recordInTx(tx, orgId, {
+      const out = await this.recordInTx(tx, orgId, {
         contactId: c.id,
         channel: input.channel,
         purpose: input.purpose,
@@ -223,8 +223,38 @@ export class ContactConsentService {
         idempotencyKey: key,
         announceOptIn: true,
       });
+      if (out.recorded && input.action === 'granted' && input.purpose === 'marketing') {
+        await this.markSubscribed(
+          tx,
+          orgId,
+          c.id,
+          input.channel,
+          ctx.actorType === 'user' ? ctx.userId : null,
+        );
+      }
     });
     return this.forContact(contactUuid, { limit: 50 });
+  }
+
+  /**
+   * The Subscription status card, the contacts list and the segment filters read the channel's label, not the ledger. A marketing grant
+   * recorded here sets the label to `subscribed` (the event just written is the proof), so the card agrees with the Consent card.
+   */
+  private async markSubscribed(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    channel: ConsentChannel,
+    actorUserId: number | null,
+  ): Promise<void> {
+    const changed = await this.repo.setSubscribedStatus(tx, orgId, contactId, channel, actorUserId);
+    if (!changed) return;
+    await this.audit.record(tx, {
+      module: 'contacts',
+      recordId: contactId,
+      action: 'update',
+      delta: { [`${channel}SubscriptionStatus`]: { old: changed.from, new: 'subscribed' } },
+    });
   }
 
   /** The Consent card: the state per channel, the roll-up, and the newest events. */

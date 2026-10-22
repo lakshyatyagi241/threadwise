@@ -297,7 +297,8 @@
       "teamLabel": "Ekip",
       "teamFilter": "Ekibe göre filtrele",
       "allTeams": "Tüm ekipler",
-      "teamFormer": "Eski ekip"
+      "teamFormer": "Eski ekip",
+      "unhideColumn": "Sütunu göster"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -623,7 +624,8 @@
         "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil",
         "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
         "invalid_timezone": "geçersiz saat dilimi",
-        "legal_hold": "korumalı kayıt, değiştirilmedi"
+        "legal_hold": "korumalı kayıt, değiştirilmedi",
+        "invalid_property_value": "özel özelliğin değeri, türüne ya da seçeneklerine uymuyor"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",
@@ -641,7 +643,9 @@
       "groupNew": "Yeni bir grup",
       "groupPick": "Bir grup seçin",
       "groupNewPlaceholder": "Yeni grup adı",
-      "groupRequiredHint": "İçe aktarılan her kişi bu tek gruba katılır. Yukarıda eşleştirmediğiniz sürece dosyanın kendi grup sütunu yok sayılır."
+      "groupRequiredHint": "İçe aktarılan her kişi bu tek gruba katılır. Yukarıda eşleştirmediğiniz sürece dosyanın kendi grup sütunu yok sayılır.",
+      "customProperties": "Özel özellikler",
+      "customPropertiesHint": "Başlığı özelliğin adı olan (ya da dışa aktarmanın yazdığı biçimiyle attr:key) bir sütun o özelliği doldurur. Boş bir hücre, kişinin zaten sahip olduğu değeri korur."
     },
     "detail": {
       "back": "Tüm kişiler",
@@ -1430,6 +1434,7 @@
       "template": "WhatsApp şablonu",
       "templatePlaceholder": "Şablon seçin",
       "noTemplates": "Bu numara için onaylı şablon yok.",
+      "openInInbox": "Sohbeti gelen kutusunda aç",
       "notSendable": "Bu şablon burada doldurulamaz ({reason}).",
       "variables": "Şablon değişkenleri",
       "preview": "Önizleme",

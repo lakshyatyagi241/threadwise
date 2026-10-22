@@ -4,6 +4,7 @@ import {
   ERROR_CODES,
   daysUntil,
   includedBy,
+  isMarketEntitlementKey,
   packPurchaseVerdict,
   type MarketAppPricingModel,
   type PackPurchaseVerdict,
@@ -24,6 +25,7 @@ interface Row {
   pricing_model: MarketAppPricingModel | null;
   purchasable: boolean | null;
   included_plan_feature: string | null;
+  grants_plan_features: string[] | null;
   included_min_plan: string | null;
   sub_status: string | null;
   /** The buyer already has the app (installed, subscribed, or an add-on purchase): a plan that no longer shows it must not stop a renewal. */
@@ -49,9 +51,11 @@ export async function assertMarketplacePack(
   featureEnabled: (key: string) => Promise<boolean>,
   /** Whether the buyer's plan makes the app's add-on visible (a plan enables paid apps; see marketplace/plan-visibility.ts). */
   planShowsApp: (appId: number) => Promise<boolean>,
+  /** How many of these plan features the PLAN ALONE grants (no add-on, no app): an app whose every grant is already in the plan is included. */
+  planCarries: (keys: string[]) => Promise<number> = async () => 0,
 ): Promise<boolean> {
   const res = await tx.execute(sql`
-    SELECT a.id::text AS app_id, a.status AS app_status, a.pricing_model, a.purchasable, a.included_plan_feature, a.included_min_plan,
+    SELECT a.id::text AS app_id, a.status AS app_status, a.pricing_model, a.purchasable, a.included_plan_feature, a.included_min_plan, a.grants_plan_features,
            s.status AS sub_status,
            (EXISTS (SELECT 1 FROM workspace_app_installations wi WHERE wi.org_id = ${orgId} AND wi.app_id = a.id)
             OR s.org_id IS NOT NULL
@@ -77,6 +81,9 @@ export async function assertMarketplacePack(
     r.included_min_plan !== null ||
     (await planShowsApp(Number(r.app_id)));
 
+  const grantKeys = (r.grants_plan_features ?? []).filter((k) => !isMarketEntitlementKey(k));
+  const planCarriesGrants =
+    grantKeys.length > 0 && (await planCarries(grantKeys)) === grantKeys.length;
   const featureOn = r.included_plan_feature ? await featureEnabled(r.included_plan_feature) : false;
   const verdict = packPurchaseVerdict({
     visible: r.app_id !== null && shown,
@@ -92,6 +99,7 @@ export async function assertMarketplacePack(
         orgPlanSlug: r.org_plan,
         planLapsed: false,
         catalogue: r.catalogue ?? [],
+        planCarriesGrants,
       }) !== null,
     remainingDays: r.paid_until ? daysUntil(new Date(r.paid_until), new Date()) : null,
   });

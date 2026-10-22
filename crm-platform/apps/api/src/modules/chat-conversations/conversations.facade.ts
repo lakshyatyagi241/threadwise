@@ -140,6 +140,8 @@ export interface EnqueueOutboundInput {
   replyToMessageId?: string;
   /** Who wrote it. Defaults to the caller (`agent`). */
   sender?: { kind: 'agent' | 'bot'; userId?: number | null; agentId?: number | null };
+  /** Where a person sent it from (`contact`: a contact's drawer). Stored as `meta.source` for the Source column of Message History. */
+  origin?: 'contact';
 }
 
 export interface EnqueueOutboundResult {

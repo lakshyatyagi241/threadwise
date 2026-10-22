@@ -143,6 +143,7 @@ services:
     image: desk-api:${IMAGE_TAG:-local}
     pull_policy: never
     command: ['node', '/opt/chat-bridge/index.mjs']
+    container_name: desk-gchat-bridge
     restart: unless-stopped
     mem_limit: 96m
     logging: *obs-logging
@@ -170,6 +171,7 @@ services:
       AUTO_REMEDIATE_MAX_PER_HOUR: ${AUTO_REMEDIATE_MAX_PER_HOUR:-3}
       STMT_RECURRING_POLLS: ${STMT_RECURRING_POLLS:-3}
       INCIDENTS_DIR: /data/incidents
+      INCIDENT_CLAIM_TTL_HOURS: ${INCIDENT_CLAIM_TTL_HOURS:-4}
     # The image runs as the non-root user `app`, so a fresh named volume would be root-owned and unwritable: a small tmpfs instead
     # (incident files then reset when the container restarts; /incidents and the Chat threads keep the history that matters).
     tmpfs:
@@ -181,7 +183,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, slow_query_pg_url]
+    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, slow_query_pg_url, incident_api_token]
+    networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-gchat-bridge:9095, only for /incidents (traefik-incidents.yml.template)
 
   grafana:
     image: grafana/grafana-oss:11.3.0
@@ -216,6 +219,8 @@ secrets:
     file: ./secrets/gchat_deploy_url
   slow_query_pg_url:
     file: ./secrets/slow_query_pg_url
+  incident_api_token:
+    file: ./secrets/incident_api_token
   grafana_admin_password:
     file: ./secrets/grafana_admin_password
   obs_metrics_token:

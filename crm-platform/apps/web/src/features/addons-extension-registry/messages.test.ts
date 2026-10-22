@@ -37,6 +37,7 @@ describe('add-ons messages', () => {
       ...[
         'name',
         'amount',
+        'amountPositive',
         'offerAmount',
         'currency',
         'billingDuration',
@@ -45,7 +46,7 @@ describe('add-ons messages', () => {
         'form',
       ].map((f) => `addons-extension-registry.packs.editor.problems.${f}`),
       ...['days', 'weeks', 'months', 'years'].map(
-        (u) => `addons-extension-registry.workspace.units.${u}`,
+        (u) => `addons-extension-registry.list.price.per.${u}`,
       ),
       ...['instagram', 'email'].flatMap((e) =>
         [
@@ -64,7 +65,14 @@ describe('add-ons messages', () => {
 
   it('uses only keys that exist in the components', () => {
     const dir = join(__dirname, 'components');
-    const src = ['packs-page', 'pack-form-page', 'extensions-page', 'workspace-addons-page', 'ui']
+    const src = [
+      'packs-page',
+      'pack-form-page',
+      'extensions-page',
+      'workspace-addons-page',
+      'addons-list',
+      'ui',
+    ]
       .map((f) => readFileSync(join(dir, `${f}.tsx`), 'utf8'))
       .join('\n');
     const namespaces = [...src.matchAll(/(?:const NS = |useTranslations\()['`]([\w.-]+)['`]/g)].map(

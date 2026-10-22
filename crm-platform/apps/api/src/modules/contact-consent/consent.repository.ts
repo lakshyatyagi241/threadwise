@@ -6,6 +6,13 @@ type Raw = Record<string, unknown>;
 const num = (v: unknown): number => Number(v);
 const iso = (v: unknown): string => (v instanceof Date ? v.toISOString() : String(v));
 
+/** The contacts column that holds each channel's subscription label (what the Subscription status card and the segment filters read). */
+const STATUS_COLUMN = new Map<string, string>([
+  ['whatsapp', 'whatsapp_subscription_status'],
+  ['sms', 'sms_subscription_status'],
+  ['email', 'email_subscription_status'],
+]);
+
 export interface EventRow {
   id: number;
   uuid: string;
@@ -149,6 +156,31 @@ export class ConsentRepository {
               WHERE org_id = ${orgId} AND id = ${contactId} AND is_unsubscribed RETURNING id`,
     );
     return res.rows.length > 0;
+  }
+
+  /**
+   * Sets a channel's subscription label to `subscribed`, unless it already reads so. Returns the label it replaced, or null when nothing
+   * changed (no label column for the channel, or already subscribed).
+   */
+  async setSubscribedStatus(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    channel: string,
+    actorUserId: number | null,
+  ): Promise<{ from: string | null } | null> {
+    const column = STATUS_COLUMN.get(channel);
+    if (!column) return null;
+    // FOR UPDATE keeps the row locked until the transaction ends, so no other label write can land between the check and the write.
+    const res = await tx.execute(
+      sql`SELECT ${sql.raw(column)} AS status FROM contacts WHERE org_id = ${orgId} AND id = ${contactId} FOR UPDATE`,
+    );
+    const from = (res.rows[0] as { status: string | null } | undefined)?.status ?? null;
+    if (from?.trim().toLowerCase() === 'subscribed') return null;
+    await tx.execute(
+      sql`UPDATE contacts SET ${sql.raw(column)} = 'subscribed', updated_by = ${actorUserId} WHERE org_id = ${orgId} AND id = ${contactId}`,
+    );
+    return { from };
   }
 
   async statesOf(tx: Tx, orgId: number, contactId: number): Promise<StateRow[]> {

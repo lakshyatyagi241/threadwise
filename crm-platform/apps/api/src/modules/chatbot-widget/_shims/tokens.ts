@@ -149,6 +149,14 @@ export interface InboxGateway {
     id: number,
     value: 'up' | 'down' | null,
   ): Promise<boolean>;
+  /** Writes the visitor's end-of-chat rating as one line on the thread; false when the thread already has one. */
+  recordRating(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    rating: number,
+    comment: string,
+  ): Promise<boolean>;
   mediaOf(
     tx: Tx,
     orgId: number,

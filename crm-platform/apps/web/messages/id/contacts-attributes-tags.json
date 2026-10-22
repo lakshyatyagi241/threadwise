@@ -297,7 +297,8 @@
       "teamLabel": "Tim",
       "teamFilter": "Filter menurut tim",
       "allTeams": "Semua tim",
-      "teamFormer": "Tim sebelumnya"
+      "teamFormer": "Tim sebelumnya",
+      "unhideColumn": "Tampilkan kolom"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -623,7 +624,8 @@
         "invalid_date_of_birth": "tanggal lahir bukan tanggal berformat tahun lebih dulu yang bisa menjadi tanggal lahir",
         "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
         "invalid_timezone": "zona waktu tidak valid",
-        "legal_hold": "catatan dilindungi, tidak diubah"
+        "legal_hold": "catatan dilindungi, tidak diubah",
+        "invalid_property_value": "nilai properti kustom tidak sesuai dengan tipe atau opsinya"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -641,7 +643,9 @@
       "groupNew": "Grup baru",
       "groupPick": "Pilih grup",
       "groupNewPlaceholder": "Nama grup baru",
-      "groupRequiredHint": "Setiap kontak yang diimpor masuk ke satu grup ini. Kolom grup dalam file diabaikan kecuali Anda memetakannya di atas."
+      "groupRequiredHint": "Setiap kontak yang diimpor masuk ke satu grup ini. Kolom grup dalam file diabaikan kecuali Anda memetakannya di atas.",
+      "customProperties": "Properti kustom",
+      "customPropertiesHint": "Kolom yang judul headernya adalah nama properti, atau attr:key seperti yang ditulis ekspor, mengisi properti tersebut. Sel kosong mempertahankan nilai yang sudah dimiliki kontak."
     },
     "detail": {
       "back": "Semua kontak",
@@ -1430,6 +1434,7 @@
       "template": "Templat WhatsApp",
       "templatePlaceholder": "Pilih templat",
       "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
+      "openInInbox": "Buka chat di kotak masuk",
       "notSendable": "Templat ini tidak dapat diisi di sini ({reason}).",
       "variables": "Variabel templat",
       "preview": "Pratinjau",

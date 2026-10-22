@@ -241,9 +241,13 @@ export class MessageLogExportRunner {
         ? `${this.webUrl}/message-history?export=${row.uuid}`
         : `${this.webUrl}/inbox/message-logs?export=${row.uuid}`;
       const range = `${row.rangeFrom} to ${row.rangeTo}`;
+      const summary =
+        rows === 0
+          ? `Your ${what} export for ${range} is ready, but it has no events in that range (the file has only its header row).`
+          : `Your ${what} export for ${range} is ready (${rows.toLocaleString('en-US')} lines).`;
       const text =
         outcome === 'ready'
-          ? `Your ${what} export for ${range} is ready (${rows.toLocaleString('en-US')} lines).\n\nDownload it here while you are signed in:\n${link}\n\nThe file is kept for ${MESSAGE_LOG_EXPORT_TTL_DAYS} days.`
+          ? `${summary}\n\nDownload it here while you are signed in:\n${link}\n\nThe file is kept for ${MESSAGE_LOG_EXPORT_TTL_DAYS} days.`
           : `Your ${what} export for ${range} could not be completed.\n\n${reason ?? ''}\n\nYou can request it again here:\n${link}`;
       await this.mail.send({
         to,

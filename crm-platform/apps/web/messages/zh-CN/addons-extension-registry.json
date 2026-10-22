@@ -124,7 +124,8 @@
           "billingMode": "计费",
           "sortOrder": "排序",
           "isActive": "启用",
-          "isLifetime": "永久（一次性）"
+          "isLifetime": "永久（一次性）",
+          "period": "计费周期"
         },
         "modes": {
           "one_time": "一次性（到期后可再次购买）",
@@ -144,8 +145,18 @@
           "billingDuration": "请输入 1 或更大的整数。",
           "sortOrder": "请输入整数。",
           "limits": "限额须为整数，或 -1 表示不限。",
-          "form": "请检查高亮的字段。"
-        }
+          "form": "请检查高亮的字段。",
+          "amountPositive": "附加组件为按月或按年订阅，因此价格必须大于零。"
+        },
+        "legacy": {
+          "title": "旧版套餐包",
+          "body": "此套餐包创建于附加组件成为订阅之前。它仍按原样销售（其计费方式会显示但无法更改），已拥有它的工作区不受影响。您仍可编辑其名称、价格、功能和限额，或将其下架。新的套餐包为按月或按年订阅。"
+        },
+        "periods": {
+          "months": "按月订阅",
+          "years": "按年订阅"
+        },
+        "periodHint": "附加组件是订阅。使用在线支付网关的工作区会自动续订；使用银行转账或线下支付时，周期结束后需要再次付款。"
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "附加包",
       "description": "在订阅之外购买的额外功能包。",
-      "needPlanTitle": "附加包需要有效套餐",
-      "needPlanBody": "附加包是在订阅之外购买的额外功能包。请先选择套餐，再回到这里添加功能。",
-      "viewPlans": "查看套餐",
-      "noneTitle": "暂无可用附加包",
-      "noneBody": "目前没有提供附加包，请稍后再来。",
-      "ownedTitle": "你的附加包",
-      "ownedBody": "已合并到当前套餐的有效功能包。",
-      "ends": "{date} 结束",
-      "lifetime": "永久",
-      "autoRenews": "自动续订",
       "renewal": {
         "cancel": "取消续订",
         "confirmTitle": "取消续订？",
@@ -277,37 +278,63 @@
         "forbidden": "你无权更改套餐。",
         "none": "没有可取消的有效订阅。",
         "failed": "无法取消续订，请重试。"
-      },
-      "active": "已启用",
-      "included": "已包含在你的套餐中",
-      "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
-      "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
-      "cardEyebrow": "附加包",
-      "catalogTitle": "附加包",
-      "catalogBody": "在当前套餐基础上解锁额外功能，无需更换套餐。",
-      "count": "{count, plural, other {# 个附加包}}",
-      "free": "免费",
-      "lifetimePrice": "一次性",
-      "per": "/ {unit}",
-      "units": {
-        "days": "天",
-        "weeks": "周",
-        "months": "个月",
-        "years": "年"
-      },
-      "buy": "添加到套餐",
-      "buyAgain": "再次购买",
-      "owned": "已拥有 ×{count} · 再次购买可叠加",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "不限 {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "无法加载附加包。"
+      }
     },
     "planFields": {
       "fromModule": "来自已安装的模块",
       "unlimited": "无限制"
+    },
+    "list": {
+      "unavailable": {
+        "title": "附加组件需要有效的付费套餐",
+        "free_plan": "您当前使用的是免费套餐。附加组件是在付费套餐之上另行购买的扩展。",
+        "plan_expired": "您的付费套餐已到期，附加组件已暂停。请续订套餐以购买或续订附加组件。",
+        "no_plan": "您的工作区还没有套餐。请选择付费套餐以使用附加组件。",
+        "cta": "查看套餐"
+      },
+      "unavailableCard": "需要有效的付费套餐",
+      "empty": {
+        "title": "暂无在售的附加组件",
+        "body": "目前没有提供的附加组件。请稍后再来查看。"
+      },
+      "listLabel": "在售的附加组件",
+      "owned": {
+        "title": "您拥有的附加组件",
+        "renews": "将于 {date} 续订",
+        "ends": "有效期至 {date}。不会自动续订。",
+        "lifetime": "永久"
+      },
+      "state": {
+        "included": "已包含在你的套餐中",
+        "includedSupport": "由您的客户经理开通。",
+        "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
+        "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
+        "active": "已启用",
+        "ownedCount": "已拥有 ×{count} · 再次购买可叠加"
+      },
+      "price": {
+        "free": "免费",
+        "oneTime": "一次性",
+        "per": {
+          "days": "{count, plural, other {/ {count} 天}}",
+          "weeks": "{count, plural, other {/ {count} 周}}",
+          "months": "{count, plural, other {/ {count} 个月}}",
+          "years": "{count, plural, other {/ {count} 年}}"
+        }
+      },
+      "renewal": {
+        "recurring": "每个周期续订。使用银行卡支付时自动扣款；使用银行转账或线下支付时，周期结束后需要再次付款。",
+        "oneTime": "一次性购买，不会续订。"
+      },
+      "buy": "购买附加包",
+      "buyAgain": "再次购买",
+      "cannotBuyHint": "请联系您的账户所有者。只有有权为此工作区购买的人才能发起购买。",
+      "bullets": {
+        "unlimited": "不限 {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "需要消息额度？请改为给钱包充值；额度不是附加组件。",
+      "walletLink": "钱包充值"
     }
   }
 }

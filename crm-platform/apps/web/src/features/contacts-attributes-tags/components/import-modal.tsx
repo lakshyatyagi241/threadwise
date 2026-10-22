@@ -119,6 +119,8 @@ function ImportBody({
   // With a required group the file's own group column starts ignored (null): the chosen group is the only one that applies.
   const baseMapping: Mapping = requireGroup ? { group: null } : {};
   const [mapping, setMapping] = useState<Mapping>(baseMapping);
+  // Custom property key -> column. Empty: the server matches columns to properties by their label or key.
+  const [propertyMapping, setPropertyMapping] = useState<Record<string, number | null>>({});
   const [fileError, setFileError] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [status, setStatus] = useState('');
@@ -140,8 +142,13 @@ function ImportBody({
   );
 
   const hasMapping = Object.keys(mapping).length > 0;
-  const options: ImportOptions = {
+  const hasPropertyMapping = Object.keys(propertyMapping).length > 0;
+  const columnOptions: ImportOptions = {
     ...(hasMapping ? { mapping } : {}),
+    ...(hasPropertyMapping ? { propertyMapping } : {}),
+  };
+  const options: ImportOptions = {
+    ...columnOptions,
     ...(status ? { status } : {}),
     ...(source.trim() ? { source: source.trim() } : {}),
     ...(groupId ? { groupId } : {}),
@@ -153,8 +160,16 @@ function ImportBody({
 
   // What the file would do. Only the column mapping changes the answer, so the knobs below do not re-upload it.
   const preview = useQuery({
-    queryKey: ['cat', 'import-preview', file?.name, file?.size, file?.lastModified, mapping],
-    queryFn: ({ signal }) => previewImport(file!, hasMapping ? { mapping } : {}, signal),
+    queryKey: [
+      'cat',
+      'import-preview',
+      file?.name,
+      file?.size,
+      file?.lastModified,
+      mapping,
+      propertyMapping,
+    ],
+    queryFn: ({ signal }) => previewImport(file!, columnOptions, signal),
     enabled: file !== null,
     gcTime: 0,
     staleTime: Infinity,
@@ -320,6 +335,7 @@ function ImportBody({
           preview={p}
           overQuota={overQuota}
           onMap={(field, column) => setMapping({ ...p.mapping, ...mapping, [field]: column })}
+          onMapProperty={(key, column) => setPropertyMapping({ ...propertyMapping, [key]: column })}
         />
       )}
 
@@ -507,19 +523,23 @@ function PreviewPanel({
   preview,
   overQuota,
   onMap,
+  onMapProperty,
 }: {
   preview: ContactImportPreview;
   overQuota: boolean;
   onMap: (field: ImportField, column: number | null) => void;
+  onMapProperty: (key: string, column: number | null) => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.import');
   const uid = useId();
   const [more, setMore] = useState(false);
   const fields = more ? IMPORT_FIELDS : MAIN_FIELDS;
+  const properties = preview.properties ?? [];
   const totals = preview.totals;
   const reason = (r: string) =>
     (IMPORT_REJECT_REASONS as readonly string[]).includes(r) ? t(`reasons.${r}`) : r;
-  const headers = preview.headers.slice(0, 6);
+  // The sample shows the first 12 columns, so a custom property's column near the end is not cut off.
+  const headers = preview.headers.slice(0, 12);
 
   return (
     <div className="space-y-3 rounded-md border border-border p-3">
@@ -567,6 +587,41 @@ function PreviewPanel({
       >
         {more ? t('fewerFields') : t('moreFields')}
       </button>
+
+      {properties.length > 0 && (
+        <div className="space-y-2">
+          <div className="text-xs font-medium">{t('customProperties')}</div>
+          <p className="text-xs text-muted-foreground">{t('customPropertiesHint')}</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {properties.map((prop, i) => (
+              <div key={prop.key} className="flex items-center justify-between gap-2 text-sm">
+                <label
+                  htmlFor={`${uid}-property-${i}`}
+                  className="min-w-0 shrink truncate text-muted-foreground"
+                  dir="auto"
+                >
+                  {prop.label}
+                </label>
+                <Select
+                  id={`${uid}-property-${i}`}
+                  className="h-8 max-w-[11rem]"
+                  value={prop.column === null ? '' : String(prop.column)}
+                  onChange={(e) =>
+                    onMapProperty(prop.key, e.target.value === '' ? null : Number(e.target.value))
+                  }
+                >
+                  <option value="">{t('notInFile')}</option>
+                  {preview.headers.map((h, col) => (
+                    <option key={col} value={col}>
+                      {h || t('columnN', { n: col + 1 })}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" aria-live="polite">
         <StatTile label={t('totals.rows')} value={totals.rows.toLocaleString()} />

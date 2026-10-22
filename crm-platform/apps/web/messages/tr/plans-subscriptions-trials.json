@@ -247,23 +247,7 @@
         "title": "Sık sorulan sorular"
       },
       "addons": {
-        "title": "Eklentiler",
-        "owned": "Sahip olduğunuz eklentiler",
-        "oneTime": "Tek seferlik",
-        "buy": "Eklenti satın al",
-        "buyAgain": "Yeniden satın al",
-        "active": "Etkin",
-        "included": "Planınıza dahil",
-        "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
-        "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
-        "unlimitedBullet": "Sınırsız {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} gün}}",
-          "weeks": "{count, plural, other {/ {count} hafta}}",
-          "months": "{count, plural, other {/ {count} ay}}",
-          "years": "{count, plural, other {/ {count} yıl}}"
-        }
+        "title": "Eklentiler"
       },
       "renewal": {
         "renewsOn": "Planınız {date} tarihinde otomatik yenilenir.",
@@ -589,7 +573,9 @@
       "addons": {
         "smartRouting": "Akıllı yönlendirme",
         "teamsPermissions": "Ekipler ve izinler"
-      }
+      },
+      "addonsTabHint": "Eklentiler için planınızda Pazar yeri olması gerekmez. Planlar ve eklentiler bölümünden sahip olduklarınızı görebilir ve eklenti satın alabilirsiniz.",
+      "addonsTabLink": "Planlar ve eklentileri aç"
     },
     "lock": {
       "link": "Planları ve eklentileri gör"

@@ -215,7 +215,6 @@ export const pushSubscriptions = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('cascade'),
     index('idx_push_subscriptions_channel').on(t.orgId, t.channel),
-    index('idx_push_subscriptions_user_id').on(t.orgId, t.userId),
     index('idx_push_subscriptions_live')
       .on(t.orgId, t.userId)
       .where(sql`${t.revokedAt} IS NULL`),

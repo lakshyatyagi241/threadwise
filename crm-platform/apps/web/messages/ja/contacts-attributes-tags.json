@@ -297,7 +297,8 @@
       "teamLabel": "チーム",
       "teamFilter": "チームで絞り込む",
       "allTeams": "すべてのチーム",
-      "teamFormer": "以前のチーム"
+      "teamFormer": "以前のチーム",
+      "unhideColumn": "列を再表示"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -623,7 +624,8 @@
         "invalid_date_of_birth": "生年月日が、生年月日として成立する年が先頭の日付ではありません",
         "duplicate_in_file": "重複した番号、前の行に統合",
         "invalid_timezone": "タイムゾーンが無効です",
-        "legal_hold": "保護されたレコードのため変更されませんでした"
+        "legal_hold": "保護されたレコードのため変更されませんでした",
+        "invalid_property_value": "カスタムプロパティの値が、その型または選択肢に合いません"
       },
       "statusHint": "このファイルで作成される連絡先に適用されます。",
       "queued": "開始を待機中...",
@@ -641,7 +643,9 @@
       "groupNew": "新しいグループ",
       "groupPick": "グループを選択",
       "groupNewPlaceholder": "新しいグループ名",
-      "groupRequiredHint": "インポートされるすべての連絡先がこの1つのグループに参加します。上でマッピングしない限り、ファイル内のグループ列は無視されます。"
+      "groupRequiredHint": "インポートされるすべての連絡先がこの1つのグループに参加します。上でマッピングしない限り、ファイル内のグループ列は無視されます。",
+      "customProperties": "カスタムプロパティ",
+      "customPropertiesHint": "ヘッダーがプロパティ名の列（またはエクスポートが書き出す attr:key）が、そのプロパティに値を入れます。空白のセルは、連絡先が既に持っている値をそのまま残します。"
     },
     "detail": {
       "back": "すべての連絡先",
@@ -1430,6 +1434,7 @@
       "template": "WhatsAppテンプレート",
       "templatePlaceholder": "テンプレートを選択",
       "noTemplates": "この番号で承認済みのテンプレートがありません。",
+      "openInInbox": "受信トレイでチャットを開く",
       "notSendable": "このテンプレートはここでは入力できません（{reason}）。",
       "variables": "テンプレート変数",
       "preview": "プレビュー",

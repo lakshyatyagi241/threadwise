@@ -37,10 +37,11 @@ an actual Postgres connection or an actual cross-tenant request.
 
 **Deciding and verifying**
 
-| Skill                                                         | Use it when                                                                                                                 |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| [security-review-gate](security-review-gate/)                 | **mandatory before any PR or "done"**: repo audits, secret scan, `security-review` + `code-review`, triage                    |
-| [pre-pr](pre-pr/)                                             | before opening a PR — runs the same checks as CI, locally                                                                   |
+| Skill                                         | Use it when                                                                                                       |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [security-review-gate](security-review-gate/) | **mandatory before any PR or "done"**: repo audits, secret scan, `security-review` + `code-review`, triage        |
+| [handle-alert](handle-alert/)                 | a production alert/incident from the Google Chat alert spaces: claim it, fix it test-first, draft PR, never merge |
+| [pre-pr](pre-pr/)                             | before opening a PR — runs the same checks as CI, locally                                                         |
 
 **Mobile app** (`apps/mobile`, see [docs/mobile](../../docs/mobile/README.md))
 

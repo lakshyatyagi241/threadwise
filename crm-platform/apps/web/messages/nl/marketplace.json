@@ -11,7 +11,8 @@
       "installed": "Geïnstalleerd · Marketplace",
       "manage": "App beheren · Marketplace",
       "requests": "Verzoeken · Marketplace",
-      "addons": "Add-ons · Marketplace"
+      "addons": "Add-ons · Marketplace",
+      "developer": "Ontwikkelaar · Marketplace"
     },
     "common": {
       "dismiss": "Sluiten",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini apps",
         "integration": "Integraties",
-        "addon": "Add-ons"
+        "addon": "Add-ons",
+        "developer": "Ontwikkelaar"
       },
       "installed": "Geïnstalleerd",
       "installedLimit": "Geïnstalleerd ({installed} van {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Openen",
       "empty": {
-        "title": "Geen add-ons beschikbaar",
-        "message": "De add-ons die je rol en abonnement bevatten, verschijnen hier."
+        "title": "Geen ontwikkelaarstools beschikbaar",
+        "message": "De ontwikkelaarstools die je rol en abonnement bevatten, verschijnen hier."
       },
       "soon": "Binnenkort",
       "upgrade": "Upgraden"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Betaling geannuleerd",
         "message": "Er is niets in rekening gebracht. Abonneer je opnieuw wanneer je er klaar voor bent."
+      }
+    },
+    "addonsTab": {
+      "intro": "Extra functiepakketten die je bovenop je abonnement koopt. Wat je abonnement al bevat, is gemarkeerd en kost niets.",
+      "developerHint": "Zoek je de REST API, webhooks of andere ontwikkelaarstools?",
+      "developerLink": "Open het tabblad Ontwikkelaar"
+    },
+    "developerTab": {
+      "intro": "Tools voor ontwikkelaars en technische beheerders: API-sleutels, webhooks, publiceren en vertalen. Je ziet alleen wat je rol en abonnement toestaan."
+    },
+    "connector": {
+      "builtIn": "Ingebouwd",
+      "status": {
+        "connected": "Verbonden",
+        "notConnected": "Niet verbonden",
+        "upgrade": "Upgraden",
+        "soon": "Binnenkort"
+      },
+      "cta": {
+        "open": "Openen",
+        "manage": "Beheren",
+        "connect": "Verbinden"
       }
     }
   }

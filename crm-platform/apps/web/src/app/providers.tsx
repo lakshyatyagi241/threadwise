@@ -2,6 +2,7 @@
 
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
+import { SlimMessagesGuard } from '@/i18n/slim-messages-guard';
 import { ApiError } from '@/lib/api/errors';
 import { redirectOnTrialExpired } from '@/features/plans-subscriptions-trials/lib/trial-redirect';
 
@@ -23,5 +24,10 @@ export function Providers({ children }: { children: ReactNode }) {
         },
       }),
   );
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={client}>
+      {children}
+      <SlimMessagesGuard />
+    </QueryClientProvider>
+  );
 }

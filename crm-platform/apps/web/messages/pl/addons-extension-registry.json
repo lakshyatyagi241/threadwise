@@ -124,7 +124,8 @@
           "billingMode": "Rozliczanie",
           "sortOrder": "Kolejność",
           "isActive": "Aktywny",
-          "isLifetime": "Dożywotnio (jednorazowo)"
+          "isLifetime": "Dożywotnio (jednorazowo)",
+          "period": "Okres rozliczeniowy"
         },
         "modes": {
           "one_time": "Jednorazowo (kup ponownie po wygaśnięciu)",
@@ -144,8 +145,18 @@
           "billingDuration": "Wpisz liczbę całkowitą równą 1 lub większą.",
           "sortOrder": "Wpisz liczbę całkowitą.",
           "limits": "Limity to liczby całkowite lub -1 dla braku limitu.",
-          "form": "Sprawdź zaznaczone pola."
-        }
+          "form": "Sprawdź zaznaczone pola.",
+          "amountPositive": "Dodatki to subskrypcje miesięczne lub roczne, więc cena musi być większa od zera."
+        },
+        "legacy": {
+          "title": "Pakiet dawny",
+          "body": "Ten pakiet utworzono, zanim dodatki stały się subskrypcjami. Nadal jest sprzedawany dokładnie tak jak wcześniej (jego rozliczenie jest widoczne, ale nie można go zmienić), a przestrzenie robocze, które go mają, nie są naruszone. Nadal możesz edytować nazwę, cenę, funkcje i limity albo wycofać go ze sprzedaży. Nowe pakiety to subskrypcje miesięczne lub roczne."
+        },
+        "periods": {
+          "months": "Subskrypcja miesięczna",
+          "years": "Subskrypcja roczna"
+        },
+        "periodHint": "Dodatki to subskrypcje. Przestrzenie robocze z bramką online odnawiają się automatycznie; przy przelewie bankowym lub płatności offline płacą ponownie po zakończeniu okresu."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Dodatki",
       "description": "Dodatkowe pakiety funkcji kupowane ponad subskrypcję.",
-      "needPlanTitle": "Dodatki wymagają aktywnego planu",
-      "needPlanBody": "Dodatki to dodatkowe pakiety funkcji kupowane ponad subskrypcję. Najpierw wybierz plan, a potem wróć tutaj, aby dodać funkcje.",
-      "viewPlans": "Zobacz plany",
-      "noneTitle": "Brak dostępnych dodatków",
-      "noneBody": "Obecnie nie oferujemy żadnych dodatków. Zajrzyj później.",
-      "ownedTitle": "Twoje dodatki",
-      "ownedBody": "Aktywne pakiety dołączone do Twojego obecnego planu.",
-      "ends": "Kończy się {date}",
-      "lifetime": "Dożywotnio",
-      "autoRenews": "Odnawia się automatycznie",
       "renewal": {
         "cancel": "Anuluj odnawianie",
         "confirmTitle": "Anulować odnawianie?",
@@ -277,37 +278,63 @@
         "forbidden": "Nie masz uprawnień do zmiany planu.",
         "none": "Brak aktywnej subskrypcji do anulowania.",
         "failed": "Nie udało się anulować odnawiania. Spróbuj ponownie."
-      },
-      "active": "Aktywny",
-      "included": "W cenie Twojego planu",
-      "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
-      "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
-      "cardEyebrow": "Dodatek",
-      "catalogTitle": "Dodatki",
-      "catalogBody": "Odblokuj dodatkowe funkcje ponad obecny plan. Zmiana planu nie jest potrzebna.",
-      "count": "{count, plural, one {# dodatek} few {# dodatki} many {# dodatków} other {# dodatku}}",
-      "free": "Bezpłatnie",
-      "lifetimePrice": "jednorazowo",
-      "per": "/ {unit}",
-      "units": {
-        "days": "dni",
-        "weeks": "tygodnie",
-        "months": "miesiące",
-        "years": "lata"
-      },
-      "buy": "Dodaj do planu",
-      "buyAgain": "Kup ponownie",
-      "owned": "Posiadane ×{count} · ponowny zakup dodaje więcej",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Bez limitu: {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "Nie udało się załadować dodatków."
+      }
     },
     "planFields": {
       "fromModule": "z zainstalowanego modułu",
       "unlimited": "Bez limitu"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Dodatki wymagają aktywnego planu płatnego",
+        "free_plan": "Masz plan bezpłatny. Dodatki to rozszerzenia kupowane do planu płatnego.",
+        "plan_expired": "Twój plan płatny wygasł, więc dodatki są wstrzymane. Odnów plan, aby kupować lub odnawiać dodatki.",
+        "no_plan": "Twoja przestrzeń robocza nie ma jeszcze planu. Wybierz plan płatny, aby korzystać z dodatków.",
+        "cta": "Zobacz plany"
+      },
+      "unavailableCard": "Wymaga aktywnego planu płatnego",
+      "empty": {
+        "title": "Brak dodatków w sprzedaży",
+        "body": "Obecnie nie oferujemy żadnych dodatków. Zajrzyj później."
+      },
+      "listLabel": "Dodatki w sprzedaży",
+      "owned": {
+        "title": "Twoje dodatki",
+        "renews": "Odnowi się {date}",
+        "ends": "Aktywny do {date}. Nie odnowi się automatycznie.",
+        "lifetime": "Dożywotnio"
+      },
+      "state": {
+        "included": "W cenie Twojego planu",
+        "includedSupport": "Włączone przez Twojego opiekuna konta.",
+        "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
+        "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
+        "active": "Aktywny",
+        "ownedCount": "Posiadane ×{count} · ponowny zakup dodaje więcej"
+      },
+      "price": {
+        "free": "Bezpłatnie",
+        "oneTime": "jednorazowo",
+        "per": {
+          "days": "{count, plural, one {/ dzień} few {/ {count} dni} many {/ {count} dni} other {/ {count} dnia}}",
+          "weeks": "{count, plural, one {/ tydzień} few {/ {count} tygodnie} many {/ {count} tygodni} other {/ {count} tygodnia}}",
+          "months": "{count, plural, one {/ miesiąc} few {/ {count} miesiące} many {/ {count} miesięcy} other {/ {count} miesiąca}}",
+          "years": "{count, plural, one {/ rok} few {/ {count} lata} many {/ {count} lat} other {/ {count} roku}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Odnawia się co okres. Płatność automatyczna kartą; przy przelewie bankowym lub płatności offline płacisz ponownie po zakończeniu okresu.",
+        "oneTime": "Zakup jednorazowy. Nie odnawia się."
+      },
+      "buy": "Kup dodatek",
+      "buyAgain": "Kup ponownie",
+      "cannotBuyHint": "Zapytaj właściciela konta. Zakup mogą rozpocząć tylko osoby uprawnione do kupowania dla tej przestrzeni roboczej.",
+      "bullets": {
+        "unlimited": "Bez limitu: {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Potrzebujesz kredytów na wiadomości? Doładuj zamiast tego portfel; kredyty nie są dodatkiem.",
+      "walletLink": "Doładuj portfel"
     }
   }
 }

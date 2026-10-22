@@ -165,3 +165,179 @@ test('resolver replies start only after the FIRING card post returned (parent fi
   br.server.close();
   assert.deepEqual(order, ['card-posted', 'resolver-started']);
 });
+
+import { createResolver } from './resolver.mjs';
+test('code_fix: recovery without a release stays open ("recovered, no release recorded"); a later release resolves it', async () => {
+  const dir = fs.mkdtempSync('/tmp/inc-unit-'), posts = [];
+  const r = createResolver({ env: { AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }, post: async (c, m) => posts.push(m.text) });
+  await r.handle({ playbook: 'code_fix', key: 'st:a', threadKey: 't', file: { queryid: '1' } }); await r.settle();
+  assert.equal(await r.statementRecovered('st:a'), true);
+  assert.equal(r.byKey('st:a').state, 'recovered_no_release');
+  assert.ok(posts.some((p) => /^RECOVERED: .*recovered, no release recorded/.test(p)) && !posts.some((p) => /^RESOLVED/.test(p)));
+  assert.equal(fs.readdirSync(`${dir}/open`).length, 1);
+  await r.setRelease('abc1234');
+  assert.equal(r.byKey('st:a').state, 'resolved');
+  assert.ok(posts.some((p) => /^RESOLVED: .*release abc1234/.test(p)));
+  assert.equal(fs.readdirSync(`${dir}/resolved`).length, 1);
+  fs.rmSync(dir, { recursive: true });
+});
+
+test('resolver: an escalated incident is not re-opened (and re-posted) on every poll of the same key', async () => {
+  const posts = [], r = createResolver({ env: { AUTO_REMEDIATE: 'on' }, post: async (c, m) => posts.push(m.text), db: {} });
+  const spec = { playbook: 'cancel_select', key: 'slow:1:x', threadKey: 't', row: { pid: 1, state: 'active', secs: 999, query: 'update t set a=1', application_name: 'api', usename: 'u' }, text: 'update' };
+  for (let i = 0; i < 3; i++) await r.handle(spec);
+  await r.settle();
+  assert.equal(posts.filter((p) => /^ESCALATED/.test(p)).length, 1);
+});
+
+// ---- team incident flow
+import { handleIncidents } from './incidents-api.mjs';
+async function teamRig(env = {}) {
+  const { startBridge } = await import('./bridge.mjs'), posts = [];
+  const e = { INCIDENT_API_TOKEN: 'tok-test', AUTO_REMEDIATE: 'dry-run', ...env };
+  let now = 1_700_000_000_000, resolver;
+  const br = startBridge({ env: e, urls: {}, log: () => {}, resolverFactory: ({ post }) => (resolver = createResolver({ env: e, post: async (c, m, o) => { posts.push({ c, t: m.text, k: o?.threadKey, card: JSON.stringify(m.cardsV2) }); }, now: () => now })) });
+  await new Promise((r) => br.server.listen(0, '127.0.0.1', r));
+  await resolver.handle({ playbook: 'code_fix', key: 'st:1', threadKey: 'thr-1', channel: 'slowquery', file: { queryid: '1' }, diagnosis: 'd' });
+  await resolver.settle(); posts.length = 0;
+  const base = `http://127.0.0.1:${br.server.address().port}`, id = resolver.list()[0].id;
+  const call = async (path, body, token = 'tok-test') => { const r = await fetch(base + path, { method: body ? 'POST' : 'GET', headers: { ...(token ? { 'x-incident-token': token } : {}), 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined }); return { s: r.status, j: await r.json() }; };
+  return { br, resolver, posts, call, id, tick: (ms) => { now += ms; }, close: () => br.server.close() };
+}
+test('team flow: auth 401 without or with a wrong token, token never echoed', async () => {
+  const t = await teamRig();
+  for (const tok of [null, 'nope']) { const r = await t.call('/incidents', null, tok); assert.equal(r.s, 401); assert.ok(!JSON.stringify(r.j).includes('tok-test')); }
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'a' }, 'nope')).s, 401);
+  assert.equal((await t.call('/incidents')).s, 200); assert.equal((await t.call('/incidents?status=bogus')).s, 400);
+  t.close();
+});
+test('team flow: claim, conflict 409, renew, release, thread replies', async () => {
+  const t = await teamRig();
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' })).j.status, 'claimed');
+  assert.match(t.posts[0].t, /^\uD83D\uDC40 vedant is working on this \(claimed \d\d:\d\d UTC\)$/); assert.equal(t.posts[0].k, 'thr-1'); assert.equal(t.posts[0].c, 'slowquery');
+  const c = await t.call(`/incidents/${t.id}/claim`, { who: 'asha' }); assert.equal(c.s, 409); assert.equal(c.j.owner, 'vedant');
+  const n = t.posts.length; assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' })).s, 200); assert.equal(t.posts.length, n); // renew is silent
+  assert.equal((await t.call(`/incidents/${t.id}/release-claim`, { who: 'asha' })).s, 409);
+  assert.equal((await t.call(`/incidents/${t.id}/release-claim`, { who: 'vedant' })).j.status, 'open');
+  assert.match(t.posts.at(-1).t, /^\uD83E\uDD1D vedant released this incident$/);
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'asha' })).s, 200);
+  assert.equal((await t.call('/incidents?status=claimed')).j.incidents.length, 1); assert.equal((await t.call('/incidents?status=open')).j.incidents.length, 0);
+  t.close();
+});
+test('team flow: racing claims, exactly one wins', async () => {
+  const t = await teamRig();
+  const rs = await Promise.all(['a', 'b', 'c'].map((who) => t.call(`/incidents/${t.id}/claim`, { who })));
+  assert.deepEqual(rs.map((r) => r.s).sort(), [200, 409, 409]); t.close();
+});
+test('team flow: claim expiry posts the escalation, a note renews it', async () => {
+  const t = await teamRig({ INCIDENT_CLAIM_TTL_HOURS: '1' });
+  await t.call(`/incidents/${t.id}/claim`, { who: 'a' }); t.tick(40 * 60e3);
+  assert.equal((await t.call(`/incidents/${t.id}/note`, { who: 'a', text: 'looking at the plan' })).s, 200);
+  t.tick(40 * 60e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'claimed'); // renewed by the note
+  t.tick(30 * 60e3); const r = await t.call(`/incidents/${t.id}`);
+  assert.equal(r.j.status, 'open'); assert.ok(t.posts.some((p) => p.t === '\u23F0 claim expired, incident is open again' && p.k === 'thr-1'));
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'b' })).s, 200); t.close();
+});
+test('team flow: PR url allow-list, query strip, pr post, RESOLVED names PR and owner on release and on alert clear', async () => {
+  const t = await teamRig(), U = 'https://github.com/lakshyatyagi241/threadwise/pull/901';
+  for (const url of ['http://github.com/lakshyatyagi241/threadwise/pull/9', 'https://evil.com/lakshyatyagi241/threadwise/pull/9', 'https://github.com/lakshyatyagi241/threadwise/pull/9/files', 'https://github.com.evil.io/lakshyatyagi241/threadwise/pull/9', 'javascript:1', '']) assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'a', url, summary: 's' })).s, 400, url);
+  assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'a', url: U, summary: 's\nx' })).s, 400);
+  assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'a', url: U, number: 5, summary: 's' })).s, 400);
+  assert.equal((await t.call(`/incidents/${t.id}/note`, { who: 'a'.repeat(41), text: 'x' })).s, 400);
+  await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' });
+  assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'asha', url: U, summary: 's' })).s, 409);
+  const r = await t.call(`/incidents/${t.id}/pr`, { who: 'vedant', url: `${U}?token=SECRET#x`, number: 901, summary: 'add index <b>' });
+  assert.equal(r.j.status, 'pr_raised'); assert.equal(r.j.prUrl, U);
+  assert.match(t.posts.at(-1).t, /^\uD83D\uDD27 PR #901 raised by vedant at \d\d:\d\d UTC: add index <b> https:\/\/github.com\/lakshyatyagi241\/threadwise\/pull\/901$/);
+  assert.ok(t.posts.at(-1).card.includes('&lt;b>') && !t.posts.at(-1).card.includes('SECRET'));
+  t.tick(5 * 3600e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'pr_raised'); // a PR never expires
+  await t.resolver.setRelease('abc1234', [901]); await t.resolver.statementRecovered('st:1'); await t.resolver.settle();
+  assert.match(t.posts.at(-1).t, /^\u2705 RESOLVED by PR #901 \(owner vedant\), release abc1234/);
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'x' })).s, 409);
+  // alert-cleared path
+  const t2 = await teamRig(); await t2.call(`/incidents/${t2.id}/pr`, { who: 'asha', url: U, summary: 's' });
+  assert.equal(await t2.resolver.alertCleared('st:1'), true); assert.match(t2.posts.at(-1).t, /^\u2705 RESOLVED by PR #901 \(owner asha\)/);
+  t.close(); t2.close();
+});
+import { run as cli } from './incident-cli.mjs';
+test('incident-cli against a local bridge: list, claim, conflict exit 1, pr, note, config file mode, no secrets printed', async () => {
+  const t = await teamRig(), home = fs.mkdtempSync('/tmp/cli-home-'), lines = [];
+  const out = (s) => lines.push(s), base = { HOME: home, INCIDENT_API_URL: `http://127.0.0.1:${t.br.server.address().port}`, INCIDENT_API_TOKEN: 'tok-test' };
+  assert.equal(await cli(['list'], { ...base, INCIDENT_WHO: 'vedant' }, out), 0); assert.match(lines.at(-1), new RegExp(`${t.id}  open`));
+  assert.equal(await cli(['claim', t.id], { ...base, INCIDENT_WHO: 'vedant' }, out), 0);
+  assert.equal(await cli(['claim', t.id], { ...base, INCIDENT_WHO: 'asha' }, out), 1); assert.match(lines.at(-1), /refused \(409\).*owner: vedant/);
+  assert.equal(await cli(['pr', t.id, 'https://github.com/lakshyatyagi241/threadwise/pull/7?x=1', 'add index'], { ...base, INCIDENT_WHO: 'vedant' }, out), 0);
+  assert.equal(await cli(['note', t.id, 'ping'], { ...base, INCIDENT_WHO: 'vedant' }, out), 0);
+  assert.equal(await cli(['show', t.id], { ...base, INCIDENT_WHO: 'vedant' }, out), 0); assert.match(lines.at(-1), /"pr_raised"/);
+  assert.equal(await cli(['list'], { ...base, INCIDENT_API_TOKEN: 'bad', INCIDENT_WHO: 'v' }, out), 1); assert.match(lines.at(-1), /401/);
+  // token from a mode-600 file; a loose mode is refused
+  fs.mkdirSync(`${home}/.config/threadwise`, { recursive: true }); const f = `${home}/.config/threadwise/incidents.env`;
+  fs.writeFileSync(f, `INCIDENT_API_URL=${base.INCIDENT_API_URL}\nINCIDENT_API_TOKEN=tok-test\n`, { mode: 0o644 });
+  assert.equal(await cli(['list'], { HOME: home, INCIDENT_WHO: 'v' }, out), 2);
+  fs.chmodSync(f, 0o600); assert.equal(await cli(['list'], { HOME: home, INCIDENT_WHO: 'v' }, out), 0);
+  assert.ok(!lines.join('\n').includes('tok-test')); t.close(); fs.rmSync(home, { recursive: true });
+});
+
+// ---- close the loop: release-aware verification, deploy_failure kind
+async function loopRig(firing = () => false) {
+  const posts = [], env = { AUTO_REMEDIATE: 'on', VERIFY_SECONDS: '0', VERIFY_POLL_MS: '1', INCIDENTS_DIR: fs.mkdtempSync('/tmp/inc-loop-') };
+  const r = createResolver({ env, post: async (c, m, o) => posts.push({ c, t: m.text, k: o?.threadKey }), promQuery: async () => (firing() ? 1 : 0), sleep: async () => {} });
+  await r.handle({ playbook: 'service', kind: 'critical_alert', alertname: 'HighErrorRate', key: 'am:f1', threadKey: 'am-f1', channel: 'critical', diagnosis: 'd', suggestion: 's' }); await r.settle();
+  const id = r.list()[0].id; await r.claim(id, 'vedant'); await r.raisePr(id, 'vedant', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/77', number: 77, summary: 'fix' });
+  posts.length = 0; return { r, posts, id };
+}
+test('loop: release containing the PR + alert gone -> released -> RESOLVED names PR, owner, release, verification', async () => {
+  const { r, posts, id } = await loopRig();
+  assert.equal(r.get(id).kind, 'critical_alert');
+  await r.setRelease('abc1234', [77]); assert.equal(r.get(id).status, 'released'); await r.settle();
+  assert.equal(r.get(id).status, 'resolved');
+  assert.match(posts.at(-1).t, /^✅ RESOLVED by PR #77 \(owner vedant\), release abc1234, verified after \d+s; open for 0h \d+m$/); assert.equal(posts.at(-1).k, 'am-f1');
+});
+test('loop: release NOT containing the PR changes nothing and posts nothing', async () => {
+  const { r, posts, id } = await loopRig();
+  await r.setRelease('def5678', [1, 2]); await r.setRelease('def5679'); await r.settle();
+  assert.equal(r.get(id).status, 'pr_raised'); assert.equal(posts.length, 0);
+});
+test('loop: PR released but alert still firing -> warning + escalated in the same thread, never RESOLVED', async () => {
+  const { r, posts, id } = await loopRig(() => true);
+  await r.setRelease('abc1234', [77]); await r.settle();
+  assert.equal(r.get(id).status, 'escalated'); assert.equal(r.get(id).prUrl, null);
+  assert.ok(posts.some((p) => /^⚠️ Released PR #77 but the problem is still there/.test(p.t) && p.k === 'am-f1')); assert.ok(!posts.some((p) => /RESOLVED/.test(p.t)));
+});
+test('loop: deploy failure opens one incident (deduped), exposes kind, takes a PR, a later live release resolves it', async () => {
+  const { r, posts } = await loopRig(); posts.length = 0;
+  const spec = { attemptedSha: 'bbbbbbb1', liveSha: 'aaaaaaa1', prs: [5, 6], mergers: ['@bob'], durationSeconds: 90 };
+  await r.openDeployFailure(spec); await r.openDeployFailure(spec); await r.settle();
+  const inc = r.listFull().filter((i) => i.kind === 'deploy_failure'); assert.equal(inc.length, 1);
+  assert.equal(posts.filter((p) => /Deploy failed or was refused: needs a human or a fix PR/.test(p.t)).length, 1);
+  assert.match(posts.at(-1).t, /PRs: #5 #6\nMerged by: @bob/); assert.equal(posts.at(-1).c, 'deploy');
+  await r.claim(inc[0].id, 'asha'); await r.raisePr(inc[0].id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/80', number: 80, summary: 'fix build' });
+  await r.setRelease('ccccccc1', [80]); await r.settle();
+  assert.equal(r.get(inc[0].id).status, 'resolved'); assert.match(posts.at(-1).t, /RESOLVED by PR #80 \(owner asha\), release ccccccc1/);
+});
+test('loop: slow statement keeps kind, released PR resolves on recovered polls', async () => {
+  const dir = fs.mkdtempSync('/tmp/inc-loop-'), posts = [];
+  const r = createResolver({ env: { AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }, post: async (c, m) => posts.push(m.text), sleep: async () => {} });
+  await r.handle({ playbook: 'code_fix', key: 'st:z', threadKey: 't', file: { queryid: '9' } }); await r.settle();
+  const id = r.list()[0].id; assert.equal(r.get(id).kind, 'slow_statement');
+  await r.raisePr(id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/5', number: 5, summary: 's' });
+  await r.setRelease('abc1234', [9]); assert.equal(r.get(id).status, 'pr_raised');
+  await r.setRelease('abc1235', [5]); assert.equal(r.get(id).status, 'released');
+  await r.statementRecovered('st:z'); assert.equal(r.get(id).status, 'resolved'); assert.match(posts.at(-1), /RESOLVED by PR #5 \(owner asha\), release abc1235/);
+});
+test('api: POST /release and POST /incidents need the token and validate input', async () => {
+  const t = await teamRig(), h = { 'x-incident-token': 'tok-test', 'content-type': 'application/json' };
+  const post = async (p, body, headers = h) => { const x = await fetch(`http://127.0.0.1:${t.br.server.address().port}${p}`, { method: 'POST', headers, body: JSON.stringify(body) }); return { s: x.status, j: await x.json() }; };
+  assert.equal((await post('/release', { sha: 'abc1234', prs: [1] }, {})).s, 401);
+  assert.equal((await post('/release', { sha: 'zz', prs: [1] })).s, 400);
+  assert.equal((await post('/release', { sha: 'abc1234', prs: ['x'] })).s, 400);
+  assert.equal((await post('/release', { sha: 'abc1234', prs: [1], at: 'now' })).s, 200);
+  assert.equal((await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1' }, {})).s, 401);
+  assert.equal((await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'not sha' })).s, 400);
+  assert.equal((await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1', mergers: ['<@all>'] })).s, 400);
+  const a = await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1', liveSha: 'aaaaaaa1', prs: [3], mergers: ['bob'], durationSeconds: 5 });
+  const b = await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1' });
+  assert.deepEqual([a.s, a.j.deduped, b.s, b.j.deduped, b.j.id === a.j.id], [201, false, 200, true, true]);
+  const g = await t.call('/incidents'); assert.ok(g.j.incidents.some((i) => i.kind === 'deploy_failure') && g.j.incidents.some((i) => i.kind === 'slow_statement'));
+  t.close();
+});

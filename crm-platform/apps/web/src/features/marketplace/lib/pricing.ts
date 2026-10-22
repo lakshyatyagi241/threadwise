@@ -1,5 +1,6 @@
 import {
   MARKET_PACK_SLUG_RE,
+  ownershipFromAccess,
   marketCheckoutPath,
   type MarketBillingPeriod,
   type MarketCardPricing,
@@ -130,14 +131,17 @@ export function priceLine(p: PricingFields, locale: string): PriceLine {
   if (p.model === 'free' || p.access === 'free')
     return { key: 'free', price: null, annualPrice: null, trialDays: null };
   const price = priceOf(p, locale);
-  switch (p.access) {
+  // The same four words as the Add-ons list (`ownershipFromAccess`): included, owned (Subscribed), buyable (the price), unavailable.
+  switch (ownershipFromAccess(p.access)) {
+    case 'free':
+      return { key: 'free', price: null, annualPrice: null, trialDays: null };
     case 'included':
       return { key: 'included', price: null, annualPrice: null, trialDays: null };
-    case 'entitled':
+    case 'owned':
       return { key: 'subscribed', price, annualPrice: null, trialDays: null };
-    case 'not_for_sale':
+    case 'unavailable':
       return { key: 'notForSale', price: null, annualPrice: null, trialDays: null };
-    case 'subscription_required': {
+    case 'buyable': {
       const trialDays = p.trialAvailable && p.trialDays > 0 ? p.trialDays : null;
       return price
         ? { key: 'monthly', price, annualPrice: annualOf(p, locale), trialDays }

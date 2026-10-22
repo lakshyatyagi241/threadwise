@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Hộp thư",
+      "contact": "Liên hệ",
       "flow": "Luồng",
       "auto_reply": "Trả lời tự động",
+      "automation": "Tự động hóa",
       "ai": "Trợ lý AI",
       "api": "API",
       "broadcast": "Gửi hàng loạt",
+      "broadcast_test": "Gửi thử chiến dịch phát",
       "campaign": "Chiến dịch",
       "scheduled": "Đã lên lịch",
       "other": "Khác"
@@ -171,6 +174,7 @@
         "contact": "Liên hệ",
         "message": "Tin nhắn",
         "type": "Loại",
+        "source": "Nguồn",
         "status": "Trạng thái",
         "open": "Mở"
       },
@@ -228,11 +232,13 @@
       "source": "Gửi bởi",
       "sourceValue": {
         "inbox": "Hộp thư",
+        "contact": "Liên hệ",
         "flow": "Luồng",
         "auto_reply": "Trả lời tự động",
         "ai": "Trợ lý AI",
         "api": "API",
         "broadcast": "Gửi hàng loạt",
+        "broadcast_test": "Gửi thử chiến dịch phát",
         "campaign": "Chiến dịch",
         "scheduled": "Tin nhắn đã lên lịch",
         "other": "Khác"

@@ -148,7 +148,7 @@ const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); ret
   await r.handle(await spec(v, 'r1')); await r.settle();
   check('cancel: pg_cancel_backend cancels a runaway SELECT (client sees 57014)', (await v.pr) === '57014', texts('r1').slice(0, 300));
   check('cancel: lifecycle DIAGNOSED>ACTION>VERIFIED>RESOLVED in the thread', labels('r1') === 'DIAGNOSED>ACTION>VERIFIED>RESOLVED', labels('r1'));
-  check('cancel: RESOLVED text says "resolved by cancel_select, after"', posts.some((p) => p.tk === 'r1' && /resolved by cancel_select, after/.test(p.text)));
+  check('cancel: RESOLVED text says "resolved by cancelling pid N, after"', posts.some((p) => p.tk === 'r1' && /resolved by cancelling pid \d+ \(pg_cancel_backend, not terminated\), after/.test(p.text)));
   v.c.end().catch(() => {});
 }
 { // refuses UPDATE
@@ -219,7 +219,7 @@ const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); ret
   const r = mkR({ AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }); await r.handle({ playbook: 'code_fix', key: 'st:2', threadKey: 'r15', channel: 'slowquery', text: 'select', file, diagnosis: 'd', suggestion: 's' }); await r.settle();
   const f = fs.readdirSync(path.join(dir, 'open'));
   check('code_fix writes incidents/open/<id>.json and posts "needs a code/index fix: ticket opened"', f.length === 1 && posts.some((p) => p.tk === 'r15' && /needs a code\/index fix: ticket opened/.test(p.text)) && JSON.parse(fs.readFileSync(path.join(dir, 'open', f[0]))).queryid === '1', f.join());
-  r.setRelease('abc1234'); await r.statementRecovered('st:2');
+  await r.setRelease('abc1234'); await r.statementRecovered('st:2');
   check('statement fast again after a release -> RESOLVED in thread with the release sha, file moved to resolved/', posts.some((p) => p.tk === 'r15' && /RESOLVED/.test(p.label ?? '') && /release abc1234/.test(p.text)) && fs.readdirSync(path.join(dir, 'resolved')).length === 1);
   fs.rmSync(dir, { recursive: true, force: true });
 }

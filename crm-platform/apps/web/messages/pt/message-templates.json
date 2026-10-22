@@ -135,6 +135,16 @@
         "name-asc": "Nome A→Z",
         "name-desc": "Nome Z→A"
       },
+      "dateRange": "Intervalo de datas",
+      "range": {
+        "all": "Todo o período",
+        "7d": "7 dias",
+        "30d": "30 dias",
+        "90d": "90 dias",
+        "custom": "Intervalo personalizado",
+        "from": "Data inicial",
+        "to": "Data final"
+      },
       "showing": "Mostrando",
       "of": "de",
       "filteredTemplates": "modelos filtrados",

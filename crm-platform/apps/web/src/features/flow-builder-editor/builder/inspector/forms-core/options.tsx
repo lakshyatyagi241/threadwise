@@ -5,7 +5,7 @@ import { ButtonActionPicker } from '../../button-action-picker';
 import { buttonActionOf, buttonActionPatch } from '../../../lib/button-actions';
 import {
   FLB_AGE_END_TEXT,
-  FLB_ASK_INPUT_TYPES,
+  flbAskInputChoices,
   FLB_DATE_FORMATS,
   flbCleanAgeWhenUnder,
   flbCleanAskInputType,
@@ -264,13 +264,14 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       >
         <SelectInput
           value={flbCleanAskInputType(d.validate)}
-          options={FLB_ASK_INPUT_TYPES.map((v) => ({ v, l: askInputLabel(tf, v) }))}
+          options={flbAskInputChoices(d.validate).map((v) => ({ v, l: askInputLabel(tf, v) }))}
           onChange={(v) => set('validate', v)}
         />
       </Field>
       {checked ? (
         <>
           {flbCleanAskInputType(d.validate) === 'date' ||
+          flbCleanAskInputType(d.validate) === 'datetime' ||
           flbCleanAskInputType(d.validate) === 'date_of_birth' ? (
             <Field label={t('askDateFormat')} hint={t('askDateFormatHint')}>
               <SelectInput

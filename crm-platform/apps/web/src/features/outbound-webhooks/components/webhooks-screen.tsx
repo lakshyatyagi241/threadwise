@@ -97,10 +97,10 @@ export function WebhooksScreen() {
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
           <Link
-            href="/marketplace/addons"
+            href="/marketplace/developer"
             className="text-sm text-muted-foreground hover:text-foreground"
           >
-            ← {tm('tabs.addon')}
+            ← {tm('tabs.developer')}
           </Link>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{t('title')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>

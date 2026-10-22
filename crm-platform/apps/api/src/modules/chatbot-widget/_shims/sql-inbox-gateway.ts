@@ -490,6 +490,28 @@ export class SqlInboxGateway implements InboxGateway {
     return (res.rows as unknown[]).length > 0;
   }
 
+  async recordRating(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    rating: number,
+    comment: string,
+  ): Promise<boolean> {
+    const had = await tx.execute(sql`
+      SELECT 1 FROM messages
+       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND meta->>'source' = 'rating' LIMIT 1`);
+    if ((had.rows as unknown[]).length > 0) return false;
+    const body = `Rated this chat ${rating}/5${comment ? `: ${truncate(comment, 1000)}` : ''}`;
+    await this.append(tx, orgId, conversationId, {
+      direction: 'in',
+      senderKind: 'customer',
+      status: 'received',
+      body,
+      meta: { source: 'rating', channel: 'chatbot_widget', widget_rating: { rating, comment } },
+    });
+    return true;
+  }
+
   async mediaOf(
     tx: Tx,
     orgId: number,

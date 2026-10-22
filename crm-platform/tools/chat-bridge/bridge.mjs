@@ -2,9 +2,10 @@
 // compose network. Delivery is synchronous so a failure returns 502 and Alertmanager retries on its own schedule.
 import http from 'node:http';
 import fs from 'node:fs';
-import { createHash } from 'node:crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, isWatchdog, routeFor, widgetsOf } from './lib.mjs';
 import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
+import { handleIncidents, loadToken } from './incidents-api.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 
 export function loadUrls(env = process.env) {
@@ -21,7 +22,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   // Guard: a typo must never send alert text to another host. Tests opt out with CHAT_ALLOW_ANY_HOST=1 and a local fake receiver.
   for (const [c, u] of Object.entries(urls)) if (!/^https:\/\/chat\.googleapis\.com\//.test(u) && env.CHAT_ALLOW_ANY_HOST !== '1') { delete urls[c]; log({ evt: 'chat_url_rejected', channel: c }); }
   const send = createSender({ urls, fetchImpl, metrics, log, baseMs: Number(env.CHAT_RETRY_BASE_MS ?? 500), retries: Number(env.CHAT_RETRIES ?? 3) });
-  const grafanaUrl = env.GRAFANA_URL ?? '';
+  const grafanaUrl = env.GRAFANA_URL ?? '', token = loadToken(env);
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
@@ -40,6 +41,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     if (a.status === 'resolved') {
       const end = Date.parse(a.endsAt); const dur = fmtDur((Number.isFinite(end) && end > 0 ? end : Date.now()) - started);
       threads.delete(fp);
+      if (await resolver?.alertCleared?.(`am:${fp}`)) return { ok: true }; // a PR was raised for it: RESOLVED names the PR
       const inc = resolver?.byKey(`am:${fp}`);
       if (inc && inc.state === 'resolved') return { ok: true }; // the resolver already posted RESOLVED after verification
       if (inc && inc.state === 'open') return send(ch, alertCard(a, { grafanaUrl, title: 'Alertmanager reports it cleared; resolver verification still running', extra: widgetsOf([['Note', 'RESOLVED is only posted after the verification passes']]) }), { threadKey });
@@ -57,7 +59,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey });
     if (resolver && ev.entry) {
       const pool = /^DbPool/.test(a.labels?.alertname);
-      resolver.handle({ playbook: pool ? 'db_pool' : 'service', action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
+      resolver.handle({ playbook: pool ? 'db_pool' : 'service', alertname: a.labels?.alertname, action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
     }
     return card;
   }
@@ -71,9 +73,14 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
       const labels = j.labels ?? { ...(j.kind === 'slow_query' ? { group: 'slow_query' } : {}), ...(j.severity ? { severity: j.severity } : {}), ...(j.test ? { test: 'true' } : {}) };
       return end(200, JSON.stringify(routeFor({ labels }, env)));
     }
-    if (req.method === 'GET' && req.url === '/incidents') return end(200, JSON.stringify({ mode: resolver?.mode ?? 'off', incidents: resolver?.list() ?? [] }));
-    if (req.method === 'POST' && req.url === '/release') { // called by the deploy step: {"sha":"abc123"}; lets code-fix incidents resolve "by release"
-      let b = ''; for await (const c of req) b += c; try { resolver?.setRelease(JSON.parse(b).sha); } catch { return end(400, '{}'); } return end(200, '{"ok":true}');
+    if (req.url?.startsWith('/incidents') && await handleIncidents(req, res, { resolver, token, log })) return;
+    if (req.method === 'POST' && req.url === '/release') { // called by the release watcher: {"sha","prs":[n],"at"}; token-protected. Only incidents whose PR is in prs move to released.
+      const given = req.headers['x-incident-token'];
+      if (!token || typeof given !== 'string' || !timingSafeEqual(createHash('sha256').update(given).digest(), createHash('sha256').update(token).digest())) return end(401, '{"error":"unauthorized"}');
+      let b = ''; for await (const c of req) { b += c; if (b.length > 20000) return end(413, '{}'); }
+      let j; try { j = JSON.parse(b); } catch { return end(400, '{}'); }
+      if (!/^[0-9a-f]{7,40}$/i.test(j?.sha ?? '') || (j.prs != null && !(Array.isArray(j.prs) && j.prs.length <= 100 && j.prs.every((n) => Number.isInteger(n) && n > 0)))) return end(400, '{"error":"bad sha or prs"}');
+      await resolver?.setRelease(j.sha, j.prs ?? []); return end(200, '{"ok":true}');
     }
     if (req.method !== 'POST' || !/^\/(alertmanager)?$/.test(req.url ?? '')) return end(404, '{}');
     let raw = '';
@@ -88,5 +95,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     log({ evt: 'am_webhook', alerts: alerts.length, delivered: ok });
     end(ok ? 200 : 502, JSON.stringify({ ok }));
   });
+  const sweep = resolver && setInterval(() => resolver.sweepClaims?.().catch(() => {}), 60_000); sweep?.unref();
+  server.on('close', () => clearInterval(sweep));
   return { server, metrics, send, log, resolver };
 }

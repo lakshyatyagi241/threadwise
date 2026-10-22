@@ -19,7 +19,9 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
+import { loadWorkspaceCalendar } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
+import { createdWindow } from '../campaigns';
 import {
   WABA_TEMPLATES,
   type RemoteTemplate,
@@ -127,8 +129,9 @@ export class TemplatesService {
 
   async list(query: ListTemplatesQuery): Promise<ListTemplatesResponse> {
     const { orgId } = RequestContextStore.require();
-    const rows = await this.db.tx((tx) =>
-      this.repo.list(tx, orgId, {
+    const rows = await this.db.tx(async (tx) => {
+      const window = await this.createdWindowOf(tx, orgId, query);
+      return this.repo.list(tx, orgId, {
         limit: query.limit,
         cursor: query.cursor,
         status: query.status,
@@ -137,8 +140,10 @@ export class TemplatesService {
         category: query.category,
         connectionUuid: query.connectionId,
         q: query.q,
-      }),
-    );
+        createdFrom: window.from,
+        createdTo: window.to,
+      });
+    });
     const { items, page } = buildPage(rows, query.limit);
     const byName = query.sort === 'name-asc' || query.sort === 'name-desc';
     const last = items[items.length - 1];
@@ -158,15 +163,34 @@ export class TemplatesService {
   /** The numbers on the library's tabs and "Showing N of M" (one read, no totals on the list itself). */
   async counts(query: TemplateCountsQuery): Promise<TemplateCounts> {
     const { orgId } = RequestContextStore.require();
-    return this.db.tx((tx) =>
-      this.repo.counts(tx, orgId, {
+    return this.db.tx(async (tx) => {
+      const window = await this.createdWindowOf(tx, orgId, query);
+      return this.repo.counts(tx, orgId, {
         status: query.status,
         statusGroup: query.statusGroup,
         category: query.category,
         connectionUuid: query.connectionId,
         q: query.q,
-      }),
-    );
+        createdFrom: window.from,
+        createdTo: window.to,
+      });
+    });
+  }
+
+  /** The date filter's window in the workspace's own days (a preset counts back from now). Only a day range reads the zone. */
+  private async createdWindowOf(
+    tx: Tx,
+    orgId: number,
+    query: Pick<ListTemplatesQuery, 'range' | 'from' | 'to'>,
+  ): Promise<{ from: Date | null; to: Date | null }> {
+    if (query.range === 'all') return { from: null, to: null };
+    const now = Date.now();
+    const { timezone } = await loadWorkspaceCalendar(tx, orgId, new Date(now));
+    const w = createdWindow(query, now, timezone);
+    return {
+      from: w.from === null ? null : new Date(w.from),
+      to: w.to === null ? null : new Date(w.to),
+    };
   }
 
   async get(uuid: string): Promise<TemplateDetail> {

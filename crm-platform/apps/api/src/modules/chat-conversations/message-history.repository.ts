@@ -95,6 +95,7 @@ export const ENTITY_OF_PREFIX = {
   b: 'broadcast',
   c: 'campaign',
   s: 'scheduled',
+  t: 'test',
 } as const satisfies Record<string, MessageHistoryEntityKind>;
 
 /** A row of the feed as a raw database row -> the contract's row. The recipient is masked here, once, for every consumer. */
@@ -134,7 +135,7 @@ export function toHistoryRow(r: Raw): MessageHistoryRow {
             status: String(r.cost_status ?? 'charged'),
           },
     entity:
-      kind !== 'message' && entityId
+      (kind === 'broadcast' || kind === 'campaign' || kind === 'scheduled') && entityId
         ? { kind, id: entityId, name: String(r.entity_name ?? '') }
         : null,
     conversationId: str(r.conv_uuid),

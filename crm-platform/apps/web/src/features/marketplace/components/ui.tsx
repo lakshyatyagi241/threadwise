@@ -13,6 +13,14 @@ import { CheckIcon, CopyIcon, ExternalIcon, LockIcon } from './icons';
 /** Pieces every Marketplace screen shares. Text comes from `marketplace.common` and its siblings; no screen writes its own wording for these. */
 
 export const PAGE = 'w-full space-y-5';
+/** The one frame of every card in the Marketplace grids (app, connector, developer tool): same border, padding, height and gap. */
+export const CARD_FRAME =
+  'flex h-full min-w-0 flex-col gap-3 rounded-md border border-border bg-background p-4';
+/** The square that holds a card's logo or icon. */
+export const CARD_ICON_BOX =
+  'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted text-sm font-semibold text-foreground/80';
+/** The grid of cards, the same on every tab. */
+export const CARD_GRID = 'grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3';
 export const TEXT_LINK =
   'font-medium text-primary underline-offset-2 hover:underline focus-visible:underline';
 export const LINK_BUTTON =
@@ -160,13 +168,7 @@ export function AppLogo({
   const [failed, setFailed] = useState(false);
   const src = isHttpsLink(logo) && !failed ? logo : null;
   return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted text-sm font-semibold text-foreground/80',
-        className,
-      )}
-    >
+    <span aria-hidden="true" className={cn(CARD_ICON_BOX, className)}>
       {src ? (
         <img
           src={src}

@@ -11,7 +11,8 @@
       "installed": "Instalada · Marketplace",
       "manage": "Gestionar app · Marketplace",
       "requests": "Solicitudes · Marketplace",
-      "addons": "Complementos · Marketplace"
+      "addons": "Complementos · Marketplace",
+      "developer": "Desarrollador · Marketplace"
     },
     "common": {
       "dismiss": "Descartar",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini apps",
         "integration": "Integraciones",
-        "addon": "Complementos"
+        "addon": "Complementos",
+        "developer": "Desarrollador"
       },
       "installed": "Instaladas",
       "installedLimit": "Instaladas ({installed} de {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Abrir",
       "empty": {
-        "title": "No hay complementos disponibles",
-        "message": "Los complementos que incluyen tu rol y tu plan aparecerán aquí."
+        "title": "No hay herramientas para desarrolladores",
+        "message": "Las herramientas para desarrolladores que incluyen tu rol y tu plan aparecerán aquí."
       },
       "soon": "Pronto",
       "upgrade": "Mejorar plan"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Pago cancelado",
         "message": "No se ha cobrado nada. Suscríbete de nuevo cuando quieras."
+      }
+    },
+    "addonsTab": {
+      "intro": "Paquetes de funciones extra que compras además de tu plan. Lo que tu plan ya incluye aparece marcado y no se cobra.",
+      "developerHint": "¿Buscas la API REST, los webhooks u otras herramientas para desarrolladores?",
+      "developerLink": "Abrir la pestaña Desarrollador"
+    },
+    "developerTab": {
+      "intro": "Herramientas para desarrolladores y administradores técnicos: claves de API, webhooks, publicación y traducción. Solo ves las que permiten tu rol y tu plan."
+    },
+    "connector": {
+      "builtIn": "Integrado",
+      "status": {
+        "connected": "Conectado",
+        "notConnected": "No conectado",
+        "upgrade": "Mejorar plan",
+        "soon": "Pronto"
+      },
+      "cta": {
+        "open": "Abrir",
+        "manage": "Gestionar",
+        "connect": "Conectar"
       }
     }
   }

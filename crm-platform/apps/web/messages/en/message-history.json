@@ -126,11 +126,14 @@
     },
     "source": {
       "inbox": "Inbox",
+      "contact": "Contact",
       "flow": "Flow",
       "auto_reply": "Auto-reply",
+      "automation": "Automation",
       "ai": "AI assistant",
       "api": "API",
       "broadcast": "Broadcast",
+      "broadcast_test": "Broadcast Test Send",
       "campaign": "Campaign",
       "scheduled": "Scheduled",
       "other": "Other"
@@ -143,6 +146,7 @@
         "contact": "Contact",
         "message": "Message",
         "type": "Type",
+        "source": "Source",
         "status": "Status",
         "open": "Open"
       },
@@ -197,11 +201,13 @@
       "source": "Sent by",
       "sourceValue": {
         "inbox": "Inbox",
+        "contact": "Contact",
         "flow": "Flow",
         "auto_reply": "Auto-reply",
         "ai": "AI assistant",
         "api": "API",
         "broadcast": "Broadcast",
+        "broadcast_test": "Broadcast Test Send",
         "campaign": "Campaign",
         "scheduled": "Scheduled message",
         "other": "Other"
