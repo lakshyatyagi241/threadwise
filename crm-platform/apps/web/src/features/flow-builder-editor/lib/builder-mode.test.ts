@@ -7,6 +7,12 @@ describe('builder mode links', () => {
     expect(openHref('f1', 'chat')).toBe('/flows/simple/f1');
   });
 
+  it('in an Advanced workspace every flow opens on the canvas', () => {
+    expect(openHref('f1', 'chat', 'advanced')).toBe('/flows/builder/f1');
+    expect(openHref('f1', 'web', 'advanced')).toBe('/flows/builder/f1');
+    expect(openHref('f1', 'chat', 'simple')).toBe('/flows/simple/f1');
+  });
+
   it('a call flow always opens on the canvas', () => {
     expect(openHref('f1', 'call')).toBe('/flows/builder/f1');
     expect(openHref('f1', 'call')).toBe('/flows/builder/f1');
