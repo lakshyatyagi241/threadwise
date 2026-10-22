@@ -283,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Estágio",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Criado",
-      "shortModified": "Modificado",
       "firstRun": {
         "title": "Adicione seus primeiros contatos",
         "message": "Traga as pessoas com quem você conversa. Os contatos são usados em mensagens, campanhas, tarefas e negócios.",

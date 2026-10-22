@@ -283,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Etap",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Utworzono",
-      "shortModified": "Zmodyfikowano",
       "firstRun": {
         "title": "Dodaj pierwsze kontakty",
         "message": "Dodaj osoby, z którymi rozmawiasz. Kontakty są używane w wiadomościach, kampaniach, zadaniach i transakcjach.",

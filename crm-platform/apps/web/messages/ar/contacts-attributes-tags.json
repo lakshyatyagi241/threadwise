@@ -283,8 +283,6 @@
       "shortEmail": "البريد",
       "shortStage": "المرحلة",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "الإنشاء",
-      "shortModified": "التعديل",
       "firstRun": {
         "title": "أضف أول جهات اتصال لك",
         "message": "أضف الأشخاص الذين تتواصل معهم. تُستخدم جهات الاتصال في الرسائل والحملات والمهام والصفقات.",

@@ -283,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Étape",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Créé",
-      "shortModified": "Modifié",
       "firstRun": {
         "title": "Ajoutez vos premiers contacts",
         "message": "Importez les personnes avec qui vous échangez. Les contacts servent aux messages, aux campagnes, aux tâches et aux transactions.",
