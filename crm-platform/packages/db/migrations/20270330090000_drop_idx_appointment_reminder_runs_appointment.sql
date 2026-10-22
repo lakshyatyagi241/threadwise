@@ -1,0 +1,12 @@
+-- @no-transaction
+-- Why this migration exists: idx_appointment_reminder_runs_appointment on appointment_reminder_runs(org_id, appointment_id) is a strict left prefix of uq_appointment_reminder_runs, so every lookup it could serve is
+-- already served by that index. It only costs: one extra btree write on every insert, update of those columns and delete, plus its disk
+-- and shared_buffers.
+--
+-- Evidence (catalog, 2026-10-22): pg_index shows the same leading columns, opclasses and sort options, no WHERE predicate on either,
+-- idx_appointment_reminder_runs_appointment is neither unique nor constraint-backed, and has no INCLUDE columns. The foreign key it indexed stays covered by the leading columns of
+-- uq_appointment_reminder_runs. Nothing in apps/ or packages/ names this index (no hint, no ON CONFLICT ON CONSTRAINT).
+--
+-- Reversible: CREATE INDEX CONCURRENTLY idx_appointment_reminder_runs_appointment ON appointment_reminder_runs (org_id, appointment_id);
+-- CONCURRENTLY so the live table is not locked; this file holds exactly one statement, so it runs outside a transaction.
+DROP INDEX CONCURRENTLY IF EXISTS idx_appointment_reminder_runs_appointment;
