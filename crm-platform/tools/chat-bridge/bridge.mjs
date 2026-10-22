@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, isWatchdog, routeFor, widgetsOf } from './lib.mjs';
 import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
+import { handleIncidents, loadToken } from './incidents-api.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 
 export function loadUrls(env = process.env) {
@@ -21,7 +22,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   // Guard: a typo must never send alert text to another host. Tests opt out with CHAT_ALLOW_ANY_HOST=1 and a local fake receiver.
   for (const [c, u] of Object.entries(urls)) if (!/^https:\/\/chat\.googleapis\.com\//.test(u) && env.CHAT_ALLOW_ANY_HOST !== '1') { delete urls[c]; log({ evt: 'chat_url_rejected', channel: c }); }
   const send = createSender({ urls, fetchImpl, metrics, log, baseMs: Number(env.CHAT_RETRY_BASE_MS ?? 500), retries: Number(env.CHAT_RETRIES ?? 3) });
-  const grafanaUrl = env.GRAFANA_URL ?? '';
+  const grafanaUrl = env.GRAFANA_URL ?? '', token = loadToken(env);
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
@@ -40,6 +41,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     if (a.status === 'resolved') {
       const end = Date.parse(a.endsAt); const dur = fmtDur((Number.isFinite(end) && end > 0 ? end : Date.now()) - started);
       threads.delete(fp);
+      if (await resolver?.alertCleared(`am:${fp}`)) return { ok: true }; // a PR was raised for it: RESOLVED names the PR
       const inc = resolver?.byKey(`am:${fp}`);
       if (inc && inc.state === 'resolved') return { ok: true }; // the resolver already posted RESOLVED after verification
       if (inc && inc.state === 'open') return send(ch, alertCard(a, { grafanaUrl, title: 'Alertmanager reports it cleared; resolver verification still running', extra: widgetsOf([['Note', 'RESOLVED is only posted after the verification passes']]) }), { threadKey });
@@ -69,7 +71,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
       const labels = j.labels ?? { ...(j.kind === 'slow_query' ? { group: 'slow_query' } : {}), ...(j.severity ? { severity: j.severity } : {}), ...(j.test ? { test: 'true' } : {}) };
       return end(200, JSON.stringify(routeFor({ labels }, env)));
     }
-    if (req.method === 'GET' && req.url === '/incidents') return end(200, JSON.stringify({ mode: resolver?.mode ?? 'off', incidents: resolver?.list() ?? [] }));
+    if (req.url?.startsWith('/incidents') && await handleIncidents(req, res, { resolver, token, log })) return;
     if (req.method === 'POST' && req.url === '/release') { // called by the deploy step: {"sha":"abc123"}; lets code-fix incidents resolve "by release"
       let b = ''; for await (const c of req) b += c; try { await resolver?.setRelease(JSON.parse(b).sha); } catch { return end(400, '{}'); } return end(200, '{"ok":true}');
     }
@@ -86,5 +88,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     log({ evt: 'am_webhook', alerts: alerts.length, delivered: ok });
     end(ok ? 200 : 502, JSON.stringify({ ok }));
   });
+  const sweep = resolver && setInterval(() => resolver.sweepClaims().catch(() => {}), 60_000); sweep?.unref();
+  server.on('close', () => clearInterval(sweep));
   return { server, metrics, send, log, resolver };
 }
