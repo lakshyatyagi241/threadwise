@@ -571,6 +571,8 @@ const SHAPERS: Record<string, Shaper> = {
     longitude: flbParseCoordinate(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
+    // A link-mode step sends its pin without the name and address, so Maps cannot look the place up by them.
+    locMode: s(d.locMode),
   }),
 
   poll: (d) => ({

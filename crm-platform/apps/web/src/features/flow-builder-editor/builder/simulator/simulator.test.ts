@@ -577,25 +577,30 @@ describe('simulator: integration and channel nodes (copy verified against the ru
 });
 
 describe('simulator: location', () => {
-  const run = async (data: Record<string, unknown>) => {
+  const run = async (data: Record<string, unknown>, count = 1) => {
     const h = harness([node('t', 'trigger'), node('l', 'location', data)], [edge('t', 'out', 'l')]);
     h.sim.start();
     h.sim.send('x');
     await h.settle();
-    return h.texts().slice(2, 3);
+    return h.texts().slice(2, 2 + count);
   };
-  it('shows the pin the runtime would send, name and address optional', async () => {
+  it('shows what the runtime would send, name and address optional', async () => {
     expect(await run({ title: 'HQ', address: '1 Road', lat: '12.5', lng: '77.1' })).toEqual([
       '(location) HQ\n1 Road\nlat 12.5, lng 77.1',
     ]);
+    // A link-mode pin carries the coordinates only; the name follows as a text, so Maps has no name to look the place up by.
     expect(
-      await run({
-        locMode: 'link',
-        mapsUrl: 'https://maps.google.com/?q=1.5,2.5',
-        lat: '1.5',
-        lng: '2.5',
-      }),
-    ).toEqual(['(location) \n\nlat 1.5, lng 2.5']);
+      await run(
+        {
+          locMode: 'link',
+          mapsUrl: 'maps.google.com/?q=1.5,2.5',
+          lat: '1.5',
+          lng: '2.5',
+          title: 'HQ',
+        },
+        2,
+      ),
+    ).toEqual(['(location) \n\nlat 1.5, lng 2.5', '(location) HQ\n']);
   });
   it('says the step is skipped when it has no real coordinates, like the runtime', async () => {
     for (const data of [{}, { lat: '0', lng: '0' }, { lat: '95', lng: '1' }])
