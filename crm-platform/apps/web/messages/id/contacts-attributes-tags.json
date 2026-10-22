@@ -1431,6 +1431,7 @@
       "template": "Templat WhatsApp",
       "templatePlaceholder": "Pilih templat",
       "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
+      "openInInbox": "Buka chat di kotak masuk",
       "notSendable": "Templat ini tidak dapat diisi di sini ({reason}).",
       "variables": "Variabel templat",
       "preview": "Pratinjau",

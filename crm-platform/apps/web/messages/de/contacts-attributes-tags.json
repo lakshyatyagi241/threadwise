@@ -1431,6 +1431,7 @@
       "template": "WhatsApp-Vorlage",
       "templatePlaceholder": "Vorlage auswählen",
       "noTemplates": "Keine genehmigten Vorlagen für diese Nummer.",
+      "openInInbox": "Chat im Posteingang öffnen",
       "notSendable": "Diese Vorlage kann hier nicht ausgefüllt werden ({reason}).",
       "variables": "Vorlagenvariablen",
       "preview": "Vorschau",

@@ -1431,6 +1431,7 @@
       "template": "WhatsApp-sjabloon",
       "templatePlaceholder": "Selecteer een sjabloon",
       "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
+      "openInInbox": "Chat openen in de inbox",
       "notSendable": "Dit sjabloon kan hier niet worden ingevuld ({reason}).",
       "variables": "Sjabloonvariabelen",
       "preview": "Voorbeeld",

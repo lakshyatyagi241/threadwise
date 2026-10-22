@@ -1431,6 +1431,7 @@
       "template": "Шаблон WhatsApp",
       "templatePlaceholder": "Выберите шаблон",
       "noTemplates": "Нет одобренных шаблонов для этого номера.",
+      "openInInbox": "Открыть чат во входящих",
       "notSendable": "Этот шаблон нельзя заполнить здесь ({reason}).",
       "variables": "Переменные шаблона",
       "preview": "Предпросмотр",

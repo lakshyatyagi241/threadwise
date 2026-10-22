@@ -1431,6 +1431,7 @@
       "template": "WhatsAppテンプレート",
       "templatePlaceholder": "テンプレートを選択",
       "noTemplates": "この番号で承認済みのテンプレートがありません。",
+      "openInInbox": "受信トレイでチャットを開く",
       "notSendable": "このテンプレートはここでは入力できません（{reason}）。",
       "variables": "テンプレート変数",
       "preview": "プレビュー",

@@ -1431,6 +1431,7 @@
       "template": "Szablon WhatsApp",
       "templatePlaceholder": "Wybierz szablon",
       "noTemplates": "Brak zatwierdzonych szablonów dla tego numeru.",
+      "openInInbox": "Otwórz czat w skrzynce odbiorczej",
       "notSendable": "Tego szablonu nie można tutaj wypełnić ({reason}).",
       "variables": "Zmienne szablonu",
       "preview": "Podgląd",

@@ -1431,6 +1431,7 @@
       "template": "Modèle WhatsApp",
       "templatePlaceholder": "Sélectionner un modèle",
       "noTemplates": "Aucun modèle approuvé pour ce numéro.",
+      "openInInbox": "Ouvrir le chat dans la boîte de réception",
       "notSendable": "Ce modèle ne peut pas être rempli ici ({reason}).",
       "variables": "Variables du modèle",
       "preview": "Aperçu",

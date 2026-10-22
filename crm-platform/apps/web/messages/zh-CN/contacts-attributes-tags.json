@@ -1431,6 +1431,7 @@
       "template": "WhatsApp 模板",
       "templatePlaceholder": "选择模板",
       "noTemplates": "此号码没有已审核通过的模板。",
+      "openInInbox": "在收件箱中打开聊天",
       "notSendable": "此模板无法在此处填写（{reason}）。",
       "variables": "模板变量",
       "preview": "预览",

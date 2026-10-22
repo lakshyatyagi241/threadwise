@@ -1431,6 +1431,7 @@
       "template": "Mẫu WhatsApp",
       "templatePlaceholder": "Chọn mẫu",
       "noTemplates": "Không có mẫu nào được duyệt cho số này.",
+      "openInInbox": "Mở cuộc trò chuyện trong hộp thư đến",
       "notSendable": "Không thể điền mẫu này tại đây ({reason}).",
       "variables": "Biến của mẫu",
       "preview": "Xem trước",
