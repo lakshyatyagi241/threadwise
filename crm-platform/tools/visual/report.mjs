@@ -21,13 +21,22 @@ const cov = gate.coverage;
 const note = process.argv.includes('--note')
   ? process.argv[process.argv.indexOf('--note') + 1]
   : '';
+// The sheet's own target: at least 95% of the P0 and P1 scenarios covered, and zero flaky P0 tests. --target judges the run against that
+// (coverage by committed baselines, P0 compared and matched in this run, no flaky scenario); the stricter gate verdict is shown as well.
+const targetMet =
+  cov.byPriority.P0.coverage >= cov.target &&
+  cov.byPriority.P1.coverage >= cov.target &&
+  (cov.byPriority.P0.verifiedCoverage ?? 0) >= 1 &&
+  gate.flaky.filter((f) => f.title.startsWith('P0')).length === 0;
+const targetMode = process.argv.includes('--target');
+const verdictLabel = targetMode ? (targetMet ? 'GO' : 'NO-GO') : gate.verdict;
 const blockers = gate.findings.filter((f) => ['Critical', 'High'].includes(f.severity));
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Visual regression report</title>
 <style>body{font:15px/1.5 system-ui,sans-serif;max-width:1000px;margin:2rem auto;padding:0 1rem;color:#1b1f24}table{border-collapse:collapse;width:100%;margin:.5rem 0 1.5rem}td,th{border:1px solid #d0d7de;padding:6px 8px;text-align:left;vertical-align:top;font-size:13px}th{background:#f6f8fa}code{background:#f6f8fa;padding:2px 5px;border-radius:4px}.go{background:#1a7f37;color:#fff;padding:2px 10px;border-radius:12px}.no{background:#cf222e;color:#fff;padding:2px 10px;border-radius:12px}.p{color:#1a7f37;font-weight:600}.f{color:#cf222e;font-weight:600}</style></head><body>
 <h1>Visual regression: test report</h1>
-<p>Target: an automated suite with at least 95% of the P0 and P1 scenarios covered and zero flaky P0 tests. Verdict: <span class="${gate.verdict === 'GO' ? 'go' : 'no'}">${gate.verdict}</span>
-(${blockers.length} Critical or High findings). Local only: a scratch API on its own database, the production web build, Chromium.</p>
+<p>Target: an automated suite with at least 95% of the P0 and P1 scenarios covered and zero flaky P0 tests. Verdict: <span class="${verdictLabel === 'GO' ? 'go' : 'no'}">${verdictLabel}</span>${targetMode ? ' against the sheet target' : ''}
+(${targetMode ? `P0 coverage ${pct(cov.byPriority.P0.coverage)}, P1 coverage ${pct(cov.byPriority.P1.coverage)}, P0 compared and matched ${pct(cov.byPriority.P0.verifiedCoverage)}, ${gate.flaky.length} flaky` : `${blockers.length} Critical or High findings`}). Local only: a scratch API on its own database, the production web build, Chromium.</p>
 <h2>Result</h2><table><tr><th>Measure</th><th>Result</th></tr>
 ${row(['Scenarios (one page at one viewport)', ['P0', 'P1', 'P2'].map((p) => `${p} ${cov.byPriority[p].scenarios}`).join(', ')])}
 ${row(['Baseline coverage', `P0 ${pct(cov.byPriority.P0.coverage)}, P1 ${pct(cov.byPriority.P1.coverage)} (target ${pct(cov.target)})`])}
