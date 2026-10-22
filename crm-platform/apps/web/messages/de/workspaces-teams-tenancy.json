@@ -414,6 +414,13 @@
       "hint": "Solange du offline bist, werden dir keine neuen Chats automatisch zugewiesen. Chats, die du schon hast, bleiben deine.",
       "failed": "Änderung nicht möglich"
     },
+    "myLeave": {
+      "label": "Abwesenheit",
+      "onLeaveUntil": "Abwesend bis {date}",
+      "onLeaveOpen": "Abwesend",
+      "hint": "Teile deinem Team mit, dass du nicht da bist. Während deiner Abwesenheit werden dir keine neuen Chats automatisch zugewiesen.",
+      "title": "Deine Abwesenheit"
+    },
     "deactivate": {
       "eyebrow": "Teammitglieder",
       "title": "Mitglied deaktivieren",

@@ -12,7 +12,7 @@
         "loadFailed": "Die Zuweisungseinstellungen konnten nicht geladen werden.",
         "retry": "Erneut versuchen",
         "notInPlan": "Nicht in deinem Tarif",
-        "upgradeHint": "Dein Tarif enthält das nicht. Bitte den Kontoinhaber, den Tarif zu upgraden.",
+        "upgradeHint": "Enthalten im Add-on Intelligentes Routing oder in einem höheren Tarif.",
         "stepFirst": "Wird zuerst geprüft",
         "stepMaster": "Hauptschalter",
         "stepAfter": "Nach der Übernahme",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Mehr Kontrolle nötig? Regeln hinzufügen",
         "intro": "Optional. Mit Regeln lenkst du bestimmte Chats (einen Kanal, Wörter in der Nachricht, einen neuen Kontakt ...) an bestimmte Agenten oder Teams. Wenn dir die vier Schalter genügen, musst du nie eine Regel anlegen.",
-        "locked": "Regeln sind nicht in deinem Tarif enthalten. Die Warteschlange, die Übernahme und die manuelle Zuweisung stehen dir weiterhin zur Verfügung. Bitte den Kontoinhaber, den Tarif zu upgraden.",
+        "locked": "Regeln sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs. Die Warteschlange, das Übernehmen und die manuelle Zuweisung bleiben erhalten.",
         "pipelineTitle": "So wird ein neuer Chat zugewiesen",
         "pipeline": {
           "agent": "1. Kontaktbesitzer und Stammagent",

@@ -540,7 +540,7 @@
             "chatbot_widgets": "Chatbot-Widgets",
             "wa_storefront": "WhatsApp-Katalog",
             "inbox_sla": "Posteingangs-SLA",
-            "inbox_routing": "Posteingangs-Routing",
+            "inbox_routing": "Intelligentes Routing",
             "waba_calling": "WhatsApp-Anrufe",
             "inbox_kanban": "Posteingangs-Kanban",
             "team_performance": "Teamleistung",
@@ -566,7 +566,7 @@
             "record_assignment": "Regeln zur Datensatzzuweisung",
             "team_hierarchy": "Teamhierarchie und Manager",
             "custom_roles": "Eigene Rollen und Bereiche",
-            "inbox_assignment_sticky": "Kontaktbesitzer und fester Agent"
+            "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
           },
           "cta": {
             "continueFree": "Kostenlos fortfahren",

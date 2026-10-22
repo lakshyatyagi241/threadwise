@@ -44,6 +44,7 @@ import {
 import { Ticks, useErrorText } from './parts';
 import { QuotePreview } from './quote-preview';
 import { ReactionBar } from './reaction-bar';
+import { BotReturnedLine } from './bot-returned-line';
 import { StageChangeLine } from './stage-change-line';
 import { TemplateMessage } from './template-message';
 
@@ -336,6 +337,13 @@ export const MessageBubble = memo(function MessageBubble({
       return (
         <li data-testid="inbox-message" className="flex justify-center">
           <StageChangeLine event={m.systemEvent} undone={stageUndone} />
+        </li>
+      );
+    }
+    if (m.systemEvent?.event === 'bot_returned') {
+      return (
+        <li data-testid="inbox-message" className="flex justify-center">
+          <BotReturnedLine event={m.systemEvent} fallback={m.body} />
         </li>
       );
     }

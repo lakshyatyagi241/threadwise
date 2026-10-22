@@ -65,7 +65,7 @@
       "chatbot_widgets": "Sohbet botu widget'ları",
       "wa_storefront": "WhatsApp kataloğu",
       "inbox_sla": "SLA politikaları",
-      "inbox_routing": "Yönlendirme kuralları",
+      "inbox_routing": "Akıllı yönlendirme: otomatik atama ve kurallar",
       "waba_calling": "WhatsApp aramaları",
       "inbox_kanban": "Kanban görünümü",
       "team_performance": "Ekip performansı",
@@ -91,7 +91,7 @@
       "record_assignment": "Kayıt atama kuralları",
       "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
       "custom_roles": "Özel roller ve kapsamlar",
-      "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
+      "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",
@@ -253,6 +253,9 @@
         "buy": "Eklenti satın al",
         "buyAgain": "Yeniden satın al",
         "active": "Etkin",
+        "included": "Planınıza dahil",
+        "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
+        "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
         "unlimitedBullet": "Sınırsız {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -580,7 +583,16 @@
       "back": "Geri dön",
       "compare": "Tüm planları karşılaştır",
       "appHint": "{feature}, Pazar yerinde uygulama olarak da satılır.",
-      "appLink": "Uygulamayı gör"
+      "appLink": "Uygulamayı gör",
+      "addonHint": "Bunu {addon} eklentisiyle mevcut planınıza da ekleyebilirsiniz.",
+      "addonLink": "Eklentileri gör",
+      "addons": {
+        "smartRouting": "Akıllı yönlendirme",
+        "teamsPermissions": "Ekipler ve izinler"
+      }
+    },
+    "lock": {
+      "link": "Planları ve eklentileri gör"
     }
   }
 }

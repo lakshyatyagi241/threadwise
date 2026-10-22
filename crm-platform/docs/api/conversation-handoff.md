@@ -23,19 +23,39 @@ thread puts it back in the queue.
 
 ## Routes
 
-| Method and path                                  | Permission                       | What                                                                                                   |
-| ------------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `GET /conversations?tab=waiting`                 | `inbox.conversation.read`        | the queue, in the caller's ordinary visibility; `GET /counts` carries `waiting`                        |
-| `POST /conversations/:id/claim` `{ rowVersion }` | `inbox.conversation.assign_self` | take a conversation nobody holds; `409 CONFLICT` when somebody did first; `{ conversation, ownerSet }` |
-| `POST /conversations/:id/handoff`                | `inbox.conversation.assign`      | send to a person, a team queue or the rules; same action a flow, an AI agent or a keyword uses         |
-| `POST /conversations/:id/return-to-bot`          | `inbox.conversation.reply`       | unassign and unmute the bot                                                                            |
-| `GET /conversations/:id/handoff`                 | `inbox.conversation.read`        | the latest handoff card: reason, summary, answers, destination, outcome, trace                         |
-| `GET /handoff-settings`                          | `inbox.settings.read`            | settings with `available` per capability                                                               |
-| `PUT /handoff-settings`                          | `inbox.routing.manage`           | change settings; `422 PLAN_FEATURE_LOCKED` names the locked fields                                     |
+| Method and path                                  | Permission                       | What                                                                                                         |
+| ------------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `GET /conversations?tab=waiting`                 | `inbox.conversation.read`        | the queue, in the caller's ordinary visibility; `GET /counts` carries `waiting`                              |
+| `POST /conversations/:id/claim` `{ rowVersion }` | `inbox.conversation.assign_self` | take a conversation nobody holds; `409 CONFLICT` when somebody did first; `{ conversation, ownerSet }`       |
+| `POST /conversations/:id/handoff`                | `inbox.conversation.assign`      | send to a person, a team queue or the rules; same action a flow, an AI agent or a keyword uses               |
+| `POST /conversations/:id/return-to-bot`          | `inbox.conversation.reply`       | unassign and unmute the bot; answers `{ conversation, resumed, nextMessageBy, why, alreadyWithBot }` (below) |
+| `GET /conversations/:id/handoff`                 | `inbox.conversation.read`        | the latest handoff card: reason, summary, answers, destination, outcome, trace                               |
+| `GET /handoff-settings`                          | `inbox.settings.read`            | settings with `available` per capability                                                                     |
+| `PUT /handoff-settings`                          | `inbox.routing.manage`           | change settings; `422 PLAN_FEATURE_LOCKED` names the locked fields                                           |
 
 `POST .../handoff` body: `{ reason, reasonText?, summary?, destination, priority? }`, destination `{ kind: 'person', userId, teamId? } | { kind: 'team', teamId } | { kind: 'rules' }`.
 It answers `{ outcome, handoffId, refused, conversation, handoff }`; `outcome` is `assigned`, `waiting` or `unavailable` (out of hours, or nobody could ever take it:
 it still enters the queue). `refused` is set (and nothing is written) for an archived thread, spam or a personal mailbox.
+
+## Return to bot (BL-410)
+
+`POST .../return-to-bot` is idempotent and always says what the bot will do (`resumed`):
+
+- `flow`: the handoff came from a flow's Human handoff node whose optional `returned` exit (builder handle `returned`, runtime port 4,
+  `HANDOFF_RETURNED_PORT`) leads to a step that still exists, in a flow that is published and on. In the same transaction the API writes the timeline
+  event `handoff_returned` and the outbox event `handoff.returned_to_bot`; the worker (`HandoffReturnConsumer`) then sends the node's optional
+  `returnMessage` (rendered with the contact and the run's variables, deterministic client id, normal outbound path so the 24 hour window and consent
+  are enforced; a refusal is reported, never thrown) and starts the flow at the exit's target (run source `handoff`, `trigger_ref` `return:<handoff>`,
+  carrying the paused run's variables) under the conversation's row lock, so a person who claimed the chat again wins. A redelivered event finds the
+  run and does nothing.
+- `next_message`: nothing is sent now. `why` is `no_flow_handoff` (a person, the AI marker or a keyword made the handoff), `no_returned_exit`,
+  `run_gone`, `flow_gone`, `flow_not_live` or `node_gone`; `nextMessageBy` is `live_flow` (a run is parked for this customer) or `default_flow` (the
+  next message starts the default-route flow if the workspace has one, else nobody answers).
+- `alreadyWithBot: true` on a second press: nothing changed, nothing was sent.
+
+Staff-only lines: a `system` message with `meta.event = 'bot_returned'` (`botStage: 'pressed'` at once, `'result'` when the worker is done, with
+`botResult`: `continued | claimed_again | flow_not_live | start_failed` and `botCustomer`: `sent | window_closed | no_consent | failed | channel_unavailable`)
+appears in the thread in real time; the timeline gets `handoff_returned`, then `bot_resumed` or `bot_resume_skipped`.
 
 ## Who is found (every step is in `trace`)
 

@@ -65,7 +65,7 @@
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Catalogo WhatsApp",
       "inbox_sla": "Policy SLA",
-      "inbox_routing": "Regole di instradamento",
+      "inbox_routing": "Instradamento intelligente: assegnazione automatica e regole",
       "waba_calling": "Chiamate WhatsApp",
       "inbox_kanban": "Vista Kanban",
       "team_performance": "Performance del team",
@@ -91,7 +91,7 @@
       "record_assignment": "Regole di assegnazione dei record",
       "team_hierarchy": "Gerarchia dei team e manager",
       "custom_roles": "Ruoli personalizzati e ambiti",
-      "inbox_assignment_sticky": "Proprietario del contatto e agente persistente"
+      "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso"
     },
     "limitGroups": {
       "messaging": "Messaggistica",
@@ -253,6 +253,9 @@
         "buy": "Acquista add-on",
         "buyAgain": "Acquista di nuovo",
         "active": "Attivo",
+        "included": "Incluso nel tuo piano",
+        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
+        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
         "unlimitedBullet": "{label} illimitati",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -580,7 +583,16 @@
       "back": "Torna indietro",
       "compare": "Confronta tutti i piani",
       "appHint": "{feature} è venduto anche come app nel Marketplace.",
-      "appLink": "Vedi l’app"
+      "appLink": "Vedi l’app",
+      "addonHint": "Puoi anche aggiungerlo al tuo piano attuale con il componente {addon}.",
+      "addonLink": "Vedi componenti aggiuntivi",
+      "addons": {
+        "smartRouting": "Instradamento intelligente",
+        "teamsPermissions": "Team e autorizzazioni"
+      }
+    },
+    "lock": {
+      "link": "Vedi piani e componenti aggiuntivi"
     }
   }
 }

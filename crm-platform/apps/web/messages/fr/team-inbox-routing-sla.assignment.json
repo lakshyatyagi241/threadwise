@@ -12,7 +12,7 @@
         "loadFailed": "Impossible de charger les paramètres d’assignation.",
         "retry": "Réessayer",
         "notInPlan": "Non inclus dans votre offre",
-        "upgradeHint": "Votre offre n’inclut pas cette fonction. Demandez au propriétaire du compte de changer d’offre.",
+        "upgradeHint": "Inclus dans le module Routage intelligent ou dans une offre supérieure.",
         "stepFirst": "Vérifié en premier",
         "stepMaster": "Commutateur principal",
         "stepAfter": "Après une prise en charge",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Besoin de plus de contrôle ? Ajoutez des règles",
         "intro": "Facultatif. Les règles envoient certains chats (un canal, des mots dans le message, un nouveau contact...) à certains agents ou équipes. Si les quatre commutateurs suffisent, vous n’avez jamais besoin de créer de règle.",
-        "locked": "Les règles ne sont pas incluses dans votre offre. Vous gardez la file d’attente, la prise en charge et l’assignation manuelle. Demandez au propriétaire du compte de changer d’offre.",
+        "locked": "Les règles font partie du module Routage intelligent ou d'une offre supérieure. Vous gardez la file d'attente, la prise en charge et l'attribution manuelle.",
         "pipelineTitle": "Comment un nouveau chat est assigné",
         "pipeline": {
           "agent": "1. Propriétaire du contact et agent habituel",

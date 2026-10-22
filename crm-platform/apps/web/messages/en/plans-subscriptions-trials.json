@@ -65,8 +65,8 @@
       "chatbot_widgets": "Chatbot widgets",
       "wa_storefront": "WhatsApp catalog",
       "inbox_sla": "SLA policies",
-      "inbox_routing": "Routing rules",
-      "inbox_assignment_sticky": "Contact owner and sticky agent",
+      "inbox_routing": "Smart routing: auto-assignment and rules",
+      "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
       "waba_calling": "WhatsApp calling",
       "inbox_kanban": "Kanban view",
       "team_performance": "Team performance",
@@ -253,6 +253,9 @@
         "buy": "Buy add-on",
         "buyAgain": "Buy again",
         "active": "Active",
+        "included": "Included in your plan",
+        "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
+        "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
         "unlimitedBullet": "Unlimited {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -580,7 +583,16 @@
       "appHint": "{feature} is also sold as an app in the Marketplace.",
       "appLink": "See the app",
       "back": "Go back",
-      "compare": "Compare all plans"
+      "compare": "Compare all plans",
+      "addonHint": "You can also add it to your current plan with the {addon} add-on.",
+      "addonLink": "See add-ons",
+      "addons": {
+        "smartRouting": "Smart routing",
+        "teamsPermissions": "Teams and permissions"
+      }
+    },
+    "lock": {
+      "link": "See plans and add-ons"
     }
   }
 }

@@ -9,6 +9,7 @@ import { nextPlanEnd, type BillingUnit } from './fulfilment-rules';
 import { recordOrderEvent } from './order-events';
 import { OrdersRepository, type OrderRow } from './orders.repository';
 import { PaygwStore } from './paygw.store';
+import { AddonRedundancyService } from './addon-redundancy.service';
 import { SubscriptionCancelService } from './subscription-cancel.service';
 
 export interface PaidFacts {
@@ -40,6 +41,7 @@ export class FulfilmentService {
     private readonly walletSettings: WalletSettingsService,
     private readonly audit: AuthAuditService,
     private readonly cancel: SubscriptionCancelService,
+    private readonly redundancy: AddonRedundancyService,
   ) {}
 
   /** `applied` is false when the order was already paid (a replay), in which case nothing was changed. */
@@ -58,6 +60,17 @@ export class FulfilmentService {
         this.logger.error(
           { err, order: order.orderNumber },
           'ending the replaced subscription failed',
+        );
+      }
+    }
+    // The new plan may include an add-on the workspace already pays for: it runs to the end of its term and does not renew.
+    if (outcome.applied && order.kind === 'plan') {
+      try {
+        await this.redundancy.stopForWorkspace(order.orgId);
+      } catch (err) {
+        this.logger.error(
+          { err, order: order.orderNumber },
+          'stopping a redundant add-on renewal failed',
         );
       }
     }

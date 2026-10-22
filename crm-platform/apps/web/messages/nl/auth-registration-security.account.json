@@ -540,7 +540,7 @@
             "chatbot_widgets": "Chatbotwidgets",
             "wa_storefront": "WhatsApp-catalogus",
             "inbox_sla": "Inbox-SLA",
-            "inbox_routing": "Inbox-routering",
+            "inbox_routing": "Slimme routering",
             "waba_calling": "Bellen via WhatsApp",
             "inbox_kanban": "Inbox-kanban",
             "team_performance": "Teamprestaties",
@@ -566,7 +566,7 @@
             "record_assignment": "Regels voor recordtoewijzing",
             "team_hierarchy": "Teamhiërarchie en managers",
             "custom_roles": "Eigen rollen en bereiken",
-            "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
+            "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

@@ -1276,6 +1276,51 @@ describe('the AI assistant step: an agent, or a custom setup with a prompt', () 
   });
 });
 
+describe('the Human handoff returned exit in the Simple builder (Return to bot)', () => {
+  const handoffGraph = () =>
+    graph(
+      [
+        node('t', 'trigger'),
+        node('h', 'assign', { handoff: 2, destination: 'rules', returnMessage: 'I am back' }),
+        node('m', 'message', { text: 'Welcome back', journeyName: 'After' }, 400, 0),
+      ],
+      [edge('t', 'out', 'h'), edge('h', 'returned', 'm')],
+    );
+
+  it('reads the wire as the step the chat returns to and writes the same wire back', () => {
+    const r = toSimple(handoffGraph());
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
+    const step = allSteps(r.doc).find((s) => s.id === 'h')!;
+    expect(step.data.returnTo).toBe('m');
+    expect(step.data.returnMessage).toBe('I am back');
+    // the target is reached through the returned exit, so it is not reported as a step nothing leads to
+    expect(unreachable(r.doc).map((s) => s.id)).toEqual([]);
+    const back = toGraph(r.doc);
+    expect(back.flowEdges.map((e) => `${e.source}.${e.sourceHandle}>${e.target}`).sort()).toEqual(
+      ['h.returned>m', 't.out>h'].sort(),
+    );
+    // returnTo is not stored on the node: the wire is the only copy
+    expect(back.flowNodes.find((n) => n.id === 'h')!.data.returnTo).toBeUndefined();
+    expect(toSimple(back).ok).toBe(true);
+  });
+
+  it('writes no wire for an empty choice, for the step itself, or for a step that is gone', () => {
+    const r = toSimple(handoffGraph());
+    if (!r.ok) throw new Error('not simple');
+    const h = allSteps(r.doc).find((s) => s.id === 'h')!;
+    for (const to of ['', 'h', 'gone']) {
+      h.data.returnTo = to;
+      expect(toGraph(r.doc).flowEdges.some((e) => e.sourceHandle === 'returned')).toBe(false);
+    }
+  });
+
+  it('the other exits of a handoff are still not Simple (they need the Advanced canvas)', () => {
+    const g = handoffGraph();
+    g.flowEdges.push(edge('h', 'waiting', 'm'));
+    expect(toSimple(g)).toMatchObject({ ok: false });
+  });
+});
+
 describe('the closed step card text', () => {
   const withText = (type: 'message' | 'ask', data: Record<string, unknown>) => ({
     ...newStep(type, []),

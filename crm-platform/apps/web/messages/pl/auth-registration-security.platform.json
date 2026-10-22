@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "Kreator widżetu chatbota na stronie.",
             "wa_storefront": "Obszar katalogu i sklepu WhatsApp.",
             "inbox_sla": "Zasady i terminy SLA w skrzynce zespołu.",
-            "inbox_routing": "Reguły routingu, które automatycznie przypisują rozmowy ze skrzynki odbiorczej.",
+            "inbox_routing": "Automatyczne przydzielanie nowych czatów: reguły kierowania, Wszyscy pozostali i liczniki kolejki oczekujących. Część dodatku Inteligentne kierowanie.",
             "waba_calling": "Połączenia WhatsApp ze skrzynki odbiorczej: numery do połączeń, uprawnienia do połączeń, wykonywanie i odbieranie połączeń.",
             "inbox_kanban": "Widok tablicy Kanban skrzynki zespołu.",
             "team_performance": "Raporty wydajności zespołu.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu.",
             "team_hierarchy": "Zespoły nadrzędne, liderzy zespołów i menedżerowie, którzy widzą swój zespół i zespoły poniżej.",
             "custom_roles": "Twórz i edytuj role oraz wybierz zakres (własne, zespołu lub wszystkie rekordy) dla każdego uprawnienia.",
-            "inbox_assignment_sticky": "Przypisywanie „najpierw właściciel” i synchronizacja między właścicielem kontaktu a właścicielem czatu, okno dla powracających kontaktów i pytanie przy zmianie przypisania. Działa razem z routingiem skrzynki."
+            "inbox_assignment_sticky": "Przydzielanie z pierwszeństwem właściciela i synchronizacją, okno dla wracających kontaktów i pytanie przy zmianie przydziału. Część dodatku Inteligentne kierowanie."
           },
           "units": {
             "days": "Dni",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "Widżety chatbota na stronie",
             "wa_storefront": "Sklep i katalog WhatsApp",
             "inbox_sla": "Zasady SLA skrzynki odbiorczej",
-            "inbox_routing": "Reguły routingu skrzynki odbiorczej i godziny pracy",
+            "inbox_routing": "Inteligentne kierowanie: automatyczne przydzielanie i reguły",
             "waba_calling": "Wykonuj i odbieraj połączenia WhatsApp ze skrzynki odbiorczej",
             "inbox_kanban": "Tablica Kanban skrzynki odbiorczej",
             "team_performance": "Raporty wydajności zespołu",
@@ -1642,7 +1642,7 @@
             "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)",
             "team_hierarchy": "Hierarchia zespołów i menedżerowie",
             "custom_roles": "Własne role i zakresy",
-            "inbox_assignment_sticky": "Właściciel kontaktu i stały agent"
+            "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent"
           },
           "problems": {
             "required": "To pole jest wymagane.",

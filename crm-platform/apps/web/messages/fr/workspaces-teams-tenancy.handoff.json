@@ -5,7 +5,7 @@
         "title": "Transfert et assignation",
         "hint": "Utilisé quand un bot, un flux ou un collègue transfère une conversation à cette équipe.",
         "method": "Comment choisir une personne",
-        "methodHint": "Manuel : la conversation attend dans la file de l’équipe que quelqu’un la prenne. Tour de rôle et Charge la plus faible choisissent un membre pour vous et nécessitent une offre avec règles d’assignation.",
+        "methodHint": "Manuel : la conversation attend dans la file de l'équipe jusqu'à ce que quelqu'un la prenne. Tourniquet et Moins chargé choisissent un membre pour vous et font partie du module Routage intelligent.",
         "defaultAssignee": "Responsable par défaut",
         "defaultAssigneeHint": "Prend la conversation quand personne d’autre ne le peut. Choisissez l’un des membres de l’équipe.",
         "noDefaultAssignee": "Personne en particulier",
@@ -23,7 +23,10 @@
           "fri": "Vendredi",
           "sat": "Samedi",
           "sun": "Dimanche"
-        }
+        },
+        "methodLocked": "{method} (nécessite Routage intelligent)",
+        "methodLockHint": "Les méthodes automatiques font partie du module Routage intelligent ou d'une offre supérieure.",
+        "defaultAssigneeLocked": "Le responsable par défaut n'est utilisé qu'avec une méthode d'équipe automatique, qui fait partie du module Routage intelligent ou d'une offre supérieure."
       }
     }
   }

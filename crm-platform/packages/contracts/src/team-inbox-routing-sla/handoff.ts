@@ -79,6 +79,12 @@ export const HANDOFF_PORTS: Record<HandoffOutcome, number> = {
   unavailable: 3,
 };
 
+/**
+ * The optional fourth exit of the Human handoff node: `returned`, taken when a person presses Return to bot. It is not an outcome of a
+ * handoff (the flow never leaves by it on its own), so it is not in `HANDOFF_PORTS`; the runtime graph names it by this number.
+ */
+export const HANDOFF_RETURNED_PORT = 4;
+
 export const HANDOFF_ANSWERS_MAX_KEYS = 20;
 export const HANDOFF_ANSWER_MAX_CHARS = 500;
 
@@ -97,6 +103,35 @@ export type ClaimConversationInput = z.infer<typeof claimConversationSchema>;
 
 export const returnToBotSchema = z.object({ note: z.string().trim().max(500).optional() });
 export type ReturnToBotInput = z.infer<typeof returnToBotSchema>;
+
+/**
+ * What Return to bot did, said plainly (never silent): `flow` = the flow that handed the chat over continues now at the node's
+ * `returned` exit; `next_message` = nothing is sent now, the bot answers the customer's next message. `nextMessageBy` says what answers
+ * it: a flow already parked for this customer (`live_flow`) or whatever the workspace set for a new message (`default_flow`: a default
+ * route flow answers if one is set, else nobody). `why` is set when a flow exit was expected and did not happen.
+ */
+export const RETURN_RESUMED = ['flow', 'next_message'] as const;
+export const RETURN_NEXT_BY = ['live_flow', 'default_flow'] as const;
+export const RETURN_NOT_RESUMED_WHY = [
+  'no_flow_handoff',
+  'no_returned_exit',
+  'run_gone',
+  'flow_gone',
+  'flow_not_live',
+  'node_gone',
+] as const;
+export const returnToBotResponseSchema = z.object({
+  conversation: conversationSummarySchema,
+  resumed: z.enum(RETURN_RESUMED),
+  nextMessageBy: z.enum(RETURN_NEXT_BY).nullable(),
+  why: z.enum(RETURN_NOT_RESUMED_WHY).nullable(),
+  /** True when the bot already had the chat (a second press): nothing changed and nothing was sent. */
+  alreadyWithBot: z.boolean(),
+});
+export type ReturnToBotResponse = z.infer<typeof returnToBotResponseSchema>;
+
+/** Outbox event written in the transaction of Return to bot when a flow is to continue; payload ids are uuids. */
+export const HANDOFF_RETURNED_TO_BOT = 'handoff.returned_to_bot';
 
 // --- the card and the trace -----------------------------------------------------------------------------------------------
 

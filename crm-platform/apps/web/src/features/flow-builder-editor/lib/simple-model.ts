@@ -253,6 +253,8 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
   const feeders = new Map<string, string[]>();
   /** Where an API step's `error` wire goes: it has to reach the step `success` reaches, or the graph is not a Simple one. */
   const apiError = new Map<string, string>();
+  /** Where a Human handoff step's optional `returned` exit goes: it rides on the step as `data.returnTo`. */
+  const returnedTo = new Map<string, string>();
   for (const e of graph.flowEdges) {
     const src = nodes.get(e.source);
     const dst = nodes.get(e.target);
@@ -283,6 +285,8 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
         next.set(src.id, dst.id);
         feeders.set(dst.id, [...(feeders.get(dst.id) ?? []), src.id]);
       }
+    } else if (src.type === 'assign' && e.sourceHandle === 'returned') {
+      returnedTo.set(src.id, dst.id);
     } else if (src.type === 'carousel' && e.sourceHandle === 'next') {
       // A carousel with no reply button carries on by this wire; the step it reaches rides on the node (`carryOn`).
       continue;
@@ -349,6 +353,7 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       delete step.data.carryOn;
       delete step.data.endOptions;
       if (errorEnds.has(n.id)) step.data.errorEnds = true;
+      if (returnedTo.has(n.id)) step.data.returnTo = returnedTo.get(n.id);
       steps.push(step);
       if (carry && !seen.has(carry)) {
         cur = carry;
@@ -389,6 +394,7 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
         l === LINK_NEXT || l === LINK_END || (l && ids.has(l)) ? l : null,
       );
       if (s.goto && !ids.has(s.goto)) delete s.goto;
+      if (typeof s.data.returnTo === 'string' && !ids.has(s.data.returnTo)) delete s.data.returnTo;
     }
 
   return {
@@ -421,6 +427,9 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
   doc.journeys.forEach((j, ji) => {
     j.steps.forEach((s, si) => {
       const data = { ...s.data };
+      // The Human handoff's `returned` exit is a wire in the graph; here it is the step it leads to.
+      const returnTo = typeof data.returnTo === 'string' ? data.returnTo : '';
+      delete data.returnTo;
       // The journey's name rides on its first step (the graph has no place for it); the main flow's is fixed.
       if (si === 0 && ji > 0) data.journeyName = j.name.trim();
       else delete data.journeyName;
@@ -452,6 +461,14 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       if (!BRANCHING.has(s.type) && nextStep) for (const h of exits) edge(s.id, h, nextStep.id);
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto))
         for (const h of exits) edge(s.id, h, s.goto);
+      if (
+        s.type === 'assign' &&
+        data.handoff === 2 &&
+        returnTo &&
+        returnTo !== s.id &&
+        known.has(returnTo)
+      )
+        edge(s.id, 'returned', returnTo);
       if (s.type === 'carousel' && optionCount(s) === 0 && following)
         edge(s.id, 'next', following.id);
       if (BRANCHING.has(s.type)) {
@@ -1084,7 +1101,11 @@ export function problems(
 export function unreachable(doc: SimpleDoc): SimpleStep[] {
   const targets = new Set(
     allSteps(doc)
-      .flatMap((s) => [...s.links, s.goto ?? null])
+      .flatMap((s) => [
+        ...s.links,
+        s.goto ?? null,
+        typeof s.data.returnTo === 'string' ? s.data.returnTo : null,
+      ])
       .filter((l): l is string => !!l),
   );
   const out: SimpleStep[] = [];

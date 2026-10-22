@@ -583,6 +583,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         summary: '',
         customerMessage: '',
         offHoursMessage: '',
+        returnMessage: '',
       };
     case 'subflow':
       return { flow: '' };
@@ -828,12 +829,14 @@ export function flbPortsFor(
     case 'media':
     case 'sequence':
     case 'assign':
-      // The Human handoff has three exits; a node saved before it existed (no `handoff: 2`) keeps its single exit.
+      // The Human handoff has three exits and an optional fourth, `returned` (a person pressed Return to bot: the flow continues there);
+      // a node saved before it existed (no `handoff: 2`) keeps its single exit.
       return d.handoff === 2
         ? [
             { id: 'assigned', label: 'assigned', kind: 'flow' },
             { id: 'waiting', label: 'waiting in queue', kind: 'flow' },
             { id: 'unavailable', label: 'no agent / out of hours', kind: 'no' },
+            { id: 'returned', label: 'returned to the bot', kind: 'flow' },
           ]
         : out('next');
     case 'tag':
@@ -1014,7 +1017,7 @@ export const flbIsMultiPort = (
 const HANDLE_PORT: Record<string, Record<string, number>> = {
   condition: { yes: 1, no: 2 },
   // Human handoff (BL-398): the old single exit (`out`) stays port 1.
-  assign: { assigned: 1, waiting: 2, unavailable: 3 },
+  assign: { assigned: 1, waiting: 2, unavailable: 3, returned: 4 },
   book_appointment: { booked: 1, no_slots: 2 },
   whatsapp_shop: { purchased: 1, abandoned: 2 },
   woocommerce: { purchased: 1, abandoned: 2 },

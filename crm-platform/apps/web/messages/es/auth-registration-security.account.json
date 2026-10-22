@@ -540,7 +540,7 @@
             "chatbot_widgets": "Widgets de chatbot",
             "wa_storefront": "Catálogo de WhatsApp",
             "inbox_sla": "SLA de la bandeja",
-            "inbox_routing": "Enrutamiento de la bandeja",
+            "inbox_routing": "Enrutamiento inteligente",
             "waba_calling": "Llamadas de WhatsApp",
             "inbox_kanban": "Kanban de la bandeja",
             "team_performance": "Rendimiento del equipo",
@@ -566,7 +566,7 @@
             "record_assignment": "Reglas de asignación de registros",
             "team_hierarchy": "Jerarquía de equipos y gerentes",
             "custom_roles": "Roles personalizados y alcances",
-            "inbox_assignment_sticky": "Propietario del contacto y agente fijo"
+            "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo"
           },
           "cta": {
             "continueFree": "Continuar gratis",

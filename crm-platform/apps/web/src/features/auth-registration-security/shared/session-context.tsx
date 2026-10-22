@@ -22,6 +22,9 @@ export function useSession(): SessionResponse {
   return s;
 }
 
+/** The session when there is one around; null in isolation (a test, a story). */
+export const useOptionalSession = (): SessionResponse | null => useContext(SessionContext);
+
 /** True when the caller holds the permission. Absent = denied. */
 export function useCan(permission: string): boolean {
   return permission in useSession().permissions;

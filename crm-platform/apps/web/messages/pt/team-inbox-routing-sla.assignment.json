@@ -12,7 +12,7 @@
         "loadFailed": "Não foi possível carregar as configurações de atribuição.",
         "retry": "Tentar novamente",
         "notInPlan": "Não incluído no seu plano",
-        "upgradeHint": "Seu plano não inclui este recurso. Peça ao proprietário da conta para fazer upgrade do plano.",
+        "upgradeHint": "Incluído no complemento Roteamento inteligente ou em um plano superior.",
         "stepFirst": "Verificado primeiro",
         "stepMaster": "Chave principal",
         "stepAfter": "Depois de assumir",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Precisa de mais controle? Adicione regras",
         "intro": "Opcional. As regras enviam chats específicos (de um canal, com certas palavras na mensagem, de um contato novo...) para agentes ou equipes específicos. Se as quatro chaves forem suficientes, você nunca precisará criar uma.",
-        "locked": "As regras não estão no seu plano. Você ainda tem a fila de espera, a opção de assumir chats e a atribuição manual. Peça ao proprietário da conta para fazer upgrade do plano.",
+        "locked": "As regras fazem parte do complemento Roteamento inteligente ou de um plano superior. Você continua com a fila de espera, a captura de conversas e a atribuição manual.",
         "pipelineTitle": "Como um chat novo é atribuído",
         "pipeline": {
           "agent": "1. Responsável pelo contato e Agente fixo",

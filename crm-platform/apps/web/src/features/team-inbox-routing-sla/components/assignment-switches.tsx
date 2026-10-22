@@ -7,6 +7,7 @@ import { useState, type ReactNode } from 'react';
 import type { HandoffSettings, UpdateHandoffSettingsInput } from '@crm/contracts';
 import { Alert, Badge, Input, Spinner, Switch, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
@@ -293,7 +294,11 @@ function SwitchRow({
           {locked && lockedText && <Badge tone="warning">{lockedText[0]}</Badge>}
         </p>
         <div className="mt-1">{children}</div>
-        {locked && lockedText && <p className="mt-1 text-xs text-warning">{lockedText[1]}</p>}
+        {locked && lockedText && (
+          <p className="mt-1 text-xs text-warning" data-testid={`switch-${id}-lock`}>
+            {lockedText[1]} <AddonLockLink />
+          </p>
+        )}
       </div>
       {control}
     </div>
@@ -326,7 +331,11 @@ function AdvancedRow({
         </p>
         <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
         {extra && <p className="mt-0.5 text-xs text-muted-foreground">{extra}</p>}
-        {locked && upgrade && <p className="mt-0.5 text-xs text-warning">{upgrade}</p>}
+        {locked && upgrade && (
+          <p className="mt-0.5 text-xs text-warning">
+            {upgrade} <AddonLockLink />
+          </p>
+        )}
       </div>
       {control}
     </div>

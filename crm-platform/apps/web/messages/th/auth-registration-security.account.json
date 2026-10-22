@@ -540,7 +540,7 @@
             "chatbot_widgets": "วิดเจ็ตแชทบอต",
             "wa_storefront": "แคตตาล็อก WhatsApp",
             "inbox_sla": "SLA ของกล่องข้อความ",
-            "inbox_routing": "การกำหนดเส้นทางกล่องข้อความ",
+            "inbox_routing": "การกำหนดเส้นทางอัจฉริยะ",
             "waba_calling": "การโทรผ่าน WhatsApp",
             "inbox_kanban": "คัมบังกล่องข้อความ",
             "team_performance": "ประสิทธิภาพทีม",
@@ -566,7 +566,7 @@
             "record_assignment": "กฎการมอบหมายระเบียน",
             "team_hierarchy": "ลำดับชั้นทีมและผู้จัดการ",
             "custom_roles": "บทบาทที่กำหนดเองและขอบเขต",
-            "inbox_assignment_sticky": "เจ้าของผู้ติดต่อและเจ้าหน้าที่ประจำ"
+            "inbox_assignment_sticky": "การกำหนดเส้นทางอัจฉริยะ: เจ้าของผู้ติดต่อและเอเจนต์ประจำ"
           },
           "cta": {
             "continueFree": "ใช้ฟรีต่อ",

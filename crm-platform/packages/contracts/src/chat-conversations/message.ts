@@ -233,6 +233,23 @@ export const messageSystemEventSchema = z.discriminatedUnion('event', [
     fromStage: z.string().max(120),
     toStage: z.string().max(120),
   }),
+  /**
+   * A person gave the conversation back to the bot (`stage: 'pressed'`, written at once: `resumed` says whether the flow continues
+   * now or the bot waits for the next message), and what then happened to the flow (`stage: 'result'`: it continued, or why it did not,
+   * and what became of the optional message to the customer). Staff-only line; `by` is the person's name.
+   */
+  z.object({
+    event: z.literal('bot_returned'),
+    stage: z.enum(['pressed', 'result']),
+    by: z.string().max(200).nullable().optional(),
+    resumed: z.enum(['flow', 'next_message']).optional(),
+    nextMessageBy: z.enum(['live_flow', 'default_flow']).nullable().optional(),
+    result: z.enum(['continued', 'claimed_again', 'flow_not_live', 'start_failed']).optional(),
+    customer: z
+      .enum(['sent', 'window_closed', 'no_consent', 'failed', 'channel_unavailable'])
+      .nullable()
+      .optional(),
+  }),
 ]);
 export type MessageSystemEvent = z.infer<typeof messageSystemEventSchema>;
 
