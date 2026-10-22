@@ -4,6 +4,7 @@ import {
   ERROR_CODES,
   createPlanRequestSchema,
   type CreatePlanPayload,
+  type PlanAddonImpactResponse,
   type PlanAddonOptionsResponse,
   type PlanAdminItem,
   type PlanAdminListResponse,
@@ -29,6 +30,7 @@ import {
   visibleAddonIds,
   visibleAddonIdsByPlan,
 } from './plan-visible-addons';
+import { addonRenewalImpact } from './plan-addon-impact';
 import { planKind, slugifyPlanName, uniquePlanSlug } from './plan-rules';
 import { PlanStore } from './plan-store';
 
@@ -147,6 +149,14 @@ export class PlanAdminService {
   /** The add-on packs a plan may enable, for the plan form (every operator role reads, like the catalogue). */
   async addonOptions(): Promise<PlanAddonOptionsResponse> {
     return { data: await this.store.tx((tx) => addonOptions(tx)) };
+  }
+
+  /** How many of one plan's workspaces still pay for each plain add-on pack (what "include it in this plan" would stop renewing). */
+  async addonImpact(uuid: string): Promise<PlanAddonImpactResponse> {
+    return this.store.tx(async (tx) => {
+      const row = await this.byUuid(tx, uuid);
+      return addonRenewalImpact(tx, row.slug);
+    });
   }
 
   async get(uuid: string): Promise<PlanAdminItem> {

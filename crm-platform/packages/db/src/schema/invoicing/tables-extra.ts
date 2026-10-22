@@ -124,7 +124,6 @@ export const creditNoteItems = pgTable(
       columns: [t.orgId, t.invoiceItemId],
       foreignColumns: [invoiceItems.orgId, invoiceItems.id],
     }).onDelete('set null'),
-    index('idx_credit_note_items_note').on(t.orgId, t.creditNoteId),
   ],
 );
 export type CreditNoteItemsRow = typeof creditNoteItems.$inferSelect;

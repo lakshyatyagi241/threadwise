@@ -82,7 +82,11 @@ A workspace override still wins over everything. When the pack ends, nothing is 
 1. Operator console, Add-ons: open **Teams and permissions** (draft, inactive).
 2. Untick **Free**, enter the price and period, adjust the extra teams if wanted, tick **Active**, save.
 3. Give it to a workspace like any other add-on pack (the workspace's add-ons panel, or checkout once it is active).
-4. To compare, the same keys can be set on a plan (Plans, Features and Limits) or as a single workspace override.
+4. **Include it in a plan** (the plan then gives the two features at no charge): Plans, open the plan, **Add-ons** tab, section **Add-ons included in this plan**, switch **Teams and permissions** on, save.
+   The switch ticks `team_hierarchy` and `custom_roles` on the Features tab (ticking them there by hand flips the switch too, and works exactly as before). The pack also adds a **cap** (`teams: +10`);
+   the extra teams are **not** part of plan inclusion and nothing on the switch changes any limit: set the plan's own `teams` cap on the Limits tab. Because the pack still sells that cap, its add-on card
+   never reads "Included in your plan" and a workspace's renewal of it is **not** stopped. The same keys can also be set as a single workspace override.
+   Design and impact: [specs/addons-marketplace-unification.md](../specs/addons-marketplace-unification.md).
 
 ## 5. Edition business types (persona presets)
 

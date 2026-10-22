@@ -66,8 +66,9 @@ function actorLabel(t: Translate, actorType: string): string {
 }
 
 /**
- * The contact's field-level change history, newest first, with "Load more". Shows the actor type only: the API sends the
- * changing person's id, and there is no name lookup for it here. `showTitle` is off inside the drawer, which has its own.
+ * The contact's field-level change history, newest first, with "Load more". Each line names the person who made the change (the
+ * API sends their name); only a change by the system or the API, or by someone no longer in the workspace, shows the actor type.
+ * `showTitle` is off inside the drawer, which has its own.
  */
 export function FieldHistoryPanel({
   contactId,
@@ -156,7 +157,7 @@ function HistoryRow({ entry }: { entry: FieldHistoryEntry }) {
         <span className="mx-1" aria-hidden="true">
           &middot;
         </span>
-        {t('by', { actor: actorLabel(t, entry.actorType) })}
+        {t('by', { actor: entry.changedByName ?? actorLabel(t, entry.actorType) })}
       </div>
     </li>
   );

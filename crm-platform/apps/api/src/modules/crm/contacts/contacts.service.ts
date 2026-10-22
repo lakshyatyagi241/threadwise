@@ -1731,6 +1731,7 @@ export class ContactsService {
         ...new Set(items.map((i) => i.actorId).filter((id): id is number => id !== null)),
       ];
       const actorUuids = await this.repo.resolveUserUuids(tx, ctx.orgId, actorIds);
+      const actorNames = await this.repo.resolveUserNames(tx, ctx.orgId, actorIds);
 
       const entries: FieldHistoryEntry[] = items.flatMap((entry) =>
         Object.entries(entry.delta ?? {}).map(([fieldKey, change]) => ({
@@ -1739,6 +1740,7 @@ export class ContactsService {
           newValue: (change as { new: unknown }).new,
           actorType: entry.actorType,
           changedByUserId: entry.actorId !== null ? (actorUuids.get(entry.actorId) ?? null) : null,
+          changedByName: entry.actorId !== null ? (actorNames.get(entry.actorId) ?? null) : null,
           changedAt: entry.at.toISOString(),
         })),
       );

@@ -1404,7 +1404,8 @@
             "packInactive": "El paquete del complemento está desactivado, así que nadie puede comprarlo.",
             "appUnpublished": "La aplicación no está publicada, así que los espacios de trabajo aún no pueden verla.",
             "appLabel": "Aplicación: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# complemento seleccionado} other {# complementos seleccionados}}"
           },
           "featureHints": {
             "automation": "El creador de flujos y las automatizaciones que responden y actúan sobre las conversaciones.",
@@ -1705,6 +1706,33 @@
             "chat": "Chat",
             "crm": "CRM de ventas",
             "platform": "Compartido por ambos"
+          },
+          "marketplace": {
+            "title": "Apps del Marketplace ofrecidas a los espacios de trabajo de este plan"
+          },
+          "included": {
+            "title": "Complementos incluidos en este plan",
+            "intro": "Activa un complemento para incluirlo: los espacios de trabajo de este plan lo reciben sin coste y su tarjeta dice \"Incluido en tu plan\". Esto marca exactamente las funciones del complemento en la pestaña Funciones, y marcarlas allí cambia el interruptor. Los complementos no incluidos se siguen vendiendo a su propio precio a todos los espacios de trabajo con un plan de pago activo.",
+            "readOnly": "Puedes ver este plan pero no modificarlo, así que estos interruptores están bloqueados.",
+            "loading": "Cargando complementos",
+            "loadFailed": "No se pudieron cargar los complementos. No se cambió nada.",
+            "empty": "Aún no hay complementos",
+            "emptyHint": "Complementos como Enrutamiento inteligente y Equipos y permisos se crean en Complementos, en la consola del operador.",
+            "stateFull": "Incluido",
+            "statePartial": "Incluido en parte",
+            "stateNone": "No incluido",
+            "noPrice": "Sin precio definido",
+            "gives": "Ofrece: {features}",
+            "switchLabel": "Incluir {name} en este plan",
+            "noFeatures": "Este complemento solo añade límites, así que no hay ninguna función que incluir. Sus límites no forman parte de la inclusión en el plan; define los límites propios del plan en la pestaña Límites.",
+            "partial": "Incluido en parte: {count} de {total} funciones están activas en este plan. Siguen desactivadas: {missing}.",
+            "includeFully": "Incluir por completo",
+            "limitsNote": "Este complemento también añade límites extra ({limits}). El límite extra no forma parte de la inclusión en el plan y nada de aquí lo cambia: define el límite propio del plan en la pestaña Límites. Los espacios de trabajo siguen comprando el complemento por el límite extra.",
+            "unlistedNote": "Algunas de sus funciones ({features}) no están en la lista estándar de complementos. Aún se pueden activar para el plan; solo cambia la forma de comprar este complemento como paquete.",
+            "inactiveNote": "Este complemento es un borrador o está desactivado, así que nadie puede comprarlo todavía. Incluirlo en el plan sigue funcionando.",
+            "impactCount": "{count, plural, one {# espacio de trabajo ya paga este complemento.} other {# espacios de trabajo ya pagan este complemento.}} Su renovación se detendrá al final del periodo actual, no se reembolsa nada y hoy no se cancela nada.",
+            "impactUnknown": "Los espacios de trabajo de este plan que ya pagan este complemento dejarán de renovarlo al final de su periodo actual. No se reembolsa nada y hoy no se cancela nada. No se pudo cargar la cifra.",
+            "offNote": "Desactivado: los espacios de trabajo de este plan pierden estas funciones salvo que compren el complemento, y pasa a poder comprarse a su precio."
           }
         }
       },

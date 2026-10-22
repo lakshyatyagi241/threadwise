@@ -297,7 +297,8 @@
       "teamLabel": "Ekip",
       "teamFilter": "Ekibe göre filtrele",
       "allTeams": "Tüm ekipler",
-      "teamFormer": "Eski ekip"
+      "teamFormer": "Eski ekip",
+      "unhideColumn": "Sütunu göster"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",

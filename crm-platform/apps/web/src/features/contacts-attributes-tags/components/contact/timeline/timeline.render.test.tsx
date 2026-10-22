@@ -210,6 +210,7 @@ describe('TimelineRow', () => {
         newValue,
         actorType: 'user',
         changedByUserId: null,
+        changedByName: null,
         changedAt: '2026-10-03T10:00:00.000Z',
       }));
     expect(row(fromFieldHistory(change([['lifecycleStage', 'new', 'qualified']]))[0]!)).toContain(

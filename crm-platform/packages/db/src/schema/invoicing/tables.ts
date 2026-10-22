@@ -277,7 +277,6 @@ export const invoiceItems = pgTable(
       columns: [t.orgId, t.taxRateId],
       foreignColumns: [taxRates.orgId, taxRates.id],
     }).onDelete('set null'),
-    index('idx_invoice_items_invoice_id').on(t.orgId, t.invoiceId),
     unique('uq_invoice_items_sort').on(t.orgId, t.invoiceId, t.sort),
   ],
 );
@@ -444,7 +443,6 @@ export const invoiceTaxSummary = pgTable(
       columns: [t.orgId, t.invoiceId],
       foreignColumns: [invoices.orgId, invoices.id],
     }).onDelete('cascade'),
-    index('idx_invoice_tax_summary_invoice_id').on(t.orgId, t.invoiceId),
     unique('uq_invoice_tax_summary_row').on(
       t.orgId,
       t.invoiceId,
