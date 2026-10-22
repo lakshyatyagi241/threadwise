@@ -15,10 +15,10 @@ type Raw = Record<string, unknown>;
  * A message that is only `sent` counts as delivered, as in Reference. A migrated message carries no receipt (the chat history has
  * none; chat-delivery finds no billing-log match), so all migrated outbound history reads `sent`: without this its delivered rate is 0.
  */
-const DELIVERED = sql.raw(
+export const DELIVERED = sql.raw(
   `(status IN ('delivered','read','sent') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
 );
-const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
+export const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 /** Failed: the status says so, or a failure reason was recorded and nothing was ever delivered or read. */
 const FAILED = sql.raw(
   `(status IN ('failed','undelivered') OR (failure_reason IS NOT NULL AND delivered_at IS NULL AND read_at IS NULL AND status NOT IN ('delivered','read')))`,
