@@ -297,7 +297,8 @@
       "teamLabel": "الفريق",
       "teamFilter": "التصفية حسب الفريق",
       "allTeams": "كل الفرق",
-      "teamFormer": "فريق سابق"
+      "teamFormer": "فريق سابق",
+      "unhideColumn": "إظهار عمود"
     },
     "bulk": {
       "label": "إجراءات على جهات الاتصال المحددة",

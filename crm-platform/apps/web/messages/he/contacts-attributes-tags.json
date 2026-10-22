@@ -297,7 +297,8 @@
       "teamLabel": "צוות",
       "teamFilter": "סינון לפי צוות",
       "allTeams": "כל הצוותים",
-      "teamFormer": "צוות קודם"
+      "teamFormer": "צוות קודם",
+      "unhideColumn": "הצגת עמודה"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",

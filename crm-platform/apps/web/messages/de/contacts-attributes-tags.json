@@ -297,7 +297,8 @@
       "teamLabel": "Team",
       "teamFilter": "Nach Team filtern",
       "allTeams": "Alle Teams",
-      "teamFormer": "Früheres Team"
+      "teamFormer": "Früheres Team",
+      "unhideColumn": "Spalte einblenden"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",

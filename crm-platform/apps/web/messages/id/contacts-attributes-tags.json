@@ -297,7 +297,8 @@
       "teamLabel": "Tim",
       "teamFilter": "Filter menurut tim",
       "allTeams": "Semua tim",
-      "teamFormer": "Tim sebelumnya"
+      "teamFormer": "Tim sebelumnya",
+      "unhideColumn": "Tampilkan kolom"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",

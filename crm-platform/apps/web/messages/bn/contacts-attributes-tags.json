@@ -297,7 +297,8 @@
       "teamLabel": "দল",
       "teamFilter": "দল অনুযায়ী ফিল্টার",
       "allTeams": "সব দল",
-      "teamFormer": "সাবেক দল"
+      "teamFormer": "সাবেক দল",
+      "unhideColumn": "কলাম দেখান"
     },
     "bulk": {
       "label": "নির্বাচিত কন্টাক্টের অ্যাকশন",
