@@ -617,6 +617,46 @@ describe('routing rule: start a flow (TW-TIB2-017, TW-FLR-010)', () => {
     expect(cleared.status, JSON.stringify(cleared.body)).toBe(200);
     expect(cleared.body.triggerFlow).toBeNull();
   });
+
+  it('a rule that marks the thread spam and names a flow starts nothing: a spam thread gets no bot', async () => {
+    const t = await p.api.signup('flrspam');
+    const ch = await simChannel(p as never, t);
+    const f = await addFlow(p, t, {
+      graph: graph([node('a', 'message', { text: 'Spam flow: hello' })], []),
+      trigger: { kind: 'manual_enroll' },
+      published: false,
+    });
+    const rules = p.api.as(t.admin);
+    const made = await rules
+      .post('/v2/inbox/routing/rules')
+      .set('idempotency-key', 'spam-flow')
+      .send({
+        name: 'Spam refunds',
+        conditions: { keywords: { words: ['refund'] } },
+        markSpam: true,
+        triggerFlowId: f.uuid,
+      });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    const live = await rules
+      .patch(`/v2/inbox/routing/rules/${made.body.id}`)
+      .send({ rowVersion: made.body.rowVersion, isActive: true });
+    expect(live.status, JSON.stringify(live.body)).toBe(200);
+
+    const from = nextPhone();
+    await simInbound(p as never, t, ch, { from, text: 'I need a refund' });
+    const conv = await until(`spam-routed ${from}`, async () => {
+      const r = await p.h.owner.query(
+        `SELECT id, status FROM conversations WHERE org_id = $1 AND channel_id = $2 AND peer_key = $3`,
+        [t.orgId, ch.internalId, from],
+      );
+      return r.rows[0]?.status === 'spam' ? r.rows[0] : undefined;
+    });
+    expect(conv.status).toBe('spam');
+    await drained('the routing event delivered', () => outboxQuiet(t));
+    await quiet();
+    expect(await runsOf(p, t, f.id)).toHaveLength(0);
+    expect(await sentTo(p, t, ch, from)).not.toContain('Spam flow: hello');
+  });
 });
 
 describe('a lead source with a flow (TW-FLR-010 rule 4)', () => {
