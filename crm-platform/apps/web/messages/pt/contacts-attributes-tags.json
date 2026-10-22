@@ -1336,7 +1336,7 @@
         "closePicker": "Fechar",
         "changed": "Propriedades a alterar",
         "clear": "Limpar",
-        "keep": "Manter",
+        "remove": "Remover {name}",
         "setValue": "Definir um valor",
         "willClear": "Será esvaziada em {count, plural, one {o contato selecionado} other {todos os # contatos selecionados}}.",
         "requiredNoClear": "Uma propriedade obrigatória não pode ser limpa.",

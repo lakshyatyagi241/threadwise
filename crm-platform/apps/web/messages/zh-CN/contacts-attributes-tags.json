@@ -1336,7 +1336,7 @@
         "closePicker": "关闭",
         "changed": "要更改的属性",
         "clear": "清空",
-        "keep": "保持不变",
+        "remove": "移除{name}",
         "setValue": "设置值",
         "willClear": "将清空{count, plural, other {所选的全部 # 个联系人}}的该值。",
         "requiredNoClear": "必填属性无法清空。",

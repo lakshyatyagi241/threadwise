@@ -1336,7 +1336,7 @@
         "closePicker": "Chiudi",
         "changed": "Proprietà da modificare",
         "clear": "Svuota",
-        "keep": "Mantieni",
+        "remove": "Rimuovi {name}",
         "setValue": "Imposta un valore",
         "willClear": "Verrà svuotata su {count, plural, one {il contatto selezionato} other {tutti i # contatti selezionati}}.",
         "requiredNoClear": "Una proprietà obbligatoria non può essere svuotata.",
