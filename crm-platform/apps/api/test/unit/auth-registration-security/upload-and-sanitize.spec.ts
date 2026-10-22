@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { UploadPolicyService } from '../../../src/modules/auth/security/upload-policy.service';
 import { HtmlSanitizerService } from '../../../src/modules/auth/security/html-sanitizer.service';
-import { jpegOfSize, pngOfSize } from '../../support/images';
+import { pngOfSize } from '../../support/images';
 
 const PNG = pngOfSize();
 const upload = new UploadPolicyService();
