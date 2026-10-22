@@ -28,6 +28,7 @@ import {
   ReminderReportController,
   ReminderTestSendController,
 } from './reminder-sequence.controller';
+import { ReminderPlan } from './reminder-plan';
 import { ReminderPacksService } from './reminder-packs.service';
 import { ReminderReportService } from './reminder-report.service';
 import { ReminderTestSendService } from './reminder-test-send';
@@ -157,6 +158,7 @@ import { SlotsService } from './slots.service';
     AppointmentChannelsRepository,
     AppointmentChannelsService,
     AppointmentTemplatesService,
+    ReminderPlan,
     ReminderPacksService,
     ReminderReportService,
     ReminderTestSendService,
@@ -214,6 +216,7 @@ import { SlotsService } from './slots.service';
     AppointmentRemindersRepository,
     // The worker's sender asks the owner's channel choice before it sends.
     AppointmentChannelsRepository,
+    ReminderPlan,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentMeetingMirror,

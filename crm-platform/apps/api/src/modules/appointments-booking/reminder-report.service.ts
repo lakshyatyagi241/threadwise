@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   defaultStepKind,
-  REMINDER_CONFIRM_BUTTONS_FEATURE,
   type BookingReminderKind,
   type BookingReminderStepKind,
   type ReminderReport,
@@ -11,7 +10,7 @@ import {
   type ReminderReportType,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
-import { PlanEntitlementService } from '../plans-subscriptions-trials/plan-entitlement.service';
+import { ReminderPlan } from './reminder-plan';
 import { DatabaseService } from '../../infra/db/database.service';
 
 type Raw = Record<string, unknown>;
@@ -38,7 +37,7 @@ const stepOf = (r: Raw): BookingReminderStepKind =>
 export class ReminderReportService {
   constructor(
     private readonly db: DatabaseService,
-    private readonly entitlements: PlanEntitlementService,
+    private readonly plan: ReminderPlan,
   ) {}
 
   async report(query: ReminderReportQuery): Promise<ReminderReport> {
@@ -46,10 +45,7 @@ export class ReminderReportService {
     const to = query.to ? new Date(query.to) : new Date();
     const from = query.from ? new Date(query.from) : new Date(to.getTime() - 30 * DAY);
     // The button counts are part of the upgrade tier: a plan without the feature gets no counts (null), not zeros.
-    const buttonsIncluded = await this.entitlements.featureEnabled(
-      orgId,
-      REMINDER_CONFIRM_BUTTONS_FEATURE,
-    );
+    const buttonsIncluded = (await this.plan.parts(orgId)).buttons;
     return this.db.tx(async (tx) => {
       const scope = sql`r.org_id = ${orgId} AND r.due_at >= ${from.toISOString()} AND r.due_at < ${to.toISOString()}
         ${query.bookingTypeId ? sql`AND bt.uuid = ${query.bookingTypeId}::uuid` : sql``}`;

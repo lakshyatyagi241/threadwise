@@ -122,6 +122,7 @@ const RESULT: ReminderPackAdoptResult = {
   ],
   added: 2,
   replaced: 0,
+  withheld: [],
 };
 
 let root: Root;
@@ -277,6 +278,35 @@ describe('the reminder pack dialog', () => {
     expect(text).toContain('goes out by email');
   });
 
+  it('says what the plan left out of the applied pack, with the way to the plans', async () => {
+    api.adoptPack.mockResolvedValue({
+      ...RESULT,
+      withheld: [
+        { stepKind: 'reminder_24h', part: 'buttons' },
+        { stepKind: 'rebook', part: 'rebook' },
+      ],
+    });
+    mount();
+    await flush();
+    await pick('Clinic and doctor');
+    click(applyButton());
+    await flush();
+    const text = document.body.textContent!;
+    expect(text).toContain('Left out because of your plan');
+    expect(text).toContain('buttons of the 24 hour reminder');
+    expect(text).toContain('Rebook message: it is saved switched off');
+    expect(document.querySelector('a[href="/account/plans"]')).not.toBeNull();
+  });
+
+  it('says nothing is left out when the plan has everything', async () => {
+    mount();
+    await flush();
+    await pick('Clinic and doctor');
+    click(applyButton());
+    await flush();
+    expect(document.body.textContent).not.toContain('Left out because of your plan');
+  });
+
   it('can leave the WhatsApp messages as drafts', async () => {
     mount();
     await flush();
@@ -339,8 +369,12 @@ describe('the reminder pack dialog', () => {
     mount({ features: ['appointment_booking'] });
     await flush();
     await pick('Clinic and doctor');
-    expect(document.body.textContent).toContain('does not include rebook messages');
-    expect(document.body.textContent).toContain('does not include the reply buttons');
+    expect(document.body.textContent).toContain(
+      'rebook step is part of the Appointments upgrade tier',
+    );
+    expect(document.body.textContent).toContain(
+      'buttons are part of the Appointments upgrade tier',
+    );
     expect(document.querySelector('a[href="/account/plans"]')).not.toBeNull();
   });
 

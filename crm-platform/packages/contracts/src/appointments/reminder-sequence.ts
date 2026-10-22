@@ -102,6 +102,16 @@ export const reminderPackPreviewStepSchema = z.object({
 });
 export type ReminderPackPreviewStep = z.infer<typeof reminderPackPreviewStepSchema>;
 
+/**
+ * A part of a pack the workspace's plan does not include, so applying the pack leaves it out (the buttons of a step, or the whole rebook
+ * step switched on). The pack still applies; this says what it does without. Both belong to the Appointments upgrade tier.
+ */
+export const reminderPackWithheldSchema = z.object({
+  stepKind: bookingReminderStepKindSchema,
+  part: z.enum(['buttons', 'rebook']),
+});
+export type ReminderPackWithheld = z.infer<typeof reminderPackWithheldSchema>;
+
 export const reminderPackPreviewSchema = z.object({
   pack: reminderPackSchema,
   language: reminderPackLanguageSchema,
@@ -121,6 +131,8 @@ export const reminderPackPreviewSchema = z.object({
   blocked: z.enum(['cap_exceeded']).nullable(),
   /** Some step would replace something the owner wrote or changed: the owner has to confirm it. */
   needsConfirm: z.boolean(),
+  /** What the plan does not include, so the pack leaves it out. */
+  withheld: z.array(reminderPackWithheldSchema).default([]),
 });
 export type ReminderPackPreview = z.infer<typeof reminderPackPreviewSchema>;
 
@@ -147,6 +159,8 @@ export const reminderPackAdoptResultSchema = z.object({
   ),
   added: z.number().int(),
   replaced: z.number().int(),
+  /** What was left out because the plan does not include it (the buttons, the rebook step). Empty on a plan that has both. */
+  withheld: z.array(reminderPackWithheldSchema).default([]),
 });
 export type ReminderPackAdoptResult = z.infer<typeof reminderPackAdoptResultSchema>;
 

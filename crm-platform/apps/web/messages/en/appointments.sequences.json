@@ -2,15 +2,15 @@
   "appointments": {
     "reminders": {
       "upgrade": "Upgrade your plan",
-      "buttonsLocked": "The Confirm, Reschedule and Cancel buttons are not part of your plan.",
+      "buttonsLocked": "The Confirm, Reschedule and Cancel buttons are part of the Appointments upgrade tier, which your plan does not include.",
       "timeline": {
         "label": "Reminder timeline",
         "addMenu": "Add a step",
         "addStep": "Add step",
         "count": "{count} of {max} steps with a time. The booking confirmation and the no-show message do not count.",
         "capReached": "You have reached {max} steps with a time. Remove one to add another.",
-        "rebookLocked": "Rebook messages are not part of your plan. You can set the step up, but it stays off until you upgrade.",
-        "rebookLockedStep": "This step cannot be switched on with your current plan.",
+        "rebookLocked": "Rebook messages are part of the Appointments upgrade tier, which your plan does not include. You can set the step up, but it stays off until your plan includes them.",
+        "rebookLockedStep": "Part of the Appointments upgrade tier: it cannot be switched on with your current plan.",
         "empty": "No steps yet. Add the first step, or start from a ready-made sequence.",
         "lane": {
           "booked": "When it is booked",
@@ -56,7 +56,7 @@
         "choiceHint": {
           "present": "Already added",
           "cap": "Limit reached",
-          "locked": "Plan upgrade needed to switch on",
+          "locked": "Upgrade tier: not in your plan",
           "online": "Online appointments"
         },
         "enabledOf": "Send: {step}",
@@ -136,8 +136,8 @@
         },
         "replaceOwnText": "You wrote your own text for this step. It will be replaced.",
         "planNotes": {
-          "rebook": "Your plan does not include rebook messages, so this step is saved switched off.",
-          "buttons": "Your plan does not include the reply buttons, so they are left out."
+          "rebook": "The rebook step is part of the Appointments upgrade tier, which your plan does not include, so this step is saved switched off.",
+          "buttons": "The Confirm, Reschedule and Cancel buttons are part of the Appointments upgrade tier, which your plan does not include, so they are left out."
         },
         "showMessages": "Show messages",
         "hideMessages": "Hide messages",
@@ -180,7 +180,10 @@
           "waiting": "Until Meta approves a message, that step goes out by email.",
           "metaError": "Meta refused it: {error}",
           "refresh": "Refresh status",
-          "refreshing": "Refreshing"
+          "refreshing": "Refreshing",
+          "withheldTitle": "Left out because of your plan",
+          "withheldButtons": "The Confirm, Reschedule and Cancel buttons of the {step}.",
+          "withheldRebook": "The {step}: it is saved switched off."
         }
       },
       "test": {

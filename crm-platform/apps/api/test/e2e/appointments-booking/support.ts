@@ -1,5 +1,4 @@
 import { expect } from 'vitest';
-import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import type { AppointmentMessenger } from '../../../src/infra/providers/appointments-booking';
 import { AuditService } from '../../../src/kernel/audit/audit.service';
@@ -12,6 +11,7 @@ import { AppointmentsSupport } from '../../../src/modules/appointments-booking/a
 import { BookingTypesRepository } from '../../../src/modules/appointments-booking/booking-types.repository';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { BookingService } from '../../../src/modules/appointments-booking/booking.service';
+import { ReminderPlan } from '../../../src/modules/appointments-booking/reminder-plan';
 import { ReminderReplyService } from '../../../src/modules/appointments-booking/reminder-reply.service';
 import {
   Api,
@@ -41,7 +41,7 @@ export function buildReminderService(
     get(BookingService),
     get(AppointmentsSupport),
     get(ContactActivitiesRepository),
-    get(PlanEntitlementService),
+    get(ReminderPlan),
     {} as never,
   );
   return new AppointmentReminderService(
@@ -54,7 +54,7 @@ export function buildReminderService(
     h.app.get(OutboxService),
     h.app.get(ContactActivitiesRepository),
     replies,
-    h.app.get(PlanEntitlementService),
+    h.app.get(ReminderPlan),
     messenger,
   );
 }
