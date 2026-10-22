@@ -1,0 +1,51 @@
+# Slow-query watcher and Google Chat bridge alerts (tools/chat-bridge). Metrics come from the gchat-bridge process (job crm-chat-bridge).
+# Watchdog always fires: Alertmanager sends it to the bridge every 30 min, so ChatBridgeNoWatchdog is a dead-man for the whole
+# Prometheus -> Alertmanager -> bridge path. Thresholds are initial engineering targets, not measured production values.
+# Tested with promtool: slow-query.rules.test.yml. Runbook: docs/runbooks/google-chat-alerts.md.
+groups:
+  - name: slow-query-and-chat
+    rules:
+      - alert: Watchdog
+        expr: vector(1)
+        labels: { severity: none, group: meta }
+        annotations:
+          summary: 'Dead-man heartbeat: always firing'
+          runbook_url: docs/runbooks/google-chat-alerts.md#watchdog
+
+      - alert: SlowQueryBurst
+        expr: sum(increase(crm_slow_query_events_total{kind=~"running|statement"}[10m])) >= 5
+        for: 0m
+        labels: { severity: warning, group: slow_query }
+        annotations:
+          summary: '{{ $value | printf "%.0f" }} slow-query events in 10 min'
+          description: 'The watcher saw many running or slow statements. See the Slow Queries space and docs/runbooks/google-chat-alerts.md.'
+          runbook_url: docs/runbooks/google-chat-alerts.md#slowqueryburst
+
+      - alert: SlowQueryWatcherDown
+        expr: |
+          (time() - crm_slow_query_watcher_last_poll_timestamp > 120 and crm_slow_query_watcher_last_poll_timestamp > 0)
+          or up{job="crm-chat-bridge"} == 0
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Slow-query watcher is not polling'
+          description: 'No successful poll for over 2 minutes (database unreachable, wrong role, or the bridge is down).'
+          runbook_url: docs/runbooks/google-chat-alerts.md#slowquerywatcherdown
+
+      - alert: ChatBridgeDeliveryFailing
+        expr: sum by (channel) (increase(crm_chat_bridge_failed_total[15m])) > 0
+        for: 0m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Google Chat delivery failing for channel {{ $labels.channel }}'
+          description: 'Messages could not be delivered after retries (bad or revoked webhook URL, or Chat is down).'
+          runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgedeliveryfailing
+
+      - alert: ChatBridgeNoWatchdog
+        expr: time() - crm_chat_bridge_last_watchdog_timestamp_seconds > 7200
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'The Watchdog heartbeat has not reached the bridge for 2 h'
+          description: 'Alerts may not be reaching Google Chat: check Prometheus, Alertmanager and the bridge. Delivered through Grafana contact points if configured.'
+          runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgenowatchdog

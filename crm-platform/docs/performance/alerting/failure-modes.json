@@ -15,7 +15,8 @@
     "resources": "docs/performance/resource-limits/README.md",
     "outbox": "docs/runbooks/outbox-backlog.md",
     "failedWork": "docs/runbooks/failed-background-work.md",
-    "backup": "docs/runbooks/backup-restore.md"
+    "backup": "docs/runbooks/backup-restore.md",
+    "chat": "docs/runbooks/google-chat-alerts.md"
   },
   "modes": [
     {
@@ -352,6 +353,15 @@
       "runbook": "docs/runbooks/p0-failure-modes.md#webhookflood",
       "status": "tested-promtool",
       "note": "queue age is paged by CriticalQueueOldestJobAge; connections idle in a transaction are not alerted (no Postgres exporter is deployed)"
+    },
+    {
+      "id": "chat-alerting-pipeline",
+      "p0": false,
+      "failureMode": "Slow queries and Google Chat alert delivery (watcher down, bridge failing, dead-man heartbeat missing)",
+      "severity": "warning",
+      "alerts": ["Watchdog", "SlowQueryBurst", "SlowQueryWatcherDown", "ChatBridgeDeliveryFailing", "ChatBridgeNoWatchdog"],
+      "runbook": "docs/runbooks/google-chat-alerts.md",
+      "status": "tested-promtool"
     }
   ]
 }

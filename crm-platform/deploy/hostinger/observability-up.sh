@@ -50,21 +50,37 @@ printf '%s' "$(grep '^OBS_METRICS_TOKEN=' .env | head -n1 | cut -d= -f2-)" > sec
 # Where alerts go decides which Alertmanager file is mounted: a generic webhook (Alertmanager's own JSON), Slack (Discord too: append
 # /slack to its webhook URL) or PagerDuty (the secret is then the Events API v2 integration key, not a URL).
 current_file="$(grep '^ALERTMANAGER_FILE=' .env | head -n1 | cut -d= -f2- || true)"
-case "${current_file:-alertmanager.yml}" in alertmanager.slack.yml) current_kind=slack ;; alertmanager.pagerduty.yml) current_kind=pagerduty ;; *) current_kind=webhook ;; esac
-read -rp "Destination type: webhook, slack (also Discord) or pagerduty [$current_kind]: " kind
+case "${current_file:-alertmanager.yml}" in alertmanager.slack.yml) current_kind=slack ;; alertmanager.pagerduty.yml) current_kind=pagerduty ;; alertmanager.gchat.yml) current_kind=gchat ;; *) current_kind=webhook ;; esac
+read -rp "Destination type: webhook, slack (also Discord), pagerduty or gchat [$current_kind]: " kind
 kind="${kind:-$current_kind}"
 case "$kind" in
   webhook) file=alertmanager.yml ;;
   slack) file=alertmanager.slack.yml ;;
   pagerduty) file=alertmanager.pagerduty.yml ;;
-  *) echo "that is not one of webhook, slack, pagerduty" >&2; exit 1 ;;
+  gchat) file=alertmanager.gchat.yml ;;
+  *) echo "that is not one of webhook, slack, pagerduty, gchat" >&2; exit 1 ;;
 esac
 if grep -q '^ALERTMANAGER_FILE=' .env; then sed -i "s/^ALERTMANAGER_FILE=.*/ALERTMANAGER_FILE=$file/" .env; else echo "ALERTMANAGER_FILE=$file" >> .env; fi
+if [ "$kind" = gchat ]; then
+  # Four Google Chat incoming-webhook URLs, hidden, written to secrets/gchat_*_url (read by the gchat-bridge only, never printed).
+  # Enter keeps a current one; an empty file is created for a space left blank (that channel is then reported as unconfigured).
+  for ch in critical other slowquery deploy; do
+    f="secrets/gchat_${ch}_url"
+    read -rsp "Google Chat webhook URL for the $ch space (hidden, Enter to keep/skip): " u; echo
+    if [ -n "${u:-}" ]; then
+      case "$u" in https://chat.googleapis.com/*) printf '%s' "$u" > "$f" ;; *) echo "that is not a https://chat.googleapis.com/ URL" >&2; exit 1 ;; esac
+    fi
+    [ -f "$f" ] || : > "$f"
+  done
+  [ -f secrets/slow_query_pg_url ] || : > secrets/slow_query_pg_url
+  [ -s secrets/alert_webhook_url ] || printf '%s' 'http://gchat-bridge:9095/alertmanager' > secrets/alert_webhook_url
+  url=""
+fi
 if [ "$kind" = pagerduty ]; then prompt="PagerDuty Events API v2 integration key"; else prompt="Alert destination URL"; fi
 if [ -s secrets/alert_webhook_url ]; then
-  read -rsp "$prompt (hidden, Enter to keep the current one): " url; echo
+  [ "$kind" = gchat ] || { read -rsp "$prompt (hidden, Enter to keep the current one): " url; echo; }
 else
-  read -rsp "$prompt (hidden): " url; echo
+  [ "$kind" = gchat ] || { read -rsp "$prompt (hidden): " url; echo; }
 fi
 if [ -n "${url:-}" ]; then
   if [ "$kind" = pagerduty ]; then
@@ -98,6 +114,7 @@ fi
 
 "${COMPOSE[@]}" pull prometheus alertmanager
 "${COMPOSE[@]}" up -d prometheus alertmanager probe
+[ "$kind" = gchat ] && "${COMPOSE[@]}" up -d gchat-bridge
 sleep 20
 echo "targets (api, worker and web appear once the next release has created containers with the metrics settings):"
 "${COMPOSE[@]}" exec -T prometheus wget -qO- http://localhost:9090/api/v1/targets | python3 -c "import sys,json; [print(' ', t['labels']['job'], t['health']) for t in json.load(sys.stdin)['data']['activeTargets']]"

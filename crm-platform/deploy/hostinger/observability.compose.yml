@@ -85,6 +85,7 @@ services:
       - ../observability/cache-hit-rate.rules.yml:/etc/prometheus/cache-hit-rate.rules.yml:ro
       - ../observability/p0-failure-modes.rules.yml:/etc/prometheus/p0-failure-modes.rules.yml:ro
       - ../observability/webhook-ingest.rules.yml:/etc/prometheus/webhook-ingest.rules.yml:ro
+      - ../observability/slow-query.rules.yml:/etc/prometheus/slow-query.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
     depends_on:
@@ -104,6 +105,34 @@ services:
       - ../observability/${ALERTMANAGER_FILE:-alertmanager.yml}:/etc/alertmanager/alertmanager.yml:ro
       - amdata:/alertmanager
     secrets: [alert_webhook_url]
+
+  # Google Chat bridge + slow-query watcher (docs/runbooks/google-chat-alerts.md). Optional: start with `up -d gchat-bridge` after the
+  # secrets/gchat_*_url files exist. Reuses the desk-api image (has `pg`); the code is mounted from tools/chat-bridge. No published port.
+  gchat-bridge:
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
+    command: ['node', '/opt/chat-bridge/index.mjs']
+    restart: unless-stopped
+    mem_limit: 96m
+    logging: *obs-logging
+    environment:
+      NODE_ENV: production
+      TZ: UTC
+      PORT: '9095'
+      GRAFANA_URL: https://${GRAFANA_DOMAIN:-grafana.${DOMAIN:-example.invalid}}
+      SLOW_RUNNING_SECONDS: ${SLOW_RUNNING_SECONDS:-5}
+      SLOW_MEAN_MS: ${SLOW_MEAN_MS:-500}
+      SLOW_POLL_SECONDS: ${SLOW_POLL_SECONDS:-15}
+      SLOW_COOLDOWN_SECONDS: ${SLOW_COOLDOWN_SECONDS:-900}
+      SLOW_MAX_PER_MINUTE: ${SLOW_MAX_PER_MINUTE:-10}
+    volumes:
+      - ../../tools/chat-bridge:/opt/chat-bridge:ro
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:9095/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    secrets: [gchat_critical_url, gchat_other_url, gchat_slowquery_url, gchat_deploy_url, slow_query_pg_url]
 
   grafana:
     image: grafana/grafana-oss:11.3.0
@@ -129,6 +158,16 @@ services:
       - prometheus
 
 secrets:
+  gchat_critical_url:
+    file: ./secrets/gchat_critical_url
+  gchat_other_url:
+    file: ./secrets/gchat_other_url
+  gchat_slowquery_url:
+    file: ./secrets/gchat_slowquery_url
+  gchat_deploy_url:
+    file: ./secrets/gchat_deploy_url
+  slow_query_pg_url:
+    file: ./secrets/slow_query_pg_url
   grafana_admin_password:
     file: ./secrets/grafana_admin_password
   obs_metrics_token:
