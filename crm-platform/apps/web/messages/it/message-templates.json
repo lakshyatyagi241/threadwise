@@ -135,6 +135,16 @@
         "name-asc": "Nome A→Z",
         "name-desc": "Nome Z→A"
       },
+      "dateRange": "Intervallo di date",
+      "range": {
+        "all": "Sempre",
+        "7d": "7 giorni",
+        "30d": "30 giorni",
+        "90d": "90 giorni",
+        "custom": "Intervallo personalizzato",
+        "from": "Data di inizio",
+        "to": "Data di fine"
+      },
       "showing": "Visualizzati",
       "of": "di",
       "filteredTemplates": "template filtrati",

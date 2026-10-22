@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { pageResponseSchema } from '../common/pagination';
 import { uuidSchema } from '../common/ids';
+import { parseDateValue } from '../common/dates';
 
 /** Meta's category, which is what the review and the price follow. */
 export const tplMetaCategorySchema = z.enum(['MARKETING', 'UTILITY', 'AUTHENTICATION']);
@@ -130,6 +131,16 @@ export type TplStatusGroup = z.infer<typeof tplStatusGroupSchema>;
 export const tplSortSchema = z.enum(['newest', 'oldest', 'name-asc', 'name-desc']);
 export type TplSort = z.infer<typeof tplSortSchema>;
 
+/** The library's date filter by creation time: a preset (the last N days up to now), all time, or a custom range of days. */
+export const TEMPLATE_RANGES = ['all', '7d', '30d', '90d', 'custom'] as const;
+export const tplRangeSchema = z.enum(TEMPLATE_RANGES);
+export type TplRange = z.infer<typeof tplRangeSchema>;
+
+/** A day the library's date filter takes: a real `YYYY-MM-DD` inside 1900 to 2200, the years the date helpers and the database accept. */
+export const tplFilterDaySchema = z.string().refine((v) => parseDateValue(v)?.kind === 'day', {
+  message: 'Use a calendar day between 1900 and 2200, YYYY-MM-DD',
+});
+
 export const listTemplatesQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(30),
   cursor: z.string().min(1).max(512).optional(),
@@ -139,6 +150,10 @@ export const listTemplatesQuerySchema = z.object({
   category: tplMetaCategorySchema.optional(),
   connectionId: uuidSchema.optional(),
   q: z.string().trim().max(100).optional(),
+  range: tplRangeSchema.default('all'),
+  /** `range=custom` only: the first and the last day of the window (workspace days, both included); a missing side is open. */
+  from: tplFilterDaySchema.optional(),
+  to: tplFilterDaySchema.optional(),
 });
 export type ListTemplatesQuery = z.infer<typeof listTemplatesQuerySchema>;
 export const listTemplatesResponseSchema = pageResponseSchema(templateSummarySchema);
@@ -218,6 +233,9 @@ export const templateCountsQuerySchema = listTemplatesQuerySchema.pick({
   category: true,
   connectionId: true,
   q: true,
+  range: true,
+  from: true,
+  to: true,
 });
 export type TemplateCountsQuery = z.infer<typeof templateCountsQuerySchema>;
 export const templateCountsSchema = z.object({

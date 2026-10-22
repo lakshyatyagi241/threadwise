@@ -26,7 +26,7 @@ WhatsApp only lets a business start a conversation with an approved template. Th
 
 ## How to use it
 
-1. Open **Templates**. The left rail lists **All**, **Approved**, **In review** and **Rejected** with counts. Use the category tabs, the number picker (when you have several numbers), **Sort** and **Search** above the cards; your filters stay in the address. **Load more** shows the next eight.
+1. Open **Templates**. The left rail lists **All**, **Approved**, **In review** and **Rejected** with counts. Use the category tabs, the number picker (when you have several numbers), **Date range**, **Sort** and **Search** above the cards; your filters stay in the address. **Date range** keeps the templates created in the last 7, 30 or 90 days, or in all time; **Custom range** shows two date boxes, **From date** and **To date**, for the first and last day to include. **Load more** shows the next eight.
 2. Select **New Template Message**. Under **Identity**, name the template using only a to z, 0 to 9 and underscores, pick the category (Marketing, Utility or Authentication), a name using only a to z, 0 to 9 and underscores, and the language.
 3. Add an optional text **Header**, then write the **Body**. Use the formatting buttons for bold, italic, strikethrough and code, and **Variable** to insert a placeholder. An **Attachment** (image, video, document or a location pin) replaces the header text.
 4. Under **Variable mapping**, name the contact attribute that fills each variable when you send, and give a sample value for Meta's review.

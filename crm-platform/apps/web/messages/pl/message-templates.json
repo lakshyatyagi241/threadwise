@@ -135,6 +135,16 @@
         "name-asc": "Nazwa A→Z",
         "name-desc": "Nazwa Z→A"
       },
+      "dateRange": "Zakres dat",
+      "range": {
+        "all": "Cały czas",
+        "7d": "7 dni",
+        "30d": "30 dni",
+        "90d": "90 dni",
+        "custom": "Zakres niestandardowy",
+        "from": "Data początkowa",
+        "to": "Data końcowa"
+      },
       "showing": "Wyświetlono",
       "of": "z",
       "filteredTemplates": "przefiltrowanych szablonów",

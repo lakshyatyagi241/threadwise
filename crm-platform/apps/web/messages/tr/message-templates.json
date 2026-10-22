@@ -135,6 +135,16 @@
         "name-asc": "Ad A→Z",
         "name-desc": "Ad Z→A"
       },
+      "dateRange": "Tarih aralığı",
+      "range": {
+        "all": "Tüm zamanlar",
+        "7d": "7 gün",
+        "30d": "30 gün",
+        "90d": "90 gün",
+        "custom": "Özel aralık",
+        "from": "Başlangıç tarihi",
+        "to": "Bitiş tarihi"
+      },
       "showing": "Gösterilen",
       "of": "/",
       "filteredTemplates": "filtrelenmiş şablon",

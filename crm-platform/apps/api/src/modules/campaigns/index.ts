@@ -10,3 +10,5 @@ export { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 /** The seam the flow runtime binds into: flow campaigns start one run per recipient through it. */
 export { CAMPAIGN_FLOW_STARTER, type CampaignFlowStarter } from './_shims/tokens';
 export { NoFlowStarter } from './_shims/open-gates';
+/** The date filter's creation window, shared with the templates library so both lists keep the same days. */
+export { createdWindow } from './campaign-rules';
