@@ -1404,7 +1404,8 @@
             "packInactive": "Das Add-on-Paket ist ausgeschaltet, daher kann es niemand kaufen.",
             "appUnpublished": "Die App ist nicht veröffentlicht, daher können Workspaces sie noch nicht sehen.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# Add-on ausgewählt} other {# Add-ons ausgewählt}}"
           },
           "featureHints": {
             "automation": "Der Flow-Builder und Automatisierungen, die auf Unterhaltungen antworten und darin handeln.",
@@ -1705,6 +1706,33 @@
             "chat": "Chat",
             "crm": "Vertriebs-CRM",
             "platform": "Von beiden genutzt"
+          },
+          "marketplace": {
+            "title": "Marketplace-Apps, die Workspaces in diesem Tarif angeboten werden"
+          },
+          "included": {
+            "title": "In diesem Tarif enthaltene Add-ons",
+            "intro": "Schalten Sie ein Add-on ein, um es einzuschließen: Workspaces in diesem Tarif erhalten es ohne Aufpreis, und die Add-on-Karte zeigt „In Ihrem Tarif enthalten“. Dadurch werden genau die Funktionen des Add-ons im Tab „Funktionen“ aktiviert, und wenn Sie sie dort aktivieren, springt der Schalter um. Nicht enthaltene Add-ons werden weiterhin zum eigenen Preis an jeden Workspace mit aktivem kostenpflichtigem Tarif verkauft.",
+            "readOnly": "Sie können diesen Tarif ansehen, aber nicht ändern, daher sind diese Schalter gesperrt.",
+            "loading": "Add-ons werden geladen",
+            "loadFailed": "Die Add-ons konnten nicht geladen werden. Es wurde nichts geändert.",
+            "empty": "Es gibt noch keine Add-ons",
+            "emptyHint": "Add-ons wie Intelligentes Routing und Teams und Berechtigungen werden in der Operator-Konsole unter „Add-ons“ erstellt.",
+            "stateFull": "Enthalten",
+            "statePartial": "Teilweise enthalten",
+            "stateNone": "Nicht enthalten",
+            "noPrice": "Kein Preis festgelegt",
+            "gives": "Bietet: {features}",
+            "switchLabel": "{name} in diesen Tarif aufnehmen",
+            "noFeatures": "Dieses Add-on erweitert nur Limits, daher gibt es keine Funktion zum Einschließen. Seine Limits gehören nicht zur Aufnahme in den Tarif; die eigenen Limits des Tarifs legen Sie im Tab „Limits“ fest.",
+            "partial": "Teilweise enthalten: {count} von {total} Funktionen sind in diesem Tarif aktiv. Noch aus: {missing}.",
+            "includeFully": "Vollständig aufnehmen",
+            "limitsNote": "Dieses Add-on erweitert auch Limits ({limits}). Das zusätzliche Limit gehört nicht zur Aufnahme in den Tarif und wird hier nicht geändert: Das eigene Limit des Tarifs legen Sie im Tab „Limits“ fest. Workspaces kaufen das Add-on weiterhin für das zusätzliche Limit.",
+            "unlistedNote": "Einige seiner Funktionen ({features}) stehen nicht in der Standardliste der Add-ons. Sie lassen sich trotzdem für den Tarif aktivieren; nur der Kauf dieses Add-ons als Paket funktioniert anders.",
+            "inactiveNote": "Dieses Add-on ist ein Entwurf oder ausgeschaltet, daher kann es noch niemand kaufen. Es in den Tarif aufzunehmen funktioniert trotzdem.",
+            "impactCount": "{count, plural, one {# Workspace bezahlt bereits für dieses Add-on.} other {# Workspaces bezahlen bereits für dieses Add-on.}} Die Verlängerung endet zum Ende der aktuellen Laufzeit, es wird nichts erstattet und heute wird nichts gekündigt.",
+            "impactUnknown": "Workspaces in diesem Tarif, die bereits für dieses Add-on bezahlen, verlängern es zum Ende ihrer aktuellen Laufzeit nicht mehr. Es wird nichts erstattet und heute wird nichts gekündigt. Die Zahl konnte nicht geladen werden.",
+            "offNote": "Ausgeschaltet: Workspaces in diesem Tarif verlieren diese Funktionen, sofern sie das Add-on nicht kaufen, und es wird für sie zum Preis kaufbar."
           }
         }
       },

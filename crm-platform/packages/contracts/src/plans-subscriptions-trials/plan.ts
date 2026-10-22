@@ -327,6 +327,15 @@ export type PlanAddonOption = z.infer<typeof planAddonOptionSchema>;
 export const planAddonOptionsResponseSchema = z.object({ data: z.array(planAddonOptionSchema) });
 export type PlanAddonOptionsResponse = z.infer<typeof planAddonOptionsResponseSchema>;
 
+/**
+ * The operator's "what happens if I include this add-on" figure (plan editor, Add-ons tab): for one plan, how many of its workspaces hold
+ * each plain add-on pack with a subscription that still renews. Packs nobody renews are absent. A count only, no workspace is named.
+ */
+export const planAddonImpactResponseSchema = z.object({
+  data: z.array(z.object({ packId: uuidSchema, renewing: z.number().int().positive() })),
+});
+export type PlanAddonImpactResponse = z.infer<typeof planAddonImpactResponseSchema>;
+
 /** One Marketplace add-on a workspace's plan makes visible, with whether the workspace already owns (bought or was granted) it. */
 export const visibleAddonSchema = z.object({
   /** The add-on pack's id (uuid). */

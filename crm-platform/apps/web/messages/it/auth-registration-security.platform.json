@@ -1404,7 +1404,8 @@
             "packInactive": "Il pacchetto del componente aggiuntivo è disattivato, quindi nessuno può acquistarlo.",
             "appUnpublished": "L'app non è pubblicata, quindi i workspace non possono ancora vederla.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# componente aggiuntivo selezionato} other {# componenti aggiuntivi selezionati}}"
           },
           "featureHints": {
             "automation": "Il generatore di flussi e le automazioni che rispondono alle conversazioni e agiscono su di esse.",
@@ -1705,6 +1706,33 @@
             "chat": "Chat",
             "crm": "CRM vendite",
             "platform": "Condiviso da entrambi"
+          },
+          "marketplace": {
+            "title": "App del Marketplace offerte agli spazi di lavoro di questo piano"
+          },
+          "included": {
+            "title": "Componenti aggiuntivi inclusi in questo piano",
+            "intro": "Attiva un componente aggiuntivo per includerlo: gli spazi di lavoro di questo piano lo ricevono senza costi e la sua scheda mostra \"Incluso nel tuo piano\". Questo seleziona esattamente le funzioni del componente nella scheda Funzioni, e selezionarle lì cambia l’interruttore. I componenti non inclusi continuano a essere venduti al proprio prezzo a ogni spazio di lavoro con un piano a pagamento attivo.",
+            "readOnly": "Puoi vedere questo piano ma non modificarlo, quindi questi interruttori sono bloccati.",
+            "loading": "Caricamento dei componenti aggiuntivi",
+            "loadFailed": "Impossibile caricare i componenti aggiuntivi. Non è stato modificato nulla.",
+            "empty": "Non ci sono ancora componenti aggiuntivi",
+            "emptyHint": "Componenti come Instradamento intelligente e Team e autorizzazioni si creano in Componenti aggiuntivi nella console operatore.",
+            "stateFull": "Incluso",
+            "statePartial": "Incluso in parte",
+            "stateNone": "Non incluso",
+            "noPrice": "Nessun prezzo impostato",
+            "gives": "Offre: {features}",
+            "switchLabel": "Includi {name} in questo piano",
+            "noFeatures": "Questo componente aggiunge solo limiti, quindi non c’è nessuna funzione da includere. I suoi limiti non fanno parte dell’inclusione nel piano; imposta i limiti propri del piano nella scheda Limiti.",
+            "partial": "Incluso in parte: {count} funzioni su {total} sono attive in questo piano. Ancora disattivate: {missing}.",
+            "includeFully": "Includi per intero",
+            "limitsNote": "Questo componente aggiunge anche limiti extra ({limits}). Il limite extra non fa parte dell’inclusione nel piano e nulla qui lo modifica: imposta il limite proprio del piano nella scheda Limiti. Gli spazi di lavoro continuano ad acquistare il componente per il limite extra.",
+            "unlistedNote": "Alcune sue funzioni ({features}) non sono nell’elenco standard dei componenti. Possono comunque essere attivate per il piano; cambia solo il modo di acquistare questo componente come pacchetto.",
+            "inactiveNote": "Questo componente è una bozza o è disattivato, quindi nessuno può ancora acquistarlo. Includerlo nel piano funziona comunque.",
+            "impactCount": "{count, plural, one {# spazio di lavoro paga già questo componente.} other {# spazi di lavoro pagano già questo componente.}} Il loro rinnovo si fermerà alla fine del periodo corrente, non viene rimborsato nulla e oggi non viene annullato nulla.",
+            "impactUnknown": "Gli spazi di lavoro di questo piano che pagano già questo componente non lo rinnoveranno più alla fine del periodo corrente. Non viene rimborsato nulla e oggi non viene annullato nulla. Non è stato possibile caricare il numero.",
+            "offNote": "Disattivato: gli spazi di lavoro di questo piano perdono queste funzioni a meno che non acquistino il componente, che diventa acquistabile per loro al suo prezzo."
           }
         }
       },
