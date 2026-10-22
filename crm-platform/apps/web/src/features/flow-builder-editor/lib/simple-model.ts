@@ -1179,7 +1179,9 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                   .filter(Boolean)
                   .join(' · ')
               : s.type === 'cta'
-                ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
+                ? // The message the buttons come with; a step saved without one shows its first button instead.
+                  str(d.bodyText) ||
+                  str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
                 : s.type === 'delay'
                   ? delaySummary(t, d)
                   : s.type === 'assign'
