@@ -57,6 +57,13 @@ export function timeZoneList(current: string): string[] {
   return [...new Set(['UTC', current, ...zones])];
 }
 
+/** The zones whose name contains what was typed: case and `_` ignored, so "new york" finds America/New_York. Empty search keeps all. */
+export function filterTimeZones(zones: readonly string[], search: string): string[] {
+  const needle = search.trim().toLowerCase().replace(/_/g, ' ');
+  if (!needle) return [...zones];
+  return zones.filter((z) => z.toLowerCase().replace(/_/g, ' ').includes(needle));
+}
+
 export type Matrix = {
   events: Record<string, ChannelFlags>;
   categories: Record<string, ChannelFlags>;

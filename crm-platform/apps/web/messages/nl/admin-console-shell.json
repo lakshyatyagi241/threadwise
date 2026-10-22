@@ -282,7 +282,9 @@
           "save": "Opslaan",
           "saved": "Voorkeur opgeslagen.",
           "saveFailed": "De voorkeur kon niet worden opgeslagen."
-        }
+        },
+        "timezoneSearch": "Tijdzones zoeken",
+        "timezoneNoMatch": "Geen passende tijdzone."
       },
       "notifications": {
         "title": "Workspacemeldingen",
