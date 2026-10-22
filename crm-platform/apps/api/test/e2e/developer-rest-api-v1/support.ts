@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { expect } from 'vitest';
+import { API_SCOPES } from '@crm/contracts';
 import {
   Api,
   bearer,
@@ -15,25 +16,25 @@ export interface MintedKey {
   id: string;
   prefix: string;
   secret: string;
-  /** What the console answered: empty is a full-access key. */
+  /** What the console answered: the scopes the key may use. */
   scopes: string[];
 }
 
 /**
- * Mints a key as the tenant's admin (`POST /v2/developer/keys`). Fails the test when the console refuses. Without `scopes` the key is
- * full access, which is what the console form makes unless "Restrict this key" is on.
+ * Mints a key as the tenant's admin (`POST /v2/developer/keys`). Fails the test when the console refuses. Without `scopes` the key gets
+ * every scope, the list a person gets by ticking them all: a key with no scopes is refused (AUTH-073).
  */
 export async function mintKey(
   api: Api,
   tenant: Tenant,
   name = 'e2e key',
-  scopes?: string[],
+  scopes: string[] = [...API_SCOPES],
 ): Promise<MintedKey> {
   const res = await api
     .http()
     .post('/v2/developer/keys')
     .set(bearer(tenant.admin))
-    .send(scopes ? { name, scopes } : { name });
+    .send({ name, scopes });
   expect(res.status, JSON.stringify(res.body)).toBe(201);
   return {
     id: res.body.key.id,

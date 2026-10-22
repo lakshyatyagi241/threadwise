@@ -22,6 +22,7 @@ import {
   type SocialProfile,
 } from '../../../src/infra/providers/auth-registration-security/social-oauth.port';
 
+import type { WebhookTransport } from '../../../src/modules/outbound-webhooks/send';
 import { sentCodes, startStubs, type SentCode, type Stubs } from './stubs';
 
 export const OPERATOR_EMAIL = 'ops@platform.test';
@@ -209,8 +210,17 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
     },
   });
 
+  // A webhook endpoint is a customer's server: the stub answers 200 and never opens a socket, so a test run leaves the machine only to
+  // reach the API under test.
+  const fakeWebhookTransport: WebhookTransport = async () => ({
+    status: 200,
+    body: '{"ok":true}',
+    headers: {},
+  });
+
   // Imported after the environment is set: AppModule reads configuration at import.
   const { AppModule } = await import('../../../src/app.module');
+  const { WEBHOOK_TRANSPORT } = await import('../../../src/modules/outbound-webhooks/send');
   const extraModules = (await options.loadModules?.()) ?? [];
   const moduleRef = await Test.createTestingModule({
     imports: [AppModule, ...(extraModules as never[])],
@@ -221,6 +231,8 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
     .useValue(fakeCaptcha)
     .overrideProvider(SOCIAL_OAUTH_PROVIDERS)
     .useValue([fakeSocial('google'), fakeSocial('facebook')])
+    .overrideProvider(WEBHOOK_TRANSPORT)
+    .useValue(fakeWebhookTransport)
     .compile();
 
   const app = moduleRef.createNestApplication({ rawBody: true, logger: false });

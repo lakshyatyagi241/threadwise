@@ -1,8 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { API_SCOPES } from '@crm/contracts';
 import { ApiV1DocsService } from '../../../src/modules/developer-rest-api-v1';
 import { AUTH_FAILURES_PER_MINUTE } from '../../../src/modules/developer-rest-api-v1/auth/bearer-api-key.guard';
-import { Api, mintKey, startHarness, tenantWithKey, v1, type Harness } from './support';
+import { Api, bearer, mintKey, startHarness, tenantWithKey, v1, type Harness } from './support';
 
 /**
  * How a key authenticates and is held to its limits on `/api/v1` (TW-API-005 to 009), the error envelope (TW-API-007) and the spec
@@ -143,7 +144,7 @@ describe('customer API: key authentication, limits, envelope', () => {
     expect((await b.call.get('/me')).status).toBe(200);
   });
 
-  it('narrows a key that carries scopes and leaves a key without scopes full (TW-API-008)', async () => {
+  it('narrows a key that carries scopes (TW-API-008)', async () => {
     const t = await tenantWithKey(api, 'auth-scope');
     expect((await t.call.get('/contacts')).status).toBe(200);
     await h.owner.query(`UPDATE api_keys SET scopes = '{contacts:read}' WHERE org_id = $1`, [
@@ -193,9 +194,17 @@ describe('customer API: key authentication, limits, envelope', () => {
     expect((await t.call.get('/me')).status).toBe(403);
   });
 
-  it('keeps a key created without scopes at full access, and a scoped one beside it restricted (AUTH-073, TW-API-008)', async () => {
-    const full = await tenantWithKey(api, 'auth-scope-full');
-    expect(full.key.scopes).toEqual([]);
+  it('refuses a key created without scopes, and a key holding every scope reaches each route (AUTH-073)', async () => {
+    const t = await api.signup('auth-scope-none');
+    const refused = await api
+      .http()
+      .post('/v2/developer/keys')
+      .set(bearer(t.admin))
+      .send({ name: 'no scopes' });
+    expect(refused.status).toBe(422);
+
+    const full = await tenantWithKey(api, 'auth-scope-full', [...API_SCOPES]);
+    expect(full.key.scopes).toEqual([...API_SCOPES]);
     for (const path of ['/me', '/contacts', '/contact-groups']) {
       expect((await full.call.get(path)).status, path).toBe(200);
     }
@@ -203,6 +212,14 @@ describe('customer API: key authentication, limits, envelope', () => {
     const restricted = await tenantWithKey(api, 'auth-scope-beside', ['account:read']);
     expect((await restricted.call.get('/me')).status).toBe(200);
     expect((await restricted.call.get('/contacts')).status).toBe(403);
+  });
+
+  it('holds a stored key whose scope list is empty to nothing (a row from before AUTH-073)', async () => {
+    const t = await tenantWithKey(api, 'auth-scope-legacy');
+    await h.owner.query(`UPDATE api_keys SET scopes = '{}' WHERE org_id = $1`, [t.tenant.orgId]);
+    for (const path of ['/me', '/contacts']) {
+      expect((await t.call.get(path)).status, path).toBe(403);
+    }
   });
 
   it('refuses every route when the plan has no Public API feature (TW-API-009)', async () => {
@@ -277,6 +294,7 @@ describe('customer API: key authentication, limits, envelope', () => {
       'Device',
       'Webhook',
       'Deal',
+      'Company',
       'Conversation',
       'Account',
     ]);

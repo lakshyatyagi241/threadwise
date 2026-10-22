@@ -195,20 +195,7 @@ describe('pieces', () => {
     );
     expect(out).toContain('3 hours ago');
   });
-  it('a key without scopes carries a visible "Full access" badge that explains how to limit it', () => {
-    const out = html(
-      <ActiveKeyCard
-        apiKey={apiKey()}
-        canRevoke
-        onRevoked={() => undefined}
-        onFailed={() => undefined}
-      />,
-    );
-    expect(out).toMatch(/data-testid="key-access"[^>]*>(?:(?!<\/div>).)*Full access/s);
-    expect(out).toContain('revoke it and create a new one with Restrict this key turned on');
-    expect(out).not.toContain('Restricted');
-  });
-  it('a key with scopes shows "Restricted" and its scope names, not "Full access"', () => {
+  it('a key lists the scope names it holds on its card, with no access badge (AUTH-073)', () => {
     const out = html(
       <ActiveKeyCard
         apiKey={apiKey({ scopes: ['contacts:read', 'messages:write'] })}
@@ -217,11 +204,11 @@ describe('pieces', () => {
         onFailed={() => undefined}
       />,
     );
-    expect(out).toMatch(/data-testid="key-access"[^>]*>(?:(?!<\/div>).)*Restricted/s);
-    expect(out).toContain('contacts:read');
+    expect(out).toMatch(/data-testid="key-access"[^>]*>(?:(?!<\/div>).)*contacts:read/s);
     expect(out).toContain('messages:write');
     expect(out).toContain('dir="ltr"');
     expect(out).not.toContain('Full access');
+    expect(out).not.toContain('Restricted');
   });
   it("the confirm dialog carries Reference's wording and is closed until Revoke is chosen", () => {
     const out = html(
@@ -263,7 +250,7 @@ describe('pieces', () => {
     expect(out).not.toContain('aria-busy');
     expect(JSON.stringify(en)).toContain('"submitting":"Creating key…"');
   });
-  it('create card offers "Restrict this key", off by default, with no scope picker until it is turned on', () => {
+  it('create card shows the scope picker at once, since a key holds at least one scope (AUTH-073)', () => {
     const out = html(
       <CreateKeyCard
         canCreate
@@ -272,13 +259,12 @@ describe('pieces', () => {
         onFailed={() => undefined}
       />,
     );
-    expect(out).toContain('Restrict this key');
-    expect(out).toContain('Off: the key has full access to the REST API.');
-    expect(out).toMatch(/<button[^>]*role="switch"[^>]*aria-checked="false"/);
-    expect(out).not.toContain('Allowed scopes');
-    expect(out).not.toContain('contacts:read');
+    expect(out).not.toContain('Restrict this key');
+    expect(out).not.toMatch(/role="switch"/);
+    expect(out).toContain('Allowed scopes');
+    expect(out).toContain('contacts:read');
   });
-  it('the restrict switch is disabled for a member who cannot create and on a plan without the API', () => {
+  it('the scope picker is disabled for a member who cannot create and on a plan without the API', () => {
     const noCreate = html(
       <CreateKeyCard
         canCreate={false}
@@ -287,11 +273,11 @@ describe('pieces', () => {
         onFailed={() => undefined}
       />,
     );
-    expect(noCreate).toMatch(/<button[^>]*role="switch"[^>]*disabled/);
+    expect(noCreate).toMatch(/<fieldset[^>]*\bdisabled\b/);
     const locked = html(
       <CreateKeyCard canCreate planLocked onCreated={() => undefined} onFailed={() => undefined} />,
     );
-    expect(locked).toMatch(/<button[^>]*role="switch"[^>]*disabled/);
+    expect(locked).toMatch(/<fieldset[^>]*\bdisabled\b/);
   });
   it('a plan-locked create card is disabled and explains why', () => {
     const out = html(

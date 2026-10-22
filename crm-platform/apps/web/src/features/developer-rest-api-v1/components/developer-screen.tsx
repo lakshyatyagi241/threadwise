@@ -12,14 +12,12 @@ import {
 } from '@crm/contracts';
 import {
   Alert,
-  Badge,
   Button,
   Checkbox,
   ConfirmDialog,
   Field,
   Input,
   Spinner,
-  Switch,
   cn,
   useToast,
 } from '@crm/ui';
@@ -35,7 +33,6 @@ import {
   checkScopes,
   dateLabel,
   errorKind,
-  isFullAccess,
   isReadImplied,
   nameFieldError,
   quickstartCurl,
@@ -414,24 +411,15 @@ export function ActiveKeyCard({
             data-testid="key-access"
             className="mt-2 flex flex-wrap items-center gap-1.5 text-[11.5px]"
           >
-            {isFullAccess(apiKey) ? (
-              <Badge tone="warning" title={t('fullAccessHint')}>
-                {t('fullAccess')}
-              </Badge>
-            ) : (
-              <>
-                <Badge>{t('restricted')}</Badge>
-                {apiKey.scopes.map((scope) => (
-                  <code
-                    key={scope}
-                    dir="ltr"
-                    className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px]"
-                  >
-                    {scope}
-                  </code>
-                ))}
-              </>
-            )}
+            {apiKey.scopes.map((scope) => (
+              <code
+                key={scope}
+                dir="ltr"
+                className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px]"
+              >
+                {scope}
+              </code>
+            ))}
           </div>
         </div>
         <div className="flex flex-col items-end gap-1">
@@ -468,8 +456,8 @@ export function ActiveKeyCard({
 }
 
 /**
- * The "Create your key" card: one name field, 1 to 120 characters, one submit at a time, and the "Restrict this key" switch. Off (the
- * default) is a full-access key as in Reference; on, only the scopes ticked below are allowed.
+ * The "Create your key" card: one name field, 1 to 120 characters, one submit at a time, and the scopes the key may use. A key holds at
+ * least one scope, so the picker is always shown and nothing ticked is refused before it is sent.
  */
 export function CreateKeyCard({
   canCreate,
@@ -487,7 +475,6 @@ export function CreateKeyCard({
   const { toast } = useToast();
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [restrict, setRestrict] = useState(false);
   const [picked, setPicked] = useState<ApiScope[]>([]);
   const [scopesError, setScopesError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -498,19 +485,15 @@ export function CreateKeyCard({
     e.preventDefault();
     if (inFlight.current || disabled) return;
     const check = checkName(name);
-    const scopes = checkScopes(restrict, picked);
+    const scopes = checkScopes(picked);
     setError(check.ok ? null : t(`errors.${check.error}`));
     setScopesError(scopes.ok ? null : t(`errors.${scopes.error}`));
     if (!check.ok || !scopes.ok) return;
     inFlight.current = true;
     setBusy(true);
     try {
-      const created = await keysApi.create({
-        name: check.name,
-        ...(scopes.scopes.length > 0 && { scopes: scopes.scopes }),
-      });
+      const created = await keysApi.create({ name: check.name, scopes: scopes.scopes });
       setName('');
-      setRestrict(false);
       setPicked([]);
       onCreated(created);
       toast(t('created'), 'success');
@@ -571,83 +554,60 @@ export function CreateKeyCard({
         </Button>
 
         <div className="w-full space-y-3 border-t border-border pt-4">
-          <div className="flex items-start gap-3">
-            <Switch
-              id="key-restrict"
-              label={t('restrict.label')}
-              checked={restrict}
-              disabled={disabled || busy}
-              onCheckedChange={(on) => {
-                setRestrict(on);
-                if (!on) setScopesError(null);
-              }}
-            />
-            <div className="min-w-0">
-              <label htmlFor="key-restrict" className="text-sm font-medium">
-                {t('restrict.label')}
-              </label>
-              <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-                {t('restrict.help')}
-              </p>
+          <fieldset
+            disabled={disabled || busy}
+            aria-describedby={scopesError ? 'key-scopes-error' : undefined}
+            className="min-w-0 space-y-2"
+          >
+            <legend className={cn(EYEBROW, 'mb-2')}>{t('restrict.scopes')}</legend>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {SCOPE_ROWS.map((row) => (
+                <div
+                  key={row.resource}
+                  data-testid={`scope-row-${row.resource}`}
+                  className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-2.5"
+                >
+                  <Checkbox
+                    id={`scope-${row.read}`}
+                    name="scopes"
+                    value={row.read}
+                    checked={picked.includes(row.read) || isReadImplied(picked, row)}
+                    disabled={isReadImplied(picked, row)}
+                    title={isReadImplied(picked, row) ? t('restrict.impliedByWrite') : undefined}
+                    onChange={() => {
+                      setPicked(toggleScope(picked, row.read));
+                      setScopesError(null);
+                    }}
+                    label={
+                      <code dir="ltr" className="font-mono text-[12px]">
+                        {row.read}
+                      </code>
+                    }
+                  />
+                  <Checkbox
+                    id={`scope-${row.write}`}
+                    name="scopes"
+                    value={row.write}
+                    checked={picked.includes(row.write)}
+                    onChange={() => {
+                      setPicked(toggleScope(picked, row.write));
+                      setScopesError(null);
+                    }}
+                    label={
+                      <code dir="ltr" className="font-mono text-[12px]">
+                        {row.write}
+                      </code>
+                    }
+                  />
+                </div>
+              ))}
             </div>
-          </div>
-
-          {restrict && (
-            <fieldset
-              disabled={disabled || busy}
-              aria-describedby={scopesError ? 'key-scopes-error' : undefined}
-              className="min-w-0 space-y-2"
-            >
-              <legend className={cn(EYEBROW, 'mb-2')}>{t('restrict.scopes')}</legend>
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {SCOPE_ROWS.map((row) => (
-                  <div
-                    key={row.resource}
-                    data-testid={`scope-row-${row.resource}`}
-                    className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-2.5"
-                  >
-                    <Checkbox
-                      id={`scope-${row.read}`}
-                      name="scopes"
-                      value={row.read}
-                      checked={picked.includes(row.read) || isReadImplied(picked, row)}
-                      disabled={isReadImplied(picked, row)}
-                      title={isReadImplied(picked, row) ? t('restrict.impliedByWrite') : undefined}
-                      onChange={() => {
-                        setPicked(toggleScope(picked, row.read));
-                        setScopesError(null);
-                      }}
-                      label={
-                        <code dir="ltr" className="font-mono text-[12px]">
-                          {row.read}
-                        </code>
-                      }
-                    />
-                    <Checkbox
-                      id={`scope-${row.write}`}
-                      name="scopes"
-                      value={row.write}
-                      checked={picked.includes(row.write)}
-                      onChange={() => {
-                        setPicked(toggleScope(picked, row.write));
-                        setScopesError(null);
-                      }}
-                      label={
-                        <code dir="ltr" className="font-mono text-[12px]">
-                          {row.write}
-                        </code>
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-              {scopesError && (
-                <p id="key-scopes-error" role="alert" className="text-xs text-danger">
-                  {scopesError}
-                </p>
-              )}
-            </fieldset>
-          )}
+            {scopesError && (
+              <p id="key-scopes-error" role="alert" className="text-xs text-danger">
+                {scopesError}
+              </p>
+            )}
+          </fieldset>
         </div>
       </form>
       {!canCreate && <p className="mt-3 text-xs text-muted-foreground">{t('noCreate')}</p>}

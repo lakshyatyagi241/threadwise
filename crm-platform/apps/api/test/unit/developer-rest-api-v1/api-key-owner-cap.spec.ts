@@ -19,16 +19,21 @@ describe('API key grants are capped to the owner', () => {
     expect(capped.get('record.contacts.read')?.scope).toBe('own');
   });
 
-  it('an unrestricted key (no scopes) of an owner with no grants has no grants', () => {
+  it('a key with no scopes holds no grants, so an owner of any kind caps it to none (AUTH-073)', () => {
     expect(capGrantsToOwner(grantsForScopes([]), new Map()).size).toBe(0);
   });
 
   it('a deny on the owner side removes the permission', () => {
-    const owner = new Map([['record.contacts.read', { effect: 'deny' as const, scope: 'all' as const }]]);
+    const owner = new Map([
+      ['record.contacts.read', { effect: 'deny' as const, scope: 'all' as const }],
+    ]);
     expect(capGrantsToOwner(new Map([['record.contacts.read', allow()]]), owner).size).toBe(0);
   });
 
-  it('creating an unrestricted key needs every permission any scope reaches', () => {
-    expect(permissionsNeededByScopes([]).length).toBeGreaterThan(20);
+  it('creating a key needs every permission its scopes reach, and an empty list needs none', () => {
+    expect(permissionsNeededByScopes(['contacts:read'])).toEqual([
+      { scope: 'contacts:read', permission: 'record.contacts.read' },
+    ]);
+    expect(permissionsNeededByScopes([])).toEqual([]);
   });
 });
