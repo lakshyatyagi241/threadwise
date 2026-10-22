@@ -142,6 +142,7 @@ describe('entries', () => {
       newValue: 'b',
       actorType: 'user',
       changedByUserId: ID,
+      changedByName: 'Ritchie Tandhara',
       changedAt: '2026-10-03T10:00:00.000Z',
     });
     const out = fromFieldHistory([
@@ -175,6 +176,7 @@ describe('entries', () => {
       newValue: 'b',
       actorType: 'user',
       changedByUserId: ID,
+      changedByName: 'Ritchie Tandhara',
       changedAt,
     });
     const out = fromFieldHistory([
@@ -183,6 +185,8 @@ describe('entries', () => {
       e('lifecycleStage', '2026-10-04T10:00:00.000Z'),
     ]);
     expect(out).toHaveLength(2);
+    // The line names the person who made the change.
+    expect(out.every((x) => x.actorName === 'Ritchie Tandhara')).toBe(true);
     const first = out.find((x) => x.at === '2026-10-03T10:00:00.000Z')!;
     expect(first.data).toMatchObject({ type: 'change' });
     expect(first.data.type === 'change' && first.data.fields.map((f) => f.key)).toEqual([
