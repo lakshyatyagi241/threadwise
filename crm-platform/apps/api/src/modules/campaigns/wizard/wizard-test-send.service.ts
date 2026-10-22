@@ -426,7 +426,8 @@ export class WizardTestSendService {
         this.db.txAs({ orgId }, async (tx) => {
           const res = await tx.execute(sql`
             SELECT t.status, t.to_phone, t.campaign_id, t.provider_message_id, t.provider,
-                   coalesce(nullif(lower(w.meta_category), ''), nullif(lower(w.category), ''), 'utility') AS category
+                   coalesce(nullif(lower(w.meta_category), ''), nullif(lower(w.category), ''), 'utility') AS category,
+                   w.template_name
             FROM camp_test_sends t
             LEFT JOIN wa_templates w ON w.org_id = t.org_id AND w.id = t.template_id
             WHERE t.org_id = ${orgId} AND t.id = ${id} FOR UPDATE OF t`);
@@ -437,6 +438,7 @@ export class WizardTestSendService {
                 campaign_id: number | string;
                 provider: string;
                 category: string;
+                template_name: string | null;
               }
             | undefined;
           if (!t || (STATUS_RANK[receipt.status] ?? 0) <= (STATUS_RANK[t.status] ?? 0)) return;
@@ -459,6 +461,7 @@ export class WizardTestSendService {
                 recipient: t.to_phone,
                 category: t.category,
                 source: 'campaign',
+                templateName: t.template_name,
               },
             });
           }

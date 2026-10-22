@@ -1338,7 +1338,7 @@
         "closePicker": "닫기",
         "changed": "변경할 속성",
         "clear": "지우기",
-        "removeRow": "{property}을(를) 업데이트에서 제거",
+        "remove": "{name} 제거",
         "setValue": "값 설정",
         "willClear": "{count, plural, one {선택한 연락처} other {선택한 연락처 #명 모두}}에서 비워집니다.",
         "requiredNoClear": "필수 속성은 지울 수 없습니다.",

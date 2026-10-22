@@ -36,6 +36,18 @@ describe('pickedState', () => {
     ).toBe(false);
   });
 
+  it('flags a picked spam or snoozed conversation, even one among others', () => {
+    expect(pickedState([summary({ status: 'resolved' })], 'u-me').someSpam).toBe(false);
+    expect(pickedState([summary({ status: 'resolved' })], 'u-me').someSnoozed).toBe(false);
+    const mixed = pickedState(
+      [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'spam' })],
+      'u-me',
+    );
+    expect(mixed.someSpam).toBe(true);
+    expect(mixed.someSnoozed).toBe(false);
+    expect(pickedState([summary({ status: 'snoozed' })], 'u-me').someSnoozed).toBe(true);
+  });
+
   it('is all read only when no picked conversation has an unread message', () => {
     expect(pickedState([summary({ unreadCount: 0 })], 'u-me').allRead).toBe(true);
     expect(

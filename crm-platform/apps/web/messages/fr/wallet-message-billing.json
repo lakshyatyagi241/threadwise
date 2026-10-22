@@ -99,7 +99,8 @@
         "fullStatement": "Ouvrir le relevé complet",
         "emptyTitle": "Aucune activité pour le moment",
         "emptyBody": "Les recharges, débits de messages et remboursements apparaissent ici."
-      }
+      },
+      "messageExpenses": "Dépenses de messages"
     },
     "activity": {
       "description": "Description",
@@ -189,6 +190,83 @@
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
       }
+    },
+    "expenses": {
+      "title": "Dépenses de messages",
+      "subtitle": "Le coût de chaque message, le modèle avec lequel il a été envoyé et les montants remboursés. Les totaux couvrent tout ce qui correspond aux filtres.",
+      "back": "Retour au portefeuille",
+      "breadcrumbLabel": "Fil d’Ariane",
+      "breadcrumbWallet": "Portefeuille",
+      "breadcrumbExpenses": "Dépenses de messages",
+      "fullStatement": "Relevé complet",
+      "summary": {
+        "messages": "Messages envoyés",
+        "charged": "Facturé",
+        "refunded": "Remboursé",
+        "net": "Coût net",
+        "notBilled": "Non facturé"
+      },
+      "filters": {
+        "status": "Statut",
+        "statusAll": "Tous",
+        "statusCharged": "Facturé",
+        "statusFree": "Non facturé",
+        "statusRefunded": "Remboursé",
+        "template": "Modèle",
+        "templatePlaceholder": "Nom du modèle",
+        "channel": "Chaîne",
+        "category": "Catégorie",
+        "allChannels": "Toutes les chaînes",
+        "allCategories": "Toutes les catégories",
+        "from": "Du",
+        "to": "Au",
+        "apply": "Appliquer",
+        "reset": "Réinitialiser",
+        "rangeInverted": "La date de fin est antérieure à la date de début."
+      },
+      "breakdown": {
+        "title": "Coût par",
+        "groupBy": {
+          "template": "Modèle",
+          "source": "Chaîne",
+          "category": "Catégorie",
+          "country": "Pays"
+        },
+        "group": "Groupe",
+        "notRecorded": "Non enregistré",
+        "truncated": "Affichage des {count} groupes les plus importants. Réduisez la période pour voir le reste.",
+        "empty": "Aucun message ne correspond à ces filtres."
+      },
+      "columns": {
+        "date": "Envoyé le",
+        "template": "Modèle",
+        "campaign": "Campagne ou diffusion",
+        "channel": "Chaîne",
+        "category": "Catégorie",
+        "country": "Pays",
+        "status": "Statut",
+        "charged": "Facturé",
+        "refunded": "Remboursé",
+        "net": "Coût net",
+        "messages": "Envois",
+        "notBilled": "Non facturé"
+      },
+      "status": {
+        "charged": "Facturé",
+        "free": "Non facturé",
+        "refunded": "Remboursé",
+        "refundedOn": "Remboursé le {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Inclus dans votre forfait",
+        "wallet_empty": "Le portefeuille était vide",
+        "rate_is_zero": "Le tarif est nul",
+        "no_wallet_owner": "Aucun titulaire du portefeuille"
+      },
+      "uncollected": "{amount} non encaissés",
+      "emptyTitle": "Aucun message pour le moment",
+      "emptyBody": "Les messages envoyés depuis les campagnes, les diffusions, les planifications et les conversations apparaissent ici avec leur modèle et leur coût.",
+      "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les."
     },
     "admin": {
       "admin": "Admin",

@@ -1338,7 +1338,7 @@
         "closePicker": "إغلاق",
         "changed": "الخصائص المراد تغييرها",
         "clear": "مسح",
-        "removeRow": "إزالة {property} من التحديث",
+        "remove": "إزالة {name}",
         "setValue": "تعيين قيمة",
         "willClear": "ستُفرَّغ على {count, plural, one {جهة الاتصال المحددة} other {جميع جهات الاتصال المحددة (#)}}.",
         "requiredNoClear": "لا يمكن مسح خاصية مطلوبة.",

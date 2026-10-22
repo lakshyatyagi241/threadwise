@@ -1338,7 +1338,7 @@
         "closePicker": "Close",
         "changed": "Properties to change",
         "clear": "Clear",
-        "removeRow": "Remove {property} from the update",
+        "remove": "Remove {name}",
         "setValue": "Set a value",
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
         "requiredNoClear": "A required property cannot be cleared.",

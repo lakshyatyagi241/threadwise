@@ -1338,7 +1338,7 @@
         "closePicker": "Sluiten",
         "changed": "Te wijzigen eigenschappen",
         "clear": "Wissen",
-        "removeRow": "{property} uit de update verwijderen",
+        "remove": "{name} verwijderen",
         "setValue": "Waarde instellen",
         "willClear": "Wordt leeggemaakt voor {count, plural, one {het geselecteerde contact} other {alle # geselecteerde contacten}}.",
         "requiredNoClear": "Een verplichte eigenschap kan niet worden gewist.",

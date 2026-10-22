@@ -1338,7 +1338,7 @@
         "closePicker": "ปิด",
         "changed": "คุณสมบัติที่จะเปลี่ยน",
         "clear": "ล้าง",
-        "removeRow": "นำ {property} ออกจากการอัปเดต",
+        "remove": "ลบ {name}",
         "setValue": "ตั้งค่า",
         "willClear": "จะถูกล้างค่าของ{count, plural, one {ผู้ติดต่อที่เลือก} other {ผู้ติดต่อที่เลือกทั้ง # ราย}}",
         "requiredNoClear": "ไม่สามารถล้างคุณสมบัติที่จำเป็นได้",

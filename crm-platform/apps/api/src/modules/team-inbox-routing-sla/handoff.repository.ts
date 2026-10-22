@@ -442,7 +442,7 @@ export class HandoffRepository {
     const r = rowsOf(run)[0];
     if (!r) return { run: false, flow: null };
     const res = await tx.execute(sql`
-      SELECT id, uuid, is_active, is_published, flow_data FROM flows
+      SELECT id, uuid, is_active, is_published, CASE WHEN is_published AND published_flow_data IS NOT NULL THEN published_flow_data ELSE flow_data END AS flow_data FROM flows
       WHERE org_id = ${orgId} AND id = ${Number(r.flow_id)}`);
     const f = rowsOf(res)[0];
     return {

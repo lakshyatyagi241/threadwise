@@ -1338,7 +1338,7 @@
         "closePicker": "Fermer",
         "changed": "Propriétés à modifier",
         "clear": "Effacer",
-        "removeRow": "Retirer {property} de la mise à jour",
+        "remove": "Retirer {name}",
         "setValue": "Définir une valeur",
         "willClear": "Sera vidée pour {count, plural, one {le contact sélectionné} other {les # contacts sélectionnés}}.",
         "requiredNoClear": "Une propriété obligatoire ne peut pas être effacée.",

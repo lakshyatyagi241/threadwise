@@ -72,6 +72,83 @@
       },
       "title": "Extracto del monedero"
     },
+    "expenses": {
+      "title": "Gastos de mensajes",
+      "subtitle": "Lo que costó cada mensaje, la plantilla con la que se envió y lo que se devolvió. Los totales incluyen todo lo que coincide con los filtros.",
+      "back": "Volver al monedero",
+      "breadcrumbLabel": "Ruta de navegación",
+      "breadcrumbWallet": "Monedero",
+      "breadcrumbExpenses": "Gastos de mensajes",
+      "fullStatement": "Extracto completo",
+      "summary": {
+        "messages": "Mensajes",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "net": "Coste neto",
+        "notBilled": "No facturado"
+      },
+      "filters": {
+        "status": "Estado",
+        "statusAll": "Todos",
+        "statusCharged": "Cobrado",
+        "statusFree": "No facturado",
+        "statusRefunded": "Reembolsado",
+        "template": "Plantilla",
+        "templatePlaceholder": "Nombre de la plantilla",
+        "channel": "Canal",
+        "category": "Categoría",
+        "allChannels": "Todos los canales",
+        "allCategories": "Todas las categorías",
+        "from": "Desde",
+        "to": "Hasta",
+        "apply": "Aplicar",
+        "reset": "Restablecer",
+        "rangeInverted": "La fecha de fin es anterior a la fecha de inicio."
+      },
+      "breakdown": {
+        "title": "Coste por",
+        "groupBy": {
+          "template": "Plantilla",
+          "source": "Canal",
+          "category": "Categoría",
+          "country": "País"
+        },
+        "group": "Grupo",
+        "notRecorded": "Sin registrar",
+        "truncated": "Se muestran los {count} grupos más grandes. Acota las fechas para ver el resto.",
+        "empty": "Ningún mensaje coincide con estos filtros."
+      },
+      "columns": {
+        "date": "Fecha",
+        "template": "Plantilla",
+        "campaign": "Campaña o difusión",
+        "channel": "Canal",
+        "category": "Categoría",
+        "country": "País",
+        "status": "Estado",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "net": "Neto",
+        "messages": "Mensajes",
+        "notBilled": "No facturado"
+      },
+      "status": {
+        "charged": "Cobrado",
+        "free": "No facturado",
+        "refunded": "Reembolsado",
+        "refundedOn": "Devuelto el {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Incluido en tu plan",
+        "wallet_empty": "El monedero estaba vacío",
+        "rate_is_zero": "La tarifa es cero",
+        "no_wallet_owner": "Sin titular del monedero"
+      },
+      "uncollected": "{amount} sin cobrar",
+      "emptyTitle": "Aún no hay mensajes",
+      "emptyBody": "Aquí aparecen los mensajes enviados desde campañas, difusiones, programaciones y chats, con su plantilla y su coste.",
+      "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos."
+    },
     "admin": {
       "admin": "Admin",
       "wallet": "Monedero",
@@ -849,7 +926,8 @@
         "fullStatement": "Abrir el extracto completo",
         "emptyTitle": "Aún no hay actividad",
         "emptyBody": "Aquí aparecen las recargas, los cargos por mensaje y los reembolsos."
-      }
+      },
+      "messageExpenses": "Gastos de mensajes"
     },
     "activity": {
       "description": "Descripción",

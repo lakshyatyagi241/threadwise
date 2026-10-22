@@ -1338,7 +1338,7 @@
         "closePicker": "סגור",
         "changed": "שדות לשינוי",
         "clear": "נקה",
-        "removeRow": "הסרת {property} מהעדכון",
+        "remove": "הסרת {name}",
         "setValue": "הגדר ערך",
         "willClear": "ירוקן עבור {count, plural, one {איש הקשר שנבחר} two {כל # אנשי הקשר שנבחרו} other {כל # אנשי הקשר שנבחרו}}.",
         "requiredNoClear": "לא ניתן לנקות שדה חובה.",

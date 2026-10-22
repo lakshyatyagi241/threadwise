@@ -1338,7 +1338,7 @@
         "closePicker": "Schließen",
         "changed": "Zu ändernde Eigenschaften",
         "clear": "Leeren",
-        "removeRow": "{property} aus der Aktualisierung entfernen",
+        "remove": "{name} entfernen",
         "setValue": "Wert festlegen",
         "willClear": "Wird für {count, plural, one {den ausgewählten Kontakt} other {alle # ausgewählten Kontakte}} geleert.",
         "requiredNoClear": "Eine Pflichteigenschaft kann nicht geleert werden.",
