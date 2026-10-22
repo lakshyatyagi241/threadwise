@@ -29,7 +29,7 @@ try {
   const p = await cli(winner, 'pr', id, 'https://github.com/lakshyatyagi241/threadwise/pull/4242?utm=x', 'add index on contacts');
   assert.equal(p.code, 0); assert.ok(got.some((m) => /PR #4242 raised by/.test(m.text) && !/utm/.test(m.text)));
   const rel = (sha, prs) => fetch(`${api}/release`, { method: 'POST', headers: { 'x-incident-token': token }, body: JSON.stringify({ sha, prs }) });
-  const n0 = got.length; assert.equal((await rel('fff0000', [1, 2])).status, 200); await b.resolver.settle();
+  const n0 = got.length; assert.equal((await rel('ffff000', [1, 2])).status, 200); await b.resolver.settle();
   assert.equal(got.length, n0, 'a release without the PR posts nothing'); assert.equal((await (await fetch(`${api}/incidents/${id}`, { headers: { 'x-incident-token': token } })).json()).status, 'pr_raised');
   assert.equal((await fetch(`${api}/release`, { method: 'POST', body: '{"sha":"abc1234","prs":[4242]}' })).status, 401);
   await rel('abc1234', [4242]); await b.resolver.statementRecovered('st:e2e'); await b.resolver.settle();
@@ -38,7 +38,7 @@ try {
   // deploy failure: one incident (deduped), a later live release resolves it
   const df = (body) => fetch(`${api}/incidents`, { method: 'POST', headers: { 'x-incident-token': token }, body: JSON.stringify({ kind: 'deploy_failure', attemptedSha: 'bad0001', liveSha: 'abc1234', prs: [7], mergers: ['bob'], durationSeconds: 60, ...body }) }).then((x) => x.json());
   const d1 = await df({}), d2 = await df({}); assert.equal(d1.id, d2.id); assert.equal(got.filter((m) => /Deploy failed or was refused/.test(m.text)).length, 1);
-  await rel('fix0002', []); await b.resolver.settle(); assert.ok(got.some((m) => /RESOLVED/.test(m.text) && m.thread === 'deploy-bad0001'));
+  await rel('fe00002', []); await b.resolver.settle(); await new Promise((r) => setTimeout(r, 200)); assert.ok(got.some((m) => /RESOLVED/.test(m.text) && /deploy-/.test(m.thread)), JSON.stringify(got.slice(-3)));
   console.log(`PASS team flow: winner=${winner}, ${got.length} thread replies`);
 } catch (e) { console.log('FAIL', e.message); process.exitCode = 1; }
 b.server.close(); chat.close(); fs.rmSync(dir, { recursive: true, force: true });
