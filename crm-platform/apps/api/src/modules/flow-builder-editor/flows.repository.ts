@@ -291,7 +291,6 @@ export class FlowsRepository {
         category = coalesce(${f.category}, category), flow_type = ${f.flowType}, builder = coalesce(${f.builder ?? null}, builder), trigger_kind = ${f.triggerKind},
         trigger_value = ${f.triggerValue}, trigger_keywords = ${f.triggerKeywords},
         trigger_device_id = ${f.triggerDeviceId}, trigger_channel_id = ${f.triggerChannelId}, provider = coalesce(${f.provider}, provider),
-        trigger_last_occurrence = CASE WHEN trigger_config IS NOT DISTINCT FROM ${cfg}::jsonb THEN trigger_last_occurrence ELSE NULL END,
         trigger_config = ${cfg}::jsonb
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${expectedVersion}
       RETURNING id
@@ -354,10 +353,22 @@ export class FlowsRepository {
     return res.rows.length > 0;
   }
 
+  /**
+   * Publish keeps a copy of the graph and of the trigger settings and sender the runtime then reads (2028 and 2029 migrations). A schedule
+   * whose settings changed restarts its bookmark here, so the new settings fire from now; the same settings published again keep it, so
+   * an occurrence that already ran does not run twice. Unpublish keeps the trigger copy: it is only read while the flow is published.
+   */
   async setPublished(tx: Tx, orgId: number, id: number, published: boolean): Promise<void> {
     await tx.execute(
       published
-        ? sql`UPDATE flows SET is_published = true, published_at = now(), published_flow_data = flow_data WHERE org_id = ${orgId} AND id = ${id}`
+        ? sql`UPDATE flows SET is_published = true, published_at = now(),
+            trigger_last_occurrence = CASE WHEN published_trigger_config IS NOT DISTINCT FROM trigger_config THEN trigger_last_occurrence ELSE NULL END,
+            published_flow_data = flow_data,
+            published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
+            published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
+            published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id,
+            published_provider = provider
+          WHERE org_id = ${orgId} AND id = ${id}`
         : sql`UPDATE flows SET is_published = false, published_at = NULL, published_flow_data = NULL WHERE org_id = ${orgId} AND id = ${id}`,
     );
   }

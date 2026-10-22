@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { liveFlowData } from './live-graph';
+import { liveFlowData, liveTrigger } from './live-graph';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES, FLOW_DEFAULT_TIMEOUT_SECONDS, type FlowRunSource } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
@@ -305,7 +305,8 @@ export class FlowLaunchService {
 
   async loadFlow(tx: Tx, orgId: number, flowId: number): Promise<FlowRow | null> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, flow_name, ${liveFlowData()} AS flow_data, is_published, is_active, provider, trigger_channel_id
+      SELECT id, uuid, flow_name, ${liveFlowData()} AS flow_data, is_published, is_active,
+        ${liveTrigger('provider')} AS provider, ${liveTrigger('trigger_channel_id')} AS trigger_channel_id
       FROM flows WHERE org_id = ${orgId} AND id = ${flowId}`);
     const r = (res as unknown as { rows: Array<Record<string, unknown>> }).rows[0];
     if (!r) return null;
