@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { MAX_PAGE_NUMBER } from '../common/pagination';
 import { previousSendOptionSchema } from '../broadcasts/previous-sends';
 import { sendHoldReasonSchema } from '../compliance/send-window';
 import { calendarDaySchema } from '../sales-docs/input-guards';
@@ -51,7 +52,7 @@ export const listCampaignsQuerySchema = z.object({
   from: calendarDaySchema.optional(),
   to: calendarDaySchema.optional(),
   q: z.string().trim().max(191).default(''),
-  page: z.coerce.number().int().min(1).default(1),
+  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).default(1),
 });
 export type ListCampaignsQuery = z.infer<typeof listCampaignsQuerySchema>;
 
@@ -242,7 +243,7 @@ export type CampaignDetail = z.infer<typeof campaignDetailSchema>;
 export const listRecipientsQuerySchema = z.object({
   status: z.enum(CAMPAIGN_RECIPIENT_STATUSES).optional(),
   q: z.string().trim().max(191).default(''),
-  page: z.coerce.number().int().min(1).default(1),
+  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).default(1),
 });
 export type ListRecipientsQuery = z.infer<typeof listRecipientsQuerySchema>;
 export const RECIPIENT_PAGE_SIZE = 50;

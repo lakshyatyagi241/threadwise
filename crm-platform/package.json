@@ -27,6 +27,7 @@
     "audit:tenancy": "node tools/tenancy-audit/run.mjs",
     "audit:sast": "node tools/sast-report/run.mjs",
     "audit:rate-limits": "node tools/rate-limit/audit.mjs && node tools/rate-limit/gate.mjs",
+    "audit:pagination": "node tools/pagination-audit/scan.mjs",
     "audit:event-loop": "node tools/event-loop-audit/scan.mjs --check",
     "qa": "node tools/qa-suite/run.mjs",
     "qa:punya": "node tools/qa-suite/status/punya-status.mjs",
