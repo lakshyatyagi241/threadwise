@@ -26,6 +26,19 @@ const BASE_BUNDLE_ID = process.env.APP_BUNDLE_ID ?? 'ai.geta.crm';
 // The name under the icon. The same name is written in src/config/brand.ts for the screens inside the app.
 const APP_NAME = process.env.APP_NAME ?? 'Geta';
 
+/**
+ * CPU architectures compiled into an Android build. Both modern phone families by default; `ANDROID_ARCHS=arm64-v8a` makes the smallest
+ * file (almost every phone sold since 2017). The Play bundle is split per phone anyway, so this matters most for a sideloaded APK.
+ */
+function androidArchs(): string[] {
+  const allowed = ['arm64-v8a', 'armeabi-v7a'];
+  const wanted = (process.env.ANDROID_ARCHS ?? allowed.join(','))
+    .split(',')
+    .map((a) => a.trim())
+    .filter((a) => allowed.includes(a));
+  return wanted.length > 0 ? wanted : allowed;
+}
+
 /** Source-map upload at build time; needs the Sentry org and project. Without them the app still reports errors, minified. */
 function sentryPlugin(): NonNullable<ExpoConfig['plugins']> {
   const { SENTRY_ORG: organization, SENTRY_PROJECT: project } = process.env;
@@ -132,7 +145,19 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       [
         'expo-build-properties',
         {
-          android: { usesCleartextTraffic: variant === 'development' },
+          android: {
+            usesCleartextTraffic: variant === 'development',
+            // App size (store and preview builds only; a development build stays quick to compile). R8 shrinks and renames the Java/Kotlin
+            // code (about half of an unshrunk build), resource shrinking drops what no screen uses, and one native copy per CPU
+            // instead of four (the emulator-only x86 pair is never needed on a phone).
+            ...(variant === 'development'
+              ? {}
+              : {
+                  enableMinifyInReleaseBuilds: true,
+                  enableShrinkResourcesInReleaseBuilds: true,
+                  buildArchs: androidArchs(),
+                }),
+          },
         },
       ],
       ...sentryPlugin(),
