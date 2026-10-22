@@ -624,7 +624,8 @@
         "invalid_date_of_birth": "Das Geburtsdatum ist kein Datum mit dem Jahr zuerst, das ein Geburtsdatum sein kann",
         "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt",
         "invalid_timezone": "ungültige Zeitzone",
-        "legal_hold": "Geschützter Datensatz, nicht geändert"
+        "legal_hold": "Geschützter Datensatz, nicht geändert",
+        "invalid_property_value": "Der Wert der benutzerdefinierten Eigenschaft passt nicht zu ihrem Typ oder ihren Optionen"
       },
       "statusHint": "Wird auf Kontakte angewendet, die diese Datei erstellt.",
       "queued": "Warten auf den Start...",
@@ -642,7 +643,9 @@
       "groupNew": "Einer neuen Gruppe",
       "groupPick": "Gruppe auswählen",
       "groupNewPlaceholder": "Name der neuen Gruppe",
-      "groupRequiredHint": "Jeder importierte Kontakt wird dieser einen Gruppe hinzugefügt. Die Gruppenspalte der Datei wird ignoriert, sofern Sie sie nicht oben zuordnen."
+      "groupRequiredHint": "Jeder importierte Kontakt wird dieser einen Gruppe hinzugefügt. Die Gruppenspalte der Datei wird ignoriert, sofern Sie sie nicht oben zuordnen.",
+      "customProperties": "Benutzerdefinierte Eigenschaften",
+      "customPropertiesHint": "Eine Spalte, deren Kopfzeile der Name der Eigenschaft ist (oder attr:key, wie der Export ihn schreibt), füllt diese Eigenschaft. Eine leere Zelle behält den Wert, den der Kontakt bereits hat."
     },
     "detail": {
       "back": "Alle Kontakte",

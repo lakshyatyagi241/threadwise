@@ -624,7 +624,8 @@
         "invalid_date_of_birth": "생년월일이 생년월일이 될 수 있는 연도 우선 형식의 날짜가 아닙니다",
         "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨",
         "invalid_timezone": "잘못된 시간대",
-        "legal_hold": "보호된 레코드, 변경되지 않음"
+        "legal_hold": "보호된 레코드, 변경되지 않음",
+        "invalid_property_value": "사용자 지정 속성 값이 해당 속성의 유형이나 선택 항목과 맞지 않습니다"
       },
       "statusHint": "이 파일이 생성하는 연락처에 적용됩니다.",
       "queued": "시작 대기 중...",
@@ -642,7 +643,9 @@
       "groupNew": "새 그룹",
       "groupPick": "그룹 선택",
       "groupNewPlaceholder": "새 그룹 이름",
-      "groupRequiredHint": "가져온 모든 연락처가 이 그룹 하나에 추가됩니다. 위에서 매핑하지 않는 한 파일의 그룹 열은 무시됩니다."
+      "groupRequiredHint": "가져온 모든 연락처가 이 그룹 하나에 추가됩니다. 위에서 매핑하지 않는 한 파일의 그룹 열은 무시됩니다.",
+      "customProperties": "사용자 지정 속성",
+      "customPropertiesHint": "헤더가 속성 이름인 열(또는 내보내기가 쓰는 attr:key)이 그 속성을 채웁니다. 빈 셀은 연락처가 이미 가진 값을 유지합니다."
     },
     "detail": {
       "back": "모든 연락처",
