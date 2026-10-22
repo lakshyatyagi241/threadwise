@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useToast } from '@crm/ui';
 import { BULK_MAX_CONVERSATIONS, type BulkConversationAction } from '@crm/contracts';
 import {
@@ -18,9 +18,11 @@ import {
 import { useErrorText } from '../components/parts';
 import { inboxApi } from './service';
 
-export interface BulkSelection {
+export interface BulkSelection<T extends { id: string } = { id: string }> {
   selecting: boolean;
   selection: Selection;
+  /** The rows that are picked, as the list holds them (the bar reads their state to word its actions). */
+  picked: ReadonlyArray<T>;
   busy: boolean;
   allInView: boolean;
   toggleSelecting: () => void;
@@ -38,11 +40,11 @@ export interface BulkSelection {
  * that applies one action to them. A selection belongs to the view it was made in: changing the filters clears it, and a row that
  * leaves the list (resolved out of the open view, for example) is dropped from it. After a call the ones that failed stay picked.
  */
-export function useBulkSelection(
-  rows: ReadonlyArray<{ id: string }>,
+export function useBulkSelection<T extends { id: string }>(
+  rows: ReadonlyArray<T>,
   viewKey: string,
   onApplied: () => void,
-): BulkSelection {
+): BulkSelection<T> {
   const t = useTranslations('team-inbox-conversations.bulk');
   const { toast } = useToast();
   const errorText = useErrorText();
@@ -135,9 +137,12 @@ export function useBulkSelection(
     [busy, selection, toast, t, errorText, onApplied],
   );
 
+  const picked = useMemo(() => rows.filter((r) => selection.has(r.id)), [rows, selection]);
+
   return {
     selecting,
     selection,
+    picked,
     busy,
     allInView: allInViewSelected(rows, selection),
     toggleSelecting: () => {

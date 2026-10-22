@@ -1059,7 +1059,10 @@
       "tagRemove": "Retirer une étiquette",
       "onLeave": "en congé",
       "onLeaveUntil": "en congé jusqu’au {date}",
-      "spam": "Marquer comme spam"
+      "spam": "Marquer comme spam",
+      "markUnread": "Marquer comme non lu",
+      "unsnooze": "Réactiver",
+      "notSpam": "Marquer comme non spam"
     },
     "tags": {
       "tag": "Étiquette",

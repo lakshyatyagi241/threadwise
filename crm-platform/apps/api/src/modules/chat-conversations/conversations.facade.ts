@@ -187,6 +187,12 @@ export interface ConversationsFacade {
    * arrived while the agent was reading stays unread. Tells the caller's other tabs by realtime (`inbox.unread`).
    */
   markRead(conversationId: string, upToSeq: number): Promise<{ unreadCount: number }>;
+
+  /**
+   * The bulk "Mark as unread": `unread_count` goes to at least one, so the thread shows unread until it is read again. Tells the
+   * caller's other tabs by realtime (`inbox.unread`).
+   */
+  markUnread(conversationId: string): Promise<{ unreadCount: number }>;
 }
 
 export const CONVERSATIONS_FACADE = Symbol('CONVERSATIONS_FACADE');
