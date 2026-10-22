@@ -59,7 +59,8 @@ function useRange(): [DashRange, CustomDates, (r: DashRange, c?: CustomDates) =>
         if (c.from) q.set('from', c.from);
         if (c.to) q.set('to', c.to);
       }
-      router.replace(`${path}?${q.toString()}`);
+      // `scroll: false`: a period change re-renders the same page; without it Next scrolls back to the top.
+      router.replace(`${path}?${q.toString()}`, { scroll: false });
     },
   ];
 }
@@ -138,7 +139,8 @@ export function DashboardScreen() {
   // The cards the workspace's persona hides (`card:dashboard.<id>`, ids in ../home-cards.ts) are not drawn; their data and API stay.
   const { isCardHidden } = usePersonaVisibility();
   // A card the caller's permissions do not open is not drawn either (`CARD_PERMISSION`); its data is only fetched by the sections drawn.
-  const showCard = (id: string) => !isCardHidden(id) && permitted(session.permissions, CARD_PERMISSION[id]);
+  const showCard = (id: string) =>
+    !isCardHidden(id) && permitted(session.permissions, CARD_PERMISSION[id]);
   const tileVisible = (key: string) => permitted(session.permissions, QUICK_ACCESS_PERMISSION[key]);
   const [range, custom, setRange] = useRange();
   const [draft, setDraft] = useState<CustomDates>({});
@@ -375,14 +377,11 @@ export function DashboardScreen() {
                       </span>
                     }
                     action={
-                      <div className="flex flex-wrap items-center justify-end gap-2">
-                        {f?.peak && (
-                          <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
-                            {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
-                          </span>
-                        )}
-                        <RangePicker value={range} onChange={setRange} ranges={DASH_RANGES} />
-                      </div>
+                      f?.peak && (
+                        <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
+                          {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
+                        </span>
+                      )
                     }
                   >
                     {f ? (
