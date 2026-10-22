@@ -205,7 +205,7 @@ function sendHeader(t: TemplateShape, vars: SendVars) {
 
   if (!isMedia && type !== 'LOCATION') {
     // A text header carries exactly as many parameters as it declares; none when it has no placeholder.
-    const placeholders = countPlaceholders(t.header);
+    const placeholders = new Set(placeholderNames(t.header)).size;
     if (placeholders < 1) return null;
 
     let value = (vars.header ?? '').trim();
@@ -290,29 +290,23 @@ export function buildSend(t: TemplateShape, vars: SendVars): SendTemplatePayload
   const header = sendHeader(t, vars);
   if (header) send.components.push(header);
 
-  // BODY: exactly as many parameters as the approved body has placeholders.
-  const placeholders = countPlaceholders(t.templateBody);
+  // BODY: exactly as many parameters as the approved body has distinct variables: a placeholder used twice is one parameter.
+  const names = [...new Set(placeholderNames(t.templateBody))];
+  const placeholders = names.length;
   let bodyVars = [...(vars.body ?? [])];
   while (bodyVars.length < placeholders) bodyVars.push('');
   bodyVars = bodyVars.slice(0, placeholders);
 
   if (bodyVars.length > 0) {
     const examples = isDict(t.variableMap) ? asArray(t.variableMap.body) : [];
-    const names = placeholderNames(t.templateBody);
     const named = (t.parameterFormat || 'POSITIONAL').toUpperCase() === 'NAMED';
-    const seen = new Set<string>();
     const parameters: unknown[] = [];
     bodyVars.forEach((v, i) => {
       let text = scalarize(v).trim();
       if (text === '') text = fallbackText(scalarize(examples[i]).trim(), names[i] ?? '');
       const param: Dict = { type: 'text', text };
       const pname = names[i] ?? '';
-      if (named && pname !== '' && !isNumeric(pname)) {
-        // A NAMED body with two parameters sharing a name is rejected: a placeholder used twice needs one parameter.
-        if (seen.has(pname)) return;
-        seen.add(pname);
-        param.parameter_name = pname;
-      }
+      if (named && pname !== '' && !isNumeric(pname)) param.parameter_name = pname;
       parameters.push(param);
     });
     send.components.push({ type: 'body', parameters });

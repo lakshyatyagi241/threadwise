@@ -36,6 +36,7 @@ import {
   buttonsOf,
   checkVariables,
   cleanVariables,
+  hasBlankCopyCode,
   isApproved,
   renderBody,
   sendComponentsOf,
@@ -323,6 +324,8 @@ export class InboxThreadService {
     const reason = blockReason(template, new Date());
     if (reason)
       refuse(`That template cannot be sent from the inbox yet (${reason.replace(/_/g, ' ')})`);
+    if (hasBlankCopyCode(template.buttons))
+      refuse('That template has a copy-code button with no code');
 
     const slots = bodySlots(template.templateBody, template.variableMap);
     const problems = checkVariables(slots, input.variables);
@@ -357,7 +360,7 @@ export class InboxThreadService {
   /** Puts a failed outbound message back in the queue. The message is named, so the conversation is found through it. */
   async retry(messageUuid: string): Promise<MessageResponse> {
     const ctx = RequestContextStore.require();
-    await this.db.tx(async (tx) => {
+    const components = await this.db.tx(async (tx) => {
       const viewer = await this.access.viewer(tx, ctx);
       const record = await this.repo.recordByMessageUuid(tx, ctx.orgId, messageUuid);
       if (!record) {
@@ -378,10 +381,38 @@ export class InboxThreadService {
       await this.access.assertCan(tx, ctx, PERM.reply, record);
       this.assertNotResolved(record);
       this.access.assertNotAssignedToOther(ctx, record);
+      return this.rebuiltComponentsOf(tx, ctx.orgId, messageUuid);
     });
     return (
-      await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
+      await this.withTemplatePreviews([
+        await this.conversations.retryOutbound(messageUuid, components),
+      ])
     )[0]!;
+  }
+
+  /**
+   * A template message sent before its Cloud API components were stored carries only its values, so a Retry would send the body without
+   * the copy-code parameter again. Its components are built now, from the template and the values it sent. Undefined when the message
+   * already has them or its template is gone; a template whose copy-code button has no code is refused, as a send is.
+   */
+  private async rebuiltComponentsOf(
+    tx: Tx,
+    orgId: number,
+    messageUuid: string,
+  ): Promise<Record<string, unknown>[] | undefined> {
+    const sent = await this.repo.templateSendOf(tx, orgId, messageUuid);
+    if (!sent || sent.hasComponents || sent.templateId === null) return undefined;
+    const template = await this.templates.findById(tx, orgId, sent.templateId);
+    if (!template) return undefined;
+    if (hasBlankCopyCode(template.buttons)) {
+      throw new AppError(
+        ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE,
+        'That template has a copy-code button with no code',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'templateId', message: 'That template has a copy-code button with no code' }],
+      );
+    }
+    return sendComponentsOf(template, sent.variables);
   }
 
   private async assertCanReply(

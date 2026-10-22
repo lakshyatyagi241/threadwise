@@ -149,6 +149,17 @@ export function sendComponentsOf(
   return [...bodyComponents(variables), ...buttonComponents(copyCode, buttons)];
 }
 
+/**
+ * Whether a copy-code button has no code. The inbox cannot type one and the stored example is the only code, so such a template is
+ * refused rather than sent with the placeholder "-" that the send falls back to.
+ */
+export function hasBlankCopyCode(buttons: unknown): boolean {
+  return (
+    Array.isArray(buttons) &&
+    buttons.some((b) => sendKindOf(kindOfButton(b)) === 'copy_code' && buttonExample(b) === '')
+  );
+}
+
 /** The body as the customer reads it: each `{{token}}` replaced by its value. A token without a value is left as written. */
 export function renderBody(body: string, variables: Record<string, string>): string {
   return body.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (m, t: string) => variables[t] ?? m);

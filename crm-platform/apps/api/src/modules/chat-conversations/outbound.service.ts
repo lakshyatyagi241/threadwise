@@ -282,8 +282,12 @@ export class OutboundService {
   /**
    * The agent's Retry on a failed message: the same message goes back to `queued` (a new dispatch generation, so the job id is new)
    * and is checked again like a new send (the window may have closed, the channel may have been switched off, the cap may be full).
+   * `templateComponents` are the components a Retry rebuilt for a template message sent before they were stored; they are stored with it.
    */
-  async retry(messageUuid: string): Promise<MessageResponse> {
+  async retry(
+    messageUuid: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse> {
     const ctx = RequestContextStore.require();
     const orgId = ctx.orgId;
 
@@ -306,7 +310,15 @@ export class OutboundService {
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
       await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
-      const retryEnvelope = envelopeOf(row, conv.peerKey, replyTo?.providerMessageId ?? null, 1);
+      // A template message sent before its components were stored gets the ones the caller rebuilt from the live template.
+      const patch = templateComponents ? { templateComponents } : {};
+      const retried = { ...row, meta: { ...row.meta, ...patch } };
+      const retryEnvelope = envelopeOf(
+        retried,
+        conv.peerKey,
+        replyTo?.providerMessageId ?? null,
+        1,
+      );
       await this.dispatcher.assertCanQueue(
         {
           channel: runtime,
@@ -322,7 +334,7 @@ export class OutboundService {
       );
 
       const ref = { id: row.id, createdAt: row.createdAtText };
-      const requeued = await this.messages.requeue(tx, orgId, ref);
+      const requeued = await this.messages.requeue(tx, orgId, ref, patch);
       if (!requeued) {
         throw new AppError(
           ERROR_CODES.MESSAGE_NOT_RETRYABLE,
