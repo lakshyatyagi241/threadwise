@@ -110,6 +110,9 @@ gdomain="$(sed -n 's/^GRAFANA_DOMAIN=//p' .env | head -n1)"
 pdomain="$(sed -n 's/^PROMETHEUS_DOMAIN=//p' .env | head -n1)"
 [ -s secrets/prometheus_basic_password ] || { printf '%s' "$(openssl rand -hex 18)" > secrets/prometheus_basic_password; echo "made secrets/prometheus_basic_password"; }
 chmod 644 secrets/prometheus_basic_password
+[ -s secrets/incidents_basic_password ] || { printf '%s' "$(openssl rand -hex 18)" > secrets/incidents_basic_password; echo "made secrets/incidents_basic_password"; }
+[ -s secrets/incident_api_token ] || { printf '%s' "$(openssl rand -hex 24)" > secrets/incident_api_token; echo "made secrets/incident_api_token"; }
+chmod 644 secrets/incidents_basic_password secrets/incident_api_token
 dyn_dir="$(dirname "${TRAEFIK_DYN:-/etc/dokploy/traefik/dynamic/desk.yml}")"
 if [ -d "$dyn_dir" ]; then
   for d in "$gdomain" "$pdomain"; do case "$d" in ""|*[!A-Za-z0-9.-]*) echo "GRAFANA_DOMAIN/PROMETHEUS_DOMAIN is not a host name" >&2; exit 1 ;; esac; done
@@ -119,11 +122,20 @@ if [ -d "$dyn_dir" ]; then
   awk -v d="$pdomain" -v u="prometheus:$hash" '{gsub(/__PROMETHEUS_DOMAIN__/,d); if ($0 ~ /__PROMETHEUS_USERS__/) sub(/__PROMETHEUS_USERS__/, "\"" u "\""); print}' traefik-prometheus.yml.template > "$dyn_dir/.prometheus.tmp"
   chmod 600 "$dyn_dir/.prometheus.tmp"; mv -f "$dyn_dir/.prometheus.tmp" "$dyn_dir/prometheus.yml"
   unset hash
+<<<<<<< HEAD
   # Chat app events route (no basicAuth, the app verifies Google's token): only with the flag, and removed again when it is off.
   if [ "$(sed -n 's/^CHAT_APP_ENABLED=//p' .env | head -n1)" = true ]; then
     sed "s/__PROMETHEUS_DOMAIN__/$pdomain/g" traefik-chat-app.yml.template > "$dyn_dir/.chat-app.tmp" && mv -f "$dyn_dir/.chat-app.tmp" "$dyn_dir/chat-app.yml"; echo "wrote $dyn_dir/chat-app.yml (Google Chat app events, rate limited, no basicAuth)"
   else rm -f "$dyn_dir/chat-app.yml"; fi
   echo "wrote $dyn_dir/grafana.yml ($gdomain) and prometheus.yml ($pdomain, basicAuth user prometheus); DNS A records needed for both"
+=======
+  # Team incident API (/incidents on the Prometheus host): basicAuth user `incidents` + the app token; same rendering as prometheus.yml.
+  ihash="$(openssl passwd -apr1 "$(cat secrets/incidents_basic_password)")"
+  awk -v d="$pdomain" -v u="incidents:$ihash" '{gsub(/__PROMETHEUS_DOMAIN__/,d); if ($0 ~ /__INCIDENTS_USERS__/) sub(/__INCIDENTS_USERS__/, "\"" u "\""); print}' traefik-incidents.yml.template > "$dyn_dir/.incidents.tmp"
+  chmod 600 "$dyn_dir/.incidents.tmp"; mv -f "$dyn_dir/.incidents.tmp" "$dyn_dir/incidents.yml"
+  unset ihash
+  echo "wrote $dyn_dir/grafana.yml ($gdomain) and prometheus.yml ($pdomain, basicAuth user prometheus) and incidents.yml (/incidents, user incidents); DNS A records needed for both"
+>>>>>>> origin/vedant/ops/team-incident-flow
 else
   echo "no Traefik routes written ($dyn_dir missing)" >&2
 fi
