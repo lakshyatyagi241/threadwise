@@ -21,6 +21,7 @@
       "unavailable": "Ta część API nie jest jeszcze dostępna.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Poproś go lub administratora o przypisanie go do Ciebie i spróbuj ponownie.",
       "retry": "Spróbuj ponownie",
       "reservedKey": "Ten klucz jest zarezerwowany dla wbudowanego tokenu. Wybierz inny.",
       "attributeInUse": "Niektóre kontakty mają wartość dla tego atrybutu.",

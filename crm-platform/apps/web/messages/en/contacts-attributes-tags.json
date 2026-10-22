@@ -21,6 +21,7 @@
       "unavailable": "This part of the API is not available yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "unexpected": "Something went wrong. Try again.",
+      "assignedToOther": "This chat is assigned to another agent. Ask them or an admin to assign it to you, then try again.",
       "retry": "Try again",
       "reservedKey": "That key is reserved for a built-in token. Choose another.",
       "attributeInUse": "Some contacts hold a value for this attribute.",

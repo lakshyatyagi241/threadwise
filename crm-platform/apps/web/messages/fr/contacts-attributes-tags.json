@@ -21,6 +21,7 @@
       "unavailable": "Cette partie de l’API n’est pas encore disponible.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "unexpected": "Un problème est survenu. Réessayez.",
+      "assignedToOther": "Ce chat est assigné à un autre agent. Demandez-lui ou à un administrateur de vous l'assigner, puis réessayez.",
       "retry": "Réessayer",
       "reservedKey": "Cette clé est réservée à un jeton intégré. Choisissez-en une autre.",
       "attributeInUse": "Certains contacts ont une valeur pour cet attribut.",

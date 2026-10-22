@@ -21,6 +21,7 @@
       "unavailable": "Esta parte da API ainda não está disponível.",
       "rateLimited": "Muitas requisições. Aguarde um momento e tente novamente.",
       "unexpected": "Algo deu errado. Tente novamente.",
+      "assignedToOther": "Esta conversa está atribuída a outro agente. Peça a ele ou a um administrador que a atribua a você e tente de novo.",
       "retry": "Tentar novamente",
       "reservedKey": "Essa chave é reservada para um token nativo. Escolha outra.",
       "attributeInUse": "Alguns contatos têm um valor para este atributo.",

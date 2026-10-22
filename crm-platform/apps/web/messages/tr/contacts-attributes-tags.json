@@ -21,6 +21,7 @@
       "unavailable": "API'nin bu bölümü henüz kullanılamıyor.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Ondan veya bir yöneticiden size atamasını isteyin, sonra tekrar deneyin.",
       "retry": "Tekrar dene",
       "reservedKey": "Bu anahtar yerleşik bir belirteç için ayrılmış. Başka bir tane seçin.",
       "attributeInUse": "Bazı kişilerde bu öznitelik için bir değer var.",

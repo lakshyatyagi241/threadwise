@@ -28,6 +28,7 @@ export type ErrorKind =
   | 'rateLimited'
   | 'planLimit'
   | 'legalHold'
+  | 'assignedToOther'
   | 'unexpected';
 
 export function errorKind(error: unknown): ErrorKind {
@@ -83,6 +84,9 @@ export function errorKind(error: unknown): ErrorKind {
     // The record is under a legal hold (BL-295): the text is neutral and never says why.
     case ERROR_CODES.LEGAL_HOLD_ACTIVE:
       return 'legalHold';
+    // The chat the drawer opened is assigned to another agent: only they send into it, so retrying cannot help.
+    case ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER:
+      return 'assignedToOther';
   }
   // A route that is not there yet answers 404/501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';
