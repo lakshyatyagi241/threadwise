@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { FieldResponse } from '@crm/contracts';
 import { Button, Input } from '@crm/ui';
@@ -40,6 +40,7 @@ export function BulkPropertiesSection({
   const t = useTranslations('contacts-attributes-tags.bulkUpdate');
   const tf = useTranslations('contacts-attributes-tags.form');
   const [picking, setPicking] = useState(false);
+  const sectionRef = useRef<HTMLFieldSetElement>(null);
   const [query, setQuery] = useState('');
   const byKey = new Map(fields.map((f) => [f.key, f]));
   const rows = Object.keys(changes)
@@ -58,7 +59,7 @@ export function BulkPropertiesSection({
     p === 'empty' ? t('properties.problemEmpty') : tf(`fieldProblem.${p}`);
 
   return (
-    <fieldset className="space-y-2 border-t border-border pt-4">
+    <fieldset ref={sectionRef} className="space-y-2 border-t border-border pt-4">
       <legend className="text-sm font-medium">{t('properties.title')}</legend>
       <p className="text-xs text-muted-foreground">{t('properties.hint', { count })}</p>
 
@@ -74,7 +75,13 @@ export function BulkPropertiesSection({
                   type="button"
                   aria-label={removeLabel}
                   title={removeLabel}
-                  onClick={() => remove(f.key)}
+                  onClick={() => {
+                    remove(f.key);
+                    // The × unmounts with its row, so hand focus to Add property rather than drop it to the page.
+                    sectionRef.current
+                      ?.querySelector<HTMLButtonElement>('[data-add-property]')
+                      ?.focus();
+                  }}
                   className="absolute end-1.5 top-1.5 rounded p-1 text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   <XIcon className="size-3.5" />
@@ -181,7 +188,13 @@ export function BulkPropertiesSection({
         </div>
       ) : (
         anyEditable && (
-          <Button type="button" size="sm" variant="secondary" onClick={() => setPicking(true)}>
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            data-add-property
+            onClick={() => setPicking(true)}
+          >
             {t('properties.add')}
           </Button>
         )

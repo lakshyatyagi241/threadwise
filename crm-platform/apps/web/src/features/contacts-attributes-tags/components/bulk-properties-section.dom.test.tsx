@@ -89,6 +89,7 @@ describe('BulkPropertiesSection remove cross', () => {
     expect(keysLeft()).toBe('tier');
     expect(host.textContent).not.toContain('Label city');
     expect(crossFor('Label tier')).not.toBeNull();
+    expect(document.activeElement?.textContent).toBe('Add property');
   });
 
   it('also takes off a required property: dropping it from the update touches no data', () => {
