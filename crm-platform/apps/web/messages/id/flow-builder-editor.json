@@ -905,7 +905,10 @@
               "phone": "Telepon sebuah nomor",
               "email": "Kirim email",
               "agent": "Bicara dengan seseorang"
-            }
+            },
+            "prev": "Kartu sebelumnya",
+            "next": "Kartu berikutnya",
+            "goTo": "Kartu {n}"
           },
           "condition": {
             "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",

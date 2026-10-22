@@ -1258,7 +1258,10 @@
               "phone": "Chiama un numero",
               "email": "Invia un'e-mail",
               "agent": "Parla con una persona"
-            }
+            },
+            "prev": "Scheda precedente",
+            "next": "Scheda successiva",
+            "goTo": "Scheda {n}"
           },
           "condition": {
             "info": "Aggiungi regole (una variabile, un confronto e un valore). Uniscile con AND o OR e annida gruppi quando serve.",

@@ -905,7 +905,10 @@
               "phone": "Zadzwoń pod numer",
               "email": "Wyślij e-mail",
               "agent": "Porozmawiaj z człowiekiem"
-            }
+            },
+            "prev": "Poprzednia karta",
+            "next": "Następna karta",
+            "goTo": "Karta {n}"
           },
           "condition": {
             "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
