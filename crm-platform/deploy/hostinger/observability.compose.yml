@@ -152,7 +152,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    secrets: [gchat_critical_url, gchat_other_url, gchat_deploy_url, slow_query_pg_url]
+    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, slow_query_pg_url]
 
   grafana:
     image: grafana/grafana-oss:11.3.0
@@ -173,7 +173,7 @@ services:
       - ../observability/grafana/provisioning:/etc/grafana/provisioning:ro
       - ../observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafanadata:/var/lib/grafana
-    secrets: [grafana_admin_password, gchat_critical_url, gchat_other_url, gchat_deploy_url]
+    secrets: [grafana_admin_password, gchat_critical_url, gchat_slowquery_url, gchat_deploy_url]
     networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-grafana:3000
     depends_on:
       - prometheus
@@ -181,8 +181,8 @@ services:
 secrets:
   gchat_critical_url:
     file: ./secrets/gchat_critical_url
-  gchat_other_url:
-    file: ./secrets/gchat_other_url
+  gchat_slowquery_url:
+    file: ./secrets/gchat_slowquery_url
   gchat_deploy_url:
     file: ./secrets/gchat_deploy_url
   slow_query_pg_url:

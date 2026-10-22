@@ -1,9 +1,9 @@
-# Three Google Chat spaces (critical, other, deploy). The webhook URLs are secrets: they come from docker secret files mounted into the Grafana container, never from git.
+# Three Google Chat spaces (critical, slowquery, deploy). The webhook URLs are secrets: they come from docker secret files mounted into the Grafana container, never from git.
 apiVersion: 1
-# The fourth space (slow queries) was dropped: slow queries go to `other` and escalate to `critical`. Purge it from Grafana's database.
+# The old `other` space was renamed to `slowquery` (Slow Queries & Warnings). Purge the stale gchat-other contact point from Grafana's database.
 deleteContactPoints:
   - orgId: 1
-    uid: gchat-slowquery
+    uid: gchat-other
 contactPoints:
   - orgId: 1
     name: gchat-critical
@@ -15,12 +15,12 @@ contactPoints:
           title: '{{ template "gchat.title" . }}'
           message: '{{ template "gchat.message" . }}'
   - orgId: 1
-    name: gchat-other
+    name: gchat-slowquery
     receivers:
-      - uid: gchat-other
+      - uid: gchat-slowquery
         type: googlechat
         settings:
-          url: $__file{/run/secrets/gchat_other_url}
+          url: $__file{/run/secrets/gchat_slowquery_url}
           title: '{{ template "gchat.title" . }}'
           message: '{{ template "gchat.message" . }}'
   - orgId: 1
