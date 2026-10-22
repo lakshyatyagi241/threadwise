@@ -149,13 +149,26 @@ Safety model: `AUTO_REMEDIATE=off|dry-run|on`, default **dry-run** (an unknown v
 
 ## Critical-path drill (real faults, fake Chat) - measured on a local stack
 
-Runner: `bash script-testing/critical-path-drill/run.sh [--quick]` (for: 20 s, group_interval 15 s; never contacts Google).
+Runner: `bash script-testing/critical-path-drill/run.sh [--quick]`. Real Prometheus v2.55.0 with the repo rules (`for:` 20 s), real Alertmanager v0.27.0
+with `alertmanager.gchat.yml` (critical `group_interval` 15 s instead of 2 m), real bridge, FAKE Chat with three distinct space URLs. Never contacts Google.
+Measured in one full run (production latency = these + the real `for:` + up to the real group_interval):
 
-| Fault | Result in the --quick run |
-|---|---|
-| Postgres black-hole (pool max 2, 8 callers) | ApiProbeFailing / ApiHighErrorRate / ApiCallerLatencyHigh critical cards reached the Critical space about 50 s after fault start (first card at +53 s). DbPoolExhausted and PostgresDown did NOT fire in this run (unexplained, open; the drill expectation fails on purpose). |
-| Warning only (CacheMetricsMissing) | Fired in Prometheus, logged `alert_not_routed`, nothing posted. |
-| Leaks | Slow Queries 0, Deployments 0. |
-| Resolver | Every incident ended in `dry-run` with a DIAGNOSED + "ACTION: DRY-RUN" reply; nothing auto-acted. ESCALATED only appears with AUTO_REMEDIATE=on (not run). |
-| Observation | The resolver's DIAGNOSED reply can land in the thread before the FIRING card (the card is sent after resolver.handle starts). |
-| Not run | Redis refused, probe at dead port, RESOLVED-in-same-thread timing (full mode), card text capture. |
+| Fault | Alert (critical) | Fault start to card in Critical | Fault end to RESOLVED reply (same thread) |
+|---|---|---|---|
+| Postgres black-hole, pool 2, 8 callers | DbPoolExhausted | 46.9 s | 9.8 s ("RESOLVED after 40s") |
+| same | PostgresDown | 38.8 s | 16.6 s |
+| Redis refused behind a TCP proxy | RedisDown | 38.3 s | 9.2 s |
+| probe aimed at a dead port | ApiProbeFailing | 31 s (1 repeat reply in the thread) | 9.9 s |
+| API metrics target dead (warning only) | CacheMetricsMissing (warning) | no post (logged `alert_not_routed`) | n/a |
+
+Behaviour: one top-level card per fingerprint (thread `am-<fingerprint>`), repeats are replies ("Still firing"), Slow Queries 0 and Deployments 0
+messages, no warning card, no critical swallowed (Alertmanager inhibited only the warning). Card: title `FIRING: <alert>`, "(firing, critical)", Summary, Description,
+Time, What it means, Likely causes, Live evidence (Prometheus), e.g. `DB pool waiting: 16.00`, What to check, Suggested action (never auto-executed), Runbook row.
+
+Resolver: AUTO_REMEDIATE stays `dry-run`. The `service` and `db_pool` playbooks post `DIAGNOSED` then `ACTION: DRY-RUN: would ...` and the incident stays `dry-run`;
+ESCALATED appears only with AUTO_REMEDIATE=on and no executor (not run). Nothing was cancelled or terminated.
+
+Found and fixed: (1) the resolver DIAGNOSED reply could be posted before the FIRING card (now sent after the card post returned; unit test);
+(2) a repo-path runbook annotation was dropped from the card (no http link possible), now shown as a "Runbook" row; (3) ApiProbeFailing had no runbook annotation, added.
+Environment note: a stale `apps/api/dist` lacks `crm_postgres_up` and `crm_db_pool_waiting`, so DbPoolExhausted/PostgresDown cannot fire: build the API from the branch under test.
+Not proven: real Google Chat, production thresholds/durations, the ApiProbeFailing runbook row after fix (only rule check + ratchet run), ESCALATED path.
