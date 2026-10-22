@@ -1,10 +1,12 @@
 import {
+  AWAY_MAX_MINUTES,
   QUEUE_TIMER_MAX_MINUTES,
+  type AwayRules,
   type QueueTimers,
   type QueueUnclaimedAction,
 } from '@crm/contracts';
 
-/** The Waiting queue section as the person edits it: three optional steps, each with its minutes. */
+/** The Waiting queue section as the person edits it: three optional steps and two away rules, each with its minutes. */
 export interface QueueForm {
   remind: boolean;
   remindMinutes: string;
@@ -15,14 +17,24 @@ export interface QueueForm {
   finalMinutes: string;
   finalAction: Exclude<QueueUnclaimedAction, 'keep'>;
   message: string;
+  returnAway: boolean;
+  autoOffline: boolean;
+  autoOfflineMinutes: string;
 }
 
 export type QueueProblem =
-  'remindMinutes' | 'overflowMinutes' | 'overflowTeam' | 'finalMinutes' | 'finalMessage';
+  | 'remindMinutes'
+  | 'overflowMinutes'
+  | 'overflowTeam'
+  | 'finalMinutes'
+  | 'finalMessage'
+  | 'offlineMinutes';
+
+export const DEFAULT_AWAY: AwayRules = { returnUnanswered: false, autoOfflineMinutes: null };
 
 const text = (n: number | null, fallback: string) => (n === null ? fallback : String(n));
 
-export function formFromTimers(t: QueueTimers): QueueForm {
+export function formFromTimers(t: QueueTimers, away: AwayRules = DEFAULT_AWAY): QueueForm {
   return {
     remind: t.remindMinutes !== null,
     remindMinutes: text(t.remindMinutes, '10'),
@@ -33,12 +45,15 @@ export function formFromTimers(t: QueueTimers): QueueForm {
     finalMinutes: text(t.unclaimedMinutes, '30'),
     finalAction: t.unclaimedAction === 'bot' ? 'bot' : 'message',
     message: t.unclaimedMessage,
+    returnAway: away.returnUnanswered,
+    autoOffline: away.autoOfflineMinutes !== null,
+    autoOfflineMinutes: text(away.autoOfflineMinutes, '30'),
   };
 }
 
-const minutesOk = (v: string): boolean => {
+const minutesOk = (v: string, max: number = QUEUE_TIMER_MAX_MINUTES): boolean => {
   const n = Number(v);
-  return /^\d+$/.test(v.trim()) && n >= 1 && n <= QUEUE_TIMER_MAX_MINUTES;
+  return /^\d+$/.test(v.trim()) && n >= 1 && n <= max;
 };
 
 /** What stops a save: a step that is on needs sensible minutes, the overflow needs a team, a message needs its text. */
@@ -49,6 +64,8 @@ export function queueProblems(f: QueueForm): QueueProblem[] {
   if (f.overflow && f.overflowTeamId === '') out.push('overflowTeam');
   if (f.final && !minutesOk(f.finalMinutes)) out.push('finalMinutes');
   if (f.final && f.finalAction === 'message' && f.message.trim() === '') out.push('finalMessage');
+  if (f.autoOffline && !minutesOk(f.autoOfflineMinutes, AWAY_MAX_MINUTES))
+    out.push('offlineMinutes');
   return out;
 }
 
@@ -64,6 +81,16 @@ export function toQueueInput(f: QueueForm): QueueTimers {
   };
 }
 
+export function toAwayInput(f: QueueForm): AwayRules {
+  return {
+    returnUnanswered: f.returnAway,
+    autoOfflineMinutes: f.autoOffline ? Number(f.autoOfflineMinutes) : null,
+  };
+}
+
 export function sameForm(a: QueueForm, b: QueueForm): boolean {
-  return JSON.stringify(toQueueInput(a)) === JSON.stringify(toQueueInput(b));
+  return (
+    JSON.stringify([toQueueInput(a), toAwayInput(a)]) ===
+    JSON.stringify([toQueueInput(b), toAwayInput(b)])
+  );
 }

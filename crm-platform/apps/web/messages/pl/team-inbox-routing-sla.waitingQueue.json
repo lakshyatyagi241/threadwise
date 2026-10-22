@@ -25,7 +25,11 @@
         "minutes": "Podaj liczbę od 1 do 1440.",
         "team": "Wybierz zespół.",
         "message": "Napisz wiadomość."
-      }
+      },
+      "away": "Zwracaj nieodpowiedziane czaty, gdy ktoś jest nieobecny",
+      "awayBody": "Gdy ktoś przejdzie w tryb Offline lub zacznie urlop, czaty, na które klient wciąż czeka, wracają do kolejki zespołu.",
+      "offline": "Ustawiaj nieaktywne osoby jako Offline",
+      "offlineBody": "Osoba Dostępna, która nic nie zrobiła przez ten czas, zostaje ustawiona jako Offline. Sama wraca do trybu Dostępny."
     }
   }
 }

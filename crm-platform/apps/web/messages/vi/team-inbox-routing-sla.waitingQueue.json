@@ -25,7 +25,11 @@
         "minutes": "Nhập một số từ 1 đến 1440.",
         "team": "Chọn một nhóm.",
         "message": "Hãy viết tin nhắn."
-      }
+      },
+      "away": "Trả lại cuộc trò chuyện chưa trả lời khi ai đó vắng mặt",
+      "awayBody": "Khi ai đó chuyển Ngoại tuyến hoặc bắt đầu nghỉ phép, các cuộc trò chuyện họ giữ mà khách vẫn đang chờ sẽ quay lại hàng chờ của nhóm.",
+      "offline": "Đặt người không hoạt động sang Ngoại tuyến",
+      "offlineBody": "Người đang Sẵn sàng nhưng không làm gì trong khoảng này sẽ bị đặt Ngoại tuyến. Họ tự chuyển lại Sẵn sàng."
     }
   }
 }

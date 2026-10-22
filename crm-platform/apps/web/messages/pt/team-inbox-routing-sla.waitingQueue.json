@@ -25,7 +25,11 @@
         "minutes": "Digite um número de 1 a 1440.",
         "team": "Escolha uma equipe.",
         "message": "Escreva a mensagem."
-      }
+      },
+      "away": "Devolver conversas sem resposta quando alguém se ausenta",
+      "awayBody": "Quando uma pessoa fica Offline ou começa uma licença, as conversas dela em que o cliente ainda espera voltam para a fila da equipe.",
+      "offline": "Deixar Offline quem está inativo",
+      "offlineBody": "Uma pessoa Disponível que não fez nada por este tempo fica Offline. Ela mesma volta a ficar Disponível."
     }
   }
 }

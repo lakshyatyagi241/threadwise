@@ -25,7 +25,11 @@
         "minutes": "Inserisci un numero da 1 a 1440.",
         "team": "Scegli un team.",
         "message": "Scrivi il messaggio."
-      }
+      },
+      "away": "Restituisci le chat senza risposta quando qualcuno si assenta",
+      "awayBody": "Quando una persona passa a Offline o inizia un'assenza, le chat che ha in carico e per cui il cliente aspetta ancora tornano nella coda del team.",
+      "offline": "Imposta Offline chi è inattivo",
+      "offlineBody": "Una persona Disponibile che non ha fatto nulla per questo tempo passa a Offline. Si rimette Disponibile da sola."
     }
   }
 }

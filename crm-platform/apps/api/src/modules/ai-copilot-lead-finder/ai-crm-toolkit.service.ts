@@ -5,7 +5,10 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
-import type { AiCrmToolDef, AiCrmToolCallResult } from '../../infra/providers/ai-copilot-lead-finder/ai-crm-provider.port';
+import type {
+  AiCrmToolDef,
+  AiCrmToolCallResult,
+} from '../../infra/providers/ai-copilot-lead-finder/ai-crm-provider.port';
 import {
   ChannelsFacade,
   CONVERSATIONS_FACADE,
@@ -87,16 +90,23 @@ export class AiCrmToolkitService {
     return [
       {
         name: 'find_contact',
-        description: 'Search CRM contacts by name or phone number. Returns matching contacts with their phone.',
+        description:
+          'Search CRM contacts by name or phone number. Returns matching contacts with their phone.',
         parameters: {
           type: 'object',
-          properties: { query: { type: 'string', description: 'A name fragment or phone number to search for.' } },
+          properties: {
+            query: {
+              type: 'string',
+              description: 'A name fragment or phone number to search for.',
+            },
+          },
           required: ['query'],
         },
       },
       {
         name: 'create_contact',
-        description: 'Create a new CRM contact (or return the existing one if the phone already exists).',
+        description:
+          'Create a new CRM contact (or return the existing one if the phone already exists).',
         parameters: {
           type: 'object',
           properties: {
@@ -108,37 +118,59 @@ export class AiCrmToolkitService {
       },
       {
         name: 'list_deals',
-        description: 'List deals in the sales pipeline, optionally filtered by status (open/won/lost).',
+        description:
+          'List deals in the sales pipeline, optionally filtered by status (open/won/lost).',
         parameters: {
           type: 'object',
           properties: {
-            status: { type: 'string', enum: ['open', 'won', 'lost', 'any'], description: 'Filter by status. Default open.' },
+            status: {
+              type: 'string',
+              enum: ['open', 'won', 'lost', 'any'],
+              description: 'Filter by status. Default open.',
+            },
             limit: { type: 'integer', description: 'Max rows (default 15, max 50).' },
           },
         },
       },
       {
         name: 'create_deal',
-        description: 'Create a new deal on the sales pipeline. Optionally attach it to a contact by phone and set a value.',
+        description:
+          'Create a new deal on the sales pipeline. Optionally attach it to a contact by phone and set a value.',
         parameters: {
           type: 'object',
           properties: {
             title: { type: 'string', description: 'Deal name/title.' },
-            value: { type: 'number', description: 'Deal value in the pipeline currency (major units, e.g. 15000).' },
-            contact_phone: { type: 'string', description: 'Optional phone of the contact to link.' },
-            stage: { type: 'string', description: 'Optional stage name; defaults to the pipeline\'s first stage.' },
+            value: {
+              type: 'number',
+              description: 'Deal value in the pipeline currency (major units, e.g. 15000).',
+            },
+            contact_phone: {
+              type: 'string',
+              description: 'Optional phone of the contact to link.',
+            },
+            stage: {
+              type: 'string',
+              description: "Optional stage name; defaults to the pipeline's first stage.",
+            },
           },
           required: ['title'],
         },
       },
       {
         name: 'move_deal_stage',
-        description: 'Move an existing deal to a different pipeline stage (e.g. to mark it won or lost).',
+        description:
+          'Move an existing deal to a different pipeline stage (e.g. to mark it won or lost).',
         parameters: {
           type: 'object',
           properties: {
-            deal_id: { type: 'string', description: 'The deal id to move (as returned by list_deals/create_deal).' },
-            stage: { type: 'string', description: 'Target stage name fragment (e.g. "Won", "Proposal").' },
+            deal_id: {
+              type: 'string',
+              description: 'The deal id to move (as returned by list_deals/create_deal).',
+            },
+            stage: {
+              type: 'string',
+              description: 'Target stage name fragment (e.g. "Won", "Proposal").',
+            },
           },
           required: ['deal_id', 'stage'],
         },
@@ -167,13 +199,17 @@ export class AiCrmToolkitService {
         description: 'Create a new company/organization.',
         parameters: {
           type: 'object',
-          properties: { name: { type: 'string', description: 'Company name.' }, industry: { type: 'string', description: 'Optional industry.' } },
+          properties: {
+            name: { type: 'string', description: 'Company name.' },
+            industry: { type: 'string', description: 'Optional industry.' },
+          },
           required: ['name'],
         },
       },
       {
         name: 'link_contact_company',
-        description: 'Link an existing contact (by phone) to a company (by name). Creates the company if it does not exist.',
+        description:
+          'Link an existing contact (by phone) to a company (by name). Creates the company if it does not exist.',
         parameters: {
           type: 'object',
           properties: {
@@ -185,7 +221,8 @@ export class AiCrmToolkitService {
       },
       {
         name: 'sales_report',
-        description: 'Get a sales summary: open pipeline value, weighted forecast, deals won this month, win rate.',
+        description:
+          'Get a sales summary: open pipeline value, weighted forecast, deals won this month, win rate.',
         parameters: { type: 'object', properties: {} },
       },
       {
@@ -219,9 +256,18 @@ export class AiCrmToolkitService {
         parameters: {
           type: 'object',
           properties: {
-            invoice_number: { type: 'string', description: 'The invoice number to apply the payment to, e.g. INV-0042.' },
-            amount: { type: 'number', description: 'Amount received, in the invoice currency major units.' },
-            method: { type: 'string', description: 'cash|bank|card|upi|cheque|other. Default bank.' },
+            invoice_number: {
+              type: 'string',
+              description: 'The invoice number to apply the payment to, e.g. INV-0042.',
+            },
+            amount: {
+              type: 'number',
+              description: 'Amount received, in the invoice currency major units.',
+            },
+            method: {
+              type: 'string',
+              description: 'cash|bank|card|upi|cheque|other. Default bank.',
+            },
           },
           required: ['invoice_number', 'amount'],
         },
@@ -233,14 +279,18 @@ export class AiCrmToolkitService {
       },
       {
         name: 'create_task',
-        description: 'Create a follow-up task / to-do with an optional due date, priority and assignee.',
+        description:
+          'Create a follow-up task / to-do with an optional due date, priority and assignee.',
         parameters: {
           type: 'object',
           properties: {
             title: { type: 'string', description: 'What needs doing.' },
             due_at: { type: 'string', description: 'Optional due date, YYYY-MM-DD.' },
             priority: { type: 'string', description: 'low|medium|high.' },
-            assignee_name: { type: 'string', description: 'Optional workspace member to assign to (by name).' },
+            assignee_name: {
+              type: 'string',
+              description: 'Optional workspace member to assign to (by name).',
+            },
           },
           required: ['title'],
         },
@@ -251,7 +301,10 @@ export class AiCrmToolkitService {
         parameters: {
           type: 'object',
           properties: {
-            task_id: { type: 'string', description: 'Task id (as returned by list_my_tasks/create_task).' },
+            task_id: {
+              type: 'string',
+              description: 'Task id (as returned by list_my_tasks/create_task).',
+            },
             assignee_name: { type: 'string', description: 'Member name to assign to.' },
           },
           required: ['task_id', 'assignee_name'],
@@ -268,7 +321,7 @@ export class AiCrmToolkitService {
       },
       {
         name: 'list_my_tasks',
-        description: "List the open tasks for the current staff member (soonest due first).",
+        description: 'List the open tasks for the current staff member (soonest due first).',
         parameters: { type: 'object', properties: {} },
       },
       {
@@ -286,13 +339,20 @@ export class AiCrmToolkitService {
             doc_type: { type: 'string', description: 'proposal|estimate.' },
             title: { type: 'string', description: 'Short title, e.g. "Website redesign".' },
             buyer_name: { type: 'string', description: 'Optional buyer/customer name.' },
-            buyer_phone: { type: 'string', description: 'Optional buyer phone, needed to send it over WhatsApp later.' },
+            buyer_phone: {
+              type: 'string',
+              description: 'Optional buyer phone, needed to send it over WhatsApp later.',
+            },
             items: {
               type: 'array',
               description: 'Line items.',
               items: {
                 type: 'object',
-                properties: { description: { type: 'string' }, qty: { type: 'number' }, unit_price: { type: 'number' } },
+                properties: {
+                  description: { type: 'string' },
+                  qty: { type: 'number' },
+                  unit_price: { type: 'number' },
+                },
                 required: ['description', 'unit_price'],
               },
             },
@@ -312,7 +372,10 @@ export class AiCrmToolkitService {
         parameters: {
           type: 'object',
           properties: {
-            to: { type: 'string', description: 'Phone number (digits) OR an existing contact name.' },
+            to: {
+              type: 'string',
+              description: 'Phone number (digits) OR an existing contact name.',
+            },
             message: { type: 'string', description: 'The text to send.' },
           },
           required: ['to', 'message'],
@@ -321,10 +384,12 @@ export class AiCrmToolkitService {
       {
         name: 'send_quote',
         description:
-          "Send an existing proposal or estimate to its buyer over WhatsApp (the public accept link). Identify it by its number, e.g. EST-0001.",
+          'Send an existing proposal or estimate to its buyer over WhatsApp (the public accept link). Identify it by its number, e.g. EST-0001.',
         parameters: {
           type: 'object',
-          properties: { number: { type: 'string', description: 'The quote number, e.g. EST-0001 or PRO-0002.' } },
+          properties: {
+            number: { type: 'string', description: 'The quote number, e.g. EST-0001 or PRO-0002.' },
+          },
           required: ['number'],
         },
       },
@@ -392,9 +457,17 @@ export class AiCrmToolkitService {
       // and the audit log should show it as a denial, not a generic error (both still land in a FAILED result
       // the provider adapter never silently swallows — the write was never executed either way).
       if (err instanceof AppError && err.code === ERROR_CODES.FORBIDDEN) {
-        return { ok: false, summary: `You don't have permission to do that (${err.message}).`, data: {} };
+        return {
+          ok: false,
+          summary: `You don't have permission to do that (${err.message}).`,
+          data: {},
+        };
       }
-      return { ok: false, summary: `Tool failed: ${String(err instanceof Error ? err.message : err)}`, data: {} };
+      return {
+        ok: false,
+        summary: `Tool failed: ${String(err instanceof Error ? err.message : err)}`,
+        data: {},
+      };
     }
   }
 
@@ -426,10 +499,17 @@ export class AiCrmToolkitService {
   private async findContact(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const query = this.str(args.query);
     if (!query) return { ok: false, summary: 'Empty search query.', data: {} };
-    const found = await this.contacts.selectData({ q: query, limit: 10 }, this.scopeFor('record.contacts.read'));
+    const found = await this.contacts.selectData(
+      { q: query, limit: 10 },
+      this.scopeFor('record.contacts.read'),
+    );
     // A contact under a legal hold (BL-295) is restricted from AI processing: the model is never shown them.
     const rows = await this.withoutHeld(found);
-    return { ok: true, summary: `${rows.length} contact(s) found for "${query}".`, data: { contacts: rows } };
+    return {
+      ok: true,
+      summary: `${rows.length} contact(s) found for "${query}".`,
+      data: { contacts: rows },
+    };
   }
 
   /** Drops the contacts that are under a legal hold from a picker result before it goes to the model. */
@@ -453,10 +533,16 @@ export class AiCrmToolkitService {
     if (!phone) return { ok: false, summary: 'A valid phone number is required.', data: {} };
     const ctx = RequestContextStore.require();
     const resolved = await this.db.tx((tx) =>
-      this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: phone, name: name || null }),
+      this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, {
+        kind: 'phone',
+        value: phone,
+        name: name || null,
+      }),
     );
-    if (resolved.outcome === 'quota_reached') return { ok: false, summary: "This workspace's contact limit is reached.", data: {} };
-    if (resolved.outcome === 'unusable') return { ok: false, summary: 'That is not a usable phone number.', data: {} };
+    if (resolved.outcome === 'quota_reached')
+      return { ok: false, summary: "This workspace's contact limit is reached.", data: {} };
+    if (resolved.outcome === 'unusable')
+      return { ok: false, summary: 'That is not a usable phone number.', data: {} };
     return {
       ok: true,
       summary: `Contact "${name || 'contact'}" saved.`,
@@ -474,7 +560,9 @@ export class AiCrmToolkitService {
   ): Promise<{ id: string } | undefined> {
     if (!nameFragment) return undefined;
     const pipeline = await this.pipelines.get(pipelineUuid);
-    const match = pipeline.stages.find((s) => s.name.toLowerCase().includes(nameFragment.toLowerCase()));
+    const match = pipeline.stages.find((s) =>
+      s.name.toLowerCase().includes(nameFragment.toLowerCase()),
+    );
     return match ? { id: match.id } : undefined;
   }
 
@@ -488,11 +576,26 @@ export class AiCrmToolkitService {
     const limit = Math.min(50, Math.max(1, Math.trunc(this.num(args.limit)) || 15));
     const scope = this.scopeFor('record.deals.read');
     const result = await this.deals.list(
-      { status: status === 'any' ? undefined : (status as 'open' | 'won' | 'lost'), limit, order: 'desc' },
+      {
+        status: status === 'any' ? undefined : (status as 'open' | 'won' | 'lost'),
+        limit,
+        order: 'desc',
+      },
       scope,
     );
-    const rows = result.data.map((d) => ({ id: d.id, title: d.title, value: d.value, currency: d.currency, status: d.status, stage: d.stage.name }));
-    return { ok: true, summary: `${rows.length} ${status === 'any' ? '' : status + ' '}deal(s).`, data: { deals: rows } };
+    const rows = result.data.map((d) => ({
+      id: d.id,
+      title: d.title,
+      value: d.value,
+      currency: d.currency,
+      status: d.status,
+      stage: d.stage.name,
+    }));
+    return {
+      ok: true,
+      summary: `${rows.length} ${status === 'any' ? '' : status + ' '}deal(s).`,
+      data: { deals: rows },
+    };
   }
 
   private async createDeal(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
@@ -537,7 +640,8 @@ export class AiCrmToolkitService {
   private async moveDealStage(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const dealId = this.str(args.deal_id);
     const stageName = this.str(args.stage);
-    if (!dealId || !stageName) return { ok: false, summary: 'A deal id and a target stage are required.', data: {} };
+    if (!dealId || !stageName)
+      return { ok: false, summary: 'A deal id and a target stage are required.', data: {} };
     const scope = this.scopeFor('record.deals.update');
     const deal = await this.deals.get(dealId, this.scopeFor('record.deals.read'));
     const stage = await this.resolveStage(deal.pipeline.id, stageName);
@@ -557,8 +661,15 @@ export class AiCrmToolkitService {
   private async findCompany(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const query = this.str(args.query);
     if (!query) return { ok: false, summary: 'Empty company query.', data: {} };
-    const rows = await this.companies.selectData({ q: query, limit: 10 }, this.scopeFor('record.companies.read'));
-    return { ok: true, summary: `${rows.length} company(ies) found for "${query}".`, data: { companies: rows } };
+    const rows = await this.companies.selectData(
+      { q: query, limit: 10 },
+      this.scopeFor('record.companies.read'),
+    );
+    return {
+      ok: true,
+      summary: `${rows.length} company(ies) found for "${query}".`,
+      data: { companies: rows },
+    };
   }
 
   /**
@@ -570,11 +681,12 @@ export class AiCrmToolkitService {
     if (!name) return { ok: false, summary: 'Tell me a company name for the brief.', data: {} };
     const scope = this.scopeFor('record.companies.read');
     const matches = await this.companies.selectData({ q: name, limit: 10 }, scope);
-    const company =
-      matches.find((c) => c.name.toLowerCase() === name.toLowerCase()) ?? matches[0];
+    const company = matches.find((c) => c.name.toLowerCase() === name.toLowerCase()) ?? matches[0];
     if (!company) return { ok: false, summary: `No company matches "${name}".`, data: {} };
     try {
-      const { brief, cached } = await this.briefs.generate(company.id, scope, { regenerate: false });
+      const { brief, cached } = await this.briefs.generate(company.id, scope, {
+        regenerate: false,
+      });
       return {
         ok: true,
         summary: `Brief of ${company.name} ready${cached ? ' (from the last one)' : ''}: ${brief.content.summary}`,
@@ -600,8 +712,17 @@ export class AiCrmToolkitService {
     this.scopeFor('record.companies.create');
     const name = this.str(args.name);
     if (!name) return { ok: false, summary: 'A company name is required.', data: {} };
-    const company = await this.companies.create({ name, industry: this.str(args.industry) || undefined });
-    return { ok: true, summary: `Company "${name}" created.`, data: { company_id: company.id }, subjectType: 'company', subjectId: null };
+    const company = await this.companies.create({
+      name,
+      industry: this.str(args.industry) || undefined,
+    });
+    return {
+      ok: true,
+      summary: `Company "${name}" created.`,
+      data: { company_id: company.id },
+      subjectType: 'company',
+      subjectId: null,
+    };
   }
 
   private async linkContactCompany(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
@@ -609,21 +730,31 @@ export class AiCrmToolkitService {
     this.scopeFor('record.contacts.create');
     const phone = this.str(args.contact_phone);
     const companyName = this.str(args.company_name);
-    if (!phone || !companyName) return { ok: false, summary: 'A contact phone and a company name are required.', data: {} };
+    if (!phone || !companyName)
+      return { ok: false, summary: 'A contact phone and a company name are required.', data: {} };
     const ctx = RequestContextStore.require();
 
-    const resolved = await this.db.tx((tx) => this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: phone }));
+    const resolved = await this.db.tx((tx) =>
+      this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: phone }),
+    );
     if (resolved.outcome !== 'found' && resolved.outcome !== 'created') {
       return { ok: false, summary: 'Could not resolve that contact.', data: {} };
     }
     const contactUuid = (resolved as { uuid: string }).uuid;
 
-    const matches = await this.companies.selectData({ q: companyName, limit: 5 }, this.scopeFor('record.companies.read'));
+    const matches = await this.companies.selectData(
+      { q: companyName, limit: 5 },
+      this.scopeFor('record.companies.read'),
+    );
     const existing = matches.find((c) => c.name.toLowerCase() === companyName.toLowerCase());
     if (!existing) this.scopeFor('record.companies.create');
     const company = existing ?? (await this.companies.create({ name: companyName }));
 
-    await this.companies.linkContacts(company.id, { contactIds: [contactUuid] }, this.scopeFor('record.companies.update'));
+    await this.companies.linkContacts(
+      company.id,
+      { contactIds: [contactUuid] },
+      this.scopeFor('record.companies.update'),
+    );
     return {
       ok: true,
       summary: `Linked contact to company "${companyName}".`,
@@ -644,7 +775,8 @@ export class AiCrmToolkitService {
       this.pipelines.list(),
     ]);
     const probabilityByStage = new Map<string, number>();
-    for (const p of pipelines) for (const s of p.stages) probabilityByStage.set(s.id, s.probability);
+    for (const p of pipelines)
+      for (const s of p.stages) probabilityByStage.set(s.id, s.probability);
 
     const open = all.data.filter((d) => d.status === 'open');
     const won = all.data.filter((d) => d.status === 'won');
@@ -652,7 +784,10 @@ export class AiCrmToolkitService {
 
     const openValue = sumMoney(open.map((d) => d.value));
     const weightedCents = open.reduce(
-      (sum, d) => sum + Math.round((Number(d.value) || 0) * 100) * ((probabilityByStage.get(d.stage.id) ?? 0) / 100),
+      (sum, d) =>
+        sum +
+        Math.round((Number(d.value) || 0) * 100) *
+          ((probabilityByStage.get(d.stage.id) ?? 0) / 100),
       0,
     );
 
@@ -662,7 +797,10 @@ export class AiCrmToolkitService {
     const wonThisMonth = won.filter((d) => d.wonAt && new Date(d.wonAt) >= monthStart);
     const wonThisMonthValue = sumMoney(wonThisMonth.map((d) => d.value));
 
-    const winRate = won.length + lost.length > 0 ? Math.round((won.length / (won.length + lost.length)) * 100) : 0;
+    const winRate =
+      won.length + lost.length > 0
+        ? Math.round((won.length / (won.length + lost.length)) * 100)
+        : 0;
 
     return {
       ok: true,
@@ -682,7 +820,8 @@ export class AiCrmToolkitService {
     this.scopeFor('record.invoices.create');
     const buyer = this.str(args.buyer_name);
     const items = Array.isArray(args.items) ? (args.items as Array<Record<string, unknown>>) : [];
-    if (!buyer || items.length === 0) return { ok: false, summary: 'Need a buyer name and at least one line item.', data: {} };
+    if (!buyer || items.length === 0)
+      return { ok: false, summary: 'Need a buyer name and at least one line item.', data: {} };
 
     const invoice = await this.invoices.create({
       buyerName: buyer,
@@ -705,12 +844,18 @@ export class AiCrmToolkitService {
   private async recordPayment(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const amount = this.num(args.amount);
     const invoiceNumber = this.str(args.invoice_number);
-    if (amount <= 0 || !invoiceNumber) return { ok: false, summary: 'An invoice number and a positive amount are required.', data: {} };
+    if (amount <= 0 || !invoiceNumber)
+      return {
+        ok: false,
+        summary: 'An invoice number and a positive amount are required.',
+        data: {},
+      };
 
     const scope = this.scopeFor('record.invoices.read');
     const page = await this.invoices.list({ q: invoiceNumber, limit: 10, order: 'desc' }, scope);
     const invoice = page.data.find((i) => i.number === invoiceNumber) ?? page.data[0];
-    if (!invoice) return { ok: false, summary: `No invoice matching "${invoiceNumber}".`, data: {} };
+    if (!invoice)
+      return { ok: false, summary: `No invoice matching "${invoiceNumber}".`, data: {} };
 
     const method = this.str(args.method).toLowerCase();
     const roundedAmount = roundMoney(amount);
@@ -794,7 +939,9 @@ export class AiCrmToolkitService {
         title,
         assigneeId,
         dueAt,
-        priority: priority ? oneOf(priority, ['low', 'medium', 'high'] as const, 'medium') : undefined,
+        priority: priority
+          ? oneOf(priority, ['low', 'medium', 'high'] as const, 'medium')
+          : undefined,
       },
       'ai',
     );
@@ -810,25 +957,48 @@ export class AiCrmToolkitService {
   private async assignTask(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const taskId = this.str(args.task_id);
     const assigneeName = this.str(args.assignee_name);
-    if (!taskId || !assigneeName) return { ok: false, summary: 'A task id and an assignee name are required.', data: {} };
+    if (!taskId || !assigneeName)
+      return { ok: false, summary: 'A task id and an assignee name are required.', data: {} };
     const scope = this.scopeFor('record.tasks.update');
     const task = await this.tasks.get(taskId, this.scopeFor('record.tasks.read'));
     const assigneeId = await this.memberUuidByName(assigneeName);
-    if (!assigneeId) return { ok: false, summary: `No workspace member matches "${assigneeName}".`, data: {} };
+    if (!assigneeId)
+      return { ok: false, summary: `No workspace member matches "${assigneeName}".`, data: {} };
     await this.tasks.update(taskId, { assigneeId, rowVersion: task.rowVersion }, scope);
-    return { ok: true, summary: `Assigned task to ${assigneeName}.`, data: { task_id: taskId }, subjectType: 'task', subjectId: null };
+    return {
+      ok: true,
+      summary: `Assigned task to ${assigneeName}.`,
+      data: { task_id: taskId },
+      subjectType: 'task',
+      subjectId: null,
+    };
   }
 
   private async completeTask(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const taskId = this.str(args.task_id);
     if (!taskId) return { ok: false, summary: 'A task id is required.', data: {} };
     await this.tasks.complete(taskId, {}, this.scopeFor('record.tasks.update'));
-    return { ok: true, summary: 'Marked the task done.', data: { task_id: taskId }, subjectType: 'task', subjectId: null };
+    return {
+      ok: true,
+      summary: 'Marked the task done.',
+      data: { task_id: taskId },
+      subjectType: 'task',
+      subjectId: null,
+    };
   }
 
   private async listMyTasks(): Promise<AiCrmToolCallResult> {
-    const page = await this.tasks.myTasks({ limit: 25, status: 'open' }, this.scopeFor('record.tasks.read'));
-    const rows = page.data.map((t) => ({ id: t.id, title: t.title, priority: t.priority, due: t.dueAt, overdue: t.overdue }));
+    const page = await this.tasks.myTasks(
+      { limit: 25, status: 'open' },
+      this.scopeFor('record.tasks.read'),
+    );
+    const rows = page.data.map((t) => ({
+      id: t.id,
+      title: t.title,
+      priority: t.priority,
+      due: t.dueAt,
+      overdue: t.overdue,
+    }));
     return { ok: true, summary: `${rows.length} open task(s).`, data: { tasks: rows } };
   }
 
@@ -838,7 +1008,8 @@ export class AiCrmToolkitService {
     this.scopeFor('record.sales-docs.create');
     const docType = this.str(args.doc_type).toLowerCase() === 'estimate' ? 'estimate' : 'proposal';
     const items = Array.isArray(args.items) ? (args.items as Array<Record<string, unknown>>) : [];
-    if (items.length === 0) return { ok: false, summary: 'A quote needs at least one line item.', data: {} };
+    if (items.length === 0)
+      return { ok: false, summary: 'A quote needs at least one line item.', data: {} };
 
     const doc = await this.salesDocs.create(
       {
@@ -866,7 +1037,12 @@ export class AiCrmToolkitService {
 
   private async listQuotes(): Promise<AiCrmToolCallResult> {
     const page = await this.salesDocs.list({ limit: 20 }, this.scopeFor('record.sales-docs.read'));
-    const rows = page.data.map((d) => ({ number: d.number, type: d.kind, status: d.status, total: d.totals.total }));
+    const rows = page.data.map((d) => ({
+      number: d.number,
+      type: d.kind,
+      status: d.status,
+      total: d.totals.total,
+    }));
     return { ok: true, summary: `${rows.length} quote(s).`, data: { quotes: rows } };
   }
 
@@ -882,10 +1058,12 @@ export class AiCrmToolkitService {
     this.scopeFor('inbox.conversation.reply');
     const to = this.str(args.to);
     const text = this.str(args.message);
-    if (!to || !text) return { ok: false, summary: 'Need both a recipient and a message.', data: {} };
+    if (!to || !text)
+      return { ok: false, summary: 'Need both a recipient and a message.', data: {} };
 
     const channelId = await this.whatsappChannelId();
-    if (!channelId) return { ok: false, summary: 'No connected WhatsApp number to send from.', data: {} };
+    if (!channelId)
+      return { ok: false, summary: 'No connected WhatsApp number to send from.', data: {} };
 
     const ctx = RequestContextStore.require();
     const digits = to.replace(/\D+/g, '');
@@ -893,10 +1071,16 @@ export class AiCrmToolkitService {
     if (digits.length >= 6) {
       // Same reason as createDeal/linkContactCompany: this can mint a new contact.
       this.scopeFor('record.contacts.create');
-      const resolved = await this.db.tx((tx) => this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: to }));
-      if (resolved.outcome === 'found' || resolved.outcome === 'created') contactUuid = (resolved as { uuid: string }).uuid;
+      const resolved = await this.db.tx((tx) =>
+        this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: to }),
+      );
+      if (resolved.outcome === 'found' || resolved.outcome === 'created')
+        contactUuid = (resolved as { uuid: string }).uuid;
     } else {
-      const matches = await this.contacts.selectData({ q: to, limit: 1 }, this.scopeFor('record.contacts.read'));
+      const matches = await this.contacts.selectData(
+        { q: to, limit: 1 },
+        this.scopeFor('record.contacts.read'),
+      );
       contactUuid = matches[0]?.id;
     }
     if (!contactUuid) return { ok: false, summary: `No contact matches "${to}".`, data: {} };
@@ -918,32 +1102,54 @@ export class AiCrmToolkitService {
     const scope = this.scopeFor('record.sales-docs.read');
     const page = await this.salesDocs.list({ q: number, limit: 5 }, scope);
     const doc = page.data.find((d) => d.number === number) ?? page.data[0];
-    if (!doc) return { ok: false, summary: `No matching proposal/estimate found for "${number}".`, data: {} };
+    if (!doc)
+      return {
+        ok: false,
+        summary: `No matching proposal/estimate found for "${number}".`,
+        data: {},
+      };
 
     // Buyer phone isn't on the summary row; fetch the full record for it.
     const full = await this.salesDocs.get(doc.id, scope);
     const phone = this.str((full as { buyer?: { phone?: string | null } }).buyer?.phone);
-    if (!phone) return { ok: false, summary: `${doc.kind} ${doc.number} has no buyer phone on file.`, data: {} };
+    if (!phone)
+      return {
+        ok: false,
+        summary: `${doc.kind} ${doc.number} has no buyer phone on file.`,
+        data: {},
+      };
 
     const channelId = await this.whatsappChannelId();
-    if (!channelId) return { ok: false, summary: 'No connected WhatsApp number to send from.', data: {} };
+    if (!channelId)
+      return { ok: false, summary: 'No connected WhatsApp number to send from.', data: {} };
     // Same reason as sendMessage: resolving the buyer by phone can mint a new contact.
     this.scopeFor('record.contacts.create');
     const ctx = RequestContextStore.require();
-    const resolved = await this.db.tx((tx) => this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: phone }));
+    const resolved = await this.db.tx((tx) =>
+      this.contacts.resolveOrCreateByIdentity(tx, ctx.orgId, { kind: 'phone', value: phone }),
+    );
     if (resolved.outcome !== 'found' && resolved.outcome !== 'created') {
       return { ok: false, summary: 'Could not resolve the buyer contact.', data: {} };
     }
     const link = await this.salesDocs.getLink(doc.id, scope);
     const body = `${doc.kind === 'estimate' ? 'Estimate' : 'Proposal'} ${doc.number}${doc.title ? ` — ${doc.title}` : ''}\nTotal: ${doc.totals.total}\nView & accept: ${link.url}`;
 
-    const thread = await this.conversations.openConversationFor((resolved as { uuid: string }).uuid, channelId);
+    const thread = await this.conversations.openConversationFor(
+      (resolved as { uuid: string }).uuid,
+      channelId,
+    );
     await this.conversations.enqueueOutbound({
       conversationId: thread.id,
       clientMessageId: `aicrm-${thread.id}-${Date.now()}`,
       content: { kind: 'text', body },
     });
-    return { ok: true, summary: `Sent ${doc.kind} ${doc.number}.`, data: { number: doc.number }, subjectType: 'sales_doc', subjectId: null };
+    return {
+      ok: true,
+      summary: `Sent ${doc.kind} ${doc.number}.`,
+      data: { number: doc.number },
+      subjectType: 'sales_doc',
+      subjectId: null,
+    };
   }
 }
 

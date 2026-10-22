@@ -22,6 +22,7 @@ import {
   formFromTimers,
   queueProblems,
   sameForm,
+  toAwayInput,
   toQueueInput,
   type QueueForm,
   type QueueProblem,
@@ -47,7 +48,7 @@ export function WaitingQueueSection({
   const { toast } = useToast();
   const save = useUpdateHandoffSettings();
   const locked = !settings.available.queueTimers;
-  const stored = formFromTimers(settings.queueTimers);
+  const stored = formFromTimers(settings.queueTimers, settings.away);
   const [form, setForm] = useState<QueueForm>(stored);
   const [tried, setTried] = useState(false);
   const patch = (p: Partial<QueueForm>) => setForm((f) => ({ ...f, ...p }));
@@ -60,7 +61,7 @@ export function WaitingQueueSection({
     setTried(true);
     if (problems.length > 0) return;
     save.mutate(
-      { queueTimers: toQueueInput(form) },
+      { queueTimers: toQueueInput(form), away: toAwayInput(form) },
       {
         onSuccess: () => {
           setTried(false);
@@ -72,7 +73,10 @@ export function WaitingQueueSection({
     );
   };
 
-  const minutes = (key: 'remindMinutes' | 'overflowMinutes' | 'finalMinutes', bad: boolean) => (
+  const minutes = (
+    key: 'remindMinutes' | 'overflowMinutes' | 'finalMinutes' | 'autoOfflineMinutes',
+    bad: boolean,
+  ) => (
     <Field label={t('afterMinutes')} error={bad ? t('problems.minutes') : undefined}>
       <Input
         type="number"
@@ -175,6 +179,27 @@ export function WaitingQueueSection({
             </Field>
           )}
         </StepRow>
+        <StepRow
+          id="away"
+          title={t('away')}
+          body={t('awayBody')}
+          on={form.returnAway}
+          disabled={disabled}
+          onChange={(returnAway) => patch({ returnAway })}
+        >
+          {null}
+        </StepRow>
+
+        <StepRow
+          id="offline"
+          title={t('offline')}
+          body={t('offlineBody')}
+          on={form.autoOffline}
+          disabled={disabled}
+          onChange={(autoOffline) => patch({ autoOffline })}
+        >
+          {minutes('autoOfflineMinutes', has('offlineMinutes'))}
+        </StepRow>
       </div>
 
       {!locked && canManage && (
@@ -215,7 +240,7 @@ function StepRow({
         </div>
         <Switch label={title} checked={on} disabled={disabled} onCheckedChange={onChange} />
       </div>
-      {on && <div className="grid gap-3 sm:grid-cols-2">{children}</div>}
+      {on && children !== null && <div className="grid gap-3 sm:grid-cols-2">{children}</div>}
     </div>
   );
 }

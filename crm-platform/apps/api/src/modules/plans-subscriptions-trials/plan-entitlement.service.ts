@@ -246,7 +246,10 @@ export class PlanEntitlementService {
     // is still resolved by the add-on registry's own resolver, as before.
     const packed = packGrants(opts.ignorePacks ? [] : (row.generic_packs ?? []));
     if (packed.features.length > 0) {
-      planFeatures = { ...planFeatures, ...Object.fromEntries(packed.features.map((k) => [k, true])) };
+      planFeatures = {
+        ...planFeatures,
+        ...Object.fromEntries(packed.features.map((k) => [k, true])),
+      };
     }
     return {
       orgId,
@@ -461,7 +464,8 @@ export function packGrants(packs: ReadonlyArray<{ features: unknown; limits: unk
   const features = new Set<string>();
   const limits: Record<string, number> = {};
   for (const p of packs) {
-    const f = p.features && typeof p.features === 'object' ? (p.features as Record<string, unknown>) : {};
+    const f =
+      p.features && typeof p.features === 'object' ? (p.features as Record<string, unknown>) : {};
     for (const k of PACK_GRANTABLE_FEATURES) if (f[k] === true) features.add(k);
     const l = p.limits && typeof p.limits === 'object' ? (p.limits as Record<string, unknown>) : {};
     for (const k of PACK_GRANTABLE_LIMITS) {

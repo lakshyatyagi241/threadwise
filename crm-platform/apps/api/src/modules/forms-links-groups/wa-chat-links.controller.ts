@@ -60,7 +60,10 @@ export class WaChatLinksController {
   @Idempotent()
   @RequirePermission('wfl.links.manage')
   @ApiOperation({ summary: 'Save a link' })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body(zodPipe(saveWaChatLinkInputSchema)) body: SaveWaChatLinkInput) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(saveWaChatLinkInputSchema)) body: SaveWaChatLinkInput,
+  ) {
     return this.links.update(id, body);
   }
 

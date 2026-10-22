@@ -45,7 +45,9 @@ const settings = (queueTimers = OFF, available = true): HandoffSettings =>
     promptOwnerOnReassign: false,
     notifyQueue: true,
     queueTimers,
+    away: { returnUnanswered: false, autoOfflineMinutes: null },
     available: {
+      away: available,
       autoAssign: true,
       ownerFirst: true,
       keepInSync: true,
@@ -91,7 +93,7 @@ describe('the Waiting queue section', () => {
   it('shows every step off by default, with nothing to fill in', () => {
     render(settings());
     expect(host.textContent).toContain('Waiting queue');
-    for (const id of ['remind', 'overflow', 'final'])
+    for (const id of ['remind', 'overflow', 'final', 'away', 'offline'])
       expect(switchOf(id)!.getAttribute('aria-checked')).toBe('false');
     expect(host.querySelector('input[type="number"]')).toBeNull();
   });
@@ -102,7 +104,7 @@ describe('the Waiting queue section', () => {
       'Smart routing add-on',
     );
     expect(host.querySelector('a[href="/account/plans"]')).not.toBeNull();
-    for (const id of ['remind', 'overflow', 'final'])
+    for (const id of ['remind', 'overflow', 'final', 'away', 'offline'])
       expect((switchOf(id) as HTMLButtonElement).disabled).toBe(true);
     expect(host.textContent).not.toContain('Save');
   });
@@ -122,7 +124,22 @@ describe('the Waiting queue section', () => {
       select.dispatchEvent(new Event('change', { bubbles: true }));
     });
     click([...host.querySelectorAll('button')].find((b) => b.textContent === 'Save') ?? null);
-    expect(calls).toEqual([{ queueTimers: { ...OFF, overflowMinutes: 20, overflowTeamId: 't1' } }]);
+    expect(calls).toEqual([
+      {
+        queueTimers: { ...OFF, overflowMinutes: 20, overflowTeamId: 't1' },
+        away: { returnUnanswered: false, autoOfflineMinutes: null },
+      },
+    ]);
+  });
+
+  it('saves the away rules together with the steps', () => {
+    render(settings());
+    click(switchOf('away'));
+    click(switchOf('offline'));
+    click([...host.querySelectorAll('button')].find((b) => b.textContent === 'Save') ?? null);
+    expect(calls).toEqual([
+      { queueTimers: OFF, away: { returnUnanswered: true, autoOfflineMinutes: 30 } },
+    ]);
   });
 
   it('a reader sees the saved steps but cannot change them', () => {

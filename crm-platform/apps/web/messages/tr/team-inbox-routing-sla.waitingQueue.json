@@ -25,7 +25,11 @@
         "minutes": "1 ile 1440 arasında bir sayı girin.",
         "team": "Bir ekip seçin.",
         "message": "Mesajı yazın."
-      }
+      },
+      "away": "Biri uzaklaştığında yanıtsız sohbetleri geri ver",
+      "awayBody": "Biri Çevrimdışı olduğunda veya izne çıktığında, müşterinin hâlâ beklediği sohbetleri ekibin kuyruğuna geri döner.",
+      "offline": "Etkin olmayanları Çevrimdışı yap",
+      "offlineBody": "Bu süre boyunca hiçbir şey yapmayan Müsait bir kişi Çevrimdışı yapılır. Kendisi tekrar Müsait olur."
     }
   }
 }

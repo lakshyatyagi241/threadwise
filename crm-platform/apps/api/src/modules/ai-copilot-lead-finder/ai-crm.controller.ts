@@ -36,7 +36,9 @@ export class AiCrmController {
   @HttpCode(HttpStatus.OK)
   @RequirePermission('aicrm.copilot.use')
   @Throttle({ limit: 30, windowSeconds: 60, by: 'actor' })
-  @ApiOperation({ summary: 'One chat turn; a write tool is parked for confirm-before-act, not executed' })
+  @ApiOperation({
+    summary: 'One chat turn; a write tool is parked for confirm-before-act, not executed',
+  })
   message(@Body(zodPipe(aiCrmMessageInputSchema)) body: AiCrmMessageInput) {
     return this.copilot.ask(body.message);
   }
@@ -53,7 +55,10 @@ export class AiCrmController {
   @Post('settings')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('aicrm.copilot.manage')
-  @ApiOperation({ summary: 'Toggle the WhatsApp staff-channel copilot (admin-only; TW-AICRM-015, no consumer yet)' })
+  @ApiOperation({
+    summary:
+      'Toggle the WhatsApp staff-channel copilot (admin-only; TW-AICRM-015, no consumer yet)',
+  })
   settings(@Body(zodPipe(aiCrmSettingsInputSchema)) body: AiCrmSettingsInput) {
     return this.copilot.setSettings(body.waCopilotEnabled);
   }

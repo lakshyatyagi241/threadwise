@@ -25,7 +25,11 @@
         "minutes": "Gib eine Zahl von 1 bis 1440 ein.",
         "team": "Wähle ein Team.",
         "message": "Schreibe die Nachricht."
-      }
+      },
+      "away": "Unbeantwortete Chats zurückgeben, wenn jemand abwesend ist",
+      "awayBody": "Wenn jemand auf Offline wechselt oder eine Abwesenheit beginnt, gehen die Chats, auf die der Kunde noch wartet, zurück in die Warteschlange des Teams.",
+      "offline": "Inaktive Personen auf Offline setzen",
+      "offlineBody": "Eine verfügbare Person, die so lange nichts getan hat, wird auf Offline gesetzt. Sie schaltet sich selbst wieder auf Verfügbar."
     }
   }
 }

@@ -25,7 +25,11 @@
         "minutes": "Saisissez un nombre de 1 à 1440.",
         "team": "Choisissez une équipe.",
         "message": "Écrivez le message."
-      }
+      },
+      "away": "Rendre les conversations sans réponse quand quelqu'un s'absente",
+      "awayBody": "Quand une personne passe Hors ligne ou commence un congé, les conversations qu'elle détient et pour lesquelles le client attend encore retournent dans la file de l'équipe.",
+      "offline": "Passer les personnes inactives Hors ligne",
+      "offlineBody": "Une personne Disponible qui n'a rien fait pendant ce temps passe Hors ligne. Elle se remet elle-même Disponible."
     }
   }
 }

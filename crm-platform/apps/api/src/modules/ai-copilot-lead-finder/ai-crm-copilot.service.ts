@@ -1,7 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
-import type { AiCrmIndexResponse, AiCrmMessageResponse, AiCrmRecentAction, AiCrmSettingsResponse } from '@crm/contracts';
+import type {
+  AiCrmIndexResponse,
+  AiCrmMessageResponse,
+  AiCrmRecentAction,
+  AiCrmSettingsResponse,
+} from '@crm/contracts';
 import { AICRM_ERROR_CODES } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -25,7 +30,8 @@ const PROVIDER_PRIORITY_ORDER = ['anthropic', 'openai', 'gemini'] as const;
 const HISTORY_MAX_TURNS = 12;
 const HISTORY_TTL_SECONDS = 60 * 60 * 2;
 const PENDING_TTL_SECONDS = 60 * 10;
-export const AFFIRMATIVE = /^\s*(yes|y|yeah|yep|ok|okay|confirm|confirmed|sure|do it|go|proceed)\b/i;
+export const AFFIRMATIVE =
+  /^\s*(yes|y|yeah|yep|ok|okay|confirm|confirmed|sure|do it|go|proceed)\b/i;
 export const NEGATIVE = /^\s*(no|n|nope|cancel|stop|don'?t)\b/i;
 
 const CHANNEL = 'dashboard';
@@ -60,7 +66,9 @@ export class AiCrmCopilotService {
   async index(): Promise<AiCrmIndexResponse> {
     const ctx = RequestContextStore.require();
     const [recentRows, waCopilotEnabled] = await Promise.all([
-      this.db.txAs({ orgId: ctx.orgId, userId: null }, (tx) => this.actions.recent(tx, ctx.orgId, 12)),
+      this.db.txAs({ orgId: ctx.orgId, userId: null }, (tx) =>
+        this.actions.recent(tx, ctx.orgId, 12),
+      ),
       this.readWaCopilotEnabled(ctx.orgId),
     ]);
     const recent: AiCrmRecentAction[] = recentRows.map((r) => ({
@@ -68,7 +76,11 @@ export class AiCrmCopilotService {
       summary: r.result_summary,
       createdAt: r.created_at.toISOString(),
     }));
-    return { recent, waCopilotEnabled, canManageSettings: Boolean(ctx.grants?.has('aicrm.copilot.manage')) };
+    return {
+      recent,
+      waCopilotEnabled,
+      canManageSettings: Boolean(ctx.grants?.has('aicrm.copilot.manage')),
+    };
   }
 
   async ask(message: string): Promise<AiCrmMessageResponse> {
@@ -76,10 +88,22 @@ export class AiCrmCopilotService {
     const history = await this.history(ctx.orgId, ctx.userId);
 
     const pending = await this.pending(ctx.orgId, ctx.userId);
-    if (pending && AFFIRMATIVE.test(message)) return this.runPending(ctx.orgId, ctx.userId, pending);
+    if (pending && AFFIRMATIVE.test(message))
+      return this.runPending(ctx.orgId, ctx.userId, pending);
     if (pending && NEGATIVE.test(message)) {
       await this.clearPending(ctx.orgId, ctx.userId);
-      await this.log(ctx.orgId, ctx.userId, pending.tool, 'write', 'cancelled', pending.args, 'Cancelled by user', null, null, 0);
+      await this.log(
+        ctx.orgId,
+        ctx.userId,
+        pending.tool,
+        'write',
+        'cancelled',
+        pending.args,
+        'Cancelled by user',
+        null,
+        null,
+        0,
+      );
       const cancelReply = 'Okay, cancelled — nothing was changed.';
       // Without this, the model's next turn has no memory a write was proposed and declined, and may re-propose it.
       await this.appendHistory(ctx.orgId, ctx.userId, history, message, cancelReply);
@@ -88,7 +112,11 @@ export class AiCrmCopilotService {
 
     const resolved = await this.resolveProvider(ctx.orgId);
     if (!resolved) {
-      throw new AppError(AICRM_ERROR_CODES.AICRM_NO_AI_PROVIDER, 'No AI provider is configured. Ask your admin to add an AI key.', 422);
+      throw new AppError(
+        AICRM_ERROR_CODES.AICRM_NO_AI_PROVIDER,
+        'No AI provider is configured. Ask your admin to add an AI key.',
+        422,
+      );
     }
     const { provider, model, key } = resolved;
 
@@ -105,7 +133,18 @@ export class AiCrmCopilotService {
         isWriteTool: (name) => this.toolkit.kindOf(name) === 'write',
         executeReadTool: async (name, args) => {
           const result = await this.toolkit.execute(name, args);
-          await this.log(ctx.orgId, ctx.userId, name, 'read', result.ok ? 'ok' : 'error', args, result.summary, provider, model, 0);
+          await this.log(
+            ctx.orgId,
+            ctx.userId,
+            name,
+            'read',
+            result.ok ? 'ok' : 'error',
+            args,
+            result.summary,
+            provider,
+            model,
+            0,
+          );
           return result;
         },
       });
@@ -113,8 +152,23 @@ export class AiCrmCopilotService {
       this.logger.warn({ err: String(err), provider }, '[AICRM] provider turn failed');
       // Every other outcome (read, pendingWrite, confirm, cancel) leaves a row in ai_crm_actions; a provider
       // failure must too, or repeated vendor outages/bad keys leave no trace in the workspace's own audit trail.
-      await this.log(ctx.orgId, ctx.userId, 'chat', 'read', 'error', { message }, String(err), provider, model, 0);
-      throw new AppError(AICRM_ERROR_CODES.AICRM_PROVIDER_FAILED, 'The AI service returned an error. Please try again.', 502);
+      await this.log(
+        ctx.orgId,
+        ctx.userId,
+        'chat',
+        'read',
+        'error',
+        { message },
+        String(err),
+        provider,
+        model,
+        0,
+      );
+      throw new AppError(
+        AICRM_ERROR_CODES.AICRM_PROVIDER_FAILED,
+        'The AI service returned an error. Please try again.',
+        502,
+      );
     }
 
     await this.meter
@@ -125,7 +179,9 @@ export class AiCrmCopilotService {
         completionTokens: outcome.completionTokens,
         billedAgainst: resolved.source,
       })
-      .catch((err: unknown) => this.logger.warn({ err: String(err) }, '[AICRM] token ledger write failed'));
+      .catch((err: unknown) =>
+        this.logger.warn({ err: String(err) }, '[AICRM] token ledger write failed'),
+      );
 
     if (outcome.pendingWrite) {
       const summary = this.describeWrite(outcome.pendingWrite.tool, outcome.pendingWrite.args);
@@ -172,8 +228,12 @@ export class AiCrmCopilotService {
       const before = await tx.execute(
         sql`SELECT wa_copilot_enabled FROM workspace_settings WHERE org_id = ${ctx.orgId} FOR UPDATE`,
       );
-      const was = Boolean((before.rows[0] as { wa_copilot_enabled?: boolean } | undefined)?.wa_copilot_enabled);
-      await tx.execute(sql`UPDATE workspace_settings SET wa_copilot_enabled = ${enabled} WHERE org_id = ${ctx.orgId}`);
+      const was = Boolean(
+        (before.rows[0] as { wa_copilot_enabled?: boolean } | undefined)?.wa_copilot_enabled,
+      );
+      await tx.execute(
+        sql`UPDATE workspace_settings SET wa_copilot_enabled = ${enabled} WHERE org_id = ${ctx.orgId}`,
+      );
       // A toggle that changes nothing is not an event; a real change is recorded with who made it (the audit row carries the actor).
       if (was !== enabled) {
         await this.audit.record(tx, {
@@ -189,14 +249,37 @@ export class AiCrmCopilotService {
 
   // ---- confirm-before-act (runs a previously-parked write) --------------------------------------------------------
 
-  private async runPending(orgId: number, userId: number | null, pending: PendingWrite): Promise<AiCrmMessageResponse> {
+  private async runPending(
+    orgId: number,
+    userId: number | null,
+    pending: PendingWrite,
+  ): Promise<AiCrmMessageResponse> {
     await this.clearPending(orgId, userId);
     const result = await this.toolkit.execute(pending.tool, pending.args);
-    await this.log(orgId, userId, pending.tool, 'write', result.ok ? 'confirmed' : 'error', pending.args, result.summary, null, null, 0, result);
-    const reply = result.ok ? `Done. ${result.summary}` : `That failed: ${result.summary || 'unknown error'}`;
+    await this.log(
+      orgId,
+      userId,
+      pending.tool,
+      'write',
+      result.ok ? 'confirmed' : 'error',
+      pending.args,
+      result.summary,
+      null,
+      null,
+      0,
+      result,
+    );
+    const reply = result.ok
+      ? `Done. ${result.summary}`
+      : `That failed: ${result.summary || 'unknown error'}`;
     const history = await this.history(orgId, userId);
     await this.appendHistory(orgId, userId, history, '(confirmed)', reply);
-    return { reply, actions: [{ tool: pending.tool, summary: result.summary }], pending: null, provider: null };
+    return {
+      reply,
+      actions: [{ tool: pending.tool, summary: result.summary }],
+      pending: null,
+      provider: null,
+    };
   }
 
   private describeWrite(tool: string, args: Record<string, unknown>): string {
@@ -237,7 +320,12 @@ export class AiCrmCopilotService {
 
   private async resolveProvider(
     orgId: number,
-  ): Promise<{ provider: string; model: string; key: string; source: 'workspace' | 'admin' } | null> {
+  ): Promise<{
+    provider: string;
+    model: string;
+    key: string;
+    source: 'workspace' | 'admin';
+  } | null> {
     // Each vendor is resolved at most once: the second pass (the platform's key) reuses what the first pass already read.
     const resolved = new Map<string, Awaited<ReturnType<typeof this.keys.resolve>>>();
     const resolve = async (provider: (typeof PROVIDER_PRIORITY_ORDER)[number]) => {
@@ -250,11 +338,23 @@ export class AiCrmCopilotService {
     };
     for (const provider of PROVIDER_PRIORITY_ORDER) {
       const r = await resolve(provider);
-      if (r.key && r.source === 'workspace') return { provider, model: r.model ?? this.defaultModel(provider), key: r.key, source: 'workspace' };
+      if (r.key && r.source === 'workspace')
+        return {
+          provider,
+          model: r.model ?? this.defaultModel(provider),
+          key: r.key,
+          source: 'workspace',
+        };
     }
     for (const provider of PROVIDER_PRIORITY_ORDER) {
       const r = await resolve(provider);
-      if (r.key) return { provider, model: r.model ?? this.defaultModel(provider), key: r.key, source: 'admin' };
+      if (r.key)
+        return {
+          provider,
+          model: r.model ?? this.defaultModel(provider),
+          key: r.key,
+          source: 'admin',
+        };
     }
     return null;
   }
@@ -310,9 +410,18 @@ export class AiCrmCopilotService {
     userMessage: string,
     assistantReply: string,
   ): Promise<void> {
-    const next = [...history, { role: 'user' as const, text: userMessage }, { role: 'assistant' as const, text: assistantReply }];
-    const trimmed = next.length > HISTORY_MAX_TURNS ? next.slice(next.length - HISTORY_MAX_TURNS) : next;
-    await this.redis.setex(this.historyKey(orgId, userId), HISTORY_TTL_SECONDS, JSON.stringify(trimmed));
+    const next = [
+      ...history,
+      { role: 'user' as const, text: userMessage },
+      { role: 'assistant' as const, text: assistantReply },
+    ];
+    const trimmed =
+      next.length > HISTORY_MAX_TURNS ? next.slice(next.length - HISTORY_MAX_TURNS) : next;
+    await this.redis.setex(
+      this.historyKey(orgId, userId),
+      HISTORY_TTL_SECONDS,
+      JSON.stringify(trimmed),
+    );
   }
 
   // ---- pending (Redis) --------------------------------------------------------------------------------------------
@@ -333,8 +442,16 @@ export class AiCrmCopilotService {
     }
   }
 
-  private async setPending(orgId: number, userId: number | null, data: PendingWrite): Promise<void> {
-    await this.redis.setex(this.pendingKey(orgId, userId), PENDING_TTL_SECONDS, JSON.stringify(data));
+  private async setPending(
+    orgId: number,
+    userId: number | null,
+    data: PendingWrite,
+  ): Promise<void> {
+    await this.redis.setex(
+      this.pendingKey(orgId, userId),
+      PENDING_TTL_SECONDS,
+      JSON.stringify(data),
+    );
   }
 
   private async clearPending(orgId: number, userId: number | null): Promise<void> {
@@ -347,7 +464,9 @@ export class AiCrmCopilotService {
     const row = await this.db.tx((tx) =>
       tx.execute(sql`SELECT wa_copilot_enabled FROM workspace_settings WHERE org_id = ${orgId}`),
     );
-    return Boolean((row.rows[0] as { wa_copilot_enabled?: boolean } | undefined)?.wa_copilot_enabled);
+    return Boolean(
+      (row.rows[0] as { wa_copilot_enabled?: boolean } | undefined)?.wa_copilot_enabled,
+    );
   }
 
   // ---- audit log ------------------------------------------------------------------------------------------------

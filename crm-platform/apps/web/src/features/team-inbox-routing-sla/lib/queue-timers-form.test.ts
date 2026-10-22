@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { formFromTimers, queueProblems, sameForm, toQueueInput } from './queue-timers-form';
+import {
+  formFromTimers,
+  queueProblems,
+  sameForm,
+  toAwayInput,
+  toQueueInput,
+} from './queue-timers-form';
 
 const OFF = {
   remindMinutes: null,
@@ -9,6 +15,20 @@ const OFF = {
   unclaimedAction: 'keep' as const,
   unclaimedMessage: '',
 };
+
+describe('the away rules in the form', () => {
+  it('round-trip and validate: off sends null, a bad limit blocks the save', () => {
+    const f = formFromTimers(OFF, { returnUnanswered: true, autoOfflineMinutes: 45 });
+    expect(toAwayInput(f)).toEqual({ returnUnanswered: true, autoOfflineMinutes: 45 });
+    expect(toAwayInput({ ...f, autoOffline: false })).toEqual({
+      returnUnanswered: true,
+      autoOfflineMinutes: null,
+    });
+    expect(queueProblems({ ...f, autoOfflineMinutes: '0' })).toEqual(['offlineMinutes']);
+    expect(queueProblems({ ...f, autoOfflineMinutes: '1441' })).toEqual(['offlineMinutes']);
+    expect(sameForm(f, { ...f, returnAway: false })).toBe(false);
+  });
+});
 
 describe('the waiting queue form', () => {
   it('everything off reads back as everything off and sends nulls', () => {

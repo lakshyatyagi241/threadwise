@@ -25,7 +25,11 @@
         "minutes": "Masukkan angka 1 sampai 1440.",
         "team": "Pilih tim.",
         "message": "Tulis pesannya."
-      }
+      },
+      "away": "Kembalikan chat tanpa balasan saat seseorang tidak ada",
+      "awayBody": "Saat seseorang menjadi Offline atau mulai cuti, chat miliknya yang masih ditunggu pelanggan kembali ke antrean tim.",
+      "offline": "Jadikan Offline orang yang tidak aktif",
+      "offlineBody": "Orang yang Tersedia tetapi tidak melakukan apa pun selama ini dijadikan Offline. Mereka sendiri yang kembali ke Tersedia."
     }
   }
 }

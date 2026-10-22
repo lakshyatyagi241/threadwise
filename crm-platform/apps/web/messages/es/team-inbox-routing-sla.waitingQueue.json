@@ -25,7 +25,11 @@
         "minutes": "Introduce un número del 1 al 1440.",
         "team": "Elige un equipo.",
         "message": "Escribe el mensaje."
-      }
+      },
+      "away": "Devolver los chats sin responder cuando alguien se ausenta",
+      "awayBody": "Cuando una persona pasa a Desconectada o empieza una ausencia, los chats que tiene y en los que el cliente sigue esperando vuelven a la cola del equipo.",
+      "offline": "Pasar a Desconectado a quien está inactivo",
+      "offlineBody": "Una persona Disponible que no ha hecho nada durante este tiempo pasa a Desconectada. Ella misma vuelve a ponerse Disponible."
     }
   }
 }

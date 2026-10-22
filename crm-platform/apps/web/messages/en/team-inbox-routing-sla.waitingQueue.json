@@ -25,7 +25,11 @@
         "minutes": "Enter a number from 1 to 1440.",
         "team": "Choose a team.",
         "message": "Write the message."
-      }
+      },
+      "away": "Return unanswered chats when someone goes away",
+      "awayBody": "When a person goes Offline or starts a leave, the chats they hold that the customer is still waiting on go back to the team's queue.",
+      "offline": "Set inactive people Offline",
+      "offlineBody": "An Available person who has done nothing for this long is set Offline. They switch themselves back to Available."
     }
   }
 }

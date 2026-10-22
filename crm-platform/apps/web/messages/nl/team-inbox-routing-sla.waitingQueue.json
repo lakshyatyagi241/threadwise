@@ -25,7 +25,11 @@
         "minutes": "Voer een getal van 1 tot 1440 in.",
         "team": "Kies een team.",
         "message": "Schrijf het bericht."
-      }
+      },
+      "away": "Onbeantwoorde chats teruggeven als iemand afwezig is",
+      "awayBody": "Wanneer iemand Offline gaat of verlof start, gaan de chats die diegene heeft en waar de klant nog op wacht terug naar de wachtrij van het team.",
+      "offline": "Inactieve mensen op Offline zetten",
+      "offlineBody": "Iemand die Beschikbaar is maar zo lang niets heeft gedaan, wordt op Offline gezet. Diegene zet zichzelf weer op Beschikbaar."
     }
   }
 }
