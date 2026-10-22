@@ -1100,7 +1100,8 @@
           "storedIn": "I valori saranno salvati nella proprietà <b>{property}</b> del contatto",
           "actions": "Azioni",
           "actionsHint": "Aggiungi un passo che parte subito dopo questo.",
-          "actionsBlocked": "Un passo che chiude la sua parte non può avere altri passi dopo."
+          "actionsBlocked": "Un passo che chiude la sua parte non può avere altri passi dopo.",
+          "fromSteps": "Raggiunto dal passaggio {stages}"
         },
         "editors": {
           "linkLabel": "Dove porta",
@@ -2469,7 +2470,8 @@
         "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare.",
         "chooseAiAgent": "Passo {stage}: scegli l’agente AI che risponde o passa il passo a una configurazione personalizzata.",
         "writeAiPrompt": "Passo {stage}: scrivi le istruzioni per l’AI o scegli un agente AI.",
-        "templateFile": "Passaggio {stage}: aggiungi il file dell'intestazione del modello."
+        "templateFile": "Passaggio {stage}: aggiungi il file dell'intestazione del modello.",
+        "fileLinkInvalid": "Passaggio {stage}: il link del file deve iniziare con https://"
       }
     },
     "waboImport": {

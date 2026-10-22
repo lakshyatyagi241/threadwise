@@ -747,7 +747,8 @@
           "storedIn": "Werte werden in der Eigenschaft <b>{property}</b> des Kontakts gespeichert",
           "actions": "Aktionen",
           "actionsHint": "Einen Schritt hinzufügen, der direkt nach diesem läuft.",
-          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen."
+          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen.",
+          "fromSteps": "Erreicht von Schritt {stages}"
         },
         "editors": {
           "linkLabel": "Wohin das führt",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
         "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
         "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten.",
-        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu."
+        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu.",
+        "fileLinkInvalid": "Schritt {stage}: Der Dateilink muss mit https:// beginnen"
       }
     },
     "waboImport": {
