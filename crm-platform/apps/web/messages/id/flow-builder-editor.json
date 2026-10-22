@@ -2354,6 +2354,7 @@
         "alphanumeric": "Huruf dan angka",
         "date": "Tanggal",
         "datetime": "Tanggal dan waktu",
+        "time": "Waktu",
         "age": "Usia",
         "date_of_birth": "Tanggal lahir"
       },
@@ -2366,6 +2367,7 @@
         "alphanumeric": "Gunakan huruf dan angka saja",
         "date": "Masukkan tanggal yang valid ({format})",
         "datetime": "Masukkan tanggal dan waktu yang valid ({format} HH:MM)",
+        "time": "Masukkan waktu yang valid (HH:MM)",
         "age": "Masukkan usia Anda sebagai bilangan bulat",
         "date_of_birth": "Masukkan tanggal yang valid ({format})"
       },

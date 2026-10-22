@@ -2354,6 +2354,7 @@
         "alphanumeric": "字母和数字",
         "date": "日期",
         "datetime": "日期和时间",
+        "time": "时间",
         "age": "年龄",
         "date_of_birth": "出生日期"
       },
@@ -2366,6 +2367,7 @@
         "alphanumeric": "请仅使用字母和数字",
         "date": "请输入有效的日期（{format}）",
         "datetime": "请输入有效的日期和时间（{format} HH:MM）",
+        "time": "请输入有效的时间（HH:MM）",
         "age": "请以整数输入您的年龄",
         "date_of_birth": "请输入有效的日期({format})"
       },

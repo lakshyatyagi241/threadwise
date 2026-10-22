@@ -2212,6 +2212,7 @@
         "alphanumeric": "Lettere e numeri",
         "date": "Data",
         "datetime": "Data e ora",
+        "time": "Ora",
         "age": "Età",
         "date_of_birth": "Data di nascita"
       },
@@ -2224,6 +2225,7 @@
         "alphanumeric": "Usa solo lettere e numeri",
         "date": "Inserisci una data valida ({format})",
         "datetime": "Inserisci una data e un'ora valide ({format} HH:MM)",
+        "time": "Inserisci un'ora valida (HH:MM)",
         "age": "Inserisci la tua età come numero intero",
         "date_of_birth": "Inserisci una data valida ({format})"
       },

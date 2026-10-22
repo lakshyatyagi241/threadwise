@@ -7,6 +7,8 @@ import {
   flbCleanAskInputType,
   flbParseDate,
   flbParseDateTime,
+  flbParseTime,
+  flbAskInputChoices,
   flbToRuntimeData,
 } from '@crm/contracts';
 import { compileGraph } from '../../../src/modules/flow-runtime-engine/graph/compile-graph';
@@ -96,6 +98,28 @@ describe('checked answers (the console runtime rules, plus phone, alphanumeric a
     expect(flbAskInputWrongText('datetime', 'yyyy-mm-dd')).toBe(
       'Please enter a valid date and time (YYYY-MM-DD HH:MM)',
     );
+  });
+
+  it('time: 24-hour or am/pm, and the picker no longer offers the repeated types', () => {
+    expect(flbAskInputCheck('time', '14:30').ok).toBe(true);
+    expect(flbAskInputCheck('time', '2:30 pm').ok).toBe(true);
+    expect(flbAskInputCheck('time', '25:00').ok).toBe(false);
+    expect(flbAskInputCheck('time', '13:00 am').ok).toBe(false);
+    expect(flbParseTime('2:05 pm')).toBe('14:05');
+    expect(flbAskInputChoices('text')).toEqual([
+      'text',
+      'name',
+      'email',
+      'phone',
+      'number',
+      'date',
+      'datetime',
+      'time',
+    ]);
+    // A question that already uses a retired type keeps it, so opening it changes nothing.
+    expect(flbAskInputChoices('age')).toContain('age');
+    expect(flbAskInputChoices('alphanumeric')).toContain('alphanumeric');
+    expect(flbAskInputChoices('date_of_birth')).toContain('date_of_birth');
   });
 
   it('the ready-made wrong-answer texts: the console ones verbatim, and the date one names the shape', () => {

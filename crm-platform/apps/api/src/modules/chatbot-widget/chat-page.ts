@@ -251,6 +251,7 @@ const SCRIPT = `
   var hint = null;
   // A date or date-time answer is typed in the question's own shape (a native date picker would show the browser's shape instead).
   function dateShape(h) {
+    if (h && h.type === 'time') return 'HH:MM';
     var f = String((h && h.format) || 'dd-mm-yyyy').toUpperCase();
     return h && h.type === 'datetime' ? f + ' HH:MM' : f;
   }
@@ -264,7 +265,7 @@ const SCRIPT = `
     else if (type === 'email') t.setAttribute('inputmode', 'email');
     else t.removeAttribute('inputmode');
     t.setAttribute('autocomplete', type === 'name' ? 'name' : type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'off');
-    t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
+    t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' || type === 'time' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
     row.className = 'input-row' + (type === 'file' ? ' file' : '');
     var f = $('file');
     f.accept = type === 'file' && hint.accept && hint.accept.length ? hint.accept.map(function (e) { return '.' + e; }).join(',') : '';

@@ -2354,6 +2354,7 @@
         "alphanumeric": "英数字",
         "date": "日付",
         "datetime": "日付と時刻",
+        "time": "時刻",
         "age": "年齢",
         "date_of_birth": "生年月日"
       },
@@ -2366,6 +2367,7 @@
         "alphanumeric": "英数字のみを使用してください",
         "date": "有効な日付を入力してください（{format}）",
         "datetime": "有効な日付と時刻を入力してください（{format} HH:MM）",
+        "time": "有効な時刻を入力してください（HH:MM）",
         "age": "年齢を整数で入力してください",
         "date_of_birth": "有効な日付を入力してください({format})"
       },
