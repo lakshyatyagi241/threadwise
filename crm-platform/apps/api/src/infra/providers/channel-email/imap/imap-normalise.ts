@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { simpleParser, type ParsedMail } from 'mailparser';
+import type { ParsedMail } from 'mailparser';
 import { isAutomated } from '../automated';
 import {
   RAW_HEADER_KEYS,
@@ -60,14 +60,20 @@ export interface NormaliseInput {
   refetch: (partId: string) => Promise<Buffer>;
 }
 
-/** One RFC 5322 message as the provider-neutral shape. Throws only for bytes that cannot be parsed at all. */
-export async function normaliseImapMessage(input: NormaliseInput): Promise<NormalisedMail> {
-  const mail = await simpleParser(input.source, {
+/** mailparser adds about 23 MB and 80 ms to every process that imports this file; load it when the first message is parsed. */
+async function parseMail(source: Buffer | string): Promise<ParsedMail> {
+  const { simpleParser } = await import('mailparser');
+  return simpleParser(source, {
     skipHtmlToText: true,
     skipTextToHtml: true,
     skipImageLinks: true,
     skipTextLinks: true,
   });
+}
+
+/** One RFC 5322 message as the provider-neutral shape. Throws only for bytes that cannot be parsed at all. */
+export async function normaliseImapMessage(input: NormaliseInput): Promise<NormalisedMail> {
+  const mail = await parseMail(input.source);
   const wanted = new Set<string>(RAW_HEADER_KEYS);
   const rawHeaders: Record<string, string> = {};
   const headers: Record<string, string> = {};
@@ -150,12 +156,7 @@ export async function normaliseImapMessage(input: NormaliseInput): Promise<Norma
 
 /** The bytes of one attachment of a source, for the lazy download. Throws when the part is not there any more. */
 export async function attachmentBytes(source: Buffer, partId: string): Promise<Buffer> {
-  const mail = await simpleParser(source, {
-    skipHtmlToText: true,
-    skipTextToHtml: true,
-    skipImageLinks: true,
-    skipTextLinks: true,
-  });
+  const mail = await parseMail(source);
   const found = mail.attachments[Number(partId.slice(1))];
   if (!found) throw new Error('attachment not found');
   return found.content;
