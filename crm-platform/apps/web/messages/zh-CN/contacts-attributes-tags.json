@@ -624,7 +624,8 @@
         "invalid_date_of_birth": "出生日期不是可作为出生日期的年份在前的日期",
         "duplicate_in_file": "号码重复，已合并到前面的行",
         "invalid_timezone": "时区无效",
-        "legal_hold": "受保护的记录，未更改"
+        "legal_hold": "受保护的记录，未更改",
+        "invalid_property_value": "自定义属性的值与其类型或选项不符"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -642,7 +643,9 @@
       "groupNew": "新群组",
       "groupPick": "选择群组",
       "groupNewPlaceholder": "新群组名称",
-      "groupRequiredHint": "每个导入的联系人都会加入这一个群组。除非您在上方映射，否则文件自带的群组列将被忽略。"
+      "groupRequiredHint": "每个导入的联系人都会加入这一个群组。除非您在上方映射，否则文件自带的群组列将被忽略。",
+      "customProperties": "自定义属性",
+      "customPropertiesHint": "表头为属性名称（或导出时写入的 attr:key）的列会填入该属性。空白单元格保留联系人已有的值。"
     },
     "detail": {
       "back": "所有联系人",

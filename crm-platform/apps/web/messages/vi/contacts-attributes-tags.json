@@ -624,7 +624,8 @@
         "invalid_date_of_birth": "ngày sinh không phải là ngày viết theo thứ tự năm trước có thể là ngày sinh",
         "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước",
         "invalid_timezone": "múi giờ không hợp lệ",
-        "legal_hold": "bản ghi được bảo vệ, không thay đổi"
+        "legal_hold": "bản ghi được bảo vệ, không thay đổi",
+        "invalid_property_value": "giá trị của thuộc tính tùy chỉnh không khớp với loại hoặc tùy chọn của nó"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -642,7 +643,9 @@
       "groupNew": "Một nhóm mới",
       "groupPick": "Chọn nhóm",
       "groupNewPlaceholder": "Tên nhóm mới",
-      "groupRequiredHint": "Mọi liên hệ được nhập đều vào nhóm này. Cột nhóm riêng của tệp sẽ bị bỏ qua trừ khi bạn ánh xạ nó ở trên."
+      "groupRequiredHint": "Mọi liên hệ được nhập đều vào nhóm này. Cột nhóm riêng của tệp sẽ bị bỏ qua trừ khi bạn ánh xạ nó ở trên.",
+      "customProperties": "Thuộc tính tùy chỉnh",
+      "customPropertiesHint": "Cột có tiêu đề là tên thuộc tính, hoặc attr:key như tệp xuất ghi, sẽ điền vào thuộc tính đó. Ô trống giữ nguyên giá trị mà liên hệ đã có."
     },
     "detail": {
       "back": "Tất cả liên hệ",

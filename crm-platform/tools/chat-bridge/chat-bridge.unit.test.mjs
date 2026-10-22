@@ -155,6 +155,17 @@ test('test=true alerts are dropped by default: nothing posted, counted reason=te
   assert.match(br.metrics.render(), /crm_chat_bridge_dropped_total\{reason="test"\} 1/);
 });
 
+test('resolver replies start only after the FIRING card post returned (parent first)', async () => {
+  const { startBridge } = await import('./bridge.mjs');
+  const order = [];
+  const fetchImpl = async () => { await new Promise((r) => setTimeout(r, 50)); order.push('card-posted'); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
+  const br = startBridge({ env: { CHAT_ALLOW_ANY_HOST: '1', PROMETHEUS_URL: 'http://127.0.0.1:1' }, urls: { critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: () => { order.push('resolver-started'); }, byKey: () => null }) });
+  await br.server.listen(0); const port = br.server.address().port;
+  await fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [{ status: 'firing', fingerprint: 'f9', labels: { alertname: 'RedisDown', severity: 'critical' }, annotations: {} }] }) });
+  br.server.close();
+  assert.deepEqual(order, ['card-posted', 'resolver-started']);
+});
+
 import { createResolver } from './resolver.mjs';
 test('code_fix: recovery without a release stays open ("recovered, no release recorded"); a later release resolves it', async () => {
   const dir = fs.mkdtempSync('/tmp/inc-unit-'), posts = [];
