@@ -60,7 +60,8 @@ export const packToDraft = (p: AddonPack): PackDraft => ({
   billingDuration: String(p.billingDuration),
   billingMode: p.billingMode,
   isLifetime: p.isLifetime,
-  legacy: isLegacyAddonPack(p),
+  // Legacy only while it still sells or still has live buyers: an inactive draft nobody holds (the seeded Smart routing / Teams drafts) is free to become a subscription.
+  legacy: isLegacyAddonPack(p) && (p.isActive || p.activePurchases > 0),
   isActive: p.isActive,
   sortOrder: String(p.sortOrder),
   features: [...p.grants.features],

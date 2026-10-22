@@ -95,9 +95,139 @@ The impact read runs in the plan store's privileged transaction (the module's on
 | end-to-end save of a plan from the editor with the new switch against the running API                            | NOT TESTED    | no dev servers on this machine                              |
 | the renewal-stop job after such a save                                                                           | NOT TESTED    | unchanged code; its own specs cover it                      |
 
-## Part B: to be done
+## Part B: one add-ons list, one ownership state, recurring-only packs
 
-Placeholder. Not started in this change.
+Owner decisions (2026-10-22): one Add-ons list with one card style; every card in exactly one state; "Included" generic across paid things;
+add-on packs are subscriptions; the wallet stays separate; who may see vs buy.
+
+### B1. The shared list
+
+`features/addons-extension-registry/components/addons-list.tsx` (`AddonsList`) is the one component. It owns its data (`GET /v2/addons`) so a mount is one
+line. It is mounted on the **Plans page** (`plans-subscriptions-trials/components/addons-section.tsx` is now a heading plus `<AddonsList />`) and on `/addons`
+(`WorkspaceAddonsPage`). The old Plans-page card code and the old `/addons` card code are deleted (and their message keys pruned in 21 locales). **Mounting it in the
+Marketplace Add-ons tab is Part C; that tab is untouched.**
+
+It works for any workspace on an active paid plan **whether or not the plan has the `marketplace` feature**: `GET /addons` has no feature gate and the Plans page has no
+feature gate on the section. A workspace NOT on an active paid plan no longer gets an empty list: the API returns the packs with every card `unavailable` plus an
+`unavailableReason` (`free_plan`, `plan_expired`, `no_plan`), and the list shows a notice with that reason and a **View plans** link.
+
+### B2. The four card states (one resolver)
+
+`resolveOwnership({ includedByPlan, owned, purchasable })` in `@crm/contracts` is the single rule: **included beats owned beats buyable; unavailable is what is left.**
+
+| Ownership   | Plain add-on card (`AddonCard.state`)                                | Marketplace app (`MarketCardPricing.access`) | What the card shows                                                                                                                                                       |
+| ----------- | -------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| included    | `included`                                                           | `included`                                   | "Included in your plan", no price, no button; note if a held purchase is ending; "enabled by your account manager" when an override / platform-owned status is the reason |
+| owned       | `active` (feature-only pack) or `buy_again` (a pack that adds a cap) | `entitled`                                   | renews on / active until, "will not renew" when stopped; buy again only for stackable limit boosts                                                                        |
+| buyable     | `buy`                                                                | `subscription_required`                      | price per month / year (offer price with the list price struck through), renewal wording, buy button                                                                      |
+| unavailable | `unavailable`                                                        | `not_for_sale`                               | plain add-ons: "Needs an active paid plan" and the notice with the reason + link to the plans                                                                             |
+
+`ownershipFromAccess(access)` maps the app side onto the same four words, so the two lists cannot drift. An inactive / draft plain pack is not listed at all (the
+catalogue query filters `is_active`). The existing server-side guard stays: checkout answers 422 `PAYGW_ADDON_INCLUDED` for a plain pack the plan already includes.
+
+### B3. "Included" for paid Marketplace apps (design)
+
+How app packs grant features today (`app-grants.ts`, `splitAppPacks`): the add-on that sells an app carries its own entitlement key (`mkt_<slug>`) plus the plan
+features the app grants (`marketplace_apps.grants_plan_features`). A subscription alone grants only the `mkt_` key (which lets the workspace install the app); the
+**plan features are on only while the app is installed and running**. `plan_visible_addons` decides which paid apps a plan SHOWS; visible is not usable.
+
+The marketplace already had two operator-set inclusion rules (`included_plan_feature`, `included_min_plan`). Part B adds the generic one, **`plan_grants`**
+(`MarketIncludedBy`): _the app is included when the PLAN ALONE carries every plan feature the app would grant_ (its own `mkt_` key aside; add-on packs and apps are
+ignored in that check, otherwise a subscribed app would "include" itself). Computed by `PricingAccess.evaluator` (card and detail panel) and re-checked at checkout by
+`assertMarketplacePack` (so a stale card cannot buy). When included: the card says "Included in your plan", there is no subscribe button, **installing stays free**
+(included access goes straight to the install flow, as for a free app).
+
+| Case                                                       | Result                                                                                                                                                                                                                         |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| plan carries `appointment_booking`, app **not installed**  | Included. Install is free and switches the app on; nothing to buy                                                                                                                                                              |
+| app **subscribed AND plan includes**                       | Included wins on the card; checkout refuses a new subscription (422 `PAYGW_PLAN_NOT_PURCHASABLE`, `marketplace: included`). The existing subscription is not cancelled and its renewal is **not** auto-stopped (see leftovers) |
+| plan carries only **some** of the app's features           | Not included: the app still adds something; subscribe as before                                                                                                                                                                |
+| app grants **nothing but its own key**                     | Never included this way                                                                                                                                                                                                        |
+| **plan downgrade** (plan no longer carries them)           | Back to subscribe (or owned if the subscription still runs); the app's plan features are withheld until it is installed and paid, as today                                                                                     |
+| operator-set `included_plan_feature` / `included_min_plan` | Unchanged; they win over `plan_grants` and keep their own names                                                                                                                                                                |
+| free app                                                   | Untouched                                                                                                                                                                                                                      |
+
+Backward compatibility: `includedBy` gained a value (`plan_grants`); the web already falls back to the generic "included in your plan" note for any value it does not
+name. Tests: `app-pack-included.spec.ts`.
+
+### B4. Recurring only
+
+- **Contracts**: `billingMode` on create is optional; when left out, a priced, non-lifetime pack becomes **`recurring`** and only the legacy lifetime / zero-price shapes
+  stay `one_time` (`defaultAddonBillingMode`). A client that sends a mode is taken at its word and the old rules (no recurring lifetime / free pack) still apply. Update
+  requests are unchanged (a pack keeps its stored mode).
+- **Operator form**: a new pack has one **Billing period** picker (monthly or yearly subscription); the duration, unit, mode and lifetime controls are gone. A price above
+  zero is required (message `amountPositive`). A **legacy pack** (one-time, lifetime, or a period that is not one month / one year; `isLegacyAddonPack`) that is on sale or still has live buyers shows a
+  "Legacy pack" notice, its billing fields are read-only (an inactive draft nobody holds, such as the seeded Smart routing and Teams drafts, is not treated as legacy and can be converted to a subscription), and everything else (name, price, features, limits, on / off sale) stays editable. It is saved exactly as stored.
+- **Existing packs keep selling as before** (the workspace card words a one-time / lifetime pack as a one-time purchase, with no renewal promise).
+- **What "recurring" needs from the gateway** (`checkout.service.ts`, `shouldRecur`): a recurring add-on is a subscription only when the platform's recurring switch is
+  on **and** the chosen gateway's driver supports subscriptions (Stripe, Razorpay, PayPal, Paddle and the other drivers that implement `supportsRecurring`). The **offline
+  and bank-transfer gateways do not**: the order is then a normal one-term purchase (`ends_at` = the period), nothing renews, and the buyer pays again when it ends (the card
+  then returns to Buy). The card therefore never says "auto-renews"; it says "Renews every term. Paid automatically with card payments; with bank transfer or offline payment you
+  pay again when the term ends", and the owned row says "Active until <date>. It will not renew automatically" whenever there is no live subscription.
+
+### B5. The wallet stays separate
+
+Wallet top-ups are orders of kind `wallet_topup` with no plan row behind them. Both add-on lists (workspace and operator) select only plans with `kind = 'addon'` and no
+Marketplace app, so a wallet item cannot appear in either; `wallet-separation.spec.ts` and `addon-ownership.spec.ts` assert the queries. The list ends with a small
+"Need message credits? Top up wallet" link to `/billing/wallet`; it is a link, not a card.
+
+### B6. Who may see and who may buy (control x permission x role)
+
+| Control                               | Needs                       | Owner / Admin (hold it) | Manager / Agent / Viewer                                        | Operator console                    |
+| ------------------------------------- | --------------------------- | ----------------------- | --------------------------------------------------------------- | ----------------------------------- |
+| See the list (`GET /addons`)          | any signed-in member        | yes                     | yes                                                             | n/a                                 |
+| Buy (checkout link)                   | `paygw.checkout.create`     | enabled link            | card visible, **button disabled** with "Ask your account owner" | n/a                                 |
+| Cancel a renewal (owned row)          | `plan.subscription.manage`  | works                   | the API answers 403, the dialog says so                         | n/a                                 |
+| Create / edit add-ons (operator form) | operator role `super_admin` | n/a                     | n/a                                                             | super_admin edits; other roles read |
+
+`canBuy` is computed server-side from `paygw.checkout.create` (the key the checkout routes enforce), not from the plan-switch key the Plans page uses for its other buttons.
+The server stays the authority: a crafted checkout request by a member without the key is refused by the route guard.
+
+### B7. Impact analysis
+
+- **API contract** (additive): `AddonCard.state` gained `unavailable`; new `AddonCard.includedVia`, `WorkspaceAddonsResponse.unavailableReason` and `canBuy` (all defaulted so
+  an older client's parser still accepts the response). For a free / lapsed workspace `catalog` is now filled (it used to be empty) with `eligible: false`; a client that only reads
+  `eligible` behaves as before. The mobile app does not use `/addons`.
+- **Behaviour changes for existing data**: none stored. New packs default to recurring; existing packs untouched. A workspace that lacked the `marketplace` feature could not reach the
+  Marketplace Add-ons tab; it now sees and can buy plain add-ons on the Plans page. A free-plan workspace sees a message instead of nothing.
+- **Marketplace**: apps whose plan already carries all their features now read "Included" and cannot be subscribed to (new subscriptions only; existing subscriptions run on).
+- **Caches**: the list is fetched on mount (`staleTime` default) and invalidated by the cancel-renewal action; no server cache.
+- **Entitlement semantics are unchanged** for plain packs; only the labels and the unavailable state are new.
+
+### B8. Edge cases
+
+| Case                                                                                                                                                                           | Status                                                     | Where                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| free plan: packs listed, all `unavailable`, reason `free_plan`, link to plans, no checkout link                                                                                | PASS                                                       | `addon-ownership.spec.ts`, `addons-list.render.test.tsx`                                                                                     |
+| paid plan expired / lapsed (falls back to free): `plan_expired`                                                                                                                | PASS                                                       | same                                                                                                                                         |
+| trial on a paid plan: eligible (unchanged rule, same as checkout)                                                                                                              | PASS (rule)                                                | `unavailableReason` test                                                                                                                     |
+| platform-owned workspace: every flag on, so feature-only packs read Included ("enabled by your account manager")                                                               | PASS (via `includedVia`)                                   | `addon-ownership.spec.ts`                                                                                                                    |
+| workspace override ON for the pack's features: Included + support note                                                                                                         | PASS                                                       | same                                                                                                                                         |
+| plan includes only some features: Buy, only the missing ones listed                                                                                                            | PASS                                                       | same                                                                                                                                         |
+| pack with limits only / pack that adds a cap: never Included, Buy                                                                                                              | PASS                                                       | same                                                                                                                                         |
+| stackable boost bought twice: `buy_again`, owned count                                                                                                                         | PASS                                                       | same                                                                                                                                         |
+| add-on expires mid-queue (a second purchase starts later): the owned query keeps only live rows; latest end shown                                                              | PASS (query: `addonLiveSql`)                               | existing; covered by owned-row mapping                                                                                                       |
+| renewal stopped by the redundancy job: Included + "ends on <date> and will not renew"                                                                                          | PASS                                                       | `addon-ownership.spec.ts`                                                                                                                    |
+| plan switched from includes to not includes: Buy again with its price (offer price shown)                                                                                      | PASS                                                       | same                                                                                                                                         |
+| pack inactive / draft: not listed                                                                                                                                              | PASS (query)                                               | same                                                                                                                                         |
+| currency / offer price display                                                                                                                                                 | PASS (SSR)                                                 | `addons-list.render.test.tsx`                                                                                                                |
+| gateway offline: wording does not promise auto-renew                                                                                                                           | PASS (wording), NOT TESTED against a live offline checkout | render test; `shouldRecur` unchanged                                                                                                         |
+| race: buy clicked while the plan just started including it                                                                                                                     | PASS (server)                                              | checkout `PAYGW_ADDON_INCLUDED` (existing) and app `included` verdict (new); the UI shows Included on the next load. NOT TESTED in a browser |
+| viewer / agent: disabled buy with the reason                                                                                                                                   | PASS (SSR)                                                 | `addons-list.render.test.tsx`                                                                                                                |
+| legacy pack: notice, read-only billing, saved as stored                                                                                                                        | PASS (draft logic); NOT render-tested                      | `pack-draft.test.ts`                                                                                                                         |
+| new pack default recurring, zero price refused, lifetime / one-time only for old clients                                                                                       | PASS                                                       | `addon-billing-mode.spec.ts`, `addon-ownership.spec.ts`, `pack-draft.test.ts`                                                                |
+| wallet cannot appear in either list                                                                                                                                            | PASS                                                       | `wallet-separation.spec.ts`                                                                                                                  |
+| 21 locales (en + 20), RTL render (ar)                                                                                                                                          | PASS                                                       | `i18n-tool check`, `check.sh`, render tests                                                                                                  |
+| keyboard / a11y: cards are `article`s labelled by their title, the list is a labelled `ul`, buy is a link or a disabled button described by its reason, the notice is an alert | PASS (markup); NOT TESTED with a screen reader             | render tests                                                                                                                                 |
+| phone width (single column, `min-w-0`, wrapped text)                                                                                                                           | NOT TESTED                                                 | no browser on this machine                                                                                                                   |
+
+### B9. Left for later
+
+- The renewal-stop job (`AddonRedundancyService`) only covers plain packs. A workspace that subscribed to an app and whose plan later carries the app's features keeps paying until it
+  cancels (the card says Included and checkout refuses a new subscription). Extending the job to app subscriptions is a follow-up.
+- The app detail page and cards already render `access: included` with the generic note; a dedicated sentence for `plan_grants` ("your plan already includes this app's features") is not added.
+- The Marketplace Add-ons tab mount (Part C).
+- Rendering tests for the operator pack form (legacy notice, period picker) need an operator-context harness and were not added; the logic is covered at the draft level.
 
 ## Part C: to be done
 

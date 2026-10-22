@@ -106,6 +106,9 @@ describe('buildPackRequest', () => {
     expect(life.ok && life.body).toMatchObject({ billingMode: 'one_time', isLifetime: true });
     const free = buildPackRequest(packToDraft({ ...stored, amount: '0.00' }));
     expect(free.ok).toBe(true);
+    // an inactive draft nobody holds can be converted to a subscription
+    expect(packToDraft({ ...stored, isActive: false, activePurchases: 0 }).legacy).toBe(false);
+    expect(packToDraft({ ...stored, isActive: false, activePurchases: 2 }).legacy).toBe(true);
     const monthly = packToDraft({
       ...stored,
       billingUnit: 'months',
