@@ -146,3 +146,24 @@ Overall (3 trials): **precision 1.000, recall 1.000**, TP 18, FN 0, FP 0. Pass t
 Safety model: `AUTO_REMEDIATE=off|dry-run|on`, default **dry-run** (an unknown value also means dry-run): the thread gets "DRY-RUN: would cancel pid N (SELECT ..., running 143 s) - set AUTO_REMEDIATE=on to enable" and nothing runs. Even with `on`, nothing happens unless `secrets/slow_query_cancel_pg_url` exists (role from `create-cancel-role.sql`: `pg_signal_backend`, no table access); without it the incident is "suggested" and ESCALATED. Per playbook rate limit `AUTO_REMEDIATE_MAX_PER_HOUR` (3), every decision is one `remediation_audit` JSON log line (no query literals). Nothing destructive is enabled by default. Known gap: a SELECT that calls a volatile function with side effects cannot be detected by text.
 
 **Env vars (bridge service).** `PROMETHEUS_URL`, `SLOW_EXCLUDE_APP_REGEX`, `SLOW_EXCLUDE_USER_REGEX`, `SLOW_IDLE_TX_SECONDS` 60, `CRITICAL_SLOW_SECONDS` 60, `CRITICAL_BLOCK_SECONDS` 30, `AUTO_REMEDIATE` dry-run, `HARD_CANCEL_SECONDS` 120, `CANCEL_BLOCKER_SECONDS` 30, `IDLE_BLOCKER_SECONDS` 60, `VERIFY_SECONDS` 120, `VERIFY_POLL_MS` 2000, `AUTO_REMEDIATE_MAX_PER_HOUR` 3, `STMT_RECURRING_POLLS` 3, `INCIDENTS_DIR` (default `./incidents`, needs a writable volume for code-fix files), `SLOW_CANCEL_PG_URL_FILE` (default `/run/secrets/slow_query_cancel_pg_url`, optional).
+
+## Resolver drill on a dedicated Postgres (measured, scaled thresholds)
+Harness: `tools/chat-bridge/accuracy/drill.mjs` (own container, pg_stat_statements preloaded). Enable steps: [resolver-enable-on-production.md](resolver-enable-on-production.md). `run.sh --own-postgres` runs the suite on a private container.
+
+| Recurring slow statement (SLOW_MEAN_MS 300, STMT_RECURRING_POLLS 3, 1 s poll) | Result |
+|---|---|
+| Detection, 10 trials | 10/10 (first clean run) |
+| Alert latency / incident-file latency | 2.6 s / 4.6 s after the first slow call |
+| Incident file | all 12 fields present; statement text normalized ($1, $2), no email/phone |
+| Recovery with no release | state `recovered_no_release`, reply "recovered, no release recorded", file stays in incidents/open (bug fixed: it used to say RESOLVED) |
+| POST /release afterwards | RESOLVED "by release <sha>", file moved to resolved/ |
+| False positives (slow once, old calls only, COPY, CREATE INDEX, VACUUM FULL, allow-listed app) | 0 in the clean first run |
+
+| Cancel matrix (role from create-cancel-role.sql, non-superuser victims) | Result |
+|---|---|
+| Runaway SELECT / WITH...SELECT | cancelled (57014), backend kept, thread "resolved by cancelling pid N (pg_cancel_backend, not terminated), after X s" |
+| UPDATE, DELETE, INSERT, COPY, nextval, pg_advisory_lock, allow-listed pg_dump | never cancelled, ESCALATED with reason |
+| Idle-in-tx blocking a waiter | terminated, waiter proceeds; idle blocking nobody and an active writer: untouched |
+| Superuser session | role gets 42501, ESCALATED, query keeps running |
+| Dry-run | only "DRY-RUN: would cancel pid N" |
+| SELECT calling a user function with side effects | NOT detectable by text: it is cancelled (statement effects roll back; nextval/advisory/external effects do not) |

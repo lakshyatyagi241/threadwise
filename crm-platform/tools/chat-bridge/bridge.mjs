@@ -71,7 +71,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     }
     if (req.method === 'GET' && req.url === '/incidents') return end(200, JSON.stringify({ mode: resolver?.mode ?? 'off', incidents: resolver?.list() ?? [] }));
     if (req.method === 'POST' && req.url === '/release') { // called by the deploy step: {"sha":"abc123"}; lets code-fix incidents resolve "by release"
-      let b = ''; for await (const c of req) b += c; try { resolver?.setRelease(JSON.parse(b).sha); } catch { return end(400, '{}'); } return end(200, '{"ok":true}');
+      let b = ''; for await (const c of req) b += c; try { await resolver?.setRelease(JSON.parse(b).sha); } catch { return end(400, '{}'); } return end(200, '{"ok":true}');
     }
     if (req.method !== 'POST' || !/^\/(alertmanager)?$/.test(req.url ?? '')) return end(404, '{}');
     let raw = '';

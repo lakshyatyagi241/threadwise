@@ -154,3 +154,27 @@ test('test=true alerts are dropped by default: nothing posted, counted reason=te
   assert.equal(r.status, 200); assert.equal(posts.length, 0); assert.equal(handled, 0); assert.equal(rc.channel, 'none');
   assert.match(br.metrics.render(), /crm_chat_bridge_dropped_total\{reason="test"\} 1/);
 });
+
+import { createResolver } from './resolver.mjs';
+test('code_fix: recovery without a release stays open ("recovered, no release recorded"); a later release resolves it', async () => {
+  const dir = fs.mkdtempSync('/tmp/inc-unit-'), posts = [];
+  const r = createResolver({ env: { AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }, post: async (c, m) => posts.push(m.text) });
+  await r.handle({ playbook: 'code_fix', key: 'st:a', threadKey: 't', file: { queryid: '1' } }); await r.settle();
+  assert.equal(await r.statementRecovered('st:a'), true);
+  assert.equal(r.byKey('st:a').state, 'recovered_no_release');
+  assert.ok(posts.some((p) => /^RECOVERED: .*recovered, no release recorded/.test(p)) && !posts.some((p) => /^RESOLVED/.test(p)));
+  assert.equal(fs.readdirSync(`${dir}/open`).length, 1);
+  await r.setRelease('abc1234');
+  assert.equal(r.byKey('st:a').state, 'resolved');
+  assert.ok(posts.some((p) => /^RESOLVED: .*release abc1234/.test(p)));
+  assert.equal(fs.readdirSync(`${dir}/resolved`).length, 1);
+  fs.rmSync(dir, { recursive: true });
+});
+
+test('resolver: an escalated incident is not re-opened (and re-posted) on every poll of the same key', async () => {
+  const posts = [], r = createResolver({ env: { AUTO_REMEDIATE: 'on' }, post: async (c, m) => posts.push(m.text), db: {} });
+  const spec = { playbook: 'cancel_select', key: 'slow:1:x', threadKey: 't', row: { pid: 1, state: 'active', secs: 999, query: 'update t set a=1', application_name: 'api', usename: 'u' }, text: 'update' };
+  for (let i = 0; i < 3; i++) await r.handle(spec);
+  await r.settle();
+  assert.equal(posts.filter((p) => /^ESCALATED/.test(p)).length, 1);
+});
