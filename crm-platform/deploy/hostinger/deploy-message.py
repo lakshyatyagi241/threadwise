@@ -2,6 +2,7 @@
 """Builds the standard deployment message (PR number, commit, author, who deployed) and prints it to stdout.
 
   deploy-message.py <event> <prev_sha> <new_sha> [seconds] [note]
+  deploy-message.py --json <event> <prev_sha> <new_sha> [seconds]   machine-readable: {sha, prev, prs, mergers, status, seconds, prsKnown}
   event: started|progress (in progress), live|succeeded, unchanged|failed, skipped
 
 Reads GitHub (read-only token from env GITHUB_TOKEN or file DEPLOY_MSG_TOKEN_FILE) to find the PRs between the two shas.
@@ -151,7 +152,23 @@ def build(ev, prev, new, secs, note):
     return "\n".join(lines)[:MAXLEN]
 
 
+def machine(ev, prev, new, secs):
+    """--json: {sha, prev, prs:[numbers], mergers:[logins], status, seconds, prsKnown}; same lookup and caps as the chat message. Never raises."""
+    out = {"sha": new, "prev": prev, "prs": [], "mergers": [], "status": ev, "seconds": int(secs) if str(secs).isdigit() else 0, "prsKnown": False}
+    try:
+        if sha_ok(new):
+            prs, _ = prs_between(prev, new)
+            out.update(prs=[p["n"] for p in prs][:50], mergers=sorted({p["merger"] for p in prs if p["merger"] != "unknown"})[:20], prsKnown=True)
+    except Exception as e:
+        sys.stderr.write(f"deploy-message: github lookup failed ({type(e).__name__})\n")
+    return json.dumps(out)
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--json"]:
+        j = sys.argv[2:] + [""] * 5
+        print(machine(j[0], j[1], j[2], j[3]))
+        sys.exit(0)
     a = sys.argv[1:] + [""] * 5
     try:
         print(build(a[0], a[1], a[2], a[3], a[4]))
