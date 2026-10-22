@@ -110,6 +110,8 @@ describe('broadcasts report delivery to the wallet', () => {
         recipient: c.digits,
         category: 'marketing', // Meta's pricing category wins over the template's own
         source: 'broadcast',
+        templateName: expect.any(String),
+        subjectName: 'B',
       },
     ]);
 
@@ -209,6 +211,8 @@ describe('campaigns report delivery to the wallet', () => {
       recipient: c.digits,
       category: 'marketing',
       source: 'campaign',
+      templateName: expect.any(String),
+      subjectName: 'K',
     });
   });
 
@@ -329,6 +333,7 @@ describe('conversation receipts report delivery to the wallet', () => {
         recipient: th.peer,
         category: 'utility',
         source: 'inbox',
+        templateName: expect.any(String),
       },
       expect.objectContaining({ status: 'read', source: 'inbox' }),
     ]);

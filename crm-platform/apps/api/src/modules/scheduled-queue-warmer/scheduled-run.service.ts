@@ -99,7 +99,7 @@ export class ScheduledRunService {
   async run(orgId: number, scheduledId: number): Promise<RunResult> {
     const prep = await this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, uuid, status, schedule_type, scheduled_time, next_run_at, timezone, repeat_interval, repeat_every,
+        SELECT id, uuid, schedule_name, status, schedule_type, scheduled_time, next_run_at, timezone, repeat_interval, repeat_every,
                days_of_week, end_date, template_type, template_id, template_overrides, message_content, media_file, latitude, longitude, provider,
                device_id, send_attempts, recipients_spent
         FROM scheduled_messages WHERE org_id = ${orgId} AND id = ${scheduledId} FOR UPDATE`);
@@ -330,6 +330,8 @@ export class ScheduledRunService {
                   scheduledId,
                   provider: row.provider,
                   category: prepared.template?.category ?? null,
+                  templateName: prepared.template?.templateName ?? null,
+                  subjectName: row.schedule_name,
                   phone: r.phone,
                 },
               }),
@@ -479,6 +481,8 @@ export class ScheduledRunService {
         scheduledId: number;
         provider: string | null;
         category: string | null;
+        templateName: string | null;
+        subjectName: string;
         phone: string;
       };
     },
@@ -507,6 +511,8 @@ export class ScheduledRunService {
           recipient: assemblePhone(extra.report.phone, null) || null,
           category: extra.report.category,
           source: 'scheduled',
+          templateName: extra.report.templateName,
+          subjectName: extra.report.subjectName,
         },
       });
     }

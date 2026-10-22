@@ -10,5 +10,6 @@ export * from './meta-cards';
 export * from './margins';
 export * from './packages';
 export * from './wallet';
+export * from './expenses';
 export * from './platform';
 export * from './events';
