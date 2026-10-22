@@ -1947,6 +1947,7 @@
       "webBot": {
         "aria": "Sekcje przepływu",
         "build": "Twórz",
+        "faqs": "FAQ",
         "customize": "Dostosuj",
         "saveFirst": "Najpierw zapisz przepływ.",
         "needsCustomizing": "Widżet nadal używa domyślnego wyglądu. Otwórz Dostosuj.",
@@ -1954,6 +1955,13 @@
         "deploy": "Wdróż",
         "customizeFirstWhatsapp": "Spersonalizuj przycisk WhatsApp i zapisz go raz przed publikacją.",
         "install": "Zainstaluj"
+      },
+      "faqsPanel": {
+        "intro": "FAQ to wpisy w wiedzy agenta AI. Te należą do agenta, którym ten przepływ odpowiada: dodaj tu pytania i odpowiedzi, a agent z nich skorzysta.",
+        "noAgent": "Ten przepływ nie używa jeszcze agenta AI. Dodaj krok Asystent AI lub Odpowiedź z FAQ i wybierz agenta: jego FAQ pojawią się tutaj.",
+        "agent": "Agent AI",
+        "openAgent": "Otwórz w Szkoleniu AI",
+        "unknownAgent": "Agent AI (nie znaleziono)"
       },
       "buttonIcon": {
         "label": "Ikona (opcjonalnie)",
