@@ -94,7 +94,14 @@ function Row({ icon, children, end, className, onClick, href }: RowProps) {
  */
 function ThemeRow({ theme }: { theme: 'light' | 'dark' }) {
   const t = useTranslations('shell');
-  const [current, setCurrent] = useState(theme);
+  // Starts from what the page shows now, not from the server's value: the header's theme button may have changed it since.
+  const [current, setCurrent] = useState<'light' | 'dark'>(() =>
+    typeof document === 'undefined'
+      ? theme
+      : document.documentElement.dataset.theme === 'dark'
+        ? 'dark'
+        : 'light',
+  );
   const [, start] = useTransition();
   useEffect(() => {
     document.documentElement.dataset.theme = current;
