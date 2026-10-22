@@ -503,7 +503,7 @@ export class TemplatesService {
         'Meta takes a JPG or PNG image, an MP4 or 3GP video, or a PDF as the header example',
         [{ path: 'file', message: 'File type not supported.' }],
       );
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: [rule.kind],

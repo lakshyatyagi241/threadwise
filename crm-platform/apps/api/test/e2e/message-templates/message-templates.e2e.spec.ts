@@ -5,6 +5,7 @@ import {
   type FetchLike,
 } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-http';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import { pngOfSize } from '../../support/images';
 
 /**
  * WhatsApp message templates end to end (TW-TPL-007, 017, 019, 020, 022, 023, 025, 026, 028): the real API, a real Postgres with
@@ -819,10 +820,7 @@ describe('sync from Meta (TW-TPL-028)', () => {
 });
 
 describe('header media (TW-TPL-009, 025)', () => {
-  const png = Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(32),
-  ]);
+  const png = pngOfSize(8 + 32);
 
   it('uploads the example to Meta and returns the handle', async () => {
     const t = await api.signup('tm');

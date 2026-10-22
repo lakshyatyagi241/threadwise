@@ -3,10 +3,20 @@
   "sheetItem": 34,
   "title": "File-upload security",
   "script": "run.sh",
-  "estMinutes": { "quick": 3, "full": 3 },
+  "estMinutes": {
+    "quick": 3,
+    "full": 3
+  },
   "heavy": false,
-  "needs": ["node22", "pnpm", "docker", "curl", "postgres", "redis"],
-  "proves": "Hostile files (spoofed extensions, HTML or script bytes, active SVG, traversal names, padded markup, a zip that inflates past its declared size) are refused by the shared upload guards; every upload route is size-capped and on a reviewed list (a new route fails the ratchet); on the booted API no multipart operation accepts an unauthenticated upload.",
-  "doesNotProve": "No authenticated live upload per route, no cross-tenant download or delete test, no real object store (S3), no antivirus scan (none exists), no image pixel-dimension limit, no CSV formula injection on import (export side is covered by vapt).",
+  "needs": [
+    "node22",
+    "pnpm",
+    "docker",
+    "curl",
+    "postgres",
+    "redis"
+  ],
+  "proves": "Hostile files (spoofed extensions, HTML or script bytes, polyglot GIF/PNG/JPEG/WebP, pixel and decompression-bomb headers, active SVG, traversal names, a zip that inflates past its declared size) are refused by the shared upload guards; the antivirus hook works against a fake clamd (clean, infected, timeout, fail-open and fail-closed); chat media keys are not readable across tenants; CSV cells are formula-guarded; every upload route is size-capped, reviewed and on the shared policy (a new route fails the ratchet); on the booted API no upload-named operation accepts an unauthenticated upload.",
+  "doesNotProve": "No authenticated live upload per route, no live cross-tenant HTTP download test (key ownership is tested in process), no real clamd, no real S3, no CSV import end to end, no JPEG trailer check beyond a markup scan (phone photos append data).",
   "report": "docs/security/file-upload/Sheet3-34-file-upload-security-REPORT.html"
 }

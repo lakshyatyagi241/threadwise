@@ -6,6 +6,7 @@ import {
   type Harness,
   type Tenant,
 } from '../contacts-attributes-tags/support';
+import { pngOfSize } from '../../support/images';
 
 /**
  * Team chat end to end through HTTP (TW-TCHAT-001..027): the access model, channels and unread counts, history and polling,
@@ -60,10 +61,7 @@ type MessagePage = {
   page: { nextCursor: string | null; hasMore: boolean; limit: number };
 };
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.alloc(64, 1),
-]);
+const PNG = pngOfSize(8 + 64);
 const PDF = Buffer.from('%PDF-1.7\n%test\n');
 
 async function channels(token: string): Promise<{ data: Channel[]; me: Record<string, unknown> }> {

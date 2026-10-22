@@ -2,6 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
+import { imageProblem } from './image-integrity';
+import { scannerFromEnv, type UploadScanner } from './upload-scanner';
 
 const BLOCKED_EXTENSIONS = new Set([
   'php',
@@ -210,7 +212,13 @@ export interface ValidatedUpload {
 }
 
 /** Why a file was refused: stable, for a client that words its own message. */
-export type UploadRejection = 'type_not_allowed' | 'empty' | 'too_large' | 'content_not_allowed';
+export type UploadRejection =
+  | 'type_not_allowed'
+  | 'empty'
+  | 'too_large'
+  | 'content_not_allowed'
+  | 'infected'
+  | 'scan_unavailable';
 
 /**
  * The shared upload guard (TW-AUTH-043). Extension allow-list plus a content
@@ -222,6 +230,21 @@ export type UploadRejection = 'type_not_allowed' | 'empty' | 'too_large' | 'cont
  */
 @Injectable()
 export class UploadPolicyService {
+  scan(buffer: Buffer): Promise<void> {
+    return scanUpload(buffer);
+  }
+
+  /** validate, then scan: use this from every upload service so the antivirus hook applies everywhere. */
+  async validateScanned(
+    input: UploadCheck,
+    scanner?: UploadScanner | null,
+    failClosed?: boolean,
+  ): Promise<ValidatedUpload> {
+    const v = this.validate(input);
+    await scanUpload(input.buffer, scanner, failClosed);
+    return v;
+  }
+
   validate(input: UploadCheck): ValidatedUpload {
     const reject = (
       message: string,
@@ -263,6 +286,10 @@ export class UploadPolicyService {
     if (!rule.sniff(input.buffer)) {
       return reject('This file content is not allowed.', 'content_not_allowed');
     }
+    // whole-file image checks: pixel size, end marker with nothing after it, no markup inside (polyglots, decompression bombs)
+    if (rule.kind === 'image' && imageProblem(input.buffer)) {
+      return reject('This file content is not allowed.', 'content_not_allowed');
+    }
 
     return {
       ext,
@@ -270,6 +297,27 @@ export class UploadPolicyService {
       storedName: `${Math.floor(Date.now() / 1000)}_${randomBytes(12).toString('hex')}.${ext}`,
     };
   }
+}
+
+/** The same checks as `validate`, then the antivirus scan when UPLOAD_SCAN_MODE is on. Every upload route calls this one. */
+export async function scanUpload(
+  buffer: Buffer,
+  scanner?: UploadScanner | null,
+  failClosed?: boolean,
+): Promise<void> {
+  const env = scannerFromEnv();
+  const sc = scanner === undefined ? env.scanner : scanner;
+  if (!sc) return;
+  const closed = failClosed ?? env.failClosed;
+  const v = await sc.scan(buffer);
+  const refuse = (m: string, reason: UploadRejection): never => {
+    throw new AppError(ERROR_CODES.AUTH_UPLOAD_REJECTED, m, HttpStatus.UNPROCESSABLE_ENTITY, [
+      { path: 'file', message: reason },
+    ]);
+  };
+  if (v.status === 'infected') refuse('The file was blocked by the virus scan.', 'infected');
+  if (v.status === 'error' && closed)
+    refuse('The file could not be scanned. Try again later.', 'scan_unavailable');
 }
 
 type AppErrorDetail = { path: string; message: string };

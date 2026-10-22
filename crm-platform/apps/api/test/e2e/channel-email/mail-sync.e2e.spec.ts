@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { pngOfSize } from '../../support/images';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { ChannelAdapterRegistry } from '../../../src/modules/chat-conversations/channel-adapter.registry';
@@ -281,10 +282,7 @@ describe('TW-MAIL-025, 026: live mail', () => {
         {
           name: 'logo.png',
           mime: 'image/png',
-          data: Buffer.from(
-            '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da63f8ffff3f0005fe02fea7d6050000000049454e44ae426082',
-            'hex',
-          ),
+          data: pngOfSize(),
           contentId: 'logo1',
           inline: true,
         },

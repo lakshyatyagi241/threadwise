@@ -48,7 +48,7 @@ export class ScheduleMediaService {
         { path: 'file', message: 'Required.' },
       ]);
     }
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: ['image', 'media', 'document'],

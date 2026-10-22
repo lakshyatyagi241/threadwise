@@ -269,6 +269,8 @@ for (const k of [
 // --- the steps -------------------------------------------------------------------------------------------------------------------
 
 export const FLOW_CONSTANTS: Record<string, unknown> = {
+  // a Waboo automation is a graph the Advanced builder edits; the Simple builder refuses branches and merges
+  builder: 'advanced',
   user_id: null,
   flow_file_path: null,
   trigger_device_id: null,

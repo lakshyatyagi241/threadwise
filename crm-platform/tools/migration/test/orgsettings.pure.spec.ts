@@ -182,6 +182,16 @@ describe('derivePlan: the Waboo Pro-Whatsapp plan', () => {
     // a base plan without the key is not given one
     expect('remove_branding' in derivePlan(core, base).features).toBe(false);
   });
+  it('automatic assignment keeps inbox_routing open, even when the Waboo plan lists no chat settings', () => {
+    const noChat = {
+      ...core,
+      subscription: { ...core.subscription, config: core.subscription.config.filter((c) => c.code !== 'chat_settings') },
+    } as unknown as Parameters<typeof derivePlan>[0];
+    const withAuto = { ...noChat, workspace: { autoAssignment: true } } as unknown as Parameters<typeof derivePlan>[0];
+    const feats = { ...base.features, inbox_routing: false };
+    expect(derivePlan(noChat, { ...base, features: feats }).features.inbox_routing).toBe(false);
+    expect(derivePlan(withAuto, { ...base, features: feats }).features.inbox_routing).toBe(true);
+  });
   it('opens only what Waboo had and limits only what Waboo limited', () => {
     const p = derivePlan(core, base);
     expect(p.limits).toMatchObject({
