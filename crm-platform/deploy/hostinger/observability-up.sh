@@ -119,6 +119,10 @@ if [ -d "$dyn_dir" ]; then
   awk -v d="$pdomain" -v u="prometheus:$hash" '{gsub(/__PROMETHEUS_DOMAIN__/,d); if ($0 ~ /__PROMETHEUS_USERS__/) sub(/__PROMETHEUS_USERS__/, "\"" u "\""); print}' traefik-prometheus.yml.template > "$dyn_dir/.prometheus.tmp"
   chmod 600 "$dyn_dir/.prometheus.tmp"; mv -f "$dyn_dir/.prometheus.tmp" "$dyn_dir/prometheus.yml"
   unset hash
+  # Chat app events route (no basicAuth, the app verifies Google's token): only with the flag, and removed again when it is off.
+  if [ "$(sed -n 's/^CHAT_APP_ENABLED=//p' .env | head -n1)" = true ]; then
+    sed "s/__PROMETHEUS_DOMAIN__/$pdomain/g" traefik-chat-app.yml.template > "$dyn_dir/.chat-app.tmp" && mv -f "$dyn_dir/.chat-app.tmp" "$dyn_dir/chat-app.yml"; echo "wrote $dyn_dir/chat-app.yml (Google Chat app events, rate limited, no basicAuth)"
+  else rm -f "$dyn_dir/chat-app.yml"; fi
   echo "wrote $dyn_dir/grafana.yml ($gdomain) and prometheus.yml ($pdomain, basicAuth user prometheus); DNS A records needed for both"
 else
   echo "no Traefik routes written ($dyn_dir missing)" >&2

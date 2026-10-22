@@ -1,0 +1,24 @@
+# Google Chat app events route, written by observability-up.sh ONLY when CHAT_APP_ENABLED=true. NO basicAuth on purpose: Google cannot send
+# it. The bridge itself verifies Google's signed bearer token (iss chat@system.gserviceaccount.com, aud CHAT_APP_AUDIENCE, exp, signature)
+# and answers 401 to everything else; Traefik adds a request rate limit. Priority is above the Prometheus router of the same host.
+http:
+  routers:
+    chat-app:
+      rule: Host(`__PROMETHEUS_DOMAIN__`) && Path(`/chat-app/events`)
+      entryPoints: [websecure]
+      service: chat-app
+      priority: 100
+      middlewares: [chat-app-ratelimit]
+      tls:
+        certResolver: letsencrypt
+  middlewares:
+    chat-app-ratelimit:
+      rateLimit:
+        average: 5
+        period: 1s
+        burst: 20
+  services:
+    chat-app:
+      loadBalancer:
+        servers:
+          - url: http://gchat-bridge:9095
