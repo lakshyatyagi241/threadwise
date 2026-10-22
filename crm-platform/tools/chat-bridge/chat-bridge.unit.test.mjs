@@ -240,7 +240,7 @@ test('team flow: PR url allow-list, query strip, pr post, RESOLVED names PR and 
   assert.match(t.posts.at(-1).t, /^\uD83D\uDD27 PR #901 raised by vedant at \d\d:\d\d UTC: add index <b> https:\/\/github.com\/lakshyatyagi241\/threadwise\/pull\/901$/);
   assert.ok(t.posts.at(-1).card.includes('&lt;b>') && !t.posts.at(-1).card.includes('SECRET'));
   t.tick(5 * 3600e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'pr_raised'); // a PR never expires
-  await t.resolver.setRelease('abc1234');
+  await t.resolver.setRelease('abc1234', [901]); await t.resolver.statementRecovered('st:1'); await t.resolver.settle();
   assert.match(t.posts.at(-1).t, /^\u2705 RESOLVED by PR #901 \(owner vedant\), release abc1234/);
   assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'x' })).s, 409);
   // alert-cleared path
