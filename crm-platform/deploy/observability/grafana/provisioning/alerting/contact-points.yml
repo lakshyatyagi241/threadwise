@@ -20,15 +20,6 @@ contactPoints:
           title: '{{ template "gchat.title" . }}'
           message: '{{ template "gchat.message" . }}'
   - orgId: 1
-    name: gchat-slowquery
-    receivers:
-      - uid: gchat-slowquery
-        type: googlechat
-        settings:
-          url: $__file{/run/secrets/gchat_slowquery_url}
-          title: '{{ template "gchat.title" . }}'
-          message: '{{ template "gchat.message" . }}'
-  - orgId: 1
     name: gchat-deploy
     receivers:
       - uid: gchat-deploy

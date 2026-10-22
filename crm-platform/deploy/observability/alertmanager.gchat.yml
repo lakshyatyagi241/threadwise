@@ -1,4 +1,4 @@
-# Alertmanager -> gchat-bridge (tools/chat-bridge) -> 4 Google Chat spaces. Chosen by observability-up.sh when the destination type is
+# Alertmanager -> gchat-bridge (tools/chat-bridge) -> 3 Google Chat spaces. Chosen by observability-up.sh when the destination type is
 # "gchat". The webhook URLs live in secrets/gchat_*_url, read by the bridge only; Alertmanager just posts JSON to the bridge on the
 # compose network. The bridge routes by label: severity=critical -> Critical Alerts, group=slow_query follows severity (warning -> Other, critical -> Critical), rest -> Other.
 # Not verified against real Google Chat here: amtool checks this file and the e2e test uses a fake receiver.
