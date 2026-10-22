@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
   Inject,
   Injectable,
@@ -108,8 +109,27 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
       if (this.clients.replica !== this.clients.primary)
         m.recordPool('replica', this.clients.replica.pool);
     };
-    tick();
-    this.poolTimer = setInterval(tick, 10_000);
+    // crm_postgres_up: a real SELECT 1 with a deadline, so a hung or unreachable primary reads 0 instead of a stale pool snapshot.
+    const ping = async () => {
+      let timer: NodeJS.Timeout | undefined;
+      try {
+        await Promise.race([
+          this.primary.execute(sql`SELECT 1`),
+          new Promise<never>((_, rej) => (timer = setTimeout(() => rej(new Error('timeout')), 2_000))),
+        ]);
+        m.recordUp(true);
+      } catch {
+        m.recordUp(false);
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+    const tickAll = () => {
+      tick();
+      void ping();
+    };
+    tickAll();
+    this.poolTimer = setInterval(tickAll, 10_000);
     this.poolTimer.unref();
   }
 

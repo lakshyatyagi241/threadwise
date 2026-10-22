@@ -14,6 +14,7 @@ rule_files:
   - /etc/prometheus/resource-limits.rules.yml
   - /etc/prometheus/cache-hit-rate.rules.yml
   - /etc/prometheus/p0-failure-modes.rules.yml
+  - /etc/prometheus/health.rules.yml
   - /etc/prometheus/webhook-ingest.rules.yml
   - /etc/prometheus/slow-query.rules.yml
 

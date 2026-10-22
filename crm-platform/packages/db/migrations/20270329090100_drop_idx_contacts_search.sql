@@ -1,0 +1,11 @@
+-- @no-transaction
+-- Why this migration exists: idx_contacts_search (GIN on contacts.search_vector) is read by nothing.
+--
+-- Evidence (prod, 2026-10-22): 0 scans since statistics began; no query in apps/api/src reads search_vector (contact search uses the
+-- trigram indexes on name, email and normalised phone, which have 24 to 28 scans); 13 MB of the table's indexes. The trigger
+-- contacts_normalize still fills the column on every insert and every update of name, email, phone or data, so while the index
+-- existed each such update also rewrote a GIN entry. The column and the trigger stay for now (the privacy manifest and the migration
+-- tooling still name the column); only the index goes.
+--
+-- Reversible: CREATE INDEX CONCURRENTLY idx_contacts_search ON contacts USING gin (search_vector) (0004_crm_contacts.sql).
+DROP INDEX CONCURRENTLY IF EXISTS idx_contacts_search;
