@@ -170,3 +170,11 @@ test('code_fix: recovery without a release stays open ("recovered, no release re
   assert.equal(fs.readdirSync(`${dir}/resolved`).length, 1);
   fs.rmSync(dir, { recursive: true });
 });
+
+test('resolver: an escalated incident is not re-opened (and re-posted) on every poll of the same key', async () => {
+  const posts = [], r = createResolver({ env: { AUTO_REMEDIATE: 'on' }, post: async (c, m) => posts.push(m.text), db: {} });
+  const spec = { playbook: 'cancel_select', key: 'slow:1:x', threadKey: 't', row: { pid: 1, state: 'active', secs: 999, query: 'update t set a=1', application_name: 'api', usename: 'u' }, text: 'update' };
+  for (let i = 0; i < 3; i++) await r.handle(spec);
+  await r.settle();
+  assert.equal(posts.filter((p) => /^ESCALATED/.test(p)).length, 1);
+});

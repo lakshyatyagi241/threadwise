@@ -141,10 +141,11 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     return inc;
   }
 
+  // Dedup is on the key in EVERY state but resolved: an escalated/dry-run incident must not be re-opened (and re-posted) on every watcher poll.
   // handle({playbook, threadKey, channel, key, diagnosis, ...ctx}) -> promise (not awaited by callers on the hot path; use settle() in tests).
   function handle(spec) {
     if (mode === 'off') return Promise.resolve(null);
-    const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && ['open', 'needs_fix', 'recovered_no_release'].includes(i.state));
+    const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && i.state !== 'resolved');
     if (dup) return Promise.resolve(dup);
     const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
     incidents.set(inc.id, inc); if (incidents.size > 200) incidents.delete(incidents.keys().next().value);
