@@ -1943,6 +1943,7 @@
       "webBot": {
         "aria": "Bagian alur",
         "build": "Bangun",
+        "faqs": "FAQ",
         "customize": "Sesuaikan",
         "saveFirst": "Simpan alur terlebih dahulu.",
         "needsCustomizing": "Widget masih memakai tampilan default. Buka Sesuaikan.",
@@ -1950,6 +1951,13 @@
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Kustomisasi tombol WhatsApp Anda dan simpan sekali sebelum mempublikasikan.",
         "install": "Pasang"
+      },
+      "faqsPanel": {
+        "intro": "FAQ adalah entri dalam pengetahuan agen AI. Ini milik agen yang dipakai alur ini untuk menjawab: tambahkan pertanyaan dan jawaban di sini dan agen akan memakainya.",
+        "noAgent": "Alur ini belum memakai agen AI. Tambahkan langkah Asisten AI atau Jawab dari FAQ dan pilih agen: FAQ-nya muncul di sini.",
+        "agent": "Agen AI",
+        "openAgent": "Buka di Pelatihan AI",
+        "unknownAgent": "Agen AI (tidak ditemukan)"
       },
       "buttonIcon": {
         "label": "Ikon (opsional)",

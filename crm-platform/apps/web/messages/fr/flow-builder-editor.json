@@ -1943,6 +1943,7 @@
       "webBot": {
         "aria": "Sections du flux",
         "build": "Créer",
+        "faqs": "FAQ",
         "customize": "Personnaliser",
         "saveFirst": "Enregistrez d’abord le flux.",
         "needsCustomizing": "Le widget utilise encore l’apparence par défaut. Ouvrez Personnaliser.",
@@ -1950,6 +1951,13 @@
         "deploy": "Déployer",
         "customizeFirstWhatsapp": "Personnalisez votre bouton WhatsApp et enregistrez-le une fois avant de publier.",
         "install": "Installer"
+      },
+      "faqsPanel": {
+        "intro": "Les FAQ sont des entrées de la connaissance d'un agent IA. Celles-ci appartiennent à l'agent avec lequel ce flux répond : ajoutez ici questions et réponses, l'agent les utilisera.",
+        "noAgent": "Ce flux n'utilise pas encore d'agent IA. Ajoutez une étape Assistant IA ou Répondre depuis la FAQ et choisissez un agent : ses FAQ apparaîtront ici.",
+        "agent": "Agent IA",
+        "openAgent": "Ouvrir dans Entraînement IA",
+        "unknownAgent": "Agent IA (introuvable)"
       },
       "buttonIcon": {
         "label": "Icône (facultatif)",

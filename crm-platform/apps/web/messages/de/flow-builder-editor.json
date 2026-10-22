@@ -1943,6 +1943,7 @@
       "webBot": {
         "aria": "Flow-Bereiche",
         "build": "Erstellen",
+        "faqs": "FAQ",
         "customize": "Anpassen",
         "saveFirst": "Speichern Sie zuerst den Flow.",
         "needsCustomizing": "Das Widget verwendet noch das Standarddesign. Öffnen Sie „Anpassen“.",
@@ -1950,6 +1951,13 @@
         "deploy": "Bereitstellen",
         "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen.",
         "install": "Installieren"
+      },
+      "faqsPanel": {
+        "intro": "FAQ sind Einträge im Wissen eines KI-Agenten. Diese gehören zum Agenten, mit dem dieser Ablauf antwortet: Fügen Sie hier Fragen und Antworten hinzu, der Agent nutzt sie.",
+        "noAgent": "Dieser Ablauf nutzt noch keinen KI-Agenten. Fügen Sie einen Schritt KI-Assistent oder Antwort aus FAQ hinzu und wählen Sie einen Agenten: Seine FAQ erscheinen hier.",
+        "agent": "KI-Agent",
+        "openAgent": "In KI-Training öffnen",
+        "unknownAgent": "KI-Agent (nicht gefunden)"
       },
       "buttonIcon": {
         "label": "Symbol (optional)",

@@ -1801,6 +1801,7 @@
       "webBot": {
         "aria": "Sezioni del flusso",
         "build": "Crea",
+        "faqs": "FAQ",
         "customize": "Personalizza",
         "saveFirst": "Salva prima il flusso.",
         "needsCustomizing": "Il widget usa ancora l’aspetto predefinito. Apri Personalizza.",
@@ -1808,6 +1809,13 @@
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Personalizza il pulsante WhatsApp e salvalo una volta prima di pubblicare.",
         "install": "Installa"
+      },
+      "faqsPanel": {
+        "intro": "Le FAQ sono voci della conoscenza di un agente IA. Queste appartengono all'agente con cui risponde questo flusso: aggiungi qui domande e risposte e l'agente le userà.",
+        "noAgent": "Questo flusso non usa ancora un agente IA. Aggiungi un passaggio Assistente IA o Rispondi dalle FAQ e scegli un agente: le sue FAQ compariranno qui.",
+        "agent": "Agente IA",
+        "openAgent": "Apri in Addestramento IA",
+        "unknownAgent": "Agente IA (non trovato)"
       },
       "buttonIcon": {
         "label": "Icona (facoltativo)",

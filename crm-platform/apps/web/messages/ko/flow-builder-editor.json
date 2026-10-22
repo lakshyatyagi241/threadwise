@@ -1943,6 +1943,7 @@
       "webBot": {
         "aria": "플로우 섹션",
         "build": "만들기",
+        "faqs": "FAQ",
         "customize": "사용자 지정",
         "saveFirst": "먼저 플로우를 저장하세요.",
         "needsCustomizing": "위젯이 아직 기본 모양을 사용하고 있습니다. 사용자 지정을 여세요.",
@@ -1950,6 +1951,13 @@
         "deploy": "배포",
         "customizeFirstWhatsapp": "게시하기 전에 WhatsApp 버튼을 사용자 지정하고 한 번 저장해 주세요.",
         "install": "설치"
+      },
+      "faqsPanel": {
+        "intro": "FAQ는 AI 에이전트 지식의 항목입니다. 여기 있는 항목은 이 플로우가 답변에 쓰는 에이전트의 것이며, 질문과 답변을 추가하면 에이전트가 사용합니다.",
+        "noAgent": "이 플로우는 아직 AI 에이전트를 사용하지 않습니다. AI 어시스턴트 또는 FAQ에서 답변 단계를 추가하고 에이전트를 선택하면 해당 FAQ가 여기에 표시됩니다.",
+        "agent": "AI 에이전트",
+        "openAgent": "AI 학습에서 열기",
+        "unknownAgent": "AI 에이전트(찾을 수 없음)"
       },
       "buttonIcon": {
         "label": "아이콘(선택 사항)",

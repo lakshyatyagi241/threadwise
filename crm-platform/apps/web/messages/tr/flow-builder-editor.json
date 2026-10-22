@@ -1943,6 +1943,7 @@
       "webBot": {
         "aria": "Akış bölümleri",
         "build": "Oluştur",
+        "faqs": "SSS",
         "customize": "Özelleştir",
         "saveFirst": "Önce akışı kaydedin.",
         "needsCustomizing": "Widget hâlâ varsayılan görünümü kullanıyor. Özelleştir'i açın.",
@@ -1950,6 +1951,13 @@
         "deploy": "Yayına al",
         "customizeFirstWhatsapp": "Yayınlamadan önce WhatsApp düğmenizi özelleştirin ve bir kez kaydedin.",
         "install": "Yükle"
+      },
+      "faqsPanel": {
+        "intro": "SSS, bir yapay zeka aracısının bilgisindeki kayıtlardır. Buradakiler bu akışın yanıt verdiği aracıya aittir: buraya soru ve cevap ekleyin, aracı bunları kullanır.",
+        "noAgent": "Bu akış henüz bir yapay zeka aracısı kullanmıyor. Yapay zeka asistanı veya SSS'den yanıtla adımı ekleyip bir aracı seçin: SSS'leri burada görünür.",
+        "agent": "Yapay zeka aracısı",
+        "openAgent": "Yapay Zeka Eğitimi'nde aç",
+        "unknownAgent": "Yapay zeka aracısı (bulunamadı)"
       },
       "buttonIcon": {
         "label": "Simge (isteğe bağlı)",

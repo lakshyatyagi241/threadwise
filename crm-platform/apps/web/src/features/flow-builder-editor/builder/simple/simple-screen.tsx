@@ -70,6 +70,7 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
+import { FaqsPanel, flowAgentIds } from '../faqs-panel';
 import { TestPanel } from '../simulator/test-panel';
 import { templateQuickReplies } from '../../lib/templates';
 import {
@@ -266,10 +267,13 @@ function Editor({
   const queuedSave = useRef<Promise<FlowDetail> | null>(null);
   const inFlight = useRef(0);
   const failToast = useRef<number | null>(null);
-  // A website chat or WhatsApp bot has Customize and Deploy beside Build.
-  const tabSet = useMemo(() => ({ web: true }), []);
+  // Every saved flow has FAQs beside Build (for a person who may read AI agents' knowledge); a website chat or WhatsApp bot also has Customize and Deploy.
+  const canFaqs = useCan('aiag.training.read');
+  const canEditFaqs = useCan('aiag.training.update');
+  const tabSet = useMemo(() => ({ faqs: canFaqs, web: true }), [canFaqs]);
   const [tab, setTab] = useBuilderTab(!!flowId, tabSet);
-  const shownTab: BuilderTab = tab;
+  // A tab this flow does not offer (FAQs before the first save) is never shown, whatever the link asked for.
+  const shownTab: BuilderTab = tab === 'faqs' ? (flowId && canFaqs ? 'faqs' : 'build') : tab;
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(flowId);
   const needsCustomizing = !!flowId && widgetQuery.data?.widget === null;
@@ -723,6 +727,7 @@ function Editor({
           onTab={setTab}
           saved={!!flowId}
           needsCustomizing={needsCustomizing}
+          faqs={canFaqs}
           web
         />
 
@@ -1197,6 +1202,23 @@ function Editor({
             setPendingImport(null);
           }}
         />
+
+        {flowId && canFaqs ? (
+          <div
+            role="tabpanel"
+            id="web-bot-panel-faqs"
+            aria-labelledby="web-bot-tab-faqs"
+            className={`min-h-0 flex-1 overflow-y-auto bg-background ${shownTab === 'faqs' ? '' : 'hidden'}`}
+          >
+            {shownTab === 'faqs' ? (
+              <FaqsPanel
+                agentIds={flowAgentIds(doc)}
+                assistants={ctx.assistants}
+                canEdit={canEditFaqs}
+              />
+            ) : null}
+          </div>
+        ) : null}
 
         {flowId ? (
           <WebBotPanels

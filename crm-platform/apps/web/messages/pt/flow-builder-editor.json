@@ -1943,6 +1943,7 @@
       "webBot": {
         "aria": "Seções do fluxo",
         "build": "Criar",
+        "faqs": "Perguntas frequentes",
         "customize": "Personalizar",
         "saveFirst": "Salve o fluxo primeiro.",
         "needsCustomizing": "O widget ainda usa a aparência padrão. Abra Personalizar.",
@@ -1950,6 +1951,13 @@
         "deploy": "Implantar",
         "customizeFirstWhatsapp": "Personalize seu botão do WhatsApp e salve-o uma vez antes de publicar.",
         "install": "Instalar"
+      },
+      "faqsPanel": {
+        "intro": "As perguntas frequentes são entradas do conhecimento de um agente de IA. Estas pertencem ao agente com que este fluxo responde: adicione perguntas e respostas aqui e o agente as usará.",
+        "noAgent": "Este fluxo ainda não usa um agente de IA. Adicione uma etapa Assistente de IA ou Responder com perguntas frequentes e escolha um agente: as perguntas dele aparecem aqui.",
+        "agent": "Agente de IA",
+        "openAgent": "Abrir em Treinamento de IA",
+        "unknownAgent": "Agente de IA (não encontrado)"
       },
       "buttonIcon": {
         "label": "Ícone (opcional)",
