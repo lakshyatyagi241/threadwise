@@ -44,7 +44,8 @@ describe('flbHandoffReturnPlan', () => {
       why: 'node_gone',
     });
     const old = flow([['h', 'returned', 'm']]);
-    old.flowNodes[1]!.data = { team: 'x' };
+    // The older Assign step stored `team`, a field the current node data type no longer has.
+    old.flowNodes[1]!.data = { team: 'x' } as never;
     expect(flbHandoffReturnPlan(old, 'h')).toEqual({ ok: false, why: 'node_gone' });
     expect(flbHandoffReturnPlan(null, 'h')).toEqual({ ok: false, why: 'node_gone' });
   });
