@@ -1,0 +1,10 @@
+{
+  "_comment": "Valid-shaped bodies for routes whose schema the generator cannot satisfy (an inline controller schema, a transform it cannot invert). The census needs a body the route accepts, because an empty one is refused before the limiters inside the services ever count it. Values are fake; nothing here is a real credential.",
+  "POST /v2/auth/login/mfa": { "challengeToken": "census-challenge", "code": "123456" },
+  "POST /v2/auth/partner/login": {
+    "orgSlug": "census",
+    "email": "census@example.test",
+    "password": "census-password"
+  },
+  "POST /v2/auth/clerk/session": { "orgSlug": "census", "clerkToken": "census-token" }
+}

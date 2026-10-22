@@ -104,7 +104,9 @@
       },
       "linkCompany": "Ein Unternehmen",
       "outcome": "Ergebnis",
-      "allOutcomes": "Alle Ergebnisse"
+      "allOutcomes": "Alle Ergebnisse",
+      "team": "Team",
+      "allTeams": "Alle Teams"
     },
     "table": {
       "scrollArea": "Aufgabentabelle",
@@ -296,7 +298,8 @@
       "retry": "Erneut versuchen",
       "outcomeInvalid": "Dieses Ergebnis ist nicht verfügbar. Wählen Sie eines aus der Liste.",
       "outcomeNameTaken": "Ein anderes Ergebnis hat bereits diesen Namen.",
-      "outcomeInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus."
+      "outcomeInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus.",
+      "completionDisabled": "Das Abschließen von Aufgaben ist in den Vertriebsaktivitäten ausgeschaltet."
     },
     "toast": {
       "completed": "Aufgabe abgeschlossen.",
@@ -356,28 +359,13 @@
     "outcomes": {
       "title": "Aufgabenergebnisse",
       "subtitle": "Die Ergebnisse, die man beim Abschließen oder Erfassen einer Aufgabe auswählt, etwa Interessiert oder Nachricht hinterlassen.",
-      "listTitle": "Ergebnisse",
-      "listHint": "Ausgeblendete Ergebnisse werden nicht mehr angeboten, bleiben aber bei Aufgaben erhalten, die sie schon haben. Ein Ergebnis, das Aufgaben verwenden, kann nicht gelöscht werden.",
       "loading": "Ergebnisse werden geladen",
       "empty": "Noch keine Ergebnisse. Fügen Sie unten das erste hinzu.",
-      "newName": "Neues Ergebnis",
-      "newNamePlaceholder": "z. B. Nachricht hinterlassen",
       "add": "Ergebnis hinzufügen",
-      "readOnly": "Sie können diese Liste sehen, brauchen aber eine Berechtigung, um sie zu ändern.",
       "failed": "Das hat nicht geklappt.",
       "conflict": "Jemand anderes hat dieses Ergebnis geändert. Die Liste wurde neu geladen. Versuchen Sie es erneut.",
-      "added": "Ergebnis hinzugefügt.",
       "saved": "Ergebnis gespeichert.",
       "deleted": "Ergebnis gelöscht.",
-      "moveUp": "{name} nach oben verschieben",
-      "moveDown": "{name} nach unten verschieben",
-      "nameLabel": "Name des Ergebnisses",
-      "taskCount": "{count, plural, one {# Aufgabe} other {# Aufgaben}}",
-      "shownLabel": "{name} beim Abschließen einer Aufgabe anbieten",
-      "shown": "Sichtbar",
-      "hidden": "Ausgeblendet",
-      "deleteNamed": "{name} löschen",
-      "deleteInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus.",
       "deleteTitle": "{name} löschen?",
       "deleteMessage": "Das Ergebnis wird aus der Liste entfernt. Keine Aufgabe verwendet es.",
       "delete": "Löschen",

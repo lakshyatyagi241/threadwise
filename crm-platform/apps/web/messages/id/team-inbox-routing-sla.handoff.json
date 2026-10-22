@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Tidak ada di paket Anda",
+      "upgradeHint": "Termasuk dalam add-on Perutean cerdas atau paket yang lebih tinggi.",
+      "owner": {
+        "prompt": "Tanyakan soal pemilik kontak saat penugasan ulang",
+        "promptHint": "Saat chat diberikan ke orang lain secara manual, tawarkan untuk menjadikannya pemilik kontak juga.",
+        "window": "Pertahankan kontak yang kembali bersama agen terakhirnya",
+        "windowHint": "Kontak yang menulis lagi diarahkan ke orang yang menangani percakapan terakhirnya, selama sekian hari. Nonaktif berarti tanpa batas.",
+        "windowDays": "Jumlah hari",
+        "days": "hari"
+      },
+      "queue": {
+        "notify": "Beri tahu tim saat ada percakapan menunggu",
+        "notifyHint": "Anggota tim, atau semua orang yang dapat menjawab chat yang belum ditugaskan, mendapat notifikasi beserta alasannya."
+      },
+      "teams": {
+        "body": "Setiap tim memiliki metode penugasan, jam buka, zona waktu, dan penerima default sendiri. Semuanya dipakai setiap kali percakapan diserahkan ke tim itu.",
+        "link": "Buka Tim"
+      }
+    }
+  }
+}

@@ -79,7 +79,7 @@ Each notification shows who it is from and what kind of event it is, for example
 
 The card is in one of these states:
 
-- **Off**: browser notifications are possible but not enabled on this device. Select **Enable on this device**; your browser asks for permission only then. If you decline, the card shows **Blocked**.
+- **Off**: browser notifications are possible but not enabled on this device. Until you answer the browser's question, the CRM asks for it on arrival: right after you sign up, and then on each page, where a banner at the top offers **Allow notifications**. Select **Enable on this device** here at any time; your browser asks for permission then. If you choose **Block**, the card shows **Blocked**.
 - **On for this device**: this browser is registered. Use **Send a test notification** to check that it works: it sends a browser notification to all your devices and also adds a **Test notification** row to your bell, so on this page you should see a pop-up, the bell number and the tab title change (you can send one every few seconds). If the live connection of the page is down, the card says so and asks you to reload instead. Or choose **Turn off on this device**.
 - **Blocked**: you blocked notifications for this site in your browser. Only the browser can undo that: open the site settings (the icon next to the address), set **Notifications** to **Allow**, then come back to this page.
 - **Not available**: this browser cannot show notifications while the CRM is closed. Use an up-to-date Chrome, Edge, Firefox or Safari on a secure (https) page.
@@ -93,7 +93,7 @@ Under the events, **This browser** has the sound switch and the desktop alerts c
 
 ## If something looks wrong
 
-- The page shows **Live updates are paused**: the live connection to the server is down, so new alerts can arrive up to a minute late and the tab title may change without a pop-up. Reload the page to reconnect; if it keeps showing, tell your administrator.
+- The page shows **Live updates are paused**: the live connection is down, so new alerts can arrive up to a minute late and the tab title may change without a pop-up. Reload the page to reconnect; if it keeps showing, tell your administrator.
 - A switch will not move: it is grey because the bell for that event is off. Turn the bell on first.
 - The page says it could not load your preferences: select **Try again**. Until it loads, alerts follow each event's default.
 - A pop-up you turned off still appeared: reload the page so every tab picks up your latest choices.

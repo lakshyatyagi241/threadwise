@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl';
 import type { TemplateSummary } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { canSendViaApi } from '../lib/curl';
-import { canEdit, statusGroupOf } from '../lib/status-model';
+import { canDuplicate, canEdit, statusGroupOf } from '../lib/status-model';
 import { previewOfSummary } from '../lib/preview';
 import { CategoryPill } from './badges';
-import { ChatIcon, CodeIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
+import { ChatIcon, CodeIcon, CopyIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
 import { MessageBubble } from './wa-bubble';
 
 const DOT = {
@@ -42,7 +42,9 @@ export function TemplateCard({
 }) {
   const t = useTranslations('message-templates.card');
   const ts = useTranslations('message-templates.status');
-  const tc = useTranslations('message-templates.category');
+  const tq = useTranslations('message-templates.quality');
+  // the status line shows the quality (the corner pill already shows the category)
+  const quality = (tpl.qualityScore ?? 'UNKNOWN').toUpperCase();
   const group = statusGroupOf(tpl.status);
   return (
     <article
@@ -75,12 +77,8 @@ export function TemplateCard({
         <span>
           {t.has(`type.${tpl.templateType}`) ? t(`type.${tpl.templateType}`) : tpl.templateType}
         </span>
-        {tpl.metaCategory && (
-          <>
-            <span aria-hidden="true">·</span>
-            <span>{tc(tpl.metaCategory)}</span>
-          </>
-        )}
+        <span aria-hidden="true">·</span>
+        <span data-testid="quality-label">{tq.has(quality) ? tq(quality) : tq('UNKNOWN')}</span>
         {connectionLabel && (
           <>
             <span aria-hidden="true">·</span>
@@ -106,7 +104,7 @@ export function TemplateCard({
       )}
 
       <div className="mt-3 flex items-center gap-2">
-        {mayEdit && canEdit(tpl.status, tpl.templateType) ? (
+        {mayEdit && canEdit(tpl.status, tpl.templateType) && tpl.editBlock === null ? (
           <Link
             href={`/templates/${tpl.id}/edit`}
             className="flex-1 rounded-full border border-dashed border-brand py-[7px] text-center text-[11px] font-medium text-brand transition hover:border-solid hover:bg-brand hover:text-brand-foreground"
@@ -124,6 +122,16 @@ export function TemplateCard({
         >
           <EyeIcon className="size-3.5" />
         </Link>
+        {mayEdit && canDuplicate(tpl.status, tpl.metaTemplateId, tpl.templateType) && (
+          <Link
+            href={`/templates/new?from=${tpl.id}`}
+            title={t('duplicate')}
+            aria-label={t('duplicateNamed', { name: tpl.name })}
+            className="grid size-8 place-items-center rounded-full border border-border bg-background transition hover:border-brand hover:bg-brand/10 hover:text-brand"
+          >
+            <CopyIcon className="size-3.5" />
+          </Link>
+        )}
         {mayCurl && canSendViaApi(tpl) && (
           <Link
             href={`/templates/${tpl.id}#curl`}

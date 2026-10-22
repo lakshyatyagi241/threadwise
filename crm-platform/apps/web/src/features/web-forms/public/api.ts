@@ -52,6 +52,7 @@ export async function submitForm(key: string, payload: SubmitPayload): Promise<S
   let res: Response;
   try {
     res = await fetch(`${BASE}/${encodeURIComponent(key)}/submit`, {
+      signal: AbortSignal.timeout(30000),
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(payload),
@@ -123,7 +124,12 @@ export async function submissionStatus(
   try {
     const res = await fetch(
       `${BASE}/${encodeURIComponent(key)}/submissions/${encodeURIComponent(token)}`,
-      { headers: { Accept: 'application/json' }, credentials: 'omit', cache: 'no-store' },
+      {
+        headers: { Accept: 'application/json' },
+        credentials: 'omit',
+        cache: 'no-store',
+        signal: AbortSignal.timeout(30_000),
+      },
     );
     if (res.status === 404) return 'missing';
     if (!res.ok) return null;

@@ -20,10 +20,10 @@ import { SMS_OPERATOR_NAV } from '../../channel-sms/operator/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { WAT_OPERATOR_NAV } from '../../whatsapp-throughput/operator-nav';
+import { DEP_OPERATOR_NAV } from '../../platform-deployments/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
-import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
 import { LSC_OPERATOR_NAV } from '../../lead-scoring/platform/operator-nav';
 import { RETENTION_OPERATOR_NAV } from '../../data-retention/operator-nav';
 import { DPDP_OPERATOR_NAV } from '../../dpdp-register/platform/operator-nav';
@@ -87,6 +87,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...WAP_OPERATOR_NAV,
   // WhatsApp send limits and live performance (super admin)
   ...WAT_OPERATOR_NAV,
+  // Flow publishes to the Geta console: queue, running, failed and live (operators)
+  ...DEP_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings
   ...CAT_OPERATOR_NAV,
   // Marketplace catalogue (MKT): listings, versions and review, categories, requests, usage
@@ -144,8 +146,6 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
   },
-  // FAQ engine (FAQ, not a Reference feature): messages/en/faq-knowledge-admin.json
-  ...FAQ_OPERATOR_NAV,
   // AI lead scoring (LSC, not a Reference feature): messages/en/lead-scoring-admin.json
   ...LSC_OPERATOR_NAV,
   // DPDP compliance register (not a Reference feature): messages/en/dpdp-register-admin.json

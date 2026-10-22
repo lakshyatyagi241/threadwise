@@ -7,6 +7,7 @@ import {
   type OnModuleInit,
 } from '@nestjs/common';
 import { ERROR_CODES, isBuiltinWhatsappProviderKey } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
 import { WABA_ENV, type WabaEnv } from '../../config/domains/whatsapp-cloud-api-waba.env';
@@ -16,6 +17,9 @@ import {
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { chooseNewNumberProvider, type ProviderSecrets, type RouteSource } from './provider-rules';
 import { ProviderStore, type ProviderRow } from './provider-store';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('whatsapp_providers');
 
 /** How often each process re-reads the registry, so a change made through the operator API reaches the worker without a restart. */
 const REFRESH_MS = 15_000;
@@ -138,7 +142,12 @@ export class WhatsAppProviderResolver implements OnModuleInit, OnModuleDestroy {
 
   /** Makes sure `key` is in memory when it exists: a provider created or a number switched moments ago may not be in this process yet. */
   async ensureKnown(key: string): Promise<void> {
-    if (isBuiltinWhatsappProviderKey(key) || this.routes.get(key)) return;
+    if (isBuiltinWhatsappProviderKey(key)) return; // built-in keys are never looked up
+    if (this.routes.get(key)) {
+      cache.hit();
+      return;
+    }
+    cache.miss();
     if (Date.now() - this.lastLoadAt < UNKNOWN_KEY_RELOAD_MS) return;
     await this.refresh();
   }
@@ -205,8 +214,10 @@ export class WhatsAppProviderResolver implements OnModuleInit, OnModuleDestroy {
    */
   async payloadProviders(
     phoneNumberIds: string[],
+    /** Where the key lookup runs; the webhook passes its own small pool so a flood cannot take the shared one. */
+    run: <T>(fn: (tx: Tx) => Promise<T>) => Promise<T> = (fn) => this.store.tx(fn),
   ): Promise<{ custom: WabaRegistryProvider[]; hasBuiltin: boolean }> {
-    const keys = await this.store.tx((tx) => this.store.keysOfPhones(tx, phoneNumberIds));
+    const keys = await run((tx) => this.store.keysOfPhones(tx, phoneNumberIds));
     const custom: WabaRegistryProvider[] = [];
     let hasBuiltin = false;
     for (const key of keys) {

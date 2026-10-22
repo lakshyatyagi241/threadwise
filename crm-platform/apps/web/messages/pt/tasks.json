@@ -104,7 +104,9 @@
       },
       "linkCompany": "Uma empresa",
       "outcome": "Resultado",
-      "allOutcomes": "Todos os resultados"
+      "allOutcomes": "Todos os resultados",
+      "team": "Equipe",
+      "allTeams": "Todas as equipes"
     },
     "table": {
       "scrollArea": "Tabela de tarefas",
@@ -296,7 +298,8 @@
       "retry": "Tentar novamente",
       "outcomeInvalid": "Esse resultado não está disponível. Escolha um da lista.",
       "outcomeNameTaken": "Outro resultado já tem este nome.",
-      "outcomeInUse": "Ainda há tarefas que usam este resultado, então ele não pode ser excluído. Oculte-o em vez disso."
+      "outcomeInUse": "Ainda há tarefas que usam este resultado, então ele não pode ser excluído. Oculte-o em vez disso.",
+      "completionDisabled": "Concluir tarefas está desativado em Atividades de vendas."
     },
     "toast": {
       "completed": "Tarefa concluída.",
@@ -356,28 +359,13 @@
     "outcomes": {
       "title": "Resultados de tarefas",
       "subtitle": "Os resultados que uma pessoa escolhe ao concluir ou registrar uma tarefa, como Interessado ou Deixou mensagem.",
-      "listTitle": "Resultados",
-      "listHint": "Os resultados ocultos deixam de ser oferecidos, mas as tarefas que já têm um o mantêm. Um resultado usado por tarefas não pode ser excluído.",
       "loading": "Carregando resultados",
       "empty": "Ainda não há resultados. Adicione o primeiro abaixo.",
-      "newName": "Novo resultado",
-      "newNamePlaceholder": "ex.: Deixou mensagem",
       "add": "Adicionar resultado",
-      "readOnly": "Você pode ver esta lista, mas precisa de permissão para alterá-la.",
       "failed": "Não foi possível concluir a ação.",
       "conflict": "Outra pessoa alterou este resultado. A lista foi recarregada. Tente novamente.",
-      "added": "Resultado adicionado.",
       "saved": "Resultado salvo.",
       "deleted": "Resultado excluído.",
-      "moveUp": "Subir {name}",
-      "moveDown": "Descer {name}",
-      "nameLabel": "Nome do resultado",
-      "taskCount": "{count, plural, one {# tarefa} other {# tarefas}}",
-      "shownLabel": "Oferecer {name} ao concluir uma tarefa",
-      "shown": "Visível",
-      "hidden": "Oculto",
-      "deleteNamed": "Excluir {name}",
-      "deleteInUse": "Ainda há tarefas que usam este resultado, então ele não pode ser excluído. Oculte-o em vez disso.",
       "deleteTitle": "Excluir {name}?",
       "deleteMessage": "O resultado será removido da lista. Nenhuma tarefa o usa.",
       "delete": "Excluir",

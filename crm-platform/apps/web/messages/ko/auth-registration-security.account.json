@@ -535,10 +535,12 @@
             "remove_branding": "화이트 라벨",
             "sales_pipeline": "영업 파이프라인",
             "appointment_booking": "예약",
+            "appointment_confirm_buttons": "리마인더 버튼",
+            "appointment_rebook_steps": "재예약 단계",
             "chatbot_widgets": "챗봇 위젯",
             "wa_storefront": "WhatsApp 카탈로그",
             "inbox_sla": "인박스 SLA",
-            "inbox_routing": "인박스 라우팅",
+            "inbox_routing": "스마트 라우팅",
             "waba_calling": "WhatsApp 통화",
             "inbox_kanban": "인박스 칸반",
             "team_performance": "팀 성과",
@@ -561,7 +563,10 @@
             "personal_history_full": "전체 기록 가져오기 (개인 WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI 리드 스코어링",
-            "record_assignment": "레코드 배정 규칙"
+            "record_assignment": "레코드 배정 규칙",
+            "team_hierarchy": "팀 계층 및 매니저",
+            "custom_roles": "사용자 지정 역할 및 범위",
+            "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원"
           },
           "cta": {
             "continueFree": "무료로 계속",

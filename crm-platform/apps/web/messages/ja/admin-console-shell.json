@@ -282,7 +282,9 @@
           "save": "保存",
           "saved": "設定を保存しました。",
           "saveFailed": "設定を保存できませんでした。"
-        }
+        },
+        "timezoneSearch": "タイムゾーンを検索",
+        "timezoneNoMatch": "一致するタイムゾーンはありません。"
       },
       "notifications": {
         "title": "ワークスペースの通知",

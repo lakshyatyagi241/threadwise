@@ -90,11 +90,12 @@
       "status": {
         "connected": "Verbonden",
         "needs_reconnect": "Opnieuw verbinden nodig",
-        "disconnected": "Niet verbonden",
+        "disconnected": "Geïnstalleerd",
         "not_installed": "Niet geïnstalleerd",
-        "unavailable": "Niet beschikbaar"
+        "unavailable": "Uitgeschakeld",
+        "not_available": "Nog niet beschikbaar"
       },
-      "account": "Account: {account}",
+      "account": "Verbonden als {account}",
       "connectedOn": "Verbonden {when}",
       "lastError": {
         "forbidden": "De provider heeft het laatste verzoek geweigerd. Je account mag mogelijk geen vergaderingen maken.",
@@ -111,7 +112,7 @@
         "canInstall": "Je werkruimte heeft {provider} nog niet geïnstalleerd. Installeer het via de Marketplace en verbind hier daarna je account.",
         "cannotInstall": "Je werkruimte heeft {provider} nog niet geïnstalleerd. Vraag een werkruimtebeheerder om het via de Marketplace te installeren."
       },
-      "unavailable": "{provider} is nog niet ingesteld voor dit platform. Neem contact op met je platformbeheerder.",
+      "unavailable": "{provider} is geïnstalleerd, maar je platformoperator heeft de instelling uitgeschakeld, dus het kan nu niet worden verbonden. Vraag het aan je platformoperator.",
       "outcome": {
         "connected": "{provider} is verbonden.",
         "denied": "{provider} is niet verbonden omdat het inloggen is geannuleerd.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Vergaderingen die al een {provider}-link hebben, houden die, maar als je die vergaderingen verplaatst of verwijdert, kan de ruimte niet meer worden aangepast. Je kunt op elk moment opnieuw verbinden.",
       "disconnectConfirm": "Verbinding verbreken",
       "keep": "Verbonden houden",
-      "calendarNote": "Google Meet- en Teams-links die via je agenda worden gemaakt, hebben hier geen verbinding nodig: ze gebruiken de agenda die je werkruimte al heeft verbonden."
+      "calendarNote": "Google Meet- en Teams-links die via je agenda worden gemaakt, hebben hier geen verbinding nodig: ze gebruiken de agenda die je werkruimte al heeft verbonden.",
+      "notAvailable": "Je platformoperator heeft {provider} nog niet beschikbaar gemaakt: het moet nog worden ingesteld en in de Marketplace worden gepubliceerd. Er is nog niets te installeren, dus vraag je platformoperator het in te schakelen.",
+      "installedHint": "{provider} is geïnstalleerd voor je werkruimte. Verbind je eigen account om {provider}-links aan je meetings toe te voegen."
+    },
+    "operator": {
+      "title": "Videomeetings instellen",
+      "ready": "Klaar",
+      "missing": "{count, plural, one {# stap ontbreekt} other {# stappen ontbreken}}",
+      "loadFailed": "De checklist voor de installatie kon niet worden geladen.",
+      "fake": "Ontwikkelmodus: de nep-adapters voor Zoom en Microsoft Teams zijn gekoppeld, zodat mensen kunnen verbinden zonder echt account. De checklist hieronder laat zien wat een echt platform nog nodig heeft.",
+      "intro": {
+        "zoom": "Werkruimtes kunnen Zoom pas zien en gebruiken als de gegevens van de Zoom-app zijn ingesteld en deze vermelding is gepubliceerd.",
+        "teams": "Werkruimtes kunnen Microsoft Teams pas zien en gebruiken als er een Microsoft-app beschikbaar is en deze vermelding is gepubliceerd."
+      },
+      "set": "ingesteld",
+      "notSet": "niet ingesteld",
+      "credentials": {
+        "zoom": {
+          "label": "Gegevens van de Zoom-app (omgevingswaarden)"
+        },
+        "teams": {
+          "label": "Gegevens van de Microsoft-app"
+        }
+      },
+      "teamsFallback": "Teams gebruikt zijn eigen waarden hierboven als beide zijn ingesteld, anders de Microsoft Calendar-app die in de console is opgeslagen.",
+      "source": {
+        "environment": "De waarden komen uit de omgeving.",
+        "console": "De waarden komen uit de console, pagina Microsoft Calendar."
+      },
+      "switchedOff": "De Microsoft Calendar-integratie staat uit in de console, waardoor ook Teams uitgeschakeld is.",
+      "redirect": {
+        "label": "Omleidingsadres om bij de provider te registreren",
+        "hint": {
+          "zoom": "Voeg precies dit adres toe als redirect-URL van de Zoom-app.",
+          "teams": "Voeg precies dit adres toe als redirect-URI van de Microsoft-app, naast die van de agenda, en voeg de gedelegeerde machtiging OnlineMeetings.ReadWrite toe."
+        }
+      },
+      "listing": {
+        "label": "Marketplace-vermelding gepubliceerd",
+        "missing": "De vermelding bestaat niet in de catalogus.",
+        "notPublished": "De vermelding is niet gepubliceerd (status: {status}). Keur hieronder een versie goed en publiceer die, dan kunnen werkruimtes het installeren.",
+        "published": "Gepubliceerd: werkruimtes kunnen het vinden en installeren."
+      }
     }
   }
 }

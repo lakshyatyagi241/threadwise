@@ -57,6 +57,16 @@ export function useTeams() {
   return useCursorList(KEYS.teams, '/workspace/teams', wspTeamSchema);
 }
 
+/** Every team, pulling pages until the list ends: the tree and the parent picker need the whole picture. */
+export function useAllTeams(enabled = true) {
+  const list = useCursorList(KEYS.teams, '/workspace/teams', wspTeamSchema, { limit: 200 });
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = list;
+  useEffect(() => {
+    if (enabled && hasNextPage && !isFetchingNextPage) void fetchNextPage();
+  }, [enabled, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  return list;
+}
+
 /** Members, the summary and every team list move together: a role, a removal or an invite changes all of them. */
 export function useRefreshWorkspace() {
   const qc = useQueryClient();

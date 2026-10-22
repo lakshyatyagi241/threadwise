@@ -19,6 +19,11 @@
     "reason": "alias is a fixed table alias chosen in code",
     "reviewedOn": "2026-10-11"
   },
+  "modules/crm/activity-types/activity-option-ref.ts": {
+    "status": "reviewed",
+    "reason": "the table aliases and the prefix are string literals at all three call sites (tasks.repository.ts, meeting-results.service.ts, call-log-entries.repository.ts), never request input",
+    "reviewedOn": "2026-10-19"
+  },
   "modules/crm/contact-dedupe/contact-dedupe.service.ts": {
     "status": "reviewed",
     "reason": "table and column come from the fixed reference list of the dedupe service, not from input",
@@ -118,5 +123,35 @@
     "status": "reviewed",
     "reason": "onLeaveOnSql interpolates only the table alias, both callers pass the literal u; today is a bound ::date parameter and the timezone is checked against Intl",
     "reviewedOn": "2026-10-14"
+  },
+  "modules/analytics/rollup/rollup-sql.ts": {
+    "status": "reviewed",
+    "reason": "rule columns, where fragments and metric ids come from the code constant ROLLUP_RULES (rollup-rules.ts); the bucket integers go through int() which throws on non-integers; latency edges are code constants",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/crm/contact-assignment/contact-assignment.repository.ts": {
+    "status": "reviewed",
+    "reason": "the interpolated name is r plus a loop index (an integer)",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/crm/tasks/task-outcomes.repository.ts": {
+    "status": "reviewed",
+    "reason": "every id is Number()-coerced and joined; only digits, sign, decimal point or NaN/Infinity reach the statement, none quotable, and an identifier of those names is a SQL error, not an injection",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/storage-quota/storage-quota.repository.ts": {
+    "status": "reviewed",
+    "reason": "table, column and where fragments come from the closed OWNER_SOURCES and the size/category maps in code; org, ids and limit are Number()-coerced",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts": {
+    "status": "reviewed",
+    "reason": "the table and owner column identifiers come from the closed OWNING_TEAM_TABLES list in the same file (a job payload carries only a table NAME, looked up in that list and refused when absent), quoted, never from a request; the cursor values are bound parameters",
+    "reviewedOn": "2026-10-20"
+  },
+  "modules/analytics/query/message-feed.service.ts": {
+    "status": "reviewed",
+    "reason": "edge() passes only literal range expressions (w.has_hours, w.f, w.h0, w.h1, w.t, NOT w.has_hours) to sql.raw; volume() takes a unit typed 'hour' | 'day' | 'week' and its only caller passes bucketUnit(), which maps every bucket to one of those three constants",
+    "reviewedOn": "2026-10-21"
   }
 }

@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "En espera"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Nadie espera a una persona",
+          "message": "Cuando un bot, un flujo o un compañero pide una persona, la conversación espera aquí hasta que alguien la tome."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "El bot está respondiendo",
+        "waiting": "Esperando a una persona",
+        "with_person": "Con una persona"
+      },
+      "ageMinutes": "{count}min",
+      "ageHours": "{count}h",
+      "ageDays": "{count}d",
+      "row": {
+        "waiting": "En espera",
+        "waitingFor": "En espera {age}",
+        "inTeam": "En la cola de {team}"
+      },
+      "assignedTo": "ahora con {name}",
+      "inTeamQueue": "cola de {team}",
+      "cardFailed": "No se pudieron cargar los detalles del traspaso.",
+      "claim": {
+        "button": "Tomar",
+        "done": "Tomaste esta conversación.",
+        "doneOwner": "Tomaste esta conversación y ahora eres el propietario del contacto.",
+        "failed": "No se pudo tomar la conversación.",
+        "taken": "Otra persona tomó esta conversación primero.",
+        "overLimitTitle": "Has alcanzado tu límite de chats",
+        "overLimitMessage": "Ya tienes {open} conversaciones abiertas y tu límite es {limit}. ¿Tomar esta de todos modos?",
+        "overLimitConfirm": "Tomarla de todos modos",
+        "overLimitCancel": "Cancelar"
+      },
+      "giveBack": {
+        "button": "Devolver al bot",
+        "done": "El bot vuelve a responder esta conversación.",
+        "failed": "No se pudo devolver la conversación al bot.",
+        "doneFlow": "El bot continúa el flujo.",
+        "doneNextLive": "El bot responderá al siguiente mensaje del cliente.",
+        "doneNextDefault": "El bot vuelve a estar activo. Solo responderá al siguiente mensaje si hay un flujo predeterminado.",
+        "already": "El bot ya tiene esta conversación."
+      },
+      "send": {
+        "button": "Enviar a la cola",
+        "buttonAgain": "Enviar a la cola de nuevo",
+        "title": "Enviar a una persona",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "submit": "Enviar",
+        "intro": "El bot deja de responder a este contacto. La conversación pasa a la persona o al equipo que elijas, o espera en la cola hasta que alguien la tome.",
+        "where": "Enviar a",
+        "whereRules": "Las reglas de asignación; si no, la cola de espera",
+        "whereQueueOnly": "La cola de espera (las reglas de asignación necesitan el complemento Enrutamiento inteligente)",
+        "whereTeam": "Un equipo",
+        "wherePerson": "Una persona",
+        "team": "Equipo",
+        "pickTeam": "Elige un equipo",
+        "person": "Persona",
+        "pickPerson": "Elige una persona",
+        "reason": "Por qué se necesita una persona",
+        "note": "Nota para la persona que la tome",
+        "noteHint": "Se muestra en la tarjeta de traspaso. Hasta 500 caracteres.",
+        "refused": "Esta conversación no se puede traspasar (está archivada, es spam o es un buzón personal).",
+        "failed": "No se pudo enviar la conversación.",
+        "done": {
+          "assigned": "Enviada: ya la tiene alguien.",
+          "waiting": "Enviada: espera en la cola.",
+          "unavailable": "Enviada a la cola: nadie está disponible ahora mismo."
+        }
+      },
+      "details": {
+        "show": "Detalles",
+        "hide": "Ocultar detalles"
+      },
+      "card": {
+        "source": "Solicitado por",
+        "reason": "Motivo",
+        "priority": "Prioridad",
+        "summary": "Resumen",
+        "answers": "Lo que el contacto le dijo al bot",
+        "trace": "Cómo se asignó",
+        "timers": "Pasos de la cola de espera"
+      },
+      "source": {
+        "flow": "Un flujo",
+        "ai_agent": "Un agente de IA",
+        "keyword": "Solicitud del propio contacto",
+        "bot_failure": "Un bot que no pudo ayudar",
+        "manual": "Un compañero",
+        "arrival": "El enrutamiento: nadie pudo tomarlo"
+      },
+      "reason": {
+        "customer_asked": "El contacto pidió hablar con una persona",
+        "bot_could_not_help": "El bot no pudo ayudar",
+        "sensitive_topic": "Tema sensible",
+        "sales_lead": "Cliente potencial de ventas",
+        "complaint": "Queja",
+        "other": "Otro"
+      },
+      "priority": {
+        "low": "Baja",
+        "normal": "Normal",
+        "high": "Alta",
+        "urgent": "Urgente"
+      },
+      "trace": {
+        "chosen": "Elegido",
+        "skipped": "Omitido",
+        "info": "Nota"
+      },
+      "botLine": {
+        "system": "el sistema",
+        "pressed": {
+          "flow": "El bot ha vuelto, devuelto por {name}. El flujo continúa.",
+          "nextLive": "El bot ha vuelto, devuelto por {name}. Responderá al siguiente mensaje del cliente.",
+          "nextDefault": "El bot ha vuelto, devuelto por {name}. Solo responderá al siguiente mensaje si hay un flujo predeterminado."
+        },
+        "result": {
+          "continued": "El flujo continuó desde la salida «devuelto».",
+          "claimed_again": "El flujo no se reanudó: una persona volvió a tomar el chat.",
+          "flow_not_live": "El flujo no se reanudó: ya no está activo.",
+          "start_failed": "No se pudo reanudar el flujo."
+        },
+        "customer": {
+          "sent": "Se envió el mensaje al cliente.",
+          "window_closed": "Se omitió el mensaje al cliente: la ventana de 24 horas está cerrada.",
+          "no_consent": "Se omitió el mensaje al cliente: sin consentimiento.",
+          "failed": "No se pudo enviar el mensaje al cliente.",
+          "channel_unavailable": "Se omitió el mensaje al cliente: el canal no está disponible."
+        }
+      },
+      "timers": {
+        "reminded": "Recordatorio a las {at}",
+        "offered": "Ofrecido a este equipo a las {at}",
+        "messaged": "Mensaje al cliente enviado a las {at}",
+        "gaveBack": "Devuelto al bot a las {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Devuelta al bot por {actor}",
+          "bot_resumed": "El bot continuó el flujo",
+          "bot_resume_skipped": "El flujo no se reanudó"
+        }
+      }
+    }
+  }
+}

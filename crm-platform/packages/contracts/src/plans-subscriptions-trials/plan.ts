@@ -3,6 +3,8 @@ import { uuidSchema } from '../common/ids';
 import {
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
+  PLAN_UNLIMITED_FROM,
+  limitZeroIsNone,
   type PlanFeatureKey,
   type PlanLimitKey,
 } from './catalogue';
@@ -42,14 +44,18 @@ const moduleKeySchema = z.string().regex(/^[a-z][a-z0-9_]{0,63}$/);
 const cap = z.number().int().min(0).max(2_000_000_000);
 const flag = z.boolean();
 
-const limitsShape = Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, cap.default(0)])) as {
+// A missing key is 0 (unlimited) for most caps; for a zero-is-none cap (`teams`) it is the unlimited stand-in, so a client that does not know the
+// key cannot turn a plan into "solo" by omission.
+const limitsShape = Object.fromEntries(
+  PLAN_LIMIT_KEYS.map((k) => [k, cap.default(limitZeroIsNone(k) ? PLAN_UNLIMITED_FROM : 0)]),
+) as {
   [K in PlanLimitKey]: z.ZodDefault<typeof cap>;
 };
 const featuresShape = Object.fromEntries(
   PLAN_FEATURE_KEYS.map((k) => [k, flag.default(false)]),
 ) as { [K in PlanFeatureKey]: z.ZodDefault<typeof flag> };
 
-/** 0 = unlimited. Unknown keys are dropped; missing keys are 0. */
+/** 0 = unlimited (except `teams`, where 0 = solo). Unknown keys are dropped; missing keys are 0 (`teams`: unlimited). */
 export const planLimitsSchema = z.object(limitsShape);
 export type PlanLimits = z.infer<typeof planLimitsSchema>;
 
@@ -320,6 +326,15 @@ export type PlanAddonOption = z.infer<typeof planAddonOptionSchema>;
 
 export const planAddonOptionsResponseSchema = z.object({ data: z.array(planAddonOptionSchema) });
 export type PlanAddonOptionsResponse = z.infer<typeof planAddonOptionsResponseSchema>;
+
+/**
+ * The operator's "what happens if I include this add-on" figure (plan editor, Add-ons tab): for one plan, how many of its workspaces hold
+ * each plain add-on pack with a subscription that still renews. Packs nobody renews are absent. A count only, no workspace is named.
+ */
+export const planAddonImpactResponseSchema = z.object({
+  data: z.array(z.object({ packId: uuidSchema, renewing: z.number().int().positive() })),
+});
+export type PlanAddonImpactResponse = z.infer<typeof planAddonImpactResponseSchema>;
 
 /** One Marketplace add-on a workspace's plan makes visible, with whether the workspace already owns (bought or was granted) it. */
 export const visibleAddonSchema = z.object({

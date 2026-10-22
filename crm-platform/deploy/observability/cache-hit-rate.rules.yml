@@ -1,0 +1,53 @@
+# Prometheus recording and alert rules for cache hit ratio and cache failures (Sheet3 #65).
+# Signals: crm_cache_hits_total / crm_cache_misses_total / crm_cache_errors_total{cache}, exported by the API and the worker
+# (cacheMetrics in packages/observability/src/cache-metrics.ts). One lookup is one hit or one miss; a backend failure (Redis down) is
+# counted as an error, and most sites also count the miss because the request went to the source. A few (idempotency, mail bounce
+# flags, read state, checkout idempotency, chat dispatch) count the error alone. So lookups = hits + misses + errors, which keeps the
+# error ratio alive in a total outage where hits and misses stop; a site that counts both makes the ratios slightly conservative.
+# Register of caches and their metric names: docs/performance/cache/register.json.
+#
+# CacheHitRatioLow covers the P0 caches whose hit ratio is a signal (register `hitRatioAlert: true`); the list in the selector is kept
+# equal to the register by apps/api/test/unit/cache-audit/instrumentation.spec.ts. P1 ratios are recorded but do not page.
+# Thresholds are initial engineering targets, not measured production values: tune them from the first weeks of data.
+# Tested with promtool: cache-hit-rate.rules.test.yml. Runbook: docs/runbooks/cache-hit-rate.md.
+groups:
+  - name: cache-hit-rate
+    rules:
+      # rate() drops the metric name, so hits, misses and errors of one cache collide when summed through a __name__ regex;
+      # each is tagged with an "outcome" label first so the three series stay distinct.
+      - record: crm:cache_lookups:rate5m
+        expr: sum by (service, cache) (label_replace(rate(crm_cache_hits_total[5m]), "outcome", "hit", "", "") or label_replace(rate(crm_cache_misses_total[5m]), "outcome", "miss", "", "") or label_replace(rate(crm_cache_errors_total[5m]), "outcome", "error", "", ""))
+      - record: crm:cache_hit_ratio:5m
+        expr: sum by (service, cache) (rate(crm_cache_hits_total[5m])) / (crm:cache_lookups:rate5m > 0)
+      - record: crm:cache_hit_ratio:1h
+        expr: sum by (service, cache) (rate(crm_cache_hits_total[1h])) / (sum by (service, cache) (label_replace(rate(crm_cache_hits_total[1h]), "outcome", "hit", "", "") or label_replace(rate(crm_cache_misses_total[1h]), "outcome", "miss", "", "") or label_replace(rate(crm_cache_errors_total[1h]), "outcome", "error", "", "")) > 0)
+      - record: crm:cache_error_ratio:5m
+        expr: sum by (service, cache) (rate(crm_cache_errors_total[5m])) / (crm:cache_lookups:rate5m > 0)
+
+      - alert: CacheHitRatioLow
+        expr: |
+          crm:cache_hit_ratio:1h{cache=~"account_gate|billing_grace_days|currency|emergency_halt|epoch_local|epoch_redis|gateway_plan|google_calendar_connection|google_oidc_keys|impersonation_open|member_directory|meta_rate_card|org_suspension|partner_agent_status|platform_rbac|platform_settings|rate_card|rbac_grants|rbac_version"} < 0.5
+          and on (service, cache) crm:cache_lookups:rate5m > 0.2
+        for: 15m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Cache {{ $labels.cache }} on {{ $labels.service }}: hit ratio {{ $value | humanizePercentage }} over 1 h with real traffic'
+          description: 'Most lookups go to the source (Postgres, Redis, or a provider) instead of the cache. See docs/runbooks/cache-hit-rate.md.'
+
+      - alert: CacheErrorRatioHigh
+        expr: |
+          crm:cache_error_ratio:5m > 0.05
+          and on (service, cache) crm:cache_lookups:rate5m > 0.1
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Cache {{ $labels.cache }} on {{ $labels.service }}: {{ $value | humanizePercentage }} of lookups failed in the backend'
+          description: 'The cache backend (normally Redis) is failing and every lookup falls back to the source. See docs/runbooks/cache-hit-rate.md.'
+
+      - alert: CacheMetricsMissing
+        expr: absent(crm_cache_hits_total{job="crm-api"})
+        for: 15m
+        labels: { severity: warning }
+        annotations:
+          summary: 'The API exports no crm_cache_hits_total series'
+          description: 'Either the API is down or not scraped (see RuntimeMetricsTargetDown), or the cache instrumentation was removed. Hit-ratio alerts are blind until it returns.'

@@ -232,7 +232,8 @@ export function buildPalette(view: ThemeView, scheme: Scheme): Palette {
   const checks: ContrastCheck[] = [];
   if (customPrimary) checks.push(check('primaryText', customPrimary, d.surface, 4.5));
   checks.push(check('button', readableOn(brand), brand, 4.5));
-  checks.push(check('buttonEdge', brand, d.surface, 3));
+  // The product's own button colour is not the workspace's choice, so it is not flagged when nothing is customised.
+  if (customAccent || customPrimary) checks.push(check('buttonEdge', brand, d.surface, 3));
   return { scheme, vars, backdrop, checks };
 }
 

@@ -1,5 +1,11 @@
 # Reference port: status and handoff
 
+> **Reference removed (2026-10-21).** The licensed Laravel app is no longer in the repo, and nothing runs or ports from it any more.
+> The `reference/` and `_work/` folders, the `threadwise-run-reference`, `threadwise-playwright-parity`, `threadwise-verify-parity`,
+> `threadwise-inventory-refresh` and `threadwise-data-model-port` skills and the Reference parity Stop hook were removed with it.
+> The wiring maps, specs, inventory and parity notes below stay as the record of what Reference did. Its "source refs" and run
+> instructions are history. The status and runbook under the next headings are from before the removal.
+
 Snapshot 2026-09-30, work paused on purpose (usage limit). Everything below is on disk; nothing is committed or pushed.
 
 Goal: rebuild every Reference (CodeCanyon Laravel + Node, v1.7.0) feature inside this monorepo (NestJS, Postgres+RLS, Drizzle,
@@ -150,6 +156,7 @@ Numbers are from the 26 finished domains only (42% of domains by count); the rem
 | D6  | Which Next.js app moves into `apps/web`, Next version, i18n library                           | Needed before the web skeleton                                                                                                                       |
 | D7  | GitHub settings: CODEOWNERS enforcement, up-to-date branches, merge queue                     | Turn on                                                                                                                                              |
 | E   | Channel strategy: keep the unofficial WhatsApp (Baileys/QR) engine or Cloud API only          | Reference's own docs list ban risk; needs a decision either way                                                                                      |
+| F   | Campaign follow-ups: does a "replied" step count a reply on any channel, or only the WhatsApp conversation of the campaign's number (TW-CAMP-036) | **Decided: WhatsApp Cloud API number only.** Enforced in `wizard-follow-up.service.ts` (`REPLY_ON_SENDER_NUMBER`), e2e test added |
 
 ## Next session, in order
 

@@ -1,0 +1,58 @@
+# Sheet3 #73: alerts for the health gaps that had none. Tested with promtool: health.rules.test.yml next to this file.
+# Series: crm_postgres_up (API, SELECT 1 on the primary every 10 s), crm_probe_file_* and crm_probe_up{target="s3"} (the probe process).
+groups:
+  - name: health
+    rules:
+      - alert: PostgresDown
+        expr: crm_postgres_up == 0
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: '{{ $labels.service }} cannot run SELECT 1 on the Postgres primary'
+          description: 'A real query with a 2 s deadline failed for 2 minutes. /ready is 503 for this instance; liveness is unaffected.'
+          runbook: 'docs/runbooks/health-readiness.md#postgresdown'
+
+      - alert: BackupStale
+        expr: crm_probe_file_age_seconds{file="backup"} > 93600
+        for: 10m
+        labels: { severity: critical }
+        annotations:
+          summary: 'The last good database dump is older than 26 hours'
+          description: 'The backup container writes .last-ok after each verified dump (daily). Older than 26 h means a dump failed or the container is stopped.'
+          runbook: 'docs/runbooks/health-readiness.md#backupstale'
+
+      - alert: BackupMarkerMissing
+        expr: crm_probe_file_present{file="backup"} == 0
+        for: 30m
+        labels: { severity: critical }
+        annotations:
+          summary: 'No backup marker file is visible to the probe'
+          description: 'Either no dump has ever succeeded, or the probe lost its read-only mount of the backups directory. Both mean backups are unobserved.'
+          runbook: 'docs/runbooks/health-readiness.md#backupmarkermissing'
+
+      - alert: OffsiteBackupStale
+        expr: crm_probe_file_age_seconds{file="offsite"} > 10800
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'No whole offsite backup pass has succeeded for 3 hours'
+          description: 'The offsite container touches its marker after each full pass (every 30 min by default). Silent when offsite was never configured (no marker, no age series).'
+          runbook: 'docs/runbooks/health-readiness.md#offsitebackupstale'
+
+      - alert: ObjectStoreUnreachable
+        expr: crm_probe_up{target="s3"} == 0
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'The object store endpoint does not answer from the stack'
+          description: 'Any HTTP answer (even 403) counts as reachable. This is deliberately not part of /ready: uploads fail, the rest of the app keeps serving.'
+          runbook: 'docs/runbooks/health-readiness.md#objectstoreunreachable'
+
+      # Dead-man's-switch: always firing. Alertmanager sends it as an hourly heartbeat (alertmanager.yml); a receiver that alerts when the
+      # heartbeat stops is the only thing that can notice Prometheus or Alertmanager dying.
+      - alert: Watchdog
+        expr: vector(1)
+        labels: { severity: none }
+        annotations:
+          summary: 'Heartbeat: the monitoring pipeline is alive'
+          runbook: 'docs/runbooks/health-readiness.md#watchdog'

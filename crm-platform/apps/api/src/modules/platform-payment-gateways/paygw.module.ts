@@ -19,7 +19,9 @@ import { OrdersService } from './orders.service';
 import { PaymentConfirmationService } from './payment-confirmation.service';
 import { ProofService } from './proof.service';
 import { PlatformSubscriptionsService } from './platform-subscriptions.service';
+import { RefundReconcilerService } from './refund-reconciler.service';
 import { RefundService } from './refund.service';
+import { AddonRedundancyService } from './addon-redundancy.service';
 import { SubscriptionCancelService } from './subscription-cancel.service';
 import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
 import { SubscriptionReconcilerService } from './subscription-reconciler.service';
@@ -53,9 +55,11 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     FulfilmentService,
     SubscriptionLifecycleService,
     SubscriptionCancelService,
+    AddonRedundancyService,
     SubscriptionReconcilerService,
     PlatformSubscriptionsService,
     RefundService,
+    RefundReconcilerService,
     PaymentConfirmationService,
     ProofService,
     BuyerInvoiceService,
@@ -68,8 +72,10 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     PaymentConfirmationService,
     SubscriptionLifecycleService,
     SubscriptionCancelService,
+    AddonRedundancyService,
     SubscriptionReconcilerService,
     RefundService,
+    RefundReconcilerService,
   ],
 })
 export class PlatformPaymentGatewaysModule {}

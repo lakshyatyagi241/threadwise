@@ -21,6 +21,8 @@ export interface TaskDraft {
   dealId: string;
   /** A task outcome id or empty for none. */
   outcomeId: string;
+  /** A current task type of the Task activity (Settings > Sales Activities) or empty. */
+  taskTypeId: string;
   /** The company a new task was started from (the company page's tasks card); not editable in the form. */
   companyId: string;
 }
@@ -34,6 +36,7 @@ export const emptyDraft = (assigneeId: string): TaskDraft => ({
   contactId: '',
   dealId: '',
   outcomeId: '',
+  taskTypeId: '',
   companyId: '',
 });
 
@@ -46,6 +49,7 @@ export const draftOf = (t: TaskResponse): TaskDraft => ({
   contactId: t.contact?.id ?? '',
   dealId: t.deal?.id ?? '',
   outcomeId: t.outcome?.id ?? '',
+  taskTypeId: t.taskType?.id ?? '',
   companyId: t.company?.id ?? '',
 });
 
@@ -84,6 +88,7 @@ export function createBody(d: TaskDraft): CreateTaskInput {
     contactId: d.contactId || null,
     dealId: d.dealId || null,
     ...(d.outcomeId ? { outcomeId: d.outcomeId } : {}),
+    ...(d.taskTypeId ? { taskTypeId: d.taskTypeId } : {}),
     ...(d.companyId ? { companyId: d.companyId } : {}),
   };
 }
@@ -103,5 +108,6 @@ export function patchBody(task: TaskResponse, d: TaskDraft): TaskPatch {
   if (d.contactId !== was.contactId) out.contactId = next.contactId;
   if (d.dealId !== was.dealId) out.dealId = next.dealId;
   if (d.outcomeId !== was.outcomeId) out.outcomeId = d.outcomeId || null;
+  if (d.taskTypeId !== was.taskTypeId) out.taskTypeId = d.taskTypeId || null;
   return out;
 }

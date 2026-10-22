@@ -34,7 +34,10 @@
         "all": "Sepanjang waktu",
         "7d": "7 hari",
         "30d": "30 hari",
-        "90d": "90 hari"
+        "90d": "90 hari",
+        "custom": "Rentang kustom",
+        "from": "Dari tanggal",
+        "to": "Sampai tanggal"
       },
       "search": "Cari kampanye",
       "selectPage": "Pilih halaman ini",
@@ -1045,7 +1048,7 @@
         "loadFailed": "Statistik tidak dapat dimuat.",
         "rates": {
           "delivered": "Tingkat pengiriman",
-          "deliveredHint": "dari audiens",
+          "deliveredHint": "dari yang terkirim",
           "read": "Tingkat dibaca",
           "readHint": "dari yang terkirim",
           "replies": "Tingkat balasan",
@@ -1873,8 +1876,7 @@
         "list": "Daftar",
         "blocks": "Blok"
       },
-      "showing": "Menampilkan {count} kampanye",
-      "legacy": "Siaran lama ({count})"
+      "showing": "Menampilkan {count} kampanye"
     },
     "senderEmpty": {
       "loading": "Memuat nomor Anda…",

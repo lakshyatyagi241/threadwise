@@ -65,6 +65,11 @@
         "description": "Müşterilerle sohbet etmek için WhatsApp Business numaranızı bağlayın.",
         "keywords": "wa, whatsapp business, cloud api, numara, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp işletme profili",
+        "description": "Logonuz, hakkında metniniz, iletişim bilgileriniz ve Meta'nın istediği uyumluluk bilgileri.",
+        "keywords": "işletme profili, logo, profil resmi, hakkında, iletişim, uyumluluk, yasal ad, müşteri hizmetleri, şikayet sorumlusu"
+      },
       "unofficial-whatsapp": {
         "label": "Resmi olmayan WhatsApp API",
         "description": "Kişisel bir WhatsApp numarasını QR kodla bağlayın ve güvenli gönderim için ısıtın.",
@@ -101,7 +106,7 @@
         "keywords": "kısa mesaj, gönderen kimliği, dlt, twilio, mobil"
       },
       "email": {
-        "label": "E-posta",
+        "label": "Destek e-postası",
         "description": "Ekibiniz müşteri e-postalarını ortak gelen kutusunda okuyup yanıtlayabilsin diye Gmail veya Google Workspace posta kutularını bağlayın.",
         "keywords": "posta kutusu, gmail, google workspace, ortak gelen kutusu, destek e-postası, outlook, imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "Ekipler",
-        "description": "Yönlendirme ve raporlama için kişileri ekiplere ayırın.",
-        "keywords": "gruplar, departmanlar, atama, yönlendirme"
+        "description": "Kişileri görüşmeler, atamalar ve raporlar için gruplayın.",
+        "keywords": "gruplar, departmanlar, yöneticiler, hiyerarşi, atama, yönlendirme"
       },
       "ai-keys": {
         "label": "AI sağlayıcı anahtarları",
@@ -341,7 +346,7 @@
         "keywords": "onay, abonelikten çıkma, abone olma, aboneliği iptal, stop, start, kvkk, gdpr, uyumluluk, gizlilik, pazarlama"
       },
       "inbox-tags": {
-        "label": "Sohbet etiketleri",
+        "label": "Etiketler",
         "description": "Ekibinizin sohbetlere eklediği ve gelen kutusunu filtrelediği etiketleri oluşturun. Kişilerde kullanılan etiketlerle aynıdır.",
         "keywords": "etiketler, sohbet etiketleri, kategoriler, düzenle, filtre"
       },
@@ -354,11 +359,6 @@
         "label": "Yanıt hedefleri",
         "description": "Ekibinizin ne kadar hızlı yanıtlaması ve çözmesi gerektiğini (SLA) belirleyin; görüşme hedefini kaçırınca uyarı alın.",
         "keywords": "sla, yanıt süresi, ilk yanıt, çözüm, ihlal, hedefler, çalışma saatleri"
-      },
-      "team-performance": {
-        "label": "Ekip performansı",
-        "description": "Her temsilcinin bugün, bu hafta veya bu ay ne kadar hızlı yanıtlayıp çözdüğünü görün.",
-        "keywords": "raporlar, analiz, temsilciler, yanıt süresi, ilk yanıt, çözüldü, iş yükü, performans"
       },
       "privacy-requests": {
         "label": "Veri talepleri",
@@ -394,6 +394,11 @@
         "label": "Yinelenen potansiyel müşteriler",
         "description": "Bir kişiyle eşleşen yeni kaydın ona birleştirilmesini mi yoksa yeni kişi olmasını mı istediğinizi seçin.",
         "keywords": "yinelenen, birleştir, potansiyel müşteri, aynı telefon, aynı e-posta, yeni kişi, kaynak"
+      },
+      "sales-activities": {
+        "label": "Satış Etkinlikleri",
+        "description": "Görevleri, toplantıları, aramaları ve kendi etkinliklerinizi yönetin: her birinin neler yapabileceği, görev türleri ve sonuçları.",
+        "keywords": "etkinlikler, görev türleri, sonuçlar, toplantı sonucu, arama sonucu, takip, giriş yapma, özel etkinlik, takvim, tamamla"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

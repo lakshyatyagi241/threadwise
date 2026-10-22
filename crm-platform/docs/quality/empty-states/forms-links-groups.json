@@ -1,0 +1,71 @@
+{
+  "feature": "forms-links-groups",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-forms-links-groups-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-form-submissions-screen.tsx",
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-forms-list-screen.tsx",
+        "apps/web/src/features/forms-links-groups/wa-links/wa-links-list-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/forms-links-groups/wa-forms/wa-forms-list-screen.render.test.tsx",
+          "match": "shows the empty state with no forms"
+        },
+        {
+          "file": "apps/web/src/features/forms-links-groups/wa-links/wa-links-list-screen.render.test.tsx",
+          "match": "shows the empty state with no links"
+        }
+      ]
+    },
+    {
+      "id": "EM-forms-links-groups-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-form-builder-screen.tsx",
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-form-submissions-screen.tsx",
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-forms-list-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-forms-links-groups-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/forms-links-groups/nav.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-forms-links-groups-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-form-builder-screen.tsx",
+        "apps/web/src/features/forms-links-groups/wa-forms/wa-form-submissions-screen.tsx",
+        "apps/web/src/features/forms-links-groups/wa-links/wa-links-list-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

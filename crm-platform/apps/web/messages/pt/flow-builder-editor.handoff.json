@@ -1,0 +1,93 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "atribuída",
+        "waitingInQueue": "em fila de espera",
+        "noAgentOutOfHours": "sem agente / fora do horário",
+        "returnedToBot": "devolvida ao bot"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Etapa {stage}: escolha a pessoa para quem a conversa vai."
+      }
+    },
+    "simulator": {
+      "handoff": "transferida para uma pessoa (destino: {destination}, equipe \"{team}\"); o chat de teste segue a saída \"atribuída\""
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Transferir para",
+          "handoffRules": "Regras de atribuição",
+          "pickAgent": "— escolha uma pessoa —",
+          "returnBack": "Quando o bot voltar:"
+        }
+      },
+      "handoff": {
+        "legacy": "Esta etapa é a antiga “Atribuir agente”.",
+        "upgradeHint": "Entrega a conversa a uma equipe e continua. Mude para o encaminhamento a uma pessoa para adicionar um motivo, uma prioridade, mensagens para o contato e as saídas (atribuída, aguardando na fila, sem agente ou fora do horário e uma opcional para quando a conversa volta ao bot). As conexões que você já fez continuam funcionando.",
+        "upgrade": "Usar recursos de transferência",
+        "destination": "Enviar a conversa para",
+        "dest": {
+          "team": "Uma equipe",
+          "person": "Uma pessoa",
+          "rules": "As regras de atribuição",
+          "rulesLocked": "As regras de atribuição (complemento Roteamento inteligente)"
+        },
+        "destHint": {
+          "team": "Vai para alguém da equipe ou aguarda na fila da equipe.",
+          "person": "Vai para esta pessoa se ela puder atender; caso contrário, aguarda na fila.",
+          "rules": "Usa suas regras de atribuição automática de conversas; se nenhuma encontrar uma pessoa, a conversa aguarda na fila."
+        },
+        "lockHint": "As regras de atribuição fazem parte do complemento Roteamento inteligente ou de um plano superior; uma conversa enviada aqui espera na fila de espera até um colega assumi-la.",
+        "team": "Equipe",
+        "teamPick": "— escolha uma equipe —",
+        "teamNone": "Nenhuma equipe ainda",
+        "teamOption": "{name} · {count, plural, one {# agente} other {# agentes}}",
+        "teamHint": "<link>Gerenciar equipes →</link>",
+        "person": "Pessoa",
+        "personPick": "— escolha uma pessoa —",
+        "personHint": "Alguém das suas equipes.",
+        "unknownMember": "{value} (não está neste workspace)",
+        "reason": "Motivo",
+        "reasons": {
+          "customer_asked": "O contato pediu uma pessoa",
+          "bot_could_not_help": "O bot não conseguiu ajudar",
+          "sensitive_topic": "Assunto sensível",
+          "sales_lead": "Lead de vendas",
+          "complaint": "Reclamação",
+          "other": "Outro"
+        },
+        "priority": "Prioridade",
+        "priorityKeep": "Manter a prioridade atual",
+        "priorities": {
+          "low": "Baixa",
+          "normal": "Normal",
+          "high": "Alta",
+          "urgent": "Urgente"
+        },
+        "note": "Nota para o agente",
+        "noteHint": "Interna. Exibida no cartão de transferência; '{{'variables'}}' funcionam. Até 500 caracteres.",
+        "customerMessage": "Mensagem para o contato",
+        "customerHint": "Enviada quando a conversa é transferida. Deixe vazio para não enviar nada.",
+        "offHours": "Mensagem quando ninguém está disponível",
+        "offHoursHint": "Enviada no lugar quando a equipe está fechada ou ninguém pode atender. A conversa continua aguardando na fila.",
+        "exits": "Esta etapa tem três saídas",
+        "exitAssigned": "atribuída: uma pessoa já está com a conversa",
+        "exitWaiting": "em fila de espera: aguarda alguém assumir",
+        "exitUnavailable": "sem agente / fora do horário: ninguém pôde atender",
+        "simpleExits": "A próxima etapa é executada quando uma pessoa já está com a conversa. Se ela precisar aguardar na fila, ou ninguém estiver disponível, o bot para aqui e uma pessoa responde. Use o construtor avançado para seguir as outras saídas.",
+        "returnMessage": "Mensagem ao contato quando o bot voltar",
+        "returnMessageHint": "Opcional. Enviada uma vez, em nome da sua empresa, quando um colega clica em Devolver ao bot, antes de o fluxo continuar pela saída «devolvida». Não é enviada se a janela de 24 horas estiver fechada ou se o contato não tiver dado consentimento. Variáveis como '{{'name'}}' funcionam.",
+        "returnNeedsExit": "Esta mensagem só é enviada quando o fluxo continua após Devolver ao bot. Conecte a saída «devolvida» à etapa que deve vir a seguir.",
+        "exitReturned": "devolvida ao bot (opcional): um colega clicou em Devolver ao bot; o fluxo continua daqui",
+        "returnedStep": "Quando um colega devolve a conversa, continuar em",
+        "returnedStepHint": "Opcional. Escolha a etapa com que o fluxo continua quando alguém clica em Devolver ao bot. Deixe vazio e o bot aguarda a próxima mensagem do contato.",
+        "returnNone": "Nenhuma etapa: aguardar a próxima mensagem do contato",
+        "returnStepOption": "{stage}: {label}"
+      }
+    }
+  }
+}

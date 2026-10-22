@@ -3,6 +3,7 @@ import type { RoleGrantRow, RoleRow } from './roles.repository';
 
 export interface RoleViewContext {
   userCount: number;
+  membersWithoutTeam: number;
   grantable: boolean;
   editable: boolean;
 }
@@ -23,6 +24,7 @@ export function toRoleResponse(
       recordScope: g.recordScope,
     })),
     userCount: view.userCount,
+    membersWithoutTeam: view.membersWithoutTeam,
     isPreset: row.systemKey !== null,
     grantable: view.grantable,
     editable: view.editable,

@@ -13,6 +13,7 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toRoleResponse, type RoleViewContext } from './roles.mapper';
 import { RolesRepository, type RoleRow } from './roles.repository';
@@ -39,7 +40,25 @@ export class RolesService {
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
     private readonly roleRules: WorkspaceRoleRulesService,
+    private readonly plan: PlanEntitlementService,
   ) {}
+
+  /**
+   * `team_and_below` ("My team and sub-teams") needs the plan feature `team_hierarchy` (BL-382, BL-383). Granting it without the feature is
+   * 422 PLAN_FEATURE_LOCKED. Only the scopes a role did not already hold are checked, so a workspace that lost the feature can still save a
+   * role it had set up before; such a role keeps resolving as `team` (see ScopeResolver and docs/api/teams-scope.md).
+   */
+  private async assertScopesOffered(
+    orgId: number,
+    grants: ReadonlyArray<{ recordScope: string }>,
+  ): Promise<void> {
+    if (!grants.some((g) => g.recordScope === 'team_and_below')) return;
+    await this.plan.assertFeature(
+      orgId,
+      'team_hierarchy',
+      "My team and sub-teams isn't on your plan. Upgrade your plan, or ask for the Teams and permissions add-on, to use it.",
+    );
+  }
 
   async list(query: PaginationQuery) {
     const ctx = RequestContextStore.require();
@@ -86,12 +105,25 @@ export class RolesService {
     });
   }
 
+  /**
+   * Custom roles and per-key scopes are a plan feature (`custom_roles`, BL-383). Creating or editing a role needs it; reading and deleting do
+   * not, so a workspace that lost the feature still sees every role, and the roles people already hold keep working. Presets stay as shipped.
+   */
+  private assertCustomRoles(orgId: number): Promise<void> {
+    return this.plan.assertFeature(
+      orgId,
+      'custom_roles',
+      "Custom roles and scoped permissions aren't on your plan. Upgrade your plan, or ask for the Teams and permissions add-on, to create or change roles.",
+    );
+  }
+
   async create(input: CreateRoleInput): Promise<RoleResponse> {
     return this.roleRules.withDenialAudit('role.create', () => this.createInTx(input));
   }
 
   private async createInTx(input: CreateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
+    await this.assertCustomRoles(ctx.orgId);
 
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByName(tx, ctx.orgId, input.name);
@@ -101,6 +133,7 @@ export class RolesService {
         ]);
       }
 
+      await this.assertScopesOffered(ctx.orgId, input.grants);
       // A new role cannot carry anything its creator does not hold (TW-RBAC-026: no handing out more than you have).
       await this.roleRules.assertCanEditGrants(
         tx,
@@ -134,6 +167,7 @@ export class RolesService {
 
   private async updateInTx(uuid: string, input: UpdateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
+    await this.assertCustomRoles(ctx.orgId);
 
     const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
@@ -149,6 +183,15 @@ export class RolesService {
       }
       if (input.grants !== undefined) {
         const current = await this.repo.grantsForRoles(tx, ctx.orgId, [existing.id]);
+        // Only a scope the role does not already hold is checked: a downgraded workspace can still save a role it had set up before.
+        const newScopes = input.grants.filter(
+          (g) =>
+            g.recordScope === 'team_and_below' &&
+            !current.some(
+              (c) => c.permissionKey === g.permissionKey && c.recordScope === 'team_and_below',
+            ),
+        );
+        await this.assertScopesOffered(ctx.orgId, newScopes);
         await this.roleRules.assertCanEditGrants(
           tx,
           ctx.orgId,
@@ -242,11 +285,17 @@ export class RolesService {
       orgId,
       rows.map((r) => r.id),
     );
+    const noTeam = await this.repo.membersWithoutTeam(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+    );
     const grantable = new Set(await this.roleRules.grantableRoleIds(tx, orgId, actorUserId));
     const out = new Map<number, RoleViewContext>();
     for (const r of rows) {
       out.set(r.id, {
         userCount: counts.get(r.id) ?? 0,
+        membersWithoutTeam: noTeam.get(r.id) ?? 0,
         grantable: grantable.has(r.id),
         editable: await this.roleRules.canEditRole(tx, orgId, actorUserId, r),
       });

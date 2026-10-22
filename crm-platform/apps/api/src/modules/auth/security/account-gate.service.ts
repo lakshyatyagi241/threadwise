@@ -11,6 +11,9 @@ import { toDate, type DateLike } from '../support/dates';
 import { isPasswordStale } from '../support/password-policy';
 import { AuthKeys, Ttl } from '../support/redis-keys';
 import { OrgSuspensionService, isOperatorImpersonation } from './org-suspension.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('account_gate');
 
 export interface AccountGateState {
   /** This person's own account is not active. */
@@ -29,6 +32,23 @@ export interface AccountGateState {
   isAdmin: boolean;
   isOwner: boolean;
 }
+
+/**
+ * Writes a freshly computed gate state only if no `invalidate` / `invalidateAll` ran since the reader started computing it.
+ * KEYS = cache key, per-user generation, global generation; ARGV = the two generations the reader saw, ttl, json. Without this, a
+ * request that read the old state just before a writer committed and invalidated could cache that old state afterwards and keep
+ * a suspended person signed in for the whole 30 s.
+ */
+export const SET_UNLESS_INVALIDATED_LUA = `
+local u = redis.call('GET', KEYS[2]) or ''
+local g = redis.call('GET', KEYS[3]) or ''
+if u == ARGV[1] and g == ARGV[2] then
+  redis.call('SET', KEYS[1], ARGV[4], 'EX', tonumber(ARGV[3]))
+  return 1
+end
+return 0`;
+/** How long a generation counter outlives the invalidation that bumped it: longer than any gate read plus the 30 s entry. */
+const GENERATION_TTL_SECONDS = 120;
 
 /**
  * Computes what, if anything, stands between a signed-in user and the app:
@@ -74,19 +94,50 @@ export class AccountGateService {
     const early = await takeAuthPrefetch('gate', orgId, userId);
     const cached =
       early === undefined || typeof early === 'symbol'
-        ? await this.redis.get(key).catch(() => null)
+        ? await this.redis.get(key).catch(() => {
+            cache.error();
+            return null;
+          })
         : early;
-    if (cached) return JSON.parse(cached) as AccountGateState;
+    if (cached) {
+      cache.hit();
+      return JSON.parse(cached) as AccountGateState;
+    }
+    cache.miss();
 
+    const genKey = AuthKeys.gateGeneration(orgId, userId);
+    const seen = await this.redis.mget(genKey, AuthKeys.gateGenerationAll).catch(() => null);
     const state = await this.compute(orgId, userId);
-    await this.redis.setex(key, Ttl.gateSeconds, JSON.stringify(state)).catch((err: unknown) => {
-      this.logger.warn({ err }, 'could not cache gate state');
-    });
+    if (seen) {
+      await this.redis
+        .eval(
+          SET_UNLESS_INVALIDATED_LUA,
+          3,
+          key,
+          genKey,
+          AuthKeys.gateGenerationAll,
+          seen[0] ?? '',
+          seen[1] ?? '',
+          String(Ttl.gateSeconds),
+          JSON.stringify(state),
+        )
+        .catch((err: unknown) => {
+          this.logger.warn({ err }, 'could not cache gate state');
+        });
+    }
     return state;
   }
 
   async invalidate(orgId: number, userId: number): Promise<void> {
-    await this.redis.del(AuthKeys.gate(orgId, userId)).catch(() => undefined);
+    // Generation first, so a reader still computing cannot cache its old answer after the DEL (see SET_UNLESS_INVALIDATED_LUA).
+    const genKey = AuthKeys.gateGeneration(orgId, userId);
+    await this.redis
+      .multi()
+      .incr(genKey)
+      .expire(genKey, GENERATION_TTL_SECONDS)
+      .del(AuthKeys.gate(orgId, userId))
+      .exec()
+      .catch(() => undefined);
   }
 
   /**
@@ -95,6 +146,11 @@ export class AccountGateService {
    */
   async invalidateAll(): Promise<void> {
     try {
+      await this.redis
+        .multi()
+        .incr(AuthKeys.gateGenerationAll)
+        .expire(AuthKeys.gateGenerationAll, GENERATION_TTL_SECONDS)
+        .exec();
       let cursor = '0';
       do {
         const [next, keys] = await this.redis.scan(cursor, 'MATCH', 'auth:gate:*', 'COUNT', 500);

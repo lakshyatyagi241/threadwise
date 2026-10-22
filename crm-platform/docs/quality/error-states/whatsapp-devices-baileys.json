@@ -1,0 +1,133 @@
+{
+  "feature": "whatsapp-devices-baileys",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-whatsapp-devices-baileys-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/connect-wizard.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-detail-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-dialogs.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-whatsapp-devices-baileys-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-detail-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/devices-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/unofficial-tabs.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/gates.test.ts",
+          "match": "is removed while the engine is not allowed for the workspace"
+        }
+      ]
+    },
+    {
+      "id": "ES-whatsapp-devices-baileys-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-detail-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/components/components.render.test.tsx",
+          "match": "detail loading, not found and failure states"
+        }
+      ]
+    },
+    {
+      "id": "ES-whatsapp-devices-baileys-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/api/groups-service.ts",
+        "apps/web/src/features/whatsapp-devices-baileys/components/connect-wizard.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-detail-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-whatsapp-devices-baileys-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/connect-wizard.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/use-error-text.ts",
+        "apps/web/src/features/whatsapp-devices-baileys/lib/error-model.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/components/components.render.test.tsx",
+          "match": "step 2 shows field messages only after the first Continue"
+        }
+      ]
+    },
+    {
+      "id": "ES-whatsapp-devices-baileys-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/lib/pairing-model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-whatsapp-devices-baileys-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/wizard-steps.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/create-group-form.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/edit-group-modal.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/groups/groups-model.test.ts",
+          "match": "is read-only while the number is offline"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/groups/groups.render.test.tsx",
+          "match": "is a normal page, not an error, when the number is offline: groups stay, with the reason and a link to the number"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/messages.test.ts",
+          "match": "reads an unknown code and a network failure as the generic error"
+        }
+      ]
+    }
+  ]
+}

@@ -104,7 +104,6 @@
       "failed": "gagal",
       "edited": "Diedit {when}",
       "openBuilder": "Buka pembuat",
-      "faqs": "Pertanyaan umum",
       "pause": "Jeda",
       "resume": "Lanjutkan",
       "rename": "Ganti nama",
@@ -556,11 +555,8 @@
           "cardCount": "{count} kartu",
           "payLink": "Tautan bayar",
           "invoice": "Faktur",
-          "faqAllFaqs": "Semua FAQ",
-          "faqCategory": "FAQ: {name}",
-          "faqScore": "skor min. {score}",
-          "faqNotSent": "tidak dikirim",
-          "faqWorkspaceScore": "skor alur"
+          "faqAgent": "Menjawab dari {agent}",
+          "faqNoAgent": "Pilih agen AI"
         },
         "overlays": {
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
@@ -724,8 +720,7 @@
             "answer": "Jawaban",
             "action": "Aksi"
           },
-          "blockedTitle": "Langkah ini mengakhiri bagian ini, jadi hanya bisa diletakkan paling akhir.",
-          "blockedTitleFaq": "Jawab dari FAQ punya dua jalur keluar, jadi hanya bisa di posisi terakhir."
+          "blockedTitle": "Langkah ini mengakhiri bagian ini, jadi hanya bisa diletakkan paling akhir."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -752,7 +747,8 @@
           "storedIn": "Nilai akan disimpan di properti <b>{property}</b> milik kontak",
           "actions": "Aksi",
           "actionsHint": "Tambahkan langkah yang berjalan tepat setelah langkah ini.",
-          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain."
+          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain.",
+          "fromSteps": "Dicapai dari langkah {stages}"
         },
         "editors": {
           "linkLabel": "Tujuan",
@@ -864,7 +860,13 @@
             "choose": "Pilih templat…",
             "buttons": "Tombol",
             "variables": "Diisi dari data kontak",
-            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat."
+            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat.",
+            "fills": "Apa yang mengisi setiap nomor",
+            "fillsHint": "Pilih data kontak atau variabel alur, atau ketik teks Anda sendiri. Kosongkan untuk memakai isi templat.",
+            "fillPick": "Sisipkan data…",
+            "headerMedia": "File header",
+            "headerMediaHint": "Gambar, video, atau file di header templat ini. Diperlukan jika templat tidak punya file sendiri.",
+            "headerMediaMissing": "Tambahkan file header: templat ini tidak punya, dan WhatsApp tidak akan mengirimnya tanpa itu."
           },
           "cta": {
             "buttonText": "Teks tombol",
@@ -903,7 +905,10 @@
               "phone": "Telepon sebuah nomor",
               "email": "Kirim email",
               "agent": "Bicara dengan seseorang"
-            }
+            },
+            "prev": "Kartu sebelumnya",
+            "next": "Kartu berikutnya",
+            "goTo": "Kartu {n}"
           },
           "condition": {
             "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",
@@ -914,18 +919,16 @@
             "hint": "Pengunjung diteruskan ke tim ini dengan catatan Anda. Tidak perlu menyambungkan apa pun setelah tombol ini."
           },
           "faq": {
-            "exits": {
-              "matched": "Jika FAQ menjawab, lanjut ke",
-              "no_match": "Jika tidak ada FAQ yang menjawab, lanjut ke"
-            },
-            "exitsHint": {
-              "matched": "Saat itu jawaban teks sudah terkirim. FAQ yang memulai alur akan melanjutkan di alur tersebut.",
-              "no_match": "Tidak ada yang cukup mirip, atau penjawab FAQ otomatis dinonaktifkan."
-            }
+            "exit": "Jika tidak ada yang cocok",
+            "exitHint": "Ke mana alur pergi saat tidak ada entri yang menjawab.",
+            "matched": "Jika terjawab",
+            "matchedHint": "Ke mana alur pergi setelah jawaban dikirim."
           }
         },
         "branchAdd": "Tambah langkah untuk “{title}”",
-        "faqEnds": "Langkah ini mengakhiri bagian ini: apa yang dikirim berikutnya bergantung pada apakah FAQ menjawab."
+        "faqEnds": "Langkah ini mengakhiri bagian ini: alur berlanjut lewat jalur Terjawab atau Tidak cocok.",
+        "flowMenu": "Opsi untuk {name}",
+        "renameFlow": "Ganti nama alur"
       },
       "formsCore": {
         "helpers": {
@@ -1873,43 +1876,13 @@
           "waitUntilPaid": "Tunggu hingga dibayar, lalu lanjutkan"
         },
         "faq": {
-          "intro": {
-            "body": "Mencocokkan pesan dengan FAQ alur ini berdasarkan makna dan menjawabnya. Keluar lewat <mono>terjawab</mono> jika sebuah FAQ menjawab, dan lewat <mono>tidak cocok</mono> jika tidak.",
-            "sub": "Berfungsi tanpa mengaktifkan jawaban FAQ otomatis alur ini. <link>Kelola FAQ alur ini</link>"
-          },
-          "exitsLabel": "Jalur keluar",
-          "exitMatchedName": "Terjawab",
-          "exitMatched": "FAQ menjawab: teksnya dikirim (kecuali pengiriman dimatikan), atau alurnya mengambil alih dan tidak kembali.",
-          "exitNoMatchName": "Tidak cocok",
-          "exitNoMatch": "tidak ada yang cukup mirip, jawaban FAQ otomatis dimatikan untuk platform, alur atau langkah yang ditautkan sudah tidak ada, atau pesannya kosong.",
-          "query": "Pesan yang dicocokkan",
-          "queryHint": "Secara default berupa pesan terakhir pelanggan. Variabel yang disimpan langkah Pertanyaan juga bisa dipakai, misalnya <mono>{variable}</mono>. Ketik / untuk menyisipkan.",
-          "category": "Hanya FAQ ini",
-          "allFaqs": "Semua FAQ",
-          "loadingCategories": "Memuat kategori…",
-          "categoryGone": "{name} (tidak ada FAQ yang memakainya)",
-          "retry": "Coba lagi",
-          "minScore": "Skor minimum",
+          "agent": "Agen AI",
+          "agentHint": "Agen yang basis pengetahuannya dicari. Tambahkan FAQ di Pelatihan AI.",
+          "query": "Cari",
+          "queryHint": "Apa yang dicari. Biasanya pesan terakhir pelanggan.",
           "sendAnswer": "Kirim jawaban ke pelanggan",
-          "sendAnswerToggle": "Kirim jawaban teks yang cocok sebagai pesan",
-          "sendAnswerOnHint": "FAQ teks yang cocok dikirim ke pelanggan. FAQ yang memulai alur akan melanjutkan di alur tersebut.",
-          "sendAnswerOffHint": "Tidak ada yang dikirim: jawaban hanya disimpan di variabel di bawah, sehingga langkah berikutnya bisa menyusun balasan sendiri. FAQ yang memulai alur tetap melanjutkan di alur tersebut.",
-          "save": "Simpan hasil sebagai",
-          "saveHint": "Nama tempat hasil disimpan. Langkah berikutnya membacanya seperti yang ditampilkan di bawah.",
-          "variables": {
-            "answer": "teks jawaban",
-            "matched": "ya atau tidak",
-            "question": "pertanyaan dari FAQ yang cocok",
-            "score": "seberapa dekat kecocokannya",
-            "id": "id FAQ yang cocok"
-          },
-          "noFaqs": "Alur ini belum memiliki FAQ, sehingga langkah ini selalu keluar lewat tidak cocok. <link>Tambahkan FAQ pertama alur ini</link>",
-          "useWorkspaceScore": "Gunakan pengaturan alur ini",
-          "minScoreInvalid": "Masukkan angka dari {min} sampai {max}, atau gunakan pengaturan alur ini.",
-          "saveFlowFirst": "Simpan alur terlebih dahulu. FAQ-nya diedit di tab FAQ pada Simple builder, dan langkah ini menjawab dari sana.",
-          "categoryHint": "Hanya FAQ kategori ini yang dapat menjawab. Kategori berasal dari FAQ alur ini.",
-          "categoriesFailed": "Kategori FAQ alur ini tidak dapat dimuat.",
-          "minScoreHint": "Menggantikan skor alur ini hanya untuk langkah ini, dari {min} sampai {max}. Skor bergantung pada model embedding platform, jadi coba pesan di <link>uji FAQ</link> alur ini sebelum memilih angka."
+          "variable": "Simpan jawaban sebagai",
+          "variableHint": "Langkah berikutnya membaca jawaban dengan nama ini, misalnya faq.answer."
         }
       },
       "attrPicker": {
@@ -1980,7 +1953,6 @@
         "customizeFirst": "Sesuaikan widget chat Anda dan simpan sekali sebelum memublikasikan.",
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Kustomisasi tombol WhatsApp Anda dan simpan sekali sebelum mempublikasikan.",
-        "faqs": "FAQ",
         "install": "Pasang"
       },
       "buttonIcon": {
@@ -2151,8 +2123,8 @@
           "description": "Tambah atau hapus tag"
         },
         "assign": {
-          "label": "Tugaskan agen",
-          "description": "Alihkan ke manusia"
+          "label": "Serah terima ke manusia",
+          "description": "Serahkan chat ke seseorang atau antrean"
         },
         "subflow": {
           "label": "Jalankan sub-alur",
@@ -2502,7 +2474,6 @@
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",
         "noSenderFacebook": "Node Pemicu belum memilih Halaman Facebook — pilih salah satu pada langkah Pemicu.",
         "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu.",
-        "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan alur.",
         "locationInvalid": "“{node}” tidak memiliki lokasi yang valid — tempel tautan Google Maps atau masukkan lintang (-90 sampai 90) dan bujur (-180 sampai 180).",
         "aiNoAgent": "\"{node}\" tidak punya agen AI maupun prompt — pilih agen AI, atau pilih Pengaturan kustom dan tulis instruksinya."
       }
@@ -2513,8 +2484,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Tugaskan ke agen",
-          "help": "Serahkan percakapan ke tim atau agen"
+          "label": "Serah terima ke manusia",
+          "help": "Serahkan percakapan ke seseorang, tim, atau aturan penugasan"
         },
         "message": {
           "label": "Pesan",
@@ -2552,30 +2523,6 @@
           "label": "Pertanyaan",
           "help": "Tanyakan apa saja dan simpan jawabannya"
         },
-        "askName": {
-          "label": "Nama",
-          "help": "Minta nama dan periksa"
-        },
-        "askEmail": {
-          "label": "Email",
-          "help": "Minta alamat email dan periksa"
-        },
-        "askPhone": {
-          "label": "Nomor telepon",
-          "help": "Minta nomor telepon dan periksa"
-        },
-        "askNumber": {
-          "label": "Angka",
-          "help": "Minta angka dan periksa"
-        },
-        "askAlphanumeric": {
-          "label": "Huruf dan angka",
-          "help": "ID atau kode, tanpa spasi atau simbol"
-        },
-        "askDate": {
-          "label": "Tanggal",
-          "help": "Minta tanggal dengan format yang Anda pilih"
-        },
         "askFile": {
           "label": "File atau gambar",
           "help": "Tunggu foto, dokumen, video, atau audio"
@@ -2591,10 +2538,6 @@
         "condition": {
           "label": "Kondisi",
           "help": "Bercabang berdasarkan apa yang dikatakan atau disimpan pelanggan, dengan aturan AND / OR"
-        },
-        "faq": {
-          "label": "Jawab dari FAQ",
-          "help": "Cocokkan pesan pelanggan dengan FAQ Anda. Mengakhiri alur ini: satu jalur keluar jika FAQ menjawab, satu lagi jika tidak"
         },
         "apiLibrary": {
           "label": "Panggilan API",
@@ -2617,7 +2560,7 @@
         "location": "Lokasi",
         "template": "Templat",
         "cta": "Tombol tautan",
-        "assign": "Tugaskan ke agen",
+        "assign": "Serah terima ke manusia",
         "carousel": "Carousel",
         "condition": "Kondisi",
         "faq": "Jawab dari FAQ",
@@ -2664,7 +2607,6 @@
         "carouselCards": "Langkah {stage}: tambahkan minimal satu kartu dan beri setiap kartu judul.",
         "carouselButtons": "Langkah {stage}: beri setiap tombol nama, serta tautan, nomor, atau alamat di tempat tombol membuka sesuatu.",
         "conditionIncomplete": "Langkah {stage}: lengkapi aturan kondisi (variabel dan nilai di setiap aturan).",
-        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur.",
         "optionNotConnected": "Langkah {stage}: {kind, select, row {baris} other {tombol}} \"{label}\" tidak mengarah ke mana pun. Tambahkan langkah untuknya atau beri tindakan.",
         "tooManyOptions": "Langkah {stage}: {kind, select, row {daftar dapat memiliki paling banyak {max} baris} other {satu set tombol dapat memiliki paling banyak {max} tombol}}.",
         "chooseFlow": "Langkah {stage}: pilih flow yang dimulai tombol.",
@@ -2672,9 +2614,10 @@
         "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",
         "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
         "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
-        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI."
-      },
-      "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
+        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI.",
+        "templateFile": "Langkah {stage}: tambahkan file header templat.",
+        "fileLinkInvalid": "Langkah {stage}: tautan file harus diawali https://"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2786,9 +2729,8 @@
       "buttonNotConnected": "Tombol \"{label}\" tidak terhubung — berhenti.",
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
-      "faqAnswered": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, jadi tidak ada yang dikirim dan {ref} tetap kosong. Mengambil jalur \"terjawab\".",
-      "faqNoMatch": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, dan jalur \"terjawab\" tidak terhubung, jadi mengambil \"tidak cocok\". {ref} tetap kosong.",
-      "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid"
+      "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid",
+      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\"."
     }
   }
 }

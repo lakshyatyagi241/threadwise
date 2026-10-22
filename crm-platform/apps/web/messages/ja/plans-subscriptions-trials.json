@@ -47,7 +47,8 @@
       "sms_monthly": "月間SMS数",
       "email_mailboxes": "メールボックス数",
       "email_monthly": "月間メール数",
-      "storage_gb": "ストレージ (GB)"
+      "storage_gb": "ストレージ (GB)",
+      "teams": "チーム"
     },
     "features": {
       "automation": "自動化",
@@ -59,10 +60,12 @@
       "remove_branding": "ブランディングの削除",
       "sales_pipeline": "営業パイプライン",
       "appointment_booking": "予約受付",
+      "appointment_confirm_buttons": "リマインダーのボタン（確認・日時変更・キャンセル）",
+      "appointment_rebook_steps": "再予約（リコール）ステップ",
       "chatbot_widgets": "チャットボットウィジェット",
       "wa_storefront": "WhatsAppカタログ",
       "inbox_sla": "SLAポリシー",
-      "inbox_routing": "ルーティングルール",
+      "inbox_routing": "スマートルーティング: 自動割り当てとルール",
       "waba_calling": "WhatsApp通話",
       "inbox_kanban": "カンバン表示",
       "team_performance": "チームのパフォーマンス",
@@ -85,7 +88,10 @@
       "personal_history_full": "全履歴インポート(個人用WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AIリードスコアリング",
-      "record_assignment": "レコード割り当てルール"
+      "record_assignment": "レコード割り当てルール",
+      "team_hierarchy": "チーム階層とマネージャー",
+      "custom_roles": "カスタムロールとスコープ",
+      "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者"
     },
     "limitGroups": {
       "messaging": "メッセージング",
@@ -139,7 +145,8 @@
       "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。",
       "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。",
       "email_monthly": "暦月に送信したメールの数(返信とキャンペーンメールの合計)。0 = 無制限。",
-      "storage_gb": "ワークスペースが保持できるストレージ容量(GB)。通話録音、チャットのメディア、メール添付、ファイルが対象です。0 = 無制限。現在は計測のみで、何もブロックされません。"
+      "storage_gb": "ワークスペースが保持できるストレージ容量(GB)。通話録音、チャットのメディア、メール添付、ファイルが対象です。0 = 無制限。現在は計測のみで、何もブロックされません。",
+      "teams": "ワークスペースが持てるチーム数。空欄は無制限、0 は個人利用(チームなし)です。既存のチームが削除されることはありません。"
     },
     "planAddons": {
       "title": "お使いのプランで利用できるアドオン",
@@ -246,6 +253,9 @@
         "buy": "アドオンを購入",
         "buyAgain": "再購入",
         "active": "有効",
+        "included": "ご利用のプランに含まれています",
+        "includedOwned": "このアドオンもご契約中です。プランに含まれるようになったため、アドオンは解約できます。自動での返金はありません。",
+        "includedEnds": "ご利用のプランに含まれています。アドオンは{date}に終了し、更新されません。",
         "unlimitedBullet": "無制限の{label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "戻る",
       "compare": "すべてのプランを比較",
       "appHint": "{feature}はマーケットプレイスでアプリとしても販売されています。",
-      "appLink": "アプリを見る"
+      "appLink": "アプリを見る",
+      "addonHint": "{addon}アドオンで、現在のプランに追加することもできます。",
+      "addonLink": "アドオンを見る",
+      "addons": {
+        "smartRouting": "スマートルーティング",
+        "teamsPermissions": "チームと権限"
+      }
+    },
+    "lock": {
+      "link": "プランとアドオンを見る"
     }
   }
 }

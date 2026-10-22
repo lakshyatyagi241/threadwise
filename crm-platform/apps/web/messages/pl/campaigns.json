@@ -34,7 +34,10 @@
         "all": "Cały czas",
         "7d": "7 dni",
         "30d": "30 dni",
-        "90d": "90 dni"
+        "90d": "90 dni",
+        "custom": "Zakres niestandardowy",
+        "from": "Data początkowa",
+        "to": "Data końcowa"
       },
       "search": "Szukaj kampanii",
       "selectPage": "Zaznacz tę stronę",
@@ -1045,7 +1048,7 @@
         "loadFailed": "Nie udało się wczytać statystyk.",
         "rates": {
           "delivered": "Wskaźnik dostarczenia",
-          "deliveredHint": "grupy docelowej",
+          "deliveredHint": "z wysłanych",
           "read": "Wskaźnik odczytu",
           "readHint": "dostarczonych",
           "replies": "Wskaźnik odpowiedzi",
@@ -1873,8 +1876,7 @@
         "list": "Lista",
         "blocks": "Bloki"
       },
-      "showing": "Wyświetlono: {count, plural, one {# kampanię} few {# kampanie} many {# kampanii} other {# kampanii}}",
-      "legacy": "Dawne wysyłki masowe ({count})"
+      "showing": "Wyświetlono: {count, plural, one {# kampanię} few {# kampanie} many {# kampanii} other {# kampanii}}"
     },
     "senderEmpty": {
       "loading": "Wczytywanie Twoich numerów…",

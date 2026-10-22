@@ -29,7 +29,15 @@ const REACHED = new AppError(
 );
 const NEXT = new Error('reached the step after the guard');
 
-const as = <T>(v: unknown) => v as T;
+// The creators now take the lock and count through `assertCanAddIn(tx, org, key)`; the rig's fake answers it like `assertCanAdd(org, key)`.
+const as = <T>(v: unknown) => {
+  const o = v as { assertCanAdd?: (org: number, key: string) => unknown; assertCanAddIn?: unknown };
+  if (o && typeof o.assertCanAdd === 'function' && !o.assertCanAddIn) {
+    const guard = o.assertCanAdd;
+    o.assertCanAddIn = (_tx: unknown, org: number, key: string) => guard(org, key);
+  }
+  return v as T;
+};
 const none = {} as never;
 const db = () => ({ tx: vi.fn(async (fn: (tx: unknown) => unknown) => fn({})) });
 const inCtx = <T>(fn: () => Promise<T>) =>
@@ -195,6 +203,7 @@ describe('plan limits, group B: guard before insert', () => {
         as({ assertCanAdd }),
         none,
         none,
+        none,
         as({ get: () => 'http://web.test' }),
       );
       const after = vi.fn().mockRejectedValue(NEXT);
@@ -309,7 +318,7 @@ describe('plan limits, group B: guard before insert', () => {
       const svc = new BroadcastsService(
         as(db()),
         as(repo),
-        as({ assertWithinLimit: vi.fn() }),
+        as({ assertWithinLimit: vi.fn(), lockLimit: vi.fn() }),
         as(sendPolicy),
         none,
         none,

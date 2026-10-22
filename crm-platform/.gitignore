@@ -6,6 +6,7 @@ coverage/
 .next/
 out/
 .turbo/
+qa-results/
 
 .env
 .env.*
@@ -72,3 +73,4 @@ reports/tenancy-audit/
 reports/ssrf/
 reports/sast/
 reports/qa-suite/
+fuzz-result.json

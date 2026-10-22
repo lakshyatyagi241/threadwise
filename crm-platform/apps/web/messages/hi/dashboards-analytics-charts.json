@@ -320,6 +320,7 @@
         "replyRate": "जवाब दर",
         "received": "प्राप्त संदेश",
         "conversationsOpen": "खुली बातचीत",
+        "conversationsResolved": "हल की गई बातचीत",
         "conversationsClosed": "बंद बातचीत",
         "conversationsAssigned": "असाइन की गई",
         "conversationsUnassigned": "असाइन नहीं की गई",

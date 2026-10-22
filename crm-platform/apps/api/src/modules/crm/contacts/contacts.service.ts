@@ -234,7 +234,7 @@ export class ContactsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
-      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row);
       return this.sendWindow.contactWindow(ctx.orgId, row.id, { tx });
     });
   }
@@ -340,7 +340,7 @@ export class ContactsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
-      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row);
       // Restricted processing (BL-295): opening a contact under a legal hold is allowed (the business keeps serving the customer), and is
       // logged. The response is the same for everyone; whether a hold exists is shown only to readers of the register.
       const held = await tx.execute(
@@ -641,6 +641,47 @@ export class ContactsService {
   }
 
   /**
+   * The contact of a chat visitor who has just given an email or a phone number inside a flow (the website chat makes no contact before
+   * that, so trying the bot out leaves no empty record): found by the visitor's id on the channel or by the phone, else made, and tied
+   * to the thread when it has none. Null when the contact could not be made (the plan's cap, an unusable value).
+   */
+  async ensureChannelContact(
+    orgId: number,
+    input: {
+      channel: string;
+      peerKey: string;
+      conversationId: number | null;
+      email?: string | null;
+      phone?: string | null;
+    },
+  ): Promise<number | null> {
+    const digits = (input.phone ?? '').replace(/\D/g, '');
+    return this.db.txAs({ orgId }, async (tx) => {
+      const r = await this.resolveOrCreateByIdentity(tx, orgId, {
+        kind: 'channel_uid',
+        channel: input.channel,
+        value: input.peerKey,
+        name: null,
+        firstName: null,
+        email: input.email?.trim() || null,
+        phone: digits === '' ? null : `+${digits}`,
+        matchPhoneFirst: true,
+        ownerId: null,
+        source: input.channel,
+        quiet: true,
+      } as Parameters<ContactsService['resolveOrCreateByIdentity']>[2]);
+      if (r.outcome !== 'found' && r.outcome !== 'created') return null;
+      if (input.conversationId !== null) {
+        await tx.execute(
+          sql`UPDATE conversations SET contact_id = ${r.contactId}
+              WHERE org_id = ${orgId} AND id = ${input.conversationId} AND contact_id IS NULL`,
+        );
+      }
+      return r.contactId;
+    });
+  }
+
+  /**
    * `resolveOrCreateByIdentity` for many inputs, in the order given. A phone number or email that already belongs to a contact is answered
    * from two queries for the whole list (the identity and its contact), exactly as the single call answers it; every other input (new,
    * healed from a stored number, over the plan cap, unusable, or a channel id) goes through the single call unchanged, so locking, quota,
@@ -810,6 +851,9 @@ export class ContactsService {
    * The flow "Ask for file / image" node's "save the response as property": writes one custom property value of the contact the run
    * belongs to (the file link). Only an active contact property of this workspace can be written, so a key typed by hand that names
    * nothing is refused (`false`). No `contact.updated` event: a flow that fills in its own contact must not start flows of its own.
+   * Exception: a built-in contact column (`email`, `name`, ...) is written by `setFieldFromFlow`, the same path as the "Update contact
+   * field" step, so "also save the answer on the contact property" works for them. That path emits `contact.updated` with `via: 'flow'`,
+   * which flow triggers skip and webhooks receive.
    */
   async setPropertyFromFlow(
     orgId: number,
@@ -819,6 +863,9 @@ export class ContactsService {
   ): Promise<boolean> {
     const clean = key.trim();
     if (clean === '') return false;
+    if (Object.hasOwn(FLOW_CONTACT_COLUMNS, clean)) {
+      return (await this.setFieldFromFlow(orgId, contactId, clean, value)) !== null;
+    }
     return this.db.txAs({ orgId }, async (tx) => {
       const field = await tx.execute(
         sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
@@ -1280,14 +1327,7 @@ export class ContactsService {
       if (!existing) throw AppError.notFound('Contact', uuid);
       const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
       const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.repo,
-        ctx.orgId,
-        updateScope,
-        ctx.userId!,
-        existing.ownerId,
-      );
+      await assertContactScope(tx, this.repo, ctx.orgId, updateScope, ctx.userId!, existing);
 
       const values: Record<string, unknown> = { updatedBy: ctx.userId };
       if (input.name !== undefined) values.name = input.name;
@@ -1543,14 +1583,7 @@ export class ContactsService {
       if (!existing) throw AppError.notFound('Contact', uuid);
       await this.repo.lockById(tx, ctx.orgId, existing.id);
       const deleteScope = this.rbac.can(ctx.grants!, 'record.contacts.delete').scope;
-      await assertContactScope(
-        tx,
-        this.repo,
-        ctx.orgId,
-        deleteScope,
-        ctx.userId!,
-        existing.ownerId,
-      );
+      await assertContactScope(tx, this.repo, ctx.orgId, deleteScope, ctx.userId!, existing);
 
       // The history first, in the same transaction: the conversations are found through the contact link, which the delete below
       // clears. A call that loses the race below rolls this back with it.
@@ -1596,7 +1629,8 @@ export class ContactsService {
       scope: this.rbac.can(ctx.grants, permission).scope,
       actorUserId: ctx.userId,
       nextOwnerId,
-      inActorTeam: (id) => this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) =>
+        this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'ownerId',
     });
   }
@@ -1683,7 +1717,7 @@ export class ContactsService {
       const contact = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!contact) throw AppError.notFound('Contact', uuid);
       const readScope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(tx, this.repo, ctx.orgId, readScope, ctx.userId!, contact.ownerId);
+      await assertContactScope(tx, this.repo, ctx.orgId, readScope, ctx.userId!, contact);
 
       const { items, nextCursor, hasMore } = await this.audit.listByRecord(
         tx,
@@ -1697,6 +1731,7 @@ export class ContactsService {
         ...new Set(items.map((i) => i.actorId).filter((id): id is number => id !== null)),
       ];
       const actorUuids = await this.repo.resolveUserUuids(tx, ctx.orgId, actorIds);
+      const actorNames = await this.repo.resolveUserNames(tx, ctx.orgId, actorIds);
 
       const entries: FieldHistoryEntry[] = items.flatMap((entry) =>
         Object.entries(entry.delta ?? {}).map(([fieldKey, change]) => ({
@@ -1705,6 +1740,7 @@ export class ContactsService {
           newValue: (change as { new: unknown }).new,
           actorType: entry.actorType,
           changedByUserId: entry.actorId !== null ? (actorUuids.get(entry.actorId) ?? null) : null,
+          changedByName: entry.actorId !== null ? (actorNames.get(entry.actorId) ?? null) : null,
           changedAt: entry.at.toISOString(),
         })),
       );
@@ -1750,14 +1786,7 @@ export class ContactsService {
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
-        await assertContactScope(
-          rowTx,
-          this.repo,
-          ctx.orgId,
-          updateScope,
-          ctx.userId!,
-          existing.ownerId,
-        );
+        await assertContactScope(rowTx, this.repo, ctx.orgId, updateScope, ctx.userId!, existing);
 
         if (ownerId !== existing.ownerId) {
           await this.assertOwnerAllowed(rowTx, 'record.contacts.update', ownerId);
@@ -1826,14 +1855,7 @@ export class ContactsService {
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
-        await assertContactScope(
-          rowTx,
-          this.repo,
-          ctx.orgId,
-          updateScope,
-          ctx.userId!,
-          existing.ownerId,
-        );
+        await assertContactScope(rowTx, this.repo, ctx.orgId, updateScope, ctx.userId!, existing);
 
         const values: Record<string, unknown> = { updatedBy: ctx.userId };
         if (input.values.ownerId !== undefined) {

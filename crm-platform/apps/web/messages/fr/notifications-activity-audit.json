@@ -414,6 +414,14 @@
           "label": "Rendez-vous désynchronisé de Google Calendar",
           "hint": "L'événement Google Calendar d'un rendez-vous à venir a été supprimé, déplacé ou ses invités ont été modifiés. Le rendez-vous n'est pas modifié ; vous choisissez la suite à donner."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Rendez-vous annulé par le client",
+          "hint": "Un client a annulé son rendez-vous en appuyant sur Annuler dans un rappel. Le responsable du rendez-vous en est informé."
+        },
+        "appointment_reminder_test": {
+          "label": "Résultat du test d'e-mail de rappel",
+          "hint": "Le résultat de l'e-mail de test envoyé pour une étape de rappel : envoyé, ou non envoyé et pourquoi."
+        },
         "snooze_wake": {
           "label": "La conversation reportée revient",
           "hint": "Une conversation reportée se rouvre à l'heure choisie et vous est attribuée, ou à votre équipe."
@@ -513,6 +521,11 @@
           "watch": "Vous devriez voir un pop-up, et le nombre de la cloche ainsi que le titre de l’onglet changer.",
           "notConnected": "Les mises à jour en direct ne sont pas connectées sur cette page, le pop-up ne peut donc pas s’y afficher. Rechargez la page et réessayez.",
           "off": "Aucune notification n’a été créée dans la cloche : la cloche est désactivée pour « Notification de test » dans le tableau ci-dessous, ou par le propriétaire de votre espace de travail."
+        },
+        "prompt": {
+          "message": "Activez les notifications du navigateur pour être alerté des événements que vous choisissez, même lorsque le CRM est fermé.",
+          "enable": "Autoriser les notifications",
+          "enabling": "Activation..."
         }
       }
     },

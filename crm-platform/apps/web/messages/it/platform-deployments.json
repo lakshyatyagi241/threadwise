@@ -1,0 +1,112 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Deployment"
+    },
+    "eyebrow": "Operazioni",
+    "title": "Deployment",
+    "description": "Ogni flusso pubblicato sulla console Geta: cosa è in coda, cosa è in esecuzione ora e cosa è fallito e perché. Si aggiorna ogni pochi secondi.",
+    "updated": "In diretta. Aggiornato alle {time}",
+    "stale": "L’ultimo aggiornamento è fallito. Vengono mostrati i deployment precedenti.",
+    "stalledAlert": "{count} deployment non cambiano da {minutes} minuti. Il loro worker potrebbe essersi fermato.",
+    "truncated": "Vengono mostrati i primi {limit} deployment. Scegli uno stato per vedere gli altri.",
+    "kpi": {
+      "running": "In esecuzione",
+      "queued": "In coda",
+      "failed": "Falliti",
+      "live": "Attivi",
+      "stalled": "Bloccati"
+    },
+    "filter": {
+      "label": "Filtra per stato",
+      "all": "Tutti",
+      "running": "In esecuzione",
+      "queued": "In coda",
+      "failed": "Falliti",
+      "live": "Attivi"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Flusso",
+      "status": "Stato",
+      "step": "Passo",
+      "attempted": "Ultimo tentativo",
+      "updated": "Ultima modifica",
+      "error": "Errore"
+    },
+    "status": {
+      "running": "In esecuzione",
+      "queued": "In coda",
+      "failed": "Fallito",
+      "live": "Attivo"
+    },
+    "steps": {
+      "configuration_update": "Aggiornamento configurazione",
+      "publish_bot": "Pubblicazione del bot"
+    },
+    "stalledBadge": "Bloccato",
+    "version": "Versione {version}",
+    "notStarted": "Non ancora avviato",
+    "failedAt": "Fallito al passo {step}",
+    "noDetail": "Nessun testo di errore è stato salvato.",
+    "empty": {
+      "title": "Niente da mostrare",
+      "all": "Nessun flusso è ancora stato pubblicato sulla console Geta.",
+      "running": "Nessuna pubblicazione è in esecuzione in questo momento.",
+      "queued": "Nulla è in attesa in coda.",
+      "failed": "Nessuna pubblicazione è fallita.",
+      "live": "Nessun flusso è ancora attivo sulla console Geta."
+    },
+    "tabs": {
+      "label": "Scegli cosa mostrare",
+      "publishes": "Pubblicazioni dei flussi",
+      "geta": "Console Geta",
+      "releases": "Release del prodotto"
+    },
+    "publishes": {
+      "description": "Ogni pubblicazione di un flusso: cosa il worker ha messo in coda, cosa sta gestendo ora e quali pubblicazioni sono fallite e perché. Si aggiorna ogni pochi secondi.",
+      "stalledAlert": "{count} pubblicazione/i di flussi non avanza/no da {minutes} minuti. Il worker potrebbe aver smesso di svuotare la coda.",
+      "truncated": "Vengono mostrate le prime {limit} pubblicazioni. Scegli uno stato per vedere le altre.",
+      "notProcessed": "Non ancora",
+      "cols": {
+        "attempts": "Tentativi",
+        "queued": "In coda dal",
+        "finished": "Completato il"
+      },
+      "status": {
+        "done": "Completato"
+      },
+      "empty": {
+        "all": "Nessun flusso è stato ancora pubblicato.",
+        "done": "Nessuna pubblicazione è stata completata negli ultimi 30 giorni."
+      }
+    },
+    "releases": {
+      "description": "Cosa è attivo su desk.wabo.ai: la release corrente, qualsiasi release in corso e ogni tentativo con i suoi passi ed errori. Si aggiorna ogni pochi secondi.",
+      "liveLabel": "Attiva ora",
+      "live": "Release {tag}, attiva dalle {time}",
+      "noneLive": "Nessuna release è ancora andata in linea.",
+      "inProgress": "Una release è in corso",
+      "stalledAlert": "{count} tentativo/i di release non avanzano da {minutes} minuti. La build o la release potrebbero essersi fermate.",
+      "empty": "Nessuna release registrata finora. Le release compariranno qui dal prossimo deploy.",
+      "cols": {
+        "tag": "Tag",
+        "changes": "Modifiche",
+        "state": "Stato",
+        "step": "Passo",
+        "started": "Avvio",
+        "finished": "Fine",
+        "error": "Errore"
+      },
+      "state": {
+        "building": "In build",
+        "shipping": "In invio",
+        "releasing": "In rilascio",
+        "ok": "Attiva",
+        "failed": "Fallita",
+        "rolled_back": "Ripristinata"
+      },
+      "by": "di {author}"
+    }
+  }
+}

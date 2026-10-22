@@ -19,6 +19,9 @@ import {
   STEP_KINDS,
   stageIn,
   stepLabel,
+  stepSummary,
+  incomingStages,
+  stepText,
   removeStep,
   stageLabel,
   LINK_END,
@@ -328,6 +331,24 @@ describe('checks', () => {
     ]);
   });
 
+  it('asks for a header file when the chosen template has a picture header with no file of its own', () => {
+    const templates = [
+      { name: 'promo', attachmentType: 'image', attachmentFile: 'meta-handle-123' },
+      { name: 'sample', attachmentType: 'IMAGE', attachmentFile: 'https://cdn.example/a.png' },
+      { name: 'plain', attachmentType: null, attachmentFile: null },
+    ];
+    const run = (data: Record<string, unknown>) => {
+      let d = emptyDoc();
+      d = insertStep(d, 0, 0, { ...newStep('template', []), data });
+      d.trigger.data.keywords = 'hi';
+      return problems(d, { senderRequired: false, templates }).map((p) => en(p.message));
+    };
+    expect(run({ tpl: 'promo' })).toEqual(["Step 1.1: add the template's header file."]);
+    expect(run({ tpl: 'promo', tplMedia: 'https://a.b/c.png' })).toEqual([]);
+    expect(run({ tpl: 'sample' })).toEqual([]);
+    expect(run({ tpl: 'plain' })).toEqual([]);
+  });
+
   it('flags a Location step until it has real coordinates, and keeps a saved one valid', () => {
     const run = (data: Record<string, unknown>) => {
       let d = emptyDoc();
@@ -414,7 +435,7 @@ describe('questions that check the answer', () => {
     expect(en(stepLabel(newStep('message', [])))).toBe('Message');
   });
 
-  it('the menu has an entry for every step type and one per question check', () => {
+  it('the menu has an entry for every step type and one Question (its answer type is chosen inside the step)', () => {
     const keys = STEP_KINDS.map((k) => k.key);
     expect(new Set(keys).size).toBe(keys.length);
     for (const t of ['message', 'media', 'buttons', 'list', 'ask_file', 'ask_location', 'delay']) {
@@ -423,15 +444,7 @@ describe('questions that check the answer', () => {
         t,
       ).toBe(true);
     }
-    expect(STEP_KINDS.filter((k) => k.type === 'ask').map((k) => k.preset)).toEqual([
-      'text',
-      'name',
-      'email',
-      'phone',
-      'number',
-      'alphanumeric',
-      'date',
-    ]);
+    expect(STEP_KINDS.filter((k) => k.type === 'ask').map((k) => k.preset)).toEqual(['text']);
   });
 
   it('a file and a location question continue into the next step like a message does', () => {
@@ -597,8 +610,7 @@ describe('the Answer from FAQ step in the Simple builder', () => {
         node('t', 'trigger'),
         node('f', 'faq', {
           query: '{{user_message}}',
-          category: 'Billing',
-          minScore: 0.6,
+          assistant: 'agent-1',
           sendAnswer: true,
           save: 'faq',
         }),
@@ -614,10 +626,10 @@ describe('the Answer from FAQ step in the Simple builder', () => {
       [edge('t', 'out', 'f'), edge('f', 'matched', 'yes'), edge('f', 'no_match', 'no')],
     );
 
-  it('is a step of the menu, in its own Answer group', () => {
-    const kind = STEP_KINDS.find((k) => k.type === 'faq')!;
-    expect(kind.group).toBe('answer');
-    expect(en(kind.label)).toBe('Answer from FAQ');
+  it('is a step of the menu on a chat flow, and has its name on the card', () => {
+    expect(STEP_KINDS.some((k) => k.type === 'faq')).toBe(true);
+    expect(stepKindsFor('chat').some((k) => k.type === 'faq')).toBe(true);
+    expect(stepKindsFor('web').some((k) => k.type === 'faq')).toBe(false);
     expect(en(stepLabel({ type: 'faq', data: {} }))).toBe('Answer from FAQ');
   });
 
@@ -627,13 +639,13 @@ describe('the Answer from FAQ step in the Simple builder', () => {
     const step = allSteps(r.doc).find((s) => s.id === 'f')!;
     expect(step.type).toBe('faq');
     expect(step.links).toEqual(['yes', 'no']);
-    expect(step.data).toMatchObject({ category: 'Billing', minScore: 0.6, save: 'faq' });
+    expect(step.data).toMatchObject({ assistant: 'agent-1', save: 'faq' });
     const back = toGraph(r.doc);
     expect(back.flowEdges.map((e) => `${e.source}.${e.sourceHandle}>${e.target}`).sort()).toEqual(
       ['f.matched>yes', 'f.no_match>no', 't.out>f'].sort(),
     );
     expect(toSimple(back).ok).toBe(true);
-    expect(back.flowNodes.find((n) => n.id === 'f')!.data).toMatchObject({ minScore: 0.6 });
+    expect(back.flowNodes.find((n) => n.id === 'f')!.data).toMatchObject({ assistant: 'agent-1' });
   });
 
   it('an exit that is not wired ends the conversation, and only that one', () => {
@@ -657,8 +669,7 @@ describe('the Answer from FAQ step in the Simple builder', () => {
     const s = newStep('faq', []);
     expect(s.data).toEqual({
       query: '{{user_message}}',
-      category: '',
-      minScore: null,
+      assistant: '',
       sendAnswer: true,
       save: 'faq',
     });
@@ -686,7 +697,7 @@ describe('the Answer from FAQ step in the Simple builder', () => {
     const f = newStep('faq', []);
     d = insertStep(d, 0, 0, f);
     d = updateStep(d, f.id, { links: [target.id, null] });
-    d = updateStep(d, f.id, { data: { category: 'Billing' } });
+    d = updateStep(d, f.id, { data: { assistant: 'agent-1' } });
     expect(allSteps(d).find((s) => s.id === f.id)!.links).toEqual([target.id, null]);
     expect(allSteps(removeStep(d, target.id)).find((s) => s.id === f.id)!.links).toEqual([
       null,
@@ -695,25 +706,6 @@ describe('the Answer from FAQ step in the Simple builder', () => {
     // both exits leading into the other part count as reaching it
     d = updateStep(d, f.id, { links: [null, target.id] });
     expect(unreachable(d)).toEqual([]);
-  });
-
-  it('blocks publishing a minimum score outside 0.05 to 0.99, and nothing else about it', () => {
-    const make = (data: Record<string, unknown>) => {
-      const d = emptyDoc();
-      const f = { ...newStep('faq', []), data: { ...newStep('faq', []).data, ...data } };
-      d.journeys[0]!.steps = [f];
-      // The trigger's own problems (no keyword yet) are not what is under test.
-      return problems(d, { senderRequired: false })
-        .filter((p) => p.stepId !== null)
-        .map((p) => en(p.message));
-    };
-    expect(make({ minScore: 1.4 })).toEqual([
-      "Step 1.1: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
-    ]);
-    expect(make({ minScore: 0.01 })).toHaveLength(1);
-    expect(make({ minScore: 0.5 })).toEqual([]);
-    expect(make({ minScore: null })).toEqual([]);
-    expect(make({ query: '', category: 'x' })).toEqual([]);
   });
 });
 
@@ -732,12 +724,67 @@ describe('steps per channel', () => {
         'delay',
         'cta',
         'webhook',
+        'ai',
       ]),
     );
   });
 
   it('a WhatsApp bot keeps every step except the website-only carousel', () => {
     expect(stepKindsFor('chat')).toEqual(STEP_KINDS.filter((k) => k.type !== 'carousel'));
+  });
+});
+
+describe('which steps lead to a step', () => {
+  it('lists the step before it, a button pointing at it, and a "Then go to" naming it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const choice = newStep('buttons', allSteps(d));
+    d = insertStep(d, 0, 1, choice);
+    const target = newStep('message', allSteps(d));
+    d = addJourney(d, target);
+    d = updateStep(d, choice.id, { data: { options: ['A', 'B'] }, links: [target.id, null] });
+    expect(incomingStages(d, choice.id)).toEqual(['1.1']);
+    expect(incomingStages(d, target.id)).toEqual(['1.2']);
+    expect(incomingStages(d, first.id)).toEqual([]);
+  });
+});
+
+describe('a media step needs a full web link', () => {
+  const run = (url: string) => {
+    let d = emptyDoc();
+    d = insertStep(d, 0, 0, { ...newStep('media', []), data: { kind: 'image', url } });
+    d.trigger.data.keywords = 'hi';
+    return problems(d, { senderRequired: false }).map((p) => en(p.message));
+  };
+
+  it('asks for the link, then for one that starts with http(s)', () => {
+    expect(run('')).toEqual(['Step 1.1: add the file link.']);
+    expect(run('www.site.com/a.png')).toEqual(['Step 1.1: the file link must start with https://']);
+    expect(run('https://cdn.site.com/a.png')).toEqual([]);
+  });
+});
+
+describe('the link button step summary', () => {
+  const summary = (data: Record<string, unknown>) => {
+    const step = { ...newStep('cta', []), data };
+    return stepSummary(step, (key) => key);
+  };
+
+  it('shows the message, not the first button', () => {
+    expect(
+      summary({
+        bodyText: 'Visit our site',
+        actions: [{ type: 'url', label: 'Open', value: 'https://a.b' }],
+      }),
+    ).toBe('Visit our site');
+  });
+
+  it('falls back to the first button when there is no message', () => {
+    expect(
+      summary({ bodyText: '', actions: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }),
+    ).toBe('Open');
   });
 });
 
@@ -800,6 +847,54 @@ describe('the carousel step', () => {
       ['p0', a.id],
       ['p1', b.id],
     ]);
+  });
+
+  it('goes anywhere: a step may follow it, and a reply button can carry on with that step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const c = newStep('carousel', allSteps(d));
+    d = insertStep(d, 0, 1, c);
+    d = updateStep(d, c.id, { data: two() });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 2, after);
+    // Inserted at the end after the carousel: every reply that led nowhere carries on with it.
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', after.id],
+      ['p1', after.id],
+    ]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) {
+      expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([first.id, c.id, after.id]);
+      expect(back.doc.journeys[0]!.steps[1]!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    }
+  });
+
+  it('a carousel with only link buttons carries on by its next wire', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }],
+      },
+    });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 1, after);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([['next', after.id]]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([c.id, after.id]);
   });
 
   it('asks for a card with a title, and for a name and an address on every button', () => {
@@ -1232,5 +1327,88 @@ describe('the AI assistant step: an agent, or a custom setup with a prompt', () 
     const saved = toGraph(back.doc).flowNodes.find((n) => n.id === 'ai1')!;
     expect(saved.data).toMatchObject(old);
     expect(saved.data.agentMode).toBeUndefined();
+  });
+});
+
+describe('the Human handoff returned exit in the Simple builder (Return to bot)', () => {
+  const handoffGraph = () =>
+    graph(
+      [
+        node('t', 'trigger'),
+        node('h', 'assign', { handoff: 2, destination: 'rules', returnMessage: 'I am back' }),
+        node('m', 'message', { text: 'Welcome back', journeyName: 'After' }, 400, 0),
+      ],
+      [edge('t', 'out', 'h'), edge('h', 'returned', 'm')],
+    );
+
+  it('reads the wire as the step the chat returns to and writes the same wire back', () => {
+    const r = toSimple(handoffGraph());
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
+    const step = allSteps(r.doc).find((s) => s.id === 'h')!;
+    expect(step.data.returnTo).toBe('m');
+    expect(step.data.returnMessage).toBe('I am back');
+    // the target is reached through the returned exit, so it is not reported as a step nothing leads to
+    expect(unreachable(r.doc).map((s) => s.id)).toEqual([]);
+    const back = toGraph(r.doc);
+    expect(back.flowEdges.map((e) => `${e.source}.${e.sourceHandle}>${e.target}`).sort()).toEqual(
+      ['h.returned>m', 't.out>h'].sort(),
+    );
+    // returnTo is not stored on the node: the wire is the only copy
+    expect(back.flowNodes.find((n) => n.id === 'h')!.data.returnTo).toBeUndefined();
+    expect(toSimple(back).ok).toBe(true);
+  });
+
+  it('writes no wire for an empty choice, for the step itself, or for a step that is gone', () => {
+    const r = toSimple(handoffGraph());
+    if (!r.ok) throw new Error('not simple');
+    const h = allSteps(r.doc).find((s) => s.id === 'h')!;
+    for (const to of ['', 'h', 'gone']) {
+      h.data.returnTo = to;
+      expect(toGraph(r.doc).flowEdges.some((e) => e.sourceHandle === 'returned')).toBe(false);
+    }
+  });
+
+  it('the other exits of a handoff are still not Simple (they need the Advanced canvas)', () => {
+    const g = handoffGraph();
+    g.flowEdges.push(edge('h', 'waiting', 'm'));
+    expect(toSimple(g)).toMatchObject({ ok: false });
+  });
+});
+
+describe('the closed step card text', () => {
+  const withText = (
+    type: 'message' | 'ask' | 'ask_file' | 'ask_location',
+    data: Record<string, unknown>,
+  ) => ({
+    ...newStep(type, []),
+    data,
+  });
+
+  it('keeps the marks and every line break for the message box to draw', () => {
+    expect(stepText(withText('message', { text: '*Welcome*\n\nHello _there_' }))).toBe(
+      '*Welcome*\n\nHello _there_',
+    );
+    expect(stepText(withText('ask', { prompt: '_Your name?_' }))).toBe('_Your name?_');
+  });
+
+  it('shows the question of an Ask for file / location step, the text the customer is asked', () => {
+    expect(stepText(withText('ask_file', { prompt: 'Send your *ID card*' }))).toBe(
+      'Send your *ID card*',
+    );
+    expect(stepText(withText('ask_location', { prompt: 'Where are you?' }))).toBe('Where are you?');
+    expect(stepSummary(withText('ask_file', { prompt: 'Send your ID' }), (key) => key)).toBe(
+      'Send your ID',
+    );
+  });
+
+  it('gives no text for a step that sends none of its own', () => {
+    expect(stepText(withText('ask', {}))).toBe('');
+    expect(stepText(withText('ask_file', {}))).toBe('');
+    expect(stepText({ ...newStep('webhook', []), data: { url: 'https://x.test/a_b_c' } })).toBe('');
+  });
+
+  it('keeps the one-line summary: lines joined, cut at 40 characters', () => {
+    const s = withText('message', { text: '*Welcome to campaigns for geta.ai* _Hello\nthere_' });
+    expect(stepSummary(s, (key) => key)).toBe('*Welcome to campaigns for geta.ai* _Hell…');
   });
 });

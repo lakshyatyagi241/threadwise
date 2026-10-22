@@ -111,7 +111,7 @@ function harness(script: Array<(now: number) => Scripted>) {
 }
 
 describe('RemoteRunner', () => {
-  it('writes the job with exactly the three values of the run, then returns the stored outcome with the report', async () => {
+  it('writes the job with exactly the values of the run, then returns the stored outcome with the report', async () => {
     const h = harness([
       (now) => ({ status: 'claimed', claimedAt: new Date(now), lastSeenAt: new Date(now) }),
       (now) => ({
@@ -125,12 +125,30 @@ describe('RemoteRunner', () => {
     const seen: PipelineEvent[] = [];
     const out = await h.runner.run(ARGS, async (ev) => void seen.push(ev));
     expect(h.enqueued).toEqual([
-      { uuid: RUN, args: { sourceClient: 'acme', sourceDb: 'Acme_Db', mode: 'dry' } },
+      {
+        uuid: RUN,
+        args: { sourceClient: 'acme', sourceDb: 'Acme_Db', mode: 'dry', skipWhatsapp: false },
+      },
     ]);
     expect(out.exitCode).toBe(0);
     expect(out.timedOut).toBe(false);
     expect(out.report?.green).toBe(true);
     expect(seen.map((e) => e.event)).toEqual(['step', 'report']);
+  });
+
+  it('carries the testing switch into the job: no WhatsApp number', async () => {
+    const h = harness([
+      (now) => ({ status: 'claimed', claimedAt: new Date(now), lastSeenAt: new Date(now) }),
+      (now) => ({
+        status: 'done',
+        events: [report(true)],
+        exitCode: 0,
+        stderrTail: '',
+        lastSeenAt: new Date(now),
+      }),
+    ]);
+    await h.runner.run({ ...ARGS, skipWhatsapp: true }, async () => undefined);
+    expect(h.enqueued[0]!.args).toMatchObject({ skipWhatsapp: true });
   });
 
   it('hands every event over exactly once and in order, however the job grows between polls', async () => {
@@ -258,6 +276,7 @@ describe('RemoteRunner', () => {
         sourceClient: 'acme',
         sourceDb: 'Acme_Db',
         mode: 'dry',
+        skipWhatsapp: false,
         status: 'queued',
       }),
       latestDry: async () => null,
@@ -268,6 +287,7 @@ describe('RemoteRunner', () => {
         sourceClient: 'acme',
         sourceDb: 'Acme_Db',
         mode: 'dry',
+        skipWhatsapp: false,
         status: 'running',
       }),
       saveSteps: async () => undefined,

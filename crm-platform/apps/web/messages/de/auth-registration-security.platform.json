@@ -1404,7 +1404,8 @@
             "packInactive": "Das Add-on-Paket ist ausgeschaltet, daher kann es niemand kaufen.",
             "appUnpublished": "Die App ist nicht veröffentlicht, daher können Workspaces sie noch nicht sehen.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# Add-on ausgewählt} other {# Add-ons ausgewählt}}"
           },
           "featureHints": {
             "automation": "Der Flow-Builder und Automatisierungen, die auf Unterhaltungen antworten und darin handeln.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "White-Label: Der Workspace kann das Plattform-Branding in seiner Fußzeile ausblenden.",
             "sales_pipeline": "Deals, Aufgaben und Pipelines sowie die Pipeline-Kennzahlen im Dashboard.",
             "appointment_booking": "Buchungsarten, Termine und die öffentlichen Buchungsseiten. Die kostenpflichtige App Termine steuert diesen Schalter.",
+            "appointment_confirm_buttons": "Fügt der WhatsApp-Erinnerung vor einem Termin die Schaltflächen Bestätigen, Verschieben und Absagen hinzu.",
+            "appointment_rebook_steps": "Nachfassnachrichten nach einem abgeschlossenen Termin, die die Kontaktperson bitten, erneut zu buchen.",
             "chatbot_widgets": "Der Builder für das Website-Chatbot-Widget.",
             "wa_storefront": "Der Bereich WhatsApp-Katalog und Storefront.",
             "inbox_sla": "SLA-Richtlinien und Fristen im Team-Posteingang.",
-            "inbox_routing": "Routing-Regeln, die Unterhaltungen im Posteingang automatisch zuweisen.",
+            "inbox_routing": "Automatische Zuweisung neuer Chats: Routing-Regeln, Alle anderen und Timer der Warteschlange. Teil des Add-ons Intelligentes Routing.",
             "waba_calling": "WhatsApp-Anrufe aus dem Posteingang: Anrufnummern, Anrufberechtigungen, Anrufe tätigen und annehmen.",
             "inbox_kanban": "Die Kanban-Ansicht des Team-Posteingangs.",
             "team_performance": "Die Berichte zur Teamleistung.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "Ermöglicht es einer privaten WhatsApp-Nummer, beim ersten Verknüpfen den gesamten Chatverlauf zu importieren. Der Import der letzten Chats ist in allen Tarifen mit privaten Nummern enthalten.",
             "ai_crm_copilot": "Findet und bewertet Leads mit KI aus Ihren Kontakten.",
             "lead_scoring": "Bewertet Kontakte mit KI und steuert den Growth-Piloten. Die App KI-Lead-Scoring besitzt diesen Schalter.",
-            "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu."
+            "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu.",
+            "team_hierarchy": "Übergeordnete Teams, Teamleiter und Manager, die ihr Team und die darunterliegenden Teams sehen.",
+            "custom_roles": "Rollen erstellen und bearbeiten und für jede Berechtigung einen Bereich wählen (eigene, Team oder alle Datensätze).",
+            "inbox_assignment_sticky": "Zuweisung mit Inhaber zuerst und Synchronisierung, Zeitfenster für wiederkehrende Kontakte und Rückfrage bei Neuzuweisung. Teil des Add-ons Intelligentes Routing."
           },
           "units": {
             "days": "Tage",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "SMS pro Monat",
             "email_mailboxes": "E-Mail-Postfächer",
             "email_monthly": "E-Mails pro Monat",
-            "storage_gb": "Speicher (GB)"
+            "storage_gb": "Speicher (GB)",
+            "teams": "Teams"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1605,10 +1612,12 @@
             "remove_branding": "White-Label (entfernt Plattform-Branding)",
             "sales_pipeline": "Vertriebspipeline (Deals und Aufgaben)",
             "appointment_booking": "Termine und Buchungsseiten",
+            "appointment_confirm_buttons": "Erinnerungs-Schaltflächen: Bestätigen, Verschieben und Absagen",
+            "appointment_rebook_steps": "Schritte zur erneuten Buchung (Reaktivierung) nach einem Termin",
             "chatbot_widgets": "Website-Chatbot-Widgets",
             "wa_storefront": "WhatsApp-Storefront und Katalog",
             "inbox_sla": "Posteingangs-SLA-Richtlinien",
-            "inbox_routing": "Posteingangs-Routing-Regeln und Geschäftszeiten",
+            "inbox_routing": "Intelligentes Routing: automatische Zuweisung und Regeln",
             "waba_calling": "WhatsApp-Anrufe aus dem Posteingang tätigen und annehmen",
             "inbox_kanban": "Posteingangs-Kanban-Board",
             "team_performance": "Berichte zur Teamleistung",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "Vollständiger Chatverlauf-Import (privates WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "KI-Lead-Scoring",
-            "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)"
+            "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)",
+            "team_hierarchy": "Teamhierarchie und Manager",
+            "custom_roles": "Eigene Rollen und Bereiche",
+            "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
             "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
             "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
-            "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert."
+            "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert.",
+            "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "Vertriebs-CRM",
+            "platform": "Von beiden genutzt"
+          },
+          "marketplace": {
+            "title": "Marketplace-Apps, die Workspaces in diesem Tarif angeboten werden"
+          },
+          "included": {
+            "title": "In diesem Tarif enthaltene Add-ons",
+            "intro": "Schalten Sie ein Add-on ein, um es einzuschließen: Workspaces in diesem Tarif erhalten es ohne Aufpreis, und die Add-on-Karte zeigt „In Ihrem Tarif enthalten“. Dadurch werden genau die Funktionen des Add-ons im Tab „Funktionen“ aktiviert, und wenn Sie sie dort aktivieren, springt der Schalter um. Nicht enthaltene Add-ons werden weiterhin zum eigenen Preis an jeden Workspace mit aktivem kostenpflichtigem Tarif verkauft.",
+            "readOnly": "Sie können diesen Tarif ansehen, aber nicht ändern, daher sind diese Schalter gesperrt.",
+            "loading": "Add-ons werden geladen",
+            "loadFailed": "Die Add-ons konnten nicht geladen werden. Es wurde nichts geändert.",
+            "empty": "Es gibt noch keine Add-ons",
+            "emptyHint": "Add-ons wie Intelligentes Routing und Teams und Berechtigungen werden in der Operator-Konsole unter „Add-ons“ erstellt.",
+            "stateFull": "Enthalten",
+            "statePartial": "Teilweise enthalten",
+            "stateNone": "Nicht enthalten",
+            "noPrice": "Kein Preis festgelegt",
+            "gives": "Bietet: {features}",
+            "switchLabel": "{name} in diesen Tarif aufnehmen",
+            "noFeatures": "Dieses Add-on erweitert nur Limits, daher gibt es keine Funktion zum Einschließen. Seine Limits gehören nicht zur Aufnahme in den Tarif; die eigenen Limits des Tarifs legen Sie im Tab „Limits“ fest.",
+            "partial": "Teilweise enthalten: {count} von {total} Funktionen sind in diesem Tarif aktiv. Noch aus: {missing}.",
+            "includeFully": "Vollständig aufnehmen",
+            "limitsNote": "Dieses Add-on erweitert auch Limits ({limits}). Das zusätzliche Limit gehört nicht zur Aufnahme in den Tarif und wird hier nicht geändert: Das eigene Limit des Tarifs legen Sie im Tab „Limits“ fest. Workspaces kaufen das Add-on weiterhin für das zusätzliche Limit.",
+            "unlistedNote": "Einige seiner Funktionen ({features}) stehen nicht in der Standardliste der Add-ons. Sie lassen sich trotzdem für den Tarif aktivieren; nur der Kauf dieses Add-ons als Paket funktioniert anders.",
+            "inactiveNote": "Dieses Add-on ist ein Entwurf oder ausgeschaltet, daher kann es noch niemand kaufen. Es in den Tarif aufzunehmen funktioniert trotzdem.",
+            "impactCount": "{count, plural, one {# Workspace bezahlt bereits für dieses Add-on.} other {# Workspaces bezahlen bereits für dieses Add-on.}} Die Verlängerung endet zum Ende der aktuellen Laufzeit, es wird nichts erstattet und heute wird nichts gekündigt.",
+            "impactUnknown": "Workspaces in diesem Tarif, die bereits für dieses Add-on bezahlen, verlängern es zum Ende ihrer aktuellen Laufzeit nicht mehr. Es wird nichts erstattet und heute wird nichts gekündigt. Die Zahl konnte nicht geladen werden.",
+            "offNote": "Ausgeschaltet: Workspaces in diesem Tarif verlieren diese Funktionen, sofern sie das Add-on nicht kaufen, und es wird für sie zum Preis kaufbar."
           }
         }
       },

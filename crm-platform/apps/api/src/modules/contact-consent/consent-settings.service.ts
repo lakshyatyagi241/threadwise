@@ -18,11 +18,17 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ConsentRepository, type SettingsRow } from './consent.repository';
+import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('consent_settings');
 
 const MODULE_KEY = 'contact_consent_settings';
 
 /** How long a process keeps a workspace's compiled keyword set. A save invalidates the saving process at once; others within this time. */
 export const CONSENT_CACHE_MS = 60_000;
+/** At most this many workspaces are remembered per process; the oldest goes first. */
+export const CONSENT_SETTINGS_CACHE_MAX = 2_000;
 
 export interface EffectiveConsentSettings extends ConsentSettingsValues {
   compiled: CompiledKeywords;
@@ -66,7 +72,11 @@ export class ConsentSettingsService {
   /** For the listener and the send paths: cached, no query for a hot message. Works with or without a request context. */
   async effective(orgId: number): Promise<EffectiveConsentSettings> {
     const hit = this.cache.get(orgId);
-    if (hit && Date.now() - hit.at < CONSENT_CACHE_MS) return hit.v;
+    if (hit && Date.now() - hit.at < CONSENT_CACHE_MS) {
+      cache.hit();
+      return hit.v;
+    }
+    cache.miss();
     const row = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.getSettings(tx, orgId),
     );
@@ -78,7 +88,7 @@ export class ConsentSettingsService {
         optIn: values.optInKeywords,
       }),
     };
-    this.cache.set(orgId, { at: Date.now(), v });
+    setCapped(this.cache, orgId, { at: Date.now(), v }, CONSENT_SETTINGS_CACHE_MAX);
     return v;
   }
 

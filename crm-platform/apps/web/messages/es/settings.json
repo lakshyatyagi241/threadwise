@@ -65,6 +65,11 @@
         "description": "Conecta tu número de WhatsApp Business para chatear con tus clientes.",
         "keywords": "wa, whatsapp business, cloud api, número, qr"
       },
+      "whatsapp-profile": {
+        "label": "Perfil de empresa de WhatsApp",
+        "description": "Tu logotipo, la descripción, los datos de contacto y la información de cumplimiento que pide Meta.",
+        "keywords": "perfil de empresa, logotipo, foto de perfil, acerca de, contacto, cumplimiento, nombre legal, atención al cliente, responsable de reclamaciones"
+      },
       "unofficial-whatsapp": {
         "label": "API no oficial de WhatsApp",
         "description": "Vincula un número personal de WhatsApp con código QR y prepáralo para enviar de forma segura.",
@@ -101,7 +106,7 @@
         "keywords": "mensaje de texto, id de remitente, dlt, twilio, móvil"
       },
       "email": {
-        "label": "Correo electrónico",
+        "label": "Correo de soporte",
         "description": "Conecta buzones de Gmail o Google Workspace para que tu equipo lea y responda los correos de clientes en la bandeja compartida.",
         "keywords": "buzón, gmail, google workspace, bandeja compartida, correo de soporte, outlook, imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "Equipos",
-        "description": "Agrupa personas en equipos para el enrutamiento y los informes.",
-        "keywords": "grupos, departamentos, asignación, enrutamiento"
+        "description": "Agrupa personas para conversaciones, asignaciones e informes.",
+        "keywords": "grupos, departamentos, responsables, jerarquía, asignación, enrutamiento"
       },
       "ai-keys": {
         "label": "Claves de proveedores de IA",
@@ -341,7 +346,7 @@
         "keywords": "consentimiento, baja, alta, cancelar suscripción, stop, start, rgpd, cumplimiento, privacidad, marketing"
       },
       "inbox-tags": {
-        "label": "Etiquetas de conversación",
+        "label": "Etiquetas",
         "description": "Crea las etiquetas que tu equipo pone en las conversaciones y con las que filtra la bandeja. Son las mismas etiquetas que se usan en los contactos.",
         "keywords": "tags, etiquetas, etiquetas de conversación, categorías, organizar, filtrar"
       },
@@ -354,11 +359,6 @@
         "label": "Objetivos de respuesta (SLA)",
         "description": "Define qué tan rápido debe responder y resolver tu equipo, y recibe avisos cuando una conversación incumple su objetivo.",
         "keywords": "sla, tiempo de respuesta, primera respuesta, resolución, incumplimiento, objetivos, horario laboral"
-      },
-      "team-performance": {
-        "label": "Rendimiento del equipo",
-        "description": "Mira qué tan rápido respondió y resolvió cada agente hoy, esta semana o este mes.",
-        "keywords": "informes, analítica, agentes, tiempo de respuesta, primera respuesta, resueltas, carga, rendimiento"
       },
       "privacy-requests": {
         "label": "Solicitudes de datos",
@@ -394,6 +394,11 @@
         "label": "Leads duplicados",
         "description": "Elige si un lead nuevo que coincide con un contacto se fusiona con él o se convierte en un contacto nuevo.",
         "keywords": "duplicado, fusionar, lead, mismo teléfono, mismo correo, contacto nuevo, fuente de leads"
+      },
+      "sales-activities": {
+        "label": "Actividades de ventas",
+        "description": "Gestione tareas, reuniones, llamadas y actividades propias: qué puede hacer cada una, sus tipos de tarea y sus resultados.",
+        "keywords": "actividades, tipos de tarea, resultados, resultado de reunión, resultado de llamada, seguimiento, registro de entrada, actividad personalizada, calendario, completar"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

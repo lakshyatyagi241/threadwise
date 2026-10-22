@@ -1,22 +1,32 @@
-import { PLAN_FEATURE_KEYS, PLAN_LIMIT_KEYS, type PlanAdminItem } from '@crm/contracts';
+import {
+  NEW_PLAN_FEATURES_OFF,
+  PLAN_FEATURE_KEYS,
+  PLAN_LIMIT_KEYS,
+  type PlanAdminItem,
+} from '@crm/contracts';
 import { createPlanRequestSchema } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
   buildPlanRequest,
+  addonsSelectedCount,
   clearAddons,
   countFeaturesOn,
   countLimitsSet,
+  includedPackCount,
   isPlanDraftDirty,
   limitIsUnlimited,
   newPlanDraft,
+  packCoverage,
   planFieldForPath,
   planToDraft,
   problemsFromServer,
   selectAddons,
   setLimitUnlimited,
+  setPackIncluded,
   toggleAddon,
   toggleFeatures,
   unknownAddonId,
+  unlistedPackFeatures,
   withToggle,
   type PlanDraft,
 } from './plan-draft';
@@ -88,6 +98,7 @@ const stored: PlanAdminItem = {
     email_mailboxes: 0,
     email_monthly: 0,
     storage_gb: 0,
+    teams: 1_000_000,
   },
   features: {
     automation: true,
@@ -99,10 +110,13 @@ const stored: PlanAdminItem = {
     remove_branding: false,
     sales_pipeline: true,
     appointment_booking: true,
+    appointment_confirm_buttons: true,
+    appointment_rebook_steps: true,
     chatbot_widgets: false,
     wa_storefront: false,
     inbox_sla: false,
     inbox_routing: true,
+    inbox_assignment_sticky: true,
     waba_calling: true,
     inbox_kanban: true,
     team_performance: true,
@@ -126,6 +140,8 @@ const stored: PlanAdminItem = {
     ai_crm_copilot: false,
     lead_scoring: false,
     record_assignment: false,
+    team_hierarchy: true,
+    custom_roles: true,
   },
   moduleFeatures: {},
   moduleLimits: {},
@@ -137,10 +153,20 @@ const stored: PlanAdminItem = {
 };
 
 describe('newPlanDraft', () => {
-  it("starts the way Reference's wizard does: active, every feature on, every limit blank", () => {
+  it("starts the way Reference's wizard does (active, every limit blank, features on) except the Smart routing and reminder upgrade flags, which start off", () => {
     const d = newPlanDraft();
     expect(d.isActive).toBe(true);
-    expect(Object.values(d.features).every(Boolean)).toBe(true);
+    expect(
+      Object.entries(d.features)
+        .filter(([, on]) => !on)
+        .map(([k]) => k)
+        .sort(),
+    ).toEqual([
+      'appointment_confirm_buttons',
+      'appointment_rebook_steps',
+      'inbox_assignment_sticky',
+      'inbox_routing',
+    ]);
     expect(Object.keys(d.features).sort()).toEqual([...PLAN_FEATURE_KEYS].sort());
     expect(Object.values(d.limits).every((v) => v === '')).toBe(true);
     expect(Object.keys(d.limits).sort()).toEqual([...PLAN_LIMIT_KEYS].sort());
@@ -379,7 +405,9 @@ describe('limits: unlimited <-> 0', () => {
 
 describe('features: counts and group toggles', () => {
   it('counts the features that are on', () => {
-    expect(countFeaturesOn(newPlanDraft().features)).toBe(PLAN_FEATURE_KEYS.length);
+    expect(countFeaturesOn(newPlanDraft().features)).toBe(
+      PLAN_FEATURE_KEYS.length - NEW_PLAN_FEATURES_OFF.length,
+    );
     const off = toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
     expect(countFeaturesOn(off)).toBe(0);
   });
@@ -512,5 +540,183 @@ describe('module-contributed plan keys (TW-ADD-013)', () => {
     expect(
       buildPlanRequest({ ...d, limits: { ...d.limits, x_cap: 'abc' } }).problems,
     ).toHaveProperty(['limits.x_cap']);
+  });
+});
+
+describe('the teams cap (0 is solo, blank is unlimited)', () => {
+  const withTeams = (n: number) => ({ ...stored, limits: { ...stored.limits, teams: n } });
+
+  it('shows the unlimited stand-in as blank and a real 0 as 0', () => {
+    expect(planToDraft(withTeams(1_000_000)).limits.teams).toBe('');
+    expect(planToDraft(withTeams(0)).limits.teams).toBe('0');
+    expect(planToDraft(withTeams(5)).limits.teams).toBe('5');
+  });
+
+  it('saves blank as unlimited, 0 as solo and a number as itself; other caps keep blank = 0', () => {
+    const d = planToDraft(stored);
+    expect(
+      buildPlanRequest({ ...d, limits: { ...d.limits, teams: '' } }).body?.limits,
+    ).toMatchObject({
+      teams: 1_000_000,
+      users: 0,
+    });
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '0' } }).body?.limits.teams).toBe(
+      0,
+    );
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '7' } }).body?.limits.teams).toBe(
+      7,
+    );
+  });
+
+  it('only a blank teams box counts as unlimited; a typed 0 is a cap', () => {
+    expect(limitIsUnlimited('', 'teams')).toBe(true);
+    expect(limitIsUnlimited('0', 'teams')).toBe(false);
+    expect(limitIsUnlimited('0', 'users')).toBe(true);
+    expect(countLimitsSet({ teams: '0', users: '' }, ['teams', 'users'])).toBe(1);
+  });
+});
+
+describe('plain add-on packs included in the plan (derived from the features)', () => {
+  const SMART = { grants: { features: ['inbox_routing', 'inbox_assignment_sticky'], limits: {} } };
+  const TEAMS = {
+    grants: { features: ['team_hierarchy', 'custom_roles'], limits: { teams: 10 } },
+  };
+  const LIMITS_ONLY = { grants: { features: [], limits: { teams: 5 } } };
+  const OUTSIDE = { grants: { features: ['inbox_routing', 'some_module_flag'], limits: {} } };
+  const allOff = () => toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
+
+  it('reads none / partial / full from the plan features', () => {
+    const none = packCoverage(SMART, allOff());
+    expect(none).toEqual({
+      state: 'none',
+      on: 0,
+      total: 2,
+      missing: ['inbox_routing', 'inbox_assignment_sticky'],
+    });
+    const part = packCoverage(SMART, { ...allOff(), inbox_routing: true });
+    expect(part.state).toBe('partial');
+    expect(part.missing).toEqual(['inbox_assignment_sticky']);
+    expect(
+      packCoverage(SMART, { ...allOff(), inbox_routing: true, inbox_assignment_sticky: true })
+        .state,
+    ).toBe('full');
+  });
+
+  it('a new plan starts without Smart routing (NEW_PLAN_FEATURES_OFF), so the pack starts as none', () => {
+    expect(packCoverage(SMART, newPlanDraft().features).state).toBe('none');
+    for (const k of NEW_PLAN_FEATURES_OFF) expect(newPlanDraft().features[k]).toBe(false);
+  });
+
+  it('a pack with no feature keys (limits only) has nothing to include and is never changed', () => {
+    expect(packCoverage(LIMITS_ONLY, newPlanDraft().features).state).toBe('noFeatures');
+    const d = filled();
+    expect(setPackIncluded(d, LIMITS_ONLY, true)).toBe(d);
+    expect(setPackIncluded(d, LIMITS_ONLY, false)).toBe(d);
+  });
+
+  it('switching on ticks exactly the pack keys; the Features tab flips the state both ways', () => {
+    const d = { ...filled(), features: allOff() };
+    const on = setPackIncluded(d, SMART, true);
+    expect(on.features.inbox_routing).toBe(true);
+    expect(on.features.inbox_assignment_sticky).toBe(true);
+    expect(countFeaturesOn(on.features)).toBe(2);
+    expect(packCoverage(SMART, on.features).state).toBe('full');
+    // one key ticked away on the Features tab makes the pack partial, ticking it back makes it full again
+    const featuresTab = { ...on.features, inbox_routing: false };
+    expect(packCoverage(SMART, featuresTab).state).toBe('partial');
+    expect(packCoverage(SMART, { ...featuresTab, inbox_routing: true }).state).toBe('full');
+    // both keys ticked on the Features tab (no switch involved) read as included
+    expect(
+      packCoverage(
+        SMART,
+        toggleFeatures(allOff(), ['inbox_routing', 'inbox_assignment_sticky'], true),
+      ).state,
+    ).toBe('full');
+  });
+
+  it('"include fully" on a partly covered pack completes it without touching other features', () => {
+    const d = { ...filled(), features: { ...allOff(), inbox_routing: true, sales_pipeline: true } };
+    const done = setPackIncluded(d, SMART, true);
+    expect(packCoverage(SMART, done.features).state).toBe('full');
+    expect(done.features.sales_pipeline).toBe(true);
+    expect(countFeaturesOn(done.features)).toBe(3);
+  });
+
+  it('switching off writes false explicitly (it does not restore a previous value and does not delete the key)', () => {
+    const d = { ...filled(), features: { ...allOff(), inbox_routing: true } };
+    const on = setPackIncluded(d, SMART, true);
+    const off = setPackIncluded(on, SMART, false);
+    expect(off.features.inbox_routing).toBe(false);
+    expect(off.features.inbox_assignment_sticky).toBe(false);
+    expect('inbox_routing' in off.features).toBe(true);
+    expect(packCoverage(SMART, off.features).state).toBe('none');
+  });
+
+  it('a pack with limits: only its features move; the limit values are left exactly as they are', () => {
+    const d = filled({ limits: { ...newPlanDraft().limits, teams: '7' } });
+    const on = setPackIncluded(d, TEAMS, true);
+    expect(on.features.team_hierarchy).toBe(true);
+    expect(on.features.custom_roles).toBe(true);
+    expect(on.limits).toEqual(d.limits);
+    expect(setPackIncluded(on, TEAMS, false).limits).toEqual(d.limits);
+  });
+
+  it('does not touch the Marketplace selection or the rest of the draft', () => {
+    const d = filled({ visibleAddons: ['a', 'b'] });
+    const on = setPackIncluded(d, SMART, true);
+    expect(on.visibleAddons).toEqual(['a', 'b']);
+    expect({ ...on, features: d.features }).toEqual(d);
+  });
+
+  it('keys outside the catalogue can be ticked on the plan and are stored as module features', () => {
+    expect(unlistedPackFeatures(OUTSIDE)).toEqual(['some_module_flag']);
+    expect(unlistedPackFeatures(SMART)).toEqual([]);
+    const on = setPackIncluded(filled(), OUTSIDE, true);
+    expect(packCoverage(OUTSIDE, on.features).state).toBe('full');
+    const body = buildPlanRequest(on).body!;
+    expect(body.moduleFeatures.some_module_flag).toBe(true);
+    expect(body.features.inbox_routing).toBe(true);
+    const off = buildPlanRequest(setPackIncluded(on, OUTSIDE, false)).body!;
+    expect(off.moduleFeatures.some_module_flag).toBe(false);
+  });
+
+  it('a plan saved from the editor stores every feature key explicitly, on and off', () => {
+    const off = buildPlanRequest(setPackIncluded(filled(), SMART, false)).body!;
+    for (const k of PLAN_FEATURE_KEYS) expect(typeof off.features[k]).toBe('boolean');
+    expect(off.features.inbox_routing).toBe(false);
+    const on = buildPlanRequest(setPackIncluded(filled(), SMART, true)).body!;
+    for (const k of PLAN_FEATURE_KEYS) expect(typeof on.features[k]).toBe('boolean');
+    expect(on.features.inbox_routing).toBe(true);
+    expect(on.features.inbox_assignment_sticky).toBe(true);
+  });
+
+  it('editing a plan that already has the keys on: the pack reads full and a save keeps them on', () => {
+    const plan = planToDraft({
+      ...stored,
+      features: { ...stored.features, inbox_routing: true, inbox_assignment_sticky: true },
+    });
+    expect(packCoverage(SMART, plan.features).state).toBe('full');
+    expect(buildPlanRequest(plan).body!.features.inbox_routing).toBe(true);
+  });
+
+  it('counts fully included packs plus the Marketplace apps offered (a partly covered pack is not counted)', () => {
+    const features = {
+      ...allOff(),
+      inbox_routing: true,
+      inbox_assignment_sticky: true,
+      team_hierarchy: true,
+    };
+    expect(includedPackCount([SMART, TEAMS, LIMITS_ONLY], features)).toBe(1);
+    expect(
+      addonsSelectedCount({ features, visibleAddons: ['a', 'b'] }, [SMART, TEAMS, LIMITS_ONLY]),
+    ).toBe(3);
+    expect(addonsSelectedCount({ features: allOff(), visibleAddons: [] }, [])).toBe(0);
+  });
+
+  it('the draft is dirty after a switch and clean again after it is put back', () => {
+    const initial = { ...filled(), features: allOff() };
+    const on = setPackIncluded(initial, SMART, true);
+    expect(isPlanDraftDirty(initial, on)).toBe(true);
+    expect(isPlanDraftDirty(initial, setPackIncluded(on, SMART, false))).toBe(false);
   });
 });

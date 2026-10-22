@@ -13,7 +13,11 @@ import {
   type VerifyCodeInput,
   type SetTokenInput,
   type UpdateBusinessProfileInput,
+  type UpdateComplianceInfoInput,
   type VerifyTokenInput,
+  type WabaComplianceInfo,
+  WABA_LOGO_MAX_BYTES,
+  WABA_LOGO_TYPES,
   type VerifyTokenResult,
   type WabaBusinessProfile,
   type WabaConnection as WabaConnectionDto,
@@ -29,6 +33,7 @@ import { WABA_ENV, type WabaEnv } from '../../config/domains/whatsapp-cloud-api-
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { UploadPolicyService } from '../auth';
 import {
   WABA_ADMIN,
   type PhoneInfo,
@@ -48,6 +53,7 @@ import {
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { toDto } from './waba-connections.mapper';
+import { toComplianceDto, toComplianceRecord } from './waba-compliance.mapper';
 import { PinnacleOnboardingService } from './pinnacle-onboarding.service';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConnectionsRepository, type WabaRow } from './waba-connections.repository';
@@ -133,6 +139,7 @@ export class WabaConnectService {
     private readonly routes: WabaRegistryRoutes,
     private readonly providers: WhatsAppProviderResolver,
     private readonly pinnacleOnboarding: PinnacleOnboardingService,
+    private readonly uploads: UploadPolicyService,
   ) {}
 
   // --- reading -----------------------------------------------------------------------------------------------------
@@ -861,6 +868,87 @@ export class WabaConnectService {
       }),
     );
     return this.admin.getBusinessProfile(conn);
+  }
+
+  /** The profile picture: checked like the template header samples, then Meta's resumable upload, then the profile's handle. */
+  async uploadLogo(
+    uuid: string,
+    file: { originalname: string; buffer: Buffer } | undefined,
+  ): Promise<WabaBusinessProfile> {
+    if (!file)
+      throw AppError.validation('Choose a picture to upload', [
+        { path: 'file', message: 'Required.' },
+      ]);
+    const checked = await this.uploads.validateScanned({
+      filename: file.originalname,
+      buffer: file.buffer,
+      allow: ['image'],
+      maxBytes: WABA_LOGO_MAX_BYTES,
+    });
+    if (!(WABA_LOGO_TYPES as readonly string[]).includes(checked.mime))
+      throw AppError.validation('Meta takes a JPG or PNG picture for the profile', [
+        { path: 'file', message: 'File type not supported.' },
+      ]);
+    const row = await this.require(uuid);
+    const conn = this.connOf(row);
+    const handle = await this.meta('Could not upload the profile picture', () =>
+      this.admin.uploadProfilePicture(conn, {
+        bytes: file.buffer,
+        fileName: file.originalname,
+        mimeType: checked.mime,
+      }),
+    );
+    await this.meta('Could not update the business profile', () =>
+      this.admin.updateBusinessProfile(conn, { profilePictureHandle: handle }),
+    );
+    await this.db.tx((tx) =>
+      this.audit.record(tx, {
+        module: MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta: { business_profile: { old: null, new: ['profile_picture'] } },
+      }),
+    );
+    return this.meta('Could not read the business profile', () =>
+      this.admin.getBusinessProfile(conn),
+    );
+  }
+
+  /** Meta's compliance record for the number (India). A number whose provider has none reads as an empty form. */
+  async getCompliance(uuid: string): Promise<WabaComplianceInfo> {
+    const conn = this.connOf(await this.require(uuid));
+    return toComplianceDto(
+      await this.meta('Could not read the compliance information', () =>
+        this.admin.getBusinessComplianceInfo(conn),
+      ),
+    );
+  }
+
+  /** Saves the whole compliance form in one call, then reads it back as Meta holds it. */
+  async updateCompliance(
+    uuid: string,
+    input: UpdateComplianceInfoInput,
+  ): Promise<WabaComplianceInfo> {
+    const row = await this.require(uuid);
+    const conn = this.connOf(row);
+    const sent = toComplianceRecord(input);
+    await this.meta('Could not update the compliance information', () =>
+      this.admin.updateBusinessComplianceInfo(conn, sent),
+    );
+    await this.db.tx((tx) =>
+      this.audit.record(tx, {
+        module: MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta: { business_compliance: { old: null, new: Object.keys(input) } },
+      }),
+    );
+    // Meta has taken the record. A failed read-back shows what was sent, not a failed save.
+    const stored = await this.admin.getBusinessComplianceInfo(conn).catch((e: unknown) => {
+      this.logger.warn({ id: row.uuid, err: asApiError(e).message }, 'compliance read-back failed');
+      return sent;
+    });
+    return toComplianceDto(stored);
   }
 
   /**

@@ -192,6 +192,25 @@ describe('editing a saved template', () => {
     expect(p.footer).toBe('Bye');
     expect(p.buttons).toEqual([{ kind: 'url', text: 'Shop' }]);
   });
+
+  it('shows the stored header file when Meta kept no sample URL', () => {
+    const stored = {
+      ...detail,
+      headerSampleUrl: null,
+      headerMediaUrl: 'https://cdn.test/stored.png',
+    } as unknown as TemplateDetail;
+    const s = stateFromDetail(stored);
+    expect(s.headerPreviewUrl).toBe('https://cdn.test/stored.png');
+    expect(previewOf(s).headerImageUrl).toBe('https://cdn.test/stored.png');
+    // Nothing new was uploaded, so the save sends no key and the server keeps the stored file.
+    expect(toUpdateInput(s, 2, false).headerMediaKey).toBeNull();
+  });
+
+  it('sends the key of a fresh upload so the file is kept with the template', () => {
+    const key = 'template-media/7/1700000000_ab.png';
+    const s = filled({ headerKind: 'image', headerHandle: '4::abc', headerMediaKey: key });
+    expect(toUpdateInput(s, 2, false).headerMediaKey).toBe(key);
+  });
 });
 
 describe('location header', () => {

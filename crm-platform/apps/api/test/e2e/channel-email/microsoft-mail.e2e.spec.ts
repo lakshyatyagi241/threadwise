@@ -13,6 +13,7 @@ import type { Tenant } from '../contacts-attributes-tags/support';
 import { STATE_KEY, WEB, mailWorkspace, outcomeOf } from './support';
 import { deriveStateKey, newState, signState } from '../../../src/modules/channel-email/mail-state';
 import { FakeGraph, MS_SCOPES, type GraphAccount } from './fake-graph';
+import { pngOfSize } from '../../support/images';
 
 /**
  * Microsoft 365 / Outlook through Microsoft Graph (TW-MAIL-034), end to end: the OAuth connect round trip, the Inbox delta sync with its quiet
@@ -438,10 +439,7 @@ describe('TW-MAIL-034: live mail', () => {
         {
           name: 'logo.png',
           mime: 'image/png',
-          data: Buffer.from(
-            '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da63f8ffff3f0005fe02fea7d6050000000049454e44ae426082',
-            'hex',
-          ),
+          data: pngOfSize(),
           contentId: 'logo1',
           inline: true,
         },
@@ -486,7 +484,7 @@ describe('TW-MAIL-034: live mail', () => {
         {
           name: 'pic.png',
           mime: 'image/png',
-          data: Buffer.from('89504e470d0a1a0a', 'hex'),
+          data: pngOfSize(),
           contentId: 'pic',
           inline: true,
         },

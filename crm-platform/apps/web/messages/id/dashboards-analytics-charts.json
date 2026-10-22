@@ -320,6 +320,7 @@
         "replyRate": "Tingkat balasan",
         "received": "Pesan diterima",
         "conversationsOpen": "Percakapan terbuka",
+        "conversationsResolved": "Percakapan diselesaikan",
         "conversationsClosed": "Percakapan ditutup",
         "conversationsAssigned": "Ditugaskan",
         "conversationsUnassigned": "Belum ditugaskan",

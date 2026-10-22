@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Planınızda yok",
+      "upgradeHint": "Akıllı yönlendirme eklentisine veya daha üst bir plana dahildir.",
+      "owner": {
+        "prompt": "Yeniden atamada kişi sahibini sor",
+        "promptHint": "Bir sohbet elle başkasına verildiğinde, onu kişi sahibi de yapmayı öner.",
+        "window": "Geri dönen kişiyi son temsilcisinde tut",
+        "windowHint": "Yeniden yazan kişi, belirtilen gün boyunca son konuşmasını yürüten kişiye gider. Kapalı olması sınır olmadığı anlamına gelir.",
+        "windowDays": "Gün sayısı",
+        "days": "gün"
+      },
+      "queue": {
+        "notify": "Bir konuşma beklediğinde ekibe haber ver",
+        "notifyHint": "Ekip üyeleri veya atanmamış sohbetleri yanıtlayabilen herkes nedenle birlikte bildirim alır."
+      },
+      "teams": {
+        "body": "Her ekibin kendi atama yöntemi, çalışma saatleri, saat dilimi ve varsayılan atananı vardır. Bir konuşma o ekibe devredildiğinde kullanılırlar.",
+        "link": "Ekipleri aç"
+      }
+    }
+  }
+}

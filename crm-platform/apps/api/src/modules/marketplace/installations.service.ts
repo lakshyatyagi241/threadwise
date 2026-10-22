@@ -618,7 +618,10 @@ export class InstallationsService {
       try {
         await this.subscriptions.stopCardRenewalAfterUninstall(ctx.orgId, ctx.userId, cardPackId);
       } catch (err) {
-        this.logger.error({ err, org: ctx.orgId, pack: cardPackId }, 'stopping the card renewal after an uninstall failed');
+        this.logger.error(
+          { err, org: ctx.orgId, pack: cardPackId },
+          'stopping the card renewal after an uninstall failed',
+        );
       }
     }
   }

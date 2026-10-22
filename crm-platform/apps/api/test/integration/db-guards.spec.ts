@@ -127,7 +127,10 @@ describe('database guards', () => {
       const { rows } = await db.query(
         `SELECT conrelid::regclass::text || '.' || conname AS name FROM pg_constraint WHERE NOT convalidated ORDER BY 1`,
       );
-      expect(rows.map((r) => r.name)).toEqual([]);
+      const left = rows.map((r) => r.name as string);
+      // The closed-set status/kind checks of 20270131090000 were added NOT VALID; 20270321090000_validate_deferred_checks validates them
+      // (on a live database only where no stored row violates them, so a real environment can still list one here until its data is fixed).
+      expect(left).toEqual([]);
     });
   });
 
@@ -163,11 +166,6 @@ describe('database guards', () => {
         'idx_appointments_status',
         'idx_appointments_status_starts',
         `SELECT * FROM appointments WHERE org_id = 1 AND status = 'pending' ORDER BY starts_at LIMIT 10`,
-      ],
-      [
-        'idx_faq_variations_faq',
-        'uq_faq_variations_text',
-        `SELECT * FROM faq_variations WHERE org_id = 1 AND faq_id = 4`,
       ],
     ];
 

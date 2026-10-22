@@ -1,0 +1,93 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "已分配",
+        "waitingInQueue": "在队列中等待",
+        "noAgentOutOfHours": "无客服 / 非营业时间",
+        "returnedToBot": "已交还机器人"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "第 {stage} 步：选择接收会话的人员。"
+      }
+    },
+    "simulator": {
+      "handoff": "已转给人工（目标：{destination}，团队“{team}”）；测试聊天将走“已分配”出口"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "转接给",
+          "handoffRules": "分配规则",
+          "pickAgent": "— 选择人员 —",
+          "returnBack": "机器人回来后:"
+        }
+      },
+      "handoff": {
+        "legacy": "此步骤是旧版的“分配客服”。",
+        "upgradeHint": "它把聊天交给团队并继续。切换到转人工,可添加原因、优先级、给联系人的消息和出口(已分配、在队列中等待、无客服或非营业时间,以及聊天交还机器人时的可选出口)。你已建立的连接继续有效。",
+        "upgrade": "使用转接功能",
+        "destination": "将会话发送给",
+        "dest": {
+          "team": "团队",
+          "person": "指定一人",
+          "rules": "分配规则",
+          "rulesLocked": "分配规则（智能路由附加组件）"
+        },
+        "destHint": {
+          "team": "会话会转给团队中的某人，或在团队队列中等待。",
+          "person": "如果此人可以接手，会话会转给他；否则在队列中等待。",
+          "rules": "使用你的会话自动分配规则；如果没有规则能找到人，则在队列中等待。"
+        },
+        "lockHint": "分配规则属于智能路由附加组件或更高套餐，因此发到这里的会话会在等待队列中等候，直到有同事认领。",
+        "team": "团队",
+        "teamPick": "— 选择团队 —",
+        "teamNone": "还没有团队",
+        "teamOption": "{name} · {count, plural, other {# 位客服}}",
+        "teamHint": "<link>管理团队 →</link>",
+        "person": "人员",
+        "personPick": "— 选择人员 —",
+        "personHint": "你所在团队中的某人。",
+        "unknownMember": "{value}（不在此工作区中）",
+        "reason": "原因",
+        "reasons": {
+          "customer_asked": "联系人要求人工服务",
+          "bot_could_not_help": "机器人无法提供帮助",
+          "sensitive_topic": "敏感话题",
+          "sales_lead": "销售线索",
+          "complaint": "投诉",
+          "other": "其他"
+        },
+        "priority": "优先级",
+        "priorityKeep": "保持当前优先级",
+        "priorities": {
+          "low": "低",
+          "normal": "普通",
+          "high": "高",
+          "urgent": "紧急"
+        },
+        "note": "给客服的备注",
+        "noteHint": "仅内部可见。显示在转接卡片上；可使用 '{{'variables'}}'。最多 500 个字符。",
+        "customerMessage": "给联系人的消息",
+        "customerHint": "会话转接时发送。留空则不发送任何内容。",
+        "offHours": "无人可接时的消息",
+        "offHoursHint": "团队休息或无人可接时改为发送此消息。会话仍会在队列中等待。",
+        "exits": "此步骤有三个出口",
+        "exitAssigned": "已分配：现在有人负责该会话",
+        "exitWaiting": "在队列中等待：等待有人接手",
+        "exitUnavailable": "无客服 / 非营业时间：无人可接手",
+        "simpleExits": "有人接手会话后才会执行下一步。如果需要在队列中等待，或无人可接，机器人会在此停止，由人工回复。要使用其他出口，请使用高级构建器。",
+        "returnMessage": "机器人回来时发给联系人的消息",
+        "returnMessageHint": "可选。当同事点击“交还机器人”后,在流程从“已交还”出口继续之前,以贵公司的名义发送一次。如果 24 小时窗口已关闭或联系人未同意,则不会发送。可使用 '{{'name'}}' 等变量。",
+        "returnNeedsExit": "只有在“交还机器人”之后流程继续时,才会发送此消息。请把“已交还”出口连接到接下来的步骤。",
+        "exitReturned": "已交还机器人(可选):同事点击了“交还机器人”;流程从这里继续",
+        "returnedStep": "同事交还聊天后,从此处继续",
+        "returnedStepHint": "可选。选择有人点击“交还机器人”时流程继续的步骤。留空则机器人等待联系人的下一条消息。",
+        "returnNone": "无步骤:等待联系人的下一条消息",
+        "returnStepOption": "{stage}: {label}"
+      }
+    }
+  }
+}

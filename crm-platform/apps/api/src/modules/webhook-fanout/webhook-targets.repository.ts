@@ -3,6 +3,10 @@ import { sql } from 'drizzle-orm';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { PlatformStore } from '../auth';
 import type { DeliveryTarget } from './deliver';
+import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('webhook_delivery_target');
 
 export interface TargetRow {
   id: number;
@@ -31,6 +35,9 @@ export const TARGET_COLUMNS = sql.raw(
     'max_attempts, success_count, failure_count, last_status, last_error, last_success_at, last_failure_at, row_version, updated_at',
 );
 
+/** At most this many targets are remembered per process; the oldest goes first. */
+export const WEBHOOK_TARGET_CACHE_MAX = 500;
+
 /** Target config as the delivery path needs it, cached briefly so a burst of webhooks is not a burst of queries. */
 @Injectable()
 export class WebhookTargetsRepository {
@@ -44,7 +51,11 @@ export class WebhookTargetsRepository {
   /** `null` when the target was deleted or switched off since the job was queued. */
   async deliveryTarget(id: number, ttlMs = 10_000): Promise<DeliveryTarget | null> {
     const hit = this.cache.get(id);
-    if (hit && Date.now() - hit.at < ttlMs) return hit.target;
+    if (hit && Date.now() - hit.at < ttlMs) {
+      cache.hit();
+      return hit.target;
+    }
+    cache.miss();
     const row = await this.store.tx(async (tx) => {
       const res = await tx.execute(
         sql`SELECT ${TARGET_COLUMNS} FROM webhook_forward_targets WHERE id = ${id}`,
@@ -52,7 +63,7 @@ export class WebhookTargetsRepository {
       return res.rows[0] as unknown as TargetRow | undefined;
     });
     const target = row && row.is_active ? this.toDelivery(row) : null;
-    this.cache.set(id, { at: Date.now(), target });
+    setCapped(this.cache, id, { at: Date.now(), target }, WEBHOOK_TARGET_CACHE_MAX);
     return target;
   }
 

@@ -1,198 +1,162 @@
 import { describe, expect, it, vi } from 'vitest';
-import {
-  runFaq,
-  type FaqNodeDeps,
-} from '../../../src/modules/flow-runtime-engine/runtime/nodes/ai/faq-node';
-import type {
-  NodeContext,
-  SendOutcome,
-} from '../../../src/modules/flow-runtime-engine/runtime/types';
-import type { FlowFaqAnswer } from '../../../src/modules/faq-knowledge';
+import { FaqNodes } from '../../../src/modules/flow-runtime-engine/runtime/nodes/ai/faq-node';
+import type { NodeContext } from '../../../src/modules/flow-runtime-engine/runtime/types';
 
-const matched = (
-  over: Partial<Extract<FlowFaqAnswer, { status: 'matched' }>> = {},
-): FlowFaqAnswer => ({
-  status: 'matched',
-  score: 0.71,
-  faqUuid: '11111111-1111-4111-8111-111111111111',
-  question: 'Where is my order?',
-  answerType: 'text',
-  answerText: 'Ships in 2 days.',
-  flowId: null,
-  flowNodeId: null,
-  ...over,
-});
+const UUID = '3f0c2a1e-9b7d-4c55-8a2e-1d6f0b9c7a42';
 
-function ctxOf(data: Record<string, unknown>, send: SendOutcome = { ok: true }) {
-  const vars: Record<string, unknown> = { user_message: 'order status', typed: 'hi {{x}}' };
-  const sent: unknown[] = [];
+function setup(
+  data: Record<string, unknown>,
+  opts: {
+    retrieval?: {
+      grounded: boolean;
+      hits?: number;
+      passages: Array<{ label: string; text: string }>;
+    };
+    assistantRow?: number;
+    send?: { ok: boolean; halt?: boolean; error?: string };
+  } = {},
+) {
+  const vars: Record<string, unknown> = { 'faq.matched': 'yes', 'faq.answer': 'stale' };
   const notes: string[] = [];
+  const sent: unknown[] = [];
   const ctx = {
     run: { orgId: 7, flowId: 41, conversationId: 3, channelId: 5, vars },
     node: { id: 'f', type: 'Faq', props: { data } },
     stepKey: 'flow:1:0:f',
-    send: vi.fn(async (m: unknown) => {
-      sent.push(m);
-      return send;
-    }),
-    render: (t: unknown) =>
-      String(t ?? '').replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_m, k) => String(vars[k] ?? '')),
+    render: (t: unknown) => String(t ?? '').replace('{{user_message}}', 'what are your hours'),
     note: (t: string) => notes.push(t),
-    now: () => new Date(),
+    send: async (m: unknown) => {
+      sent.push(m);
+      return opts.send ?? { ok: true };
+    },
   } as unknown as NodeContext;
-  return { ctx, vars, sent, notes };
+  const retrieve = vi.fn(async () => opts.retrieval ?? { grounded: true, passages: [] });
+  const assistantId = vi.fn(async () => opts.assistantRow ?? 12);
+  const node = new FaqNodes({ retrieve } as never, { assistantId } as never);
+  return { node, ctx, vars, notes, sent, retrieve, assistantId };
 }
 
-const deps = (
-  a: FlowFaqAnswer | Error,
-): FaqNodeDeps & { calls: unknown[]; scopes: Array<[number, number]> } => {
-  const calls: unknown[] = [];
-  const scopes: Array<[number, number]> = [];
-  return {
-    calls,
-    scopes,
-    answer: async (org, flowId, input) => {
-      scopes.push([org, flowId]);
-      calls.push(input);
-      if (a instanceof Error) throw a;
-      return a;
-    },
-  };
-};
-
-describe('runFaq: the "Answer from FAQ" node', () => {
-  it('a text FAQ is sent and the node leaves by matched, with the result in variables', async () => {
-    const { ctx, vars, sent } = ctxOf({
-      query: '{{user_message}}',
-      sendAnswer: true,
-      variable: 'faq',
-    });
-    const d = deps(matched());
-    const r = await runFaq(ctx, d);
-    expect(r).toEqual({ kind: 'advance', port: 1, branch: true });
-    expect(sent).toEqual([{ kind: 'text', body: 'Ships in 2 days.' }]);
-    // The node asks for the FAQs of the flow the run is in, never the workspace's.
-    expect(d.scopes[0]).toEqual([7, 41]);
-    expect(d.calls[0]).toEqual({
-      query: 'order status',
-      category: null,
-      minScore: null,
-      conversationId: 3,
-      channelId: 5,
-    });
-    expect(vars).toMatchObject({
-      'faq.matched': 'yes',
-      'faq.score': 0.71,
-      'faq.question': 'Where is my order?',
-      'faq.answer': 'Ships in 2 days.',
-      'faq.id': '11111111-1111-4111-8111-111111111111',
-    });
+describe('the "Answer from FAQ" step', () => {
+  it('handles the Faq node type', () => {
+    expect(setup({}).node.types).toEqual(['Faq']);
   });
 
-  it('"send the answer" off saves the answer without sending anything', async () => {
-    const { ctx, vars, sent } = ctxOf({ query: 'x', sendAnswer: false });
-    expect((await runFaq(ctx, deps(matched()))).kind).toBe('advance');
-    expect(sent).toEqual([]);
-    expect(vars['faq.answer']).toBe('Ships in 2 days.');
-  });
-
-  it('a miss leaves by no_match and says no', async () => {
-    const { ctx, vars, sent } = ctxOf({ query: 'x' });
-    const r = await runFaq(ctx, deps({ status: 'no_match', score: 0.2, reason: 'below' }));
-    expect(r).toEqual({ kind: 'advance', port: 2, branch: true });
-    expect(sent).toEqual([]);
-    expect(vars).toMatchObject({ 'faq.matched': 'no', 'faq.score': 0.2, 'faq.answer': '' });
-  });
-
-  it('an unavailable engine and a thrown error both leave by no_match, never fail the run', async () => {
-    for (const a of [
-      { status: 'unavailable', reason: 'off' } as FlowFaqAnswer,
-      new Error('db down'),
-    ]) {
-      const { ctx, vars, notes } = ctxOf({ query: 'x' });
-      expect(await runFaq(ctx, deps(a))).toEqual({ kind: 'advance', port: 2, branch: true });
-      expect(vars['faq.matched']).toBe('no');
-      expect(notes.join(' ')).toContain('faq:');
-    }
-  });
-
-  it('passes the category and a valid minimum score, and ignores a bad one', async () => {
-    const a = ctxOf({ query: 'x', category: ' billing ', minScore: '0.6' });
-    const da = deps({ status: 'no_match', score: null, reason: '' });
-    await runFaq(a.ctx, da);
-    expect(da.calls[0]).toMatchObject({ category: 'billing', minScore: 0.6 });
-    const b = ctxOf({ query: 'x', minScore: 'abc' });
-    const db = deps({ status: 'no_match', score: null, reason: '' });
-    await runFaq(b.ctx, db);
-    expect(db.calls[0]).toMatchObject({ category: null, minScore: null });
-    const c = ctxOf({ query: 'x', minScore: '' });
-    const dc = deps({ status: 'no_match', score: null, reason: '' });
-    await runFaq(c.ctx, dc);
-    expect(dc.calls[0]).toMatchObject({ minScore: null });
-  });
-
-  it('a flow FAQ hands the run to its flow at its step, falling back to no_match with matched = no', async () => {
-    const { ctx } = ctxOf({ query: 'x', variable: 'hit' });
-    const r = await runFaq(
-      ctx,
-      deps(matched({ answerType: 'flow', answerText: null, flowId: 42, flowNodeId: 'b' })),
-    );
-    expect(r).toEqual({
-      kind: 'subflow',
-      flowId: 42,
-      startNodeId: 'b',
-      missPort: 2,
-      missVars: { 'hit.matched': 'no' },
-    });
-  });
-
-  it('a flow FAQ without a chosen step starts the flow at its start, and one whose flow is gone is a miss', async () => {
-    const { ctx } = ctxOf({ query: 'x' });
-    const r = await runFaq(
-      ctx,
-      deps(matched({ answerType: 'flow', answerText: null, flowId: 42 })),
-    );
-    expect(r).toMatchObject({ kind: 'subflow', flowId: 42 });
-    expect(r).not.toHaveProperty('startNodeId');
-    const gone = ctxOf({ query: 'x' });
-    expect(
-      await runFaq(gone.ctx, deps(matched({ answerType: 'flow', answerText: null, flowId: null }))),
-    ).toEqual({
+  it('leaves by "No match" (port 2) when no AI agent is chosen, without searching', async () => {
+    const t = setup({}, { assistantRow: 0 });
+    await expect(t.node.execute(t.ctx)).resolves.toEqual({
       kind: 'advance',
       port: 2,
       branch: true,
     });
-    expect(gone.vars['faq.matched']).toBe('no');
+    expect(t.retrieve).not.toHaveBeenCalled();
+    expect(t.vars['faq.matched']).toBe('no');
+    expect(t.vars['faq.answer']).toBe('');
   });
 
-  it('a channel that is down halts the run so it tries again; another refusal fails it', async () => {
-    const down = ctxOf({ query: 'x' }, { ok: false, error: 'channel down', code: 'X', halt: true });
-    expect((await runFaq(down.ctx, deps(matched()))).kind).toBe('halt');
-    const refused = ctxOf(
-      { query: 'x' },
-      { ok: false, error: 'window closed', code: 'WINDOW', halt: false },
+  it('searches the chosen agent with the rendered query', async () => {
+    const t = setup({ assistant: UUID, query: '{{user_message}}' });
+    await t.node.execute(t.ctx);
+    expect(t.assistantId).toHaveBeenCalledWith(7, { kind: 'uuid', uuid: UUID });
+    expect(t.retrieve).toHaveBeenCalledWith(7, 12, 'what are your hours');
+  });
+
+  it('matches: sets the variables under the saved name, sends the answer and leaves by "Matched" (port 1)', async () => {
+    const t = setup(
+      { assistant: UUID, variable: 'kb' },
+      {
+        retrieval: {
+          grounded: true,
+          hits: 1,
+          passages: [{ label: 'FAQ', text: 'Q: Opening hours?\nA: 9 to 5, Monday to Friday.' }],
+        },
+      },
     );
-    expect(await runFaq(refused.ctx, deps(matched()))).toMatchObject({
-      kind: 'fail',
-      code: 'WINDOW',
-    });
-  });
-
-  it('a text FAQ with an empty answer sends nothing and still leaves by matched', async () => {
-    const { ctx, sent } = ctxOf({ query: 'x' });
-    expect(await runFaq(ctx, deps(matched({ answerText: '' })))).toEqual({
+    await expect(t.node.execute(t.ctx)).resolves.toEqual({
       kind: 'advance',
       port: 1,
       branch: true,
     });
-    expect(sent).toEqual([]);
+    expect(t.vars['kb.matched']).toBe('yes');
+    expect(t.vars['kb.question']).toBe('Opening hours?');
+    expect(t.vars['kb.answer']).toBe('9 to 5, Monday to Friday.');
+    expect(t.sent).toEqual([{ kind: 'text', body: '9 to 5, Monday to Friday.' }]);
+    // A different name does not touch the default one.
+    expect(t.vars['faq.matched']).toBe('yes');
   });
 
-  it('a blank query still asks the service (which answers no_match), and a missing variable name falls back to faq', async () => {
-    const { ctx, vars } = ctxOf({ query: '', variable: '' });
-    const d = deps({ status: 'no_match', score: null, reason: 'empty' });
-    await runFaq(ctx, d);
-    expect(d.calls[0]).toMatchObject({ query: '' });
-    expect(vars['faq.matched']).toBe('no');
+  it('sends a text passage whole, with no question', async () => {
+    const t = setup(
+      { assistant: UUID },
+      {
+        retrieval: {
+          grounded: true,
+          hits: 1,
+          passages: [{ label: 'Doc', text: 'We ship worldwide.' }],
+        },
+      },
+    );
+    await t.node.execute(t.ctx);
+    expect(t.vars['faq.question']).toBe('');
+    expect(t.vars['faq.answer']).toBe('We ship worldwide.');
+  });
+
+  it('does not send the answer when the step is set not to', async () => {
+    const t = setup(
+      { assistant: UUID, sendAnswer: false },
+      {
+        retrieval: {
+          grounded: true,
+          hits: 1,
+          passages: [{ label: 'Doc', text: 'We ship worldwide.' }],
+        },
+      },
+    );
+    await expect(t.node.execute(t.ctx)).resolves.toMatchObject({ port: 1 });
+    expect(t.sent).toEqual([]);
+    expect(t.vars['faq.answer']).toBe('We ship worldwide.');
+  });
+
+  it('leaves by "No match" when nothing matched', async () => {
+    const t = setup({ assistant: UUID });
+    await expect(t.node.execute(t.ctx)).resolves.toMatchObject({ port: 2 });
+    expect(t.vars['faq.matched']).toBe('no');
+    expect(t.sent).toEqual([]);
+  });
+
+  it('leaves by "No match" when only text the search has not indexed yet came back', async () => {
+    const t = setup(
+      { assistant: UUID },
+      { retrieval: { grounded: true, hits: 0, passages: [{ label: 'New', text: 'Unindexed.' }] } },
+    );
+    await expect(t.node.execute(t.ctx)).resolves.toMatchObject({ port: 2 });
+    expect(t.sent).toEqual([]);
+  });
+
+  it('leaves by "No match" when the search could not run (the whole base is not an answer)', async () => {
+    const t = setup(
+      { assistant: UUID },
+      { retrieval: { grounded: false, passages: [{ label: 'Doc', text: 'Everything we know.' }] } },
+    );
+    await expect(t.node.execute(t.ctx)).resolves.toMatchObject({ port: 2 });
+    expect(t.vars['faq.answer']).toBe('');
+    expect(t.sent).toEqual([]);
+  });
+
+  it('halts when the channel says the send must halt the flow, and carries on when it only failed', async () => {
+    const found = { grounded: true, hits: 1, passages: [{ label: 'Doc', text: 'Yes.' }] };
+    const halted = setup(
+      { assistant: UUID },
+      { retrieval: found, send: { ok: false, halt: true, error: 'window closed' } },
+    );
+    await expect(halted.node.execute(halted.ctx)).resolves.toEqual({
+      kind: 'halt',
+      reason: 'window closed',
+    });
+    const failed = setup(
+      { assistant: UUID },
+      { retrieval: found, send: { ok: false, halt: false, error: 'rate limited' } },
+    );
+    await expect(failed.node.execute(failed.ctx)).resolves.toMatchObject({ port: 1 });
+    expect(failed.notes.some((n) => n.includes('rate limited'))).toBe(true);
   });
 });

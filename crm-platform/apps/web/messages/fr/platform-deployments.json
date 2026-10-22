@@ -1,0 +1,112 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Déploiements"
+    },
+    "eyebrow": "Exploitation",
+    "title": "Déploiements",
+    "description": "Chaque flux publié sur la console Geta : ce qui est en file d’attente, ce qui tourne maintenant, et ce qui a échoué et pourquoi. Se met à jour toutes les quelques secondes.",
+    "updated": "En direct. Mis à jour à {time}",
+    "stale": "La dernière actualisation a échoué. Affichage des déploiements précédents.",
+    "stalledAlert": "{count} déploiement(s) n’ont pas changé depuis {minutes} minutes. Leur worker s’est peut-être arrêté.",
+    "truncated": "Affichage des {limit} premiers déploiements. Choisissez un statut pour voir les autres.",
+    "kpi": {
+      "running": "En cours",
+      "queued": "En file",
+      "failed": "Échoués",
+      "live": "En ligne",
+      "stalled": "Bloqués"
+    },
+    "filter": {
+      "label": "Filtrer par statut",
+      "all": "Tous",
+      "running": "En cours",
+      "queued": "En file",
+      "failed": "Échoués",
+      "live": "En ligne"
+    },
+    "cols": {
+      "workspace": "Espace de travail",
+      "flow": "Flux",
+      "status": "Statut",
+      "step": "Étape",
+      "attempted": "Dernière tentative",
+      "updated": "Dernière modification",
+      "error": "Erreur"
+    },
+    "status": {
+      "running": "En cours",
+      "queued": "En file",
+      "failed": "Échoué",
+      "live": "En ligne"
+    },
+    "steps": {
+      "configuration_update": "Mise à jour de la configuration",
+      "publish_bot": "Publication du bot"
+    },
+    "stalledBadge": "Bloqué",
+    "version": "Version {version}",
+    "notStarted": "Pas encore démarré",
+    "failedAt": "Échec à l’étape {step}",
+    "noDetail": "Aucun texte d’erreur n’a été enregistré.",
+    "empty": {
+      "title": "Rien à afficher",
+      "all": "Aucun flux n’a encore été publié sur la console Geta.",
+      "running": "Aucune publication en cours pour le moment.",
+      "queued": "Rien n’attend dans la file.",
+      "failed": "Aucune publication n’a échoué.",
+      "live": "Aucun flux n’est encore en ligne sur la console Geta."
+    },
+    "tabs": {
+      "label": "Choisir ce qui s’affiche",
+      "publishes": "Publications de flux",
+      "geta": "Console Geta",
+      "releases": "Versions du produit"
+    },
+    "publishes": {
+      "description": "Chaque publication de flux : ce que le worker a mis en file, ce qu’il traite maintenant, et les publications échouées et pourquoi. Se met à jour toutes les quelques secondes.",
+      "stalledAlert": "{count} publication(s) de flux n’ont pas bougé depuis {minutes} minutes. Le worker a peut-être cessé de vider la file.",
+      "truncated": "Affichage des {limit} premières publications. Choisissez un statut pour voir les autres.",
+      "notProcessed": "Pas encore",
+      "cols": {
+        "attempts": "Tentatives",
+        "queued": "Mis en file le",
+        "finished": "Terminé le"
+      },
+      "status": {
+        "done": "Terminé"
+      },
+      "empty": {
+        "all": "Aucun flux n’a encore été publié.",
+        "done": "Aucune publication n’a été terminée ces 30 derniers jours."
+      }
+    },
+    "releases": {
+      "description": "Ce qui est en ligne sur desk.wabo.ai : la version actuelle, toute version en cours, et chaque tentative avec ses étapes et ses erreurs. Se met à jour toutes les quelques secondes.",
+      "liveLabel": "En ligne maintenant",
+      "live": "Version {tag}, en ligne depuis {time}",
+      "noneLive": "Aucune version n’est encore passée en ligne.",
+      "inProgress": "Une version est en cours",
+      "stalledAlert": "{count} tentative(s) de version n’ont pas bougé depuis {minutes} minutes. La compilation ou la mise en ligne s’est peut-être arrêtée.",
+      "empty": "Aucune version enregistrée pour l’instant. Les versions apparaîtront ici à partir du prochain déploiement.",
+      "cols": {
+        "tag": "Étiquette",
+        "changes": "Modifications",
+        "state": "Statut",
+        "step": "Étape",
+        "started": "Début",
+        "finished": "Fin",
+        "error": "Erreur"
+      },
+      "state": {
+        "building": "Compilation",
+        "shipping": "Envoi",
+        "releasing": "Mise en ligne",
+        "ok": "En ligne",
+        "failed": "Échouée",
+        "rolled_back": "Annulée"
+      },
+      "by": "par {author}"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { customerDetailResponseSchema, customersResponseSchema } from '@crm/contracts';
@@ -127,6 +127,7 @@ export function CustomerDetailPage({ id }: { id: string }) {
   const ts = useTranslations(`${NS}.status`);
   const tp = useTranslations(`${NS}.priority`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useQuery({
     queryKey: ['support', 'operator', 'customer', id],
     queryFn: ({ signal }) =>
@@ -194,7 +195,7 @@ export function CustomerDetailPage({ id }: { id: string }) {
               </tr>
             )}
             {d.tickets.map((tk) => {
-              const when = shortDate(tk.createdAt, locale);
+              const when = shortDate(tk.createdAt, locale, timeZone);
               return (
                 <tr key={tk.id} className="border-b last:border-0">
                   <td className="p-3 font-mono text-xs">

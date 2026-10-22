@@ -6,6 +6,9 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { onRedisFailure } from '../support/resilience';
 import { AuthKeys, Ttl } from '../support/redis-keys';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('partner_agent_status');
 
 /**
  * Revocation for partner agents.
@@ -37,9 +40,14 @@ export class PartnerAgentStatusService {
     const key = AuthKeys.partnerStatus(orgId, agentId);
     try {
       const cached = await this.redis.get(key);
-      if (cached === '1') return true;
-      if (cached === '0') return false;
+      if (cached === '1' || cached === '0') {
+        cache.hit();
+        return cached === '1';
+      }
+      cache.miss();
     } catch (err) {
+      cache.error();
+      cache.miss();
       // Closed mode: refuse (503). Open mode: read the database directly, which is authoritative anyway.
       onRedisFailure('partner-status.read', err);
     }

@@ -29,6 +29,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import { UploadPolicyService } from '../auth';
+import { MediaStorageService } from '../platform-settings-branding-storage';
 import { PlanUsageService } from '../plans-subscriptions-trials';
 import {
   localStatusFor,
@@ -36,7 +37,15 @@ import {
   type ResolvedWabaConnection,
 } from '../whatsapp-cloud-api-waba';
 import type { FlowTemplate } from './flow-template';
+import { metaEditBlockOf, metaEditLogAfter, type MetaEditBlock } from './meta-edit-rules';
 import { describeTemplateFailure, providerProblem } from './template-errors';
+import {
+  detailWithMedia,
+  headerPreviewUrl,
+  isTemplateMediaKey,
+  MEDIA_PREVIEW_TTL_S,
+  templateMediaFolder,
+} from './template-media';
 import {
   BUILDABLE_TYPES,
   lintPrepared,
@@ -57,9 +66,9 @@ import {
 
 const MODULE = 'wa_templates';
 /** Statuses a template can still be edited in (TW-TPL-018, and Geta's "locked once approved"). */
-/** An approved or paused template is edited in place on Meta (Meta's own edit endpoint), as Reference does; the rest are replaced. */
+/** An approved, paused or rejected template Meta holds is edited in place on Meta (its edit endpoint); the rest are replaced. */
 const EDITABLE = new Set(['pending', 'rejected', 'draft', 'approved', 'paused']);
-const IN_PLACE = new Set(['approved', 'paused']);
+const IN_PLACE = new Set(['approved', 'paused', 'rejected']);
 
 /** Header example files Meta takes, and the size it allows for each (TW-TPL-009: 5 MB image, 16 MB video, 100 MB document). */
 const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxBytes: number }> = {
@@ -73,6 +82,20 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
 export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
 
 const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
+
+/** The refusal for an edit Meta would not take now: the template is under review, or past its edit limit. */
+const editBlocked = (block: MetaEditBlock): AppError =>
+  block.reason === 'in_review'
+    ? new AppError(
+        ERROR_CODES.TPL_NOT_EDITABLE,
+        'Meta is reviewing this template. It can be edited again once the review ends.',
+        HttpStatus.CONFLICT,
+      )
+    : new AppError(
+        ERROR_CODES.TPL_EDIT_LIMIT,
+        `Meta allows an approved template one edit in 24 hours and ten in 30 days. It can be edited again after ${block.until.toISOString()}.`,
+        HttpStatus.CONFLICT,
+      );
 
 const toIssue = (i: LintIssue): TplLintIssue => i;
 
@@ -96,6 +119,7 @@ export class TemplatesService {
     private readonly waba: WabaConnectService,
     private readonly uploads: UploadPolicyService,
     private readonly planUsage: PlanUsageService,
+    private readonly storage: MediaStorageService,
     @Inject(WABA_TEMPLATES) private readonly remote: WabaTemplatePort,
   ) {}
 
@@ -146,7 +170,16 @@ export class TemplatesService {
   }
 
   async get(uuid: string): Promise<TemplateDetail> {
-    return toDetail(await this.require(uuid));
+    return detailWithMedia(this.storage, await this.require(uuid));
+  }
+
+  /**
+   * Links the header files a team-inbox thread shows: the returned function links one template row. The storage destination is resolved
+   * once for the whole read, on the first stored file asked for.
+   */
+  async previewLinker(): Promise<(row: TemplateRow) => Promise<string | null>> {
+    const link = await this.storage.linker(MEDIA_PREVIEW_TTL_S);
+    return (row) => headerPreviewUrl(link, row);
   }
 
   /**
@@ -209,6 +242,7 @@ export class TemplatesService {
   async create(input: CreateTemplateInput): Promise<TemplateSubmitResult> {
     const ctx = RequestContextStore.require();
     const prepared = prepareTemplate(input);
+    this.assertOwnMedia(ctx.orgId, prepared.headerMediaKey);
     const issues = lintPrepared(prepared, Boolean(prepared.headerHandle), input.name);
     if (input.submit) {
       this.requireSubmitRight();
@@ -219,9 +253,8 @@ export class TemplatesService {
     if (input.submit) this.requireUsable(target);
 
     // Plan cap on templates (live count of wa_templates): refuse before anything is written, 422 PLAN_LIMIT_REACHED.
-    await this.planUsage.assertCanAdd(ctx.orgId, 'templates');
-
     const row = await this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'templates');
       if (await this.repo.nameTaken(tx, ctx.orgId, target.id, prepared.name, prepared.language))
         throw this.nameTaken();
       const saved = await this.repo.insert(tx, ctx.orgId, {
@@ -240,6 +273,7 @@ export class TemplatesService {
         attachmentType: prepared.attachmentType,
         attachmentFile: prepared.headerHandle,
         headerSampleUrl: prepared.headerSampleUrl,
+        headerMediaKey: prepared.headerMediaKey,
         headerLocation: prepared.headerLocation,
         parameterFormat: prepared.parameterFormat,
         status: input.submit ? 'pending' : 'draft',
@@ -272,8 +306,9 @@ export class TemplatesService {
     const ctx = RequestContextStore.require();
     if (input.submit) this.requireSubmitRight();
     const prepared = prepareTemplate(input);
+    this.assertOwnMedia(ctx.orgId, prepared.headerMediaKey);
 
-    const { row, issues, edit } = await this.db.tx(async (tx) => {
+    const { row, issues, edit, replacedKey } = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
       if (!current) throw this.notFound();
       if (!EDITABLE.has(statusOf(current)) || !BUILDABLE_TYPES.has(current.templateType))
@@ -282,6 +317,9 @@ export class TemplatesService {
           'Only a template that is a draft, in review, rejected, approved or paused can be edited. Copy it into a new template instead.',
           HttpStatus.CONFLICT,
         );
+      // Meta refuses an edit of a template under review, or past an approved template's edit limit.
+      const block = metaEditBlockOf(current, new Date());
+      if (block) throw editBlocked(block);
       if (current.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Template');
       if (current.providerConfigId === null)
         throw new AppError(
@@ -303,9 +341,11 @@ export class TemplatesService {
       // The same media type keeps the handle already stored unless a new one came with the form.
       const sameMedia = prepared.attachmentType === (current.attachmentType ?? null);
       const handle = prepared.headerHandle ?? (sameMedia ? current.attachmentFile : null);
+      const mediaKey = prepared.headerMediaKey ?? (sameMedia ? current.headerMediaKey : null);
       const effective: PreparedTemplate = {
         ...prepared,
         headerHandle: prepared.attachmentType ? handle : null,
+        headerMediaKey: prepared.attachmentType ? mediaKey : null,
         headerSampleUrl: prepared.headerSampleUrl ?? (sameMedia ? current.headerSampleUrl : null),
       };
       const found = lintPrepared(effective, Boolean(effective.headerHandle), input.name);
@@ -342,6 +382,7 @@ export class TemplatesService {
           attachmentType: effective.attachmentType,
           attachmentFile: effective.headerHandle,
           headerSampleUrl: effective.headerSampleUrl,
+          headerMediaKey: effective.headerMediaKey,
           headerLocation: effective.headerLocation,
           parameterFormat: effective.parameterFormat,
           // An in-place edit keeps its live status until Meta takes the edit.
@@ -362,8 +403,13 @@ export class TemplatesService {
         eventType: 'template.updated',
         payload: { templateId: saved.uuid, name: saved.templateName },
       });
-      return { row: saved, issues: found, edit: inPlace(current) };
+      const replaced =
+        current.headerMediaKey && current.headerMediaKey !== saved.headerMediaKey
+          ? current.headerMediaKey
+          : null;
+      return { row: saved, issues: found, edit: inPlace(current), replacedKey: replaced };
     });
+    if (replacedKey) await this.releaseHeaderCopy(ctx.orgId, replacedKey);
 
     const target = input.submit ? await this.connection({ id: row.providerConfigId! }) : null;
     if (target) this.requireUsable(target);
@@ -434,9 +480,9 @@ export class TemplatesService {
       }
     }
 
-    await this.db.tx(async (tx) => {
+    const storedHeader = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, orgId, uuid, true);
-      if (!current) return;
+      if (!current) return null;
       if ((await this.repo.activeBroadcasts(tx, orgId, current.id)) > 0) throw this.inUse();
       await this.repo.delete(tx, orgId, current.id);
       await this.audit.record(tx, {
@@ -451,7 +497,9 @@ export class TemplatesService {
         eventType: 'template.deleted',
         payload: { templateId: current.uuid, name: current.templateName },
       });
+      return current.headerMediaKey;
     });
+    if (storedHeader) await this.releaseHeaderCopy(orgId, storedHeader);
   }
 
   // --- header media ------------------------------------------------------------------------------------------------
@@ -473,7 +521,7 @@ export class TemplatesService {
         'Meta takes a JPG or PNG image, an MP4 or 3GP video, or a PDF as the header example',
         [{ path: 'file', message: 'File type not supported.' }],
       );
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: [rule.kind],
@@ -481,19 +529,60 @@ export class TemplatesService {
     });
     const target = await this.connection({ uuid: connectionId });
     this.requireUsable(target);
+    // The stored copy is written first: a workspace without object storage is refused before Meta is asked for anything.
+    const { orgId } = RequestContextStore.require();
+    const key = `${templateMediaFolder(orgId)}${checked.storedName}`;
+    const stored = await this.storage.put(key, file.buffer, checked.mime);
+    if (!stored)
+      throw AppError.validation(
+        'Header files for templates need cloud object storage: ask the platform admin to turn it on',
+        [{ path: 'file', message: 'Storage is local.' }],
+      );
+    let handle: string;
     try {
-      const handle = await this.remote.uploadHeaderMedia(target.conn!, {
+      handle = await this.remote.uploadHeaderMedia(target.conn!, {
         bytes: file.buffer,
         fileName: file.originalname,
         mimeType: checked.mime,
       });
-      return { handle, fileName: file.originalname, mimeType: checked.mime };
     } catch (e) {
+      await this.releaseHeaderCopy(orgId, key);
       throw providerProblem('Meta did not accept the file', e);
     }
+    return {
+      handle,
+      fileName: file.originalname,
+      mimeType: checked.mime,
+      mediaKey: key,
+      previewUrl: await this.storage.url(key, MEDIA_PREVIEW_TTL_S),
+    };
   }
 
   // --- internals ---------------------------------------------------------------------------------------------------
+
+  /**
+   * A stored header the form names must be a file this workspace uploaded as a template header: its own folder, not any other
+   * file of the workspace (exports, chat media). Anything else is refused before a write.
+   */
+  private assertOwnMedia(orgId: number, key: string | null): void {
+    if (key && !isTemplateMediaKey(orgId, key))
+      throw AppError.validation('The header file was not uploaded to this workspace', [
+        { path: 'file', message: 'Upload the file again.' },
+      ]);
+  }
+
+  /**
+   * Deletes a stored header copy this workspace no longer uses (replaced, template deleted, Meta refused the upload). Never throws:
+   * the row change or the refusal is already decided, and a file left behind is only storage.
+   */
+  private async releaseHeaderCopy(orgId: number, key: string): Promise<void> {
+    if (!isTemplateMediaKey(orgId, key)) return;
+    await this.storage
+      .remove(key)
+      .catch((err: unknown) =>
+        this.logger.warn({ err: String(err) }, '[TPL] a stored header copy was not removed'),
+      );
+  }
 
   /**
    * Sends the saved row to Meta (when asked) and answers with the row as it then stands. The Meta call is outside any transaction.
@@ -658,6 +747,7 @@ export class TemplatesService {
           submittedAt: now,
           lastSyncedAt: now,
           rejectionReason: null,
+          metaEditLog: metaEditLogAfter(row.metaEditLog, now),
         })) ?? row;
       await this.audit.record(tx, {
         module: MODULE,
@@ -703,12 +793,12 @@ export class TemplatesService {
     }
   }
 
-  private result(
+  private async result(
     row: TemplateRow,
     warnings: TplLintIssue[],
     metaError: string | null,
-  ): TemplateSubmitResult {
-    return { template: toDetail(row), warnings, metaError };
+  ): Promise<TemplateSubmitResult> {
+    return { template: await detailWithMedia(this.storage, row), warnings, metaError };
   }
 
   private async reload(row: TemplateRow): Promise<TemplateRow> {

@@ -4,6 +4,7 @@ import { keepPreviousData, useQuery, useQueries, type QueryClient } from '@tanst
 import { z } from 'zod';
 import {
   fieldDependencyResponseSchema,
+  fieldOptionDependencyResponseSchema,
   fieldOptionResponseSchema,
   fieldSectionResponseSchema,
   fieldUsageResponseSchema,
@@ -11,6 +12,7 @@ import {
   type FieldOptionResponse,
   type FieldResponse,
   type FieldSectionResponse,
+  type ReplaceCascadeInput,
   type UpdateFieldInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -31,6 +33,7 @@ const FIELDS = ['cat', 'fields'] as const;
 const SECTIONS = ['cat', 'field-sections'] as const;
 const USAGE = ['cat', 'field-usage'] as const;
 const DEPENDENCIES = ['cat', 'field-dependencies'] as const;
+const OPTION_DEPENDENCIES = ['cat', 'field-option-dependencies'] as const;
 
 /** Custom properties of a module. Inactive ones come only when asked for (the screen's "show inactive"). */
 export function useModuleFields(
@@ -69,7 +72,7 @@ const optionPage = z.object({ data: z.array(fieldOptionResponseSchema) });
 /** One page of a lazy property's options, filtered by what the person typed. Waits for the property to be chosen. */
 export function useFieldOptionSearch(fieldId: string | null, q: string, enabled = true) {
   const term = q.trim();
-  return useQuery({
+  return useQuery<FieldOptionResponse[]>({
     enabled: enabled && fieldId !== null,
     queryKey: [...OPTION_SEARCH, fieldId, term],
     queryFn: ({ signal }) =>
@@ -77,7 +80,7 @@ export function useFieldOptionSearch(fieldId: string | null, q: string, enabled 
         query: { q: term || undefined, limit: 50 },
         schema: optionPage,
         signal,
-      }).then((r) => r.data),
+      }).then((r): FieldOptionResponse[] => r.data),
     placeholderData: keepPreviousData,
     staleTime: 5 * 60_000,
   });
@@ -164,6 +167,21 @@ export function useFieldDependencies(moduleKey: PropertyModule = 'contacts', ena
   });
 }
 
+/** The option pairs of a module's cascades (which choices of a cascade child each parent choice allows). */
+export function useFieldOptionDependencies(moduleKey: PropertyModule = 'contacts', enabled = true) {
+  return useQuery({
+    enabled,
+    queryKey: moduleKey === 'contacts' ? OPTION_DEPENDENCIES : [...OPTION_DEPENDENCIES, moduleKey],
+    queryFn: ({ signal }) =>
+      apiFetch('/fields/option-dependencies', {
+        query: { moduleKey },
+        schema: z.array(fieldOptionDependencyResponseSchema),
+        signal,
+      }),
+    staleTime: 60_000,
+  });
+}
+
 /** Everything that shows properties: this screen, the contact form and profile, the Attributes screen and the picker. */
 export function invalidateProperties(qc: QueryClient) {
   return Promise.all([
@@ -171,6 +189,7 @@ export function invalidateProperties(qc: QueryClient) {
     qc.invalidateQueries({ queryKey: SECTIONS }),
     qc.invalidateQueries({ queryKey: USAGE }),
     qc.invalidateQueries({ queryKey: DEPENDENCIES }),
+    qc.invalidateQueries({ queryKey: OPTION_DEPENDENCIES }),
     qc.invalidateQueries({ queryKey: KEYS.attributes }),
     qc.invalidateQueries({ queryKey: KEYS.attributePicker }),
   ]);
@@ -242,6 +261,13 @@ export const createFieldDependency = (body: {
 
 export const deleteFieldDependency = (id: string): Promise<void> =>
   apiFetch(`/fields/dependencies/${id}`, { method: 'DELETE' });
+
+/** Make a property's choices depend on another property's choices (replaces its whole cascade). */
+export const replaceCascade = (fieldId: string, body: ReplaceCascadeInput): Promise<void> =>
+  apiFetch(`/fields/${fieldId}/cascade`, { method: 'PUT', body });
+
+export const removeCascade = (fieldId: string): Promise<void> =>
+  apiFetch(`/fields/${fieldId}/cascade`, { method: 'DELETE' });
 
 // --- sections ---------------------------------------------------------------------------------------------------
 

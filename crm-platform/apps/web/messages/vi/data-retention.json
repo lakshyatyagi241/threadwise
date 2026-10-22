@@ -38,6 +38,58 @@
       "audit_log_exports": {
         "title": "Tệp xuất nhật ký kiểm tra",
         "description": "Tệp CSV mà một không gian làm việc yêu cầu từ nhật ký kiểm tra của mình. Người yêu cầu nhận email có liên kết để đăng nhập và tải xuống; tệp bị xóa sau số ngày lưu hoạt động."
+      },
+      "message_log": {
+        "title": "Nhật ký gửi tin nhắn",
+        "description": "Nhật ký gửi của từng tin nhắn: đã gửi, đã nhận, thất bại, thử lại. Sự kiện rời bảng trực tiếp sau số ngày trực tiếp rồi được nén và chuyển vào kho lưu trữ; số ngày lưu trữ tính từ ngày đó. Nhật ký của một tin nhắn và các bản xuất nhật ký vẫn có thể đọc kho lưu trữ."
+      },
+      "notifications_read": {
+        "title": "Thông báo (đã đọc)",
+        "description": "Thông báo chuông mà người dùng đã đọc. Chúng bị xóa khi đạt số ngày này. Số mặc định lấy từ cài đặt máy chủ (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Thông báo (chưa từng đọc)",
+        "description": "Thông báo chuông chưa ai mở. Chúng bị xóa khi đạt số ngày này và không bao giờ sớm hơn thông báo đã đọc (nếu vậy, việc lưu sẽ bị từ chối). Số mặc định lấy từ cài đặt máy chủ (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Thiết bị đẩy đã thu hồi",
+        "description": "Trình duyệt và điện thoại đã ngừng nhận thông báo đẩy. Được giữ trong thời gian ngắn để thiết bị quay lại có thể bật lại thông báo, sau đó bị xóa."
+      },
+      "assignment_runs": {
+        "title": "Nhật ký lượt phân công",
+        "description": "Bản ghi của mỗi lượt tự động phân công liên hệ, gồm ai nhận gì và vì sao. Bị xóa sau số ngày trực tiếp."
+      },
+      "form_events": {
+        "title": "Sự kiện phân tích biểu mẫu",
+        "description": "Lượt xem, lượt bắt đầu và lượt gửi của biểu mẫu web, dùng cho biểu đồ chuyển đổi biểu mẫu. Không chứa câu trả lời. Bị xóa sau số ngày trực tiếp. Bản thân câu trả lời tuân theo thời hạn lưu giữ riêng của từng biểu mẫu."
+      },
+      "lead_sync_runs": {
+        "title": "Lượt đồng bộ khách hàng tiềm năng",
+        "description": "Bản ghi của mỗi lần đồng bộ hoặc bổ sung khách hàng tiềm năng từ nền tảng quảng cáo: ai đã lấy gì và khi nào. Bị xóa sau số ngày trực tiếp. Dữ liệu thô của khách hàng tiềm năng tuân theo thời hạn lưu giữ riêng của từng nguồn."
+      },
+      "lead_scoring_runs": {
+        "title": "Nhật ký chấm điểm khách hàng tiềm năng bằng AI",
+        "description": "Mỗi điểm khách hàng tiềm năng do AI chấm cùng lý do, cùng các phân tích hội thoại và gợi ý giai đoạn làm cơ sở. Cho đến khi bạn lưu một giá trị tại đây, số ngày trong cài đặt chấm điểm khách hàng tiềm năng bằng AI sẽ được dùng. Người đang bị lưu giữ pháp lý vẫn giữ nguyên hồ sơ của họ."
+      },
+      "api_library_logs": {
+        "title": "Nhật ký chạy API Library",
+        "description": "Nhật ký yêu cầu và phản hồi của mỗi lệnh gọi API Library. Bị xóa sau số ngày trực tiếp."
+      },
+      "flow_run_logs": {
+        "title": "Nhật ký chạy tự động hóa",
+        "description": "Mỗi lượt chạy đã hoàn tất của luồng tự động hóa cùng các bước, và các phiên bản luồng không còn lượt chạy nào trỏ tới. Các lượt chạy đang diễn ra không bao giờ bị đụng tới."
+      },
+      "webhook_forward_failures": {
+        "title": "Webhook gửi thất bại",
+        "description": "Các lượt gửi webhook thất bại và vẫn có thể gửi lại. Sau số ngày trực tiếp, chúng không thể gửi lại nữa và bị xóa."
+      },
+      "click_calls": {
+        "title": "Cuộc gọi nhấp để gọi chưa được báo cáo",
+        "description": "Cuộc gọi nhấp để gọi mà kết quả cuộc gọi đã hoàn tất không bao giờ được nhà cung cấp trả về. Bị bỏ sau số ngày trực tiếp."
+      },
+      "call_recordings": {
+        "title": "Bản ghi âm cuộc gọi",
+        "description": "Số ngày mặc định giữ bản ghi âm cuộc gọi, dành cho các không gian làm việc chưa tự chọn thời hạn; thời hạn riêng của không gian làm việc vẫn được ưu tiên. Sau đó tệp ghi âm bị xóa còn cuộc gọi vẫn được giữ. Bản ghi âm đang bị lưu giữ pháp lý sẽ được giữ lại."
       }
     },
     "fields": {
@@ -45,7 +97,8 @@
       "liveDaysHint": "Số ngày dữ liệu nằm trong cơ sở dữ liệu. Cho phép: từ {min} đến {max}.",
       "keepForever": "Giữ kho lưu trữ vĩnh viễn",
       "archiveDays": "Ngày lưu trữ",
-      "archiveDaysHint": "Số ngày kho lưu trữ giữ thêm, sau đó bị xóa. Cho phép: từ {min} đến {max}."
+      "archiveDaysHint": "Số ngày kho lưu trữ giữ thêm, sau đó bị xóa. Cho phép: từ {min} đến {max}.",
+      "keepForeverShort": "Giữ vĩnh viễn"
     },
     "summary": {
       "noArchive": "Xóa vĩnh viễn sau {live, plural, other {# ngày}} kể từ khi được ghi.",
@@ -73,7 +126,9 @@
       "neverRun": "Chưa chạy",
       "runLive": "{when}: đã lưu trữ {months, plural, other {# tháng}} ({rows} hàng, {size}), đã xóa {expired} khỏi kho lưu trữ, đã xóa {deleted} hàng hoặc tệp",
       "runDry": "{when}: chạy thử, không có gì thay đổi",
-      "runFailed": "Lần chạy gần nhất gặp sự cố: {error}"
+      "runFailed": "Lần chạy gần nhất gặp sự cố: {error}",
+      "runDeleted": "{when}: đã xóa {deleted, plural, other {# hàng hoặc tệp}}",
+      "runDaily": "{when}: đã chuyển {rows} sự kiện vào kho lưu trữ, đã xóa {expired} ngày lưu trữ"
     },
     "actions": {
       "save": "Lưu",
@@ -85,7 +140,8 @@
       "confirmSave": "Lưu và áp dụng",
       "resetTitle": "Đưa {item} về hành vi hiện tại?",
       "resetBody": "Các giá trị đã lưu sẽ bị xóa. Các tác vụ hằng đêm quay về quy tắc tích hợp sẵn cho mục này. Dữ liệu đã lưu trữ vẫn nằm trong kho lưu trữ.",
-      "confirmReset": "Quay về hành vi hiện tại"
+      "confirmReset": "Quay về hành vi hiện tại",
+      "resetShort": "Đặt lại"
     },
     "preview": {
       "title": "Lưu chính sách lưu giữ cho {item}?",
@@ -94,7 +150,8 @@
       "toDeleteFromArchive": "{count, plural, other {# tháng đã lưu trữ}} sẽ bị xóa vĩnh viễn khỏi kho lưu trữ.",
       "rowsToDelete": "{count, plural, other {# hàng hoặc tệp}} sẽ bị xóa vĩnh viễn.",
       "notApplied": "Tác vụ lưu trữ chưa thực hiện các giá trị đã lưu, nên không điều nào ở trên xảy ra cho đến khi bật tác vụ.",
-      "permanent": "Việc xóa là vĩnh viễn và không thể hoàn tác."
+      "permanent": "Việc xóa là vĩnh viễn và không thể hoàn tác.",
+      "rowsToArchive": "{count, plural, other {# sự kiện}} sẽ được chuyển từ bảng trực tiếp vào kho lưu trữ."
     },
     "saved": "Đã lưu chính sách lưu giữ.",
     "resetDone": "Đã quay về hành vi hiện tại.",
@@ -103,7 +160,8 @@
       "archive_out_of_range": "Ngày lưu trữ phải là số nguyên từ {min} đến {max}.",
       "archive_not_supported": "Mục này không thể lưu trữ.",
       "delete_before_archive": "Không thể xóa dữ liệu trước khi lưu trữ.",
-      "not_a_number": "Nhập số ngày là số nguyên."
+      "not_a_number": "Nhập số ngày là số nguyên.",
+      "unread_before_read": "Không thể xóa thông báo chưa đọc trước thông báo đã đọc. Hãy đặt số ngày chưa đọc ít nhất bằng số ngày đã đọc."
     },
     "errors": {
       "forbidden": "Bạn không có quyền thực hiện thao tác này.",
@@ -112,6 +170,36 @@
       "request": "Yêu cầu bị từ chối.",
       "unexpected": "Đã xảy ra lỗi trên máy chủ. Hãy thử lại.",
       "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại."
+    },
+    "groups": {
+      "analytics": "Phân tích",
+      "security": "Bảo mật và kiểm toán",
+      "messaging": "Nhắn tin và thông báo",
+      "crm": "CRM và khách hàng tiềm năng",
+      "automation": "Tự động hóa và tích hợp",
+      "calling": "Cuộc gọi"
+    },
+    "table": {
+      "title": "Tổng quan lưu giữ",
+      "description": "Mỗi loại dữ liệu được giữ những gì và trong bao lâu. Chọn một mục để thay đổi số liệu bên dưới.",
+      "item": "Dữ liệu",
+      "storedIn": "Lưu trữ tại",
+      "live": "Trực tiếp (cơ sở dữ liệu)",
+      "archive": "Kho lưu trữ",
+      "deleted": "Xóa vĩnh viễn sau",
+      "setting": "Cài đặt",
+      "days": "{count, plural, other {# ngày}}",
+      "noArchive": "Không có kho lưu trữ",
+      "forever": "Mãi mãi",
+      "never": "Không bao giờ",
+      "where": {
+        "partitioned": "Cơ sở dữ liệu, sau đó là kho lưu trữ {driver}",
+        "daily_archive": "Cơ sở dữ liệu, sau đó là kho lưu trữ trong cơ sở dữ liệu",
+        "table": "Chỉ cơ sở dữ liệu",
+        "file": "Tệp"
+      },
+      "actions": "Thao tác",
+      "about": "Đây là gì?"
     }
   }
 }

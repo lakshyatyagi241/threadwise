@@ -169,7 +169,7 @@ export class DevicesService {
 
       // The plan's `devices` limit (the plan meter counts every row, so it sees creations that committed before this lock) and the
       // pilot cap (owner decision D3), whichever is lower.
-      await this.planUsage.assertCanAdd(ctx.orgId, 'devices');
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'devices');
       const used = await this.repo.count(tx, ctx.orgId);
       if (used >= PILOT_DEVICE_CAP) {
         throw new AppError(

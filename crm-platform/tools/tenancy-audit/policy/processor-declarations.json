@@ -2,5 +2,9 @@
   "infra/sandbox/code-sandbox.ts": "worker_threads sandbox for flow code nodes, not a queue processor; receives no tenant data beyond the node input",
   "modules/notifications/web-push.processor.ts": "job carries orgId+userId; WebPushDeliveryService.deliver reads and writes through db.txAs({orgId,userId}) (verified)",
   "modules/webhook-fanout/webhook-forward.processor.ts": "platform-level inbound webhook forwarding to operator-defined targets (webhook_forward_targets is operator-only); no tenant data",
-  "modules/whatsapp-cloud-api-waba/waba-ingest.processor.ts": "org is resolved inside WabaIngestService via waba_route_lookup(phone_number_id, waba_id) then every write is db.txAs({orgId: route.orgId}) (verified); see TI-003 for the waba_id fallback"
+  "modules/whatsapp-cloud-api-waba/waba-ingest.processor.ts": "org is resolved inside WabaIngestService via waba_route_lookup(phone_number_id, waba_id) then every write is db.txAs({orgId: route.orgId}) (verified); see TI-003 for the waba_id fallback",
+  "modules/appointments-booking/calendar-backfill.jobs.ts": "job carries orgId (and a cursor); CalendarBackfillService.backfillOrg runs in RequestContextStore for that org and reads via db.txAs({orgId}) (verified)",
+  "modules/meta-lead-ads/lead-sweep.processor.ts": "job carries orgId+pageId; LeadgenService.sweepPage loads through db.txAs({orgId}) (verified)",
+  "modules/meta-lead-ads/leadgen.processor.ts": "job carries orgId+pageId, validated by metaLeadgenJobSchema; handleWebhook loads through db.txAs({orgId}) (verified)",
+  "modules/webhook-retry/webhook-retry.processor.ts": "job carries a sealed payload written by the channel that failed; the registered per-channel handler re-runs that channel's ingest, which sets the workspace from the payload (the same path as the first attempt)"
 }

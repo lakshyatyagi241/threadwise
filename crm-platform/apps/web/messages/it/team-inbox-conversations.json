@@ -584,7 +584,11 @@
           "sla_breach": "Scadenza di risposta mancata",
           "spam_flagged": "Segnata come spam da {actor}",
           "escalated": "Escalata",
-          "unknown": "{what} da {actor}"
+          "unknown": "{what} da {actor}",
+          "handoff_requested": "Passata a una persona da {actor}",
+          "queue_reminded": "Il team è stato sollecitato",
+          "queue_offered": "Offerta a un altro team",
+          "queue_customer_message": "È stato inviato un messaggio al cliente"
         },
         "actors": {
           "user": "Un collega",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulatore (test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat del sito web",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Email",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulatore (test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat del sito web",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Email",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contatto",
         "agent": "Tu",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "Torna alla posta in arrivo",
-        "title": "Tag della conversazione",
+        "title": "Tag",
         "intro": "I tag della conversazione contrassegnano una discussione (fatturazione, rimborso, urgente) così il tuo team può ordinare e filtrare la posta in arrivo. Provengono dalla stessa libreria dei tag del contatto, che descrivono la persona.",
         "newTitle": "Nuovo tag",
         "editTitle": "Modifica tag",

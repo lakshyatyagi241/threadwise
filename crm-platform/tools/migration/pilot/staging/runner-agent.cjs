@@ -46,7 +46,15 @@ function validJob(j) {
   if (typeof j.sourceClient !== 'string' || !CLIENT_RE.test(j.sourceClient)) return null;
   if (typeof j.sourceDb !== 'string' || !DB_RE.test(j.sourceDb)) return null;
   if (!MODES.includes(j.mode)) return null;
-  return { runId: j.runId, sourceClient: j.sourceClient, sourceDb: j.sourceDb, mode: j.mode };
+  // the testing switch must be a real boolean when present (absent = off): anything else makes the job invalid
+  if (j.skipWhatsapp !== undefined && typeof j.skipWhatsapp !== 'boolean') return null;
+  return {
+    runId: j.runId,
+    sourceClient: j.sourceClient,
+    sourceDb: j.sourceDb,
+    mode: j.mode,
+    skipWhatsapp: j.skipWhatsapp === true,
+  };
 }
 
 /**
@@ -67,7 +75,16 @@ function childEnv(env) {
 
 /** `node pipeline.cjs --client c --db d --mode m`: an args array, never a shell string. */
 function pipelineArgs(job) {
-  return [PIPELINE, '--client', job.sourceClient, '--db', job.sourceDb, '--mode', job.mode];
+  return [
+    PIPELINE,
+    '--client',
+    job.sourceClient,
+    '--db',
+    job.sourceDb,
+    '--mode',
+    job.mode,
+    ...(job.skipWhatsapp ? ['--no-whatsapp'] : []),
+  ];
 }
 
 /** The agent's name: WABOO_RUNNER_NAME, else the machine name, cut to what the API accepts. */
@@ -294,6 +311,10 @@ async function main(argv, env) {
   const token = env.WABOO_RUNNER_TOKEN;
   if (!url || !/^https?:\/\/[^/\s]+/i.test(url))
     throw new Error('WABOO_RUNNER_URL must be the WaDesk address, e.g. https://desk.wabo.ai');
+  if (!/^https:\/\//i.test(url) && !/^http:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(url))
+    throw new Error(
+      'WABOO_RUNNER_URL must be https (plain http only for localhost): the runner token would cross the network in the clear',
+    );
   if (!token || token.length < MIN_TOKEN)
     throw new Error(
       `WABOO_RUNNER_TOKEN must be set (${MIN_TOKEN}+ characters, the same value as on the API)`,

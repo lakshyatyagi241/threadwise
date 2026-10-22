@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { Logger as PinoLogger } from 'nestjs-pino';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule } from '@nestjs/swagger';
 import type { NextFunction, Request, Response } from 'express';
@@ -23,8 +24,10 @@ import {
   startRuntimeMonitor,
 } from './modules/platform-infrastructure';
 import { buildOpenApiDocument } from './common/openapi';
+import { overloadGuard } from './common/http/overload-guard';
 import { responseCompression } from './common/http/response-compression';
 import type { Env } from './config/env.schema';
+import { parseTrustProxy } from './config/trust-proxy';
 
 async function bootstrap(): Promise<void> {
   // First, so a failure while the application is still being built is reported too (TW-INFRA-018).
@@ -40,7 +43,10 @@ async function bootstrap(): Promise<void> {
     // them (key order, whitespace, number formatting).
     rawBody: true,
   });
+  app.disable('x-powered-by'); // VAPT: do not advertise the framework
 
+  // Every Nest `Logger` call goes through pino (JSON, redaction, request id); without this they print as coloured text.
+  app.useLogger(app.get(PinoLogger));
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('bootstrap');
 
@@ -48,15 +54,14 @@ async function bootstrap(): Promise<void> {
   const trust = config.get('TRUST_PROXY', { infer: true });
   (app.getHttpAdapter().getInstance() as { set: (k: string, v: unknown) => void }).set(
     'trust proxy',
-    /^\d+$/.test(trust)
-      ? Number(trust)
-      : trust.includes(',')
-        ? trust.split(',').map((s) => s.trim())
-        : trust,
+    parseTrustProxy(trust),
   );
 
   // Times every response by route template, so a loop stall can be matched to the requests that were running.
   if (runtimeMonitor) app.use(httpMetricsMiddleware(runtimeMonitor));
+
+  // Load shedding (QA 54): past the cap a request gets an immediate 503 + Retry-After instead of joining an unbounded queue.
+  app.use(overloadGuard(config.get('API_MAX_INFLIGHT', { infer: true })));
 
   // Smaller responses on the wire (QA 63): before the routes, after the metrics middleware so the timing still covers the handler.
   if (config.get('RESPONSE_COMPRESSION', { infer: true })) app.use(responseCompression());

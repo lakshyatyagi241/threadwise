@@ -104,7 +104,6 @@
       "failed": "başarısız",
       "edited": "{when} düzenlendi",
       "openBuilder": "Oluşturucuyu aç",
-      "faqs": "Sık sorulan sorular",
       "pause": "Duraklat",
       "resume": "Devam et",
       "rename": "Yeniden adlandır",
@@ -556,11 +555,8 @@
           "cardCount": "{count} kart",
           "payLink": "Ödeme bağlantısı",
           "invoice": "Fatura",
-          "faqAllFaqs": "Tüm FAQ'lar",
-          "faqCategory": "FAQ'lar: {name}",
-          "faqScore": "en düşük puan {score}",
-          "faqNotSent": "gönderilmez",
-          "faqWorkspaceScore": "akış puanı"
+          "faqAgent": "{agent} üzerinden yanıtlar",
+          "faqNoAgent": "Bir yapay zeka aracısı seçin"
         },
         "overlays": {
           "startPinned": "Bu başlangıç noktasıdır (sabitlemeyi kaldırmak için tıklayın)",
@@ -724,8 +720,7 @@
             "answer": "Yanıt",
             "action": "Eylemler"
           },
-          "blockedTitle": "Bu adım bu bölümü bitirir, bu yüzden yalnızca en sona konabilir.",
-          "blockedTitleFaq": "FAQ ile yanıtla adımının iki çıkışı vardır, bu yüzden yalnızca en sona konabilir."
+          "blockedTitle": "Bu adım bu bölümü bitirir, bu yüzden yalnızca en sona konabilir."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -752,7 +747,8 @@
           "storedIn": "Değerler kişinin <b>{property}</b> özelliğine kaydedilecek",
           "actions": "Eylemler",
           "actionsHint": "Bu adımdan hemen sonra çalışan bir adım ekleyin.",
-          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez."
+          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez.",
+          "fromSteps": "{stages}. adımdan gelinir"
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
@@ -864,7 +860,13 @@
             "choose": "Bir şablon seçin…",
             "buttons": "Düğmeler",
             "variables": "Kişi bilgisinden doldurulur",
-            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin.",
+            "fills": "Her numaranın neyle doldurulacağı",
+            "fillsHint": "Bir kişi bilgisi veya akış değişkeni seçin ya da kendi metninizi yazın. Şablondaki değeri kullanmak için boş bırakın.",
+            "fillPick": "Bilgi ekle…",
+            "headerMedia": "Üst bilgi dosyası",
+            "headerMediaHint": "Bu şablonun üst bilgisindeki resim, video veya dosya. Şablonun kendi dosyası yoksa gereklidir.",
+            "headerMediaMissing": "Üst bilgi dosyasını ekleyin: bu şablonda yok ve WhatsApp onsuz göndermez."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -903,7 +905,10 @@
               "phone": "Bir numarayı ara",
               "email": "E-posta gönder",
               "agent": "Bir kişiyle konuş"
-            }
+            },
+            "prev": "Önceki kart",
+            "next": "Sonraki kart",
+            "goTo": "Kart {n}"
           },
           "condition": {
             "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",
@@ -914,18 +919,16 @@
             "hint": "Ziyaretçi, notunuzla birlikte bu ekibe aktarılır. Bu düğmeden sonra hiçbir şey bağlamanız gerekmez."
           },
           "faq": {
-            "exits": {
-              "matched": "Bir FAQ yanıtladıysa şuraya git",
-              "no_match": "Hiçbir FAQ yanıtlamadıysa şuraya git"
-            },
-            "exitsHint": {
-              "matched": "Bu noktada metin yanıtı gönderilmiş olur. Bir akış başlatan FAQ ise onun yerine o akışta devam eder.",
-              "no_match": "Yeterince yakın bir şey bulunamadı veya FAQ ile yanıtlama kapalı."
-            }
+            "exit": "Hiçbir şey eşleşmezse",
+            "exitHint": "Hiçbir kayıt yanıt vermediğinde akışın gideceği yer.",
+            "matched": "Yanıt bulunursa",
+            "matchedHint": "Yanıt gönderildikten sonra akışın gideceği yer."
           }
         },
         "branchAdd": "“{title}” için adım ekle",
-        "faqEnds": "Bu adım bu bölümü bitirir: sonra nelerin gönderileceği bir FAQ'ın yanıtlayıp yanıtlamadığına bağlıdır."
+        "faqEnds": "Bu adım bu bölümü bitirir: akış Yanıtlandı ya da Eşleşme yok çıkışından devam eder.",
+        "flowMenu": "{name} seçenekleri",
+        "renameFlow": "Akışı yeniden adlandır"
       },
       "formsCore": {
         "helpers": {
@@ -1873,43 +1876,13 @@
           "waitUntilPaid": "Ödenene kadar bekle, sonra devam et"
         },
         "faq": {
-          "intro": {
-            "body": "Bir mesajı anlamına göre bu akışın SSS öğeleriyle eşleştirir ve yanıtlar. Bir SSS yanıtladığında <mono>answered</mono> çıkışından, aksi halde <mono>no match</mono> çıkışından ayrılır.",
-            "sub": "Bu akışın otomatik SSS yanıtlaması açılmadan da çalışır. <link>Bu akışın SSS öğelerini yönet</link>"
-          },
-          "exitsLabel": "Çıkışlar",
-          "exitMatchedName": "Yanıtlandı",
-          "exitMatched": "bir FAQ yanıtladı: metni gönderildi (gönderim kapalı değilse) ya da akışı devraldı ve geri dönmez.",
-          "exitNoMatchName": "Eşleşme yok",
-          "exitNoMatch": "yeterince yakın bir şey bulunamadı, platform için FAQ ile yanıtlama kapalı, bağlı akış veya adım artık yok ya da mesaj boştu.",
-          "query": "Eşleştirilecek mesaj",
-          "queryHint": "Varsayılan olarak müşterinin son mesajıdır. Bir Soru adımının kaydettiği değişken de olur, örneğin <mono>{variable}</mono>. Eklemek için / yazın.",
-          "category": "Yalnızca bu FAQ'lar",
-          "allFaqs": "Tüm FAQ'lar",
-          "loadingCategories": "Kategoriler yükleniyor…",
-          "categoryGone": "{name} (hiçbir FAQ kullanmıyor)",
-          "retry": "Tekrar dene",
-          "minScore": "En düşük puan",
+          "agent": "Yapay zeka aracısı",
+          "agentHint": "Bilgi tabanında arama yapılacak aracı. Sık sorulan soruları Yapay Zeka Eğitimi'nde ekleyin.",
+          "query": "Aranacak metin",
+          "queryHint": "Neyin aranacağı. Genellikle müşterinin son mesajı.",
           "sendAnswer": "Yanıtı müşteriye gönder",
-          "sendAnswerToggle": "Eşleşen metin yanıtını mesaj olarak gönder",
-          "sendAnswerOnHint": "Eşleşen metin FAQ'ı müşteriye gönderilir. Bir akış başlatan FAQ o akışta devam eder.",
-          "sendAnswerOffHint": "Hiçbir şey gönderilmez: yanıt yalnızca aşağıdaki değişkenlere kaydedilir, böylece sonraki bir adım yanıtı kendisi yazabilir. Bir akış başlatan FAQ yine de o akışta devam eder.",
-          "save": "Sonucu şu adla kaydet",
-          "saveHint": "Sonucun kaydedildiği ad. Sonraki adımlar onu aşağıda gösterildiği gibi okur.",
-          "variables": {
-            "answer": "yanıt metni",
-            "matched": "evet veya hayır",
-            "question": "eşleşen FAQ'ın sorusu",
-            "score": "eşleşmenin ne kadar yakın olduğu",
-            "id": "eşleşen FAQ'ın kimliği"
-          },
-          "noFaqs": "Bu akışın henüz SSS öğesi yok, bu yüzden bu adım her zaman no match çıkışından ayrılır. <link>Bu akışın ilk SSS öğesini ekle</link>",
-          "useWorkspaceScore": "Bu akışın ayarını kullan",
-          "minScoreInvalid": "{min} ile {max} arasında bir sayı girin veya bu akışın ayarını kullanın.",
-          "saveFlowFirst": "Önce akışı kaydedin. SSS öğeleri Basit oluşturucunun SSS sekmesinde düzenlenir ve bu adım onlardan yanıt verir.",
-          "categoryHint": "Yalnızca bu kategorideki SSS öğeleri yanıt verebilir. Kategoriler bu akışın SSS öğelerinden gelir.",
-          "categoriesFailed": "Bu akışın SSS kategorileri yüklenemedi.",
-          "minScoreHint": "Bu akışın puanını yalnızca bu adım için, {min} ile {max} arasında değiştirir. Puanlar platformun gömme modeline bağlıdır; bir sayı seçmeden önce bu akışın <link>SSS testinde</link> bir mesaj deneyin."
+          "variable": "Yanıtı şu adla kaydet",
+          "variableHint": "Sonraki adımlar yanıtı bu adla okur, örneğin faq.answer."
         }
       },
       "attrPicker": {
@@ -1980,7 +1953,6 @@
         "customizeFirst": "Yayınlamadan önce sohbet widget'ınızı özelleştirin ve bir kez kaydedin.",
         "deploy": "Yayına al",
         "customizeFirstWhatsapp": "Yayınlamadan önce WhatsApp düğmenizi özelleştirin ve bir kez kaydedin.",
-        "faqs": "SSS",
         "install": "Yükle"
       },
       "buttonIcon": {
@@ -2151,8 +2123,8 @@
           "description": "Etiket ekle veya kaldır"
         },
         "assign": {
-          "label": "Temsilci ata",
-          "description": "Bir insana devret"
+          "label": "İnsana devir",
+          "description": "Sohbeti bir kişiye veya kuyruğa devret"
         },
         "subflow": {
           "label": "Alt akış çalıştır",
@@ -2502,7 +2474,6 @@
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
-        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın.",
         "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin.",
         "aiNoAgent": "\"{node}\" için ne yapay zekâ ajanı ne de istem var — bir yapay zekâ ajanı seçin ya da Özel kurulum’u seçip talimatları yazın."
       }
@@ -2513,8 +2484,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Bir temsilciye ata",
-          "help": "Görüşmeyi bir ekibe veya temsilciye devret"
+          "label": "İnsana devir",
+          "help": "Konuşmayı bir kişiye, ekibe veya atama kurallarına devret"
         },
         "message": {
           "label": "Mesaj",
@@ -2552,30 +2523,6 @@
           "label": "Soru",
           "help": "Herhangi bir şey sorun ve yanıtı kaydedin"
         },
-        "askName": {
-          "label": "Ad",
-          "help": "Bir ad isteyin ve doğrulayın"
-        },
-        "askEmail": {
-          "label": "E-posta",
-          "help": "Bir e-posta adresi isteyin ve doğrulayın"
-        },
-        "askPhone": {
-          "label": "Telefon numarası",
-          "help": "Bir telefon numarası isteyin ve doğrulayın"
-        },
-        "askNumber": {
-          "label": "Sayı",
-          "help": "Bir sayı isteyin ve doğrulayın"
-        },
-        "askAlphanumeric": {
-          "label": "Harfler ve sayılar",
-          "help": "Boşluk veya sembol içermeyen bir kimlik veya kod"
-        },
-        "askDate": {
-          "label": "Tarih",
-          "help": "Seçtiğiniz biçimde bir tarih isteyin"
-        },
         "askFile": {
           "label": "Dosya veya görsel",
           "help": "Fotoğraf, belge, video veya ses bekle"
@@ -2591,10 +2538,6 @@
         "condition": {
           "label": "Koşul",
           "help": "Müşterinin söylediğine veya kaydettiğine göre dallanın, AND / OR kurallarıyla"
-        },
-        "faq": {
-          "label": "FAQ ile yanıtla",
-          "help": "Müşterinin mesajını FAQ'larınızla eşleştirir. Bu akışı bitirir: bir FAQ yanıtladıysa bir çıkış, yanıtlamadıysa başka bir çıkış"
         },
         "apiLibrary": {
           "label": "API çağrısı",
@@ -2617,7 +2560,7 @@
         "location": "Konum",
         "template": "Şablon",
         "cta": "Bağlantı düğmesi",
-        "assign": "Bir temsilciye ata",
+        "assign": "İnsana devir",
         "carousel": "Karusel",
         "condition": "Koşul",
         "faq": "FAQ ile yanıtla",
@@ -2664,7 +2607,6 @@
         "carouselCards": "Adım {stage}: en az bir kart ekleyin ve her karta bir başlık verin.",
         "carouselButtons": "Adım {stage}: her düğmeye bir ad verin, bir şey açan düğmeye de bağlantı, numara veya adres girin.",
         "conditionIncomplete": "Adım {stage}: koşulun kurallarını tamamlayın (her birinde bir değişken ve bir değer).",
-        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı.",
         "optionNotConnected": "Adım {stage}: {kind, select, row {\"{label}\" satırı} other {\"{label}\" düğmesi}} hiçbir yere gitmiyor. Ona bir adım ekleyin veya bir eylem verin.",
         "tooManyOptions": "Adım {stage}: {kind, select, row {bir listede en fazla {max} satır olabilir} other {bir düğme grubunda en fazla {max} düğme olabilir}}.",
         "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
@@ -2672,9 +2614,10 @@
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
         "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
         "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
-        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
-      },
-      "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin.",
+        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin.",
+        "fileLinkInvalid": "Adım {stage}: dosya bağlantısı https:// ile başlamalı"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2786,9 +2729,8 @@
       "buttonNotConnected": "\"{label}\" düğmesi bağlı değil — durdu.",
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
-      "faqAnswered": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz, bu yüzden hiçbir şey gönderilmez ve {ref} boş kalır. \"Yanıtlandı\" çıkışı kullanılıyor.",
-      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır.",
-      "locationSkipped": "(konum) atlandı: geçerli koordinat yok"
+      "locationSkipped": "(konum) atlandı: geçerli koordinat yok",
+      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir."
     }
   }
 }

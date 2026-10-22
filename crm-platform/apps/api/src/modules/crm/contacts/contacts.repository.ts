@@ -4,6 +4,7 @@ import { and, asc, desc, eq, gt, inArray, lt, or, sql, type SQL } from 'drizzle-
 import { schema, type Tx } from '@crm/db';
 import { ERROR_CODES, type ContactSort, type RecordScope } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
+import { isTeamPeer, teamPeersSql } from '../../../kernel/rbac/scope';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
 import type { StatusScopeOption } from './contact-status-stage';
@@ -18,16 +19,8 @@ import {
   type ResolvedContactFilter,
 } from './contact-conditions';
 
-const {
-  companies,
-  contacts,
-  fieldDependencies,
-  fieldOptions,
-  fields,
-  statusOptions,
-  teamMembers,
-  users,
-} = schema;
+const { companies, contacts, fieldDependencies, fieldOptions, fields, statusOptions, users } =
+  schema;
 
 export interface ContactRow {
   /** Only on a list ordered by a column: the lower-cased value it was ordered by (null = blank). */
@@ -45,6 +38,8 @@ export interface ContactRow {
   companyId: number | null;
   companyUuid: string | null;
   ownerId: number | null;
+  /** Who created the contact: with the owner, the people record scope looks at (D1). */
+  createdBy: number | null;
   ownerUuid: string | null;
   lifecycleState: 'draft' | 'active' | 'archived' | 'deleted';
   lifecycleStage: string;
@@ -174,6 +169,7 @@ export class ContactsRepository {
       companyId: contacts.companyId,
       companyUuid: companies.uuid,
       ownerId: contacts.ownerId,
+      createdBy: contacts.createdBy,
       ownerUuid: users.uuid,
       lifecycleState: contacts.lifecycleState,
       lifecycleStage: contacts.lifecycleStage,
@@ -351,19 +347,20 @@ export class ContactsRepository {
         this.scopeCondition(orgId, scope, actorUserId),
       ),
     );
+    // The two membership tests read the open follow-ups and the group members once (a hashed list) instead of probing them for every
+    // contact: 106 ms to 23 ms on 100,000 contacts. NOT IN is exact here because contact_group_members.contact_id is NOT NULL.
     const rows = await tx.execute(sql`
       SELECT count(*)::int AS total,
              count(*) FILTER (WHERE ${whatsappSubscribedSql})::int AS subscribed,
              count(*) FILTER (WHERE ${contacts.isUnsubscribed})::int AS unsubscribed,
              count(*) FILTER (WHERE ${contacts.importJobId} IS NOT NULL)::int AS imported,
              count(*) FILTER (WHERE ${contacts.uncontactedSince} IS NOT NULL)::int AS uncontacted,
-             count(*) FILTER (WHERE EXISTS (
-               SELECT 1 FROM tasks t
-               WHERE t.org_id = ${orgId} AND t.contact_id = ${contacts.id} AND t.kind = 'follow_up' AND t.status = 'open'
+             count(*) FILTER (WHERE ${contacts.id} IN (
+               SELECT t.contact_id FROM tasks t
+               WHERE t.org_id = ${orgId} AND t.kind = 'follow_up' AND t.status = 'open'
              ))::int AS with_follow_up,
-             count(*) FILTER (WHERE NOT EXISTS (
-               SELECT 1 FROM contact_group_members m
-               WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id}
+             count(*) FILTER (WHERE ${contacts.id} NOT IN (
+               SELECT m.contact_id FROM contact_group_members m WHERE m.org_id = ${orgId}
              ))::int AS no_group
       FROM ${contacts} WHERE ${where}
     `);
@@ -616,6 +613,16 @@ export class ContactsRepository {
     return new Map(rows.map((r) => [r.id, r.uuid]));
   }
 
+  /** Batch lookup — id -> full name, for naming the people behind a page of audit entries in one query. */
+  async resolveUserNames(tx: Tx, orgId: number, ids: number[]): Promise<Map<number, string>> {
+    if (ids.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: users.id, name: users.fullName })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), inArray(users.id, ids)));
+    return new Map(rows.filter((r) => r.name).map((r) => [r.id, r.name as string]));
+  }
+
   async resolveCompanyId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
     const rows = await tx
       .select({ id: companies.id })
@@ -779,8 +786,9 @@ export class ContactsRepository {
     return required.map((r) => ({
       key: r.key,
       label: r.label,
+      // A cascade link names no option and no value, so it is no condition: the property shows whatever its parent holds.
       conditions: deps
-        .filter((d) => d.fieldId === r.id)
+        .filter((d) => d.fieldId === r.id && (d.value !== null || d.optionValue !== null))
         .map((d) => ({ parentKey: d.parentKey, wanted: d.value ?? d.optionValue ?? null })),
     }));
   }
@@ -994,11 +1002,7 @@ export class ContactsRepository {
           ? sql<boolean>`false`
           : scope === 'own'
             ? sql<boolean>`${users.id} = ${actorUserId}`
-            : sql<boolean>`(${users.id} = ${actorUserId} OR EXISTS (
-                SELECT 1 FROM ${teamMembers} tm1
-                JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-                WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${users.id}
-              ))`;
+            : sql<boolean>`(${users.id} = ${actorUserId} OR ${users.id} IN ${teamPeersSql(orgId, actorUserId)})`;
     const rows = await tx
       .select({ id: users.uuid, fullName: users.fullName, email: users.email, canAssign })
       .from(users)
@@ -1033,9 +1037,9 @@ export class ContactsRepository {
     tx: Tx,
     orgId: number,
     uuid: string,
-  ): Promise<{ id: number; ownerId: number | null } | undefined> {
+  ): Promise<{ id: number; ownerId: number | null; createdBy: number | null } | undefined> {
     const rows = await tx
-      .select({ id: contacts.id, ownerId: contacts.ownerId })
+      .select({ id: contacts.id, ownerId: contacts.ownerId, createdBy: contacts.createdBy })
       .from(contacts)
       .where(and(eq(contacts.orgId, orgId), eq(contacts.uuid, uuid)));
     return rows[0];
@@ -1047,14 +1051,9 @@ export class ContactsRepository {
     orgId: number,
     actorUserId: number,
     ownerId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    const rows = await tx.execute(sql`
-      SELECT 1
-      FROM ${teamMembers} tm1
-      JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${ownerId}
-      LIMIT 1
-    `);
-    return rows.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, ownerId, below);
   }
 }

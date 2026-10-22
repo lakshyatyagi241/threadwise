@@ -22,7 +22,11 @@ import { getSiteConfig } from '@/features/platform-settings-branding-storage/sit
 import { PlanClosedGate } from '@/components/shell/plan-closed-gate';
 import { InboxNavCounts } from '@/features/team-inbox-conversations';
 import { WalletAppShell } from '@/features/wallet-message-billing';
-import { LiveNotifications, NotificationBell } from '@/features/notifications-activity-audit';
+import {
+  LiveNotifications,
+  NotificationBell,
+  NotificationPermissionPrompt,
+} from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
 import { MENU_PLANNED_NAV } from '@/features/_registry/planned';
@@ -137,6 +141,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                           <ImpersonationBanner key="impersonation" />
                           <TrialBar />
                           <BackgroundErrorBanner key="background-error" />
+                          {/* Until the person answers the browser's notification permission: asked on arrival, then this banner. */}
+                          <NotificationPermissionPrompt key="notification-permission" />
                           <AccountBanners key="banners" />
                         </>
                       }

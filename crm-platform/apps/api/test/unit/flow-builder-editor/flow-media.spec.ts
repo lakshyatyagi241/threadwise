@@ -35,8 +35,11 @@ describe('flow media upload (TW-FLB-027)', () => {
     ).toBe('ok');
   });
 
+  // The service stores what validateScanned returns (validate, then the antivirus scan): the fake answers both the same way.
+  const verified = { storedName: '1700000000_aaaaaaaaaaaaaaaaaaaaaaaa.png', mime: 'image/png' };
   const policy = {
-    validate: () => ({ storedName: '1700000000_aaaaaaaaaaaaaaaaaaaaaaaa.png', mime: 'image/png' }),
+    validate: () => verified,
+    validateScanned: () => Promise.resolve(verified),
   };
 
   it('a storage that is not available is a 503 with a message the builder can show after "Upload failed:"', async () => {

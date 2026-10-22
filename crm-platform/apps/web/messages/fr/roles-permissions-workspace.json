@@ -47,7 +47,8 @@
       "nameTaken": "Un rôle portant ce nom existe déjà.",
       "nameRequired": "Le nom du rôle est obligatoire.",
       "nameTooLong": "Le nom du rôle ne peut pas dépasser {max} caractères.",
-      "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé."
+      "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé.",
+      "customRolesLocked": "Les rôles personnalisés et les autorisations par périmètre ne sont pas dans votre offre. Vous pouvez consulter les rôles, mais pas les créer ni les modifier."
     },
     "team": {
       "crumb": "Membres de l’équipe",
@@ -90,7 +91,9 @@
         "member": "Membre",
         "roles": "Rôles",
         "status": "Statut",
-        "actions": "Actions"
+        "actions": "Actions",
+        "teams": "Équipes",
+        "manager": "Responsable"
       },
       "empty": {
         "none": "Il n’y a pas encore de membres.",
@@ -137,8 +140,17 @@
         "keptRole": "{name} reste attribué : vous ne pouvez ni l’accorder ni le retirer.",
         "atLeastOne": "Sélectionnez au moins un rôle.",
         "save": "Enregistrer les rôles",
-        "reload": "Recharger"
-      }
+        "reload": "Recharger",
+        "noTeamWarning": "{name} ne fait partie d'aucune équipe : là où un rôle est réglé sur la portée équipe, la personne ne voit que ses propres fiches. Ajoutez-la à une équipe dans Paramètres > Équipes."
+      },
+      "teamFilter": {
+        "label": "Filtrer les membres par équipe",
+        "all": "Toutes les équipes"
+      },
+      "noTeams": "Aucune équipe",
+      "primaryTeam": "Équipe principale",
+      "primaryMark": "principale",
+      "noManager": "Aucun responsable"
     },
     "list": {
       "crumb": "Rôles",
@@ -171,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Rôle « {name} » supprimé."
-      }
+      },
+      "customRolesLocked": "Les rôles personnalisés et les autorisations par périmètre ne sont pas dans votre offre. Vous pouvez consulter les rôles, mais pas les créer ni les modifier.",
+      "addRoleLocked": "Ajouter un rôle (mise à niveau)"
     },
     "editor": {
       "crumbRoles": "Rôles",
@@ -212,7 +226,9 @@
         "created": "Rôle « {name} » créé.",
         "updated": "Rôle « {name} » mis à jour.",
         "deleted": "Rôle « {name} » supprimé."
-      }
+      },
+      "customRolesLocked": "Les rôles personnalisés et les autorisations par périmètre ne sont pas dans votre offre. Vous pouvez consulter les rôles, mais pas les créer ni les modifier.",
+      "upgrade": "Voir les offres"
     },
     "matrix": {
       "title": "Autorisations",
@@ -235,8 +251,20 @@
       "lockedHint": "Cette autorisation n’est pas encore disponible pour cet espace de travail. Elle se débloque lorsque la fonctionnalité du forfait est activée ou que l’application est installée.",
       "scope": {
         "all": "Tous les enregistrements",
-        "team": "Enregistrements de l’équipe",
-        "own": "Ses propres enregistrements"
+        "own": "Mes enregistrements",
+        "team": "Enregistrements de mon équipe",
+        "team_and_below": "Mon équipe et sous-équipes"
+      },
+      "scopeLegend": "Ce que couvre chaque portée des enregistrements",
+      "scopeHelp": {
+        "all": "Tous les enregistrements de l’espace de travail.",
+        "team_and_below": "Enregistrements de votre équipe et de toutes les équipes en dessous.",
+        "team": "Enregistrements des personnes de votre équipe.",
+        "own": "Uniquement les enregistrements qui vous appartiennent ou vous sont attribués."
+      },
+      "noTeamWarning": "{count, plural, one {# membre ayant ce rôle n’est dans aucune équipe, il ne voit donc que ses propres enregistrements là où ce rôle a une portée d’équipe.} many {# de membres ayant ce rôle ne sont dans aucune équipe, ils ne voient donc que leurs propres enregistrements là où ce rôle a une portée d’équipe.} other {# membres ayant ce rôle ne sont dans aucune équipe, ils ne voient donc que leurs propres enregistrements là où ce rôle a une portée d’équipe.}} Ajoutez-les à une équipe dans <link>Paramètres > Équipes</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Sans cette autorisation, les agents ayant un accès d’équipe ne voient que les conversations qui leur sont attribuées ou attribuées à leur équipe. Avec elle, ils voient aussi la file ouverte des conversations attribuées à personne."
       }
     },
     "delete": {

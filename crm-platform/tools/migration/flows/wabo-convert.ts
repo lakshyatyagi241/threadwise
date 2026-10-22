@@ -690,6 +690,10 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
           x: lastX,
           y: 60 + agents * ROW,
           data: {
+            // `handoff: 2` makes it the Human handoff node; without it the node is read as the old Assign agent with one exit
+            handoff: 2,
+            destination: 'team',
+            reason: 'customer_asked',
             team: '',
             userId: '',
             journeyName: '',

@@ -65,6 +65,11 @@
         "description": "Hubungkan nomor WhatsApp Business Anda untuk chat dengan pelanggan.",
         "keywords": "wa, whatsapp business, cloud api, nomor, qr"
       },
+      "whatsapp-profile": {
+        "label": "Profil bisnis WhatsApp",
+        "description": "Logo, teks tentang bisnis, detail kontak, dan informasi kepatuhan yang diminta Meta.",
+        "keywords": "profil bisnis, logo, foto profil, tentang, kontak, kepatuhan, nama legal, layanan pelanggan, petugas pengaduan"
+      },
       "unofficial-whatsapp": {
         "label": "API WhatsApp tidak resmi",
         "description": "Tautkan nomor WhatsApp pribadi lewat kode QR dan panaskan agar pengiriman aman.",
@@ -101,7 +106,7 @@
         "keywords": "pesan teks, sender id, dlt, twilio, seluler"
       },
       "email": {
-        "label": "Email",
+        "label": "Email dukungan",
         "description": "Hubungkan kotak surat Gmail atau Google Workspace agar tim Anda dapat membaca dan menjawab email pelanggan di inbox bersama.",
         "keywords": "kotak surat, gmail, google workspace, inbox bersama, email dukungan, outlook, imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "Tim",
-        "description": "Kelompokkan orang ke dalam tim untuk routing dan pelaporan.",
-        "keywords": "grup, departemen, penugasan, routing"
+        "description": "Kelompokkan orang untuk percakapan, penugasan, dan laporan.",
+        "keywords": "grup, departemen, manajer, hierarki, penugasan, perutean"
       },
       "ai-keys": {
         "label": "Kunci penyedia AI",
@@ -341,7 +346,7 @@
         "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
       },
       "inbox-tags": {
-        "label": "Tag percakapan",
+        "label": "Tag",
         "description": "Buat tag yang dipasang tim Anda pada percakapan dan dipakai untuk memfilter kotak masuk. Tag ini sama dengan yang digunakan pada kontak.",
         "keywords": "tag, kategori, atur, filter, tag percakapan"
       },
@@ -354,11 +359,6 @@
         "label": "Target respons",
         "description": "Atur seberapa cepat tim Anda harus membalas dan menyelesaikan (SLA), dan dapatkan peringatan saat percakapan melewati target.",
         "keywords": "sla, waktu respons, balasan pertama, penyelesaian, pelanggaran, target, jam kerja"
-      },
-      "team-performance": {
-        "label": "Kinerja tim",
-        "description": "Lihat seberapa cepat tiap agen membalas dan menyelesaikan hari ini, minggu ini, atau bulan ini.",
-        "keywords": "laporan, analitik, agen, waktu respons, balasan pertama, selesai, beban kerja, kinerja"
       },
       "privacy-requests": {
         "label": "Permintaan data",
@@ -394,6 +394,11 @@
         "label": "Lead duplikat",
         "description": "Pilih apakah lead baru yang cocok dengan kontak digabungkan ke kontak itu atau menjadi kontak baru.",
         "keywords": "duplikat, gabung, lead, telepon sama, e-mail sama, kontak baru, sumber lead"
+      },
+      "sales-activities": {
+        "label": "Aktivitas Penjualan",
+        "description": "Kelola tugas, pertemuan, panggilan, dan aktivitas Anda sendiri: apa yang bisa dilakukan tiap aktivitas, jenis tugas, dan hasilnya.",
+        "keywords": "aktivitas, jenis tugas, hasil, hasil pertemuan, hasil panggilan, tindak lanjut, check-in, aktivitas kustom, kalender, selesaikan"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

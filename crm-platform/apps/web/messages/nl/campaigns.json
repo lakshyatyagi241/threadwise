@@ -34,7 +34,10 @@
         "all": "Alle tijd",
         "7d": "7 dagen",
         "30d": "30 dagen",
-        "90d": "90 dagen"
+        "90d": "90 dagen",
+        "custom": "Aangepast bereik",
+        "from": "Vanaf datum",
+        "to": "Tot datum"
       },
       "search": "Campagnes zoeken",
       "selectPage": "Deze pagina selecteren",
@@ -1045,7 +1048,7 @@
         "loadFailed": "De statistieken konden niet worden geladen.",
         "rates": {
           "delivered": "Afleverpercentage",
-          "deliveredHint": "van het publiek",
+          "deliveredHint": "van de verzonden",
           "read": "Leespercentage",
           "readHint": "van de afgeleverde",
           "replies": "Antwoordpercentage",
@@ -1873,8 +1876,7 @@
         "list": "Lijst",
         "blocks": "Blokken"
       },
-      "showing": "{count, plural, one {# campagne} other {# campagnes}} getoond",
-      "legacy": "Oude broadcasts ({count})"
+      "showing": "{count, plural, one {# campagne} other {# campagnes}} getoond"
     },
     "senderEmpty": {
       "loading": "Je nummers worden geladen…",

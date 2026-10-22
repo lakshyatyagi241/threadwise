@@ -584,7 +584,11 @@
           "sla_breach": "已错过回复期限",
           "spam_flagged": "由 {actor} 标记为垃圾信息",
           "escalated": "已升级",
-          "unknown": "{actor} 执行：{what}"
+          "unknown": "{actor} 执行：{what}",
+          "handoff_requested": "由 {actor} 移交给某人",
+          "queue_reminded": "已提醒团队",
+          "queue_offered": "已转给另一个团队",
+          "queue_customer_message": "已向客户发送消息"
         },
         "actors": {
           "user": "某位团队成员",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "模拟器（测试）",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp（QR）",
+      "webchat": "网站聊天",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "电子邮件",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "模拟器（测试）",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp（QR）",
-        "webchat": "网站聊天",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "电子邮件",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "联系人",
         "agent": "你",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "返回收件箱",
-        "title": "会话标签",
+        "title": "标签",
         "intro": "会话标签用于标记一次对话（账单、退款、紧急），方便团队整理和筛选收件箱。它们与描述联系人本人的联系人标签来自同一个标签库。",
         "newTitle": "新标签",
         "editTitle": "编辑标签",

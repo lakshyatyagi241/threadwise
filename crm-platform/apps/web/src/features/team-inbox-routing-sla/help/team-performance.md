@@ -4,7 +4,7 @@ title: Team performance report
 summary: See how many replies each agent sent, how many conversations they resolved and how fast they answered first, for today, this week or this month.
 area: inbox
 order: 70
-documents: [tile:team-performance]
+documents: []
 gates:
   permission: inbox.analytics.view
   planFeature: team_performance
@@ -30,7 +30,7 @@ The Team performance report answers "how fast did your team respond?". It shows 
 
 ## How to use it
 
-1. Open **Settings**, go to **Data and security** and select **Team performance**. From the inbox, the same tile is offered as a shortcut.
+1. Go to `/inbox/analytics/team`.
 2. Choose the period: **Today**, **This week** (from Monday) or **This month**. The period follows your workspace time zone.
 3. If the workspace has two or more channels, pick one under **Channel** to narrow every figure to it. The choice stays in the address, so a link keeps it.
 4. Read the four tiles, then the table.

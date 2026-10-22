@@ -6,11 +6,13 @@ import {
   EMPTY_LIST,
   badgeText,
   compareRows,
+  countsQuery,
   filtersKey,
   isFiltered,
   listQuery,
   listReducer,
   matchesFilters,
+  narrowsCounts,
   placeRow,
   tabCount,
   windowFilterCount,
@@ -218,6 +220,21 @@ describe('tab counts', () => {
     expect(tabCount(null, 'all')).toBeNull();
     expect(tabCount({ ...EMPTY_COUNTS, unread: 3 }, 'unread')).toBe(3);
     expect(tabCount({ ...EMPTY_COUNTS, unread: -1 }, 'unread')).toBe(0);
+  });
+
+  it('asks for the badges with the filters on screen, but without the tab or the sort', () => {
+    const q = countsQuery(f({ tab: 'mine', sort: 'old', statuses: ['snoozed'], q: 'ana' }));
+    expect(q).toMatchObject({ statuses: 'snoozed', q: 'ana' });
+    expect(q).not.toHaveProperty('tab');
+    expect(q).not.toHaveProperty('sort');
+    expect(countsQuery(f())).toEqual({ archived: undefined });
+  });
+
+  it('the menu badge takes the counts only while no filter narrows them (the tab and the sort do not)', () => {
+    expect(narrowsCounts(f({ tab: 'unread' }))).toBe(false);
+    expect(narrowsCounts(f({ sort: 'old' }))).toBe(false);
+    expect(narrowsCounts(f({ status: 'resolved' }))).toBe(true);
+    expect(narrowsCounts(f({ channelIds: ['c1'] }))).toBe(true);
   });
 
   it('caps the row badge', () => {

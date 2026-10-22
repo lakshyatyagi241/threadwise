@@ -1,0 +1,33 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "인계 및 배정",
+        "hint": "봇, 플로우 또는 팀원이 이 팀으로 대화를 인계할 때 사용됩니다.",
+        "method": "담당자를 정하는 방법",
+        "methodHint": "수동: 누군가 가져갈 때까지 대화가 팀 대기열에서 기다립니다. 순환 배정과 최소 부하는 구성원을 대신 골라 주며 스마트 라우팅 애드온의 일부입니다.",
+        "defaultAssignee": "기본 담당자",
+        "defaultAssigneeHint": "다른 사람이 맡을 수 없을 때 대화를 맡습니다. 팀 구성원 중에서 선택하세요.",
+        "noDefaultAssignee": "지정 안 함",
+        "hours": "운영 시간",
+        "hoursHint": "끄면 항상 운영합니다. 이 시간 밖에서도 대화는 대기열에서 기다리며, 연락처에게는 플로우의 운영 시간 외 메시지가 전송됩니다.",
+        "timezone": "시간대",
+        "dayFrom": "{day}, 시작",
+        "dayTo": "{day}, 종료",
+        "hoursProblem": "운영하는 요일마다 서로 다른 시작 시간과 종료 시간이 필요합니다.",
+        "day": {
+          "mon": "월요일",
+          "tue": "화요일",
+          "wed": "수요일",
+          "thu": "목요일",
+          "fri": "금요일",
+          "sat": "토요일",
+          "sun": "일요일"
+        },
+        "methodLocked": "{method}(스마트 라우팅 필요)",
+        "methodLockHint": "자동 방식은 스마트 라우팅 애드온 또는 상위 요금제의 일부입니다.",
+        "defaultAssigneeLocked": "기본 담당자는 스마트 라우팅 애드온 또는 상위 요금제에 포함된 자동 팀 방식에서만 사용됩니다."
+      }
+    }
+  }
+}

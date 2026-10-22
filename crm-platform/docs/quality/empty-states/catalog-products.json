@@ -1,0 +1,69 @@
+{
+  "feature": "catalog-products",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-catalog-products-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/activity-tab.tsx",
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/collection-editor.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/catalog-products/lib/variants-model.test.ts",
+          "match": "leaves the table alone while an option has no values yet"
+        }
+      ]
+    },
+    {
+      "id": "EM-catalog-products-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/collection-editor.tsx",
+        "apps/web/src/features/catalog-products/components/products-screen.tsx",
+        "apps/web/src/features/catalog-products/components/send-products.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-catalog-products-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/activity-tab.tsx",
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/catalog-manage.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-catalog-products-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/product-form-screen.tsx",
+        "apps/web/src/features/catalog-products/components/send-tab.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

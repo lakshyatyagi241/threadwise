@@ -1,0 +1,33 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Handoff and assignment",
+        "hint": "Used when a bot, a flow or a teammate hands a conversation to this team.",
+        "method": "How to pick a person",
+        "methodHint": "Manual: the conversation waits in the team's queue until someone claims it. Round robin and Least loaded pick a member for you and are part of the Smart routing add-on.",
+        "defaultAssignee": "Default assignee",
+        "defaultAssigneeHint": "Takes the conversation when nobody else can. Pick one of the team's members.",
+        "noDefaultAssignee": "Nobody in particular",
+        "hours": "Opening hours",
+        "hoursHint": "Off means always open. Outside these hours a conversation still waits in the queue and the contact gets the out-of-hours message of the flow.",
+        "timezone": "Time zone",
+        "dayFrom": "{day}, opens",
+        "dayTo": "{day}, closes",
+        "hoursProblem": "Each open day needs an opening and a closing time that differ.",
+        "day": {
+          "mon": "Monday",
+          "tue": "Tuesday",
+          "wed": "Wednesday",
+          "thu": "Thursday",
+          "fri": "Friday",
+          "sat": "Saturday",
+          "sun": "Sunday"
+        },
+        "methodLocked": "{method} (needs Smart routing)",
+        "methodLockHint": "Automatic methods are part of the Smart routing add-on or a higher plan.",
+        "defaultAssigneeLocked": "The default assignee is used only with an automatic team method, which is part of the Smart routing add-on or a higher plan."
+      }
+    }
+  }
+}

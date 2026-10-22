@@ -1,0 +1,264 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Upgrade your plan",
+      "buttonsLocked": "The Confirm, Reschedule and Cancel buttons are part of the Appointments upgrade tier, which your plan does not include.",
+      "timeline": {
+        "label": "Reminder timeline",
+        "addMenu": "Add a step",
+        "addStep": "Add step",
+        "count": "{count} of {max} steps with a time. The booking confirmation and the no-show message do not count.",
+        "capReached": "You have reached {max} steps with a time. Remove one to add another.",
+        "rebookLocked": "Rebook messages are part of the Appointments upgrade tier, which your plan does not include. You can set the step up, but it stays off until your plan includes them.",
+        "rebookLockedStep": "Part of the Appointments upgrade tier: it cannot be switched on with your current plan.",
+        "empty": "No steps yet. Add the first step, or start from a ready-made sequence.",
+        "lane": {
+          "booked": "When it is booked",
+          "before": "Before the appointment",
+          "after": "After the appointment"
+        },
+        "laneHint": {
+          "booked": "Sent as soon as the booking is made.",
+          "before": "Sent before the appointment starts, never after it.",
+          "after": "Sent after the appointment ends, or when it is marked as a no-show."
+        },
+        "laneEmpty": "Nothing here yet.",
+        "step": {
+          "confirmation": "Booking confirmation",
+          "reminder_24h": "24 hour reminder",
+          "reminder_2h": "2 hour reminder",
+          "reminder_15m": "15 minute reminder",
+          "reminder": "Reminder",
+          "after_visit": "After-appointment message",
+          "no_show": "No-show message",
+          "rebook": "Rebook message"
+        },
+        "stepHint": {
+          "confirmation": "Sent right after the booking is confirmed.",
+          "reminder_24h": "The day before. It can carry the Confirm, Reschedule and Cancel buttons.",
+          "reminder_2h": "A short reminder a couple of hours before.",
+          "reminder_15m": "For online appointments with a join link only.",
+          "reminder": "A reminder at a time you choose.",
+          "after_visit": "A thank-you or follow-up after the appointment ends.",
+          "no_show": "Sent when you mark the appointment as a no-show.",
+          "rebook": "Asks the contact to book again some days after a completed appointment. Counts as marketing."
+        },
+        "choice": {
+          "confirmation": "Booking confirmation",
+          "reminder_24h": "24 hours before",
+          "reminder_2h": "2 hours before",
+          "reminder_15m": "15 minutes before",
+          "custom": "Reminder at another time",
+          "after_visit": "After-appointment message",
+          "no_show": "No-show message",
+          "rebook": "Rebook message, some days later"
+        },
+        "choiceHint": {
+          "present": "Already added",
+          "cap": "Limit reached",
+          "locked": "Upgrade tier: not in your plan",
+          "online": "Online appointments"
+        },
+        "enabledOf": "Send: {step}",
+        "remove": "Remove: {step}",
+        "offsetOf": "Time of: {step}",
+        "unitOf": "Unit of time of: {step}",
+        "beforeStart": "before the appointment starts",
+        "afterEnd": "after the appointment ends",
+        "setTime": "Enter a time",
+        "templateName": "WhatsApp template: {name}",
+        "wa": {
+          "none": "No template",
+          "draft": "Template not sent to Meta",
+          "pending": "Waiting for Meta approval",
+          "approved": "Template approved",
+          "rejected": "Rejected by Meta"
+        },
+        "fallback": {
+          "email": "Until the WhatsApp template is approved, this step goes out by email.",
+          "window": "WhatsApp is the only channel here, so outside the 24 hour window nothing is sent until a template is approved. Add email as a fallback."
+        },
+        "when": {
+          "before": "{amount} before it starts",
+          "after": "{amount} after it ends"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# hour} other {# hours}}",
+          "days": "{count, plural, one {# day} other {# days}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "The contact had already confirmed.",
+        "no_join_link": "The appointment has no join link.",
+        "already_rebooked": "The contact has booked again.",
+        "visit_not_completed": "The appointment was not completed.",
+        "plan_feature_locked": "Your plan does not include this step.",
+        "not_delivered": "WhatsApp did not deliver it in time, so the next channel was used.",
+        "send_failed": "The send failed, so the next channel was used."
+      },
+      "packs": {
+        "open": "Ready-made sequences",
+        "eyebrow": "For {name}",
+        "title": "Ready-made reminder sequences",
+        "close": "Close",
+        "intro": "Pick a sequence for your kind of business. It sets up the confirmation, the reminders, the follow-up and the rebook message in one go. WhatsApp messages need Meta's approval before they can be sent; until then each step goes out by email.",
+        "loading": "Loading the sequences",
+        "choose": "Choose a sequence",
+        "stepsCount": "{count, plural, one {# step} other {# steps}}",
+        "language": "Language of the messages",
+        "machineDraft": "The Hindi text is a machine-made draft. Have someone who reads Hindi check it before you switch the steps on.",
+        "previewLoading": "Loading the preview",
+        "previewTitle": "What will change",
+        "summary": "{add} to add, {replace} to replace, {unchanged} already the same",
+        "timedOf": "{count} of {max} steps with a time",
+        "blocked": "Applying this sequence would pass the limit of {max} steps with a time. Remove a step first.",
+        "confirmTitle": "This replaces steps you already have",
+        "confirmBody": "{count, plural, one {# step of this booking type} other {# steps of this booking type}} will be replaced by the sequence's version, including any text you wrote.",
+        "confirmCheck": "Replace them",
+        "action": {
+          "add": "New",
+          "replace": "Replaces yours",
+          "unchanged": "Already the same"
+        },
+        "starts": {
+          "on": "Starts on",
+          "off": "Starts off"
+        },
+        "category": {
+          "UTILITY": "Service message",
+          "MARKETING": "Marketing message"
+        },
+        "onlineOnly": "Online appointments only",
+        "hasButtons": "Confirm, Reschedule, Cancel buttons",
+        "wa": {
+          "new": "Will be sent to Meta"
+        },
+        "replaceOwnText": "You wrote your own text for this step. It will be replaced.",
+        "planNotes": {
+          "rebook": "The rebook step is part of the Appointments upgrade tier, which your plan does not include, so this step is saved switched off.",
+          "buttons": "The Confirm, Reschedule and Cancel buttons are part of the Appointments upgrade tier, which your plan does not include, so they are left out."
+        },
+        "showMessages": "Show messages",
+        "hideMessages": "Hide messages",
+        "kept": "{count, plural, one {# step you already have is not touched.} other {# steps you already have are not touched.}}",
+        "sample": {
+          "title": "Sample values",
+          "hint": "The messages are shown with these made-up values. Change them to see how a longer name or another place reads.",
+          "reset": "Reset the values",
+          "labels": {
+            "name": "Contact name",
+            "service": "Service",
+            "date": "Date",
+            "time": "Time",
+            "place": "Place",
+            "join_link": "Join link",
+            "manage_link": "Manage link"
+          }
+        },
+        "submitToMeta": "Send the WhatsApp messages to Meta for approval now",
+        "submitHint": "{count, plural, one {# new WhatsApp message is created.} other {# new WhatsApp messages are created.}} Meta decides when to approve; until then the step goes out by email. Leave this off to keep them as drafts.",
+        "submitHintNone": "The WhatsApp messages already exist in your workspace, so nothing new is created.",
+        "apply": "Apply sequence",
+        "applying": "Applying",
+        "cancel": "Cancel",
+        "block": {
+          "readOnly": "You can look at the sequences but not apply them.",
+          "unsaved": "Save or discard your changes to this booking type's steps first.",
+          "cap": "Remove a step first: the limit of steps with a time would be passed.",
+          "confirm": "Tick Replace them to continue."
+        },
+        "errors": {
+          "needsConfirm": "Applying would replace a step, so it needs your confirmation. The preview has been reloaded.",
+          "cap": "The sequence would pass the limit of steps with a time for this booking type."
+        },
+        "result": {
+          "title": "The sequence is applied",
+          "summary": "{added} added, {replaced} replaced. The steps start as the sequence sets them.",
+          "templatesTitle": "WhatsApp messages",
+          "templatesNone": "No WhatsApp message was created. Connect a WhatsApp Cloud API number to use WhatsApp; email is used meanwhile.",
+          "waiting": "Until Meta approves a message, that step goes out by email.",
+          "metaError": "Meta refused it: {error}",
+          "refresh": "Refresh status",
+          "refreshing": "Refreshing",
+          "withheldTitle": "Left out because of your plan",
+          "withheldButtons": "The Confirm, Reschedule and Cancel buttons of the {step}.",
+          "withheldRebook": "The {step}: it is saved switched off."
+        }
+      },
+      "test": {
+        "send": "Send a test email",
+        "sending": "Sending",
+        "hint": "Sends this step with sample values. Leave the address empty to send it to your own email address.",
+        "toLabel": "Send the test to",
+        "toPlaceholder": "Your own address, or type another one",
+        "toInvalid": "Enter a complete email address, or leave it empty.",
+        "wait": {
+          "unsaved": "Save your changes first: the test sends the saved step.",
+          "notSaved": "Save the reminders first: this step is new."
+        },
+        "queued": "The test email is on its way to {address}. The result also arrives in your notifications.",
+        "skipped": "Nothing was sent: your user has no email address.",
+        "noWhatsapp": "WhatsApp messages cannot be tested from here."
+      },
+      "report": {
+        "title": "Reminder report",
+        "description": "What the reminders did: how many were sent, delivered, failed or skipped, and how many went by another channel.",
+        "type": "Booking type",
+        "allTypes": "All booking types",
+        "range": "Period",
+        "ranges": {
+          "7": "Last 7 days",
+          "30": "Last 30 days",
+          "90": "Last 90 days",
+          "custom": "Choose dates"
+        },
+        "from": "From",
+        "to": "To",
+        "refresh": "Refresh",
+        "pickDates": "Choose a start and an end date to see the report.",
+        "loading": "Loading the report",
+        "empty": "No reminder was due in this period. Once reminders are sent, their results appear here.",
+        "caption": "Reminder results for {name}",
+        "col": {
+          "step": "Step",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "failed": "Failed",
+          "fallback": "Sent by another channel",
+          "skipped": "Skipped",
+          "confirmed": "Confirmed",
+          "rescheduled": "Reschedule asked",
+          "cancelled": "Cancelled",
+          "total": "Total"
+        },
+        "rates": "Of {count, plural, one {# appointment} other {# appointments}} that got a reminder: {confirmed}% confirmed, {cancelled}% cancelled, {noShow}% no-show.",
+        "why": "Why",
+        "otherReason": "Another reason",
+        "buttonsLocked": "The Confirm, Reschedule and Cancel button results belong to the Appointments upgrade tier, so they are not counted on your plan.",
+        "emailNote": "Delivered comes from WhatsApp only: email has no delivery report, so an email counts as sent. Counts only; no names, numbers or messages are shown."
+      },
+      "history": {
+        "fallback": "Sent by {channel} because the first channel could not deliver it.",
+        "delivery": {
+          "delivered": "WhatsApp reported it as delivered.",
+          "failed": "WhatsApp reported that it failed.",
+          "undelivered": "WhatsApp did not deliver it in time."
+        },
+        "tried": "Channels tried, in order",
+        "attempt": {
+          "sent": "sent",
+          "skipped": "not used",
+          "held": "waiting",
+          "failed": "failed"
+        },
+        "buttons": "Replies with the buttons",
+        "button": {
+          "confirm": "Tapped Confirm",
+          "reschedule": "Tapped Reschedule",
+          "cancel": "Tapped Cancel"
+        }
+      }
+    }
+  }
+}

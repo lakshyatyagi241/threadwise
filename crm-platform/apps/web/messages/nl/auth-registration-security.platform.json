@@ -1404,7 +1404,8 @@
             "packInactive": "Het add-onpakket is uitgeschakeld, dus niemand kan het kopen.",
             "appUnpublished": "De app is niet gepubliceerd, dus workspaces kunnen hem nog niet zien.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# add-on geselecteerd} other {# add-ons geselecteerd}}"
           },
           "featureHints": {
             "automation": "De flowbuilder en automatiseringen die op gesprekken reageren en erop handelen.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "White-label: de workspace kan de platformbranding in de voettekst verbergen.",
             "sales_pipeline": "Deals, taken en pijplijnen, en de pijplijncijfers op het dashboard.",
             "appointment_booking": "Boekingstypen, afspraken en de openbare boekingspagina's. De betaalde Afspraken-app beheert deze schakelaar.",
+            "appointment_confirm_buttons": "Voegt de knoppen Bevestigen, Verplaatsen en Annuleren toe aan de afspraakherinnering die via WhatsApp wordt verstuurd.",
+            "appointment_rebook_steps": "Vervolgberichten na een afgeronde afspraak, die de contactpersoon vragen opnieuw te boeken.",
             "chatbot_widgets": "De builder voor de chatbotwidget van de website.",
             "wa_storefront": "Het WhatsApp-catalogus- en winkelgedeelte.",
             "inbox_sla": "SLA-beleid en deadlines in de teaminbox.",
-            "inbox_routing": "Routeringsregels die inboxgesprekken automatisch toewijzen.",
+            "inbox_routing": "Automatische toewijzing van nieuwe chats: routeringsregels, Alle anderen en timers van de wachtrij. Onderdeel van de add-on Slimme routering.",
             "waba_calling": "Bellen via WhatsApp vanuit de inbox: belnummers, belrechten, bellen en gesprekken beantwoorden.",
             "inbox_kanban": "De kanbanweergave van de teaminbox.",
             "team_performance": "De rapporten over teamprestaties.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "Laat een persoonlijk WhatsApp-nummer de volledige chatgeschiedenis importeren bij de eerste koppeling. Het importeren van recente chats is beschikbaar voor elk abonnement met persoonlijke nummers.",
             "ai_crm_copilot": "Vindt en scoort leads met AI uit je contacten.",
             "lead_scoring": "Scoort contacten met AI en voedt de groeipilot. De app AI-leadscoring beheert deze schakelaar.",
-            "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar."
+            "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar.",
+            "team_hierarchy": "Bovenliggende teams, teamleiders en managers die hun team en de teams eronder zien.",
+            "custom_roles": "Maak en bewerk rollen en kies per recht een bereik (eigen, team of alle records).",
+            "inbox_assignment_sticky": "Toewijzing met eigenaar eerst en synchroon, het venster voor terugkerende contacten en de vraag bij hertoewijzing. Onderdeel van de add-on Slimme routering."
           },
           "units": {
             "days": "Dagen",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "SMS per maand",
             "email_mailboxes": "E-mailpostvakken",
             "email_monthly": "E-mails per maand",
-            "storage_gb": "Opslag (GB)"
+            "storage_gb": "Opslag (GB)",
+            "teams": "Teams"
           },
           "featureGroups": {
             "messaging": "Berichten",
@@ -1605,10 +1612,12 @@
             "remove_branding": "White-label (verwijdert platformbranding)",
             "sales_pipeline": "Verkooppijplijn (deals en taken)",
             "appointment_booking": "Afspraken en boekingspagina's",
+            "appointment_confirm_buttons": "Herinneringsknoppen: Bevestigen, Verplaatsen en Annuleren",
+            "appointment_rebook_steps": "Stappen voor opnieuw boeken (herinnering) na een afspraak",
             "chatbot_widgets": "Chatbotwidgets voor websites",
             "wa_storefront": "WhatsApp-winkel en -catalogus",
             "inbox_sla": "Inbox-SLA-beleid",
-            "inbox_routing": "Inbox-routeringsregels en kantooruren",
+            "inbox_routing": "Slimme routering: automatische toewijzing en regels",
             "waba_calling": "WhatsApp-gesprekken starten en beantwoorden vanuit de inbox",
             "inbox_kanban": "Inbox-kanbanbord",
             "team_performance": "Rapporten over teamprestaties",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "Volledige chatgeschiedenis importeren (persoonlijke WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI-leadscoring",
-            "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)"
+            "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)",
+            "team_hierarchy": "Teamhiërarchie en managers",
+            "custom_roles": "Eigen rollen en bereiken",
+            "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
           },
           "problems": {
             "required": "Dit veld is verplicht.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
             "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
             "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
-            "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd."
+            "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd.",
+            "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "Verkoop-CRM",
+            "platform": "Gedeeld door beide"
+          },
+          "marketplace": {
+            "title": "Marketplace-apps die worden aangeboden aan werkruimtes op dit abonnement"
+          },
+          "included": {
+            "title": "Add-ons inbegrepen in dit abonnement",
+            "intro": "Zet een add-on aan om hem op te nemen: werkruimtes op dit abonnement krijgen hem zonder kosten en op de kaart van de add-on staat \"Inbegrepen in je abonnement\". Hiermee worden precies de functies van de add-on aangevinkt op het tabblad Functies, en als je ze daar aanvinkt, schakelt de schakelaar mee. Add-ons die niet zijn opgenomen, worden nog steeds tegen hun eigen prijs verkocht aan elke werkruimte met een actief betaald abonnement.",
+            "readOnly": "Je kunt dit abonnement bekijken maar niet wijzigen, dus deze schakelaars zijn vergrendeld.",
+            "loading": "Add-ons laden",
+            "loadFailed": "De add-ons konden niet worden geladen. Er is niets gewijzigd.",
+            "empty": "Er zijn nog geen add-ons",
+            "emptyHint": "Add-ons zoals Slimme routering en Teams en machtigingen maak je aan onder Add-ons in de operatorconsole.",
+            "stateFull": "Inbegrepen",
+            "statePartial": "Gedeeltelijk inbegrepen",
+            "stateNone": "Niet inbegrepen",
+            "noPrice": "Geen prijs ingesteld",
+            "gives": "Geeft: {features}",
+            "switchLabel": "{name} opnemen in dit abonnement",
+            "noFeatures": "Deze add-on voegt alleen limieten toe, dus er is geen functie om op te nemen. Zijn limieten maken geen deel uit van opname in het abonnement; stel de eigen limieten van het abonnement in op het tabblad Limieten.",
+            "partial": "Gedeeltelijk inbegrepen: {count} van {total} functies staan aan in dit abonnement. Nog uit: {missing}.",
+            "includeFully": "Volledig opnemen",
+            "limitsNote": "Deze add-on voegt ook extra limieten toe ({limits}). De extra limiet maakt geen deel uit van opname in het abonnement en niets hier wijzigt die: stel de eigen limiet van het abonnement in op het tabblad Limieten. Werkruimtes kopen de add-on nog steeds voor de extra limiet.",
+            "unlistedNote": "Sommige functies ({features}) staan niet op de standaardlijst van add-ons. Ze kunnen nog steeds voor het abonnement worden aangezet; alleen het kopen van deze add-on als pakket werkt anders.",
+            "inactiveNote": "Deze add-on is een concept of staat uit, dus niemand kan hem nog kopen. Hem opnemen in het abonnement werkt wel.",
+            "impactCount": "{count, plural, one {# werkruimte betaalt al voor deze add-on.} other {# werkruimtes betalen al voor deze add-on.}} Hun verlenging stopt aan het einde van de huidige periode, er wordt niets terugbetaald en er wordt vandaag niets geannuleerd.",
+            "impactUnknown": "Werkruimtes op dit abonnement die al voor deze add-on betalen, verlengen hem niet meer aan het einde van hun huidige periode. Er wordt niets terugbetaald en er wordt vandaag niets geannuleerd. Het aantal kon niet worden geladen.",
+            "offNote": "Uitgezet: werkruimtes op dit abonnement verliezen deze functies tenzij ze de add-on kopen, en de add-on wordt voor hen koopbaar tegen zijn prijs."
           }
         }
       },

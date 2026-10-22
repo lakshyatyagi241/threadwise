@@ -20,7 +20,13 @@ const config = (over: Partial<RetentionConfig> = {}): RetentionConfig => ({
  * A database that answers the two statements the job issues. `script` says how many rows each batch deletes per kind and whether the
  * advisory lock is granted; every executed statement is kept so the cutoffs bound into it can be checked.
  */
-function harness(script: { read: number[]; unread: number[]; lock?: (call: number) => boolean }) {
+function harness(script: {
+  read: number[];
+  unread: number[];
+  lock?: (call: number) => boolean;
+  /** Live days saved on the retention dashboard, by item. */
+  policies?: Record<string, number>;
+}) {
   const queues = { read: [...script.read], unread: [...script.unread] };
   const calls: Array<{ kind: 'read' | 'unread'; cutoff: string; size: number }> = [];
   let lockCalls = 0;
@@ -30,6 +36,27 @@ function harness(script: { read: number[]; unread: number[]; lock?: (call: numbe
       const tx = {
         execute: async (query: { queryChunks: unknown[] }) => {
           const text = flatten(query);
+          // The retention dashboard's saved windows and the note of the run: nothing saved, nothing to write back.
+          if (text.includes('FROM data_retention_policies')) {
+            const item = String(params_(query)[0]);
+            const days = script.policies?.[item];
+            return {
+              rows:
+                days === undefined
+                  ? []
+                  : [
+                      {
+                        item,
+                        live_days: days,
+                        archive_days: null,
+                        row_version: 1,
+                        updated_by: 1,
+                        updated_at: NOW.toISOString(),
+                      },
+                    ],
+            };
+          }
+          if (text.includes('data_retention_')) return { rows: [] };
           if (text.includes('pg_try_advisory_xact_lock')) {
             lockCalls += 1;
             return { rows: [{ ok: script.lock ? script.lock(lockCalls) : true }] };
@@ -95,6 +122,27 @@ describe('NotificationRetentionService with a fake clock', () => {
       unreadDeleted: 0,
       moreToDo: false,
     });
+  });
+
+  it('uses the windows saved on the retention dashboard instead of the environment’s', async () => {
+    const { svc } = harness({
+      read: [0],
+      unread: [0],
+      policies: { notifications_read: 45, notifications_unread: 100 },
+    });
+    const res = await svc.runOnce(NOW, config());
+    expect(res.readCutoff).toBe(new Date(NOW.getTime() - 45 * DAY).toISOString());
+    expect(res.unreadCutoff).toBe(new Date(NOW.getTime() - 100 * DAY).toISOString());
+  });
+
+  it('never deletes an unread row before a read one, even if the saved numbers say so', async () => {
+    const { svc } = harness({
+      read: [0],
+      unread: [0],
+      policies: { notifications_read: 120, notifications_unread: 60 },
+    });
+    const res = await svc.runOnce(NOW, config());
+    expect(res.unreadCutoff).toBe(res.readCutoff);
   });
 
   it('moves with the clock: the same job a month later reaches a month further', async () => {
@@ -166,13 +214,18 @@ describe('NotificationRetentionService with a fake clock', () => {
     let batches = 0;
     const db = {
       privileged: async <T>(fn: (tx: unknown) => Promise<T>) => {
-        batches += 1;
         await gate;
         return fn({
-          execute: async (q: unknown) =>
-            flatten(q).includes('pg_try_advisory_xact_lock')
-              ? { rows: [{ ok: true }] }
-              : { rows: [{ n: 0 }] },
+          execute: async (q: unknown) => {
+            const text = flatten(q);
+            if (text.includes('data_retention_')) return { rows: [] };
+            // One advisory lock is taken per batch; the windows read and the run notes are not batches.
+            if (text.includes('pg_try_advisory_xact_lock')) {
+              batches += 1;
+              return { rows: [{ ok: true }] };
+            }
+            return { rows: [{ n: 0 }] };
+          },
         });
       },
     };

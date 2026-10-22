@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from 'libphonenumber-js/min';
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 
@@ -305,3 +306,120 @@ export const updateBusinessProfileInputSchema = z
   .partial()
   .refine((v) => Object.keys(v).length > 0, 'nothing to update');
 export type UpdateBusinessProfileInput = z.infer<typeof updateBusinessProfileInputSchema>;
+
+/** Profile pictures: Meta takes a JPG or PNG up to 5 MB (the same limit the template header examples use). */
+export const WABA_LOGO_MAX_BYTES = 5 * 1024 * 1024;
+export const WABA_LOGO_TYPES = ['image/jpeg', 'image/png'] as const;
+
+// --- business compliance (Meta's business_compliance_info, the India compliance form) ----------------------------------------
+
+/** The entity types Meta accepts. The form shows the words Geta uses ("Private Company"); Meta stores these values. */
+export const WABA_ENTITY_TYPES = [
+  'LIMITED_LIABILITY_PARTNERSHIP',
+  'SOLE_PROPRIETORSHIP',
+  'PARTNERSHIP',
+  'PUBLIC_COMPANY',
+  'PRIVATE_COMPANY',
+  'OTHER',
+] as const;
+export type WabaEntityType = (typeof WABA_ENTITY_TYPES)[number];
+
+/** Types that ask whether the business is registered. */
+export const REGISTRATION_ASKED: readonly WabaEntityType[] = ['PARTNERSHIP', 'OTHER'];
+
+const contactEmail = z
+  .string()
+  .trim()
+  .max(128)
+  .regex(/^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Enter a complete email address');
+
+/** A phone number with its country code (`+` first) that Meta would accept as valid, or empty. */
+const contactPhone = z
+  .string()
+  .trim()
+  .max(20)
+  .refine(
+    (v) => v === '' || v.startsWith('+'),
+    'Enter the number with its country code, starting with +',
+  )
+  .refine((v) => v === '' || isValidPhoneNumber(v), 'Enter a valid number with its country code');
+
+const contactDetails = z.object({
+  email: contactEmail,
+  mobile: contactPhone,
+  landline: contactPhone,
+});
+
+export const wabaComplianceInfoSchema = z.object({
+  entityName: z.string().nullable(),
+  entityType: z.enum(WABA_ENTITY_TYPES).nullable(),
+  entityTypeCustom: z.string().nullable(),
+  isRegistered: z.boolean().nullable(),
+  customerCare: z.object({
+    email: z.string().nullable(),
+    mobile: z.string().nullable(),
+    landline: z.string().nullable(),
+  }),
+  grievanceOfficer: z.object({
+    name: z.string().nullable(),
+    email: z.string().nullable(),
+    mobile: z.string().nullable(),
+    landline: z.string().nullable(),
+  }),
+});
+export type WabaComplianceInfo = z.infer<typeof wabaComplianceInfoSchema>;
+
+/**
+ * The whole compliance form, saved at once (Meta takes the same fields as one POST). The rules are Geta's: a custom type only
+ * for `OTHER`, the registration question only for `PARTNERSHIP` and `OTHER`, one way to reach each side (email, mobile or
+ * landline), and a grievance officer name.
+ */
+export const updateComplianceInfoInputSchema = z
+  .object({
+    entityName: z.string().trim().min(1, 'Enter the legal name of the business'),
+    entityType: z.enum(WABA_ENTITY_TYPES),
+    entityTypeCustom: z.string().trim().max(128).optional(),
+    isRegistered: z.boolean().optional(),
+    customerCare: contactDetails,
+    grievanceOfficer: contactDetails.extend({
+      name: z.string().trim().min(1, 'Enter the grievance officer name'),
+    }),
+  })
+  .superRefine((v, ctx) => {
+    const asked = REGISTRATION_ASKED.includes(v.entityType);
+    if (asked && v.isRegistered === undefined)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['isRegistered'],
+        message: 'Say whether the business is registered',
+      });
+    if (!asked && v.isRegistered !== undefined)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['isRegistered'],
+        message: 'Only asked for partnerships and other types',
+      });
+    if (v.entityType === 'OTHER' && !v.entityTypeCustom)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['entityTypeCustom'],
+        message: 'Enter the business type',
+      });
+    if (!hasOneContact(v.customerCare))
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['customerCare'],
+        message: 'Enter an email, a mobile or a landline for customer care',
+      });
+    if (!hasOneContact(v.grievanceOfficer))
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['grievanceOfficer'],
+        message: 'Enter an email, a mobile or a landline for the grievance officer',
+      });
+  });
+export type UpdateComplianceInfoInput = z.infer<typeof updateComplianceInfoInputSchema>;
+
+function hasOneContact(c: { email: string; mobile: string; landline: string }): boolean {
+  return c.email !== '' || c.mobile !== '' || c.landline !== '';
+}

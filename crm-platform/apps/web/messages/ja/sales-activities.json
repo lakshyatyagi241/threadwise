@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "タスク",
+        "meeting": "ミーティング",
+        "phone": "電話",
+        "email": "メール",
+        "reminder": "リマインダー",
+        "sms": "SMS",
+        "chat": "チャット"
+      },
+      "option": {
+        "task": {
+          "follow_up": "フォローアップ",
+          "call_reminder": "折り返し電話のリマインダー"
+        },
+        "meeting": {
+          "interested": "関心あり",
+          "not_interested": "関心なし",
+          "needs_follow_up": "フォローアップが必要",
+          "rescheduled": "日程変更",
+          "no_show": "不参加"
+        },
+        "phone": {
+          "connected": "つながった",
+          "no_answer": "応答なし",
+          "busy": "話し中",
+          "left_voicemail": "留守番電話に残した",
+          "wrong_number": "番号違い",
+          "declined": "拒否された",
+          "failed": "失敗"
+        }
+      }
+    },
+    "list": {
+      "back": "データ",
+      "title": "営業アクティビティ",
+      "intro": "チームが記録するアクティビティを1か所で管理します。タスク、ミーティング、通話、独自のアクティビティが対象です。それぞれでできること、タスクの種類、結果を選べます。",
+      "create": "アクティビティを作成",
+      "loading": "アクティビティを読み込んでいます…",
+      "loadFailed": "アクティビティを読み込めませんでした。",
+      "retry": "再試行",
+      "listLabel": "アクティビティ",
+      "default": "デフォルト",
+      "custom": "カスタム",
+      "noEditor": "設定項目のないデフォルトのアクティビティです。",
+      "edit": "アクティビティを編集",
+      "editNamed": "アクティビティ「{name}」を編集",
+      "chip": {
+        "completable": "完了できる",
+        "notCompletable": "完了できない",
+        "calendar": "カレンダーに表示",
+        "taskTypes": "{count, plural, other {タスクの種類 #件}}",
+        "outcomes": "{count, plural, other {結果 #件}}"
+      }
+    },
+    "drawer": {
+      "title": "アクティビティを編集: {name}",
+      "close": "閉じる",
+      "done": "完了",
+      "cancel": "キャンセル",
+      "saved": "保存しました。",
+      "autosave": "変更はすぐに保存されます。",
+      "readOnly": "この設定は表示のみで、変更はできません。",
+      "name": "アクティビティ名",
+      "nameLocked": "デフォルトのアクティビティの名前は変更できません。",
+      "mobileCheckIn": "モバイルアプリからのチェックイン／チェックアウトを許可する",
+      "mobileCheckInPending": "保存しましたが、まだ効果はありません。モバイルアプリがミーティングのチェックインに対応していないためです。対応すると有効になります。",
+      "showInCalendar": "このアクティビティをアクティビティダッシュボードの「マイカレンダー」に表示する",
+      "showInCalendarHint": "保存しましたが、アクティビティのカレンダーはまだありません。追加されると有効になります。",
+      "allowComplete": "このアクティビティを完了としてマークすることを許可する",
+      "allowEditCompleted": "このアクティビティの完了日時の編集を許可する",
+      "taskTypes": "タスクの種類",
+      "taskTypesHint": "タスクの作成時に1つ選びます。例: フォローアップ、折り返し電話のリマインダー。",
+      "addTaskType": "種類を追加",
+      "taskTypePlaceholder": "新しいタスクの種類",
+      "predictOutcomes": "このアクティビティの結果を予測する",
+      "predictOutcomesHint": "アクティビティの完了時に結果の選択肢を表示します。",
+      "outcomes": "結果",
+      "outcomesHint": "結果を削除しても、すでにその結果を持つレコードには残ります。",
+      "phoneOutcomesHint": "各結果を通話レポートでどう数えるかを選びます。結果を削除しても、すでにその結果を持つ通話には残ります。",
+      "addOutcome": "結果を追加",
+      "outcomePlaceholder": "新しい結果",
+      "listEmpty": "まだ何もありません。",
+      "moveUp": "{name}を上へ移動",
+      "moveDown": "{name}を下へ移動",
+      "remove": "{name}を削除",
+      "countsAsShort": "{as}として集計",
+      "countsAsLabel": "集計方法",
+      "countsAsOption": "{as}として集計",
+      "countsAs": {
+        "connected": "つながった",
+        "no_answer": "応答なし",
+        "busy": "話し中",
+        "left_voicemail": "留守番電話に残した",
+        "wrong_number": "番号違い",
+        "declined": "拒否された",
+        "failed": "失敗"
+      },
+      "removeActivity": "アクティビティを削除",
+      "removeConfirmTitle": "{name}を削除しますか？",
+      "removeConfirmBody": "リストから外れます。使用していたレコードの結果は残ります。",
+      "removed": "アクティビティを削除しました。",
+      "noSettings": "このアクティビティには設定項目がありません。",
+      "errors": {
+        "nameRequired": "アクティビティに名前を付けてください。",
+        "nameTaken": "その名前はすでに使われています。",
+        "limit": "このリストの上限に達しました。",
+        "conflict": "他のユーザーがこのアクティビティを変更しました。再読み込みしたので、もう一度お試しください。",
+        "forbidden": "これを変更する権限がありません。",
+        "failed": "保存できませんでした。もう一度お試しください。"
+      },
+      "itemName": "名前",
+      "hiddenInstead": "まだタスクが使っているため、代わりに非表示にしました。タスクには引き続き表示されます。",
+      "loadingOutcomes": "結果を読み込んでいます…",
+      "outcomesLoadFailed": "結果を読み込めませんでした。",
+      "retry": "再試行"
+    },
+    "create": {
+      "title": "アクティビティを作成",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "create": "作成",
+      "intro": "ビジネス固有のアクティビティを追加します。選んだ種類の設定で始まります。",
+      "name": "名前",
+      "namePlaceholder": "例: 現地訪問",
+      "behavesAs": "動作の種類",
+      "behavesAsHint": {
+        "task": "期日までに行い、完了できるもの。",
+        "meeting": "決まった時刻に行われ、完了できるもの。",
+        "phone": "通話。通話の結果を持ちます。"
+      },
+      "behaves": {
+        "task": "タスク",
+        "meeting": "ミーティング",
+        "phone": "電話"
+      },
+      "icon": "アイコン",
+      "icons": {
+        "task": "タスク",
+        "meeting": "カレンダー",
+        "phone": "電話",
+        "email": "メール",
+        "reminder": "ベル",
+        "sms": "メッセージ",
+        "chat": "チャット",
+        "visit": "場所",
+        "video": "ビデオ",
+        "document": "ドキュメント",
+        "flag": "旗",
+        "star": "星"
+      },
+      "errors": {
+        "nameRequired": "アクティビティに名前を付けてください。",
+        "nameTaken": "その名前のアクティビティはすでにあります。",
+        "limit": "カスタムアクティビティの上限に達しました。",
+        "failed": "アクティビティを作成できませんでした。もう一度お試しください。"
+      }
+    },
+    "picker": {
+      "removedSuffix": "（削除済み）",
+      "taskType": "タスクの種類",
+      "taskTypeNone": "種類なし",
+      "outcome": "結果",
+      "outcomeNone": "結果なし",
+      "completeOff": "営業アクティビティでタスクの完了がオフになっています。"
+    },
+    "meeting": {
+      "saved": "ミーティングを更新しました。",
+      "reopened": "ミーティングを再開しました。",
+      "errors": {
+        "disabled": "営業アクティビティでミーティングの完了がオフになっています。",
+        "optionGone": "その結果は削除されました。別のものを選んでください。",
+        "failed": "保存できませんでした。もう一度お試しください。"
+      },
+      "outcome": "結果",
+      "noOutcome": "結果なし",
+      "removedSuffix": "（削除済み）",
+      "notes": "メモ",
+      "cancel": "キャンセル",
+      "save": "保存",
+      "outcomeChip": "結果: {name}",
+      "completed": "完了",
+      "editAria": "{title}の結果を編集",
+      "edit": "編集",
+      "reopenAria": "{title}を再開",
+      "reopen": "再開",
+      "addAria": "{title}に結果を追加",
+      "add": "結果を追加",
+      "markCompleted": "完了にする"
+    }
+  }
+}

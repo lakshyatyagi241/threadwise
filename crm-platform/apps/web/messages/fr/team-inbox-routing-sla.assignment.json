@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Assignation des chats",
+        "intro": "Quatre commutateurs couvrent la plupart des espaces de travail : activez-les et vous n’avez plus besoin de créer de règle.",
+        "order": "L’ordre pour un nouveau chat : d’abord le propriétaire du contact et l’agent habituel, puis vos règles (si vous en ajoutez), puis « Tous les autres », puis la file d’attente.",
+        "readOnly": "Vous pouvez voir ces commutateurs, mais pas les modifier.",
+        "saved": "Enregistré.",
+        "saveFailed": "Impossible d’enregistrer la modification.",
+        "loading": "Chargement des paramètres d’assignation",
+        "loadFailed": "Impossible de charger les paramètres d’assignation.",
+        "retry": "Réessayer",
+        "notInPlan": "Non inclus dans votre offre",
+        "upgradeHint": "Inclus dans le module Routage intelligent ou dans une offre supérieure.",
+        "stepFirst": "Vérifié en premier",
+        "stepMaster": "Commutateur principal",
+        "stepAfter": "Après une prise en charge",
+        "needsAuto": "Utilisé uniquement lorsque l’attribution automatique est activée.",
+        "auto": {
+          "title": "Attribution automatique",
+          "body": "Les nouveaux chats sont répartis équitablement entre les agents qui acceptent des chats (ni hors ligne, ni occupés, ni en congé). Quand tous les agents ont atteint leur limite de chats, les nouveaux chats attendent dans la file d’attente.",
+          "limitHint": "Définissez la limite de chats de chaque agent dans son profil, sous <link>Membres de l’équipe</link>.",
+          "off": "Désactivé : rien n’est assigné automatiquement, ni par une règle ni via le propriétaire du contact. Les chats attendent dans la file d’attente jusqu’à ce que quelqu’un les prenne ou qu’un parcours désigne une personne."
+        },
+        "sticky": {
+          "title": "Agent habituel",
+          "body": "Un contact récurrent retourne vers l’agent qui a traité son dernier chat, tant que cet agent est toujours un membre actif pouvant ouvrir la boîte de réception (son statut en ligne n’est pas vérifié). Si le contact a un propriétaire, celui-ci est essayé en premier.",
+          "withWindow": "Le nombre de jours pris en compte pour le dernier agent se règle dans « Avancé »."
+        },
+        "owner": {
+          "title": "Assigner le chat au propriétaire du contact",
+          "body": "Les chats d’un contact connu vont d’abord à son propriétaire, pour que le support reste cohérent et personnel. Si le propriétaire est en congé, son remplaçant prend le chat ; s’il n’y a pas de propriétaire, l’étape suivante décide.",
+          "wins": "Si « Agent habituel » est aussi activé, le propriétaire du contact passe quand même en premier ; le dernier agent n’est que le second choix."
+        },
+        "claim": {
+          "title": "Définir l’agent comme propriétaire du contact",
+          "body": "Quand un agent prend un chat dans la file d’attente et que le contact n’a pas encore de propriétaire, cet agent devient le propriétaire du contact. Un propriétaire existant n’est jamais modifié.",
+          "note": "Un chat confié à un agent par une règle ne définit pas le propriétaire. Avec « Garder les chats ouverts avec le propriétaire » (dans « Avancé »), un transfert le fait aussi."
+        }
+      },
+      "advanced": {
+        "title": "Avancé",
+        "hint": "Synchronisation des chats avec le propriétaire du contact, durée de l’agent habituel, invite de réassignation et alertes de file d’attente.",
+        "sync": {
+          "title": "Garder les chats ouverts avec le propriétaire",
+          "body": "Quand le propriétaire d’un contact change, ses chats ouverts assignés automatiquement suivent le nouveau propriétaire. Un chat pris par une personne n’est jamais déplacé. Un transfert qui assigne un chat définit aussi le propriétaire si le contact n’en a pas.",
+          "needsOwner": "Activez d’abord « Assigner le chat au propriétaire du contact »."
+        }
+      },
+      "rules": {
+        "title": "Besoin de plus de contrôle ? Ajoutez des règles",
+        "intro": "Facultatif. Les règles envoient certains chats (un canal, des mots dans le message, un nouveau contact...) à certains agents ou équipes. Si les quatre commutateurs suffisent, vous n’avez jamais besoin de créer de règle.",
+        "locked": "Les règles font partie du module Routage intelligent ou d'une offre supérieure. Vous gardez la file d'attente, la prise en charge et l'attribution manuelle.",
+        "pipelineTitle": "Comment un nouveau chat est assigné",
+        "pipeline": {
+          "agent": "1. Propriétaire du contact et agent habituel",
+          "rules": "2. Vos règles, de haut en bas",
+          "rulesBody": "La première règle qui correspond et trouve un agent disponible prend le chat.",
+          "everyone": "3. Tous les autres",
+          "everyoneBody": "Prend ce qu’aucune règle n’a pris.",
+          "queue": "4. File d’attente",
+          "queueBody": "Si personne n’est trouvé, le chat attend dans l’onglet « En attente » jusqu’à ce qu’un agent le prenne.",
+          "agentBody": "Défini par les commutateurs ci-dessus."
+        },
+        "never": "Ce qui a déjà été assigné par un parcours, une personne ou un transfert n’est jamais modifié par les règles.",
+        "add": "Ajouter une règle",
+        "emptyTitle": "Aucune règle",
+        "empty": "Ce n’est pas un problème. Vos commutateurs ci-dessus et « Tous les autres » décident.",
+        "loading": "Chargement des règles",
+        "loadFailed": "Impossible de charger les règles.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy} : {who}",
+        "everyoneWho": "tous les agents",
+        "noAssign": "n’assigne pas",
+        "drag": "Faites glisser {name} pour changer l’ordre",
+        "neverRuns": "Ne s’exécute jamais",
+        "neverMatches": "Ne correspond jamais",
+        "neverMatchesHint": "Elle n’a aucune condition et ne s’applique pas à toutes les conversations. Modifiez-la pour corriger cela.",
+        "shadowed": "{count, plural, one {La règle située sous “{blocker}” ne peut} other {Les règles situées sous “{blocker}” ne peuvent}} jamais s’exécuter, sauf si aucun agent de “{blocker}” n’est disponible : {names}. “{blocker}” s’applique à toutes les conversations et arrête la vérification. Déplacez-la vers le bas, ou désactivez-y « Arrêter lorsque cette règle correspond ».",
+        "reordered": "Ordre enregistré."
+      },
+      "everyone": {
+        "title": "Tous les autres",
+        "pinned": "Toujours en dernier",
+        "body": "Prend tous les chats qu’aucune règle n’a pris. Choisissez qui les reçoit.",
+        "notSet": "Pas encore configuré : les chats qu’aucune règle ne prend attendent dans la file d’attente.",
+        "mode": "Ce qui arrive à ces chats",
+        "evenly": "Répartir équitablement entre tous les agents",
+        "evenlyHint": "Tour de rôle ou le moins occupé parmi tous ceux qui peuvent ouvrir la boîte de réception et sont disponibles : ni hors ligne, ni occupés, ni en congé, ni à leur limite de chats.",
+        "listed": "Choisir des agents ou des équipes",
+        "listedNow": "Actuellement : {who}.",
+        "listedEdit": "Modifier les agents ou les équipes",
+        "queue": "Laisser dans la file d’attente",
+        "queueHint": "Personne n’est assigné. Le chat attend qu’un agent le prenne.",
+        "strategy": "Mode de répartition",
+        "saved": "Enregistré.",
+        "failed": "Impossible d’enregistrer la modification.",
+        "confirmTitle": "Remplacer les agents choisis ?",
+        "confirmBody": "« Tous les autres » confie désormais les chats aux agents ou équipes que vous avez choisis. La répartition équitable remplace ce choix.",
+        "confirm": "Remplacer",
+        "ruleName": "Tous les autres"
+      },
+      "where": {
+        "title": "Où cela s’applique",
+        "applied": "Appliqué",
+        "applied1": "Quand un nouveau chat arrive (et quand un client rouvre un chat terminé que personne ne suit).",
+        "applied2": "Quand une étape « Transfert vers un humain » est réglée sur « Règles d’assignation » : la même liste est alors vérifiée, d’après le contact, le canal et le dernier message du client, puis « Tous les autres », puis la file d’attente.",
+        "not": "Non appliqué",
+        "not1": "Un chat qu’un parcours, une personne ou un transfert a déjà assigné.",
+        "not2": "L’assignation ou la prise en charge manuelle.",
+        "not3": "Une étape « Transfert vers un humain » qui désigne une personne (les règles sont ignorées) ou une équipe (la méthode propre à l’équipe est utilisée)."
+      },
+      "try": {
+        "title": "Essayer",
+        "body": "Choisissez un contact, un canal et un exemple de message pour voir qui recevrait le chat et pourquoi. Rien n’est assigné, comptabilisé ou envoyé.",
+        "contact": "Contact (facultatif)",
+        "noContact": "Aucun contact choisi : l’exemple est un tout nouveau contact. Les conditions sur les informations enregistrées du contact ne peuvent pas être vérifiées sans vrai contact.",
+        "channel": "Canal",
+        "message": "Exemple de message",
+        "messagePlaceholder": "p. ex. Je voudrais un remboursement",
+        "run": "Afficher ce qui se passerait",
+        "running": "Vérification",
+        "failed": "Le test n’a pas pu s’exécuter.",
+        "result": "Résultat",
+        "outcome": {
+          "sticky": "L’agent habituel décide : {who}.",
+          "rule": "La règle “{rule}” décide : {who}.",
+          "everyone": "« Tous les autres » décide : {who}.",
+          "queue": "Personne n’est trouvé : le chat attend dans la file d’attente.",
+          "off": "L’attribution automatique est désactivée : rien n’est assigné automatiquement."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "un agent",
+          "team": "la file d’attente de {name}",
+          "teamUnknown": "une file d’attente d’équipe"
+        },
+        "stepsTitle": "Étape par étape",
+        "step": {
+          "switch": "Attribution automatique",
+          "sticky": "Propriétaire du contact et agent habituel",
+          "rule": "Règle “{name}”",
+          "everyone": "Tous les autres",
+          "queue": "File d’attente"
+        },
+        "why": {
+          "auto_assign_off": "Le commutateur est désactivé.",
+          "sticky_off": "Les deux commutateurs sont désactivés, cette étape est donc ignorée.",
+          "no_contact": "Il n’y a pas de contact à rechercher.",
+          "no_agent_found": "Ni le propriétaire du contact ni le dernier agent n’ont pu le prendre.",
+          "owner": "Le propriétaire du contact le prend.",
+          "last_handler": "L’agent du dernier chat du contact le prend.",
+          "conditions_failed": "Ne correspondait pas.",
+          "nobody_available": "Correspondait, mais aucun des agents visés n’est disponible.",
+          "agent_picked": "Correspondait et a choisi un agent.",
+          "team_queue": "Correspondait ; personne n’était libre, le chat va donc dans la file d’attente de l’équipe.",
+          "no_assignment_in_rule": "Correspondait ; cette règle n’assigne pas (elle n’exécute que ses autres actions).",
+          "not_set": "Il n’y a aucune règle « Tous les autres » active, les chats que personne ne prend attendent donc dans la file d’attente."
+        },
+        "part": {
+          "contactKind": "Contact nouveau ou récurrent",
+          "contact": "Informations du contact",
+          "channel": "Canal",
+          "keywords": "Mots du message",
+          "languages": "Langue",
+          "businessHours": "Heures d’ouverture"
+        },
+        "partOk": "correspond",
+        "partWhy": {
+          "no_saved_value": "ce contact n’a pas cette information enregistrée, donc ne correspond pas",
+          "no_contact": "il n’y a pas de contact",
+          "not_same_kind": "le contact n’est pas de ce type",
+          "channel_differs": "ce canal n’est pas dans la liste",
+          "no_word": "aucun des mots n’est dans le message",
+          "language_differs": "la langue est différente ou inconnue",
+          "hours_differ": "l’heure n’est pas dans cette partie de la journée"
+        },
+        "contactLine": "Ce contact est {kind}. Étape : {stage}. {owner} {tags}",
+        "kind": {
+          "new": "nouveau",
+          "returning": "récurrent"
+        },
+        "hasOwner": "Il a un propriétaire.",
+        "noOwner": "Il n’a pas de propriétaire.",
+        "tags": "{count, plural, =0 {Aucun tag enregistré.} one {# tag enregistré.} other {# tags enregistrés.}}",
+        "skippedTitle": "Exclus",
+        "skip": {
+          "on_leave": "en congé",
+          "offline_busy_or_at_capacity": "hors ligne, occupé ou à sa limite de chats",
+          "cannot_read": "ne peut pas ouvrir la boîte de réception",
+          "no_owner": "le contact n’a pas de propriétaire",
+          "no_previous_handler_in_window": "aucun agent précédent pour ce contact",
+          "not_an_active_member": "n’est pas un membre actif"
+        },
+        "outside": "Simuler en dehors des heures d’ouverture",
+        "inside": "Simuler pendant les heures d’ouverture",
+        "clock": "Heures d’ouverture : utiliser l’heure actuelle",
+        "skipStep": {
+          "owner": "Propriétaire du contact",
+          "last_handler": "Dernier agent"
+        }
+      },
+      "form": {
+        "whenSwitch": "Uniquement pour les conversations qui correspondent...",
+        "whenSwitchHint": "Désactivé : cette règle s’applique à toutes les nouvelles conversations.",
+        "everyConversation": "Cette règle s’applique à toutes les nouvelles conversations.",
+        "kept": "Vos conditions sont conservées mais ignorées tant que cette option est désactivée.",
+        "add": "Ajouter une condition",
+        "remove": "Supprimer {name}",
+        "name": {
+          "contactKind": "Contact nouveau ou récurrent",
+          "channel": "Canal",
+          "keywords": "Mots du message",
+          "language": "Langue du client",
+          "hours": "Heures d’ouverture",
+          "contact": "Informations du contact"
+        },
+        "kind": {
+          "title": "Contact nouveau ou récurrent",
+          "hint": "Un contact est récurrent s’il a un chat antérieur ou s’il a été enregistré plus de 10 minutes avant ce chat.",
+          "new": "Nouveau contact (premier chat)",
+          "returning": "Contact récurrent"
+        },
+        "contactNote": "Correspond uniquement aux contacts qui ont déjà cette information enregistrée. Un tout nouveau contact arrive sans rien d’enregistré, sauf l’étape « Nouveau » ; utilisez donc Contact nouveau ou récurrent pour les premiers clients.",
+        "everyoneElseNote": "Voici la règle « Tous les autres » : elle prend les chats qu’aucune autre règle n’a pris.",
+        "everyoneAgents": "Toutes les personnes pouvant ouvrir la boîte de réception",
+        "everyoneAgentsHint": "Répartir les chats entre tous les agents disponibles au lieu de les choisir.",
+        "fallbackConditions": "Cette règle a des conditions enregistrées auparavant, elle ne prend donc que les chats qui y correspondent. Activez le commutateur ci-dessous pour les examiner, ou supprimez-les."
+      }
+    }
+  }
+}

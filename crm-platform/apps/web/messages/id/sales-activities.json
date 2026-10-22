@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Tugas",
+        "meeting": "Pertemuan",
+        "phone": "Telepon",
+        "email": "Email",
+        "reminder": "Pengingat",
+        "sms": "SMS",
+        "chat": "Obrolan"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Tindak lanjut",
+          "call_reminder": "Pengingat telepon"
+        },
+        "meeting": {
+          "interested": "Tertarik",
+          "not_interested": "Tidak tertarik",
+          "needs_follow_up": "Perlu tindak lanjut",
+          "rescheduled": "Dijadwalkan ulang",
+          "no_show": "Tidak hadir"
+        },
+        "phone": {
+          "connected": "Tersambung",
+          "no_answer": "Tidak dijawab",
+          "busy": "Sibuk",
+          "left_voicemail": "Meninggalkan pesan suara",
+          "wrong_number": "Nomor salah",
+          "declined": "Ditolak",
+          "failed": "Gagal"
+        }
+      }
+    },
+    "list": {
+      "back": "Data",
+      "title": "Aktivitas Penjualan",
+      "intro": "Kelola aktivitas yang dicatat tim Anda di satu tempat: tugas, pertemuan, panggilan, dan aktivitas buatan sendiri. Pilih apa yang bisa dilakukan tiap aktivitas, jenis tugas, dan hasilnya.",
+      "create": "Buat aktivitas",
+      "loading": "Memuat aktivitas…",
+      "loadFailed": "Aktivitas tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "listLabel": "Aktivitas",
+      "default": "Bawaan",
+      "custom": "Kustom",
+      "noEditor": "Aktivitas bawaan tanpa pengaturan.",
+      "edit": "Edit aktivitas",
+      "editNamed": "Edit aktivitas {name}",
+      "chip": {
+        "completable": "Dapat diselesaikan",
+        "notCompletable": "Tidak dapat diselesaikan",
+        "calendar": "Di kalender",
+        "taskTypes": "{count, plural, other {# jenis tugas}}",
+        "outcomes": "{count, plural, other {# hasil}}"
+      }
+    },
+    "drawer": {
+      "title": "Edit aktivitas: {name}",
+      "close": "Tutup",
+      "done": "Selesai",
+      "cancel": "Batal",
+      "saved": "Tersimpan.",
+      "autosave": "Perubahan disimpan saat Anda membuatnya.",
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+      "name": "Nama aktivitas",
+      "nameLocked": "Nama aktivitas bawaan tidak dapat diubah.",
+      "mobileCheckIn": "Izinkan pengguna check-in dan check-out dari aplikasi seluler",
+      "mobileCheckInPending": "Tersimpan, tetapi belum berpengaruh: aplikasi seluler belum mendukung check-in pertemuan. Akan berfungsi saat aplikasi mendukungnya.",
+      "showInCalendar": "Tampilkan aktivitas ini di Kalender Saya pada Dasbor Aktivitas",
+      "showInCalendarHint": "Tersimpan, tetapi belum ada kalender aktivitas. Akan berlaku saat kalender ditambahkan.",
+      "allowComplete": "Izinkan pengguna menandai aktivitas ini sebagai selesai",
+      "allowEditCompleted": "Izinkan pengguna mengedit tanggal dan waktu penyelesaian aktivitas ini",
+      "taskTypes": "Jenis tugas",
+      "taskTypesHint": "Pilih salah satu saat membuat tugas, misalnya Tindak lanjut atau Pengingat telepon.",
+      "addTaskType": "Tambah jenis",
+      "taskTypePlaceholder": "Jenis tugas baru",
+      "predictOutcomes": "Prediksi hasil untuk aktivitas ini",
+      "predictOutcomesHint": "Tawarkan hasil saat aktivitas diselesaikan.",
+      "outcomes": "Hasil",
+      "outcomesHint": "Menghapus hasil tetap menyimpannya pada catatan yang sudah memilikinya.",
+      "phoneOutcomesHint": "Pilih bagaimana setiap hasil dihitung dalam laporan panggilan. Menghapus hasil tetap menyimpannya pada panggilan yang sudah memilikinya.",
+      "addOutcome": "Tambah hasil",
+      "outcomePlaceholder": "Hasil baru",
+      "listEmpty": "Belum ada apa pun.",
+      "moveUp": "Naikkan {name}",
+      "moveDown": "Turunkan {name}",
+      "remove": "Hapus {name}",
+      "countsAsShort": "dihitung sebagai {as}",
+      "countsAsLabel": "Dihitung sebagai",
+      "countsAsOption": "Dihitung sebagai {as}",
+      "countsAs": {
+        "connected": "tersambung",
+        "no_answer": "tidak dijawab",
+        "busy": "sibuk",
+        "left_voicemail": "meninggalkan pesan suara",
+        "wrong_number": "nomor salah",
+        "declined": "ditolak",
+        "failed": "gagal"
+      },
+      "removeActivity": "Hapus aktivitas",
+      "removeConfirmTitle": "Hapus {name}?",
+      "removeConfirmBody": "Aktivitas keluar dari daftar. Catatan yang memakainya tetap menyimpan hasilnya.",
+      "removed": "Aktivitas dihapus.",
+      "noSettings": "Aktivitas ini tidak memiliki pengaturan.",
+      "errors": {
+        "nameRequired": "Beri nama aktivitas.",
+        "nameTaken": "Nama itu sudah dipakai di sini.",
+        "limit": "Anda telah mencapai batas daftar ini.",
+        "conflict": "Orang lain mengubah aktivitas ini. Aktivitas dimuat ulang; coba lagi.",
+        "forbidden": "Anda tidak memiliki izin untuk mengubah ini.",
+        "failed": "Tidak dapat disimpan. Coba lagi."
+      },
+      "itemName": "Nama",
+      "hiddenInstead": "Tugas masih memakainya, jadi disembunyikan. Tugas tetap menampilkannya.",
+      "loadingOutcomes": "Memuat hasil…",
+      "outcomesLoadFailed": "Hasil tidak dapat dimuat.",
+      "retry": "Coba lagi"
+    },
+    "create": {
+      "title": "Buat aktivitas",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "create": "Buat",
+      "intro": "Tambahkan aktivitas khusus untuk bisnis Anda. Aktivitas dimulai dengan pengaturan jenis yang Anda pilih.",
+      "name": "Nama",
+      "namePlaceholder": "Contoh: Kunjungan lokasi",
+      "behavesAs": "Berfungsi seperti",
+      "behavesAsHint": {
+        "task": "Sesuatu yang dikerjakan sebelum tanggal tertentu dan dapat diselesaikan.",
+        "meeting": "Sesuatu yang terjadi pada waktu tertentu dan dapat diselesaikan.",
+        "phone": "Panggilan, dengan hasil panggilan."
+      },
+      "behaves": {
+        "task": "Tugas",
+        "meeting": "Pertemuan",
+        "phone": "Panggilan telepon"
+      },
+      "icon": "Ikon",
+      "icons": {
+        "task": "Tugas",
+        "meeting": "Kalender",
+        "phone": "Telepon",
+        "email": "Email",
+        "reminder": "Lonceng",
+        "sms": "Pesan",
+        "chat": "Obrolan",
+        "visit": "Tempat",
+        "video": "Video",
+        "document": "Dokumen",
+        "flag": "Bendera",
+        "star": "Bintang"
+      },
+      "errors": {
+        "nameRequired": "Beri nama aktivitas.",
+        "nameTaken": "Aktivitas dengan nama itu sudah ada.",
+        "limit": "Anda telah mencapai batas aktivitas kustom.",
+        "failed": "Aktivitas tidak dapat dibuat. Coba lagi."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(dihapus)",
+      "taskType": "Jenis tugas",
+      "taskTypeNone": "Tanpa jenis",
+      "outcome": "Hasil",
+      "outcomeNone": "Tanpa hasil",
+      "completeOff": "Menyelesaikan tugas dimatikan di Aktivitas Penjualan."
+    },
+    "meeting": {
+      "saved": "Pertemuan diperbarui.",
+      "reopened": "Pertemuan dibuka kembali.",
+      "errors": {
+        "disabled": "Menyelesaikan pertemuan dimatikan di Aktivitas Penjualan.",
+        "optionGone": "Hasil itu telah dihapus. Pilih yang lain.",
+        "failed": "Tidak dapat disimpan. Coba lagi."
+      },
+      "outcome": "Hasil",
+      "noOutcome": "Tanpa hasil",
+      "removedSuffix": "(dihapus)",
+      "notes": "Catatan",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "outcomeChip": "Hasil: {name}",
+      "completed": "Selesai",
+      "editAria": "Edit hasil {title}",
+      "edit": "Edit",
+      "reopenAria": "Buka kembali {title}",
+      "reopen": "Buka kembali",
+      "addAria": "Tambahkan hasil ke {title}",
+      "add": "Tambah hasil",
+      "markCompleted": "Tandai selesai"
+    }
+  }
+}

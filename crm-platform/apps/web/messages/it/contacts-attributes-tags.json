@@ -37,7 +37,8 @@
       "statusStage": "Quello stato appartiene a un'altra fase. Scegli uno stato adatto alla fase del contatto.",
       "stageScope": "Uno stato può essere limitato solo a una delle tue fasi del ciclo di vita.",
       "planLimit": "Hai raggiunto il limite del tuo piano di {limit, plural, one {# contatto} other {# contatti}}. Passa a un piano superiore per aggiungerne altri, oppure elimina un contatto esistente per liberare spazio.",
-      "legalHold": "Questo record è protetto e al momento non può essere eliminato."
+      "legalHold": "Questo record è protetto e al momento non può essere eliminato.",
+      "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnatela prima a te per inviare un messaggio."
     },
     "list": {
       "title": "Contact Hub",
@@ -130,6 +131,7 @@
       "colLeadScore": "Punteggio lead",
       "colLanguage": "Lingua",
       "colCreatedOn": "Creato il",
+      "colModifiedOn": "Modificato il",
       "pagination": "Paginazione",
       "prevPage": "Pagina precedente",
       "nextPage": "Pagina successiva",
@@ -282,6 +284,7 @@
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Creato",
+      "shortModified": "Modificato",
       "firstRun": {
         "title": "Aggiungi i tuoi primi contatti",
         "message": "Porta dentro le persone con cui parli. I contatti servono per messaggi, campagne, attività e trattative.",
@@ -290,7 +293,11 @@
         "importBody": "Carica un foglio di calcolo e abbina le sue colonne ai campi del contatto.",
         "connect": "Collega WhatsApp",
         "connectBody": "Collega il tuo numero, così i contatti possono rispondere e tu puoi scrivere loro."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Filtra per team",
+      "allTeams": "Tutti i team",
+      "teamFormer": "Team precedente"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -442,7 +449,8 @@
       "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo.",
       "searchOptions": "Cerca opzioni",
       "searchOptionsFor": "Cerca tra le opzioni di {field}",
-      "noOptionsFound": "Nessuna opzione corrisponde alla ricerca."
+      "noOptionsFound": "Nessuna opzione corrisponde alla ricerca.",
+      "cascadeWaiting": "Scegli prima {parent} per vedere le scelte."
     },
     "tags": {
       "title": "Tag",
@@ -1081,7 +1089,8 @@
         "moveDown": "Sposta {name} giù",
         "edit": "Modifica {name}",
         "deactivate": "Disattiva {name}",
-        "reactivate": "Riattiva"
+        "reactivate": "Riattiva",
+        "dependsOn": "Scelte dipendenti da {field}"
       },
       "toast": {
         "conflict": "Qualcun altro ha modificato questo elemento. L'elenco è stato aggiornato; riprova.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Gestisci fasi",
         "manageGroups": "Gestisci gruppi",
         "locked": "Fisso"
+      },
+      "cascade": {
+        "open": "Campi dipendenti",
+        "title": "Campi dipendenti",
+        "close": "Chiudi",
+        "intro": "Un campo dipendente è sempre visibile. Le sue scelte dipendono dalla scelta fatta nel campo genitore: per ogni scelta del genitore, seleziona le scelte del campo dipendente che consente.",
+        "empty": "Nessun campo dipendente per ora.",
+        "add": "Aggiungi campo dipendente",
+        "needTwoChoiceFields": "I campi dipendenti richiedono almeno due proprietà con un elenco di scelte (menu a tendina, selezione multipla o radio).",
+        "dependsOn": "dipende da {parent}",
+        "editLabel": "Modifica {name}",
+        "removeLabel": "Rimuovi {name}",
+        "parent": "Proprietà genitore",
+        "child": "Proprietà dipendente",
+        "pickParent": "Scegli la proprietà genitore",
+        "pickChild": "Scegli la proprietà dipendente",
+        "allowed": "Scelte di {child} consentite per ogni scelta di {parent}",
+        "noParentChoices": "La proprietà genitore non ha ancora scelte.",
+        "noChildChoices": "La proprietà dipendente non ha ancora scelte.",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "saved": "Campo dipendente salvato.",
+        "cycle": "Questa dipendenza farebbe attendere due proprietà l'una dall'altra.",
+        "removeTitle": "Rimuovere {name} dai campi dipendenti?",
+        "removeMessage": "Mostrerà di nuovo tutte le sue scelte. Le scelte associate al genitore vengono dimenticate; i valori dei contatti restano invariati.",
+        "removeConfirm": "Rimuovi",
+        "removed": "Campo dipendente rimosso.",
+        "removeFailed": "Impossibile rimuovere il campo dipendente. Riprova."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Colonne selezionate",
         "selectAll": "Seleziona tutto",
         "reorder": "Trascina per riordinare le colonne",
-        "remove": "Rimuovi {name}"
+        "remove": "Rimuovi {name}",
+        "nameShort": "Il nome della vista deve avere almeno {min} caratteri.",
+        "nameLong": "Il nome della vista può avere al massimo {max} caratteri."
       },
       "presets": {
         "myContacts": "I miei contatti",

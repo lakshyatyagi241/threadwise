@@ -34,7 +34,10 @@
         "all": "全期間",
         "7d": "7日間",
         "30d": "30日間",
-        "90d": "90日間"
+        "90d": "90日間",
+        "custom": "カスタム範囲",
+        "from": "開始日",
+        "to": "終了日"
       },
       "search": "キャンペーンを検索",
       "selectPage": "このページを選択",
@@ -1045,7 +1048,7 @@
         "loadFailed": "統計を読み込めませんでした。",
         "rates": {
           "delivered": "配信率",
-          "deliveredHint": "対象全体に対して",
+          "deliveredHint": "送信済みのうち",
           "read": "開封率",
           "readHint": "配信済みに対して",
           "replies": "返信率",
@@ -1873,8 +1876,7 @@
         "list": "リスト",
         "blocks": "ブロック"
       },
-      "showing": "{count}件のキャンペーンを表示",
-      "legacy": "旧配信 ({count})"
+      "showing": "{count}件のキャンペーンを表示"
     },
     "senderEmpty": {
       "loading": "番号を読み込んでいます…",

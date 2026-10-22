@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
+import { bumpRolesVersionOffline } from '../../../kernel/rbac/roles-version-offline';
 
 loadEnv({ path: resolve(__dirname, '../../../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
@@ -95,7 +96,17 @@ const SAMPLE_PLANS: SeedPlan[] = [
       ai_token_limit_monthly: 50000,
     },
     // WhatsApp groups is a paid plan feature (owner decision 2026-10-08, BL-094); the demo plans carry it so local testing works.
-    features: { ...FEATURES_OFF, waba_groups: true, help_agent: true },
+    // Smart routing (automatic assignment) is an upper-tier feature: the entry plan has neither flag.
+    features: {
+      ...FEATURES_OFF,
+      waba_groups: true,
+      help_agent: true,
+      inbox_routing: false,
+      inbox_assignment_sticky: false,
+      // Reminder upgrade tier (needs the Appointments app): the entry plan has timed reminders only, no buttons and no rebook steps.
+      appointment_confirm_buttons: false,
+      appointment_rebook_steps: false,
+    },
   },
   {
     slug: 'growth',
@@ -144,6 +155,10 @@ const SAMPLE_PLANS: SeedPlan[] = [
       shopify: true,
       waba_groups: true,
       help_agent: true,
+      inbox_routing: true,
+      inbox_assignment_sticky: true,
+      appointment_confirm_buttons: true,
+      appointment_rebook_steps: true,
     },
   },
   {
@@ -196,6 +211,10 @@ const SAMPLE_PLANS: SeedPlan[] = [
       sales_pipeline: true,
       waba_groups: true,
       help_agent: true,
+      inbox_routing: true,
+      inbox_assignment_sticky: true,
+      appointment_confirm_buttons: true,
+      appointment_rebook_steps: true,
     },
   },
 ];
@@ -315,6 +334,14 @@ async function main(): Promise<void> {
     const plansCreated = await seedPlans(client);
 
     await client.query('COMMIT');
+    // New role links: a running API must not keep serving the grant sets it cached before them (R-64-04).
+    const rbac = await bumpRolesVersionOffline(client, [
+      ...new Set(users.rows.map((u) => u.org_id)),
+    ]);
+    if (!rbac.redisCleared)
+      console.log(
+        'note: Redis was not cleared; a running API picks up the new roles within 10 minutes.',
+      );
     console.log(
       `plans:    starter (free, 14-day trial, sign-up default), growth, scale  (${plansCreated} created)`,
     );

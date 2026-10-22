@@ -7,6 +7,7 @@ import {
 import type { OutboxEvent } from '../../../src/kernel/outbox/outbox-subscribers';
 import { ConferencingReleaseConsumer } from '../../../src/modules/meeting-conferencing/conferencing-release.consumer';
 import { MeetingConferencingWorkerModule } from '../../../src/modules/meeting-conferencing';
+import { ConferencingOperatorService } from '../../../src/modules/meeting-conferencing/conferencing-operator.service';
 import {
   deriveStateKey,
   signTicket,
@@ -45,9 +46,10 @@ const KEYS = [
   'GOOGLE_RETRY_BASE_MS',
   'GOOGLE_BUSY_CACHE_SECONDS',
 ];
-const STATE_KEY = deriveStateKey(Buffer.alloc(32, 7).toString('base64'));
+let STATE_KEY: Buffer;
 
 beforeAll(async () => {
+  STATE_KEY = await deriveStateKey(Buffer.alloc(32, 7).toString('base64'));
   fakeGoogle = await FakeGoogle.start();
   for (const k of [...KEYS, ...Object.keys(fakeGoogle.env())]) saved[k] = process.env[k];
   Object.assign(process.env, fakeGoogle.env(), {
@@ -94,6 +96,7 @@ interface Caps {
   canInstall: boolean;
   connectable: string[];
   installable: boolean;
+  installPath: string | null;
 }
 const caps = async (token: string): Promise<Caps> => {
   const res = await api.as(token).get('/v2/conferencing/capabilities');
@@ -213,8 +216,8 @@ describe('nothing is offered before the integration is installed and connected',
     const list = await api.as(a.admin).get('/v2/conferencing/connections');
     expect(list.status).toBe(200);
     expect(list.body.data.map((c: { status: string }) => c.status)).toEqual([
-      'not_installed',
-      'not_installed',
+      'not_available',
+      'not_available',
     ]);
   });
 
@@ -249,6 +252,158 @@ describe('nothing is offered before the integration is installed and connected',
       [a.orgId],
     );
     expect(after.rows[0].n).toBe(before.rows[0].n);
+  });
+});
+
+interface Card {
+  provider: string;
+  status: string;
+  listingPublished: boolean;
+  configured: boolean;
+  listingPath: string | null;
+  account: string | null;
+}
+const cards = async (token: string): Promise<Record<string, Card>> => {
+  const res = await api.as(token).get('/v2/conferencing/connections');
+  expect(res.status, JSON.stringify(res.body)).toBe(200);
+  return Object.fromEntries((res.body.data as Card[]).map((c) => [c.provider, c]));
+};
+const setListing = (slug: string, status: 'draft' | 'published') =>
+  h.owner.query(
+    `UPDATE marketplace_apps a SET status = $2,
+            current_version_id = CASE WHEN $2 = 'published' THEN (SELECT id FROM marketplace_app_versions v WHERE v.app_id = a.id ORDER BY id DESC LIMIT 1) ELSE NULL END
+      WHERE a.slug = $1`,
+    [slug, status],
+  );
+
+describe('the four states of a card, and the operator checklist (BL-370)', () => {
+  const fresh = async () => {
+    const t = await api.signup('cfs');
+    return t;
+  };
+
+  it('a draft listing is "not available yet": no install link anywhere, and the form offers nothing', async () => {
+    const t = await fresh();
+    const c = (await cards(t.admin)).zoom!;
+    expect(c).toMatchObject({
+      status: 'not_available',
+      listingPublished: false,
+      listingPath: null,
+    });
+    const k = await caps(t.admin);
+    expect(k.installable).toBe(false);
+    expect(k.installPath).toBeNull();
+  });
+
+  it('a published listing on a platform that has the provider is "not installed", with a deep link to the listing page', async () => {
+    const t = await fresh();
+    await setListing('zoom', 'published');
+    try {
+      const c = await cards(t.admin);
+      expect(c.zoom).toMatchObject({
+        status: 'not_installed',
+        listingPublished: true,
+        configured: true,
+        listingPath: '/marketplace/app/zoom',
+      });
+      // Teams is still a draft: it stays unavailable and has no link.
+      expect(c.teams).toMatchObject({ status: 'not_available', listingPath: null });
+      const k = await caps(t.admin);
+      expect(k.installable).toBe(true);
+      expect(k.installPath).toBe('/marketplace/app/zoom');
+      // Two installable listings: the Integrations tab, not one of them.
+      await setListing('microsoft-teams', 'published');
+      expect((await caps(t.admin)).installPath).toBe('/marketplace/integrations');
+    } finally {
+      await setListing('microsoft-teams', 'draft');
+      await setListing('zoom', 'draft');
+    }
+  });
+
+  it('a published listing for a provider the platform has not set up is "not available yet" too', async () => {
+    const t = await fresh();
+    await setListing('zoom', 'published');
+    zoom.isConfigured = false;
+    try {
+      const c = (await cards(t.admin)).zoom!;
+      expect(c).toMatchObject({
+        status: 'not_available',
+        listingPublished: true,
+        configured: false,
+        listingPath: null,
+      });
+      const k = await caps(t.admin);
+      expect(k.installable).toBe(false);
+      expect(k.installPath).toBeNull();
+      // Installed first, then switched off by the operator: a different state, with its own words.
+      await install(t, 'zoom');
+      expect((await cards(t.admin)).zoom).toMatchObject({
+        status: 'unavailable',
+        configured: false,
+      });
+    } finally {
+      zoom.isConfigured = true;
+      await uninstall(t, 'zoom');
+      await setListing('zoom', 'draft');
+    }
+  });
+
+  it('installed is "installed, connect your account", and connected shows the account', async () => {
+    const t = await fresh();
+    await install(t, 'zoom');
+    expect((await cards(t.admin)).zoom).toMatchObject({
+      status: 'disconnected',
+      account: null,
+      listingPath: null,
+    });
+    await connect(t, t.admin, 'zoom', 'maya@example.com');
+    expect((await cards(t.admin)).zoom).toMatchObject({
+      status: 'connected',
+      account: 'maya@example.com',
+    });
+  });
+
+  it('the operator checklist says what is missing per provider and gives the exact redirect address', async () => {
+    const operator = h.app.get(ConferencingOperatorService);
+    const before = await operator.status();
+    expect(before.fakeAdapters).toBe(true);
+    const z = before.providers.find((p) => p.provider === 'zoom')!;
+    expect(z).toMatchObject({
+      slug: 'zoom',
+      ready: false,
+      listing: { exists: true, status: 'draft', published: false },
+    });
+    expect(z.gaps).toContain('listing_not_published');
+    // The address is built from APP_URL and is the one the callback is mounted on.
+    expect(z.redirectUri).toMatch(/\/v2\/public\/conferencing\/zoom\/callback$/);
+    const teams = before.providers.find((p) => p.provider === 'teams')!;
+    expect(teams.redirectUri).toMatch(/\/v2\/public\/conferencing\/teams\/callback$/);
+    // No value ever leaves: only whether one is set.
+    expect(JSON.stringify(before)).not.toMatch(/secret-value/);
+
+    process.env.ZOOM_CLIENT_ID = 'zoom-id';
+    process.env.ZOOM_CLIENT_SECRET = 'secret-value';
+    await setListing('zoom', 'published');
+    try {
+      const ready = (await operator.status()).providers.find((p) => p.provider === 'zoom')!;
+      expect(ready).toMatchObject({
+        ready: true,
+        gaps: [],
+        hasClientId: true,
+        hasClientSecret: true,
+        credentialsSource: 'environment',
+      });
+      expect(JSON.stringify(await operator.status())).not.toContain('secret-value');
+    } finally {
+      delete process.env.ZOOM_CLIENT_ID;
+      delete process.env.ZOOM_CLIENT_SECRET;
+      await setListing('zoom', 'draft');
+    }
+  });
+
+  it('the operator route is for platform operators only', async () => {
+    const res = await api.as(a.admin).get('/v2/platform/conferencing/status');
+    expect([401, 403]).toContain(res.status);
   });
 });
 
@@ -349,8 +504,8 @@ describe("connecting a person's own Zoom account", () => {
     expect((await caps(b.admin)).video).toEqual([]);
     const list = await api.as(b.admin).get('/v2/conferencing/connections');
     expect(list.body.data.map((c: { status: string }) => c.status)).toEqual([
-      'not_installed',
-      'not_installed',
+      'not_available',
+      'not_available',
     ]);
   });
 });

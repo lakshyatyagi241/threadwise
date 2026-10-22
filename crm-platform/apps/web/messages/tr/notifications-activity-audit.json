@@ -414,6 +414,14 @@
           "label": "Randevu, Google Calendar ile senkronize değil",
           "hint": "Yaklaşan bir randevunun Google Calendar etkinliği silindi, taşındı veya konukları değiştirildi. Randevu değiştirilmez; ne yapacağınıza siz karar verirsiniz."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Randevu müşteri tarafından iptal edildi",
+          "hint": "Bir müşteri, hatırlatmadaki İptal düğmesine dokunarak randevusunu iptal etti. Randevunun sahibine bildirilir."
+        },
+        "appointment_reminder_test": {
+          "label": "Hatırlatma e-postası testinin sonucu",
+          "hint": "Bir hatırlatma adımı için gönderdiğiniz test e-postasının sonucu: gönderildi ya da gönderilmedi ve nedeni."
+        },
         "snooze_wake": {
           "label": "Ertelenen sohbet geri döner",
           "hint": "Ertelenen bir sohbet belirlenen saatte yeniden açılır ve size ya da ekibinize atanır."
@@ -513,6 +521,11 @@
           "watch": "Bir açılır pencere görmeniz, zil sayısının ve sekme başlığının değişmesi gerekir.",
           "notConnected": "Bu sayfada canlı güncellemeler bağlı değil, bu yüzden açılır pencere burada görünemez. Sayfayı yenileyip tekrar deneyin.",
           "off": "Zilde bildirim oluşturulmadı: aşağıdaki tabloda \"Test bildirimi\" için zil kapalı ya da çalışma alanı sahibiniz tarafından kapatılmış."
+        },
+        "prompt": {
+          "message": "Tarayıcı bildirimlerini açın; CRM kapalıyken bile seçtiğiniz olaylar için uyarı alın.",
+          "enable": "Bildirimlere izin ver",
+          "enabling": "Etkinleştiriliyor..."
         }
       }
     },

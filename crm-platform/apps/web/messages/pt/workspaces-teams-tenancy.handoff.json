@@ -1,0 +1,33 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Transferência e atribuição",
+        "hint": "Usado quando um bot, um fluxo ou um colega transfere uma conversa para esta equipe.",
+        "method": "Como escolher uma pessoa",
+        "methodHint": "Manual: a conversa espera na fila da equipe até alguém assumi-la. Rodízio e Menos carregado escolhem um membro para você e fazem parte do complemento Roteamento inteligente.",
+        "defaultAssignee": "Responsável padrão",
+        "defaultAssigneeHint": "Assume a conversa quando ninguém mais pode. Escolha um dos membros da equipe.",
+        "noDefaultAssignee": "Ninguém em particular",
+        "hours": "Horário de atendimento",
+        "hoursHint": "Desativado significa sempre aberto. Fora desse horário, a conversa continua aguardando na fila e o contato recebe a mensagem de fora do horário do fluxo.",
+        "timezone": "Fuso horário",
+        "dayFrom": "{day}, abre",
+        "dayTo": "{day}, fecha",
+        "hoursProblem": "Cada dia aberto precisa de um horário de abertura e um de fechamento diferentes.",
+        "day": {
+          "mon": "Segunda-feira",
+          "tue": "Terça-feira",
+          "wed": "Quarta-feira",
+          "thu": "Quinta-feira",
+          "fri": "Sexta-feira",
+          "sat": "Sábado",
+          "sun": "Domingo"
+        },
+        "methodLocked": "{method} (exige Roteamento inteligente)",
+        "methodLockHint": "Os métodos automáticos fazem parte do complemento Roteamento inteligente ou de um plano superior.",
+        "defaultAssigneeLocked": "O responsável padrão só é usado com um método de equipe automático, que faz parte do complemento Roteamento inteligente ou de um plano superior."
+      }
+    }
+  }
+}

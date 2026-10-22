@@ -127,7 +127,7 @@ beforeAll(async () => {
       [t.orgId, name],
     );
     await p.h.owner.query(
-      `INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1, $2, $3)`,
+      `INSERT INTO team_members (org_id, team_id, user_id, is_primary) VALUES ($1, $2, $3, true)`,
       [t.orgId, r.rows[0].id, userId],
     );
     return r.rows[0].uuid as string;
@@ -320,6 +320,27 @@ describe('the report against seeded invoices and payments', () => {
     );
     expect(amount(row(r, teamA).metrics.invoiced.current, 'USD')).toBe('150.00');
     expect(amount(row(r, teamB).metrics.invoiced.current, 'USD')).toBe('200.00');
+  });
+
+  it('by team: a person on a second team (not primary) is counted once, for the primary team (BL-382)', async () => {
+    const teamBId = (await p.h.owner.query(`SELECT id FROM teams WHERE uuid = $1`, [teamB])).rows[0]
+      .id;
+    const aliceId = (await p.h.owner.query(`SELECT id FROM users WHERE uuid = $1`, [aliceUuid]))
+      .rows[0].id;
+    await p.h.owner.query(
+      `INSERT INTO team_members (org_id, team_id, user_id, is_primary) VALUES ($1, $2, $3, false)`,
+      [t.orgId, teamBId, aliceId],
+    );
+    const r = await get(t.admin, 'range=30d&groupBy=team');
+    expect(amount(row(r, teamA).metrics.invoiced.current, 'USD')).toBe('150.00');
+    expect(amount(row(r, teamB).metrics.invoiced.current, 'USD')).toBe('200.00');
+    // The filter agrees: team B is bob's primary team only.
+    const byB = await get(t.admin, `range=30d&teamId=${teamB}`);
+    expect(amount(byB.summary.metrics.invoiced.current, 'USD')).toBe('200.00');
+    await p.h.owner.query(
+      `DELETE FROM team_members WHERE org_id = $1 AND team_id = $2 AND user_id = $3`,
+      [t.orgId, teamBId, aliceId],
+    );
   });
 
   it('by product: a line is a SKU or its description; discount, shipping and rounding follow the lines so rows add up', async () => {

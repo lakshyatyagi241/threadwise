@@ -1,0 +1,99 @@
+# promtool tests for cache-hit-rate.rules.yml:
+#   docker run --rm -v "<repo>/crm-platform/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/cache-hit-rate.rules.test.yml
+# Synthetic series. Each alert has a must-fire and a must-not-fire; the 80 hits / 20 misses case checks the recorded ratio.
+rule_files:
+  - cache-hit-rate.rules.yml
+evaluation_interval: 1m
+tests:
+  # 80 hits + 20 misses per minute-window is a ratio of 0.8 (hits +8 per minute, misses +2 per minute).
+  - interval: 1m
+    input_series:
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+8x70'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+2x70'
+    promql_expr_test:
+      - expr: crm:cache_hit_ratio:5m
+        eval_time: 10m
+        exp_samples:
+          - labels: 'crm:cache_hit_ratio:5m{service="api",cache="rbac_grants"}'
+            value: 0.8
+      - expr: crm:cache_hit_ratio:1h
+        eval_time: 65m
+        exp_samples:
+          - labels: 'crm:cache_hit_ratio:1h{service="api",cache="rbac_grants"}'
+            value: 0.8
+  # A busy P0 cache that misses 9 of 10 fires; the same ratio on a quiet cache, or a healthy busy one, does not;
+  # a P1 cache (translation) with the same bad ratio is recorded but never pages.
+  - interval: 1m
+    input_series:
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="account_gate"}'
+        values: '0+10x90'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="account_gate"}'
+        values: '0+90x90'
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="platform_rbac"}'
+        values: '0+0x90'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="platform_rbac"}'
+        values: '0+1x90'
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+900x90'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+100x90'
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="translation"}'
+        values: '0+10x90'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="translation"}'
+        values: '0+90x90'
+    alert_rule_test:
+      - eval_time: 85m
+        alertname: CacheHitRatioLow
+        exp_alerts:
+          - exp_labels: { severity: warning, service: api, cache: account_gate }
+            exp_annotations:
+              summary: 'Cache account_gate on api: hit ratio 10% over 1 h with real traffic'
+              description: 'Most lookups go to the source (Postgres, Redis, or a provider) instead of the cache. See docs/runbooks/cache-hit-rate.md.'
+  # Error ratio: 20 errors in 120 lookups fires; 1% does not; a total outage (errors only) fires.
+  - interval: 1m
+    input_series:
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="idempotency"}'
+        values: '0+0x30'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="idempotency"}'
+        values: '0+100x30'
+      - series: 'crm_cache_errors_total{service="api",instance="a",cache="idempotency"}'
+        values: '0+20x30'
+      - series: 'crm_cache_hits_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+99x30'
+      - series: 'crm_cache_misses_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+1x30'
+      - series: 'crm_cache_errors_total{service="api",instance="a",cache="rbac_grants"}'
+        values: '0+1x30'
+      # total outage: hits and misses stop, only errors move; the alert must still fire
+      - series: 'crm_cache_errors_total{service="api",instance="a",cache="mail_bounced_flag"}'
+        values: '0+10x30'
+    alert_rule_test:
+      - eval_time: 25m
+        alertname: CacheErrorRatioHigh
+        exp_alerts:
+          - exp_labels: { severity: warning, service: api, cache: idempotency }
+            exp_annotations:
+              summary: 'Cache idempotency on api: 16.67% of lookups failed in the backend'
+              description: 'The cache backend (normally Redis) is failing and every lookup falls back to the source. See docs/runbooks/cache-hit-rate.md.'
+          - exp_labels: { severity: warning, service: api, cache: mail_bounced_flag }
+            exp_annotations:
+              summary: 'Cache mail_bounced_flag on api: 100% of lookups failed in the backend'
+              description: 'The cache backend (normally Redis) is failing and every lookup falls back to the source. See docs/runbooks/cache-hit-rate.md.'
+  # Instrumentation vanished: the series exist for 5 minutes, then stop.
+  - interval: 1m
+    input_series:
+      - series: 'crm_cache_hits_total{job="crm-api",service="api",instance="a",cache="rbac_grants"}'
+        values: '1 2 3 4 5 _x60'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: CacheMetricsMissing
+        exp_alerts: []
+      - eval_time: 40m
+        alertname: CacheMetricsMissing
+        exp_alerts:
+          - exp_labels: { severity: warning, job: crm-api }
+            exp_annotations:
+              summary: 'The API exports no crm_cache_hits_total series'
+              description: 'Either the API is down or not scraped (see RuntimeMetricsTargetDown), or the cache instrumentation was removed. Hit-ratio alerts are blind until it returns.'

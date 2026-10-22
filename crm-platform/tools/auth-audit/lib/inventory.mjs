@@ -27,6 +27,8 @@ function controllerBase(decoratorText) {
   if (obj) {
     path = /path:\s*['"`]([^'"`]*)['"`]/.exec(obj[1])?.[1] ?? '';
     version = /version:\s*['"`]([^'"`]*)['"`]/.exec(obj[1])?.[1] ?? null;
+    // VERSION_NEUTRAL: the route has no version prefix (the widget embed, its legacy alias).
+    if (/version:\s*VERSION_NEUTRAL\b/.test(obj[1])) version = '';
   } else {
     path = /@Controller\(\s*['"`]([^'"`]*)['"`]/.exec(decoratorText)?.[1] ?? '';
   }
@@ -57,68 +59,79 @@ export function scanRoutes() {
     if (!text) continue;
     const ls = text.split(/\r?\n/);
 
-    // Class-level decorators: every line that starts a decorator before `export class`.
-    const classIdx = ls.findIndex((l) => /^export\s+(abstract\s+)?class\s/.test(l));
-    if (classIdx === -1) continue;
-    const classHead = ls.slice(0, classIdx).join('\n');
-    if (!/@Controller\(/.test(classHead)) continue;
-    const base = controllerBase(classHead.slice(classHead.indexOf('@Controller(')));
-    const version = base.version ?? dv;
-    const classPublic = /@Public\(\)/.test(classHead);
-    const classKinds = /@ActorKinds\(([^)]*)\)/.exec(classHead)?.[1]?.replace(/['"`\s]/g, '') ?? '';
-    const classExcluded = /@ApiExcludeController\(/.test(classHead);
-    const className = /^export\s+(?:abstract\s+)?class\s+(\w+)/.exec(ls[classIdx])?.[1] ?? '';
+    // A file can hold several exported classes (a filter, then its controller). Each class reads the decorators between the
+    // end of the previous class and its own `export class` line, and its methods up to its own closing brace.
+    const classStarts = ls.flatMap((l, i) =>
+      /^export\s+(abstract\s+)?class\s/.test(l) ? [i] : [],
+    );
+    let headStart = 0;
+    for (const classIdx of classStarts) {
+      const bodyClose = ls.findIndex((l, i) => i > classIdx && /^}/.test(l));
+      const bodyEnd = bodyClose === -1 ? ls.length : bodyClose;
+      const classHead = ls.slice(headStart, classIdx).join('\n');
+      headStart = bodyEnd + 1;
+      if (!/@Controller\(/.test(classHead)) continue;
+      const base = controllerBase(classHead.slice(classHead.indexOf('@Controller(')));
+      const version = base.version ?? dv;
+      const classPublic = /@Public\(\)/.test(classHead);
+      const classKinds =
+        /@ActorKinds\(([^)]*)\)/.exec(classHead)?.[1]?.replace(/['"`\s]/g, '') ?? '';
+      const classExcluded = /@ApiExcludeController\(/.test(classHead);
+      const className = /^export\s+(?:abstract\s+)?class\s+(\w+)/.exec(ls[classIdx])?.[1] ?? '';
 
-    let decorators = [];
-    for (let i = classIdx + 1; i < ls.length; i++) {
-      const line = ls[i];
-      if (/^ {2}@\w+/.test(line)) {
-        // join a multi-line decorator until its parentheses balance
-        let text2 = line.trim();
-        let depth = (text2.match(/\(/g) || []).length - (text2.match(/\)/g) || []).length;
-        let j = i;
-        while (depth > 0 && j + 1 < ls.length) {
-          j++;
-          text2 += ' ' + ls[j].trim();
-          depth += (ls[j].match(/\(/g) || []).length - (ls[j].match(/\)/g) || []).length;
+      let decorators = [];
+      for (let i = classIdx + 1; i < bodyEnd; i++) {
+        const line = ls[i];
+        if (/^ {2}@\w+/.test(line)) {
+          // join a multi-line decorator until its parentheses balance
+          let text2 = line.trim();
+          let depth = (text2.match(/\(/g) || []).length - (text2.match(/\)/g) || []).length;
+          let j = i;
+          while (depth > 0 && j + 1 < ls.length) {
+            j++;
+            text2 += ' ' + ls[j].trim();
+            depth += (ls[j].match(/\(/g) || []).length - (ls[j].match(/\)/g) || []).length;
+          }
+          decorators.push({ text: text2, line: i + 1 });
+          i = j;
+          continue;
         }
-        decorators.push({ text: text2, line: i + 1 });
-        i = j;
-        continue;
-      }
-      const sig =
-        /^ {2}(?:public\s+|private\s+|protected\s+)?(?:async\s+)?(\w+)\s*(?:<[^>]*>)?\(/.exec(line);
-      if (sig && decorators.length) {
-        const http = decorators.find((d) => HTTP_DECORATORS.has(/^@(\w+)/.exec(d.text)?.[1]));
-        if (http) {
-          const method = /^@(\w+)/.exec(http.text)[1].toUpperCase();
-          const sub = /@\w+\(\s*['"`]([^'"`]*)['"`]/.exec(http.text)?.[1] ?? '';
-          const names = decorators.map((d) => /^@(\w+)/.exec(d.text)?.[1]);
-          const kinds = decorators.find((d) => d.text.startsWith('@ActorKinds('));
-          routes.push({
-            method,
-            path: joinPath(version ? `v${version}` : '', base.path, sub),
-            controller: className,
-            handler: sig[1],
-            file,
-            line: http.line,
-            public: classPublic || names.includes('Public'),
-            actorKinds:
-              (kinds
-                ? /@ActorKinds\(([^)]*)\)/.exec(kinds.text)?.[1]?.replace(/['"`\s]/g, '')
-                : '') ||
-              classKinds ||
-              null,
-            throttle: names.includes('Throttle'),
-            skipThrottle: names.includes('SkipThrottle'),
-            allowWhileGated: names.includes('AllowWhileGated'),
-            apiExcluded: classExcluded || names.includes('ApiExcludeEndpoint'),
-          });
+        const sig =
+          /^ {2}(?:public\s+|private\s+|protected\s+)?(?:async\s+)?(\w+)\s*(?:<[^>]*>)?\(/.exec(
+            line,
+          );
+        if (sig && decorators.length) {
+          const http = decorators.find((d) => HTTP_DECORATORS.has(/^@(\w+)/.exec(d.text)?.[1]));
+          if (http) {
+            const method = /^@(\w+)/.exec(http.text)[1].toUpperCase();
+            const sub = /@\w+\(\s*['"`]([^'"`]*)['"`]/.exec(http.text)?.[1] ?? '';
+            const names = decorators.map((d) => /^@(\w+)/.exec(d.text)?.[1]);
+            const kinds = decorators.find((d) => d.text.startsWith('@ActorKinds('));
+            routes.push({
+              method,
+              path: joinPath(version ? `v${version}` : '', base.path, sub),
+              controller: className,
+              handler: sig[1],
+              file,
+              line: http.line,
+              public: classPublic || names.includes('Public'),
+              actorKinds:
+                (kinds
+                  ? /@ActorKinds\(([^)]*)\)/.exec(kinds.text)?.[1]?.replace(/['"`\s]/g, '')
+                  : '') ||
+                classKinds ||
+                null,
+              throttle: names.includes('Throttle'),
+              skipThrottle: names.includes('SkipThrottle'),
+              allowWhileGated: names.includes('AllowWhileGated'),
+              apiExcluded: classExcluded || names.includes('ApiExcludeEndpoint'),
+            });
+          }
         }
+        if (!/^ {2}@/.test(line) && !/^\s*$/.test(line) && sig) decorators = [];
+        // A closing brace at class-member indent also ends a decorator run (decorated property, etc.).
+        if (/^ {2}\}/.test(line)) decorators = [];
       }
-      if (!/^ {2}@/.test(line) && !/^\s*$/.test(line) && sig) decorators = [];
-      // A closing brace at class-member indent also ends a decorator run (decorated property, etc.).
-      if (/^ {2}\}/.test(line)) decorators = [];
     }
   }
   return routes.sort((a, b) => a.path.localeCompare(b.path) || a.method.localeCompare(b.method));

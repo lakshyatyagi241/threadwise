@@ -16,7 +16,13 @@ import {
 import { canSendViaApi, templateSendCurl } from '../lib/curl';
 import { clearFlash, peekFlash } from '../lib/flash';
 import { previewOfSummary } from '../lib/preview';
-import { REJECTION_CODES, canEdit, canRefresh, isAwaitingReview } from '../lib/status-model';
+import {
+  REJECTION_CODES,
+  canDuplicate,
+  canEdit,
+  canRefresh,
+  isAwaitingReview,
+} from '../lib/status-model';
 import { connectionLabel, usableConnections } from '../lib/sync';
 import { ErrorAlert } from './error-line';
 import {
@@ -188,16 +194,22 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
   function run(kind: 'refresh' | 'submit') {
     setFailure(null);
     setOutcome(null);
-    const done = {
-      onSuccess: (r: TemplateSubmitResult) => {
-        setOutcome(r);
-        if (kind === 'refresh') toast(t('refreshed'));
-        else if (!r.metaError) toast(t('submittedToast'));
+    const onError = (e: unknown) => setFailure(errorText(e));
+    if (kind === 'refresh') {
+      // The refresh answers with the template itself; the query cache reload shows the new state.
+      refresh.mutate(tpl.id, { onSuccess: () => toast(t('refreshed')), onError });
+      return;
+    }
+    submit.mutate(
+      { id: tpl.id, connectionId: pick || undefined },
+      {
+        onSuccess: (r) => {
+          setOutcome(r);
+          if (!r.metaError) toast(t('submittedToast'));
+        },
+        onError,
       },
-      onError: (e: unknown) => setFailure(errorText(e)),
-    };
-    if (kind === 'refresh') refresh.mutate(tpl.id, done);
-    else submit.mutate({ id: tpl.id, connectionId: pick || undefined }, done);
+    );
   }
   const busy = refresh.isPending || submit.isPending;
 
@@ -219,7 +231,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
     ) : null;
 
   const editHref = `/templates/${tpl.id}/edit`;
-  const editable = mayEdit && canEdit(tpl.status, tpl.templateType);
+  const editable = mayEdit && canEdit(tpl.status, tpl.templateType) && tpl.editBlock === null;
   const submitBtn = (
     <div className="flex flex-wrap items-center gap-2">
       {usable.length > 1 && (
@@ -348,9 +360,18 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
                 {t('editTemplate')}
               </Link>
             )}
+            {mayEdit && canDuplicate(tpl.status, tpl.metaTemplateId, tpl.templateType) && (
+              <Link
+                href={`/templates/new?from=${tpl.id}`}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] hover:bg-muted"
+              >
+                <CopyIcon className="size-3.5" />
+                {t('duplicateTemplate')}
+              </Link>
+            )}
             {isApproved && (
               <Link
-                href="/broadcasts/create"
+                href="/campaigns/create"
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-medium text-brand hover:bg-muted"
               >
                 <SendIcon className="size-3.5" />
@@ -393,6 +414,14 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             </div>
           </header>
 
+          {mayEdit && tpl.editBlock && (
+            <p className="mb-4 text-[13px] text-muted-foreground" data-testid="edit-blocked">
+              {t('editBlocked', {
+                reason: tpl.editBlock.reason,
+                when: tpl.editBlock.until ? stamp(tpl.editBlock.until) : '',
+              })}
+            </p>
+          )}
           {failure && <ErrorAlert className="mb-4" error={failure} />}
           {outcome?.metaError && (
             <Banner

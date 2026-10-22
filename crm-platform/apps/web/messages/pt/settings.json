@@ -65,6 +65,11 @@
         "description": "Conecte seu número do WhatsApp Business para conversar com clientes.",
         "keywords": "wa, whatsapp business, cloud api, número, qr"
       },
+      "whatsapp-profile": {
+        "label": "Perfil comercial do WhatsApp",
+        "description": "Seu logotipo, texto sobre a empresa, dados de contato e as informações de conformidade exigidas pela Meta.",
+        "keywords": "perfil comercial, logotipo, foto de perfil, sobre, contato, conformidade, razão social, atendimento ao cliente, responsável por reclamações"
+      },
       "unofficial-whatsapp": {
         "label": "API não oficial do WhatsApp",
         "description": "Vincule um número pessoal do WhatsApp por QR code e aqueça-o para envios seguros.",
@@ -101,7 +106,7 @@
         "keywords": "mensagem de texto, id do remetente, dlt, twilio, celular"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail de suporte",
         "description": "Conecte caixas de e-mail do Gmail ou Google Workspace para que sua equipe leia e responda os e-mails de clientes na caixa de entrada compartilhada.",
         "keywords": "caixa de e-mail, gmail, google workspace, caixa de entrada compartilhada, e-mail de suporte, outlook, imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "Equipes",
-        "description": "Agrupe pessoas em equipes para roteamento e relatórios.",
-        "keywords": "grupos, departamentos, atribuição, roteamento"
+        "description": "Agrupe pessoas para conversas, atribuições e relatórios.",
+        "keywords": "grupos, departamentos, gerentes, hierarquia, atribuição, roteamento"
       },
       "ai-keys": {
         "label": "Chaves de provedores de IA",
@@ -341,7 +346,7 @@
         "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
       },
       "inbox-tags": {
-        "label": "Tags da conversa",
+        "label": "Tags",
         "description": "Crie as tags que sua equipe aplica às conversas e usa para filtrar a caixa de entrada. São as mesmas tags usadas nos contatos.",
         "keywords": "tags, tag, categorias, organizar, filtrar, tags da conversa"
       },
@@ -354,11 +359,6 @@
         "label": "Metas de resposta (SLA)",
         "description": "Defina a rapidez com que sua equipe deve responder e resolver, e receba alertas quando uma conversa descumprir a meta.",
         "keywords": "sla, tempo de resposta, primeira resposta, resolução, descumprimento, metas, horário comercial"
-      },
-      "team-performance": {
-        "label": "Desempenho da equipe",
-        "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
-        "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
       },
       "privacy-requests": {
         "label": "Solicitações de dados",
@@ -394,6 +394,11 @@
         "label": "Leads duplicados",
         "description": "Escolha se um novo lead que coincide com um contato é mesclado a ele ou vira um novo contato.",
         "keywords": "duplicado, mesclar, lead, mesmo telefone, mesmo e-mail, novo contato, fonte de leads"
+      },
+      "sales-activities": {
+        "label": "Atividades de vendas",
+        "description": "Gerencie tarefas, reuniões, ligações e atividades próprias: o que cada uma pode fazer, seus tipos de tarefa e seus resultados.",
+        "keywords": "atividades, tipos de tarefa, resultados, resultado da reunião, resultado da ligação, acompanhamento, check-in, atividade personalizada, calendário, concluir"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

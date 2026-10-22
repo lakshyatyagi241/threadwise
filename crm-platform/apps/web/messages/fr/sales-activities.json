@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Tâche",
+        "meeting": "Rendez-vous",
+        "phone": "Téléphone",
+        "email": "E-mail",
+        "reminder": "Rappel",
+        "sms": "SMS",
+        "chat": "Chat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Relance",
+          "call_reminder": "Rappel d’appel"
+        },
+        "meeting": {
+          "interested": "Intéressé",
+          "not_interested": "Pas intéressé",
+          "needs_follow_up": "Relance à prévoir",
+          "rescheduled": "Reporté",
+          "no_show": "Absent"
+        },
+        "phone": {
+          "connected": "Joint",
+          "no_answer": "Pas de réponse",
+          "busy": "Occupé",
+          "left_voicemail": "Message vocal laissé",
+          "wrong_number": "Mauvais numéro",
+          "declined": "Refusé",
+          "failed": "Échec"
+        }
+      }
+    },
+    "list": {
+      "back": "Données",
+      "title": "Activités commerciales",
+      "intro": "Gérez au même endroit les activités de votre équipe : tâches, rendez-vous, appels et vos propres activités. Choisissez ce que chacune peut faire, ses types de tâche et ses résultats.",
+      "create": "Créer une activité",
+      "loading": "Chargement des activités…",
+      "loadFailed": "Impossible de charger les activités.",
+      "retry": "Réessayer",
+      "listLabel": "Activités",
+      "default": "Par défaut",
+      "custom": "Personnalisée",
+      "noEditor": "Une activité par défaut, sans rien à configurer.",
+      "edit": "Modifier l’activité",
+      "editNamed": "Modifier l’activité {name}",
+      "chip": {
+        "completable": "Peut être terminée",
+        "notCompletable": "Ne peut pas être terminée",
+        "calendar": "Dans le calendrier",
+        "taskTypes": "{count, plural, one {# type de tâche} other {# types de tâche}}",
+        "outcomes": "{count, plural, one {# résultat} other {# résultats}}"
+      }
+    },
+    "drawer": {
+      "title": "Modifier l’activité : {name}",
+      "close": "Fermer",
+      "done": "Terminé",
+      "cancel": "Annuler",
+      "saved": "Enregistré.",
+      "autosave": "Les modifications sont enregistrées au fur et à mesure.",
+      "readOnly": "Vous pouvez voir ces réglages, mais pas les modifier.",
+      "name": "Nom de l’activité",
+      "nameLocked": "Le nom d’une activité par défaut ne peut pas être modifié.",
+      "mobileCheckIn": "Autoriser les utilisateurs à pointer leur arrivée et leur départ depuis l’application mobile",
+      "mobileCheckInPending": "Enregistré, mais sans effet pour l’instant : l’application mobile ne gère pas encore l’enregistrement aux rendez-vous. Cela fonctionnera dès qu’elle le gérera.",
+      "showInCalendar": "Afficher cette activité dans Mon calendrier du tableau de bord des activités",
+      "showInCalendarHint": "Enregistré, mais il n’existe pas encore de calendrier des activités. Cela prendra effet quand il sera ajouté.",
+      "allowComplete": "Autoriser les utilisateurs à marquer cette activité comme terminée",
+      "allowEditCompleted": "Autoriser les utilisateurs à modifier la date et l’heure de fin de cette activité",
+      "taskTypes": "Types de tâche",
+      "taskTypesHint": "Choisissez-en un à la création d’une tâche, par exemple Relance ou Rappel d’appel.",
+      "addTaskType": "Ajouter un type",
+      "taskTypePlaceholder": "Nouveau type de tâche",
+      "predictOutcomes": "Prévoir les résultats de cette activité",
+      "predictOutcomesHint": "Proposer un résultat à la fin de l’activité.",
+      "outcomes": "Résultats",
+      "outcomesHint": "Supprimer un résultat le conserve sur les éléments qui l’ont déjà.",
+      "phoneOutcomesHint": "Choisissez comment chaque résultat compte dans les rapports d’appels. Supprimer un résultat le conserve sur les appels qui l’ont déjà.",
+      "addOutcome": "Ajouter un résultat",
+      "outcomePlaceholder": "Nouveau résultat",
+      "listEmpty": "Rien pour l’instant.",
+      "moveUp": "Monter {name}",
+      "moveDown": "Descendre {name}",
+      "remove": "Supprimer {name}",
+      "countsAsShort": "compte comme {as}",
+      "countsAsLabel": "Compte comme",
+      "countsAsOption": "Compte comme {as}",
+      "countsAs": {
+        "connected": "joint",
+        "no_answer": "sans réponse",
+        "busy": "occupé",
+        "left_voicemail": "message vocal laissé",
+        "wrong_number": "mauvais numéro",
+        "declined": "refusé",
+        "failed": "échoué"
+      },
+      "removeActivity": "Supprimer l’activité",
+      "removeConfirmTitle": "Supprimer {name} ?",
+      "removeConfirmBody": "Elle quitte la liste. Les éléments qui l’ont utilisée gardent leurs résultats.",
+      "removed": "Activité supprimée.",
+      "noSettings": "Cette activité n’a rien à configurer.",
+      "errors": {
+        "nameRequired": "Donnez un nom à l’activité.",
+        "nameTaken": "Ce nom est déjà utilisé ici.",
+        "limit": "Vous avez atteint la limite de cette liste.",
+        "conflict": "Quelqu’un d’autre a modifié cette activité. Elle a été rechargée, réessayez.",
+        "forbidden": "Vous n’avez pas l’autorisation de modifier ceci.",
+        "failed": "Enregistrement impossible. Réessayez."
+      },
+      "itemName": "Nom",
+      "hiddenInstead": "Des tâches l’utilisent encore, il a donc été masqué à la place. Elles continuent de l’afficher.",
+      "loadingOutcomes": "Chargement des résultats…",
+      "outcomesLoadFailed": "Impossible de charger les résultats.",
+      "retry": "Réessayer"
+    },
+    "create": {
+      "title": "Créer une activité",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "intro": "Ajoutez une activité propre à votre métier. Elle démarre avec les réglages du type choisi.",
+      "name": "Nom",
+      "namePlaceholder": "Par exemple, Visite sur site",
+      "behavesAs": "Fonctionne comme",
+      "behavesAsHint": {
+        "task": "Quelque chose à faire avant une date, qui peut être terminé.",
+        "meeting": "Quelque chose qui a lieu à une heure donnée, qui peut être terminé.",
+        "phone": "Un appel, avec les résultats d’un appel."
+      },
+      "behaves": {
+        "task": "Une tâche",
+        "meeting": "Un rendez-vous",
+        "phone": "Un appel téléphonique"
+      },
+      "icon": "Icône",
+      "icons": {
+        "task": "Tâche",
+        "meeting": "Calendrier",
+        "phone": "Téléphone",
+        "email": "E-mail",
+        "reminder": "Cloche",
+        "sms": "Message",
+        "chat": "Chat",
+        "visit": "Lieu",
+        "video": "Vidéo",
+        "document": "Document",
+        "flag": "Drapeau",
+        "star": "Étoile"
+      },
+      "errors": {
+        "nameRequired": "Donnez un nom à l’activité.",
+        "nameTaken": "Une activité portant ce nom existe déjà.",
+        "limit": "Vous avez atteint la limite d’activités personnalisées.",
+        "failed": "Impossible de créer l’activité. Réessayez."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(supprimé)",
+      "taskType": "Type de tâche",
+      "taskTypeNone": "Aucun type",
+      "outcome": "Résultat",
+      "outcomeNone": "Aucun résultat",
+      "completeOff": "Terminer des tâches est désactivé dans les activités commerciales."
+    },
+    "meeting": {
+      "saved": "Rendez-vous mis à jour.",
+      "reopened": "Rendez-vous rouvert.",
+      "errors": {
+        "disabled": "Terminer des rendez-vous est désactivé dans les activités commerciales.",
+        "optionGone": "Ce résultat a été supprimé. Choisissez-en un autre.",
+        "failed": "Enregistrement impossible. Réessayez."
+      },
+      "outcome": "Résultat",
+      "noOutcome": "Aucun résultat",
+      "removedSuffix": "(supprimé)",
+      "notes": "Notes",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "outcomeChip": "Résultat : {name}",
+      "completed": "Terminé",
+      "editAria": "Modifier le résultat de {title}",
+      "edit": "Modifier",
+      "reopenAria": "Rouvrir {title}",
+      "reopen": "Rouvrir",
+      "addAria": "Ajouter un résultat à {title}",
+      "add": "Ajouter un résultat",
+      "markCompleted": "Marquer comme terminé"
+    }
+  }
+}

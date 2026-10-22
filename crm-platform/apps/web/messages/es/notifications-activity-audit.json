@@ -414,6 +414,14 @@
           "label": "Cita desincronizada con Google Calendar",
           "hint": "El evento de Google Calendar de una próxima cita se eliminó, se movió o se modificaron sus invitados. La cita no se modifica; usted decide qué hacer."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Cita cancelada por el cliente",
+          "hint": "Un cliente canceló su cita al pulsar Cancelar en un recordatorio. Se avisa al responsable de la cita."
+        },
+        "appointment_reminder_test": {
+          "label": "Resultado de la prueba de correo del recordatorio",
+          "hint": "El resultado del correo de prueba que envías para un paso de recordatorio: enviado, o no enviado y por qué."
+        },
         "snooze_wake": {
           "label": "El chat pospuesto vuelve",
           "hint": "Un chat pospuesto se reabre a su hora y se asigna a ti o a tu equipo."
@@ -513,6 +521,11 @@
           "watch": "Deberías ver una ventana emergente y cambiar el número de la campana y el título de la pestaña.",
           "notConnected": "Las actualizaciones en vivo no están conectadas en esta página, así que la ventana emergente no puede aparecer aquí. Recarga la página y vuelve a intentarlo.",
           "off": "No se creó ninguna notificación en la campana: la campana está desactivada para «Notificación de prueba» en la tabla de abajo, o por el propietario de tu espacio de trabajo."
+        },
+        "prompt": {
+          "message": "Active las notificaciones del navegador para recibir un aviso de los eventos que elija, incluso con el CRM cerrado.",
+          "enable": "Permitir notificaciones",
+          "enabling": "Activando..."
         }
       }
     },

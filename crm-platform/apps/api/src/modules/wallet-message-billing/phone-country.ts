@@ -318,7 +318,7 @@ export function resolveCountry(value: string | null | undefined): string | null 
   const raw = (value ?? '').trim();
   if (raw === '' || raw === '*') return '';
   // "UK" is not an ISO code but is what people write: the aliases come before the 2-letter rule.
-  const alias = ALIASES[raw.toLowerCase()];
+  const alias = Object.hasOwn(ALIASES, raw.toLowerCase()) ? ALIASES[raw.toLowerCase()] : undefined; // not `constructor`
   if (alias) return alias;
   if (/^[A-Za-z]{2}$/.test(raw)) {
     const code = raw.toUpperCase();

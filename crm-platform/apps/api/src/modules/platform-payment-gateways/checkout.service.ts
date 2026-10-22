@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { randomInt } from 'node:crypto';
+import { randomInt, randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
+import { legacyValue, tokenHash } from '../../common/crypto/secret-columns';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -21,7 +22,11 @@ import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { AddonEntitlementService } from '../addons-extension-registry';
+import {
+  AddonEntitlementService,
+  isIncludedInPlan,
+  readGrants,
+} from '../addons-extension-registry';
 import { appVisibleOnPlan, PlanEntitlementService } from '../plans-subscriptions-trials';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
@@ -195,6 +200,21 @@ export class CheckoutService {
         )
       )
         return;
+      // Nothing left to buy: the plan (or an override) already grants every feature of this pack and the pack adds no cap. A crafted request
+      // for a pack the catalogue shows as "included" is refused here, not only hidden on the card.
+      const packRes = await tx.execute(
+        sql`SELECT features, limits FROM plans WHERE slug = ${plan.slug} AND kind = 'addon'`,
+      );
+      const pack = packRes.rows[0] as { features: unknown; limits: unknown } | undefined;
+      if (pack) {
+        const grants = readGrants(pack.features, pack.limits);
+        if (isIncludedInPlan(grants, await this.plans.includedByPlan(orgId, grants.features))) {
+          throw unavailable(
+            'Your plan already includes everything this add-on gives.',
+            ERROR_CODES.PAYGW_ADDON_INCLUDED,
+          );
+        }
+      }
       // An add-on sits on top of an active paid plan (TW-ADD-033). Reference enforced this only in the view; a direct POST bypassed it.
       const base = await tx.execute(sql`
         SELECT p.is_free, p.is_custom_quote, s.plan_ends_at
@@ -745,6 +765,21 @@ export class CheckoutService {
     };
   }
 
+  private async assertCouponUseFree(tx: Tx, couponId: number, key: string | null): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`coupon-use:${couponId}`}, 0))`,
+    );
+    const { maxUses, taken } = await this.coupons.usesTaken(couponId, key);
+    if (maxUses === null || taken < maxUses) return;
+    const message = 'This coupon is fully used.';
+    throw new AppError(
+      ERROR_CODES.PAYGW_COUPON_REJECTED,
+      message,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [{ path: 'coupon', message }],
+    );
+  }
+
   private async insertOrder(
     orgId: number,
     userId: number,
@@ -765,8 +800,12 @@ export class CheckoutService {
       const orderNumber = newOrderNumber(new Date(), (n) =>
         Array.from({ length: n }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(32)]).join(''),
       );
+      const returnToken = randomUUID().replace(/-/g, '');
       try {
         return await this.db.tx(async (tx) => {
+          // One buyer at a time per coupon from here to the commit, so the last uses cannot be handed out twice (QA Sheet3 #15, D-06).
+          if (coupon?.ok && coupon.couponId !== null)
+            await this.assertCouponUseFree(tx, coupon.couponId, idempotencyKey ?? null);
           const order = await this.orders.insert(tx, {
             orgId,
             userId,
@@ -796,9 +835,11 @@ export class CheckoutService {
             idempotencyKey: idempotencyKey ?? null,
             couponId: coupon?.ok ? coupon.couponId : null,
             couponCode: coupon?.ok ? coupon.code : null,
+            returnToken: { plain: legacyValue(returnToken), hash: tokenHash(returnToken) },
           });
           await recordOrderEvent(tx, this.outbox, order, 'created', { gateway: gateway.slug });
-          return order;
+          // The return URL needs the token once, now; the row may hold only its hash.
+          return { ...order, returnToken };
         });
       } catch (err) {
         const e = err as { code?: string; constraint?: string };

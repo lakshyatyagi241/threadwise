@@ -372,6 +372,31 @@ export const workspaceSettings = pgTable(
     inboxAway: boolean('inbox_away').notNull().default(false),
     /** TIB2: a new or reopened conversation of a contact who already has an agent goes to that agent first (routing rules run otherwise). */
     routingKeepContactAgent: boolean('routing_keep_contact_agent').notNull().default(false),
+    /** Handoff and assignment settings (BL-404, migration 20270301090000); every default is the behaviour of before. */
+    handoffAutoAssign: boolean('handoff_auto_assign').notNull().default(true),
+    handoffClaimSetsOwner: boolean('handoff_claim_sets_owner').notNull().default(false),
+    handoffOwnerMode: text('handoff_owner_mode')
+      .$type<'independent' | 'owner_first' | 'keep_in_sync'>()
+      .notNull()
+      .default('independent'),
+    handoffContinuityDays: integer('handoff_continuity_days'),
+    handoffPromptOwnerOnReassign: boolean('handoff_prompt_owner_on_reassign')
+      .notNull()
+      .default(false),
+    handoffNotifyQueue: boolean('handoff_notify_queue').notNull().default(true),
+    /** Waiting queue timers (migration 20270324090000): all off by default; the minutes count only while the team is open. */
+    handoffWqRemindMinutes: integer('handoff_wq_remind_minutes'),
+    handoffWqOverflowMinutes: integer('handoff_wq_overflow_minutes'),
+    handoffWqOverflowTeamId: idColumn('handoff_wq_overflow_team_id'),
+    handoffWqUnclaimedMinutes: integer('handoff_wq_unclaimed_minutes'),
+    handoffWqUnclaimedAction: text('handoff_wq_unclaimed_action')
+      .$type<'keep' | 'message' | 'bot'>()
+      .notNull()
+      .default('keep'),
+    handoffWqUnclaimedMessage: text('handoff_wq_unclaimed_message'),
+    /** Away rules (migration 20270326090000): both off by default. */
+    handoffReturnOnAway: boolean('handoff_return_on_away').notNull().default(false),
+    handoffAutoOfflineMin: integer('handoff_auto_offline_min'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

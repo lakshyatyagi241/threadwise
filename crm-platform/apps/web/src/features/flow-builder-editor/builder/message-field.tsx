@@ -9,14 +9,12 @@ import { attrEntries, filterAttrs } from './inspector/attr-picker';
 import { EMOJIS, searchEmoji } from '../lib/emoji-data';
 import {
   clip,
-  insertText,
   toggleList,
-  toggleMark,
   variableToken,
   type ListKind,
   type MarkKind,
-  type TextEdit,
 } from '../lib/message-tools';
+import { htmlToMarks, marksToHtml, placeCaret, RICH_TEXT_CLASS } from '../lib/rich-text';
 
 type Panel = 'format' | 'emoji' | 'variable' | null;
 
@@ -77,21 +75,70 @@ export function MessageField({
   const t = useTranslations('flb.builder.messageTools');
   const tf = useFlb();
   const feed = usePickerFeed();
-  const ref = useRef<HTMLTextAreaElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const box = useRef<HTMLDivElement>(null);
   const id = useId();
   const [panel, setPanel] = useState<Panel>(null);
   const [q, setQ] = useState('');
-  /** Where the selection goes once the new text is in the box. */
-  const pending = useRef<{ start: number; end: number } | null>(null);
+  /** Where the caret goes (in characters of the shown text) once new text is in the box; `Infinity` is the end. */
+  const pending = useRef<number | null>(null);
+  /** The last selection inside the box, kept for the toolbar and the pickers, which take the focus away. */
+  const saved = useRef<Range | null>(null);
 
+  // The box shows the marks as bold, italic and so on. Text that came from outside (a list toggle, a clip, another step) is drawn again.
   useLayoutEffect(() => {
-    const sel = pending.current;
-    if (!sel || !ref.current) return;
+    const el = ref.current;
+    if (!el) return;
+    if (htmlToMarks(el) !== value) el.innerHTML = marksToHtml(value);
+    const at = pending.current;
+    if (at === null) return;
     pending.current = null;
-    ref.current.focus();
-    ref.current.setSelectionRange(sel.start, sel.end);
+    el.focus();
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(placeCaret(el, at));
   }, [value]);
+
+  const remember = () => {
+    const sel = window.getSelection();
+    const el = ref.current;
+    if (el && sel && sel.rangeCount > 0 && el.contains(sel.anchorNode))
+      saved.current = sel.getRangeAt(0).cloneRange();
+  };
+  /** Back into the box with the selection it had. */
+  const focusBox = (): boolean => {
+    const el = ref.current;
+    if (!el) return false;
+    el.focus();
+    const sel = window.getSelection();
+    if (saved.current && sel) {
+      sel.removeAllRanges();
+      sel.addRange(saved.current);
+    }
+    return true;
+  };
+  const sync = () => {
+    const el = ref.current;
+    if (!el) return;
+    const text = htmlToMarks(el);
+    if (max !== undefined && text.length > max) {
+      // The edit ran past the channel's limit: the box goes back to what it was.
+      el.innerHTML = marksToHtml(value);
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(placeCaret(el, Infinity));
+      return;
+    }
+    if (text !== value) onChange(text);
+  };
+  const run = (command: string, arg?: string) => {
+    // A shortcut arrives while the words are still selected: take that selection, not the one the last mouse or key left behind.
+    remember();
+    if (!focusBox()) return;
+    document.execCommand(command, false, arg);
+    sync();
+    remember();
+  };
 
   useEffect(() => {
     if (!panel) return;
@@ -113,33 +160,41 @@ export function MessageField({
     setQ('');
     setPanel((cur) => (cur === p ? null : p));
   };
-  const selection = () => {
-    const el = ref.current;
-    return { start: el?.selectionStart ?? value.length, end: el?.selectionEnd ?? value.length };
-  };
-  const apply = (edit: TextEdit) => {
-    const next = max === undefined ? edit : clip(edit, max);
-    pending.current = { start: next.start, end: next.end };
-    if (next.text === value) {
-      // Nothing changed (the limit was reached): the selection still moves, and the effect above will not run.
-      ref.current?.focus();
-      pending.current = null;
-      return;
-    }
-    onChange(next.text);
-  };
 
   const format = (kind: MarkKind | ListKind) => {
-    const { start, end } = selection();
-    apply(
-      kind === 'bullet' || kind === 'numbered'
-        ? toggleList(value, start, end, kind)
-        : toggleMark(value, start, end, kind),
-    );
+    if (kind === 'bold') return run('bold');
+    if (kind === 'italic') return run('italic');
+    if (kind === 'strike') return run('strikeThrough');
+    if (kind === 'mono') {
+      if (!focusBox()) return;
+      const text = window.getSelection()?.toString() ?? '';
+      if (text) run('insertHTML', marksToHtml('```' + text + '```'));
+      return;
+    }
+    // A list is plain lines that begin `- ` or `1. `: the lines the selection touches are turned over in the text.
+    if (!focusBox()) return;
+    const el = ref.current;
+    const r = window.getSelection()?.rangeCount ? window.getSelection()!.getRangeAt(0) : null;
+    if (!el || !r) return;
+    const lineOf = (node: Node, off: number) => {
+      const range = document.createRange();
+      range.setStart(el, 0);
+      range.setEnd(node, off);
+      return range.cloneContents().querySelectorAll('br').length;
+    };
+    const first = lineOf(r.startContainer, r.startOffset);
+    const last = lineOf(r.endContainer, r.endOffset);
+    const lines = value.split('\n');
+    const from = lines.slice(0, first).reduce((n, l) => n + l.length + 1, 0);
+    const to = lines.slice(0, last + 1).reduce((n, l) => n + l.length + 1, -1);
+    const next = toggleList(value, from, Math.max(from, to), kind);
+    const edit = max === undefined ? next : clip(next, max);
+    if (edit.text === value) return;
+    pending.current = Infinity;
+    onChange(edit.text);
   };
   const put = (text: string) => {
-    const { start, end } = selection();
-    apply(insertText(value, start, end, text));
+    run('insertText', text);
     setPanel(null);
   };
 
@@ -166,19 +221,73 @@ export function MessageField({
           invalid ? 'border-danger' : 'border-border',
         )}
       >
-        <textarea
-          ref={ref}
-          id={id}
-          rows={rows}
-          value={value}
-          aria-label={label}
-          placeholder={placeholder}
-          onChange={(e) =>
-            onChange(max === undefined ? e.target.value : e.target.value.slice(0, max))
-          }
-          className="block w-full resize-y rounded-t-lg bg-transparent px-3 pt-2.5 text-[13px] outline-none"
-        />
-        <div className="flex items-center gap-0.5 px-1.5 pb-1">
+        <div className="relative">
+          {value === '' && placeholder ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute start-3 top-2.5 text-[13px] text-muted-foreground"
+            >
+              {placeholder}
+            </span>
+          ) : null}
+          <div
+            ref={ref}
+            id={id}
+            role="textbox"
+            aria-multiline="true"
+            aria-label={label}
+            contentEditable
+            suppressContentEditableWarning
+            spellCheck
+            style={{ minHeight: `${rows * 20 + 12}px` }}
+            onInput={() => {
+              sync();
+              remember();
+            }}
+            onKeyUp={remember}
+            onMouseUp={remember}
+            onBlur={() => {
+              remember();
+              // What was typed with its marks (`*hi*`) turns into the word, now that the box is left.
+              const el = ref.current;
+              if (el && el.innerHTML !== marksToHtml(value)) el.innerHTML = marksToHtml(value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                e.preventDefault();
+                document.execCommand('insertLineBreak');
+                sync();
+              } else if (
+                (e.ctrlKey || e.metaKey) &&
+                !e.altKey &&
+                !e.shiftKey &&
+                /^[bi]$/i.test(e.key)
+              ) {
+                // Ctrl/Cmd+B and Ctrl/Cmd+I are the toolbar's bold and italic.
+                e.preventDefault();
+                format(e.key.toLowerCase() === 'b' ? 'bold' : 'italic');
+              } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
+                e.preventDefault();
+                run('strikeThrough');
+              }
+            }}
+            onPaste={(e) => {
+              e.preventDefault();
+              const text = e.clipboardData.getData('text/plain').replace(/\r\n?/g, '\n');
+              document.execCommand('insertHTML', false, marksToHtml(text));
+              sync();
+              remember();
+            }}
+            className={`block w-full resize-y overflow-auto whitespace-pre-wrap break-words rounded-t-lg bg-transparent px-3 pb-1 pt-2.5 text-[13px] outline-none ${RICH_TEXT_CLASS}`}
+          />
+        </div>
+        <div
+          className="flex items-center gap-0.5 px-1.5 pb-1"
+          onMouseDown={(e) => {
+            // The buttons never take the text's selection away, so bold and emoji land where the words are marked.
+            if ((e.target as HTMLElement).closest('button')) e.preventDefault();
+          }}
+        >
           <button
             type="button"
             className={cn(tool, panel === 'format' && 'bg-muted text-foreground')}

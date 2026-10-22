@@ -2,6 +2,9 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
+  defaultStepKind,
+  type AppointmentMessageKind,
+  type BookingReminderStepKind,
   type BookingTypeListResponse,
   type BookingTypeOption,
   type BookingTypeResponse,
@@ -22,6 +25,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanUsageService } from '../plans-subscriptions-trials';
+import { ReminderPlan } from './reminder-plan';
 import { AppointmentChannelsRepository } from './appointment-channels.repository';
 import { AppointmentChannelsService } from './appointment-channels.service';
 import { toApiTemplate } from './appointment-template.mapper';
@@ -42,6 +46,18 @@ import { resolveZone, SlotsService } from './slots.service';
 import { addDays, startOfLocalDay } from './tz';
 
 const MAX_SLUG_TRIES = 50;
+
+/** The library message kind each step of a reminder sequence sends. */
+const LIBRARY_KIND_OF_STEP: Record<BookingReminderStepKind, AppointmentMessageKind> = {
+  confirmation: 'confirmation',
+  reminder_24h: 'reminder',
+  reminder_2h: 'reminder',
+  reminder_15m: 'reminder',
+  reminder: 'reminder',
+  after_visit: 'follow_up',
+  no_show: 'no_show',
+  rebook: 'rebook',
+};
 
 /** The child lists a create or an update body may carry (the same shapes in both). */
 type ChildLists = Pick<
@@ -70,6 +86,7 @@ export class BookingTypesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly planUsage: PlanUsageService,
+    private readonly reminderPlan: ReminderPlan,
     private readonly channels: AppointmentChannelsService,
     private readonly library: AppointmentChannelsRepository,
     config: ConfigService<Env, true>,
@@ -136,8 +153,8 @@ export class BookingTypesService {
   async create(input: CreateBookingTypeInput): Promise<BookingTypeResponse> {
     const ctx = RequestContextStore.require();
     // The plan's `booking_types` cap (a live count: deleting a type frees the slot).
-    await this.planUsage.assertCanAdd(ctx.orgId, 'booking_types');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'booking_types');
       const hostId = await this.resolveHost(tx, ctx.orgId, input.hostId, ctx.userId);
       const slug = await this.uniqueSlug(tx, ctx.orgId, input.slug || input.name);
       const id = await this.repo.insert(tx, ctx.orgId, {
@@ -430,10 +447,29 @@ export class BookingTypesService {
           if (!had.has(c)) added.push({ channel: c, path: `reminders.${i}.channels` });
       });
       await this.channels.assertEnabled(tx, orgId, added);
+      // Two parts of a sequence are plan features (default on): the Confirm / Reschedule / Cancel buttons and the rebook (recall) steps.
+      // Asked only for what is being switched on, so a plan that lost one still saves everything else.
+      for (const r of input.reminders) {
+        if (!r.isActive) continue;
+        const before = r.id ? existing.find((e) => e.uuid === r.id) : undefined;
+        const step = r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
+        if (step === 'rebook' && !(before?.isActive && before.stepKind === 'rebook')) {
+          await this.reminderPlan.assert(orgId, 'rebook');
+        }
+        if (r.buttonsEnabled && !(before?.isActive && before.buttonsEnabled)) {
+          await this.reminderPlan.assert(orgId, 'buttons');
+        }
+      }
       const waIds = await this.repo.resolveWaTemplates(
         tx,
         orgId,
         input.reminders.flatMap((r) => (r.waTemplateId ? [r.waTemplateId] : [])),
+      );
+      // An email message of the library: it must exist, be an email, and be of the kind the step sends.
+      const libs = await this.library.findLibraryMany(
+        tx,
+        orgId,
+        input.reminders.flatMap((r) => (r.libraryTemplateId ? [r.libraryTemplateId] : [])),
       );
       await this.repo.syncReminders(
         tx,
@@ -445,16 +481,44 @@ export class BookingTypesService {
               { path: `reminders.${i}.waTemplateId`, message: r.waTemplateId },
             ]);
           }
+          const stepKind: BookingReminderStepKind =
+            r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
+          let libraryId: number | null = null;
+          if (r.libraryTemplateId) {
+            const lib = libs.find((m) => m.uuid === r.libraryTemplateId);
+            const path = `reminders.${i}.libraryTemplateId`;
+            if (!lib) {
+              throw AppError.validation('That message is not in the library of this workspace.', [
+                { path, message: r.libraryTemplateId },
+              ]);
+            }
+            if (lib.channel !== 'email' || lib.kind !== LIBRARY_KIND_OF_STEP[stepKind]) {
+              throw AppError.validation('That message does not fit this step.', [
+                { path, message: r.libraryTemplateId },
+              ]);
+            }
+            libraryId = lib.id;
+          }
           return {
             uuid: r.id,
             offsetMinutes: r.offsetMinutes,
             label: r.label && r.label.trim() !== '' ? r.label : null,
             isActive: r.isActive,
             kind: r.kind,
+            stepKind,
             channels: r.channels,
             subject: r.subject && r.subject.trim() !== '' ? r.subject : null,
             body: r.body && r.body.trim() !== '' ? r.body : null,
             waTemplateId: r.waTemplateId ? waIds.get(r.waTemplateId)! : null,
+            libraryTemplateId: libraryId,
+            // Buttons belong on a reminder before the start; they mean nothing on the other steps.
+            buttonsEnabled: r.buttonsEnabled && r.kind === 'before',
+            skipIfConfirmed: r.skipIfConfirmed && r.kind === 'before',
+            undeliveredFallbackMinutes: r.undeliveredFallbackMinutes ?? null,
+            serviceLabel:
+              r.serviceLabel && r.serviceLabel.trim() !== '' ? r.serviceLabel.trim() : null,
+            packKey: r.packKey ?? null,
+            packVersion: r.packKey ? (r.packVersion ?? 1) : null,
           };
         }),
       );
@@ -564,11 +628,7 @@ export class BookingTypesService {
       tx,
       orgId,
       added.filter(
-        (a) =>
-          a.channel === 'whatsapp' ||
-          a.channel === 'email' ||
-          a.channel === 'sms' ||
-          a.channel === 'voice',
+        (a) => a.channel === 'whatsapp' || a.channel === 'email' || a.channel === 'voice',
       ),
     );
 

@@ -1,5 +1,6 @@
 import type { PushSubscriptionInput } from '@crm/contracts';
 import {
+  PUSH_ASKED_KEY,
   PUSH_DEVICE_KEY,
   sameApplicationKey,
   subscriptionToInput,
@@ -10,7 +11,7 @@ import {
  * The browser side of Web Push for this device: register the service worker, ask for permission, subscribe, unsubscribe. Every call
  * may reject (the browser can refuse at any step); callers turn a rejection into the card's "something went wrong" line.
  *
- * Permission is requested ONLY inside `enableOnThisDevice`, which the card calls from the click on "Enable". Nothing else here runs on
+ * Permission is requested ONLY inside `enableOnThisDevice`, which the Enable click and the arrival prompt call. Nothing else here runs on
  * page load except silent reads that never ask for anything.
  */
 
@@ -31,6 +32,23 @@ export function saveDeviceId(id: string | null): void {
     else window.localStorage.removeItem(PUSH_DEVICE_KEY);
   } catch {
     /* blocked storage: the device still works, it just is not labelled "this device" */
+  }
+}
+
+/** Whether the automatic permission ask already ran in this browser tab session (the arrival prompt; see its comment). */
+export function askedThisSession(): boolean {
+  try {
+    return window.sessionStorage.getItem(PUSH_ASKED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function rememberAskedThisSession(): void {
+  try {
+    window.sessionStorage.setItem(PUSH_ASKED_KEY, '1');
+  } catch {
+    /* blocked storage: the banner still asks, the browser decides whether to show its prompt again */
   }
 }
 

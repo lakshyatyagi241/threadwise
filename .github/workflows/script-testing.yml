@@ -1,0 +1,41 @@
+# Read by GitHub Actions. Effect: a manually triggered job that runs crm-platform/script-testing/run-all.sh. No secrets used.
+# User instruction (verbatim): "a manual-trigger workflow .github/workflows/script-testing.yml"
+name: script-testing
+
+# Manual trigger only: GitHub Actions cannot start on this account yet. Run the same thing locally with
+#   cd crm-platform && pnpm qa:script-testing:quick
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: quick or full
+        default: quick
+      only:
+        description: comma separated test folders (empty = all)
+        default: ''
+  # schedule:            # enable once Actions can start; nightly quick run
+  #   - cron: '0 2 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: crm-platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: docker compose up -d postgres redis
+      - run: bash script-testing/run-all.sh --${{ inputs.mode }} ${{ inputs.only != '' && format('--only {0}', inputs.only) || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-results
+          path: crm-platform/qa-results

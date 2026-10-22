@@ -1,0 +1,77 @@
+rule_files:
+  - health.rules.yml
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'crm_postgres_up{service="api",instance="a:1"}'
+        values: '1x5 0x10'
+      - series: 'crm_postgres_up{service="worker",instance="w:1"}'
+        values: '1x15'
+      - series: 'crm_probe_file_age_seconds{file="backup"}'
+        values: '90000x5 94000x30'
+      - series: 'crm_probe_file_present{file="backup"}'
+        values: '1x5 0x40'
+      - series: 'crm_probe_file_age_seconds{file="offsite"}'
+        values: '600x5 11000x20'
+      - series: 'crm_probe_up{target="s3"}'
+        values: '1x5 0x20'
+      - series: 'crm_probe_up{target="ready"}'
+        values: '0x25'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: PostgresDown
+        exp_alerts:
+          - exp_labels: { severity: critical, service: api, instance: 'a:1' }
+            exp_annotations:
+              summary: 'api cannot run SELECT 1 on the Postgres primary'
+              description: 'A real query with a 2 s deadline failed for 2 minutes. /ready is 503 for this instance; liveness is unaffected.'
+              runbook: 'docs/runbooks/health-readiness.md#postgresdown'
+      - eval_time: 4m
+        alertname: PostgresDown
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: BackupStale
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: BackupStale
+        exp_alerts:
+          - exp_labels: { severity: critical, file: backup }
+            exp_annotations:
+              summary: 'The last good database dump is older than 26 hours'
+              description: 'The backup container writes .last-ok after each verified dump (daily). Older than 26 h means a dump failed or the container is stopped.'
+              runbook: 'docs/runbooks/health-readiness.md#backupstale'
+      - eval_time: 40m
+        alertname: BackupMarkerMissing
+        exp_alerts:
+          - exp_labels: { severity: critical, file: backup }
+            exp_annotations:
+              summary: 'No backup marker file is visible to the probe'
+              description: 'Either no dump has ever succeeded, or the probe lost its read-only mount of the backups directory. Both mean backups are unobserved.'
+              runbook: 'docs/runbooks/health-readiness.md#backupmarkermissing'
+      - eval_time: 10m
+        alertname: BackupMarkerMissing
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: OffsiteBackupStale
+        exp_alerts:
+          - exp_labels: { severity: warning, file: offsite }
+            exp_annotations:
+              summary: 'No whole offsite backup pass has succeeded for 3 hours'
+              description: 'The offsite container touches its marker after each full pass (every 30 min by default). Silent when offsite was never configured (no marker, no age series).'
+              runbook: 'docs/runbooks/health-readiness.md#offsitebackupstale'
+      - eval_time: 20m
+        alertname: ObjectStoreUnreachable
+        exp_alerts:
+          - exp_labels: { severity: warning, target: s3 }
+            exp_annotations:
+              summary: 'The object store endpoint does not answer from the stack'
+              description: 'Any HTTP answer (even 403) counts as reachable. This is deliberately not part of /ready: uploads fail, the rest of the app keeps serving.'
+              runbook: 'docs/runbooks/health-readiness.md#objectstoreunreachable'
+      - eval_time: 1m
+        alertname: Watchdog
+        exp_alerts:
+          - exp_labels: { severity: none }
+            exp_annotations:
+              summary: 'Heartbeat: the monitoring pipeline is alive'
+              runbook: 'docs/runbooks/health-readiness.md#watchdog'

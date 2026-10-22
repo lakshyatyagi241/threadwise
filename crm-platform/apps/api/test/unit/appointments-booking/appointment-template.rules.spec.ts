@@ -227,13 +227,12 @@ describe('toApiTemplate', () => {
 describe('stateOf (the owner screen and the editor read this)', () => {
   const dir = (over: Partial<SenderDirectory> = {}): SenderDirectory => ({
     whatsapp: [],
-    sms: [],
     email: [],
     whatsappDevice: false,
     ...over,
   });
   const sender = { id: 3, uuid: '44444444-4444-4444-8444-444444444444', label: '+91 98765' };
-  const row = (channel: 'email' | 'whatsapp' | 'sms' | 'voice', enabled: boolean, over = {}) => ({
+  const row = (channel: 'email' | 'whatsapp' | 'voice', enabled: boolean, over = {}) => ({
     id: 1,
     channel,
     enabled,
@@ -254,14 +253,14 @@ describe('stateOf (the owner screen and the editor read this)', () => {
     });
   });
   it('enabled but not connected is not usable (the editor says Connect it in Settings)', () => {
-    expect(stateOf('sms', row('sms', true), dir())).toMatchObject({
+    expect(stateOf('email', row('email', true), dir())).toMatchObject({
       enabled: true,
       connection: 'not_connected',
       usable: false,
     });
   });
   it('enabled and connected is usable', () => {
-    expect(stateOf('sms', row('sms', true), dir({ sms: [sender] }))).toMatchObject({
+    expect(stateOf('email', row('email', true), dir({ email: [sender] }))).toMatchObject({
       usable: true,
       senders: [{ id: sender.uuid, label: sender.label }],
     });

@@ -1,18 +1,30 @@
 'use client';
 
-import { useInfiniteQuery, useQuery, type QueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from '@tanstack/react-query';
 import {
   businessHoursSchema,
+  handoffSettingsSchema,
   inboxAssigneesResponseSchema,
   routingRuleListResponseSchema,
   routingRuleSchema,
   routingSettingsSchema,
+  routingTestResponseSchema,
   type CreateRoutingRuleInput,
+  type RoutingTestRequest,
+  type HandoffSettings,
   type UpdateBusinessHoursInput,
+  type UpdateHandoffSettingsInput,
   type UpdateRoutingRuleInput,
 } from '@crm/contracts';
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
+import { ApiError } from '@/lib/api/errors';
 import { flowsApi } from '@/features/flow-builder-editor/api/flows';
 
 export const KEYS = {
@@ -22,6 +34,7 @@ export const KEYS = {
   settings: ['routing-rules', 'settings'] as const,
   businessHours: ['routing-rules', 'business-hours'] as const,
   assignees: ['routing-rules', 'assignees'] as const,
+  handoffSettings: ['inbox', 'handoff-settings'] as const,
 };
 
 const PAGE = 50;
@@ -65,6 +78,13 @@ export const routingApi = {
       body: { keepContactAgent },
       schema: routingSettingsSchema,
     }),
+  /** "Try it": the arrival decision for a sample. Read-only on the server (nothing is assigned or counted). */
+  test: (input: RoutingTestRequest) =>
+    apiFetch('/inbox/routing/test', {
+      method: 'POST',
+      body: input,
+      schema: routingTestResponseSchema,
+    }),
   businessHours: (signal?: AbortSignal) =>
     apiFetch('/inbox/routing/business-hours', { schema: businessHoursSchema, signal }),
   updateBusinessHours: (input: UpdateBusinessHoursInput) =>
@@ -76,6 +96,23 @@ export const routingApi = {
   assignees: (signal?: AbortSignal) =>
     apiFetch('/inbox/assignees', { schema: inboxAssigneesResponseSchema, signal }),
 };
+
+/**
+ * Changes a rule at its current version. The engine moves a rule's version every time it fires, so a switch or a choice made on the list
+ * (which has nothing to lose) takes the current version once when the one it holds is stale.
+ */
+export async function updateRuleFresh(
+  rule: { id: string; rowVersion: number },
+  patch: Omit<UpdateRoutingRuleInput, 'rowVersion'>,
+) {
+  try {
+    return await routingApi.update(rule.id, { rowVersion: rule.rowVersion, ...patch });
+  } catch (e) {
+    if (!(e instanceof ApiError) || e.code !== 'ROW_VERSION_CONFLICT') throw e;
+    const fresh = await routingApi.get(rule.id);
+    return routingApi.update(rule.id, { rowVersion: fresh.rowVersion, ...patch });
+  }
+}
 
 /** The workspace's flows (the first 100, newest activity first) for the rule's "also start a flow" choice. A person without access to flows gets an empty choice, never an error page. */
 export function useFlowChoices() {
@@ -140,5 +177,29 @@ export function useAssignees(enabled = true) {
     retry: false,
     staleTime: 30_000,
     queryFn: ({ signal }) => routingApi.assignees(signal),
+  });
+}
+
+/** The handoff and assignment settings (BL-396..BL-404) with what the plan includes; open to every plan, so no paywall here. */
+export function useHandoffSettings(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.handoffSettings,
+    enabled,
+    retry: false,
+    queryFn: ({ signal }) =>
+      apiFetch('/inbox/handoff-settings', { schema: handoffSettingsSchema, signal }),
+  });
+}
+
+export function useUpdateHandoffSettings() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UpdateHandoffSettingsInput) =>
+      apiFetch('/inbox/handoff-settings', {
+        method: 'PUT',
+        body: input,
+        schema: handoffSettingsSchema,
+      }),
+    onSuccess: (data: HandoffSettings) => qc.setQueryData(KEYS.handoffSettings, data),
   });
 }

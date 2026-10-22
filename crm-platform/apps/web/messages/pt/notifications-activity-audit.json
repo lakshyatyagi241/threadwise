@@ -414,6 +414,14 @@
           "label": "Agendamento fora de sincronia com o Google Calendar",
           "hint": "O evento do Google Calendar de um agendamento futuro foi excluído, movido ou teve os convidados alterados. O agendamento não é alterado; você escolhe o que fazer."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Agendamento cancelado pelo cliente",
+          "hint": "Um cliente cancelou o agendamento ao tocar em Cancelar num lembrete. O responsável pelo agendamento é avisado."
+        },
+        "appointment_reminder_test": {
+          "label": "Resultado do teste de e-mail do lembrete",
+          "hint": "O resultado do e-mail de teste que você envia para uma etapa de lembrete: enviado, ou não enviado e o motivo."
+        },
         "snooze_wake": {
           "label": "Chat adiado volta",
           "hint": "Um chat adiado reabre na hora marcada e é enviado a você ou à sua equipe."
@@ -513,6 +521,11 @@
           "watch": "Você deve ver um pop-up, e o número do sino e o título da aba devem mudar.",
           "notConnected": "As atualizações em tempo real não estão conectadas nesta página, então o pop-up não pode aparecer aqui. Recarregue a página e tente de novo.",
           "off": "Nenhuma notificação foi criada no sino: o sino está desativado para \"Notificação de teste\" na tabela abaixo, ou pelo proprietário do seu espaço de trabalho."
+        },
+        "prompt": {
+          "message": "Ative as notificações do navegador para receber um aviso dos eventos que escolher, mesmo com o CRM fechado.",
+          "enable": "Permitir notificações",
+          "enabling": "Ativando..."
         }
       }
     },

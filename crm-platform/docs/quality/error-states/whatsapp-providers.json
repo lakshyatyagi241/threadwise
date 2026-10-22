@@ -1,0 +1,103 @@
+{
+  "feature": "whatsapp-providers",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-whatsapp-providers-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-providers/components/assignments-page.tsx",
+        "apps/web/src/features/whatsapp-providers/components/provider-detail-page.tsx",
+        "apps/web/src/features/whatsapp-providers/components/provider-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-whatsapp-providers-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-providers/lib/errors.ts",
+        "apps/web/src/features/whatsapp-providers/lib/test-result.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-providers/lib/lib.test.ts",
+          "match": "asks for a reload on a row version conflict and names the missing permission on a 403"
+        }
+      ]
+    },
+    {
+      "id": "ES-whatsapp-providers-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-providers/components/assignments-page.tsx",
+        "apps/web/src/features/whatsapp-providers/components/provider-actions.tsx",
+        "apps/web/src/features/whatsapp-providers/components/provider-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-whatsapp-providers-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-providers/lib/base-url.ts",
+        "apps/web/src/features/whatsapp-providers/lib/errors.ts",
+        "apps/web/src/features/whatsapp-providers/lib/switch-plan.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-providers/lib/lib.test.ts",
+          "match": "maps each registry code to a key and puts field errors on their field"
+        }
+      ]
+    },
+    {
+      "id": "ES-whatsapp-providers-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-providers/components/assignments-page.tsx",
+        "apps/web/src/features/whatsapp-providers/components/provider-actions.tsx",
+        "apps/web/src/features/whatsapp-providers/components/provider-form.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-providers/lib/lib.test.ts",
+          "match": "asks for a reload on a row version conflict and names the missing permission on a 403"
+        }
+      ]
+    },
+    {
+      "id": "ES-whatsapp-providers-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

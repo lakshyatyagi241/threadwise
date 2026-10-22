@@ -9,6 +9,7 @@ import { ChatConversationsModule } from '../chat-conversations';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
 import { SqlAssistantDirectory } from './_shims/sql-assistant-directory';
 import { SqlInboxGateway } from './_shims/sql-inbox-gateway';
 import {
@@ -27,6 +28,7 @@ import {
 import { WidgetPublicService } from './widget-public.service';
 import { WidgetThrottleService } from './widget-throttle.service';
 import { WidgetVisitorsRepository } from './widget-visitors.repository';
+import { KnowledgeBaseModule } from '../knowledge-base';
 import { WidgetsController } from './widgets.controller';
 import { FlowWidgetController } from './flow-widget.controller';
 import { WidgetsRepository } from './widgets.repository';
@@ -44,6 +46,8 @@ import { WidgetsService } from './widgets.service';
     ChatConversationsModule,
     ContactConsentModule,
     CrmModule,
+    KnowledgeBaseModule,
+    TeamInboxRoutingSlaModule,
   ],
   controllers: [
     WidgetsController,

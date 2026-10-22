@@ -104,7 +104,9 @@
       },
       "linkCompany": "Một công ty",
       "outcome": "Kết quả",
-      "allOutcomes": "Tất cả kết quả"
+      "allOutcomes": "Tất cả kết quả",
+      "team": "Nhóm",
+      "allTeams": "Tất cả nhóm"
     },
     "table": {
       "scrollArea": "Bảng công việc",
@@ -296,7 +298,8 @@
       "retry": "Thử lại",
       "outcomeInvalid": "Kết quả đó không khả dụng. Hãy chọn một kết quả trong danh sách.",
       "outcomeNameTaken": "Một kết quả khác đã có tên này.",
-      "outcomeInUse": "Vẫn còn công việc dùng kết quả này nên không thể xóa. Hãy ẩn nó thay thế."
+      "outcomeInUse": "Vẫn còn công việc dùng kết quả này nên không thể xóa. Hãy ẩn nó thay thế.",
+      "completionDisabled": "Việc hoàn thành công việc đang tắt trong Hoạt động bán hàng."
     },
     "toast": {
       "completed": "Đã hoàn thành tác vụ.",
@@ -356,28 +359,13 @@
     "outcomes": {
       "title": "Kết quả công việc",
       "subtitle": "Các kết quả mà một người chọn khi hoàn thành hoặc ghi nhận công việc, chẳng hạn Quan tâm hoặc Đã để lại tin nhắn.",
-      "listTitle": "Kết quả",
-      "listHint": "Kết quả bị ẩn sẽ không còn được đề xuất, nhưng các công việc đã có kết quả đó vẫn giữ nguyên. Không thể xóa kết quả đang được công việc sử dụng.",
       "loading": "Đang tải kết quả",
       "empty": "Chưa có kết quả nào. Hãy thêm kết quả đầu tiên bên dưới.",
-      "newName": "Kết quả mới",
-      "newNamePlaceholder": "ví dụ: Đã để lại tin nhắn",
       "add": "Thêm kết quả",
-      "readOnly": "Bạn có thể xem danh sách này nhưng cần có quyền để thay đổi.",
       "failed": "Không thực hiện được.",
       "conflict": "Người khác đã thay đổi kết quả này. Danh sách đã được tải lại. Hãy thử lại.",
-      "added": "Đã thêm kết quả.",
       "saved": "Đã lưu kết quả.",
       "deleted": "Đã xóa kết quả.",
-      "moveUp": "Di chuyển {name} lên",
-      "moveDown": "Di chuyển {name} xuống",
-      "nameLabel": "Tên kết quả",
-      "taskCount": "{count, plural, other {# công việc}}",
-      "shownLabel": "Đề xuất {name} khi hoàn thành công việc",
-      "shown": "Đang hiện",
-      "hidden": "Đã ẩn",
-      "deleteNamed": "Xóa {name}",
-      "deleteInUse": "Vẫn còn công việc dùng kết quả này nên không thể xóa. Hãy ẩn nó thay thế.",
       "deleteTitle": "Xóa {name}?",
       "deleteMessage": "Kết quả sẽ bị xóa khỏi danh sách. Không có công việc nào dùng nó.",
       "delete": "Xóa",

@@ -422,6 +422,17 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         );
         return advance('out');
       case 'assign':
+        if (d.handoff === 2) {
+          // The test chat takes the "assigned" exit (a real run picks by who is free); a flow wired only for "waiting" says so.
+          sys(
+            tx('handoff', { team: str(d.team) || '?', destination: str(d.destination) || 'team' }),
+          );
+          return advance(
+            edges.some((x) => x.source === node.id && x.sourceHandle === 'assigned')
+              ? 'assigned'
+              : 'out',
+          );
+        }
         sys(
           d.userId
             ? tx('assignedUser', { team: str(d.team) || '?', user: str(d.userId) })
@@ -552,20 +563,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         );
         return advance('success');
       }
-      case 'faq': {
-        // The match needs the workspace's FAQs and its embedding model: the test chat does not run it, so nothing is sent and no
-        // `<save>.*` variable is set. The step takes the "answered" exit when it is wired, else "no match", so either branch can be walked.
-        const wired = (handle: string) =>
-          edges.some((x) => x.source === node.id && x.sourceHandle === handle);
-        const port = wired('matched') || !wired('no_match') ? 'matched' : 'no_match';
-        sys(
-          tx(port === 'matched' ? 'faqAnswered' : 'faqNoMatch', {
-            query: str(d.query) || '{{user_message}}',
-            ref: `{{${str(d.save) || 'faq'}}}`,
-          }),
-        );
-        return advance(port);
-      }
+      case 'faq':
+        // The knowledge base search needs the workspace's AI agent; the test chat does not run it and leaves by "no match".
+        sys(tx('faqLine'));
+        return advance('no_match');
       case 'end':
         sys(tx('flowEnded'));
         stop();

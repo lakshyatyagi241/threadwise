@@ -14,8 +14,8 @@ import { ErrorLine, useAppointmentsCan } from './parts';
 import { SettingsCard } from './settings-parts';
 
 /**
- * Which channels may carry appointment messages (BL-350), on the Appointment settings page. The owner (or an admin) switches email,
- * WhatsApp and SMS on or off and may pick the default sender of a channel; a booking type then lists only the channels that are on AND
+ * Which channels may carry appointment messages (BL-350), on the Appointment settings page. The owner (or an admin) switches email
+ * and WhatsApp on or off and may pick the default sender of a channel; a booking type then lists only the channels that are on AND
  * connected. The outbound reminder call is listed and cannot be switched on until the Voice bot exists.
  */
 export function ChannelsSection() {

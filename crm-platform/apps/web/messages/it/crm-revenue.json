@@ -143,7 +143,7 @@
       },
       "total": "Totale",
       "truncated": "Sono elencate solo le {count} righe più alte. Il riepilogo CSV contiene le stesse righe.",
-      "teamNote": "Una persona in due team viene contata in entrambi, quindi le righe dei team possono sommarsi a più del totale.",
+      "teamNote": "Ogni persona conta solo per il suo team principale, quindi le righe per team sommano il totale. Chi non ha un team principale compare sotto «Nessun team».",
       "productNote": "Gli sconti sull'intera fattura, la spedizione e gli arrotondamenti sono ripartiti sulle righe in proporzione al loro valore."
     },
     "aging": {

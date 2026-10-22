@@ -23,6 +23,8 @@ export interface RunHead {
   sourceClient: string;
   sourceDb: string;
   mode: RunMode;
+  /** testing switch: leave the WhatsApp number out */
+  skipWhatsapp: boolean;
   status: string;
 }
 
@@ -67,7 +69,13 @@ export async function executeRun(
   let startError: string | null = null;
   try {
     result = await d.runner.run(
-      { runUuid: run.uuid, sourceClient: run.sourceClient, sourceDb: run.sourceDb, mode: run.mode },
+      {
+        runUuid: run.uuid,
+        sourceClient: run.sourceClient,
+        sourceDb: run.sourceDb,
+        mode: run.mode,
+        skipWhatsapp: run.skipWhatsapp,
+      },
       async (ev) => {
         if (ev.event !== 'step') return;
         steps = applyStep(steps, ev, now());

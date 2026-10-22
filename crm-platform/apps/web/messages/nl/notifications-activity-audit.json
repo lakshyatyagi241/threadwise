@@ -414,6 +414,14 @@
           "label": "Afspraak niet gesynchroniseerd met Google Calendar",
           "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Afspraak geannuleerd door de klant",
+          "hint": "Een klant annuleerde de afspraak door op Annuleren te tikken in een herinnering. De eigenaar van de afspraak krijgt bericht."
+        },
+        "appointment_reminder_test": {
+          "label": "Resultaat van de testmail van de herinnering",
+          "hint": "Het resultaat van de testmail die je voor een herinneringsstap stuurt: verzonden, of niet verzonden en waarom."
+        },
         "snooze_wake": {
           "label": "Gesnoozede chat komt terug",
           "hint": "Een gesnoozede chat wordt op het gekozen moment weer geopend en aan jou of je team toegewezen."
@@ -513,6 +521,11 @@
           "watch": "Je zou een pop-up moeten zien, en het getal bij het belletje en de tabtitel veranderen.",
           "notConnected": "Live-updates zijn op deze pagina niet verbonden, dus de pop-up kan hier niet verschijnen. Laad de pagina opnieuw en probeer het nog eens.",
           "off": "Er is geen melding in het belletje gemaakt: het belletje staat uit voor “Testmelding” in de tabel hieronder, of is uitgezet door de eigenaar van je werkruimte."
+        },
+        "prompt": {
+          "message": "Schakel browsermeldingen in om een melding te krijgen voor de gebeurtenissen die u kiest, ook als de CRM gesloten is.",
+          "enable": "Meldingen toestaan",
+          "enabling": "Bezig met inschakelen..."
         }
       }
     },

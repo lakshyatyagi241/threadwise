@@ -1,0 +1,2536 @@
+[
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 36,
+  "text": "SELECT p.features, p.limits, ma.slug AS app_slug, (SELECT wi.status FROM workspace_app_installations wi WHERE wi.org_id = a.org_id AND wi.ap",
+  "file": "apps/api/src/modules/addons-extension-registry/addon-entitlement.service.ts",
+  "module": "addons-extension-registry"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 83,
+  "text": "SELECT a.uuid, p.uuid AS pack_uuid, p.name, a.starts_at, a.ends_at, a.package_id::int AS package_id, EXISTS (SELECT 1 FROM subscriptions sb ",
+  "file": "apps/api/src/modules/addons-extension-registry/workspace-addons.service.ts",
+  "module": "addons-extension-registry"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 45,
+  "text": "SELECT CASE WHEN count(*) = 0 THEN NULL ELSE round(100.0 * count(*) FILTER (WHERE status IN ('delivered', 'read')) / count(*)) END FROM mess",
+  "file": "apps/api/src/modules/admin-console-shell/overview-stats.service.ts",
+  "module": "admin-console-shell"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 49,
+  "text": "SELECT CASE WHEN count(*) = 0 THEN NULL ELSE round(100.0 * count(*) FILTER (WHERE matched_keyword_reply_id IS NOT NULL) / count(*)) END FROM",
+  "file": "apps/api/src/modules/admin-console-shell/overview-stats.service.ts",
+  "module": "admin-console-shell"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 43,
+  "text": "SELECT COALESCE((o.settings ->> 'ownerUserId') = u.uuid::text, false) AS is_owner, (o.settings ->> 'ownerUserId') IS NOT NULL AS has_owner, ",
+  "file": "apps/api/src/modules/admin-console-shell/workspace-export.service.ts",
+  "module": "admin-console-shell"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 130,
+  "text": "SELECT a.uuid, a.name, a.ai_provider, a.ai_model, (SELECT count(*) FROM ai_training_sources s WHERE s.org_id = a.org_id AND s.status = 'read",
+  "file": "apps/api/src/modules/ai-agents-training/assistants.repository.ts",
+  "module": "ai-agents-training"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 123,
+  "text": "SELECT * FROM appointment_channel_settings WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/appointments-booking/appointment-channels.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 89,
+  "text": "WITH due AS ( SELECT a.org_id, a.id AS appointment_id, r.id AS reminder_id, r.kind, r.offset_minutes, a.armed_at, CASE r.kind WHEN 'before' ",
+  "file": "apps/api/src/modules/appointments-booking/appointment-reminders.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 176,
+  "text": "SELECT * FROM appointment_reminder_runs WHERE org_id = ${orgId} AND id = ${id}",
+  "file": "apps/api/src/modules/appointments-booking/appointment-reminders.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 244,
+  "text": "SELECT * FROM appointment_reminder_runs WHERE org_id = ${orgId} AND appointment_id = ${appointmentId} ORDER BY armed_at, due_at, id",
+  "file": "apps/api/src/modules/appointments-booking/appointment-reminders.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 450,
+  "text": "SELECT a.status, count(*) AS n, count(*) FILTER (WHERE a.status IN ('pending', 'confirmed') AND a.starts_at >= now()) AS upcoming, count(*) ",
+  "file": "apps/api/src/modules/appointments-booking/appointments.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 168,
+  "text": "SELECT t.*, u.uuid AS host_uuid, u.full_name AS host_name, (SELECT count(*) FROM appointments a WHERE a.org_id = t.org_id AND a.booking_type",
+  "file": "apps/api/src/modules/appointments-booking/booking-types.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 325,
+  "text": "SELECT * FROM booking_questions WHERE org_id = ${orgId} AND booking_type_id IN ${ids} ORDER BY sort_order, id",
+  "file": "apps/api/src/modules/appointments-booking/booking-types.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 388,
+  "text": "SELECT * FROM booking_financials WHERE org_id = ${orgId} AND booking_type_id IN ${ids}",
+  "file": "apps/api/src/modules/appointments-booking/booking-types.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 406,
+  "text": "SELECT * FROM booking_integrations WHERE org_id = ${orgId} AND booking_type_id IN ${ids}",
+  "file": "apps/api/src/modules/appointments-booking/booking-types.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 206,
+  "text": "SELECT * FROM appointment_feed_tokens WHERE org_id = ${orgId} AND user_id = ${userId} ${lock ? sql",
+  "file": "apps/api/src/modules/appointments-booking/bookings-feed.service.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 79,
+  "text": "SELECT * FROM appointment_calendar_connections WHERE org_id = ${orgId} ${forUpdate ? sql",
+  "file": "apps/api/src/modules/appointments-booking/google-calendar-connection.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 201,
+  "text": "UPDATE appointment_calendar_connections c SET next_reconcile_at = now() + (${claimMs} || ' milliseconds')::interval WHERE (c.org_id, c.id) I",
+  "file": "apps/api/src/modules/appointments-booking/google-calendar-connection.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 104,
+  "text": "SELECT * FROM google_consent_requests WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid ${forUpdate ? sql",
+  "file": "apps/api/src/modules/appointments-booking/google-consent.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 197,
+  "text": "SELECT * FROM google_consent_requests WHERE status IN ('pending', 'awaiting_confirm') AND expires_at < now() ORDER BY expires_at LIMIT ${lim",
+  "file": "apps/api/src/modules/appointments-booking/google-consent.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 97,
+  "text": "SELECT * FROM calendar_ics_feeds WHERE org_id = ${orgId} ORDER BY created_at ASC, id ASC",
+  "file": "apps/api/src/modules/appointments-booking/ics-feeds.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 115,
+  "text": "SELECT * FROM calendar_ics_feeds WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid ${forUpdate ? sql",
+  "file": "apps/api/src/modules/appointments-booking/ics-feeds.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 123,
+  "text": "SELECT * FROM calendar_ics_feeds WHERE org_id = ${orgId} AND id = ${id}",
+  "file": "apps/api/src/modules/appointments-booking/ics-feeds.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 73,
+  "text": "SELECT * FROM appointment_microsoft_connections WHERE org_id = ${orgId} ${forUpdate ? sql",
+  "file": "apps/api/src/modules/appointments-booking/microsoft-calendar-connection.repository.ts",
+  "module": "appointments-booking"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 501,
+  "text": "SELECT u.email, u.password_hash, (SELECT count(*)::int FROM users x WHERE x.org_id = u.org_id AND x.status = 'active') AS active_users, (SEL",
+  "file": "apps/api/src/modules/auth/account/account.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 149,
+  "text": "SELECT * FROM platform_operators WHERE email = ${email}",
+  "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 156,
+  "text": "SELECT * FROM platform_operators WHERE id = ${id}",
+  "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 284,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE mfa_enabled)::int AS enrolled FROM platform_operators WHERE status = 'active'",
+  "file": "apps/api/src/modules/auth/platform/security-center.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 300,
+  "text": "SELECT count(*) FILTER (WHERE status IN ('failure','warning') AND at > now() - interval '7 days')::int AS open_risks, count(*) FILTER (WHERE",
+  "file": "apps/api/src/modules/auth/platform/security-center.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 300,
+  "text": "SELECT count(*) FILTER (WHERE status IN ('failure','warning') AND at > now() - interval '7 days')::int AS open_risks, count(*) FILTER (WHERE",
+  "file": "apps/api/src/modules/auth/platform/security-center.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 334,
+  "text": "SELECT e.at, e.event, e.status, e.actor_type, e.actor_id, e.payload, o.name AS org_name, CASE e.actor_type WHEN 'user' THEN ( SELECT u.full_",
+  "file": "apps/api/src/modules/auth/platform/security-center.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 309,
+  "text": "SELECT count(*)::int AS users, count(*) FILTER (WHERE s.mfa_enabled)::int AS enrolled FROM users u LEFT JOIN user_security s ON s.org_id = u",
+  "file": "apps/api/src/modules/auth/platform/tenant-directory.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 126,
+  "text": "SELECT u.status, s.email_verified_at, s.force_password_change, s.password_changed_at, COALESCE(s.mfa_enabled, false) AS mfa_enabled, EXISTS ",
+  "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+  "module": "auth"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 41,
+  "text": "SELECT * FROM bcast_receipt_lookup(${receipt.providerMessageId})",
+  "file": "apps/api/src/modules/broadcasts/broadcast-receipts.service.ts",
+  "module": "broadcasts"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 134,
+  "text": "SELECT * FROM ( SELECT uuid, 'baileys' AS engine, coalesce(nullif(device_name, ''), phone_number) AS label, country_code, phone_number FROM ",
+  "file": "apps/api/src/modules/broadcasts/broadcasts-compose.service.ts",
+  "module": "broadcasts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 188,
+  "text": "SELECT count(*) FILTER (WHERE status = 'pending')::int AS queued, count(*) FILTER (WHERE status IN ('processing', 'sent'))::int AS processin",
+  "file": "apps/api/src/modules/broadcasts/broadcasts-read.repository.ts",
+  "module": "broadcasts"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 132,
+  "text": "SELECT DISTINCT m.contact_id AS id FROM contact_group_members m JOIN contact_groups g ON g.org_id = m.org_id AND g.id = m.group_id WHERE m.o",
+  "file": "apps/api/src/modules/broadcasts/broadcasts.repository.ts",
+  "module": "broadcasts"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 144,
+  "text": "SELECT DISTINCT ct.contact_id AS id FROM contact_tags ct JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id WHERE ct.org_id = ${orgId}",
+  "file": "apps/api/src/modules/broadcasts/broadcasts.repository.ts",
+  "module": "broadcasts"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 47,
+  "text": "SELECT * FROM bcast_link_lookup(${token})",
+  "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts",
+  "module": "broadcasts"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 147,
+  "text": "SELECT * FROM ( SELECT DISTINCT ON (c.org_id, c.meta_json->>'waba_id') o.uuid AS org_uuid, o.name AS org_name, c.phone_number, c.display_lab",
+  "file": "apps/api/src/modules/bsp-billing-engine/reseller-platform.reader.ts",
+  "module": "bsp-billing-engine"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 242,
+  "text": "SELECT count(*) FILTER (WHERE status = 'charged')::int AS billed, count(*) FILTER (WHERE status = 'free')::int AS free, ${major(sql",
+  "file": "apps/api/src/modules/bsp-billing-engine/reseller-platform.reader.ts",
+  "module": "bsp-billing-engine"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 148,
+  "text": "SELECT ${ROW_COLS} ${UNIFIED} WHERE ${filterClause(v, f)} ORDER BY w.started_at DESC, w.row_id DESC, w.source LIMIT ${limit} OFFSET ${offset",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 201,
+  "text": "SELECT count(*) AS total, count(*) FILTER (WHERE w.is_answered) AS answered, count(*) FILTER (WHERE w.is_missed) AS missed, coalesce(round(a",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 221,
+  "text": "SELECT count(*) AS total, count(*) FILTER (WHERE w.started_at >= now() - interval '24 hours') AS last24h, coalesce(sum(w.duration_sec) FILTE",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 309,
+  "text": "SELECT count(*) AS total, count(*) FILTER (WHERE w.status IN ('ended', 'failed')) AS finished, count(*) FILTER (WHERE w.is_answered) AS answ",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 338,
+  "text": "SELECT to_char((w.started_at AT TIME ZONE ${tz})::date, 'YYYY-MM-DD') AS day, count(*) AS total, count(*) FILTER (WHERE w.is_answered) AS an",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 361,
+  "text": "SELECT u.uuid AS agent_uuid, u.full_name AS name, count(*) AS calls, count(*) FILTER (WHERE w.is_answered) AS answered, coalesce(round(avg(w",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 410,
+  "text": "SELECT w.source, count(*) AS calls, count(*) FILTER (WHERE w.is_answered) AS answered, count(*) FILTER (WHERE w.is_missed) AS missed ${UNIFI",
+  "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 66,
+  "text": "SELECT * FROM telephony_connection_for_webhook(${connectionUuid}::uuid)",
+  "file": "apps/api/src/modules/calling-voice/logging/telephony-webhook.service.ts",
+  "module": "calling-voice"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 41,
+  "text": "SELECT * FROM camp_campaign_lookup(${campaign}::uuid)",
+  "file": "apps/api/src/modules/campaigns/campaign-callbacks.service.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 33,
+  "text": "SELECT * FROM camp_receipt_lookup(${receipt.providerMessageId})",
+  "file": "apps/api/src/modules/campaigns/campaign-receipts.service.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 111,
+  "text": "SELECT * FROM camp_follow_up_receipt_lookup(${receipt.providerMessageId})",
+  "file": "apps/api/src/modules/campaigns/campaign-receipts.service.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 219,
+  "text": "SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid, f.uuid AS flow_uuid, fb.uuid A",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 791,
+  "text": "SELECT count(*)::int AS remaining, count(*) FILTER (WHERE send_attempts < ${maxAttempts})::int AS retryable, min(next_attempt_at) FILTER (WH",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 1016,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('approved', 'public'))::int AS approved FROM wa_templates WHERE org_id = ${",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 1063,
+  "text": "SELECT DISTINCT m.contact_id AS id FROM contact_group_members m JOIN contact_groups g ON g.org_id = m.org_id AND g.id = m.group_id WHERE m.o",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 1078,
+  "text": "WITH picked AS (SELECT id FROM tags WHERE org_id = ${orgId} AND uuid IN (${list(tagUuids, 'uuid')})) SELECT DISTINCT id FROM ( SELECT ct.con",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 1275,
+  "text": "SELECT r.sender_provider, r.sender_device_id, count(*)::int AS recipients, count(*) FILTER (WHERE ${sql.raw(AGG_SENT)})::int AS sent, count(",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 1417,
+  "text": "SELECT h.hour, count(*) FILTER (WHERE r.sent_at IS NOT NULL AND extract(hour FROM r.sent_at AT TIME ZONE ${zone}) = h.hour)::int AS sent, co",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 1497,
+  "text": "SELECT count(*)::int AS n, count(*) FILTER (WHERE phone_number IS NULL AND contact_id IS NULL)::int AS invalid, count(*) FILTER (WHERE statu",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 1643,
+  "text": "SELECT t.uuid, t.name, t.color, (SELECT count(DISTINCT x.id) FROM ( SELECT ct.contact_id AS id FROM contact_tags ct WHERE ct.org_id = t.org_",
+  "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 153,
+  "text": "rcp AS MATERIALIZED (${this.rcp(s.orgId, s.source, s.id)}), -- Recipients with no contact are matched in one pass over the contacts (and pho",
+  "file": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 288,
+  "text": "WITH ${this.people(s)}, ${this.replies(s)}, ${this.forms(s)}, cb AS MATERIALIZED ( SELECT p.pkey, p.contact_id, p.sent_at, r.replied_at, p.o",
+  "file": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 452,
+  "text": "WITH ${this.people(s)}, ${this.forms(s)}, x AS MATERIALIZED ( SELECT DISTINCT ON (f.pkey) f.pkey, p.contact_id, p.rname, p.rphone, f.at, f.f",
+  "file": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 247,
+  "text": "SELECT count(*)::int AS matching, count(*) FILTER (WHERE contacts.is_unsubscribed)::int AS opted_out, count(*) FILTER (WHERE NOT contacts.is",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 58,
+  "text": "SELECT contacts.uuid, contacts.name, contacts.first_name, contacts.last_name, contacts.email::text AS email, contacts.phone, contacts.is_uns",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard-contacts.service.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 416,
+  "text": "SELECT * FROM camp_test_receipt_lookup(${receipt.providerMessageId})",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard-test-send.service.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 349,
+  "text": "SELECT uuid, name, color, member_count_cache FROM segments WHERE org_id = ${orgId} AND (visibility = 'shared' OR owner_id = ${userId}::bigin",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 709,
+  "text": "SELECT p.*, t.template_name, s.uuid AS series_uuid, CASE WHEN coalesce(p.provider, 'baileys') = 'baileys' THEN (SELECT coalesce(nullif(d.dev",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 778,
+  "text": "SELECT count(*) FILTER (WHERE retry_state IN ('scheduled', 'sending', 'sent'))::int AS pending, min(retry_next_at) FILTER (WHERE retry_state",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 811,
+  "text": "SELECT step_no AS step, count(*) FILTER (WHERE outcome = 'sent')::int AS sent, count(*) FILTER (WHERE outcome = 'sent' AND delivery_status I",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 841,
+  "text": "SELECT count(*)::int AS recipients, count(*) FILTER (WHERE status IN ('sent','delivered','read','responded') OR sent_at IS NOT NULL)::int AS",
+  "file": "apps/api/src/modules/campaigns/wizard/wizard.repository.ts",
+  "module": "campaigns"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 16,
+  "text": "SELECT g.id, g.uuid, g.name, (SELECT count(*) FROM contact_group_members m JOIN contacts c ON c.org_id = m.org_id AND c.id = m.contact_id AN",
+  "file": "apps/api/src/modules/catalog-products/_shims/sql-audience-directory.ts",
+  "module": "catalog-products"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 171,
+  "text": "SELECT count(*) AS total, count(*) FILTER (WHERE image_url IS NULL OR image_url = '') AS no_image, count(*) FILTER (WHERE price_minor = 0) A",
+  "file": "apps/api/src/modules/catalog-products/catalog-sync.repository.ts",
+  "module": "catalog-products"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 149,
+  "text": "SELECT * FROM ( SELECT coalesce(v.meta_retailer_id, v.sku, coalesce(p.meta_retailer_id, p.sku, 'wsn-' || p.id::text) || '-' || (v.position +",
+  "file": "apps/api/src/modules/catalog-products/catalog-variants.ts",
+  "module": "catalog-products"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 73,
+  "text": "p.in_stock AND p.status = 'active' AND (p.storefront_id IS NULL OR p.storefront_id = ${storefrontId}) AND (NOT EXISTS (SELECT 1 FROM wa_prod",
+  "file": "apps/api/src/modules/catalog-products/sql-storefront-reader.ts",
+  "module": "catalog-products"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 113,
+  "text": "SELECT ${COLUMNS} FROM wa_products p WHERE p.org_id = ${orgId} AND ${available(storefrontId)} ORDER BY p.sort_order, p.id DESC OFFSET ${page",
+  "file": "apps/api/src/modules/catalog-products/sql-storefront-reader.ts",
+  "module": "catalog-products"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 64,
+  "text": "SELECT * FROM mail_outbound_attachments WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid AND uploaded_by = ${userId} AND used_at IS NULL FOR",
+  "file": "apps/api/src/modules/channel-email/mail-outbound-attachments.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 89,
+  "text": "SELECT * FROM mail_outbound_attachments WHERE org_id = ${orgId} AND uploaded_by = ${userId} AND uuid = ANY(ARRAY[${sql.join( uuids.map((u) =",
+  "file": "apps/api/src/modules/channel-email/mail-outbound-attachments.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 112,
+  "text": "SELECT m.*, u.uuid AS owner_uuid, u.full_name AS owner_name, EXISTS (SELECT 1 FROM mail_signatures sg WHERE sg.org_id = m.org_id AND sg.mail",
+  "file": "apps/api/src/modules/channel-email/mailboxes.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 136,
+  "text": "SELECT * FROM mail_mailboxes WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid ${forUpdate ? sql",
+  "file": "apps/api/src/modules/channel-email/mailboxes.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 144,
+  "text": "SELECT * FROM mail_mailboxes WHERE org_id = ${orgId} AND id = ${id}",
+  "file": "apps/api/src/modules/channel-email/mailboxes.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 179,
+  "text": "SELECT * FROM mail_mailboxes WHERE org_id = ${orgId} AND address = ${address}::citext ${forUpdate ? sql",
+  "file": "apps/api/src/modules/channel-email/mailboxes.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 390,
+  "text": "SELECT DISTINCT lower(m.meta->'email'->>'messageId') AS message_id, m.meta->'email'->>'threadId' AS thread_id FROM messages m JOIN conversat",
+  "file": "apps/api/src/modules/channel-email/mailboxes.repository.ts",
+  "module": "channel-email"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 148,
+  "text": "SELECT count(*)::int AS total, coalesce(sum(sent), 0)::int AS sent, coalesce(sum(failed), 0)::int AS failed, coalesce(sum(blocked), 0)::int ",
+  "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 266,
+  "text": "UPDATE facebook_broadcasts b SET sent = c.sent, failed = c.failed, blocked = c.blocked FROM ( SELECT count(*) FILTER (WHERE status = 'sent')",
+  "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 124,
+  "text": "SELECT * FROM fb_page_lookup(${entry.pageId})",
+  "file": "apps/api/src/modules/channel-facebook/inbound.service.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 32,
+  "text": "SELECT count(*)::int AS convos, count(*) FILTER (WHERE c.status = 'open')::int AS open FROM conversations c JOIN channels ch ON ch.org_id = ",
+  "file": "apps/api/src/modules/channel-facebook/insights.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 36,
+  "text": "SELECT count(*) FILTER (WHERE m.direction = 'in')::int AS msg_in, count(*) FILTER (WHERE m.direction = 'out' AND m.kind <> 'reaction')::int ",
+  "file": "apps/api/src/modules/channel-facebook/insights.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 43,
+  "text": "SELECT count(*)::int AS posts, count(*) FILTER (WHERE status = 'published')::int AS published, count(*) FILTER (WHERE status = 'scheduled'):",
+  "file": "apps/api/src/modules/channel-facebook/insights.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 122,
+  "text": "${SELECT} WHERE ${where} ORDER BY CASE p.status WHEN 'scheduled' THEN 0 WHEN 'failed' THEN 1 WHEN 'draft' THEN 1 ELSE 2 END, p.scheduled_pub",
+  "file": "apps/api/src/modules/channel-facebook/posts.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 138,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status = 'scheduled')::int AS scheduled, count(*) FILTER (WHERE status = 'published'):",
+  "file": "apps/api/src/modules/channel-facebook/posts.repository.ts",
+  "module": "channel-facebook"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 74,
+  "text": "SELECT * FROM line_channel_lookup(${token})",
+  "file": "apps/api/src/modules/channel-line/inbound.service.ts",
+  "module": "channel-line"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 151,
+  "text": "SELECT count(*)::int AS total, coalesce(sum(sent), 0)::int AS sent, coalesce(sum(failed), 0)::int AS failed, coalesce(sum(blocked), 0)::int ",
+  "file": "apps/api/src/modules/channel-line/line-broadcasts.repository.ts",
+  "module": "channel-line"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 273,
+  "text": "UPDATE line_broadcasts b SET sent = c.sent, failed = c.failed, blocked = c.blocked FROM ( SELECT count(*) FILTER (WHERE status = 'sent')::in",
+  "file": "apps/api/src/modules/channel-line/line-broadcasts.repository.ts",
+  "module": "channel-line"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 41,
+  "text": "SELECT * FROM bcast_receipt_lookup(${messageId})",
+  "file": "apps/api/src/modules/channel-sms/sms-status.service.ts",
+  "module": "channel-sms"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 44,
+  "text": "SELECT * FROM camp_receipt_lookup(${messageId})",
+  "file": "apps/api/src/modules/channel-sms/sms-status.service.ts",
+  "module": "channel-sms"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 99,
+  "text": "SELECT * FROM sms_sender_by_dlr_secret(${secret})",
+  "file": "apps/api/src/modules/channel-sms/sms-status.service.ts",
+  "module": "channel-sms"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 88,
+  "text": "SELECT * FROM tg_bot_lookup(${token})",
+  "file": "apps/api/src/modules/channel-telegram/inbound.service.ts",
+  "module": "channel-telegram"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 167,
+  "text": "SELECT count(*)::int AS total, coalesce(sum(sent), 0)::int AS sent, coalesce(sum(failed), 0)::int AS failed, coalesce(sum(blocked), 0)::int ",
+  "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.repository.ts",
+  "module": "channel-telegram"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 290,
+  "text": "UPDATE telegram_broadcasts b SET sent = c.sent, failed = c.failed, blocked = c.blocked FROM ( SELECT count(*) FILTER (WHERE status = 'sent')",
+  "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.repository.ts",
+  "module": "channel-telegram"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 64,
+  "text": "SELECT * FROM vib_channel_lookup(${token})",
+  "file": "apps/api/src/modules/channel-viber/inbound.service.ts",
+  "module": "channel-viber"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 58,
+  "text": "SELECT count(*) FILTER (WHERE m.delivered_at IS NOT NULL)::int AS delivered, count(*) FILTER (WHERE m.read_at IS NOT NULL)::int AS seen, cou",
+  "file": "apps/api/src/modules/channel-viber/insights.repository.ts",
+  "module": "channel-viber"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 147,
+  "text": "SELECT count(*)::int AS total, coalesce(sum(sent), 0)::int AS sent, coalesce(sum(failed), 0)::int AS failed, coalesce(sum(delivered), 0)::in",
+  "file": "apps/api/src/modules/channel-viber/vib-broadcasts.repository.ts",
+  "module": "channel-viber"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 273,
+  "text": "UPDATE viber_broadcasts b SET sent = c.sent, failed = c.failed, delivered = c.delivered, seen = c.seen FROM ( SELECT count(*) FILTER (WHERE ",
+  "file": "apps/api/src/modules/channel-viber/vib-broadcasts.repository.ts",
+  "module": "channel-viber"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 251,
+  "text": "SELECT DISTINCT c.contact_id FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id WHERE c.org_id = ${orgId",
+  "file": "apps/api/src/modules/channel-wechat/broadcasts.repository.ts",
+  "module": "channel-wechat"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 97,
+  "text": "SELECT o.settings->>'country' AS onboarding, (SELECT upper(btrim(x.billing_country)) FROM orders x WHERE x.org_id = o.id AND x.status = 'pai",
+  "file": "apps/api/src/modules/channel-wechat/channels.repository.ts",
+  "module": "channel-wechat"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 77,
+  "text": "SELECT * FROM wech_channel_lookup(${token})",
+  "file": "apps/api/src/modules/channel-wechat/inbound.service.ts",
+  "module": "channel-wechat"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 306,
+  "text": "SELECT * FROM chat_channel_lookup(${uuid}::uuid)",
+  "file": "apps/api/src/modules/chat-conversations/channels.repository.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 719,
+  "text": "SELECT * FROM (${feedSql(ctx, sel, { level, page: { cursor, limit } })}) f ORDER BY f.at DESC, f.rank DESC, f.id DESC LIMIT ${limit + 1}",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 724,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE r.direction = 'in')::int AS received, count(*) FILTER (WHERE r.direction = 'out' AND r",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 737,
+  "text": "SELECT u.currency AS currency, sum(u.credits)::bigint AS minor, count(*)::int AS messages FROM (SELECT DISTINCT r.provider_id FROM (${feedSq",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 737,
+  "text": "SELECT u.currency AS currency, sum(u.credits)::bigint AS minor, count(*)::int AS messages FROM (SELECT DISTINCT r.provider_id FROM (${feedSq",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 761,
+  "text": "WITH per_conversation AS ( SELECT m.conversation_id, min(m.created_at) FILTER (WHERE m.direction = 'in') AS at, min(m.created_at) FILTER (WH",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 798,
+  "text": "WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim', entities })}), agg AS ( SELECT date_",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 930,
+  "text": "WITH g AS ( SELECT GROUPING(x.b, x.t, x.conv) AS g, x.b, x.t, x.conv, count(*) FILTER (WHERE x.direction = 'out' AND x.status <> 'failed')::",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 152,
+  "text": "SELECT * FROM (${feedSql(ctx, sel, { level: 'detail', noWindow: true, only: uuid, ignoreNarrow: true, entities: [kind], })}) d LIMIT 1",
+  "file": "apps/api/src/modules/chat-conversations/message-history.repository.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 135,
+  "text": "SELECT * FROM wgt_widget_lookup(${token})",
+  "file": "apps/api/src/modules/chatbot-widget/widget-public.service.ts",
+  "module": "chatbot-widget"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 192,
+  "text": "SELECT ${COLUMNS}, (SELECT count(*) FROM chatbot_widget_visitors v WHERE v.org_id = w.org_id AND v.widget_id = w.id) AS visitors FROM ${FROM",
+  "file": "apps/api/src/modules/chatbot-widget/widgets.repository.ts",
+  "module": "chatbot-widget"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 48,
+  "text": "SELECT * FROM store_gateway_lookup(${gatewayUuid}::uuid)",
+  "file": "apps/api/src/modules/checkout-orders-merchant-payments/gateways/gateway-webhook.service.ts",
+  "module": "checkout-orders-merchant-payments"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 219,
+  "text": "SELECT count(*)::int AS total, (count(*) FILTER (WHERE c.status = 'open'))::int AS open, max(c.last_message_at) AS last_at FROM conversation",
+  "file": "apps/api/src/modules/company-briefs/brief-facts.service.ts",
+  "module": "company-briefs"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 114,
+  "text": "SELECT * FROM compliance_settings WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/compliance-center/compliance.repository.ts",
+  "module": "compliance-center"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 260,
+  "text": "SELECT o.name, o.slug, o.settings->>'country' AS country, o.settings->>'timezone' AS timezone, (SELECT upper(btrim(x.billing_country)) FROM ",
+  "file": "apps/api/src/modules/compliance-center/compliance.repository.ts",
+  "module": "compliance-center"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 297,
+  "text": "SELECT coalesce((SELECT sla_days FROM privacy_settings WHERE org_id = ${orgId}), 30) AS sla_days, count(*) FILTER (WHERE status IN ('receive",
+  "file": "apps/api/src/modules/compliance-center/compliance.repository.ts",
+  "module": "compliance-center"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 118,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE is_active)::int AS active, count(*) FILTER (WHERE NOT is_active)::int AS disabled, cou",
+  "file": "apps/api/src/modules/coupons-credits-referral-currency/coupon-admin.service.ts",
+  "module": "coupons-credits-referral-currency"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 142,
+  "text": "SELECT ${COUPON_COLUMNS} FROM coupons WHERE true ${search} ${status} ORDER BY id DESC LIMIT ${COUPON_PAGE_SIZE} OFFSET ${offset}",
+  "file": "apps/api/src/modules/coupons-credits-referral-currency/coupon-admin.service.ts",
+  "module": "coupons-credits-referral-currency"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 115,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE is_active)::int AS active FROM currencies",
+  "file": "apps/api/src/modules/coupons-credits-referral-currency/currency-admin.service.ts",
+  "module": "coupons-credits-referral-currency"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 125,
+  "text": "SELECT ${COLUMNS} FROM currencies WHERE true ${search} ORDER BY code ASC LIMIT ${CURRENCY_PAGE_SIZE} OFFSET ${offset}",
+  "file": "apps/api/src/modules/coupons-credits-referral-currency/currency-admin.service.ts",
+  "module": "coupons-credits-referral-currency"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 103,
+  "text": "SELECT count(*)::int AS lifetime, coalesce(sum(credits_awarded), 0)::bigint AS earned, count(*) FILTER (WHERE created_at >= ${w.since30d.toI",
+  "file": "apps/api/src/modules/coupons-credits-referral-currency/referral.repository.ts",
+  "module": "coupons-credits-referral-currency"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 249,
+  "text": "SELECT count(*)::int AS total, (count(*) FILTER (WHERE ${OPEN_DEAL}))::int AS with_open FROM companies c WHERE ${conds}",
+  "file": "apps/api/src/modules/crm/companies/companies.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 331,
+  "text": "SELECT DISTINCT user_id FROM team_members WHERE org_id = ${orgId} AND team_id IN (${sql.join( teamIds.map((t) => sql",
+  "file": "apps/api/src/modules/crm/contact-assignment/contact-assignment.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 56,
+  "text": "SELECT g.id, g.uuid, g.name, g.note, g.color, g.row_version, g.created_at, g.updated_at, (SELECT count(*) FROM contact_group_members m WHERE",
+  "file": "apps/api/src/modules/crm/contact-groups/contact-groups.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 392,
+  "text": "SELECT DISTINCT tm2.user_id FROM ${teamMembers} tm1 JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id WHERE t",
+  "file": "apps/api/src/modules/crm/contact-meetings/contact-meetings.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 12,
+  "text": "WITH thread AS ( SELECT c.id FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id WHERE c.org_id = ${orgId",
+  "file": "apps/api/src/modules/crm/contact-message-stats/contact-message-stats.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 356,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE ${whatsappSubscribedSql})::int AS subscribed, count(*) FILTER (WHERE ${contacts.isUnsu",
+  "file": "apps/api/src/modules/crm/contacts/contacts.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 122,
+  "text": "SELECT d.stage_id, d.currency, count(*)::int AS n, coalesce(sum(d.value_minor), 0)::text AS total, (count(*) FILTER (WHERE d.expected_close_",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 226,
+  "text": "WITH cohort AS ( SELECT d.id, d.currency, d.value_minor, d.stage_id FROM deals d WHERE ${cond} ), visited AS ( SELECT c.id, c.currency, c.va",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 282,
+  "text": "SELECT u.uuid AS owner_uuid, u.full_name AS owner_name, d.currency, (count(*) FILTER (WHERE ${won}))::int AS won_n, coalesce(sum(d.value_min",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 384,
+  "text": "SELECT * FROM ( (SELECT 'deal'::text AS kind, a.type AS type, a.created_at AS at, d.title AS subject, d.uuid AS subject_uuid, u.uuid AS acto",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 441,
+  "text": "SELECT (count(*) FILTER (WHERE ${inCur}))::int AS cur, (count(*) FILTER (WHERE ${inPrev}))::int AS prev, (count(*) FILTER (WHERE ${inCur} AN",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 476,
+  "text": "SELECT c.source, count(*)::int AS leads, (count(*) FILTER (WHERE ds.n > 0))::int AS with_deal, (count(*) FILTER (WHERE ds.won_n > 0))::int A",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 563,
+  "text": "SELECT u.uuid AS assignee_uuid, u.full_name AS assignee_name, count(*)::int AS open_n, (count(*) FILTER (WHERE t.due_at < now()))::int AS ov",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 589,
+  "text": "SELECT count(*)::int AS open_n, (count(*) FILTER (WHERE t.due_at < now()))::int AS overdue_n, (count(*) FILTER (WHERE t.due_at >= now() AND ",
+  "file": "apps/api/src/modules/crm/crm-dashboard/crm-dashboard.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 400,
+  "text": "SELECT p.id, p.uuid, (p.amount_minor - coalesce((SELECT sum(-r.amount_minor) FROM payments r WHERE r.org_id = p.org_id AND r.refund_of_id = ",
+  "file": "apps/api/src/modules/crm/invoicing/credit-notes.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 514,
+  "text": "SELECT count(*)::int AS \"all\", count(*) FILTER (WHERE ${st} = 'draft')::int AS draft, count(*) FILTER (WHERE ${st} = 'issued')::int AS issue",
+  "file": "apps/api/src/modules/crm/invoicing/invoices.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 278,
+  "text": "SELECT i.currency, coalesce(sum(greatest(i.total_minor - i.paid_minor - i.credited_minor, 0)), 0)::text AS outstanding, count(*)::int AS inv",
+  "file": "apps/api/src/modules/crm/invoicing/payments.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 388,
+  "text": "SELECT * FROM ( SELECT i.contact_id, c.uuid AS contact_uuid, c.name AS contact_name, i.currency, sum(i.total_minor - i.paid_minor - i.credit",
+  "file": "apps/api/src/modules/crm/invoicing/payments.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 291,
+  "text": "SELECT o.status, o.currency, count(*)::int AS cnt, sum(o.total_minor)::text AS total, count(*) FILTER (WHERE o.status = 'confirmed' AND x.qi",
+  "file": "apps/api/src/modules/crm/invoicing/sales-orders.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 90,
+  "text": "SELECT p.id, p.uuid, p.name, p.currency, p.is_default, p.sort_order, p.row_version, p.created_at, p.updated_at, (SELECT count(*) FROM deals ",
+  "file": "apps/api/src/modules/crm/pipelines/pipelines.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 96,
+  "text": "SELECT s.id, s.uuid, s.pipeline_id, p.uuid AS pipeline_uuid, s.name, s.color, s.probability, s.is_won, s.is_lost, s.sort_order, s.row_versio",
+  "file": "apps/api/src/modules/crm/pipelines/pipelines.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 349,
+  "text": "SELECT r.id, r.uuid, r.name, r.sort_order, r.is_active, r.row_version, r.created_at, r.updated_at, (SELECT count(*) FROM deals d WHERE d.org",
+  "file": "apps/api/src/modules/crm/pipelines/pipelines.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 508,
+  "text": "SELECT * FROM sales_doc_items WHERE org_id = ${orgId} AND doc_id IN (${sql.join( docIds.map((x) => sql",
+  "file": "apps/api/src/modules/crm/sales-docs/sales-docs.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 628,
+  "text": "SELECT * FROM sales_doc_settings WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/crm/sales-docs/sales-docs.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 672,
+  "text": "SELECT * FROM sales_doc_templates WHERE org_id = ${orgId} ${kind ? sql",
+  "file": "apps/api/src/modules/crm/sales-docs/sales-docs.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 686,
+  "text": "SELECT * FROM sales_doc_templates WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid ${forUpdate ? sql",
+  "file": "apps/api/src/modules/crm/sales-docs/sales-docs.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 698,
+  "text": "SELECT * FROM sales_doc_templates WHERE org_id = ${orgId} AND doc_type = ${kind} AND is_default",
+  "file": "apps/api/src/modules/crm/sales-docs/sales-docs.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 989,
+  "text": "SELECT o.name, o.settings ->> 'timezone' AS timezone, COALESCE(NULLIF(o.settings ->> 'currency', ''), (SELECT p.currency FROM pipelines p WH",
+  "file": "apps/api/src/modules/crm/sales-docs/sales-docs.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 103,
+  "text": "(s.visibility = 'specific' AND EXISTS ( SELECT 1 FROM segment_shares sh WHERE sh.org_id = s.org_id AND sh.segment_id = s.id AND (sh.user_id ",
+  "file": "apps/api/src/modules/crm/segments/segments.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 417,
+  "text": "SELECT sh.segment_id, t.uuid, t.name, (SELECT count(*)::int FROM team_members tm WHERE tm.org_id = t.org_id AND tm.team_id = t.id) AS member",
+  "file": "apps/api/src/modules/crm/segments/segments.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 32,
+  "text": "SELECT o.id, o.uuid, o.name, o.sort_order, o.is_active, o.row_version, o.created_at, o.updated_at, (SELECT count(*) FROM tasks t WHERE t.org",
+  "file": "apps/api/src/modules/crm/tasks/task-outcomes.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 286,
+  "text": "SELECT count(*) FILTER (WHERE t.status = 'open' AND t.due_at < now())::int AS overdue, count(*) FILTER (WHERE t.status = 'open' AND t.due_at",
+  "file": "apps/api/src/modules/crm/tasks/tasks.repository.ts",
+  "module": "crm"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 29,
+  "text": "SELECT count(*) FILTER (WHERE NOT cv.archived)::int AS open, count(*) FILTER (WHERE NOT cv.archived AND (cv.unread_count > 0 OR (cv.last_inb",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-extras.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 38,
+  "text": "SELECT count(*) FILTER (WHERE m.direction = 'in')::int AS dms_in, count(*) FILTER (WHERE m.direction = 'out' AND m.kind <> 'reaction')::int ",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-extras.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 67,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE is_active)::int AS active, (SELECT count(*) FROM flow_subscribers s WHERE s.org_id = $",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-extras.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 97,
+  "text": "SELECT EXISTS (SELECT 1 FROM woocommerce_integrations WHERE org_id = ${orgId} AND status = 'active') AS woo, (SELECT count(*) FROM woocommer",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-extras.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 21,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status = 'connected' AND active)::int AS online FROM devices WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-panels.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 55,
+  "text": "SELECT user_agent, count(*)::int AS total, count(*) FILTER (WHERE revoked_at IS NULL AND expires_at > now())::int AS active FROM auth_sessio",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-panels.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 101,
+  "text": "SELECT t.uuid, t.template_name, t.category, t.language, count(m.id)::int AS sends FROM (SELECT * FROM wa_templates WHERE org_id = ${orgId} O",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-panels.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 101,
+  "text": "SELECT t.uuid, t.template_name, t.category, t.language, count(m.id)::int AS sends FROM (SELECT * FROM wa_templates WHERE org_id = ${orgId} O",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-panels.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 30,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE NOT is_unsubscribed)::int AS subscribed, count(*) FILTER (WHERE is_unsubscribed)::int ",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-widgets.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 50,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN (${list(RUNNING)}))::int AS running, count(*) FILTER (WHERE status IN (${lis",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-widgets.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 85,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status = 'connected' AND active)::int AS online FROM devices WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-widgets.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 126,
+  "text": "SELECT t.uuid, t.template_name, t.language, t.category, t.template_type, t.status, count(m.id)::int AS sent, count(m.id) FILTER (WHERE m.sta",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-widgets.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 189,
+  "text": "SELECT coalesce((SELECT currency FROM pipelines WHERE org_id = ${orgId} ORDER BY is_default DESC, sort_order LIMIT 1), 'USD') AS currency, c",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash-widgets.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 56,
+  "text": "WITH per AS ( SELECT conversation_id, count(*) FILTER (WHERE direction = 'out') AS sent, count(*) FILTER (WHERE direction = 'out' AND ${DELI",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 137,
+  "text": "SELECT ${idx} AS i, count(*)::int AS sent, count(*) FILTER (WHERE ${DELIVERED})::int AS delivered, count(*) FILTER (WHERE ${FAILED})::int AS",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 158,
+  "text": "SELECT CASE WHEN template_id IS NOT NULL OR kind = 'template' THEN 'template' WHEN kind IN ('image','video','audio','voice','document','stic",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 190,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('resolved','closed'))::int AS closed, count(*) FILTER ( WHERE assignee_user",
+  "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
+  "module": "dashboards-analytics-charts"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 131,
+  "text": "SELECT DISTINCT ON (a.check_key) a.check_key, a.result, a.note, a.evidence_url, a.attested_at, a.expires_at, o.full_name FROM dpdp_register_",
+  "file": "apps/api/src/modules/dpdp-register/dpdp-register.service.ts",
+  "module": "dpdp-register"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 164,
+  "text": "SELECT count(*) FILTER (WHERE require_consent_for_marketing) AS on_count, count(*) AS total FROM contact_consent_settings",
+  "file": "apps/api/src/modules/dpdp-register/dpdp-register.service.ts",
+  "module": "dpdp-register"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 407,
+  "text": "SELECT source_queue AS queue, count(*)::int AS open, coalesce(extract(epoch FROM now() - min(first_failed_at)), 0)::int AS oldest_seconds, c",
+  "file": "apps/api/src/modules/failed-operations/failed-operations.repository.ts",
+  "module": "failed-operations"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 262,
+  "text": "SELECT count(*) AS messages, count(*) FILTER (WHERE outcome = 'answered') AS answered, count(*) FILTER (WHERE outcome = 'flow_started') AS f",
+  "file": "apps/api/src/modules/faq-knowledge/faq-log.repository.ts",
+  "module": "faq-knowledge"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 273,
+  "text": "SELECT LEAST(floor(score * 10), 9)::int AS bucket, count(*) FILTER (WHERE outcome IN ('answered', 'flow_started')) AS answered, count(*) FIL",
+  "file": "apps/api/src/modules/faq-knowledge/faq-log.repository.ts",
+  "module": "faq-knowledge"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 280,
+  "text": "SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day, count(*) FILTER (WHERE outcome IN ('answered', 'flow_started')) AS answe",
+  "file": "apps/api/src/modules/faq-knowledge/faq-log.repository.ts",
+  "module": "faq-knowledge"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 294,
+  "text": "SELECT count(*) AS n FROM faqs f WHERE f.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.status = 'active' AND NOT EXISTS ( SELECT 1",
+  "file": "apps/api/src/modules/faq-knowledge/faq-log.repository.ts",
+  "module": "faq-knowledge"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 86,
+  "text": "SELECT o.uuid, o.name, EXISTS (SELECT 1 FROM faq_settings s WHERE s.org_id = o.id AND s.enabled) AS enabled, (SELECT count(*) FROM faqs f WH",
+  "file": "apps/api/src/modules/faq-knowledge/faq-platform.service.ts",
+  "module": "faq-knowledge"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 103,
+  "text": "LEFT JOIN flows fl ON fl.org_id = f.org_id AND fl.id = f.flow_id LEFT JOIN LATERAL ( SELECT count(*) AS total, count(*) FILTER (WHERE v.embe",
+  "file": "apps/api/src/modules/faq-knowledge/faq.repository.ts",
+  "module": "faq-knowledge"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 247,
+  "text": "SELECT a.uuid, a.name, a.status, a.ai_model, (SELECT count(*) FROM ai_training_sources src WHERE src.org_id = a.org_id AND lower(src.status)",
+  "file": "apps/api/src/modules/flow-builder-editor/builder-context.service.ts",
+  "module": "flow-builder-editor"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 98,
+  "text": "SELECT count(*) AS total, count(*) FILTER (WHERE is_active) AS visible, coalesce(sum(clone_count), 0) AS cloned FROM flow_templates",
+  "file": "apps/api/src/modules/flow-builder-editor/flow-templates-admin.service.ts",
+  "module": "flow-builder-editor"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 86,
+  "text": "f.id, f.uuid, f.user_id, f.flow_name, f.category, f.flow_type, f.trigger_kind, f.trigger_value, f.trigger_keywords, f.trigger_device_id, f.t",
+  "file": "apps/api/src/modules/flow-builder-editor/flows.repository.ts",
+  "module": "flow-builder-editor"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 198,
+  "text": "SELECT count(*) AS total, count(*) FILTER (WHERE is_published AND is_active) AS live, count(*) FILTER (WHERE is_published AND NOT is_active)",
+  "file": "apps/api/src/modules/flow-builder-editor/flows.repository.ts",
+  "module": "flow-builder-editor"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 694,
+  "text": "SELECT count(*)::int AS failed, count(DISTINCT s.flow_id)::int AS flows, count(DISTINCT s.contact_id)::int AS contacts, count(*) FILTER (WHE",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 716,
+  "text": "SELECT r.id, r.uuid, r.peer_key, r.source, r.status, r.end_reason, r.failure_reason, r.halt_reason, r.current_node_id, r.started_at, r.last_",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 894,
+  "text": "${ev} SELECT count(*)::int AS enrolled, count(*) FILTER (WHERE r.status IN ('running','waiting','sleeping','halted'))::int AS running, count",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 910,
+  "text": "${ev} SELECT to_char(date_trunc('day', r.started_at AT TIME ZONE 'UTC'), 'YYYY-MM-DD') AS day, count(*)::int AS started, count(*) FILTER (WH",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 932,
+  "text": "${ev} SELECT f.uuid, f.flow_name, f.is_active, f.is_published, count(*)::int AS runs, count(*) FILTER (WHERE r.status IN ('running','waiting",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 948,
+  "text": "SELECT count(*) FILTER (WHERE s.status = 'paused')::int AS paused, count(*) FILTER (WHERE s.retry_count > 0)::int AS retried FROM flow_subsc",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 961,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE is_active AND is_published)::int AS live FROM flows WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 1029,
+  "text": "SELECT f.uuid, f.flow_name, f.flow_type, f.trigger_kind, f.is_published, f.is_active, f.provider, f.updated_at, (SELECT count(*)::int FROM f",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 1041,
+  "text": "SELECT f.uuid, f.flow_name, f.flow_type, f.trigger_kind, f.is_published, f.is_active, f.provider, f.updated_at, (SELECT count(*)::int FROM f",
+  "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.service.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 281,
+  "text": "DELETE FROM flow_graph_versions WHERE (org_id, id) IN ( SELECT v.org_id, v.id FROM flow_graph_versions v WHERE v.created_at < ${cutoff.toISO",
+  "file": "apps/api/src/modules/flow-runtime-engine/runtime/run.repository.ts",
+  "module": "flow-runtime-engine"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 51,
+  "text": "SELECT * FROM web_form_lookup(${key})",
+  "file": "apps/api/src/modules/forms-builder/form-lookup.service.ts",
+  "module": "forms-builder"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 145,
+  "text": "SELECT s.uuid, s.status, s.form_id, s.contact_id, EXISTS (SELECT 1 FROM web_form_payments p WHERE p.org_id = s.org_id AND p.submission_id = ",
+  "file": "apps/api/src/modules/forms-builder/form-payments.repository.ts",
+  "module": "forms-builder"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 86,
+  "text": "SELECT f.*, to_char(f.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"') AS created_at_iso, v.version AS published_version, v.p",
+  "file": "apps/api/src/modules/forms-builder/forms.repository.ts",
+  "module": "forms-builder"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 491,
+  "text": "SELECT f.key, f.label, f.field_type, f.is_required, coalesce((SELECT jsonb_agg(jsonb_build_object('value', o.value, 'label', o.label) ORDER ",
+  "file": "apps/api/src/modules/forms-builder/forms.repository.ts",
+  "module": "forms-builder"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 94,
+  "text": "SELECT count(*)::int AS all, (count(*) FILTER (WHERE status = 'active' AND (expires_at IS NULL OR expires_at > now())))::int AS live, coales",
+  "file": "apps/api/src/modules/forms-links-groups/wa-chat-links.repository.ts",
+  "module": "forms-links-groups"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 126,
+  "text": "SELECT * FROM wa_chat_link_lookup(${slug})",
+  "file": "apps/api/src/modules/forms-links-groups/wa-chat-links.repository.ts",
+  "module": "forms-links-groups"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 85,
+  "text": "SELECT count(*)::int AS all, (count(*) FILTER (WHERE status = 'published'))::int AS published, (count(*) FILTER (WHERE status = 'draft'))::i",
+  "file": "apps/api/src/modules/forms-links-groups/wa-forms.repository.ts",
+  "module": "forms-links-groups"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 160,
+  "text": "WITH r AS ( SELECT w.campaign_id, w.sent_at, w.delivered_at, w.read_at, w.responded_at, (SELECT min(m.created_at) FROM conversations cv JOIN",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 160,
+  "text": "WITH r AS ( SELECT w.campaign_id, w.sent_at, w.delivered_at, w.read_at, w.responded_at, (SELECT min(m.created_at) FROM conversations cv JOIN",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 160,
+  "text": "WITH r AS ( SELECT w.campaign_id, w.sent_at, w.delivered_at, w.read_at, w.responded_at, (SELECT min(m.created_at) FROM conversations cv JOIN",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 204,
+  "text": "WITH r AS ( SELECT c.template_id, w.sent_at, (SELECT min(m.created_at) FROM conversations cv JOIN messages m ON m.org_id = cv.org_id AND m.c",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 232,
+  "text": "WITH r AS ( SELECT w.id, w.campaign_id, (SELECT min(m.created_at) FROM conversations cv JOIN messages m ON m.org_id = cv.org_id AND m.conver",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 232,
+  "text": "WITH r AS ( SELECT w.id, w.campaign_id, (SELECT min(m.created_at) FROM conversations cv JOIN messages m ON m.org_id = cv.org_id AND m.conver",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 275,
+  "text": "SELECT c.id FROM contacts c LEFT JOIN status_options so ON so.org_id = c.org_id AND so.module_key = 'contacts' AND so.option_group = 'lifecy",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 292,
+  "text": "SELECT DISTINCT d.contact_id FROM lead_chat_digests d JOIN contacts c ON c.org_id = d.org_id AND c.id = d.contact_id WHERE d.org_id = ${orgI",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 457,
+  "text": "SELECT cv.id, cv.uuid, cv.contact_id, d.id AS digest_id, d.intent, extract(epoch FROM now() - cv.last_inbound_at) / 3600 AS hours_waiting FR",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 457,
+  "text": "SELECT cv.id, cv.uuid, cv.contact_id, d.id AS digest_id, d.intent, extract(epoch FROM now() - cv.last_inbound_at) / 3600 AS hours_waiting FR",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 481,
+  "text": "WITH camp AS ( SELECT contact_id, count(*) FILTER (WHERE read_at >= now() - interval '30 days') AS opens, count(*) FILTER (WHERE sent_at >= ",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 724,
+  "text": "SELECT u.id, u.uuid, u.full_name, (SELECT count(*) FROM conversations cv WHERE cv.org_id = u.org_id AND cv.assignee_user_id = u.id AND cv.st",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 957,
+  "text": "SELECT g.uuid, (SELECT count(*) FROM contact_group_members m WHERE m.org_id = g.org_id AND m.group_id = g.id) AS size FROM contact_groups g ",
+  "file": "apps/api/src/modules/growth-pilot/growth.repository.ts",
+  "module": "growth-pilot"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 181,
+  "text": "SELECT uuid, at, direction, sender_kind, kind, body FROM ( SELECT m.uuid, COALESCE(m.provider_ts, m.created_at) AS at, m.direction, m.sender",
+  "file": "apps/api/src/modules/lead-scoring/lead-chat-digest.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 270,
+  "text": "SELECT id, uuid, assignee_user_id FROM conversations WHERE org_id = ${orgId} AND contact_id = ${contactId} AND peer_key NOT LIKE '%@g.us' OR",
+  "file": "apps/api/src/modules/lead-scoring/lead-chat-digest.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 290,
+  "text": "SELECT ch.uuid AS channel_uuid, cv.peer_key FROM conversations cv JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id WHERE ",
+  "file": "apps/api/src/modules/lead-scoring/lead-chat-digest.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "leading-wildcard LIKE",
+  "line": 447,
+  "text": "SELECT cv.org_id, cv.contact_id FROM lead_scoring_settings st JOIN conversations cv ON cv.org_id = st.org_id WHERE st.enabled AND st.chat_di",
+  "file": "apps/api/src/modules/lead-scoring/lead-chat-digest.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 51,
+  "text": "SELECT count(*) FILTER (WHERE status = 'ok') AS scores, count(*) FILTER (WHERE status = 'failed') AS failed, COALESCE(sum(prompt_tokens), 0)",
+  "file": "apps/api/src/modules/lead-scoring/lead-scoring-platform.service.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 75,
+  "text": "SELECT o.uuid, o.name, COALESCE(s.enabled, false) AS enabled, (SELECT count(*) FROM contacts c WHERE c.org_id = o.id AND c.lead_score_source",
+  "file": "apps/api/src/modules/lead-scoring/lead-scoring-platform.service.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 145,
+  "text": "SELECT c.id, c.uuid, c.name, c.lead_score, c.lead_score_source, c.lifecycle_stage, c.status, c.source, c.channel, c.title, c.language, c.cou",
+  "file": "apps/api/src/modules/lead-scoring/lead-scoring.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 333,
+  "text": "SELECT count(*) FILTER (WHERE lead_score IS NULL OR lead_score_source = 'ai') AS eligible, count(*) FILTER (WHERE lead_score_source = 'ai') ",
+  "file": "apps/api/src/modules/lead-scoring/lead-scoring.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 391,
+  "text": "SELECT count(*) FILTER (WHERE status = 'ok') AS scores, count(*) FILTER (WHERE status = 'failed') AS failed, COALESCE(sum(prompt_tokens), 0)",
+  "file": "apps/api/src/modules/lead-scoring/lead-scoring.repository.ts",
+  "module": "lead-scoring"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 108,
+  "text": "SELECT * FROM lead_source_lookup(${tokenHash})",
+  "file": "apps/api/src/modules/leads/lead-hooks.service.ts",
+  "module": "leads"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 68,
+  "text": "SELECT s.*, (SELECT count(*)::int FROM lead_events e WHERE e.org_id = s.org_id AND e.source_id = s.id AND e.status IN ('needs_review', 'fail",
+  "file": "apps/api/src/modules/leads/lead-sources.repository.ts",
+  "module": "leads"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 84,
+  "text": "SELECT COUNT(*) AS calls, COALESCE(SUM(chars_in), 0) AS chars_in, COALESCE(SUM(chars_out), 0) AS chars_out, COALESCE(SUM(cost_micros), 0) AS",
+  "file": "apps/api/src/modules/localization-translation/translation-usage.service.ts",
+  "module": "localization-translation"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 129,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE ${LIVE})::int AS live, count(*) FILTER (WHERE starts_at IS NOT NULL AND starts_at > no",
+  "file": "apps/api/src/modules/marketing-site-cms/announcement.service.ts",
+  "module": "marketing-site-cms"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 174,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status = 'published')::int AS published, count(*) FILTER (WHERE status = 'draft')::int",
+  "file": "apps/api/src/modules/marketing-site-cms/blog.service.ts",
+  "module": "marketing-site-cms"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 190,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE NOT is_read)::int AS unread FROM contact_messages",
+  "file": "apps/api/src/modules/marketing-site-cms/contact.service.ts",
+  "module": "marketing-site-cms"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 246,
+  "text": "SELECT ${CARD_COLUMNS}, coalesce(iv.recipe, cv.recipe) AS recipe, (SELECT coalesce(jsonb_agg(jsonb_build_object('version', h.version, 'notes",
+  "file": "apps/api/src/modules/marketplace/browse.repository.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 387,
+  "text": "SELECT ap.id AS pack_id, (SELECT count(*) FROM plan_visible_addons v WHERE v.addon_plan_id = ap.id)::int AS enabled, (SELECT count(*) FROM p",
+  "file": "apps/api/src/modules/marketplace/cli/seed-app.runner.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 445,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE s.source = 'comp')::int AS comped FROM marketplace_subscriptions s JOIN marketplace_ap",
+  "file": "apps/api/src/modules/marketplace/cli/seed-app.runner.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 176,
+  "text": "SELECT c.*, (SELECT count(*) FROM marketplace_apps a WHERE a.category_id = c.id)::int AS app_count FROM marketplace_categories c ORDER BY c.",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 183,
+  "text": "SELECT c.*, (SELECT count(*) FROM marketplace_apps a WHERE a.category_id = c.id)::int AS app_count FROM marketplace_categories c WHERE c.uui",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 402,
+  "text": "SELECT * FROM marketplace_app_versions WHERE app_id = ${appId} ORDER BY created_at DESC, id DESC",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 413,
+  "text": "SELECT * FROM marketplace_app_versions WHERE app_id = ${appId} AND uuid = ${uuid}::uuid ${forUpdate ? sql",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 420,
+  "text": "SELECT * FROM marketplace_app_versions WHERE id = ${id}",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 426,
+  "text": "SELECT * FROM marketplace_app_versions WHERE app_id = ${appId} AND status = 'approved' ORDER BY created_at DESC, id DESC LIMIT 1",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 612,
+  "text": "SELECT a.uuid, count(*) FILTER (WHERE e.status = 'accepted' AND e.received_at > now() - interval '24 hours')::int AS a24, coalesce(sum(e.see",
+  "file": "apps/api/src/modules/marketplace/operator-catalogue.store.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 499,
+  "text": "SELECT o.id, o.uuid, o.name FROM organizations o WHERE o.id > ${after} AND NOT EXISTS (SELECT 1 FROM marketplace_subscriptions s WHERE s.org",
+  "file": "apps/api/src/modules/marketplace/operator-pricing.service.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 30,
+  "text": "( EXISTS (SELECT 1 FROM workspace_app_installations wi WHERE wi.app_id = a.id AND wi.org_id = ${orgId}) OR EXISTS (SELECT 1 FROM marketplace",
+  "file": "apps/api/src/modules/marketplace/plan-visibility.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 78,
+  "text": "SELECT * FROM marketplace_connection_lookup(${publicKey})",
+  "file": "apps/api/src/modules/marketplace/relay.service.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 95,
+  "text": "SELECT DISTINCT u.id, u.email FROM users u JOIN user_roles ur ON ur.org_id = u.org_id AND ur.user_id = u.id JOIN roles r ON r.org_id = ur.or",
+  "file": "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts",
+  "module": "marketplace"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 84,
+  "text": "SELECT * FROM conferencing_connections WHERE org_id = ${orgId} AND user_id = ${userId} AND provider = ${provider} ${forUpdate ? sql",
+  "file": "apps/api/src/modules/meeting-conferencing/conferencing-connection.repository.ts",
+  "module": "meeting-conferencing"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 93,
+  "text": "SELECT * FROM conferencing_connections WHERE org_id = ${orgId} AND user_id = ${userId} ORDER BY provider",
+  "file": "apps/api/src/modules/meeting-conferencing/conferencing-connection.repository.ts",
+  "module": "meeting-conferencing"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 291,
+  "text": "SELECT upper(coalesce(t.meta_category, t.category)) AS cat, count(*)::int AS n, count(*) FILTER (WHERE ${GROUP_WHERE.approved})::int AS appr",
+  "file": "apps/api/src/modules/message-templates/templates.repository.ts",
+  "module": "message-templates"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 112,
+  "text": "SELECT * FROM meta_lead_pages WHERE org_id = ${orgId}",
+  "file": "apps/api/src/modules/meta-lead-ads/meta-lead-ads.repository.ts",
+  "module": "meta-lead-ads"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 118,
+  "text": "SELECT * FROM meta_lead_pages WHERE org_id = ${orgId} AND page_id = ${pageId}",
+  "file": "apps/api/src/modules/meta-lead-ads/meta-lead-ads.repository.ts",
+  "module": "meta-lead-ads"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 188,
+  "text": "SELECT p.org_id, p.page_id FROM meta_lead_pages p WHERE p.enabled AND EXISTS ( SELECT 1 FROM meta_lead_forms f WHERE f.org_id = p.org_id AND",
+  "file": "apps/api/src/modules/meta-lead-ads/meta-lead-ads.repository.ts",
+  "module": "meta-lead-ads"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 28,
+  "text": "SELECT o.id AS org_id, o.uuid AS org_uuid, o.name, o.slug, o.plan AS plan_slug, w.enabled_at, to_char(w.enabled_at AT TIME ZONE 'UTC', 'YYYY",
+  "file": "apps/api/src/modules/node-bridge-runtime/unofficial-workspaces.service.ts",
+  "module": "node-bridge-runtime"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 113,
+  "text": "SELECT o.uuid AS org_uuid, o.name, o.slug, o.plan AS plan_slug, ow.email::text AS owner_email, EXISTS (SELECT 1 FROM unofficial_whatsapp_wor",
+  "file": "apps/api/src/modules/node-bridge-runtime/unofficial-workspaces.service.ts",
+  "module": "node-bridge-runtime"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 199,
+  "text": "SELECT type, count(*)::int AS n, (count(*) FILTER (WHERE created_at >= now() - interval '1 day'))::int AS d1, (count(*) FILTER (WHERE create",
+  "file": "apps/api/src/modules/notifications/notifications.repository.ts",
+  "module": "notifications"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 193,
+  "text": "SELECT DISTINCT u.id FROM users u JOIN user_roles ur ON ur.org_id = u.org_id AND ur.user_id = u.id JOIN roles r ON r.org_id = ur.org_id AND ",
+  "file": "apps/api/src/modules/notifications/send-outcome-notification.consumer.ts",
+  "module": "notifications"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 364,
+  "text": "SELECT count(*)::int AS n FROM organizations o JOIN org_plan_state s ON s.org_id = o.id JOIN plans p ON p.slug = o.plan WHERE NOT p.is_free ",
+  "file": "apps/api/src/modules/plans-subscriptions-trials/plan-analytics.service.ts",
+  "module": "plans-subscriptions-trials"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 78,
+  "text": "WITH picked AS ( SELECT o.id, o.created_at FROM event_outbox o WHERE o.status = 'dead' AND o.event_type = ${req.eventType} AND EXISTS ( SELE",
+  "file": "apps/api/src/modules/platform-async-ops/async-ops.service.ts",
+  "module": "platform-async-ops"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 97,
+  "text": "SELECT count(*)::int AS n FROM event_outbox o WHERE o.status = 'dead' AND o.event_type = ${req.eventType} AND NOT EXISTS (SELECT 1 FROM orga",
+  "file": "apps/api/src/modules/platform-async-ops/async-ops.service.ts",
+  "module": "platform-async-ops"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 188,
+  "text": "SELECT count(*) FILTER (WHERE created_at BETWEEN ${iso(r.from)}::timestamptz AND ${iso(r.to)}::timestamptz)::int AS total, count(*) FILTER (",
+  "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 195,
+  "text": "WITH x AS ( SELECT o.status, o.kind, o.paid_at, o.updated_at, ${TYPE_EXPR} AS otype, ${money} AS amt ${FROM_TYPED} WHERE (o.status = 'paid' ",
+  "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 267,
+  "text": "SELECT count(*) FILTER (WHERE ${between(sql",
+  "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 472,
+  "text": "SELECT count(*) FILTER (WHERE o.status = 'paid' AND o.paid_at BETWEEN ${iso(r.from)}::timestamptz AND ${iso(r.to)}::timestamptz)::int AS pai",
+  "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 620,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE o.status = 'paid')::int AS paid, count(*) FILTER (WHERE o.status IN ${OPEN})::int AS p",
+  "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 69,
+  "text": "SELECT count(*)::int AS paid, count(*) FILTER (WHERE coupon_id = ${facts.id})::int AS used FROM orders WHERE org_id = ${input.orgId} AND use",
+  "file": "apps/api/src/modules/platform-payment-gateways/coupon.service.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 53,
+  "text": "SELECT a.id::text AS app_id, a.status AS app_status, a.pricing_model, a.purchasable, a.included_plan_feature, a.included_min_plan, s.status ",
+  "file": "apps/api/src/modules/platform-payment-gateways/marketplace-pack.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 54,
+  "text": "SELECT s.uuid, s.kind, s.status, s.gateway, s.gateway_subscription_id, s.currency, s.amount::text AS amount, s.billing_cycle, s.current_peri",
+  "file": "apps/api/src/modules/platform-payment-gateways/platform-subscriptions.service.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 66,
+  "text": "SELECT count(*) FILTER (WHERE status = 'active')::int AS active, count(*) FILTER (WHERE status = 'past_due')::int AS past_due, count(*) FILT",
+  "file": "apps/api/src/modules/platform-payment-gateways/platform-subscriptions.service.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 207,
+  "text": "SELECT r.* FROM order_refunds r JOIN orders o ON o.org_id = r.org_id AND o.id = r.order_id WHERE o.uuid = ${uuid}::uuid ORDER BY r.id DESC",
+  "file": "apps/api/src/modules/platform-payment-gateways/refund.service.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 208,
+  "text": "SELECT r.* FROM order_refunds r JOIN subscriptions s ON s.org_id = r.org_id AND s.id = r.subscription_id WHERE s.uuid = ${uuid}::uuid ORDER ",
+  "file": "apps/api/src/modules/platform-payment-gateways/refund.service.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 75,
+  "text": "SELECT DISTINCT u.id, u.email FROM users u JOIN user_roles ur ON ur.org_id = u.org_id AND ur.user_id = u.id JOIN roles r ON r.org_id = ur.or",
+  "file": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts",
+  "module": "platform-payment-gateways"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 40,
+  "text": "SELECT r.uuid, r.specialty, r.is_active, r.row_version, o.uuid AS op_uuid, o.full_name AS op_name, o.email::text AS op_email, (SELECT count(",
+  "file": "apps/api/src/modules/platform-support-desk/agents.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 64,
+  "text": "SELECT o.uuid AS id, o.full_name AS name, o.email::text AS email FROM platform_operators o WHERE o.status = 'active' AND o.role IN (${ASSIGN",
+  "file": "apps/api/src/modules/platform-support-desk/agents.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 70,
+  "text": "SELECT (SELECT count(*) FROM support_agent_roster)::int AS total, (SELECT count(*) FROM support_agent_roster WHERE is_active)::int AS active",
+  "file": "apps/api/src/modules/platform-support-desk/agents.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 22,
+  "text": "SELECT o.uuid, o.name, o.slug, count(*)::int AS total_tickets, count(*) FILTER (WHERE t.status IN ('open', 'in_progress', 'pending'))::int A",
+  "file": "apps/api/src/modules/platform-support-desk/customers.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 103,
+  "text": "SELECT count(*) FILTER (WHERE status IN ('open', 'pending', 'in_progress'))::int AS open, count(*) FILTER (WHERE assigned_agent_id IS NULL A",
+  "file": "apps/api/src/modules/platform-support-desk/operator-tickets.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 153,
+  "text": "SELECT o.uuid, o.name, o.slug, o.plan, o.status, ws.last_active_at, (SELECT count(*) FROM conversations c WHERE c.org_id = o.id AND ${OPEN})",
+  "file": "apps/api/src/modules/platform-support-desk/platform-inbox.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "json_agg subquery per row",
+  "line": 153,
+  "text": "SELECT o.uuid, o.name, o.slug, o.plan, o.status, ws.last_active_at, (SELECT count(*) FROM conversations c WHERE c.org_id = o.id AND ${OPEN})",
+  "file": "apps/api/src/modules/platform-support-desk/platform-inbox.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 162,
+  "text": "SELECT (SELECT count(*) FROM organizations WHERE status = 'active')::int AS workspaces, count(*) FILTER (WHERE ${OPEN})::int AS open_total, ",
+  "file": "apps/api/src/modules/platform-support-desk/platform-inbox.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 40,
+  "text": "SELECT (SELECT count(*) FROM support_tickets WHERE created_at >= ${since})::int AS tickets, (SELECT count(*) FROM support_tickets WHERE reso",
+  "file": "apps/api/src/modules/platform-support-desk/reports.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 227,
+  "text": "SELECT count(*)::int AS resolved, count(*) FILTER (WHERE EXISTS ( SELECT 1 FROM support_sla_breaches b WHERE b.org_id = t.org_id AND b.ticke",
+  "file": "apps/api/src/modules/platform-support-desk/sla.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 227,
+  "text": "SELECT count(*)::int AS resolved, count(*) FILTER (WHERE EXISTS ( SELECT 1 FROM support_sla_breaches b WHERE b.org_id = t.org_id AND b.ticke",
+  "file": "apps/api/src/modules/platform-support-desk/sla.service.ts",
+  "module": "platform-support-desk"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 49,
+  "text": "SELECT p.uuid, p.name::text AS name, p.is_system, p.created_at, (SELECT count(*) FROM platform_role_permissions rp WHERE rp.permission_id = ",
+  "file": "apps/api/src/modules/roles-permissions/platform-permissions.service.ts",
+  "module": "roles-permissions"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 131,
+  "text": "SELECT id, name::text AS name, is_system, (SELECT count(*) FROM platform_role_permissions rp WHERE rp.permission_id = p.id) AS role_count FR",
+  "file": "apps/api/src/modules/roles-permissions/platform-permissions.service.ts",
+  "module": "roles-permissions"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 39,
+  "text": "SELECT DISTINCT p.name::text AS name FROM platform_operator_roles o JOIN platform_role_permissions rp ON rp.role_id = o.role_id JOIN platfor",
+  "file": "apps/api/src/modules/roles-permissions/platform-rbac.service.ts",
+  "module": "roles-permissions"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 48,
+  "text": "SELECT r.id, r.uuid, r.name::text AS name, r.description, r.is_locked, r.is_system, r.row_version, r.updated_at, (SELECT count(*) FROM platf",
+  "file": "apps/api/src/modules/roles-permissions/platform-roles.service.ts",
+  "module": "roles-permissions"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 76,
+  "text": "SELECT (SELECT count(*) FROM platform_roles) AS total_roles, (SELECT count(*) FROM platform_roles WHERE is_system) AS system_roles, (SELECT ",
+  "file": "apps/api/src/modules/roles-permissions/platform-roles.service.ts",
+  "module": "roles-permissions"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 71,
+  "text": "SELECT DISTINCT m.contact_id AS id FROM contact_group_members m JOIN contact_groups g ON g.org_id = m.org_id AND g.id = m.group_id WHERE m.o",
+  "file": "apps/api/src/modules/scheduled-queue-warmer/audience/schedule-audience.service.ts",
+  "module": "scheduled-queue-warmer"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 78,
+  "text": "SELECT DISTINCT ct.contact_id AS id FROM contact_tags ct JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id WHERE ct.org_id = ${orgId}",
+  "file": "apps/api/src/modules/scheduled-queue-warmer/audience/schedule-audience.service.ts",
+  "module": "scheduled-queue-warmer"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 148,
+  "text": "SELECT c.phone, k.name AS contact_name, c.status, c.error_message, c.sent_at, c.delivered_at, c.read_at, c.held_until, c.held_reason FROM sc",
+  "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-engagement.service.ts",
+  "module": "scheduled-queue-warmer"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 88,
+  "text": "SELECT ${SELECT} FROM scheduled_messages m WHERE ${where} ORDER BY CASE WHEN m.status IN ('scheduled', 'running') THEN 0 ELSE 1 END, m.sched",
+  "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-read.service.ts",
+  "module": "scheduled-queue-warmer"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 95,
+  "text": "SELECT count(*)::int AS all, count(*) FILTER (WHERE status = 'scheduled')::int AS upcoming, count(*) FILTER (WHERE status = 'running')::int ",
+  "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-read.service.ts",
+  "module": "scheduled-queue-warmer"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 72,
+  "text": "SELECT * FROM sched_receipt_lookup(${receipt.providerMessageId})",
+  "file": "apps/api/src/modules/scheduled-queue-warmer/scheduled-receipts.service.ts",
+  "module": "scheduled-queue-warmer"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 45,
+  "text": "SELECT * FROM ecom_shop_lookup(${shop})",
+  "file": "apps/api/src/modules/shopify-woocommerce/compliance.service.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 202,
+  "text": "SELECT count(*) FILTER (WHERE status = 'sent')::int AS sent, count(*) FILTER (WHERE event_type = 'offer/broadcast')::int AS offers, count(*)",
+  "file": "apps/api/src/modules/shopify-woocommerce/dashboard.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 207,
+  "text": "SELECT count(*) FILTER (WHERE status = 'confirmed')::int AS confirmed, count(*) FILTER (WHERE status = 'cancelled')::int AS cancelled FROM $",
+  "file": "apps/api/src/modules/shopify-woocommerce/dashboard.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 89,
+  "text": "SELECT * FROM ecom_shop_lookup(${shop})",
+  "file": "apps/api/src/modules/shopify-woocommerce/embedded.service.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 90,
+  "text": "SELECT count(*) FILTER (WHERE ${phone} <> '' AND customer_phone = ${phone} AND woo_order_id IS DISTINCT FROM ${exceptOrderId})::int AS n, co",
+  "file": "apps/api/src/modules/shopify-woocommerce/mirror.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 54,
+  "text": "SELECT * FROM ( SELECT coalesce(v.meta_retailer_id, v.sku, coalesce(p.meta_retailer_id, p.sku, 'wsn-' || p.id::text) || '-' || (v.position +",
+  "file": "apps/api/src/modules/shopify-woocommerce/shop-products.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 160,
+  "text": "SELECT * FROM shopify_integrations WHERE org_id = ${orgId} ORDER BY id DESC LIMIT 1",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 168,
+  "text": "SELECT * FROM shopify_integrations WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 180,
+  "text": "SELECT * FROM shopify_integrations WHERE org_id = ${orgId} AND store_url = ${storeUrl}",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 239,
+  "text": "SELECT * FROM woocommerce_integrations WHERE org_id = ${orgId} ORDER BY id DESC LIMIT 1",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 247,
+  "text": "SELECT * FROM woocommerce_integrations WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 255,
+  "text": "SELECT * FROM woocommerce_integrations WHERE org_id = ${orgId} AND store_url = ${storeUrl}",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 324,
+  "text": "SELECT * FROM shopify_integrations WHERE org_id = ${orgId} AND id = ${id}",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 332,
+  "text": "SELECT * FROM woocommerce_integrations WHERE org_id = ${orgId} AND id = ${id}",
+  "file": "apps/api/src/modules/shopify-woocommerce/stores.repository.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 130,
+  "text": "SELECT * FROM ecom_store_lookup(${kind}, ${secret})",
+  "file": "apps/api/src/modules/shopify-woocommerce/webhook.service.ts",
+  "module": "shopify-woocommerce"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 63,
+  "text": "SELECT o.uuid, o.name, o.plan, s.hot_bytes, s.reserved_bytes, s.cap_bytes, s.level, s.last_reconciled_at, coalesce((SELECT sum(u.cold_bytes)",
+  "file": "apps/api/src/modules/storage-quota/storage-fleet.service.ts",
+  "module": "storage-quota"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 77,
+  "text": "SELECT count(*) FILTER (WHERE s.last_drift_bytes > 0)::bigint AS drifting, coalesce(sum(s.last_drift_bytes), 0)::bigint AS drift_bytes FROM ",
+  "file": "apps/api/src/modules/storage-quota/storage-fleet.service.ts",
+  "module": "storage-quota"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 229,
+  "text": "SELECT category, coalesce(sum(bytes) FILTER (WHERE tier <> 'cold' AND state <> 'missing'), 0)::bigint AS hot, coalesce(sum(bytes) FILTER (WH",
+  "file": "apps/api/src/modules/storage-quota/storage-quota.repository.ts",
+  "module": "storage-quota"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 215,
+  "text": "SELECT count(*)::int AS n, count(*) FILTER (WHERE status = 'cancelled')::int AS cancelled, count(*) FILTER (WHERE status IN ('shipped', 'pai",
+  "file": "apps/api/src/modules/storefront-builder/_shims/sql-orders-gateway.ts",
+  "module": "storefront-builder"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 135,
+  "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE coalesce(group_code, '') <> '')::int AS coded FROM wa_groups WHERE org_id = ${ctx.orgI",
+  "file": "apps/api/src/modules/storefront-builder/admin/store-groups.service.ts",
+  "module": "storefront-builder"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 69,
+  "text": "SELECT * FROM store_public_lookup_id(${shopId})",
+  "file": "apps/api/src/modules/storefront-builder/payments/payment-webhook.service.ts",
+  "module": "storefront-builder"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 206,
+  "text": "SELECT * FROM store_public_lookup_host(${host})",
+  "file": "apps/api/src/modules/storefront-builder/public/public-catalog.service.ts",
+  "module": "storefront-builder"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 39,
+  "text": "SELECT * FROM store_public_lookup_slug(${slug.toLowerCase()})",
+  "file": "apps/api/src/modules/storefront-builder/public/public-shop.loader.ts",
+  "module": "storefront-builder"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 351,
+  "text": "SELECT count(*) FILTER (WHERE ${active})::int AS \"all\", count(*) FILTER (WHERE ${active} AND c.assignee_user_id = ${viewer.userId})::int AS ",
+  "file": "apps/api/src/modules/team-inbox-conversations/conversations.repository.ts",
+  "module": "team-inbox-conversations"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 17,
+  "text": "SELECT t.id, t.uuid, t.name::text AS name, t.color, t.description, t.row_version, (SELECT count(*)::int FROM conversation_tag x WHERE x.org_",
+  "file": "apps/api/src/modules/team-inbox-conversations/inbox-tags.repository.ts",
+  "module": "team-inbox-conversations"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 74,
+  "text": "SELECT * FROM conversation_media_uploads WHERE org_id = ${orgId} AND uuid = ${uuid} AND user_id = ${userId} FOR UPDATE",
+  "file": "apps/api/src/modules/team-inbox-conversations/media-uploads.repository.ts",
+  "module": "team-inbox-conversations"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 140,
+  "text": "SELECT count(*) FILTER (WHERE user_id IS NULL)::int AS shared, count(*) FILTER (WHERE user_id = ${me})::int AS mine, count(*)::int AS total ",
+  "file": "apps/api/src/modules/team-inbox-conversations/saved-replies/saved-replies.repository.ts",
+  "module": "team-inbox-conversations"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 39,
+  "text": "SELECT u.id, u.uuid, u.full_name, u.email, COALESCE(s.status, 'offline') AS availability, (SELECT count(*)::int FROM conversations c WHERE c",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/assignees.service.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 89,
+  "text": "SELECT t.uuid, t.name, t.color, t.assignment_strategy, (SELECT count(*)::int FROM team_members m WHERE m.org_id = t.org_id AND m.team_id = t",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/assignees.service.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 44,
+  "text": "WITH ranked AS (${this.ranked(orgId)}) SELECT * FROM ranked WHERE TRUE ${like ? sql",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/routing-rules.repository.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 62,
+  "text": "WITH ranked AS (${this.ranked(orgId)}) SELECT * FROM ranked WHERE uuid = ${uuid}::uuid",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/routing-rules.repository.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 432,
+  "text": "SELECT m.id, m.uuid, m.open FROM ( SELECT u.id, u.uuid, p.chat_limit, (SELECT count(*)::int FROM conversations c WHERE c.org_id = u.org_id A",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/routing-rules.repository.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 53,
+  "text": "WITH z AS ( SELECT COALESCE((SELECT name FROM pg_timezone_names WHERE name = o.settings ->> 'timezone'), 'UTC') AS name FROM organizations o",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/team-analytics.service.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 107,
+  "text": "SELECT u.id, u.uuid, u.full_name, COALESCE(s.status, 'offline') AS status, s.last_seen_at, (SELECT count(*)::int FROM conversations c WHERE ",
+  "file": "apps/api/src/modules/team-inbox-routing-sla/team-analytics.service.ts",
+  "module": "team-inbox-routing-sla"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 80,
+  "text": "SELECT * FROM credit_packages ORDER BY sort_order, id",
+  "file": "apps/api/src/modules/wallet-message-billing/credit-packages.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 122,
+  "text": "SELECT * FROM credit_packages WHERE uuid = ${uuid}::uuid FOR UPDATE",
+  "file": "apps/api/src/modules/wallet-message-billing/credit-packages.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 360,
+  "text": "SELECT * FROM (${sql.join(branches, sql",
+  "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 413,
+  "text": "SELECT COALESCE(sum(balance), 0)::text AS float, count(*) FILTER (WHERE balance > 0)::int AS holding, count(*) FILTER (WHERE ${s.lowBalanceT",
+  "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 426,
+  "text": "SELECT count(*) FILTER (WHERE status = 'charged')::int AS charged, count(*) FILTER (WHERE status = 'free')::int AS free FROM usage_charges W",
+  "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 429,
+  "text": "SELECT w.unit, COALESCE(sum(w.balance), 0)::text AS float, count(*) FILTER (WHERE w.balance > 0)::int AS holding, COALESCE((SELECT sum(t.amo",
+  "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 429,
+  "text": "SELECT w.unit, COALESCE(sum(w.balance), 0)::text AS float, count(*) FILTER (WHERE w.balance > 0)::int AS holding, COALESCE((SELECT sum(t.amo",
+  "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 74,
+  "text": "SELECT DISTINCT u.id FROM users u JOIN user_roles ur ON ur.org_id = u.org_id AND ur.user_id = u.id JOIN roles r ON r.org_id = ur.org_id AND ",
+  "file": "apps/api/src/modules/wallet-message-billing/wallet-notifications.consumer.ts",
+  "module": "wallet-message-billing"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 99,
+  "text": "SELECT ${TARGET_COLUMNS}, (SELECT count(*) FROM webhook_forward_failures f WHERE f.target_id = t.id AND f.replayed_at IS NULL) AS pending_fa",
+  "file": "apps/api/src/modules/webhook-fanout/webhook-targets.service.ts",
+  "module": "webhook-fanout"
+ },
+ {
+  "shape": "OFFSET pagination",
+  "line": 69,
+  "text": "SELECT uuid, phone, name, company, address, updated_at FROM wa_customer_profiles WHERE org_id = ${orgId} ${where} ORDER BY name NULLS LAST, ",
+  "file": "apps/api/src/modules/whatsapp-cloud-api-waba/customer-profiles.service.ts",
+  "module": "whatsapp-cloud-api-waba"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 96,
+  "text": "SELECT count(*)::int AS groups, coalesce(sum(participant_count), 0)::int AS members, coalesce(sum(CASE WHEN jsonb_typeof(meta_json -> 'join_",
+  "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups.repository.ts",
+  "module": "whatsapp-cloud-api-waba"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 110,
+  "text": "SELECT * FROM waba_route_lookup(${change.phoneNumberId}, ${change.wabaId})",
+  "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts",
+  "module": "whatsapp-cloud-api-waba"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 205,
+  "text": "SELECT * FROM waba_route_lookup(${c.phoneNumberId}, ${c.phoneNumberId ? null : c.wabaId})",
+  "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts",
+  "module": "whatsapp-cloud-api-waba"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 214,
+  "text": "SELECT * FROM waba_route_lookup(NULL, ${waba})",
+  "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts",
+  "module": "whatsapp-cloud-api-waba"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 223,
+  "text": "SELECT * FROM waba_route_lookup(${phone}, NULL)",
+  "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts",
+  "module": "whatsapp-cloud-api-waba"
+ },
+ {
+  "shape": "ORDER BY random()",
+  "line": 72,
+  "text": "SELECT org_id, id FROM devices WHERE status = 'connected' ORDER BY random() LIMIT 200",
+  "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
+  "module": "whatsapp-devices-baileys"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 153,
+  "text": "SELECT count(*)::int AS groups, coalesce(sum(size) FILTER (WHERE left_at IS NULL), 0)::int AS members, coalesce(sum(jsonb_array_length(join_",
+  "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups.repository.ts",
+  "module": "whatsapp-devices-baileys"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 181,
+  "text": "SELECT ${COLUMNS}, (SELECT count(*)::int FROM wa_provider_configs w WHERE w.provider = 'waba' AND ${CONNECTION_PROVIDER_KEY} = p.key) AS num",
+  "file": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts",
+  "module": "whatsapp-provider-registry"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 367,
+  "text": "SELECT o.id, o.uuid, o.name, o.slug, o.created_at, to_char(o.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"') AS created_at_i",
+  "file": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts",
+  "module": "whatsapp-provider-registry"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 433,
+  "text": "SELECT DISTINCT ${CONNECTION_PROVIDER_KEY} AS k FROM wa_provider_configs w WHERE w.provider = 'waba' AND w.meta_json ->> 'phone_number_id' I",
+  "file": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts",
+  "module": "whatsapp-provider-registry"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 63,
+  "text": "WITH claimed AS ( SELECT l.org_id, l.id FROM member_leaves l JOIN organizations o ON o.id = l.org_id WHERE l.status = 'scheduled' AND l.star",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave-sweep.service.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 55,
+  "text": "SELECT o.id, o.uuid, o.name, o.slug, o.status, o.plan, o.last_activity_at, o.archived_at, o.deleted_at, o.archive_after_days, o.delete_after",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "DISTINCT over a join",
+  "line": 205,
+  "text": "SELECT DISTINCT u.email::text AS email FROM users u WHERE u.org_id = ${id} AND u.status = 'active' AND ( u.uuid::text = (SELECT settings->>'",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 205,
+  "text": "SELECT DISTINCT u.email::text AS email FROM users u WHERE u.org_id = ${id} AND u.status = 'active' AND ( u.uuid::text = (SELECT settings->>'",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "SELECT *",
+  "line": 165,
+  "text": "SELECT m.* FROM (${base}) m ${outer.length > 0 ? sql",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/members.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 204,
+  "text": "SELECT m.tier_score, count(*)::int AS n, count(*) FILTER (WHERE m.joined_at IS NULL AND m.invited_at IS NOT NULL)::int AS pending FROM (${th",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/members.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 207,
+  "text": "${this.thresholds(c)} SELECT count(*)::int AS total, count(*) FILTER (WHERE o.status = 'active')::int AS active, count(*) FILTER (WHERE o.st",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 262,
+  "text": "SELECT org_id, at FROM (SELECT o.id AS org_id, (SELECT max(m.created_at) FROM messages m WHERE m.org_id = o.id) AS at FROM organizations o W",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 339,
+  "text": "SELECT to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD') AS day, count(*)::int AS sent, count(*) FILTER (WHERE status IN ('delivered', 'r",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 93,
+  "text": "SELECT t.id AS team_id, EXISTS ( SELECT 1 FROM team_members tm WHERE tm.org_id = t.org_id AND tm.team_id = t.id AND tm.user_id = ${userId} )",
+  "file": "apps/api/src/realtime/audience/member-directory.service.ts",
+  "module": "realtime"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
+  "line": 128,
+  "text": "SELECT c.relname AS parent, (SELECT d.relname FROM pg_inherits i JOIN pg_class d ON d.oid = i.inhrelid WHERE i.inhparent = c.oid AND pg_get_",
+  "file": "apps/api/src/workers/partition-maintenance.service.ts",
+  "module": "workers"
+ }
+]

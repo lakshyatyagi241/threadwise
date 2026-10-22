@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
   INBOX_TEMPLATE_LIST_MAX,
@@ -22,7 +22,12 @@ import {
   type OutboundContent,
 } from '../chat-conversations';
 import { EmailTemplatesReader } from '../email-templates';
-import { TemplatesRepository } from '../message-templates';
+import {
+  BUILDABLE_TYPES,
+  TemplatesRepository,
+  TemplatesService,
+  metaEditBlockOf,
+} from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import {
@@ -47,6 +52,8 @@ import { MediaUploadsRepository } from './media-uploads.repository';
  */
 @Injectable()
 export class InboxThreadService {
+  private readonly logger = new Logger(InboxThreadService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: ConversationsRepository,
@@ -56,6 +63,7 @@ export class InboxThreadService {
     private readonly templates: TemplatesRepository,
     private readonly emailTemplates: EmailTemplatesReader,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly templateService: TemplatesService,
   ) {}
 
   /** The conversation for a contact on a channel, created if missing. The route requires `inbox.conversation.reply`, like sending the first message. */
@@ -92,7 +100,20 @@ export class InboxThreadService {
     if (ids.length === 0) return messages;
     const orgId = RequestContextStore.orgId();
     const rows = await this.db.tx((tx) => this.templates.findManyByUuids(tx, orgId, ids));
-    const byUuid = new Map(rows.map((r) => [r.uuid, templatePreviewOf(r)]));
+    // A fresh link to each template's header file (its stored copy or the channel's sample), made at each read like the template detail's.
+    // A link that cannot be made costs its bubble the media only: the page still loads, with the marker.
+    const linkOf = await this.templateService.previewLinker();
+    const byUuid = new Map(
+      await Promise.all(
+        rows.map(async (r) => {
+          const file = await linkOf(r).catch((err: unknown) => {
+            this.logger.warn(`header link for template ${r.uuid} not made: ${String(err)}`);
+            return null;
+          });
+          return [r.uuid, templatePreviewOf(r, file)] as const;
+        }),
+      ),
+    );
     return messages.map((m) => {
       const preview = m.template?.templateId ? byUuid.get(m.template.templateId) : undefined;
       return preview && m.template ? { ...m, template: { ...m.template, preview } } : m;
@@ -257,6 +278,7 @@ export class InboxThreadService {
           slots: bodySlots(t.templateBody, t.variableMap),
           sendable: reason === null,
           reason,
+          editable: BUILDABLE_TYPES.has(t.templateType) && metaEditBlockOf(t, now) === null,
         };
       });
       return { data, hasMore };

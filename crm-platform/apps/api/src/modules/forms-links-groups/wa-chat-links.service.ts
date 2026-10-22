@@ -30,13 +30,19 @@ export class WaChatLinksService {
   ) {}
 
   /** E.164 length guard: combined country+number digits must be 7–15 (TW-WFL-014). */
-  private assertDigits(countryCode: string, phoneNumber: string): { countryCode: string; phoneNumber: string } {
+  private assertDigits(
+    countryCode: string,
+    phoneNumber: string,
+  ): { countryCode: string; phoneNumber: string } {
     const countryDigits = countryCode.replace(/\D/g, '');
     const numberDigits = phoneNumber.replace(/\D/g, '');
     const total = countryDigits.length + numberDigits.length;
     if (total < WA_CHAT_LINK_DIGITS_MIN || total > WA_CHAT_LINK_DIGITS_MAX) {
       throw AppError.validation('Enter a valid phone number with country code.', [
-        { path: 'phoneNumber', message: `Combined digits must be ${WA_CHAT_LINK_DIGITS_MIN}–${WA_CHAT_LINK_DIGITS_MAX}.` },
+        {
+          path: 'phoneNumber',
+          message: `Combined digits must be ${WA_CHAT_LINK_DIGITS_MIN}–${WA_CHAT_LINK_DIGITS_MAX}.`,
+        },
       ]);
     }
     return { countryCode: `+${countryDigits}`, phoneNumber: numberDigits };
@@ -172,7 +178,9 @@ export class WaChatLinksService {
    * click counter and return the `wa.me` URL to redirect to. Runs outside any tenant transaction — see
    * `WaChatLinksRepository.lookupPublic`/`recordClickPublic`.
    */
-  async resolvePublic(slug: string): Promise<{ waUrl: string } | { notFound: true } | { gone: true }> {
+  async resolvePublic(
+    slug: string,
+  ): Promise<{ waUrl: string } | { notFound: true } | { gone: true }> {
     const row = await this.repo.lookupPublic(this.db.primary, slug);
     if (!row) return { notFound: true };
     if (!isLinkLive(row.status, row.expires_at)) return { gone: true };

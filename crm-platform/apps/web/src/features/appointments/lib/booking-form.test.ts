@@ -77,7 +77,7 @@ const stored: BookingType = {
       label: '3h',
       isActive: true,
       kind: 'before',
-      channels: ['sms', 'email'],
+      channels: ['whatsapp', 'email'],
       subject: null,
       body: 'Hi {{name}}',
       waTemplateId: null,
@@ -88,7 +88,7 @@ const stored: BookingType = {
       label: '24h',
       isActive: false,
       kind: 'before',
-      channels: ['whatsapp', 'sms', 'email'],
+      channels: ['whatsapp', 'email'],
       subject: null,
       body: null,
       waTemplateId: null,
@@ -182,7 +182,7 @@ describe('validation', () => {
     expect(validateDraft({ ...d, depositMode: 'full', deposit: 'junk' }).deposit).toBeUndefined();
   });
 
-  it('wants reminders to be positive, distinct and at most eight', () => {
+  it('wants reminders to be positive, distinct and at most five', () => {
     const d = base();
     const r = (id: string, offset: string) => ({ ...newReminder(offset), id });
     expect(validateDraft({ ...d, reminders: [r('a', '1440'), r('b', '1440')] })['reminder:b']).toBe(
@@ -193,9 +193,9 @@ describe('validation', () => {
       'reminderInvalid',
     );
     expect(validateDraft({ ...d, reminders: [r('a', '')] })).toEqual({});
-    const nine = Array.from({ length: 9 }, (_, i) => r(`r${i}`, String((i + 1) * 60)));
+    const nine = Array.from({ length: 6 }, (_, i) => r(`r${i}`, String((i + 1) * 60)));
     expect(validateDraft({ ...d, reminders: nine }).reminders).toBe('remindersTooMany');
-    expect(validateDraft({ ...d, reminders: nine.slice(0, 8) }).reminders).toBeUndefined();
+    expect(validateDraft({ ...d, reminders: nine.slice(0, 5) }).reminders).toBeUndefined();
   });
 
   it('wants a select question to have choices, and ignores a blank question row', () => {
@@ -273,7 +273,7 @@ describe('conversion', () => {
     expect(input.reminders[0]).toMatchObject({ id: 'r-1440' });
     expect(input.reminders[1]).toMatchObject({
       id: 'r-180',
-      channels: ['sms', 'email'],
+      channels: ['whatsapp', 'email'],
       body: 'Hi {{name}}',
     });
     expect(input.reminders[2]).toMatchObject({ subject: 'Thanks', channels: ['email'] });

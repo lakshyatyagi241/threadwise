@@ -164,12 +164,16 @@
         "in": "জমা",
         "out": "খরচ",
         "balance": "ব্যালেন্স",
-        "none": "কিছু নেই"
+        "none": "কিছু নেই",
+        "channel": "চ্যানেল",
+        "recipient": "প্রাপক",
+        "template": "টেমপ্লেট",
+        "country": "দেশ",
+        "category": "বিভাগ",
+        "engine": "ইঞ্জিন"
       },
       "context": {
-        "reason": "কারণ",
-        "to": "প্রাপক",
-        "template": "টেমপ্লেট"
+        "reason": "কারণ"
       },
       "channels": {
         "campaign": "ক্যাম্পেইন",

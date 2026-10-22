@@ -230,7 +230,7 @@ export class StoreOrderSalesService {
       const ref = await this.contacts.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!ref) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(tx, this.contacts, ctx.orgId, scope, ctx.userId!, ref.ownerId);
+      await assertContactScope(tx, this.contacts, ctx.orgId, scope, ctx.userId!, ref);
       const rows = await this.orders.forContact(tx, ctx.orgId, ref.id, size);
       const page = rows.slice(0, size);
       return {

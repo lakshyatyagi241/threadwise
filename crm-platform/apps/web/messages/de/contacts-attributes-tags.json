@@ -37,7 +37,8 @@
       "statusStage": "Dieser Status gehört zu einer anderen Phase. Wählen Sie einen Status, der zur Phase des Kontakts passt.",
       "stageScope": "Ein Status kann nur auf eine Ihrer Lebenszyklusphasen beschränkt werden.",
       "planLimit": "Sie haben das Limit Ihres Tarifs von {limit, plural, one {# Kontakt} other {# Kontakten}} erreicht. Wechseln Sie auf einen höheren Tarif, um mehr hinzuzufügen, oder löschen Sie einen vorhandenen, um Platz zu schaffen.",
-      "legalHold": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden."
+      "legalHold": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weise ihn dir zuerst selbst zu, um eine Nachricht zu senden."
     },
     "list": {
       "title": "Contact Hub",
@@ -130,6 +131,7 @@
       "colLeadScore": "Lead-Score",
       "colLanguage": "Sprache",
       "colCreatedOn": "Erstellt am",
+      "colModifiedOn": "Geändert am",
       "pagination": "Seitennavigation",
       "prevPage": "Vorherige Seite",
       "nextPage": "Nächste Seite",
@@ -282,6 +284,7 @@
       "shortStage": "Phase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Erstellt",
+      "shortModified": "Geändert",
       "firstRun": {
         "title": "Fügen Sie Ihre ersten Kontakte hinzu",
         "message": "Holen Sie die Menschen herein, mit denen Sie sprechen. Kontakte werden für Nachrichten, Kampagnen, Aufgaben und Deals verwendet.",
@@ -290,7 +293,11 @@
         "importBody": "Laden Sie eine Tabelle hoch und ordnen Sie ihre Spalten den Kontaktfeldern zu.",
         "connect": "WhatsApp verbinden",
         "connectBody": "Verbinden Sie Ihre Nummer, damit Kontakte antworten können und Sie ihnen schreiben können."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Nach Team filtern",
+      "allTeams": "Alle Teams",
+      "teamFormer": "Früheres Team"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -442,7 +449,8 @@
       "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld.",
       "searchOptions": "Optionen durchsuchen",
       "searchOptionsFor": "Optionen von {field} durchsuchen",
-      "noOptionsFound": "Keine Option passt zu Ihrer Suche."
+      "noOptionsFound": "Keine Option passt zu Ihrer Suche.",
+      "cascadeWaiting": "Wählen Sie zuerst {parent}, um die Auswahlmöglichkeiten zu sehen."
     },
     "tags": {
       "title": "Tags",
@@ -1081,7 +1089,8 @@
         "moveDown": "{name} nach unten",
         "edit": "{name} bearbeiten",
         "deactivate": "{name} deaktivieren",
-        "reactivate": "Reaktivieren"
+        "reactivate": "Reaktivieren",
+        "dependsOn": "Auswahl hängt ab von {field}"
       },
       "toast": {
         "conflict": "Jemand anderes hat dies geändert. Die Liste wurde aktualisiert, versuchen Sie es erneut.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Phasen verwalten",
         "manageGroups": "Gruppen verwalten",
         "locked": "Fest"
+      },
+      "cascade": {
+        "open": "Abhängige Felder",
+        "title": "Abhängige Felder",
+        "close": "Schließen",
+        "intro": "Ein abhängiges Feld wird immer angezeigt. Seine Auswahlmöglichkeiten hängen von der Auswahl im übergeordneten Feld ab: Markieren Sie für jede Auswahl des übergeordneten Feldes die Auswahlmöglichkeiten des abhängigen Feldes, die sie zulässt.",
+        "empty": "Noch keine abhängigen Felder.",
+        "add": "Abhängiges Feld hinzufügen",
+        "needTwoChoiceFields": "Abhängige Felder brauchen mindestens zwei Eigenschaften mit einer Auswahlliste (Dropdown, Mehrfachauswahl oder Radio).",
+        "dependsOn": "hängt ab von {parent}",
+        "editLabel": "{name} bearbeiten",
+        "removeLabel": "{name} entfernen",
+        "parent": "Übergeordnete Eigenschaft",
+        "child": "Abhängige Eigenschaft",
+        "pickParent": "Übergeordnete Eigenschaft wählen",
+        "pickChild": "Abhängige Eigenschaft wählen",
+        "allowed": "Zulässige Auswahl von {child} für jede Auswahl von {parent}",
+        "noParentChoices": "Die übergeordnete Eigenschaft hat noch keine Auswahlmöglichkeiten.",
+        "noChildChoices": "Die abhängige Eigenschaft hat noch keine Auswahlmöglichkeiten.",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "saved": "Abhängiges Feld gespeichert.",
+        "cycle": "Diese Abhängigkeit würde dazu führen, dass zwei Eigenschaften aufeinander warten.",
+        "removeTitle": "{name} aus den abhängigen Feldern entfernen?",
+        "removeMessage": "Alle Auswahlmöglichkeiten werden wieder angezeigt. Die Zuordnung zur übergeordneten Eigenschaft wird vergessen; die Werte der Kontakte bleiben erhalten.",
+        "removeConfirm": "Entfernen",
+        "removed": "Abhängiges Feld entfernt.",
+        "removeFailed": "Das abhängige Feld konnte nicht entfernt werden. Versuchen Sie es erneut."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Ausgewählte Spalten",
         "selectAll": "Alle auswählen",
         "reorder": "Ziehen, um Spalten neu anzuordnen",
-        "remove": "{name} entfernen"
+        "remove": "{name} entfernen",
+        "nameShort": "Der Ansichtsname muss mindestens {min} Zeichen lang sein.",
+        "nameLong": "Der Ansichtsname darf höchstens {max} Zeichen lang sein."
       },
       "presets": {
         "myContacts": "Meine Kontakte",

@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Bekleyen"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Bir kişiyi bekleyen yok",
+          "message": "Bir bot, akış veya ekip arkadaşı bir kişi istediğinde konuşma, biri üstlenene kadar burada bekler."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Bot yanıtlıyor",
+        "waiting": "Bir kişi bekleniyor",
+        "with_person": "Bir kişide"
+      },
+      "ageMinutes": "{count}dk",
+      "ageHours": "{count}sa",
+      "ageDays": "{count}g",
+      "row": {
+        "waiting": "Bekleyen",
+        "waitingFor": "{age} bekliyor",
+        "inTeam": "{team} kuyruğunda"
+      },
+      "assignedTo": "şu an {name} ile",
+      "inTeamQueue": "{team} kuyruğu",
+      "cardFailed": "Devir ayrıntıları yüklenemedi.",
+      "claim": {
+        "button": "Üstlen",
+        "done": "Bu konuşmayı üstlendiniz.",
+        "doneOwner": "Bu konuşmayı üstlendiniz ve artık kişinin sahibisiniz.",
+        "failed": "Konuşma üstlenilemedi.",
+        "taken": "Bu konuşmayı başka biri önce üstlendi.",
+        "overLimitTitle": "Sohbet sınırınıza ulaştınız",
+        "overLimitMessage": "Zaten {open} açık sohbetiniz var ve sınırınız {limit}. Bunu yine de üstlenmek istiyor musunuz?",
+        "overLimitConfirm": "Yine de üstlen",
+        "overLimitCancel": "İptal"
+      },
+      "giveBack": {
+        "button": "Bota geri ver",
+        "done": "Bot bu konuşmayı yeniden yanıtlıyor.",
+        "failed": "Konuşma bota geri verilemedi.",
+        "doneFlow": "Bot akışı sürdürüyor.",
+        "doneNextLive": "Bot, müşterinin bir sonraki mesajını yanıtlayacak.",
+        "doneNextDefault": "Bot yeniden devrede. Bir sonraki mesajı yalnızca varsayılan bir akış ayarlıysa yanıtlar.",
+        "already": "Bu görüşme zaten botta."
+      },
+      "send": {
+        "button": "Kuyruğa gönder",
+        "buttonAgain": "Yeniden kuyruğa gönder",
+        "title": "Bir kişiye gönder",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "submit": "Gönder",
+        "intro": "Bot bu kişiye yanıt vermeyi bırakır. Konuşma seçtiğiniz kişiye veya ekibe gider ya da biri üstlenene kadar kuyrukta bekler.",
+        "where": "Gönderilecek yer",
+        "whereRules": "Atama kuralları, yoksa bekleme kuyruğu",
+        "whereQueueOnly": "Bekleme kuyruğu (atama kuralları için Akıllı yönlendirme eklentisi gerekir)",
+        "whereTeam": "Bir ekip",
+        "wherePerson": "Bir kişi",
+        "team": "Ekip",
+        "pickTeam": "Bir ekip seçin",
+        "person": "Kişi",
+        "pickPerson": "Bir kişi seçin",
+        "reason": "Neden bir kişi gerekiyor",
+        "note": "Üstlenecek kişi için not",
+        "noteHint": "Devir kartında gösterilir. En fazla 500 karakter.",
+        "refused": "Bu konuşma devredilemez (arşivlenmiş, spam veya kişisel bir posta kutusu).",
+        "failed": "Konuşma gönderilemedi.",
+        "done": {
+          "assigned": "Gönderildi: artık biri ilgileniyor.",
+          "waiting": "Gönderildi: kuyrukta bekliyor.",
+          "unavailable": "Kuyruğa gönderildi: şu an müsait kimse yok."
+        }
+      },
+      "details": {
+        "show": "Ayrıntılar",
+        "hide": "Ayrıntıları gizle"
+      },
+      "card": {
+        "source": "İsteyen",
+        "reason": "Neden",
+        "priority": "Öncelik",
+        "summary": "Özet",
+        "answers": "Kişinin bota söyledikleri",
+        "trace": "Nasıl atandı",
+        "timers": "Bekleme kuyruğu adımları"
+      },
+      "source": {
+        "flow": "Bir akış",
+        "ai_agent": "Bir yapay zekâ temsilcisi",
+        "keyword": "Kişinin kendi isteği",
+        "bot_failure": "Yardımcı olamayan bir bot",
+        "manual": "Bir ekip arkadaşı",
+        "arrival": "Yönlendirme: kimse üstlenemedi"
+      },
+      "reason": {
+        "customer_asked": "Kişi bir insan istedi",
+        "bot_could_not_help": "Bot yardımcı olamadı",
+        "sensitive_topic": "Hassas konu",
+        "sales_lead": "Satış adayı",
+        "complaint": "Şikâyet",
+        "other": "Diğer"
+      },
+      "priority": {
+        "low": "Düşük",
+        "normal": "Normal",
+        "high": "Yüksek",
+        "urgent": "Acil"
+      },
+      "trace": {
+        "chosen": "Seçildi",
+        "skipped": "Atlandı",
+        "info": "Not"
+      },
+      "botLine": {
+        "system": "sistem",
+        "pressed": {
+          "flow": "Bot geri döndü, geri veren: {name}. Akış devam ediyor.",
+          "nextLive": "Bot geri döndü, geri veren: {name}. Müşterinin bir sonraki mesajını yanıtlayacak.",
+          "nextDefault": "Bot geri döndü, geri veren: {name}. Bir sonraki mesajı yalnızca varsayılan bir akış ayarlıysa yanıtlar."
+        },
+        "result": {
+          "continued": "Akış “geri verildi” çıkışından devam etti.",
+          "claimed_again": "Akış yeniden başlatılmadı: bir kişi sohbeti tekrar devraldı.",
+          "flow_not_live": "Akış yeniden başlatılmadı: artık etkin değil.",
+          "start_failed": "Akış yeniden başlatılamadı."
+        },
+        "customer": {
+          "sent": "Müşteriye mesaj gönderildi.",
+          "window_closed": "Müşteriye mesaj atlandı: 24 saatlik pencere kapalı.",
+          "no_consent": "Müşteriye mesaj atlandı: izin yok.",
+          "failed": "Müşteriye mesaj gönderilemedi.",
+          "channel_unavailable": "Müşteriye mesaj atlandı: kanal kullanılamıyor."
+        }
+      },
+      "timers": {
+        "reminded": "{at} saatinde hatırlatıldı",
+        "offered": "{at} saatinde bu ekibe önerildi",
+        "messaged": "{at} saatinde müşteriye mesaj gönderildi",
+        "gaveBack": "{at} saatinde bota geri verildi"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "{actor} bota geri verdi",
+          "bot_resumed": "Bot akışı sürdürdü",
+          "bot_resume_skipped": "Akış yeniden başlatılmadı"
+        }
+      }
+    }
+  }
+}

@@ -414,6 +414,14 @@
           "label": "Lịch hẹn không đồng bộ với Google Calendar",
           "hint": "Sự kiện Google Calendar của một lịch hẹn sắp tới đã bị xóa, chuyển giờ hoặc thay đổi danh sách khách. Lịch hẹn không bị thay đổi; bạn sẽ chọn cách xử lý."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Lịch hẹn bị khách hàng hủy",
+          "hint": "Khách hàng đã hủy lịch hẹn bằng cách nhấn Hủy trong nhắc nhở. Người phụ trách lịch hẹn sẽ được thông báo."
+        },
+        "appointment_reminder_test": {
+          "label": "Kết quả thử email nhắc nhở",
+          "hint": "Kết quả email thử bạn gửi cho một bước nhắc nhở: đã gửi, hoặc chưa gửi kèm lý do."
+        },
         "snooze_wake": {
           "label": "Cuộc trò chuyện hoãn quay lại",
           "hint": "Cuộc trò chuyện hoãn mở lại đúng giờ và được giao cho bạn hoặc nhóm của bạn."
@@ -513,6 +521,11 @@
           "watch": "Bạn sẽ thấy một cửa sổ bật lên, số trên chuông và tiêu đề tab thay đổi.",
           "notConnected": "Cập nhật trực tiếp chưa được kết nối trên trang này nên cửa sổ bật lên không thể hiện ở đây. Hãy tải lại trang và thử lại.",
           "off": "Không có thông báo nào được tạo trong chuông: chuông đang tắt cho \"Thông báo thử\" trong bảng bên dưới, hoặc do chủ không gian làm việc của bạn tắt."
+        },
+        "prompt": {
+          "message": "Bật thông báo trình duyệt để nhận cảnh báo cho các sự kiện bạn chọn, ngay cả khi CRM đã đóng.",
+          "enable": "Cho phép thông báo",
+          "enabling": "Đang bật..."
         }
       }
     },

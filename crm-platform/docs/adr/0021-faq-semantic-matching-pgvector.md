@@ -81,3 +81,35 @@ Decided with the project owner after seeing the workspace-level screens: the FAQ
 3. **Where it is edited.** Inside the Simple builder, as the FAQs tab of every saved flow (list, editor, Try it, Test, Unanswered, Insights, Settings). The `/faq/*` screens and the menu entry are gone (`/faq` redirects to `/flows`). The Advanced builder has no FAQs tab; the FAQ step's inspector links to it. Platform controls (`/admin/faq`) stay, with limits now per flow and workspace counts aggregated over their flows.
 4. **The FAQ step** matches the FAQs of the flow the run is in.
 5. **Route shape.** `/v2/faq/flows/:flowId/...` for everything the screens use, `/v2/faq/flow-nodes/:flowId` for the steps of an answer-target flow; the unscoped routes were removed without aliases.
+
+## Addendum 3 (2026-10-19): the FAQ is retired into the AI agent's knowledge base
+
+Decided with the project owner. The audience is people like an account director, not engineers: thresholds, a "FAQ answering engine" switch, a
+second check, indexing status, a test tab and insights are not theirs to run. Two engines (a direct FAQ answer and an AI agent reading
+"knowledge") also meant two places to teach the same fact and two sets of rules for when each answers.
+
+1. **One source of knowledge, one flow.** FAQs are plain entries (a text entry, or Q&A entries) of an AI agent's knowledge base. The FAQ's own
+   tables (`faqs`, `faq_variations`, `faq_settings`, `faq_match_logs`) are no longer read or written; migration
+   `20270205090000_kb_per_agent_vector_faq_merge.sql` copies the active text FAQs of each flow, with their phrasings, into one text entry
+   labelled "FAQ" on the AI agent that flow talks through (else the workspace's first active agent; a workspace with FAQs and no agent gets one).
+   FAQs that answered with "go to a step" and paused FAQs have no text to keep and are not copied (counted in the migration's NOTICE). The old
+   tables were kept as an archive until the legacy-data migration tool (`tools/migration`) was retargeted to write the same "FAQ" text
+   entry per agent; migration `20270206090000_drop_faq_tables.sql` then dropped them.
+2. **One knowledge base per agent.** Entries belong to exactly one agent. Workspace-wide entries (only ever imported from Reference) are copied to
+   every agent of the workspace by the migration; nothing reads "no agent" any more.
+3. **One search for every reader.** Each entry is cut into passages (`ai_training_chunks`, `halfvec(3072)`, same model allow-list and scan as
+   before) when it becomes ready; the embed worker (every 5 s, same claim / lock / retry / self-heal as the FAQ worker) makes the vectors.
+   `KbRetrievalService` is the one door: the flow AI step and the website chat both read what their agent knows about the customer's message.
+   Passages not indexed yet are read as text, so a new entry answers at once; when the search cannot run (off, nothing indexed, no key, vendor
+   down) the agent reads its whole base exactly as before.
+4. **Top-1 or several passages (the trade-off).** One passage is the safest against blending but misses answers that span two passages (a policy
+   and its exception). Several raise coverage and also the chance the model blends two passages into a wrong answer. Chosen: at most **3**
+   passages, each at or above a per-model score floor and within **0.12** of the best one, and the agent is told to answer only from them and
+   to say it does not know otherwise (`GROUNDED_NOTE`). The numbers are constants in `@crm/contracts` (`KB_RETRIEVAL`), not settings.
+   Regression gate: the unit tests pin the cut (floor, band, top-k); a set of real customer questions with the expected answer must be run
+   against the agent before changing any of the numbers or the model (see `docs/threadwise-port/knowledge-base/README.md`).
+5. **Removed.** The direct-answer listener and matcher, the score threshold, margin and "second check", the per-flow switch, the fallback
+   message card, the playground, unanswered list and insights, the link to a flow step, the FAQs tab of the Simple builder, `/admin/faq` and
+   the `faq.*` permission keys. The "Answer from FAQ" flow step is retired: it stays in saved flows and always leaves by "No match".
+6. **Environment.** `FAQ_AI_DRIVER` / `FAQ_OPENROUTER_BASE_URL` are now `KB_AI_DRIVER` / `KB_OPENROUTER_BASE_URL`. The platform operator's
+   stored `faq.config` document is still read for the embedding model (and an off switch); no screen edits it any more.

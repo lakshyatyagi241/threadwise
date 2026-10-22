@@ -118,6 +118,17 @@ export class MeetingConferencingService implements MeetingConferencingPort {
     else if (microsoft) video.push({ provider: 'teams', via: 'calendar' });
     if (google) video.push({ provider: 'meet', via: 'calendar' });
 
+    // Installable now: published AND the platform has the provider's OAuth app (a draft listing or an unset provider is a dead end).
+    const installableNow: ConnectedVideoProvider[] = [];
+    for (const p of CONNECTED_VIDEO_PROVIDERS) {
+      if (
+        state.published.has(CONFERENCING_APP_SLUG[p]) &&
+        !state.installed.has(CONFERENCING_APP_SLUG[p]) &&
+        (await this.tokens.adapter(p).configured())
+      ) {
+        installableNow.push(p);
+      }
+    }
     const connectable = (
       await Promise.all(
         CONNECTED_VIDEO_PROVIDERS.map(async (p) =>
@@ -130,11 +141,13 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       calendar,
       canInstall: ctx.grants ? this.rbac.can(ctx.grants, 'market.apps.install').allowed : false,
       connectable,
-      installable: CONNECTED_VIDEO_PROVIDERS.some(
-        (p) =>
-          state.published.has(CONFERENCING_APP_SLUG[p]) &&
-          !state.installed.has(CONFERENCING_APP_SLUG[p]),
-      ),
+      installable: installableNow.length > 0,
+      installPath:
+        installableNow.length === 0
+          ? null
+          : installableNow.length === 1
+            ? `/marketplace/app/${CONFERENCING_APP_SLUG[installableNow[0]!]}`
+            : '/marketplace/integrations',
     };
   }
 
@@ -451,7 +464,7 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       const contact = await this.contacts.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(tx, this.contacts, ctx.orgId, scope, ctx.userId!, contact.ownerId);
+      await assertContactScope(tx, this.contacts, ctx.orgId, scope, ctx.userId!, contact);
       const meeting = await this.meetings.findByUuid(tx, ctx.orgId, meetingUuid);
       if (!meeting || meeting.contactId !== contact.id) {
         throw AppError.notFound('ContactMeeting', meetingUuid);

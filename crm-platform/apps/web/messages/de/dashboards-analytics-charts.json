@@ -320,6 +320,7 @@
         "replyRate": "Antwortrate",
         "received": "Empfangene Nachrichten",
         "conversationsOpen": "Offene Unterhaltungen",
+        "conversationsResolved": "Gelöste Unterhaltungen",
         "conversationsClosed": "Geschlossene Unterhaltungen",
         "conversationsAssigned": "Zugewiesen",
         "conversationsUnassigned": "Nicht zugewiesen",

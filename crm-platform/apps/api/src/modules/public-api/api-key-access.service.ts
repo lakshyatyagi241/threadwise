@@ -6,6 +6,7 @@ import { ERROR_CODES, type PlanFeatureKey } from '@crm/contracts';
 import type { Response } from 'express';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { SecurityPolicyService } from '../auth';
 import {
@@ -67,8 +68,7 @@ export class ApiKeyAccessService {
 
   async recordAuthFailure(scope: string, ip: string): Promise<void> {
     const key = this.authFailureKey(scope, ip);
-    const n = await this.redis.incr(key).catch(() => 0);
-    if (n === 1) await this.redis.expire(key, 60).catch(() => undefined);
+    await incrWithTtl(this.redis, key, 60).catch(() => undefined);
   }
 
   /**
@@ -109,10 +109,7 @@ export class ApiKeyAccessService {
     const bucket = Math.floor(Date.now() / 60_000);
     const key = `ratelimit:apikey:${bucketKey}:${bucket}`;
 
-    const count = await this.redis.incr(key).catch(() => 0);
-    if (count === 1) {
-      await this.redis.expire(key, 120).catch(() => undefined);
-    }
+    const count = await incrWithTtl(this.redis, key, 120).catch(() => 0);
     res?.setHeader('X-RateLimit-Limit', String(limit));
     res?.setHeader('X-RateLimit-Remaining', String(Math.max(0, limit - count)));
     if (count > limit) {

@@ -34,7 +34,52 @@ if ! flock -n 9; then
   exit 0
 fi
 
+# Tells the Deployments chat space. Runs in the background and swallows everything: it must never fail or slow a release.
+HERE=$(cd "$(dirname "$0")" && pwd)
+notify() { ( "$HERE/notify-chat.sh" "$@" >/dev/null 2>&1 & ) 2>/dev/null; true; }
+T0=$(date +%s); elapsed() { echo $(( $(date +%s) - T0 )); }
+
 status() { printf '{"at":"%s","sha":"%s","state":"%s","log":"%s"}\n' "$(date -Is)" "${TAG:-}" "$1" "${LOG:-}" > "$STATE/status.json"; }
+
+# Tells production about a build-side step, so the operator console's release history shows it (see `event` in ci-entry.sh). The
+# message goes on stdin. Reporting never stops the deploy: if production cannot be reached the release still runs or fails as it would.
+report() {  # report <state> <step> [message]
+  [ -n "${TAG:-}" ] && [ -n "${ATTEMPT:-}" ] || return 0
+  printf '%s' "${3:-}" | ssh_prod "event $ATTEMPT $TAG $1 $2" >/dev/null 2>&1 \
+    || echo "$(date -Is) could not report $1 for $TAG to production; the deploy goes on" >> "$LOGS/webhook.log"
+}
+
+# Tells production which pull requests this release carries (number, title, author), so the release history says what was deployed. It
+# reads the first-parent history since the last released commit (the tip alone when that is unknown): a squash commit is one PR with its
+# author, a merge commit takes its title from the body and its author from the merged branch. Never stops the deploy.
+report_changes() {  # report_changes <last released commit or empty>
+  [ -n "${ATTEMPT:-}" ] || return 0
+  python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || true
+import json, re, subprocess, sys
+last = sys.argv[1]
+def git(*a):
+    return subprocess.run(["git", *a], capture_output=True, text=True, check=True).stdout
+rng = [f"{last}..HEAD"] if last else ["-1", "HEAD"]
+out = []
+for sha in git("log", "--first-parent", "--max-count=30", "--format=%H", *rng).split():
+    parents = git("log", "-1", "--format=%P", sha).split()
+    if len(parents) > 1:
+        author = git("log", "-1", "--format=%an", parents[1]).strip()
+        body = [l for l in git("log", "-1", "--format=%b", sha).splitlines() if l.strip()]
+        title = body[0] if body else git("log", "-1", "--format=%s", sha).strip()
+        m = re.match(r"Merge pull request #(\d+)", git("log", "-1", "--format=%s", sha))
+        pr = int(m.group(1)) if m else None
+    else:
+        author = git("log", "-1", "--format=%an", sha).strip()
+        title = git("log", "-1", "--format=%s", sha).strip()
+        m = re.search(r"\(#(\d+)\)\s*$", title)
+        pr = int(m.group(1)) if m else None
+        if m:
+            title = title[: m.start()].rstrip()
+    out.append({"pr": pr, "title": title[:200], "author": author[:100]})
+print(json.dumps(out[:20]))
+PY
+}
 
 run_once() {
   TAG=""; LOG="$LOGS/$(date +%Y%m%dT%H%M%S).log"
@@ -48,11 +93,11 @@ run_once() {
   cd "$CI_DIR/repo" || return 1
   TAG=$(git rev-parse --short=9 HEAD)
   last=$(cat "$STATE/deployed" 2>/dev/null || true)
-  if [ "$FORCE" = 0 ] && [ "$last" = "$TAG" ]; then echo "== $TAG is already released; nothing to do"; return 0; fi
+  if [ "$FORCE" = 0 ] && [ "$last" = "$TAG" ]; then echo "== $TAG is already released; nothing to do"; notify skipped "$TAG" "" "already released"; return 0; fi
   # Like the old workflow's `paths: crm-platform/**`: a push that changes nothing under crm-platform/ is not released.
   if [ "$FORCE" = 0 ] && [ -n "$last" ] && git rev-parse -q --verify "$last^{commit}" >/dev/null 2>&1 \
     && git diff --quiet "$last" HEAD -- crm-platform; then
-    echo "== $TAG changes nothing under crm-platform/ since $last; not releasing"; return 0
+    echo "== $TAG changes nothing under crm-platform/ since $last; not releasing"; notify skipped "$TAG" "" "no change under crm-platform/"; return 0
   fi
   # Blue-green: the live slot keeps serving while this release migrates, so the migrations it adds must be expand-only. Checked here,
   # before anything is built or shipped. Needs the last released commit in the clone; fetch the full history once if it is missing.
@@ -69,21 +114,25 @@ run_once() {
     echo "== cannot find the last released commit $last in the clone; not releasing (check the clone's history)"; return 1
   fi
   status building
+  notify started "$TAG"
+  report building build
+  report_changes "$last"
   echo "== building $TAG"
   docker build -f crm-platform/apps/api/Dockerfile -t "desk-api:$TAG" --build-arg "GIT_SHA=$TAG" crm-platform || return 1
   docker build -f crm-platform/apps/web/Dockerfile -t "desk-web:$TAG" \
     --build-arg "NEXT_PUBLIC_SENTRY_DSN=$SENTRY_DSN" --build-arg "NEXT_PUBLIC_GIT_SHA=$TAG" crm-platform || return 1
   status shipping
+  report shipping ship
   echo "== syncing deploy files"
   tar -C crm-platform/deploy/hostinger -c docker-compose.yml init-roles.sh seed.js set-secrets.sh .env.example traefik-desk.yml.template | ssh_prod sync || return 1
   echo "== shipping images"
   docker save "desk-api:$TAG" "desk-web:$TAG" | gzip -1 | ssh_prod load || return 1
   status releasing
   echo "== releasing $TAG on production"
-  ssh_prod "release $TAG" || return 1
+  ssh_prod "release $TAG $ATTEMPT" || return 1
   echo "== smoke test $SMOKE_URL"
   for _ in $(seq 1 12); do
-    [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$SMOKE_URL")" = 200 ] && { echo "== $TAG is live"; echo "$TAG" > "$STATE/deployed"; return 0; }
+    [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$SMOKE_URL")" = 200 ] && { echo "== $TAG is live"; echo "$TAG" > "$STATE/deployed"; notify succeeded "$TAG" "$(elapsed)"; return 0; }
     sleep 5
   done
   echo "== $SMOKE_URL did not return 200 after the release" >&2
@@ -92,9 +141,19 @@ run_once() {
 
 while true; do
   rm -f "$STATE/pending"
+  # One id per run; production records the release history under it (the build's steps and the release's steps share it).
+  ATTEMPT=$(cat /proc/sys/kernel/random/uuid)
   ( run_once ); rc=$?
   TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
-  if [ "$rc" = 0 ]; then status ok; else status failed; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"; fi
+  if [ "$rc" = 0 ]; then status ok; else
+    status failed; notify failed "$TAG" "$(elapsed)" "see $LOG on the build server"; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"
+    # A failure before production was asked to release is recorded here; a failure during the release is recorded by the release itself.
+    cur=$(sed -n 's/.*"state":"\([a-z]*\)".*/\1/p' "$STATE/status.json" 2>/dev/null)
+    case "$cur" in building|shipping)
+      [ -n "$TAG" ] && printf '%s' "the build or the ship stopped; see the build log on the build server" \
+        | ssh_prod "event $ATTEMPT $TAG failed $cur" >/dev/null 2>&1 || true ;;
+    esac
+  fi
   # keep the last two local builds and trim the build cache so the disk does not fill
   docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
   docker builder prune -f --filter until=96h >/dev/null 2>&1 || true

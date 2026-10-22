@@ -37,7 +37,8 @@
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
       "stageScope": "A status can only be limited to one of your lifecycle stages.",
       "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space.",
-      "legalHold": "This record is protected and cannot be deleted at the moment."
+      "legalHold": "This record is protected and cannot be deleted at the moment.",
+      "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to send a message."
     },
     "list": {
       "title": "Contact Hub",
@@ -130,6 +131,7 @@
       "colLeadScore": "Lead score",
       "colLanguage": "Language",
       "colCreatedOn": "Created On",
+      "colModifiedOn": "Modified On",
       "pagination": "Pagination",
       "prevPage": "Previous page",
       "nextPage": "Next page",
@@ -191,6 +193,10 @@
       "myContacts": "My contacts",
       "ownersCount": "{count} owners",
       "ownerMe": "{name} (me)",
+      "teamLabel": "Team",
+      "teamFilter": "Filter by team",
+      "allTeams": "All teams",
+      "teamFormer": "Former team",
       "ownerFormer": "Former member",
       "reassignView": "Reassign the contacts of {name}...",
       "pqlLabel": "Search contacts in plain English",
@@ -282,6 +288,7 @@
       "shortStage": "Stage",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Created",
+      "shortModified": "Modified",
       "firstRun": {
         "title": "Add your first contacts",
         "message": "Bring in the people you talk to. Contacts are used for messages, campaigns, tasks and deals.",
@@ -442,7 +449,8 @@
       "companyRefused": "You cannot use that company. Pick another one or clear the field.",
       "searchOptions": "Search options",
       "searchOptionsFor": "Search the options of {field}",
-      "noOptionsFound": "No option matches your search."
+      "noOptionsFound": "No option matches your search.",
+      "cascadeWaiting": "Choose {parent} first to see the choices."
     },
     "tags": {
       "title": "Tags",
@@ -1081,7 +1089,8 @@
         "moveDown": "Move {name} down",
         "edit": "Edit {name}",
         "deactivate": "Deactivate {name}",
-        "reactivate": "Reactivate"
+        "reactivate": "Reactivate",
+        "dependsOn": "Choices depend on {field}"
       },
       "toast": {
         "conflict": "Someone else changed this. The list was refreshed; try again.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Manage stages",
         "manageGroups": "Manage groups",
         "locked": "Fixed"
+      },
+      "cascade": {
+        "open": "Dependent fields",
+        "title": "Dependent fields",
+        "close": "Close",
+        "intro": "A dependent field always shows. Its choices depend on the choice made in its parent property: for each parent choice, tick the choices of the dependent field it allows.",
+        "empty": "No dependent fields yet.",
+        "add": "Add dependent field",
+        "needTwoChoiceFields": "Dependent fields need at least two properties with a choice list (dropdown, multi-select or radio).",
+        "dependsOn": "depends on {parent}",
+        "editLabel": "Edit {name}",
+        "removeLabel": "Remove {name}",
+        "parent": "Parent property",
+        "child": "Dependent property",
+        "pickParent": "Choose the parent property",
+        "pickChild": "Choose the dependent property",
+        "allowed": "Choices of {child} allowed under each choice of {parent}",
+        "noParentChoices": "The parent property has no choices yet.",
+        "noChildChoices": "The dependent property has no choices yet.",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saved": "Dependent field saved.",
+        "cycle": "That dependency would make two properties wait for each other.",
+        "removeTitle": "Remove {name} from dependent fields?",
+        "removeMessage": "It shows all its choices again. The choices it had under the parent are forgotten; the values contacts hold are kept.",
+        "removeConfirm": "Remove",
+        "removed": "Dependent field removed.",
+        "removeFailed": "The dependent field could not be removed. Try again."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Selected columns",
         "selectAll": "Select All",
         "reorder": "Drag to re-order columns",
-        "remove": "Remove {name}"
+        "remove": "Remove {name}",
+        "nameShort": "View name must be at least {min} characters.",
+        "nameLong": "View name can be at most {max} characters."
       },
       "presets": {
         "myContacts": "My contacts",

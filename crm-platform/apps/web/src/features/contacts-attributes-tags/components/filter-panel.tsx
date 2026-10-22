@@ -26,6 +26,7 @@ export type FilterSection =
   | 'segment'
   | 'tag'
   | 'owner'
+  | 'team'
   | 'stage'
   | 'status'
   | 'minor'
@@ -44,6 +45,7 @@ type FilterValues = Pick<
   | 'segment'
   | 'tag'
   | 'owner'
+  | 'team'
   | 'lifecycleStage'
   | 'status'
   | 'minor'
@@ -66,6 +68,8 @@ export interface FilterPanelProps {
 
   tags: ReadonlyArray<{ id: string; name: string }>;
   owners: readonly Owner[];
+  /** The workspace's teams for the Team filter; empty when the viewer cannot read teams or there are none (the row is then left out). */
+  teams: ReadonlyArray<{ id: string; name: string }>;
   /** The signed-in person, for "My contacts". */
   meId: string;
   /**
@@ -83,6 +87,8 @@ export interface FilterPanelProps {
   conditionCount: number;
   /** Opens the panel on a section from outside; each new `nonce` opens it again. */
   request?: { section: FilterSection; nonce: number } | null;
+  /** Opens the condition builder on one field from outside (a column header's "Filter" on name, phone or email). */
+  fieldRequest?: { field: string; nonce: number } | null;
 }
 
 const row =
@@ -94,6 +100,7 @@ export function quickFilterCount(f: FilterValues): number {
     Number(f.group !== '' || f.imported || f.segment !== '') +
     Number(f.tag !== '') +
     Number(ownerTokens(f.owner).length > 0) +
+    Number(f.team !== '') +
     Number(f.lifecycleStage !== '') +
     Number(f.status !== '') +
     Number(f.minor !== '') +
@@ -128,6 +135,14 @@ export function FilterPanel(p: FilterPanelProps) {
     setView(p.request.section);
     setOpen(true);
   }, [p.request]);
+
+  const seenField = useRef(0);
+  useEffect(() => {
+    if (!p.fieldRequest || p.fieldRequest.nonce === seenField.current) return;
+    seenField.current = p.fieldRequest.nonce;
+    setOpen(false);
+    setBuilder(true);
+  }, [p.fieldRequest]);
 
   const f = p.filters;
   // Suggestions use this workspace's own first tag and stage, so they read like something the person would really ask.
@@ -194,6 +209,8 @@ export function FilterPanel(p: FilterPanelProps) {
           : owners[0] === p.meId
             ? t('myContacts')
             : (p.owners.find((o) => o.id === owners[0])?.fullName ?? t('ownerFormer'));
+  const teamName =
+    f.team === '' ? undefined : (p.teams.find((x) => x.id === f.team)?.name ?? t('teamFormer'));
   const stageName = p.stages.find((s) => s.value === f.lifecycleStage)?.label;
   const statusName = p.statuses.find((s) => s.value === f.status)?.label;
   const minorName = f.minor === 'yes' ? t('minorYes') : f.minor === 'no' ? t('minorNo') : undefined;
@@ -313,6 +330,7 @@ export function FilterPanel(p: FilterPanelProps) {
             {entry('segment', t('segmentLabel'), segmentName)}
             {entry('tag', t('tagLabel'), tagName)}
             {entry('owner', t('ownerLabel'), ownerName)}
+            {(p.teams.length > 0 || f.team !== '') && entry('team', t('teamLabel'), teamName)}
             {entry('stage', t('stageLabel'), stageName)}
             {entry('status', t('statusLabel'), statusName)}
             {entry('minor', t('minorLabel'), minorName)}
@@ -477,6 +495,18 @@ export function FilterPanel(p: FilterPanelProps) {
           </div>
         )}
 
+        {view === 'team' && (
+          <div
+            role="radiogroup"
+            aria-label={t('teamFilter')}
+            className="thin-scrollbar max-h-72 space-y-0.5 overflow-y-auto p-1"
+          >
+            {back}
+            {choice('all', t('allTeams'), f.team === '', () => pick({ team: '' }))}
+            {p.teams.map((x) => choice(x.id, x.name, f.team === x.id, () => pick({ team: x.id })))}
+          </div>
+        )}
+
         {view === 'stage' && (
           <div
             role="radiogroup"
@@ -600,6 +630,7 @@ export function FilterPanel(p: FilterPanelProps) {
         open={builder}
         onOpenChange={setBuilder}
         hideTrigger
+        start={p.fieldRequest}
       />
     </div>
   );

@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Waiting"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Nobody is waiting for a person",
+          "message": "When a bot, a flow or a teammate asks for a person, the conversation waits here until someone claims it."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "The bot is answering",
+        "waiting": "Waiting for a person",
+        "with_person": "With a person"
+      },
+      "ageMinutes": "{count}m",
+      "ageHours": "{count}h",
+      "ageDays": "{count}d",
+      "row": {
+        "waiting": "Waiting",
+        "waitingFor": "Waiting {age}",
+        "inTeam": "In the queue of {team}"
+      },
+      "assignedTo": "now with {name}",
+      "inTeamQueue": "queue of {team}",
+      "cardFailed": "The handoff details could not be loaded.",
+      "claim": {
+        "button": "Claim",
+        "done": "You took this conversation.",
+        "doneOwner": "You took this conversation and you are now the contact's owner.",
+        "failed": "The conversation could not be claimed.",
+        "taken": "Somebody else took this conversation first.",
+        "overLimitTitle": "You are at your chat limit",
+        "overLimitMessage": "You already hold {open} open conversations and your limit is {limit}. Take this one anyway?",
+        "overLimitConfirm": "Take it anyway",
+        "overLimitCancel": "Cancel"
+      },
+      "giveBack": {
+        "button": "Return to bot",
+        "done": "The bot answers this conversation again.",
+        "failed": "The conversation could not be given back to the bot.",
+        "doneFlow": "The bot continues the flow.",
+        "doneNextLive": "The bot will answer the customer's next message.",
+        "doneNextDefault": "The bot is back on. It answers the next message only if a default flow is set.",
+        "already": "The bot already has this conversation."
+      },
+      "send": {
+        "button": "Send to queue",
+        "buttonAgain": "Send to queue again",
+        "title": "Send to a person",
+        "close": "Close",
+        "cancel": "Cancel",
+        "submit": "Send",
+        "intro": "The bot stops answering this contact. The conversation goes to the person or team you choose, or waits in the queue until someone claims it.",
+        "where": "Send it to",
+        "whereRules": "The assignment rules, otherwise the waiting queue",
+        "whereQueueOnly": "The waiting queue (assignment rules need the Smart routing add-on)",
+        "whereTeam": "A team",
+        "wherePerson": "One person",
+        "team": "Team",
+        "pickTeam": "Choose a team",
+        "person": "Person",
+        "pickPerson": "Choose a person",
+        "reason": "Why a person is needed",
+        "note": "Note for the person who takes it",
+        "noteHint": "Shown on the handoff card. Up to 500 characters.",
+        "refused": "This conversation cannot be handed over (it is archived, spam or a personal mailbox).",
+        "failed": "The conversation could not be sent.",
+        "done": {
+          "assigned": "Sent: someone has it now.",
+          "waiting": "Sent: it waits in the queue.",
+          "unavailable": "Sent to the queue: nobody is available right now."
+        }
+      },
+      "details": {
+        "show": "Details",
+        "hide": "Hide details"
+      },
+      "card": {
+        "source": "Asked by",
+        "reason": "Reason",
+        "priority": "Priority",
+        "summary": "Summary",
+        "answers": "What the contact told the bot",
+        "trace": "How it was assigned",
+        "timers": "Waiting queue steps"
+      },
+      "source": {
+        "flow": "A flow",
+        "ai_agent": "An AI agent",
+        "keyword": "The contact's own request",
+        "bot_failure": "A bot that could not help",
+        "manual": "A teammate",
+        "arrival": "The routing: nobody could take it"
+      },
+      "reason": {
+        "customer_asked": "The contact asked for a person",
+        "bot_could_not_help": "The bot could not help",
+        "sensitive_topic": "Sensitive topic",
+        "sales_lead": "Sales lead",
+        "complaint": "Complaint",
+        "other": "Other"
+      },
+      "priority": {
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "trace": {
+        "chosen": "Chosen",
+        "skipped": "Skipped",
+        "info": "Note"
+      },
+      "botLine": {
+        "system": "the system",
+        "pressed": {
+          "flow": "Bot is back, returned by {name}. The flow continues.",
+          "nextLive": "Bot is back, returned by {name}. It will answer the customer's next message.",
+          "nextDefault": "Bot is back, returned by {name}. It answers the next message only if a default flow is set."
+        },
+        "result": {
+          "continued": "The flow continued from the \"returned\" exit.",
+          "claimed_again": "The flow was not resumed: a person took the chat again.",
+          "flow_not_live": "The flow was not resumed: it is no longer live.",
+          "start_failed": "The flow could not be resumed."
+        },
+        "customer": {
+          "sent": "The message to the customer was sent.",
+          "window_closed": "The message to the customer was skipped: the 24 hour window is closed.",
+          "no_consent": "The message to the customer was skipped: no consent.",
+          "failed": "The message to the customer could not be sent.",
+          "channel_unavailable": "The message to the customer was skipped: the channel is unavailable."
+        }
+      },
+      "timers": {
+        "reminded": "Reminded at {at}",
+        "offered": "Offered to this team at {at}",
+        "messaged": "Message sent to the customer at {at}",
+        "gaveBack": "Given back to the bot at {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Given back to the bot by {actor}",
+          "bot_resumed": "The bot continued the flow",
+          "bot_resume_skipped": "The flow was not resumed"
+        }
+      }
+    }
+  }
+}

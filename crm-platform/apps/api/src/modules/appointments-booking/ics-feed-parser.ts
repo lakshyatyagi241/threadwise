@@ -1,4 +1,5 @@
 import { addDays, parseLocalDate, wallToInstant, weekdayOf } from './tz';
+import { CappedMap } from '../../common/cache/capped-map';
 
 /**
  * Reads an iCalendar (RFC 5545) feed into BUSY INTERVALS (BL-035): what a read-only ICS subscription contributes to the slot engine. Pure: text in,
@@ -121,7 +122,7 @@ export const WINDOWS_ZONES: Readonly<Record<string, string>> = {
   'New Zealand Standard Time': 'Pacific/Auckland',
 };
 
-const validZones = new Map<string, boolean>();
+const validZones = new CappedMap<string, boolean>(1000);
 function isZone(name: string): boolean {
   let ok = validZones.get(name);
   if (ok === undefined) {

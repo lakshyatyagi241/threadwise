@@ -33,7 +33,7 @@ A contact with no history shows **No consent recorded**. We never assume consent
 
 Open **Settings**, then **Consent and STOP replies** under Security. When a contact sends **only** one of the STOP words (STOP, STOPALL, UNSUBSCRIBE, CANCEL, END, QUIT or OPT OUT, plus the Arabic words), they are opted out of marketing on that channel. This works for WhatsApp, Telegram and every other channel that receives messages, and for numbers connected the official way or with a QR code.
 
-The message must be the keyword and nothing else. Capital letters, spaces, punctuation, emoji and Arabic diacritics are ignored, so `Stop.` and `STOP!!` work. A sentence such as "please stop sending me invoices" or "don't stop" does **not** match, so nobody is opted out by accident. A STOP is never passed to a flow, an FAQ answer or an AI agent.
+The message must be the keyword and nothing else. Capital letters, spaces, punctuation, emoji and Arabic diacritics are ignored, so `Stop.` and `STOP!!` work. A sentence such as "please stop sending me invoices" or "don't stop" does **not** match, so nobody is opted out by accident. A STOP is never passed to a flow or an AI agent.
 
 The same screen lists the START words (START, SUBSCRIBE, UNSTOP and the Arabic words). A contact who sends one is subscribed again.
 
@@ -61,8 +61,8 @@ Forms record the consent line a visitor ticked, with the exact text and its vers
 
 ## Permissions and limits
 
-- **settings.consent.manage** opens the settings and the workspace export.
-- **contacts.consent.read** shows the Consent card and exports one contact. **contacts.consent.manage** records a change.
+- The permission to manage consent settings opens the settings and the workspace export.
+- The permission to see contact consent shows the Consent card and exports one contact. The permission to manage contact consent records a change.
 - We store ids, hashes and the matched keyword as proof, never an IP address and never the text of a contact's message.
 - If a keyword change does not seem to apply, wait a minute: each server keeps the list for up to a minute.
 
@@ -72,7 +72,7 @@ When a contact replies STOP (or START) and it changes their status, the conversa
 
 ## Exporting the proof when the history is large
 
-**Export proof (CSV)** downloads the whole history at once while it has up to 50,000 entries. Past that, the button becomes **Prepare the full proof file**: the file is built in the background, you get an email when it is ready, and it is listed under **Prepared proof files** with a **Download CSV** link. A prepared file is kept for 7 days and then deleted (prepare it again if you need it). Only one file is prepared at a time. Preparing a file needs the permission **contacts.consent.manage** and is recorded in the audit log.
+**Export proof (CSV)** downloads the whole history at once while it has up to 50,000 entries. Past that, the button becomes **Prepare the full proof file**: the file is built in the background, you get an email when it is ready, and it is listed under **Prepared proof files** with a **Download CSV** link. A prepared file is kept for 7 days and then deleted (prepare it again if you need it). Only one file is prepared at a time. Preparing a file needs the permission to manage contact consent and is recorded in the audit log.
 
 ## A yes / no column in a contact import
 
@@ -146,7 +146,7 @@ The **Consent** card of a contact also has a **Privacy flags** part. Each switch
 - **Do Not Sell or Share.** Shown when the United States CCPA profile is switched on in the Compliance center (and for a contact who already has it). Switch it on when a person asks not to have their data sold or shared. The date and where it came from are shown.
 - **Global Privacy Control.** When a visitor's browser sends the Global Privacy Control signal (`Sec-GPC: 1`) with a public form submission or a message to your website chat widget, and the CCPA profile is on, the contact it belongs to is opted out of sale and sharing, with the source **Global Privacy Control**. Nothing else about the visitor's browser is kept. In the chat widget the contact must exist for the visitor, which happens once they give a phone number or an email address. This does not subscribe or unsubscribe anyone from marketing.
 
-Minor and Do Not Sell or Share badges also show beside the contact's name. Changing a flag needs **contacts.consent.manage**; seeing them needs **contacts.consent.read**. Nothing in the product sells or shares contact data with third parties today, so Do Not Sell or Share is a record that any future path must respect.
+Minor and Do Not Sell or Share badges also show beside the contact's name. Changing a flag needs the permission to manage contact consent; seeing them needs the permission to see it. Nothing in the product sells or shares contact data with third parties today, so Do Not Sell or Share is a record that any future path must respect.
 
 ## How a minor is detected
 
@@ -157,6 +157,6 @@ Names, emails and phone numbers say nothing about age, so a contact is only mark
 - **A person.** Switch **Minor** on, on the Consent card, when a customer says they are a child or you learn it on a call.
 - **A flow.** A flow can set the flag when it learns the customer is a minor.
 
-In the contact list, the **Minors** view shows the flagged contacts, and the contact filter and segments know "minor". In an import, map a column to **Date of birth**. The REST API reads and writes `date_of_birth` and reads `is_minor`; the flag itself is read and changed on `/privacy` of a contact.
+In the contact list, the **Minors** view shows the flagged contacts, and the contact filter and segments know "minor". In an import, map a column to **Date of birth**. The flag itself is read and changed on the contact's privacy page.
 
 Asking a date of birth is data you collect, so ask it only where you need it. The least data is the box "I confirm I am at least N years old", which keeps nothing about the age.

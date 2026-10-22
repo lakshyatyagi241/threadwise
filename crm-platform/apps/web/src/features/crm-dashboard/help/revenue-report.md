@@ -28,14 +28,14 @@ The revenue report answers "how much money are we making, and where is it stuck"
 - **Invoiced, paid so far, owed and overdue** count the invoices you **issued** in the period. Drafts, voided invoices and proformas are left out. "Paid so far" is net of refunds, and "owed" and "overdue" are as of today.
 - **Collected and refunded** count the money that **came in** during the period, whichever invoice it settled, or none.
 
-The key figures also show Reference's four: collected in the period, collected all time, outstanding (every open invoice as of today, whatever the period) and the tax on invoices that became fully paid in the period.
+The key figures also show four more: collected in the period, collected all time, outstanding (every open invoice as of today, whatever the period) and the tax on invoices that became fully paid in the period.
 
 ## What each part shows
 
 - **Key figures**: arrows compare with the comparison period.
 - **Invoiced, paid and owed**: one bar for the invoices issued in the period, split into paid, owed and overdue.
 - **Invoiced and collected**: per day, week or month, whichever keeps the chart readable.
-- **The table**: a total line and the biggest rows first, with the change against the comparison period under invoiced and collected. By product, an invoice is spread over its lines by value, so a discount on the whole invoice or shipping follows the lines. By team, a person on two teams counts in both.
+- **The table**: a total line and the biggest rows first, with the change against the comparison period under invoiced and collected. By product, an invoice is spread over its lines by value, so a discount on the whole invoice or shipping follows the lines. By team, each person counts for their primary team only, so a person on two teams is counted once and people with no primary team are listed under no team.
 - **Receivables aging**: open invoices by how long past due, one block per currency.
 
 ## Downloading

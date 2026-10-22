@@ -1,0 +1,33 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Transfert et assignation",
+        "hint": "Utilisé quand un bot, un flux ou un collègue transfère une conversation à cette équipe.",
+        "method": "Comment choisir une personne",
+        "methodHint": "Manuel : la conversation attend dans la file de l'équipe jusqu'à ce que quelqu'un la prenne. Tourniquet et Moins chargé choisissent un membre pour vous et font partie du module Routage intelligent.",
+        "defaultAssignee": "Responsable par défaut",
+        "defaultAssigneeHint": "Prend la conversation quand personne d’autre ne le peut. Choisissez l’un des membres de l’équipe.",
+        "noDefaultAssignee": "Personne en particulier",
+        "hours": "Horaires d’ouverture",
+        "hoursHint": "Désactivé signifie toujours ouvert. En dehors de ces horaires, la conversation attend toujours dans la file et le contact reçoit le message hors horaires du flux.",
+        "timezone": "Fuseau horaire",
+        "dayFrom": "{day}, ouverture",
+        "dayTo": "{day}, fermeture",
+        "hoursProblem": "Chaque jour ouvert nécessite une heure d’ouverture et une heure de fermeture différentes.",
+        "day": {
+          "mon": "Lundi",
+          "tue": "Mardi",
+          "wed": "Mercredi",
+          "thu": "Jeudi",
+          "fri": "Vendredi",
+          "sat": "Samedi",
+          "sun": "Dimanche"
+        },
+        "methodLocked": "{method} (nécessite Routage intelligent)",
+        "methodLockHint": "Les méthodes automatiques font partie du module Routage intelligent ou d'une offre supérieure.",
+        "defaultAssigneeLocked": "Le responsable par défaut n'est utilisé qu'avec une méthode d'équipe automatique, qui fait partie du module Routage intelligent ou d'une offre supérieure."
+      }
+    }
+  }
+}

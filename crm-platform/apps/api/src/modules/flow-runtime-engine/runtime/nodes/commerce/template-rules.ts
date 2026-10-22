@@ -139,3 +139,41 @@ export function richComponents(
   const built = buildSend(shape, vars).components as Array<Record<string, unknown>>;
   return built.length > 0 ? built : null;
 }
+
+/**
+ * The template as this node sends it: placeholders the author filled in the flow (`header:1`, `body:2`) take their text (merge tags
+ * allowed) instead of the contact detail the template maps, and a header picture, video or file set on the node replaces the
+ * template's own sample. Each overridden slot gets a private key, so the one `render` every other path calls still works unchanged.
+ */
+export function withOverrides(
+  t: FlowTemplate,
+  overrides: Record<string, string>,
+  mediaUrl: string,
+  render: (tpl: string) => string,
+): { tpl: FlowTemplate; render: (tpl: string) => string } {
+  const private_: Record<string, string> = {};
+  const map: Record<string, unknown> = { ...(t.variableMap as Record<string, unknown>) };
+  for (const [section, list] of Object.entries(map)) {
+    if (!Array.isArray(list)) continue;
+    map[section] = list.map((e: { num?: unknown; key?: unknown }) => {
+      const value = overrides[`${section}:${Number(e.num)}`];
+      if (value === undefined) return e;
+      const key = `__ovr_${section}_${Number(e.num)}`;
+      private_[key] = value;
+      return { ...e, key };
+    });
+  }
+  const own = /^\{\{\s*(__ovr_[a-z]+_\d+)\s*\}\}$/;
+  return {
+    tpl: {
+      ...t,
+      variableMap: map as FlowTemplate['variableMap'],
+      ...(mediaUrl ? { headerMediaUrl: mediaUrl } : {}),
+    },
+    render: (text) => {
+      const hit = own.exec(text.trim());
+      const value = hit ? private_[hit[1]!] : undefined;
+      return value === undefined ? render(text) : render(value);
+    },
+  };
+}

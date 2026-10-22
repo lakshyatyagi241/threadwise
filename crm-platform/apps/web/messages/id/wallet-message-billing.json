@@ -164,12 +164,16 @@
         "in": "Uang masuk",
         "out": "Uang keluar",
         "balance": "Saldo",
-        "none": "Tidak ada"
+        "none": "Tidak ada",
+        "channel": "Saluran",
+        "recipient": "Penerima",
+        "template": "Templat",
+        "country": "Negara",
+        "category": "Kategori",
+        "engine": "Mesin"
       },
       "context": {
-        "reason": "Alasan",
-        "to": "Kepada",
-        "template": "Templat"
+        "reason": "Alasan"
       },
       "channels": {
         "campaign": "Kampanye",

@@ -5,7 +5,7 @@ import { addDays } from '../../../common/workspace-calendar';
  * touch whose leave, and which delegate stands in. Pure, so the time-zone and edge cases are unit tests.
  */
 
-export type LeaveScope = 'all' | 'team' | 'own';
+export type LeaveScope = 'all' | 'team' | 'team_and_below' | 'own';
 
 export interface RangeCheck {
   ok: boolean;
@@ -78,5 +78,5 @@ export function mayManage(
   if (scope === null) return false;
   if (scope === 'all') return true;
   if (callerId === targetId) return true;
-  return scope === 'team' && sharesTeam;
+  return (scope === 'team' || scope === 'team_and_below') && sharesTeam;
 }

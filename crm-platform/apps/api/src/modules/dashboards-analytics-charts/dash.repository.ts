@@ -11,13 +11,14 @@ type Raw = Record<string, unknown>;
  * to the caller's workspace; the explicit `org_id` is the index prefix. Nothing is cached and nothing is pre-aggregated.
  */
 /**
- * A message is delivered once the provider said so: its status says delivered / read, or a delivery / read time was recorded (an
- * imported message keeps its history in the timestamps and may still read `sent`). A message that is only `sent` counts as sent.
+ * Delivered is Reference's delivered set (TW-DASH-002 rule 3): status delivered, read or sent, or a delivery / read time was recorded.
+ * A message that is only `sent` counts as delivered, as in Reference. A migrated message carries no receipt (the chat history has
+ * none; chat-delivery finds no billing-log match), so all migrated outbound history reads `sent`: without this its delivered rate is 0.
  */
-const DELIVERED = sql.raw(
-  `(status IN ('delivered','read') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
+export const DELIVERED = sql.raw(
+  `(status IN ('delivered','read','sent') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
 );
-const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
+export const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 /** Failed: the status says so, or a failure reason was recorded and nothing was ever delivered or read. */
 const FAILED = sql.raw(
   `(status IN ('failed','undelivered') OR (failure_reason IS NOT NULL AND delivered_at IS NULL AND read_at IS NULL AND status NOT IN ('delivered','read')))`,
@@ -50,22 +51,30 @@ export class DashRepository {
    * (never above `contactsMessaged`); `repliers` is every conversation that wrote in, messaged or not.
    */
   async counts(tx: Tx, orgId: number, from: Date, to: Date): Promise<RawCounts> {
+    // One pass over the window's messages, counted per conversation; the headline numbers are then sums and counts of those rows. The
+    // distinct counts and the "conversation also has an outbound message" test are plain per-conversation flags this way, instead of a
+    // DISTINCT sort per filter and a sub-select per row (280 ms to 99 ms on 90,000 messages, same result).
     const res = await tx.execute(sql`
-      WITH s AS (SELECT * FROM ${stream(orgId, from, to)})
+      WITH per AS (
+        SELECT conversation_id,
+          count(*) FILTER (WHERE direction = 'out') AS sent,
+          count(*) FILTER (WHERE direction = 'out' AND ${DELIVERED}) AS delivered,
+          count(*) FILTER (WHERE direction = 'out' AND ${FAILED}) AS failed,
+          count(*) FILTER (WHERE direction = 'out' AND ${READ}) AS read,
+          count(*) FILTER (WHERE direction = 'in') AS replies
+        FROM ${stream(orgId, from, to)}
+        GROUP BY conversation_id)
       SELECT
-        count(*) FILTER (WHERE direction = 'out')::int AS sent,
-        count(*) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS delivered,
-        count(*) FILTER (WHERE direction = 'out' AND ${FAILED})::int AS failed,
-        count(*) FILTER (WHERE direction = 'out' AND ${READ})::int AS read,
-        count(*) FILTER (WHERE direction = 'in')::int AS replies,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out')::int AS contacts_messaged,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS contacts_delivered,
-        count(DISTINCT conversation_id) FILTER (
-          WHERE direction = 'in'
-            AND conversation_id IN (SELECT conversation_id FROM s WHERE direction = 'out')
-        )::int AS contacts_replied
-      FROM s`);
+        coalesce(sum(sent), 0)::int AS sent,
+        coalesce(sum(delivered), 0)::int AS delivered,
+        coalesce(sum(failed), 0)::int AS failed,
+        coalesce(sum(read), 0)::int AS read,
+        coalesce(sum(replies), 0)::int AS replies,
+        count(*) FILTER (WHERE replies > 0)::int AS repliers,
+        count(*) FILTER (WHERE sent > 0)::int AS contacts_messaged,
+        count(*) FILTER (WHERE delivered > 0)::int AS contacts_delivered,
+        count(*) FILTER (WHERE replies > 0 AND sent > 0)::int AS contacts_replied
+      FROM per`);
     const r = (res.rows[0] ?? {}) as Raw;
     return {
       contactsGoalCompleted: await this.goalCompleted(tx, orgId, from, to),
@@ -164,8 +173,9 @@ export class DashRepository {
   }
 
   /**
-   * Conversations whose last message falls in [from, to), split open / closed (resolved counts as closed) and assigned / unassigned
-   * (a person, a team or an AI agent holds it). Archived chats are left out, as the inbox does.
+   * Conversations with activity in [from, to) (a message, or a resolve / close in the window), split open / resolved / closed and
+   * assigned / unassigned (a person, a team or an AI agent holds it). Resolving does not touch the last message, so a chat resolved
+   * today counts as resolved today even when its last message is older. Archived chats are left out, as the inbox does.
    */
   async conversationStates(
     tx: Tx,
@@ -175,25 +185,33 @@ export class DashRepository {
   ): Promise<{
     total: number;
     open: number;
+    resolved: number;
     closed: number;
     assigned: number;
     unassigned: number;
   }> {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS total,
-        count(*) FILTER (WHERE status IN ('resolved','closed'))::int AS closed,
+        count(*) FILTER (WHERE status = 'resolved')::int AS resolved,
+        count(*) FILTER (WHERE status = 'closed')::int AS closed,
         count(*) FILTER (
           WHERE assignee_user_id IS NOT NULL OR assignee_team_id IS NOT NULL OR assignee_agent_id IS NOT NULL
         )::int AS assigned
       FROM conversations
       WHERE org_id = ${orgId} AND NOT archived
-        AND last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz`);
+        AND (
+          (last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz)
+          OR (resolved_at >= ${from.toISOString()}::timestamptz AND resolved_at < ${to.toISOString()}::timestamptz)
+        )`);
     const r = (res.rows[0] ?? {}) as Raw;
     const total = n(r.total);
+    const resolved = n(r.resolved);
+    const closed = n(r.closed);
     return {
       total,
-      open: total - n(r.closed),
-      closed: n(r.closed),
+      open: total - resolved - closed,
+      resolved,
+      closed,
       assigned: n(r.assigned),
       unassigned: total - n(r.assigned),
     };

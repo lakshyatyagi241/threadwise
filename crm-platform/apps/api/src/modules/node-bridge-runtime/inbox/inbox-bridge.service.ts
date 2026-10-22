@@ -22,6 +22,10 @@ import {
   type InboundSink,
 } from '../runtime/routers';
 import { INBOUND_MEDIA_TTL_S, inboxKeys, SENT_MARKER_TTL_S } from './inbox-keys';
+import { CappedMap } from '../../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('inbox_bridge_channel');
 
 interface DeviceRow {
   uuid: string;
@@ -63,7 +67,7 @@ const KIND_LABEL: Record<string, string> = {
 @Injectable()
 export class InboxBridge implements InboundSink, OnModuleInit {
   private readonly logger = new Logger(InboxBridge.name);
-  private readonly channels = new Map<string, { uuid: string; at: number }>();
+  private readonly channels = new CappedMap<string, { uuid: string; at: number }>(5000);
   private readonly subjects = new Map<string, { subject: string; at: number }>();
 
   constructor(
@@ -329,7 +333,11 @@ export class InboxBridge implements InboundSink, OnModuleInit {
   private async channelOf(orgId: number, deviceId: number): Promise<string | null> {
     const key = `${orgId}:${deviceId}`;
     const hit = this.channels.get(key);
-    if (hit && Date.now() - hit.at < 60_000) return hit.uuid;
+    if (hit && Date.now() - hit.at < 60_000) {
+      cache.hit();
+      return hit.uuid;
+    }
+    cache.miss();
     const dev = await this.device(orgId, deviceId);
     if (!dev) return null;
     const { uuid } = await this.system(orgId, () =>

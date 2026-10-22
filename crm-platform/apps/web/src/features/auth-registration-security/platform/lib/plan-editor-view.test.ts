@@ -173,11 +173,13 @@ describe('planCounts', () => {
       (typeof PLAN_LIMIT_KEYS)[number],
       number
     >;
+    limits.teams = 1_000_000; // unlimited stand-in: not a cap
     limits.users = 5;
     limits.contacts = 1000;
     const c = planCounts({ features, limits, visibleAddons: [A, B, GONE] });
     expect(c.featuresTotal).toBe(Object.keys(d.features).length);
-    expect(c.featuresOn).toBe(c.featuresTotal - 2);
+    // the two switched off here, and the four flags a new plan starts without (two Smart routing, two reminder upgrade tier)
+    expect(c.featuresOn).toBe(c.featuresTotal - 6);
     expect(c.limitsTotal).toBe(PLAN_LIMIT_KEYS.length);
     expect(c.limitsSet).toBe(2);
     expect(c.addons).toBe(3);

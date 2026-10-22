@@ -1404,7 +1404,8 @@
             "packInactive": "Il pacchetto del componente aggiuntivo è disattivato, quindi nessuno può acquistarlo.",
             "appUnpublished": "L'app non è pubblicata, quindi i workspace non possono ancora vederla.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# componente aggiuntivo selezionato} other {# componenti aggiuntivi selezionati}}"
           },
           "featureHints": {
             "automation": "Il generatore di flussi e le automazioni che rispondono alle conversazioni e agiscono su di esse.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "White-label: il workspace può nascondere il marchio della piattaforma nel piè di pagina.",
             "sales_pipeline": "Trattative, attività e pipeline, e i dati della pipeline nella dashboard.",
             "appointment_booking": "Tipi di prenotazione, appuntamenti e pagine di prenotazione pubbliche. L'app a pagamento Appuntamenti controlla questo interruttore.",
+            "appointment_confirm_buttons": "Aggiunge i pulsanti Conferma, Riprogramma e Annulla al promemoria dell'appuntamento inviato su WhatsApp.",
+            "appointment_rebook_steps": "Messaggi di follow-up inviati dopo un appuntamento completato, che invitano il contatto a prenotare di nuovo.",
             "chatbot_widgets": "Il generatore di widget chatbot per il sito web.",
             "wa_storefront": "L'area catalogo e vetrina di WhatsApp.",
             "inbox_sla": "Politiche e scadenze SLA nella casella di posta del team.",
-            "inbox_routing": "Regole di instradamento che assegnano automaticamente le conversazioni della casella di posta.",
+            "inbox_routing": "Assegnazione automatica delle nuove chat: regole di instradamento, Tutti gli altri e timer della coda d'attesa. Fa parte del componente aggiuntivo Instradamento intelligente.",
             "waba_calling": "Chiamate WhatsApp dalla casella di posta: numeri di chiamata, permessi di chiamata, effettuare e rispondere alle chiamate.",
             "inbox_kanban": "La vista Kanban della casella di posta del team.",
             "team_performance": "I report sulle prestazioni del team.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "Consente a un numero WhatsApp personale di importare l'intera cronologia delle chat al primo collegamento. L'importazione delle chat recenti è disponibile in tutti i piani che includono numeri personali.",
             "ai_crm_copilot": "Trova e valuta i lead con l'IA dai tuoi contatti.",
             "lead_scoring": "Assegna un punteggio ai contatti con l’IA e alimenta il pilota di crescita. L’app Lead scoring con IA controlla questo interruttore.",
-            "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità."
+            "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità.",
+            "team_hierarchy": "Team padre, responsabili di team e manager che vedono il proprio team e quelli sottostanti.",
+            "custom_roles": "Crea e modifica i ruoli e scegli un ambito (propri, del team o tutti i record) per ogni permesso.",
+            "inbox_assignment_sticky": "Assegnazione con priorità al proprietario e sincronizzata, finestra per i contatti di ritorno e richiesta alla riassegnazione. Fa parte del componente aggiuntivo Instradamento intelligente."
           },
           "units": {
             "days": "Giorni",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "SMS al mese",
             "email_mailboxes": "Caselle e-mail",
             "email_monthly": "E-mail al mese",
-            "storage_gb": "Archiviazione (GB)"
+            "storage_gb": "Archiviazione (GB)",
+            "teams": "Team"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1605,10 +1612,12 @@
             "remove_branding": "White-label (rimuove il marchio della piattaforma)",
             "sales_pipeline": "Pipeline di vendita (trattative e attività)",
             "appointment_booking": "Appuntamenti e pagine di prenotazione",
+            "appointment_confirm_buttons": "Pulsanti del promemoria: Conferma, Riprogramma e Annulla",
+            "appointment_rebook_steps": "Passaggi di riprenotazione (richiamo) dopo un appuntamento",
             "chatbot_widgets": "Widget chatbot del sito web",
             "wa_storefront": "Vetrina e catalogo WhatsApp",
             "inbox_sla": "Politiche SLA della casella di posta",
-            "inbox_routing": "Regole di instradamento e orari di lavoro della casella di posta",
+            "inbox_routing": "Instradamento intelligente: assegnazione automatica e regole",
             "waba_calling": "Effettua e rispondi alle chiamate WhatsApp dalla casella di posta",
             "inbox_kanban": "Kanban della casella di posta",
             "team_performance": "Report sulle prestazioni del team",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "Importazione completa della cronologia chat (WhatsApp personale)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Lead scoring con IA",
-            "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)"
+            "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)",
+            "team_hierarchy": "Gerarchia dei team e manager",
+            "custom_roles": "Ruoli personalizzati e ambiti",
+            "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
             "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
             "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
-            "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla."
+            "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
+            "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "CRM vendite",
+            "platform": "Condiviso da entrambi"
+          },
+          "marketplace": {
+            "title": "App del Marketplace offerte agli spazi di lavoro di questo piano"
+          },
+          "included": {
+            "title": "Componenti aggiuntivi inclusi in questo piano",
+            "intro": "Attiva un componente aggiuntivo per includerlo: gli spazi di lavoro di questo piano lo ricevono senza costi e la sua scheda mostra \"Incluso nel tuo piano\". Questo seleziona esattamente le funzioni del componente nella scheda Funzioni, e selezionarle lì cambia l’interruttore. I componenti non inclusi continuano a essere venduti al proprio prezzo a ogni spazio di lavoro con un piano a pagamento attivo.",
+            "readOnly": "Puoi vedere questo piano ma non modificarlo, quindi questi interruttori sono bloccati.",
+            "loading": "Caricamento dei componenti aggiuntivi",
+            "loadFailed": "Impossibile caricare i componenti aggiuntivi. Non è stato modificato nulla.",
+            "empty": "Non ci sono ancora componenti aggiuntivi",
+            "emptyHint": "Componenti come Instradamento intelligente e Team e autorizzazioni si creano in Componenti aggiuntivi nella console operatore.",
+            "stateFull": "Incluso",
+            "statePartial": "Incluso in parte",
+            "stateNone": "Non incluso",
+            "noPrice": "Nessun prezzo impostato",
+            "gives": "Offre: {features}",
+            "switchLabel": "Includi {name} in questo piano",
+            "noFeatures": "Questo componente aggiunge solo limiti, quindi non c’è nessuna funzione da includere. I suoi limiti non fanno parte dell’inclusione nel piano; imposta i limiti propri del piano nella scheda Limiti.",
+            "partial": "Incluso in parte: {count} funzioni su {total} sono attive in questo piano. Ancora disattivate: {missing}.",
+            "includeFully": "Includi per intero",
+            "limitsNote": "Questo componente aggiunge anche limiti extra ({limits}). Il limite extra non fa parte dell’inclusione nel piano e nulla qui lo modifica: imposta il limite proprio del piano nella scheda Limiti. Gli spazi di lavoro continuano ad acquistare il componente per il limite extra.",
+            "unlistedNote": "Alcune sue funzioni ({features}) non sono nell’elenco standard dei componenti. Possono comunque essere attivate per il piano; cambia solo il modo di acquistare questo componente come pacchetto.",
+            "inactiveNote": "Questo componente è una bozza o è disattivato, quindi nessuno può ancora acquistarlo. Includerlo nel piano funziona comunque.",
+            "impactCount": "{count, plural, one {# spazio di lavoro paga già questo componente.} other {# spazi di lavoro pagano già questo componente.}} Il loro rinnovo si fermerà alla fine del periodo corrente, non viene rimborsato nulla e oggi non viene annullato nulla.",
+            "impactUnknown": "Gli spazi di lavoro di questo piano che pagano già questo componente non lo rinnoveranno più alla fine del periodo corrente. Non viene rimborsato nulla e oggi non viene annullato nulla. Non è stato possibile caricare il numero.",
+            "offNote": "Disattivato: gli spazi di lavoro di questo piano perdono queste funzioni a meno che non acquistino il componente, che diventa acquistabile per loro al suo prezzo."
           }
         }
       },

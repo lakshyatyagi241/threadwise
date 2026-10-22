@@ -38,11 +38,11 @@ A webhook sends a message to a web address of yours each time something happens 
 
 ## What your server receives
 
-Each delivery is a `POST` with a JSON body: `id` (the same for every retry of one event), `event`, `createdAt` and `data` (the facts of the event). The headers are `X-Webhook-Event`, `X-Webhook-Id`, `X-Webhook-Timestamp` and, when a secret is set, `X-Webhook-Signature`: `sha256=` followed by the HMAC-SHA256, keyed with your secret, of the timestamp, a dot and the raw body. Answer with any 2xx status within 10 seconds.
+Each delivery carries the event name, the time, an id that stays the same for every retry of one event, and the facts of the event. When a secret is set, it also carries a signature your system can check. Your system must confirm receipt with a success answer within 10 seconds.
 
 ## Retries and health
 
-A delivery that does not get a 2xx answer is tried again up to six times in all, waiting longer each time. A refusal that cannot improve (most 4xx answers) is not repeated. An endpoint whose last delivery failed for good shows **Failing**; the next successful delivery clears it. You can switch an endpoint off without deleting it.
+A delivery that is not confirmed is tried again up to six times in all, waiting longer each time. A refusal that cannot improve is not repeated. An endpoint whose last delivery failed for good shows **Failing**; the next successful delivery clears it. You can switch an endpoint off without deleting it.
 
 ## Options and settings
 
@@ -58,5 +58,5 @@ Seeing webhooks needs the permission to view them; adding, changing, deleting an
 
 - **The URL is refused.** It must start with https and point to a public address; localhost, private networks and internal names are not allowed.
 - **Deliveries show "no answer".** Your server did not respond within 10 seconds or could not be reached. Check the address and the firewall.
-- **Deliveries show 401 or 403.** Your server rejected the request; check it accepts the signature and any allow-list.
+- **Deliveries show a refusal.** Your server rejected the request; check it accepts the signature and any allow-list.
 - **Nothing arrives.** Check the endpoint is **Active** and subscribed to the event, then use **Send test**.

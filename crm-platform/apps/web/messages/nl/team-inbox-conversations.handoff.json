@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Wachtend"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Niemand wacht op een medewerker",
+          "message": "Wanneer een bot, een flow of een collega om een medewerker vraagt, wacht het gesprek hier tot iemand het overneemt."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "De bot antwoordt",
+        "waiting": "Wacht op een medewerker",
+        "with_person": "Bij een medewerker"
+      },
+      "ageMinutes": "{count}min",
+      "ageHours": "{count}u",
+      "ageDays": "{count}d",
+      "row": {
+        "waiting": "Wachtend",
+        "waitingFor": "Wacht al {age}",
+        "inTeam": "In de wachtrij van {team}"
+      },
+      "assignedTo": "nu bij {name}",
+      "inTeamQueue": "wachtrij van {team}",
+      "cardFailed": "De overdrachtsgegevens konden niet worden geladen.",
+      "claim": {
+        "button": "Overnemen",
+        "done": "Je hebt dit gesprek overgenomen.",
+        "doneOwner": "Je hebt dit gesprek overgenomen en bent nu de eigenaar van het contact.",
+        "failed": "Het gesprek kon niet worden overgenomen.",
+        "taken": "Iemand anders heeft dit gesprek als eerste overgenomen.",
+        "overLimitTitle": "Je zit aan je chatlimiet",
+        "overLimitMessage": "Je hebt al {open} open gesprekken en je limiet is {limit}. Dit gesprek toch oppakken?",
+        "overLimitConfirm": "Toch oppakken",
+        "overLimitCancel": "Annuleren"
+      },
+      "giveBack": {
+        "button": "Terug naar bot",
+        "done": "De bot beantwoordt dit gesprek weer.",
+        "failed": "Het gesprek kon niet worden teruggegeven aan de bot.",
+        "doneFlow": "De bot zet de flow voort.",
+        "doneNextLive": "De bot beantwoordt het volgende bericht van de klant.",
+        "doneNextDefault": "De bot is weer actief. Hij beantwoordt het volgende bericht alleen als er een standaardflow is ingesteld.",
+        "already": "De bot heeft dit gesprek al."
+      },
+      "send": {
+        "button": "Naar wachtrij sturen",
+        "buttonAgain": "Opnieuw naar wachtrij sturen",
+        "title": "Naar een medewerker sturen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "submit": "Versturen",
+        "intro": "De bot beantwoordt dit contact niet meer. Het gesprek gaat naar de persoon of het team dat je kiest, of wacht in de wachtrij tot iemand het overneemt.",
+        "where": "Sturen naar",
+        "whereRules": "De toewijzingsregels, anders de wachtrij",
+        "whereQueueOnly": "De wachtrij (toewijzingsregels vereisen de add-on Slimme routering)",
+        "whereTeam": "Een team",
+        "wherePerson": "Eén persoon",
+        "team": "Team",
+        "pickTeam": "Kies een team",
+        "person": "Persoon",
+        "pickPerson": "Kies een persoon",
+        "reason": "Waarom een medewerker nodig is",
+        "note": "Notitie voor wie het overneemt",
+        "noteHint": "Wordt getoond op de overdrachtskaart. Maximaal 500 tekens.",
+        "refused": "Dit gesprek kan niet worden overgedragen (het is gearchiveerd, spam of een persoonlijke mailbox).",
+        "failed": "Het gesprek kon niet worden verstuurd.",
+        "done": {
+          "assigned": "Verstuurd: iemand heeft het nu.",
+          "waiting": "Verstuurd: het wacht in de wachtrij.",
+          "unavailable": "Naar de wachtrij gestuurd: er is nu niemand beschikbaar."
+        }
+      },
+      "details": {
+        "show": "Details",
+        "hide": "Details verbergen"
+      },
+      "card": {
+        "source": "Gevraagd door",
+        "reason": "Reden",
+        "priority": "Prioriteit",
+        "summary": "Samenvatting",
+        "answers": "Wat het contact de bot heeft verteld",
+        "trace": "Hoe het is toegewezen",
+        "timers": "Stappen van de wachtrij"
+      },
+      "source": {
+        "flow": "Een flow",
+        "ai_agent": "Een AI-agent",
+        "keyword": "Het eigen verzoek van het contact",
+        "bot_failure": "Een bot die niet kon helpen",
+        "manual": "Een collega",
+        "arrival": "De routering: niemand kon hem oppakken"
+      },
+      "reason": {
+        "customer_asked": "Het contact vroeg om een medewerker",
+        "bot_could_not_help": "De bot kon niet helpen",
+        "sensitive_topic": "Gevoelig onderwerp",
+        "sales_lead": "Salesprospect",
+        "complaint": "Klacht",
+        "other": "Overig"
+      },
+      "priority": {
+        "low": "Laag",
+        "normal": "Normaal",
+        "high": "Hoog",
+        "urgent": "Urgent"
+      },
+      "trace": {
+        "chosen": "Gekozen",
+        "skipped": "Overgeslagen",
+        "info": "Notitie"
+      },
+      "botLine": {
+        "system": "het systeem",
+        "pressed": {
+          "flow": "De bot is terug, teruggegeven door {name}. De flow gaat verder.",
+          "nextLive": "De bot is terug, teruggegeven door {name}. Hij beantwoordt het volgende bericht van de klant.",
+          "nextDefault": "De bot is terug, teruggegeven door {name}. Hij beantwoordt het volgende bericht alleen als er een standaardflow is ingesteld."
+        },
+        "result": {
+          "continued": "De flow ging verder bij de uitgang ‘teruggegeven’.",
+          "claimed_again": "De flow is niet hervat: een persoon heeft de chat opnieuw overgenomen.",
+          "flow_not_live": "De flow is niet hervat: hij is niet meer actief.",
+          "start_failed": "De flow kon niet worden hervat."
+        },
+        "customer": {
+          "sent": "Het bericht aan de klant is verstuurd.",
+          "window_closed": "Het bericht aan de klant is overgeslagen: het venster van 24 uur is gesloten.",
+          "no_consent": "Het bericht aan de klant is overgeslagen: geen toestemming.",
+          "failed": "Het bericht aan de klant kon niet worden verstuurd.",
+          "channel_unavailable": "Het bericht aan de klant is overgeslagen: het kanaal is niet beschikbaar."
+        }
+      },
+      "timers": {
+        "reminded": "Herinnerd om {at}",
+        "offered": "Aangeboden aan dit team om {at}",
+        "messaged": "Bericht naar de klant gestuurd om {at}",
+        "gaveBack": "Teruggegeven aan de bot om {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Teruggegeven aan de bot door {actor}",
+          "bot_resumed": "De bot zette de flow voort",
+          "bot_resume_skipped": "De flow is niet hervat"
+        }
+      }
+    }
+  }
+}

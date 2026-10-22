@@ -47,7 +47,8 @@
       "nameTaken": "Ya existe un rol con este nombre.",
       "nameRequired": "El nombre del rol es obligatorio.",
       "nameTooLong": "El nombre del rol puede tener como máximo {max} caracteres.",
-      "notFound": "Este elemento ya no existe. Puede que se haya eliminado."
+      "notFound": "Este elemento ya no existe. Puede que se haya eliminado.",
+      "customRolesLocked": "Los roles personalizados y los permisos con alcance no están en tu plan. Puedes ver los roles, pero no crearlos ni cambiarlos."
     },
     "team": {
       "crumb": "Miembros del equipo",
@@ -90,7 +91,9 @@
         "member": "Miembro",
         "roles": "Roles",
         "status": "Estado",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "teams": "Equipos",
+        "manager": "Responsable"
       },
       "empty": {
         "none": "Todavía no hay miembros.",
@@ -137,8 +140,17 @@
         "keptRole": "{name} se mantiene: no puedes asignarlo ni quitarlo.",
         "atLeastOne": "Elige al menos un rol.",
         "save": "Guardar roles",
-        "reload": "Recargar"
-      }
+        "reload": "Recargar",
+        "noTeamWarning": "{name} no está en ningún equipo, así que donde un rol tiene alcance de equipo solo ve sus propios registros. Añádelo a un equipo en Ajustes > Equipos."
+      },
+      "teamFilter": {
+        "label": "Filtrar miembros por equipo",
+        "all": "Todos los equipos"
+      },
+      "noTeams": "Sin equipo",
+      "primaryTeam": "Equipo principal",
+      "primaryMark": "principal",
+      "noManager": "Sin responsable"
     },
     "list": {
       "crumb": "Roles",
@@ -171,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Rol \"{name}\" eliminado."
-      }
+      },
+      "customRolesLocked": "Los roles personalizados y los permisos con alcance no están en tu plan. Puedes ver los roles, pero no crearlos ni cambiarlos.",
+      "addRoleLocked": "Añadir rol (mejorar plan)"
     },
     "editor": {
       "crumbRoles": "Roles",
@@ -212,7 +226,9 @@
         "created": "Rol \"{name}\" creado.",
         "updated": "Rol \"{name}\" actualizado.",
         "deleted": "Rol \"{name}\" eliminado."
-      }
+      },
+      "customRolesLocked": "Los roles personalizados y los permisos con alcance no están en tu plan. Puedes ver los roles, pero no crearlos ni cambiarlos.",
+      "upgrade": "Ver planes"
     },
     "matrix": {
       "title": "Permisos",
@@ -235,8 +251,20 @@
       "lockedHint": "Este permiso todavía no está disponible para este espacio de trabajo. Se activa cuando se habilita la función del plan o se instala la app.",
       "scope": {
         "all": "Todos los registros",
-        "team": "Registros del equipo",
-        "own": "Registros propios"
+        "own": "Mis registros",
+        "team": "Registros de mi equipo",
+        "team_and_below": "Mi equipo y subequipos"
+      },
+      "scopeLegend": "Qué abarca cada alcance de registros",
+      "scopeHelp": {
+        "all": "Todos los registros del espacio de trabajo.",
+        "team_and_below": "Registros de tu equipo y de todos los equipos inferiores.",
+        "team": "Registros de las personas de tu equipo.",
+        "own": "Solo los registros que son tuyos o te han asignado."
+      },
+      "noTeamWarning": "{count, plural, one {# miembro con este rol no está en ningún equipo, así que solo ve sus propios registros donde este rol tiene un alcance de equipo.} other {# miembros con este rol no están en ningún equipo, así que solo ven sus propios registros donde este rol tiene un alcance de equipo.}} Añádelos a un equipo en <link>Ajustes > Equipos</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Sin este permiso, los agentes con acceso de equipo solo ven las conversaciones asignadas a ellos o a su equipo. Con él también ven la cola abierta de conversaciones sin asignar."
       }
     },
     "delete": {

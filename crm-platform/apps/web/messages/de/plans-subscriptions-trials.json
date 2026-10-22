@@ -47,7 +47,8 @@
       "sms_monthly": "SMS pro Monat",
       "email_mailboxes": "E-Mail-Postfächer",
       "email_monthly": "E-Mails pro Monat",
-      "storage_gb": "Speicher (GB)"
+      "storage_gb": "Speicher (GB)",
+      "teams": "Teams"
     },
     "features": {
       "automation": "Automatisierung",
@@ -59,10 +60,12 @@
       "remove_branding": "Branding entfernen",
       "sales_pipeline": "Vertriebspipeline",
       "appointment_booking": "Terminbuchung",
+      "appointment_confirm_buttons": "Erinnerungs-Schaltflächen (Bestätigen / Verschieben / Absagen)",
+      "appointment_rebook_steps": "Schritte zur erneuten Buchung (Reaktivierung)",
       "chatbot_widgets": "Chatbot-Widgets",
       "wa_storefront": "WhatsApp-Katalog",
       "inbox_sla": "SLA-Richtlinien",
-      "inbox_routing": "Routing-Regeln",
+      "inbox_routing": "Intelligentes Routing: automatische Zuweisung und Regeln",
       "waba_calling": "WhatsApp-Anrufe",
       "inbox_kanban": "Kanban-Ansicht",
       "team_performance": "Teamleistung",
@@ -85,7 +88,10 @@
       "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "KI-Lead-Scoring",
-      "record_assignment": "Regeln zur Datensatzzuweisung"
+      "record_assignment": "Regeln zur Datensatzzuweisung",
+      "team_hierarchy": "Teamhierarchie und Manager",
+      "custom_roles": "Eigene Rollen und Bereiche",
+      "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
     },
     "limitGroups": {
       "messaging": "Nachrichten",
@@ -139,7 +145,8 @@
       "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
       "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
       "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
-      "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert."
+      "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert.",
+      "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt."
     },
     "planAddons": {
       "title": "Add-ons in Ihrem Tarif verfügbar",
@@ -246,6 +253,9 @@
         "buy": "Add-on kaufen",
         "buyAgain": "Erneut kaufen",
         "active": "Aktiv",
+        "included": "In deinem Tarif enthalten",
+        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
+        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
         "unlimitedBullet": "{label} unbegrenzt",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "Zurück",
       "compare": "Alle Tarife vergleichen",
       "appHint": "{feature} wird auch als App im Marketplace verkauft.",
-      "appLink": "App ansehen"
+      "appLink": "App ansehen",
+      "addonHint": "Du kannst es auch mit dem Add-on {addon} zu deinem aktuellen Tarif hinzufügen.",
+      "addonLink": "Add-ons ansehen",
+      "addons": {
+        "smartRouting": "Intelligentes Routing",
+        "teamsPermissions": "Teams und Berechtigungen"
+      }
+    },
+    "lock": {
+      "link": "Tarife und Add-ons ansehen"
     }
   }
 }

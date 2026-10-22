@@ -66,9 +66,14 @@ export default {
         `${x.file.split('/').pop()}: ${x.name} is NOT VALID and no later migration validates it`,
     );
     checks.push(
-      expectNone('int-notvalid', 'Constraints added NOT VALID are later validated', notValid, {
-        level: 'warn',
-      }),
+      expectNone(
+        'int-notvalid',
+        'Constraints added NOT VALID are later validated',
+        unreviewed(48, notValid),
+        {
+          level: 'warn',
+        },
+      ),
     );
 
     const { client, error } = await pgClient();
@@ -189,7 +194,8 @@ export default {
       );
       await client.end();
       const v = sh('pnpm', ['--filter', '@crm/db', 'verify-schema'], {
-        env: process.env,
+        // verify-schema reads MIGRATION_DATABASE_URL (the repo's .env points it at the dev cluster): check the database under test
+        env: { ...process.env, MIGRATION_DATABASE_URL: process.env.DATABASE_URL },
         timeout: 300000,
       });
       checks.push(

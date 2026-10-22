@@ -535,10 +535,12 @@
             "remove_branding": "白标",
             "sales_pipeline": "销售管道",
             "appointment_booking": "预约",
+            "appointment_confirm_buttons": "提醒按钮",
+            "appointment_rebook_steps": "再预约步骤",
             "chatbot_widgets": "聊天机器人小组件",
             "wa_storefront": "WhatsApp 商品目录",
             "inbox_sla": "收件箱 SLA",
-            "inbox_routing": "收件箱路由",
+            "inbox_routing": "智能路由",
             "waba_calling": "WhatsApp 通话",
             "inbox_kanban": "收件箱看板",
             "team_performance": "团队绩效",
@@ -561,7 +563,10 @@
             "personal_history_full": "完整历史记录导入（个人 WhatsApp）",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI 线索评分",
-            "record_assignment": "记录分配规则"
+            "record_assignment": "记录分配规则",
+            "team_hierarchy": "团队层级与经理",
+            "custom_roles": "自定义角色与范围",
+            "inbox_assignment_sticky": "智能路由: 联系人负责人和固定客服"
           },
           "cta": {
             "continueFree": "继续免费使用",

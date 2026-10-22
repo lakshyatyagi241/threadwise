@@ -61,10 +61,11 @@ function Start({
   );
 }
 
-const svg = (d: string) => (
+const svg = (d: string, className = 'h-6 w-6') => (
   <svg
+    aria-hidden
     viewBox="0 0 24 24"
-    className="h-6 w-6"
+    className={className}
     fill="none"
     stroke="currentColor"
     strokeWidth="1.7"
@@ -84,6 +85,7 @@ export function AiStudioScreen() {
   const t = useTranslations('aiStudio');
   const canAgents = useCan('aiag.training.create');
   const canFlows = useCan('flb.flows.create');
+  const canWeb = useCan('wgt.widgets.read');
   return (
     <div className="mx-auto w-full max-w-5xl space-y-6 p-4 sm:p-6 lg:p-8">
       <header>
@@ -118,11 +120,21 @@ export function AiStudioScreen() {
           body={t('chatbot.body')}
           locked={canFlows ? null : t('noAccess')}
         >
-          <Link href="/flows/simple?type=web" className={PRIMARY}>
-            {t('chatbot.web')}
-          </Link>
-          <Link href="/flows/simple" className={SECONDARY}>
+          {canWeb ? (
+            <Link href="/flows/simple?type=web" className={PRIMARY}>
+              {t('chatbot.web')}
+              {svg(
+                'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c2.5 2.4 3.8 5.4 3.8 9s-1.3 6.6-3.8 9c-2.5-2.4-3.8-5.4-3.8-9S9.5 5.4 12 3z',
+                'ms-2 size-4',
+              )}
+            </Link>
+          ) : null}
+          <Link href="/flows/simple" className={canWeb ? SECONDARY : PRIMARY}>
             {t('chatbot.whatsapp')}
+            {svg(
+              'M3 21l1.6-4.7A8.5 8.5 0 1 1 8 19.6L3 21zM9 10c.5 2 2.5 4 5 5l1.2-1.2-1.7-1-.8.7c-.8-.4-1.5-1.1-1.9-1.9l.7-.8-1-1.7L9 10z',
+              'ms-2 size-4',
+            )}
           </Link>
         </Start>
         <Start

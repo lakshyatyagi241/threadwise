@@ -4,17 +4,19 @@ import type { FlowType } from '@crm/contracts';
 export type BuilderMode = 'simple' | 'advanced';
 
 /**
- * Where "Open" goes. The Simple builder only handles messaging (chat) flows; with it on, those open there and everything else (a call
- * flow) still needs the canvas.
+ * Where "Open" goes. In a workspace on the Advanced builder every flow is an automation and opens on the canvas with the automation nodes.
+ * Otherwise bots (WhatsApp and website chat) are built in the Simple builder, while the migration is on. Automations (the canvas: a messaging flow built on it, and call flows) open on the Advanced canvas.
  */
-export function openHref(mode: BuilderMode, id: string, flowType: FlowType | string): string {
-  return mode === 'simple' && (flowType === 'chat' || flowType === 'web')
-    ? `/flows/simple/${id}`
-    : `/flows/builder/${id}`;
+export function openHref(
+  id: string,
+  flowType: FlowType | string,
+  mode: BuilderMode = 'simple',
+): string {
+  if (mode === 'advanced') return `/flows/builder/${id}`;
+  return flowType === 'chat' || flowType === 'web' ? `/flows/simple/${id}` : `/flows/builder/${id}`;
 }
 
-/** Where "Create flow" goes. Both builders ask for the channel first (the create sheet), because a bot is built for one channel. */
-export function newHref(mode: BuilderMode, channel: 'chat' | 'web' = 'chat'): string {
-  const base = mode === 'simple' ? '/flows/simple' : '/flows/builder';
-  return channel === 'web' ? `${base}?type=web` : base;
+/** Where "Create flow" goes for a bot: the Simple builder, with the channel in the link. Automations are created from the create sheet's Advanced rows. */
+export function newHref(channel: 'chat' | 'web' = 'chat'): string {
+  return channel === 'web' ? '/flows/simple?type=web' : '/flows/simple';
 }

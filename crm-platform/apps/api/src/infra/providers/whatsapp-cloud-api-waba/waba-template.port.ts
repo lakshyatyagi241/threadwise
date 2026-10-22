@@ -1,4 +1,5 @@
 import type { WabaConnection } from './waba-admin.port';
+import type { MediaUpload } from './waba-http';
 
 /**
  * Message templates on a WhatsApp Business Account: create, read back, delete, and the media handle a header example needs.
@@ -51,11 +52,7 @@ export interface TemplatePage {
   next: string | null;
 }
 
-export interface MediaUpload {
-  bytes: Uint8Array;
-  fileName: string;
-  mimeType: string;
-}
+export type { MediaUpload } from './waba-http';
 
 export interface WabaTemplatePort {
   create(conn: WabaConnection, input: CreateRemoteTemplate): Promise<CreatedRemoteTemplate>;

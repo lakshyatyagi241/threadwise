@@ -201,7 +201,6 @@ export function BroadcastHistoryScreen({ highlight }: { highlight: string | null
       hint={t('history.hint')}
       filters={filters}
       footer={null}
-      legacy
     >
       <Body
         pending={res.isPending}

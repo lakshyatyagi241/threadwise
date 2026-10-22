@@ -23,6 +23,15 @@ import { AppointmentChannelsService } from './appointment-channels.service';
 import { AppointmentTemplatesService } from './appointment-templates.service';
 import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository } from './appointments.repository';
+import {
+  ReminderPacksController,
+  ReminderReportController,
+  ReminderTestSendController,
+} from './reminder-sequence.controller';
+import { ReminderPlan } from './reminder-plan';
+import { ReminderPacksService } from './reminder-packs.service';
+import { ReminderReportService } from './reminder-report.service';
+import { ReminderTestSendService } from './reminder-test-send';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
 import { AppointmentCalendarWriter } from './appointment-calendar-writer.service';
@@ -115,6 +124,10 @@ import { SlotsService } from './slots.service';
     // `appointment-channels` and `appointment-message-templates` (BL-350, BL-351).
     AppointmentChannelsController,
     AppointmentTemplatesController,
+    // Reminder packs, the email test of a step and the delivery report (BL-424, BL-425, BL-429).
+    ReminderPacksController,
+    ReminderReportController,
+    ReminderTestSendController,
     AppointmentsController,
     ContactAppointmentsController,
     PublicBookingController,
@@ -145,6 +158,10 @@ import { SlotsService } from './slots.service';
     AppointmentChannelsRepository,
     AppointmentChannelsService,
     AppointmentTemplatesService,
+    ReminderPlan,
+    ReminderPacksService,
+    ReminderReportService,
+    ReminderTestSendService,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentCalendarSyncService,
@@ -199,6 +216,7 @@ import { SlotsService } from './slots.service';
     AppointmentRemindersRepository,
     // The worker's sender asks the owner's channel choice before it sends.
     AppointmentChannelsRepository,
+    ReminderPlan,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentMeetingMirror,

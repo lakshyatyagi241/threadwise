@@ -26,7 +26,7 @@ keywords:
 
 The **Summary** tab answers the questions an admission head asks after a campaign: how many people we messaged, how many received and opened it, how many wrote back and how many filled in an application form. It uses plain words and counts people, not messages: someone who wrote back three times is one person.
 
-A finished campaign opens on this tab. For a campaign that is still running, open **Summary** from the tabs at the top of the campaign page. On the legacy broadcast page the same summary sits at the top of the **Overview** tab, and on the screen of a launched broadcast it sits under the title.
+A finished campaign opens on this tab. For a campaign that is still running, open **Summary** from the tabs at the top of the campaign page. On an earlier broadcast's page (opened from its notification) the same summary sits at the top of the **Overview** tab, and on the screen of a launched broadcast it sits under the title.
 
 ## How to use it
 
@@ -45,7 +45,7 @@ A finished campaign opens on this tab. For a campaign that is still running, ope
 
 ## Plan and access
 
-You need the right to view campaigns (or broadcasts, on the legacy page). The lists of names follow the same right. **Download names** needs the right to export. Form counts need the right to read form submissions.
+You need the right to view campaigns (or earlier broadcasts). The lists of names follow the same right. **Download names** needs the right to export. Form counts need the right to read form submissions.
 
 ## If something looks wrong
 

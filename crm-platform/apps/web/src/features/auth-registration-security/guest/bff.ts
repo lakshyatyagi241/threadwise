@@ -17,6 +17,7 @@ export async function postBff<T>(
   let res: Response;
   try {
     res = await fetch(`/api/auth/${action}`, {
+      signal: AbortSignal.timeout(30000),
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

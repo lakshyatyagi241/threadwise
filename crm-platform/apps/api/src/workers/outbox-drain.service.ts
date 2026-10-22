@@ -37,6 +37,10 @@ function drainConcurrency(): number {
   return Number.isFinite(n) ? Math.min(16, Math.max(1, n)) : 6;
 }
 
+/** The id of the request that wrote the event (OutboxService stores it in `_meta`), so a worker line joins the API lines. */
+const originRequestId = (row: OutboxRow): string | undefined =>
+  (row.payload?._meta as { requestId?: string | null } | undefined)?.requestId ?? undefined;
+
 /**
  * Drains event_outbox.
  *
@@ -133,7 +137,12 @@ export class OutboxDrainService {
 
           if (dead) {
             this.logger.error(
-              { eventId: row.id, eventType: row.event_type, orgId: row.org_id },
+              {
+                eventId: row.id,
+                eventType: row.event_type,
+                orgId: row.org_id,
+                requestId: originRequestId(row),
+              },
               'outbox event dead-lettered after max attempts',
             );
           }
@@ -183,7 +192,12 @@ export class OutboxDrainService {
    */
   private async dispatch(row: OutboxRow): Promise<void> {
     this.logger.debug(
-      { eventType: row.event_type, orgId: row.org_id, aggregateId: row.aggregate_id },
+      {
+        eventType: row.event_type,
+        orgId: row.org_id,
+        aggregateId: row.aggregate_id,
+        requestId: originRequestId(row),
+      },
       'outbox event dispatched',
     );
     await this.subscribers.dispatch({

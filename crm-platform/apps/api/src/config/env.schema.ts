@@ -37,6 +37,11 @@ export const envSchema = z.object({
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
   /** gzip/brotli on API responses over 1 KB (QA 63). Set false when the proxy in front of the API already compresses. */
   RESPONSE_COMPRESSION: booleanish.default(true),
+  /**
+   * Requests in flight at once before the API answers 503 + Retry-After instead of queueing (QA 54 load shedding). /health, /ready and
+   * /metrics are never shed. 0 turns it off. 256 is well above what one process serves at once on a healthy day (the database pool is 28).
+   */
+  API_MAX_INFLIGHT: z.coerce.number().int().min(0).max(100_000).default(256),
   /** A request that takes at least this long (ms) is logged at warn with its route, organisation and duration. 0 turns it off (QA 51). */
   SLOW_REQUEST_MS: z.coerce.number().int().min(0).max(600_000).default(500),
   CORS_ORIGINS: z
@@ -59,6 +64,13 @@ export const envSchema = z.object({
   /** Owner connection, used only by the migration/seed CLI. */
   MIGRATION_DATABASE_URL: z.string().min(1).optional(),
   DB_POOL_MAX: z.coerce.number().int().min(1).max(200).default(20),
+  /**
+   * Connections the public webhook receivers may hold, in a pool of their own: a delivery flood can fill this one and never the pool
+   * the dashboard and the readiness probe use.
+   */
+  WEBHOOK_DB_POOL_MAX: z.coerce.number().int().min(1).max(100).default(6),
+  /** A reserved pool for the readiness probe, so `/ready` answers truthfully while the main pool is busy. */
+  HEALTH_DB_POOL_MAX: z.coerce.number().int().min(1).max(10).default(2),
   DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(1000).default(15_000),
 
   // --- redis ---------------------------------------------------------------
@@ -168,7 +180,7 @@ export const envSchema = z.object({
    */
   CHANNEL_SIMULATOR_ENABLED: booleanish.default(false),
   /**
-   * The FAQ engine's AI vendor (ADR-0021): `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline
+   * The knowledge base search's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline
    * stand-in for tests and demos that embeds by shared words and needs no key or network. Declared here because only declared
    * keys of a `.env` file reach `process.env`. A production process that sets `fixture` does not boot.
    */
@@ -206,9 +218,9 @@ export const envSchema = z.object({
   /** The directory for `ARCHIVE_DRIVER=local`. Empty means `.archive` under the working directory. */
   ARCHIVE_LOCAL_DIR: z.string().optional(),
   S3_BUCKET_ARCHIVE: z.string().default('crm-archive'),
-  FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
-  /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
-  FAQ_OPENROUTER_BASE_URL: optionalUrl,
+  KB_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
+  /** Overrides OpenRouter's base URL for the knowledge base search (a gateway, a local stub). */
+  KB_OPENROUTER_BASE_URL: optionalUrl,
   /**
    * AI lead scoring's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline stand-in for
    * tests and demos that needs no key or network. A production process that sets `fixture` does not boot.
@@ -259,9 +271,9 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
     }
-    if (parsed.data.FAQ_AI_DRIVER === 'fixture') {
+    if (parsed.data.KB_AI_DRIVER === 'fixture') {
       throw new Error(
-        'FAQ_AI_DRIVER=fixture must not be set in production: the fixture is an offline stand-in, not the AI vendor.',
+        'KB_AI_DRIVER=fixture must not be set in production: the fixture is an offline stand-in, not the AI vendor.',
       );
     }
     if (parsed.data.JWT_ACCESS_SECRET === parsed.data.JWT_REFRESH_SECRET) {

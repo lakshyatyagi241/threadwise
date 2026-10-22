@@ -5,6 +5,7 @@
 export * from './errors';
 export * from './members';
 export * from './teams';
+export * from './team-usage';
 export * from './admin-hub';
 export * from './lifecycle';
 export * from './leave';

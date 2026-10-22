@@ -1,40 +1,64 @@
 ---
 id: teams
 title: Teams
-summary: Group your agents into teams, pick how work is shared among them, and see who is online in each team.
+summary: Group people for conversations, assignments and reports; give each team a manager, an optional parent team and a choice of where it can be used.
 area: settings
 order: 80
 documents: [tile:teams]
-keywords: [teams, groups, departments, assignment, round robin, routing, colour]
+keywords:
+  [
+    teams,
+    groups,
+    departments,
+    manager,
+    lead,
+    parent team,
+    sub-team,
+    hierarchy,
+    primary team,
+    assignment,
+    routing,
+    colour,
+  ]
 ---
 
 ## What it is for
 
-Teams group your people by department, such as Sales or Support. Each team has a colour, an assignment strategy and a list of members. Conversations assigned to a team are shared among its members according to that strategy.
+Teams group people for conversations, assignments and reports. The same team can take chats, own contacts, companies and deals, and be a column in a report, so you keep one list of teams whether your workspace uses chat, the CRM or both. Each team has a name, a colour, a description, an optional manager, an optional parent team, its members, and two switches that say where the team can be used.
 
 ## How to use it
 
 1. Open **Settings**, go to **Team and permissions** and select **Teams**.
-2. Each card shows the team's name, its strategy, how many members it has and how many are online.
-3. To create a team, select **Create team**. Enter a name (up to 64 characters), pick a colour, choose the assignment strategy and tick its members.
-4. To change a team, select the pencil on its card, change what you need and select **Save changes**.
-5. To delete a team, open it and select **Delete team**, then confirm. Conversations assigned to it become unassigned.
+2. The list shows teams as a tree: a sub-team sits indented under its parent. Each row shows the manager, how many members the team has and how many are online, what the team can receive, and where it is used (routing rules, assignment rules, shared segments, conversations and sub-teams).
+3. To create a team, select **Create team**. Enter a name (up to 64 characters), pick a colour and optionally add a description, a **Manager**, a **Parent team** and its members, then select **Create team**.
+4. To change a team, select the pencil on its row, change what you need and select **Save changes**.
+5. To delete a team, open it and select **Delete team**. The confirmation lists what will change: the people who leave the team, the routing rules and record assignment rules that name it, the segments shared with it, the conversations assigned to it and the people who would stop seeing each other's records under **My team's records**. Then confirm. The team is removed from those rules (a routing rule left with nothing to do is switched off), conversations assigned to it keep their place with no team, and its sub-teams move up one level.
 
-> You can open **How teams work** at the top of the page for a short summary.
+For what the team scopes (including **My team and sub-teams**) and the owning team mean, see [How team access works](help:team-access).
+
+> Open **How teams work** at the top of the page for a short summary.
 
 ## Options and settings
 
-- **Colour**: shown on the team's chip in the inbox.
-- **Auto-assignment strategy**: **Manual** (someone picks who gets it), **Round robin** (spread evenly), **Least loaded** (fewest open conversations first) or **Sticky** (the last agent who replied to the contact).
-- **Members**: tick the team members. You can only pick people in the workspace.
+- **Manager**: the person who leads the team. They are added to the team as a lead. If the manager is deactivated, the team shows no manager until they come back, and the choice is kept.
+- **Parent team**: puts the team under another team so you can build a tree such as Sales and Sales West, up to 5 levels. A team cannot sit under itself or under one of its own sub-teams.
+- **Can receive**: **Conversations** lets the team be picked in routing rules, in the inbox assign list and in the Assign step of a flow. **Records** lets it be picked as a pool in contact assignment rules and when you reassign a person's work to a team. Turn one off to keep the team out of those lists; a team that is off is also skipped by rules that already point at it.
+- **Members**: tick the people on the team. Mark the ones who are **Lead**, and choose each person's **Primary** team. A person on exactly one team always has it as their primary team.
+- **Primary team**: a person's main team, kept for reports. It decides the **owning team** of the records they own (used for reports by team and the Team filter in the contacts, deals and tasks lists). Routing, assignment and visibility use every team a person is on, so nobody drops out of anything because of it. A person with no primary team belongs to no team in reports.
+- **Stored, not used yet**: the auto-assignment strategy, a device limit, business hours, a time zone and a default assignee are kept on the team, but nothing reads them yet. They are listed at the bottom of the team's dialog so nothing is hidden.
 
 ## Plan and access
 
-Everyone in the workspace can see the list. Creating, editing and deleting teams needs the permission to manage teams. Owners, Admins and Managers hold it by default. This screen has no plan requirement.
+Seeing the list needs the permission to see teams; Owners, Admins, Managers and Agents have it by default, Viewers do not. Creating, editing and deleting teams, choosing managers and changing who is on a team need the permission to manage teams, which Owners, Admins and Managers have. A role that already had **Create, edit and delete teams** keeps working for now. The screen itself has no plan requirement, but the team method **Round robin** and **Least loaded**, and the default assignee that goes with them, are part of Smart routing ([Smart routing add-on](help:smart-routing-addon)): without it they are locked in the form, with a link to Plans, and a team that already stores one keeps it unchanged.
 
 ## If something looks wrong
 
-- **The create button is missing.** Your role cannot manage teams, so you can only read them.
+- **The create button is missing.** Your role can read teams but not manage them.
+- **You cannot see Teams at all.** Your role does not include the permission to see teams. Ask an Owner or Admin.
 - **Save says the name is taken.** Each team needs a unique name; choose another.
+- **Save says the parent is not available.** The team would sit under itself or one of its sub-teams, or the tree would go deeper than 5 levels.
+- **A team does not appear in a picker.** Check its **Can receive** switches: a team that does not receive conversations is left out of the inbox lists and routing rules, and one that does not receive records is left out of assignment rules.
 - **The member list says it could not be loaded.** Close the dialog and try again. Check your connection if it keeps failing.
 - **A team shows no devices.** Device limits are not available in this release, so teams are not limited to a device.
+
+See also [Teams, managers and who sees what](help:teams-managers-access).

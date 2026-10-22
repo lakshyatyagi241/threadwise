@@ -320,6 +320,7 @@
         "replyRate": "Antwoordpercentage",
         "received": "Ontvangen berichten",
         "conversationsOpen": "Open gesprekken",
+        "conversationsResolved": "Opgeloste gesprekken",
         "conversationsClosed": "Gesloten gesprekken",
         "conversationsAssigned": "Toegewezen",
         "conversationsUnassigned": "Niet toegewezen",

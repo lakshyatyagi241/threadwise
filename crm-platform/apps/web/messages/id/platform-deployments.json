@@ -1,0 +1,112 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Deployment"
+    },
+    "eyebrow": "Operasi",
+    "title": "Deployment",
+    "description": "Setiap flow yang dipublikasikan ke konsol Geta: apa yang antre, apa yang sedang berjalan, dan apa yang gagal beserta alasannya. Diperbarui setiap beberapa detik.",
+    "updated": "Langsung. Diperbarui {time}",
+    "stale": "Pembaruan terakhir gagal. Menampilkan deployment sebelumnya.",
+    "stalledAlert": "{count} deployment tidak berubah selama {minutes} menit. Worker-nya mungkin berhenti.",
+    "truncated": "Menampilkan {limit} deployment pertama. Pilih status untuk melihat sisanya.",
+    "kpi": {
+      "running": "Berjalan",
+      "queued": "Antre",
+      "failed": "Gagal",
+      "live": "Langsung",
+      "stalled": "Macet"
+    },
+    "filter": {
+      "label": "Filter berdasarkan status",
+      "all": "Semua",
+      "running": "Berjalan",
+      "queued": "Antre",
+      "failed": "Gagal",
+      "live": "Langsung"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Langkah",
+      "attempted": "Percobaan terakhir",
+      "updated": "Perubahan terakhir",
+      "error": "Galat"
+    },
+    "status": {
+      "running": "Berjalan",
+      "queued": "Antre",
+      "failed": "Gagal",
+      "live": "Langsung"
+    },
+    "steps": {
+      "configuration_update": "Pembaruan konfigurasi",
+      "publish_bot": "Publikasikan bot"
+    },
+    "stalledBadge": "Macet",
+    "version": "Versi {version}",
+    "notStarted": "Belum dimulai",
+    "failedAt": "Gagal di {step}",
+    "noDetail": "Tidak ada teks galat yang tersimpan.",
+    "empty": {
+      "title": "Tidak ada yang ditampilkan",
+      "all": "Belum ada flow yang dipublikasikan ke konsol Geta.",
+      "running": "Tidak ada publikasi yang sedang berjalan.",
+      "queued": "Tidak ada yang menunggu di antrean.",
+      "failed": "Tidak ada publikasi yang gagal.",
+      "live": "Belum ada flow yang langsung di konsol Geta."
+    },
+    "tabs": {
+      "label": "Pilih yang ditampilkan",
+      "publishes": "Publikasi flow",
+      "geta": "Konsol Geta",
+      "releases": "Rilis produk"
+    },
+    "publishes": {
+      "description": "Setiap publikasi flow: apa yang diantrekan worker, apa yang sedang ditangani, dan publikasi mana yang gagal beserta alasannya. Diperbarui setiap beberapa detik.",
+      "stalledAlert": "{count} publikasi flow tidak bergerak selama {minutes} menit. Worker mungkin berhenti memproses outbox.",
+      "truncated": "Menampilkan {limit} publikasi pertama. Pilih status untuk melihat sisanya.",
+      "notProcessed": "Belum",
+      "cols": {
+        "attempts": "Percobaan",
+        "queued": "Diantrekan pada",
+        "finished": "Selesai pada"
+      },
+      "status": {
+        "done": "Selesai"
+      },
+      "empty": {
+        "all": "Belum ada flow yang dipublikasikan.",
+        "done": "Tidak ada publikasi yang selesai dalam 30 hari terakhir."
+      }
+    },
+    "releases": {
+      "description": "Yang aktif di desk.wabo.ai: rilis saat ini, rilis yang sedang berjalan, dan setiap percobaan beserta langkah dan galatnya. Diperbarui setiap beberapa detik.",
+      "liveLabel": "Aktif sekarang",
+      "live": "Rilis {tag}, aktif sejak {time}",
+      "noneLive": "Belum ada rilis yang aktif.",
+      "inProgress": "Sebuah rilis sedang berjalan",
+      "stalledAlert": "{count} percobaan rilis tidak berubah selama {minutes} menit. Build atau rilis mungkin berhenti.",
+      "empty": "Belum ada rilis yang tercatat. Rilis akan tampil di sini mulai dari deployment berikutnya.",
+      "cols": {
+        "tag": "Tag",
+        "changes": "Perubahan",
+        "state": "Status",
+        "step": "Langkah",
+        "started": "Mulai",
+        "finished": "Selesai",
+        "error": "Galat"
+      },
+      "state": {
+        "building": "Sedang dibangun",
+        "shipping": "Sedang dikirim",
+        "releasing": "Sedang dirilis",
+        "ok": "Aktif",
+        "failed": "Gagal",
+        "rolled_back": "Dikembalikan"
+      },
+      "by": "oleh {author}"
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Implantações"
+    },
+    "eyebrow": "Operações",
+    "title": "Implantações",
+    "description": "Cada fluxo publicado no console da Geta: o que está na fila, o que está rodando agora e o que falhou e por quê. Atualiza a cada poucos segundos.",
+    "updated": "Ao vivo. Atualizado às {time}",
+    "stale": "A última atualização falhou. Mostrando as implantações anteriores.",
+    "stalledAlert": "{count} implantação(ões) não mudaram há {minutes} minutos. O worker delas pode ter parado.",
+    "truncated": "Mostrando as primeiras {limit} implantações. Escolha um status para ver as demais.",
+    "kpi": {
+      "running": "Em execução",
+      "queued": "Na fila",
+      "failed": "Com falha",
+      "live": "Ativas",
+      "stalled": "Paradas"
+    },
+    "filter": {
+      "label": "Filtrar por status",
+      "all": "Todas",
+      "running": "Em execução",
+      "queued": "Na fila",
+      "failed": "Com falha",
+      "live": "Ativas"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Fluxo",
+      "status": "Status",
+      "step": "Etapa",
+      "attempted": "Última tentativa",
+      "updated": "Última alteração",
+      "error": "Erro"
+    },
+    "status": {
+      "running": "Em execução",
+      "queued": "Na fila",
+      "failed": "Com falha",
+      "live": "Ativa"
+    },
+    "steps": {
+      "configuration_update": "Atualização de configuração",
+      "publish_bot": "Publicar bot"
+    },
+    "stalledBadge": "Parada",
+    "version": "Versão {version}",
+    "notStarted": "Não iniciada",
+    "failedAt": "Falhou em {step}",
+    "noDetail": "Nenhum texto de erro foi armazenado.",
+    "empty": {
+      "title": "Nada para mostrar",
+      "all": "Nenhum fluxo foi publicado no console da Geta ainda.",
+      "running": "Nenhuma publicação está em execução agora.",
+      "queued": "Nada está aguardando na fila.",
+      "failed": "Nenhuma publicação falhou.",
+      "live": "Nenhum fluxo está ativo no console da Geta ainda."
+    },
+    "tabs": {
+      "label": "Escolha o que mostrar",
+      "publishes": "Publicações de fluxos",
+      "geta": "Console da Geta",
+      "releases": "Versões do produto"
+    },
+    "publishes": {
+      "description": "Cada publicação de fluxo: o que o worker colocou na fila, o que está processando agora e quais publicações falharam e por quê. Atualiza a cada poucos segundos.",
+      "stalledAlert": "{count} publicação(ões) de fluxo não avançaram há {minutes} minutos. O worker pode ter parado de processar a fila.",
+      "truncated": "Mostrando as primeiras {limit} publicações. Escolha um status para ver as demais.",
+      "notProcessed": "Ainda não",
+      "cols": {
+        "attempts": "Tentativas",
+        "queued": "Na fila desde",
+        "finished": "Concluída em"
+      },
+      "status": {
+        "done": "Concluída"
+      },
+      "empty": {
+        "all": "Nenhum fluxo foi publicado ainda.",
+        "done": "Nenhuma publicação foi concluída nos últimos 30 dias."
+      }
+    },
+    "releases": {
+      "description": "O que está no ar em desk.wabo.ai: a versão atual, qualquer versão em andamento e cada tentativa com suas etapas e erros. Atualiza a cada poucos segundos.",
+      "liveLabel": "No ar agora",
+      "live": "Versão {tag}, no ar desde {time}",
+      "noneLive": "Nenhuma versão foi colocada no ar ainda.",
+      "inProgress": "Uma versão está em andamento",
+      "stalledAlert": "{count} tentativa(s) de versão não avançaram há {minutes} minutos. A compilação ou a publicação podem ter parado.",
+      "empty": "Nenhuma versão registrada ainda. As versões aparecem aqui a partir da próxima implantação.",
+      "cols": {
+        "tag": "Etiqueta",
+        "changes": "Alterações",
+        "state": "Status",
+        "step": "Etapa",
+        "started": "Início",
+        "finished": "Fim",
+        "error": "Erro"
+      },
+      "state": {
+        "building": "Compilando",
+        "shipping": "Enviando",
+        "releasing": "Publicando",
+        "ok": "No ar",
+        "failed": "Falhou",
+        "rolled_back": "Revertida"
+      },
+      "by": "por {author}"
+    }
+  }
+}

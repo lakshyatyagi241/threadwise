@@ -1,0 +1,93 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "assigned",
+        "waitingInQueue": "waiting in queue",
+        "noAgentOutOfHours": "no agent / out of hours",
+        "returnedToBot": "returned to the bot"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Step {stage}: choose the person the conversation goes to."
+      }
+    },
+    "simulator": {
+      "handoff": "handed to a person (destination: {destination}, team \"{team}\"); the test chat takes the \"assigned\" exit"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Hand off to",
+          "handoffRules": "Assignment rules",
+          "pickAgent": "— pick a person —",
+          "returnBack": "When the bot is back:"
+        }
+      },
+      "handoff": {
+        "legacy": "This step is the older “Assign agent”.",
+        "upgradeHint": "It gives the chat to a team and carries on. Switch to the Human handoff to add a reason, a priority, messages for the contact and the exits (assigned, waiting in queue, no agent or out of hours, and an optional one for when the chat is given back to the bot). Wiring you already made keeps working.",
+        "upgrade": "Use handoff features",
+        "destination": "Send the conversation to",
+        "dest": {
+          "team": "A team",
+          "person": "One person",
+          "rules": "The assignment rules",
+          "rulesLocked": "The assignment rules (Smart routing add-on)"
+        },
+        "destHint": {
+          "team": "It goes to someone in the team, or waits in the team's queue.",
+          "person": "It goes to this person if they can take it; otherwise it waits in the queue.",
+          "rules": "Uses your Conversation auto-assignment rules; when none finds a person it waits in the queue."
+        },
+        "lockHint": "Assignment rules are part of the Smart routing add-on or a higher plan, so a conversation sent here waits in the Waiting queue until a teammate claims it.",
+        "team": "Team",
+        "teamPick": "— pick a team —",
+        "teamNone": "No teams yet",
+        "teamOption": "{name} · {count, plural, one {# agent} other {# agents}}",
+        "teamHint": "<link>Manage teams →</link>",
+        "person": "Person",
+        "personPick": "— pick a person —",
+        "personHint": "Someone from your teams.",
+        "unknownMember": "{value} (not in this workspace)",
+        "reason": "Reason",
+        "reasons": {
+          "customer_asked": "The contact asked for a person",
+          "bot_could_not_help": "The bot could not help",
+          "sensitive_topic": "Sensitive topic",
+          "sales_lead": "Sales lead",
+          "complaint": "Complaint",
+          "other": "Other"
+        },
+        "priority": "Priority",
+        "priorityKeep": "Keep the current priority",
+        "priorities": {
+          "low": "Low",
+          "normal": "Normal",
+          "high": "High",
+          "urgent": "Urgent"
+        },
+        "note": "Note for the agent",
+        "noteHint": "Internal. Shown on the handoff card; '{{'variables'}}' work. Up to 500 characters.",
+        "customerMessage": "Message to the contact",
+        "customerHint": "Sent when the conversation is handed over. Leave empty to send nothing.",
+        "offHours": "Message when nobody is available",
+        "offHoursHint": "Sent instead when the team is closed or nobody can take it. The conversation still waits in the queue.",
+        "exits": "This step has three exits",
+        "exitAssigned": "assigned: a person has the conversation now",
+        "exitWaiting": "waiting in queue: it waits for someone to claim it",
+        "exitUnavailable": "no agent / out of hours: nobody could take it",
+        "simpleExits": "The next step runs once a person has the conversation. If it has to wait in the queue, or nobody is available, the bot stops here and a person answers. Use the Advanced builder to follow the other exits.",
+        "returnMessage": "Message to the contact when the bot is back",
+        "returnMessageHint": "Optional. Sent once, as your business, when a teammate presses Return to bot, before the flow carries on from the 'returned' exit. It is not sent if the 24 hour window is closed or the contact has not given consent. Variables like '{{'name'}}' work.",
+        "returnNeedsExit": "This message is only sent when the flow carries on after Return to bot. Connect the 'returned' exit to the step that should come next.",
+        "exitReturned": "returned to the bot (optional): a teammate pressed Return to bot; the flow carries on from here",
+        "returnedStep": "When a teammate gives the chat back, continue at",
+        "returnedStepHint": "Optional. Pick the step the flow carries on with when someone presses Return to bot. Leave it empty and the bot waits for the contact's next message.",
+        "returnNone": "No step: wait for the contact's next message",
+        "returnStepOption": "{stage} · {label}"
+      }
+    }
+  }
+}

@@ -47,7 +47,8 @@
       "sms_monthly": "SMS miesięcznie",
       "email_mailboxes": "Skrzynki e-mail",
       "email_monthly": "E-maile miesięcznie",
-      "storage_gb": "Miejsce na dane (GB)"
+      "storage_gb": "Miejsce na dane (GB)",
+      "teams": "Zespoły"
     },
     "features": {
       "automation": "Automatyzacja",
@@ -59,10 +60,12 @@
       "remove_branding": "Usunięcie oznaczeń marki",
       "sales_pipeline": "Lejek sprzedaży",
       "appointment_booking": "Rezerwacja wizyt",
+      "appointment_confirm_buttons": "Przyciski przypomnienia (Potwierdź / Zmień termin / Anuluj)",
+      "appointment_rebook_steps": "Kroki ponownego umówienia (przypomnienia)",
       "chatbot_widgets": "Widżety chatbota",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Polityki SLA",
-      "inbox_routing": "Reguły przydzielania",
+      "inbox_routing": "Inteligentne kierowanie: automatyczne przydzielanie i reguły",
       "waba_calling": "Połączenia WhatsApp",
       "inbox_kanban": "Widok kanban",
       "team_performance": "Wyniki zespołu",
@@ -85,7 +88,10 @@
       "personal_history_full": "Import pełnej historii (osobisty WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Ocenianie leadów przez AI",
-      "record_assignment": "Reguły przypisywania rekordów"
+      "record_assignment": "Reguły przypisywania rekordów",
+      "team_hierarchy": "Hierarchia zespołów i menedżerowie",
+      "custom_roles": "Własne role i zakresy",
+      "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent"
     },
     "limitGroups": {
       "messaging": "Wiadomości",
@@ -139,7 +145,8 @@
       "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu.",
       "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
       "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
-      "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane."
+      "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane.",
+      "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane."
     },
     "planAddons": {
       "title": "Dodatki dostępne w Twoim planie",
@@ -246,6 +253,9 @@
         "buy": "Kup dodatek",
         "buyAgain": "Kup ponownie",
         "active": "Aktywny",
+        "included": "W cenie Twojego planu",
+        "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
+        "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
         "unlimitedBullet": "Bez limitu: {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "Wróć",
       "compare": "Porównaj wszystkie plany",
       "appHint": "{feature} jest też sprzedawane jako aplikacja w Marketplace.",
-      "appLink": "Zobacz aplikację"
+      "appLink": "Zobacz aplikację",
+      "addonHint": "Możesz też dodać go do obecnego planu jako dodatek {addon}.",
+      "addonLink": "Zobacz dodatki",
+      "addons": {
+        "smartRouting": "Inteligentne kierowanie",
+        "teamsPermissions": "Zespoły i uprawnienia"
+      }
+    },
+    "lock": {
+      "link": "Zobacz plany i dodatki"
     }
   }
 }

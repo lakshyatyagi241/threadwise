@@ -37,6 +37,7 @@ export function RunsList({
             <p className="truncate font-mono text-xs text-muted-foreground">{r.sourceClient}</p>
           </div>
           <Badge>{tm(r.mode)}</Badge>
+          {r.skipWhatsapp && <Badge>{tm('skipWhatsapp')}</Badge>}
           <StatusBadge run={r} />
           <VerdictBadge verdict={r.verdict} />
           <time className="text-xs text-muted-foreground" dateTime={r.runAt ?? r.createdAt}>

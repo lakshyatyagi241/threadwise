@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WorkspaceHubDetail, WorkspaceHubRow } from '@crm/contracts';
 import { Badge, Button, Card, StatTile } from '@crm/ui';
@@ -67,6 +67,7 @@ export function DetailBody({ detail }: { detail: WorkspaceHubDetail }) {
   const th = useTranslations('workspaces-hub.cell.health');
   const ts = useTranslations('plans-subscriptions-trials.operator.state');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const { row } = detail;
   const access = accessFromCan(detail.can);
   const actions = useRowActions();
@@ -95,7 +96,7 @@ export function DetailBody({ detail }: { detail: WorkspaceHubDetail }) {
             <Badge>{row.plan.known ? (row.plan.name ?? row.plan.slug) : row.plan.slug}</Badge>
             <span className="text-xs">
               {t('created', {
-                date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
+                date: new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(
                   new Date(row.createdAt),
                 ),
               })}
@@ -208,10 +209,11 @@ function ActionButtons({
 function MessagesChart({ days }: { days: WorkspaceHubDetail['messages30d'] }) {
   const t = useTranslations('workspaces-hub.detail.chart');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (days.every((d) => d.sent === 0 && d.delivered === 0)) {
     return <p className="py-8 text-center text-sm text-muted-foreground">{t('empty')}</p>;
   }
-  const fmt = new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' });
+  const fmt = new Intl.DateTimeFormat(locale, { timeZone, month: 'short', day: 'numeric' });
   return (
     <BarChart
       label={t('label')}
@@ -282,6 +284,7 @@ function PlanTab({
   const ts = useTranslations('plans-subscriptions-trials.operator.state');
   const tc = useTranslations('workspaces-hub.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const ends = endsInfo(row.validity);
   const limits: Array<[string, number | null]> = [
     [tl('messages'), row.limits.monthlyMessages],
@@ -298,7 +301,9 @@ function PlanTab({
         <Fact label={t('state')}>{ts(row.validity.state)}</Fact>
         <Fact label={t('ends')}>
           {ends.iso
-            ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(ends.iso))
+            ? new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(
+                new Date(ends.iso),
+              )
             : tc('none')}
         </Fact>
       </dl>

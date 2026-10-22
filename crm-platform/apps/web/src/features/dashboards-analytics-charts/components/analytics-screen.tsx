@@ -142,7 +142,7 @@ export function AnalyticsScreen() {
             />
           </section>
 
-          <section aria-label={t('moreKpis')} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          <section aria-label={t('moreKpis')} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
             <StatTile
               label={t('kpi.received')}
               value={a.current.replies.toLocaleString(locale)}
@@ -154,6 +154,10 @@ export function AnalyticsScreen() {
                   label={t('kpi.conversationsOpen')}
                   value={a.conversations.open.toLocaleString(locale)}
                   hint={t('kpi.conversationsTotal', { count: a.conversations.total })}
+                />
+                <StatTile
+                  label={t('kpi.conversationsResolved')}
+                  value={a.conversations.resolved.toLocaleString(locale)}
                 />
                 <StatTile
                   label={t('kpi.conversationsClosed')}

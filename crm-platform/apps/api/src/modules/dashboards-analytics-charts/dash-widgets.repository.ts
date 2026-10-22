@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { DashWidgets } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { channelOwnerSql } from '../../realtime';
+import { DELIVERED, READ } from './dash.repository';
 
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number => Number(v ?? 0);
@@ -118,21 +119,32 @@ export class DashWidgetsRepository {
     };
   }
 
-  /** The five most recently edited templates with their sends in the window, then ordered by sends (Reference's rule, kept). */
+  /**
+   * The five busiest templates in the window. Every template is ranked by its sends in the window, so a template that sent is listed
+   * whatever its age; ties fall back to the most recently edited. Templates that did not send fill the rest of the five.
+   */
   async templates(tx: Tx, orgId: number, from: Date, to: Date): Promise<DashWidgets['templates']> {
     const count = (
       await tx.execute(sql`SELECT count(*)::int AS n FROM wa_templates WHERE org_id = ${orgId}`)
     ).rows[0] as Raw;
     const res = await tx.execute(sql`
+      WITH sends AS (
+        SELECT m.template_id,
+               count(m.id)::int AS sent,
+               count(m.id) FILTER (WHERE ${DELIVERED})::int AS delivered,
+               count(m.id) FILTER (WHERE ${READ})::int AS read
+        FROM messages m
+        WHERE m.org_id = ${orgId} AND m.direction = 'out' AND m.template_id IS NOT NULL
+          AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
+        GROUP BY m.template_id
+      )
       SELECT t.uuid, t.template_name, t.language, t.category, t.template_type, t.status,
-             count(m.id)::int AS sent,
-             count(m.id) FILTER (WHERE m.status IN ('delivered', 'read') OR m.delivered_at IS NOT NULL OR m.read_at IS NOT NULL)::int AS delivered,
-             count(m.id) FILTER (WHERE m.read_at IS NOT NULL OR m.status = 'read')::int AS read
-      FROM (SELECT * FROM wa_templates WHERE org_id = ${orgId} ORDER BY updated_at DESC LIMIT 5) t
-      LEFT JOIN messages m ON m.org_id = t.org_id AND m.template_id = t.id AND m.direction = 'out'
-        AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
-      GROUP BY t.uuid, t.template_name, t.language, t.category, t.template_type, t.status
-      ORDER BY sent DESC, t.template_name`);
+             coalesce(s.sent, 0) AS sent, coalesce(s.delivered, 0) AS delivered, coalesce(s.read, 0) AS read
+      FROM wa_templates t
+      LEFT JOIN sends s ON s.template_id = t.id
+      WHERE t.org_id = ${orgId}
+      ORDER BY sent DESC, t.updated_at DESC, t.template_name
+      LIMIT 5`);
     return {
       count: n(count.n),
       rows: (res.rows as Raw[]).map((r) => {

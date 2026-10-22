@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { WEB_PUSH_PROVIDER } from '../../infra/providers/web-push/web-push.port';
 import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.provider';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationNotificationConsumer } from './conversation-notification.consumer';
+import { QueueReminderNotificationConsumer } from './queue-reminder-notification.consumer';
 import { ConversationReadState } from './conversation-read-state';
 import { DeviceGroupNotificationConsumer } from './device-group-notification.consumer';
 import { DeviceNotificationConsumer } from './device-notification.consumer';
@@ -20,6 +22,7 @@ import { WebPushSender } from './web-push.sender';
 import { SalesDocNotificationConsumer } from './salesdoc-notification.consumer';
 import { EmailBounceNotificationConsumer } from './email-bounce-notification.consumer';
 import { AppointmentDriftNotificationConsumer } from './appointment-drift-notification.consumer';
+import { AppointmentReplyNotificationConsumer } from './appointment-reply-notification.consumer';
 import { MemberLeaveNotificationConsumer } from './member-leave-notification.consumer';
 import { SlaNotificationConsumer } from './sla-notification.consumer';
 import { SendOutcomeNotificationConsumer } from './send-outcome-notification.consumer';
@@ -41,6 +44,7 @@ import { WabaGroupNotificationConsumer } from './waba-group-notification.consume
     TaskNotificationConsumer,
     SalesDocNotificationConsumer,
     ConversationNotificationConsumer,
+    QueueReminderNotificationConsumer,
     NotificationFanout,
     DeviceNotificationConsumer,
     SendOutcomeNotificationConsumer,
@@ -48,11 +52,13 @@ import { WabaGroupNotificationConsumer } from './waba-group-notification.consume
     SlaNotificationConsumer,
     MemberLeaveNotificationConsumer,
     AppointmentDriftNotificationConsumer,
+    AppointmentReplyNotificationConsumer,
     TeamChatNotificationConsumer,
     WabaGroupNotificationConsumer,
     DeviceGroupNotificationConsumer,
     NotificationRetentionService,
     WaitingNudgeService,
+    CryptoService,
     PushSubscriptionsRepository,
     PushSubscriptionsPruneService,
     WebPushSender,

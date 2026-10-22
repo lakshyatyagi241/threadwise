@@ -187,11 +187,11 @@ describe('reminders', () => {
     expect(list[0]).toMatchObject({ offset: '3', unit: 'hours', label: '3 h' });
   });
 
-  it('stops at eight', () => {
+  it('stops at five', () => {
     let list = [] as ReturnType<typeof addReminder>;
     for (let i = 1; i <= 8; i++) list = addReminder(list, i * 10);
-    expect(list).toHaveLength(8);
-    expect(addReminder(list, 999)).toHaveLength(8);
+    expect(list).toHaveLength(5);
+    expect(addReminder(list, 999)).toHaveLength(5);
   });
 
   it('does not count an unreadable box as a moment', () => {

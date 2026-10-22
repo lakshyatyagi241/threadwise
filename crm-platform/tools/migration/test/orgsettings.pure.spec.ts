@@ -176,6 +176,22 @@ describe('derivePlan: the Waboo Pro-Whatsapp plan', () => {
       whatsapp_warmer: true,
     },
   };
+  it('keeps remove_branding open: Waboo never added a "Sent via" line, so the plan must not make Desk add one', () => {
+    const p = derivePlan(core, { ...base, features: { ...base.features, remove_branding: false } });
+    expect(p.features.remove_branding).toBe(true);
+    // a base plan without the key is not given one
+    expect('remove_branding' in derivePlan(core, base).features).toBe(false);
+  });
+  it('automatic assignment keeps inbox_routing open, even when the Waboo plan lists no chat settings', () => {
+    const noChat = {
+      ...core,
+      subscription: { ...core.subscription, config: core.subscription.config.filter((c) => c.code !== 'chat_settings') },
+    } as unknown as Parameters<typeof derivePlan>[0];
+    const withAuto = { ...noChat, workspace: { autoAssignment: true } } as unknown as Parameters<typeof derivePlan>[0];
+    const feats = { ...base.features, inbox_routing: false };
+    expect(derivePlan(noChat, { ...base, features: feats }).features.inbox_routing).toBe(false);
+    expect(derivePlan(withAuto, { ...base, features: feats }).features.inbox_routing).toBe(true);
+  });
   it('opens only what Waboo had and limits only what Waboo limited', () => {
     const p = derivePlan(core, base);
     expect(p.limits).toMatchObject({
@@ -246,5 +262,12 @@ describe('task outcomes, last logins and chat limits', () => {
       1000,
       2,
     ]);
+  });
+
+  it('knows the outcome list was read, even when empty, so the seeded defaults can go', async () => {
+    const { planSettings } = await import('../load/orgsettings');
+    expect(planSettings({ taskOutcomes: [] }, false).taskOutcomesKnown).toBe(true);
+    expect(planSettings({ pipelines: [] }, false).taskOutcomesKnown).toBe(false);
+    expect(planSettings(undefined, false).taskOutcomesKnown).toBe(false);
   });
 });

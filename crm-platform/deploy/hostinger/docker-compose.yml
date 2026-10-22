@@ -23,8 +23,18 @@ x-api-env: &api-env
   PORT: '3000'
   NODE_OPTIONS: --max-old-space-size=640
   DB_POOL_MAX: '10'
+  # Where the message counts come from: JSON map of metric to legacy | shadow | rollup (docs/superpowers/specs/2026-10-19-message-count-rollup-design.md).
+  # Empty means legacy (scan). Set it in .env after `backfill:message-feed`; the History KPIs went from 800 ms to 28 ms on 1M messages.
+  ANALYTICS_SOURCES: ${ANALYTICS_SOURCES:-}
+  # Two small pools beside the main one, so the public webhook path and the readiness probe never queue behind (or starve) the pool
+  # the dashboard uses. They are per process: the real ceiling is (slots + hooks + worker) x (DB_POOL_MAX + these) against Postgres'
+  # max_connections=100 (see the postgres service).
+  WEBHOOK_DB_POOL_MAX: '6'
+  HEALTH_DB_POOL_MAX: '2'
   APP_URL: https://${DOMAIN}
   WEB_APP_URL: https://${DOMAIN}
+  # The origin the chat widget's embed script and chat page point back at; the API container's own name must never end up in a snippet.
+  WIDGET_PUBLIC_BASE_URL: https://${DOMAIN}
   CORS_ORIGINS: https://${DOMAIN}
   APP_NAME: ${APP_NAME}
   TRUST_PROXY: loopback,linklocal,uniquelocal
@@ -101,7 +111,7 @@ x-api-env: &api-env
 x-api-slot: &api-slot
   pull_policy: never
   restart: unless-stopped
-  mem_limit: 1g
+  mem_limit: 1536m
   # Docker kills a container 10 s after SIGTERM by default. The API closes HTTP and websocket connections on SIGTERM; give slow
   # requests time to finish instead of cutting them off on every release.
   stop_grace_period: 30s
@@ -157,6 +167,8 @@ x-web-slot: &web-slot
 x-web-env: &web-env
   NODE_ENV: production
   TZ: UTC
+  # The traced server binds to $HOSTNAME, which Docker sets to the container id unless it is given here; the healthcheck calls 127.0.0.1.
+  HOSTNAME: 0.0.0.0
   NODE_OPTIONS: --max-old-space-size=512
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   REALTIME_URL: https://${DOMAIN}/realtime
@@ -177,8 +189,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
       WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
-    # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
-    mem_limit: 1g
+    # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine. 2g (was 1g: the database sat
+    # at its cap under webhook load); keep PG_SHARED_BUFFERS about a quarter of it and PG_EFFECTIVE_CACHE_SIZE about three quarters.
+    # max_connections=100 covers the API slots (two during a switch), the webhook API and the worker at their pool sizes.
+    mem_limit: 2g
     logging: *app-logging
     command:
       - postgres
@@ -210,7 +224,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     # noeviction: BullMQ job state is not a cache.
-    mem_limit: 256m
+    mem_limit: 512m
     logging: *app-logging
     command:
       [
@@ -220,7 +234,7 @@ services:
         '--maxmemory-policy',
         'noeviction',
         '--maxmemory',
-        '192mb',
+        '448mb',
       ]
     volumes:
       - redisdata:/data
@@ -345,6 +359,8 @@ services:
       OFFSITE_SYNC_MINUTES: ${OFFSITE_SYNC_MINUTES:-30}
     volumes:
       - ./backups:/backups:ro
+      # /tmp holds the offsite-ok marker; as a named volume the probe (observability.compose.yml) can read its age (OffsiteBackupStale).
+      - offsite_state:/tmp
     # Healthy while a whole pass has succeeded in the last two hours.
     healthcheck:
       test: ['CMD-SHELL', 'find /tmp/offsite-ok -mmin -120 2>/dev/null | grep -q .']
@@ -391,6 +407,25 @@ services:
       <<: *api-env
       WORKER_MODE: 'false'
       OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
+
+  # The public webhook receiver, on its own container (and its own DB pools), so a webhook flood cannot slow the dashboard API and a
+  # dashboard stall cannot make providers retry. Not in a slot: Traefik sends /v2/public/webhooks here (traefik-desk.yml.template) and
+  # falls back to the live slot's API while this one is not healthy, so a restart of it costs nothing. No `api` alias: Prometheus, the
+  # probe and the web server keep finding the slots only (Prometheus scrapes this one by its service name, job crm-api-hooks). The tag
+  # is HOOKS_TAG, moved by ci-entry.sh on every release.
+  api-hooks:
+    <<: *api-slot
+    container_name: desk-api-hooks
+    image: desk-api:${HOOKS_TAG:-${IMAGE_TAG:-local}}
+    mem_limit: 1g
+    networks:
+      default: {}
+      dokploy-network: {}
+    environment:
+      <<: *api-env
+      WORKER_MODE: 'false'
+      DB_POOL_MAX: '8'
+      OBS_RELEASE: ${HOOKS_TAG:-${IMAGE_TAG:-local}}
 
   web-blue:
     <<: *web-slot
@@ -447,3 +482,4 @@ networks:
 volumes:
   pgdata:
   redisdata:
+  offsite_state:

@@ -1404,7 +1404,8 @@
             "packInactive": "The add-on pack is switched off, so nobody can buy it.",
             "appUnpublished": "The app is not published, so workspaces cannot see it yet.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# add-on selected} other {# add-ons selected}}"
           },
           "featureHints": {
             "automation": "The flow builder and automations that reply to and act on conversations.",
@@ -1416,10 +1417,13 @@
             "remove_branding": "White-label: the workspace can hide the platform branding in its footer.",
             "sales_pipeline": "Deals, tasks and pipelines, and the pipeline figures on the dashboard.",
             "appointment_booking": "Booking types, appointments and the public booking pages. The paid Appointments app owns this switch.",
+            "appointment_confirm_buttons": "Adds Confirm, Reschedule and Cancel buttons to the WhatsApp reminder sent before an appointment.",
+            "appointment_rebook_steps": "Follow-up messages sent after a completed appointment that ask the contact to book again.",
             "chatbot_widgets": "The website chatbot widget builder.",
             "wa_storefront": "The WhatsApp catalog and storefront area.",
             "inbox_sla": "SLA policies and deadlines in the team inbox.",
-            "inbox_routing": "Routing rules that assign inbox conversations automatically.",
+            "inbox_routing": "Automatic assignment of new chats: routing rules, Everyone else and waiting-queue timers. Part of the Smart routing add-on.",
+            "inbox_assignment_sticky": "Owner-first and keep-in-sync assignment, the returning-contact window and the reassign prompt. Part of the Smart routing add-on.",
             "waba_calling": "WhatsApp calling from the inbox: calling numbers, call permissions, placing and answering calls.",
             "inbox_kanban": "The Kanban board view of the team inbox.",
             "team_performance": "The team performance reports.",
@@ -1442,7 +1446,9 @@
             "personal_history_full": "Lets a personal WhatsApp number import its full chat history when it is first linked. The recent-chats import is open to every plan that has personal numbers.",
             "ai_crm_copilot": "Finds and scores leads with AI, from the contacts in your workspace.",
             "lead_scoring": "Scores contacts with AI and powers the growth pilot. The Lead scoring app owns this switch.",
-            "record_assignment": "Gives new contacts, companies and deals to the right sales owner by priority rules."
+            "record_assignment": "Gives new contacts, companies and deals to the right sales owner by priority rules.",
+            "team_hierarchy": "Parent teams, team leads and managers who see their team and the teams below it.",
+            "custom_roles": "Create and edit roles, and choose a scope (own, team or all records) for each permission."
           },
           "units": {
             "days": "Days",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "SMS per month",
             "email_mailboxes": "Email mailboxes",
             "email_monthly": "Emails per month",
-            "storage_gb": "Storage (GB)"
+            "storage_gb": "Storage (GB)",
+            "teams": "Teams"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1605,10 +1612,13 @@
             "remove_branding": "White-label (removes platform branding)",
             "sales_pipeline": "Sales pipeline (deals and tasks)",
             "appointment_booking": "Appointments and booking pages",
+            "appointment_confirm_buttons": "Reminder buttons: Confirm, Reschedule and Cancel",
+            "appointment_rebook_steps": "Rebook (recall) steps after an appointment",
             "chatbot_widgets": "Website chatbot widgets",
             "wa_storefront": "WhatsApp storefront and catalog",
             "inbox_sla": "Inbox SLA policies",
-            "inbox_routing": "Inbox routing rules and business hours",
+            "inbox_routing": "Smart routing: auto-assignment and rules",
+            "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
             "waba_calling": "Place and answer WhatsApp calls from the inbox",
             "inbox_kanban": "Inbox Kanban board",
             "team_performance": "Team performance reports",
@@ -1631,7 +1641,9 @@
             "personal_history_full": "Full chat-history import (personal WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI lead scoring",
-            "record_assignment": "Record assignment rules (auto-assign contacts, companies and deals)"
+            "record_assignment": "Record assignment rules (auto-assign contacts, companies and deals)",
+            "team_hierarchy": "Team hierarchy and managers",
+            "custom_roles": "Custom roles and scopes"
           },
           "problems": {
             "required": "This field is required.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
             "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
             "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
-            "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet."
+            "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet.",
+            "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "Sales CRM",
+            "platform": "Shared by both"
+          },
+          "marketplace": {
+            "title": "Marketplace apps offered to workspaces on this plan"
+          },
+          "included": {
+            "title": "Add-ons included in this plan",
+            "intro": "Switch an add-on on to include it: workspaces on this plan get it at no charge and its add-on card says \"Included in your plan\". This ticks exactly the add-on's features on the Features tab, and ticking them there flips the switch. Add-ons that are not included are still sold at their own price to every workspace on an active paid plan.",
+            "readOnly": "You can view this plan but not change it, so these switches are locked.",
+            "loading": "Loading add-ons",
+            "loadFailed": "The add-ons could not be loaded. Nothing was changed.",
+            "empty": "No add-ons exist yet",
+            "emptyHint": "Add-ons such as Smart routing and Teams and permissions are created under Add-ons in the operator console.",
+            "stateFull": "Included",
+            "statePartial": "Partly included",
+            "stateNone": "Not included",
+            "noPrice": "No price set",
+            "gives": "Gives: {features}",
+            "switchLabel": "Include {name} in this plan",
+            "noFeatures": "This add-on only adds limits, so there is no feature to include. Its limits are not part of plan inclusion; set the plan's own limits on the Limits tab.",
+            "partial": "Partly included: {count} of {total} features are on in this plan. Still off: {missing}.",
+            "includeFully": "Include fully",
+            "limitsNote": "This add-on also adds extra limits ({limits}). The extra limit is not part of plan inclusion and nothing here changes it: set the plan's own limit on the Limits tab. Workspaces still buy the add-on for the extra limit.",
+            "unlistedNote": "Some of its features ({features}) are outside the standard add-on list. They can still be switched on for the plan; only buying this add-on as a pack works differently.",
+            "inactiveNote": "This add-on is a draft or switched off, so nobody can buy it yet. Including it in the plan still works.",
+            "impactCount": "{count, plural, one {# workspace already pays for this add-on.} other {# workspaces already pay for this add-on.}} Their renewal will stop at the end of the current term, nothing is refunded and nothing is cancelled today.",
+            "impactUnknown": "Workspaces on this plan that already pay for this add-on will stop renewing it at the end of their current term. Nothing is refunded and nothing is cancelled today. The number could not be loaded.",
+            "offNote": "Switched off: workspaces on this plan lose these features unless they buy the add-on, and it becomes buyable for them at its price."
           }
         }
       },

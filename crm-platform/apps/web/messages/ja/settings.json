@@ -65,6 +65,11 @@
         "description": "WhatsApp Business の番号を接続して、お客様とチャットします。",
         "keywords": "wa、whatsapp business、cloud api、番号、qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp ビジネスプロフィール",
+        "description": "ロゴ、概要、連絡先、Meta が求めるコンプライアンス情報を設定します。",
+        "keywords": "ビジネスプロフィール,ロゴ,プロフィール写真,概要,連絡先,コンプライアンス,正式名称,カスタマーサポート,苦情処理責任者"
+      },
       "unofficial-whatsapp": {
         "label": "非公式 WhatsApp API",
         "description": "個人の WhatsApp 番号を QR コードで連携し、安全な送信のためにウォームアップします。",
@@ -101,7 +106,7 @@
         "keywords": "テキストメッセージ、送信者ID、dlt、twilio、携帯"
       },
       "email": {
-        "label": "メール",
+        "label": "サポートメール",
         "description": "Gmail または Google Workspace のメールボックスを接続して、チームで共有の受信箱からお客様のメールを読み、返信します。",
         "keywords": "メールボックス、gmail、google workspace、共有受信箱、サポートメール、outlook、imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "チーム",
-        "description": "振り分けとレポートのために、メンバーをチームにまとめます。",
-        "keywords": "グループ、部門、担当割り当て、振り分け"
+        "description": "会話、割り当て、レポートのために人をグループ化します。",
+        "keywords": "グループ、部署、マネージャー、階層、割り当て、ルーティング"
       },
       "ai-keys": {
         "label": "AI プロバイダーのキー",
@@ -341,7 +346,7 @@
         "keywords": "同意, オプトアウト, オプトイン, 配信停止, stop, start, gdpr, コンプライアンス, プライバシー, マーケティング"
       },
       "inbox-tags": {
-        "label": "会話タグ",
+        "label": "タグ",
         "description": "チームが会話に付けたり、受信トレイの絞り込みに使ったりするタグを作成します。連絡先で使うタグと同じものです。",
         "keywords": "タグ, カテゴリ, 整理, フィルター, 会話タグ"
       },
@@ -354,11 +359,6 @@
         "label": "対応目標（SLA）",
         "description": "チームが返信・解決すべき速さを設定し、会話が目標を達成できなかったときに通知を受け取ります。",
         "keywords": "sla, 応答時間, 初回返信, 解決, 違反, 目標, 営業時間"
-      },
-      "team-performance": {
-        "label": "チームパフォーマンス",
-        "description": "今日・今週・今月に各エージェントがどれだけ速く返信・解決したかを確認します。",
-        "keywords": "レポート, 分析, エージェント, 応答時間, 初回返信, 解決, 負荷, パフォーマンス"
       },
       "privacy-requests": {
         "label": "データリクエスト",
@@ -394,6 +394,11 @@
         "label": "重複リード",
         "description": "連絡先に一致する新しいリードを、その連絡先に統合するか、新しい連絡先にするかを選びます。",
         "keywords": "重複, 統合, リード, 同じ電話番号, 同じメール, 新しい連絡先, リードソース"
+      },
+      "sales-activities": {
+        "label": "営業アクティビティ",
+        "description": "タスク、ミーティング、通話、独自のアクティビティを管理します。それぞれでできること、タスクの種類、結果を設定できます。",
+        "keywords": "アクティビティ, タスクの種類, 結果, ミーティングの結果, 通話の結果, フォローアップ, チェックイン, カスタムアクティビティ, カレンダー, 完了"
       }
     },
     "backToMarketplace": "マーケットプレイスに戻る"

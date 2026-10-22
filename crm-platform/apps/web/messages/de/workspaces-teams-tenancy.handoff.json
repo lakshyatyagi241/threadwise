@@ -1,0 +1,33 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Übergabe und Zuweisung",
+        "hint": "Wird verwendet, wenn ein Bot, ein Flow oder ein Teamkollege eine Unterhaltung an dieses Team übergibt.",
+        "method": "Wie eine Person ausgewählt wird",
+        "methodHint": "Manuell: Die Unterhaltung wartet in der Warteschlange des Teams, bis jemand sie übernimmt. Reihum und Geringste Auslastung wählen ein Mitglied für dich aus und sind Teil des Add-ons Intelligentes Routing.",
+        "defaultAssignee": "Standardempfänger",
+        "defaultAssigneeHint": "Übernimmt die Unterhaltung, wenn sonst niemand kann. Wähle ein Mitglied des Teams.",
+        "noDefaultAssignee": "Niemand Bestimmtes",
+        "hours": "Öffnungszeiten",
+        "hoursHint": "Aus bedeutet immer geöffnet. Außerhalb dieser Zeiten wartet eine Unterhaltung weiterhin in der Warteschlange und der Kontakt erhält die Nachricht für außerhalb der Öffnungszeiten aus dem Flow.",
+        "timezone": "Zeitzone",
+        "dayFrom": "{day}, öffnet",
+        "dayTo": "{day}, schließt",
+        "hoursProblem": "Jeder geöffnete Tag braucht eine Öffnungs- und eine Schließzeit, die sich unterscheiden.",
+        "day": {
+          "mon": "Montag",
+          "tue": "Dienstag",
+          "wed": "Mittwoch",
+          "thu": "Donnerstag",
+          "fri": "Freitag",
+          "sat": "Samstag",
+          "sun": "Sonntag"
+        },
+        "methodLocked": "{method} (benötigt Intelligentes Routing)",
+        "methodLockHint": "Automatische Methoden sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs.",
+        "defaultAssigneeLocked": "Der Standardbearbeiter wird nur mit einer automatischen Teammethode verwendet, die Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs ist."
+      }
+    }
+  }
+}

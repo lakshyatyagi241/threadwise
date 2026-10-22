@@ -252,6 +252,7 @@ const summary = (over: Partial<TemplateSummary> = {}): TemplateSummary =>
     rejectionReason: null,
     rejectionReasonCode: null,
     metaTemplateId: 'M1',
+    editBlock: null,
     connectionId: null,
     pausedUntil: null,
     approvedAt: null,
@@ -313,6 +314,30 @@ describe('library card', () => {
     expect(out).toContain('View details &amp; Meta review status');
     expect(out).toContain('aria-label="Delete sample_purchase_feedback"');
     expect(out).toContain('href="/templates/22222222-2222-4222-8222-222222222222/edit"');
+  });
+
+  it('offers Duplicate on a template Meta holds, and it opens a copy', () => {
+    const copy = 'href="/templates/new?from=22222222-2222-4222-8222-222222222222"';
+    expect(card(summary())).toContain(copy);
+    expect(card(summary())).toContain('aria-label="Duplicate sample_purchase_feedback"');
+    expect(card(summary({ status: 'pending' }))).toContain(copy);
+    expect(card(summary({ status: 'rejected' }))).toContain(copy);
+    expect(card(summary(), { mayEdit: false })).not.toContain(copy);
+    expect(card(summary({ metaTemplateId: null, status: 'draft' }))).not.toContain(copy);
+  });
+
+  it('hides Edit while Meta does not allow an edit right now', () => {
+    expect(card(summary())).toContain('Edit template');
+    expect(card(summary({ editBlock: { reason: 'in_review', until: null } }))).not.toContain(
+      'Edit template',
+    );
+    expect(
+      card(
+        summary({
+          editBlock: { reason: 'daily_limit', until: '2026-10-23T12:00:00.000Z' },
+        }),
+      ),
+    ).not.toContain('Edit template');
   });
 
   it('follows permissions and what the status allows', () => {

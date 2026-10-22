@@ -90,11 +90,12 @@
       "status": {
         "connected": "Conectado",
         "needs_reconnect": "Precisa reconectar",
-        "disconnected": "Não conectado",
+        "disconnected": "Instalado",
         "not_installed": "Não instalado",
-        "unavailable": "Não disponível"
+        "unavailable": "Desativado",
+        "not_available": "Ainda não disponível"
       },
-      "account": "Conta: {account}",
+      "account": "Conectado como {account}",
       "connectedOn": "Conectado {when}",
       "lastError": {
         "forbidden": "O provedor recusou a última solicitação. Sua conta pode não ter permissão para criar reuniões.",
@@ -111,7 +112,7 @@
         "canInstall": "Seu espaço de trabalho ainda não instalou o {provider}. Instale-o pelo Marketplace e depois conecte sua conta aqui.",
         "cannotInstall": "Seu espaço de trabalho ainda não instalou o {provider}. Peça a um administrador do espaço de trabalho para instalá-lo pelo Marketplace."
       },
-      "unavailable": "O {provider} ainda não foi configurado para esta plataforma. Fale com o administrador da plataforma.",
+      "unavailable": "O {provider} está instalado, mas o operador da sua plataforma desativou a configuração dele, então ele não pode ser conectado agora. Fale com o operador da plataforma.",
       "outcome": {
         "connected": "O {provider} está conectado.",
         "denied": "O {provider} não foi conectado porque o login foi cancelado.",
@@ -126,7 +127,49 @@
       "disconnectBody": "As reuniões que já têm um link do {provider} o mantêm, mas mover ou excluir essas reuniões não poderá mais alterar a sala. Você pode conectar novamente a qualquer momento.",
       "disconnectConfirm": "Desconectar",
       "keep": "Manter conectado",
-      "calendarNote": "Os links do Google Meet e do Teams criados pela sua agenda não precisam de conexão aqui: eles usam a agenda que seu espaço de trabalho já conectou."
+      "calendarNote": "Os links do Google Meet e do Teams criados pela sua agenda não precisam de conexão aqui: eles usam a agenda que seu espaço de trabalho já conectou.",
+      "notAvailable": "O operador da sua plataforma ainda não disponibilizou o {provider}: ele ainda precisa ser configurado e publicado no Marketplace. Ainda não há nada para instalar, então peça ao operador da plataforma para ativá-lo.",
+      "installedHint": "O {provider} está instalado no seu espaço de trabalho. Conecte sua própria conta para adicionar links do {provider} às suas reuniões."
+    },
+    "operator": {
+      "title": "Configuração de reuniões por vídeo",
+      "ready": "Pronto",
+      "missing": "{count, plural, one {Falta # etapa} other {Faltam # etapas}}",
+      "loadFailed": "Não foi possível carregar a lista de configuração.",
+      "fake": "Modo de desenvolvimento: os adaptadores falsos do Zoom e do Microsoft Teams estão ativos, então as pessoas podem se conectar sem uma conta real. A lista abaixo mostra o que uma plataforma real ainda precisa.",
+      "intro": {
+        "zoom": "Os espaços de trabalho não podem ver nem usar o Zoom até que as credenciais do app do Zoom sejam definidas e esta listagem seja publicada.",
+        "teams": "Os espaços de trabalho não podem ver nem usar o Microsoft Teams até que um app da Microsoft esteja disponível e esta listagem seja publicada."
+      },
+      "set": "definido",
+      "notSet": "não definido",
+      "credentials": {
+        "zoom": {
+          "label": "Credenciais do app do Zoom (valores de ambiente)"
+        },
+        "teams": {
+          "label": "Credenciais do app da Microsoft"
+        }
+      },
+      "teamsFallback": "O Teams usa os próprios valores acima quando ambos estão definidos; caso contrário, usa o app do Calendário Microsoft salvo no console.",
+      "source": {
+        "environment": "Os valores vêm do ambiente.",
+        "console": "Os valores vêm do console, na página Calendário Microsoft."
+      },
+      "switchedOff": "A integração do Calendário Microsoft está desativada no console, o que desativa o Teams também.",
+      "redirect": {
+        "label": "Endereço de redirecionamento a registrar no provedor",
+        "hint": {
+          "zoom": "Adicione exatamente este endereço como URL de redirecionamento do app do Zoom.",
+          "teams": "Adicione exatamente este endereço como URI de redirecionamento do app da Microsoft, ao lado do endereço do calendário, e adicione a permissão delegada OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Listagem do Marketplace publicada",
+        "missing": "A listagem não existe no catálogo.",
+        "notPublished": "A listagem não está publicada (status: {status}). Aprove e publique uma versão abaixo para que os espaços de trabalho possam instalá-la.",
+        "published": "Publicada: os espaços de trabalho podem encontrá-la e instalá-la."
+      }
     }
   }
 }

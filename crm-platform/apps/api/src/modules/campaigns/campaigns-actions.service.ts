@@ -12,6 +12,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { loadWorkspaceCalendar } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
@@ -33,7 +34,7 @@ const EXPORT_PAGE = 1_000;
 export const EXPORT_HEADER = [
   'Recipient',
   'Phone',
-  'Variant',
+  'Version',
   'Status',
   'Clicked',
   'Queued',
@@ -44,6 +45,27 @@ export const EXPORT_HEADER = [
   'Last event',
   'Error',
 ] as const;
+
+/**
+ * The newest thing that happened to a recipient, as the export's "Last event" column names it. A recipient with no sent
+ * time takes its status instead (Failed, Skipped, Unsubscribed), so `Queued` only means still waiting to go out.
+ */
+export const lastEventOf = (r: {
+  status: string;
+  respondedAt: Date | null;
+  clickedAt: Date | null;
+  readAt: Date | null;
+  deliveredAt: Date | null;
+  sentAt: Date | null;
+}): string => {
+  if (r.respondedAt) return 'Reply';
+  if (r.clickedAt) return 'Button tap';
+  if (r.readAt) return 'Read';
+  if (r.deliveredAt) return 'Delivered';
+  if (r.sentAt) return 'Sent';
+  if (r.status === 'queued' || r.status === 'pending' || r.status === '') return 'Queued';
+  return r.status.charAt(0).toUpperCase() + r.status.slice(1);
+};
 
 /** One CSV cell: quoted when it holds a comma, a quote or a line break. */
 const cell = (v: string) => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
@@ -238,9 +260,13 @@ export class CampaignsActionsService {
   /** The recipients as CSV, newest first, streamed in pages (TW-CAMP-020). */
   async export(uuid: string): Promise<{ stream: Readable; fileName: string }> {
     const { orgId } = RequestContextStore.require();
-    const c = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
+    const { c, zone } = await this.db.tx(async (tx) => {
+      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      // a campaign with no zone of its own (a migrated one) is written in the workspace's zone, the one the platform shows it in
+      return { c, zone: c?.timezone ?? (await loadWorkspaceCalendar(tx, orgId)).timezone };
+    });
     if (!c) throw AppError.notFound('Campaign', uuid);
-    return this.exportRuns([{ id: c.id, run: null }], c.timezone ?? 'UTC', `campaign-${c.uuid}`);
+    return this.exportRuns([{ id: c.id, run: null }], zone, `campaign-${c.uuid}`);
   }
 
   /**
@@ -279,17 +305,6 @@ export class CampaignsActionsService {
           );
           if (page.length === 0) break;
           for (const r of page) {
-            const last = r.respondedAt
-              ? 'Reply'
-              : r.clickedAt
-                ? 'Button tap'
-                : r.readAt
-                  ? 'Read'
-                  : r.deliveredAt
-                    ? 'Delivered'
-                    : r.sentAt
-                      ? 'Sent'
-                      : 'Queued';
             const cells = [
               csvSafe(r.name || (r.contactId ? `Contact #${r.contactId}` : '')),
               csvSafe(r.phone ?? ''),
@@ -301,7 +316,7 @@ export class CampaignsActionsService {
               fmt(r.deliveredAt),
               fmt(r.readAt),
               fmt(r.respondedAt),
-              last,
+              lastEventOf(r),
               csvSafe(r.error ?? ''),
             ];
             yield csvLine(withRun ? [String(run.run ?? ''), ...cells] : cells);

@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "等待队列",
+      "intro": "没人接手的会话会留在“等待中”标签页。这些可选步骤帮助它们得到回复。每个步骤对每个会话只执行一次，只计算团队营业的分钟数，有人接手后立即停止。",
+      "remind": "提醒团队",
+      "remindBody": "通知可以接手会话的人。",
+      "overflow": "转给另一个团队",
+      "overflowBody": "将会话一次性移到该团队的队列。",
+      "team": "团队",
+      "teamPick": "选择团队",
+      "final": "最后一步",
+      "finalBody": "如果到那时仍没人接手：",
+      "action": "执行内容",
+      "actionMessage": "给客户发送消息",
+      "actionBot": "将会话交还给机器人",
+      "message": "消息",
+      "messageHint": "你可以使用 '{{name}}' 和 '{{first_name}}'。",
+      "afterMinutes": "等待（分钟）",
+      "save": "保存",
+      "saved": "等待队列设置已保存。",
+      "saveFailed": "无法保存等待队列设置。",
+      "readOnly": "你可以查看这些设置，但不能修改。",
+      "problems": {
+        "minutes": "请输入 1 到 1440 的数字。",
+        "team": "请选择团队。",
+        "message": "请填写消息。"
+      },
+      "away": "有人离开时退回未回复的会话",
+      "awayBody": "当有人变为离线或开始休假时，其名下客户仍在等待的会话会回到团队队列。",
+      "offline": "将不活跃的人设为离线",
+      "offlineBody": "在此时间内没有任何操作的“可接待”成员会被设为离线，之后由本人自行切换回可接待。"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useMemo, useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -67,6 +67,7 @@ function StepBadge({ n, done }: { n: number; done?: boolean }) {
 function LicenceCard({ data }: { data: SystemStatusResponse }) {
   const t = useTranslations(`${NS}.licence`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { operator } = useOperator();
   const [code, setCode] = useState('');
@@ -95,8 +96,8 @@ function LicenceCard({ data }: { data: SystemStatusResponse }) {
   });
 
   const when = useMemo(
-    () => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
+    [locale, timeZone],
   );
 
   return (
@@ -178,14 +179,15 @@ function ProcessCard() {
 export function SystemView() {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useQuery({
     queryKey: QUERY_KEY,
     queryFn: ({ signal }) =>
       operatorFetch('/system', { schema: systemStatusResponseSchema, signal }),
   });
   const when = useMemo(
-    () => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium' }),
-    [locale],
+    () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'medium' }),
+    [locale, timeZone],
   );
   const stamp = (iso: string | null) => (iso ? when.format(new Date(iso)) : t('release.none'));
   const data = q.data;
@@ -215,7 +217,7 @@ export function SystemView() {
             {t('kicker')}
           </div>
           <h1 className="font-serif text-[28px] font-normal leading-none tracking-[-0.01em] sm:text-[40px]">
-            {t.rich('titleRich', { i: (c) => <span className="italic text-brand">{c}</span> })}
+            {t.rich('titleRich', { i: (c) => <span className="not-italic text-brand">{c}</span> })}
           </h1>
           <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('description')}</p>
         </div>

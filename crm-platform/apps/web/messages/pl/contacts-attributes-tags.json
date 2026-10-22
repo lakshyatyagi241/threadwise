@@ -37,7 +37,8 @@
       "statusStage": "Ten status należy do innego etapu. Wybierz status pasujący do etapu kontaktu.",
       "stageScope": "Status można ograniczyć tylko do jednego z Twoich etapów cyklu życia.",
       "planLimit": "Osiągnięto limit planu: {limit, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}. Zmień plan na wyższy, aby dodać więcej, lub usuń istniejący kontakt, aby zwolnić miejsce.",
-      "legalHold": "Ten rekord jest chroniony i obecnie nie można go usunąć."
+      "legalHold": "Ten rekord jest chroniony i obecnie nie można go usunąć.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go sobie, aby wysłać wiadomość."
     },
     "list": {
       "title": "Centrum kontaktów",
@@ -130,6 +131,7 @@
       "colLeadScore": "Ocena leada",
       "colLanguage": "Język",
       "colCreatedOn": "Data utworzenia",
+      "colModifiedOn": "Data modyfikacji",
       "pagination": "Paginacja",
       "prevPage": "Poprzednia strona",
       "nextPage": "Następna strona",
@@ -282,6 +284,7 @@
       "shortStage": "Etap",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Utworzono",
+      "shortModified": "Zmodyfikowano",
       "firstRun": {
         "title": "Dodaj pierwsze kontakty",
         "message": "Dodaj osoby, z którymi rozmawiasz. Kontakty są używane w wiadomościach, kampaniach, zadaniach i transakcjach.",
@@ -290,7 +293,11 @@
         "importBody": "Prześlij arkusz kalkulacyjny i dopasuj jego kolumny do pól kontaktu.",
         "connect": "Połącz WhatsApp",
         "connectBody": "Połącz swój numer, aby kontakty mogły odpowiadać i aby można było do nich pisać."
-      }
+      },
+      "teamLabel": "Zespół",
+      "teamFilter": "Filtruj według zespołu",
+      "allTeams": "Wszystkie zespoły",
+      "teamFormer": "Dawny zespół"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -442,7 +449,8 @@
       "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole.",
       "searchOptions": "Szukaj opcji",
       "searchOptionsFor": "Szukaj w opcjach pola {field}",
-      "noOptionsFound": "Żadna opcja nie pasuje do wyszukiwania."
+      "noOptionsFound": "Żadna opcja nie pasuje do wyszukiwania.",
+      "cascadeWaiting": "Najpierw wybierz {parent}, aby zobaczyć wybory."
     },
     "tags": {
       "title": "Tagi",
@@ -1081,7 +1089,8 @@
         "moveDown": "Przesuń {name} w dół",
         "edit": "Edytuj: {name}",
         "deactivate": "Dezaktywuj: {name}",
-        "reactivate": "Aktywuj ponownie"
+        "reactivate": "Aktywuj ponownie",
+        "dependsOn": "Wybory zależą od: {field}"
       },
       "toast": {
         "conflict": "Ktoś inny to zmienił. Lista została odświeżona, spróbuj ponownie.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Zarządzaj etapami",
         "manageGroups": "Zarządzaj grupami",
         "locked": "Stała"
+      },
+      "cascade": {
+        "open": "Pola zależne",
+        "title": "Pola zależne",
+        "close": "Zamknij",
+        "intro": "Pole zależne jest zawsze widoczne. Jego wybory zależą od wyboru w polu nadrzędnym: dla każdego wyboru pola nadrzędnego zaznacz wybory pola zależnego, które on dopuszcza.",
+        "empty": "Nie ma jeszcze pól zależnych.",
+        "add": "Dodaj pole zależne",
+        "needTwoChoiceFields": "Pola zależne wymagają co najmniej dwóch właściwości z listą wyborów (lista rozwijana, wielokrotny wybór lub przyciski radiowe).",
+        "dependsOn": "zależy od: {parent}",
+        "editLabel": "Edytuj {name}",
+        "removeLabel": "Usuń {name}",
+        "parent": "Właściwość nadrzędna",
+        "child": "Właściwość zależna",
+        "pickParent": "Wybierz właściwość nadrzędną",
+        "pickChild": "Wybierz właściwość zależną",
+        "allowed": "Wybory {child} dopuszczone przy każdym wyborze {parent}",
+        "noParentChoices": "Właściwość nadrzędna nie ma jeszcze wyborów.",
+        "noChildChoices": "Właściwość zależna nie ma jeszcze wyborów.",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "saved": "Pole zależne zapisane.",
+        "cycle": "Ta zależność sprawiłaby, że dwie właściwości czekałyby na siebie nawzajem.",
+        "removeTitle": "Usunąć {name} z pól zależnych?",
+        "removeMessage": "Ponownie pokaże wszystkie swoje wybory. Wybory przypisane do właściwości nadrzędnej zostaną zapomniane; wartości kontaktów pozostaną bez zmian.",
+        "removeConfirm": "Usuń",
+        "removed": "Pole zależne usunięte.",
+        "removeFailed": "Nie udało się usunąć pola zależnego. Spróbuj ponownie."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Wybrane kolumny",
         "selectAll": "Zaznacz wszystko",
         "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
-        "remove": "Usuń: {name}"
+        "remove": "Usuń: {name}",
+        "nameShort": "Nazwa widoku musi mieć co najmniej {min} znaki.",
+        "nameLong": "Nazwa widoku może mieć najwyżej {max} znaków."
       },
       "presets": {
         "myContacts": "Moje kontakty",

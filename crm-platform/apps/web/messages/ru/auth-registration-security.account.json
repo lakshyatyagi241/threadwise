@@ -535,10 +535,12 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Воронка продаж",
             "appointment_booking": "Записи",
+            "appointment_confirm_buttons": "Кнопки напоминания",
+            "appointment_rebook_steps": "Шаги повторной записи",
             "chatbot_widgets": "Виджеты чат-бота",
             "wa_storefront": "Каталог WhatsApp",
             "inbox_sla": "SLA входящих",
-            "inbox_routing": "Маршрутизация входящих",
+            "inbox_routing": "Умная маршрутизация",
             "waba_calling": "Звонки WhatsApp",
             "inbox_kanban": "Канбан входящих",
             "team_performance": "Эффективность команды",
@@ -561,7 +563,10 @@
             "personal_history_full": "Импорт полной истории (личный WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "ИИ-оценка лидов",
-            "record_assignment": "Правила назначения записей"
+            "record_assignment": "Правила назначения записей",
+            "team_hierarchy": "Иерархия команд и руководители",
+            "custom_roles": "Свои роли и области доступа",
+            "inbox_assignment_sticky": "Умная маршрутизация: владелец контакта и закреплённый агент"
           },
           "cta": {
             "continueFree": "Продолжить бесплатно",

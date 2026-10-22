@@ -164,12 +164,16 @@
         "in": "Binnenkomend",
         "out": "Uitgaand",
         "balance": "Saldo",
-        "none": "Geen"
+        "none": "Geen",
+        "channel": "Kanaal",
+        "recipient": "Ontvanger",
+        "template": "Sjabloon",
+        "country": "Land",
+        "category": "Categorie",
+        "engine": "Motor"
       },
       "context": {
-        "reason": "Reden",
-        "to": "Aan",
-        "template": "Sjabloon"
+        "reason": "Reden"
       },
       "channels": {
         "campaign": "Campagne",

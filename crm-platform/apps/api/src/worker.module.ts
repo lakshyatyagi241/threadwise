@@ -1,16 +1,25 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
+import { baseLoggerOptions } from './common/logging/http-logger';
 import { AppConfigModule } from './config/config.module';
 import type { Env } from './config/env.schema';
 import { DbModule } from './infra/db/db.module';
 import { RedisModule } from './infra/redis/redis.module';
 import { QueueModule } from './infra/queue/queue.module';
+import { QueueGuardModule } from './infra/queue/queue-guard.module';
+import { FAILURE_POLICIES } from './modules/failed-operations';
+import { WorkerDrainModule } from './infra/queue/worker-drain.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { SendGuardModule } from './modules/auth';
 import { ApiKeyAccessModule } from './modules/public-api/api-key-access.module';
-import { JobMetricsModule, QueueDepthModule, WorkerHeartbeatModule } from './modules/platform-infrastructure';
+import {
+  JobMetricsModule,
+  QueueDepthModule,
+  RedisPressureModule,
+  WorkerHeartbeatModule,
+} from './modules/platform-infrastructure';
 import { RealtimeEmitterModule } from './realtime';
 import { WorkersModule } from './workers/workers.module';
 
@@ -31,7 +40,7 @@ import { WorkersModule } from './workers/workers.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => ({
         pinoHttp: {
-          level: config.get('LOG_LEVEL', { infer: true }),
+          ...baseLoggerOptions('worker', config.get('LOG_LEVEL', { infer: true })),
           transport:
             config.get('NODE_ENV', { infer: true }) === 'development'
               ? { target: 'pino-pretty', options: { singleLine: true } }
@@ -43,6 +52,10 @@ import { WorkersModule } from './workers/workers.module';
     DbModule,
     RedisModule,
     QueueModule,
+    // Trims finished-job history before a full Redis stops every queue.
+    QueueGuardModule.forRoot({ capturedQueues: FAILURE_POLICIES.map((p) => p.queue) }),
+    // Closes the workers (waiting for running jobs) before the database pools close.
+    WorkerDrainModule,
     ProvidersModule,
     SendGuardModule,
     KernelModule,
@@ -58,6 +71,8 @@ import { WorkersModule } from './workers/workers.module';
     JobMetricsModule,
     // Backlog and oldest waiting age per queue: the signals a saturated queue shows before any job finishes late.
     QueueDepthModule,
+    // Redis memory/clients/evictions (crm_redis_*), and a pause for workers while Redis is at maxmemory instead of a hot error loop.
+    RedisPressureModule,
   ],
 })
 export class WorkerModule {}

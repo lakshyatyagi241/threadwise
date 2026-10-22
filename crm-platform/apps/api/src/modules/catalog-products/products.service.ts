@@ -6,7 +6,6 @@ import {
   type ListProductsQuery,
   type ListProductsResponse,
   type ProductPickerQuery,
-  type ProductCurrency,
   type ProductOption,
   type ProductPickerResponse,
   type ProductResponse,
@@ -263,8 +262,8 @@ export class ProductsService {
   async create(input: CreateProductInput): Promise<ProductResponse> {
     const ctx = RequestContextStore.require();
     // The plan's `catalog_products` cap (a live count, so deleting a product frees a slot). Products pulled in by a catalog sync are not user creates and are not capped.
-    await this.planUsage.assertCanAdd(ctx.orgId, 'catalog_products');
     const { id, pushNeeded } = await this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'catalog_products');
       const base = slugify(input.name) || 'product';
       const slug = nextFreeSlug(base, await this.repo.slugsLike(tx, ctx.orgId, base));
       const patch = formPatch(input);

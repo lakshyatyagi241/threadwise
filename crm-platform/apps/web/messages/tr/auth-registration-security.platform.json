@@ -1404,7 +1404,8 @@
             "packInactive": "Eklenti paketi kapalı, bu yüzden kimse satın alamaz.",
             "appUnpublished": "Uygulama yayımlanmadı, bu yüzden çalışma alanları henüz göremez.",
             "appLabel": "Uygulama: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# eklenti seçildi} other {# eklenti seçildi}}"
           },
           "featureHints": {
             "automation": "Sohbetlere yanıt veren ve onlar üzerinde işlem yapan akış oluşturucu ve otomasyonlar.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "Beyaz etiket: çalışma alanı alt bilgisindeki platform markasını gizleyebilir.",
             "sales_pipeline": "Fırsatlar, görevler ve satış hunileri ile panodaki huni rakamları.",
             "appointment_booking": "Rezervasyon türleri, randevular ve herkese açık rezervasyon sayfaları. Bu anahtar ücretli Randevular uygulamasına aittir.",
+            "appointment_confirm_buttons": "Randevudan önce WhatsApp ile gönderilen hatırlatmaya Onayla, Yeniden planla ve İptal et düğmelerini ekler.",
+            "appointment_rebook_steps": "Tamamlanan randevudan sonra gönderilen, kişiyi yeniden randevu almaya çağıran takip mesajları.",
             "chatbot_widgets": "Web sitesi sohbet botu widget oluşturucusu.",
             "wa_storefront": "WhatsApp kataloğu ve mağaza vitrini alanı.",
             "inbox_sla": "Ekip gelen kutusundaki SLA politikaları ve son tarihler.",
-            "inbox_routing": "Gelen kutusu görüşmelerini otomatik atayan yönlendirme kuralları.",
+            "inbox_routing": "Yeni sohbetlerin otomatik atanması: yönlendirme kuralları, Diğer herkes ve bekleme kuyruğu zamanlayıcıları. Akıllı yönlendirme eklentisinin parçasıdır.",
             "waba_calling": "Gelen kutusundan WhatsApp aramaları: arama numaraları, arama izinleri, arama yapma ve yanıtlama.",
             "inbox_kanban": "Ekip gelen kutusunun Kanban pano görünümü.",
             "team_performance": "Ekip performans raporları.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir.",
             "ai_crm_copilot": "Kişilerinizden yapay zekâyla potansiyel müşterileri bulur ve puanlar.",
             "lead_scoring": "Kişileri yapay zekayla puanlar ve büyüme pilotunu çalıştırır. Bu anahtarın sahibi Yapay zeka ile potansiyel müşteri puanlama uygulamasıdır.",
-            "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar."
+            "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar.",
+            "team_hierarchy": "Kendi ekibini ve altındaki ekipleri gören üst ekipler, ekip liderleri ve yöneticiler.",
+            "custom_roles": "Rolleri oluşturun ve düzenleyin, her izin için bir kapsam seçin (kendi, ekip veya tüm kayıtlar).",
+            "inbox_assignment_sticky": "Önce sahip ve eşitlenmiş atama, geri dönen kişi penceresi ve yeniden atama sorusu. Akıllı yönlendirme eklentisinin parçasıdır."
           },
           "units": {
             "days": "Gün",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "Aylık SMS",
             "email_mailboxes": "E-posta kutuları",
             "email_monthly": "Aylık e-posta",
-            "storage_gb": "Depolama (GB)"
+            "storage_gb": "Depolama (GB)",
+            "teams": "Ekipler"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1605,10 +1612,12 @@
             "remove_branding": "Beyaz etiket (platform markasını kaldırır)",
             "sales_pipeline": "Satış hunisi (fırsatlar ve görevler)",
             "appointment_booking": "Randevular ve rezervasyon sayfaları",
+            "appointment_confirm_buttons": "Hatırlatma düğmeleri: Onayla, Yeniden planla ve İptal et",
+            "appointment_rebook_steps": "Randevudan sonra yeniden randevu (hatırlatma) adımları",
             "chatbot_widgets": "Web sitesi sohbet botu widget'ları",
             "wa_storefront": "WhatsApp mağaza vitrini ve kataloğu",
             "inbox_sla": "Gelen kutusu SLA politikaları",
-            "inbox_routing": "Gelen kutusu yönlendirme kuralları ve çalışma saatleri",
+            "inbox_routing": "Akıllı yönlendirme: otomatik atama ve kurallar",
             "waba_calling": "Gelen kutusundan WhatsApp aramaları yapın ve yanıtlayın",
             "inbox_kanban": "Gelen kutusu Kanban panosu",
             "team_performance": "Ekip performans raporları",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
-            "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)"
+            "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)",
+            "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
+            "custom_roles": "Özel roller ve kapsamlar",
+            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
             "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
             "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız.",
-            "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez."
+            "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez.",
+            "teams": "Çalışma alanının sahip olabileceği ekip sayısı. Boş sınırsızdır, 0 tek kişilik (ekip yok) demektir. Mevcut ekipler asla silinmez."
+          },
+          "productLines": {
+            "chat": "Sohbet",
+            "crm": "Satış CRM",
+            "platform": "İkisi için ortak"
+          },
+          "marketplace": {
+            "title": "Bu plandaki çalışma alanlarına sunulan Marketplace uygulamaları"
+          },
+          "included": {
+            "title": "Bu plana dahil eklentiler",
+            "intro": "Bir eklentiyi dahil etmek için açın: bu plandaki çalışma alanları onu ücretsiz alır ve eklenti kartında \"Planınıza dahil\" yazar. Bu işlem Özellikler sekmesinde eklentinin özelliklerini tam olarak işaretler; orada işaretlemek de anahtarı değiştirir. Dahil olmayan eklentiler, etkin ücretli plandaki her çalışma alanına kendi fiyatıyla satılmaya devam eder.",
+            "readOnly": "Bu planı görüntüleyebilirsiniz ancak değiştiremezsiniz, bu yüzden bu anahtarlar kilitli.",
+            "loading": "Eklentiler yükleniyor",
+            "loadFailed": "Eklentiler yüklenemedi. Hiçbir şey değiştirilmedi.",
+            "empty": "Henüz eklenti yok",
+            "emptyHint": "Akıllı yönlendirme ve Ekipler ve izinler gibi eklentiler, operatör konsolunda Eklentiler bölümünde oluşturulur.",
+            "stateFull": "Dahil",
+            "statePartial": "Kısmen dahil",
+            "stateNone": "Dahil değil",
+            "noPrice": "Fiyat belirlenmedi",
+            "gives": "Sağladığı: {features}",
+            "switchLabel": "{name} eklentisini bu plana dahil et",
+            "noFeatures": "Bu eklenti yalnızca limit ekler, bu yüzden dahil edilecek bir özellik yok. Limitleri plana dahil etmenin parçası değildir; planın kendi limitlerini Limitler sekmesinde belirleyin.",
+            "partial": "Kısmen dahil: bu planda {total} özelliğin {count} tanesi açık. Hâlâ kapalı: {missing}.",
+            "includeFully": "Tamamen dahil et",
+            "limitsNote": "Bu eklenti ayrıca ek limitler ({limits}) sağlar. Ek limit plana dahil etmenin parçası değildir ve burada hiçbir şey onu değiştirmez: planın kendi limitini Limitler sekmesinde belirleyin. Çalışma alanları ek limit için eklentiyi yine satın alır.",
+            "unlistedNote": "Özelliklerinden bazıları ({features}) standart eklenti listesinin dışında. Yine de plan için açılabilirler; yalnızca bu eklentinin paket olarak satın alınması farklı çalışır.",
+            "inactiveNote": "Bu eklenti taslak veya kapalı, bu yüzden henüz kimse satın alamaz. Plana dahil etmek yine de çalışır.",
+            "impactCount": "{count, plural, one {# çalışma alanı bu eklenti için zaten ödeme yapıyor.} other {# çalışma alanı bu eklenti için zaten ödeme yapıyor.}} Yenilemeleri mevcut dönemin sonunda duracak, hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek.",
+            "impactUnknown": "Bu plandaki ve bu eklenti için zaten ödeme yapan çalışma alanları, mevcut dönemlerinin sonunda yenilemeyi bırakacak. Hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek. Sayı yüklenemedi.",
+            "offNote": "Kapatıldı: bu plandaki çalışma alanları eklentiyi satın almadıkça bu özellikleri kaybeder ve eklenti onlar için fiyatıyla satın alınabilir hale gelir."
           }
         }
       },

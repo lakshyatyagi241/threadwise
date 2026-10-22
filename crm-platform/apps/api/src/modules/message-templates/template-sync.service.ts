@@ -32,7 +32,8 @@ import {
   type CurrentState,
   type ParsedComponents,
 } from './template-remote';
-import { toDetail } from './templates.mapper';
+import { detailWithMedia } from './template-media';
+import { MediaStorageService } from '../platform-settings-branding-storage';
 import { TemplatesRepository, type TemplatePatch, type TemplateRow } from './templates.repository';
 
 /** Meta lists 100 a page; a WABA holds at most a few thousand, so this only stops a loop that never ends. */
@@ -67,6 +68,7 @@ export class TemplateSyncService {
     private readonly outbox: OutboxService,
     private readonly waba: WabaConnectService,
     @Inject(WABA_TEMPLATES) private readonly remote: WabaTemplatePort,
+    private readonly storage: MediaStorageService,
   ) {}
 
   // --- one template ------------------------------------------------------------------------------------------------
@@ -77,7 +79,7 @@ export class TemplateSyncService {
     const row = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
     if (!row) throw this.notFound();
     const fresh = await this.refreshRow(orgId, row, { cooldown: true, fail: true });
-    return toDetail(fresh);
+    return detailWithMedia(this.storage, fresh);
   }
 
   /** The sweeper's entry: one stale template by internal id. Returns whether its state changed. Never throws on a Meta failure. */

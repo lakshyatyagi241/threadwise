@@ -3,6 +3,9 @@ import { sql } from 'drizzle-orm';
 import { evaluateCoupon, type CouponFacts } from './coupon-rules';
 import { PaygwStore } from './paygw.store';
 
+/** How long an open order keeps its coupon use reserved. */
+const COUPON_HOLD_MINUTES = 30;
+
 export interface CouponResolution {
   ok: boolean;
   message: string;
@@ -86,6 +89,31 @@ export class CouponService {
         couponId: facts.id,
         code: facts.code,
         discountMinor: verdict.discountMinor,
+      };
+    });
+  }
+
+  /**
+   * Uses a coupon cannot give away any more: paid ones plus open orders that already hold one. Deliberate deviation from Reference,
+   * which counted only paid orders and so let every concurrent buyer through (QA Sheet3 #15, D-06; the coupons owner confirms). An
+   * open order holds a use for `COUPON_HOLD_MINUTES`, so an abandoned checkout frees it. `max_uses` null = unlimited.
+   */
+  async usesTaken(
+    couponId: number,
+    exceptIdempotencyKey: string | null,
+  ): Promise<{ maxUses: number | null; taken: number }> {
+    return this.store.tx(async (tx) => {
+      const r = await tx.execute(sql`
+        SELECT c.max_uses,
+               c.uses_count + (SELECT count(*) FROM orders o
+                                WHERE o.coupon_id = c.id AND o.status IN ('pending', 'awaiting_approval')
+                                  AND o.created_at > now() - make_interval(mins => ${COUPON_HOLD_MINUTES})
+                                  AND (${exceptIdempotencyKey}::text IS NULL OR o.idempotency_key IS DISTINCT FROM ${exceptIdempotencyKey}))::int AS taken
+        FROM coupons c WHERE c.id = ${couponId}`);
+      const row = r.rows[0] as { max_uses: number | null; taken: number } | undefined;
+      return {
+        maxUses: row?.max_uses == null ? null : Number(row.max_uses),
+        taken: Number(row?.taken ?? 0),
       };
     });
   }

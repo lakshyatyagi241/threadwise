@@ -12,7 +12,9 @@ import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import type { Response } from 'express';
 import { Public } from '../common/decorators';
+import { isDependencyOutage } from '../common/errors/dependency-outage';
 import { DatabaseService } from '../infra/db/database.service';
+import { HealthDb } from '../infra/db/side-pools';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
 import {
   SkipThrottle,
@@ -24,7 +26,36 @@ import {
 interface DependencyCheck {
   status: 'up' | 'down';
   latencyMs?: number;
-  error?: string;
+  /** A fixed word, never the driver's message: this endpoint is public and those messages carry hosts, ports and role names. */
+  error?: 'timeout' | 'unreachable' | 'error';
+}
+
+/**
+ * Each dependency gets this long. A probe that waits for a silent database or Redis is worse than one that says "down": the orchestrator's
+ * own probe timeout fires first, and it reads that as a dead process rather than a dead dependency.
+ */
+export const READY_CHECK_DEADLINE_MS = 2_000;
+const DEADLINE = Symbol('deadline');
+
+async function check(run: () => Promise<unknown>): Promise<DependencyCheck> {
+  const startedAt = Date.now();
+  let timer: NodeJS.Timeout | undefined;
+  try {
+    await Promise.race([
+      run(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(DEADLINE), READY_CHECK_DEADLINE_MS);
+      }),
+    ]);
+    return { status: 'up', latencyMs: Date.now() - startedAt };
+  } catch (err) {
+    return {
+      status: 'down',
+      error: err === DEADLINE ? 'timeout' : isDependencyOutage(err) ? 'unreachable' : 'error',
+    };
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /**
@@ -50,6 +81,7 @@ export class HealthController {
 
   constructor(
     private readonly db: DatabaseService,
+    private readonly healthDb: HealthDb,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly workerStatus: WorkerStatusService,
   ) {}
@@ -68,47 +100,44 @@ export class HealthController {
   @Get('ready')
   @ApiOperation({ summary: 'Readiness — dependencies reachable (503 when not)' })
   async readiness(@Res({ passthrough: true }) res: Response) {
-    const [primary, replica, redis] = await Promise.all([
+    // Concurrent probes share one in-flight check: a burst of probes (or a scraper) costs the database one SELECT 1, not one per request.
+    this.inflight ??= this.runReadiness().finally(() => (this.inflight = undefined));
+    const { ready, body } = await this.inflight;
+    res.status(ready ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE);
+    return body;
+  }
+
+  private inflight?: Promise<{ ready: boolean; body: object }>;
+
+  private async runReadiness() {
+    const [primary, replica, redis, { workers, outbox }] = await Promise.all([
       this.checkPrimary(),
       this.checkReplica(),
       this.checkRedis(),
+      this.checkWorkers(),
     ]);
-    const { workers, outbox } = await this.checkWorkers();
 
     // Only the primary and Redis decide readiness. The worker and outbox checks are for monitoring: an API with no workers
     // (a deploy in progress, a crashed worker) still serves requests, and pulling it from rotation would turn a background
     // problem into an outage. The deploy health gate and the container healthcheck read the status code only.
     const ready = primary.status === 'up' && redis.status === 'up';
-    res.status(ready ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE);
-
     return {
-      status: ready ? 'ok' : 'degraded',
-      checks: { primary, replica, redis, workers, outbox },
+      ready,
+      body: { status: ready ? 'ok' : 'degraded', checks: { primary, replica, redis, workers, outbox } },
     };
   }
 
-  private async checkPrimary(): Promise<DependencyCheck> {
-    const startedAt = Date.now();
-    try {
-      await this.db.primary.execute(sql`SELECT 1`);
-      return { status: 'up', latencyMs: Date.now() - startedAt };
-    } catch (err) {
-      return { status: 'down', error: err instanceof Error ? err.message : 'unknown' };
-    }
+  private checkPrimary(): Promise<DependencyCheck> {
+    // The reserved pool: the probe must say "down" only when the database is, not when the shared pool is busy with other work.
+    return check(() => this.healthDb.ping());
   }
 
   /**
    * The replica being down is NOT fatal: reads fall back to the primary, so the
    * instance stays in rotation. It is reported so monitoring can see it.
    */
-  private async checkReplica(): Promise<DependencyCheck> {
-    const startedAt = Date.now();
-    try {
-      await this.db.replica.execute(sql`SELECT 1`);
-      return { status: 'up', latencyMs: Date.now() - startedAt };
-    } catch (err) {
-      return { status: 'down', error: err instanceof Error ? err.message : 'unknown' };
-    }
+  private checkReplica(): Promise<DependencyCheck> {
+    return check(() => this.db.replica.execute(sql`SELECT 1`));
   }
 
   /** Written by the worker process, read from Redis. If Redis cannot be read the `redis` check already says so. */
@@ -116,20 +145,26 @@ export class HealthController {
     workers: WorkersCheck | { status: 'unknown' };
     outbox: OutboxCheck;
   }> {
+    const unknown = {
+      workers: { status: 'unknown' as const },
+      outbox: { status: 'unknown' as const },
+    };
+    let timer: NodeJS.Timeout | undefined;
     try {
-      return await this.workerStatus.read();
+      return await Promise.race([
+        this.workerStatus.read(),
+        new Promise<typeof unknown>((ok) => {
+          timer = setTimeout(() => ok(unknown), READY_CHECK_DEADLINE_MS);
+        }),
+      ]);
     } catch {
-      return { workers: { status: 'unknown' }, outbox: { status: 'unknown' } };
+      return unknown;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
-  private async checkRedis(): Promise<DependencyCheck> {
-    const startedAt = Date.now();
-    try {
-      await this.redis.ping();
-      return { status: 'up', latencyMs: Date.now() - startedAt };
-    } catch (err) {
-      return { status: 'down', error: err instanceof Error ? err.message : 'unknown' };
-    }
+  private checkRedis(): Promise<DependencyCheck> {
+    return check(() => this.redis.ping());
   }
 }

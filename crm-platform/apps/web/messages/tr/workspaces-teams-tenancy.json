@@ -106,7 +106,9 @@
       "leaveAction": "İzin ve vekil",
       "noLimit": "Sınır yok",
       "neverSignedIn": "Hiç",
-      "editAction": "Telefonu ve sohbet sınırını değiştir"
+      "editAction": "Telefonu ve sohbet sınırını değiştir",
+      "moreAction": "Daha fazla",
+      "moreLabel": "{name} için daha fazla işlem"
     },
     "invite": {
       "eyebrow": "Çalışma alanı",
@@ -148,12 +150,10 @@
       "eyebrow": "Çalışma alanı",
       "title": "Ekipler",
       "pageTitle": "Ekipler",
-      "subtitle": "Temsilcilerinizi departmana göre gruplayın. Görüşmeler yönlendirme kurallarıyla ekibe göre otomatik atanabilir.",
       "create": "Ekip oluştur",
       "edit": "Ekibi düzenle",
       "loading": "Ekipler yükleniyor",
       "emptyTitle": "Henüz ekip yok",
-      "emptyMessage": "Bir ekip oluşturun, temsilcilerinizi ekleyin ve görüşmeleri bu ekibe yönlendirin.",
       "emptyAction": "Ekip oluştur",
       "members": "{count, plural, =0 {Üye yok} other {# üye}}",
       "online": "{count} çevrimiçi",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Ekipler nasıl çalışır",
       "how": {
-        "one": "Bir ekip adı verin (örneğin Satış), bir renk seçin ve temsilcilerinizi ekleyin.",
-        "two": "Üç şekilde kullanın: bir sohbeti elle ekibe atayın, yönlendirme kuralıyla yeni sohbetleri ekibe yönlendirin veya performansını analizlerde inceleyin.",
-        "three": "Ekip rengi, gelen kutusu kuyruğundaki etiket rengidir; böylece her ekibin sohbetlerini bir bakışta ayırt edebilirsiniz."
+        "one": "Ekibe bir ad verin (örneğin Satış), bir renk seçin ve birlikte çalışan kişileri ekleyin.",
+        "two": "Görüşmeler (yeni sohbetleri ona yönlendirin veya bir sohbeti elle atayın), kayıtlar (kişileri, şirketleri ve fırsatları üyelerine atayın) ve raporlar için kullanın.",
+        "three": "Yönetici, ekibi yöneten kişidir. Üst ekip, ekibi başka bir ekibin altına yerleştirir; böylece Satış ve Satış Batı gibi bir ağaç oluşturabilirsiniz.",
+        "four": "Bir kişinin ana ekibi, raporlar için tutulan asıl ekibidir (raporlar bunu gelecek bir sürümde kullanmaya başlayacak). Yönlendirme, atama ve görünürlük, kişinin üyesi olduğu tüm ekipleri kullanır."
       },
       "created": "Ekip oluşturuldu.",
       "updated": "Ekip güncellendi.",
@@ -178,9 +179,43 @@
       "updateFailed": "Güncelleme başarısız: {reason}",
       "deleteFailed": "Silme başarısız: {reason}",
       "deleteTitle": "Bu ekip silinsin mi?",
-      "deleteMessage": "\"{name}\" ekibi silinsin mi? Bu ekibe atanmış görüşmelerin ataması kaldırılacak.",
+      "deleteMessage": "\"{name}\" ekibi silinsin mi? Ekipteki kişiler çalışma alanında kalır. Ekip, şu anda kullanıldığı her yerden kaldırılır.",
       "deleteConfirm": "Ekibi sil",
-      "delete": "Ekibi sil"
+      "delete": "Ekibi sil",
+      "subtitle": "Ekipler, kişileri görüşmeler, atamalar ve raporlar için gruplar.",
+      "emptyMessage": "Bir ekip oluşturun ve birlikte çalışan kişileri ekleyin. Görüşmeleri ona yönlendirebilir, kişileri, şirketleri ve fırsatları üyelerine atayabilirsiniz.",
+      "noAccess": "Ekipleri görme izniniz yok. Çalışma alanı Sahibinden veya Yöneticisinden team.read iznini isteyin.",
+      "manager": "Yönetici: {name}",
+      "noManager": "Yönetici yok",
+      "receivesConversations": "Görüşmeler",
+      "receivesRecords": "Kayıtlar",
+      "primaryCount": "{count, plural, one {# kişi bunu ana ekibi olarak kullanıyor} other {# kişi bunu ana ekibi olarak kullanıyor}}",
+      "usedBy": "Kullanıldığı yerler",
+      "usedByNone": "Henüz hiçbir kural tarafından kullanılmıyor",
+      "usage": {
+        "routingRules": "{count, plural, one {# yönlendirme kuralı} other {# yönlendirme kuralı}}",
+        "assignmentRules": "{count, plural, one {# atama kuralı} other {# atama kuralı}}",
+        "segmentShares": "{count, plural, one {# paylaşılan segment} other {# paylaşılan segment}}",
+        "conversations": "{count, plural, one {# görüşme} other {# görüşme}}",
+        "childTeams": "{count, plural, one {# alt ekip} other {# alt ekip}}"
+      },
+      "notUsed": {
+        "title": "Saklandı, henüz kullanılmıyor",
+        "body": "Bu ayar ekipte kaydedilir ancak henüz hiçbir şey onu okumuyor.",
+        "devices": "{count, plural, one {# cihazla sınırlı} other {# cihazla sınırlı}}"
+      },
+      "deleteUsage": {
+        "title": "Neler değişecek",
+        "loading": "Bu ekibin nerelerde kullanıldığı kontrol ediliyor...",
+        "failed": "Bu ekibin nerelerde kullanıldığı kontrol edilemedi. Yine de silebilirsiniz.",
+        "nothing": "Başka hiçbir yerde bu ekip kullanılmıyor.",
+        "members": "{count, plural, one {# kişi ekipten ayrılır} other {# kişi ekipten ayrılır}}",
+        "routingRules": "{count, plural, one {# yönlendirme kuralı bu ekibi hedef olarak kaybeder; yapacak işi kalmayan kural kapatılır} other {# yönlendirme kuralı bu ekibi hedef olarak kaybeder; yapacak işi kalmayan kurallar kapatılır}}",
+        "assignmentRules": "{count, plural, one {# kayıt atama kuralı bu ekibi havuzundan kaybeder} other {# kayıt atama kuralı bu ekibi havuzlarından kaybeder}}",
+        "segmentShares": "{count, plural, one {# segment artık bu ekiple paylaşılmaz} other {# segment artık bu ekiple paylaşılmaz}}",
+        "conversationsAssigned": "{count, plural, one {Bu ekibe atanmış # konuşma yerinde kalır ve ekipsiz olur} other {Bu ekibe atanmış # konuşma yerinde kalır ve ekipsiz olur}}",
+        "peopleWithReachChange": "{count, plural, one {# kişi, ekip erişimi kapsamında meslektaşlarının daha az kaydını görecek} other {# kişi, ekip erişimi kapsamında meslektaşlarının daha az kaydını görecek}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Çalışma alanı",
@@ -192,13 +227,6 @@
       "nameTooLong": "Ad en fazla {max} karakter olabilir.",
       "color": "Renk",
       "colorOption": "Renk {color}",
-      "strategy": "Otomatik atama stratejisi",
-      "strategyOptions": {
-        "manual": "Manuel — bir müdür kimin alacağını seçer",
-        "round_robin": "Sırayla dağıtım — eşit dağıt",
-        "least_loaded": "En az yüklü — en az açık işi olan önce",
-        "sticky": "Sabit — bu kişiye en son yanıt veren temsilci"
-      },
       "members": "Üyeler",
       "membersLoading": "Ekip arkadaşları yükleniyor",
       "membersFailed": "Ekip arkadaşları yüklenemedi.",
@@ -209,7 +237,28 @@
       "create": "Ekip oluştur",
       "creating": "Oluşturuluyor…",
       "save": "Değişiklikleri kaydet",
-      "saving": "Kaydediliyor…"
+      "saving": "Kaydediliyor…",
+      "hint": "Ekipler, kişileri görüşmeler, atamalar ve raporlar için gruplar. Bir yönetici, isteğe bağlı bir üst ekip ve ekibin neleri alabileceğini seçin.",
+      "description": "Açıklama",
+      "descriptionPlaceholder": "Bu ekip ne yapar (isteğe bağlı)",
+      "lead": "Yönetici",
+      "leadNone": "Yönetici yok",
+      "leadHint": "Ekibi yöneten kişi. Ekibe lider olarak eklenir.",
+      "parent": "Üst ekip",
+      "parentNone": "Yok (en üst düzey)",
+      "parentHint": "Bir ağaç oluşturmak için bu ekibi başka bir ekibin altına yerleştirin; en fazla 5 seviye.",
+      "receive": "Alabilir",
+      "receiveHint": "Bu ekibin nerelerde seçilebileceği. O seçicilerde görünmemesi için birini kapatın.",
+      "receiveConversations": "Görüşmeler (gelen kutusu yönlendirme ve atama)",
+      "receiveRecords": "Kayıtlar (kişiler, şirketler ve fırsatlar)",
+      "membersHint": "Bu ekipteki kişileri işaretleyin. Liderleri belirleyin ve her kişinin ana ekibini seçin.",
+      "leadFlag": "Lider",
+      "leadToggle": "Bu ekibin lideri olarak işaretle",
+      "leadLocked": "Yönetici her zaman liderdir",
+      "primaryFlag": "Ana",
+      "primaryToggle": "Bunu kişinin ana ekibi yap",
+      "primaryLocked": "Bir kişinin tek ekibi her zaman ana ekibidir",
+      "primaryHint": "Bir kişinin ana ekibi, raporlar için tutulan asıl ekibidir (raporlar bunu gelecek bir sürümde kullanmaya başlayacak). Yönlendirme, atama ve görünürlük tüm ekiplerini kullanır."
     },
     "errors": {
       "network": "Bağlantı koptu. Kontrol edip yeniden deneyin.",
@@ -238,7 +287,13 @@
       "delegateInvalid": "Vekil, bu çalışma alanının etkin başka bir üyesi olmalıdır.",
       "delegateCycle": "Bu bir döngü oluşturur: seçilen kişinin vekili zaten bu kişi.",
       "reassignInvalid": "Hiçbir şey yeniden atanamadı. Kişinin kişileri veya açık fırsatları olduğunu ve hedefin bunları alabildiğini kontrol edin.",
-      "reassignNotRestorable": "Bu yeniden atama artık geri alınamaz."
+      "reassignNotRestorable": "Bu yeniden atama artık geri alınamaz.",
+      "teamParentCycle": "Bir ekip kendi altına veya kendi alt ekiplerinden birinin altına yerleştirilemez.",
+      "teamParentInvalid": "Bu üst ekip kullanılamıyor veya ağaç 5 seviyeden daha derin olurdu.",
+      "teamNotOnTeam": "Bu kişi bu ekipte değil.",
+      "teamsNotIncluded": "Planınız ekipleri içermiyor. Kişileri ekiplerde toplamak için planınızı yükseltin veya Ekipler ve izinler eklentisini isteyin.",
+      "teamsLimit": "Planınızın {limit} ekip sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya bir ekibi silin.",
+      "teamsLimitUnknown": "Planınızın ekip sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya bir ekibi silin."
     },
     "accept": {
       "title": "Çalışma alanınıza katılın",
@@ -358,6 +413,33 @@
       "offline": "Çevrimdışı",
       "hint": "Çevrimdışı olduğunuz sürece size otomatik olarak yeni sohbet atanmaz. Zaten sizde olan sohbetler sizde kalır.",
       "failed": "Değiştirilemedi"
+    },
+    "myLeave": {
+      "label": "İzin",
+      "onLeaveUntil": "{date} tarihine kadar izinde",
+      "onLeaveOpen": "İzinde",
+      "hint": "Ekibinize yokluğunuzu bildirin. İzindeyken size otomatik olarak yeni sohbet atanmaz.",
+      "title": "İzniniz"
+    },
+    "deactivate": {
+      "eyebrow": "Ekip üyeleri",
+      "title": "Üyeyi devre dışı bırak",
+      "message": "{name} artık oturum açamayacak. İstediğiniz zaman yeniden etkinleştirebilirsiniz.",
+      "loading": "Sahip olduklarına bakılıyor",
+      "previewFailed": "Bu kişinin neler tuttuğunu denetleyemedik. Yine de devre dışı bırakabilirsiniz; işleri kendisinde kalır.",
+      "holds": "{name} şunlara sahip: {contacts, plural, one {# kişi} other {# kişi}}, {deals, plural, one {# açık fırsat} other {# açık fırsat}} ve {chats, plural, one {# açık görüşme} other {# açık görüşme}}. Bunlara ne yapılsın?",
+      "optLead": "Ekip yöneticisine ver: {name} ({team})",
+      "optLeadNone": "Ekip yöneticisine ver (bu kişinin etkin bir ekip yöneticisi yok)",
+      "optPerson": "Bir kişiye ver",
+      "pickPerson": "Kişi",
+      "pickPlaceholder": "Bir kişi seçin",
+      "optLeave": "{name} üzerinde bırak",
+      "undoNote": "Kişiler ve açık fırsatlar, yeniden atama geçmişinden 14 gün boyunca geri alınabilir. Açık görüşmeler tek tek yeniden atanır.",
+      "nothing": "{name} adlı kişinin kişisi, açık fırsatı veya açık görüşmesi yok.",
+      "membership": "Ekip yerleri korunur; bu yüzden {name} yeniden etkinleştirilirse ekiplerine geri döner.",
+      "confirm": "Devre dışı bırak",
+      "moved": "{contacts, plural, one {# kişi} other {# kişi}}, {deals, plural, one {# fırsat} other {# fırsat}} ve {chats, plural, one {# görüşme} other {# görüşme}} {name} adlı kişiye taşındı.",
+      "remaining": "{count} öğe daha bekliyor. Taşımak için devri tekrar çalıştırın."
     }
   }
 }

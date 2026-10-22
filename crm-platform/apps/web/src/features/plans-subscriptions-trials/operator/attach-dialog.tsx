@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import {
   PLAN_FEATURE_KEYS,
@@ -343,9 +343,12 @@ export function AttachDialog({
 /** The workspace's Marketplace add-ons: what its plan makes visible (owned or not) and what it owns that the plan no longer shows. */
 function AddonsSection({ addons, locale }: { addons: WorkspacePlan['addons']; locale: string }) {
   const ta = useTranslations(`${NS}.operator.dialog.addons`);
+  const timeZone = useTimeZone();
   const { visible, former } = addonLists(addons);
   const date = (iso: string | null) =>
-    iso ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso)) : null;
+    iso
+      ? new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(new Date(iso))
+      : null;
   return (
     <section className="space-y-3" data-testid="workspace-addons">
       <div>

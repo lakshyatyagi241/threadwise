@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "待機中"
+      },
+      "empty": {
+        "waiting": {
+          "title": "担当者を待っている会話はありません",
+          "message": "ボット、フロー、またはチームメンバーが担当者を求めると、誰かが引き受けるまで会話はここで待機します。"
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "ボットが対応中",
+        "waiting": "担当者を待っています",
+        "with_person": "担当者が対応中"
+      },
+      "ageMinutes": "{count}分",
+      "ageHours": "{count}時間",
+      "ageDays": "{count}日",
+      "row": {
+        "waiting": "待機中",
+        "waitingFor": "{age}待機中",
+        "inTeam": "{team} のキュー"
+      },
+      "assignedTo": "現在の担当: {name}",
+      "inTeamQueue": "{team} のキュー",
+      "cardFailed": "引き継ぎの詳細を読み込めませんでした。",
+      "claim": {
+        "button": "引き受ける",
+        "done": "この会話を引き受けました。",
+        "doneOwner": "この会話を引き受け、連絡先の担当者になりました。",
+        "failed": "会話を引き受けられませんでした。",
+        "taken": "他の人が先にこの会話を引き受けました。",
+        "overLimitTitle": "チャット数の上限に達しています",
+        "overLimitMessage": "すでに{open}件の対応中の会話があり、上限は{limit}件です。それでもこの会話を引き受けますか？",
+        "overLimitConfirm": "それでも引き受ける",
+        "overLimitCancel": "キャンセル"
+      },
+      "giveBack": {
+        "button": "ボットに戻す",
+        "done": "この会話はボットが再び対応します。",
+        "failed": "会話をボットに戻せませんでした。",
+        "doneFlow": "ボットがフローを続けます。",
+        "doneNextLive": "ボットがお客様の次のメッセージに返信します。",
+        "doneNextDefault": "ボットが再び有効になりました。デフォルトのフローが設定されている場合のみ、次のメッセージに返信します。",
+        "already": "この会話はすでにボットが対応しています。"
+      },
+      "send": {
+        "button": "キューに送る",
+        "buttonAgain": "もう一度キューに送る",
+        "title": "担当者に送る",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "submit": "送信",
+        "intro": "ボットはこの連絡先への対応を停止します。会話は選択した担当者またはチームに渡されるか、誰かが引き受けるまでキューで待機します。",
+        "where": "送信先",
+        "whereRules": "割り当てルール、なければ待機キュー",
+        "whereQueueOnly": "待機キュー（割り当てルールにはスマートルーティングアドオンが必要です）",
+        "whereTeam": "チーム",
+        "wherePerson": "1人の担当者",
+        "team": "チーム",
+        "pickTeam": "チームを選択",
+        "person": "担当者",
+        "pickPerson": "担当者を選択",
+        "reason": "担当者が必要な理由",
+        "note": "引き受ける担当者へのメモ",
+        "noteHint": "引き継ぎカードに表示されます。500文字まで。",
+        "refused": "この会話は引き継げません(アーカイブ済み、スパム、または個人用メールボックスです)。",
+        "failed": "会話を送信できませんでした。",
+        "done": {
+          "assigned": "送信しました。担当者が決まりました。",
+          "waiting": "送信しました。キューで待機しています。",
+          "unavailable": "キューに送信しました。現在対応できる人がいません。"
+        }
+      },
+      "details": {
+        "show": "詳細",
+        "hide": "詳細を隠す"
+      },
+      "card": {
+        "source": "依頼元",
+        "reason": "理由",
+        "priority": "優先度",
+        "summary": "概要",
+        "answers": "連絡先がボットに伝えた内容",
+        "trace": "割り当て方法",
+        "timers": "待機キューの手順"
+      },
+      "source": {
+        "flow": "フロー",
+        "ai_agent": "AIエージェント",
+        "keyword": "連絡先自身の希望",
+        "bot_failure": "対応できなかったボット",
+        "manual": "チームメンバー",
+        "arrival": "ルーティング: 誰も引き受けられませんでした"
+      },
+      "reason": {
+        "customer_asked": "連絡先が担当者を希望しました",
+        "bot_could_not_help": "ボットでは対応できませんでした",
+        "sensitive_topic": "センシティブな話題",
+        "sales_lead": "営業リード",
+        "complaint": "クレーム",
+        "other": "その他"
+      },
+      "priority": {
+        "low": "低",
+        "normal": "通常",
+        "high": "高",
+        "urgent": "緊急"
+      },
+      "trace": {
+        "chosen": "選択済み",
+        "skipped": "スキップ",
+        "info": "メモ"
+      },
+      "botLine": {
+        "system": "システム",
+        "pressed": {
+          "flow": "ボットが戻りました。{name} が戻しました。フローは続きます。",
+          "nextLive": "ボットが戻りました。{name} が戻しました。お客様の次のメッセージに返信します。",
+          "nextDefault": "ボットが戻りました。{name} が戻しました。デフォルトのフローが設定されている場合のみ、次のメッセージに返信します。"
+        },
+        "result": {
+          "continued": "フローは「ボットに戻した」出口から続きました。",
+          "claimed_again": "フローは再開されませんでした: 担当者が再びチャットを引き受けました。",
+          "flow_not_live": "フローは再開されませんでした: フローは有効ではなくなりました。",
+          "start_failed": "フローを再開できませんでした。"
+        },
+        "customer": {
+          "sent": "お客様へのメッセージを送信しました。",
+          "window_closed": "お客様へのメッセージをスキップしました: 24時間ウィンドウが閉じています。",
+          "no_consent": "お客様へのメッセージをスキップしました: 同意がありません。",
+          "failed": "お客様へのメッセージを送信できませんでした。",
+          "channel_unavailable": "お客様へのメッセージをスキップしました: チャネルを利用できません。"
+        }
+      },
+      "timers": {
+        "reminded": "{at}に通知",
+        "offered": "{at}にこのチームへ回しました",
+        "messaged": "{at}に顧客へメッセージを送信",
+        "gaveBack": "{at}にボットへ戻しました"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "{actor} がボットに戻しました",
+          "bot_resumed": "ボットがフローを続けました",
+          "bot_resume_skipped": "フローは再開されませんでした"
+        }
+      }
+    }
+  }
+}

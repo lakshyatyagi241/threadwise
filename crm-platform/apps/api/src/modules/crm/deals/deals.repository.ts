@@ -10,6 +10,7 @@ import {
 import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import { isTeamPeer, scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 /** What a deal looks like after the joins every read needs. Ids here are internal and never leave the mapper. */
 export interface DealRow {
@@ -43,6 +44,8 @@ export interface DealRow {
   stageProbability: number;
   stageKind: StageKind;
   ownerId: number | null;
+  /** Who created the deal (D1): with the owner, the people record scope looks at. */
+  createdBy: number | null;
   ownerUuid: string | null;
   ownerName: string | null;
   contactId: number | null;
@@ -86,6 +89,7 @@ interface RawDeal {
   stage_is_won: boolean;
   stage_is_lost: boolean;
   owner_id: number | string | null;
+  created_by: number | string | null;
   owner_uuid: string | null;
   owner_name: string | null;
   contact_id: number | string | null;
@@ -132,6 +136,7 @@ export function toDealRow(r: RawDeal): DealRow {
     stageProbability: Number(r.stage_probability),
     stageKind: r.stage_is_won ? 'won' : r.stage_is_lost ? 'lost' : 'open',
     ownerId: num(r.owner_id),
+    createdBy: num(r.created_by),
     ownerUuid: r.owner_uuid,
     ownerName: r.owner_name,
     contactId: num(r.contact_id),
@@ -150,6 +155,8 @@ export interface DealFilter {
   q?: string;
   ownerId?: number;
   unassigned?: boolean;
+  /** The deal's owning team (BL-382). */
+  teamId?: number;
   contactId?: number;
   companyId?: number;
   source?: string;
@@ -161,20 +168,17 @@ export interface DealFilter {
 
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
-/** Record scope as a condition on the deal's owner; 'all' adds nothing. */
+/** Record scope as a condition on the deal's owner and creator; 'all' adds nothing. */
 export function dealScopeCondition(
   orgId: number,
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  if (scope === 'own') return sql`d.owner_user_id = ${actorUserId}`;
-  return sql`d.owner_user_id IN (
-    SELECT tm2.user_id FROM team_members tm1
-    JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-    WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
-  )`;
+  // D1 (BL-380): the creator counts like the owner, in `own` and in `team`.
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`d.owner_user_id`,
+    sql`d.created_by`,
+  ]);
 }
 
 /** WHERE conditions for a filter, against the `d`, `c` (contact) and `co` (company) aliases of `FROM_JOINS`. */
@@ -188,6 +192,7 @@ export function dealConditions(orgId: number, f: DealFilter, scope?: SQL): SQL[]
   if (f.source) conds.push(sql`d.source = ${f.source}`);
   if (f.ownerId !== undefined) conds.push(sql`d.owner_user_id = ${f.ownerId}`);
   if (f.unassigned) conds.push(sql`d.owner_user_id IS NULL`);
+  if (f.teamId !== undefined) conds.push(sql`d.owning_team_id = ${f.teamId}`);
   if (f.contactId !== undefined) conds.push(sql`d.contact_id = ${f.contactId}`);
   if (f.companyId !== undefined) conds.push(sql`d.company_id = ${f.companyId}`);
   if (f.q) {
@@ -207,7 +212,7 @@ const SELECT_COLS = sql`
   d.pipeline_id, p.uuid AS pipeline_uuid, p.name AS pipeline_name,
   d.stage_id, s.uuid AS stage_uuid, s.name AS stage_name, s.color AS stage_color,
   s.probability AS stage_probability, s.is_won AS stage_is_won, s.is_lost AS stage_is_lost,
-  d.owner_user_id AS owner_id, u.uuid AS owner_uuid, u.full_name AS owner_name,
+  d.owner_user_id AS owner_id, d.created_by, u.uuid AS owner_uuid, u.full_name AS owner_name,
   d.contact_id, c.uuid AS contact_uuid, c.name AS contact_name, c.phone AS contact_phone, c.email::text AS contact_email,
   d.company_id, co.uuid AS company_uuid, co.name AS company_name
 `;
@@ -251,6 +256,9 @@ export interface StageTotalRow {
   sumMinor: bigint;
 }
 
+/** The people on a deal that record scope looks at: who owns it and who created it (BL-380, D1). */
+export type DealPeople = Pick<DealRow, 'ownerId' | 'createdBy'>;
+
 export interface NewDeal {
   pipelineId: number;
   stageId: number;
@@ -260,6 +268,8 @@ export interface NewDeal {
   valueMinor: bigint;
   currency: string;
   ownerUserId: number | null;
+  /** The staff member who created the deal (BL-380, D1: record scope `own` counts the creator). Null for a flow, an import or the API. */
+  createdBy?: number | null;
   expectedCloseDate: string | null;
   status: DealStatus;
   lostReason: string | null;
@@ -438,9 +448,9 @@ export class DealsRepository {
   async insert(tx: Tx, orgId: number, v: NewDeal): Promise<{ id: number; uuid: string }> {
     const res = await tx.execute(sql`
       INSERT INTO deals (org_id, pipeline_id, stage_id, contact_id, company_id, title, value_minor, currency,
-                         owner_user_id, expected_close_date, status, lost_reason, source, sort_order, notes, won_at, lost_at)
+                         owner_user_id, created_by, expected_close_date, status, lost_reason, source, sort_order, notes, won_at, lost_at)
       VALUES (${orgId}, ${v.pipelineId}, ${v.stageId}, ${v.contactId}, ${v.companyId}, ${v.title},
-              ${v.valueMinor.toString()}::bigint, ${v.currency}, ${v.ownerUserId}, ${v.expectedCloseDate}::date,
+              ${v.valueMinor.toString()}::bigint, ${v.currency}, ${v.ownerUserId}, ${v.createdBy ?? null}, ${v.expectedCloseDate}::date,
               ${v.status}, ${v.lostReason}, ${v.source}, ${v.sortOrder.toString()}::bigint, ${v.notes},
               ${v.wonAt}, ${v.lostAt})
       RETURNING id, uuid
@@ -638,14 +648,10 @@ export class DealsRepository {
     orgId: number,
     actorUserId: number,
     ownerId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${ownerId}
-      LIMIT 1
-    `);
-    return res.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, ownerId, below);
   }
 
   /** The workspace's own currency for a pipeline that does not say, and its time zone for reports. */

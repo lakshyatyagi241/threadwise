@@ -10,7 +10,7 @@
 # extra path segment — it is not a mistake.)
 # ---------------------------------------------------------------------------
 
-FROM node:25-alpine AS base
+FROM node:22-alpine AS base
 # git: `pnpm deploy` re-resolves baileys' git-hosted dependency (libsignal-node), and alpine ships without git.
 RUN apk add --no-cache git && npm install -g --force corepack && corepack enable pnpm
 WORKDIR /app
@@ -28,7 +28,10 @@ COPY packages/db/package.json       packages/db/
 COPY packages/observability/package.json packages/observability/
 COPY packages/tax/package.json      packages/tax/
 COPY packages/ui/package.json       packages/ui/
-RUN pnpm install --frozen-lockfile
+# Only this app and the workspace packages it depends on (the other app's dependencies are not needed to build this image); the store is
+# cached between builds so a changed lockfile re-downloads only what changed.
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile --filter @crm/api...
 
 # --- build -----------------------------------------------------------------
 FROM deps AS build
@@ -45,7 +48,7 @@ RUN pnpm --filter @crm/api --prod deploy /out \
  && cp -r packages/db/migrations /out/migrations
 
 # --- runtime ---------------------------------------------------------------
-FROM node:25-alpine AS runtime
+FROM node:22-alpine AS runtime
 ENV NODE_ENV=production
 # The commit this image was built from: the release name in error reports and on the operator System page.
 ARG GIT_SHA=

@@ -31,7 +31,7 @@ export function AdminOverviewScreen({ window }: { window: AdminOverviewWindow })
             {t('overview.kicker')}
           </p>
           <h1 className="font-serif text-3xl leading-tight sm:text-4xl">
-            {t('overview.titleLead')} <em className="text-primary">{t('overview.titleAccent')}</em>.
+            {t('overview.titleLead')} <em className="not-italic text-primary">{t('overview.titleAccent')}</em>.
           </h1>
           <p className="text-sm text-muted-foreground">{t('overview.subtitle')}</p>
         </div>
@@ -39,7 +39,9 @@ export function AdminOverviewScreen({ window }: { window: AdminOverviewWindow })
           aria-label={t('window.label')}
           className="w-auto"
           value={window}
-          onChange={(e) => router.replace(`${pathname}?window=${e.target.value}`)}
+          onChange={(e) =>
+            router.replace(`${pathname}?window=${e.target.value}`, { scroll: false })
+          }
         >
           {ADMIN_OVERVIEW_WINDOWS.map((w) => (
             <option key={w} value={w}>

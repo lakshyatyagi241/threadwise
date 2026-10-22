@@ -45,19 +45,22 @@ export const BULK_TABLES = new Set([
   'keyword_reply_contents',
   'chatbot_widgets',
   'ai_chat_assistants',
-  // the FAQ feature (step faq_knowledge): verified by reconcile/faq.ts; faq_match_logs stays in the baseline (empty)
-  'faqs',
-  'faq_variations',
-  'faq_settings',
   // stage 2 lead data: verified by reconcile/leads.ts against the independent oracle (reconcile/oracle-leads.ts); the outbox and notifications stay in the baseline (empty)
   'lead_sources',
   'lead_events',
   'contact_attributions',
   // the later bulk steps (templates, segments and saved views, knowledge sources, forms, the API library, outbound webhooks, chat labels):
   // every row is compared column by column through the generic fingerprint of reconcile/index.ts, so the baseline digest must not flag them
+  // derived data the platform keeps on its own schedule (storage-quota backfill and the nightly reconcile write these within minutes of an
+  // organization existing): never a baseline difference
+  'storage_org_state',
+  'storage_usage',
+  'storage_objects',
+  'storage_reservations',
   'wa_templates',
   'segments',
   'contact_views',
+  'contact_view_users',
   'ai_training_sources',
   'wa_forms',
   'api_library_apis',
@@ -116,7 +119,9 @@ export async function digest(
     if (hs.length > 0) out[t] = hs;
   }
   const o = await tx.execute(
-    sql`SELECT md5(to_jsonb(x)::text) AS h FROM organizations x WHERE id = ${orgId}`,
+    // roles_version, updated_at and row_version move whenever a platform migration re-applies the preset baseline or a person edits the
+    // workspace: they are not what provisioning left behind
+    sql`SELECT md5((to_jsonb(x) - 'roles_version' - 'updated_at' - 'row_version')::text) AS h FROM organizations x WHERE id = ${orgId}`,
   );
   out.organizations = (o.rows as Array<{ h: string }>).map((x) => x.h).sort();
   return out;

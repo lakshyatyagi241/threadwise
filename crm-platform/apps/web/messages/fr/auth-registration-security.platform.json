@@ -1404,7 +1404,8 @@
             "packInactive": "Le pack du module complémentaire est désactivé, personne ne peut donc l’acheter.",
             "appUnpublished": "L’application n’est pas publiée, les espaces de travail ne peuvent donc pas encore la voir.",
             "appLabel": "Application : {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# module complémentaire sélectionné} other {# modules complémentaires sélectionnés}}"
           },
           "featureHints": {
             "automation": "Le créateur de flux et les automatisations qui répondent aux conversations et agissent dessus.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "Marque blanche : l’espace de travail peut masquer la marque de la plateforme dans son pied de message.",
             "sales_pipeline": "Affaires, tâches et pipelines, et les chiffres du pipeline sur le tableau de bord.",
             "appointment_booking": "Types de réservation, rendez-vous et pages de réservation publiques. L’application payante Rendez-vous gère cet interrupteur.",
+            "appointment_confirm_buttons": "Ajoute les boutons Confirmer, Reporter et Annuler au rappel de rendez-vous envoyé sur WhatsApp.",
+            "appointment_rebook_steps": "Messages de suivi envoyés après un rendez-vous terminé, qui invitent le contact à reprendre rendez-vous.",
             "chatbot_widgets": "Le créateur de widgets de chatbot pour site web.",
             "wa_storefront": "La zone du catalogue et de la boutique WhatsApp.",
             "inbox_sla": "Politiques et échéances SLA dans la boîte de réception d’équipe.",
-            "inbox_routing": "Règles de routage qui attribuent automatiquement les conversations de la boîte de réception.",
+            "inbox_routing": "Attribution automatique des nouvelles conversations : règles de routage, Tous les autres et minuteurs de la file d'attente. Fait partie du module Routage intelligent.",
             "waba_calling": "Appels WhatsApp depuis la boîte de réception : numéros d’appel, autorisations d’appel, émission et réponse aux appels.",
             "inbox_kanban": "La vue tableau Kanban de la boîte de réception d’équipe.",
             "team_performance": "Les rapports de performance de l’équipe.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels.",
             "ai_crm_copilot": "Trouve et note des prospects avec l'IA à partir de vos contacts.",
             "lead_scoring": "Note les contacts avec l’IA et alimente le pilote de croissance. L’application Scoring des leads par IA gère ce commutateur.",
-            "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité."
+            "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité.",
+            "team_hierarchy": "Équipes parentes, responsables d'équipe et managers qui voient leur équipe et les équipes en dessous.",
+            "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation.",
+            "inbox_assignment_sticky": "Attribution propriétaire d'abord et synchronisée, fenêtre de contact récurrent et invite de réattribution. Fait partie du module Routage intelligent."
           },
           "units": {
             "days": "Jours",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "SMS par mois",
             "email_mailboxes": "Boîtes e-mail",
             "email_monthly": "E-mails par mois",
-            "storage_gb": "Stockage (Go)"
+            "storage_gb": "Stockage (Go)",
+            "teams": "Équipes"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1605,10 +1612,12 @@
             "remove_branding": "Marque blanche (supprime la marque de la plateforme)",
             "sales_pipeline": "Pipeline de vente (affaires et tâches)",
             "appointment_booking": "Rendez-vous et pages de réservation",
+            "appointment_confirm_buttons": "Boutons du rappel : Confirmer, Reporter et Annuler",
+            "appointment_rebook_steps": "Étapes de relance après un rendez-vous",
             "chatbot_widgets": "Widgets de chatbot pour site web",
             "wa_storefront": "Boutique et catalogue WhatsApp",
             "inbox_sla": "Politiques SLA de la boîte de réception",
-            "inbox_routing": "Règles de routage de la boîte de réception et horaires d’ouverture",
+            "inbox_routing": "Routage intelligent: attribution automatique et règles",
             "waba_calling": "Passer et recevoir des appels WhatsApp depuis la boîte de réception",
             "inbox_kanban": "Tableau Kanban de la boîte de réception",
             "team_performance": "Rapports de performance de l’équipe",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Scoring des leads par IA",
-            "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)"
+            "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)",
+            "team_hierarchy": "Hiérarchie des équipes et managers",
+            "custom_roles": "Rôles personnalisés et périmètres",
+            "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
             "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
             "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
-            "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué."
+            "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
+            "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "CRM commercial",
+            "platform": "Partagé par les deux"
+          },
+          "marketplace": {
+            "title": "Applications du Marketplace proposées aux espaces de travail de ce forfait"
+          },
+          "included": {
+            "title": "Modules complémentaires inclus dans ce forfait",
+            "intro": "Activez un module complémentaire pour l’inclure : les espaces de travail de ce forfait l’obtiennent sans frais et sa carte indique « Inclus dans votre forfait ». Cela coche exactement les fonctionnalités du module dans l’onglet Fonctionnalités, et les cocher là-bas fait basculer le commutateur. Les modules non inclus restent vendus à leur propre prix à tout espace de travail ayant un forfait payant actif.",
+            "readOnly": "Vous pouvez consulter ce forfait mais pas le modifier, ces commutateurs sont donc verrouillés.",
+            "loading": "Chargement des modules complémentaires",
+            "loadFailed": "Impossible de charger les modules complémentaires. Rien n’a été modifié.",
+            "empty": "Aucun module complémentaire pour l’instant",
+            "emptyHint": "Les modules comme Routage intelligent et Équipes et autorisations se créent sous Modules complémentaires dans la console opérateur.",
+            "stateFull": "Inclus",
+            "statePartial": "Partiellement inclus",
+            "stateNone": "Non inclus",
+            "noPrice": "Aucun prix défini",
+            "gives": "Donne : {features}",
+            "switchLabel": "Inclure {name} dans ce forfait",
+            "noFeatures": "Ce module n’ajoute que des limites, il n’y a donc aucune fonctionnalité à inclure. Ses limites ne font pas partie de l’inclusion dans le forfait ; définissez les limites propres au forfait dans l’onglet Limites.",
+            "partial": "Partiellement inclus : {count} fonctionnalités sur {total} sont activées dans ce forfait. Encore désactivées : {missing}.",
+            "includeFully": "Inclure entièrement",
+            "limitsNote": "Ce module ajoute aussi des limites supplémentaires ({limits}). La limite supplémentaire ne fait pas partie de l’inclusion dans le forfait et rien ici ne la modifie : définissez la limite propre au forfait dans l’onglet Limites. Les espaces de travail achètent toujours le module pour la limite supplémentaire.",
+            "unlistedNote": "Certaines de ses fonctionnalités ({features}) ne figurent pas dans la liste standard des modules. Elles peuvent quand même être activées pour le forfait ; seul l’achat de ce module en tant que pack fonctionne différemment.",
+            "inactiveNote": "Ce module est un brouillon ou désactivé, personne ne peut donc encore l’acheter. L’inclure dans le forfait fonctionne quand même.",
+            "impactCount": "{count, plural, one {# espace de travail paie déjà ce module.} other {# espaces de travail paient déjà ce module.}} Leur renouvellement s’arrêtera à la fin de la période en cours, rien n’est remboursé et rien n’est annulé aujourd’hui.",
+            "impactUnknown": "Les espaces de travail de ce forfait qui paient déjà ce module ne le renouvelleront plus à la fin de leur période en cours. Rien n’est remboursé et rien n’est annulé aujourd’hui. Le nombre n’a pas pu être chargé.",
+            "offNote": "Désactivé : les espaces de travail de ce forfait perdent ces fonctionnalités à moins d’acheter le module, qui devient achetable pour eux à son prix."
           }
         }
       },

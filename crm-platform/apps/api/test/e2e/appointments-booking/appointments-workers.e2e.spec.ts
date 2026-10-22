@@ -20,8 +20,6 @@ import { AppointmentMessageConsumer } from '../../../src/modules/appointments-bo
 import { AppointmentReminderService } from '../../../src/modules/appointments-booking/appointment-reminder.service';
 import { AppointmentReminderSweepService } from '../../../src/modules/appointments-booking/appointment-reminder-sweep.service';
 import { AppointmentRemindersRepository } from '../../../src/modules/appointments-booking/appointment-reminders.repository';
-import { AuditService } from '../../../src/kernel/audit/audit.service';
-import { ContactActivitiesRepository } from '../../../src/modules/crm';
 import { AppointmentsRepository } from '../../../src/modules/appointments-booking/appointments.repository';
 import { AppointmentsSupport } from '../../../src/modules/appointments-booking/appointments.support';
 import { BookingService } from '../../../src/modules/appointments-booking/booking.service';
@@ -29,6 +27,7 @@ import { BookingTypesRepository } from '../../../src/modules/appointments-bookin
 import { SlotsService } from '../../../src/modules/appointments-booking/slots.service';
 import {
   AppointmentsApi,
+  buildReminderService,
   startHarness,
   type Appointment,
   type Harness,
@@ -46,7 +45,7 @@ let api: AppointmentsApi;
 let db: DatabaseService;
 let reminders: AppointmentReminderSweepService;
 let reminderService: AppointmentReminderService;
-/** What the reminder delivery hands to the customer messenger: a fake, no real WhatsApp, SMS or email provider is ever called. */
+/** What the reminder delivery hands to the customer messenger: a fake, no real WhatsApp or email provider is ever called. */
 let reminderMessenger: FakeMessenger;
 let lifecycle: AppointmentLifecycleSweepService;
 let typesRepo: BookingTypesRepository;
@@ -61,17 +60,7 @@ beforeAll(async () => {
   apptsRepo = h.app.get(AppointmentsRepository);
   support = h.app.get(AppointmentsSupport);
   reminderMessenger = new FakeMessenger();
-  reminderService = new AppointmentReminderService(
-    db,
-    h.app.get(AppointmentRemindersRepository),
-    apptsRepo,
-    typesRepo,
-    support,
-    h.app.get(AuditService),
-    h.app.get(OutboxService),
-    h.app.get(ContactActivitiesRepository),
-    reminderMessenger,
-  );
+  reminderService = buildReminderService(h, reminderMessenger);
   reminders = new AppointmentReminderSweepService(
     db,
     h.app.get(OutboxService),
@@ -319,7 +308,7 @@ describe('reminder rules and their delivery (BL-283)', () => {
   it('a rule is created OFF: nothing is claimed or sent until someone switches it on', async () => {
     const { type, a } = await book('Off by default', [{ offsetMinutes: 60 }]);
     expect(type.reminders[0]).toMatchObject({ isActive: false, kind: 'before', body: null });
-    expect(type.reminders[0].channels).toEqual(['whatsapp', 'sms', 'email']);
+    expect(type.reminders[0].channels).toEqual(['whatsapp', 'email']);
     await arrange(a.id, 30, 600);
     await reminders.sweep();
     await reminders.deliver();
@@ -332,7 +321,7 @@ describe('reminder rules and their delivery (BL-283)', () => {
       {
         offsetMinutes: 60,
         isActive: true,
-        channels: ['sms', 'email'],
+        channels: ['whatsapp', 'email'],
         body: 'Hi {{name}}, {{type}} at {{time}}. Cancel or move: {{manage_link}}',
       },
     ]);
@@ -346,7 +335,7 @@ describe('reminder rules and their delivery (BL-283)', () => {
       orgId: t.orgId,
       appointmentId: a.id,
       event: 'reminder',
-      channel: 'sms',
+      channel: 'whatsapp',
       purpose: 'service',
     });
     expect(m.body).toMatch(/^Hi Rita, Deliver at \d{1,2}:\d{2} [AP]M\. Cancel or move: http/);
@@ -358,9 +347,9 @@ describe('reminder rules and their delivery (BL-283)', () => {
       kind: 'before',
       offset_minutes: 60,
       status: 'sent',
-      channel: 'sms',
+      channel: 'whatsapp',
     });
-    expect(await timeline(a.id)).toEqual([{ title: 'Reminder sent on SMS', body: null }]);
+    expect(await timeline(a.id)).toEqual([{ title: 'Reminder sent on WhatsApp', body: null }]);
     expect(JSON.stringify(await timeline(a.id))).not.toMatch(/Rita|\+9198|@example/);
     const audit = await h.owner.query(
       `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'appointment_reminder_runs'`,
@@ -377,25 +366,24 @@ describe('reminder rules and their delivery (BL-283)', () => {
 
   it("tries the rule's channels in its order and uses the first that delivers, without a second copy", async () => {
     const { a } = await book('Fallback order', [
-      { offsetMinutes: 60, isActive: true, channels: ['whatsapp', 'sms', 'email'] },
+      { offsetMinutes: 60, isActive: true, channels: ['whatsapp', 'email'] },
     ]);
     reminderMessenger.byChannel = {
       whatsapp: { status: 'skipped', reason: 'template_required' },
-      sms: { status: 'skipped', reason: 'no_sender' },
     };
     await arrange(a.id, 30, 600);
     await reminders.sweep();
     await reminders.deliver();
-    expect(reminderMessenger.sent.map((x) => x.channel)).toEqual(['whatsapp', 'sms', 'email']);
+    expect(reminderMessenger.sent.map((x) => x.channel)).toEqual(['whatsapp', 'email']);
     expect((await runsOf(a.id))[0]).toMatchObject({ status: 'sent', channel: 'email' });
   });
 
   it('when no channel can deliver, the run says why (the most telling reason) and the timeline shows it', async () => {
     const { a } = await book('Nobody', [
-      { offsetMinutes: 60, isActive: true, channels: ['sms', 'email'] },
+      { offsetMinutes: 60, isActive: true, channels: ['whatsapp', 'email'] },
     ]);
     reminderMessenger.byChannel = {
-      sms: { status: 'skipped', reason: 'opted_out' },
+      whatsapp: { status: 'skipped', reason: 'opted_out' },
       email: { status: 'skipped', reason: 'no_sender' },
     };
     await arrange(a.id, 30, 600);
@@ -412,14 +400,16 @@ describe('reminder rules and their delivery (BL-283)', () => {
   });
 
   it('a hold (quiet hours) waits for its time, keeps the preference, and writes the timeline once', async () => {
-    const { a } = await book('Held', [{ offsetMinutes: 60, isActive: true, channels: ['sms'] }]);
+    const { a } = await book('Held', [
+      { offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
+    ]);
     const until = new Date(Date.now() + 2 * 3_600_000).toISOString();
     reminderMessenger.result = { status: 'held', reason: 'quiet_hours', holdUntil: until };
     await arrange(a.id, 30, 600);
     await reminders.sweep();
     await reminders.deliver();
     const [held] = await runsOf(a.id);
-    expect(held).toMatchObject({ status: 'held', reason: 'quiet_hours', channel: 'sms' });
+    expect(held).toMatchObject({ status: 'held', reason: 'quiet_hours', channel: 'whatsapp' });
     expect(new Date(held.next_attempt_at).toISOString()).toBe(until);
     // Not due yet: the next pass leaves it alone.
     expect(await reminders.deliver()).toBe(0);
@@ -437,10 +427,10 @@ describe('reminder rules and their delivery (BL-283)', () => {
       [t.orgId],
     );
     await reminders.deliver();
-    expect((await runsOf(a.id))[0]).toMatchObject({ status: 'sent', channel: 'sms' });
+    expect((await runsOf(a.id))[0]).toMatchObject({ status: 'sent', channel: 'whatsapp' });
     expect((await timeline(a.id)).map((x) => x.title)).toEqual([
       'Reminder waiting',
-      'Reminder sent on SMS',
+      'Reminder sent on WhatsApp',
     ]);
   });
 
@@ -562,7 +552,11 @@ describe('reminder rules and their delivery (BL-283)', () => {
     const made = [];
     for (let i = 0; i < 5; i++) {
       made.push(
-        (await book(`Parallel ${i}`, [{ offsetMinutes: 60, isActive: true, channels: ['sms'] }])).a,
+        (
+          await book(`Parallel ${i}`, [
+            { offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
+          ])
+        ).a,
       );
     }
     for (const a of made) await arrange(a.id, 30, 600);
@@ -576,8 +570,8 @@ describe('reminder rules and their delivery (BL-283)', () => {
 
   it('the booking detail shows each reminder and what became of it', async () => {
     const { a } = await book('Detail', [
-      { offsetMinutes: 60, isActive: true, channels: ['sms'], label: 'One hour' },
-      { offsetMinutes: 30, isActive: true, channels: ['sms'] },
+      { offsetMinutes: 60, isActive: true, channels: ['whatsapp'], label: 'One hour' },
+      { offsetMinutes: 30, isActive: true, channels: ['whatsapp'] },
       { offsetMinutes: 15, isActive: false },
       { kind: 'after', offsetMinutes: 60, isActive: true },
     ]);
@@ -599,12 +593,14 @@ describe('reminder rules and their delivery (BL-283)', () => {
       ['before', 30, 'sent'],
       ['after', 60, 'scheduled'],
     ]);
-    expect(list[0]).toMatchObject({ label: 'One hour', channel: 'sms' });
+    expect(list[0]).toMatchObject({ label: 'One hour', channel: 'whatsapp' });
   });
 
   it("another workspace's runs are never touched by this one's rules", async () => {
     const other = await api.signup('wrd2');
-    const mine = await book('Mine', [{ offsetMinutes: 60, isActive: true, channels: ['sms'] }]);
+    const mine = await book('Mine', [
+      { offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
+    ]);
     await arrange(mine.a.id, 30, 600);
     await reminders.sweep();
     const seen = await h.owner.query(
@@ -825,6 +821,8 @@ describe('the message consumer (TW-APPT-013, 030, 031, D-14, EXT-APPT-08)', () =
       typesRepo,
       support,
       new OutboxSubscriberRegistry(),
+      reminderService,
+      h.app.get(AppointmentRemindersRepository),
       messenger,
     );
   });

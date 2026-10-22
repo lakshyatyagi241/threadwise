@@ -47,7 +47,8 @@
       "nameTaken": "已存在同名角色。",
       "nameRequired": "角色名称为必填项。",
       "nameTooLong": "角色名称最多 {max} 个字符。",
-      "notFound": "此项目已不存在，可能已被删除。"
+      "notFound": "此项目已不存在，可能已被删除。",
+      "customRolesLocked": "您的套餐不包含自定义角色和带范围的权限。您可以查看角色,但无法创建或更改。"
     },
     "team": {
       "crumb": "团队成员",
@@ -90,7 +91,9 @@
         "member": "成员",
         "roles": "角色",
         "status": "状态",
-        "actions": "操作"
+        "actions": "操作",
+        "teams": "团队",
+        "manager": "负责人"
       },
       "empty": {
         "none": "暂无成员。",
@@ -137,8 +140,17 @@
         "keptRole": "{name} 将保留：您无法授予或移除该角色。",
         "atLeastOne": "请至少选择一个角色。",
         "save": "保存角色",
-        "reload": "重新加载"
-      }
+        "reload": "重新加载",
+        "noTeamWarning": "{name} 不属于任何团队，因此在角色范围设置为团队的地方只能看到自己的记录。请在“设置 > 团队”中将其加入团队。"
+      },
+      "teamFilter": {
+        "label": "按团队筛选成员",
+        "all": "所有团队"
+      },
+      "noTeams": "无团队",
+      "primaryTeam": "主团队",
+      "primaryMark": "主团队",
+      "noManager": "无负责人"
     },
     "list": {
       "crumb": "角色",
@@ -171,7 +183,9 @@
       },
       "toasts": {
         "deleted": "已删除角色“{name}”。"
-      }
+      },
+      "customRolesLocked": "您的套餐不包含自定义角色和带范围的权限。您可以查看角色,但无法创建或更改。",
+      "addRoleLocked": "添加角色(升级)"
     },
     "editor": {
       "crumbRoles": "角色",
@@ -212,7 +226,9 @@
         "created": "已创建角色“{name}”。",
         "updated": "已更新角色“{name}”。",
         "deleted": "已删除角色“{name}”。"
-      }
+      },
+      "customRolesLocked": "您的套餐不包含自定义角色和带范围的权限。您可以查看角色,但无法创建或更改。",
+      "upgrade": "查看套餐"
     },
     "matrix": {
       "title": "权限",
@@ -235,8 +251,20 @@
       "lockedHint": "此工作区暂不可使用该权限。待套餐功能开启或应用安装后即可解锁。",
       "scope": {
         "all": "全部记录",
-        "team": "团队记录",
-        "own": "个人记录"
+        "own": "我的记录",
+        "team": "我团队的记录",
+        "team_and_below": "我的团队及下级团队"
+      },
+      "scopeLegend": "每种记录范围涵盖的内容",
+      "scopeHelp": {
+        "all": "工作区中的所有记录。",
+        "team_and_below": "你所在团队及其下所有团队的记录。",
+        "team": "你团队成员的记录。",
+        "own": "仅限你拥有或分配给你的记录。"
+      },
+      "noTeamWarning": "{count, plural, other {拥有此角色的 # 名成员不在任何团队中，因此在此角色设为团队范围的地方，他们只能看到自己的记录。}} 请在<link>设置 > 团队</link>中将他们加入团队。",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "没有此权限时，拥有团队访问权限的客服只能看到分配给自己或所在团队的对话。有此权限时，还能看到未分配给任何人的待处理对话队列。"
       }
     },
     "delete": {

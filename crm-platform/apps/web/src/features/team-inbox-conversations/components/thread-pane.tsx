@@ -7,6 +7,7 @@ import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
   ConversationPriority,
   ChannelResponse,
+  ConversationSummary,
   EmailReplyExtras,
   ConversationNote,
   InboxConversationDetail,
@@ -43,6 +44,7 @@ import { SlaBadge } from './sla-badge';
 import { TagMenu } from './tag-menu';
 import { TemplatePicker } from './template-picker';
 import { AssignMenu } from './assign-menu';
+import { HandoffBar, SendToQueueButton } from './handoff-bar';
 import { TriageMenu } from './triage-menu';
 import {
   AlertIcon,
@@ -111,6 +113,13 @@ export interface ThreadPaneProps {
     canAssign: boolean;
     busy: boolean;
     onAssign: (change: { userId: string | null }) => void;
+  };
+  /** Handoff (BL-396): who may claim, send to the queue and give back to the bot, and where the row the server answered goes. */
+  handoff?: {
+    canClaim: boolean;
+    canSend: boolean;
+    canReturn: boolean;
+    onPlaced: (row: ConversationSummary) => void;
   };
   /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
   triage?: {
@@ -365,6 +374,9 @@ export function ThreadPane(props: ThreadPaneProps) {
                 onSpam={props.triage.onSpam}
               />
             )}
+            {detail && props.handoff?.canSend && (
+              <SendToQueueButton detail={detail} onPlaced={props.handoff.onPlaced} />
+            )}
             {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
               <AssignMenu
                 current={detail.assignment.user}
@@ -438,6 +450,17 @@ export function ThreadPane(props: ThreadPaneProps) {
           </div>
         )}
       </header>
+
+      {detail && props.handoff && (
+        <HandoffBar
+          detail={detail}
+          nowMs={props.nowMs}
+          canClaim={props.handoff.canClaim}
+          canSend={props.handoff.canSend}
+          canReturn={props.handoff.canReturn}
+          onPlaced={props.handoff.onPlaced}
+        />
+      )}
 
       <MessageStream
         conversationId={props.conversationId}

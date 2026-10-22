@@ -8,6 +8,7 @@ import {
   type ConnectedVideoProvider,
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
+import { Throttle } from '../platform-infrastructure';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { ConferencingConnectService } from './conferencing-connect.service';
 
@@ -24,6 +25,7 @@ export class ConferencingCallbackController {
   constructor(private readonly connect: ConferencingConnectService) {}
 
   @Get(':provider/callback')
+  @Throttle({ limit: 300, windowSeconds: 60, by: 'ip' })
   @Header('Cache-Control', 'no-store')
   @Header('Referrer-Policy', 'no-referrer')
   @Header('X-Robots-Tag', 'noindex, nofollow')

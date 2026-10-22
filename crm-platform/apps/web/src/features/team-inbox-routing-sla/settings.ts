@@ -2,14 +2,15 @@ import { settingsTile } from '../_registry/settings-types';
 
 /**
  * Auto-assignment (TW-TIB2-004 to 011): the routing rules that give a new conversation to an agent. A tile under Automation for roles that may
- * read the inbox configuration; a plan without the `inbox_routing` feature sees it locked. Copy lives in `messages/<locale>/settings.json`
+ * read the inbox configuration. It is NOT plan-locked as a whole: the page holds base controls every plan has (the claim-sets-owner and
+ * queue-alert switches, the waiting queue note) next to the Smart routing ones (`inbox_routing`, `inbox_assignment_sticky`), and each of those
+ * shows its own lock naming the add-on. Copy lives in `messages/<locale>/settings.json`
  * under `settings.tiles.auto-assignment`.
  *
- * Record assignment rules (contacts, companies and deals) are a tile of the record-assignment domain.
+ * Handoff and assignment (BL-396 to BL-404) used to have a tile of its own; its settings are now the four switches and the Advanced part at the top
+ * of the Auto-assignment page (spec H14). The old /assignment-settings address redirects there.
  *
- * Team performance (TW-TIB2-034): how fast the team replied, resolved and answered first, per agent. A tile under Data and security for
- * roles that hold `inbox.analytics.view`; a plan without Team performance sees it locked. Copy lives in `messages/<locale>/settings.json`
- * under `settings.tiles.team-performance`.
+ * Record assignment rules (contacts, companies and deals) are a tile of the record-assignment domain.
  */
 export const settings = [
   settingsTile({
@@ -19,7 +20,7 @@ export const settings = [
     icon: 'transfer',
     order: 25,
     shortcutFrom: ['/inbox'],
-    gates: { permission: 'inbox.settings.read', planFeature: 'inbox_routing' },
+    gates: { permission: 'inbox.settings.read' },
   }),
   settingsTile({
     id: 'sla-policies',
@@ -29,14 +30,5 @@ export const settings = [
     order: 27,
     shortcutFrom: ['/inbox'],
     gates: { permission: 'inbox.sla.manage', planFeature: 'inbox_sla' },
-  }),
-  settingsTile({
-    id: 'team-performance',
-    section: 'data',
-    href: '/inbox/analytics/team',
-    icon: 'sliders',
-    order: 55,
-    shortcutFrom: ['/inbox'],
-    gates: { permission: 'inbox.analytics.view', planFeature: 'team_performance' },
   }),
 ];

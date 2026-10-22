@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { jpegOfSize } from '../../support/images';
 import { INBOUND_HOOKS, type InboundHooks } from '../../../src/modules/channel-line/_shims/tokens';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 import { FakeLine, connectChannel, delivery, deliver, sign, textEvent, userId } from './support';
@@ -340,7 +341,7 @@ describe('files', () => {
     expect(m).toMatchObject({ kind: 'image', media_key: null });
     expect(m.meta.line.message_id).toBe('img-1');
 
-    fake.content = () => ({ bytes: new Uint8Array([0xff, 0xd8, 0xff, 0xd9]), mime: 'image/jpeg' });
+    fake.content = () => ({ bytes: new Uint8Array(jpegOfSize()), mime: 'image/jpeg' });
     await deliver(
       api,
       c,

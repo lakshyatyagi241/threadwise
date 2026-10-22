@@ -20,7 +20,7 @@ export interface RoleGrantRow {
   roleId: number;
   permissionKey: string;
   effect: 'allow' | 'deny';
-  recordScope: 'all' | 'team' | 'own';
+  recordScope: 'all' | 'team' | 'team_and_below' | 'own';
 }
 
 export interface ListRolesFilter {
@@ -127,6 +127,30 @@ export class RolesRepository {
     );
   }
 
+  /** Active members per role who are in no team (the roles editor warns about a team scope for them). */
+  async membersWithoutTeam(tx: Tx, orgId: number, roleIds: number[]): Promise<Map<number, number>> {
+    if (roleIds.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT ur.role_id, count(*)::int AS n
+      FROM user_roles ur
+      JOIN users u ON u.org_id = ur.org_id AND u.id = ur.user_id AND u.status <> 'inactive'
+      WHERE ur.org_id = ${orgId}
+        AND ur.role_id IN (${sql.join(
+          roleIds.map((i) => sql`${i}`),
+          sql`, `,
+        )})
+        AND NOT EXISTS (
+          SELECT 1 FROM team_members tm WHERE tm.org_id = ur.org_id AND tm.user_id = ur.user_id)
+      GROUP BY ur.role_id
+    `);
+    return new Map(
+      (res.rows as Array<{ role_id: number; n: number }>).map((r) => [
+        Number(r.role_id),
+        Number(r.n),
+      ]),
+    );
+  }
+
   async insert(tx: Tx, orgId: number, name: string): Promise<{ id: number; uuid: string }> {
     const [row] = await tx
       .insert(roles)
@@ -166,7 +190,7 @@ export class RolesRepository {
     grants: Array<{
       permissionKey: string;
       effect: 'allow' | 'deny';
-      recordScope: 'all' | 'team' | 'own';
+      recordScope: 'all' | 'team' | 'team_and_below' | 'own';
     }>,
   ): Promise<void> {
     await tx

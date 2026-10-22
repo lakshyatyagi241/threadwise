@@ -1,7 +1,12 @@
 import {
+  NEW_PLAN_FEATURES_OFF,
+  PACK_GRANTABLE_FEATURES,
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
+  PLAN_UNLIMITED_FROM,
   checkPlanRules,
+  isUnlimitedFor,
+  limitZeroIsNone,
   isMoney,
   moneyCents,
   normaliseMoney,
@@ -83,7 +88,11 @@ export interface PlanProblem {
 }
 export type PlanProblems = Partial<Record<PlanField, PlanProblem>>;
 
-/** Reference's defaults for a new package: active, every feature ticked, limits blank, sort 0, 1 month. */
+/**
+ * Reference's defaults for a new package: active, every feature ticked, limits blank, sort 0, 1 month. One deliberate difference: the
+ * features sold as the Smart routing add-on (NEW_PLAN_FEATURES_OFF) start unticked, so a new plan is a minimal entry plan. Existing plans
+ * are not touched: they are read from what they store.
+ */
 export function newPlanDraft(currency = 'USD'): PlanDraft {
   return {
     name: '',
@@ -104,7 +113,9 @@ export function newPlanDraft(currency = 'USD'): PlanDraft {
     ctaLabel: 'Get started',
     dataRetentionDays: '0',
     limits: Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, ''])) as PlanDraft['limits'],
-    features: Object.fromEntries(PLAN_FEATURE_KEYS.map((k) => [k, true])) as PlanDraft['features'],
+    features: Object.fromEntries(
+      PLAN_FEATURE_KEYS.map((k) => [k, !NEW_PLAN_FEATURES_OFF.includes(k)]),
+    ) as PlanDraft['features'],
     visibleAddons: [],
   };
 }
@@ -131,7 +142,17 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
     dataRetentionDays: String(p.dataRetentionDays),
     // Registry keys first, then the caps an installed module contributed (TW-ADD-013).
     limits: Object.fromEntries([
-      ...PLAN_LIMIT_KEYS.map((k) => [k, p.limits[k] > 0 ? String(p.limits[k]) : '']),
+      ...PLAN_LIMIT_KEYS.map((k) => [
+        k,
+        // `teams`: 0 is a real cap (solo) and a huge value is the unlimited stand-in, shown blank.
+        limitZeroIsNone(k)
+          ? isUnlimitedFor(k, p.limits[k])
+            ? ''
+            : String(p.limits[k])
+          : p.limits[k] > 0
+            ? String(p.limits[k])
+            : '',
+      ]),
       ...Object.entries(p.moduleLimits).map(([k, v]) => [k, v > 0 ? String(v) : '']),
     ]),
     features: { ...p.moduleFeatures, ...p.features },
@@ -235,7 +256,7 @@ export function buildPlanRequest(
     // Registry caps and the caps installed modules add travel apart (TW-ADD-013).
     const target = isRegistryLimit(key) ? limits : moduleLimits;
     if (!raw) {
-      target[key] = 0;
+      target[key] = limitZeroIsNone(key) ? PLAN_UNLIMITED_FROM : 0;
       continue;
     }
     const n = wholeNumber(raw);
@@ -347,13 +368,18 @@ export function problemsFromServer(
 }
 
 /** A limit input left blank or at 0 means unlimited (0 is what is stored; for the API rate it means "platform default"). */
-export function limitIsUnlimited(raw: string): boolean {
+export function limitIsUnlimited(raw: string, key?: string): boolean {
   const v = raw.trim();
+  // `teams`: a typed 0 means solo (no teams), only a blank box is unlimited.
+  if (key !== undefined && limitZeroIsNone(key)) return v === '';
   return v === '' || /^0+$/.test(v);
 }
 
 /** What a limit shows right after "Unlimited" is unticked: a small real cap to edit (blank would mean unlimited again). */
-const LIMITED_START: Partial<Record<PlanLimitKey, string>> = { api_rate_limit_per_minute: '60' };
+const LIMITED_START: Partial<Record<PlanLimitKey, string>> = {
+  api_rate_limit_per_minute: '60',
+  teams: '5',
+};
 
 export function setLimitUnlimited(
   draft: PlanDraft,
@@ -371,7 +397,7 @@ export function countLimitsSet(
   limits: PlanDraft['limits'],
   keys: readonly string[] = PLAN_LIMIT_KEYS,
 ): number {
-  return keys.filter((k) => !limitIsUnlimited(limits[k] ?? '')).length;
+  return keys.filter((k) => !limitIsUnlimited(limits[k] ?? '', k)).length;
 }
 
 /** How many of the given features (default: all) are on. */
@@ -391,6 +417,73 @@ export function toggleFeatures(
   const next = { ...features };
   for (const k of keys) next[k] = on;
   return next;
+}
+
+// --- plain add-on packs included in the plan (Add-ons tab, "Included add-ons") ---------------------------------------------------
+//
+// "Included in this plan" is not a stored list: it is DERIVED from `draft.features`. A pack is included when every feature key it grants
+// is on in the plan, which is the exact rule the workspace's add-on card and checkout use (`isIncludedInPlan`). So the switch, the Features
+// tab and the saved plan can never disagree: both tabs write the same keys.
+
+/** The part of an add-on pack (`AddonPack` from the API) these helpers read. */
+export interface PackGrants {
+  grants: { features: readonly string[]; limits: Readonly<Record<string, number>> };
+}
+
+export type PackCoverageState =
+  /** The pack grants no feature (limits only): there is nothing to include. */
+  'noFeatures' | 'none' | 'partial' | 'full';
+
+export interface PackCoverage {
+  state: PackCoverageState;
+  /** How many of the pack's feature keys are on in the plan. */
+  on: number;
+  total: number;
+  /** The pack's feature keys the plan does not have on. */
+  missing: string[];
+}
+
+/** How much of a pack the plan's features already cover. Pure; reads only `features`. */
+export function packCoverage(pack: PackGrants, features: PlanDraft['features']): PackCoverage {
+  const keys = [...new Set(pack.grants.features)];
+  const missing = keys.filter((k) => features[k] !== true);
+  const on = keys.length - missing.length;
+  const state: PackCoverageState =
+    keys.length === 0 ? 'noFeatures' : on === keys.length ? 'full' : on === 0 ? 'none' : 'partial';
+  return { state, on, total: keys.length, missing };
+}
+
+/**
+ * Include the pack in the plan (every feature key on) or take it out (every feature key explicitly OFF, not deleted: a plan row that
+ * does not store a key falls back to the catalogue default, and the editor always stores every key, so "off" is written as false).
+ * Switching on and then off therefore does not restore what a key was before; it ends at false. Limits are never touched (a pack's cap
+ * deltas such as Teams +N are not part of plan inclusion; the cap is set on the Limits tab), nor are the Marketplace selection or any
+ * feature the pack does not grant. A pack with no feature keys changes nothing.
+ */
+export function setPackIncluded(draft: PlanDraft, pack: PackGrants, on: boolean): PlanDraft {
+  if (pack.grants.features.length === 0) return draft;
+  return { ...draft, features: toggleFeatures(draft.features, pack.grants.features, on) };
+}
+
+/** How many of the packs the plan fully includes (a partly covered pack is not counted). */
+export function includedPackCount(
+  packs: readonly PackGrants[],
+  features: PlanDraft['features'],
+): number {
+  return packs.filter((p) => packCoverage(p, features).state === 'full').length;
+}
+
+/** Feature keys a pack grants that the shared entitlement resolver does not merge from a live pack (they still work on a plan). */
+export function unlistedPackFeatures(pack: PackGrants): string[] {
+  return pack.grants.features.filter((k) => !PACK_GRANTABLE_FEATURES.includes(k));
+}
+
+/** The Add-ons tab's total: Marketplace apps offered plus plain add-ons fully included. */
+export function addonsSelectedCount(
+  draft: Pick<PlanDraft, 'features' | 'visibleAddons'>,
+  packs: readonly PackGrants[],
+): number {
+  return draft.visibleAddons.length + includedPackCount(packs, draft.features);
 }
 
 /** One add-on ticked or unticked. */

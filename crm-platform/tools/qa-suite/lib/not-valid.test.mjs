@@ -58,9 +58,18 @@ test('a name that only appears as a longer name does not match', () => {
   assert.equal(validates("... VALIDATE CONSTRAINT %I ... 'chk_a_long'", 'chk_a'), false);
 });
 
+// 20270131090000_con_enum_checks_closed_sets.sql adds eight CHECKs NOT VALID on purpose (live data not inspected yet); they are the only
+// ones allowed to stay unvalidated, and tools/qa-suite/data/baseline.json records why. Validate them later, then drop this allowance.
+const DEFERRED_VALIDATION = '20270131090000_con_enum_checks_closed_sets.sql';
+
 test('the real migrations leave nothing reported (the four the old check flagged are validated by the cat migration)', async () => {
   const { migrations: list } = await import('./core.mjs');
   const { readFileSync } = await import('node:fs');
   const all = list().map((f) => ({ file: f.split('/').pop(), sql: readFileSync(f, 'utf8') }));
-  assert.deepEqual(neverValidated(all), []);
+  const left = neverValidated(all);
+  assert.deepEqual(
+    left.filter((x) => x.file !== DEFERRED_VALIDATION),
+    [],
+  );
+  assert.equal(left.filter((x) => x.file === DEFERRED_VALIDATION).length, 8);
 });

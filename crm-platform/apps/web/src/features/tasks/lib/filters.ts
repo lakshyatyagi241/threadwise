@@ -17,6 +17,8 @@ export interface TaskFilters {
   priority: TaskPriority | '';
   /** A member id, `none` for unassigned, or empty for everyone. */
   assignee: string;
+  /** The owning team (a team uuid) or empty for every team. */
+  team: string;
   /** Linked contact / deal / company (a uuid) or empty. */
   contact: string;
   deal: string;
@@ -34,6 +36,7 @@ export const DEFAULT_FILTERS: TaskFilters = {
   status: 'open',
   priority: '',
   assignee: '',
+  team: '',
   contact: '',
   deal: '',
   company: '',
@@ -65,6 +68,7 @@ export function parseFilters(search: SearchLike): TaskFilters {
       ? (priority as TaskPriority)
       : '',
     assignee: assignee === 'none' || UUID.test(assignee) ? assignee : '',
+    team: id(search.get('team')),
     contact: id(search.get('contact')),
     deal: id(search.get('deal')),
     company: id(search.get('company')),
@@ -82,6 +86,7 @@ export function filtersToSearch(f: TaskFilters): string {
   if (f.tab === 'all' && f.status !== 'open') p.set('status', f.status);
   if (f.priority) p.set('priority', f.priority);
   if (f.assignee) p.set('assignee', f.assignee);
+  if (f.team) p.set('team', f.team);
   if (f.contact) p.set('contact', f.contact);
   if (f.deal) p.set('deal', f.deal);
   if (f.company) p.set('company', f.company);
@@ -98,6 +103,7 @@ export function hasActiveFilter(
     TaskFilters,
     'q' | 'priority' | 'assignee' | 'contact' | 'deal' | 'company' | 'outcome'
   > & {
+    team?: string;
     status?: StatusFilter;
     tab?: TaskTab;
   },
@@ -106,6 +112,7 @@ export function hasActiveFilter(
     f.q.trim() !== '' ||
     f.priority !== '' ||
     f.assignee !== '' ||
+    (f.team ?? '') !== '' ||
     f.contact !== '' ||
     f.deal !== '' ||
     f.company !== '' ||
@@ -123,6 +130,7 @@ export function sharedQuery(f: TaskFilters): QueryValues {
     priority: f.priority || undefined,
     assigneeId: f.assignee && f.assignee !== 'none' ? f.assignee : undefined,
     unassigned: f.assignee === 'none' ? true : undefined,
+    teamId: f.team || undefined,
     contactId: f.contact || undefined,
     dealId: f.deal || undefined,
     companyId: f.company || undefined,

@@ -414,6 +414,14 @@
           "label": "Termin nicht synchron mit Google Calendar",
           "hint": "Der Google-Calendar-Eintrag eines bevorstehenden Termins wurde gelöscht, verschoben oder seine Gäste wurden geändert. Der Termin selbst bleibt unverändert; Sie entscheiden, was geschehen soll."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Termin vom Kunden abgesagt",
+          "hint": "Ein Kunde hat seinen Termin über „Absagen“ in einer Erinnerung abgesagt. Der Termininhaber wird benachrichtigt."
+        },
+        "appointment_reminder_test": {
+          "label": "Ergebnis des Test-E-Mails für Erinnerungen",
+          "hint": "Das Ergebnis der Test-E-Mail für einen Erinnerungsschritt: gesendet oder nicht gesendet, mit Grund."
+        },
         "snooze_wake": {
           "label": "Zurückgestellter Chat kehrt zurück",
           "hint": "Ein zurückgestellter Chat wird zur festgelegten Zeit wieder geöffnet und Ihnen oder Ihrem Team zugewiesen."
@@ -513,6 +521,11 @@
           "watch": "Du solltest ein Pop-up sehen, und die Zahl an der Glocke und der Tab-Titel ändern sich.",
           "notConnected": "Live-Aktualisierungen sind auf dieser Seite nicht verbunden, daher kann hier kein Pop-up erscheinen. Lade die Seite neu und versuche es erneut.",
           "off": "Es wurde keine Benachrichtigung in der Glocke erstellt: Die Glocke ist für „Testbenachrichtigung“ in der Tabelle unten ausgeschaltet, oder vom Inhaber deines Arbeitsbereichs."
+        },
+        "prompt": {
+          "message": "Aktivieren Sie Browser-Benachrichtigungen, um auch bei geschlossenem CRM über die gewählten Ereignisse informiert zu werden.",
+          "enable": "Benachrichtigungen erlauben",
+          "enabling": "Wird aktiviert..."
         }
       }
     },

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TeamHierarchyGateModule } from '../modules/plans-subscriptions-trials/team-hierarchy-gate.module';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
@@ -50,7 +51,7 @@ import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { WabooMigrationWorkerModule } from '../modules/waboo-migration';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
-import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
+import { KnowledgeBaseWorkerModule } from '../modules/knowledge-base/knowledge-base-worker.module';
 import { GrowthPilotWorkerModule } from '../modules/growth-pilot/growth-pilot-worker.module';
 import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-worker.module';
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
@@ -86,6 +87,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
 @Module({
   // AuthModule: the OTP template poll reuses the sender registry and the Meta template client.
   imports: [
+    TeamHierarchyGateModule,
     ScheduleModule.forRoot(),
     AuthModule,
     AnalyticsWorkerModule,
@@ -111,7 +113,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     WabooMigrationWorkerModule,
     OutboundWebhooksWorkerModule,
     ApiLibraryWorkerModule,
-    FaqKnowledgeWorkerModule,
+    KnowledgeBaseWorkerModule,
     LeadScoringWorkerModule,
     GrowthPilotWorkerModule,
     ContactConsentWorkerModule,

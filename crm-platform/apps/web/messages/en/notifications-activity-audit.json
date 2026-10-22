@@ -410,6 +410,14 @@
           "label": "Appointment out of sync with Google Calendar",
           "hint": "An upcoming appointment's Google Calendar event was deleted, moved or had its guests changed. The appointment is not changed; you choose what to do."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Appointment cancelled by the customer",
+          "hint": "A customer cancelled their appointment by tapping Cancel on a reminder. The appointment's host is told."
+        },
+        "appointment_reminder_test": {
+          "label": "Reminder email test result",
+          "hint": "The result of the test email you send for a reminder step: sent, or not sent and why."
+        },
         "test": {
           "label": "Test notification",
           "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."
@@ -513,6 +521,11 @@
           "watch": "You should see a pop-up, the bell number and the tab title change.",
           "notConnected": "Live updates are not connected on this page, so the pop-up cannot appear here. Reload the page and try again.",
           "off": "No bell notification was created: the bell is turned off for \"Test notification\" in the table below, or by your workspace owner."
+        },
+        "prompt": {
+          "message": "Turn on browser notifications to get an alert for the events you choose, even when the CRM is closed.",
+          "enable": "Allow notifications",
+          "enabling": "Enabling..."
         }
       }
     },

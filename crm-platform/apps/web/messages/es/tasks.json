@@ -104,7 +104,9 @@
       },
       "linkCompany": "Una empresa",
       "outcome": "Resultado",
-      "allOutcomes": "Todos los resultados"
+      "allOutcomes": "Todos los resultados",
+      "team": "Equipo",
+      "allTeams": "Todos los equipos"
     },
     "table": {
       "scrollArea": "Tabla de tareas",
@@ -296,7 +298,8 @@
       "retry": "Reintentar",
       "outcomeInvalid": "Ese resultado no está disponible. Elige uno de la lista.",
       "outcomeNameTaken": "Otro resultado ya tiene este nombre.",
-      "outcomeInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar."
+      "outcomeInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar.",
+      "completionDisabled": "Completar tareas está desactivado en Actividades de ventas."
     },
     "toast": {
       "completed": "Tarea completada.",
@@ -356,28 +359,13 @@
     "outcomes": {
       "title": "Resultados de tareas",
       "subtitle": "Los resultados que una persona elige al completar o registrar una tarea, como Interesado o Dejó mensaje.",
-      "listTitle": "Resultados",
-      "listHint": "Los resultados ocultos ya no se ofrecen, pero las tareas que ya tienen uno lo conservan. Un resultado que usan tareas no se puede eliminar.",
       "loading": "Cargando resultados",
       "empty": "Aún no hay resultados. Añade el primero abajo.",
-      "newName": "Nuevo resultado",
-      "newNamePlaceholder": "p. ej. Dejó mensaje",
       "add": "Añadir resultado",
-      "readOnly": "Puedes ver esta lista, pero necesitas permiso para cambiarla.",
       "failed": "No se pudo completar la acción.",
       "conflict": "Otra persona cambió este resultado. Se recargó la lista. Inténtalo de nuevo.",
-      "added": "Resultado añadido.",
       "saved": "Resultado guardado.",
       "deleted": "Resultado eliminado.",
-      "moveUp": "Subir {name}",
-      "moveDown": "Bajar {name}",
-      "nameLabel": "Nombre del resultado",
-      "taskCount": "{count, plural, one {# tarea} other {# tareas}}",
-      "shownLabel": "Ofrecer {name} al completar una tarea",
-      "shown": "Visible",
-      "hidden": "Oculto",
-      "deleteNamed": "Eliminar {name}",
-      "deleteInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar.",
       "deleteTitle": "¿Eliminar {name}?",
       "deleteMessage": "El resultado se quita de la lista. Ninguna tarea lo usa.",
       "delete": "Eliminar",

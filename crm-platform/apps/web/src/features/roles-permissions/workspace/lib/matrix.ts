@@ -1,3 +1,4 @@
+import { isTeamScope } from '@crm/contracts';
 import type { PermissionDefResponse, RecordScope, RoleGrant } from '@crm/contracts';
 
 /** A role's grants while editing: permission key -> effect and scope. A key that is absent is not granted. */
@@ -126,4 +127,34 @@ export function sameDraft(a: GrantDraft, b: GrantDraft): boolean {
     if (!o || o.effect !== v.effect || o.recordScope !== v.recordScope) return false;
   }
   return true;
+}
+
+/** Every record scope, widest first, as the matrix lists them. */
+export const ALL_SCOPES: readonly RecordScope[] = ['all', 'team_and_below', 'team', 'own'];
+
+/**
+ * The scope options one row offers. `team_and_below` is left out when the workspace does not have the team hierarchy feature, unless the
+ * row already holds it: a value the plan no longer offers stays visible (and is kept on save) instead of being changed silently.
+ */
+export function scopeOptions(hierarchyOffered: boolean, current?: RecordScope): RecordScope[] {
+  return ALL_SCOPES.filter((s) => s !== 'team_and_below' || hierarchyOffered || current === s);
+}
+
+/**
+ * True when the role allows something at a team scope (`team` or `team_and_below`) and some of its members are in no team: those members
+ * see only their own records there. A denied grant does not count, nor does a key without scope support.
+ */
+export function needsTeamWarning(
+  draft: GrantDraft,
+  membersWithoutTeam: number | undefined,
+  defs?: readonly Pick<PermissionDefResponse, 'key' | 'supportsScope'>[],
+): boolean {
+  if (!membersWithoutTeam || membersWithoutTeam <= 0) return false;
+  const scoped = defs ? new Set(defs.filter((d) => d.supportsScope).map((d) => d.key)) : null;
+  for (const [key, g] of draft) {
+    if (g.effect !== 'allow' || !isTeamScope(g.recordScope)) continue;
+    if (scoped && !scoped.has(key)) continue;
+    return true;
+  }
+  return false;
 }

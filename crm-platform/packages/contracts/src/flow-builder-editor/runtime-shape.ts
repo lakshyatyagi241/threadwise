@@ -10,6 +10,7 @@ import {
   flbCleanDateFormat,
   flbCleanMinAge,
 } from './ask-input';
+import { trimEdges } from '../common/trim-edges';
 import { flbSanitizeConditionGroup } from './condition-group';
 import { flbParseCoordinate } from './location';
 import type { FlbNodeData } from './node-catalogue';
@@ -133,9 +134,11 @@ function strictInt(v: unknown): number {
 export function flbCleanVarName(v: unknown, fallback = ''): string {
   const t = s(v).trim();
   if (t === '') return fallback;
-  const unwrapped = t
-    .replace(/^\s*\{\{\s*|\s*\}\}\s*$/g, '')
-    .replace(/^[ \t\r\n@{}]+|[ \t\r\n@{}]+$/g, '');
+  // `t` has no blanks at its ends. No `/\s*\}\}\s*$/` here: it is quadratic on a long run of blanks not at the end.
+  let inner = t;
+  if (inner.startsWith('{{')) inner = inner.slice(2).trimStart();
+  if (inner.endsWith('}}')) inner = inner.slice(0, -2).trimEnd();
+  const unwrapped = trimEdges(inner, (c) => ' \t\r\n@{}'.includes(c));
   return unwrapped !== '' ? unwrapped : fallback;
 }
 
@@ -332,8 +335,7 @@ const SHAPERS: Record<string, Shaper> = {
 
   faq: (d) => ({
     query: s(d.query, '{{user_message}}'),
-    category: s(d.category).trim(),
-    minScore: isNil(d.minScore) || d.minScore === '' ? null : Number(d.minScore),
+    assistant: s(d.assistant),
     sendAnswer: isNil(d.sendAnswer) ? true : toBool(d.sendAnswer),
     variable: variableFrom(d, 'save', 'faq'),
   }),

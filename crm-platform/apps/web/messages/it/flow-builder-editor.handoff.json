@@ -1,0 +1,93 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "assegnata",
+        "waitingInQueue": "in coda di attesa",
+        "noAgentOutOfHours": "nessun agente / fuori orario",
+        "returnedToBot": "restituita al bot"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Passo {stage}: scegli la persona a cui va la conversazione."
+      }
+    },
+    "simulator": {
+      "handoff": "passata a una persona (destinazione: {destination}, team \"{team}\"); la chat di prova prende l’uscita \"assegnata\""
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Passa a",
+          "handoffRules": "Regole di assegnazione",
+          "pickAgent": "— scegli una persona —",
+          "returnBack": "Quando il bot è di nuovo attivo:"
+        }
+      },
+      "handoff": {
+        "legacy": "Questo passo è il vecchio “Assegna agente”.",
+        "upgradeHint": "Affida la chat a un team e prosegue. Passa al trasferimento a una persona per aggiungere un motivo, una priorità, messaggi per il contatto e le uscite (assegnata, in coda, nessun agente o fuori orario e una facoltativa per quando la chat torna al bot). I collegamenti già fatti continuano a funzionare.",
+        "upgrade": "Usa le funzioni di passaggio",
+        "destination": "Invia la conversazione a",
+        "dest": {
+          "team": "Un team",
+          "person": "Una persona",
+          "rules": "Le regole di assegnazione",
+          "rulesLocked": "Le regole di assegnazione (componente Instradamento intelligente)"
+        },
+        "destHint": {
+          "team": "Va a qualcuno del team oppure resta nella coda del team.",
+          "person": "Va a questa persona se può prenderla; altrimenti resta in coda.",
+          "rules": "Usa le tue regole di assegnazione automatica delle conversazioni; se nessuna trova una persona, resta in coda."
+        },
+        "lockHint": "Le regole di assegnazione fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore, quindi una conversazione inviata qui attende nella coda d'attesa finché un collega la prende in carico.",
+        "team": "Team",
+        "teamPick": "— scegli un team —",
+        "teamNone": "Ancora nessun team",
+        "teamOption": "{name} · {count, plural, one {# agente} other {# agenti}}",
+        "teamHint": "<link>Gestisci i team →</link>",
+        "person": "Persona",
+        "personPick": "— scegli una persona —",
+        "personHint": "Qualcuno dei tuoi team.",
+        "unknownMember": "{value} (non è in questo spazio di lavoro)",
+        "reason": "Motivo",
+        "reasons": {
+          "customer_asked": "Il contatto ha chiesto una persona",
+          "bot_could_not_help": "Il bot non ha potuto aiutare",
+          "sensitive_topic": "Argomento sensibile",
+          "sales_lead": "Lead di vendita",
+          "complaint": "Reclamo",
+          "other": "Altro"
+        },
+        "priority": "Priorità",
+        "priorityKeep": "Mantieni la priorità attuale",
+        "priorities": {
+          "low": "Bassa",
+          "normal": "Normale",
+          "high": "Alta",
+          "urgent": "Urgente"
+        },
+        "note": "Nota per l’agente",
+        "noteHint": "Interna. Mostrata nella scheda del passaggio; le '{{'variables'}}' funzionano. Fino a 500 caratteri.",
+        "customerMessage": "Messaggio al contatto",
+        "customerHint": "Inviato quando la conversazione viene passata. Lascia vuoto per non inviare nulla.",
+        "offHours": "Messaggio quando nessuno è disponibile",
+        "offHoursHint": "Inviato al suo posto quando il team è chiuso o nessuno può prenderla. La conversazione resta comunque in coda.",
+        "exits": "Questo passo ha tre uscite",
+        "exitAssigned": "assegnata: ora una persona ha la conversazione",
+        "exitWaiting": "in coda di attesa: aspetta che qualcuno la prenda",
+        "exitUnavailable": "nessun agente / fuori orario: nessuno ha potuto prenderla",
+        "simpleExits": "Il passo successivo viene eseguito quando una persona ha la conversazione. Se deve restare in coda, o nessuno è disponibile, il bot si ferma qui e risponde una persona. Usa il builder avanzato per seguire le altre uscite.",
+        "returnMessage": "Messaggio al contatto quando il bot è di nuovo attivo",
+        "returnMessageHint": "Facoltativo. Inviato una sola volta, a nome della tua attività, quando un collega preme Restituisci al bot, prima che il flusso prosegua dall’uscita «restituita». Non viene inviato se la finestra di 24 ore è chiusa o il contatto non ha dato il consenso. Le variabili come '{{'name'}}' funzionano.",
+        "returnNeedsExit": "Questo messaggio viene inviato solo se il flusso prosegue dopo Restituisci al bot. Collega l’uscita «restituita» al passaggio successivo.",
+        "exitReturned": "restituita al bot (facoltativa): un collega ha premuto Restituisci al bot; il flusso prosegue da qui",
+        "returnedStep": "Quando un collega restituisce la chat, continua da",
+        "returnedStepHint": "Facoltativo. Scegli il passaggio con cui prosegue il flusso quando qualcuno preme Restituisci al bot. Se lo lasci vuoto, il bot attende il prossimo messaggio del contatto.",
+        "returnNone": "Nessun passaggio: attendi il prossimo messaggio del contatto",
+        "returnStepOption": "{stage}: {label}"
+      }
+    }
+  }
+}

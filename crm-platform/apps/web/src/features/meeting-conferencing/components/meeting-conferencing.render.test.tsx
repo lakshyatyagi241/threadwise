@@ -20,6 +20,7 @@ const state = vi.hoisted(() => ({
     isError: false,
     error: null as unknown,
   },
+  op: { data: undefined as unknown, isPending: true, isError: false },
   perms: new Set<string>(['record.contacts.update']),
   search: '',
 }));
@@ -37,6 +38,14 @@ vi.mock('next/link', () => ({
     </a>
   ),
 }));
+vi.mock('@tanstack/react-query', async (orig) => {
+  const actual = await orig<typeof import('@tanstack/react-query')>();
+  return {
+    ...actual,
+    useQuery: (opts: { queryKey: readonly unknown[] }) =>
+      opts.queryKey[0] === 'operator' ? state.op : actual.useQuery(opts as never),
+  };
+});
 vi.mock('../api/conferencing', () => ({
   KEYS: { capabilities: ['c'], connections: ['k'] },
   conferencingApi: { start: vi.fn(), confirm: vi.fn(), disconnect: vi.fn(), retry: vi.fn() },
@@ -48,6 +57,7 @@ vi.mock('../api/conferencing', () => ({
 import { MeetingConferencingFields } from './meeting-conferencing-fields';
 import { MeetingVideoStatus } from './meeting-video-status';
 import { VideoMeetingsScreen } from './video-meetings-screen';
+import { ConferencingSetupPanel } from './operator-setup-panel';
 
 const en = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'meeting-conferencing.json'), 'utf8'),
@@ -70,6 +80,7 @@ const caps = (over: Partial<ConferencingCapabilities> = {}): ConferencingCapabil
   canInstall: false,
   connectable: [],
   installable: false,
+  installPath: null,
   ...over,
 });
 
@@ -97,10 +108,12 @@ describe('the video and calendar fields of the meeting form', () => {
   });
 
   it('draw one quiet link to the Marketplace for a person who may install, and none for one who may not', () => {
-    state.caps = { data: caps({ canInstall: true, installable: true }) };
+    state.caps = {
+      data: caps({ canInstall: true, installable: true, installPath: '/marketplace/app/zoom' }),
+    };
     const out = fields();
     expect(out).toContain('Connect video conferencing');
-    expect(out).toContain('href="/marketplace/integrations"');
+    expect(out).toContain('href="/marketplace/app/zoom"');
     expect(out).not.toContain('Add Zoom link');
     state.caps = { data: caps({ canInstall: false, installable: true }) };
     expect(fields()).toBe('');
@@ -250,6 +263,9 @@ describe('the status line of a meeting', () => {
 const card = (over: Partial<ConferencingConnection>): ConferencingConnection => ({
   provider: 'zoom',
   status: 'disconnected',
+  listingPublished: true,
+  configured: true,
+  listingPath: null,
   account: null,
   connectedAt: null,
   lastErrorCode: null,
@@ -272,20 +288,55 @@ describe('the Video meetings page', () => {
     expect(out).toContain('You cannot use this page');
   });
 
-  it('offers Install to a person who may install, and says to ask an admin otherwise', () => {
+  it('"Not available yet": the listing is a draft or the provider is not set up, so there is no button and the person is told to ask the operator', () => {
     const cards = [
-      card({ status: 'not_installed' }),
-      card({ provider: 'teams', status: 'not_installed' }),
+      card({ status: 'not_available', listingPublished: false, configured: true }),
+      card({
+        provider: 'teams',
+        status: 'not_available',
+        listingPublished: true,
+        configured: false,
+      }),
+    ];
+    for (const canInstall of [true, false]) {
+      const out = screen(cards, canInstall);
+      expect(out).toContain('Not available yet');
+      expect(out).toContain('ask your platform operator');
+      expect(out).not.toContain('Install in the Marketplace');
+      expect(out).not.toContain('href="/marketplace');
+    }
+  });
+
+  it('"Not installed": offers the install to a person who may, as a deep link to the listing page, and says to ask an admin otherwise', () => {
+    const cards = [
+      card({ status: 'not_installed', listingPath: '/marketplace/app/zoom' }),
+      card({
+        provider: 'teams',
+        status: 'not_installed',
+        listingPath: '/marketplace/app/microsoft-teams',
+      }),
     ];
     const can = screen(cards, true);
     expect(can).toContain('Install in the Marketplace');
-    expect(can).toContain('href="/marketplace/integrations"');
+    expect(can).toContain('href="/marketplace/app/zoom"');
+    expect(can).toContain('href="/marketplace/app/microsoft-teams"');
+    expect(can).not.toContain('href="/marketplace/integrations"');
     const cannot = screen(cards, false);
     expect(cannot).not.toContain('Install in the Marketplace');
     expect(cannot).toContain('Ask a workspace admin to install it');
   });
 
-  it('shows Connect when not connected, the account when connected, and Reconnect when it needs renewing', () => {
+  it('"Installed": says the integration is installed and asks the person to connect their own account', () => {
+    const out = screen([
+      card({ status: 'disconnected' }),
+      card({ provider: 'teams', status: 'disconnected' }),
+    ]);
+    expect(out).toContain('>Installed<');
+    expect(out).toContain('is installed for your workspace. Connect your own account');
+    expect(out).toContain('>Connect<');
+  });
+
+  it('"Connected as <account>", and Reconnect when it needs renewing', () => {
     const out = screen([
       card({ status: 'disconnected' }),
       card({
@@ -295,15 +346,14 @@ describe('the Video meetings page', () => {
         connectedAt: '2027-01-02T00:00:00.000Z',
       }),
     ]);
-    expect(out).toContain('>Connect<');
-    expect(out).toContain('Account: ana@contoso.example');
+    expect(out).toContain('Connected as ana@contoso.example');
     expect(out).toContain('>Disconnect<');
     const renew = screen([
       card({ status: 'needs_reconnect', account: 'ana@example.com' }),
       card({ provider: 'teams', status: 'unavailable' }),
     ]);
     expect(renew).toContain('>Reconnect<');
-    expect(renew).toContain('has not been set up for this platform yet');
+    expect(renew).toContain('switched its set-up off');
   });
 
   it('shows the outcome the provider left in the address', () => {
@@ -311,5 +361,76 @@ describe('the Video meetings page', () => {
     expect(screen([card({}), card({ provider: 'teams' })])).toContain(
       'Zoom was not connected because the sign-in was cancelled',
     );
+  });
+});
+
+describe('the operator checklist on the Zoom and Teams listing pages', () => {
+  const provider = (over: Record<string, unknown> = {}) => ({
+    provider: 'zoom',
+    slug: 'zoom',
+    credentialsSource: 'none',
+    hasClientId: false,
+    hasClientSecret: false,
+    switchedOff: false,
+    redirectUri: 'https://app.example.test/v2/public/conferencing/zoom/callback',
+    listing: { exists: true, status: 'draft', published: false },
+    gaps: ['client_id', 'client_secret', 'listing_not_published'],
+    ready: false,
+    ...over,
+  });
+  const panel = (slug: string, p: unknown, fake = false) => {
+    state.op = { data: { providers: [p], fakeAdapters: fake }, isPending: false, isError: false };
+    return html(<ConferencingSetupPanel slug={slug} />);
+  };
+
+  it('draws nothing on any other listing', () => {
+    expect(panel('webhook', provider())).toBe('');
+  });
+
+  it('lists what is missing, names the environment values, and shows the exact redirect address', () => {
+    const out = panel('zoom', provider());
+    expect(out).toContain('3 steps missing');
+    expect(out).toContain('ZOOM_CLIENT_ID');
+    expect(out).toContain('ZOOM_CLIENT_SECRET');
+    expect(out).toContain('not set');
+    expect(out).toContain('https://app.example.test/v2/public/conferencing/zoom/callback');
+    expect(out).toContain('The listing is not published (status: draft)');
+  });
+
+  it('says ready once the values are set and the listing is published, and never prints a value', () => {
+    const out = panel(
+      'zoom',
+      provider({
+        credentialsSource: 'environment',
+        hasClientId: true,
+        hasClientSecret: true,
+        listing: { exists: true, status: 'published', published: true },
+        gaps: [],
+        ready: true,
+      }),
+    );
+    expect(out).toContain('>Ready<');
+    expect(out).toContain('Published: workspaces can find and install it');
+    expect(out).toContain('The values come from the environment');
+  });
+
+  it('warns that switching the Microsoft Calendar integration off switches Teams off, and flags the fake adapters', () => {
+    const out = panel(
+      'microsoft-teams',
+      provider({
+        provider: 'teams',
+        slug: 'microsoft-teams',
+        switchedOff: true,
+        hasClientId: true,
+        hasClientSecret: true,
+        credentialsSource: 'console',
+        redirectUri: 'https://app.example.test/v2/public/conferencing/teams/callback',
+        gaps: ['switched_off', 'listing_not_published'],
+      }),
+      true,
+    );
+    expect(out).toContain('switches Teams off with it');
+    expect(out).toContain('Development mode');
+    expect(out).toContain('OnlineMeetings.ReadWrite');
   });
 });

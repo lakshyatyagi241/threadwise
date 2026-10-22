@@ -1,4 +1,8 @@
-import type { ContactViewResponse } from '@crm/contracts';
+import {
+  CONTACT_VIEW_NAME_MAX,
+  CONTACT_VIEW_NAME_MIN,
+  type ContactViewResponse,
+} from '@crm/contracts';
 import { DEFAULT_FILTERS, type ContactFilters, type PageSize } from '../api/contacts';
 import { filtersToSearch, parseFilters } from './filters';
 
@@ -15,6 +19,16 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export function viewIdOf(params: Pick<URLSearchParams, 'get'>): string {
   const v = params.get(VIEW_PARAM) ?? '';
   return UUID.test(v) ? v : '';
+}
+
+/**
+ * The saved list parameters of a view. A view saved here keeps them under `params`; a view the Waboo migration loaded keeps only its
+ * rules, as `filter.rules` (JSON text) with no `params`. Both shapes are read, so a migrated view shows its own rules, not none.
+ */
+function paramsOf(filter: Record<string, unknown>): Record<string, unknown> {
+  const raw = filter.params;
+  if (raw && typeof raw === 'object') return raw as Record<string, unknown>;
+  return typeof filter.rules === 'string' ? { rules: filter.rules } : {};
 }
 
 /** What a view remembers of the current filters, and the columns when it keeps them (`columns` is the ordered list of column ids). */
@@ -42,8 +56,7 @@ export function viewColumnsOf(filter: Record<string, unknown>): string[] | null 
 
 /** The ad-hoc rules (JSON text) a view saved, empty for none. */
 export function viewRulesOf(filter: Record<string, unknown>): string {
-  const raw = filter.params;
-  const rules = raw && typeof raw === 'object' ? (raw as Record<string, unknown>).rules : undefined;
+  const rules = paramsOf(filter).rules;
   return typeof rules === 'string' ? rules : '';
 }
 
@@ -56,11 +69,9 @@ export function composeViewFilter(
   rules: string,
   columns: readonly string[],
 ): Record<string, unknown> {
-  const raw = base?.params;
   const params: Record<string, string> = {};
-  if (raw && typeof raw === 'object')
-    for (const [k, v] of Object.entries(raw))
-      if (typeof v === 'string' && k !== 'rules') params[k] = v;
+  for (const [k, v] of Object.entries(paramsOf(base ?? {})))
+    if (typeof v === 'string' && k !== 'rules') params[k] = v;
   if (rules) params.rules = rules;
   return { v: 1, params, ...(columns.length > 0 ? { columns: [...columns] } : {}) };
 }
@@ -82,10 +93,8 @@ export function filtersOfView(
   filter: Record<string, unknown>,
   defaultLimit: PageSize = DEFAULT_FILTERS.limit,
 ): ContactFilters {
-  const raw = filter.params;
   const p = new URLSearchParams();
-  if (raw && typeof raw === 'object')
-    for (const [k, v] of Object.entries(raw)) if (typeof v === 'string') p.set(k, v);
+  for (const [k, v] of Object.entries(paramsOf(filter))) if (typeof v === 'string') p.set(k, v);
   return { ...parseFilters(p, defaultLimit), page: 1 };
 }
 
@@ -129,4 +138,13 @@ export function tabViews(
   const pinned = views.filter((v) => v.isFavorite).sort(byOrder);
   const open = views.find((v) => v.id === activeId);
   return open && !open.isFavorite ? [...pinned, open] : pinned;
+}
+
+/** What is wrong with a view name as typed (null when it is fine): nothing, too short or too long, counted after trimming. */
+export function viewNameProblem(name: string): 'needName' | 'nameShort' | 'nameLong' | null {
+  const n = name.trim().length;
+  if (n === 0) return 'needName';
+  if (n < CONTACT_VIEW_NAME_MIN) return 'nameShort';
+  if (n > CONTACT_VIEW_NAME_MAX) return 'nameLong';
+  return null;
 }

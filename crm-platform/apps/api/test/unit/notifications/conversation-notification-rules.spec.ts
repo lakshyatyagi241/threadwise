@@ -28,7 +28,7 @@ const viewer = (
   userId: number,
   scope: ConversationViewer['scope'],
   teamIds: number[] = [],
-): ConversationViewer => ({ userId, scope, teamIds });
+): ConversationViewer => ({ userId, scope, teamIds, readsUnassigned: true });
 const rec = (
   u: number | null,
   t: number | null = null,

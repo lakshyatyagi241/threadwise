@@ -125,7 +125,7 @@ function Body({
         </div>
         <div className="min-w-0">
           <p className="mb-2 text-center text-sm text-muted-foreground">{t('dragToReorder')}</p>
-          <ul className="space-y-2">
+          <ul className="max-h-80 space-y-2 overflow-y-auto">
             {chosen.map((id) => {
               const c = byId.get(id);
               if (!c) return null;

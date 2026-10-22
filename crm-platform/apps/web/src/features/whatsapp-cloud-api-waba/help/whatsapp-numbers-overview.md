@@ -39,7 +39,7 @@ This is where your WhatsApp Business numbers are connected to the workspace. Onc
 
 ## Options and settings
 
-- The health page can replace or renew the access token (checked with Meta before saving), edit the **Business profile**, create **Message QR codes**, and turn on [WhatsApp calling](help:calling-overview).
+- The health page can replace or renew the access token (checked with Meta before saving), edit the **Business profile**, and create **Message QR codes**.
 
 > **Disconnect** wipes the stored token at once. The number stays listed until you remove it.
 

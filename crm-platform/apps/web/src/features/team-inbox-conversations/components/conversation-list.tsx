@@ -31,6 +31,7 @@ import {
   type ListState,
 } from '../lib/list';
 import type { Selection } from '../lib/selection';
+import { ChannelKindOptions } from './channel-kind-options';
 import { ConversationRow } from './conversation-row';
 import { TagFilter } from './tag-filter';
 import { FiltersDialog } from './filters-dialog';
@@ -206,13 +207,7 @@ export function ConversationList(props: ConversationListProps) {
               className="h-8 text-xs"
             >
               <option value="">{t('allChannels')}</option>
-              {channels!
-                .filter((c) => c.kind !== 'email')
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
+              <ChannelKindOptions channels={channels!} />
               <EmailChannelOptions channels={channels!} />
             </Select>
           )}
@@ -226,7 +221,8 @@ export function ConversationList(props: ConversationListProps) {
           channels={channels}
         />
 
-        {list.counts && list.counts.archived > 0 && (
+        {/* The archive view keeps its way back even when the filters leave no archived thread. */}
+        {list.counts && (list.counts.archived > 0 || filters.archived) && (
           <button
             type="button"
             onClick={() => props.onFilters({ archived: !filters.archived })}
@@ -425,7 +421,7 @@ function TabBar({
     <div
       role="tablist"
       aria-label={t('tabsLabel')}
-      className="flex gap-0.5 rounded-lg bg-muted p-0.5"
+      className="flex gap-0.5 overflow-x-auto rounded-lg bg-muted p-0.5 thin-scrollbar"
     >
       {INBOX_TABS.map((tab, i) => {
         const n = tabCount(list.counts, tab);
@@ -443,7 +439,7 @@ function TabBar({
             onClick={() => onChange(tab)}
             onKeyDown={(e) => onKey(e, i)}
             className={cn(
-              'flex min-w-fit flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-md px-1.5 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:ring-primary',
+              'flex min-w-fit flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-md px-1 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:ring-primary',
               selected
                 ? 'bg-background text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground',

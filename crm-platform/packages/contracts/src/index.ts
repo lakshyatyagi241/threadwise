@@ -10,6 +10,7 @@
  */
 export * from './analytics';
 export * from './platform-async-ops';
+export * from './platform-deployments';
 export * from './data-retention';
 export * from './platform-failed-operations';
 export * from './common/ids';
@@ -106,7 +107,7 @@ export * from './meeting-conferencing';
 export * from './ai-copilot-lead-finder';
 export * from './google-account';
 export * from './api-library';
-export * from './faq-knowledge';
+export * from './knowledge-base';
 export * from './lead-scoring';
 export * from './growth';
 export * from './contact-consent';
@@ -118,3 +119,4 @@ export * from './lead-handling';
 export * from './channel-wechat';
 export * from './persona';
 export * from './storage-quota';
+export * from './sales-activities';

@@ -58,5 +58,6 @@ export function isValidTimezone(tz: string): boolean {
 export function safeRelativePath(path: string | null | undefined): string | null {
   if (!path) return null;
   // "//evil.com" and "/\evil.com" are protocol-relative / backslash tricks.
-  return /^\/(?![/\\])/.test(path) ? path : null;
+  // A browser drops tab, CR and LF from a URL before parsing it, so "/\t/evil.com" is "//evil.com".
+  return /^\/(?![/\\])/.test(path.replace(/[\t\r\n]/g, '')) ? path : null;
 }

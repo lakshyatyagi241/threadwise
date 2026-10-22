@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-api-waba.env';
 import { abortableFetch } from './abortable-fetch';
 import { assertPublicUrl } from './provider-url-guard';
@@ -66,6 +66,12 @@ export interface WabaRequest {
 
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
+export interface MediaUpload {
+  bytes: Uint8Array;
+  fileName: string;
+  mimeType: string;
+}
+
 /**
  * The one place that talks HTTP to Meta Graph and Interakt: base URL, version, auth headers, timeout, JSON decoding and error
  * normalisation. Nothing above the provider adapters builds a URL or a header.
@@ -77,6 +83,8 @@ export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 export class WabaHttp {
   /** Resolved per call so a test (or a runtime patch) that replaces global fetch is honoured. */
   fetchImpl: FetchLike = abortableFetch;
+
+  private readonly logger = new Logger(WabaHttp.name);
 
   constructor(
     @Inject(WABA_ENV) private readonly env: WabaEnv,
@@ -205,7 +213,22 @@ export class WabaHttp {
         body = { raw: text.slice(0, 2000) };
       }
     }
-    if (!res.ok) throw WabaApiError.fromResponse(res.status, body);
+    if (!res.ok) {
+      // A 401/403 with no Meta `error` object is a proxy or provider route refusing the credential: say which host and path.
+      if (res.status === 401 || res.status === 403) {
+        const target = new URL(url);
+        this.logger.warn(
+          {
+            status: res.status,
+            host: target.host,
+            path: target.pathname,
+            body: JSON.stringify(body).slice(0, 500),
+          },
+          '[WABA] credential rejected',
+        );
+      }
+      throw WabaApiError.fromResponse(res.status, body);
+    }
     return body as T;
   }
 }

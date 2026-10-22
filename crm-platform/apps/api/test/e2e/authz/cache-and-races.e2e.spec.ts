@@ -21,6 +21,7 @@ import {
   ChatMediaStore,
   MediaTokenService,
 } from '../../../src/infra/providers/chat-conversations/media';
+import { pngWithText } from '../../support/images';
 
 /**
  * Cache isolation, fail-closed behaviour, check-then-act races and stale entitlement caches
@@ -428,10 +429,7 @@ describe('AUTHZ-019 cache isolation between tenants and between users', () => {
   it('AUTHZ-019 signed media tokens are bound to one person in one tenant: no other user, in or out of the tenant, opens them', async () => {
     const store = h.app.get(ChatMediaStore);
     const tokens = h.app.get(MediaTokenService);
-    const png = Buffer.concat([
-      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-      Buffer.from('cache-and-races-secret-image-bytes'),
-    ]);
+    const png = pngWithText('cache-and-races-secret-image-bytes');
     const stored = await store.store({ orgId: A.orgId, filename: 'secret.png', buffer: png });
     const open = (token: string, jwt: string) =>
       http()
@@ -659,7 +657,7 @@ describe('AUTHZ-088 fail-closed when an authorization store is unavailable', () 
     expect((await call(sAdmin, 'get', '/v2/contacts')).status).toBe(200);
     expect((await call(sUser.token, 'get', '/v2/contacts')).status).toBe(200);
 
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [sUser.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [sUser.userId]);
     await flushAuthCaches();
     await withRedisDown(async () => {
       const u = await call(sUser.token, 'get', '/v2/contacts');
@@ -1331,7 +1329,7 @@ describe('AUTHZ-089 entitlement, suspension and session changes take effect with
       await h.redis.get(`auth:gate:${C.orgId}:${m.userId}`),
       'gate state cached',
     ).not.toBeNull();
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [m.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [m.userId]);
     const t0 = now();
     let status = 200;
     while (now() - t0 < 40_000) {

@@ -1,0 +1,31 @@
+name: sast
+# QA task 26. MANUAL ONLY: GitHub billing for Actions is stopped, so nothing here runs on a pull request or a schedule. Run it from the
+# Actions tab when billing is back, or use the local gate (.husky/pre-push, or `pnpm audit:sast -- --fail-on high`). Fails on any
+# unresolved High or Critical finding (resolved by a fix or by a reasoned entry in crm-platform/tools/sast-report/baseline.json).
+on:
+  workflow_dispatch:
+  # pull_request:        # enable once billing is back
+  # schedule:            # nightly
+  #   - cron: '30 2 * * *'
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: crm-platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit:sast -- --fail-on high
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-report
+          path: crm-platform/reports/sast/latest

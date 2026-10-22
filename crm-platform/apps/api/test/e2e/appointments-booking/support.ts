@@ -1,4 +1,18 @@
 import { expect } from 'vitest';
+import { DatabaseService } from '../../../src/infra/db/database.service';
+import type { AppointmentMessenger } from '../../../src/infra/providers/appointments-booking';
+import { AuditService } from '../../../src/kernel/audit/audit.service';
+import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
+import { ContactActivitiesRepository } from '../../../src/modules/crm';
+import { AppointmentReminderService } from '../../../src/modules/appointments-booking/appointment-reminder.service';
+import { AppointmentRemindersRepository } from '../../../src/modules/appointments-booking/appointment-reminders.repository';
+import { AppointmentsRepository } from '../../../src/modules/appointments-booking/appointments.repository';
+import { AppointmentsSupport } from '../../../src/modules/appointments-booking/appointments.support';
+import { BookingTypesRepository } from '../../../src/modules/appointments-booking/booking-types.repository';
+import { CryptoService } from '../../../src/common/crypto/crypto.service';
+import { BookingService } from '../../../src/modules/appointments-booking/booking.service';
+import { ReminderPlan } from '../../../src/modules/appointments-booking/reminder-plan';
+import { ReminderReplyService } from '../../../src/modules/appointments-booking/reminder-reply.service';
 import {
   Api,
   bearer,
@@ -9,6 +23,41 @@ import {
 } from '../contacts-attributes-tags/support';
 
 export { Api, bearer, startHarness, type Grant, type Harness, type Tenant };
+
+/** The reminder delivery service built from the app's own parts with a fake customer messenger (no provider is ever called). */
+export function buildReminderService(
+  h: Harness,
+  messenger: AppointmentMessenger,
+): AppointmentReminderService {
+  // The reply service lives in the worker process only (not in the HTTP app): built here from the app's parts. It is never registered
+  // as an inbound hook, and the delivery tests only use its outbound side (buttons and the plan gate).
+  const get = <T>(token: new (...a: never[]) => T): T => h.app.get(token, { strict: false });
+  const replies = new ReminderReplyService(
+    get(DatabaseService),
+    {} as never,
+    get(CryptoService),
+    get(AppointmentRemindersRepository),
+    get(AppointmentsRepository),
+    get(BookingService),
+    get(AppointmentsSupport),
+    get(ContactActivitiesRepository),
+    get(ReminderPlan),
+    {} as never,
+  );
+  return new AppointmentReminderService(
+    h.app.get(DatabaseService),
+    h.app.get(AppointmentRemindersRepository),
+    h.app.get(AppointmentsRepository),
+    h.app.get(BookingTypesRepository),
+    h.app.get(AppointmentsSupport),
+    h.app.get(AuditService),
+    h.app.get(OutboxService),
+    h.app.get(ContactActivitiesRepository),
+    replies,
+    h.app.get(ReminderPlan),
+    messenger,
+  );
+}
 
 export const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -47,11 +96,15 @@ export interface BookingType {
     id: string;
     offsetMinutes: number;
     isActive: boolean;
-    kind: 'before' | 'after';
+    kind: 'before' | 'after' | 'event';
+    stepKind: string;
     channels: string[];
     subject: string | null;
     body: string | null;
     waTemplateId: string | null;
+    skipIfConfirmed: boolean;
+    undeliveredFallbackMinutes: number | null;
+    notice: 'sms_removed' | null;
   }>;
   templates: Array<{
     event: string;
@@ -128,14 +181,14 @@ export interface Slot {
 /** Appointments helpers on top of the contacts harness (same app, same database, organizations of their own). */
 export class AppointmentsApi extends Api {
   /**
-   * A new workspace whose owner has switched email, WhatsApp and SMS on for appointment messages (BL-350): a workspace created now
+   * A new workspace whose owner has switched email and WhatsApp on (SMS is not an appointment channel any more) for appointment messages (BL-350): a workspace created now
    * starts with no channel chosen, and a booking type can name only chosen channels. `signupUndecided` is the workspace as it is born.
    */
-  async signup(label = 'con'): Promise<Tenant> {
+  override async signup(label = 'con'): Promise<Tenant> {
     const t = await super.signup(label);
     await this.h.owner.query(
       `INSERT INTO appointment_channel_settings (org_id, channel, enabled, source)
-       SELECT $1, c, true, 'owner' FROM unnest(ARRAY['email', 'whatsapp', 'sms']) AS c
+       SELECT $1, c, true, 'owner' FROM unnest(ARRAY['email', 'whatsapp']) AS c
        ON CONFLICT (org_id, channel) DO UPDATE SET enabled = true`,
       [t.orgId],
     );

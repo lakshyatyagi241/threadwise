@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { isTeamPeer } from '../../../kernel/rbac/scope';
 
 type Raw = Record<string, unknown>;
 
@@ -85,12 +86,9 @@ export class LeaveRepository {
     return res.rows[0] ? toMember(res.rows[0] as Raw) : null;
   }
 
-  /** Whether `a` and `b` share at least one team (the `team` record scope of `team.leave.manage`). */
-  async shareTeam(tx: Tx, orgId: number, a: number, b: number): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members x JOIN team_members y ON y.org_id = x.org_id AND y.team_id = x.team_id
-      WHERE x.org_id = ${orgId} AND x.user_id = ${a} AND y.user_id = ${b} LIMIT 1`);
-    return res.rows.length > 0;
+  /** Whether `a` and `b` share at least one team (the `team` record scope of `team.leave.manage`); `below`: a team under one of a's counts too. */
+  async shareTeam(tx: Tx, orgId: number, a: number, b: number, below = false): Promise<boolean> {
+    return isTeamPeer(tx, orgId, a, b, below);
   }
 
   async byUuid(tx: Tx, orgId: number, uuid: string, lock = false): Promise<LeaveRow | null> {

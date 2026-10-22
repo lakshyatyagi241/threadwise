@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import type { CampaignListResponse, CampaignTypeFilter } from '@crm/contracts';
-import { NewBroadcast } from '@/features/broadcasts/components/new-broadcast';
+import { NewCampaignButton } from './new-campaign-button';
 import { STATUS_VIEWS, type StatusView } from '../lib/list-model';
 
 const DOT: Record<StatusView, string> = {
@@ -127,7 +127,7 @@ export function CampaignsRail({
         })}
       </div>
 
-      {canCreate && <NewBroadcast label={listT('createBroadcast')} variant="link" />}
+      {canCreate && <NewCampaignButton label={listT('createBroadcast')} variant="link" />}
     </aside>
   );
 }

@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Penugasan chat",
+        "intro": "Empat sakelar ini cukup untuk sebagian besar ruang kerja: aktifkan, dan Anda tidak perlu membuat aturan.",
+        "order": "Urutan untuk chat baru: Pemilik Kontak dan Agen Tetap lebih dulu, lalu aturan Anda (jika ada), lalu Semua lainnya, lalu antrean tunggu.",
+        "readOnly": "Anda dapat melihat sakelar ini tetapi tidak dapat mengubahnya.",
+        "saved": "Tersimpan.",
+        "saveFailed": "Perubahan tidak dapat disimpan.",
+        "loading": "Memuat pengaturan penugasan",
+        "loadFailed": "Pengaturan penugasan tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "notInPlan": "Tidak ada di paket Anda",
+        "upgradeHint": "Termasuk dalam add-on Perutean cerdas atau paket yang lebih tinggi.",
+        "stepFirst": "Diperiksa pertama",
+        "stepMaster": "Sakelar utama",
+        "stepAfter": "Setelah chat diambil",
+        "needsAuto": "Hanya berlaku saat Penugasan Otomatis aktif.",
+        "auto": {
+          "title": "Penugasan Otomatis",
+          "body": "Chat baru dibagikan merata ke agen yang sedang menerima chat (tidak offline, sibuk, atau cuti). Jika semua agen sudah mencapai batas chat, chat baru menunggu di antrean.",
+          "limitHint": "Atur batas chat setiap agen di profilnya pada <link>Anggota tim</link>.",
+          "off": "Nonaktif: tidak ada yang ditugaskan otomatis, baik oleh aturan maupun oleh pemilik kontak. Chat menunggu di antrean sampai ada yang mengambilnya atau sebuah alur menunjuk seseorang."
+        },
+        "sticky": {
+          "title": "Agen Tetap",
+          "body": "Kontak yang kembali dikembalikan ke agen yang menangani chat terakhirnya, selama agen itu masih anggota aktif yang dapat membuka inbox (status online-nya tidak diperiksa). Jika kontak memiliki pemilik, pemilik dicoba lebih dulu.",
+          "withWindow": "Berapa hari ke belakang agen terakhir diperhitungkan diatur di bagian Lanjutan."
+        },
+        "owner": {
+          "title": "Tugaskan Chat ke Pemilik Kontak",
+          "body": "Chat dari kontak yang sudah dikenal diberikan lebih dulu ke pemilik kontaknya, sehingga dukungan tetap konsisten dan personal. Jika pemilik sedang cuti, delegasinya yang mengambil chat; jika tidak ada pemilik, langkah berikutnya yang menentukan.",
+          "wins": "Jika Agen Tetap juga aktif, pemilik kontak tetap diutamakan; agen terakhir hanya menjadi pilihan kedua."
+        },
+        "claim": {
+          "title": "Jadikan Agen sebagai Pemilik Kontak",
+          "body": "Saat agen mengambil chat dari antrean tunggu dan kontak belum punya pemilik, agen itu menjadi pemilik kontak. Pemilik yang sudah ada tidak pernah diubah.",
+          "note": "Chat yang diberikan ke agen oleh aturan tidak menetapkan pemilik. Dengan Pertahankan chat terbuka bersama pemilik (di Lanjutan), penyerahan juga menetapkan pemilik."
+        }
+      },
+      "advanced": {
+        "title": "Lanjutan",
+        "hint": "Menjaga chat tetap selaras dengan pemilik kontak, jangka waktu agen tetap, pengingat penugasan ulang, dan peringatan antrean.",
+        "sync": {
+          "title": "Pertahankan chat terbuka bersama pemilik",
+          "body": "Saat pemilik kontak berubah, chat terbuka yang ditugaskan otomatis ikut pindah ke pemilik baru. Chat yang diambil oleh seseorang tidak pernah dipindahkan. Penyerahan yang menugaskan chat juga menetapkan pemilik jika kontak belum punya.",
+          "needsOwner": "Aktifkan Tugaskan Chat ke Pemilik Kontak terlebih dulu."
+        }
+      },
+      "rules": {
+        "title": "Perlu kontrol lebih? Tambahkan aturan",
+        "intro": "Opsional. Aturan mengarahkan chat tertentu (saluran, kata dalam pesan, kontak baru...) ke agen atau tim tertentu. Jika keempat sakelar sudah cukup, Anda tidak perlu membuat aturan.",
+        "locked": "Aturan adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi. Antrean tunggu, mengambil chat, dan penugasan manual tetap tersedia.",
+        "pipelineTitle": "Cara chat baru ditugaskan",
+        "pipeline": {
+          "agent": "1. Pemilik kontak dan Agen Tetap",
+          "rules": "2. Aturan Anda, dari atas",
+          "rulesBody": "Aturan pertama yang cocok dan menemukan agen yang tersedia akan mengambil chat.",
+          "everyone": "3. Semua lainnya",
+          "everyoneBody": "Mengambil chat yang tidak diambil aturan mana pun.",
+          "queue": "4. Antrean tunggu",
+          "queueBody": "Jika tidak ada yang ditemukan, chat menunggu di tab Menunggu sampai agen mengambilnya.",
+          "agentBody": "Diatur oleh sakelar di atas."
+        },
+        "never": "Chat yang sudah ditugaskan oleh alur, seseorang, atau penyerahan tidak pernah diubah oleh aturan.",
+        "add": "Tambah aturan",
+        "emptyTitle": "Belum ada aturan",
+        "empty": "Tidak masalah. Sakelar di atas dan Semua lainnya yang menentukan.",
+        "loading": "Memuat aturan",
+        "loadFailed": "Aturan tidak dapat dimuat.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "semua agen",
+        "noAssign": "tidak menugaskan",
+        "drag": "Seret {name} untuk mengubah urutan",
+        "neverRuns": "Tidak pernah berjalan",
+        "neverMatches": "Tidak pernah cocok",
+        "neverMatchesHint": "Aturan ini tidak punya kondisi dan tidak berlaku untuk semua percakapan. Edit untuk memperbaikinya.",
+        "shadowed": "{count, plural, other {Aturan di bawah}} “{blocker}” tidak akan pernah berjalan kecuali tidak ada yang tersedia di “{blocker}”: {names}. “{blocker}” berlaku untuk semua percakapan dan menghentikan pemeriksaan di situ. Pindahkan ke bawah, atau nonaktifkan “Berhenti saat aturan ini cocok” di dalamnya.",
+        "reordered": "Urutan tersimpan."
+      },
+      "everyone": {
+        "title": "Semua lainnya",
+        "pinned": "Disematkan di akhir",
+        "body": "Mengambil semua chat yang tidak diambil aturan mana pun. Pilih siapa yang menerimanya.",
+        "notSet": "Belum diatur: chat yang tidak diambil aturan mana pun menunggu di antrean.",
+        "mode": "Apa yang terjadi pada chat tersebut",
+        "evenly": "Bagikan merata ke semua agen",
+        "evenlyHint": "Bergiliran atau paling sedikit kesibukan di antara semua orang yang dapat membuka inbox dan tersedia: tidak offline, sibuk, cuti, atau mencapai batas chat.",
+        "listed": "Pilih agen atau tim",
+        "listedNow": "Saat ini: {who}.",
+        "listedEdit": "Ubah agen atau tim",
+        "queue": "Biarkan di antrean tunggu",
+        "queueHint": "Tidak ada yang ditugaskan. Chat menunggu sampai agen mengambilnya.",
+        "strategy": "Cara membagi",
+        "saved": "Tersimpan.",
+        "failed": "Perubahan tidak dapat disimpan.",
+        "confirmTitle": "Ganti agen yang dipilih?",
+        "confirmBody": "Semua lainnya sekarang memberikan chat ke agen atau tim yang Anda pilih. Membagi merata akan menggantikan pilihan itu.",
+        "confirm": "Ganti",
+        "ruleName": "Semua lainnya"
+      },
+      "where": {
+        "title": "Di mana ini berlaku",
+        "applied": "Berlaku",
+        "applied1": "Saat chat baru masuk (dan saat pelanggan membuka kembali chat selesai yang tidak dipegang siapa pun).",
+        "applied2": "Saat langkah Penyerahan ke manusia diatur ke “Aturan penugasan”: daftar yang sama diperiksa, memakai kontak, saluran, dan pesan terakhir pelanggan, lalu Semua lainnya, lalu antrean tunggu.",
+        "not": "Tidak berlaku",
+        "not1": "Chat yang sudah ditugaskan oleh alur, seseorang, atau penyerahan.",
+        "not2": "Menugaskan atau mengambil chat secara manual.",
+        "not3": "Langkah Penyerahan ke manusia yang menunjuk seseorang (aturan diabaikan) atau tim (metode milik tim yang dipakai)."
+      },
+      "try": {
+        "title": "Coba",
+        "body": "Pilih kontak, saluran, dan contoh pesan untuk melihat siapa yang akan mendapat chat dan alasannya. Tidak ada yang ditugaskan, dihitung, atau dikirim.",
+        "contact": "Kontak (opsional)",
+        "noContact": "Tidak ada kontak dipilih: contoh ini dianggap kontak yang benar-benar baru. Kondisi pada detail kontak yang tersimpan tidak dapat diperiksa tanpa kontak sungguhan.",
+        "channel": "Saluran",
+        "message": "Contoh pesan",
+        "messagePlaceholder": "mis. Saya ingin refund",
+        "run": "Tampilkan hasilnya",
+        "running": "Memeriksa",
+        "failed": "Pengujian tidak dapat dijalankan.",
+        "result": "Hasil",
+        "outcome": {
+          "sticky": "Pertahankan bersama agennya yang menentukan: {who}.",
+          "rule": "Aturan “{rule}” yang menentukan: {who}.",
+          "everyone": "Semua lainnya yang menentukan: {who}.",
+          "queue": "Tidak ada yang ditemukan: chat menunggu di antrean.",
+          "off": "Penugasan Otomatis dinonaktifkan: tidak ada yang ditugaskan otomatis."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "seorang agen",
+          "team": "antrean {name}",
+          "teamUnknown": "antrean tim"
+        },
+        "stepsTitle": "Langkah demi langkah",
+        "step": {
+          "switch": "Penugasan Otomatis",
+          "sticky": "Pemilik kontak dan Agen Tetap",
+          "rule": "Aturan “{name}”",
+          "everyone": "Semua lainnya",
+          "queue": "Antrean tunggu"
+        },
+        "why": {
+          "auto_assign_off": "Sakelar nonaktif.",
+          "sticky_off": "Kedua sakelar nonaktif, jadi langkah ini dilewati.",
+          "no_contact": "Tidak ada kontak untuk dicari.",
+          "no_agent_found": "Tidak ada pemilik kontak atau agen terakhir yang bisa mengambilnya.",
+          "owner": "Pemilik kontak mengambilnya.",
+          "last_handler": "Agen dari chat terakhir kontak mengambilnya.",
+          "conditions_failed": "Tidak cocok.",
+          "nobody_available": "Cocok, tetapi tidak ada yang dituju yang tersedia.",
+          "agent_picked": "Cocok dan memilih seorang agen.",
+          "team_queue": "Cocok; tidak ada yang bebas, jadi masuk ke antrean tim.",
+          "no_assignment_in_rule": "Cocok; aturan ini tidak menugaskan (hanya menjalankan tindakan lainnya).",
+          "not_set": "Tidak ada aturan Semua lainnya yang aktif, jadi chat yang tidak diambil siapa pun menunggu di antrean."
+        },
+        "part": {
+          "contactKind": "Kontak baru atau kembali",
+          "contact": "Detail kontak",
+          "channel": "Saluran",
+          "keywords": "Kata dalam pesan",
+          "languages": "Bahasa",
+          "businessHours": "Jam kerja"
+        },
+        "partOk": "cocok",
+        "partWhy": {
+          "no_saved_value": "kontak ini tidak memiliki data itu, jadi tidak cocok",
+          "no_contact": "tidak ada kontak",
+          "not_same_kind": "kontak bukan jenis itu",
+          "channel_differs": "saluran ini tidak ada dalam daftar",
+          "no_word": "tidak ada kata yang ada di pesan",
+          "language_differs": "bahasanya berbeda atau tidak diketahui",
+          "hours_differ": "waktunya tidak berada di bagian hari itu"
+        },
+        "contactLine": "Kontak ini {kind}. Tahap: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "baru",
+          "returning": "sudah pernah menghubungi"
+        },
+        "hasOwner": "Punya pemilik.",
+        "noOwner": "Tidak punya pemilik.",
+        "tags": "{count, plural, =0 {Tidak ada tag tersimpan.} other {# tag tersimpan.}}",
+        "skippedTitle": "Dilewati",
+        "skip": {
+          "on_leave": "sedang cuti",
+          "offline_busy_or_at_capacity": "offline, sibuk, atau mencapai batas chat",
+          "cannot_read": "tidak dapat membuka inbox",
+          "no_owner": "kontak tidak punya pemilik",
+          "no_previous_handler_in_window": "belum ada agen sebelumnya untuk kontak ini",
+          "not_an_active_member": "bukan anggota aktif"
+        },
+        "outside": "Anggap di luar jam kerja",
+        "inside": "Anggap dalam jam kerja",
+        "clock": "Jam kerja: pakai waktu sekarang",
+        "skipStep": {
+          "owner": "Pemilik kontak",
+          "last_handler": "Agen terakhir"
+        }
+      },
+      "form": {
+        "whenSwitch": "Hanya untuk percakapan yang cocok dengan...",
+        "whenSwitchHint": "Nonaktif: aturan ini berlaku untuk setiap percakapan baru.",
+        "everyConversation": "Aturan ini berlaku untuk setiap percakapan baru.",
+        "kept": "Kondisi Anda tetap disimpan tetapi diabaikan selama ini nonaktif.",
+        "add": "Tambah kondisi",
+        "remove": "Hapus {name}",
+        "name": {
+          "contactKind": "Kontak baru atau kembali",
+          "channel": "Saluran",
+          "keywords": "Kata dalam pesan",
+          "language": "Bahasa pelanggan",
+          "hours": "Jam kerja",
+          "contact": "Detail kontak"
+        },
+        "kind": {
+          "title": "Kontak baru atau kembali",
+          "hint": "Kontak dianggap kembali jika sudah punya chat sebelumnya, atau disimpan lebih dari 10 menit sebelum chat ini.",
+          "new": "Kontak baru (chat pertama)",
+          "returning": "Kontak kembali"
+        },
+        "contactNote": "Hanya cocok dengan kontak yang sudah memiliki data ini. Kontak yang benar-benar baru datang tanpa data tersimpan kecuali tahap “Baru”, jadi gunakan Kontak baru atau kembali untuk pelanggan pertama kali.",
+        "everyoneElseNote": "Ini adalah aturan Semua lainnya: mengambil chat yang tidak diambil aturan lain.",
+        "everyoneAgents": "Semua orang yang dapat membuka inbox",
+        "everyoneAgentsHint": "Bagikan chat ke semua agen yang tersedia alih-alih memilihnya.",
+        "fallbackConditions": "Aturan ini memiliki kondisi yang disimpan sebelumnya, jadi hanya mengambil chat yang cocok dengannya. Aktifkan sakelar di bawah untuk meninjaunya, atau hapus."
+      }
+    }
+  }
+}

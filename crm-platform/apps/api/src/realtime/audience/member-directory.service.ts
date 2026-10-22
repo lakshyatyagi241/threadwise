@@ -3,7 +3,15 @@ import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import { PERM_MAIL_SETTINGS_MANAGE, adminsCanReadPersonal } from './channel-owner';
-import type { ConversationViewer } from './conversation-visibility';
+import { withDescendants } from '../../kernel/rbac/scope';
+import {
+  PERM_CONVERSATION_READ_UNASSIGNED,
+  viewerReadsUnassigned,
+  type ConversationViewer,
+} from './conversation-visibility';
+import { cacheMetrics, cacheSize } from '@crm/observability';
+
+const cache = cacheMetrics('member_directory');
 
 /** How long a workspace's member list is reused. A grant changed inside this window reaches the live signals this much late. */
 const PERM_CONVERSATION_READ_KEY = 'inbox.conversation.read';
@@ -29,6 +37,7 @@ interface Entry {
 @Injectable()
 export class MemberDirectory {
   private readonly cache = new Map<string, Entry>();
+  private readonly sizeGauge = cacheSize('member_directory', () => this.cache.size);
 
   constructor(
     private readonly db: DatabaseService,
@@ -58,7 +67,11 @@ export class MemberDirectory {
     const key = `${orgId}:${permission}`;
     const now = Date.now();
     const hit = this.cache.get(key);
-    if (hit && now - hit.at < CACHE_TTL_MS) return hit.viewers;
+    if (hit && now - hit.at < CACHE_TTL_MS) {
+      cache.hit();
+      return hit.viewers;
+    }
+    cache.miss();
 
     const viewers = this.load(orgId, permission);
     // A failed load must not be remembered for 30 seconds.
@@ -75,12 +88,23 @@ export class MemberDirectory {
   async viewer(orgId: number, userId: number, permission: string): Promise<ConversationViewer> {
     const grants = await this.rbac.grantsForUser(orgId, userId);
     const can = this.rbac.can(grants, permission);
-    const teamIds = await this.teamIdsOf(orgId, userId);
+    const teamIds = await this.teamIdsFor(orgId, userId, can.allowed ? can.scope : null);
+    const readsUnassigned = viewerReadsUnassigned(
+      permission,
+      can.allowed ? can.scope : null,
+      this.rbac.can(grants, PERM_CONVERSATION_READ_UNASSIGNED).allowed,
+    );
     const mailAdmin = this.rbac.can(grants, PERM_MAIL_SETTINGS_MANAGE).allowed;
     const readsPersonalMail = mailAdmin
       ? await this.db.txAs({ orgId, userId }, (tx) => adminsCanReadPersonal(tx, orgId))
       : false;
-    return { userId, scope: can.allowed ? can.scope : null, teamIds, readsPersonalMail };
+    return {
+      userId,
+      scope: can.allowed ? can.scope : null,
+      teamIds,
+      readsUnassigned,
+      readsPersonalMail,
+    };
   }
 
   /** The internal id of a team named by uuid, and whether the user belongs to it. Null when the team is not in this workspace. */
@@ -110,16 +134,18 @@ export class MemberDirectory {
   }
 
   private async load(orgId: number, permission: string): Promise<CachedViewer[]> {
-    const { users, teams } = await this.db.txAs({ orgId }, async (tx) => {
+    const { users, teams, parents } = await this.db.txAs({ orgId }, async (tx) => {
       const u = await tx.execute(
         sql`SELECT id FROM users WHERE org_id = ${orgId} AND status = 'active'`,
       );
       const t = await tx.execute(
         sql`SELECT user_id, team_id FROM team_members WHERE org_id = ${orgId}`,
       );
+      const p = await tx.execute(sql`SELECT id, parent_team_id FROM teams WHERE org_id = ${orgId}`);
       return {
         users: u.rows as Array<{ id: string | number }>,
         teams: t.rows as Array<{ user_id: string | number; team_id: string | number }>,
+        parents: p.rows as Array<{ id: string | number; parent_team_id: string | number | null }>,
       };
     });
 
@@ -130,27 +156,55 @@ export class MemberDirectory {
       teamsByUser.set(Number(row.user_id), list);
     }
 
+    const parentOf = new Map<number, number | null>(
+      parents.map((r) => [
+        Number(r.id),
+        r.parent_team_id === null ? null : Number(r.parent_team_id),
+      ]),
+    );
+
     return Promise.all(
       users.map(async ({ id }) => {
         const userId = Number(id);
         const grants = await this.rbac.grantsForUser(orgId, userId);
         const can = this.rbac.can(grants, permission);
+        const scope = can.allowed ? can.scope : null;
+        const own = teamsByUser.get(userId) ?? [];
         return {
           userId,
-          scope: can.allowed ? can.scope : null,
-          teamIds: teamsByUser.get(userId) ?? [],
+          scope,
+          teamIds: scope === 'team_and_below' ? withDescendants(own, parentOf) : own,
+          readsUnassigned: viewerReadsUnassigned(
+            permission,
+            scope,
+            this.rbac.can(grants, PERM_CONVERSATION_READ_UNASSIGNED).allowed,
+          ),
           mailAdmin: this.rbac.can(grants, PERM_MAIL_SETTINGS_MANAGE).allowed,
         };
       }),
     );
   }
 
-  private async teamIdsOf(orgId: number, userId: number): Promise<number[]> {
+  private async teamIdsFor(
+    orgId: number,
+    userId: number,
+    scope: ConversationViewer['scope'],
+  ): Promise<number[]> {
     const res = await this.db.txAs({ orgId, userId }, async (tx) =>
       tx.execute(
         sql`SELECT team_id FROM team_members WHERE org_id = ${orgId} AND user_id = ${userId}`,
       ),
     );
-    return (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
+    const own = (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
+    if (scope !== 'team_and_below' || own.length === 0) return own;
+    const all = await this.db.txAs({ orgId, userId }, async (tx) =>
+      tx.execute(sql`SELECT id, parent_team_id FROM teams WHERE org_id = ${orgId}`),
+    );
+    const parentOf = new Map<number, number | null>(
+      (all.rows as Array<{ id: string | number; parent_team_id: string | number | null }>).map(
+        (r) => [Number(r.id), r.parent_team_id === null ? null : Number(r.parent_team_id)],
+      ),
+    );
+    return withDescendants(own, parentOf);
   }
 }

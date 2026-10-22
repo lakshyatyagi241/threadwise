@@ -7,6 +7,8 @@ import { dealValueSchema } from '../deals-pipelines/money';
 import {
   bookingLocationTypeSchema,
   bookingQuestionTypeSchema,
+  bookingReminderRecordChannelSchema,
+  bookingReminderStepKindSchema,
   timeZoneSchema,
 } from './booking-type';
 
@@ -112,16 +114,38 @@ export const APPOINTMENT_REMINDER_STATUSES = [
 export const appointmentReminderStatusSchema = z.enum(APPOINTMENT_REMINDER_STATUSES);
 export type AppointmentReminderStatus = z.infer<typeof appointmentReminderStatusSchema>;
 
+/** One channel a step tried and what came of it: the answer to "why did it go by email?". Codes only, never an address or a message. */
+export const appointmentReminderAttemptSchema = z.object({
+  channel: bookingReminderRecordChannelSchema,
+  status: z.enum(['sent', 'skipped', 'held', 'failed']),
+  reason: z.string().nullable(),
+});
+export type AppointmentReminderAttempt = z.infer<typeof appointmentReminderAttemptSchema>;
+
+/** A tap on one of the Confirm / Reschedule / Cancel buttons of a reminder that did something, and when. */
+export const appointmentReminderButtonReplySchema = z.object({
+  action: z.enum(['confirm', 'reschedule', 'cancel']),
+  at: z.string().datetime(),
+});
+export type AppointmentReminderButtonReply = z.infer<typeof appointmentReminderButtonReplySchema>;
+
 export const appointmentReminderSchema = z.object({
-  kind: z.enum(['before', 'after']),
+  kind: z.enum(['before', 'after', 'event']),
+  stepKind: bookingReminderStepKindSchema.nullable().default(null),
   offsetMinutes: z.number().int(),
   label: z.string().nullable(),
   /** The moment the message is due (start minus the offset, or end plus it). */
   dueAt: z.string().datetime(),
   status: appointmentReminderStatusSchema,
   reason: z.string().nullable(),
-  channel: z.enum(['whatsapp', 'sms', 'email']).nullable(),
+  channel: bookingReminderRecordChannelSchema.nullable(),
   sentAt: z.string().datetime().nullable(),
+  /** The channels tried, in order, with the reason each was used or skipped. */
+  attempts: z.array(appointmentReminderAttemptSchema).default([]),
+  /** What the provider reported for the message afterwards (WhatsApp only): `unknown` while nothing is known. */
+  delivery: z.enum(['unknown', 'delivered', 'failed', 'undelivered']).default('unknown'),
+  /** The button taps of this message that did something (oldest first). A recorded fact of the booking, so it is listed on every plan. */
+  buttonReplies: z.array(appointmentReminderButtonReplySchema).default([]),
 });
 export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
 
@@ -161,6 +185,8 @@ export const appointmentResponseSchema = z.object({
   checkedInAt: z.string().datetime().nullable(),
   statusChangedAt: z.string().datetime(),
   cancelledAt: z.string().datetime().nullable(),
+  /** When the customer tapped Confirm on a reminder (a second fact next to the business confirming the booking); null until they do. */
+  customerConfirmedAt: z.string().datetime().nullable().optional(),
   cancelledBy: appointmentCancellerSchema.nullable(),
   cancelReason: z.string().nullable(),
   calendar: z.object({

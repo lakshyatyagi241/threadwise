@@ -574,10 +574,13 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Sales pipeline",
             "appointment_booking": "Appointments",
+            "appointment_confirm_buttons": "Reminder buttons",
+            "appointment_rebook_steps": "Rebook steps",
             "chatbot_widgets": "Chatbot widgets",
             "wa_storefront": "WhatsApp catalog",
             "inbox_sla": "Inbox SLA",
-            "inbox_routing": "Inbox routing",
+            "inbox_routing": "Smart routing",
+            "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
             "waba_calling": "WhatsApp calling",
             "inbox_kanban": "Inbox Kanban",
             "team_performance": "Team performance",
@@ -600,7 +603,9 @@
             "personal_history_full": "Full history import (personal WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI lead scoring",
-            "record_assignment": "Record assignment rules"
+            "record_assignment": "Record assignment rules",
+            "team_hierarchy": "Team hierarchy and managers",
+            "custom_roles": "Custom roles and scopes"
           },
           "cta": {
             "continueFree": "Continue free",

@@ -56,6 +56,7 @@ type Problem =
 
 async function post(path: string, body: unknown): Promise<unknown> {
   const res = await fetch(path, {
+    signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

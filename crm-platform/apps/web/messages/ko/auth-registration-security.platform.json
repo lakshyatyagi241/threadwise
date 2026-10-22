@@ -1404,7 +1404,8 @@
             "packInactive": "애드온 팩이 꺼져 있어 아무도 구매할 수 없습니다.",
             "appUnpublished": "앱이 게시되지 않아 워크스페이스에서 아직 볼 수 없습니다.",
             "appLabel": "앱: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, other {애드온 #개 선택됨}}"
           },
           "featureHints": {
             "automation": "대화에 응답하고 조치하는 플로우 빌더와 자동화입니다.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "화이트 라벨: 워크스페이스가 푸터에서 플랫폼 브랜딩을 숨길 수 있습니다.",
             "sales_pipeline": "딜, 작업, 파이프라인 및 대시보드의 파이프라인 수치입니다.",
             "appointment_booking": "예약 유형, 예약, 공개 예약 페이지입니다. 유료 예약 앱이 이 스위치를 관리합니다.",
+            "appointment_confirm_buttons": "예약 전에 WhatsApp으로 보내는 리마인더에 확인, 일정 변경, 취소 버튼을 추가합니다.",
+            "appointment_rebook_steps": "예약이 끝난 뒤 보내는 후속 메시지로, 연락처에 다시 예약하도록 안내합니다.",
             "chatbot_widgets": "웹사이트 챗봇 위젯 빌더입니다.",
             "wa_storefront": "WhatsApp 카탈로그 및 스토어프론트 영역입니다.",
             "inbox_sla": "팀 인박스의 SLA 정책 및 기한입니다.",
-            "inbox_routing": "인박스 대화를 자동으로 배정하는 라우팅 규칙입니다.",
+            "inbox_routing": "새 채팅 자동 배정: 라우팅 규칙, 나머지 전체, 대기열 타이머. 스마트 라우팅 애드온의 일부입니다.",
             "waba_calling": "인박스에서의 WhatsApp 통화: 통화 번호, 통화 권한, 전화 걸기 및 받기입니다.",
             "inbox_kanban": "팀 인박스의 칸반 보드 보기입니다.",
             "team_performance": "팀 성과 보고서입니다.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "개인 WhatsApp 번호를 처음 연결할 때 전체 채팅 기록을 가져올 수 있습니다. 최근 채팅 가져오기는 개인 번호를 지원하는 모든 요금제에서 사용할 수 있습니다.",
             "ai_crm_copilot": "연락처에서 AI로 잠재 고객을 찾고 점수를 매깁니다.",
             "lead_scoring": "AI로 연락처에 점수를 매기고 성장 파일럿을 구동합니다. 이 스위치는 AI 리드 스코어링 앱이 관리합니다.",
-            "record_assignment": "우선순위 규칙에 따라 새 연락처, 회사, 거래를 알맞은 영업 담당자에게 배정합니다."
+            "record_assignment": "우선순위 규칙에 따라 새 연락처, 회사, 거래를 알맞은 영업 담당자에게 배정합니다.",
+            "team_hierarchy": "상위 팀, 팀 리더, 그리고 자기 팀과 하위 팀을 볼 수 있는 매니저입니다.",
+            "custom_roles": "역할을 만들고 수정하며, 권한마다 범위(내 기록, 팀 기록 또는 전체 기록)를 선택합니다.",
+            "inbox_assignment_sticky": "소유자 우선 및 동기화 배정, 재방문 연락처 기간, 재배정 시 확인. 스마트 라우팅 애드온의 일부입니다."
           },
           "units": {
             "days": "일",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "월간 SMS",
             "email_mailboxes": "이메일 메일함",
             "email_monthly": "월간 이메일",
-            "storage_gb": "저장 공간 (GB)"
+            "storage_gb": "저장 공간 (GB)",
+            "teams": "팀"
           },
           "featureGroups": {
             "messaging": "메시징",
@@ -1605,10 +1612,12 @@
             "remove_branding": "화이트 라벨(플랫폼 브랜딩 제거)",
             "sales_pipeline": "영업 파이프라인(딜 및 작업)",
             "appointment_booking": "예약 및 예약 페이지",
+            "appointment_confirm_buttons": "리마인더 버튼: 확인, 일정 변경, 취소",
+            "appointment_rebook_steps": "예약 후 재예약(리콜) 단계",
             "chatbot_widgets": "웹사이트 챗봇 위젯",
             "wa_storefront": "WhatsApp 스토어프론트 및 카탈로그",
             "inbox_sla": "인박스 SLA 정책",
-            "inbox_routing": "인박스 라우팅 규칙 및 영업 시간",
+            "inbox_routing": "스마트 라우팅: 자동 배정 및 규칙",
             "waba_calling": "인박스에서 WhatsApp 통화 걸기 및 받기",
             "inbox_kanban": "인박스 칸반 보드",
             "team_performance": "팀 성과 보고서",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "전체 채팅 기록 가져오기 (개인 WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI 리드 스코어링",
-            "record_assignment": "레코드 배정 규칙 (연락처, 회사, 거래 자동 배정)"
+            "record_assignment": "레코드 배정 규칙 (연락처, 회사, 거래 자동 배정)",
+            "team_hierarchy": "팀 계층 및 매니저",
+            "custom_roles": "사용자 지정 역할 및 범위",
+            "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원"
           },
           "problems": {
             "required": "필수 입력 항목입니다.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한.",
             "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
             "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한.",
-            "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다."
+            "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다.",
+            "teams": "워크스페이스가 가질 수 있는 팀 수입니다. 비워 두면 무제한, 0은 단독 사용(팀 없음)입니다. 기존 팀은 삭제되지 않습니다."
+          },
+          "productLines": {
+            "chat": "채팅",
+            "crm": "영업 CRM",
+            "platform": "둘 다 공유"
+          },
+          "marketplace": {
+            "title": "이 요금제의 워크스페이스에 제공되는 마켓플레이스 앱"
+          },
+          "included": {
+            "title": "이 요금제에 포함된 애드온",
+            "intro": "애드온을 켜면 요금제에 포함됩니다. 이 요금제의 워크스페이스는 추가 비용 없이 사용하며, 애드온 카드에 \"요금제에 포함됨\"이라고 표시됩니다. 기능 탭에서 해당 애드온의 기능이 그대로 선택되고, 그곳에서 기능을 선택하면 스위치도 바뀝니다. 포함되지 않은 애드온은 활성 유료 요금제의 모든 워크스페이스에 각자의 가격으로 계속 판매됩니다.",
+            "readOnly": "이 요금제는 볼 수만 있고 변경할 수 없어서 이 스위치는 잠겨 있습니다.",
+            "loading": "애드온을 불러오는 중",
+            "loadFailed": "애드온을 불러오지 못했습니다. 변경된 내용은 없습니다.",
+            "empty": "아직 애드온이 없습니다",
+            "emptyHint": "스마트 라우팅, 팀 및 권한 같은 애드온은 운영자 콘솔의 애드온에서 만듭니다.",
+            "stateFull": "포함됨",
+            "statePartial": "일부 포함됨",
+            "stateNone": "포함되지 않음",
+            "noPrice": "가격 미설정",
+            "gives": "제공: {features}",
+            "switchLabel": "{name}을(를) 이 요금제에 포함",
+            "noFeatures": "이 애드온은 한도만 추가하므로 포함할 기능이 없습니다. 한도는 요금제 포함 대상이 아닙니다. 요금제 자체의 한도는 한도 탭에서 설정하세요.",
+            "partial": "일부 포함됨: 이 요금제에서 기능 {total}개 중 {count}개가 켜져 있습니다. 아직 꺼진 기능: {missing}.",
+            "includeFully": "모두 포함",
+            "limitsNote": "이 애드온은 추가 한도({limits})도 부여합니다. 추가 한도는 요금제 포함 대상이 아니며 여기서 변경되지 않습니다. 요금제 자체의 한도는 한도 탭에서 설정하세요. 워크스페이스는 추가 한도를 위해 계속 애드온을 구매합니다.",
+            "unlistedNote": "일부 기능({features})은 표준 애드온 목록에 없습니다. 요금제에서 켤 수는 있으며, 이 애드온을 팩으로 구매하는 방식만 다릅니다.",
+            "inactiveNote": "이 애드온은 초안이거나 꺼져 있어 아직 아무도 구매할 수 없습니다. 요금제에 포함하는 것은 가능합니다.",
+            "impactCount": "{count, plural, other {워크스페이스 #개가 이미 이 애드온을 결제하고 있습니다.}} 갱신은 현재 기간이 끝나면 중단되며, 환불은 없고 오늘 취소되는 것도 없습니다.",
+            "impactUnknown": "이 요금제의 워크스페이스 중 이미 이 애드온을 결제하고 있는 곳은 현재 기간이 끝나면 갱신이 중단됩니다. 환불은 없고 오늘 취소되는 것도 없습니다. 개수를 불러오지 못했습니다.",
+            "offNote": "꺼짐: 이 요금제의 워크스페이스는 애드온을 구매하지 않으면 이 기능을 잃으며, 애드온은 해당 가격으로 구매할 수 있게 됩니다."
           }
         }
       },

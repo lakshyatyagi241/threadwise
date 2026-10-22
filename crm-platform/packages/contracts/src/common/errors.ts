@@ -17,6 +17,7 @@ import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
 import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
+import { ACTIVITY_ERROR_CODES } from '../sales-activities/errors';
 import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
 import { MKT_ERROR_CODES } from '../marketplace/errors';
@@ -29,7 +30,6 @@ import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { GOOGLE_ERROR_CODES } from '../google-account/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
-import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
 import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
 import { PRIVACY_ERROR_CODES } from '../privacy/errors';
@@ -46,7 +46,6 @@ import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
 export const ERROR_CODES = {
   ...STORAGE_ERROR_CODES,
   ...CONF_ERROR_CODES,
-  ...FAQ_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,
   ...CONSENT_ERROR_CODES,
@@ -73,6 +72,7 @@ export const ERROR_CODES = {
   ...WAP_ERROR_CODES,
   ...WALLET_ERROR_CODES,
   ...CALL_ERROR_CODES,
+  ...ACTIVITY_ERROR_CODES,
   ...FLR_ERROR_CODES,
   ...MKT_ERROR_CODES,
   ...LEAD_ERROR_CODES,
@@ -97,6 +97,8 @@ export const ERROR_CODES = {
   /** The request body is larger than the server accepts (body-parser limit). */
   PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   INTERNAL: 'INTERNAL',
+  /** A dependency (database, Redis, queue) could not be reached or stopped answering: 503, retry shortly. */
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
 
   // platform invariants
   ROW_VERSION_CONFLICT: 'ROW_VERSION_CONFLICT',
@@ -195,6 +197,8 @@ export const ERROR_CODES = {
   // plans, entitlements and the plan catalogue (TW-PLAN-005, 017)
   PLAN_FEATURE_LOCKED: 'PLAN_FEATURE_LOCKED',
   PLAN_LIMIT_REACHED: 'PLAN_LIMIT_REACHED',
+  // The plan is "solo": its `teams` cap is 0, so no team can be created (BL-383). A cap above 0 that is full is PLAN_LIMIT_REACHED.
+  PLAN_TEAMS_NOT_INCLUDED: 'PLAN_TEAMS_NOT_INCLUDED',
   PLAN_IN_USE: 'PLAN_IN_USE',
   PLAN_DEFAULT_PROTECTED: 'PLAN_DEFAULT_PROTECTED',
   PLAN_TRIAL_EXPIRED: 'PLAN_TRIAL_EXPIRED',

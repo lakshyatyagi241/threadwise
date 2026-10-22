@@ -19,25 +19,12 @@
     "page": {
       "back": "Automação e IA",
       "title": "Atribuição automática de conversas",
-      "subtitle": "Atribua cada nova conversa ao agente certo automaticamente. As regras são testadas em ordem, de cima para baixo.",
       "noAccess": "Você não tem permissão para ver as configurações de atribuição automática.",
-      "create": "Criar regra",
       "limitUsed": "{used} de {limit} regras usadas",
       "limitReached": "Você usou todas as {limit} regras permitidas pelo seu plano.",
-      "keepTitle": "Manter contatos recorrentes com o seu agente",
-      "keepBody": "Quando um contato que já tem um agente escrever novamente, a nova conversa vai primeiro para esse agente: o responsável pelo contato ou quem atendeu a última conversa, desde que ainda seja um agente ativo. Caso contrário, as regras abaixo decidem.",
-      "settingsFailed": "Não foi possível salvar a configuração.",
-      "rulesTitle": "Regras",
-      "searchPlaceholder": "Pesquisar regras",
-      "searchLabel": "Pesquisar regras por nome",
-      "howItWorks": "A primeira regra que corresponde e encontra um agente disponível recebe a conversa. A regra de fallback é usada quando nenhuma outra regra corresponde. Se nada corresponder, a conversa fica sem atribuição.",
       "loading": "Carregando regras",
       "loadFailed": "Não foi possível carregar as regras.",
       "retry": "Tentar novamente",
-      "noMatchTitle": "Nenhuma regra encontrada",
-      "noMatch": "Nenhuma regra com nome semelhante a “{q}”.",
-      "emptyTitle": "Nenhuma regra ainda",
-      "empty": "Crie uma regra para distribuir novas conversas entre seus agentes, por palavra-chave, canal, idioma ou dados do contato.",
       "list": "Regras de atribuição automática em ordem de prioridade",
       "loadMore": "Carregar mais",
       "toggleFailed": "Não foi possível alternar a regra.",
@@ -51,16 +38,14 @@
       "deleted": "Regra excluída.",
       "deleteFailed": "Não foi possível excluir a regra.",
       "businessHours": "Horário comercial",
-      "recordNote": "Isto atribui conversas. Para atribuir novos {contacts}, empresas e {deals} aos responsáveis de vendas, veja <link>Regras de atribuição de registros</link>."
+      "recordNote": "Isto atribui conversas. Para atribuir novos {contacts}, empresas e {deals} aos responsáveis de vendas, veja <link>Regras de atribuição de registros</link>.",
+      "subtitle": "Escolha quem recebe cada chat novo. As chaves são suficientes para a maioria dos espaços de trabalho; adicione regras só se precisar de mais controle."
     },
     "rules": {
       "someone": "um agente",
       "moveUp": "Mover {name} para cima",
       "moveDown": "Mover {name} para baixo",
       "priority": "Prioridade",
-      "active": "Ativa",
-      "off": "Desativada",
-      "fallback": "Fallback",
       "continues": "Continua verificando",
       "unavailable": "{count, plural, one {# agente indisponível} other {# agentes indisponíveis}}",
       "activeFor": "A regra “{name}” está ativa",
@@ -74,7 +59,9 @@
         "languages": "Idioma: {list}",
         "inside": "Dentro do horário comercial",
         "outside": "Fora do horário comercial",
-        "always": "Toda conversa que ninguém atendeu"
+        "always": "Toda conversa nova",
+        "contactNew": "Contato novo",
+        "contactReturning": "Contato recorrente"
       },
       "strategy": {
         "round_robin": "Rodízio",
@@ -122,7 +109,6 @@
         "name": "Digite um nome para a regra.",
         "nameLong": "O nome é muito longo.",
         "descriptionLong": "A descrição é muito longa.",
-        "conditions": "Adicione pelo menos uma condição ou marque esta regra como fallback.",
         "contactIncomplete": "Conclua ou remova as condições de contato incompletas.",
         "keywordsMany": "Use no máximo 20 palavras.",
         "targets": "Escolha pelo menos um agente ou equipe.",
@@ -133,20 +119,17 @@
         "escalationAction": "Reatribuir, definir uma prioridade ou as duas.",
         "escalationAgents": "Reatribuir precisa de atendentes nesta regra: escolha-os acima.",
         "autoReplyEmpty": "Escreva a resposta ou desmarque a opção.",
-        "autoReplyLong": "A resposta é longa demais (no máximo 1024 caracteres)."
+        "autoReplyLong": "A resposta é longa demais (no máximo 1024 caracteres).",
+        "conditions": "Adicione pelo menos uma condição ou desative “Somente para conversas que correspondam”."
       },
       "whenTitle": "Quando uma nova conversa chegar",
-      "whenHint": "Todas as condições definidas precisam corresponder. Deixe uma parte vazia para ignorá-la.",
       "contact": {
-        "title": "O contato corresponde",
-        "hint": "Marcadores, responsável, etapa do ciclo de vida e outros dados de contato, como nos segmentos.",
         "loading": "Carregando campos de contato",
         "partial": "Algumas listas de contatos não puderam ser carregadas; por isso, algumas opções podem estar faltando.",
         "summary": "Condições",
         "none": "Nenhuma condição de contato."
       },
       "channel": {
-        "title": "Canal",
         "hint": "Apenas conversas que chegam por estes canais. Nenhum marcado significa qualquer canal."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Horário comercial",
         "hint": "Usa o horário comercial do seu espaço de trabalho.",
-        "any": "Qualquer horário",
         "inside": "Somente dentro do horário comercial",
         "outside": "Somente fora do horário comercial"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Opções",
       "stopOnMatch": "Parar quando esta regra corresponder",
       "stopOnMatchHint": "Ativado: as regras seguintes não são verificadas. Desativado: uma regra correspondente posterior pode assumir a conversa.",
-      "fallback": "Regra de fallback",
-      "fallbackHint": "Usada quando nenhuma outra regra corresponde. Só há um fallback; escolher esta substitui o anterior.",
       "cancel": "Cancelar",
       "save": "Salvar",
       "saveActivate": "Salvar e ativar",
@@ -219,7 +199,8 @@
       "escalatePriority": "Depois, definir a prioridade",
       "autoReply": "Enviar uma resposta automática",
       "autoReplyBody": "Texto da resposta",
-      "autoReplyHint": "Enviada como a empresa ao cliente. Fora da janela de 24 horas, uma resposta livre não é enviada."
+      "autoReplyHint": "Enviada como a empresa ao cliente. Fora da janela de 24 horas, uma resposta livre não é enviada.",
+      "whenHint": "Toda condição que você adicionar deve corresponder."
     },
     "sla": {
       "back": "Voltar para Configurações",

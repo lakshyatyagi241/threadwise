@@ -95,6 +95,7 @@ body[data-corner="square"] .bubble, body[data-corner="square"] .bubble.out, body
 .bubble.out { border-radius: 20px 20px 6px 20px; background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,.14); }
 .time { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #8b8fa8; padding: 0 4px; }
 .row.out .time svg { color: var(--accent); }
+.bubble code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; background: rgba(30,32,60,.08); border-radius: 4px; padding: 0 3px; }
 .bubble.media { padding: 5px; }
 .bubble.media .cap { padding: 7px 10px 5px; white-space: pre-wrap; }
 .bubble img.shot { display: block; max-width: 100%; max-height: 240px; border-radius: 15px; cursor: zoom-in; }
@@ -119,6 +120,7 @@ a.chip { text-decoration: none; }
 .chip .ico { border-radius: var(--rb, 50%); }
 body[data-icons="off"] .chip .ico:not(.pic) { display: none; }
 .chip .ico.pic { background: transparent; overflow: hidden; }
+.chip.menu.picked { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 .chip .ico img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; display: block; }
 .chip .lico { width: 18px; height: 18px; border-radius: 5px; object-fit: cover; }
 body[data-icons="off"] .chip.menu { padding: 8px 15px; }
@@ -292,8 +294,10 @@ const SCRIPT = `
 
   // An image address is used only when it is an http(s) one (it comes from the author's upload, checked again here).
   function imgUrl(v) {
+    // No address is no picture: an empty value would resolve against this page and draw a broken image (on a link button, an avatar).
+    if (!String(v || '').trim()) return '';
     try {
-      var u = new URL(String(v || ''), window.location.href);
+      var u = new URL(String(v), window.location.href);
       return u.protocol === 'http:' || u.protocol === 'https:' ? u.href : '';
     } catch (e) { return ''; }
   }
@@ -667,6 +671,33 @@ const SCRIPT = `
   function nearBottom() { var m = $('msgs'); return m.scrollHeight - m.scrollTop - m.clientHeight < 70; }
   function toBottom() { var m = $('msgs'); m.scrollTop = m.scrollHeight; $('latest').style.display = 'none'; }
 
+  // WhatsApp's own marks in a line the bot sent: *bold*, _italic_, ~strike~ and three backticks for monospace. Built as elements with
+  // textContent, never as markup, so nothing in the text can add any. A mark inside a word (snake_case, a link) is left as typed.
+  var MARKS = /\\x60\\x60\\x60([^\\n]+?)\\x60\\x60\\x60|\\*(?=\\S)([^*\\n]*?\\S)\\*|_(?=\\S)([^_\\n]*?\\S)_|~(?=\\S)([^~\\n]*?\\S)~/g;
+  function fmtInto(el, text) {
+    // Its own regex per call: the nested call for *bold _italic_* must not move this one's position.
+    var re = new RegExp(MARKS.source, 'g');
+    var last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      var mono = m[1] !== undefined;
+      if (!mono && (/\\w/.test(text.charAt(m.index - 1)) || /\\w/.test(text.charAt(m.index + m[0].length)))) { re.lastIndex = m.index + 1; continue; }
+      if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var tag = mono ? 'code' : m[2] !== undefined ? 'b' : m[3] !== undefined ? 'i' : 's';
+      var inner = mono ? m[1] : m[2] !== undefined ? m[2] : m[3] !== undefined ? m[3] : m[4];
+      var n = document.createElement(tag);
+      if (mono) n.textContent = inner; else fmtInto(n, inner);
+      el.appendChild(n);
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+  }
+  // The same line without its marks, for the voice that reads it out.
+  function plain(text) {
+    var d = document.createElement('div');
+    fmtInto(d, text);
+    return d.textContent;
+  }
+
   function addBubble(dir, text, extras) {
     if (dir === 'in') { hideTyping(); setHint(extras && extras.input ? extras.input : null); }
     // A file the visitor sent in an earlier visit has no text of its own.
@@ -687,9 +718,11 @@ const SCRIPT = `
       if (text) {
         var cap = document.createElement('div');
         cap.className = 'cap';
-        cap.textContent = text;
+        if (dir === 'in') fmtInto(cap, text); else cap.textContent = text;
         b.appendChild(cap);
       }
+    } else if (dir === 'in') {
+      fmtInto(b, text);
     } else {
       b.textContent = text;
     }
@@ -717,7 +750,7 @@ const SCRIPT = `
       if (dir === 'in' && CHAT.actions && extras && extras.id && text) tm.appendChild(actionsNode(extras.id, text));
       row.appendChild(tm);
     }
-    if (dir === 'in' && voiceOn && text) speak(text);
+    if (dir === 'in' && voiceOn && text) speak(plain(text));
     if (dir === 'in' && imgUrl(CHAT.avatar)) {
       var bi = document.createElement('img');
       bi.className = 'bav'; bi.src = imgUrl(CHAT.avatar); bi.alt = '';
@@ -725,10 +758,9 @@ const SCRIPT = `
       row.insertBefore(bi, row.firstChild);
     }
     if (dir === 'in' && settled) blip();
-    if (dir === 'in' && settled && text && CHAT.speak && !voiceOn && window.speechSynthesis) { try { window.speechSynthesis.speak(new SpeechSynthesisUtterance(text)); } catch (e) {} }
+    if (dir === 'in' && settled && text && CHAT.speak && !voiceOn && window.speechSynthesis) { try { window.speechSynthesis.speak(new SpeechSynthesisUtterance(plain(text))); } catch (e) {} }
     if (extras && extras.id) row.dataset.id = extras.id;
-    // Reply buttons only stay on the newest line: any new line (a tap, a typed answer, the bot's next message) retires them.
-    clearChips();
+    // Reply buttons stay where the bot put them, also after one is tapped (the run keeps an old menu tappable): the tapped one is marked.
     m.appendChild(row);
     if (extras && extras.buttons && extras.buttons.length) addChips(extras.buttons);
     if (stick) toBottom(); else $('latest').style.display = 'flex';
@@ -743,8 +775,8 @@ const SCRIPT = `
     a.href = u;
     if (/^https?:/i.test(u)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
     var lpic = imgUrl(icon);
+    // The author's own picture only: a button without one has no icon.
     if (lpic) { var li = document.createElement('img'); li.src = lpic; li.alt = ''; li.className = 'lico'; a.appendChild(li); }
-    else a.appendChild(svg(14, /^tel:/i.test(u) ? ['M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2'] : /^mailto:/i.test(u) ? ['M4 6h16v12H4z', 'M4 7l8 6 8-6'] : ['M7 17L17 7', 'M9 7h8v8']));
     a.appendChild(document.createTextNode(String(label || '') || tx('open', 'Open')));
     return a;
   }
@@ -769,7 +801,7 @@ const SCRIPT = `
       var cb = document.createElement('div');
       cb.className = 'cb';
       if (c.title) { var ct = document.createElement('div'); ct.className = 'ct'; ct.textContent = c.title; cb.appendChild(ct); }
-      if (c.text) { var tx = document.createElement('div'); tx.className = 'tx'; tx.textContent = c.text; cb.appendChild(tx); }
+      if (c.text) { var tx = document.createElement('div'); tx.className = 'tx'; fmtInto(tx, c.text); cb.appendChild(tx); }
       el.appendChild(cb);
       var bt = document.createElement('div');
       bt.className = 'bt';
@@ -843,15 +875,21 @@ const SCRIPT = `
       var c = document.createElement('button');
       c.type = 'button';
       c.className = 'chip menu';
-      var ico = document.createElement('span');
-      ico.className = 'ico';
-      // The author's own small picture replaces the arrow when the button has one.
+      // The author's own small picture, and only that: a button without one has no icon.
       var pic = imgUrl(btn.icon);
-      if (pic) { var im = document.createElement('img'); im.src = pic; im.alt = ''; ico.appendChild(im); ico.classList.add('pic'); }
-      else ico.appendChild(svg(14, ['M5 12h14', 'M13 6l6 6-6 6']));
-      c.appendChild(ico);
+      if (pic) {
+        var ico = document.createElement('span');
+        ico.className = 'ico pic';
+        var im = document.createElement('img'); im.src = pic; im.alt = ''; ico.appendChild(im);
+        c.appendChild(ico);
+      }
       c.appendChild(document.createTextNode(btn.title));
-      c.onclick = function () { send(btn.title, btn.id); };
+      c.onclick = function () {
+        var sib = box.querySelectorAll('.chip.menu');
+        for (var k = 0; k < sib.length; k++) sib[k].classList.remove('picked');
+        c.classList.add('picked');
+        send(btn.title, btn.id);
+      };
       box.appendChild(c);
     });
     $('msgs').appendChild(box);
@@ -1034,9 +1072,6 @@ const SCRIPT = `
     t.className = 'title';
     t.textContent = tx('intakeTitle', 'Tell us a bit about you');
     box.appendChild(t);
-    if (cfg.collect_name) field(box, tx('name', 'Name'), 'i-name', 'text');
-    if (cfg.collect_email) field(box, tx('email', 'Email'), 'i-email', 'email');
-    if (cfg.collect_phone) field(box, tx('phone', 'Phone'), 'i-phone', 'tel');
     if (cfg.age_gate && cfg.age_gate.pending) {
       if (cfg.age_gate.mode === 'dob') {
         field(box, tx('ageDobLabel', 'Date of birth'), 'i-dob', 'date');
@@ -1133,7 +1168,7 @@ const SCRIPT = `
         settled = true;
         if (cfg.whatsapp_url && cfg.mode !== 'ai') addWaCta();
         var ageAsk = !!(cfg.age_gate && cfg.age_gate.pending);
-        if (((cfg.collect_name || cfg.collect_email || cfg.collect_phone) && !(vis.name || vis.email || vis.phone)) || ageAsk) {
+        if (ageAsk) {
           renderIntake();
         } else {
           intakeDone = true;

@@ -1,0 +1,116 @@
+{
+  "feature": "team-inbox-conversations",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-team-inbox-conversations-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/hooks.ts",
+        "apps/web/src/features/team-inbox-conversations/components/assign-menu.tsx",
+        "apps/web/src/features/team-inbox-conversations/components/channels-list.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/components/saved-replies-screen.test.tsx",
+          "match": "has an empty state, a loading state, an error state and a no-access state"
+        }
+      ]
+    },
+    {
+      "id": "ES-team-inbox-conversations-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/hooks.ts",
+        "apps/web/src/features/team-inbox-conversations/api/use-list.ts",
+        "apps/web/src/features/team-inbox-conversations/components/channels-list.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-team-inbox-conversations-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/handoff.ts",
+        "apps/web/src/features/team-inbox-conversations/api/hooks.ts",
+        "apps/web/src/features/team-inbox-conversations/api/use-list.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-team-inbox-conversations-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/saved-replies.ts",
+        "apps/web/src/features/team-inbox-conversations/api/service.ts",
+        "apps/web/src/features/team-inbox-conversations/api/use-bulk.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/components/states.test.tsx",
+          "match": "keeps the typed values and shows the error when save fails"
+        }
+      ]
+    },
+    {
+      "id": "ES-team-inbox-conversations-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/components/saved-reply-form.tsx",
+        "apps/web/src/features/team-inbox-conversations/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-team-inbox-conversations-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/handoff.ts",
+        "apps/web/src/features/team-inbox-conversations/components/handoff-bar.tsx",
+        "apps/web/src/features/team-inbox-conversations/components/inbox-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-team-inbox-conversations-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/service.ts",
+        "apps/web/src/features/team-inbox-conversations/api/use-list.ts",
+        "apps/web/src/features/team-inbox-conversations/components/assign-menu.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

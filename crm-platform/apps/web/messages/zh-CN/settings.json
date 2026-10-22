@@ -65,6 +65,11 @@
         "description": "连接您的 WhatsApp Business 号码，与客户聊天。",
         "keywords": "wa, WhatsApp Business, cloud api, 号码, 二维码"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp 商业资料",
+        "description": "您的标志、简介文字、联系方式，以及 Meta 要求的合规信息。",
+        "keywords": "商业资料, 标志, 头像, 简介, 联系, 合规, 法定名称, 客户服务, 投诉负责人"
+      },
       "unofficial-whatsapp": {
         "label": "非官方 WhatsApp API",
         "description": "通过二维码关联个人 WhatsApp 号码，并进行养号以确保安全发送。",
@@ -101,7 +106,7 @@
         "keywords": "短信, 发送方 ID, dlt, twilio, 手机"
       },
       "email": {
-        "label": "电子邮件",
+        "label": "客服邮箱",
         "description": "连接 Gmail 或 Google Workspace 邮箱，让团队在共享收件箱中阅读和回复客户邮件。",
         "keywords": "邮箱, gmail, google workspace, 共享收件箱, 客服邮件, outlook, imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "团队",
-        "description": "将成员分组为团队，用于分配和报表。",
-        "keywords": "分组, 部门, 分配, 路由"
+        "description": "将人员分组,用于会话、分配和报表。",
+        "keywords": "分组、部门、负责人、层级、分配、路由"
       },
       "ai-keys": {
         "label": "AI 服务商密钥",
@@ -341,7 +346,7 @@
         "keywords": "同意, 退订, 重新订阅, 取消订阅, stop, start, gdpr, 合规, 隐私, 营销"
       },
       "inbox-tags": {
-        "label": "会话标签",
+        "label": "标签",
         "description": "创建团队用于会话并据以筛选收件箱的标签。它们与联系人使用的标签相同。",
         "keywords": "标签, 标记, 会话标签, 分类, 整理, 筛选"
       },
@@ -354,11 +359,6 @@
         "label": "响应目标",
         "description": "设置团队回复和解决的时限（SLA），会话错过目标时收到提醒。",
         "keywords": "sla, 响应时间, 首次回复, 解决, 超时, 目标, 营业时间"
-      },
-      "team-performance": {
-        "label": "团队绩效",
-        "description": "查看每位客服今天、本周或本月回复和解决的速度。",
-        "keywords": "报表, 分析, 客服, 响应时间, 首次回复, 已解决, 工作量, 绩效"
       },
       "privacy-requests": {
         "label": "数据请求",
@@ -394,6 +394,11 @@
         "label": "重复线索",
         "description": "选择与联系人匹配的新线索是合并到该联系人，还是成为新联系人。",
         "keywords": "重复, 合并, 线索, 相同电话, 相同邮箱, 新联系人, 线索来源"
+      },
+      "sales-activities": {
+        "label": "销售活动",
+        "description": "管理任务、会议、通话和您自己的活动：每种活动能做什么、任务类型和结果。",
+        "keywords": "活动, 任务类型, 结果, 会议结果, 通话结果, 跟进, 签到, 自定义活动, 日历, 完成"
       }
     },
     "backToMarketplace": "返回应用市场"

@@ -37,7 +37,11 @@ export interface FieldMapping {
 /** Field id -> `{mapsTo, kind, label}` out of a form's stored `definition_json`, however malformed; never throws. */
 export function extractFieldMappings(definitionJson: unknown): Record<string, FieldMapping> {
   const def = definitionJson as
-    | { screens?: Array<{ fields?: Array<{ id?: unknown; kind?: unknown; label?: unknown; mapsTo?: unknown }> }> }
+    | {
+        screens?: Array<{
+          fields?: Array<{ id?: unknown; kind?: unknown; label?: unknown; mapsTo?: unknown }>;
+        }>;
+      }
     | null
     | undefined;
   const out: Record<string, FieldMapping> = {};

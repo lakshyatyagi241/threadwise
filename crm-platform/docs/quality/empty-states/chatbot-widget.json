@@ -1,0 +1,93 @@
+{
+  "feature": "chatbot-widget",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-chatbot-widget-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/chatbot-widget/components/builder-screen.tsx",
+        "apps/web/src/features/chatbot-widget/components/web-behaviour-card.tsx",
+        "apps/web/src/features/chatbot-widget/components/web-bots-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/chatbot-widget/lib/models.test.ts",
+          "match": "intake lists the enabled fields; none gives an empty list"
+        }
+      ]
+    },
+    {
+      "id": "EM-chatbot-widget-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/chatbot-widget/components/widgets-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-chatbot-widget-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/chatbot-widget/components/builder-screen.tsx",
+        "apps/web/src/features/chatbot-widget/components/flow-whatsapp-customize.tsx",
+        "apps/web/src/features/chatbot-widget/components/flow-widget-customize.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/chatbot-widget/lib/launcher-model.test.ts",
+          "match": "is a clean neutral page with the panel dominating: no skeleton blocks"
+        }
+      ]
+    },
+    {
+      "id": "EM-chatbot-widget-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/chatbot-widget/components/builder-steps.tsx",
+        "apps/web/src/features/chatbot-widget/components/web-behaviour-card.tsx",
+        "apps/web/src/features/chatbot-widget/settings.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-chatbot-widget-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/chatbot-widget/components/web-behaviour-card.tsx",
+        "apps/web/src/features/chatbot-widget/components/web-launcher-card.tsx",
+        "apps/web/src/features/chatbot-widget/components/widget-age-question.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/chatbot-widget/lib/launcher-model.test.ts",
+          "match": "spacing that is not a whole number becomes NaN, which the contract refuses"
+        }
+      ]
+    }
+  ]
+}

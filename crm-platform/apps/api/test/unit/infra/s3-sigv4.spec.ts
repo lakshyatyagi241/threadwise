@@ -57,7 +57,10 @@ const cases = [
     input: { method: 'DELETE' as const, key: 'a b/c', payloadSha256: 'x', now },
     url: 'http://bk.objects.local:9000/a%20b/c',
     payload: 'x',
-    signature: '1eca441fd63272dc17a0236a1663faf8b24b022cf56d898af38bfea8f332bfa0',
+    // The host is part of the signed request. The fixture host was renamed from minio.local to objects.local when MinIO was removed (#605)
+    // without recomputing this value; the signer itself is unchanged: with the old host it still produces the old signature
+    // 1eca441fd63272dc17a0236a1663faf8b24b022cf56d898af38bfea8f332bfa0 (checked when this value was recomputed).
+    signature: '78c4d99cea16abea72123a1a32cc0dd1adc0bea2e8412570904d0aba45958a05',
   },
 ];
 

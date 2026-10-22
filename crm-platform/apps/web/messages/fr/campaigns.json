@@ -34,7 +34,10 @@
         "all": "Toute la période",
         "7d": "7 jours",
         "30d": "30 jours",
-        "90d": "90 jours"
+        "90d": "90 jours",
+        "custom": "Plage personnalisée",
+        "from": "Date de début",
+        "to": "Date de fin"
       },
       "search": "Rechercher des campagnes",
       "selectPage": "Sélectionner cette page",
@@ -1045,7 +1048,7 @@
         "loadFailed": "Impossible de charger les statistiques.",
         "rates": {
           "delivered": "Taux de livraison",
-          "deliveredHint": "de l’audience",
+          "deliveredHint": "des envois",
           "read": "Taux de lecture",
           "readHint": "des messages livrés",
           "replies": "Taux de réponse",
@@ -1873,8 +1876,7 @@
         "list": "Liste",
         "blocks": "Blocs"
       },
-      "showing": "{count, plural, one {# campagne affichée} other {# campagnes affichées}}",
-      "legacy": "Anciennes diffusions ({count})"
+      "showing": "{count, plural, one {# campagne affichée} other {# campagnes affichées}}"
     },
     "senderEmpty": {
       "loading": "Chargement de vos numéros…",

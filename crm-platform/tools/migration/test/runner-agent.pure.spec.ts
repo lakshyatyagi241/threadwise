@@ -12,7 +12,12 @@ const agent = require(AGENT) as {
   validJob: (
     j: unknown,
   ) => { runId: string; sourceClient: string; sourceDb: string; mode: string } | null;
-  pipelineArgs: (j: { sourceClient: string; sourceDb: string; mode: string }) => string[];
+  pipelineArgs: (j: {
+    sourceClient: string;
+    sourceDb: string;
+    mode: string;
+    skipWhatsapp?: boolean;
+  }) => string[];
   childEnv: (env: Record<string, string | undefined>) => Record<string, string | undefined>;
   runnerName: (env: Record<string, string | undefined>) => string;
   batches: (lines: string[]) => string[][];
@@ -24,8 +29,18 @@ const RUN = '2b0e4f0a-6a43-4e0f-9a63-8d1f5c9f1b11';
 const good = { runId: RUN, sourceClient: 'acme', sourceDb: 'Acme_Db', mode: 'dry' };
 
 describe('runner agent: what it will start a process for', () => {
-  it('accepts exactly the three values of a run, and nothing else rides along', () => {
-    expect(agent.validJob({ ...good, extra: '; rm -rf /' })).toEqual(good);
+  it('accepts exactly the values of a run (the three and the testing switch), and nothing else rides along', () => {
+    expect(agent.validJob({ ...good, extra: '; rm -rf /' })).toEqual({
+      ...good,
+      skipWhatsapp: false,
+    });
+    expect(agent.validJob({ ...good, skipWhatsapp: true })).toEqual({
+      ...good,
+      skipWhatsapp: true,
+    });
+    // the switch must be a real boolean: a string or a number makes the job invalid
+    expect(agent.validJob({ ...good, skipWhatsapp: 'true' })).toBeNull();
+    expect(agent.validJob({ ...good, skipWhatsapp: 1 })).toBeNull();
     for (const mode of ['dry', 'load', 'catchup'])
       expect(agent.validJob({ ...good, mode })).not.toBeNull();
   });
@@ -60,6 +75,11 @@ describe('runner agent: what it will start a process for', () => {
       '--mode',
       'dry',
     ]);
+    // the testing switch leaves the WhatsApp number out: the pipeline gets --no-whatsapp, and only then
+    expect(agent.pipelineArgs({ ...good, skipWhatsapp: true }).slice(-1)).toEqual([
+      '--no-whatsapp',
+    ]);
+    expect(agent.pipelineArgs({ ...good, skipWhatsapp: false })).not.toContain('--no-whatsapp');
   });
 });
 

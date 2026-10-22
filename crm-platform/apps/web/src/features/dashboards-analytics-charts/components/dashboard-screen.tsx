@@ -12,7 +12,7 @@ import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
 import { flash } from '@/features/admin-console-shell/flash/flash-store';
 import type { CustomDates } from '../api/service';
-import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
+import { compact, greetingKey, isForbidden, throughputCsv, tzChip } from '../lib/format';
 import { BarChart, Sparkline, Legend } from './charts';
 import {
   ActivityCard,
@@ -27,6 +27,7 @@ import {
 import { Funnel } from './funnel';
 import { LoadError, Panel, Trend } from './parts';
 import { QuickAccessTiles } from '@/features/admin-console-shell/quick-access/quick-access-tiles';
+import { CARD_PERMISSION, QUICK_ACCESS_PERMISSION, permitted } from '../card-permissions';
 import {
   CopilotCard,
   FlowsCard,
@@ -58,7 +59,8 @@ function useRange(): [DashRange, CustomDates, (r: DashRange, c?: CustomDates) =>
         if (c.from) q.set('from', c.from);
         if (c.to) q.set('to', c.to);
       }
-      router.replace(`${path}?${q.toString()}`);
+      // `scroll: false`: a period change re-renders the same page; without it Next scrolls back to the top.
+      router.replace(`${path}?${q.toString()}`, { scroll: false });
     },
   ];
 }
@@ -99,6 +101,34 @@ export function RangePicker({
   );
 }
 
+/**
+ * The "synced N seconds ago" chip. It owns the one-second tick so only this chip re-renders each second, not the whole
+ * dashboard (every card and chart) with it.
+ */
+function SyncedChip({ updatedAt }: { updatedAt: number }) {
+  const t = useTranslations('dashboards-analytics-charts.dashboard');
+  const [nowMs, setNowMs] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    const t0 = setTimeout(() => setNowMs(Date.now()), 0);
+    return () => {
+      clearInterval(id);
+      clearTimeout(t0);
+    };
+  }, []);
+  if (!updatedAt || nowMs <= 0) return null;
+  const syncedAgo = Math.max(0, Math.round((nowMs - updatedAt) / 1000));
+  return (
+    <>
+      <span aria-hidden className="size-1 rounded-full bg-muted-foreground/50" />
+      <span className="flex items-center gap-1.5" data-testid="live-chip">
+        <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-success" />
+        {t('synced', { s: syncedAgo })}
+      </span>
+    </>
+  );
+}
+
 /** `/dashboard` (TW-DASH-001..021): the operator dashboard, cards in the order Reference shows them. */
 export function DashboardScreen() {
   const t = useTranslations('dashboards-analytics-charts.dashboard');
@@ -108,7 +138,10 @@ export function DashboardScreen() {
   const session = useSession();
   // The cards the workspace's persona hides (`card:dashboard.<id>`, ids in ../home-cards.ts) are not drawn; their data and API stay.
   const { isCardHidden } = usePersonaVisibility();
-  const showCard = (id: string) => !isCardHidden(id);
+  // A card the caller's permissions do not open is not drawn either (`CARD_PERMISSION`); its data is only fetched by the sections drawn.
+  const showCard = (id: string) =>
+    !isCardHidden(id) && permitted(session.permissions, CARD_PERMISSION[id]);
+  const tileVisible = (key: string) => permitted(session.permissions, QUICK_ACCESS_PERMISSION[key]);
   const [range, custom, setRange] = useRange();
   const [draft, setDraft] = useState<CustomDates>({});
   const summary = useSummary(range, custom);
@@ -124,18 +157,6 @@ export function DashboardScreen() {
     flash('roleDenied', 'warning', { role });
     router.replace('/inbox');
   }, [bounced, role, router]);
-  const [nowMs, setNowMs] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setNowMs(Date.now()), 1000);
-    const t0 = setTimeout(() => setNowMs(Date.now()), 0);
-    return () => {
-      clearInterval(id);
-      clearTimeout(t0);
-    };
-  }, []);
-  const syncedAgo = summary.dataUpdatedAt
-    ? Math.max(0, Math.round((nowMs - summary.dataUpdatedAt) / 1000))
-    : null;
   const tz = session.org.timezone ?? 'UTC';
   const name = session.user.displayName ?? session.user.fullName;
 
@@ -177,19 +198,11 @@ export function DashboardScreen() {
         <div className="space-y-1.5 font-[family-name:var(--font-inter)] font-semibold">
           <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             <span>{t('kicker')}</span>
-            {syncedAgo !== null && nowMs > 0 && (
-              <>
-                <span aria-hidden className="size-1 rounded-full bg-muted-foreground/50" />
-                <span className="flex items-center gap-1.5" data-testid="live-chip">
-                  <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-success" />
-                  {t('synced', { s: syncedAgo })}
-                </span>
-              </>
-            )}
+            <SyncedChip updatedAt={summary.dataUpdatedAt} />
           </p>
           <h1 className="text-[32px] leading-tight">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
-            <em className="text-primary">
+            <em className="not-italic text-primary">
               {running > 0 ? t('running', { n: running }) : t('calm')}
             </em>
           </h1>
@@ -255,12 +268,14 @@ export function DashboardScreen() {
               </Button>
             </form>
           )}
-          <Link
-            href="/campaigns/create"
-            className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground"
-          >
-            + {t('newCampaign')}
-          </Link>
+          {permitted(session.permissions, 'camp.campaigns.create') && (
+            <Link
+              href="/campaigns/create"
+              className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground"
+            >
+              + {t('newCampaign')}
+            </Link>
+          )}
           {summary.isFetching && <Spinner />}
         </div>
       </header>
@@ -335,7 +350,7 @@ export function DashboardScreen() {
 
           {showCard('instagram') && w?.instagram && <InstagramBand data={w.instagram} />}
 
-          {showCard('quick-access') && <QuickAccessTiles />}
+          {showCard('quick-access') && <QuickAccessTiles visible={tileVisible} />}
 
           {showCard('pipeline') && w?.pipeline && <PipelineStrip data={w.pipeline} />}
 
@@ -362,14 +377,11 @@ export function DashboardScreen() {
                       </span>
                     }
                     action={
-                      <div className="flex flex-wrap items-center justify-end gap-2">
-                        {f?.peak && (
-                          <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
-                            {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
-                          </span>
-                        )}
-                        <RangePicker value={range} onChange={setRange} ranges={DASH_RANGES} />
-                      </div>
+                      f?.peak && (
+                        <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
+                          {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
+                        </span>
+                      )
                     }
                   >
                     {f ? (
@@ -549,18 +561,6 @@ function ReadRing({ pct, label }: { pct: number; label: string }) {
       </text>
     </svg>
   );
-}
-
-/** "UTC+1" style label of a zone, as Reference's chip. */
-function tzChip(zone: string): string {
-  try {
-    const part = new Intl.DateTimeFormat('en', { timeZone: zone, timeZoneName: 'shortOffset' })
-      .formatToParts(new Date())
-      .find((p) => p.type === 'timeZoneName')?.value;
-    return (part ?? 'UTC').replace('GMT', 'UTC');
-  } catch {
-    return 'UTC';
-  }
 }
 
 function Tile({ label, value }: { label: string; value: string }) {

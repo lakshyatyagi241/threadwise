@@ -164,12 +164,16 @@
         "in": "आई राशि",
         "out": "गई राशि",
         "balance": "बैलेंस",
-        "none": "कोई नहीं"
+        "none": "कोई नहीं",
+        "channel": "चैनल",
+        "recipient": "प्राप्तकर्ता",
+        "template": "टेम्पलेट",
+        "country": "देश",
+        "category": "श्रेणी",
+        "engine": "इंजन"
       },
       "context": {
-        "reason": "कारण",
-        "to": "तक",
-        "template": "टेम्पलेट"
+        "reason": "कारण"
       },
       "channels": {
         "campaign": "अभियान",

@@ -187,7 +187,23 @@ function CatalogCard({ card: c }: { card: AddonCard }) {
           ))}
         </ul>
       )}
-      {c.state === 'active' ? (
+      {c.state === 'included' ? (
+        <div className="mt-auto space-y-1 text-center" data-testid={`addon-${c.slug}-included`}>
+          <span className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3 py-2.5 text-xs font-semibold text-primary">
+            <Tick className="size-3.5" />
+            {t('included')}
+          </span>
+          {c.ownedCount > 0 && (
+            <p className="text-[10.5px] text-muted-foreground" data-testid={`addon-${c.slug}-note`}>
+              {!c.ownedRenews && c.ownedEndsAt
+                ? t('includedEnds', {
+                    date: fmt.dateTime(new Date(c.ownedEndsAt), { dateStyle: 'medium' }),
+                  })
+                : t('includedOwned')}
+            </p>
+          )}
+        </div>
+      ) : c.state === 'active' ? (
         <span className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3 py-2.5 text-xs font-semibold text-primary">
           <Tick className="size-3.5" />
           {t('active')}

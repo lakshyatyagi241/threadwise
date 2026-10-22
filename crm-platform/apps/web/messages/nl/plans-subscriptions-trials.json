@@ -47,7 +47,8 @@
       "sms_monthly": "SMS per maand",
       "email_mailboxes": "E-mailpostvakken",
       "email_monthly": "E-mails per maand",
-      "storage_gb": "Opslag (GB)"
+      "storage_gb": "Opslag (GB)",
+      "teams": "Teams"
     },
     "features": {
       "automation": "Automatisering",
@@ -59,10 +60,12 @@
       "remove_branding": "Branding verwijderen",
       "sales_pipeline": "Verkooppipeline",
       "appointment_booking": "Afspraken boeken",
+      "appointment_confirm_buttons": "Herinneringsknoppen (Bevestigen / Verplaatsen / Annuleren)",
+      "appointment_rebook_steps": "Stappen voor opnieuw boeken (herinnering)",
       "chatbot_widgets": "Chatbotwidgets",
       "wa_storefront": "WhatsApp-catalogus",
       "inbox_sla": "SLA-beleid",
-      "inbox_routing": "Routeringsregels",
+      "inbox_routing": "Slimme routering: automatische toewijzing en regels",
       "waba_calling": "WhatsApp-bellen",
       "inbox_kanban": "Kanbanweergave",
       "team_performance": "Teamprestaties",
@@ -85,7 +88,10 @@
       "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AI-leadscoring",
-      "record_assignment": "Regels voor recordtoewijzing"
+      "record_assignment": "Regels voor recordtoewijzing",
+      "team_hierarchy": "Teamhiërarchie en managers",
+      "custom_roles": "Eigen rollen en bereiken",
+      "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -139,7 +145,8 @@
       "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
       "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
       "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
-      "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd."
+      "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd.",
+      "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd."
     },
     "planAddons": {
       "title": "Add-ons beschikbaar in je abonnement",
@@ -246,6 +253,9 @@
         "buy": "Add-on kopen",
         "buyAgain": "Opnieuw kopen",
         "active": "Actief",
+        "included": "Inbegrepen in je abonnement",
+        "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
+        "includedEnds": "Inbegrepen in je abonnement. Je add-on eindigt op {date} en wordt niet verlengd.",
         "unlimitedBullet": "Onbeperkt {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "Terug",
       "compare": "Alle abonnementen vergelijken",
       "appHint": "{feature} wordt ook als app verkocht in de Marktplaats.",
-      "appLink": "Bekijk de app"
+      "appLink": "Bekijk de app",
+      "addonHint": "Je kunt het ook aan je huidige abonnement toevoegen met de add-on {addon}.",
+      "addonLink": "Add-ons bekijken",
+      "addons": {
+        "smartRouting": "Slimme routering",
+        "teamsPermissions": "Teams en machtigingen"
+      }
+    },
+    "lock": {
+      "link": "Abonnementen en add-ons bekijken"
     }
   }
 }

@@ -8,6 +8,9 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { AuthKeys, Ttl } from '../support/redis-keys';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('org_suspension');
 
 /** A second look after an invalidation, to close the window where a request cached the old value before the writer committed. */
 const RECHECK_DELAY_MS = 1_500;
@@ -37,8 +40,14 @@ export class OrgSuspensionService {
       const early = await takeAuthPrefetch('orgSuspended', orgId);
       const cached =
         early === undefined || typeof early === 'symbol' ? await this.redis.get(key) : early;
-      if (cached !== null) return cached === '1';
+      if (cached !== null) {
+        cache.hit();
+        return cached === '1';
+      }
+      cache.miss();
     } catch (err) {
+      cache.error();
+      cache.miss();
       this.logger.warn({ err, orgId }, 'org status cache read failed; using the database');
     }
 

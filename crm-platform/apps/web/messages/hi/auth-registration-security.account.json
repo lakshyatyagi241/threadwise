@@ -535,10 +535,12 @@
             "remove_branding": "व्हाइट-लेबल",
             "sales_pipeline": "सेल्स पाइपलाइन",
             "appointment_booking": "अपॉइंटमेंट",
+            "appointment_confirm_buttons": "रिमाइंडर बटन",
+            "appointment_rebook_steps": "दोबारा बुकिंग चरण",
             "chatbot_widgets": "चैटबॉट विजेट",
             "wa_storefront": "WhatsApp कैटलॉग",
             "inbox_sla": "इनबॉक्स SLA",
-            "inbox_routing": "इनबॉक्स रूटिंग",
+            "inbox_routing": "स्मार्ट रूटिंग",
             "waba_calling": "WhatsApp कॉलिंग",
             "inbox_kanban": "इनबॉक्स कानबन",
             "team_performance": "टीम प्रदर्शन",
@@ -561,7 +563,10 @@
             "personal_history_full": "पूरी हिस्ट्री इंपोर्ट (व्यक्तिगत WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI लीड स्कोरिंग",
-            "record_assignment": "रिकॉर्ड असाइनमेंट नियम"
+            "record_assignment": "रिकॉर्ड असाइनमेंट नियम",
+            "team_hierarchy": "टीम पदानुक्रम और प्रबंधक",
+            "custom_roles": "कस्टम भूमिकाएँ और दायरे",
+            "inbox_assignment_sticky": "स्मार्ट रूटिंग: संपर्क का मालिक और स्थायी एजेंट"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

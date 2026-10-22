@@ -65,6 +65,11 @@
         "description": "Connect your WhatsApp Business number to chat with customers.",
         "keywords": "wa, whatsapp business, cloud api, number, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp business profile",
+        "description": "Your logo, about text, contact details and the compliance information Meta asks for.",
+        "keywords": "business profile, logo, profile picture, about, contact, compliance, legal name, customer care, grievance officer"
+      },
       "unofficial-whatsapp": {
         "label": "Unofficial WhatsApp API",
         "description": "Link a personal WhatsApp number by QR code and warm it up for safe sending.",
@@ -106,7 +111,7 @@
         "keywords": "text message, sender id, dlt, twilio, mobile"
       },
       "email": {
-        "label": "Email",
+        "label": "Support email",
         "description": "Connect Gmail or Google Workspace mailboxes so your team can read and answer customer email in the shared inbox.",
         "keywords": "mailbox, gmail, google workspace, shared inbox, support email, outlook, imap"
       },
@@ -207,8 +212,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Group people into teams for routing and reporting.",
-        "keywords": "groups, departments, assignment, routing"
+        "description": "Group people for conversations, assignments and reports.",
+        "keywords": "groups, departments, managers, hierarchy, assignment, routing"
       },
       "ai-keys": {
         "label": "AI provider keys",
@@ -356,7 +361,7 @@
         "keywords": "privacy, gdpr, data request, dsar, subject access, export data, erase, right to be forgotten, delete personal data, legal hold"
       },
       "inbox-tags": {
-        "label": "Conversation tags",
+        "label": "Tags",
         "description": "Create the tags your team puts on conversations and filters the inbox by. They are the same tags used on contacts.",
         "keywords": "tags, labels, categories, organize, filter, conversation tags"
       },
@@ -365,15 +370,15 @@
         "description": "Set how fast your team should reply and resolve, and get alerted when a conversation misses its target.",
         "keywords": "sla, response time, first reply, resolution, breach, targets, business hours"
       },
-      "team-performance": {
-        "label": "Team performance",
-        "description": "See how fast each agent replied and resolved today, this week or this month.",
-        "keywords": "reports, analytics, agents, response time, first reply, resolved, workload, performance"
-      },
       "record-assignment": {
         "label": "Record assignment rules",
         "description": "Automatically give new contacts, companies and deals to your sales owners, by priority rules.",
         "keywords": "assign, owner, round robin, new contact, new deal, company, leave, lead routing, workload, territory"
+      },
+      "sales-activities": {
+        "label": "Sales Activities",
+        "description": "Manage tasks, meetings, calls and your own activities: what each can do, its task types and its outcomes.",
+        "keywords": "activities, task types, outcomes, meeting outcome, call outcome, follow up, check in, custom activity, calendar, complete"
       },
       "company-properties": {
         "label": "Company properties",

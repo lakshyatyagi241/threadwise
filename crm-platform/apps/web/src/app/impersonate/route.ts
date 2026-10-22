@@ -4,6 +4,7 @@ import { clearSessionCookies, setImpersonationCookie } from '@/lib/auth/cookies'
 import { clientIpFrom } from '@/lib/auth/client-ip';
 import { redirectTo } from '@/lib/auth/proxy';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 const ENDED = '/impersonate/ended';
 /** Where the operator lands: the customer's inbox, as Reference does (TW-WSP-032 rule 4). */
@@ -26,7 +27,7 @@ export async function GET(req: Request) {
   const ip = clientIpFrom(req.headers);
   if (ip) headers.set('x-forwarded-for', ip);
 
-  const upstream = await fetch(`${apiBase()}/v2/auth/impersonation/redeem`, {
+  const upstream = await upstreamFetch(`${apiBase()}/v2/auth/impersonation/redeem`, {
     method: 'POST',
     headers,
     body: JSON.stringify({ code }),

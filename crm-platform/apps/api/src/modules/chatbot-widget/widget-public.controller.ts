@@ -34,6 +34,7 @@ import {
   WidgetPublicService,
   type PublicRequest,
 } from './widget-public.service';
+import { widgetBaseUrl } from './widget-rules';
 
 const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -54,6 +55,7 @@ export class WidgetPublicErrorFilter implements ExceptionFilter {
  * of the new embed apply unchanged. A wrong, unknown or paused id answers the same 404 script as the new embed.
  */
 @ApiExcludeController()
+@Public()
 @Controller({ path: 'widget-legacy', version: VERSION_NEUTRAL })
 export class WidgetLegacyEmbedController {
   constructor(
@@ -61,11 +63,18 @@ export class WidgetLegacyEmbedController {
     private readonly config: ConfigService,
   ) {}
 
+  private base(req: Request): string {
+    return widgetBaseUrl(
+      {
+        widgetPublicBase: this.config.get<string>('WIDGET_PUBLIC_BASE_URL'),
+        appUrl: this.config.get<string>('APP_URL'),
+      },
+      req,
+    );
+  }
+
   private async serve(id: unknown, req: Request, res: Response): Promise<void> {
-    const configured = this.config.get<string>('WIDGET_PUBLIC_BASE_URL');
-    const base = configured
-      ? configured.replace(/\/+$/, '')
-      : `${req.protocol}://${req.get('host')}`;
+    const base = this.base(req);
     const js = typeof id === 'string' ? await this.widgets.legacyEmbedScript(id, base) : null;
     res.type('application/javascript');
     if (js === null) {
@@ -101,11 +110,15 @@ export class WidgetPublicController {
     private readonly mediaStore: ChatMediaStore,
   ) {}
 
-  /** Behind a proxy `req.protocol` and `req.get('host')` follow the configured `trust proxy`; an override pins the base. */
+  /** The address the snippet points at (see `widgetBaseUrl`): never the API container's own host name. */
   private base(req: Request): string {
-    const configured = this.config.get<string>('WIDGET_PUBLIC_BASE_URL');
-    if (configured) return configured.replace(/\/+$/, '');
-    return `${req.protocol}://${req.get('host')}`;
+    return widgetBaseUrl(
+      {
+        widgetPublicBase: this.config.get<string>('WIDGET_PUBLIC_BASE_URL'),
+        appUrl: this.config.get<string>('APP_URL'),
+      },
+      req,
+    );
   }
 
   private publicRequest(req: Request, inputUuid: unknown): PublicRequest {

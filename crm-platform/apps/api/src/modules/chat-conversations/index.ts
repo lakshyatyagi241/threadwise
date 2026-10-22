@@ -55,6 +55,7 @@ export {
   ENTITY_OF_PREFIX,
   historyId,
   toHistoryRow,
+  type FeedRollup,
 } from './message-history.repository';
 export type { HistoryContext, HistorySelection } from './message-history.query';
 export {

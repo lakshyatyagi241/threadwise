@@ -1,0 +1,264 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "升级您的套餐",
+      "timeline": {
+        "label": "提醒时间线",
+        "addMenu": "添加步骤",
+        "addStep": "添加步骤",
+        "count": "已设定时间的步骤：{count}/{max}。预约确认和未到场消息不计入在内。",
+        "capReached": "已设定时间的步骤已达到 {max} 个上限。请先删除一个再添加。",
+        "empty": "还没有步骤。添加第一个步骤，或从现成的序列开始。",
+        "lane": {
+          "booked": "预约成功时",
+          "before": "预约开始前",
+          "after": "预约结束后"
+        },
+        "laneHint": {
+          "booked": "预约一经创建即发送。",
+          "before": "在预约开始前发送，绝不会在开始后发送。",
+          "after": "在预约结束后发送，或在标记为未到场时发送。"
+        },
+        "laneEmpty": "这里还没有内容。",
+        "step": {
+          "confirmation": "预约确认",
+          "reminder_24h": "提前 24 小时提醒",
+          "reminder_2h": "提前 2 小时提醒",
+          "reminder_15m": "提前 15 分钟提醒",
+          "reminder": "提醒",
+          "after_visit": "预约后消息",
+          "no_show": "未到场消息",
+          "rebook": "再次预约消息"
+        },
+        "stepHint": {
+          "confirmation": "预约确认后立即发送。",
+          "reminder_24h": "提前一天。可包含确认、改期和取消按钮。",
+          "reminder_2h": "在预约前几个小时发送的简短提醒。",
+          "reminder_15m": "仅适用于带有加入链接的线上预约。",
+          "reminder": "在您选择的时间发送的提醒。",
+          "after_visit": "预约结束后发送的感谢或跟进消息。",
+          "no_show": "当您将预约标记为未到场时发送。",
+          "rebook": "在已完成的预约几天后，请联系人再次预约。计为营销消息。"
+        },
+        "choice": {
+          "confirmation": "预约确认",
+          "reminder_24h": "提前 24 小时",
+          "reminder_2h": "提前 2 小时",
+          "reminder_15m": "提前 15 分钟",
+          "custom": "在其他时间提醒",
+          "after_visit": "预约后消息",
+          "no_show": "未到场消息",
+          "rebook": "再次预约消息（几天后）"
+        },
+        "choiceHint": {
+          "present": "已添加",
+          "cap": "已达到上限",
+          "online": "线上预约",
+          "locked": "升级版：不在您的套餐中"
+        },
+        "enabledOf": "发送：{step}",
+        "remove": "删除：{step}",
+        "offsetOf": "时间：{step}",
+        "unitOf": "时间单位：{step}",
+        "beforeStart": "预约开始前",
+        "afterEnd": "预约结束后",
+        "setTime": "请输入时间",
+        "templateName": "WhatsApp 模板：{name}",
+        "wa": {
+          "none": "无模板",
+          "draft": "模板尚未提交给 Meta",
+          "pending": "等待 Meta 审核",
+          "approved": "模板已通过",
+          "rejected": "被 Meta 拒绝"
+        },
+        "fallback": {
+          "email": "在 WhatsApp 模板通过审核之前，此步骤将通过 Email 发送。",
+          "window": "这里 WhatsApp 是唯一渠道，因此在 24 小时窗口之外，在模板通过审核前不会发送任何内容。请添加 Email 作为备用。"
+        },
+        "when": {
+          "before": "开始前 {amount}",
+          "after": "结束后 {amount}"
+        },
+        "amount": {
+          "minutes": "{count, plural, other {# 分钟}}",
+          "hours": "{count, plural, other {# 小时}}",
+          "days": "{count, plural, other {# 天}}"
+        },
+        "rebookLocked": "再次预约消息属于预约应用的升级版，您当前的套餐不包含。您可以设置该步骤，但在套餐包含之前它会保持关闭。",
+        "rebookLockedStep": "属于预约应用的升级版：当前套餐无法开启。"
+      },
+      "reasons": {
+        "already_confirmed": "联系人已确认。",
+        "no_join_link": "该预约没有加入链接。",
+        "already_rebooked": "联系人已再次预约。",
+        "visit_not_completed": "该预约未完成。",
+        "plan_feature_locked": "您的套餐不包含此步骤。",
+        "not_delivered": "WhatsApp 未能及时送达，因此改用下一个渠道。",
+        "send_failed": "发送失败，因此改用下一个渠道。"
+      },
+      "packs": {
+        "open": "现成序列",
+        "eyebrow": "适用于{name}",
+        "title": "现成的提醒序列",
+        "close": "关闭",
+        "intro": "请选择适合您业务类型的序列。它会一次性设置预约确认、提醒、跟进和再次预约消息。WhatsApp 消息需要先获得 Meta 批准才能发送；在此之前，每个步骤都会通过 Email 发送。",
+        "loading": "正在加载序列",
+        "choose": "选择序列",
+        "stepsCount": "{count, plural, other {# 个步骤}}",
+        "language": "消息语言",
+        "machineDraft": "印地语文本是机器生成的草稿。请先让会读印地语的人检查，再开启这些步骤。",
+        "previewLoading": "正在加载预览",
+        "previewTitle": "将会发生的变化",
+        "summary": "新增 {add} 个，替换 {replace} 个，已相同 {unchanged} 个",
+        "timedOf": "已设定时间的步骤：{count}/{max}",
+        "blocked": "应用此序列将超过 {max} 个已设定时间步骤的上限。请先删除一个步骤。",
+        "confirmTitle": "这将替换您已有的步骤",
+        "confirmBody": "此预约类型下的 {count, plural, other {# 个步骤}} 将被替换为序列中的版本，包括您写过的任何文本。",
+        "confirmCheck": "替换",
+        "action": {
+          "add": "新增",
+          "replace": "替换您的",
+          "unchanged": "已相同"
+        },
+        "starts": {
+          "on": "开始时开启",
+          "off": "开始时关闭"
+        },
+        "category": {
+          "UTILITY": "服务消息",
+          "MARKETING": "营销消息"
+        },
+        "onlineOnly": "仅限线上预约",
+        "hasButtons": "确认、改期、取消按钮",
+        "wa": {
+          "new": "将提交给 Meta"
+        },
+        "replaceOwnText": "您为此步骤写了自己的文本，它将被替换。",
+        "planNotes": {
+          "rebook": "再次预约步骤属于预约应用的升级版，您当前的套餐不包含，因此该步骤将以关闭状态保存。",
+          "buttons": "“确认”“改期”“取消”按钮属于预约应用的升级版，您当前的套餐不包含，因此已省略。"
+        },
+        "showMessages": "显示消息",
+        "hideMessages": "隐藏消息",
+        "kept": "{count, plural, other {您已有的 # 个步骤不会被修改。}}",
+        "sample": {
+          "title": "示例值",
+          "hint": "消息将使用这些虚构的值显示。修改它们，可查看较长的姓名或其他地点的显示效果。",
+          "reset": "重置值",
+          "labels": {
+            "name": "联系人姓名",
+            "service": "服务",
+            "date": "日期",
+            "time": "时间",
+            "place": "地点",
+            "join_link": "加入链接",
+            "manage_link": "管理链接"
+          }
+        },
+        "submitToMeta": "立即将 WhatsApp 消息提交给 Meta 审核",
+        "submitHint": "{count, plural, other {将创建 # 条新的 WhatsApp 消息。}} 何时批准由 Meta 决定；在此之前，该步骤将通过 Email 发送。关闭此选项可将其保留为草稿。",
+        "submitHintNone": "您的工作区中已存在这些 WhatsApp 消息，因此不会创建新消息。",
+        "apply": "应用序列",
+        "applying": "正在应用",
+        "cancel": "取消",
+        "block": {
+          "readOnly": "您可以查看序列，但无法应用。",
+          "unsaved": "请先保存或放弃此预约类型步骤的更改。",
+          "cap": "请先删除一个步骤：否则将超过已设定时间步骤的上限。",
+          "confirm": "勾选“替换”以继续。"
+        },
+        "errors": {
+          "needsConfirm": "应用将替换一个步骤，因此需要您确认。预览已重新加载。",
+          "cap": "此序列将超过此预约类型已设定时间步骤的上限。"
+        },
+        "result": {
+          "title": "序列已应用",
+          "summary": "已新增 {added} 个，已替换 {replaced} 个。步骤将按序列的设置开始。",
+          "templatesTitle": "WhatsApp 消息",
+          "templatesNone": "未创建任何 WhatsApp 消息。请连接 WhatsApp Cloud API 号码以使用 WhatsApp；在此期间将使用 Email。",
+          "waiting": "在 Meta 批准消息之前，该步骤将通过 Email 发送。",
+          "metaError": "Meta 拒绝了：{error}",
+          "refresh": "刷新状态",
+          "refreshing": "正在刷新",
+          "withheldTitle": "因您的套餐而省略",
+          "withheldButtons": "此步骤的“确认”“改期”“取消”按钮：{step}。",
+          "withheldRebook": "{step}：以关闭状态保存。"
+        }
+      },
+      "buttonsLocked": "“确认”“改期”“取消”按钮属于预约应用的升级版，您当前的套餐不包含。",
+      "test": {
+        "send": "发送测试邮件",
+        "sending": "正在发送",
+        "hint": "使用示例值发送此步骤。地址留空则发送到您自己的邮箱。",
+        "toLabel": "测试发送至",
+        "toPlaceholder": "您自己的地址，或输入其他地址",
+        "toInvalid": "请输入完整的邮箱地址，或留空。",
+        "wait": {
+          "unsaved": "请先保存更改：测试发送的是已保存的步骤。",
+          "notSaved": "请先保存提醒：此步骤是新建的。"
+        },
+        "queued": "测试邮件正在发送到 {address}。结果也会出现在您的通知中。",
+        "skipped": "未发送任何内容：您的用户没有邮箱地址。",
+        "noWhatsapp": "无法在此测试 WhatsApp 消息。"
+      },
+      "report": {
+        "title": "提醒报告",
+        "description": "提醒的执行情况：已发送、已送达、失败、已跳过的数量，以及通过其他渠道发送的数量。",
+        "type": "预约类型",
+        "allTypes": "所有预约类型",
+        "range": "时间段",
+        "ranges": {
+          "7": "最近 7 天",
+          "30": "最近 30 天",
+          "90": "最近 90 天",
+          "custom": "选择日期"
+        },
+        "from": "开始",
+        "to": "结束",
+        "refresh": "刷新",
+        "pickDates": "请选择开始和结束日期以查看报告。",
+        "loading": "正在加载报告",
+        "empty": "此时间段内没有到期的提醒。提醒发送后，结果会显示在这里。",
+        "caption": "{name} 的提醒结果",
+        "col": {
+          "step": "步骤",
+          "sent": "已发送",
+          "delivered": "已送达",
+          "failed": "失败",
+          "fallback": "经其他渠道发送",
+          "skipped": "已跳过",
+          "confirmed": "已确认",
+          "rescheduled": "要求改期",
+          "cancelled": "已取消",
+          "total": "合计"
+        },
+        "rates": "在收到提醒的{count, plural, other {# 个预约}}中：{confirmed}% 已确认，{cancelled}% 已取消，{noShow}% 未到场。",
+        "why": "原因",
+        "otherReason": "其他原因",
+        "buttonsLocked": "“确认”“改期”“取消”按钮的结果属于预约应用的升级版，因此不会计入您的套餐。",
+        "emailNote": "“已送达”仅由 WhatsApp 报告：邮件没有送达报告，因此按已发送计算。只显示数量，不显示姓名、号码或消息。"
+      },
+      "history": {
+        "fallback": "已通过{channel}发送，因为第一个渠道无法送达。",
+        "delivery": {
+          "delivered": "WhatsApp 报告已送达。",
+          "failed": "WhatsApp 报告发送失败。",
+          "undelivered": "WhatsApp 未能及时送达。"
+        },
+        "tried": "按顺序尝试的渠道",
+        "attempt": {
+          "sent": "已发送",
+          "skipped": "未使用",
+          "held": "等待中",
+          "failed": "失败"
+        },
+        "buttons": "通过按钮的回复",
+        "button": {
+          "confirm": "点击了确认",
+          "reschedule": "点击了改期",
+          "cancel": "点击了取消"
+        }
+      }
+    }
+  }
+}

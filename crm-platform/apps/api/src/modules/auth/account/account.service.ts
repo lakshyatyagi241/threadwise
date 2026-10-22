@@ -181,7 +181,7 @@ export class AccountService {
       this.platformCurrency(),
     ]);
 
-    const permissions: Record<string, 'all' | 'team' | 'own'> = {};
+    const permissions: Record<string, 'all' | 'team' | 'team_and_below' | 'own'> = {};
     for (const [key, grant] of grants) {
       if (grant.effect === 'allow') permissions[key] = grant.scope;
     }
@@ -342,7 +342,7 @@ export class AccountService {
 
   async setAvatar(file: { originalname: string; buffer: Buffer }): Promise<{ avatarUrl: string }> {
     const { orgId, userId } = this.actor();
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: ['image'],

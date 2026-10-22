@@ -1,0 +1,24 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "notInPlan": "Não incluído no seu plano",
+      "upgradeHint": "Incluído no complemento Roteamento inteligente ou em um plano superior.",
+      "owner": {
+        "prompt": "Perguntar sobre o responsável pelo contato ao reatribuir",
+        "promptHint": "Quando um chat é passado manualmente para outra pessoa, oferece torná-la também responsável pelo contato.",
+        "window": "Manter um contato recorrente com o último agente",
+        "windowHint": "Um contato que escreve novamente vai para a pessoa que atendeu a última conversa dele, por este número de dias. Desativado significa sem limite.",
+        "windowDays": "Número de dias",
+        "days": "dias"
+      },
+      "queue": {
+        "notify": "Avisar a equipe quando uma conversa estiver em espera",
+        "notifyHint": "Os membros da equipe, ou todos que podem responder chats sem atribuição, recebem uma notificação com o motivo."
+      },
+      "teams": {
+        "body": "Cada equipe tem seu próprio método de atribuição, horário de atendimento, fuso horário e responsável padrão. Eles são usados sempre que uma conversa é transferida para essa equipe.",
+        "link": "Abrir Equipes"
+      }
+    }
+  }
+}

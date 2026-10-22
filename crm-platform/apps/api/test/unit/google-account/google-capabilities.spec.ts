@@ -66,8 +66,10 @@ describe('capabilities and their scopes', () => {
 
   it('lists what a grant still lacks for the requested capabilities', () => {
     expect(googleMissingScopes(`${A}/spreadsheets`, ['sheets'])).toEqual([]);
+    // the Forms capability is two scopes: the form (public responder link) and its responses (a submission resumes the waiting flow)
     expect(googleMissingScopes(`${A}/spreadsheets`, ['sheets', 'forms'])).toEqual([
       `${A}/forms.body.readonly`,
+      `${A}/forms.responses.readonly`,
     ]);
     expect(googleMissingScopes(`${A}/documents`, ['docs'])).toEqual([`${A}/drive`]);
     expect(googleMissingScopes(null, ['calendar'])).toHaveLength(3);

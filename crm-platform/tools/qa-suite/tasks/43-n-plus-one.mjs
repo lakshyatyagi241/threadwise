@@ -1,6 +1,7 @@
 // #43 N+1 query detection: a database or repository call awaited inside a loop or per-item async map.
 import { apiSrc, expectNone, read, rel, unreviewed } from '../lib/core.mjs';
 import { lineAt, maskCode, matchClose } from '../lib/code.mjs';
+import { batchedLoop } from '../lib/loop-shape.mjs';
 
 const DB_CALL =
   /\bawait\s+(?:this\.\w+\.(?:find|get|load|list|fetch|select|count|exists|read|lookup|resolve|insert|update|delete|create|save|upsert|remove|mark|record)\w*\(|(?:tx|rowTx|sp|trx|db)\.(?:select|insert|update|delete|execute|query)\b|(?:tx|rowTx|sp|trx)\.transaction\()/;
@@ -31,6 +32,7 @@ export default {
         const close = matchClose(m, open);
         if (close < 0) continue;
         const body = raw.slice(open, close);
+        if (!isMap && batchedLoop(mt[0], body)) continue;
         const hit = body.match(DB_CALL);
         if (!hit) continue;
         const where = `${rel(f)}:${lineAt(raw, open + hit.index)}  ${hit[0].replace(/\s+/g, ' ').slice(0, 70)}`;

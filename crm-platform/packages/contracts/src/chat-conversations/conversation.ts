@@ -85,6 +85,13 @@ export const conversationSummarySchema = z.object({
   imported: z.boolean().optional(),
   contact: conversationContactSchema.nullable(),
   assignment: conversationAssignmentSchema,
+  /**
+   * Who handles the thread (BL-396): `waiting` = in the queue for a person, `with_person`, `with_bot`; null = not tracked (behaves as
+   * before). Optional so a client built before it ignores it.
+   */
+  handling: z.enum(['with_bot', 'waiting', 'with_person']).nullable().optional(),
+  /** When the thread entered its current handling (the queue's age). */
+  handlingSince: z.string().datetime().nullable().optional(),
   snoozedUntil: z.string().datetime().nullable(),
   /** Tags on the thread, by name. The JSON field keeps its original name `labels` so existing clients keep working: it holds tags. */
   labels: z.array(conversationTagSchema),
@@ -176,11 +183,22 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
 });
 export type ListConversationsQuery = z.infer<typeof listConversationsQuerySchema>;
 
+/** The filters the tab badges count over: the list's query without the page, the sort and the tab (a badge counts every tab). */
+export const inboxCountsQuerySchema = listConversationsQuerySchema.omit({
+  tab: true,
+  sort: true,
+  limit: true,
+  cursor: true,
+  order: true,
+});
+export type InboxCountsQuery = z.infer<typeof inboxCountsQuerySchema>;
+
 /** Tab badges and the archived count; also what the safety poll of `GET /inbox/counts` returns. */
 export const inboxCountsSchema = z.object({
   all: z.number().int().nonnegative(),
   mine: z.number().int().nonnegative(),
   unassigned: z.number().int().nonnegative(),
+  waiting: z.number().int().nonnegative().optional(),
   unread: z.number().int().nonnegative(),
   archived: z.number().int().nonnegative(),
 });

@@ -5,7 +5,9 @@ import { useTranslations } from 'next-intl';
 import { flbCleanVarName } from '@crm/contracts';
 import { Check, controlClass, Field, TextInput } from '../kit';
 import type { FormProps } from '../types';
+import { compatiblePropertyTypes } from '../../../lib/property-types';
 import { NewPropertyInline } from '../../new-property';
+import { savePropertyOptions } from '../../../lib/property-options';
 
 /**
  * "Save the selected option as variable" for a List or Quick replies. Reference kept the choice in a run variable (default `choice`)
@@ -52,13 +54,19 @@ export function SaveToAttributeField({
             className={`${controlClass} mt-2`}
           >
             <option value="">{t('propertyChoose')}</option>
-            {(feed.data?.custom ?? []).map((p) => (
+            {savePropertyOptions(feed.data, key).map((p) => (
               <option key={p.key} value={p.key}>
                 {p.name}
               </option>
             ))}
           </select>
-          <NewPropertyInline onCreated={(k) => set('propertyKey', k)} />
+          <NewPropertyInline
+            onCreated={(k) => set('propertyKey', k)}
+            types={compatiblePropertyTypes(
+              noun,
+              typeof d.inputType === 'string' ? d.inputType : undefined,
+            )}
+          />
           {key === '' ? (
             <div role="alert" className="mt-1 text-[10.5px] font-semibold text-[#E87A5D]">
               {t('propertyRequired')}

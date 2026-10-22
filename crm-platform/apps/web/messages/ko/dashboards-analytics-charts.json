@@ -320,6 +320,7 @@
         "replyRate": "답장률",
         "received": "수신 메시지",
         "conversationsOpen": "진행 중인 대화",
+        "conversationsResolved": "해결된 대화",
         "conversationsClosed": "종료된 대화",
         "conversationsAssigned": "배정됨",
         "conversationsUnassigned": "미배정",

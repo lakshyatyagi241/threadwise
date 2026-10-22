@@ -180,7 +180,14 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
 
   it('meta.counts and GET /counts equal what the tabs list, and the archived count is separate', async () => {
     const p = await list(agent.token);
-    expect(p.meta.counts).toEqual({ all: 4, mine: 1, unassigned: 2, unread: 1, archived: 1 });
+    expect(p.meta.counts).toEqual({
+      all: 4,
+      mine: 1,
+      unassigned: 2,
+      unread: 1,
+      waiting: 0,
+      archived: 1,
+    });
     const res = await api.as(agent.token).get('/v2/inbox/counts');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(p.meta.counts);
@@ -189,7 +196,78 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     }
     // Narrowed by channel, the badges follow.
     const second = await list(agent.token, `?channelId=${ch2.id}`);
-    expect(second.meta.counts).toEqual({ all: 1, mine: 0, unassigned: 0, unread: 0, archived: 0 });
+    expect(second.meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 0,
+      unread: 0,
+      waiting: 0,
+      archived: 0,
+    });
+  });
+
+  it('the badges follow the filters on screen, each one equal to what its tab lists under them', async () => {
+    const resolved = await list(agent.token, '?status=resolved');
+    expect(resolved.meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 1,
+      unread: 0,
+      waiting: 0,
+      archived: 1,
+    });
+    expect((await list(agent.token, '?statuses=resolved,snoozed')).meta.counts).toMatchObject({
+      all: 2,
+      unassigned: 2,
+      archived: 1,
+    });
+    expect((await list(agent.token, '?status=all')).meta.counts).toEqual({
+      all: 6,
+      mine: 1,
+      unassigned: 4,
+      unread: 1,
+      waiting: 0,
+      archived: 1,
+    });
+    // Narrowed to unread threads, the other badges are the unread ones only, and the archived one is none.
+    expect((await list(agent.token, '?assignment=unattended')).meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 1,
+      unread: 1,
+      waiting: 0,
+      archived: 0,
+    });
+    // The tab is not a filter of the badges: every tab gives the same numbers.
+    expect((await list(agent.token, '?tab=unread')).meta.counts).toEqual(
+      (await list(agent.token)).meta.counts,
+    );
+    // The archive view ignores the tab and the status, so each tab badge is the archive's count, as its list shows.
+    const archive = await list(agent.token, '?archived=true&status=resolved');
+    expect(archive.meta.counts).toEqual({
+      all: 1,
+      mine: 1,
+      unassigned: 1,
+      unread: 1,
+      waiting: 1,
+      archived: 1,
+    });
+    expect(archive.data).toHaveLength(1);
+    // The counts endpoint takes the same filters and ignores the tab; an unknown status is still refused.
+    const viaCounts = await api.as(agent.token).get('/v2/inbox/counts?status=resolved&tab=mine');
+    expect(viaCounts.status).toBe(200);
+    expect(viaCounts.body).toEqual(resolved.meta.counts);
+    expect((await api.as(agent.token).get('/v2/inbox/counts?status=bogus')).status).toBe(422);
+    // A channel of nobody has no threads, so its badges are zero.
+    const stranger = await list(agent.token, '?channelId=0a5c1d92-1f64-4f9b-8a0e-0e8b6f5a77f1');
+    expect(stranger.meta.counts).toEqual({
+      all: 0,
+      mine: 0,
+      unassigned: 0,
+      unread: 0,
+      waiting: 0,
+      archived: 0,
+    });
   });
 
   it('a limit above the maximum is a validation error, and limit 2 pages the whole set without repeats or gaps', async () => {
@@ -326,6 +404,119 @@ describe('list: search by name, number, last message and contact', () => {
   });
 });
 
+/**
+ * The search by contact name, checked against the correlated EXISTS it was written as. The oracle is that predicate in plain SQL, run on
+ * the owner connection with the organization named, so it does not depend on the app's own search code. Terms are narrow, typical and
+ * one letter: each must return the same set, each once, and the counts must equal the list total for the same search.
+ */
+describe('list: contact-name search is the set the correlated EXISTS gives, and the counts match it', () => {
+  let t: Tenant;
+  let token: string;
+  let ch: { id: string };
+
+  const ORACLE = `
+    SELECT c.uuid FROM conversations c
+    WHERE c.org_id = $1 AND c.last_message_at IS NOT NULL AND c.archived = FALSE AND c.status = 'open'
+      AND (c.title ILIKE $2 OR c.peer_name ILIKE $2 OR c.peer_key ILIKE $2 OR c.preview ILIKE $2
+           OR EXISTS (SELECT 1 FROM contacts sc WHERE sc.org_id = c.org_id AND sc.id = c.contact_id AND sc.name ILIKE $2)
+           OR ($3::text IS NOT NULL AND c.peer_key LIKE $3))`;
+
+  /** The same predicate as the correlated EXISTS, plus the digits rule of the search (a number matches the stored peer key). */
+  const oracle = async (q: string): Promise<string[]> => {
+    const digits = q.replace(/\D/g, '');
+    const digitsLike = digits.length >= 3 && /^[\d\s+()\-.]+$/.test(q) ? `%${digits}%` : null;
+    return (await h.owner.query(ORACLE, [t.orgId, `%${q}%`, digitsLike])).rows.map(
+      (r) => r.uuid as string,
+    );
+  };
+
+  /** Every page of a search, walked with the cursor at a small page size so the keyset boundary is crossed. */
+  const search = async (q: string) => {
+    const seen: string[] = [];
+    let counts: Record<string, number> | null = null;
+    let cursor: string | null = null;
+    for (let i = 0; i < 50; i += 1) {
+      const p: Page = await list(
+        token,
+        `?q=${encodeURIComponent(q)}&limit=4${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`,
+      );
+      counts ??= p.meta.counts;
+      seen.push(...ids(p));
+      if (!p.page.hasMore) break;
+      cursor = p.page.nextCursor;
+    }
+    return { seen, counts: counts! };
+  };
+
+  beforeAll(async () => {
+    t = await api.signup('ibqx');
+    token = t.admin;
+    ch = await inbox.channel(t.admin);
+    const names = [
+      'Rita Acharya',
+      'Ritu Anand',
+      'Meera Rao',
+      'Anil Kapoor',
+      'Contact 12',
+      'Contact 120',
+      'Zed Wolf',
+      'AMIT',
+      'Gita',
+    ];
+    const uuids = await api.seedContacts(
+      t,
+      names.map((name) => ({ name })),
+    );
+    const internal = new Map<string, number>(
+      (
+        await h.owner.query(
+          `SELECT id, uuid FROM contacts WHERE org_id = $1 AND uuid = ANY($2::uuid[])`,
+          [t.orgId, uuids],
+        )
+      ).rows.map((r): [string, number] => [r.uuid as string, Number(r.id)]),
+    );
+    // One open thread per contact, with a title and number that match nothing, so only the contact name can find it.
+    for (const [i, uuid] of uuids.entries()) {
+      await inbox.conversation(t, ch.id, {
+        title: `Thread ${i}`,
+        peer: `9190000${String(i).padStart(4, '0')}`,
+        contactId: internal.get(uuid)!,
+      });
+    }
+    // A thread of Rita's that is resolved, and one of Ritu's that is archived: neither is in the open list, so neither may match.
+    await inbox.conversation(t, ch.id, {
+      title: 'Thread R',
+      peer: '9190009001',
+      contactId: internal.get(uuids[0]!)!,
+      status: 'resolved',
+    });
+    await inbox.conversation(t, ch.id, {
+      title: 'Thread Q',
+      peer: '9190009002',
+      contactId: internal.get(uuids[1]!)!,
+      archived: true,
+    });
+    // A thread with no contact whose own title says "Rita": it matches by its title, not by a contact.
+    await inbox.conversation(t, ch.id, { title: 'Rita from the web form', peer: '9190009003' });
+  }, 120_000);
+
+  // The last term is a number: it matches one thread's peer key through the digits rule and nothing by name or title.
+  it.each(['Rita Acharya', 'rit', 'RITA', 'contact 1', 'z', 'a', '91900000003'])(
+    '"%s": the list is the EXISTS set, each thread once, and the counts equal the list total',
+    async (term) => {
+      const expected = await oracle(term);
+      expect(expected.length, `term ${term} must match something`).toBeGreaterThan(0);
+      const { seen, counts } = await search(term);
+      expect([...seen].sort(), `term ${term}`).toEqual([...expected].sort());
+      expect(new Set(seen).size, `term ${term}`).toBe(seen.length);
+      expect(counts.all, `term ${term}`).toBe(expected.length);
+      const viaCounts = await api.as(token).get(`/v2/inbox/counts?q=${encodeURIComponent(term)}`);
+      expect(viaCounts.status, `term ${term}`).toBe(200);
+      expect(viaCounts.body, `term ${term}`).toEqual(counts);
+    },
+  );
+});
+
 describe('scope: all, team and own see the same conversations in the list, the counts and by id', () => {
   let t: Tenant;
   let ch: { id: string };
@@ -342,7 +533,11 @@ describe('scope: all, team and own see the same conversations in the list, the c
     t = await api.signup('ibs');
     ch = await inbox.channel(t.admin);
     all = await api.member(t, 'all', [['inbox.conversation.read', 'all']]);
-    teamer = await api.member(t, 'teamer', [['inbox.conversation.read', 'team']]);
+    // The migration of BL-382 gives every role that read at `team` the unassigned queue as a permission; this member is such a role.
+    teamer = await api.member(t, 'teamer', [
+      ['inbox.conversation.read', 'team'],
+      ['inbox.conversation.read_unassigned'],
+    ]);
     own = await api.member(t, 'own', [['inbox.conversation.read', 'own']]);
     none = await api.member(t, 'none', []);
     const mk = async (name: string) =>
@@ -511,6 +706,58 @@ describe('the conversation header', () => {
     expect(res.status).toBe(200);
     expect(res.body.contactSummary).toBeNull();
     expect(res.body.contact.id).toBe(contactUuid);
+  });
+
+  it('applies the caller contact scope to the contact panel, like the message history does (BL-380, gap 10)', async () => {
+    // An agent who reads only the contacts they own or created: the thread is theirs, the contact is somebody else's.
+    const scoped = await api.member(t, 'scoped', [...AGENT, ['record.contacts.read', 'own']]);
+    const mine = await inbox.conversation(t, ch.id, {
+      contactId: Number(
+        (await h.owner.query(`SELECT id FROM contacts WHERE uuid = $1`, [contactUuid])).rows[0].id,
+      ),
+      assigneeUserId: scoped.userId,
+    });
+    const panel = async () =>
+      (await api.as(scoped.token).get(`/v2/inbox/conversations/${mine.uuid}`)).body;
+    const before = (
+      await h.owner.query(`SELECT owner_id, created_by FROM contacts WHERE uuid = $1`, [
+        contactUuid,
+      ])
+    ).rows[0] as { owner_id: number | null; created_by: number | null };
+
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $2 WHERE uuid = $1`, [
+      contactUuid,
+      t.adminUserId,
+    ]);
+    const hidden = await panel();
+    expect(hidden.contactSummary).toBeNull();
+    // The thread itself still opens, and still names the contact: only the contact's own details are held back.
+    expect(hidden.contact.id).toBe(contactUuid);
+
+    // Owned by the agent: the panel shows.
+    await h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE uuid = $1`, [
+      contactUuid,
+      scoped.userId,
+    ]);
+    expect((await panel()).contactSummary).toMatchObject({ id: contactUuid });
+
+    // Created by the agent but owned by a colleague: D1, the creator still sees it.
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $3 WHERE uuid = $1`, [
+      contactUuid,
+      t.adminUserId,
+      scoped.userId,
+    ]);
+    expect((await panel()).contactSummary).toMatchObject({ id: contactUuid });
+
+    await h.owner.query(`UPDATE contacts SET owner_id = NULL, created_by = NULL WHERE uuid = $1`, [
+      contactUuid,
+    ]);
+    expect((await panel()).contactSummary).toBeNull();
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $3 WHERE uuid = $1`, [
+      contactUuid,
+      before.owner_id,
+      before.created_by,
+    ]);
   });
 
   it('shows a closed window and when it closed, for a customer who last wrote two days ago', async () => {

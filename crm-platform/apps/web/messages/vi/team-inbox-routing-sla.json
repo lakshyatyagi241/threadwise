@@ -19,25 +19,12 @@
     "page": {
       "back": "Tự động hóa và AI",
       "title": "Tự động phân công cuộc trò chuyện",
-      "subtitle": "Tự động giao mỗi cuộc trò chuyện mới cho đúng nhân viên. Các quy tắc được áp dụng theo thứ tự từ trên xuống.",
       "noAccess": "Bạn không có quyền xem cài đặt tự động giao việc.",
-      "create": "Tạo quy tắc",
       "limitUsed": "Đã dùng {used} / {limit} quy tắc",
       "limitReached": "Bạn đã dùng hết {limit} quy tắc mà gói cho phép.",
-      "keepTitle": "Giữ liên hệ quay lại với nhân viên phụ trách",
-      "keepBody": "Khi một liên hệ đã có nhân viên phụ trách nhắn tin lại, cuộc trò chuyện mới sẽ được giao cho nhân viên đó trước: người phụ trách liên hệ, hoặc người đã xử lý cuộc trò chuyện trước đó, miễn là họ vẫn đang hoạt động. Nếu không, các quy tắc bên dưới sẽ quyết định.",
-      "settingsFailed": "Không thể lưu cài đặt.",
-      "rulesTitle": "Quy tắc",
-      "searchPlaceholder": "Tìm quy tắc",
-      "searchLabel": "Tìm quy tắc theo tên",
-      "howItWorks": "Quy tắc đầu tiên khớp và tìm được nhân viên rảnh sẽ nhận cuộc trò chuyện. Quy tắc dự phòng được dùng khi không có quy tắc nào khác khớp. Nếu không khớp gì, cuộc trò chuyện sẽ ở trạng thái chưa giao.",
       "loading": "Đang tải quy tắc",
       "loadFailed": "Không thể tải quy tắc.",
       "retry": "Thử lại",
-      "noMatchTitle": "Không tìm thấy quy tắc",
-      "noMatch": "Không có quy tắc nào tên “{q}”.",
-      "emptyTitle": "Chưa có quy tắc nào",
-      "empty": "Tạo quy tắc để lần lượt giao cuộc trò chuyện mới cho nhân viên theo từ khóa, kênh, ngôn ngữ hoặc thông tin liên hệ.",
       "list": "Quy tắc tự động giao việc theo thứ tự ưu tiên",
       "loadMore": "Tải thêm",
       "toggleFailed": "Không thể bật/tắt quy tắc.",
@@ -51,16 +38,14 @@
       "deleted": "Đã xóa quy tắc.",
       "deleteFailed": "Không thể xóa quy tắc.",
       "businessHours": "Giờ làm việc",
-      "recordNote": "Mục này phân công cuộc trò chuyện. Để giao {contacts}, công ty và {deals} mới cho người phụ trách bán hàng, xem <link>Quy tắc phân công bản ghi</link>."
+      "recordNote": "Mục này phân công cuộc trò chuyện. Để giao {contacts}, công ty và {deals} mới cho người phụ trách bán hàng, xem <link>Quy tắc phân công bản ghi</link>.",
+      "subtitle": "Chọn người nhận từng chat mới. Các công tắc đã đủ cho hầu hết không gian làm việc; chỉ thêm quy tắc khi bạn cần kiểm soát nhiều hơn."
     },
     "rules": {
       "someone": "một nhân viên",
       "moveUp": "Chuyển {name} lên",
       "moveDown": "Chuyển {name} xuống",
       "priority": "Ưu tiên",
-      "active": "Đang bật",
-      "off": "Tắt",
-      "fallback": "Dự phòng",
       "continues": "Tiếp tục kiểm tra",
       "unavailable": "{count, plural, other {# nhân viên không khả dụng}}",
       "activeFor": "Quy tắc “{name}” đang bật",
@@ -74,7 +59,9 @@
         "languages": "Ngôn ngữ: {list}",
         "inside": "Trong giờ làm việc",
         "outside": "Ngoài giờ làm việc",
-        "always": "Mọi cuộc trò chuyện không khớp quy tắc nào"
+        "always": "Mọi cuộc trò chuyện mới",
+        "contactNew": "Liên hệ mới",
+        "contactReturning": "Liên hệ quay lại"
       },
       "strategy": {
         "round_robin": "Luân phiên",
@@ -122,7 +109,6 @@
         "name": "Nhập tên cho quy tắc.",
         "nameLong": "Tên quá dài.",
         "descriptionLong": "Mô tả quá dài.",
-        "conditions": "Thêm ít nhất một điều kiện, hoặc đánh dấu quy tắc này là quy tắc dự phòng.",
         "contactIncomplete": "Hoàn tất hoặc xóa các điều kiện liên hệ chưa đầy đủ.",
         "keywordsMany": "Dùng tối đa 20 từ.",
         "targets": "Chọn ít nhất một nhân viên hoặc nhóm.",
@@ -133,20 +119,17 @@
         "escalationAction": "Giao lại, đặt mức ưu tiên, hoặc cả hai.",
         "escalationAgents": "Giao lại cần nhân viên trong quy tắc này: chọn ở trên.",
         "autoReplyEmpty": "Viết nội dung trả lời, hoặc bỏ chọn tùy chọn.",
-        "autoReplyLong": "Nội dung trả lời quá dài (tối đa 1024 ký tự)."
+        "autoReplyLong": "Nội dung trả lời quá dài (tối đa 1024 ký tự).",
+        "conditions": "Hãy thêm ít nhất một điều kiện, hoặc tắt “Chỉ cho các cuộc trò chuyện khớp với”."
       },
       "whenTitle": "Khi có cuộc trò chuyện mới đến",
-      "whenHint": "Mọi điều kiện bạn đặt đều phải khớp. Để trống một phần để bỏ qua phần đó.",
       "contact": {
-        "title": "Liên hệ khớp với",
-        "hint": "Thẻ, người phụ trách, giai đoạn vòng đời và các chi tiết liên hệ khác, giống như trong phân khúc.",
         "loading": "Đang tải trường thông tin liên hệ",
         "partial": "Một số danh sách liên hệ không tải được nên có thể thiếu một số lựa chọn.",
         "summary": "Điều kiện",
         "none": "Không có điều kiện liên hệ."
       },
       "channel": {
-        "title": "Kênh",
         "hint": "Chỉ các cuộc trò chuyện đến từ những kênh này. Không chọn gì nghĩa là mọi kênh."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Giờ làm việc",
         "hint": "Dùng giờ làm việc của không gian làm việc của bạn.",
-        "any": "Bất kỳ lúc nào",
         "inside": "Chỉ trong giờ làm việc",
         "outside": "Chỉ ngoài giờ làm việc"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Tùy chọn",
       "stopOnMatch": "Dừng khi quy tắc này khớp",
       "stopOnMatchHint": "Bật: các quy tắc sau không được kiểm tra. Tắt: quy tắc khớp sau đó vẫn có thể nhận cuộc trò chuyện.",
-      "fallback": "Quy tắc dự phòng",
-      "fallbackHint": "Dùng khi không có quy tắc nào khác khớp. Chỉ có một quy tắc dự phòng; chọn quy tắc này sẽ thay thế quy tắc trước.",
       "cancel": "Hủy",
       "save": "Lưu",
       "saveActivate": "Lưu và kích hoạt",
@@ -219,7 +199,8 @@
       "escalatePriority": "Sau đó đặt mức ưu tiên",
       "autoReply": "Gửi trả lời tự động",
       "autoReplyBody": "Nội dung trả lời",
-      "autoReplyHint": "Được gửi cho khách hàng dưới tên doanh nghiệp. Ngoài cửa sổ 24 giờ, trả lời tự do sẽ không được gửi."
+      "autoReplyHint": "Được gửi cho khách hàng dưới tên doanh nghiệp. Ngoài cửa sổ 24 giờ, trả lời tự do sẽ không được gửi.",
+      "whenHint": "Mọi điều kiện bạn thêm đều phải khớp."
     },
     "sla": {
       "back": "Quay lại Cài đặt",

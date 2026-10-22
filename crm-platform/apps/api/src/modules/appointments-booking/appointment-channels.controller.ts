@@ -50,7 +50,7 @@ export class AppointmentChannelsController {
   @ApiOperation({
     summary: 'The channels for appointment messages: enabled, connected, senders',
     description:
-      'Email, WhatsApp, SMS and the reserved voice channel, each with whether the owner switched it on, whether a sender is connected, the connected senders and the chosen default. A booking type can use a channel only when `usable` is true.',
+      'Email, WhatsApp and the reserved voice channel, each with whether the owner switched it on, whether a sender is connected, the connected senders and the chosen default. A booking type can use a channel only when `usable` is true.',
   })
   list() {
     return this.channels.list();

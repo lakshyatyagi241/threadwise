@@ -11,6 +11,7 @@ import {
   type TplStatus,
   type TplVariableMap,
 } from '@crm/contracts';
+import { metaEditBlockOf } from './meta-edit-rules';
 import { lintTemplate, type LintInput } from './template-linter';
 import { buildMetaTemplate, metaCategoryOf, type TemplateDraft } from './template-payload';
 import type { TemplateRow } from './templates.repository';
@@ -101,6 +102,13 @@ function rejectionOf(row: TemplateRow): string | null {
   return code && code !== 'NONE' ? code : null;
 }
 
+/** Why Meta does not let this template be edited right now, as the library shows it (null when it can be edited). */
+function editBlockOf(row: TemplateRow): TemplateSummary['editBlock'] {
+  const block = metaEditBlockOf(row, new Date());
+  if (!block) return null;
+  return { reason: block.reason, until: block.until ? block.until.toISOString() : null };
+}
+
 export function toSummary(row: TemplateRow): TemplateSummary {
   return {
     id: row.uuid,
@@ -117,6 +125,7 @@ export function toSummary(row: TemplateRow): TemplateSummary {
         ? row.rejectionReasonCode
         : null,
     metaTemplateId: row.metaTemplateId,
+    editBlock: editBlockOf(row),
     connectionId: row.connectionUuid,
     pausedUntil: iso(row.pausedUntil),
     approvedAt: iso(row.approvedAt),
@@ -148,6 +157,8 @@ export function toDetail(row: TemplateRow): TemplateDetail {
     codeExpirationMinutes: row.codeExpirationMinutes,
     parameterFormat: parameterFormatOf(row),
     metaPayload: buildMetaTemplate(draftOf(row)) as unknown as Record<string, unknown>,
+    // Set by the service, which can ask storage for the link (see detailWithMedia).
+    headerMediaUrl: null,
     lint: lintOf(row),
   };
 }

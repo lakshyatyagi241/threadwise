@@ -65,6 +65,11 @@
         "description": "Verbinden Sie Ihre WhatsApp-Business-Nummer, um mit Kunden zu chatten.",
         "keywords": "wa, whatsapp business, cloud api, nummer, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp-Unternehmensprofil",
+        "description": "Ihr Logo, Infotext, Kontaktdaten und die Compliance-Angaben, die Meta verlangt.",
+        "keywords": "unternehmensprofil, logo, profilbild, info, kontakt, compliance, rechtlicher name, kundenservice, beschwerdebeauftragte"
+      },
       "unofficial-whatsapp": {
         "label": "Inoffizielle WhatsApp-API",
         "description": "Verknüpfen Sie eine persönliche WhatsApp-Nummer per QR-Code und starten Sie das Warm-up für sicheren Versand.",
@@ -101,7 +106,7 @@
         "keywords": "textnachricht, absender-id, dlt, twilio, mobil"
       },
       "email": {
-        "label": "E-Mail",
+        "label": "Support-E-Mail",
         "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
         "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },
@@ -197,8 +202,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Gruppieren Sie Personen in Teams für Weiterleitung und Auswertung.",
-        "keywords": "gruppen, abteilungen, zuweisung, routing"
+        "description": "Personen für Unterhaltungen, Zuweisungen und Berichte gruppieren.",
+        "keywords": "Gruppen, Abteilungen, Manager, Hierarchie, Zuweisung, Routing"
       },
       "ai-keys": {
         "label": "KI-Anbieter-Schlüssel",
@@ -341,7 +346,7 @@
         "keywords": "einwilligung, abmeldung, anmeldung, abmelden, stop, start, dsgvo, compliance, datenschutz, marketing"
       },
       "inbox-tags": {
-        "label": "Unterhaltungs-Tags",
+        "label": "Tags",
         "description": "Erstellen Sie die Tags, die Ihr Team Unterhaltungen zuweist und nach denen es den Posteingang filtert. Es sind dieselben Tags wie bei den Kontakten.",
         "keywords": "Tags, Unterhaltungs-Tags, Kategorien, organisieren, filtern"
       },
@@ -354,11 +359,6 @@
         "label": "Antwortziele (SLA)",
         "description": "Legen Sie fest, wie schnell Ihr Team antworten und lösen soll, und werden Sie benachrichtigt, wenn eine Unterhaltung ihr Ziel verfehlt.",
         "keywords": "sla, Antwortzeit, erste Antwort, Lösung, Verletzung, Ziele, Geschäftszeiten"
-      },
-      "team-performance": {
-        "label": "Teamleistung",
-        "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
-        "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
       },
       "privacy-requests": {
         "label": "Datenanfragen",
@@ -394,6 +394,11 @@
         "label": "Doppelte Leads",
         "description": "Wählen Sie, ob ein neuer Lead, der zu einem Kontakt passt, dort zusammengeführt oder als neuer Kontakt angelegt wird.",
         "keywords": "Duplikat, zusammenführen, Lead, gleiche Telefonnummer, gleiche E-Mail, neuer Kontakt, Lead-Quelle"
+      },
+      "sales-activities": {
+        "label": "Vertriebsaktivitäten",
+        "description": "Verwalten Sie Aufgaben, Termine, Anrufe und eigene Aktivitäten: was jede kann, welche Aufgabentypen und Ergebnisse sie hat.",
+        "keywords": "Aktivitäten, Aufgabentypen, Ergebnisse, Terminergebnis, Anrufergebnis, Nachfassen, Einchecken, eigene Aktivität, Kalender, abschließen"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

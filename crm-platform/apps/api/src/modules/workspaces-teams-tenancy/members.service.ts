@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
+  MEMBER_AVAILABILITY_CHANGED,
   ERROR_CODES,
   WSP_INVITE_TTL_DAYS,
   inviteWspMemberSchema,
@@ -143,7 +144,9 @@ export class MembersService {
           tier: me.tier,
           canInvite: this.rbac.can(grants, 'org.member.invite').allowed,
           canAssignRoles: this.rbac.can(grants, 'org.member.role_assign').allowed,
-          canManageTeams: this.rbac.can(grants, 'inbox.team.manage').allowed,
+          canManageTeams:
+            this.rbac.can(grants, 'team.manage').allowed ||
+            this.rbac.can(grants, 'inbox.team.manage').allowed,
         },
       };
     });
@@ -158,6 +161,7 @@ export class MembersService {
   async invite(raw: unknown): Promise<InviteWspMemberResponse> {
     const ctx = RequestContextStore.require();
     const done = await this.db.tx(async (tx) => {
+      await this.entitlements.lockLimit(tx, ctx.orgId, 'users');
       await this.entitlements.assertWithinLimit(
         ctx.orgId,
         'users',
@@ -411,6 +415,14 @@ export class MembersService {
           action: 'member.availability_changed',
           delta: { availability: { old: before, new: input.status } },
           requestId: ctx.requestId,
+        });
+        // Routing reacts to a person going away (the away rules): ids only, the consumer reads the rest.
+        await this.outbox.emit(tx, {
+          aggregateModule: 'members',
+          aggregateId: ctx.userId!,
+          orgId: ctx.orgId,
+          eventType: MEMBER_AVAILABILITY_CHANGED,
+          payload: { userId: ctx.userId!, status: input.status, reason: 'self' },
         });
       }
       return { status: input.status };

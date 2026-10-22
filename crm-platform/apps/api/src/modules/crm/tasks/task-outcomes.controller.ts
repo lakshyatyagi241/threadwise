@@ -52,7 +52,8 @@ export class TaskOutcomesController {
   @RequirePermission('settings.task_outcomes.manage')
   @ApiOperation({
     summary: 'Add a task outcome',
-    description: 'A name another outcome already has (ignoring case) is 409 TASK_OUTCOME_NAME_TAKEN. It goes last.',
+    description:
+      'A name another outcome already has (ignoring case) is 409 TASK_OUTCOME_NAME_TAKEN. It goes last.',
   })
   async create(@Body(zodPipe(createTaskOutcomeSchema)) body: CreateTaskOutcomeInput) {
     return this.outcomes.create(body);

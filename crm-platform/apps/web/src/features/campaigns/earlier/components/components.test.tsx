@@ -1,0 +1,236 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { NextIntlClientProvider } from 'next-intl';
+import type { ReactElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it, vi } from 'vitest';
+import type { BroadcastDetail, BroadcastListItem, BroadcastRecipient } from '@crm/contracts';
+import { pageWindow } from '@/features/broadcasts/components/broadcasts-pagination';
+import { Donut, HBars } from '@/features/broadcasts/components/charts';
+import { EventsTab } from './events-tab';
+import { OverviewTab } from './overview-tab';
+import { RecipientsTable } from './recipients-table';
+
+// The director summary has its own tests (director-summary.test.tsx); here it is a marker so this screen is tested on its own.
+vi.mock('@/features/campaigns/components/director-summary', () => ({
+  DirectorSummary: () => <section data-testid="director-summary" />,
+}));
+
+const messages = JSON.parse(
+  readFileSync(join(process.cwd(), 'messages', 'en', 'broadcasts.json'), 'utf8'),
+) as Record<string, unknown>;
+
+const html = (el: ReactElement) =>
+  renderToStaticMarkup(
+    <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
+      {el}
+    </NextIntlClientProvider>,
+  );
+
+const item = (over: Partial<BroadcastListItem> = {}): BroadcastListItem => ({
+  id: 'abcdef12-0000-4000-8000-000000000000',
+  name: 'Diwali offer',
+  status: 'completed',
+  provider: 'waba',
+  senderKey: null,
+  templateId: null,
+  templateName: 'promo_oct',
+  timezone: 'UTC',
+  scheduledAt: null,
+  completedAt: null,
+  totalRecipients: 1200,
+  successCount: 1100,
+  deliveredCount: 1000,
+  readCount: 400,
+  clickedCount: 0,
+  failCount: 100,
+  rowVersion: 1,
+  createdAt: '2026-10-01T10:00:00.000Z',
+  updatedAt: '2026-10-01T10:00:00.000Z',
+  ...over,
+});
+
+describe('page window', () => {
+  it('shows first, last and two either side of the current page, with a gap between', () => {
+    expect(pageWindow(1, 3)).toEqual([1, 2, 3]);
+    expect(pageWindow(1, 20)).toEqual([1, 2, 3, 'gap', 20]);
+    expect(pageWindow(10, 20)).toEqual([1, 'gap', 8, 9, 10, 11, 12, 'gap', 20]);
+  });
+});
+
+describe('detail tabs', () => {
+  const detail: BroadcastDetail = {
+    broadcast: item(),
+    template: {
+      id: 'tpl',
+      name: 'promo_oct',
+      category: 'marketing',
+      type: 'standard',
+      language: 'en_US',
+      header: 'Sale',
+      body: 'Hi there',
+      footer: 'Reply STOP',
+      buttons: null,
+    },
+    sender: null,
+    counts: { total: 10, sent: 8, delivered: 6, read: 3, failed: 2, queued: 0, clicked: 1 },
+    pct: { sent: 80, delivered: 60, read: 50, failed: 20, clicked: 16.7 },
+    donut: {
+      labels: ['Sent', 'Delivered', 'Read', 'Queued', 'Failed'],
+      series: [2, 3, 3, 0, 2],
+      successPct: 80,
+    },
+    deliveryCurve: { labels: ['9:00', '10:00'], sent: [2, 6], delivered: [1, 5], read: [0, 3] },
+    failureReasons: [{ reason: 'Undeliverable', count: 2 }],
+    pause: null,
+    events: {
+      createdAt: '2026-10-02T10:00:00.000Z',
+      scheduledAt: null,
+      status: 'completed',
+      completedAt: '2026-10-02T11:00:00.000Z',
+    },
+  };
+
+  it('overview: the funnel, the donut centre, the preview and a chart', () => {
+    const out = html(<OverviewTab detail={detail} />);
+    for (const s of [
+      'From send to read',
+      '80%',
+      'promo_oct',
+      'Reply STOP',
+      'Marketing',
+      '8 / 80%',
+      'role="img"',
+    ])
+      expect(out).toContain(s);
+    // The director summary sits at the top of the Overview.
+    expect(out.indexOf('data-testid="director-summary"')).toBeGreaterThanOrEqual(0);
+    expect(out.indexOf('data-testid="director-summary"')).toBeLessThan(
+      out.indexOf('From send to read'),
+    );
+  });
+
+  it('overview: no template means no preview; no curve data says so', () => {
+    const out = html(
+      <OverviewTab
+        detail={{
+          ...detail,
+          template: null,
+          deliveryCurve: { labels: [], sent: [], delivered: [], read: [] },
+        }}
+      />,
+    );
+    expect(out).not.toContain('Template preview');
+    expect(out).toContain('No sends yet.');
+  });
+
+  it('events: the four lifecycle rows in the broadcast zone', () => {
+    const out = html(<EventsTab detail={detail} />);
+    for (const s of [
+      'Created',
+      'Scheduled at',
+      'Completed',
+      'Oct 2, 10:00:00',
+      'Oct 2, 11:00:00',
+      '—',
+    ])
+      expect(out).toContain(s);
+  });
+
+  it('recipients: error or message id, clicks and the empty line', () => {
+    const r = (over: Partial<BroadcastRecipient>): BroadcastRecipient => ({
+      contactId: 'c1',
+      name: 'Asha',
+      phone: '+919800000001',
+      status: 'failed',
+      error: 'Undeliverable',
+      providerMessageId: null,
+      queuedAt: '2026-10-02T10:00:00.000Z',
+      sentAt: null,
+      deliveredAt: null,
+      readAt: null,
+      clicks: 0,
+      lastClickAt: null,
+      ...over,
+    });
+    const out = html(
+      <RecipientsTable
+        rows={[
+          r({}),
+          r({
+            contactId: 'c2',
+            status: 'read',
+            error: null,
+            providerMessageId: 'wamid.HBgMOTE5ODc2NTQzMjEw',
+            clicks: 3,
+          }),
+        ]}
+        timezone="UTC"
+        empty="No recipients attached."
+      />,
+    );
+    for (const s of ['Undeliverable', 'wamid.HBgMOTE5OD...', '>3<']) expect(out).toContain(s);
+    expect(
+      html(<RecipientsTable rows={[]} timezone="UTC" empty="No recipients attached." />),
+    ).toContain('No recipients attached.');
+  });
+
+  it('recipients: a held recipient says when it may go (BL-177)', () => {
+    const held = html(
+      <RecipientsTable
+        rows={[
+          {
+            contactId: 'c9',
+            name: 'Ravi',
+            phone: '+919800000009',
+            status: 'pending',
+            error: null,
+            providerMessageId: null,
+            queuedAt: '2026-10-02T10:00:00.000Z',
+            heldUntil: '2026-10-03T03:30:00.000Z',
+            heldReason: 'quiet_hours',
+            sentAt: null,
+            deliveredAt: null,
+            readAt: null,
+            clicks: 0,
+            lastClickAt: null,
+          },
+        ]}
+        timezone="UTC"
+        empty="none"
+      />,
+    );
+    expect(held).toContain('data-testid="recipient-held"');
+    expect(held).toContain('Held until');
+    expect(held).toContain('quiet hours');
+  });
+});
+
+describe('charts', () => {
+  it('the donut skips empty slices and the bars scale to the largest', () => {
+    const d = renderToStaticMarkup(
+      <Donut
+        label="mix"
+        centre="50%"
+        caption="Success"
+        slices={[
+          { label: 'A', value: 5, color: 'red' },
+          { label: 'B', value: 0, color: 'blue' },
+        ]}
+      />,
+    );
+    expect(d.match(/<circle/g)).toHaveLength(2);
+    const bars = renderToStaticMarkup(
+      <HBars
+        label="x"
+        color="red"
+        rows={[
+          { label: 'a', value: 10 },
+          { label: 'b', value: 5 },
+        ]}
+      />,
+    );
+    expect(bars).toContain('width:100%');
+    expect(bars).toContain('width:50%');
+  });
+});

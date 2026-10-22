@@ -14,8 +14,9 @@ import {
 import { AiKeysUsageAdminModule } from '../../../../ai-keys-usage-admin';
 import { CatalogProductsModule } from '../../../../catalog-products';
 import { CrmModule } from '../../../../crm';
-import { FaqKnowledgeModule } from '../../../../faq-knowledge';
+import { KnowledgeBaseModule } from '../../../../knowledge-base';
 import { LocalizationTranslationModule } from '../../../../localization-translation';
+import { FlowRefResolver } from '../flow-refs';
 import { AiCallService } from './ai-call.service';
 import { AiNodes } from './ai-nodes';
 import { FaqNodes } from './faq-node';
@@ -27,13 +28,14 @@ import { OrderingFlowService } from './ordering.service';
     AiKeysUsageAdminModule,
     CatalogProductsModule,
     CrmModule,
-    FaqKnowledgeModule,
+    KnowledgeBaseModule,
     LocalizationTranslationModule,
   ],
   providers: [
     AiNodes,
     FaqNodes,
     AiCallService,
+    FlowRefResolver,
     OrderingFlowService,
     { provide: FLOW_AI_PORT, useClass: HttpFlowAiAdapter },
     // Until the AI agents domain provides its own binding, a Chatbot hand-off is refused as unavailable.

@@ -37,7 +37,8 @@
       "statusStage": "Die status hoort bij een andere fase. Kies een status die past bij de fase van het contact.",
       "stageScope": "Een status kan alleen aan één van je levenscyclusfases worden gekoppeld.",
       "planLimit": "Je hebt de limiet van je abonnement bereikt van {limit, plural, one {# contact} other {# contacten}}. Upgrade je abonnement om er meer toe te voegen, of verwijder een bestaand contact om ruimte vrij te maken.",
-      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd."
+      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "assignedToOther": "Deze chat is aan een andere agent toegewezen. Wijs hem eerst aan jezelf toe om een bericht te sturen."
     },
     "list": {
       "title": "Contact Hub",
@@ -130,6 +131,7 @@
       "colLeadScore": "Leadscore",
       "colLanguage": "Taal",
       "colCreatedOn": "Aangemaakt op",
+      "colModifiedOn": "Gewijzigd op",
       "pagination": "Paginering",
       "prevPage": "Vorige pagina",
       "nextPage": "Volgende pagina",
@@ -282,6 +284,7 @@
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Aangemaakt",
+      "shortModified": "Gewijzigd",
       "firstRun": {
         "title": "Voeg je eerste contacten toe",
         "message": "Haal de mensen binnen met wie je praat. Contacten gebruik je voor berichten, campagnes, taken en deals.",
@@ -290,7 +293,11 @@
         "importBody": "Upload een spreadsheet en koppel de kolommen aan contactvelden.",
         "connect": "WhatsApp koppelen",
         "connectBody": "Koppel je nummer zodat contacten kunnen antwoorden en je ze kunt berichten."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Filteren op team",
+      "allTeams": "Alle teams",
+      "teamFormer": "Voormalig team"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -442,7 +449,8 @@
       "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
       "searchOptions": "Opties zoeken",
       "searchOptionsFor": "Zoeken in de opties van {field}",
-      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht."
+      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht.",
+      "cascadeWaiting": "Kies eerst {parent} om de keuzes te zien."
     },
     "tags": {
       "title": "Tags",
@@ -1081,7 +1089,8 @@
         "moveDown": "{name} omlaag verplaatsen",
         "edit": "{name} bewerken",
         "deactivate": "{name} deactiveren",
-        "reactivate": "Opnieuw activeren"
+        "reactivate": "Opnieuw activeren",
+        "dependsOn": "Keuzes hangen af van {field}"
       },
       "toast": {
         "conflict": "Iemand anders heeft dit gewijzigd. De lijst is vernieuwd; probeer het opnieuw.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Fasen beheren",
         "manageGroups": "Groepen beheren",
         "locked": "Vast"
+      },
+      "cascade": {
+        "open": "Afhankelijke velden",
+        "title": "Afhankelijke velden",
+        "close": "Sluiten",
+        "intro": "Een afhankelijk veld wordt altijd getoond. De keuzes ervan hangen af van de keuze in het bovenliggende veld: vink voor elke keuze van het bovenliggende veld de keuzes van het afhankelijke veld aan die erbij horen.",
+        "empty": "Nog geen afhankelijke velden.",
+        "add": "Afhankelijk veld toevoegen",
+        "needTwoChoiceFields": "Afhankelijke velden hebben minstens twee eigenschappen met een keuzelijst nodig (keuzemenu, meervoudige keuze of radio).",
+        "dependsOn": "hangt af van {parent}",
+        "editLabel": "{name} bewerken",
+        "removeLabel": "{name} verwijderen",
+        "parent": "Bovenliggende eigenschap",
+        "child": "Afhankelijke eigenschap",
+        "pickParent": "Kies de bovenliggende eigenschap",
+        "pickChild": "Kies de afhankelijke eigenschap",
+        "allowed": "Keuzes van {child} die per keuze van {parent} zijn toegestaan",
+        "noParentChoices": "De bovenliggende eigenschap heeft nog geen keuzes.",
+        "noChildChoices": "De afhankelijke eigenschap heeft nog geen keuzes.",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "saved": "Afhankelijk veld opgeslagen.",
+        "cycle": "Die afhankelijkheid zou twee eigenschappen op elkaar laten wachten.",
+        "removeTitle": "{name} uit de afhankelijke velden verwijderen?",
+        "removeMessage": "Alle keuzes worden weer getoond. De koppeling met de bovenliggende eigenschap wordt vergeten; de waarden van contacten blijven bewaard.",
+        "removeConfirm": "Verwijderen",
+        "removed": "Afhankelijk veld verwijderd.",
+        "removeFailed": "Het afhankelijke veld kon niet worden verwijderd. Probeer het opnieuw."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Geselecteerde kolommen",
         "selectAll": "Alles selecteren",
         "reorder": "Sleep om kolommen te herschikken",
-        "remove": "{name} verwijderen"
+        "remove": "{name} verwijderen",
+        "nameShort": "De naam van de weergave moet minstens {min} tekens hebben.",
+        "nameLong": "De naam van de weergave mag hoogstens {max} tekens hebben."
       },
       "presets": {
         "myContacts": "Mijn contacten",

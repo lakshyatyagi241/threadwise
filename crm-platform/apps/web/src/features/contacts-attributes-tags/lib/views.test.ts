@@ -11,6 +11,7 @@ import {
   viewColumnsOf,
   viewFilterOf,
   viewIdOf,
+  viewNameProblem,
   viewRulesOf,
   withView,
 } from './views';
@@ -130,6 +131,20 @@ describe('view columns and the editor filter', () => {
     expect(viewRulesOf(base)).toBe('{"old":1}');
     expect(viewRulesOf({})).toBe('');
   });
+  it('reads the rules of a view the Waboo migration loaded (filter.rules, no params)', () => {
+    const rules =
+      '{"type":"group","combinator":"and","children":[{"type":"condition","field":"ry26_pax","operator":"is_not_empty"}]}';
+    const migrated = { rules };
+    expect(viewRulesOf(migrated)).toBe(rules);
+    expect(filtersOfView(migrated).rules).toBe(rules);
+    // Saving it from the editor writes the shape the app keeps, and drops the top-level copy.
+    expect(composeViewFilter(migrated, rules, ['name'])).toEqual({
+      v: 1,
+      params: { rules },
+      columns: ['name'],
+    });
+    expect(viewRulesOf({ rules: 5 })).toBe('');
+  });
   it('flags a change in filters, and in columns only for a view that keeps columns', () => {
     const saved = viewFilterOf({ ...DEFAULT_FILTERS, q: 'a' }, ['name', 'phone']);
     const v = view({ filter: saved });
@@ -139,5 +154,17 @@ describe('view columns and the editor filter', () => {
     expect(viewChanged(v, { ...same, q: 'b' }, ['name', 'phone'])).toBe(true);
     const noCols = view({ filter: viewFilterOf(same) });
     expect(viewChanged(noCols, same, ['anything'])).toBe(false);
+  });
+});
+
+describe('view name check', () => {
+  it('asks for a name, then for at least 3 and at most 50 characters, counted after trimming', () => {
+    expect(viewNameProblem('')).toBe('needName');
+    expect(viewNameProblem('   ')).toBe('needName');
+    expect(viewNameProblem('ab')).toBe('nameShort');
+    expect(viewNameProblem('  ab  ')).toBe('nameShort');
+    expect(viewNameProblem('abc')).toBeNull();
+    expect(viewNameProblem('x'.repeat(50))).toBeNull();
+    expect(viewNameProblem('x'.repeat(51))).toBe('nameLong');
   });
 });

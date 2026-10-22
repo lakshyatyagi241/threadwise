@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
+import { trimEdges } from '../common/trim-edges';
 import { paginationQuerySchema } from '../common/pagination';
 
 /**
@@ -28,6 +29,8 @@ export const WSP_TIER_RANK: Record<WspRoleTier, number> = {
 
 export const WSP_MEMBER_NAME_MAX = 191;
 
+const HIDDEN_EDGE = /^[\s\u200B-\u200D\u2060\uFEFF]$/;
+
 /**
  * A display name (member, team) with whitespace AND invisible formatting characters (zero-width space, joiners, word
  * joiner, byte-order mark) removed from both ends, so a name cannot hide behind characters nobody can see.
@@ -35,9 +38,7 @@ export const WSP_MEMBER_NAME_MAX = 191;
 export const wspDisplayName = (max: number) =>
   z
     .string()
-    .transform((v) =>
-      v.replace(/^[\s\u200B-\u200D\u2060\uFEFF]+|[\s\u200B-\u200D\u2060\uFEFF]+$/g, ''),
-    )
+    .transform((v) => trimEdges(v, (c) => HIDDEN_EDGE.test(c)))
     .pipe(z.string().min(1).max(max));
 export const WSP_INVITE_TTL_DAYS = 7;
 
@@ -169,6 +170,8 @@ export type UpdateWspMemberDetailsInput = z.infer<typeof updateWspMemberDetailsS
  * never does. A member nobody has switched yet counts as `online`, as routing always read them.
  */
 export const WSP_AVAILABILITY = ['online', 'offline'] as const;
+/** Outbox event: a person switched Available / Offline (or the system did, for inactivity). Payload `userId` (internal id), `status`, `reason`. */
+export const MEMBER_AVAILABILITY_CHANGED = 'member.availability_changed';
 export const wspAvailabilitySchema = z.object({ status: z.enum(WSP_AVAILABILITY) });
 export type WspAvailability = z.infer<typeof wspAvailabilitySchema>;
 export const setWspAvailabilitySchema = wspAvailabilitySchema;

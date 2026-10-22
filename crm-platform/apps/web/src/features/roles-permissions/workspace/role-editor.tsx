@@ -18,6 +18,7 @@ import {
   sameDraft,
   type GrantDraft,
 } from './lib/matrix';
+import { usePlanFeature } from '@/lib/plan-features';
 import { presetSlug, sortRoles } from './lib/members';
 import { useUnsavedGuard } from './lib/use-unsaved-guard';
 import { DeleteRoleDialog } from './ui/delete-role-dialog';
@@ -131,7 +132,9 @@ function RoleForm({
   const editing = initial !== null;
   const slug = presetSlug(initial?.systemKey ?? null);
   const owner = initial !== null && (initial.isLocked || slug === 'owner');
-  const readOnly = editing && (owner || !initial.editable);
+  // Custom roles and scoped permissions are a plan feature (`custom_roles`): without it the roles stay readable, not editable.
+  const customRolesOn = usePlanFeature('custom_roles');
+  const readOnly = (editing && (owner || !initial.editable)) || !customRolesOn;
   const nameLocked = editing && initial.isPreset;
 
   const initialDraft = useMemo(() => draftFromGrants(initial?.grants ?? []), [initial]);
@@ -250,7 +253,17 @@ function RoleForm({
           {t('lockedNotice')}
         </Alert>
       )}
-      {readOnly && !owner && (
+      {!customRolesOn && (
+        <Alert tone="warning" className="space-y-1" data-testid="custom-roles-locked">
+          <p>{t('customRolesLocked')}</p>
+          <p>
+            <Link href="/account/plans" className="font-semibold underline underline-offset-2">
+              {t('upgrade')}
+            </Link>
+          </p>
+        </Alert>
+      )}
+      {readOnly && !owner && customRolesOn && (
         <Alert tone="info" data-testid="read-only-notice">
           {slug === 'admin' ? t('adminNotice') : t('readOnlyNotice')}
         </Alert>
@@ -338,7 +351,13 @@ function RoleForm({
           </div>
         </section>
 
-        <PermissionMatrix defs={catalogue} draft={draft} onChange={setDraft} readOnly={readOnly} />
+        <PermissionMatrix
+          defs={catalogue}
+          draft={draft}
+          onChange={setDraft}
+          readOnly={readOnly}
+          membersWithoutTeam={initial?.membersWithoutTeam}
+        />
       </form>
 
       {canDelete && (

@@ -535,10 +535,12 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Pipeline di vendita",
             "appointment_booking": "Appuntamenti",
+            "appointment_confirm_buttons": "Pulsanti del promemoria",
+            "appointment_rebook_steps": "Passaggi di riprenotazione",
             "chatbot_widgets": "Widget chatbot",
             "wa_storefront": "Catalogo WhatsApp",
             "inbox_sla": "SLA della casella di posta",
-            "inbox_routing": "Instradamento della casella di posta",
+            "inbox_routing": "Instradamento intelligente",
             "waba_calling": "Chiamate WhatsApp",
             "inbox_kanban": "Kanban della casella di posta",
             "team_performance": "Prestazioni del team",
@@ -561,7 +563,10 @@
             "personal_history_full": "Importazione cronologia completa (WhatsApp personale)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Lead scoring con IA",
-            "record_assignment": "Regole di assegnazione dei record"
+            "record_assignment": "Regole di assegnazione dei record",
+            "team_hierarchy": "Gerarchia dei team e manager",
+            "custom_roles": "Ruoli personalizzati e ambiti",
+            "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso"
           },
           "cta": {
             "continueFree": "Continua gratis",

@@ -15,6 +15,9 @@ import type { BookingType } from '../api/schemas';
 import { appointmentsApi } from '../api/service';
 import { errorKind } from '../lib/errors';
 import {
+  REMINDER_MAX_RULES,
+  UNDELIVERED_MAX,
+  UNDELIVERED_MIN,
   remindersChanged,
   remindersFromType,
   remindersToInput,
@@ -24,7 +27,9 @@ import {
 } from '../lib/reminder-rules';
 import { ChevronDownIcon } from './icons';
 import { ErrorLine, TypeDot, useAppointmentsCan } from './parts';
-import { ReminderRulesEditor } from './reminder-rules-editor';
+import { ReminderPackDialog } from './reminder-pack-dialog';
+import { ReminderTestEmail } from './reminder-test-email';
+import { ReminderTimeline } from './reminder-timeline';
 import { SettingsCard } from './settings-parts';
 
 /**
@@ -77,6 +82,7 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
   const [tried, setTried] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [conflict, setConflict] = useState(false);
+  const [packOpen, setPackOpen] = useState(false);
 
   const dirty = remindersChanged(saved, rules);
   // A newer copy of the type arrives (another tab saved, a refetch): take it when nothing here is being edited.
@@ -89,7 +95,13 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
   const problemCount = Object.keys(problems).length;
   const errorOf = (key: string): string | undefined => {
     const p: ReminderProblem | undefined = tried ? problems[key] : undefined;
-    return p ? t(`problems.${p}`) : undefined;
+    return p
+      ? t(`problems.${p}`, {
+          max: REMINDER_MAX_RULES,
+          min: UNDELIVERED_MIN,
+          maxMinutes: UNDELIVERED_MAX,
+        })
+      : undefined;
   };
   const on = rules.filter((r) => r.enabled).length;
   const disabled = !canEdit || saving;
@@ -166,7 +178,7 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
             </Alert>
           )}
           {error !== null && !conflict && <ErrorLine error={error} />}
-          <ReminderRulesEditor
+          <ReminderTimeline
             rules={rules}
             onChange={setRules}
             disabled={disabled}
@@ -176,6 +188,31 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
             channelStates={channelStates}
             library={library}
             idPrefix={`rem-${type.id}`}
+            renderExtra={(r) => (
+              <ReminderTestEmail typeId={type.id} rule={r} dirty={dirty} canEdit={canEdit} />
+            )}
+            toolbar={
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!canEdit}
+                onClick={() => setPackOpen(true)}
+              >
+                {t('packs.open')}
+              </Button>
+            }
+          />
+          <ReminderPackDialog
+            open={packOpen}
+            onClose={() => setPackOpen(false)}
+            type={{ id: type.id, name: type.name }}
+            dirty={dirty}
+            canEdit={canEdit}
+            onApplied={() => {
+              setTried(false);
+              setError(null);
+              setConflict(false);
+            }}
           />
           {canEdit ? (
             <div className="flex flex-wrap items-center justify-end gap-2">

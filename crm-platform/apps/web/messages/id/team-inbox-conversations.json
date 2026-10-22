@@ -584,7 +584,11 @@
           "sla_breach": "Tenggat respons terlewat",
           "spam_flagged": "Ditandai spam oleh {actor}",
           "escalated": "Dieskalasi",
-          "unknown": "{what} oleh {actor}"
+          "unknown": "{what} oleh {actor}",
+          "handoff_requested": "Diserahkan ke orang oleh {actor}",
+          "queue_reminded": "Tim sudah diingatkan",
+          "queue_offered": "Ditawarkan ke tim lain",
+          "queue_customer_message": "Pesan dikirim ke pelanggan"
         },
         "actors": {
           "user": "Seorang anggota tim",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (pengujian)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Obrolan situs web",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Email",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (pengujian)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Obrolan situs web",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Email",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Kontak",
         "agent": "Anda",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "Kembali ke kotak masuk",
-        "title": "Tag percakapan",
+        "title": "Tag",
         "intro": "Tag percakapan menandai sebuah utas (tagihan, pengembalian dana, mendesak) agar tim Anda dapat mengurutkan dan memfilter kotak masuk. Tag ini berasal dari pustaka yang sama dengan tag kontak, yang menggambarkan orangnya.",
         "newTitle": "Tag baru",
         "editTitle": "Edit tag",

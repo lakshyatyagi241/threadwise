@@ -535,10 +535,12 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Quy trình bán hàng",
             "appointment_booking": "Lịch hẹn",
+            "appointment_confirm_buttons": "Nút nhắc hẹn",
+            "appointment_rebook_steps": "Bước đặt lại lịch",
             "chatbot_widgets": "Widget chatbot",
             "wa_storefront": "Danh mục WhatsApp",
             "inbox_sla": "SLA hộp thư",
-            "inbox_routing": "Định tuyến hộp thư",
+            "inbox_routing": "Định tuyến thông minh",
             "waba_calling": "Gọi điện WhatsApp",
             "inbox_kanban": "Kanban hộp thư",
             "team_performance": "Hiệu suất nhóm",
@@ -561,7 +563,10 @@
             "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
-            "record_assignment": "Quy tắc phân công bản ghi"
+            "record_assignment": "Quy tắc phân công bản ghi",
+            "team_hierarchy": "Phân cấp nhóm và quản lý",
+            "custom_roles": "Vai trò tùy chỉnh và phạm vi",
+            "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
           },
           "cta": {
             "continueFree": "Tiếp tục miễn phí",

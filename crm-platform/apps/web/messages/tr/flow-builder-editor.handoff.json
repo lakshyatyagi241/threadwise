@@ -1,0 +1,93 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "atandı",
+        "waitingInQueue": "kuyrukta bekliyor",
+        "noAgentOutOfHours": "temsilci yok / mesai dışı",
+        "returnedToBot": "bota geri verildi"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "{stage}. adım: konuşmanın gideceği kişiyi seçin."
+      }
+    },
+    "simulator": {
+      "handoff": "bir kişiye devredildi (hedef: {destination}, ekip \"{team}\"); test sohbeti \"atandı\" çıkışını izler"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Devredilecek yer",
+          "handoffRules": "Atama kuralları",
+          "pickAgent": "— bir kişi seçin —",
+          "returnBack": "Bot geri döndüğünde:"
+        }
+      },
+      "handoff": {
+        "legacy": "Bu adım eski “Temsilci ata” adımıdır.",
+        "upgradeHint": "Sohbeti bir ekibe verir ve devam eder. Bir neden, öncelik, kişi için mesajlar ve çıkışlar (atandı, sırada bekliyor, temsilci yok veya mesai dışı ve sohbet bota geri verildiğinde için isteğe bağlı bir çıkış) eklemek için İnsana devir adımına geçin. Önceden yaptığınız bağlantılar çalışmaya devam eder.",
+        "upgrade": "Devir özelliklerini kullan",
+        "destination": "Konuşmanın gönderileceği yer",
+        "dest": {
+          "team": "Bir ekip",
+          "person": "Bir kişi",
+          "rules": "Atama kuralları",
+          "rulesLocked": "Atama kuralları (Akıllı yönlendirme eklentisi)"
+        },
+        "destHint": {
+          "team": "Ekipteki birine gider veya ekibin kuyruğunda bekler.",
+          "person": "Üstlenebiliyorsa bu kişiye gider; aksi halde kuyrukta bekler.",
+          "rules": "Konuşma otomatik atama kurallarınızı kullanır; hiçbiri kimseyi bulamazsa kuyrukta bekler."
+        },
+        "lockHint": "Atama kuralları Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır; buraya gönderilen sohbet bir ekip arkadaşı üstlenene kadar bekleme kuyruğunda bekler.",
+        "team": "Ekip",
+        "teamPick": "— bir ekip seçin —",
+        "teamNone": "Henüz ekip yok",
+        "teamOption": "{name} · {count, plural, one {# temsilci} other {# temsilci}}",
+        "teamHint": "<link>Ekipleri yönet →</link>",
+        "person": "Kişi",
+        "personPick": "— bir kişi seçin —",
+        "personHint": "Ekiplerinizden biri.",
+        "unknownMember": "{value} (bu çalışma alanında değil)",
+        "reason": "Neden",
+        "reasons": {
+          "customer_asked": "Kişi bir insan istedi",
+          "bot_could_not_help": "Bot yardımcı olamadı",
+          "sensitive_topic": "Hassas konu",
+          "sales_lead": "Satış adayı",
+          "complaint": "Şikâyet",
+          "other": "Diğer"
+        },
+        "priority": "Öncelik",
+        "priorityKeep": "Mevcut önceliği koru",
+        "priorities": {
+          "low": "Düşük",
+          "normal": "Normal",
+          "high": "Yüksek",
+          "urgent": "Acil"
+        },
+        "note": "Temsilci için not",
+        "noteHint": "Dahili. Devir kartında gösterilir; '{{'variables'}}' çalışır. En fazla 500 karakter.",
+        "customerMessage": "Kişiye mesaj",
+        "customerHint": "Konuşma devredildiğinde gönderilir. Hiçbir şey göndermemek için boş bırakın.",
+        "offHours": "Kimse müsait değilken mesaj",
+        "offHoursHint": "Ekip kapalıyken veya kimse üstlenemiyorsa bunun yerine gönderilir. Konuşma yine de kuyrukta bekler.",
+        "exits": "Bu adımın üç çıkışı var",
+        "exitAssigned": "atandı: konuşma artık bir kişide",
+        "exitWaiting": "kuyrukta bekliyor: biri üstlenene kadar bekler",
+        "exitUnavailable": "temsilci yok / mesai dışı: kimse üstlenemedi",
+        "simpleExits": "Sonraki adım, konuşma bir kişiye ulaştığında çalışır. Kuyrukta beklemesi gerekirse veya kimse müsait değilse bot burada durur ve bir kişi yanıtlar. Diğer çıkışları izlemek için Gelişmiş oluşturucuyu kullanın.",
+        "returnMessage": "Bot geri döndüğünde kişiye gönderilecek mesaj",
+        "returnMessageHint": "İsteğe bağlı. Bir ekip arkadaşı Bota geri ver düğmesine bastığında, akış “geri verildi” çıkışından devam etmeden önce işletmeniz adına bir kez gönderilir. 24 saatlik pencere kapalıysa veya kişi izin vermediyse gönderilmez. '{{'name'}}' gibi değişkenler çalışır.",
+        "returnNeedsExit": "Bu mesaj yalnızca akış Bota geri ver işleminden sonra devam ettiğinde gönderilir. “Geri verildi” çıkışını sonraki adıma bağlayın.",
+        "exitReturned": "bota geri verildi (isteğe bağlı): bir ekip arkadaşı Bota geri ver düğmesine bastı; akış buradan devam eder",
+        "returnedStep": "Bir ekip arkadaşı sohbeti geri verdiğinde şuradan devam et",
+        "returnedStepHint": "İsteğe bağlı. Biri Bota geri ver düğmesine bastığında akışın devam edeceği adımı seçin. Boş bırakırsanız bot kişinin bir sonraki mesajını bekler.",
+        "returnNone": "Adım yok: kişinin bir sonraki mesajını bekle",
+        "returnStepOption": "{stage}: {label}"
+      }
+    }
+  }
+}

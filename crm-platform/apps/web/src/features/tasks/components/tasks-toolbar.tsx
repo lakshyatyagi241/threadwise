@@ -13,6 +13,8 @@ import {
   cn,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useTeamFilterOptions } from '@/features/segments';
+import { useActivitySettings } from '@/features/sales-activities';
 import { useRecordRef, useTaskOutcomes } from '../api/hooks';
 import { outcomeChoices } from '../lib/outcomes';
 import { PRIORITIES, type Member } from '../api/schemas';
@@ -53,6 +55,7 @@ export interface TasksToolbarProps {
 export function TasksToolbar(p: TasksToolbarProps) {
   const t = useTranslations('tasks.toolbar');
   const f = p.filters;
+  const teamFilter = useTeamFilterOptions();
   const active = hasActiveFilter({ ...f, q: p.q });
   // "Linked to" first picks a kind, then the record; only the record filters the list.
   const canPickCompany = useCan('record.companies.read');
@@ -73,10 +76,12 @@ export function TasksToolbar(p: TasksToolbarProps) {
           ? f.company
           : '';
   const outcomes = useTaskOutcomes(false);
+  const outcomeSettings = useActivitySettings('task');
   const outcomeOptions = outcomeChoices(
     outcomes.data ?? [],
     f.outcome ? { id: f.outcome, name: '…', isActive: true } : null,
   );
+  const showOutcomeFilter = !(outcomeSettings.loaded && !outcomeSettings.outcomesEnabled);
   const ref = useRecordRef(linkKind === '' ? 'contact' : linkKind, linkId);
   const views: Array<{ id: TasksView; icon: typeof ListIcon }> = [
     { id: 'list', icon: ListIcon },
@@ -126,7 +131,7 @@ export function TasksToolbar(p: TasksToolbarProps) {
         ))}
       </Select>
 
-      {outcomeOptions.length > 0 && (
+      {outcomeOptions.length > 0 && showOutcomeFilter && (
         <Select
           aria-label={t('outcome')}
           className="h-9 w-auto min-w-36 max-w-52"
@@ -154,6 +159,22 @@ export function TasksToolbar(p: TasksToolbarProps) {
           {p.members.map((m) => (
             <option key={m.id} value={m.id}>
               {m.fullName}
+            </option>
+          ))}
+        </Select>
+      )}
+
+      {(teamFilter.show || f.team !== '') && (
+        <Select
+          aria-label={t('team')}
+          className="h-9 w-auto min-w-36 max-w-52"
+          value={f.team}
+          onChange={(e) => p.onChange({ team: e.target.value })}
+        >
+          <option value="">{t('allTeams')}</option>
+          {teamFilter.teams.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.name}
             </option>
           ))}
         </Select>
@@ -199,6 +220,7 @@ export function TasksToolbar(p: TasksToolbarProps) {
               status: 'open',
               priority: '',
               assignee: '',
+              team: '',
               contact: '',
               deal: '',
               company: '',

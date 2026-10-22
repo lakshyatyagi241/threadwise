@@ -28,6 +28,7 @@ export interface AuthoredTemplate {
   attachmentType: string;
   headerHandle?: string | null;
   headerSampleUrl?: string | null;
+  headerMediaKey?: string | null;
   headerLocation?: TplHeaderLocation | null;
   body: string;
   footer?: string | null;
@@ -49,6 +50,8 @@ export interface PreparedTemplate {
   attachmentType: string | null;
   headerHandle: string | null;
   headerSampleUrl: string | null;
+  /** Object-storage key of the uploaded header file (null without an attachment, or for a location). */
+  headerMediaKey: string | null;
   /** The pin of a `location` header; null for every other header. */
   headerLocation: TplHeaderLocation | null;
   body: string;
@@ -112,6 +115,8 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
     headerHandle:
       auth || !attachment || attachment === 'location' ? null : (input.headerHandle ?? null),
     headerSampleUrl: auth || !attachment ? null : (input.headerSampleUrl ?? null),
+    headerMediaKey:
+      auth || !attachment || attachment === 'location' ? null : (input.headerMediaKey ?? null),
     headerLocation: !auth && attachment === 'location' ? (input.headerLocation ?? null) : null,
     body: text.body,
     footer: auth ? null : text.footer,

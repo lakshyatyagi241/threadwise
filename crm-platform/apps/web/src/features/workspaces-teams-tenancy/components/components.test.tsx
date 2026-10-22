@@ -237,13 +237,55 @@ describe('TeamDialog', () => {
     expect(two).toContain('Line 2');
   });
 
-  it('creates with the six swatches, the strategy list and no Delete button', () => {
+  it('creates with the six swatches, the manager, parent and receive fields, and no Delete button or stored-settings note', () => {
     const out = html(<TeamDialog open team={null} devices={[]} canDelete onClose={noop} />);
     expect(out).toContain('Create a team');
-    expect(out).toContain('Auto-assignment strategy');
-    expect(out).toContain('Round robin — spread evenly');
+    expect(out).toContain('Teams group people for conversations, assignments and reports.');
+    expect(out).toContain('Manager');
+    expect(out).toContain('Parent team');
+    expect(out).toContain('Can receive');
+    expect(out).toContain('Conversations (inbox routing and assignment)');
+    expect(out).toContain('Records (contacts, companies and deals)');
     expect(out.match(/aria-label="Colour #/g)).toHaveLength(6);
     expect(out).not.toContain('data-testid="delete-team"');
+    expect(out).not.toContain('data-testid="team-not-used"');
+  });
+
+  it('shows the devices a team is limited to as stored but not used yet, instead of hiding them', () => {
+    const t = team(1, { assignmentStrategy: 'round_robin', deviceIds: ['d1', 'd2'] });
+    const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
+    expect(out).toContain('data-testid="team-not-used"');
+    expect(out).toContain('Stored, not used yet');
+    expect(out).toContain('Limited to 2 devices');
+    expect(out).not.toContain('Auto-assignment strategy');
+  });
+
+  it('edits the handoff settings a team keeps: method, default assignee and opening hours', () => {
+    const t = team(1, {
+      assignmentStrategy: 'round_robin',
+      unusedSettings: {
+        businessHours: {
+          days: {
+            mon: { enabled: true, from: '09:00', to: '17:00' },
+            tue: { enabled: true, from: '09:00', to: '17:00' },
+            wed: { enabled: true, from: '09:00', to: '17:00' },
+            thu: { enabled: true, from: '09:00', to: '17:00' },
+            fri: { enabled: true, from: '09:00', to: '17:00' },
+            sat: { enabled: false, from: '09:00', to: '17:00' },
+            sun: { enabled: false, from: '09:00', to: '17:00' },
+          },
+        },
+        timezone: 'Asia/Kolkata',
+        defaultAssignee: { id: 'u1', fullName: 'Asha Rao' },
+      },
+    });
+    const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
+    expect(out).toContain('data-testid="team-handoff"');
+    expect(out).toContain('Handoff and assignment');
+    expect(out).toContain('How to pick a person');
+    expect(out).toContain('Default assignee');
+    expect(out).toContain('Opening hours');
+    expect(out).not.toContain('data-testid="team-not-used"');
   });
 
   it('edits with Delete when the caller may manage teams', () => {

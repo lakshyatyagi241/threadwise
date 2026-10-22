@@ -60,12 +60,22 @@ interface Person {
   userId: number;
   uuid: string;
 }
+/**
+ * A person a rule can name has to be able to open what they are given (BL-380, gap 9), so by default a test person holds the three read
+ * rights; the tests of the exclusion build their own people (teams-t0.e2e.spec.ts).
+ */
+const READS: Array<[string, 'all']> = [
+  ['record.contacts.read', 'all'],
+  ['record.companies.read', 'all'],
+  ['record.deals.read', 'all'],
+];
 const person = async (
   t: Tenant,
   name: string,
   grants: Array<[string, 'all']> = [],
 ): Promise<Person> => {
-  const m = await api.member(t, name, grants);
+  const extra = grants.filter(([key]) => !READS.some(([read]) => read === key));
+  const m = await api.member(t, name, [...READS, ...extra]);
   const uuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [m.userId])).rows[0]
     .uuid as string;
   return { ...m, uuid };
@@ -718,6 +728,12 @@ describe('record assignment rules (BL-340..BL-345)', () => {
         [t.orgId, name, industry, JSON.stringify(data)],
       )
     ).rows[0].uuid as string;
+  /** A row of the assignment run log as this spec reads it: the outcome reason, the record, and the rule trace. */
+  interface RunRow {
+    reason: string;
+    record: unknown;
+    trace: Array<{ ruleId: string; matched: boolean }>;
+  }
   const runs = async (query = '') =>
     (await api.as(mgr.token).get(`/v2/assignment/runs${query}`)).body;
 
@@ -759,16 +775,13 @@ describe('record assignment rules (BL-340..BL-345)', () => {
       .post('/v2/field-sections')
       .send({ moduleKey: 'companies', name: 'Billing' });
     expect(sec.status, JSON.stringify(sec.body)).toBe(201);
-    const prop = await api
-      .as(t.admin)
-      .post('/v2/fields')
-      .send({
-        moduleKey: 'companies',
-        sectionId: sec.body.id,
-        label: 'Tier',
-        key: 'tier',
-        fieldType: 'text',
-      });
+    const prop = await api.as(t.admin).post('/v2/fields').send({
+      moduleKey: 'companies',
+      sectionId: sec.body.id,
+      label: 'Tier',
+      key: 'tier',
+      fieldType: 'text',
+    });
     expect(prop.status, JSON.stringify(prop.body)).toBe(201);
     const key = prop.body.key as string;
 
@@ -953,7 +966,7 @@ describe('record assignment rules (BL-340..BL-345)', () => {
     await assignTo(t, await newContact(t, 'web'));
     await back(t);
 
-    const log = (await runs('?limit=10')).data as Array<Record<string, any>>;
+    const log = (await runs('?limit=10')).data as RunRow[];
     expect(log.map((x) => x.reason)).toEqual([
       'nobody_available',
       'no_rule',

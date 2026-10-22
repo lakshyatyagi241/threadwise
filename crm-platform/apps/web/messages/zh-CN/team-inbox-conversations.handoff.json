@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "等待中"
+      },
+      "empty": {
+        "waiting": {
+          "title": "没有等待人工的会话",
+          "message": "当机器人、流程或同事请求人工时，会话会在此等待，直到有人接手。"
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "机器人正在回复",
+        "waiting": "等待人工",
+        "with_person": "人工处理中"
+      },
+      "ageMinutes": "{count}分钟",
+      "ageHours": "{count}小时",
+      "ageDays": "{count}天",
+      "row": {
+        "waiting": "等待中",
+        "waitingFor": "已等待 {age}",
+        "inTeam": "在 {team} 的队列中"
+      },
+      "assignedTo": "现由 {name} 处理",
+      "inTeamQueue": "{team} 的队列",
+      "cardFailed": "无法加载转接详情。",
+      "claim": {
+        "button": "接手",
+        "done": "你已接手此会话。",
+        "doneOwner": "你已接手此会话，并成为该联系人的负责人。",
+        "failed": "无法接手该会话。",
+        "taken": "其他人已先接手此会话。",
+        "overLimitTitle": "你已达到会话上限",
+        "overLimitMessage": "你已有 {open} 个进行中的会话，上限为 {limit}。仍要接手这个会话吗？",
+        "overLimitConfirm": "仍然接手",
+        "overLimitCancel": "取消"
+      },
+      "giveBack": {
+        "button": "交还机器人",
+        "done": "机器人将重新回复此会话。",
+        "failed": "无法将会话交还给机器人。",
+        "doneFlow": "机器人继续运行流程。",
+        "doneNextLive": "机器人将回复客户的下一条消息。",
+        "doneNextDefault": "机器人已恢复。只有设置了默认流程,它才会回复下一条消息。",
+        "already": "机器人已经在处理这个对话。"
+      },
+      "send": {
+        "button": "发送到队列",
+        "buttonAgain": "重新发送到队列",
+        "title": "发送给人工",
+        "close": "关闭",
+        "cancel": "取消",
+        "submit": "发送",
+        "intro": "机器人将停止回复此联系人。会话会转给你选择的人员或团队，或在队列中等待，直到有人接手。",
+        "where": "发送给",
+        "whereRules": "分配规则，否则进入等待队列",
+        "whereQueueOnly": "等待队列（分配规则需要智能路由附加组件）",
+        "whereTeam": "团队",
+        "wherePerson": "指定一人",
+        "team": "团队",
+        "pickTeam": "选择团队",
+        "person": "人员",
+        "pickPerson": "选择人员",
+        "reason": "需要人工的原因",
+        "note": "给接手人的备注",
+        "noteHint": "显示在转接卡片上。最多 500 个字符。",
+        "refused": "此会话无法转接（已归档、垃圾信息或个人邮箱）。",
+        "failed": "无法发送该会话。",
+        "done": {
+          "assigned": "已发送：现在有人负责。",
+          "waiting": "已发送：正在队列中等待。",
+          "unavailable": "已发送到队列：目前无人可接。"
+        }
+      },
+      "details": {
+        "show": "详情",
+        "hide": "隐藏详情"
+      },
+      "card": {
+        "source": "请求方",
+        "reason": "原因",
+        "priority": "优先级",
+        "summary": "摘要",
+        "answers": "联系人对机器人说的内容",
+        "trace": "分配方式",
+        "timers": "等待队列步骤"
+      },
+      "source": {
+        "flow": "流程",
+        "ai_agent": "AI 智能体",
+        "keyword": "联系人本人的请求",
+        "bot_failure": "无法提供帮助的机器人",
+        "manual": "同事",
+        "arrival": "路由：没有人能接手"
+      },
+      "reason": {
+        "customer_asked": "联系人要求人工服务",
+        "bot_could_not_help": "机器人无法提供帮助",
+        "sensitive_topic": "敏感话题",
+        "sales_lead": "销售线索",
+        "complaint": "投诉",
+        "other": "其他"
+      },
+      "priority": {
+        "low": "低",
+        "normal": "普通",
+        "high": "高",
+        "urgent": "紧急"
+      },
+      "trace": {
+        "chosen": "已选择",
+        "skipped": "已跳过",
+        "info": "备注"
+      },
+      "botLine": {
+        "system": "系统",
+        "pressed": {
+          "flow": "机器人回来了,由 {name} 交还。流程继续。",
+          "nextLive": "机器人回来了,由 {name} 交还。它将回复客户的下一条消息。",
+          "nextDefault": "机器人回来了,由 {name} 交还。只有设置了默认流程,它才会回复下一条消息。"
+        },
+        "result": {
+          "continued": "流程已从“已交还”出口继续。",
+          "claimed_again": "流程未恢复:有人再次接手了聊天。",
+          "flow_not_live": "流程未恢复:该流程已不再启用。",
+          "start_failed": "无法恢复流程。"
+        },
+        "customer": {
+          "sent": "已向客户发送消息。",
+          "window_closed": "已跳过向客户发送的消息:24 小时窗口已关闭。",
+          "no_consent": "已跳过向客户发送的消息:没有同意。",
+          "failed": "无法向客户发送消息。",
+          "channel_unavailable": "已跳过向客户发送的消息:渠道不可用。"
+        }
+      },
+      "timers": {
+        "reminded": "{at} 已提醒",
+        "offered": "{at} 转给了此团队",
+        "messaged": "{at} 已向客户发送消息",
+        "gaveBack": "{at} 已交还给机器人"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "{actor} 已交还机器人",
+          "bot_resumed": "机器人继续了流程",
+          "bot_resume_skipped": "流程未恢复"
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState, useTransition, type ReactNode } from 'react';
 import { Popover, cn } from '@crm/ui';
@@ -11,7 +10,12 @@ import { useOptionalShellData } from './shell-data';
 import { NavIcon } from './nav-icons';
 import { setTheme } from './actions';
 import { AvailabilityRow } from '@/features/workspaces-teams-tenancy/components/availability-row';
+import {
+  MyLeaveDialog,
+  MyLeaveRow,
+} from '@/features/workspaces-teams-tenancy/components/my-leave-row';
 import { TOUR_START_EVENT } from '@/features/admin-console-shell/tour/tour-model';
+import { signOut } from '@/features/auth-registration-security/shared/sign-out';
 
 export interface ShellUser {
   fullName: string;
@@ -90,7 +94,14 @@ function Row({ icon, children, end, className, onClick, href }: RowProps) {
  */
 function ThemeRow({ theme }: { theme: 'light' | 'dark' }) {
   const t = useTranslations('shell');
-  const [current, setCurrent] = useState(theme);
+  // Starts from what the page shows now, not from the server's value: the header's theme button may have changed it since.
+  const [current, setCurrent] = useState<'light' | 'dark'>(() =>
+    typeof document === 'undefined'
+      ? theme
+      : document.documentElement.dataset.theme === 'dark'
+        ? 'dark'
+        : 'light',
+  );
   const [, start] = useTransition();
   useEffect(() => {
     document.documentElement.dataset.theme = current;
@@ -155,14 +166,12 @@ export function UserMenu({
   const brand = useBrandName();
   const shellData = useOptionalShellData();
   const profile = profileProp ?? shellData?.profile;
-  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [leaveOpen, setLeaveOpen] = useState(false);
   const close = () => setOpen(false);
 
-  const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.replace('/login');
-  };
+  // A full page navigation, so the browser's query cache of this account does not outlive the sign-out.
+  const logout = () => signOut('/login');
   const support = helpItems.find((i) => i.id === 'support' && !i.comingSoon);
 
   return (
@@ -234,6 +243,15 @@ export function UserMenu({
           </Row>
           {/* Only inside the real shell: it needs the app's query client and a workspace session. */}
           {shellData && <AvailabilityRow className={ROW} />}
+          {shellData && (
+            <MyLeaveRow
+              className={ROW}
+              onOpen={() => {
+                close();
+                setLeaveOpen(true);
+              }}
+            />
+          )}
           <ThemeRow theme={theme} />
           <Row icon="cart" href="/billing/orders" onClick={close}>
             {tm('orders')}
@@ -275,6 +293,8 @@ export function UserMenu({
           {process.env.NEXT_PUBLIC_APP_VERSION ? ` · v${process.env.NEXT_PUBLIC_APP_VERSION}` : ''}
         </div>
       </Popover>
+      {/* Outside the popover: closing the menu must not close the dialog it opened. */}
+      {shellData && leaveOpen && <MyLeaveDialog open onClose={() => setLeaveOpen(false)} />}
     </div>
   );
 }

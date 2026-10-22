@@ -34,7 +34,10 @@
         "all": "Mọi lúc",
         "7d": "7 ngày",
         "30d": "30 ngày",
-        "90d": "90 ngày"
+        "90d": "90 ngày",
+        "custom": "Khoảng tùy chỉnh",
+        "from": "Từ ngày",
+        "to": "Đến ngày"
       },
       "search": "Tìm chiến dịch",
       "selectPage": "Chọn trang này",
@@ -1045,7 +1048,7 @@
         "loadFailed": "Không tải được thống kê.",
         "rates": {
           "delivered": "Tỷ lệ gửi thành công",
-          "deliveredHint": "trên tổng đối tượng",
+          "deliveredHint": "trên tổng số đã gửi",
           "read": "Tỷ lệ đã đọc",
           "readHint": "trên số đã gửi tới",
           "replies": "Tỷ lệ phản hồi",
@@ -1873,8 +1876,7 @@
         "list": "Danh sách",
         "blocks": "Khối"
       },
-      "showing": "Đang hiển thị {count} chiến dịch",
-      "legacy": "Chiến dịch gửi cũ ({count})"
+      "showing": "Đang hiển thị {count} chiến dịch"
     },
     "senderEmpty": {
       "loading": "Đang tải các số của bạn…",

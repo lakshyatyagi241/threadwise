@@ -41,7 +41,7 @@ export function Crumb({ items }: { items: Array<{ label: string; href?: string }
 export function TwoToneTitle({ first, second }: { first: string; second: string }) {
   return (
     <>
-      {first} <em className="font-semibold italic text-primary">{second}</em>
+      {first} <em className="font-semibold not-italic text-primary">{second}</em>
     </>
   );
 }

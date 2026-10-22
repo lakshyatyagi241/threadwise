@@ -47,7 +47,8 @@
       "sms_monthly": "SMS mỗi tháng",
       "email_mailboxes": "Hộp thư email",
       "email_monthly": "Email mỗi tháng",
-      "storage_gb": "Dung lượng lưu trữ (GB)"
+      "storage_gb": "Dung lượng lưu trữ (GB)",
+      "teams": "Nhóm"
     },
     "features": {
       "automation": "Tự động hóa",
@@ -59,10 +60,12 @@
       "remove_branding": "Gỡ thương hiệu",
       "sales_pipeline": "Pipeline bán hàng",
       "appointment_booking": "Đặt lịch hẹn",
+      "appointment_confirm_buttons": "Nút nhắc hẹn (Xác nhận / Đổi lịch / Hủy)",
+      "appointment_rebook_steps": "Bước đặt lại lịch (gợi nhớ)",
       "chatbot_widgets": "Tiện ích chatbot",
       "wa_storefront": "Danh mục WhatsApp",
       "inbox_sla": "Chính sách SLA",
-      "inbox_routing": "Quy tắc định tuyến",
+      "inbox_routing": "Định tuyến thông minh: tự động giao và quy tắc",
       "waba_calling": "Gọi qua WhatsApp",
       "inbox_kanban": "Chế độ xem Kanban",
       "team_performance": "Hiệu suất nhóm",
@@ -85,7 +88,10 @@
       "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
-      "record_assignment": "Quy tắc phân công bản ghi"
+      "record_assignment": "Quy tắc phân công bản ghi",
+      "team_hierarchy": "Phân cấp nhóm và quản lý",
+      "custom_roles": "Vai trò tùy chỉnh và phạm vi",
+      "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",
@@ -139,7 +145,8 @@
       "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
       "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
       "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn.",
-      "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả."
+      "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả.",
+      "teams": "Số nhóm mà không gian làm việc được phép có. Để trống là không giới hạn, 0 là dùng một mình (không có nhóm). Các nhóm hiện có không bao giờ bị xóa."
     },
     "planAddons": {
       "title": "Tiện ích bổ sung có trong gói của bạn",
@@ -246,6 +253,9 @@
         "buy": "Mua tiện ích bổ sung",
         "buyAgain": "Mua lại",
         "active": "Đang hoạt động",
+        "included": "Đã có trong gói của bạn",
+        "includedOwned": "Bạn cũng đang có tiện ích này. Gói của bạn giờ đã bao gồm nó nên bạn có thể hủy tiện ích. Không có khoản nào được hoàn tự động.",
+        "includedEnds": "Đã có trong gói của bạn. Tiện ích của bạn kết thúc vào {date} và sẽ không gia hạn.",
         "unlimitedBullet": "{label} không giới hạn",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "Quay lại",
       "compare": "So sánh tất cả gói",
       "appHint": "{feature} cũng được bán dưới dạng ứng dụng trong Chợ ứng dụng.",
-      "appLink": "Xem ứng dụng"
+      "appLink": "Xem ứng dụng",
+      "addonHint": "Bạn cũng có thể thêm vào gói hiện tại bằng tiện ích {addon}.",
+      "addonLink": "Xem tiện ích",
+      "addons": {
+        "smartRouting": "Định tuyến thông minh",
+        "teamsPermissions": "Nhóm và quyền"
+      }
+    },
+    "lock": {
+      "link": "Xem gói và tiện ích"
     }
   }
 }

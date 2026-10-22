@@ -192,6 +192,8 @@ export const appointments = pgTable(
     answers: jsonb('answers'),
     reminderSentAt: timestamp('reminder_sent_at', { withTimezone: true }),
     checkedInAt: timestamp('checked_in_at', { withTimezone: true }),
+    /** When the customer tapped Confirm on a reminder (separate from the business confirming the booking). */
+    customerConfirmedAt: timestamp('customer_confirmed_at', { withTimezone: true }),
     source: text('source').notNull().default('chat'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -497,10 +499,23 @@ export const bookingReminders = pgTable(
     channels: text('channels')
       .array()
       .notNull()
-      .default(sql`ARRAY['whatsapp', 'sms', 'email']::text[]`),
+      .default(sql`ARRAY['whatsapp', 'email']::text[]`),
     subject: text('subject'),
     body: text('body'),
     waTemplateId: idColumn('wa_template_id'),
+    /** Which step of the reminder sequence this is; null for a rule saved before steps existed. */
+    stepKind: text('step_kind'),
+    buttonsEnabled: boolean('buttons_enabled').notNull().default(false),
+    skipIfConfirmed: boolean('skip_if_confirmed').notNull().default(false),
+    undeliveredFallbackMinutes: integer('undelivered_fallback_minutes'),
+    libraryTemplateId: idColumn('library_template_id'),
+    /** `sms_removed`: the rule listed only SMS, which was removed; shown to the owner until the rule is saved again. */
+    noticeCode: text('notice_code'),
+    /** The word this step uses instead of the booking type's name (a medical practice: "appointment"). */
+    serviceLabel: text('service_label'),
+    /** The reminder pack this step was made from, and its version; null when the owner wrote it. */
+    packKey: text('pack_key'),
+    packVersion: smallint('pack_version'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -508,7 +523,7 @@ export const bookingReminders = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_booking_reminders_org_id_uuid').on(t.orgId, t.uuid),
-    check('chk_booking_reminders_kind', sql`${t.kind} in ('before', 'after')`),
+    check('chk_booking_reminders_kind', sql`${t.kind} in ('before', 'after', 'event')`),
     foreignKey({
       name: 'fk_booking_reminders_wa_template_id',
       columns: [t.orgId, t.waTemplateId],
@@ -632,6 +647,19 @@ export const appointmentReminderRuns = pgTable(
     lockedAt: timestamp('locked_at', { withTimezone: true }),
     sentAt: timestamp('sent_at', { withTimezone: true }),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    stepKind: text('step_kind'),
+    /** Every channel the step tried, in order: `{channel, status, reason}`. Codes only. */
+    attemptLog: jsonb('attempt_log')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    messageRef: uuid('message_ref'),
+    delivery: text('delivery').notNull().default('unknown'),
+    deliveredAt: timestamp('delivered_at', { withTimezone: true }),
+    deliveryCheckAt: timestamp('delivery_check_at', { withTimezone: true }),
+    /** The one-time reply tokens of a step with quick-reply buttons (nonce, used-at, outcome). Codes only. */
+    replyState: jsonb('reply_state')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
@@ -647,7 +675,7 @@ export const appointmentReminderRuns = pgTable(
       t.offsetMinutes,
       t.armedAt,
     ),
-    check('chk_appointment_reminder_runs_kind', sql`${t.kind} in ('before', 'after')`),
+    check('chk_appointment_reminder_runs_kind', sql`${t.kind} in ('before', 'after', 'event')`),
     check(
       'chk_appointment_reminder_runs_status',
       sql`${t.status} in ('pending', 'sending', 'held', 'sent', 'skipped', 'failed', 'cancelled')`,
@@ -665,7 +693,6 @@ export const appointmentReminderRuns = pgTable(
       columns: [t.orgId, t.reminderId],
       foreignColumns: [bookingReminders.orgId, bookingReminders.id],
     }).onDelete('set null'),
-    index('idx_appointment_reminder_runs_appointment').on(t.orgId, t.appointmentId),
   ],
 );
 

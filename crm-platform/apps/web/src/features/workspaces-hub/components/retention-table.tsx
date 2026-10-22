@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { OrgLifecycleResponse } from '@crm/contracts';
 import { Badge, Button, Card, Menu, MenuItem, cn } from '@crm/ui';
 import type { RetentionAccess } from '../lib/permissions';
@@ -31,10 +31,11 @@ export function retentionActions(
 
 function DateText({ iso, locale }: { iso: string | null; locale: string }) {
   const t = useTranslations('workspaces-hub.common');
+  const timeZone = useTimeZone();
   if (!iso) return <span className="text-muted-foreground">{t('none')}</span>;
   return (
     <time dateTime={iso}>
-      {new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso))}
+      {new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(new Date(iso))}
     </time>
   );
 }
@@ -43,8 +44,9 @@ function DateText({ iso, locale }: { iso: string | null; locale: string }) {
 export function ProtectionBadges({ row }: { row: OrgLifecycleResponse }) {
   const t = useTranslations('workspaces-hub.retention.badge');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const date = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso));
+    new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(new Date(iso));
   const exemptTitle = [
     row.retentionExemptReason,
     row.retentionExemptUntil

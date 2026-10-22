@@ -180,8 +180,8 @@ describe('source guards', () => {
       'modules/forms-builder/form-public.service.ts', // ETag
       'modules/platform-infrastructure/offsite-backup/sync.ts', // S3 Content-MD5
       'modules/localization-translation/translation-policy.ts', // cache key of a text
-      'modules/faq-knowledge/faq.rules.ts', // deterministic demo id
       'modules/storefront-builder/cli/demo-seeder.ts', // deterministic demo id
+      'modules/team-inbox-routing-sla/handoff.service.ts', // a uuid derived from a seed so a retry sends nothing twice; protects nothing
       'infra/providers/channel-email/graph-normalise.ts', // synthetic message id
       'infra/providers/channel-email/mime-parse.ts', // synthetic message id
       'infra/providers/auth-registration-security/avatar-download.ts', // ETag of an avatar
@@ -190,6 +190,9 @@ describe('source guards', () => {
       'infra/providers/chat-conversations/simulator.adapter.ts', // synthetic message id of the simulator
       'infra/providers/platform-payment-gateways/europe.drivers.ts', // the gateway's own request hash, fixed by its API
       'infra/providers/platform-payment-gateways/us.drivers.ts', // the gateway's own request hash, fixed by its API
+      'infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts', // short key for a recipient in a rate-limit counter, not a protection
+      'modules/team-inbox-routing-sla/routing-engine.service.ts', // a deterministic uuid (v5 shape) from a seed, not a protection
+      'modules/team-inbox-routing-sla/handoff.service.ts', // the same deterministic uuid (v5 shape) from a seed so a retry sends nothing twice, not a protection
     ]);
     const bad = ALL.filter(
       ({ p, s }) => /create(Hash|Hmac)\(\s*['"](md5|sha1)['"]/.test(s) && !ALLOWED.has(p),
@@ -206,6 +209,7 @@ describe('source guards', () => {
       'modules/platform-infrastructure/offsite-backup/s3-client.ts', // signs requests to the bucket
       'modules/forms-builder/form-key.ts', // a keyed hash of an IP, never compared with input
       'infra/providers/marketplace/pull.connector.ts', // signs outbound
+      'infra/net/s3-sigv4.ts', // AWS Signature V4 for requests we send to a bucket
       'infra/providers/platform-settings-branding-storage/object-storage.probe.ts', // signs requests to the bucket
     ]);
     const bad = ALL.filter(

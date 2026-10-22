@@ -165,7 +165,9 @@ describe('relative dates', () => {
 
   it('a bare day covers the whole day in UTC; an instant is exact', () => {
     const on = render(datePredicate(sqlCol(), 'on_or_before', '2026-10-03'));
-    expect(on.sql).toContain("AT TIME ZONE 'UTC'");
+    // the zone is a bound value now (the workspace's; UTC when none is given), not a literal in the statement
+    expect(on.sql).toContain('AT TIME ZONE');
+    expect(on.params).toContain('UTC');
     expect(on.sql).toContain("interval '1 day'");
     expect(on.sql).not.toContain('<=');
     const exact = render(datePredicate(sqlCol(), 'on_or_before', '2026-10-03T09:30:00Z'));

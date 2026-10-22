@@ -320,6 +320,7 @@
         "replyRate": "อัตราการตอบกลับ",
         "received": "ข้อความที่ได้รับ",
         "conversationsOpen": "การสนทนาที่เปิดอยู่",
+        "conversationsResolved": "การสนทนาที่แก้ไขแล้ว",
         "conversationsClosed": "การสนทนาที่ปิดแล้ว",
         "conversationsAssigned": "มอบหมายแล้ว",
         "conversationsUnassigned": "ยังไม่ได้มอบหมาย",

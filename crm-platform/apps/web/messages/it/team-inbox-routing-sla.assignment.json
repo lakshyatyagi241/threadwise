@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Assegnazione delle conversazioni",
+        "intro": "Quattro interruttori coprono la maggior parte degli spazi di lavoro: attivali e non dovrai mai creare una regola.",
+        "order": "L’ordine per una nuova conversazione: prima Responsabile del contatto e Agente abituale, poi le tue regole (se ne aggiungi), poi Tutti gli altri, infine la coda di attesa.",
+        "readOnly": "Puoi vedere questi interruttori ma non modificarli.",
+        "saved": "Salvato.",
+        "saveFailed": "Impossibile salvare la modifica.",
+        "loading": "Caricamento delle impostazioni di assegnazione",
+        "loadFailed": "Impossibile caricare le impostazioni di assegnazione.",
+        "retry": "Riprova",
+        "notInPlan": "Non incluso nel tuo piano",
+        "upgradeHint": "Incluso nel componente aggiuntivo Instradamento intelligente o in un piano superiore.",
+        "stepFirst": "Controllato per primo",
+        "stepMaster": "Interruttore principale",
+        "stepAfter": "Dopo una presa in carico",
+        "needsAuto": "Usato solo quando l’assegnazione automatica è attiva.",
+        "auto": {
+          "title": "Assegnazione automatica",
+          "body": "Le nuove conversazioni vengono distribuite in modo uniforme tra gli agenti che accettano conversazioni (non offline, occupati o in ferie). Quando tutti gli agenti hanno raggiunto il proprio limite di conversazioni, le nuove conversazioni restano in coda.",
+          "limitHint": "Imposta il limite di conversazioni di ogni agente nel suo profilo, in <link>Membri del team</link>.",
+          "off": "Disattivata: nulla viene assegnato automaticamente, né da una regola né dal responsabile del contatto. Le conversazioni restano in coda finché qualcuno le prende in carico o un flow indica una persona."
+        },
+        "sticky": {
+          "title": "Agente abituale",
+          "body": "Un contatto che torna viene riassegnato all’agente che ha gestito la sua ultima conversazione, purché sia ancora un membro attivo che può aprire l’Inbox (il suo stato online non viene controllato). Se il contatto ha un responsabile, si prova prima con lui.",
+          "withWindow": "Quanti giorni indietro conta l’ultimo agente si imposta in Avanzate."
+        },
+        "owner": {
+          "title": "Assegna la conversazione al responsabile del contatto",
+          "body": "Le conversazioni di un contatto già noto vanno prima al suo responsabile, così l’assistenza resta coerente e personale. Se il responsabile è in ferie, la conversazione passa al suo sostituto; se non c’è un responsabile, decide il passaggio successivo.",
+          "wins": "Se è attivo anche Agente abituale, il responsabile del contatto ha comunque la precedenza; l’ultimo agente è solo la seconda scelta."
+        },
+        "claim": {
+          "title": "Imposta l’agente come responsabile del contatto",
+          "body": "Quando un agente prende in carico una conversazione dalla coda di attesa e il contatto non ha ancora un responsabile, quell’agente diventa il responsabile del contatto. Un responsabile esistente non viene mai cambiato.",
+          "note": "Una conversazione assegnata a un agente da una regola non imposta il responsabile. Con Mantieni le conversazioni aperte con il responsabile (in Avanzate) lo fa anche un passaggio a un agente."
+        }
+      },
+      "advanced": {
+        "title": "Avanzate",
+        "hint": "Sincronizzazione delle conversazioni con il responsabile del contatto, finestra dell’agente abituale, richiesta di riassegnazione e avvisi sulla coda.",
+        "sync": {
+          "title": "Mantieni le conversazioni aperte con il responsabile",
+          "body": "Quando cambia il responsabile di un contatto, le sue conversazioni aperte assegnate automaticamente passano al nuovo responsabile. Una conversazione presa da una persona non viene mai spostata. Un passaggio che assegna una conversazione imposta anche il responsabile, se il contatto non ne ha uno.",
+          "needsOwner": "Attiva prima Assegna la conversazione al responsabile del contatto."
+        }
+      },
+      "rules": {
+        "title": "Serve più controllo? Aggiungi regole",
+        "intro": "Facoltativo. Le regole inviano conversazioni specifiche (un canale, parole nel messaggio, un nuovo contatto...) ad agenti o team specifici. Se i quattro interruttori bastano, non devi crearne nessuna.",
+        "locked": "Le regole fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore. Restano disponibili la coda d'attesa, la presa in carico e l'assegnazione manuale.",
+        "pipelineTitle": "Come viene assegnata una nuova conversazione",
+        "pipeline": {
+          "agent": "1. Responsabile del contatto e Agente abituale",
+          "rules": "2. Le tue regole, dall’alto",
+          "rulesBody": "La prima regola che corrisponde e trova un agente disponibile prende la conversazione.",
+          "everyone": "3. Tutti gli altri",
+          "everyoneBody": "Prende ciò che nessuna regola ha preso.",
+          "queue": "4. Coda di attesa",
+          "queueBody": "Se non si trova nessuno, la conversazione resta nella scheda In attesa finché un agente non la prende in carico.",
+          "agentBody": "Impostato dagli interruttori qui sopra."
+        },
+        "never": "Ciò che è già stato assegnato da un flow, da una persona o da un passaggio a un agente non viene mai modificato dalle regole.",
+        "add": "Aggiungi una regola",
+        "emptyTitle": "Nessuna regola",
+        "empty": "Va bene così. Decidono gli interruttori qui sopra e Tutti gli altri.",
+        "loading": "Caricamento delle regole",
+        "loadFailed": "Impossibile caricare le regole.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "tutti gli agenti",
+        "noAssign": "non assegna",
+        "drag": "Trascina {name} per cambiare l’ordine",
+        "neverRuns": "Non viene mai eseguita",
+        "neverMatches": "Non corrisponde mai",
+        "neverMatchesHint": "Non ha condizioni e non si applica a tutte le conversazioni. Modificala per risolvere.",
+        "shadowed": "{count, plural, one {La regola sotto} other {Le regole sotto}} “{blocker}” non può mai essere eseguita, a meno che nessuno in “{blocker}” sia disponibile: {names}. “{blocker}” si applica a tutte le conversazioni e interrompe qui il controllo. Spostala più in basso o disattiva “Fermati quando questa regola corrisponde” al suo interno.",
+        "reordered": "Ordine salvato."
+      },
+      "everyone": {
+        "title": "Tutti gli altri",
+        "pinned": "Fissata in fondo",
+        "body": "Prende ogni conversazione che nessuna regola ha preso. Scegli chi la riceve.",
+        "notSet": "Non ancora configurato: le conversazioni che nessuna regola prende restano in coda.",
+        "mode": "Cosa succede a queste conversazioni",
+        "evenly": "Distribuisci in modo uniforme tra tutti gli agenti",
+        "evenlyHint": "Round robin (a rotazione) o meno occupato tra tutti quelli che possono aprire l’Inbox e sono disponibili: non offline, occupati, in ferie o al limite di conversazioni.",
+        "listed": "Scegli agenti o team",
+        "listedNow": "Ora: {who}.",
+        "listedEdit": "Cambia gli agenti o i team",
+        "queue": "Lascia nella coda di attesa",
+        "queueHint": "Non viene assegnata a nessuno. La conversazione attende finché un agente non la prende in carico.",
+        "strategy": "Come distribuire",
+        "saved": "Salvato.",
+        "failed": "Impossibile salvare la modifica.",
+        "confirmTitle": "Sostituire gli agenti scelti?",
+        "confirmBody": "Ora Tutti gli altri assegna le conversazioni agli agenti o ai team che hai scelto. La distribuzione uniforme sostituisce questa scelta.",
+        "confirm": "Sostituisci",
+        "ruleName": "Tutti gli altri"
+      },
+      "where": {
+        "title": "Dove si applica",
+        "applied": "Si applica",
+        "applied1": "Quando arriva una nuova conversazione (e quando un cliente riapre una conversazione conclusa che nessuno gestisce).",
+        "applied2": "Quando un passaggio Passaggio a un operatore è impostato su “Regole di assegnazione”: viene controllato lo stesso elenco, usando il contatto, il canale e l’ultimo messaggio del cliente, poi Tutti gli altri, poi la coda di attesa.",
+        "not": "Non si applica",
+        "not1": "Una conversazione già assegnata da un flow, da una persona o da un passaggio a un agente.",
+        "not2": "Assegnare o prendere in carico a mano.",
+        "not3": "Un passaggio Passaggio a un operatore che indica una persona (le regole vengono ignorate) o un team (si usa il metodo del team)."
+      },
+      "try": {
+        "title": "Prova",
+        "body": "Scegli un contatto, un canale e un messaggio di esempio per vedere chi riceverebbe la conversazione e perché. Nulla viene assegnato, conteggiato o inviato.",
+        "contact": "Contatto (facoltativo)",
+        "noContact": "Nessun contatto scelto: l’esempio è un contatto nuovo di zecca. Le condizioni sui dettagli salvati del contatto non si possono verificare senza un contatto reale.",
+        "channel": "Canale",
+        "message": "Messaggio di esempio",
+        "messagePlaceholder": "es. Vorrei un rimborso",
+        "run": "Mostra cosa succederebbe",
+        "running": "Verifica in corso",
+        "failed": "Impossibile eseguire la prova.",
+        "result": "Risultato",
+        "outcome": {
+          "sticky": "Decide Mantieni con il suo agente: {who}.",
+          "rule": "Decide la regola “{rule}”: {who}.",
+          "everyone": "Decide Tutti gli altri: {who}.",
+          "queue": "Non si trova nessuno: la conversazione resta in coda.",
+          "off": "L’assegnazione automatica è disattivata: nulla viene assegnato automaticamente."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "un agente",
+          "team": "la coda di {name}",
+          "teamUnknown": "una coda del team"
+        },
+        "stepsTitle": "Passo dopo passo",
+        "step": {
+          "switch": "Assegnazione automatica",
+          "sticky": "Responsabile del contatto e Agente abituale",
+          "rule": "Regola “{name}”",
+          "everyone": "Tutti gli altri",
+          "queue": "Coda di attesa"
+        },
+        "why": {
+          "auto_assign_off": "L’interruttore è disattivato.",
+          "sticky_off": "Entrambi gli interruttori sono disattivati, quindi questo passaggio viene saltato.",
+          "no_contact": "Non c’è nessun contatto da cercare.",
+          "no_agent_found": "Nessun responsabile del contatto o ultimo agente ha potuto prenderla.",
+          "owner": "La prende il responsabile del contatto.",
+          "last_handler": "La prende l’agente dell’ultima conversazione del contatto.",
+          "conditions_failed": "Non corrisponde.",
+          "nobody_available": "Corrisponde, ma nessuno di quelli indicati è disponibile.",
+          "agent_picked": "Corrisponde e ha scelto un agente.",
+          "team_queue": "Corrisponde; nessuno era libero, quindi va nella coda del team.",
+          "no_assignment_in_rule": "Corrisponde; questa regola non assegna (esegue solo le altre azioni).",
+          "not_set": "Non c’è nessuna regola Tutti gli altri attiva, quindi le conversazioni che nessuno prende restano in coda."
+        },
+        "part": {
+          "contactKind": "Contatto nuovo o già noto",
+          "contact": "Dettagli del contatto",
+          "channel": "Canale",
+          "keywords": "Parole del messaggio",
+          "languages": "Lingua",
+          "businessHours": "Orario di lavoro"
+        },
+        "partOk": "corrisponde",
+        "partWhy": {
+          "no_saved_value": "questo contatto non ha questo dato salvato, quindi non corrisponde",
+          "no_contact": "non c’è nessun contatto",
+          "not_same_kind": "il contatto non è di quel tipo",
+          "channel_differs": "questo canale non è nell’elenco",
+          "no_word": "nessuna delle parole è nel messaggio",
+          "language_differs": "la lingua è diversa o sconosciuta",
+          "hours_differ": "l’ora non rientra in quella parte della giornata"
+        },
+        "contactLine": "Questo contatto è {kind}. Fase: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "nuovo",
+          "returning": "già noto"
+        },
+        "hasOwner": "Ha un responsabile.",
+        "noOwner": "Non ha un responsabile.",
+        "tags": "{count, plural, =0 {Nessun tag salvato.} one {# tag salvato.} other {# tag salvati.}}",
+        "skippedTitle": "Escluso",
+        "skip": {
+          "on_leave": "in ferie",
+          "offline_busy_or_at_capacity": "offline, occupato o al limite di conversazioni",
+          "cannot_read": "non può aprire l’Inbox",
+          "no_owner": "il contatto non ha un responsabile",
+          "no_previous_handler_in_window": "nessun agente precedente per questo contatto",
+          "not_an_active_member": "non è un membro attivo"
+        },
+        "outside": "Simula un orario fuori dall’orario di lavoro",
+        "inside": "Simula un orario durante l’orario di lavoro",
+        "clock": "Orario di lavoro: usa l’ora attuale",
+        "skipStep": {
+          "owner": "Responsabile del contatto",
+          "last_handler": "Ultimo agente"
+        }
+      },
+      "form": {
+        "whenSwitch": "Solo per le conversazioni che corrispondono a...",
+        "whenSwitchHint": "Disattivato: questa regola si applica a ogni nuova conversazione.",
+        "everyConversation": "Questa regola si applica a ogni nuova conversazione.",
+        "kept": "Le tue condizioni vengono conservate ma ignorate finché questa opzione è disattivata.",
+        "add": "Aggiungi una condizione",
+        "remove": "Rimuovi {name}",
+        "name": {
+          "contactKind": "Contatto nuovo o già noto",
+          "channel": "Canale",
+          "keywords": "Parole del messaggio",
+          "language": "Lingua del cliente",
+          "hours": "Orario di lavoro",
+          "contact": "Dettagli del contatto"
+        },
+        "kind": {
+          "title": "Contatto nuovo o già noto",
+          "hint": "Un contatto è già noto quando ha una conversazione precedente o è stato salvato più di 10 minuti prima di questa conversazione.",
+          "new": "Contatto nuovo (prima conversazione)",
+          "returning": "Contatto già noto"
+        },
+        "contactNote": "Corrisponde solo ai contatti che hanno già questo dato salvato. Un contatto nuovo di zecca arriva senza nulla di salvato tranne la fase “Nuovo”, quindi per i clienti alla prima volta usa Contatto nuovo o già noto.",
+        "everyoneElseNote": "Questa è la regola Tutti gli altri: prende le conversazioni che nessun’altra regola ha preso.",
+        "everyoneAgents": "Tutti quelli che possono aprire l’Inbox",
+        "everyoneAgentsHint": "Distribuisci le conversazioni tra tutti gli agenti disponibili invece di sceglierli.",
+        "fallbackConditions": "Questa regola ha condizioni salvate in precedenza, quindi prende solo le conversazioni che le soddisfano. Attiva l’interruttore qui sotto per rivederle, oppure rimuovile."
+      }
+    }
+  }
+}

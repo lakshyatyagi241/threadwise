@@ -75,6 +75,16 @@ export const templateSummarySchema = z.object({
   /** Meta's reason code (`INVALID_FORMAT`, `PROMOTIONAL`...), when it sent one; `NONE` is not reported. */
   rejectionReasonCode: z.string().nullable(),
   metaTemplateId: z.string().nullable(),
+  /**
+   * Why Meta does not let this template be edited right now: its review (`in_review`), or the edit limit of an approved template
+   * (`daily_limit` one per 24 hours, `monthly_limit` ten per 30 days, with `until` when it opens). Null when it can be edited.
+   */
+  editBlock: z
+    .object({
+      reason: z.enum(['in_review', 'daily_limit', 'monthly_limit']),
+      until: z.string().datetime().nullable(),
+    })
+    .nullable(),
   /** The WhatsApp number it is submitted through (uuid of the connection). */
   connectionId: uuidSchema.nullable(),
   pausedUntil: z.string().datetime().nullable(),
@@ -105,6 +115,8 @@ export const templateDetailSchema = templateSummarySchema.extend({
   /** The Meta create payload as it would be (or was) sent: what the review sees. */
   metaPayload: z.record(z.unknown()),
   lint: z.array(tplLintIssueSchema),
+  /** A link to the stored header file (fresh each read); null when none was stored (Meta's sample is `headerSampleUrl`). */
+  headerMediaUrl: z.string().nullable(),
 });
 export type TemplateDetail = z.infer<typeof templateDetailSchema>;
 
@@ -145,6 +157,8 @@ const templateFields = {
   /** Handle returned by `POST /v2/templates/media`; required for an image, video or document header. */
   headerHandle: z.string().max(2000).nullish(),
   headerSampleUrl: z.string().max(2000).nullish(),
+  /** Object-storage key from the upload (`mediaKey`); keeps the uploaded file so it can be shown again. */
+  headerMediaKey: z.string().max(512).nullish(),
   /** Required with a `location` attachment. */
   headerLocation: tplHeaderLocationSchema.nullish(),
   body: z.string().max(TPL_BODY_MAX),
@@ -231,10 +245,18 @@ export const syncTemplatesResultSchema = z.object({
 });
 export type SyncTemplatesResult = z.infer<typeof syncTemplatesResultSchema>;
 
+/** `POST /v2/templates/media` (multipart): the WhatsApp number the header sample is uploaded through, plus the `file` part. */
+export const uploadTemplateMediaInputSchema = z.object({ connectionId: uuidSchema });
+export type UploadTemplateMediaInput = z.infer<typeof uploadTemplateMediaInputSchema>;
+
 export const uploadTemplateMediaResultSchema = z.object({
   handle: z.string(),
   fileName: z.string(),
   mimeType: z.string(),
+  /** Object-storage key of the stored copy; sent back with the form so the template keeps the file to show again. */
+  mediaKey: z.string(),
+  /** A link to look at the stored copy now (the form's phone preview). */
+  previewUrl: z.string(),
 });
 export type UploadTemplateMediaResult = z.infer<typeof uploadTemplateMediaResultSchema>;
 

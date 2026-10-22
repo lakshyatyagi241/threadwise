@@ -104,7 +104,9 @@
       },
       "linkCompany": "Bir şirket",
       "outcome": "Sonuç",
-      "allOutcomes": "Tüm sonuçlar"
+      "allOutcomes": "Tüm sonuçlar",
+      "team": "Ekip",
+      "allTeams": "Tüm ekipler"
     },
     "table": {
       "scrollArea": "Görev tablosu",
@@ -296,7 +298,8 @@
       "retry": "Yeniden dene",
       "outcomeInvalid": "Bu sonuç kullanılamıyor. Listeden birini seçin.",
       "outcomeNameTaken": "Başka bir sonuç zaten bu ada sahip.",
-      "outcomeInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin."
+      "outcomeInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin.",
+      "completionDisabled": "Görevleri tamamlama, Satış Etkinlikleri’nde kapalı."
     },
     "toast": {
       "completed": "Görev tamamlandı.",
@@ -356,28 +359,13 @@
     "outcomes": {
       "title": "Görev sonuçları",
       "subtitle": "Bir görevi tamamlarken veya kaydederken seçilen sonuçlar; örneğin İlgileniyor ya da Mesaj bırakıldı.",
-      "listTitle": "Sonuçlar",
-      "listHint": "Gizlenen sonuçlar artık sunulmaz, ancak onu zaten taşıyan görevlerde kalır. Görevlerin kullandığı bir sonuç silinemez.",
       "loading": "Sonuçlar yükleniyor",
       "empty": "Henüz sonuç yok. İlkini aşağıdan ekleyin.",
-      "newName": "Yeni sonuç",
-      "newNamePlaceholder": "örn. Mesaj bırakıldı",
       "add": "Sonuç ekle",
-      "readOnly": "Bu listeyi görebilirsiniz ancak değiştirmek için izniniz olmalı.",
       "failed": "İşlem başarısız oldu.",
       "conflict": "Bu sonucu başka biri değiştirdi. Liste yeniden yüklendi. Tekrar deneyin.",
-      "added": "Sonuç eklendi.",
       "saved": "Sonuç kaydedildi.",
       "deleted": "Sonuç silindi.",
-      "moveUp": "{name} sonucunu yukarı taşı",
-      "moveDown": "{name} sonucunu aşağı taşı",
-      "nameLabel": "Sonuç adı",
-      "taskCount": "{count, plural, one {# görev} other {# görev}}",
-      "shownLabel": "Bir görev tamamlanırken {name} sonucunu sun",
-      "shown": "Gösteriliyor",
-      "hidden": "Gizli",
-      "deleteNamed": "{name} sonucunu sil",
-      "deleteInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin.",
       "deleteTitle": "{name} silinsin mi?",
       "deleteMessage": "Sonuç listeden kaldırılır. Hiçbir görev bunu kullanmıyor.",
       "delete": "Sil",

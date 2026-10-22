@@ -320,6 +320,7 @@
         "replyRate": "جواب کی شرح",
         "received": "موصول شدہ پیغامات",
         "conversationsOpen": "کھلی گفتگو",
+        "conversationsResolved": "حل شدہ گفتگو",
         "conversationsClosed": "بند گفتگو",
         "conversationsAssigned": "تفویض شدہ",
         "conversationsUnassigned": "غیر تفویض شدہ",

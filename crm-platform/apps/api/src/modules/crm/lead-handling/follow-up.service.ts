@@ -154,7 +154,7 @@ export class FollowUpService {
     const ctx = RequestContextStore.require();
     const ref = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, uuid);
     if (!ref) throw AppError.notFound('Contact', uuid);
-    await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref.ownerId);
+    await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref);
     return ref;
   }
 }

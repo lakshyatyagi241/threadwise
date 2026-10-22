@@ -47,7 +47,8 @@
       "sms_monthly": "每月短信数",
       "email_mailboxes": "邮箱数量",
       "email_monthly": "每月邮件数",
-      "storage_gb": "存储空间 (GB)"
+      "storage_gb": "存储空间 (GB)",
+      "teams": "团队"
     },
     "features": {
       "automation": "自动化",
@@ -59,10 +60,12 @@
       "remove_branding": "移除品牌标识",
       "sales_pipeline": "销售管道",
       "appointment_booking": "预约预订",
+      "appointment_confirm_buttons": "提醒按钮（确认 / 改期 / 取消）",
+      "appointment_rebook_steps": "再预约（召回）步骤",
       "chatbot_widgets": "聊天机器人小组件",
       "wa_storefront": "WhatsApp 目录",
       "inbox_sla": "SLA 策略",
-      "inbox_routing": "分配规则",
+      "inbox_routing": "智能路由: 自动分配和规则",
       "waba_calling": "WhatsApp 通话",
       "inbox_kanban": "看板视图",
       "team_performance": "团队绩效",
@@ -85,7 +88,10 @@
       "personal_history_full": "完整历史记录导入（个人 WhatsApp）",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AI 线索评分",
-      "record_assignment": "记录分配规则"
+      "record_assignment": "记录分配规则",
+      "team_hierarchy": "团队层级与经理",
+      "custom_roles": "自定义角色与范围",
+      "inbox_assignment_sticky": "智能路由: 联系人负责人和固定客服"
     },
     "limitGroups": {
       "messaging": "消息",
@@ -139,7 +145,8 @@
       "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
       "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
       "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
-      "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。"
+      "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。",
+      "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。"
     },
     "planAddons": {
       "title": "您的套餐可用的附加包",
@@ -246,6 +253,9 @@
         "buy": "购买附加包",
         "buyAgain": "再次购买",
         "active": "有效",
+        "included": "已包含在你的套餐中",
+        "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
+        "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
         "unlimitedBullet": "无限{label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "返回",
       "compare": "比较全部套餐",
       "appHint": "{feature}也在应用市场以应用形式出售。",
-      "appLink": "查看应用"
+      "appLink": "查看应用",
+      "addonHint": "你也可以通过{addon}附加组件将其加入当前套餐。",
+      "addonLink": "查看附加组件",
+      "addons": {
+        "smartRouting": "智能路由",
+        "teamsPermissions": "团队和权限"
+      }
+    },
+    "lock": {
+      "link": "查看套餐和附加组件"
     }
   }
 }

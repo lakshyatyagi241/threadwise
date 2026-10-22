@@ -414,6 +414,14 @@
           "label": "Janji temu tidak sinkron dengan Google Calendar",
           "hint": "Acara Google Calendar dari janji temu mendatang dihapus, dipindahkan, atau tamunya diubah. Janji temu tidak diubah; Anda yang memilih tindakan selanjutnya."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Janji temu dibatalkan oleh pelanggan",
+          "hint": "Pelanggan membatalkan janji temunya dengan mengetuk Batal pada pengingat. Pemilik janji temu diberi tahu."
+        },
+        "appointment_reminder_test": {
+          "label": "Hasil uji email pengingat",
+          "hint": "Hasil email uji yang Anda kirim untuk satu langkah pengingat: terkirim, atau tidak terkirim beserta alasannya."
+        },
         "snooze_wake": {
           "label": "Chat yang ditunda kembali",
           "hint": "Chat yang ditunda dibuka lagi pada waktunya dan diberikan kepada Anda atau tim Anda."
@@ -513,6 +521,11 @@
           "watch": "Anda akan melihat pop-up, dan angka lonceng serta judul tab berubah.",
           "notConnected": "Pembaruan langsung tidak terhubung di halaman ini, sehingga pop-up tidak bisa muncul di sini. Muat ulang halaman lalu coba lagi.",
           "off": "Tidak ada notifikasi yang dibuat di lonceng: lonceng dimatikan untuk \"Notifikasi uji\" di tabel di bawah, atau oleh pemilik ruang kerja Anda."
+        },
+        "prompt": {
+          "message": "Aktifkan notifikasi browser untuk mendapat pemberitahuan atas peristiwa yang Anda pilih, meski CRM tertutup.",
+          "enable": "Izinkan notifikasi",
+          "enabling": "Mengaktifkan..."
         }
       }
     },

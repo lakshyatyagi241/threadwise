@@ -127,6 +127,8 @@ export const tasks = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     createdBy: idColumn('created_by'),
     assigneeId: idColumn('assignee_id'),
+    /** The assignee's primary team when the assignee was set (BL-382). Stamped by a trigger, for reports and filters only, never access. */
+    owningTeamId: idColumn('owning_team_id'),
     title: text('title').notNull(),
     notes: text('notes'),
     priority: text('priority').notNull().default('medium'),
@@ -139,6 +141,8 @@ export const tasks = pgTable(
     source: text('source').notNull().default('manual'),
     /** BL-291: `follow_up` is a contact's next follow-up (at most one open per contact); every other task is `task`. */
     kind: text('kind').notNull().default('task'),
+    /** Sales activities settings: the task type (activity_type_options). The outcome is `outcomeId` above (task_outcomes). */
+    taskTypeId: idColumn('task_type_id'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),

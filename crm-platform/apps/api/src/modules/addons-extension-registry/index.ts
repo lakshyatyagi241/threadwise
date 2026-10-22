@@ -31,3 +31,4 @@ export {
 export { EngineConnectionService } from './engine-connections.service';
 export { mergeFeature, mergeLimit, type PlanFacts } from './entitlement-merge';
 export { addonLiveSql } from './addon-grants';
+export { isIncludedInPlan, readGrants } from './addon-grants';

@@ -269,6 +269,8 @@ for (const k of [
 // --- the steps -------------------------------------------------------------------------------------------------------------------
 
 export const FLOW_CONSTANTS: Record<string, unknown> = {
+  // a Waboo automation is a graph the Advanced builder edits; the Simple builder refuses branches and merges
+  builder: 'advanced',
   user_id: null,
   flow_file_path: null,
   trigger_device_id: null,
@@ -485,7 +487,6 @@ export const ASSISTANT_CONSTANTS: Record<string, unknown> = {
   tone: 'helpful',
   ai_provider: 'openai',
   reply_max_tokens: 400,
-  fallback_message: null,
   handoff_enabled: true,
   handoff_keyword: null,
   handoff_message: null,
@@ -513,6 +514,7 @@ export const widgetAssistants: HandlerSpec = {
         c('language', 'text'),
         c('ai_model', 'text'),
         c('temperature', 'numeric'),
+        c('fallback_message', 'text'),
         c('status', 'text'),
         c('created_at', 'timestamptz'),
         c('updated_at', 'timestamptz'),
@@ -547,7 +549,10 @@ export const widgetAssistants: HandlerSpec = {
       return { kind: w.verdict.kind, code: w.verdict.code, reason: w.verdict.reason };
     return {
       kind: 'rows',
-      rows: [{ table: 'ai_chat_assistants', sub: '', row: w.assistant }],
+      // the bot's "did not understand" reply lives on the agent now (the FAQ engine's faq_settings.fallback_message is retired)
+      rows: [
+        { table: 'ai_chat_assistants', sub: '', row: { ...w.assistant, fallback_message: w.fallback } },
+      ],
     };
   },
 };

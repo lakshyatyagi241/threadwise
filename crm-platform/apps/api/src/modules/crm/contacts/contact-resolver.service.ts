@@ -245,7 +245,10 @@ export class ContactResolverService implements ContactResolverPort {
     let tag = await this.tags.findByName(tx, orgId, name);
     if (!tag) {
       const cap = await this.entitlements.limit(orgId, 'tags');
-      if (cap > 0 && (await this.tags.countAll(tx, orgId)) >= cap) return;
+      if (cap > 0) {
+        await this.entitlements.lockLimit(tx, orgId, 'tags');
+        if ((await this.tags.countAll(tx, orgId)) >= cap) return;
+      }
       await this.tags.insertIfAbsent(tx, orgId, { name, color: TAG_COLOR });
       tag = await this.tags.findByName(tx, orgId, name);
     }

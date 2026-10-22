@@ -37,7 +37,8 @@
       "statusStage": "Bu durum farklı bir aşamaya ait. Kişinin aşamasına uygun bir durum seçin.",
       "stageScope": "Bir durum yalnızca yaşam döngüsü aşamalarınızdan biriyle sınırlandırılabilir.",
       "planLimit": "Planınızın {limit, plural, one {# kişi} other {# kişi}} sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya yer açmak için mevcut bir kişiyi silin.",
-      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez."
+      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Mesaj göndermek için önce kendinize atayın."
     },
     "list": {
       "title": "Kişi Merkezi",
@@ -130,6 +131,7 @@
       "colLeadScore": "Potansiyel müşteri puanı",
       "colLanguage": "Dil",
       "colCreatedOn": "Oluşturulma tarihi",
+      "colModifiedOn": "Değiştirilme tarihi",
       "pagination": "Sayfalama",
       "prevPage": "Önceki sayfa",
       "nextPage": "Sonraki sayfa",
@@ -282,6 +284,7 @@
       "shortStage": "Aşama",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Oluşturuldu",
+      "shortModified": "Değiştirildi",
       "firstRun": {
         "title": "İlk kişilerinizi ekleyin",
         "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",
@@ -290,7 +293,11 @@
         "importBody": "Bir elektronik tablo yükleyin ve sütunlarını kişi alanlarıyla eşleştirin.",
         "connect": "WhatsApp'ı bağla",
         "connectBody": "Numaranızı bağlayın; böylece kişiler yanıt verebilir ve onlara mesaj gönderebilirsiniz."
-      }
+      },
+      "teamLabel": "Ekip",
+      "teamFilter": "Ekibe göre filtrele",
+      "allTeams": "Tüm ekipler",
+      "teamFormer": "Eski ekip"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -442,7 +449,8 @@
       "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin.",
       "searchOptions": "Seçeneklerde ara",
       "searchOptionsFor": "{field} seçeneklerinde ara",
-      "noOptionsFound": "Aramanızla eşleşen seçenek yok."
+      "noOptionsFound": "Aramanızla eşleşen seçenek yok.",
+      "cascadeWaiting": "Seçenekleri görmek için önce {parent} seçin."
     },
     "tags": {
       "title": "Etiketler",
@@ -1081,7 +1089,8 @@
         "moveDown": "{name} öğesini aşağı taşı",
         "edit": "{name} öğesini düzenle",
         "deactivate": "{name} öğesini devre dışı bırak",
-        "reactivate": "Yeniden etkinleştir"
+        "reactivate": "Yeniden etkinleştir",
+        "dependsOn": "Seçenekler {field} alanına bağlı"
       },
       "toast": {
         "conflict": "Bunu başka biri değiştirdi. Liste yenilendi; tekrar deneyin.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Aşamaları yönet",
         "manageGroups": "Grupları yönet",
         "locked": "Sabit"
+      },
+      "cascade": {
+        "open": "Bağımlı alanlar",
+        "title": "Bağımlı alanlar",
+        "close": "Kapat",
+        "intro": "Bağımlı bir alan her zaman gösterilir. Seçenekleri üst özellikte yapılan seçime bağlıdır: üst özelliğin her seçeneği için, o seçeneğin izin verdiği bağımlı alan seçeneklerini işaretleyin.",
+        "empty": "Henüz bağımlı alan yok.",
+        "add": "Bağımlı alan ekle",
+        "needTwoChoiceFields": "Bağımlı alanlar için seçenek listesi olan (açılır liste, çoklu seçim veya radyo) en az iki özellik gerekir.",
+        "dependsOn": "{parent} alanına bağlı",
+        "editLabel": "{name} düzenle",
+        "removeLabel": "{name} alanını kaldır",
+        "parent": "Üst özellik",
+        "child": "Bağımlı özellik",
+        "pickParent": "Üst özelliği seçin",
+        "pickChild": "Bağımlı özelliği seçin",
+        "allowed": "{parent} alanının her seçeneği altında izin verilen {child} seçenekleri",
+        "noParentChoices": "Üst özelliğin henüz seçeneği yok.",
+        "noChildChoices": "Bağımlı özelliğin henüz seçeneği yok.",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "saved": "Bağımlı alan kaydedildi.",
+        "cycle": "Bu bağımlılık iki özelliğin birbirini beklemesine yol açardı.",
+        "removeTitle": "{name} bağımlı alanlardan kaldırılsın mı?",
+        "removeMessage": "Tüm seçenekleri yeniden gösterilir. Üst özellik altındaki seçenek eşleşmeleri unutulur; kişilerin sahip olduğu değerler korunur.",
+        "removeConfirm": "Kaldır",
+        "removed": "Bağımlı alan kaldırıldı.",
+        "removeFailed": "Bağımlı alan kaldırılamadı. Tekrar deneyin."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Seçilen sütunlar",
         "selectAll": "Tümünü seç",
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
-        "remove": "{name} öğesini kaldır"
+        "remove": "{name} öğesini kaldır",
+        "nameShort": "Görünüm adı en az {min} karakter olmalı.",
+        "nameLong": "Görünüm adı en fazla {max} karakter olabilir."
       },
       "presets": {
         "myContacts": "Kişilerim",

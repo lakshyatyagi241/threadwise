@@ -224,20 +224,20 @@
           "title": "Dowolny tekst",
           "body": "Wklej fragment pomocy lub zasady."
         },
-        "qa": {
-          "title": "Para pytanie-odpowiedź",
-          "body": "Jedno pytanie z jego wzorcową odpowiedzią."
-        },
         "file": {
           "title": "PDF, DOCX, TXT i inne",
           "body": "Prześlij plik. Tekst zostanie wyodrębniony automatycznie."
+        },
+        "faq": {
+          "title": "Dodaj FAQ",
+          "body": "Pytania i odpowiedzi, których chcesz udzielać."
         }
       },
       "panel": {
         "url": "Pobierz publiczny adres URL",
         "text": "Wklej zwykły tekst",
-        "qa": "Pojedyncze pytanie i odpowiedź",
-        "file": "Prześlij plik wiedzy"
+        "file": "Prześlij plik wiedzy",
+        "faq": "Dodaj pytania i odpowiedzi"
       },
       "label": "Etykieta",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Etykieta (np. Strona z cennikiem)",
           "text": "Etykieta (np. Podsumowanie zasad zwrotów)",
-          "qa": "Etykieta (np. Czas zwrotu)",
           "file": "Etykieta (np. Podręcznik produktu)"
         },
         "content": "Wklej dowolny tekst, który agent powinien znać…",
         "question": "Pytanie, np. Jak długo trwają zwroty?",
         "answer": "Odpowiedź, np. Zwroty są realizowane w ciągu 3 do 5 dni roboczych."
       },
-      "urlHint": "Odczytywane są tylko publiczne strony http i https. Strona jest pobierana w tle, więc wpis przez chwilę będzie miał stan Przetwarzanie.",
+      "urlHint": "Czytane są tylko publiczne strony http i https. Strona jest czytana w tle, więc może to chwilę potrwać.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV lub HTML, do 10 MB. Tekst jest wyodrębniany automatycznie.",
       "uploading": "Postęp przesyłania",
       "submit": {
         "url": "Pobierz i trenuj",
         "text": "Zapisz tekst",
-        "qa": "Zapisz parę",
-        "file": "Prześlij"
+        "file": "Prześlij",
+        "faq": "Zapisz FAQ"
       },
       "cancel": "Anuluj",
       "added": "Wiedza dodana.",
@@ -281,25 +280,6 @@
         "file_empty": "Ten plik jest pusty.",
         "tooLarge": "To za dużo tekstu na jedno wklejenie. Prześlij go zamiast tego jako plik."
       },
-      "col": {
-        "kind": "Rodzaj",
-        "label": "Etykieta",
-        "state": "Stan",
-        "actions": "Akcje"
-      },
-      "kind": {
-        "url": "url",
-        "text": "tekst",
-        "qa": "pytania i odpowiedzi",
-        "file": "plik"
-      },
-      "state": {
-        "ready": "gotowe",
-        "processing": "przetwarzanie",
-        "failed": "niepowodzenie"
-      },
-      "tokens": "około {count} tokenów",
-      "workspaceWide": "w całej przestrzeni roboczej",
       "loading": "Ładowanie wpisów",
       "loadError": "Nie udało się załadować wpisów.",
       "retry": "Spróbuj ponownie",
@@ -310,7 +290,14 @@
       "removeBody": "Agent przestanie go używać w nowych odpowiedziach. Starsze rozmowy pozostaną bez zmian.",
       "keep": "Zachowaj",
       "removed": "Usunięto.",
-      "removeFailed": "Usuwanie nie powiodło się."
+      "removeFailed": "Usuwanie nie powiodło się.",
+      "ownedNote": "Ta wiedza należy tylko do tego agenta. Żaden inny agent nie może jej używać.",
+      "faq": {
+        "addAnother": "Dodaj kolejne pytanie",
+        "removeRow": "Usuń to pytanie"
+      },
+      "reading": "Czytanie…",
+      "failed": "Nie udało się tego odczytać."
     }
   }
 }

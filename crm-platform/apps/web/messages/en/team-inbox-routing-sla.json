@@ -20,25 +20,13 @@
       "back": "Automation and AI",
       "title": "Conversation auto-assignment",
       "recordNote": "This assigns conversations. To give new {contacts}, companies and {deals} to sales owners, see <link>Record assignment rules</link>.",
-      "subtitle": "Give each new conversation to the right agent automatically. Rules are tried in order, from the top.",
+      "subtitle": "Choose who gets each new chat. The switches are enough for most workspaces; add rules only if you need more control.",
       "noAccess": "You do not have permission to view the conversation auto-assignment settings.",
-      "create": "Create rule",
       "limitUsed": "{used} of {limit} rules used",
       "limitReached": "You have used all {limit} rules your plan allows.",
-      "keepTitle": "Keep returning contacts with their agent",
-      "keepBody": "When a contact who already has an agent writes in again, the new conversation goes to that agent first: the contact's owner, or whoever handled their last conversation, as long as they are still an active agent. Otherwise the rules below decide.",
-      "settingsFailed": "Could not save the setting.",
-      "rulesTitle": "Rules",
-      "searchPlaceholder": "Search rules",
-      "searchLabel": "Search rules by name",
-      "howItWorks": "The first rule that matches and finds an available agent gets the conversation. The fallback rule is used when no other rule matched. If nothing matches, the conversation stays unassigned.",
       "loading": "Loading rules",
       "loadFailed": "The rules could not be loaded.",
       "retry": "Try again",
-      "noMatchTitle": "No rule found",
-      "noMatch": "No rule is named like \"{q}\".",
-      "emptyTitle": "No rules yet",
-      "empty": "Create a rule to give new conversations to your agents in turn, by keyword, channel, language or contact details.",
       "list": "Conversation auto-assignment rules in priority order",
       "loadMore": "Load more",
       "toggleFailed": "Could not switch the rule.",
@@ -58,9 +46,6 @@
       "moveUp": "Move {name} up",
       "moveDown": "Move {name} down",
       "priority": "Priority",
-      "active": "Active",
-      "off": "Off",
-      "fallback": "Fallback",
       "continues": "Keeps checking",
       "unavailable": "{count, plural, one {# agent unavailable} other {# agents unavailable}}",
       "activeFor": "Rule \"{name}\" is active",
@@ -74,7 +59,9 @@
         "languages": "Language: {list}",
         "inside": "Inside business hours",
         "outside": "Outside business hours",
-        "always": "Every conversation nobody matched"
+        "always": "Every new conversation",
+        "contactNew": "New contact",
+        "contactReturning": "Returning contact"
       },
       "strategy": {
         "round_robin": "Round robin",
@@ -122,7 +109,7 @@
         "name": "Enter a name for the rule.",
         "nameLong": "The name is too long.",
         "descriptionLong": "The description is too long.",
-        "conditions": "Add at least one condition, or mark this rule as the fallback.",
+        "conditions": "Add at least one condition, or turn off “Only for conversations that match”.",
         "contactIncomplete": "Finish or remove the contact conditions that are not complete.",
         "keywordsMany": "Use at most 20 words.",
         "targets": "Choose at least one agent or team.",
@@ -136,17 +123,14 @@
         "autoReplyLong": "The reply is too long (at most 1024 characters)."
       },
       "whenTitle": "When a new conversation arrives",
-      "whenHint": "Every condition you set must match. Leave a part empty to ignore it.",
+      "whenHint": "Every condition you add must match.",
       "contact": {
-        "title": "The contact matches",
-        "hint": "Tags, owner, lifecycle stage and other contact details, as in segments.",
         "loading": "Loading contact fields",
         "partial": "Some contact lists could not be loaded, so some choices may be missing.",
         "summary": "Conditions",
         "none": "No contact conditions."
       },
       "channel": {
-        "title": "Channel",
         "hint": "Only conversations that arrive on these channels. None ticked means any channel."
       },
       "keywords": {
@@ -164,7 +148,6 @@
       "hours": {
         "title": "Business hours",
         "hint": "Uses the business hours of your workspace.",
-        "any": "Any time",
         "inside": "Only inside business hours",
         "outside": "Only outside business hours"
       },
@@ -188,8 +171,6 @@
       "optionsTitle": "Options",
       "stopOnMatch": "Stop when this rule matches",
       "stopOnMatchHint": "On: later rules are not checked. Off: a later matching rule can take the conversation over.",
-      "fallback": "Fallback rule",
-      "fallbackHint": "Used when no other rule matched. There is only one fallback; choosing this one replaces the previous one.",
       "cancel": "Cancel",
       "save": "Save",
       "saveActivate": "Save and activate",

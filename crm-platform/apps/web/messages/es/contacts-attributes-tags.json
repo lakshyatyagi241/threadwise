@@ -37,7 +37,8 @@
       "statusStage": "Ese estado pertenece a otra etapa. Elige un estado que corresponda a la etapa del contacto.",
       "stageScope": "Un estado solo se puede limitar a una de tus etapas del ciclo de vida.",
       "planLimit": "Has alcanzado el límite de tu plan de {limit, plural, one {# contacto} other {# contactos}}. Mejora tu plan para añadir más, o elimina uno existente para liberar espacio.",
-      "legalHold": "Este registro está protegido y no se puede borrar por ahora."
+      "legalHold": "Este registro está protegido y no se puede borrar por ahora.",
+      "assignedToOther": "Este chat está asignado a otro agente. Asígnatelo primero para enviar un mensaje."
     },
     "list": {
       "title": "Centro de contactos",
@@ -130,6 +131,7 @@
       "colLeadScore": "Puntuación del lead",
       "colLanguage": "Idioma",
       "colCreatedOn": "Creado el",
+      "colModifiedOn": "Modificado el",
       "pagination": "Paginación",
       "prevPage": "Página anterior",
       "nextPage": "Página siguiente",
@@ -282,6 +284,7 @@
       "shortStage": "Etapa",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Creado",
+      "shortModified": "Modificado",
       "firstRun": {
         "title": "Añade tus primeros contactos",
         "message": "Trae a las personas con las que hablas. Los contactos se usan para mensajes, campañas, tareas y negocios.",
@@ -290,7 +293,11 @@
         "importBody": "Sube una hoja de cálculo y relaciona sus columnas con los campos de contacto.",
         "connect": "Conectar WhatsApp",
         "connectBody": "Conecta tu número para que los contactos puedan responder y tú puedas escribirles."
-      }
+      },
+      "teamLabel": "Equipo",
+      "teamFilter": "Filtrar por equipo",
+      "allTeams": "Todos los equipos",
+      "teamFormer": "Equipo anterior"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -442,7 +449,8 @@
       "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
       "searchOptions": "Buscar opciones",
       "searchOptionsFor": "Buscar entre las opciones de {field}",
-      "noOptionsFound": "Ninguna opción coincide con la búsqueda."
+      "noOptionsFound": "Ninguna opción coincide con la búsqueda.",
+      "cascadeWaiting": "Elija primero {parent} para ver las opciones."
     },
     "tags": {
       "title": "Etiquetas",
@@ -1081,7 +1089,8 @@
         "moveDown": "Bajar {name}",
         "edit": "Editar {name}",
         "deactivate": "Desactivar {name}",
-        "reactivate": "Reactivar"
+        "reactivate": "Reactivar",
+        "dependsOn": "Las opciones dependen de {field}"
       },
       "toast": {
         "conflict": "Otra persona cambió esto. La lista se actualizó; inténtalo de nuevo.",
@@ -1237,6 +1246,34 @@
         "manageStages": "Administrar etapas",
         "manageGroups": "Administrar grupos",
         "locked": "Fija"
+      },
+      "cascade": {
+        "open": "Campos dependientes",
+        "title": "Campos dependientes",
+        "close": "Cerrar",
+        "intro": "Un campo dependiente siempre se muestra. Sus opciones dependen de la opción elegida en su campo principal: para cada opción del principal, marque las opciones del campo dependiente que permite.",
+        "empty": "Todavía no hay campos dependientes.",
+        "add": "Añadir campo dependiente",
+        "needTwoChoiceFields": "Los campos dependientes necesitan al menos dos propiedades con una lista de opciones (desplegable, selección múltiple o radio).",
+        "dependsOn": "depende de {parent}",
+        "editLabel": "Editar {name}",
+        "removeLabel": "Quitar {name}",
+        "parent": "Campo principal",
+        "child": "Campo dependiente",
+        "pickParent": "Elija el campo principal",
+        "pickChild": "Elija el campo dependiente",
+        "allowed": "Opciones de {child} permitidas con cada opción de {parent}",
+        "noParentChoices": "El campo principal aún no tiene opciones.",
+        "noChildChoices": "El campo dependiente aún no tiene opciones.",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "saved": "Campo dependiente guardado.",
+        "cycle": "Esa dependencia haría que dos campos esperaran uno al otro.",
+        "removeTitle": "¿Quitar {name} de los campos dependientes?",
+        "removeMessage": "Volverá a mostrar todas sus opciones. Las opciones que tenía bajo el campo principal se olvidan; los valores que tienen los contactos se conservan.",
+        "removeConfirm": "Quitar",
+        "removed": "Campo dependiente quitado.",
+        "removeFailed": "No se pudo quitar el campo dependiente. Inténtelo de nuevo."
       }
     },
     "lost": {
@@ -1509,7 +1546,9 @@
         "selected": "Columnas seleccionadas",
         "selectAll": "Seleccionar todo",
         "reorder": "Arrastra para reordenar las columnas",
-        "remove": "Quitar {name}"
+        "remove": "Quitar {name}",
+        "nameShort": "El nombre de la vista debe tener al menos {min} caracteres.",
+        "nameLong": "El nombre de la vista puede tener como máximo {max} caracteres."
       },
       "presets": {
         "myContacts": "Mis contactos",

@@ -1,0 +1,33 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Traspaso y asignación",
+        "hint": "Se usa cuando un bot, un flujo o un compañero traspasa una conversación a este equipo.",
+        "method": "Cómo elegir a una persona",
+        "methodHint": "Manual: la conversación espera en la cola del equipo hasta que alguien la reclame. Round robin y Menos carga eligen un miembro por ti y forman parte del complemento Enrutamiento inteligente.",
+        "defaultAssignee": "Responsable predeterminado",
+        "defaultAssigneeHint": "Toma la conversación cuando nadie más puede. Elige a uno de los miembros del equipo.",
+        "noDefaultAssignee": "Nadie en particular",
+        "hours": "Horario de atención",
+        "hoursHint": "Desactivado significa siempre abierto. Fuera de este horario, la conversación sigue esperando en la cola y el contacto recibe el mensaje de fuera de horario del flujo.",
+        "timezone": "Zona horaria",
+        "dayFrom": "{day}, abre",
+        "dayTo": "{day}, cierra",
+        "hoursProblem": "Cada día abierto necesita una hora de apertura y una de cierre distintas.",
+        "day": {
+          "mon": "Lunes",
+          "tue": "Martes",
+          "wed": "Miércoles",
+          "thu": "Jueves",
+          "fri": "Viernes",
+          "sat": "Sábado",
+          "sun": "Domingo"
+        },
+        "methodLocked": "{method} (requiere Enrutamiento inteligente)",
+        "methodLockHint": "Los métodos automáticos forman parte del complemento Enrutamiento inteligente o de un plan superior.",
+        "defaultAssigneeLocked": "El responsable por defecto solo se usa con un método de equipo automático, que forma parte del complemento Enrutamiento inteligente o de un plan superior."
+      }
+    }
+  }
+}

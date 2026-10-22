@@ -155,7 +155,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-microsoft-mail',
       'settings-flow-builder',
       'ai-keys',
-      'faq-engine',
       'settings-privacy',
       'settings-analytics',
       'settings-custom',
@@ -173,6 +172,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
     icon: 'gear',
     tabs: [
       'system',
+      'deployments',
       'data-retention',
       'i18n-languages',
       'currencies',

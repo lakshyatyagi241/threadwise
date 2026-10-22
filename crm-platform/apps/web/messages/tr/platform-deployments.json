@@ -1,0 +1,112 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Dağıtımlar"
+    },
+    "eyebrow": "Operasyon",
+    "title": "Dağıtımlar",
+    "description": "Geta konsoluna yayımlanan her akış: kuyrukta ne bekliyor, şu an ne çalışıyor, ne başarısız oldu ve nedeni. Birkaç saniyede bir yenilenir.",
+    "updated": "Canlı. Güncellendi: {time}",
+    "stale": "Son yenileme başarısız oldu. Önceki dağıtımlar gösteriliyor.",
+    "stalledAlert": "{count} dağıtım {minutes} dakikadır değişmedi. İşçileri durmuş olabilir.",
+    "truncated": "İlk {limit} dağıtım gösteriliyor. Kalanlarını görmek için bir durum seçin.",
+    "kpi": {
+      "running": "Çalışıyor",
+      "queued": "Kuyrukta",
+      "failed": "Başarısız",
+      "live": "Canlı",
+      "stalled": "Takılı"
+    },
+    "filter": {
+      "label": "Duruma göre filtrele",
+      "all": "Tümü",
+      "running": "Çalışıyor",
+      "queued": "Kuyrukta",
+      "failed": "Başarısız",
+      "live": "Canlı"
+    },
+    "cols": {
+      "workspace": "Çalışma alanı",
+      "flow": "Akış",
+      "status": "Durum",
+      "step": "Adım",
+      "attempted": "Son deneme",
+      "updated": "Son değişiklik",
+      "error": "Hata"
+    },
+    "status": {
+      "running": "Çalışıyor",
+      "queued": "Kuyrukta",
+      "failed": "Başarısız",
+      "live": "Canlı"
+    },
+    "steps": {
+      "configuration_update": "Yapılandırma güncellemesi",
+      "publish_bot": "Botu yayımla"
+    },
+    "stalledBadge": "Takılı",
+    "version": "Sürüm {version}",
+    "notStarted": "Başlamadı",
+    "failedAt": "{step} adımında başarısız",
+    "noDetail": "Kaydedilmiş bir hata metni yok.",
+    "empty": {
+      "title": "Gösterilecek bir şey yok",
+      "all": "Henüz hiçbir akış Geta konsoluna yayımlanmadı.",
+      "running": "Şu anda çalışan bir yayımlama yok.",
+      "queued": "Kuyrukta bekleyen bir şey yok.",
+      "failed": "Başarısız bir yayımlama yok.",
+      "live": "Henüz Geta konsolunda canlı bir akış yok."
+    },
+    "tabs": {
+      "label": "Gösterilecekleri seçin",
+      "publishes": "Akış yayımları",
+      "geta": "Geta konsolu",
+      "releases": "Ürün sürümleri"
+    },
+    "publishes": {
+      "description": "Her akış yayımı: işçinin kuyruğa aldıkları, şu an işlediği ve hangi yayımların neden başarısız olduğu. Birkaç saniyede bir yenilenir.",
+      "stalledAlert": "{count} akış yayımı {minutes} dakikadır ilerlemedi. İşçi outbox'ı boşaltmayı durdurmuş olabilir.",
+      "truncated": "İlk {limit} yayım gösteriliyor. Kalanlarını görmek için bir durum seçin.",
+      "notProcessed": "Henüz değil",
+      "cols": {
+        "attempts": "Denemeler",
+        "queued": "Kuyruğa alındı",
+        "finished": "Tamamlandı"
+      },
+      "status": {
+        "done": "Tamamlandı"
+      },
+      "empty": {
+        "all": "Henüz hiçbir akış yayımlanmadı.",
+        "done": "Son 30 günde tamamlanan bir yayım yok."
+      }
+    },
+    "releases": {
+      "description": "desk.wabo.ai üzerinde çalışan şey: geçerli sürüm, devam eden bir sürüm ve her denemenin adımları ve hataları. Birkaç saniyede bir yenilenir.",
+      "liveLabel": "Şu an canlı",
+      "live": "Sürüm {tag}, {time} tarihinden beri canlı",
+      "noneLive": "Henüz canlıya geçen bir sürüm yok.",
+      "inProgress": "Bir sürüm devam ediyor",
+      "stalledAlert": "{count} sürüm denemesi {minutes} dakikadır ilerlemedi. Derleme ya da sürüm durmuş olabilir.",
+      "empty": "Henüz kayıtlı bir sürüm yok. Sürümler bir sonraki dağıtımdan itibaren burada görünür.",
+      "cols": {
+        "tag": "Etiket",
+        "changes": "Değişiklikler",
+        "state": "Durum",
+        "step": "Adım",
+        "started": "Başlangıç",
+        "finished": "Bitiş",
+        "error": "Hata"
+      },
+      "state": {
+        "building": "Derleniyor",
+        "shipping": "Gönderiliyor",
+        "releasing": "Yayımlanıyor",
+        "ok": "Canlı",
+        "failed": "Başarısız",
+        "rolled_back": "Geri alındı"
+      },
+      "by": "{author} tarafından"
+    }
+  }
+}

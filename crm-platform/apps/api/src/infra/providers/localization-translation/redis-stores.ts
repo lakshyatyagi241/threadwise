@@ -1,5 +1,6 @@
 import type { Redis } from 'ioredis';
 import type { BreakerStore } from './translation-driver.port';
+import { CappedMap } from '../../../common/cache/capped-map';
 
 export const TRANSLATION_CACHE = Symbol('TRANSLATION_CACHE');
 export const TRANSLATION_BREAKER = Symbol('TRANSLATION_BREAKER');
@@ -47,7 +48,7 @@ export class RedisTranslationStores implements TranslationCache, BreakerStore {
 
 /** In-process stores for tests and for running without Redis. */
 export class MemoryTranslationStores implements TranslationCache, BreakerStore {
-  private readonly data = new Map<string, { value: string; expires: number }>();
+  private readonly data = new CappedMap<string, { value: string; expires: number }>(10000);
 
   async get(key: string): Promise<string | null> {
     const hit = this.data.get(key);

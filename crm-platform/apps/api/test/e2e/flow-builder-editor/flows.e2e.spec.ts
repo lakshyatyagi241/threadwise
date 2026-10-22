@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { pngOfSize } from '../../support/images';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { FLOW_AI_PORT } from '../../../src/infra/providers/flow-builder-editor/flow-ai.port';
 import type { HttpFlowAiAdapter } from '../../../src/infra/providers/flow-builder-editor/http-flow-ai.adapter';
@@ -1455,10 +1456,7 @@ describe('media upload (TW-FLB-027)', () => {
   beforeAll(async () => {
     t = await api.signup('flbmed');
   });
-  const PNG = Buffer.from(
-    '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c6360000002000001e221bc330000000049454e44ae426082',
-    'hex',
-  );
+  const PNG = pngOfSize();
 
   it('TW-FLB-027 #1: a PNG uploaded as an image answers an absolute public URL that serves the same bytes with safe headers', async () => {
     const res = await api

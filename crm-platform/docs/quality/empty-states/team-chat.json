@@ -1,0 +1,47 @@
+{
+  "feature": "team-chat",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-team-chat-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-chat/components/dialogs.tsx",
+        "apps/web/src/features/team-chat/components/members-rail.tsx",
+        "apps/web/src/features/team-chat/components/message-stream.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-team-chat-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-chat/components/side-panel.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-team-chat-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-chat/components/dialogs.tsx",
+        "apps/web/src/features/team-chat/components/message-stream.tsx",
+        "apps/web/src/features/team-chat/components/side-panel.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

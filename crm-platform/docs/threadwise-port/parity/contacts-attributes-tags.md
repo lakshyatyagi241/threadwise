@@ -646,3 +646,58 @@ A live WhatsApp or e-mail send through a real provider (the dispatch hook is cov
 | --- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | L09 | Settings | Nothing            | Settings > Automation and AI > Duplicate leads: a lead whose phone or e-mail matches a contact is merged (default, today's behaviour) or becomes a separate contact; optional timeline note on merge (off by default).         |
 | L10 | Identity | n/a                | A separate contact never takes the shared identity: it stays with the first contact so messages keep routing there; the new contact says on its timeline that it may be a duplicate of which contact, and can be merged later. |
+
+### Contact detail: values imported from another system (Sheet issues #3 and #4)
+
+Not in the reference platform (it has no imported properties), so this was run on our app only
+(`adhoc-contact-detail-imported-values.twin.mjs`, 5 scenarios, no console, page or 5xx errors).
+
+| Case                                                                     | Ours                                                    |
+| ------------------------------------------------------------------------ | ------------------------------------------------------- |
+| An ISO timestamp in a property, or in an imported value with no property | Shown as a date in the workspace's time zone and format |
+| `last_chat_assigned_to` holding an agent id                              | The agent's name; upper-case ids work                   |
+| That id when no active agent matches                                     | The stored id, unchanged                                |
+| A UUID under any other key                                               | Unchanged                                               |
+
+## Dependent fields (Waboo cascades, migrated; owner request 2026-10-21): not in the reference platform
+
+Reference has no dependent fields, so there is no Reference twin for this part. It came with the Waboo migration (Rhythm Watches showed
+dependent fields missing in Settings). The contact-form and properties-screen parts it touches are covered by the existing twins.
+
+### What it does
+
+- Settings, Contact properties (and Company properties): **Dependent fields** opens one dialog. Pick the parent property and the dependent
+  property, then tick the choices each parent choice allows. It stores a cascade link and option pairs.
+- Contact form and company form: a dependent property always shows, lists only the choices its parent allows, offers none until the parent
+  has a choice (the hint names the parent), and clears a choice the parent no longer allows.
+- A cascade link is no "show only when" rule. The server's required-property check and the form both treat it as no condition, so a
+  required dependent property is required whenever it shows.
+- Migration: no code change. The loader already wrote Waboo's dependent pair as a cascade link (`field_dependencies` with no option and no
+  value, `transform/fields.ts` `fieldDeps`) and its option map as option pairs (`fieldOptionDeps`). Only the link's meaning changed, so the
+  rows that were already loaded now cascade instead of hiding the dependent field. A pair whose either side is a built-in property is still
+  excluded, as before. Re-running the Rhythm Watches load is not needed for the fix, but its dependent fields only reappear as cascades once
+  this code is deployed.
+
+### Intended differences (owner approval pending)
+
+| Difference from Waboo                                                                    | Reason                                                                        | Decision needed                                 |
+| ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------- |
+| The API does not reject a cascade value that breaks the cascade on write                 | Waboo does not check it either (its dropdown check has no option check)       | Enforce on write (recommended) or keep as Waboo |
+| Waboo's rule that a write touching part of a dependency group is rejected is not ported  | Not in the Settings or form flows; a separate API rule                        | Port or drop                                    |
+| Bulk update and the import do not narrow a dependent choice                              | Each bulk property is applied to many contacts at once; no parent per contact | Design a per-contact rule                       |
+| A cascade parent or child whose choices are not all loaded (a long list) is not narrowed | The form only has the choices sent with the list                              | Lazy-list support for cascades                  |
+
+### Checks run (2026-10-21)
+
+- API e2e `cascade-dependencies.e2e.spec.ts`: 7 of 7 pass (replace, list, pair validation, cycle 409, required rule, remove cascade, remove link).
+- API e2e `contact-stages-and-required.e2e.spec.ts`: 15 of 15 pass (required rules with conditions, unchanged).
+- Web unit `cascade.test.ts`, `cascade-dialog.dom.test.tsx`: pass.
+- i18n check, ESLint, typecheck (API, web), architecture rule check: pass.
+- Security repo audits: tenancy audit reports findings in modules this change does not touch (see the audit report); authz passes;
+  auth audit is conditional on controls outside this change; dependency audit passes (two accepted highs).
+
+### Not verified
+
+- The Reference twin run: Reference was not running in this session, so the parity stamp is not recorded.
+- A browser run of the dialog and the contact form against a live stack.
+- Waboo data for Rhythm Watches: the migration output was not re-run against the real dump (not in this repo).

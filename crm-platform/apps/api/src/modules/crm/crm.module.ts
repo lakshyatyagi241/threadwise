@@ -53,6 +53,13 @@ import { ContactMessageStatsService } from './contact-message-stats/contact-mess
 import { ContactFilesController } from './contact-files/contact-files.controller';
 import { ContactFilesRepository } from './contact-files/contact-files.repository';
 import { ContactFilesService } from './contact-files/contact-files.service';
+import {
+  ActivityTypesController,
+  MeetingResultsController,
+} from './activity-types/activity-types.controller';
+import { ActivityTypesRepository } from './activity-types/activity-types.repository';
+import { ActivityTypesService } from './activity-types/activity-types.service';
+import { MeetingResultsService } from './activity-types/meeting-results.service';
 import { ContactMeetingsController } from './contact-meetings/contact-meetings.controller';
 import { ContactMeetingConferencingRepository } from './contact-meetings/contact-meeting-conferencing.repository';
 import { ContactMeetingsRepository } from './contact-meetings/contact-meetings.repository';
@@ -238,6 +245,9 @@ import { TagsService } from './tags/tags.service';
     ContactActivitiesController,
     ContactMessageStatsController,
     ContactMeetingsController,
+    // Settings > Sales Activities, and the outcome of a completed meeting.
+    ActivityTypesController,
+    MeetingResultsController,
     // Companies: `companies/stats`, `industries`, `select-data` and `bulk/delete` are literal paths declared before `companies/:id`
     // inside the controller.
     CompaniesController,
@@ -333,6 +343,9 @@ import { TagsService } from './tags/tags.service';
     ContactMessageStatsRepository,
     ContactMeetingsService,
     ContactMeetingsRepository,
+    ActivityTypesService,
+    ActivityTypesRepository,
+    MeetingResultsService,
     ContactMeetingConferencingRepository,
     CompaniesRepository,
     CompaniesService,
@@ -442,6 +455,8 @@ import { TagsService } from './tags/tags.service';
     DealsService,
     PipelinesService,
     TasksService,
+    // Call logging reads the Phone activity's outcomes; lead handling reads the follow-up task type.
+    ActivityTypesService,
     SalesDocsService,
     SalesDocsRepository,
     InvoicesService,

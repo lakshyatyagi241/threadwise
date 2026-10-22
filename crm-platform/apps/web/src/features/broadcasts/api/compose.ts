@@ -10,7 +10,7 @@ import {
   tagResponseSchema,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
-import { KEYS } from './broadcasts';
+import { KEYS } from '@/features/campaigns/earlier/api/broadcasts';
 
 /** Reference's picker listed the 500 newest contacts; a group or a tag reaches everyone else. */
 export const AUDIENCE_LIMIT = 500;

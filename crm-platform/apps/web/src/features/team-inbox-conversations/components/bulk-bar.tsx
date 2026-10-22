@@ -26,7 +26,7 @@ export interface BulkBarProps {
     tag: boolean;
   };
   meId: string;
-  onSelectAll: () => void;
+  onToggleAll: () => void;
   onClear: () => void;
   onRun: (action: BulkConversationAction) => void;
 }
@@ -38,6 +38,7 @@ export interface BulkBarProps {
  */
 export function BulkBar(props: BulkBarProps) {
   const t = useTranslations('team-inbox-conversations.bulk');
+  const ta = useTranslations('team-inbox-conversations.panel.assignee');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const tp = useTranslations('team-inbox-conversations.list');
@@ -63,8 +64,9 @@ export function BulkBar(props: BulkBarProps) {
         </p>
         <button
           type="button"
-          onClick={props.onSelectAll}
-          disabled={props.allInViewSelected || props.busy}
+          onClick={props.onToggleAll}
+          aria-pressed={props.allInViewSelected}
+          disabled={props.busy}
           data-testid="inbox-bulk-all"
           className="text-xs text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary disabled:text-muted-foreground disabled:no-underline"
         >
@@ -156,7 +158,7 @@ export function BulkBar(props: BulkBarProps) {
                 .filter((u) => !u.isMe)
                 .map((u) => (
                   <option key={u.id} value={`u:${u.id}`}>
-                    {u.name ?? u.email}
+                    {u.name ?? u.email} · {ta(`availability.${u.availability}`)}
                     {u.onLeave
                       ? ` · ${u.onLeave.until ? t('onLeaveUntil', { date: leaveDayText(u.onLeave.until, locale) }) : t('onLeave')}`
                       : ''}
@@ -215,7 +217,7 @@ export function BulkBar(props: BulkBarProps) {
             ))}
           </Select>
         )}
-        {can.tag && (tags.data?.data.length ?? 0) > 0 && (
+        {can.tag && (
           <Select
             aria-label={t('tag')}
             data-testid="inbox-bulk-tag"

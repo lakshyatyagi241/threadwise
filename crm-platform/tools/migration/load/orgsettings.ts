@@ -172,6 +172,8 @@ export function outcomesOf(list: WabooSettings['taskOutcomes']): OutcomeRow[] {
 
 export interface SettingsPlan {
   taskOutcomes: OutcomeRow[];
+  /** the source's task-outcome list was read (it may be empty): only then are the defaults a new workspace is seeded with removed */
+  taskOutcomesKnown: boolean;
   lastLogins: Array<{ userId: string; at: string }>;
   pipelines: Array<{ name: string; stages: StageRow[] }>;
   lostReasons: string[];
@@ -205,6 +207,7 @@ export function planSettings(
     consent: consentOf(settings?.consent),
     autoAssign: autoAssignment === true,
     taskOutcomes: outcomesOf(settings?.taskOutcomes),
+    taskOutcomesKnown: Array.isArray(settings?.taskOutcomes),
     lastLogins,
   };
 }
@@ -297,10 +300,19 @@ export async function applySettings(
       res.lostReasons += r.rows.length;
     }
 
+    if (plan.taskOutcomesKnown) {
+      // a new workspace is seeded with default outcomes (Interested ... Not interested ...): the Waboo list replaces them, but an outcome a task uses stays
+      await tx.execute(sql`
+        DELETE FROM task_outcomes o
+        WHERE o.org_id = ${orgId}
+          AND lower(btrim(o.name)) NOT IN (SELECT lower(btrim(x)) FROM jsonb_array_elements_text(${JSON.stringify(plan.taskOutcomes.map((t) => t.name))}::jsonb) AS x)
+          AND NOT EXISTS (SELECT 1 FROM tasks t WHERE t.org_id = o.org_id AND t.outcome_id = o.id)`);
+    }
     for (const o of plan.taskOutcomes) {
       const r = await tx.execute(sql`
         INSERT INTO task_outcomes (org_id, name, sort_order, is_active) VALUES (${orgId}, ${o.name}, ${o.sortOrder}, ${o.isActive})
-        ON CONFLICT (org_id, lower(btrim(name))) DO NOTHING RETURNING 1`);
+        ON CONFLICT (org_id, lower(btrim(name))) DO UPDATE SET name = EXCLUDED.name, sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active
+        RETURNING 1`);
       res.taskOutcomes += r.rows.length;
     }
 
@@ -359,8 +371,8 @@ export async function applySettings(
             },
           ];
           await tx.execute(sql`
-            INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, sort)
-            VALUES (${orgId}, 'Auto assignment (from Waboo)', ${JSON.stringify(conditions)}::jsonb, ${JSON.stringify(actions)}::jsonb, true, true, true, 1)`);
+            INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, sort, applies_to_all)
+            VALUES (${orgId}, 'Auto assignment (from Waboo)', ${JSON.stringify(conditions)}::jsonb, ${JSON.stringify(actions)}::jsonb, true, true, true, 1, true)`);
           res.routingRule = 'created';
         }
       }

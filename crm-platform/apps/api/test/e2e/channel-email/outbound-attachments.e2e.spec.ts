@@ -25,6 +25,7 @@ import { until } from '../chat-conversations/pipeline-support';
 import type { Tenant } from '../contacts-attributes-tags/support';
 import { expectMimeCarries } from '../../unit/channel-email/driver-send-contract';
 import { connectMailbox, mailWorkspace, outcomeOf, startMailRig, type MailRig } from './support';
+import { gifOfSize } from '../../support/images';
 
 /**
  * Composer uploads, signatures and the rich body (TW-MAIL-027), end to end: a file is staged, named in a reply, goes out through the Gmail
@@ -419,7 +420,7 @@ describe('TW-MAIL-027: caps and filters', () => {
   });
 
   it('the mime deny list refuses a type after its content is known, and removes what it stored', async () => {
-    const gif = Buffer.concat([Buffer.from('GIF89a'), Buffer.alloc(40)]);
+    const gif = gifOfSize(6 + 40);
     const res = await upload(gif, 'anim.gif');
     expect(res.status).toBe(422);
   });

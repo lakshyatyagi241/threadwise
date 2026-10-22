@@ -1,11 +1,18 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ChannelError } from '../../../infra/providers/chat-conversations';
 import { ChatMediaStore, mimeForKey } from '../../../infra/providers/chat-conversations/media';
-import { SafeFetch } from '../../../infra/providers/node-bridge-runtime/safe-fetch';
+import {
+  FLOW_MEDIA_STORE,
+  type FlowMediaStore,
+} from '../../../infra/providers/flow-builder-editor/flow-media.port';
+import {
+  SafeFetch,
+  type FetchedMedia,
+} from '../../../infra/providers/node-bridge-runtime/safe-fetch';
 import {
   CONVERSATIONS_FACADE,
   ChannelDispatcher,
@@ -60,6 +67,7 @@ export class FlowSender {
     private readonly media: ChatMediaStore,
     private readonly consentGate: ConsentGate,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    @Optional() @Inject(FLOW_MEDIA_STORE) private readonly ownMedia?: FlowMediaStore,
   ) {}
 
   async send(run: RunState, message: OutboundMessage, index: number): Promise<SendOutcome> {
@@ -210,8 +218,35 @@ export class FlowSender {
   }
 
   private envelopeOf(run: RunState, r: Rendered, clientReference: string): Promise<unknown> {
-    return envelopeFor(this.fetcher, this.media, run.orgId, run.peerKey, r, clientReference);
+    return envelopeFor(
+      this.fetcher,
+      this.media,
+      run.orgId,
+      run.peerKey,
+      r,
+      clientReference,
+      this.ownMedia,
+    );
   }
+}
+
+const OWN_MEDIA_PATH =
+  /\/v2\/flow-media\/([A-Za-z0-9_-]{1,64})\/(\d{6,}_[a-f0-9]{24}\.([a-z0-9]{1,5}))(?:[?#].*)?$/;
+
+/**
+ * A file the flow builder uploaded (its link is `<this server>/v2/flow-media/<org>/<name>`), read straight from the store the upload
+ * went to; null for any other link, or when the file is not there (the caller then fetches the link like any other).
+ */
+export async function readOwnMedia(
+  store: FlowMediaStore | undefined,
+  url: string,
+): Promise<FetchedMedia | null> {
+  const m = store ? OWN_MEDIA_PATH.exec(url) : null;
+  if (!store || !m) return null;
+  const file = await store.get(m[1]!, m[2]!);
+  return file
+    ? { buffer: file.data, mimetype: file.mime, extension: `.${m[3]}`, finalUrl: url }
+    : null;
 }
 
 /**
@@ -225,6 +260,7 @@ export async function envelopeFor(
   to: string,
   r: Rendered,
   clientReference: string,
+  own?: FlowMediaStore,
 ): Promise<unknown> {
   const common = { to, clientReference };
   switch (r.kind) {
@@ -252,7 +288,9 @@ export async function envelopeFor(
           },
         };
       }
-      const got = await fetcher.fetchMedia(r.url);
+      // A file the builder uploaded is read from where it was stored: its link points at this very server, which the guarded fetcher
+      // rightly refuses (an internal host) or cannot reach through the website's address.
+      const got = (await readOwnMedia(own, r.url)) ?? (await fetcher.fetchMedia(r.url));
       const filename = r.filename || `file${got.extension}`;
       const stored = await media.store({
         orgId,

@@ -48,7 +48,8 @@ import { CONFERENCING_AUDIT_MODULE, ConferencingTokens } from './conferencing-to
 @Injectable()
 export class ConferencingConnectService {
   private readonly logger = new Logger(ConferencingConnectService.name);
-  private readonly key: Buffer;
+  private readonly credentialsKey: string;
+  private stateKeyPromise?: Promise<Buffer>;
   private readonly webUrl: string;
 
   constructor(
@@ -61,8 +62,13 @@ export class ConferencingConnectService {
     private readonly rbac: RbacService,
     env: ConfigService<Env, true>,
   ) {
-    this.key = deriveStateKey(env.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }));
+    this.credentialsKey = env.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true });
     this.webUrl = env.get('WEB_APP_URL', { infer: true }).replace(/\/$/, '');
+  }
+
+  /** Derived once, on the first request that needs it: the HKDF runs on the libuv pool, not on the event loop. */
+  private stateKey(): Promise<Buffer> {
+    return (this.stateKeyPromise ??= deriveStateKey(this.credentialsKey));
   }
 
   // --- staff -----------------------------------------------------------------------------------------------------------
@@ -72,14 +78,16 @@ export class ConferencingConnectService {
     const ctx = RequestContextStore.require();
     if (ctx.userId === null) throw AppError.unauthenticated();
     const slugs = CONNECTED_VIDEO_PROVIDERS.map((p) => CONFERENCING_APP_SLUG[p]);
-    const { installed, mine } = await this.db.tx(async (tx) => ({
+    const { installed, published, mine } = await this.db.tx(async (tx) => ({
       installed: await this.repo.installedApps(tx, ctx.orgId, slugs),
+      published: await this.repo.publishedApps(tx, slugs),
       mine: await this.repo.listForUser(tx, ctx.orgId, ctx.userId!),
     }));
     const data: ConferencingConnection[] = [];
     for (const provider of CONNECTED_VIDEO_PROVIDERS) {
       const conn = mine.find((c) => c.provider === provider);
-      data.push(await this.card(provider, installed.has(CONFERENCING_APP_SLUG[provider]), conn));
+      const slug = CONFERENCING_APP_SLUG[provider];
+      data.push(await this.card(provider, installed.has(slug), published.has(slug), conn));
     }
     return { data, canInstall: this.canInstall() };
   }
@@ -87,12 +95,17 @@ export class ConferencingConnectService {
   private async card(
     provider: ConnectedVideoProvider,
     installed: boolean,
+    published: boolean,
     conn: ConferencingConnectionRow | undefined,
   ): Promise<ConferencingConnection> {
     const configured = await this.tokens.adapter(provider).configured();
     const covers = provider !== 'teams' || !conn || teamsGrantCovers(conn.scopes);
+    const installable = published && configured;
     const status = !installed
-      ? 'not_installed'
+      ? // Not installed: installable now, or not available yet (a draft listing, or a provider the operator has not set up).
+        installable
+        ? 'not_installed'
+        : 'not_available'
       : !configured
         ? 'unavailable'
         : !conn
@@ -103,6 +116,11 @@ export class ConferencingConnectService {
     return {
       provider,
       status,
+      listingPublished: published,
+      configured,
+      // A deep link to the listing page: the Integrations list may not show it, and a person must not land on an empty list.
+      listingPath:
+        !installed && installable ? `/marketplace/app/${CONFERENCING_APP_SLUG[provider]}` : null,
       account: conn?.accountEmail ?? null,
       connectedAt: conn?.connectedAt.toISOString() ?? null,
       lastErrorCode: conn?.lastErrorCode ?? null,
@@ -134,7 +152,7 @@ export class ConferencingConnectService {
       Date.now(),
     );
     return {
-      url: await adapter.authorizeUrl(signState(state, this.key)),
+      url: await adapter.authorizeUrl(signState(state, await this.stateKey())),
       expiresInSeconds: STATE_TTL_SECONDS,
     };
   }
@@ -175,7 +193,7 @@ export class ConferencingConnectService {
     provider: ConnectedVideoProvider,
     query: ConferencingCallbackQuery,
   ): Promise<string> {
-    const checked = verifyState(query.state ?? '', this.key, Date.now());
+    const checked = verifyState(query.state ?? '', await this.stateKey(), Date.now());
     if (!checked.ok || checked.value.provider !== provider) {
       this.logger.warn(
         { provider, reason: checked.ok ? 'provider' : checked.reason },
@@ -201,7 +219,7 @@ export class ConferencingConnectService {
         sealedCode: this.crypto.encrypt(query.code),
         expiresAt: Date.now() + TICKET_TTL_SECONDS * 1000,
       },
-      this.key,
+      await this.stateKey(),
     );
     return returnUrl(this.webUrl, returnTo, {
       video: CONFERENCING_CONFIRM_OUTCOME,
@@ -220,7 +238,7 @@ export class ConferencingConnectService {
   ): Promise<ConferencingConnection> {
     const ctx = RequestContextStore.require();
     if (ctx.userId === null) throw AppError.unauthenticated();
-    const checked = verifyTicket(input.ticket, this.key, Date.now());
+    const checked = verifyTicket(input.ticket, await this.stateKey(), Date.now());
     if (!checked.ok || checked.value.provider !== provider) {
       throw new AppError(
         ERROR_CODES.CONF_CONFIRM_INVALID,

@@ -35,6 +35,9 @@ import {
 } from './sender-rules';
 import { SmsAvailability } from './sms-availability.service';
 import { SmsSendersRepository, type SenderRow } from './sms-senders.repository';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('sms_lookup');
 
 const MODULE_KEY = 'sms_senders';
 const LOOKUP_TTL_SECONDS = 90 * 24 * 3600;
@@ -177,6 +180,7 @@ export class SmsSendersService {
       const existing = await this.repo.findByFrom(tx, ctx.orgId, input.fromNumber);
       // The cap is checked only for a NEW sender: updating one never needs a place (TW-SMS-002 rule 6).
       if (!existing) {
+        await this.entitlements.lockLimit(tx, ctx.orgId, 'devices');
         await this.entitlements.assertWithinLimit(
           ctx.orgId,
           'devices',
@@ -270,14 +274,20 @@ export class SmsSendersService {
 
     // Scoped by workspace: Reference shared one cache across every workspace (and every provider).
     const cacheKey = `sms:lookup:${orgId}:${digits}`;
-    const cached = await this.redis.get(cacheKey).catch(() => null);
+    const cached = await this.redis.get(cacheKey).catch(() => {
+      cache.error();
+      return null;
+    });
     if (cached) {
       try {
-        return JSON.parse(cached) as SmsLookupResponse;
+        const hit = JSON.parse(cached) as SmsLookupResponse;
+        cache.hit();
+        return hit;
       } catch {
         // an unreadable entry is a miss
       }
     }
+    cache.miss();
 
     const res = await this.gateway.lookup(creds, digits);
     const out: SmsLookupResponse = {

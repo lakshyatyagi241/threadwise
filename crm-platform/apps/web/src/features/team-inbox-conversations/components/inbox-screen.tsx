@@ -637,7 +637,7 @@ export function InboxScreen() {
                           tag: can.tag,
                         }}
                         meId={meId}
-                        onSelectAll={bulk.selectAll}
+                        onToggleAll={bulk.toggleAll}
                         onClear={bulk.toggleSelecting}
                         onRun={bulk.run}
                       />
@@ -711,6 +711,15 @@ export function InboxScreen() {
                 canAssign: can.assign,
                 busy: assigning,
                 onAssign: (change) => void assign(change),
+              }}
+              handoff={{
+                canClaim: can.assignSelf || can.assign,
+                canSend: can.assign,
+                canReturn: can.reply,
+                onPlaced: (row) => {
+                  list.placeRow(row);
+                  void detail.refetch();
+                },
               }}
               onRetryDetail={() => void detail.refetch()}
             />

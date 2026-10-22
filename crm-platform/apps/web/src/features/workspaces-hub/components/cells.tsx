@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { WorkspaceHubRow } from '@crm/contracts';
 import { Badge, cn } from '@crm/ui';
 import { STATE_TONE } from '@/features/plans-subscriptions-trials/lib/format';
@@ -87,12 +87,15 @@ export function EndsCell({ row }: { row: WorkspaceHubRow }) {
   const t = useTranslations('workspaces-hub.cell');
   const tc = useTranslations('workspaces-hub.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const ends = endsInfo(row.validity);
   if (!ends.iso) return <span className="text-muted-foreground">{tc('none')}</span>;
   return (
     <div className="whitespace-nowrap">
       <div>
-        {new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(ends.iso))}
+        {new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(
+          new Date(ends.iso),
+        )}
       </div>
       <div
         className={cn(

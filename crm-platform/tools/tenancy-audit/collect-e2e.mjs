@@ -3,7 +3,7 @@
 // reports/tenancy-audit/e2e/<name>.json, which run.mjs reads. Needs Docker (every spec boots the app on Postgres + Redis).
 //
 //   node tools/tenancy-audit/collect-e2e.mjs               # everything below
-//   node tools/tenancy-audit/collect-e2e.mjs faq flows     # only these names
+//   node tools/tenancy-audit/collect-e2e.mjs ai-training flows     # only these names
 //
 // A spec that fails or cannot boot is still recorded: its report says so and run.mjs marks the controls FAILED / BLOCKED.
 // The module suites run with -t so only their isolation tests execute; the audit's own specs run whole.
@@ -24,7 +24,6 @@ const SPECS = {
   'tenancy-concurrency': ['test/e2e/tenancy/tenancy-concurrency.e2e.spec.ts', null],
   'waba-connect': ['test/e2e/whatsapp-cloud-api-waba/waba-connect.e2e.spec.ts', null],
   'ai-training': ['test/e2e/ai-agents-training/ai-training.e2e.spec.ts', ISOLATION],
-  faq: ['test/e2e/faq-knowledge/faq.e2e.spec.ts', ISOLATION],
   'widget-public': ['test/e2e/chatbot-widget/widget-public.e2e.spec.ts', ISOLATION],
   'widgets-admin': ['test/e2e/chatbot-widget/widgets-admin.e2e.spec.ts', ISOLATION],
   'broadcast-wizard': ['test/e2e/campaigns/broadcast-wizard.e2e.spec.ts', ISOLATION],

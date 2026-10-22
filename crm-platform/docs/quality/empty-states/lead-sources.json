@@ -1,0 +1,89 @@
+{
+  "feature": "lead-sources",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-lead-sources-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/events-panel.tsx",
+        "apps/web/src/features/lead-sources/components/lead-inbox-tab.tsx",
+        "apps/web/src/features/lead-sources/components/lead-sources-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-sources/components/detail.render.test.tsx",
+          "match": "says there are no leads yet and what to do"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/components/screens.render.test.tsx",
+          "match": "says there are no sources yet and offers the first one to a person who can create it"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/lib/form-mapping.test.ts",
+          "match": "drops a mapping the person set back to automatic, and an empty result has no customFields key"
+        }
+      ]
+    },
+    {
+      "id": "EM-lead-sources-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/events-panel.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-lead-sources-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/event-drawer.tsx",
+        "apps/web/src/features/lead-sources/components/events-panel.tsx",
+        "apps/web/src/features/lead-sources/components/inbox-drawer.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-sources/components/detail.render.test.tsx",
+          "match": "fetches lazily: before the payload arrives it shows a loading state, not a payload"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/components/preview-attribution.render.test.tsx",
+          "match": "renders nothing while loading and nothing for a contact that never came through a lead source"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/components/screens.render.test.tsx",
+          "match": "shows a loading state while the list is on its way"
+        }
+      ]
+    },
+    {
+      "id": "EM-lead-sources-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/contact-attribution-card.tsx",
+        "apps/web/src/features/lead-sources/components/events-panel.tsx",
+        "apps/web/src/features/lead-sources/components/lead-inbox-tab.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

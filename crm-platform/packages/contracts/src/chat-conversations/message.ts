@@ -75,11 +75,16 @@ export const messageLocationSchema = z.object({
 });
 export type MessageLocation = z.infer<typeof messageLocationSchema>;
 
-/** What the template's header is. A media header carries only its format: the file is not stored with the message. */
+/**
+ * What the template's header is. The file itself is not stored with the message: a media header carries its format and, when the
+ * template still has a file to show (our stored copy, else the channel's sample), a short-lived link to it so the bubble can play or show it.
+ */
 export const messageTemplateHeaderSchema = z.object({
   format: z.enum(['text', 'image', 'video', 'document', 'location']),
   /** The header text of a `text` header; null for the other formats. */
   text: z.string().nullable().optional(),
+  /** A short-lived link to the header file, minted at each read. Absent when the template has no file to show. */
+  mediaUrl: z.string().nullable().optional(),
 });
 export type MessageTemplateHeader = z.infer<typeof messageTemplateHeaderSchema>;
 
@@ -227,6 +232,23 @@ export const messageSystemEventSchema = z.discriminatedUnion('event', [
     suggestionId: uuidSchema,
     fromStage: z.string().max(120),
     toStage: z.string().max(120),
+  }),
+  /**
+   * A person gave the conversation back to the bot (`stage: 'pressed'`, written at once: `resumed` says whether the flow continues
+   * now or the bot waits for the next message), and what then happened to the flow (`stage: 'result'`: it continued, or why it did not,
+   * and what became of the optional message to the customer). Staff-only line; `by` is the person's name.
+   */
+  z.object({
+    event: z.literal('bot_returned'),
+    stage: z.enum(['pressed', 'result']),
+    by: z.string().max(200).nullable().optional(),
+    resumed: z.enum(['flow', 'next_message']).optional(),
+    nextMessageBy: z.enum(['live_flow', 'default_flow']).nullable().optional(),
+    result: z.enum(['continued', 'claimed_again', 'flow_not_live', 'start_failed']).optional(),
+    customer: z
+      .enum(['sent', 'window_closed', 'no_consent', 'failed', 'channel_unavailable'])
+      .nullable()
+      .optional(),
   }),
 ]);
 export type MessageSystemEvent = z.infer<typeof messageSystemEventSchema>;

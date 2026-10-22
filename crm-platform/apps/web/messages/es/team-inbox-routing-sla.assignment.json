@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Asignación de chats",
+        "intro": "Cuatro interruptores cubren la mayoría de los espacios de trabajo: actívalos y no tendrás que crear ninguna regla.",
+        "order": "El orden para un chat nuevo: primero el propietario del contacto y el Agente fijo, luego tus reglas (si añades alguna), después Todos los demás y por último la cola de espera.",
+        "readOnly": "Puedes ver estos interruptores, pero no cambiarlos.",
+        "saved": "Guardado.",
+        "saveFailed": "No se pudo guardar el cambio.",
+        "loading": "Cargando los ajustes de asignación",
+        "loadFailed": "No se pudieron cargar los ajustes de asignación.",
+        "retry": "Reintentar",
+        "notInPlan": "No incluido en tu plan",
+        "upgradeHint": "Incluido en el complemento Enrutamiento inteligente o en un plan superior.",
+        "stepFirst": "Se comprueba primero",
+        "stepMaster": "Interruptor principal",
+        "stepAfter": "Tras tomar un chat",
+        "needsAuto": "Solo se usa mientras la Asignación automática está activada.",
+        "auto": {
+          "title": "Asignación automática",
+          "body": "Los chats nuevos se reparten de forma equitativa entre los agentes que aceptan chats (no desconectados, ocupados ni de baja). Cuando todos los agentes han alcanzado su límite de chats, los chats nuevos esperan en la cola.",
+          "limitHint": "Define el límite de chats de cada agente en su perfil, en <link>Miembros del equipo</link>.",
+          "off": "Desactivado: no se asigna nada automáticamente, ni por una regla ni por el propietario del contacto. Los chats esperan en la cola hasta que alguien los tome o un flujo indique a una persona."
+        },
+        "sticky": {
+          "title": "Agente fijo",
+          "body": "Un contacto que vuelve regresa con el agente que atendió su último chat, siempre que ese agente siga siendo un miembro activo que pueda abrir la bandeja de entrada (no se comprueba su estado de conexión). Si el contacto tiene propietario, se prueba primero con él.",
+          "withWindow": "Los días hacia atrás que cuenta el último agente se definen en Avanzado."
+        },
+        "owner": {
+          "title": "Asignar el chat al propietario del contacto",
+          "body": "Los chats de un contacto conocido van primero a su propietario, para que la atención sea coherente y personal. Si el propietario está de baja, el chat lo recibe su suplente; si no hay propietario, decide el paso siguiente.",
+          "wins": "Si el Agente fijo también está activado, el propietario del contacto sigue teniendo prioridad; el último agente es solo la segunda opción."
+        },
+        "claim": {
+          "title": "Asignar al agente como propietario del contacto",
+          "body": "Cuando un agente toma un chat de la cola de espera y el contacto aún no tiene propietario, ese agente pasa a ser el propietario del contacto. Un propietario existente nunca se cambia.",
+          "note": "Un chat asignado a un agente por una regla no establece el propietario. Con Mantener los chats abiertos con el propietario (en Avanzado), un traspaso sí lo hace."
+        }
+      },
+      "advanced": {
+        "title": "Avanzado",
+        "hint": "Mantener los chats sincronizados con el propietario del contacto, el plazo del agente fijo, el aviso de reasignación y las alertas de la cola.",
+        "sync": {
+          "title": "Mantener los chats abiertos con el propietario",
+          "body": "Cuando cambia el propietario de un contacto, sus chats abiertos asignados automáticamente pasan al nuevo propietario. Un chat que tomó una persona nunca se mueve. Un traspaso que asigna un chat también establece el propietario cuando el contacto no tiene ninguno.",
+          "needsOwner": "Activa primero Asignar el chat al propietario del contacto."
+        }
+      },
+      "rules": {
+        "title": "¿Necesitas más control? Añade reglas",
+        "intro": "Opcional. Las reglas envían chats concretos (de un canal, con ciertas palabras en el mensaje, de un contacto nuevo...) a agentes o equipos concretos. Si los cuatro interruptores te bastan, no tendrás que crear ninguna.",
+        "locked": "Las reglas forman parte del complemento Enrutamiento inteligente o de un plan superior. Sigues teniendo la cola de espera, reclamar chats y la asignación manual.",
+        "pipelineTitle": "Cómo se asigna un chat nuevo",
+        "pipeline": {
+          "agent": "1. Propietario del contacto y Agente fijo",
+          "rules": "2. Tus reglas, de arriba abajo",
+          "rulesBody": "La primera regla que coincide y encuentra un agente disponible se queda con el chat.",
+          "everyone": "3. Todos los demás",
+          "everyoneBody": "Recibe lo que ninguna regla tomó.",
+          "queue": "4. Cola de espera",
+          "queueBody": "Si no se encuentra a nadie, el chat espera en la pestaña En espera hasta que un agente lo tome.",
+          "agentBody": "Se define con los interruptores de arriba."
+        },
+        "never": "Las reglas nunca cambian lo que ya asignó un flujo, una persona o un traspaso.",
+        "add": "Añadir una regla",
+        "emptyTitle": "Sin reglas",
+        "empty": "No pasa nada. Deciden tus interruptores de arriba y Todos los demás.",
+        "loading": "Cargando las reglas",
+        "loadFailed": "No se pudieron cargar las reglas.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "todos los agentes",
+        "noAssign": "no asigna",
+        "drag": "Arrastra {name} para cambiar el orden",
+        "neverRuns": "Nunca se ejecuta",
+        "neverMatches": "Nunca coincide",
+        "neverMatchesHint": "No tiene ninguna condición y no se aplica a todas las conversaciones. Edítala para corregirlo.",
+        "shadowed": "{count, plural, one {La regla situada debajo de “{blocker}” no puede ejecutarse} other {Las reglas situadas debajo de “{blocker}” no pueden ejecutarse}} a menos que nadie de “{blocker}” esté disponible: {names}. “{blocker}” se aplica a todas las conversaciones y detiene la comprobación ahí. Muévela hacia abajo o desactiva “Detener al coincidir esta regla” en ella.",
+        "reordered": "Orden guardado."
+      },
+      "everyone": {
+        "title": "Todos los demás",
+        "pinned": "Siempre al final",
+        "body": "Recibe todos los chats que ninguna regla tomó. Elige quién los recibe.",
+        "notSet": "Aún sin configurar: los chats que ninguna regla toma esperan en la cola.",
+        "mode": "Qué pasa con esos chats",
+        "evenly": "Repartir de forma equitativa entre todos los agentes",
+        "evenlyHint": "Por turnos o al menos ocupado entre todos los que pueden abrir la bandeja de entrada y están disponibles: no desconectados, ocupados, de baja ni en su límite de chats.",
+        "listed": "Elegir agentes o equipos",
+        "listedNow": "Ahora: {who}.",
+        "listedEdit": "Cambiar los agentes o equipos",
+        "queue": "Dejar en la cola de espera",
+        "queueHint": "No se asigna a nadie. El chat espera hasta que un agente lo tome.",
+        "strategy": "Cómo repartir",
+        "saved": "Guardado.",
+        "failed": "No se pudo guardar el cambio.",
+        "confirmTitle": "¿Reemplazar los agentes elegidos?",
+        "confirmBody": "Todos los demás ahora da los chats a los agentes o equipos que elegiste. Repartir de forma equitativa reemplaza esa elección.",
+        "confirm": "Reemplazar",
+        "ruleName": "Todos los demás"
+      },
+      "where": {
+        "title": "Dónde se aplica",
+        "applied": "Se aplica",
+        "applied1": "Cuando llega un chat nuevo (y cuando un cliente reabre uno terminado que nadie atiende).",
+        "applied2": "Cuando un paso de traspaso a una persona está configurado en “Reglas de asignación”: entonces se comprueba la misma lista, usando el contacto, el canal y el último mensaje del cliente, después Todos los demás y por último la cola de espera.",
+        "not": "No se aplica",
+        "not1": "Un chat que ya asignó un flujo, una persona o un traspaso.",
+        "not2": "Asignar o tomar un chat manualmente.",
+        "not3": "Un paso de traspaso a una persona que indica a una persona (se ignoran las reglas) o a un equipo (se usa el método propio del equipo)."
+      },
+      "try": {
+        "title": "Probar",
+        "body": "Elige un contacto, un canal y un mensaje de ejemplo para ver quién recibiría el chat y por qué. No se asigna, cuenta ni envía nada.",
+        "contact": "Contacto (opcional)",
+        "noContact": "No se eligió ningún contacto: el ejemplo es un contacto totalmente nuevo. Las condiciones sobre datos guardados del contacto no se pueden comprobar sin un contacto real.",
+        "channel": "Canal",
+        "message": "Mensaje de ejemplo",
+        "messagePlaceholder": "p. ej. Quisiera un reembolso",
+        "run": "Mostrar qué pasaría",
+        "running": "Comprobando",
+        "failed": "No se pudo ejecutar la prueba.",
+        "result": "Resultado",
+        "outcome": {
+          "sticky": "Mantener con su agente decide: {who}.",
+          "rule": "La regla “{rule}” decide: {who}.",
+          "everyone": "Todos los demás decide: {who}.",
+          "queue": "No se encuentra a nadie: el chat espera en la cola.",
+          "off": "La Asignación automática está desactivada: no se asigna nada automáticamente."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "un agente",
+          "team": "la cola de {name}",
+          "teamUnknown": "una cola de equipo"
+        },
+        "stepsTitle": "Paso a paso",
+        "step": {
+          "switch": "Asignación automática",
+          "sticky": "Propietario del contacto y Agente fijo",
+          "rule": "Regla “{name}”",
+          "everyone": "Todos los demás",
+          "queue": "Cola de espera"
+        },
+        "why": {
+          "auto_assign_off": "El interruptor está desactivado.",
+          "sticky_off": "Los dos interruptores están desactivados, así que se omite este paso.",
+          "no_contact": "No hay ningún contacto que buscar.",
+          "no_agent_found": "Ni el propietario del contacto ni el último agente podían tomarlo.",
+          "owner": "Lo toma el propietario del contacto.",
+          "last_handler": "Lo toma el agente del último chat del contacto.",
+          "conditions_failed": "No coincidió.",
+          "nobody_available": "Coincidió, pero nadie de a quienes apunta está disponible.",
+          "agent_picked": "Coincidió y eligió a un agente.",
+          "team_queue": "Coincidió; nadie estaba libre, así que pasa a la cola del equipo.",
+          "no_assignment_in_rule": "Coincidió; esta regla no asigna (solo ejecuta sus otras acciones).",
+          "not_set": "No hay ninguna regla Todos los demás activa, así que los chats que nadie toma esperan en la cola."
+        },
+        "part": {
+          "contactKind": "Contacto nuevo o recurrente",
+          "contact": "Datos del contacto",
+          "channel": "Canal",
+          "keywords": "Palabras del mensaje",
+          "languages": "Idioma",
+          "businessHours": "Horario laboral"
+        },
+        "partOk": "coincidió",
+        "partWhy": {
+          "no_saved_value": "este contacto no tiene eso guardado, así que no coincidió",
+          "no_contact": "no hay ningún contacto",
+          "not_same_kind": "el contacto no es de ese tipo",
+          "channel_differs": "este canal no está en la lista",
+          "no_word": "ninguna de las palabras está en el mensaje",
+          "language_differs": "el idioma es distinto o se desconoce",
+          "hours_differ": "la hora no está en esa parte del día"
+        },
+        "contactLine": "Este contacto es {kind}. Etapa: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "nuevo",
+          "returning": "recurrente"
+        },
+        "hasOwner": "Tiene propietario.",
+        "noOwner": "No tiene propietario.",
+        "tags": "{count, plural, =0 {Sin etiquetas guardadas.} one {# etiqueta guardada.} other {# etiquetas guardadas.}}",
+        "skippedTitle": "Excluidos",
+        "skip": {
+          "on_leave": "de baja",
+          "offline_busy_or_at_capacity": "desconectado, ocupado o en su límite de chats",
+          "cannot_read": "no puede abrir la bandeja de entrada",
+          "no_owner": "el contacto no tiene propietario",
+          "no_previous_handler_in_window": "no hay un agente anterior para este contacto",
+          "not_an_active_member": "no es un miembro activo"
+        },
+        "outside": "Simular que es fuera del horario laboral",
+        "inside": "Simular que es dentro del horario laboral",
+        "clock": "Horario laboral: usar la hora actual",
+        "skipStep": {
+          "owner": "Propietario del contacto",
+          "last_handler": "Último agente"
+        }
+      },
+      "form": {
+        "whenSwitch": "Solo para conversaciones que coincidan con...",
+        "whenSwitchHint": "Desactivado: esta regla se aplica a todas las conversaciones nuevas.",
+        "everyConversation": "Esta regla se aplica a todas las conversaciones nuevas.",
+        "kept": "Tus condiciones se conservan, pero se ignoran mientras esto esté desactivado.",
+        "add": "Añadir una condición",
+        "remove": "Quitar {name}",
+        "name": {
+          "contactKind": "Contacto nuevo o recurrente",
+          "channel": "Canal",
+          "keywords": "Palabras del mensaje",
+          "language": "Idioma del cliente",
+          "hours": "Horario laboral",
+          "contact": "Datos del contacto"
+        },
+        "kind": {
+          "title": "Contacto nuevo o recurrente",
+          "hint": "Un contacto es recurrente cuando tiene un chat anterior o se guardó más de 10 minutos antes de este chat.",
+          "new": "Contacto nuevo (primer chat)",
+          "returning": "Contacto recurrente"
+        },
+        "contactNote": "Solo coincide con contactos que ya tienen esto guardado. Un contacto totalmente nuevo llega sin nada guardado salvo la etapa “Nuevo”, así que usa Contacto nuevo o recurrente para los clientes de primera vez.",
+        "everyoneElseNote": "Esta es la regla Todos los demás: recibe los chats que ninguna otra regla tomó.",
+        "everyoneAgents": "Todos los que pueden abrir la bandeja de entrada",
+        "everyoneAgentsHint": "Reparte los chats entre todos los agentes disponibles en lugar de elegirlos.",
+        "fallbackConditions": "Esta regla tiene condiciones guardadas de antes, así que solo recibe los chats que las cumplen. Activa el interruptor de abajo para revisarlas, o quítalas."
+      }
+    }
+  }
+}

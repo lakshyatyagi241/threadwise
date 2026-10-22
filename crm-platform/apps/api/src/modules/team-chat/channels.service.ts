@@ -56,8 +56,8 @@ export class ChannelsService {
   async create(input: CreateTchatChannelInput): Promise<TchatChannelResponse> {
     const { orgId, userId } = this.access.actor();
     // The plan's `team_chat_channels` cap. Direct messages (openDirect) and the seeded #general are not user-created channels and are not guarded.
-    await this.planUsage.assertCanAdd(orgId, 'team_chat_channels');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, orgId, 'team_chat_channels');
       const name = input.name.toLowerCase();
       const slug = channelSlug(name);
       const row = await this.repo.insertChannel(tx, orgId, {

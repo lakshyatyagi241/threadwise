@@ -13,6 +13,7 @@ import { reencryptSecrets } from '../../../src/modules/auth/maintenance/reencryp
 import { AuthKeys, Ttl } from '../../../src/modules/auth/support/redis-keys';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import { OPERATOR_EMAIL, OPERATOR_PASSWORD, startHarness, type Harness } from './harness';
+import { pngOfSize, gifOfSize } from '../../support/images';
 
 /**
  * The account, security-center and secrets slice of the auth domain end to end:
@@ -141,10 +142,7 @@ async function securityEvents(event: string) {
 }
 
 const png = (extra = 64) =>
-  Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(extra, 1),
-  ]);
+  pngOfSize(8 + extra);
 
 async function setPolicy(patch: Record<string, unknown>, ip?: string) {
   const req = ops('patch', '/security/policy');
@@ -360,7 +358,7 @@ describe('profile photo (TW-AUTH-026)', () => {
       .attach('file', png(10), 'a.png');
     expect(first.status).toBe(201);
     // An "animated" GIF: header plus extra frames. The server keeps the bytes it was given.
-    const gif = Buffer.concat([Buffer.from('GIF89a'), Buffer.alloc(600, 7)]);
+    const gif = gifOfSize(6 + 600);
     const second = await api()
       .post('/v2/account/avatar')
       .set(bearer(a.access))

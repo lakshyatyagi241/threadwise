@@ -39,7 +39,11 @@ function build(assertCanAdd: ReturnType<typeof vi.fn>) {
     {} as never,
     waba as never,
     {} as never,
-    { assertCanAdd } as never,
+    {
+      assertCanAdd,
+      assertCanAddIn: (_tx: unknown, org: number, key: string) => assertCanAdd(org, key),
+    } as never,
+    {} as never,
     {} as never,
   );
   const run = () =>

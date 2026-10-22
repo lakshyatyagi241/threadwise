@@ -47,7 +47,8 @@
       "sms_monthly": "SMS al mese",
       "email_mailboxes": "Caselle e-mail",
       "email_monthly": "E-mail al mese",
-      "storage_gb": "Archiviazione (GB)"
+      "storage_gb": "Archiviazione (GB)",
+      "teams": "Team"
     },
     "features": {
       "automation": "Automazione",
@@ -59,10 +60,12 @@
       "remove_branding": "Rimuovi branding",
       "sales_pipeline": "Pipeline di vendita",
       "appointment_booking": "Prenotazione appuntamenti",
+      "appointment_confirm_buttons": "Pulsanti del promemoria (Conferma / Riprogramma / Annulla)",
+      "appointment_rebook_steps": "Passaggi di riprenotazione (richiamo)",
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Catalogo WhatsApp",
       "inbox_sla": "Policy SLA",
-      "inbox_routing": "Regole di instradamento",
+      "inbox_routing": "Instradamento intelligente: assegnazione automatica e regole",
       "waba_calling": "Chiamate WhatsApp",
       "inbox_kanban": "Vista Kanban",
       "team_performance": "Performance del team",
@@ -85,7 +88,10 @@
       "personal_history_full": "Importazione cronologia completa (WhatsApp personale)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Lead scoring con IA",
-      "record_assignment": "Regole di assegnazione dei record"
+      "record_assignment": "Regole di assegnazione dei record",
+      "team_hierarchy": "Gerarchia dei team e manager",
+      "custom_roles": "Ruoli personalizzati e ambiti",
+      "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso"
     },
     "limitGroups": {
       "messaging": "Messaggistica",
@@ -139,7 +145,8 @@
       "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
       "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
       "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
-      "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla."
+      "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
+      "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
     },
     "planAddons": {
       "title": "Add-on disponibili nel tuo piano",
@@ -246,6 +253,9 @@
         "buy": "Acquista add-on",
         "buyAgain": "Acquista di nuovo",
         "active": "Attivo",
+        "included": "Incluso nel tuo piano",
+        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
+        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
         "unlimitedBullet": "{label} illimitati",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -573,7 +583,16 @@
       "back": "Torna indietro",
       "compare": "Confronta tutti i piani",
       "appHint": "{feature} è venduto anche come app nel Marketplace.",
-      "appLink": "Vedi l’app"
+      "appLink": "Vedi l’app",
+      "addonHint": "Puoi anche aggiungerlo al tuo piano attuale con il componente {addon}.",
+      "addonLink": "Vedi componenti aggiuntivi",
+      "addons": {
+        "smartRouting": "Instradamento intelligente",
+        "teamsPermissions": "Team e autorizzazioni"
+      }
+    },
+    "lock": {
+      "link": "Vedi piani e componenti aggiuntivi"
     }
   }
 }

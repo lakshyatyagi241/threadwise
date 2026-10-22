@@ -1,0 +1,34 @@
+{
+  "feature": "webhook-fanout",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-webhook-fanout-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/webhook-fanout/failures-panel.tsx",
+        "apps/web/src/features/webhook-fanout/targets-table.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-webhook-fanout-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/webhook-fanout/failures-panel.tsx",
+        "apps/web/src/features/webhook-fanout/state.tsx",
+        "apps/web/src/features/webhook-fanout/target-dialog.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -8,11 +8,11 @@ const OTHER_TEAM = 200;
 
 /** A workspace of five people: one of each scope, a team member, and someone with no grant. */
 const WORKSPACE: ConversationViewer[] = [
-  { userId: 1, scope: 'all', teamIds: [] },
-  { userId: 2, scope: 'team', teamIds: [MY_TEAM] },
-  { userId: 3, scope: 'team', teamIds: [OTHER_TEAM] },
-  { userId: 4, scope: 'own', teamIds: [MY_TEAM] },
-  { userId: 5, scope: null, teamIds: [MY_TEAM] },
+  { userId: 1, scope: 'all', teamIds: [], readsUnassigned: true },
+  { userId: 2, scope: 'team', teamIds: [MY_TEAM], readsUnassigned: true },
+  { userId: 3, scope: 'team', teamIds: [OTHER_TEAM], readsUnassigned: true },
+  { userId: 4, scope: 'own', teamIds: [MY_TEAM], readsUnassigned: true },
+  { userId: 5, scope: null, teamIds: [MY_TEAM], readsUnassigned: true },
 ];
 
 function resolver() {

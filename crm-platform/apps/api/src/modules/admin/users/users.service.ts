@@ -59,6 +59,7 @@ export class UsersService {
         order: query.order,
         q: query.q,
         status: query.status,
+        teamId: query.teamId,
       });
 
       const { items, page } = buildPage(rows, query.limit);
@@ -72,8 +73,13 @@ export class UsersService {
         rolesByUser.set(r.userId, [...(rolesByUser.get(r.userId) ?? []), r]);
       }
 
+      const teamRows = await this.repo.teamsForUsers(
+        tx,
+        ctx.orgId,
+        items.map((u) => u.id),
+      );
       return {
-        data: items.map((row) => toUserResponse(row, rolesByUser.get(row.id) ?? [])),
+        data: items.map((row) => toUserResponse(row, rolesByUser.get(row.id) ?? [], teamRows)),
         page,
       };
     });
@@ -85,7 +91,7 @@ export class UsersService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('User', uuid);
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [row.id]);
-      return toUserResponse(row, roleRows);
+      return toUserResponse(row, roleRows, await this.repo.teamsForUsers(tx, ctx.orgId, [row.id]));
     });
   }
 
@@ -97,7 +103,7 @@ export class UsersService {
       const row = await this.repo.findById(tx, ctx.orgId, ctx.userId!);
       if (!row) throw AppError.notFound('User');
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [row.id]);
-      return toUserResponse(row, roleRows);
+      return toUserResponse(row, roleRows, await this.repo.teamsForUsers(tx, ctx.orgId, [row.id]));
     });
   }
 
@@ -169,6 +175,7 @@ export class UsersService {
     const ctx = RequestContextStore.require();
     let rolesChanged = false;
     let suspendedUserId = null as number | null;
+    let statusChangedUserId = null as number | null;
 
     const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
@@ -203,6 +210,9 @@ export class UsersService {
       if (input.status === 'inactive' && existing.status !== 'inactive') {
         suspendedUserId = existing.id;
       }
+      if (input.status !== undefined && input.status !== existing.status) {
+        statusChangedUserId = existing.id;
+      }
 
       if (input.roleIds !== undefined) {
         const roleIds = await this.resolveRoleIdsStrict(tx, ctx.orgId, input.roleIds);
@@ -235,7 +245,11 @@ export class UsersService {
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [existing.id]);
-      return toUserResponse(after!, roleRows);
+      return toUserResponse(
+        after!,
+        roleRows,
+        await this.repo.teamsForUsers(tx, ctx.orgId, [existing.id]),
+      );
     });
 
     // Both run only once the change is committed, so a request racing the edit cannot cache the old state again.
@@ -243,8 +257,9 @@ export class UsersService {
     if (suspendedUserId !== null) {
       // Suspension ends access now, not when the access token or the 30 s gate cache runs out.
       await this.sessions.revokeAllForUser(ctx.orgId, suspendedUserId, 'member_suspended');
-      await this.gates.invalidate(ctx.orgId, suspendedUserId);
     }
+    // Any status change, not only a suspension: a re-activated person must not be refused for the rest of the 30 s the gate copy lives.
+    if (statusChangedUserId !== null) await this.gates.invalidate(ctx.orgId, statusChangedUserId);
     return result;
   }
 }

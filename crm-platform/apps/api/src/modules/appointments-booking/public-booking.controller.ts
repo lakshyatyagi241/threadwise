@@ -26,6 +26,7 @@ import {
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { Public } from '../../common/decorators';
+import { Throttle } from '../platform-infrastructure';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { PublicBookingService } from './public-booking.service';
 
@@ -185,6 +186,7 @@ export class PublicBookingAssetsController {
   constructor(private readonly pub: PublicBookingService) {}
 
   @Get(':orgSlug/:assetId')
+  @Throttle({ limit: 600, windowSeconds: 60, by: 'ip' })
   @ApiOperation({ summary: "A booking page's logo or cover image" })
   async asset(
     @Param('orgSlug') orgSlug: string,

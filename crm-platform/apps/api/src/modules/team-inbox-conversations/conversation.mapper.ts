@@ -54,6 +54,15 @@ export function toConversationSummary(row: InboxConversationRow): ConversationSu
         ? { id: row.assigneeAgentUuid, name: row.assigneeAgentName ?? '' }
         : null,
     },
+    // Effective handling: what a handoff stored, else "with a person" when a person or team holds it and "with the bot" when an AI agent does.
+    handling:
+      (row.handling as ConversationSummary['handling']) ??
+      (row.assigneeUserUuid || row.assigneeTeamUuid
+        ? 'with_person'
+        : row.assigneeAgentUuid
+          ? 'with_bot'
+          : null),
+    handlingSince: iso(row.handlingSince),
     snoozedUntil: iso(row.snoozedUntil),
     labels: row.labels,
     slaStatus: slaStatus(

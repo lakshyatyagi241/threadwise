@@ -87,6 +87,8 @@ export interface TransitionParams {
   notify: boolean;
   nowMs: number;
   rowVersion?: number;
+  /** What caused it, when not a screen: `reminder_reply` is the customer tapping a button on a reminder. */
+  via?: 'reminder_reply';
 }
 
 const slotTaken = (): AppError =>
@@ -461,6 +463,7 @@ export class BookingService {
           by: p.by,
           reason: p.reason ?? null,
           notify: p.notify,
+          via: p.via ?? null,
           feeRecorded: fee > 0n ? money(fee, after.currency) : null,
         },
       },
@@ -569,6 +572,7 @@ export class BookingService {
   private async assertPlanCap(tx: Tx, orgId: number, startMs: number): Promise<void> {
     const cap = await this.plan.cap(orgId);
     if (cap === 0) return;
+    await this.plan.lockCap(tx, orgId);
     const tz = await this.slots.orgTimezone(tx, orgId);
     const { startMs: from, endMs: to } = monthBounds(localMonthOf(startMs, tz), tz);
     await this.plan.assertWithinCap(orgId, await this.appts.countInRange(tx, orgId, from, to));

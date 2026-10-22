@@ -27,6 +27,11 @@ import { normalizeIp } from '../support/ip';
 import { AuthKeys } from '../support/redis-keys';
 import { TokenService, type TokenClaims } from '../token.service';
 import { PlatformStore } from './platform-store';
+import { CappedMap } from '../../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const tombstone = cacheMetrics('impersonation_tombstone');
+const openRow = cacheMetrics('impersonation_open');
 
 export type ImpersonationEndedBy = 'operator' | 'expiry' | 'new_session' | 'access_revoked';
 
@@ -71,7 +76,7 @@ interface CachedOpen {
 @Injectable()
 export class ImpersonationService {
   private readonly logger = new Logger(ImpersonationService.name);
-  private readonly open = new Map<string, CachedOpen>();
+  private readonly open = new CappedMap<string, CachedOpen>(1000);
 
   constructor(
     private readonly store: PlatformStore,
@@ -334,6 +339,8 @@ export class ImpersonationService {
     if (await this.tombstoned(imp.sid)) throw ended();
 
     let hit = this.open.get(imp.sid);
+    if (hit && Date.now() - hit.checkedAt <= OPEN_CACHE_MS) openRow.hit();
+    else openRow.miss();
     if (!hit || Date.now() - hit.checkedAt > OPEN_CACHE_MS) {
       const row = await this.store.tx((tx) =>
         this.one<SessionRow>(
@@ -499,8 +506,12 @@ export class ImpersonationService {
 
   private async tombstoned(sessionUuid: string): Promise<boolean> {
     try {
-      return Boolean(await this.redis.get(AuthKeys.impersonationEnded(sessionUuid)));
+      const ended = Boolean(await this.redis.get(AuthKeys.impersonationEnded(sessionUuid)));
+      if (ended) tombstone.hit();
+      else tombstone.miss();
+      return ended;
     } catch {
+      tombstone.error();
       return false; // fail open like the session check: the row read below still decides
     }
   }

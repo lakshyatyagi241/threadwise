@@ -535,10 +535,12 @@
             "remove_branding": "ホワイトラベル",
             "sales_pipeline": "営業パイプライン",
             "appointment_booking": "予約",
+            "appointment_confirm_buttons": "リマインダーのボタン",
+            "appointment_rebook_steps": "再予約ステップ",
             "chatbot_widgets": "チャットボットウィジェット",
             "wa_storefront": "WhatsAppカタログ",
             "inbox_sla": "受信トレイSLA",
-            "inbox_routing": "受信トレイのルーティング",
+            "inbox_routing": "スマートルーティング",
             "waba_calling": "WhatsApp通話",
             "inbox_kanban": "受信トレイのカンバン",
             "team_performance": "チームのパフォーマンス",
@@ -561,7 +563,10 @@
             "personal_history_full": "全履歴インポート(個人用WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AIリードスコアリング",
-            "record_assignment": "レコード割り当てルール"
+            "record_assignment": "レコード割り当てルール",
+            "team_hierarchy": "チーム階層とマネージャー",
+            "custom_roles": "カスタムロールとスコープ",
+            "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者"
           },
           "cta": {
             "continueFree": "無料で続ける",

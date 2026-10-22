@@ -414,6 +414,14 @@
           "label": "Appuntamento non sincronizzato con Google Calendar",
           "hint": "L'evento di Google Calendar di un prossimo appuntamento è stato eliminato, spostato o ha subito modifiche agli invitati. L'appuntamento non viene modificato: sei tu a scegliere cosa fare."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Appuntamento annullato dal cliente",
+          "hint": "Un cliente ha annullato l'appuntamento toccando Annulla in un promemoria. Il responsabile dell'appuntamento ne viene avvisato."
+        },
+        "appointment_reminder_test": {
+          "label": "Esito della prova email del promemoria",
+          "hint": "L'esito dell'email di prova inviata per un passo del promemoria: inviata, oppure non inviata e il motivo."
+        },
         "snooze_wake": {
           "label": "La chat posticipata torna",
           "hint": "Una chat posticipata si riapre all'ora scelta e viene assegnata a te o al tuo team."
@@ -513,6 +521,11 @@
           "watch": "Dovresti vedere un popup, e il numero della campanella e il titolo della scheda dovrebbero cambiare.",
           "notConnected": "Gli aggiornamenti in tempo reale non sono connessi in questa pagina, quindi il popup non può comparire qui. Ricarica la pagina e riprova.",
           "off": "Nessuna notifica è stata creata nella campanella: la campanella è disattivata per «Notifica di prova» nella tabella sottostante, oppure dal proprietario del tuo spazio di lavoro."
+        },
+        "prompt": {
+          "message": "Attiva le notifiche del browser per ricevere un avviso sugli eventi che scegli, anche con il CRM chiuso.",
+          "enable": "Consenti notifiche",
+          "enabling": "Attivazione..."
         }
       }
     },

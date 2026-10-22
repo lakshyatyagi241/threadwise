@@ -584,7 +584,11 @@
           "sla_breach": "응답 기한 초과",
           "spam_flagged": "{actor}님이 스팸으로 표시",
           "escalated": "에스컬레이션됨",
-          "unknown": "{actor} 님: {what}"
+          "unknown": "{actor} 님: {what}",
+          "handoff_requested": "{actor} 님이 사람에게 인계",
+          "queue_reminded": "팀에 알렸습니다",
+          "queue_offered": "다른 팀에 제안했습니다",
+          "queue_customer_message": "고객에게 메시지를 보냈습니다"
         },
         "actors": {
           "user": "팀원",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "시뮬레이터(테스트)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "웹사이트 채팅",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "이메일",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "시뮬레이터(테스트)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "웹사이트 채팅",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "이메일",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "연락처",
         "agent": "나",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "받은편지함으로 돌아가기",
-        "title": "대화 태그",
+        "title": "태그",
         "intro": "대화 태그는 스레드(결제, 환불, 긴급 등)에 붙여 팀이 받은편지함을 정렬하고 필터링할 수 있게 해 줍니다. 사람을 설명하는 연락처 태그와 같은 태그 라이브러리를 사용합니다.",
         "newTitle": "새 태그",
         "editTitle": "태그 편집",

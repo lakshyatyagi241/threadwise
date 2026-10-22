@@ -1,0 +1,93 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "zugewiesen",
+        "waitingInQueue": "wartet in der Warteschlange",
+        "noAgentOutOfHours": "kein Agent / außerhalb der Öffnungszeiten",
+        "returnedToBot": "an den Bot zurückgegeben"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Schritt {stage}: Wähle die Person, an die die Unterhaltung geht."
+      }
+    },
+    "simulator": {
+      "handoff": "an einen Mitarbeiter übergeben (Ziel: {destination}, Team „{team}“); der Test-Chat nimmt den Ausgang „zugewiesen“"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Übergeben an",
+          "handoffRules": "Zuweisungsregeln",
+          "pickAgent": "— Person auswählen —",
+          "returnBack": "Wenn der Bot wieder da ist:"
+        }
+      },
+      "handoff": {
+        "legacy": "Dieser Schritt ist die ältere „Agent zuweisen“.",
+        "upgradeHint": "Er übergibt den Chat an ein Team und läuft weiter. Wechseln Sie zur Übergabe an eine Person, um einen Grund, eine Priorität, Nachrichten an den Kontakt und die Ausgänge (zugewiesen, in der Warteschlange, kein Agent oder außerhalb der Öffnungszeiten und ein optionaler für die Rückgabe an den Bot) hinzuzufügen. Bereits erstellte Verbindungen funktionieren weiter.",
+        "upgrade": "Übergabe-Funktionen nutzen",
+        "destination": "Unterhaltung senden an",
+        "dest": {
+          "team": "Ein Team",
+          "person": "Eine Person",
+          "rules": "Die Zuweisungsregeln",
+          "rulesLocked": "Die Zuweisungsregeln (Add-on Intelligentes Routing)"
+        },
+        "destHint": {
+          "team": "Sie geht an jemanden im Team oder wartet in der Warteschlange des Teams.",
+          "person": "Sie geht an diese Person, wenn sie sie übernehmen kann; sonst wartet sie in der Warteschlange.",
+          "rules": "Nutzt deine Regeln für die automatische Zuweisung von Unterhaltungen; findet keine Regel eine Person, wartet sie in der Warteschlange."
+        },
+        "lockHint": "Zuweisungsregeln sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs. Eine hierher gesendete Unterhaltung wartet in der Warteschlange, bis ein Teammitglied sie übernimmt.",
+        "team": "Team",
+        "teamPick": "— Team auswählen —",
+        "teamNone": "Noch keine Teams",
+        "teamOption": "{name} · {count, plural, one {# Agent} other {# Agenten}}",
+        "teamHint": "<link>Teams verwalten →</link>",
+        "person": "Person",
+        "personPick": "— Person auswählen —",
+        "personHint": "Jemand aus deinen Teams.",
+        "unknownMember": "{value} (nicht in diesem Workspace)",
+        "reason": "Grund",
+        "reasons": {
+          "customer_asked": "Der Kontakt hat einen Mitarbeiter verlangt",
+          "bot_could_not_help": "Der Bot konnte nicht helfen",
+          "sensitive_topic": "Sensibles Thema",
+          "sales_lead": "Vertriebslead",
+          "complaint": "Beschwerde",
+          "other": "Sonstiges"
+        },
+        "priority": "Priorität",
+        "priorityKeep": "Aktuelle Priorität beibehalten",
+        "priorities": {
+          "low": "Niedrig",
+          "normal": "Normal",
+          "high": "Hoch",
+          "urgent": "Dringend"
+        },
+        "note": "Notiz für den Agenten",
+        "noteHint": "Intern. Wird auf der Übergabekarte angezeigt; '{{'variables'}}' funktionieren. Bis zu 500 Zeichen.",
+        "customerMessage": "Nachricht an den Kontakt",
+        "customerHint": "Wird gesendet, wenn die Unterhaltung übergeben wird. Leer lassen, um nichts zu senden.",
+        "offHours": "Nachricht, wenn niemand verfügbar ist",
+        "offHoursHint": "Wird stattdessen gesendet, wenn das Team geschlossen ist oder niemand übernehmen kann. Die Unterhaltung wartet weiterhin in der Warteschlange.",
+        "exits": "Dieser Schritt hat drei Ausgänge",
+        "exitAssigned": "zugewiesen: Eine Person hat die Unterhaltung jetzt",
+        "exitWaiting": "wartet in der Warteschlange: Sie wartet darauf, dass jemand sie übernimmt",
+        "exitUnavailable": "kein Agent / außerhalb der Öffnungszeiten: Niemand konnte sie übernehmen",
+        "simpleExits": "Der nächste Schritt läuft, sobald eine Person die Unterhaltung hat. Muss sie in der Warteschlange warten oder ist niemand verfügbar, stoppt der Bot hier und eine Person antwortet. Nutze den erweiterten Builder, um den anderen Ausgängen zu folgen.",
+        "returnMessage": "Nachricht an den Kontakt, wenn der Bot wieder da ist",
+        "returnMessageHint": "Optional. Wird einmal im Namen Ihres Unternehmens gesendet, wenn ein Teammitglied auf „An Bot zurückgeben“ klickt, bevor der Flow am Ausgang „zurückgegeben“ weiterläuft. Sie wird nicht gesendet, wenn das 24-Stunden-Fenster geschlossen ist oder keine Einwilligung vorliegt. Variablen wie '{{'name'}}' funktionieren.",
+        "returnNeedsExit": "Diese Nachricht wird nur gesendet, wenn der Flow nach „An Bot zurückgeben“ weiterläuft. Verbinden Sie den Ausgang „zurückgegeben“ mit dem nächsten Schritt.",
+        "exitReturned": "an den Bot zurückgegeben (optional): Ein Teammitglied hat „An Bot zurückgeben“ gewählt; der Flow läuft hier weiter",
+        "returnedStep": "Wenn ein Teammitglied den Chat zurückgibt, weiter bei",
+        "returnedStepHint": "Optional. Wählen Sie den Schritt, mit dem der Flow nach „An Bot zurückgeben“ weiterläuft. Bleibt das Feld leer, wartet der Bot auf die nächste Nachricht des Kontakts.",
+        "returnNone": "Kein Schritt: auf die nächste Nachricht des Kontakts warten",
+        "returnStepOption": "{stage}: {label}"
+      }
+    }
+  }
+}

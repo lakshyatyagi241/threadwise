@@ -15,12 +15,14 @@ import {
   MicrosoftCalendarConnectionRepository,
   type MicrosoftConnectionRow,
 } from './microsoft-calendar-connection.repository';
+import { CappedMap, setCapped } from '../../common/cache/capped-map';
 
 /** Audit module and outbox aggregate of the Microsoft connection (its row ids are not the Google connection's, so they get their own module). */
 export const MICROSOFT_CALENDAR_AUDIT_MODULE = 'appointment_calendar_microsoft';
 
 /** How long a process keeps a workspace's connection row before reading it again (a connect or disconnect in this process drops it at once). */
 const CONNECTION_TTL_MS = 15_000;
+const CALENDAR_CONNECTION_CACHE_MAX = 1_000;
 /** A token that expires within this window is refreshed before it is used. */
 const EXPIRY_MARGIN_MS = 60_000;
 /** A used-just-now stamp is written at most this often per workspace per process (the SQL guards across processes too). */
@@ -54,7 +56,7 @@ export class MicrosoftCalendarTokens {
   private readonly logger = new Logger(MicrosoftCalendarTokens.name);
   private readonly rows = new Map<number, { at: number; row: MicrosoftConnectionRow | null }>();
   private readonly refreshing = new Map<number, Promise<string>>();
-  private readonly health = new Map<number, { code: string | null; usedAt: number }>();
+  private readonly health = new CappedMap<number, { code: string | null; usedAt: number }>(2000);
 
   constructor(
     private readonly db: DatabaseService,
@@ -75,7 +77,7 @@ export class MicrosoftCalendarTokens {
     if (!opts.fresh && hit && Date.now() - hit.at < CONNECTION_TTL_MS) return hit.row;
     const row =
       (await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.find(tx, orgId))) ?? null;
-    this.rows.set(orgId, { at: Date.now(), row });
+    setCapped(this.rows, orgId, { at: Date.now(), row }, CALENDAR_CONNECTION_CACHE_MAX);
     return row;
   }
 
@@ -197,15 +199,20 @@ export class MicrosoftCalendarTokens {
     );
     // Only the writer's copy is cached: when another process won the race, the next read of the row finds its tokens.
     if (stored) {
-      this.rows.set(orgId, {
-        at: Date.now(),
-        row: {
-          ...conn,
-          accessTokenEnc: sealedAccess,
-          accessTokenExpiresAt: expiresAt,
-          refreshTokenEnc: sealedRefresh ?? conn.refreshTokenEnc,
+      setCapped(
+        this.rows,
+        orgId,
+        {
+          at: Date.now(),
+          row: {
+            ...conn,
+            accessTokenEnc: sealedAccess,
+            accessTokenExpiresAt: expiresAt,
+            refreshTokenEnc: sealedRefresh ?? conn.refreshTokenEnc,
+          },
         },
-      });
+        CALENDAR_CONNECTION_CACHE_MAX,
+      );
     } else {
       this.invalidate(orgId);
     }

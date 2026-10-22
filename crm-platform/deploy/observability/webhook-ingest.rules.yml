@@ -1,0 +1,50 @@
+# Prometheus alert rules for the public webhook path (/v2/public/webhooks/*): how much arrives, how fast it is answered, whether the
+# DB pools behind it are full and whether the queue it feeds is backing up. Added after a flood of ~110 WhatsApp webhooks/s saturated the
+# API's DB pool and took the readiness check down. Signals, all existing: crm_http_request_duration_seconds (route template label),
+# crm_db_pool_connections / crm_db_pool_max / crm_db_pool_waiting (pool label: primary, replica and the pools of the webhook and health
+# probe if the process registers them) and crm_queue_jobs_pending (worker). Queue AGE for waba-ingest is already paged by
+# CriticalQueueOldestJobAge in queue-capacity.rules.yml; DbPoolExhausted (p0-failure-modes.rules.yml) pages a pool with callers waiting for 3 min.
+# Not covered here: connections idle in a transaction (needs a Postgres exporter, none is deployed; see the READMEs).
+# Thresholds are initial engineering targets, not measured limits. Tested with promtool: webhook-ingest.rules.test.yml.
+groups:
+  - name: webhook-ingest
+    rules:
+      - record: crm:webhook_request_rate
+        expr: sum by (service) (rate(crm_http_request_duration_seconds_count{route=~".*/webhooks/.*"}[5m]))
+
+      - alert: WebhookRateHigh
+        expr: crm:webhook_request_rate > 50
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Public webhooks arrive at {{ $value | humanize }} requests/s on {{ $labels.service }}'
+          description: 'Well above the normal rate. A provider or a migrating workspace may be replaying a backlog or retrying. Check the sender (x-real-ip in the API log) and the DB pools below before it slows the dashboard.'
+
+      - alert: WebhookLatencyHigh
+        expr: |
+          histogram_quantile(0.95, sum by (le, service) (rate(crm_http_request_duration_seconds_bucket{route=~".*/webhooks/.*"}[5m]))) > 1
+          and crm:webhook_request_rate > 1
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Webhook p95 is {{ $value | humanizeDuration }} on {{ $labels.service }}'
+          description: 'A webhook should be authenticated, queued and answered in milliseconds. Slow answers make the provider retry, which adds load. Check DbPoolSaturated and the worker.'
+
+      - alert: DbPoolSaturated
+        expr: |
+          max by (service, pool) (crm_db_pool_connections{state="total"})
+            / (max by (service, pool) (crm_db_pool_max) > 0) >= 0.9
+          and max by (service, pool) (crm_db_pool_connections{state="idle"}) == 0
+        for: 2m
+        labels: { severity: warning }
+        annotations:
+          summary: 'The {{ $labels.pool }} DB pool of {{ $labels.service }} is at its maximum with no idle connection'
+          description: 'Early warning: DbPoolExhausted pages when callers are already waiting. Look for slow queries or a burst on one route (webhook rate above).'
+
+      - alert: WabaIngestBacklogGrowing
+        expr: max(crm_queue_jobs_pending{queue="waba-ingest", state="waiting"}) > 5000
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'waba-ingest has {{ $value }} jobs waiting'
+          description: 'Inbound WhatsApp payloads are queued faster than the worker drains them. The age alert (CriticalQueueOldestJobAge) pages when the oldest is over 30 s.'

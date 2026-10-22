@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -92,6 +92,7 @@ export function OtpSection({
 }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const toast = useToast();
   const problemText = useProblemText();
@@ -112,8 +113,8 @@ export function OtpSection({
   const noneConnected = sendersQ.isSuccess && senders.length > 0 && offered.length === 0;
 
   const fmt = useMemo(
-    () => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
+    [locale, timeZone],
   );
   const when = (iso: string | null) => (iso ? fmt.format(new Date(iso)) : t('otp.template.never'));
 

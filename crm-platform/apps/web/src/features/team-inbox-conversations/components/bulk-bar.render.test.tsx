@@ -93,7 +93,7 @@ const props = (over: Partial<BulkBarProps> = {}): BulkBarProps => ({
   busy: false,
   can: { resolve: true, assign: true, assignSelf: true, priority: true, snooze: true, tag: true },
   meId: 'u-me',
-  onSelectAll: vi.fn(),
+  onToggleAll: vi.fn(),
   onClear: vi.fn(),
   onRun: vi.fn(),
   ...over,
@@ -123,9 +123,19 @@ describe('the bulk bar', () => {
       'Select all 30 in view',
     );
     click('inbox-bulk-all');
-    expect(p.onSelectAll).toHaveBeenCalledOnce();
+    expect(p.onToggleAll).toHaveBeenCalledOnce();
     click('inbox-bulk-clear');
     expect(p.onClear).toHaveBeenCalledOnce();
+  });
+
+  it('keeps select all in view clickable once every row in view is picked, so it can clear them', () => {
+    const p = props({ count: 30, allInViewSelected: true });
+    render(<BulkBar {...p} />);
+    const all = host.querySelector('[data-testid="inbox-bulk-all"]') as HTMLButtonElement;
+    expect(all.disabled).toBe(false);
+    expect(all.getAttribute('aria-pressed')).toBe('true');
+    click('inbox-bulk-all');
+    expect(p.onToggleAll).toHaveBeenCalledOnce();
   });
 
   it('runs the action named on the button', () => {
@@ -212,6 +222,11 @@ describe('the bulk bar', () => {
     expect(
       (host.querySelector('[data-testid="inbox-bulk-resolve"]') as HTMLButtonElement).disabled,
     ).toBe(true);
+    for (const name of ['assign', 'priority', 'snooze', 'tag']) {
+      const select = host.querySelector(`[data-testid="inbox-bulk-${name}"]`) as HTMLSelectElement;
+      expect(select.disabled).toBe(true);
+      expect(select.className).toContain('disabled:opacity-50');
+    }
   });
 
   it('reads in Arabic, not in English', () => {

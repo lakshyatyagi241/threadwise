@@ -224,6 +224,7 @@ function world(opts: {
     sourceClient: r.client,
     sourceDb: r.client,
     mode: r.mode,
+    skipWhatsapp: false,
     status: r.status,
   });
   const exec: ExecStore = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useMemo, useState, type FormEvent } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -20,6 +20,7 @@ export function ContactInbox() {
   const t = useTranslations(`${NS}.contact`);
   const tc = useTranslations(`${NS}.common`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const [term, setTerm] = useState('');
   const [q, setQ] = useState('');
@@ -43,8 +44,8 @@ export function ContactInbox() {
   const rows = useMemo(() => list.data?.pages.flatMap((p) => p.data) ?? [], [list.data]);
   const summary = list.data?.pages[0]?.summary;
   const when = useMemo(
-    () => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
+    [locale, timeZone],
   );
 
   const setRead = useMutation({

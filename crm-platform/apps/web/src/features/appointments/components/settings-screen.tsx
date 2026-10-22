@@ -25,6 +25,7 @@ import { CalendarCard } from './settings-calendar';
 import { CalendarsSection } from './settings-calendars';
 import { DefaultsCard, TemplatesCard, TimeZoneCard, type FormCtx } from './settings-fields';
 import { ChannelsSection } from './settings-channels';
+import { ReminderReportSection } from './settings-reminder-report';
 import { ReminderRulesSection } from './settings-reminders';
 import { MessageLibrarySection } from './settings-templates';
 import { SettingsCard, SettingsHeader } from './settings-parts';
@@ -67,6 +68,8 @@ export function SettingsScreen() {
               <AppearanceLinkCard />
               <ChannelsSection />
               <MessageLibrarySection />
+              <ReminderRulesSection />
+              <ReminderReportSection />
             </>
           ) : (
             <ErrorLine error={query.error} onRetry={() => void query.refetch()} />
@@ -277,6 +280,7 @@ function SettingsEditor({
       <ChannelsSection />
       <MessageLibrarySection />
       <ReminderRulesSection />
+      <ReminderReportSection />
       <TemplatesCard {...ctx} />
 
       {!readOnly && (

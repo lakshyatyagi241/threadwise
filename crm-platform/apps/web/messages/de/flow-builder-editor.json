@@ -104,7 +104,6 @@
       "failed": "fehlgeschlagen",
       "edited": "Bearbeitet {when}",
       "openBuilder": "Editor öffnen",
-      "faqs": "Häufige Fragen",
       "pause": "Pausieren",
       "resume": "Fortsetzen",
       "rename": "Umbenennen",
@@ -556,11 +555,8 @@
           "cardCount": "{count} Karte(n)",
           "payLink": "Zahlungslink",
           "invoice": "Rechnung",
-          "faqAllFaqs": "Alle FAQs",
-          "faqCategory": "FAQ-Kategorie: {name}",
-          "faqScore": "Mindestscore {score}",
-          "faqNotSent": "nicht gesendet",
-          "faqWorkspaceScore": "Flow-Score"
+          "faqAgent": "Antwortet aus {agent}",
+          "faqNoAgent": "KI-Agent wählen"
         },
         "overlays": {
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
@@ -724,8 +720,7 @@
             "answer": "Antwort",
             "action": "Aktionen"
           },
-          "blockedTitle": "Dieser Schritt beendet diesen Teil und kann deshalb nur ganz am Ende stehen.",
-          "blockedTitleFaq": "„Antwort aus FAQ“ hat zwei Ausgänge und kann daher nur als Letztes stehen."
+          "blockedTitle": "Dieser Schritt beendet diesen Teil und kann deshalb nur ganz am Ende stehen."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -752,7 +747,8 @@
           "storedIn": "Werte werden in der Eigenschaft <b>{property}</b> des Kontakts gespeichert",
           "actions": "Aktionen",
           "actionsHint": "Einen Schritt hinzufügen, der direkt nach diesem läuft.",
-          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen."
+          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen.",
+          "fromSteps": "Erreicht von Schritt {stages}"
         },
         "editors": {
           "linkLabel": "Wohin das führt",
@@ -864,7 +860,13 @@
             "choose": "Vorlage auswählen ...",
             "buttons": "Schaltflächen",
             "variables": "Wird aus dem Kontakt befüllt",
-            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage."
+            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage.",
+            "fills": "Womit jede Nummer gefüllt wird",
+            "fillsHint": "Wähle eine Kontaktangabe oder eine Ablaufvariable oder schreibe einen eigenen Text. Leer lassen, um die Vorgabe der Vorlage zu nutzen.",
+            "fillPick": "Angabe einfügen…",
+            "headerMedia": "Kopfzeilen-Datei",
+            "headerMediaHint": "Das Bild, Video oder die Datei in der Kopfzeile dieser Vorlage. Nötig, wenn die Vorlage keine eigene Datei hat.",
+            "headerMediaMissing": "Kopfzeilen-Datei hinzufügen: Diese Vorlage hat keine, und WhatsApp sendet sie ohne nicht."
           },
           "cta": {
             "buttonText": "Schaltflächentext",
@@ -903,7 +905,10 @@
               "phone": "Nummer anrufen",
               "email": "E-Mail senden",
               "agent": "Mit einer Person sprechen"
-            }
+            },
+            "prev": "Vorherige Karte",
+            "next": "Nächste Karte",
+            "goTo": "Karte {n}"
           },
           "condition": {
             "info": "Fügen Sie Regeln hinzu (eine Variable, einen Vergleich und einen Wert). Verknüpfen Sie sie mit AND oder OR und verschachteln Sie bei Bedarf Gruppen.",
@@ -914,18 +919,16 @@
             "hint": "Der Besucher wird mit Ihrer Notiz an dieses Team übergeben. Nach dieser Schaltfläche muss nichts verbunden werden."
           },
           "faq": {
-            "exits": {
-              "matched": "Wenn eine FAQ geantwortet hat, weiter zu",
-              "no_match": "Wenn keine FAQ geantwortet hat, weiter zu"
-            },
-            "exitsHint": {
-              "matched": "Bis dahin wurde eine Textantwort gesendet. Eine FAQ, die einen Flow startet, wird stattdessen in diesem Flow fortgesetzt.",
-              "no_match": "Nichts war nah genug, oder die automatische FAQ-Antwort ist ausgeschaltet."
-            }
+            "exit": "Wenn nichts passt",
+            "exitHint": "Wohin der Ablauf geht, wenn kein Eintrag antwortet.",
+            "matched": "Bei Antwort",
+            "matchedHint": "Wohin der Ablauf nach dem Senden der Antwort geht."
           }
         },
         "branchAdd": "Schritt für „{title}“ hinzufügen",
-        "faqEnds": "Dieser Schritt beendet diesen Abschnitt: Was als Nächstes gesendet wird, hängt davon ab, ob eine FAQ geantwortet hat."
+        "faqEnds": "Dieser Schritt beendet diesen Teil: Der Ablauf geht über den Ausgang Beantwortet oder Kein Treffer weiter.",
+        "flowMenu": "Optionen für {name}",
+        "renameFlow": "Ablauf umbenennen"
       },
       "formsCore": {
         "helpers": {
@@ -1873,43 +1876,13 @@
           "waitUntilPaid": "Bis zur Zahlung warten, dann fortfahren"
         },
         "faq": {
-          "intro": {
-            "body": "Gleicht eine Nachricht inhaltlich mit den FAQs dieses Flows ab und beantwortet sie. Verlässt den Schritt über <mono>beantwortet</mono>, wenn eine FAQ geantwortet hat, sonst über <mono>kein Treffer</mono>.",
-            "sub": "Funktioniert auch ohne eingeschaltete automatische FAQ-Antworten für diesen Flow. <link>FAQs dieses Flows verwalten</link>"
-          },
-          "exitsLabel": "Ausgänge",
-          "exitMatchedName": "Beantwortet",
-          "exitMatched": "eine FAQ hat geantwortet: Ihr Text wurde gesendet (außer das Senden ist aus), oder ihr Flow hat übernommen und kehrt nicht zurück.",
-          "exitNoMatchName": "Kein Treffer",
-          "exitNoMatch": "nichts war nah genug, die automatische FAQ-Antwort ist für die Plattform ausgeschaltet, der verknüpfte Flow oder Schritt existiert nicht mehr, oder die Nachricht war leer.",
-          "query": "Zu prüfende Nachricht",
-          "queryHint": "Standardmäßig die letzte Nachricht des Kunden. Eine von einem Frage-Schritt gespeicherte Variable funktioniert ebenfalls, zum Beispiel <mono>{variable}</mono>. Mit / fügen Sie eine ein.",
-          "category": "Nur diese FAQs",
-          "allFaqs": "Alle FAQs",
-          "loadingCategories": "Kategorien werden geladen …",
-          "categoryGone": "{name} (keine FAQ nutzt sie)",
-          "retry": "Erneut versuchen",
-          "minScore": "Mindestscore",
+          "agent": "KI-Agent",
+          "agentHint": "Der Agent, dessen Wissensdatenbank durchsucht wird. Häufige Fragen fügen Sie unter KI-Training hinzu.",
+          "query": "Suchen nach",
+          "queryHint": "Wonach gesucht wird. Meist die letzte Nachricht des Kunden.",
           "sendAnswer": "Antwort an den Kunden senden",
-          "sendAnswerToggle": "Passende Textantwort als Nachricht senden",
-          "sendAnswerOnHint": "Eine passende Text-FAQ wird an den Kunden gesendet. Eine FAQ, die einen Flow startet, wird in diesem Flow fortgesetzt.",
-          "sendAnswerOffHint": "Es wird nichts gesendet: Die Antwort wird nur in den Variablen unten gespeichert, sodass ein späterer Schritt die Antwort selbst formulieren kann. Eine FAQ, die einen Flow startet, wird weiterhin in diesem Flow fortgesetzt.",
-          "save": "Ergebnis speichern als",
-          "saveHint": "Der Name, unter dem das Ergebnis gespeichert wird. Spätere Schritte lesen es wie unten gezeigt.",
-          "variables": {
-            "answer": "der Antworttext",
-            "matched": "ja oder nein",
-            "question": "die Frage der passenden FAQ",
-            "score": "wie gut der Treffer war",
-            "id": "die ID der passenden FAQ"
-          },
-          "noFaqs": "Dieser Flow hat noch keine FAQs, daher verlässt dieser Schritt immer über kein Treffer. <link>Erste FAQ dieses Flows hinzufügen</link>",
-          "useWorkspaceScore": "Einstellung dieses Flows verwenden",
-          "minScoreInvalid": "Geben Sie eine Zahl von {min} bis {max} ein oder verwenden Sie die Einstellung dieses Flows.",
-          "saveFlowFirst": "Speichern Sie zuerst den Flow. Seine FAQs bearbeiten Sie im Tab FAQs des einfachen Builders, und dieser Schritt antwortet aus ihnen.",
-          "categoryHint": "Nur FAQs dieser Kategorie können antworten. Die Kategorien stammen aus den FAQs dieses Flows.",
-          "categoriesFailed": "Die FAQ-Kategorien dieses Flows konnten nicht geladen werden.",
-          "minScoreHint": "Ersetzt den Score dieses Flows nur für diesen Schritt, von {min} bis {max}. Scores hängen vom Embedding-Modell der Plattform ab. Probieren Sie daher eine Nachricht im <link>FAQ-Test</link> dieses Flows aus, bevor Sie eine Zahl wählen."
+          "variable": "Antwort speichern als",
+          "variableHint": "Spätere Schritte lesen die Antwort unter diesem Namen, zum Beispiel faq.answer."
         }
       },
       "attrPicker": {
@@ -1980,7 +1953,6 @@
         "customizeFirst": "Passen Sie Ihr Chat-Widget an und speichern Sie es einmal, bevor Sie veröffentlichen.",
         "deploy": "Bereitstellen",
         "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen.",
-        "faqs": "FAQs",
         "install": "Installieren"
       },
       "buttonIcon": {
@@ -2151,8 +2123,8 @@
           "description": "Tag hinzufügen oder entfernen"
         },
         "assign": {
-          "label": "Agenten zuweisen",
-          "description": "An einen Menschen übergeben"
+          "label": "Übergabe an Mitarbeiter",
+          "description": "Chat an eine Person oder eine Warteschlange übergeben"
         },
         "subflow": {
           "label": "Unter-Flow ausführen",
@@ -2502,7 +2474,6 @@
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
-        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden.",
         "locationInvalid": "„{node}“ hat keinen gültigen Standort – fügen Sie einen Google-Maps-Link ein oder geben Sie Breitengrad (-90 bis 90) und Längengrad (-180 bis 180) ein.",
         "aiNoAgent": "„{node}“ hat weder einen KI-Agenten noch einen Prompt – wähle einen KI-Agenten oder „Eigene Einrichtung“ und schreibe die Anweisungen."
       }
@@ -2513,8 +2484,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Einem Agenten zuweisen",
-          "help": "Die Unterhaltung an ein Team oder einen Agenten übergeben"
+          "label": "Übergabe an Mitarbeiter",
+          "help": "Die Unterhaltung an eine Person, ein Team oder die Zuweisungsregeln übergeben"
         },
         "message": {
           "label": "Nachricht",
@@ -2552,30 +2523,6 @@
           "label": "Frage",
           "help": "Beliebige Frage stellen und Antwort speichern"
         },
-        "askName": {
-          "label": "Name",
-          "help": "Nach einem Namen fragen und prüfen"
-        },
-        "askEmail": {
-          "label": "E-Mail",
-          "help": "Nach einer E-Mail-Adresse fragen und prüfen"
-        },
-        "askPhone": {
-          "label": "Telefonnummer",
-          "help": "Nach einer Telefonnummer fragen und prüfen"
-        },
-        "askNumber": {
-          "label": "Zahl",
-          "help": "Nach einer Zahl fragen und prüfen"
-        },
-        "askAlphanumeric": {
-          "label": "Buchstaben und Zahlen",
-          "help": "Eine ID oder ein Code, ohne Leerzeichen oder Symbole"
-        },
-        "askDate": {
-          "label": "Datum",
-          "help": "Nach einem Datum im gewählten Format fragen"
-        },
         "askFile": {
           "label": "Datei oder Bild",
           "help": "Auf Foto, Dokument, Video oder Audio warten"
@@ -2591,10 +2538,6 @@
         "condition": {
           "label": "Bedingung",
           "help": "Verzweigen nach dem, was der Kunde gesagt oder gespeichert hat, mit AND-/OR-Regeln"
-        },
-        "faq": {
-          "label": "Antwort aus FAQ",
-          "help": "Die Nachricht des Kunden mit Ihren FAQs abgleichen. Beendet diesen Flow: ein Ausgang, wenn eine FAQ geantwortet hat, ein anderer, wenn nicht"
         },
         "apiLibrary": {
           "label": "API-Aufruf",
@@ -2617,7 +2560,7 @@
         "location": "Standort",
         "template": "Vorlage",
         "cta": "Link-Schaltfläche",
-        "assign": "Einem Agenten zuweisen",
+        "assign": "Übergabe an Mitarbeiter",
         "carousel": "Karussell",
         "condition": "Bedingung",
         "faq": "Antwort aus FAQ",
@@ -2664,7 +2607,6 @@
         "carouselCards": "Schritt {stage}: Fügen Sie mindestens eine Karte hinzu und geben Sie jeder Karte einen Titel.",
         "carouselButtons": "Schritt {stage}: Geben Sie jeder Schaltfläche einen Namen sowie einen Link, eine Nummer oder eine Adresse, wo sie etwas öffnet.",
         "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert).",
-        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows.",
         "optionNotConnected": "Schritt {stage}: {kind, select, row {Die Zeile} other {Die Schaltfläche}} „{label}\" führt nirgendwohin. Füge einen Schritt dafür hinzu oder gib ihr eine Aktion.",
         "tooManyOptions": "Schritt {stage}: {kind, select, row {Eine Liste kann höchstens {max} Zeilen haben} other {Eine Gruppe von Schaltflächen kann höchstens {max} Schaltflächen haben}}.",
         "chooseFlow": "Schritt {stage}: Wähle den Flow, den die Schaltfläche startet.",
@@ -2672,9 +2614,10 @@
         "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird.",
         "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
         "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
-        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten."
-      },
-      "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
+        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten.",
+        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu.",
+        "fileLinkInvalid": "Schritt {stage}: Der Dateilink muss mit https:// beginnen"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2786,9 +2729,8 @@
       "buttonNotConnected": "Schaltfläche „{label}“ nicht verbunden, Ende.",
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
-      "faqAnswered": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, daher wird nichts gesendet und {ref} bleibt leer. Ausgang „Beantwortet“ wird genommen.",
-      "faqNoMatch": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, und der Ausgang „Beantwortet“ ist nicht verbunden, daher wird „Kein Treffer“ genommen. {ref} bleibt leer.",
-      "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten"
+      "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten",
+      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\"."
     }
   }
 }

@@ -42,7 +42,7 @@ With two-step sign-in on, you enter your password and then a six-digit code from
 Resetting your password does not turn two-step sign-in off. What helps depends on whether you are still signed in somewhere.
 
 - **You are still signed in on another device or browser.** Open **Settings**, then **Data and security**, then **Password and two-step sign-in**. Select **Turn off** and enter your password. No code is needed. Then turn it on again with your new phone and keep the new recovery codes. If your workspace requires two-step sign-in, you will be asked to set it up again straight away.
-- **You are not signed in anywhere.** There is no self-service reset in this build. Ask a workspace admin to follow the steps below, or contact the people who run your platform.
+- **You are not signed in anywhere.** There is no self-service reset. Ask a workspace admin to follow the steps below, or contact the people who run your platform.
 
 ## If you are an admin helping a teammate
 

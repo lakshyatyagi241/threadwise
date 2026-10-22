@@ -1,0 +1,233 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Przypisywanie czatów",
+        "intro": "Cztery przełączniki wystarczają w większości przestrzeni roboczych: włącz je, a nie musisz tworzyć żadnych reguł.",
+        "order": "Kolejność dla nowego czatu: najpierw Właściciel kontaktu i Stały agent, potem Twoje reguły (jeśli jakieś dodasz), potem Pozostali, a na końcu kolejka oczekujących.",
+        "readOnly": "Możesz zobaczyć te przełączniki, ale nie możesz ich zmieniać.",
+        "saved": "Zapisano.",
+        "saveFailed": "Nie udało się zapisać zmiany.",
+        "loading": "Wczytywanie ustawień przypisywania",
+        "loadFailed": "Nie udało się wczytać ustawień przypisywania.",
+        "retry": "Spróbuj ponownie",
+        "notInPlan": "Brak w Twoim planie",
+        "upgradeHint": "W dodatku Inteligentne kierowanie lub w wyższym planie.",
+        "stepFirst": "Sprawdzane najpierw",
+        "stepMaster": "Główny przełącznik",
+        "stepAfter": "Po przejęciu czatu",
+        "needsAuto": "Działa tylko wtedy, gdy włączone jest Automatyczne przypisywanie.",
+        "auto": {
+          "title": "Automatyczne przypisywanie",
+          "body": "Nowe czaty są dzielone po równo między agentów, którzy przyjmują czaty (nie są offline, zajęci ani na urlopie). Gdy każdy agent osiągnie swój limit czatów, nowe czaty czekają w kolejce.",
+          "limitHint": "Limit czatów każdego agenta ustawisz w jego profilu w sekcji <link>Członkowie zespołu</link>.",
+          "off": "Wyłączone: nic nie jest przypisywane automatycznie, ani przez regułę, ani przez właściciela kontaktu. Czaty czekają w kolejce, aż ktoś je przejmie lub przepływ wskaże osobę."
+        },
+        "sticky": {
+          "title": "Stały agent",
+          "body": "Powracający kontakt wraca do agenta, który obsługiwał jego ostatni czat, o ile ten agent nadal jest aktywnym członkiem z dostępem do skrzynki odbiorczej (jego status online nie jest sprawdzany). Jeśli kontakt ma właściciela, najpierw próbowany jest właściciel.",
+          "withWindow": "To, ile dni wstecz liczy się ostatni agent, ustawiasz w sekcji Zaawansowane."
+        },
+        "owner": {
+          "title": "Przypisz czat właścicielowi kontaktu",
+          "body": "Czaty od znanego kontaktu trafiają najpierw do jego właściciela, dzięki czemu obsługa jest spójna i osobista. Jeśli właściciel jest na urlopie, czat przejmuje jego zastępca; jeśli nie ma właściciela, decyduje następny krok.",
+          "wins": "Jeśli włączony jest także Stały agent, właściciel kontaktu nadal ma pierwszeństwo; ostatni agent jest dopiero drugim wyborem."
+        },
+        "claim": {
+          "title": "Ustaw agenta jako właściciela kontaktu",
+          "body": "Gdy agent przejmie czat z kolejki oczekujących, a kontakt nie ma jeszcze właściciela, ten agent zostaje właścicielem kontaktu. Istniejący właściciel nigdy nie jest zmieniany.",
+          "note": "Czat przydzielony agentowi przez regułę nie ustawia właściciela. Przy włączonej opcji Zachowaj otwarte czaty przy właścicielu (w sekcji Zaawansowane) robi to także przekazanie."
+        }
+      },
+      "advanced": {
+        "title": "Zaawansowane",
+        "hint": "Utrzymywanie czatów zgodnie z właścicielem kontaktu, okno stałego agenta, monit o zmianie przypisania i alerty kolejki.",
+        "sync": {
+          "title": "Zachowaj otwarte czaty przy właścicielu",
+          "body": "Gdy zmieni się właściciel kontaktu, jego otwarte czaty przypisane automatycznie przechodzą do nowego właściciela. Czat przejęty przez osobę nigdy nie jest przenoszony. Przekazanie, które przypisuje czat, ustawia też właściciela, jeśli kontakt go nie ma.",
+          "needsOwner": "Najpierw włącz Przypisz czat właścicielowi kontaktu."
+        }
+      },
+      "rules": {
+        "title": "Potrzebujesz większej kontroli? Dodaj reguły",
+        "intro": "Opcjonalne. Reguły kierują wybrane czaty (z danego kanału, ze słowami w wiadomości, od nowego kontaktu...) do wybranych agentów lub zespołów. Jeśli cztery przełączniki wystarczają, nie musisz tworzyć żadnej reguły.",
+        "locked": "Reguły są częścią dodatku Inteligentne kierowanie lub wyższego planu. Nadal masz kolejkę oczekujących, przejmowanie czatów i ręczne przydzielanie.",
+        "pipelineTitle": "Jak przypisywany jest nowy czat",
+        "pipeline": {
+          "agent": "1. Właściciel kontaktu i Stały agent",
+          "rules": "2. Twoje reguły, od góry",
+          "rulesBody": "Pierwsza reguła, która pasuje i znajdzie dostępnego agenta, przejmuje czat.",
+          "everyone": "3. Pozostali",
+          "everyoneBody": "Przejmuje to, czego nie przejęła żadna reguła.",
+          "queue": "4. Kolejka oczekujących",
+          "queueBody": "Jeśli nikogo nie znaleziono, czat czeka na karcie Oczekujące, aż agent go przejmie.",
+          "agentBody": "Ustawiane przełącznikami powyżej."
+        },
+        "never": "Czaty już przypisane przez przepływ, osobę lub przekazanie nigdy nie są zmieniane przez reguły.",
+        "add": "Dodaj regułę",
+        "emptyTitle": "Brak reguł",
+        "empty": "To w porządku. Decydują przełączniki powyżej i Pozostali.",
+        "loading": "Wczytywanie reguł",
+        "loadFailed": "Nie udało się wczytać reguł.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "wszyscy agenci",
+        "noAssign": "nie przypisuje",
+        "drag": "Przeciągnij „{name}”, aby zmienić kolejność",
+        "neverRuns": "Nigdy się nie uruchamia",
+        "neverMatches": "Nigdy nie pasuje",
+        "neverMatchesHint": "Reguła nie ma warunku i nie dotyczy każdej rozmowy. Edytuj ją, aby to naprawić.",
+        "shadowed": "{count, plural, one {Reguła poniżej „{blocker}” nigdy się nie uruchomi} few {Reguły poniżej „{blocker}” nigdy się nie uruchomią} many {Reguły poniżej „{blocker}” nigdy się nie uruchomią} other {Reguły poniżej „{blocker}” nigdy się nie uruchomią}}, chyba że nikt z „{blocker}” nie jest dostępny: {names}. „{blocker}” dotyczy każdej rozmowy i kończy sprawdzanie w tym miejscu. Przesuń ją niżej albo wyłącz w niej opcję „Zatrzymaj, gdy ta reguła pasuje”.",
+        "reordered": "Zapisano kolejność."
+      },
+      "everyone": {
+        "title": "Pozostali",
+        "pinned": "Przypięte na końcu",
+        "body": "Przejmuje każdy czat, którego nie przejęła żadna reguła. Wybierz, kto go dostaje.",
+        "notSet": "Jeszcze nie skonfigurowano: czaty, których nie przejmie żadna reguła, czekają w kolejce.",
+        "mode": "Co dzieje się z tymi czatami",
+        "evenly": "Rozdziel po równo między wszystkich agentów",
+        "evenlyHint": "Po kolei lub najmniej zajęty wśród wszystkich, którzy mają dostęp do skrzynki odbiorczej i są dostępni: nie są offline, zajęci, na urlopie ani przy limicie czatów.",
+        "listed": "Wybierz agentów lub zespoły",
+        "listedNow": "Teraz: {who}.",
+        "listedEdit": "Zmień agentów lub zespoły",
+        "queue": "Zostaw w kolejce oczekujących",
+        "queueHint": "Nikt nie jest przypisany. Czat czeka, aż agent go przejmie.",
+        "strategy": "Sposób dzielenia",
+        "saved": "Zapisano.",
+        "failed": "Nie udało się zapisać zmiany.",
+        "confirmTitle": "Zastąpić wybranych agentów?",
+        "confirmBody": "Pozostali przekazują teraz czaty wybranym przez Ciebie agentom lub zespołom. Równy podział zastąpi ten wybór.",
+        "confirm": "Zastąp",
+        "ruleName": "Pozostali"
+      },
+      "where": {
+        "title": "Gdzie to działa",
+        "applied": "Działa",
+        "applied1": "Gdy przychodzi nowy czat (oraz gdy klient ponownie otwiera zakończony czat, którego nikt nie prowadzi).",
+        "applied2": "Gdy krok Przekazanie człowiekowi ustawiono na „Reguły przypisywania”: sprawdzana jest wtedy ta sama lista, na podstawie kontaktu, kanału i ostatniej wiadomości klienta, potem Pozostali, a następnie kolejka oczekujących.",
+        "not": "Nie działa",
+        "not1": "Czat, który został już przypisany przez przepływ, osobę lub przekazanie.",
+        "not2": "Ręczne przypisywanie lub przejmowanie.",
+        "not3": "Krok Przekazanie człowiekowi, który wskazuje osobę (reguły są pomijane) lub zespół (używana jest metoda zespołu)."
+      },
+      "try": {
+        "title": "Wypróbuj",
+        "body": "Wybierz kontakt, kanał i przykładową wiadomość, aby zobaczyć, kto dostałby czat i dlaczego. Nic nie jest przypisywane, liczone ani wysyłane.",
+        "contact": "Kontakt (opcjonalnie)",
+        "noContact": "Nie wybrano kontaktu: przykład to zupełnie nowy kontakt. Warunków dotyczących zapisanych danych kontaktu nie można sprawdzić bez prawdziwego kontaktu.",
+        "channel": "Kanał",
+        "message": "Przykładowa wiadomość",
+        "messagePlaceholder": "np. Chcę zwrotu pieniędzy",
+        "run": "Pokaż, co by się stało",
+        "running": "Sprawdzanie",
+        "failed": "Nie udało się uruchomić testu.",
+        "result": "Wynik",
+        "outcome": {
+          "sticky": "Decyduje zatrzymanie przy dotychczasowym agencie: {who}.",
+          "rule": "Decyduje reguła „{rule}”: {who}.",
+          "everyone": "Decydują Pozostali: {who}.",
+          "queue": "Nikogo nie znaleziono: czat czeka w kolejce.",
+          "off": "Automatyczne przypisywanie jest wyłączone: nic nie jest przypisywane automatycznie."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "agent",
+          "team": "kolejka: {name}",
+          "teamUnknown": "kolejka zespołu"
+        },
+        "stepsTitle": "Krok po kroku",
+        "step": {
+          "switch": "Automatyczne przypisywanie",
+          "sticky": "Właściciel kontaktu i Stały agent",
+          "rule": "Reguła „{name}”",
+          "everyone": "Pozostali",
+          "queue": "Kolejka oczekujących"
+        },
+        "why": {
+          "auto_assign_off": "Przełącznik jest wyłączony.",
+          "sticky_off": "Oba przełączniki są wyłączone, więc ten krok jest pomijany.",
+          "no_contact": "Nie ma kontaktu do wyszukania.",
+          "no_agent_found": "Żaden właściciel kontaktu ani ostatni agent nie mógł go przejąć.",
+          "owner": "Przejmuje go właściciel kontaktu.",
+          "last_handler": "Przejmuje go agent z ostatniego czatu kontaktu.",
+          "conditions_failed": "Nie pasuje.",
+          "nobody_available": "Pasuje, ale nikt, na kogo wskazuje, nie jest dostępny.",
+          "agent_picked": "Pasuje i wybrano agenta.",
+          "team_queue": "Pasuje; nikt nie był wolny, więc czat trafia do kolejki zespołu.",
+          "no_assignment_in_rule": "Pasuje; ta reguła nie przypisuje (wykonuje tylko inne akcje).",
+          "not_set": "Brak aktywnej reguły Pozostali, więc czaty, których nikt nie przejmie, czekają w kolejce."
+        },
+        "part": {
+          "contactKind": "Nowy lub powracający kontakt",
+          "contact": "Dane kontaktu",
+          "channel": "Kanał",
+          "keywords": "Słowa w wiadomości",
+          "languages": "Język",
+          "businessHours": "Godziny pracy"
+        },
+        "partOk": "pasuje",
+        "partWhy": {
+          "no_saved_value": "ten kontakt nie ma tego zapisanego, więc nie pasuje",
+          "no_contact": "brak kontaktu",
+          "not_same_kind": "kontakt nie jest tego rodzaju",
+          "channel_differs": "tego kanału nie ma na liście",
+          "no_word": "żadnego ze słów nie ma w wiadomości",
+          "language_differs": "język jest inny lub nieznany",
+          "hours_differ": "godzina nie mieści się w tej porze dnia"
+        },
+        "contactLine": "Ten kontakt jest {kind}. Etap: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "nowy",
+          "returning": "powracający"
+        },
+        "hasOwner": "Ma właściciela.",
+        "noOwner": "Nie ma właściciela.",
+        "tags": "{count, plural, =0 {Brak zapisanych tagów.} one {Zapisano # tag.} few {Zapisano # tagi.} many {Zapisano # tagów.} other {Zapisano # tagu.}}",
+        "skippedTitle": "Pominięci",
+        "skip": {
+          "on_leave": "na urlopie",
+          "offline_busy_or_at_capacity": "offline, zajęty lub przy limicie czatów",
+          "cannot_read": "nie ma dostępu do skrzynki odbiorczej",
+          "no_owner": "kontakt nie ma właściciela",
+          "no_previous_handler_in_window": "brak wcześniejszego agenta dla tego kontaktu",
+          "not_an_active_member": "nie jest aktywnym członkiem"
+        },
+        "outside": "Udawaj, że jest poza godzinami pracy",
+        "inside": "Udawaj, że jest w godzinach pracy",
+        "clock": "Godziny pracy: użyj aktualnej godziny",
+        "skipStep": {
+          "owner": "Właściciel kontaktu",
+          "last_handler": "Ostatni agent"
+        }
+      },
+      "form": {
+        "whenSwitch": "Tylko dla rozmów, które pasują do...",
+        "whenSwitchHint": "Wyłączone: ta reguła dotyczy każdej nowej rozmowy.",
+        "everyConversation": "Ta reguła dotyczy każdej nowej rozmowy.",
+        "kept": "Twoje warunki są zachowane, ale ignorowane, gdy ta opcja jest wyłączona.",
+        "add": "Dodaj warunek",
+        "remove": "Usuń: {name}",
+        "name": {
+          "contactKind": "Nowy lub powracający kontakt",
+          "channel": "Kanał",
+          "keywords": "Słowa w wiadomości",
+          "language": "Język klienta",
+          "hours": "Godziny pracy",
+          "contact": "Dane kontaktu"
+        },
+        "kind": {
+          "title": "Nowy lub powracający kontakt",
+          "hint": "Kontakt jest powracający, jeśli ma wcześniejszy czat albo został zapisany ponad 10 minut przed tym czatem.",
+          "new": "Nowy kontakt (pierwszy czat)",
+          "returning": "Powracający kontakt"
+        },
+        "contactNote": "Pasuje tylko do kontaktów, które mają to już zapisane. Zupełnie nowy kontakt przychodzi bez żadnych zapisanych danych poza etapem „Nowy”, więc dla klientów, którzy piszą pierwszy raz, użyj opcji Nowy lub powracający kontakt.",
+        "everyoneElseNote": "To jest reguła Pozostali: przejmuje czaty, których nie przejęła żadna inna reguła.",
+        "everyoneAgents": "Wszyscy z dostępem do skrzynki odbiorczej",
+        "everyoneAgentsHint": "Rozdziel czaty między wszystkich dostępnych agentów zamiast ich wybierać.",
+        "fallbackConditions": "Ta reguła ma zapisane wcześniej warunki, więc przejmuje tylko czaty, które do nich pasują. Włącz przełącznik poniżej, aby je przejrzeć, albo je usuń."
+      }
+    }
+  }
+}

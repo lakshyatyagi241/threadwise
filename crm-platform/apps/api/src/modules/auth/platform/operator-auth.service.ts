@@ -19,6 +19,7 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { LoginAlertService } from '../flows/login-alert.service';
 import { EpochService } from '../sessions/epoch.service';
 import { idleTimeoutError } from '../sessions/session.service';
@@ -218,11 +219,9 @@ export class OperatorAuthService {
     }
     await this.rate.reset(lockKey);
 
-    // A super admin is challenged only while the switch is on, even if they enrolled earlier.
-    if (
-      operator.mfa_enabled &&
-      (operator.role !== 'super_admin' || (await this.mfaRequired(operator)))
-    ) {
+    // An operator with a second factor enrolled is always asked for it. The policy switches decide who must enrol; they do not
+    // decide whether an enrolled factor counts (a super admin's factor protected nothing while the switch was off).
+    if (operator.mfa_enabled) {
       const token = randomToken(32);
       await this.redis.setex(
         AuthKeys.mfaChallenge(token),
@@ -258,8 +257,7 @@ export class OperatorAuthService {
     if (typeof challenge.operatorId !== 'number') throw expired();
 
     const attemptsKey = AuthKeys.mfaAttempts(req.challengeToken);
-    const attempts = await this.redis.incr(attemptsKey);
-    if (attempts === 1) await this.redis.expire(attemptsKey, Ttl.mfaChallengeSeconds);
+    const attempts = await incrWithTtl(this.redis, attemptsKey, Ttl.mfaChallengeSeconds);
     if (attempts > Ttl.mfaMaxAttempts) {
       await this.redis.del(key);
       throw expired();

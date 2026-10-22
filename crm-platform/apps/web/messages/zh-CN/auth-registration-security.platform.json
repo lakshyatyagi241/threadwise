@@ -1404,7 +1404,8 @@
             "packInactive": "该附加组件包已关闭，因此无人可以购买。",
             "appUnpublished": "该应用尚未发布，因此工作区暂时无法看到。",
             "appLabel": "应用：{name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, other {已选择 # 个附加组件}}"
           },
           "featureHints": {
             "automation": "用于回复对话并根据对话执行操作的流程构建器和自动化。",
@@ -1416,10 +1417,12 @@
             "remove_branding": "白标：工作区可在页脚隐藏平台品牌标识。",
             "sales_pipeline": "交易、任务和销售管道，以及仪表板上的管道数据。",
             "appointment_booking": "预约类型、预约及公开预约页面。此开关由付费的预约应用掌管。",
+            "appointment_confirm_buttons": "在预约前通过 WhatsApp 发送的提醒中添加“确认”“改期”和“取消”按钮。",
+            "appointment_rebook_steps": "预约完成后发送的跟进消息，邀请联系人再次预约。",
             "chatbot_widgets": "网站聊天机器人小组件构建器。",
             "wa_storefront": "WhatsApp 商品目录和店铺区域。",
             "inbox_sla": "团队收件箱中的 SLA 策略和截止时间。",
-            "inbox_routing": "自动分配收件箱对话的路由规则。",
+            "inbox_routing": "自动分配新会话：路由规则、其他所有人和等待队列计时器。属于智能路由附加组件。",
             "waba_calling": "收件箱中的 WhatsApp 通话：通话号码、通话权限、拨打和接听电话。",
             "inbox_kanban": "团队收件箱的看板视图。",
             "team_performance": "团队绩效报表。",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "个人 WhatsApp 号码首次关联时，可导入完整的聊天记录。所有支持个人号码的套餐均可导入近期聊天。",
             "ai_crm_copilot": "用 AI 从您的联系人中查找并评分潜在客户。",
             "lead_scoring": "用 AI 为联系人评分，并支撑增长试点。此开关由“AI 线索评分”应用管理。",
-            "record_assignment": "按优先级规则，将新的联系人、公司和商机分配给合适的销售负责人。"
+            "record_assignment": "按优先级规则，将新的联系人、公司和商机分配给合适的销售负责人。",
+            "team_hierarchy": "上级团队、团队负责人和经理,他们可以查看自己的团队及下级团队。",
+            "custom_roles": "创建和编辑角色,并为每项权限选择范围(自己的、团队的或全部记录)。",
+            "inbox_assignment_sticky": "负责人优先和同步分配、回访联系人时间窗口以及重新分配时的提示。属于智能路由附加组件。"
           },
           "units": {
             "days": "天",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "每月短信数",
             "email_mailboxes": "邮箱数量",
             "email_monthly": "每月邮件数",
-            "storage_gb": "存储空间 (GB)"
+            "storage_gb": "存储空间 (GB)",
+            "teams": "团队"
           },
           "featureGroups": {
             "messaging": "消息",
@@ -1605,10 +1612,12 @@
             "remove_branding": "白标（移除平台品牌标识）",
             "sales_pipeline": "销售管道（交易和任务）",
             "appointment_booking": "预约和预约页面",
+            "appointment_confirm_buttons": "提醒按钮：确认、改期和取消",
+            "appointment_rebook_steps": "预约后的再预约（召回）步骤",
             "chatbot_widgets": "网站聊天机器人小组件",
             "wa_storefront": "WhatsApp 店铺和商品目录",
             "inbox_sla": "收件箱 SLA 策略",
-            "inbox_routing": "收件箱路由规则和营业时间",
+            "inbox_routing": "智能路由: 自动分配和规则",
             "waba_calling": "在收件箱中拨打和接听 WhatsApp 电话",
             "inbox_kanban": "收件箱看板",
             "team_performance": "团队绩效报表",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "完整聊天记录导入（个人 WhatsApp）",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI 线索评分",
-            "record_assignment": "记录分配规则（自动分配联系人、公司和商机）"
+            "record_assignment": "记录分配规则（自动分配联系人、公司和商机）",
+            "team_hierarchy": "团队层级与经理",
+            "custom_roles": "自定义角色与范围",
+            "inbox_assignment_sticky": "智能路由: 联系人负责人和固定客服"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
             "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
             "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
-            "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。"
+            "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。",
+            "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。"
+          },
+          "productLines": {
+            "chat": "聊天",
+            "crm": "销售 CRM",
+            "platform": "两者共用"
+          },
+          "marketplace": {
+            "title": "向此套餐的工作区提供的应用市场应用"
+          },
+          "included": {
+            "title": "此套餐包含的附加组件",
+            "intro": "打开某个附加组件即可将其纳入套餐：此套餐的工作区可免费获得，其附加组件卡片会显示“已包含在您的套餐中”。这会在“功能”标签页中勾选该附加组件的全部功能，在那里勾选这些功能也会切换开关。未包含的附加组件仍以各自的价格销售给所有使用有效付费套餐的工作区。",
+            "readOnly": "您只能查看此套餐而无法修改，因此这些开关已锁定。",
+            "loading": "正在加载附加组件",
+            "loadFailed": "无法加载附加组件。未做任何更改。",
+            "empty": "还没有附加组件",
+            "emptyHint": "智能路由、团队与权限等附加组件在运营商控制台的“附加组件”中创建。",
+            "stateFull": "已包含",
+            "statePartial": "部分包含",
+            "stateNone": "未包含",
+            "noPrice": "未设置价格",
+            "gives": "提供：{features}",
+            "switchLabel": "将 {name} 纳入此套餐",
+            "noFeatures": "此附加组件只增加限额，因此没有可纳入的功能。其限额不属于套餐纳入的范围；请在“限额”标签页设置套餐自身的限额。",
+            "partial": "部分包含：此套餐已开启 {total} 项功能中的 {count} 项。仍未开启：{missing}。",
+            "includeFully": "完全纳入",
+            "limitsNote": "此附加组件还增加了额外限额（{limits}）。额外限额不属于套餐纳入的范围，这里也不会更改它：请在“限额”标签页设置套餐自身的限额。工作区仍需购买该附加组件以获得额外限额。",
+            "unlistedNote": "它的部分功能（{features}）不在标准附加组件列表中。仍可为套餐开启；只是将此附加组件作为套餐包购买的方式有所不同。",
+            "inactiveNote": "此附加组件是草稿或已关闭，因此暂时无人能购买。将其纳入套餐仍然有效。",
+            "impactCount": "{count, plural, other {已有 # 个工作区在为此附加组件付费。}}它们的续订将在当前周期结束时停止，不会退款，今天也不会取消任何内容。",
+            "impactUnknown": "此套餐中已为该附加组件付费的工作区，将在当前周期结束时停止续订。不会退款，今天也不会取消任何内容。无法加载数量。",
+            "offNote": "已关闭：除非购买该附加组件，否则此套餐的工作区将失去这些功能，该附加组件将按其价格供它们购买。"
           }
         }
       },

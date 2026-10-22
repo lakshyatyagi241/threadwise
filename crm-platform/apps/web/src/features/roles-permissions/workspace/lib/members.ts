@@ -1,4 +1,4 @@
-import type { RoleResponse, UserResponse } from '@crm/contracts';
+import { isTeamScope, type RoleResponse, type UserResponse } from '@crm/contracts';
 
 /** The five Reference presets, by the `systemKey` the API sends (the Owner row keeps the historical key `admin`). */
 export type PresetSlug = 'owner' | 'admin' | 'manager' | 'agent' | 'viewer';
@@ -11,6 +11,21 @@ const PRESET_BY_KEY: Record<string, PresetSlug> = {
   viewer: 'viewer',
 };
 const LADDER: readonly PresetSlug[] = ['owner', 'admin', 'manager', 'agent', 'viewer'];
+
+/**
+ * True when a person in no team is about to hold a role that grants something at a team scope: they would see only their own records
+ * there (BL-382). `selectedIds` are the roles ticked in the change-role dialog.
+ */
+export function noTeamMeetsTeamScope(
+  teamCount: number,
+  roles: ReadonlyArray<Pick<RoleResponse, 'id' | 'grants'>>,
+  selectedIds: readonly string[],
+): boolean {
+  if (teamCount > 0) return false;
+  return roles
+    .filter((r) => selectedIds.includes(r.id))
+    .some((r) => r.grants.some((g) => g.effect === 'allow' && isTeamScope(g.recordScope)));
+}
 
 export const presetSlug = (systemKey: string | null): PresetSlug | null =>
   systemKey ? (PRESET_BY_KEY[systemKey] ?? null) : null;
@@ -44,18 +59,40 @@ export interface MemberFilter {
   /** `null` = All. */
   roleId: string | null;
   search: string;
+  /** A team id, or `null` = every team. */
+  teamId?: string | null;
 }
 
 export function filterMembers(
   members: readonly UserResponse[],
-  { roleId, search }: MemberFilter,
+  { roleId, search, teamId = null }: MemberFilter,
 ): UserResponse[] {
   const q = search.trim().toLowerCase();
   return members.filter(
     (m) =>
       (roleId === null || m.roles.some((r) => r.id === roleId)) &&
+      (teamId === null || m.teams.some((t) => t.id === teamId)) &&
       (q === '' || m.fullName.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)),
   );
+}
+
+export interface TeamFilterOption {
+  id: string;
+  name: string;
+  count: number;
+}
+
+/** The teams the people shown are on, by name, with how many of them are on each (the team filter's options). */
+export function teamFilterOptions(members: readonly UserResponse[]): TeamFilterOption[] {
+  const byTeam = new Map<string, TeamFilterOption>();
+  for (const m of members) {
+    for (const t of m.teams) {
+      const cur = byTeam.get(t.id) ?? { id: t.id, name: t.name, count: 0 };
+      cur.count += 1;
+      byTeam.set(t.id, cur);
+    }
+  }
+  return [...byTeam.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /** Roles the caller may hand to a member: the server marks them, the picker never offers the rest. */

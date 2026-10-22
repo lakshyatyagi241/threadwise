@@ -13,10 +13,12 @@ const OTHER_TEAM = 200;
 const viewer = (
   scope: ConversationViewer['scope'],
   teamIds: number[] = [],
+  readsUnassigned = true,
 ): ConversationViewer => ({
   userId: ME,
   scope,
   teamIds,
+  readsUnassigned,
 });
 const record = (
   assigneeUserId: number | null,
@@ -69,11 +71,39 @@ describe('conversationVisible: who may see a conversation (plan 3.7)', () => {
     });
   });
 
+  describe('scope team without inbox.conversation.read_unassigned (BL-382, decision D2)', () => {
+    it('does not see an unassigned conversation, but still the ones assigned to them or to their team', () => {
+      expect(conversationVisible(viewer('team', [MY_TEAM], false), record(null, null))).toBe(false);
+      expect(conversationVisible(viewer('team', [MY_TEAM], false), record(ME))).toBe(true);
+      expect(conversationVisible(viewer('team', [MY_TEAM], false), record(null, MY_TEAM))).toBe(
+        true,
+      );
+    });
+    it('a personal mailbox of their own stays theirs, unassigned or not', () => {
+      expect(conversationVisible(viewer('team', [], false), record(null, null, ME))).toBe(true);
+    });
+  });
+
+  describe('scope team_and_below', () => {
+    it('sees the conversations of every team it was given (its own and the ones below)', () => {
+      const v = viewer('team_and_below', [MY_TEAM, 150]);
+      expect(conversationVisible(v, record(null, MY_TEAM))).toBe(true);
+      expect(conversationVisible(v, record(OTHER, 150))).toBe(true);
+      expect(conversationVisible(v, record(OTHER, OTHER_TEAM))).toBe(false);
+    });
+    it('sees the unassigned queue only with the permission', () => {
+      expect(conversationVisible(viewer('team_and_below', [MY_TEAM]), record(null))).toBe(true);
+      expect(conversationVisible(viewer('team_and_below', [MY_TEAM], false), record(null))).toBe(
+        false,
+      );
+    });
+  });
+
   describe('scope own', () => {
     it('sees only what is assigned to them', () => {
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(ME))).toBe(true);
     });
-    it('does not see the unassigned, a team, or a colleague', () => {
+    it('does not see the unassigned (even with the permission: it widens team scopes only), a team, or a colleague', () => {
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(null))).toBe(false);
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(null, MY_TEAM))).toBe(false);
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(OTHER, MY_TEAM))).toBe(false);

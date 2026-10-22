@@ -22,7 +22,7 @@ export function ErrorLine({
   return (
     <Alert tone={kind === 'unavailable' ? 'warning' : 'danger'} className={className}>
       <span>{t(kind, { limit: planLimitOf(error) ?? 0 })}</span>
-      {onRetry && (
+      {onRetry && kind !== 'assignedToOther' && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}
         </Button>

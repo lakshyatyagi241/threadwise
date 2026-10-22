@@ -224,20 +224,20 @@
           "title": "Texto libre",
           "body": "Pega un fragmento de ayuda o una política."
         },
-        "qa": {
-          "title": "Par de pregunta y respuesta",
-          "body": "Una pregunta con su respuesta oficial."
-        },
         "file": {
           "title": "PDF, DOCX, TXT y más",
           "body": "Sube un archivo. El texto se extrae por ti."
+        },
+        "faq": {
+          "title": "Añadir preguntas frecuentes",
+          "body": "Preguntas y las respuestas que quieres que se den."
         }
       },
       "panel": {
         "url": "Obtener una URL pública",
         "text": "Pegar texto sin formato",
-        "qa": "Pregunta y respuesta individual",
-        "file": "Subir un archivo de conocimiento"
+        "file": "Subir un archivo de conocimiento",
+        "faq": "Añade preguntas y respuestas"
       },
       "label": "Etiqueta",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Etiqueta (p. ej. Página de precios)",
           "text": "Etiqueta (p. ej. Resumen de la política de reembolsos)",
-          "qa": "Etiqueta (p. ej. Plazo de reembolso)",
           "file": "Etiqueta (p. ej. Manual del producto)"
         },
         "content": "Pega cualquier texto que el agente deba conocer…",
         "question": "Pregunta, p. ej. ¿Cuánto tardan los reembolsos?",
         "answer": "Respuesta, p. ej. Los reembolsos se acreditan en 3 a 5 días hábiles."
       },
-      "urlHint": "Solo se leen páginas públicas http y https. La página se obtiene en segundo plano, por lo que la entrada muestra Procesando un momento.",
+      "urlHint": "Solo se leen páginas públicas http y https. La página se lee en segundo plano, así que puede tardar un momento.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV o HTML, hasta 10 MB. El texto se extrae automáticamente.",
       "uploading": "Progreso de la subida",
       "submit": {
         "url": "Obtener y entrenar",
         "text": "Guardar texto",
-        "qa": "Guardar par",
-        "file": "Subir"
+        "file": "Subir",
+        "faq": "Guardar preguntas frecuentes"
       },
       "cancel": "Cancelar",
       "added": "Conocimiento añadido.",
@@ -281,25 +280,6 @@
         "file_empty": "Ese archivo está vacío.",
         "tooLarge": "Es demasiado texto para pegarlo de una vez. Súbelo como archivo."
       },
-      "col": {
-        "kind": "Tipo",
-        "label": "Etiqueta",
-        "state": "Estado",
-        "actions": "Acciones"
-      },
-      "kind": {
-        "url": "url",
-        "text": "texto",
-        "qa": "p y r",
-        "file": "archivo"
-      },
-      "state": {
-        "ready": "listo",
-        "processing": "procesando",
-        "failed": "fallido"
-      },
-      "tokens": "unos {count} tokens",
-      "workspaceWide": "en todo el espacio de trabajo",
       "loading": "Cargando entradas",
       "loadError": "No se pudieron cargar las entradas.",
       "retry": "Reintentar",
@@ -310,7 +290,14 @@
       "removeBody": "El agente dejará de usarla en las nuevas respuestas. Las conversaciones anteriores no cambian.",
       "keep": "Conservar",
       "removed": "Quitada.",
-      "removeFailed": "Error al quitar."
+      "removeFailed": "Error al quitar.",
+      "ownedNote": "Este conocimiento pertenece solo a este agente. Ningún otro agente puede usarlo.",
+      "faq": {
+        "addAnother": "Añadir otra pregunta",
+        "removeRow": "Quitar esta pregunta"
+      },
+      "reading": "Leyendo…",
+      "failed": "No se pudo leer."
     }
   }
 }

@@ -11,3 +11,4 @@ export {
 } from './assignment.service';
 export { RoutingEngine, type RoutingInput, type RoutingOutcome } from './routing-engine.service';
 export { TeamInboxRoutingSlaWorkerModule } from './team-inbox-routing-sla-worker.module';
+export { HandoffService, type HandoffInput, type HandoffResultInternal } from './handoff.service';

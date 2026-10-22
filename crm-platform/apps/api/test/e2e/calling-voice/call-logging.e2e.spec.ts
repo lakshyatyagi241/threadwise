@@ -7,6 +7,7 @@ import { CallLogRetentionService } from '../../../src/modules/calling-voice/logg
 import {
   addNumber,
   enableRecording,
+  saveRecordingRules,
   startCallPipeline,
   type CallPipeline,
   type Tenant,
@@ -706,7 +707,7 @@ describe('the contact’s calls and the Call logs screen', () => {
           .post(`/v2/calling/call-logs/${made.body.entry.id}/playback`)
           .send({})
       ).status,
-    ).toBe(404);
+    ).toBe(403); // no role holds call.recordings.play any more, so the refusal comes before the "nothing to play" check
   });
 
   it('applies the record scope of call.logs.read by who handled the call, on the list, the contact and the detail', async () => {
@@ -1564,6 +1565,25 @@ describe('telephony', () => {
       expect((await recorded(t))[0]!.recording_ref).toBeNull();
     });
 
+    it('refuses to switch recording on without a notice, the rule the PUT route applies', async () => {
+      const { t } = await setup('recnone', { phone: '+919811400002' });
+      await expect(
+        saveRecordingRules(p, t, {
+          enabled: true,
+          consentMode: 'confirmed',
+          retentionDays: 90,
+          noticeText: '  ',
+        }),
+      ).rejects.toThrow(
+        'Write the recording notice (at least 10 characters) before switching recording on.',
+      );
+      const rows = await p.h.owner.query(
+        `SELECT enabled FROM call_recording_settings WHERE org_id = $1`,
+        [t.orgId],
+      );
+      expect(rows.rows).toEqual([]);
+    });
+
     it('is kept with its consent evidence once recording is on, the mode is "announcement" and the connection plays the notice; then it is cleared after the retention window', async () => {
       const { t } = await setup('rec4', { phone: '+919811400001' });
       const settings = await enableRecording(p, t, { mode: 'announcement', retentionDays: 30 });
@@ -1583,7 +1603,7 @@ describe('telephony', () => {
       expect(JSON.stringify(detail.body)).not.toContain('rec-ok-1');
       expect(
         (await p.api.as(t.admin).post(`/v2/calling/call-logs/${row.id}/playback`).send({})).status,
-      ).toBe(404);
+      ).toBe(403); // no role holds call.recordings.play any more
 
       // The database itself refuses a reference with no consent behind it.
       for (const change of [

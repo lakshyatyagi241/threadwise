@@ -14,6 +14,8 @@ describe('routing rule actions as stored', () => {
       markSpam: true,
       priority: null,
       addTags: [],
+      escalation: null,
+      autoReply: null,
       triggerFlowId: null,
       description: '',
       cursor: null,
@@ -30,10 +32,12 @@ describe('routing rule actions as stored', () => {
 
   it('assign, mark_spam, flow and note round-trip together, with the round robin cursor on the assign only', () => {
     const stored = encodeActions({
-      assign: { strategy: 'round_robin', userIds: [U1], teamIds: [] },
+      assign: { strategy: 'round_robin', userIds: [U1], teamIds: [], everyone: false },
       markSpam: true,
       priority: null,
       addTags: [],
+      escalation: null,
+      autoReply: null,
       triggerFlowId: '1b2f7c1e-6d1a-4f6e-9a55-3e2f0d7a1b12',
       description: 'scams',
       cursor: 7,
@@ -84,6 +88,8 @@ describe('priority and tags as stored', () => {
         { name: 'VIP', color: null },
         { name: 'Refunds', color: '#FF0000' },
       ],
+      escalation: null,
+      autoReply: null,
       triggerFlowId: null,
       description: '',
       cursor: null,
@@ -123,11 +129,12 @@ describe('priority and tags as stored', () => {
 describe('escalation as stored and validated', () => {
   it('the escalation round-trips through the stored actions', () => {
     const stored = encodeActions({
-      assign: { strategy: 'specific', userIds: [U1], teamIds: [] },
+      assign: { strategy: 'specific', userIds: [U1], teamIds: [], everyone: false },
       markSpam: false,
       priority: null,
       addTags: [],
       escalation: { minutes: 15, reassign: true, priority: 'urgent' },
+      autoReply: null,
       triggerFlowId: null,
       description: '',
       cursor: null,

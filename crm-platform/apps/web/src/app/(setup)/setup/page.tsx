@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { setupStatusResponseSchema } from '@crm/contracts';
 import { SetupWizard } from '@/features/install-update-licensing/setup/setup-wizard';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,7 +18,7 @@ export default async function SetupPage() {
   const t = await getTranslations('install-update-licensing.setup');
   let status;
   try {
-    const res = await fetch(`${apiBase()}/v2/setup/status`, { cache: 'no-store' });
+    const res = await upstreamFetch(`${apiBase()}/v2/setup/status`, { cache: 'no-store' });
     status = setupStatusResponseSchema.parse(await res.json());
   } catch {
     return (

@@ -16,6 +16,7 @@ import {
 import { formatMoney } from '../lib/money';
 import { deriveReminders } from '../lib/reminders';
 import { knownReason } from '../lib/reminder-rules';
+import { ReminderHistory } from './reminder-history';
 import { REMINDER_RUN_TONE, REMINDER_TONE, actionsFor } from '../lib/status';
 import { CalendarSyncPanel } from './calendar-sync-panel';
 import { Drawer } from './drawer';
@@ -100,18 +101,27 @@ function RecordedReminders({
         >
           <span className="min-w-0">
             <span className="font-medium">
-              {r.label || t(`when.${r.kind}`, { count: r.offsetMinutes })}
+              {r.label ||
+                (r.kind === 'event'
+                  ? t(`steps.${r.stepKind ?? 'confirmation'}`)
+                  : t(`when.${r.kind}`, { count: r.offsetMinutes }))}
             </span>
             <span className="ms-2 tabular-nums text-muted-foreground">
               {formatDateTime(r.dueAt, locale, zone)}
             </span>
             <span className="block text-xs text-muted-foreground">
               {r.status === 'sent' && r.channel
-                ? t('sentOn', { channel: t(`channels.${r.channel}`) })
+                ? t('sentOn', {
+                    channel:
+                      r.channel === 'whatsapp' || r.channel === 'email' || r.channel === 'voice'
+                        ? t(`channels.${r.channel}`)
+                        : r.channel.toUpperCase(),
+                  })
                 : knownReason(r.reason)
                   ? t(`reasons.${knownReason(r.reason)!}`)
                   : null}
             </span>
+            <ReminderHistory reminder={r} zone={zone} />
           </span>
           <ToneChip tone={REMINDER_RUN_TONE[r.status]} label={t(`status.${r.status}`)} />
         </li>

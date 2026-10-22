@@ -8,6 +8,9 @@ import type { StorageCategory } from '@crm/contracts';
  */
 const AREA_CATEGORY: Readonly<Record<string, StorageCategory>> = {
   marketing: 'campaign_media',
+  // The example file a message template shows in its header (image, video or PDF): it is sent with every broadcast that uses the
+  // template, so it counts as the same kind as a file attached to a broadcast.
+  'template-media': 'campaign_media',
   scheduled: 'scheduled_media',
   telegram: 'channel_profile_media',
   'ai-training': 'ai_training_file',

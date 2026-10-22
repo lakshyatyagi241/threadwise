@@ -1,13 +1,18 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
+  HANDOFF_GATES,
   hasRoutingConditions,
+  ROUTING_NEW_CONTACT_GRACE_MINUTES,
   ROUTING_BLOCKED_BY_LEAVE,
   ROUTING_FLOW_REQUESTED,
   type ConversationPriority,
   type RoutingAssign,
   type RoutingAutoReply,
-  type RoutingConditions,
   type RoutingTag,
+  type RoutingTestCondition,
+  type RoutingTestRequest,
+  type RoutingTestResponse,
+  type RoutingTestStep,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { isOutsideBusinessHours } from '../../common/business-hours';
@@ -26,11 +31,15 @@ import {
 } from '../team-inbox-conversations';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../chat-conversations';
 import { createHash } from 'node:crypto';
+import { sql } from 'drizzle-orm';
+import { AppError } from '../../common/errors/app-error';
 import { AssignmentService, type AssignmentChange, type AssignmentHow } from './assignment.service';
 import { pickLeastBusy, pickRoundRobin } from './agent-picker';
-import { matchesFacts, type RoutingFacts } from './routing-matcher';
+import { QueueArrivalService, type ArrivalQueued } from './queue-arrival.service';
+import { explainFacts, type RoutingFacts } from './routing-matcher';
 import { decodeActions, decodeConditions, encodeActions } from './routing-rules.mapper';
 import { RoutingRulesRepository, type RuleRow } from './routing-rules.repository';
+import type { HandoffTraceLine } from '@crm/contracts';
 
 /** A uuid derived from a seed (a SHA-1 shaped as a version 5 uuid), so the same seed always gives the same id. */
 const deterministicUuid = (seed: string): string => {
@@ -55,9 +64,13 @@ export type RoutingOutcome =
   | { outcome: 'triggered'; ruleIds: string[] }
   | { outcome: 'assigned'; via: 'contact_agent' | 'rule'; ruleIds: string[] };
 
-type Done = { result: RoutingOutcome; change?: AssignmentChange | null };
+type Done = {
+  result: RoutingOutcome;
+  change?: AssignmentChange | null;
+  queued?: ArrivalQueued | null;
+};
 
-interface Pick {
+export interface Pick {
   userId: number | null;
   userUuid: string | null;
   teamId: number | null;
@@ -69,8 +82,59 @@ interface Pick {
   delegateFor?: string | null;
 }
 
+/** What one rule does when it fires: the person it picks and every other action. Reading it changes nothing. */
+export interface RuleTurn {
+  pick: Pick | null;
+  flowId: string | null;
+  markSpam: boolean;
+  priority: ConversationPriority | null;
+  addTags: RoutingTag[];
+  escalation: {
+    minutes: number;
+    priority: ConversationPriority | null;
+    assign: RoutingAssign | null;
+  } | null;
+  autoReply: RoutingAutoReply | null;
+  /** The actions as stored (with the round robin cursor), so that recording the firing can move the cursor. */
+  stored: ReturnType<typeof decodeActions>;
+}
+
+/** The contact's agent and where it came from: the owner, or the person who held the last conversation. */
+type ContactAgentPick = Pick & { from: 'owner' | 'last_handler' };
+
+/** What the arrival pipeline needs to decide, read once. The same input feeds the real run and the dry run ("Try it"). */
+interface ArrivalInput {
+  orgId: number;
+  /** Internal id of the conversation being routed; null for the dry run (none exists yet). */
+  conversationId: number | null;
+  contactId: number | null;
+  rf: RoutingFacts;
+  rules: RuleRow[];
+  arrival: { keep: boolean; autoAssign: boolean; ownerMode: string; days: number | null };
+  stickyPlan: boolean;
+  canOpen: ReadonlySet<number>;
+  cal: Calendar;
+  /** The dry run reads rules without locks, explains every condition, and gives no side effect to hooks. */
+  dry: boolean;
+  trace: HandoffTraceLine[] | undefined;
+}
+
+/** What the real run does as the decision unfolds. The dry run passes none: it only reads. */
+interface ArrivalHooks {
+  onSticky(mine: ContactAgentPick, how: 'contact_agent' | 'owner'): Promise<void>;
+  onRule(rule: RuleRow, turn: RuleTurn): Promise<void>;
+}
+
+interface ArrivalDecision {
+  steps: RoutingTestStep[];
+  sticky: ContactAgentPick | null;
+  /** The rules that fired, in order. */
+  fired: Array<{ rule: RuleRow; turn: RuleTurn }>;
+  autoAssignOff: boolean;
+}
+
 /** What the engine knows about the calendar while it evaluates one conversation. */
-interface Calendar {
+export interface Calendar {
   today: string;
   /** People a rule wanted but who are on leave today (internal ids): the notice to the leads when nobody could take the conversation. */
   blocked: Set<number>;
@@ -116,6 +180,7 @@ export class RoutingEngine {
     private readonly directory: MemberDirectory,
     private readonly entitlements: PlanEntitlementService,
     private readonly outbox: OutboxService,
+    private readonly arrivalQueue: QueueArrivalService,
     @Inject(CONVERSATIONS_FACADE) private readonly facade: ConversationsFacade,
   ) {}
 
@@ -181,19 +246,10 @@ export class RoutingEngine {
           : c;
       };
 
-      // 2. the contact's own agent
-      if (facts.contactId !== null && (await this.repo.keepContactAgent(tx, orgId))) {
-        const mine = await this.contactAgent(tx, orgId, facts.contactId, locked, canOpen, cal);
-        if (mine) {
-          await apply(
-            { ...mine, teamId: null, teamUuid: null, how: 'contact_agent', cursor: null },
-            {},
-          );
-          return { result: { outcome: 'assigned', via: 'contact_agent', ruleIds: [] }, change };
-        }
-      }
-
-      // 3 and 4. the rules
+      // The workspace's switch (BL-404): automatic assignment off means no rule and no sticky agent at arrival either; default on = before.
+      const arrival = await this.repo.arrivalSettings(tx, orgId);
+      if (!arrival.autoAssign) return { result: { outcome: 'skipped', reason: 'plan' } };
+      const stickyPlan = await this.entitlements.featureEnabled(orgId, HANDOFF_GATES.ownerFirst);
       const rules = await this.repo.activeRules(tx, orgId);
       const hours = await this.repo.businessHours(tx, orgId);
       const rf: RoutingFacts = {
@@ -201,76 +257,84 @@ export class RoutingEngine {
         messageText: input.messageText,
         language: facts.language,
         outsideHours: isOutsideBusinessHours(hours.hours, hours.timezone, now),
+        contactKind: await this.contactKindFor(tx, orgId, rules, facts.contactId, locked.id),
       };
       const fired: string[] = [];
-      const run = async (rule: RuleRow): Promise<boolean> => {
-        const ruleId = rule.uuid as string;
-        if (
-          !(await this.matches(
-            tx,
-            orgId,
-            decodeConditions(rule.conditions),
-            rule.is_fallback === true,
-            rf,
-            facts.contactId,
-          ))
-        ) {
-          return false;
-        }
-        const turn = await this.fire(tx, orgId, rule, canOpen, cal);
-        if (!turn) return false;
-        // Reference's mark_spam: the thread leaves the open list; the rule's other actions still run.
-        if (turn.markSpam) await this.markSpamByRule(tx, orgId, current, ruleId);
-        // Priority and tags are written before the assignment: the assignment re-reads the row, so it sees both.
-        await this.decorateByRule(tx, orgId, current, ruleId, turn.priority, turn.addTags);
-        if (turn.autoReply) replies.push(turn.autoReply.body);
-        if (turn.escalation) {
-          await this.repo.setEscalation(
-            tx,
-            orgId,
-            locked.id,
-            new Date(now.getTime() + turn.escalation.minutes * 60_000),
-            {
-              ruleId,
-              ruleName: rule.name as string,
-              priority: turn.escalation.priority,
-              assign: turn.escalation.assign,
-            },
-          );
-        }
-        if (turn.pick)
-          await apply(turn.pick, {
-            ruleId: rule.uuid as string,
-            ruleName: rule.name as string,
-            ...(turn.pick.delegateFor ? { delegateFor: turn.pick.delegateFor } : {}),
-          });
-        if (turn.flowId) {
-          // The flow starts in the flow runtime's worker (the event is committed with the rule's firing, so a crash cannot lose it).
-          // Reference started it on the next Baileys inbound only; here it starts on every channel.
-          await this.outbox.emit(tx, {
-            aggregateModule: 'conversations',
-            aggregateId: locked.id,
-            orgId,
-            eventType: ROUTING_FLOW_REQUESTED,
-            payload: {
-              conversationId: locked.uuid,
-              flowId: turn.flowId,
-              ruleId: rule.uuid as string,
-              ruleName: rule.name as string,
-              messageUuid: input.messageUuid,
-            },
-          });
-        }
-        fired.push(rule.uuid as string);
-        return true;
-      };
-      for (const rule of rules.filter((r) => r.is_fallback !== true)) {
-        if ((await run(rule)) && rule.stop_on_match === true) break;
-      }
-      if (fired.length === 0) {
-        for (const rule of rules.filter((r) => r.is_fallback === true)) {
-          if (await run(rule)) break;
-        }
+      // A rule that starts a flow leaves the chat to that flow: such a chat does not enter the waiting queue.
+      let startedFlow = false;
+      const decision = await this.decideArrival(
+        {
+          orgId,
+          conversationId: locked.id,
+          contactId: facts.contactId,
+          rf,
+          rules,
+          arrival,
+          stickyPlan,
+          canOpen,
+          cal,
+          dry: false,
+          trace: undefined,
+        },
+        tx,
+        {
+          // 2. the contact's own agent
+          onSticky: async (mine, how) => {
+            await apply({ ...mine, teamId: null, teamUuid: null, how, cursor: null }, {});
+          },
+          // 3 and 4. a rule (or the fallback) fires: count it, then do what it says
+          onRule: async (rule, turn) => {
+            const ruleId = rule.uuid as string;
+            await this.recordFire(tx, orgId, rule, turn);
+            // Reference's mark_spam: the thread leaves the open list; the rule's other actions still run.
+            if (turn.markSpam) await this.markSpamByRule(tx, orgId, current, ruleId);
+            // Priority and tags are written before the assignment: the assignment re-reads the row, so it sees both.
+            await this.decorateByRule(tx, orgId, current, ruleId, turn.priority, turn.addTags);
+            if (turn.autoReply) replies.push(turn.autoReply.body);
+            if (turn.escalation) {
+              await this.repo.setEscalation(
+                tx,
+                orgId,
+                locked.id,
+                new Date(now.getTime() + turn.escalation.minutes * 60_000),
+                {
+                  ruleId,
+                  ruleName: rule.name as string,
+                  priority: turn.escalation.priority,
+                  assign: turn.escalation.assign,
+                },
+              );
+            }
+            if (turn.pick)
+              await apply(turn.pick, {
+                ruleId,
+                ruleName: rule.name as string,
+                ...(turn.pick.delegateFor ? { delegateFor: turn.pick.delegateFor } : {}),
+              });
+            if (turn.flowId) {
+              startedFlow = true;
+              // The flow starts in the flow runtime's worker (the event is committed with the rule's firing, so a crash cannot lose it).
+              // Reference started it on the next Baileys inbound only; here it starts on every channel.
+              await this.outbox.emit(tx, {
+                aggregateModule: 'conversations',
+                aggregateId: locked.id,
+                orgId,
+                eventType: ROUTING_FLOW_REQUESTED,
+                payload: {
+                  conversationId: locked.uuid,
+                  flowId: turn.flowId,
+                  ruleId,
+                  ruleName: rule.name as string,
+                  messageUuid: input.messageUuid,
+                },
+              });
+            }
+            fired.push(ruleId);
+          },
+        },
+      );
+      if (decision.sticky) {
+        return { result: { outcome: 'assigned', via: 'contact_agent', ruleIds: [] }, change };
       }
       // Somebody who should have had it is away and nobody took their place: the leads hear of it (once per message, with the event).
       if (change === null && cal.blocked.size > 0) {
@@ -287,12 +351,29 @@ export class RoutingEngine {
           },
         });
       }
-      if (fired.length === 0) return { result: { outcome: 'unmatched' } };
-      if (change === null) return { result: { outcome: 'triggered', ruleIds: fired } };
-      return { result: { outcome: 'assigned', via: 'rule', ruleIds: fired }, change };
+      // Nobody took it (no rule matched, nobody was available, or a rule only named a team): it waits in the queue, with its age, its
+      // card and the queue timers, instead of only sitting in the Unassigned tab. Not when a rule started a flow for it.
+      const queued =
+        !startedFlow && current.assigneeUserId === null
+          ? await this.arrivalQueue.enter(
+              tx,
+              orgId,
+              current,
+              input.messageUuid,
+              fired.length === 0
+                ? 'no_rule_matched'
+                : current.assigneeTeamId !== null
+                  ? 'team_queue'
+                  : 'nobody_available',
+            )
+          : null;
+      if (fired.length === 0) return { result: { outcome: 'unmatched' }, queued };
+      if (change === null) return { result: { outcome: 'triggered', ruleIds: fired }, queued };
+      return { result: { outcome: 'assigned', via: 'rule', ruleIds: fired }, change, queued };
     });
 
     if (done.change) await this.assignment.afterCommit(orgId, done.change);
+    if (done.queued) await this.arrivalQueue.announce(orgId, done.queued);
     await this.sendReplies(orgId, input.conversationUuid, input.messageUuid, replies);
     return done.result;
   }
@@ -307,7 +388,17 @@ export class RoutingEngine {
     conversationUuid: string,
     now: Date = new Date(),
   ): Promise<boolean> {
-    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) return false;
+    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) {
+      // The plan (or the Smart routing add-on) is gone: the timer stops. Dropping the schedule is what ends it; leaving it set would make
+      // the sweep pick the same conversation every 30 seconds for ever and, as the oldest due rows, crowd out other workspaces' escalations.
+      // Nothing else is touched: the chat keeps its assignee and priority. The rule that scheduled it is still stored and works again
+      // for a NEW conversation once the feature is back.
+      await this.db.txAs({ orgId }, async (tx) => {
+        const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);
+        if (locked) await this.repo.clearEscalation(tx, orgId, locked.id);
+      });
+      return false;
+    }
     const canOpen = await this.inboxPeople(orgId);
     const done = await this.db.txAs({ orgId }, async (tx) => {
       const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);
@@ -388,21 +479,15 @@ export class RoutingEngine {
         messageText: input.messageText,
         language: facts.language,
         outsideHours: isOutsideBusinessHours(hours.hours, hours.timezone, now),
+        contactKind: await this.contactKindFor(tx, orgId, rules, facts.contactId, locked.id),
       };
       const fired: string[] = [];
       const replies: string[] = [];
       for (const rule of rules.filter((r) => r.is_fallback !== true)) {
         const ruleId = rule.uuid as string;
-        if (
-          !(await this.matches(
-            tx,
-            orgId,
-            decodeConditions(rule.conditions),
-            false,
-            rf,
-            facts.contactId,
-          ))
-        ) {
+        // A rule that applies to every conversation, like the fallback, would act on every message of a live chat: it only runs at arrival.
+        if (rule.applies_to_all === true) continue;
+        if (!(await this.ruleMatches(tx, orgId, rule, rf, facts.contactId, false)).matched) {
           continue;
         }
         const turn = await this.firePerMessage(tx, orgId, rule);
@@ -482,59 +567,375 @@ export class RoutingEngine {
     }
   }
 
+  // --- handoff (BL-401) --------------------------------------------------------------------------------------------------------
+
+  /** Who takes it under an assign action, with the reasons people were skipped appended to `trace`. Runs inside the caller's transaction. */
+  pickForHandoff(
+    tx: Tx,
+    orgId: number,
+    a: RoutingAssign,
+    cursor: number | null,
+    canOpen: ReadonlySet<number>,
+    cal: Calendar,
+    trace: HandoffTraceLine[],
+  ): Promise<Pick | null> {
+    return this.choose(tx, orgId, a, cursor, canOpen, cal, trace);
+  }
+
+  /**
+   * The workspace's rules evaluated for a conversation that is handed to a person (the arrival rules, at handoff time): the first rule that
+   * matches AND finds somebody wins, then the fallback rule. Only the assignment is taken from a rule here, plus its priority and tags; a
+   * rule that starts a flow, answers, marks spam or escalates is skipped with a trace line (a handoff can never start a bot).
+   */
+  async rulesForHandoff(
+    tx: Tx,
+    orgId: number,
+    locked: LockedConversation,
+    facts: { contactId: number | null; channelKind: string; language: string | null },
+    messageText: string | null,
+    canOpen: ReadonlySet<number>,
+    cal: Calendar,
+    trace: HandoffTraceLine[],
+    now: Date,
+  ): Promise<{ pick: Pick; rule: { id: string; name: string } } | null> {
+    const rules = await this.repo.activeRules(tx, orgId);
+    const hours = await this.repo.businessHours(tx, orgId);
+    // The contact row is read now, in this transaction: what a flow saved to the contact before the handoff counts (H18).
+    const rf: RoutingFacts = {
+      channelKind: facts.channelKind,
+      messageText: messageText ?? (await this.repo.latestCustomerText(tx, orgId, locked.id)),
+      language: facts.language,
+      outsideHours: isOutsideBusinessHours(hours.hours, hours.timezone, now),
+      contactKind: await this.contactKindFor(tx, orgId, rules, facts.contactId, locked.id),
+    };
+    const ordered = [
+      ...rules.filter((r) => r.is_fallback !== true),
+      ...rules.filter((r) => r.is_fallback === true),
+    ];
+    if (ordered.length === 0) trace.push({ step: 'rules', result: 'info', why: 'no_rules' });
+    for (const rule of ordered) {
+      const name = rule.name as string;
+      if (!(await this.ruleMatches(tx, orgId, rule, rf, facts.contactId, false)).matched) {
+        continue;
+      }
+      const turn = await this.fire(tx, orgId, rule, canOpen, cal);
+      if (!turn || !turn.pick) {
+        trace.push({ step: 'rule', who: name, result: 'skipped', why: 'nobody_available' });
+        continue;
+      }
+      if (turn.flowId || turn.autoReply || turn.markSpam || turn.escalation) {
+        trace.push({
+          step: 'rule',
+          who: name,
+          result: 'info',
+          why: 'flow_reply_spam_and_escalation_actions_are_not_run_at_handoff',
+        });
+      }
+      await this.decorateByRule(
+        tx,
+        orgId,
+        locked,
+        rule.uuid as string,
+        turn.priority,
+        turn.addTags,
+      );
+      trace.push({ step: 'rule', who: name, result: 'chosen', why: `strategy ${turn.pick.how}` });
+      return { pick: turn.pick, rule: { id: rule.uuid as string, name } };
+    }
+    trace.push({ step: 'rules', result: 'info', why: 'no_rule_matched' });
+    return null;
+  }
+
   // --- matching ----------------------------------------------------------------------------------------------------------------
 
   /**
-   * Every part of the conditions holds. A rule with no condition is a catch-all and only the fallback may be one (the API refuses
-   * the other; a hand-edited row that is one never matches). The contact part is the segment rule engine over the contact.
+   * Whether a rule matches, and how each part of its conditions came out. A rule that applies to every conversation matches without
+   * looking at its conditions (they stay stored). Otherwise a rule with no condition is a catch-all only when it is the fallback (a hand-edited
+   * row that is not never matches). The contact details part is the segment rule engine over the contact's saved row. `explainAll` also
+   * evaluates the later parts after one failed, for the "Try it" box; a real run stops at the first that failed.
    */
-  private async matches(
+  private async ruleMatches(
     tx: Tx,
     orgId: number,
-    c: RoutingConditions,
-    isFallback: boolean,
+    rule: RuleRow,
     facts: RoutingFacts,
     contactId: number | null,
-  ): Promise<boolean> {
-    if (!hasRoutingConditions(c)) return isFallback;
-    if (!matchesFacts(c, facts)) return false;
-    if (c.contact === null) return true;
-    if (contactId === null) return false;
-    const rules = c.contact as unknown as Parameters<typeof collectRuleRefs>[0];
-    const rc = await loadRuleContext(tx, orgId, collectRuleRefs(rules));
-    return this.repo.contactMatches(tx, orgId, contactId, compileRules(orgId, rules, rc).where);
+    explainAll: boolean,
+  ): Promise<{ matched: boolean; parts: RoutingTestCondition[] }> {
+    if (rule.applies_to_all === true) return { matched: true, parts: [] };
+    const c = decodeConditions(rule.conditions);
+    if (!hasRoutingConditions(c)) return { matched: rule.is_fallback === true, parts: [] };
+    const parts = explainFacts(c, facts);
+    const factsOk = parts.every((p) => p.matched);
+    if (c.contact !== null && (factsOk || explainAll)) {
+      if (contactId === null) {
+        parts.push({ part: 'contact', matched: false, why: 'no_contact' });
+      } else {
+        const rules = c.contact as unknown as Parameters<typeof collectRuleRefs>[0];
+        const rc = await loadRuleContext(tx, orgId, collectRuleRefs(rules));
+        const ok = await this.repo.contactMatches(
+          tx,
+          orgId,
+          contactId,
+          compileRules(orgId, rules, rc).where,
+        );
+        parts.push({ part: 'contact', matched: ok, why: ok ? null : 'no_saved_value' });
+      }
+    }
+    return { matched: parts.every((p) => p.matched), parts };
+  }
+
+  /** New or returning, read only when some active rule asks (one query); null when the conversation has no contact. */
+  private async contactKindFor(
+    tx: Tx,
+    orgId: number,
+    rules: readonly RuleRow[],
+    contactId: number | null,
+    conversationId: number | null,
+    force = false,
+  ): Promise<'new' | 'returning' | null> {
+    if (contactId === null) return null;
+    const needed =
+      force ||
+      rules.some(
+        (r) => r.applies_to_all !== true && decodeConditions(r.conditions).contactKind !== 'any',
+      );
+    if (!needed) return null;
+    return this.repo.contactKindOf(
+      tx,
+      orgId,
+      contactId,
+      conversationId,
+      ROUTING_NEW_CONTACT_GRACE_MINUTES,
+    );
+  }
+
+  /**
+   * THE decision of the arrival pipeline, shared by the real run (`route`, with hooks that write) and the dry run (`dryRun`, none): the
+   * switch, the contact's own agent, the rules in order, the fallback. It reads; every write goes through a hook, so a dry run cannot write
+   * even by mistake (and it also runs in a read-only transaction). It returns each step with the reason, which "Try it" shows.
+   */
+  private async decideArrival(
+    inp: ArrivalInput,
+    tx: Tx,
+    hooks: ArrivalHooks | null,
+  ): Promise<ArrivalDecision> {
+    const { orgId } = inp;
+    const steps: RoutingTestStep[] = [];
+    const decision: ArrivalDecision = { steps, sticky: null, fired: [], autoAssignOff: false };
+    const step = (
+      kind: RoutingTestStep['kind'],
+      result: RoutingTestStep['result'],
+      why: string,
+      rule: RuleRow | null = null,
+      conditions: RoutingTestCondition[] = [],
+    ) =>
+      steps.push({
+        kind,
+        result,
+        why,
+        ruleId: rule ? (rule.uuid as string) : null,
+        ruleName: rule ? (rule.name as string) : null,
+        conditions,
+      });
+
+    if (!inp.arrival.autoAssign) {
+      decision.autoAssignOff = true;
+      step('switch', 'decided', 'auto_assign_off');
+      return decision;
+    }
+
+    // 2. the contact's own agent: the legacy switch (owner, else last handler), and/or the owner modes (owner first), which need the
+    //    sticky plan feature (BL-402). The window limits the last handler only under the sticky feature.
+    const ownerMode = inp.stickyPlan && inp.arrival.ownerMode !== 'independent';
+    if (!inp.arrival.keep && !ownerMode) {
+      step('sticky', 'passed', 'sticky_off');
+    } else if (inp.contactId === null) {
+      step('sticky', 'passed', 'no_contact');
+    } else {
+      const mine = await this.contactAgent(
+        tx,
+        orgId,
+        inp.contactId,
+        inp.conversationId,
+        inp.canOpen,
+        inp.cal,
+        { last: inp.arrival.keep, days: inp.stickyPlan ? inp.arrival.days : null },
+        inp.trace,
+      );
+      if (mine) {
+        step('sticky', 'decided', mine.from);
+        decision.sticky = mine;
+        if (hooks) await hooks.onSticky(mine, inp.arrival.keep ? 'contact_agent' : 'owner');
+        return decision;
+      }
+      step('sticky', 'passed', 'no_agent_found');
+    }
+
+    // 3 and 4. the rules, then the fallback when no other rule fired
+    const run = async (rule: RuleRow, kind: 'rule' | 'everyone_else'): Promise<boolean> => {
+      const verdict = await this.ruleMatches(tx, orgId, rule, inp.rf, inp.contactId, inp.dry);
+      if (!verdict.matched) {
+        step(kind, 'passed', 'conditions_failed', rule, verdict.parts);
+        return false;
+      }
+      const turn = await this.turnFor(tx, orgId, rule, inp.canOpen, inp.cal, inp.dry, inp.trace);
+      if (!turn) {
+        step(kind, 'passed', 'nobody_available', rule, verdict.parts);
+        return false;
+      }
+      if (hooks) await hooks.onRule(rule, turn);
+      decision.fired.push({ rule, turn });
+      step(
+        kind,
+        'decided',
+        turn.pick
+          ? turn.pick.userId === null
+            ? 'team_queue'
+            : 'agent_picked'
+          : 'no_assignment_in_rule',
+        rule,
+        verdict.parts,
+      );
+      return true;
+    };
+    for (const rule of inp.rules.filter((r) => r.is_fallback !== true)) {
+      if ((await run(rule, 'rule')) && rule.stop_on_match === true) break;
+    }
+    if (decision.fired.length === 0) {
+      const fallbacks = inp.rules.filter((r) => r.is_fallback === true);
+      if (fallbacks.length === 0) step('everyone_else', 'info', 'not_set');
+      for (const rule of fallbacks) {
+        if (await run(rule, 'everyone_else')) break;
+      }
+    }
+    return decision;
+  }
+
+  /**
+   * "Try it" (spec decision H20): which step of the arrival pipeline would decide for this contact, channel and message, and why. It calls
+   * the same `decideArrival` as `route`, with no hooks and inside a READ ONLY transaction: nothing is assigned, counted, moved, logged or sent
+   * (the database would refuse a write). The round robin cursor is read as it is and left alone.
+   */
+  async dryRun(
+    orgId: number,
+    req: RoutingTestRequest,
+    now: Date = new Date(),
+  ): Promise<RoutingTestResponse> {
+    const canOpen = await this.inboxPeople(orgId);
+    const stickyPlan = await this.entitlements.featureEnabled(orgId, HANDOFF_GATES.ownerFirst);
+    return this.db.txAs({ orgId }, async (tx) => {
+      await tx.execute(sql`SET TRANSACTION READ ONLY`);
+      let contactId: number | null = null;
+      const summary: RoutingTestResponse['contact'] = {
+        found: false,
+        kind: null,
+        stage: null,
+        hasOwner: false,
+        tagCount: 0,
+      };
+      if (req.contactId !== null) {
+        const snap = await this.repo.contactSnapshot(tx, orgId, req.contactId);
+        if (!snap) throw AppError.notFound('Contact');
+        contactId = snap.id;
+        summary.found = true;
+        summary.stage = snap.stage;
+        summary.hasOwner = snap.hasOwner;
+        summary.tagCount = snap.tagCount;
+      }
+      const arrival = await this.repo.arrivalSettings(tx, orgId);
+      const rules = await this.repo.activeRules(tx, orgId);
+      const hours = await this.repo.businessHours(tx, orgId);
+      const outsideHours =
+        req.outsideHours ?? isOutsideBusinessHours(hours.hours, hours.timezone, now);
+      // With no contact picked the sample is a brand-new person: new, and nothing saved to look at.
+      const kind =
+        contactId === null
+          ? 'new'
+          : await this.contactKindFor(tx, orgId, rules, contactId, null, true);
+      summary.kind = kind;
+      const rf: RoutingFacts = {
+        channelKind: req.channelKind,
+        messageText: req.messageText === '' ? null : req.messageText,
+        language: req.language,
+        outsideHours,
+        contactKind: kind,
+      };
+      const trace: HandoffTraceLine[] = [];
+      const cal: Calendar = {
+        today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        blocked: new Set<number>(),
+      };
+      const d = await this.decideArrival(
+        {
+          orgId,
+          conversationId: null,
+          contactId,
+          rf,
+          rules,
+          arrival,
+          stickyPlan,
+          canOpen,
+          cal,
+          dry: true,
+          trace,
+        },
+        tx,
+        null,
+      );
+      // The assignment that would stand: the last firing rule that picked somebody (a later rule takes over when "stop" is off).
+      const last = [...d.fired].reverse().find((f) => f.turn.pick);
+      const pick: Pick | null = d.sticky ?? last?.turn.pick ?? null;
+      const rule = d.sticky ? null : (last?.rule ?? null);
+      const outcome: RoutingTestResponse['outcome'] = d.autoAssignOff
+        ? 'off'
+        : d.sticky
+          ? 'sticky'
+          : pick && rule
+            ? rule.is_fallback === true
+              ? 'everyone_else'
+              : 'rule'
+            : 'queue';
+      return {
+        outcome,
+        ruleId: rule ? (rule.uuid as string) : null,
+        ruleName: rule ? (rule.name as string) : null,
+        assigneeUserId: pick?.userUuid ?? null,
+        assigneeTeamId: pick?.teamUuid ?? null,
+        how: pick?.how ?? null,
+        steps: d.steps,
+        trace,
+        contact: summary,
+        outsideHours,
+      };
+    });
   }
 
   // --- picking -----------------------------------------------------------------------------------------------------------------
 
   /**
-   * A matching rule's turn: lock it, read the cursor as it is now, pick, and record the firing. Null when the rule has nobody to give
-   * the conversation to and no flow to start (it does not fire: no count, no cursor move). A rule that also starts a flow fires even
-   * when nobody is available: that is the case a flow answers ("we will be right with you").
+   * A matching rule's turn: read its actions (locked when `dry` is false, so two conversations arriving together take two turns), pick, and
+   * report what the rule would do. Null when the rule has nobody to give the conversation to and nothing else to do (it does not fire: no
+   * count, no cursor move). A rule that also starts a flow fires even when nobody is available: that is the case a flow answers ("we will be
+   * right with you"). It writes nothing: `recordFire` counts the firing.
    */
-  private async fire(
+  private async turnFor(
     tx: Tx,
     orgId: number,
     rule: RuleRow,
     canOpen: ReadonlySet<number>,
     cal: Calendar,
-  ): Promise<{
-    pick: Pick | null;
-    flowId: string | null;
-    markSpam: boolean;
-    priority: ConversationPriority | null;
-    addTags: RoutingTag[];
-    escalation: {
-      minutes: number;
-      priority: ConversationPriority | null;
-      assign: RoutingAssign | null;
-    } | null;
-    autoReply: RoutingAutoReply | null;
-  } | null> {
+    dry: boolean,
+    trace?: HandoffTraceLine[],
+  ): Promise<RuleTurn | null> {
     const ruleId = Number(rule.id);
-    const stored = decodeActions(await this.repo.lockActions(tx, orgId, ruleId));
+    const stored = decodeActions(
+      dry
+        ? await this.repo.readActions(tx, orgId, ruleId)
+        : await this.repo.lockActions(tx, orgId, ruleId),
+    );
     const pick = stored.assign
-      ? await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen, cal)
+      ? await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen, cal, trace)
       : null;
     const decorates = stored.priority !== null || stored.addTags.length > 0;
     const escalates = stored.escalation !== null;
@@ -549,15 +950,6 @@ export class RoutingEngine {
     ) {
       return null;
     }
-    await this.repo.markFired(
-      tx,
-      orgId,
-      ruleId,
-      encodeActions({
-        ...stored,
-        cursor: pick && pick.userId !== null ? pick.cursor : stored.cursor,
-      }),
-    );
     return {
       pick,
       flowId: stored.triggerFlowId,
@@ -573,7 +965,34 @@ export class RoutingEngine {
           }
         : null,
       autoReply: stored.autoReply,
+      stored,
     };
+  }
+
+  /** Counts a firing and stores the round robin cursor of the person who took the turn. */
+  private async recordFire(tx: Tx, orgId: number, rule: RuleRow, turn: RuleTurn): Promise<void> {
+    await this.repo.markFired(
+      tx,
+      orgId,
+      Number(rule.id),
+      encodeActions({
+        ...turn.stored,
+        cursor: turn.pick && turn.pick.userId !== null ? turn.pick.cursor : turn.stored.cursor,
+      }),
+    );
+  }
+
+  /** `turnFor` and `recordFire` in one: the rule fires now (handoff time). */
+  private async fire(
+    tx: Tx,
+    orgId: number,
+    rule: RuleRow,
+    canOpen: ReadonlySet<number>,
+    cal: Calendar,
+  ): Promise<RuleTurn | null> {
+    const turn = await this.turnFor(tx, orgId, rule, canOpen, cal, false);
+    if (turn) await this.recordFire(tx, orgId, rule, turn);
+    return turn;
   }
 
   /**
@@ -668,9 +1087,14 @@ export class RoutingEngine {
     cursor: number | null,
     canOpen: ReadonlySet<number>,
     cal: Calendar,
+    trace?: HandoffTraceLine[],
   ): Promise<Pick | null> {
-    const users = await this.repo.activeUsers(tx, orgId, a.userIds);
-    const teams = await this.repo.teams(tx, orgId, a.teamIds);
+    const users = a.everyone
+      ? new Map(
+          (await this.repo.allActiveUserIds(tx, orgId)).map((id) => [String(id), id] as const),
+        )
+      : await this.repo.activeUsers(tx, orgId, a.userIds);
+    const teams = await this.repo.teams(tx, orgId, a.teamIds, { receivingOnly: true });
     const teamIds = a.teamIds.filter((t) => teams.has(t)).map((t) => teams.get(t)!);
     const members = await this.repo.teamMembers(tx, orgId, teamIds);
 
@@ -719,9 +1143,40 @@ export class RoutingEngine {
       }
     }
 
-    let pool = (await this.repo.available(tx, orgId, [...origin.keys()], cal.today)).filter((p) =>
+    const considered = [...origin.keys()];
+    let pool = (await this.repo.available(tx, orgId, considered, cal.today)).filter((p) =>
       canOpen.has(p.id),
     );
+    if (trace) {
+      // Why somebody was not picked (BL-401): the run log must be able to show it.
+      const names = await this.repo.userUuids(tx, orgId, [...away.keys(), ...considered]);
+      for (const id of away.keys()) {
+        trace.push({
+          step: 'candidate',
+          who: names.get(id) ?? null,
+          result: 'skipped',
+          why: 'on_leave',
+        });
+      }
+      const inPool = new Set(pool.map((p) => p.id));
+      for (const id of considered) {
+        if (inPool.has(id)) continue;
+        trace.push({
+          step: 'candidate',
+          who: names.get(id) ?? null,
+          result: 'skipped',
+          why: canOpen.has(id) ? 'offline_busy_or_at_capacity' : 'cannot_read',
+        });
+      }
+      for (const [d, absent] of delegateFor) {
+        trace.push({
+          step: 'delegate',
+          who: names.get(d) ?? null,
+          result: 'info',
+          why: `covers ${absent}`,
+        });
+      }
+    }
     if (namedAway) {
       const direct = pool.filter((p) => origin.get(p.id) === null);
       if (direct.length > 0) pool = direct;
@@ -770,23 +1225,39 @@ export class RoutingEngine {
 
   /**
    * "Keep returning contacts with their agent": the contact's owner (`contacts.owner_id`), else whoever held the contact's most
-   * recent other conversation, as long as they are an active member who can open the inbox. Availability is not checked.
+   * recent other conversation, as long as they are an active member who can open the inbox. Availability is not checked. `trace` collects
+   * why a candidate was passed over (the "Try it" box).
    */
   private async contactAgent(
     tx: Tx,
     orgId: number,
     contactId: number,
-    locked: LockedConversation,
+    exceptConversationId: number | null,
     canOpen: ReadonlySet<number>,
     cal: Calendar,
-  ): Promise<Pick | null> {
-    const candidates = [
-      await this.repo.contactOwner(tx, orgId, contactId),
-      await this.repo.lastAgentOf(tx, orgId, contactId, locked.id),
+    opts: { last: boolean; days: number | null } = { last: true, days: null },
+    trace?: HandoffTraceLine[],
+  ): Promise<ContactAgentPick | null> {
+    const candidates: Array<{ from: 'owner' | 'last_handler'; id: number | null }> = [
+      { from: 'owner', id: await this.repo.contactOwner(tx, orgId, contactId) },
+      {
+        from: 'last_handler',
+        id: opts.last
+          ? await this.repo.lastAgentOf(tx, orgId, contactId, exceptConversationId ?? -1, opts.days)
+          : null,
+      },
     ];
-    for (const original of candidates) {
-      let id = original;
-      if (id === null) continue;
+    for (const cand of candidates) {
+      let id = cand.id;
+      if (id === null) {
+        if (cand.from === 'owner' || opts.last)
+          trace?.push({
+            step: cand.from,
+            result: 'skipped',
+            why: cand.from === 'owner' ? 'no_owner' : 'no_previous_handler_in_window',
+          });
+        continue;
+      }
       // The owner is away (BL-112): their delegate carries the contact meanwhile; with none present, on to the rules.
       if ((await onLeaveMap(tx, orgId, [id], cal.today)).has(id)) {
         const d = (await this.repo.delegatesOf(tx, orgId, [id])).get(id);
@@ -799,11 +1270,15 @@ export class RoutingEngine {
         );
         if (next === null) {
           cal.blocked.add(id);
+          trace?.push({ step: cand.from, result: 'skipped', why: 'on_leave' });
           continue;
         }
         id = next;
       }
-      if (!canOpen.has(id)) continue;
+      if (!canOpen.has(id)) {
+        trace?.push({ step: cand.from, result: 'skipped', why: 'cannot_read' });
+        continue;
+      }
       const user = await this.repo.activeUserById(tx, orgId, id);
       if (user) {
         return {
@@ -813,8 +1288,10 @@ export class RoutingEngine {
           teamUuid: null,
           how: 'contact_agent',
           cursor: null,
+          from: cand.from,
         };
       }
+      trace?.push({ step: cand.from, result: 'skipped', why: 'not_an_active_member' });
     }
     return null;
   }

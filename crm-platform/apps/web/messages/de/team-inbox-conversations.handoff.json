@@ -1,0 +1,157 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Wartend"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Niemand wartet auf einen Mitarbeiter",
+          "message": "Wenn ein Bot, ein Flow oder ein Teamkollege einen Mitarbeiter anfordert, wartet die Unterhaltung hier, bis jemand sie übernimmt."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Der Bot antwortet",
+        "waiting": "Wartet auf einen Mitarbeiter",
+        "with_person": "Bei einem Mitarbeiter"
+      },
+      "ageMinutes": "{count}Min.",
+      "ageHours": "{count}Std.",
+      "ageDays": "{count}T",
+      "row": {
+        "waiting": "Wartend",
+        "waitingFor": "Wartet seit {age}",
+        "inTeam": "In der Warteschlange von {team}"
+      },
+      "assignedTo": "jetzt bei {name}",
+      "inTeamQueue": "Warteschlange von {team}",
+      "cardFailed": "Die Übergabedetails konnten nicht geladen werden.",
+      "claim": {
+        "button": "Übernehmen",
+        "done": "Du hast diese Unterhaltung übernommen.",
+        "doneOwner": "Du hast diese Unterhaltung übernommen und bist jetzt Besitzer des Kontakts.",
+        "failed": "Die Unterhaltung konnte nicht übernommen werden.",
+        "taken": "Jemand anderes hat diese Unterhaltung zuerst übernommen.",
+        "overLimitTitle": "Du hast dein Chat-Limit erreicht",
+        "overLimitMessage": "Du hast bereits {open} offene Unterhaltungen und dein Limit liegt bei {limit}. Diese trotzdem übernehmen?",
+        "overLimitConfirm": "Trotzdem übernehmen",
+        "overLimitCancel": "Abbrechen"
+      },
+      "giveBack": {
+        "button": "An Bot zurückgeben",
+        "done": "Der Bot beantwortet diese Unterhaltung wieder.",
+        "failed": "Die Unterhaltung konnte nicht an den Bot zurückgegeben werden.",
+        "doneFlow": "Der Bot führt den Flow fort.",
+        "doneNextLive": "Der Bot antwortet auf die nächste Nachricht des Kunden.",
+        "doneNextDefault": "Der Bot ist wieder aktiv. Er antwortet auf die nächste Nachricht nur, wenn ein Standard-Flow festgelegt ist.",
+        "already": "Der Bot hat diese Unterhaltung bereits."
+      },
+      "send": {
+        "button": "In die Warteschlange senden",
+        "buttonAgain": "Erneut in die Warteschlange senden",
+        "title": "An einen Mitarbeiter senden",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "submit": "Senden",
+        "intro": "Der Bot antwortet diesem Kontakt nicht mehr. Die Unterhaltung geht an die Person oder das Team, das du auswählst, oder wartet in der Warteschlange, bis jemand sie übernimmt.",
+        "where": "Senden an",
+        "whereRules": "Die Zuweisungsregeln, sonst die Warteschlange",
+        "whereQueueOnly": "Die Warteschlange (Zuweisungsregeln benötigen das Add-on Intelligentes Routing)",
+        "whereTeam": "Ein Team",
+        "wherePerson": "Eine Person",
+        "team": "Team",
+        "pickTeam": "Team auswählen",
+        "person": "Person",
+        "pickPerson": "Person auswählen",
+        "reason": "Warum ein Mitarbeiter benötigt wird",
+        "note": "Notiz für die Person, die übernimmt",
+        "noteHint": "Wird auf der Übergabekarte angezeigt. Bis zu 500 Zeichen.",
+        "refused": "Diese Unterhaltung kann nicht übergeben werden (sie ist archiviert, Spam oder ein persönliches Postfach).",
+        "failed": "Die Unterhaltung konnte nicht gesendet werden.",
+        "done": {
+          "assigned": "Gesendet: Jemand hat sie jetzt.",
+          "waiting": "Gesendet: Sie wartet in der Warteschlange.",
+          "unavailable": "In die Warteschlange gesendet: Gerade ist niemand verfügbar."
+        }
+      },
+      "details": {
+        "show": "Details",
+        "hide": "Details ausblenden"
+      },
+      "card": {
+        "source": "Angefordert von",
+        "reason": "Grund",
+        "priority": "Priorität",
+        "summary": "Zusammenfassung",
+        "answers": "Was der Kontakt dem Bot mitgeteilt hat",
+        "trace": "Wie zugewiesen wurde",
+        "timers": "Schritte der Warteschlange"
+      },
+      "source": {
+        "flow": "Ein Flow",
+        "ai_agent": "Ein KI-Agent",
+        "keyword": "Der Wunsch des Kontakts",
+        "bot_failure": "Ein Bot, der nicht helfen konnte",
+        "manual": "Ein Teamkollege",
+        "arrival": "Das Routing: niemand konnte ihn übernehmen"
+      },
+      "reason": {
+        "customer_asked": "Der Kontakt hat einen Mitarbeiter verlangt",
+        "bot_could_not_help": "Der Bot konnte nicht helfen",
+        "sensitive_topic": "Sensibles Thema",
+        "sales_lead": "Vertriebslead",
+        "complaint": "Beschwerde",
+        "other": "Sonstiges"
+      },
+      "priority": {
+        "low": "Niedrig",
+        "normal": "Normal",
+        "high": "Hoch",
+        "urgent": "Dringend"
+      },
+      "trace": {
+        "chosen": "Ausgewählt",
+        "skipped": "Übersprungen",
+        "info": "Notiz"
+      },
+      "botLine": {
+        "system": "das System",
+        "pressed": {
+          "flow": "Der Bot ist wieder da, zurückgegeben von {name}. Der Flow läuft weiter.",
+          "nextLive": "Der Bot ist wieder da, zurückgegeben von {name}. Er antwortet auf die nächste Nachricht des Kunden.",
+          "nextDefault": "Der Bot ist wieder da, zurückgegeben von {name}. Er antwortet auf die nächste Nachricht nur, wenn ein Standard-Flow festgelegt ist."
+        },
+        "result": {
+          "continued": "Der Flow lief am Ausgang „zurückgegeben“ weiter.",
+          "claimed_again": "Der Flow wurde nicht fortgesetzt: Eine Person hat den Chat erneut übernommen.",
+          "flow_not_live": "Der Flow wurde nicht fortgesetzt: Er ist nicht mehr aktiv.",
+          "start_failed": "Der Flow konnte nicht fortgesetzt werden."
+        },
+        "customer": {
+          "sent": "Die Nachricht an den Kunden wurde gesendet.",
+          "window_closed": "Die Nachricht an den Kunden wurde übersprungen: Das 24-Stunden-Fenster ist geschlossen.",
+          "no_consent": "Die Nachricht an den Kunden wurde übersprungen: keine Einwilligung.",
+          "failed": "Die Nachricht an den Kunden konnte nicht gesendet werden.",
+          "channel_unavailable": "Die Nachricht an den Kunden wurde übersprungen: Der Kanal ist nicht verfügbar."
+        }
+      },
+      "timers": {
+        "reminded": "Erinnert um {at}",
+        "offered": "Diesem Team angeboten um {at}",
+        "messaged": "Nachricht an den Kunden gesendet um {at}",
+        "gaveBack": "An den Bot zurückgegeben um {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "An den Bot zurückgegeben von {actor}",
+          "bot_resumed": "Der Bot hat den Flow fortgesetzt",
+          "bot_resume_skipped": "Der Flow wurde nicht fortgesetzt"
+        }
+      }
+    }
+  }
+}

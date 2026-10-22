@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type {
   TemplateDetail,
@@ -38,7 +38,7 @@ import {
 import { applyAiDraft, canDraftCategory, takeAiDraft } from '../lib/ai-draft';
 import { buttonIssues } from '../lib/buttons';
 import { galleryToState } from '../lib/gallery-state';
-import { counter, wrapSelection } from '../lib/format';
+import { counter, toggleSelection } from '../lib/format';
 import {
   BODY_MAX,
   EXPIRY_MAX,
@@ -112,6 +112,8 @@ export function TemplateFormScreen({
   galleryId?: string;
 }) {
   const t = useTranslations('message-templates.form');
+  const td = useTranslations('message-templates.detail');
+  const format = useFormatter();
   const errorText = useErrorText();
   // A copy opens the form of a new template filled in from this one ("Duplicate template" in the inbox's template list).
   const detail = useTemplate(id ?? copyFrom ?? '', { poll: false });
@@ -189,12 +191,23 @@ export function TemplateFormScreen({
     );
   if (id === undefined)
     return <TemplateForm key={`copy:${copyFrom}`} initial={copyState(detail.data)} />;
-  if (!canEdit(detail.data.status)) {
+  // A template Meta will not edit right now (under review, or past its edit limit) is shown read-only until it opens again.
+  const block = detail.data.editBlock;
+  if (!canEdit(detail.data.status) || block) {
+    const when = block?.until
+      ? format.dateTime(new Date(block.until), {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        })
+      : '';
     return (
       <main className="mx-auto max-w-3xl px-4 py-7">
         <EmptyState
-          title={t('notEditableTitle')}
-          message={t('notEditableBody')}
+          title={block ? td('editBlockedTitle') : t('notEditableTitle')}
+          message={block ? td('editBlocked', { reason: block.reason, when }) : t('notEditableBody')}
           actions={
             <Link
               href={`/templates/${detail.data.id}`}
@@ -218,7 +231,12 @@ export function TemplateFormScreen({
 
 /** A new template that starts as a copy of `d`: its own name, and no media sample (a new file is chosen for the copy). */
 function copyState(d: TemplateDetail): FormState {
-  return { ...stateFromDetail(d), name: `${d.name}_copy`.slice(0, 512), headerSampleUrl: '' };
+  return {
+    ...stateFromDetail(d),
+    name: `${d.name.slice(0, 512 - '_copy'.length)}_copy`,
+    headerSampleUrl: '',
+    headerPreviewUrl: '',
+  };
 }
 
 interface Saved {
@@ -337,10 +355,10 @@ function TemplateForm({
     }
   }
 
-  function wrap(marker: string) {
+  function toggle(marker: string) {
     const el = bodyRef.current;
     if (!el) return;
-    const r = wrapSelection(
+    const r = toggleSelection(
       current.body,
       el.selectionStart,
       el.selectionEnd,
@@ -397,10 +415,13 @@ function TemplateForm({
             {t('ai.open')}
           </Button>
         )}
-        <Button variant="secondary" disabled={!canDraft} onClick={() => save(false)}>
-          {busy && !create.variables?.submit && !update.variables?.submit && <Spinner />}
-          {t('saveDraft')}
-        </Button>
+        {/* An edit of a template Meta holds goes to Meta with Submit; a draft saved here would leave Meta with the old text. */}
+        {!live && (
+          <Button variant="secondary" disabled={!canDraft} onClick={() => save(false)}>
+            {busy && !create.variables?.submit && !update.variables?.submit && <Spinner />}
+            {t('saveDraft')}
+          </Button>
+        )}
         <Button disabled={!canSubmit} onClick={() => save(true)} aria-describedby={`${base}-why`}>
           {busy && (create.variables?.submit || update.variables?.submit) && <Spinner />}
           {t('submit')}
@@ -588,7 +609,14 @@ function TemplateForm({
                   headerError={contract.header ? t('errors.header') : undefined}
                   onKind={(k) => setState((s) => withHeaderKind(s, k))}
                   onText={(v) => setState((s) => withHeaderText(s, v))}
-                  onUploaded={(r) => set({ headerHandle: r.handle, headerFileName: r.fileName })}
+                  onUploaded={(r) =>
+                    set({
+                      headerHandle: r.handle,
+                      headerFileName: r.fileName,
+                      headerMediaKey: r.mediaKey,
+                      headerPreviewUrl: r.previewUrl,
+                    })
+                  }
                 />
                 <IssueList issues={issues} field="header" />
               </Section>
@@ -596,7 +624,12 @@ function TemplateForm({
               <Section title={t('body.title')} hint={t('body.hint')}>
                 <div role="toolbar" aria-label={t('body.toolbar')} className="flex flex-wrap gap-1">
                   {TOOLBAR.map((b) => (
-                    <Button key={b.id} size="sm" variant="secondary" onClick={() => wrap(b.marker)}>
+                    <Button
+                      key={b.id}
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => toggle(b.marker)}
+                    >
                       {t(`body.format.${b.id}`)}
                     </Button>
                   ))}

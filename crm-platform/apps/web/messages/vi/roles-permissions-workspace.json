@@ -47,7 +47,8 @@
       "nameTaken": "Đã có vai trò với tên này.",
       "nameRequired": "Tên vai trò là bắt buộc.",
       "nameTooLong": "Tên vai trò tối đa {max} ký tự.",
-      "notFound": "Mục này không còn tồn tại. Có thể đã bị xóa."
+      "notFound": "Mục này không còn tồn tại. Có thể đã bị xóa.",
+      "customRolesLocked": "Vai trò tùy chỉnh và quyền theo phạm vi không có trong gói của bạn. Bạn có thể xem các vai trò nhưng không thể tạo hoặc thay đổi."
     },
     "team": {
       "crumb": "Thành viên nhóm",
@@ -90,7 +91,9 @@
         "member": "Thành viên",
         "roles": "Vai trò",
         "status": "Trạng thái",
-        "actions": "Thao tác"
+        "actions": "Thao tác",
+        "teams": "Nhóm",
+        "manager": "Quản lý"
       },
       "empty": {
         "none": "Chưa có thành viên nào.",
@@ -137,8 +140,17 @@
         "keptRole": "{name} được giữ nguyên: bạn không thể cấp hoặc gỡ vai trò này.",
         "atLeastOne": "Chọn ít nhất một vai trò.",
         "save": "Lưu vai trò",
-        "reload": "Tải lại"
-      }
+        "reload": "Tải lại",
+        "noTeamWarning": "{name} không thuộc nhóm nào, nên ở nơi vai trò được đặt phạm vi theo nhóm, họ chỉ thấy bản ghi của chính mình. Hãy thêm họ vào một nhóm trong Cài đặt > Nhóm."
+      },
+      "teamFilter": {
+        "label": "Lọc thành viên theo nhóm",
+        "all": "Tất cả nhóm"
+      },
+      "noTeams": "Không có nhóm",
+      "primaryTeam": "Nhóm chính",
+      "primaryMark": "chính",
+      "noManager": "Không có quản lý"
     },
     "list": {
       "crumb": "Vai trò",
@@ -171,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Đã xóa vai trò “{name}”."
-      }
+      },
+      "customRolesLocked": "Vai trò tùy chỉnh và quyền theo phạm vi không có trong gói của bạn. Bạn có thể xem các vai trò nhưng không thể tạo hoặc thay đổi.",
+      "addRoleLocked": "Thêm vai trò (nâng cấp)"
     },
     "editor": {
       "crumbRoles": "Vai trò",
@@ -212,7 +226,9 @@
         "created": "Đã tạo vai trò “{name}”.",
         "updated": "Đã cập nhật vai trò “{name}”.",
         "deleted": "Đã xóa vai trò “{name}”."
-      }
+      },
+      "customRolesLocked": "Vai trò tùy chỉnh và quyền theo phạm vi không có trong gói của bạn. Bạn có thể xem các vai trò nhưng không thể tạo hoặc thay đổi.",
+      "upgrade": "Xem các gói"
     },
     "matrix": {
       "title": "Quyền",
@@ -235,8 +251,20 @@
       "lockedHint": "Quyền này chưa khả dụng cho không gian làm việc này. Quyền sẽ mở khi tính năng của gói được bật hoặc ứng dụng được cài.",
       "scope": {
         "all": "Tất cả bản ghi",
-        "team": "Bản ghi của nhóm",
-        "own": "Bản ghi của riêng tôi"
+        "own": "Bản ghi của tôi",
+        "team": "Bản ghi của nhóm tôi",
+        "team_and_below": "Nhóm của tôi và nhóm con"
+      },
+      "scopeLegend": "Mỗi phạm vi bản ghi bao gồm những gì",
+      "scopeHelp": {
+        "all": "Mọi bản ghi trong không gian làm việc.",
+        "team_and_below": "Bản ghi của nhóm bạn và mọi nhóm bên dưới.",
+        "team": "Bản ghi của những người trong nhóm bạn.",
+        "own": "Chỉ các bản ghi bạn sở hữu hoặc được giao."
+      },
+      "noTeamWarning": "{count, plural, other {# thành viên có vai trò này không thuộc nhóm nào, nên chỉ thấy bản ghi của chính mình ở những nơi vai trò này đặt phạm vi nhóm.}} Hãy thêm họ vào một nhóm tại <link>Cài đặt > Nhóm</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Nếu không có quyền này, nhân viên có quyền truy cập nhóm chỉ thấy các cuộc trò chuyện được giao cho họ hoặc nhóm của họ. Khi có quyền này, họ còn thấy hàng đợi mở gồm các cuộc trò chuyện chưa giao cho ai."
       }
     },
     "delete": {

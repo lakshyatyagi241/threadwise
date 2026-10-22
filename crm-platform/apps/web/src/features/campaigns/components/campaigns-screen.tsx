@@ -9,7 +9,7 @@ import type { Campaign } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { pageWindow } from '@/features/broadcasts/components/broadcasts-pagination';
-import { NewBroadcast } from '@/features/broadcasts/components/new-broadcast';
+import { NewCampaignButton } from './new-campaign-button';
 import {
   bulkDeleteCampaigns,
   cancelCampaign,
@@ -60,7 +60,7 @@ const BlockViewIcon = () => (
 );
 
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
-const RANGES = ['all', '7d', '30d', '90d'] as const;
+const RANGES = ['all', '7d', '30d', '90d', 'custom'] as const;
 const n = (v: number | undefined) => (v === undefined ? '—' : v.toLocaleString());
 /** A share of `of` as a percentage with one decimal (0 when there is nothing to divide by). */
 const rate = (part: number | undefined, of: number | undefined) =>
@@ -221,7 +221,7 @@ export function CampaignsScreen() {
                 {t('workspace')} · {session.org.name}
               </div>
               <h1 className="text-[32px] leading-none tracking-tight">
-                {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
+                {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>
               </h1>
               <p className="mt-1 hidden max-w-xl text-sm font-semibold text-muted-foreground xl:block">
                 {t('intro')}
@@ -232,7 +232,7 @@ export function CampaignsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && <NewBroadcast label={t('newCampaign')} />}
+              {canCreate && <NewCampaignButton label={t('newCampaign')} />}
             </div>
           </div>
 
@@ -282,6 +282,32 @@ export function CampaignsScreen() {
                   {t(`range.${r}`)}
                 </button>
               ))}
+              {state.range === 'custom' && (
+                <>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {t('range.from')}
+                    <Input
+                      type="date"
+                      data-testid="campaigns-range-from"
+                      className="w-40"
+                      value={state.from}
+                      max={state.to || undefined}
+                      onChange={(e) => go({ from: e.target.value })}
+                    />
+                  </label>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {t('range.to')}
+                    <Input
+                      type="date"
+                      data-testid="campaigns-range-to"
+                      className="w-40"
+                      value={state.to}
+                      min={state.from || undefined}
+                      onChange={(e) => go({ to: e.target.value })}
+                    />
+                  </label>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <div
@@ -373,7 +399,7 @@ export function CampaignsScreen() {
                 >
                   {t('reset')}
                 </Button>
-                {canCreate && <NewBroadcast label={t('createCampaign')} />}
+                {canCreate && <NewCampaignButton label={t('createCampaign')} />}
               </div>
             </div>
           ) : view === 'list' ? (

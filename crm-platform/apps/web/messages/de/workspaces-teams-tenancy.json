@@ -106,7 +106,9 @@
       "leaveAction": "Abwesenheit und Vertretung",
       "noLimit": "Kein Limit",
       "neverSignedIn": "Nie",
-      "editAction": "Telefon und Chat-Limit ändern"
+      "editAction": "Telefon und Chat-Limit ändern",
+      "moreAction": "Mehr",
+      "moreLabel": "Weitere Aktionen für {name}"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -148,12 +150,10 @@
       "eyebrow": "Workspace",
       "title": "Teams",
       "pageTitle": "Teams",
-      "subtitle": "Gruppieren Sie Ihre Agenten nach Abteilung. Unterhaltungen können per Routing-Regeln automatisch nach Team zugewiesen werden.",
       "create": "Team erstellen",
       "edit": "Team bearbeiten",
       "loading": "Teams werden geladen",
       "emptyTitle": "Noch keine Teams",
-      "emptyMessage": "Erstellen Sie ein Team, fügen Sie Ihre Agenten hinzu und leiten Sie Unterhaltungen an dieses Team weiter.",
       "emptyAction": "Team erstellen",
       "members": "{count, plural, =0 {Keine Mitglieder} one {# Mitglied} other {# Mitglieder}}",
       "online": "{count} online",
@@ -167,9 +167,10 @@
       },
       "howTitle": "So funktionieren Teams",
       "how": {
-        "one": "Benennen Sie ein Team (zum Beispiel Vertrieb), wählen Sie eine Farbe und fügen Sie Ihre Agenten hinzu.",
-        "two": "Nutzen Sie es auf drei Arten: Chats von Hand dem Team zuweisen, neue Chats mit einer Routing-Regel dorthin leiten oder seine Leistung in der Analyse lesen.",
-        "three": "Die Teamfarbe ist die Farbe des Kennzeichens in der Posteingangs-Warteschlange, sodass Sie die Chats jedes Teams auf einen Blick unterscheiden können."
+        "one": "Geben Sie dem Team einen Namen (zum Beispiel Vertrieb), wählen Sie eine Farbe und fügen Sie die Personen hinzu, die zusammenarbeiten.",
+        "two": "Nutzen Sie es für Unterhaltungen (neue Chats routen oder einen Chat manuell zuweisen), für Datensätze (Kontakte, Unternehmen und Deals den Mitgliedern zuweisen) und für Berichte.",
+        "three": "Ein Manager ist die Person, die das Team leitet. Ein übergeordnetes Team stellt es unter ein anderes Team, sodass Sie eine Hierarchie wie Vertrieb und Vertrieb West aufbauen können.",
+        "four": "Das primäre Team einer Person ist ihr Hauptteam und wird für Berichte geführt (Berichte nutzen es ab einem kommenden Release). Routing, Zuweisung und Sichtbarkeit nutzen alle Teams einer Person."
       },
       "created": "Team erstellt.",
       "updated": "Team aktualisiert.",
@@ -178,9 +179,43 @@
       "updateFailed": "Aktualisierung fehlgeschlagen: {reason}",
       "deleteFailed": "Löschen fehlgeschlagen: {reason}",
       "deleteTitle": "Dieses Team löschen?",
-      "deleteMessage": "Team „{name}“ löschen? Unterhaltungen, die diesem Team zugewiesen sind, werden danach nicht mehr zugewiesen sein.",
+      "deleteMessage": "Team \"{name}\" löschen? Die Mitglieder bleiben im Workspace. Das Team wird überall entfernt, wo es derzeit verwendet wird.",
       "deleteConfirm": "Team löschen",
-      "delete": "Team löschen"
+      "delete": "Team löschen",
+      "subtitle": "Teams gruppieren Personen für Unterhaltungen, Zuweisungen und Berichte.",
+      "emptyMessage": "Erstellen Sie ein Team und fügen Sie die Personen hinzu, die zusammenarbeiten. Sie können Unterhaltungen an das Team routen und Kontakte, Unternehmen und Deals seinen Mitgliedern zuweisen.",
+      "noAccess": "Sie haben keine Berechtigung, Teams zu sehen. Bitten Sie einen Workspace-Inhaber oder Admin um die Berechtigung team.read.",
+      "manager": "Manager: {name}",
+      "noManager": "Kein Manager",
+      "receivesConversations": "Unterhaltungen",
+      "receivesRecords": "Datensätze",
+      "primaryCount": "{count, plural, one {# hat es als primäres Team} other {# haben es als primäres Team}}",
+      "usedBy": "Verwendet von",
+      "usedByNone": "Noch von keiner Regel verwendet",
+      "usage": {
+        "routingRules": "{count, plural, one {# Routing-Regel} other {# Routing-Regeln}}",
+        "assignmentRules": "{count, plural, one {# Zuweisungsregel} other {# Zuweisungsregeln}}",
+        "segmentShares": "{count, plural, one {# geteiltes Segment} other {# geteilte Segmente}}",
+        "conversations": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}}",
+        "childTeams": "{count, plural, one {# Unterteam} other {# Unterteams}}"
+      },
+      "notUsed": {
+        "title": "Gespeichert, noch nicht verwendet",
+        "body": "Diese Einstellung wird im Team gespeichert, aber noch nicht verwendet.",
+        "devices": "{count, plural, one {Auf # Gerät beschränkt} other {Auf # Geräte beschränkt}}"
+      },
+      "deleteUsage": {
+        "title": "Was sich ändert",
+        "loading": "Es wird geprüft, wo dieses Team verwendet wird...",
+        "failed": "Die Verwendung dieses Teams konnte nicht geprüft werden. Du kannst es trotzdem löschen.",
+        "nothing": "Sonst wird dieses Team nirgends verwendet.",
+        "members": "{count, plural, one {# Person verlässt das Team} other {# Personen verlassen das Team}}",
+        "routingRules": "{count, plural, one {# Routing-Regel verliert dieses Team als Ziel; eine Regel ohne verbleibendes Ziel wird deaktiviert} other {# Routing-Regeln verlieren dieses Team als Ziel; eine Regel ohne verbleibendes Ziel wird deaktiviert}}",
+        "assignmentRules": "{count, plural, one {# Datensatz-Zuweisungsregel verliert dieses Team aus ihrem Pool} other {# Datensatz-Zuweisungsregeln verlieren dieses Team aus ihrem Pool}}",
+        "segmentShares": "{count, plural, one {# Segment wird nicht mehr mit diesem Team geteilt} other {# Segmente werden nicht mehr mit diesem Team geteilt}}",
+        "conversationsAssigned": "{count, plural, one {# Unterhaltung, die diesem Team zugewiesen ist, bleibt erhalten und hat kein Team} other {# Unterhaltungen, die diesem Team zugewiesen sind, bleiben erhalten und haben kein Team}}",
+        "peopleWithReachChange": "{count, plural, one {# Person sieht mit Teamzugriff weniger Datensätze von Kollegen} other {# Personen sehen mit Teamzugriff weniger Datensätze von Kollegen}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Workspace",
@@ -192,13 +227,6 @@
       "nameTooLong": "Der Name darf höchstens {max} Zeichen lang sein.",
       "color": "Farbe",
       "colorOption": "Farbe {color}",
-      "strategy": "Strategie für die automatische Zuweisung",
-      "strategyOptions": {
-        "manual": "Manuell – ein Manager wählt, wer zugewiesen wird",
-        "round_robin": "Rundlauf – gleichmäßig verteilen",
-        "least_loaded": "Geringste Auslastung – zuerst die mit den wenigsten offenen",
-        "sticky": "Fest – der zuletzt antwortende Agent für diesen Kontakt"
-      },
       "members": "Mitglieder",
       "membersLoading": "Teammitglieder werden geladen",
       "membersFailed": "Teammitglieder konnten nicht geladen werden.",
@@ -209,7 +237,28 @@
       "create": "Team erstellen",
       "creating": "Wird erstellt…",
       "save": "Änderungen speichern",
-      "saving": "Wird gespeichert…"
+      "saving": "Wird gespeichert…",
+      "hint": "Teams gruppieren Personen für Unterhaltungen, Zuweisungen und Berichte. Wählen Sie einen Manager, optional ein übergeordnetes Team und was das Team erhalten kann.",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Was dieses Team macht (optional)",
+      "lead": "Manager",
+      "leadNone": "Kein Manager",
+      "leadHint": "Die Person, die das Team leitet. Sie wird als Lead hinzugefügt.",
+      "parent": "Übergeordnetes Team",
+      "parentNone": "Keines (oberste Ebene)",
+      "parentHint": "Stellen Sie dieses Team unter ein anderes Team, um eine Hierarchie von bis zu 5 Ebenen aufzubauen.",
+      "receive": "Kann erhalten",
+      "receiveHint": "Wo dieses Team ausgewählt werden kann. Schalten Sie eine Option aus, damit das Team in diesen Auswahllisten nicht erscheint.",
+      "receiveConversations": "Unterhaltungen (Posteingang-Routing und Zuweisung)",
+      "receiveRecords": "Datensätze (Kontakte, Unternehmen und Deals)",
+      "membersHint": "Haken Sie die Personen in diesem Team an. Markieren Sie Leads und wählen Sie das primäre Team jeder Person.",
+      "leadFlag": "Lead",
+      "leadToggle": "Als Lead dieses Teams markieren",
+      "leadLocked": "Der Manager ist immer Lead",
+      "primaryFlag": "Primär",
+      "primaryToggle": "Als primäres Team der Person festlegen",
+      "primaryLocked": "Das einzige Team einer Person ist immer ihr primäres Team",
+      "primaryHint": "Das primäre Team einer Person ist ihr Hauptteam und wird für Berichte geführt (Berichte nutzen es ab einem kommenden Release). Routing, Zuweisung und Sichtbarkeit nutzen alle ihre Teams."
     },
     "errors": {
       "network": "Die Verbindung wurde unterbrochen. Prüfen Sie sie und versuchen Sie es erneut.",
@@ -238,7 +287,13 @@
       "delegateInvalid": "Die Vertretung muss ein anderes aktives Mitglied dieses Workspace sein.",
       "delegateCycle": "Das würde einen Kreis ergeben: Die gewählte Person hat diese Person bereits als Vertretung.",
       "reassignInvalid": "Es konnte nichts neu zugewiesen werden. Prüfen Sie, ob die Person Kontakte oder offene Deals hat und ob das Ziel sie übernehmen kann.",
-      "reassignNotRestorable": "Diese Neuzuweisung kann nicht mehr rückgängig gemacht werden."
+      "reassignNotRestorable": "Diese Neuzuweisung kann nicht mehr rückgängig gemacht werden.",
+      "teamParentCycle": "Ein Team kann nicht unter sich selbst oder unter einem seiner eigenen Unterteams stehen.",
+      "teamParentInvalid": "Dieses übergeordnete Team ist nicht verfügbar, oder die Hierarchie wäre tiefer als 5 Ebenen.",
+      "teamNotOnTeam": "Diese Person gehört nicht zu diesem Team.",
+      "teamsNotIncluded": "Ihr Tarif enthält keine Teams. Wechseln Sie zu einem höheren Tarif oder fragen Sie das Add-on „Teams und Berechtigungen“ an, um Personen in Teams zu gruppieren.",
+      "teamsLimit": "Sie haben das Limit von {limit} Teams Ihres Tarifs erreicht. Wechseln Sie zu einem höheren Tarif oder löschen Sie ein Team, um weitere hinzuzufügen.",
+      "teamsLimitUnknown": "Das Teamlimit Ihres Tarifs ist erreicht. Wechseln Sie zu einem höheren Tarif oder löschen Sie ein Team, um weitere hinzuzufügen."
     },
     "accept": {
       "title": "Treten Sie Ihrem Workspace bei",
@@ -358,6 +413,33 @@
       "offline": "Offline",
       "hint": "Solange du offline bist, werden dir keine neuen Chats automatisch zugewiesen. Chats, die du schon hast, bleiben deine.",
       "failed": "Änderung nicht möglich"
+    },
+    "myLeave": {
+      "label": "Abwesenheit",
+      "onLeaveUntil": "Abwesend bis {date}",
+      "onLeaveOpen": "Abwesend",
+      "hint": "Teile deinem Team mit, dass du nicht da bist. Während deiner Abwesenheit werden dir keine neuen Chats automatisch zugewiesen.",
+      "title": "Deine Abwesenheit"
+    },
+    "deactivate": {
+      "eyebrow": "Teammitglieder",
+      "title": "Mitglied deaktivieren",
+      "message": "{name} kann sich nicht mehr anmelden. Sie können die Person jederzeit wieder aktivieren.",
+      "loading": "Bestand wird geprüft",
+      "previewFailed": "Wir konnten nicht prüfen, was diese Person besitzt. Sie können sie trotzdem deaktivieren; ihre Arbeit bleibt bei ihr.",
+      "holds": "{name} besitzt {contacts, plural, one {# Kontakt} other {# Kontakte}}, {deals, plural, one {# offenen Deal} other {# offene Deals}} und {chats, plural, one {# offene Unterhaltung} other {# offene Unterhaltungen}}. Was soll damit geschehen?",
+      "optLead": "An den Teammanager übergeben, {name} ({team})",
+      "optLeadNone": "An den Teammanager übergeben (diese Person hat keinen aktiven Teammanager)",
+      "optPerson": "An eine Person übergeben",
+      "pickPerson": "Person",
+      "pickPlaceholder": "Person auswählen",
+      "optLeave": "Bei {name} belassen",
+      "undoNote": "Kontakte und offene Deals können 14 Tage lang über den Zuweisungsverlauf rückgängig gemacht werden. Offene Unterhaltungen werden einzeln neu zugewiesen.",
+      "nothing": "{name} besitzt keine Kontakte, offenen Deals oder offenen Unterhaltungen.",
+      "membership": "Die Teamzugehörigkeiten bleiben erhalten, sodass {name} nach der Reaktivierung wieder in den Teams ist.",
+      "confirm": "Deaktivieren",
+      "moved": "{contacts, plural, one {# Kontakt} other {# Kontakte}}, {deals, plural, one {# Deal} other {# Deals}} und {chats, plural, one {# Unterhaltung} other {# Unterhaltungen}} an {name} übertragen.",
+      "remaining": "{count} weitere warten noch. Starten Sie die Übergabe erneut, um sie zu übertragen."
     }
   }
 }

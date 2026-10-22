@@ -26,6 +26,8 @@ export interface TemplateRow {
   /** The Meta media handle of the header example (Reference kept the stored file's path here). */
   attachmentFile: string | null;
   headerSampleUrl: string | null;
+  /** Object-storage key of the stored header file the user uploaded (the preview copy; `attachmentFile` is Meta's handle). */
+  headerMediaKey: string | null;
   /** The pin of a `location` header (`{latitude, longitude, name, address}`). */
   headerLocation: unknown;
   parameterFormat: string;
@@ -39,6 +41,8 @@ export interface TemplateRow {
   submittedAt: Date | null;
   lastSyncedAt: Date | null;
   pausedUntil: Date | null;
+  /** ISO times of the edits sent to Meta in the last 30 days (see meta-edit-rules.ts). */
+  metaEditLog: string[];
   providerConfigId: number | null;
   connectionUuid: string | null;
   rowVersion: number;
@@ -52,7 +56,7 @@ const SELECT = sql.raw(`
   t.id, t.uuid, t.user_id, t.template_name, t.language, t.header, t.template_body, t.footer, t.code_expiration_minutes,
   t.buttons, t.variable_map, t.category, t.meta_category, t.template_type, t.attachment_type, t.attachment_file,
   t.header_sample_url, t.header_location, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
-  t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until,
+  t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until, t.meta_edit_log,
   t.provider_config_id, c.uuid AS connection_uuid, t.row_version, t.created_at, t.updated_at,
   to_char(t.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
 
@@ -81,6 +85,7 @@ function toRow(r: Raw): TemplateRow {
     attachmentType: (r.attachment_type as string | null) ?? null,
     attachmentFile: (r.attachment_file as string | null) ?? null,
     headerSampleUrl: (r.header_sample_url as string | null) ?? null,
+    headerMediaKey: (r.header_media_key as string | null) ?? null,
     headerLocation: r.header_location ?? null,
     parameterFormat: String(r.parameter_format),
     status: String(r.status),
@@ -93,6 +98,7 @@ function toRow(r: Raw): TemplateRow {
     submittedAt: date(r.submitted_at),
     lastSyncedAt: date(r.last_synced_at),
     pausedUntil: date(r.paused_until),
+    metaEditLog: Array.isArray(r.meta_edit_log) ? (r.meta_edit_log as string[]) : [],
     providerConfigId: num(r.provider_config_id),
     connectionUuid: (r.connection_uuid as string | null) ?? null,
     rowVersion: Number(r.row_version),
@@ -134,6 +140,7 @@ export interface NewTemplate {
   attachmentType: string | null;
   attachmentFile: string | null;
   headerSampleUrl: string | null;
+  headerMediaKey?: string | null;
   headerLocation?: unknown;
   parameterFormat: string;
   status: string;
@@ -151,6 +158,7 @@ export interface NewTemplate {
 export type TemplatePatch = Partial<Omit<NewTemplate, 'userId'>> & {
   rejectionReason?: string | null;
   pausedUntil?: Date | null;
+  metaEditLog?: string[];
 };
 
 const COLUMN: Record<keyof TemplatePatch, string> = {
@@ -168,6 +176,7 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   attachmentType: 'attachment_type',
   attachmentFile: 'attachment_file',
   headerSampleUrl: 'header_sample_url',
+  headerMediaKey: 'header_media_key',
   headerLocation: 'header_location',
   parameterFormat: 'parameter_format',
   status: 'status',
@@ -180,9 +189,10 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   submittedAt: 'submitted_at',
   lastSyncedAt: 'last_synced_at',
   pausedUntil: 'paused_until',
+  metaEditLog: 'meta_edit_log',
   providerConfigId: 'provider_config_id',
 };
-const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap', 'headerLocation']);
+const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap', 'headerLocation', 'metaEditLog']);
 
 /** The library's status tabs as Reference reads them: a draft is "in review", a paused or disabled template is "rejected". */
 const GROUP_WHERE = {
@@ -367,12 +377,12 @@ export class TemplatesRepository {
     const res = await tx.execute(sql`
       INSERT INTO wa_templates (org_id, user_id, template_name, language, header, template_body, footer,
         code_expiration_minutes, buttons, variable_map, category, meta_category, template_type, attachment_type,
-        attachment_file, header_sample_url, header_location, parameter_format, status, meta_status, meta_template_id, quality_score,
+        attachment_file, header_sample_url, header_media_key, header_location, parameter_format, status, meta_status, meta_template_id, quality_score,
         rejection_reason_code, approved_at, paused_until, submitted_at, last_synced_at, provider_config_id, channel)
       VALUES (${orgId}, ${v.userId}, ${v.templateName}, ${v.language}, ${v.header}, ${v.templateBody}, ${v.footer},
         ${v.codeExpirationMinutes}, ${JSON.stringify(v.buttons)}::jsonb, ${JSON.stringify(v.variableMap ?? {})}::jsonb,
         ${v.category}, ${v.metaCategory}, ${v.templateType}, ${v.attachmentType}, ${v.attachmentFile},
-        ${v.headerSampleUrl}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
+        ${v.headerSampleUrl}, ${v.headerMediaKey ?? null}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
         ${v.qualityScore ?? null}, ${v.rejectionReasonCode ?? null}, ${v.approvedAt ?? null}, ${v.pausedUntil ?? null},
         ${v.submittedAt ?? null},
         ${v.lastSyncedAt ?? null}, ${v.providerConfigId}, 'waba')

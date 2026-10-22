@@ -13,6 +13,8 @@ const arg = (n, d) => {
 const SECONDS = Number(arg('--seconds', 600));
 const EVERY = Number(arg('--every', 2));
 const API = process.env.API_URL || 'http://localhost:3000';
+const cpuCount = () =>
+  (readFileSync('/proc/cpuinfo', 'utf8').match(/^processor/gm) ?? []).length || 1;
 const run = (cmd, args, opts = {}) => {
   try {
     return execFileSync(cmd, args, {
@@ -31,14 +33,57 @@ export function parseRss(statusText) {
   return m ? Math.round(Number(m[1]) / 1024) : null;
 }
 
+/** Busy and total CPU ticks of the whole machine, from the first line of /proc/stat. */
+export function parseCpu(statText) {
+  const m = /^cpu\s+(.+)$/m.exec(statText ?? '');
+  if (!m) return null;
+  const v = m[1].trim().split(/\s+/).map(Number);
+  const total = v.reduce((a, b) => a + b, 0);
+  const idle = (v[3] ?? 0) + (v[4] ?? 0);
+  return { busy: total - idle, total };
+}
+
+/** utime + stime of one process, from /proc/<pid>/stat (the name in field 2 may hold spaces, so count from the last bracket). */
+export function parseProcTicks(statText) {
+  const i = (statText ?? '').lastIndexOf(')');
+  if (i < 0) return null;
+  const f = statText.slice(i + 2).split(' ');
+  return Number(f[11]) + Number(f[12]);
+}
+
+let prevCpu = null;
+let prevProc = null;
+
 async function reading(t0) {
   const s = {
     t: Math.round((Date.now() - t0) / 1000),
+    at: Date.now(),
     uptime: null,
     rssMb: null,
     pgConns: null,
     queueDepth: null,
+    systemCpuPct: null,
+    apiCpuPct: null,
   };
+  try {
+    const cpu = parseCpu(readFileSync('/proc/stat', 'utf8'));
+    const proc = process.env.API_PID
+      ? parseProcTicks(readFileSync(`/proc/${process.env.API_PID}/stat`, 'utf8'))
+      : null;
+    if (cpu && prevCpu) {
+      const dt = cpu.total - prevCpu.total;
+      if (dt > 0) {
+        s.systemCpuPct = Math.round((100 * (cpu.busy - prevCpu.busy)) / dt);
+        // Against ONE core: 100 means the API process used a whole core (it is a single thread of JavaScript plus helpers).
+        if (proc != null && prevProc != null)
+          s.apiCpuPct = Math.round((100 * (proc - prevProc) * cpuCount()) / dt);
+      }
+    }
+    prevCpu = cpu;
+    prevProc = proc;
+  } catch {
+    /* no /proc on this system */
+  }
   try {
     s.uptime =
       (await (await fetch(`${API}/health`, { signal: AbortSignal.timeout(3000) })).json())

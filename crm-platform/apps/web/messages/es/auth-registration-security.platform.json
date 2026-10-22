@@ -1404,7 +1404,8 @@
             "packInactive": "El paquete del complemento está desactivado, así que nadie puede comprarlo.",
             "appUnpublished": "La aplicación no está publicada, así que los espacios de trabajo aún no pueden verla.",
             "appLabel": "Aplicación: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# complemento seleccionado} other {# complementos seleccionados}}"
           },
           "featureHints": {
             "automation": "El creador de flujos y las automatizaciones que responden y actúan sobre las conversaciones.",
@@ -1416,10 +1417,12 @@
             "remove_branding": "Marca blanca: el espacio de trabajo puede ocultar la marca de la plataforma en su pie.",
             "sales_pipeline": "Negocios, tareas y embudos, y las cifras del embudo en el panel.",
             "appointment_booking": "Tipos de reserva, citas y las páginas públicas de reservas. La aplicación de pago Citas controla este interruptor.",
+            "appointment_confirm_buttons": "Añade los botones Confirmar, Reprogramar y Cancelar al recordatorio de cita enviado por WhatsApp.",
+            "appointment_rebook_steps": "Mensajes de seguimiento enviados tras una cita completada para pedir al contacto que vuelva a reservar.",
             "chatbot_widgets": "El creador de widgets de chatbot para el sitio web.",
             "wa_storefront": "El área de catálogo y tienda de WhatsApp.",
             "inbox_sla": "Políticas y plazos de SLA en la bandeja de equipo.",
-            "inbox_routing": "Reglas de enrutamiento que asignan automáticamente las conversaciones de la bandeja.",
+            "inbox_routing": "Asignación automática de chats nuevos: reglas de enrutamiento, Todos los demás y temporizadores de la cola de espera. Forma parte del complemento Enrutamiento inteligente.",
             "waba_calling": "Llamadas de WhatsApp desde la bandeja: números de llamada, permisos de llamada, realizar y contestar llamadas.",
             "inbox_kanban": "La vista de tablero Kanban de la bandeja de equipo.",
             "team_performance": "Los informes de rendimiento del equipo.",
@@ -1442,7 +1445,10 @@
             "personal_history_full": "Permite que un número personal de WhatsApp importe todo su historial de chats al vincularse por primera vez. La importación de chats recientes está disponible en todos los planes que incluyen números personales.",
             "ai_crm_copilot": "Encuentra y puntúa leads con IA a partir de tus contactos.",
             "lead_scoring": "Puntúa los contactos con IA y da soporte al piloto de crecimiento. La app Puntuación de leads con IA controla este interruptor.",
-            "record_assignment": "Asigna los nuevos contactos, empresas y negocios al responsable de ventas adecuado mediante reglas por prioridad."
+            "record_assignment": "Asigna los nuevos contactos, empresas y negocios al responsable de ventas adecuado mediante reglas por prioridad.",
+            "team_hierarchy": "Equipos padre, líderes de equipo y gerentes que ven su equipo y los equipos inferiores.",
+            "custom_roles": "Crea y edita roles, y elige un alcance (propios, del equipo o todos los registros) para cada permiso.",
+            "inbox_assignment_sticky": "Asignación con prioridad al propietario y sincronizada, ventana de contacto recurrente y aviso al reasignar. Forma parte del complemento Enrutamiento inteligente."
           },
           "units": {
             "days": "Días",
@@ -1587,7 +1593,8 @@
             "sms_monthly": "SMS al mes",
             "email_mailboxes": "Buzones de correo",
             "email_monthly": "Correos al mes",
-            "storage_gb": "Almacenamiento (GB)"
+            "storage_gb": "Almacenamiento (GB)",
+            "teams": "Equipos"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1605,10 +1612,12 @@
             "remove_branding": "Marca blanca (quita la marca de la plataforma)",
             "sales_pipeline": "Embudo de ventas (negocios y tareas)",
             "appointment_booking": "Citas y páginas de reservas",
+            "appointment_confirm_buttons": "Botones del recordatorio: Confirmar, Reprogramar y Cancelar",
+            "appointment_rebook_steps": "Pasos de nueva reserva (reactivación) tras una cita",
             "chatbot_widgets": "Widgets de chatbot para el sitio web",
             "wa_storefront": "Tienda y catálogo de WhatsApp",
             "inbox_sla": "Políticas de SLA de la bandeja",
-            "inbox_routing": "Reglas de enrutamiento y horarios de atención de la bandeja",
+            "inbox_routing": "Enrutamiento inteligente: asignación automática y reglas",
             "waba_calling": "Realizar y contestar llamadas de WhatsApp desde la bandeja",
             "inbox_kanban": "Tablero Kanban de la bandeja",
             "team_performance": "Informes de rendimiento del equipo",
@@ -1631,7 +1640,10 @@
             "personal_history_full": "Importación del historial completo de chats (WhatsApp personal)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Puntuación de leads con IA",
-            "record_assignment": "Reglas de asignación de registros (asignar automáticamente contactos, empresas y negocios)"
+            "record_assignment": "Reglas de asignación de registros (asignar automáticamente contactos, empresas y negocios)",
+            "team_hierarchy": "Jerarquía de equipos y gerentes",
+            "custom_roles": "Roles personalizados y alcances",
+            "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo"
           },
           "problems": {
             "required": "Este campo es obligatorio.",
@@ -1687,7 +1699,40 @@
             "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
             "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
             "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado.",
-            "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada."
+            "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada.",
+            "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "CRM de ventas",
+            "platform": "Compartido por ambos"
+          },
+          "marketplace": {
+            "title": "Apps del Marketplace ofrecidas a los espacios de trabajo de este plan"
+          },
+          "included": {
+            "title": "Complementos incluidos en este plan",
+            "intro": "Activa un complemento para incluirlo: los espacios de trabajo de este plan lo reciben sin coste y su tarjeta dice \"Incluido en tu plan\". Esto marca exactamente las funciones del complemento en la pestaña Funciones, y marcarlas allí cambia el interruptor. Los complementos no incluidos se siguen vendiendo a su propio precio a todos los espacios de trabajo con un plan de pago activo.",
+            "readOnly": "Puedes ver este plan pero no modificarlo, así que estos interruptores están bloqueados.",
+            "loading": "Cargando complementos",
+            "loadFailed": "No se pudieron cargar los complementos. No se cambió nada.",
+            "empty": "Aún no hay complementos",
+            "emptyHint": "Complementos como Enrutamiento inteligente y Equipos y permisos se crean en Complementos, en la consola del operador.",
+            "stateFull": "Incluido",
+            "statePartial": "Incluido en parte",
+            "stateNone": "No incluido",
+            "noPrice": "Sin precio definido",
+            "gives": "Ofrece: {features}",
+            "switchLabel": "Incluir {name} en este plan",
+            "noFeatures": "Este complemento solo añade límites, así que no hay ninguna función que incluir. Sus límites no forman parte de la inclusión en el plan; define los límites propios del plan en la pestaña Límites.",
+            "partial": "Incluido en parte: {count} de {total} funciones están activas en este plan. Siguen desactivadas: {missing}.",
+            "includeFully": "Incluir por completo",
+            "limitsNote": "Este complemento también añade límites extra ({limits}). El límite extra no forma parte de la inclusión en el plan y nada de aquí lo cambia: define el límite propio del plan en la pestaña Límites. Los espacios de trabajo siguen comprando el complemento por el límite extra.",
+            "unlistedNote": "Algunas de sus funciones ({features}) no están en la lista estándar de complementos. Aún se pueden activar para el plan; solo cambia la forma de comprar este complemento como paquete.",
+            "inactiveNote": "Este complemento es un borrador o está desactivado, así que nadie puede comprarlo todavía. Incluirlo en el plan sigue funcionando.",
+            "impactCount": "{count, plural, one {# espacio de trabajo ya paga este complemento.} other {# espacios de trabajo ya pagan este complemento.}} Su renovación se detendrá al final del periodo actual, no se reembolsa nada y hoy no se cancela nada.",
+            "impactUnknown": "Los espacios de trabajo de este plan que ya pagan este complemento dejarán de renovarlo al final de su periodo actual. No se reembolsa nada y hoy no se cancela nada. No se pudo cargar la cifra.",
+            "offNote": "Desactivado: los espacios de trabajo de este plan pierden estas funciones salvo que compren el complemento, y pasa a poder comprarse a su precio."
           }
         }
       },

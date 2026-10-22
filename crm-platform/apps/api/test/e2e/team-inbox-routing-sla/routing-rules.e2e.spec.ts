@@ -130,7 +130,13 @@ describe('rules API', () => {
       firedCount: 0,
       position: 1,
     });
-    expect(res.body.assign).toEqual({ strategy: 'round_robin', userIds: [u1, u2], teamIds: [] });
+    expect(res.body.assign).toEqual({
+      strategy: 'round_robin',
+      userIds: [u1, u2],
+      teamIds: [],
+      everyone: false,
+    });
+    expect(res.body.appliesToAll).toBe(false);
     expect(JSON.stringify(res.body)).not.toMatch(/rrCursor/);
     expect(await p.api.auditCount(t.orgId, 'routing_rules', 'insert')).toBeGreaterThan(0);
     expect((await p.api.events(t.orgId, 'routing_rule.created')).length).toBeGreaterThan(0);
@@ -148,14 +154,14 @@ describe('rules API', () => {
     expect(n.rows[0].n).toBe(1);
   });
 
-  it('refuses a rule that catches everything unless it is the fallback, and targets outside the workspace', async () => {
+  it('refuses a rule with no condition unless it is the fallback or applies to every conversation, and targets outside the workspace', async () => {
     const t2 = await p.api.signup('rrc');
     const none = await rulesApi(t2.admin).create({
       name: 'All',
       assign: { strategy: 'round_robin', userIds: [u1] },
     });
     expect(none.status).toBe(422);
-    expect(JSON.stringify(none.body)).toContain('fallback');
+    expect(JSON.stringify(none.body)).toContain('every conversation');
 
     // an agent of ANOTHER workspace: the friendly 422, nothing created
     const foreign = await rulesApi(t2.admin).create(body());
@@ -440,7 +446,7 @@ describe('the engine: a new conversation is given to an agent', () => {
   });
 
   it('an agent who is suspended, or marked busy, is skipped; with nobody left a team queue or nothing', async () => {
-    await p.h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [a2.userId]);
+    await p.h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [a2.userId]);
     const g1 = await customer(t, ch, 'refund');
     const g2 = await customer(t, ch, 'refund');
     expect([g1.assignee, g2.assignee]).toEqual([a1.userId, a1.userId]);
@@ -572,7 +578,7 @@ describe('the engine: a new conversation is given to an agent', () => {
     expect(Number((await ruleRow(refunds.id)).fired_count)).toBe(firedBefore);
 
     // the owner is suspended: the rules run as usual
-    await p.h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [a1.userId]);
+    await p.h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [a1.userId]);
     const gone = phone();
     await p.api.seedContacts(t, [{ name: 'Orphaned', phone: `+${gone}`, ownerId: a1.userId }]);
     const fallThrough = await customer(t, ch, 'refund', gone);

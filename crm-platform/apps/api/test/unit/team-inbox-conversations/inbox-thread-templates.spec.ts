@@ -33,6 +33,7 @@ const template = (over: Partial<TemplateRow> = {}): TemplateRow =>
     status: 'approved',
     metaStatus: 'APPROVED',
     pausedUntil: null,
+    metaEditLog: [],
     providerConfigId: WABA,
     ...over,
   }) as TemplateRow;
@@ -75,6 +76,7 @@ function setup(
     } as never,
     {} as never,
     { enqueueOutbound } as never,
+    { previewLinker: async () => async () => null } as never,
   );
   const send = (input: Partial<Extract<SendMessageInput, { kind: 'template' }>> = {}) =>
     RequestContextStore.run(ctx, () =>

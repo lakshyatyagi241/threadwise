@@ -7,7 +7,7 @@
  *   dry      export (fresh), ship, preflight, dry run (rolled back, nothing written), stop. Safe to repeat.
  *   load     ship, preflight, a fresh dry run, backup, load, files, core-load (plan, wallet, subscription), wallet-sync, flow-state, reconcile,
  *            whatsapp (the Meta token of the migrated number is imported and the number connected; --no-whatsapp leaves it out), report.
- *   catchup  an ALREADY-loaded client whose live data moved on: forced export, ship, preflight, dry run, backup, load (new rows only, credits
+ *   catchup  an ALREADY-loaded client whose live data moved on: forced export, geta_core snapshot (core-snapshot, read right after the export), ship, preflight, dry run, backup, load (new rows only, credits
  *            skipped), update (edits since the load), files, core-load, wallet-sync, reconcile, report. Needs the client's config (refuses a
  *            client that was never loaded); never touches the channel map; never publishes flows again.
  *
@@ -177,7 +177,13 @@ const ORDER = [
   'whatsapp',
 ].filter((n) => PANEL_STEPS.includes(n));
 // the WhatsApp number is two cycle steps (token import, cutover) shown as one panel step: it is done when the cutover is
-const EVENT_OF = { ship: 'preflight', init: 'preflight', complete: 'report', 'wa-credentials': 'whatsapp', 'wa-cutover': 'whatsapp' };
+const EVENT_OF = {
+  ship: 'preflight',
+  init: 'preflight',
+  complete: 'report',
+  'wa-credentials': 'whatsapp',
+  'wa-cutover': 'whatsapp',
+};
 
 const problem = ensureConfig();
 if (problem) fail(problem);
@@ -233,6 +239,8 @@ child.stdout.on('data', (d) => {
     let m;
     if ((m = line.match(/^migrate: (\S+) (ok|failed|skipped) [\d.]+s/))) {
       const step = EVENT_OF[m[1]] || m[1];
+      // a step the panel does not announce (update, files, wallet-sync ...) that FAILS must still name the failed step in the summary
+      if (m[2] === 'failed' && !wanted.includes(step) && !st.failedStep) st.failedStep = m[1];
       if (!wanted.includes(step)) continue;
       const status = m[2] === 'ok' ? 'done' : m[2];
       if (m[1] === 'ship' && status === 'done') continue; // ship and preflight are one step for the panel

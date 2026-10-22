@@ -39,6 +39,9 @@ import { emitGroupEvents, GROUP_EVENTS, groupEventsFor } from './waba-group-even
 import { toGroupDto } from './waba-groups.mapper';
 import { wabaGroupsEligibleKey } from '../../infra/providers/whatsapp/group-peer';
 import { factsOf, WabaGroupsRepository, type WabaGroupRow } from './waba-groups.repository';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('waba_groups_eligibility');
 
 const MODULE = 'waba_groups';
 /** Reference caches a definite eligibility answer for an hour per number. */
@@ -106,9 +109,15 @@ export class WabaGroupsAdminService {
 
     const key = eligibleKey(orgId, num.id);
     if (!fresh) {
-      const cached = await this.redis.get(key).catch(() => null);
-      if (cached === '1') return out(true, 'eligible');
-      if (cached === '0') return out(false, 'not_eligible');
+      const cached = await this.redis.get(key).catch(() => {
+        cache.error();
+        return null;
+      });
+      if (cached === '1' || cached === '0') {
+        cache.hit();
+        return cached === '1' ? out(true, 'eligible') : out(false, 'not_eligible');
+      }
+      cache.miss();
     }
     const answer = await this.meta.probe(num.conn);
     if (answer === 'unknown') return out(true, 'check_failed');
