@@ -1404,7 +1404,8 @@
             "packInactive": "Gói tiện ích bổ sung đang tắt nên không ai mua được.",
             "appUnpublished": "Ứng dụng chưa được xuất bản nên các không gian làm việc chưa thấy được.",
             "appLabel": "Ứng dụng: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, other {Đã chọn # tiện ích bổ sung}}"
           },
           "featureHints": {
             "automation": "Trình tạo luồng và tự động hóa để phản hồi và xử lý các cuộc trò chuyện.",
@@ -1705,6 +1706,33 @@
             "chat": "Trò chuyện",
             "crm": "CRM bán hàng",
             "platform": "Dùng chung cho cả hai"
+          },
+          "marketplace": {
+            "title": "Ứng dụng Marketplace được cung cấp cho không gian làm việc trong gói này"
+          },
+          "included": {
+            "title": "Tiện ích bổ sung có trong gói này",
+            "intro": "Bật một tiện ích bổ sung để đưa vào gói: các không gian làm việc trong gói này nhận được miễn phí và thẻ của tiện ích ghi \"Đã bao gồm trong gói của bạn\". Thao tác này chọn đúng các tính năng của tiện ích trong tab Tính năng, và chọn chúng ở đó cũng đổi công tắc. Các tiện ích không được đưa vào vẫn được bán theo giá riêng cho mọi không gian làm việc có gói trả phí đang hoạt động.",
+            "readOnly": "Bạn có thể xem gói này nhưng không thể thay đổi, nên các công tắc này bị khóa.",
+            "loading": "Đang tải tiện ích bổ sung",
+            "loadFailed": "Không thể tải các tiện ích bổ sung. Chưa có gì bị thay đổi.",
+            "empty": "Chưa có tiện ích bổ sung nào",
+            "emptyHint": "Các tiện ích như Định tuyến thông minh và Nhóm và quyền được tạo trong mục Tiện ích bổ sung của bảng điều khiển nhà điều hành.",
+            "stateFull": "Đã bao gồm",
+            "statePartial": "Bao gồm một phần",
+            "stateNone": "Chưa bao gồm",
+            "noPrice": "Chưa đặt giá",
+            "gives": "Cung cấp: {features}",
+            "switchLabel": "Đưa {name} vào gói này",
+            "noFeatures": "Tiện ích này chỉ thêm giới hạn nên không có tính năng nào để đưa vào. Giới hạn của nó không thuộc phần đưa vào gói; hãy đặt giới hạn riêng của gói trong tab Giới hạn.",
+            "partial": "Bao gồm một phần: {count} trên {total} tính năng đang bật trong gói này. Vẫn đang tắt: {missing}.",
+            "includeFully": "Bao gồm đầy đủ",
+            "limitsNote": "Tiện ích này còn thêm các giới hạn bổ sung ({limits}). Giới hạn bổ sung không thuộc phần đưa vào gói và không có gì ở đây thay đổi nó: hãy đặt giới hạn riêng của gói trong tab Giới hạn. Các không gian làm việc vẫn mua tiện ích để có giới hạn bổ sung.",
+            "unlistedNote": "Một số tính năng của nó ({features}) nằm ngoài danh sách tiện ích tiêu chuẩn. Chúng vẫn có thể được bật cho gói; chỉ cách mua tiện ích này dưới dạng gói là khác.",
+            "inactiveNote": "Tiện ích này là bản nháp hoặc đang tắt, nên chưa ai có thể mua. Đưa nó vào gói vẫn hoạt động.",
+            "impactCount": "{count, plural, other {# không gian làm việc đã trả tiền cho tiện ích này.}} Việc gia hạn của họ sẽ dừng khi kết thúc kỳ hiện tại, không hoàn tiền và hôm nay không hủy gì cả.",
+            "impactUnknown": "Các không gian làm việc trong gói này đã trả tiền cho tiện ích này sẽ ngừng gia hạn khi kết thúc kỳ hiện tại. Không hoàn tiền và hôm nay không hủy gì cả. Không thể tải số lượng.",
+            "offNote": "Đã tắt: các không gian làm việc trong gói này mất các tính năng này trừ khi họ mua tiện ích, và tiện ích trở thành có thể mua với giá của nó."
           }
         }
       },

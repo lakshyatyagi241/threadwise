@@ -1404,7 +1404,8 @@
             "packInactive": "Pakiet dodatku jest wyłączony, więc nikt nie może go kupić.",
             "appUnpublished": "Aplikacja nie jest opublikowana, więc przestrzenie robocze jeszcze jej nie widzą.",
             "appLabel": "Aplikacja: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {Wybrano # dodatek} few {Wybrano # dodatki} many {Wybrano # dodatków} other {Wybrano # dodatku}}"
           },
           "featureHints": {
             "automation": "Kreator przepływów i automatyzacje, które odpowiadają na rozmowy i na nie reagują.",
@@ -1705,6 +1706,33 @@
             "chat": "Czat",
             "crm": "CRM sprzedaży",
             "platform": "Wspólne dla obu"
+          },
+          "marketplace": {
+            "title": "Aplikacje Marketplace oferowane przestrzeniom roboczym w tym planie"
+          },
+          "included": {
+            "title": "Dodatki wliczone w ten plan",
+            "intro": "Włącz dodatek, aby go uwzględnić: przestrzenie robocze w tym planie dostają go bez opłaty, a na jego karcie widnieje „Wliczone w Twój plan”. To zaznacza dokładnie funkcje dodatku na karcie Funkcje, a zaznaczenie ich tam przełącza przełącznik. Dodatki, które nie są wliczone, nadal są sprzedawane po własnej cenie każdej przestrzeni roboczej z aktywnym planem płatnym.",
+            "readOnly": "Możesz przeglądać ten plan, ale nie możesz go zmieniać, więc te przełączniki są zablokowane.",
+            "loading": "Ładowanie dodatków",
+            "loadFailed": "Nie udało się załadować dodatków. Nic nie zostało zmienione.",
+            "empty": "Nie ma jeszcze dodatków",
+            "emptyHint": "Dodatki takie jak Inteligentne kierowanie oraz Zespoły i uprawnienia tworzy się w sekcji Dodatki w konsoli operatora.",
+            "stateFull": "Wliczone",
+            "statePartial": "Częściowo wliczone",
+            "stateNone": "Niewliczone",
+            "noPrice": "Nie ustawiono ceny",
+            "gives": "Daje: {features}",
+            "switchLabel": "Uwzględnij {name} w tym planie",
+            "noFeatures": "Ten dodatek tylko zwiększa limity, więc nie ma funkcji do uwzględnienia. Jego limity nie wchodzą w skład wliczenia w plan; własne limity planu ustawisz na karcie Limity.",
+            "partial": "Częściowo wliczone: w tym planie włączono {count} z {total} funkcji. Nadal wyłączone: {missing}.",
+            "includeFully": "Uwzględnij w całości",
+            "limitsNote": "Ten dodatek zwiększa też limity dodatkowe ({limits}). Limit dodatkowy nie wchodzi w skład wliczenia w plan i nic tutaj go nie zmienia: własny limit planu ustawisz na karcie Limity. Przestrzenie robocze nadal kupują dodatek ze względu na limit dodatkowy.",
+            "unlistedNote": "Niektóre jego funkcje ({features}) nie są na standardowej liście dodatków. Nadal można je włączyć dla planu; inaczej działa tylko kupowanie tego dodatku jako pakietu.",
+            "inactiveNote": "Ten dodatek jest szkicem lub jest wyłączony, więc nikt jeszcze nie może go kupić. Uwzględnienie go w planie nadal działa.",
+            "impactCount": "{count, plural, one {# przestrzeń robocza już płaci za ten dodatek.} few {# przestrzenie robocze już płacą za ten dodatek.} many {# przestrzeni roboczych już płaci za ten dodatek.} other {# przestrzeni roboczej już płaci za ten dodatek.}} Ich odnowienie zatrzyma się na końcu bieżącego okresu, nic nie zostanie zwrócone i dziś nic nie zostanie anulowane.",
+            "impactUnknown": "Przestrzenie robocze w tym planie, które już płacą za ten dodatek, przestaną go odnawiać na koniec bieżącego okresu. Nic nie zostanie zwrócone i dziś nic nie zostanie anulowane. Nie udało się załadować liczby.",
+            "offNote": "Wyłączono: przestrzenie robocze w tym planie tracą te funkcje, chyba że kupią dodatek, a dodatek staje się dla nich dostępny do kupienia w swojej cenie."
           }
         }
       },
