@@ -25,7 +25,7 @@ export async function run(argv, env = process.env, out = console.log) {
   try { r = await fetch(cfg.INCIDENT_API_URL.replace(/\/+$/, '') + route[1], { method: route[0], headers, body: route[2] ? JSON.stringify({ ...route[2], who }) : undefined }); } catch (e) { out(`cannot reach the incident API: ${e?.cause?.code ?? e?.code ?? 'error'}`); return 1; }
   const j = await r.json().catch(() => ({}));
   if (!r.ok) { out(`refused (${r.status}): ${j.error ?? 'error'}${j.owner ? ` (owner: ${j.owner})` : ''}`); return 1; }
-  if (cmd === 'list') for (const i of j.incidents) out(`${i.id}  ${i.status.padEnd(9)}  ${i.playbook}  owner=${i.owner ?? '-'}  ${i.prUrl ?? ''}`);
+  if (cmd === 'list') for (const i of j.incidents) out(`${i.id}  ${i.status.padEnd(9)}  ${(i.kind ?? i.playbook).padEnd(14)}  owner=${i.owner ?? '-'}  ${i.prUrl ?? ''}`);
   else out(JSON.stringify(j, null, 2));
   return 0;
 }

@@ -149,6 +149,18 @@ tf = tempfile.mktemp(); open(tf, "w").write(TOKEN + "\n")
 out, _ = run("live", A, B, env={"GITHUB_TOKEN": "", "DEPLOY_MSG_TOKEN_FILE": tf})
 check("token read from file works", "#34" in out, out)
 
+# 9b --json machine-readable mode
+FIX.update(compare=[commit(sha(11), "Merge pull request #51 from a/b", "a"), commit(sha(12), "Merge pull request #52 from c/d", "c")], pulls={sha(11): [pr(51, "T1", "a", "bob")], sha(12): [pr(52, "T2", "c", "eve")]})
+shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
+pj = subprocess.run([sys.executable, FMT, "--json", "live", A, B, "42"], env=ENV, capture_output=True, text=True, timeout=60)
+jj = json.loads(pj.stdout)
+check("--json: sha, prev, prs, mergers, status", jj["sha"] == B and jj["prev"] == A and jj["prs"] == [51, 52] and jj["mergers"] == ["@bob", "@eve"] and jj["status"] == "live" and jj["seconds"] == 42 and jj["prsKnown"] is True, pj.stdout)
+MODE["fail"] = "500"; shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
+pj = subprocess.run([sys.executable, FMT, "--json", "unchanged", A, B], env=ENV, capture_output=True, text=True, timeout=60); jf = json.loads(pj.stdout)
+MODE["fail"] = None
+check("--json: API failure degrades to empty prs, exit 0, token not leaked", pj.returncode == 0 and jf["prs"] == [] and jf["prsKnown"] is False and TOKEN not in pj.stdout + pj.stderr, pj.stdout)
+
+FIX.update(compare=[commit(sha(3), "Add feature (#34)", "carol")], pulls={sha(3): [pr(34, "Add feature", "carol", "carol")]})
 # 10 --dry-run posts nothing and keeps state clean
 before = len(chat_posts)
 p = subprocess.run(["bash", WATCH, "--dry-run", A, B, "12", "live"], env={**ENV, "DESK_WATCH_URL_FILE": "/nonexistent"}, capture_output=True, text=True, timeout=60)
@@ -163,9 +175,36 @@ wenv = {**ENV, "PATH": f"{BIN}:{os.environ['PATH']}", "DESK_DIR": D, "DESK_WATCH
 chat_posts.clear(); shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
 w = subprocess.Popen(["bash", WATCH], env=wenv, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 time.sleep(1.5); open(f"{D}/running", "w").close(); time.sleep(3)
-os.remove(f"{D}/running"); open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={B[:9]}\n"); time.sleep(4)
-w.terminate(); w.wait()
+# fake docker: slow (2 s) on purpose, records args + stdin; fails when D/docker_fail exists
+open(f"{BIN}/docker", "w").write(f'#!/bin/sh\nsleep 2\nb=$(cat)\necho "ARGS $*" >> {D}/docker.log\necho "BODY $b" >> {D}/docker.log\n[ ! -f {D}/docker_fail ]\n'); os.chmod(f"{BIN}/docker", 0o755)
+def wait_for(cond, secs):
+    t = time.time()
+    while time.time() - t < secs and not cond(): time.sleep(0.2)
+    return cond()
+os.remove(f"{D}/running"); open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={B[:9]}\n")
+wait_for(lambda: len(chat_posts) >= 2, 8)
+live_before_docker = len(chat_posts) >= 2 and not os.path.exists(f"{D}/docker.log")  # post is out while the slow docker call is still running
+wait_for(lambda: os.path.exists(f"{D}/docker.log") and "BODY" in open(f"{D}/docker.log").read(), 8)
+dlog = open(f"{D}/docker.log").read() if os.path.exists(f"{D}/docker.log") else ""
 txt = [p["text"] for p in chat_posts]
+check("watcher: release call reaches the bridge after 'Release live' without delaying it", live_before_docker and "ARGS exec -i desk-gchat-bridge node -e" in dlog and dlog.count("/release") >= 1 and f'"sha": "{B[:9]}"' in dlog and '"prs": [' in dlog and '"at": "' in dlog, dlog)
+check("watcher: no secret path or token in the docker args", "ARGS" in dlog and TOKEN not in dlog and "incident_api_token" in open(WATCH).read() and "incident_api_token" not in "".join(l for l in dlog.splitlines() if l.startswith("ARGS").__bool__() and "node -e" in l and "/run/secrets" in l.replace("incident_api_token", "").replace("/run/secrets/", "")) )
+# deploy ends with the SAME live tag -> deploy_failure incident; then a failing docker must not block the post
+C = "c" * 40
+for fail in (False, True):
+    chat_posts.clear(); open(f"{D}/docker.log", "w").close()
+    if fail: open(f"{D}/docker_fail", "w").close()
+    open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={C}\n"); open(f"{D}/running", "w").close(); time.sleep(2.5)
+    os.remove(f"{D}/running"); wait_for(lambda: any(p["text"].startswith("⚠️") for p in chat_posts), 8)
+    posted = any("did not change" in p["text"] for p in chat_posts)
+    wait_for(lambda: "BODY" in open(f"{D}/docker.log").read(), 8); dl = open(f"{D}/docker.log").read()
+    if not fail:
+        check("watcher: unchanged deploy posts, then opens a deploy_failure incident", posted and "/incidents" in dl and '"kind": "deploy_failure"' in dl and f'"attemptedSha": "{C}"' in dl and f'"liveSha": "{B[:9]}"' in dl and '"durationSeconds"' in dl, dl)
+    else:
+        time.sleep(0.5)
+        check("watcher: a failing bridge call never blocks the Deployments post and is logged without secrets", posted and "bridge call /incidents failed" in open(f"{STATE}/watch.log").read() and TOKEN not in open(f"{STATE}/watch.log").read())
+w.terminate(); w.wait()
+chat_posts.clear(); chat_posts.extend({"text": t} for t in txt)
 check("watcher: in-progress then live posted via Chat", len(txt) == 2 and txt[0].startswith("🚀") and txt[1].startswith("✅") and "(was `aaaaaaaaa`)" in txt[1], str(txt))
 check("watcher: webhook secret not logged", "127.0.0.1" not in open(f"{STATE}/watch.log").read())
 

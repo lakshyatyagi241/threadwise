@@ -2,7 +2,7 @@
 // compose network. Delivery is synchronous so a failure returns 502 and Alertmanager retries on its own schedule.
 import http from 'node:http';
 import fs from 'node:fs';
-import { createHash } from 'node:crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, isWatchdog, routeFor, widgetsOf } from './lib.mjs';
 import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
 import { handleIncidents, loadToken } from './incidents-api.mjs';
@@ -57,7 +57,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     threads.put(fp, { threadKey, startedAt: started, peak, diag });
     if (resolver && ev.entry) {
       const pool = /^DbPool/.test(a.labels?.alertname);
-      resolver.handle({ playbook: pool ? 'db_pool' : 'service', action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
+      resolver.handle({ playbook: pool ? 'db_pool' : 'service', alertname: a.labels?.alertname, action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
     }
     return send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey });
   }
@@ -72,8 +72,13 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
       return end(200, JSON.stringify(routeFor({ labels }, env)));
     }
     if (req.url?.startsWith('/incidents') && await handleIncidents(req, res, { resolver, token, log })) return;
-    if (req.method === 'POST' && req.url === '/release') { // called by the deploy step: {"sha":"abc123"}; lets code-fix incidents resolve "by release"
-      let b = ''; for await (const c of req) b += c; try { await resolver?.setRelease(JSON.parse(b).sha); } catch { return end(400, '{}'); } return end(200, '{"ok":true}');
+    if (req.method === 'POST' && req.url === '/release') { // called by the release watcher: {"sha","prs":[n],"at"}; token-protected. Only incidents whose PR is in prs move to released.
+      const given = req.headers['x-incident-token'];
+      if (!token || typeof given !== 'string' || !timingSafeEqual(createHash('sha256').update(given).digest(), createHash('sha256').update(token).digest())) return end(401, '{"error":"unauthorized"}');
+      let b = ''; for await (const c of req) { b += c; if (b.length > 20000) return end(413, '{}'); }
+      let j; try { j = JSON.parse(b); } catch { return end(400, '{}'); }
+      if (!/^[0-9a-f]{7,40}$/i.test(j?.sha ?? '') || (j.prs != null && !(Array.isArray(j.prs) && j.prs.length <= 100 && j.prs.every((n) => Number.isInteger(n) && n > 0)))) return end(400, '{"error":"bad sha or prs"}');
+      await resolver?.setRelease(j.sha, j.prs ?? []); return end(200, '{"ok":true}');
     }
     if (req.method !== 'POST' || !/^\/(alertmanager)?$/.test(req.url ?? '')) return end(404, '{}');
     let raw = '';

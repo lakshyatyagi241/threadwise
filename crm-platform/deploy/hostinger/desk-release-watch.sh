@@ -5,7 +5,8 @@
 #   deploy ended, tag changed -> "Release live"
 #   deploy ended, same tag    -> "Deploy finished but the live version did not change"
 # Every message shows PR number(s), commit, author and who deployed (built by deploy-message.py from the GitHub API; falls back to
-# "PR details unavailable"). Never touches the release, never takes its lock, never fails it. Secrets are never logged.
+# "PR details unavailable"). After the Deployments post it tells the bridge (docker exec, background): release -> POST /release {sha,prs,at};
+# unchanged -> POST /incidents (deploy_failure). Never touches the release, never takes its lock, never fails it. Secrets are never logged.
 #   desk-release-watch.sh                                   loop forever (systemd service)
 #   desk-release-watch.sh --test                            post one clearly labelled TEST card (text only)
 #   desk-release-watch.sh --dry-run <prev> <new> [secs] [event]   print the message that WOULD be posted; posts nothing
@@ -34,6 +35,25 @@ post() { # post <text>
   return 0
 }
 
+# Tell the bridge (internal port, not published) about the release / the failed deploy so incidents can resolve or open. Runs in the background
+# AFTER the Deployments post, so it can never block or delay it. The token is read INSIDE the container; failures log only the path and exit code.
+BRIDGE_JS='const fs=require("fs");let b="";process.stdin.on("data",d=>b+=d).on("end",async()=>{let t="";try{t=fs.readFileSync("/run/secrets/incident_api_token","utf8").trim()}catch{}try{const r=await fetch("http://127.0.0.1:"+(process.env.PORT||9095)+process.argv[1],{method:"POST",headers:{"x-incident-token":t,"content-type":"application/json"},body:b,signal:AbortSignal.timeout(10000)});console.log("bridge "+process.argv[1]+" http "+r.status);process.exit(r.ok?0:1)}catch(e){console.log("bridge "+process.argv[1]+" failed "+(e.cause&&e.cause.code||e.code||"error"));process.exit(1)}})'
+bridge_call() { # bridge_call <path> <json>
+  printf '%s' "$2" | timeout 25 docker exec -i "${DESK_BRIDGE_CONTAINER:-desk-gchat-bridge}" node -e "$BRIDGE_JS" "$1" >> "$STATE/watch.log" 2>&1 \
+    || echo "$(date -u +%FT%TZ) bridge call $1 failed" >> "$STATE/watch.log"
+}
+notify_bridge() { # notify_bridge live|unchanged <prev> <new> <secs>
+  local j body
+  j=$(python3 "$FORMATTER" --json "$1" "$2" "$3" "$4" 2>>"$STATE/watch.log") || { echo "$(date -u +%FT%TZ) bridge json failed" >> "$STATE/watch.log"; return 0; }
+  if [ "$1" = live ]; then
+    body=$(python3 -c 'import json,sys,time; j=json.loads(sys.argv[1]); print(json.dumps({"sha":j["sha"],"prs":j["prs"],"at":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime())}))' "$j") && bridge_call /release "$body"
+  else # deploy ended without changing the live version: open a deploy_failure incident (the bridge dedupes on the attempted sha)
+    body=$(python3 -c 'import json,sys; j=json.loads(sys.argv[1]); print(json.dumps({"kind":"deploy_failure","attemptedSha":j["sha"],"liveSha":j["prev"],"prs":j["prs"],"mergers":j["mergers"],"durationSeconds":j["seconds"]}))' "$j") && bridge_call /incidents "$body"
+  fi
+  return 0
+}
+bridge_bg() { ( notify_bridge "$@" ) >/dev/null 2>&1 & }
+
 case "${1:-}" in
   --test)
     post "🧪 *TEST* - Test message, not a real deployment. The production release watcher is connected to this space. Live release right now: \`$(live_tag || echo unknown)\`."
@@ -58,8 +78,10 @@ while true; do
     prev_running=0; now=$(live_tag || true); dur=$(( $(date +%s) - started ))
     if [ -n "$now" ] && [ "$now" != "$tag_before" ]; then
       post "$(msg live "$tag_before" "$now" "$dur")"
+      bridge_bg live "$tag_before" "$now" "$dur"
     else
       post "$(msg unchanged "$now" "$(env_get IMAGE_TAG)" "$dur" "It was rolled back or refused. Check the build server log.")"
+      bridge_bg unchanged "$now" "$(env_get IMAGE_TAG)" "$dur"
     fi
   fi
   sleep "$POLL"
