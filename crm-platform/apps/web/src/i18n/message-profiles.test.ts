@@ -6,18 +6,71 @@ import { MESSAGE_PROFILES, pickMessages, profileFor } from './message-profiles';
 
 const SRC = resolve(__dirname, '..');
 const APP = join(SRC, 'app');
-const guest = MESSAGE_PROFILES.find((p) => p.name === 'guest')!;
+const pub = MESSAGE_PROFILES.find((p) => p.name === 'public')!;
+
+/** The route groups and folders whose pages get the public profile; every other page keeps the whole catalogue. */
+const PUBLIC_DIRS = [
+  '(auth)',
+  '(site)',
+  '(developer-rest-api-v1-docs)',
+  'b',
+  'book',
+  'docs',
+  'f',
+  'l',
+  's',
+  'trust',
+  'u',
+];
+const FULL_DIRS = [
+  '(app)',
+  '(admin)',
+  '(embedded)',
+  '(gate)',
+  '(operator-auth)',
+  '(setup)',
+  '(site-preview)',
+  'i',
+  'impersonate',
+  'q',
+];
 
 describe('profileFor', () => {
-  it('matches a guest page, its sub-pages and its query, and nothing else', () => {
-    expect(profileFor('/login')?.name).toBe('guest');
-    expect(profileFor('/login?next=%2Fcontacts')?.name).toBe('guest');
-    expect(profileFor('/signup/verify-email')?.name).toBe('guest');
-    expect(profileFor('/auth/social/google/callback')?.name).toBe('guest');
-    expect(profileFor('/loginx')).toBeNull();
-    expect(profileFor('/contacts')).toBeNull();
-    expect(profileFor('/f/some-form')).toBeNull();
-    expect(profileFor('/')).toBeNull();
+  it('matches a public page, its sub-pages and its query, and nothing else', () => {
+    for (const path of [
+      '/login',
+      '/login?next=%2Fcontacts',
+      '/signup/verify-email',
+      '/auth/social/google/callback',
+      '/',
+      '/?page=2',
+      '/pricing',
+      '/blog/some-post',
+      '/developers/docs',
+      '/book/acme/intro',
+      '/f/some-form',
+      '/s/shop/p/thing',
+      '/u/token',
+    ]) {
+      expect(profileFor(path)?.name, path).toBe('public');
+    }
+    for (const path of [
+      '/loginx',
+      '/contacts',
+      '/inbox',
+      '/developers', // an app page, next to /developers/docs
+      '/admin/login',
+      '/legal/data-processing',
+      '/legal/privacy',
+      '/shopify',
+      '/i/token',
+      '/q/token',
+      '/setup',
+      '/onboarding',
+      '/frontend-preview/home',
+    ]) {
+      expect(profileFor(path), path).toBeNull();
+    }
     expect(profileFor(null)).toBeNull();
   });
 });
@@ -123,8 +176,20 @@ function translationNamespaces(entries: string[]) {
         const a = n.arguments[0];
         const where = `${file.slice(SRC.length + 1)}:${sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1}`;
         if (a && ts.isStringLiteralLike(a)) namespaces.add(a.text);
-        else if (a && ts.isTemplateExpression(a)) namespaces.add(a.head.text.replace(/\.$/, ''));
-        else if (a && ts.isIdentifier(a) && consts.has(a.text)) namespaces.add(consts.get(a.text)!);
+        else if (a && ts.isTemplateExpression(a)) {
+          let t = a.head.text;
+          for (const span of a.templateSpans) {
+            const known = ts.isIdentifier(span.expression)
+              ? consts.get(span.expression.text)
+              : undefined;
+            if (known === undefined) break;
+            t += known + span.literal.text;
+          }
+          t = t.replace(/\.$/, '');
+          if (t) namespaces.add(t);
+          else unreadable.push(where);
+        } else if (a && ts.isIdentifier(a) && consts.has(a.text))
+          namespaces.add(consts.get(a.text)!);
         else unreadable.push(where);
       }
       ts.forEachChild(n, visit);
@@ -137,24 +202,60 @@ function translationNamespaces(entries: string[]) {
 const covered = (ns: string, list: readonly string[]) =>
   list.some((p) => ns === p || ns.startsWith(`${p}.`));
 
-describe('the guest profile covers the guest pages', () => {
+/** The URL a page or route file serves, with every [param] filled in. */
+function urlOf(file: string): string {
+  const rel = file.slice(APP.length + 1).replace(/(^|\/)(page|route)\.tsx?$/, '');
+  const segs = rel.split('/').filter((x) => x && !/^\(.*\)$/.test(x));
+  return `/${segs.map((x) => x.replace(/^\[.*\]$/, 'x')).join('/')}`;
+}
+const pagesUnder = (dir: string) =>
+  [...sourcesUnder(join(APP, dir))].filter((f) => /(^|\/)(page|route)\.tsx?$/.test(f));
+
+describe('the public profile covers the public pages', () => {
   const entries = [
-    ...sourcesUnder(join(APP, '(auth)')),
+    ...PUBLIC_DIRS.flatMap((d) => [...sourcesUnder(join(APP, d))]),
     join(APP, 'layout.tsx'),
     join(APP, 'providers.tsx'),
+    join(APP, 'page.tsx'),
   ];
   const found = translationNamespaces(entries);
 
-  it('every page folder of the group is listed as a path', () => {
-    const folders = readdirSync(join(APP, '(auth)'), { withFileTypes: true })
-      .filter((e) => e.isDirectory())
-      .map((e) => `/${e.name}`);
-    expect(folders.filter((f) => !guest.paths.includes(f))).toEqual([]);
+  it('every page of these groups, and the home page, is matched by the profile', () => {
+    // /legal/<slug> shares its prefix with an app page (/legal/data-processing), so it keeps the whole catalogue
+    const urls = [...PUBLIC_DIRS.flatMap((d) => pagesUnder(d).map(urlOf)), '/'].filter(
+      (u) => !u.startsWith('/legal/'),
+    );
+    expect(urls.filter((u) => profileFor(u)?.name !== 'public')).toEqual([]);
   });
 
-  it('every namespace a component under the group asks for is in the profile', () => {
+  it('no page of the other groups is matched (they keep the whole catalogue)', () => {
+    const urls = FULL_DIRS.flatMap((d) => pagesUnder(d).map(urlOf));
+    expect(urls.length).toBeGreaterThan(50);
+    expect(urls.filter((u) => profileFor(u) !== null)).toEqual([]);
+  });
+
+  it('every page folder under app/ is in one of the two lists, so a new group has to be decided', () => {
+    const folders = readdirSync(APP, { withFileTypes: true })
+      .filter((e) => e.isDirectory() && e.name !== 'api')
+      .map((e) => e.name);
+    // folders that hold only route handlers (files, feeds, webhooks) or the widget have no client page of their own
+    const handlers = [
+      'webhooks',
+      'widget',
+      'widget-assets',
+      'manifest.webmanifest',
+      'robots.txt',
+      'sitemap.xml',
+      'team-inbox-manifest.webmanifest',
+    ];
+    expect(folders.filter((f) => ![...PUBLIC_DIRS, ...FULL_DIRS, ...handlers].includes(f))).toEqual(
+      [],
+    );
+  });
+
+  it('every namespace a component under these groups asks for is in the profile', () => {
     expect(found.namespaces.length).toBeGreaterThan(5); // the walk found the pages; an empty result would pass vacuously
-    expect(found.namespaces.filter((ns) => !covered(ns, guest.namespaces))).toEqual([]);
+    expect(found.namespaces.filter((ns) => !covered(ns, pub.namespaces))).toEqual([]);
   });
 
   it('every namespace is one the code can name (a computed one would escape this check)', () => {
@@ -178,7 +279,7 @@ describe('the guest profile covers the guest pages', () => {
     for (const f of readdirSync(dir).filter((x) => x.endsWith('.json'))) {
       all = merge(all, JSON.parse(readFileSync(join(dir, f), 'utf8')) as Obj);
     }
-    const missing = guest.namespaces.filter(
+    const missing = pub.namespaces.filter(
       (ns) =>
         ns.split('.').reduce<unknown>((o, k) => (o as Obj | undefined)?.[k], all) === undefined,
     );
