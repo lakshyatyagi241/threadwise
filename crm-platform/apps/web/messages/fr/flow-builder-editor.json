@@ -905,7 +905,10 @@
               "phone": "Appeler un numéro",
               "email": "Envoyer un e-mail",
               "agent": "Parler à une personne"
-            }
+            },
+            "prev": "Carte précédente",
+            "next": "Carte suivante",
+            "goTo": "Carte {n}"
           },
           "condition": {
             "info": "Ajoutez des règles (une variable, une comparaison et une valeur). Reliez-les par AND ou OR et imbriquez des groupes si besoin.",

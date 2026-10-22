@@ -905,7 +905,10 @@
               "phone": "Gọi một số",
               "email": "Gửi email",
               "agent": "Nói chuyện với một người"
-            }
+            },
+            "prev": "Thẻ trước",
+            "next": "Thẻ tiếp theo",
+            "goTo": "Thẻ {n}"
           },
           "condition": {
             "info": "Thêm quy tắc (một biến, một phép so sánh và một giá trị). Nối bằng AND hoặc OR và lồng nhóm khi cần.",
