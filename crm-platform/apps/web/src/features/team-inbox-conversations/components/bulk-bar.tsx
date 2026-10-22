@@ -54,9 +54,16 @@ export function BulkBar(props: BulkBarProps) {
   const state = useMemo(() => pickedState(props.picked, props.meId), [props.picked, props.meId]);
   // Every picked conversation is snoozed: "Unsnooze" takes the snooze menu's place (the status route, as the wake button does).
   const unsnoozeShown = state.allSnoozed && can.resolve;
-  const tagOptions = tags.data?.data ?? [];
-  const addTags = tagOptions.filter((l) => state.canAddTag(l.id));
-  const removeTags = tagOptions.filter((l) => state.canRemoveTag(l.id));
+  const tagList = tags.data?.data;
+  // Memoised: each tag is checked against every picked conversation, so the lists are rebuilt only when the tags or the pick change.
+  const addTags = useMemo(
+    () => (tagList ?? []).filter((l) => state.canAddTag(l.id)),
+    [tagList, state],
+  );
+  const removeTags = useMemo(
+    () => (tagList ?? []).filter((l) => state.canRemoveTag(l.id)),
+    [tagList, state],
+  );
 
   const pick = (value: string, run: (value: string) => void) => {
     if (value) run(value);
@@ -139,7 +146,8 @@ export function BulkBar(props: BulkBarProps) {
                 {t('close')}
               </Button>
             )}
-            {state.canMoveTo('open') && !state.allSpam && !state.allSnoozed && (
+            {/* Reopen sends status open to every picked conversation: it would un-spam or wake the spam and snoozed ones among them. */}
+            {state.canMoveTo('open') && !state.someSpam && !state.someSnoozed && (
               <Button
                 size="sm"
                 variant="secondary"
