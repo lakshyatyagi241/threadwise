@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { dirOf } from '@/i18n/locales';
-import { pickMessages, profileFor } from '@/i18n/message-profiles';
+import { SLIM_MARKER, pickMessages, profileFor } from '@/i18n/message-profiles';
 import { requestPath } from '@/lib/auth/server';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
 import { appFontVariables } from '@/lib/fonts';
@@ -35,10 +35,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   // Guest pages get the part of the catalogue they use, not all of it (see i18n/message-profiles.ts).
   const profile = profileFor(await requestPath());
   const clientMessages = profile
-    ? (pickMessages(
-        messages as Parameters<typeof pickMessages>[0],
-        profile.namespaces,
-      ) as typeof messages)
+    ? ({
+        ...pickMessages(messages as Parameters<typeof pickMessages>[0], profile.namespaces),
+        [SLIM_MARKER]: '1',
+      } as typeof messages)
     : messages;
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   const site = await getSiteConfig();

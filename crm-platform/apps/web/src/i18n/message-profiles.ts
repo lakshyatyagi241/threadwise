@@ -4,14 +4,17 @@ type Tree = { [key: string]: string | Tree };
  * Which part of the message catalogue the browser gets with a page.
  *
  * The root layout hands the client provider the whole catalogue (about 1.9 MB of JSON, 570 KB gzipped, inside every full page load).
- * A guest page uses a few dozen kilobytes of it, so a request for one of those pages gets only that part. Server components are not
- * affected: they read the full catalogue through the request config. Every other page keeps the whole catalogue.
+ * The public pages (sign-in and recovery, the marketing site, public forms, booking and manage-booking pages, short links, unsubscribe,
+ * shop pages, the trust page, the API docs) use about 75 KB of it, so a request for one of them gets only that part. Server components
+ * are not affected: they read the full catalogue through the request config. Every other page keeps the whole catalogue.
  *
- * The lists below are checked against the code by `message-profiles.test.ts`, which walks the imports of every page of the group and
- * fails when a client component asks for a namespace that is not here (a missing key shows as its path on screen).
+ * It is ONE profile for all of those pages, not one per group, because the root layout is not rendered again on a client-side
+ * navigation: a visitor who goes from the marketing site to the sign-in page keeps the set they came with, so the set has to cover
+ * every public page. Going from a public page into the app is different, and must be a full page load (`window.location.replace` in
+ * sign-in-complete.ts; a plain `<a href="/">` on the site's logo links, because `/` sends a signed-in visitor into the app).
  *
- * Leaving the group by a client-side navigation would keep this smaller set, so the guest pages leave it with a full page load
- * (`window.location.replace` in sign-in-complete.ts); the navigations that stay inside the group are fine.
+ * The lists are checked against the code by `message-profiles.test.ts`, which walks the imports of every page of these groups and
+ * fails when a component asks for a namespace that is not here (a missing key shows as its path on screen).
  */
 export interface MessageProfile {
   name: string;
@@ -21,11 +24,14 @@ export interface MessageProfile {
   namespaces: readonly string[];
 }
 
+/** Top-level key the reduced set carries, so the browser can tell it from the whole catalogue (SlimMessagesGuard). */
+export const SLIM_MARKER = '__slim';
+
 export const MESSAGE_PROFILES: readonly MessageProfile[] = [
   {
-    // app/(auth): sign-in, sign-up, recovery, emailed-link landings, social callback.
-    name: 'guest',
+    name: 'public',
     paths: [
+      // app/(auth): sign-in, sign-up, recovery, emailed-link landings, social callback
       '/accept-invite',
       '/auth',
       '/confirm-email-change',
@@ -38,14 +44,50 @@ export const MESSAGE_PROFILES: readonly MessageProfile[] = [
       '/signup',
       '/verify-email',
       '/verify-otp',
+      // app/(site): the marketing site; app/page.tsx is its home (matched exactly, see profileFor). `/legal/<slug>` is left out: the app
+      // has a page of its own under `/legal/` (data-processing), so the prefix cannot be told apart.
+      '/',
+      '/about',
+      '/blog',
+      '/contact',
+      '/features',
+      '/pricing',
+      // app/(developer-rest-api-v1-docs) and app/docs
+      '/developers/docs',
+      '/docs',
+      // app/b (manage a booking), app/book, app/f (public forms), app/l (short links), app/s (shops), app/trust, app/u (unsubscribe)
+      '/b',
+      '/book',
+      '/f',
+      '/l',
+      '/s',
+      '/trust',
+      '/u',
     ],
     namespaces: [
       'common',
+      'appointments.common',
+      'appointments.errors',
+      'appointments.picker',
+      'appointments.public',
+      'appointments.status',
       'auth-registration-security.account.timezone',
       'auth-registration-security.guest',
+      'contact-consent.unsubscribe',
+      'developer-rest-api-v1-docs',
+      'developer-rest-api-v1.common',
+      'forms-links-groups.links.public',
       'localization-translation.switcher',
+      'marketing-site-cms.site',
+      'plans-subscriptions-trials.common',
+      'plans-subscriptions-trials.features',
+      'plans-subscriptions-trials.limits',
       'plans-subscriptions-trials.lock',
+      'plans-subscriptions-trials.plans',
+      'plans-subscriptions-trials.public',
       'platform-settings-branding-storage.cookie',
+      'shopPublic',
+      'web-forms.public',
       'workspaces-teams-tenancy',
     ],
   },
@@ -56,8 +98,9 @@ export function profileFor(requestPath: string | null | undefined): MessageProfi
   if (!requestPath) return null;
   const path = requestPath.split(/[?#]/, 1)[0] ?? '';
   return (
-    MESSAGE_PROFILES.find((p) => p.paths.some((x) => path === x || path.startsWith(`${x}/`))) ??
-    null
+    MESSAGE_PROFILES.find((p) =>
+      p.paths.some((x) => path === x || (x !== '/' && path.startsWith(`${x}/`))),
+    ) ?? null
   );
 }
 
