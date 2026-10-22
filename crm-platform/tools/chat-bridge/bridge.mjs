@@ -53,11 +53,13 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
       return send(ch, { text: `Still firing: ${a.labels?.alertname}`, cardsV2: [{ cardId: 'rep', card: { header: { title: `Still firing (${fmtDur(Date.now() - started)})` }, sections: [{ widgets: widgetsOf(rows) }] } }] }, { threadKey });
     }
     threads.put(fp, { threadKey, startedAt: started, peak, diag });
+    // the FIRING card must be the thread parent: start the resolver (its replies) only after that post returned
+    const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey });
     if (resolver && ev.entry) {
       const pool = /^DbPool/.test(a.labels?.alertname);
       resolver.handle({ playbook: pool ? 'db_pool' : 'service', action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
     }
-    return send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey });
+    return card;
   }
   const server = http.createServer(async (req, res) => {
     const end = (code, body, type = 'application/json') => { res.writeHead(code, { 'content-type': type }); res.end(body); };
