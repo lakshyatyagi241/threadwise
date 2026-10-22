@@ -9,6 +9,7 @@ import {
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ConsentGate } from '../../contact-consent';
 import { SegmentsService } from '../../crm';
+import { liveTrigger } from '../runtime/live-graph';
 import { dueDay, dueOccurrence, localMoment } from './schedule-rules';
 import { FlowTriggerService } from './trigger.service';
 
@@ -61,10 +62,12 @@ export class FlowScheduleSweeper {
   async tickOnce(now: Date = new Date()): Promise<{ fired: number; started: number }> {
     const flows = await this.db.privileged(async (tx) => {
       const res = (await tx.execute(sql`
-        SELECT f.id, f.org_id, f.trigger_kind, f.trigger_config, f.trigger_last_occurrence,
+        SELECT f.id, f.org_id, ${liveTrigger('trigger_kind', 'f')} AS trigger_kind,
+               ${liveTrigger('trigger_config', 'f')} AS trigger_config, f.trigger_last_occurrence,
                coalesce(ws.timezone, 'UTC') AS tz
           FROM flows f LEFT JOIN workspace_settings ws ON ws.org_id = f.org_id
-         WHERE f.is_published AND f.is_active AND f.trigger_kind IN ('schedule', 'date_field_match')
+         WHERE f.is_published AND f.is_active
+           AND ${liveTrigger('trigger_kind', 'f')} IN ('schedule', 'date_field_match')
          ORDER BY f.id`)) as unknown as Rows;
       return res.rows;
     });
