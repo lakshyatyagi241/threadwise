@@ -560,22 +560,38 @@ function Editor({
 
   useEffect(() => {
     if (!activeId) return;
+    const inside = (target: Element): boolean =>
+      Boolean(
+        target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`) ||
+        target.closest(
+          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
+        ),
+      );
+    // Where the press began. Selecting text in the step and letting go outside it sends the click to the page around the step (the
+    // press and the release have only that in common), which is not a click outside: only a press that began outside closes it.
+    let pressedInside = false;
+    const onPress = (e: MouseEvent) => {
+      const target = e.target instanceof Element ? e.target : null;
+      pressedInside = Boolean(target && inside(target));
+    };
     const onOutside = (e: MouseEvent) => {
       const target = e.target instanceof Element ? e.target : null;
       if (!target || !target.isConnected) return;
-      if (target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`)) return;
-      if (
-        target.closest(
-          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
-        )
-      )
+      if (pressedInside) {
+        pressedInside = false;
         return;
+      }
+      if (inside(target)) return;
       closeAndSave.current();
     };
     // The click, not the press: closing the step moves what is below it, and a press-time close would send the click to the wrong place
     // (the + under the step, or the next step's header).
+    document.addEventListener('mousedown', onPress, true);
     document.addEventListener('click', onOutside, true);
-    return () => document.removeEventListener('click', onOutside, true);
+    return () => {
+      document.removeEventListener('mousedown', onPress, true);
+      document.removeEventListener('click', onOutside, true);
+    };
   }, [activeId]);
 
   const onPublish = async () => {
