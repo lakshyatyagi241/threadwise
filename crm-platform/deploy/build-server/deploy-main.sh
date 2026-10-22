@@ -44,6 +44,38 @@ report() {  # report <state> <step> [message]
     || echo "$(date -Is) could not report $1 for $TAG to production; the deploy goes on" >> "$LOGS/webhook.log"
 }
 
+# Tells production which pull requests this release carries (number, title, author), so the release history says what was deployed. It
+# reads the first-parent history since the last released commit (the tip alone when that is unknown): a squash commit is one PR with its
+# author, a merge commit takes its title from the body and its author from the merged branch. Never stops the deploy.
+report_changes() {  # report_changes <last released commit or empty>
+  [ -n "${ATTEMPT:-}" ] || return 0
+  python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || true
+import json, re, subprocess, sys
+last = sys.argv[1]
+def git(*a):
+    return subprocess.run(["git", *a], capture_output=True, text=True, check=True).stdout
+rng = [f"{last}..HEAD"] if last else ["-1", "HEAD"]
+out = []
+for sha in git("log", "--first-parent", "--max-count=30", "--format=%H", *rng).split():
+    parents = git("log", "-1", "--format=%P", sha).split()
+    if len(parents) > 1:
+        author = git("log", "-1", "--format=%an", parents[1]).strip()
+        body = [l for l in git("log", "-1", "--format=%b", sha).splitlines() if l.strip()]
+        title = body[0] if body else git("log", "-1", "--format=%s", sha).strip()
+        m = re.match(r"Merge pull request #(\d+)", git("log", "-1", "--format=%s", sha))
+        pr = int(m.group(1)) if m else None
+    else:
+        author = git("log", "-1", "--format=%an", sha).strip()
+        title = git("log", "-1", "--format=%s", sha).strip()
+        m = re.search(r"\(#(\d+)\)\s*$", title)
+        pr = int(m.group(1)) if m else None
+        if m:
+            title = title[: m.start()].rstrip()
+    out.append({"pr": pr, "title": title[:200], "author": author[:100]})
+print(json.dumps(out[:20]))
+PY
+}
+
 run_once() {
   TAG=""; LOG="$LOGS/$(date +%Y%m%dT%H%M%S).log"
   exec > >(tee -a "$LOG") 2>&1
@@ -78,6 +110,7 @@ run_once() {
   fi
   status building
   report building build
+  report_changes "$last"
   echo "== building $TAG"
   docker build -f crm-platform/apps/api/Dockerfile -t "desk-api:$TAG" --build-arg "GIT_SHA=$TAG" crm-platform || return 1
   docker build -f crm-platform/apps/web/Dockerfile -t "desk-web:$TAG" \

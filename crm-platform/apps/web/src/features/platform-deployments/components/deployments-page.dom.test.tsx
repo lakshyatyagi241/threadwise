@@ -189,6 +189,13 @@ describe('DeploymentsPage', () => {
           state: 'failed',
           step: 'schema',
           error: 'migration failed; the running release is untouched',
+          changes: [
+            {
+              pr: 830,
+              title: 'feat(flows): the featured flow tile names its bot',
+              author: 'Akshay',
+            },
+          ],
           startedAt: '2026-10-19T10:00:00.000Z',
           updatedAt: '2026-10-19T10:01:00.000Z',
           finishedAt: '2026-10-19T10:01:00.000Z',
@@ -202,6 +209,9 @@ describe('DeploymentsPage', () => {
     expect(host.textContent).toContain('29f32b7b6');
     expect(host.textContent).toContain(en('releases.state.failed'));
     expect(host.textContent).toContain('migration failed; the running release is untouched');
+    expect(host.textContent).toContain('#830');
+    expect(host.textContent).toContain('feat(flows): the featured flow tile names its bot');
+    expect(host.textContent).toContain('Akshay');
   });
 
   it('lists flow publishes with their state, attempts and error', async () => {

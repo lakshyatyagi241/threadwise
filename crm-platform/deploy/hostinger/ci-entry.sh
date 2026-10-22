@@ -10,6 +10,7 @@
 #                    are recorded in platform_releases (the operator console's release history) under <attempt> (a uuid; made here when
 #                    the caller gives none). Recording never blocks a release.
 #   event <attempt> <tag> <state> [step]   records a build-side step (building, shipping, releasing, failed) with the error text on stdin.
+#   changes <attempt>   records what the release carries (a JSON array of {pr, title, author}, on stdin) for the release history.
 set -euo pipefail
 DESK_DIR=${DESK_DIR:-/opt/desk}   # overridable only so tests/ci-entry.test.sh can run against a scratch directory
 TRAEFIK_DYN=${TRAEFIK_DYN:-/etc/dokploy/traefik/dynamic/desk.yml}   # Traefik watches this directory: rewriting the file moves traffic
@@ -162,6 +163,18 @@ case "$action" in
       && "$estep" =~ ^[a-z_]{0,40}$ ]] || { echo "bad event" >&2; exit 2; }
     eerr=$(head -c 1000 || true)
     record "$eattempt" "$etag" "$estate" "$estep" "$eerr"
+    echo "recorded"
+    ;;
+  changes)
+    # The pull requests in a release, for the console. Cut to 8000 characters, control characters dropped, and the SQL accepts only a
+    # JSON array (the column's check); anything else is simply not recorded.
+    cattempt=$arg
+    [[ "$cattempt" =~ ^[0-9a-f-]{36}$ ]] || { echo "bad attempt id" >&2; exit 2; }
+    cjson=$(head -c 8000 | LC_ALL=C tr -d '\000-\037\177' || true)
+    compose exec -T postgres sh -c 'exec psql -X -q -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -v attempt="$1" -v changes="$2" -f -' \
+      sh "$cattempt" "$cjson" >/dev/null 2>&1 <<'SQL' || true
+UPDATE platform_releases SET changes = :'changes'::jsonb WHERE attempt = :'attempt';
+SQL
     echo "recorded"
     ;;
   release)

@@ -134,6 +134,15 @@ export type ReleaseState = z.infer<typeof releaseStateSchema>;
 export const RELEASE_STALL_MINUTES = 45;
 export const RELEASE_LIST_MAX = 50;
 
+/** One pull request a release carries, as the build server read it from the git history (`pr` is null for a commit not made from a PR). */
+export const releaseChangeSchema = z.object({
+  pr: z.number().int().positive().nullable(),
+  title: z.string().max(200),
+  author: z.string().max(100),
+});
+export type ReleaseChange = z.infer<typeof releaseChangeSchema>;
+export const RELEASE_CHANGES_MAX = 20;
+
 export const releaseRowSchema = z.object({
   /** The attempt id (uuid), shared by the build's steps and the release's steps. */
   id: z.string().uuid(),
@@ -146,6 +155,8 @@ export const releaseRowSchema = z.object({
   updatedAt: z.string().datetime(),
   finishedAt: z.string().datetime().nullable(),
   stalled: z.boolean(),
+  /** What the release carries: the pull requests merged since the previous release, newest first. Empty for releases recorded before this was kept. */
+  changes: z.array(releaseChangeSchema).max(RELEASE_CHANGES_MAX),
 });
 export type ReleaseRow = z.infer<typeof releaseRowSchema>;
 
