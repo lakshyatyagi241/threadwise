@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Antrean tunggu",
+      "intro": "Chat yang belum diambil siapa pun menunggu di tab Menunggu. Langkah opsional ini membantu agar chat dijawab. Setiap langkah berjalan sekali per chat, hanya menghitung menit saat tim buka, dan berhenti begitu ada yang mengambil chat.",
+      "remind": "Ingatkan tim",
+      "remindBody": "Memberi tahu orang yang bisa mengambil chat.",
+      "overflow": "Tawarkan ke tim lain",
+      "overflowBody": "Memindahkan chat ke antrean tim ini, satu kali.",
+      "team": "Tim",
+      "teamPick": "Pilih tim",
+      "final": "Langkah terakhir",
+      "finalBody": "Jika sampai saat itu belum ada yang mengambil chat:",
+      "action": "Yang terjadi",
+      "actionMessage": "Kirim pesan ke pelanggan",
+      "actionBot": "Kembalikan chat ke bot",
+      "message": "Pesan",
+      "messageHint": "Anda dapat memakai '{{name}}' dan '{{first_name}}'.",
+      "afterMinutes": "Setelah (menit)",
+      "save": "Simpan",
+      "saved": "Pengaturan antrean tunggu disimpan.",
+      "saveFailed": "Pengaturan antrean tunggu tidak dapat disimpan.",
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak mengubahnya.",
+      "problems": {
+        "minutes": "Masukkan angka 1 sampai 1440.",
+        "team": "Pilih tim.",
+        "message": "Tulis pesannya."
+      },
+      "away": "Kembalikan chat tanpa balasan saat seseorang tidak ada",
+      "awayBody": "Saat seseorang menjadi Offline atau mulai cuti, chat miliknya yang masih ditunggu pelanggan kembali ke antrean tim.",
+      "offline": "Jadikan Offline orang yang tidak aktif",
+      "offlineBody": "Orang yang Tersedia tetapi tidak melakukan apa pun selama ini dijadikan Offline. Mereka sendiri yang kembali ke Tersedia."
+    }
+  }
+}

@@ -33,7 +33,11 @@
         "done": "Przejęto tę rozmowę.",
         "doneOwner": "Przejęto tę rozmowę i jesteś teraz właścicielem kontaktu.",
         "failed": "Nie udało się przejąć rozmowy.",
-        "taken": "Ktoś inny przejął tę rozmowę wcześniej."
+        "taken": "Ktoś inny przejął tę rozmowę wcześniej.",
+        "overLimitTitle": "Osiągnięto Twój limit czatów",
+        "overLimitMessage": "Masz już {open} otwartych rozmów, a Twój limit to {limit}. Przejąć tę mimo to?",
+        "overLimitConfirm": "Przejmij mimo to",
+        "overLimitCancel": "Anuluj"
       },
       "giveBack": {
         "button": "Zwróć botowi",
@@ -82,14 +86,16 @@
         "priority": "Priorytet",
         "summary": "Podsumowanie",
         "answers": "Co kontakt powiedział botowi",
-        "trace": "Jak przypisano"
+        "trace": "Jak przypisano",
+        "timers": "Kroki kolejki oczekujących"
       },
       "source": {
         "flow": "Przepływ",
         "ai_agent": "Agent AI",
         "keyword": "Własna prośba kontaktu",
         "bot_failure": "Bot, który nie mógł pomóc",
-        "manual": "Współpracownik"
+        "manual": "Współpracownik",
+        "arrival": "Kierowanie: nikt nie mógł go przejąć"
       },
       "reason": {
         "customer_asked": "Kontakt poprosił o konsultanta",
@@ -130,6 +136,12 @@
           "failed": "Nie udało się wysłać wiadomości do klienta.",
           "channel_unavailable": "Wiadomość do klienta pominięto: kanał jest niedostępny."
         }
+      },
+      "timers": {
+        "reminded": "Przypomniano o {at}",
+        "offered": "Zaproponowano temu zespołowi o {at}",
+        "messaged": "Wiadomość do klienta wysłana o {at}",
+        "gaveBack": "Oddano botowi o {at}"
       }
     },
     "panel": {

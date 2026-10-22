@@ -321,7 +321,12 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
       };
     case 'dateOfBirth':
       return {
-        sql: datePredicate(sql`${contacts.dateOfBirth}::timestamptz`, op as DateOperator, c.value, rc.timezone),
+        sql: datePredicate(
+          sql`${contacts.dateOfBirth}::timestamptz`,
+          op as DateOperator,
+          c.value,
+          rc.timezone,
+        ),
       };
     case 'age':
       // Whole years on the earliest calendar date on Earth (UTC minus 12 hours), like the minor flag; no date, no age.
@@ -335,9 +340,13 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
     case 'search':
       return { sql: searchCondition(String(c.value)) };
     case 'createdAt':
-      return { sql: datePredicate(sql`${contacts.createdAt}`, op as DateOperator, c.value, rc.timezone) };
+      return {
+        sql: datePredicate(sql`${contacts.createdAt}`, op as DateOperator, c.value, rc.timezone),
+      };
     case 'updatedAt':
-      return { sql: datePredicate(sql`${contacts.updatedAt}`, op as DateOperator, c.value, rc.timezone) };
+      return {
+        sql: datePredicate(sql`${contacts.updatedAt}`, op as DateOperator, c.value, rc.timezone),
+      };
     case 'lastActivityAt':
       return { sql: datePredicate(contactLastActivity, op as DateOperator, c.value, rc.timezone) };
     default:

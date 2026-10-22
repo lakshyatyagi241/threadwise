@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import {
   HANDOFF_REASONS,
@@ -9,7 +9,7 @@ import {
   type HandoffReason,
   type InboxConversationDetail,
 } from '@crm/contracts';
-import { Alert, Badge, Button, Spinner, cn, useToast } from '@crm/ui';
+import { Alert, Badge, Button, ConfirmDialog, Spinner, cn, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useHandoffActions, useHandoffCard } from '../api/handoff';
 import { AGE_KEY, giveBackToastKey, waitAge } from '../lib/handoff';
@@ -52,6 +52,7 @@ export function HandoffBar({
   const { claim, giveBack } = useHandoffActions(detail.id);
   const [open, setOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [overLimit, setOverLimit] = useState<{ open: number; limit: number } | null>(null);
 
   if (handling === null) return null;
 
@@ -64,14 +65,27 @@ export function HandoffBar({
     if (e instanceof ApiError && e.status === 409) return t('claim.taken');
     return e instanceof ApiError && e.message ? e.message : fallback;
   };
-  const onClaim = () =>
-    claim.mutate(undefined, {
-      onSuccess: (r) => {
-        onPlaced(r.conversation);
-        toast(r.ownerSet ? t('claim.doneOwner') : t('claim.done'));
+  const onClaim = (acknowledgeLimit = false) =>
+    claim.mutate(
+      { acknowledgeLimit },
+      {
+        onSuccess: (r) => {
+          setOverLimit(null);
+          onPlaced(r.conversation);
+          toast(r.ownerSet ? t('claim.doneOwner') : t('claim.done'));
+        },
+        onError: (e) => {
+          // Over the person's own chat limit: a warning they can overrule, not a refusal.
+          if (e instanceof ApiError && e.code === 'INBOX_CLAIM_OVER_LIMIT') {
+            const n = (path: string) =>
+              Number(e.fieldErrors.find((f) => f.path === path)?.message ?? 0);
+            setOverLimit({ open: n('open'), limit: n('limit') });
+            return;
+          }
+          toast(refused(e, t('claim.failed')), 'danger');
+        },
       },
-      onError: (e) => toast(refused(e, t('claim.failed')), 'danger'),
-    });
+    );
   const onGiveBack = () =>
     giveBack.mutate(undefined, {
       onSuccess: (r) => {
@@ -130,7 +144,7 @@ export function HandoffBar({
               size="sm"
               data-testid="inbox-claim"
               disabled={claim.isPending}
-              onClick={onClaim}
+              onClick={() => onClaim()}
               className="gap-1.5"
             >
               {claim.isPending ? <Spinner /> : <UserPlusIcon width={14} height={14} />}
@@ -194,6 +208,19 @@ export function HandoffBar({
           onPlaced={onPlaced}
         />
       )}
+      <ConfirmDialog
+        open={overLimit !== null}
+        title={t('claim.overLimitTitle')}
+        message={t('claim.overLimitMessage', {
+          open: overLimit?.open ?? 0,
+          limit: overLimit?.limit ?? 0,
+        })}
+        confirmLabel={t('claim.overLimitConfirm')}
+        cancelLabel={t('claim.overLimitCancel')}
+        busy={claim.isPending}
+        onConfirm={() => onClaim(true)}
+        onClose={() => setOverLimit(null)}
+      />
     </div>
   );
 }
@@ -248,6 +275,19 @@ function reasonText(t: T, c: HandoffCard): string {
 function HandoffDetails({ card }: { card: HandoffCard }) {
   const t = useTranslations('team-inbox-conversations.handoff');
   const answers = Object.entries(card.answers);
+  const fmt = useFormatter();
+  const at = (iso: string) =>
+    fmt.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' });
+  const steps = [
+    card.timers.remindedAt ? t('timers.reminded', { at: at(card.timers.remindedAt) }) : null,
+    card.timers.offeredAt ? t('timers.offered', { at: at(card.timers.offeredAt) }) : null,
+    card.timers.finalAt && card.timers.finalAction === 'message'
+      ? t('timers.messaged', { at: at(card.timers.finalAt) })
+      : null,
+    card.timers.finalAt && card.timers.finalAction === 'bot'
+      ? t('timers.gaveBack', { at: at(card.timers.finalAt) })
+      : null,
+  ].filter((x): x is string => x !== null);
   return (
     <div
       data-testid="inbox-handoff-card"
@@ -282,6 +322,16 @@ function HandoffDetails({ card }: { card: HandoffCard }) {
               </div>
             ))}
           </dl>
+        </div>
+      )}
+      {steps.length > 0 && (
+        <div data-testid="inbox-handoff-timers">
+          <p className="mb-1 font-medium">{t('card.timers')}</p>
+          <ul className="space-y-0.5">
+            {steps.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
         </div>
       )}
       {card.trace.length > 0 && (

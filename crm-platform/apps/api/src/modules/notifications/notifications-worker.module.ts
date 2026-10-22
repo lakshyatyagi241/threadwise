@@ -4,6 +4,7 @@ import { WEB_PUSH_PROVIDER } from '../../infra/providers/web-push/web-push.port'
 import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.provider';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationNotificationConsumer } from './conversation-notification.consumer';
+import { QueueReminderNotificationConsumer } from './queue-reminder-notification.consumer';
 import { ConversationReadState } from './conversation-read-state';
 import { DeviceGroupNotificationConsumer } from './device-group-notification.consumer';
 import { DeviceNotificationConsumer } from './device-notification.consumer';
@@ -43,6 +44,7 @@ import { WabaGroupNotificationConsumer } from './waba-group-notification.consume
     TaskNotificationConsumer,
     SalesDocNotificationConsumer,
     ConversationNotificationConsumer,
+    QueueReminderNotificationConsumer,
     NotificationFanout,
     DeviceNotificationConsumer,
     SendOutcomeNotificationConsumer,

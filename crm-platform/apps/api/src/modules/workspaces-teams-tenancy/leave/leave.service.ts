@@ -441,7 +441,13 @@ export class LeaveService {
     if (scope === null) return false;
     const shares =
       (scope === 'team' || scope === 'team_and_below') && ctx.userId !== targetId
-        ? await this.repo.shareTeam(tx, ctx.orgId, ctx.userId!, targetId, scope === 'team_and_below')
+        ? await this.repo.shareTeam(
+            tx,
+            ctx.orgId,
+            ctx.userId!,
+            targetId,
+            scope === 'team_and_below',
+          )
         : false;
     return mayManage(scope, ctx.userId!, targetId, shares);
   }

@@ -584,7 +584,11 @@
           "sla_breach": "מועד המענה הוחמץ",
           "spam_flagged": "סומן כספאם על ידי {actor}",
           "escalated": "הוסלם",
-          "unknown": "{what} על ידי {actor}"
+          "unknown": "{what} על ידי {actor}",
+          "handoff_requested": "הועבר לאדם על ידי {actor}",
+          "queue_reminded": "הצוות קיבל תזכורת",
+          "queue_offered": "הוצע לצוות אחר",
+          "queue_customer_message": "נשלחה הודעה ללקוח"
         },
         "actors": {
           "user": "חבר צוות",

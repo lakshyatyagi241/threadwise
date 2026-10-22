@@ -27,7 +27,8 @@ export interface WaChatLinkRow {
   row_version: number;
 }
 
-const COLUMNS = sql.raw(`id, uuid, name, slug, country_code, phone_number, welcome_message, utm_source,
+const COLUMNS =
+  sql.raw(`id, uuid, name, slug, country_code, phone_number, welcome_message, utm_source,
   utm_medium, utm_campaign, click_count, last_clicked_at, expires_at, status, created_at, row_version,
   to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
 
@@ -99,10 +100,20 @@ export class WaChatLinksRepository {
     const r = (res.rows[0] ?? {}) as Record<string, unknown>;
     const all = Number(r.all ?? 0);
     const totalClicks = Number(r.total_clicks ?? 0);
-    return { all, live: Number(r.live ?? 0), totalClicks, avgClicksPerLink: all > 0 ? totalClicks / all : 0 };
+    return {
+      all,
+      live: Number(r.live ?? 0),
+      totalClicks,
+      avgClicksPerLink: all > 0 ? totalClicks / all : 0,
+    };
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, lock = false): Promise<WaChatLinkRow | null> {
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    lock = false,
+  ): Promise<WaChatLinkRow | null> {
     const res = await tx.execute(sql`
       SELECT ${COLUMNS} FROM wa_chat_links WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid
       ${lock ? sql`FOR UPDATE` : sql``}`);
@@ -114,7 +125,10 @@ export class WaChatLinksRepository {
    * `wa_chat_link_lookup` SECURITY DEFINER function (RLS would otherwise hide every row). Returns only what the
    * redirect needs, never the full row.
    */
-  async lookupPublic(tx: Executable, slug: string): Promise<{
+  async lookupPublic(
+    tx: Executable,
+    slug: string,
+  ): Promise<{
     org_id: number;
     id: number;
     country_code: string;

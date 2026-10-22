@@ -584,7 +584,11 @@
           "sla_breach": "Reactietermijn verlopen",
           "spam_flagged": "Als spam gemarkeerd door {actor}",
           "escalated": "Geëscaleerd",
-          "unknown": "{what} door {actor}"
+          "unknown": "{what} door {actor}",
+          "handoff_requested": "Overgedragen aan een persoon door {actor}",
+          "queue_reminded": "Het team is herinnerd",
+          "queue_offered": "Aangeboden aan een ander team",
+          "queue_customer_message": "Er is een bericht naar de klant gestuurd"
         },
         "actors": {
           "user": "Een teamgenoot",

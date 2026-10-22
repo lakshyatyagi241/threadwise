@@ -21,7 +21,6 @@
       "unavailable": "This part of the API is not available yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "unexpected": "Something went wrong. Try again.",
-      "assignedToOther": "This chat is assigned to another agent. Ask them or an admin to assign it to you, then try again.",
       "retry": "Try again",
       "reservedKey": "That key is reserved for a built-in token. Choose another.",
       "attributeInUse": "Some contacts hold a value for this attribute.",
@@ -38,7 +37,8 @@
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
       "stageScope": "A status can only be limited to one of your lifecycle stages.",
       "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space.",
-      "legalHold": "This record is protected and cannot be deleted at the moment."
+      "legalHold": "This record is protected and cannot be deleted at the moment.",
+      "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to send a message."
     },
     "list": {
       "title": "Contact Hub",

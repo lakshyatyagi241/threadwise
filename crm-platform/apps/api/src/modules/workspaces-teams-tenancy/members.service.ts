@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
+  MEMBER_AVAILABILITY_CHANGED,
   ERROR_CODES,
   WSP_INVITE_TTL_DAYS,
   inviteWspMemberSchema,
@@ -414,6 +415,14 @@ export class MembersService {
           action: 'member.availability_changed',
           delta: { availability: { old: before, new: input.status } },
           requestId: ctx.requestId,
+        });
+        // Routing reacts to a person going away (the away rules): ids only, the consumer reads the rest.
+        await this.outbox.emit(tx, {
+          aggregateModule: 'members',
+          aggregateId: ctx.userId!,
+          orgId: ctx.orgId,
+          eventType: MEMBER_AVAILABILITY_CHANGED,
+          payload: { userId: ctx.userId!, status: input.status, reason: 'self' },
         });
       }
       return { status: input.status };

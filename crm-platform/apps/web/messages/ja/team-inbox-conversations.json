@@ -584,7 +584,11 @@
           "sla_breach": "返信期限を超過しました",
           "spam_flagged": "{actor} がスパムとしてマーク",
           "escalated": "エスカレートしました",
-          "unknown": "{actor} による{what}"
+          "unknown": "{actor} による{what}",
+          "handoff_requested": "{actor} が担当者に引き継ぎ",
+          "queue_reminded": "チームに通知しました",
+          "queue_offered": "別のチームに回しました",
+          "queue_customer_message": "顧客にメッセージを送りました"
         },
         "actors": {
           "user": "チームメイト",

@@ -80,6 +80,22 @@ A team whose business hours are closed gets no person picked: the conversation w
 
 `inbox_assignment_sticky` is a plan feature (default on for plan rows that predate it, effective only with `inbox_routing`): the owner moves it between plans in plan management.
 
+## Waiting queue timers, away rules and the claim limit (Smart routing; claim limit is base)
+
+Settings (`GET/PUT /inbox/handoff-settings`) gain `queueTimers` (`remindMinutes`, `overflowMinutes` + `overflowTeamId`, `unclaimedMinutes` + `unclaimedAction` `keep|message|bot` +
+`unclaimedMessage`) and `away` (`returnUnanswered`, `autoOfflineMinutes`). Both need `inbox_routing` (`available.queueTimers`, `available.away`): a save that switches something on without
+it is 422 `PLAN_FEATURE_LOCKED`; stored values are kept and read as off. An incomplete step is 422 `VALIDATION_FAILED` with the field (`queueTimers.overflowTeamId`, `queueTimers.unclaimedMessage`).
+The handoff card carries `timers` (`remindedAt`, `offeredAt`, `offeredFrom`, `finalAt`, `finalAction`); handoff `source` has a new value `arrival` (a new chat nobody could take; it does not mute the bot).
+
+- `QueueTimersService` (worker, every 30 s): only workspaces that configured a timer and have the feature are looked at; each step is claimed by a conditional UPDATE (`reminded_at IS NULL` ...) under the chat's row lock,
+  so it runs once; the chat must still be open, `handling = waiting`, unassigned, with a `waiting` card (a claim, resolve, archive or Return to bot cancels by changing that state). Minutes count only while the chat's team is open (`waitedOpenMinutes`).
+  Remind emits `conversation.queue_reminder` (bell + push to the team's members, or the leads when there is no team). Offer reassigns the chat to the overflow team once (timeline `queue_offered`). Final `message` sends the text with a deterministic client id
+  (`{{name}}`, `{{first_name}}`), final `bot` is `giveBackInTx` with a system actor.
+- `AwayService`: on `member.availability_changed` (status offline) and `member.leave.started`, returns the person's open chats with `waiting_since` set (not groups, not personal mailboxes) to the team's queue with a card and trace line `returned_offline|returned_leave|returned_inactive`.
+  A stale event does nothing when the person is back online. A 1-minute sweep sets Available people Offline after `autoOfflineMinutes` without session activity (the latest of `auth_sessions.last_used_at` and the Redis activity key); nobody is set Available by the system.
+- Claim: `POST /inbox/conversations/:id/claim` is 422 `INBOX_CLAIM_OVER_LIMIT` (`errors[]` `open`, `limit`) when the claimer already holds their `chat_limit` of open chats; resend with `acknowledgeLimit: true` to take it anyway. Base feature, every plan.
+- Migrations `20270324090000_waiting_queue_timers` (+ `_validate`) and `20270326090000_away_rules`: expand-only, defaults off.
+
 ## Owner alignment and the record assignment engine
 
 The contact owner is only ever written by a **first touch**: `UPDATE contacts SET owner_id = ... WHERE owner_id IS NULL AND owner_changed_at IS NULL`, the exact guard of

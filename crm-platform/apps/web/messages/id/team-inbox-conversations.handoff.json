@@ -33,7 +33,11 @@
         "done": "Anda mengambil percakapan ini.",
         "doneOwner": "Anda mengambil percakapan ini dan sekarang menjadi pemilik kontak.",
         "failed": "Percakapan tidak dapat diambil.",
-        "taken": "Orang lain mengambil percakapan ini lebih dulu."
+        "taken": "Orang lain mengambil percakapan ini lebih dulu.",
+        "overLimitTitle": "Anda sudah mencapai batas chat",
+        "overLimitMessage": "Anda sudah memegang {open} percakapan terbuka dan batas Anda {limit}. Tetap ambil yang ini?",
+        "overLimitConfirm": "Tetap ambil",
+        "overLimitCancel": "Batal"
       },
       "giveBack": {
         "button": "Kembalikan ke bot",
@@ -82,14 +86,16 @@
         "priority": "Prioritas",
         "summary": "Ringkasan",
         "answers": "Yang disampaikan kontak kepada bot",
-        "trace": "Cara penugasan"
+        "trace": "Cara penugasan",
+        "timers": "Langkah antrean tunggu"
       },
       "source": {
         "flow": "Sebuah alur",
         "ai_agent": "Agen AI",
         "keyword": "Permintaan kontak sendiri",
         "bot_failure": "Bot yang tidak dapat membantu",
-        "manual": "Seorang rekan tim"
+        "manual": "Seorang rekan tim",
+        "arrival": "Perutean: tidak ada yang bisa mengambil"
       },
       "reason": {
         "customer_asked": "Kontak meminta bicara dengan orang",
@@ -130,6 +136,12 @@
           "failed": "Pesan ke pelanggan tidak dapat dikirim.",
           "channel_unavailable": "Pesan ke pelanggan dilewati: kanal tidak tersedia."
         }
+      },
+      "timers": {
+        "reminded": "Diingatkan pukul {at}",
+        "offered": "Ditawarkan ke tim ini pukul {at}",
+        "messaged": "Pesan ke pelanggan dikirim pukul {at}",
+        "gaveBack": "Dikembalikan ke bot pukul {at}"
       }
     },
     "panel": {

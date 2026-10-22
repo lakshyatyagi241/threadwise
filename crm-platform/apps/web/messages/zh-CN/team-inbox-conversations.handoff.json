@@ -33,7 +33,11 @@
         "done": "你已接手此会话。",
         "doneOwner": "你已接手此会话，并成为该联系人的负责人。",
         "failed": "无法接手该会话。",
-        "taken": "其他人已先接手此会话。"
+        "taken": "其他人已先接手此会话。",
+        "overLimitTitle": "你已达到会话上限",
+        "overLimitMessage": "你已有 {open} 个进行中的会话，上限为 {limit}。仍要接手这个会话吗？",
+        "overLimitConfirm": "仍然接手",
+        "overLimitCancel": "取消"
       },
       "giveBack": {
         "button": "交还机器人",
@@ -82,14 +86,16 @@
         "priority": "优先级",
         "summary": "摘要",
         "answers": "联系人对机器人说的内容",
-        "trace": "分配方式"
+        "trace": "分配方式",
+        "timers": "等待队列步骤"
       },
       "source": {
         "flow": "流程",
         "ai_agent": "AI 智能体",
         "keyword": "联系人本人的请求",
         "bot_failure": "无法提供帮助的机器人",
-        "manual": "同事"
+        "manual": "同事",
+        "arrival": "路由：没有人能接手"
       },
       "reason": {
         "customer_asked": "联系人要求人工服务",
@@ -130,6 +136,12 @@
           "failed": "无法向客户发送消息。",
           "channel_unavailable": "已跳过向客户发送的消息:渠道不可用。"
         }
+      },
+      "timers": {
+        "reminded": "{at} 已提醒",
+        "offered": "{at} 转给了此团队",
+        "messaged": "{at} 已向客户发送消息",
+        "gaveBack": "{at} 已交还给机器人"
       }
     },
     "panel": {

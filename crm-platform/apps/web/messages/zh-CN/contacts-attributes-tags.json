@@ -21,7 +21,6 @@
       "unavailable": "API 的这一部分暂不可用。",
       "rateLimited": "请求过多。请稍候再试。",
       "unexpected": "出了点问题。请重试。",
-      "assignedToOther": "此聊天已分配给其他客服。请让对方或管理员将其分配给你，然后重试。",
       "retry": "重试",
       "reservedKey": "该键已被内置令牌保留。请选择其他键。",
       "attributeInUse": "部分联系人在此属性上有值。",
@@ -38,7 +37,8 @@
       "statusStage": "该状态属于其他阶段。请选择与联系人阶段相符的状态。",
       "stageScope": "一个状态只能限定于您的某个生命周期阶段。",
       "planLimit": "您已达到套餐的 {limit, plural, other {# 位联系人}}上限。请升级套餐以添加更多，或删除现有联系人以腾出空间。",
-      "legalHold": "此记录受保护，目前无法删除。"
+      "legalHold": "此记录受保护，目前无法删除。",
+      "assignedToOther": "此聊天已分配给其他客服。请先分配给自己，再发送消息。"
     },
     "list": {
       "title": "联系人中心",

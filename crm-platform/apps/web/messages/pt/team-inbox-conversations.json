@@ -584,7 +584,11 @@
           "sla_breach": "Prazo de resposta perdido",
           "spam_flagged": "Marcada como spam por {actor}",
           "escalated": "Escalada",
-          "unknown": "{what} por {actor}"
+          "unknown": "{what} por {actor}",
+          "handoff_requested": "Transferida para uma pessoa por {actor}",
+          "queue_reminded": "A equipe foi lembrada",
+          "queue_offered": "Oferecida a outra equipe",
+          "queue_customer_message": "Uma mensagem foi enviada ao cliente"
         },
         "actors": {
           "user": "Um membro da equipe",

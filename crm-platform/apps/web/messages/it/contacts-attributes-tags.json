@@ -21,7 +21,6 @@
       "unavailable": "Questa parte dell'API non è ancora disponibile.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
       "unexpected": "Qualcosa è andato storto. Riprova.",
-      "assignedToOther": "Questa chat è assegnata a un altro agente. Chiedi a lui o a un amministratore di assegnarla a te e riprova.",
       "retry": "Riprova",
       "reservedKey": "Quella chiave è riservata a un token integrato. Scegline un'altra.",
       "attributeInUse": "Alcuni contatti hanno un valore per questo attributo.",
@@ -38,7 +37,8 @@
       "statusStage": "Quello stato appartiene a un'altra fase. Scegli uno stato adatto alla fase del contatto.",
       "stageScope": "Uno stato può essere limitato solo a una delle tue fasi del ciclo di vita.",
       "planLimit": "Hai raggiunto il limite del tuo piano di {limit, plural, one {# contatto} other {# contatti}}. Passa a un piano superiore per aggiungerne altri, oppure elimina un contatto esistente per liberare spazio.",
-      "legalHold": "Questo record è protetto e al momento non può essere eliminato."
+      "legalHold": "Questo record è protetto e al momento non può essere eliminato.",
+      "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnatela prima a te per inviare un messaggio."
     },
     "list": {
       "title": "Contact Hub",

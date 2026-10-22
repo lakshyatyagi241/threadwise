@@ -11,7 +11,14 @@ import { usePlanFeature } from '@/lib/plan-features';
 import { useVocab } from '@/features/persona-vocabulary';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
-import { refresh, routingApi, updateRuleFresh, useAssignees, useRules } from '../api/routing';
+import {
+  refresh,
+  routingApi,
+  updateRuleFresh,
+  useAssignees,
+  useHandoffSettings,
+  useRules,
+} from '../api/routing';
 import {
   everyoneElseOf,
   movedIds,
@@ -25,6 +32,7 @@ import { AssignmentSwitches } from './assignment-switches';
 import { BusinessHoursDialog } from './business-hours-dialog';
 import { EveryoneElseRow, ensureEveryoneElseEvenly } from './everyone-else-row';
 import { TryItPanel } from './try-it-panel';
+import { WaitingQueueSection } from './waiting-queue-section';
 
 const isCode = (e: unknown, code: string) => e instanceof ApiError && e.code === code;
 const reason = (e: unknown, fallback: string) =>
@@ -51,6 +59,7 @@ export function AutoAssignmentScreen() {
   const { toast } = useToast();
   const rules = useRules('', canRead);
   const assignees = useAssignees(canRead);
+  const handoffSettings = useHandoffSettings(canRead);
   const [busy, setBusy] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<RoutingRule | null>(null);
   const [hoursOpen, setHoursOpen] = useState(false);
@@ -166,6 +175,16 @@ export function AutoAssignmentScreen() {
       />
 
       <AssignmentSwitches onAutoEnabled={locked ? async () => undefined : onAutoEnabled} />
+
+      {handoffSettings.data && (
+        <WaitingQueueSection
+          // a saved change replaces the form's starting point
+          key={JSON.stringify(handoffSettings.data.queueTimers)}
+          settings={handoffSettings.data}
+          teams={assignees.data?.teams ?? []}
+          canManage={canManage}
+        />
+      )}
 
       <section className="space-y-4" data-testid="rules-layer" aria-labelledby="rules-title">
         <div className="flex flex-wrap items-start justify-between gap-3">

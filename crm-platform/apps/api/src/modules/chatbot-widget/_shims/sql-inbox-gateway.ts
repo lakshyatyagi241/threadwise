@@ -408,7 +408,12 @@ export class SqlInboxGateway implements InboxGateway {
         AND COALESCE(meta->>'source', '') <> 'welcome'
       UNION ALL
       SELECT 1 FROM conversations
-      WHERE org_id = ${orgId} AND id = ${conversationId} AND handling IN ('waiting', 'with_person')
+      WHERE org_id = ${orgId} AND id = ${conversationId} AND (
+        handling = 'with_person'
+        -- a chat the routing engine queued because nobody could take it is not yet a person's: the assistant keeps answering
+        OR (handling = 'waiting' AND NOT EXISTS (
+          SELECT 1 FROM conversation_handoffs h WHERE h.org_id = conversations.org_id AND h.conversation_id = conversations.id
+            AND h.status = 'waiting' AND h.source = 'arrival')))
       LIMIT 1`);
     return res.rows.length > 0;
   }

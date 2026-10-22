@@ -21,7 +21,6 @@
       "unavailable": "API'nin bu bölümü henüz kullanılamıyor.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
-      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Ondan veya bir yöneticiden size atamasını isteyin, sonra tekrar deneyin.",
       "retry": "Tekrar dene",
       "reservedKey": "Bu anahtar yerleşik bir belirteç için ayrılmış. Başka bir tane seçin.",
       "attributeInUse": "Bazı kişilerde bu öznitelik için bir değer var.",
@@ -38,7 +37,8 @@
       "statusStage": "Bu durum farklı bir aşamaya ait. Kişinin aşamasına uygun bir durum seçin.",
       "stageScope": "Bir durum yalnızca yaşam döngüsü aşamalarınızdan biriyle sınırlandırılabilir.",
       "planLimit": "Planınızın {limit, plural, one {# kişi} other {# kişi}} sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya yer açmak için mevcut bir kişiyi silin.",
-      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez."
+      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Mesaj göndermek için önce kendinize atayın."
     },
     "list": {
       "title": "Kişi Merkezi",

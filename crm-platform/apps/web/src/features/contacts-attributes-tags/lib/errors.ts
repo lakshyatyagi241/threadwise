@@ -84,7 +84,7 @@ export function errorKind(error: unknown): ErrorKind {
     // The record is under a legal hold (BL-295): the text is neutral and never says why.
     case ERROR_CODES.LEGAL_HOLD_ACTIVE:
       return 'legalHold';
-    // The chat the drawer opened is assigned to another agent: only they send into it, so retrying cannot help.
+    // A chat another agent holds: only that agent can send into it (the message list and the send both say so).
     case ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER:
       return 'assignedToOther';
   }

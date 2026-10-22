@@ -1142,13 +1142,22 @@ function conditionSummary(d: Record<string, unknown>): string {
   return first ? [str(first.variable), str(first.operator), str(first.value)].join(' ').trim() : '';
 }
 
+/** The steps whose `prompt` is the text the customer is sent: the questions, the file and location asks, buttons and lists. */
+const PROMPT_STEPS: ReadonlySet<string> = new Set([
+  'ask',
+  'ask_file',
+  'ask_location',
+  'buttons',
+  'list',
+]);
+
 /**
  * The text a step sends as WhatsApp text, as the message box holds it: its marks (`*bold*`) and its line breaks. '' for a step that
  * sends none of its own text.
  */
 export function stepText(s: SimpleStep): string {
   if (s.type === 'message') return str(s.data.text);
-  if (s.type === 'ask' || s.type === 'buttons' || s.type === 'list') return str(s.data.prompt);
+  if (PROMPT_STEPS.has(s.type)) return str(s.data.prompt);
   return '';
 }
 
