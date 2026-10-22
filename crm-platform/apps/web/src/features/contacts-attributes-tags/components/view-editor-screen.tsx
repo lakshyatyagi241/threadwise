@@ -27,7 +27,13 @@ import {
   type ColumnDef,
   type ColumnId,
 } from '../lib/columns';
-import { composeViewFilter, viewColumnsOf, viewNameProblem, viewRulesOf } from '../lib/views';
+import {
+  composeViewFilter,
+  searchOfView,
+  viewColumnsOf,
+  viewNameProblem,
+  viewRulesOf,
+} from '../lib/views';
 import { GripIcon, LockIcon, StarIcon, XIcon } from './icons';
 
 const NS = 'contacts-attributes-tags.views.editor';
@@ -173,7 +179,8 @@ function Editor({ view }: { view?: View }) {
   const filterOk = rules.summary.count > 0 && rules.summary.valid;
   const peopleOk = shareMode !== 'selected' || userIds.length > 0;
   const busy = create.isPending || update.isPending || pin.isPending;
-  const back = view ? `/contacts?view=${view.id}` : '/contacts';
+  // The URL carries the saved filters, so the list opens on them with no second step.
+  const back = view ? `/contacts${searchOfView(view.filter, view.id)}` : '/contacts';
 
   const fail = (e: unknown) =>
     toast(tv('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
@@ -199,7 +206,7 @@ function Editor({ view }: { view?: View }) {
         {
           onSuccess: (v) => {
             toast(tv('toast.created', { name: v.name }), 'success');
-            router.push(`/contacts?view=${v.id}`);
+            router.push(`/contacts${searchOfView(v.filter, v.id)}`);
           },
           onError: fail,
         },
@@ -219,10 +226,11 @@ function Editor({ view }: { view?: View }) {
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: (saved) => {
           const finish = () => {
             toast(tv('toast.updated'), 'success');
-            router.push(back);
+            // The list opens on what the server stored, not on the copy this form composed.
+            router.push(`/contacts${searchOfView(saved.filter, view.id)}`);
           };
           if (favorite !== view.isFavorite)
             pin.mutate({ id: view.id, pinned: favorite }, { onSuccess: finish, onError: fail });
