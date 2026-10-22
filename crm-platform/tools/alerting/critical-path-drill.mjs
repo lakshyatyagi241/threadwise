@@ -92,8 +92,8 @@ setInterval(async () => {
 const promFiring = async () => { const r = await get(`http://localhost:${P.prom}/api/v1/alerts`); return r.s === 200 ? JSON.parse(r.b).data.alerts.filter((a) => a.state === 'firing').map((a) => a.labels.alertname) : []; };
 const incidents = async () => JSON.parse((await get(`http://127.0.0.1:${P.bridge}/incidents`)).b || '{}');
 // all messages of one space grouped by thread, oldest first
-const threadsOf = (msgs) => { const t = {}; for (const m of [...msgs].reverse()) (t[m.thread] ??= []).push({ at: Date.parse(m.at), ...flat(m.body) }); return t; };
-const cardFor = (msgs, alertname) => { const t = threadsOf(msgs); for (const [k, list] of Object.entries(t)) { const f = list.find((m) => /FIRING/.test(m.title) && m.text?.includes(alertname)); if (f) return { thread: k, list: [f, ...list.filter((m) => m !== f)] }; } return null; };
+const threadsOf = (msgs, minAt = 0) => { const t = {}; for (const m of [...msgs].reverse().filter((x) => Date.parse(x.at) >= minAt)) (t[m.thread] ??= []).push({ at: Date.parse(m.at), ...flat(m.body) }); return t; };
+const cardFor = (msgs, alertname, minAt = 0) => { const t = threadsOf(msgs, minAt); for (const [k, list] of Object.entries(t)) { const f = list.find((m) => /FIRING/.test(m.title) && m.text?.includes(alertname)); if (f) return { thread: k, list: [f, ...list.filter((m) => m !== f)] }; } return null; };
 
 async function fault(id, desc, expectAlerts, doIt, undo, { waitMs = 120000, noPostAlerts = [] } = {}) {
   log('==', id, desc);
@@ -101,8 +101,8 @@ async function fault(id, desc, expectAlerts, doIt, undo, { waitMs = 120000, noPo
   const t1 = Date.now(); await doIt(); const tFault = Date.now();
   const rec = { id, desc, faultStart: new Date(tFault).toISOString(), expected: {} };
   for (const alertname of expectAlerts) {
-    const ok = await waitFor(async () => Boolean(cardFor((await chat()).critical ?? [], alertname)), waitMs, `${alertname} card`);
-    const c = cardFor((await chat()).critical ?? [], alertname);
+    const ok = await waitFor(async () => Boolean(cardFor((await chat()).critical ?? [], alertname, tFault - 1000)), waitMs, `${alertname} card`);
+    const c = cardFor((await chat()).critical ?? [], alertname, tFault - 1000);
     rec.expected[alertname] = { cardAppeared: ok, secondsToCard: c ? +((c.list[0].at - tFault) / 1000).toFixed(1) : null, thread: c?.thread ?? null, card: c ? { title: c.list[0].title, rows: c.list[0].rows, buttons: c.list[0].buttons } : null };
     check(`${id}: critical card for ${alertname}`, ok, c ? `${rec.expected[alertname].secondsToCard}s after fault start` : 'no card');
   }
@@ -111,7 +111,7 @@ async function fault(id, desc, expectAlerts, doIt, undo, { waitMs = 120000, noPo
   const mid = await chat();
   for (const alertname of expectAlerts) {
     const e = rec.expected[alertname]; if (!e.thread) continue;
-    const list = threadsOf(mid.critical ?? [])[e.thread] ?? [];
+    const list = threadsOf(mid.critical ?? [], tFault - 1000)[e.thread] ?? [];
     e.messagesInThread = list.map((m) => `${m.title}`);
     e.topLevelCards = list.filter((m) => /FIRING/.test(m.title)).length;
     e.repeatReplies = list.filter((m) => /Still firing/.test(m.title)).length;
@@ -122,6 +122,7 @@ async function fault(id, desc, expectAlerts, doIt, undo, { waitMs = 120000, noPo
   const swallowed = await get(`http://localhost:${P.am}/api/v2/alerts?inhibited=true&silenced=false`);
   rec.alertmanagerInhibited = swallowed.s === 200 ? JSON.parse(swallowed.b).filter((a) => a.status?.inhibitedBy?.length).map((a) => `${a.labels.alertname}(${a.labels.severity})`) : ['am-unreachable'];
   for (const n of noPostAlerts) {
+    await waitFor(() => [...seenProm.values()].some((e) => e.alert === n && e.firingAt), 60000, `${n} firing in Prometheus`);
     const all = JSON.stringify(await chat());
     check(`${id}: warning ${n} fired in Prometheus but was NOT posted to Chat`, Boolean([...seenProm.values()].find((e) => e.alert === n && e.firingAt)) && !all.includes(n), all.includes(n) ? 'LEAKED to chat' : 'not posted');
     rec.noPost = { [n]: { promFired: Boolean([...seenProm.values()].find((e) => e.alert === n && e.firingAt)), inChat: all.includes(n) } };
@@ -129,8 +130,8 @@ async function fault(id, desc, expectAlerts, doIt, undo, { waitMs = 120000, noPo
   const tUndo = Date.now(); await undo();
   for (const alertname of expectAlerts) {
     const e = rec.expected[alertname]; if (!e.thread) continue;
-    const ok = await waitFor(async () => (threadsOf((await chat()).critical ?? [])[e.thread] ?? []).some((m) => /^RESOLVED/.test(m.title)), 150000, `${alertname} resolved reply`);
-    const list = threadsOf((await chat()).critical ?? [])[e.thread] ?? []; const r = list.find((m) => /^RESOLVED/.test(m.title));
+    const ok = await waitFor(async () => (threadsOf((await chat()).critical ?? [], tFault - 1000)[e.thread] ?? []).some((m) => /^RESOLVED/.test(m.title)), 150000, `${alertname} resolved reply`);
+    const list = threadsOf((await chat()).critical ?? [], tFault - 1000)[e.thread] ?? []; const r = list.find((m) => /^RESOLVED/.test(m.title));
     e.resolve = { appearedInSameThread: ok, secondsAfterFaultEnd: r ? +((r.at - tUndo) / 1000).toFixed(1) : null, title: r?.title ?? null, rows: r?.rows ?? [] };
     check(`${id}: RESOLVED reply in the same thread for ${alertname}`, ok, r ? `${e.resolve.secondsAfterFaultEnd}s after fault end: ${r.title}` : 'none');
   }
