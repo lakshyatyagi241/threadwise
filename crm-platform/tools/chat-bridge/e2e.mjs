@@ -66,7 +66,7 @@ try {
   n = posts.length; mode = { status: 429, failFirst: 1 }; r = await post('/alertmanager', { alerts: [alert('Retry429', 'warning')] });
   check('429 retried then delivered', r.status === 200 && posts.length - n === 2);
   n = posts.length; mode = { status: 500, failFirst: 99 }; r = await post('/alertmanager', { alerts: [alert('Perm500', 'warning')] });
-  check('permanent 500 -> 502 after 4 attempts, bridge alive', r.status === 502 && posts.length - n === 4 && (await fetch(`${base}/health`)).ok && mval(await metrics(), 'crm_chat_bridge_failed_total\\{channel="other"\\}') >= 1);
+  check('permanent 500 -> 502 after 4 attempts, bridge alive', r.status === 502 && posts.length - n === 4 && (await fetch(`${base}/health`)).ok && mval(await metrics(), 'crm_chat_bridge_failed_total\\{channel="slowquery"\\}') >= 1);
   mode = { status: 200, failFirst: 0 };
 
   // (1) slow running query: sanitized text, no literals
