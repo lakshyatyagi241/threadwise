@@ -150,6 +150,13 @@ function sendButton(btn: ButtonVar, tplBtn?: unknown) {
   return { type: 'button', sub_type: sub, index: Math.trunc(btn.index) || 0, parameters };
 }
 
+/** The button components of a send: one for each button that takes a send-time parameter, in the order given. */
+export function buttonComponents(buttons: ButtonVar[], tplButtons: unknown[]) {
+  return buttons
+    .filter((btn) => shouldEmitButtonParam(btn, tplButtons))
+    .map((btn) => sendButton(btn, tplButtons[btn.index]));
+}
+
 /** A fallback for an empty parameter: the template's own example, else the placeholder's name, else "-". */
 function fallbackText(example: string, name: string): string {
   if (example !== '') return example;
@@ -312,10 +319,7 @@ export function buildSend(t: TemplateShape, vars: SendVars): SendTemplatePayload
   }
 
   const tplButtons = asArray(t.buttons);
-  for (const btn of vars.buttons ?? []) {
-    if (shouldEmitButtonParam(btn, tplButtons))
-      send.components.push(sendButton(btn, tplButtons[btn.index]));
-  }
+  send.components.push(...buttonComponents(vars.buttons ?? [], tplButtons));
 
   if (t.templateType === 'catalog') {
     let rid = (vars.thumbnailProductRetailerId ?? '').trim();

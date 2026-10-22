@@ -38,6 +38,7 @@ import {
   cleanVariables,
   isApproved,
   renderBody,
+  sendComponentsOf,
   templatePreviewOf,
 } from './inbox-template-rules';
 import { MediaUploadsRepository } from './media-uploads.repository';
@@ -341,6 +342,7 @@ export class InboxThreadService {
       variables,
       body: renderBody(template.templateBody, variables),
       templateId: template.id,
+      components: sendComponentsOf(template, variables),
     };
   }
 

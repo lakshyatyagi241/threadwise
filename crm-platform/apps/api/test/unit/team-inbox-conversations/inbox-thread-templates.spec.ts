@@ -108,7 +108,43 @@ describe('InboxThreadService: sending a template', () => {
       variables: { '1': 'Ana', '2': 'A12' },
       body: 'Hi Ana, order A12 shipped.',
       templateId: 11,
+      components: [
+        {
+          type: 'body',
+          parameters: [
+            { type: 'text', text: 'Ana' },
+            { type: 'text', text: 'A12' },
+          ],
+        },
+      ],
     });
+  });
+
+  it('sends a copy-code button with the code the template holds: the inbox has no value to type for it', async () => {
+    const { send, enqueueOutbound } = setup({
+      found: template({
+        buttons: [
+          { type: 'QUICK_REPLY', text: 'Hey' },
+          { type: 'COPY_CODE', example: 'TEST30' },
+        ],
+      }),
+    });
+    await send();
+    expect(enqueueOutbound.mock.calls[0]![0].content.components).toEqual([
+      {
+        type: 'body',
+        parameters: [
+          { type: 'text', text: 'Ana' },
+          { type: 'text', text: 'A12' },
+        ],
+      },
+      {
+        type: 'button',
+        sub_type: 'copy_code',
+        index: 1,
+        parameters: [{ type: 'coupon_code', coupon_code: 'TEST30' }],
+      },
+    ]);
   });
 
   it('trims the values and drops any the template does not have', async () => {
