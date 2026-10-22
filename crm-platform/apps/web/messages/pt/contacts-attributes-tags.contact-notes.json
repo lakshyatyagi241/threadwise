@@ -120,7 +120,12 @@
         "keep": "Manter arquivo",
         "deleted": "Arquivo removido",
         "deleteFailed": "Não foi possível remover o arquivo. Tente novamente.",
-        "forbidden": "Você não tem permissão para remover arquivos."
+        "forbidden": "Você não tem permissão para remover arquivos.",
+        "upload": "Adicionar arquivo",
+        "uploading": "Enviando arquivo",
+        "added": "Arquivo adicionado",
+        "uploadFailed": "Não foi possível adicionar o arquivo. Tente novamente.",
+        "uploadRejected": "Este tipo de arquivo não é permitido, ou o arquivo é muito grande."
       }
     }
   }

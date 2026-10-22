@@ -1,11 +1,12 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId, useRef, useState, type ChangeEvent } from 'react';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
-import type { ContactFileResponse } from '@crm/contracts';
+import { ERROR_CODES, type ContactFileResponse } from '@crm/contracts';
 import { Button, ConfirmDialog, Spinner, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useContactFiles, useRemoveContactFile } from '../../api/files';
+import { ApiError } from '@/lib/api/errors';
+import { useContactFiles, useRemoveContactFile, useUploadContactFile } from '../../api/files';
 import { fileTypeOf, formatBytes } from '../../lib/contact-files';
 import { errorKind } from '../../lib/errors';
 import { ErrorLine } from '../error-line';
@@ -13,8 +14,8 @@ import { EmptyLine, Panel, type SectionProps } from './shared';
 
 /**
  * The files recorded against the contact: name, size, type, when and by whom (the person's id; names are not looked up).
- * Read-only: the API stores only a storage key and upload is not built, so there is no upload control. People who may
- * update the contact can remove a file from the list.
+ * People who may update the contact can add a file (the server reads its type and size from the bytes) and remove one
+ * from the list; everyone who can read the contact sees the list.
  */
 export function FilesSection({ contact, variant }: SectionProps) {
   const t = useTranslations('contacts-attributes-tags.contact.files');
@@ -23,9 +24,25 @@ export function FilesSection({ contact, variant }: SectionProps) {
   const { toast } = useToast();
   const canUpdate = useCan('record.contacts.update');
   const list = useContactFiles(contact.id);
+  const upload = useUploadContactFile(contact.id);
   const remove = useRemoveContactFile(contact.id);
   const [deleting, setDeleting] = useState<ContactFileResponse | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
   const titleId = useId();
+
+  const pickFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    // Cleared so that picking the same file again still fires a change.
+    event.target.value = '';
+    if (!file) return;
+    upload.mutate(file, {
+      onSuccess: () => toast(t('added')),
+      onError: (err) => {
+        const rejected = err instanceof ApiError && err.code === ERROR_CODES.AUTH_UPLOAD_REJECTED;
+        toast(rejected ? t('uploadRejected') : t('uploadFailed'), 'danger');
+      },
+    });
+  };
 
   const confirmDelete = () => {
     if (!deleting) return;
@@ -46,6 +63,22 @@ export function FilesSection({ contact, variant }: SectionProps) {
       id={titleId}
       title={t('title')}
       bodyClassName={variant === 'drawer' ? 'px-3' : undefined}
+      action={
+        canUpdate ? (
+          <>
+            <input ref={fileInput} type="file" hidden onChange={pickFile} />
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={upload.isPending}
+              onClick={() => fileInput.current?.click()}
+            >
+              {upload.isPending && <Spinner label={t('uploading')} />}
+              {t('upload')}
+            </Button>
+          </>
+        ) : undefined
+      }
     >
       <div className="space-y-3">
         {list.isPending && (

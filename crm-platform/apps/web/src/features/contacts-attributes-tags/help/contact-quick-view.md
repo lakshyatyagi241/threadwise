@@ -34,7 +34,7 @@ The **quick view** shows one contact in a panel on the right, about 60% of the w
 ## Good to know
 
 - **Subscription status.** Yes means the contact is subscribed on that channel. No in red means the contact opted out of marketing messages. The proof is on the contact's **Consent** page.
-- **Files.** The list shows the files attached to the contact. Uploading is not available yet.
+- **Files.** The list shows the files attached to the contact. Select **Add file** to add one; the same limits apply as on the details page.
 - **Web analytics** is not shown: no visit or page-view data is kept for a contact.
 - **Conversations and communication stats** count the chats found for this contact on your channels and, with the right access, their calls and open tasks. They need access to the Team inbox (and to calls) and are not shown without it.
 - **Plan and access.** Reading needs permission to read contacts. Notes, meetings, tags, owner and company changes need permission to update contacts; the Tasks tab needs permission to read tasks and adding one needs permission to create tasks; messaging needs the inbox reply permission and calling needs the calling permission.

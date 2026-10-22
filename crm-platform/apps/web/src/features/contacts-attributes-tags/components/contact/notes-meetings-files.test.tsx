@@ -408,15 +408,16 @@ describe('Files section', () => {
     expect(out).not.toMatch(NO_PHYSICAL);
   });
 
-  it('offers removal, behind a confirmation, to people who can update', () => {
+  it('offers adding and removal, the removal behind a confirmation, to people who can update', () => {
     const out = render(<FilesSection contact={contact} variant="drawer" />, {
       permissions: [UPDATE],
       seed: (qc) => seedList(qc, FILE_KEYS.list(CONTACT_ID), [file()]),
     });
+    expect(out).toContain('Add file');
+    expect(out).toContain('type="file"');
     expect(out).toContain('>Remove<');
     expect(out).toContain('aria-label="Remove the file Quote 2026.pdf"');
     expect(out).toContain('Remove this file?');
-    expect(out).not.toContain('type="file"');
   });
 
   it('falls back to the extension for the type and says when the size is unknown', () => {

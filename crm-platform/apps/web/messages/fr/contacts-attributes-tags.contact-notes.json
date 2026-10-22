@@ -120,7 +120,12 @@
         "keep": "Garder le fichier",
         "deleted": "Fichier retiré",
         "deleteFailed": "Impossible de retirer le fichier. Réessayez.",
-        "forbidden": "Vous n'avez pas l'autorisation de retirer des fichiers."
+        "forbidden": "Vous n'avez pas l'autorisation de retirer des fichiers.",
+        "upload": "Ajouter un fichier",
+        "uploading": "Envoi du fichier en cours",
+        "added": "Fichier ajouté",
+        "uploadFailed": "Le fichier n'a pas pu être ajouté. Réessayez.",
+        "uploadRejected": "Ce type de fichier n'est pas autorisé, ou le fichier est trop volumineux."
       }
     }
   }
