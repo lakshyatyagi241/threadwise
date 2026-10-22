@@ -25,10 +25,18 @@ export function isWatchdog(a) {
 
 export const isTest = (a) => a?.labels?.test === 'true';
 
-export function channelFor(a) {
-  if (isTest(a)) return 'slowquery'; // test alerts never reach the critical space
-  return a?.labels?.severity === 'critical' ? 'critical' : 'slowquery';
+export const isSlowQuery = (a) => a?.labels?.group === 'slow_query' || a?.labels?.kind === 'slow_query';
+
+// Routing: test -> slowquery; slow_query (any severity) -> slowquery; severity=critical -> critical; the rest -> NON_CRITICAL_CHANNEL
+// (none|slowquery, default none = dropped). The deploy channel is never chosen here (release watcher and notify-chat.sh only).
+export function routeFor(a, env = process.env) {
+  if (isTest(a)) return { channel: 'slowquery', reason: 'test alert' };
+  if (isSlowQuery(a)) return { channel: 'slowquery', reason: 'slow query (any severity)' };
+  if (a?.labels?.severity === 'critical') return { channel: 'critical', reason: 'severity=critical' };
+  if (env.NON_CRITICAL_CHANNEL === 'slowquery') return { channel: 'slowquery', reason: 'NON_CRITICAL_CHANNEL=slowquery' };
+  return { channel: 'none', reason: 'not routed: only critical and slow-query alerts reach Chat' };
 }
+export const channelFor = (a, env) => routeFor(a, env).channel;
 
 const ICON = { critical: '🔴', warning: '🟠', info: '🔵', resolved: '✅' };
 const fmtTime = (t) => (t && !String(t).startsWith('0001') ? String(t).replace('T', ' ').replace(/\.\d+/, '').replace('Z', ' UTC') : '');
@@ -62,11 +70,12 @@ const safeUrl = (u) => (/^https?:\/\//.test(String(u ?? '')) ? String(u).slice(0
 const size = (ws) => JSON.stringify(ws).length;
 
 // -> { critical: [msg...], slowquery: [...] }; each msg is a Chat cardsV2 message body under the size limits.
-export function formatAlertmanager(payload, { grafanaUrl = '' } = {}) {
+export function formatAlertmanager(payload, { grafanaUrl = '', env = process.env } = {}) {
   const per = {};
   for (const a of payload?.alerts ?? []) {
     if (isWatchdog(a)) continue;
-    (per[channelFor(a)] ??= []).push(a);
+    const ch = channelFor(a, env);
+    if (ch !== 'none') (per[ch] ??= []).push(a);
   }
   const out = {};
   for (const [ch, alerts] of Object.entries(per)) {
@@ -155,14 +164,14 @@ export function createGate({ cooldownMs = 900000, perMinute = 10, now = Date.now
 
 export function createMetrics() {
   // lastWatchdog starts at now: a restart must not look like a missing heartbeat (time()-0 would fire ChatBridgeNoWatchdog)
-  const sent = {}, failed = {}, last = {}, g = { received: 0, lastReceived: 0, lastWatchdog: Date.now() / 1000, dropped: 0 };
+  const sent = {}, failed = {}, last = {}, g = { received: 0, lastReceived: 0, lastWatchdog: Date.now() / 1000, dropped: {} };
   const extra = new Map(); // name -> { help, type, samples: Map(labelStr -> value) }
   const m = {
     ok: (c) => { sent[c] = (sent[c] ?? 0) + 1; last[c] = Date.now() / 1000; },
     fail: (c, reason) => { const k = `${c}|${reason}`; failed[k] = (failed[k] ?? 0) + 1; },
     received: () => { g.received++; g.lastReceived = Date.now() / 1000; },
     watchdog: () => { g.lastWatchdog = Date.now() / 1000; },
-    dropped: () => { g.dropped++; },
+    dropped: (reason = 'watchdog') => { g.dropped[reason] = (g.dropped[reason] ?? 0) + 1; },
     set(name, type, value, labels = '') { const e = extra.get(name) ?? { type, samples: new Map() }; e.samples.set(labels, value); extra.set(name, e); },
     inc(name, labels = '', by = 1) { const e = extra.get(name) ?? { type: 'counter', samples: new Map() }; e.samples.set(labels, (e.samples.get(labels) ?? 0) + by); extra.set(name, e); },
     render() {
@@ -174,7 +183,7 @@ export function createMetrics() {
       fam('crm_chat_bridge_received_total', 'counter', 'Alertmanager webhook calls received.', [`crm_chat_bridge_received_total ${g.received}`]);
       fam('crm_chat_bridge_last_received_timestamp_seconds', 'gauge', 'Unix time of the last Alertmanager call.', [`crm_chat_bridge_last_received_timestamp_seconds ${g.lastReceived}`]);
       fam('crm_chat_bridge_last_watchdog_timestamp_seconds', 'gauge', 'Unix time the Watchdog alert last reached the bridge (dead-man).', [`crm_chat_bridge_last_watchdog_timestamp_seconds ${g.lastWatchdog}`]);
-      fam('crm_chat_bridge_dropped_total', 'counter', 'Alerts dropped on purpose (Watchdog).', [`crm_chat_bridge_dropped_total ${g.dropped}`]);
+      fam('crm_chat_bridge_dropped_total', 'counter', 'Alerts dropped on purpose (Watchdog, or not routed to any channel).', ['watchdog', 'not_routed'].map((r) => `crm_chat_bridge_dropped_total{reason="${r}"} ${g.dropped[r] ?? 0}`));
       for (const [n, e] of extra) fam(n, e.type, n, [...e.samples].map(([l, v]) => `${n}${l ? `{${l}}` : ''} ${v}`));
       return `${L.join('\n')}\n`;
     },

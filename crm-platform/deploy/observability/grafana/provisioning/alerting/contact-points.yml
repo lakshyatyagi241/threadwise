@@ -32,3 +32,12 @@ contactPoints:
           url: $__file{/run/secrets/gchat_deploy_url}
           title: '{{ template "gchat.title" . }}'
           message: '{{ template "gchat.message" . }}'
+  # Default-route sink: Grafana ships this receiver but a provisioned policy needs it declared. No SMTP is configured, so anything
+  # that reaches it (neither slow_query nor critical) is not delivered anywhere.
+  - orgId: 1
+    name: email receiver
+    receivers:
+      - uid: email-receiver-sink
+        type: email
+        settings:
+          addresses: nobody@example.invalid

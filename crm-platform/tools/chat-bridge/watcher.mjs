@@ -103,7 +103,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
         const ok = `${r.pid}:${iso(r.query_start)}:${k.kind}`; seen.add(ok);
         const o = open.get(ok); if (o) o.peak = Math.max(o.peak, secs);
         offenders.push({ kind: k.kind, row: r, text, waiterSecs: waiter[r.pid] ?? 0 });
-        const channel = k.severity === 'critical' ? 'critical' : 'slowquery', h = sha(`${r.datname}|${k.kind}|${text}`), threadKey = `sq-${h.slice(0, 16)}`;
+        const channel = k.severity === 'critical' && env.SLOW_QUERY_ESCALATE_TO_CRITICAL === 'true' ? 'critical' : 'slowquery', h = sha(`${r.datname}|${k.kind}|${text}`), threadKey = `sq-${h.slice(0, 16)}`;
         const blk = (r.blockers ?? []).map((p) => byPid.get(p)).filter(Boolean)[0];
         const rowsOut = [['Verdict', k.verdict], ['Duration', `${fmt(secs)} s (${k.kind === 'idle_in_tx' ? 'time idle in transaction' : 'now() - query_start'})`], ['Database / role / app', `${r.datname} / ${r.usename} / ${r.application_name || '-'}`],
           ['Evidence (verify in psql)', `pid ${r.pid}, query_start ${iso(r.query_start)}, state ${r.state}, wait_event ${r.wait_event_type ?? '-'}/${r.wait_event ?? '-'}, xact age ${r.xact_secs == null ? '-' : fmt(r.xact_secs, 0)} s`]];

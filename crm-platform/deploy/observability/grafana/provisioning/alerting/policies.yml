@@ -1,12 +1,14 @@
 apiVersion: 1
 policies:
   - orgId: 1
-    receiver: gchat-slowquery
+    receiver: email receiver # built-in, unconfigured: anything not matched below is dropped
     group_by: [alertname]
     group_wait: 30s
     group_interval: 5m
     repeat_interval: 4h
     routes:
+      - receiver: gchat-slowquery
+        object_matchers: [["group", "=", "slow_query"]]
       - receiver: gchat-critical
         object_matchers: [["severity", "=", "critical"]]
         repeat_interval: 1h

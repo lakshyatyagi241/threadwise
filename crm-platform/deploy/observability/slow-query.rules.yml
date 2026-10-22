@@ -18,7 +18,7 @@ groups:
         labels: { severity: warning, group: slow_query }
         annotations:
           summary: '{{ $value | printf "%.0f" }} slow-query events in 10 min'
-          description: 'The watcher saw many running or slow statements. See the slow-query cards in Slow Queries & Warnings or Critical Chat and docs/runbooks/google-chat-alerts.md.'
+          description: 'The watcher saw many running or slow statements. See the slow-query cards in Slow Queries & Warnings and docs/runbooks/google-chat-alerts.md.'
           runbook_url: docs/runbooks/google-chat-alerts.md#slowqueryburst
 
       - alert: SlowQueryWatcherDown
@@ -26,7 +26,7 @@ groups:
           (time() - crm_slow_query_watcher_last_poll_timestamp > 120 and crm_slow_query_watcher_last_poll_timestamp > 0)
           or up{job="crm-chat-bridge"} == 0
         for: 5m
-        labels: { severity: warning }
+        labels: { severity: warning, group: slow_query }
         annotations:
           summary: 'Slow-query watcher is not polling'
           description: 'No successful poll for over 2 minutes (database unreachable, wrong role, or the bridge is down).'
@@ -35,7 +35,7 @@ groups:
       - alert: ChatBridgeDeliveryFailing
         expr: sum by (channel) (increase(crm_chat_bridge_failed_total[15m])) > 0
         for: 0m
-        labels: { severity: warning }
+        labels: { severity: critical }
         annotations:
           summary: 'Google Chat delivery failing for channel {{ $labels.channel }}'
           description: 'Messages could not be delivered after retries (bad or revoked webhook URL, or Chat is down).'
@@ -44,7 +44,7 @@ groups:
       - alert: ChatBridgeNoWatchdog
         expr: time() - crm_chat_bridge_last_watchdog_timestamp_seconds > 900
         for: 5m
-        labels: { severity: warning }
+        labels: { severity: critical }
         annotations:
           summary: 'The Watchdog heartbeat has not reached the bridge for 15 min'
           description: 'Alerts may not be reaching Google Chat: check Prometheus, Alertmanager and the bridge. Delivered through Grafana contact points if configured.'

@@ -37,7 +37,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   };
   const escalate = async (inc, why) => {
     inc.state = 'escalated'; count(inc.playbook, 'escalated'); audit({ id: inc.id, playbook: inc.playbook, result: 'escalated', why });
-    await step(inc, 'ESCALATED', `NOT resolved, needs a human: ${why}. Suggested next step: ${inc.suggestion ?? 'see the diagnosis in this thread'}. Evidence: ${inc.evidence ?? 'see thread'}`, 'critical');
+    await step(inc, 'ESCALATED', `NOT resolved, needs a human: ${why}. Suggested next step: ${inc.suggestion ?? 'see the diagnosis in this thread'}. Evidence: ${inc.evidence ?? 'see thread'}`, env.SLOW_QUERY_ESCALATE_TO_CRITICAL === 'true' ? 'critical' : inc.channel);
   };
   const pre = {
     cancel_select(c) {

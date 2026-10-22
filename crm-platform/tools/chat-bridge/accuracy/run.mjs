@@ -33,9 +33,9 @@ const scenarios = [
   S('fast queries', { run: async (c, m) => { for (let i = 0; i < 20; i++) await c.query(`select pg_sleep(0.05) as ${m}`); } }),
   S('slow pg_sleep 6 s (<critical)', { expect: ['slow'], channel: 'slowquery', noCritical: true, allow: ['statement'], run: (c, m) => c.query(`select pg_sleep(6) as ${m}`), resolveReply: true }),
   S('heavy aggregate', { expect: ['slow'], allow: ['statement'], run: (c, m) => c.query(`select count(*) as ${m} from generate_series(1,40000000) x where x%7=0`) }),
-  S('critical slow 11 s (>=critical)', { expect: ['slow'], channel: 'critical', allow: ['statement'], run: (c, m) => c.query(`select pg_sleep(11) as ${m}`) }),
-  S('lock wait: waiter', { expect: ['blocked'], channel: 'critical', app: 'lockB', special: 'lock' }),
-  S('lock wait: blocker (idle in tx)', { expect: ['idle_in_tx'], channel: 'critical', app: 'lockA', special: 'none' }),
+  S('critical slow 11 s (>=critical)', { expect: ['slow'], channel: 'slowquery', noCritical: true, allow: ['statement'], run: (c, m) => c.query(`select pg_sleep(11) as ${m}`) }),
+  S('lock wait: waiter', { expect: ['blocked'], channel: 'slowquery', noCritical: true, app: 'lockB', special: 'lock' }),
+  S('lock wait: blocker (idle in tx)', { expect: ['idle_in_tx'], channel: 'slowquery', noCritical: true, app: 'lockA', special: 'none' }),
   S('idle in transaction', { expect: ['idle_in_tx'], run: async (c) => { await c.query('begin'); await c.query('select 1'); await sleep(13000); } }),
   S('allow-listed pg_dump', { appName: 'pg_dump', run: (c, m) => c.query(`select pg_sleep(7) as ${m}`) }),
   S('allow-listed migration job', { appName: 'nightly-migrate', run: (c, m) => c.query(`select pg_sleep(7) as ${m}`) }),
@@ -99,7 +99,7 @@ for (let n = 1; n <= trials; n++) {
     if (a.indeterminate) { if (r.kinds.has('slow')) a.TP++; continue; }
     for (const k of r.s.expect) { if (r.kinds.has(k)) { a.TP++; a.lat.push(r.lat[k]); } else a.FN++; }
     for (const k of r.kinds) if (!r.s.expect.includes(k) && !r.s.allow.includes(k)) a.FP++;
-    if (r.s.channel) { a.channelRuns++; if (r.s.channel === 'critical' ? r.crit : r.other && !(r.s.noCritical && r.crit)) a.channelOk++; }
+    if (r.s.channel) { a.channelRuns++; if (r.other && !r.crit) a.channelOk++; }
     if (r.ended != null) { a.endedRuns++; if (r.ended) a.endedOk++; }
   }
 }
@@ -120,7 +120,7 @@ check('resolve reply posted in the same thread when the slow query ends', real.e
 // ---- classifier at PRODUCTION defaults (the harness runs scaled thresholds; defaults are asserted on the pure function) ----
 {
   const c = cfg({}), base = { state: 'active', application_name: 'api', usename: 'app', blockers: [] };
-  check('defaults: 70 s slow query -> critical', classify({ ...base, secs: 70 }, c, {}).severity === 'critical');
+  check('defaults: 70 s slow query -> severity critical (shown CRITICAL, posted to slowquery only)', classify({ ...base, secs: 70 }, c, {}).severity === 'critical');
   check('defaults: 7 s slow query -> warning (slowquery)', classify({ ...base, secs: 7 }, c, {}).severity === 'warning');
   check('defaults: blocker with a 40 s waiter -> critical', classify({ ...base, secs: 8 }, c, {}, 40).severity === 'critical');
   check('defaults: waiter blocked 40 s -> critical blocked', (({ kind, severity }) => kind === 'blocked' && severity === 'critical')(classify({ ...base, secs: 40, blockers: [9] }, c, {})));
@@ -155,7 +155,7 @@ const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); ret
   const c0 = await mk('acc-rem2'); const { rows } = await c0.query('select pg_backend_pid() as p'); const pr = c0.query('update t_acc set a = a where (select pg_sleep(40)) is null').then(() => 'done', (e) => e.code); await sleep(1500);
   const v = { pid: rows[0].p }, r = mkR({ AUTO_REMEDIATE: 'on' });
   await r.handle(await spec(v, 'r2')); await r.settle();
-  check('refuses an UPDATE (never cancelled, ESCALATED to critical)', (await stillActive(v.pid)) && /ESCALATED/.test(labels('r2')) && posts.some((p) => p.tk === 'r2' && p.ch === 'critical'), labels('r2'));
+  check('refuses an UPDATE (never cancelled, ESCALATED in the slowquery thread, not critical)', (await stillActive(v.pid)) && /ESCALATED/.test(labels('r2')) && posts.some((p) => p.tk === 'r2' && p.ch === 'slowquery' && /^ESCALATED/.test(p.text)) && !posts.some((p) => p.tk === 'r2' && p.ch === 'critical'), labels('r2'));
   await setup.query('select pg_cancel_backend($1)', [v.pid]); await pr; c0.end().catch(() => {});
 }
 { // refuses allow-listed
@@ -180,7 +180,7 @@ const spec = async (v, key, extra = {}) => { const row = await rowOf(v.pid); ret
   const v = await startSleep('acc-f1');
   const r1 = mkR({ AUTO_REMEDIATE: 'on' }, { db: { cancel: async () => { throw Object.assign(new Error('x'), { code: '42501' }); } } });
   await r1.handle(await spec(v, 'r7')); await r1.settle();
-  check('action fails -> ESCALATED (critical)', /ESCALATED/.test(labels('r7')) && posts.some((p) => p.tk === 'r7' && p.ch === 'critical' && /action failed/.test(p.text)), labels('r7'));
+  check('action fails -> ESCALATED (slowquery thread)', /ESCALATED/.test(labels('r7')) && posts.some((p) => p.tk === 'r7' && p.ch === 'slowquery' && /action failed/.test(p.text)) && !posts.some((p) => p.tk === 'r7' && p.ch === 'critical'), labels('r7'));
   const r2 = mkR({ AUTO_REMEDIATE: 'on' }, { db: { cancel: async () => true } }); // claims success but the query keeps running
   await r2.handle(await spec(v, 'r8')); await r2.settle();
   check('verification fails (query still running) -> ESCALATED, never RESOLVED', /ACTION>ESCALATED$/.test(labels('r8')) && !/RESOLVED/.test(labels('r8')), labels('r8'));

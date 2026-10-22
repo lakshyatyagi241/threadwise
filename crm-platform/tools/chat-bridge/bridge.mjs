@@ -3,7 +3,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, isWatchdog, widgetsOf } from './lib.mjs';
+import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, isWatchdog, routeFor, widgetsOf } from './lib.mjs';
 import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 
@@ -26,8 +26,9 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
     if (isTest(a)) return send('slowquery', alertCard(a, { grafanaUrl })); // test=true: plain card, no thread/diagnosis/resolver/escalation, not an incident
+    if (channelFor(a, env) === 'none') { metrics.dropped('not_routed'); log({ evt: 'alert_not_routed', alertname: a.labels?.alertname, severity: a.labels?.severity }); return { ok: true }; }
     const fp = a.fingerprint || createHash('sha1').update(JSON.stringify(a.labels ?? {})).digest('hex').slice(0, 16);
-    const threadKey = `am-${fp}`, ch = channelFor(a), t0 = Date.parse(a.startsAt), known = threads.get(fp);
+    const threadKey = `am-${fp}`, ch = channelFor(a, env), t0 = Date.parse(a.startsAt), known = threads.get(fp);
     const started = Number.isFinite(t0) && t0 > 0 ? t0 : known?.startedAt ?? Date.now(); // Alertmanager's startsAt survives a bridge restart
     const ev = await diagnose(a, { env }).catch(() => ({ entry: null, rows: [], value: null }));
     const peak = Math.max(known?.peak ?? -Infinity, ev.value ?? -Infinity);
@@ -58,6 +59,12 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     const end = (code, body, type = 'application/json') => { res.writeHead(code, { 'content-type': type }); res.end(body); };
     if (req.method === 'GET' && req.url === '/health') return end(200, '{"ok":true}');
     if (req.method === 'GET' && req.url === '/metrics') return end(200, metrics.render(), 'text/plain; version=0.0.4');
+    if (req.method === 'POST' && req.url === '/route-check') { // read-only: where would this alert go? Posts nothing, touches no state.
+      let b = ''; for await (const c of req) { b += c; if (b.length > 20000) return end(413, '{}'); }
+      let j; try { j = JSON.parse(b); } catch { return end(400, '{"error":"bad json"}'); }
+      const labels = j.labels ?? { ...(j.kind === 'slow_query' ? { group: 'slow_query' } : {}), ...(j.severity ? { severity: j.severity } : {}), ...(j.test ? { test: 'true' } : {}) };
+      return end(200, JSON.stringify(routeFor({ labels }, env)));
+    }
     if (req.method === 'GET' && req.url === '/incidents') return end(200, JSON.stringify({ mode: resolver?.mode ?? 'off', incidents: resolver?.list() ?? [] }));
     if (req.method === 'POST' && req.url === '/release') { // called by the deploy step: {"sha":"abc123"}; lets code-fix incidents resolve "by release"
       let b = ''; for await (const c of req) b += c; try { resolver?.setRelease(JSON.parse(b).sha); } catch { return end(400, '{}'); } return end(200, '{"ok":true}');

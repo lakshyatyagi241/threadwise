@@ -51,23 +51,25 @@ try {
   await post('/alertmanager', { alerts: [alert('CritA', 'critical')] });
   check('critical goes to Critical space only', posts.slice(n).length === 1 && posts[n].channel === 'critical');
   n = posts.length; await post('/alertmanager', { alerts: [alert('WarnA', 'warning')] });
-  check('warning goes to Slow Queries space', posts.slice(n).length === 1 && posts[n].channel === 'slowquery');
-  n = posts.length; await post('/alertmanager', { alerts: [alert('WarnA', 'warning', 'resolved')] });
+  check('plain warning is dropped and counted not_routed', posts.length === n && mval(await metrics(), 'crm_chat_bridge_dropped_total{reason="not_routed"}') >= 1);
+  n = posts.length; await post('/alertmanager', { alerts: [alert('CritA', 'critical', 'resolved')] });
   check('resolved is posted', posts.slice(n).length === 1 && /resolved/.test(posts[n].body));
+  const rc = await (await fetch(`http://127.0.0.1:${BP}/route-check`, { method: 'POST', body: JSON.stringify({ kind: 'slow_query', severity: 'critical' }) })).json();
+  check('/route-check: critical slow query -> slowquery, posts nothing', rc.channel === 'slowquery' && posts.length === n + 1);
   n = posts.length; const wd = await post('/alertmanager', { alerts: [alert('Watchdog', 'none')] });
   check('Watchdog dropped but counted', wd.status === 200 && posts.length === n && mval(await metrics(), 'crm_chat_bridge_last_watchdog_timestamp_seconds') > 0);
   n = posts.length; await post('/alertmanager', { alerts: [alert('E2ETest', 'critical', 'firing', { test: 'true' })] });
   check('test=true: TEST card in slowquery, never critical', posts.length === n + 1 && posts[n].channel === 'slowquery' && /TEST - /.test(posts[n].body) && /Test message, not a real alert/.test(posts[n].body));
   n = posts.length; await post('/alertmanager', { alerts: [alert('SlowQueryBurst', 'warning', 'firing', { group: 'slow_query' })] });
   check('group=slow_query warning goes to Slow Queries', posts[n]?.channel === 'slowquery');
-  check('big payload split under limits', await (async () => { n = posts.length; await post('/alertmanager', { alerts: Array.from({ length: 30 }, (_, i) => alert(`Big${i}`, 'warning')) }); const p = posts.slice(n); return p.length >= 4 && p.every((x) => x.body.length < 30000); })());
+  check('big payload split under limits', await (async () => { n = posts.length; await post('/alertmanager', { alerts: Array.from({ length: 30 }, (_, i) => alert(`Big${i}`, 'warning', 'firing', { group: 'slow_query' })) }); const p = posts.slice(n); return p.length >= 4 && p.every((x) => x.body.length < 30000); })());
 
   // (4) retry / failure
-  n = posts.length; mode = { status: 500, failFirst: 2 }; let r = await post('/alertmanager', { alerts: [alert('Retry500', 'warning')] });
+  n = posts.length; mode = { status: 500, failFirst: 2 }; let r = await post('/alertmanager', { alerts: [alert('Retry500', 'warning', 'firing', { group: 'slow_query' })] });
   check('5xx retried then delivered', r.status === 200 && posts.length - n === 3);
-  n = posts.length; mode = { status: 429, failFirst: 1 }; r = await post('/alertmanager', { alerts: [alert('Retry429', 'warning')] });
+  n = posts.length; mode = { status: 429, failFirst: 1 }; r = await post('/alertmanager', { alerts: [alert('Retry429', 'warning', 'firing', { group: 'slow_query' })] });
   check('429 retried then delivered', r.status === 200 && posts.length - n === 2);
-  n = posts.length; mode = { status: 500, failFirst: 99 }; r = await post('/alertmanager', { alerts: [alert('Perm500', 'warning')] });
+  n = posts.length; mode = { status: 500, failFirst: 99 }; r = await post('/alertmanager', { alerts: [alert('Perm500', 'warning', 'firing', { group: 'slow_query' })] });
   check('permanent 500 -> 502 after 4 attempts, bridge alive', r.status === 502 && posts.length - n === 4 && (await fetch(`${base}/health`)).ok && mval(await metrics(), 'crm_chat_bridge_failed_total\\{channel="slowquery"\\}') >= 1);
   mode = { status: 200, failFirst: 0 };
 

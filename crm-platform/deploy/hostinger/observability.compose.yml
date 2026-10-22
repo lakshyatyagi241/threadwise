@@ -138,6 +138,8 @@ services:
       SLOW_MAX_PER_MINUTE: ${SLOW_MAX_PER_MINUTE:-10}
       # Resolver (tools/chat-bridge/resolver.mjs). dry-run: it only says what it WOULD do. `on` needs the optional secret slow_query_cancel_pg_url.
       PROMETHEUS_URL: http://prometheus:9090
+      SLOW_QUERY_ESCALATE_TO_CRITICAL: ${SLOW_QUERY_ESCALATE_TO_CRITICAL:-false}
+      NON_CRITICAL_CHANNEL: ${NON_CRITICAL_CHANNEL:-none}
       AUTO_REMEDIATE: ${AUTO_REMEDIATE:-dry-run}
       CRITICAL_SLOW_SECONDS: ${CRITICAL_SLOW_SECONDS:-60}
       CRITICAL_BLOCK_SECONDS: ${CRITICAL_BLOCK_SECONDS:-30}

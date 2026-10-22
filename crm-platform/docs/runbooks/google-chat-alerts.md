@@ -1,8 +1,25 @@
 # Google Chat alerts and slow queries
 
-All alerts and slow queries land in three Google Chat spaces: Threadwise Critical Alerts, Threadwise Slow Queries & Warnings, Threadwise Deployments. Slow queries and all other non-critical alerts go to Slow Queries & Warnings and slow queries escalate to Critical (see Autonomy).
+All alerts and slow queries land in three Google Chat spaces: Threadwise Critical Alerts, Threadwise Slow Queries & Warnings, Threadwise Deployments. Slow queries (any severity) go to Slow Queries & Warnings only, other critical alerts to Critical only, other warnings are not posted (see Routing).
 Pieces: `tools/chat-bridge` (bridge + slow-query watcher, one Node process, service `gchat-bridge`, 96 MB), `deploy/observability/alertmanager.gchat.yml`,
 `deploy/observability/slow-query.rules.yml`. Grafana contact points / dashboard and the Deployments notifier are built on a separate branch (placeholder: see that branch's docs; not part of this runbook yet).
+
+## Routing (what lands where)
+
+| Alert | Space |
+|---|---|
+| Slow-query watcher post, or label `group=slow_query`, any severity (a critical one shows `CRITICAL` inside the card) | Slow Queries & Warnings only. No Critical copy, no pointer reply |
+| `severity=critical`, not slow query (21 app rules plus `ChatBridgeDeliveryFailing`, `ChatBridgeNoWatchdog`) | Critical only |
+| `SlowQueryWatcherDown` (`group=slow_query`, warning) | Slow Queries & Warnings |
+| `test=true` | Slow Queries & Warnings, TEST card |
+| Any other warning/info | Not posted. Counted in `crm_chat_bridge_dropped_total{reason="not_routed"}` and logged |
+| `Watchdog` | Never posted (heartbeat only) |
+| Deploy | Only the release watcher and `notify-chat.sh` post to Deployments; routing never picks it |
+
+Real rule set in `deploy/observability/*.rules.yml`: 23 to Critical, 2 to Slow Queries & Warnings, 21 not posted, Watchdog 1 (enforced by the routing-matrix unit test, so a new rule in the wrong place fails CI).
+Env: `SLOW_QUERY_ESCALATE_TO_CRITICAL` (default false; true restores the old escalation thread + pointer reply), `NON_CRITICAL_CHANNEL=none|slowquery` (default none). Resolver ESCALATED replies stay in the incident's own space unless the first is true.
+Check a route without posting anything: `curl -s -X POST bridge:9095/route-check -d '{"kind":"slow_query","severity":"critical"}'` returns `{"channel","reason"}`.
+Grafana policy tree: `group=slow_query` -> gchat-slowquery, `severity=critical` -> gchat-critical, default -> the unconfigured `email receiver` (dropped).
 
 ## Hostnames and DNS (owner, once)
 - Grafana: https://grafana-desk.wabo.ai (login `admin`, password in `secrets/grafana_admin_password`).
@@ -13,7 +30,7 @@ Pieces: `tools/chat-bridge` (bridge + slow-query watcher, one Node process, serv
 - Laptop deploy: `deploy-chat-alerts-prod-v3.sh` (reads `~/gchat/{critical,slowquery,deploy}_url`; `--check-only` only checks DNS and prerequisites).
 
 ## Setup (owner, once)
-1. Create 3 spaces (Threadwise Critical Alerts, Threadwise Slow Queries & Warnings, Threadwise Deployments; slow queries and warnings go to Slow Queries & Warnings, slow queries escalate to Critical with a pointer reply in the first thread) in Google Chat. In each: Manage webhooks, Add, name it, copy the URL (`https://chat.googleapis.com/v1/spaces/.../messages?key=...&token=...`). Treat the URLs as secrets.
+1. Create 3 spaces (Threadwise Critical Alerts, Threadwise Slow Queries & Warnings, Threadwise Deployments; slow queries and warnings go to Slow Queries & Warnings, slow queries stay in Slow Queries & Warnings; non-slow critical alerts go to Critical) in Google Chat. In each: Manage webhooks, Add, name it, copy the URL (`https://chat.googleapis.com/v1/spaces/.../messages?key=...&token=...`). Treat the URLs as secrets.
 2. Read-only database role: run `psql "$ADMIN_URL" -v pw="'<generated password>'" -f tools/chat-bridge/create-readonly-role.sql` (idempotent: role `slow_query_ro`, `pg_read_all_stats`, CONNECT only, no table SELECT). Then write `postgres://slow_query_ro:<pw>@postgres:5432/<db>` to `secrets/slow_query_pg_url` (mode 644, dir 700).
 3. `pg_stat_statements`: `deploy/hostinger/docker-compose.yml` already sets `shared_preload_libraries=pg_stat_statements` and `pg_stat_statements.track=all` (nothing added here). If the server's Postgres container was started before that was merged it needs ONE restart; then `CREATE EXTENSION IF NOT EXISTS pg_stat_statements;` in the app database. Verify: `select count(*) from pg_stat_statements;`. Without it the watcher still reports running queries and exports `pg_stat_statements_available 0`.
 4. On the server: `cd /opt/desk && ./observability-up.sh`, choose `gchat`, paste the 3 URLs when asked (hidden; Enter skips a space). It writes `secrets/gchat_{critical,slowquery,deploy}_url`, sets `ALERTMANAGER_FILE=alertmanager.gchat.yml` and starts prometheus, alertmanager, probe and `gchat-bridge`. Manually: `docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d gchat-bridge` (and `up -d --force-recreate prometheus alertmanager` to pick up the rules/config).
@@ -87,7 +104,7 @@ Notes: the Grafana alert rules are provisioned, so they are read-only in the UI 
 ## Autonomy: threads, diagnosis, accuracy, resolver
 **Test alerts.** An alert with label `test="true"` is posted as a plain card titled `🧪 TEST - ...` whose first line says "Test message, not a real alert", always in the slowquery space (even with severity critical); it is never counted as an incident, never starts the resolver or remediation, never escalates, and gets no thread or diagnosis. Use it with severity warning for post-deploy smoke tests.
 
-**Channels.** Three spaces only: `critical`, `slowquery`, `deploy` (`/run/secrets/gchat_{critical,slowquery,deploy}_url`). Slow-query cards and all non-critical alerts go to `slowquery` and ESCALATE to `critical` when a query runs >= `CRITICAL_SLOW_SECONDS` (60) or a session holds others waiting >= `CRITICAL_BLOCK_SECONDS` (30). Metric names `crm_slow_query_*` are unchanged.
+**Channels.** Three spaces only: `critical`, `slowquery`, `deploy` (`/run/secrets/gchat_{critical,slowquery,deploy}_url`). Slow-query cards and all non-critical alerts go to `slowquery` and are shown as CRITICAL in the slowquery card when a query runs >= `CRITICAL_SLOW_SECONDS` (60) or a session holds others waiting >= `CRITICAL_BLOCK_SECONDS` (30); they only escalate to the critical space when `SLOW_QUERY_ESCALATE_TO_CRITICAL=true`. Metric names `crm_slow_query_*` are unchanged.
 
 **Threads.** Every alert fingerprint is one Chat thread (`?threadKey=am-<fingerprint>&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD` plus `thread.threadKey` in the body). The first firing card carries the diagnosis; repeats are replies ("Still firing for 14m"); `resolved` is a reply "RESOLVED after 4m 12s" with what it was, peak value seen and the diagnosis at firing. Duration uses Alertmanager's `startsAt`, so a bridge restart still posts a correct resolve (the in-memory map, max 500 entries, 7-day TTL, only loses the peak and diagnosis). Slow queries: when the session is gone at the next poll, a reply "RESOLVED after N s (finished on its own)" is posted in the same thread (exact end is within one poll interval).
 
