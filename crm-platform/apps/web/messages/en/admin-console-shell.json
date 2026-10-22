@@ -224,6 +224,8 @@
         "urlHint": "URL slug isn't editable here. Contact support to change.",
         "timezone": "Default timezone",
         "timezoneHint": "All scheduled sends, business-hours checks, and SLA timers run in this zone.",
+        "timezoneSearch": "Search time zones",
+        "timezoneNoMatch": "No time zone matches.",
         "currency": "Currency",
         "currencyHint": "Used on plan checkout, invoices, and wallet display.",
         "save": "Save",
