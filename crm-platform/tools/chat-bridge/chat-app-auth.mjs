@@ -25,7 +25,7 @@ export function createAppAuth({ env = process.env, fetchImpl = fetch, now = Date
     if (cached && cached.exp - 60_000 > now()) return cached.token;
     const key = loadServiceAccount(env);
     if (!key) throw new Error('chat app service account key missing');
-    const url = hostOverride(env, 'CHAT_APP_TOKEN_URL', key.token_uri === GOOGLE_TOKEN_URL || !key.token_uri ? GOOGLE_TOKEN_URL : GOOGLE_TOKEN_URL);
+    const url = hostOverride(env, 'CHAT_APP_TOKEN_URL', GOOGLE_TOKEN_URL);
     const iat = Math.floor(now() / 1000);
     const assertion = signJwt({ iss: key.client_email, scope: CHAT_SCOPE, aud: url, iat, exp: iat + 3600 }, key.private_key, { alg: 'RS256', typ: 'JWT', ...(key.private_key_id ? { kid: key.private_key_id } : {}) });
     const r = await fetchImpl(url, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion }), signal: AbortSignal.timeout(5000) });
