@@ -809,6 +809,7 @@
         "onlyStatus": "เฉพาะข้อความ{status}",
         "requestedAt": "ขอเมื่อ {date}",
         "lines": "{count, plural, other {# บรรทัด}}",
+        "noLines": "ไม่มีเหตุการณ์ในช่วงเวลานี้",
         "until": "ใช้ได้ถึง {date}",
         "download": "ดาวน์โหลด",
         "status": {

@@ -809,6 +809,7 @@
         "onlyStatus": "Only {status} messages",
         "requestedAt": "Requested {date}",
         "lines": "{count, plural, one {# line} other {# lines}}",
+        "noLines": "No events in this range",
         "until": "Available until {date}",
         "download": "Download",
         "status": {

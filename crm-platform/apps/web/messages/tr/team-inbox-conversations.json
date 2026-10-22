@@ -809,6 +809,7 @@
         "onlyStatus": "Yalnızca {status} durumundaki mesajlar",
         "requestedAt": "İstenme: {date}",
         "lines": "{count, plural, one {# satır} other {# satır}}",
+        "noLines": "Bu dönemde olay yok",
         "until": "{date} tarihine kadar kullanılabilir",
         "download": "İndir",
         "status": {

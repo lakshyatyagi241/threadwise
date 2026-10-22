@@ -809,6 +809,7 @@
         "onlyStatus": "الرسائل {status} فقط",
         "requestedAt": "تاريخ الطلب {date}",
         "lines": "{count, plural, zero {# سطر} one {سطر واحد} two {سطران} few {# أسطر} many {# سطرًا} other {# سطر}}",
+        "noLines": "لا توجد أحداث في هذه الفترة",
         "until": "متاح حتى {date}",
         "download": "تنزيل",
         "status": {

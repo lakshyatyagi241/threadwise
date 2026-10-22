@@ -809,6 +809,7 @@
         "onlyStatus": "רק הודעות {status}",
         "requestedAt": "התבקש ב-{date}",
         "lines": "{count, plural, one {שורה #} two {# שורות} other {# שורות}}",
+        "noLines": "אין אירועים בטווח הזה",
         "until": "זמין עד {date}",
         "download": "הורדה",
         "status": {

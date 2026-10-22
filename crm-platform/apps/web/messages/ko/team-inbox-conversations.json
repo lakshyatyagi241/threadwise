@@ -809,6 +809,7 @@
         "onlyStatus": "{status} 메시지만",
         "requestedAt": "요청일 {date}",
         "lines": "{count, plural, other {#줄}}",
+        "noLines": "이 기간에는 이벤트가 없습니다",
         "until": "{date}까지 사용 가능",
         "download": "다운로드",
         "status": {

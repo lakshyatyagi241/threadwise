@@ -809,6 +809,7 @@
         "onlyStatus": "শুধু {status} মেসেজ",
         "requestedAt": "অনুরোধ করা হয়েছে {date}",
         "lines": "{count, plural, one {# লাইন} other {# লাইন}}",
+        "noLines": "এই সময়সীমায় কোনো ঘটনা নেই",
         "until": "{date} পর্যন্ত পাওয়া যাবে",
         "download": "ডাউনলোড",
         "status": {

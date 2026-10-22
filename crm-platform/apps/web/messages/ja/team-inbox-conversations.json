@@ -809,6 +809,7 @@
         "onlyStatus": "{status} のメッセージのみ",
         "requestedAt": "リクエスト日時 {date}",
         "lines": "{count, plural, other {# 行}}",
+        "noLines": "この期間のイベントはありません",
         "until": "{date} まで利用可能",
         "download": "ダウンロード",
         "status": {

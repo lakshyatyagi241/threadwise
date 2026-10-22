@@ -809,6 +809,7 @@
         "onlyStatus": "Только сообщения со статусом {status}",
         "requestedAt": "Запрошено {date}",
         "lines": "{count, plural, one {# строка} few {# строки} many {# строк} other {# строки}}",
+        "noLines": "За этот период событий нет",
         "until": "Доступно до {date}",
         "download": "Скачать",
         "status": {

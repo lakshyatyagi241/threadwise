@@ -809,6 +809,7 @@
         "onlyStatus": "Solo messaggi {status}",
         "requestedAt": "Richiesta {date}",
         "lines": "{count, plural, one {# riga} many {# righe} other {# righe}}",
+        "noLines": "Nessun evento in questo periodo",
         "until": "Disponibile fino al {date}",
         "download": "Scarica",
         "status": {

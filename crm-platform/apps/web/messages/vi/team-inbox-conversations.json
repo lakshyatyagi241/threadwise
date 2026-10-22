@@ -809,6 +809,7 @@
         "onlyStatus": "Chỉ tin nhắn {status}",
         "requestedAt": "Yêu cầu lúc {date}",
         "lines": "{count, plural, other {# dòng}}",
+        "noLines": "Không có sự kiện nào trong khoảng thời gian này",
         "until": "Có sẵn đến {date}",
         "download": "Tải xuống",
         "status": {
