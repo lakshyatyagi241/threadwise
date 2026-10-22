@@ -860,7 +860,14 @@ export function ContactsScreen() {
           <AppliedFilters
             chips={chips}
             onRemove={removeChip}
-            onClearAll={() => setFilters(clearAllPatch())}
+            onClearAll={() => {
+              // A saved view is a set of filters: clearing them all leaves the view, back to All contacts (the search text stays).
+              if (!viewId) return setFilters(clearAllPatch());
+              router.replace(
+                `${pathname}${withView(filtersToSearch({ ...defaultFiltersOf(sizeDefault), q: filters.q }, sizeDefault), '')}`,
+                { scroll: false },
+              );
+            }}
             onSaveAsSegment={
               canCreateSegments && filtered && !filters.segment && !filters.rules
                 ? () => setSaveSegmentOpen(true)

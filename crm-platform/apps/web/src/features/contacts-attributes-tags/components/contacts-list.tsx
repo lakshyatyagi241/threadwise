@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
-import { Fragment, useState, type ReactNode } from 'react';
+import { Fragment, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { MenuItem, MenuSeparator, cn } from '@crm/ui';
 import { CompanyLink } from '@/features/companies';
@@ -14,6 +14,18 @@ import {
   type ColumnGroup,
   type ColumnId,
 } from '../lib/columns';
+import { useStoredValue } from '@/lib/use-stored-value';
+import {
+  COLUMN_WIDTHS_KEY,
+  MAX_COLUMN_W,
+  MIN_COLUMN_W,
+  RESIZE_STEP,
+  clampWidth,
+  parseColumnWidths,
+  serializeColumnWidths,
+  withColumnWidth,
+  type ColumnWidths,
+} from '../lib/column-widths';
 import type { OptIn } from '../lib/subscription';
 import { formatDateTime } from '../lib/format';
 import type { Choice } from '../lib/option-sets';
@@ -160,8 +172,88 @@ const WIDTH: Record<string, number> = {
 };
 const widthOf = (id: ColumnId) => WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
 
-export function tableMinWidth(columns: readonly ColumnDef[], selectable = true): number {
-  return (selectable ? SELECT_W : 0) + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
+export function tableMinWidth(
+  columns: readonly ColumnDef[],
+  selectable = true,
+  widths: ColumnWidths = {},
+): number {
+  return (
+    (selectable ? SELECT_W : 0) +
+    columns.reduce((sum, c) => sum + (widths[c.id] ?? widthOf(c.id)), 0)
+  );
+}
+
+/**
+ * The drag edge at the end of a column header: drag to resize, arrow keys move it by a step (Home / double-click go back to the
+ * built-in width). It is a separator the keyboard reaches, and it follows the page direction (right-to-left grows the other way).
+ */
+function ResizeHandle({
+  label,
+  width,
+  onLive,
+  onCommit,
+}: {
+  label: string;
+  width: number;
+  onLive: (w: number | null) => void;
+  onCommit: (w: number | null) => void;
+}) {
+  const start = useRef<{ x: number; w: number; sign: 1 | -1 } | null>(null);
+  const move = (x: number) => {
+    const s = start.current;
+    return s ? clampWidth(s.w + (x - s.x) * s.sign) : width;
+  };
+  return (
+    <div
+      role="separator"
+      aria-orientation="vertical"
+      aria-label={label}
+      aria-valuemin={MIN_COLUMN_W}
+      aria-valuemax={MAX_COLUMN_W}
+      aria-valuenow={Math.round(width)}
+      tabIndex={0}
+      draggable={false}
+      onPointerDown={(e) => {
+        // Cancelled so the header's own drag (moving the column) does not start.
+        e.preventDefault();
+        e.stopPropagation();
+        e.currentTarget.setPointerCapture(e.pointerId);
+        const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+        start.current = { x: e.clientX, w: width, sign: rtl ? -1 : 1 };
+      }}
+      onPointerMove={(e) => {
+        if (start.current) onLive(move(e.clientX));
+      }}
+      onPointerUp={(e) => {
+        if (!start.current) return;
+        onCommit(move(e.clientX));
+        start.current = null;
+        onLive(null);
+      }}
+      onPointerCancel={() => {
+        start.current = null;
+        onLive(null);
+      }}
+      onClick={(e) => e.stopPropagation()}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        onCommit(null);
+      }}
+      onKeyDown={(e) => {
+        const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          e.stopPropagation();
+          const grow = (e.key === 'ArrowRight') !== rtl;
+          onCommit(clampWidth(width + (grow ? RESIZE_STEP : -RESIZE_STEP)));
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          onCommit(null);
+        }
+      }}
+      className="absolute inset-y-0 end-0 z-10 w-2 cursor-col-resize touch-none select-none outline-none after:absolute after:inset-y-1.5 after:end-0.5 after:w-px after:bg-border hover:after:bg-brand focus-visible:after:w-0.5 focus-visible:after:bg-primary"
+    />
+  );
 }
 
 /** Leading icon of a column header, by the kind of data the column holds. */
@@ -972,6 +1064,11 @@ export function ContactsTable({
   const timeZone = useTimeZone();
   // The shadow along the frozen edge shows only once something has scrolled underneath it.
   const [scrolled, setScrolled] = useState(false);
+  // Widths the person dragged, kept in this browser; `live` is the width while a drag is in progress.
+  const [storedWidths, setStoredWidths] = useStoredValue(COLUMN_WIDTHS_KEY);
+  const saved = useMemo(() => parseColumnWidths(storedWidths), [storedWidths]);
+  const [live, setLive] = useState<{ id: string; w: number } | null>(null);
+  const widths: ColumnWidths = live ? { ...saved, [live.id]: live.w } : saved;
   const th =
     'sticky top-0 z-20 border-b border-border bg-muted px-3 py-2.5 text-start text-xs font-semibold uppercase tracking-wide text-muted-foreground';
   return (
@@ -984,15 +1081,23 @@ export function ContactsTable({
     >
       <table
         className="w-full table-fixed border-separate border-spacing-0 text-sm"
-        style={{ minWidth: tableMinWidth(columns, selectable) + (columnTools ? ADD_W : 0) }}
+        style={{
+          minWidth: tableMinWidth(columns, selectable, widths) + (columnTools ? ADD_W : 0),
+        }}
       >
         <colgroup>
           {selectable && <col style={{ width: SELECT_W }} />}
           {columns.map((c) => (
             <col
               key={c.id}
-              className={c.id === 'name' ? 'w-[200px] sm:w-[270px]' : undefined}
-              style={c.id === 'name' ? undefined : { width: widthOf(c.id) }}
+              className={
+                c.id === 'name' && widths[c.id] === undefined ? 'w-[200px] sm:w-[270px]' : undefined
+              }
+              style={
+                c.id === 'name' && widths[c.id] === undefined
+                  ? undefined
+                  : { width: widths[c.id] ?? widthOf(c.id) }
+              }
             />
           ))}
           {columnTools && <col style={{ width: ADD_W }} />}
@@ -1113,6 +1218,14 @@ export function ContactsTable({
                       />
                     )}
                   </div>
+                  <ResizeHandle
+                    label={t('resizeColumn', { column: label })}
+                    width={widths[c.id] ?? widthOf(c.id)}
+                    onLive={(w) => setLive(w === null ? null : { id: c.id, w })}
+                    onCommit={(w) =>
+                      setStoredWidths(serializeColumnWidths(withColumnWidth(saved, c.id, w)))
+                    }
+                  />
                 </th>
               );
             })}

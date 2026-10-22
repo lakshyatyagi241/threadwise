@@ -47,6 +47,11 @@ describe('parsePql', () => {
     const text = '```json\n{"rules":null,"summary":"x","ignored":[]}\n```';
     expect(parsePql(text)).toEqual({ rules: null, summary: 'x', ignored: [] });
   });
+  it('finds the object inside a sentence around it', () => {
+    const text =
+      'Here is the filter you asked for: {"rules":null,"summary":"x","ignored":[]} Hope it helps.';
+    expect(parsePql(text)).toEqual({ rules: null, summary: 'x', ignored: [] });
+  });
   it('refuses a tree with an unknown operator or non JSON', () => {
     expect(parsePql('nope')).toBeNull();
     const rules = { type: 'group', combinator: 'and', children: [cond('name', 'drop_table', 'x')] };

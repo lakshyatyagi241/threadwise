@@ -130,6 +130,13 @@ describe('ContactsTable', () => {
       />,
     );
 
+  it('gives every column header a keyboard-reachable resize edge', () => {
+    const out = table([row()]);
+    expect(out.match(/role="separator"/g)?.length).toBe(EVERY_COLUMN.length);
+    expect(out).toContain('cursor-col-resize');
+    expect(out).toContain('aria-orientation="vertical"');
+  });
+
   it('shows name, language, attribute value, groups, tags, email, phone, memo, stage and date', () => {
     const out = table([row()]);
     for (const text of [

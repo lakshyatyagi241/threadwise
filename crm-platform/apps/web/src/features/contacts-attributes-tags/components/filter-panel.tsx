@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Popover, cn } from '@crm/ui';
 import { PQL_QUERY_MAX } from '@crm/contracts';
 import { AdvancedFilter } from '@/features/segments';
+import { ApiError } from '@/lib/api/errors';
 import { askPql } from '../api/pql';
 import { ownerTokens, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
 import type { Owner } from '../api/owners';
@@ -36,7 +37,8 @@ export type FilterSection =
   | 'ai';
 
 type View = 'menu' | FilterSection;
-type Outcome = { kind: 'ignored'; parts: string[] } | { kind: 'empty' } | { kind: 'failed' };
+type Outcome =
+  { kind: 'ignored'; parts: string[] } | { kind: 'empty' } | { kind: 'failed' } | { kind: 'noKey' };
 
 type FilterValues = Pick<
   ContactFilters,
@@ -180,8 +182,8 @@ export function FilterPanel(p: FilterPanelProps) {
       p.onAiSummary(json, r.summary);
       if (r.ignored.length > 0) setOutcome({ kind: 'ignored', parts: r.ignored });
       else close();
-    } catch {
-      setOutcome({ kind: 'failed' });
+    } catch (e) {
+      setOutcome({ kind: e instanceof ApiError && e.code === 'PQL_NO_KEY' ? 'noKey' : 'failed' });
     } finally {
       setBusy(false);
     }
@@ -408,7 +410,8 @@ export function FilterPanel(p: FilterPanelProps) {
                 <p>{t('pqlIgnored', { parts: outcome.parts.join(', ') })}</p>
               )}
               {outcome?.kind === 'empty' && <p>{t('pqlNothing')}</p>}
-              {outcome?.kind === 'failed' && <p className="text-destructive">{t('pqlFailed')}</p>}
+              {outcome?.kind === 'failed' && <p className="text-danger">{t('pqlFailed')}</p>}
+              {outcome?.kind === 'noKey' && <p className="text-danger">{t('pqlNoKey')}</p>}
             </div>
           </div>
         )}
