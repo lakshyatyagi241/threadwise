@@ -178,3 +178,91 @@ test('resolver: an escalated incident is not re-opened (and re-posted) on every 
   await r.settle();
   assert.equal(posts.filter((p) => /^ESCALATED/.test(p)).length, 1);
 });
+
+// ---- team incident flow
+import { handleIncidents } from './incidents-api.mjs';
+async function teamRig(env = {}) {
+  const { startBridge } = await import('./bridge.mjs'), posts = [];
+  const e = { INCIDENT_API_TOKEN: 'tok-test', AUTO_REMEDIATE: 'dry-run', ...env };
+  let now = 1_700_000_000_000, resolver;
+  const br = startBridge({ env: e, urls: {}, log: () => {}, resolverFactory: ({ post }) => (resolver = createResolver({ env: e, post: async (c, m, o) => { posts.push({ c, t: m.text, k: o?.threadKey, card: JSON.stringify(m.cardsV2) }); }, now: () => now })) });
+  await new Promise((r) => br.server.listen(0, '127.0.0.1', r));
+  await resolver.handle({ playbook: 'code_fix', key: 'st:1', threadKey: 'thr-1', channel: 'slowquery', file: { queryid: '1' }, diagnosis: 'd' });
+  await resolver.settle(); posts.length = 0;
+  const base = `http://127.0.0.1:${br.server.address().port}`, id = resolver.list()[0].id;
+  const call = async (path, body, token = 'tok-test') => { const r = await fetch(base + path, { method: body ? 'POST' : 'GET', headers: { ...(token ? { 'x-incident-token': token } : {}), 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined }); return { s: r.status, j: await r.json() }; };
+  return { br, resolver, posts, call, id, tick: (ms) => { now += ms; }, close: () => br.server.close() };
+}
+test('team flow: auth 401 without or with a wrong token, token never echoed', async () => {
+  const t = await teamRig();
+  for (const tok of [null, 'nope']) { const r = await t.call('/incidents', null, tok); assert.equal(r.s, 401); assert.ok(!JSON.stringify(r.j).includes('tok-test')); }
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'a' }, 'nope')).s, 401);
+  assert.equal((await t.call('/incidents')).s, 200); assert.equal((await t.call('/incidents?status=bogus')).s, 400);
+  t.close();
+});
+test('team flow: claim, conflict 409, renew, release, thread replies', async () => {
+  const t = await teamRig();
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' })).j.status, 'claimed');
+  assert.match(t.posts[0].t, /^\uD83D\uDC40 vedant is working on this \(claimed \d\d:\d\d UTC\)$/); assert.equal(t.posts[0].k, 'thr-1'); assert.equal(t.posts[0].c, 'slowquery');
+  const c = await t.call(`/incidents/${t.id}/claim`, { who: 'asha' }); assert.equal(c.s, 409); assert.equal(c.j.owner, 'vedant');
+  const n = t.posts.length; assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' })).s, 200); assert.equal(t.posts.length, n); // renew is silent
+  assert.equal((await t.call(`/incidents/${t.id}/release-claim`, { who: 'asha' })).s, 409);
+  assert.equal((await t.call(`/incidents/${t.id}/release-claim`, { who: 'vedant' })).j.status, 'open');
+  assert.match(t.posts.at(-1).t, /^\uD83E\uDD1D vedant released this incident$/);
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'asha' })).s, 200);
+  assert.equal((await t.call('/incidents?status=claimed')).j.incidents.length, 1); assert.equal((await t.call('/incidents?status=open')).j.incidents.length, 0);
+  t.close();
+});
+test('team flow: racing claims, exactly one wins', async () => {
+  const t = await teamRig();
+  const rs = await Promise.all(['a', 'b', 'c'].map((who) => t.call(`/incidents/${t.id}/claim`, { who })));
+  assert.deepEqual(rs.map((r) => r.s).sort(), [200, 409, 409]); t.close();
+});
+test('team flow: claim expiry posts the escalation, a note renews it', async () => {
+  const t = await teamRig({ INCIDENT_CLAIM_TTL_HOURS: '1' });
+  await t.call(`/incidents/${t.id}/claim`, { who: 'a' }); t.tick(40 * 60e3);
+  assert.equal((await t.call(`/incidents/${t.id}/note`, { who: 'a', text: 'looking at the plan' })).s, 200);
+  t.tick(40 * 60e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'claimed'); // renewed by the note
+  t.tick(30 * 60e3); const r = await t.call(`/incidents/${t.id}`);
+  assert.equal(r.j.status, 'open'); assert.ok(t.posts.some((p) => p.t === '\u23F0 claim expired, incident is open again' && p.k === 'thr-1'));
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'b' })).s, 200); t.close();
+});
+test('team flow: PR url allow-list, query strip, pr post, RESOLVED names PR and owner on release and on alert clear', async () => {
+  const t = await teamRig(), U = 'https://github.com/lakshyatyagi241/threadwise/pull/901';
+  for (const url of ['http://github.com/lakshyatyagi241/threadwise/pull/9', 'https://evil.com/lakshyatyagi241/threadwise/pull/9', 'https://github.com/lakshyatyagi241/threadwise/pull/9/files', 'https://github.com.evil.io/lakshyatyagi241/threadwise/pull/9', 'javascript:1', '']) assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'a', url, summary: 's' })).s, 400, url);
+  assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'a', url: U, summary: 's\nx' })).s, 400);
+  assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'a', url: U, number: 5, summary: 's' })).s, 400);
+  assert.equal((await t.call(`/incidents/${t.id}/note`, { who: 'a'.repeat(41), text: 'x' })).s, 400);
+  await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' });
+  assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'asha', url: U, summary: 's' })).s, 409);
+  const r = await t.call(`/incidents/${t.id}/pr`, { who: 'vedant', url: `${U}?token=SECRET#x`, number: 901, summary: 'add index <b>' });
+  assert.equal(r.j.status, 'pr_raised'); assert.equal(r.j.prUrl, U);
+  assert.match(t.posts.at(-1).t, /^\uD83D\uDD27 PR #901 raised by vedant at \d\d:\d\d UTC: add index <b> https:\/\/github.com\/lakshyatyagi241\/threadwise\/pull\/901$/);
+  assert.ok(t.posts.at(-1).card.includes('&lt;b>') && !t.posts.at(-1).card.includes('SECRET'));
+  t.tick(5 * 3600e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'pr_raised'); // a PR never expires
+  await t.resolver.setRelease('abc1234');
+  assert.match(t.posts.at(-1).t, /^\u2705 RESOLVED by PR #901 \(owner vedant\), release abc1234/);
+  assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'x' })).s, 409);
+  // alert-cleared path
+  const t2 = await teamRig(); await t2.call(`/incidents/${t2.id}/pr`, { who: 'asha', url: U, summary: 's' });
+  assert.equal(await t2.resolver.alertCleared('st:1'), true); assert.match(t2.posts.at(-1).t, /^\u2705 RESOLVED by PR #901 \(owner asha\)/);
+  t.close(); t2.close();
+});
+import { run as cli } from './incident-cli.mjs';
+test('incident-cli against a local bridge: list, claim, conflict exit 1, pr, note, config file mode, no secrets printed', async () => {
+  const t = await teamRig(), home = fs.mkdtempSync('/tmp/cli-home-'), lines = [];
+  const out = (s) => lines.push(s), base = { HOME: home, INCIDENT_API_URL: `http://127.0.0.1:${t.br.server.address().port}`, INCIDENT_API_TOKEN: 'tok-test' };
+  assert.equal(await cli(['list'], { ...base, INCIDENT_WHO: 'vedant' }, out), 0); assert.match(lines.at(-1), new RegExp(`${t.id}  open`));
+  assert.equal(await cli(['claim', t.id], { ...base, INCIDENT_WHO: 'vedant' }, out), 0);
+  assert.equal(await cli(['claim', t.id], { ...base, INCIDENT_WHO: 'asha' }, out), 1); assert.match(lines.at(-1), /refused \(409\).*owner: vedant/);
+  assert.equal(await cli(['pr', t.id, 'https://github.com/lakshyatyagi241/threadwise/pull/7?x=1', 'add index'], { ...base, INCIDENT_WHO: 'vedant' }, out), 0);
+  assert.equal(await cli(['note', t.id, 'ping'], { ...base, INCIDENT_WHO: 'vedant' }, out), 0);
+  assert.equal(await cli(['show', t.id], { ...base, INCIDENT_WHO: 'vedant' }, out), 0); assert.match(lines.at(-1), /"pr_raised"/);
+  assert.equal(await cli(['list'], { ...base, INCIDENT_API_TOKEN: 'bad', INCIDENT_WHO: 'v' }, out), 1); assert.match(lines.at(-1), /401/);
+  // token from a mode-600 file; a loose mode is refused
+  fs.mkdirSync(`${home}/.config/threadwise`, { recursive: true }); const f = `${home}/.config/threadwise/incidents.env`;
+  fs.writeFileSync(f, `INCIDENT_API_URL=${base.INCIDENT_API_URL}\nINCIDENT_API_TOKEN=tok-test\n`, { mode: 0o644 });
+  assert.equal(await cli(['list'], { HOME: home, INCIDENT_WHO: 'v' }, out), 2);
+  fs.chmodSync(f, 0o600); assert.equal(await cli(['list'], { HOME: home, INCIDENT_WHO: 'v' }, out), 0);
+  assert.ok(!lines.join('\n').includes('tok-test')); t.close(); fs.rmSync(home, { recursive: true });
+});

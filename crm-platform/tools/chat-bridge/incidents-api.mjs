@@ -5,7 +5,7 @@ import { timingSafeEqual, createHash } from 'node:crypto';
 
 const PR_RE = /^https:\/\/github\.com\/lakshyatyagi241\/threadwise\/pull\/(\d{1,7})$/;
 const STATUSES = ['open', 'claimed', 'pr_raised', 'resolved', 'escalated'];
-const CTRL = /[\u0000-\u001f\u007f-\u009f  ]/;
+const CTRL = /[\u0000-\u001f\u007f-\u009f\u2028\u2029]/;
 const text = (v, max) => typeof v === 'string' && v.trim() && v.length <= max && !CTRL.test(v) ? v.trim() : null;
 const sha = (s) => createHash('sha256').update(s).digest();
 

@@ -41,7 +41,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     if (a.status === 'resolved') {
       const end = Date.parse(a.endsAt); const dur = fmtDur((Number.isFinite(end) && end > 0 ? end : Date.now()) - started);
       threads.delete(fp);
-      if (await resolver?.alertCleared(`am:${fp}`)) return { ok: true }; // a PR was raised for it: RESOLVED names the PR
+      if (await resolver?.alertCleared?.(`am:${fp}`)) return { ok: true }; // a PR was raised for it: RESOLVED names the PR
       const inc = resolver?.byKey(`am:${fp}`);
       if (inc && inc.state === 'resolved') return { ok: true }; // the resolver already posted RESOLVED after verification
       if (inc && inc.state === 'open') return send(ch, alertCard(a, { grafanaUrl, title: 'Alertmanager reports it cleared; resolver verification still running', extra: widgetsOf([['Note', 'RESOLVED is only posted after the verification passes']]) }), { threadKey });
@@ -88,7 +88,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     log({ evt: 'am_webhook', alerts: alerts.length, delivered: ok });
     end(ok ? 200 : 502, JSON.stringify({ ok }));
   });
-  const sweep = resolver && setInterval(() => resolver.sweepClaims().catch(() => {}), 60_000); sweep?.unref();
+  const sweep = resolver && setInterval(() => resolver.sweepClaims?.().catch(() => {}), 60_000); sweep?.unref();
   server.on('close', () => clearInterval(sweep));
   return { server, metrics, send, log, resolver };
 }
