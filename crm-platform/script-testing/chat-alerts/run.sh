@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Google Chat alerts + slow-query watcher: unit tests, promtool/amtool, compose config, and a live e2e against a FAKE Chat receiver
-# and a throwaway Postgres database. Exit: 0 PASS, 1 FAIL, 2 ERROR. Ports (own): fake Chat 59611, bridge 59612.
+# and a throwaway Postgres database, plus the accuracy/resolver harness (tools/chat-bridge/accuracy; --quick runs a subset, 1 trial). Exit: 0 PASS, 1 FAIL, 2 ERROR. Ports (own): fake Chat 59611, bridge 59612.
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$HERE/../_lib/common.sh"
 st_init chat-alerts "Google Chat alerts and slow-query watcher"
@@ -32,6 +32,7 @@ st_run role_can_read_stats bash -c "docker exec -i crm-platform-postgres psql -U
 cd apps/api
 E2EFLAG=""; [ "$MODE" = quick ] && E2EFLAG="--quick"
 st_run e2e node "$ST_ROOT/tools/chat-bridge/e2e.mjs" "postgres://crm:crm@localhost:5432" "$DB" "$RO" "$OUT/e2e-results.json" $E2EFLAG
+st_run accuracy node "$ST_ROOT/tools/chat-bridge/accuracy/run.mjs" "postgres://crm:crm@localhost:5432" "$DB" "$RO" "$OUT/accuracy-results.json" $E2EFLAG
 cd "$ST_ROOT"
 [ -f "$OUT/e2e-results.json" ] && node -e 'for (const r of JSON.parse(require("fs").readFileSync(process.argv[1])).results) console.log("   "+r.status+" "+r.name+" "+r.detail)' "$OUT/e2e-results.json"
 st_finish

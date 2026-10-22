@@ -22,6 +22,7 @@ const checks = [];
 const check = (name, ok, detail = '') => { checks.push({ name, status: ok ? 'PASS' : 'FAIL', detail }); console.log(`${ok ? 'PASS' : 'FAIL'} ${name} ${detail}`); };
 const ENV = { SLOW_RUNNING_SECONDS: '3', SLOW_IDLE_TX_SECONDS: '3', CRITICAL_SLOW_SECONDS: '8', CRITICAL_BLOCK_SECONDS: '4', SLOW_MEAN_MS: '300', SLOW_MAX_PER_MINUTE: '100000', SLOW_COOLDOWN_SECONDS: '600', AUTO_REMEDIATE: 'off' };
 
+const RUN = Math.random().toString(36).slice(2, 6); // unique statement ids per run (pg_stat_statements keeps old ones)
 const setup = await mk('acc-setup');
 await setup.query('create table if not exists t_acc(a int)');
 await setup.query('create extension if not exists pg_stat_statements').catch(() => {});
@@ -40,14 +41,14 @@ const scenarios = [
   S('allow-listed migration job', { appName: 'nightly-migrate', run: (c, m) => c.query(`select pg_sleep(7) as ${m}`) }),
   S('burst of identical statements', { run: async (c, m) => { for (let i = 0; i < 60; i++) await c.query(`select pg_sleep(0.05) as ${m}`); } }),
   S('statement slow only once', { run: async (c, m) => { for (let i = 0; i < 200; i++) await c.query(`select pg_sleep($1::float8) as ${m}`, [0.001]); await c.query(`select pg_sleep($1::float8) as ${m}`, [1.2]); } }),
-  S('recurring slow statement 0.6 s', { expect: ['statement'], run: async (c, m) => { await c.query(`select pg_sleep(0.6) as ${m}`); await sleep(2500); for (let i = 0; i < 4; i++) await c.query(`select pg_sleep(0.6) as ${m}`); } }),
+  S('recurring slow statement 0.6 s', { expect: ['statement'], run: async (c, m) => { await c.query(`select pg_sleep(0.6) as ${m}`); await sleep(2500); for (let i = 0; i < 8; i++) await c.query(`select pg_sleep(0.6) as ${m}`); } }),
   S('clock edge: ends just before threshold (2 s)', { run: (c, m) => c.query(`select pg_sleep(2) as ${m}`) }),
 ];
 const indeterminate = S('clock edge: 3.4 s (threshold 3 s + poll 1 s, may be missed)', { run: (c, m) => c.query(`select pg_sleep(3.4) as ${m}`) });
 const use = quick ? scenarios.filter((s) => /^(fast|slow pg|critical|lock|idle|allow-listed pg_dump|statement slow only)/.test(s.name)) : scenarios;
 
 async function trial(n) {
-  const tag = `t${n}`, cards = [], metrics = createMetrics(), t0 = Date.now();
+  const tag = `t${n}${RUN}`, cards = [], metrics = createMetrics(), t0 = Date.now();
   const w = createWatcher({ query: (() => { let c; return async (sql, p) => { if (!c) { c = new Client({ connectionString: url(ro, 'ropw'), application_name: 'gchat-watcher' }); c.on('error', () => {}); await c.connect(); await c.query('set default_transaction_read_only = on'); trial.ro = c; } return c.query(sql, p); }; })(), env: ENV, metrics, log: () => {},
     send: async (channel, msg, o = {}) => { cards.push({ channel, t: Date.now(), kind: o.meta?.kind, app: o.meta?.app, threadKey: o.threadKey, json: JSON.stringify(msg) }); } });
   const clients = [], starts = {};
@@ -71,7 +72,9 @@ async function trial(n) {
   for (const c of clients) c.end().catch(() => {});
   await Promise.allSettled([...running, lb]);
   trial.ro?.end().catch(() => {});
-  // attribute cards to scenarios
+  // pg_stat_statements on a shared busy server evicts fresh entries (it holds 5000): a statement scenario whose entry vanished cannot be
+  // measured; it is reported as unmeasurable instead of counted as a miss.
+  const present = new Set((await setup.query(`select query from pg_stat_statements s join pg_database d on d.oid=s.dbid where d.datname=$1 and query like '%as m\\_%'`, [db])).rows.map((x) => x.query));
   return items.map((s) => {
     const app = s.special ? `acc-${s.app}-${tag}` : s.appUse;
     const mine = cards.filter((x) => x.kind && x.kind !== 'ended' && (x.app === app || x.json.includes(s.mark)));
@@ -81,7 +84,8 @@ async function trial(n) {
     for (const k of kinds) lat[k] = (mine.find((x) => x.kind === k).t - st) / 1000;
     const ended = s.resolveReply ? cards.some((x) => x.kind === 'ended' && mine.some((m) => m.threadKey === x.threadKey)) : null;
     const crit = mine.some((x) => x.channel === 'critical'), other = mine.some((x) => x.channel === 'other');
-    return { s, kinds, lat, ended, crit, other, nCards: mine.length };
+    const lost = s.expect.includes('statement') && ![...present].some((q) => q.includes(s.mark));
+    return { s, kinds, lat, ended, crit, other, nCards: mine.length, lost };
   });
 }
 
@@ -91,6 +95,7 @@ for (let n = 1; n <= trials; n++) {
   for (const r of await trial(n)) {
     const a = (rows[r.s.name] ??= { name: r.s.name, runs: 0, TP: 0, FN: 0, FP: 0, lat: [], indeterminate: r.s === indeterminate, channelOk: 0, channelRuns: 0, endedOk: 0, endedRuns: 0, cards: 0, expect: r.s.expect });
     a.runs++; a.cards += r.nCards;
+    if (r.lost) { a.unmeasurable = (a.unmeasurable ?? 0) + 1; a.runs--; continue; }
     if (a.indeterminate) { if (r.kinds.has('slow')) a.TP++; continue; }
     for (const k of r.s.expect) { if (r.kinds.has(k)) { a.TP++; a.lat.push(r.lat[k]); } else a.FN++; }
     for (const k of r.kinds) if (!r.s.expect.includes(k) && !r.s.allow.includes(k)) a.FP++;
@@ -99,7 +104,7 @@ for (let n = 1; n <= trials; n++) {
   }
 }
 const table = Object.values(rows);
-const real = table.filter((r) => !r.indeterminate);
+const real = table.filter((r) => !r.indeterminate && r.runs > 0);
 const TP = real.reduce((x, r) => x + r.TP, 0), FN = real.reduce((x, r) => x + r.FN, 0), FP = real.reduce((x, r) => x + r.FP, 0);
 const precision = TP + FP ? TP / (TP + FP) : 1, recall = TP + FN ? TP / (TP + FN) : 1;
 const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN);

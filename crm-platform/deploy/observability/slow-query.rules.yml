@@ -18,7 +18,7 @@ groups:
         labels: { severity: warning, group: slow_query }
         annotations:
           summary: '{{ $value | printf "%.0f" }} slow-query events in 10 min'
-          description: 'The watcher saw many running or slow statements. See the Slow Queries space and docs/runbooks/google-chat-alerts.md.'
+          description: 'The watcher saw many running or slow statements. See the slow-query cards in Other/Critical Chat and docs/runbooks/google-chat-alerts.md.'
           runbook_url: docs/runbooks/google-chat-alerts.md#slowqueryburst
 
       - alert: SlowQueryWatcherDown
