@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { BrandProvider } from './brand';
+import { createTitleBadge } from '@/features/notifications-activity-audit/live/alerts';
 import { PageTitle } from './page-title';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -74,5 +75,41 @@ describe('the tab title', () => {
       await Promise.resolve();
     });
     expect(document.title).toBe('Contacts | WABO DEMO');
+  });
+
+  it('keeps the unread badge instead of fighting it (the two title watchers must settle)', async () => {
+    pathname = '/contacts';
+    render();
+    // Count every write to the title: two watchers that keep undoing each other never stop, and in a browser that freezes the tab.
+    const real = Object.getOwnPropertyDescriptor(Document.prototype, 'title')!;
+    let writes = 0;
+    Object.defineProperty(document, 'title', {
+      configurable: true,
+      get: () => real.get!.call(document),
+      set: (v: string) => {
+        if (++writes > 50) throw new Error('title write loop');
+        real.set!.call(document, v);
+      },
+    });
+    const badge = createTitleBadge();
+    try {
+      badge.set(2);
+      for (let i = 0; i < 5; i += 1) {
+        await act(async () => {
+          await Promise.resolve();
+        });
+      }
+      expect(document.title).toBe('(2) Contacts | WABO DEMO');
+      expect(writes).toBeLessThan(10);
+      // The badge going away leaves the plain page title.
+      badge.set(0);
+      await act(async () => {
+        await Promise.resolve();
+      });
+      expect(document.title).toBe('Contacts | WABO DEMO');
+    } finally {
+      badge.dispose();
+      delete (document as { title?: string }).title;
+    }
   });
 });

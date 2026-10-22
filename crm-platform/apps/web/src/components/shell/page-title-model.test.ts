@@ -4,7 +4,7 @@ import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { SETTINGS } from '@/features/_registry/settings.generated';
 import { loadMessages } from '@/i18n/messages';
-import { documentTitle, pageLabelKey } from './page-title-model';
+import { documentTitle, pageLabelKey, splitTitleBadge } from './page-title-model';
 
 // The registries as the menu sees them for a person who may open everything (the gates only lock or hide, they never rename).
 const nav: ResolvedNavItem[] = NAV.map((n) => ({ ...n, locked: false, comingSoon: false }));
@@ -88,5 +88,19 @@ describe('documentTitle', () => {
       documentTitle({ label: 'Inbox', workspace: ' ', brand: 'Desk', serverTitle: null }),
     ).toBe('Inbox | Desk');
     expect(documentTitle({ ...base, label: '', serverTitle: 'Desk' })).toBeNull();
+  });
+});
+
+describe('splitTitleBadge', () => {
+  it('splits a leading unread badge off the title', () => {
+    expect(splitTitleBadge('(2) Dashboard | Acme')).toEqual({
+      badge: '(2) ',
+      rest: 'Dashboard | Acme',
+    });
+    expect(splitTitleBadge('(99+) Inbox')).toEqual({ badge: '(99+) ', rest: 'Inbox' });
+  });
+  it('leaves a title without a badge alone, and a bracket in the middle', () => {
+    expect(splitTitleBadge('Dashboard | Acme')).toEqual({ badge: '', rest: 'Dashboard | Acme' });
+    expect(splitTitleBadge('Q3 (2) plan')).toEqual({ badge: '', rest: 'Q3 (2) plan' });
   });
 });

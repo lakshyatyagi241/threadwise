@@ -56,3 +56,15 @@ export function documentTitle({ label, workspace, brand, serverTitle }: TitleInp
   if (!page) return null;
   return workspace.trim() ? `${page} | ${workspace.trim()}` : `${page} | ${brand}`;
 }
+
+// The unread badge `(3) ` that the live notifications put in front of the tab title (notifications-activity-audit/live/model.ts).
+const BADGE = /^\(\d+\+?\)\s+/;
+
+/**
+ * Splits a leading unread badge off a tab title. The title this module writes keeps whatever badge is already there: two watchers
+ * on the title (this one and the badge's) that each want a different text undo each other forever, and the tab freezes.
+ */
+export function splitTitleBadge(title: string): { badge: string; rest: string } {
+  const badge = BADGE.exec(title)?.[0] ?? '';
+  return { badge, rest: title.slice(badge.length) };
+}
