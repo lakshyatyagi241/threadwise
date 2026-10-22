@@ -555,7 +555,8 @@
           "cardCount": "{count, plural, one {# karta} few {# karty} many {# kart} other {# karty}}",
           "payLink": "Link do płatności",
           "invoice": "Faktura",
-          "faqRetired": "Wycofany · wychodzi przez brak dopasowania"
+          "faqAgent": "Odpowiada z {agent}",
+          "faqNoAgent": "Wybierz agenta AI"
         },
         "overlays": {
           "startPinned": "To jest punkt startowy (kliknij, aby odpiąć)",
@@ -914,12 +915,14 @@
             "hint": "Odwiedzający trafia do tego zespołu z Twoją notatką. Po tym przycisku nie trzeba niczego łączyć."
           },
           "faq": {
-            "exit": "Kontynuuj w",
-            "exitHint": "Przepływ zawsze idzie dalej tutaj."
+            "exit": "Gdy nic nie pasuje",
+            "exitHint": "Dokąd idzie przepływ, gdy żaden wpis nie odpowiada.",
+            "matched": "Gdy jest odpowiedź",
+            "matchedHint": "Dokąd idzie przepływ po wysłaniu odpowiedzi."
           }
         },
         "branchAdd": "Dodaj krok dla „{title}”",
-        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania.",
+        "faqEnds": "Ten krok kończy tę część: przepływ idzie dalej wyjściem Odpowiedziano lub Brak dopasowania.",
         "flowMenu": "Opcje: {name}",
         "renameFlow": "Zmień nazwę przepływu"
       },
@@ -1869,7 +1872,13 @@
           "waitUntilPaid": "Czekaj na płatność, a następnie kontynuuj"
         },
         "faq": {
-          "retired": "Ten krok został wycofany i niczego już nie wyszukuje. Przepływ zawsze idzie dalej przez Brak dopasowania. Aby odpowiadać na podstawie własnej wiedzy, użyj kroku asystenta AI i wybierz agenta AI."
+          "agent": "Agent AI",
+          "agentHint": "Agent, w którego bazie wiedzy szukamy. Dodaj do niego pytania i odpowiedzi w Szkoleniu AI.",
+          "query": "Szukaj",
+          "queryHint": "Czego szukać. Zwykle ostatniej wiadomości klienta.",
+          "sendAnswer": "Wyślij odpowiedź klientowi",
+          "variable": "Zapisz odpowiedź jako",
+          "variableHint": "Kolejne kroki odczytują odpowiedź pod tą nazwą, na przykład faq.answer."
         }
       },
       "attrPicker": {
@@ -2716,7 +2725,7 @@
       "simPurchase": "Symulowany zakup: {name} → wyjście „kupiono”",
       "simAbandon": "Symulowane porzucenie → wyjście „porzucono”",
       "locationSkipped": "(lokalizacja) pominięta: brak poprawnych współrzędnych",
-      "faqRetired": "(symulacja) Odpowiedź z FAQ jest wycofana: wybierane jest „brak dopasowania”."
+      "faqLine": "(symulacja) Odpowiedź z FAQ: w czacie testowym baza wiedzy nie jest przeszukiwana, wybrano „brak dopasowania”."
     }
   }
 }

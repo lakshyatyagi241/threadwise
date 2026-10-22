@@ -25,6 +25,11 @@ export interface KbRetrieval {
    */
   grounded: boolean;
   passages: KbPassage[];
+  /**
+   * How many of the first `passages` the search matched to the message. The rest (text not indexed yet, added as written) is context
+   * for an agent, not a match: a reader that must decide "did anything answer?" (the flow FAQ step) reads this, not `passages.length`.
+   */
+  hits?: number;
 }
 
 /**
@@ -99,6 +104,7 @@ export class KbRetrievalService {
       label: p.label,
       text: p.text,
     }));
+    const hits = picked.length;
     // Text the vectors do not cover yet is read as written, up to a budget: a new entry works at once.
     let budget = UNINDEXED_BUDGET_CHARS;
     for (const u of unindexed) {
@@ -106,6 +112,6 @@ export class KbRetrievalService {
       picked.push({ label: u.label, text: u.text.slice(0, budget) });
       budget -= u.text.length;
     }
-    return { grounded: true, passages: picked };
+    return { grounded: true, passages: picked, hits };
   }
 }

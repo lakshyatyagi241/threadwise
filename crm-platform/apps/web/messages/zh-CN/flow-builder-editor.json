@@ -555,7 +555,8 @@
           "cardCount": "{count} 张卡片",
           "payLink": "支付链接",
           "invoice": "发票",
-          "faqRetired": "已停用 · 从“无匹配”离开"
+          "faqAgent": "从 {agent} 回答",
+          "faqNoAgent": "选择 AI 代理"
         },
         "overlays": {
           "startPinned": "这是起点（点击取消固定）",
@@ -914,12 +915,14 @@
             "hint": "访客会连同您的备注转交给该团队。此按钮之后无需连接任何内容。"
           },
           "faq": {
-            "exit": "继续到",
-            "exitHint": "流程始终从这里继续。"
+            "exit": "没有匹配时",
+            "exitHint": "没有条目能回答时，流程走向哪里。",
+            "matched": "有回答时",
+            "matchedHint": "发送回答后，流程走向哪里。"
           }
         },
         "branchAdd": "为“{title}”添加步骤",
-        "faqEnds": "这个已停用的步骤会结束这一部分：流程始终从它的“无匹配”出口继续。",
+        "faqEnds": "此步骤到此结束：流程从“已回答”或“无匹配”出口继续。",
         "flowMenu": "{name} 的选项",
         "renameFlow": "重命名流程"
       },
@@ -1869,7 +1872,13 @@
           "waitUntilPaid": "等待付款后继续"
         },
         "faq": {
-          "retired": "此步骤已停用，不再查找任何内容。流程始终从“无匹配”继续。若要用你自己的知识回答，请使用 AI 助手步骤并选择一个 AI 智能体。"
+          "agent": "AI 代理",
+          "agentHint": "要搜索其知识库的代理。请在 AI 训练中为它添加常见问题。",
+          "query": "搜索内容",
+          "queryHint": "要查找的内容。通常是客户的最后一条消息。",
+          "sendAnswer": "将回答发送给客户",
+          "variable": "回答保存为",
+          "variableHint": "后续步骤用此名称读取回答，例如 faq.answer。"
         }
       },
       "attrPicker": {
@@ -2716,7 +2725,7 @@
       "simPurchase": "模拟购买：{name} → 出口 \"purchased\"",
       "simAbandon": "模拟放弃 → 出口 \"abandoned\"",
       "locationSkipped": "（位置）已跳过：没有有效的坐标",
-      "faqRetired": "（模拟）“从常见问题回答”已停用：走“无匹配”。"
+      "faqLine": "（模拟）从常见问题回答：测试聊天不会搜索知识库，按“无匹配”处理。"
     }
   }
 }

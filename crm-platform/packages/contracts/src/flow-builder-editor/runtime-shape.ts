@@ -335,8 +335,7 @@ const SHAPERS: Record<string, Shaper> = {
 
   faq: (d) => ({
     query: s(d.query, '{{user_message}}'),
-    category: s(d.category).trim(),
-    minScore: isNil(d.minScore) || d.minScore === '' ? null : Number(d.minScore),
+    assistant: s(d.assistant),
     sendAnswer: isNil(d.sendAnswer) ? true : toBool(d.sendAnswer),
     variable: variableFrom(d, 'save', 'faq'),
   }),

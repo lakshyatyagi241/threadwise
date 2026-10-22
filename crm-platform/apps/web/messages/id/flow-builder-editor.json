@@ -555,7 +555,8 @@
           "cardCount": "{count} kartu",
           "payLink": "Tautan bayar",
           "invoice": "Faktur",
-          "faqRetired": "Dihentikan · keluar lewat tidak cocok"
+          "faqAgent": "Menjawab dari {agent}",
+          "faqNoAgent": "Pilih agen AI"
         },
         "overlays": {
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
@@ -914,12 +915,14 @@
             "hint": "Pengunjung diteruskan ke tim ini dengan catatan Anda. Tidak perlu menyambungkan apa pun setelah tombol ini."
           },
           "faq": {
-            "exit": "Lanjutkan dengan",
-            "exitHint": "Alur selalu berlanjut ke sini."
+            "exit": "Jika tidak ada yang cocok",
+            "exitHint": "Ke mana alur pergi saat tidak ada entri yang menjawab.",
+            "matched": "Jika terjawab",
+            "matchedHint": "Ke mana alur pergi setelah jawaban dikirim."
           }
         },
         "branchAdd": "Tambah langkah untuk “{title}”",
-        "faqEnds": "Langkah yang dihentikan ini mengakhiri bagian ini: alur selalu berlanjut lewat jalur keluar Tidak cocok.",
+        "faqEnds": "Langkah ini mengakhiri bagian ini: alur berlanjut lewat jalur Terjawab atau Tidak cocok.",
         "flowMenu": "Opsi untuk {name}",
         "renameFlow": "Ganti nama alur"
       },
@@ -1869,7 +1872,13 @@
           "waitUntilPaid": "Tunggu hingga dibayar, lalu lanjutkan"
         },
         "faq": {
-          "retired": "Langkah ini sudah dihentikan dan tidak mencari apa pun lagi. Alur selalu berlanjut lewat Tidak cocok. Untuk menjawab dari pengetahuan Anda sendiri, gunakan langkah asisten AI dan pilih agen AI."
+          "agent": "Agen AI",
+          "agentHint": "Agen yang basis pengetahuannya dicari. Tambahkan FAQ di Pelatihan AI.",
+          "query": "Cari",
+          "queryHint": "Apa yang dicari. Biasanya pesan terakhir pelanggan.",
+          "sendAnswer": "Kirim jawaban ke pelanggan",
+          "variable": "Simpan jawaban sebagai",
+          "variableHint": "Langkah berikutnya membaca jawaban dengan nama ini, misalnya faq.answer."
         }
       },
       "attrPicker": {
@@ -2716,7 +2725,7 @@
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
       "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid",
-      "faqRetired": "(simulasi) Jawab dari FAQ sudah dihentikan: mengambil \"tidak cocok\"."
+      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\"."
     }
   }
 }
