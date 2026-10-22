@@ -51,6 +51,8 @@ export function Composer({
   const canSend = trimmed.length > 0 && !tooLong;
   // As in the reference app: the lock is for starting a note, so it steps aside while a reply is being typed.
   const showLock = onToggleNote !== undefined && (note || trimmed.length === 0);
+  // The tool buttons sit in their own row under the box: five controls in one row left the box about 60 dp wide on a phone.
+  const hasTools = showLock || (!note && Boolean(onOpenReplies ?? onOpenAttach ?? onOpenTemplates));
   return (
     <View
       style={[
@@ -62,87 +64,96 @@ export function Composer({
         },
       ]}
     >
-      {!note && onOpenReplies ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('inbox.replies.open')}
-          onPress={onOpenReplies}
-          style={styles.tool}
-        >
-          <Icon name="flash-outline" size={24} color="primary" />
-        </Pressable>
-      ) : null}
-      {!note && onOpenAttach ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('inbox.attach.open')}
-          onPress={onOpenAttach}
-          style={styles.tool}
-        >
-          <Icon name="attach" size={24} color="primary" />
-        </Pressable>
-      ) : null}
-      {!note && onOpenTemplates ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('inbox.template.send')}
-          onPress={onOpenTemplates}
-          style={styles.tool}
-        >
-          <Icon name="document-text-outline" size={24} color="primary" />
-        </Pressable>
-      ) : null}
-      <View style={styles.field}>
-        <TextField
-          label={note ? t('inbox.composer.noteLabel') : t('inbox.composer.label')}
-          placeholder={note ? t('inbox.composer.notePlaceholder') : t('inbox.composer.placeholder')}
-          value={value}
-          onChangeText={onChange}
-          multiline
-          error={
-            tooLong
-              ? note
-                ? t('inbox.details.notes.tooLong', { max })
-                : t('inbox.composer.tooLong', { max })
-              : null
-          }
+      <View style={styles.inputRow}>
+        <View style={styles.field}>
+          <TextField
+            label={note ? t('inbox.composer.noteLabel') : t('inbox.composer.label')}
+            placeholder={
+              note ? t('inbox.composer.notePlaceholder') : t('inbox.composer.placeholder')
+            }
+            value={value}
+            onChangeText={onChange}
+            multiline
+            error={
+              tooLong
+                ? note
+                  ? t('inbox.details.notes.tooLong', { max })
+                  : t('inbox.composer.tooLong', { max })
+                : null
+            }
+          />
+        </View>
+        <Button
+          label={note ? t('inbox.composer.addNote') : t('inbox.composer.send')}
+          loading={busy}
+          onPress={onSend}
+          disabled={!canSend}
         />
       </View>
-      {showLock ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={note ? t('inbox.composer.noteOff') : t('inbox.composer.noteOn')}
-          accessibilityState={{ selected: note }}
-          onPress={onToggleNote}
-          style={styles.tool}
-        >
-          <Icon
-            name={note ? 'lock-closed' : 'lock-closed-outline'}
-            size={22}
-            color={note ? 'warning' : 'textMuted'}
-          />
-        </Pressable>
+      {hasTools ? (
+        <View style={styles.tools}>
+          {!note && onOpenReplies ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('inbox.replies.open')}
+              onPress={onOpenReplies}
+              style={styles.tool}
+            >
+              <Icon name="flash-outline" size={24} color="primary" />
+            </Pressable>
+          ) : null}
+          {!note && onOpenAttach ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('inbox.attach.open')}
+              onPress={onOpenAttach}
+              style={styles.tool}
+            >
+              <Icon name="attach" size={24} color="primary" />
+            </Pressable>
+          ) : null}
+          {!note && onOpenTemplates ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('inbox.template.send')}
+              onPress={onOpenTemplates}
+              style={styles.tool}
+            >
+              <Icon name="document-text-outline" size={24} color="primary" />
+            </Pressable>
+          ) : null}
+          {showLock ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={note ? t('inbox.composer.noteOff') : t('inbox.composer.noteOn')}
+              accessibilityState={{ selected: note }}
+              onPress={onToggleNote}
+              style={[styles.tool, styles.lock]}
+            >
+              <Icon
+                name={note ? 'lock-closed' : 'lock-closed-outline'}
+                size={22}
+                color={note ? 'warning' : 'textMuted'}
+              />
+            </Pressable>
+          ) : null}
+        </View>
       ) : null}
-      <Button
-        label={note ? t('inbox.composer.addNote') : t('inbox.composer.send')}
-        loading={busy}
-        onPress={onSend}
-        disabled={!canSend}
-      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   bar: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: spacing.sm,
+    gap: spacing.xs,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
+  inputRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
   field: { flex: 1 },
+  tools: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  lock: { marginStart: 'auto' },
   tool: {
     width: MIN_TOUCH_TARGET,
     height: MIN_TOUCH_TARGET,
