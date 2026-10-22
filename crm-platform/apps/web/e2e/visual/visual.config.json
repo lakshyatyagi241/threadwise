@@ -1,0 +1,84 @@
+{
+  "_comment": "Read by scenarios.ts, by tools/visual and by the QA report, so the scenario count everywhere is the number the spec really generates. A scenario is one page at one viewport. Priority is chosen by the longest matching prefix: p0 (a customer cannot use the product without it, or it guards their data), p2 (operator, marketing and one-off pages); any other signed-in page is p1. Pages with a [param] need real data and are left out; the QA report counts them.",
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    },
+    "tablet": {
+      "width": 768,
+      "height": 1024
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "viewportsByPriority": {
+    "P0": ["desktop", "tablet", "mobile"],
+    "P1": ["desktop", "mobile"],
+    "P2": ["desktop"]
+  },
+  "p0": [
+    "/",
+    "/login",
+    "/register",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/verify-otp",
+    "/accept-invite",
+    "/find-workspace",
+    "/suspended",
+    "/onboarding",
+    "/dashboard",
+    "/inbox",
+    "/contacts",
+    "/account/security",
+    "/account/profile",
+    "/settings/team",
+    "/settings/roles",
+    "/billing/wallet",
+    "/billing/subscriptions",
+    "/channels",
+    "/broadcasts",
+    "/campaigns"
+  ],
+  "p2": [
+    "/about",
+    "/blog",
+    "/pricing",
+    "/features",
+    "/contact",
+    "/support",
+    "/legal",
+    "/admin",
+    "/impersonate",
+    "/i18n",
+    "/workspace-words",
+    "/confirm-email-change",
+    "/google-account/confirm",
+    "/developers",
+    "/more"
+  ],
+  "skipGroups": ["(admin)", "(embedded)", "(setup)", "(site-preview)"],
+  "authedGroups": ["(app)", "(gate)"],
+  "consentCookie": "crm_cookie_consent",
+  "fixedTime": "2026-01-15T09:30:00.000Z",
+  "diff": {
+    "maxDiffPixelRatio": 0.002,
+    "threshold": 0.2
+  },
+  "maxShotHeight": 3000,
+  "known": {
+    "/templates/new": "real defect: React hydration error #418 (a text mismatch between the server render and the browser) on every load of the page, with the real clock. Owner: message-templates. Fix: find the value rendered differently on the server and the client (a date, a locale string or Math.random) and render it after mount.",
+    "/credit-notes/new": "real defect: React hydration error #418 when the browser date differs from the server date (the default date is computed while rendering). The suite fixes the browser clock, which exposes it; a visitor in another time zone near midnight sees it too. Owner: invoicing. Fix: compute the default date after mount.",
+    "/estimates/new": "real defect: React hydration error #418 when the browser date differs from the server date (the default date is computed while rendering). The suite fixes the browser clock, which exposes it; a visitor in another time zone near midnight sees it too. Owner: sales-docs. Fix: compute the default date after mount.",
+    "/proposals/new": "real defect: React hydration error #418 when the browser date differs from the server date (the default date is computed while rendering). The suite fixes the browser clock, which exposes it; a visitor in another time zone near midnight sees it too. Owner: sales-docs. Fix: compute the default date after mount."
+  },
+  "hide": {
+    "/account/security": ["table tbody tr:not([class*=\"bg-success\"])"]
+  },
+  "_hide": "Elements removed before the screenshot, by page: content that depends on how many times the test signed in (the list of the account's sessions), which is not what a visual test should compare."
+}

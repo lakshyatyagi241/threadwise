@@ -1,0 +1,12 @@
+{
+  "id": "visual-regression",
+  "sheetItem": 21,
+  "title": "Visual regression testing",
+  "script": "run.sh",
+  "estMinutes": { "quick": 1, "full": 40 },
+  "heavy": true,
+  "needs": ["node22", "pnpm", "docker", "curl", "postgres", "redis"],
+  "proves": "Every P0 and P1 page at the viewports its priority asks for has a committed baseline (95% or more, checked on every pull request, so a new page without one fails), every scenario matches its baseline on a seeded stack with the clock, language, time zone, animation and dates fixed, every P0 scenario gives the same answer on every one of its repeated runs (zero flaky P0), and a deliberate change to a page is caught.",
+  "doesNotProve": "Other browsers (Chromium only; cross-browser is task 19), other operating systems (baselines are Linux Chromium), pages that need data ([id] and [token] routes), pages in the operator, embedded and setup groups, interaction states beyond the first paint, or the look of real customer data (the seeded workspace is mostly empty).",
+  "report": "docs/quality/visual-regression/visual-regression-REPORT.html"
+}

@@ -1,0 +1,44 @@
+name: visual-regression
+# QA task 21. Pull request: the coverage gate (no browser). Daily and by hand (pre-release): the full run, every scenario and the P0 repeats.
+on:
+  pull_request:
+    paths:
+      - 'apps/web/src/app/**/page.tsx'
+      - 'apps/web/e2e/visual/**'
+      - 'apps/web/playwright.config.ts'
+      - 'tools/visual/**'
+      - 'script-testing/visual-regression/**'
+      - '.github/workflows/visual-regression.yml'
+  schedule:
+    - cron: '47 3 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'quick or full (pre-release: full)'
+        default: 'full'
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm --filter @crm/web exec playwright install --with-deps chromium
+        if: github.event_name != 'pull_request' && github.event.inputs.mode != 'quick'
+      - run: pnpm infra:up
+        if: github.event_name != 'pull_request' && github.event.inputs.mode != 'quick'
+      - name: Visual regression
+        run: |
+          mode="${{ github.event_name == 'pull_request' && 'quick' || github.event.inputs.mode || 'full' }}"
+          if [ "$mode" = quick ]; then bash script-testing/visual-regression/run.sh --quick; else bash script-testing/visual-regression/run.sh; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-regression
+          path: |
+            qa-results/visual-regression
+            apps/web/e2e/.results
