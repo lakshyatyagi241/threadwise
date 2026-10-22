@@ -17,7 +17,7 @@ import { PropertyInput } from './custom-fields-section';
  * The "Custom properties" part of the bulk update dialog. Every property starts on Keep and is not listed; "Add property"
  * opens a searchable list (it stays usable with dozens of properties) and adds one row at a time. A row holds the property's own
  * typed input (the same one the contact form uses) and two ways out: "Clear" empties the property on every selected contact,
- * "Keep" takes the row away again so that property is left alone.
+ * "×" takes the row away again so that property is left alone.
  */
 export function BulkPropertiesSection({
   fields,
@@ -111,8 +111,15 @@ export function BulkPropertiesSection({
                       {t('properties.setValue')}
                     </Button>
                   )}
-                  <Button type="button" size="sm" variant="ghost" onClick={() => remove(f.key)}>
-                    {t('properties.keep')}
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t('properties.removeRow', { property: f.label })}
+                    title={t('properties.removeRow', { property: f.label })}
+                    onClick={() => remove(f.key)}
+                  >
+                    <span aria-hidden="true">&times;</span>
                   </Button>
                 </div>
               </li>

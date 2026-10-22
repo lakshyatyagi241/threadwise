@@ -1338,7 +1338,7 @@
         "closePicker": "閉じる",
         "changed": "変更するプロパティ",
         "clear": "クリア",
-        "keep": "変更しない",
+        "removeRow": "{property} を更新から削除",
         "setValue": "値を設定",
         "willClear": "{count, plural, other {選択したすべての#件の連絡先}}で空になります。",
         "requiredNoClear": "必須プロパティはクリアできません。",

@@ -1338,7 +1338,7 @@
         "closePicker": "Zamknij",
         "changed": "Właściwości do zmiany",
         "clear": "Wyczyść",
-        "keep": "Zachowaj",
+        "removeRow": "Usuń {property} z aktualizacji",
         "setValue": "Ustaw wartość",
         "willClear": "Zostanie opróżniona dla {count, plural, one {zaznaczonego kontaktu} few {wszystkich # zaznaczonych kontaktów} many {wszystkich # zaznaczonych kontaktów} other {wszystkich # zaznaczonych kontaktów}}.",
         "requiredNoClear": "Wymaganej właściwości nie można wyczyścić.",

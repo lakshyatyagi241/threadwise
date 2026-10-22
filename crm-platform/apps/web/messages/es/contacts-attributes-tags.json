@@ -1338,7 +1338,7 @@
         "closePicker": "Cerrar",
         "changed": "Propiedades a cambiar",
         "clear": "Borrar",
-        "keep": "Mantener",
+        "removeRow": "Quitar {property} de la actualización",
         "setValue": "Definir un valor",
         "willClear": "Se vaciará en {count, plural, one {el contacto seleccionado} other {los # contactos seleccionados}}.",
         "requiredNoClear": "Una propiedad obligatoria no se puede borrar.",

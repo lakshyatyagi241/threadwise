@@ -90,7 +90,7 @@ describe('BulkPropertiesSection', () => {
     expect(out).toContain('type="date"');
     expect(out).toContain('value="2026-03-04"');
     expect((out.match(/>Clear</g) ?? []).length).toBe(4);
-    expect((out.match(/>Keep</g) ?? []).length).toBe(4);
+    expect((out.match(/aria-label="Remove Label \w+ from the update"/g) ?? []).length).toBe(4);
   });
 
   it('a cleared property shows what will happen and offers "Set a value"; a required one cannot be cleared', () => {
