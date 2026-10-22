@@ -82,3 +82,18 @@ export function flbCarouselReplies(
 
 /** True when `url` is a picture address the chat window may load. */
 export const flbCarouselImageOk = (url: string): boolean => /^https?:\/\/\S+$/i.test(url.trim());
+
+/**
+ * A picture address the chat can use: an http(s) link, with spaces and other characters a browser would write as %XX written that way
+ * (a camera's `IMG 1234.JPG` is a usual name). Null for anything else, so a card without a usable picture shows without one.
+ */
+export function flbImageUrl(raw: unknown): string | null {
+  const s = typeof raw === 'string' ? raw.trim() : '';
+  if (s === '') return null;
+  try {
+    const u = new URL(s);
+    return u.protocol === 'http:' || u.protocol === 'https:' ? u.href : null;
+  } catch {
+    return null;
+  }
+}
