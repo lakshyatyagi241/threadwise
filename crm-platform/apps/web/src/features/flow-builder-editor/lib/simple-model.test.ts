@@ -1322,7 +1322,10 @@ describe('the Human handoff returned exit in the Simple builder (Return to bot)'
 });
 
 describe('the closed step card text', () => {
-  const withText = (type: 'message' | 'ask', data: Record<string, unknown>) => ({
+  const withText = (
+    type: 'message' | 'ask' | 'ask_file' | 'ask_location',
+    data: Record<string, unknown>,
+  ) => ({
     ...newStep(type, []),
     data,
   });
@@ -1334,8 +1337,19 @@ describe('the closed step card text', () => {
     expect(stepText(withText('ask', { prompt: '_Your name?_' }))).toBe('_Your name?_');
   });
 
+  it('shows the question of an Ask for file / location step, the text the customer is asked', () => {
+    expect(stepText(withText('ask_file', { prompt: 'Send your *ID card*' }))).toBe(
+      'Send your *ID card*',
+    );
+    expect(stepText(withText('ask_location', { prompt: 'Where are you?' }))).toBe('Where are you?');
+    expect(stepSummary(withText('ask_file', { prompt: 'Send your ID' }), (key) => key)).toBe(
+      'Send your ID',
+    );
+  });
+
   it('gives no text for a step that sends none of its own', () => {
     expect(stepText(withText('ask', {}))).toBe('');
+    expect(stepText(withText('ask_file', {}))).toBe('');
     expect(stepText({ ...newStep('webhook', []), data: { url: 'https://x.test/a_b_c' } })).toBe('');
   });
 
