@@ -23,8 +23,8 @@ Dotted, resource-first, action-last:
 ```
 record.contacts.read        record.contacts.update
 inbox.conversation.assign   broadcast.campaign.start
-billing.wallet.topup        exam.application.verify
-partner.agent.manage        admin.role.manage
+billing.wallet.topup        admin.role.manage
+partner.agent.manage
 ```
 
 Custom modules auto-register `record.<module>.<action>` at creation, which is
