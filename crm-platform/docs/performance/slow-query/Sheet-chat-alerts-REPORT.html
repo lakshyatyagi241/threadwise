@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Chat alerts and slow queries - report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#59636e;--card:#f4f6f8;--line:#d0d7de;--a:#1f5fbf;--b:#b4540a;--c:#6b7480;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9aa4af;--card:#161b22;--line:#30363d;--a:#6ea8fe;--b:#f0a05a;--c:#8b949e;--ok:#3fb950;--warn:#d29922;--bad:#ff7b72}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{font-size:1.05rem;margin:1.2em 0 .3em}
+.badge{display:inline-block;padding:.1em .6em;border-radius:1em;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.partly{color:var(--warn)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.meta{color:var(--mut);font-size:.92rem}.meta code{word-break:break-all}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile b{display:block;font-size:1.7rem;line-height:1.1}.tile span{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}
+blockquote{margin:8px 0;padding:6px 12px;border-left:4px solid var(--a);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+figure{margin:14px 0}figcaption{color:var(--mut);font-size:.88rem}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}svg .m{fill:var(--mut)}
+.warn{color:var(--warn)}.chip{font-size:.78rem;font-weight:700;padding:0 .45em;border:1px solid currentColor;border-radius:4px;white-space:nowrap}
+code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
+@media print{body{font-size:11pt}main{max-width:none}table,figure,.box,.tile{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Google Chat alerts and slow queries</h1>
+<p><span class="badge partly">Partly met: built and tested locally, not run on the real host</span></p>
+<p class="meta">Owner: Vedant &middot; Date: 2026-10-22 &middot; Branch: <code>vedant/ops/google-chat-alerts</code> &middot; PR: none (local commits only)</p>
+<blockquote>Goal: all alerts and slow queries land in 4 Google Chat spaces: Slow Queries, Deployments, Critical Alerts, Other Alerts.</blockquote>
+</header>
+<h2>In 60 seconds</h2>
+<div class="tiles">
+<div class="tile"><b>28 / 28</b><span>runner checks pass in full mode (65 s); 8 unit tests; 5 promtool alert tests</span></div>
+<div class="tile"><b>~56 MB</b><span>idle RSS of the bridge process measured locally (limit set to 96 MB; with the watcher polling it is not measured under load)</span></div>
+<div class="tile"><b>0</b><span>real Google Chat calls: a fake receiver was used</span></div>
+</div>
+<p><strong>Verdict: Partly met.</strong> Critical, Other and Slow Queries spaces are wired (bridge, watcher, Alertmanager config, rules, compose service, runbook). The Deployments space and the Grafana contact points are built on a separate branch and are not in this report.</p>
+<h2>What was built</h2>
+<p>A small Node process (<code>tools/chat-bridge</code>) receives Alertmanager webhooks and posts cards to Google Chat. The same process polls Postgres every 15 s with a read-only role and posts slow queries with all literals stripped. Everything is optional: the service starts only when asked.</p>
+<h2>How it was tested</h2>
+<p>The real bridge and watcher process run against a fake Chat receiver and a throwaway database with <code>pg_stat_statements</code> (dev container). Checks: routing critical / warning / resolved / slow_query, Watchdog dropped but counted, big payload split, 5xx and 429 retried, permanent failure gives 502 without crashing, <code>pg_sleep(7)</code> gives one post with no email, phone, token or number, a statement delta post, burst limited to 10 per minute followed by a digest, secrets absent from logs and <code>/metrics</code>. Also promtool, amtool on all four Alertmanager files, <code>docker compose config</code>, <code>bash -n</code> and the runbook ratchet.</p>
+<h2>Findings</h2>
+<table><tr><th>Found</th><th>Status</th></tr>
+<tr><td>pg_stat_statements repeats one queryid per database and role; keying by queryid alone broke the delta</td><td>fixed (found by the e2e)</td></tr>
+<tr><td>On a busy shared cluster, the top-50 by total time hid the probe statement</td><td>fixed (top 200 by mean)</td></tr>
+<tr><td><code>shared_preload_libraries=pg_stat_statements</code> already in <code>deploy/hostinger/docker-compose.yml</code></td><td>nothing added</td></tr>
+<tr><td>If Alertmanager or the bridge is dead, ChatBridgeNoWatchdog cannot reach Chat</td><td>open: Grafana contact points (other branch) cover it</td></tr></table>
+<h2>What this does NOT prove</h2>
+<ul><li>Delivery to real Google Chat and how the cards look there.</li><li>The real production Postgres, its role grants, or pg_stat_statements on it.</li><li>Memory under production load; the <code>pg</code> module resolution inside the real <code>desk-api</code> image.</li><li>Grafana contact points, the Grafana rule and dashboard, and the deploy-main notifier (other branch).</li><li>The full alerting and health-readiness runners were not re-run (apps/api is not built here); only their promtool and ratchet parts were.</li></ul>
+<h2>Appendix: commands</h2>
+<pre>bash script-testing/chat-alerts/run.sh            # PASS, 65 s
+bash script-testing/chat-alerts/run.sh --quick    # PASS earlier run, burst step skipped
+node --test tools/chat-bridge/chat-bridge.unit.test.mjs   # 8 pass
+node tools/alerting/check-alert-runbooks.mjs; node --test tools/alerting/check-alert-runbooks.test.mjs   # ok, 8 pass
+bash deploy/hostinger/tests/ci-entry.test.sh      # 113 passed</pre>
+</main>
+</body>
+</html>
