@@ -166,10 +166,13 @@ const SELECT_COLUMNS = sql.raw(`
 
 const SELECT_ROW = sql`${SELECT_COLUMNS}, ${channelOwnerSql('c')} AS channel_owner_user_id`;
 
+/** The conversation's contact, on the primary key: at most one row, so joining it never repeats a conversation. */
+const CONTACT_JOIN = sql`LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id`;
+
 const FROM_ROW = sql`
   FROM conversations c
   JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
-  LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
+  ${CONTACT_JOIN}
   LEFT JOIN users au ON au.org_id = c.org_id AND au.id = c.assignee_user_id
   LEFT JOIN teams tm ON tm.org_id = c.org_id AND tm.id = c.assignee_team_id
   LEFT JOIN ai_agents aa ON aa.org_id = c.org_id AND aa.id = c.assignee_agent_id`;
@@ -314,7 +317,8 @@ export class ConversationsRepository {
     f: CountFilter,
   ): Promise<InboxCounts> {
     const scope = this.scopeWhere(orgId, viewer, f);
-    const from = sql`FROM conversations c ${scope.joins}`;
+    // The search reads the contact's name through `ct`. The list's FROM joins it already; the counts join it only when they search.
+    const from = sql`FROM conversations c ${f.q ? CONTACT_JOIN : sql``} ${scope.joins}`;
     const where = (extra: SQL[]) => sql.join([...scope.where, ...extra], sql` AND `);
 
     if (f.archived) {
@@ -666,11 +670,10 @@ export class ConversationsRepository {
   /**
    * Name, number or last message, as typed: the contact's name too, since a thread's own title can be older than a rename.
    *
-   * The contact branch is a correlated EXISTS, as the list had it before. Measured as the app role (RLS on) with 300k named contacts:
-   * a typical contact-name term takes about 2 s, a term that matches every contact about 1.6 s. Id-list forms were tried and rejected:
-   * `= ANY (ARRAY(...))` took 68 s for the one-letter term (a per-row scan of a 300k-element list), and `IN (subquery)` did not hash
-   * within work_mem and degraded the same way. Narrow peer-name terms without the branch are index-driven; with it, every candidate is
-   * checked. Making the contact match index-driven for every term length needs a semi-join redesign and a decision on short terms.
+   * The contact's name is `ct.name`, read from the LEFT JOIN on the primary key (CONTACT_JOIN). That join matches at most one row, so the
+   * set is the one a correlated EXISTS gives, and the planner can hash-join the contacts instead of probing them once per candidate row.
+   * Terms under three characters cannot use the trigram indexes on any column, so they still scan; whether they should match names at
+   * all is an owner decision and is not changed here.
    */
   private searchCondition(orgId: number, q: string): SQL {
     const like = likePattern(q);
@@ -679,7 +682,7 @@ export class ConversationsRepository {
       sql`c.peer_name ILIKE ${like}`,
       sql`c.peer_key ILIKE ${like}`,
       sql`c.preview ILIKE ${like}`,
-      sql`EXISTS (SELECT 1 FROM contacts sc WHERE sc.org_id = c.org_id AND sc.id = c.contact_id AND sc.name ILIKE ${like})`,
+      sql`ct.name ILIKE ${like}`,
     ];
     // "+91 98765-43210" must find 919876543210: compare the digits of the query with the digits stored as the peer key.
     const digits = q.replace(/\D/g, '');
