@@ -7,6 +7,19 @@ import { MoreIcon } from './icons';
 
 const PANEL_W = 208;
 
+/** Whether a scroll (or resize) event comes from inside the panel: those are not the page moving, so they must not close it. */
+export function isInside(
+  panel: { contains(node: Node): boolean } | null,
+  target: EventTarget | null,
+): boolean {
+  return (
+    panel !== null &&
+    typeof Node !== 'undefined' &&
+    target instanceof Node &&
+    panel.contains(target)
+  );
+}
+
 /**
  * The "..." menu of a table row. The panel is drawn in a portal at the page level and positioned from the button, so
  * the table's own scrolling and its frozen cells can neither clip it nor paint over it. Escape, a press outside,
@@ -86,7 +99,11 @@ export function RowMenu({
         list[(at <= 0 ? list.length : at) - 1]?.focus();
       } else if (e.key === 'Tab') setOpen(false);
     };
-    const onMove = () => setOpen(false);
+    // The page moving under the panel closes it; the panel's own list scrolling (the column picker's) does not.
+    const onMove = (e: Event) => {
+      if (isInside(panel.current, e.target)) return;
+      setOpen(false);
+    };
     document.addEventListener('pointerdown', onPress);
     document.addEventListener('keydown', onKey);
     window.addEventListener('resize', onMove);
