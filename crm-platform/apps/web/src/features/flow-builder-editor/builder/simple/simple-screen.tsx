@@ -97,6 +97,10 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' 
  * steps one under another, grouped in flows ("journeys") like the console's bot builder; a button or list row leads to any step.
  * It saves the same graph the Advanced canvas does, through the same API, so a flow runs the same and opens in either builder.
  */
+/** A button that cannot be pressed now (nothing to save, already published): grey but still readable, not a faded ghost of itself. */
+const QUIET_DISABLED =
+  'disabled:opacity-100 disabled:border-border disabled:bg-muted disabled:text-muted-foreground';
+
 export function SimpleScreen({
   flowId: initialFlowId,
   channel = 'chat',
@@ -709,6 +713,7 @@ function Editor({
               variant="secondary"
               size="sm"
               disabled={busy || !dirty}
+              className={QUIET_DISABLED}
               onClick={() => void onSave()}
             >
               {t('save')}
@@ -717,6 +722,7 @@ function Editor({
               variant={published && !dirty ? 'secondary' : 'brand'}
               size="sm"
               disabled={busy || (published && !dirty)}
+              className={published && !dirty ? QUIET_DISABLED : undefined}
               onClick={() => void onPublish()}
             >
               {published ? t('publishChanges') : t('publish')}
