@@ -18,6 +18,14 @@ You need to see the locks, so one workspace must be on a plan WITHOUT the two up
 | **B**     | a plan with both of those flags **off** (for example the seeded Starter) | installed, running | sees every lock, still gets the included parts |
 | **C**     | any plan                                                              | **not** subscribed/installed | nothing of Appointments is visible             |
 
+How to set the flags in the operator console:
+
+1. Open `/admin/workspace-plans`, find the workspace, and use **Edit**, then **feature overrides**.
+2. For **A**: set `appointment_booking`, `appointment_confirm_buttons` and `appointment_rebook_steps` to on.
+3. For **B**: set `appointment_booking` to on and `appointment_confirm_buttons` and `appointment_rebook_steps` to **off** (an explicit off override beats the plan, so B shows every lock even on a plan row that has no entry for them).
+4. Alternatively give B a real plan without the two flags (Plans, the plan, Features tab, both switched off), and leave the overrides empty. A workspace override always wins over the plan.
+5. Reload the app in the workspace after changing an override.
+
 Notes:
 
 - The app flag is `appointment_booking` (the Appointments app in the Marketplace). It must be installed and running in A and B. The app listing grants only `appointment_booking`;

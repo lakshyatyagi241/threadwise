@@ -407,6 +407,43 @@ describe('the report, the history and the send', () => {
     await flags(t, { buttons: true, rebook: true });
   });
 
+  it('filters by date range, answers empty for a quiet period, and never shows another workspace', async () => {
+    const { type, a } = await book([timed({ offsetMinutes: 60, stepKind: 'reminder' })]);
+    await arrange(a.id, 30);
+    await sweep.sweep();
+    await sweep.deliver();
+    const day = 86_400_000;
+    const inside = await api
+      .as(t.admin)
+      .get(
+        `/v2/appointment-reminder-report?bookingTypeId=${type.id}&from=${new Date(Date.now() - day).toISOString()}&to=${new Date(Date.now() + day).toISOString()}`,
+      );
+    expect(inside.status, JSON.stringify(inside.body)).toBe(200);
+    expect(inside.body.data[0].steps[0].sent).toBe(1);
+    // a window in the past holds nothing: an empty list, not an error
+    const past = await api
+      .as(t.admin)
+      .get(
+        `/v2/appointment-reminder-report?bookingTypeId=${type.id}&from=${new Date(Date.now() - 40 * day).toISOString()}&to=${new Date(Date.now() - 30 * day).toISOString()}`,
+      );
+    expect(past.status).toBe(200);
+    expect(past.body.data).toEqual([]);
+    // another workspace sees none of it, and cannot ask for this workspace's booking type
+    const other = await api.signup('grepiso');
+    const theirs = await api
+      .as(other.admin)
+      .get(`/v2/appointment-reminder-report?bookingTypeId=${type.id}`);
+    expect(theirs.status).toBe(200);
+    expect(theirs.body.data).toEqual([]);
+    const all = await api.as(other.admin).get('/v2/appointment-reminder-report');
+    expect(all.body.data).toEqual([]);
+    // a viewer may read it; someone without the right to view booking types may not
+    const viewer = await api.member(t, 'grepviewer', [['record.booking-types.read']]);
+    expect((await api.as(viewer.token).get('/v2/appointment-reminder-report')).status).toBe(200);
+    const none = await api.member(t, 'grepnone', [['record.appointments.read']]);
+    expect((await api.as(none.token).get('/v2/appointment-reminder-report')).status).toBe(403);
+  });
+
   it('the appointment lists the channels tried, the fallback and the button replies (every plan)', async () => {
     const { a } = await book([timed({ offsetMinutes: 60, stepKind: 'reminder' })]);
     await arrange(a.id, 30);
