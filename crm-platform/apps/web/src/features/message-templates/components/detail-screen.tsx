@@ -16,7 +16,13 @@ import {
 import { canSendViaApi, templateSendCurl } from '../lib/curl';
 import { clearFlash, peekFlash } from '../lib/flash';
 import { previewOfSummary } from '../lib/preview';
-import { REJECTION_CODES, canEdit, canRefresh, isAwaitingReview } from '../lib/status-model';
+import {
+  REJECTION_CODES,
+  canDuplicate,
+  canEdit,
+  canRefresh,
+  isAwaitingReview,
+} from '../lib/status-model';
 import { connectionLabel, usableConnections } from '../lib/sync';
 import { ErrorAlert } from './error-line';
 import {
@@ -352,6 +358,15 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
               >
                 <PencilIcon className="size-3.5" />
                 {t('editTemplate')}
+              </Link>
+            )}
+            {mayEdit && canDuplicate(tpl.status, tpl.templateType) && (
+              <Link
+                href={`/templates/new?from=${tpl.id}`}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] hover:bg-muted"
+              >
+                <CopyIcon className="size-3.5" />
+                {t('duplicateTemplate')}
               </Link>
             )}
             {isApproved && (

@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl';
 import type { TemplateSummary } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { canSendViaApi } from '../lib/curl';
-import { canEdit, statusGroupOf } from '../lib/status-model';
+import { canDuplicate, canEdit, statusGroupOf } from '../lib/status-model';
 import { previewOfSummary } from '../lib/preview';
 import { CategoryPill } from './badges';
-import { ChatIcon, CodeIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
+import { ChatIcon, CodeIcon, CopyIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
 import { MessageBubble } from './wa-bubble';
 
 const DOT = {
@@ -122,6 +122,16 @@ export function TemplateCard({
         >
           <EyeIcon className="size-3.5" />
         </Link>
+        {mayEdit && canDuplicate(tpl.status, tpl.templateType) && (
+          <Link
+            href={`/templates/new?from=${tpl.id}`}
+            title={t('duplicate')}
+            aria-label={t('duplicateNamed', { name: tpl.name })}
+            className="grid size-8 place-items-center rounded-full border border-border bg-background transition hover:border-brand hover:bg-brand/10 hover:text-brand"
+          >
+            <CopyIcon className="size-3.5" />
+          </Link>
+        )}
         {mayCurl && canSendViaApi(tpl) && (
           <Link
             href={`/templates/${tpl.id}#curl`}

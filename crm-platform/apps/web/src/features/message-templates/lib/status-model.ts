@@ -61,6 +61,13 @@ export const canEdit = (s: TplStatus, templateType: string = 'standard'): boolea
 export const isLive = (s: TplStatus, metaTemplateId: string | null): boolean =>
   (s === 'approved' || s === 'paused') && metaTemplateId !== null;
 
+/**
+ * An approved template keeps its name on Meta, so a copy is how its name changes: Duplicate opens a new template filled in from it,
+ * named `<name>_copy`, which is saved and submitted as a template of its own.
+ */
+export const canDuplicate = (s: TplStatus, templateType: string = 'standard'): boolean =>
+  s === 'approved' && BUILDABLE_TYPES.includes(templateType);
+
 /** The library's status tabs (Reference's effective status): `all`, then the three groups the API filters on. */
 export const STATUS_TABS = ['all', 'approved', 'pending', 'rejected'] as const;
 export type StatusTab = (typeof STATUS_TABS)[number];
