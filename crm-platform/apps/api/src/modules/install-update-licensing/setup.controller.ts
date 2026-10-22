@@ -20,6 +20,7 @@ import {
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { Throttle } from '../platform-infrastructure';
 import { SetupService } from './setup.service';
 
 /**
@@ -29,6 +30,8 @@ import { SetupService } from './setup.service';
  */
 @ApiTags('setup')
 @Public()
+// the setup token is a deploy-time secret every call here checks, so guessing it is capped; setup is a one-off, 30 a minute is ample
+@Throttle({ limit: 30, windowSeconds: 60, by: 'ip' })
 @Controller({ path: 'setup', version: '2' })
 export class SetupController {
   constructor(private readonly setup: SetupService) {}

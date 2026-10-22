@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Sluiten"
     },
+    "list": {
+      "unofficialDisabled": "Onofficieel (uitgeschakeld)"
+    },
     "detail": {
       "back": "Terug",
       "crumb": "Broadcasts / Analyses / #{ref}",

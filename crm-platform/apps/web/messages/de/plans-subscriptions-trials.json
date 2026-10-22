@@ -60,6 +60,8 @@
       "remove_branding": "Branding entfernen",
       "sales_pipeline": "Vertriebspipeline",
       "appointment_booking": "Terminbuchung",
+      "appointment_confirm_buttons": "Erinnerungs-Schaltflächen (Bestätigen / Verschieben / Absagen)",
+      "appointment_rebook_steps": "Schritte zur erneuten Buchung (Reaktivierung)",
       "chatbot_widgets": "Chatbot-Widgets",
       "wa_storefront": "WhatsApp-Katalog",
       "inbox_sla": "SLA-Richtlinien",

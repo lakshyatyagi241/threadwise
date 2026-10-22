@@ -60,6 +60,8 @@
       "remove_branding": "Hapus branding",
       "sales_pipeline": "Pipeline penjualan",
       "appointment_booking": "Pemesanan janji temu",
+      "appointment_confirm_buttons": "Tombol pengingat (Konfirmasi / Jadwalkan Ulang / Batalkan)",
+      "appointment_rebook_steps": "Langkah pemesanan ulang (recall)",
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Kebijakan SLA",

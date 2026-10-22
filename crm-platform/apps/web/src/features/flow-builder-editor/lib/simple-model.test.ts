@@ -19,6 +19,8 @@ import {
   STEP_KINDS,
   stageIn,
   stepLabel,
+  stepSummary,
+  stepText,
   removeStep,
   stageLabel,
   LINK_END,
@@ -722,6 +724,7 @@ describe('steps per channel', () => {
         'delay',
         'cta',
         'webhook',
+        'ai',
       ]),
     );
   });
@@ -790,6 +793,54 @@ describe('the carousel step', () => {
       ['p0', a.id],
       ['p1', b.id],
     ]);
+  });
+
+  it('goes anywhere: a step may follow it, and a reply button can carry on with that step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const c = newStep('carousel', allSteps(d));
+    d = insertStep(d, 0, 1, c);
+    d = updateStep(d, c.id, { data: two() });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 2, after);
+    // Inserted at the end after the carousel: every reply that led nowhere carries on with it.
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', after.id],
+      ['p1', after.id],
+    ]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) {
+      expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([first.id, c.id, after.id]);
+      expect(back.doc.journeys[0]!.steps[1]!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    }
+  });
+
+  it('a carousel with only link buttons carries on by its next wire', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }],
+      },
+    });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 1, after);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([['next', after.id]]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([c.id, after.id]);
   });
 
   it('asks for a card with a title, and for a name and an address on every button', () => {
@@ -1267,5 +1318,29 @@ describe('the Human handoff returned exit in the Simple builder (Return to bot)'
     const g = handoffGraph();
     g.flowEdges.push(edge('h', 'waiting', 'm'));
     expect(toSimple(g)).toMatchObject({ ok: false });
+  });
+});
+
+describe('the closed step card text', () => {
+  const withText = (type: 'message' | 'ask', data: Record<string, unknown>) => ({
+    ...newStep(type, []),
+    data,
+  });
+
+  it('keeps the marks and every line break for the message box to draw', () => {
+    expect(stepText(withText('message', { text: '*Welcome*\n\nHello _there_' }))).toBe(
+      '*Welcome*\n\nHello _there_',
+    );
+    expect(stepText(withText('ask', { prompt: '_Your name?_' }))).toBe('_Your name?_');
+  });
+
+  it('gives no text for a step that sends none of its own', () => {
+    expect(stepText(withText('ask', {}))).toBe('');
+    expect(stepText({ ...newStep('webhook', []), data: { url: 'https://x.test/a_b_c' } })).toBe('');
+  });
+
+  it('keeps the one-line summary: lines joined, cut at 40 characters', () => {
+    const s = withText('message', { text: '*Welcome to campaigns for geta.ai* _Hello\nthere_' });
+    expect(stepSummary(s, (key) => key)).toBe('*Welcome to campaigns for geta.ai* _Hell…');
   });
 });

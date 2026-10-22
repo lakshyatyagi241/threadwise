@@ -61,7 +61,7 @@ export function SecurityEvents() {
   const rows = useMemo(() => q.data?.pages.flatMap((p) => p.data) ?? [], [q.data]);
   const when = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'medium' }),
-    [locale],
+    [locale, timeZone],
   );
 
   const apply = (next: EventFilters) => {

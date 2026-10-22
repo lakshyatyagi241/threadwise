@@ -74,23 +74,20 @@ describe('template rules (TW-FLR-026)', () => {
   });
 
   it('the node keeps only well-formed fills from the builder', () => {
-    const g = compileGraph(
-      {
-        flowNodes: [
-          {
-            id: 'a',
-            type: 'template',
-            data: {
-              tpl: 'x',
-              tplVars: { 'body:1': ' Gold ', bad: 'z', 'body:2': '' },
-              tplMedia: ' https://a.b/c.png ',
-            },
+    const g = compileGraph({
+      flowNodes: [
+        {
+          id: 'a',
+          type: 'template',
+          data: {
+            tpl: 'x',
+            tplVars: { 'body:1': ' Gold ', bad: 'z', 'body:2': '' },
+            tplMedia: ' https://a.b/c.png ',
           },
-        ],
-        flowEdges: [],
-      } as never,
-      'chat',
-    );
+        },
+      ],
+      flowEdges: [],
+    } as never);
     const node = Object.values(
       (g as unknown as { nodes: Record<string, { props: Record<string, unknown> }> }).nodes,
     )[0]!;

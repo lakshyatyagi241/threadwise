@@ -60,6 +60,8 @@
       "remove_branding": "הסרת מיתוג",
       "sales_pipeline": "צינור מכירות",
       "appointment_booking": "הזמנת פגישות",
+      "appointment_confirm_buttons": "כפתורי תזכורת (אישור / שינוי מועד / ביטול)",
+      "appointment_rebook_steps": "שלבי הזמנה מחדש (תזכורת חוזרת)",
       "chatbot_widgets": "ווידג׳טים של צ׳אטבוט",
       "wa_storefront": "קטלוג WhatsApp",
       "inbox_sla": "מדיניות SLA",

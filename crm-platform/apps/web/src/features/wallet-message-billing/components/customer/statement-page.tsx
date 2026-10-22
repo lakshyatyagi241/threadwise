@@ -5,7 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
-import { statementTypeSchema, type StatementResponse, type StatementRow } from '@crm/contracts';
+import {
+  statementTypeSchema,
+  type StatementDetailColumn,
+  type StatementResponse,
+  type StatementRow,
+} from '@crm/contracts';
 import {
   Badge,
   Button,
@@ -245,7 +250,7 @@ function StatementList({ filters }: { filters: StatementFilters }) {
         />
       ) : (
         <Card className="space-y-2">
-          <StatementTable rows={d.data} currency={d.currency} />
+          <StatementTable rows={d.data} currency={d.currency} detailColumns={d.detailColumns} />
           {(pager.hasPrev || d.page.hasMore) && (
             <PagerBar
               page={pager.page}
@@ -299,14 +304,21 @@ export function SummaryCards({ data }: { data: Pick<StatementResponse, 'summary'
 const hasMoney = (minor: number, exact: string | undefined): boolean =>
   exact ? /[1-9]/.test(exact) : minor > 0;
 
+/**
+ * The statement's columns are the CSV's columns, in the CSV's order. An optional column (channel, recipient, template, country,
+ * category, engine) is here only when some row of the filtered set has a value in it: `detailColumns` comes from the server.
+ */
 export function StatementTable({
   rows,
   currency,
+  detailColumns,
 }: {
   rows: readonly StatementRow[];
   currency: string;
+  detailColumns: readonly StatementDetailColumn[];
 }) {
   const t = useTranslations('wallet-message-billing.statement.columns');
+  const tctx = useTranslations('wallet-message-billing.statement.context');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
@@ -319,11 +331,16 @@ export function StatementTable({
               {t('date')}
             </th>
             <th scope="col" className="px-2 py-2 text-start font-medium">
-              {t('description')}
-            </th>
-            <th scope="col" className="px-2 py-2 text-start font-medium">
               {t('type')}
             </th>
+            <th scope="col" className="px-2 py-2 text-start font-medium">
+              {t('description')}
+            </th>
+            {detailColumns.map((c) => (
+              <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
+                {t(c)}
+              </th>
+            ))}
             <th scope="col" className="px-2 py-2 text-end font-medium">
               {t('in')}
             </th>
@@ -342,12 +359,21 @@ export function StatementTable({
                 {formatWhen(r.createdAt, locale, timeZone)}
               </td>
               <td className="px-2 py-2">
-                <div>{r.description || humanizeSource(r.source)}</div>
-                <ContextBlock row={r} />
-              </td>
-              <td className="px-2 py-2">
                 <TypePill type={r.type} />
               </td>
+              <td className="px-2 py-2">
+                <div>{r.description || humanizeSource(r.source)}</div>
+                {r.note && (
+                  <div className="mt-0.5 text-xs text-muted-foreground">
+                    {tctx('reason')}: {r.note}
+                  </div>
+                )}
+              </td>
+              {detailColumns.map((c) => (
+                <td key={c} className="px-2 py-2">
+                  <DetailCell column={c} row={r} />
+                </td>
+              ))}
               <td
                 className={cn(
                   'whitespace-nowrap px-2 py-2 text-end tabular-nums',
@@ -383,46 +409,31 @@ export function StatementTable({
   );
 }
 
-function ContextBlock({ row }: { row: StatementRow }) {
-  const t = useTranslations('wallet-message-billing.statement.context');
+/** One optional column of a row, with the values the CSV writes. A blank cell reads as none, as the money columns do. */
+function DetailCell({ column, row }: { column: StatementDetailColumn; row: StatementRow }) {
+  const t = useTranslations('wallet-message-billing.statement.columns');
   const tch = useTranslations('wallet-message-billing.statement.channels');
   const te = useTranslations('wallet-message-billing.statement.engines');
   const tcat = useTranslations('wallet-message-billing.categories');
   const c = row.context;
-  return (
-    <>
-      {row.note && (
-        <div className="mt-0.5 text-xs text-muted-foreground">
-          {t('reason')}: {row.note}
-        </div>
-      )}
-      {c && (
-        <>
-          <div className="mt-1 space-y-0.5 text-xs text-muted-foreground">
-            {c.campaignName && <div>{c.campaignName}</div>}
-            {c.recipient && (
-              <div>
-                {t('to')}: {c.recipient}
-              </div>
-            )}
-            {c.template && (
-              <div>
-                {t('template')}: {c.template}
-              </div>
-            )}
-          </div>
-          <div className="mt-1.5 flex flex-wrap gap-1">
-            {c.channel && (
-              <Badge>{CHANNELS.includes(c.channel) ? tch(c.channel) : c.channel}</Badge>
-            )}
-            {c.country && <Badge>{c.country}</Badge>}
-            {c.category && (
-              <Badge>{CATEGORIES.includes(c.category) ? tcat(c.category) : c.category}</Badge>
-            )}
-            {c.engine && <Badge>{ENGINES.includes(c.engine) ? te(c.engine) : c.engine}</Badge>}
-          </div>
-        </>
-      )}
-    </>
-  );
+  const none = <span aria-label={t('none')}>-</span>;
+  if (!c) return none;
+  if (column === 'channel') {
+    if (!c.channel && !c.campaignName) return none;
+    return (
+      <div className="space-y-1">
+        {c.channel && <Badge>{CHANNELS.includes(c.channel) ? tch(c.channel) : c.channel}</Badge>}
+        {c.campaignName && <div className="text-xs text-muted-foreground">{c.campaignName}</div>}
+      </div>
+    );
+  }
+  if (column === 'recipient') return c.recipient ? <span>{c.recipient}</span> : none;
+  if (column === 'template') return c.template ? <span>{c.template}</span> : none;
+  if (column === 'country') return c.country ? <Badge>{c.country}</Badge> : none;
+  if (column === 'category') {
+    if (!c.category) return none;
+    return <Badge>{CATEGORIES.includes(c.category) ? tcat(c.category) : c.category}</Badge>;
+  }
+  if (!c.engine) return none;
+  return <Badge>{ENGINES.includes(c.engine) ? te(c.engine) : c.engine}</Badge>;
 }

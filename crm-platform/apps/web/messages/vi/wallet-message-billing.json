@@ -164,12 +164,16 @@
         "in": "Tiền vào",
         "out": "Tiền ra",
         "balance": "Số dư",
-        "none": "Không có"
+        "none": "Không có",
+        "channel": "Kênh",
+        "recipient": "Người nhận",
+        "template": "Bản mẫu",
+        "country": "Quốc gia",
+        "category": "Thể loại",
+        "engine": "Động cơ"
       },
       "context": {
-        "reason": "Lý do",
-        "to": "Đến",
-        "template": "Mẫu"
+        "reason": "Lý do"
       },
       "channels": {
         "campaign": "Chiến dịch",

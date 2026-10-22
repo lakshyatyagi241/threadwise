@@ -535,6 +535,8 @@
             "remove_branding": "Marque blanche",
             "sales_pipeline": "Pipeline de vente",
             "appointment_booking": "Rendez-vous",
+            "appointment_confirm_buttons": "Boutons du rappel",
+            "appointment_rebook_steps": "Étapes de relance",
             "chatbot_widgets": "Widgets de chatbot",
             "wa_storefront": "Catalogue WhatsApp",
             "inbox_sla": "SLA de la boîte de réception",

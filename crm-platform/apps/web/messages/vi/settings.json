@@ -65,6 +65,11 @@
         "description": "Kết nối số WhatsApp Business để trò chuyện với khách hàng.",
         "keywords": "wa, whatsapp business, cloud api, số, qr"
       },
+      "whatsapp-profile": {
+        "label": "Hồ sơ doanh nghiệp WhatsApp",
+        "description": "Logo, phần giới thiệu, thông tin liên hệ và thông tin tuân thủ mà Meta yêu cầu.",
+        "keywords": "hồ sơ doanh nghiệp, logo, ảnh đại diện, giới thiệu, liên hệ, tuân thủ, tên pháp lý, chăm sóc khách hàng, người phụ trách khiếu nại"
+      },
       "unofficial-whatsapp": {
         "label": "API WhatsApp không chính thức",
         "description": "Liên kết số WhatsApp cá nhân bằng mã QR và làm nóng số để gửi an toàn.",
@@ -341,7 +346,7 @@
         "keywords": "đồng ý, từ chối, đăng ký lại, hủy đăng ký, stop, start, gdpr, tuân thủ, quyền riêng tư, marketing"
       },
       "inbox-tags": {
-        "label": "Thẻ cuộc trò chuyện",
+        "label": "Thẻ",
         "description": "Tạo các thẻ mà nhóm của bạn gắn vào cuộc trò chuyện và dùng để lọc hộp thư. Đây là các thẻ giống như dùng cho liên hệ.",
         "keywords": "thẻ, thẻ cuộc trò chuyện, danh mục, sắp xếp, lọc"
       },

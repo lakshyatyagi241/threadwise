@@ -535,6 +535,8 @@
             "remove_branding": "Marca própria",
             "sales_pipeline": "Funil de vendas",
             "appointment_booking": "Agendamentos",
+            "appointment_confirm_buttons": "Botões do lembrete",
+            "appointment_rebook_steps": "Etapas de novo agendamento",
             "chatbot_widgets": "Widgets de chatbot",
             "wa_storefront": "Catálogo do WhatsApp",
             "inbox_sla": "SLA da caixa de entrada",

@@ -637,7 +637,7 @@ export function InboxScreen() {
                           tag: can.tag,
                         }}
                         meId={meId}
-                        onSelectAll={bulk.selectAll}
+                        onToggleAll={bulk.toggleAll}
                         onClear={bulk.toggleSelecting}
                         onRun={bulk.run}
                       />

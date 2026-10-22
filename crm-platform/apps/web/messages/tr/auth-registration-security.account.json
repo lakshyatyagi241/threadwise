@@ -535,6 +535,8 @@
             "remove_branding": "Beyaz etiket",
             "sales_pipeline": "Satış hunisi",
             "appointment_booking": "Randevular",
+            "appointment_confirm_buttons": "Hatırlatma düğmeleri",
+            "appointment_rebook_steps": "Yeniden randevu adımları",
             "chatbot_widgets": "Sohbet botu widget'ları",
             "wa_storefront": "WhatsApp kataloğu",
             "inbox_sla": "Gelen kutusu SLA",

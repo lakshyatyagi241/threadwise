@@ -95,8 +95,7 @@ function calloutScript(w: EmbedWidget, colour: string, side: string): string {
     btn.style.position = 'relative';
     if (X.badge) {
       var dot = d.createElement('span');
-      dot.textContent = '1';
-      dot.style.cssText = 'position:absolute;top:-3px;' + (X.side === 'left' ? 'left' : 'right') + ':-3px;min-width:20px;height:20px;border-radius:999px;background:#ff4d5e;color:#fff;font:700 11px system-ui,sans-serif;display:grid;place-items:center;border:2px solid #fff';
+      dot.style.cssText = 'position:absolute;top:0;' + (X.side === 'left' ? 'left' : 'right') + ':0;width:14px;height:14px;border-radius:999px;background:#ff4d5e;border:2px solid #fff';
       btn.appendChild(dot);
       extras.push(dot);
     }
@@ -310,7 +309,9 @@ ${
     ? `  var img = d.createElement('img');
   img.src = ${jsString(image)};
   img.alt = '';
-  img.style.cssText = 'width:36px;height:36px;border-radius:50%';
+  // The picture is the whole button: no ring of the button colour around it.
+  img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;display:block';
+  btn.style.background = 'transparent';
   btn.appendChild(img);`
     : `  btn.innerHTML = ${jsString(CHAT_GLYPH)};`
 }

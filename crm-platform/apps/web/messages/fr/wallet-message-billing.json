@@ -164,12 +164,16 @@
         "in": "Entrées",
         "out": "Sorties",
         "balance": "Solde",
-        "none": "Aucun"
+        "none": "Aucun",
+        "channel": "Chaîne",
+        "recipient": "Destinataire",
+        "template": "Modèle",
+        "country": "Pays",
+        "category": "Catégorie",
+        "engine": "Moteur"
       },
       "context": {
-        "reason": "Motif",
-        "to": "Destinataire",
-        "template": "Modèle"
+        "reason": "Motif"
       },
       "channels": {
         "campaign": "Campagne",

@@ -1,4 +1,4 @@
-import { isSafeSvg } from '../chatbot-widget/svg-safe';
+import { isSafeSvg } from '../../common/svg-safe';
 import { createHash } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';

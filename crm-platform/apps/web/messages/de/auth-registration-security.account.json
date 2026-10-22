@@ -535,6 +535,8 @@
             "remove_branding": "White-Label",
             "sales_pipeline": "Vertriebspipeline",
             "appointment_booking": "Termine",
+            "appointment_confirm_buttons": "Erinnerungs-Schaltflächen",
+            "appointment_rebook_steps": "Schritte zur erneuten Buchung",
             "chatbot_widgets": "Chatbot-Widgets",
             "wa_storefront": "WhatsApp-Katalog",
             "inbox_sla": "Posteingangs-SLA",

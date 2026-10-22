@@ -779,7 +779,7 @@ Money model warning (read before building): Reference carries a half-finished mi
   - Given a charge for a campaign message, When listed, Then it shows the campaign name, recipient and template.
   - Given a spend row stored 12, When rendered in the port, Then it must appear as money OUT (fix), not in (Reference bug).
 - **Source refs:** app/Http/Controllers/AccountController.php (walletStatement, walletStatementQuery, resolveMessageContext, tryRead), resources/views/user/account/wallet-statement.blade.php, resources/views/user/partials/empty-state.blade.php.
-- **Port notes:** Home `apps/web/.../account/wallet/statement`, API `GET /wallet/statements?type&from&to&q&cursor` (cursor pagination per repo contracts). Join charge details through `message_charges` -> campaign/broadcast message ids; expose direction explicitly.
+- **Port notes:** Home `apps/web/.../account/wallet/statement`, API `GET /wallet/statements?type&from&to&q&cursor` (cursor pagination per repo contracts). Port 2026-10-21: the screen and the CSV share one column set in CSV order; Channel, Recipient, Template, Country, Category and Engine appear only when some row of the filtered set has a value (parity file item 16). Migrated Waboo history fills Category from Waboo's own category (item 17). Join charge details through `message_charges` -> campaign/broadcast message ids; expose direction explicitly.
 
 ### TW-WALLET-022 — Wallet statement CSV export
 
@@ -809,7 +809,7 @@ Money model warning (read before building): Reference carries a half-finished mi
   - Given a description starting with "=", When exported, Then it is prefixed with an apostrophe.
   - Given 10,000 rows, When exporting, Then the response streams without loading all rows in memory.
 - **Source refs:** app/Http/Controllers/AccountController.php (walletStatementCsv, csvSafe).
-- **Port notes:** Prefer an async export job for very large ledgers (download link), keep formula-injection protection, add a row cap.
+- **Port notes:** Prefer an async export job for very large ledgers (download link), keep formula-injection protection, add a row cap. Port 2026-10-21: the screen and the CSV share one column set in CSV order; Channel, Recipient, Template, Country, Category and Engine appear only when some row of the filtered set has a value (parity file item 16). Migrated Waboo history fills Category from Waboo's own category (item 17).
 
 ### TW-WALLET-023 — Wallet balance display surfaces (rail, top strip, dashboard, more, plan usage, JS user chip)
 

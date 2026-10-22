@@ -65,6 +65,11 @@
         "description": "WhatsApp Business の番号を接続して、お客様とチャットします。",
         "keywords": "wa、whatsapp business、cloud api、番号、qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp ビジネスプロフィール",
+        "description": "ロゴ、概要、連絡先、Meta が求めるコンプライアンス情報を設定します。",
+        "keywords": "ビジネスプロフィール,ロゴ,プロフィール写真,概要,連絡先,コンプライアンス,正式名称,カスタマーサポート,苦情処理責任者"
+      },
       "unofficial-whatsapp": {
         "label": "非公式 WhatsApp API",
         "description": "個人の WhatsApp 番号を QR コードで連携し、安全な送信のためにウォームアップします。",
@@ -341,7 +346,7 @@
         "keywords": "同意, オプトアウト, オプトイン, 配信停止, stop, start, gdpr, コンプライアンス, プライバシー, マーケティング"
       },
       "inbox-tags": {
-        "label": "会話タグ",
+        "label": "タグ",
         "description": "チームが会話に付けたり、受信トレイの絞り込みに使ったりするタグを作成します。連絡先で使うタグと同じものです。",
         "keywords": "タグ, カテゴリ, 整理, フィルター, 会話タグ"
       },

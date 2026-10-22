@@ -535,6 +535,8 @@
             "remove_branding": "화이트 라벨",
             "sales_pipeline": "영업 파이프라인",
             "appointment_booking": "예약",
+            "appointment_confirm_buttons": "리마인더 버튼",
+            "appointment_rebook_steps": "재예약 단계",
             "chatbot_widgets": "챗봇 위젯",
             "wa_storefront": "WhatsApp 카탈로그",
             "inbox_sla": "인박스 SLA",

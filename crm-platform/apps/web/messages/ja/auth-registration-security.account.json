@@ -535,6 +535,8 @@
             "remove_branding": "ホワイトラベル",
             "sales_pipeline": "営業パイプライン",
             "appointment_booking": "予約",
+            "appointment_confirm_buttons": "リマインダーのボタン",
+            "appointment_rebook_steps": "再予約ステップ",
             "chatbot_widgets": "チャットボットウィジェット",
             "wa_storefront": "WhatsAppカタログ",
             "inbox_sla": "受信トレイSLA",

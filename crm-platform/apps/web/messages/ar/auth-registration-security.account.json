@@ -535,6 +535,8 @@
             "remove_branding": "العلامة البيضاء",
             "sales_pipeline": "مسار المبيعات",
             "appointment_booking": "المواعيد",
+            "appointment_confirm_buttons": "أزرار التذكير",
+            "appointment_rebook_steps": "خطوات إعادة الحجز",
             "chatbot_widgets": "أدوات الدردشة",
             "wa_storefront": "كتالوج واتساب",
             "inbox_sla": "اتفاقية مستوى الخدمة",

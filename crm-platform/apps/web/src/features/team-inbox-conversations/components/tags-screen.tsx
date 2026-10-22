@@ -21,7 +21,7 @@ interface Draft {
 const EMPTY: Draft = { name: '', color: DEFAULT_TAG_COLOR, description: '' };
 
 /**
- * Settings, "Conversation tags" (`/inbox/tags`): the workspace tag library used to tag conversations and filter the inbox. Anyone who may
+ * Settings, "Tags" (`/inbox/tags`): the workspace tag library used to tag conversations and filter the inbox. Anyone who may
  * manage tags can add, rename, recolour, describe and delete them. The tags are the same ones contacts use, so a deletion also
  * takes the tag off contacts; the screen says how many conversations carry it before it asks.
  */

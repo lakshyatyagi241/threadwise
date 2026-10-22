@@ -164,12 +164,16 @@
         "in": "입금",
         "out": "출금",
         "balance": "잔액",
-        "none": "없음"
+        "none": "없음",
+        "channel": "채널",
+        "recipient": "수신자",
+        "template": "템플릿",
+        "country": "국가",
+        "category": "카테고리",
+        "engine": "엔진"
       },
       "context": {
-        "reason": "사유",
-        "to": "받는 사람",
-        "template": "템플릿"
+        "reason": "사유"
       },
       "channels": {
         "campaign": "캠페인",

@@ -164,12 +164,16 @@
         "in": "Wpływy",
         "out": "Wydatki",
         "balance": "Saldo",
-        "none": "Brak"
+        "none": "Brak",
+        "channel": "Kanał",
+        "recipient": "Odbiorca",
+        "template": "Szablon",
+        "country": "Kraj",
+        "category": "Kategoria",
+        "engine": "Silnik"
       },
       "context": {
-        "reason": "Powód",
-        "to": "Do",
-        "template": "Szablon"
+        "reason": "Powód"
       },
       "channels": {
         "campaign": "Kampania",

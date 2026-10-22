@@ -2,10 +2,10 @@
   "generatedBy": "node tools/redis-audit/inventory.mjs",
   "generatedFrom": "apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)",
   "totals": {
-    "sourceFilesUsingRedis": 113,
-    "commandCallSites": 378,
-    "keyFamilies": 151,
-    "familiesInFilesWhereEveryWriteHasATtl": 134,
+    "sourceFilesUsingRedis": 114,
+    "commandCallSites": 380,
+    "keyFamilies": 153,
+    "familiesInFilesWhereEveryWriteHasATtl": 136,
     "familiesInFilesToReview": 0,
     "familiesInReadOnlyFiles": 12,
     "orgScopedFamilies": 71,
@@ -69,7 +69,7 @@
     {
       "file": "deploy/hostinger/docker-compose.yml",
       "appendonly": true,
-      "maxmemory": "192mb",
+      "maxmemory": "448mb",
       "policy": "noeviction"
     }
   ],
@@ -1109,361 +1109,271 @@
   "keyFamilies": [
     {
       "template": "aicrm:history:*:*",
-      "files": [
-        "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts"
-      ],
+      "files": ["apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "aicrm:pending:*:*:dashboard",
-      "files": [
-        "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts"
-      ],
+      "files": ["apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "an:v1:*:*:*:*",
-      "files": [
-        "apps/api/src/modules/analytics/query/analytics-query.service.ts"
-      ],
+      "files": ["apps/api/src/modules/analytics/query/analytics-query.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "apikey:authfail:*",
-      "files": [
-        "apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts"
-      ],
+      "files": ["apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts"],
       "scope": "ip",
       "ttlStatus": "read-only"
     },
     {
       "template": "apikey:authfail:*:*",
-      "files": [
-        "apps/api/src/modules/public-api/api-key-access.service.ts"
-      ],
+      "files": ["apps/api/src/modules/public-api/api-key-access.service.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "apikey:touched:*:*",
-      "files": [
-        "apps/api/src/modules/public-api/api-key-access.service.ts"
-      ],
+      "files": ["apps/api/src/modules/public-api/api-key-access.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "appt:page-theme:v1:*",
-      "files": [
-        "apps/api/src/modules/appointments-booking/booking-page-themes.cache.ts"
-      ],
+      "files": ["apps/api/src/modules/appointments-booking/booking-page-themes.cache.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "appt:pub:*:ip:*",
-      "files": [
-        "apps/api/src/modules/appointments-booking/public-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/appointments-booking/public-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "appt:pub:*:target:*",
-      "files": [
-        "apps/api/src/modules/appointments-booking/public-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/appointments-booking/public-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:acct-fail:*:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:act:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:alert:*:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:cap:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:epoch",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:footer-v:*",
-      "files": [
-        "apps/api/src/modules/auth/security/branding-footer.service.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/security/branding-footer.service.ts"],
       "scope": "org",
       "ttlStatus": "read-only"
     },
     {
       "template": "auth:footer-v:platform",
-      "files": [
-        "apps/api/src/modules/auth/security/branding-footer.service.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/security/branding-footer.service.ts"],
       "scope": "global",
       "ttlStatus": "read-only"
     },
     {
       "template": "auth:gate-gen:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:gate-gen:all",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:gate:*",
-      "files": [
-        "apps/api/src/modules/auth/security/account-gate.service.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/security/account-gate.service.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:gate:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:imp-end:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:ip:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:ipfail:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:known-nets:*:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:lock-partner:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "indirect"
     },
     {
       "template": "auth:lock:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:mail:*:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "indirect"
     },
     {
       "template": "auth:mfa-fail:*:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "indirect"
     },
     {
       "template": "auth:mfa-setup:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:mfa-try:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:mfa:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:org-susp:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:otp-phone:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:otp-template-refresh",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:otp-test:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "user",
       "ttlStatus": "indirect"
     },
     {
       "template": "auth:partner:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:rev:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:send-day:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:send-halt",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:send-min:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:signup-email-sends:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:signup-email-stage:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:signup:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:social:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:wa-login:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
@@ -1478,97 +1388,73 @@
     },
     {
       "template": "auth:wa-reg:*:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "auth:wschoice:*",
-      "files": [
-        "apps/api/src/modules/auth/support/redis-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/support/redis-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "bcast:cap:*:*:*:*",
-      "files": [
-        "apps/api/src/modules/broadcasts/send-safety.ts"
-      ],
+      "files": ["apps/api/src/modules/broadcasts/send-safety.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "bcast:sender:*:*:*",
-      "files": [
-        "apps/api/src/modules/broadcasts/send-safety.ts"
-      ],
+      "files": ["apps/api/src/modules/broadcasts/send-safety.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "calendar-backfill:lock:*",
-      "files": [
-        "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts"
-      ],
+      "files": ["apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "calendar-reconcile:lock:*",
-      "files": [
-        "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts"
-      ],
+      "files": ["apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "calling:calls-field-write",
-      "files": [
-        "apps/api/src/modules/calling-voice/calling-readiness.service.ts"
-      ],
+      "files": ["apps/api/src/modules/calling-voice/calling-readiness.service.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "catalog_concierge:*:*",
-      "files": [
-        "apps/api/src/modules/catalog-products/catalog-concierge.service.ts"
-      ],
+      "files": ["apps/api/src/modules/catalog-products/catalog-concierge.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "chat:dispatch:*:*:*",
-      "files": [
-        "apps/api/src/modules/chat-conversations/channel-dispatcher.service.ts"
-      ],
+      "files": ["apps/api/src/modules/chat-conversations/channel-dispatcher.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "ecom:addr-edit:*:*",
-      "files": [
-        "apps/api/src/modules/shopify-woocommerce/concierge.service.ts"
-      ],
+      "files": ["apps/api/src/modules/shopify-woocommerce/concierge.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "ecom:delivery:*:*:*",
-      "files": [
-        "apps/api/src/modules/shopify-woocommerce/webhook.service.ts"
-      ],
+      "files": ["apps/api/src/modules/shopify-woocommerce/webhook.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "ecom:woo-status:*:*:*:*",
-      "files": [
-        "apps/api/src/modules/shopify-woocommerce/webhook-pipeline.service.ts"
-      ],
+      "files": ["apps/api/src/modules/shopify-woocommerce/webhook-pipeline.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
@@ -1582,257 +1468,193 @@
     },
     {
       "template": "form_cap:*:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-notification.consumer.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form_review:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-notification.consumer.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form_submission:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-notification.consumer.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form:mail:*:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-notification.consumer.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form:paymail:*:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-notification.consumer.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form:pub:ip:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "form:sub:contact:*:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form:sub:form:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "form:sub:ip:*:*",
-      "files": [
-        "apps/api/src/modules/forms-builder/form-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-builder/form-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "g:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "health:probe",
-      "files": [
-        "apps/api/src/modules/dashboards-analytics-charts/health.service.ts"
-      ],
+      "files": ["apps/api/src/modules/dashboards-analytics-charts/health.service.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "ics-feed:lock:*:*",
-      "files": [
-        "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts"
-      ],
+      "files": ["apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "idem:*:*",
-      "files": [
-        "apps/api/src/common/interceptors/idempotency.interceptor.ts"
-      ],
+      "files": ["apps/api/src/common/interceptors/idempotency.interceptor.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "invoicing:rl:*:*:*",
-      "files": [
-        "apps/api/src/modules/crm/invoicing/invoice-public.service.ts"
-      ],
+      "files": ["apps/api/src/modules/crm/invoicing/invoice-public.service.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
     {
       "template": "kb:embed:lock:*",
-      "files": [
-        "apps/api/src/modules/knowledge-base/kb-embed.worker.ts"
-      ],
+      "files": ["apps/api/src/modules/knowledge-base/kb-embed.worker.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "kb:q:*:*",
-      "files": [
-        "apps/api/src/modules/knowledge-base/kb-embedding.service.ts"
-      ],
+      "files": ["apps/api/src/modules/knowledge-base/kb-embedding.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "lead:hook:ip:*",
-      "files": [
-        "apps/api/src/modules/leads/lead-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/leads/lead-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "lead:hook:token:*",
-      "files": [
-        "apps/api/src/modules/leads/lead-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/leads/lead-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "line_hits:*:*",
-      "files": [
-        "apps/api/src/modules/channel-line/inbound.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-line/inbound.service.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
     {
       "template": "link_click_ip:*:*",
-      "files": [
-        "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts"
-      ],
+      "files": ["apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "link_hits:*:*",
-      "files": [
-        "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts"
-      ],
+      "files": ["apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "locale:active_languages",
-      "files": [
-        "apps/api/src/modules/localization-translation/languages.service.ts"
-      ],
+      "files": ["apps/api/src/modules/localization-translation/languages.service.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "m:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "mail:bounced:*:*",
-      "files": [
-        "apps/api/src/modules/channel-email/mail-limits.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-email/mail-limits.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "mail:fl:*:*:*",
-      "files": [
-        "apps/api/src/modules/channel-email/mail-limits.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-email/mail-limits.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "mail:rl:*:*",
-      "files": [
-        "apps/api/src/modules/channel-email/mail-limits.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-email/mail-limits.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "mail:rr:*:*:*",
-      "files": [
-        "apps/api/src/modules/channel-email/mail-limits.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-email/mail-limits.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "mkt:hook:authfail:*",
-      "files": [
-        "apps/api/src/modules/marketplace/hook-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/marketplace/hook-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "mkt:hook:conn:*",
-      "files": [
-        "apps/api/src/modules/marketplace/hook-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/marketplace/hook-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "mkt:hook:ip:*",
-      "files": [
-        "apps/api/src/modules/marketplace/hook-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/marketplace/hook-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "mkt:sub-mail:*:*",
-      "files": [
-        "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts"
-      ],
+      "files": ["apps/api/src/modules/marketplace/subscription-notifications.consumer.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "passkey:*:*",
-      "files": [
-        "apps/api/src/modules/auth/security/webauthn.service.ts"
-      ],
+      "files": ["apps/api/src/modules/auth/security/webauthn.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
@@ -1846,57 +1668,43 @@
     },
     {
       "template": "pb:*",
-      "files": [
-        "apps/api/src/modules/channel-line/inbound.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-line/inbound.service.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
     {
       "template": "prbac:v*:op*",
-      "files": [
-        "apps/api/src/modules/roles-permissions/platform-rbac.service.ts"
-      ],
+      "files": ["apps/api/src/modules/roles-permissions/platform-rbac.service.ts"],
       "scope": "user",
       "ttlStatus": "ttl"
     },
     {
       "template": "prbac:version",
-      "files": [
-        "apps/api/src/modules/roles-permissions/platform-rbac.service.ts"
-      ],
+      "files": ["apps/api/src/modules/roles-permissions/platform-rbac.service.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "push:test:*:*",
-      "files": [
-        "apps/api/src/modules/notifications/push-subscriptions.service.ts"
-      ],
+      "files": ["apps/api/src/modules/notifications/push-subscriptions.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "ratelimit:apikey:*:*",
-      "files": [
-        "apps/api/src/modules/public-api/api-key-access.service.ts"
-      ],
+      "files": ["apps/api/src/modules/public-api/api-key-access.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "rbac:",
-      "files": [
-        "apps/api/src/kernel/rbac/rbac.service.ts"
-      ],
+      "files": ["apps/api/src/kernel/rbac/rbac.service.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "rbac:*:v*:u*",
-      "files": [
-        "apps/api/src/kernel/rbac/rbac.service.ts"
-      ],
+      "files": ["apps/api/src/kernel/rbac/rbac.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
@@ -1911,137 +1719,103 @@
     },
     {
       "template": "rt:nc:*:*:*",
-      "files": [
-        "apps/api/src/modules/notifications/notification.publisher.ts"
-      ],
+      "files": ["apps/api/src/modules/notifications/notification.publisher.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "rt:nc:seen:*:*:*",
-      "files": [
-        "apps/api/src/modules/notifications/conversation-read-state.ts"
-      ],
+      "files": ["apps/api/src/modules/notifications/conversation-read-state.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "rt:seq:*",
-      "files": [
-        "apps/api/src/realtime/realtime-emitter.service.ts"
-      ],
+      "files": ["apps/api/src/realtime/realtime-emitter.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "rt:ticket:*",
-      "files": [
-        "apps/api/src/realtime/ticket/realtime-ticket.service.ts"
-      ],
+      "files": ["apps/api/src/realtime/ticket/realtime-ticket.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "rt:vis:*:*",
-      "files": [
-        "apps/api/src/realtime/visibility-presence.service.ts"
-      ],
+      "files": ["apps/api/src/realtime/visibility-presence.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "salesdoc:pub:*:ip:*",
-      "files": [
-        "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/crm/sales-docs/public-link-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "salesdoc:pub:*:link:*",
-      "files": [
-        "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/crm/sales-docs/public-link-throttle.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "segments:rl:*:*:*",
-      "files": [
-        "apps/api/src/modules/crm/segments/segment-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/crm/segments/segment-throttle.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "sms:lookup:*:*",
-      "files": [
-        "apps/api/src/modules/channel-sms/sms-senders.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-sms/sms-senders.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "store_idem:*:*:*",
-      "files": [
-        "apps/api/src/modules/storefront-builder/public/checkout.service.ts"
-      ],
+      "files": ["apps/api/src/modules/storefront-builder/public/checkout.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "store_rl:*:*:*",
-      "files": [
-        "apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts"
-      ],
+      "files": ["apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts"],
       "scope": "ip",
       "ttlStatus": "read-only"
     },
     {
       "template": "tchat:online:*:*",
-      "files": [
-        "apps/api/src/modules/team-chat/presence.service.ts"
-      ],
+      "files": ["apps/api/src/modules/team-chat/presence.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "tchat:typing:*:*:*",
-      "files": [
-        "apps/api/src/modules/team-chat/presence.service.ts"
-      ],
+      "files": ["apps/api/src/modules/team-chat/presence.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "test:*",
-      "files": [
-        "apps/api/src/modules/notifications/push-subscriptions.service.ts"
-      ],
+      "files": ["apps/api/src/modules/notifications/push-subscriptions.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "tg_hits:*:*",
-      "files": [
-        "apps/api/src/modules/channel-telegram/inbound.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-telegram/inbound.service.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
     {
       "template": "v1:*",
-      "files": [
-        "apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts"
-      ],
+      "files": ["apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
     {
       "template": "viber_hits:*:*",
-      "files": [
-        "apps/api/src/modules/channel-viber/inbound.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-viber/inbound.service.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
@@ -2056,33 +1830,25 @@
     },
     {
       "template": "wa:cmd",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "global",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:cmd:res:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:code:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:device:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
@@ -2096,113 +1862,85 @@
     },
     {
       "template": "wa:grp:*:*:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:grpcool:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:grpsweep:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:grpsync:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:hist:*:*:ch",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:hist:*:*:pc",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:in:*:*:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/routers.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/routers.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:in:media:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/inbox/inbox-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/inbox/inbox-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:inbox:sent:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/inbox/inbox-keys.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/inbox/inbox-keys.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:init:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:media-id:*:*:*:*:*",
-      "files": [
-        "apps/api/src/infra/providers/whatsapp/media/upload-cache.ts"
-      ],
+      "files": ["apps/api/src/infra/providers/whatsapp/media/upload-cache.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:out:*:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/device-control.service.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/device-control.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:qr:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wa:status:*:*",
-      "files": [
-        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
-      ],
+      "files": ["apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
@@ -2216,98 +1954,86 @@
       "ttlStatus": "ttl"
     },
     {
+      "template": "waba:*",
+      "files": ["apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts"],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
       "template": "waba:echo:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "waba:groups:ops:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "waba:inbound:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "waba:payment:*:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
+      "template": "waba:wh:seen:",
+      "files": ["apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts"],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
       "template": "wadev:create:org:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wadev:pair:dev:*:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wadev:pair:org:*",
-      "files": [
-        "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"
-      ],
+      "files": ["apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wechat_hits:*:*",
-      "files": [
-        "apps/api/src/modules/channel-wechat/inbound.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-wechat/inbound.service.ts"],
       "scope": "other",
       "ttlStatus": "read-only"
     },
     {
       "template": "wechat:bcast:*:*",
-      "files": [
-        "apps/api/src/modules/channel-wechat/broadcast-sender.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-wechat/broadcast-sender.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wechat:token:*:*",
-      "files": [
-        "apps/api/src/modules/channel-wechat/wechat-token.service.ts"
-      ],
+      "files": ["apps/api/src/modules/channel-wechat/wechat-token.service.ts"],
       "scope": "org",
       "ttlStatus": "ttl"
     },
     {
       "template": "wfl:link:redirect:*",
-      "files": [
-        "apps/api/src/modules/forms-links-groups/wa-link-redirect-throttle.ts"
-      ],
+      "files": ["apps/api/src/modules/forms-links-groups/wa-link-redirect-throttle.ts"],
       "scope": "ip",
       "ttlStatus": "ttl"
     },
     {
       "template": "wgt:hits:*:*",
-      "files": [
-        "apps/api/src/modules/chatbot-widget/widget-throttle.service.ts"
-      ],
+      "files": ["apps/api/src/modules/chatbot-widget/widget-throttle.service.ts"],
       "scope": "ip",
       "ttlStatus": "read-only"
     },
@@ -2323,11 +2049,7 @@
   "files": [
     {
       "file": "apps/api/src/common/interceptors/idempotency.interceptor.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 113,
@@ -2344,19 +2066,13 @@
     },
     {
       "file": "apps/api/src/health/health.controller.ts",
-      "commands": [
-        "ping"
-      ],
+      "commands": ["ping"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/infra/providers/localization-translation/redis-stores.ts",
-      "commands": [
-        "exists",
-        "get",
-        "set"
-      ],
+      "commands": ["exists", "get", "set"],
       "writes": [
         {
           "line": 30,
@@ -2368,11 +2084,7 @@
     },
     {
       "file": "apps/api/src/infra/providers/whatsapp/media/upload-cache.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 47,
@@ -2532,10 +2244,7 @@
     },
     {
       "file": "apps/api/src/infra/redis/counter.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
+      "commands": ["expire", "incr"],
       "writes": [
         {
           "line": 13,
@@ -2558,12 +2267,7 @@
     },
     {
       "file": "apps/api/src/kernel/rbac/rbac.service.ts",
-      "commands": [
-        "del",
-        "eval",
-        "get",
-        "setex"
-      ],
+      "commands": ["del", "eval", "get", "setex"],
       "writes": [
         {
           "line": 124,
@@ -2575,19 +2279,13 @@
     },
     {
       "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
-      "commands": [
-        "del"
-      ],
+      "commands": ["del"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "setex"
-      ],
+      "commands": ["del", "get", "setex"],
       "writes": [
         {
           "line": 315,
@@ -2604,10 +2302,7 @@
     },
     {
       "file": "apps/api/src/modules/analytics/query/analytics-query.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 213,
@@ -2619,11 +2314,7 @@
     },
     {
       "file": "apps/api/src/modules/appointments-booking/booking-page-themes.cache.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 41,
@@ -2635,10 +2326,7 @@
     },
     {
       "file": "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 79,
@@ -2650,10 +2338,7 @@
     },
     {
       "file": "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 54,
@@ -2665,10 +2350,7 @@
     },
     {
       "file": "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 55,
@@ -2680,11 +2362,7 @@
     },
     {
       "file": "apps/api/src/modules/appointments-booking/public-throttle.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 68,
@@ -2707,9 +2385,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/flows/login-alert.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 125,
@@ -2721,11 +2397,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/flows/login.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "setex"
-      ],
+      "commands": ["del", "get", "setex"],
       "writes": [
         {
           "line": 262,
@@ -2742,15 +2414,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/flows/signup.service.ts",
-      "commands": [
-        "del",
-        "eval",
-        "expire",
-        "get",
-        "incr",
-        "set",
-        "setex"
-      ],
+      "commands": ["del", "eval", "expire", "get", "incr", "set", "setex"],
       "writes": [
         {
           "line": 248,
@@ -2792,10 +2456,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/flows/social-auth.service.ts",
-      "commands": [
-        "getdel",
-        "setex"
-      ],
+      "commands": ["getdel", "setex"],
       "writes": [
         {
           "line": 140,
@@ -2807,18 +2468,13 @@
     },
     {
       "file": "apps/api/src/modules/auth/guards/jwt-auth.guard.ts",
-      "commands": [
-        "get",
-        "mget"
-      ],
+      "commands": ["get", "mget"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/auth/maintenance/otp-template-refresh.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 29,
@@ -2836,10 +2492,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/platform/impersonation.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 427,
@@ -2851,60 +2504,55 @@
     },
     {
       "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "set",
-        "setex"
-      ],
+      "commands": ["del", "get", "set", "setex"],
       "writes": [
         {
-          "line": 228,
+          "line": 226,
           "cmd": "setex",
           "ttl": "EX Ttl.mfaChallengeSeconds"
         },
         {
-          "line": 375,
+          "line": 373,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 389,
+          "line": 387,
           "cmd": "set",
           "ttl": "EX 24 * 3600"
         },
         {
-          "line": 392,
+          "line": 390,
           "cmd": "set",
           "ttl": "EX 24 * 3600"
         },
         {
-          "line": 473,
+          "line": 471,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 488,
+          "line": 486,
           "cmd": "set",
           "ttl": "EX 24 * 3600"
         },
         {
-          "line": 570,
+          "line": 568,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 588,
+          "line": 586,
           "cmd": "set",
           "ttl": "EX 24 * 3600"
         },
         {
-          "line": 642,
+          "line": 640,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 836,
+          "line": 834,
           "cmd": "setex",
           "ttl": "EX Ttl.mfaSetupSeconds"
         }
@@ -2913,13 +2561,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/account-attack.service.ts",
-      "commands": [
-        "expire",
-        "sadd",
-        "scard",
-        "sismember",
-        "spop"
-      ],
+      "commands": ["expire", "sadd", "scard", "sismember", "spop"],
       "writes": [
         {
           "line": 120,
@@ -2936,16 +2578,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
-      "commands": [
-        "del",
-        "eval",
-        "expire",
-        "get",
-        "incr",
-        "mget",
-        "scan",
-        "unlink"
-      ],
+      "commands": ["del", "eval", "expire", "get", "incr", "mget", "scan", "unlink"],
       "writes": [
         {
           "line": 136,
@@ -2972,18 +2605,13 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/branding-footer.service.ts",
-      "commands": [
-        "mget"
-      ],
+      "commands": ["mget"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/auth/security/emergency-halt.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 81,
@@ -2995,11 +2623,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/mfa.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "setex"
-      ],
+      "commands": ["del", "get", "setex"],
       "writes": [
         {
           "line": 174,
@@ -3011,11 +2635,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/org-suspension.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "setex"
-      ],
+      "commands": ["del", "get", "setex"],
       "writes": [
         {
           "line": 65,
@@ -3027,13 +2647,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/rate-limit.service.ts",
-      "commands": [
-        "del",
-        "expire",
-        "get",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["del", "expire", "get", "incr", "ttl"],
       "writes": [
         {
           "line": 31,
@@ -3050,18 +2664,13 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/send-policy.service.ts",
-      "commands": [
-        "eval"
-      ],
+      "commands": ["eval"],
       "writes": [],
       "ttlStatus": "ttl"
     },
     {
       "file": "apps/api/src/modules/auth/security/webauthn.service.ts",
-      "commands": [
-        "getdel",
-        "setex"
-      ],
+      "commands": ["getdel", "setex"],
       "writes": [
         {
           "line": 171,
@@ -3078,10 +2687,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/sessions/epoch.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 66,
@@ -3098,11 +2704,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/sessions/partner-agent-status.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 56,
@@ -3114,10 +2716,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/sessions/session.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 514,
@@ -3144,12 +2743,7 @@
     },
     {
       "file": "apps/api/src/modules/broadcasts/send-safety.ts",
-      "commands": [
-        "del",
-        "get",
-        "pexpire",
-        "set"
-      ],
+      "commands": ["del", "get", "pexpire", "set"],
       "writes": [
         {
           "line": 97,
@@ -3166,9 +2760,7 @@
     },
     {
       "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 86,
@@ -3180,10 +2772,7 @@
     },
     {
       "file": "apps/api/src/modules/calling-voice/calling-readiness.service.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 400,
@@ -3195,10 +2784,7 @@
     },
     {
       "file": "apps/api/src/modules/campaigns/summary/campaign-summary.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 117,
@@ -3210,9 +2796,7 @@
     },
     {
       "file": "apps/api/src/modules/catalog-products/catalog-concierge.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 75,
@@ -3271,10 +2855,7 @@
     },
     {
       "file": "apps/api/src/modules/channel-sms/sms-senders.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 302,
@@ -3298,10 +2879,7 @@
     },
     {
       "file": "apps/api/src/modules/channel-wechat/broadcast-sender.service.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 84,
@@ -3319,10 +2897,7 @@
     },
     {
       "file": "apps/api/src/modules/channel-wechat/wechat-token.service.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 146,
@@ -3334,12 +2909,7 @@
     },
     {
       "file": "apps/api/src/modules/chat-conversations/channel-dispatcher.service.ts",
-      "commands": [
-        "del",
-        "eval",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "eval", "get", "set"],
       "writes": [
         {
           "line": 200,
@@ -3356,9 +2926,7 @@
     },
     {
       "file": "apps/api/src/modules/chat-conversations/cloud-group-thread.reader.ts",
-      "commands": [
-        "get"
-      ],
+      "commands": ["get"],
       "writes": [],
       "ttlStatus": "read-only"
     },
@@ -3376,11 +2944,7 @@
     },
     {
       "file": "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 48,
@@ -3397,11 +2961,7 @@
     },
     {
       "file": "apps/api/src/modules/crm/segments/segment-throttle.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 30,
@@ -3418,10 +2978,7 @@
     },
     {
       "file": "apps/api/src/modules/dashboards-analytics-charts/health.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 234,
@@ -3433,17 +2990,13 @@
     },
     {
       "file": "apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts",
-      "commands": [
-        "get"
-      ],
+      "commands": ["get"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 122,
@@ -3455,9 +3008,7 @@
     },
     {
       "file": "apps/api/src/modules/forms-builder/form-notification.consumer.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 206,
@@ -3474,11 +3025,7 @@
     },
     {
       "file": "apps/api/src/modules/forms-builder/form-throttle.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 74,
@@ -3495,10 +3042,7 @@
     },
     {
       "file": "apps/api/src/modules/forms-links-groups/wa-link-redirect-throttle.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
+      "commands": ["expire", "incr"],
       "writes": [
         {
           "line": 27,
@@ -3515,26 +3059,19 @@
     },
     {
       "file": "apps/api/src/modules/install-update-licensing/requirements.service.ts",
-      "commands": [
-        "ping"
-      ],
+      "commands": ["ping"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/install-update-licensing/system.service.ts",
-      "commands": [
-        "ping"
-      ],
+      "commands": ["ping"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/knowledge-base/kb-embed.worker.ts",
-      "commands": [
-        "del",
-        "set"
-      ],
+      "commands": ["del", "set"],
       "writes": [
         {
           "line": 92,
@@ -3546,10 +3083,7 @@
     },
     {
       "file": "apps/api/src/modules/knowledge-base/kb-embedding.service.ts",
-      "commands": [
-        "getbuffer",
-        "set"
-      ],
+      "commands": ["getbuffer", "set"],
       "writes": [
         {
           "line": 86,
@@ -3561,11 +3095,7 @@
     },
     {
       "file": "apps/api/src/modules/leads/lead-throttle.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 51,
@@ -3582,11 +3112,7 @@
     },
     {
       "file": "apps/api/src/modules/localization-translation/languages.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 128,
@@ -3604,11 +3130,7 @@
     },
     {
       "file": "apps/api/src/modules/marketplace/hook-throttle.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 28,
@@ -3625,9 +3147,7 @@
     },
     {
       "file": "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 151,
@@ -3639,10 +3159,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 112,
@@ -3664,10 +3181,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/inbox/qr-channel.adapter.ts",
-      "commands": [
-        "getbuffer",
-        "set"
-      ],
+      "commands": ["getbuffer", "set"],
       "writes": [
         {
           "line": 288,
@@ -3679,13 +3193,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-control.service.ts",
-      "commands": [
-        "exists",
-        "get",
-        "getdel",
-        "publish",
-        "set"
-      ],
+      "commands": ["exists", "get", "getdel", "publish", "set"],
       "writes": [
         {
           "line": 99,
@@ -3702,12 +3210,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "getdelbuffer",
-        "set"
-      ],
+      "commands": ["del", "get", "getdelbuffer", "set"],
       "writes": [
         {
           "line": 382,
@@ -3749,14 +3252,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/group-limiter.ts",
-      "commands": [
-        "decr",
-        "expire",
-        "get",
-        "incr",
-        "set",
-        "ttl"
-      ],
+      "commands": ["decr", "expire", "get", "incr", "set", "ttl"],
       "writes": [
         {
           "line": 167,
@@ -3778,9 +3274,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/routers.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 79,
@@ -3792,11 +3286,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts",
-      "commands": [
-        "eval",
-        "get",
-        "set"
-      ],
+      "commands": ["eval", "get", "set"],
       "writes": [
         {
           "line": 67,
@@ -3808,19 +3298,13 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/worker-status.ts",
-      "commands": [
-        "mget",
-        "scan"
-      ],
+      "commands": ["mget", "scan"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/notifications/conversation-read-state.ts",
-      "commands": [
-        "mget",
-        "set"
-      ],
+      "commands": ["mget", "set"],
       "writes": [
         {
           "line": 29,
@@ -3832,9 +3316,7 @@
     },
     {
       "file": "apps/api/src/modules/notifications/notification.publisher.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 138,
@@ -3846,9 +3328,7 @@
     },
     {
       "file": "apps/api/src/modules/notifications/push-subscriptions.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 129,
@@ -3860,10 +3340,7 @@
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/coordination/redis-lock.service.ts",
-      "commands": [
-        "eval",
-        "set"
-      ],
+      "commands": ["eval", "set"],
       "writes": [
         {
           "line": 107,
@@ -3886,12 +3363,7 @@
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/observability/worker-heartbeat.service.ts",
-      "commands": [
-        "set",
-        "zadd",
-        "zrem",
-        "zremrangebyscore"
-      ],
+      "commands": ["set", "zadd", "zrem", "zremrangebyscore"],
       "writes": [
         {
           "line": 66,
@@ -3908,34 +3380,25 @@
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/observability/worker-probe.ts",
-      "commands": [
-        "zscan"
-      ],
+      "commands": ["zscan"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/observability/worker-status.service.ts",
-      "commands": [
-        "get",
-        "zcount"
-      ],
+      "commands": ["get", "zcount"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/rate-limit/rate-limiter.ts",
-      "commands": [
-        "eval"
-      ],
+      "commands": ["eval"],
       "writes": [],
       "ttlStatus": "ttl"
     },
     {
       "file": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 125,
@@ -3947,10 +3410,7 @@
     },
     {
       "file": "apps/api/src/modules/public-api/api-key-access.service.ts",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": [
         {
           "line": 154,
@@ -3962,12 +3422,7 @@
     },
     {
       "file": "apps/api/src/modules/roles-permissions/platform-rbac.service.ts",
-      "commands": [
-        "del",
-        "eval",
-        "get",
-        "setex"
-      ],
+      "commands": ["del", "eval", "get", "setex"],
       "writes": [
         {
           "line": 59,
@@ -3979,11 +3434,7 @@
     },
     {
       "file": "apps/api/src/modules/shopify-woocommerce/concierge.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 139,
@@ -3995,9 +3446,7 @@
     },
     {
       "file": "apps/api/src/modules/shopify-woocommerce/webhook-pipeline.service.ts",
-      "commands": [
-        "set"
-      ],
+      "commands": ["set"],
       "writes": [
         {
           "line": 379,
@@ -4009,10 +3458,7 @@
     },
     {
       "file": "apps/api/src/modules/shopify-woocommerce/webhook.service.ts",
-      "commands": [
-        "del",
-        "set"
-      ],
+      "commands": ["del", "set"],
       "writes": [
         {
           "line": 92,
@@ -4024,11 +3470,7 @@
     },
     {
       "file": "apps/api/src/modules/storefront-builder/public/checkout.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 269,
@@ -4051,10 +3493,7 @@
     },
     {
       "file": "apps/api/src/modules/team-chat/presence.service.ts",
-      "commands": [
-        "mget",
-        "set"
-      ],
+      "commands": ["mget", "set"],
       "writes": [
         {
           "line": 38,
@@ -4071,13 +3510,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts",
-      "commands": [
-        "expire",
-        "get",
-        "incr",
-        "set",
-        "ttl"
-      ],
+      "commands": ["expire", "get", "incr", "set", "ttl"],
       "writes": [
         {
           "line": 126,
@@ -4104,10 +3537,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts",
-      "commands": [
-        "del",
-        "set"
-      ],
+      "commands": ["del", "set"],
       "writes": [
         {
           "line": 221,
@@ -4128,11 +3558,20 @@
       "ttlStatus": "ttl"
     },
     {
-      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
-      "commands": [
-        "del",
-        "set"
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts",
+      "commands": ["exists", "set"],
+      "writes": [
+        {
+          "line": 269,
+          "cmd": "set",
+          "ttl": "EX REPLAY_WINDOW_S"
+        }
       ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
+      "commands": ["del", "set"],
       "writes": [
         {
           "line": 83,
@@ -4144,10 +3583,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts",
-      "commands": [
-        "del",
-        "set"
-      ],
+      "commands": ["del", "set"],
       "writes": [
         {
           "line": 271,
@@ -4159,11 +3595,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts",
-      "commands": [
-        "expire",
-        "incr",
-        "ttl"
-      ],
+      "commands": ["expire", "incr", "ttl"],
       "writes": [
         {
           "line": 62,
@@ -4180,11 +3612,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-devices-baileys/device-pairing.service.ts",
-      "commands": [
-        "del",
-        "get",
-        "set"
-      ],
+      "commands": ["del", "get", "set"],
       "writes": [
         {
           "line": 170,
@@ -4196,14 +3624,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
-      "commands": [
-        "del",
-        "expire",
-        "hgetall",
-        "hincrby",
-        "sadd",
-        "smembers"
-      ],
+      "commands": ["del", "expire", "hgetall", "hincrby", "sadd", "smembers"],
       "writes": [
         {
           "line": 147,
@@ -4230,10 +3651,7 @@
     },
     {
       "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts",
-      "commands": [
-        "del",
-        "set"
-      ],
+      "commands": ["del", "set"],
       "writes": [
         {
           "line": 158,
@@ -4245,19 +3663,13 @@
     },
     {
       "file": "apps/api/src/realtime/realtime-auth.service.ts",
-      "commands": [
-        "mget"
-      ],
+      "commands": ["mget"],
       "writes": [],
       "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/realtime/realtime-emitter.service.ts",
-      "commands": [
-        "expire",
-        "get",
-        "incr"
-      ],
+      "commands": ["expire", "get", "incr"],
       "writes": [
         {
           "line": 131,
@@ -4280,10 +3692,7 @@
     },
     {
       "file": "apps/api/src/realtime/ticket/realtime-ticket.service.ts",
-      "commands": [
-        "getdel",
-        "set"
-      ],
+      "commands": ["getdel", "set"],
       "writes": [
         {
           "line": 35,
@@ -4295,13 +3704,7 @@
     },
     {
       "file": "apps/api/src/realtime/visibility-presence.service.ts",
-      "commands": [
-        "expire",
-        "zadd",
-        "zcard",
-        "zrem",
-        "zremrangebyscore"
-      ],
+      "commands": ["expire", "zadd", "zcard", "zrem", "zremrangebyscore"],
       "writes": [
         {
           "line": 33,
@@ -4321,143 +3724,98 @@
     {
       "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
       "name": "RESERVE_LUA",
-      "commands": [
-        "get",
-        "hmget",
-        "set",
-        "time"
-      ],
+      "commands": ["get", "hmget", "set", "time"],
       "writes": true,
       "setsTtl": true
     },
     {
       "file": "apps/api/src/kernel/rbac/rbac.service.ts",
       "name": "RAISE_VERSION_LUA",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": true,
       "setsTtl": true
     },
     {
       "file": "apps/api/src/kernel/rbac/rbac.service.ts",
       "name": "READ_CACHED_LUA",
-      "commands": [
-        "get"
-      ],
+      "commands": ["get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts",
       "name": "RELEASE",
-      "commands": [
-        "del",
-        "get"
-      ],
+      "commands": ["del", "get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts",
       "name": "RELEASE",
-      "commands": [
-        "del",
-        "get"
-      ],
+      "commands": ["del", "get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts",
       "name": "RELEASE",
-      "commands": [
-        "del",
-        "get"
-      ],
+      "commands": ["del", "get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/auth/flows/signup.service.ts",
       "name": "CONSUME_STAGED",
-      "commands": [
-        "del",
-        "get"
-      ],
+      "commands": ["del", "get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/auth/flows/signup.service.ts",
       "name": "MARK_EMAIL_STAGE_VERIFIED",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": true,
       "setsTtl": true
     },
     {
       "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
       "name": "SET_UNLESS_INVALIDATED_LUA",
-      "commands": [
-        "get",
-        "set"
-      ],
+      "commands": ["get", "set"],
       "writes": true,
       "setsTtl": true
     },
     {
       "file": "apps/api/src/modules/auth/security/send-policy.service.ts",
       "name": "COUNT_UNLESS_AT_CAP",
-      "commands": [
-        "expire",
-        "get",
-        "incr"
-      ],
+      "commands": ["expire", "get", "incr"],
       "writes": true,
       "setsTtl": true
     },
     {
       "file": "apps/api/src/modules/calling-voice/calling-readiness.service.ts",
       "name": "RELEASE_LOCK",
-      "commands": [
-        "del",
-        "get"
-      ],
+      "commands": ["del", "get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/coordination/redis-lock.service.ts",
       "name": "RELEASE",
-      "commands": [
-        "del",
-        "get"
-      ],
+      "commands": ["del", "get"],
       "writes": false,
       "setsTtl": false
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/coordination/redis-lock.service.ts",
       "name": "RENEW",
-      "commands": [
-        "get",
-        "pexpire"
-      ],
+      "commands": ["get", "pexpire"],
       "writes": false,
       "setsTtl": true
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/rate-limit/rate-limiter.ts",
       "name": "SLIDING_WINDOW",
-      "commands": [
-        "get",
-        "incr",
-        "pexpire"
-      ],
+      "commands": ["get", "incr", "pexpire"],
       "writes": true,
       "setsTtl": true
     }
@@ -4662,7 +4020,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
-      "line": 634,
+      "line": 632,
       "cmd": "set"
     },
     {

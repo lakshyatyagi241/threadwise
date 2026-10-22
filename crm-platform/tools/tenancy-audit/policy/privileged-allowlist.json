@@ -603,5 +603,15 @@
     "status": "reviewed",
     "reason": "the public WhatsApp webhook runs one platform lookup (keysOfPhones: provider key of the connections that own the phone number ids named in the body) before it knows the workspace; the statement is fixed in code, the ids are bound parameters, and it returns provider keys only, not tenant rows. It moved from PlatformStore.tx to the webhook's own pool; the result is cached per set of ids for 30 s",
     "reviewedOn": "2026-10-21"
+  },
+  "modules/chat-conversations/message-log.service.ts": {
+    "status": "reviewed",
+    "reason": "reads the platform message-log retention window (loadPolicy on the policy table, which the tenant session cannot read) and returns two day counts; every tenant row is read in the tenant transaction that follows (db.tx with ctx.orgId)",
+    "reviewedOn": "2026-10-21"
+  },
+  "modules/data-retention/sweep-record.ts": {
+    "status": "reviewed",
+    "reason": "writes the one platform row per retention item in data_retention_runs (keyed by item, no org_id) after a nightly sweep; a failure is logged and never thrown into the sweep",
+    "reviewedOn": "2026-10-21"
   }
 }
