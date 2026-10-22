@@ -28,6 +28,8 @@ export interface ChatMediaUploadValidator {
     mime: string;
     storedName: string;
   };
+  /** Antivirus hook (UPLOAD_SCAN_MODE); throws `AUTH_UPLOAD_REJECTED` for an infected file. */
+  scan?(buffer: Buffer): Promise<void>;
 }
 
 /**

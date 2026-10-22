@@ -527,7 +527,7 @@ export class WidgetsService {
         ]);
       mime = 'image/svg+xml';
     } else {
-      const checked = this.uploads.validate({
+      const checked = await this.uploads.validateScanned({
         filename: file.originalname,
         buffer: file.buffer,
         allow: ['image'],

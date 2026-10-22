@@ -1,4 +1,6 @@
 import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
+import { imageProblem } from '../auth/security/image-integrity';
+import { scanUpload } from '../auth/security/upload-policy.service';
 import { randomUUID } from 'node:crypto';
 import {
   ERROR_CODES,
@@ -177,6 +179,7 @@ export class MessagesService {
     }
     // Checked before anything is written, so a refused file leaves no row and no orphan (Reference stored it first).
     const sniffed = file ? this.checkAttachment(file) : null;
+    if (file) await scanUpload(file.buffer); // antivirus hook (UPLOAD_SCAN_MODE), same as every other upload
 
     // The attachment is a Postgres blob that counts toward the workspace's storage (spec docs/specs/storage-quota-and-archival.md 3 and 6.4).
     // Reserved before the transaction, committed inside it (so the blob and its registry row land together), released if it fails.
@@ -432,6 +435,8 @@ export class MessagesService {
     if (file.size > TCHAT_ATTACHMENT_MAX_BYTES) throw reject('The file is larger than 20 MB');
     const sniffed = sniffAttachment(file.buffer, file.originalname);
     if (!sniffed) throw reject('This file type is not allowed');
+    if (sniffed.mime.startsWith('image/') && imageProblem(file.buffer))
+      throw reject('This file type is not allowed'); // polyglot or pixel bomb
     return sniffed;
   }
 

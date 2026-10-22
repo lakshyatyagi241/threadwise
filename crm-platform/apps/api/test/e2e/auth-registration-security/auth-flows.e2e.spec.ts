@@ -10,6 +10,7 @@ import {
   type Harness,
 } from './harness';
 import { BRIDGE_SENDER, BRIDGE_TOKEN } from './stubs';
+import { pngOfSize } from '../../support/images';
 
 /**
  * The auth domain end to end through HTTP: sign-up, verification, login,
@@ -1451,10 +1452,7 @@ describe('account screens and onboarding', () => {
 
   it('stores, serves and removes an avatar, rejecting anything that is not a real image', async () => {
     const a = await signup();
-    const png = Buffer.concat([
-      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-      Buffer.alloc(64, 1),
-    ]);
+    const png = pngOfSize(8 + 64);
     const ok = await api()
       .post('/v2/account/avatar')
       .set(bearer(a.access))

@@ -13,7 +13,7 @@ H
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../_lib" && pwd)/common.sh"
 sec_init "$@"
 sec_prereq node22 pnpm docker curl postgres redis
-sec_vitest upload-guards-and-ratchet api test/security/file-upload/file-upload-security.spec.ts
+sec_vitest upload-guards-and-ratchet api test/security/file-upload/file-upload-security.spec.ts test/security/file-upload/file-upload-hardening.spec.ts
 sec_boot_api
 curl -s --max-time 20 "$SEC_API/docs-json" -o "$SEC_OUT/openapi.json"
 # operations that declare multipart, plus write operations whose path names an upload (the spec does not declare every @UseInterceptors upload)
