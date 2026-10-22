@@ -259,6 +259,14 @@ function Editor({
   const [flowId, setFlowId] = useState<string | null>(initial?.id ?? null);
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
+  // Edits made since the bot was last published: saving them does not put them live, so Publish stays available until it is pressed.
+  const [unpublished, setUnpublished] = useState(false);
+  // A website chat bot's Customize tab keeps its own form; the page's Save follows it while that tab is open.
+  const [customizeDirty, setCustomizeDirty] = useState(false);
+  const customizeSave = useRef<(() => void) | null>(null);
+  const registerCustomizeSave = useCallback((fn: (() => void) | null) => {
+    customizeSave.current = fn;
+  }, []);
   const [busy, setBusy] = useState(false);
   // Saves run one at a time and always read the newest version / flow id / content from refs, never from the render that started them:
   // two quick clicks outside the step, or an edit made while a save is in flight, must not send a stale version (that is a false
@@ -299,6 +307,7 @@ function Editor({
     editSeq.current += 1;
     dirtyRef.current = true;
     setDirty(true);
+    setUnpublished(true);
   }, []);
 
   const senderRequired = channel === 'chat' && ctx.senders.chat.length > 0;
@@ -619,9 +628,11 @@ function Editor({
           toast(tw(channel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'), 'danger');
           return;
         }
+        const editsAtPublish = editSeq.current;
         const pub = await flowsApi.publish(id!);
         rowVersionRef.current = pub.rowVersion;
         setPublished(true);
+        if (editSeq.current === editsAtPublish) setUnpublished(false);
         toast(t('publishedToast'), 'success');
       } catch (e) {
         toast(t('publishFailed', { error: errMessage(e, t('genericError')) }), 'danger');
@@ -629,6 +640,7 @@ function Editor({
     });
   };
 
+  const onCustomizeTab = channel === 'web' && shownTab === 'customize';
   const status = published
     ? dirty
       ? t('status.publishedUnsaved')
@@ -661,6 +673,7 @@ function Editor({
               editSeq.current += 1;
               dirtyRef.current = true;
               setDirty(true);
+              setUnpublished(true);
             }}
             className="h-9 min-w-0 max-w-sm flex-1 rounded-lg border border-transparent bg-transparent px-2 font-serif text-[18px] hover:border-border focus:border-border focus:outline-none"
           />
@@ -728,17 +741,17 @@ function Editor({
             <Button
               variant="secondary"
               size="sm"
-              disabled={busy || !dirty}
+              disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
               className={QUIET_DISABLED}
-              onClick={() => void onSave()}
+              onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
             >
               {t('save')}
             </Button>
             <Button
-              variant={published && !dirty ? 'secondary' : 'brand'}
+              variant={published && !unpublished && !dirty ? 'secondary' : 'brand'}
               size="sm"
-              disabled={busy || (published && !dirty)}
-              className={published && !dirty ? QUIET_DISABLED : undefined}
+              disabled={busy || (published && !unpublished && !dirty)}
+              className={published && !unpublished && !dirty ? QUIET_DISABLED : undefined}
               onClick={() => void onPublish()}
             >
               {published ? t('publishChanges') : t('publish')}
@@ -1236,6 +1249,8 @@ function Editor({
             flowName={name}
             published={published}
             canEdit={canEditFlow}
+            onCustomizeDirty={setCustomizeDirty}
+            registerCustomizeSave={registerCustomizeSave}
           />
         ) : null}
 
