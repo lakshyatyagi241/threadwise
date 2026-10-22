@@ -33,6 +33,7 @@ const template = (over: Partial<TemplateRow> = {}): TemplateRow =>
     status: 'approved',
     metaStatus: 'APPROVED',
     pausedUntil: null,
+    metaEditLog: [],
     providerConfigId: WABA,
     ...over,
   }) as TemplateRow;

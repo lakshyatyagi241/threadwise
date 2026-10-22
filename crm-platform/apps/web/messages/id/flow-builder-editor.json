@@ -555,7 +555,8 @@
           "cardCount": "{count} kartu",
           "payLink": "Tautan bayar",
           "invoice": "Faktur",
-          "faqRetired": "Dihentikan · keluar lewat tidak cocok"
+          "faqAgent": "Menjawab dari {agent}",
+          "faqNoAgent": "Pilih agen AI"
         },
         "overlays": {
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
@@ -746,7 +747,8 @@
           "storedIn": "Nilai akan disimpan di properti <b>{property}</b> milik kontak",
           "actions": "Aksi",
           "actionsHint": "Tambahkan langkah yang berjalan tepat setelah langkah ini.",
-          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain."
+          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain.",
+          "fromSteps": "Dicapai dari langkah {stages}"
         },
         "editors": {
           "linkLabel": "Tujuan",
@@ -903,7 +905,10 @@
               "phone": "Telepon sebuah nomor",
               "email": "Kirim email",
               "agent": "Bicara dengan seseorang"
-            }
+            },
+            "prev": "Kartu sebelumnya",
+            "next": "Kartu berikutnya",
+            "goTo": "Kartu {n}"
           },
           "condition": {
             "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",
@@ -914,12 +919,14 @@
             "hint": "Pengunjung diteruskan ke tim ini dengan catatan Anda. Tidak perlu menyambungkan apa pun setelah tombol ini."
           },
           "faq": {
-            "exit": "Lanjutkan dengan",
-            "exitHint": "Alur selalu berlanjut ke sini."
+            "exit": "Jika tidak ada yang cocok",
+            "exitHint": "Ke mana alur pergi saat tidak ada entri yang menjawab.",
+            "matched": "Jika terjawab",
+            "matchedHint": "Ke mana alur pergi setelah jawaban dikirim."
           }
         },
         "branchAdd": "Tambah langkah untuk “{title}”",
-        "faqEnds": "Langkah yang dihentikan ini mengakhiri bagian ini: alur selalu berlanjut lewat jalur keluar Tidak cocok.",
+        "faqEnds": "Langkah ini mengakhiri bagian ini: alur berlanjut lewat jalur Terjawab atau Tidak cocok.",
         "flowMenu": "Opsi untuk {name}",
         "renameFlow": "Ganti nama alur"
       },
@@ -1869,7 +1876,13 @@
           "waitUntilPaid": "Tunggu hingga dibayar, lalu lanjutkan"
         },
         "faq": {
-          "retired": "Langkah ini sudah dihentikan dan tidak mencari apa pun lagi. Alur selalu berlanjut lewat Tidak cocok. Untuk menjawab dari pengetahuan Anda sendiri, gunakan langkah asisten AI dan pilih agen AI."
+          "agent": "Agen AI",
+          "agentHint": "Agen yang basis pengetahuannya dicari. Tambahkan FAQ di Pelatihan AI.",
+          "query": "Cari",
+          "queryHint": "Apa yang dicari. Biasanya pesan terakhir pelanggan.",
+          "sendAnswer": "Kirim jawaban ke pelanggan",
+          "variable": "Simpan jawaban sebagai",
+          "variableHint": "Langkah berikutnya membaca jawaban dengan nama ini, misalnya faq.answer."
         }
       },
       "attrPicker": {
@@ -2602,7 +2615,8 @@
         "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
         "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
         "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI.",
-        "templateFile": "Langkah {stage}: tambahkan file header templat."
+        "templateFile": "Langkah {stage}: tambahkan file header templat.",
+        "fileLinkInvalid": "Langkah {stage}: tautan file harus diawali https://"
       }
     },
     "waboImport": {
@@ -2716,7 +2730,7 @@
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
       "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid",
-      "faqRetired": "(simulasi) Jawab dari FAQ sudah dihentikan: mengambil \"tidak cocok\"."
+      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\"."
     }
   }
 }

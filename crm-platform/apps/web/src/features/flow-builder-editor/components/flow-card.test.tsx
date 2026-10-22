@@ -128,6 +128,17 @@ describe('featured card (TW-FLB-002)', () => {
     expect(html).toContain('~2.5 h total');
   });
 
+  it('names the bot: a WhatsApp flow and a website flow each carry their own type pill', () => {
+    const wa = renderToStaticMarkup(<FeaturedCard flow={featured()} actions={actions} />);
+    expect(wa).toContain('data-testid="featured-flow-type"');
+    expect(wa).toContain('contracts.flowTypes.chat');
+    const web = renderToStaticMarkup(
+      <FeaturedCard flow={featured({ flowType: 'web' })} actions={actions} />,
+    );
+    expect(web).toContain('contracts.flowTypes.web');
+    expect(web).not.toContain('contracts.flowTypes.chat');
+  });
+
   it('a flow with no category reads "Flow"', () => {
     expect(
       renderToStaticMarkup(<FeaturedCard flow={featured({ category: null })} actions={actions} />),

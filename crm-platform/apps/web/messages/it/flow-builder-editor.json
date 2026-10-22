@@ -574,7 +574,13 @@
           "waitUntilPaid": "Attendi il pagamento, poi continua"
         },
         "faq": {
-          "retired": "Questo passaggio è ritirato e non cerca più nulla. Il flusso prosegue sempre da Nessuna corrispondenza. Per rispondere con la tua conoscenza, usa un passaggio assistente IA e scegli un agente IA."
+          "agent": "Agente IA",
+          "agentHint": "L'agente nella cui base di conoscenza si cerca. Aggiungi le FAQ in Addestramento IA.",
+          "query": "Cerca",
+          "queryHint": "Cosa cercare. Di solito l'ultimo messaggio del cliente.",
+          "sendAnswer": "Invia la risposta al cliente",
+          "variable": "Salva la risposta come",
+          "variableHint": "I passaggi successivi leggono la risposta con questo nome, ad esempio faq.answer."
         }
       },
       "attrPicker": {
@@ -902,7 +908,8 @@
           "cardCount": "{count} card",
           "payLink": "Link di pagamento",
           "invoice": "Fattura",
-          "faqRetired": "Ritirato · esce da nessuna corrispondenza"
+          "faqAgent": "Risponde da {agent}",
+          "faqNoAgent": "Scegli un agente IA"
         },
         "overlays": {
           "startPinned": "Questo è il punto di partenza (clicca per rimuoverlo)",
@@ -1093,7 +1100,8 @@
           "storedIn": "I valori saranno salvati nella proprietà <b>{property}</b> del contatto",
           "actions": "Azioni",
           "actionsHint": "Aggiungi un passo che parte subito dopo questo.",
-          "actionsBlocked": "Un passo che chiude la sua parte non può avere altri passi dopo."
+          "actionsBlocked": "Un passo che chiude la sua parte non può avere altri passi dopo.",
+          "fromSteps": "Raggiunto dal passaggio {stages}"
         },
         "editors": {
           "linkLabel": "Dove porta",
@@ -1250,7 +1258,10 @@
               "phone": "Chiama un numero",
               "email": "Invia un'e-mail",
               "agent": "Parla con una persona"
-            }
+            },
+            "prev": "Scheda precedente",
+            "next": "Scheda successiva",
+            "goTo": "Scheda {n}"
           },
           "condition": {
             "info": "Aggiungi regole (una variabile, un confronto e un valore). Uniscile con AND o OR e annida gruppi quando serve.",
@@ -1261,12 +1272,14 @@
             "hint": "Il visitatore passa a questo team con la tua nota. Dopo questo pulsante non serve collegare nulla."
           },
           "faq": {
-            "exit": "Continua con",
-            "exitHint": "Il flusso prosegue sempre qui."
+            "exit": "Quando nulla corrisponde",
+            "exitHint": "Dove va il flusso quando nessuna voce risponde.",
+            "matched": "Quando risponde",
+            "matchedHint": "Dove va il flusso dopo l'invio della risposta."
           }
         },
         "branchAdd": "Aggiungi un passaggio per «{title}»",
-        "faqEnds": "Questo passaggio ritirato chiude questa parte: il flusso prosegue sempre dalla sua uscita Nessuna corrispondenza.",
+        "faqEnds": "Questo passaggio chiude questa parte: il flusso continua dall'uscita Risposto o Nessuna corrispondenza.",
         "flowMenu": "Opzioni per {name}",
         "renameFlow": "Rinomina flusso"
       },
@@ -2460,7 +2473,8 @@
         "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare.",
         "chooseAiAgent": "Passo {stage}: scegli l’agente AI che risponde o passa il passo a una configurazione personalizzata.",
         "writeAiPrompt": "Passo {stage}: scrivi le istruzioni per l’AI o scegli un agente AI.",
-        "templateFile": "Passaggio {stage}: aggiungi il file dell'intestazione del modello."
+        "templateFile": "Passaggio {stage}: aggiungi il file dell'intestazione del modello.",
+        "fileLinkInvalid": "Passaggio {stage}: il link del file deve iniziare con https://"
       }
     },
     "waboImport": {
@@ -2574,7 +2588,7 @@
       "simPurchase": "Acquisto simulato: {name} → porta «acquistato»",
       "simAbandon": "Abbandono simulato → porta «abbandonato»",
       "locationSkipped": "(posizione) saltata: nessuna coordinata valida",
-      "faqRetired": "(simulato) Rispondi dalle FAQ è ritirato: si prende \"nessuna corrispondenza\"."
+      "faqLine": "(simulato) Rispondi dalle FAQ: nella chat di prova la base di conoscenza non viene interrogata, si usa \"nessuna corrispondenza\"."
     },
     "templates": {
       "eyebrow": "Modelli di partenza",

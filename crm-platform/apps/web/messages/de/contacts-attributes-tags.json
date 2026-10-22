@@ -1546,7 +1546,9 @@
         "selected": "Ausgewählte Spalten",
         "selectAll": "Alle auswählen",
         "reorder": "Ziehen, um Spalten neu anzuordnen",
-        "remove": "{name} entfernen"
+        "remove": "{name} entfernen",
+        "nameShort": "Der Ansichtsname muss mindestens {min} Zeichen lang sein.",
+        "nameLong": "Der Ansichtsname darf höchstens {max} Zeichen lang sein."
       },
       "presets": {
         "myContacts": "Meine Kontakte",

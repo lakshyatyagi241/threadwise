@@ -98,13 +98,21 @@ export class DashPanelsRepository {
     from: Date,
     to: Date,
   ): Promise<AnalyticsPanels['templates']> {
+    // The eight busiest in the window: every template is ranked by its sends, so an older template that sent is listed too.
     const res = await tx.execute(sql`
-      SELECT t.uuid, t.template_name, t.category, t.language, count(m.id)::int AS sends
-      FROM (SELECT * FROM wa_templates WHERE org_id = ${orgId} ORDER BY updated_at DESC LIMIT 8) t
-      LEFT JOIN messages m ON m.org_id = t.org_id AND m.template_id = t.id AND m.direction = 'out'
-        AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
-      GROUP BY t.uuid, t.template_name, t.category, t.language
-      ORDER BY sends DESC, t.template_name`);
+      WITH counts AS (
+        SELECT m.template_id, count(m.id)::int AS sends
+        FROM messages m
+        WHERE m.org_id = ${orgId} AND m.direction = 'out' AND m.template_id IS NOT NULL
+          AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
+        GROUP BY m.template_id
+      )
+      SELECT t.uuid, t.template_name, t.category, t.language, coalesce(c.sends, 0) AS sends
+      FROM wa_templates t
+      LEFT JOIN counts c ON c.template_id = t.id
+      WHERE t.org_id = ${orgId}
+      ORDER BY sends DESC, t.updated_at DESC, t.template_name
+      LIMIT 8`);
     return (res.rows as Raw[]).map((r) => ({
       uuid: String(r.uuid),
       name: String(r.template_name),

@@ -555,7 +555,8 @@
           "cardCount": "카드 {count}개",
           "payLink": "결제 링크",
           "invoice": "인보이스",
-          "faqRetired": "중단됨 · '일치 없음'으로 나감"
+          "faqAgent": "{agent}에서 답변",
+          "faqNoAgent": "AI 에이전트 선택"
         },
         "overlays": {
           "startPinned": "시작 지점입니다(클릭하면 해제)",
@@ -746,7 +747,8 @@
           "storedIn": "값은 연락처의 <b>{property}</b> 속성에 저장됩니다",
           "actions": "액션",
           "actionsHint": "이 단계 바로 뒤에 실행되는 단계를 추가합니다.",
-          "actionsBlocked": "자기 부분을 끝내는 단계 뒤에는 다른 단계가 올 수 없습니다."
+          "actionsBlocked": "자기 부분을 끝내는 단계 뒤에는 다른 단계가 올 수 없습니다.",
+          "fromSteps": "{stages}단계에서 연결됩니다"
         },
         "editors": {
           "linkLabel": "연결 대상",
@@ -903,7 +905,10 @@
               "phone": "번호로 전화",
               "email": "이메일 보내기",
               "agent": "상담원과 대화"
-            }
+            },
+            "prev": "이전 카드",
+            "next": "다음 카드",
+            "goTo": "카드 {n}"
           },
           "condition": {
             "info": "규칙(변수, 비교, 값)을 추가하세요. AND 또는 OR로 연결하고 필요하면 그룹을 중첩할 수 있습니다.",
@@ -914,12 +919,14 @@
             "hint": "방문자가 메모와 함께 이 팀으로 전달됩니다. 이 버튼 뒤에는 아무것도 연결하지 않아도 됩니다."
           },
           "faq": {
-            "exit": "다음으로 이동",
-            "exitHint": "플로우는 항상 여기로 이어집니다."
+            "exit": "일치하는 항목이 없을 때",
+            "exitHint": "어떤 항목도 답하지 못할 때 흐름이 가는 곳.",
+            "matched": "답변했을 때",
+            "matchedHint": "답변을 보낸 뒤 흐름이 가는 곳."
           }
         },
         "branchAdd": "“{title}”에 단계 추가",
-        "faqEnds": "이 중단된 단계는 이 부분을 끝냅니다. 플로우는 항상 '일치 없음' 출구로 이어집니다.",
+        "faqEnds": "이 단계는 여기서 끝납니다. 흐름은 '답변됨' 또는 '일치 없음' 출구로 이어집니다.",
         "flowMenu": "{name} 옵션",
         "renameFlow": "플로 이름 바꾸기"
       },
@@ -1869,7 +1876,13 @@
           "waitUntilPaid": "결제될 때까지 기다린 후 계속"
         },
         "faq": {
-          "retired": "이 단계는 중단되어 더 이상 아무것도 찾지 않습니다. 플로우는 항상 '일치 없음'으로 이어집니다. 내 지식으로 답하려면 AI 어시스턴트 단계를 사용하고 AI 에이전트를 선택하세요."
+          "agent": "AI 에이전트",
+          "agentHint": "지식 베이스를 검색할 에이전트. 자주 묻는 질문은 AI 학습에서 추가하세요.",
+          "query": "검색할 내용",
+          "queryHint": "찾을 내용. 보통 고객의 마지막 메시지입니다.",
+          "sendAnswer": "고객에게 답변 보내기",
+          "variable": "답변 저장 이름",
+          "variableHint": "이후 단계는 이 이름으로 답변을 읽습니다. 예: faq.answer."
         }
       },
       "attrPicker": {
@@ -2602,7 +2615,8 @@
         "webhookUrl": "단계 {stage}: 호출할 주소(URL)를 추가하세요.",
         "chooseAiAgent": "단계 {stage}: 답변할 AI 에이전트를 선택하거나 이 단계를 직접 설정으로 전환하세요.",
         "writeAiPrompt": "단계 {stage}: AI에 대한 지침을 작성하거나 AI 에이전트를 선택하세요.",
-        "templateFile": "{stage}단계: 템플릿의 헤더 파일을 추가하세요."
+        "templateFile": "{stage}단계: 템플릿의 헤더 파일을 추가하세요.",
+        "fileLinkInvalid": "{stage}단계: 파일 링크는 https://로 시작해야 합니다"
       }
     },
     "waboImport": {
@@ -2716,7 +2730,7 @@
       "simPurchase": "시뮬레이션 구매: {name} → “구매 완료” 포트",
       "simAbandon": "시뮬레이션 이탈 → “이탈” 포트",
       "locationSkipped": "(위치) 건너뜀: 유효한 좌표 없음",
-      "faqRetired": "(시뮬레이션) FAQ에서 답변 단계는 중단되었습니다. '일치 없음'으로 진행합니다."
+      "faqLine": "(시뮬레이션) FAQ에서 답변: 테스트 채팅에서는 지식 베이스를 검색하지 않고 '일치 없음'으로 진행합니다."
     }
   }
 }

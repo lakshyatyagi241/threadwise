@@ -120,7 +120,9 @@ an AI agent holds it, otherwise `null`.
         │                          send to queue ◀───────┘  └──── unassign / release ─┤
         │                                                                              │
         └────────────── return to bot ─────────────────────────────────────────────────┘
-   resolve / close / spam  : handling -> NULL (history stays in the handoff row)
+   resolve / close         : handling -> NULL (history stays in the handoff row)
+   spam, nobody holds it   : handling -> NULL (history stays in the handoff row; a team queue is not a hold)
+   spam, a person holds it : handling and the open handoff stay; the bot stays muted (the hold survives spam and unspam)
    customer writes to a resolved/closed thread (reopen): handling -> NULL, then the normal arrival path
         (flow / AI agent answers if one handles the channel; else arrival routing; else the thread waits unassigned as today)
 ```

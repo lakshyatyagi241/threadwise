@@ -555,7 +555,8 @@
           "cardCount": "{count} kart",
           "payLink": "Ödeme bağlantısı",
           "invoice": "Fatura",
-          "faqRetired": "Kullanımdan kalktı · \"eşleşme yok\" ile çıkar"
+          "faqAgent": "{agent} üzerinden yanıtlar",
+          "faqNoAgent": "Bir yapay zeka aracısı seçin"
         },
         "overlays": {
           "startPinned": "Bu başlangıç noktasıdır (sabitlemeyi kaldırmak için tıklayın)",
@@ -746,7 +747,8 @@
           "storedIn": "Değerler kişinin <b>{property}</b> özelliğine kaydedilecek",
           "actions": "Eylemler",
           "actionsHint": "Bu adımdan hemen sonra çalışan bir adım ekleyin.",
-          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez."
+          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez.",
+          "fromSteps": "{stages}. adımdan gelinir"
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
@@ -903,7 +905,10 @@
               "phone": "Bir numarayı ara",
               "email": "E-posta gönder",
               "agent": "Bir kişiyle konuş"
-            }
+            },
+            "prev": "Önceki kart",
+            "next": "Sonraki kart",
+            "goTo": "Kart {n}"
           },
           "condition": {
             "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",
@@ -914,12 +919,14 @@
             "hint": "Ziyaretçi, notunuzla birlikte bu ekibe aktarılır. Bu düğmeden sonra hiçbir şey bağlamanız gerekmez."
           },
           "faq": {
-            "exit": "Şununla devam et",
-            "exitHint": "Akış her zaman buradan devam eder."
+            "exit": "Hiçbir şey eşleşmezse",
+            "exitHint": "Hiçbir kayıt yanıt vermediğinde akışın gideceği yer.",
+            "matched": "Yanıt bulunursa",
+            "matchedHint": "Yanıt gönderildikten sonra akışın gideceği yer."
           }
         },
         "branchAdd": "“{title}” için adım ekle",
-        "faqEnds": "Kullanımdan kalkan bu adım bu bölümü bitirir: akış her zaman Eşleşme yok çıkışıyla devam eder.",
+        "faqEnds": "Bu adım bu bölümü bitirir: akış Yanıtlandı ya da Eşleşme yok çıkışından devam eder.",
         "flowMenu": "{name} seçenekleri",
         "renameFlow": "Akışı yeniden adlandır"
       },
@@ -1869,7 +1876,13 @@
           "waitUntilPaid": "Ödenene kadar bekle, sonra devam et"
         },
         "faq": {
-          "retired": "Bu adım kullanımdan kalktı ve artık bir şey aramıyor. Akış her zaman Eşleşme yok ile devam eder. Kendi bilginizle yanıtlamak için bir yapay zeka asistanı adımı kullanın ve bir yapay zeka temsilcisi seçin."
+          "agent": "Yapay zeka aracısı",
+          "agentHint": "Bilgi tabanında arama yapılacak aracı. Sık sorulan soruları Yapay Zeka Eğitimi'nde ekleyin.",
+          "query": "Aranacak metin",
+          "queryHint": "Neyin aranacağı. Genellikle müşterinin son mesajı.",
+          "sendAnswer": "Yanıtı müşteriye gönder",
+          "variable": "Yanıtı şu adla kaydet",
+          "variableHint": "Sonraki adımlar yanıtı bu adla okur, örneğin faq.answer."
         }
       },
       "attrPicker": {
@@ -2602,7 +2615,8 @@
         "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
         "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
         "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin.",
-        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin."
+        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin.",
+        "fileLinkInvalid": "Adım {stage}: dosya bağlantısı https:// ile başlamalı"
       }
     },
     "waboImport": {
@@ -2716,7 +2730,7 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "locationSkipped": "(konum) atlandı: geçerli koordinat yok",
-      "faqRetired": "(simülasyon) SSS'den yanıtla adımı kullanımdan kalktı: \"eşleşme yok\" seçiliyor."
+      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir."
     }
   }
 }

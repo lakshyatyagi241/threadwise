@@ -23,6 +23,9 @@ x-api-env: &api-env
   PORT: '3000'
   NODE_OPTIONS: --max-old-space-size=640
   DB_POOL_MAX: '10'
+  # Where the message counts come from: JSON map of metric to legacy | shadow | rollup (docs/superpowers/specs/2026-10-19-message-count-rollup-design.md).
+  # Empty means legacy (scan). Set it in .env after `backfill:message-feed`; the History KPIs went from 800 ms to 28 ms on 1M messages.
+  ANALYTICS_SOURCES: ${ANALYTICS_SOURCES:-}
   # Two small pools beside the main one, so the public webhook path and the readiness probe never queue behind (or starve) the pool
   # the dashboard uses. They are per process: the real ceiling is (slots + hooks + worker) x (DB_POOL_MAX + these) against Postgres'
   # max_connections=100 (see the postgres service).
@@ -30,6 +33,8 @@ x-api-env: &api-env
   HEALTH_DB_POOL_MAX: '2'
   APP_URL: https://${DOMAIN}
   WEB_APP_URL: https://${DOMAIN}
+  # The origin the chat widget's embed script and chat page point back at; the API container's own name must never end up in a snippet.
+  WIDGET_PUBLIC_BASE_URL: https://${DOMAIN}
   CORS_ORIGINS: https://${DOMAIN}
   APP_NAME: ${APP_NAME}
   TRUST_PROXY: loopback,linklocal,uniquelocal

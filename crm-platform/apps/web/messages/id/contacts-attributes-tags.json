@@ -1546,7 +1546,9 @@
         "selected": "Kolom terpilih",
         "selectAll": "Pilih Semua",
         "reorder": "Seret untuk mengurutkan ulang kolom",
-        "remove": "Hapus {name}"
+        "remove": "Hapus {name}",
+        "nameShort": "Nama tampilan minimal {min} karakter.",
+        "nameLong": "Nama tampilan maksimal {max} karakter."
       },
       "presets": {
         "myContacts": "Kontak saya",

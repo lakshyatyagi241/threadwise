@@ -142,6 +142,9 @@ const attempt = {
   state: 'releasing',
   step: 'schema',
   error: null,
+  changes: [
+    { pr: 830, title: 'feat(flows): the featured flow tile names its bot', author: 'Akshay' },
+  ],
   started_at: new Date('2026-10-19T11:00:00Z'),
   updated_at: new Date('2026-10-19T11:02:00Z'),
   finished_at: null,
@@ -157,11 +160,29 @@ describe('toReleaseRow', () => {
       state: 'releasing',
       step: 'schema',
       error: null,
+      changes: [
+        { pr: 830, title: 'feat(flows): the featured flow tile names its bot', author: 'Akshay' },
+      ],
       startedAt: '2026-10-19T11:00:00.000Z',
       updatedAt: '2026-10-19T11:02:00.000Z',
       finishedAt: null,
       stalled: false,
     });
+  });
+
+  it('has no changes for a release recorded before they were kept, and drops a malformed entry', () => {
+    expect(toReleaseRow({ ...attempt, changes: null }).changes).toEqual([]);
+    const row = toReleaseRow({
+      ...attempt,
+      changes: [
+        { pr: null, title: 'fix: a commit with no PR', author: 'Lakshya' },
+        { title: 5 },
+        'x',
+      ],
+    });
+    expect(row.changes).toEqual([
+      { pr: null, title: 'fix: a commit with no PR', author: 'Lakshya' },
+    ]);
   });
 
   it('cuts a long error and rejects a state the contract does not know', () => {

@@ -282,7 +282,9 @@
           "save": "保存",
           "saved": "偏好已保存。",
           "saveFailed": "无法保存偏好。"
-        }
+        },
+        "timezoneSearch": "搜索时区",
+        "timezoneNoMatch": "没有匹配的时区。"
       },
       "notifications": {
         "title": "工作区通知",

@@ -13,7 +13,7 @@ import {
   buttonActionPatch,
   buttonActionsWithout,
 } from '../../lib/button-actions';
-import { useContext, useMemo, type ReactNode } from 'react';
+import { useContext, useMemo, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   FLB_AGE_END_TEXT,
@@ -37,6 +37,7 @@ import {
 } from '../../lib/contract-text';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
+import { FaqForm } from '../inspector/forms-channels/faq';
 import { AiForm, CodeForm, ConditionGroupEditor, WebhookForm } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { usePlanFeature } from '@/lib/plan-features';
@@ -390,6 +391,10 @@ function HandoffFields({
 function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const cards = arr(step.data.cards).map(rec);
+  // One card at a time: arrows walk through them, and on the last one the right arrow is a "+" that adds the next card.
+  const [at, setAt] = useState(0);
+  const here = Math.min(at, Math.max(0, cards.length - 1));
+  const canAdd = cards.length < FLB_CAROUSEL_MAX_CARDS;
   const setCards = (next: Array<Record<string, unknown>>) => set({ cards: next });
   const patchCard = (i: number, p: Record<string, unknown>) =>
     setCards(cards.map((c, j) => (j === i ? { ...c, ...p } : c)));
@@ -413,151 +418,212 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
           onChange={(e) => set({ text: e.target.value })}
         />
       </Field>
-      {cards.map((c, ci) => (
-        <Row key={ci}>
-          <div className="mb-2 flex items-center justify-between gap-2">
-            <span className="text-[12px] font-semibold">{t('carousel.card', { n: ci + 1 })}</span>
-            <RemoveBtn
-              label={t('carousel.removeCard')}
-              disabled={cards.length <= 1}
-              onClick={() => setCards(cards.filter((_, j) => j !== ci))}
+      <div className="flex items-center justify-between gap-2">
+        <PagerButton
+          label={t('carousel.prev')}
+          hidden={here === 0}
+          onClick={() => setAt(here - 1)}
+          glyph="‹"
+        />
+        <div className="flex items-center gap-1.5">
+          {cards.map((_, j) => (
+            <button
+              key={j}
+              type="button"
+              aria-label={t('carousel.goTo', { n: j + 1 })}
+              aria-current={j === here ? 'true' : undefined}
+              onClick={() => setAt(j)}
+              className={`size-2.5 rounded-sm border border-brand outline-none focus-visible:ring-2 focus-visible:ring-primary ${j === here ? 'bg-brand' : 'bg-background'}`}
             />
-          </div>
-          <div className="space-y-2">
-            <Field label={t('carousel.image')}>
-              <div className="mb-2">
-                <MediaUpload
-                  compact
-                  kind="image"
-                  url={str(c.image)}
-                  filename=""
-                  onDone={(res) => patchCard(ci, { image: res.url })}
-                />
-              </div>
-              <Input
-                value={str(c.image)}
-                placeholder="https://"
-                onChange={(e) => patchCard(ci, { image: e.target.value })}
+          ))}
+        </div>
+        {here < cards.length - 1 ? (
+          <PagerButton label={t('carousel.next')} onClick={() => setAt(here + 1)} glyph="›" />
+        ) : (
+          <PagerButton
+            label={t('carousel.addCard')}
+            hidden={!canAdd}
+            onClick={() => {
+              setCards([
+                ...cards,
+                {
+                  image: '',
+                  title: '',
+                  text: '',
+                  buttons: [{ type: 'url', label: '', value: '' }],
+                },
+              ]);
+              setAt(cards.length);
+            }}
+            glyph="+"
+          />
+        )}
+      </div>
+      {cards.map((c, ci) =>
+        ci !== here ? null : (
+          <Row key={ci}>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <span className="text-[12px] font-semibold">
+                {t('carousel.card', { n: ci + 1 })} / {cards.length}
+              </span>
+              <RemoveBtn
+                label={t('carousel.removeCard')}
+                disabled={cards.length <= 1}
+                onClick={() => {
+                  setCards(cards.filter((_, j) => j !== ci));
+                  setAt(Math.max(0, ci - 1));
+                }}
               />
-            </Field>
-            <Field
-              label={
-                <span className="flex items-center justify-between">
-                  {t('carousel.title')}{' '}
-                  <Counter value={str(c.title)} max={FLB_CAROUSEL_LIMITS.title} />
-                </span>
-              }
-            >
-              <Input
-                value={str(c.title)}
-                maxLength={FLB_CAROUSEL_LIMITS.title + 20}
-                onChange={(e) => patchCard(ci, { title: e.target.value })}
-              />
-            </Field>
-            <Field
-              label={
-                <span className="flex items-center justify-between">
-                  {t('carousel.text')}{' '}
-                  <Counter value={str(c.text)} max={FLB_CAROUSEL_LIMITS.text} />
-                </span>
-              }
-            >
-              <Textarea
-                rows={2}
-                value={str(c.text)}
-                onChange={(e) => patchCard(ci, { text: e.target.value })}
-              />
-            </Field>
-            <div className="text-[12px] font-medium">{t('carousel.buttons')}</div>
-            {buttonsOf(c).map((b, bi) => {
-              const kind = (CAROUSEL_BTN_KINDS as readonly string[]).includes(str(b.type))
-                ? str(b.type)
-                : 'reply';
-              const ri = replyIndex(ci, bi);
-              return (
-                <div key={bi} className="rounded-lg border border-border bg-background p-2">
-                  <div className="grid grid-cols-[1fr_auto] items-center gap-2">
-                    <Select
-                      value={kind}
-                      onChange={(e) => patchBtn(ci, bi, { type: e.target.value })}
-                    >
-                      {CAROUSEL_BTN_KINDS.map((k) => (
-                        <option key={k} value={k}>
-                          {t(`carousel.btnKinds.${k}`)}
-                        </option>
-                      ))}
-                    </Select>
-                    <RemoveBtn
-                      label={t('carousel.removeButton')}
-                      onClick={() =>
-                        patchCard(ci, { buttons: buttonsOf(c).filter((_, j) => j !== bi) })
-                      }
-                    />
-                    <Input
-                      className="col-span-2"
-                      value={str(b.label)}
-                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
-                      placeholder={t('carousel.label')}
-                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
-                    />
-                    {kind === 'reply' || kind === 'agent' ? null : (
-                      <Input
-                        className="col-span-2"
-                        value={str(b.value)}
-                        placeholder={holder(kind)}
-                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
-                      />
-                    )}
-                  </div>
-                  {kind === 'reply' ? (
-                    <div className="mt-2">
-                      <LinkSelect
-                        doc={doc}
-                        stepId={step.id}
-                        value={step.links[ri] ?? null}
-                        decide
-                        onChange={(target) => link(ri, target)}
-                      />
-                    </div>
-                  ) : kind === 'agent' ? (
-                    <HandoffFields
-                      ctx={ctx}
-                      team={str(b.team)}
-                      note={str(b.note)}
-                      onTeam={(v) => patchBtn(ci, bi, { team: v })}
-                      onNote={(v) => patchBtn(ci, bi, { note: v })}
-                    />
-                  ) : null}
+            </div>
+            <div className="space-y-2">
+              <Field label={t('carousel.image')}>
+                <div className="mb-2">
+                  <MediaUpload
+                    compact
+                    kind="image"
+                    url={str(c.image)}
+                    filename=""
+                    onDone={(res) => patchCard(ci, { image: res.url })}
+                  />
                 </div>
-              );
-            })}
-            {buttonsOf(c).length < FLB_CAROUSEL_MAX_BUTTONS ? (
-              <AddBtn
-                onClick={() =>
-                  patchCard(ci, {
-                    buttons: [...buttonsOf(c), { type: 'reply', label: '', value: '' }],
-                  })
+                <Input
+                  value={str(c.image)}
+                  placeholder="https://"
+                  onChange={(e) => patchCard(ci, { image: e.target.value })}
+                />
+              </Field>
+              <Field
+                label={
+                  <span className="flex items-center justify-between">
+                    {t('carousel.title')}{' '}
+                    <Counter value={str(c.title)} max={FLB_CAROUSEL_LIMITS.title} />
+                  </span>
                 }
               >
-                {t('carousel.addButton')}
-              </AddBtn>
-            ) : null}
-          </div>
-        </Row>
-      ))}
-      {cards.length < FLB_CAROUSEL_MAX_CARDS ? (
-        <AddBtn
-          onClick={() =>
-            setCards([
-              ...cards,
-              { image: '', title: '', text: '', buttons: [{ type: 'url', label: '', value: '' }] },
-            ])
-          }
-        >
-          {t('carousel.addCard')}
-        </AddBtn>
-      ) : null}
+                <Input
+                  value={str(c.title)}
+                  maxLength={FLB_CAROUSEL_LIMITS.title + 20}
+                  onChange={(e) => patchCard(ci, { title: e.target.value })}
+                />
+              </Field>
+              <Field
+                label={
+                  <span className="flex items-center justify-between">
+                    {t('carousel.text')}{' '}
+                    <Counter value={str(c.text)} max={FLB_CAROUSEL_LIMITS.text} />
+                  </span>
+                }
+              >
+                <Textarea
+                  rows={2}
+                  value={str(c.text)}
+                  onChange={(e) => patchCard(ci, { text: e.target.value })}
+                />
+              </Field>
+              <div className="text-[12px] font-medium">{t('carousel.buttons')}</div>
+              {buttonsOf(c).map((b, bi) => {
+                const kind = (CAROUSEL_BTN_KINDS as readonly string[]).includes(str(b.type))
+                  ? str(b.type)
+                  : 'reply';
+                const ri = replyIndex(ci, bi);
+                return (
+                  <div key={bi} className="rounded-lg border border-border bg-background p-2">
+                    <div className="grid grid-cols-[1fr_auto] items-center gap-2">
+                      <Select
+                        value={kind}
+                        onChange={(e) => patchBtn(ci, bi, { type: e.target.value })}
+                      >
+                        {CAROUSEL_BTN_KINDS.map((k) => (
+                          <option key={k} value={k}>
+                            {t(`carousel.btnKinds.${k}`)}
+                          </option>
+                        ))}
+                      </Select>
+                      <RemoveBtn
+                        label={t('carousel.removeButton')}
+                        onClick={() =>
+                          patchCard(ci, { buttons: buttonsOf(c).filter((_, j) => j !== bi) })
+                        }
+                      />
+                      <Input
+                        className="col-span-2"
+                        value={str(b.label)}
+                        maxLength={FLB_CAROUSEL_LIMITS.label + 10}
+                        placeholder={t('carousel.label')}
+                        onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
+                      />
+                      {kind === 'reply' || kind === 'agent' ? null : (
+                        <Input
+                          className="col-span-2"
+                          value={str(b.value)}
+                          placeholder={holder(kind)}
+                          onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
+                        />
+                      )}
+                    </div>
+                    {kind === 'reply' ? (
+                      <div className="mt-2">
+                        <LinkSelect
+                          doc={doc}
+                          stepId={step.id}
+                          value={step.links[ri] ?? null}
+                          decide
+                          onChange={(target) => link(ri, target)}
+                        />
+                      </div>
+                    ) : kind === 'agent' ? (
+                      <HandoffFields
+                        ctx={ctx}
+                        team={str(b.team)}
+                        note={str(b.note)}
+                        onTeam={(v) => patchBtn(ci, bi, { team: v })}
+                        onNote={(v) => patchBtn(ci, bi, { note: v })}
+                      />
+                    ) : null}
+                  </div>
+                );
+              })}
+              {buttonsOf(c).length < FLB_CAROUSEL_MAX_BUTTONS ? (
+                <AddBtn
+                  onClick={() =>
+                    patchCard(ci, {
+                      buttons: [...buttonsOf(c), { type: 'reply', label: '', value: '' }],
+                    })
+                  }
+                >
+                  {t('carousel.addButton')}
+                </AddBtn>
+              ) : null}
+            </div>
+          </Row>
+        ),
+      )}
     </div>
+  );
+}
+
+/** A round arrow (or "+") at an edge of the card pager. `hidden` keeps its place so the dots stay centred. */
+function PagerButton({
+  label,
+  glyph,
+  onClick,
+  hidden = false,
+}: {
+  label: string;
+  glyph: string;
+  onClick: () => void;
+  hidden?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onClick}
+      className={`grid size-9 shrink-0 place-items-center rounded-lg border border-border bg-background text-lg leading-none text-brand shadow-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary ${hidden ? 'invisible' : ''}`}
+    >
+      {glyph}
+    </button>
   );
 }
 
@@ -1083,17 +1149,23 @@ function VarField({
 }
 
 /**
- * "Answer from FAQ" is retired (FAQs are entries in an AI agent's knowledge now). A flow that still has the step keeps working: it
- * always leaves by "no match", so only that exit can be changed here.
+ * The Answer from FAQ step: the same form as the Advanced builder (AI agent, search text, send, variable), then where the flow goes
+ * when an entry answers and when none does.
  */
-function FaqEditor({ step, doc, link }: EditorProps) {
-  const t = useTranslations('flb.builder.formsChannels.faq');
+function FaqEditor(p: EditorProps) {
+  const { step, doc, link } = p;
   const ts = useTranslations('flb.builder.simple.editors.faq');
   return (
     <div className="space-y-3">
-      <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
-        {t('retired')}
-      </p>
+      <NodeFormEditor {...p} Form={FaqForm} />
+      <Field label={ts('matched')} hint={ts('matchedHint')}>
+        <LinkSelect
+          doc={doc}
+          stepId={step.id}
+          value={step.links[0] ?? null}
+          onChange={(target) => link(0, target)}
+        />
+      </Field>
       <Field label={ts('exit')} hint={ts('exitHint')}>
         <LinkSelect
           doc={doc}
@@ -1518,7 +1590,7 @@ const CTA_DEFAULT_LABEL: Record<string, string> = {
 
 /**
  * The buttons of a Link button step: up to three, each opening a web page, a phone call or an email. The website chat window draws
- * all of them; WhatsApp sends the first web link as its button and the rest as lines of text.
+ * all of them; WhatsApp shows one link button per message, so the first web link is the message's button and each other web link follows as a button message of its own (a call or an email stays a line of text).
  */
 function CtaEditor({ step, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');

@@ -555,7 +555,8 @@
           "cardCount": "{count} thẻ",
           "payLink": "Liên kết thanh toán",
           "invoice": "Hóa đơn",
-          "faqRetired": "Đã ngừng · thoát qua không khớp"
+          "faqAgent": "Trả lời từ {agent}",
+          "faqNoAgent": "Chọn một tác nhân AI"
         },
         "overlays": {
           "startPinned": "Đây là điểm bắt đầu (nhấn để bỏ ghim)",
@@ -746,7 +747,8 @@
           "storedIn": "Giá trị sẽ được lưu vào thuộc tính <b>{property}</b> của liên hệ",
           "actions": "Hành động",
           "actionsHint": "Thêm một bước chạy ngay sau bước này.",
-          "actionsBlocked": "Bước kết thúc phần của nó không thể có bước nào sau đó."
+          "actionsBlocked": "Bước kết thúc phần của nó không thể có bước nào sau đó.",
+          "fromSteps": "Đến từ bước {stages}"
         },
         "editors": {
           "linkLabel": "Nơi này dẫn tới",
@@ -903,7 +905,10 @@
               "phone": "Gọi một số",
               "email": "Gửi email",
               "agent": "Nói chuyện với một người"
-            }
+            },
+            "prev": "Thẻ trước",
+            "next": "Thẻ tiếp theo",
+            "goTo": "Thẻ {n}"
           },
           "condition": {
             "info": "Thêm quy tắc (một biến, một phép so sánh và một giá trị). Nối bằng AND hoặc OR và lồng nhóm khi cần.",
@@ -914,12 +919,14 @@
             "hint": "Khách truy cập được chuyển cho nhóm này kèm ghi chú của bạn. Không cần nối gì sau nút này."
           },
           "faq": {
-            "exit": "Tiếp tục với",
-            "exitHint": "Luồng luôn tiếp tục ở đây."
+            "exit": "Khi không khớp",
+            "exitHint": "Luồng đi đâu khi không mục nào trả lời được.",
+            "matched": "Khi có câu trả lời",
+            "matchedHint": "Luồng đi đâu sau khi gửi câu trả lời."
           }
         },
         "branchAdd": "Thêm bước cho “{title}”",
-        "faqEnds": "Bước đã ngừng này kết thúc phần này: luồng luôn tiếp tục qua lối ra Không khớp.",
+        "faqEnds": "Bước này kết thúc phần này: luồng tiếp tục theo lối ra Đã trả lời hoặc Không khớp.",
         "flowMenu": "Tùy chọn cho {name}",
         "renameFlow": "Đổi tên luồng"
       },
@@ -1869,7 +1876,13 @@
           "waitUntilPaid": "Chờ đến khi thanh toán, rồi tiếp tục"
         },
         "faq": {
-          "retired": "Bước này đã ngừng và không còn tìm gì nữa. Luồng luôn tiếp tục qua Không khớp. Để trả lời từ kiến thức của bạn, hãy dùng bước trợ lý AI và chọn một tác nhân AI."
+          "agent": "Tác nhân AI",
+          "agentHint": "Tác nhân có cơ sở kiến thức được tìm kiếm. Thêm câu hỏi thường gặp trong Huấn luyện AI.",
+          "query": "Tìm kiếm",
+          "queryHint": "Nội dung cần tìm. Thường là tin nhắn cuối của khách.",
+          "sendAnswer": "Gửi câu trả lời cho khách",
+          "variable": "Lưu câu trả lời với tên",
+          "variableHint": "Các bước sau đọc câu trả lời bằng tên này, ví dụ faq.answer."
         }
       },
       "attrPicker": {
@@ -2602,7 +2615,8 @@
         "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
         "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
         "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI.",
-        "templateFile": "Bước {stage}: thêm tệp tiêu đề của mẫu."
+        "templateFile": "Bước {stage}: thêm tệp tiêu đề của mẫu.",
+        "fileLinkInvalid": "Bước {stage}: liên kết tệp phải bắt đầu bằng https://"
       }
     },
     "waboImport": {
@@ -2716,7 +2730,7 @@
       "simPurchase": "Mô phỏng giao dịch mua: {name} → cổng \"đã mua\"",
       "simAbandon": "Mô phỏng bỏ dở → cổng \"bỏ dở\"",
       "locationSkipped": "(vị trí) đã bỏ qua: không có tọa độ hợp lệ",
-      "faqRetired": "(mô phỏng) Trả lời từ câu hỏi thường gặp đã ngừng: đi theo \"không khớp\"."
+      "faqLine": "(mô phỏng) Trả lời từ FAQ: chat thử không tìm trong cơ sở kiến thức, chọn \"không khớp\"."
     }
   }
 }

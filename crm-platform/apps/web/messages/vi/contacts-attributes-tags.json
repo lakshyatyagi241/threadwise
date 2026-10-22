@@ -1546,7 +1546,9 @@
         "selected": "Cột đã chọn",
         "selectAll": "Chọn tất cả",
         "reorder": "Kéo để sắp xếp lại các cột",
-        "remove": "Gỡ {name}"
+        "remove": "Gỡ {name}",
+        "nameShort": "Tên chế độ xem phải có ít nhất {min} ký tự.",
+        "nameLong": "Tên chế độ xem có tối đa {max} ký tự."
       },
       "presets": {
         "myContacts": "Liên hệ của tôi",

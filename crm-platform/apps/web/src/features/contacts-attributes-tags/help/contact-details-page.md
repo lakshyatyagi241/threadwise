@@ -42,7 +42,7 @@ When you open your phone from **Call on your phone** and come back to the page, 
 
 ## Good to know
 
-- Changing an owner, stage, status, tag, company or a detail saves at once and is checked again by the server. If someone changed the contact first, you are told and the page reloads.
+- Changing an owner, stage, status, tag, company or a detail saves at once and is checked again. If someone changed the contact first, you are told and the page reloads.
 - A call that starts from your phone's dialer cannot be seen by the CRM: it only knows you clicked. That is why it asks afterwards.
 - **Delete contact** asks for confirmation and offers to keep the conversations without the person's identity.
 - The page and the quick view read the same data, so a change made in one is seen in the other.

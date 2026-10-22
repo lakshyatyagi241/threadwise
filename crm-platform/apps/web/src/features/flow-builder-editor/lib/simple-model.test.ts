@@ -20,6 +20,7 @@ import {
   stageIn,
   stepLabel,
   stepSummary,
+  incomingStages,
   stepText,
   removeStep,
   stageLabel,
@@ -602,15 +603,14 @@ describe('the list of flows (groups)', () => {
   });
 });
 
-describe('the retired Answer from FAQ step in the Simple builder', () => {
+describe('the Answer from FAQ step in the Simple builder', () => {
   const faqGraph = () =>
     graph(
       [
         node('t', 'trigger'),
         node('f', 'faq', {
           query: '{{user_message}}',
-          category: 'Billing',
-          minScore: 0.6,
+          assistant: 'agent-1',
           sendAnswer: true,
           save: 'faq',
         }),
@@ -626,9 +626,10 @@ describe('the retired Answer from FAQ step in the Simple builder', () => {
       [edge('t', 'out', 'f'), edge('f', 'matched', 'yes'), edge('f', 'no_match', 'no')],
     );
 
-  it('is no longer a step of the menu, but an existing one still has its name on the card', () => {
-    expect(STEP_KINDS.some((k) => k.type === 'faq')).toBe(false);
-    expect(stepKindsFor('chat').some((k) => k.type === 'faq')).toBe(false);
+  it('is a step of the menu on a chat flow, and has its name on the card', () => {
+    expect(STEP_KINDS.some((k) => k.type === 'faq')).toBe(true);
+    expect(stepKindsFor('chat').some((k) => k.type === 'faq')).toBe(true);
+    expect(stepKindsFor('web').some((k) => k.type === 'faq')).toBe(false);
     expect(en(stepLabel({ type: 'faq', data: {} }))).toBe('Answer from FAQ');
   });
 
@@ -638,13 +639,13 @@ describe('the retired Answer from FAQ step in the Simple builder', () => {
     const step = allSteps(r.doc).find((s) => s.id === 'f')!;
     expect(step.type).toBe('faq');
     expect(step.links).toEqual(['yes', 'no']);
-    expect(step.data).toMatchObject({ category: 'Billing', minScore: 0.6, save: 'faq' });
+    expect(step.data).toMatchObject({ assistant: 'agent-1', save: 'faq' });
     const back = toGraph(r.doc);
     expect(back.flowEdges.map((e) => `${e.source}.${e.sourceHandle}>${e.target}`).sort()).toEqual(
       ['f.matched>yes', 'f.no_match>no', 't.out>f'].sort(),
     );
     expect(toSimple(back).ok).toBe(true);
-    expect(back.flowNodes.find((n) => n.id === 'f')!.data).toMatchObject({ minScore: 0.6 });
+    expect(back.flowNodes.find((n) => n.id === 'f')!.data).toMatchObject({ assistant: 'agent-1' });
   });
 
   it('an exit that is not wired ends the conversation, and only that one', () => {
@@ -668,8 +669,7 @@ describe('the retired Answer from FAQ step in the Simple builder', () => {
     const s = newStep('faq', []);
     expect(s.data).toEqual({
       query: '{{user_message}}',
-      category: '',
-      minScore: null,
+      assistant: '',
       sendAnswer: true,
       save: 'faq',
     });
@@ -697,7 +697,7 @@ describe('the retired Answer from FAQ step in the Simple builder', () => {
     const f = newStep('faq', []);
     d = insertStep(d, 0, 0, f);
     d = updateStep(d, f.id, { links: [target.id, null] });
-    d = updateStep(d, f.id, { data: { category: 'Billing' } });
+    d = updateStep(d, f.id, { data: { assistant: 'agent-1' } });
     expect(allSteps(d).find((s) => s.id === f.id)!.links).toEqual([target.id, null]);
     expect(allSteps(removeStep(d, target.id)).find((s) => s.id === f.id)!.links).toEqual([
       null,
@@ -731,6 +731,60 @@ describe('steps per channel', () => {
 
   it('a WhatsApp bot keeps every step except the website-only carousel', () => {
     expect(stepKindsFor('chat')).toEqual(STEP_KINDS.filter((k) => k.type !== 'carousel'));
+  });
+});
+
+describe('which steps lead to a step', () => {
+  it('lists the step before it, a button pointing at it, and a "Then go to" naming it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const choice = newStep('buttons', allSteps(d));
+    d = insertStep(d, 0, 1, choice);
+    const target = newStep('message', allSteps(d));
+    d = addJourney(d, target);
+    d = updateStep(d, choice.id, { data: { options: ['A', 'B'] }, links: [target.id, null] });
+    expect(incomingStages(d, choice.id)).toEqual(['1.1']);
+    expect(incomingStages(d, target.id)).toEqual(['1.2']);
+    expect(incomingStages(d, first.id)).toEqual([]);
+  });
+});
+
+describe('a media step needs a full web link', () => {
+  const run = (url: string) => {
+    let d = emptyDoc();
+    d = insertStep(d, 0, 0, { ...newStep('media', []), data: { kind: 'image', url } });
+    d.trigger.data.keywords = 'hi';
+    return problems(d, { senderRequired: false }).map((p) => en(p.message));
+  };
+
+  it('asks for the link, then for one that starts with http(s)', () => {
+    expect(run('')).toEqual(['Step 1.1: add the file link.']);
+    expect(run('www.site.com/a.png')).toEqual(['Step 1.1: the file link must start with https://']);
+    expect(run('https://cdn.site.com/a.png')).toEqual([]);
+  });
+});
+
+describe('the link button step summary', () => {
+  const summary = (data: Record<string, unknown>) => {
+    const step = { ...newStep('cta', []), data };
+    return stepSummary(step, (key) => key);
+  };
+
+  it('shows the message, not the first button', () => {
+    expect(
+      summary({
+        bodyText: 'Visit our site',
+        actions: [{ type: 'url', label: 'Open', value: 'https://a.b' }],
+      }),
+    ).toBe('Visit our site');
+  });
+
+  it('falls back to the first button when there is no message', () => {
+    expect(
+      summary({ bodyText: '', actions: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }),
+    ).toBe('Open');
   });
 });
 

@@ -296,6 +296,14 @@ check "exits 0" test "$(code)" = 0
 check "no control character reaches the record" test "$(grep -c "$(printf '\001')" "$STUB_LOG")" = 0
 check "the message is cut to 500 characters" test "$(grep 'failed shipping' "$STUB_LOG" | head -1 | sed 's/.*failed shipping //' | tr -d '\n' | wc -c)" -le 500
 
+echo "changes: the pull requests of a release are recorded for the attempt, without control characters"
+unset_stubs; new_dir blue bbbbbbb
+printf '[{"pr":830,"title":"feat: a\001b","author":"Akshay"}]' | SSH_ORIGINAL_COMMAND="changes $A1" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"
+check "exits 0" test "$(code)" = 0
+check "the attempt and the JSON are recorded" grep -qF -- "$A1 [{\"pr\":830,\"title\":\"feat: ab\",\"author\":\"Akshay\"}]" "$STUB_LOG"
+printf '[]' | SSH_ORIGINAL_COMMAND="changes not-a-uuid" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"
+check "a bad attempt is refused" test "$(code)" = 2
+
 echo
 echo "$pass passed, $fail failed"
 [ "$fail" -eq 0 ]

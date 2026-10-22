@@ -53,7 +53,7 @@ export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
 /**
  * The steps that end their journey: what happens next depends on what the customer taps (buttons, list, a carousel's reply buttons),
- * on a condition's answer, or on whether a retired "Answer from FAQ" step answered (`faq`; it now always leaves by no match).
+ * on a condition's answer, or on whether an "Answer from FAQ" step found an answer in its AI agent's knowledge base (`faq`).
  */
 export const BRANCHING: ReadonlySet<string> = new Set([
   'buttons',
@@ -226,6 +226,30 @@ export function stageIn(doc: SimpleDoc, journeyIndex: number, stepIndex: number)
     before += doc.journeys[c]!.steps.length;
   }
   return `${gi + 1}.${before + stepIndex + 1}`;
+}
+
+/**
+ * The stage numbers (`1.2`) of the steps that lead to this one: the step before it in its part, a button or row pointing at it, and a
+ * "Then go to" that names it. Read on the card, so the author can see what is connected to it without following the lines.
+ */
+export function incomingStages(doc: SimpleDoc, stepId: string): string[] {
+  const out: string[] = [];
+  doc.journeys.forEach((j, ji) =>
+    j.steps.forEach((s, si) => {
+      const next = j.steps[si + 1];
+      const leads = new Set<string>();
+      if (BRANCHING.has(s.type)) {
+        for (const l of s.links) {
+          if (l === LINK_NEXT) {
+            if (next) leads.add(next.id);
+          } else if (l && l !== LINK_END) leads.add(l);
+        }
+      } else if (next) leads.add(next.id);
+      else if (s.goto) leads.add(s.goto);
+      if (leads.has(stepId)) out.push(stageIn(doc, ji, si));
+    }),
+  );
+  return out;
 }
 
 // --- graph -> simple ------------------------------------------------------------------------------------------------------
@@ -548,6 +572,7 @@ const nodeKind = (key: string, type: SimpleType, group: StepKind['group']): Step
 
 export const STEP_KINDS: readonly StepKind[] = [
   nodeKind('ai', 'ai', 'answer'),
+  nodeKind('faq', 'faq', 'answer'),
   kind('assign', 'assign', 'handoff'),
   kind('message', 'message', 'send'),
   kind('media', 'media', 'send'),
@@ -971,6 +996,9 @@ export function problems(
       const d = s.data;
       if (s.type === 'message' && !str(d.text).trim()) bad('writeMessage');
       if (s.type === 'media' && !str(d.url).trim()) bad('addFileLink');
+      // The runtime fetches the file from this address: anything that is not a full http(s) link is skipped there without a word.
+      else if (s.type === 'media' && !/^https?:\/\//i.test(str(d.url).trim()))
+        bad('fileLinkInvalid');
       if (s.type === 'api_library' && !str(d.apiId).trim()) bad('chooseApi');
       if (s.type === 'code' && !str(d.code).trim()) bad('writeCode');
       if (s.type === 'webhook' && !str(d.url).trim()) bad('webhookUrl');
@@ -1179,7 +1207,9 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                   .filter(Boolean)
                   .join(' · ')
               : s.type === 'cta'
-                ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
+                ? // The message the buttons come with; a step saved without one shows its first button instead.
+                  str(d.bodyText) ||
+                  str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
                 : s.type === 'delay'
                   ? delaySummary(t, d)
                   : s.type === 'assign'

@@ -19,7 +19,7 @@ A credit note reduces what a customer owes on an issued invoice, for example whe
 3. Under **What to credit**, choose **The whole remaining invoice**, or **Some lines or amounts**: tick lines and set quantities, or add a free-form line with a description, an amount before tax and a tax rate.
 4. Pick a **Reason**: **Goods returned**, **Price adjustment**, **Billing error**, **Cancellation**, **Goodwill** or **Other**. The issue date and a note are optional.
 5. Under **What happens to the money**, choose **Apply to the invoice balance** (no money moves, the invoice just owes less) or **Refund in cash** (money the customer paid above what is now owed goes back through the [payment ledger](help:payments-overview)).
-6. Check the **Estimated credit** panel, then select **Save draft** or **Save and issue**. Issuing gives the credit note its number, lowers the invoice and locks the credit note. The server's saved figures are the final ones.
+6. Check the **Estimated credit** panel, then select **Save draft** or **Save and issue**. Issuing gives the credit note its number, lowers the invoice and locks the credit note. The saved figures are the final ones.
 
 ## Options and settings
 

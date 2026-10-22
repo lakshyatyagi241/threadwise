@@ -555,7 +555,8 @@
           "cardCount": "{count} card(s)",
           "payLink": "Pay link",
           "invoice": "Invoice",
-          "faqRetired": "Retired · leaves by no match"
+          "faqAgent": "Answers from {agent}",
+          "faqNoAgent": "Pick an AI agent"
         },
         "overlays": {
           "startPinned": "This is the start point (click to unpin)",
@@ -756,7 +757,8 @@
           "storedIn": "Values will be stored in <b>{property}</b> property of contact",
           "actions": "Actions",
           "actionsHint": "Add a step that runs right after this one.",
-          "actionsBlocked": "A step that ends its part cannot have a step after it."
+          "actionsBlocked": "A step that ends its part cannot have a step after it.",
+          "fromSteps": "Reached from step {stages}"
         },
         "editors": {
           "linkLabel": "Where this leads",
@@ -913,7 +915,10 @@
               "phone": "Call a number",
               "email": "Send an email",
               "agent": "Talk to a person"
-            }
+            },
+            "prev": "Previous card",
+            "next": "Next card",
+            "goTo": "Card {n}"
           },
           "condition": {
             "info": "Add rules (a variable, a comparison and a value). Join them with AND or OR, and nest groups when you need to.",
@@ -924,12 +929,14 @@
             "hint": "The visitor is passed to this team with your note. Nothing needs to be connected after this button."
           },
           "faq": {
-            "exit": "Carry on with",
-            "exitHint": "The flow always continues here."
+            "exit": "When nothing matches",
+            "exitHint": "Where the flow goes when no entry answers.",
+            "matched": "When answered",
+            "matchedHint": "Where the flow goes after the answer is sent."
           }
         },
         "branchAdd": "Add a step for “{title}”",
-        "faqEnds": "This retired step ends this part: the flow always carries on by its No match exit.",
+        "faqEnds": "This step ends this part: the flow carries on by its Answered or No match exit.",
         "flowMenu": "Options for {name}",
         "renameFlow": "Rename flow"
       },
@@ -1891,7 +1898,13 @@
           "waitUntilPaid": "Wait until paid, then continue"
         },
         "faq": {
-          "retired": "This step is retired and no longer looks anything up. The flow always carries on by No match. To answer from your own knowledge, use an AI assistant step and pick an AI agent."
+          "agent": "AI agent",
+          "agentHint": "The agent whose knowledge base is searched. Add FAQs to it in AI Training.",
+          "query": "Search for",
+          "queryHint": "What to look up. Usually the customer's last message.",
+          "sendAnswer": "Send the answer to the customer",
+          "variable": "Save the answer as",
+          "variableHint": "Later steps read the answer from this name, for example faq.answer."
         }
       },
       "attrPicker": {
@@ -2601,7 +2614,8 @@
         "webhookUrl": "Step {stage}: add the address (URL) to call.",
         "chooseAiAgent": "Step {stage}: choose the AI agent that answers, or switch the step to a custom setup.",
         "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent.",
-        "templateFile": "Step {stage}: add the template's header file."
+        "templateFile": "Step {stage}: add the template's header file.",
+        "fileLinkInvalid": "Step {stage}: the file link must start with https://"
       }
     },
     "waboImport": {
@@ -2715,7 +2729,7 @@
       "simPurchase": "Simulated purchase: {name} → port \"purchased\"",
       "simAbandon": "Simulated abandon → port \"abandoned\"",
       "locationSkipped": "(location) skipped: no valid coordinates",
-      "faqRetired": "(simulated) Answer from FAQ is retired: taking \"no match\"."
+      "faqLine": "(simulated) Answer from FAQ: the knowledge base is not searched in the test chat, taking \"no match\"."
     }
   }
 }

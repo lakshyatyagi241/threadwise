@@ -7,6 +7,7 @@ import {
   type NotificationPrefsResponse,
   type SaveNotificationPrefsRequest,
 } from '@crm/contracts';
+import { modernZoneList } from '@/lib/timezones';
 
 export const SETTINGS_TABS = [
   'general',
@@ -54,7 +55,14 @@ export function timeZoneList(current: string): string[] {
   } catch {
     zones = ['Asia/Kolkata', 'Asia/Dubai', 'Europe/London', 'America/New_York'];
   }
-  return [...new Set(['UTC', current, ...zones])];
+  return [...new Set(['UTC', current, ...modernZoneList(zones, current)])];
+}
+
+/** The zones whose name contains what was typed: case and `_` ignored, so "new york" finds America/New_York. Empty search keeps all. */
+export function filterTimeZones(zones: readonly string[], search: string): string[] {
+  const needle = search.trim().toLowerCase().replace(/_/g, ' ');
+  if (!needle) return [...zones];
+  return zones.filter((z) => z.toLowerCase().replace(/_/g, ' ').includes(needle));
 }
 
 export type Matrix = {

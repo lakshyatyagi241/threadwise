@@ -282,13 +282,20 @@ const list: NodeExecutor = {
       sections,
     });
     if (!out.ok) return failed(out, 'end', ctx)!;
+    const variable = str(p.variable) || 'choice';
+    // Like the Buttons menu, the list stays tappable after a leaf branch finishes (unless `keepMenuOpen` is off): without this the run
+    // ended on the first pick and every later tap on the same list did nothing.
+    const keepOpen = p.keepMenuOpen !== false;
+    if (keepOpen)
+      ctx.run.menus.latest = { nodeId: ctx.node.id, variable, answerItems: [], listItems: rows };
     return {
       kind: 'wait',
       wait: {
         nodeId: ctx.node.id,
-        variable: str(p.variable) || 'choice',
+        variable,
         kind: 'List',
         listItems: rows,
+        persistent: keepOpen,
       },
     };
   },
@@ -401,6 +408,7 @@ const cta: NodeExecutor = {
         ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value)),
     );
     let msg: OutboundMessage;
+    let moreLinks: Array<Record<string, unknown>> = [];
     if (ctx.run.channelKind === 'webchat') {
       // The website chat window draws up to three buttons that open a page, a call or an email.
       const links = actions
@@ -415,8 +423,13 @@ const cta: NodeExecutor = {
       if (links.length === 0 && !text) return advance;
       msg = { kind: 'text', body: text || links[0]!.label, ...(links.length ? { links } : {}) };
     } else if (urlAction) {
+      const isLink = (a: Record<string, unknown>) =>
+        ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value));
+      // WhatsApp's link message holds one button, so every further web link goes out as a button message of its own (a call, an email
+      // or a copy code cannot be a button there and stays a line of text in the first message).
+      moreLinks = actions.filter((a) => a !== urlAction && isLink(a)).slice(0, 2);
       const extra = actions
-        .filter((a) => a !== urlAction)
+        .filter((a) => a !== urlAction && !isLink(a))
         .slice(0, 2)
         .map(line)
         .join('\n');
@@ -444,6 +457,21 @@ const cta: NodeExecutor = {
     if (!out.ok) {
       const stop = failed(out, 'skip', ctx);
       if (stop) return stop;
+    }
+    if (out.ok) {
+      for (const a of moreLinks) {
+        const label = (str(a.label) || 'Visit').slice(0, 20);
+        const more = await ctx.send({
+          kind: 'cta_url',
+          body: label,
+          text: label,
+          url: ctx.render(a.value),
+        });
+        if (!more.ok) {
+          const stop = failed(more, 'skip', ctx);
+          if (stop) return stop;
+        }
+      }
     }
     return advance;
   },

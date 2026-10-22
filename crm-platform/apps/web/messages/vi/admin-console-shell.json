@@ -282,7 +282,9 @@
           "save": "Lưu",
           "saved": "Đã lưu tùy chọn.",
           "saveFailed": "Không thể lưu tùy chọn."
-        }
+        },
+        "timezoneSearch": "Tìm múi giờ",
+        "timezoneNoMatch": "Không có múi giờ nào khớp."
       },
       "notifications": {
         "title": "Thông báo không gian làm việc",

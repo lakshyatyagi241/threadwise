@@ -1546,7 +1546,9 @@
         "selected": "Selected columns",
         "selectAll": "Select All",
         "reorder": "Drag to re-order columns",
-        "remove": "Remove {name}"
+        "remove": "Remove {name}",
+        "nameShort": "View name must be at least {min} characters.",
+        "nameLong": "View name can be at most {max} characters."
       },
       "presets": {
         "myContacts": "My contacts",

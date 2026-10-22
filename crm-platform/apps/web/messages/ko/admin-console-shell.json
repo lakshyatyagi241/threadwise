@@ -282,7 +282,9 @@
           "save": "저장",
           "saved": "환경설정을 저장했습니다.",
           "saveFailed": "환경설정을 저장할 수 없습니다."
-        }
+        },
+        "timezoneSearch": "시간대 검색",
+        "timezoneNoMatch": "일치하는 시간대가 없습니다."
       },
       "notifications": {
         "title": "워크스페이스 알림",

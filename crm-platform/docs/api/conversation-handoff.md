@@ -18,8 +18,10 @@ service and reported as `available` in the settings.
 | `with_bot`    | a person gave it back                                      | answers   |
 | `null`        | no handoff ever touched it, or it was resolved             | as before |
 
-Resolving, closing or marking spam clears it. A person assigning a `waiting` or `with_bot` thread makes it `with_person`; unassigning a `with_person`
-thread puts it back in the queue.
+Resolving or closing clears it. Marking spam clears it only when no person holds the thread: a thread with a person assigned keeps its
+state and its open handoff (a team queue is not a hold, so it is cleared). A person assigning a `waiting` or `with_bot` thread makes it `with_person`; unassigning a `with_person`
+thread puts it back in the queue. A spam thread is muted for the bot too (no flow, keyword reply or auto reply). Taking it off spam lifts that
+mute only when no person holds it; a held thread stays muted until it is returned to the bot.
 
 ## Routes
 

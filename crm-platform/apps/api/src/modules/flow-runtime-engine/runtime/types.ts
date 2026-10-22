@@ -53,7 +53,13 @@ export interface ListRow {
  * on an older message still finds the menu it came from.
  */
 export interface MenuMemory {
-  latest: { nodeId: string; variable: string; answerItems: MenuItem[] } | null;
+  latest: {
+    nodeId: string;
+    variable: string;
+    answerItems: MenuItem[];
+    /** A List node's menu: its rows, so a dead end re-arms a list wait (the rows stay tappable) instead of a buttons one. */
+    listItems?: ListRow[];
+  } | null;
   byNode: Record<string, MenuItem[]>;
 }
 

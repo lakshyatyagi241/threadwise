@@ -94,7 +94,7 @@ When a limit is reached, or when WhatsApp pushes back, group actions on that num
 
 ## Who can do what
 
-**wa.groups.read** shows the tab and the groups. **wa.groups.create** creates groups. **wa.groups.manage** edits groups, sees members and join requests, uses the invite link and joins by link. **wa.groups.leave** leaves a group. By default only workspace admins have them. The unofficial connection must also be allowed for the workspace.
+Separate permissions control seeing the tab and the groups, creating groups, editing groups (seeing members and join requests, using the invite link and joining by link) and leaving a group. By default only workspace admins have them. The unofficial connection must also be allowed for the workspace.
 
 ## If something looks wrong
 

@@ -24,7 +24,7 @@ An edition is not a separate product and not a setting called "edition". It come
 1. **The plan** decides what you may use. Each plan feature belongs to a product line (Chat, Sales CRM or Platform, which both sides share). A Chat plan has the Sales CRM features switched off, a Sales CRM plan has the Chat features switched off, and a plan for both has all of them on. The plan editor groups the features by product line so this is a few clicks.
 2. **The business type** decides what you see. The "Chat team", "Sales team" and "Chat and sales" business types hide the screens of the other side so people only meet words and menus that apply to them.
 
-Hiding is not locking. A hidden screen is not drawn and shows no upgrade prompt, but nothing is removed: its data, its API and a saved or shared link still work when your plan and role allow it. And a business type never gives access to something the plan does not include; a visible screen the plan lacks still shows its lock.
+Hiding is not locking. A hidden screen is not drawn and shows no upgrade prompt, but nothing is removed: its data and a saved or shared link still work when your plan and role allow it. And a business type never gives access to something the plan does not include; a visible screen the plan lacks still shows its lock.
 
 ## For operators
 

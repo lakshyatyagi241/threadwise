@@ -66,6 +66,9 @@ function dummy(col, tag, n) {
   }
 }
 
+/** Rows another table's policy depends on, seeded first (with the column values the dummy seed cannot guess). */
+const PARENT_ROWS = { team_members: [{ table: 'users', set: { status: "'active'" } }] };
+
 export async function runDbProbe({ ownerUrl, appUrl, log = () => {} }) {
   const owner = new Client({ connectionString: ownerUrl });
   const app = new Client({ connectionString: appUrl });
@@ -161,10 +164,25 @@ export async function runDbProbe({ ownerUrl, appUrl, log = () => {} }) {
       const vals = need.map((c) => (c.name === 'org_id' ? String(org) : dummy(c, tag, n)));
       return `insert into ${q(table)} (${names.join(',')}) values (${vals.join(',')})`;
     };
+    // A table whose own policy looks at another table needs that row to exist: team_members rows are visible only while their user is not
+    // inactive (20270210090000), and the dummy seed disables foreign keys, so without a real user row the table could never show its own rows.
+    const parentSql = (org, n, tag) =>
+      (PARENT_ROWS[table] ?? []).map(({ table: pt, set = {} }) => {
+        const pneed = byTable
+          .get(pt)
+          .filter(
+            (c) => !c.generated && (c.name === 'org_id' || (c.notnull && !c.hasdef && !c.ident)),
+          );
+        const vals = pneed.map((c) =>
+          c.name === 'org_id' ? String(org) : (set[c.name] ?? dummy(c, tag, n)),
+        );
+        return `insert into ${q(pt)} (${pneed.map((c) => q(c.name)).join(',')}) values (${vals.join(',')})`;
+      });
     const seedRow = async (org, n, tag) => {
       await owner.query('begin');
       try {
         await owner.query(`set local session_replication_role = replica`);
+        for (const sqlText of parentSql(org, n, tag)) await owner.query(sqlText);
         await owner.query(insertSql(org, n, tag));
         await owner.query('commit');
         return null;

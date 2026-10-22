@@ -404,6 +404,119 @@ describe('list: search by name, number, last message and contact', () => {
   });
 });
 
+/**
+ * The search by contact name, checked against the correlated EXISTS it was written as. The oracle is that predicate in plain SQL, run on
+ * the owner connection with the organization named, so it does not depend on the app's own search code. Terms are narrow, typical and
+ * one letter: each must return the same set, each once, and the counts must equal the list total for the same search.
+ */
+describe('list: contact-name search is the set the correlated EXISTS gives, and the counts match it', () => {
+  let t: Tenant;
+  let token: string;
+  let ch: { id: string };
+
+  const ORACLE = `
+    SELECT c.uuid FROM conversations c
+    WHERE c.org_id = $1 AND c.last_message_at IS NOT NULL AND c.archived = FALSE AND c.status = 'open'
+      AND (c.title ILIKE $2 OR c.peer_name ILIKE $2 OR c.peer_key ILIKE $2 OR c.preview ILIKE $2
+           OR EXISTS (SELECT 1 FROM contacts sc WHERE sc.org_id = c.org_id AND sc.id = c.contact_id AND sc.name ILIKE $2)
+           OR ($3::text IS NOT NULL AND c.peer_key LIKE $3))`;
+
+  /** The same predicate as the correlated EXISTS, plus the digits rule of the search (a number matches the stored peer key). */
+  const oracle = async (q: string): Promise<string[]> => {
+    const digits = q.replace(/\D/g, '');
+    const digitsLike = digits.length >= 3 && /^[\d\s+()\-.]+$/.test(q) ? `%${digits}%` : null;
+    return (await h.owner.query(ORACLE, [t.orgId, `%${q}%`, digitsLike])).rows.map(
+      (r) => r.uuid as string,
+    );
+  };
+
+  /** Every page of a search, walked with the cursor at a small page size so the keyset boundary is crossed. */
+  const search = async (q: string) => {
+    const seen: string[] = [];
+    let counts: Record<string, number> | null = null;
+    let cursor: string | null = null;
+    for (let i = 0; i < 50; i += 1) {
+      const p: Page = await list(
+        token,
+        `?q=${encodeURIComponent(q)}&limit=4${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`,
+      );
+      counts ??= p.meta.counts;
+      seen.push(...ids(p));
+      if (!p.page.hasMore) break;
+      cursor = p.page.nextCursor;
+    }
+    return { seen, counts: counts! };
+  };
+
+  beforeAll(async () => {
+    t = await api.signup('ibqx');
+    token = t.admin;
+    ch = await inbox.channel(t.admin);
+    const names = [
+      'Rita Acharya',
+      'Ritu Anand',
+      'Meera Rao',
+      'Anil Kapoor',
+      'Contact 12',
+      'Contact 120',
+      'Zed Wolf',
+      'AMIT',
+      'Gita',
+    ];
+    const uuids = await api.seedContacts(
+      t,
+      names.map((name) => ({ name })),
+    );
+    const internal = new Map<string, number>(
+      (
+        await h.owner.query(
+          `SELECT id, uuid FROM contacts WHERE org_id = $1 AND uuid = ANY($2::uuid[])`,
+          [t.orgId, uuids],
+        )
+      ).rows.map((r): [string, number] => [r.uuid as string, Number(r.id)]),
+    );
+    // One open thread per contact, with a title and number that match nothing, so only the contact name can find it.
+    for (const [i, uuid] of uuids.entries()) {
+      await inbox.conversation(t, ch.id, {
+        title: `Thread ${i}`,
+        peer: `9190000${String(i).padStart(4, '0')}`,
+        contactId: internal.get(uuid)!,
+      });
+    }
+    // A thread of Rita's that is resolved, and one of Ritu's that is archived: neither is in the open list, so neither may match.
+    await inbox.conversation(t, ch.id, {
+      title: 'Thread R',
+      peer: '9190009001',
+      contactId: internal.get(uuids[0]!)!,
+      status: 'resolved',
+    });
+    await inbox.conversation(t, ch.id, {
+      title: 'Thread Q',
+      peer: '9190009002',
+      contactId: internal.get(uuids[1]!)!,
+      archived: true,
+    });
+    // A thread with no contact whose own title says "Rita": it matches by its title, not by a contact.
+    await inbox.conversation(t, ch.id, { title: 'Rita from the web form', peer: '9190009003' });
+  }, 120_000);
+
+  // The last term is a number: it matches one thread's peer key through the digits rule and nothing by name or title.
+  it.each(['Rita Acharya', 'rit', 'RITA', 'contact 1', 'z', 'a', '91900000003'])(
+    '"%s": the list is the EXISTS set, each thread once, and the counts equal the list total',
+    async (term) => {
+      const expected = await oracle(term);
+      expect(expected.length, `term ${term} must match something`).toBeGreaterThan(0);
+      const { seen, counts } = await search(term);
+      expect([...seen].sort(), `term ${term}`).toEqual([...expected].sort());
+      expect(new Set(seen).size, `term ${term}`).toBe(seen.length);
+      expect(counts.all, `term ${term}`).toBe(expected.length);
+      const viaCounts = await api.as(token).get(`/v2/inbox/counts?q=${encodeURIComponent(term)}`);
+      expect(viaCounts.status, `term ${term}`).toBe(200);
+      expect(viaCounts.body, `term ${term}`).toEqual(counts);
+    },
+  );
+});
+
 describe('scope: all, team and own see the same conversations in the list, the counts and by id', () => {
   let t: Tenant;
   let ch: { id: string };

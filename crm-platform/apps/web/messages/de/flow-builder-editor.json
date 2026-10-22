@@ -555,7 +555,8 @@
           "cardCount": "{count} Karte(n)",
           "payLink": "Zahlungslink",
           "invoice": "Rechnung",
-          "faqRetired": "Eingestellt · verlässt über „Keine Übereinstimmung“"
+          "faqAgent": "Antwortet aus {agent}",
+          "faqNoAgent": "KI-Agent wählen"
         },
         "overlays": {
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
@@ -746,7 +747,8 @@
           "storedIn": "Werte werden in der Eigenschaft <b>{property}</b> des Kontakts gespeichert",
           "actions": "Aktionen",
           "actionsHint": "Einen Schritt hinzufügen, der direkt nach diesem läuft.",
-          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen."
+          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen.",
+          "fromSteps": "Erreicht von Schritt {stages}"
         },
         "editors": {
           "linkLabel": "Wohin das führt",
@@ -903,7 +905,10 @@
               "phone": "Nummer anrufen",
               "email": "E-Mail senden",
               "agent": "Mit einer Person sprechen"
-            }
+            },
+            "prev": "Vorherige Karte",
+            "next": "Nächste Karte",
+            "goTo": "Karte {n}"
           },
           "condition": {
             "info": "Fügen Sie Regeln hinzu (eine Variable, einen Vergleich und einen Wert). Verknüpfen Sie sie mit AND oder OR und verschachteln Sie bei Bedarf Gruppen.",
@@ -914,12 +919,14 @@
             "hint": "Der Besucher wird mit Ihrer Notiz an dieses Team übergeben. Nach dieser Schaltfläche muss nichts verbunden werden."
           },
           "faq": {
-            "exit": "Weiter mit",
-            "exitHint": "Der Ablauf geht immer hier weiter."
+            "exit": "Wenn nichts passt",
+            "exitHint": "Wohin der Ablauf geht, wenn kein Eintrag antwortet.",
+            "matched": "Bei Antwort",
+            "matchedHint": "Wohin der Ablauf nach dem Senden der Antwort geht."
           }
         },
         "branchAdd": "Schritt für „{title}“ hinzufügen",
-        "faqEnds": "Dieser eingestellte Schritt beendet diesen Abschnitt: Der Ablauf geht immer über seinen Ausgang „Keine Übereinstimmung“ weiter.",
+        "faqEnds": "Dieser Schritt beendet diesen Teil: Der Ablauf geht über den Ausgang Beantwortet oder Kein Treffer weiter.",
         "flowMenu": "Optionen für {name}",
         "renameFlow": "Ablauf umbenennen"
       },
@@ -1869,7 +1876,13 @@
           "waitUntilPaid": "Bis zur Zahlung warten, dann fortfahren"
         },
         "faq": {
-          "retired": "Dieser Schritt ist eingestellt und sucht nichts mehr. Der Ablauf geht immer über „Keine Übereinstimmung“ weiter. Um aus Ihrem eigenen Wissen zu antworten, nutzen Sie einen KI-Assistenten-Schritt und wählen Sie einen KI-Agenten."
+          "agent": "KI-Agent",
+          "agentHint": "Der Agent, dessen Wissensdatenbank durchsucht wird. Häufige Fragen fügen Sie unter KI-Training hinzu.",
+          "query": "Suchen nach",
+          "queryHint": "Wonach gesucht wird. Meist die letzte Nachricht des Kunden.",
+          "sendAnswer": "Antwort an den Kunden senden",
+          "variable": "Antwort speichern als",
+          "variableHint": "Spätere Schritte lesen die Antwort unter diesem Namen, zum Beispiel faq.answer."
         }
       },
       "attrPicker": {
@@ -2602,7 +2615,8 @@
         "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
         "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
         "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten.",
-        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu."
+        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu.",
+        "fileLinkInvalid": "Schritt {stage}: Der Dateilink muss mit https:// beginnen"
       }
     },
     "waboImport": {
@@ -2716,7 +2730,7 @@
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
       "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten",
-      "faqRetired": "(simuliert) Antwort aus FAQ ist eingestellt: „Keine Übereinstimmung“ wird genommen."
+      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\"."
     }
   }
 }

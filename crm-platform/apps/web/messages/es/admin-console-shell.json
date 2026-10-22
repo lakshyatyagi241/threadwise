@@ -282,7 +282,9 @@
           "save": "Guardar",
           "saved": "Preferencia guardada.",
           "saveFailed": "No se pudo guardar la preferencia."
-        }
+        },
+        "timezoneSearch": "Buscar zonas horarias",
+        "timezoneNoMatch": "No hay ninguna zona horaria que coincida."
       },
       "notifications": {
         "title": "Notificaciones del espacio de trabajo",
