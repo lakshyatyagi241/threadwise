@@ -213,10 +213,6 @@ function ExportRow({ item: e, highlighted }: { item: MessageLogExport; highlight
     }
   }
 
-  // A range with no events still gives a file (header only): say so instead of "0 lines".
-  const linesText =
-    e.rowCount === 0 ? t('history.noLines') : t('history.lines', { count: e.rowCount ?? 0 });
-
   return (
     <li
       data-testid="message-log-export"
@@ -237,7 +233,12 @@ function ExportRow({ item: e, highlighted }: { item: MessageLogExport; highlight
         </p>
         <p className="text-xs text-muted-foreground">
           {t('history.requestedAt', { date: fullStamp(e.requestedAt, locale, timeZone) })}
-          {e.status === 'ready' && e.rowCount !== null && <> · {linesText}</>}
+          {e.status === 'ready' && e.rowCount !== null && (
+            <>
+              {' · '}
+              {e.rowCount === 0 ? t('history.noLines') : t('history.lines', { count: e.rowCount })}
+            </>
+          )}
           {e.status === 'ready' && e.expiresAt && (
             <> · {t('history.until', { date: fullStamp(e.expiresAt, locale, timeZone) })}</>
           )}
