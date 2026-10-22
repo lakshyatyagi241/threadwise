@@ -12,12 +12,13 @@ import {
   type BulkPropertyProblem,
 } from '../lib/bulk-properties';
 import { PropertyInput } from './custom-fields-section';
+import { XIcon } from './icons';
 
 /**
  * The "Custom properties" part of the bulk update dialog. Every property starts on Keep and is not listed; "Add property"
  * opens a searchable list (it stays usable with dozens of properties) and adds one row at a time. A row holds the property's own
  * typed input (the same one the contact form uses) and two ways out: "Clear" empties the property on every selected contact,
- * "Keep" takes the row away again so that property is left alone.
+ * the cross in the corner takes the row away again so that property is left alone.
  */
 export function BulkPropertiesSection({
   fields,
@@ -67,7 +68,16 @@ export function BulkPropertiesSection({
             const change = changes[f.key]!;
             const problem = problems[f.key];
             return (
-              <li key={f.key} className="rounded-md border border-border p-2.5">
+              <li key={f.key} className="relative rounded-md border border-border p-2.5 pe-9">
+                <button
+                  type="button"
+                  aria-label={t('properties.remove', { name: f.label })}
+                  title={t('properties.remove', { name: f.label })}
+                  onClick={() => remove(f.key)}
+                  className="absolute end-1.5 top-1.5 rounded p-1 text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <XIcon className="size-3.5" />
+                </button>
                 {change.mode === 'set' ? (
                   <PropertyInput
                     field={f}
@@ -111,9 +121,6 @@ export function BulkPropertiesSection({
                       {t('properties.setValue')}
                     </Button>
                   )}
-                  <Button type="button" size="sm" variant="ghost" onClick={() => remove(f.key)}>
-                    {t('properties.keep')}
-                  </Button>
                 </div>
               </li>
             );
