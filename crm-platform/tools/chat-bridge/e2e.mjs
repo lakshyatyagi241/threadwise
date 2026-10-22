@@ -26,7 +26,7 @@ const recv = http.createServer((req, res) => {
 
 const env = {
   ...process.env, PORT: String(BP), CHAT_ALLOW_ANY_HOST: '1', CHAT_RETRY_BASE_MS: '50',
-  GCHAT_CRITICAL_URL: `http://127.0.0.1:${RP}/critical?token=${SECRET}`, GCHAT_OTHER_URL: `http://127.0.0.1:${RP}/other?token=${SECRET}`, GCHAT_SLOWQUERY_URL: `http://127.0.0.1:${RP}/slowquery?token=${SECRET}`,
+  GCHAT_CRITICAL_URL: `http://127.0.0.1:${RP}/critical?token=${SECRET}`, GCHAT_OTHER_URL: `http://127.0.0.1:${RP}/other?token=${SECRET}`,
   SLOW_PG_URL: `${admin.replace('postgres://crm:crm@', `postgres://${ro}:ropw@`)}/${db}`, SLOW_POLL_SECONDS: '2', SLOW_RUNNING_SECONDS: '5', SLOW_MEAN_MS: '300', SLOW_COOLDOWN_SECONDS: '600', SLOW_MAX_PER_MINUTE: '10',
 };
 const logs = [];
@@ -57,7 +57,7 @@ try {
   n = posts.length; const wd = await post('/alertmanager', { alerts: [alert('Watchdog', 'none')] });
   check('Watchdog dropped but counted', wd.status === 200 && posts.length === n && mval(await metrics(), 'crm_chat_bridge_last_watchdog_timestamp_seconds') > 0);
   n = posts.length; await post('/alertmanager', { alerts: [alert('SlowQueryBurst', 'warning', 'firing', { group: 'slow_query' })] });
-  check('group=slow_query goes to Slow Queries', posts[n]?.channel === 'slowquery');
+  check('group=slow_query warning goes to Other', posts[n]?.channel === 'other');
   check('big payload split under limits', await (async () => { n = posts.length; await post('/alertmanager', { alerts: Array.from({ length: 30 }, (_, i) => alert(`Big${i}`, 'warning')) }); const p = posts.slice(n); return p.length >= 4 && p.every((x) => x.body.length < 30000); })());
 
   // (4) retry / failure
@@ -73,9 +73,9 @@ try {
   n = posts.length;
   const slow = new Client({ connectionString: `${admin}/${db}` }); await slow.connect();
   const sp = slow.query("select pg_sleep(7), 'victim@example.com' as e, '+919876543210' as ph, 'tok_live_ABC123' as t, 4242 as n");
-  const got = await until(() => posts.slice(n).some((p) => p.channel === 'slowquery' && /Slow query running/.test(p.body)), 25000);
-  const sq = posts.slice(n).find((p) => p.channel === 'slowquery' && /Slow query running/.test(p.body));
-  check('pg_sleep(7) -> Slow Queries post', got);
+  const got = await until(() => posts.slice(n).some((p) => p.channel === 'other' && /Slow query running/.test(p.body)), 25000);
+  const sq = posts.slice(n).find((p) => p.channel === 'other' && /Slow query running/.test(p.body));
+  check('pg_sleep(7) -> Other post', got);
   check('slow post has no literal values', !!sq && !/victim|example\.com|919876|tok_live|ABC123|4242/.test(sq.body), sq ? '' : 'no post');
   check('slow post shows duration, database, role', !!sq && /Duration/.test(sq.body) && sq.body.includes(db) && sq.body.includes('Role'));
   await sp.catch(() => {}); await slow.end();
@@ -91,7 +91,7 @@ try {
     n = posts.length; const cs = [];
     for (let i = 0; i < 14; i++) { const c = new Client({ connectionString: `${admin}/${db}` }); await c.connect(); cs.push(c); c.query(`select pg_sleep(8) as burst_col_${String.fromCharCode(97 + i)}`).catch(() => {}); }
     await sleep(12000);
-    const first = posts.slice(n).filter((p) => p.channel === 'slowquery').length;
+    const first = posts.slice(n).filter((p) => p.channel === 'other').length;
     check('burst limited to <=10 per minute', first <= 10 && first > 0, `sent=${first}`);
     check('digest message follows', await until(() => posts.slice(n).some((p) => /held back/.test(p.body)), 80000));
     for (const c of cs) c.end().catch(() => {});

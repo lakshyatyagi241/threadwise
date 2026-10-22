@@ -18,7 +18,8 @@ test('sanitizer handles unterminated quote and truncates to 800', () => {
 test('router', () => {
   assert.equal(channelFor({ labels: { severity: 'critical' } }), 'critical');
   assert.equal(channelFor({ labels: { severity: 'warning' } }), 'other');
-  assert.equal(channelFor({ labels: { severity: 'critical', group: 'slow_query' } }), 'slowquery');
+  assert.equal(channelFor({ labels: { severity: 'critical', group: 'slow_query' } }), 'critical');
+  assert.equal(channelFor({ labels: { severity: 'warning', group: 'slow_query' } }), 'other');
   assert.equal(channelFor({ labels: {} }), 'other');
 });
 test('formatter drops Watchdog, splits large payloads, escapes html, keeps messages small', () => {
@@ -64,4 +65,30 @@ test('watcher: rate limit then digest', async () => {
   const w = createWatcher({ query: async (s) => (s.includes('backend_type') ? { rows } : { rows: [] }), metrics: m, send: async (c, x) => sent.push(x), now: () => t, env: {} });
   await w.poll(); assert.equal(sent.length, 10);
   t = 61000; await w.poll(); assert.ok(sent.some((x) => /held back/.test(x.text)));
+});
+
+import fsx from 'node:fs';
+import { DIAG, ruleNames, diagnose, diagnosisRows } from './diagnosis.mjs';
+import { createThreads, fmtDur } from './threads.mjs';
+test('every alert rule has a diagnosis entry', () => {
+  const dir = new URL('../../deploy/observability/', import.meta.url);
+  const names = fsx.readdirSync(dir).filter((f) => f.endsWith('.rules.yml')).flatMap((f) => ruleNames(fsx.readFileSync(new URL(f, dir), 'utf8'))).filter((n) => n !== 'Watchdog');
+  assert.ok(names.length > 40);
+  const missing = names.filter((n) => !DIAG[n]);
+  assert.deepEqual(missing, [], `rules without a diagnosis entry: ${missing}`);
+  for (const n of names) { const d = DIAG[n]; assert.ok(d.meaning && d.causes.length >= 2 && d.check.length && d.action && d.rb && d.q.length, n); }
+  const stale = Object.keys(DIAG).filter((n) => !names.includes(n));
+  assert.deepEqual(stale, [], 'diagnosis entries without a rule');
+});
+test('diagnose: evidence + trend, and timeouts never block', async () => {
+  const f = async (u) => ({ json: async () => ({ data: { result: [{ value: [0, /offset/.test(decodeURIComponent(u)) ? '10' : '20'] }] } }) });
+  const ev = await diagnose({ labels: { alertname: 'DbPoolExhausted' } }, { fetchImpl: f, env: {} });
+  assert.match(JSON.stringify(ev.rows), /trend up/); assert.equal(ev.value, 20);
+  const t = Date.now(); const hang = await diagnose({ labels: { alertname: 'RedisDown' } }, { fetchImpl: () => new Promise(() => {}), env: {} });
+  assert.ok(Date.now() - t < 3000); assert.deepEqual(hang.rows, []); assert.match(JSON.stringify(diagnosisRows({}, hang)), /unavailable/);
+});
+test('threads: bounded and TTL', () => {
+  let t = 0; const th = createThreads({ max: 2, ttlMs: 100, now: () => t });
+  th.put('a', {}); th.put('b', {}); th.put('c', {}); assert.equal(th.size, 2); assert.ok(!th.get('a'));
+  t = 500; assert.ok(!th.get('b')); assert.equal(fmtDur(252000), '4m 12s');
 });

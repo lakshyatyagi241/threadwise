@@ -1,7 +1,7 @@
 // Pure helpers for the Google Chat bridge and the slow-query watcher: sanitizer, router, formatter, sender, dedup, rate limit.
 // No dependencies. Webhook URLs are secrets: nothing here logs or returns them.
 
-export const CHANNELS = ['critical', 'other', 'slowquery', 'deploy'];
+export const CHANNELS = ['critical', 'other', 'deploy'];
 const MAX_TEXT = 3500; // Chat caps a message text at 4096 chars; cards are counted by the text they hold, keep a margin.
 const MAX_WIDGETS = 40;
 
@@ -24,7 +24,6 @@ export function isWatchdog(a) {
 }
 
 export function channelFor(a) {
-  if (a?.labels?.group === 'slow_query') return 'slowquery';
   return a?.labels?.severity === 'critical' ? 'critical' : 'other';
 }
 
@@ -58,7 +57,7 @@ const safeUrl = (u) => (/^https?:\/\//.test(String(u ?? '')) ? String(u).slice(0
 
 const size = (ws) => JSON.stringify(ws).length;
 
-// -> { critical: [msg...], other: [...], slowquery: [...] }; each msg is a Chat cardsV2 message body under the size limits.
+// -> { critical: [msg...], other: [...] }; each msg is a Chat cardsV2 message body under the size limits.
 export function formatAlertmanager(payload, { grafanaUrl = '' } = {}) {
   const per = {};
   for (const a of payload?.alerts ?? []) {
@@ -90,14 +89,28 @@ export function formatAlertmanager(payload, { grafanaUrl = '' } = {}) {
   return out;
 }
 
+// One card for ONE alert (so each alert can have its own thread). extra = widgets appended before the buttons (diagnosis).
+export function alertCard(a, { grafanaUrl = '', extra = [], title } = {}) {
+  const resolved = a.status === 'resolved';
+  const widgets = [...alertWidgets(a, grafanaUrl), ...extra].slice(0, MAX_WIDGETS * 3);
+  const name = trunc(a.labels?.alertname ?? 'alert', 120);
+  return { text: trunc(`${title ?? (resolved ? 'resolved' : 'firing')}: ${name}`, 300), cardsV2: [{ cardId: 'am-1', card: { header: { title: trunc(title ?? `${resolved ? 'RESOLVED' : 'FIRING'}: ${name}`, 100), subtitle: 'Threadwise alerts' }, sections: [{ widgets }] } }] };
+}
+export const widgetsOf = (rows) => rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(trunc(v, 700)), wrapText: true } }));
+
 export function textMessage(text) {
   return { text: trunc(text, 4000) };
 }
 
 // Sender: post(channel, body) -> { ok, status, attempts }. Retries 429/5xx/network errors with backoff, never throws, never exposes the URL.
 export function createSender({ urls, fetchImpl = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), metrics, retries = 3, baseMs = 500, timeoutMs = 5000, log = () => {} }) {
-  return async function post(channel, body) {
-    const url = urls[channel];
+  // opts.threadKey: post into that thread (Chat webhook ?threadKey + body.thread.threadKey); a missing thread falls back to a new one.
+  return async function post(channel, body, opts = {}) {
+    let url = urls[channel];
+    if (url && opts.threadKey) {
+      const u = new URL(url); u.searchParams.set('threadKey', opts.threadKey); u.searchParams.set('messageReplyOption', 'REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD');
+      url = u.toString(); body = { ...body, thread: { threadKey: opts.threadKey } };
+    }
     if (!url) { metrics?.fail(channel, 'unconfigured'); log({ evt: 'chat_unconfigured', channel }); return { ok: false, status: 0, attempts: 0 }; }
     let status = 0;
     for (let i = 0; i <= retries; i++) {
