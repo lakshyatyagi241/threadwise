@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   NOTIFICATION_CATEGORY_KEYS,
   NOTIFICATION_EVENT_KEYS,
@@ -58,11 +58,29 @@ describe('Settings tab shell (TW-ASHELL-032)', () => {
 });
 
 describe('General tab (TW-ASHELL-033)', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('lists UTC and the workspace zone first, once each', () => {
     const zones = timeZoneList('Asia/Kolkata');
     expect(zones[0]).toBe('UTC');
     expect(zones[1]).toBe('Asia/Kolkata');
     expect(new Set(zones).size).toBe(zones.length);
+  });
+
+  it('keeps Asia/Kolkata selectable after the workspace moves off it, even when the browser lists only Asia/Calcutta', () => {
+    vi.spyOn(Intl, 'supportedValuesOf').mockReturnValue([
+      'Asia/Calcutta',
+      'Asia/Colombo',
+      'Asia/Jerusalem',
+      'Europe/London',
+    ]);
+    const zones = timeZoneList('Asia/Colombo');
+    expect(zones).toContain('Asia/Kolkata');
+    expect(zones).not.toContain('Asia/Calcutta');
+    expect(zones.filter((z) => z === 'Asia/Colombo')).toHaveLength(1);
+    expect(zones.indexOf('Asia/Kolkata')).toBeLessThan(zones.indexOf('Europe/London'));
   });
 });
 
