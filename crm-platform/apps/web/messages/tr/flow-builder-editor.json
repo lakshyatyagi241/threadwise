@@ -747,7 +747,8 @@
           "storedIn": "Değerler kişinin <b>{property}</b> özelliğine kaydedilecek",
           "actions": "Eylemler",
           "actionsHint": "Bu adımdan hemen sonra çalışan bir adım ekleyin.",
-          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez."
+          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez.",
+          "fromSteps": "{stages}. adımdan gelinir"
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
         "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
         "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin.",
-        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin."
+        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin.",
+        "fileLinkInvalid": "Adım {stage}: dosya bağlantısı https:// ile başlamalı"
       }
     },
     "waboImport": {

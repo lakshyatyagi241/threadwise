@@ -1100,7 +1100,8 @@
           "storedIn": "Waarden worden opgeslagen in de eigenschap <b>{property}</b> van het contact",
           "actions": "Acties",
           "actionsHint": "Een stap toevoegen die direct na deze draait.",
-          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen."
+          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen.",
+          "fromSteps": "Bereikt vanaf stap {stages}"
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
@@ -2469,7 +2470,8 @@
         "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe.",
         "chooseAiAgent": "Stap {stage}: kies de AI-agent die antwoordt of zet de stap op een eigen instelling.",
         "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent.",
-        "templateFile": "Stap {stage}: voeg het koptekstbestand van de sjabloon toe."
+        "templateFile": "Stap {stage}: voeg het koptekstbestand van de sjabloon toe.",
+        "fileLinkInvalid": "Stap {stage}: de bestandslink moet met https:// beginnen"
       }
     },
     "templates": {

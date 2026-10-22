@@ -747,7 +747,8 @@
           "storedIn": "Wartości zostaną zapisane we właściwości <b>{property}</b> kontaktu",
           "actions": "Akcje",
           "actionsHint": "Dodaj krok uruchamiany zaraz po tym.",
-          "actionsBlocked": "Po kroku, który kończy swoją część, nie może być kolejnego kroku."
+          "actionsBlocked": "Po kroku, który kończy swoją część, nie może być kolejnego kroku.",
+          "fromSteps": "Prowadzi tu krok {stages}"
         },
         "editors": {
           "linkLabel": "Dokąd to prowadzi",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania.",
         "chooseAiAgent": "Krok {stage}: wybierz agenta AI, który odpowiada, albo przełącz krok na ustawienia własne.",
         "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI.",
-        "templateFile": "Krok {stage}: dodaj plik nagłówka szablonu."
+        "templateFile": "Krok {stage}: dodaj plik nagłówka szablonu.",
+        "fileLinkInvalid": "Krok {stage}: link do pliku musi zaczynać się od https://"
       }
     },
     "waboImport": {

@@ -20,6 +20,7 @@ import {
   stageIn,
   stepLabel,
   stepSummary,
+  incomingStages,
   stepText,
   removeStep,
   stageLabel,
@@ -730,6 +731,38 @@ describe('steps per channel', () => {
 
   it('a WhatsApp bot keeps every step except the website-only carousel', () => {
     expect(stepKindsFor('chat')).toEqual(STEP_KINDS.filter((k) => k.type !== 'carousel'));
+  });
+});
+
+describe('which steps lead to a step', () => {
+  it('lists the step before it, a button pointing at it, and a "Then go to" naming it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const choice = newStep('buttons', allSteps(d));
+    d = insertStep(d, 0, 1, choice);
+    const target = newStep('message', allSteps(d));
+    d = addJourney(d, target);
+    d = updateStep(d, choice.id, { data: { options: ['A', 'B'] }, links: [target.id, null] });
+    expect(incomingStages(d, choice.id)).toEqual(['1.1']);
+    expect(incomingStages(d, target.id)).toEqual(['1.2']);
+    expect(incomingStages(d, first.id)).toEqual([]);
+  });
+});
+
+describe('a media step needs a full web link', () => {
+  const run = (url: string) => {
+    let d = emptyDoc();
+    d = insertStep(d, 0, 0, { ...newStep('media', []), data: { kind: 'image', url } });
+    d.trigger.data.keywords = 'hi';
+    return problems(d, { senderRequired: false }).map((p) => en(p.message));
+  };
+
+  it('asks for the link, then for one that starts with http(s)', () => {
+    expect(run('')).toEqual(['Step 1.1: add the file link.']);
+    expect(run('www.site.com/a.png')).toEqual(['Step 1.1: the file link must start with https://']);
+    expect(run('https://cdn.site.com/a.png')).toEqual([]);
   });
 });
 

@@ -747,7 +747,8 @@
           "storedIn": "Les valeurs seront enregistrées dans la propriété <b>{property}</b> du contact",
           "actions": "Actions",
           "actionsHint": "Ajouter une étape qui s'exécute juste après celle-ci.",
-          "actionsBlocked": "Une étape qui termine sa partie ne peut pas être suivie d'une autre."
+          "actionsBlocked": "Une étape qui termine sa partie ne peut pas être suivie d'une autre.",
+          "fromSteps": "Atteint depuis l'étape {stages}"
         },
         "editors": {
           "linkLabel": "Où cela mène",
@@ -2611,7 +2612,8 @@
         "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler.",
         "chooseAiAgent": "Étape {stage} : choisissez l’agent IA qui répond ou passez l’étape en configuration personnalisée.",
         "writeAiPrompt": "Étape {stage} : rédigez les instructions pour l’IA ou choisissez un agent IA.",
-        "templateFile": "Étape {stage} : ajoutez le fichier d'en-tête du modèle."
+        "templateFile": "Étape {stage} : ajoutez le fichier d'en-tête du modèle.",
+        "fileLinkInvalid": "Étape {stage} : le lien du fichier doit commencer par https://"
       }
     },
     "waboImport": {
