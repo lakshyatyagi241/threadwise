@@ -97,7 +97,12 @@ export function DashboardScreen() {
   // The people panel is only asked for while the Agent view is open.
   const team = useTeamPanel(win, canAnalytics && view === 'agent');
   const [agent, setAgent] = useState<string | undefined>(undefined);
-  const conversationStats = useConversationStats(win, agent, canAnalytics && view === 'agent');
+  // The Bot view shows the same average duration for the whole workspace.
+  const conversationStats = useConversationStats(
+    win,
+    view === 'bot' ? undefined : agent,
+    canAnalytics && (view === 'agent' || view === 'bot'),
+  );
   // The Summary shows the same status counts for the whole workspace, so a person who may read analytics sees them there too.
   const summaryStats = useConversationStats(win, undefined, canAnalytics && view === 'summary');
   const taskCounts = useTaskCounts(canTasks);
@@ -120,6 +125,7 @@ export function DashboardScreen() {
       wallet.refetch(),
       session.refetch(),
       ...(canAnalytics && view === 'agent' ? [team.refetch(), conversationStats.refetch()] : []),
+      ...(canAnalytics && view === 'bot' ? [conversationStats.refetch()] : []),
       ...(canAnalytics && view === 'summary' ? [summaryStats.refetch()] : []),
       ...(canContacts ? [newContacts.refetch()] : []),
       ...(canTasks ? [taskCounts.refetch()] : []),
@@ -234,11 +240,9 @@ export function DashboardScreen() {
         contentContainerStyle={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} />}
       >
-        {view !== 'bot' ? (
-          <FadeIn>
-            <DateRangePill range={win} onPress={() => setSheetOpen(true)} />
-          </FadeIn>
-        ) : null}
+        <FadeIn>
+          <DateRangePill range={win} onPress={() => setSheetOpen(true)} />
+        </FadeIn>
 
         {session.data?.landing === 'onboarding' ? (
           <Banner tone="info" message={t('dashboard.setupBanner')} />
@@ -256,7 +260,13 @@ export function DashboardScreen() {
             onRetry={() => void team.refetch()}
           />
         ) : view === 'bot' ? (
-          <BotView query={widgets} onRetry={() => void widgets.refetch()} />
+          <BotView
+            query={widgets}
+            summary={summary}
+            stats={canAnalytics ? conversationStats : undefined}
+            rangeName={rangeName}
+            onRetry={() => void widgets.refetch()}
+          />
         ) : forbidden ? (
           <Card>
             <Text accessibilityRole="alert">{t('dashboard.error.forbidden', { role })}</Text>

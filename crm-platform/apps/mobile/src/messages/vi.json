@@ -536,7 +536,9 @@
       "hint": "Đã lưu vào tài khoản của bạn.",
       "failed": "Không thể lưu lựa chọn của bạn. Hãy thử lại."
     },
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "helpCenter": "Trung tâm trợ giúp",
+    "helpUnavailable": "Địa chỉ Trung tâm trợ giúp chưa được thiết lập cho ứng dụng này."
   },
   "settings": {
     "quickReplies": {
@@ -1073,7 +1075,10 @@
       },
       "bot": {
         "notice": "Đây là cuộc trò chuyện với bot.",
-        "assignSelf": "Giao cho chính bạn"
+        "assignSelf": "Giao cho chính bạn",
+        "tab": "Bot",
+        "returnToBot": "Trả lại cho bot",
+        "answering": "Bot đang trả lời"
       },
       "labels": {
         "open": "Gán nhãn",
@@ -1541,6 +1546,15 @@
     "sheet": {
       "close": "Đóng"
     },
+    "whatsappAction": {
+      "title": "Thao tác WhatsApp",
+      "subtitle": "Chọn cách bạn muốn liên lạc với {{name}}",
+      "open": "Mở WhatsApp",
+      "openHint": "Mở trực tiếp ứng dụng WhatsApp",
+      "templateHint": "Chọn từ các mẫu đã được duyệt",
+      "noNumber": "Không có số WhatsApp nào được kết nối với không gian làm việc này.",
+      "pickNumber": "Gửi từ số nào?"
+    },
     "views": {
       "open": "Chế độ xem liên hệ: {{name}}",
       "title": "Chế độ xem",
@@ -1607,8 +1621,7 @@
     "filter": {
       "open": "Lọc công việc",
       "title": "Lọc công việc",
-      "clear": "Xóa tất cả",
-      "apply": "Áp dụng",
+      "any": "Bất kỳ",
       "group": {
         "status": "Trạng thái",
         "priority": "Ưu tiên",
@@ -1677,10 +1690,6 @@
       "title": "Tiêu đề công việc",
       "description": "Mô tả công việc",
       "priority": "Ưu tiên",
-      "date": "Ngày (YYYY-MM-DD)",
-      "dateHint": "Để trống ngày và giờ nếu không có hạn. Ví dụ 2026-10-31.",
-      "time": "Giờ (HH:mm)",
-      "timeHint": "Đồng hồ 24 giờ, ví dụ 14:30.",
       "owner": "Người phụ trách",
       "ownerPick": "Chọn người phụ trách",
       "ownerMe": "Tôi",
@@ -1708,6 +1717,21 @@
         "dueInvalid": "Không thể dùng ngày giờ đến hạn này.",
         "assigneeInvalid": "Không thể giao công việc cho người này. Hãy chọn người phụ trách khác.",
         "contactInvalid": "Không thể liên kết liên hệ này."
+      },
+      "titlePlaceholder": "Nhập tiêu đề",
+      "descriptionPlaceholder": "Nhập mô tả (không bắt buộc)",
+      "contactPlaceholder": "Nhập để tìm liên hệ…",
+      "typePlaceholder": "Chọn loại",
+      "datePlaceholder": "Chọn ngày",
+      "timePlaceholder": "Chọn giờ",
+      "hour": "Giờ",
+      "minute": "Phút",
+      "type": "Loại công việc",
+      "typeNone": "Không có loại",
+      "typeRemoved": "(đã xóa)",
+      "typeNames": {
+        "follow_up": "Theo dõi",
+        "call_reminder": "Nhắc gọi lại"
       }
     }
   },
@@ -2771,6 +2795,41 @@
         "label": "Đăng ký ứng dụng trả phí đã kết thúc",
         "hint": "Gói đăng ký của một ứng dụng trả phí đã kết thúc và ứng dụng đã bị tạm dừng."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách quyền riêng tư",
+    "deletion": "Yêu cầu xóa tài khoản",
+    "unavailable": "Liên kết này chưa khả dụng. Hãy nhờ quản trị viên không gian làm việc thiết lập."
+  },
+  "accountDelete": {
+    "title": "Xóa tài khoản của bạn",
+    "warning": "Thao tác này xóa vĩnh viễn tài khoản của bạn: thông tin đăng nhập, hồ sơ, ảnh và thiết bị.",
+    "irreversible": "Không thể hoàn tác.",
+    "consequencesTitle": "Điều sẽ xảy ra",
+    "consequence1": "Bạn bị đăng xuất ở mọi nơi và không thể đăng nhập lại bằng tài khoản này.",
+    "consequence2": "Không gian làm việc và các thành viên khác vẫn còn. Công việc bạn đã làm vẫn thuộc về không gian làm việc.",
+    "consequence3": "Một bản ghi về việc xóa tài khoản được giữ lại để kiểm toán.",
+    "blocked": {
+      "sole_member": {
+        "title": "Bạn là thành viên duy nhất của không gian làm việc này.",
+        "body": "Không thể tự xóa tài khoản. Hãy nhờ đội ngũ nền tảng đóng không gian làm việc."
+      },
+      "sole_admin": {
+        "title": "Bạn là quản trị viên duy nhất.",
+        "body": "Hãy chuyển một thành viên khác thành quản trị viên trước, rồi quay lại để xóa tài khoản."
+      }
+    },
+    "phraseLabel": "Nhập {{phrase}} để xác nhận",
+    "phraseHint": "Đúng như hiển thị, kể cả chữ hoa.",
+    "password": "Mật khẩu hiện tại",
+    "cancel": "Hủy",
+    "submit": "Xóa vĩnh viễn tài khoản",
+    "errors": {
+      "phrase": "Nhập cụm từ đúng như hiển thị.",
+      "passwordRequired": "Nhập mật khẩu hiện tại.",
+      "passwordWrong": "Mật khẩu không đúng."
     }
   }
 }

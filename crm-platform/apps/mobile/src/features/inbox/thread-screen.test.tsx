@@ -56,6 +56,7 @@ const statusCall = jest.mocked(api.setConversationStatus);
 const spamCall = jest.mocked(api.markConversationSpam);
 const retryCall = jest.mocked(api.retryMessage);
 const assignCall = jest.mocked(api.assignConversation);
+const toBotCall = jest.mocked(api.returnConversationToBot);
 const assigneesCall = jest.mocked(api.fetchAssignees);
 const notesCall = jest.mocked(notesApi.fetchNotes);
 const addNoteCall = jest.mocked(notesApi.addNote);
@@ -775,6 +776,72 @@ describe('ThreadScreen: a conversation an AI agent has', () => {
     await loaded();
     expect(screen.getByLabelText('Message')).toBeTruthy();
     expect(screen.queryByText('This is a bot conversation.')).toBeNull();
+  });
+});
+
+describe('ThreadScreen: the Bot cell under the header', () => {
+  const held = { user: { id: ME, name: 'Asha Verma' }, team: null, aiAgent: null };
+
+  it('says the bot is answering, with nothing to press, when the bot has the conversation', async () => {
+    as('inbox.conversation.reply', 'inbox.conversation.tag');
+    arrange({ detail: detail({ handling: 'with_bot' }) });
+    await show();
+    await loaded();
+    expect(await screen.findByLabelText('The bot is answering')).toBeTruthy();
+    expect(screen.getByText('Bot')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+  });
+
+  it('gives the conversation back to the bot from a person, and the cell turns into the bot’s', async () => {
+    as('inbox.conversation.reply', 'inbox.conversation.tag');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    toBotCall.mockResolvedValue({ conversation: summary({ rowVersion: 5 }) });
+    await show();
+    await loaded();
+    detailCall.mockResolvedValue(detail({ handling: 'with_bot', rowVersion: 5 }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Return to bot' }));
+    await waitFor(() =>
+      expect(toBotCall).toHaveBeenCalledWith(CONVERSATION_ID, expect.any(String)),
+    );
+    expect(await screen.findByLabelText('The bot is answering')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+  });
+
+  it('offers the return for a conversation waiting in the queue too', async () => {
+    as('inbox.conversation.reply');
+    arrange({ detail: detail({ handling: 'waiting' }) });
+    await show();
+    await loaded();
+    expect(await screen.findByRole('button', { name: 'Return to bot' })).toBeTruthy();
+  });
+
+  it('shows no return to a person who may not reply', async () => {
+    sessionCall.mockResolvedValue(
+      withPermissions(BASE.filter((permission) => permission !== 'inbox.conversation.reply')),
+    );
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+  });
+
+  it('draws nothing for a conversation no bot ever handled', async () => {
+    as('inbox.conversation.reply');
+    arrange();
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+    expect(screen.queryByText('Bot')).toBeNull();
+  });
+
+  it('says why the return failed', async () => {
+    as('inbox.conversation.reply');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    toBotCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Return to bot' }));
+    expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
   });
 });
 

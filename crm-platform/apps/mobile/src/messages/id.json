@@ -536,7 +536,9 @@
       "hint": "Disimpan ke akun Anda.",
       "failed": "Pilihan Anda tidak dapat disimpan. Coba lagi."
     },
-    "settings": "Pengaturan"
+    "settings": "Pengaturan",
+    "helpCenter": "Pusat bantuan",
+    "helpUnavailable": "Alamat Pusat Bantuan belum diatur untuk aplikasi ini."
   },
   "settings": {
     "quickReplies": {
@@ -1073,7 +1075,10 @@
       },
       "bot": {
         "notice": "Ini adalah percakapan bot.",
-        "assignSelf": "Tugaskan ke diri sendiri"
+        "assignSelf": "Tugaskan ke diri sendiri",
+        "tab": "Bot",
+        "returnToBot": "Kembalikan ke bot",
+        "answering": "Bot sedang menjawab"
       },
       "labels": {
         "open": "Tetapkan label",
@@ -1541,6 +1546,15 @@
     "sheet": {
       "close": "Tutup"
     },
+    "whatsappAction": {
+      "title": "Aksi WhatsApp",
+      "subtitle": "Pilih cara berkomunikasi dengan {{name}}",
+      "open": "Buka WhatsApp",
+      "openHint": "Langsung buka aplikasi WhatsApp",
+      "templateHint": "Pilih dari templat yang disetujui",
+      "noNumber": "Tidak ada nomor WhatsApp yang terhubung ke ruang kerja ini.",
+      "pickNumber": "Kirim dari nomor mana?"
+    },
     "views": {
       "open": "Tampilan kontak: {{name}}",
       "title": "Tampilan",
@@ -1607,8 +1621,7 @@
     "filter": {
       "open": "Filter tugas",
       "title": "Filter tugas",
-      "clear": "Hapus semua",
-      "apply": "Terapkan",
+      "any": "Apa saja",
       "group": {
         "status": "Status",
         "priority": "Prioritas",
@@ -1677,10 +1690,6 @@
       "title": "Judul tugas",
       "description": "Deskripsi tugas",
       "priority": "Prioritas",
-      "date": "Tanggal (YYYY-MM-DD)",
-      "dateHint": "Kosongkan tanggal dan waktu jika tanpa tenggat. Contoh 2026-10-31.",
-      "time": "Waktu (HH:mm)",
-      "timeHint": "Format 24 jam, misalnya 14:30.",
       "owner": "Pemilik",
       "ownerPick": "Pilih pemilik",
       "ownerMe": "Saya",
@@ -1708,6 +1717,21 @@
         "dueInvalid": "Tanggal dan waktu tenggat ini tidak dapat digunakan.",
         "assigneeInvalid": "Orang tersebut tidak dapat diberi tugas. Pilih pemilik lain.",
         "contactInvalid": "Kontak ini tidak dapat ditautkan."
+      },
+      "titlePlaceholder": "Masukkan judul",
+      "descriptionPlaceholder": "Masukkan deskripsi (opsional)",
+      "contactPlaceholder": "Ketik untuk mencari kontak…",
+      "typePlaceholder": "Pilih jenis",
+      "datePlaceholder": "Pilih tanggal",
+      "timePlaceholder": "Pilih waktu",
+      "hour": "Jam",
+      "minute": "Menit",
+      "type": "Jenis tugas",
+      "typeNone": "Tanpa jenis",
+      "typeRemoved": "(dihapus)",
+      "typeNames": {
+        "follow_up": "Tindak lanjut",
+        "call_reminder": "Pengingat telepon"
       }
     }
   },
@@ -2771,6 +2795,41 @@
         "label": "Langganan aplikasi berbayar berakhir",
         "hint": "Langganan aplikasi berbayar berakhir dan aplikasi dijeda."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Ketentuan Penggunaan",
+    "privacy": "Kebijakan Privasi",
+    "deletion": "Permintaan Penghapusan Akun",
+    "unavailable": "Tautan ini belum tersedia. Minta admin ruang kerja Anda untuk menyiapkannya."
+  },
+  "accountDelete": {
+    "title": "Hapus akun Anda",
+    "warning": "Ini menghapus akun Anda secara permanen: data masuk, profil, foto, dan perangkat Anda.",
+    "irreversible": "Tindakan ini tidak dapat dibatalkan.",
+    "consequencesTitle": "Yang akan terjadi",
+    "consequence1": "Anda dikeluarkan di mana-mana dan tidak dapat masuk lagi dengan akun ini.",
+    "consequence2": "Ruang kerja dan anggota lainnya tetap ada. Pekerjaan yang Anda lakukan tetap berada di ruang kerja.",
+    "consequence3": "Catatan bahwa akun telah dihapus disimpan untuk audit.",
+    "blocked": {
+      "sole_member": {
+        "title": "Anda satu-satunya anggota ruang kerja ini.",
+        "body": "Akun tidak dapat dihapus sendiri. Minta tim platform untuk menutup ruang kerja."
+      },
+      "sole_admin": {
+        "title": "Anda satu-satunya administrator.",
+        "body": "Jadikan anggota lain sebagai administrator terlebih dahulu, lalu kembali untuk menghapus akun Anda."
+      }
+    },
+    "phraseLabel": "Ketik {{phrase}} untuk mengonfirmasi",
+    "phraseHint": "Persis seperti yang ditampilkan, termasuk huruf kapital.",
+    "password": "Kata sandi saat ini",
+    "cancel": "Batal",
+    "submit": "Hapus akun secara permanen",
+    "errors": {
+      "phrase": "Ketik frasa persis seperti yang ditampilkan.",
+      "passwordRequired": "Masukkan kata sandi Anda saat ini.",
+      "passwordWrong": "Kata sandi itu salah."
     }
   }
 }

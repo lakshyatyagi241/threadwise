@@ -1,19 +1,15 @@
-import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
-import { useTheme } from '@/lib/theme/use-theme';
+import { FilterPanes, type FilterCategory } from '@/components/ui/filter-panes';
 import {
   DEFAULT_STATUS,
   DUE_CHOICES,
-  NO_CHOICES,
   OWNER_CHOICES,
   PRIORITY_CHOICES,
   STATUS_CHOICES,
   cleanChoices,
   defaultOwner,
+  type OwnerChoice,
+  type StatusChoice,
   type TaskChoices,
 } from './filters';
 
@@ -25,157 +21,84 @@ interface Props {
   onClose: () => void;
 }
 
-function Chip({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  const { colors } = useTheme();
-  return (
-    <Pressable
-      accessibilityRole="radio"
-      accessibilityLabel={label}
-      accessibilityState={{ checked: selected }}
-      onPress={onPress}
-      style={[
-        styles.chip,
-        {
-          backgroundColor: selected ? colors.primarySoft : colors.surface,
-          borderColor: selected ? colors.primary : colors.borderStrong,
-        },
-      ]}
-    >
-      <Text variant="label" color={selected ? 'primary' : 'text'}>
-        {label}
-      </Text>
-    </Pressable>
-  );
-}
-
-function Group({ id, title, children }: { id: string; title: string; children: ReactNode }) {
-  return (
-    <View
-      testID={`task-filter-${id}`}
-      style={styles.group}
-      accessibilityRole="radiogroup"
-      accessibilityLabel={title}
-    >
-      <Text variant="label" muted>
-        {title}
-      </Text>
-      <View style={styles.chips}>{children}</View>
-    </View>
-  );
-}
-
 /**
- * The filters of the task list, in a sheet: status, priority, due and owner, one choice each. Pressing the chosen chip again
- * clears the group (back to its default). Nothing changes on the list until "Apply"; "Clear all" empties the sheet and applies.
- * The screen mounts it fresh each time it opens, so it starts from what is applied.
+ * The filters of the task list, laid out like the Geta app's and like the contact and deal filters: the categories (status,
+ * priority, due, owner) down the left, the choices of the open one on the right, "Clear all" and "Apply" along the bottom. One
+ * choice each; status and owner always hold a real value (open and mine, or all on a contact's list, are their defaults), priority
+ * and due can be left on "Any". Nothing changes on the list until "Apply"; "Clear all" takes every filter off and applies at once. The screen
+ * mounts it fresh each time it opens, so it starts from what is applied.
  */
 export function TaskFilterModal({ choices, contactId, onApply, onClose }: Props) {
   const { t } = useTranslation();
-  const { colors } = useTheme();
-  const [draft, setDraft] = useState<TaskChoices>(choices);
+  const ownerDefault = defaultOwner(contactId);
+  const any = { value: '', label: t('tasks.filter.any') };
 
-  const pick = <K extends keyof TaskChoices>(key: K, value: NonNullable<TaskChoices[K]>) =>
-    setDraft((d) => ({ ...d, [key]: d[key] === value ? undefined : value }));
+  const categories: FilterCategory[] = [
+    {
+      key: 'status',
+      title: t('tasks.filter.group.status'),
+      kind: 'single',
+      empty: DEFAULT_STATUS,
+      options: STATUS_CHOICES.map((value) => ({
+        value,
+        label: t(`tasks.filter.status.${value}`),
+      })),
+    },
+    {
+      key: 'priority',
+      title: t('tasks.filter.group.priority'),
+      kind: 'single',
+      options: [
+        any,
+        ...PRIORITY_CHOICES.map((value) => ({ value, label: t(`tasks.priority.${value}`) })),
+      ],
+    },
+    {
+      key: 'due',
+      title: t('tasks.filter.group.due'),
+      kind: 'single',
+      options: [
+        any,
+        ...DUE_CHOICES.map((value) => ({ value, label: t(`tasks.filter.due.${value}`) })),
+      ],
+    },
+    {
+      key: 'owner',
+      title: t('tasks.filter.group.owner'),
+      kind: 'single',
+      empty: ownerDefault,
+      options: OWNER_CHOICES.map((value) => ({
+        value,
+        label: t(`tasks.filter.owner.${value}`),
+      })),
+    },
+  ];
 
-  const status = draft.status ?? DEFAULT_STATUS;
-  const owner = draft.owner ?? defaultOwner(contactId);
   return (
-    <Modal transparent visible animationType="slide" onRequestClose={onClose}>
-      <View style={[styles.scrim, { backgroundColor: colors.scrim }]}>
-        <View
-          accessibilityViewIsModal
-          style={[styles.sheet, { backgroundColor: colors.surface, borderColor: colors.border }]}
-        >
-          <Text variant="heading" accessibilityRole="header">
-            {t('tasks.filter.title')}
-          </Text>
-          <ScrollView contentContainerStyle={styles.body}>
-            <Group id="status" title={t('tasks.filter.group.status')}>
-              {STATUS_CHOICES.map((value) => (
-                <Chip
-                  key={value}
-                  label={t(`tasks.filter.status.${value}`)}
-                  selected={status === value}
-                  onPress={() => pick('status', value)}
-                />
-              ))}
-            </Group>
-            <Group id="priority" title={t('tasks.filter.group.priority')}>
-              {PRIORITY_CHOICES.map((value) => (
-                <Chip
-                  key={value}
-                  label={t(`tasks.priority.${value}`)}
-                  selected={draft.priority === value}
-                  onPress={() => pick('priority', value)}
-                />
-              ))}
-            </Group>
-            <Group id="due" title={t('tasks.filter.group.due')}>
-              {DUE_CHOICES.map((value) => (
-                <Chip
-                  key={value}
-                  label={t(`tasks.filter.due.${value}`)}
-                  selected={draft.due === value}
-                  onPress={() => pick('due', value)}
-                />
-              ))}
-            </Group>
-            <Group id="owner" title={t('tasks.filter.group.owner')}>
-              {OWNER_CHOICES.map((value) => (
-                <Chip
-                  key={value}
-                  label={t(`tasks.filter.owner.${value}`)}
-                  selected={owner === value}
-                  onPress={() => pick('owner', value)}
-                />
-              ))}
-            </Group>
-          </ScrollView>
-          <View style={styles.actions}>
-            <Button
-              variant="secondary"
-              label={t('tasks.filter.clear')}
-              onPress={() => onApply(NO_CHOICES)}
-            />
-            <Button
-              label={t('tasks.filter.apply')}
-              onPress={() => onApply(cleanChoices(draft, contactId))}
-            />
-            <Button variant="link" label={t('tasks.cancel')} onPress={onClose} />
-          </View>
-        </View>
-      </View>
-    </Modal>
+    <FilterPanes
+      visible
+      title={t('tasks.filter.title')}
+      categories={categories}
+      value={{
+        status: choices.status ?? DEFAULT_STATUS,
+        priority: choices.priority ?? '',
+        due: choices.due ?? '',
+        owner: choices.owner ?? ownerDefault,
+      }}
+      onApply={(picked) =>
+        onApply(
+          cleanChoices(
+            {
+              status: picked.status as StatusChoice,
+              owner: picked.owner as OwnerChoice,
+              ...(picked.priority ? { priority: picked.priority as TaskChoices['priority'] } : {}),
+              ...(picked.due ? { due: picked.due as TaskChoices['due'] } : {}),
+            },
+            contactId,
+          ),
+        )
+      }
+      onClose={onClose}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  scrim: { flex: 1, justifyContent: 'flex-end' },
-  sheet: {
-    maxHeight: '90%',
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: spacing.lg,
-    gap: spacing.lg,
-  },
-  body: { gap: spacing.xl },
-  group: { gap: spacing.sm },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  chip: {
-    minHeight: MIN_TOUCH_TARGET,
-    justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.pill,
-    borderWidth: 1.5,
-  },
-  actions: { gap: spacing.sm },
-});

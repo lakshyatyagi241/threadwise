@@ -556,7 +556,9 @@
       "hint": "Salvo na sua conta.",
       "failed": "Não foi possível salvar sua escolha. Tente novamente."
     },
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "helpCenter": "Central de ajuda",
+    "helpUnavailable": "O endereço da Central de ajuda não está configurado para este app."
   },
   "settings": {
     "quickReplies": {
@@ -1117,7 +1119,10 @@
       },
       "bot": {
         "notice": "Esta é uma conversa de bot.",
-        "assignSelf": "Atribuir a você"
+        "assignSelf": "Atribuir a você",
+        "tab": "Bot",
+        "returnToBot": "Devolver ao bot",
+        "answering": "O bot está respondendo"
       },
       "labels": {
         "open": "Atribuir rótulos",
@@ -1599,6 +1604,15 @@
     "sheet": {
       "close": "Fechar"
     },
+    "whatsappAction": {
+      "title": "Ação do WhatsApp",
+      "subtitle": "Escolha como você quer falar com {{name}}",
+      "open": "Abrir WhatsApp",
+      "openHint": "Abre o aplicativo do WhatsApp diretamente",
+      "templateHint": "Escolha entre os modelos aprovados",
+      "noNumber": "Nenhum número de WhatsApp está conectado a este espaço de trabalho.",
+      "pickNumber": "Enviar de qual número?"
+    },
     "views": {
       "open": "Visão de contatos: {{name}}",
       "title": "Visões",
@@ -1665,8 +1679,7 @@
     "filter": {
       "open": "Filtrar tarefas",
       "title": "Filtrar tarefas",
-      "clear": "Limpar tudo",
-      "apply": "Aplicar",
+      "any": "Qualquer",
       "group": {
         "status": "Status",
         "priority": "Prioridade",
@@ -1735,10 +1748,6 @@
       "title": "Título da tarefa",
       "description": "Descrição da tarefa",
       "priority": "Prioridade",
-      "date": "Data (AAAA-MM-DD)",
-      "dateHint": "Deixe a data e a hora em branco para não ter prazo. Por exemplo, 2026-10-31.",
-      "time": "Hora (HH:mm)",
-      "timeHint": "Formato de 24 horas, por exemplo 14:30.",
       "owner": "Responsável",
       "ownerPick": "Escolha um responsável",
       "ownerMe": "Eu",
@@ -1766,6 +1775,21 @@
         "dueInvalid": "Este prazo (data e hora) não pode ser usado.",
         "assigneeInvalid": "Essa pessoa não pode receber tarefas. Escolha outro responsável.",
         "contactInvalid": "Este contato não pode ser vinculado."
+      },
+      "titlePlaceholder": "Digite o título",
+      "descriptionPlaceholder": "Digite uma descrição (opcional)",
+      "contactPlaceholder": "Digite para buscar um contato…",
+      "typePlaceholder": "Selecione o tipo",
+      "datePlaceholder": "Selecione a data",
+      "timePlaceholder": "Selecione a hora",
+      "hour": "Hora",
+      "minute": "Minuto",
+      "type": "Tipo de tarefa",
+      "typeNone": "Sem tipo",
+      "typeRemoved": "(removido)",
+      "typeNames": {
+        "follow_up": "Acompanhamento",
+        "call_reminder": "Lembrete de ligação"
       }
     }
   },
@@ -2867,6 +2891,41 @@
         "label": "Assinatura de app pago encerrada",
         "hint": "A assinatura de um app pago terminou e o app foi pausado."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Termos de uso",
+    "privacy": "Política de privacidade",
+    "deletion": "Solicitação de exclusão de conta",
+    "unavailable": "Este link ainda não está disponível. Peça ao administrador do espaço de trabalho para configurá-lo."
+  },
+  "accountDelete": {
+    "title": "Excluir sua conta",
+    "warning": "Isso exclui permanentemente sua conta: seu login, perfil, foto e dispositivos.",
+    "irreversible": "Isso não pode ser desfeito.",
+    "consequencesTitle": "O que acontece",
+    "consequence1": "Você é desconectado de todos os lugares e não poderá mais entrar com esta conta.",
+    "consequence2": "O espaço de trabalho e os outros membros permanecem. O trabalho que você fez continua com o espaço de trabalho.",
+    "consequence3": "Um registro da exclusão da conta é mantido para auditoria.",
+    "blocked": {
+      "sole_member": {
+        "title": "Você é o único membro deste espaço de trabalho.",
+        "body": "A conta não pode ser excluída isoladamente. Peça à equipe da plataforma para encerrar o espaço de trabalho."
+      },
+      "sole_admin": {
+        "title": "Você é o único administrador.",
+        "body": "Torne outro membro administrador primeiro e depois volte para excluir sua conta."
+      }
+    },
+    "phraseLabel": "Digite {{phrase}} para confirmar",
+    "phraseHint": "Exatamente como mostrado, incluindo maiúsculas.",
+    "password": "Senha atual",
+    "cancel": "Cancelar",
+    "submit": "Excluir conta permanentemente",
+    "errors": {
+      "phrase": "Digite a frase exatamente como mostrado.",
+      "passwordRequired": "Digite sua senha atual.",
+      "passwordWrong": "Essa senha está incorreta."
     }
   }
 }

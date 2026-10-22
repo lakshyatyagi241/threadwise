@@ -74,7 +74,7 @@ const rangeOf = (picked: string | undefined): { from: string | null; to: string 
 /**
  * The filters of a list as a full screen, the way the Geta app lays them out: the categories down the left, the choices of the
  * one that is open on the right, and "Clear all" and "Apply" along the bottom. Nothing changes on the list until "Apply";
- * "Clear all" empties the draft and stays. The screen mounts it only while open, so a draft always starts from what is applied.
+ * "Clear all" takes every filter off and applies at once. The screen mounts it only while open, so a draft always starts from what is applied.
  */
 export function FilterPanes(props: Props) {
   return (
@@ -97,10 +97,9 @@ function PanesBody({ title, categories, value, error, onApply, onClose }: Props)
   const open = categories.find((c) => c.key === openKey) ?? categories[0];
 
   const set = (key: string, next: string) => setEdited((p) => ({ ...p, [key]: next }));
-  const clearAll = () => {
-    setEdited(Object.fromEntries(categories.map((c) => [c.key, emptyOf(c)])));
-    setSearch('');
-  };
+  // "Clear all" is a way to take every filter off the list, so it applies at once: every category goes back to what it holds when it
+  // filters nothing, and the list changes behind the closing screen.
+  const clearAll = () => onApply(Object.fromEntries(categories.map((c) => [c.key, emptyOf(c)])));
   const choose = (category: FilterCategory, optionValue: string) => {
     if (category.kind === 'single') return set(category.key, optionValue);
     const ticked = listOf(current(category));
@@ -300,14 +299,6 @@ function Pane({ category, picked, search, onSearch, onChoose, onText, onRange }:
               onPress={() => onChoose(option.value)}
               style={[styles.row, { borderBottomColor: colors.border }]}
             >
-              <View style={styles.rowText}>
-                <Text variant={checked ? 'label' : 'body'}>{option.label}</Text>
-                {option.hint ? (
-                  <Text variant="caption" muted>
-                    {option.hint}
-                  </Text>
-                ) : null}
-              </View>
               <Icon
                 name={
                   multiple
@@ -321,6 +312,14 @@ function Pane({ category, picked, search, onSearch, onChoose, onText, onRange }:
                 size={24}
                 color={checked ? 'primary' : 'textMuted'}
               />
+              <View style={styles.rowText}>
+                <Text variant={checked ? 'label' : 'body'}>{option.label}</Text>
+                {option.hint ? (
+                  <Text variant="caption" muted>
+                    {option.hint}
+                  </Text>
+                ) : null}
+              </View>
             </Pressable>
           );
         })

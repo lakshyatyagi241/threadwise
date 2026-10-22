@@ -25,6 +25,9 @@ jest.mock('expo-updates', () => ({
   reloadAsync: jest.fn(),
 }));
 jest.mock('@/lib/session/api');
+jest.mock('@/config/env', () => ({
+  env: { ...jest.requireActual('@/config/env').env, webUrl: 'https://app.example.test' },
+}));
 jest.mock('./links-api');
 jest.mock('@/lib/auth/sign-out', () => ({ signOut: jest.fn() }));
 
@@ -85,10 +88,11 @@ describe('MenuScreen', () => {
       'Notifications',
       'Tasks',
       'Deals',
-      'Social leads',
       'Manage profile',
       'Appearance',
       'Device permissions',
+      'Help Center',
+      'Data & Security',
       'Check for updates',
       'Sign out',
     ]) {
@@ -115,10 +119,9 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/notifications');
     });
 
-    it('opens the lead sources for a person who may read them, and explains when they may not', async () => {
+    it('does not list Social leads, even for a person who may read the lead sources', async () => {
       await show({ ...session.permissions, 'leads.sources.read': 'all' });
-      await press('Social leads');
-      expect(mockNavigate).toHaveBeenCalledWith('/leads');
+      expect(screen.queryByRole('button', { name: 'Social leads' })).toBeNull();
     });
 
     it('opens the deals for a person who may read them, and explains when they may not', async () => {
@@ -177,60 +180,11 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/contact/new');
     });
 
-    it('opens a list under Settings with the saved replies, for a person who may manage them', async () => {
+    it('opens the Settings page, not a list under the row', async () => {
       await show({ ...session.permissions, 'inbox.savedreply.manage': 'all' });
       await press('Settings');
-      await press('Saved replies');
-      expect(mockNavigate).toHaveBeenCalledWith('/quick-replies');
-    });
-
-    it('opens the Settings lines the person may use, and fades the others, explaining when one is pressed', async () => {
-      await show({ ...session.permissions, 'inbox.tag.manage': 'all' });
-      await press('Settings');
-      await press('Saved replies');
-      expect(mockNavigate).not.toHaveBeenCalled();
-      expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
-      await press('Labels');
-      expect(mockNavigate).toHaveBeenCalledWith('/labels');
-    });
-
-    it('opens Business hours for a person who may read the inbox settings', async () => {
-      await show({ ...session.permissions, 'inbox.settings.read': 'all' });
-      await press('Settings');
-      await press('Business hours');
-      expect(mockNavigate).toHaveBeenCalledWith('/business-hours');
-    });
-
-    it('opens Auto-assignment for a person who may read the inbox settings', async () => {
-      await show({ ...session.permissions, 'inbox.settings.read': 'all' });
-      await press('Settings');
-      await press('Auto-assignment');
-      expect(mockNavigate).toHaveBeenCalledWith('/auto-assignment');
-    });
-
-    it('opens Team members for everyone: reading the list needs no right of its own', async () => {
-      await show();
-      await press('Settings');
-      await press('Team members');
-      expect(mockNavigate).toHaveBeenCalledWith('/members');
-    });
-
-    it('opens Teams for everyone: the list may be read by every member', async () => {
-      await show();
-      await press('Settings');
-      await press('Teams');
-      expect(mockNavigate).toHaveBeenCalledWith('/teams');
-    });
-
-    it('shows the Settings lines a person may not open faded, and explains instead of opening them', async () => {
-      await show();
-      await press('Settings');
-      expect(
-        screen.getByRole('button', { name: 'Saved replies' }).props.accessibilityState.disabled,
-      ).toBe(true);
-      await press('Saved replies');
-      expect(mockNavigate).not.toHaveBeenCalled();
-      expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
+      expect(mockNavigate).toHaveBeenCalledWith('/settings');
+      expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
     });
 
     it('explains instead of opening a module the person cannot read', async () => {
@@ -278,16 +232,16 @@ describe('MenuScreen', () => {
   });
 
   describe('About', () => {
-    it('has a Data & Security row that opens the privacy policy, once there is an address to open', async () => {
-      linksCall.mockResolvedValue(links('https://app.example.test/legal/privacy'));
+    it('opens the Data & Security page from its row', async () => {
       await show();
       await press('Data & Security');
-      expect(Linking.openURL).toHaveBeenCalledWith('https://app.example.test/legal/privacy');
+      expect(mockNavigate).toHaveBeenCalledWith('/data-security');
     });
 
-    it('leaves the Data & Security row out when the policy has no address the app can open', async () => {
+    it('opens the web Help Center in the browser, from the address of the web app', async () => {
       await show();
-      expect(screen.queryByRole('button', { name: 'Data & Security' })).toBeNull();
+      await press('Help Center');
+      expect(Linking.openURL).toHaveBeenCalledWith('https://app.example.test/help');
     });
 
     it('says a build without updates does not receive them, without pretending to look', async () => {

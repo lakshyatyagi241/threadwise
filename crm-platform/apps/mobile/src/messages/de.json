@@ -546,7 +546,9 @@
       "hint": "In Ihrem Konto gespeichert.",
       "failed": "Ihre Auswahl konnte nicht gespeichert werden. Versuchen Sie es erneut."
     },
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "helpCenter": "Hilfecenter",
+    "helpUnavailable": "Die Adresse des Hilfe-Centers ist für diese App nicht eingerichtet."
   },
   "settings": {
     "quickReplies": {
@@ -1095,7 +1097,10 @@
       },
       "bot": {
         "notice": "Dies ist eine Bot-Unterhaltung.",
-        "assignSelf": "Sich selbst zuweisen"
+        "assignSelf": "Sich selbst zuweisen",
+        "tab": "Bot",
+        "returnToBot": "An Bot zurückgeben",
+        "answering": "Der Bot antwortet"
       },
       "labels": {
         "open": "Labels zuweisen",
@@ -1570,6 +1575,15 @@
     "sheet": {
       "close": "Schließen"
     },
+    "whatsappAction": {
+      "title": "WhatsApp-Aktion",
+      "subtitle": "Wähle, wie du mit {{name}} kommunizieren möchtest",
+      "open": "WhatsApp öffnen",
+      "openHint": "WhatsApp-App direkt starten",
+      "templateHint": "Aus genehmigten Vorlagen wählen",
+      "noNumber": "Mit diesem Arbeitsbereich ist keine WhatsApp-Nummer verbunden.",
+      "pickNumber": "Von welcher Nummer senden?"
+    },
     "views": {
       "open": "Kontaktansicht: {{name}}",
       "title": "Ansichten",
@@ -1636,8 +1650,7 @@
     "filter": {
       "open": "Aufgaben filtern",
       "title": "Aufgaben filtern",
-      "clear": "Alle zurücksetzen",
-      "apply": "Anwenden",
+      "any": "Beliebig",
       "group": {
         "status": "Status",
         "priority": "Priorität",
@@ -1706,10 +1719,6 @@
       "title": "Aufgabentitel",
       "description": "Aufgabenbeschreibung",
       "priority": "Priorität",
-      "date": "Datum (JJJJ-MM-TT)",
-      "dateHint": "Lassen Sie Datum und Uhrzeit leer, wenn es keine Fälligkeit gibt. Zum Beispiel 2026-10-31.",
-      "time": "Uhrzeit (HH:mm)",
-      "timeHint": "24-Stunden-Format, zum Beispiel 14:30.",
       "owner": "Verantwortlicher",
       "ownerPick": "Verantwortlichen auswählen",
       "ownerMe": "Ich",
@@ -1737,6 +1746,21 @@
         "dueInvalid": "Dieses Fälligkeitsdatum mit Uhrzeit kann nicht verwendet werden.",
         "assigneeInvalid": "Dieser Person können keine Aufgaben zugewiesen werden. Wählen Sie einen anderen Verantwortlichen.",
         "contactInvalid": "Dieser Kontakt kann nicht verknüpft werden."
+      },
+      "titlePlaceholder": "Titel eingeben",
+      "descriptionPlaceholder": "Beschreibung eingeben (optional)",
+      "contactPlaceholder": "Tippen, um einen Kontakt zu suchen …",
+      "typePlaceholder": "Typ auswählen",
+      "datePlaceholder": "Datum auswählen",
+      "timePlaceholder": "Uhrzeit auswählen",
+      "hour": "Stunde",
+      "minute": "Minute",
+      "type": "Aufgabentyp",
+      "typeNone": "Kein Typ",
+      "typeRemoved": "(entfernt)",
+      "typeNames": {
+        "follow_up": "Nachfassen",
+        "call_reminder": "Rückruferinnerung"
       }
     }
   },
@@ -2819,6 +2843,41 @@
         "label": "Abonnement einer kostenpflichtigen App beendet",
         "hint": "Das Abonnement einer kostenpflichtigen App wurde beendet und die App pausiert."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzerklärung",
+    "deletion": "Antrag auf Kontolöschung",
+    "unavailable": "Dieser Link ist noch nicht verfügbar. Bitte deinen Arbeitsbereich-Admin, ihn einzurichten."
+  },
+  "accountDelete": {
+    "title": "Ihr Konto löschen",
+    "warning": "Dadurch werden Ihr Konto, Ihre Anmeldung, Ihr Profil, Ihr Foto und Ihre Geräte dauerhaft gelöscht.",
+    "irreversible": "Dies kann nicht rückgängig gemacht werden.",
+    "consequencesTitle": "Was passiert",
+    "consequence1": "Sie werden überall abgemeldet und können sich mit diesem Konto nicht mehr anmelden.",
+    "consequence2": "Der Workspace und seine anderen Mitglieder bleiben bestehen. Ihre geleistete Arbeit verbleibt im Workspace.",
+    "consequence3": "Ein Nachweis über die Löschung des Kontos wird für Prüfzwecke aufbewahrt.",
+    "blocked": {
+      "sole_member": {
+        "title": "Sie sind das einzige Mitglied dieses Workspace.",
+        "body": "Das Konto kann nicht einzeln gelöscht werden. Bitten Sie das Plattform-Team, den Workspace zu schließen."
+      },
+      "sole_admin": {
+        "title": "Sie sind der einzige Administrator.",
+        "body": "Machen Sie zuerst ein anderes Mitglied zum Administrator und kehren Sie dann zurück, um Ihr Konto zu löschen."
+      }
+    },
+    "phraseLabel": "Geben Sie zur Bestätigung {{phrase}} ein",
+    "phraseHint": "Genau wie angezeigt, einschließlich Großbuchstaben.",
+    "password": "Aktuelles Passwort",
+    "cancel": "Abbrechen",
+    "submit": "Konto dauerhaft löschen",
+    "errors": {
+      "phrase": "Geben Sie die Wortfolge genau wie angezeigt ein.",
+      "passwordRequired": "Geben Sie Ihr aktuelles Passwort ein.",
+      "passwordWrong": "Das Passwort ist nicht korrekt."
     }
   }
 }

@@ -15,6 +15,7 @@ import {
   type SetConversationStatusInput,
   type SnoozeConversationInput,
 } from '@crm/contracts';
+import { z } from 'zod';
 import { apiFetch } from '@/lib/api';
 import type { PickedAttachment } from './attachment';
 import type { InboxFilters } from './filters';
@@ -178,6 +179,18 @@ export const assignConversation = (id: string, input: AssignInput, idempotencyKe
     method: 'POST',
     body: input,
     schema: assignConversationResponseSchema,
+    idempotencyKey,
+  });
+
+/**
+ * Gives the conversation back to the bot (`inbox.conversation.reply`): it is unassigned, the bot is unmuted and the parked flow answers
+ * the next message. A conversation no handoff ever touched, or one the bot already has, comes back unchanged.
+ */
+export const returnConversationToBot = (id: string, idempotencyKey?: string) =>
+  apiFetch(`/v2/inbox/conversations/${id}/return-to-bot`, {
+    method: 'POST',
+    body: {},
+    schema: z.object({ conversation: conversationSummarySchema }),
     idempotencyKey,
   });
 

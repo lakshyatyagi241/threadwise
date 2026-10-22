@@ -566,7 +566,9 @@
       "hint": "Zapisano na Twoim koncie.",
       "failed": "Nie udało się zapisać wyboru. Spróbuj ponownie."
     },
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "helpCenter": "Centrum pomocy",
+    "helpUnavailable": "Adres Centrum pomocy nie jest skonfigurowany dla tej aplikacji."
   },
   "settings": {
     "quickReplies": {
@@ -1139,7 +1141,10 @@
       },
       "bot": {
         "notice": "To jest rozmowa z botem.",
-        "assignSelf": "Przypisz do siebie"
+        "assignSelf": "Przypisz do siebie",
+        "tab": "Bot",
+        "returnToBot": "Zwróć botowi",
+        "answering": "Odpowiada bot"
       },
       "labels": {
         "open": "Przypisz etykiety",
@@ -1628,6 +1633,15 @@
     "sheet": {
       "close": "Zamknij"
     },
+    "whatsappAction": {
+      "title": "Akcja WhatsApp",
+      "subtitle": "Wybierz, jak chcesz skontaktować się z {{name}}",
+      "open": "Otwórz WhatsApp",
+      "openHint": "Uruchom aplikację WhatsApp bezpośrednio",
+      "templateHint": "Wybierz spośród zatwierdzonych szablonów",
+      "noNumber": "Do tego obszaru roboczego nie jest podłączony żaden numer WhatsApp.",
+      "pickNumber": "Z którego numeru wysłać?"
+    },
     "views": {
       "open": "Widok kontaktów: {{name}}",
       "title": "Widoki",
@@ -1694,8 +1708,7 @@
     "filter": {
       "open": "Filtruj zadania",
       "title": "Filtruj zadania",
-      "clear": "Wyczyść wszystko",
-      "apply": "Zastosuj",
+      "any": "Dowolne",
       "group": {
         "status": "Status",
         "priority": "Priorytet",
@@ -1764,10 +1777,6 @@
       "title": "Tytuł zadania",
       "description": "Opis zadania",
       "priority": "Priorytet",
-      "date": "Data (YYYY-MM-DD)",
-      "dateHint": "Zostaw datę i godzinę puste, aby nie ustawiać terminu. Na przykład 2026-10-31.",
-      "time": "Godzina (HH:mm)",
-      "timeHint": "Zegar 24-godzinny, na przykład 14:30.",
       "owner": "Właściciel",
       "ownerPick": "Wybierz właściciela",
       "ownerMe": "Ja",
@@ -1795,6 +1804,21 @@
         "dueInvalid": "Tego terminu i godziny nie można użyć.",
         "assigneeInvalid": "Tej osobie nie można przypisywać zadań. Wybierz innego właściciela.",
         "contactInvalid": "Tego kontaktu nie można powiązać."
+      },
+      "titlePlaceholder": "Wpisz tytuł",
+      "descriptionPlaceholder": "Wpisz opis (opcjonalnie)",
+      "contactPlaceholder": "Wpisz, aby wyszukać kontakt…",
+      "typePlaceholder": "Wybierz typ",
+      "datePlaceholder": "Wybierz datę",
+      "timePlaceholder": "Wybierz godzinę",
+      "hour": "Godzina",
+      "minute": "Minuta",
+      "type": "Typ zadania",
+      "typeNone": "Bez typu",
+      "typeRemoved": "(usunięty)",
+      "typeNames": {
+        "follow_up": "Kontakt kontrolny",
+        "call_reminder": "Przypomnienie o telefonie"
       }
     }
   },
@@ -2915,6 +2939,41 @@
         "label": "Subskrypcja płatnej aplikacji zakończona",
         "hint": "Subskrypcja płatnej aplikacji zakończyła się, a aplikacja została wstrzymana."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Warunki korzystania",
+    "privacy": "Polityka prywatności",
+    "deletion": "Prośba o usunięcie konta",
+    "unavailable": "Ten link nie jest jeszcze dostępny. Poproś administratora obszaru roboczego o jego skonfigurowanie."
+  },
+  "accountDelete": {
+    "title": "Usuń swoje konto",
+    "warning": "To trwale usunie Twoje konto: dane logowania, profil, zdjęcie i urządzenia.",
+    "irreversible": "Tej operacji nie można cofnąć.",
+    "consequencesTitle": "Co się stanie",
+    "consequence1": "Zostaniesz wylogowany wszędzie i nie będziesz mógł ponownie zalogować się na to konto.",
+    "consequence2": "Przestrzeń robocza i jej pozostali członkowie zostają. Twoja praca pozostaje w przestrzeni roboczej.",
+    "consequence3": "Informacja o usunięciu konta jest zachowywana na potrzeby audytu.",
+    "blocked": {
+      "sole_member": {
+        "title": "Jesteś jedynym członkiem tej przestrzeni roboczej.",
+        "body": "Konta nie można usunąć samodzielnie. Poproś zespół platformy o zamknięcie przestrzeni roboczej."
+      },
+      "sole_admin": {
+        "title": "Jesteś jedynym administratorem.",
+        "body": "Najpierw nadaj innemu członkowi rolę administratora, a potem wróć, aby usunąć konto."
+      }
+    },
+    "phraseLabel": "Wpisz {{phrase}}, aby potwierdzić",
+    "phraseHint": "Dokładnie tak, jak pokazano, łącznie z wielkimi literami.",
+    "password": "Obecne hasło",
+    "cancel": "Anuluj",
+    "submit": "Trwale usuń konto",
+    "errors": {
+      "phrase": "Wpisz frazę dokładnie tak, jak pokazano.",
+      "passwordRequired": "Wpisz swoje obecne hasło.",
+      "passwordWrong": "To hasło jest nieprawidłowe."
     }
   }
 }

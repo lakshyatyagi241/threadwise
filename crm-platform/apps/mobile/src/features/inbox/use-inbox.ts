@@ -16,6 +16,7 @@ import type {
 import * as Crypto from 'expo-crypto';
 import {
   assignConversation,
+  returnConversationToBot,
   fetchAssignees,
   fetchChannels,
   fetchConversation,
@@ -136,6 +137,15 @@ export function useAssign(id: string) {
   return useMutation({
     mutationFn: (input: AssignInput) => assignConversation(id, input, Crypto.randomUUID()),
     // Success and conflict both leave the screen holding a stale row version; reading again is right either way.
+    onSettled: refresh,
+  });
+}
+
+/** Gives the conversation back to the bot. The lists and the thread read again either way. */
+export function useReturnToBot(id: string) {
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: () => returnConversationToBot(id, Crypto.randomUUID()),
     onSettled: refresh,
   });
 }

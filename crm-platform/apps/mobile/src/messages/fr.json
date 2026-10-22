@@ -556,7 +556,9 @@
       "hint": "Enregistré dans votre compte.",
       "failed": "Impossible d’enregistrer votre choix. Réessayez."
     },
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "helpCenter": "Centre d’aide",
+    "helpUnavailable": "L’adresse du centre d’aide n’est pas configurée pour cette application."
   },
   "settings": {
     "quickReplies": {
@@ -1117,7 +1119,10 @@
       },
       "bot": {
         "notice": "Il s’agit d’une conversation avec un bot.",
-        "assignSelf": "Vous l’assigner"
+        "assignSelf": "Vous l’assigner",
+        "tab": "Bot",
+        "returnToBot": "Rendre au bot",
+        "answering": "Le bot répond"
       },
       "labels": {
         "open": "Attribuer des étiquettes",
@@ -1599,6 +1604,15 @@
     "sheet": {
       "close": "Fermer"
     },
+    "whatsappAction": {
+      "title": "Action WhatsApp",
+      "subtitle": "Choisissez comment communiquer avec {{name}}",
+      "open": "Ouvrir WhatsApp",
+      "openHint": "Lance directement l’application WhatsApp",
+      "templateHint": "Choisir parmi les modèles approuvés",
+      "noNumber": "Aucun numéro WhatsApp n’est connecté à cet espace de travail.",
+      "pickNumber": "Depuis quel numéro envoyer ?"
+    },
     "views": {
       "open": "Vue des contacts : {{name}}",
       "title": "Vues",
@@ -1665,8 +1679,7 @@
     "filter": {
       "open": "Filtrer les tâches",
       "title": "Filtrer les tâches",
-      "clear": "Tout effacer",
-      "apply": "Appliquer",
+      "any": "Tous",
       "group": {
         "status": "Statut",
         "priority": "Priorité",
@@ -1735,10 +1748,6 @@
       "title": "Titre de la tâche",
       "description": "Description de la tâche",
       "priority": "Priorité",
-      "date": "Date (AAAA-MM-JJ)",
-      "dateHint": "Laissez la date et l’heure vides s’il n’y a pas d’échéance. Par exemple 2026-10-31.",
-      "time": "Heure (HH:mm)",
-      "timeHint": "Format 24 heures, par exemple 14:30.",
       "owner": "Propriétaire",
       "ownerPick": "Choisir un propriétaire",
       "ownerMe": "Moi",
@@ -1766,6 +1775,21 @@
         "dueInvalid": "Cette date et cette heure d’échéance ne peuvent pas être utilisées.",
         "assigneeInvalid": "Cette personne ne peut pas recevoir de tâches. Choisissez un autre propriétaire.",
         "contactInvalid": "Ce contact ne peut pas être lié."
+      },
+      "titlePlaceholder": "Saisissez le titre",
+      "descriptionPlaceholder": "Saisissez une description (facultatif)",
+      "contactPlaceholder": "Saisissez pour rechercher un contact…",
+      "typePlaceholder": "Sélectionnez le type",
+      "datePlaceholder": "Sélectionnez la date",
+      "timePlaceholder": "Sélectionnez l’heure",
+      "hour": "Heure",
+      "minute": "Minute",
+      "type": "Type de tâche",
+      "typeNone": "Aucun type",
+      "typeRemoved": "(supprimé)",
+      "typeNames": {
+        "follow_up": "Relance",
+        "call_reminder": "Rappel d’appel"
       }
     }
   },
@@ -2867,6 +2891,41 @@
         "label": "Abonnement d’une application payante terminé",
         "hint": "L’abonnement d’une application payante est terminé et l’application a été mise en pause."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Conditions d’utilisation",
+    "privacy": "Politique de confidentialité",
+    "deletion": "Demande de suppression du compte",
+    "unavailable": "Ce lien n’est pas encore disponible. Demandez à l’administrateur de votre espace de le configurer."
+  },
+  "accountDelete": {
+    "title": "Supprimer votre compte",
+    "warning": "Cela supprime définitivement votre compte : votre identifiant de connexion, votre profil, votre photo et vos appareils.",
+    "irreversible": "Cette action est irréversible.",
+    "consequencesTitle": "Ce qui se passe",
+    "consequence1": "Vous êtes déconnecté partout et ne pouvez plus vous connecter avec ce compte.",
+    "consequence2": "L’espace de travail et ses autres membres restent. Le travail que vous avez effectué reste dans l’espace de travail.",
+    "consequence3": "Une trace de la suppression du compte est conservée à des fins d’audit.",
+    "blocked": {
+      "sole_member": {
+        "title": "Vous êtes le seul membre de cet espace de travail.",
+        "body": "Le compte ne peut pas être supprimé seul. Demandez à l’équipe de la plateforme de fermer l’espace de travail."
+      },
+      "sole_admin": {
+        "title": "Vous êtes le seul administrateur.",
+        "body": "Nommez d’abord un autre membre administrateur, puis revenez supprimer votre compte."
+      }
+    },
+    "phraseLabel": "Saisissez {{phrase}} pour confirmer",
+    "phraseHint": "Exactement comme indiqué, majuscules comprises.",
+    "password": "Mot de passe actuel",
+    "cancel": "Annuler",
+    "submit": "Supprimer définitivement le compte",
+    "errors": {
+      "phrase": "Saisissez la phrase exactement comme indiqué.",
+      "passwordRequired": "Saisissez votre mot de passe actuel.",
+      "passwordWrong": "Ce mot de passe est incorrect."
     }
   }
 }

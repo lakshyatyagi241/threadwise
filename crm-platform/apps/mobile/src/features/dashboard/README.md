@@ -30,10 +30,14 @@ web has no pages with those names, so each shows what the API already has:
   person the conversations given, how many were resolved, average first reply and resolution time, and the customers' rating, with the
   team totals above. It uses the date pill. Without `dash.analytics.read` it says so and asks for nothing; a plan without analytics
   answers 403 `PLAN_FEATURE_LOCKED` and the view says that.
-- **Bot**: the automation flows (`flows` of `GET /v2/dashboard/widgets`, which ignores the date window, so this view has no date
-  pill): flows running, people in them, and the latest flows.
-- The API has no counts of "conversations handled by a bot" against "by an agent", so those two figures of the phone design are not
-  shown; adding them needs an API route first (owner decision).
+- **Bot** (laid out like the Geta app's Bot dashboard): the window's messages sent and received as one split bar with their total
+  (`current.sent` and `current.replies` of `GET /v2/dashboard/summary`; the Geta app draws a ring, the app has no drawing library),
+  the average conversation duration (`avgDurationMin` of `GET /v2/analytics/conversations`, only for people with
+  `dash.analytics.read`; nothing is asked without it), then the automation flows (`flows` of `GET /v2/dashboard/widgets`, which
+  ignores the date window): flows running, people in them, and the latest flows. It uses the date pill.
+- **Not shown on Bot, because the API has no figure for them** (owner decision, needs a route outside `apps/mobile`): conversations
+  handled by the bot, conversations handed to an agent (the handoff state exists per conversation, there is no count), time saved by
+  the bot, average messages per conversation of the bot, and answers the bot failed to deliver.
 
 ## What the phone does differently (on purpose)
 

@@ -132,19 +132,11 @@ describe('FilterPanes', () => {
     expect(applied()).toMatchObject({ owner: 'b', stage: 'new', status: 'closed' });
   });
 
-  it('Clear all empties the draft but applies nothing until Apply', async () => {
+  it('Clear all takes every filter off and applies at once', async () => {
     await show({ owner: 'b', stage: 'new', status: 'closed' });
     await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
-    expect(onApply).not.toHaveBeenCalled();
-    expect(
-      screen.getByRole('checkbox', { name: 'Prasad Chaudhari' }).props.accessibilityState.checked,
-    ).toBe(false);
-    await tab('Status');
+    expect(onApply).toHaveBeenCalledTimes(1);
     // The status goes back to its own default, not to nothing.
-    expect(
-      screen.getByRole('radio', { name: 'Open and pending' }).props.accessibilityState.checked,
-    ).toBe(true);
-    await apply();
     expect(applied()).toEqual({
       owner: '',
       stage: '',

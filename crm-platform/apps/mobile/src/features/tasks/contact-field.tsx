@@ -47,7 +47,9 @@ export function ContactField({ value, onChange, error }: Props) {
     <>
       <PickerField
         label={t('tasks.form.contactLinkOptional')}
-        value={value ? value.name || t('tasks.unknownContact') : t('tasks.form.contactNone')}
+        value={value ? value.name || t('tasks.unknownContact') : t('tasks.form.contactPlaceholder')}
+        placeholder={value === null}
+        icon="search"
         error={error}
         onPress={() => setOpen(true)}
       />

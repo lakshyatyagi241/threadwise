@@ -546,7 +546,9 @@
       "hint": "Hesabınıza kaydedilir.",
       "failed": "Seçiminiz kaydedilemedi. Yeniden deneyin."
     },
-    "settings": "Ayarlar"
+    "settings": "Ayarlar",
+    "helpCenter": "Yardım merkezi",
+    "helpUnavailable": "Yardım Merkezi adresi bu uygulama için ayarlanmamış."
   },
   "settings": {
     "quickReplies": {
@@ -1095,7 +1097,10 @@
       },
       "bot": {
         "notice": "Bu bir bot konuşması.",
-        "assignSelf": "Kendinize atayın"
+        "assignSelf": "Kendinize atayın",
+        "tab": "Bot",
+        "returnToBot": "Bota geri ver",
+        "answering": "Bot yanıtlıyor"
       },
       "labels": {
         "open": "Etiket ata",
@@ -1570,6 +1575,15 @@
     "sheet": {
       "close": "Kapat"
     },
+    "whatsappAction": {
+      "title": "WhatsApp işlemi",
+      "subtitle": "{{name}} ile nasıl iletişim kurmak istediğinizi seçin",
+      "open": "WhatsApp’ı aç",
+      "openHint": "WhatsApp uygulamasını doğrudan başlat",
+      "templateHint": "Onaylı şablonlardan seçin",
+      "noNumber": "Bu çalışma alanına bağlı bir WhatsApp numarası yok.",
+      "pickNumber": "Hangi numaradan gönderilsin?"
+    },
     "views": {
       "open": "Kişi görünümü: {{name}}",
       "title": "Görünümler",
@@ -1636,8 +1650,7 @@
     "filter": {
       "open": "Görevleri filtrele",
       "title": "Görevleri filtrele",
-      "clear": "Tümünü temizle",
-      "apply": "Uygula",
+      "any": "Herhangi",
       "group": {
         "status": "Durum",
         "priority": "Öncelik",
@@ -1706,10 +1719,6 @@
       "title": "Görev başlığı",
       "description": "Görev açıklaması",
       "priority": "Öncelik",
-      "date": "Tarih (YYYY-AA-GG)",
-      "dateHint": "Son tarih olmaması için tarih ve saati boş bırakın. Örneğin 2026-10-31.",
-      "time": "Saat (SS:dd)",
-      "timeHint": "24 saatlik düzen, örneğin 14:30.",
       "owner": "Sahip",
       "ownerPick": "Bir sahip seçin",
       "ownerMe": "Ben",
@@ -1737,6 +1746,21 @@
         "dueInvalid": "Bu son tarih ve saat kullanılamaz.",
         "assigneeInvalid": "Bu kişiye görev atanamaz. Başka bir sahip seçin.",
         "contactInvalid": "Bu kişi bağlanamaz."
+      },
+      "titlePlaceholder": "Başlık girin",
+      "descriptionPlaceholder": "Açıklama girin (isteğe bağlı)",
+      "contactPlaceholder": "Kişi aramak için yazın…",
+      "typePlaceholder": "Tür seçin",
+      "datePlaceholder": "Tarih seçin",
+      "timePlaceholder": "Saat seçin",
+      "hour": "Saat",
+      "minute": "Dakika",
+      "type": "Görev türü",
+      "typeNone": "Tür yok",
+      "typeRemoved": "(kaldırıldı)",
+      "typeNames": {
+        "follow_up": "Takip",
+        "call_reminder": "Arama hatırlatması"
       }
     }
   },
@@ -2819,6 +2843,41 @@
         "label": "Ücretli uygulama aboneliği sona erdi",
         "hint": "Ücretli bir uygulamanın aboneliği sona erdi ve uygulama duraklatıldı."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Kullanım Koşulları",
+    "privacy": "Gizlilik Politikası",
+    "deletion": "Hesap Silme Talebi",
+    "unavailable": "Bu bağlantı henüz kullanılamıyor. Çalışma alanı yöneticinizden ayarlamasını isteyin."
+  },
+  "accountDelete": {
+    "title": "Hesabınızı silin",
+    "warning": "Bu işlem hesabınızı kalıcı olarak siler: oturum açma bilgilerinizi, profilinizi, fotoğrafınızı ve cihazlarınızı.",
+    "irreversible": "Bu işlem geri alınamaz.",
+    "consequencesTitle": "Neler olur",
+    "consequence1": "Her yerde oturumunuz kapatılır ve bu hesapla bir daha oturum açamazsınız.",
+    "consequence2": "Çalışma alanı ve diğer üyeler kalır. Yaptığınız işler çalışma alanında kalır.",
+    "consequence3": "Hesabın silindiğine dair bir kayıt denetim için saklanır.",
+    "blocked": {
+      "sole_member": {
+        "title": "Bu çalışma alanının tek üyesisiniz.",
+        "body": "Hesap tek başına silinemez. Platform ekibinden çalışma alanını kapatmasını isteyin."
+      },
+      "sole_admin": {
+        "title": "Tek yönetici sizsiniz.",
+        "body": "Önce başka bir üyeyi yönetici yapın, sonra hesabınızı silmek için geri dönün."
+      }
+    },
+    "phraseLabel": "Onaylamak için {{phrase}} yazın",
+    "phraseHint": "Büyük harfler dahil, gösterildiği gibi yazın.",
+    "password": "Mevcut parola",
+    "cancel": "İptal",
+    "submit": "Hesabı kalıcı olarak sil",
+    "errors": {
+      "phrase": "İfadeyi gösterildiği gibi yazın.",
+      "passwordRequired": "Mevcut parolanızı girin.",
+      "passwordWrong": "Bu parola doğru değil."
     }
   }
 }

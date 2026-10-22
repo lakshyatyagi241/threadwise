@@ -1,4 +1,5 @@
 import {
+  activityTypesResponseSchema,
   assigneeResponseSchema,
   contactResponseSchema,
   contactSelectItemSchema,
@@ -98,3 +99,15 @@ export const searchContacts = (q: string, signal?: AbortSignal) =>
 /** One contact, for the name of the contact a new task is added for. */
 export const getLinkedContact = (id: string, signal?: AbortSignal) =>
   apiFetch(`/v2/contacts/${id}`, { schema: contactResponseSchema, signal });
+
+/**
+ * The task types of the workspace (Settings > Sales activities), in order: the list of the "task" activity. `null` when the workspace
+ * has none to offer. The activity list is open to anyone who may read tasks.
+ */
+export async function listTaskTypes(signal?: AbortSignal) {
+  const list = await apiFetch('/v2/activity-types', {
+    schema: activityTypesResponseSchema,
+    signal,
+  });
+  return list.data.find((a) => a.key === 'task')?.taskTypes ?? [];
+}

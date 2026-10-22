@@ -18,13 +18,11 @@ import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { modeOf } from './appearance';
-import { usePrivacyLink } from './use-privacy-link';
+import { OPEN, SETTINGS_ITEMS } from './settings-items';
+import { helpCenterUrl } from './use-legal-links';
 import { useUpdateCheck, type UpdateState } from './use-update-check';
 
 const FADED = 0.4;
-
-/** The permission of a line every signed-in person may open (the team members list has no right of its own, as on the web). */
-const OPEN = '';
 
 /** A line under an expanded row: where it goes, and the permission that opens it (`OPEN`: everyone). */
 interface Child {
@@ -35,11 +33,11 @@ interface Child {
   permission: string;
 }
 
-type Group = 'dashboard' | 'contacts' | 'settings';
+type Group = 'dashboard' | 'contacts';
 
 /**
  * The Account tab, laid out like the reference app's menu: the person at the top, then sections (Workspace, Account, Preferences,
- * About) as one flat list. Dashboard and Contacts open a short list of their own screens. A module the person may not read stays in
+ * About) as one flat list. Dashboard and Contacts open a short list of their own screens; Settings opens a page of its own. A module the person may not read stays in
  * the list, faded, and explains itself when pressed. Rows with nothing behind them yet (Settings, Away, Appearance, Help Center)
  * are not shown: see README.md.
  */
@@ -49,10 +47,11 @@ export function MenuScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const session = useSession();
-  const privacyLink = usePrivacyLink();
+  const helpUrl = helpCenterUrl();
   const updates = useUpdateCheck();
   const [refreshing, setRefreshing] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
+  const [helpMissing, setHelpMissing] = useState(false);
   const [open, setOpen] = useState<Group | null>(null);
   const [confirming, setConfirming] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -128,46 +127,8 @@ export function MenuScreen() {
     },
   ];
 
-  // Settings holds the workspace's own setup. Each line opens with the right that manages it; the row is faded only when none opens.
-  const settingsChildren: Child[] = [
-    {
-      key: 'savedReplies',
-      label: t('settings.quickReplies.title'),
-      href: '/quick-replies',
-      permission: 'inbox.savedreply.manage',
-    },
-    {
-      key: 'labels',
-      label: t('inbox.filter.labels'),
-      href: '/labels',
-      permission: 'inbox.tag.manage',
-    },
-    {
-      key: 'businessHours',
-      label: t('settings.businessHours.title'),
-      href: '/business-hours',
-      permission: 'inbox.settings.read',
-    },
-    {
-      key: 'autoAssignment',
-      label: t('settings.routing.title'),
-      href: '/auto-assignment',
-      permission: 'inbox.settings.read',
-    },
-    {
-      key: 'members',
-      label: t('settings.members.title'),
-      href: '/members',
-      permission: OPEN,
-    },
-    {
-      key: 'teams',
-      label: t('settings.teams.title'),
-      href: '/teams',
-      permission: OPEN,
-    },
-  ];
-  const settingsOpen = settingsChildren.some((child) => allowed(child.permission));
+  // Settings is its own page; its row is faded only when none of the lines on it opens.
+  const settingsOpen = SETTINGS_ITEMS.some((item) => allowed(item.permission));
 
   const confirmSignOut = async () => {
     setSigningOut(true);
@@ -250,25 +211,17 @@ export function MenuScreen() {
             faded={faded('record.deals.read')}
             onPress={() => go('record.deals.read', '/deals')}
           />
-          <Row
-            icon="funnel-outline"
-            label={t('leads.title')}
-            faded={faded('leads.sources.read')}
-            onPress={() => go('leads.sources.read', '/leads')}
-          />
+          {/* Social leads is hidden from the menu for now (the screen and its route, /leads, are still built). */}
           <Row
             icon="settings-outline"
             label={t('menu.settings')}
-            expanded={open === 'settings'}
+            arrow
             faded={session.data !== undefined && !settingsOpen}
             onPress={() => {
               setNoAccess(!settingsOpen);
-              if (settingsOpen) setOpen(open === 'settings' ? null : 'settings');
+              if (settingsOpen) router.navigate('/settings');
             }}
           />
-          {open === 'settings' ? (
-            <Children items={settingsChildren} faded={faded} onOpen={go} />
-          ) : null}
         </Section>
         {noAccess ? (
           <View style={styles.notice}>
@@ -305,13 +258,21 @@ export function MenuScreen() {
         </Section>
 
         <Section title={t('menu.about')}>
-          {privacyLink ? (
-            <Row
-              icon="shield-checkmark-outline"
-              label={t('menu.dataSecurity')}
-              onPress={() => void Linking.openURL(privacyLink)}
-            />
-          ) : null}
+          <Row
+            icon="help-circle-outline"
+            label={t('menu.helpCenter')}
+            faded={helpUrl === null}
+            onPress={() => {
+              setNoAccess(false);
+              setHelpMissing(helpUrl === null);
+              if (helpUrl) void Linking.openURL(helpUrl);
+            }}
+          />
+          <Row
+            icon="shield-checkmark-outline"
+            label={t('menu.dataSecurity')}
+            onPress={() => router.navigate('/data-security')}
+          />
           <Row
             icon="sync-circle-outline"
             label={t('menu.checkUpdates')}
@@ -319,6 +280,11 @@ export function MenuScreen() {
             onPress={() => (updates.state === 'ready' ? updates.apply() : void updates.check())}
           />
         </Section>
+        {helpMissing ? (
+          <View style={styles.notice}>
+            <Banner tone="warning" message={t('menu.helpUnavailable')} />
+          </View>
+        ) : null}
         <UpdateNote state={updates.state} />
 
         <View style={[styles.signOut, { borderTopColor: colors.border }]}>
@@ -401,6 +367,8 @@ interface RowProps {
   onPress: () => void;
   /** A second line under the label. */
   hint?: string;
+  /** A forward arrow: the row opens a page of its own. */
+  arrow?: boolean;
   /** Present for a row that opens a list: the chevron points down, or up while the list is open. */
   expanded?: boolean;
   faded?: boolean;
@@ -409,7 +377,7 @@ interface RowProps {
 }
 
 /** One line of the menu: an icon, the name, and a chevron when it opens a list. */
-function Row({ icon, label, onPress, hint, expanded, faded, busy, danger }: RowProps) {
+function Row({ icon, label, onPress, hint, expanded, arrow, faded, busy, danger }: RowProps) {
   const { colors } = useTheme();
   return (
     <Pressable
@@ -441,6 +409,8 @@ function Row({ icon, label, onPress, hint, expanded, faded, busy, danger }: RowP
       </View>
       {expanded !== undefined ? (
         <Icon name={expanded ? 'chevron-up' : 'chevron-down'} size={20} color="textMuted" />
+      ) : arrow ? (
+        <Icon name="chevron-forward" size={20} color="textMuted" />
       ) : null}
     </Pressable>
   );

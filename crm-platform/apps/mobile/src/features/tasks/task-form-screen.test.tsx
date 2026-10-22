@@ -1,5 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ApiError } from '@/lib/api';
 import { fetchSession } from '@/lib/session/api';
@@ -15,6 +15,8 @@ import {
   team,
 } from '@/test/tasks-fixtures';
 import * as api from './api';
+import { showDate, showTime } from '@/components/ui/date-time-fields';
+import { longDateLabel } from '@/components/ui/calendar-range.dates';
 import { fromDueAt, toDueAt } from '@/lib/format/dates';
 import { TaskFormScreen } from './task-form-screen';
 
@@ -29,6 +31,7 @@ const getCall = jest.mocked(api.getTask);
 const teamCall = jest.mocked(api.listAssignees);
 const searchCall = jest.mocked(api.searchContacts);
 const contactCall = jest.mocked(api.getLinkedContact);
+const typesCall = jest.mocked(api.listTaskTypes);
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
 
 const DEV = team[1]!;
@@ -47,6 +50,30 @@ const save = async () => await fireEvent.press(screen.getByRole('button', { name
 const typeTitle = async (text: string) =>
   await fireEvent.changeText(await screen.findByLabelText('Task title'), text);
 
+/** A day of the month on screen, as 'YYYY-MM-DD' (the 28th exists in every month, and the calendar opens on this month). */
+const thisMonth28 = () => {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-28`;
+};
+const pickDate = async (day: string) => {
+  await fireEvent.press(screen.getByRole('button', { name: 'Date' }));
+  await fireEvent.press(
+    await screen.findByRole('button', { name: new RegExp(`^${longDateLabel(day, 'en')}`) }),
+  );
+};
+const pickTime = async (hour: string, minute: string) => {
+  await fireEvent.press(screen.getByRole('button', { name: 'Time' }));
+  const radio = (group: string, name: string) =>
+    within(screen.getByLabelText(group)).getByRole('radio', { name });
+  await fireEvent.press(radio('Hour', hour));
+  await fireEvent.press(radio('Minute', minute));
+  await fireEvent.press(screen.getByRole('button', { name: 'Done' }));
+};
+/** The new form starts on now, so a task with nothing else filled still carries a due date. */
+const NOW = expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00[+-]\d{2}:\d{2}$/);
+const valueOf = (name: string) =>
+  screen.getByRole('button', { name }).props.accessibilityValue.text;
+
 beforeEach(() => {
   jest.resetAllMocks();
   client = undefined;
@@ -60,6 +87,7 @@ beforeEach(() => {
   teamCall.mockResolvedValue(team);
   searchCall.mockResolvedValue(contactChoices);
   contactCall.mockResolvedValue(aarav);
+  typesCall.mockResolvedValue([]);
 });
 afterEach(async () => {
   if (client) {
@@ -69,23 +97,28 @@ afterEach(async () => {
 });
 
 describe('adding a task', () => {
-  it('shows the fields in order under the Add task header', async () => {
+  it('shows the fields in the Geta order under the Add task header', async () => {
     await show();
     expect(await screen.findByRole('header', { name: 'Add task' })).toBeTruthy();
     const order = [
       screen.getByLabelText('Task title'),
       screen.getByLabelText('Task description'),
-      screen.getByRole('radio', { name: 'Medium' }),
-      screen.getByLabelText('Date (YYYY-MM-DD)'),
-      screen.getByLabelText('Time (HH:mm)'),
-      screen.getByRole('button', { name: 'Owner' }),
       screen.getByRole('button', { name: 'Link contact (optional)' }),
+      screen.getByRole('button', { name: 'Priority' }),
+      screen.getByRole('button', { name: 'Date' }),
+      screen.getByRole('button', { name: 'Time' }),
+      screen.getByRole('button', { name: 'Owner' }),
     ];
     expect(order).toHaveLength(7);
-    expect(screen.getByRole('radio', { name: 'Medium' }).props.accessibilityState.checked).toBe(
-      true,
-    );
-    expect(screen.getByRole('button', { name: 'Owner' }).props.accessibilityValue.text).toBe('Me');
+    expect(screen.getByLabelText('Task title').props.placeholder).toBe('Enter title');
+    expect(valueOf('Link contact (optional)')).toBe('Type to search contact…');
+    expect(valueOf('Priority')).toBe('Medium');
+    // Date and Time start on now, as the Geta form's do.
+    expect(valueOf('Date')).toBe(showDate(fromDueAt(new Date().toISOString()).date, 'en'));
+    expect(valueOf('Time')).not.toBe('Select time');
+    expect(valueOf('Owner')).toBe('Me');
+    // The workspace has no task types here, so there is no dropdown for them.
+    expect(screen.queryByRole('button', { name: 'Task type' })).toBeNull();
   });
 
   it('creates the task with just a title, for me, with the default priority', async () => {
@@ -94,7 +127,7 @@ describe('adding a task', () => {
     await save();
     await waitFor(() =>
       expect(createCall).toHaveBeenCalledWith(
-        { title: 'Call Aarav', priority: 'medium' },
+        { title: 'Call Aarav', priority: 'medium', dueAt: NOW },
         expect.any(String),
       ),
     );
@@ -105,9 +138,13 @@ describe('adding a task', () => {
     await show();
     await typeTitle('Send the quote');
     await fireEvent.changeText(screen.getByLabelText('Task description'), ' 40 seats ');
+    await fireEvent.press(screen.getByRole('button', { name: 'Priority' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'High' }));
-    await fireEvent.changeText(screen.getByLabelText('Date (YYYY-MM-DD)'), '2026-10-31');
-    await fireEvent.changeText(screen.getByLabelText('Time (HH:mm)'), '14:30');
+    const day = thisMonth28();
+    await pickDate(day);
+    expect(valueOf('Date')).toBe(showDate(day, 'en'));
+    await pickTime('14', '30');
+    expect(valueOf('Time')).toBe(showTime('14:30', 'en'));
     await save();
     await waitFor(() => expect(createCall).toHaveBeenCalled());
     const body = createCall.mock.calls[0]?.[0];
@@ -115,9 +152,9 @@ describe('adding a task', () => {
       title: 'Send the quote',
       notes: '40 seats',
       priority: 'high',
-      dueAt: toDueAt('2026-10-31', '14:30'),
+      dueAt: toDueAt(day, '14:30'),
     });
-    expect(body?.dueAt).toMatch(/^2026-10-31T14:30:00[+-]\d{2}:\d{2}$/);
+    expect(body?.dueAt).toMatch(new RegExp(`^${day}T14:30:00[+-]\\d{2}:\\d{2}$`));
     expect(body).not.toHaveProperty('assigneeId');
   });
 
@@ -150,23 +187,101 @@ describe('adding a task', () => {
       expect(screen.queryByText('Enter a task title.')).toBeNull();
     });
 
-    it('checks the shape of the date and the time, and wants them together', async () => {
+    it('wants the date and the time together', async () => {
       await show();
       await typeTitle('Call');
-      await fireEvent.changeText(screen.getByLabelText('Date (YYYY-MM-DD)'), '31/10/2026');
-      await fireEvent.changeText(screen.getByLabelText('Time (HH:mm)'), '25:00');
-      await save();
-      expect(
-        await screen.findByText('Enter the date as YYYY-MM-DD, for example 2026-10-31.'),
-      ).toBeTruthy();
-      expect(
-        screen.getByText('Enter the time as HH:mm on a 24-hour clock, for example 14:30.'),
-      ).toBeTruthy();
-      await fireEvent.changeText(screen.getByLabelText('Date (YYYY-MM-DD)'), '2026-10-31');
-      await fireEvent.changeText(screen.getByLabelText('Time (HH:mm)'), '');
+      await fireEvent.press(screen.getByRole('button', { name: 'Time' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Clear' }));
       await save();
       expect(await screen.findByText('Enter the time as well.')).toBeTruthy();
-      expect(createCall).not.toHaveBeenCalled();
+      await pickTime('09', '05');
+      await save();
+      await waitFor(() => expect(createCall).toHaveBeenCalledTimes(1));
+    });
+
+    it('sends no due date once the day and the time are both cleared', async () => {
+      await show();
+      await typeTitle('Call');
+      await fireEvent.press(screen.getByRole('button', { name: 'Time' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Clear' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Date' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Clear' }));
+      expect(valueOf('Date')).toBe('Select date');
+      expect(valueOf('Time')).toBe('Select time');
+      await save();
+      await waitFor(() =>
+        expect(createCall).toHaveBeenCalledWith(
+          { title: 'Call', priority: 'medium' },
+          expect.any(String),
+        ),
+      );
+    });
+  });
+
+  describe('the task type', () => {
+    const FOLLOW_UP = '77777777-7777-4777-8777-777777777771';
+    const types = [
+      {
+        id: FOLLOW_UP,
+        kind: 'type',
+        key: 'follow_up',
+        name: null,
+        isSystem: true,
+        countsAs: null,
+        position: 0,
+      },
+      {
+        id: '77777777-7777-4777-8777-777777777772',
+        kind: 'type',
+        key: 'call_reminder',
+        name: null,
+        isSystem: true,
+        countsAs: null,
+        position: 1,
+      },
+      {
+        id: '77777777-7777-4777-8777-777777777773',
+        kind: 'type',
+        key: 'site_visit',
+        name: 'Site visit',
+        isSystem: false,
+        countsAs: null,
+        position: 2,
+      },
+    ] as const;
+
+    it('offers the workspace’s types, named in the app’s words, and sends the one chosen', async () => {
+      typesCall.mockResolvedValue([...types]);
+      await show();
+      await typeTitle('Call');
+      expect(await screen.findByRole('button', { name: 'Task type' })).toBeTruthy();
+      expect(valueOf('Task type')).toBe('Select type');
+      await fireEvent.press(screen.getByRole('button', { name: 'Task type' }));
+      expect(screen.getByRole('radio', { name: 'Call reminder' })).toBeTruthy();
+      expect(screen.getByRole('radio', { name: 'Site visit' })).toBeTruthy();
+      await fireEvent.press(screen.getByRole('radio', { name: 'Follow up' }));
+      expect(valueOf('Task type')).toBe('Follow up');
+      await save();
+      await waitFor(() =>
+        expect(createCall).toHaveBeenCalledWith(
+          { title: 'Call', priority: 'medium', taskTypeId: FOLLOW_UP, dueAt: NOW },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('sends no type when none is chosen', async () => {
+      typesCall.mockResolvedValue([...types]);
+      await show();
+      await typeTitle('Call');
+      await screen.findByRole('button', { name: 'Task type' });
+      await save();
+      await waitFor(() =>
+        expect(createCall).toHaveBeenCalledWith(
+          { title: 'Call', priority: 'medium', dueAt: NOW },
+          expect.any(String),
+        ),
+      );
     });
   });
 
@@ -191,7 +306,7 @@ describe('adding a task', () => {
       await save();
       await waitFor(() =>
         expect(createCall).toHaveBeenCalledWith(
-          { title: 'Call', priority: 'medium', assigneeId: DEV.id },
+          { title: 'Call', priority: 'medium', assigneeId: DEV.id, dueAt: NOW },
           expect.any(String),
         ),
       );
@@ -205,7 +320,7 @@ describe('adding a task', () => {
       await save();
       await waitFor(() =>
         expect(createCall).toHaveBeenCalledWith(
-          { title: 'Call', priority: 'medium', assigneeId: null },
+          { title: 'Call', priority: 'medium', assigneeId: null, dueAt: NOW },
           expect.any(String),
         ),
       );
@@ -248,7 +363,7 @@ describe('adding a task', () => {
       await save();
       await waitFor(() =>
         expect(createCall).toHaveBeenCalledWith(
-          { title: 'Call', priority: 'medium', contactId: aarav.id },
+          { title: 'Call', priority: 'medium', contactId: aarav.id, dueAt: NOW },
           expect.any(String),
         ),
       );
@@ -271,7 +386,7 @@ describe('adding a task', () => {
       await save();
       await waitFor(() =>
         expect(createCall).toHaveBeenCalledWith(
-          { title: 'Call', priority: 'medium', contactId: aarav.id },
+          { title: 'Call', priority: 'medium', contactId: aarav.id, dueAt: NOW },
           expect.any(String),
         ),
       );
@@ -305,7 +420,7 @@ describe('adding a task', () => {
       await save();
       await waitFor(() =>
         expect(createCall).toHaveBeenCalledWith(
-          { title: 'Call', priority: 'medium' },
+          { title: 'Call', priority: 'medium', dueAt: NOW },
           expect.any(String),
         ),
       );
@@ -405,20 +520,17 @@ describe('editing a task', () => {
       'Ask whether the quote for 40 seats is approved.',
     );
     const due = fromDueAt(callAarav.dueAt);
-    expect(screen.getByLabelText('Date (YYYY-MM-DD)').props.value).toBe(due.date);
-    expect(screen.getByLabelText('Time (HH:mm)').props.value).toBe(due.time);
-    expect(screen.getByRole('radio', { name: 'Medium' }).props.accessibilityState.checked).toBe(
-      true,
-    );
-    expect(screen.getByRole('button', { name: 'Owner' }).props.accessibilityValue.text).toBe('Me');
-    expect(
-      screen.getByRole('button', { name: 'Link contact (optional)' }).props.accessibilityValue.text,
-    ).toBe('Aarav Sharma');
+    expect(valueOf('Date')).toBe(showDate(due.date, 'en'));
+    expect(valueOf('Time')).toBe(showTime(due.time, 'en'));
+    expect(valueOf('Priority')).toBe('Medium');
+    expect(valueOf('Owner')).toBe('Me');
+    expect(valueOf('Link contact (optional)')).toBe('Aarav Sharma');
   });
 
   it('sends only what changed, with the version that was read, and goes back', async () => {
     await show();
     await typeTitle('Call Aarav today');
+    await fireEvent.press(screen.getByRole('button', { name: 'Priority' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'High' }));
     await save();
     await waitFor(() =>
@@ -436,8 +548,10 @@ describe('editing a task', () => {
     await show();
     await screen.findByLabelText('Task title');
     await fireEvent.changeText(screen.getByLabelText('Task description'), '');
-    await fireEvent.changeText(screen.getByLabelText('Date (YYYY-MM-DD)'), '');
-    await fireEvent.changeText(screen.getByLabelText('Time (HH:mm)'), '');
+    await fireEvent.press(screen.getByRole('button', { name: 'Date' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Clear' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Time' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Clear' }));
     await save();
     await waitFor(() =>
       expect(updateCall).toHaveBeenCalledWith(

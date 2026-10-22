@@ -543,7 +543,7 @@ describe('DashboardScreen', () => {
       expect(await screen.findByText('Your plan does not include analytics.')).toBeTruthy();
     });
 
-    it('shows the automation flows in the Bot view, without the date pill', async () => {
+    it('shows the automation flows in the Bot view, with the date pill and the messages split', async () => {
       arrange();
       const { queryClient } = await show();
       await loaded(queryClient);
@@ -552,8 +552,24 @@ describe('DashboardScreen', () => {
       expect(screen.getByText('Win-back')).toBeTruthy();
       expect(screen.getByLabelText('Active flows of 5 flows: 3')).toBeTruthy();
       expect(screen.getByLabelText('Subscribers in all flows: 1,200')).toBeTruthy();
-      expect(screen.queryByRole('button', { name: /^Date range/ })).toBeNull();
+      expect(screen.getByRole('button', { name: /^Date range/ })).toBeTruthy();
+      // The window's messages: sent and received (the replies), as in the Geta app's Bot dashboard.
+      expect(screen.getByLabelText('Sent: 1.3k')).toBeTruthy();
+      expect(screen.getByLabelText('Received: 150')).toBeTruthy();
       expect(screen.queryByTestId('card-sent')).toBeNull();
+      // Nothing was asked of the analytics API by a person who may not read it.
+      expect(statsCall).not.toHaveBeenCalled();
+      expect(screen.queryByLabelText(/^Average conversation duration/)).toBeNull();
+    });
+
+    it('shows the average conversation duration in the Bot view for a person who may read analytics', async () => {
+      arrange({ session: sessionAnalytics });
+      statsCall.mockResolvedValue(conversationStats);
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Bot');
+      expect(await screen.findByLabelText(/^Average conversation duration/)).toBeTruthy();
+      expect(statsCall).toHaveBeenCalledWith(expect.anything(), undefined, expect.anything());
     });
 
     it('opens on the view the Menu asked for', async () => {

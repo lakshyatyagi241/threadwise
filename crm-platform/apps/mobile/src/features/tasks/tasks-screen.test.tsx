@@ -427,34 +427,42 @@ describe('TasksScreen', () => {
   });
 
   describe('filters', () => {
-    const group = (name: string) => within(screen.getByTestId(`task-filter-${name.toLowerCase()}`));
     const openSheet = async () =>
       await fireEvent.press(screen.getByRole('button', { name: 'Filter tasks' }));
+    // The Geta layout: the categories down the left, the choices of the open one on the right.
+    const category = async (name: string) =>
+      await fireEvent.press(screen.getByRole('tab', { name }));
+    // The due tabs behind the sheet use some of the same words (Overdue, Today, All): the sheet is the last on screen.
+    const option = (name: string) => screen.getAllByRole('radio', { name }).at(-1)!;
+    const choose = async (name: string) => await fireEvent.press(option(name));
+    const checked = (name: string) => option(name).props.accessibilityState.checked;
 
     it('starts on Open and on Mine, and nothing else', async () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      expect(
-        group('Status').getByRole('radio', { name: 'Open' }).props.accessibilityState.checked,
-      ).toBe(true);
-      expect(
-        group('Owner').getByRole('radio', { name: 'Mine' }).props.accessibilityState.checked,
-      ).toBe(true);
-      expect(
-        group('Priority').getByRole('radio', { name: 'High' }).props.accessibilityState.checked,
-      ).toBe(false);
-      expect(group('Due').getByRole('radio', { name: 'No date' })).toBeTruthy();
+      expect(checked('Open')).toBe(true);
+      await category('Priority');
+      expect(checked('Any')).toBe(true);
+      expect(checked('High')).toBe(false);
+      await category('Due');
+      expect(checked('Any')).toBe(true);
+      expect(screen.getByRole('radio', { name: 'No date' })).toBeTruthy();
+      await category('Owner');
+      expect(checked('Mine')).toBe(true);
     });
 
     it('applies the chosen filters with the API’s names, and the owner All asks the whole list', async () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      await fireEvent.press(group('Status').getByRole('radio', { name: 'Done' }));
-      await fireEvent.press(group('Priority').getByRole('radio', { name: 'High' }));
-      await fireEvent.press(group('Due').getByRole('radio', { name: 'Overdue' }));
-      await fireEvent.press(group('Owner').getByRole('radio', { name: 'All' }));
+      await choose('Done');
+      await category('Priority');
+      await choose('High');
+      await category('Due');
+      await choose('Overdue');
+      await category('Owner');
+      await choose('All');
       await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() =>
         expect(listCall).toHaveBeenLastCalledWith(
@@ -470,7 +478,8 @@ describe('TasksScreen', () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      await fireEvent.press(group('Owner').getByRole('radio', { name: 'Unassigned' }));
+      await category('Owner');
+      await choose('Unassigned');
       await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() =>
         expect(listCall).toHaveBeenLastCalledWith(
@@ -481,48 +490,42 @@ describe('TasksScreen', () => {
       );
     });
 
-    it('clears a group when its chosen chip is pressed again', async () => {
+    it('takes a choice back with Any, and marks the categories that hold a choice', async () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      await fireEvent.press(group('Priority').getByRole('radio', { name: 'Low' }));
-      expect(
-        group('Priority').getByRole('radio', { name: 'Low' }).props.accessibilityState.checked,
-      ).toBe(true);
-      await fireEvent.press(group('Priority').getByRole('radio', { name: 'Low' }));
-      expect(
-        group('Priority').getByRole('radio', { name: 'Low' }).props.accessibilityState.checked,
-      ).toBe(false);
-      await fireEvent.press(group('Status').getByRole('radio', { name: 'All' }));
-      await fireEvent.press(group('Status').getByRole('radio', { name: 'All' }));
-      expect(
-        group('Status').getByRole('radio', { name: 'Open' }).props.accessibilityState.checked,
-      ).toBe(true);
+      await category('Priority');
+      await choose('Low');
+      expect(checked('Low')).toBe(true);
+      await choose('Any');
+      expect(checked('Low')).toBe(false);
+      expect(checked('Any')).toBe(true);
     });
 
-    it('opens on what is applied, and Clear all removes every filter at once', async () => {
+    it('opens on what is applied, and Clear all takes every filter off at once', async () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      await fireEvent.press(group('Priority').getByRole('radio', { name: 'High' }));
+      await category('Priority');
+      await choose('High');
       await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() => expect(listCall).toHaveBeenCalledTimes(2));
 
       await openSheet();
-      expect(
-        group('Priority').getByRole('radio', { name: 'High' }).props.accessibilityState.checked,
-      ).toBe(true);
+      await category('Priority');
+      expect(checked('High')).toBe(true);
       await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
       await waitFor(() => expect(listCall).toHaveBeenLastCalledWith(MINE, OPEN, expect.anything()));
       expect(screen.queryByRole('button', { name: 'Apply' })).toBeNull();
     });
 
-    it('leaves the list alone when the sheet is cancelled', async () => {
+    it('leaves the list alone when the screen is left with the back arrow', async () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      await fireEvent.press(group('Due').getByRole('radio', { name: 'Today' }));
-      await fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));
+      await category('Due');
+      await choose('Today');
+      await fireEvent.press(screen.getAllByRole('button', { name: 'Back' }).at(-1)!);
       expect(screen.queryByRole('button', { name: 'Apply' })).toBeNull();
       expect(listCall).toHaveBeenCalledTimes(1);
     });
@@ -532,10 +535,9 @@ describe('TasksScreen', () => {
       await show();
       await screen.findByRole('button', { name: 'Send the contract' });
       await openSheet();
-      expect(
-        group('Owner').getByRole('radio', { name: 'All' }).props.accessibilityState.checked,
-      ).toBe(true);
-      await fireEvent.press(group('Owner').getByRole('radio', { name: 'Mine' }));
+      await category('Owner');
+      expect(checked('All')).toBe(true);
+      await choose('Mine');
       await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() =>
         expect(listCall).toHaveBeenLastCalledWith(
@@ -554,9 +556,8 @@ describe('TasksScreen', () => {
       expect(await screen.findByText('No tasks found.')).toBeTruthy();
       expect(screen.getByText('Tasks you add show up here.')).toBeTruthy();
       await fireEvent.press(screen.getByRole('button', { name: 'Filter tasks' }));
-      await fireEvent.press(
-        within(screen.getByTestId('task-filter-priority')).getByRole('radio', { name: 'High' }),
-      );
+      await fireEvent.press(screen.getByRole('tab', { name: 'Priority' }));
+      await fireEvent.press(screen.getByRole('radio', { name: 'High' }));
       await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       expect(await screen.findByText('Try a different filter or search.')).toBeTruthy();
     });

@@ -29,6 +29,10 @@ interface Props {
   maxDate: string;
   /** The most calendar days a range may cover, both ends counted. Once a first day is chosen, days that would make a longer range are disabled. */
   maxSpanDays?: number;
+  /** One day instead of a range: pressing a day answers `onChange(day, day)`, and `from` is the chosen day. */
+  single?: boolean;
+  /** The day ringed as today; the last choosable day (`maxDate`) when not given. */
+  today?: string;
   /** A first day was pressed (`to` is null: the range is open), or the second one completed the range (earlier day first). */
   onChange: (from: string, to: string | null) => void;
 }
@@ -40,7 +44,15 @@ const DAY_SIZE = MIN_TOUCH_TARGET - 2 * spacing.xs;
  * second to end it (an earlier second day swaps the two); pressing again after a complete range starts over. The month shown
  * starts at the range's end (else its start, else `maxDate`); to move it from outside, give the calendar a new `key`.
  */
-export function CalendarRange({ from, to, maxDate, maxSpanDays, onChange }: Props) {
+export function CalendarRange({
+  from,
+  to,
+  maxDate,
+  maxSpanDays,
+  single = false,
+  today: todayDate = maxDate,
+  onChange,
+}: Props) {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const rtl = I18nManager.isRTL;
@@ -49,7 +61,9 @@ export function CalendarRange({ from, to, maxDate, maxSpanDays, onChange }: Prop
   const last = first !== null && isDateString(to) ? to : null;
   const [start, end] = first !== null && last !== null ? orderDates(first, last) : [first, last];
 
-  const [shown, setShown] = useState<YearMonth>(() => monthOf(end ?? start ?? maxDate));
+  const [shown, setShown] = useState<YearMonth>(() =>
+    monthOf(end ?? start ?? (single ? todayDate : maxDate)),
+  );
   const weeks = useMemo(() => monthGrid(shown.year, shown.month), [shown]);
   const weekdays = useMemo(() => weekdayNames(i18n.language), [i18n.language]);
   const atLatest = compareMonths(shown, monthOf(maxDate)) >= 0;
@@ -66,6 +80,10 @@ export function CalendarRange({ from, to, maxDate, maxSpanDays, onChange }: Prop
   };
 
   const press = (day: string) => {
+    if (single) {
+      onChange(day, day);
+      return;
+    }
     if (start === null || end !== null) {
       onChange(day, null);
       return;
@@ -80,10 +98,14 @@ export function CalendarRange({ from, to, maxDate, maxSpanDays, onChange }: Prop
   /** What a screen reader adds to the date: where the day sits in the range, and that it is today. */
   const stateText = (day: string): string[] => {
     const parts: string[] = [];
+    if (single) {
+      if (day === todayDate) parts.push(t('dashDate.calendar.today'));
+      return parts;
+    }
     if (day === start) parts.push(t('dashDate.calendar.start'));
     if (day === end) parts.push(t('dashDate.calendar.end'));
     if (isInside(day)) parts.push(t('dashDate.calendar.inRange'));
-    if (day === maxDate) parts.push(t('dashDate.calendar.today'));
+    if (day === todayDate) parts.push(t('dashDate.calendar.today'));
     return parts;
   };
 
@@ -142,7 +164,7 @@ export function CalendarRange({ from, to, maxDate, maxSpanDays, onChange }: Prop
               const isEnd = day === end;
               const inside = isInside(day);
               const disabled = isDisabled(day);
-              const today = day === maxDate;
+              const today = day === todayDate;
               const joined = start !== null && end !== null && start !== end;
               const filled = isStart || isEnd;
               const text = [longDateLabel(day, i18n.language), ...stateText(day)].join(', ');

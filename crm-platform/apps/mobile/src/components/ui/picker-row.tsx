@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Icon } from '@/components/ui/icon';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { CONTROL_HEIGHT, MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -9,10 +9,21 @@ interface FieldProps {
   value: string;
   onPress: () => void;
   error?: string | null;
+  /** The icon at the end of the box: a down chevron for a list, a calendar or a clock for a picker. */
+  icon?: IconName;
+  /** The value is the hint for an empty field, so it is drawn in the placeholder grey. */
+  placeholder?: boolean;
 }
 
 /** A form field that shows its chosen value and opens a list to change it: the label above, the value in a box with a chevron. */
-export function PickerField({ label, value, onPress, error }: FieldProps) {
+export function PickerField({
+  label,
+  value,
+  onPress,
+  error,
+  icon = 'chevron-down',
+  placeholder = false,
+}: FieldProps) {
   const { colors } = useTheme();
   return (
     <View style={styles.field}>
@@ -30,10 +41,13 @@ export function PickerField({ label, value, onPress, error }: FieldProps) {
           },
         ]}
       >
-        <Text numberOfLines={1} style={styles.value}>
+        <Text
+          numberOfLines={1}
+          style={[styles.value, placeholder && { color: colors.placeholder }]}
+        >
           {value}
         </Text>
-        <Icon name="chevron-down" size={18} color="textMuted" />
+        <Icon name={icon} size={icon === 'chevron-down' ? 18 : 22} color="textMuted" />
       </Pressable>
       {error ? (
         <Text variant="caption" danger accessibilityRole="alert">

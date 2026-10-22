@@ -16,7 +16,7 @@ import { firstParam } from './route-params';
 import { describeTaskFailure, isNotFound, isPlanLocked, type TaskFailure } from './task-errors';
 import { TaskEditor } from './task-editor';
 import {
-  EMPTY_TASK,
+  newTaskValues,
   buildCreateBody,
   buildUpdateBody,
   contractProblems,
@@ -134,7 +134,7 @@ export function TaskFormScreen() {
     }
   } else {
     const current = task.data;
-    const initial: TaskFormValues = current ? valuesOfTask(current, myId) : EMPTY_TASK;
+    const initial: TaskFormValues = current ? valuesOfTask(current, myId) : newTaskValues();
 
     // A contact that cannot be changed here: the one the task was opened for, or the task's own when contacts cannot be listed.
     let fixedContact: ContactChoice | null = null;
@@ -186,6 +186,7 @@ export function TaskFormScreen() {
         mode={editing ? 'edit' : 'create'}
         initial={initial}
         fixedContact={fixedContact}
+        currentType={current?.taskType ?? null}
         contactLoading={Boolean(contactId) && canReadContacts && linked.isPending}
         canListTeam={canReadContacts}
         canPickContact={canReadContacts}

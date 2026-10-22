@@ -3,8 +3,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
-import { Icon } from '@/components/ui/icon';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -12,7 +11,7 @@ import { channelMark } from './channel-badge';
 import { STATUS_TONE } from './status';
 import { formatConversationTime } from './time';
 
-/** A titled card of the details screen. */
+/** A titled band of the details screen: white, edge to edge, with the grey of the screen showing between bands (as in the Geta app). */
 export function Section({
   title,
   children,
@@ -22,13 +21,14 @@ export function Section({
   children: ReactNode;
   count?: number;
 }) {
+  const { colors } = useTheme();
   return (
-    <Card>
+    <View style={[styles.section, { backgroundColor: colors.surface }]}>
       <Text variant="subheading" accessibilityRole="header">
         {count ? `${title} (${count})` : title}
       </Text>
       {children}
-    </Card>
+    </View>
   );
 }
 
@@ -36,20 +36,25 @@ interface RowProps {
   label: string;
   /** What it is now. */
   value: string;
+  /** The picture at the start of the line. */
+  icon: IconName;
   /** Present when the person may change it: the row becomes a button that opens the picker. */
   onPress?: () => void;
 }
 
-/** One line of "Actions": the name on the left, what it is now on the right, and a chevron when it can be changed. */
-export function ActionRow({ label, value, onPress }: RowProps) {
+/** One line of "Actions": a picture, the name with what it is now under it, and a chevron when it can be changed. */
+export function ActionRow({ label, value, icon, onPress }: RowProps) {
   const { colors } = useTheme();
   const content = (
     <>
-      <Text style={styles.rowLabel}>{label}</Text>
-      <Text muted numberOfLines={1} style={styles.rowValue}>
-        {value}
-      </Text>
-      {onPress ? <Icon name="chevron-forward" size={18} color="textMuted" /> : null}
+      <Icon name={icon} size={24} color="textMuted" />
+      <View style={styles.rowText}>
+        <Text>{label}</Text>
+        <Text muted numberOfLines={1}>
+          {value}
+        </Text>
+      </View>
+      {onPress ? <Icon name="chevron-forward" size={20} color="textMuted" /> : null}
     </>
   );
   return onPress ? (
@@ -118,15 +123,15 @@ export function PastList({
 }
 
 const styles = StyleSheet.create({
+  section: { gap: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.lg },
   row: {
-    minHeight: MIN_TOUCH_TARGET,
+    minHeight: MIN_TOUCH_TARGET + spacing.xl,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.lg,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  rowLabel: { flexShrink: 0 },
-  rowValue: { flex: 1, textAlign: 'right' },
+  rowText: { flex: 1 },
   past: {
     minHeight: MIN_TOUCH_TARGET,
     flexDirection: 'row',

@@ -8,12 +8,13 @@ import { placeCall } from '@/lib/device/call';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
 import { messageForError } from '@/lib/api/error-message';
@@ -144,11 +145,15 @@ export function ConversationDetailsScreen() {
 
     return (
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        {notice ? <Banner tone="danger" message={notice} /> : null}
+        {notice ? (
+          <View style={styles.pad}>
+            <Banner tone="danger" message={notice} />
+          </View>
+        ) : null}
 
-        <Card>
+        <View style={[styles.hero, { backgroundColor: colors.surface }]}>
           <View style={styles.who}>
-            <Avatar name={name} seed={conversation.id} size={64} />
+            <Avatar name={name} seed={conversation.id} size={88} />
             <Text variant="heading" accessibilityRole="header" style={styles.center}>
               {name}
             </Text>
@@ -156,32 +161,35 @@ export function ConversationDetailsScreen() {
           </View>
           <View style={styles.buttons}>
             {phone ? (
-              <View style={styles.fill}>
-                <Button
-                  variant="secondary"
-                  label={t('inbox.details.call')}
-                  onPress={() =>
-                    void placeCall(phone, {
-                      contactId: can(session.data, 'record.contacts.update')
-                        ? (contact?.id ?? null)
-                        : null,
-                      name,
-                      phone,
-                    })
-                  }
-                />
-              </View>
+              <RoundButton
+                icon="call"
+                label={t('inbox.details.call')}
+                onPress={() =>
+                  void placeCall(phone, {
+                    contactId: can(session.data, 'record.contacts.update')
+                      ? (contact?.id ?? null)
+                      : null,
+                    name,
+                    phone,
+                  })
+                }
+              />
             ) : null}
+            <RoundButton
+              icon="chatbox-ellipses"
+              label={t('contacts.detail.actions.chat')}
+              onPress={() =>
+                router.navigate({ pathname: '/conversation/[id]', params: { id: conversation.id } })
+              }
+            />
             {contact ? (
-              <View style={styles.fill}>
-                <Button
-                  variant="secondary"
-                  label={t('inbox.details.openContact')}
-                  onPress={() =>
-                    router.push({ pathname: '/contact/[id]', params: { id: contact.id } })
-                  }
-                />
-              </View>
+              <RoundButton
+                icon="person-circle"
+                label={t('inbox.details.openContact')}
+                onPress={() =>
+                  router.push({ pathname: '/contact/[id]', params: { id: contact.id } })
+                }
+              />
             ) : null}
           </View>
           {contact ? (
@@ -209,38 +217,47 @@ export function ConversationDetailsScreen() {
           ) : (
             <Banner tone="info" message={t('inbox.details.noContact')} />
           )}
-        </Card>
+        </View>
 
         <Section title={t('inbox.details.actions')}>
           <ActionRow
+            icon="sync-circle-outline"
             label={t('inbox.details.status')}
             value={t(`inbox.status.${conversation.status}`)}
             onPress={canResolve && statuses.length > 1 ? () => open('status') : undefined}
           />
           <ActionRow
+            icon="flag-outline"
             label={t('inbox.details.priority')}
             value={t(`inbox.priority.${conversation.priority}`)}
             onPress={canPriority ? () => open('priority') : undefined}
           />
           {canSnooze && conversation.status === 'open' ? (
             <ActionRow
+              icon="alarm-outline"
               label={t('inbox.details.snooze')}
               value={t('inbox.status.snoozed')}
               onPress={() => open('snooze')}
             />
           ) : null}
           <ActionRow
+            icon="pricetag-outline"
             label={t('inbox.details.labels')}
             value={labels}
             onPress={canLabel ? () => open('labels') : undefined}
           />
           <ActionRow
+            icon="headset-outline"
             label={t('inbox.details.agent')}
             value={agentValue}
             onPress={canAssign ? () => open('agent') : undefined}
           />
           {assignment.team ? (
-            <ActionRow label={t('inbox.details.team')} value={assignment.team.name} />
+            <ActionRow
+              icon="people-outline"
+              label={t('inbox.details.team')}
+              value={assignment.team.name}
+            />
           ) : null}
           {canResolve && conversation.status === 'snoozed' ? (
             <Button
@@ -267,10 +284,19 @@ export function ConversationDetailsScreen() {
         </Section>
 
         <Section title={t('inbox.details.info')}>
-          <ActionRow label={t('inbox.details.channel')} value={conversation.channel.name} />
-          <ActionRow label={t('inbox.details.window')} value={windowText} />
+          <ActionRow
+            icon="git-network-outline"
+            label={t('inbox.details.channel')}
+            value={conversation.channel.name}
+          />
+          <ActionRow
+            icon="hourglass-outline"
+            label={t('inbox.details.window')}
+            value={windowText}
+          />
           {conversation.snoozedUntil ? (
             <ActionRow
+              icon="alarm-outline"
               label={t('inbox.status.snoozed')}
               value={t('inbox.details.snoozedUntil', {
                 time: formatDateTime(conversation.snoozedUntil, t),
@@ -379,6 +405,29 @@ export function ConversationDetailsScreen() {
   );
 }
 
+/** A round shortcut under the name: a picture in a soft circle, named for a screen reader. */
+function RoundButton({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: IconName;
+  label: string;
+  onPress: () => void;
+}) {
+  const { colors } = useTheme();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      style={[styles.round, { backgroundColor: colors.primarySoft, borderColor: colors.primary }]}
+    >
+      <Icon name={icon} size={24} color="primary" />
+    </Pressable>
+  );
+}
+
 /** One fact about the contact; nothing is drawn when there is no value. */
 function Fact({ label, value }: { label: string; value: string | null }) {
   if (!value) return null;
@@ -395,11 +444,19 @@ function Fact({ label, value }: { label: string; value: string | null }) {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   pad: { padding: spacing.lg },
-  content: { padding: spacing.lg, gap: spacing.lg },
+  content: { gap: spacing.md, paddingBottom: spacing.xxl },
+  hero: { gap: spacing.lg, padding: spacing.lg },
   who: { alignItems: 'center', gap: spacing.xs },
   center: { textAlign: 'center' },
-  buttons: { flexDirection: 'row', gap: spacing.sm },
-  fill: { flex: 1 },
+  buttons: { flexDirection: 'row', justifyContent: 'center', gap: spacing.xl },
   facts: { gap: spacing.sm },
   fact: { gap: 2 },
+  round: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

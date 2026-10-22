@@ -1,4 +1,5 @@
-import { conversationListResponseSchema } from '@crm/contracts';
+import { channelListResponseSchema, conversationListResponseSchema } from '@crm/contracts';
+import { z } from 'zod';
 import { apiFetch } from '@/lib/api';
 
 /** The inbox search only matches a number when at least this many digits are typed. */
@@ -30,3 +31,22 @@ export async function findConversationId(
     );
   return mine?.id ?? null;
 }
+
+/** The workspace's WhatsApp numbers that are connected: where a template to a contact can be sent from (`inbox.conversation.read`). */
+export async function fetchWhatsappNumbers(signal?: AbortSignal) {
+  const list = await apiFetch('/v2/channels', { schema: channelListResponseSchema, signal });
+  return list.data.filter((c) => c.status === 'connected' && c.kind.startsWith('whatsapp'));
+}
+
+/**
+ * Opens, or creates, the contact's thread on one WhatsApp number (`inbox.conversation.reply`), the route the web's single send uses.
+ * The API answers 422 when the number cannot start a thread or the contact has no phone; the first message outside the 24-hour
+ * window must be a template, which is why "Send Template" goes through here.
+ */
+export const openConversation = (contactId: string, channelId: string, signal?: AbortSignal) =>
+  apiFetch('/v2/inbox/conversations/open', {
+    method: 'POST',
+    body: { contactId, channelId },
+    schema: z.object({ id: z.string().uuid() }),
+    signal,
+  });

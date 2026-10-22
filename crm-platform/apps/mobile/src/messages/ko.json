@@ -536,7 +536,9 @@
       "hint": "계정에 저장됩니다.",
       "failed": "선택을 저장하지 못했습니다. 다시 시도하세요."
     },
-    "settings": "설정"
+    "settings": "설정",
+    "helpCenter": "도움말 센터",
+    "helpUnavailable": "이 앱에는 도움말 센터 주소가 설정되어 있지 않습니다."
   },
   "settings": {
     "quickReplies": {
@@ -1073,7 +1075,10 @@
       },
       "bot": {
         "notice": "봇 대화입니다.",
-        "assignSelf": "나에게 배정"
+        "assignSelf": "나에게 배정",
+        "tab": "봇",
+        "returnToBot": "봇에게 돌려주기",
+        "answering": "봇이 응대 중"
       },
       "labels": {
         "open": "라벨 지정",
@@ -1541,6 +1546,15 @@
     "sheet": {
       "close": "닫기"
     },
+    "whatsappAction": {
+      "title": "WhatsApp 작업",
+      "subtitle": "{{name}}에게 연락할 방법을 선택하세요",
+      "open": "WhatsApp 열기",
+      "openHint": "WhatsApp 앱을 바로 실행합니다",
+      "templateHint": "승인된 템플릿에서 선택",
+      "noNumber": "이 워크스페이스에 연결된 WhatsApp 번호가 없습니다.",
+      "pickNumber": "어느 번호로 보낼까요?"
+    },
     "views": {
       "open": "연락처 보기: {{name}}",
       "title": "보기",
@@ -1607,8 +1621,7 @@
     "filter": {
       "open": "작업 필터",
       "title": "작업 필터",
-      "clear": "모두 지우기",
-      "apply": "적용",
+      "any": "전체",
       "group": {
         "status": "상태",
         "priority": "우선순위",
@@ -1677,10 +1690,6 @@
       "title": "작업 제목",
       "description": "작업 설명",
       "priority": "우선순위",
-      "date": "날짜 (YYYY-MM-DD)",
-      "dateHint": "기한이 없으면 날짜와 시간을 비워 두세요. 예: 2026-10-31.",
-      "time": "시간 (HH:mm)",
-      "timeHint": "24시간제로 입력하세요. 예: 14:30.",
       "owner": "담당자",
       "ownerPick": "담당자 선택",
       "ownerMe": "나",
@@ -1708,6 +1717,21 @@
         "dueInvalid": "이 기한 날짜와 시간은 사용할 수 없습니다.",
         "assigneeInvalid": "이 사용자에게는 작업을 배정할 수 없습니다. 다른 담당자를 선택하세요.",
         "contactInvalid": "이 연락처는 연결할 수 없습니다."
+      },
+      "titlePlaceholder": "제목을 입력하세요",
+      "descriptionPlaceholder": "설명을 입력하세요(선택)",
+      "contactPlaceholder": "입력하여 연락처 검색…",
+      "typePlaceholder": "유형 선택",
+      "datePlaceholder": "날짜 선택",
+      "timePlaceholder": "시간 선택",
+      "hour": "시",
+      "minute": "분",
+      "type": "작업 유형",
+      "typeNone": "유형 없음",
+      "typeRemoved": "(삭제됨)",
+      "typeNames": {
+        "follow_up": "후속 조치",
+        "call_reminder": "전화 알림"
       }
     }
   },
@@ -2771,6 +2795,41 @@
         "label": "유료 앱 구독 종료",
         "hint": "유료 앱의 구독이 종료되어 앱이 일시 중지되었습니다."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "이용약관",
+    "privacy": "개인정보 처리방침",
+    "deletion": "계정 삭제 요청",
+    "unavailable": "이 링크는 아직 사용할 수 없습니다. 워크스페이스 관리자에게 설정을 요청하세요."
+  },
+  "accountDelete": {
+    "title": "계정 삭제",
+    "warning": "계정이 영구적으로 삭제됩니다. 로그인 정보, 프로필, 사진, 기기가 모두 삭제됩니다.",
+    "irreversible": "이 작업은 되돌릴 수 없습니다.",
+    "consequencesTitle": "삭제 시 일어나는 일",
+    "consequence1": "모든 기기에서 로그아웃되며, 이 계정으로 다시 로그인할 수 없습니다.",
+    "consequence2": "워크스페이스와 다른 멤버는 그대로 유지됩니다. 내가 한 작업은 워크스페이스에 남습니다.",
+    "consequence3": "계정이 삭제되었다는 기록은 감사를 위해 보관됩니다.",
+    "blocked": {
+      "sole_member": {
+        "title": "이 워크스페이스의 유일한 멤버입니다.",
+        "body": "계정만 따로 삭제할 수 없습니다. 플랫폼 팀에 워크스페이스 폐쇄를 요청하세요."
+      },
+      "sole_admin": {
+        "title": "유일한 관리자입니다.",
+        "body": "먼저 다른 멤버를 관리자로 지정한 후 돌아와서 계정을 삭제하세요."
+      }
+    },
+    "phraseLabel": "확인하려면 {{phrase}}을(를) 입력하세요",
+    "phraseHint": "대소문자를 포함해 표시된 그대로 입력하세요.",
+    "password": "현재 비밀번호",
+    "cancel": "취소",
+    "submit": "계정 영구 삭제",
+    "errors": {
+      "phrase": "문구를 표시된 그대로 입력하세요.",
+      "passwordRequired": "현재 비밀번호를 입력하세요.",
+      "passwordWrong": "비밀번호가 올바르지 않습니다."
     }
   }
 }

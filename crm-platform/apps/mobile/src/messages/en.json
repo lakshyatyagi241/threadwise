@@ -546,7 +546,9 @@
       "hint": "Saved to your account.",
       "failed": "Couldn't save your choice. Try again."
     },
-    "settings": "Settings"
+    "settings": "Settings",
+    "helpCenter": "Help Center",
+    "helpUnavailable": "The Help Center address is not set up for this app."
   },
   "settings": {
     "quickReplies": {
@@ -1095,7 +1097,10 @@
       },
       "bot": {
         "notice": "This is a bot conversation.",
-        "assignSelf": "Assign to yourself"
+        "assignSelf": "Assign to yourself",
+        "tab": "Bot",
+        "returnToBot": "Return to bot",
+        "answering": "The bot is answering"
       },
       "labels": {
         "open": "Assign labels",
@@ -1570,6 +1575,15 @@
     "sheet": {
       "close": "Close"
     },
+    "whatsappAction": {
+      "title": "WhatsApp Action",
+      "subtitle": "Choose how you would like to communicate with {{name}}",
+      "open": "Open WhatsApp",
+      "openHint": "Launch WhatsApp app directly",
+      "templateHint": "Choose from approved templates",
+      "noNumber": "No WhatsApp number is connected to this workspace.",
+      "pickNumber": "Send from which number?"
+    },
     "views": {
       "open": "Contact view: {{name}}",
       "title": "Views",
@@ -1636,8 +1650,7 @@
     "filter": {
       "open": "Filter tasks",
       "title": "Filter tasks",
-      "clear": "Clear all",
-      "apply": "Apply",
+      "any": "Any",
       "group": {
         "status": "Status",
         "priority": "Priority",
@@ -1706,10 +1719,6 @@
       "title": "Task title",
       "description": "Task description",
       "priority": "Priority",
-      "date": "Date (YYYY-MM-DD)",
-      "dateHint": "Leave the date and time empty for no due date. For example 2026-10-31.",
-      "time": "Time (HH:mm)",
-      "timeHint": "24-hour clock, for example 14:30.",
       "owner": "Owner",
       "ownerPick": "Choose an owner",
       "ownerMe": "Me",
@@ -1737,6 +1746,21 @@
         "dueInvalid": "This due date and time can't be used.",
         "assigneeInvalid": "That person can't be given tasks. Choose another owner.",
         "contactInvalid": "This contact can't be linked."
+      },
+      "titlePlaceholder": "Enter title",
+      "descriptionPlaceholder": "Enter description (optional)",
+      "contactPlaceholder": "Type to search contact…",
+      "typePlaceholder": "Select type",
+      "datePlaceholder": "Select date",
+      "timePlaceholder": "Select time",
+      "hour": "Hour",
+      "minute": "Minute",
+      "type": "Task type",
+      "typeNone": "No type",
+      "typeRemoved": "(removed)",
+      "typeNames": {
+        "follow_up": "Follow up",
+        "call_reminder": "Call reminder"
       }
     }
   },
@@ -2819,6 +2843,41 @@
         "label": "Paid app subscription ended",
         "hint": "A paid app's subscription ended and the app was paused."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "deletion": "Request for Account Deletion",
+    "unavailable": "This link is not available yet. Ask your workspace admin to set it up."
+  },
+  "accountDelete": {
+    "title": "Delete your account",
+    "warning": "This permanently deletes your account: your sign-in, profile, photo and devices.",
+    "irreversible": "This cannot be undone.",
+    "consequencesTitle": "What happens",
+    "consequence1": "You are signed out everywhere and cannot sign in with this account again.",
+    "consequence2": "The workspace and its other members stay. Work you did remains with the workspace.",
+    "consequence3": "A record that the account was deleted is kept for audit.",
+    "blocked": {
+      "sole_member": {
+        "title": "You are the only member of this workspace.",
+        "body": "The account cannot be deleted on its own. Ask the platform team to close the workspace."
+      },
+      "sole_admin": {
+        "title": "You are the only administrator.",
+        "body": "Make another member an administrator first, then come back to delete your account."
+      }
+    },
+    "phraseLabel": "Type {{phrase}} to confirm",
+    "phraseHint": "Exactly as shown, including capital letters.",
+    "password": "Current password",
+    "cancel": "Cancel",
+    "submit": "Permanently delete account",
+    "errors": {
+      "phrase": "Type the phrase exactly as shown.",
+      "passwordRequired": "Enter your current password.",
+      "passwordWrong": "That password is not correct."
     }
   }
 }

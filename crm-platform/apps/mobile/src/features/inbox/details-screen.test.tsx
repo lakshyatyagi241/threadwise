@@ -39,6 +39,7 @@ const eventsCall = jest.mocked(notesApi.fetchEvents);
 const libraryCall = jest.mocked(labels.fetchLabelLibrary);
 const back = jest.fn();
 const push = jest.fn();
+const navigate = jest.fn();
 
 const ME = inboxSession.user.id;
 const OTHER = '22222222-2222-4222-8222-222222222222';
@@ -140,7 +141,9 @@ function arrange(over: Parameters<typeof detail>[0] = {}) {
 beforeEach(() => {
   jest.resetAllMocks();
   client = undefined;
-  jest.mocked(useRouter).mockReturnValue({ back, push } as unknown as ReturnType<typeof useRouter>);
+  jest
+    .mocked(useRouter)
+    .mockReturnValue({ back, push, navigate } as unknown as ReturnType<typeof useRouter>);
   jest.mocked(useLocalSearchParams).mockReturnValue({ id: CONVERSATION_ID });
   as();
 });
@@ -163,6 +166,16 @@ describe('ConversationDetailsScreen: the customer', () => {
     expect(push).toHaveBeenCalledWith({ pathname: '/contact/[id]', params: { id: CONTACT_ID } });
     await fireEvent.press(screen.getByRole('button', { name: 'Call' }));
     expect(Linking.openURL).toHaveBeenCalledWith('tel:+919800000001');
+  });
+
+  it('has a round Chat shortcut that goes back to the conversation', async () => {
+    arrange();
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Chat' }));
+    expect(navigate).toHaveBeenCalledWith({
+      pathname: '/conversation/[id]',
+      params: { id: expect.any(String) },
+    });
   });
 
   it('says there is no contact record yet, and offers neither call nor open', async () => {

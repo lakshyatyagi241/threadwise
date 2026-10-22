@@ -33,6 +33,7 @@ import { AttachPreviewSheet } from './attach-preview-sheet';
 import { formatBytes } from './message-parts';
 import { ATTACHMENT_MAX_BYTES } from './attachment';
 import { BotBar } from './bot-bar';
+import { BotTab } from './bot-tab';
 import { ChoiceSheet } from './choice-sheet';
 import { Composer } from './composer';
 import { LabelsSheet } from './labels-sheet';
@@ -238,6 +239,17 @@ export function ThreadScreen() {
     setSheetError(null);
     setSheet(which);
   };
+
+  // The Bot cell under the header: the bot is answering, or a person holds the conversation and may give it back (as on the web).
+  const botTab: 'answering' | 'return' | null =
+    conversation === undefined
+      ? null
+      : conversation.handling === 'with_bot' || isBotConversation(conversation.assignment)
+        ? 'answering'
+        : canReply &&
+            (conversation.handling === 'waiting' || conversation.handling === 'with_person')
+          ? 'return'
+          : null;
 
   const target = conversation ? nextStatus(conversation.status) : null;
   const showStatusAction =
@@ -457,25 +469,38 @@ export function ThreadScreen() {
           <Banner tone="warning" message={warning} />
         </View>
       ) : null}
-      {canLabel && conversation ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('inbox.thread.labels.open')}
-          accessibilityValue={{ text: labelNames || undefined }}
-          onPress={() => setLabelsOpen(true)}
+      {conversation && (canLabel || botTab !== null) ? (
+        <View
           style={[
-            styles.strip,
+            styles.tabs,
             { backgroundColor: colors.surface, borderBottomColor: colors.border },
           ]}
         >
-          <Icon name="pricetag-outline" size={20} color="primary" />
-          <Text variant="label">{t('inbox.thread.labels.open')}</Text>
-          {labelNames ? (
-            <Text variant="caption" muted numberOfLines={1} style={styles.labelNames}>
-              {labelNames}
-            </Text>
+          {canLabel ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('inbox.thread.labels.open')}
+              accessibilityValue={{ text: labelNames || undefined }}
+              onPress={() => setLabelsOpen(true)}
+              style={styles.strip}
+            >
+              <Icon name="pricetag-outline" size={20} color="primary" />
+              <Text variant="label">{t('inbox.thread.labels.open')}</Text>
+              {labelNames ? (
+                <Text variant="caption" muted numberOfLines={1} style={styles.labelNames}>
+                  {labelNames}
+                </Text>
+              ) : null}
+            </Pressable>
           ) : null}
-        </Pressable>
+          {botTab !== null ? (
+            <BotTab
+              mode={botTab}
+              busy={actions.givingToBot}
+              onReturn={() => report(actions.giveToBot())}
+            />
+          ) : null}
+        </View>
       ) : null}
       <View style={styles.screen}>{body()}</View>
       {canRead && conversation && !isBotConversation(conversation.assignment) ? (
@@ -594,14 +619,15 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   pad: { padding: spacing.sm },
   strip: {
+    flex: 1,
     minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
     paddingHorizontal: spacing.lg,
-    borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  tabs: { flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth },
   labelNames: { flexShrink: 1 },
   messages: { paddingVertical: spacing.sm },
   empty: { flex: 1, justifyContent: 'center' },

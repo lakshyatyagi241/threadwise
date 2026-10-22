@@ -62,7 +62,7 @@ function RequiredLabel({ children }: { children: string }) {
  * move into a lost stage, the lost reason (a dropdown with "Other", which asks for words). Save stays off until the form is complete.
  * It is mounted fresh each time it opens, so it starts from the contact.
  */
-function LifecycleSheet({ contact, options, onClose }: SheetProps) {
+export function LifecycleSheet({ contact, options, onClose }: SheetProps) {
   const { t } = useTranslation();
   const { stageLabel, statusLabel } = useLifecycleLabels();
   const queryClient = useQueryClient();

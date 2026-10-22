@@ -556,7 +556,9 @@
       "hint": "Se guarda en tu cuenta.",
       "failed": "No se pudo guardar tu elección. Inténtalo de nuevo."
     },
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "helpCenter": "Centro de ayuda",
+    "helpUnavailable": "La dirección del Centro de ayuda no está configurada para esta app."
   },
   "settings": {
     "quickReplies": {
@@ -1117,7 +1119,10 @@
       },
       "bot": {
         "notice": "Esta es una conversación con un bot.",
-        "assignSelf": "Asignármela"
+        "assignSelf": "Asignármela",
+        "tab": "Bot",
+        "returnToBot": "Devolver al bot",
+        "answering": "El bot está respondiendo"
       },
       "labels": {
         "open": "Asignar etiquetas",
@@ -1599,6 +1604,15 @@
     "sheet": {
       "close": "Cerrar"
     },
+    "whatsappAction": {
+      "title": "Acción de WhatsApp",
+      "subtitle": "Elige cómo quieres comunicarte con {{name}}",
+      "open": "Abrir WhatsApp",
+      "openHint": "Abre la aplicación de WhatsApp directamente",
+      "templateHint": "Elige entre las plantillas aprobadas",
+      "noNumber": "No hay ningún número de WhatsApp conectado a este espacio de trabajo.",
+      "pickNumber": "¿Desde qué número quieres enviar?"
+    },
     "views": {
       "open": "Vista de contactos: {{name}}",
       "title": "Vistas",
@@ -1665,8 +1679,7 @@
     "filter": {
       "open": "Filtrar tareas",
       "title": "Filtrar tareas",
-      "clear": "Borrar todo",
-      "apply": "Aplicar",
+      "any": "Cualquiera",
       "group": {
         "status": "Estado",
         "priority": "Prioridad",
@@ -1735,10 +1748,6 @@
       "title": "Título de la tarea",
       "description": "Descripción de la tarea",
       "priority": "Prioridad",
-      "date": "Fecha (AAAA-MM-DD)",
-      "dateHint": "Deja la fecha y la hora vacías si no hay vencimiento. Por ejemplo 2026-10-31.",
-      "time": "Hora (HH:mm)",
-      "timeHint": "Formato de 24 horas, por ejemplo 14:30.",
       "owner": "Responsable",
       "ownerPick": "Elige un responsable",
       "ownerMe": "Yo",
@@ -1766,6 +1775,21 @@
         "dueInvalid": "Esta fecha y hora de vencimiento no se pueden usar.",
         "assigneeInvalid": "A esa persona no se le pueden asignar tareas. Elige otro responsable.",
         "contactInvalid": "Este contacto no se puede vincular."
+      },
+      "titlePlaceholder": "Introduce el título",
+      "descriptionPlaceholder": "Introduce una descripción (opcional)",
+      "contactPlaceholder": "Escribe para buscar un contacto…",
+      "typePlaceholder": "Selecciona el tipo",
+      "datePlaceholder": "Selecciona la fecha",
+      "timePlaceholder": "Selecciona la hora",
+      "hour": "Hora",
+      "minute": "Minuto",
+      "type": "Tipo de tarea",
+      "typeNone": "Sin tipo",
+      "typeRemoved": "(quitado)",
+      "typeNames": {
+        "follow_up": "Seguimiento",
+        "call_reminder": "Recordatorio de llamada"
       }
     }
   },
@@ -2867,6 +2891,41 @@
         "label": "Finalizó la suscripción de una app de pago",
         "hint": "La suscripción de una app de pago finalizó y la app se pausó."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Términos de uso",
+    "privacy": "Política de privacidad",
+    "deletion": "Solicitud de eliminación de cuenta",
+    "unavailable": "Este enlace aún no está disponible. Pide a tu administrador que lo configure."
+  },
+  "accountDelete": {
+    "title": "Eliminar tu cuenta",
+    "warning": "Esto elimina tu cuenta de forma permanente: tu inicio de sesión, perfil, foto y dispositivos.",
+    "irreversible": "Esta acción no se puede deshacer.",
+    "consequencesTitle": "Qué ocurre",
+    "consequence1": "Se cierra tu sesión en todas partes y ya no podrás iniciar sesión con esta cuenta.",
+    "consequence2": "El espacio de trabajo y sus demás miembros permanecen. Tu trabajo sigue en el espacio de trabajo.",
+    "consequence3": "Se conserva un registro de que la cuenta fue eliminada, para auditoría.",
+    "blocked": {
+      "sole_member": {
+        "title": "Eres el único miembro de este espacio de trabajo.",
+        "body": "La cuenta no se puede eliminar por sí sola. Pide al equipo de la plataforma que cierre el espacio de trabajo."
+      },
+      "sole_admin": {
+        "title": "Eres el único administrador.",
+        "body": "Primero convierte a otro miembro en administrador y luego vuelve para eliminar tu cuenta."
+      }
+    },
+    "phraseLabel": "Escribe {{phrase}} para confirmar",
+    "phraseHint": "Exactamente como se muestra, incluidas las mayúsculas.",
+    "password": "Contraseña actual",
+    "cancel": "Cancelar",
+    "submit": "Eliminar cuenta permanentemente",
+    "errors": {
+      "phrase": "Escribe la frase exactamente como se muestra.",
+      "passwordRequired": "Introduce tu contraseña actual.",
+      "passwordWrong": "Esa contraseña no es correcta."
     }
   }
 }

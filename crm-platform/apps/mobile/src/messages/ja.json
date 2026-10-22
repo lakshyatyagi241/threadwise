@@ -536,7 +536,9 @@
       "hint": "アカウントに保存されます。",
       "failed": "選択内容を保存できませんでした。もう一度お試しください。"
     },
-    "settings": "設定"
+    "settings": "設定",
+    "helpCenter": "ヘルプセンター",
+    "helpUnavailable": "このアプリにはヘルプセンターのアドレスが設定されていません。"
   },
   "settings": {
     "quickReplies": {
@@ -1073,7 +1075,10 @@
       },
       "bot": {
         "notice": "これはボットとの会話です。",
-        "assignSelf": "自分に割り当て"
+        "assignSelf": "自分に割り当て",
+        "tab": "ボット",
+        "returnToBot": "ボットに戻す",
+        "answering": "ボットが対応中"
       },
       "labels": {
         "open": "ラベルを割り当て",
@@ -1541,6 +1546,15 @@
     "sheet": {
       "close": "閉じる"
     },
+    "whatsappAction": {
+      "title": "WhatsApp アクション",
+      "subtitle": "{{name}} への連絡方法を選んでください",
+      "open": "WhatsApp を開く",
+      "openHint": "WhatsApp アプリを直接起動します",
+      "templateHint": "承認済みテンプレートから選択",
+      "noNumber": "このワークスペースに接続されている WhatsApp 番号がありません。",
+      "pickNumber": "どの番号から送信しますか？"
+    },
     "views": {
       "open": "連絡先ビュー: {{name}}",
       "title": "ビュー",
@@ -1607,8 +1621,7 @@
     "filter": {
       "open": "タスクをフィルター",
       "title": "タスクをフィルター",
-      "clear": "すべてクリア",
-      "apply": "適用",
+      "any": "指定なし",
       "group": {
         "status": "ステータス",
         "priority": "優先度",
@@ -1677,10 +1690,6 @@
       "title": "タスクのタイトル",
       "description": "タスクの説明",
       "priority": "優先度",
-      "date": "日付(YYYY-MM-DD)",
-      "dateHint": "期限を設定しない場合は、日付と時刻を空欄にしてください。例: 2026-10-31",
-      "time": "時刻(HH:mm)",
-      "timeHint": "24時間表記で入力してください(例: 14:30)。",
       "owner": "担当者",
       "ownerPick": "担当者を選択",
       "ownerMe": "自分",
@@ -1708,6 +1717,21 @@
         "dueInvalid": "この期限の日時は使用できません。",
         "assigneeInvalid": "このユーザーにはタスクを割り当てられません。別の担当者を選択してください。",
         "contactInvalid": "この連絡先は紐づけできません。"
+      },
+      "titlePlaceholder": "タイトルを入力",
+      "descriptionPlaceholder": "説明を入力（任意）",
+      "contactPlaceholder": "入力して連絡先を検索…",
+      "typePlaceholder": "種類を選択",
+      "datePlaceholder": "日付を選択",
+      "timePlaceholder": "時刻を選択",
+      "hour": "時",
+      "minute": "分",
+      "type": "タスクの種類",
+      "typeNone": "種類なし",
+      "typeRemoved": "（削除済み）",
+      "typeNames": {
+        "follow_up": "フォローアップ",
+        "call_reminder": "折り返し電話のリマインダー"
       }
     }
   },
@@ -2771,6 +2795,41 @@
         "label": "有料アプリのサブスクリプション終了",
         "hint": "有料アプリのサブスクリプションが終了し、アプリが一時停止されました。"
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "deletion": "アカウント削除のリクエスト",
+    "unavailable": "このリンクはまだ利用できません。ワークスペースの管理者に設定を依頼してください。"
+  },
+  "accountDelete": {
+    "title": "アカウントを削除",
+    "warning": "ログイン情報、プロフィール、写真、端末を含むアカウントが完全に削除されます。",
+    "irreversible": "この操作は元に戻せません。",
+    "consequencesTitle": "削除後の動作",
+    "consequence1": "すべての端末からログアウトされ、このアカウントで再度ログインすることはできません。",
+    "consequence2": "ワークスペースと他のメンバーは残ります。あなたが行った作業はワークスペースに残ります。",
+    "consequence3": "アカウントが削除されたことを示す記録は監査用に保持されます。",
+    "blocked": {
+      "sole_member": {
+        "title": "あなたはこのワークスペースの唯一のメンバーです。",
+        "body": "アカウントのみを削除することはできません。ワークスペースの閉鎖はプラットフォームチームにご依頼ください。"
+      },
+      "sole_admin": {
+        "title": "あなたは唯一の管理者です。",
+        "body": "先に別のメンバーを管理者に設定してから、アカウントを削除してください。"
+      }
+    },
+    "phraseLabel": "確認のため{{phrase}}と入力してください",
+    "phraseHint": "大文字・小文字を含め、表示のとおりに入力してください。",
+    "password": "現在のパスワード",
+    "cancel": "キャンセル",
+    "submit": "アカウントを完全に削除",
+    "errors": {
+      "phrase": "表示されているとおりに入力してください。",
+      "passwordRequired": "現在のパスワードを入力してください。",
+      "passwordWrong": "パスワードが正しくありません。"
     }
   }
 }

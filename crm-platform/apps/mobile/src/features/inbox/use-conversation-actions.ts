@@ -9,7 +9,14 @@ import { isApiError } from '@/lib/api';
 import type { AssignmentChange } from './assign-sheet';
 import { snoozeUntil, type SnoozeChoice } from './thread-actions';
 import { sendErrorMessage } from './thread-errors';
-import { useAssign, useMarkSpam, useSetPriority, useSetStatus, useSnooze } from './use-inbox';
+import {
+  useAssign,
+  useMarkSpam,
+  useReturnToBot,
+  useSetPriority,
+  useSetStatus,
+  useSnooze,
+} from './use-inbox';
 
 /**
  * The changes a person makes to a conversation, shared by the thread and its details screen: each takes the row version the screen
@@ -26,6 +33,7 @@ export function useConversationActions(
   const setPriority = useSetPriority(id);
   const snooze = useSnooze(id);
   const spam = useMarkSpam(id);
+  const toBot = useReturnToBot(id);
 
   const run = async (action: () => Promise<unknown>): Promise<string | null> => {
     try {
@@ -45,8 +53,12 @@ export function useConversationActions(
       assign.isPending ||
       setPriority.isPending ||
       snooze.isPending ||
-      spam.isPending,
+      spam.isPending ||
+      toBot.isPending,
     assigning: assign.isPending,
+    givingToBot: toBot.isPending,
+    /** Hands the conversation back to the bot; it needs no row version. */
+    giveToBot: async () => run(() => toBot.mutateAsync()),
     moveTo: async (status: SetConversationStatusInput['status']) =>
       conversation
         ? run(() => setStatus.mutateAsync({ rowVersion: conversation.rowVersion, status }))

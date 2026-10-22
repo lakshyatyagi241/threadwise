@@ -18,7 +18,7 @@ import {
 import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
-import { findConversationId } from './chat-api';
+import { fetchWhatsappNumbers, findConversationId, openConversation } from './chat-api';
 import { listContactViews } from './views-api';
 import { ContactsScreen } from './contacts-screen';
 
@@ -34,17 +34,25 @@ const listCall = jest.mocked(api.listContacts);
 const deleteCall = jest.mocked(api.deleteContact);
 const viewsCall = jest.mocked(listContactViews);
 const chatCall = jest.mocked(findConversationId);
+const numbersCall = jest.mocked(fetchWhatsappNumbers);
+const openCall = jest.mocked(openConversation);
 const sessionRow = {
   ...sessionFull,
   permissions: {
     ...sessionFull.permissions,
     'inbox.conversation.read': 'all',
     'record.tasks.read': 'all',
+    'record.tasks.create': 'all',
   },
 } as typeof sessionFull;
 const sessionAll = {
   ...sessionFull,
-  permissions: { ...sessionFull.permissions, 'record.contacts.delete': 'all' },
+  permissions: {
+    ...sessionFull.permissions,
+    'record.contacts.delete': 'all',
+    'inbox.conversation.read': 'all',
+    'inbox.conversation.reply': 'all',
+  },
 } as typeof sessionFull;
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
 
@@ -205,17 +213,13 @@ describe('ContactsScreen', () => {
       );
       expect(screen.queryByRole('tab', { name: 'Lifecycle stage' })).toBeNull();
 
-      // The screen opens on what is applied; "Clear all" empties the draft and "Apply" sends it.
+      // The screen opens on what is applied; "Clear all" takes every filter off and applies at once.
       await fireEvent.press(screen.getByRole('button', { name: 'Filter contacts' }));
       await category('Lifecycle stage');
       expect(
         screen.getByRole('radio', { name: 'Qualified' }).props.accessibilityState.checked,
       ).toBe(true);
       await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
-      expect(
-        screen.getByRole('radio', { name: 'Qualified' }).props.accessibilityState.checked,
-      ).toBe(false);
-      await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() =>
         expect(listCall).toHaveBeenLastCalledWith(
           { limit: 50, cursor: undefined },
@@ -298,21 +302,33 @@ describe('ContactsScreen', () => {
         await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
       );
       expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Call' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Notes' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Edit contact' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Delete contact' })).toBeTruthy();
+      // The Geta app's sheet: four shortcuts, four actions, and the owner and the stage underneath.
+      for (const name of [
+        'Call',
+        'WhatsApp',
+        'Email',
+        'Message',
+        'Task',
+        'Note',
+        'Edit',
+        'Delete',
+        'Contact owner',
+        'Lifecycle stage',
+      ]) {
+        expect(screen.getByRole('button', { name })).toBeTruthy();
+      }
     });
 
-    it('offers no edit or delete to a person who may only read', async () => {
+    it('leaves edit and delete faded for a person who may only read', async () => {
       sessionCall.mockResolvedValue(sessionReadOnly);
       await show();
       await fireEvent.press(
         await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
       );
       expect(await screen.findByRole('button', { name: 'Call' })).toBeTruthy();
-      expect(screen.queryByRole('button', { name: 'Edit contact' })).toBeNull();
-      expect(screen.queryByRole('button', { name: 'Delete contact' })).toBeNull();
+      for (const name of ['Edit', 'Delete', 'Note', 'Contact owner', 'Lifecycle stage']) {
+        expect(screen.getByRole('button', { name }).props.accessibilityState.disabled).toBe(true);
+      }
     });
 
     it('opens the contact ready to edit', async () => {
@@ -321,7 +337,7 @@ describe('ContactsScreen', () => {
       await fireEvent.press(
         await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
       );
-      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit' }));
       expect(router.push).toHaveBeenCalledWith({
         pathname: '/contact/[id]',
         params: { id: aarav.id, edit: '1' },
@@ -335,7 +351,7 @@ describe('ContactsScreen', () => {
       await fireEvent.press(
         await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
       );
-      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete' }));
       expect(await screen.findByText('Delete Aarav Sharma? This cannot be undone.')).toBeTruthy();
       expect(deleteCall).not.toHaveBeenCalled();
       await fireEvent.press(screen.getByRole('button', { name: 'Delete' }));
@@ -350,7 +366,7 @@ describe('ContactsScreen', () => {
       await fireEvent.press(
         await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
       );
-      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete' }));
       await fireEvent.press(await screen.findByRole('button', { name: 'Delete' }));
       expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
     });
@@ -654,18 +670,79 @@ describe('ContactsScreen', () => {
       );
       await fireEvent.press(await screen.findByRole('button', { name: 'Email' }));
       expect(Linking.openURL).toHaveBeenCalledWith(`mailto:${aarav.email}`);
-      await fireEvent.press(screen.getByRole('button', { name: 'SMS' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Message' }));
       expect(Linking.openURL).toHaveBeenCalledWith(`sms:${aarav.phone}`);
-      await fireEvent.press(screen.getByRole('button', { name: 'Tasks' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Task' }));
       expect(router.push).toHaveBeenCalledWith({
-        pathname: '/tasks',
+        pathname: '/task-form',
         params: { contactId: aarav.id },
       });
-      await fireEvent.press(screen.getByRole('button', { name: 'Notes' }));
+    });
+
+    it('opens the note form for the contact from the sheet', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      await fireEvent.press(await screen.findByRole('button', { name: 'Note' }));
       expect(router.push).toHaveBeenCalledWith({
-        pathname: '/contact-notes',
+        pathname: '/contact-note',
         params: { contactId: aarav.id },
       });
+    });
+  });
+
+  describe('WhatsApp from the three dots', () => {
+    const openSheet = async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      await fireEvent.press(await screen.findByRole('button', { name: 'WhatsApp' }));
+    };
+    const number = { id: '55555555-5555-4555-8555-555555555555', name: 'Support line' };
+
+    it('asks whether to open WhatsApp or send a template', async () => {
+      await openSheet();
+      expect(await screen.findByText('WhatsApp Action')).toBeTruthy();
+      expect(
+        screen.getByText('Choose how you would like to communicate with Aarav Sharma'),
+      ).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Open WhatsApp' }));
+      expect(Linking.openURL).toHaveBeenCalledWith(
+        expect.stringMatching(/^https:\/\/wa\.me\/\d+$/),
+      );
+    });
+
+    it('opens the thread on the only connected number and goes to the templates', async () => {
+      numbersCall.mockResolvedValue([number] as never);
+      openCall.mockResolvedValue({ id: 'thread-1' } as never);
+      await openSheet();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Send Template' }));
+      await waitFor(() => expect(openCall).toHaveBeenCalledWith(aarav.id, number.id));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/template-picker',
+        params: { id: 'thread-1' },
+      });
+    });
+
+    it('asks which number when there are several', async () => {
+      numbersCall.mockResolvedValue([number, { ...number, id: 'n2', name: 'Sales line' }] as never);
+      openCall.mockResolvedValue({ id: 'thread-2' } as never);
+      await openSheet();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Send Template' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Sales line' }));
+      await waitFor(() => expect(openCall).toHaveBeenCalledWith(aarav.id, 'n2'));
+    });
+
+    it('says so when no WhatsApp number is connected', async () => {
+      numbersCall.mockResolvedValue([]);
+      await openSheet();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Send Template' }));
+      expect(await screen.findByText(/No WhatsApp number is connected/)).toBeTruthy();
+      expect(openCall).not.toHaveBeenCalled();
     });
   });
 });

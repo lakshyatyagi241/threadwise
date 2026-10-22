@@ -556,7 +556,9 @@
       "hint": "Salvato nel tuo account.",
       "failed": "Impossibile salvare la scelta. Riprova."
     },
-    "settings": "Impostazioni"
+    "settings": "Impostazioni",
+    "helpCenter": "Centro assistenza",
+    "helpUnavailable": "L’indirizzo del Centro assistenza non è configurato per questa app."
   },
   "settings": {
     "quickReplies": {
@@ -1117,7 +1119,10 @@
       },
       "bot": {
         "notice": "Questa è una conversazione con un bot.",
-        "assignSelf": "Assegna a te"
+        "assignSelf": "Assegna a te",
+        "tab": "Bot",
+        "returnToBot": "Restituisci al bot",
+        "answering": "Il bot sta rispondendo"
       },
       "labels": {
         "open": "Assegna etichette",
@@ -1599,6 +1604,15 @@
     "sheet": {
       "close": "Chiudi"
     },
+    "whatsappAction": {
+      "title": "Azione WhatsApp",
+      "subtitle": "Scegli come comunicare con {{name}}",
+      "open": "Apri WhatsApp",
+      "openHint": "Avvia direttamente l’app WhatsApp",
+      "templateHint": "Scegli tra i modelli approvati",
+      "noNumber": "Nessun numero WhatsApp è collegato a questo spazio di lavoro.",
+      "pickNumber": "Da quale numero inviare?"
+    },
     "views": {
       "open": "Vista contatti: {{name}}",
       "title": "Viste",
@@ -1665,8 +1679,7 @@
     "filter": {
       "open": "Filtra task",
       "title": "Filtra task",
-      "clear": "Cancella tutto",
-      "apply": "Applica",
+      "any": "Qualsiasi",
       "group": {
         "status": "Stato",
         "priority": "Priorità",
@@ -1735,10 +1748,6 @@
       "title": "Titolo del task",
       "description": "Descrizione del task",
       "priority": "Priorità",
-      "date": "Data (YYYY-MM-DD)",
-      "dateHint": "Lascia vuoti data e ora per nessuna scadenza. Ad esempio 2026-10-31.",
-      "time": "Ora (HH:mm)",
-      "timeHint": "Formato 24 ore, ad esempio 14:30.",
       "owner": "Responsabile",
       "ownerPick": "Scegli un responsabile",
       "ownerMe": "Io",
@@ -1766,6 +1775,21 @@
         "dueInvalid": "Questa data e ora di scadenza non è utilizzabile.",
         "assigneeInvalid": "A questa persona non si possono assegnare task. Scegli un altro responsabile.",
         "contactInvalid": "Questo contatto non può essere collegato."
+      },
+      "titlePlaceholder": "Inserisci il titolo",
+      "descriptionPlaceholder": "Inserisci una descrizione (facoltativo)",
+      "contactPlaceholder": "Digita per cercare un contatto…",
+      "typePlaceholder": "Seleziona il tipo",
+      "datePlaceholder": "Seleziona la data",
+      "timePlaceholder": "Seleziona l’ora",
+      "hour": "Ora",
+      "minute": "Minuto",
+      "type": "Tipo di compito",
+      "typeNone": "Nessun tipo",
+      "typeRemoved": "(rimosso)",
+      "typeNames": {
+        "follow_up": "Ricontatto",
+        "call_reminder": "Promemoria di chiamata"
       }
     }
   },
@@ -2867,6 +2891,41 @@
         "label": "Abbonamento a un’app a pagamento terminato",
         "hint": "L’abbonamento a un’app a pagamento è terminato e l’app è stata messa in pausa."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Termini di utilizzo",
+    "privacy": "Informativa sulla privacy",
+    "deletion": "Richiesta di eliminazione dell’account",
+    "unavailable": "Questo link non è ancora disponibile. Chiedi all’amministratore dello spazio di lavoro di configurarlo."
+  },
+  "accountDelete": {
+    "title": "Elimina il tuo account",
+    "warning": "Questa azione elimina definitivamente il tuo account: accesso, profilo, foto e dispositivi.",
+    "irreversible": "Questa azione non può essere annullata.",
+    "consequencesTitle": "Cosa succede",
+    "consequence1": "Verrai disconnesso ovunque e non potrai più accedere con questo account.",
+    "consequence2": "Il workspace e gli altri membri restano. Il lavoro svolto rimane nel workspace.",
+    "consequence3": "Viene conservata una registrazione dell'eliminazione dell'account a fini di audit.",
+    "blocked": {
+      "sole_member": {
+        "title": "Sei l'unico membro di questo workspace.",
+        "body": "L'account non può essere eliminato da solo. Chiedi al team della piattaforma di chiudere il workspace."
+      },
+      "sole_admin": {
+        "title": "Sei l'unico amministratore.",
+        "body": "Nomina prima un altro membro amministratore, poi torna qui per eliminare il tuo account."
+      }
+    },
+    "phraseLabel": "Digita {{phrase}} per confermare",
+    "phraseHint": "Esattamente come mostrato, comprese le maiuscole.",
+    "password": "Password attuale",
+    "cancel": "Annulla",
+    "submit": "Elimina definitivamente l'account",
+    "errors": {
+      "phrase": "Digita la frase esattamente come mostrato.",
+      "passwordRequired": "Inserisci la password attuale.",
+      "passwordWrong": "La password non è corretta."
     }
   }
 }

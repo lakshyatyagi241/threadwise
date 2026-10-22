@@ -15,6 +15,7 @@ import {
   getLinkedContact,
   getTask,
   listAssignees,
+  listTaskTypes,
   listTasks,
   reopenTask,
   searchContacts,
@@ -36,6 +37,7 @@ export const taskListKey = (source: TaskListSource, filters: TaskListFilters) =>
   [...taskListsKey, source, filters] as const;
 export const taskKey = (id: string) => [...tasksKey, 'detail', id] as const;
 export const assigneesKey = [...tasksKey, 'assignees'] as const;
+export const taskTypesKey = [...tasksKey, 'types'] as const;
 export const contactChoicesKey = (q: string) => [...tasksKey, 'contact-choices', q] as const;
 export const linkedContactKey = (id: string) => [...tasksKey, 'contact', id] as const;
 
@@ -68,6 +70,14 @@ export const useAssignees = (enabled: boolean) =>
   useQuery({
     queryKey: assigneesKey,
     queryFn: ({ signal }) => listAssignees(signal),
+    enabled,
+  });
+
+/** The task types the workspace offers, for the "Task type" dropdown of the form. */
+export const useTaskTypes = (enabled: boolean) =>
+  useQuery({
+    queryKey: taskTypesKey,
+    queryFn: ({ signal }) => listTaskTypes(signal),
     enabled,
   });
 

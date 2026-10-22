@@ -536,7 +536,9 @@
       "hint": "已保存到您的账号。",
       "failed": "无法保存您的选择，请重试。"
     },
-    "settings": "设置"
+    "settings": "设置",
+    "helpCenter": "帮助中心",
+    "helpUnavailable": "此应用尚未设置帮助中心地址。"
   },
   "settings": {
     "quickReplies": {
@@ -1073,7 +1075,10 @@
       },
       "bot": {
         "notice": "这是一个机器人会话。",
-        "assignSelf": "分配给自己"
+        "assignSelf": "分配给自己",
+        "tab": "机器人",
+        "returnToBot": "交还机器人",
+        "answering": "机器人正在回复"
       },
       "labels": {
         "open": "分配标签",
@@ -1541,6 +1546,15 @@
     "sheet": {
       "close": "关闭"
     },
+    "whatsappAction": {
+      "title": "WhatsApp 操作",
+      "subtitle": "选择与 {{name}} 联系的方式",
+      "open": "打开 WhatsApp",
+      "openHint": "直接启动 WhatsApp 应用",
+      "templateHint": "从已批准的模板中选择",
+      "noNumber": "此工作区尚未连接任何 WhatsApp 号码。",
+      "pickNumber": "从哪个号码发送？"
+    },
     "views": {
       "open": "联系人视图：{{name}}",
       "title": "视图",
@@ -1607,8 +1621,7 @@
     "filter": {
       "open": "筛选任务",
       "title": "筛选任务",
-      "clear": "全部清除",
-      "apply": "应用",
+      "any": "不限",
       "group": {
         "status": "状态",
         "priority": "优先级",
@@ -1677,10 +1690,6 @@
       "title": "任务标题",
       "description": "任务描述",
       "priority": "优先级",
-      "date": "日期（YYYY-MM-DD）",
-      "dateHint": "日期和时间都留空表示无截止日期。例如 2026-10-31。",
-      "time": "时间（HH:mm）",
-      "timeHint": "24 小时制，例如 14:30。",
       "owner": "负责人",
       "ownerPick": "选择负责人",
       "ownerMe": "我",
@@ -1708,6 +1717,21 @@
         "dueInvalid": "无法使用此截止日期和时间。",
         "assigneeInvalid": "无法给该用户分配任务。请选择其他负责人。",
         "contactInvalid": "无法关联此联系人。"
+      },
+      "titlePlaceholder": "输入标题",
+      "descriptionPlaceholder": "输入描述（可选）",
+      "contactPlaceholder": "输入以搜索联系人…",
+      "typePlaceholder": "选择类型",
+      "datePlaceholder": "选择日期",
+      "timePlaceholder": "选择时间",
+      "hour": "小时",
+      "minute": "分钟",
+      "type": "任务类型",
+      "typeNone": "无类型",
+      "typeRemoved": "（已删除）",
+      "typeNames": {
+        "follow_up": "跟进",
+        "call_reminder": "回电提醒"
       }
     }
   },
@@ -2771,6 +2795,41 @@
         "label": "付费应用订阅已结束",
         "hint": "付费应用的订阅已结束，应用已被暂停。"
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "使用条款",
+    "privacy": "隐私政策",
+    "deletion": "申请删除账号",
+    "unavailable": "此链接暂不可用。请联系工作区管理员进行设置。"
+  },
+  "accountDelete": {
+    "title": "删除你的账户",
+    "warning": "此操作将永久删除你的账户，包括登录信息、个人资料、照片和设备。",
+    "irreversible": "此操作无法撤销。",
+    "consequencesTitle": "将会发生什么",
+    "consequence1": "你将在所有设备上退出登录，且无法再使用此账户登录。",
+    "consequence2": "工作区及其其他成员会保留。你完成的工作仍归工作区所有。",
+    "consequence3": "账户已被删除的记录会保留用于审计。",
+    "blocked": {
+      "sole_member": {
+        "title": "你是此工作区的唯一成员。",
+        "body": "无法单独删除该账户。请联系平台团队关闭工作区。"
+      },
+      "sole_admin": {
+        "title": "你是唯一的管理员。",
+        "body": "请先将另一位成员设为管理员，再回来删除你的账户。"
+      }
+    },
+    "phraseLabel": "输入 {{phrase}} 以确认",
+    "phraseHint": "请与显示内容完全一致，包括大小写。",
+    "password": "当前密码",
+    "cancel": "取消",
+    "submit": "永久删除账户",
+    "errors": {
+      "phrase": "请完全按照显示内容输入该短语。",
+      "passwordRequired": "请输入当前密码。",
+      "passwordWrong": "密码不正确。"
     }
   }
 }

@@ -453,17 +453,10 @@ describe('InboxScreen', () => {
       expect(screen.queryByRole('tab', { name: 'Labels' })).toBeNull();
     });
 
-    it('empties the choices with Clear all and applies them only on Apply', async () => {
+    it('takes the choices off and applies at once with Clear all', async () => {
       await open();
       await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
       await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
-      expect(screen.getByRole('radio', { name: 'Resolved' }).props.accessibilityState.checked).toBe(
-        false,
-      );
-      expect(screen.getByRole('radio', { name: 'Open' }).props.accessibilityState.checked).toBe(
-        true,
-      );
-      await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
       expect(lastFilters()).toMatchObject({ status: 'default' });
     });
 

@@ -3,12 +3,7 @@ import { FilterPanes, type FilterCategory } from '@/components/ui/filter-panes';
 import { can, useSession } from '@/lib/session/use-session';
 import type { ContactFilters } from './api';
 import { cleanFilters } from './filters';
-import {
-  stageChoices,
-  statusChoices,
-  titleCaseKey,
-  type LifecycleChoice,
-} from './property-values';
+import { stageChoices, statusChoices, titleCaseKey, type LifecycleChoice } from './property-values';
 import { useContactFilterValues } from './use-contacts';
 import { useAssignees, useStatusOptions } from './use-properties';
 

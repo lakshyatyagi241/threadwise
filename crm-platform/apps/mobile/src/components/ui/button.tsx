@@ -7,8 +7,8 @@ interface Props extends Omit<PressableProps, 'children' | 'style'> {
   label: string;
   /** What a screen reader says when the visible `label` is not enough alone (a "Delete" inside a list says whose). */
   accessibilityLabel?: string;
-  /** `primary` is the one action of a screen, `secondary` an alternative, `link` a quiet text action (it sits inside a sentence of UI). */
-  variant?: 'primary' | 'secondary' | 'link';
+  /** `primary` is the one action of a screen, `secondary` an alternative, `danger` the one that cannot be undone (delete account), `link` a quiet text action (it sits inside a sentence of UI). */
+  variant?: 'primary' | 'secondary' | 'danger' | 'link';
   loading?: boolean;
   /** Where a `link` sits in its row: centred (after a sentence), or at the start, lined up with the fields above it. */
   align?: 'center' | 'start';
@@ -26,8 +26,15 @@ export function Button({
   const { colors } = useTheme();
   const inactive = Boolean(disabled) || loading;
   const primary = variant === 'primary';
+  const danger = variant === 'danger';
   const link = variant === 'link';
-  const textColor = primary ? colors.onPrimary : link ? colors.primary : colors.text;
+  const textColor = primary
+    ? colors.onPrimary
+    : danger
+      ? colors.onDanger
+      : link
+        ? colors.primary
+        : colors.text;
   return (
     <Pressable
       {...rest}
@@ -39,8 +46,8 @@ export function Button({
         link ? styles.link : styles.base,
         link && align === 'start' && styles.linkStart,
         !link && {
-          backgroundColor: primary ? colors.primary : colors.surface,
-          borderColor: primary ? colors.primary : colors.borderStrong,
+          backgroundColor: primary ? colors.primary : danger ? colors.danger : colors.surface,
+          borderColor: primary ? colors.primary : danger ? colors.danger : colors.borderStrong,
         },
         { opacity: inactive ? 0.5 : pressed ? 0.85 : 1 },
       ]}

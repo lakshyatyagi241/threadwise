@@ -546,7 +546,9 @@
       "hint": "Opgeslagen in je account.",
       "failed": "Je keuze kon niet worden opgeslagen. Probeer het opnieuw."
     },
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "helpCenter": "Helpcentrum",
+    "helpUnavailable": "Het adres van het Helpcentrum is niet ingesteld voor deze app."
   },
   "settings": {
     "quickReplies": {
@@ -1095,7 +1097,10 @@
       },
       "bot": {
         "notice": "Dit is een botgesprek.",
-        "assignSelf": "Aan jezelf toewijzen"
+        "assignSelf": "Aan jezelf toewijzen",
+        "tab": "Bot",
+        "returnToBot": "Terug naar bot",
+        "answering": "De bot antwoordt"
       },
       "labels": {
         "open": "Labels toewijzen",
@@ -1570,6 +1575,15 @@
     "sheet": {
       "close": "Sluiten"
     },
+    "whatsappAction": {
+      "title": "WhatsApp-actie",
+      "subtitle": "Kies hoe je met {{name}} wilt communiceren",
+      "open": "WhatsApp openen",
+      "openHint": "Start de WhatsApp-app direct",
+      "templateHint": "Kies uit goedgekeurde sjablonen",
+      "noNumber": "Er is geen WhatsApp-nummer gekoppeld aan deze werkruimte.",
+      "pickNumber": "Vanaf welk nummer verzenden?"
+    },
     "views": {
       "open": "Contactweergave: {{name}}",
       "title": "Weergaven",
@@ -1636,8 +1650,7 @@
     "filter": {
       "open": "Taken filteren",
       "title": "Taken filteren",
-      "clear": "Alles wissen",
-      "apply": "Toepassen",
+      "any": "Alle",
       "group": {
         "status": "Status",
         "priority": "Prioriteit",
@@ -1706,10 +1719,6 @@
       "title": "Taaktitel",
       "description": "Taakbeschrijving",
       "priority": "Prioriteit",
-      "date": "Datum (JJJJ-MM-DD)",
-      "dateHint": "Laat datum en tijd leeg voor een taak zonder deadline. Bijvoorbeeld 2026-10-31.",
-      "time": "Tijd (UU:mm)",
-      "timeHint": "24-uursklok, bijvoorbeeld 14:30.",
       "owner": "Eigenaar",
       "ownerPick": "Kies een eigenaar",
       "ownerMe": "Ik",
@@ -1737,6 +1746,21 @@
         "dueInvalid": "Deze deadline kan niet worden gebruikt.",
         "assigneeInvalid": "Aan die persoon kunnen geen taken worden toegewezen. Kies een andere eigenaar.",
         "contactInvalid": "Dit contact kan niet worden gekoppeld."
+      },
+      "titlePlaceholder": "Voer een titel in",
+      "descriptionPlaceholder": "Voer een beschrijving in (optioneel)",
+      "contactPlaceholder": "Typ om een contact te zoeken…",
+      "typePlaceholder": "Selecteer een type",
+      "datePlaceholder": "Selecteer een datum",
+      "timePlaceholder": "Selecteer een tijd",
+      "hour": "Uur",
+      "minute": "Minuut",
+      "type": "Taaktype",
+      "typeNone": "Geen type",
+      "typeRemoved": "(verwijderd)",
+      "typeNames": {
+        "follow_up": "Opvolgen",
+        "call_reminder": "Belherinnering"
       }
     }
   },
@@ -2819,6 +2843,41 @@
         "label": "Abonnement betaalde app beëindigd",
         "hint": "Het abonnement op een betaalde app is beëindigd en de app is gepauzeerd."
       }
+    }
+  },
+  "dataSecurity": {
+    "terms": "Gebruiksvoorwaarden",
+    "privacy": "Privacybeleid",
+    "deletion": "Verzoek tot verwijdering van account",
+    "unavailable": "Deze link is nog niet beschikbaar. Vraag de beheerder van je werkruimte om hem in te stellen."
+  },
+  "accountDelete": {
+    "title": "Je account verwijderen",
+    "warning": "Hiermee verwijder je je account definitief: je login, profiel, foto en apparaten.",
+    "irreversible": "Dit kan niet ongedaan worden gemaakt.",
+    "consequencesTitle": "Wat er gebeurt",
+    "consequence1": "Je wordt overal uitgelogd en kunt niet meer inloggen met dit account.",
+    "consequence2": "De workspace en de andere leden blijven bestaan. Werk dat je hebt gedaan blijft bij de workspace.",
+    "consequence3": "Een registratie dat het account is verwijderd wordt bewaard voor audit.",
+    "blocked": {
+      "sole_member": {
+        "title": "Je bent het enige lid van deze workspace.",
+        "body": "Het account kan niet los worden verwijderd. Vraag het platformteam om de workspace te sluiten."
+      },
+      "sole_admin": {
+        "title": "Je bent de enige beheerder.",
+        "body": "Maak eerst een ander lid beheerder en kom dan terug om je account te verwijderen."
+      }
+    },
+    "phraseLabel": "Typ {{phrase}} om te bevestigen",
+    "phraseHint": "Precies zoals getoond, inclusief hoofdletters.",
+    "password": "Huidig wachtwoord",
+    "cancel": "Annuleren",
+    "submit": "Account definitief verwijderen",
+    "errors": {
+      "phrase": "Typ de zin precies zoals getoond.",
+      "passwordRequired": "Voer je huidige wachtwoord in.",
+      "passwordWrong": "Dat wachtwoord is onjuist."
     }
   }
 }

@@ -19,6 +19,9 @@ export interface ContactChoice {
   name: string;
 }
 
+/** The task type chosen: its id, or `null` for none. A type the task holds that was since removed is still the chosen one. */
+export type TaskTypeChoice = string | null;
+
 export interface TaskFormValues {
   title: string;
   notes: string;
@@ -29,6 +32,7 @@ export interface TaskFormValues {
   time: string;
   assignee: AssigneeChoice;
   contact: ContactChoice | null;
+  taskTypeId: TaskTypeChoice;
 }
 
 /** The fields a message can sit under. */
@@ -55,7 +59,17 @@ export const EMPTY_TASK: TaskFormValues = {
   time: '',
   assignee: { kind: 'me' },
   contact: null,
+  taskTypeId: null,
 };
+
+/**
+ * What the Add task form starts from: empty, but with the day and the time set to now on this phone's clock, as the Geta app's does
+ * (the person changes them, or takes them away with Clear for a task without a due date).
+ */
+export const newTaskValues = (now: Date = new Date()): TaskFormValues => ({
+  ...EMPTY_TASK,
+  ...fromDueAt(now.toISOString()),
+});
 
 /** Any letter of any script (Devanagari included): a title of digits and punctuation alone is not a title. */
 const HAS_LETTER = /\p{L}/u;
@@ -104,6 +118,7 @@ export function buildCreateBody(values: TaskFormValues): CreateTaskInput {
     ...(dueAt ? { dueAt } : {}),
     ...assigneeBody(values.assignee),
     ...(values.contact ? { contactId: values.contact.id } : {}),
+    ...(values.taskTypeId ? { taskTypeId: values.taskTypeId } : {}),
   };
 }
 
@@ -125,6 +140,7 @@ export function valuesOfTask(task: TaskResponse, myId: string | undefined): Task
     time: due.time,
     assignee,
     contact: task.contact ? { id: task.contact.id, name: task.contact.name ?? '' } : null,
+    taskTypeId: task.taskType?.id ?? null,
   };
 }
 
@@ -166,6 +182,8 @@ export function buildUpdateBody(
 
   const contactAfter = values.contact?.id ?? null;
   if (contactAfter !== (task.contact?.id ?? null)) body.contactId = contactAfter;
+
+  if (values.taskTypeId !== (task.taskType?.id ?? null)) body.taskTypeId = values.taskTypeId;
   return body;
 }
 
