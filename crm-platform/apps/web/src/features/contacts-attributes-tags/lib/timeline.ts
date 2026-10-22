@@ -368,7 +368,7 @@ export function fromFieldHistory(entries: readonly FieldHistoryEntry[]): Timelin
     kind: 'change' as const,
     at: g.list[0]!.changedAt,
     actorId: g.list[0]!.changedByUserId,
-    actorName: null,
+    actorName: g.list[0]!.changedByName ?? null,
     upNext: false,
     when: null,
     data: {

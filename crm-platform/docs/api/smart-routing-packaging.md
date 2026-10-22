@@ -28,7 +28,12 @@ add-on cannot be saved at 0; untick it when you set the price). Idempotent, expa
 2. Untick **Free**, enter the price and period, tick **Active**, save.
 3. Give it to a workspace like any other add-on pack (the workspace's add-ons panel, or checkout once it is active). Workspaces on a paid plan see it in the add-on
    catalogue on the Plans page. Plain add-ons are not part of a plan's `visibleAddons` (that table is for Marketplace apps).
-4. To include Smart routing in a higher tier instead, switch the two features on for that plan (Plans, the plan, Features, Chat line).
+4. To include Smart routing in a higher tier instead: Plans, open the plan, **Add-ons** tab, section **Add-ons included in this plan**, switch **Smart routing** on, save. The switch ticks the two
+   features (`inbox_routing`, `inbox_assignment_sticky`) on the Features tab and is derived from them, so the old route (Plans, the plan, Features, Chat line, tick both) still works and flips the switch.
+   A pack with only one of its two features on shows **Partly included** with an **Include fully** button. For a saved plan the row says how many of its workspaces already pay for the add-on: their renewal
+   stops at the end of the current term (section 5), nothing is refunded and nothing is cancelled when you save. Switching it off: workspaces on the plan lose the features unless they buy the add-on, which
+   is then buyable for them at its price. Add-ons that are not included are still sold to every workspace on an active paid plan (no per-plan visibility for plain add-ons).
+   Design and impact: [specs/addons-marketplace-unification.md](../specs/addons-marketplace-unification.md).
 
 ## 2. Setting the tiers (Basic off, higher tiers on)
 

@@ -319,6 +319,8 @@ export const fieldHistoryEntrySchema = z.object({
   newValue: z.unknown(),
   actorType: z.string(),
   changedByUserId: uuidSchema.nullable(),
+  /** The name of the person who made the change (null for the system, the API, or a person no longer in the workspace). */
+  changedByName: z.string().nullable().optional(),
   changedAt: z.string().datetime(),
 });
 export type FieldHistoryEntry = z.infer<typeof fieldHistoryEntrySchema>;

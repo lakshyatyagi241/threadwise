@@ -24,6 +24,7 @@ Add-ons are extra feature packs you buy on top of your current plan, without cha
 
 - **Active** with no button means you already own a pack that only unlocks features, so there is nothing more to buy.
 - **Buy again** appears on a pack that adds to a limit. It says how many times you own it, and buying it again adds more on top.
+- **Included in your plan** means your plan already gives you everything this pack does, so there is nothing to buy and no charge. If you were already paying for the pack when your plan started to include it, it keeps running until the end of the term you paid for, is not refunded, and then stops renewing; the card shows the end date.
 - A price shown as **Free** means the pack costs nothing.
 - If a pack has an offer price, the card shows the offer price.
 

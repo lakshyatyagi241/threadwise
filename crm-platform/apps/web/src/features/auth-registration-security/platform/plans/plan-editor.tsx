@@ -9,6 +9,7 @@ import { ApiError } from '@/lib/api/errors';
 import {
   buildPlanRequest,
   countFeaturesOn,
+  addonsSelectedCount,
   countLimitsSet,
   isPlanDraftDirty,
   newPlanDraft,
@@ -26,15 +27,23 @@ import {
   tabsWithProblems,
   type PlanTab,
 } from '../lib/plan-editor-view';
+import { useCanEdit } from '../operator-context';
 import { operatorFetch } from '../operator-fetch';
-import { AddonsTab, type AddonOptionsState } from './addons-tab';
+import { AddonsTab, type AddonOptionsState, type IncludedPacksState } from './addons-tab';
 import { FeaturesTab } from './features-tab';
 import { LimitsTab } from './limits-tab';
 import { PlanModuleFields } from '@/features/addons-extension-registry/components/plan-module-fields';
 import { PlanDetailsTab } from './plan-details-tab';
 import { FORM_ID, NS, fieldId, type EditorState } from './plan-editor-shared';
 import { PlanEditorTabs } from './plan-editor-tabs';
-import { PLAN_ADDON_OPTIONS_QUERY_KEY, fetchPlanAddonOptions } from './plans-query';
+import {
+  PLAN_ADDON_OPTIONS_QUERY_KEY,
+  PLAN_INCLUDABLE_PACKS_QUERY_KEY,
+  fetchIncludablePacks,
+  fetchPlanAddonImpact,
+  fetchPlanAddonOptions,
+  planAddonImpactKey,
+} from './plans-query';
 
 /**
  * Create or edit one plan in a dialog with four tabs (TW-PLAN-002's steps: details and pricing, then
@@ -73,6 +82,32 @@ export function PlanEditor({
     options: addonQuery.data?.data ?? [],
     retry: () => void addonQuery.refetch(),
   };
+
+  // The plain add-on packs the plan can include (a switch per pack) and, for a saved plan, who already pays for each.
+  const packQuery = useQuery({
+    queryKey: PLAN_INCLUDABLE_PACKS_QUERY_KEY,
+    queryFn: ({ signal }) => fetchIncludablePacks(signal),
+    refetchOnWindowFocus: false,
+  });
+  const impactQuery = useQuery({
+    queryKey: planAddonImpactKey(plan?.id ?? 'new'),
+    queryFn: ({ signal }) => fetchPlanAddonImpact(plan!.id, signal),
+    enabled: plan !== null,
+    refetchOnWindowFocus: false,
+  });
+  const packs = packQuery.data?.data ?? [];
+  const included: IncludedPacksState = {
+    status: packQuery.data ? 'success' : packQuery.isError ? 'error' : 'pending',
+    packs,
+    retry: () => void packQuery.refetch(),
+    // A new plan has nobody on it; for a saved plan the figure is unknown until it loads (or if it fails).
+    impact: plan
+      ? impactQuery.data
+        ? new Map(impactQuery.data.data.map((r) => [r.packId, r.renewing]))
+        : null
+      : new Map(),
+  };
+  const canEdit = useCanEdit('plans');
 
   const save = useMutation({
     mutationFn: async (body: NonNullable<ReturnType<typeof buildPlanRequest>['body']>) =>
@@ -208,7 +243,7 @@ export function PlanEditor({
             counts={{
               featuresOn: countFeaturesOn(draft.features),
               limitsSet: countLimitsSet(draft.limits),
-              addons: draft.visibleAddons.length,
+              addons: addonsSelectedCount(draft, packs),
             }}
             errorTabs={errorTabs}
             panels={{
@@ -226,7 +261,14 @@ export function PlanEditor({
                 </>
               ),
               addons: (
-                <AddonsTab state={state} addons={addons} onTouched={() => setAddonsTouched(true)} />
+                <AddonsTab
+                  state={state}
+                  addons={addons}
+                  included={included}
+                  savedFeatures={initial.features}
+                  readOnly={!canEdit}
+                  onTouched={() => setAddonsTouched(true)}
+                />
               ),
             }}
           />

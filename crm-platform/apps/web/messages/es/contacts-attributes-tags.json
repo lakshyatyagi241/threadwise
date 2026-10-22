@@ -297,7 +297,8 @@
       "teamLabel": "Equipo",
       "teamFilter": "Filtrar por equipo",
       "allTeams": "Todos los equipos",
-      "teamFormer": "Equipo anterior"
+      "teamFormer": "Equipo anterior",
+      "unhideColumn": "Mostrar columna"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",

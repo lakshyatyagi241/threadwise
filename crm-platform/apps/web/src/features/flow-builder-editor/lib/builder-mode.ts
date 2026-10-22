@@ -4,10 +4,15 @@ import type { FlowType } from '@crm/contracts';
 export type BuilderMode = 'simple' | 'advanced';
 
 /**
- * Where "Open" goes. Bots (WhatsApp and website chat) are built in the Simple builder whatever the workspace uses, while the migration
- * is on. Automations (the canvas: a messaging flow built on it, and call flows) open on the Advanced canvas.
+ * Where "Open" goes. In a workspace on the Advanced builder every flow is an automation and opens on the canvas with the automation nodes.
+ * Otherwise bots (WhatsApp and website chat) are built in the Simple builder, while the migration is on. Automations (the canvas: a messaging flow built on it, and call flows) open on the Advanced canvas.
  */
-export function openHref(id: string, flowType: FlowType | string): string {
+export function openHref(
+  id: string,
+  flowType: FlowType | string,
+  mode: BuilderMode = 'simple',
+): string {
+  if (mode === 'advanced') return `/flows/builder/${id}`;
   return flowType === 'chat' || flowType === 'web' ? `/flows/simple/${id}` : `/flows/builder/${id}`;
 }
 

@@ -297,7 +297,8 @@
         "importBody": "Upload a spreadsheet and match its columns to contact fields.",
         "connect": "Connect WhatsApp",
         "connectBody": "Connect your number so contacts can reply and you can message them."
-      }
+      },
+      "unhideColumn": "Unhide column"
     },
     "bulk": {
       "label": "Actions for the selected contacts",

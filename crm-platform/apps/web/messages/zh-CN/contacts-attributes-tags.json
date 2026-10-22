@@ -297,7 +297,8 @@
       "teamLabel": "团队",
       "teamFilter": "按团队筛选",
       "allTeams": "所有团队",
-      "teamFormer": "原团队"
+      "teamFormer": "原团队",
+      "unhideColumn": "显示列"
     },
     "bulk": {
       "label": "所选联系人的操作",

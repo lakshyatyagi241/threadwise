@@ -297,7 +297,8 @@
       "teamLabel": "Nhóm",
       "teamFilter": "Lọc theo nhóm",
       "allTeams": "Tất cả nhóm",
-      "teamFormer": "Nhóm cũ"
+      "teamFormer": "Nhóm cũ",
+      "unhideColumn": "Hiện cột"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",

@@ -1404,7 +1404,8 @@
             "packInactive": "Het add-onpakket is uitgeschakeld, dus niemand kan het kopen.",
             "appUnpublished": "De app is niet gepubliceerd, dus workspaces kunnen hem nog niet zien.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# add-on geselecteerd} other {# add-ons geselecteerd}}"
           },
           "featureHints": {
             "automation": "De flowbuilder en automatiseringen die op gesprekken reageren en erop handelen.",
@@ -1705,6 +1706,33 @@
             "chat": "Chat",
             "crm": "Verkoop-CRM",
             "platform": "Gedeeld door beide"
+          },
+          "marketplace": {
+            "title": "Marketplace-apps die worden aangeboden aan werkruimtes op dit abonnement"
+          },
+          "included": {
+            "title": "Add-ons inbegrepen in dit abonnement",
+            "intro": "Zet een add-on aan om hem op te nemen: werkruimtes op dit abonnement krijgen hem zonder kosten en op de kaart van de add-on staat \"Inbegrepen in je abonnement\". Hiermee worden precies de functies van de add-on aangevinkt op het tabblad Functies, en als je ze daar aanvinkt, schakelt de schakelaar mee. Add-ons die niet zijn opgenomen, worden nog steeds tegen hun eigen prijs verkocht aan elke werkruimte met een actief betaald abonnement.",
+            "readOnly": "Je kunt dit abonnement bekijken maar niet wijzigen, dus deze schakelaars zijn vergrendeld.",
+            "loading": "Add-ons laden",
+            "loadFailed": "De add-ons konden niet worden geladen. Er is niets gewijzigd.",
+            "empty": "Er zijn nog geen add-ons",
+            "emptyHint": "Add-ons zoals Slimme routering en Teams en machtigingen maak je aan onder Add-ons in de operatorconsole.",
+            "stateFull": "Inbegrepen",
+            "statePartial": "Gedeeltelijk inbegrepen",
+            "stateNone": "Niet inbegrepen",
+            "noPrice": "Geen prijs ingesteld",
+            "gives": "Geeft: {features}",
+            "switchLabel": "{name} opnemen in dit abonnement",
+            "noFeatures": "Deze add-on voegt alleen limieten toe, dus er is geen functie om op te nemen. Zijn limieten maken geen deel uit van opname in het abonnement; stel de eigen limieten van het abonnement in op het tabblad Limieten.",
+            "partial": "Gedeeltelijk inbegrepen: {count} van {total} functies staan aan in dit abonnement. Nog uit: {missing}.",
+            "includeFully": "Volledig opnemen",
+            "limitsNote": "Deze add-on voegt ook extra limieten toe ({limits}). De extra limiet maakt geen deel uit van opname in het abonnement en niets hier wijzigt die: stel de eigen limiet van het abonnement in op het tabblad Limieten. Werkruimtes kopen de add-on nog steeds voor de extra limiet.",
+            "unlistedNote": "Sommige functies ({features}) staan niet op de standaardlijst van add-ons. Ze kunnen nog steeds voor het abonnement worden aangezet; alleen het kopen van deze add-on als pakket werkt anders.",
+            "inactiveNote": "Deze add-on is een concept of staat uit, dus niemand kan hem nog kopen. Hem opnemen in het abonnement werkt wel.",
+            "impactCount": "{count, plural, one {# werkruimte betaalt al voor deze add-on.} other {# werkruimtes betalen al voor deze add-on.}} Hun verlenging stopt aan het einde van de huidige periode, er wordt niets terugbetaald en er wordt vandaag niets geannuleerd.",
+            "impactUnknown": "Werkruimtes op dit abonnement die al voor deze add-on betalen, verlengen hem niet meer aan het einde van hun huidige periode. Er wordt niets terugbetaald en er wordt vandaag niets geannuleerd. Het aantal kon niet worden geladen.",
+            "offNote": "Uitgezet: werkruimtes op dit abonnement verliezen deze functies tenzij ze de add-on kopen, en de add-on wordt voor hen koopbaar tegen zijn prijs."
           }
         }
       },

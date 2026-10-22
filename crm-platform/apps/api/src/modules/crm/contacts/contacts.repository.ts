@@ -613,6 +613,16 @@ export class ContactsRepository {
     return new Map(rows.map((r) => [r.id, r.uuid]));
   }
 
+  /** Batch lookup — id -> full name, for naming the people behind a page of audit entries in one query. */
+  async resolveUserNames(tx: Tx, orgId: number, ids: number[]): Promise<Map<number, string>> {
+    if (ids.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: users.id, name: users.fullName })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), inArray(users.id, ids)));
+    return new Map(rows.filter((r) => r.name).map((r) => [r.id, r.name as string]));
+  }
+
   async resolveCompanyId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
     const rows = await tx
       .select({ id: companies.id })

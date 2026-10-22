@@ -59,7 +59,9 @@ export function AdminAnalyticsScreen({ days }: { days: number }) {
             aria-label={t('daysLabel')}
             className="w-auto"
             value={String(days)}
-            onChange={(e) => router.replace(`${pathname}?days=${e.target.value}`)}
+            onChange={(e) =>
+              router.replace(`${pathname}?days=${e.target.value}`, { scroll: false })
+            }
           >
             {!standard && <option value={String(days)}>{t('days.custom', { n: days })}</option>}
             {DAYS.map((d) => (

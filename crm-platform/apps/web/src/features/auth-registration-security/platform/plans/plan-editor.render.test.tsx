@@ -2,13 +2,14 @@ import { createElement } from 'react';
 import {
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
+  type AddonPack,
   type PlanAddonOption,
   type PlanAdminItem,
 } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { newPlanDraft, type PlanDraft, type PlanProblems } from '../lib/plan-draft';
 import { renderWithMessages } from '../render-test-utils';
-import { AddonsTab, type AddonOptionsState } from './addons-tab';
+import { AddonsTab, type AddonOptionsState, type IncludedPacksState } from './addons-tab';
 import { FeaturesTab } from './features-tab';
 import { LimitsTab } from './limits-tab';
 import { PlanEditorTabs } from './plan-editor-tabs';
@@ -46,6 +47,43 @@ const addons = (over: Partial<AddonOptionsState>): AddonOptionsState => ({
   retry: () => undefined,
   ...over,
 });
+
+const SMART = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e01';
+const TEAMS = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e02';
+const LIMITS_ONLY = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e03';
+
+const plain = (over: Partial<AddonPack> & { id: string }): AddonPack => ({
+  slug: 'smart_routing',
+  name: 'Smart routing',
+  subtitle: null,
+  detail: null,
+  amount: '9.00',
+  offerAmount: null,
+  currency: 'USD',
+  billingUnit: 'months',
+  billingDuration: 1,
+  billingMode: 'recurring',
+  isFree: false,
+  isLifetime: false,
+  isActive: true,
+  sortOrder: 0,
+  grants: { features: ['inbox_routing', 'inbox_assignment_sticky'], limits: {} },
+  activePurchases: 0,
+  rowVersion: 1,
+  createdAt: '2026-10-01T00:00:00.000Z',
+  updatedAt: '2026-10-01T00:00:00.000Z',
+  ...over,
+});
+
+const included = (over: Partial<IncludedPacksState> = {}): IncludedPacksState => ({
+  status: 'success',
+  packs: [],
+  retry: () => undefined,
+  impact: new Map(),
+  ...over,
+});
+
+const SAVED = newPlanDraft().features;
 
 const render = (el: ReturnType<typeof createElement>, locale: 'en' | 'ar' = 'en') =>
   renderWithMessages(el, { locale });
@@ -115,6 +153,8 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
         createElement(AddonsTab, {
           state: state(),
           addons: addons({ status: 'pending' }),
+          included: included(),
+          savedFeatures: SAVED,
           onTouched: () => undefined,
         }),
         locale,
@@ -124,13 +164,21 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
       createElement(AddonsTab, {
         state: state(),
         addons: addons({ status: 'error' }),
+        included: included(),
+        savedFeatures: SAVED,
         onTouched: () => undefined,
       }),
       locale,
     );
     expect(failed).toContain('<button');
     const empty = render(
-      createElement(AddonsTab, { state: state(), addons: addons({}), onTouched: () => undefined }),
+      createElement(AddonsTab, {
+        state: state(),
+        addons: addons({}),
+        included: included(),
+        savedFeatures: SAVED,
+        onTouched: () => undefined,
+      }),
       locale,
     );
     expect(empty).not.toContain('type="checkbox"');
@@ -143,6 +191,8 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
         addons: addons({
           options: [pack({ id: A }), pack({ id: B, name: 'Draft pack', isActive: false })],
         }),
+        included: included(),
+        savedFeatures: SAVED,
         onTouched: () => undefined,
       }),
       locale,
@@ -154,6 +204,115 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
     expect(html).toMatch(/9(\.00|[.,]00)/);
     // The inactive pack is flagged as not on sale.
     expect(html).toContain('bg-warning/5');
+  });
+
+  it('lists the plain add-ons in their own section with a switch, apart from the Marketplace apps', () => {
+    const html = render(
+      createElement(AddonsTab, {
+        state: state({
+          features: {
+            ...newPlanDraft().features,
+            inbox_routing: true,
+            inbox_assignment_sticky: true,
+          },
+        }),
+        addons: addons({ options: [pack({ id: A })] }),
+        included: included({
+          packs: [
+            plain({ id: SMART }),
+            plain({
+              id: LIMITS_ONLY,
+              name: 'More teams',
+              grants: { features: [], limits: { teams: 5 } },
+            }),
+          ],
+        }),
+        savedFeatures: SAVED,
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(html).toContain(`data-testid="plan-pack-${SMART}"`);
+    expect(html).toContain(`data-coverage="full"`);
+    // A limits-only pack has nothing to include: its switch is disabled.
+    expect(html).toContain(`data-coverage="noFeatures"`);
+    expect(html).toContain(`data-testid="plan-addon-${A}"`);
+    expect(html).toContain('role="switch"');
+  });
+
+  it('shows partial coverage with a button, the limits note, the draft note and the renewal impact', () => {
+    const partial = render(
+      createElement(AddonsTab, {
+        state: state({ features: { ...newPlanDraft().features, inbox_routing: true } }),
+        addons: addons({}),
+        included: included({ packs: [plain({ id: SMART, isActive: false })] }),
+        savedFeatures: SAVED,
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(partial).toContain('data-coverage="partial"');
+    expect(partial).toContain('<button');
+    const teams = render(
+      createElement(AddonsTab, {
+        state: state({
+          features: { ...newPlanDraft().features, team_hierarchy: true, custom_roles: true },
+        }),
+        addons: addons({}),
+        included: included({
+          packs: [
+            plain({
+              id: TEAMS,
+              slug: 'teams',
+              name: 'Teams and permissions',
+              grants: { features: ['team_hierarchy', 'custom_roles'], limits: { teams: 10 } },
+            }),
+          ],
+          impact: new Map([[TEAMS, 3]]),
+        }),
+        savedFeatures: SAVED,
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(teams).toContain('data-coverage="full"');
+    // A pack that also sells a cap is never stopped by inclusion: no renewal-stop sentence for it.
+    expect(teams).not.toContain('role="status"');
+    const stops = render(
+      createElement(AddonsTab, {
+        state: state({
+          features: {
+            ...newPlanDraft().features,
+            inbox_routing: true,
+            inbox_assignment_sticky: true,
+          },
+        }),
+        addons: addons({}),
+        included: included({ packs: [plain({ id: SMART })], impact: new Map([[SMART, 4]]) }),
+        savedFeatures: SAVED,
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(stops).toContain('role="status"');
+    expect(stops).toContain('4');
+  });
+
+  it('locks every switch for an operator who cannot edit plans', () => {
+    const html = render(
+      createElement(AddonsTab, {
+        state: state(),
+        addons: addons({}),
+        included: included({ packs: [plain({ id: SMART })] }),
+        savedFeatures: SAVED,
+        readOnly: true,
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(html).toMatch(
+      /<button[^>]*role="switch"[^>]*disabled|<button[^>]*disabled[^>]*role="switch"/,
+    );
   });
 
   it('puts counts and an error dot on the tabs', () => {

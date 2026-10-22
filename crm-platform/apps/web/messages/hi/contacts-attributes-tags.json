@@ -297,7 +297,8 @@
       "teamLabel": "टीम",
       "teamFilter": "टीम के अनुसार फ़िल्टर करें",
       "allTeams": "सभी टीमें",
-      "teamFormer": "पूर्व टीम"
+      "teamFormer": "पूर्व टीम",
+      "unhideColumn": "कॉलम दिखाएँ"
     },
     "bulk": {
       "label": "चुने हुए संपर्कों के लिए कार्रवाइयां",

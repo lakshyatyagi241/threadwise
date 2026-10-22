@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { purposeOf, relativeTime } from '../lib/list-model';
 import { useFlb, useMsg } from '../lib/msg';
 import { flowTypeLabel } from '../lib/contract-text';
-import { openHref } from '../lib/builder-mode';
+import { openHref, type BuilderMode } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
   live: { pill: 'bg-primary/10 text-brand border-primary/30', dot: 'bg-primary' },
@@ -133,6 +133,8 @@ export interface CardActions {
   onExport: (f: FlowSummary) => void | Promise<void>;
   onDelete: (f: FlowSummary) => void;
   can: { update: boolean; create: boolean; remove: boolean };
+  /** The workspace's builder. On Advanced every flow is an automation: no bot picture or channel mark, and Open goes to the canvas. */
+  builderMode?: BuilderMode;
 }
 
 export function triggerLabelKey(
@@ -178,7 +180,8 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
               <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
             </svg>
           </div>
-        ) : flow.flowType === 'web' || flow.flowType === 'chat' ? (
+        ) : (flow.flowType === 'web' || flow.flowType === 'chat') &&
+          actions.builderMode !== 'advanced' ? (
           // A WhatsApp or website bot's flow wears the bot picture where the others have their category icon.
           <div
             data-testid="flow-card-bot"
@@ -251,7 +254,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
                 <path d="M2.5 2.5h3.5v3.5H2.5zM10 2.5h3.5v3.5H10zM6.2 10h3.6v3.5H6.2zM4.2 6v1.5a1 1 0 0 0 1 1h2.8M11.8 6v1.5a1 1 0 0 1-1 1H8v1.5" />
               </svg>
             </span>
-          ) : flow.flowType === 'chat' ? (
+          ) : flow.flowType === 'chat' && actions.builderMode !== 'advanced' ? (
             <span
               title={flowTypeLabel(tf, 'chat')}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white"
@@ -261,7 +264,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
                 <path d={WHATSAPP_MARK} />
               </svg>
             </span>
-          ) : flow.flowType === 'web' ? (
+          ) : flow.flowType === 'web' && actions.builderMode !== 'advanced' ? (
             <span
               title={flowTypeLabel(tf, 'web')}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-500 text-white"
@@ -320,7 +323,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
 
       <div className="mt-4 flex items-center gap-2">
         <Link
-          href={openHref(flow.id, flow.flowType)}
+          href={openHref(flow.id, flow.flowType, actions.builderMode)}
           className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
         >
           {t('openBuilder')}
@@ -433,35 +436,37 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
             </svg>
             {t('mostUsed')}
           </span>
-          <span
-            data-testid="featured-flow-type"
-            className={cn(
-              PILL,
-              flow.flowType === 'web'
-                ? 'border-sky-500/40 bg-sky-50 text-sky-700'
-                : flow.flowType === 'chat'
-                  ? 'border-[#25D366]/40 bg-[#25D366]/10 text-[#128C7E]'
-                  : 'border-border bg-muted text-muted-foreground',
-            )}
-          >
-            {flow.flowType === 'chat' ? (
-              <svg viewBox="0 0 24 24" className="h-3 w-3" fill="currentColor" aria-hidden="true">
-                <path d={WHATSAPP_MARK} />
-              </svg>
-            ) : flow.flowType === 'web' ? (
-              <svg
-                viewBox="0 0 16 16"
-                className="h-3 w-3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.3"
-                aria-hidden="true"
-              >
-                <path d={GLOBE_MARK} />
-              </svg>
-            ) : null}
-            {flowTypeLabel(tf, flow.flowType)}
-          </span>
+          {actions.builderMode === 'advanced' ? null : (
+            <span
+              data-testid="featured-flow-type"
+              className={cn(
+                PILL,
+                flow.flowType === 'web'
+                  ? 'border-sky-500/40 bg-sky-50 text-sky-700'
+                  : flow.flowType === 'chat'
+                    ? 'border-[#25D366]/40 bg-[#25D366]/10 text-[#128C7E]'
+                    : 'border-border bg-muted text-muted-foreground',
+              )}
+            >
+              {flow.flowType === 'chat' ? (
+                <svg viewBox="0 0 24 24" className="h-3 w-3" fill="currentColor" aria-hidden="true">
+                  <path d={WHATSAPP_MARK} />
+                </svg>
+              ) : flow.flowType === 'web' ? (
+                <svg
+                  viewBox="0 0 16 16"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  aria-hidden="true"
+                >
+                  <path d={GLOBE_MARK} />
+                </svg>
+              ) : null}
+              {flowTypeLabel(tf, flow.flowType)}
+            </span>
+          )}
           <span
             className={cn(
               PILL,
@@ -504,7 +509,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
-            href={openHref(flow.id, flow.flowType)}
+            href={openHref(flow.id, flow.flowType, actions.builderMode)}
             className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
           >
             {t('open')}

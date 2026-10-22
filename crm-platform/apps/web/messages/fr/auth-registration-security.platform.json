@@ -1404,7 +1404,8 @@
             "packInactive": "Le pack du module complémentaire est désactivé, personne ne peut donc l’acheter.",
             "appUnpublished": "L’application n’est pas publiée, les espaces de travail ne peuvent donc pas encore la voir.",
             "appLabel": "Application : {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# module complémentaire sélectionné} other {# modules complémentaires sélectionnés}}"
           },
           "featureHints": {
             "automation": "Le créateur de flux et les automatisations qui répondent aux conversations et agissent dessus.",
@@ -1705,6 +1706,33 @@
             "chat": "Chat",
             "crm": "CRM commercial",
             "platform": "Partagé par les deux"
+          },
+          "marketplace": {
+            "title": "Applications du Marketplace proposées aux espaces de travail de ce forfait"
+          },
+          "included": {
+            "title": "Modules complémentaires inclus dans ce forfait",
+            "intro": "Activez un module complémentaire pour l’inclure : les espaces de travail de ce forfait l’obtiennent sans frais et sa carte indique « Inclus dans votre forfait ». Cela coche exactement les fonctionnalités du module dans l’onglet Fonctionnalités, et les cocher là-bas fait basculer le commutateur. Les modules non inclus restent vendus à leur propre prix à tout espace de travail ayant un forfait payant actif.",
+            "readOnly": "Vous pouvez consulter ce forfait mais pas le modifier, ces commutateurs sont donc verrouillés.",
+            "loading": "Chargement des modules complémentaires",
+            "loadFailed": "Impossible de charger les modules complémentaires. Rien n’a été modifié.",
+            "empty": "Aucun module complémentaire pour l’instant",
+            "emptyHint": "Les modules comme Routage intelligent et Équipes et autorisations se créent sous Modules complémentaires dans la console opérateur.",
+            "stateFull": "Inclus",
+            "statePartial": "Partiellement inclus",
+            "stateNone": "Non inclus",
+            "noPrice": "Aucun prix défini",
+            "gives": "Donne : {features}",
+            "switchLabel": "Inclure {name} dans ce forfait",
+            "noFeatures": "Ce module n’ajoute que des limites, il n’y a donc aucune fonctionnalité à inclure. Ses limites ne font pas partie de l’inclusion dans le forfait ; définissez les limites propres au forfait dans l’onglet Limites.",
+            "partial": "Partiellement inclus : {count} fonctionnalités sur {total} sont activées dans ce forfait. Encore désactivées : {missing}.",
+            "includeFully": "Inclure entièrement",
+            "limitsNote": "Ce module ajoute aussi des limites supplémentaires ({limits}). La limite supplémentaire ne fait pas partie de l’inclusion dans le forfait et rien ici ne la modifie : définissez la limite propre au forfait dans l’onglet Limites. Les espaces de travail achètent toujours le module pour la limite supplémentaire.",
+            "unlistedNote": "Certaines de ses fonctionnalités ({features}) ne figurent pas dans la liste standard des modules. Elles peuvent quand même être activées pour le forfait ; seul l’achat de ce module en tant que pack fonctionne différemment.",
+            "inactiveNote": "Ce module est un brouillon ou désactivé, personne ne peut donc encore l’acheter. L’inclure dans le forfait fonctionne quand même.",
+            "impactCount": "{count, plural, one {# espace de travail paie déjà ce module.} other {# espaces de travail paient déjà ce module.}} Leur renouvellement s’arrêtera à la fin de la période en cours, rien n’est remboursé et rien n’est annulé aujourd’hui.",
+            "impactUnknown": "Les espaces de travail de ce forfait qui paient déjà ce module ne le renouvelleront plus à la fin de leur période en cours. Rien n’est remboursé et rien n’est annulé aujourd’hui. Le nombre n’a pas pu être chargé.",
+            "offNote": "Désactivé : les espaces de travail de ce forfait perdent ces fonctionnalités à moins d’acheter le module, qui devient achetable pour eux à son prix."
           }
         }
       },
