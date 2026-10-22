@@ -314,6 +314,7 @@ export const savedViews: HandlerSpec = {
       isShared = true;
       soft.push({ code: 'VIEW_OWNER_UNRESOLVED', reason: 'the private view has no migrated owner: it is shared so it stays visible' });
     }
+    const shareMode = isShared ? 'everyone' : 'me';
     return {
       kind: 'rows',
       soft,
@@ -325,9 +326,9 @@ export const savedViews: HandlerSpec = {
             name,
             filter,
             position: Math.max(0, Math.trunc(num(doc.position) ?? 0)),
-            is_shared: isShared,
             // the service keeps share_mode and is_shared in step; without it the column default 'me' hides a shared view from everyone else
-            share_mode: isShared ? 'everyone' : 'me',
+            is_shared: shareMode !== 'me',
+            share_mode: shareMode,
             created_by: owner?.id ?? null,
             created_at: t.created,
             updated_at: t.updated,
