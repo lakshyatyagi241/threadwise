@@ -734,6 +734,28 @@ describe('steps per channel', () => {
   });
 });
 
+describe('the link button step summary', () => {
+  const summary = (data: Record<string, unknown>) => {
+    const step = { ...newStep('cta', []), data };
+    return stepSummary(step, (key) => key);
+  };
+
+  it('shows the message, not the first button', () => {
+    expect(
+      summary({
+        bodyText: 'Visit our site',
+        actions: [{ type: 'url', label: 'Open', value: 'https://a.b' }],
+      }),
+    ).toBe('Visit our site');
+  });
+
+  it('falls back to the first button when there is no message', () => {
+    expect(
+      summary({ bodyText: '', actions: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }),
+    ).toBe('Open');
+  });
+});
+
 describe('the carousel step', () => {
   const two = (extra: Record<string, unknown> = {}) => ({
     text: 'Pick one',
