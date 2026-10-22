@@ -1,4 +1,5 @@
 import { jsString } from './embed-script';
+import { flbPhoneCountries } from '@crm/contracts';
 import { CHAT_TEXT, RTL_LOCALES } from './chat-page-text';
 
 /**
@@ -195,6 +196,13 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
 .input-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input-row .cc { flex: none; width: 92px; max-width: 34%; border: 0; border-inline-end: 1px solid #dfe2ee; border-radius: 0; background: transparent; font: inherit; font-size: 13.5px; font-weight: 600; color: #2c2e3d; padding: 8px 4px 8px 0; text-overflow: ellipsis; cursor: pointer; outline: none; }
+.input-row .cc[hidden] { display: none; }
+.input-row .locbtn { display: none; flex: 1; justify-content: center; }
+.input-row.loc { padding: 5px; }
+.input-row.loc #txt, .input-row.loc #send, .input-row.loc .cc { display: none; }
+.input-row.loc .locbtn { display: inline-flex; background: var(--accent); color: var(--accent-ink); }
+.input-row.loc + .hint { display: none; }
 .input-row input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; font: inherit; font-size: 14.5px; padding: 9px 0; color: #2c2e3d; }
 .input-row button { display: inline-flex; align-items: center; gap: 7px; flex: none; height: 38px; padding: 0 16px; border: 0; border-radius: 14px; font: inherit; font-weight: 700; font-size: 13px; cursor: pointer; }
 .input-row button:disabled { opacity: .5; cursor: not-allowed; }
@@ -219,6 +227,7 @@ const SCRIPT = `
   var FLOW = __FLOW__;
   var PREVIEW = __PREVIEW__;
   var T = __TEXT__;
+  var COUNTRIES = __COUNTRIES__;
   // The window's own words, in the visitor's language (English is the fallback for a missing key).
   function tx(key, fallback) { return (T && T[key]) || fallback; }
   var VKEY = 'wsnap_vid_' + TOKEN;
@@ -229,6 +238,7 @@ const SCRIPT = `
   var API_UP = BASE + 'upload';
   var API_FB = BASE + 'feedback';
   var API_RATE = BASE + 'rating';
+  var API_LOC = BASE + 'location';
 
   // The visitor id lives in the iframe's own localStorage, not only in a cookie: the page runs in a cross-site frame where
   // third-party cookies are often blocked, and without it every visit would start a new conversation.
@@ -255,10 +265,32 @@ const SCRIPT = `
     var f = String((h && h.format) || 'dd-mm-yyyy').toUpperCase();
     return h && h.type === 'datetime' ? f + ' HH:MM' : f;
   }
+  // A phone question shows a country list beside the box; the number goes out as +<code> <number>, so it is judged by that country's rules.
+  function flagOf(code) {
+    return code.length === 2 ? String.fromCodePoint(127397 + code.charCodeAt(0), 127397 + code.charCodeAt(1)) : '';
+  }
+  function paintCountries(h) {
+    var cc = $('cc');
+    if (!cc.options.length) {
+      COUNTRIES.forEach(function (c) {
+        var o = document.createElement('option');
+        o.value = c.dial;
+        o.dataset.code = c.code;
+        o.textContent = '+' + c.dial + ' ' + flagOf(c.code) + ' ' + c.name;
+        cc.appendChild(o);
+      });
+      cc.setAttribute('aria-label', tx('countryCode', 'Country code'));
+    }
+    var want = String((h && h.country) || ((navigator.language || '').split('-')[1] || '') || 'IN').toUpperCase();
+    for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
+  }
   function setHint(h) {
     hint = h && h.type && h.type !== 'text' && h.type !== 'alphanumeric' ? h : null;
     var t = $('txt'), row = document.querySelector('.input-row'), type = hint ? hint.type : 'text';
     t.value = ''; syncSend();
+    var ccBox = $('cc');
+    ccBox.hidden = type !== 'phone';
+    if (type === 'phone') paintCountries(hint);
     t.type = type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'text';
     if (type === 'number') t.setAttribute('inputmode', 'decimal');
     else if (type === 'phone') t.setAttribute('inputmode', 'tel');
@@ -266,7 +298,8 @@ const SCRIPT = `
     else t.removeAttribute('inputmode');
     t.setAttribute('autocomplete', type === 'name' ? 'name' : type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'off');
     t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' || type === 'time' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
-    row.className = 'input-row' + (type === 'file' ? ' file' : '');
+    row.className = 'input-row' + (type === 'file' ? ' file' : type === 'location' ? ' loc' : '');
+    $('locbtn').textContent = '\\uD83D\\uDCCD ' + tx('shareLocation', 'Share my location');
     var f = $('file');
     f.accept = type === 'file' && hint.accept && hint.accept.length ? hint.accept.map(function (e) { return '.' + e; }).join(',') : '';
   }
@@ -373,10 +406,21 @@ const SCRIPT = `
     if (first) hdr.insertBefore(b, first); else hdr.appendChild(b);
     pipBtn = b;
   }
+  // A flow bot opens by itself: the first time the window is open on an empty thread the bot starts at its first step, and does not
+  // wait for the visitor to write. The site's panel tells the page when it is opened (a page of its own is open from the start).
+  var windowOpened = window.parent === window, botReady = false, botStarted = false;
+  function startBot() {
+    if (!FLOW || PREVIEW || !botReady || !windowOpened || botStarted) return;
+    botStarted = true;
+    fetch(withVid(BASE + 'start'), { method: 'POST', credentials: 'include' })
+      .then(function () { showTyping(); burstPoll(); })
+      .catch(function () {});
+  }
   window.addEventListener('message', function (e) {
     var d = e.data;
     if (!d || e.source !== window.parent) return;
-    if (d.wgt === 'pip-state') { PIPSTATE = { supported: d.supported === true, active: d.active === true }; ensurePipButton(); }
+    if (d.wgt === 'opened') { windowOpened = true; startBot(); }
+    else if (d.wgt === 'pip-state') { PIPSTATE = { supported: d.supported === true, active: d.active === true }; ensurePipButton(); }
     else if (d.wgt === 'pip-ask' && CHAT.pip) pipCard(tx('pipAsk', 'Keep chatting in a floating window when you switch tabs?'), [{ label: tx('pipAllow', 'Allow'), run: function () { toParent({ wgt: 'ask-notify' }); } }, { label: tx('pipNo', 'Not now'), no: true }]);
     else if (d.wgt === 'pip-offer' && CHAT.pip) pipCard(tx('pipOffer', 'Continue chatting in a floating window?'), [{ label: tx('pipYes', 'Float the chat'), run: function () { toParent({ wgt: 'pip' }); } }, { label: tx('pipNo', 'Not now'), no: true }]);
   });
@@ -899,6 +943,13 @@ const SCRIPT = `
         img.alt = c.title || '';
         img.loading = 'lazy';
         img.referrerPolicy = 'no-referrer';
+        // A picture a host will not give without a referrer is asked for once more with the window's origin; failing that, the card shows without it.
+        img.onerror = function () {
+          if (img.dataset.retry) { img.remove(); return; }
+          img.dataset.retry = '1';
+          img.referrerPolicy = 'origin';
+          img.src = c.image;
+        };
         img.src = c.image;
         el.appendChild(img);
       }
@@ -1276,6 +1327,8 @@ const SCRIPT = `
         } else {
           intakeDone = true;
           $('send').disabled = false;
+          botReady = transcript.length === 0;
+          startBot();
         }
         if (ageAsk && ageLocked()) blockChat(false);
       });
@@ -1283,11 +1336,37 @@ const SCRIPT = `
     // with a disabled Send button.
   }
 
+  // The visitor shares where they are, when the bot asked: the browser's own permission prompt decides.
+  function shareLocation() {
+    var b = $('locbtn');
+    if (PREVIEW || b.disabled) return;
+    if (!navigator.geolocation) { addBubble('in', tx('locationDenied', 'We could not get your location. Please allow location access and try again.'), { input: hint }); return; }
+    b.disabled = true;
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      b.disabled = false;
+      visitorSpeaks();
+      addBubble('out', '\\uD83D\\uDCCD ' + tx('shareLocation', 'Share my location'));
+      showTyping();
+      var payload = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+      var vid = storedUuid();
+      if (vid) payload.visitor_uuid = vid;
+      fetch(API_LOC, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function () { burstPoll(); })
+        .catch(function () { addBubble('in', tx('failed', "Sorry, that didn't go through. Please try again."), { input: hint }); });
+    }, function () {
+      b.disabled = false;
+      addBubble('in', tx('locationDenied', 'We could not get your location. Please allow location access and try again.'), { input: hint });
+    }, { enableHighAccuracy: false, timeout: 15000 });
+  }
+  $('locbtn').addEventListener('click', shareLocation);
+
   function send(tapTitle, tapId) {
     if (PREVIEW) return;
     var txt = $('txt');
     var body = typeof tapTitle === 'string' ? tapTitle : (txt.value || '').trim();
     if (!body) return;
+    // A phone answer typed without a plus gets the chosen country's code in front of it.
+    if (typeof tapTitle !== 'string' && hint && hint.type === 'phone' && body.charAt(0) !== '+') body = '+' + $('cc').value + ' ' + body.replace(/^0+/, '');
     visitorSpeaks();
     toParent({ wgt: 'activity' });
     if (typeof tapTitle !== 'string') txt.value = '';
@@ -1443,6 +1522,11 @@ export function renderChatPage(w: ChatPageWidget): string {
       JSON.stringify(CHAT_TEXT[locale])
         .replace(/</g, '\\u003c')
         .replace(/\u2028|\u2029/g, ' '),
+    )
+    .replace('__COUNTRIES__', () =>
+      JSON.stringify(flbPhoneCountries(locale))
+        .replace(/</g, '\\u003c')
+        .replace(/\u2028|\u2029/g, ' '),
     );
   return `<!doctype html>
 <html lang="${locale}" dir="${RTL_LOCALES.has(locale) ? 'rtl' : 'ltr'}">
@@ -1468,6 +1552,8 @@ export function renderChatPage(w: ChatPageWidget): string {
 <div class="sugg" id="sugg" hidden></div>
 <div id="intake" class="intake" style="display:none"></div>
 <div class="input-row">
+<select id="cc" class="cc" hidden></select>
+<button id="locbtn" class="locbtn" type="button">Share my location</button>
 <input id="txt" type="text" placeholder="Type a message…" aria-label="Type a message" autocomplete="off" />
 <label class="att" id="att"><input id="file" type="file" hidden /><span aria-hidden="true">&#128206;</span><span>Attach a file</span></label>
 <button class="mic" id="mic" type="button" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>

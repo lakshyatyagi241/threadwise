@@ -255,6 +255,15 @@ describe('the panel of a flow bot (a website chat bot)', () => {
   });
 });
 
+describe('a phone question', () => {
+  it('shows a country list beside the box and sends the number with the chosen code', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('<select id="cc" class="cc" hidden></select>');
+    expect(page).toContain('"code":"IN","dial":"91"');
+    expect(page).toContain("body = '+' + $('cc').value + ' ' + body.replace(/^0+/, '')");
+  });
+});
+
 describe('the cross: end the conversation, rate it, or restart', () => {
   it('asks first, in every website bot inside the site panel', () => {
     for (const flow of [true, false]) {

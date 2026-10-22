@@ -337,6 +337,9 @@ function withWebInput(
   message: OutboundMessage,
   stored: { body: string; meta?: Record<string, unknown> },
 ): { body: string; meta?: Record<string, unknown> } {
+  // A question for the visitor's location: the window draws a "Share my location" button.
+  if (channelKind === 'webchat' && message.kind === 'location_request')
+    return { ...stored, meta: { ...stored.meta, widget_input: { type: 'location' } } };
   if (channelKind !== 'webchat' || message.kind !== 'text') return stored;
   if (!message.input && !message.links?.length) return stored;
   return {

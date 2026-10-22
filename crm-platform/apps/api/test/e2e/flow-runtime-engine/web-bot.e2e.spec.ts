@@ -341,6 +341,72 @@ describe('a website chat bot answers its visitor', () => {
     expect(rows.rows).toEqual([{ body: 'Rated this chat 4/5: Quick and clear', direction: 'in' }]);
   });
 
+  it('starts by itself when the window opens on an empty thread, once, without a line for the visitor', async () => {
+    const { token } = await liveBot(
+      'Opens itself bot',
+      graph([trigger(), node('m', 'message', { text: 'Welcome aboard' })], [edge('t', 'm')]),
+    );
+    const visitor = await api.visitor(token);
+    const start = () =>
+      request(p.h.app.getHttpServer()).post(`/widget/${token}/api/start?visitor_uuid=${visitor}`);
+    expect((await start()).status).toBe(200);
+    const lines = await linesUntil(token, visitor, 'the bot opens', (all) =>
+      all.some((l) => l.body === 'Welcome aboard'),
+    );
+    // The window shows the bot's own lines only: the opening tap is kept for the team, not drawn.
+    expect(lines.some((l) => l.body === 'Opened the chat')).toBe(false);
+    const rows = await api.h.owner.query(
+      `SELECT count(*)::int AS n FROM messages m
+         JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+        WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.body = 'Opened the chat'`,
+      [t.orgId, visitor],
+    );
+    expect(rows.rows[0]).toEqual({ n: 1 });
+    // A second open does not start the bot again.
+    expect((await start()).status).toBe(200);
+    const again = await api.h.owner.query(
+      `SELECT count(*)::int AS n FROM messages m
+         JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+        WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.body = 'Welcome aboard'`,
+      [t.orgId, visitor],
+    );
+    expect(again.rows[0]).toEqual({ n: 1 });
+  });
+
+  it("asks for the visitor's location, takes the pin they share, and sends a pin as a map link", async () => {
+    const { token } = await liveBot(
+      'Location bot',
+      graph(
+        [
+          trigger(),
+          node('l', 'ask_location', { prompt: 'Where are you?', var: 'where' }),
+          node('p', 'location', { lat: 18.5204, lng: 73.8567, title: 'Our office' }),
+          node('done', 'message', { text: 'Thanks, see {{where_latitude}}' }),
+        ],
+        [edge('t', 'l'), edge('l', 'p'), edge('p', 'done')],
+      ),
+    );
+    const visitor = await api.visitor(token);
+    await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+    const asked = await linesUntil(token, visitor, 'the bot asks for the location', (all) =>
+      all.some((l) => l.input?.type === 'location'),
+    );
+    // The question is the plain question: the window draws the share button, so no WhatsApp "tap the + button" hint.
+    expect(asked.find((l) => l.input?.type === 'location')!.body).toBe('Where are you?');
+    const share = (body: object) =>
+      request(p.h.app.getHttpServer())
+        .post(`/widget/${token}/api/location?visitor_uuid=${visitor}`)
+        .send(body);
+    expect((await share({ latitude: 120, longitude: 10 })).status).toBe(422);
+    expect((await share({ latitude: 18.52, longitude: 73.85 })).status).toBe(200);
+    const lines = await linesUntil(token, visitor, 'the flow carries on', (all) =>
+      all.some((l) => /^Thanks, see 18\.52/.test(l.body ?? '')),
+    );
+    expect(
+      lines.some((l) => (l.body ?? '').includes('https://maps.google.com/?q=18.5204,73.8567')),
+    ).toBe(true);
+  });
+
   it('shows link, call and email buttons on a bot line, and drops any address a browser must not open', async () => {
     const { token } = await liveBot(
       'Links bot',

@@ -181,7 +181,7 @@ export function WebBotPanels({
   canEdit: boolean;
   /** What a WhatsApp bot's button starts from (its number and keyword); ignored for website chat. */
   whatsapp: WhatsappBotDefaults;
-  /** A website chat bot's Customize tab: whether it has unsaved changes, and its save, so the builder's Save button can follow it. */
+  /** A bot's Customize tab: whether it has unsaved changes, and its save, so the builder's Save button can follow it. */
   onCustomizeDirty?: (dirty: boolean) => void;
   registerCustomizeSave?: (save: (() => void) | null) => void;
 }) {
@@ -199,6 +199,8 @@ export function WebBotPanels({
             flowName={flowName}
             canEdit={canEdit}
             defaults={whatsapp}
+            onDirtyChange={onCustomizeDirty}
+            registerSave={registerCustomizeSave}
           />
         ) : (
           <FlowWidgetCustomize

@@ -601,6 +601,8 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'condition',
   'ask',
   'ask_file',
+  'location',
+  'ask_location',
   'delay',
   'cta',
   'webhook',

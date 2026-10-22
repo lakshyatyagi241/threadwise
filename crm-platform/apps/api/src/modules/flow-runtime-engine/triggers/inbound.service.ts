@@ -157,7 +157,8 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
         conversationId: e.conversationId,
         requirePublished: true,
         withSubscriber: false,
-        startNodeId: nodeId,
+        // `__start` is the bot's own opening (a website chat that opens by itself): from its first step.
+        startNodeId: nodeId === '__start' ? null : nodeId,
       });
       return out.outcome === 'started';
     } catch (err) {

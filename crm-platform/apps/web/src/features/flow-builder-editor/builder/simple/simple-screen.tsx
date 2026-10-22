@@ -261,7 +261,7 @@ function Editor({
   const [dirty, setDirty] = useState(!initial);
   // Edits made since the bot was last published: saving them does not put them live, so Publish stays available until it is pressed.
   const [unpublished, setUnpublished] = useState(false);
-  // A website chat bot's Customize tab keeps its own form; the page's Save follows it while that tab is open.
+  // A bot's Customize tab keeps its own form; the page's Save follows it while that tab is open.
   const [customizeDirty, setCustomizeDirty] = useState(false);
   const customizeSave = useRef<(() => void) | null>(null);
   const registerCustomizeSave = useCallback((fn: (() => void) | null) => {
@@ -640,7 +640,7 @@ function Editor({
     });
   };
 
-  const onCustomizeTab = channel === 'web' && shownTab === 'customize';
+  const onCustomizeTab = shownTab === 'customize';
   const status = published
     ? dirty
       ? t('status.publishedUnsaved')
