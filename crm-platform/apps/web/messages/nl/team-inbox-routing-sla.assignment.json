@@ -12,7 +12,7 @@
         "loadFailed": "De toewijzingsinstellingen konden niet worden geladen.",
         "retry": "Opnieuw proberen",
         "notInPlan": "Niet in je abonnement",
-        "upgradeHint": "Dit zit niet in je abonnement. Vraag de accounteigenaar om het abonnement te upgraden.",
+        "upgradeHint": "Inbegrepen in de add-on Slimme routering of een hoger abonnement.",
         "stepFirst": "Wordt eerst gecontroleerd",
         "stepMaster": "Hoofdschakelaar",
         "stepAfter": "Na het oppakken",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Meer controle nodig? Voeg regels toe",
         "intro": "Optioneel. Met regels stuur je bepaalde chats (een kanaal, woorden in het bericht, een nieuw contact...) naar bepaalde medewerkers of teams. Zijn de vier schakelaars genoeg, dan hoef je nooit een regel aan te maken.",
-        "locked": "Regels zitten niet in je abonnement. Je hebt nog steeds de wachtrij, het oppakken van chats en handmatige toewijzing. Vraag de accounteigenaar om het abonnement te upgraden.",
+        "locked": "Regels maken deel uit van de add-on Slimme routering of een hoger abonnement. De wachtrij, claimen en handmatige toewijzing blijven beschikbaar.",
         "pipelineTitle": "Hoe een nieuwe chat wordt toegewezen",
         "pipeline": {
           "agent": "1. Contacteigenaar en Vaste medewerker",

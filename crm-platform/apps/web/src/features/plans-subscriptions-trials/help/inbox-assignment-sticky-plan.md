@@ -21,7 +21,7 @@ A returning customer is easier to help when the same person answers. This plan f
 
 ## Plan and access
 
-The owner modes and the window are included in plans that list them. On a plan without them, those controls are locked and show an upgrade hint, and conversations are routed by your rules as before. Changing the settings needs the inbox settings permission. Auto assignment itself needs the routing rules feature.
+The owner modes and the window are part of **Smart routing** ([Smart routing add-on](help:smart-routing-addon)): included in some plans or added with the add-on. On a plan without them, those controls are locked and say so, with a link to Plans, and your saved choices are kept but not applied. Changing the settings needs the inbox settings permission. Auto assignment itself is the other half of Smart routing.
 
 ## If something looks wrong
 

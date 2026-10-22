@@ -65,7 +65,7 @@
       "chatbot_widgets": "Chatbot-Widgets",
       "wa_storefront": "WhatsApp-Katalog",
       "inbox_sla": "SLA-Richtlinien",
-      "inbox_routing": "Routing-Regeln",
+      "inbox_routing": "Intelligentes Routing: automatische Zuweisung und Regeln",
       "waba_calling": "WhatsApp-Anrufe",
       "inbox_kanban": "Kanban-Ansicht",
       "team_performance": "Teamleistung",
@@ -91,7 +91,7 @@
       "record_assignment": "Regeln zur Datensatzzuweisung",
       "team_hierarchy": "Teamhierarchie und Manager",
       "custom_roles": "Eigene Rollen und Bereiche",
-      "inbox_assignment_sticky": "Kontaktbesitzer und fester Agent"
+      "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
     },
     "limitGroups": {
       "messaging": "Nachrichten",
@@ -253,6 +253,9 @@
         "buy": "Add-on kaufen",
         "buyAgain": "Erneut kaufen",
         "active": "Aktiv",
+        "included": "In deinem Tarif enthalten",
+        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
+        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
         "unlimitedBullet": "{label} unbegrenzt",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -580,7 +583,16 @@
       "back": "Zurück",
       "compare": "Alle Tarife vergleichen",
       "appHint": "{feature} wird auch als App im Marketplace verkauft.",
-      "appLink": "App ansehen"
+      "appLink": "App ansehen",
+      "addonHint": "Du kannst es auch mit dem Add-on {addon} zu deinem aktuellen Tarif hinzufügen.",
+      "addonLink": "Add-ons ansehen",
+      "addons": {
+        "smartRouting": "Intelligentes Routing",
+        "teamsPermissions": "Teams und Berechtigungen"
+      }
+    },
+    "lock": {
+      "link": "Tarife und Add-ons ansehen"
     }
   }
 }

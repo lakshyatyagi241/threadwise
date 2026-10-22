@@ -34,14 +34,14 @@
           "team": "Zespół",
           "person": "Jedna osoba",
           "rules": "Reguły przypisywania",
-          "rulesLocked": "Reguły przypisywania (nie ma ich w Twoim planie)"
+          "rulesLocked": "Reguły przydzielania (dodatek Inteligentne kierowanie)"
         },
         "destHint": {
           "team": "Trafia do kogoś z zespołu lub czeka w kolejce zespołu.",
           "person": "Trafia do tej osoby, jeśli może ją przejąć; w przeciwnym razie czeka w kolejce.",
           "rules": "Używa Twoich reguł automatycznego przypisywania rozmów; gdy żadna nie wskaże osoby, rozmowa czeka w kolejce."
         },
-        "lockHint": "Twój plan nie obejmuje reguł przypisywania, więc rozmowa wysłana tutaj czeka w kolejce oczekujących, aż współpracownik ją przejmie.",
+        "lockHint": "Reguły przydzielania są częścią dodatku Inteligentne kierowanie lub wyższego planu, więc rozmowa wysłana tutaj czeka w kolejce, aż ktoś z zespołu ją przejmie.",
         "team": "Zespół",
         "teamPick": "— wybierz zespół —",
         "teamNone": "Brak zespołów",

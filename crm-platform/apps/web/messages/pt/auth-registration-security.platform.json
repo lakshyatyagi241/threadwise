@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "O construtor de widgets de chatbot para sites.",
             "wa_storefront": "A área de catálogo e loja virtual do WhatsApp.",
             "inbox_sla": "Políticas e prazos de SLA na caixa de entrada da equipe.",
-            "inbox_routing": "Regras de roteamento que atribuem automaticamente as conversas da caixa de entrada.",
+            "inbox_routing": "Atribuição automática de novas conversas: regras de roteamento, Todos os outros e temporizadores da fila de espera. Faz parte do complemento Roteamento inteligente.",
             "waba_calling": "Chamadas do WhatsApp pela caixa de entrada: números de chamada, permissões de chamada, fazer e atender chamadas.",
             "inbox_kanban": "A visualização em quadro Kanban da caixa de entrada da equipe.",
             "team_performance": "Os relatórios de desempenho da equipe.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "Atribui novos contatos, empresas e negócios ao responsável de vendas certo por regras de prioridade.",
             "team_hierarchy": "Equipes pai, líderes de equipe e gestores que veem sua equipe e as equipes abaixo dela.",
             "custom_roles": "Crie e edite funções e escolha um escopo (próprios, da equipe ou todos os registros) para cada permissão.",
-            "inbox_assignment_sticky": "Atribuição com prioridade ao responsável e sincronizada entre o responsável pelo contato e o responsável pelo chat, a janela de contato recorrente e o aviso de reatribuição. Funciona junto com o roteamento da caixa de entrada."
+            "inbox_assignment_sticky": "Atribuição com prioridade ao proprietário e sincronizada, janela para contatos recorrentes e aviso ao reatribuir. Faz parte do complemento Roteamento inteligente."
           },
           "units": {
             "days": "Dias",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "Widgets de chatbot para sites",
             "wa_storefront": "Loja virtual e catálogo do WhatsApp",
             "inbox_sla": "Políticas de SLA da caixa de entrada",
-            "inbox_routing": "Regras de roteamento da caixa de entrada e horário comercial",
+            "inbox_routing": "Roteamento inteligente: atribuição automática e regras",
             "waba_calling": "Fazer e atender chamadas do WhatsApp pela caixa de entrada",
             "inbox_kanban": "Quadro Kanban da caixa de entrada",
             "team_performance": "Relatórios de desempenho da equipe",
@@ -1642,7 +1642,7 @@
             "record_assignment": "Regras de atribuição de registros (atribuir contatos, empresas e negócios automaticamente)",
             "team_hierarchy": "Hierarquia de equipes e gestores",
             "custom_roles": "Funções personalizadas e escopos",
-            "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
+            "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo"
           },
           "problems": {
             "required": "Este campo é obrigatório.",

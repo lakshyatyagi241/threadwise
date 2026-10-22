@@ -34,14 +34,14 @@
           "team": "Un team",
           "person": "Una persona",
           "rules": "Le regole di assegnazione",
-          "rulesLocked": "Le regole di assegnazione (non incluse nel tuo piano)"
+          "rulesLocked": "Le regole di assegnazione (componente Instradamento intelligente)"
         },
         "destHint": {
           "team": "Va a qualcuno del team oppure resta nella coda del team.",
           "person": "Va a questa persona se può prenderla; altrimenti resta in coda.",
           "rules": "Usa le tue regole di assegnazione automatica delle conversazioni; se nessuna trova una persona, resta in coda."
         },
-        "lockHint": "Il tuo piano non include le regole di assegnazione, quindi una conversazione inviata qui resta nella coda In attesa finché un collega la prende in carico.",
+        "lockHint": "Le regole di assegnazione fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore, quindi una conversazione inviata qui attende nella coda d'attesa finché un collega la prende in carico.",
         "team": "Team",
         "teamPick": "— scegli un team —",
         "teamNone": "Ancora nessun team",

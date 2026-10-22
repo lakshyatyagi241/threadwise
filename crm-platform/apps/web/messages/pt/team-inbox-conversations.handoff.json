@@ -54,7 +54,7 @@
         "intro": "O bot deixa de responder a este contato. A conversa vai para a pessoa ou equipe que você escolher, ou aguarda na fila até que alguém a assuma.",
         "where": "Enviar para",
         "whereRules": "As regras de atribuição; caso contrário, a fila de espera",
-        "whereQueueOnly": "A fila de espera (as regras de atribuição não estão no seu plano)",
+        "whereQueueOnly": "A fila de espera (as regras de atribuição exigem o complemento Roteamento inteligente)",
         "whereTeam": "Uma equipe",
         "wherePerson": "Uma pessoa",
         "team": "Equipe",

@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "Brak w Twoim planie",
-      "upgradeHint": "Twój plan tego nie obejmuje. Poproś właściciela konta o zmianę planu na wyższy.",
+      "upgradeHint": "W dodatku Inteligentne kierowanie lub w wyższym planie.",
       "owner": {
         "prompt": "Pytaj o właściciela kontaktu przy zmianie przypisania",
         "promptHint": "Gdy czat jest ręcznie przekazany komuś innemu, zaproponuj ustawienie tej osoby także jako właściciela kontaktu.",

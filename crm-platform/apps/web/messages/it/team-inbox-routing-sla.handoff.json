@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "Non incluso nel tuo piano",
-      "upgradeHint": "Il tuo piano non lo include. Chiedi al proprietario dell’account di passare a un piano superiore.",
+      "upgradeHint": "Incluso nel componente aggiuntivo Instradamento intelligente o in un piano superiore.",
       "owner": {
         "prompt": "Chiedi del proprietario del contatto alla riassegnazione",
         "promptHint": "Quando una chat viene passata a mano a qualcun altro, proponi di renderlo anche proprietario del contatto.",

@@ -12,7 +12,7 @@
         "loadFailed": "Pengaturan penugasan tidak dapat dimuat.",
         "retry": "Coba lagi",
         "notInPlan": "Tidak ada di paket Anda",
-        "upgradeHint": "Paket Anda tidak mencakup ini. Minta pemilik akun untuk meningkatkan paket.",
+        "upgradeHint": "Termasuk dalam add-on Perutean cerdas atau paket yang lebih tinggi.",
         "stepFirst": "Diperiksa pertama",
         "stepMaster": "Sakelar utama",
         "stepAfter": "Setelah chat diambil",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Perlu kontrol lebih? Tambahkan aturan",
         "intro": "Opsional. Aturan mengarahkan chat tertentu (saluran, kata dalam pesan, kontak baru...) ke agen atau tim tertentu. Jika keempat sakelar sudah cukup, Anda tidak perlu membuat aturan.",
-        "locked": "Aturan tidak ada di paket Anda. Antrean tunggu, pengambilan chat, dan penugasan manual tetap tersedia. Minta pemilik akun untuk meningkatkan paket.",
+        "locked": "Aturan adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi. Antrean tunggu, mengambil chat, dan penugasan manual tetap tersedia.",
         "pipelineTitle": "Cara chat baru ditugaskan",
         "pipeline": {
           "agent": "1. Pemilik kontak dan Agen Tetap",

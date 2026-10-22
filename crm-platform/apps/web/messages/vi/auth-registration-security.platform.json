@@ -1421,7 +1421,7 @@
             "chatbot_widgets": "Trình tạo widget chatbot trên website.",
             "wa_storefront": "Khu vực danh mục và cửa hàng WhatsApp.",
             "inbox_sla": "Chính sách SLA và thời hạn trong hộp thư nhóm.",
-            "inbox_routing": "Quy tắc định tuyến tự động phân công cuộc trò chuyện trong hộp thư.",
+            "inbox_routing": "Tự động giao các cuộc trò chuyện mới: quy tắc định tuyến, Tất cả còn lại và bộ hẹn giờ hàng chờ. Thuộc tiện ích Định tuyến thông minh.",
             "waba_calling": "Gọi điện WhatsApp từ hộp thư: số gọi, quyền gọi, thực hiện và nhận cuộc gọi.",
             "inbox_kanban": "Chế độ xem bảng Kanban của hộp thư nhóm.",
             "team_performance": "Báo cáo hiệu suất nhóm.",
@@ -1447,7 +1447,7 @@
             "record_assignment": "Giao liên hệ, công ty và giao dịch mới cho đúng người phụ trách bán hàng theo các quy tắc ưu tiên.",
             "team_hierarchy": "Nhóm cha, trưởng nhóm và quản lý, những người xem được nhóm của mình và các nhóm bên dưới.",
             "custom_roles": "Tạo và sửa vai trò, rồi chọn phạm vi (của mình, của nhóm hoặc tất cả bản ghi) cho từng quyền.",
-            "inbox_assignment_sticky": "Giao việc ưu tiên chủ sở hữu và giữ đồng bộ giữa chủ sở hữu liên hệ và người phụ trách chat, khoảng thời gian cho liên hệ quay lại và lời nhắc giao lại. Hoạt động cùng Định tuyến hộp thư."
+            "inbox_assignment_sticky": "Giao ưu tiên chủ sở hữu và đồng bộ, khoảng thời gian cho liên hệ quay lại và câu hỏi khi giao lại. Thuộc tiện ích Định tuyến thông minh."
           },
           "units": {
             "days": "Ngày",
@@ -1616,7 +1616,7 @@
             "chatbot_widgets": "Widget chatbot trên website",
             "wa_storefront": "Cửa hàng và danh mục WhatsApp",
             "inbox_sla": "Chính sách SLA hộp thư",
-            "inbox_routing": "Quy tắc định tuyến hộp thư và giờ làm việc",
+            "inbox_routing": "Định tuyến thông minh: tự động giao và quy tắc",
             "waba_calling": "Thực hiện và nhận cuộc gọi WhatsApp từ hộp thư",
             "inbox_kanban": "Bảng Kanban hộp thư",
             "team_performance": "Báo cáo hiệu suất nhóm",
@@ -1642,7 +1642,7 @@
             "record_assignment": "Quy tắc phân công bản ghi (tự động phân công liên hệ, công ty và giao dịch)",
             "team_hierarchy": "Phân cấp nhóm và quản lý",
             "custom_roles": "Vai trò tùy chỉnh và phạm vi",
-            "inbox_assignment_sticky": "Chủ sở hữu liên hệ và nhân viên cố định"
+            "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",

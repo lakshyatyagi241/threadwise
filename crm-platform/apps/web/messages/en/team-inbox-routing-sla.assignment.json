@@ -12,7 +12,7 @@
         "loadFailed": "The assignment settings could not be loaded.",
         "retry": "Try again",
         "notInPlan": "Not in your plan",
-        "upgradeHint": "Your plan does not include this. Ask the account owner to upgrade the plan.",
+        "upgradeHint": "Included in the Smart routing add-on or a higher plan.",
         "stepFirst": "Checked first",
         "stepMaster": "Master switch",
         "stepAfter": "After a claim",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Need more control? Add rules",
         "intro": "Optional. Rules send particular chats (a channel, words in the message, a new contact...) to particular agents or teams. If the four switches are enough, you never have to create one.",
-        "locked": "Rules are not in your plan. You still have the waiting queue, claiming and manual assignment. Ask the account owner to upgrade the plan.",
+        "locked": "Rules are part of the Smart routing add-on or a higher plan. You still have the waiting queue, claiming and manual assignment.",
         "pipelineTitle": "How a new chat is assigned",
         "pipeline": {
           "agent": "1. Contact owner and Sticky Agent",

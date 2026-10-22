@@ -12,7 +12,7 @@
         "loadFailed": "Không thể tải cài đặt phân công.",
         "retry": "Thử lại",
         "notInPlan": "Không có trong gói của bạn",
-        "upgradeHint": "Gói của bạn không bao gồm tính năng này. Hãy nhờ chủ tài khoản nâng cấp gói.",
+        "upgradeHint": "Có trong tiện ích Định tuyến thông minh hoặc gói cao hơn.",
         "stepFirst": "Được kiểm tra đầu tiên",
         "stepMaster": "Công tắc chính",
         "stepAfter": "Sau khi nhận chat",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Cần kiểm soát nhiều hơn? Thêm quy tắc",
         "intro": "Tùy chọn. Quy tắc gửi những chat nhất định (một kênh, từ trong tin nhắn, liên hệ mới...) đến những nhân viên hoặc nhóm nhất định. Nếu bốn công tắc đã đủ, bạn không cần tạo quy tắc nào.",
-        "locked": "Gói của bạn không có quy tắc. Bạn vẫn có hàng đợi, nhận chat và phân công thủ công. Hãy nhờ chủ tài khoản nâng cấp gói.",
+        "locked": "Quy tắc thuộc tiện ích Định tuyến thông minh hoặc gói cao hơn. Bạn vẫn có hàng chờ, nhận cuộc trò chuyện và giao thủ công.",
         "pipelineTitle": "Cách chat mới được phân công",
         "pipeline": {
           "agent": "1. Chủ sở hữu liên hệ và Nhân viên cố định",
