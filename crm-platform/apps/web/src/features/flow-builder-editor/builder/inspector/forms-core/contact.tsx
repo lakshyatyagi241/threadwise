@@ -7,10 +7,12 @@ import {
   HANDOFF_DESTINATIONS,
   HANDOFF_MESSAGE_MAX,
   HANDOFF_NOTE_MAX,
+  HANDOFF_RETURN_MAX,
   HANDOFF_PRIORITY_CHOICES,
   HANDOFF_REASON_CHOICES,
   isHandoffNode,
   peopleOf,
+  returnMessageHasNoExit,
   upgradeLegacy,
 } from '../../../lib/handoff-node';
 import { Field, SelectInput, TextArea, TextInput } from '../kit';
@@ -83,8 +85,11 @@ export function AssignForm(props: FormProps) {
   );
 }
 
-function HandoffForm({ data: d, set, setMany, env }: FormProps) {
+function HandoffForm({ node, data: d, set, setMany, env }: FormProps) {
   const t = useTranslations('flb.builder.handoff');
+  const returnedWired = (env.edges ?? []).some(
+    (e) => e.source === node.id && e.sourceHandle === 'returned',
+  );
   const teams = env.ctx.teams;
   const rulesInPlan = usePlanFeature('inbox_routing');
   const kind = destinationOf(d);
@@ -192,6 +197,23 @@ function HandoffForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('offHoursMessage', v)}
         />
       </Field>
+      <Field label={t('returnMessage')} hint={t('returnMessageHint')}>
+        <TextArea
+          value={d.returnMessage}
+          rows={3}
+          maxLength={HANDOFF_RETURN_MAX}
+          onChange={(v) => set('returnMessage', v)}
+        />
+      </Field>
+      {returnMessageHasNoExit(d, returnedWired) && (
+        <p
+          role="note"
+          data-testid="flb-handoff-return-no-exit"
+          className="-mt-2 mb-4 rounded-lg bg-warning/10 p-2.5 text-[11px]"
+        >
+          {t('returnNeedsExit')}
+        </p>
+      )}
       <div
         className="mb-4 rounded-lg border border-border p-3 text-[11px]"
         data-testid="flb-handoff-exits"
@@ -201,6 +223,7 @@ function HandoffForm({ data: d, set, setMany, env }: FormProps) {
           <li>{t('exitAssigned')}</li>
           <li>{t('exitWaiting')}</li>
           <li>{t('exitUnavailable')}</li>
+          <li>{t('exitReturned')}</li>
         </ul>
       </div>
     </>

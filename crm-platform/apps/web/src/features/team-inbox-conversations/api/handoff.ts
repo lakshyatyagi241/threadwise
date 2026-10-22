@@ -8,6 +8,7 @@ import {
   handoffCardSchema,
   handoffOutcomeSchema,
   handoffSettingsSchema,
+  returnToBotResponseSchema,
   type HandoffSettings,
   type RequestHandoffInput,
   type UpdateHandoffSettingsInput,
@@ -17,7 +18,6 @@ import { inboxApi } from './service';
 
 /** The handoff calls of the inbox (BL-396..BL-404). Everything is parsed with the shared contracts. */
 const claimResponse = z.object({ conversation: conversationSummarySchema, ownerSet: z.boolean() });
-const returnResponse = z.object({ conversation: conversationSummarySchema });
 /** `refused` is the reason the service gave when it did nothing (an archived thread, spam); the screen shows it as a message. */
 const sendResponse = z.object({
   outcome: handoffOutcomeSchema,
@@ -48,7 +48,7 @@ export const handoffApi = {
     apiFetch(`/inbox/conversations/${conversationId}/return-to-bot`, {
       method: 'POST',
       body: {},
-      schema: returnResponse,
+      schema: returnToBotResponseSchema,
     }),
   settings: (signal?: AbortSignal) =>
     apiFetch('/inbox/handoff-settings', { schema: handoffSettingsSchema, signal }),

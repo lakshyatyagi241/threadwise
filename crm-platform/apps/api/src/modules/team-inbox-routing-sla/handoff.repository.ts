@@ -339,6 +339,77 @@ export class HandoffRepository {
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND status IN ('waiting', 'assigned')`);
   }
 
+  /**
+   * The live handoff's link to the flow that made it, for Return to bot: the flow run and the Human handoff node. Null when the thread
+   * has no live handoff; `flowRunId`/`nodeId` are null for a handoff no flow made (a person's "send to queue", the AI marker, a keyword).
+   */
+  async liveFlowRef(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+  ): Promise<{ uuid: string; flowRunId: number | null; nodeId: string | null } | null> {
+    const res = await tx.execute(sql`
+      SELECT uuid, flow_run_id, node_id FROM conversation_handoffs
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND status IN ('waiting', 'assigned')`);
+    const r = rowsOf(res)[0];
+    return r
+      ? { uuid: String(r.uuid), flowRunId: num(r.flow_run_id), nodeId: str(r.node_id) }
+      : null;
+  }
+
+  /** The flow a run belonged to, as Return to bot needs it. `run: false` = the run row is gone (retention); `flow: null` = the flow is gone. */
+  async flowOfRun(
+    tx: Tx,
+    orgId: number,
+    runId: number,
+  ): Promise<{
+    run: boolean;
+    flow: { id: number; uuid: string; live: boolean; data: unknown } | null;
+  }> {
+    const run = await tx.execute(
+      sql`SELECT flow_id FROM flow_runs WHERE org_id = ${orgId} AND id = ${runId}`,
+    );
+    const r = rowsOf(run)[0];
+    if (!r) return { run: false, flow: null };
+    const res = await tx.execute(sql`
+      SELECT id, uuid, is_active, is_published, flow_data FROM flows
+      WHERE org_id = ${orgId} AND id = ${Number(r.flow_id)}`);
+    const f = rowsOf(res)[0];
+    return {
+      run: true,
+      flow: f
+        ? {
+            id: Number(f.id),
+            uuid: String(f.uuid),
+            live: f.is_active === true && f.is_published === true,
+            data: f.flow_data,
+          }
+        : null,
+    };
+  }
+
+  /** The (channel, customer) a conversation is: what the conversation core needs to write a line into its thread. */
+  async threadKey(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+  ): Promise<{ channelUuid: string; peerKey: string } | null> {
+    const res = await tx.execute(sql`
+      SELECT ch.uuid AS channel_uuid, c.peer_key FROM conversations c
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND c.id = ${conversationId}`);
+    const r = rowsOf(res)[0];
+    return r ? { channelUuid: String(r.channel_uuid), peerKey: String(r.peer_key) } : null;
+  }
+
+  /** Whether a flow run is still alive for this customer on this channel (it would answer their next message). */
+  async hasLiveRun(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM flow_runs r JOIN conversations c ON c.org_id = r.org_id AND c.channel_id = r.channel_id AND c.peer_key = r.peer_key
+      WHERE r.org_id = ${orgId} AND c.id = ${conversationId} AND r.status IN ('running', 'waiting', 'sleeping', 'halted') LIMIT 1`);
+    return rowsOf(res).length > 0;
+  }
+
   /** Sets the handling columns without an assignment change (a repeat that changes nothing else). */
   async setHandling(
     tx: Tx,

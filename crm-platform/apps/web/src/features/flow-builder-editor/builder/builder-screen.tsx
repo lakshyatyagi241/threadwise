@@ -570,10 +570,11 @@ function BuilderInner({
       refresh: refreshContext,
       toast,
       nodes: state.nodes,
+      edges: state.edges,
       flowId,
       uploadMedia: uploadFlowMedia,
     }),
-    [ctx, mode, openedAs, refreshContext, toast, state.nodes, flowId],
+    [ctx, mode, openedAs, refreshContext, toast, state.nodes, state.edges, flowId],
   );
 
   return (

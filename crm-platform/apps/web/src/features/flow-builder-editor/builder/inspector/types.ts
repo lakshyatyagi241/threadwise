@@ -26,6 +26,8 @@ export interface FormEnv {
   ) => Promise<{ url: string; filename: string }>;
   /** Every node in the flow (for forms that reference other nodes). */
   nodes: readonly FlowNode[];
+  /** The wires of the flow (the Advanced canvas only), for forms that need to know whether an exit is connected. */
+  edges?: readonly { source: string; sourceHandle: string }[];
   /** The saved flow being edited (null before its first save): a Sub-flow node never offers it. */
   flowId: string | null;
 }

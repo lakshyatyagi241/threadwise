@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Rendre au bot",
         "done": "Le bot répond de nouveau à cette conversation.",
-        "failed": "Impossible de rendre la conversation au bot."
+        "failed": "Impossible de rendre la conversation au bot.",
+        "doneFlow": "Le bot poursuit le flux.",
+        "doneNextLive": "Le bot répondra au prochain message du client.",
+        "doneNextDefault": "Le bot est de nouveau actif. Il ne répondra au prochain message que si un flux par défaut est défini.",
+        "already": "Le bot a déjà cette conversation."
       },
       "send": {
         "button": "Envoyer dans la file",
@@ -105,6 +109,36 @@
         "chosen": "Choisi",
         "skipped": "Ignoré",
         "info": "Note"
+      },
+      "botLine": {
+        "system": "le système",
+        "pressed": {
+          "flow": "Le bot est de retour, rendu par {name}. Le flux continue.",
+          "nextLive": "Le bot est de retour, rendu par {name}. Il répondra au prochain message du client.",
+          "nextDefault": "Le bot est de retour, rendu par {name}. Il ne répondra au prochain message que si un flux par défaut est défini."
+        },
+        "result": {
+          "continued": "Le flux a continué par la sortie « rendue ».",
+          "claimed_again": "Le flux n’a pas repris : une personne a de nouveau pris la conversation.",
+          "flow_not_live": "Le flux n’a pas repris : il n’est plus actif.",
+          "start_failed": "Le flux n’a pas pu reprendre."
+        },
+        "customer": {
+          "sent": "Le message au client a été envoyé.",
+          "window_closed": "Le message au client a été ignoré : la fenêtre de 24 heures est fermée.",
+          "no_consent": "Le message au client a été ignoré : pas de consentement.",
+          "failed": "Le message au client n’a pas pu être envoyé.",
+          "channel_unavailable": "Le message au client a été ignoré : le canal est indisponible."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Rendue au bot par {actor}",
+          "bot_resumed": "Le bot a poursuivi le flux",
+          "bot_resume_skipped": "Le flux n’a pas repris"
+        }
       }
     }
   }

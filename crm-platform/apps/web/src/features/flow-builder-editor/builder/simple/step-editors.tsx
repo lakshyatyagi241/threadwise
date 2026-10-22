@@ -45,10 +45,12 @@ import {
   HANDOFF_DESTINATIONS,
   HANDOFF_MESSAGE_MAX,
   HANDOFF_NOTE_MAX,
+  HANDOFF_RETURN_MAX,
   HANDOFF_PRIORITY_CHOICES,
   HANDOFF_REASON_CHOICES,
   isHandoffNode,
   peopleOf,
+  returnMessageHasNoExit,
   upgradeLegacy,
 } from '../../lib/handoff-node';
 import { Field, Input, Select, Textarea, useToast } from '@crm/ui';
@@ -1108,7 +1110,8 @@ function AssignEditor(p: EditorProps) {
 }
 
 /** The Human handoff step (BL-398): where the chat goes, why, the note for the agent and the words the customer reads. */
-function HandoffEditor({ step, ctx, set }: EditorProps) {
+function HandoffEditor({ step, doc, ctx, set }: EditorProps) {
+  const tf = useFlb();
   const t = useTranslations('flb.builder.handoff');
   const teams = ctx.teams;
   const rulesInPlan = usePlanFeature('inbox_routing');
@@ -1232,6 +1235,50 @@ function HandoffEditor({ step, ctx, set }: EditorProps) {
       >
         {t('simpleExits')}
       </p>
+      <Field label={t('returnedStep')} hint={t('returnedStepHint')}>
+        <Select
+          data-testid="flb-handoff-returned-step"
+          value={str(d.returnTo)}
+          onChange={(e) => set({ returnTo: e.target.value })}
+        >
+          <option value="">{t('returnNone')}</option>
+          {groupsOf(doc).map((g) => (
+            <optgroup key={g.key} label={groupText(g, tf)}>
+              {g.chains.flatMap((ci) =>
+                doc.journeys[ci]!.steps.flatMap((s, si) =>
+                  s.id === step.id
+                    ? []
+                    : [
+                        <option key={s.id} value={s.id}>
+                          {t('returnStepOption', {
+                            stage: stageIn(doc, ci, si),
+                            label: renderMsg(tf, stepLabel(s)),
+                          })}
+                        </option>,
+                      ],
+                ),
+              )}
+            </optgroup>
+          ))}
+        </Select>
+      </Field>
+      <Field label={t('returnMessage')} hint={t('returnMessageHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_RETURN_MAX}
+          value={str(d.returnMessage)}
+          onChange={(e) => set({ returnMessage: e.target.value })}
+        />
+      </Field>
+      {returnMessageHasNoExit(d, str(d.returnTo) !== '') && (
+        <p
+          role="note"
+          data-testid="flb-handoff-return-no-exit"
+          className="rounded-xl bg-warning/10 p-2.5 text-[12px]"
+        >
+          {t('returnNeedsExit')}
+        </p>
+      )}
     </div>
   );
 }

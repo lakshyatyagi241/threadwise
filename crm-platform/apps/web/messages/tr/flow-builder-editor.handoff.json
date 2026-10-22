@@ -4,7 +4,8 @@
       "ports": {
         "assigned": "atandı",
         "waitingInQueue": "kuyrukta bekliyor",
-        "noAgentOutOfHours": "temsilci yok / mesai dışı"
+        "noAgentOutOfHours": "temsilci yok / mesai dışı",
+        "returnedToBot": "bota geri verildi"
       }
     },
     "simpleModel": {
@@ -20,12 +21,13 @@
         "nodePreview": {
           "handoffTo": "Devredilecek yer",
           "handoffRules": "Atama kuralları",
-          "pickAgent": "— bir kişi seçin —"
+          "pickAgent": "— bir kişi seçin —",
+          "returnBack": "Bot geri döndüğünde:"
         }
       },
       "handoff": {
         "legacy": "Bu adım eski “Temsilci ata” adımıdır.",
-        "upgradeHint": "Sohbeti bir ekibe verir ve devam eder. Neden, öncelik, kişiye mesajlar ve üç çıkış (atandı, kuyrukta bekliyor, temsilci yok veya mesai dışı) eklemek için İnsana devir adımına geçin. Önceden yaptığınız bağlantılar çalışmaya devam eder.",
+        "upgradeHint": "Sohbeti bir ekibe verir ve devam eder. Bir neden, öncelik, kişi için mesajlar ve çıkışlar (atandı, sırada bekliyor, temsilci yok veya mesai dışı ve sohbet bota geri verildiğinde için isteğe bağlı bir çıkış) eklemek için İnsana devir adımına geçin. Önceden yaptığınız bağlantılar çalışmaya devam eder.",
         "upgrade": "Devir özelliklerini kullan",
         "destination": "Konuşmanın gönderileceği yer",
         "dest": {
@@ -76,7 +78,15 @@
         "exitAssigned": "atandı: konuşma artık bir kişide",
         "exitWaiting": "kuyrukta bekliyor: biri üstlenene kadar bekler",
         "exitUnavailable": "temsilci yok / mesai dışı: kimse üstlenemedi",
-        "simpleExits": "Sonraki adım, konuşma bir kişiye ulaştığında çalışır. Kuyrukta beklemesi gerekirse veya kimse müsait değilse bot burada durur ve bir kişi yanıtlar. Diğer çıkışları izlemek için Gelişmiş oluşturucuyu kullanın."
+        "simpleExits": "Sonraki adım, konuşma bir kişiye ulaştığında çalışır. Kuyrukta beklemesi gerekirse veya kimse müsait değilse bot burada durur ve bir kişi yanıtlar. Diğer çıkışları izlemek için Gelişmiş oluşturucuyu kullanın.",
+        "returnMessage": "Bot geri döndüğünde kişiye gönderilecek mesaj",
+        "returnMessageHint": "İsteğe bağlı. Bir ekip arkadaşı Bota geri ver düğmesine bastığında, akış “geri verildi” çıkışından devam etmeden önce işletmeniz adına bir kez gönderilir. 24 saatlik pencere kapalıysa veya kişi izin vermediyse gönderilmez. '{{'name'}}' gibi değişkenler çalışır.",
+        "returnNeedsExit": "Bu mesaj yalnızca akış Bota geri ver işleminden sonra devam ettiğinde gönderilir. “Geri verildi” çıkışını sonraki adıma bağlayın.",
+        "exitReturned": "bota geri verildi (isteğe bağlı): bir ekip arkadaşı Bota geri ver düğmesine bastı; akış buradan devam eder",
+        "returnedStep": "Bir ekip arkadaşı sohbeti geri verdiğinde şuradan devam et",
+        "returnedStepHint": "İsteğe bağlı. Biri Bota geri ver düğmesine bastığında akışın devam edeceği adımı seçin. Boş bırakırsanız bot kişinin bir sonraki mesajını bekler.",
+        "returnNone": "Adım yok: kişinin bir sonraki mesajını bekle",
+        "returnStepOption": "{stage}: {label}"
       }
     }
   }

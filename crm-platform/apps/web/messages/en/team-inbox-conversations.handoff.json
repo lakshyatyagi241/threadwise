@@ -38,7 +38,11 @@
       "giveBack": {
         "button": "Return to bot",
         "done": "The bot answers this conversation again.",
-        "failed": "The conversation could not be given back to the bot."
+        "failed": "The conversation could not be given back to the bot.",
+        "doneFlow": "The bot continues the flow.",
+        "doneNextLive": "The bot will answer the customer's next message.",
+        "doneNextDefault": "The bot is back on. It answers the next message only if a default flow is set.",
+        "already": "The bot already has this conversation."
       },
       "send": {
         "button": "Send to queue",
@@ -105,6 +109,36 @@
         "chosen": "Chosen",
         "skipped": "Skipped",
         "info": "Note"
+      },
+      "botLine": {
+        "system": "the system",
+        "pressed": {
+          "flow": "Bot is back, returned by {name}. The flow continues.",
+          "nextLive": "Bot is back, returned by {name}. It will answer the customer's next message.",
+          "nextDefault": "Bot is back, returned by {name}. It answers the next message only if a default flow is set."
+        },
+        "result": {
+          "continued": "The flow continued from the \"returned\" exit.",
+          "claimed_again": "The flow was not resumed: a person took the chat again.",
+          "flow_not_live": "The flow was not resumed: it is no longer live.",
+          "start_failed": "The flow could not be resumed."
+        },
+        "customer": {
+          "sent": "The message to the customer was sent.",
+          "window_closed": "The message to the customer was skipped: the 24 hour window is closed.",
+          "no_consent": "The message to the customer was skipped: no consent.",
+          "failed": "The message to the customer could not be sent.",
+          "channel_unavailable": "The message to the customer was skipped: the channel is unavailable."
+        }
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Given back to the bot by {actor}",
+          "bot_resumed": "The bot continued the flow",
+          "bot_resume_skipped": "The flow was not resumed"
+        }
       }
     }
   }

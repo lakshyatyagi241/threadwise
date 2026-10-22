@@ -4,7 +4,8 @@
       "ports": {
         "assigned": "przypisano",
         "waitingInQueue": "czeka w kolejce",
-        "noAgentOutOfHours": "brak agenta / poza godzinami"
+        "noAgentOutOfHours": "brak agenta / poza godzinami",
+        "returnedToBot": "zwrócona do bota"
       }
     },
     "simpleModel": {
@@ -20,12 +21,13 @@
         "nodePreview": {
           "handoffTo": "Przekaż do",
           "handoffRules": "Reguły przypisywania",
-          "pickAgent": "— wybierz osobę —"
+          "pickAgent": "— wybierz osobę —",
+          "returnBack": "Gdy bot wraca:"
         }
       },
       "handoff": {
         "legacy": "Ten krok to starsze „Przypisz agenta”.",
-        "upgradeHint": "Przekazuje czat zespołowi i działa dalej. Przełącz na Przekazanie człowiekowi, aby dodać powód, priorytet, wiadomości dla kontaktu i trzy wyjścia (przypisano, czeka w kolejce, brak agenta lub poza godzinami). Wykonane już połączenia nadal działają.",
+        "upgradeHint": "Przekazuje czat zespołowi i idzie dalej. Przełącz na przekazanie człowiekowi, aby dodać powód, priorytet, wiadomości dla kontaktu i wyjścia (przypisana, w kolejce, brak agenta lub poza godzinami oraz opcjonalne na wypadek zwrotu czatu do bota). Połączenia, które już wykonano, nadal działają.",
         "upgrade": "Użyj funkcji przekazania",
         "destination": "Wyślij rozmowę do",
         "dest": {
@@ -76,7 +78,15 @@
         "exitAssigned": "przypisano: rozmowę ma już osoba",
         "exitWaiting": "czeka w kolejce: czeka, aż ktoś ją przejmie",
         "exitUnavailable": "brak agenta / poza godzinami: nikt nie mógł jej przejąć",
-        "simpleExits": "Następny krok uruchomi się, gdy rozmowę przejmie osoba. Jeśli musi czekać w kolejce lub nikt nie jest dostępny, bot kończy tutaj, a odpowiada osoba. Użyj zaawansowanego kreatora, aby obsłużyć pozostałe wyjścia."
+        "simpleExits": "Następny krok uruchomi się, gdy rozmowę przejmie osoba. Jeśli musi czekać w kolejce lub nikt nie jest dostępny, bot kończy tutaj, a odpowiada osoba. Użyj zaawansowanego kreatora, aby obsłużyć pozostałe wyjścia.",
+        "returnMessage": "Wiadomość do kontaktu, gdy bot wraca",
+        "returnMessageHint": "Opcjonalnie. Wysyłana raz, w imieniu Twojej firmy, gdy współpracownik kliknie Zwróć do bota, zanim przepływ przejdzie dalej wyjściem „zwrócona”. Nie jest wysyłana, jeśli okno 24 godzin jest zamknięte lub kontakt nie wyraził zgody. Zmienne takie jak '{{'name'}}' działają.",
+        "returnNeedsExit": "Ta wiadomość jest wysyłana tylko wtedy, gdy przepływ idzie dalej po Zwróć do bota. Połącz wyjście „zwrócona” z krokiem, który ma nastąpić dalej.",
+        "exitReturned": "zwrócona do bota (opcjonalnie): współpracownik kliknął Zwróć do bota; przepływ idzie dalej stąd",
+        "returnedStep": "Gdy współpracownik zwraca czat, kontynuuj od",
+        "returnedStepHint": "Opcjonalnie. Wybierz krok, od którego przepływ idzie dalej po kliknięciu Zwróć do bota. Zostaw puste, a bot poczeka na kolejną wiadomość kontaktu.",
+        "returnNone": "Brak kroku: czekaj na kolejną wiadomość kontaktu",
+        "returnStepOption": "{stage}: {label}"
       }
     }
   }
