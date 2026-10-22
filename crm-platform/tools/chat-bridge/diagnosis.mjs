@@ -40,6 +40,11 @@ def('SlowQueryWatcherDown ChatBridgeDeliveryFailing ChatBridgeNoWatchdog', { mea
 const ruleNames = (text) => [...text.matchAll(/^\s*-\s*alert:\s*(\S+)/gm)].map((m) => m[1]);
 export { ruleNames };
 
+export const promQuery = async (expr, env = process.env, fetchImpl = fetch) => {
+  const r = await fetchImpl(`${(env.PROMETHEUS_URL ?? 'http://prometheus:9090').replace(/\/$/, '')}/api/v1/query?query=${encodeURIComponent(expr)}`, { signal: AbortSignal.timeout(2000) });
+  const v = Number((await r.json())?.data?.result?.[0]?.value?.[1]);
+  return Number.isFinite(v) ? v : null;
+};
 const trendOf = (now, then) => (then == null || !isFinite(then) ? 'n/a' : Math.abs(now - then) <= Math.max(Math.abs(then) * 0.1, 1e-9) ? 'flat' : now > then ? 'up' : 'down');
 const num = (v) => (v == null ? '-' : Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) >= 1 ? v.toFixed(2) : v.toPrecision(2));
 
