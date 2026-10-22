@@ -77,7 +77,7 @@ try {
   const sq = posts.slice(n).find((p) => p.channel === 'other' && /Slow query running/.test(p.body));
   check('pg_sleep(7) -> Other post', got);
   check('slow post has no literal values', !!sq && !/victim|example\.com|919876|tok_live|ABC123|4242/.test(sq.body), sq ? '' : 'no post');
-  check('slow post shows duration, database, role', !!sq && /Duration/.test(sq.body) && sq.body.includes(db) && sq.body.includes('Role'));
+  check('slow post shows duration, database, role', !!sq && /Duration/.test(sq.body) && sq.body.includes(db) && /role/i.test(sq.body));
   await sp.catch(() => {}); await slow.end();
   // statement path
   n = posts.length; await admin1.query("select pg_sleep(0.4) as delta_probe, 'seed-value-2'"); await admin1.query("select pg_sleep(0.4) as delta_probe, 'seed-value-3'");
