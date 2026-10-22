@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { pageInfoSchema } from '../common/pagination';
+import { timeZoneSchema } from '../common/time-zone';
 import { exactAmountSchema, walletBillingModeSchema } from './wallet';
 
 /**
@@ -24,20 +25,25 @@ export type ExpenseFreeReason = z.infer<typeof expenseFreeReasonSchema>;
 export const expenseGroupBySchema = z.enum(['template', 'source', 'category', 'country']);
 export type ExpenseGroupBy = z.infer<typeof expenseGroupBySchema>;
 
-const isoDate = z
+/** A calendar day, `YYYY-MM-DD`, that exists: `2026-13-45` is refused here, not left to fail as a database error. */
+const isoDay = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
-  .optional();
+  .refine((s) => {
+    const d = new Date(`${s}T00:00:00Z`);
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }, 'day must be a real calendar date');
 
 /** `all` plus the three statuses: what the status filter takes. */
 export const expenseStatusFilterSchema = z.enum(['all', 'charged', 'free', 'refunded']);
 export type ExpenseStatusFilter = z.infer<typeof expenseStatusFilterSchema>;
 
-/** The filters shared by the log and the summary. `source` and `category` take any value the charge carries, not only today's list. */
+/** The filters shared by the log, the summary and the day log. `source` and `category` take any value the charge carries, not only today's list. `from` and `to` are calendar days in `timeZone`, so a day is the same day the viewer sees on each message. */
 export const expenseFilterSchema = z.object({
   status: expenseStatusFilterSchema.default('all'),
-  from: isoDate,
-  to: isoDate,
+  from: isoDay.optional(),
+  to: isoDay.optional(),
+  timeZone: timeZoneSchema.default('UTC'),
   template: z.string().trim().max(512).optional(),
   source: z.string().trim().max(24).optional(),
   category: z.string().trim().max(24).optional(),
@@ -54,6 +60,13 @@ export const expenseSummaryQuerySchema = expenseFilterSchema.extend({
   groupBy: expenseGroupBySchema.default('template'),
 });
 export type ExpenseSummaryQuery = z.infer<typeof expenseSummaryQuerySchema>;
+
+/** The day log pages by day, not by row: a day's groups always arrive together. `cursor` is the last day of the previous page. */
+export const expenseDaysQuerySchema = expenseFilterSchema.extend({
+  limit: z.coerce.number().int().min(1).max(31).default(14),
+  cursor: isoDay.optional(),
+});
+export type ExpenseDaysQuery = z.infer<typeof expenseDaysQuerySchema>;
 
 export const expenseEventSchema = z.object({
   /** The provider's message id: the one WhatsApp shows for the message. Not an internal id. */
@@ -122,3 +135,27 @@ export const expenseSummaryResponseSchema = z.object({
   truncated: z.boolean(),
 });
 export type ExpenseSummaryResponse = z.infer<typeof expenseSummaryResponseSchema>;
+
+/** One line of the day log: the messages of one calendar day (in the viewer's time zone) with one status, channel and category. `source` and `category` null = not recorded. */
+export const expenseDayGroupSchema = z.object({
+  day: isoDay,
+  status: expenseStatusSchema,
+  source: z.string().nullable(),
+  category: z.string().nullable(),
+  messages: z.number().int(),
+  chargedMinor: z.number().int(),
+  chargedExact: exactAmountSchema.optional(),
+  refundedMinor: z.number().int(),
+  refundedExact: exactAmountSchema.optional(),
+  netMinor: z.number().int(),
+  netExact: exactAmountSchema.optional(),
+});
+export type ExpenseDayGroup = z.infer<typeof expenseDayGroupSchema>;
+
+export const expenseDaysResponseSchema = z.object({
+  currency: z.string(),
+  data: z.array(expenseDayGroupSchema),
+  /** `nextCursor` is the day to pass as `cursor` for the next page: the days after it are the older ones. */
+  page: pageInfoSchema,
+});
+export type ExpenseDaysResponse = z.infer<typeof expenseDaysResponseSchema>;

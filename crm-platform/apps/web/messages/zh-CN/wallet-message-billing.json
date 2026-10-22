@@ -266,7 +266,20 @@
       "uncollected": "未收取 {amount}",
       "emptyTitle": "暂无消息",
       "emptyBody": "来自营销活动、群发、定时任务和聊天的消息会显示在这里，并附带模板和费用。",
-      "emptyFiltered": "没有符合这些筛选条件的内容。请更改或重置筛选条件。"
+      "emptyFiltered": "没有符合这些筛选条件的内容。请更改或重置筛选条件。",
+      "days": {
+        "title": "每日日志",
+        "subtitle": "按日期、状态、渠道和类别分组的消息。打开某一天即可查看每条消息。",
+        "messagesOnDay": "{count} 条消息",
+        "viewDetails": "查看详情",
+        "actions": "操作",
+        "empty": "这些日期没有消息。"
+      },
+      "log": {
+        "title": "消息",
+        "forDay": "{date}的消息",
+        "showAllDays": "显示所有日期"
+      }
     },
     "admin": {
       "admin": "管理员",

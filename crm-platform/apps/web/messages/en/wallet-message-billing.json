@@ -237,6 +237,19 @@
         "truncated": "Showing the {count} largest groups. Narrow the dates to see the rest.",
         "empty": "No messages match these filters."
       },
+      "days": {
+        "title": "Daily log",
+        "subtitle": "Messages grouped by day, status, channel and category. Open a day to see each message.",
+        "messagesOnDay": "{count} messages",
+        "viewDetails": "View details",
+        "actions": "Actions",
+        "empty": "No messages on these days."
+      },
+      "log": {
+        "title": "Messages",
+        "forDay": "Messages on {date}",
+        "showAllDays": "Show all days"
+      },
       "columns": {
         "date": "Date",
         "template": "Template",

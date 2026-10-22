@@ -11,8 +11,10 @@ A product extension: Reference has no free-text query builder. Base path `/v2`.
 
 - The AI model gets the query and the workspace's names (tags, groups, owners, lifecycle stages, statuses, filterable custom
   fields), never a contact row. It answers JSON only; the model never writes SQL.
-- The answer is validated with `pqlResultSchema` (which embeds `segmentRulesSchema`), then conditions pointing at an id, key or value
-  the workspace does not have are dropped (`pql.prune.ts`) and named in `ignored`.
+- Each condition is checked on its own against `segmentRulesSchema`, then against the workspace (`pql.prune.ts`). A condition the schema
+  refuses (an operator its field does not have, a value of the wrong shape, a tag written as a name instead of its id) or that points at
+  an id, key or value the workspace does not have is dropped and named in `ignored`; the rest of the search still applies. Only a
+  reply that is not a JSON object fails the search (`502 PQL_PROVIDER_FAILED`).
 - The existing contacts list compiles the rules, so RLS, owner scope and field permissions apply as for any filter.
 - Countries match on the start of the phone number (`phone starts_with +91`): `countryCode` is often empty.
 

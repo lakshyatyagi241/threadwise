@@ -147,7 +147,20 @@
       "uncollected": "{amount} sin cobrar",
       "emptyTitle": "Aún no hay mensajes",
       "emptyBody": "Aquí aparecen los mensajes enviados desde campañas, difusiones, programaciones y chats, con su plantilla y su coste.",
-      "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos."
+      "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos.",
+      "days": {
+        "title": "Registro diario",
+        "subtitle": "Mensajes agrupados por día, estado, canal y categoría. Abre un día para ver cada mensaje.",
+        "messagesOnDay": "{count} mensajes",
+        "viewDetails": "Ver detalles",
+        "actions": "Acciones",
+        "empty": "No hay mensajes en estos días."
+      },
+      "log": {
+        "title": "Mensajes",
+        "forDay": "Mensajes del {date}",
+        "showAllDays": "Mostrar todos los días"
+      }
     },
     "admin": {
       "admin": "Admin",

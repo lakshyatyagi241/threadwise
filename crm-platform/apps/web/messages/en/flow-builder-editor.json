@@ -632,12 +632,20 @@
       "webBot": {
         "aria": "Flow sections",
         "build": "Build",
+        "faqs": "FAQs",
         "customize": "Customize",
         "saveFirst": "Save the flow first.",
         "needsCustomizing": "Customize is not saved yet. Open Customize.",
         "customizeFirst": "Customize your chat widget and save it once before publishing.",
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Customize your WhatsApp button and save it once before publishing."
+      },
+      "faqsPanel": {
+        "intro": "FAQs are entries in an AI agent's knowledge. These belong to the agent this flow answers with: add questions and answers here and the agent uses them.",
+        "noAgent": "This flow does not use an AI agent yet. Add an AI assistant or Answer from FAQ step and pick an agent: its FAQs show up here.",
+        "agent": "AI agent",
+        "openAgent": "Open in AI Training",
+        "unknownAgent": "AI agent (not found)"
       },
       "simple": {
         "loading": "Loading the flow…",
