@@ -573,3 +573,32 @@ describe('permission and plan are independent gates', () => {
     expect(mine.status, JSON.stringify(mine.body)).toBe(200);
   });
 });
+
+describe('workspace business hours are read by the rules and by SLA clocks', () => {
+  it('locked with neither feature; editable with either one', async () => {
+    const t = await p.api.signup('srh');
+    await onPlan(t, 'sr_basic');
+    const hours = { days: {} as Record<string, unknown> };
+    const get = () => p.api.as(t.admin).get('/v2/inbox/routing/business-hours');
+    expect((await get()).status).toBe(422);
+    expect((await get()).body.code).toBe('PLAN_FEATURE_LOCKED');
+
+    // SLA policies on the plan, no Smart routing: the hours can be read and saved
+    await override(t, { inbox_sla: true });
+    const read = await get();
+    expect(read.status, JSON.stringify(read.body)).toBe(200);
+    const save = await p.api
+      .as(t.admin)
+      .put('/v2/inbox/routing/business-hours')
+      .set('idempotency-key', randomUUID())
+      .send({ days: read.body.days });
+    expect(save.status, JSON.stringify(save.body)).toBe(200);
+    // ...but the routing rules stay locked
+    expect((await rules(t.admin)).status).toBe(422);
+    void hours;
+
+    // Smart routing alone is enough too
+    await override(t, { inbox_routing: true });
+    expect((await get()).status).toBe(200);
+  });
+});

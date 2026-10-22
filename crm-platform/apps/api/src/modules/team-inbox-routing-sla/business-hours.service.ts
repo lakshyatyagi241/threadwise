@@ -4,6 +4,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   mayEditTimezone,
   mergeBusinessHours,
@@ -21,8 +22,7 @@ const MODULE_KEY = 'business_hours';
  * "Business hours" dialog. The engine that reads the same schedule (`common/business-hours.ts`) is not changed here.
  *
  * A save is one transaction: the schedule, the owner's time zone when it changed, the audit row and the outbox event. The caller's
- * permission (`inbox.settings.read` to read, `inbox.routing.manage` to write) and the plan feature `inbox_routing` are enforced by the
- * controller.
+ * permission (`inbox.settings.read` to read, `inbox.routing.manage` to write) is enforced by the controller; the plan by `assertPlan`.
  */
 @Injectable()
 export class BusinessHoursService {
@@ -31,10 +31,22 @@ export class BusinessHoursService {
     private readonly repo: RoutingRulesRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
+
+  /**
+   * The workspace's hours are read by the routing rules AND by SLA clocks (`respectBusinessHours`), so either plan feature may edit them:
+   * a workspace with SLA policies but no Smart routing must not be left with hours it cannot change. Neither: 422 PLAN_FEATURE_LOCKED for
+   * `inbox_routing`.
+   */
+  async assertPlan(orgId: number): Promise<void> {
+    if (await this.entitlements.featureEnabled(orgId, 'inbox_sla')) return;
+    await this.entitlements.assertFeature(orgId, 'inbox_routing');
+  }
 
   async get(): Promise<BusinessHours> {
     const { orgId, userId } = RequestContextStore.require();
+    await this.assertPlan(orgId);
     return this.db.tx(async (tx) => {
       const row = await this.repo.businessHours(tx, orgId);
       const owner = await this.repo.ownerUuid(tx, orgId);
@@ -50,6 +62,7 @@ export class BusinessHoursService {
 
   async update(input: UpdateBusinessHoursInput): Promise<BusinessHours> {
     const { orgId, userId } = RequestContextStore.require();
+    await this.assertPlan(orgId);
     return this.db.tx(async (tx) => {
       const before = await this.repo.businessHours(tx, orgId);
       const owner = await this.repo.ownerUuid(tx, orgId);

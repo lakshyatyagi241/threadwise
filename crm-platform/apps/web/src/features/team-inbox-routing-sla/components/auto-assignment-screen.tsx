@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { RoutingRule } from '@crm/contracts';
 import { Alert, Badge, Button, ConfirmDialog, Spinner, Switch, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useVocab } from '@/features/persona-vocabulary';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
@@ -44,6 +45,8 @@ export function AutoAssignmentScreen() {
   const dealNoun = useVocab('deal');
   const canRead = useCan('inbox.settings.read');
   const canManage = useCan('inbox.routing.manage');
+  // The workspace hours are read by the rules and by SLA clocks, so a plan with SLA keeps the editor even without Smart routing.
+  const slaInPlan = usePlanFeature('inbox_sla');
   const qc = useQueryClient();
   const { toast } = useToast();
   const rules = useRules('', canRead);
@@ -149,7 +152,7 @@ export function AutoAssignmentScreen() {
             })}
           </p>
         </div>
-        {canRead && !locked && (
+        {canRead && (!locked || slaInPlan) && (
           <Button variant="secondary" onClick={() => setHoursOpen(true)}>
             {t('businessHours')}
           </Button>
