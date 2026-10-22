@@ -184,10 +184,10 @@ export function startWatcher({ env, metrics, send, log, resolverFactory }) {
   if (curl) {
     cc = new Client({ connectionString: curl, application_name: 'gchat-resolver', statement_timeout: 5000 }); cc.on('error', () => {}); let up = false;
     const q = async (sql, p) => { if (!up) { await cc.connect(); up = true; } return cc.query(sql, p); };
-    const same = async (r) => (await q('select 1 from pg_stat_activity where pid=$1 and query_start is not distinct from $2 and state=$3', [r.pid, r.query_start, r.state])).rowCount > 0;
+    const same = async (r) => (await q(`select 1 from pg_stat_activity where pid=$1 and date_trunc('milliseconds', query_start) = date_trunc('milliseconds', $2::timestamptz) and state=$3`, [r.pid, r.query_start, r.state])).rowCount > 0;
     db = { recheck: same, cancel: async (pid) => (await q('select pg_cancel_backend($1) as ok', [pid])).rows[0].ok, terminate: async (pid) => (await q('select pg_terminate_backend($1) as ok', [pid])).rows[0].ok };
   }
-  db.isGone = async (r) => !(await query('select 1 from pg_stat_activity where pid=$1 and query_start is not distinct from $2', [r.pid, r.query_start])).rowCount;
+  db.isGone = async (r) => !(await query(`select 1 from pg_stat_activity where pid=$1 and date_trunc('milliseconds', query_start) = date_trunc('milliseconds', $2::timestamptz) and state=$3`, [r.pid, r.query_start, r.state])).rowCount;
   let w; const resolver = resolverFactory?.({ db, offenders: () => w.offenders() });
   w = createWatcher({ query, env, metrics, send, log, resolver });
   const t = setInterval(() => w.poll(), w.intervalMs);
