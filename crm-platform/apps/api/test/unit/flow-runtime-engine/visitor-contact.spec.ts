@@ -46,7 +46,7 @@ const graph = compileGraph({
   ],
 });
 
-function runOf(graph: ReturnType<typeof builder>, over: Partial<RunState> = {}): RunState {
+function runOf(graph: RuntimeGraph, over: Partial<RunState> = {}): RunState {
   return {
     id: 1,
     uuid: 'run-uuid',
