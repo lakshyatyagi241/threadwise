@@ -4,6 +4,9 @@ import {
   type CompanyExportColumn,
 } from '@crm/contracts';
 import { isEditableProperty, type CompanyPropertyDef } from './company-properties';
+import { normaliseHeader, readBooleanCell, readNumberCell } from '../property-csv-cells';
+
+export { normaliseHeader };
 
 /**
  * Pure rules of the companies CSV (export columns, import header mapping, cell to property value), kept apart from the service so a
@@ -24,8 +27,6 @@ const BUILTIN_ALIASES = {
 } as const;
 
 export type ImportField = keyof typeof BUILTIN_ALIASES;
-
-export const normaliseHeader = (h: string): string => h.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 export type ImportTarget =
   { kind: 'builtin'; field: ImportField } | { kind: 'property'; def: CompanyPropertyDef };
@@ -71,9 +72,6 @@ export function mapHeaders(
   return { columns, ignored };
 }
 
-const TRUE = /^(true|yes|y|1|x|on)$/i;
-const FALSE = /^(false|no|n|0|off)$/i;
-
 /**
  * A cell as the value of its property. Blank is `undefined` (the cell says nothing). A value that cannot be read as the property's type
  * is passed on as text, so the shared write rules (`mergeProperties`) refuse it with their usual message instead of this guessing.
@@ -88,13 +86,11 @@ export function cellToPropertyValue(def: CompanyPropertyDef, cell: string): unkn
     case 'decimal':
     case 'percentage':
     case 'currency':
-    case 'rating': {
-      const n = Number(text.replace(/,/g, ''));
-      return Number.isFinite(n) ? n : text;
-    }
+    case 'rating':
+      return readNumberCell(text);
     case 'boolean':
     case 'checkbox':
-      return TRUE.test(text) ? true : FALSE.test(text) ? false : text;
+      return readBooleanCell(text);
     case 'select':
     case 'radio':
       return def.options.find((o) => o.toLowerCase() === text.toLowerCase()) ?? text;

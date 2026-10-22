@@ -1,17 +1,13 @@
-import { normalizeImportHeader } from '@crm/contracts';
 import type { PropertyDef } from '../contacts/contact-property-values';
+import { normaliseHeader, readBooleanCell, readNumberCell } from '../property-csv-cells';
 
 /** A custom contact property as the import reads it: the column its values come from (null: the file has none). */
 export interface ImportProperty extends PropertyDef {
   column: number | null;
 }
 
-const TRUE = /^(true|yes|y|1|x|on)$/i;
-const FALSE = /^(false|no|n|0|off)$/i;
-
 /** `attr:tier` (the header the export writes for a property) is read as `tier`. */
-const headerKey = (header: string): string =>
-  normalizeImportHeader(header.replace(/^\s*attr\s*:/i, ''));
+const headerKey = (header: string): string => normaliseHeader(header.replace(/^\s*attr\s*:/i, ''));
 
 /**
  * Which column fills each custom property. An explicit request wins (null ignores that property). Otherwise a property takes the
@@ -40,7 +36,7 @@ export function resolvePropertyColumns(
   }
   for (const def of defs) {
     if (columns.has(def.key)) continue;
-    const wanted = new Set([def.label, def.key].map(normalizeImportHeader).filter(Boolean));
+    const wanted = new Set([def.label, def.key].map(normaliseHeader).filter(Boolean));
     const index = headers.findIndex((h, i) => !taken.has(i) && wanted.has(headerKey(h)));
     if (index >= 0) taken.add(index);
     columns.set(def.key, index >= 0 ? index : null);
@@ -66,16 +62,11 @@ export function cellToPropertyValue(def: PropertyDef, cell: string): unknown {
     case 'decimal':
     case 'percentage':
     case 'currency':
-    case 'rating': {
-      // A comma is a thousands separator only when it groups digits in threes (1,250.5). Any other comma ("12,5") is not read
-      // as a thousands separator: it stays text, so the row is refused rather than stored as 125.
-      const grouped = /^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(text);
-      const n = Number(grouped ? text.replace(/,/g, '') : text);
-      return Number.isFinite(n) ? n : text;
-    }
+    case 'rating':
+      return readNumberCell(text);
     case 'boolean':
     case 'checkbox':
-      return TRUE.test(text) ? true : FALSE.test(text) ? false : text;
+      return readBooleanCell(text);
     case 'select':
     case 'radio':
       return optionOf(def, text);
