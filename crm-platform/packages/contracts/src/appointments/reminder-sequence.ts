@@ -156,6 +156,12 @@ export type ReminderPackAdoptResult = z.infer<typeof reminderPackAdoptResultSche
  * An email-only test of one step, sent to the signed-in user's own address. There is no WhatsApp test-send. The email is sent by the
  * worker a moment later (`queued`); the result comes back as a notification. `skipped`: the signed-in user has no email address.
  */
+export const reminderTestSendInputSchema = z.object({
+  /** Another address to send the test to (a colleague, a mailbox that renders email differently); left out = the signed-in user's own. */
+  to: z.string().trim().toLowerCase().email().max(254).optional(),
+});
+export type ReminderTestSendInput = z.infer<typeof reminderTestSendInputSchema>;
+
 export const reminderTestSendResultSchema = z.object({
   status: z.enum(['queued', 'skipped']),
   reason: z.string().nullable(),

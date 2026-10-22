@@ -37,6 +37,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
 }
 const BASIC = { inbox_routing: false, inbox_assignment_sticky: false };
 const SMART = ['inbox_assignment_sticky', 'inbox_routing'];
+const REMINDER_UPGRADES = ['appointment_confirm_buttons', 'appointment_rebook_steps'];
 
 describe('the Smart routing flags', () => {
   it('are grantable by a plain add-on pack, next to the Teams ones', () => {
@@ -117,7 +118,7 @@ describe('the entry plan has no automatic assignment by default (owner decision 
   });
 
   it('the operator plan form lists both as off for a new plan', () => {
-    expect([...NEW_PLAN_FEATURES_OFF].sort()).toEqual(SMART);
+    expect([...NEW_PLAN_FEATURES_OFF].sort()).toEqual([...SMART, ...REMINDER_UPGRADES].sort());
     for (const k of NEW_PLAN_FEATURES_OFF) {
       expect(
         PLAN_FEATURE_DEFS.some((d) => d.key === k),
