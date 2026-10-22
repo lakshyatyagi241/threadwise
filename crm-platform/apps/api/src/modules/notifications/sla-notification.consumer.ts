@@ -76,7 +76,7 @@ export class SlaNotificationConsumer implements OutboxSubscriber, OnModuleInit {
       .filter((v) => v.scope !== null)
       .map((v) => v.userId);
 
-    const pending = await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
+    const pending = await this.db.retry.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
         SELECT c.id, c.assignee_user_id, c.assignee_team_id, c.title, ct.name AS contact_name
         FROM conversations c LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id

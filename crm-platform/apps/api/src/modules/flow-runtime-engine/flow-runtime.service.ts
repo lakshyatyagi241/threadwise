@@ -873,7 +873,7 @@ export class FlowRuntimeService {
    */
   async analytics(q: FlowAnalyticsQuery): Promise<FlowAnalytics> {
     const orgId = this.org();
-    return this.db.tx(async (tx) => {
+    return this.db.retry.tx(async (tx) => {
       const { from, to } = windowOf(q);
       const flowIdSql = q.flowId
         ? sql`(SELECT id FROM flows WHERE org_id = ${orgId} AND uuid = ${q.flowId}::uuid)`

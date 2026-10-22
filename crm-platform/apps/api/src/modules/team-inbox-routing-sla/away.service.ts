@@ -199,7 +199,7 @@ export class AwayService {
   }
 
   async offlineInactive(orgId: number, minutes: number, now: Date = new Date()): Promise<number> {
-    const people = await this.db.txAs({ orgId }, async (tx) => {
+    const people = await this.db.retry.txAs({ orgId }, async (tx) => {
       const online = rowsOf(
         await tx.execute(sql`
           SELECT u.id FROM users u LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id

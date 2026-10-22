@@ -88,7 +88,7 @@ export class MessageBillingService {
     const category = (input.category ?? '').trim().toLowerCase() || null;
     const source = (input.source ?? '').trim().toLowerCase() || null;
 
-    const outcome = await this.db.txAs({ orgId: input.orgId, userId: null }, async (tx) => {
+    const outcome = await this.db.retry.txAs({ orgId: input.orgId, userId: null }, async (tx) => {
       // 1. claim
       const claim = await tx.execute(sql`
         INSERT INTO usage_charge_keys (org_id, provider_message_id) VALUES (${input.orgId}, ${wamid})
@@ -257,7 +257,7 @@ export class MessageBillingService {
     if (!wamid || orgId <= NO_ORG)
       return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
     const s = await this.settings.effective();
-    return this.db.txAs({ orgId, userId: null }, async (tx) => {
+    return this.db.retry.txAs({ orgId, userId: null }, async (tx) => {
       const found = await tx.execute(sql`
         SELECT id, charge_id, charge_created_at::text AS charge_created_at, status FROM usage_charge_keys
         WHERE org_id = ${orgId} AND provider_message_id = ${wamid} FOR UPDATE`);
