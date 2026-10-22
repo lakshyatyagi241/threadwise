@@ -159,6 +159,39 @@ describe('the leave API', () => {
     expect((await call(ag1.token).end((own.body as { id: string }).id)).status).toBe(200);
   });
 
+  it('the account menu flow works for a role WITHOUT team.read (a Viewer-like role): own id, delegate picker, set leave, see it, end it', async () => {
+    const viewerLike = await person(t, 'lvviewer', SELF); // holds only the two leave keys, no team.read
+    const auth = { authorization: `Bearer ${viewerLike.token}` };
+    // the member id the menu needs, and the people the delegate picker offers: no permission key on either
+    const summary = await api.http().get('/v2/workspace/members/summary').set(auth);
+    expect(summary.status, JSON.stringify(summary.body)).toBe(200);
+    expect(summary.body.me.id).toBe(viewerLike.uuid);
+    const members = await api.http().get('/v2/workspace/members?limit=50').set(auth);
+    expect(members.status).toBe(200);
+    expect((members.body.data as Array<{ id: string }>).some((m) => m.id === ag2.uuid)).toBe(true);
+
+    const set = await call(viewerLike.token).create(viewerLike.uuid, {
+      startsOn: today,
+      endsOn: addDays(today, 3),
+    });
+    expect(set.status, JSON.stringify(set.body)).toBe(201);
+    const del = await call(viewerLike.token).delegate(viewerLike.uuid, ag2.uuid);
+    expect(del.status, JSON.stringify(del.body)).toBe(200);
+
+    const panel = await call(viewerLike.token).overview(viewerLike.uuid);
+    expect(panel.status).toBe(200);
+    expect(panel.body.current).toMatchObject({ onLeaveNow: true, endsOn: addDays(today, 3) });
+    expect(panel.body.can.manage).toBe(true);
+    expect(panel.body.delegate).toMatchObject({ id: ag2.uuid });
+
+    // "End leave now" and removing the delegate also work for yourself; someone else's panel stays read-only
+    expect((await call(viewerLike.token).end((set.body as { id: string }).id)).status).toBe(200);
+    expect((await call(viewerLike.token).delegate(viewerLike.uuid, null)).status).toBe(200);
+    const others = await call(viewerLike.token).overview(ag2.uuid);
+    expect(others.status).toBe(200);
+    expect(others.body.can.manage).toBe(false);
+  });
+
   it('the reason is for the person and their managers, never for colleagues', async () => {
     const made = await call(ag1.token).create(ag1.uuid, {
       startsOn: addDays(today, 40),

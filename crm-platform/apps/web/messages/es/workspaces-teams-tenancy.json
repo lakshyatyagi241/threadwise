@@ -414,6 +414,13 @@
       "hint": "Mientras estés sin conexión, no se te asignan chats nuevos automáticamente. Los chats que ya tienes siguen siendo tuyos.",
       "failed": "No se pudo cambiar"
     },
+    "myLeave": {
+      "label": "Tiempo libre",
+      "onLeaveUntil": "De baja hasta {date}",
+      "onLeaveOpen": "De baja",
+      "hint": "Avisa a tu equipo de que no estás. Mientras estés de baja, no se te asignan chats nuevos automáticamente.",
+      "title": "Tu tiempo libre"
+    },
     "deactivate": {
       "eyebrow": "Miembros del equipo",
       "title": "Desactivar miembro",
