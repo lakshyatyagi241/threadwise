@@ -384,6 +384,16 @@ export const workspaceSettings = pgTable(
       .notNull()
       .default(false),
     handoffNotifyQueue: boolean('handoff_notify_queue').notNull().default(true),
+    /** Waiting queue timers (migration 20270324090000): all off by default; the minutes count only while the team is open. */
+    handoffWqRemindMinutes: integer('handoff_wq_remind_minutes'),
+    handoffWqOverflowMinutes: integer('handoff_wq_overflow_minutes'),
+    handoffWqOverflowTeamId: idColumn('handoff_wq_overflow_team_id'),
+    handoffWqUnclaimedMinutes: integer('handoff_wq_unclaimed_minutes'),
+    handoffWqUnclaimedAction: text('handoff_wq_unclaimed_action')
+      .$type<'keep' | 'message' | 'bot'>()
+      .notNull()
+      .default('keep'),
+    handoffWqUnclaimedMessage: text('handoff_wq_unclaimed_message'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

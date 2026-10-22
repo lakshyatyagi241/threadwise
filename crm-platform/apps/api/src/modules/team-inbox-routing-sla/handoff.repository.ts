@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { HandoffCard, HandoffTraceLine, OwnerMode } from '@crm/contracts';
+import type {
+  HandoffCard,
+  HandoffTraceLine,
+  OwnerMode,
+  QueueUnclaimedAction,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 type Raw = Record<string, unknown>;
@@ -9,7 +14,19 @@ const num = (v: unknown): number | null => (v === null || v === undefined ? null
 const str = (v: unknown): string | null => (v === null || v === undefined ? null : String(v));
 
 /** The workspace's handoff settings as stored (`workspace_settings.handoff_*`, plus the older keep-contact-agent switch). */
+/** The waiting queue's timers as stored: the overflow team by internal id, with its uuid for the wire. */
+export interface StoredQueueTimers {
+  remindMinutes: number | null;
+  overflowMinutes: number | null;
+  overflowTeamId: number | null;
+  overflowTeamUuid: string | null;
+  unclaimedMinutes: number | null;
+  unclaimedAction: QueueUnclaimedAction;
+  unclaimedMessage: string;
+}
+
 export interface StoredHandoffSettings {
+  queueTimers: StoredQueueTimers;
   autoAssign: boolean;
   claimSetsOwner: boolean;
   ownerMode: OwnerMode;
@@ -65,11 +82,25 @@ export class HandoffRepository {
 
   async settings(tx: Tx, orgId: number): Promise<StoredHandoffSettings> {
     const res = await tx.execute(sql`
-      SELECT handoff_auto_assign, handoff_claim_sets_owner, handoff_owner_mode, handoff_continuity_days,
-             handoff_prompt_owner_on_reassign, handoff_notify_queue, routing_keep_contact_agent
-      FROM workspace_settings WHERE org_id = ${orgId}`);
+      SELECT s.handoff_auto_assign, s.handoff_claim_sets_owner, s.handoff_owner_mode, s.handoff_continuity_days,
+             s.handoff_prompt_owner_on_reassign, s.handoff_notify_queue, s.routing_keep_contact_agent,
+             s.handoff_wq_remind_minutes, s.handoff_wq_overflow_minutes, s.handoff_wq_overflow_team_id, ot.uuid AS wq_overflow_team_uuid,
+             s.handoff_wq_unclaimed_minutes, s.handoff_wq_unclaimed_action, s.handoff_wq_unclaimed_message
+      FROM workspace_settings s
+      LEFT JOIN teams ot ON ot.org_id = s.org_id AND ot.id = s.handoff_wq_overflow_team_id
+      WHERE s.org_id = ${orgId}`);
     const r = rowsOf(res)[0];
     return {
+      queueTimers: {
+        remindMinutes: num(r?.handoff_wq_remind_minutes),
+        overflowMinutes: num(r?.handoff_wq_overflow_minutes),
+        overflowTeamId: num(r?.handoff_wq_overflow_team_id),
+        overflowTeamUuid: str(r?.wq_overflow_team_uuid),
+        unclaimedMinutes: num(r?.handoff_wq_unclaimed_minutes),
+        unclaimedAction: ((r?.handoff_wq_unclaimed_action as QueueUnclaimedAction | undefined) ??
+          'keep') as QueueUnclaimedAction,
+        unclaimedMessage: str(r?.handoff_wq_unclaimed_message) ?? '',
+      },
       autoAssign: r ? r.handoff_auto_assign === true : true,
       claimSetsOwner: r ? r.handoff_claim_sets_owner === true : false,
       ownerMode: ((r?.handoff_owner_mode as OwnerMode | undefined) ?? 'independent') as OwnerMode,
@@ -84,8 +115,11 @@ export class HandoffRepository {
   async updateSettings(
     tx: Tx,
     orgId: number,
-    v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent'>>,
+    v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent' | 'queueTimers'>> & {
+      queueTimers?: Partial<Omit<StoredQueueTimers, 'overflowTeamUuid'>>;
+    },
   ): Promise<void> {
+    const q = v.queueTimers ?? {};
     await tx.execute(
       sql`INSERT INTO workspace_settings (org_id) VALUES (${orgId}) ON CONFLICT (org_id) DO NOTHING`,
     );
@@ -98,6 +132,20 @@ export class HandoffRepository {
         ? sql`handoff_prompt_owner_on_reassign = ${v.promptOwnerOnReassign}`
         : null,
       v.notifyQueue !== undefined ? sql`handoff_notify_queue = ${v.notifyQueue}` : null,
+      q.remindMinutes !== undefined ? sql`handoff_wq_remind_minutes = ${q.remindMinutes}` : null,
+      q.overflowMinutes !== undefined
+        ? sql`handoff_wq_overflow_minutes = ${q.overflowMinutes}`
+        : null,
+      q.overflowTeamId !== undefined ? sql`handoff_wq_overflow_team_id = ${q.overflowTeamId}` : null,
+      q.unclaimedMinutes !== undefined
+        ? sql`handoff_wq_unclaimed_minutes = ${q.unclaimedMinutes}`
+        : null,
+      q.unclaimedAction !== undefined
+        ? sql`handoff_wq_unclaimed_action = ${q.unclaimedAction}`
+        : null,
+      q.unclaimedMessage !== undefined
+        ? sql`handoff_wq_unclaimed_message = ${q.unclaimedMessage === '' ? null : q.unclaimedMessage}`
+        : null,
     ].filter((x): x is ReturnType<typeof sql> => x !== null);
     if (sets.length === 0) return;
     await tx.execute(
@@ -429,13 +477,15 @@ export class HandoffRepository {
       SELECT h.uuid, cv.uuid AS conversation_uuid, h.source, h.reason, h.reason_text, h.summary, h.answers, h.destination_kind,
              dt.uuid AS dt_uuid, dt.name AS dt_name, du.uuid AS du_uuid, du.full_name AS du_name,
              h.priority, h.status, h.outcome, au.uuid AS au_uuid, au.full_name AS au_name, at.uuid AS at_uuid, at.name AS at_name,
-             h.trace, h.created_at, h.completed_at
+             h.trace, h.created_at, h.completed_at, h.reminded_at, h.offered_at, h.final_at, h.final_action,
+             ot.uuid AS ot_uuid, ot.name AS ot_name
       FROM conversation_handoffs h
       JOIN conversations cv ON cv.org_id = h.org_id AND cv.id = h.conversation_id
       LEFT JOIN teams dt ON dt.org_id = h.org_id AND dt.id = h.destination_team_id
       LEFT JOIN users du ON du.org_id = h.org_id AND du.id = h.destination_user_id
       LEFT JOIN users au ON au.org_id = h.org_id AND au.id = h.assigned_user_id
       LEFT JOIN teams at ON at.org_id = h.org_id AND at.id = h.assigned_team_id
+      LEFT JOIN teams ot ON ot.org_id = h.org_id AND ot.id = h.offered_from_team_id
       WHERE h.org_id = ${orgId} AND h.conversation_id = ${conversationId}
       ORDER BY (h.status IN ('waiting', 'assigned')) DESC, h.created_at DESC, h.id DESC LIMIT 1`);
     const r = rowsOf(res)[0];
@@ -462,6 +512,13 @@ export class HandoffRepository {
         team: r.at_uuid ? { id: String(r.at_uuid), name: String(r.at_name) } : null,
       },
       trace: (r.trace as HandoffTraceLine[] | null) ?? [],
+      timers: {
+        remindedAt: r.reminded_at ? iso(r.reminded_at) : null,
+        offeredAt: r.offered_at ? iso(r.offered_at) : null,
+        offeredFrom: r.ot_uuid ? { id: String(r.ot_uuid), name: String(r.ot_name) } : null,
+        finalAt: r.final_at ? iso(r.final_at) : null,
+        finalAction: (str(r.final_action) as 'message' | 'bot' | null) ?? null,
+      },
       createdAt: iso(r.created_at),
       completedAt: r.completed_at ? iso(r.completed_at) : null,
     };

@@ -197,6 +197,7 @@ export class HandoffService {
       keepInSync: sticky,
       continuityWindow: sticky,
       promptOwnerOnReassign: sticky,
+      queueTimers: routing && (await has(HANDOFF_GATES.queueTimers)),
     };
   }
 
@@ -464,6 +465,15 @@ export class HandoffService {
       locked.push('continuityDays');
     if (input.promptOwnerOnReassign === true && !available.promptOwnerOnReassign)
       locked.push('promptOwnerOnReassign');
+    const qt = input.queueTimers;
+    if (
+      qt &&
+      !available.queueTimers &&
+      Object.entries(qt).some(([k, v]) =>
+        k === 'unclaimedAction' ? v !== 'keep' : k === 'unclaimedMessage' ? v !== '' : v !== null,
+      )
+    )
+      locked.push('queueTimers');
     if (locked.length > 0) {
       throw new AppError(
         ERROR_CODES.PLAN_FEATURE_LOCKED,
@@ -473,7 +483,9 @@ export class HandoffService {
       );
     }
     const stored = await this.db.tx(async (tx) => {
-      await this.repo.updateSettings(tx, ctx.orgId, input);
+      const { queueTimers: qIn, ...rest } = input;
+      const queueTimers = qIn ? await this.queueTimersToStore(tx, ctx.orgId, qIn) : undefined;
+      await this.repo.updateSettings(tx, ctx.orgId, { ...rest, ...(queueTimers ? { queueTimers } : {}) });
       await this.audit.record(tx, {
         module: 'workspace_settings',
         recordId: ctx.orgId,
@@ -485,6 +497,51 @@ export class HandoffService {
       return this.repo.settings(tx, ctx.orgId);
     });
     return this.shape(stored, available);
+  }
+
+  /**
+   * The waiting queue's timers as they will be stored, checked against what they would be after this save: a timer needs its
+   * companion (a team to offer the chat to, a text to send), the team must receive conversations, and a timer that is switched off
+   * clears its companion's requirement. Refused with a field path, never silently dropped.
+   */
+  private async queueTimersToStore(
+    tx: Tx,
+    orgId: number,
+    input: NonNullable<UpdateHandoffSettingsInput['queueTimers']>,
+  ) {
+    const now = (await this.repo.settings(tx, orgId)).queueTimers;
+    const next = { ...now, ...input } as typeof now & typeof input;
+    const problems: Array<{ path: string; message: string }> = [];
+    let teamId: number | null | undefined;
+    if (input.overflowTeamId !== undefined) {
+      if (input.overflowTeamId === null) teamId = null;
+      else {
+        const team = await this.repo.teamByUuid(tx, orgId, input.overflowTeamId);
+        if (!team) problems.push({ path: 'queueTimers.overflowTeamId', message: 'team_not_found' });
+        else if (!team.receives)
+          problems.push({
+            path: 'queueTimers.overflowTeamId',
+            message: 'team_does_not_receive_conversations',
+          });
+        else teamId = team.id;
+      }
+    }
+    const hasTeam = teamId !== undefined ? teamId !== null : now.overflowTeamId !== null;
+    if (next.overflowMinutes !== null && !hasTeam)
+      problems.push({ path: 'queueTimers.overflowTeamId', message: 'required' });
+    if (next.unclaimedMinutes !== null && next.unclaimedAction === 'keep')
+      problems.push({ path: 'queueTimers.unclaimedAction', message: 'required' });
+    if (next.unclaimedAction === 'message' && next.unclaimedMessage.trim() === '')
+      problems.push({ path: 'queueTimers.unclaimedMessage', message: 'required' });
+    if (problems.length > 0)
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'The waiting queue settings are incomplete',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        problems,
+      );
+    const { overflowTeamId: _uuid, ...fields } = input;
+    return { ...fields, ...(teamId !== undefined ? { overflowTeamId: teamId } : {}) };
   }
 
   private shape(
@@ -506,6 +563,24 @@ export class HandoffService {
       continuityDays: available.continuityWindow ? s.continuityDays : null,
       promptOwnerOnReassign: s.promptOwnerOnReassign && available.promptOwnerOnReassign,
       notifyQueue: s.notifyQueue,
+      // What is in effect: a plan without the timers runs none (what was saved comes back on upgrade), so the screen shows them off.
+      queueTimers: available.queueTimers
+        ? {
+            remindMinutes: s.queueTimers.remindMinutes,
+            overflowMinutes: s.queueTimers.overflowMinutes,
+            overflowTeamId: s.queueTimers.overflowTeamUuid,
+            unclaimedMinutes: s.queueTimers.unclaimedMinutes,
+            unclaimedAction: s.queueTimers.unclaimedAction,
+            unclaimedMessage: s.queueTimers.unclaimedMessage,
+          }
+        : {
+            remindMinutes: null,
+            overflowMinutes: null,
+            overflowTeamId: null,
+            unclaimedMinutes: null,
+            unclaimedAction: 'keep',
+            unclaimedMessage: '',
+          },
       available,
     };
   }

@@ -298,6 +298,12 @@ export const conversationHandoffs = pgTable(
     flowRunId: idColumn('flow_run_id'),
     nodeId: text('node_id'),
     requestedBy: idColumn('requested_by'),
+    /** Waiting queue timers (migration 20270324090000): each step of a wait runs at most once. */
+    remindedAt: timestamp('reminded_at', { withTimezone: true }),
+    offeredAt: timestamp('offered_at', { withTimezone: true }),
+    offeredFromTeamId: idColumn('offered_from_team_id'),
+    finalAt: timestamp('final_at', { withTimezone: true }),
+    finalAction: text('final_action'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     completedAt: timestamp('completed_at', { withTimezone: true }),
@@ -340,6 +346,11 @@ export const conversationHandoffs = pgTable(
       name: 'fk_conversation_handoffs_requested_by',
       columns: [t.orgId, t.requestedBy],
       foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_offered_from',
+      columns: [t.orgId, t.offeredFromTeamId],
+      foreignColumns: [teams.orgId, teams.id],
     }).onDelete('set null'),
     uniqueIndex('uq_conversation_handoffs_live')
       .on(t.orgId, t.conversationId)
