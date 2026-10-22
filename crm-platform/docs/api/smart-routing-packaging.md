@@ -25,7 +25,7 @@ add-on cannot be saved at 0; untick it when you set the price). Idempotent, expa
 ### How an operator switches it on
 
 1. Operator console, **Add-ons**: open **Smart routing** (draft, inactive).
-2. Untick **Free**, enter the price and period, tick **Active**, save.
+2. Pick the **Billing period** (monthly or yearly subscription), enter a price above zero, tick **Active**, save. Add-ons are subscriptions: the seeded draft is not a legacy pack, so it can be converted here. See [specs/addons-marketplace-unification.md](../specs/addons-marketplace-unification.md) (Part B) for how renewal works on an offline gateway.
 3. Give it to a workspace like any other add-on pack (the workspace's add-ons panel, or checkout once it is active). Workspaces on a paid plan see it in the add-on
    catalogue on the Plans page. Plain add-ons are not part of a plan's `visibleAddons` (that table is for Marketplace apps).
 4. To include Smart routing in a higher tier instead: Plans, open the plan, **Add-ons** tab, section **Add-ons included in this plan**, switch **Smart routing** on, save. The switch ticks the two

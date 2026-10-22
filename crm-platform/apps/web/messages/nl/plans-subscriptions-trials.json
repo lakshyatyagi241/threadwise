@@ -247,23 +247,7 @@
         "title": "Veelgestelde vragen"
       },
       "addons": {
-        "title": "Add-ons",
-        "owned": "Add-ons in bezit",
-        "oneTime": "eenmalig",
-        "buy": "Add-on kopen",
-        "buyAgain": "Opnieuw kopen",
-        "active": "Actief",
-        "included": "Inbegrepen in je abonnement",
-        "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
-        "includedEnds": "Inbegrepen in je abonnement. Je add-on eindigt op {date} en wordt niet verlengd.",
-        "unlimitedBullet": "Onbeperkt {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ dag} other {/ {count} dagen}}",
-          "weeks": "{count, plural, one {/ week} other {/ {count} weken}}",
-          "months": "{count, plural, one {/ maand} other {/ {count} maanden}}",
-          "years": "{count, plural, one {/ jaar} other {/ {count} jaar}}"
-        }
+        "title": "Add-ons"
       },
       "renewal": {
         "renewsOn": "Je abonnement wordt automatisch verlengd op {date}.",
@@ -589,7 +573,9 @@
       "addons": {
         "smartRouting": "Slimme routering",
         "teamsPermissions": "Teams en machtigingen"
-      }
+      },
+      "addonsTabHint": "Voor add-ons heeft je abonnement de Marketplace niet nodig. Bij Abonnementen en add-ons zie je nog steeds wat je hebt en kun je add-ons kopen.",
+      "addonsTabLink": "Open Abonnementen en add-ons"
     },
     "lock": {
       "link": "Abonnementen en add-ons bekijken"

@@ -809,6 +809,7 @@
         "onlyStatus": "Chỉ tin nhắn {status}",
         "requestedAt": "Yêu cầu lúc {date}",
         "lines": "{count, plural, other {# dòng}}",
+        "noLines": "Không có sự kiện nào trong khoảng thời gian này",
         "until": "Có sẵn đến {date}",
         "download": "Tải xuống",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "Bỏ thẻ",
       "onLeave": "đang nghỉ phép",
       "onLeaveUntil": "nghỉ phép đến {date}",
-      "spam": "Đánh dấu là spam"
+      "spam": "Đánh dấu là spam",
+      "markUnread": "Đánh dấu chưa đọc",
+      "unsnooze": "Hủy tạm ẩn",
+      "notSpam": "Đánh dấu là không phải spam"
     },
     "tags": {
       "tag": "Thẻ",

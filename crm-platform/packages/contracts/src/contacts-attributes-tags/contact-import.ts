@@ -275,6 +275,13 @@ export function parseImportConsent(cell: string): ImportConsentValue {
 export const contactImportOptionsSchema = z.object({
   /** Field -> column index. Omitted: auto-detected from the header row. null: ignore that field. */
   mapping: z.record(importFieldSchema, z.number().int().min(0).nullable()).optional(),
+  /**
+   * Custom property key -> column index, the same way as `mapping`. Omitted: a column is matched to a property by its label or its key
+   * (`attr:<key>`, as the export writes it). null: ignore that property's column.
+   */
+  propertyMapping: z
+    .record(z.string().trim().min(1).max(255), z.number().int().min(0).nullable())
+    .optional(),
   /** Omitted: detected from the header row (comma, semicolon, tab, pipe). */
   delimiter: z.enum([',', ';', '\t', '|']).optional(),
   /** Stamped on every contact this file CREATES. Existing contacts keep theirs. */
@@ -336,6 +343,8 @@ export const IMPORT_REJECT_REASONS = [
   'duplicate_in_file',
   /** The number belongs to a contact under a legal hold (BL-295): the row would overwrite it, so it is skipped. The text is neutral. */
   'legal_hold',
+  /** A custom property's column holds a value that does not fit the property's type or options. */
+  'invalid_property_value',
 ] as const;
 export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 
@@ -355,6 +364,15 @@ const importConsentSummarySchema = z.object({
   unrecognisedSamples: z.array(z.string()),
 });
 
+/** One custom contact property and the column that would fill it (null: no column in the file). */
+export const importPropertyColumnSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  fieldType: z.string(),
+  column: z.number().int().nullable(),
+});
+export type ImportPropertyColumn = z.infer<typeof importPropertyColumnSchema>;
+
 export const contactImportPreviewSchema = z.object({
   fileName: z.string(),
   delimiter: z.string(),
@@ -362,6 +380,8 @@ export const contactImportPreviewSchema = z.object({
   detected: z.record(z.number().int()),
   /** The mapping that would be used (detected, overridden by the request). */
   mapping: z.record(z.number().int().nullable()),
+  /** Every active custom contact property the workspace has, with the column it would read. Omitted by an older server. */
+  properties: z.array(importPropertyColumnSchema).optional(),
   missingRequired: z.array(importFieldSchema),
   /** Up to 5 data rows, keyed by header. */
   sampleRows: z.array(z.record(z.string())),

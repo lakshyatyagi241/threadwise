@@ -809,6 +809,7 @@
         "onlyStatus": "Alleen berichten met status {status}",
         "requestedAt": "Aangevraagd {date}",
         "lines": "{count, plural, one {# regel} other {# regels}}",
+        "noLines": "Geen gebeurtenissen in deze periode",
         "until": "Beschikbaar tot {date}",
         "download": "Downloaden",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "Tag verwijderen",
       "onLeave": "met verlof",
       "onLeaveUntil": "met verlof tot {date}",
-      "spam": "Markeer als spam"
+      "spam": "Markeer als spam",
+      "markUnread": "Markeren als ongelezen",
+      "unsnooze": "Uitstel opheffen",
+      "notSpam": "Markeer als geen spam"
     },
     "tags": {
       "tag": "Tag",

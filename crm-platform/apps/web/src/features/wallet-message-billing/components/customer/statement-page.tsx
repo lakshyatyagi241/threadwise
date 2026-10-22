@@ -46,9 +46,9 @@ import { TypePill } from './type-pill';
 import { usePager } from './use-pager';
 
 const STATEMENT_PAGE = 25;
-const CHANNELS = ['campaign', 'broadcast', 'flow', 'scheduled', 'auto_reply', 'chat', 'api'];
+export const CHANNELS = ['campaign', 'broadcast', 'flow', 'scheduled', 'auto_reply', 'chat', 'api'];
 const ENGINES = ['waba', 'baileys', 'twilio'];
-const CATEGORIES = ['marketing', 'utility', 'authentication', 'service'];
+export const CATEGORIES = ['marketing', 'utility', 'authentication', 'service'];
 
 /** The full ledger: totals over the whole filtered set, filters kept in the address, per-message detail, CSV export. */
 export function StatementPage() {

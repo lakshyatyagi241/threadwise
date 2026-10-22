@@ -558,6 +558,33 @@ describe('the library: sort, status tabs and counts', () => {
     });
   });
 
+  it('filters by creation day: a custom range is whole days, a preset counts back from now', async () => {
+    const t = await api.signup('tld');
+    const conn = await seedConnection(t);
+    await seedTemplate(t, conn, { template_name: 'made_today' });
+    // Two days either side of UTC today: the workspace's own day is within that span whatever its zone or the hour of the run.
+    const day = (offset: number) =>
+      new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
+    const names = async (q: string) =>
+      (await api.as(t.admin).get(`/v2/templates?sort=name-asc&${q}`)).body.data.map(
+        (x: { name: string }) => x.name,
+      );
+    expect(await names(`range=custom&from=${day(-2)}&to=${day(2)}`)).toEqual(['made_today']);
+    expect(await names('range=custom&from=2000-01-01&to=2000-01-31')).toEqual([]);
+    expect(await names('range=7d')).toEqual(['made_today']);
+
+    const counts = await api
+      .as(t.admin)
+      .get('/v2/templates/counts?range=custom&from=2000-01-01&to=2000-01-31');
+    expect(counts.body.filtered).toBe(0);
+    expect(counts.body.statuses.all).toBe(1);
+
+    for (const bad of ['from=2026-02-31', 'to=9999-12-31', 'from=0050-01-01']) {
+      const refused = await api.as(t.admin).get(`/v2/templates?range=custom&${bad}`);
+      expect(refused.status, bad).toBeGreaterThanOrEqual(400);
+    }
+  });
+
   it('counts only this organization', async () => {
     const a = await api.signup('tcoa');
     const b = await api.signup('tcob');

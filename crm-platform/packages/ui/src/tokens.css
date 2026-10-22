@@ -136,6 +136,26 @@
   background: var(--thumb-hover);
 }
 
+/* A toast (components/toast.tsx) eases in; still for reduced motion. */
+@keyframes crm-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.crm-toast {
+  animation: crm-toast-in 0.18s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .crm-toast {
+    animation: none;
+  }
+}
+
 /* The right-side drawer (components/drawer.tsx): slides in from the end edge, fades the backdrop; still for reduced motion. */
 @keyframes crm-drawer-in {
   from {

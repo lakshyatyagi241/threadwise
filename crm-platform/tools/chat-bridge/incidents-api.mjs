@@ -1,10 +1,12 @@
 // Team incident API (JSON), all routes need header X-Incident-Token. See docs/runbooks/team-incident-flow.md.
 //   GET /incidents[?status=] | GET /incidents/:id | POST /incidents/:id/{claim,release-claim,pr,note}
+//   POST /incidents {kind:'deploy_failure', attemptedSha, liveSha, prs:[n], mergers:[login], durationSeconds} (deduped on attemptedSha)
 import fs from 'node:fs';
 import { timingSafeEqual, createHash } from 'node:crypto';
 
 const PR_RE = /^https:\/\/github\.com\/lakshyatyagi241\/threadwise\/pull\/(\d{1,7})$/;
-const STATUSES = ['open', 'claimed', 'pr_raised', 'resolved', 'escalated'];
+const STATUSES = ['open', 'claimed', 'pr_raised', 'released', 'resolved', 'escalated'];
+const SHA = /^[0-9a-f]{7,40}$/i, LOGIN = /^@?[A-Za-z0-9-]{1,39}$/;
 const CTRL = /[\u0000-\u001f\u007f-\u009f\u2028\u2029]/;
 const text = (v, max) => typeof v === 'string' && v.trim() && v.length <= max && !CTRL.test(v) ? v.trim() : null;
 const sha = (s) => createHash('sha256').update(s).digest();
@@ -26,6 +28,18 @@ export async function handleIncidents(req, res, { resolver, token, log = () => {
     const status = u.searchParams.get('status');
     if (status && !STATUSES.includes(status)) return out(400, { error: 'bad status' });
     return out(200, { mode: resolver.mode, incidents: resolver.listFull(status) });
+  }
+  if (req.method === 'POST' && !id) { // open a deploy_failure incident (every field validated; the message is built server-side)
+    let raw = ''; for await (const c of req) { raw += c; if (raw.length > 8000) return out(413, { error: 'too large' }); }
+    let b; try { b = JSON.parse(raw || '{}'); } catch { return out(400, { error: 'bad json' }); }
+    const prs = b?.prs ?? [], mergers = b?.mergers ?? [], dur = b?.durationSeconds ?? 0;
+    if (b?.kind !== 'deploy_failure' || !SHA.test(b.attemptedSha ?? '') || (b.liveSha && !SHA.test(b.liveSha)) || !Array.isArray(prs) || prs.length > 50 || !prs.every((n) => Number.isInteger(n) && n > 0) || !Array.isArray(mergers) || mergers.length > 20 || !mergers.every((m) => typeof m === 'string' && LOGIN.test(m)) || !Number.isInteger(dur) || dur < 0 || dur > 86400) return out(400, { error: 'bad deploy_failure body' });
+    const known = resolver.byKey(`deploy:${b.attemptedSha}`);
+    if (known && known.state !== 'resolved') return out(200, { id: known.id, deduped: true });
+    await resolver.openDeployFailure({ attemptedSha: b.attemptedSha, liveSha: b.liveSha ?? '', prs, mergers: mergers.map((m) => m.replace(/^@?/, '@')), durationSeconds: dur });
+    const inc = resolver.byKey(`deploy:${b.attemptedSha}`);
+    log({ evt: 'incident_api', action: 'open_deploy_failure', code: inc ? 201 : 503 });
+    return inc ? out(201, { id: inc.id, deduped: false }) : out(503, { error: 'resolver off' });
   }
   if (req.method !== 'POST' || !id || !action) return out(405, { error: 'method not allowed' });
   let raw = ''; for await (const c of req) { raw += c; if (raw.length > 8000) return out(413, { error: 'too large' }); }

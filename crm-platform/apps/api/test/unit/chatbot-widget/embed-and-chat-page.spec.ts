@@ -238,6 +238,10 @@ describe('the panel of a flow bot (a website chat bot)', () => {
     expect(script).toContain('e.source !== frame.contentWindow || !e.data');
     expect(script).toContain("e.data.wgt === 'close'");
     expect(script).toContain("e.data.wgt === 'expand'");
+    // Expanded, the window sits in the middle of the page instead of growing from its corner.
+    expect(script).toContain("ps.transform = 'translate(-50%,-50%)'");
+    // Closing it puts the launcher's callout back as at first.
+    expect(script).toContain("if (typeof showExtras === 'function') showExtras();");
     expect(buildEmbedScript({ ...widget, mode: 'ai' }, chat)).not.toContain("wgt === 'close'");
   });
 
@@ -251,16 +255,35 @@ describe('the panel of a flow bot (a website chat bot)', () => {
   });
 });
 
-describe('the cross: Close this chat and Restart this chat', () => {
-  it('is drawn for every website bot inside the site panel, not only a flow bot', () => {
+describe('the cross: end the conversation, rate it, or restart', () => {
+  it('asks first, in every website bot inside the site panel', () => {
     for (const flow of [true, false]) {
       const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow });
-      expect(page).toContain('id="endpop"');
-      expect(page).toContain('tx(o[0], o[1])');
-      expect(page).toContain("'closeThis', 'Close this chat'");
-      expect(page).toContain("'restartThis', 'Restart this chat'");
+      expect(page).toContain('id="endmodal"');
+      expect(page).toContain("tx('endTitle', 'Are you sure you want to end conversation?')");
+      expect(page).toContain("tx('endConversation', 'End conversation')");
+      expect(page).toContain("tx('restartChat', 'Restart chat')");
+      expect(page).toContain("tx('notNow', 'Not now')");
       expect(page).toContain("BASE + 'restart'");
     }
+  });
+
+  it('End conversation asks for stars and a few words; Restart chat sends five stars on its own; Not now only closes', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain("var API_RATE = BASE + 'rating'");
+    expect(page).toContain(
+      "sheetButton('danger', tx('endConversation', 'End conversation'), openRating)",
+    );
+    expect(page).toContain('closeSheet(); rate(5).then(function () { startOver(true); })');
+    expect(page).toContain("sheetButton('ghost', tx('notNow', 'Not now'), closeSheet)");
+    expect(page).toContain("tx('submitFeedback', 'Submit feedback')");
+    expect(page).toContain("tx('noThanks', 'No, thanks')");
+  });
+
+  it('has a minimize button next to the cross that only folds the window into the launcher', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain("mn.dataset.minimize = '1'");
+    expect(page).toContain("tx('minimize', 'Minimize')");
   });
 });
 

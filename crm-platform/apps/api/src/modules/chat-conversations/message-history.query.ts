@@ -55,7 +55,7 @@ export interface HistorySelection {
 }
 
 /** The ranks of the branches: part of the cursor, so a page resumes exactly after its last row even when two rows share a moment. */
-export const RANK = { message: 0, broadcast: 1, campaign: 2, scheduled: 3 } as const;
+export const RANK = { message: 0, broadcast: 1, campaign: 2, scheduled: 3, test: 4 } as const;
 
 /** Every column, in order, with the lowest level that carries it. */
 const COLUMNS: ReadonlyArray<readonly [string, Level]> = [
@@ -120,15 +120,21 @@ const utcText = (col: SQL): SQL =>
 /** The recipient's number as digits only, so a number typed with spaces or dashes is still recognised as a phone number. */
 const digitsOf = (col: SQL): SQL => sql`NULLIF(regexp_replace(${col}, '\\D', '', 'g'), '')`;
 
-/** May the caller read this contact? The contact row is `ct` (possibly NULL: a number with no saved contact). */
-export function contactOpen(ctx: HistoryContext, ct: string): SQL {
+/**
+ * May the caller read this contact? The contact row is `ct`; null is a number with no saved contact (a test send), which has no owner or
+ * creator, so only a scope that needs neither opens it.
+ */
+export function contactOpen(ctx: HistoryContext, ct: string | null): SQL {
   if (ctx.contacts.scope === null) return sql`FALSE`;
-  const c = rawIdentifier(ct);
+  const columns =
+    ct === null
+      ? [sql`NULL`, sql`NULL`]
+      : [sql`${rawIdentifier(ct)}.owner_id`, sql`${rawIdentifier(ct)}.created_by`];
   // The same rule the contacts list applies (contactScopeCondition: owner or creator, D1), through the one resolver.
   return scopeOwnerPredicate(
     { orgId: ctx.orgId, userId: ctx.contacts.userId },
     ctx.contacts.scope,
-    [sql`${c}.owner_id`, sql`${c}.created_by`],
+    columns,
   );
 }
 
@@ -143,7 +149,7 @@ const contactName = (ct: string): SQL => {
 /** What sent a message. Inbound messages and an agent's messages are `inbox`; automated ones say so in `meta.source`. */
 const MESSAGE_SOURCE = sql`CASE
   WHEN m.direction = 'in' THEN 'inbox'
-  WHEN m.meta ->> 'source' IN ('auto_reply', 'flow', 'ai', 'api', 'broadcast', 'campaign', 'scheduled') THEN m.meta ->> 'source'
+  WHEN m.meta ->> 'source' IN ('auto_reply', 'flow', 'ai', 'api', 'contact', 'broadcast', 'campaign', 'scheduled') THEN m.meta ->> 'source'
   WHEN m.sender_agent_id IS NOT NULL THEN 'ai'
   WHEN m.sender_kind = 'agent' OR m.meta ->> 'source' = 'inbox' THEN 'inbox'
   ELSE 'other' END`;
@@ -170,7 +176,7 @@ const none = sql`FALSE`;
 
 /** Filters on a branch, as conditions on the pieces of that branch. Each branch names its own columns. */
 interface BranchRefs {
-  entity: 'message' | 'broadcast' | 'campaign' | 'scheduled';
+  entity: 'message' | 'broadcast' | 'campaign' | 'scheduled' | 'test';
   /** The moment of the row (the index expression). */
   at: SQL;
   id: SQL;
@@ -267,7 +273,9 @@ function scopingConditions(ctx: HistoryContext, sel: HistorySelection, b: Branch
     out.push(
       b.entity === 'campaign'
         ? sql`wc.campaign_id = (SELECT id FROM wpcampaigns WHERE org_id = ${org} AND uuid = ${s.campaignId}::uuid)`
-        : none,
+        : b.entity === 'test'
+          ? sql`tt.campaign_id = (SELECT id FROM wpcampaigns WHERE org_id = ${org} AND uuid = ${s.campaignId}::uuid)`
+          : none,
     );
   }
   if (s.broadcastId) {
@@ -345,7 +353,7 @@ export interface BranchOptions {
   /** The narrowing filters do not apply (the KPI cards). */
   ignoreNarrow?: boolean;
   /** Only these branches (the drawer knows which table a row is in). */
-  entities?: ReadonlyArray<'message' | 'broadcast' | 'campaign' | 'scheduled'>;
+  entities?: ReadonlyArray<'message' | 'broadcast' | 'campaign' | 'scheduled' | 'test'>;
 }
 
 function finish(
@@ -684,9 +692,88 @@ function scheduledBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOp
   );
 }
 
+/**
+ * A wizard test send (`camp_test_sends`): one message to a number typed in the broadcast wizard. It has no message row and no
+ * conversation, so it is a row of its own, visible only to a caller who reads every conversation (as the recipient rows are).
+ */
+function testBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions): SQL {
+  const level = o.level;
+  const row = included(level, 'row');
+  const at = sql`tt.created_at`;
+  const phone = digitsOf(sql`tt.to_phone`);
+  const b: BranchRefs = {
+    entity: 'test',
+    at,
+    id: sql`tt.id`,
+    uuid: sql`tt.uuid`,
+    direction: sql`'out'`,
+    status: recipientStatus('tt.status'),
+    source: sql`'broadcast_test'`,
+    kind: sql`CASE WHEN tt.template_id IS NULL THEN 'text' ELSE 'template' END`,
+    names: [sql`k.campaign_name`],
+    text: null,
+    phoneDigits: phone,
+    phoneOpen: contactOpen(ctx, null),
+    templateMatch: (t) => sql`tt.template_id = ${t}`,
+    rank: RANK.test,
+  };
+  const joins = sql`
+    FROM camp_test_sends tt
+    JOIN wpcampaigns k ON k.org_id = tt.org_id AND k.id = tt.campaign_id
+    ${row ? sql`LEFT JOIN wa_templates t ON t.org_id = tt.org_id AND t.id = tt.template_id` : sql``}
+    ${costJoin(ctx, level, 'uc', sql`tt.provider_message_id`)}`;
+  const cols: Record<string, SQL> = {
+    rank: sql`${RANK.test}::int`,
+    id: sql`tt.id`,
+    at,
+    entity_kind: sql`'test'::text`,
+    source: sql`'broadcast_test'::text`,
+    direction: sql`'out'::text`,
+    status: recipientStatus('tt.status'),
+    type: b.kind,
+    provider_id: sql`tt.provider_message_id`,
+    uid: sql`tt.uuid`,
+    at_text: utcText(at),
+    msg_kind: b.kind,
+    conv_uuid: sql`NULL::uuid`,
+    contact_uuid: sql`NULL::uuid`,
+    contact_name: sql`NULL::text`,
+    phone,
+    phone_open: b.phoneOpen,
+    channel_uuid: sql`NULL::uuid`,
+    channel_kind: sql`NULL::text`,
+    channel_name: sql`NULL::text`,
+    body: sql`NULL::text`,
+    media_name: sql`NULL::text`,
+    template_uuid: sql`t.uuid`,
+    template_name: sql`t.template_name`,
+    fail_code: sql`tt.error_code`,
+    fail_reason: sql`tt.error_message`,
+    entity_uuid: sql`NULL::uuid`,
+    entity_name: sql`NULL::text`,
+    ...costCols(ctx, 'uc'),
+    created_at: sql`tt.created_at`,
+    sent_at: sql`NULL::timestamptz`,
+    delivered_at: sql`NULL::timestamptz`,
+    read_at: sql`NULL::timestamptz`,
+    failed_at: sql`CASE WHEN tt.status = 'failed' THEN tt.updated_at END`,
+    sender_kind: sql`'broadcast'::text`,
+    sender_name: sql`NULL::text`,
+    language: sql`NULL::text`,
+  };
+  return finish(
+    sql`SELECT ${select(level, cols)} ${joins}`,
+    b,
+    [sql`tt.org_id = ${ctx.orgId}`],
+    ctx,
+    sel,
+    o,
+  );
+}
+
 /** The branches the caller may see and the filters can match, joined with UNION ALL. A caller who may see none of the asked branches must be answered before this is called. */
 export function feedSql(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions): SQL {
-  const want = (e: 'message' | 'broadcast' | 'campaign' | 'scheduled') =>
+  const want = (e: 'message' | 'broadcast' | 'campaign' | 'scheduled' | 'test') =>
     !o.entities || o.entities.includes(e);
   const branches: SQL[] = [];
   if (want('message')) branches.push(messageBranch(ctx, sel, o));
@@ -694,6 +781,7 @@ export function feedSql(ctx: HistoryContext, sel: HistorySelection, o: BranchOpt
     if (want('broadcast')) branches.push(broadcastBranch(ctx, sel, o));
     if (want('campaign')) branches.push(campaignBranch(ctx, sel, o));
     if (want('scheduled')) branches.push(scheduledBranch(ctx, sel, o));
+    if (want('test')) branches.push(testBranch(ctx, sel, o));
   }
   if (branches.length === 0) throw new Error('message history: no branch is visible to the caller');
   return sql.join(o.page ? branches : branches.map((b) => sql`(${b})`), sql` UNION ALL `);
@@ -868,7 +956,7 @@ export function sharedScanApplies(sel: HistorySelection): boolean {
 }
 
 /** The recipient branches (no conversation): what the caller adds to the shared scan's message numbers. */
-export const BULK_ENTITIES = ['broadcast', 'campaign', 'scheduled'] as const;
+export const BULK_ENTITIES = ['broadcast', 'campaign', 'scheduled', 'test'] as const;
 
 interface ScanOptions {
   from: Date;

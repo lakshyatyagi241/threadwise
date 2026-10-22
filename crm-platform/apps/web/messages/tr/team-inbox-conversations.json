@@ -809,6 +809,7 @@
         "onlyStatus": "Yalnızca {status} durumundaki mesajlar",
         "requestedAt": "İstenme: {date}",
         "lines": "{count, plural, one {# satır} other {# satır}}",
+        "noLines": "Bu dönemde olay yok",
         "until": "{date} tarihine kadar kullanılabilir",
         "download": "İndir",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
       "onLeaveUntil": "{date} tarihine kadar izinli",
-      "spam": "Spam olarak işaretle"
+      "spam": "Spam olarak işaretle",
+      "markUnread": "Okunmadı olarak işaretle",
+      "unsnooze": "Ertelemeyi kaldır",
+      "notSpam": "Spam değil olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",

@@ -25,7 +25,7 @@ import { StorageMeterService } from '../../../src/modules/storage-quota/storage-
 import type { StorageModeService } from '../../../src/modules/storage-quota/storage-mode.service';
 import type { StorageQuotaRepository } from '../../../src/modules/storage-quota/storage-quota.repository';
 import type { DatabaseService } from '../../../src/infra/db/database.service';
-import { jpegOfSize, pngOfSize } from '../../support/images';
+import { pngOfSize } from '../../support/images';
 
 /**
  * OBSERVE MODE NEVER BLOCKS. Whatever the metering path does (throws on reserve, on commit, on release, on remove, a database that is

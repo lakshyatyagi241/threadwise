@@ -97,6 +97,10 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' 
  * steps one under another, grouped in flows ("journeys") like the console's bot builder; a button or list row leads to any step.
  * It saves the same graph the Advanced canvas does, through the same API, so a flow runs the same and opens in either builder.
  */
+/** A button that cannot be pressed now (nothing to save, already published): grey but still readable, not a faded ghost of itself. */
+const QUIET_DISABLED =
+  'disabled:opacity-100 disabled:border-border disabled:bg-muted disabled:text-muted-foreground';
+
 export function SimpleScreen({
   flowId: initialFlowId,
   channel = 'chat',
@@ -255,6 +259,14 @@ function Editor({
   const [flowId, setFlowId] = useState<string | null>(initial?.id ?? null);
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
+  // Edits made since the bot was last published: saving them does not put them live, so Publish stays available until it is pressed.
+  const [unpublished, setUnpublished] = useState(false);
+  // A website chat bot's Customize tab keeps its own form; the page's Save follows it while that tab is open.
+  const [customizeDirty, setCustomizeDirty] = useState(false);
+  const customizeSave = useRef<(() => void) | null>(null);
+  const registerCustomizeSave = useCallback((fn: (() => void) | null) => {
+    customizeSave.current = fn;
+  }, []);
   const [busy, setBusy] = useState(false);
   // Saves run one at a time and always read the newest version / flow id / content from refs, never from the render that started them:
   // two quick clicks outside the step, or an edit made while a save is in flight, must not send a stale version (that is a false
@@ -295,6 +307,7 @@ function Editor({
     editSeq.current += 1;
     dirtyRef.current = true;
     setDirty(true);
+    setUnpublished(true);
   }, []);
 
   const senderRequired = channel === 'chat' && ctx.senders.chat.length > 0;
@@ -560,22 +573,38 @@ function Editor({
 
   useEffect(() => {
     if (!activeId) return;
+    const inside = (target: Element): boolean =>
+      Boolean(
+        target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`) ||
+        target.closest(
+          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
+        ),
+      );
+    // Where the press began. Selecting text in the step and letting go outside it sends the click to the page around the step (the
+    // press and the release have only that in common), which is not a click outside: only a press that began outside closes it.
+    let pressedInside = false;
+    const onPress = (e: MouseEvent) => {
+      const target = e.target instanceof Element ? e.target : null;
+      pressedInside = Boolean(target && inside(target));
+    };
     const onOutside = (e: MouseEvent) => {
       const target = e.target instanceof Element ? e.target : null;
       if (!target || !target.isConnected) return;
-      if (target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`)) return;
-      if (
-        target.closest(
-          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
-        )
-      )
+      if (pressedInside) {
+        pressedInside = false;
         return;
+      }
+      if (inside(target)) return;
       closeAndSave.current();
     };
     // The click, not the press: closing the step moves what is below it, and a press-time close would send the click to the wrong place
     // (the + under the step, or the next step's header).
+    document.addEventListener('mousedown', onPress, true);
     document.addEventListener('click', onOutside, true);
-    return () => document.removeEventListener('click', onOutside, true);
+    return () => {
+      document.removeEventListener('mousedown', onPress, true);
+      document.removeEventListener('click', onOutside, true);
+    };
   }, [activeId]);
 
   const onPublish = async () => {
@@ -599,9 +628,11 @@ function Editor({
           toast(tw(channel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'), 'danger');
           return;
         }
+        const editsAtPublish = editSeq.current;
         const pub = await flowsApi.publish(id!);
         rowVersionRef.current = pub.rowVersion;
         setPublished(true);
+        if (editSeq.current === editsAtPublish) setUnpublished(false);
         toast(t('publishedToast'), 'success');
       } catch (e) {
         toast(t('publishFailed', { error: errMessage(e, t('genericError')) }), 'danger');
@@ -609,6 +640,7 @@ function Editor({
     });
   };
 
+  const onCustomizeTab = channel === 'web' && shownTab === 'customize';
   const status = published
     ? dirty
       ? t('status.publishedUnsaved')
@@ -641,6 +673,7 @@ function Editor({
               editSeq.current += 1;
               dirtyRef.current = true;
               setDirty(true);
+              setUnpublished(true);
             }}
             className="h-9 min-w-0 max-w-sm flex-1 rounded-lg border border-transparent bg-transparent px-2 font-serif text-[18px] hover:border-border focus:border-border focus:outline-none"
           />
@@ -708,12 +741,19 @@ function Editor({
             <Button
               variant="secondary"
               size="sm"
-              disabled={busy || !dirty}
-              onClick={() => void onSave()}
+              disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
+              className={QUIET_DISABLED}
+              onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
             >
               {t('save')}
             </Button>
-            <Button variant="brand" size="sm" disabled={busy} onClick={() => void onPublish()}>
+            <Button
+              variant={published && !unpublished && !dirty ? 'secondary' : 'brand'}
+              size="sm"
+              disabled={busy || (published && !unpublished && !dirty)}
+              className={published && !unpublished && !dirty ? QUIET_DISABLED : undefined}
+              onClick={() => void onPublish()}
+            >
               {published ? t('publishChanges') : t('publish')}
             </Button>
           </div>
@@ -1209,6 +1249,8 @@ function Editor({
             flowName={name}
             published={published}
             canEdit={canEditFlow}
+            onCustomizeDirty={setCustomizeDirty}
+            registerCustomizeSave={registerCustomizeSave}
           />
         ) : null}
 

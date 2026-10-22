@@ -407,9 +407,15 @@ export const MessageBubble = memo(function MessageBubble({
             className={cn(
               BUBBLE,
               m.email && 'w-full sm:max-w-[90%]',
-              out
-                ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
-                : 'rounded-es-md border border-border bg-background',
+              m.email
+                ? // An email is a card of its own: the same frame for both sides, the sent ones marked with an accent edge.
+                  cn(
+                    'rounded-lg border border-border bg-background text-foreground shadow-sm',
+                    out && 'border-s-4 border-s-primary',
+                  )
+                : out
+                  ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
+                  : 'rounded-es-md border border-border bg-background',
               failed && 'border-danger/50',
             )}
           >

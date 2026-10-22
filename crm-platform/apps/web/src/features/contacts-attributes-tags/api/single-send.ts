@@ -61,14 +61,17 @@ export function useConversationTemplates(conversationId: string | undefined) {
   });
 }
 
-/** Sends one template message. The same `clientMessageId` twice sends once, so a double click cannot text twice. */
+/**
+ * Sends one template message. The same `clientMessageId` twice sends once, so a double click cannot text twice. `origin` tells Message
+ * History the send came from the contact, not the inbox.
+ */
 export function sendTemplate(
   conversationId: string,
   input: { templateId: string; variables: Record<string, string>; clientMessageId: string },
 ) {
   return apiFetch(`/inbox/conversations/${conversationId}/messages`, {
     method: 'POST',
-    body: { kind: 'template', ...input },
+    body: { kind: 'template', origin: 'contact', ...input },
     schema: messageResponseSchema,
     idempotencyKey: input.clientMessageId,
   });
@@ -86,6 +89,7 @@ export function sendEmail(
       body: input.body,
       clientMessageId: input.clientMessageId,
       email: { subject: input.subject },
+      origin: 'contact',
     },
     schema: messageResponseSchema,
     idempotencyKey: input.clientMessageId,

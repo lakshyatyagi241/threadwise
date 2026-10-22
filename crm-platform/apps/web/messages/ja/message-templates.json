@@ -135,6 +135,16 @@
         "name-asc": "名前 A→Z",
         "name-desc": "名前 Z→A"
       },
+      "dateRange": "期間",
+      "range": {
+        "all": "全期間",
+        "7d": "7日間",
+        "30d": "30日間",
+        "90d": "90日間",
+        "custom": "カスタム範囲",
+        "from": "開始日",
+        "to": "終了日"
+      },
       "showing": "表示中",
       "of": "/",
       "filteredTemplates": "件の絞り込み済みテンプレート",

@@ -315,6 +315,64 @@ describe('a website chat bot answers its visitor', () => {
     expect(rows.rows[0]).toMatchObject({ kind: 'image', media_name: 'my-id.png' });
   });
 
+  it("keeps the visitor's rating when they end the chat, once, and refuses a rating outside 1 to 5", async () => {
+    const { token } = await liveBot(
+      'Rated bot',
+      graph([trigger(), node('m', 'message', { text: 'Hello' })], [edge('t', 'm')]),
+    );
+    const visitor = await api.visitor(token);
+    await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+    await linesUntil(token, visitor, 'the bot greets', (all) =>
+      all.some((l) => l.body === 'Hello'),
+    );
+    const rate = (body: object) =>
+      request(p.h.app.getHttpServer())
+        .post(`/widget/${token}/api/rating?visitor_uuid=${visitor}`)
+        .send(body);
+    expect((await rate({ rating: 9 })).status).toBe(422);
+    expect((await rate({ rating: 4, comment: 'Quick and clear' })).status).toBe(200);
+    expect((await rate({ rating: 1 })).status).toBe(200);
+    const rows = await api.h.owner.query(
+      `SELECT m.body, m.direction FROM messages m
+         JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+        WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.meta->>'source' = 'rating'`,
+      [t.orgId, visitor],
+    );
+    expect(rows.rows).toEqual([{ body: 'Rated this chat 4/5: Quick and clear', direction: 'in' }]);
+  });
+
+  it('a saved edit to a published bot goes live only when it is published again', async () => {
+    const { flowId, token } = await liveBot(
+      'Draft vs live bot',
+      graph([trigger(), node('m', 'message', { text: 'Version A' })], [edge('t', 'm')]),
+    );
+    const says = async (word: string) => {
+      const visitor = await api.visitor(token);
+      await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+      return linesUntil(token, visitor, `the bot says ${word}`, (all) =>
+        all.some((l) => /^Version /.test(l.body ?? '')),
+      ).then((all) => all.find((l) => /^Version /.test(l.body ?? ''))!.body);
+    };
+    expect(await says('A')).toBe('Version A');
+
+    const current = await api.as(t.admin).get(`/v2/flows/${flowId}`);
+    expect(current.status).toBe(200);
+    const saved = await api
+      .as(t.admin)
+      .put(`/v2/flows/${flowId}`)
+      .send({
+        name: 'Draft vs live bot',
+        graph: graph([trigger(), node('m', 'message', { text: 'Version B' })], [edge('t', 'm')]),
+        rowVersion: current.body.rowVersion,
+      });
+    expect(saved.status, JSON.stringify(saved.body)).toBe(200);
+    // Saved but not published: customers still get the published version.
+    expect(await says('still A')).toBe('Version A');
+
+    expect((await api.as(t.admin).post(`/v2/flows/${flowId}/publish`).send({})).status).toBe(200);
+    expect(await says('B')).toBe('Version B');
+  });
+
   it('shows link, call and email buttons on a bot line, and drops any address a browser must not open', async () => {
     const { token } = await liveBot(
       'Links bot',

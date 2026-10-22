@@ -8,6 +8,7 @@ export const mktRoutes = {
   apps: '/marketplace/apps',
   integrations: '/marketplace/integrations',
   addons: '/marketplace/addons',
+  developer: '/marketplace/developer',
   installed: '/marketplace/installed',
   requests: '/marketplace/requests',
   app: (slug: string) => `/marketplace/app/${slug}`,

@@ -98,6 +98,11 @@ export function filtersOfView(
   return { ...parseFilters(p, defaultLimit), page: 1 };
 }
 
+/** The default filters ("All contacts") at the person's own page size. */
+export function defaultFiltersOf(defaultLimit: PageSize): ContactFilters {
+  return { ...DEFAULT_FILTERS, limit: defaultLimit };
+}
+
 /** Adds, replaces or removes `view=` on a `?a=b` search string. */
 export function withView(search: string, viewId: string): string {
   const p = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
@@ -105,6 +110,11 @@ export function withView(search: string, viewId: string): string {
   else p.delete(VIEW_PARAM);
   const s = p.toString();
   return s ? `?${s}` : '';
+}
+
+/** The list address that shows a saved view: its saved filters, on page 1, with the view still open. */
+export function searchOfView(filter: Record<string, unknown>, viewId: string): string {
+  return withView(filtersToSearch(filtersOfView(filter), DEFAULT_FILTERS.limit), viewId);
 }
 
 /** True while the list shows what the view saved (the dot on a tab says "changed" when this is false). */

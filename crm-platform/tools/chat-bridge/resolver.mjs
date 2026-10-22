@@ -26,6 +26,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const hard = Number(env.HARD_CANCEL_SECONDS ?? 120), holder = Number(env.CANCEL_BLOCKER_SECONDS ?? 30), idleBlock = Number(env.IDLE_BLOCKER_SECONDS ?? 60);
   const verifyMs = Number(env.VERIFY_SECONDS ?? 120) * 1000, pollMs = Number(env.VERIFY_POLL_MS ?? 2000), perHour = Number(env.AUTO_REMEDIATE_MAX_PER_HOUR ?? 3);
   const dir = env.INCIDENTS_DIR ?? 'incidents';
+  const kindOf = (pb) => (pb === 'code_fix' ? 'slow_statement' : pb === 'deploy_failure' ? 'deploy_failure' : 'critical_alert');
   const incidents = new Map(), pending = new Set(), acted = {}; let release = null, seq = 0;
   const count = (playbook, outcome) => metrics?.inc('crm_incident_total', `playbook="${playbook}",outcome="${outcome}"`);
   const audit = (o) => log({ evt: 'remediation_audit', mode, ...o });
@@ -57,7 +58,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
       if (!(c.waiterSecs > 0)) w.push('blocks nobody');
       return w;
     },
-    db_pool: () => [], code_fix: () => [], service: () => [],
+    db_pool: () => [], code_fix: () => [], service: () => [], deploy_failure: () => [],
   };
   const describe = {
     cancel_select: (c) => `cancel pid ${c.row.pid} (${c.text.slice(0, 120)}, running ${Math.round(c.row.secs)} s) with pg_cancel_backend`,
@@ -110,6 +111,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   async function run(inc, c) {
     c.incident = inc;
     if (mode === 'off') return inc;
+    if (inc.playbook === 'deploy_failure') { inc.state = 'needs_fix'; count('deploy_failure', 'opened'); await step(inc, '', c.message); return inc; } // informational: a human or a fix PR resolves it
     await step(inc, 'DIAGNOSED', inc.diagnosis ?? 'see the first message of this thread');
     const why = pre[inc.playbook](c);
     if (why.length) { audit({ id: inc.id, result: 'refused', why }); await escalate(inc, `no safe action: ${why.join('; ')}`); return inc; }
@@ -147,39 +149,81 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (mode === 'off') return Promise.resolve(null);
     const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && i.state !== 'resolved');
     if (dup) return Promise.resolve(dup);
-    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), notes: [], events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence };
+    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), notes: [], events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence, kind: spec.kind ?? kindOf(spec.playbook), alertname: spec.alertname, meta: spec.meta };
     incidents.set(inc.id, inc); if (incidents.size > 200) incidents.delete(incidents.keys().next().value);
     const p = run(inc, spec).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p));
     pending.add(p); return p;
   }
-  // (d) the watcher reports a recurring slow statement is fast again; a release marker makes it "resolved by release <sha>".
+  const hm = (ms) => `${Math.floor(ms / 3600e3)}h ${Math.floor((ms % 3600e3) / 60e3)}m`;
+  const sha7 = (x) => String(x ?? '').slice(0, 9);
+  const closeFile = (inc) => { try { fs.mkdirSync(path.join(dir, 'resolved'), { recursive: true }); fs.renameSync(path.join(dir, 'open', `${inc.id}.json`), path.join(dir, 'resolved', `${inc.id}.json`)); } catch { /* file optional */ } };
+  // RESOLVED is only ever posted by this function, after the original condition was verified gone.
   const resolveByRelease = async (inc) => {
-    inc.state = 'resolved'; count('code_fix', 'resolved');
-    try { fs.mkdirSync(path.join(dir, 'resolved'), { recursive: true }); fs.renameSync(path.join(dir, 'open', `${inc.id}.json`), path.join(dir, 'resolved', `${inc.id}.json`)); } catch { /* file optional */ }
-    if (inc.prUrl) return step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${release.sha}, after ${fmtDur(now() - inc.startedAt)}`);
-    await step(inc, 'RESOLVED', `statement is fast again (mean under threshold for the verification polls); resolved by release ${release.sha}, after ${fmtDur(now() - inc.startedAt)}`);
+    const sha = inc.releasedSha ?? release.sha; inc.state = 'resolved'; count(inc.playbook, 'resolved'); closeFile(inc);
+    if (inc.prUrl) return step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${sha}, verified after ${Math.round((now() - (inc.releasedAt ?? inc.startedAt)) / 1000)}s; open for ${hm(now() - inc.startedAt)}`);
+    await step(inc, 'RESOLVED', `${inc.kind === 'deploy_failure' ? `a release is live again (${sha})` : 'statement is fast again (mean under threshold for the verification polls)'}; resolved by release ${sha}, after ${fmtDur(now() - inc.startedAt)}`);
   };
-  // Recovery WITHOUT a release recorded since the incident opened is NOT a resolution (a data change, a cache or a one-off may explain it):
-  // the incident stays open (file stays in incidents/open) for review until POST /release arrives.
+  // Released PR but the condition persists: back to open/escalated in the same thread, PR link cleared so a new PR can be registered. Never RESOLVED.
+  const stillThere = async (inc) => {
+    const n = inc.prNumber, sha = inc.releasedSha; inc.notes.push({ t: now(), who: 'bridge', text: `PR #${n} released in ${sha} did not fix it` });
+    inc.prUrl = inc.prNumber = inc.prAt = inc.owner = inc.claimedAt = inc.claimExpiresAt = null; inc.state = 'escalated'; count(inc.playbook, 'released_not_fixed');
+    await step(inc, '', `\u26A0\uFE0F Released PR #${n} but the problem is still there (release ${sha}). The incident is open again: claim it and try again.`);
+  };
+  // Condition gone? alert: ALERTS{...firing} absent in Prometheus (or Alertmanager's resolved webhook seen); slow statement: the watcher's recovered polls (statementRecovered).
+  const alertGone = async (inc) => {
+    if (inc.alertCleared) return true;
+    if (!promQuery || !inc.alertname) return false;
+    const v = await promQuery(`count(ALERTS{alertname="${String(inc.alertname).replace(/[^A-Za-z0-9_]/g, '')}",alertstate="firing"})`);
+    return v == null || v === 0;
+  };
+  async function verifyReleased(inc) {
+    const slow = inc.kind === 'slow_statement', limit = slow ? Number(env.SLOW_VERIFY_SECONDS ?? 600) * 1000 : verifyMs * 2 + pollMs * 2;
+    const t0 = now(); let clear = null;
+    while (inc.state === 'released') {
+      const gone = slow ? false : await alertGone(inc).catch(() => false); // slow: statementRecovered() flips the state
+      if (gone) { clear ??= now(); if (now() - clear >= verifyMs) return resolveByRelease(inc); } else clear = null;
+      if (now() - t0 > limit) return stillThere(inc);
+      await sleep(pollMs);
+    }
+  }
+  // (d) the watcher reports a recurring slow statement is fast again.
+  // Recovery WITHOUT a release containing the incident's PR is NOT a resolution: the incident stays open for review.
   async function statementRecovered(key) {
-    const inc = [...incidents.values()].find((i) => i.key === key && i.state === 'needs_fix');
+    const inc = [...incidents.values()].find((i) => i.key === key && (i.state === 'needs_fix' || i.state === 'released'));
     if (!inc) return false;
-    if (release && release.at >= inc.startedAt) { await resolveByRelease(inc); return true; }
+    if (inc.state === 'released' || (!inc.prUrl && release && release.at >= inc.startedAt)) { await resolveByRelease(inc); return true; }
     inc.state = 'recovered_no_release'; count('code_fix', 'recovered_no_release');
-    await step(inc, 'RECOVERED', `statement is fast again, but recovered, no release recorded: the incident stays OPEN for review (${path.join(dir, 'open', `${inc.id}.json`)}); it resolves when POST /release arrives or a human closes it`);
+    await step(inc, 'RECOVERED', `statement is fast again, but recovered, no release recorded: the incident stays OPEN for review (${path.join(dir, 'open', `${inc.id}.json`)}); it resolves when POST /release arrives (with its PR, if one was raised) or a human closes it`);
     return true;
   }
-  async function setRelease(sha) {
+  const prOf = (inc) => inc.prNumber;
+  // POST /release {sha, prs}: ONLY incidents whose PR is in prs move to 'released' and get verified; unrelated releases change nothing.
+  async function setRelease(sha, prs = []) {
     release = { sha: String(sha).slice(0, 40), at: now() };
-    for (const inc of incidents.values()) if (inc.state === 'recovered_no_release' || (inc.prUrl && inc.state !== 'resolved' && inc.prAt <= release.at)) await resolveByRelease(inc);
+    const set = new Set((Array.isArray(prs) ? prs : []).map(Number));
+    for (const inc of incidents.values()) {
+      if (inc.state === 'resolved') continue;
+      if (inc.kind === 'deploy_failure') { if (inc.startedAt <= release.at) await resolveByRelease(inc); continue; } // a live release after the failure = deploying works again
+      if (inc.state === 'recovered_no_release' && (!inc.prUrl || set.has(prOf(inc)))) { inc.releasedSha = release.sha; inc.releasedAt = now(); await resolveByRelease(inc); continue; }
+      if (inc.prUrl && inc.state !== 'released' && inc.prAt <= release.at && set.has(prOf(inc))) {
+        inc.state = 'released'; inc.releasedSha = release.sha; inc.releasedAt = now();
+        await step(inc, '', `\uD83D\uDE80 PR #${inc.prNumber} is live in release ${sha7(release.sha)}; verifying for ${Math.round(verifyMs / 1000)}s that the problem is gone`);
+        const p = verifyReleased(inc).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p)); pending.add(p);
+      }
+    }
   }
+  // A deploy that ended without changing the live version: one incident per attempted sha (dedup), resolved by the next live release.
+  const openDeployFailure = ({ attemptedSha, liveSha, prs = [], mergers = [], durationSeconds = 0 }) => {
+    const message = ['\uD83D\uDD34 Deploy failed or was refused: needs a human or a fix PR', `Attempted: ${sha7(attemptedSha)} (live: ${sha7(liveSha) || 'unknown'})`, `PRs: ${prs.length ? prs.map((n) => `#${n}`).join(' ') : 'unknown'}`, `Merged by: ${mergers.join(' ') || 'unknown'}`, `Took ${durationSeconds}s`].join('\n');
+    return handle({ playbook: 'deploy_failure', kind: 'deploy_failure', key: `deploy:${attemptedSha}`, threadKey: `deploy-${sha7(attemptedSha)}`, channel: 'deploy', diagnosis: message.split('\n')[1], message, meta: { attemptedSha, liveSha, prs, mergers, durationSeconds } });
+  };
 
   // ---- team claim flow (docs/runbooks/team-incident-flow.md). Claims are checked and set synchronously (no await in between), so two racing callers cannot both win.
   const ttlMs = () => Math.max(0.01, Number(env.INCIDENT_CLAIM_TTL_HOURS ?? 4)) * 3600e3;
   const hhmm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
   const held = (inc) => !!inc.owner && (!!inc.prUrl || inc.claimExpiresAt > now());
-  const statusOf = (inc) => inc.state === 'resolved' ? 'resolved' : inc.prUrl ? 'pr_raised' : held(inc) ? 'claimed' : inc.state === 'escalated' ? 'escalated' : 'open';
-  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
+  const statusOf = (inc) => inc.state === 'resolved' ? 'resolved' : inc.state === 'released' ? 'released' : inc.prUrl ? 'pr_raised' : held(inc) ? 'claimed' : inc.state === 'escalated' ? 'escalated' : 'open';
+  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, kind: inc.kind, alertname: inc.alertname ?? null, meta: inc.meta ?? null, releasedSha: inc.releasedSha ?? null, state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
   const sweepClaims = async () => {
     for (const inc of incidents.values()) if (inc.owner && !inc.prUrl && inc.state !== 'resolved' && inc.claimExpiresAt <= now()) { inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; await step(inc, '', '\u23F0 claim expired, incident is open again'); }
   };
@@ -214,14 +258,15 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   async function alertCleared(key) {
     const inc = [...incidents.values()].find((i) => i.key === key && i.prUrl && i.state !== 'resolved');
     if (!inc) return false;
+    if (inc.state === 'released') { inc.alertCleared = true; return true; } // Alertmanager's resolved counts as the verification; the verify loop posts RESOLVED
     inc.state = 'resolved'; await step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`); return true;
   }
   return {
     mode, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
-    setRelease, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
+    setRelease, openDeployFailure, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),
     byKey: (k) => [...incidents.values()].find((i) => i.key === k),
-    list: () => [...incidents.values()].map(({ id, playbook, state, threadKey, startedAt, events }) => ({ id, playbook, state, threadKey, startedAt, events: events.map((e) => ({ t: e.t, label: e.label })) })),
+    list: () => [...incidents.values()].map(({ id, playbook, kind, state, threadKey, startedAt, events }) => ({ id, playbook, kind, state, threadKey, startedAt, events: events.map((e) => ({ t: e.t, label: e.label })) })),
   };
 }

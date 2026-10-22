@@ -5,13 +5,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { fetchInstallations, mktKeys } from '../api';
-import { BROWSE_TABS } from '../lib/browse';
+import { MARKET_TABS } from '../lib/browse';
 import { mktRoutes } from '../lib/routes';
 import { usageView } from '../lib/manage';
 import { ChevronLeftIcon, flip } from './icons';
 import { TEXT_LINK } from './ui';
 
-export type HeaderSection = 'apps' | 'integrations' | 'addons' | 'installed' | 'requests';
+export type HeaderSection =
+  'apps' | 'integrations' | 'addons' | 'developer' | 'installed' | 'requests';
 
 /** "Installed (3 of 10)": the usage of the plan's installed-apps cap, as the installed list reports it. Says nothing until it is known. */
 export function InstalledLinkLabel() {
@@ -33,7 +34,7 @@ export function InstalledLinkLabel() {
 }
 
 /**
- * The top of the browse, installed and requests screens: the title, the two tabs (links, the current one marked), and the secondary
+ * The top of the browse, installed and requests screens: the title, the four tabs (links, the current one marked), and the secondary
  * links. The app page and the flows under it use `BackLink` instead.
  */
 export function MarketplaceHeader({ section }: { section: HeaderSection }) {
@@ -54,26 +55,19 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
       </div>
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-border">
         <nav aria-label={t('tabsLabel')} className="-mb-px flex gap-1 overflow-x-auto">
-          {BROWSE_TABS.map((tab) => {
-            const active = section === tab.segment;
+          {MARKET_TABS.map((tab) => {
+            const active = section === tab.section;
             return (
               <Link
-                key={tab.kind}
+                key={tab.section}
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}
                 className={tabClass(active)}
               >
-                {t(`tabs.${tab.kind}`)}
+                {t(`tabs.${tab.labelKey}`)}
               </Link>
             );
           })}
-          <Link
-            href={mktRoutes.addons}
-            aria-current={section === 'addons' ? 'page' : undefined}
-            className={tabClass(section === 'addons')}
-          >
-            {t('tabs.addon')}
-          </Link>
         </nav>
         <nav
           aria-label={t('moreLabel')}

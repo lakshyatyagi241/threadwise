@@ -809,6 +809,7 @@
         "onlyStatus": "{status} 메시지만",
         "requestedAt": "요청일 {date}",
         "lines": "{count, plural, other {#줄}}",
+        "noLines": "이 기간에는 이벤트가 없습니다",
         "until": "{date}까지 사용 가능",
         "download": "다운로드",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "태그 제거",
       "onLeave": "휴가 중",
       "onLeaveUntil": "{date}까지 휴가 중",
-      "spam": "스팸으로 표시"
+      "spam": "스팸으로 표시",
+      "markUnread": "읽지 않음으로 표시",
+      "unsnooze": "다시 알림 취소",
+      "notSpam": "스팸 아님으로 표시"
     },
     "tags": {
       "tag": "태그",

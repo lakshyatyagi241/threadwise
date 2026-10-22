@@ -31,4 +31,4 @@ http.createServer(async (req, res) => {
   const cols = Object.entries(SP).map(([k, n]) => `<section><h2>${n} (${msgs[k].length})</h2>${msgs[k].map((m) => `<pre><b>${m.at}</b>${m.thread ? ` [thread ${esc(m.thread)}]` : ''}\n${esc(text(m.body))}</pre>`).join('') || '<i>no messages</i>'}</section>`).join('');
   res.writeHead(200, { 'content-type': 'text/html' });
   res.end(`<!doctype html><meta charset=utf-8><meta http-equiv=refresh content=3><title>LOCAL FAKE of Google Chat</title><style>body{font:13px sans-serif;margin:8px}h1{color:#b00}main{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}section{border:1px solid #888;padding:6px;overflow:hidden}pre{white-space:pre-wrap;background:#eef;padding:4px;margin:4px 0}</style><h1>LOCAL FAKE of Google Chat (not real Google Chat)</h1><main>${cols}</main>`);
-}).listen(59611, '0.0.0.0');
+}).listen(Number(process.env.FAKE_CHAT_PORT ?? 59611), process.env.FAKE_CHAT_HOST ?? '0.0.0.0');

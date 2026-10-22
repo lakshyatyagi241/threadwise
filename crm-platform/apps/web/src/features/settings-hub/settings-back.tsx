@@ -25,6 +25,7 @@ export function SettingsBack({ always = false }: { always?: boolean }) {
 
   const inMarketplace = tile.section === MARKETPLACE_TOOLS_SECTION;
   const tab = toolTabForTile(tile.id);
+  const tabLabel = { integrations: 'integration', developer: 'developer', addons: 'addon' }[tab];
   const link =
     'inline-flex min-h-6 items-center rounded-sm outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-primary';
   return (
@@ -32,7 +33,7 @@ export function SettingsBack({ always = false }: { always?: boolean }) {
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
         <li>
           <Link
-            href={inMarketplace ? mktRoutes.integrations : '/settings'}
+            href={inMarketplace ? mktRoutes[tab] : '/settings'}
             className={`gap-1 font-medium ${link}`}
           >
             <svg
@@ -54,7 +55,7 @@ export function SettingsBack({ always = false }: { always?: boolean }) {
         <li>
           {inMarketplace ? (
             <Link href={mktRoutes[tab]} className={link}>
-              {t(`marketplace.header.tabs.${tab === 'addons' ? 'addon' : 'integration'}`)}
+              {t(`marketplace.header.tabs.${tabLabel}`)}
             </Link>
           ) : (
             <Link href={`/settings/${tile.section}`} className={link}>

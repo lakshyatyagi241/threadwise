@@ -124,7 +124,8 @@
           "billingMode": "Facturatie",
           "sortOrder": "Sorteervolgorde",
           "isActive": "Actief",
-          "isLifetime": "Levenslang (eenmalig)"
+          "isLifetime": "Levenslang (eenmalig)",
+          "period": "Factureringsperiode"
         },
         "modes": {
           "one_time": "Eenmalig (opnieuw kopen na afloop)",
@@ -144,8 +145,18 @@
           "billingDuration": "Voer een geheel getal van 1 of hoger in.",
           "sortOrder": "Voer een geheel getal in.",
           "limits": "Limieten zijn gehele getallen, of -1 voor onbeperkt.",
-          "form": "Controleer de gemarkeerde velden."
-        }
+          "form": "Controleer de gemarkeerde velden.",
+          "amountPositive": "Add-ons zijn maandelijkse of jaarlijkse abonnementen, dus de prijs moet hoger zijn dan nul."
+        },
+        "legacy": {
+          "title": "Verouderd pakket",
+          "body": "Dit pakket is gemaakt voordat add-ons abonnementen werden. Het wordt precies zoals voorheen verkocht (de facturering wordt getoond maar kan niet worden gewijzigd) en werkruimtes die het hebben, worden niet geraakt. Je kunt nog steeds naam, prijs, functies en limieten bewerken, of het uit de verkoop halen. Nieuwe pakketten zijn maandelijkse of jaarlijkse abonnementen."
+        },
+        "periods": {
+          "months": "Maandabonnement",
+          "years": "Jaarabonnement"
+        },
+        "periodHint": "Add-ons zijn abonnementen. Werkruimtes met een online betaalprovider worden automatisch verlengd; bij bankoverschrijving of offline betaling betalen ze opnieuw als de periode afloopt."
       }
     },
     "extensions": {
@@ -258,16 +269,6 @@
     "workspace": {
       "title": "Add-ons",
       "description": "Extra functiepakketten die je bovenop je abonnement koopt.",
-      "needPlanTitle": "Add-ons vereisen een actief abonnement",
-      "needPlanBody": "Add-ons zijn extra functiepakketten die je bovenop je abonnement koopt. Kies eerst een abonnement en kom dan hier terug om functies toe te voegen.",
-      "viewPlans": "Abonnementen bekijken",
-      "noneTitle": "Geen add-ons beschikbaar",
-      "noneBody": "Er worden momenteel geen add-ons aangeboden. Kom later terug.",
-      "ownedTitle": "Jouw add-ons",
-      "ownedBody": "Actieve pakketten die op je huidige abonnement zijn toegepast.",
-      "ends": "Eindigt op {date}",
-      "lifetime": "Levenslang",
-      "autoRenews": "Verlengt automatisch",
       "renewal": {
         "cancel": "Verlenging annuleren",
         "confirmTitle": "Verlenging annuleren?",
@@ -277,37 +278,63 @@
         "forbidden": "Je hebt geen toestemming om het abonnement te wijzigen.",
         "none": "Er is geen actief abonnement om te annuleren.",
         "failed": "We konden de verlenging niet annuleren. Probeer het opnieuw."
-      },
-      "active": "Actief",
-      "included": "Inbegrepen in je abonnement",
-      "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
-      "includedEnds": "Inbegrepen in je abonnement. Je add-on eindigt op {date} en wordt niet verlengd.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-ons",
-      "catalogBody": "Ontgrendel extra functies bovenop je huidige abonnement. Geen abonnementswijziging nodig.",
-      "count": "{count, plural, one {# add-on} other {# add-ons}}",
-      "free": "Gratis",
-      "lifetimePrice": "eenmalig",
-      "per": "/ {unit}",
-      "units": {
-        "days": "dagen",
-        "weeks": "weken",
-        "months": "maanden",
-        "years": "jaar"
-      },
-      "buy": "Toevoegen aan abonnement",
-      "buyAgain": "Opnieuw kopen",
-      "owned": "In bezit ×{count} · opnieuw kopen voegt meer toe",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Onbeperkt {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "De add-ons konden niet worden geladen."
+      }
     },
     "planFields": {
       "fromModule": "vanuit een geïnstalleerde module",
       "unlimited": "Onbeperkt"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-ons hebben een actief betaald abonnement nodig",
+        "free_plan": "Je hebt een gratis abonnement. Add-ons zijn extra’s die je bovenop een betaald abonnement koopt.",
+        "plan_expired": "Je betaalde abonnement is afgelopen, dus add-ons staan op pauze. Verleng je abonnement om add-ons te kopen of te verlengen.",
+        "no_plan": "Je werkruimte heeft nog geen abonnement. Kies een betaald abonnement om add-ons te gebruiken.",
+        "cta": "Abonnementen bekijken"
+      },
+      "unavailableCard": "Heeft een actief betaald abonnement nodig",
+      "empty": {
+        "title": "Geen add-ons te koop",
+        "body": "Er worden nu geen add-ons aangeboden. Kom later terug."
+      },
+      "listLabel": "Add-ons te koop",
+      "owned": {
+        "title": "Je add-ons",
+        "renews": "Wordt verlengd op {date}",
+        "ends": "Actief tot {date}. Wordt niet automatisch verlengd.",
+        "lifetime": "Levenslang"
+      },
+      "state": {
+        "included": "Inbegrepen in je abonnement",
+        "includedSupport": "Ingeschakeld door je accountmanager.",
+        "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
+        "includedEnds": "Inbegrepen in je abonnement. Je add-on eindigt op {date} en wordt niet verlengd.",
+        "active": "Actief",
+        "ownedCount": "In bezit ×{count} · opnieuw kopen voegt meer toe"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "eenmalig",
+        "per": {
+          "days": "{count, plural, one {/ dag} other {/ {count} dagen}}",
+          "weeks": "{count, plural, one {/ week} other {/ {count} weken}}",
+          "months": "{count, plural, one {/ maand} other {/ {count} maanden}}",
+          "years": "{count, plural, one {/ jaar} other {/ {count} jaar}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Wordt elke periode verlengd. Automatisch betaald met een kaart; bij bankoverschrijving of offline betaling betaal je opnieuw als de periode afloopt.",
+        "oneTime": "Eenmalige aankoop. Wordt niet verlengd."
+      },
+      "buy": "Add-on kopen",
+      "buyAgain": "Opnieuw kopen",
+      "cannotBuyHint": "Vraag het aan de eigenaar van je account. Alleen mensen die voor deze werkruimte mogen kopen, kunnen een aankoop starten.",
+      "bullets": {
+        "unlimited": "Onbeperkt {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Berichtcredits nodig? Laad in plaats daarvan je wallet op; credits zijn geen add-on.",
+      "walletLink": "Wallet opladen"
     }
   }
 }

@@ -135,6 +135,16 @@
         "name-asc": "Nom A→Z",
         "name-desc": "Nom Z→A"
       },
+      "dateRange": "Période",
+      "range": {
+        "all": "Toute la période",
+        "7d": "7 jours",
+        "30d": "30 jours",
+        "90d": "90 jours",
+        "custom": "Plage personnalisée",
+        "from": "Date de début",
+        "to": "Date de fin"
+      },
       "showing": "Affichage de",
       "of": "sur",
       "filteredTemplates": "modèles filtrés",

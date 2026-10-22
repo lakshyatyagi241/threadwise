@@ -268,10 +268,13 @@ export class ConversationsService implements ConversationsFacade {
     return this.outbound.enqueue(input);
   }
 
-  async retryOutbound(messageId: string): Promise<MessageResponse> {
+  async retryOutbound(
+    messageId: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse> {
     // One Retry button for both directions: on a customer's message it starts the failed file download again.
     const inbound = await this.mediaFetch.retryIfInbound(messageId);
-    return inbound ?? this.outbound.retry(messageId);
+    return inbound ?? this.outbound.retry(messageId, templateComponents);
   }
 
   async listMessages(
@@ -310,11 +313,27 @@ export class ConversationsService implements ConversationsFacade {
   }
 
   async markRead(conversationId: string, upToSeq: number): Promise<{ unreadCount: number }> {
+    return this.changeUnread(conversationId, (tx, orgId, id) =>
+      this.conversations.setUnreadAfter(tx, orgId, id, upToSeq),
+    );
+  }
+
+  async markUnread(conversationId: string): Promise<{ unreadCount: number }> {
+    return this.changeUnread(conversationId, (tx, orgId, id) =>
+      this.conversations.setUnreadAtLeastOne(tx, orgId, id),
+    );
+  }
+
+  /** One unread change under the thread's row lock; the other tabs hear about it by realtime only when the counter moved. */
+  private async changeUnread(
+    conversationId: string,
+    change: (tx: Tx, orgId: number, id: number) => Promise<number>,
+  ): Promise<{ unreadCount: number }> {
     const orgId = RequestContextStore.orgId();
     const done = await this.db.tx(async (tx) => {
       const conv = await this.conversations.byUuid(tx, orgId, conversationId, true);
       if (!conv) throw conversationNotFound(conversationId);
-      const unread = await this.conversations.setUnreadAfter(tx, orgId, conv.id, upToSeq);
+      const unread = await change(tx, orgId, conv.id);
       const after = (await this.conversations.byId(tx, orgId, conv.id))!;
       return { before: conv.unreadCount, unread, after };
     });

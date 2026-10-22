@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import type { FlowWidgetSaveInput, Widget } from '@crm/contracts';
@@ -62,11 +62,17 @@ export function FlowWidgetCustomize({
   flowName,
   canEdit,
   onSaved,
+  onDirtyChange,
+  registerSave,
 }: {
   flowId: string;
   flowName: string;
   canEdit: boolean;
   onSaved?: (widget: Widget) => void;
+  /** Tells the page when the look has changes that are not saved (a bot never saved counts as having some), so its own Save can follow. */
+  onDirtyChange?: (dirty: boolean) => void;
+  /** Hands the page this form's save, so the page's Save button can run it; called with null when the form goes away. */
+  registerSave?: (save: (() => void) | null) => void;
 }) {
   const t = useTranslations('chatbotWidget.flowBot.customize');
   const q = useFlowWidget(flowId);
@@ -90,6 +96,8 @@ export function FlowWidgetCustomize({
       untouched={widget === null}
       canEdit={canEdit}
       onSaved={onSaved}
+      onDirtyChange={onDirtyChange}
+      registerSave={registerSave}
     />
   );
 }
@@ -102,6 +110,8 @@ function Panel({
   untouched,
   canEdit,
   onSaved,
+  onDirtyChange,
+  registerSave,
 }: {
   flowId: string;
   initial: BuilderState;
@@ -110,6 +120,8 @@ function Panel({
   untouched: boolean;
   canEdit: boolean;
   onSaved?: (widget: Widget) => void;
+  onDirtyChange?: (dirty: boolean) => void;
+  registerSave?: (save: (() => void) | null) => void;
 }) {
   const t = useTranslations('chatbotWidget.flowBot.customize');
   const tb = useTranslations('chatbotWidget.builder');
@@ -121,6 +133,12 @@ function Panel({
   const [busy, setBusy] = useState(false);
   const [surface, setSurface] = useState<PreviewSurface>('chat');
   const set = (patch: Partial<BuilderState>) => setS((prev) => ({ ...prev, ...patch }));
+  // What the form started from (a save restarts it from what the server stored): the look is unsaved when it differs, or was never saved.
+  const baseline = useRef(JSON.stringify([initial, initialDomains]));
+  const dirty = untouched || JSON.stringify([s, domains]) !== baseline.current;
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
 
   const save = async () => {
     for (const step of [2, 3]) {
@@ -164,6 +182,11 @@ function Panel({
       setBusy(false);
     }
   };
+
+  useEffect(() => {
+    registerSave?.(() => void save());
+    return () => registerSave?.(null);
+  });
 
   const surfaces: PreviewSurface[] = ['chat', 'expanded', 'mobile', 'closed'];
   const scroller = useRef<HTMLDivElement>(null);

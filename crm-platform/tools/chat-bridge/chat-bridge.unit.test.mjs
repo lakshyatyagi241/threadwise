@@ -155,6 +155,17 @@ test('test=true alerts are dropped by default: nothing posted, counted reason=te
   assert.match(br.metrics.render(), /crm_chat_bridge_dropped_total\{reason="test"\} 1/);
 });
 
+test('resolver replies start only after the FIRING card post returned (parent first)', async () => {
+  const { startBridge } = await import('./bridge.mjs');
+  const order = [];
+  const fetchImpl = async () => { await new Promise((r) => setTimeout(r, 50)); order.push('card-posted'); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
+  const br = startBridge({ env: { CHAT_ALLOW_ANY_HOST: '1', PROMETHEUS_URL: 'http://127.0.0.1:1' }, urls: { critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: () => { order.push('resolver-started'); }, byKey: () => null }) });
+  await br.server.listen(0); const port = br.server.address().port;
+  await fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [{ status: 'firing', fingerprint: 'f9', labels: { alertname: 'RedisDown', severity: 'critical' }, annotations: {} }] }) });
+  br.server.close();
+  assert.deepEqual(order, ['card-posted', 'resolver-started']);
+});
+
 import { createResolver } from './resolver.mjs';
 test('code_fix: recovery without a release stays open ("recovered, no release recorded"); a later release resolves it', async () => {
   const dir = fs.mkdtempSync('/tmp/inc-unit-'), posts = [];
@@ -240,7 +251,7 @@ test('team flow: PR url allow-list, query strip, pr post, RESOLVED names PR and 
   assert.match(t.posts.at(-1).t, /^\uD83D\uDD27 PR #901 raised by vedant at \d\d:\d\d UTC: add index <b> https:\/\/github.com\/lakshyatyagi241\/threadwise\/pull\/901$/);
   assert.ok(t.posts.at(-1).card.includes('&lt;b>') && !t.posts.at(-1).card.includes('SECRET'));
   t.tick(5 * 3600e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'pr_raised'); // a PR never expires
-  await t.resolver.setRelease('abc1234');
+  await t.resolver.setRelease('abc1234', [901]); await t.resolver.statementRecovered('st:1'); await t.resolver.settle();
   assert.match(t.posts.at(-1).t, /^\u2705 RESOLVED by PR #901 \(owner vedant\), release abc1234/);
   assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'x' })).s, 409);
   // alert-cleared path
@@ -265,4 +276,68 @@ test('incident-cli against a local bridge: list, claim, conflict exit 1, pr, not
   assert.equal(await cli(['list'], { HOME: home, INCIDENT_WHO: 'v' }, out), 2);
   fs.chmodSync(f, 0o600); assert.equal(await cli(['list'], { HOME: home, INCIDENT_WHO: 'v' }, out), 0);
   assert.ok(!lines.join('\n').includes('tok-test')); t.close(); fs.rmSync(home, { recursive: true });
+});
+
+// ---- close the loop: release-aware verification, deploy_failure kind
+async function loopRig(firing = () => false) {
+  const posts = [], env = { AUTO_REMEDIATE: 'on', VERIFY_SECONDS: '0', VERIFY_POLL_MS: '1', INCIDENTS_DIR: fs.mkdtempSync('/tmp/inc-loop-') };
+  const r = createResolver({ env, post: async (c, m, o) => posts.push({ c, t: m.text, k: o?.threadKey }), promQuery: async () => (firing() ? 1 : 0), sleep: async () => {} });
+  await r.handle({ playbook: 'service', kind: 'critical_alert', alertname: 'HighErrorRate', key: 'am:f1', threadKey: 'am-f1', channel: 'critical', diagnosis: 'd', suggestion: 's' }); await r.settle();
+  const id = r.list()[0].id; await r.claim(id, 'vedant'); await r.raisePr(id, 'vedant', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/77', number: 77, summary: 'fix' });
+  posts.length = 0; return { r, posts, id };
+}
+test('loop: release containing the PR + alert gone -> released -> RESOLVED names PR, owner, release, verification', async () => {
+  const { r, posts, id } = await loopRig();
+  assert.equal(r.get(id).kind, 'critical_alert');
+  await r.setRelease('abc1234', [77]); assert.equal(r.get(id).status, 'released'); await r.settle();
+  assert.equal(r.get(id).status, 'resolved');
+  assert.match(posts.at(-1).t, /^✅ RESOLVED by PR #77 \(owner vedant\), release abc1234, verified after \d+s; open for 0h \d+m$/); assert.equal(posts.at(-1).k, 'am-f1');
+});
+test('loop: release NOT containing the PR changes nothing and posts nothing', async () => {
+  const { r, posts, id } = await loopRig();
+  await r.setRelease('def5678', [1, 2]); await r.setRelease('def5679'); await r.settle();
+  assert.equal(r.get(id).status, 'pr_raised'); assert.equal(posts.length, 0);
+});
+test('loop: PR released but alert still firing -> warning + escalated in the same thread, never RESOLVED', async () => {
+  const { r, posts, id } = await loopRig(() => true);
+  await r.setRelease('abc1234', [77]); await r.settle();
+  assert.equal(r.get(id).status, 'escalated'); assert.equal(r.get(id).prUrl, null);
+  assert.ok(posts.some((p) => /^⚠️ Released PR #77 but the problem is still there/.test(p.t) && p.k === 'am-f1')); assert.ok(!posts.some((p) => /RESOLVED/.test(p.t)));
+});
+test('loop: deploy failure opens one incident (deduped), exposes kind, takes a PR, a later live release resolves it', async () => {
+  const { r, posts } = await loopRig(); posts.length = 0;
+  const spec = { attemptedSha: 'bbbbbbb1', liveSha: 'aaaaaaa1', prs: [5, 6], mergers: ['@bob'], durationSeconds: 90 };
+  await r.openDeployFailure(spec); await r.openDeployFailure(spec); await r.settle();
+  const inc = r.listFull().filter((i) => i.kind === 'deploy_failure'); assert.equal(inc.length, 1);
+  assert.equal(posts.filter((p) => /Deploy failed or was refused: needs a human or a fix PR/.test(p.t)).length, 1);
+  assert.match(posts.at(-1).t, /PRs: #5 #6\nMerged by: @bob/); assert.equal(posts.at(-1).c, 'deploy');
+  await r.claim(inc[0].id, 'asha'); await r.raisePr(inc[0].id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/80', number: 80, summary: 'fix build' });
+  await r.setRelease('ccccccc1', [80]); await r.settle();
+  assert.equal(r.get(inc[0].id).status, 'resolved'); assert.match(posts.at(-1).t, /RESOLVED by PR #80 \(owner asha\), release ccccccc1/);
+});
+test('loop: slow statement keeps kind, released PR resolves on recovered polls', async () => {
+  const dir = fs.mkdtempSync('/tmp/inc-loop-'), posts = [];
+  const r = createResolver({ env: { AUTO_REMEDIATE: 'on', INCIDENTS_DIR: dir }, post: async (c, m) => posts.push(m.text), sleep: async () => {} });
+  await r.handle({ playbook: 'code_fix', key: 'st:z', threadKey: 't', file: { queryid: '9' } }); await r.settle();
+  const id = r.list()[0].id; assert.equal(r.get(id).kind, 'slow_statement');
+  await r.raisePr(id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/5', number: 5, summary: 's' });
+  await r.setRelease('abc1234', [9]); assert.equal(r.get(id).status, 'pr_raised');
+  await r.setRelease('abc1235', [5]); assert.equal(r.get(id).status, 'released');
+  await r.statementRecovered('st:z'); assert.equal(r.get(id).status, 'resolved'); assert.match(posts.at(-1), /RESOLVED by PR #5 \(owner asha\), release abc1235/);
+});
+test('api: POST /release and POST /incidents need the token and validate input', async () => {
+  const t = await teamRig(), h = { 'x-incident-token': 'tok-test', 'content-type': 'application/json' };
+  const post = async (p, body, headers = h) => { const x = await fetch(`http://127.0.0.1:${t.br.server.address().port}${p}`, { method: 'POST', headers, body: JSON.stringify(body) }); return { s: x.status, j: await x.json() }; };
+  assert.equal((await post('/release', { sha: 'abc1234', prs: [1] }, {})).s, 401);
+  assert.equal((await post('/release', { sha: 'zz', prs: [1] })).s, 400);
+  assert.equal((await post('/release', { sha: 'abc1234', prs: ['x'] })).s, 400);
+  assert.equal((await post('/release', { sha: 'abc1234', prs: [1], at: 'now' })).s, 200);
+  assert.equal((await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1' }, {})).s, 401);
+  assert.equal((await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'not sha' })).s, 400);
+  assert.equal((await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1', mergers: ['<@all>'] })).s, 400);
+  const a = await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1', liveSha: 'aaaaaaa1', prs: [3], mergers: ['bob'], durationSeconds: 5 });
+  const b = await post('/incidents', { kind: 'deploy_failure', attemptedSha: 'bbbbbbb1' });
+  assert.deepEqual([a.s, a.j.deduped, b.s, b.j.deduped, b.j.id === a.j.id], [201, false, 200, true, true]);
+  const g = await t.call('/incidents'); assert.ok(g.j.incidents.some((i) => i.kind === 'deploy_failure') && g.j.incidents.some((i) => i.kind === 'slow_statement'));
+  t.close();
 });

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { flbImageUrl } from '@crm/contracts';
 import { ContactsService } from '../../crm';
 import {
   AI_SOURCE,
@@ -110,7 +111,7 @@ const cardsOf = (raw: unknown): NonNullable<InboxLine['cards']> | null => {
     .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
     .slice(0, 10)
     .map((c) => {
-      const image = String(c.image ?? '');
+      const image = flbImageUrl(c.image);
       const buttons: NonNullable<InboxLine['cards']>[number]['buttons'] = [];
       for (const b of (Array.isArray(c.buttons) ? c.buttons : []).slice(0, 2)) {
         if (typeof b !== 'object' || b === null) continue;
@@ -131,7 +132,7 @@ const cardsOf = (raw: unknown): NonNullable<InboxLine['cards']> | null => {
       return {
         title: String(c.title ?? '').slice(0, 80),
         text: String(c.text ?? '').slice(0, 300),
-        ...(/^https?:\/\/\S+$/i.test(image) ? { image } : {}),
+        ...(image === null ? {} : { image }),
         buttons,
       };
     })
@@ -488,6 +489,28 @@ export class SqlInboxGateway implements InboxGateway {
        WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
        RETURNING id`);
     return (res.rows as unknown[]).length > 0;
+  }
+
+  async recordRating(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    rating: number,
+    comment: string,
+  ): Promise<boolean> {
+    const had = await tx.execute(sql`
+      SELECT 1 FROM messages
+       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND meta->>'source' = 'rating' LIMIT 1`);
+    if ((had.rows as unknown[]).length > 0) return false;
+    const body = `Rated this chat ${rating}/5${comment ? `: ${truncate(comment, 1000)}` : ''}`;
+    await this.append(tx, orgId, conversationId, {
+      direction: 'in',
+      senderKind: 'customer',
+      status: 'received',
+      body,
+      meta: { source: 'rating', channel: 'chatbot_widget', widget_rating: { rating, comment } },
+    });
+    return true;
   }
 
   async mediaOf(

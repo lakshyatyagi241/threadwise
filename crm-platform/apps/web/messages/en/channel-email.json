@@ -197,6 +197,8 @@
       "date": "Date",
       "imagesBlocked": "Pictures from the internet are hidden.",
       "loadImages": "Load images",
+      "showQuoted": "Show quoted text",
+      "hideQuoted": "Hide quoted text",
       "frameTitle": "Email: {subject}",
       "truncated": "This email was long, so only the first part is shown.",
       "noBody": "This email has no text.",

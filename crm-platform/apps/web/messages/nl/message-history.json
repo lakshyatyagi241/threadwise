@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Inbox",
+      "contact": "Contact",
       "flow": "Flow",
       "auto_reply": "Automatisch antwoord",
+      "automation": "Automatisering",
       "ai": "AI-assistent",
       "api": "API",
       "broadcast": "Broadcast",
+      "broadcast_test": "Testverzending broadcast",
       "campaign": "Campagne",
       "scheduled": "Ingepland",
       "other": "Overig"
@@ -171,6 +174,7 @@
         "contact": "Contact",
         "message": "Bericht",
         "type": "Type",
+        "source": "Bron",
         "status": "Status",
         "open": "Openen"
       },
@@ -228,11 +232,13 @@
       "source": "Verzonden door",
       "sourceValue": {
         "inbox": "Inbox",
+        "contact": "Contact",
         "flow": "Flow",
         "auto_reply": "Automatisch antwoord",
         "ai": "AI-assistent",
         "api": "API",
         "broadcast": "Broadcast",
+        "broadcast_test": "Testverzending broadcast",
         "campaign": "Campagne",
         "scheduled": "Ingepland bericht",
         "other": "Overig"

@@ -31,6 +31,15 @@ export const walletDeliverySourceSchema = z.enum([
 ]);
 export type WalletDeliverySource = z.infer<typeof walletDeliverySourceSchema>;
 
+/** A display label on the event. Cut to its length, never refused: a refused event would drop the charge it describes. */
+const label = (max: number) =>
+  z
+    .string()
+    .trim()
+    .transform((v) => v.slice(0, max))
+    .nullable()
+    .optional();
+
 export const walletDeliveryReportedSchema = z.object({
   provider: walletDeliveryProviderSchema,
   providerMessageId: z.string().trim().min(1).max(191),
@@ -40,6 +49,10 @@ export const walletDeliveryReportedSchema = z.object({
   /** The Meta pricing category, else the template's category; null for chat and flow sends. */
   category: z.string().trim().max(24).nullable().optional(),
   source: walletDeliverySourceSchema.nullable().optional(),
+  /** The template as it was sent. Copied onto the charge so the expense log keeps it after the template is renamed or removed. */
+  templateName: label(512),
+  /** The campaign, broadcast or schedule the message belongs to, by name at send time; null for chat and flow sends. */
+  subjectName: label(255),
 });
 export type WalletDeliveryReported = z.infer<typeof walletDeliveryReportedSchema>;
 

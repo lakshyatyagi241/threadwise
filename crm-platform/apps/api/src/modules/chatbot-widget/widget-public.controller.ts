@@ -252,6 +252,22 @@ export class WidgetPublicController {
     res.status(200).json(out);
   }
 
+  /** The visitor's stars when they end the chat (and "Restart chat", which sends five on its own). */
+  @Post('api/rating')
+  async rating(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Body() body: Record<string, unknown> | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const inputUuid =
+      queryUuid ?? (typeof body?.visitor_uuid === 'string' ? body.visitor_uuid : undefined);
+    res.status(200).json(await this.widgets.rate(token, this.publicRequest(req, inputUuid), body));
+  }
+
   /** The visitor's thumbs up or down on a line the bot sent. */
   @Post('api/feedback')
   async feedback(

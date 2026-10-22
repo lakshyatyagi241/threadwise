@@ -819,6 +819,19 @@ export class ContactsRepository {
     keys: readonly string[],
   ): Promise<Map<string, PropertyDef>> {
     if (keys.length === 0) return new Map();
+    return this.loadEditableProperties(tx, orgId, keys);
+  }
+
+  /** Every custom property a contact import can fill: the same rules as a bulk edit (see `editableProperties`). */
+  async importableProperties(tx: Tx, orgId: number): Promise<PropertyDef[]> {
+    return [...(await this.loadEditableProperties(tx, orgId)).values()];
+  }
+
+  private async loadEditableProperties(
+    tx: Tx,
+    orgId: number,
+    keys?: readonly string[],
+  ): Promise<Map<string, PropertyDef>> {
     const rows = await tx
       .select({ id: fields.id, key: fields.key, label: fields.label, fieldType: fields.fieldType })
       .from(fields)
@@ -826,7 +839,7 @@ export class ContactsRepository {
         and(
           eq(fields.orgId, orgId),
           eq(fields.moduleKey, 'contacts'),
-          inArray(fields.key, [...keys]),
+          keys ? inArray(fields.key, [...keys]) : undefined,
           eq(fields.isActive, true),
           eq(fields.isSystem, false),
           eq(fields.isHidden, false),

@@ -809,6 +809,7 @@
         "onlyStatus": "Nur Nachrichten mit Status {status}",
         "requestedAt": "Angefordert {date}",
         "lines": "{count, plural, one {# Zeile} other {# Zeilen}}",
+        "noLines": "Keine Ereignisse in diesem Zeitraum",
         "until": "Verfügbar bis {date}",
         "download": "Herunterladen",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "Tag entfernen",
       "onLeave": "abwesend",
       "onLeaveUntil": "abwesend bis {date}",
-      "spam": "Als Spam markieren"
+      "spam": "Als Spam markieren",
+      "markUnread": "Als ungelesen markieren",
+      "unsnooze": "Zurückstellung aufheben",
+      "notSpam": "Als kein Spam markieren"
     },
     "tags": {
       "tag": "Tag",

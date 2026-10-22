@@ -500,6 +500,37 @@ export class ConversationsRepository {
     return r ? toRecord(r) : null;
   }
 
+  /**
+   * What a template message sent, for a Retry that rebuilds its Cloud API components: the template it used, the values it sent and whether
+   * its components were stored with it. Null when no template message has that uuid in this workspace.
+   */
+  async templateSendOf(
+    tx: Tx,
+    orgId: number,
+    messageUuid: string,
+  ): Promise<{
+    templateId: number | null;
+    variables: Record<string, string>;
+    hasComponents: boolean;
+  } | null> {
+    const res = await tx.execute(sql`
+      SELECT m.template_id, m.meta
+      FROM messages m
+      WHERE m.org_id = ${orgId} AND m.uuid = ${messageUuid} AND m.kind = 'template'`);
+    const r = rowsOf(res)[0];
+    if (!r) return null;
+    const meta = (r.meta ?? {}) as {
+      templateVariables?: Record<string, string>;
+      templateComponents?: unknown[];
+    };
+    return {
+      templateId:
+        r.template_id === null || r.template_id === undefined ? null : Number(r.template_id),
+      variables: meta.templateVariables ?? {},
+      hasComponents: (meta.templateComponents?.length ?? 0) > 0,
+    };
+  }
+
   /** The wire id of a staff user: events and outbox payloads carry uuids, never the internal id. */
   async userUuid(tx: Tx, orgId: number, userId: number): Promise<string | null> {
     const res = await tx.execute(

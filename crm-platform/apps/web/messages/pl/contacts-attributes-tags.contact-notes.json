@@ -120,7 +120,12 @@
         "keep": "Zachowaj plik",
         "deleted": "Plik usunięty",
         "deleteFailed": "Nie udało się usunąć pliku. Spróbuj ponownie.",
-        "forbidden": "Nie masz uprawnień do usuwania plików."
+        "forbidden": "Nie masz uprawnień do usuwania plików.",
+        "upload": "Dodaj plik",
+        "uploading": "Przesyłanie pliku",
+        "added": "Plik dodano",
+        "uploadFailed": "Nie udało się dodać pliku. Spróbuj ponownie.",
+        "uploadRejected": "Ten typ pliku nie jest dozwolony albo plik jest za duży."
       }
     }
   }

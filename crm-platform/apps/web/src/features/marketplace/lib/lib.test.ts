@@ -10,7 +10,10 @@ import { ApiError } from '@/lib/api/errors';
 import { ID, SECRET, card, installation, paidPricing, request, scopes } from '../test-fixtures';
 import {
   BROWSE_TABS,
+  DEFAULT_SORT,
+  MARKET_TABS,
   NO_FILTERS,
+  SORT_OPTIONS,
   availabilityPatch,
   availabilityView,
   browseHref,
@@ -597,7 +600,40 @@ describe('browse view model', () => {
     expect(
       browseHref('mini_app', { category: 'sales', q: ' crm ', installed: true, sort: 'name' }),
     ).toBe('/marketplace/apps?category=sales&q=crm&installed=true&sort=name');
-    expect(browseHref('mini_app', { sort: 'featured', q: '' })).toBe('/marketplace/apps');
+    expect(browseHref('mini_app', { sort: 'popular', q: '' })).toBe('/marketplace/apps');
+    expect(browseHref('mini_app', { sort: 'featured' })).toBe('/marketplace/apps?sort=featured');
+  });
+
+  it('has one default sort and one list of sort options for both tabs: Most installed first', () => {
+    expect(DEFAULT_SORT).toBe('popular');
+    expect(SORT_OPTIONS).toEqual(['popular', 'featured', 'new', 'name']);
+    expect(NO_FILTERS.sort).toBe(DEFAULT_SORT);
+    expect(listQuery('mini_app', NO_FILTERS).sort).toBe(listQuery('integration', NO_FILTERS).sort);
+  });
+
+  it('has the four header tabs in order, each with its own address', () => {
+    expect(MARKET_TABS.map((t) => [t.section, t.href, t.labelKey])).toEqual([
+      ['apps', '/marketplace/apps', 'mini_app'],
+      ['integrations', '/marketplace/integrations', 'integration'],
+      ['addons', '/marketplace/addons', 'addon'],
+      ['developer', '/marketplace/developer', 'developer'],
+    ]);
+  });
+
+  it('adds the connectors to the category counts', () => {
+    const cats = [
+      { slug: 'e-commerce', name: 'E-commerce', appCount: 1, sortOrder: 1 },
+      { slug: 'productivity', name: 'Productivity', appCount: 0, sortOrder: 2 },
+    ];
+    const items = categoryItems('integration', cats, NO_FILTERS, {
+      'e-commerce': 2,
+      productivity: 4,
+    });
+    expect(items.map((i) => [i.slug, i.count])).toEqual([
+      [null, 7],
+      ['e-commerce', 3],
+      ['productivity', 4],
+    ]);
   });
 
   it('shows shelves only while nothing narrows the list', () => {
@@ -617,7 +653,7 @@ describe('browse view model', () => {
       category: 'sales',
       q: 'x',
       installed: true,
-      sort: 'featured',
+      sort: 'popular',
       limit: 24,
     });
     expect(listQuery('mini_app', NO_FILTERS)).toMatchObject({

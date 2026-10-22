@@ -5,9 +5,8 @@ import { paginationQuerySchema } from '../common/pagination';
 /**
  * File metadata attached to a contact — the detail page's Files tab.
  *
- * This records where a file ended up, not how it got there: actual
- * upload/storage (presigned URLs, size/MIME enforcement) is Phase 9's
- * (File Manager) job. `storageKey` is caller-supplied.
+ * Uploaded files (`POST /contacts/:id/files/upload`) get their key from the chat media door and their size and
+ * type from the server's reading of the bytes. `storageKey` is caller-supplied only on the record-only route.
  */
 export const contactFileResponseSchema = z.object({
   id: uuidSchema,

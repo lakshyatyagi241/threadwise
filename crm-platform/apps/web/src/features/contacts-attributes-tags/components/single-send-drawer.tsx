@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
+import { Alert, Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton, useCallEligibility, useDirectCall } from '@/features/calling-voice';
 import {
@@ -22,6 +23,7 @@ import {
   whatsappChannels,
   type SendChannel,
 } from '../lib/single-send';
+import { errorKind } from '../lib/errors';
 import type { RowView } from '../lib/row-view';
 import { isMaskedPhone } from '../lib/row-actions';
 import { ErrorLine } from './error-line';
@@ -186,6 +188,38 @@ function Body({ target, onClose }: { target: SingleSendTarget; onClose: () => vo
   );
 }
 
+/** The chat belongs to another agent, so its templates are refused: say why, and link to the chat where it can be assigned. */
+export function AssignedElsewhereNotice({ conversationId }: { conversationId: string }) {
+  const t = useTranslations(NS);
+  const tErrors = useTranslations('contacts-attributes-tags.errors');
+  return (
+    <Alert tone="warning">
+      <p>{tErrors('assignedToOther')}</p>
+      <Link
+        href={`/inbox?c=${conversationId}`}
+        className="mt-2 inline-block font-medium text-primary underline"
+      >
+        {t('openInInbox')}
+      </Link>
+    </Alert>
+  );
+}
+
+/** Why the template list was refused: a chat another agent holds gets the link to it, anything else the plain error line. */
+export function TemplateListError({
+  error,
+  conversationId,
+  onRetry,
+}: {
+  error: unknown;
+  conversationId: string;
+  onRetry: () => void;
+}) {
+  if (errorKind(error) === 'assignedToOther')
+    return <AssignedElsewhereNotice conversationId={conversationId} />;
+  return <ErrorLine error={error} onRetry={onRetry} />;
+}
+
 function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   const t = useTranslations(NS);
   const { toast } = useToast();
@@ -303,7 +337,11 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
           )}
           {/* The list can be refused (no reply right, or the chat is another agent's): say so, instead of an empty list. */}
           {templates.isError && (
-            <ErrorLine error={templates.error} onRetry={() => void templates.refetch()} />
+            <TemplateListError
+              error={templates.error}
+              conversationId={conversation.data.id}
+              onRetry={() => void templates.refetch()}
+            />
           )}
         </div>
       )}

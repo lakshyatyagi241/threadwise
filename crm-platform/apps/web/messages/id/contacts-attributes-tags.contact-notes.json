@@ -120,7 +120,12 @@
         "keep": "Pertahankan berkas",
         "deleted": "Berkas dilepas",
         "deleteFailed": "Berkas tidak dapat dilepas. Coba lagi.",
-        "forbidden": "Anda tidak memiliki izin untuk melepas berkas."
+        "forbidden": "Anda tidak memiliki izin untuk melepas berkas.",
+        "upload": "Tambah file",
+        "uploading": "Mengunggah file",
+        "added": "File ditambahkan",
+        "uploadFailed": "File tidak dapat ditambahkan. Coba lagi.",
+        "uploadRejected": "Jenis file ini tidak diizinkan, atau ukurannya terlalu besar."
       }
     }
   }

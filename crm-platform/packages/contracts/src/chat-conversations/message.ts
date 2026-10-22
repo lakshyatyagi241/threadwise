@@ -363,6 +363,8 @@ const clientMessageId = uuidSchema;
 const sendBase = {
   clientMessageId,
   replyToMessageId: uuidSchema.optional(),
+  /** Where the send was made from, for the Source column of Message History. Only the contact drawer says `contact`; the inbox is the default. */
+  origin: z.enum(['contact']).optional(),
 };
 
 /**

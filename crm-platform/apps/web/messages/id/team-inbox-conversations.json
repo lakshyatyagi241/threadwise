@@ -809,6 +809,7 @@
         "onlyStatus": "Hanya pesan {status}",
         "requestedAt": "Diminta {date}",
         "lines": "{count, plural, other {# baris}}",
+        "noLines": "Tidak ada peristiwa pada rentang ini",
         "until": "Tersedia hingga {date}",
         "download": "Unduh",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "Hapus tag",
       "onLeave": "sedang cuti",
       "onLeaveUntil": "cuti hingga {date}",
-      "spam": "Tandai sebagai spam"
+      "spam": "Tandai sebagai spam",
+      "markUnread": "Tandai belum dibaca",
+      "unsnooze": "Batalkan tunda",
+      "notSpam": "Tandai sebagai bukan spam"
     },
     "tags": {
       "tag": "Tag",

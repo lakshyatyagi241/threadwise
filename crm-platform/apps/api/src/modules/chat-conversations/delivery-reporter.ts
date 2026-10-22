@@ -61,6 +61,7 @@ export class DeliveryReporter {
     if (!o.providerMessageId) return;
     const provider = deliveryProviderOf(o.channelKind);
     if (!provider) return;
+    const template = await this.messages.templateFacts(tx, orgId, o.message.templateId);
     await emitDeliveryReported(this.outbox, tx, {
       orgId,
       aggregateModule: CONVERSATIONS_MODULE,
@@ -70,8 +71,9 @@ export class DeliveryReporter {
         providerMessageId: o.providerMessageId,
         status: o.status,
         recipient: o.peerKey,
-        category: await this.messages.templateCategory(tx, orgId, o.message.templateId),
+        category: template.category,
         source: walletSourceOf(o.message),
+        templateName: template.templateName,
       },
     });
   }

@@ -247,23 +247,7 @@
         "title": "Preguntas frecuentes"
       },
       "addons": {
-        "title": "Complementos",
-        "owned": "Complementos que tienes",
-        "oneTime": "pago único",
-        "buy": "Comprar complemento",
-        "buyAgain": "Volver a comprar",
-        "active": "Activo",
-        "included": "Incluido en tu plan",
-        "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
-        "includedEnds": "Incluido en tu plan. Tu complemento termina el {date} y no se renovará.",
-        "unlimitedBullet": "{label} ilimitados",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ día} other {/ {count} días}}",
-          "weeks": "{count, plural, one {/ semana} other {/ {count} semanas}}",
-          "months": "{count, plural, one {/ mes} other {/ {count} meses}}",
-          "years": "{count, plural, one {/ año} other {/ {count} años}}"
-        }
+        "title": "Complementos"
       },
       "renewal": {
         "renewsOn": "Tu plan se renueva automáticamente el {date}.",
@@ -589,7 +573,9 @@
       "addons": {
         "smartRouting": "Enrutamiento inteligente",
         "teamsPermissions": "Equipos y permisos"
-      }
+      },
+      "addonsTabHint": "Los complementos no necesitan el Marketplace en tu plan. Aun así puedes ver lo que tienes y comprar complementos desde Planes y complementos.",
+      "addonsTabLink": "Abrir Planes y complementos"
     },
     "lock": {
       "link": "Ver planes y complementos"

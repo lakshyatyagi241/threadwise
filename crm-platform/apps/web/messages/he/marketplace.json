@@ -11,7 +11,8 @@
       "installed": "מותקן · Marketplace",
       "manage": "נהל אפליקציה · Marketplace",
       "requests": "בקשות · Marketplace",
-      "addons": "תוספים · Marketplace"
+      "addons": "תוספים · Marketplace",
+      "developer": "מפתחים · Marketplace"
     },
     "common": {
       "dismiss": "סגור",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "מיני אפליקציות",
         "integration": "אינטגרציות",
-        "addon": "תוספים"
+        "addon": "תוספים",
+        "developer": "מפתחים"
       },
       "installed": "מותקנות",
       "installedLimit": "מותקנות ({installed} מתוך {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "פתיחה",
       "empty": {
-        "title": "אין תוספים זמינים",
-        "message": "התוספים הכלולים בתפקיד ובתוכנית שלכם יופיעו כאן."
+        "title": "אין כלי מפתחים זמינים",
+        "message": "כלי המפתחים שהתפקיד והתוכנית שלכם כוללים יופיעו כאן."
       },
       "soon": "בקרוב",
       "upgrade": "שדרוג"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "התשלום בוטל",
         "message": "לא חויב כלום. הירשם שוב בכל עת שתהיה מוכן."
+      }
+    },
+    "addonsTab": {
+      "intro": "חבילות תכונות נוספות שרוכשים מעבר לתוכנית. מה שהתוכנית שלכם כבר כוללת מסומן ואינו מחויב.",
+      "developerHint": "מחפשים את ה-REST API, webhooks או כלי מפתחים אחרים?",
+      "developerLink": "פתיחת הלשונית מפתחים"
+    },
+    "developerTab": {
+      "intro": "כלים למפתחים ולמנהלים טכניים: מפתחות API, webhooks, פרסום ותרגום. תראו רק את מה שהתפקיד והתוכנית שלכם מאפשרים."
+    },
+    "connector": {
+      "builtIn": "מובנה",
+      "status": {
+        "connected": "מחובר",
+        "notConnected": "לא מחובר",
+        "upgrade": "שדרוג",
+        "soon": "בקרוב"
+      },
+      "cta": {
+        "open": "פתיחה",
+        "manage": "נהל",
+        "connect": "התחברות"
       }
     }
   }

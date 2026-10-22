@@ -809,6 +809,7 @@
         "onlyStatus": "רק הודעות {status}",
         "requestedAt": "התבקש ב-{date}",
         "lines": "{count, plural, one {שורה #} two {# שורות} other {# שורות}}",
+        "noLines": "אין אירועים בטווח הזה",
         "until": "זמין עד {date}",
         "download": "הורדה",
         "status": {
@@ -1058,7 +1059,10 @@
       "tagRemove": "הסרת תגית",
       "onLeave": "בחופשה",
       "onLeaveUntil": "בחופשה עד {date}",
-      "spam": "סמן כספאם"
+      "spam": "סמן כספאם",
+      "markUnread": "סמן כלא נקרא",
+      "unsnooze": "בטל דחייה",
+      "notSpam": "סמן כלא ספאם"
     },
     "tags": {
       "tag": "תגית",

@@ -122,6 +122,9 @@ export interface ListFilter {
   /** This connection's templates first, then the rest, each group newest first. For a caller whose page is shared with other numbers. */
   preferProviderConfigId?: number;
   q?: string;
+  /** The date filter's window by creation time: `createdFrom` inclusive, `createdTo` exclusive, a missing side is open. */
+  createdFrom?: Date | null;
+  createdTo?: Date | null;
 }
 
 export interface NewTemplate {
@@ -282,6 +285,8 @@ export class TemplatesRepository {
         sql`(t.template_name ILIKE ${like} OR t.meta_template_id ILIKE ${like} OR t.template_body ILIKE ${like})`,
       );
     }
+    if (f.createdFrom) where.push(sql`t.created_at >= ${f.createdFrom.toISOString()}::timestamptz`);
+    if (f.createdTo) where.push(sql`t.created_at < ${f.createdTo.toISOString()}::timestamptz`);
     return where;
   }
 

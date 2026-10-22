@@ -11,7 +11,8 @@
       "installed": "Zainstalowane · Marketplace",
       "manage": "Zarządzaj aplikacją · Marketplace",
       "requests": "Żądania · Marketplace",
-      "addons": "Dodatki · Marketplace"
+      "addons": "Dodatki · Marketplace",
+      "developer": "Deweloper · Marketplace"
     },
     "common": {
       "dismiss": "Odrzuć",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Miniaplikacje",
         "integration": "Integracje",
-        "addon": "Dodatki"
+        "addon": "Dodatki",
+        "developer": "Deweloper"
       },
       "installed": "Zainstalowane",
       "installedLimit": "Zainstalowane ({installed} z {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Otwórz",
       "empty": {
-        "title": "Brak dostępnych dodatków",
-        "message": "Dodatki wchodzące w skład Twojej roli i planu pojawią się tutaj."
+        "title": "Brak dostępnych narzędzi dla deweloperów",
+        "message": "Narzędzia dla deweloperów wchodzące w skład Twojej roli i planu pojawią się tutaj."
       },
       "soon": "Wkrótce",
       "upgrade": "Ulepsz"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Płatność anulowana",
         "message": "Nic nie zostało pobrane. Zasubskrybuj ponownie w dowolnej chwili."
+      }
+    },
+    "addonsTab": {
+      "intro": "Dodatkowe pakiety funkcji kupowane ponad plan. To, co plan już obejmuje, jest oznaczone i nie jest płatne.",
+      "developerHint": "Szukasz REST API, webhooków lub innych narzędzi dla deweloperów?",
+      "developerLink": "Otwórz kartę Deweloper"
+    },
+    "developerTab": {
+      "intro": "Narzędzia dla deweloperów i administratorów technicznych: klucze API, webhooki, publikowanie i tłumaczenie. Widzisz tylko te, na które pozwalają Twoja rola i plan."
+    },
+    "connector": {
+      "builtIn": "Wbudowane",
+      "status": {
+        "connected": "Połączono",
+        "notConnected": "Niepołączono",
+        "upgrade": "Ulepsz",
+        "soon": "Wkrótce"
+      },
+      "cta": {
+        "open": "Otwórz",
+        "manage": "Zarządzaj",
+        "connect": "Połącz"
       }
     }
   }

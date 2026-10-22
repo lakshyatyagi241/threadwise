@@ -61,7 +61,7 @@ When a limit is full, creating one more is refused with a message that names the
 
 The bars show the limits that apply to your workspace, which can include values the platform team set for you specifically. **Compare plans** lists the same limits, features and add-ons side by side. The first column stays in place while you scroll sideways, your plan is tinted, and **Only show differences** hides the rows every plan shares.
 
-An add-on listed on your plan is available to buy, not already switched on. It starts working once you have bought it.
+An app listed under the apps on your plan is available to buy, not already switched on. It starts working once you have bought it. The **Add-ons** list below it is separate and is shown to every workspace: each card is included in your plan, active, buyable, or marked as needing an active paid plan. See [Add-ons](help:workspace-addons).
 
 ## Stopping auto-renew
 

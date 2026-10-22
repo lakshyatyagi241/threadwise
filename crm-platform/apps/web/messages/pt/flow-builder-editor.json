@@ -2353,6 +2353,8 @@
         "number": "Número",
         "alphanumeric": "Letras e números",
         "date": "Data",
+        "datetime": "Data e hora",
+        "time": "Hora",
         "age": "Idade",
         "date_of_birth": "Data de nascimento"
       },
@@ -2364,6 +2366,8 @@
         "number": "Digite um número válido",
         "alphanumeric": "Use somente letras e números",
         "date": "Digite uma data válida ({format})",
+        "datetime": "Informe uma data e hora válidas ({format} HH:MM)",
+        "time": "Informe uma hora válida (HH:MM)",
         "age": "Informe sua idade como um número inteiro",
         "date_of_birth": "Informe uma data válida ({format})"
       },

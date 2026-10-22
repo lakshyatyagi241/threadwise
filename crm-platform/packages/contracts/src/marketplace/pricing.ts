@@ -88,8 +88,12 @@ export const MARKET_AVAILABILITY_STATES = ['open', 'visible', 'purchased', 'not_
 export const marketAvailabilitySchema = z.enum(MARKET_AVAILABILITY_STATES);
 export type MarketAvailability = z.infer<typeof marketAvailabilitySchema>;
 
-/** Why a paid app costs a workspace nothing: its plan has the feature the operator named, or is at or above the plan the operator named. */
-export const marketIncludedBySchema = z.enum(['plan_feature', 'min_plan']);
+/**
+ * Why a paid app costs a workspace nothing: its plan has the feature the operator named, or is at or above the plan the operator named, or
+ * (`plan_grants`) the plan ITSELF carries every plan feature the app would grant (the app's own `mkt_` key aside), so the app adds nothing the
+ * plan lacks. Installing the app stays free in all three cases.
+ */
+export const marketIncludedBySchema = z.enum(['plan_feature', 'min_plan', 'plan_grants']);
 export type MarketIncludedBy = z.infer<typeof marketIncludedBySchema>;
 
 /** How many days ahead of its end a paid period may be renewed (one more month is bought on top of the remaining time). */
@@ -364,6 +368,8 @@ export function includedBy(f: {
   orgPlanSlug: string | null;
   planLapsed: boolean;
   catalogue: readonly string[];
+  /** The plan alone (no add-on, no app) already grants every plan feature the app grants; false when the app grants none. */
+  planCarriesGrants?: boolean;
 }): MarketIncludedBy | null {
   if (f.includedPlanFeature && f.planFeatureOn) return 'plan_feature';
   if (f.includedMinPlan && f.orgPlanSlug && !f.planLapsed) {
@@ -371,6 +377,7 @@ export function includedBy(f: {
     const have = f.catalogue.indexOf(f.orgPlanSlug);
     if (need >= 0 && have >= need) return 'min_plan';
   }
+  if (f.planCarriesGrants) return 'plan_grants';
   return null;
 }
 

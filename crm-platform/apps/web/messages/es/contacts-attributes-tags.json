@@ -624,7 +624,8 @@
         "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento",
         "duplicate_in_file": "número repetido, combinado con una fila anterior",
         "invalid_timezone": "zona horaria no válida",
-        "legal_hold": "registro protegido, sin cambios"
+        "legal_hold": "registro protegido, sin cambios",
+        "invalid_property_value": "el valor de la propiedad personalizada no coincide con su tipo ni con sus opciones"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",
@@ -642,7 +643,9 @@
       "groupNew": "Un grupo nuevo",
       "groupPick": "Elige un grupo",
       "groupNewPlaceholder": "Nombre del grupo nuevo",
-      "groupRequiredHint": "Todos los contactos importados se unen a este grupo. La columna de grupo del archivo se ignora a menos que la asignes arriba."
+      "groupRequiredHint": "Todos los contactos importados se unen a este grupo. La columna de grupo del archivo se ignora a menos que la asignes arriba.",
+      "customProperties": "Propiedades personalizadas",
+      "customPropertiesHint": "Una columna cuyo encabezado sea el nombre de la propiedad, o attr:key tal como lo escribe la exportación, completa esa propiedad. Una celda vacía conserva el valor que el contacto ya tiene."
     },
     "detail": {
       "back": "Todos los contactos",
@@ -1335,7 +1338,7 @@
         "closePicker": "Cerrar",
         "changed": "Propiedades a cambiar",
         "clear": "Borrar",
-        "keep": "Mantener",
+        "remove": "Quitar {name}",
         "setValue": "Definir un valor",
         "willClear": "Se vaciará en {count, plural, one {el contacto seleccionado} other {los # contactos seleccionados}}.",
         "requiredNoClear": "Una propiedad obligatoria no se puede borrar.",
@@ -1431,6 +1434,7 @@
       "template": "Plantilla de WhatsApp",
       "templatePlaceholder": "Selecciona una plantilla",
       "noTemplates": "No hay plantillas aprobadas para este número.",
+      "openInInbox": "Abrir el chat en la bandeja",
       "notSendable": "Esta plantilla no se puede completar aquí ({reason}).",
       "variables": "Variables de la plantilla",
       "preview": "Vista previa",

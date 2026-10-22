@@ -27,6 +27,8 @@ export interface SettleDelivered {
   recipient?: string | null;
   category?: string | null;
   source?: string | null;
+  templateName?: string | null;
+  subjectName?: string | null;
 }
 
 export type SettleOutcome =
@@ -87,6 +89,8 @@ export class MessageBillingService {
     const s = await this.settings.effective();
     const category = (input.category ?? '').trim().toLowerCase() || null;
     const source = (input.source ?? '').trim().toLowerCase() || null;
+    const templateName = (input.templateName ?? '').trim() || null;
+    const subjectName = (input.subjectName ?? '').trim() || null;
 
     const outcome = await this.db.txAs({ orgId: input.orgId, userId: null }, async (tx) => {
       // 1. claim
@@ -168,11 +172,11 @@ export class MessageBillingService {
       const row = await tx.execute(sql`
         INSERT INTO usage_charges
           (org_id, provider, wamid, to_country, category, source, credits, revenue_minor, cost_minor, cost_micros, status,
-           wallet_tx_id, meta, price_credits, shortfall_credits, billing_mode, free_reason, currency)
+           wallet_tx_id, meta, price_credits, shortfall_credits, billing_mode, free_reason, currency, template_name, subject_name)
         VALUES (${input.orgId}, ${input.provider}, ${wamid}, ${priced.country}, ${category}, ${source}, ${chargedMinor},
                 ${chargedMinor}, ${costMinor}, ${priced.metaCostMicros}, ${status}, ${txRowId},
                 ${JSON.stringify({ matched: priced.matched, basis: priced.basis, margin: priced.margin })}, ${priced.priceMinor}, ${shortfallMinor},
-                ${payPerMessage ? 'wallet' : 'plan'}, ${freeReason}, ${currency})
+                ${payPerMessage ? 'wallet' : 'plan'}, ${freeReason}, ${currency}, ${templateName}, ${subjectName})
         RETURNING id, created_at::text AS created_at`);
       // Carried as TEXT: a JS Date keeps milliseconds, the partition key has microseconds, and the refund must find this exact row.
       const charge = row.rows[0] as { id: string | number; created_at: string };

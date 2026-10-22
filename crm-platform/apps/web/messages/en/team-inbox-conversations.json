@@ -809,6 +809,7 @@
         "onlyStatus": "Only {status} messages",
         "requestedAt": "Requested {date}",
         "lines": "{count, plural, one {# line} other {# lines}}",
+        "noLines": "No events in this range",
         "until": "Available until {date}",
         "download": "Download",
         "status": {
@@ -1032,6 +1033,7 @@
       "selectAllInView": "Select all {count} in view",
       "done": "Done",
       "markRead": "Mark as read",
+      "markUnread": "Mark as unread",
       "resolve": "Resolve",
       "close": "Close",
       "reopen": "Reopen",
@@ -1041,6 +1043,7 @@
       "removeTeam": "Remove team",
       "priority": "Priority",
       "snooze": "Snooze",
+      "unsnooze": "Unsnooze",
       "snoozePreset": {
         "oneHour": "1 hour",
         "threeHours": "3 hours",
@@ -1058,7 +1061,8 @@
       "tagRemove": "Remove tag",
       "onLeave": "on leave",
       "onLeaveUntil": "on leave until {date}",
-      "spam": "Mark as spam"
+      "spam": "Mark as spam",
+      "notSpam": "Mark as not spam"
     },
     "tags": {
       "tag": "Tag",
