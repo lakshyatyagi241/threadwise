@@ -37,7 +37,8 @@
       "statusStage": "Dieser Status gehört zu einer anderen Phase. Wählen Sie einen Status, der zur Phase des Kontakts passt.",
       "stageScope": "Ein Status kann nur auf eine Ihrer Lebenszyklusphasen beschränkt werden.",
       "planLimit": "Sie haben das Limit Ihres Tarifs von {limit, plural, one {# Kontakt} other {# Kontakten}} erreicht. Wechseln Sie auf einen höheren Tarif, um mehr hinzuzufügen, oder löschen Sie einen vorhandenen, um Platz zu schaffen.",
-      "legalHold": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden."
+      "legalHold": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weise ihn dir zuerst selbst zu, um eine Nachricht zu senden."
     },
     "list": {
       "title": "Contact Hub",

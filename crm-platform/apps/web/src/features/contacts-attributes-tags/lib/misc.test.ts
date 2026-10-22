@@ -13,6 +13,7 @@ describe('errorKind', () => {
 
   it('branches on the code, never the text', () => {
     expect(errorKind(api(403, ERROR_CODES.FORBIDDEN))).toBe('forbidden');
+    expect(errorKind(api(403, ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER))).toBe('assignedToOther');
     expect(errorKind(api(409, ERROR_CODES.ROW_VERSION_CONFLICT))).toBe('conflict');
     expect(errorKind(api(409, ERROR_CODES.FIELD_KEY_TAKEN))).toBe('keyTaken');
     expect(errorKind(api(409, ERROR_CODES.FIELD_IS_SYSTEM))).toBe('systemField');

@@ -37,7 +37,8 @@
       "statusStage": "Esse status pertence a outro estágio. Escolha um status que combine com o estágio do contato.",
       "stageScope": "Um status só pode ser limitado a um dos seus estágios do ciclo de vida.",
       "planLimit": "Você atingiu o limite do seu plano de {limit, plural, one {# contato} other {# contatos}}. Faça upgrade do plano para adicionar mais ou exclua um existente para liberar espaço.",
-      "legalHold": "Este registo está protegido e não pode ser eliminado neste momento."
+      "legalHold": "Este registo está protegido e não pode ser eliminado neste momento.",
+      "assignedToOther": "Esta conversa está atribuída a outro agente. Atribua-a a você primeiro para enviar uma mensagem."
     },
     "list": {
       "title": "Hub de Contatos",

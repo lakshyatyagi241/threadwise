@@ -37,7 +37,8 @@
       "statusStage": "Ten status należy do innego etapu. Wybierz status pasujący do etapu kontaktu.",
       "stageScope": "Status można ograniczyć tylko do jednego z Twoich etapów cyklu życia.",
       "planLimit": "Osiągnięto limit planu: {limit, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}. Zmień plan na wyższy, aby dodać więcej, lub usuń istniejący kontakt, aby zwolnić miejsce.",
-      "legalHold": "Ten rekord jest chroniony i obecnie nie można go usunąć."
+      "legalHold": "Ten rekord jest chroniony i obecnie nie można go usunąć.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go sobie, aby wysłać wiadomość."
     },
     "list": {
       "title": "Centrum kontaktów",
