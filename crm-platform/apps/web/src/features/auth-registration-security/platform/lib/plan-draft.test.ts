@@ -1,4 +1,9 @@
-import { PLAN_FEATURE_KEYS, PLAN_LIMIT_KEYS, type PlanAdminItem } from '@crm/contracts';
+import {
+  NEW_PLAN_FEATURES_OFF,
+  PLAN_FEATURE_KEYS,
+  PLAN_LIMIT_KEYS,
+  type PlanAdminItem,
+} from '@crm/contracts';
 import { createPlanRequestSchema } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
@@ -143,7 +148,7 @@ const stored: PlanAdminItem = {
 };
 
 describe('newPlanDraft', () => {
-  it("starts the way Reference's wizard does (active, every limit blank, features on) except the Smart routing flags, which start off", () => {
+  it("starts the way Reference's wizard does (active, every limit blank, features on) except the Smart routing and reminder upgrade flags, which start off", () => {
     const d = newPlanDraft();
     expect(d.isActive).toBe(true);
     expect(
@@ -151,7 +156,12 @@ describe('newPlanDraft', () => {
         .filter(([, on]) => !on)
         .map(([k]) => k)
         .sort(),
-    ).toEqual(['inbox_assignment_sticky', 'inbox_routing']);
+    ).toEqual([
+      'appointment_confirm_buttons',
+      'appointment_rebook_steps',
+      'inbox_assignment_sticky',
+      'inbox_routing',
+    ]);
     expect(Object.keys(d.features).sort()).toEqual([...PLAN_FEATURE_KEYS].sort());
     expect(Object.values(d.limits).every((v) => v === '')).toBe(true);
     expect(Object.keys(d.limits).sort()).toEqual([...PLAN_LIMIT_KEYS].sort());
@@ -390,7 +400,9 @@ describe('limits: unlimited <-> 0', () => {
 
 describe('features: counts and group toggles', () => {
   it('counts the features that are on', () => {
-    expect(countFeaturesOn(newPlanDraft().features)).toBe(PLAN_FEATURE_KEYS.length - 2);
+    expect(countFeaturesOn(newPlanDraft().features)).toBe(
+      PLAN_FEATURE_KEYS.length - NEW_PLAN_FEATURES_OFF.length,
+    );
     const off = toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
     expect(countFeaturesOn(off)).toBe(0);
   });

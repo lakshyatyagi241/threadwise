@@ -16,6 +16,7 @@ import {
 import { formatMoney } from '../lib/money';
 import { deriveReminders } from '../lib/reminders';
 import { knownReason } from '../lib/reminder-rules';
+import { ReminderHistory } from './reminder-history';
 import { REMINDER_RUN_TONE, REMINDER_TONE, actionsFor } from '../lib/status';
 import { CalendarSyncPanel } from './calendar-sync-panel';
 import { Drawer } from './drawer';
@@ -120,6 +121,7 @@ function RecordedReminders({
                   ? t(`reasons.${knownReason(r.reason)!}`)
                   : null}
             </span>
+            <ReminderHistory reminder={r} zone={zone} />
           </span>
           <ToneChip tone={REMINDER_RUN_TONE[r.status]} label={t(`status.${r.status}`)} />
         </li>

@@ -178,8 +178,8 @@ describe('planCounts', () => {
     limits.contacts = 1000;
     const c = planCounts({ features, limits, visibleAddons: [A, B, GONE] });
     expect(c.featuresTotal).toBe(Object.keys(d.features).length);
-    // the two switched off here, and the two Smart routing flags a new plan starts without
-    expect(c.featuresOn).toBe(c.featuresTotal - 4);
+    // the two switched off here, and the four flags a new plan starts without (two Smart routing, two reminder upgrade tier)
+    expect(c.featuresOn).toBe(c.featuresTotal - 6);
     expect(c.limitsTotal).toBe(PLAN_LIMIT_KEYS.length);
     expect(c.limitsSet).toBe(2);
     expect(c.addons).toBe(3);

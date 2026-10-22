@@ -132,6 +132,8 @@ export const PACK_GRANTABLE_FEATURES: readonly string[] = [
 export const NEW_PLAN_FEATURES_OFF: readonly string[] = [
   'inbox_routing',
   'inbox_assignment_sticky',
+  'appointment_confirm_buttons',
+  'appointment_rebook_steps',
 ];
 export const PACK_GRANTABLE_LIMITS: readonly string[] = ['teams'];
 
@@ -168,9 +170,11 @@ export const PLAN_FEATURE_DEFS = [
   // `20261023090200_mkt_appointments_app.sql` and the operator's grandfather action).
   { key: 'appointment_booking', group: 'advanced', productLine: 'crm', default: false },
   // Parts of a reminder sequence (BL-428): the Confirm / Reschedule / Cancel buttons on the 24 hour reminder and the rebook (recall)
-  // steps. Default TRUE so every plan that has appointment booking keeps both; a plan can switch either off. Both need `appointment_booking`.
-  { key: 'appointment_confirm_buttons', group: 'advanced', productLine: 'crm', default: true },
-  { key: 'appointment_rebook_steps', group: 'advanced', productLine: 'crm', default: true },
+  // steps. Default FALSE since the owner decision of 2026-10-22 (no paying clients yet): they are the UPGRADE TIER of the Appointments app
+  // (timed WhatsApp and email reminders, packs, test email, fallback, report and history come with `appointment_booking`). Both need
+  // `appointment_booking`. The app listing grants only `appointment_booking`, so these two are per-plan switches (plan Features tab).
+  { key: 'appointment_confirm_buttons', group: 'advanced', productLine: 'crm', default: false },
+  { key: 'appointment_rebook_steps', group: 'advanced', productLine: 'crm', default: false },
   // The website chatbot widget builder (TW-WGT-027). Default false: Reference's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
   { key: 'chatbot_widgets', group: 'messaging', productLine: 'chat', default: false },
   // The WhatsApp catalog area (TW-CAT-001). Default false: Reference's `access_wa_storefront` column default.

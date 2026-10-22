@@ -16,10 +16,12 @@ import {
   reminderPackKeySchema,
   reminderPackPreviewInputSchema,
   reminderReportQuerySchema,
+  reminderTestSendInputSchema,
   type ReminderPackAdoptInput,
   type ReminderPackKey,
   type ReminderPackPreviewInput,
   type ReminderReportQuery,
+  type ReminderTestSendInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -117,14 +119,16 @@ export class ReminderTestSendController {
   @Idempotent()
   @RequirePermission('record.booking-types.update')
   @ApiOperation({
-    summary: "Send a step as a test email to the signed-in user's own address",
+    summary:
+      "Send a step as a test email to the signed-in user's own address, or to one address they type",
     description:
-      'Email only (there is no WhatsApp test). Sample values; the subject starts with [Test]. The worker sends it and the result arrives as a notification. 404 when the step does not belong to the service.',
+      'Email only (there is no WhatsApp test). Sample values; the subject starts with [Test]. `to` is optional (default: the signed-in user). At most 10 tests per workspace per hour (429). The worker sends it and the result arrives as a notification. 404 when the step does not belong to the service.',
   })
   testEmail(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('reminderId', ParseUUIDPipe) reminderId: string,
+    @Body(zodPipe(reminderTestSendInputSchema)) body: ReminderTestSendInput,
   ) {
-    return this.tests.request(id, reminderId);
+    return this.tests.request(id, reminderId, body.to);
   }
 }

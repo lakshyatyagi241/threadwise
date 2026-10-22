@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Tingkatkan paket Anda",
-      "buttonsLocked": "Tombol Konfirmasi, Jadwalkan ulang, dan Batalkan tidak termasuk dalam paket Anda.",
       "timeline": {
         "label": "Linimasa pengingat",
         "addMenu": "Tambahkan langkah",
         "addStep": "Tambah langkah",
         "count": "{count} dari {max} langkah dengan waktu. Konfirmasi pemesanan dan pesan tidak hadir tidak dihitung.",
         "capReached": "Anda sudah mencapai {max} langkah dengan waktu. Hapus satu untuk menambah yang lain.",
-        "rebookLocked": "Pesan pemesanan ulang tidak termasuk dalam paket Anda. Anda bisa mengatur langkah ini, tetapi langkah ini tetap nonaktif sampai Anda meningkatkan paket.",
-        "rebookLockedStep": "Langkah ini tidak bisa diaktifkan dengan paket Anda saat ini.",
         "empty": "Belum ada langkah. Tambahkan langkah pertama, atau mulai dari urutan siap pakai.",
         "lane": {
           "booked": "Saat pemesanan dibuat",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Sudah ditambahkan",
           "cap": "Batas tercapai",
-          "locked": "Perlu meningkatkan paket untuk mengaktifkan",
-          "online": "Janji temu online"
+          "online": "Janji temu online",
+          "locked": "Tingkat upgrade: tidak ada di paket Anda"
         },
         "enabledOf": "Kirim: {step}",
         "remove": "Hapus: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# menit} other {# menit}}",
           "hours": "{count, plural, one {# jam} other {# jam}}",
           "days": "{count, plural, one {# hari} other {# hari}}"
-        }
+        },
+        "rebookLocked": "Pesan pemesanan ulang adalah bagian dari tingkat upgrade Janji Temu, yang tidak termasuk dalam paket Anda. Anda dapat menyiapkan langkahnya, tetapi tetap nonaktif sampai paket Anda mencakupnya.",
+        "rebookLockedStep": "Bagian dari tingkat upgrade Janji Temu: tidak dapat diaktifkan dengan paket Anda saat ini."
       },
       "reasons": {
         "already_confirmed": "Kontak sudah mengonfirmasi.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Anda menulis teks sendiri untuk langkah ini. Teks itu akan diganti.",
         "planNotes": {
-          "rebook": "Paket Anda tidak mencakup pesan pemesanan ulang, jadi langkah ini disimpan dalam keadaan nonaktif.",
-          "buttons": "Paket Anda tidak mencakup tombol balasan, jadi tombol tersebut dilewati."
+          "rebook": "Langkah pemesanan ulang adalah bagian dari tingkat upgrade Janji Temu, yang tidak termasuk dalam paket Anda, sehingga langkah ini disimpan dalam keadaan nonaktif.",
+          "buttons": "Tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan adalah bagian dari tingkat upgrade Janji Temu, yang tidak termasuk dalam paket Anda, sehingga dilewati."
         },
         "showMessages": "Tampilkan pesan",
         "hideMessages": "Sembunyikan pesan",
@@ -180,7 +179,84 @@
           "waiting": "Sampai Meta menyetujui pesan, langkah tersebut dikirim melalui email.",
           "metaError": "Meta menolaknya: {error}",
           "refresh": "Segarkan status",
-          "refreshing": "Menyegarkan"
+          "refreshing": "Menyegarkan",
+          "withheldTitle": "Dilewati karena paket Anda",
+          "withheldButtons": "Tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan pada langkah ini: {step}.",
+          "withheldRebook": "{step}: disimpan dalam keadaan nonaktif."
+        }
+      },
+      "buttonsLocked": "Tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan adalah bagian dari tingkat upgrade Janji Temu, yang tidak termasuk dalam paket Anda.",
+      "test": {
+        "send": "Kirim email uji coba",
+        "sending": "Mengirim",
+        "hint": "Mengirim langkah ini dengan nilai contoh. Biarkan alamat kosong untuk mengirim ke alamat email Anda sendiri.",
+        "toLabel": "Kirim uji coba ke",
+        "toPlaceholder": "Alamat Anda sendiri, atau ketik alamat lain",
+        "toInvalid": "Masukkan alamat email lengkap, atau biarkan kosong.",
+        "wait": {
+          "unsaved": "Simpan perubahan Anda terlebih dahulu: uji coba mengirim langkah yang tersimpan.",
+          "notSaved": "Simpan pengingat terlebih dahulu: langkah ini baru."
+        },
+        "queued": "Email uji coba sedang dikirim ke {address}. Hasilnya juga masuk ke notifikasi Anda.",
+        "skipped": "Tidak ada yang dikirim: pengguna Anda tidak memiliki alamat email.",
+        "noWhatsapp": "Pesan WhatsApp tidak dapat diuji dari sini."
+      },
+      "report": {
+        "title": "Laporan pengingat",
+        "description": "Apa yang dilakukan pengingat: berapa yang terkirim, tersampaikan, gagal, atau dilewati, dan berapa yang lewat saluran lain.",
+        "type": "Jenis pemesanan",
+        "allTypes": "Semua jenis pemesanan",
+        "range": "Periode",
+        "ranges": {
+          "7": "7 hari terakhir",
+          "30": "30 hari terakhir",
+          "90": "90 hari terakhir",
+          "custom": "Pilih tanggal"
+        },
+        "from": "Dari",
+        "to": "Sampai",
+        "refresh": "Segarkan",
+        "pickDates": "Pilih tanggal mulai dan tanggal akhir untuk melihat laporan.",
+        "loading": "Memuat laporan",
+        "empty": "Tidak ada pengingat yang jatuh tempo pada periode ini. Setelah pengingat dikirim, hasilnya muncul di sini.",
+        "caption": "Hasil pengingat untuk {name}",
+        "col": {
+          "step": "Langkah",
+          "sent": "Terkirim",
+          "delivered": "Tersampaikan",
+          "failed": "Gagal",
+          "fallback": "Dikirim lewat saluran lain",
+          "skipped": "Dilewati",
+          "confirmed": "Dikonfirmasi",
+          "rescheduled": "Minta jadwal ulang",
+          "cancelled": "Dibatalkan",
+          "total": "Total"
+        },
+        "rates": "Dari {count, plural, other {# janji temu}} yang menerima pengingat: {confirmed}% dikonfirmasi, {cancelled}% dibatalkan, {noShow}% tidak hadir.",
+        "why": "Mengapa",
+        "otherReason": "Alasan lain",
+        "buttonsLocked": "Hasil tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan adalah bagian dari tingkat upgrade Janji Temu, sehingga tidak dihitung di paket Anda.",
+        "emailNote": "Status tersampaikan hanya dilaporkan oleh WhatsApp: email tidak memiliki laporan pengiriman, jadi dihitung sebagai terkirim. Hanya jumlah yang ditampilkan; tidak ada nama, nomor, atau pesan."
+      },
+      "history": {
+        "fallback": "Dikirim lewat {channel} karena saluran pertama tidak dapat menyampaikannya.",
+        "delivery": {
+          "delivered": "WhatsApp melaporkan pesan tersampaikan.",
+          "failed": "WhatsApp melaporkan pesan gagal.",
+          "undelivered": "WhatsApp tidak menyampaikannya tepat waktu."
+        },
+        "tried": "Saluran yang dicoba, berurutan",
+        "attempt": {
+          "sent": "terkirim",
+          "skipped": "tidak dipakai",
+          "held": "menunggu",
+          "failed": "gagal"
+        },
+        "buttons": "Balasan dengan tombol",
+        "button": {
+          "confirm": "Mengetuk Konfirmasi",
+          "reschedule": "Mengetuk Jadwalkan Ulang",
+          "cancel": "Mengetuk Batalkan"
         }
       }
     }

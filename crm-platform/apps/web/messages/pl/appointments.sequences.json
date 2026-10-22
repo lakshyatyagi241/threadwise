@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Ulepsz swój plan",
-      "buttonsLocked": "Przyciski Potwierdź, Przełóż i Anuluj nie są objęte Twoim planem.",
       "timeline": {
         "label": "Oś czasu przypomnień",
         "addMenu": "Dodaj krok",
         "addStep": "Dodaj krok",
         "count": "{count} z {max} kroków z godziną. Potwierdzenie rezerwacji i wiadomość o nieobecności się nie liczą.",
         "capReached": "Osiągnięto limit {max} kroków z godziną. Usuń jeden, aby dodać kolejny.",
-        "rebookLocked": "Wiadomości o ponownej rezerwacji nie są objęte Twoim planem. Krok możesz ustawić, ale pozostanie wyłączony, dopóki nie ulepszysz planu.",
-        "rebookLockedStep": "Przy obecnym planie nie można włączyć tego kroku.",
         "empty": "Brak kroków. Dodaj pierwszy krok lub zacznij od gotowej sekwencji.",
         "lane": {
           "booked": "Gdy wizyta zostanie zarezerwowana",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Już dodano",
           "cap": "Osiągnięto limit",
-          "locked": "Do włączenia potrzebne ulepszenie planu",
-          "online": "Wizyty online"
+          "online": "Wizyty online",
+          "locked": "Wyższy poziom: nie ma go w Twoim planie"
         },
         "enabledOf": "Wyślij: {step}",
         "remove": "Usuń: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
           "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
           "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}"
-        }
+        },
+        "rebookLocked": "Wiadomości o ponownej rezerwacji należą do wyższego poziomu aplikacji Wizyty, którego Twój plan nie obejmuje. Możesz skonfigurować krok, ale pozostanie wyłączony, dopóki plan go nie obejmie.",
+        "rebookLockedStep": "Należy do wyższego poziomu aplikacji Wizyty: nie można włączyć w obecnym planie."
       },
       "reasons": {
         "already_confirmed": "Kontakt już potwierdził.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Dla tego kroku napisałeś własny tekst. Zostanie zastąpiony.",
         "planNotes": {
-          "rebook": "Twój plan nie obejmuje wiadomości o ponownej rezerwacji, więc ten krok zostanie zapisany jako wyłączony.",
-          "buttons": "Twój plan nie obejmuje przycisków odpowiedzi, więc zostaną pominięte."
+          "rebook": "Krok ponownej rezerwacji należy do wyższego poziomu aplikacji Wizyty, którego Twój plan nie obejmuje, dlatego ten krok zostanie zapisany jako wyłączony.",
+          "buttons": "Przyciski Potwierdź, Przełóż i Anuluj należą do wyższego poziomu aplikacji Wizyty, którego Twój plan nie obejmuje, dlatego zostały pominięte."
         },
         "showMessages": "Pokaż wiadomości",
         "hideMessages": "Ukryj wiadomości",
@@ -180,7 +179,84 @@
           "waiting": "Dopóki Meta nie zatwierdzi wiadomości, ten krok jest wysyłany przez Email.",
           "metaError": "Meta ją odrzuciła: {error}",
           "refresh": "Odśwież status",
-          "refreshing": "Odświeżanie"
+          "refreshing": "Odświeżanie",
+          "withheldTitle": "Pominięto z powodu Twojego planu",
+          "withheldButtons": "Przyciski Potwierdź, Przełóż i Anuluj tego kroku: {step}.",
+          "withheldRebook": "{step}: zapisany jako wyłączony."
+        }
+      },
+      "buttonsLocked": "Przyciski Potwierdź, Przełóż i Anuluj należą do wyższego poziomu aplikacji Wizyty, którego Twój plan nie obejmuje.",
+      "test": {
+        "send": "Wyślij e-mail testowy",
+        "sending": "Wysyłanie",
+        "hint": "Wysyła ten krok z przykładowymi wartościami. Zostaw adres pusty, aby wysłać na Twój własny e-mail.",
+        "toLabel": "Wyślij test na",
+        "toPlaceholder": "Twój własny adres lub wpisz inny",
+        "toInvalid": "Wpisz pełny adres e-mail albo zostaw pole puste.",
+        "wait": {
+          "unsaved": "Najpierw zapisz zmiany: test wysyła zapisany krok.",
+          "notSaved": "Najpierw zapisz przypomnienia: ten krok jest nowy."
+        },
+        "queued": "E-mail testowy jest w drodze na adres {address}. Wynik pojawi się też w Twoich powiadomieniach.",
+        "skipped": "Nic nie wysłano: Twój użytkownik nie ma adresu e-mail.",
+        "noWhatsapp": "Wiadomości WhatsApp nie można stąd przetestować."
+      },
+      "report": {
+        "title": "Raport przypomnień",
+        "description": "Co zrobiły przypomnienia: ile wysłano, dostarczono, nie udało się lub pominięto oraz ile poszło innym kanałem.",
+        "type": "Typ rezerwacji",
+        "allTypes": "Wszystkie typy rezerwacji",
+        "range": "Okres",
+        "ranges": {
+          "7": "Ostatnie 7 dni",
+          "30": "Ostatnie 30 dni",
+          "90": "Ostatnie 90 dni",
+          "custom": "Wybierz daty"
+        },
+        "from": "Od",
+        "to": "Do",
+        "refresh": "Odśwież",
+        "pickDates": "Wybierz datę początkową i końcową, aby zobaczyć raport.",
+        "loading": "Wczytywanie raportu",
+        "empty": "W tym okresie nie było przypomnień do wysłania. Gdy przypomnienia zostaną wysłane, ich wyniki pojawią się tutaj.",
+        "caption": "Wyniki przypomnień dla: {name}",
+        "col": {
+          "step": "Krok",
+          "sent": "Wysłano",
+          "delivered": "Dostarczono",
+          "failed": "Niepowodzenia",
+          "fallback": "Wysłano innym kanałem",
+          "skipped": "Pominięto",
+          "confirmed": "Potwierdzono",
+          "rescheduled": "Prośba o przełożenie",
+          "cancelled": "Anulowano",
+          "total": "Razem"
+        },
+        "rates": "Spośród {count, plural, one {# wizyty} few {# wizyt} many {# wizyt} other {# wizyty}}, które dostały przypomnienie: {confirmed}% potwierdziło, {cancelled}% anulowało, {noShow}% nie przyszło.",
+        "why": "Dlaczego",
+        "otherReason": "Inny powód",
+        "buttonsLocked": "Wyniki przycisków Potwierdź, Przełóż i Anuluj należą do wyższego poziomu aplikacji Wizyty, więc w Twoim planie nie są liczone.",
+        "emailNote": "Dostarczenie zgłasza tylko WhatsApp: e-mail nie ma raportu doręczeń, więc liczy się jako wysłany. Pokazujemy tylko liczby, bez imion, numerów i wiadomości."
+      },
+      "history": {
+        "fallback": "Wysłano kanałem {channel}, bo pierwszy kanał nie mógł dostarczyć wiadomości.",
+        "delivery": {
+          "delivered": "WhatsApp zgłosił dostarczenie.",
+          "failed": "WhatsApp zgłosił niepowodzenie.",
+          "undelivered": "WhatsApp nie dostarczył wiadomości na czas."
+        },
+        "tried": "Wypróbowane kanały, po kolei",
+        "attempt": {
+          "sent": "wysłano",
+          "skipped": "nie użyto",
+          "held": "oczekuje",
+          "failed": "niepowodzenie"
+        },
+        "buttons": "Odpowiedzi przyciskami",
+        "button": {
+          "confirm": "Dotknął(-ęła) Potwierdź",
+          "reschedule": "Dotknął(-ęła) Przełóż",
+          "cancel": "Dotknął(-ęła) Anuluj"
         }
       }
     }

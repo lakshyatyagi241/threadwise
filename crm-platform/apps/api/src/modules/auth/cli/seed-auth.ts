@@ -103,6 +103,9 @@ const SAMPLE_PLANS: SeedPlan[] = [
       help_agent: true,
       inbox_routing: false,
       inbox_assignment_sticky: false,
+      // Reminder upgrade tier (needs the Appointments app): the entry plan has timed reminders only, no buttons and no rebook steps.
+      appointment_confirm_buttons: false,
+      appointment_rebook_steps: false,
     },
   },
   {
@@ -154,6 +157,8 @@ const SAMPLE_PLANS: SeedPlan[] = [
       help_agent: true,
       inbox_routing: true,
       inbox_assignment_sticky: true,
+      appointment_confirm_buttons: true,
+      appointment_rebook_steps: true,
     },
   },
   {
@@ -208,6 +213,8 @@ const SAMPLE_PLANS: SeedPlan[] = [
       help_agent: true,
       inbox_routing: true,
       inbox_assignment_sticky: true,
+      appointment_confirm_buttons: true,
+      appointment_rebook_steps: true,
     },
   },
 ];

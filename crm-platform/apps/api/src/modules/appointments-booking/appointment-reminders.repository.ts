@@ -66,6 +66,8 @@ export interface RunRow {
   messageRef: string | null;
   delivery: DeliveryState;
   deliveredAt: Date | null;
+  /** The button taps that did something, oldest first (from `reply_state`). */
+  buttonReplies: Array<{ action: ReplyAction; at: string }>;
 }
 
 /** The rule as it is now (what a run is delivered from). */
@@ -100,6 +102,16 @@ const toLog = (v: unknown): AttemptEntry[] =>
     ? (v as AttemptEntry[]).filter((e) => e && typeof e === 'object' && 'channel' in e)
     : [];
 
+const REPLY_ORDER: readonly ReplyAction[] = ['confirm', 'reschedule', 'cancel'];
+const toReplies = (v: unknown): Array<{ action: ReplyAction; at: string }> => {
+  if (!v || typeof v !== 'object') return [];
+  const state = v as ReplyState;
+  return REPLY_ORDER.flatMap((action) => {
+    const at = state[action]?.usedAt;
+    return typeof at === 'string' && at ? [{ action, at }] : [];
+  }).sort((a, b) => a.at.localeCompare(b.at));
+};
+
 const toRun = (r: Raw): RunRow => ({
   id: Number(r.id),
   appointmentId: Number(r.appointment_id),
@@ -119,6 +131,7 @@ const toRun = (r: Raw): RunRow => ({
   messageRef: s(r.message_ref),
   delivery: (r.delivery as DeliveryState | null) ?? 'unknown',
   deliveredAt: d(r.delivered_at),
+  buttonReplies: toReplies(r.reply_state),
 });
 
 /** Only the channels a step can name now; an old row that still lists the removed SMS reads without it. */

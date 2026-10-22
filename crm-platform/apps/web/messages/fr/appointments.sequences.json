@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Mettre à niveau votre forfait",
-      "buttonsLocked": "Les boutons Confirmer, Reprogrammer et Annuler ne font pas partie de votre forfait.",
       "timeline": {
         "label": "Calendrier des rappels",
         "addMenu": "Ajouter une étape",
         "addStep": "Ajouter une étape",
         "count": "{count} sur {max} étapes avec une heure. La confirmation de réservation et le message d'absence ne sont pas comptés.",
         "capReached": "Vous avez atteint {max} étapes avec une heure. Supprimez-en une pour en ajouter une autre.",
-        "rebookLocked": "Les messages de nouvelle réservation ne font pas partie de votre forfait. Vous pouvez configurer l'étape, mais elle restera désactivée tant que vous n'aurez pas mis à niveau votre forfait.",
-        "rebookLockedStep": "Cette étape ne peut pas être activée avec votre forfait actuel.",
         "empty": "Aucune étape pour l'instant. Ajoutez la première étape ou partez d'une séquence prête à l'emploi.",
         "lane": {
           "booked": "Au moment de la réservation",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Déjà ajouté",
           "cap": "Limite atteinte",
-          "locked": "Mise à niveau du forfait requise pour l'activer",
-          "online": "Rendez-vous en ligne"
+          "online": "Rendez-vous en ligne",
+          "locked": "Niveau supérieur : pas dans votre forfait"
         },
         "enabledOf": "Envoyer : {step}",
         "remove": "Supprimer : {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# minute} other {# minutes}}",
           "hours": "{count, plural, one {# heure} other {# heures}}",
           "days": "{count, plural, one {# jour} other {# jours}}"
-        }
+        },
+        "rebookLocked": "Les messages de nouvelle réservation font partie du niveau supérieur de Rendez-vous, que votre forfait n'inclut pas. Vous pouvez configurer l'étape, mais elle reste désactivée tant que votre forfait ne les inclut pas.",
+        "rebookLockedStep": "Fait partie du niveau supérieur de Rendez-vous : impossible à activer avec votre forfait actuel."
       },
       "reasons": {
         "already_confirmed": "Le contact avait déjà confirmé.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Vous avez écrit votre propre texte pour cette étape. Il sera remplacé.",
         "planNotes": {
-          "rebook": "Votre forfait n'inclut pas les messages de nouvelle réservation : cette étape est donc enregistrée désactivée.",
-          "buttons": "Votre forfait n'inclut pas les boutons de réponse : ils sont donc omis."
+          "rebook": "L'étape de nouvelle réservation fait partie du niveau supérieur de Rendez-vous, que votre forfait n'inclut pas ; cette étape est donc enregistrée désactivée.",
+          "buttons": "Les boutons Confirmer, Reporter et Annuler font partie du niveau supérieur de Rendez-vous, que votre forfait n'inclut pas ; ils sont donc omis."
         },
         "showMessages": "Afficher les messages",
         "hideMessages": "Masquer les messages",
@@ -180,7 +179,84 @@
           "waiting": "Tant que Meta n'a pas approuvé un message, cette étape part par email.",
           "metaError": "Meta l'a refusé : {error}",
           "refresh": "Actualiser le statut",
-          "refreshing": "Actualisation"
+          "refreshing": "Actualisation",
+          "withheldTitle": "Omis à cause de votre forfait",
+          "withheldButtons": "Les boutons Confirmer, Reporter et Annuler de cette étape : {step}.",
+          "withheldRebook": "{step} : enregistrée désactivée."
+        }
+      },
+      "buttonsLocked": "Les boutons Confirmer, Reporter et Annuler font partie du niveau supérieur de Rendez-vous, que votre forfait n'inclut pas.",
+      "test": {
+        "send": "Envoyer un e-mail de test",
+        "sending": "Envoi en cours",
+        "hint": "Envoie cette étape avec des valeurs d'exemple. Laissez l'adresse vide pour l'envoyer à votre propre e-mail.",
+        "toLabel": "Envoyer le test à",
+        "toPlaceholder": "Votre propre adresse, ou saisissez-en une autre",
+        "toInvalid": "Saisissez une adresse e-mail complète, ou laissez le champ vide.",
+        "wait": {
+          "unsaved": "Enregistrez d'abord vos modifications : le test envoie l'étape enregistrée.",
+          "notSaved": "Enregistrez d'abord les rappels : cette étape est nouvelle."
+        },
+        "queued": "L'e-mail de test est en route vers {address}. Le résultat arrive aussi dans vos notifications.",
+        "skipped": "Rien n'a été envoyé : votre utilisateur n'a pas d'adresse e-mail.",
+        "noWhatsapp": "Les messages WhatsApp ne peuvent pas être testés d'ici."
+      },
+      "report": {
+        "title": "Rapport des rappels",
+        "description": "Ce que les rappels ont fait : combien ont été envoyés, remis, ont échoué ou ont été ignorés, et combien sont passés par un autre canal.",
+        "type": "Type de réservation",
+        "allTypes": "Tous les types de réservation",
+        "range": "Période",
+        "ranges": {
+          "7": "7 derniers jours",
+          "30": "30 derniers jours",
+          "90": "90 derniers jours",
+          "custom": "Choisir des dates"
+        },
+        "from": "Du",
+        "to": "Au",
+        "refresh": "Actualiser",
+        "pickDates": "Choisissez une date de début et une date de fin pour voir le rapport.",
+        "loading": "Chargement du rapport",
+        "empty": "Aucun rappel n'était dû sur cette période. Une fois les rappels envoyés, leurs résultats apparaissent ici.",
+        "caption": "Résultats des rappels pour {name}",
+        "col": {
+          "step": "Étape",
+          "sent": "Envoyés",
+          "delivered": "Remis",
+          "failed": "Échoués",
+          "fallback": "Envoyés par un autre canal",
+          "skipped": "Ignorés",
+          "confirmed": "Confirmés",
+          "rescheduled": "Report demandé",
+          "cancelled": "Annulés",
+          "total": "Total"
+        },
+        "rates": "Sur {count, plural, one {# rendez-vous} other {# rendez-vous}} ayant reçu un rappel : {confirmed} % confirmés, {cancelled} % annulés, {noShow} % absents.",
+        "why": "Pourquoi",
+        "otherReason": "Autre raison",
+        "buttonsLocked": "Les résultats des boutons Confirmer, Reporter et Annuler font partie du niveau supérieur de Rendez-vous ; ils ne sont donc pas comptés dans votre forfait.",
+        "emailNote": "« Remis » vient uniquement de WhatsApp : l'e-mail n'a pas de rapport de remise, il compte donc comme envoyé. Seuls des totaux sont affichés, ni noms, ni numéros, ni messages."
+      },
+      "history": {
+        "fallback": "Envoyé par {channel} car le premier canal n'a pas pu le remettre.",
+        "delivery": {
+          "delivered": "WhatsApp a signalé la remise.",
+          "failed": "WhatsApp a signalé un échec.",
+          "undelivered": "WhatsApp ne l'a pas remis à temps."
+        },
+        "tried": "Canaux essayés, dans l'ordre",
+        "attempt": {
+          "sent": "envoyé",
+          "skipped": "non utilisé",
+          "held": "en attente",
+          "failed": "échoué"
+        },
+        "buttons": "Réponses avec les boutons",
+        "button": {
+          "confirm": "A touché Confirmer",
+          "reschedule": "A touché Reporter",
+          "cancel": "A touché Annuler"
         }
       }
     }

@@ -466,6 +466,7 @@ export interface RecordedRun {
   sentAt: Date | null;
   attemptLog?: AttemptEntry[];
   delivery?: 'unknown' | 'delivered' | 'failed' | 'undelivered';
+  buttonReplies?: Array<{ action: 'confirm' | 'reschedule' | 'cancel'; at: string }>;
 }
 
 export interface ShownReminder {
@@ -480,6 +481,7 @@ export interface ShownReminder {
   sentAt: Date | null;
   attempts: AttemptEntry[];
   delivery: 'unknown' | 'delivered' | 'failed' | 'undelivered';
+  buttonReplies: Array<{ action: 'confirm' | 'reschedule' | 'cancel'; at: string }>;
 }
 
 /**
@@ -518,6 +520,7 @@ export function remindersOf(
       sentAt: run.sentAt,
       attempts: run.attemptLog ?? [],
       delivery: run.delivery ?? 'unknown',
+      buttonReplies: run.buttonReplies ?? [],
     });
   }
   const open =
@@ -550,6 +553,7 @@ export function remindersOf(
       sentAt: null,
       attempts: [],
       delivery: 'unknown',
+      buttonReplies: [],
     });
   }
   return out.sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime());
