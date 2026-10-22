@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { Client } from 'pg';
 import { migrationChecksum, recordedChecksumMatches } from './checksum';
+import { indexStates } from './index-state';
 
 /**
  * Migration runner for hand-written SQL.
@@ -126,32 +127,6 @@ function indexBuilds(sql: string): IndexBuild[] {
   }));
 }
 
-interface NamedIndex {
-  name: string;
-  quoted: string; // the name as a DROP statement must spell it
-  table: string; // regclass text, as the catalog spells it
-  valid: boolean;
-  building: boolean;
-  definition: string;
-}
-
-async function namedIndexes(client: Client, names: string[]): Promise<NamedIndex[]> {
-  const { rows } = await client.query<NamedIndex>(
-    `SELECT c.relname AS name,
-            quote_ident(c.relname) AS quoted,
-            ix.indrelid::regclass::text AS "table",
-            ix.indisvalid AS valid,
-            EXISTS (SELECT 1 FROM pg_stat_progress_create_index p WHERE p.index_relid = ix.indexrelid) AS building,
-            pg_get_indexdef(ix.indexrelid) AS definition
-       FROM pg_index ix
-       JOIN pg_class c ON c.oid = ix.indexrelid
-       JOIN pg_namespace n ON n.oid = c.relnamespace
-      WHERE n.nspname = current_schema() AND c.relname = ANY($1::text[])`,
-    [names],
-  );
-  return rows;
-}
-
 /** pg_get_indexdef names the table it is on; that part differs between the probe and the real index, so it is dropped. */
 const withoutTable = (definition: string): string =>
   definition.replace(/ ON \S+ USING /, ' ON _ USING ');
@@ -192,7 +167,7 @@ async function checkIndexesBeforeRun(client: Client, file: MigrationFile): Promi
   const builds = indexBuilds(file.sql);
   if (builds.length === 0) return;
   const problems: string[] = [];
-  for (const ix of await namedIndexes(
+  for (const ix of await indexStates(
     client,
     builds.map((b) => b.name),
   )) {

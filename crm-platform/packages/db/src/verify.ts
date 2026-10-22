@@ -2,6 +2,7 @@ import { is } from 'drizzle-orm';
 import { getTableConfig, PgTable } from 'drizzle-orm/pg-core';
 import type { Client } from 'pg';
 import * as schema from './schema';
+import { indexStates } from './index-state';
 
 /**
  * Drift check between the Drizzle schema and the live database (the SQL
@@ -399,11 +400,11 @@ export async function verifySchema(client: Client): Promise<VerifyResult> {
     if (/_(default|\d{6})$/.test(dbTable)) continue; // partitions
     warn(dbTable, 'exists in the database but has no Drizzle declaration');
   }
-  for (const ix of cat.indexes) {
+  for (const ix of await indexStates(client, null)) {
     if (!ix.valid) {
       err(
         ix.table,
-        `index ${ix.name} is INVALID (a CREATE INDEX CONCURRENTLY failed): DROP INDEX CONCURRENTLY ${ix.name}, then rerun the migration`,
+        `index ${ix.name} is INVALID (a CREATE INDEX CONCURRENTLY failed): DROP INDEX CONCURRENTLY ${ix.quoted}, then rerun the migration`,
       );
     }
   }
