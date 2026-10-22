@@ -33,7 +33,11 @@
         "done": "Bạn đã nhận cuộc trò chuyện này.",
         "doneOwner": "Bạn đã nhận cuộc trò chuyện này và hiện là chủ sở hữu của liên hệ.",
         "failed": "Không thể nhận cuộc trò chuyện.",
-        "taken": "Người khác đã nhận cuộc trò chuyện này trước."
+        "taken": "Người khác đã nhận cuộc trò chuyện này trước.",
+        "overLimitTitle": "Bạn đã đạt giới hạn cuộc trò chuyện",
+        "overLimitMessage": "Bạn đã có {open} cuộc trò chuyện đang mở và giới hạn của bạn là {limit}. Vẫn nhận cuộc này?",
+        "overLimitConfirm": "Vẫn nhận",
+        "overLimitCancel": "Hủy"
       },
       "giveBack": {
         "button": "Trả lại cho bot",

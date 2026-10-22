@@ -33,7 +33,11 @@
         "done": "Przejęto tę rozmowę.",
         "doneOwner": "Przejęto tę rozmowę i jesteś teraz właścicielem kontaktu.",
         "failed": "Nie udało się przejąć rozmowy.",
-        "taken": "Ktoś inny przejął tę rozmowę wcześniej."
+        "taken": "Ktoś inny przejął tę rozmowę wcześniej.",
+        "overLimitTitle": "Osiągnięto Twój limit czatów",
+        "overLimitMessage": "Masz już {open} otwartych rozmów, a Twój limit to {limit}. Przejąć tę mimo to?",
+        "overLimitConfirm": "Przejmij mimo to",
+        "overLimitCancel": "Anuluj"
       },
       "giveBack": {
         "button": "Zwróć botowi",

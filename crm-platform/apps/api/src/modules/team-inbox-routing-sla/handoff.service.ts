@@ -620,6 +620,7 @@ export class HandoffService {
   async claim(
     uuid: string,
     rowVersion: number,
+    acknowledgeLimit = false,
   ): Promise<{
     summary: Awaited<ReturnType<InboxConversationsService['summaryInTx']>>;
     ownerSet: boolean;
@@ -646,6 +647,19 @@ export class HandoffService {
         );
       }
       if (locked.rowVersion !== rowVersion) throw AppError.rowVersionConflict('Conversation');
+      // The chat limit is a warning for a person who claims (they may take it anyway), and a hard filter only for automatic assignment.
+      const cap = (await this.repo.capacity(tx, ctx.orgId, [ctx.userId!])).get(ctx.userId!);
+      if (!acknowledgeLimit && cap && cap.limit !== null && cap.open >= cap.limit) {
+        throw new AppError(
+          ERROR_CODES.INBOX_CLAIM_OVER_LIMIT,
+          `You already hold ${cap.open} open conversations and your limit is ${cap.limit}.`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [
+            { path: 'open', message: String(cap.open) },
+            { path: 'limit', message: String(cap.limit) },
+          ],
+        );
+      }
       const me = await this.repo.userBrief(tx, ctx.orgId, ctx.userId!);
       const change = await this.assignment.assignInTx(
         tx,

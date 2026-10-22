@@ -306,3 +306,46 @@ describe('giving the chat back to the bot', () => {
     expect((await run(t, c.uuid, minutes(40))).skipped).toBe('not_waiting');
   });
 });
+
+describe('claiming over your own chat limit', () => {
+  it('warns first (422 with the numbers), takes the chat when the person confirms, and a person with room is not asked', async () => {
+    const t = await p.api.signup('wqc');
+    const ch = await simChannel(p, t);
+    const a1 = await p.api.member(t, 'wqc1', AGENT);
+    const team = (
+      await q(`INSERT INTO teams (org_id, name) VALUES ($1, 'Desk') RETURNING uuid`, [t.orgId])
+    ).rows[0];
+    await q(
+      `INSERT INTO user_profiles (org_id, user_id, chat_limit) VALUES ($1, $2, 1) ON CONFLICT (org_id, user_id) DO UPDATE SET chat_limit = 1`,
+      [t.orgId, a1.userId],
+    );
+    const claim = async (uuid: string, body: Record<string, unknown> = {}) => {
+      const sum = (await p.api.as(a1.token).get(`/v2/inbox/conversations/${uuid}`)).body;
+      const version = (sum.conversation ?? sum).rowVersion as number;
+      return p.api
+        .as(a1.token)
+        .post(`/v2/inbox/conversations/${uuid}/claim`)
+        .set('idempotency-key', randomUUID())
+        .send({ rowVersion: version, ...body });
+    };
+    const first = await thread(t, ch);
+    await sendToTeam(t, first.uuid, team.uuid);
+    expect((await claim(first.uuid)).status).toBe(200); // 0 held, limit 1: room
+
+    const second = await thread(t, ch);
+    await sendToTeam(t, second.uuid, team.uuid);
+    const warn = await claim(second.uuid);
+    expect(warn.status).toBe(422);
+    expect(warn.body.code).toBe('INBOX_CLAIM_OVER_LIMIT');
+    expect(warn.body.errors).toEqual(
+      expect.arrayContaining([
+        { path: 'open', message: '1' },
+        { path: 'limit', message: '1' },
+      ]),
+    );
+    expect((await row(second.id)).assignee_user_id).toBeNull(); // nothing changed
+    const ok = await claim(second.uuid, { acknowledgeLimit: true });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+    expect(Number((await row(second.id)).assignee_user_id)).toBe(a1.userId);
+  });
+});

@@ -33,7 +33,11 @@
         "done": "你已接手此会话。",
         "doneOwner": "你已接手此会话，并成为该联系人的负责人。",
         "failed": "无法接手该会话。",
-        "taken": "其他人已先接手此会话。"
+        "taken": "其他人已先接手此会话。",
+        "overLimitTitle": "你已达到会话上限",
+        "overLimitMessage": "你已有 {open} 个进行中的会话，上限为 {limit}。仍要接手这个会话吗？",
+        "overLimitConfirm": "仍然接手",
+        "overLimitCancel": "取消"
       },
       "giveBack": {
         "button": "交还机器人",

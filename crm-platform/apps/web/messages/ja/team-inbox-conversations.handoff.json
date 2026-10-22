@@ -33,7 +33,11 @@
         "done": "この会話を引き受けました。",
         "doneOwner": "この会話を引き受け、連絡先の担当者になりました。",
         "failed": "会話を引き受けられませんでした。",
-        "taken": "他の人が先にこの会話を引き受けました。"
+        "taken": "他の人が先にこの会話を引き受けました。",
+        "overLimitTitle": "チャット数の上限に達しています",
+        "overLimitMessage": "すでに{open}件の対応中の会話があり、上限は{limit}件です。それでもこの会話を引き受けますか？",
+        "overLimitConfirm": "それでも引き受ける",
+        "overLimitCancel": "キャンセル"
       },
       "giveBack": {
         "button": "ボットに戻す",

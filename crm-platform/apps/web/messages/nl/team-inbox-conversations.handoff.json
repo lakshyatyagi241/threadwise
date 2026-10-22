@@ -33,7 +33,11 @@
         "done": "Je hebt dit gesprek overgenomen.",
         "doneOwner": "Je hebt dit gesprek overgenomen en bent nu de eigenaar van het contact.",
         "failed": "Het gesprek kon niet worden overgenomen.",
-        "taken": "Iemand anders heeft dit gesprek als eerste overgenomen."
+        "taken": "Iemand anders heeft dit gesprek als eerste overgenomen.",
+        "overLimitTitle": "Je zit aan je chatlimiet",
+        "overLimitMessage": "Je hebt al {open} open gesprekken en je limiet is {limit}. Dit gesprek toch oppakken?",
+        "overLimitConfirm": "Toch oppakken",
+        "overLimitCancel": "Annuleren"
       },
       "giveBack": {
         "button": "Terug naar bot",

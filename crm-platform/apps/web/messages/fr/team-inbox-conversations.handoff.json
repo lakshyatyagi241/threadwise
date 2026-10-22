@@ -33,7 +33,11 @@
         "done": "Vous avez pris cette conversation.",
         "doneOwner": "Vous avez pris cette conversation et vous êtes maintenant le propriétaire du contact.",
         "failed": "Impossible de prendre la conversation.",
-        "taken": "Quelqu’un d’autre a pris cette conversation en premier."
+        "taken": "Quelqu’un d’autre a pris cette conversation en premier.",
+        "overLimitTitle": "Vous avez atteint votre limite de conversations",
+        "overLimitMessage": "Vous avez déjà {open} conversations ouvertes et votre limite est de {limit}. Prendre celle-ci quand même ?",
+        "overLimitConfirm": "La prendre quand même",
+        "overLimitCancel": "Annuler"
       },
       "giveBack": {
         "button": "Rendre au bot",

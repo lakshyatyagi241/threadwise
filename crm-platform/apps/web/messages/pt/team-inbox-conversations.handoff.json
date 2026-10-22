@@ -33,7 +33,11 @@
         "done": "Você assumiu esta conversa.",
         "doneOwner": "Você assumiu esta conversa e agora é o responsável pelo contato.",
         "failed": "Não foi possível assumir a conversa.",
-        "taken": "Outra pessoa assumiu esta conversa primeiro."
+        "taken": "Outra pessoa assumiu esta conversa primeiro.",
+        "overLimitTitle": "Você atingiu seu limite de conversas",
+        "overLimitMessage": "Você já tem {open} conversas abertas e seu limite é {limit}. Assumir esta mesmo assim?",
+        "overLimitConfirm": "Assumir mesmo assim",
+        "overLimitCancel": "Cancelar"
       },
       "giveBack": {
         "button": "Devolver ao bot",

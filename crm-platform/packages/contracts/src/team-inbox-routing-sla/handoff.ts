@@ -109,7 +109,11 @@ export const requestHandoffSchema = z.object({
 });
 export type RequestHandoffInput = z.infer<typeof requestHandoffSchema>;
 
-export const claimConversationSchema = z.object({ rowVersion: z.number().int().positive() });
+export const claimConversationSchema = z.object({
+  rowVersion: z.number().int().positive(),
+  /** The person saw the chat-limit warning (INBOX_CLAIM_OVER_LIMIT) and takes the chat anyway. */
+  acknowledgeLimit: z.boolean().optional(),
+});
 export type ClaimConversationInput = z.infer<typeof claimConversationSchema>;
 
 export const returnToBotSchema = z.object({ note: z.string().trim().max(500).optional() });

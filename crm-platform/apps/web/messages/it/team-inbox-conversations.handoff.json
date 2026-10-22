@@ -33,7 +33,11 @@
         "done": "Hai preso in carico questa conversazione.",
         "doneOwner": "Hai preso in carico questa conversazione e ora sei il proprietario del contatto.",
         "failed": "Impossibile prendere in carico la conversazione.",
-        "taken": "Qualcun altro ha preso in carico prima questa conversazione."
+        "taken": "Qualcun altro ha preso in carico prima questa conversazione.",
+        "overLimitTitle": "Hai raggiunto il tuo limite di chat",
+        "overLimitMessage": "Hai già {open} conversazioni aperte e il tuo limite è {limit}. Prendere comunque questa?",
+        "overLimitConfirm": "Prendila comunque",
+        "overLimitCancel": "Annulla"
       },
       "giveBack": {
         "button": "Restituisci al bot",

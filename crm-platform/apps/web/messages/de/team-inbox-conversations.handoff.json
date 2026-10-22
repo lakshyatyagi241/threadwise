@@ -33,7 +33,11 @@
         "done": "Du hast diese Unterhaltung übernommen.",
         "doneOwner": "Du hast diese Unterhaltung übernommen und bist jetzt Besitzer des Kontakts.",
         "failed": "Die Unterhaltung konnte nicht übernommen werden.",
-        "taken": "Jemand anderes hat diese Unterhaltung zuerst übernommen."
+        "taken": "Jemand anderes hat diese Unterhaltung zuerst übernommen.",
+        "overLimitTitle": "Du hast dein Chat-Limit erreicht",
+        "overLimitMessage": "Du hast bereits {open} offene Unterhaltungen und dein Limit liegt bei {limit}. Diese trotzdem übernehmen?",
+        "overLimitConfirm": "Trotzdem übernehmen",
+        "overLimitCancel": "Abbrechen"
       },
       "giveBack": {
         "button": "An Bot zurückgeben",

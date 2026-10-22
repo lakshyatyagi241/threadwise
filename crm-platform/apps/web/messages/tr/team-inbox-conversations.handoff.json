@@ -33,7 +33,11 @@
         "done": "Bu konuşmayı üstlendiniz.",
         "doneOwner": "Bu konuşmayı üstlendiniz ve artık kişinin sahibisiniz.",
         "failed": "Konuşma üstlenilemedi.",
-        "taken": "Bu konuşmayı başka biri önce üstlendi."
+        "taken": "Bu konuşmayı başka biri önce üstlendi.",
+        "overLimitTitle": "Sohbet sınırınıza ulaştınız",
+        "overLimitMessage": "Zaten {open} açık sohbetiniz var ve sınırınız {limit}. Bunu yine de üstlenmek istiyor musunuz?",
+        "overLimitConfirm": "Yine de üstlen",
+        "overLimitCancel": "İptal"
       },
       "giveBack": {
         "button": "Bota geri ver",
