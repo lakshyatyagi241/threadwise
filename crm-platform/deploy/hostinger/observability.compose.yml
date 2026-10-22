@@ -107,7 +107,7 @@ services:
     secrets: [alert_webhook_url]
 
   # Google Chat bridge + slow-query watcher (docs/runbooks/google-chat-alerts.md). Optional: start with `up -d gchat-bridge` after the
-  # secrets/gchat_*_url files exist. Reuses the desk-api image (has `pg`); the code is mounted from tools/chat-bridge. No published port.
+  # secrets/gchat_*_url files exist. Reuses the desk-api image (has `pg`); the code is mounted from tools/chat-bridge (on the server set CHAT_BRIDGE_DIR=/opt/chat-bridge in .env: /opt/desk/../../tools does not exist there). No published port.
   gchat-bridge:
     image: desk-api:${IMAGE_TAG:-local}
     pull_policy: never
@@ -126,7 +126,7 @@ services:
       SLOW_COOLDOWN_SECONDS: ${SLOW_COOLDOWN_SECONDS:-900}
       SLOW_MAX_PER_MINUTE: ${SLOW_MAX_PER_MINUTE:-10}
     volumes:
-      - ../../tools/chat-bridge:/opt/chat-bridge:ro
+      - ${CHAT_BRIDGE_DIR:-../../tools/chat-bridge}:/opt/chat-bridge:ro
     healthcheck:
       test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:9095/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
