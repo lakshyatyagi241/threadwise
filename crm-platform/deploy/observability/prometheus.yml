@@ -15,6 +15,7 @@ rule_files:
   - /etc/prometheus/cache-hit-rate.rules.yml
   - /etc/prometheus/p0-failure-modes.rules.yml
   - /etc/prometheus/health.rules.yml
+  - /etc/prometheus/webhook-ingest.rules.yml
 
 alerting:
   alertmanagers:
@@ -31,6 +32,17 @@ scrape_configs:
       - names: ['api']
         type: A
         port: 9464
+
+  # The webhook API is outside the slots and has no `api` alias (deploy/hostinger/docker-compose.yml), so it is scraped by its service name.
+  # It is a separate job on purpose: its series still carry service="api", so the existing API rules cover it too, and the webhook rules
+  # can tell it from the slots.
+  - job_name: crm-api-hooks
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/obs_metrics_token
+    static_configs:
+      - targets: ['api-hooks:9464']
 
   - job_name: crm-worker
     metrics_path: /metrics

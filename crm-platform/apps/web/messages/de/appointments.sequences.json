@@ -1,0 +1,188 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Tarif aktualisieren",
+      "buttonsLocked": "Die Schaltflächen Bestätigen, Umbuchen und Stornieren sind nicht Teil Ihres Tarifs.",
+      "timeline": {
+        "label": "Zeitplan der Erinnerungen",
+        "addMenu": "Schritt hinzufügen",
+        "addStep": "Schritt hinzufügen",
+        "count": "{count} von {max} Schritten mit Zeitangabe. Die Buchungsbestätigung und die Nachricht bei Nichterscheinen zählen nicht mit.",
+        "capReached": "Sie haben {max} Schritte mit Zeitangabe erreicht. Entfernen Sie einen, um einen weiteren hinzuzufügen.",
+        "rebookLocked": "Nachrichten zur erneuten Buchung sind nicht Teil Ihres Tarifs. Sie können den Schritt einrichten, er bleibt aber aus, bis Sie Ihren Tarif aktualisieren.",
+        "rebookLockedStep": "Dieser Schritt kann mit Ihrem aktuellen Tarif nicht eingeschaltet werden.",
+        "empty": "Noch keine Schritte. Fügen Sie den ersten Schritt hinzu oder starten Sie mit einer fertigen Sequenz.",
+        "lane": {
+          "booked": "Bei der Buchung",
+          "before": "Vor dem Termin",
+          "after": "Nach dem Termin"
+        },
+        "laneHint": {
+          "booked": "Wird gesendet, sobald der Termin gebucht ist.",
+          "before": "Wird gesendet, bevor der Termin beginnt, niemals danach.",
+          "after": "Wird gesendet, nachdem der Termin geendet hat, oder wenn er als nicht erschienen markiert wurde."
+        },
+        "laneEmpty": "Hier ist noch nichts.",
+        "step": {
+          "confirmation": "Buchungsbestätigung",
+          "reminder_24h": "Erinnerung 24 Stunden vorher",
+          "reminder_2h": "Erinnerung 2 Stunden vorher",
+          "reminder_15m": "Erinnerung 15 Minuten vorher",
+          "reminder": "Erinnerung",
+          "after_visit": "Nachricht nach dem Termin",
+          "no_show": "Nachricht bei Nichterscheinen",
+          "rebook": "Nachricht zur erneuten Buchung"
+        },
+        "stepHint": {
+          "confirmation": "Wird direkt nach der Bestätigung der Buchung gesendet.",
+          "reminder_24h": "Am Tag davor. Sie kann die Schaltflächen Bestätigen, Umbuchen und Stornieren enthalten.",
+          "reminder_2h": "Eine kurze Erinnerung ein paar Stunden vorher.",
+          "reminder_15m": "Nur für Online-Termine mit Teilnahmelink.",
+          "reminder": "Eine Erinnerung zu einer Zeit, die Sie wählen.",
+          "after_visit": "Ein Dankeschön oder eine Nachfassnachricht, nachdem der Termin geendet hat.",
+          "no_show": "Wird gesendet, wenn Sie den Termin als nicht erschienen markieren.",
+          "rebook": "Bittet den Kontakt, einige Tage nach einem abgeschlossenen Termin erneut zu buchen. Zählt als Marketing-Nachricht."
+        },
+        "choice": {
+          "confirmation": "Buchungsbestätigung",
+          "reminder_24h": "24 Stunden vorher",
+          "reminder_2h": "2 Stunden vorher",
+          "reminder_15m": "15 Minuten vorher",
+          "custom": "Erinnerung zu einer anderen Zeit",
+          "after_visit": "Nachricht nach dem Termin",
+          "no_show": "Nachricht bei Nichterscheinen",
+          "rebook": "Nachricht zur erneuten Buchung, einige Tage später"
+        },
+        "choiceHint": {
+          "present": "Bereits hinzugefügt",
+          "cap": "Limit erreicht",
+          "locked": "Tarif-Upgrade nötig, um einzuschalten",
+          "online": "Online-Termine"
+        },
+        "enabledOf": "Senden: {step}",
+        "remove": "Entfernen: {step}",
+        "offsetOf": "Zeitpunkt von: {step}",
+        "unitOf": "Zeiteinheit von: {step}",
+        "beforeStart": "vor Beginn des Termins",
+        "afterEnd": "nach Ende des Termins",
+        "setTime": "Zeit eingeben",
+        "templateName": "WhatsApp-Vorlage: {name}",
+        "wa": {
+          "none": "Keine Vorlage",
+          "draft": "Vorlage nicht an Meta gesendet",
+          "pending": "Warten auf die Genehmigung durch Meta",
+          "approved": "Vorlage genehmigt",
+          "rejected": "Von Meta abgelehnt"
+        },
+        "fallback": {
+          "email": "Bis die WhatsApp-Vorlage genehmigt ist, wird dieser Schritt per email gesendet.",
+          "window": "WhatsApp ist hier der einzige Kanal. Außerhalb des 24-Stunden-Fensters wird daher nichts gesendet, bis eine Vorlage genehmigt ist. Fügen Sie email als Ersatz hinzu."
+        },
+        "when": {
+          "before": "{amount} vor Beginn",
+          "after": "{amount} nach Ende"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+          "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+          "days": "{count, plural, one {# Tag} other {# Tage}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "Der Kontakt hatte bereits bestätigt.",
+        "no_join_link": "Der Termin hat keinen Teilnahmelink.",
+        "already_rebooked": "Der Kontakt hat erneut gebucht.",
+        "visit_not_completed": "Der Termin wurde nicht abgeschlossen.",
+        "plan_feature_locked": "Ihr Tarif enthält diesen Schritt nicht.",
+        "not_delivered": "WhatsApp hat sie nicht rechtzeitig zugestellt, daher wurde der nächste Kanal verwendet.",
+        "send_failed": "Das Senden ist fehlgeschlagen, daher wurde der nächste Kanal verwendet."
+      },
+      "packs": {
+        "open": "Fertige Sequenzen",
+        "eyebrow": "Für {name}",
+        "title": "Fertige Erinnerungs-Sequenzen",
+        "close": "Schließen",
+        "intro": "Wählen Sie eine Sequenz für Ihre Art von Geschäft. Sie richtet in einem Schritt die Bestätigung, die Erinnerungen, die Nachfassnachricht und die Nachricht zur erneuten Buchung ein. WhatsApp-Nachrichten brauchen die Genehmigung durch Meta, bevor sie gesendet werden können. Bis dahin wird jeder Schritt per email gesendet.",
+        "loading": "Sequenzen werden geladen",
+        "choose": "Sequenz auswählen",
+        "stepsCount": "{count, plural, one {# Schritt} other {# Schritte}}",
+        "language": "Sprache der Nachrichten",
+        "machineDraft": "Der Hindi-Text ist ein maschinell erstellter Entwurf. Lassen Sie ihn von jemandem prüfen, der Hindi liest, bevor Sie die Schritte einschalten.",
+        "previewLoading": "Vorschau wird geladen",
+        "previewTitle": "Was sich ändert",
+        "summary": "{add} hinzufügen, {replace} ersetzen, {unchanged} bereits gleich",
+        "timedOf": "{count} von {max} Schritten mit Zeitangabe",
+        "blocked": "Diese Sequenz würde das Limit von {max} Schritten mit Zeitangabe überschreiten. Entfernen Sie zuerst einen Schritt.",
+        "confirmTitle": "Dies ersetzt Schritte, die Sie bereits haben",
+        "confirmBody": "{count, plural, one {# Schritt dieses Buchungstyps wird} other {# Schritte dieses Buchungstyps werden}} durch die Version der Sequenz ersetzt, einschließlich aller Texte, die Sie geschrieben haben.",
+        "confirmCheck": "Ersetzen",
+        "action": {
+          "add": "Neu",
+          "replace": "Ersetzt Ihren",
+          "unchanged": "Bereits gleich"
+        },
+        "starts": {
+          "on": "Startet eingeschaltet",
+          "off": "Startet ausgeschaltet"
+        },
+        "category": {
+          "UTILITY": "Service-Nachricht",
+          "MARKETING": "Marketing-Nachricht"
+        },
+        "onlineOnly": "Nur Online-Termine",
+        "hasButtons": "Schaltflächen Bestätigen, Umbuchen, Stornieren",
+        "wa": {
+          "new": "Wird an Meta gesendet"
+        },
+        "replaceOwnText": "Sie haben für diesen Schritt einen eigenen Text geschrieben. Er wird ersetzt.",
+        "planNotes": {
+          "rebook": "Ihr Tarif enthält keine Nachrichten zur erneuten Buchung. Dieser Schritt wird daher ausgeschaltet gespeichert.",
+          "buttons": "Ihr Tarif enthält keine Antwort-Schaltflächen, daher werden sie weggelassen."
+        },
+        "showMessages": "Nachrichten anzeigen",
+        "hideMessages": "Nachrichten ausblenden",
+        "kept": "{count, plural, one {# Schritt, den Sie bereits haben, bleibt unverändert.} other {# Schritte, die Sie bereits haben, bleiben unverändert.}}",
+        "sample": {
+          "title": "Beispielwerte",
+          "hint": "Die Nachrichten werden mit diesen erfundenen Werten angezeigt. Ändern Sie sie, um zu sehen, wie ein längerer Name oder ein anderer Ort wirkt.",
+          "reset": "Werte zurücksetzen",
+          "labels": {
+            "name": "Name des Kontakts",
+            "service": "Dienstleistung",
+            "date": "Datum",
+            "time": "Uhrzeit",
+            "place": "Ort",
+            "join_link": "Teilnahmelink",
+            "manage_link": "Verwaltungslink"
+          }
+        },
+        "submitToMeta": "WhatsApp-Nachrichten jetzt zur Genehmigung an Meta senden",
+        "submitHint": "{count, plural, one {# neue WhatsApp-Nachricht wird erstellt.} other {# neue WhatsApp-Nachrichten werden erstellt.}} Meta entscheidet, wann sie genehmigt werden. Bis dahin wird der Schritt per email gesendet. Lassen Sie dies aus, um sie als Entwürfe zu behalten.",
+        "submitHintNone": "Die WhatsApp-Nachrichten gibt es in Ihrem Arbeitsbereich bereits, daher wird nichts Neues erstellt.",
+        "apply": "Sequenz anwenden",
+        "applying": "Wird angewendet",
+        "cancel": "Abbrechen",
+        "block": {
+          "readOnly": "Sie können die Sequenzen ansehen, aber nicht anwenden.",
+          "unsaved": "Speichern oder verwerfen Sie zuerst Ihre Änderungen an den Schritten dieses Buchungstyps.",
+          "cap": "Entfernen Sie zuerst einen Schritt: Das Limit für Schritte mit Zeitangabe würde überschritten.",
+          "confirm": "Aktivieren Sie „Ersetzen“, um fortzufahren."
+        },
+        "errors": {
+          "needsConfirm": "Beim Anwenden würde ein Schritt ersetzt, daher braucht es Ihre Bestätigung. Die Vorschau wurde neu geladen.",
+          "cap": "Die Sequenz würde das Limit für Schritte mit Zeitangabe für diesen Buchungstyp überschreiten."
+        },
+        "result": {
+          "title": "Die Sequenz wurde angewendet",
+          "summary": "{added} hinzugefügt, {replaced} ersetzt. Die Schritte starten so, wie die Sequenz sie einstellt.",
+          "templatesTitle": "WhatsApp-Nachrichten",
+          "templatesNone": "Es wurde keine WhatsApp-Nachricht erstellt. Verbinden Sie eine WhatsApp Cloud API-Nummer, um WhatsApp zu nutzen; bis dahin wird email verwendet.",
+          "waiting": "Bis Meta eine Nachricht genehmigt, wird dieser Schritt per email gesendet.",
+          "metaError": "Meta hat sie abgelehnt: {error}",
+          "refresh": "Status aktualisieren",
+          "refreshing": "Wird aktualisiert"
+        }
+      }
+    }
+  }
+}

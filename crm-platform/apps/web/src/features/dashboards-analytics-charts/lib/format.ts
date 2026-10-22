@@ -152,3 +152,20 @@ export const followersLabel = (n: number): string =>
 /** TW-DASH-001: a workspace member below manager is sent to the inbox instead of seeing an error (Reference redirects, it does not 403). */
 export const isForbidden = (error: unknown): boolean =>
   error instanceof ApiError && error.status === 403;
+
+/**
+ * The timezone chip on the throughput card ("UTC", "UTC+5:30"). Deterministic: Node and each browser's ICU spell zero offset
+ * differently ("GMT", "GMT+0", "UTC"), and the card is server-rendered, so every spelling is folded to one or React reports
+ * a hydration mismatch and rebuilds the tree on the client.
+ */
+export function tzChip(zone: string, at: Date = new Date()): string {
+  try {
+    const part = new Intl.DateTimeFormat('en', { timeZone: zone, timeZoneName: 'shortOffset' })
+      .formatToParts(at)
+      .find((p) => p.type === 'timeZoneName')?.value;
+    const label = (part ?? 'UTC').replace('GMT', 'UTC');
+    return /^UTC[+-]0(?::00)?$/.test(label) ? 'UTC' : label;
+  } catch {
+    return 'UTC';
+  }
+}

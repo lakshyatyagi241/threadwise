@@ -37,7 +37,8 @@
       "statusStage": "Bu durum farklı bir aşamaya ait. Kişinin aşamasına uygun bir durum seçin.",
       "stageScope": "Bir durum yalnızca yaşam döngüsü aşamalarınızdan biriyle sınırlandırılabilir.",
       "planLimit": "Planınızın {limit, plural, one {# kişi} other {# kişi}} sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya yer açmak için mevcut bir kişiyi silin.",
-      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez."
+      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Mesaj göndermek için önce kendinize atayın."
     },
     "list": {
       "title": "Kişi Merkezi",
@@ -1545,7 +1546,9 @@
         "selected": "Seçilen sütunlar",
         "selectAll": "Tümünü seç",
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
-        "remove": "{name} öğesini kaldır"
+        "remove": "{name} öğesini kaldır",
+        "nameShort": "Görünüm adı en az {min} karakter olmalı.",
+        "nameLong": "Görünüm adı en fazla {max} karakter olabilir."
       },
       "presets": {
         "myContacts": "Kişilerim",

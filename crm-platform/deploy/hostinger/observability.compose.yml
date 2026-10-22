@@ -55,6 +55,13 @@ services:
     volumes:
       - ./backups:/backups:ro
       - offsite_state:/offsite:ro
+    # The image's own check GETs :3000/health, which the probe does not serve (it only exposes metrics on :9464), so it sat "unhealthy" for ever.
+    healthcheck:
+      test: ['CMD', 'node', '-e', "require('net').connect(9464, '127.0.0.1').on('connect', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
     environment:
       NODE_ENV: production
       TZ: UTC
@@ -92,6 +99,7 @@ services:
       - ../observability/cache-hit-rate.rules.yml:/etc/prometheus/cache-hit-rate.rules.yml:ro
       - ../observability/p0-failure-modes.rules.yml:/etc/prometheus/p0-failure-modes.rules.yml:ro
       - ../observability/health.rules.yml:/etc/prometheus/health.rules.yml:ro
+      - ../observability/webhook-ingest.rules.yml:/etc/prometheus/webhook-ingest.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
     healthcheck:

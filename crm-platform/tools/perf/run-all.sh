@@ -12,6 +12,8 @@ set -u
 cd "$(dirname "$0")/../.."
 ROOT=$PWD
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+# several integration specs assert UTC timestamps; a machine in another zone fails them for no real reason
+export TZ=UTC
 WANT_QA=0; WANT_STRESS=0; WANT_REPORTS=0; WANT_STATUS=0; ONLY=""
 while [ $# -gt 0 ]; do
   case "$1" in

@@ -723,7 +723,6 @@ describe('ContactsToolbar', () => {
         <ContactsToolbar
           q=""
           onQ={noop}
-          focusSearch={0}
           filter={{
             filters: {
               group: '',

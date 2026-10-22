@@ -5,17 +5,8 @@
 // It saves a Graph version and restores the one it found, so the page ends as it began.
 import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
-import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const here = dirname(fileURLToPath(import.meta.url));
-const require = createRequire(
-  process.env.PW_MODULES ??
-    `${resolve(here, '../../../../.claude/skills/threadwise-playwright-parity/harness')}/`,
-);
-const { chromium } = require('playwright');
+import { chromium } from '@playwright/test';
 
 const WEB = process.env.WEB ?? 'http://localhost:3108';
 const EMAIL = process.env.OPERATOR_EMAIL ?? 'operator@example.test';

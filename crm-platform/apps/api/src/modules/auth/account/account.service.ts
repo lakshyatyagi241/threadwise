@@ -342,7 +342,7 @@ export class AccountService {
 
   async setAvatar(file: { originalname: string; buffer: Buffer }): Promise<{ avatarUrl: string }> {
     const { orgId, userId } = this.actor();
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: ['image'],

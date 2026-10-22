@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import {
   deriveStateKey,
   newState,
@@ -13,9 +13,14 @@ import { problemOf } from '../../../src/modules/meeting-conferencing/meeting-con
 import { VideoNotConnectedError } from '../../../src/modules/meeting-conferencing/conferencing-tokens.service';
 import { ConferencingError } from '../../../src/infra/providers/meeting-conferencing';
 
-const KEY = deriveStateKey(Buffer.alloc(32, 3).toString('base64'));
-const OTHER = deriveStateKey(Buffer.alloc(32, 4).toString('base64'));
+let KEY: Buffer;
+let OTHER: Buffer;
 const NOW = 1_800_000_000_000;
+
+beforeAll(async () => {
+  KEY = await deriveStateKey(Buffer.alloc(32, 3).toString('base64'));
+  OTHER = await deriveStateKey(Buffer.alloc(32, 4).toString('base64'));
+});
 
 describe('connect state and ticket', () => {
   it('round-trips a state and binds it to its provider', () => {

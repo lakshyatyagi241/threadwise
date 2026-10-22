@@ -131,6 +131,8 @@ describe('the customer wallet (TW-WALLET-020, -021, -022, -025)', () => {
       engine: 'WhatsApp Cloud',
       channel: 'Campaign',
     });
+    // No recipient or template on this charge (no campaign row behind it), so those columns stay out of the screen and the CSV.
+    expect(s.detailColumns).toEqual(['channel', 'country', 'category', 'engine']);
   });
 
   it('filters the statement: the Top-ups filter finds top-ups, search finds a description, a date range bounds it', async () => {
@@ -172,7 +174,7 @@ describe('the customer wallet (TW-WALLET-020, -021, -022, -025)', () => {
     const text = r.text.replace(String.fromCharCode(0xfeff), '');
     const lines = text.trim().split('\r\n');
     expect(lines[0]).toBe(
-      'Date,Type,Description,Channel,Recipient,Template,Country,Category,Engine,Money in (USD),Money out (USD),Balance after (USD)',
+      'Date,Type,Description,Channel,Country,Category,Engine,Money in (USD),Money out (USD),Balance after (USD)',
     );
     expect(lines).toHaveLength(4);
     expect(lines[1]).toContain('Top-up');
@@ -180,6 +182,45 @@ describe('the customer wallet (TW-WALLET-020, -021, -022, -025)', () => {
     expect(lines[2]).toContain('1.00');
     expect(lines.some((l) => l.includes(`'=HYPERLINK`))).toBe(true);
     expect(lines.some((l) => l.includes(',=HYPERLINK'))).toBe(false);
+  });
+
+  it('fills Category for migrated Waboo history and leaves out the columns no row fills', async () => {
+    const c = await newTenant(h, 'wc-m');
+    // Waboo history is one ledger row per local day and category, with no billing row behind it: only Waboo's own category is on the row.
+    const legacy = (category: string) => JSON.stringify({ legacy: { waboo: { category } } });
+    await h.owner.query(
+      `INSERT INTO wallet_transactions (org_id, kind, type, direction, amount, balance_after, source, description, meta, idempotency_key)
+       VALUES ($1, 'credit', 'spend', 'out', -9.15, 90.85, 'waboo_whatsapp', 'Balance Deducted For Whatsapp Utility', $2::jsonb, 'waboo:wc-m:wa:chg:utility'),
+              ($1, 'credit', 'refund', 'in', 1.525, 92.375, 'waboo_whatsapp', 'Balance Reverted For Whatsapp Utility', $2::jsonb, 'waboo:wc-m:wa:rev:utility'),
+              ($1, 'credit', 'spend', 'out', -1, 91.375, 'waboo_whatsapp', 'Balance Deducted For Whatsapp Message', $3::jsonb, 'waboo:wc-m:wa:chg:message'),
+              ($1, 'credit', 'earn', 'in', 5, 96.375, 'waboo_whatsapp', 'Affiliate earning', $2::jsonb, 'waboo:wc-m:earn:1')`,
+      [c.orgId, legacy('Utility'), legacy('Message')],
+    );
+    const st = statementResponseSchema.parse((await me(c.admin).get('/v2/wallet/statement')).body);
+    expect(st.detailColumns).toEqual(['category']);
+    const byDescription = (d: string) => st.data.find((r) => r.description === d)!;
+    expect(byDescription('Balance Deducted For Whatsapp Utility').context).toMatchObject({
+      category: 'utility',
+      channel: null,
+      country: null,
+      engine: null,
+    });
+    expect(byDescription('Balance Reverted For Whatsapp Utility').context).toMatchObject({
+      category: 'utility',
+    });
+    // Waboo writes its own title ("Message") when a charge had no template category: that is not a WhatsApp category, so nothing is filled.
+    expect(byDescription('Balance Deducted For Whatsapp Message').context).toBeNull();
+    // Only a charge or a refund takes Waboo's category: an earning carrying the same meta fills nothing.
+    expect(byDescription('Affiliate earning').context).toBeNull();
+
+    const r = await me(c.admin).get('/v2/wallet/statement.csv').buffer(true);
+    const lines = r.text.replace(String.fromCharCode(0xfeff), '').trim().split('\r\n');
+    expect(lines[0]).toBe(
+      'Date,Type,Description,Category,Money in (USD),Money out (USD),Balance after (USD)',
+    );
+    expect(lines).toHaveLength(5);
+    expect(lines[1]).toContain('Balance Deducted For Whatsapp Utility,utility,');
+    expect(lines[3]).toContain('Balance Deducted For Whatsapp Message,,');
   });
 
   it('shows another workspace nothing of this one', async () => {

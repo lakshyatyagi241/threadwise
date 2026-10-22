@@ -584,7 +584,11 @@
           "sla_breach": "Prazo de resposta perdido",
           "spam_flagged": "Marcada como spam por {actor}",
           "escalated": "Escalada",
-          "unknown": "{what} por {actor}"
+          "unknown": "{what} por {actor}",
+          "handoff_requested": "Transferida para uma pessoa por {actor}",
+          "queue_reminded": "A equipe foi lembrada",
+          "queue_offered": "Oferecida a outra equipe",
+          "queue_customer_message": "Uma mensagem foi enviada ao cliente"
         },
         "actors": {
           "user": "Um membro da equipe",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulador (testes)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat do site",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulador (testes)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat do site",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contato",
         "agent": "Você",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "Voltar para a caixa de entrada",
-        "title": "Tags da conversa",
+        "title": "Tags",
         "intro": "As tags da conversa marcam um assunto (cobrança, reembolso, urgente) para que sua equipe possa organizar e filtrar a caixa de entrada. Elas vêm da mesma biblioteca de tags dos contatos, que descrevem a pessoa.",
         "newTitle": "Nova tag",
         "editTitle": "Editar tag",

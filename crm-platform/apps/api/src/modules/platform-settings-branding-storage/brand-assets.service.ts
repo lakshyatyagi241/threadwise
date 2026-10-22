@@ -1,3 +1,5 @@
+import { imageProblem } from '../auth/security/image-integrity';
+import { isSafeSvg } from '../../common/svg-safe';
 import { createHash } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
@@ -41,6 +43,7 @@ const assetKey = (slot: string) => `set.asset.${slot}`;
 
 /** The file's real type from its first bytes; the client's claimed type and file name are never trusted. */
 export function sniffImage(buf: Buffer): string | null {
+  if (imageProblem(buf)) return null; // pixel size, trailing data, markup inside (SEC-UPLOAD-3/5)
   if (buf.length >= 8 && buf.subarray(0, 8).equals(Buffer.from('89504e470d0a1a0a', 'hex')))
     return 'image/png';
   if (buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'image/jpeg';
@@ -54,7 +57,7 @@ export function sniffImage(buf: Buffer): string | null {
     return 'image/x-icon';
   const head = buf.subarray(0, 512).toString('utf8').trimStart().toLowerCase();
   if (/^(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)?(<!doctype svg[^>]*>\s*)?<svg[\s>]/.test(head))
-    return 'image/svg+xml';
+    return isSafeSvg(buf) ? 'image/svg+xml' : null; // active SVG (script, links, entities) is refused (SEC-UPLOAD-1)
   return null;
 }
 

@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { HtmlSanitizerService } from '../../../src/modules/auth/security/html-sanitizer.service';
 import { UploadPolicyService } from '../../../src/modules/auth/security/upload-policy.service';
+import { jpegOfSize, pngOfSize } from '../../support/images';
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.alloc(32),
-]);
+const PNG = pngOfSize();
 const upload = new UploadPolicyService();
 const media = (name: string, buf: Buffer) =>
   upload.validate({ filename: name, buffer: buf, allow: ['media'], maxBytes: 1_000_000 });

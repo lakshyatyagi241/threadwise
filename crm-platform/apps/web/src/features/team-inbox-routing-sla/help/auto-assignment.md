@@ -54,7 +54,7 @@ Anything already assigned by a flow, a person or a handoff is never changed by t
 
 ## The four switches
 
-Each switch saves as soon as you change it. You can read the page with the inbox settings right; changing it needs the right to manage routing. A switch your plan does not include is marked **Not in your plan**.
+Each switch saves as soon as you change it. You can read the page with the inbox settings right; changing it needs the right to manage routing. A switch your plan does not include is marked **Not in your plan**. If your plan loses an option, the page shows it as off; your earlier choice is kept and comes back when the plan includes it again.
 
 - **Auto Assignment** is the master switch. New chats are shared evenly among agents who are accepting chats: not offline, not busy and not on leave. An agent who has reached their chat limit is skipped, and when every agent is at the limit, new chats wait in the queue. Set each agent's chat limit in their profile under **Team members**. Turn it off and nothing is assigned automatically, not by a rule and not by the contact owner; chats wait in the queue until someone claims them or a flow names a person. When you turn it on and the workspace has no **Everyone else** setting yet, the page creates it with "Distribute evenly among all agents" selected, so you can see and change it. Nothing is ever created for you without this click.
 - **Sticky Agent** sends a returning contact back to the agent who handled their last chat, as long as that agent is still an active member who can open the inbox. Their online status is not checked, because continuity is the point. If the contact has an owner, the owner is tried first. How many days back the last agent counts is set under **Advanced**. Needs a plan with assignment rules.
@@ -122,6 +122,10 @@ Under the list, **Try it** answers "who would get this chat, and why?". Pick a c
 
 It does not apply to a chat that someone, a flow or a handoff already assigned, to assigning or claiming by hand, or to a Human handoff step that names a person (the rules are ignored) or a team (the team's own method is used). Rules do not run again for later messages of a chat that is already open, except the extras a rule can do for each message (tags, an automatic reply or a flow); a rule that applies to every conversation never does these on later messages.
 
+## Waiting queue (Smart routing)
+
+Under the switches, **Waiting queue** has three optional steps for chats nobody has taken: remind the team, offer the chat to another team, and a last step (a message to the customer, or the chat given back to the bot). Every step is off until you switch it on, runs once per chat, counts only the minutes the team is open, and stops when someone takes the chat. A step that needs a team or a message cannot be saved without it. Two more rules sit in the same section, both off by default: **Return unanswered chats when someone goes away** (when a person goes Offline or starts a leave, the chats they hold that the customer is still waiting on go back to the team's queue) and **Set inactive people Offline** (an Available person with no activity for the number of minutes you choose is set Offline; they switch themselves back). All of this is part of Smart routing: without it the section is shown locked with a link to Plans, your saved choices are kept, and nothing runs.
+
 ## Business hours
 
 Select **Business hours** at the top of the page to set when your team is open. Each day has a switch, an opening time and a closing time. A day that is switched off is closed all day. A closing time before the opening time is a night shift that runs into the next morning. Breaks and holidays are set under **Settings > General > Working hours**, which edits this same schedule.
@@ -130,7 +134,7 @@ The **Time zone** is the one your workspace uses for every day and time. Only th
 
 ## Plan and access
 
-Your plan must include Routing rules to use rules, Everyone else, Try it and Auto Assignment; without it the switches your plan allows still work (Assign Agent as Contact Owner works on every plan) and chats wait in the queue to be claimed or assigned by hand. The rule limit counts rules that are switched off too.
+Rules, Everyone else, Try it and Auto Assignment are part of Smart routing, which comes with some plans or as an add-on ([Smart routing add-on](help:smart-routing-addon)). Each locked control says so and links to Plans and add-ons. Without it the switches your plan allows still work (Assign Agent as Contact Owner works on every plan) and chats wait in the queue to be claimed or assigned by hand. The rule limit counts rules that are switched off too.
 
 ## If something looks wrong
 

@@ -9,9 +9,9 @@ import {
   allInViewSelected,
   failedIds,
   pruneSelection,
-  selectAllInView,
   selectRange,
   summarize,
+  toggleAllInView,
   toggleId,
   type Selection,
 } from '../lib/selection';
@@ -27,7 +27,8 @@ export interface BulkSelection {
   select: (id: string, shift: boolean) => void;
   /** A tick on a row's hover box: starts the selection if none is on, toggles the row (shift: the run), and ends it when the last tick is taken off. */
   pick: (id: string, shift: boolean) => void;
-  selectAll: () => void;
+  /** Picks every row in view, or clears the selection when they are all picked already. */
+  toggleAll: () => void;
   clear: () => void;
   run: (action: BulkConversationAction) => void;
 }
@@ -88,6 +89,13 @@ export function useBulkSelection(
     [rows, selection],
   );
 
+  const toggleAll = useCallback(() => {
+    const clearing = allInViewSelected(rows, selection);
+    setSelection(toggleAllInView(rows, selection));
+    // Clearing every pick is the same as taking off the last tick: a select mode started by a tick ends with it.
+    if (clearing) setSelecting(manual.current);
+  }, [rows, selection]);
+
   const run = useCallback(
     (action: BulkConversationAction) => {
       if (busy || selection.size === 0) return;
@@ -139,7 +147,7 @@ export function useBulkSelection(
     },
     select,
     pick,
-    selectAll: () => setSelection(selectAllInView(rows)),
+    toggleAll,
     clear,
     run,
   };

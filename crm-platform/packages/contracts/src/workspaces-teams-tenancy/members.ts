@@ -170,6 +170,8 @@ export type UpdateWspMemberDetailsInput = z.infer<typeof updateWspMemberDetailsS
  * never does. A member nobody has switched yet counts as `online`, as routing always read them.
  */
 export const WSP_AVAILABILITY = ['online', 'offline'] as const;
+/** Outbox event: a person switched Available / Offline (or the system did, for inactivity). Payload `userId` (internal id), `status`, `reason`. */
+export const MEMBER_AVAILABILITY_CHANGED = 'member.availability_changed';
 export const wspAvailabilitySchema = z.object({ status: z.enum(WSP_AVAILABILITY) });
 export type WspAvailability = z.infer<typeof wspAvailabilitySchema>;
 export const setWspAvailabilitySchema = wspAvailabilitySchema;

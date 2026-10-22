@@ -535,10 +535,12 @@
             "remove_branding": "Marca própria",
             "sales_pipeline": "Funil de vendas",
             "appointment_booking": "Agendamentos",
+            "appointment_confirm_buttons": "Botões do lembrete",
+            "appointment_rebook_steps": "Etapas de novo agendamento",
             "chatbot_widgets": "Widgets de chatbot",
             "wa_storefront": "Catálogo do WhatsApp",
             "inbox_sla": "SLA da caixa de entrada",
-            "inbox_routing": "Roteamento da caixa de entrada",
+            "inbox_routing": "Roteamento inteligente",
             "waba_calling": "Chamadas no WhatsApp",
             "inbox_kanban": "Kanban da caixa de entrada",
             "team_performance": "Desempenho da equipe",
@@ -564,7 +566,7 @@
             "record_assignment": "Regras de atribuição de registros",
             "team_hierarchy": "Hierarquia de equipes e gestores",
             "custom_roles": "Funções personalizadas e escopos",
-            "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
+            "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo"
           },
           "cta": {
             "continueFree": "Continuar grátis",

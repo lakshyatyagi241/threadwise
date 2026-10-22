@@ -31,6 +31,7 @@ import {
   type ListState,
 } from '../lib/list';
 import type { Selection } from '../lib/selection';
+import { ChannelKindOptions } from './channel-kind-options';
 import { ConversationRow } from './conversation-row';
 import { TagFilter } from './tag-filter';
 import { FiltersDialog } from './filters-dialog';
@@ -206,13 +207,7 @@ export function ConversationList(props: ConversationListProps) {
               className="h-8 text-xs"
             >
               <option value="">{t('allChannels')}</option>
-              {channels!
-                .filter((c) => c.kind !== 'email')
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
+              <ChannelKindOptions channels={channels!} />
               <EmailChannelOptions channels={channels!} />
             </Select>
           )}
@@ -226,7 +221,8 @@ export function ConversationList(props: ConversationListProps) {
           channels={channels}
         />
 
-        {list.counts && list.counts.archived > 0 && (
+        {/* The archive view keeps its way back even when the filters leave no archived thread. */}
+        {list.counts && (list.counts.archived > 0 || filters.archived) && (
           <button
             type="button"
             onClick={() => props.onFilters({ archived: !filters.archived })}

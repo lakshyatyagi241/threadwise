@@ -1,0 +1,91 @@
+{
+  "feature": "deals-pipelines",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-deals-pipelines-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/deals-pipelines/api/use-board.ts",
+        "apps/web/src/features/deals-pipelines/components/contact-picker.tsx",
+        "apps/web/src/features/deals-pipelines/components/deal-activity.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-deals-pipelines-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/deals-pipelines/components/deals-toolbar.tsx",
+        "apps/web/src/features/deals-pipelines/components/parts.tsx",
+        "apps/web/src/features/deals-pipelines/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-deals-pipelines-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/deals-pipelines/api/mock-server.ts",
+        "apps/web/src/features/deals-pipelines/components/deal-activity.tsx",
+        "apps/web/src/features/deals-pipelines/components/deal-drawer.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-deals-pipelines-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/deals-pipelines/api/mock-server.ts",
+        "apps/web/src/features/deals-pipelines/components/deal-drawer.tsx",
+        "apps/web/src/features/deals-pipelines/components/deal-form-modal.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-deals-pipelines-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/deals-pipelines/api/mock-server.ts",
+        "apps/web/src/features/deals-pipelines/components/deal-drawer.tsx",
+        "apps/web/src/features/deals-pipelines/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-deals-pipelines-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/deals-pipelines/api/mock-server.ts",
+        "apps/web/src/features/deals-pipelines/components/contact-picker.tsx",
+        "apps/web/src/features/deals-pipelines/components/deals-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -132,6 +132,8 @@ export function derivePlan(
   for (const [feature, codes] of Object.entries(FEATURE_FROM_WABOO))
     features[feature] = codes.some(on);
   for (const feature of ALWAYS_OPEN_FEATURES) if (feature in features) features[feature] = true;
+  // automatic assignment is a workspace setting in Waboo: a workspace that had it keeps it, whatever its plan lists
+  if (core.workspace?.autoAssignment === true && 'inbox_routing' in features) features.inbox_routing = true;
   const limits: Record<string, number> = {};
   for (const [k, v] of Object.entries(base.limits))
     limits[k] = LIMITS_KEPT_FROM_BASE.has(k) ? v : 0;

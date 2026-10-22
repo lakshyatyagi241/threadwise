@@ -60,10 +60,12 @@
       "remove_branding": "Gỡ thương hiệu",
       "sales_pipeline": "Pipeline bán hàng",
       "appointment_booking": "Đặt lịch hẹn",
+      "appointment_confirm_buttons": "Nút nhắc hẹn (Xác nhận / Đổi lịch / Hủy)",
+      "appointment_rebook_steps": "Bước đặt lại lịch (gợi nhớ)",
       "chatbot_widgets": "Tiện ích chatbot",
       "wa_storefront": "Danh mục WhatsApp",
       "inbox_sla": "Chính sách SLA",
-      "inbox_routing": "Quy tắc định tuyến",
+      "inbox_routing": "Định tuyến thông minh: tự động giao và quy tắc",
       "waba_calling": "Gọi qua WhatsApp",
       "inbox_kanban": "Chế độ xem Kanban",
       "team_performance": "Hiệu suất nhóm",
@@ -89,7 +91,7 @@
       "record_assignment": "Quy tắc phân công bản ghi",
       "team_hierarchy": "Phân cấp nhóm và quản lý",
       "custom_roles": "Vai trò tùy chỉnh và phạm vi",
-      "inbox_assignment_sticky": "Chủ sở hữu liên hệ và nhân viên cố định"
+      "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",
@@ -251,6 +253,9 @@
         "buy": "Mua tiện ích bổ sung",
         "buyAgain": "Mua lại",
         "active": "Đang hoạt động",
+        "included": "Đã có trong gói của bạn",
+        "includedOwned": "Bạn cũng đang có tiện ích này. Gói của bạn giờ đã bao gồm nó nên bạn có thể hủy tiện ích. Không có khoản nào được hoàn tự động.",
+        "includedEnds": "Đã có trong gói của bạn. Tiện ích của bạn kết thúc vào {date} và sẽ không gia hạn.",
         "unlimitedBullet": "{label} không giới hạn",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "Quay lại",
       "compare": "So sánh tất cả gói",
       "appHint": "{feature} cũng được bán dưới dạng ứng dụng trong Chợ ứng dụng.",
-      "appLink": "Xem ứng dụng"
+      "appLink": "Xem ứng dụng",
+      "addonHint": "Bạn cũng có thể thêm vào gói hiện tại bằng tiện ích {addon}.",
+      "addonLink": "Xem tiện ích",
+      "addons": {
+        "smartRouting": "Định tuyến thông minh",
+        "teamsPermissions": "Nhóm và quyền"
+      }
+    },
+    "lock": {
+      "link": "Xem gói và tiện ích"
     }
   }
 }

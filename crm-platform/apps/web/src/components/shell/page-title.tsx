@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { splitTitleBadge } from '@/lib/tab-title';
 import { useBrandName } from './brand';
 import { documentTitle, pageLabelKey } from './page-title-model';
 
@@ -34,12 +35,14 @@ export function PageTitle({
     let server: string | null = null;
     const apply = () => {
       const label = registered || document.querySelector('main h1')?.textContent?.trim() || '';
-      const now = document.title;
-      if (now !== mine) server = now;
+      // The live notifications own the `(3) ` unread badge in front of the title: name the page, keep the badge as it is. Writing
+      // the title without it makes that watcher put it back, which makes this one rewrite it, and so on without end.
+      const { badge, base } = splitTitleBadge(document.title);
+      if (base !== mine) server = base;
       const next = documentTitle({ label, workspace, brand, serverTitle: server });
       if (!next) return;
       mine = next;
-      if (next !== document.title) document.title = next;
+      if (badge + next !== document.title) document.title = badge + next;
     };
     // The route just changed: whatever is in the tab now was rendered by the server for this page (or is our previous title).
     apply();

@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { HandoffCard, HandoffTraceLine, OwnerMode } from '@crm/contracts';
+import type {
+  HandoffCard,
+  HandoffTraceLine,
+  OwnerMode,
+  QueueUnclaimedAction,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 type Raw = Record<string, unknown>;
@@ -9,7 +14,20 @@ const num = (v: unknown): number | null => (v === null || v === undefined ? null
 const str = (v: unknown): string | null => (v === null || v === undefined ? null : String(v));
 
 /** The workspace's handoff settings as stored (`workspace_settings.handoff_*`, plus the older keep-contact-agent switch). */
+/** The waiting queue's timers as stored: the overflow team by internal id, with its uuid for the wire. */
+export interface StoredQueueTimers {
+  remindMinutes: number | null;
+  overflowMinutes: number | null;
+  overflowTeamId: number | null;
+  overflowTeamUuid: string | null;
+  unclaimedMinutes: number | null;
+  unclaimedAction: QueueUnclaimedAction;
+  unclaimedMessage: string;
+}
+
 export interface StoredHandoffSettings {
+  queueTimers: StoredQueueTimers;
+  away: { returnUnanswered: boolean; autoOfflineMinutes: number | null };
   autoAssign: boolean;
   claimSetsOwner: boolean;
   ownerMode: OwnerMode;
@@ -65,11 +83,30 @@ export class HandoffRepository {
 
   async settings(tx: Tx, orgId: number): Promise<StoredHandoffSettings> {
     const res = await tx.execute(sql`
-      SELECT handoff_auto_assign, handoff_claim_sets_owner, handoff_owner_mode, handoff_continuity_days,
-             handoff_prompt_owner_on_reassign, handoff_notify_queue, routing_keep_contact_agent
-      FROM workspace_settings WHERE org_id = ${orgId}`);
+      SELECT s.handoff_auto_assign, s.handoff_claim_sets_owner, s.handoff_owner_mode, s.handoff_continuity_days,
+             s.handoff_prompt_owner_on_reassign, s.handoff_notify_queue, s.routing_keep_contact_agent,
+             s.handoff_wq_remind_minutes, s.handoff_wq_overflow_minutes, s.handoff_wq_overflow_team_id, ot.uuid AS wq_overflow_team_uuid,
+             s.handoff_wq_unclaimed_minutes, s.handoff_wq_unclaimed_action, s.handoff_wq_unclaimed_message,
+             s.handoff_return_on_away, s.handoff_auto_offline_min
+      FROM workspace_settings s
+      LEFT JOIN teams ot ON ot.org_id = s.org_id AND ot.id = s.handoff_wq_overflow_team_id
+      WHERE s.org_id = ${orgId}`);
     const r = rowsOf(res)[0];
     return {
+      away: {
+        returnUnanswered: r ? r.handoff_return_on_away === true : false,
+        autoOfflineMinutes: num(r?.handoff_auto_offline_min),
+      },
+      queueTimers: {
+        remindMinutes: num(r?.handoff_wq_remind_minutes),
+        overflowMinutes: num(r?.handoff_wq_overflow_minutes),
+        overflowTeamId: num(r?.handoff_wq_overflow_team_id),
+        overflowTeamUuid: str(r?.wq_overflow_team_uuid),
+        unclaimedMinutes: num(r?.handoff_wq_unclaimed_minutes),
+        unclaimedAction: ((r?.handoff_wq_unclaimed_action as QueueUnclaimedAction | undefined) ??
+          'keep') as QueueUnclaimedAction,
+        unclaimedMessage: str(r?.handoff_wq_unclaimed_message) ?? '',
+      },
       autoAssign: r ? r.handoff_auto_assign === true : true,
       claimSetsOwner: r ? r.handoff_claim_sets_owner === true : false,
       ownerMode: ((r?.handoff_owner_mode as OwnerMode | undefined) ?? 'independent') as OwnerMode,
@@ -84,8 +121,13 @@ export class HandoffRepository {
   async updateSettings(
     tx: Tx,
     orgId: number,
-    v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent'>>,
+    v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent' | 'queueTimers' | 'away'>> & {
+      queueTimers?: Partial<Omit<StoredQueueTimers, 'overflowTeamUuid'>>;
+      away?: Partial<StoredHandoffSettings['away']>;
+    },
   ): Promise<void> {
+    const q = v.queueTimers ?? {};
+    const a = v.away ?? {};
     await tx.execute(
       sql`INSERT INTO workspace_settings (org_id) VALUES (${orgId}) ON CONFLICT (org_id) DO NOTHING`,
     );
@@ -98,6 +140,26 @@ export class HandoffRepository {
         ? sql`handoff_prompt_owner_on_reassign = ${v.promptOwnerOnReassign}`
         : null,
       v.notifyQueue !== undefined ? sql`handoff_notify_queue = ${v.notifyQueue}` : null,
+      a.returnUnanswered !== undefined ? sql`handoff_return_on_away = ${a.returnUnanswered}` : null,
+      a.autoOfflineMinutes !== undefined
+        ? sql`handoff_auto_offline_min = ${a.autoOfflineMinutes}`
+        : null,
+      q.remindMinutes !== undefined ? sql`handoff_wq_remind_minutes = ${q.remindMinutes}` : null,
+      q.overflowMinutes !== undefined
+        ? sql`handoff_wq_overflow_minutes = ${q.overflowMinutes}`
+        : null,
+      q.overflowTeamId !== undefined
+        ? sql`handoff_wq_overflow_team_id = ${q.overflowTeamId}`
+        : null,
+      q.unclaimedMinutes !== undefined
+        ? sql`handoff_wq_unclaimed_minutes = ${q.unclaimedMinutes}`
+        : null,
+      q.unclaimedAction !== undefined
+        ? sql`handoff_wq_unclaimed_action = ${q.unclaimedAction}`
+        : null,
+      q.unclaimedMessage !== undefined
+        ? sql`handoff_wq_unclaimed_message = ${q.unclaimedMessage === '' ? null : q.unclaimedMessage}`
+        : null,
     ].filter((x): x is ReturnType<typeof sql> => x !== null);
     if (sets.length === 0) return;
     await tx.execute(
@@ -125,6 +187,14 @@ export class HandoffRepository {
       cursor: num(r.assignment_cursor),
       receives: r.receives_conversations !== false,
     };
+  }
+
+  /** A team by its internal id, with what a queue timer needs to know about it (does it take conversations, its uuid). */
+  async teamFactsById(tx: Tx, orgId: number, id: number): Promise<TeamFacts | null> {
+    const res = await tx.execute(sql`
+      SELECT uuid FROM teams WHERE org_id = ${orgId} AND id = ${id}`);
+    const uuid = rowsOf(res)[0]?.uuid;
+    return typeof uuid === 'string' ? this.teamByUuid(tx, orgId, uuid) : null;
   }
 
   async teamById(
@@ -339,6 +409,77 @@ export class HandoffRepository {
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND status IN ('waiting', 'assigned')`);
   }
 
+  /**
+   * The live handoff's link to the flow that made it, for Return to bot: the flow run and the Human handoff node. Null when the thread
+   * has no live handoff; `flowRunId`/`nodeId` are null for a handoff no flow made (a person's "send to queue", the AI marker, a keyword).
+   */
+  async liveFlowRef(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+  ): Promise<{ uuid: string; flowRunId: number | null; nodeId: string | null } | null> {
+    const res = await tx.execute(sql`
+      SELECT uuid, flow_run_id, node_id FROM conversation_handoffs
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND status IN ('waiting', 'assigned')`);
+    const r = rowsOf(res)[0];
+    return r
+      ? { uuid: String(r.uuid), flowRunId: num(r.flow_run_id), nodeId: str(r.node_id) }
+      : null;
+  }
+
+  /** The flow a run belonged to, as Return to bot needs it. `run: false` = the run row is gone (retention); `flow: null` = the flow is gone. */
+  async flowOfRun(
+    tx: Tx,
+    orgId: number,
+    runId: number,
+  ): Promise<{
+    run: boolean;
+    flow: { id: number; uuid: string; live: boolean; data: unknown } | null;
+  }> {
+    const run = await tx.execute(
+      sql`SELECT flow_id FROM flow_runs WHERE org_id = ${orgId} AND id = ${runId}`,
+    );
+    const r = rowsOf(run)[0];
+    if (!r) return { run: false, flow: null };
+    const res = await tx.execute(sql`
+      SELECT id, uuid, is_active, is_published, flow_data FROM flows
+      WHERE org_id = ${orgId} AND id = ${Number(r.flow_id)}`);
+    const f = rowsOf(res)[0];
+    return {
+      run: true,
+      flow: f
+        ? {
+            id: Number(f.id),
+            uuid: String(f.uuid),
+            live: f.is_active === true && f.is_published === true,
+            data: f.flow_data,
+          }
+        : null,
+    };
+  }
+
+  /** The (channel, customer) a conversation is: what the conversation core needs to write a line into its thread. */
+  async threadKey(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+  ): Promise<{ channelUuid: string; peerKey: string } | null> {
+    const res = await tx.execute(sql`
+      SELECT ch.uuid AS channel_uuid, c.peer_key FROM conversations c
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND c.id = ${conversationId}`);
+    const r = rowsOf(res)[0];
+    return r ? { channelUuid: String(r.channel_uuid), peerKey: String(r.peer_key) } : null;
+  }
+
+  /** Whether a flow run is still alive for this customer on this channel (it would answer their next message). */
+  async hasLiveRun(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM flow_runs r JOIN conversations c ON c.org_id = r.org_id AND c.channel_id = r.channel_id AND c.peer_key = r.peer_key
+      WHERE r.org_id = ${orgId} AND c.id = ${conversationId} AND r.status IN ('running', 'waiting', 'sleeping', 'halted') LIMIT 1`);
+    return rowsOf(res).length > 0;
+  }
+
   /** Sets the handling columns without an assignment change (a repeat that changes nothing else). */
   async setHandling(
     tx: Tx,
@@ -358,13 +499,15 @@ export class HandoffRepository {
       SELECT h.uuid, cv.uuid AS conversation_uuid, h.source, h.reason, h.reason_text, h.summary, h.answers, h.destination_kind,
              dt.uuid AS dt_uuid, dt.name AS dt_name, du.uuid AS du_uuid, du.full_name AS du_name,
              h.priority, h.status, h.outcome, au.uuid AS au_uuid, au.full_name AS au_name, at.uuid AS at_uuid, at.name AS at_name,
-             h.trace, h.created_at, h.completed_at
+             h.trace, h.created_at, h.completed_at, h.reminded_at, h.offered_at, h.final_at, h.final_action,
+             ot.uuid AS ot_uuid, ot.name AS ot_name
       FROM conversation_handoffs h
       JOIN conversations cv ON cv.org_id = h.org_id AND cv.id = h.conversation_id
       LEFT JOIN teams dt ON dt.org_id = h.org_id AND dt.id = h.destination_team_id
       LEFT JOIN users du ON du.org_id = h.org_id AND du.id = h.destination_user_id
       LEFT JOIN users au ON au.org_id = h.org_id AND au.id = h.assigned_user_id
       LEFT JOIN teams at ON at.org_id = h.org_id AND at.id = h.assigned_team_id
+      LEFT JOIN teams ot ON ot.org_id = h.org_id AND ot.id = h.offered_from_team_id
       WHERE h.org_id = ${orgId} AND h.conversation_id = ${conversationId}
       ORDER BY (h.status IN ('waiting', 'assigned')) DESC, h.created_at DESC, h.id DESC LIMIT 1`);
     const r = rowsOf(res)[0];
@@ -391,6 +534,13 @@ export class HandoffRepository {
         team: r.at_uuid ? { id: String(r.at_uuid), name: String(r.at_name) } : null,
       },
       trace: (r.trace as HandoffTraceLine[] | null) ?? [],
+      timers: {
+        remindedAt: r.reminded_at ? iso(r.reminded_at) : null,
+        offeredAt: r.offered_at ? iso(r.offered_at) : null,
+        offeredFrom: r.ot_uuid ? { id: String(r.ot_uuid), name: String(r.ot_name) } : null,
+        finalAt: r.final_at ? iso(r.final_at) : null,
+        finalAction: (str(r.final_action) as 'message' | 'bot' | null) ?? null,
+      },
       createdAt: iso(r.created_at),
       completedAt: r.completed_at ? iso(r.completed_at) : null,
     };

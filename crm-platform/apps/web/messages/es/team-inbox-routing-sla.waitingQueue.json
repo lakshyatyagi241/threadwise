@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Cola de espera",
+      "intro": "Los chats que nadie ha tomado esperan en la pestaña Espera. Estos pasos opcionales ayudan a que se atiendan. Cada paso se ejecuta una vez por chat, cuenta solo los minutos en que el equipo está abierto y se detiene en cuanto alguien toma el chat.",
+      "remind": "Recordar al equipo",
+      "remindBody": "Avisa a quienes pueden tomar el chat.",
+      "overflow": "Ofrecer a otro equipo",
+      "overflowBody": "Mueve el chat a la cola de este equipo, una vez.",
+      "team": "Equipo",
+      "teamPick": "Elige un equipo",
+      "final": "Último paso",
+      "finalBody": "Si nadie ha tomado el chat para entonces:",
+      "action": "Qué ocurre",
+      "actionMessage": "Enviar un mensaje al cliente",
+      "actionBot": "Devolver el chat al bot",
+      "message": "Mensaje",
+      "messageHint": "Puedes usar '{{name}}' y '{{first_name}}'.",
+      "afterMinutes": "Después de (minutos)",
+      "save": "Guardar",
+      "saved": "Ajustes de la cola de espera guardados.",
+      "saveFailed": "No se pudieron guardar los ajustes de la cola de espera.",
+      "readOnly": "Puedes ver estos ajustes pero no cambiarlos.",
+      "problems": {
+        "minutes": "Introduce un número del 1 al 1440.",
+        "team": "Elige un equipo.",
+        "message": "Escribe el mensaje."
+      },
+      "away": "Devolver los chats sin responder cuando alguien se ausenta",
+      "awayBody": "Cuando una persona pasa a Desconectada o empieza una ausencia, los chats que tiene y en los que el cliente sigue esperando vuelven a la cola del equipo.",
+      "offline": "Pasar a Desconectado a quien está inactivo",
+      "offlineBody": "Una persona Disponible que no ha hecho nada durante este tiempo pasa a Desconectada. Ella misma vuelve a ponerse Disponible."
+    }
+  }
+}

@@ -240,7 +240,10 @@ describe('companies: schema, constraints and isolation (TW-CTP)', () => {
           'payments',
         ]),
       );
-      for (const r of res.rows) expect(r.confdeltype, r.tbl).toBe('n');
+      // a company's AI brief has no meaning without the company, so it is deleted with it (20261222090100_company_briefs); the rest unlink
+      const DELETED_WITH_COMPANY = new Set(['company_briefs']);
+      for (const r of res.rows)
+        expect(r.confdeltype, r.tbl).toBe(DELETED_WITH_COMPANY.has(r.tbl) ? 'c' : 'n');
     });
   });
 
@@ -344,6 +347,8 @@ describe('companies: schema, constraints and isolation (TW-CTP)', () => {
       expect(res.rows).toEqual([
         { key: 'record.companies.create', supports_scope: false },
         { key: 'record.companies.delete', supports_scope: true },
+        { key: 'record.companies.export', supports_scope: true },
+        { key: 'record.companies.import', supports_scope: false },
         { key: 'record.companies.read', supports_scope: true },
         { key: 'record.companies.update', supports_scope: true },
       ]);
@@ -369,6 +374,8 @@ describe('companies: schema, constraints and isolation (TW-CTP)', () => {
       const all = [
         'record.companies.create:all',
         'record.companies.delete:all',
+        'record.companies.export:all',
+        'record.companies.import:all',
         'record.companies.read:all',
         'record.companies.update:all',
       ];

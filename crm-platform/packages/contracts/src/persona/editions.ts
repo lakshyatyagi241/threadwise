@@ -95,7 +95,6 @@ export const CHAT_SIDE_MODULES = [
   'tile:inbox-tags',
   'tile:message-logs',
   'tile:auto-assignment',
-  'tile:assignment-settings',
   'tile:sla-policies',
   'tile:team-performance',
   'tile:auto-reply',

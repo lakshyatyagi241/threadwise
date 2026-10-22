@@ -240,14 +240,16 @@ function TemplatePickerDialog(props: TemplatePickerProps) {
                         role="menu"
                         className="absolute end-2 top-11 z-20 w-52 rounded-lg border border-border bg-background p-1 shadow-lg"
                       >
-                        <Link
-                          role="menuitem"
-                          href={`/templates/${tpl.id}/edit`}
-                          className="flex items-center gap-2 rounded-md px-2.5 py-2 text-sm hover:bg-muted"
-                        >
-                          <span aria-hidden="true">✎</span>
-                          {t('edit')}
-                        </Link>
+                        {tpl.editable && (
+                          <Link
+                            role="menuitem"
+                            href={`/templates/${tpl.id}/edit`}
+                            className="flex items-center gap-2 rounded-md px-2.5 py-2 text-sm hover:bg-muted"
+                          >
+                            <span aria-hidden="true">✎</span>
+                            {t('edit')}
+                          </Link>
+                        )}
                         <Link
                           role="menuitem"
                           href={`/templates/new?from=${tpl.id}`}

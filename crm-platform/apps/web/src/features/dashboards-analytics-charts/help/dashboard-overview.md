@@ -24,11 +24,12 @@ The Dashboard is the first page to check each day. It shows how many messages yo
 ## What the numbers mean
 
 - The trend badges compare the period you picked with the one just before it. A green badge is good news and a red one is not.
+- A message counts as delivered once it is sent, delivered or read, so conversations moved from another platform, which carry no receipts, still show as delivered.
 - Days and hours follow your workspace timezone, which you can see on the [Account](help:account-profile) page.
 
 ## Plan and access
 
-You need the permission to view the dashboard. The Dashboard does not need a particular plan feature, but the Analytics page that **View analytics** opens does.
+You need the permission to view the dashboard. The cards, **Quick access** shortcuts and **Quick actions** (including **New campaign**) show only for the screens your role may open, so two people can see different cards. The Dashboard does not need a particular plan feature, but the Analytics page that **View analytics** opens does.
 
 ## If something looks wrong
 

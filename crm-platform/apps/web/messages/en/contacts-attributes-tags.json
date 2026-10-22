@@ -37,7 +37,8 @@
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
       "stageScope": "A status can only be limited to one of your lifecycle stages.",
       "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space.",
-      "legalHold": "This record is protected and cannot be deleted at the moment."
+      "legalHold": "This record is protected and cannot be deleted at the moment.",
+      "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to send a message."
     },
     "list": {
       "title": "Contact Hub",
@@ -1545,7 +1546,9 @@
         "selected": "Selected columns",
         "selectAll": "Select All",
         "reorder": "Drag to re-order columns",
-        "remove": "Remove {name}"
+        "remove": "Remove {name}",
+        "nameShort": "View name must be at least {min} characters.",
+        "nameLong": "View name can be at most {max} characters."
       },
       "presets": {
         "myContacts": "My contacts",

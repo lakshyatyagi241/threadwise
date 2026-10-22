@@ -19,7 +19,7 @@ How and why: `docs/mobile/testing.md`, ADR-0025. Models to copy: `src/features/a
 | A hook / `api.ts`             | script `fetch`, assert the request (method, path, query, body, `Idempotency-Key`) and the parsed result; the contract-mismatch case; offline                                  |
 | `src/lib/auth`, `src/lib/api` | every branch: concurrency, offline, 4xx vs 5xx, ended-while-in-flight. These carry the security-relevant logic and the 90% coverage floor                                     |
 | A pure helper                 | plain unit test with edge cases                                                                                                                                               |
-| A new user flow               | a Maestro flow in `apps/mobile/.maestro/<feature>.yaml` with the same scenario as the web parity run (ADR-0027)                                                               |
+| A new user flow               | a Maestro flow in `apps/mobile/.maestro/<feature>.yaml` with the same scenario as the web e2e spec (ADR-0027)                                                               |
 
 ## How
 

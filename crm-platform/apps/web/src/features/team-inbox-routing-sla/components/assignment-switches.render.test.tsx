@@ -17,7 +17,18 @@ const base: HandoffSettings = {
   continuityDays: null,
   promptOwnerOnReassign: false,
   notifyQueue: true,
+  away: { returnUnanswered: false, autoOfflineMinutes: null },
+  queueTimers: {
+    remindMinutes: null,
+    overflowMinutes: null,
+    overflowTeamId: null,
+    unclaimedMinutes: null,
+    unclaimedAction: 'keep',
+    unclaimedMessage: '',
+  },
   available: {
+    queueTimers: true,
+    away: true,
     autoAssign: true,
     ownerFirst: true,
     keepInSync: true,
@@ -96,6 +107,8 @@ describe('the four switches', () => {
     data = {
       ...base,
       available: {
+        queueTimers: false,
+        away: false,
         autoAssign: false,
         ownerFirst: false,
         keepInSync: false,
@@ -105,7 +118,10 @@ describe('the four switches', () => {
     };
     const out = switches();
     expect(out).toContain('Not in your plan');
-    expect(out).toMatch(/upgrade/i);
+    // Every locked control names the add-on that unlocks it and links to where it is bought.
+    expect(out).toContain('Smart routing add-on');
+    expect(out).toContain('href="/account/plans"');
+    expect((out.match(/data-testid="switch-(auto|sticky|owner)-lock"/g) ?? []).length).toBe(3);
     const claim = out.slice(
       out.indexOf('data-testid="switch-claim"'),
       out.indexOf('data-testid="advanced"'),

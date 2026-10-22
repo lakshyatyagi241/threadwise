@@ -37,7 +37,8 @@
       "statusStage": "Die status hoort bij een andere fase. Kies een status die past bij de fase van het contact.",
       "stageScope": "Een status kan alleen aan één van je levenscyclusfases worden gekoppeld.",
       "planLimit": "Je hebt de limiet van je abonnement bereikt van {limit, plural, one {# contact} other {# contacten}}. Upgrade je abonnement om er meer toe te voegen, of verwijder een bestaand contact om ruimte vrij te maken.",
-      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd."
+      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "assignedToOther": "Deze chat is aan een andere agent toegewezen. Wijs hem eerst aan jezelf toe om een bericht te sturen."
     },
     "list": {
       "title": "Contact Hub",
@@ -1545,7 +1546,9 @@
         "selected": "Geselecteerde kolommen",
         "selectAll": "Alles selecteren",
         "reorder": "Sleep om kolommen te herschikken",
-        "remove": "{name} verwijderen"
+        "remove": "{name} verwijderen",
+        "nameShort": "De naam van de weergave moet minstens {min} tekens hebben.",
+        "nameLong": "De naam van de weergave mag hoogstens {max} tekens hebben."
       },
       "presets": {
         "myContacts": "Mijn contacten",

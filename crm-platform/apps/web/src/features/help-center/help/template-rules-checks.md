@@ -28,7 +28,7 @@ While you write a template, the **Pre-submit checks** panel on the right of the 
 
 - **Errors** block **Submit to Meta**. Nothing is sent to Meta until every error is gone.
 - **Warnings** do not block. They point at wording that Meta's review often flags, so read them before you submit.
-- The checks run again on our server when you submit. If the panel says it could not run, you can still submit and the server checks.
+- The checks run again when you submit. If the panel says it could not run, you can still submit and the checks run then.
 - **Save draft** never needs a clean result. Keep a half-finished template as a draft for as long as you like.
 
 ## Rules that are errors

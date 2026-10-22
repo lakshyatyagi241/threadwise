@@ -164,12 +164,16 @@
         "in": "الوارد",
         "out": "الصادر",
         "balance": "الرصيد",
-        "none": "لا شيء"
+        "none": "لا شيء",
+        "channel": "قناة",
+        "recipient": "المتلقي",
+        "template": "القالب",
+        "country": "الدولة",
+        "category": "الفئة",
+        "engine": "المحرك"
       },
       "context": {
-        "reason": "السبب",
-        "to": "إلى",
-        "template": "قالب"
+        "reason": "السبب"
       },
       "channels": {
         "campaign": "حملة",

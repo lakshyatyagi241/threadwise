@@ -1416,10 +1416,12 @@
             "remove_branding": "White-label: il workspace può nascondere il marchio della piattaforma nel piè di pagina.",
             "sales_pipeline": "Trattative, attività e pipeline, e i dati della pipeline nella dashboard.",
             "appointment_booking": "Tipi di prenotazione, appuntamenti e pagine di prenotazione pubbliche. L'app a pagamento Appuntamenti controlla questo interruttore.",
+            "appointment_confirm_buttons": "Aggiunge i pulsanti Conferma, Riprogramma e Annulla al promemoria dell'appuntamento inviato su WhatsApp.",
+            "appointment_rebook_steps": "Messaggi di follow-up inviati dopo un appuntamento completato, che invitano il contatto a prenotare di nuovo.",
             "chatbot_widgets": "Il generatore di widget chatbot per il sito web.",
             "wa_storefront": "L'area catalogo e vetrina di WhatsApp.",
             "inbox_sla": "Politiche e scadenze SLA nella casella di posta del team.",
-            "inbox_routing": "Regole di instradamento che assegnano automaticamente le conversazioni della casella di posta.",
+            "inbox_routing": "Assegnazione automatica delle nuove chat: regole di instradamento, Tutti gli altri e timer della coda d'attesa. Fa parte del componente aggiuntivo Instradamento intelligente.",
             "waba_calling": "Chiamate WhatsApp dalla casella di posta: numeri di chiamata, permessi di chiamata, effettuare e rispondere alle chiamate.",
             "inbox_kanban": "La vista Kanban della casella di posta del team.",
             "team_performance": "I report sulle prestazioni del team.",
@@ -1445,7 +1447,7 @@
             "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità.",
             "team_hierarchy": "Team padre, responsabili di team e manager che vedono il proprio team e quelli sottostanti.",
             "custom_roles": "Crea e modifica i ruoli e scegli un ambito (propri, del team o tutti i record) per ogni permesso.",
-            "inbox_assignment_sticky": "Assegnazione con priorità al proprietario e sincronizzata tra il proprietario del contatto e il responsabile della chat, finestra dei contatti ricorrenti e richiesta di riassegnazione. Funziona insieme all’instradamento della inbox."
+            "inbox_assignment_sticky": "Assegnazione con priorità al proprietario e sincronizzata, finestra per i contatti di ritorno e richiesta alla riassegnazione. Fa parte del componente aggiuntivo Instradamento intelligente."
           },
           "units": {
             "days": "Giorni",
@@ -1609,10 +1611,12 @@
             "remove_branding": "White-label (rimuove il marchio della piattaforma)",
             "sales_pipeline": "Pipeline di vendita (trattative e attività)",
             "appointment_booking": "Appuntamenti e pagine di prenotazione",
+            "appointment_confirm_buttons": "Pulsanti del promemoria: Conferma, Riprogramma e Annulla",
+            "appointment_rebook_steps": "Passaggi di riprenotazione (richiamo) dopo un appuntamento",
             "chatbot_widgets": "Widget chatbot del sito web",
             "wa_storefront": "Vetrina e catalogo WhatsApp",
             "inbox_sla": "Politiche SLA della casella di posta",
-            "inbox_routing": "Regole di instradamento e orari di lavoro della casella di posta",
+            "inbox_routing": "Instradamento intelligente: assegnazione automatica e regole",
             "waba_calling": "Effettua e rispondi alle chiamate WhatsApp dalla casella di posta",
             "inbox_kanban": "Kanban della casella di posta",
             "team_performance": "Report sulle prestazioni del team",
@@ -1638,7 +1642,7 @@
             "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)",
             "team_hierarchy": "Gerarchia dei team e manager",
             "custom_roles": "Ruoli personalizzati e ambiti",
-            "inbox_assignment_sticky": "Proprietario del contatto e agente persistente"
+            "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",

@@ -535,10 +535,12 @@
             "remove_branding": "מיתוג White-label",
             "sales_pipeline": "צינור מכירות",
             "appointment_booking": "פגישות",
+            "appointment_confirm_buttons": "כפתורי תזכורת",
+            "appointment_rebook_steps": "שלבי הזמנה מחדש",
             "chatbot_widgets": "ווידג'טים של צ'אטבוט",
             "wa_storefront": "קטלוג WhatsApp",
             "inbox_sla": "SLA בתיבת הדואר",
-            "inbox_routing": "ניתוב תיבת הדואר",
+            "inbox_routing": "ניתוב חכם",
             "waba_calling": "שיחות WhatsApp",
             "inbox_kanban": "קנבן של תיבת הדואר",
             "team_performance": "ביצועי הצוות",
@@ -564,7 +566,7 @@
             "record_assignment": "כללי הקצאת רשומות",
             "team_hierarchy": "היררכיית צוותים ומנהלים",
             "custom_roles": "תפקידים מותאמים וטווחים",
-            "inbox_assignment_sticky": "בעלים של איש קשר ונציג קבוע"
+            "inbox_assignment_sticky": "ניתוב חכם: בעל איש הקשר והנציג הקבוע"
           },
           "cta": {
             "continueFree": "המשך בחינם",

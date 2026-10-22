@@ -535,10 +535,12 @@
             "remove_branding": "হোয়াইট-লেবেল",
             "sales_pipeline": "সেলস পাইপলাইন",
             "appointment_booking": "অ্যাপয়েন্টমেন্ট",
+            "appointment_confirm_buttons": "রিমাইন্ডারের বোতাম",
+            "appointment_rebook_steps": "পুনর্বুকিং ধাপ",
             "chatbot_widgets": "চ্যাটবট উইজেট",
             "wa_storefront": "WhatsApp ক্যাটালগ",
             "inbox_sla": "ইনবক্স SLA",
-            "inbox_routing": "ইনবক্স রাউটিং",
+            "inbox_routing": "স্মার্ট রাউটিং",
             "waba_calling": "WhatsApp কলিং",
             "inbox_kanban": "ইনবক্স কানবান",
             "team_performance": "টিমের পারফরম্যান্স",
@@ -564,7 +566,7 @@
             "record_assignment": "রেকর্ড অ্যাসাইনমেন্ট নিয়ম",
             "team_hierarchy": "টিম শ্রেণিবিন্যাস ও ম্যানেজার",
             "custom_roles": "কাস্টম ভূমিকা ও পরিসর",
-            "inbox_assignment_sticky": "কন্টাক্টের মালিক ও স্টিকি এজেন্ট"
+            "inbox_assignment_sticky": "স্মার্ট রাউটিং: কন্টাক্টের মালিক ও স্থায়ী এজেন্ট"
           },
           "cta": {
             "continueFree": "ফ্রি-তে চালিয়ে যান",

@@ -574,7 +574,13 @@
           "waitUntilPaid": "Wacht tot betaald, ga dan verder"
         },
         "faq": {
-          "retired": "Deze stap is buiten gebruik en zoekt niets meer op. De flow gaat altijd verder via Geen overeenkomst. Gebruik een AI-assistentstap en kies een AI-agent om uit je eigen kennis te antwoorden."
+          "agent": "AI-agent",
+          "agentHint": "De agent in wiens kennisbank wordt gezocht. Voeg veelgestelde vragen toe in AI-training.",
+          "query": "Zoeken naar",
+          "queryHint": "Waarnaar gezocht wordt. Meestal het laatste bericht van de klant.",
+          "sendAnswer": "Antwoord naar de klant sturen",
+          "variable": "Antwoord opslaan als",
+          "variableHint": "Latere stappen lezen het antwoord onder deze naam, bijvoorbeeld faq.answer."
         }
       },
       "attrPicker": {
@@ -902,7 +908,8 @@
           "cardCount": "{count} kaart(en)",
           "payLink": "Betaallink",
           "invoice": "Factuur",
-          "faqRetired": "Buiten gebruik · verlaat via geen overeenkomst"
+          "faqAgent": "Antwoordt uit {agent}",
+          "faqNoAgent": "Kies een AI-agent"
         },
         "overlays": {
           "startPinned": "Dit is het startpunt (klik om los te maken)",
@@ -1093,7 +1100,8 @@
           "storedIn": "Waarden worden opgeslagen in de eigenschap <b>{property}</b> van het contact",
           "actions": "Acties",
           "actionsHint": "Een stap toevoegen die direct na deze draait.",
-          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen."
+          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen.",
+          "fromSteps": "Bereikt vanaf stap {stages}"
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
@@ -1205,7 +1213,13 @@
             "choose": "Kies een sjabloon…",
             "buttons": "Knoppen",
             "variables": "Ingevuld vanuit het contact",
-            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon."
+            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon.",
+            "fills": "Waarmee elk nummer wordt gevuld",
+            "fillsHint": "Kies een contactgegeven of een flowvariabele, of typ je eigen tekst. Laat leeg om te gebruiken wat de sjabloon zegt.",
+            "fillPick": "Gegeven invoegen…",
+            "headerMedia": "Koptekstbestand",
+            "headerMediaHint": "De afbeelding, video of het bestand in de koptekst van deze sjabloon. Nodig als de sjabloon geen eigen bestand heeft.",
+            "headerMediaMissing": "Voeg het koptekstbestand toe: deze sjabloon heeft er geen en WhatsApp verstuurt hem niet zonder."
           },
           "cta": {
             "buttonText": "Knoptekst",
@@ -1244,7 +1258,10 @@
               "phone": "Een nummer bellen",
               "email": "Een e-mail sturen",
               "agent": "Met een persoon praten"
-            }
+            },
+            "prev": "Vorige kaart",
+            "next": "Volgende kaart",
+            "goTo": "Kaart {n}"
           },
           "condition": {
             "info": "Voeg regels toe (een variabele, een vergelijking en een waarde). Koppel ze met AND of OR en nest groepen als dat nodig is.",
@@ -1255,12 +1272,16 @@
             "hint": "De bezoeker gaat met je notitie naar dit team. Na deze knop hoeft niets te worden gekoppeld."
           },
           "faq": {
-            "exit": "Doorgaan met",
-            "exitHint": "De flow gaat altijd hier verder."
+            "exit": "Als niets overeenkomt",
+            "exitHint": "Waar de flow heen gaat als geen item antwoordt.",
+            "matched": "Als er antwoord is",
+            "matchedHint": "Waar de flow heen gaat nadat het antwoord is verstuurd."
           }
         },
         "branchAdd": "Stap toevoegen voor “{title}”",
-        "faqEnds": "Deze stap die buiten gebruik is, beëindigt dit deel: de flow gaat altijd verder via de uitgang Geen overeenkomst."
+        "faqEnds": "Deze stap beëindigt dit deel: de flow gaat verder via de uitgang Beantwoord of Geen match.",
+        "flowMenu": "Opties voor {name}",
+        "renameFlow": "Flow hernoemen"
       },
       "formsCore": {
         "helpers": {
@@ -2360,30 +2381,6 @@
           "label": "Vraag",
           "help": "Iets vragen en het antwoord opslaan"
         },
-        "askName": {
-          "label": "Naam",
-          "help": "Naar een naam vragen en die controleren"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Naar een e-mailadres vragen en dat controleren"
-        },
-        "askPhone": {
-          "label": "Telefoonnummer",
-          "help": "Naar een telefoonnummer vragen en dat controleren"
-        },
-        "askNumber": {
-          "label": "Getal",
-          "help": "Naar een getal vragen en dat controleren"
-        },
-        "askAlphanumeric": {
-          "label": "Letters en cijfers",
-          "help": "Een ID of code, zonder spaties of symbolen"
-        },
-        "askDate": {
-          "label": "Datum",
-          "help": "Vraag om een datum in het formaat dat je kiest"
-        },
         "askFile": {
           "label": "Bestand of afbeelding",
           "help": "Wacht op een foto, document, video of audio"
@@ -2475,7 +2472,9 @@
         "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
         "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe.",
         "chooseAiAgent": "Stap {stage}: kies de AI-agent die antwoordt of zet de stap op een eigen instelling.",
-        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent."
+        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent.",
+        "templateFile": "Stap {stage}: voeg het koptekstbestand van de sjabloon toe.",
+        "fileLinkInvalid": "Stap {stage}: de bestandslink moet met https:// beginnen"
       }
     },
     "templates": {
@@ -2731,7 +2730,7 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten",
-      "faqRetired": "(gesimuleerd) Antwoord uit veelgestelde vragen is buiten gebruik: \"geen overeenkomst\" wordt genomen."
+      "faqLine": "(gesimuleerd) Antwoord uit FAQ: in de testchat wordt de kennisbank niet doorzocht, \"geen match\" wordt gekozen."
     }
   }
 }

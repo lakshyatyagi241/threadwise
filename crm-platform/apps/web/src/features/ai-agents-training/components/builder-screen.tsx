@@ -223,7 +223,7 @@ function Builder({ initial, editing }: { initial: BuilderState; editing: boolean
               </div>
               <h1 className="truncate text-xl font-normal leading-tight">
                 {editing ? t('titleEdit') : t('titleNew')}{' '}
-                <span className="italic text-brand">{t('titleAccent')}</span>
+                <span className="not-italic text-brand">{t('titleAccent')}</span>
               </h1>
             </div>
           </div>

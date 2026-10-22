@@ -60,10 +60,12 @@
       "remove_branding": "Hapus branding",
       "sales_pipeline": "Pipeline penjualan",
       "appointment_booking": "Pemesanan janji temu",
+      "appointment_confirm_buttons": "Tombol pengingat (Konfirmasi / Jadwalkan Ulang / Batalkan)",
+      "appointment_rebook_steps": "Langkah pemesanan ulang (recall)",
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Kebijakan SLA",
-      "inbox_routing": "Aturan perutean",
+      "inbox_routing": "Perutean cerdas: penugasan otomatis dan aturan",
       "waba_calling": "Panggilan WhatsApp",
       "inbox_kanban": "Tampilan Kanban",
       "team_performance": "Performa tim",
@@ -89,7 +91,7 @@
       "record_assignment": "Aturan penugasan data",
       "team_hierarchy": "Hierarki tim dan manajer",
       "custom_roles": "Peran kustom dan cakupan",
-      "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
+      "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -251,6 +253,9 @@
         "buy": "Beli add-on",
         "buyAgain": "Beli lagi",
         "active": "Aktif",
+        "included": "Termasuk dalam paket Anda",
+        "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
+        "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
         "unlimitedBullet": "{label} tanpa batas",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "Kembali",
       "compare": "Bandingkan semua paket",
       "appHint": "{feature} juga dijual sebagai aplikasi di Marketplace.",
-      "appLink": "Lihat aplikasi"
+      "appLink": "Lihat aplikasi",
+      "addonHint": "Anda juga dapat menambahkannya ke paket saat ini dengan add-on {addon}.",
+      "addonLink": "Lihat add-on",
+      "addons": {
+        "smartRouting": "Perutean cerdas",
+        "teamsPermissions": "Tim dan izin"
+      }
+    },
+    "lock": {
+      "link": "Lihat paket dan add-on"
     }
   }
 }

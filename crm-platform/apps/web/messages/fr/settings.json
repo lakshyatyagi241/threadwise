@@ -65,6 +65,11 @@
         "description": "Connectez votre numéro WhatsApp Business pour discuter avec vos clients.",
         "keywords": "wa, whatsapp business, cloud api, numéro, qr"
       },
+      "whatsapp-profile": {
+        "label": "Profil professionnel WhatsApp",
+        "description": "Votre logo, votre présentation, vos coordonnées et les informations de conformité demandées par Meta.",
+        "keywords": "profil professionnel, logo, photo de profil, à propos, contact, conformité, nom légal, service client, responsable des réclamations"
+      },
       "unofficial-whatsapp": {
         "label": "API WhatsApp non officielle",
         "description": "Associez un numéro WhatsApp personnel par code QR et préchauffez-le pour un envoi sécurisé.",
@@ -341,7 +346,7 @@
         "keywords": "consentement, désinscription, réinscription, se désabonner, stop, start, rgpd, conformité, confidentialité, marketing"
       },
       "inbox-tags": {
-        "label": "Étiquettes de conversation",
+        "label": "Étiquettes",
         "description": "Créez les étiquettes que votre équipe applique aux conversations et qui servent à filtrer la boîte de réception. Ce sont les mêmes étiquettes que celles des contacts.",
         "keywords": "tags, étiquettes, catégories, organiser, filtrer, étiquettes de conversation"
       },

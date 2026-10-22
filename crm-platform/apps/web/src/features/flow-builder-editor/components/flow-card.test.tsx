@@ -17,6 +17,7 @@ const flow = (over: Partial<FlowSummary> = {}): FlowSummary => ({
   id: '11111111-1111-4111-8111-111111111111',
   name: 'Welcome',
   flowType: 'chat',
+  builder: 'simple',
   category: 'welcome',
   state: 'live',
   isPublished: true,
@@ -44,6 +45,13 @@ const card = (over: Partial<FlowSummary> = {}) =>
   renderToStaticMarkup(<FlowCard flow={flow(over)} actions={actions} />);
 
 describe('flow card (TW-FLB-001)', () => {
+  it('a WhatsApp bot carries the WhatsApp mark, an Advanced messaging flow the automation mark instead', () => {
+    expect(card()).not.toContain('flow-card-automation');
+    const advanced = card({ builder: 'advanced' });
+    expect(advanced).toContain('data-testid="flow-card-automation"');
+    expect(advanced).not.toContain('bg-[#25D366]');
+  });
+
   it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
     const html = card();
     expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
@@ -118,6 +126,17 @@ describe('featured card (TW-FLB-002)', () => {
     expect(html).toContain('Trigger / keyword');
     expect(html).toContain('Wait 30 min');
     expect(html).toContain('~2.5 h total');
+  });
+
+  it('names the bot: a WhatsApp flow and a website flow each carry their own type pill', () => {
+    const wa = renderToStaticMarkup(<FeaturedCard flow={featured()} actions={actions} />);
+    expect(wa).toContain('data-testid="featured-flow-type"');
+    expect(wa).toContain('contracts.flowTypes.chat');
+    const web = renderToStaticMarkup(
+      <FeaturedCard flow={featured({ flowType: 'web' })} actions={actions} />,
+    );
+    expect(web).toContain('contracts.flowTypes.web');
+    expect(web).not.toContain('contracts.flowTypes.chat');
   });
 
   it('a flow with no category reads "Flow"', () => {

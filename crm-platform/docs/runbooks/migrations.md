@@ -72,14 +72,44 @@ Needed for:
 - `ALTER TYPE ... ADD VALUE`
 - `VACUUM`, `REINDEX CONCURRENTLY`
 
-**Caveat:** a `CONCURRENTLY` build that fails leaves an **invalid index**
-behind. Check after any failure:
+**Rule:** every `CREATE INDEX CONCURRENTLY` in a `-- @no-transaction` file says
+`IF NOT EXISTS`. The statement and its `_migrations` record are two steps
+(CONCURRENTLY cannot share a transaction), so a crash between them leaves the
+index built and the file unrecorded. The rerun must skip that index, not fail
+on it.
+
+**What the runner does** (`packages/db/src/migrator.ts`):
+
+- Before it runs such a file, it reads the index names the file creates. If one
+  of them is **INVALID**, or still being built by another session, it stops with
+  the recovery text and runs nothing from that file. It never drops the index
+  itself.
+- Invalid indexes the file does not create are not checked.
+- A **valid** index left unrecorded is adopted: `IF NOT EXISTS` skips the build,
+  the file is recorded and the run continues. No manual step. Adoption happens
+  only when the index's definition is the one the file builds (checked on an
+  empty temporary copy of the table, rolled back). A valid index of the same
+  name with another definition stops the run and is not adopted. Drop it with
+  `DROP INDEX CONCURRENTLY` if it is not wanted, then rerun.
+- A statement the runner cannot read (a `CREATE INDEX CONCURRENTLY` that is
+  schema-qualified, for example) stops the run. Write it unqualified.
+
+**A failed build** (a `CONCURRENTLY` build that errors or is interrupted) leaves
+an **invalid index** behind. The planner never uses it. Find every one:
 
 ```sql
 SELECT indexrelid::regclass FROM pg_index WHERE NOT indisvalid;
 ```
 
-Drop it before retrying.
+If `pg_stat_progress_create_index` shows the build still running, wait for it.
+Otherwise drop the index and rerun:
+
+```sql
+DROP INDEX CONCURRENTLY <index_name>;
+```
+
+then `pnpm db:migrate`. `pnpm db:verify-schema` reports an invalid index as an
+error.
 
 ## Enums
 
@@ -112,7 +142,7 @@ instances booting together cannot race.
 | Add a nullable column | safe, one step                                              |
 | Add a NOT NULL column | add nullable → backfill in batches → set NOT NULL           |
 | Rename a column       | add new → dual-write → backfill → switch reads → drop old   |
-| Add an index          | `CONCURRENTLY`, with `-- @no-transaction`                   |
+| Add an index          | `CONCURRENTLY IF NOT EXISTS`, with `-- @no-transaction`     |
 | Drop a column         | stop reading it, deploy, **then** drop in a later migration |
 | Change a column type  | new column + backfill; in-place rewrites lock the table     |
 

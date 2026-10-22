@@ -301,7 +301,7 @@ describe('waiting-for-a-reply sweep', () => {
       await chat({ status: 'resolved' }),
       await chat({ status: 'closed' }),
       await chat({ status: 'snoozed' }),
-      await chat({ status: 'pending' }),
+      await chat({ status: 'spam' }), // 'pending' is no longer a conversation status (20261222090000)
       await chat({ archived: true }),
       await chat({ peerKey: 'g:120363000000' }),
       await chat({ answered: true }),

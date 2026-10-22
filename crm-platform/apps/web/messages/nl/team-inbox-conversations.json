@@ -584,7 +584,11 @@
           "sla_breach": "Reactietermijn verlopen",
           "spam_flagged": "Als spam gemarkeerd door {actor}",
           "escalated": "Geëscaleerd",
-          "unknown": "{what} door {actor}"
+          "unknown": "{what} door {actor}",
+          "handoff_requested": "Overgedragen aan een persoon door {actor}",
+          "queue_reminded": "Het team is herinnerd",
+          "queue_offered": "Aangeboden aan een ander team",
+          "queue_customer_message": "Er is een bericht naar de klant gestuurd"
         },
         "actors": {
           "user": "Een teamgenoot",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (testen)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Websitechat",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (testen)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Websitechat",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contact",
         "agent": "U",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "Terug naar de inbox",
-        "title": "Gesprekstags",
+        "title": "Tags",
         "intro": "Gesprekstags markeren een conversatie (facturatie, terugbetaling, urgent) zodat je team de inbox kan sorteren en filteren. Ze komen uit dezelfde tagbibliotheek als contacttags, die de persoon beschrijven.",
         "newTitle": "Nieuwe tag",
         "editTitle": "Tag bewerken",

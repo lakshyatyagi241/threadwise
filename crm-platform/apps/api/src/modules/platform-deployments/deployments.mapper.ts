@@ -2,7 +2,9 @@ import {
   DEPLOYMENT_ERROR_MAX_CHARS,
   deploymentRowSchema,
   publishRowSchema,
+  releaseChangeSchema,
   releaseRowSchema,
+  RELEASE_CHANGES_MAX,
   releasesResponseSchema,
   type ReleaseRow,
   type ReleasesResponse,
@@ -72,6 +74,17 @@ export function toPublishCounts(r: Raw): PublishCounts {
   };
 }
 
+/** The stored changes to the wire shape. The column is written by the build server, so a malformed entry is dropped, not shown. */
+function toChanges(v: unknown) {
+  if (!Array.isArray(v)) return [];
+  return v
+    .flatMap((c) => {
+      const p = releaseChangeSchema.safeParse(c);
+      return p.success ? [p.data] : [];
+    })
+    .slice(0, RELEASE_CHANGES_MAX);
+}
+
 /** One release attempt to the wire shape. */
 export function toReleaseRow(r: Raw): ReleaseRow {
   return releaseRowSchema.parse({
@@ -80,6 +93,7 @@ export function toReleaseRow(r: Raw): ReleaseRow {
     state: r.state,
     step: r.step ?? null,
     error: cut(r.error),
+    changes: toChanges(r.changes),
     startedAt: new Date(r.started_at as string).toISOString(),
     updatedAt: new Date(r.updated_at as string).toISOString(),
     finishedAt: iso(r.finished_at),

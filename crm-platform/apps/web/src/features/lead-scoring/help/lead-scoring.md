@@ -52,11 +52,11 @@ A contact's last activity now also moves when the contact writes to you or one o
 
 The banner at the top of the screen tells you where you stand. Scoring needs the platform switch to be on and an OpenRouter key: your own key from **AI keys**, or the platform's shared key when your workspace has none. Without a key the banner says so and links to **AI keys**.
 
-Seeing the screen needs the permission **lsc.runs.read**. Changing the switches needs **lsc.settings.manage**.
+Seeing the screen needs the permission to see lead scoring runs. Changing the switches needs the permission to manage lead scoring settings.
 
 ## Score one contact
 
-Open a contact, or open a conversation in the **Inbox**: the contact panel on the right shows the same **Lead score** card, so you can see how promising the person you are chatting with looks, and re-score them, without leaving the thread. The **Lead score** card shows the number, who set it, the date and model, and the reasons the AI gave. Select **Score with AI** (or **Re-score** when the contact already has an AI score). It takes a few seconds, and when it finishes the card shows what that run cost. This button needs **lsc.contacts.score**.
+Open a contact, or open a conversation in the **Inbox**: the contact panel on the right shows the same **Lead score** card, so you can see how promising the person you are chatting with looks, and re-score them, without leaving the thread. The **Lead score** card shows the number, who set it, the date and model, and the reasons the AI gave. Select **Score with AI** (or **Re-score** when the contact already has an AI score). It takes a few seconds, and when it finishes the card shows what that run cost. This button needs the permission to score contacts.
 
 If something stops it, the card says exactly what: scoring is off for the workspace (with a link to the settings), no key is available, the provider did not give a usable answer, the plan's AI allowance is used up, or the contact has a score a person typed.
 
@@ -68,7 +68,7 @@ A few workspaces can also let the AI **read a contact's chat**. It is a pilot: y
 - **What is hidden first.** Phone numbers keep only their first and last two digits, emails keep the first letter and the domain, card and ID numbers keep only their ends, and the contact's name keeps only its first and last letter. Bots, deleted messages, group chats and other businesses' automatic replies are left out.
 - **What you get.** On the contact's page, a **Conversation reading** card shows what the contact is after (for example _Ready to buy_ or _Asking about price_), a few signals, and a short summary. The score is updated from the same reading, unless a person typed it.
 - **Button taps.** A contact that only tapped menu buttons or keywords the system knows (such as _view warranty slip_) is understood without calling the AI at all.
-- **Suggested stages.** When the chat clearly shows a contact has moved on, the card suggests the next lifecycle stage with how sure the AI is. Under **Read conversations** you choose how a stage change is made. **Automatic** (the default) moves the contact straight away and adds a line to the chat ("AI read the chat and moved this contact from X to Y") with an **Undo**; undoing adds a second line and puts the contact back, as long as nobody moved it since. **Manual** leaves each suggestion for you to choose **Accept** or **Dismiss**, and nothing moves by itself. Won and Lost stages are never suggested, and an automatic change only ever moves a contact forward. All waiting suggestions are listed under **Stage suggestions** on the settings screen, where you can accept every confident one at once. Accepting needs the permission **lsc.stage.review** and the right to edit the contact, and it changes the stage like any other edit.
+- **Suggested stages.** When the chat clearly shows a contact has moved on, the card suggests the next lifecycle stage with how sure the AI is. Under **Read conversations** you choose how a stage change is made. **Automatic** (the default) moves the contact straight away and adds a line to the chat ("AI read the chat and moved this contact from X to Y") with an **Undo**; undoing adds a second line and puts the contact back, as long as nobody moved it since. **Manual** leaves each suggestion for you to choose **Accept** or **Dismiss**, and nothing moves by itself. Won and Lost stages are never suggested, and an automatic change only ever moves a contact forward. All waiting suggestions are listed under **Stage suggestions** on the settings screen, where you can accept every confident one at once. Accepting needs the permission to review stage suggestions and the right to edit the contact, and it changes the stage like any other edit.
 
 ## A score you typed is yours
 
@@ -76,7 +76,7 @@ You can type a score yourself in the contact's edit form (while scoring is on; w
 
 ## Score the contacts you already have
 
-**Score unscored contacts now** queues contacts that have no score, up to 500 at a time, and scores them in the background. The screen tells you how many were queued; select it again to queue the next batch. It needs **lsc.contacts.score**.
+**Score unscored contacts now** queues contacts that have no score, up to 500 at a time, and scores them in the background. The screen tells you how many were queued; select it again to queue the next batch. It needs the permission to score contacts.
 
 ## Cost and the log
 

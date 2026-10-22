@@ -37,7 +37,8 @@
       "statusStage": "Ce statut appartient à une autre étape. Choisissez un statut adapté à l’étape du contact.",
       "stageScope": "Un statut ne peut être limité qu’à l’une de vos étapes du cycle de vie.",
       "planLimit": "Vous avez atteint la limite de {limit, plural, one {# contact} other {# contacts}} de votre forfait. Passez à un forfait supérieur pour en ajouter, ou supprimez un contact existant pour libérer de la place.",
-      "legalHold": "Cet enregistrement est protégé et ne peut pas être supprimé pour le moment."
+      "legalHold": "Cet enregistrement est protégé et ne peut pas être supprimé pour le moment.",
+      "assignedToOther": "Ce chat est assigné à un autre agent. Assignez-le-vous d'abord pour envoyer un message."
     },
     "list": {
       "title": "Hub des contacts",
@@ -1545,7 +1546,9 @@
         "selected": "Colonnes sélectionnées",
         "selectAll": "Tout sélectionner",
         "reorder": "Faire glisser pour réorganiser les colonnes",
-        "remove": "Retirer {name}"
+        "remove": "Retirer {name}",
+        "nameShort": "Le nom de la vue doit comporter au moins {min} caractères.",
+        "nameLong": "Le nom de la vue peut comporter au plus {max} caractères."
       },
       "presets": {
         "myContacts": "Mes contacts",

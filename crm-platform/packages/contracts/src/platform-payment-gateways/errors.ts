@@ -11,6 +11,8 @@ export const PAYGW_ERROR_CODES = {
   /** The provider rejected or failed the call; the order is marked failed and the buyer may pick another gateway. */
   PAYGW_PROVIDER_ERROR: 'PAYGW_PROVIDER_ERROR',
   PAYGW_PLAN_NOT_PURCHASABLE: 'PAYGW_PLAN_NOT_PURCHASABLE',
+  /** A plain add-on every feature of which the workspace's plan already includes: nothing left to buy (422). */
+  PAYGW_ADDON_INCLUDED: 'PAYGW_ADDON_INCLUDED',
   PAYGW_DOWNGRADE_NOT_ALLOWED: 'PAYGW_DOWNGRADE_NOT_ALLOWED',
   PAYGW_AMOUNT_TOO_LOW: 'PAYGW_AMOUNT_TOO_LOW',
   PAYGW_COUPON_UNAVAILABLE: 'PAYGW_COUPON_UNAVAILABLE',

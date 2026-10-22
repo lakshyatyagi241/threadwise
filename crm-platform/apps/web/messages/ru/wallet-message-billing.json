@@ -164,12 +164,16 @@
         "in": "Поступления",
         "out": "Списания",
         "balance": "Баланс",
-        "none": "Нет"
+        "none": "Нет",
+        "channel": "Канал",
+        "recipient": "Получатель",
+        "template": "Шаблон",
+        "country": "Страна",
+        "category": "Категория",
+        "engine": "Двигатель"
       },
       "context": {
-        "reason": "Причина",
-        "to": "Получатель",
-        "template": "Шаблон"
+        "reason": "Причина"
       },
       "channels": {
         "campaign": "Кампания",

@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "No incluido en tu plan",
-      "upgradeHint": "Tu plan no incluye esta función. Pide al propietario de la cuenta que mejore el plan.",
+      "upgradeHint": "Incluido en el complemento Enrutamiento inteligente o en un plan superior.",
       "owner": {
         "prompt": "Preguntar por el propietario del contacto al reasignar",
         "promptHint": "Cuando un chat se pasa a otra persona manualmente, ofrece convertirla también en propietaria del contacto.",

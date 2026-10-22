@@ -1,0 +1,92 @@
+{
+  "feature": "flow-builder-editor",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-flow-builder-editor-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/builder/ask-media/cards.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/ask-media/prompt-box.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/commerce.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/button-icon.test.tsx",
+          "match": "asks to save the bot first when it has no id yet, and offers no upload"
+        },
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/inspector/attr-picker.test.ts",
+          "match": "wraps in both directions and survives an empty list"
+        },
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/modals.test.tsx",
+          "match": "no providers: the empty state names AI Keys as a link to the platform page, and Generate is disabled"
+        }
+      ]
+    },
+    {
+      "id": "EM-flow-builder-editor-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/builder/palette.tsx",
+        "apps/web/src/features/flow-builder-editor/lib/contract-text.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/states.test.tsx",
+          "match": "lists the nodes, not the no results message, for an empty search"
+        }
+      ]
+    },
+    {
+      "id": "EM-flow-builder-editor-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/api/hooks.ts",
+        "apps/web/src/features/flow-builder-editor/builder/builder-route.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/api-library.test.tsx",
+          "match": "keeps a deleted API visible as not found, and says so while loading"
+        },
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/forms.test.tsx",
+          "match": "says Loading stores while loading; the product button is off until a store is picked"
+        }
+      ]
+    },
+    {
+      "id": "EM-flow-builder-editor-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/api/hooks.ts",
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/google-connection.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/google.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

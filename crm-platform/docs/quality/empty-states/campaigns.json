@@ -1,0 +1,139 @@
+{
+  "feature": "campaigns",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-campaigns-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/api/summary.ts",
+        "apps/web/src/features/campaigns/components/builder/ai-modal.tsx",
+        "apps/web/src/features/campaigns/components/builder/step-compose.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/components/create-screen.test.tsx",
+          "match": "waits for the answer on the platform switch instead of opening on an empty list"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/components/previous-sends-picker.test.tsx",
+          "match": "shows the empty state when there are no earlier sends"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/steps-template-audience.test.tsx",
+          "match": "tells each reason an empty list is empty, with the action that fixes it"
+        }
+      ]
+    },
+    {
+      "id": "EM-campaigns-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/previous-sends-picker.tsx",
+        "apps/web/src/features/campaigns/history/components/parts.tsx",
+        "apps/web/src/features/campaigns/wizard/components/contacts-table.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/steps-review-send.test.tsx",
+          "match": "has Reset and Send Test buttons, a recent-tests region, and no results at first"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/steps-template-audience.test.tsx",
+          "match": "says nothing matches and offers to clear the filters"
+        }
+      ]
+    },
+    {
+      "id": "EM-campaigns-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/builder/ai-modal.tsx",
+        "apps/web/src/features/campaigns/components/builder/cost-panel.tsx",
+        "apps/web/src/features/campaigns/components/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/components/director-summary.test.tsx",
+          "match": "shows a skeleton while loading and an error with a retry"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/screens.test.tsx",
+          "match": "shows a loading state while the draft loads"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/steps-template-audience.test.tsx",
+          "match": "shows a skeleton while the numbers load, not an empty dropdown"
+        }
+      ]
+    },
+    {
+      "id": "EM-campaigns-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/campaign-table.tsx",
+        "apps/web/src/features/campaigns/components/campaigns-screen.tsx",
+        "apps/web/src/features/campaigns/components/create-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/components/create-screen.test.tsx",
+          "match": "shows no access without the create permission"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/screens.test.tsx",
+          "match": "hides Retry failed without the control permission, with nothing failed, or while the failing run is still going"
+        }
+      ]
+    },
+    {
+      "id": "EM-campaigns-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/campaign-card.tsx",
+        "apps/web/src/features/campaigns/components/campaign-table.tsx",
+        "apps/web/src/features/campaigns/components/campaigns-rail.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/earlier/lib/detail-model.test.ts",
+          "match": "the header tiles use the audience as the base, read uses delivered, zero is zero"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/lib/live-model.test.ts",
+          "match": "names the queued and the sending-now counts that are not zero, and nothing before a live read"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/lib/templates.test.ts",
+          "match": "makes a short flat snippet"
+        }
+      ]
+    }
+  ]
+}

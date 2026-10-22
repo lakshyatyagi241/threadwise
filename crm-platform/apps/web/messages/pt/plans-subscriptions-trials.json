@@ -60,10 +60,12 @@
       "remove_branding": "Remover marca",
       "sales_pipeline": "Funil de vendas",
       "appointment_booking": "Agendamento de reservas",
+      "appointment_confirm_buttons": "Botões do lembrete (Confirmar / Reagendar / Cancelar)",
+      "appointment_rebook_steps": "Etapas de novo agendamento (reativação)",
       "chatbot_widgets": "Widgets de chatbot",
       "wa_storefront": "Catálogo do WhatsApp",
       "inbox_sla": "Políticas de SLA",
-      "inbox_routing": "Regras de roteamento",
+      "inbox_routing": "Roteamento inteligente: atribuição automática e regras",
       "waba_calling": "Chamadas do WhatsApp",
       "inbox_kanban": "Visualização Kanban",
       "team_performance": "Desempenho da equipe",
@@ -89,7 +91,7 @@
       "record_assignment": "Regras de atribuição de registros",
       "team_hierarchy": "Hierarquia de equipes e gestores",
       "custom_roles": "Funções personalizadas e escopos",
-      "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
+      "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo"
     },
     "limitGroups": {
       "messaging": "Mensagens",
@@ -251,6 +253,9 @@
         "buy": "Comprar complemento",
         "buyAgain": "Comprar novamente",
         "active": "Ativo",
+        "included": "Incluído no seu plano",
+        "includedOwned": "Você também tem este complemento. Seu plano agora o inclui, então você pode cancelá-lo. Nada é reembolsado automaticamente.",
+        "includedEnds": "Incluído no seu plano. Seu complemento termina em {date} e não será renovado.",
         "unlimitedBullet": "{label} ilimitados",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "Voltar",
       "compare": "Comparar todos os planos",
       "appHint": "{feature} também é vendido como app no Marketplace.",
-      "appLink": "Ver o app"
+      "appLink": "Ver o app",
+      "addonHint": "Você também pode adicioná-lo ao seu plano atual com o complemento {addon}.",
+      "addonLink": "Ver complementos",
+      "addons": {
+        "smartRouting": "Roteamento inteligente",
+        "teamsPermissions": "Equipes e permissões"
+      }
+    },
+    "lock": {
+      "link": "Ver planos e complementos"
     }
   }
 }

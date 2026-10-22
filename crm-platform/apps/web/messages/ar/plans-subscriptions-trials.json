@@ -51,10 +51,12 @@
       "remove_branding": "إزالة العلامة التجارية",
       "sales_pipeline": "مسار المبيعات",
       "appointment_booking": "حجز المواعيد",
+      "appointment_confirm_buttons": "أزرار التذكير (التأكيد وإعادة الجدولة والإلغاء)",
+      "appointment_rebook_steps": "خطوات إعادة الحجز (الاستدعاء)",
       "chatbot_widgets": "أدوات الدردشة للمواقع",
       "wa_storefront": "كتالوج واتساب",
       "inbox_sla": "سياسات مستوى الخدمة",
-      "inbox_routing": "قواعد التوجيه",
+      "inbox_routing": "التوجيه الذكي: الإسناد التلقائي والقواعد",
       "waba_calling": "اتصالات واتساب",
       "inbox_kanban": "عرض كانبان",
       "team_performance": "أداء الفريق",
@@ -80,7 +82,7 @@
       "record_assignment": "قواعد تعيين السجلات",
       "team_hierarchy": "التسلسل الهرمي للفرق والمديرون",
       "custom_roles": "أدوار مخصصة ونطاقات",
-      "inbox_assignment_sticky": "مالك جهة الاتصال والوكيل الثابت"
+      "inbox_assignment_sticky": "التوجيه الذكي: مالك جهة الاتصال والوكيل الثابت"
     },
     "limitGroups": {
       "messaging": "المراسلة",
@@ -271,6 +273,9 @@
         "buy": "شراء إضافة",
         "buyAgain": "الشراء مرة أخرى",
         "active": "نشط",
+        "included": "مشمول في باقتك",
+        "includedOwned": "لديك هذه الإضافة أيضاً. باقتك تشملها الآن، لذا يمكنك إلغاء الإضافة. لا يُردّ أي مبلغ تلقائياً.",
+        "includedEnds": "مشمول في باقتك. تنتهي إضافتك في {date} ولن تُجدَّد.",
         "unlimitedBullet": "{label} غير محدود",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "رجوع",
       "compare": "مقارنة كل الخطط",
       "appHint": "يُباع {feature} أيضًا كتطبيق في سوق التطبيقات.",
-      "appLink": "عرض التطبيق"
+      "appLink": "عرض التطبيق",
+      "addonHint": "يمكنك أيضاً إضافتها إلى باقتك الحالية عبر إضافة {addon}.",
+      "addonLink": "عرض الإضافات",
+      "addons": {
+        "smartRouting": "التوجيه الذكي",
+        "teamsPermissions": "الفرق والصلاحيات"
+      }
+    },
+    "lock": {
+      "link": "عرض الباقات والإضافات"
     }
   }
 }

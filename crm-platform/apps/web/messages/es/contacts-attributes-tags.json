@@ -37,7 +37,8 @@
       "statusStage": "Ese estado pertenece a otra etapa. Elige un estado que corresponda a la etapa del contacto.",
       "stageScope": "Un estado solo se puede limitar a una de tus etapas del ciclo de vida.",
       "planLimit": "Has alcanzado el límite de tu plan de {limit, plural, one {# contacto} other {# contactos}}. Mejora tu plan para añadir más, o elimina uno existente para liberar espacio.",
-      "legalHold": "Este registro está protegido y no se puede borrar por ahora."
+      "legalHold": "Este registro está protegido y no se puede borrar por ahora.",
+      "assignedToOther": "Este chat está asignado a otro agente. Asígnatelo primero para enviar un mensaje."
     },
     "list": {
       "title": "Centro de contactos",
@@ -1545,7 +1546,9 @@
         "selected": "Columnas seleccionadas",
         "selectAll": "Seleccionar todo",
         "reorder": "Arrastra para reordenar las columnas",
-        "remove": "Quitar {name}"
+        "remove": "Quitar {name}",
+        "nameShort": "El nombre de la vista debe tener al menos {min} caracteres.",
+        "nameLong": "El nombre de la vista puede tener como máximo {max} caracteres."
       },
       "presets": {
         "myContacts": "Mis contactos",

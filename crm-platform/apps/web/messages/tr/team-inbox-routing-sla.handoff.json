@@ -2,7 +2,7 @@
   "team-inbox-routing-sla": {
     "handoffSettings": {
       "notInPlan": "Planınızda yok",
-      "upgradeHint": "Planınız bunu içermiyor. Hesap sahibinden planı yükseltmesini isteyin.",
+      "upgradeHint": "Akıllı yönlendirme eklentisine veya daha üst bir plana dahildir.",
       "owner": {
         "prompt": "Yeniden atamada kişi sahibini sor",
         "promptHint": "Bir sohbet elle başkasına verildiğinde, onu kişi sahibi de yapmayı öner.",

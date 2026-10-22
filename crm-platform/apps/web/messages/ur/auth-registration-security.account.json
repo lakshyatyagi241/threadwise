@@ -535,10 +535,12 @@
             "remove_branding": "وائٹ لیبل",
             "sales_pipeline": "سیلز پائپ لائن",
             "appointment_booking": "اپائنٹمنٹس",
+            "appointment_confirm_buttons": "یاددہانی کے بٹن",
+            "appointment_rebook_steps": "دوبارہ بکنگ کے مراحل",
             "chatbot_widgets": "چیٹ بوٹ ویجٹس",
             "wa_storefront": "WhatsApp کیٹلاگ",
             "inbox_sla": "ان باکس SLA",
-            "inbox_routing": "ان باکس روٹنگ",
+            "inbox_routing": "اسمارٹ روٹنگ",
             "waba_calling": "WhatsApp کالنگ",
             "inbox_kanban": "ان باکس کانبان",
             "team_performance": "ٹیم کی کارکردگی",
@@ -564,7 +566,7 @@
             "record_assignment": "ریکارڈ تفویض کے اصول",
             "team_hierarchy": "ٹیم کا درجہ بندی اور مینیجرز",
             "custom_roles": "حسبِ ضرورت کردار اور دائرہ کار",
-            "inbox_assignment_sticky": "رابطے کا مالک اور اسٹکی ایجنٹ"
+            "inbox_assignment_sticky": "اسمارٹ روٹنگ: رابطے کا مالک اور مستقل ایجنٹ"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

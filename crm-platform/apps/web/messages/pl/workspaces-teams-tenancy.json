@@ -414,6 +414,13 @@
       "hint": "Gdy jesteś offline, nowe czaty nie są Ci przydzielane automatycznie. Czaty, które już masz, zostają Twoje.",
       "failed": "Nie udało się zmienić"
     },
+    "myLeave": {
+      "label": "Urlop",
+      "onLeaveUntil": "Na urlopie do {date}",
+      "onLeaveOpen": "Na urlopie",
+      "hint": "Powiadom zespół, że jesteś nieobecny. Podczas urlopu nowe czaty nie są Ci przydzielane automatycznie.",
+      "title": "Twój urlop"
+    },
     "deactivate": {
       "eyebrow": "Członkowie zespołu",
       "title": "Dezaktywuj członka",

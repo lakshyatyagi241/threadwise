@@ -5,6 +5,7 @@ import {
   PACK_GRANTABLE_FEATURES,
   PACK_GRANTABLE_LIMITS,
   PLAN_UNLIMITED_FROM,
+  isPlanFeatureKey,
   PLAN_UPGRADE_PATH,
   limitZeroIsNone,
   storedFeature,
@@ -158,7 +159,7 @@ export class PlanEntitlementService {
   }
 
   /** The organization's resolved entitlements, or null when it does not exist. */
-  async forOrg(orgId: number): Promise<Entitlements | null> {
+  async forOrg(orgId: number, opts: { ignorePacks?: boolean } = {}): Promise<Entitlements | null> {
     const res = await this.db.txAs({ orgId, userId: null }, (tx) =>
       tx.execute(sql`
         SELECT o.plan AS plan_slug,
@@ -239,13 +240,16 @@ export class PlanEntitlementService {
       features: p.features,
       install: p.install ?? null,
     }));
-    const { granted, withheld } = splitAppPacks(packs);
+    const { granted, withheld } = splitAppPacks(opts.ignorePacks ? [] : packs);
     if (Object.keys(granted).length > 0) planFeatures = { ...planFeatures, ...granted };
     // A plain add-on pack (the "Teams and permissions" add-on) grants only the few keys PACK_GRANTABLE_* names; every other key of such a pack
     // is still resolved by the add-on registry's own resolver, as before.
-    const packed = packGrants(row.generic_packs ?? []);
+    const packed = packGrants(opts.ignorePacks ? [] : (row.generic_packs ?? []));
     if (packed.features.length > 0) {
-      planFeatures = { ...planFeatures, ...Object.fromEntries(packed.features.map((k) => [k, true])) };
+      planFeatures = {
+        ...planFeatures,
+        ...Object.fromEntries(packed.features.map((k) => [k, true])),
+      };
     }
     return {
       orgId,
@@ -315,6 +319,18 @@ export class PlanEntitlementService {
     const e = await this.forOrg(orgId);
     if (!e) return false; // no such organization: nothing is granted
     return resolveFeature(e, key);
+  }
+
+  /**
+   * Which of `keys` the workspace gets from its PLAN alone (platform-owned, an override, the plan row or its registry default), ignoring every
+   * add-on pack. The add-on catalogue and checkout use it to see what a pack would still add. A key the registry does not know is never included.
+   */
+  async includedByPlan(orgId: number, keys: readonly string[]): Promise<Set<string>> {
+    const e = await this.forOrg(orgId, { ignorePacks: true });
+    const out = new Set<string>();
+    if (!e) return out;
+    for (const k of keys) if (isPlanFeatureKey(k) && resolveFeature(e, k)) out.add(k);
+    return out;
   }
 
   /** The cap on `key`; 0 means unlimited. */
@@ -448,7 +464,8 @@ export function packGrants(packs: ReadonlyArray<{ features: unknown; limits: unk
   const features = new Set<string>();
   const limits: Record<string, number> = {};
   for (const p of packs) {
-    const f = p.features && typeof p.features === 'object' ? (p.features as Record<string, unknown>) : {};
+    const f =
+      p.features && typeof p.features === 'object' ? (p.features as Record<string, unknown>) : {};
     for (const k of PACK_GRANTABLE_FEATURES) if (f[k] === true) features.add(k);
     const l = p.limits && typeof p.limits === 'object' ? (p.limits as Record<string, unknown>) : {};
     for (const k of PACK_GRANTABLE_LIMITS) {

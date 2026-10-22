@@ -414,6 +414,13 @@
       "hint": "Finché sei offline, nessuna nuova chat ti viene assegnata automaticamente. Le chat che hai già restano tue.",
       "failed": "Impossibile modificare"
     },
+    "myLeave": {
+      "label": "Assenza",
+      "onLeaveUntil": "In ferie fino al {date}",
+      "onLeaveOpen": "In ferie",
+      "hint": "Avvisa il tuo team che sei assente. Durante l'assenza non ti vengono assegnate automaticamente nuove chat.",
+      "title": "La tua assenza"
+    },
     "deactivate": {
       "eyebrow": "Membri del team",
       "title": "Disattiva membro",

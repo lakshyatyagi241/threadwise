@@ -164,12 +164,16 @@
         "in": "Entrate",
         "out": "Uscite",
         "balance": "Saldo",
-        "none": "Nessuno"
+        "none": "Nessuno",
+        "channel": "Canale",
+        "recipient": "Destinatario",
+        "template": "Modello",
+        "country": "Paese",
+        "category": "Categoria",
+        "engine": "Motore"
       },
       "context": {
-        "reason": "Motivo",
-        "to": "A",
-        "template": "Template"
+        "reason": "Motivo"
       },
       "channels": {
         "campaign": "Campagna",

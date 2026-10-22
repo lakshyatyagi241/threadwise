@@ -19,7 +19,7 @@ Analytics gives you a full report on the messages your workspace has sent and re
 3. For **Custom**, fill in **From** and **To** and select **Apply**. If you leave **From** blank it starts 30 days back, if you leave **To** blank it ends today, and if **From** is after **To** the two are swapped. A custom window can span at most 366 days.
 4. Read the headline under the title. It gives the share of messages that reached their reader between the two dates, then the number sent and the reply rate.
 5. Read the key numbers: **Sent**, **Delivered**, **Queued**, **Failed** and **Reply rate**. Each has a trend against the previous window of the same length. For **Queued** and **Failed**, a fall is the good direction.
-6. Under them, **Received messages** counts the messages your contacts sent in the window, and the conversation tiles count the conversations that had activity: **Open**, **Closed**, **Assigned** and **Unassigned**. A message counts as delivered when its delivery or read time was recorded, even if it still reads as sent.
+6. Under them, **Received messages** counts the messages your contacts sent in the window, and the conversation tiles count the conversations that had activity in the window, a message or a resolve or close: **Open**, **Resolved** (you pressed Resolve), **Closed** (you pressed Close), **Assigned** and **Unassigned**. A conversation you resolve today counts as resolved today, even when its last message is older. A message counts as delivered when its delivery or read time was recorded, even if it still reads as sent.
 7. Scroll down to the charts, described below.
 8. Select **Export CSV** to download the report for the window you are looking at.
 

@@ -286,4 +286,46 @@ describe('schema invariants', () => {
     expect(result.errors).toEqual([]);
     expect(result.declared).toBeGreaterThan(200);
   });
+  it('the inbox badge indexes are valid, and conversations keep their autovacuum settings', async () => {
+    const idx = await owner.query<{ name: string; valid: boolean; predicate: string | null }>(`
+      SELECT i.relname AS name, ix.indisvalid AS valid, pg_get_expr(ix.indpred, ix.indrelid) AS predicate
+      FROM pg_index ix JOIN pg_class i ON i.oid = ix.indexrelid
+      WHERE i.relname IN ('idx_conversations_live_badges', 'idx_conversations_archived_badges')
+    `);
+    expect(idx.rows.map((r) => r.name).sort()).toEqual([
+      'idx_conversations_archived_badges',
+      'idx_conversations_live_badges',
+    ]);
+    expect(idx.rows.every((r) => r.valid)).toBe(true);
+    const live = idx.rows.find((r) => r.name === 'idx_conversations_live_badges');
+    expect(live?.predicate).toContain("'open'");
+    // Index-only badge counts need the visibility map current: these thresholds keep it so (migration 20270323090200).
+    const opts = await owner.query<{ reloptions: string[] | null }>(
+      `SELECT reloptions FROM pg_class WHERE relname = 'conversations'`,
+    );
+    expect(opts.rows[0]?.reloptions).toEqual(
+      expect.arrayContaining([
+        'autovacuum_vacuum_scale_factor=0.01',
+        'autovacuum_vacuum_insert_scale_factor=0.01',
+        'autovacuum_analyze_scale_factor=0.02',
+      ]),
+    );
+  });
+
+  it('verify reports an index a failed CONCURRENTLY build left INVALID, and clears it once dropped', async () => {
+    await owner.query(`CREATE TABLE verify_probe (x integer)`);
+    try {
+      await owner.query(`INSERT INTO verify_probe VALUES (1), (1)`);
+      // A unique index over duplicate rows fails, and CONCURRENTLY leaves it behind INVALID.
+      await expect(
+        owner.query(`CREATE UNIQUE INDEX CONCURRENTLY verify_probe_x ON verify_probe (x)`),
+      ).rejects.toThrow();
+      const failed = await verifySchema(owner);
+      expect(failed.errors).toEqual([expect.stringContaining('index verify_probe_x is INVALID')]);
+      await owner.query(`DROP INDEX CONCURRENTLY verify_probe_x`);
+      expect((await verifySchema(owner)).errors).toEqual([]);
+    } finally {
+      await owner.query(`DROP TABLE IF EXISTS verify_probe`);
+    }
+  });
 });

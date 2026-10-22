@@ -3,6 +3,11 @@
 Base `/v2/calling`, session auth; ids are uuids; every route needs the plan feature `waba_calling`. Reads and calls need `call.calls.use`;
 switching a number needs `call.calling.manage` (Owner, Admin and Manager by default). Types are in `@crm/contracts` (`calling-voice`).
 
+> **Removed from Desk:** WhatsApp calling is gone from the product. Migration `20270324090000_remove_whatsapp_calling_permissions` deletes
+> `call.calls.use`, `call.calling.manage`, `call.recordings.play` and `call.recordings.manage` from the catalog and every role, so no role can
+> reach the routes below (they answer 403). The call-log keys (`call.logs.read`, `call.logs.create`, `call.logging.manage`) stay: see
+> [call-logging.md](../specs/call-logging.md) section 5. The rest of this page describes the code as it was; it is kept for reference.
+
 | Method and path                    | What                                                                                                   | Notes                                                                                                                                               |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /numbers`                     | the WhatsApp numbers with their calling switch                                                         |                                                                                                                                                     |

@@ -1,0 +1,7 @@
+{
+  "feature": "persona",
+  "tier": "P1",
+  "applicable": false,
+  "reason": "The feature makes no API call (no apiFetch, query or mutation in its code)",
+  "cases": []
+}

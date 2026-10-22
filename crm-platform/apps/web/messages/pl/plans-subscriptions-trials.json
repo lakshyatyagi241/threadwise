@@ -60,10 +60,12 @@
       "remove_branding": "Usunięcie oznaczeń marki",
       "sales_pipeline": "Lejek sprzedaży",
       "appointment_booking": "Rezerwacja wizyt",
+      "appointment_confirm_buttons": "Przyciski przypomnienia (Potwierdź / Zmień termin / Anuluj)",
+      "appointment_rebook_steps": "Kroki ponownego umówienia (przypomnienia)",
       "chatbot_widgets": "Widżety chatbota",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Polityki SLA",
-      "inbox_routing": "Reguły przydzielania",
+      "inbox_routing": "Inteligentne kierowanie: automatyczne przydzielanie i reguły",
       "waba_calling": "Połączenia WhatsApp",
       "inbox_kanban": "Widok kanban",
       "team_performance": "Wyniki zespołu",
@@ -89,7 +91,7 @@
       "record_assignment": "Reguły przypisywania rekordów",
       "team_hierarchy": "Hierarchia zespołów i menedżerowie",
       "custom_roles": "Własne role i zakresy",
-      "inbox_assignment_sticky": "Właściciel kontaktu i stały agent"
+      "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent"
     },
     "limitGroups": {
       "messaging": "Wiadomości",
@@ -251,6 +253,9 @@
         "buy": "Kup dodatek",
         "buyAgain": "Kup ponownie",
         "active": "Aktywny",
+        "included": "W cenie Twojego planu",
+        "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
+        "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
         "unlimitedBullet": "Bez limitu: {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "Wróć",
       "compare": "Porównaj wszystkie plany",
       "appHint": "{feature} jest też sprzedawane jako aplikacja w Marketplace.",
-      "appLink": "Zobacz aplikację"
+      "appLink": "Zobacz aplikację",
+      "addonHint": "Możesz też dodać go do obecnego planu jako dodatek {addon}.",
+      "addonLink": "Zobacz dodatki",
+      "addons": {
+        "smartRouting": "Inteligentne kierowanie",
+        "teamsPermissions": "Zespoły i uprawnienia"
+      }
+    },
+    "lock": {
+      "link": "Zobacz plany i dodatki"
     }
   }
 }

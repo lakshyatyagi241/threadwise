@@ -414,6 +414,13 @@
       "hint": "Tant que vous êtes hors ligne, aucun nouveau chat ne vous est attribué automatiquement. Les chats que vous avez déjà restent à vous.",
       "failed": "Modification impossible"
     },
+    "myLeave": {
+      "label": "Congés",
+      "onLeaveUntil": "En congé jusqu'au {date}",
+      "onLeaveOpen": "En congé",
+      "hint": "Prévenez votre équipe de votre absence. Pendant votre congé, aucune nouvelle conversation ne vous est attribuée automatiquement.",
+      "title": "Vos congés"
+    },
     "deactivate": {
       "eyebrow": "Membres de l'équipe",
       "title": "Désactiver le membre",

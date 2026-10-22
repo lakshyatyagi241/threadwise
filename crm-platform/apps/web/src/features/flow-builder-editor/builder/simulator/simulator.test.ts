@@ -802,7 +802,7 @@ describe('Ask for file / image and Ask for location in the test runner (TW-FLB-0
   });
 });
 
-describe('simulator: retired Answer from FAQ', () => {
+describe('simulator: Answer from FAQ', () => {
   const run = async (handles: string[]) => {
     const nodes = [
       node('t', 'trigger'),
@@ -822,10 +822,12 @@ describe('simulator: retired Answer from FAQ', () => {
     return h;
   };
 
-  it('always takes the no match exit, even when the answered exit is connected, and says it is retired', async () => {
+  it('takes the no match exit (the test chat does not search the knowledge base), even when the answered exit is connected, and says so', async () => {
     const h = await run(['matched', 'no_match']);
     const texts = h.texts();
-    expect(texts.find((t) => t.startsWith('(simulated) Answer from FAQ'))).toContain('retired');
+    expect(texts.find((t) => t.startsWith('(simulated) Answer from FAQ'))).toContain(
+      'not searched',
+    );
     expect(texts).toContain('NO MATCH PATH');
     expect(texts).not.toContain('ANSWERED PATH');
   });

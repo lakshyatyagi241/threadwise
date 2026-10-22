@@ -555,7 +555,8 @@
           "cardCount": "{count} carte(s)",
           "payLink": "Lien de paiement",
           "invoice": "Facture",
-          "faqRetired": "Retiré · sort par aucune correspondance"
+          "faqAgent": "Répond depuis {agent}",
+          "faqNoAgent": "Choisissez un agent IA"
         },
         "overlays": {
           "startPinned": "Ceci est le point de départ (cliquez pour le retirer)",
@@ -746,7 +747,8 @@
           "storedIn": "Les valeurs seront enregistrées dans la propriété <b>{property}</b> du contact",
           "actions": "Actions",
           "actionsHint": "Ajouter une étape qui s'exécute juste après celle-ci.",
-          "actionsBlocked": "Une étape qui termine sa partie ne peut pas être suivie d'une autre."
+          "actionsBlocked": "Une étape qui termine sa partie ne peut pas être suivie d'une autre.",
+          "fromSteps": "Atteint depuis l'étape {stages}"
         },
         "editors": {
           "linkLabel": "Où cela mène",
@@ -858,7 +860,13 @@
             "choose": "Choisir un modèle…",
             "buttons": "Boutons",
             "variables": "Rempli à partir du contact",
-            "variablesHint": "Chaque numéro est rempli à l'envoi du message avec l'information du contact indiquée ici. Modifiez-le dans le modèle."
+            "variablesHint": "Chaque numéro est rempli à l'envoi du message avec l'information du contact indiquée ici. Modifiez-le dans le modèle.",
+            "fills": "Ce qui remplit chaque numéro",
+            "fillsHint": "Choisissez une information du contact ou une variable du flux, ou saisissez votre propre texte. Laissez vide pour utiliser ce que dit le modèle.",
+            "fillPick": "Insérer une information…",
+            "headerMedia": "Fichier d'en-tête",
+            "headerMediaHint": "L'image, la vidéo ou le fichier de l'en-tête de ce modèle. Nécessaire si le modèle n'a pas de fichier propre.",
+            "headerMediaMissing": "Ajoutez le fichier d'en-tête : ce modèle n'en a pas et WhatsApp ne l'enverra pas sans."
           },
           "cta": {
             "buttonText": "Texte du bouton",
@@ -897,7 +905,10 @@
               "phone": "Appeler un numéro",
               "email": "Envoyer un e-mail",
               "agent": "Parler à une personne"
-            }
+            },
+            "prev": "Carte précédente",
+            "next": "Carte suivante",
+            "goTo": "Carte {n}"
           },
           "condition": {
             "info": "Ajoutez des règles (une variable, une comparaison et une valeur). Reliez-les par AND ou OR et imbriquez des groupes si besoin.",
@@ -908,12 +919,16 @@
             "hint": "Le visiteur est transmis à cette équipe avec votre note. Rien n'est à connecter après ce bouton."
           },
           "faq": {
-            "exit": "Continuer avec",
-            "exitHint": "Le flux continue toujours ici."
+            "exit": "Quand rien ne correspond",
+            "exitHint": "Où va le flux quand aucune entrée ne répond.",
+            "matched": "Quand une réponse existe",
+            "matchedHint": "Où va le flux après l'envoi de la réponse."
           }
         },
         "branchAdd": "Ajouter une étape pour « {title} »",
-        "faqEnds": "Cette étape retirée termine cette partie : le flux continue toujours par sa sortie Aucune correspondance."
+        "faqEnds": "Cette étape termine cette partie : le flux continue par la sortie Répondu ou Aucune correspondance.",
+        "flowMenu": "Options pour {name}",
+        "renameFlow": "Renommer le flux"
       },
       "formsCore": {
         "helpers": {
@@ -1861,7 +1876,13 @@
           "waitUntilPaid": "Attendre le paiement, puis continuer"
         },
         "faq": {
-          "retired": "Cette étape est retirée et ne cherche plus rien. Le flux continue toujours par Aucune correspondance. Pour répondre à partir de vos propres connaissances, utilisez une étape d'assistant IA et choisissez un agent IA."
+          "agent": "Agent IA",
+          "agentHint": "L'agent dont la base de connaissances est interrogée. Ajoutez-y des FAQ dans Entraînement IA.",
+          "query": "Rechercher",
+          "queryHint": "Ce qu'il faut chercher. En général le dernier message du client.",
+          "sendAnswer": "Envoyer la réponse au client",
+          "variable": "Enregistrer la réponse sous",
+          "variableHint": "Les étapes suivantes lisent la réponse sous ce nom, par exemple faq.answer."
         }
       },
       "attrPicker": {
@@ -2502,30 +2523,6 @@
           "label": "Question",
           "help": "Poser n’importe quelle question et enregistrer la réponse"
         },
-        "askName": {
-          "label": "Nom",
-          "help": "Demander un nom et le valider"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Demander une adresse e-mail et la valider"
-        },
-        "askPhone": {
-          "label": "Numéro de téléphone",
-          "help": "Demander un numéro de téléphone et le valider"
-        },
-        "askNumber": {
-          "label": "Nombre",
-          "help": "Demander un nombre et le valider"
-        },
-        "askAlphanumeric": {
-          "label": "Lettres et chiffres",
-          "help": "Un identifiant ou un code, sans espaces ni symboles"
-        },
-        "askDate": {
-          "label": "Date",
-          "help": "Demander une date au format choisi"
-        },
         "askFile": {
           "label": "Fichier ou image",
           "help": "Attendre une photo, un document, une vidéo ou un audio"
@@ -2617,7 +2614,9 @@
         "writeCode": "Étape {stage} : écrivez le code à exécuter.",
         "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler.",
         "chooseAiAgent": "Étape {stage} : choisissez l’agent IA qui répond ou passez l’étape en configuration personnalisée.",
-        "writeAiPrompt": "Étape {stage} : rédigez les instructions pour l’IA ou choisissez un agent IA."
+        "writeAiPrompt": "Étape {stage} : rédigez les instructions pour l’IA ou choisissez un agent IA.",
+        "templateFile": "Étape {stage} : ajoutez le fichier d'en-tête du modèle.",
+        "fileLinkInvalid": "Étape {stage} : le lien du fichier doit commencer par https://"
       }
     },
     "waboImport": {
@@ -2731,7 +2730,7 @@
       "simPurchase": "Achat simulé : {name} → sortie « achetée »",
       "simAbandon": "Abandon simulé → sortie « abandonnée »",
       "locationSkipped": "(emplacement) ignoré : aucune coordonnée valide",
-      "faqRetired": "(simulé) Répondre depuis la FAQ est retiré : la sortie « aucune correspondance » est prise."
+      "faqLine": "(simulé) Répondre depuis la FAQ : la base de connaissances n'est pas interrogée dans le chat de test, \"aucune correspondance\" est retenu."
     }
   }
 }

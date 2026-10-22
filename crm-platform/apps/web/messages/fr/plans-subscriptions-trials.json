@@ -60,10 +60,12 @@
       "remove_branding": "Supprimer la marque",
       "sales_pipeline": "Pipeline commercial",
       "appointment_booking": "Prise de rendez-vous",
+      "appointment_confirm_buttons": "Boutons du rappel (Confirmer / Reporter / Annuler)",
+      "appointment_rebook_steps": "Étapes de relance pour reprendre rendez-vous",
       "chatbot_widgets": "Widgets chatbot",
       "wa_storefront": "Catalogue WhatsApp",
       "inbox_sla": "Politiques SLA",
-      "inbox_routing": "Règles de routage",
+      "inbox_routing": "Routage intelligent: attribution automatique et règles",
       "waba_calling": "Appels WhatsApp",
       "inbox_kanban": "Vue Kanban",
       "team_performance": "Performance de l’équipe",
@@ -89,7 +91,7 @@
       "record_assignment": "Règles d'attribution des enregistrements",
       "team_hierarchy": "Hiérarchie des équipes et managers",
       "custom_roles": "Rôles personnalisés et périmètres",
-      "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
+      "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré"
     },
     "limitGroups": {
       "messaging": "Messagerie",
@@ -251,6 +253,9 @@
         "buy": "Acheter le module",
         "buyAgain": "Racheter",
         "active": "Actif",
+        "included": "Inclus dans votre offre",
+        "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
+        "includedEnds": "Inclus dans votre offre. Votre module se termine le {date} et ne sera pas renouvelé.",
         "unlimitedBullet": "Illimité : {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "Retour",
       "compare": "Comparer tous les forfaits",
       "appHint": "{feature} est aussi vendu comme application dans le Marketplace.",
-      "appLink": "Voir l’application"
+      "appLink": "Voir l’application",
+      "addonHint": "Vous pouvez aussi l'ajouter à votre offre actuelle avec le module {addon}.",
+      "addonLink": "Voir les modules",
+      "addons": {
+        "smartRouting": "Routage intelligent",
+        "teamsPermissions": "Équipes et autorisations"
+      }
+    },
+    "lock": {
+      "link": "Voir les offres et modules"
     }
   }
 }

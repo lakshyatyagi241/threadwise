@@ -282,7 +282,9 @@
           "save": "Speichern",
           "saved": "Einstellung gespeichert.",
           "saveFailed": "Die Einstellung konnte nicht gespeichert werden."
-        }
+        },
+        "timezoneSearch": "Zeitzonen suchen",
+        "timezoneNoMatch": "Keine Zeitzone gefunden."
       },
       "notifications": {
         "title": "Workspace-Benachrichtigungen",

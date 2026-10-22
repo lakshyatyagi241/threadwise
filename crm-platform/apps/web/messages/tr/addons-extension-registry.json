@@ -279,6 +279,9 @@
         "failed": "Yenilemeyi iptal edemedik. Lütfen tekrar deneyin."
       },
       "active": "Etkin",
+      "included": "Planınıza dahil",
+      "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
+      "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
       "cardEyebrow": "Eklenti",
       "catalogTitle": "Eklentiler",
       "catalogBody": "Mevcut planınızın üzerine ek özelliklerin kilidini açın. Plan değişikliği gerekmez.",

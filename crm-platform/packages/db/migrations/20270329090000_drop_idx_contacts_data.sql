@@ -1,0 +1,14 @@
+-- @no-transaction
+-- Why this migration exists: idx_contacts_data (GIN, jsonb_path_ops on contacts.data) is read by nothing, and it is the index that
+-- stops almost every contact update from being a HOT update.
+--
+-- Evidence (prod, 2026-10-22): 0 scans since statistics began; no query in apps/api/src uses `data @>` or `data ?` on contacts (the
+-- code reads custom fields with `data ->> key`, which a jsonb_path_ops index cannot serve); 17 MB of the table's 117 MB of indexes.
+-- 31,602 of the 72,228 contact updates set only `data` (UPDATE contacts SET data = ..., row_version = row_version + 1): Postgres
+-- cannot do a heap-only (HOT) update when an indexed column changes, and `data` is indexed as a whole, so those updates wrote a new row
+-- version AND a new GIN entry (the slowest kind of index write) AND bumped every other index. Only 8 of the 72,228 were HOT.
+-- With this index gone the data-only updates can be HOT once the page has room (see the fillfactor migration after this one).
+--
+-- Reversible: CREATE INDEX CONCURRENTLY idx_contacts_data ON contacts USING gin (data jsonb_path_ops) (0004_crm_contacts.sql).
+-- CONCURRENTLY so the live table is not locked; this file holds exactly one statement, so it runs outside a transaction.
+DROP INDEX CONCURRENTLY IF EXISTS idx_contacts_data;

@@ -49,7 +49,7 @@ For what the team scopes (including **My team and sub-teams**) and the owning te
 
 ## Plan and access
 
-Seeing the list needs the permission to see teams (`team.read`); Owners, Admins, Managers and Agents hold it by default, Viewers do not. Creating, editing and deleting teams, choosing managers and changing who is on a team need the permission to manage teams (`team.manage`), held by Owners, Admins and Managers. The older permission **Create, edit and delete teams** (`inbox.team.manage`) still works for one more release. This screen has no plan requirement.
+Seeing the list needs the permission to see teams; Owners, Admins, Managers and Agents have it by default, Viewers do not. Creating, editing and deleting teams, choosing managers and changing who is on a team need the permission to manage teams, which Owners, Admins and Managers have. A role that already had **Create, edit and delete teams** keeps working for now. The screen itself has no plan requirement, but the team method **Round robin** and **Least loaded**, and the default assignee that goes with them, are part of Smart routing ([Smart routing add-on](help:smart-routing-addon)): without it they are locked in the form, with a link to Plans, and a team that already stores one keeps it unchanged.
 
 ## If something looks wrong
 

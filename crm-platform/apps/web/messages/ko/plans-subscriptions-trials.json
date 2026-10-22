@@ -60,10 +60,12 @@
       "remove_branding": "브랜딩 제거",
       "sales_pipeline": "영업 파이프라인",
       "appointment_booking": "예약 접수",
+      "appointment_confirm_buttons": "리마인더 버튼 (확인 / 일정 변경 / 취소)",
+      "appointment_rebook_steps": "재예약(리콜) 단계",
       "chatbot_widgets": "챗봇 위젯",
       "wa_storefront": "WhatsApp 카탈로그",
       "inbox_sla": "SLA 정책",
-      "inbox_routing": "라우팅 규칙",
+      "inbox_routing": "스마트 라우팅: 자동 배정 및 규칙",
       "waba_calling": "WhatsApp 통화",
       "inbox_kanban": "칸반 보기",
       "team_performance": "팀 성과",
@@ -89,7 +91,7 @@
       "record_assignment": "레코드 배정 규칙",
       "team_hierarchy": "팀 계층 및 매니저",
       "custom_roles": "사용자 지정 역할 및 범위",
-      "inbox_assignment_sticky": "연락처 담당자와 고정 배정"
+      "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원"
     },
     "limitGroups": {
       "messaging": "메시징",
@@ -251,6 +253,9 @@
         "buy": "추가 기능 구매",
         "buyAgain": "다시 구매",
         "active": "활성",
+        "included": "현재 요금제에 포함됨",
+        "includedOwned": "이 애드온도 보유 중입니다. 이제 요금제에 포함되어 있으므로 애드온을 해지할 수 있습니다. 자동 환불은 없습니다.",
+        "includedEnds": "현재 요금제에 포함됨. 애드온은 {date}에 종료되며 갱신되지 않습니다.",
         "unlimitedBullet": "{label} 무제한",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "뒤로 가기",
       "compare": "모든 요금제 비교",
       "appHint": "{feature}은(는) 마켓플레이스에서 앱으로도 판매됩니다.",
-      "appLink": "앱 보기"
+      "appLink": "앱 보기",
+      "addonHint": "{addon} 애드온으로 현재 요금제에 추가할 수도 있습니다.",
+      "addonLink": "애드온 보기",
+      "addons": {
+        "smartRouting": "스마트 라우팅",
+        "teamsPermissions": "팀 및 권한"
+      }
+    },
+    "lock": {
+      "link": "요금제 및 애드온 보기"
     }
   }
 }

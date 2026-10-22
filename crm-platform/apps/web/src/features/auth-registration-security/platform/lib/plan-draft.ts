@@ -1,4 +1,5 @@
 import {
+  NEW_PLAN_FEATURES_OFF,
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
   PLAN_UNLIMITED_FROM,
@@ -86,7 +87,11 @@ export interface PlanProblem {
 }
 export type PlanProblems = Partial<Record<PlanField, PlanProblem>>;
 
-/** Reference's defaults for a new package: active, every feature ticked, limits blank, sort 0, 1 month. */
+/**
+ * Reference's defaults for a new package: active, every feature ticked, limits blank, sort 0, 1 month. One deliberate difference: the
+ * features sold as the Smart routing add-on (NEW_PLAN_FEATURES_OFF) start unticked, so a new plan is a minimal entry plan. Existing plans
+ * are not touched: they are read from what they store.
+ */
 export function newPlanDraft(currency = 'USD'): PlanDraft {
   return {
     name: '',
@@ -107,7 +112,9 @@ export function newPlanDraft(currency = 'USD'): PlanDraft {
     ctaLabel: 'Get started',
     dataRetentionDays: '0',
     limits: Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, ''])) as PlanDraft['limits'],
-    features: Object.fromEntries(PLAN_FEATURE_KEYS.map((k) => [k, true])) as PlanDraft['features'],
+    features: Object.fromEntries(
+      PLAN_FEATURE_KEYS.map((k) => [k, !NEW_PLAN_FEATURES_OFF.includes(k)]),
+    ) as PlanDraft['features'],
     visibleAddons: [],
   };
 }

@@ -110,7 +110,7 @@ export function ConnectWoo({ overview }: { overview: StoreOverview }) {
                 {c('integrations')} / WooCommerce
               </div>
               <h1 className="text-3xl font-normal leading-none tracking-tight sm:text-[40px]">
-                {t('title')} <span className="italic text-[#7F54B3]">{t('accent')}</span>
+                {t('title')} <span className="not-italic text-[#7F54B3]">{t('accent')}</span>
               </h1>
               <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
             </div>

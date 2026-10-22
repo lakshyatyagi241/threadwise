@@ -91,6 +91,7 @@
       "empty": "Nessuna release registrata finora. Le release compariranno qui dal prossimo deploy.",
       "cols": {
         "tag": "Tag",
+        "changes": "Modifiche",
         "state": "Stato",
         "step": "Passo",
         "started": "Avvio",
@@ -104,7 +105,8 @@
         "ok": "Attiva",
         "failed": "Fallita",
         "rolled_back": "Ripristinata"
-      }
+      },
+      "by": "di {author}"
     }
   }
 }

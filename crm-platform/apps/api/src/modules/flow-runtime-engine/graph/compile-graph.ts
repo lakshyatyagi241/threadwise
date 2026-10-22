@@ -95,8 +95,8 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
 const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   condition: { yes: 1, no: 2 },
   book_appointment: { booked: 1, no_slots: 2 },
-  // Human handoff (BL-398); the old single exit (`out`) is port 1 too.
-  assign: { assigned: 1, waiting: 2, unavailable: 3 },
+  // Human handoff (BL-398); the old single exit (`out`) is port 1 too. `returned` (4) is taken only by Return to bot, never by a handoff.
+  assign: { assigned: 1, waiting: 2, unavailable: 3, returned: 4 },
   whatsapp_shop: { purchased: 1, abandoned: 2 },
   woocommerce: { purchased: 1, abandoned: 2 },
   shopify: { purchased: 1, abandoned: 2 },
@@ -213,6 +213,8 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
         savePropertyKey: str(data.savePropertyKey),
+        // Like the Buttons node: the list stays tappable after a leaf branch unless the author turned this off.
+        keepMenuOpen: data.keepMenuOpen !== false,
       };
     }
     case 'carousel': {

@@ -1416,10 +1416,12 @@
             "remove_branding": "White-label: de workspace kan de platformbranding in de voettekst verbergen.",
             "sales_pipeline": "Deals, taken en pijplijnen, en de pijplijncijfers op het dashboard.",
             "appointment_booking": "Boekingstypen, afspraken en de openbare boekingspagina's. De betaalde Afspraken-app beheert deze schakelaar.",
+            "appointment_confirm_buttons": "Voegt de knoppen Bevestigen, Verplaatsen en Annuleren toe aan de afspraakherinnering die via WhatsApp wordt verstuurd.",
+            "appointment_rebook_steps": "Vervolgberichten na een afgeronde afspraak, die de contactpersoon vragen opnieuw te boeken.",
             "chatbot_widgets": "De builder voor de chatbotwidget van de website.",
             "wa_storefront": "Het WhatsApp-catalogus- en winkelgedeelte.",
             "inbox_sla": "SLA-beleid en deadlines in de teaminbox.",
-            "inbox_routing": "Routeringsregels die inboxgesprekken automatisch toewijzen.",
+            "inbox_routing": "Automatische toewijzing van nieuwe chats: routeringsregels, Alle anderen en timers van de wachtrij. Onderdeel van de add-on Slimme routering.",
             "waba_calling": "Bellen via WhatsApp vanuit de inbox: belnummers, belrechten, bellen en gesprekken beantwoorden.",
             "inbox_kanban": "De kanbanweergave van de teaminbox.",
             "team_performance": "De rapporten over teamprestaties.",
@@ -1445,7 +1447,7 @@
             "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar.",
             "team_hierarchy": "Bovenliggende teams, teamleiders en managers die hun team en de teams eronder zien.",
             "custom_roles": "Maak en bewerk rollen en kies per recht een bereik (eigen, team of alle records).",
-            "inbox_assignment_sticky": "Toewijzing met eigenaar eerst en gelijk houden tussen de contacteigenaar en de gesprekseigenaar, het venster voor terugkerende contacten en de vraag bij hertoewijzing. Werkt samen met de inboxroutering."
+            "inbox_assignment_sticky": "Toewijzing met eigenaar eerst en synchroon, het venster voor terugkerende contacten en de vraag bij hertoewijzing. Onderdeel van de add-on Slimme routering."
           },
           "units": {
             "days": "Dagen",
@@ -1609,10 +1611,12 @@
             "remove_branding": "White-label (verwijdert platformbranding)",
             "sales_pipeline": "Verkooppijplijn (deals en taken)",
             "appointment_booking": "Afspraken en boekingspagina's",
+            "appointment_confirm_buttons": "Herinneringsknoppen: Bevestigen, Verplaatsen en Annuleren",
+            "appointment_rebook_steps": "Stappen voor opnieuw boeken (herinnering) na een afspraak",
             "chatbot_widgets": "Chatbotwidgets voor websites",
             "wa_storefront": "WhatsApp-winkel en -catalogus",
             "inbox_sla": "Inbox-SLA-beleid",
-            "inbox_routing": "Inbox-routeringsregels en kantooruren",
+            "inbox_routing": "Slimme routering: automatische toewijzing en regels",
             "waba_calling": "WhatsApp-gesprekken starten en beantwoorden vanuit de inbox",
             "inbox_kanban": "Inbox-kanbanbord",
             "team_performance": "Rapporten over teamprestaties",
@@ -1638,7 +1642,7 @@
             "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)",
             "team_hierarchy": "Teamhiërarchie en managers",
             "custom_roles": "Eigen rollen en bereiken",
-            "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
+            "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
           },
           "problems": {
             "required": "Dit veld is verplicht.",

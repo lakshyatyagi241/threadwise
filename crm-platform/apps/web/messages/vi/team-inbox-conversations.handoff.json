@@ -33,12 +33,20 @@
         "done": "Bạn đã nhận cuộc trò chuyện này.",
         "doneOwner": "Bạn đã nhận cuộc trò chuyện này và hiện là chủ sở hữu của liên hệ.",
         "failed": "Không thể nhận cuộc trò chuyện.",
-        "taken": "Người khác đã nhận cuộc trò chuyện này trước."
+        "taken": "Người khác đã nhận cuộc trò chuyện này trước.",
+        "overLimitTitle": "Bạn đã đạt giới hạn cuộc trò chuyện",
+        "overLimitMessage": "Bạn đã có {open} cuộc trò chuyện đang mở và giới hạn của bạn là {limit}. Vẫn nhận cuộc này?",
+        "overLimitConfirm": "Vẫn nhận",
+        "overLimitCancel": "Hủy"
       },
       "giveBack": {
         "button": "Trả lại cho bot",
         "done": "Bot trả lời lại cuộc trò chuyện này.",
-        "failed": "Không thể trả cuộc trò chuyện lại cho bot."
+        "failed": "Không thể trả cuộc trò chuyện lại cho bot.",
+        "doneFlow": "Bot tiếp tục luồng.",
+        "doneNextLive": "Bot sẽ trả lời tin nhắn tiếp theo của khách.",
+        "doneNextDefault": "Bot đã hoạt động lại. Bot chỉ trả lời tin nhắn tiếp theo nếu đã đặt luồng mặc định.",
+        "already": "Bot đã nhận cuộc trò chuyện này."
       },
       "send": {
         "button": "Gửi vào hàng chờ",
@@ -50,7 +58,7 @@
         "intro": "Bot sẽ ngừng trả lời liên hệ này. Cuộc trò chuyện chuyển đến người hoặc nhóm bạn chọn, hoặc chờ trong hàng chờ cho đến khi có người nhận.",
         "where": "Gửi tới",
         "whereRules": "Quy tắc giao việc, nếu không có thì hàng chờ",
-        "whereQueueOnly": "Hàng chờ (gói của bạn không có quy tắc giao việc)",
+        "whereQueueOnly": "Hàng chờ (quy tắc giao cần tiện ích Định tuyến thông minh)",
         "whereTeam": "Một nhóm",
         "wherePerson": "Một người",
         "team": "Nhóm",
@@ -78,14 +86,16 @@
         "priority": "Mức ưu tiên",
         "summary": "Tóm tắt",
         "answers": "Những gì liên hệ đã nói với bot",
-        "trace": "Cách được giao"
+        "trace": "Cách được giao",
+        "timers": "Các bước của hàng chờ"
       },
       "source": {
         "flow": "Một luồng",
         "ai_agent": "Một tác nhân AI",
         "keyword": "Yêu cầu của chính liên hệ",
         "bot_failure": "Một bot không thể hỗ trợ",
-        "manual": "Một đồng nghiệp"
+        "manual": "Một đồng nghiệp",
+        "arrival": "Định tuyến: không ai nhận được"
       },
       "reason": {
         "customer_asked": "Liên hệ yêu cầu gặp người thật",
@@ -105,6 +115,42 @@
         "chosen": "Đã chọn",
         "skipped": "Đã bỏ qua",
         "info": "Ghi chú"
+      },
+      "botLine": {
+        "system": "hệ thống",
+        "pressed": {
+          "flow": "Bot đã quay lại, do {name} trả lại. Luồng tiếp tục.",
+          "nextLive": "Bot đã quay lại, do {name} trả lại. Bot sẽ trả lời tin nhắn tiếp theo của khách.",
+          "nextDefault": "Bot đã quay lại, do {name} trả lại. Bot chỉ trả lời tin nhắn tiếp theo nếu đã đặt luồng mặc định."
+        },
+        "result": {
+          "continued": "Luồng đã tiếp tục từ lối ra “trả lại”.",
+          "claimed_again": "Luồng không được tiếp tục: có người đã nhận lại cuộc trò chuyện.",
+          "flow_not_live": "Luồng không được tiếp tục: luồng không còn hoạt động.",
+          "start_failed": "Không thể tiếp tục luồng."
+        },
+        "customer": {
+          "sent": "Đã gửi tin nhắn cho khách.",
+          "window_closed": "Bỏ qua tin nhắn cho khách: cửa sổ 24 giờ đã đóng.",
+          "no_consent": "Bỏ qua tin nhắn cho khách: không có sự đồng ý.",
+          "failed": "Không thể gửi tin nhắn cho khách.",
+          "channel_unavailable": "Bỏ qua tin nhắn cho khách: kênh không khả dụng."
+        }
+      },
+      "timers": {
+        "reminded": "Nhắc lúc {at}",
+        "offered": "Đề nghị cho nhóm này lúc {at}",
+        "messaged": "Gửi tin nhắn cho khách lúc {at}",
+        "gaveBack": "Trả lại cho bot lúc {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "{actor} đã trả lại cho bot",
+          "bot_resumed": "Bot đã tiếp tục luồng",
+          "bot_resume_skipped": "Luồng không được tiếp tục"
+        }
       }
     }
   }

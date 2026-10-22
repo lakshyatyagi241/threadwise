@@ -29,6 +29,7 @@ The wallet screen shows your message balance and how it has moved in the last 30
 - **Type**: all movements, top-ups, earnings, message charges, refunds or adjustments.
 - **From and to**: the date range. The end date cannot be before the start date.
 - **Search**: matches the description or the reason of a movement.
+- **Columns**: the statement and the exported CSV have the same columns. Channel, Recipient, Template, Country, Category and Engine appear only when at least one movement in the list has a value for them, so a column is never blank for every row. Category is filled for movements brought over from the old platform.
 
 ## Plan and access
 

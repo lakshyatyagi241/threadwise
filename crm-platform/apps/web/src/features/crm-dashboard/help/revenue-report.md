@@ -28,7 +28,7 @@ The revenue report answers "how much money are we making, and where is it stuck"
 - **Invoiced, paid so far, owed and overdue** count the invoices you **issued** in the period. Drafts, voided invoices and proformas are left out. "Paid so far" is net of refunds, and "owed" and "overdue" are as of today.
 - **Collected and refunded** count the money that **came in** during the period, whichever invoice it settled, or none.
 
-The key figures also show Reference's four: collected in the period, collected all time, outstanding (every open invoice as of today, whatever the period) and the tax on invoices that became fully paid in the period.
+The key figures also show four more: collected in the period, collected all time, outstanding (every open invoice as of today, whatever the period) and the tax on invoices that became fully paid in the period.
 
 ## What each part shows
 

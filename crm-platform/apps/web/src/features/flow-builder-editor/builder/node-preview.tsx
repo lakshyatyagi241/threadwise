@@ -425,6 +425,11 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
                 &quot;{cut(d.message, 40)}&quot;
               </div>
             ) : null}
+            {handoff && str(d.returnMessage).trim() ? (
+              <div className="mt-1 truncate text-[10.5px] text-muted-foreground">
+                {tp('returnBack')} &quot;{cut(str(d.returnMessage), 32)}&quot;
+              </div>
+            ) : null}
           </div>
         );
       }
@@ -669,12 +674,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         </div>
       );
     }
-    case 'faq':
+    case 'faq': {
+      const agent = ctx.assistants.find((a) => a.id === str(d.assistant));
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <Count>{tp('faqRetired')}</Count>
+          <Count>{agent ? tp('faqAgent', { agent: agent.name }) : tp('faqNoAgent')}</Count>
         </div>
       );
+    }
     case 'api_library': {
       const api = str(d.apiName);
       const overrides = asArr(d.inputs).length;

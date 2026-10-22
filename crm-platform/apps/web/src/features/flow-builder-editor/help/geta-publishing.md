@@ -15,10 +15,10 @@ When you press **Publish** in the flow builder, the flow is published here first
 ## How to use it
 
 1. Open **Marketplace**, select the **Add-ons** tab and open **Geta publishing**.
-2. Enter the **Base URL** of the Geta API, for example `https://api-core-sandbox.geta.ai`.
-3. Optionally enter the **Console origin**, for example `https://app-sandbox.geta.ai`. It is sent as the origin and referer of each request. Leave it empty to send neither.
+2. Enter the **Base URL** of your Geta connection, for example `https://api-core-sandbox.geta.ai`.
+3. Optionally enter the **Console origin**, for example `https://app-sandbox.geta.ai`. Leave it empty if Geta did not give you one.
 4. Enter the **Authorization token** and the **geta-host token** exactly as Geta gave them. The authorization token is sent as it is, so include `Bearer ` yourself if Geta expects it.
-5. Paste the **Geta chatbot record**: the chatbot object as it should be sent to Geta, or the whole request body with a `chatbot` key. It needs at least `id` and `bot_id`.
+5. Paste the **Geta chatbot record** exactly as Geta gave it to you. It needs at least an `id` and a `bot_id`.
 6. Select **Save**. The page then shows each secret as Saved and the chatbot record as its id, name and bot id.
 
 ## What you see in the editor
@@ -32,10 +32,8 @@ When you press **Publish** in the flow builder, the flow is published here first
 
 - A saved secret is never shown again. Leave its box empty to keep it, type a new value to replace it, or select **Remove**.
 - **Clear all** removes every Geta setting of the workspace. Published flows stay published here.
-- The chatbot record is sent as you pasted it. Only its `modified_time` is refreshed to the current time (UTC) each time it is sent.
-- A single flow can use its own chatbot record instead of the workspace one. This is set through the API.
-
-> If the page says the server is in fixture mode, publishing is simulated and nothing reaches Geta.
+- The chatbot record is sent as you pasted it, with only its last-changed time refreshed each time.
+- A single flow can use its own chatbot record instead of the workspace one. Ask your platform team to set this up.
 
 ## Plan and access
 

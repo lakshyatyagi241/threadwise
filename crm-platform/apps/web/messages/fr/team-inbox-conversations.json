@@ -584,7 +584,11 @@
           "sla_breach": "Délai de réponse dépassé",
           "spam_flagged": "Marquée comme spam par {actor}",
           "escalated": "Escaladée",
-          "unknown": "{what} par {actor}"
+          "unknown": "{what} par {actor}",
+          "handoff_requested": "Confiée à une personne par {actor}",
+          "queue_reminded": "L'équipe a été relancée",
+          "queue_offered": "Proposé à une autre équipe",
+          "queue_customer_message": "Un message a été envoyé au client"
         },
         "actors": {
           "user": "Un collègue",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulateur (test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat du site web",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulateur (test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat du site web",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contact",
         "agent": "Vous",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "Retour à la boîte de réception",
-        "title": "Étiquettes de conversation",
+        "title": "Étiquettes",
         "intro": "Les étiquettes de conversation marquent un échange (facturation, remboursement, urgent) pour que votre équipe puisse trier et filtrer la boîte de réception. Elles viennent de la même bibliothèque que les étiquettes de contact, qui décrivent la personne.",
         "newTitle": "Nouvelle étiquette",
         "editTitle": "Modifier l’étiquette",

@@ -7,9 +7,18 @@ import { useEffect, useMemo, useState } from 'react';
 import type { RoutingRule } from '@crm/contracts';
 import { Alert, Badge, Button, ConfirmDialog, Spinner, Switch, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useVocab } from '@/features/persona-vocabulary';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { refresh, routingApi, updateRuleFresh, useAssignees, useRules } from '../api/routing';
+import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
+import {
+  refresh,
+  routingApi,
+  updateRuleFresh,
+  useAssignees,
+  useHandoffSettings,
+  useRules,
+} from '../api/routing';
 import {
   everyoneElseOf,
   movedIds,
@@ -23,6 +32,7 @@ import { AssignmentSwitches } from './assignment-switches';
 import { BusinessHoursDialog } from './business-hours-dialog';
 import { EveryoneElseRow, ensureEveryoneElseEvenly } from './everyone-else-row';
 import { TryItPanel } from './try-it-panel';
+import { WaitingQueueSection } from './waiting-queue-section';
 
 const isCode = (e: unknown, code: string) => e instanceof ApiError && e.code === code;
 const reason = (e: unknown, fallback: string) =>
@@ -43,10 +53,13 @@ export function AutoAssignmentScreen() {
   const dealNoun = useVocab('deal');
   const canRead = useCan('inbox.settings.read');
   const canManage = useCan('inbox.routing.manage');
+  // The workspace hours are read by the rules and by SLA clocks, so a plan with SLA keeps the editor even without Smart routing.
+  const slaInPlan = usePlanFeature('inbox_sla');
   const qc = useQueryClient();
   const { toast } = useToast();
   const rules = useRules('', canRead);
   const assignees = useAssignees(canRead);
+  const handoffSettings = useHandoffSettings(canRead);
   const [busy, setBusy] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<RoutingRule | null>(null);
   const [hoursOpen, setHoursOpen] = useState(false);
@@ -148,7 +161,7 @@ export function AutoAssignmentScreen() {
             })}
           </p>
         </div>
-        {canRead && !locked && (
+        {canRead && (!locked || slaInPlan) && (
           <Button variant="secondary" onClick={() => setHoursOpen(true)}>
             {t('businessHours')}
           </Button>
@@ -162,6 +175,16 @@ export function AutoAssignmentScreen() {
       />
 
       <AssignmentSwitches onAutoEnabled={locked ? async () => undefined : onAutoEnabled} />
+
+      {handoffSettings.data && (
+        <WaitingQueueSection
+          // a saved change replaces the form's starting point
+          key={JSON.stringify(handoffSettings.data.queueTimers)}
+          settings={handoffSettings.data}
+          teams={assignees.data?.teams ?? []}
+          canManage={canManage}
+        />
+      )}
 
       <section className="space-y-4" data-testid="rules-layer" aria-labelledby="rules-title">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -192,7 +215,11 @@ export function AutoAssignmentScreen() {
         </div>
 
         {locked ? (
-          <Alert tone="info">{tr('locked')}</Alert>
+          <Alert tone="info">
+            <span data-testid="rules-locked">
+              {tr('locked')} <AddonLockLink />
+            </span>
+          </Alert>
         ) : (
           <>
             <Pipeline />

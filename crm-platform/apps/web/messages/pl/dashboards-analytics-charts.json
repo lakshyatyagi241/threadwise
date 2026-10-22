@@ -320,6 +320,7 @@
         "replyRate": "Wskaźnik odpowiedzi",
         "received": "Odebrane wiadomości",
         "conversationsOpen": "Otwarte rozmowy",
+        "conversationsResolved": "Rozwiązane rozmowy",
         "conversationsClosed": "Zamknięte rozmowy",
         "conversationsAssigned": "Przypisane",
         "conversationsUnassigned": "Nieprzypisane",

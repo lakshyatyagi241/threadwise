@@ -555,7 +555,8 @@
           "cardCount": "{count} tarjeta(s)",
           "payLink": "Enlace de pago",
           "invoice": "Factura",
-          "faqRetired": "Retirado · sale por sin coincidencia"
+          "faqAgent": "Responde desde {agent}",
+          "faqNoAgent": "Elige un agente de IA"
         },
         "overlays": {
           "startPinned": "Este es el punto de inicio (clic para desfijar)",
@@ -746,7 +747,8 @@
           "storedIn": "Los valores se guardarán en la propiedad <b>{property}</b> del contacto",
           "actions": "Acciones",
           "actionsHint": "Añade un paso que se ejecuta justo después de este.",
-          "actionsBlocked": "Un paso que termina su parte no puede tener otro después."
+          "actionsBlocked": "Un paso que termina su parte no puede tener otro después.",
+          "fromSteps": "Se llega desde el paso {stages}"
         },
         "editors": {
           "linkLabel": "A dónde lleva",
@@ -858,7 +860,13 @@
             "choose": "Elige una plantilla…",
             "buttons": "Botones",
             "variables": "Se rellena con datos del contacto",
-            "variablesHint": "Cada número se rellena al enviar el mensaje con el dato del contacto indicado aquí. Cámbialo en la plantilla."
+            "variablesHint": "Cada número se rellena al enviar el mensaje con el dato del contacto indicado aquí. Cámbialo en la plantilla.",
+            "fills": "Qué rellena cada número",
+            "fillsHint": "Elige un dato del contacto o una variable del flujo, o escribe tu propio texto. Déjalo vacío para usar lo que dice la plantilla.",
+            "fillPick": "Insertar un dato…",
+            "headerMedia": "Archivo del encabezado",
+            "headerMediaHint": "La imagen, el vídeo o el archivo del encabezado de esta plantilla. Hace falta si la plantilla no tiene archivo propio.",
+            "headerMediaMissing": "Añade el archivo del encabezado: esta plantilla no tiene ninguno y WhatsApp no la enviará sin él."
           },
           "cta": {
             "buttonText": "Texto del botón",
@@ -897,7 +905,10 @@
               "phone": "Llamar a un número",
               "email": "Enviar un correo",
               "agent": "Hablar con una persona"
-            }
+            },
+            "prev": "Tarjeta anterior",
+            "next": "Tarjeta siguiente",
+            "goTo": "Tarjeta {n}"
           },
           "condition": {
             "info": "Añade reglas (una variable, una comparación y un valor). Únelas con AND u OR y anida grupos cuando lo necesites.",
@@ -908,12 +919,16 @@
             "hint": "El visitante pasa a este equipo con tu nota. No hace falta conectar nada después de este botón."
           },
           "faq": {
-            "exit": "Continuar con",
-            "exitHint": "El flujo siempre continúa aquí."
+            "exit": "Cuando nada coincide",
+            "exitHint": "A dónde va el flujo cuando ninguna entrada responde.",
+            "matched": "Cuando responde",
+            "matchedHint": "A dónde va el flujo después de enviar la respuesta."
           }
         },
         "branchAdd": "Añadir un paso para “{title}”",
-        "faqEnds": "Este paso retirado termina esta parte: el flujo siempre continúa por su salida Sin coincidencia."
+        "faqEnds": "Este paso cierra esta parte: el flujo continúa por su salida Respondida o Sin coincidencia.",
+        "flowMenu": "Opciones de {name}",
+        "renameFlow": "Renombrar flujo"
       },
       "formsCore": {
         "helpers": {
@@ -1861,7 +1876,13 @@
           "waitUntilPaid": "Esperar al pago y continuar"
         },
         "faq": {
-          "retired": "Este paso está retirado y ya no busca nada. El flujo siempre continúa por Sin coincidencia. Para responder con tu propio conocimiento, usa un paso de asistente de IA y elige un agente de IA."
+          "agent": "Agente de IA",
+          "agentHint": "El agente cuya base de conocimiento se consulta. Añade preguntas frecuentes en Entrenamiento de IA.",
+          "query": "Buscar",
+          "queryHint": "Qué buscar. Normalmente el último mensaje del cliente.",
+          "sendAnswer": "Enviar la respuesta al cliente",
+          "variable": "Guardar la respuesta como",
+          "variableHint": "Los pasos siguientes leen la respuesta con este nombre, por ejemplo faq.answer."
         }
       },
       "attrPicker": {
@@ -2502,30 +2523,6 @@
           "label": "Pregunta",
           "help": "Pregunta lo que quieras y guarda la respuesta"
         },
-        "askName": {
-          "label": "Nombre",
-          "help": "Pide un nombre y lo comprueba"
-        },
-        "askEmail": {
-          "label": "Correo",
-          "help": "Pide una dirección de correo y la comprueba"
-        },
-        "askPhone": {
-          "label": "Número de teléfono",
-          "help": "Pide un número de teléfono y lo comprueba"
-        },
-        "askNumber": {
-          "label": "Número",
-          "help": "Pide un número y lo comprueba"
-        },
-        "askAlphanumeric": {
-          "label": "Letras y números",
-          "help": "Un id o código, sin espacios ni símbolos"
-        },
-        "askDate": {
-          "label": "Fecha",
-          "help": "Pide una fecha con el formato que elijas"
-        },
         "askFile": {
           "label": "Archivo o imagen",
           "help": "Espera una foto, un documento, un vídeo o un audio"
@@ -2617,7 +2614,9 @@
         "writeCode": "Paso {stage}: escribe el código que se ejecutará.",
         "webhookUrl": "Paso {stage}: añade la dirección (URL) a la que llamar.",
         "chooseAiAgent": "Paso {stage}: elige el agente de IA que responde o cambia el paso a una configuración personalizada.",
-        "writeAiPrompt": "Paso {stage}: escribe las instrucciones para la IA o elige un agente de IA."
+        "writeAiPrompt": "Paso {stage}: escribe las instrucciones para la IA o elige un agente de IA.",
+        "templateFile": "Paso {stage}: añade el archivo del encabezado de la plantilla.",
+        "fileLinkInvalid": "Paso {stage}: el enlace del archivo debe empezar por https://"
       }
     },
     "waboImport": {
@@ -2731,7 +2730,7 @@
       "simPurchase": "Compra simulada: {name} → puerto «purchased»",
       "simAbandon": "Abandono simulado → puerto «abandoned»",
       "locationSkipped": "(ubicación) omitida: no hay coordenadas válidas",
-      "faqRetired": "(simulado) Responder desde preguntas frecuentes está retirado: se toma \"sin coincidencia\"."
+      "faqLine": "(simulado) Responder desde preguntas frecuentes: la base de conocimiento no se consulta en el chat de prueba, se toma \"sin coincidencia\"."
     }
   }
 }

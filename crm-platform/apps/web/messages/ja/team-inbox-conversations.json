@@ -584,7 +584,11 @@
           "sla_breach": "返信期限を超過しました",
           "spam_flagged": "{actor} がスパムとしてマーク",
           "escalated": "エスカレートしました",
-          "unknown": "{actor} による{what}"
+          "unknown": "{actor} による{what}",
+          "handoff_requested": "{actor} が担当者に引き継ぎ",
+          "queue_reminded": "チームに通知しました",
+          "queue_offered": "別のチームに回しました",
+          "queue_customer_message": "顧客にメッセージを送りました"
         },
         "actors": {
           "user": "チームメイト",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "シミュレーター（テスト）",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp（QR）",
+      "webchat": "ウェブサイトチャット",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "メール",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "シミュレーター（テスト）",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp（QR）",
-        "webchat": "ウェブサイトチャット",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "メール",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "連絡先",
         "agent": "あなた",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "受信トレイに戻る",
-        "title": "会話タグ",
+        "title": "タグ",
         "intro": "会話タグはスレッド(請求、返金、至急など)に付けて、チームが受信トレイを並べ替えたり絞り込んだりするためのものです。相手その人を表す連絡先タグと同じタグライブラリを使います。",
         "newTitle": "新しいタグ",
         "editTitle": "タグを編集",

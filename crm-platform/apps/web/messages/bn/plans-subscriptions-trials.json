@@ -60,10 +60,12 @@
       "remove_branding": "ব্র্যান্ডিং সরান",
       "sales_pipeline": "সেলস পাইপলাইন",
       "appointment_booking": "অ্যাপয়েন্টমেন্ট বুকিং",
+      "appointment_confirm_buttons": "রিমাইন্ডারের বোতাম (নিশ্চিত / পুনঃনির্ধারণ / বাতিল)",
+      "appointment_rebook_steps": "পুনর্বুকিং (রিকল) ধাপ",
       "chatbot_widgets": "চ্যাটবট উইজেট",
       "wa_storefront": "WhatsApp ক্যাটালগ",
       "inbox_sla": "SLA নীতি",
-      "inbox_routing": "রাউটিং রুল",
+      "inbox_routing": "স্মার্ট রাউটিং: স্বয়ংক্রিয় বরাদ্দ ও নিয়ম",
       "waba_calling": "WhatsApp কলিং",
       "inbox_kanban": "কানবান ভিউ",
       "team_performance": "টিমের কর্মক্ষমতা",
@@ -89,7 +91,7 @@
       "record_assignment": "রেকর্ড অ্যাসাইনমেন্ট নিয়ম",
       "team_hierarchy": "টিম শ্রেণিবিন্যাস ও ম্যানেজার",
       "custom_roles": "কাস্টম ভূমিকা ও পরিসর",
-      "inbox_assignment_sticky": "কন্টাক্টের মালিক ও স্টিকি এজেন্ট"
+      "inbox_assignment_sticky": "স্মার্ট রাউটিং: কন্টাক্টের মালিক ও স্থায়ী এজেন্ট"
     },
     "limitGroups": {
       "messaging": "মেসেজিং",
@@ -251,6 +253,9 @@
         "buy": "অ্যাড-অন কিনুন",
         "buyAgain": "আবার কিনুন",
         "active": "সক্রিয়",
+        "included": "আপনার প্ল্যানে অন্তর্ভুক্ত",
+        "includedOwned": "এই অ্যাড-অনটি আপনারও আছে। আপনার প্ল্যানে এখন এটি অন্তর্ভুক্ত, তাই আপনি অ্যাড-অনটি বাতিল করতে পারেন। স্বয়ংক্রিয়ভাবে কোনো অর্থ ফেরত দেওয়া হয় না।",
+        "includedEnds": "আপনার প্ল্যানে অন্তর্ভুক্ত। আপনার অ্যাড-অন {date} তারিখে শেষ হবে এবং নবায়ন হবে না।",
         "unlimitedBullet": "সীমাহীন {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "ফিরে যান",
       "compare": "সব প্ল্যান তুলনা করুন",
       "appHint": "{feature} মার্কেটপ্লেসে অ্যাপ হিসেবেও বিক্রি হয়।",
-      "appLink": "অ্যাপটি দেখুন"
+      "appLink": "অ্যাপটি দেখুন",
+      "addonHint": "আপনি এটি {addon} অ্যাড-অন দিয়ে বর্তমান প্ল্যানে যোগও করতে পারেন।",
+      "addonLink": "অ্যাড-অন দেখুন",
+      "addons": {
+        "smartRouting": "স্মার্ট রাউটিং",
+        "teamsPermissions": "টিম ও অনুমতি"
+      }
+    },
+    "lock": {
+      "link": "প্ল্যান ও অ্যাড-অন দেখুন"
     }
   }
 }

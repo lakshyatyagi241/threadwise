@@ -7,6 +7,8 @@ import {
   HANDOFF_ANSWER_MAX_CHARS,
   HANDOFF_ANSWERS_MAX_KEYS,
   HANDOFF_GATES,
+  HANDOFF_RETURNED_TO_BOT,
+  flbHandoffReturnPlan,
   type AssignedSource,
   type ConversationPriority,
   type HandoffCard,
@@ -15,6 +17,7 @@ import {
   type HandoffReason,
   type HandoffSettings,
   type HandoffSource,
+  type ReturnToBotResponse,
   type HandoffTraceLine,
   type UpdateHandoffSettingsInput,
 } from '@crm/contracts';
@@ -50,6 +53,27 @@ import { HandoffRepository, type StoredHandoffSettings } from './handoff.reposit
 import { OwnerAlignmentService } from './owner-alignment.service';
 import { RoutingEngine, type Calendar } from './routing-engine.service';
 import { RoutingRulesRepository } from './routing-rules.repository';
+
+/** Who gives a conversation back to the bot: a person, or the system (the waiting queue's timer, with the reason it acted). */
+export type GiveBackActor =
+  | { kind: 'user'; userId: number; name: string | null; uuid: string | null }
+  | { kind: 'system'; reason: string };
+
+/** What Return to bot will do, decided before the change is written (see `planReturn`). */
+export type ReturnPlan =
+  | {
+      resumed: 'flow';
+      handoffUuid: string;
+      flowRunId: number;
+      nodeId: string;
+      flowUuid: string;
+    }
+  | {
+      resumed: 'next_message';
+      why: NonNullable<ReturnToBotResponse['why']>;
+      handoffUuid: string | null;
+      nextMessageBy: 'live_flow' | 'default_flow';
+    };
 
 /** What a caller (flow, AI agent, keyword rule, person) asks for. Uuids on the outside, never an internal id. */
 export interface HandoffInput {
@@ -173,6 +197,8 @@ export class HandoffService {
       keepInSync: sticky,
       continuityWindow: sticky,
       promptOwnerOnReassign: sticky,
+      queueTimers: routing && (await has(HANDOFF_GATES.queueTimers)),
+      away: routing && (await has(HANDOFF_GATES.away)),
     };
   }
 
@@ -440,6 +466,22 @@ export class HandoffService {
       locked.push('continuityDays');
     if (input.promptOwnerOnReassign === true && !available.promptOwnerOnReassign)
       locked.push('promptOwnerOnReassign');
+    const qt = input.queueTimers;
+    if (
+      qt &&
+      !available.queueTimers &&
+      Object.entries(qt).some(([k, v]) =>
+        k === 'unclaimedAction' ? v !== 'keep' : k === 'unclaimedMessage' ? v !== '' : v !== null,
+      )
+    )
+      locked.push('queueTimers');
+    const aw = input.away;
+    if (
+      aw &&
+      !available.away &&
+      ((aw.returnUnanswered ?? false) === true || (aw.autoOfflineMinutes ?? null) !== null)
+    )
+      locked.push('away');
     if (locked.length > 0) {
       throw new AppError(
         ERROR_CODES.PLAN_FEATURE_LOCKED,
@@ -449,7 +491,13 @@ export class HandoffService {
       );
     }
     const stored = await this.db.tx(async (tx) => {
-      await this.repo.updateSettings(tx, ctx.orgId, input);
+      const { queueTimers: qIn, away, ...rest } = input;
+      const queueTimers = qIn ? await this.queueTimersToStore(tx, ctx.orgId, qIn) : undefined;
+      await this.repo.updateSettings(tx, ctx.orgId, {
+        ...rest,
+        ...(queueTimers ? { queueTimers } : {}),
+        ...(away ? { away } : {}),
+      });
       await this.audit.record(tx, {
         module: 'workspace_settings',
         recordId: ctx.orgId,
@@ -463,17 +511,89 @@ export class HandoffService {
     return this.shape(stored, available);
   }
 
+  /**
+   * The waiting queue's timers as they will be stored, checked against what they would be after this save: a timer needs its
+   * companion (a team to offer the chat to, a text to send), the team must receive conversations, and a timer that is switched off
+   * clears its companion's requirement. Refused with a field path, never silently dropped.
+   */
+  private async queueTimersToStore(
+    tx: Tx,
+    orgId: number,
+    input: NonNullable<UpdateHandoffSettingsInput['queueTimers']>,
+  ) {
+    const now = (await this.repo.settings(tx, orgId)).queueTimers;
+    const next = { ...now, ...input } as typeof now & typeof input;
+    const problems: Array<{ path: string; message: string }> = [];
+    let teamId: number | null | undefined;
+    if (input.overflowTeamId !== undefined) {
+      if (input.overflowTeamId === null) teamId = null;
+      else {
+        const team = await this.repo.teamByUuid(tx, orgId, input.overflowTeamId);
+        if (!team) problems.push({ path: 'queueTimers.overflowTeamId', message: 'team_not_found' });
+        else if (!team.receives)
+          problems.push({
+            path: 'queueTimers.overflowTeamId',
+            message: 'team_does_not_receive_conversations',
+          });
+        else teamId = team.id;
+      }
+    }
+    const hasTeam = teamId !== undefined ? teamId !== null : now.overflowTeamId !== null;
+    if (next.overflowMinutes !== null && !hasTeam)
+      problems.push({ path: 'queueTimers.overflowTeamId', message: 'required' });
+    if (next.unclaimedMinutes !== null && next.unclaimedAction === 'keep')
+      problems.push({ path: 'queueTimers.unclaimedAction', message: 'required' });
+    if (next.unclaimedAction === 'message' && next.unclaimedMessage.trim() === '')
+      problems.push({ path: 'queueTimers.unclaimedMessage', message: 'required' });
+    if (problems.length > 0)
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'The waiting queue settings are incomplete',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        problems,
+      );
+    const { overflowTeamId: _uuid, ...fields } = input;
+    return { ...fields, ...(teamId !== undefined ? { overflowTeamId: teamId } : {}) };
+  }
+
   private shape(
     s: StoredHandoffSettings,
     available: HandoffSettings['available'],
   ): HandoffSettings {
+    // What is IN EFFECT, not what an earlier plan left stored: a workspace that was downgraded keeps its saved choices (they come back
+    // on upgrade) but the screen must not show a locked mode as selected when the engine ignores it.
+    const modeOpen =
+      s.ownerMode === 'owner_first'
+        ? available.ownerFirst
+        : s.ownerMode === 'keep_in_sync'
+          ? available.keepInSync
+          : true;
     return {
-      autoAssign: s.autoAssign,
+      autoAssign: s.autoAssign && available.autoAssign,
       claimSetsOwner: s.claimSetsOwner,
-      ownerMode: s.ownerMode,
-      continuityDays: s.continuityDays,
-      promptOwnerOnReassign: s.promptOwnerOnReassign,
+      ownerMode: modeOpen ? s.ownerMode : 'independent',
+      continuityDays: available.continuityWindow ? s.continuityDays : null,
+      promptOwnerOnReassign: s.promptOwnerOnReassign && available.promptOwnerOnReassign,
       notifyQueue: s.notifyQueue,
+      away: available.away ? { ...s.away } : { returnUnanswered: false, autoOfflineMinutes: null },
+      // What is in effect: a plan without the timers runs none (what was saved comes back on upgrade), so the screen shows them off.
+      queueTimers: available.queueTimers
+        ? {
+            remindMinutes: s.queueTimers.remindMinutes,
+            overflowMinutes: s.queueTimers.overflowMinutes,
+            overflowTeamId: s.queueTimers.overflowTeamUuid,
+            unclaimedMinutes: s.queueTimers.unclaimedMinutes,
+            unclaimedAction: s.queueTimers.unclaimedAction,
+            unclaimedMessage: s.queueTimers.unclaimedMessage,
+          }
+        : {
+            remindMinutes: null,
+            overflowMinutes: null,
+            overflowTeamId: null,
+            unclaimedMinutes: null,
+            unclaimedAction: 'keep',
+            unclaimedMessage: '',
+          },
       available,
     };
   }
@@ -510,6 +630,7 @@ export class HandoffService {
   async claim(
     uuid: string,
     rowVersion: number,
+    acknowledgeLimit = false,
   ): Promise<{
     summary: Awaited<ReturnType<InboxConversationsService['summaryInTx']>>;
     ownerSet: boolean;
@@ -536,6 +657,19 @@ export class HandoffService {
         );
       }
       if (locked.rowVersion !== rowVersion) throw AppError.rowVersionConflict('Conversation');
+      // The chat limit is a warning for a person who claims (they may take it anyway), and a hard filter only for automatic assignment.
+      const cap = (await this.repo.capacity(tx, ctx.orgId, [ctx.userId!])).get(ctx.userId!);
+      if (!acknowledgeLimit && cap && cap.limit !== null && cap.open >= cap.limit) {
+        throw new AppError(
+          ERROR_CODES.INBOX_CLAIM_OVER_LIMIT,
+          `You already hold ${cap.open} open conversations and your limit is ${cap.limit}.`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [
+            { path: 'open', message: String(cap.open) },
+            { path: 'limit', message: String(cap.limit) },
+          ],
+        );
+      }
       const me = await this.repo.userBrief(tx, ctx.orgId, ctx.userId!);
       const change = await this.assignment.assignInTx(
         tx,
@@ -580,8 +714,14 @@ export class HandoffService {
     return { summary: done.summary, ownerSet: done.ownerSet };
   }
 
-  /** `POST /inbox/conversations/:id/return-to-bot`: the person gives the conversation back; the bot (the parked flow) answers again. */
-  async returnToBot(uuid: string, note?: string) {
+  /**
+   * `POST /inbox/conversations/:id/return-to-bot`: the person gives the conversation back and the bot is back at once, visibly.
+   *
+   * If the handoff came from a flow's Human handoff node whose `returned` exit leads somewhere, the flow continues there right away (the
+   * worker starts it from the outbox event written here); otherwise the bot is simply ready for the customer's next message, as it
+   * always was. The answer says which, so the screen never has to guess. A second press changes nothing and sends nothing.
+   */
+  async returnToBot(uuid: string, note?: string): Promise<ReturnToBotResponse> {
     const ctx = RequestContextStore.require();
     const done = await this.db.tx(async (tx) => {
       const locked = await this.conversations.lockByUuid(tx, ctx.orgId, uuid);
@@ -589,31 +729,187 @@ export class HandoffService {
       this.access.assertVisible(await this.access.viewer(tx, ctx), locked);
       await this.access.assertCan(tx, ctx, PERM.reply, locked);
       if (locked.handling === null || locked.handling === 'with_bot') {
-        return { change: null, summary: (await this.inbox.summaryInTx(tx, ctx.orgId, uuid))! };
+        return {
+          again: true as const,
+          summary: (await this.inbox.summaryInTx(tx, ctx.orgId, uuid))!,
+          nextMessageBy: (await this.repo.hasLiveRun(tx, ctx.orgId, locked.id))
+            ? ('live_flow' as const)
+            : ('default_flow' as const),
+        };
       }
-      const change = await this.assignment.assignInTx(
-        tx,
-        ctx.orgId,
-        locked,
-        { userId: null, teamId: null, userUuid: null, teamUuid: null },
-        { kind: 'user', userId: ctx.userId! },
-        'manual',
-        { returnedToBot: true },
-        { handling: 'with_bot' },
-      );
-      await this.repo.markReturned(tx, ctx.orgId, locked.id);
-      await this.events.append(tx, ctx.orgId, {
-        conversationId: locked.id,
-        type: 'handoff_returned',
-        actorKind: 'user',
-        actorUserId: ctx.userId!,
-        payload: note ? { note: note.slice(0, 500) } : {},
-      });
-      const summary = (await this.inbox.summaryInTx(tx, ctx.orgId, uuid))!;
-      return { change: { ...change, rowVersion: summary.rowVersion }, summary };
+      const who = await this.repo.userBrief(tx, ctx.orgId, ctx.userId!);
+      return {
+        again: false as const,
+        ...(await this.giveBackInTx(
+          tx,
+          ctx.orgId,
+          locked,
+          { kind: 'user', userId: ctx.userId!, name: who?.name ?? null, uuid: who?.uuid ?? null },
+          note,
+        )),
+      };
     });
-    if (done.change) await this.assignment.afterCommit(ctx.orgId, done.change);
-    return done.summary;
+    if (done.again) {
+      return {
+        conversation: done.summary,
+        resumed: 'next_message',
+        nextMessageBy: done.nextMessageBy,
+        why: null,
+        alreadyWithBot: true,
+      };
+    }
+    await this.afterGiveBack(ctx.orgId, done);
+    return {
+      conversation: done.summary,
+      resumed: done.plan.resumed,
+      nextMessageBy: done.plan.resumed === 'next_message' ? done.plan.nextMessageBy : null,
+      why: done.plan.resumed === 'next_message' ? done.plan.why : null,
+      alreadyWithBot: false,
+    };
+  }
+
+  /**
+   * Gives a conversation back to the bot inside the caller's transaction (the conversation is locked): handling -> `with_bot`, the
+   * assignee cleared, the live handoff marked returned, a timeline line, and, when a flow is to continue, the outbox event that makes
+   * the worker continue it. Used by the Return to bot button and by the waiting queue's "give it back to the bot" step.
+   */
+  async giveBackInTx(
+    tx: Tx,
+    orgId: number,
+    locked: LockedConversation,
+    actor: GiveBackActor,
+    note?: string,
+  ) {
+    const plan = await this.planReturn(tx, orgId, locked);
+    const assignActor: AssignmentActor =
+      actor.kind === 'user' ? { kind: 'user', userId: actor.userId } : { kind: 'system' };
+    const change = await this.assignment.assignInTx(
+      tx,
+      orgId,
+      locked,
+      { userId: null, teamId: null, userUuid: null, teamUuid: null },
+      assignActor,
+      'manual',
+      { returnedToBot: true },
+      { handling: 'with_bot' },
+    );
+    await this.repo.markReturned(tx, orgId, locked.id);
+    await this.events.append(tx, orgId, {
+      conversationId: locked.id,
+      type: 'handoff_returned',
+      actorKind: actor.kind === 'user' ? 'user' : 'system',
+      ...(actor.kind === 'user' ? { actorUserId: actor.userId } : {}),
+      payload: {
+        ...(note ? { note: note.slice(0, 500) } : {}),
+        resumed: plan.resumed,
+        ...(plan.resumed === 'next_message' ? { why: plan.why } : {}),
+        ...(actor.kind === 'system' ? { reason: actor.reason } : {}),
+      },
+    });
+    if (plan.resumed === 'flow') {
+      await this.outbox.emit(tx, {
+        aggregateModule: 'conversations',
+        aggregateId: locked.id,
+        orgId,
+        eventType: HANDOFF_RETURNED_TO_BOT,
+        payload: {
+          conversationId: locked.uuid,
+          handoffId: plan.handoffUuid,
+          flowRunId: plan.flowRunId,
+          nodeId: plan.nodeId,
+          flowId: plan.flowUuid,
+          by: actor.kind === 'user' ? actor.name : null,
+        },
+      });
+    }
+    const thread = await this.repo.threadKey(tx, orgId, locked.id);
+    const summary = (await this.inbox.summaryInTx(tx, orgId, locked.uuid))!;
+    return {
+      change: { ...change, rowVersion: summary.rowVersion },
+      summary,
+      plan,
+      thread,
+      conversationUuid: locked.uuid,
+      by: actor.kind === 'user' ? actor.name : null,
+    };
+  }
+
+  /** After the commit: tell open screens, and write the line the staff reads in the thread ("Bot is back, ..."). Never throws. */
+  async afterGiveBack(
+    orgId: number,
+    done: {
+      change: AssignmentChange;
+      plan: ReturnPlan;
+      thread: { channelUuid: string; peerKey: string } | null;
+      conversationUuid: string;
+      by: string | null;
+    },
+  ): Promise<void> {
+    await this.assignment.afterCommit(orgId, done.change);
+    if (!done.thread) return;
+    const flow = done.plan.resumed === 'flow';
+    const nextBy = done.plan.resumed === 'next_message' ? done.plan.nextMessageBy : null;
+    const who = done.by ?? 'the system';
+    try {
+      await this.facade.recordOutbound({
+        channelId: done.thread.channelUuid,
+        peerKey: done.thread.peerKey,
+        source: 'handoff',
+        kind: 'system',
+        direction: 'in',
+        body: flow
+          ? `Bot is back, returned by ${who}. The flow continues.`
+          : nextBy === 'live_flow'
+            ? `Bot is back, returned by ${who}. It will answer the customer's next message.`
+            : `Bot is back, returned by ${who}. It answers the next message only if a default flow is set.`,
+        // One line per give-back: the handoff it ends (or, for a chat no handoff made, the row version it produced).
+        providerMessageId: `bot-back:${done.plan.handoffUuid ?? `${done.conversationUuid}:${done.change.rowVersion}`}`,
+        meta: {
+          event: 'bot_returned',
+          botStage: 'pressed',
+          botBy: done.by,
+          botResumed: done.plan.resumed,
+          ...(nextBy ? { botNextBy: nextBy } : {}),
+        },
+      });
+    } catch (err) {
+      this.logger.warn({ err, orgId }, 'the "bot is back" line could not be written');
+    }
+  }
+
+  /**
+   * What giving the conversation back will do, decided from the live handoff card inside the transaction. A flow continues only when
+   * the handoff came from a Human handoff node of a flow that is still published and on, whose `returned` exit leads to a step that
+   * still exists. In every other case the bot waits for the next message and `why` says why (the timeline and the toast use it).
+   */
+  private async planReturn(tx: Tx, orgId: number, locked: LockedConversation): Promise<ReturnPlan> {
+    const ref = await this.repo.liveFlowRef(tx, orgId, locked.id);
+    const next = async (
+      why: NonNullable<ReturnToBotResponse['why']>,
+      handoffUuid: string | null,
+    ): Promise<ReturnPlan> => ({
+      resumed: 'next_message',
+      why,
+      handoffUuid,
+      nextMessageBy: (await this.repo.hasLiveRun(tx, orgId, locked.id))
+        ? 'live_flow'
+        : 'default_flow',
+    });
+    if (!ref || ref.flowRunId === null || ref.nodeId === null)
+      return next('no_flow_handoff', ref?.uuid ?? null);
+    const found = await this.repo.flowOfRun(tx, orgId, ref.flowRunId);
+    if (!found.run) return next('run_gone', ref.uuid);
+    if (!found.flow) return next('flow_gone', ref.uuid);
+    if (!found.flow.live) return next('flow_not_live', ref.uuid);
+    const exit = flbHandoffReturnPlan(found.flow.data, ref.nodeId);
+    if (!exit.ok) return next(exit.why, ref.uuid);
+    return {
+      resumed: 'flow',
+      handoffUuid: ref.uuid,
+      flowRunId: ref.flowRunId,
+      nodeId: ref.nodeId,
+      flowUuid: found.flow.uuid,
+    };
   }
 
   // --- deciding --------------------------------------------------------------------------------------------------------------

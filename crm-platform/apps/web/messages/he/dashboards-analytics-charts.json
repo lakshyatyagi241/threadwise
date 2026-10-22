@@ -320,6 +320,7 @@
         "replyRate": "שיעור תגובות",
         "received": "הודעות שהתקבלו",
         "conversationsOpen": "שיחות פתוחות",
+        "conversationsResolved": "שיחות שנפתרו",
         "conversationsClosed": "שיחות סגורות",
         "conversationsAssigned": "משויכות",
         "conversationsUnassigned": "לא משויכות",

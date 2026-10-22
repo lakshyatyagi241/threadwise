@@ -584,7 +584,11 @@
           "sla_breach": "מועד המענה הוחמץ",
           "spam_flagged": "סומן כספאם על ידי {actor}",
           "escalated": "הוסלם",
-          "unknown": "{what} על ידי {actor}"
+          "unknown": "{what} על ידי {actor}",
+          "handoff_requested": "הועבר לאדם על ידי {actor}",
+          "queue_reminded": "הצוות קיבל תזכורת",
+          "queue_offered": "הוצע לצוות אחר",
+          "queue_customer_message": "נשלחה הודעה ללקוח"
         },
         "actors": {
           "user": "חבר צוות",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "סימולטור (בדיקות)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "צ'אט באתר",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "אימייל",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "סימולטור (בדיקות)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "צ'אט באתר",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "אימייל",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "איש קשר",
         "agent": "אתם",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "חזרה לתיבת הדואר",
-        "title": "תגיות שיחה",
+        "title": "תגיות",
         "intro": "תגיות שיחה מסמנות שיחה (חיוב, החזר, דחוף) כדי שהצוות שלך יוכל למיין ולסנן את תיבת הדואר. הן מגיעות מאותה ספריית תגיות כמו תגיות איש קשר, שמתארות את האדם.",
         "newTitle": "תגית חדשה",
         "editTitle": "עריכת תגית",

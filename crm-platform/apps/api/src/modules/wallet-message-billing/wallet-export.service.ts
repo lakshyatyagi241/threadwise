@@ -3,7 +3,8 @@ import { Readable } from 'node:stream';
 import type { StatementQuery } from '@crm/contracts';
 import { WalletQueryService } from './wallet-query.service';
 import {
-  CSV_HEADER,
+  CSV_DETAIL_CELL,
+  CSV_DETAIL_HEADER,
   CSV_MAX_ROWS,
   TYPE_LABELS,
   csvCell,
@@ -15,14 +16,26 @@ import {
 /** Excel needs this at the start of a UTF-8 CSV to read accents and non-Latin names correctly. */
 const BOM = String.fromCharCode(0xfeff);
 
-/** The statement as a CSV stream (TW-WALLET-022): oldest first, in chunks, formula-safe, capped. */
+/**
+ * The statement as a CSV stream (TW-WALLET-022): oldest first, in chunks, formula-safe, capped. The optional columns are the ones the
+ * screen shows: a column with no value on any row of the filtered set is left out.
+ */
 @Injectable()
 export class WalletExportService {
   constructor(private readonly query: WalletQueryService) {}
 
   async stream(query: StatementQuery): Promise<{ stream: Readable; fileName: string }> {
     const currency = await this.query.billingCurrency();
-    const header = CSV_HEADER.map((h, i) => (i >= 9 ? `${h} (${currency})` : h));
+    const detail = await this.query.detailColumns(query, CSV_MAX_ROWS);
+    const header = [
+      'Date',
+      'Type',
+      'Description',
+      ...detail.map((c) => CSV_DETAIL_HEADER[c]),
+      `Money in (${currency})`,
+      `Money out (${currency})`,
+      `Balance after (${currency})`,
+    ];
     const rows = this.query.exportRows(query, CSV_MAX_ROWS);
     async function* lines(): AsyncGenerator<string> {
       yield `${BOM}${header.map(csvCell).join(',')}\r\n`;
@@ -33,12 +46,7 @@ export class WalletExportService {
               csvDate(r.createdAt),
               TYPE_LABELS[r.type] ?? r.type,
               csvSafe(r.description ?? r.note ?? ''),
-              csvSafe([r.context?.channel, r.context?.campaignName].filter(Boolean).join(' · ')),
-              csvSafe(r.context?.recipient ?? ''),
-              csvSafe(r.context?.template ?? ''),
-              r.context?.country ?? '',
-              r.context?.category ?? '',
-              r.context?.engine ?? '',
+              ...detail.map((c) => CSV_DETAIL_CELL[c](r.context)),
               // The exact ledger figure (up to four decimals), so the file adds up to the on-screen totals.
               r.moneyInExact && r.moneyInExact !== '0.00'
                 ? r.moneyInExact

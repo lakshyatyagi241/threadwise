@@ -37,7 +37,8 @@
       "statusStage": "Trạng thái đó thuộc giai đoạn khác. Hãy chọn trạng thái phù hợp với giai đoạn của liên hệ.",
       "stageScope": "Một trạng thái chỉ có thể giới hạn cho một trong các giai đoạn vòng đời của bạn.",
       "planLimit": "Bạn đã đạt giới hạn {limit, plural, other {# liên hệ}} của gói. Hãy nâng cấp gói để thêm nữa, hoặc xóa liên hệ hiện có để giải phóng chỗ.",
-      "legalHold": "Bản ghi này được bảo vệ và hiện không thể xóa."
+      "legalHold": "Bản ghi này được bảo vệ và hiện không thể xóa.",
+      "assignedToOther": "Cuộc trò chuyện này được giao cho nhân viên khác. Hãy giao cho chính bạn trước để gửi tin nhắn."
     },
     "list": {
       "title": "Trung tâm liên hệ",
@@ -1545,7 +1546,9 @@
         "selected": "Cột đã chọn",
         "selectAll": "Chọn tất cả",
         "reorder": "Kéo để sắp xếp lại các cột",
-        "remove": "Gỡ {name}"
+        "remove": "Gỡ {name}",
+        "nameShort": "Tên chế độ xem phải có ít nhất {min} ký tự.",
+        "nameLong": "Tên chế độ xem có tối đa {max} ký tự."
       },
       "presets": {
         "myContacts": "Liên hệ của tôi",

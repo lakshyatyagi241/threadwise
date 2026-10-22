@@ -37,10 +37,10 @@ A REST API key lets your own software, such as a website, a CRM or an automation
 
 ## Full access or restricted
 
-- **Restrict this key** is off by default. The key then has **Full access**: it can use every endpoint of the REST API, and the **Your API key** card shows a **Full access** badge.
+- **Restrict this key** is off by default. The key then has **Full access**: it can use everything the REST API offers, and the **Your API key** card shows a **Full access** badge.
 - Turn **Restrict this key** on to limit the key to the scopes you tick under **Allowed scopes**. A scope is a resource and an action, written `contacts:read` or `contacts:write`. For example `contacts:read` lets the key list and read contacts, while `contacts:write` also lets it create, change and delete them. Ticking a write scope includes its read scope, so the read box is shown ticked and cannot be cleared while the write box is ticked.
 - With **Restrict this key** on you must tick at least one scope. Create key is refused otherwise, because a key without scopes would have full access, the opposite of what you asked for.
-- A restricted key shows a **Restricted** badge and its scope names on the card. A call outside those scopes is refused with a 403 `forbidden` error that names the scope it needed.
+- A restricted key shows a **Restricted** badge and its scope names on the card. A call outside those scopes is refused with an error that names the scope it needed.
 
 > A key's scopes are fixed when it is created. To change them, revoke the key and create a new one.
 
@@ -65,6 +65,6 @@ Anything that uses the key stops working immediately and this cannot be undone. 
 
 - **You already have an active API key**: revoke it first, then create the new one.
 - **You cannot copy**: your browser may block clipboard access. Select the key text and copy it by hand.
-- **An app got a 401 error**: the key was revoked or mistyped. Create a new key and update the app.
-- **An app got a 403 error that names a scope**: the key is restricted and does not hold that scope. Revoke it and create a new key with the scope ticked, or with **Restrict this key** off.
+- **An app is refused as not signed in**: the key was revoked or mistyped. Create a new key and update the app.
+- **An app is refused with an error that names a scope**: the key is restricted and does not hold that scope. Revoke it and create a new key with the scope ticked, or with **Restrict this key** off.
 - **Tick at least one scope, or turn off Restrict this key**: you turned the restriction on but ticked nothing. Tick the scopes the key needs, or turn the switch off for full access.

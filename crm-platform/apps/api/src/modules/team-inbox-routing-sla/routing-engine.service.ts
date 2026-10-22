@@ -35,6 +35,7 @@ import { sql } from 'drizzle-orm';
 import { AppError } from '../../common/errors/app-error';
 import { AssignmentService, type AssignmentChange, type AssignmentHow } from './assignment.service';
 import { pickLeastBusy, pickRoundRobin } from './agent-picker';
+import { QueueArrivalService, type ArrivalQueued } from './queue-arrival.service';
 import { explainFacts, type RoutingFacts } from './routing-matcher';
 import { decodeActions, decodeConditions, encodeActions } from './routing-rules.mapper';
 import { RoutingRulesRepository, type RuleRow } from './routing-rules.repository';
@@ -63,7 +64,11 @@ export type RoutingOutcome =
   | { outcome: 'triggered'; ruleIds: string[] }
   | { outcome: 'assigned'; via: 'contact_agent' | 'rule'; ruleIds: string[] };
 
-type Done = { result: RoutingOutcome; change?: AssignmentChange | null };
+type Done = {
+  result: RoutingOutcome;
+  change?: AssignmentChange | null;
+  queued?: ArrivalQueued | null;
+};
 
 export interface Pick {
   userId: number | null;
@@ -175,6 +180,7 @@ export class RoutingEngine {
     private readonly directory: MemberDirectory,
     private readonly entitlements: PlanEntitlementService,
     private readonly outbox: OutboxService,
+    private readonly arrivalQueue: QueueArrivalService,
     @Inject(CONVERSATIONS_FACADE) private readonly facade: ConversationsFacade,
   ) {}
 
@@ -254,6 +260,8 @@ export class RoutingEngine {
         contactKind: await this.contactKindFor(tx, orgId, rules, facts.contactId, locked.id),
       };
       const fired: string[] = [];
+      // A rule that starts a flow leaves the chat to that flow: such a chat does not enter the waiting queue.
+      let startedFlow = false;
       const decision = await this.decideArrival(
         {
           orgId,
@@ -304,6 +312,7 @@ export class RoutingEngine {
                 ...(turn.pick.delegateFor ? { delegateFor: turn.pick.delegateFor } : {}),
               });
             if (turn.flowId) {
+              startedFlow = true;
               // The flow starts in the flow runtime's worker (the event is committed with the rule's firing, so a crash cannot lose it).
               // Reference started it on the next Baileys inbound only; here it starts on every channel.
               await this.outbox.emit(tx, {
@@ -342,12 +351,29 @@ export class RoutingEngine {
           },
         });
       }
-      if (fired.length === 0) return { result: { outcome: 'unmatched' } };
-      if (change === null) return { result: { outcome: 'triggered', ruleIds: fired } };
-      return { result: { outcome: 'assigned', via: 'rule', ruleIds: fired }, change };
+      // Nobody took it (no rule matched, nobody was available, or a rule only named a team): it waits in the queue, with its age, its
+      // card and the queue timers, instead of only sitting in the Unassigned tab. Not when a rule started a flow for it.
+      const queued =
+        !startedFlow && current.assigneeUserId === null
+          ? await this.arrivalQueue.enter(
+              tx,
+              orgId,
+              current,
+              input.messageUuid,
+              fired.length === 0
+                ? 'no_rule_matched'
+                : current.assigneeTeamId !== null
+                  ? 'team_queue'
+                  : 'nobody_available',
+            )
+          : null;
+      if (fired.length === 0) return { result: { outcome: 'unmatched' }, queued };
+      if (change === null) return { result: { outcome: 'triggered', ruleIds: fired }, queued };
+      return { result: { outcome: 'assigned', via: 'rule', ruleIds: fired }, change, queued };
     });
 
     if (done.change) await this.assignment.afterCommit(orgId, done.change);
+    if (done.queued) await this.arrivalQueue.announce(orgId, done.queued);
     await this.sendReplies(orgId, input.conversationUuid, input.messageUuid, replies);
     return done.result;
   }
@@ -362,7 +388,17 @@ export class RoutingEngine {
     conversationUuid: string,
     now: Date = new Date(),
   ): Promise<boolean> {
-    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) return false;
+    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) {
+      // The plan (or the Smart routing add-on) is gone: the timer stops. Dropping the schedule is what ends it; leaving it set would make
+      // the sweep pick the same conversation every 30 seconds for ever and, as the oldest due rows, crowd out other workspaces' escalations.
+      // Nothing else is touched: the chat keeps its assignee and priority. The rule that scheduled it is still stored and works again
+      // for a NEW conversation once the feature is back.
+      await this.db.txAs({ orgId }, async (tx) => {
+        const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);
+        if (locked) await this.repo.clearEscalation(tx, orgId, locked.id);
+      });
+      return false;
+    }
     const canOpen = await this.inboxPeople(orgId);
     const done = await this.db.txAs({ orgId }, async (tx) => {
       const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);

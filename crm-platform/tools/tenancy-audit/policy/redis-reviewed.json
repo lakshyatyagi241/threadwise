@@ -186,5 +186,9 @@
   "modules/knowledge-base/kb-embed.worker.ts": {
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/whatsapp-cloud-api-waba/waba-webhook.service.ts": {
+    "status": "reviewed",
+    "reason": "replay marker waba:wh:seen:<sha256(raw body, signature, url key)>, written only after the delivery authenticated and queued; value is a presence flag with no tenant data, and a key can only be hit by the exact signed bytes of the same delivery"
   }
 }

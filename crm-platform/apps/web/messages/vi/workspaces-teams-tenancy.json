@@ -414,6 +414,13 @@
       "hint": "Khi bạn ngoại tuyến, hệ thống không tự động giao cuộc trò chuyện mới cho bạn. Các cuộc trò chuyện bạn đang có vẫn của bạn.",
       "failed": "Không thể thay đổi"
     },
+    "myLeave": {
+      "label": "Nghỉ phép",
+      "onLeaveUntil": "Nghỉ phép đến {date}",
+      "onLeaveOpen": "Đang nghỉ phép",
+      "hint": "Báo cho nhóm biết bạn vắng mặt. Trong thời gian nghỉ, hệ thống sẽ không tự động giao cuộc trò chuyện mới cho bạn.",
+      "title": "Thời gian nghỉ của bạn"
+    },
     "deactivate": {
       "eyebrow": "Thành viên nhóm",
       "title": "Vô hiệu hóa thành viên",

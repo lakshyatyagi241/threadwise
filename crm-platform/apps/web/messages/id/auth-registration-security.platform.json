@@ -1416,10 +1416,12 @@
             "remove_branding": "White-label: ruang kerja dapat menyembunyikan branding platform di footer-nya.",
             "sales_pipeline": "Deal, tugas, dan pipeline, serta angka pipeline di dasbor.",
             "appointment_booking": "Jenis pemesanan, janji temu, dan halaman pemesanan publik. Aplikasi Janji temu berbayar memegang sakelar ini.",
+            "appointment_confirm_buttons": "Menambahkan tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan pada pengingat janji temu yang dikirim lewat WhatsApp.",
+            "appointment_rebook_steps": "Pesan tindak lanjut yang dikirim setelah janji temu selesai, meminta kontak untuk memesan lagi.",
             "chatbot_widgets": "Pembuat widget chatbot situs web.",
             "wa_storefront": "Area katalog dan etalase WhatsApp.",
             "inbox_sla": "Kebijakan dan tenggat SLA di kotak masuk tim.",
-            "inbox_routing": "Aturan perutean yang menugaskan percakapan kotak masuk secara otomatis.",
+            "inbox_routing": "Penugasan otomatis untuk chat baru: aturan perutean, Semua yang lain, dan pengatur waktu antrean tunggu. Bagian dari add-on Perutean cerdas.",
             "waba_calling": "Panggilan WhatsApp dari kotak masuk: nomor panggilan, izin panggilan, melakukan dan menjawab panggilan.",
             "inbox_kanban": "Tampilan papan Kanban dari kotak masuk tim.",
             "team_performance": "Laporan performa tim.",
@@ -1445,7 +1447,7 @@
             "record_assignment": "Menugaskan kontak, perusahaan, dan transaksi baru ke pemilik penjualan yang tepat berdasarkan aturan prioritas.",
             "team_hierarchy": "Tim induk, ketua tim, dan manajer yang melihat timnya serta tim di bawahnya.",
             "custom_roles": "Buat dan ubah peran, lalu pilih cakupan (milik sendiri, tim, atau semua data) untuk setiap izin.",
-            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron antara pemilik kontak dan pemilik chat, jendela kontak yang kembali, dan prompt penugasan ulang. Bekerja bersama Perutean inbox."
+            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron, jendela kontak yang kembali, dan pertanyaan saat menugaskan ulang. Bagian dari add-on Perutean cerdas."
           },
           "units": {
             "days": "Hari",
@@ -1609,10 +1611,12 @@
             "remove_branding": "White-label (menghapus branding platform)",
             "sales_pipeline": "Pipeline penjualan (deal dan tugas)",
             "appointment_booking": "Janji temu dan halaman pemesanan",
+            "appointment_confirm_buttons": "Tombol pengingat: Konfirmasi, Jadwalkan Ulang, dan Batalkan",
+            "appointment_rebook_steps": "Langkah pemesanan ulang (recall) setelah janji temu",
             "chatbot_widgets": "Widget chatbot situs web",
             "wa_storefront": "Etalase dan katalog WhatsApp",
             "inbox_sla": "Kebijakan SLA kotak masuk",
-            "inbox_routing": "Aturan perutean kotak masuk dan jam kerja",
+            "inbox_routing": "Perutean cerdas: penugasan otomatis dan aturan",
             "waba_calling": "Lakukan dan jawab panggilan WhatsApp dari kotak masuk",
             "inbox_kanban": "Papan Kanban kotak masuk",
             "team_performance": "Laporan performa tim",
@@ -1638,7 +1642,7 @@
             "record_assignment": "Aturan penugasan data (tugaskan otomatis kontak, perusahaan, dan transaksi)",
             "team_hierarchy": "Hierarki tim dan manajer",
             "custom_roles": "Peran kustom dan cakupan",
-            "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
+            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",

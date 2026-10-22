@@ -37,7 +37,8 @@
       "statusStage": "Status itu milik tahap yang berbeda. Pilih status yang sesuai dengan tahap kontak.",
       "stageScope": "Status hanya dapat dibatasi ke salah satu tahap siklus hidup Anda.",
       "planLimit": "Anda telah mencapai batas paket sebanyak {limit, plural, other {# kontak}}. Upgrade paket untuk menambah, atau hapus kontak yang ada untuk mengosongkan ruang.",
-      "legalHold": "Catatan ini dilindungi dan saat ini tidak dapat dihapus."
+      "legalHold": "Catatan ini dilindungi dan saat ini tidak dapat dihapus.",
+      "assignedToOther": "Chat ini ditugaskan ke agen lain. Tugaskan ke diri Anda dulu untuk mengirim pesan."
     },
     "list": {
       "title": "Contact Hub",
@@ -1545,7 +1546,9 @@
         "selected": "Kolom terpilih",
         "selectAll": "Pilih Semua",
         "reorder": "Seret untuk mengurutkan ulang kolom",
-        "remove": "Hapus {name}"
+        "remove": "Hapus {name}",
+        "nameShort": "Nama tampilan minimal {min} karakter.",
+        "nameLong": "Nama tampilan maksimal {max} karakter."
       },
       "presets": {
         "myContacts": "Kontak saya",

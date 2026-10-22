@@ -1416,10 +1416,12 @@
             "remove_branding": "White-Label: Der Workspace kann das Plattform-Branding in seiner Fußzeile ausblenden.",
             "sales_pipeline": "Deals, Aufgaben und Pipelines sowie die Pipeline-Kennzahlen im Dashboard.",
             "appointment_booking": "Buchungsarten, Termine und die öffentlichen Buchungsseiten. Die kostenpflichtige App Termine steuert diesen Schalter.",
+            "appointment_confirm_buttons": "Fügt der WhatsApp-Erinnerung vor einem Termin die Schaltflächen Bestätigen, Verschieben und Absagen hinzu.",
+            "appointment_rebook_steps": "Nachfassnachrichten nach einem abgeschlossenen Termin, die die Kontaktperson bitten, erneut zu buchen.",
             "chatbot_widgets": "Der Builder für das Website-Chatbot-Widget.",
             "wa_storefront": "Der Bereich WhatsApp-Katalog und Storefront.",
             "inbox_sla": "SLA-Richtlinien und Fristen im Team-Posteingang.",
-            "inbox_routing": "Routing-Regeln, die Unterhaltungen im Posteingang automatisch zuweisen.",
+            "inbox_routing": "Automatische Zuweisung neuer Chats: Routing-Regeln, Alle anderen und Timer der Warteschlange. Teil des Add-ons Intelligentes Routing.",
             "waba_calling": "WhatsApp-Anrufe aus dem Posteingang: Anrufnummern, Anrufberechtigungen, Anrufe tätigen und annehmen.",
             "inbox_kanban": "Die Kanban-Ansicht des Team-Posteingangs.",
             "team_performance": "Die Berichte zur Teamleistung.",
@@ -1445,7 +1447,7 @@
             "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu.",
             "team_hierarchy": "Übergeordnete Teams, Teamleiter und Manager, die ihr Team und die darunterliegenden Teams sehen.",
             "custom_roles": "Rollen erstellen und bearbeiten und für jede Berechtigung einen Bereich wählen (eigene, Team oder alle Datensätze).",
-            "inbox_assignment_sticky": "Zuweisung nach dem Prinzip „Besitzer zuerst“ und Synchronisierung zwischen Kontaktbesitzer und Chat-Besitzer, Zeitfenster für wiederkehrende Kontakte und Rückfrage bei Neuzuweisung. Arbeitet zusammen mit dem Posteingangs-Routing."
+            "inbox_assignment_sticky": "Zuweisung mit Inhaber zuerst und Synchronisierung, Zeitfenster für wiederkehrende Kontakte und Rückfrage bei Neuzuweisung. Teil des Add-ons Intelligentes Routing."
           },
           "units": {
             "days": "Tage",
@@ -1609,10 +1611,12 @@
             "remove_branding": "White-Label (entfernt Plattform-Branding)",
             "sales_pipeline": "Vertriebspipeline (Deals und Aufgaben)",
             "appointment_booking": "Termine und Buchungsseiten",
+            "appointment_confirm_buttons": "Erinnerungs-Schaltflächen: Bestätigen, Verschieben und Absagen",
+            "appointment_rebook_steps": "Schritte zur erneuten Buchung (Reaktivierung) nach einem Termin",
             "chatbot_widgets": "Website-Chatbot-Widgets",
             "wa_storefront": "WhatsApp-Storefront und Katalog",
             "inbox_sla": "Posteingangs-SLA-Richtlinien",
-            "inbox_routing": "Posteingangs-Routing-Regeln und Geschäftszeiten",
+            "inbox_routing": "Intelligentes Routing: automatische Zuweisung und Regeln",
             "waba_calling": "WhatsApp-Anrufe aus dem Posteingang tätigen und annehmen",
             "inbox_kanban": "Posteingangs-Kanban-Board",
             "team_performance": "Berichte zur Teamleistung",
@@ -1638,7 +1642,7 @@
             "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)",
             "team_hierarchy": "Teamhierarchie und Manager",
             "custom_roles": "Eigene Rollen und Bereiche",
-            "inbox_assignment_sticky": "Kontaktbesitzer und fester Agent"
+            "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",

@@ -60,10 +60,12 @@
       "remove_branding": "برانڈنگ ہٹائیں",
       "sales_pipeline": "سیلز پائپ لائن",
       "appointment_booking": "ملاقات کی بکنگ",
+      "appointment_confirm_buttons": "یاددہانی کے بٹن (تصدیق / دوبارہ شیڈول / منسوخ)",
+      "appointment_rebook_steps": "دوبارہ بکنگ (یاد دہانی) کے مراحل",
       "chatbot_widgets": "چیٹ بوٹ ویجٹس",
       "wa_storefront": "WhatsApp کیٹلاگ",
       "inbox_sla": "SLA پالیسیاں",
-      "inbox_routing": "روٹنگ قواعد",
+      "inbox_routing": "اسمارٹ روٹنگ: خودکار تفویض اور اصول",
       "waba_calling": "WhatsApp کالنگ",
       "inbox_kanban": "کانبان ویو",
       "team_performance": "ٹیم کی کارکردگی",
@@ -89,7 +91,7 @@
       "record_assignment": "ریکارڈ تفویض کے اصول",
       "team_hierarchy": "ٹیم کا درجہ بندی اور مینیجرز",
       "custom_roles": "حسبِ ضرورت کردار اور دائرہ کار",
-      "inbox_assignment_sticky": "رابطے کا مالک اور اسٹکی ایجنٹ"
+      "inbox_assignment_sticky": "اسمارٹ روٹنگ: رابطے کا مالک اور مستقل ایجنٹ"
     },
     "limitGroups": {
       "messaging": "میسجنگ",
@@ -251,6 +253,9 @@
         "buy": "ایڈ آن خریدیں",
         "buyAgain": "دوبارہ خریدیں",
         "active": "فعال",
+        "included": "آپ کے پلان میں شامل",
+        "includedOwned": "یہ ایڈ آن آپ کے پاس بھی ہے۔ آپ کے پلان میں اب یہ شامل ہے، اس لیے آپ اسے منسوخ کر سکتے ہیں۔ کوئی رقم خود بخود واپس نہیں ہوتی۔",
+        "includedEnds": "آپ کے پلان میں شامل۔ آپ کا ایڈ آن {date} کو ختم ہوگا اور اس کی تجدید نہیں ہوگی۔",
         "unlimitedBullet": "غیر محدود {label}",
         "addBullet": "+{amount, number} {label}",
         "per": {
@@ -578,7 +583,16 @@
       "back": "واپس جائیں",
       "compare": "تمام پلانز کا موازنہ کریں",
       "appHint": "{feature} مارکیٹ پلیس میں ایپ کے طور پر بھی فروخت ہوتا ہے۔",
-      "appLink": "ایپ دیکھیں"
+      "appLink": "ایپ دیکھیں",
+      "addonHint": "آپ اسے {addon} ایڈ آن کے ساتھ اپنے موجودہ پلان میں بھی شامل کر سکتے ہیں۔",
+      "addonLink": "ایڈ آنز دیکھیں",
+      "addons": {
+        "smartRouting": "اسمارٹ روٹنگ",
+        "teamsPermissions": "ٹیمیں اور اجازتیں"
+      }
+    },
+    "lock": {
+      "link": "پلان اور ایڈ آنز دیکھیں"
     }
   }
 }

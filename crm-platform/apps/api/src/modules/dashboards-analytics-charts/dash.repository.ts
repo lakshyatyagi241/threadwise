@@ -15,10 +15,10 @@ type Raw = Record<string, unknown>;
  * A message that is only `sent` counts as delivered, as in Reference. A migrated message carries no receipt (the chat history has
  * none; chat-delivery finds no billing-log match), so all migrated outbound history reads `sent`: without this its delivered rate is 0.
  */
-const DELIVERED = sql.raw(
+export const DELIVERED = sql.raw(
   `(status IN ('delivered','read','sent') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
 );
-const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
+export const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 /** Failed: the status says so, or a failure reason was recorded and nothing was ever delivered or read. */
 const FAILED = sql.raw(
   `(status IN ('failed','undelivered') OR (failure_reason IS NOT NULL AND delivered_at IS NULL AND read_at IS NULL AND status NOT IN ('delivered','read')))`,
@@ -173,8 +173,9 @@ export class DashRepository {
   }
 
   /**
-   * Conversations whose last message falls in [from, to), split open / closed (resolved counts as closed) and assigned / unassigned
-   * (a person, a team or an AI agent holds it). Archived chats are left out, as the inbox does.
+   * Conversations with activity in [from, to) (a message, or a resolve / close in the window), split open / resolved / closed and
+   * assigned / unassigned (a person, a team or an AI agent holds it). Resolving does not touch the last message, so a chat resolved
+   * today counts as resolved today even when its last message is older. Archived chats are left out, as the inbox does.
    */
   async conversationStates(
     tx: Tx,
@@ -184,25 +185,33 @@ export class DashRepository {
   ): Promise<{
     total: number;
     open: number;
+    resolved: number;
     closed: number;
     assigned: number;
     unassigned: number;
   }> {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS total,
-        count(*) FILTER (WHERE status IN ('resolved','closed'))::int AS closed,
+        count(*) FILTER (WHERE status = 'resolved')::int AS resolved,
+        count(*) FILTER (WHERE status = 'closed')::int AS closed,
         count(*) FILTER (
           WHERE assignee_user_id IS NOT NULL OR assignee_team_id IS NOT NULL OR assignee_agent_id IS NOT NULL
         )::int AS assigned
       FROM conversations
       WHERE org_id = ${orgId} AND NOT archived
-        AND last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz`);
+        AND (
+          (last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz)
+          OR (resolved_at >= ${from.toISOString()}::timestamptz AND resolved_at < ${to.toISOString()}::timestamptz)
+        )`);
     const r = (res.rows[0] ?? {}) as Raw;
     const total = n(r.total);
+    const resolved = n(r.resolved);
+    const closed = n(r.closed);
     return {
       total,
-      open: total - n(r.closed),
-      closed: n(r.closed),
+      open: total - resolved - closed,
+      resolved,
+      closed,
       assigned: n(r.assigned),
       unassigned: total - n(r.assigned),
     };

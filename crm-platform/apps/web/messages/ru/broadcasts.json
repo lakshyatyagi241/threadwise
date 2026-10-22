@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Закрыть"
     },
+    "list": {
+      "unofficialDisabled": "Неофициальный (отключён)"
+    },
     "detail": {
       "back": "Назад",
       "crumb": "Рассылки / Аналитика / #{ref}",

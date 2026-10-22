@@ -231,6 +231,7 @@ export class FlowsService {
         graph,
         category: input.category?.trim() || null,
         flowType: input.flowType ?? 'chat',
+        builder: input.builder ?? 'simple',
       });
       return this.afterInsert(tx, ctx.orgId, id, 'flow.created');
     });
@@ -251,6 +252,7 @@ export class FlowsService {
         graph,
         category: input.category?.trim() || null,
         flowType,
+        builder: input.builder ?? null,
         ...(await this.triggerColumns(tx, ctx.orgId, graph, flowType, row.id)),
       };
       const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, update);
@@ -339,6 +341,7 @@ export class FlowsService {
         graph,
         category: src.category,
         flowType: src.flowType as FlowType,
+        builder: src.builder,
         isActive: src.isActive,
       });
       return this.afterInsert(tx, ctx.orgId, id, 'flow.duplicated');
@@ -568,6 +571,7 @@ export class FlowsService {
       graph: FlowGraph;
       category: string | null;
       flowType: FlowType;
+      builder?: string;
       isActive?: boolean;
     },
   ): Promise<number> {
@@ -578,6 +582,7 @@ export class FlowsService {
       graph: f.graph,
       category: f.category,
       flowType: f.flowType,
+      builder: f.builder,
       isActive: f.isActive,
       ...t,
     };

@@ -584,7 +584,11 @@
           "sla_breach": "Đã quá hạn phản hồi",
           "spam_flagged": "Đã đánh dấu spam bởi {actor}",
           "escalated": "Đã leo thang",
-          "unknown": "{what} bởi {actor}"
+          "unknown": "{what} bởi {actor}",
+          "handoff_requested": "Được chuyển cho một người bởi {actor}",
+          "queue_reminded": "Đã nhắc nhóm",
+          "queue_offered": "Đã đề nghị cho nhóm khác",
+          "queue_customer_message": "Đã gửi tin nhắn cho khách hàng"
         },
         "actors": {
           "user": "Một đồng nghiệp",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Trình mô phỏng (thử nghiệm)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat trên website",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Email",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Trình mô phỏng (thử nghiệm)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat trên website",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Email",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Liên hệ",
         "agent": "Bạn",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "Quay lại hộp thư",
-        "title": "Thẻ cuộc trò chuyện",
+        "title": "Thẻ",
         "intro": "Thẻ cuộc trò chuyện đánh dấu một luồng (thanh toán, hoàn tiền, khẩn cấp) để nhóm của bạn sắp xếp và lọc hộp thư. Chúng lấy từ cùng thư viện thẻ với thẻ liên hệ, vốn mô tả con người.",
         "newTitle": "Thẻ mới",
         "editTitle": "Sửa thẻ",

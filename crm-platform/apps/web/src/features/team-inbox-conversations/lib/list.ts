@@ -97,6 +97,14 @@ export function listQuery(f: ListFilters): Record<string, string | boolean | und
   };
 }
 
+/** The query string of `GET /inbox/counts`: the list's filters without the tab and the sort, since a badge counts every tab. */
+export function countsQuery(f: ListFilters): Record<string, string | boolean | undefined> {
+  const q = listQuery(f);
+  delete q.tab;
+  delete q.sort;
+  return q;
+}
+
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** The tag ids of `?tags=a,b` (or its original name `?labels=a,b`; anything that is not a uuid is dropped, at most 20). */
@@ -141,6 +149,14 @@ export function isFiltered(f: ListFilters): boolean {
     f.tags.length > 0 ||
     windowFilterCount(f) > 0
   );
+}
+
+/**
+ * Whether a filter narrows the badges. The tab and the sort never do (a badge counts the same rows in any order), so only the other
+ * filters count. This decides whether the screen's counts may stand for the whole inbox (the menu's Inbox badge takes them only then).
+ */
+export function narrowsCounts(f: ListFilters): boolean {
+  return isFiltered({ ...f, sort: DEFAULT_FILTERS.sort });
 }
 
 const norm = (s: string | null | undefined) => (s ?? '').toLocaleLowerCase();

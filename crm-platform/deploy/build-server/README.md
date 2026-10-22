@@ -49,6 +49,10 @@ release refuses to start when less than `BLUE_GREEN_MIN_MEM_MB` (default 1000 MB
 available, or less than `DESK_MIN_DISK_MB` (3000 MB) of disk, or when another release holds `/var/lock/desk-release.lock`, or when Traefik's
 dynamic directory is missing, all before anything changes.
 
+### Webhook API (`api-hooks`)
+
+A release also restarts `desk-api-hooks`, the container behind `/v2/public/webhooks`, on the new tag (`HOOKS_TAG`), after the idle slot is healthy and before the switch. It is not in a slot: Traefik falls back to the live slot's API while it is unhealthy, so a failed start only logs a warning and the release goes on. A rollback moves it back to the previous tag. Details: `deploy/hostinger/README.md`.
+
 ## What runs where
 
 | Where        | What                                                                                       | Files                                                                                                   |

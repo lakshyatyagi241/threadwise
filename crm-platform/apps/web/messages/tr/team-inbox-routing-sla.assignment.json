@@ -12,7 +12,7 @@
         "loadFailed": "Atama ayarları yüklenemedi.",
         "retry": "Yeniden dene",
         "notInPlan": "Planınızda yok",
-        "upgradeHint": "Planınız bunu içermiyor. Hesap sahibinden planı yükseltmesini isteyin.",
+        "upgradeHint": "Akıllı yönlendirme eklentisine veya daha üst bir plana dahildir.",
         "stepFirst": "İlk kontrol edilir",
         "stepMaster": "Ana anahtar",
         "stepAfter": "Üstlenmeden sonra",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "Daha fazla denetim mi gerek? Kural ekleyin",
         "intro": "İsteğe bağlı. Kurallar belirli konuşmaları (bir kanalı, mesajdaki sözcükleri, yeni bir kişiyi...) belirli temsilcilere veya ekiplere yönlendirir. Dört anahtar yeterliyse hiç kural oluşturmanız gerekmez.",
-        "locked": "Kurallar planınızda yok. Bekleme kuyruğu, üstlenme ve elle atama yine de kullanılabilir. Hesap sahibinden planı yükseltmesini isteyin.",
+        "locked": "Kurallar Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır. Bekleme kuyruğu, sohbeti üstlenme ve elle atama kullanılmaya devam eder.",
         "pipelineTitle": "Yeni bir konuşma nasıl atanır",
         "pipeline": {
           "agent": "1. Kişi sahibi ve Sabit Temsilci",

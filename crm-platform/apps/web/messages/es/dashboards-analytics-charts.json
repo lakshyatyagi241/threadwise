@@ -320,6 +320,7 @@
         "replyRate": "Tasa de respuesta",
         "received": "Mensajes recibidos",
         "conversationsOpen": "Conversaciones abiertas",
+        "conversationsResolved": "Conversaciones resueltas",
         "conversationsClosed": "Conversaciones cerradas",
         "conversationsAssigned": "Asignadas",
         "conversationsUnassigned": "Sin asignar",

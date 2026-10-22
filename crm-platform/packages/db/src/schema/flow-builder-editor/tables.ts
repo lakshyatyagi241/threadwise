@@ -46,6 +46,8 @@ export const flows = pgTable(
     publishedAt: timestamp('published_at', { withTimezone: true }),
     provider: text('provider').notNull().default('baileys'),
     flowType: text('flow_type').notNull().default('chat'),
+    /** Where the flow was made: 'simple' (the bot builder) or 'advanced' (the canvas). Only the list reads it. */
+    builder: text('builder').notNull().default('simple'),
     instaflowFlowId: idColumn('instaflow_flow_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),

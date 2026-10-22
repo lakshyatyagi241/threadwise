@@ -1,0 +1,101 @@
+{
+  "feature": "help-agent",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-help-agent-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/help-agent/components/assistant-panel.tsx",
+        "apps/web/src/features/help-agent/components/settings-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-help-agent-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/help-agent/components/assistant-panel.tsx",
+        "apps/web/src/features/help-agent/lib/failure.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-help-agent-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/help-agent/lib/failure.ts",
+        "apps/web/src/features/help-agent/lib/gate.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-help-agent-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/help-agent/components/assistant-panel.tsx",
+        "apps/web/src/features/help-agent/components/settings-screen.tsx",
+        "apps/web/src/features/help-agent/components/use-assistant.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-help-agent-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/help-agent/lib/failure.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-help-agent-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-help-agent-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/help-agent/components/assistant-panel.tsx",
+        "apps/web/src/features/help-agent/components/use-assistant.ts",
+        "apps/web/src/features/help-agent/lib/failure.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/help-agent/lib/guards.test.ts",
+          "match": "records a network error but not an abort, and lets both through"
+        }
+      ]
+    }
+  ]
+}

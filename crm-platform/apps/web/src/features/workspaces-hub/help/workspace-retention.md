@@ -35,7 +35,7 @@ Open the menu at the end of a row. Only the actions your role may run are shown.
 3. **Restore**: for an archived workspace. It becomes active again and the inactivity clock restarts. A reason is required.
 4. **Place legal hold** and **Lift legal hold**: the hold blocks archive and erase until it is lifted. Only a Super Admin can use it.
 
-Each action asks you to confirm, and an error from the server is shown in the dialog with a request id you can give to support.
+Each action asks you to confirm, and an error is shown in the dialog with a request id you can give to support.
 
 ## History
 

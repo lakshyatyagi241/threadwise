@@ -1,0 +1,35 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Bekleme kuyruğu",
+      "intro": "Kimsenin üstlenmediği sohbetler Bekleyen sekmesinde bekler. Bu isteğe bağlı adımlar yanıtlanmalarına yardım eder. Her adım sohbet başına bir kez çalışır, yalnızca ekibin açık olduğu dakikaları sayar ve biri sohbeti üstlenir üstlenmez durur.",
+      "remind": "Ekibi hatırlat",
+      "remindBody": "Sohbeti üstlenebilecek kişilere haber verir.",
+      "overflow": "Başka bir ekibe öner",
+      "overflowBody": "Sohbeti bir kez bu ekibin kuyruğuna taşır.",
+      "team": "Ekip",
+      "teamPick": "Bir ekip seçin",
+      "final": "Son adım",
+      "finalBody": "O zamana kadar kimse sohbeti üstlenmediyse:",
+      "action": "Ne olur",
+      "actionMessage": "Müşteriye mesaj gönder",
+      "actionBot": "Sohbeti bota geri ver",
+      "message": "Mesaj",
+      "messageHint": "'{{name}}' ve '{{first_name}}' kullanabilirsiniz.",
+      "afterMinutes": "Sonra (dakika)",
+      "save": "Kaydet",
+      "saved": "Bekleme kuyruğu ayarları kaydedildi.",
+      "saveFailed": "Bekleme kuyruğu ayarları kaydedilemedi.",
+      "readOnly": "Bu ayarları görebilir ancak değiştiremezsiniz.",
+      "problems": {
+        "minutes": "1 ile 1440 arasında bir sayı girin.",
+        "team": "Bir ekip seçin.",
+        "message": "Mesajı yazın."
+      },
+      "away": "Biri uzaklaştığında yanıtsız sohbetleri geri ver",
+      "awayBody": "Biri Çevrimdışı olduğunda veya izne çıktığında, müşterinin hâlâ beklediği sohbetleri ekibin kuyruğuna geri döner.",
+      "offline": "Etkin olmayanları Çevrimdışı yap",
+      "offlineBody": "Bu süre boyunca hiçbir şey yapmayan Müsait bir kişi Çevrimdışı yapılır. Kendisi tekrar Müsait olur."
+    }
+  }
+}

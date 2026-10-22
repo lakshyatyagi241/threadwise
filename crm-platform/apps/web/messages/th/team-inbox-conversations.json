@@ -584,7 +584,11 @@
           "sla_breach": "พลาดกำหนดเวลาตอบกลับ",
           "spam_flagged": "ทำเครื่องหมายเป็นสแปมโดย {actor}",
           "escalated": "ยกระดับแล้ว",
-          "unknown": "{what} โดย {actor}"
+          "unknown": "{what} โดย {actor}",
+          "handoff_requested": "ส่งต่อให้บุคคลโดย {actor}",
+          "queue_reminded": "เตือนทีมแล้ว",
+          "queue_offered": "เสนอให้ทีมอื่นแล้ว",
+          "queue_customer_message": "ส่งข้อความถึงลูกค้าแล้ว"
         },
         "actors": {
           "user": "เพื่อนร่วมทีม",
@@ -816,20 +820,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "ตัวจำลอง (ทดสอบ)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "แชทบนเว็บไซต์",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "อีเมล",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "ตัวจำลอง (ทดสอบ)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "แชทบนเว็บไซต์",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "อีเมล",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "ผู้ติดต่อ",
         "agent": "คุณ",
@@ -1086,7 +1090,7 @@
       },
       "screen": {
         "back": "กลับไปยังกล่องข้อความ",
-        "title": "แท็กการสนทนา",
+        "title": "แท็ก",
         "intro": "แท็กการสนทนาใช้ทำเครื่องหมายเธรด (การเรียกเก็บเงิน, คืนเงิน, ด่วน) เพื่อให้ทีมของคุณจัดเรียงและกรองกล่องข้อความได้ มาจากคลังแท็กเดียวกับแท็กผู้ติดต่อ ซึ่งอธิบายตัวบุคคล",
         "newTitle": "แท็กใหม่",
         "editTitle": "แก้ไขแท็ก",

@@ -34,7 +34,7 @@ Nav entries come from your `features/<domain>/nav.ts` through the generated regi
 
 1. Read **UX & screens** of the entry: each screen/modal/tab, fields, validation, conditional visibility (role, plan, channel
    state), empty/loading/error/limit states, bulk actions, filters/sort/search, realtime, toasts. Each item becomes a component or
-   a test id. Open the reference screen in Reference for layout intent only.
+   a test id. Layout intent comes from the entry and its wiring map.
 2. Build with `@crm/ui` components and tokens, matching the reference screen's layout, flow and behavior
    ([PORTING_RULES.md](../../../docs/threadwise-port/PORTING_RULES.md) section 3: same UI, rewritten in our stack). No Reference markup, CSS, JS, icons or images; short
    functional labels match the reference, longer copy is written fresh, in English
@@ -55,5 +55,5 @@ Nav entries come from your `features/<domain>/nav.ts` through the generated regi
 
 ## Verify
 
-Browser e2e for each acceptance criterion that has a UI (`threadwise-e2e-tests`), then `threadwise-playwright-parity`: it opens the same screen on Reference and on ours, compares structure, states, validation, keyboard, responsive and a11y behaviour with the full edge-case matrix, and fixes what is missing.
+Browser e2e for each acceptance criterion that has a UI (`threadwise-e2e-tests`), then check states, validation, keyboard, responsive and a11y against the entry.
 Type-check and lint the web workspace with the commands in `apps/web/README.md`, then the repo gate.

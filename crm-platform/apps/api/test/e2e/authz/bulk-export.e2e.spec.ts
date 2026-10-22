@@ -16,6 +16,7 @@ import {
   type Harness,
   type Tenant,
 } from '../contacts-attributes-tags/support';
+import { pngOfSize, pngWithText } from '../../support/images';
 
 /**
  * Bulk operations, import / export, downloads, reports and pagination: authorization evidence
@@ -1332,18 +1333,9 @@ describe('AUTHZ-048 / AUTHZ-050 import needs the import grant, writes only into 
 
 // ==== 4. downloads and signed links (AUTHZ-064, 074) ============================================================================
 
-const PNG_A = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.from('AZ-A-SECRET-BYTES-0123456789'),
-]);
-const PNG_A2 = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.from('AZ-A-SECOND-FILE-BYTES-9876'),
-]);
-const PNG_B = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.from('AZ-B-SECRET-BYTES-abcdefgh'),
-]);
+const PNG_A = pngWithText('AZ-A-SECRET-BYTES-0123456789');
+const PNG_A2 = pngWithText('AZ-A-SECOND-FILE-BYTES-9876');
+const PNG_B = pngWithText('AZ-B-SECRET-BYTES-abcdefgh');
 
 describe('AUTHZ-064 / AUTHZ-074 media links are bound to the person and workspace they were minted for', () => {
   let A: Tenant;
@@ -1603,10 +1595,7 @@ describe('AUTHZ-064 attachments: contact files, team-chat files, invoice PDFs an
     const general = (await as(A.admin).get('/v2/team-chat/channels')).body.data.find(
       (c: { slug: string }) => c.slug === 'general',
     );
-    const png = Buffer.concat([
-      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-      Buffer.alloc(32, 7),
-    ]);
+    const png = pngOfSize(8 + 32);
     const msg = await as(A.admin)
       .post(`/v2/team-chat/channels/${general.id}/messages`)
       .attach('attachment', png, '../../evil.png');

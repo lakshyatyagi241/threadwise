@@ -4,6 +4,7 @@ import {
   addGroup,
   changeField,
   changeOperator,
+  conditionsOf,
   findNode,
   moveNode,
   newCondition,
@@ -34,6 +35,24 @@ export type RuleAction =
 
 /** What a new condition tests: the first field of the catalog (Journey > Stage), so it is never blank. */
 export const defaultField = (catalog: readonly FieldDef[]): FieldDef | undefined => catalog[0];
+
+/**
+ * The rules with one condition on `field` ready to fill (added to the top group), or the rules unchanged when a condition on that
+ * field is already there or the catalog has no such field. A column header's "Filter" opens the builder this way.
+ */
+export function withFieldCondition(
+  root: Group,
+  field: string,
+  catalog: readonly FieldDef[],
+): Group {
+  if (!catalog.some((f) => f.id === field)) return root;
+  if (conditionsOf(root).some((c) => c.field === field)) return root;
+  const added = ruleReducer(root, { type: 'addCondition', groupId: root.id }, catalog);
+  const last = added.children[added.children.length - 1];
+  return last && last.kind === 'condition'
+    ? ruleReducer(added, { type: 'field', id: last.id, field }, catalog)
+    : added;
+}
 
 export function ruleReducer(root: Group, action: RuleAction, catalog: readonly FieldDef[]): Group {
   switch (action.type) {

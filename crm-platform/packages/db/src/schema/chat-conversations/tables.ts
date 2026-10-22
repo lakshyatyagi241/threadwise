@@ -170,6 +170,14 @@ export const conversations = pgTable(
     index('idx_conversations_waiting')
       .on(t.orgId, t.handlingSince)
       .where(sql`handling = 'waiting'`),
+    // The inbox's tab badges, index-only (migrations 20270323090000 and 20270323090100): the live open threads, and the archive.
+    // counts() in conversations.repository.ts reads exactly these key columns under these predicates; keep the two in step.
+    index('idx_conversations_live_badges')
+      .on(t.orgId, t.channelId, t.assigneeUserId, t.assigneeTeamId, t.unreadCount, t.handling)
+      .where(sql`archived = FALSE AND status = 'open' AND last_message_at IS NOT NULL`),
+    index('idx_conversations_archived_badges')
+      .on(t.orgId, t.channelId, t.assigneeUserId, t.assigneeTeamId, t.unreadCount, t.handling)
+      .where(sql`archived = TRUE AND last_message_at IS NOT NULL`),
     index('idx_conversations_snooze_due')
       .on(t.snoozedUntil)
       .where(sql`status = 'snoozed' AND snoozed_until IS NOT NULL`),
@@ -298,6 +306,12 @@ export const conversationHandoffs = pgTable(
     flowRunId: idColumn('flow_run_id'),
     nodeId: text('node_id'),
     requestedBy: idColumn('requested_by'),
+    /** Waiting queue timers (migration 20270324090000): each step of a wait runs at most once. */
+    remindedAt: timestamp('reminded_at', { withTimezone: true }),
+    offeredAt: timestamp('offered_at', { withTimezone: true }),
+    offeredFromTeamId: idColumn('offered_from_team_id'),
+    finalAt: timestamp('final_at', { withTimezone: true }),
+    finalAction: text('final_action'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     completedAt: timestamp('completed_at', { withTimezone: true }),
@@ -340,6 +354,11 @@ export const conversationHandoffs = pgTable(
       name: 'fk_conversation_handoffs_requested_by',
       columns: [t.orgId, t.requestedBy],
       foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_conversation_handoffs_offered_from',
+      columns: [t.orgId, t.offeredFromTeamId],
+      foreignColumns: [teams.orgId, teams.id],
     }).onDelete('set null'),
     uniqueIndex('uq_conversation_handoffs_live')
       .on(t.orgId, t.conversationId)

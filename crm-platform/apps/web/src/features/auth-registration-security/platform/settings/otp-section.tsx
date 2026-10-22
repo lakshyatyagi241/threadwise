@@ -114,7 +114,7 @@ export function OtpSection({
 
   const fmt = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    [locale, timeZone],
   );
   const when = (iso: string | null) => (iso ? fmt.format(new Date(iso)) : t('otp.template.never'));
 

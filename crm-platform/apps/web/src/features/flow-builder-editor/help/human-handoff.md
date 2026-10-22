@@ -1,7 +1,7 @@
 ---
 id: flows-human-handoff
 title: Human handoff step
-summary: Hand a conversation from a flow to a person, a team or the assignment rules, with a reason, a note and three exits.
+summary: Hand a conversation from a flow to a person, a team or the assignment rules, with a reason, a note, three exits and an optional way back to the bot.
 area: automation
 order: 12
 documents: [nav:flows]
@@ -38,9 +38,9 @@ The **Human handoff** step ends the bot's part of a conversation. It gives the c
 
 The variables your flow collected are passed to the agent on the handoff card, so the contact does not have to repeat them.
 
-## The three exits
+## The exits
 
-In the Advanced canvas the step has three exits:
+In the Advanced canvas the step has three exits, and a fourth optional one described below:
 
 - **assigned**: a person has the conversation now.
 - **waiting in queue**: nobody had it free; it waits for someone to claim it.
@@ -48,9 +48,20 @@ In the Advanced canvas the step has three exits:
 
 In the Simple builder the next step runs once a person has the conversation. If it has to wait, or nobody is available, the bot stops there and a person answers. Use the Advanced canvas to follow the other exits.
 
+## The way back: Return to bot
+
+When a teammate presses **Return to bot** on a conversation this step handed over, the flow can carry on instead of waiting silently for the contact's next message. The step has an optional fourth exit for this:
+
+- In the **Advanced** canvas, connect the exit **returned to the bot** to the step that should come next, for example a message such as "Is there anything else I can help with?".
+- In the **Simple** builder, pick the step under **When a teammate gives the chat back, continue at**.
+
+You can also write a **Message to the contact when the bot is back**. It is sent once, as your business, before the flow carries on from that exit. Variables such as the contact's name work. It is not sent when the 24 hour window is closed or the contact has not given consent, and your team sees that on the line in the thread. A message needs the exit to be connected: the editor warns you when it is not, because the message would never be sent.
+
+Leave the exit empty and nothing changes: the bot answers the contact's next message, as before. Flows saved before this exit existed keep working exactly as they were.
+
 ## After the handoff
 
-From the moment the conversation is handed over, new messages from the contact no longer reach the flow, the AI assistant or the auto-reply: the person answers. If the conversation is given back with **Return to bot**, the paused flow answers the next message. See [Waiting queue and claiming](help:waiting-queue).
+From the moment the conversation is handed over, new messages from the contact no longer reach the flow, the AI assistant or the auto-reply: the person answers. If the conversation is given back with **Return to bot**, the flow carries on from the **returned** exit, or the paused flow answers the next message when that exit is not connected. See [Waiting queue and claiming](help:waiting-queue).
 
 ## Update an older Assign agent step
 

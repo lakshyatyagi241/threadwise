@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Dismiss"
     },
+    "list": {
+      "unofficialDisabled": "Unofficial (disabled)"
+    },
     "detail": {
       "back": "Back",
       "crumb": "Broadcasts / Analytics / #{ref}",

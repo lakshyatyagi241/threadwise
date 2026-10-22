@@ -535,10 +535,12 @@
             "remove_branding": "العلامة البيضاء",
             "sales_pipeline": "مسار المبيعات",
             "appointment_booking": "المواعيد",
+            "appointment_confirm_buttons": "أزرار التذكير",
+            "appointment_rebook_steps": "خطوات إعادة الحجز",
             "chatbot_widgets": "أدوات الدردشة",
             "wa_storefront": "كتالوج واتساب",
             "inbox_sla": "اتفاقية مستوى الخدمة",
-            "inbox_routing": "توجيه المحادثات",
+            "inbox_routing": "التوجيه الذكي",
             "waba_calling": "المكالمات عبر واتساب",
             "inbox_kanban": "لوحة كانبان",
             "team_performance": "أداء الفريق",
@@ -564,7 +566,7 @@
             "record_assignment": "قواعد تعيين السجلات",
             "team_hierarchy": "التسلسل الهرمي للفرق والمديرون",
             "custom_roles": "أدوار مخصصة ونطاقات",
-            "inbox_assignment_sticky": "مالك جهة الاتصال والوكيل الثابت"
+            "inbox_assignment_sticky": "التوجيه الذكي: مالك جهة الاتصال والوكيل الثابت"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

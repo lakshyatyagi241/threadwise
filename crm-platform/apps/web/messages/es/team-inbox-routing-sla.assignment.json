@@ -12,7 +12,7 @@
         "loadFailed": "No se pudieron cargar los ajustes de asignación.",
         "retry": "Reintentar",
         "notInPlan": "No incluido en tu plan",
-        "upgradeHint": "Tu plan no incluye esta función. Pide al propietario de la cuenta que mejore el plan.",
+        "upgradeHint": "Incluido en el complemento Enrutamiento inteligente o en un plan superior.",
         "stepFirst": "Se comprueba primero",
         "stepMaster": "Interruptor principal",
         "stepAfter": "Tras tomar un chat",
@@ -51,7 +51,7 @@
       "rules": {
         "title": "¿Necesitas más control? Añade reglas",
         "intro": "Opcional. Las reglas envían chats concretos (de un canal, con ciertas palabras en el mensaje, de un contacto nuevo...) a agentes o equipos concretos. Si los cuatro interruptores te bastan, no tendrás que crear ninguna.",
-        "locked": "Las reglas no están incluidas en tu plan. Sigues teniendo la cola de espera, tomar chats y la asignación manual. Pide al propietario de la cuenta que mejore el plan.",
+        "locked": "Las reglas forman parte del complemento Enrutamiento inteligente o de un plan superior. Sigues teniendo la cola de espera, reclamar chats y la asignación manual.",
         "pipelineTitle": "Cómo se asigna un chat nuevo",
         "pipeline": {
           "agent": "1. Propietario del contacto y Agente fijo",

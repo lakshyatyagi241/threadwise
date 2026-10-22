@@ -11,7 +11,7 @@ keywords:
 
 ## What it is for
 
-Once Meta approves a template, this build locks it: there is no **Edit** button on an approved template, and the server refuses the change too. To change the wording or the buttons you create a new template and send it for review. This guide shows a safe way to switch over without interrupting your sends.
+Once Meta approves a template, it is locked: there is no **Edit** button on an approved template, and a change is refused too. To change the wording or the buttons you create a new template and send it for review. This guide shows a safe way to switch over without interrupting your sends.
 
 ## Make the change
 
