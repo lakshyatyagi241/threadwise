@@ -19,9 +19,10 @@ test('sanitizer handles unterminated quote and truncates to 800', () => {
 test('router: full matrix of slow_query x severity x test x group', () => {
   for (const severity of ['critical', 'warning', 'info', 'none', undefined]) for (const slow of [false, true]) for (const test of [false, true]) {
     const labels = { ...(severity ? { severity } : {}), ...(slow ? { group: 'slow_query' } : {}), ...(test ? { test: 'true' } : {}) };
-    const want = test || slow ? 'slowquery' : severity === 'critical' ? 'critical' : 'none';
+    const want = test ? 'none' : slow ? 'slowquery' : severity === 'critical' ? 'critical' : 'none';
     assert.equal(channelFor({ labels }, {}), want, JSON.stringify(labels));
     assert.notEqual(channelFor({ labels }, {}), 'deploy');
+    if (test) assert.equal(channelFor({ labels }, { TEST_ALERTS_CHANNEL: 'slowquery' }), 'slowquery', JSON.stringify(labels));
   }
   assert.equal(channelFor({ labels: { severity: 'warning', group: 'api' } }, { NON_CRITICAL_CHANNEL: 'slowquery' }), 'slowquery');
   assert.equal(channelFor({ labels: { severity: 'critical', group: 'api' } }, { NON_CRITICAL_CHANNEL: 'slowquery' }), 'critical');
@@ -125,17 +126,31 @@ test('test=true alerts: TEST card, slowquery only, never an incident or escalati
   const { alertCard, isTest } = await import('./lib.mjs');
   const { startBridge } = await import('./bridge.mjs');
   const a = { status: 'firing', labels: { alertname: 'DeployTest', severity: 'critical', test: 'true' }, annotations: { summary: 's' } };
-  assert.ok(isTest(a)); assert.equal(channelFor(a), 'slowquery');
+  assert.ok(isTest(a)); assert.equal(channelFor(a), 'none'); assert.equal(channelFor(a, { TEST_ALERTS_CHANNEL: 'slowquery' }), 'slowquery');
   const c = alertCard(a).cardsV2[0].card;
   assert.ok(c.header.title.startsWith('🧪 TEST - ')); assert.match(c.sections[0].widgets[0].textParagraph.text, /Test message, not a real alert/);
   assert.ok(!alertCard({ ...a, labels: { alertname: 'X', test: 'false' } }).cardsV2[0].card.header.title.includes('TEST'));
   const posts = []; let handled = 0;
   const fetchImpl = async (u, o) => { posts.push({ u: String(u), b: o?.body }); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
-  const env = { CHAT_ALLOW_ANY_HOST: '1', GCHAT_SLOWQUERY_URL: 'http://x/s', GCHAT_CRITICAL_URL: 'http://x/c' };
+  const env = { TEST_ALERTS_CHANNEL: 'slowquery', CHAT_ALLOW_ANY_HOST: '1', GCHAT_SLOWQUERY_URL: 'http://x/s', GCHAT_CRITICAL_URL: 'http://x/c' };
   const br = startBridge({ env, urls: { slowquery: 'http://x/s', critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: () => { handled++; }, byKey: () => null }) });
   await br.server.listen(0); const port = br.server.address().port;
   for (const st of ['firing', 'resolved']) await fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [{ ...a, status: st, fingerprint: 'f1' }] }) });
   br.server.close();
   assert.equal(handled, 0); assert.equal(posts.length, 2);
   assert.ok(posts.every((p) => p.u.startsWith('http://x/s') && /TEST - /.test(p.b)));
+});
+
+test('test=true alerts are dropped by default: nothing posted, counted reason=test, no resolver', async () => {
+  const { startBridge } = await import('./bridge.mjs');
+  const posts = []; let handled = 0;
+  const fetchImpl = async (u) => { posts.push(String(u)); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
+  const br = startBridge({ env: { CHAT_ALLOW_ANY_HOST: '1' }, urls: { slowquery: 'http://x/s', critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: () => { handled++; }, byKey: () => null }) });
+  await br.server.listen(0); const port = br.server.address().port;
+  const a = { status: 'firing', labels: { alertname: 'DeployTest', severity: 'critical', test: 'true' }, annotations: {} };
+  const r = await fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [a] }) });
+  const rc = await (await fetch(`http://127.0.0.1:${port}/route-check`, { method: 'POST', body: '{"test":true,"severity":"critical"}' })).json();
+  br.server.close();
+  assert.equal(r.status, 200); assert.equal(posts.length, 0); assert.equal(handled, 0); assert.equal(rc.channel, 'none');
+  assert.match(br.metrics.render(), /crm_chat_bridge_dropped_total\{reason="test"\} 1/);
 });
