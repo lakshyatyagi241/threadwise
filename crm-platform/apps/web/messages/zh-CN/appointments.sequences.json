@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "升级您的套餐",
-      "buttonsLocked": "确认、改期和取消按钮不在您的套餐内。",
       "timeline": {
         "label": "提醒时间线",
         "addMenu": "添加步骤",
         "addStep": "添加步骤",
         "count": "已设定时间的步骤：{count}/{max}。预约确认和未到场消息不计入在内。",
         "capReached": "已设定时间的步骤已达到 {max} 个上限。请先删除一个再添加。",
-        "rebookLocked": "再次预约消息不在您的套餐内。您可以设置此步骤，但在升级之前会保持关闭。",
-        "rebookLockedStep": "当前套餐无法开启此步骤。",
         "empty": "还没有步骤。添加第一个步骤，或从现成的序列开始。",
         "lane": {
           "booked": "预约成功时",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "已添加",
           "cap": "已达到上限",
-          "locked": "需要升级套餐才能开启",
-          "online": "线上预约"
+          "online": "线上预约",
+          "locked": "升级版：不在您的套餐中"
         },
         "enabledOf": "发送：{step}",
         "remove": "删除：{step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, other {# 分钟}}",
           "hours": "{count, plural, other {# 小时}}",
           "days": "{count, plural, other {# 天}}"
-        }
+        },
+        "rebookLocked": "再次预约消息属于预约应用的升级版，您当前的套餐不包含。您可以设置该步骤，但在套餐包含之前它会保持关闭。",
+        "rebookLockedStep": "属于预约应用的升级版：当前套餐无法开启。"
       },
       "reasons": {
         "already_confirmed": "联系人已确认。",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "您为此步骤写了自己的文本，它将被替换。",
         "planNotes": {
-          "rebook": "您的套餐不包含再次预约消息，因此此步骤将保存为关闭状态。",
-          "buttons": "您的套餐不包含回复按钮，因此将不予添加。"
+          "rebook": "再次预约步骤属于预约应用的升级版，您当前的套餐不包含，因此该步骤将以关闭状态保存。",
+          "buttons": "“确认”“改期”“取消”按钮属于预约应用的升级版，您当前的套餐不包含，因此已省略。"
         },
         "showMessages": "显示消息",
         "hideMessages": "隐藏消息",
@@ -180,7 +179,84 @@
           "waiting": "在 Meta 批准消息之前，该步骤将通过 Email 发送。",
           "metaError": "Meta 拒绝了：{error}",
           "refresh": "刷新状态",
-          "refreshing": "正在刷新"
+          "refreshing": "正在刷新",
+          "withheldTitle": "因您的套餐而省略",
+          "withheldButtons": "此步骤的“确认”“改期”“取消”按钮：{step}。",
+          "withheldRebook": "{step}：以关闭状态保存。"
+        }
+      },
+      "buttonsLocked": "“确认”“改期”“取消”按钮属于预约应用的升级版，您当前的套餐不包含。",
+      "test": {
+        "send": "发送测试邮件",
+        "sending": "正在发送",
+        "hint": "使用示例值发送此步骤。地址留空则发送到您自己的邮箱。",
+        "toLabel": "测试发送至",
+        "toPlaceholder": "您自己的地址，或输入其他地址",
+        "toInvalid": "请输入完整的邮箱地址，或留空。",
+        "wait": {
+          "unsaved": "请先保存更改：测试发送的是已保存的步骤。",
+          "notSaved": "请先保存提醒：此步骤是新建的。"
+        },
+        "queued": "测试邮件正在发送到 {address}。结果也会出现在您的通知中。",
+        "skipped": "未发送任何内容：您的用户没有邮箱地址。",
+        "noWhatsapp": "无法在此测试 WhatsApp 消息。"
+      },
+      "report": {
+        "title": "提醒报告",
+        "description": "提醒的执行情况：已发送、已送达、失败、已跳过的数量，以及通过其他渠道发送的数量。",
+        "type": "预约类型",
+        "allTypes": "所有预约类型",
+        "range": "时间段",
+        "ranges": {
+          "7": "最近 7 天",
+          "30": "最近 30 天",
+          "90": "最近 90 天",
+          "custom": "选择日期"
+        },
+        "from": "开始",
+        "to": "结束",
+        "refresh": "刷新",
+        "pickDates": "请选择开始和结束日期以查看报告。",
+        "loading": "正在加载报告",
+        "empty": "此时间段内没有到期的提醒。提醒发送后，结果会显示在这里。",
+        "caption": "{name} 的提醒结果",
+        "col": {
+          "step": "步骤",
+          "sent": "已发送",
+          "delivered": "已送达",
+          "failed": "失败",
+          "fallback": "经其他渠道发送",
+          "skipped": "已跳过",
+          "confirmed": "已确认",
+          "rescheduled": "要求改期",
+          "cancelled": "已取消",
+          "total": "合计"
+        },
+        "rates": "在收到提醒的{count, plural, other {# 个预约}}中：{confirmed}% 已确认，{cancelled}% 已取消，{noShow}% 未到场。",
+        "why": "原因",
+        "otherReason": "其他原因",
+        "buttonsLocked": "“确认”“改期”“取消”按钮的结果属于预约应用的升级版，因此不会计入您的套餐。",
+        "emailNote": "“已送达”仅由 WhatsApp 报告：邮件没有送达报告，因此按已发送计算。只显示数量，不显示姓名、号码或消息。"
+      },
+      "history": {
+        "fallback": "已通过{channel}发送，因为第一个渠道无法送达。",
+        "delivery": {
+          "delivered": "WhatsApp 报告已送达。",
+          "failed": "WhatsApp 报告发送失败。",
+          "undelivered": "WhatsApp 未能及时送达。"
+        },
+        "tried": "按顺序尝试的渠道",
+        "attempt": {
+          "sent": "已发送",
+          "skipped": "未使用",
+          "held": "等待中",
+          "failed": "失败"
+        },
+        "buttons": "通过按钮的回复",
+        "button": {
+          "confirm": "点击了确认",
+          "reschedule": "点击了改期",
+          "cancel": "点击了取消"
         }
       }
     }

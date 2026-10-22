@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Passa a un piano superiore",
-      "buttonsLocked": "I pulsanti Conferma, Riprogramma e Annulla non fanno parte del tuo piano.",
       "timeline": {
         "label": "Cronologia dei promemoria",
         "addMenu": "Aggiungi un passaggio",
         "addStep": "Aggiungi passaggio",
         "count": "{count} di {max} passaggi con un orario. La conferma di prenotazione e il messaggio di mancata presentazione non vengono conteggiati.",
         "capReached": "Hai raggiunto {max} passaggi con un orario. Rimuovine uno per aggiungerne un altro.",
-        "rebookLocked": "I messaggi per prenotare di nuovo non fanno parte del tuo piano. Puoi configurare il passaggio, ma resterà disattivato finché non passi a un piano superiore.",
-        "rebookLockedStep": "Questo passaggio non può essere attivato con il tuo piano attuale.",
         "empty": "Nessun passaggio per ora. Aggiungi il primo passaggio oppure parti da una sequenza pronta.",
         "lane": {
           "booked": "Quando viene prenotato",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Già aggiunto",
           "cap": "Limite raggiunto",
-          "locked": "Serve un piano superiore per attivarlo",
-          "online": "Appuntamenti online"
+          "online": "Appuntamenti online",
+          "locked": "Livello superiore: non incluso nel tuo piano"
         },
         "enabledOf": "Invia: {step}",
         "remove": "Rimuovi: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# minuto} other {# minuti}}",
           "hours": "{count, plural, one {# ora} other {# ore}}",
           "days": "{count, plural, one {# giorno} other {# giorni}}"
-        }
+        },
+        "rebookLocked": "I messaggi per riprenotare fanno parte del livello superiore di Appuntamenti, che il tuo piano non include. Puoi configurare il passaggio, ma resta disattivato finché il tuo piano non lo include.",
+        "rebookLockedStep": "Fa parte del livello superiore di Appuntamenti: non può essere attivato con il tuo piano attuale."
       },
       "reasons": {
         "already_confirmed": "Il contatto aveva già confermato.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Hai scritto un tuo testo per questo passaggio. Verrà sostituito.",
         "planNotes": {
-          "rebook": "Il tuo piano non include i messaggi per prenotare di nuovo, quindi questo passaggio viene salvato disattivato.",
-          "buttons": "Il tuo piano non include i pulsanti di risposta, quindi vengono esclusi."
+          "rebook": "Il passaggio di nuova prenotazione fa parte del livello superiore di Appuntamenti, che il tuo piano non include, quindi viene salvato disattivato.",
+          "buttons": "I pulsanti Conferma, Riprogramma e Annulla fanno parte del livello superiore di Appuntamenti, che il tuo piano non include, quindi vengono omessi."
         },
         "showMessages": "Mostra messaggi",
         "hideMessages": "Nascondi messaggi",
@@ -180,7 +179,84 @@
           "waiting": "Finché Meta non approva un messaggio, quel passaggio viene inviato via email.",
           "metaError": "Meta lo ha rifiutato: {error}",
           "refresh": "Aggiorna stato",
-          "refreshing": "Aggiornamento in corso"
+          "refreshing": "Aggiornamento in corso",
+          "withheldTitle": "Omesso a causa del tuo piano",
+          "withheldButtons": "I pulsanti Conferma, Riprogramma e Annulla di questo passaggio: {step}.",
+          "withheldRebook": "{step}: viene salvato disattivato."
+        }
+      },
+      "buttonsLocked": "I pulsanti Conferma, Riprogramma e Annulla fanno parte del livello superiore di Appuntamenti, che il tuo piano non include.",
+      "test": {
+        "send": "Invia un'email di prova",
+        "sending": "Invio in corso",
+        "hint": "Invia questo passaggio con valori di esempio. Lascia vuoto l'indirizzo per inviarlo alla tua email.",
+        "toLabel": "Invia la prova a",
+        "toPlaceholder": "Il tuo indirizzo, oppure scrivine un altro",
+        "toInvalid": "Inserisci un indirizzo email completo, oppure lascia vuoto.",
+        "wait": {
+          "unsaved": "Salva prima le modifiche: la prova invia il passaggio salvato.",
+          "notSaved": "Salva prima i promemoria: questo passaggio è nuovo."
+        },
+        "queued": "L'email di prova sta arrivando a {address}. Il risultato arriva anche nelle tue notifiche.",
+        "skipped": "Non è stato inviato nulla: il tuo utente non ha un indirizzo email.",
+        "noWhatsapp": "I messaggi WhatsApp non possono essere provati da qui."
+      },
+      "report": {
+        "title": "Report dei promemoria",
+        "description": "Cosa hanno fatto i promemoria: quanti sono stati inviati, consegnati, falliti o saltati, e quanti sono passati da un altro canale.",
+        "type": "Tipo di prenotazione",
+        "allTypes": "Tutti i tipi di prenotazione",
+        "range": "Periodo",
+        "ranges": {
+          "7": "Ultimi 7 giorni",
+          "30": "Ultimi 30 giorni",
+          "90": "Ultimi 90 giorni",
+          "custom": "Scegli le date"
+        },
+        "from": "Dal",
+        "to": "Al",
+        "refresh": "Aggiorna",
+        "pickDates": "Scegli una data di inizio e una di fine per vedere il report.",
+        "loading": "Caricamento del report",
+        "empty": "In questo periodo non era previsto alcun promemoria. Quando i promemoria vengono inviati, i risultati compaiono qui.",
+        "caption": "Risultati dei promemoria per {name}",
+        "col": {
+          "step": "Passaggio",
+          "sent": "Inviati",
+          "delivered": "Consegnati",
+          "failed": "Falliti",
+          "fallback": "Inviati da un altro canale",
+          "skipped": "Saltati",
+          "confirmed": "Confermati",
+          "rescheduled": "Riprogrammazione richiesta",
+          "cancelled": "Annullati",
+          "total": "Totale"
+        },
+        "rates": "Su {count, plural, one {# appuntamento} other {# appuntamenti}} che hanno ricevuto un promemoria: {confirmed}% confermati, {cancelled}% annullati, {noShow}% assenze.",
+        "why": "Perché",
+        "otherReason": "Altro motivo",
+        "buttonsLocked": "I risultati dei pulsanti Conferma, Riprogramma e Annulla fanno parte del livello superiore di Appuntamenti, quindi non vengono conteggiati nel tuo piano.",
+        "emailNote": "«Consegnato» è riportato solo da WhatsApp: l'email non ha un report di consegna, quindi conta come inviata. Vengono mostrati solo conteggi, nessun nome, numero o messaggio."
+      },
+      "history": {
+        "fallback": "Inviato tramite {channel} perché il primo canale non è riuscito a consegnarlo.",
+        "delivery": {
+          "delivered": "WhatsApp ha segnalato la consegna.",
+          "failed": "WhatsApp ha segnalato un errore.",
+          "undelivered": "WhatsApp non lo ha consegnato in tempo."
+        },
+        "tried": "Canali provati, in ordine",
+        "attempt": {
+          "sent": "inviato",
+          "skipped": "non usato",
+          "held": "in attesa",
+          "failed": "fallito"
+        },
+        "buttons": "Risposte con i pulsanti",
+        "button": {
+          "confirm": "Ha toccato Conferma",
+          "reschedule": "Ha toccato Riprogramma",
+          "cancel": "Ha toccato Annulla"
         }
       }
     }

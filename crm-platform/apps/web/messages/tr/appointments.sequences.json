@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Planınızı yükseltin",
-      "buttonsLocked": "Onayla, Yeniden planla ve İptal et düğmeleri planınıza dahil değil.",
       "timeline": {
         "label": "Hatırlatma zaman çizelgesi",
         "addMenu": "Adım ekle",
         "addStep": "Adım ekle",
         "count": "Saatli {max} adımdan {count} tanesi var. Randevu onayı ve gelmedi mesajı bu sayıya dahil değil.",
         "capReached": "Saatli {max} adım sınırına ulaştınız. Yenisini eklemek için birini kaldırın.",
-        "rebookLocked": "Yeniden randevu mesajları planınıza dahil değil. Adımı ayarlayabilirsiniz, ancak planınızı yükseltene kadar kapalı kalır.",
-        "rebookLockedStep": "Bu adım mevcut planınızla açılamaz.",
         "empty": "Henüz adım yok. İlk adımı ekleyin veya hazır bir diziyle başlayın.",
         "lane": {
           "booked": "Randevu alındığında",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Zaten eklendi",
           "cap": "Sınıra ulaşıldı",
-          "locked": "Açmak için plan yükseltmesi gerekli",
-          "online": "Online randevular"
+          "online": "Online randevular",
+          "locked": "Yükseltme katmanı: planınızda yok"
         },
         "enabledOf": "Gönder: {step}",
         "remove": "Kaldır: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, other {# dakika}}",
           "hours": "{count, plural, other {# saat}}",
           "days": "{count, plural, other {# gün}}"
-        }
+        },
+        "rebookLocked": "Yeniden rezervasyon mesajları Randevu uygulamasının yükseltme katmanına aittir ve planınıza dahil değildir. Adımı ayarlayabilirsiniz ancak planınız bunları içerene kadar kapalı kalır.",
+        "rebookLockedStep": "Randevu uygulamasının yükseltme katmanına aittir: mevcut planınızla açılamaz."
       },
       "reasons": {
         "already_confirmed": "Kişi zaten onaylamıştı.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Bu adım için kendi metninizi yazdınız. Değiştirilecek.",
         "planNotes": {
-          "rebook": "Planınız yeniden randevu mesajlarını içermiyor, bu yüzden bu adım kapalı olarak kaydedilir.",
-          "buttons": "Planınız yanıt düğmelerini içermiyor, bu yüzden bunlar eklenmez."
+          "rebook": "Yeniden rezervasyon adımı Randevu uygulamasının yükseltme katmanına aittir ve planınıza dahil değildir, bu nedenle bu adım kapalı olarak kaydedilir.",
+          "buttons": "Onayla, Ertele ve İptal et düğmeleri Randevu uygulamasının yükseltme katmanına aittir ve planınıza dahil değildir, bu nedenle atlandı."
         },
         "showMessages": "Mesajları göster",
         "hideMessages": "Mesajları gizle",
@@ -180,7 +179,84 @@
           "waiting": "Meta bir mesajı onaylayana kadar bu adım Email ile gönderilir.",
           "metaError": "Meta reddetti: {error}",
           "refresh": "Durumu yenile",
-          "refreshing": "Yenileniyor"
+          "refreshing": "Yenileniyor",
+          "withheldTitle": "Planınız nedeniyle atlandı",
+          "withheldButtons": "Bu adımın Onayla, Ertele ve İptal et düğmeleri: {step}.",
+          "withheldRebook": "{step}: kapalı olarak kaydedilir."
+        }
+      },
+      "buttonsLocked": "Onayla, Ertele ve İptal et düğmeleri Randevu uygulamasının yükseltme katmanına aittir ve planınıza dahil değildir.",
+      "test": {
+        "send": "Test e-postası gönder",
+        "sending": "Gönderiliyor",
+        "hint": "Bu adımı örnek değerlerle gönderir. Kendi e-posta adresinize göndermek için adresi boş bırakın.",
+        "toLabel": "Testin gönderileceği adres",
+        "toPlaceholder": "Kendi adresiniz veya başka bir adres yazın",
+        "toInvalid": "Tam bir e-posta adresi girin ya da boş bırakın.",
+        "wait": {
+          "unsaved": "Önce değişikliklerinizi kaydedin: test, kaydedilmiş adımı gönderir.",
+          "notSaved": "Önce hatırlatmaları kaydedin: bu adım yeni."
+        },
+        "queued": "Test e-postası {address} adresine gidiyor. Sonuç bildirimlerinize de ulaşır.",
+        "skipped": "Hiçbir şey gönderilmedi: kullanıcınızın e-posta adresi yok.",
+        "noWhatsapp": "WhatsApp mesajları buradan test edilemez."
+      },
+      "report": {
+        "title": "Hatırlatma raporu",
+        "description": "Hatırlatmaların yaptığı: kaç tanesi gönderildi, teslim edildi, başarısız oldu veya atlandı ve kaç tanesi başka bir kanaldan gitti.",
+        "type": "Rezervasyon türü",
+        "allTypes": "Tüm rezervasyon türleri",
+        "range": "Dönem",
+        "ranges": {
+          "7": "Son 7 gün",
+          "30": "Son 30 gün",
+          "90": "Son 90 gün",
+          "custom": "Tarih seç"
+        },
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "refresh": "Yenile",
+        "pickDates": "Raporu görmek için bir başlangıç ve bir bitiş tarihi seçin.",
+        "loading": "Rapor yükleniyor",
+        "empty": "Bu dönemde zamanı gelen hatırlatma yoktu. Hatırlatmalar gönderildiğinde sonuçları burada görünür.",
+        "caption": "{name} için hatırlatma sonuçları",
+        "col": {
+          "step": "Adım",
+          "sent": "Gönderilen",
+          "delivered": "Teslim edilen",
+          "failed": "Başarısız",
+          "fallback": "Başka kanaldan gönderilen",
+          "skipped": "Atlanan",
+          "confirmed": "Onaylanan",
+          "rescheduled": "Erteleme istendi",
+          "cancelled": "İptal edilen",
+          "total": "Toplam"
+        },
+        "rates": "Hatırlatma alan {count, plural, one {# randevunun} other {# randevunun}} %{confirmed} kadarı onayladı, %{cancelled} kadarı iptal etti, %{noShow} kadarı gelmedi.",
+        "why": "Neden",
+        "otherReason": "Başka bir neden",
+        "buttonsLocked": "Onayla, Ertele ve İptal et düğmelerinin sonuçları Randevu uygulamasının yükseltme katmanına aittir, bu nedenle planınızda sayılmaz.",
+        "emailNote": "Teslim bilgisini yalnızca WhatsApp bildirir: e-postanın teslim raporu yoktur, bu yüzden gönderildi olarak sayılır. Yalnızca sayılar gösterilir; ad, numara veya mesaj gösterilmez."
+      },
+      "history": {
+        "fallback": "İlk kanal teslim edemediği için {channel} ile gönderildi.",
+        "delivery": {
+          "delivered": "WhatsApp teslim edildiğini bildirdi.",
+          "failed": "WhatsApp başarısız olduğunu bildirdi.",
+          "undelivered": "WhatsApp zamanında teslim etmedi."
+        },
+        "tried": "Denenen kanallar, sırayla",
+        "attempt": {
+          "sent": "gönderildi",
+          "skipped": "kullanılmadı",
+          "held": "bekliyor",
+          "failed": "başarısız"
+        },
+        "buttons": "Düğmelerle verilen yanıtlar",
+        "button": {
+          "confirm": "Onayla'ya dokundu",
+          "reschedule": "Ertele'ye dokundu",
+          "cancel": "İptal et'e dokundu"
         }
       }
     }

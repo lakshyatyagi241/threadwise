@@ -69,9 +69,18 @@ A reminder is a message sent before an appointment starts, so the contact turns 
 
 Open an appointment to see each reminder with its status: **Scheduled**, **Waiting**, **Sent** (and on which channel), **Not sent** or **Failed**, with the reason. The same outcome appears on the contact's timeline, without the message text.
 
+## Test, report and history
+
+- Send a step to yourself before customers see it: [Send a test email of a reminder](help:appointments-reminder-test-email).
+- See what the reminders did, per booking type and step: [Reminder report](help:appointments-reminder-report).
+- See what happened to one appointment's reminders, including the channels tried and the buttons tapped: [What happened to an appointment's reminders](help:appointments-reminder-history).
+- Details of the ready-made sequences and where their WhatsApp messages stand with Meta: [Ready-made reminder sequences](help:appointments-reminder-packs).
+
 ## Plan and access
 
-Seeing the reminders needs permission to view booking types. Changing them needs permission to edit booking types. Sending needs a connected WhatsApp number or shared mailbox for the channels you choose; a channel without one is skipped.
+Timed reminders on WhatsApp and email, the ready-made sequences, the test email, the email fallback, the report and the history come with the Appointments app. The Confirm, Reschedule and Cancel buttons and the rebook messages are the upgrade tier, which your plan has to include: where it does not, those controls are shown locked with a link to the plans. See [Reminder buttons and rebook messages on your plan](help:appointment-reminder-plans).
+
+Seeing the reminders needs permission to view booking types. Changing them, applying a sequence and sending a test email need permission to edit booking types. Sending needs a connected WhatsApp number or shared mailbox for the channels you choose; a channel without one is skipped.
 
 ## If something looks wrong
 

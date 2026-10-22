@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Tarif aktualisieren",
-      "buttonsLocked": "Die Schaltflächen Bestätigen, Umbuchen und Stornieren sind nicht Teil Ihres Tarifs.",
       "timeline": {
         "label": "Zeitplan der Erinnerungen",
         "addMenu": "Schritt hinzufügen",
         "addStep": "Schritt hinzufügen",
         "count": "{count} von {max} Schritten mit Zeitangabe. Die Buchungsbestätigung und die Nachricht bei Nichterscheinen zählen nicht mit.",
         "capReached": "Sie haben {max} Schritte mit Zeitangabe erreicht. Entfernen Sie einen, um einen weiteren hinzuzufügen.",
-        "rebookLocked": "Nachrichten zur erneuten Buchung sind nicht Teil Ihres Tarifs. Sie können den Schritt einrichten, er bleibt aber aus, bis Sie Ihren Tarif aktualisieren.",
-        "rebookLockedStep": "Dieser Schritt kann mit Ihrem aktuellen Tarif nicht eingeschaltet werden.",
         "empty": "Noch keine Schritte. Fügen Sie den ersten Schritt hinzu oder starten Sie mit einer fertigen Sequenz.",
         "lane": {
           "booked": "Bei der Buchung",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Bereits hinzugefügt",
           "cap": "Limit erreicht",
-          "locked": "Tarif-Upgrade nötig, um einzuschalten",
-          "online": "Online-Termine"
+          "online": "Online-Termine",
+          "locked": "Upgrade-Stufe: nicht in Ihrem Tarif"
         },
         "enabledOf": "Senden: {step}",
         "remove": "Entfernen: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
           "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
           "days": "{count, plural, one {# Tag} other {# Tage}}"
-        }
+        },
+        "rebookLocked": "Nachrichten zur erneuten Buchung gehören zur Upgrade-Stufe der Terminanwendung, die Ihr Tarif nicht enthält. Sie können den Schritt einrichten, er bleibt aber aus, bis Ihr Tarif sie enthält.",
+        "rebookLockedStep": "Teil der Upgrade-Stufe der Terminanwendung: Mit Ihrem aktuellen Tarif nicht einschaltbar."
       },
       "reasons": {
         "already_confirmed": "Der Kontakt hatte bereits bestätigt.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Sie haben für diesen Schritt einen eigenen Text geschrieben. Er wird ersetzt.",
         "planNotes": {
-          "rebook": "Ihr Tarif enthält keine Nachrichten zur erneuten Buchung. Dieser Schritt wird daher ausgeschaltet gespeichert.",
-          "buttons": "Ihr Tarif enthält keine Antwort-Schaltflächen, daher werden sie weggelassen."
+          "rebook": "Der Schritt zur erneuten Buchung gehört zur Upgrade-Stufe der Terminanwendung, die Ihr Tarif nicht enthält, daher wird dieser Schritt ausgeschaltet gespeichert.",
+          "buttons": "Die Schaltflächen Bestätigen, Verschieben und Stornieren gehören zur Upgrade-Stufe der Terminanwendung, die Ihr Tarif nicht enthält, daher werden sie weggelassen."
         },
         "showMessages": "Nachrichten anzeigen",
         "hideMessages": "Nachrichten ausblenden",
@@ -180,7 +179,84 @@
           "waiting": "Bis Meta eine Nachricht genehmigt, wird dieser Schritt per email gesendet.",
           "metaError": "Meta hat sie abgelehnt: {error}",
           "refresh": "Status aktualisieren",
-          "refreshing": "Wird aktualisiert"
+          "refreshing": "Wird aktualisiert",
+          "withheldTitle": "Wegen Ihres Tarifs weggelassen",
+          "withheldButtons": "Die Schaltflächen Bestätigen, Verschieben und Stornieren dieses Schritts: {step}.",
+          "withheldRebook": "{step}: wird ausgeschaltet gespeichert."
+        }
+      },
+      "buttonsLocked": "Die Schaltflächen Bestätigen, Verschieben und Stornieren gehören zur Upgrade-Stufe der Terminanwendung, die Ihr Tarif nicht enthält.",
+      "test": {
+        "send": "Test-E-Mail senden",
+        "sending": "Wird gesendet",
+        "hint": "Sendet diesen Schritt mit Beispielwerten. Lassen Sie die Adresse leer, um ihn an Ihre eigene E-Mail-Adresse zu senden.",
+        "toLabel": "Test senden an",
+        "toPlaceholder": "Ihre eigene Adresse oder eine andere eingeben",
+        "toInvalid": "Geben Sie eine vollständige E-Mail-Adresse ein oder lassen Sie das Feld leer.",
+        "wait": {
+          "unsaved": "Speichern Sie zuerst Ihre Änderungen: Der Test sendet den gespeicherten Schritt.",
+          "notSaved": "Speichern Sie zuerst die Erinnerungen: Dieser Schritt ist neu."
+        },
+        "queued": "Die Test-E-Mail ist unterwegs an {address}. Das Ergebnis erscheint auch in Ihren Benachrichtigungen.",
+        "skipped": "Es wurde nichts gesendet: Ihr Benutzer hat keine E-Mail-Adresse.",
+        "noWhatsapp": "WhatsApp-Nachrichten können hier nicht getestet werden."
+      },
+      "report": {
+        "title": "Erinnerungsbericht",
+        "description": "Was die Erinnerungen bewirkt haben: wie viele gesendet, zugestellt, fehlgeschlagen oder übersprungen wurden und wie viele über einen anderen Kanal gingen.",
+        "type": "Buchungstyp",
+        "allTypes": "Alle Buchungstypen",
+        "range": "Zeitraum",
+        "ranges": {
+          "7": "Letzte 7 Tage",
+          "30": "Letzte 30 Tage",
+          "90": "Letzte 90 Tage",
+          "custom": "Daten wählen"
+        },
+        "from": "Von",
+        "to": "Bis",
+        "refresh": "Aktualisieren",
+        "pickDates": "Wählen Sie ein Start- und ein Enddatum, um den Bericht zu sehen.",
+        "loading": "Bericht wird geladen",
+        "empty": "In diesem Zeitraum war keine Erinnerung fällig. Sobald Erinnerungen gesendet werden, erscheinen ihre Ergebnisse hier.",
+        "caption": "Erinnerungsergebnisse für {name}",
+        "col": {
+          "step": "Schritt",
+          "sent": "Gesendet",
+          "delivered": "Zugestellt",
+          "failed": "Fehlgeschlagen",
+          "fallback": "Über anderen Kanal gesendet",
+          "skipped": "Übersprungen",
+          "confirmed": "Bestätigt",
+          "rescheduled": "Verschiebung gewünscht",
+          "cancelled": "Storniert",
+          "total": "Gesamt"
+        },
+        "rates": "Von {count, plural, one {# Termin} other {# Terminen}}, die eine Erinnerung erhielten: {confirmed} % bestätigt, {cancelled} % storniert, {noShow} % nicht erschienen.",
+        "why": "Warum",
+        "otherReason": "Anderer Grund",
+        "buttonsLocked": "Die Ergebnisse der Schaltflächen Bestätigen, Verschieben und Stornieren gehören zur Upgrade-Stufe der Terminanwendung und werden in Ihrem Tarif daher nicht gezählt.",
+        "emailNote": "„Zugestellt“ meldet nur WhatsApp: E-Mail hat keinen Zustellbericht und zählt daher als gesendet. Es werden nur Zahlen angezeigt, keine Namen, Nummern oder Nachrichten."
+      },
+      "history": {
+        "fallback": "Über {channel} gesendet, weil der erste Kanal nicht zustellen konnte.",
+        "delivery": {
+          "delivered": "WhatsApp hat die Zustellung gemeldet.",
+          "failed": "WhatsApp hat einen Fehler gemeldet.",
+          "undelivered": "WhatsApp hat nicht rechtzeitig zugestellt."
+        },
+        "tried": "Versuchte Kanäle in Reihenfolge",
+        "attempt": {
+          "sent": "gesendet",
+          "skipped": "nicht genutzt",
+          "held": "wartet",
+          "failed": "fehlgeschlagen"
+        },
+        "buttons": "Antworten über die Schaltflächen",
+        "button": {
+          "confirm": "Hat Bestätigen getippt",
+          "reschedule": "Hat Verschieben getippt",
+          "cancel": "Hat Stornieren getippt"
         }
       }
     }

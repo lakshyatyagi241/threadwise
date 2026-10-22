@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Mejorar tu plan",
-      "buttonsLocked": "Los botones Confirmar, Reprogramar y Cancelar no forman parte de tu plan.",
       "timeline": {
         "label": "Calendario de recordatorios",
         "addMenu": "Añadir un paso",
         "addStep": "Añadir paso",
         "count": "{count} de {max} pasos con hora. La confirmación de la reserva y el mensaje por inasistencia no cuentan.",
         "capReached": "Has alcanzado {max} pasos con hora. Quita uno para añadir otro.",
-        "rebookLocked": "Los mensajes para volver a reservar no forman parte de tu plan. Puedes configurar el paso, pero seguirá desactivado hasta que mejores tu plan.",
-        "rebookLockedStep": "Este paso no se puede activar con tu plan actual.",
         "empty": "Todavía no hay pasos. Añade el primero o empieza con una secuencia lista para usar.",
         "lane": {
           "booked": "Cuando se reserva",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Ya añadido",
           "cap": "Límite alcanzado",
-          "locked": "Hace falta mejorar el plan para activarlo",
-          "online": "Citas en línea"
+          "online": "Citas en línea",
+          "locked": "Nivel superior: no está en tu plan"
         },
         "enabledOf": "Enviar: {step}",
         "remove": "Quitar: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# minuto} other {# minutos}}",
           "hours": "{count, plural, one {# hora} other {# horas}}",
           "days": "{count, plural, one {# día} other {# días}}"
-        }
+        },
+        "rebookLocked": "Los mensajes para volver a reservar forman parte del nivel superior de Citas, que tu plan no incluye. Puedes configurar el paso, pero seguirá desactivado hasta que tu plan los incluya.",
+        "rebookLockedStep": "Forma parte del nivel superior de Citas: no se puede activar con tu plan actual."
       },
       "reasons": {
         "already_confirmed": "El contacto ya había confirmado.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Escribiste tu propio texto para este paso. Se reemplazará.",
         "planNotes": {
-          "rebook": "Tu plan no incluye mensajes para volver a reservar, así que este paso se guarda desactivado.",
-          "buttons": "Tu plan no incluye los botones de respuesta, así que se omiten."
+          "rebook": "El paso para volver a reservar forma parte del nivel superior de Citas, que tu plan no incluye, así que este paso se guarda desactivado.",
+          "buttons": "Los botones Confirmar, Reprogramar y Cancelar forman parte del nivel superior de Citas, que tu plan no incluye, así que se omiten."
         },
         "showMessages": "Mostrar mensajes",
         "hideMessages": "Ocultar mensajes",
@@ -180,7 +179,84 @@
           "waiting": "Hasta que Meta apruebe un mensaje, ese paso se envía por email.",
           "metaError": "Meta lo rechazó: {error}",
           "refresh": "Actualizar estado",
-          "refreshing": "Actualizando"
+          "refreshing": "Actualizando",
+          "withheldTitle": "Omitido por tu plan",
+          "withheldButtons": "Los botones Confirmar, Reprogramar y Cancelar de este paso: {step}.",
+          "withheldRebook": "{step}: se guarda desactivado."
+        }
+      },
+      "buttonsLocked": "Los botones Confirmar, Reprogramar y Cancelar forman parte del nivel superior de Citas, que tu plan no incluye.",
+      "test": {
+        "send": "Enviar un correo de prueba",
+        "sending": "Enviando",
+        "hint": "Envía este paso con valores de ejemplo. Deja la dirección vacía para enviarlo a tu propio correo.",
+        "toLabel": "Enviar la prueba a",
+        "toPlaceholder": "Tu propia dirección u otra que escribas",
+        "toInvalid": "Escribe una dirección de correo completa o déjalo vacío.",
+        "wait": {
+          "unsaved": "Guarda primero tus cambios: la prueba envía el paso guardado.",
+          "notSaved": "Guarda primero los recordatorios: este paso es nuevo."
+        },
+        "queued": "El correo de prueba va de camino a {address}. El resultado también llega a tus notificaciones.",
+        "skipped": "No se envió nada: tu usuario no tiene correo electrónico.",
+        "noWhatsapp": "Los mensajes de WhatsApp no se pueden probar desde aquí."
+      },
+      "report": {
+        "title": "Informe de recordatorios",
+        "description": "Lo que hicieron los recordatorios: cuántos se enviaron, entregaron, fallaron u omitieron, y cuántos salieron por otro canal.",
+        "type": "Tipo de reserva",
+        "allTypes": "Todos los tipos de reserva",
+        "range": "Periodo",
+        "ranges": {
+          "7": "Últimos 7 días",
+          "30": "Últimos 30 días",
+          "90": "Últimos 90 días",
+          "custom": "Elegir fechas"
+        },
+        "from": "Desde",
+        "to": "Hasta",
+        "refresh": "Actualizar",
+        "pickDates": "Elige una fecha de inicio y una de fin para ver el informe.",
+        "loading": "Cargando el informe",
+        "empty": "Ningún recordatorio vencía en este periodo. Cuando se envíen recordatorios, sus resultados aparecerán aquí.",
+        "caption": "Resultados de los recordatorios de {name}",
+        "col": {
+          "step": "Paso",
+          "sent": "Enviados",
+          "delivered": "Entregados",
+          "failed": "Fallidos",
+          "fallback": "Enviados por otro canal",
+          "skipped": "Omitidos",
+          "confirmed": "Confirmados",
+          "rescheduled": "Reprogramación pedida",
+          "cancelled": "Cancelados",
+          "total": "Total"
+        },
+        "rates": "De {count, plural, one {# cita} other {# citas}} que recibieron un recordatorio: {confirmed}% confirmadas, {cancelled}% canceladas, {noShow}% ausencias.",
+        "why": "Por qué",
+        "otherReason": "Otro motivo",
+        "buttonsLocked": "Los resultados de los botones Confirmar, Reprogramar y Cancelar pertenecen al nivel superior de Citas, por eso no se cuentan en tu plan.",
+        "emailNote": "«Entregado» solo lo informa WhatsApp: el correo no tiene informe de entrega, así que cuenta como enviado. Solo se muestran recuentos; ningún nombre, número ni mensaje."
+      },
+      "history": {
+        "fallback": "Enviado por {channel} porque el primer canal no pudo entregarlo.",
+        "delivery": {
+          "delivered": "WhatsApp informó de que se entregó.",
+          "failed": "WhatsApp informó de que falló.",
+          "undelivered": "WhatsApp no lo entregó a tiempo."
+        },
+        "tried": "Canales probados, en orden",
+        "attempt": {
+          "sent": "enviado",
+          "skipped": "no usado",
+          "held": "en espera",
+          "failed": "fallido"
+        },
+        "buttons": "Respuestas con los botones",
+        "button": {
+          "confirm": "Tocó Confirmar",
+          "reschedule": "Tocó Reprogramar",
+          "cancel": "Tocó Cancelar"
         }
       }
     }

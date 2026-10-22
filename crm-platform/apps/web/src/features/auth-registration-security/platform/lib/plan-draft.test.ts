@@ -1,4 +1,9 @@
-import { PLAN_FEATURE_KEYS, PLAN_LIMIT_KEYS, type PlanAdminItem } from '@crm/contracts';
+import {
+  NEW_PLAN_FEATURES_OFF,
+  PLAN_FEATURE_KEYS,
+  PLAN_LIMIT_KEYS,
+  type PlanAdminItem,
+} from '@crm/contracts';
 import { createPlanRequestSchema } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
@@ -395,7 +400,9 @@ describe('limits: unlimited <-> 0', () => {
 
 describe('features: counts and group toggles', () => {
   it('counts the features that are on', () => {
-    expect(countFeaturesOn(newPlanDraft().features)).toBe(PLAN_FEATURE_KEYS.length - 2);
+    expect(countFeaturesOn(newPlanDraft().features)).toBe(
+      PLAN_FEATURE_KEYS.length - NEW_PLAN_FEATURES_OFF.length,
+    );
     const off = toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
     expect(countFeaturesOn(off)).toBe(0);
   });

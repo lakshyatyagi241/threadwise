@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "Faça upgrade do seu plano",
-      "buttonsLocked": "Os botões Confirmar, Reagendar e Cancelar não fazem parte do seu plano.",
       "timeline": {
         "label": "Linha do tempo dos lembretes",
         "addMenu": "Adicionar uma etapa",
         "addStep": "Adicionar etapa",
         "count": "{count} de {max} etapas com horário. A confirmação do agendamento e a mensagem de não comparecimento não contam.",
         "capReached": "Você atingiu {max} etapas com horário. Remova uma para adicionar outra.",
-        "rebookLocked": "Mensagens de reagendamento não fazem parte do seu plano. Você pode configurar a etapa, mas ela fica desligada até fazer upgrade.",
-        "rebookLockedStep": "Esta etapa não pode ser ligada com o seu plano atual.",
         "empty": "Ainda não há etapas. Adicione a primeira ou comece com uma sequência pronta.",
         "lane": {
           "booked": "Quando for agendado",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "Já adicionado",
           "cap": "Limite atingido",
-          "locked": "É preciso fazer upgrade para ligar",
-          "online": "Agendamentos online"
+          "online": "Agendamentos online",
+          "locked": "Nível superior: não incluído no seu plano"
         },
         "enabledOf": "Enviar: {step}",
         "remove": "Remover: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, one {# minuto} other {# minutos}}",
           "hours": "{count, plural, one {# hora} other {# horas}}",
           "days": "{count, plural, one {# dia} other {# dias}}"
-        }
+        },
+        "rebookLocked": "As mensagens para marcar novamente fazem parte do nível superior de Agendamentos, que o seu plano não inclui. Pode configurar a etapa, mas ela fica desativada até o seu plano a incluir.",
+        "rebookLockedStep": "Faz parte do nível superior de Agendamentos: não pode ser ativada com o seu plano atual."
       },
       "reasons": {
         "already_confirmed": "O contato já tinha confirmado.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "Você escreveu um texto próprio para esta etapa. Ele será substituído.",
         "planNotes": {
-          "rebook": "Seu plano não inclui mensagens de reagendamento, então esta etapa é salva desligada.",
-          "buttons": "Seu plano não inclui os botões de resposta, então eles ficam de fora."
+          "rebook": "A etapa de nova marcação faz parte do nível superior de Agendamentos, que o seu plano não inclui, por isso é guardada desativada.",
+          "buttons": "Os botões Confirmar, Reagendar e Cancelar fazem parte do nível superior de Agendamentos, que o seu plano não inclui, por isso foram deixados de fora."
         },
         "showMessages": "Mostrar mensagens",
         "hideMessages": "Ocultar mensagens",
@@ -180,7 +179,84 @@
           "waiting": "Até a Meta aprovar uma mensagem, esta etapa é enviada por Email.",
           "metaError": "A Meta recusou: {error}",
           "refresh": "Atualizar status",
-          "refreshing": "Atualizando"
+          "refreshing": "Atualizando",
+          "withheldTitle": "Deixado de fora por causa do seu plano",
+          "withheldButtons": "Os botões Confirmar, Reagendar e Cancelar desta etapa: {step}.",
+          "withheldRebook": "{step}: é guardada desativada."
+        }
+      },
+      "buttonsLocked": "Os botões Confirmar, Reagendar e Cancelar fazem parte do nível superior de Agendamentos, que o seu plano não inclui.",
+      "test": {
+        "send": "Enviar um e-mail de teste",
+        "sending": "A enviar",
+        "hint": "Envia esta etapa com valores de exemplo. Deixe o endereço vazio para enviar ao seu próprio e-mail.",
+        "toLabel": "Enviar o teste para",
+        "toPlaceholder": "O seu próprio endereço, ou escreva outro",
+        "toInvalid": "Introduza um endereço de e-mail completo, ou deixe vazio.",
+        "wait": {
+          "unsaved": "Guarde primeiro as alterações: o teste envia a etapa guardada.",
+          "notSaved": "Guarde primeiro os lembretes: esta etapa é nova."
+        },
+        "queued": "O e-mail de teste está a caminho de {address}. O resultado também chega às suas notificações.",
+        "skipped": "Nada foi enviado: o seu utilizador não tem endereço de e-mail.",
+        "noWhatsapp": "As mensagens de WhatsApp não podem ser testadas a partir daqui."
+      },
+      "report": {
+        "title": "Relatório de lembretes",
+        "description": "O que os lembretes fizeram: quantos foram enviados, entregues, falharam ou foram ignorados, e quantos seguiram por outro canal.",
+        "type": "Tipo de marcação",
+        "allTypes": "Todos os tipos de marcação",
+        "range": "Período",
+        "ranges": {
+          "7": "Últimos 7 dias",
+          "30": "Últimos 30 dias",
+          "90": "Últimos 90 dias",
+          "custom": "Escolher datas"
+        },
+        "from": "De",
+        "to": "Até",
+        "refresh": "Atualizar",
+        "pickDates": "Escolha uma data de início e uma de fim para ver o relatório.",
+        "loading": "A carregar o relatório",
+        "empty": "Nenhum lembrete estava previsto neste período. Quando os lembretes forem enviados, os resultados aparecem aqui.",
+        "caption": "Resultados dos lembretes de {name}",
+        "col": {
+          "step": "Etapa",
+          "sent": "Enviados",
+          "delivered": "Entregues",
+          "failed": "Falharam",
+          "fallback": "Enviados por outro canal",
+          "skipped": "Ignorados",
+          "confirmed": "Confirmados",
+          "rescheduled": "Reagendamento pedido",
+          "cancelled": "Cancelados",
+          "total": "Total"
+        },
+        "rates": "De {count, plural, one {# agendamento} other {# agendamentos}} que receberam um lembrete: {confirmed}% confirmados, {cancelled}% cancelados, {noShow}% faltas.",
+        "why": "Porquê",
+        "otherReason": "Outro motivo",
+        "buttonsLocked": "Os resultados dos botões Confirmar, Reagendar e Cancelar fazem parte do nível superior de Agendamentos, por isso não são contados no seu plano.",
+        "emailNote": "«Entregue» vem apenas do WhatsApp: o e-mail não tem relatório de entrega, por isso conta como enviado. Só se mostram contagens; nenhum nome, número ou mensagem."
+      },
+      "history": {
+        "fallback": "Enviado por {channel} porque o primeiro canal não conseguiu entregar.",
+        "delivery": {
+          "delivered": "O WhatsApp indicou que foi entregue.",
+          "failed": "O WhatsApp indicou que falhou.",
+          "undelivered": "O WhatsApp não entregou a tempo."
+        },
+        "tried": "Canais tentados, por ordem",
+        "attempt": {
+          "sent": "enviado",
+          "skipped": "não usado",
+          "held": "em espera",
+          "failed": "falhou"
+        },
+        "buttons": "Respostas com os botões",
+        "button": {
+          "confirm": "Tocou em Confirmar",
+          "reschedule": "Tocou em Reagendar",
+          "cancel": "Tocou em Cancelar"
         }
       }
     }

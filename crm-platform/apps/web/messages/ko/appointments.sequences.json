@@ -2,15 +2,12 @@
   "appointments": {
     "reminders": {
       "upgrade": "요금제 업그레이드",
-      "buttonsLocked": "확정, 일정 변경, 취소 버튼은 현재 요금제에 포함되지 않습니다.",
       "timeline": {
         "label": "알림 타임라인",
         "addMenu": "단계 추가",
         "addStep": "단계 추가",
         "count": "시간이 있는 단계 {count}개 (최대 {max}개). 예약 확인 메시지와 노쇼 메시지는 개수에 포함되지 않습니다.",
         "capReached": "시간이 있는 단계는 최대 {max}개까지 만들 수 있습니다. 다른 단계를 추가하려면 하나를 삭제하세요.",
-        "rebookLocked": "재예약 메시지는 현재 요금제에 포함되지 않습니다. 단계는 설정할 수 있지만 요금제를 업그레이드하기 전까지 꺼진 상태로 유지됩니다.",
-        "rebookLockedStep": "현재 요금제에서는 이 단계를 켤 수 없습니다.",
         "empty": "아직 단계가 없습니다. 첫 번째 단계를 추가하거나 준비된 시퀀스로 시작하세요.",
         "lane": {
           "booked": "예약이 완료되면",
@@ -56,8 +53,8 @@
         "choiceHint": {
           "present": "이미 추가됨",
           "cap": "한도에 도달함",
-          "locked": "켜려면 요금제 업그레이드 필요",
-          "online": "온라인 예약"
+          "online": "온라인 예약",
+          "locked": "업그레이드 단계: 현재 요금제에 없음"
         },
         "enabledOf": "보내기: {step}",
         "remove": "삭제: {step}",
@@ -86,7 +83,9 @@
           "minutes": "{count, plural, other {#분}}",
           "hours": "{count, plural, other {#시간}}",
           "days": "{count, plural, other {#일}}"
-        }
+        },
+        "rebookLocked": "재예약 메시지는 예약 앱의 업그레이드 단계에 포함되며 현재 요금제에는 포함되어 있지 않습니다. 단계를 설정할 수는 있지만 요금제에 포함될 때까지 꺼진 상태로 유지됩니다.",
+        "rebookLockedStep": "예약 앱의 업그레이드 단계에 포함됩니다. 현재 요금제에서는 켤 수 없습니다."
       },
       "reasons": {
         "already_confirmed": "고객이 이미 확정했습니다.",
@@ -136,8 +135,8 @@
         },
         "replaceOwnText": "이 단계에 직접 작성한 문구가 있습니다. 교체됩니다.",
         "planNotes": {
-          "rebook": "현재 요금제에는 재예약 메시지가 포함되지 않아 이 단계는 꺼진 상태로 저장됩니다.",
-          "buttons": "현재 요금제에는 응답 버튼이 포함되지 않아 버튼은 빠집니다."
+          "rebook": "재예약 단계는 예약 앱의 업그레이드 단계에 포함되며 현재 요금제에는 포함되어 있지 않으므로 이 단계는 꺼진 상태로 저장됩니다.",
+          "buttons": "확인, 일정 변경, 취소 버튼은 예약 앱의 업그레이드 단계에 포함되며 현재 요금제에는 포함되어 있지 않으므로 제외됩니다."
         },
         "showMessages": "메시지 보기",
         "hideMessages": "메시지 숨기기",
@@ -180,7 +179,84 @@
           "waiting": "Meta가 메시지를 승인할 때까지 해당 단계는 Email로 발송됩니다.",
           "metaError": "Meta가 거부했습니다: {error}",
           "refresh": "상태 새로고침",
-          "refreshing": "새로고침 중"
+          "refreshing": "새로고침 중",
+          "withheldTitle": "요금제 때문에 제외됨",
+          "withheldButtons": "이 단계의 확인, 일정 변경, 취소 버튼: {step}.",
+          "withheldRebook": "{step}: 꺼진 상태로 저장됩니다."
+        }
+      },
+      "buttonsLocked": "확인, 일정 변경, 취소 버튼은 예약 앱의 업그레이드 단계에 포함되며 현재 요금제에는 포함되어 있지 않습니다.",
+      "test": {
+        "send": "테스트 이메일 보내기",
+        "sending": "보내는 중",
+        "hint": "이 단계를 샘플 값으로 보냅니다. 주소를 비워 두면 내 이메일 주소로 보냅니다.",
+        "toLabel": "테스트 받는 사람",
+        "toPlaceholder": "내 주소 또는 다른 주소 입력",
+        "toInvalid": "전체 이메일 주소를 입력하거나 비워 두세요.",
+        "wait": {
+          "unsaved": "먼저 변경 사항을 저장하세요. 테스트는 저장된 단계를 보냅니다.",
+          "notSaved": "먼저 리마인더를 저장하세요. 이 단계는 새 단계입니다."
+        },
+        "queued": "테스트 이메일이 {address}(으)로 가고 있습니다. 결과는 알림으로도 도착합니다.",
+        "skipped": "아무것도 보내지 않았습니다. 내 사용자에게 이메일 주소가 없습니다.",
+        "noWhatsapp": "WhatsApp 메시지는 여기서 테스트할 수 없습니다."
+      },
+      "report": {
+        "title": "리마인더 리포트",
+        "description": "리마인더 결과: 발송, 전달, 실패, 건너뜀 건수와 다른 채널로 간 건수입니다.",
+        "type": "예약 유형",
+        "allTypes": "모든 예약 유형",
+        "range": "기간",
+        "ranges": {
+          "7": "최근 7일",
+          "30": "최근 30일",
+          "90": "최근 90일",
+          "custom": "날짜 선택"
+        },
+        "from": "시작",
+        "to": "종료",
+        "refresh": "새로고침",
+        "pickDates": "리포트를 보려면 시작일과 종료일을 선택하세요.",
+        "loading": "리포트를 불러오는 중",
+        "empty": "이 기간에 예정된 리마인더가 없었습니다. 리마인더가 발송되면 결과가 여기에 표시됩니다.",
+        "caption": "{name}의 리마인더 결과",
+        "col": {
+          "step": "단계",
+          "sent": "발송",
+          "delivered": "전달됨",
+          "failed": "실패",
+          "fallback": "다른 채널로 발송",
+          "skipped": "건너뜀",
+          "confirmed": "확인됨",
+          "rescheduled": "일정 변경 요청",
+          "cancelled": "취소됨",
+          "total": "합계"
+        },
+        "rates": "리마인더를 받은 {count, plural, other {#건의 예약}} 중 {confirmed}% 확인, {cancelled}% 취소, {noShow}% 노쇼.",
+        "why": "이유",
+        "otherReason": "기타 이유",
+        "buttonsLocked": "확인, 일정 변경, 취소 버튼 결과는 예약 앱의 업그레이드 단계에 포함되므로 현재 요금제에서는 집계되지 않습니다.",
+        "emailNote": "전달 여부는 WhatsApp만 알려 줍니다. 이메일에는 전달 리포트가 없으므로 발송한 것으로 집계합니다. 건수만 표시하며 이름, 번호, 메시지는 표시하지 않습니다."
+      },
+      "history": {
+        "fallback": "첫 번째 채널이 전달하지 못해 {channel}(으)로 발송했습니다.",
+        "delivery": {
+          "delivered": "WhatsApp이 전달됨으로 보고했습니다.",
+          "failed": "WhatsApp이 실패로 보고했습니다.",
+          "undelivered": "WhatsApp이 제때 전달하지 못했습니다."
+        },
+        "tried": "시도한 채널(순서대로)",
+        "attempt": {
+          "sent": "발송됨",
+          "skipped": "사용 안 함",
+          "held": "대기 중",
+          "failed": "실패"
+        },
+        "buttons": "버튼으로 한 응답",
+        "button": {
+          "confirm": "확인 버튼을 누름",
+          "reschedule": "일정 변경 버튼을 누름",
+          "cancel": "취소 버튼을 누름"
         }
       }
     }
