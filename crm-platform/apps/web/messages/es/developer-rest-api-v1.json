@@ -54,10 +54,7 @@
         "message": "Cualquier app o integración que use esta clave dejará de funcionar de inmediato. Esta acción no se puede deshacer. Después podrás crear una clave nueva.",
         "accept": "Revocar",
         "cancel": "Cancelar"
-      },
-      "fullAccess": "Acceso completo",
-      "fullAccessHint": "Esta clave puede usar todos los endpoints de la API REST. Para limitar lo que puede hacer una clave, revócala y crea una nueva con «Restringir esta clave» activado.",
-      "restricted": "Restringida"
+      }
     },
     "create": {
       "title": "Crea tu clave",
@@ -72,11 +69,9 @@
       "errors": {
         "required": "Introduce un nombre para la clave.",
         "tooLong": "El nombre puede tener 120 caracteres como máximo.",
-        "noScopes": "Marca al menos un scope o desactiva «Restringir esta clave»."
+        "noScopes": "Marca al menos un ámbito."
       },
       "restrict": {
-        "label": "Restringir esta clave",
-        "help": "Desactivado: la clave tiene acceso completo a la API REST. Activado: solo puede usar los scopes que marques abajo.",
         "scopes": "Scopes permitidos",
         "impliedByWrite": "Incluido con el scope de escritura"
       }

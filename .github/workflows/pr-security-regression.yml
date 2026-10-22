@@ -1,0 +1,32 @@
+name: pr-security-regression
+# AUTH-099. MANUAL ONLY for now: GitHub Actions billing is stopped on this account (see sast.yml), so nothing here runs on a pull request.
+# The local pre-push hook runs the static part of this (authz and tenancy audits). To enable on pull requests, uncomment `pull_request`
+# below once billing is back.
+on:
+  workflow_dispatch:
+  # pull_request:
+  #   branches: [main]
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: crm-platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Authorization audit
+        run: pnpm audit:authz
+      - name: Tenancy audit (code scans, no database)
+        run: pnpm audit:tenancy -- --static
+      - name: API unit tests
+        run: pnpm --filter @crm/api test
+      - name: Web unit tests
+        run: pnpm --filter @crm/web test

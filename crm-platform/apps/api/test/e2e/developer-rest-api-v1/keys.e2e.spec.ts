@@ -1,5 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { API_SCOPES } from '@crm/contracts';
 import { Api, bearer, mintKey, startHarness, type Harness } from './support';
+
+/** Every scope: a key is created with at least one (AUTH-073), and these tests are about something other than scopes. */
+const EVERY = [...API_SCOPES];
 
 /**
  * The Developers console's keys (TW-API-001 to 004, 010): create, list, revoke, the cap, the permissions.
@@ -21,7 +25,7 @@ describe('developer keys (console)', () => {
       .http()
       .post('/v2/developer/keys')
       .set(bearer(t.admin))
-      .send({ name: '  Production backend ' });
+      .send({ name: '  Production backend ', scopes: EVERY });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
 
     const secret: string = res.body.secret;
@@ -60,20 +64,24 @@ describe('developer keys (console)', () => {
     expect(JSON.stringify(outbox.rows[0].payload)).not.toContain(secret);
   });
 
-  it('creates a full-access key when no scopes are sent, and lists it with an empty scope list (TW-API-008)', async () => {
+  it('refuses a key with no scopes, whether the name is alone or the list is empty (AUTH-073)', async () => {
     const t = await api.signup('keys-scope-none');
-    const key = await mintKey(api, t, 'no scopes');
-    expect(key.scopes).toEqual([]);
-    const listed = await api.http().get('/v2/developer/keys').set(bearer(t.admin));
-    expect(listed.body.data[0].scopes).toEqual([]);
-    const row = (await h.owner.query(`SELECT scopes FROM api_keys WHERE org_id = $1`, [t.orgId]))
-      .rows[0];
-    expect(row.scopes).toEqual([]);
-
-    // an explicit empty list is the same thing
-    await api.http().delete(`/v2/developer/keys/${key.id}`).set(bearer(t.admin));
-    const empty = await mintKey(api, t, 'empty list', []);
-    expect(empty.scopes).toEqual([]);
+    const alone = await api
+      .http()
+      .post('/v2/developer/keys')
+      .set(bearer(t.admin))
+      .send({ name: 'no scopes' });
+    expect(alone.status).toBe(422);
+    const empty = await api
+      .http()
+      .post('/v2/developer/keys')
+      .set(bearer(t.admin))
+      .send({ name: 'empty list', scopes: [] });
+    expect(empty.status).toBe(422);
+    const row = (
+      await h.owner.query(`SELECT count(*)::int AS n FROM api_keys WHERE org_id = $1`, [t.orgId])
+    ).rows[0];
+    expect(row.n).toBe(0);
   });
 
   it('creates a restricted key: the scopes are stored, listed, audited and in the event, once each (AUTH-073)', async () => {
@@ -130,7 +138,11 @@ describe('developer keys (console)', () => {
   it('refuses a blank name and a name over 120 characters (TW-API-001)', async () => {
     const t = await api.signup('keys-name');
     for (const name of ['', '   ', 'x'.repeat(121)]) {
-      const res = await api.http().post('/v2/developer/keys').set(bearer(t.admin)).send({ name });
+      const res = await api
+        .http()
+        .post('/v2/developer/keys')
+        .set(bearer(t.admin))
+        .send({ name, scopes: EVERY });
       expect(res.status, name).toBe(422);
     }
     expect(
@@ -141,7 +153,7 @@ describe('developer keys (console)', () => {
       .http()
       .post('/v2/developer/keys')
       .set(bearer(t.admin))
-      .send({ name: 'y'.repeat(120) });
+      .send({ name: 'y'.repeat(120), scopes: EVERY });
     expect(ok.status).toBe(201);
   });
 
@@ -172,8 +184,16 @@ describe('developer keys (console)', () => {
       [t.orgId],
     );
     const [first, second] = await Promise.all([
-      api.http().post('/v2/developer/keys').set(bearer(t.admin)).send({ name: 'one' }),
-      api.http().post('/v2/developer/keys').set(bearer(t.admin)).send({ name: 'two' }),
+      api
+        .http()
+        .post('/v2/developer/keys')
+        .set(bearer(t.admin))
+        .send({ name: 'one', scopes: EVERY }),
+      api
+        .http()
+        .post('/v2/developer/keys')
+        .set(bearer(t.admin))
+        .send({ name: 'two', scopes: EVERY }),
     ]);
     expect([first.status, second.status].sort()).toEqual([201, 422]);
     const refused = first.status === 422 ? first : second;
@@ -214,7 +234,7 @@ describe('developer keys (console)', () => {
       .http()
       .post('/v2/developer/keys')
       .set(bearer(t.admin))
-      .send({ name: 'next' });
+      .send({ name: 'next', scopes: EVERY });
     expect(replacement.status, JSON.stringify(replacement.body)).toBe(201);
   });
 
@@ -263,7 +283,7 @@ describe('developer keys (console)', () => {
       .post('/v2/developer/keys')
       .set(bearer(t.admin))
       .set('idempotency-key', 'k-1')
-      .send({ name: 'idem' });
+      .send({ name: 'idem', scopes: EVERY });
     expect(res.status).toBe(201);
     const keys = await h.redis.keys('*idem*');
     for (const k of keys) {

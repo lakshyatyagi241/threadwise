@@ -37,11 +37,6 @@ export function checkName(raw: string): NameCheck {
   return { ok: true, name };
 }
 
-/** A key with no scopes is full access (Reference parity, TW-API-008), and the list says so. */
-export function isFullAccess(key: Pick<ApiKeyResponse, 'scopes'>): boolean {
-  return key.scopes.length === 0;
-}
-
 /** One row of the scope picker: a resource and its two scopes, `read` before `write`. */
 export interface ScopeRow {
   resource: ApiScopeResource;
@@ -67,12 +62,10 @@ export function toggleScope(picked: readonly ApiScope[], scope: ApiScope): ApiSc
 export type ScopesCheck = { ok: true; scopes: ApiScope[] } | { ok: false; error: 'noScopes' };
 
 /**
- * What the form sends. Restriction off is no scopes, which the API reads as full access. Restriction on with nothing ticked is refused
- * here rather than sent: an empty list would silently make the key full access, the opposite of what the person asked for. The list goes
- * out in picker order, without a `read` its `write` already implies.
+ * What the form sends. A key needs at least one scope, so nothing ticked is refused here rather than sent: the API refuses an empty list.
+ * The list goes out in picker order, without a `read` its `write` already implies.
  */
-export function checkScopes(restrict: boolean, picked: readonly ApiScope[]): ScopesCheck {
-  if (!restrict) return { ok: true, scopes: [] };
+export function checkScopes(picked: readonly ApiScope[]): ScopesCheck {
   const scopes = API_SCOPES.filter(
     (s) => picked.includes(s) && !(s.endsWith(':read') && picked.includes(writeOf(s))),
   );
