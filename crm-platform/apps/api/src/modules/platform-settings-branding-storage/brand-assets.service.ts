@@ -1,4 +1,4 @@
-import { imageProblem } from '../auth/security/image-integrity';
+import { imageProblem } from '../../common/image-integrity';
 import { isSafeSvg } from '../../common/svg-safe';
 import { createHash } from 'node:crypto';
 import { Injectable } from '@nestjs/common';

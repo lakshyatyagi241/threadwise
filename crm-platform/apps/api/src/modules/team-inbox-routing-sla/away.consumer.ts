@@ -27,6 +27,11 @@ export class AwayConsumer implements OutboxSubscriber, OnModuleInit {
     this.registry.register(this);
   }
 
+  /**
+   * Redelivery (ADR-0029, section 3): the outbox delivers at least once, so `handle` can run again for the same `event.id`. A second run
+   * does nothing: the first one moved the chats off this person (a returned chat has no assignee), and a stale event is refused unless the
+   * person is still away, offline or on an active leave (`AwayService.returnUnanswered`).
+   */
   async handle(event: OutboxEvent): Promise<void> {
     const p = event.payload;
     let userId: number | null = null;

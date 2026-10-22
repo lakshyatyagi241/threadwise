@@ -879,7 +879,7 @@ export class WabaConnectService {
       throw AppError.validation('Choose a picture to upload', [
         { path: 'file', message: 'Required.' },
       ]);
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: ['image'],

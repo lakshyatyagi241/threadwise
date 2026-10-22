@@ -328,7 +328,7 @@ describe('the closed launcher of a flow bot: callout, animation and unread dot',
     );
     expect(off.created.map((e) => e.textContent)).not.toContain('Hi');
     // The unread dot is a red dot with no number in it.
-    const dot = (created: Array<{ style: unknown }>) =>
+    const dot = (created: Array<Record<string, unknown>>) =>
       created.some((e) => String((e.style as { cssText: string }).cssText).includes('#ff4d5e'));
     expect(dot(off.created)).toBe(true);
     expect(off.created.map((e) => e.textContent)).not.toContain('1');

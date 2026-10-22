@@ -1,6 +1,6 @@
 import type { WabaApiError } from './waba-errors';
 import type { WabaAuth, WabaProviderKind, WabaRegistryAuth } from './waba-http';
-import type { MediaUpload } from './waba-template.port';
+import type { MediaUpload } from './waba-http';
 
 /**
  * Account-level operations on a WhatsApp Business Account: everything between "the customer finished Embedded Signup" and

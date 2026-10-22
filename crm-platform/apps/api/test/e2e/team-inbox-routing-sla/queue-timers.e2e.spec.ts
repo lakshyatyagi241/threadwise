@@ -431,8 +431,30 @@ describe('away rules: return unanswered chats, set inactive people offline', () 
   it('a leave returns them too, without needing the offline switch', async () => {
     const c = await thread(t, ch);
     await holdBy(a1.token, c.uuid);
+    // The leave event is only emitted for an active leave, so the return needs one (member_leaves, status active).
+    await q(
+      `INSERT INTO member_leaves (org_id, user_id, starts_on, ends_on, reason, status, started_at)
+       VALUES ($1, $2, current_date - 1, current_date + 5, 'holiday', 'active', now())`,
+      [t.orgId, a1.userId],
+    );
     expect(await away().returnUnanswered(t.orgId, a1.userId, 'leave')).toBeGreaterThanOrEqual(1);
     expect((await row(c.id)).assignee_user_id).toBeNull();
+    await q(
+      `UPDATE member_leaves SET status = 'ended', ended_at = now() WHERE org_id = $1 AND user_id = $2 AND status = 'active'`,
+      [t.orgId, a1.userId],
+    );
+  });
+
+  it('a stale leave event returns nothing once the leave is over, so a redelivery cannot take chats from someone back', async () => {
+    await q(
+      `INSERT INTO member_leaves (org_id, user_id, starts_on, ends_on, reason, status, started_at, ended_at)
+       VALUES ($1, $2, current_date - 10, current_date - 3, 'holiday', 'ended', now() - interval '10 days', now() - interval '3 days')`,
+      [t.orgId, a1.userId],
+    );
+    const c = await thread(t, ch);
+    await holdBy(a1.token, c.uuid);
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'leave')).toBe(0);
+    expect((await row(c.id)).assignee_user_id).toBe(a1.userId);
   });
 
   it('inactive people are set offline once, audited and announced; the limit is validated', async () => {

@@ -2,17 +2,17 @@
   "generatedBy": "node tools/redis-audit/inventory.mjs",
   "generatedFrom": "apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)",
   "totals": {
-    "sourceFilesUsingRedis": 114,
-    "commandCallSites": 380,
-    "keyFamilies": 153,
-    "familiesInFilesWhereEveryWriteHasATtl": 136,
+    "sourceFilesUsingRedis": 115,
+    "commandCallSites": 382,
+    "keyFamilies": 156,
+    "familiesInFilesWhereEveryWriteHasATtl": 137,
     "familiesInFilesToReview": 0,
-    "familiesInReadOnlyFiles": 12,
+    "familiesInReadOnlyFiles": 14,
     "orgScopedFamilies": 71,
     "queues": 52,
     "luaScripts": 14,
     "clientConstructionSites": 6,
-    "redisCallsInsideLoops": 16,
+    "redisCallsInsideLoops": 17,
     "pipelineOrMultiUses": 30
   },
   "clients": [
@@ -1399,6 +1399,12 @@
       "ttlStatus": "ttl"
     },
     {
+      "template": "away:*:*",
+      "files": ["apps/api/src/modules/team-inbox-routing-sla/away.service.ts"],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
       "template": "bcast:cap:*:*:*:*",
       "files": ["apps/api/src/modules/broadcasts/send-safety.ts"],
       "scope": "org",
@@ -1525,6 +1531,12 @@
       "files": ["apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts"],
       "scope": "other",
       "ttlStatus": "ttl"
+    },
+    {
+      "template": "g:%",
+      "files": ["apps/api/src/modules/team-inbox-routing-sla/away.service.ts"],
+      "scope": "global",
+      "ttlStatus": "read-only"
     },
     {
       "template": "health:probe",
@@ -1655,6 +1667,14 @@
     {
       "template": "passkey:*:*",
       "files": ["apps/api/src/modules/auth/security/webauthn.service.ts"],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "paygw:addon-mail:*:*",
+      "files": [
+        "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts"
+      ],
       "scope": "other",
       "ttlStatus": "ttl"
     },
@@ -2288,12 +2308,12 @@
       "commands": ["del", "get", "setex"],
       "writes": [
         {
-          "line": 315,
+          "line": 420,
           "cmd": "setex",
           "ttl": "EX HISTORY_TTL_SECONDS"
         },
         {
-          "line": 337,
+          "line": 450,
           "cmd": "setex",
           "ttl": "EX PENDING_TTL_SECONDS"
         }
@@ -3401,7 +3421,12 @@
       "commands": ["set"],
       "writes": [
         {
-          "line": 125,
+          "line": 137,
+          "cmd": "set",
+          "ttl": "EX 7 * 86_400"
+        },
+        {
+          "line": 165,
           "cmd": "set",
           "ttl": "EX 7 * 86_400"
         }
@@ -3507,6 +3532,12 @@
         }
       ],
       "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-routing-sla/away.service.ts",
+      "commands": ["mget"],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts",
@@ -4065,7 +4096,12 @@
     },
     {
       "file": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts",
-      "line": 121,
+      "line": 134,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts",
+      "line": 161,
       "cmd": "set"
     },
     {

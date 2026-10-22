@@ -217,6 +217,8 @@ const REVIEWED: Record<string, string> = {
     'CSV parse, size cap',
   'modules/platform-settings-branding-storage/settings.controller.ts': 'sniffImage',
   'modules/team-chat/team-chat.controller.ts': 'UploadPolicyService',
+  'modules/whatsapp-cloud-api-waba/waba-connections.controller.ts':
+    'UploadPolicyService; WABA profile picture: size cap, JPG/PNG only, antivirus scan in waba-connect.service',
 };
 describe('ratchet: upload routes', () => {
   const sites = walk(SRC).flatMap((f) => {

@@ -1,6 +1,6 @@
 import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
-import { imageProblem } from '../auth/security/image-integrity';
-import { scanUpload } from '../auth/security/upload-policy.service';
+import { imageProblem } from '../../common/image-integrity';
+import { scanUpload } from '../auth';
 import { randomUUID } from 'node:crypto';
 import {
   ERROR_CODES,

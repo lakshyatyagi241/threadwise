@@ -22,8 +22,11 @@ import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { AddonEntitlementService } from '../addons-extension-registry';
-import { isIncludedInPlan, readGrants } from '../addons-extension-registry/addon-grants';
+import {
+  AddonEntitlementService,
+  isIncludedInPlan,
+  readGrants,
+} from '../addons-extension-registry';
 import { appVisibleOnPlan, PlanEntitlementService } from '../plans-subscriptions-trials';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
