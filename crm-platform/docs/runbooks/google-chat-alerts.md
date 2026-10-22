@@ -33,7 +33,7 @@ Bridge + watcher: `mem_limit: 96m` (one Node process, one pg connection, no queu
 Real Google Chat delivery and card rendering, the real webhook URL format, Postgres on the server with `pg_stat_statements`, the role grants on the server, container memory under real load, the `desk-api` image's `pg` module resolution (verified locally with the repo's node_modules only).
 
 ## Watchdog
-`Watchdog` always fires; Alertmanager sends it to the bridge every 30 min; the bridge drops it (never posted) and records its arrival. If it stops, `ChatBridgeNoWatchdog` fires, but if Alertmanager or the bridge itself is dead that alert cannot reach Chat: rely on Grafana contact points for that case.
+`Watchdog` always fires; Alertmanager sends it to the bridge every 5 min (route `repeat_interval`/`group_interval` 5m); the bridge drops it (never posted) and records its arrival. If it stops for more than 15 min (3x the interval) for 5 more min, `ChatBridgeNoWatchdog` fires (so a bridge restart, normally under 6 min without a heartbeat, does not alarm; the bridge also counts its own start as the last heartbeat), but if Alertmanager or the bridge itself is dead that alert cannot reach Chat: rely on Grafana contact points for that case.
 
 ## SlowQueryBurst
 Five or more slow-query events in 10 min. Open the slow-query cards in the Slow Queries & Warnings (or Critical) space: each message has the normalized statement, calls since the last poll, mean/max, database and role. Find the statement in `pg_stat_statements` (`order by total_exec_time desc`), `EXPLAIN` it on a copy, add an index or fix the caller. Cooldown per query is 15 min, so repeats are expected while it is unfixed.
@@ -45,7 +45,7 @@ No poll for 2 min. Check `docker logs` of `gchat-bridge` (events `watcher_poll_e
 `crm_chat_bridge_failed_total{channel}` grew. 4xx means the webhook URL is wrong or revoked (recreate in the space, re-run `observability-up.sh`); 429/5xx means Chat is limiting or down (the bridge already retried; Alertmanager retries too). Check the `chat_post_failed` log lines for the status.
 
 ## ChatBridgeNoWatchdog
-See Watchdog above: check prometheus rules loaded (`slow-query.rules.yml` mounted), alertmanager config is the gchat one, and `gchat-bridge` is healthy.
+Fires when no Watchdog reached the bridge for 15 min (about 20 min after the last one). See Watchdog above: check prometheus rules loaded (`slow-query.rules.yml` mounted), alertmanager config is the gchat one, and `gchat-bridge` is healthy.
 
 ## Run the live local demo
 Everything local, with a fake Chat page standing in for Google Chat (`tools/chat-bridge/fake-chat.mjs`; never calls chat.googleapis.com). Needs Docker, node, the dev Postgres with `pg_stat_statements`. Use a work dir `W` outside git.
@@ -85,6 +85,8 @@ Open http://localhost:59611 (fake Chat, refreshes every 3 s), http://localhost:5
 Notes: the Grafana alert rules are provisioned, so they are read-only in the UI (copy to edit). The Watchdog is dropped by the bridge by design; it shows as `crm_chat_bridge_last_watchdog_timestamp_seconds`. Identical statements that differ only in literals are one normalized query (deduped for the 15 min cooldown), so use different statements to see several cards.
 
 ## Autonomy: threads, diagnosis, accuracy, resolver
+**Test alerts.** An alert with label `test="true"` is posted as a plain card titled `🧪 TEST - ...` whose first line says "Test message, not a real alert", always in the slowquery space (even with severity critical); it is never counted as an incident, never starts the resolver or remediation, never escalates, and gets no thread or diagnosis. Use it with severity warning for post-deploy smoke tests.
+
 **Channels.** Three spaces only: `critical`, `slowquery`, `deploy` (`/run/secrets/gchat_{critical,slowquery,deploy}_url`). Slow-query cards and all non-critical alerts go to `slowquery` and ESCALATE to `critical` when a query runs >= `CRITICAL_SLOW_SECONDS` (60) or a session holds others waiting >= `CRITICAL_BLOCK_SECONDS` (30). Metric names `crm_slow_query_*` are unchanged.
 
 **Threads.** Every alert fingerprint is one Chat thread (`?threadKey=am-<fingerprint>&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD` plus `thread.threadKey` in the body). The first firing card carries the diagnosis; repeats are replies ("Still firing for 14m"); `resolved` is a reply "RESOLVED after 4m 12s" with what it was, peak value seen and the diagnosis at firing. Duration uses Alertmanager's `startsAt`, so a bridge restart still posts a correct resolve (the in-memory map, max 500 entries, 7-day TTL, only loses the peak and diagnosis). Slow queries: when the session is gone at the next poll, a reply "RESOLVED after N s (finished on its own)" is posted in the same thread (exact end is within one poll interval).

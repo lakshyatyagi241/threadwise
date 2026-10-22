@@ -92,3 +92,22 @@ test('threads: bounded and TTL', () => {
   th.put('a', {}); th.put('b', {}); th.put('c', {}); assert.equal(th.size, 2); assert.ok(!th.get('a'));
   t = 500; assert.ok(!th.get('b')); assert.equal(fmtDur(252000), '4m 12s');
 });
+
+test('test=true alerts: TEST card, slowquery only, never an incident or escalation', async () => {
+  const { alertCard, isTest } = await import('./lib.mjs');
+  const { startBridge } = await import('./bridge.mjs');
+  const a = { status: 'firing', labels: { alertname: 'DeployTest', severity: 'critical', test: 'true' }, annotations: { summary: 's' } };
+  assert.ok(isTest(a)); assert.equal(channelFor(a), 'slowquery');
+  const c = alertCard(a).cardsV2[0].card;
+  assert.ok(c.header.title.startsWith('🧪 TEST - ')); assert.match(c.sections[0].widgets[0].textParagraph.text, /Test message, not a real alert/);
+  assert.ok(!alertCard({ ...a, labels: { alertname: 'X', test: 'false' } }).cardsV2[0].card.header.title.includes('TEST'));
+  const posts = []; let handled = 0;
+  const fetchImpl = async (u, o) => { posts.push({ u: String(u), b: o?.body }); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
+  const env = { CHAT_ALLOW_ANY_HOST: '1', GCHAT_SLOWQUERY_URL: 'http://x/s', GCHAT_CRITICAL_URL: 'http://x/c' };
+  const br = startBridge({ env, urls: { slowquery: 'http://x/s', critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: () => { handled++; }, byKey: () => null }) });
+  await br.server.listen(0); const port = br.server.address().port;
+  for (const st of ['firing', 'resolved']) await fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [{ ...a, status: st, fingerprint: 'f1' }] }) });
+  br.server.close();
+  assert.equal(handled, 0); assert.equal(posts.length, 2);
+  assert.ok(posts.every((p) => p.u.startsWith('http://x/s') && /TEST - /.test(p.b)));
+});

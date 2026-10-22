@@ -23,7 +23,10 @@ export function isWatchdog(a) {
   return a?.labels?.alertname === 'Watchdog';
 }
 
+export const isTest = (a) => a?.labels?.test === 'true';
+
 export function channelFor(a) {
+  if (isTest(a)) return 'slowquery'; // test alerts never reach the critical space
   return a?.labels?.severity === 'critical' ? 'critical' : 'slowquery';
 }
 
@@ -36,6 +39,7 @@ function alertWidgets(a, grafanaUrl) {
   const icon = resolved ? ICON.resolved : ICON[l.severity] ?? ICON.warning;
   const where = [l.instance, l.job].filter(Boolean).join(' / ');
   const w = [
+    ...(isTest(a) ? [{ textParagraph: { text: '<b>Test message, not a real alert</b>' } }] : []),
     { textParagraph: { text: `<b>${icon} ${esc(trunc(l.alertname ?? 'alert', 120))}</b> (${resolved ? 'resolved' : 'firing'}${l.severity ? `, ${esc(l.severity)}` : ''})` } },
   ];
   if (n.summary) w.push({ decoratedText: { topLabel: 'Summary', text: esc(trunc(n.summary, 400)), wrapText: true } });
@@ -93,8 +97,8 @@ export function formatAlertmanager(payload, { grafanaUrl = '' } = {}) {
 export function alertCard(a, { grafanaUrl = '', extra = [], title } = {}) {
   const resolved = a.status === 'resolved';
   const widgets = [...alertWidgets(a, grafanaUrl), ...extra].slice(0, MAX_WIDGETS * 3);
-  const name = trunc(a.labels?.alertname ?? 'alert', 120);
-  return { text: trunc(`${title ?? (resolved ? 'resolved' : 'firing')}: ${name}`, 300), cardsV2: [{ cardId: 'am-1', card: { header: { title: trunc(title ?? `${resolved ? 'RESOLVED' : 'FIRING'}: ${name}`, 100), subtitle: 'Threadwise alerts' }, sections: [{ widgets }] } }] };
+  const name = trunc(a.labels?.alertname ?? 'alert', 120), pre = isTest(a) ? '🧪 TEST - ' : '';
+  return { text: trunc(`${pre}${title ?? (resolved ? 'resolved' : 'firing')}: ${name}`, 300), cardsV2: [{ cardId: 'am-1', card: { header: { title: trunc(pre + (title ?? `${resolved ? 'RESOLVED' : 'FIRING'}: ${name}`), 100), subtitle: 'Threadwise alerts' }, sections: [{ widgets }] } }] };
 }
 export const widgetsOf = (rows) => rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(trunc(v, 700)), wrapText: true } }));
 
@@ -150,7 +154,8 @@ export function createGate({ cooldownMs = 900000, perMinute = 10, now = Date.now
 }
 
 export function createMetrics() {
-  const sent = {}, failed = {}, last = {}, g = { received: 0, lastReceived: 0, lastWatchdog: 0, dropped: 0 };
+  // lastWatchdog starts at now: a restart must not look like a missing heartbeat (time()-0 would fire ChatBridgeNoWatchdog)
+  const sent = {}, failed = {}, last = {}, g = { received: 0, lastReceived: 0, lastWatchdog: Date.now() / 1000, dropped: 0 };
   const extra = new Map(); // name -> { help, type, samples: Map(labelStr -> value) }
   const m = {
     ok: (c) => { sent[c] = (sent[c] ?? 0) + 1; last[c] = Date.now() / 1000; },

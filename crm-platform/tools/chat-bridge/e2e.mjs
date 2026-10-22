@@ -56,6 +56,8 @@ try {
   check('resolved is posted', posts.slice(n).length === 1 && /resolved/.test(posts[n].body));
   n = posts.length; const wd = await post('/alertmanager', { alerts: [alert('Watchdog', 'none')] });
   check('Watchdog dropped but counted', wd.status === 200 && posts.length === n && mval(await metrics(), 'crm_chat_bridge_last_watchdog_timestamp_seconds') > 0);
+  n = posts.length; await post('/alertmanager', { alerts: [alert('E2ETest', 'critical', 'firing', { test: 'true' })] });
+  check('test=true: TEST card in slowquery, never critical', posts.length === n + 1 && posts[n].channel === 'slowquery' && /TEST - /.test(posts[n].body) && /Test message, not a real alert/.test(posts[n].body));
   n = posts.length; await post('/alertmanager', { alerts: [alert('SlowQueryBurst', 'warning', 'firing', { group: 'slow_query' })] });
   check('group=slow_query warning goes to Slow Queries', posts[n]?.channel === 'slowquery');
   check('big payload split under limits', await (async () => { n = posts.length; await post('/alertmanager', { alerts: Array.from({ length: 30 }, (_, i) => alert(`Big${i}`, 'warning')) }); const p = posts.slice(n); return p.length >= 4 && p.every((x) => x.body.length < 30000); })());

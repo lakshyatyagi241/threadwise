@@ -3,7 +3,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isWatchdog, widgetsOf } from './lib.mjs';
+import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, isWatchdog, widgetsOf } from './lib.mjs';
 import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 
@@ -25,6 +25,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
+    if (isTest(a)) return send('slowquery', alertCard(a, { grafanaUrl })); // test=true: plain card, no thread/diagnosis/resolver/escalation, not an incident
     const fp = a.fingerprint || createHash('sha1').update(JSON.stringify(a.labels ?? {})).digest('hex').slice(0, 16);
     const threadKey = `am-${fp}`, ch = channelFor(a), t0 = Date.parse(a.startsAt), known = threads.get(fp);
     const started = Number.isFinite(t0) && t0 > 0 ? t0 : known?.startedAt ?? Date.now(); // Alertmanager's startsAt survives a bridge restart

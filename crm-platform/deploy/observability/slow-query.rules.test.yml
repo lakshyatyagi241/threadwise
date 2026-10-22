@@ -34,13 +34,13 @@ tests:
               summary: 'Google Chat delivery failing for channel slowquery'
               description: 'Messages could not be delivered after retries (bad or revoked webhook URL, or Chat is down).'
               runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgedeliveryfailing
-      # stale watchdog (value 60 vs time()) fires after 2 h; poll timestamp is also stale
+      # stale watchdog (value 60 vs time()) fires after 15 m + for; poll timestamp is also stale
       - eval_time: 3h
         alertname: ChatBridgeNoWatchdog
         exp_alerts:
           - exp_labels: { severity: warning, job: crm-chat-bridge }
             exp_annotations:
-              summary: 'The Watchdog heartbeat has not reached the bridge for 2 h'
+              summary: 'The Watchdog heartbeat has not reached the bridge for 15 min'
               description: 'Alerts may not be reaching Google Chat: check Prometheus, Alertmanager and the bridge. Delivered through Grafana contact points if configured.'
               runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgenowatchdog
       - eval_time: 3h
@@ -63,6 +63,29 @@ tests:
         alertname: ChatBridgeNoWatchdog
         exp_alerts: []
 
+  # Watchdog gap cases: heartbeat every 5 m; the gauge keeps its last value (= unix time of last beat) while silent. Fires when silent > 15 m for 5 m.
+  - interval: 1m
+    input_series:
+      - series: 'crm_chat_bridge_last_watchdog_timestamp_seconds{job="crm-chat-bridge"}'
+        values: '0+60x5 300x6 720+60x40'   # last beat 5 m, bridge restart gap of 6 min, beats resume at 12 m
+    alert_rule_test:
+      - { eval_time: 11m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }
+      - { eval_time: 30m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }
+  - interval: 1m
+    input_series:
+      - series: 'crm_chat_bridge_last_watchdog_timestamp_seconds{job="crm-chat-bridge"}'
+        values: '0+60x5 300x24 1800+60x30'   # last beat 5 m, silent 25 min (until 30 m), then resumes
+    alert_rule_test:
+      - { eval_time: 22m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }   # gap 17 m > 15 m but inside `for: 5m`
+      - eval_time: 28m   # gap 23 m, condition true since gap passed 15 m (20 m) for more than 5 m
+        alertname: ChatBridgeNoWatchdog
+        exp_alerts:
+          - exp_labels: { severity: warning, job: crm-chat-bridge }
+            exp_annotations:
+              summary: 'The Watchdog heartbeat has not reached the bridge for 15 min'
+              description: 'Alerts may not be reaching Google Chat: check Prometheus, Alertmanager and the bridge. Delivered through Grafana contact points if configured.'
+              runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgenowatchdog
+      - { eval_time: 32m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }   # heartbeat resumed: resolved
   # ---- NEGATIVE and lifecycle cases: the rules must stay silent below threshold, during `for`, and must resolve ----
   - interval: 1m
     input_series:
