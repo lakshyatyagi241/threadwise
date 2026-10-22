@@ -191,9 +191,10 @@ function Body({ target, onClose }: { target: SingleSendTarget; onClose: () => vo
 /** The chat belongs to another agent, so its templates are refused: say why, and link to the chat where it can be assigned. */
 export function AssignedElsewhereNotice({ conversationId }: { conversationId: string }) {
   const t = useTranslations(NS);
+  const tErrors = useTranslations('contacts-attributes-tags.errors');
   return (
     <Alert tone="warning">
-      <p>{t('assignedElsewhere')}</p>
+      <p>{tErrors('assignedToOther')}</p>
       <Link
         href={`/inbox?c=${conversationId}`}
         className="mt-2 inline-block font-medium text-primary underline"
@@ -202,6 +203,21 @@ export function AssignedElsewhereNotice({ conversationId }: { conversationId: st
       </Link>
     </Alert>
   );
+}
+
+/** Why the template list was refused: a chat another agent holds gets the link to it, anything else the plain error line. */
+export function TemplateListError({
+  error,
+  conversationId,
+  onRetry,
+}: {
+  error: unknown;
+  conversationId: string;
+  onRetry: () => void;
+}) {
+  if (errorKind(error) === 'assignedToOther')
+    return <AssignedElsewhereNotice conversationId={conversationId} />;
+  return <ErrorLine error={error} onRetry={onRetry} />;
 }
 
 function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
@@ -320,12 +336,13 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
             <p className="text-xs text-muted-foreground">{t('noTemplates')}</p>
           )}
           {/* The list can be refused (no reply right, or the chat is another agent's): say so, instead of an empty list. */}
-          {templates.isError &&
-            (errorKind(templates.error) === 'assignedToOther' ? (
-              <AssignedElsewhereNotice conversationId={conversation.data.id} />
-            ) : (
-              <ErrorLine error={templates.error} onRetry={() => void templates.refetch()} />
-            ))}
+          {templates.isError && (
+            <TemplateListError
+              error={templates.error}
+              conversationId={conversation.data.id}
+              onRetry={() => void templates.refetch()}
+            />
+          )}
         </div>
       )}
 

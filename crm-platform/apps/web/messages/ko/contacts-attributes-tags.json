@@ -1431,7 +1431,6 @@
       "template": "WhatsApp 템플릿",
       "templatePlaceholder": "템플릿 선택",
       "noTemplates": "이 번호에 승인된 템플릿이 없습니다.",
-      "assignedElsewhere": "이 채팅은 다른 상담원에게 배정되어 있어 여기서 템플릿을 보낼 수 없습니다. 받은편지함에서 열어 먼저 본인에게 배정하세요.",
       "openInInbox": "받은편지함에서 채팅 열기",
       "notSendable": "이 템플릿은 여기에서 채울 수 없습니다 ({reason}).",
       "variables": "템플릿 변수",

@@ -1431,7 +1431,6 @@
       "template": "WhatsApp template",
       "templatePlaceholder": "Select a template",
       "noTemplates": "No approved templates for this number.",
-      "assignedElsewhere": "This chat is with another agent, so no template can be sent from here. Open it in the inbox and assign it to yourself first.",
       "openInInbox": "Open the chat in the inbox",
       "notSendable": "This template cannot be filled in here ({reason}).",
       "variables": "Template variables",

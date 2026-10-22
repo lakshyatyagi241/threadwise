@@ -1431,7 +1431,6 @@
       "template": "Plantilla de WhatsApp",
       "templatePlaceholder": "Selecciona una plantilla",
       "noTemplates": "No hay plantillas aprobadas para este número.",
-      "assignedElsewhere": "Este chat lo atiende otro agente, así que no se puede enviar ninguna plantilla desde aquí. Ábrelo en la bandeja y asígnatelo primero.",
       "openInInbox": "Abrir el chat en la bandeja",
       "notSendable": "Esta plantilla no se puede completar aquí ({reason}).",
       "variables": "Variables de la plantilla",

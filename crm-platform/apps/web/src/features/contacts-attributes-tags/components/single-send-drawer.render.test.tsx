@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
-import type { ChannelListResponse, ChannelResponse } from '@crm/contracts';
+import { ERROR_CODES, type ChannelListResponse, type ChannelResponse } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import {
   makeSession,
   renderAccount,
@@ -11,6 +12,7 @@ import type { RowView } from '../lib/row-view';
 import {
   AssignedElsewhereNotice,
   SingleSendDrawer,
+  TemplateListError,
   type SingleSendTarget,
 } from './single-send-drawer';
 
@@ -140,8 +142,28 @@ describe('SingleSendDrawer — WhatsApp chat assigned to another agent', () => {
     const html = renderAccount(<AssignedElsewhereNotice conversationId="conv-1" />, {
       session: makeSession(),
     });
-    expect(html).toContain('This chat is with another agent');
+    expect(html).toContain('This chat is assigned to another agent');
     expect(html).toContain('href="/inbox?c=conv-1"');
     expect(html).toContain('Open the chat in the inbox');
+  });
+
+  it('shows the notice, with no retry, when the list is refused for another agent', () => {
+    const refused = new ApiError(403, ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER, 'refused');
+    const html = renderAccount(
+      <TemplateListError error={refused} conversationId="conv-1" onRetry={() => undefined} />,
+      { session: makeSession() },
+    );
+    expect(html).toContain('href="/inbox?c=conv-1"');
+    expect(html).not.toContain('Try again');
+  });
+
+  it('keeps the retry line for any other refusal', () => {
+    const refused = new ApiError(403, ERROR_CODES.FORBIDDEN, 'refused');
+    const html = renderAccount(
+      <TemplateListError error={refused} conversationId="conv-1" onRetry={() => undefined} />,
+      { session: makeSession() },
+    );
+    expect(html).toContain('Try again');
+    expect(html).not.toContain('href="/inbox?c=');
   });
 });

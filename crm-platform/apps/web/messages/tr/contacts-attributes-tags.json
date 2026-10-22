@@ -1431,7 +1431,6 @@
       "template": "WhatsApp şablonu",
       "templatePlaceholder": "Şablon seçin",
       "noTemplates": "Bu numara için onaylı şablon yok.",
-      "assignedElsewhere": "Bu sohbet başka bir temsilciye atanmış, bu yüzden buradan şablon gönderilemez. Önce gelen kutusunda açıp kendinize atayın.",
       "openInInbox": "Sohbeti gelen kutusunda aç",
       "notSendable": "Bu şablon burada doldurulamaz ({reason}).",
       "variables": "Şablon değişkenleri",

@@ -1431,7 +1431,6 @@
       "template": "Modelo do WhatsApp",
       "templatePlaceholder": "Selecione um modelo",
       "noTemplates": "Nenhum modelo aprovado para este número.",
-      "assignedElsewhere": "Este chat está com outro agente, então nenhum modelo pode ser enviado daqui. Abra-o primeiro na caixa de entrada e atribua-o a você.",
       "openInInbox": "Abrir o chat na caixa de entrada",
       "notSendable": "Este modelo não pode ser preenchido aqui ({reason}).",
       "variables": "Variáveis do modelo",
