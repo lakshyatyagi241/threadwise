@@ -25,7 +25,8 @@
           "sun": "Sonntag"
         },
         "methodLocked": "{method} (benötigt Intelligentes Routing)",
-        "methodLockHint": "Automatische Methoden sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs."
+        "methodLockHint": "Automatische Methoden sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs.",
+        "defaultAssigneeLocked": "Der Standardbearbeiter wird nur mit einer automatischen Teammethode verwendet, die Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs ist."
       }
     }
   }

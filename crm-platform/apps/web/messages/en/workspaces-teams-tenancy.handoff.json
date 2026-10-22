@@ -25,7 +25,8 @@
           "sun": "Sunday"
         },
         "methodLocked": "{method} (needs Smart routing)",
-        "methodLockHint": "Automatic methods are part of the Smart routing add-on or a higher plan."
+        "methodLockHint": "Automatic methods are part of the Smart routing add-on or a higher plan.",
+        "defaultAssigneeLocked": "The default assignee is used only with an automatic team method, which is part of the Smart routing add-on or a higher plan."
       }
     }
   }

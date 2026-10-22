@@ -25,7 +25,8 @@
           "sun": "Domingo"
         },
         "methodLocked": "{method} (exige Roteamento inteligente)",
-        "methodLockHint": "Os métodos automáticos fazem parte do complemento Roteamento inteligente ou de um plano superior."
+        "methodLockHint": "Os métodos automáticos fazem parte do complemento Roteamento inteligente ou de um plano superior.",
+        "defaultAssigneeLocked": "O responsável padrão só é usado com um método de equipe automático, que faz parte do complemento Roteamento inteligente ou de um plano superior."
       }
     }
   }

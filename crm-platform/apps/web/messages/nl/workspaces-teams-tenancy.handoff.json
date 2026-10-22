@@ -25,7 +25,8 @@
           "sun": "Zondag"
         },
         "methodLocked": "{method} (vereist Slimme routering)",
-        "methodLockHint": "Automatische methoden maken deel uit van de add-on Slimme routering of een hoger abonnement."
+        "methodLockHint": "Automatische methoden maken deel uit van de add-on Slimme routering of een hoger abonnement.",
+        "defaultAssigneeLocked": "De standaardbehandelaar wordt alleen gebruikt met een automatische teammethode, die deel uitmaakt van de add-on Slimme routering of een hoger abonnement."
       }
     }
   }

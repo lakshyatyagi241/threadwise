@@ -25,7 +25,8 @@
           "sun": "星期日"
         },
         "methodLocked": "{method}（需要智能路由）",
-        "methodLockHint": "自动方式属于智能路由附加组件或更高套餐。"
+        "methodLockHint": "自动方式属于智能路由附加组件或更高套餐。",
+        "defaultAssigneeLocked": "默认负责人仅在使用自动团队方式时生效，该方式属于智能路由附加组件或更高套餐。"
       }
     }
   }

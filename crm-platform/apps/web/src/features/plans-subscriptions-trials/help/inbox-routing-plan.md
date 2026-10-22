@@ -21,7 +21,7 @@ Routing rules decide who receives a new conversation, based on conditions such a
 
 ## Plan and access
 
-Routing rules are included in plans that list them. On a plan without them, the routing settings are locked. Managing rules needs the inbox settings permission.
+Routing rules and automatic assignment are part of **Smart routing**: included in some plans, or added to any plan as the **Smart routing add-on** (see [Smart routing add-on](help:smart-routing-addon)). On a plan without it the rules, Everyone else and Try it are locked with a note that names the add-on and links to Plans, and a team cannot be set to Round robin or Least loaded. Managing rules needs the inbox settings permission. Rules you saved are kept if Smart routing ends and work again when it returns.
 
 ## If something looks wrong
 

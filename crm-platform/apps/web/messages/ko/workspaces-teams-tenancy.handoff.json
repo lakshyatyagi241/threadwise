@@ -25,7 +25,8 @@
           "sun": "일요일"
         },
         "methodLocked": "{method}(스마트 라우팅 필요)",
-        "methodLockHint": "자동 방식은 스마트 라우팅 애드온 또는 상위 요금제의 일부입니다."
+        "methodLockHint": "자동 방식은 스마트 라우팅 애드온 또는 상위 요금제의 일부입니다.",
+        "defaultAssigneeLocked": "기본 담당자는 스마트 라우팅 애드온 또는 상위 요금제에 포함된 자동 팀 방식에서만 사용됩니다."
       }
     }
   }

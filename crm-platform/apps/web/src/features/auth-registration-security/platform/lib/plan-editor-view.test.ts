@@ -178,7 +178,8 @@ describe('planCounts', () => {
     limits.contacts = 1000;
     const c = planCounts({ features, limits, visibleAddons: [A, B, GONE] });
     expect(c.featuresTotal).toBe(Object.keys(d.features).length);
-    expect(c.featuresOn).toBe(c.featuresTotal - 2);
+    // the two switched off here, and the two Smart routing flags a new plan starts without
+    expect(c.featuresOn).toBe(c.featuresTotal - 4);
     expect(c.limitsTotal).toBe(PLAN_LIMIT_KEYS.length);
     expect(c.limitsSet).toBe(2);
     expect(c.addons).toBe(3);

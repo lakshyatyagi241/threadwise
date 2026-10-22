@@ -311,8 +311,9 @@ describe('handoff: queue, claim, named person (every plan)', () => {
   it('settings: a Basic plan can set what it has and is refused, with a reason, what it does not', async () => {
     const s = await p.api.as(t.admin).get('/v2/inbox/handoff-settings');
     expect(s.status).toBe(200);
+    // what is in effect: the stored switch is on (the default) but the plan has no routing, so it reads off (d2f0625de)
     expect(s.body).toMatchObject({
-      autoAssign: true,
+      autoAssign: false,
       ownerMode: 'independent',
       claimSetsOwner: false,
     });

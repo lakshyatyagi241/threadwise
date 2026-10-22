@@ -25,7 +25,8 @@
           "sun": "Dimanche"
         },
         "methodLocked": "{method} (nécessite Routage intelligent)",
-        "methodLockHint": "Les méthodes automatiques font partie du module Routage intelligent ou d'une offre supérieure."
+        "methodLockHint": "Les méthodes automatiques font partie du module Routage intelligent ou d'une offre supérieure.",
+        "defaultAssigneeLocked": "Le responsable par défaut n'est utilisé qu'avec une méthode d'équipe automatique, qui fait partie du module Routage intelligent ou d'une offre supérieure."
       }
     }
   }

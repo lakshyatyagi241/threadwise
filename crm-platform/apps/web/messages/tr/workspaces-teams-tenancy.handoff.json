@@ -25,7 +25,8 @@
           "sun": "Pazar"
         },
         "methodLocked": "{method} (Akıllı yönlendirme gerekir)",
-        "methodLockHint": "Otomatik yöntemler Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır."
+        "methodLockHint": "Otomatik yöntemler Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır.",
+        "defaultAssigneeLocked": "Varsayılan atanan kişi yalnızca otomatik ekip yöntemiyle kullanılır; bu yöntem Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır."
       }
     }
   }

@@ -25,7 +25,8 @@
           "sun": "Chủ Nhật"
         },
         "methodLocked": "{method} (cần Định tuyến thông minh)",
-        "methodLockHint": "Các phương thức tự động thuộc tiện ích Định tuyến thông minh hoặc gói cao hơn."
+        "methodLockHint": "Các phương thức tự động thuộc tiện ích Định tuyến thông minh hoặc gói cao hơn.",
+        "defaultAssigneeLocked": "Người nhận mặc định chỉ được dùng với phương thức nhóm tự động, thuộc tiện ích Định tuyến thông minh hoặc gói cao hơn."
       }
     }
   }

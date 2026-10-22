@@ -25,7 +25,8 @@
           "sun": "Niedziela"
         },
         "methodLocked": "{method} (wymaga Inteligentnego kierowania)",
-        "methodLockHint": "Metody automatyczne są częścią dodatku Inteligentne kierowanie lub wyższego planu."
+        "methodLockHint": "Metody automatyczne są częścią dodatku Inteligentne kierowanie lub wyższego planu.",
+        "defaultAssigneeLocked": "Domyślna osoba jest używana tylko przy automatycznej metodzie zespołu, która jest częścią dodatku Inteligentne kierowanie lub wyższego planu."
       }
     }
   }

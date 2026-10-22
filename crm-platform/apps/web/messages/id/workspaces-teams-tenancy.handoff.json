@@ -25,7 +25,8 @@
           "sun": "Minggu"
         },
         "methodLocked": "{method} (memerlukan Perutean cerdas)",
-        "methodLockHint": "Metode otomatis adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi."
+        "methodLockHint": "Metode otomatis adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi.",
+        "defaultAssigneeLocked": "Penerima default hanya dipakai dengan metode tim otomatis, yang merupakan bagian dari add-on Perutean cerdas atau paket yang lebih tinggi."
       }
     }
   }

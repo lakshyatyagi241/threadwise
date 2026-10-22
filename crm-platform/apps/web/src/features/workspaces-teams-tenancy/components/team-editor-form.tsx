@@ -449,8 +449,14 @@ export function TeamEditorForm({
           htmlFor={`${ids}-default-assignee`}
           hint={t('handoff.defaultAssigneeHint')}
         >
+          {!autoMethodsInPlan && (
+            <p className="mb-1 text-xs text-warning" data-testid="team-default-lock">
+              {t('handoff.defaultAssigneeLocked')} <AddonLockLink />
+            </p>
+          )}
           <Select
             id={`${ids}-default-assignee`}
+            disabled={!autoMethodsInPlan}
             value={form.defaultAssigneeId ?? ''}
             onChange={(e) => patch({ defaultAssigneeId: e.target.value || null })}
           >

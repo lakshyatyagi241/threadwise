@@ -25,7 +25,8 @@
           "sun": "Domenica"
         },
         "methodLocked": "{method} (richiede Instradamento intelligente)",
-        "methodLockHint": "I metodi automatici fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore."
+        "methodLockHint": "I metodi automatici fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore.",
+        "defaultAssigneeLocked": "L'assegnatario predefinito viene usato solo con un metodo di team automatico, che fa parte del componente aggiuntivo Instradamento intelligente o di un piano superiore."
       }
     }
   }
