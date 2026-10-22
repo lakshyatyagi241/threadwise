@@ -392,6 +392,15 @@ export class ConversationsRepository {
     return Number(rowsOf(res)[0]?.unread_count ?? 0);
   }
 
+  /** Unread becomes at least one, so a thread marked unread shows it even when no customer message is left to count. */
+  async setUnreadAtLeastOne(tx: Tx, orgId: number, id: number): Promise<number> {
+    const res = await tx.execute(sql`
+      UPDATE conversations c SET unread_count = GREATEST(c.unread_count, 1)
+      WHERE c.org_id = ${orgId} AND c.id = ${id}
+      RETURNING c.unread_count`);
+    return Number(rowsOf(res)[0]?.unread_count ?? 0);
+  }
+
   async insertEvent(
     tx: Tx,
     orgId: number,

@@ -1059,7 +1059,10 @@
       "tagRemove": "הסרת תגית",
       "onLeave": "בחופשה",
       "onLeaveUntil": "בחופשה עד {date}",
-      "spam": "סמן כספאם"
+      "spam": "סמן כספאם",
+      "markUnread": "סמן כלא נקרא",
+      "unsnooze": "בטל דחייה",
+      "notSpam": "סמן כלא ספאם"
     },
     "tags": {
       "tag": "תגית",

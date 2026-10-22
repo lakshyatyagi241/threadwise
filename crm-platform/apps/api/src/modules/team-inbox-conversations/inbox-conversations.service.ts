@@ -302,6 +302,18 @@ export class InboxConversationsService {
     return { conversationId: uuid, unreadCount };
   }
 
+  /** The bulk "Mark as unread": the same visibility check as `markRead`; the counter and the `inbox.unread` signal are the core's. */
+  async markUnread(uuid: string): Promise<{ unreadCount: number }> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const viewer = await this.access.viewer(tx, ctx);
+      const record = await this.repo.recordByUuid(tx, ctx.orgId, uuid);
+      if (!record) throw conversationNotFound();
+      this.access.assertVisible(viewer, record);
+    });
+    return this.conversations.markUnread(uuid);
+  }
+
   /** Resolve, close, or reopen, along the legal moves (`canMoveConversationStatus`). */
   async setStatus(uuid: string, input: SetConversationStatusInput): Promise<ConversationSummary> {
     const ctx = RequestContextStore.require();

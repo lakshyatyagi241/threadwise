@@ -327,6 +327,21 @@ export class ConversationsService implements ConversationsFacade {
     return { unreadCount: done.unread };
   }
 
+  async markUnread(conversationId: string): Promise<{ unreadCount: number }> {
+    const orgId = RequestContextStore.orgId();
+    const done = await this.db.tx(async (tx) => {
+      const conv = await this.conversations.byUuid(tx, orgId, conversationId, true);
+      if (!conv) throw conversationNotFound(conversationId);
+      const unread = await this.conversations.setUnreadAtLeastOne(tx, orgId, conv.id);
+      const after = (await this.conversations.byId(tx, orgId, conv.id))!;
+      return { before: conv.unreadCount, unread, after };
+    });
+    if (done.unread !== done.before) {
+      await this.realtime.conversationChanged(orgId, done.after, ['unread'], { unread: true });
+    }
+    return { unreadCount: done.unread };
+  }
+
   // --- helpers -------------------------------------------------------------------------------------------------------------------
 
   /** The thread of (channel, peer): found, or created with the lifecycle records. Holds the thread's row lock until the transaction ends. */
