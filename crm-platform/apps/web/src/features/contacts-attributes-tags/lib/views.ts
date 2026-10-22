@@ -1,4 +1,8 @@
-import type { ContactViewResponse } from '@crm/contracts';
+import {
+  CONTACT_VIEW_NAME_MAX,
+  CONTACT_VIEW_NAME_MIN,
+  type ContactViewResponse,
+} from '@crm/contracts';
 import { DEFAULT_FILTERS, type ContactFilters, type PageSize } from '../api/contacts';
 import { filtersToSearch, parseFilters } from './filters';
 
@@ -134,4 +138,13 @@ export function tabViews(
   const pinned = views.filter((v) => v.isFavorite).sort(byOrder);
   const open = views.find((v) => v.id === activeId);
   return open && !open.isFavorite ? [...pinned, open] : pinned;
+}
+
+/** What is wrong with a view name as typed (null when it is fine): nothing, too short or too long, counted after trimming. */
+export function viewNameProblem(name: string): 'needName' | 'nameShort' | 'nameLong' | null {
+  const n = name.trim().length;
+  if (n === 0) return 'needName';
+  if (n < CONTACT_VIEW_NAME_MIN) return 'nameShort';
+  if (n > CONTACT_VIEW_NAME_MAX) return 'nameLong';
+  return null;
 }

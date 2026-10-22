@@ -11,6 +11,7 @@ import {
   viewColumnsOf,
   viewFilterOf,
   viewIdOf,
+  viewNameProblem,
   viewRulesOf,
   withView,
 } from './views';
@@ -153,5 +154,17 @@ describe('view columns and the editor filter', () => {
     expect(viewChanged(v, { ...same, q: 'b' }, ['name', 'phone'])).toBe(true);
     const noCols = view({ filter: viewFilterOf(same) });
     expect(viewChanged(noCols, same, ['anything'])).toBe(false);
+  });
+});
+
+describe('view name check', () => {
+  it('asks for a name, then for at least 3 and at most 50 characters, counted after trimming', () => {
+    expect(viewNameProblem('')).toBe('needName');
+    expect(viewNameProblem('   ')).toBe('needName');
+    expect(viewNameProblem('ab')).toBe('nameShort');
+    expect(viewNameProblem('  ab  ')).toBe('nameShort');
+    expect(viewNameProblem('abc')).toBeNull();
+    expect(viewNameProblem('x'.repeat(50))).toBeNull();
+    expect(viewNameProblem('x'.repeat(51))).toBe('nameLong');
   });
 });
