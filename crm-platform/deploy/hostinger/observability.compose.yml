@@ -129,6 +129,22 @@ services:
       SLOW_POLL_SECONDS: ${SLOW_POLL_SECONDS:-15}
       SLOW_COOLDOWN_SECONDS: ${SLOW_COOLDOWN_SECONDS:-900}
       SLOW_MAX_PER_MINUTE: ${SLOW_MAX_PER_MINUTE:-10}
+      # Resolver (tools/chat-bridge/resolver.mjs). dry-run: it only says what it WOULD do. `on` needs the optional secret slow_query_cancel_pg_url.
+      PROMETHEUS_URL: http://prometheus:9090
+      AUTO_REMEDIATE: ${AUTO_REMEDIATE:-dry-run}
+      CRITICAL_SLOW_SECONDS: ${CRITICAL_SLOW_SECONDS:-60}
+      CRITICAL_BLOCK_SECONDS: ${CRITICAL_BLOCK_SECONDS:-30}
+      SLOW_IDLE_TX_SECONDS: ${SLOW_IDLE_TX_SECONDS:-60}
+      HARD_CANCEL_SECONDS: ${HARD_CANCEL_SECONDS:-120}
+      IDLE_BLOCKER_SECONDS: ${IDLE_BLOCKER_SECONDS:-60}
+      VERIFY_SECONDS: ${VERIFY_SECONDS:-120}
+      AUTO_REMEDIATE_MAX_PER_HOUR: ${AUTO_REMEDIATE_MAX_PER_HOUR:-3}
+      STMT_RECURRING_POLLS: ${STMT_RECURRING_POLLS:-3}
+      INCIDENTS_DIR: /data/incidents
+    # The image runs as the non-root user `app`, so a fresh named volume would be root-owned and unwritable: a small tmpfs instead
+    # (incident files then reset when the container restarts; /incidents and the Chat threads keep the history that matters).
+    tmpfs:
+      - /data/incidents:mode=1777,size=16m
     volumes:
       - ${CHAT_BRIDGE_DIR:-../../tools/chat-bridge}:/opt/chat-bridge:ro
     healthcheck:
