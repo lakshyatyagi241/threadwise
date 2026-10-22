@@ -160,6 +160,7 @@ pj = subprocess.run([sys.executable, FMT, "--json", "unchanged", A, B], env=ENV,
 MODE["fail"] = None
 check("--json: API failure degrades to empty prs, exit 0, token not leaked", pj.returncode == 0 and jf["prs"] == [] and jf["prsKnown"] is False and TOKEN not in pj.stdout + pj.stderr, pj.stdout)
 
+FIX.update(compare=[commit(sha(3), "Add feature (#34)", "carol")], pulls={sha(3): [pr(34, "Add feature", "carol", "carol")]})
 # 10 --dry-run posts nothing and keeps state clean
 before = len(chat_posts)
 p = subprocess.run(["bash", WATCH, "--dry-run", A, B, "12", "live"], env={**ENV, "DESK_WATCH_URL_FILE": "/nonexistent"}, capture_output=True, text=True, timeout=60)
