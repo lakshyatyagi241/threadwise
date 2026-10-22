@@ -10,3 +10,4 @@ export { PaygwWorkerModule } from './paygw-worker.module';
 export { SubscriptionReconcilerService } from './subscription-reconciler.service';
 export { SubscriptionCancelService, type EndReason } from './subscription-cancel.service';
 export { RefundService } from './refund.service';
+export { RefundReconcilerService } from './refund-reconciler.service';
