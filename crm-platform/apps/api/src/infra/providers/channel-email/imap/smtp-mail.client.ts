@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { createTransport, type Transporter } from 'nodemailer';
+import type { Transporter } from 'nodemailer';
 import { channelEmailEnv } from '../../../../config/domains/channel-email.env';
 import type { MailServerLogin } from '../mail-types';
 import { resolveSafeTarget } from './host-guard';
@@ -10,6 +10,7 @@ export class SmtpMailClient {
   private async transport(login: MailServerLogin): Promise<Transporter> {
     const env = channelEmailEnv();
     const target = await resolveSafeTarget(login.host, env.MAIL_IMAP_ALLOW_PRIVATE_HOSTS);
+    const { createTransport } = await import('nodemailer'); // loaded on first use: about 20 MB the processes that never send mail skip
     return createTransport({
       host: target.connectHost,
       port: login.port,

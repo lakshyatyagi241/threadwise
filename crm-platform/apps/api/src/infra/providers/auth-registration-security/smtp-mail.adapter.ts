@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createTransport, type Transporter } from 'nodemailer';
+import type { Transporter } from 'nodemailer';
 import type { Env } from '../../../config/env.schema';
 import { MailError, type MailMessage, type MailPort } from './mail.port';
 
@@ -35,7 +35,8 @@ export type MailRuntimeResolver = () => Promise<MailRuntime | null>;
 @Injectable()
 export class SmtpMailAdapter implements MailPort {
   private readonly logger = new Logger(SmtpMailAdapter.name);
-  private readonly transport: Transporter | null;
+  /** The env-configured transport, built on the first send (undefined = not yet; null = no SMTP_HOST). */
+  private envTransportMemo: Transporter | null | undefined;
   private readonly from: string;
   private resolver: MailRuntimeResolver | null = null;
   private runtimeTransport: { key: string; transport: Transporter } | null = null;
@@ -59,18 +60,31 @@ export class SmtpMailAdapter implements MailPort {
       user,
       pass,
     };
+  }
 
-    this.transport = host
-      ? createTransport({
+  /**
+   * nodemailer is loaded here, not at the top of the file: it adds about 20 MB and 40 ms to every process that imports this adapter
+   * (the API, the webhook API and the worker), and only a process that sends mail needs it.
+   */
+  private async envTransport(): Promise<Transporter | null> {
+    if (this.envTransportMemo === undefined) {
+      const { host, port, secure, user, pass } = this.env;
+      if (!host) {
+        this.envTransportMemo = null;
+      } else {
+        const { createTransport } = await import('nodemailer');
+        this.envTransportMemo = createTransport({
           host,
-          port: config.get('SMTP_PORT', { infer: true }),
-          secure: config.get('SMTP_SECURE', { infer: true }),
+          port,
+          secure,
           auth: user && pass ? { user, pass } : undefined,
           connectionTimeout: SEND_TIMEOUT_MS,
           greetingTimeout: SEND_TIMEOUT_MS,
           socketTimeout: SEND_TIMEOUT_MS,
-        })
-      : null;
+        });
+      }
+    }
+    return this.envTransportMemo;
   }
 
   /** Registered once by the platform-settings module; consulted on every send so a saved change applies at once. */
@@ -80,7 +94,7 @@ export class SmtpMailAdapter implements MailPort {
 
   private async effective(): Promise<{ transport: Transporter | null; from: string } | 'log'> {
     const rt = this.resolver ? await this.resolver().catch(() => null) : null;
-    if (!rt) return { transport: this.transport, from: this.from };
+    if (!rt) return { transport: await this.envTransport(), from: this.from };
     if (rt.mode === 'log') return 'log';
     if (rt.mode === 'unsupported') return { transport: null, from: this.from };
     const host = rt.host || this.env.host;
@@ -105,6 +119,7 @@ export class SmtpMailAdapter implements MailPort {
     };
     const key = JSON.stringify(opts);
     if (this.runtimeTransport?.key !== key) {
+      const { createTransport } = await import('nodemailer');
       this.runtimeTransport = { key, transport: createTransport(opts) };
     }
     return { transport: this.runtimeTransport.transport, from };
