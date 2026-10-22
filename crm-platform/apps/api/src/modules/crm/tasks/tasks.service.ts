@@ -3,6 +3,7 @@ import {
   ERROR_CODES,
   type BulkAssignTasksInput,
   type BulkTaskIdsInput,
+  BulkTaskTransitionInput,
   type CreateTaskInput,
   type ListLinkedTasksQuery,
   type ListTasksQuery,
@@ -413,18 +414,31 @@ export class TasksService {
 
   // --- bulk ------------------------------------------------------------------------------------------------------------
 
-  bulkComplete(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
-    const ctx = RequestContextStore.require();
-    return this.bulk(input.ids, scope, async (tx, row) => {
-      await this.assertCompletable(tx, ctx.orgId);
-      await this.transition(tx, row, true);
-    });
+  bulkComplete(input: BulkTaskTransitionInput, scope: RecordScope): Promise<TaskBulkResult> {
+    return this.bulkTransition(input, scope, true);
   }
 
-  bulkReopen(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
-    return this.bulk(input.ids, scope, (tx, row) =>
-      this.transition(tx, row, false).then(() => undefined),
-    );
+  bulkReopen(input: BulkTaskTransitionInput, scope: RecordScope): Promise<TaskBulkResult> {
+    return this.bulkTransition(input, scope, false);
+  }
+
+  /** One outcome lookup for the whole call; a bad outcome fails the call (422), not each row. */
+  private bulkTransition(
+    input: BulkTaskTransitionInput,
+    scope: RecordScope,
+    done: boolean,
+  ): Promise<TaskBulkResult> {
+    const ctx = RequestContextStore.require();
+    let outcome: number | null | undefined;
+    let resolved = false;
+    return this.bulk(input.ids, scope, async (tx, row) => {
+      if (done) await this.assertCompletable(tx, ctx.orgId);
+      if (!resolved) {
+        outcome = await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, null);
+        resolved = true;
+      }
+      await this.transition(tx, row, done, { outcomeId: outcome });
+    });
   }
 
   bulkDelete(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
@@ -477,7 +491,11 @@ export class TasksService {
         } catch (err) {
           if (!(err instanceof AppError)) throw err;
           // A bad assignee fails the whole call: it is the request that is wrong, not one row.
-          if (err.code === ERROR_CODES.TASK_ASSIGNEE_INVALID) throw err;
+          if (
+            err.code === ERROR_CODES.TASK_ASSIGNEE_INVALID ||
+            err.code === ERROR_CODES.TASK_OUTCOME_INVALID
+          )
+            throw err;
           result.failed.push({ id, code: err.code, message: err.message });
         }
       }
