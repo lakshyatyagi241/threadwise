@@ -414,6 +414,13 @@
       "hint": "Çevrimdışı olduğunuz sürece size otomatik olarak yeni sohbet atanmaz. Zaten sizde olan sohbetler sizde kalır.",
       "failed": "Değiştirilemedi"
     },
+    "myLeave": {
+      "label": "İzin",
+      "onLeaveUntil": "{date} tarihine kadar izinde",
+      "onLeaveOpen": "İzinde",
+      "hint": "Ekibinize yokluğunuzu bildirin. İzindeyken size otomatik olarak yeni sohbet atanmaz.",
+      "title": "İzniniz"
+    },
     "deactivate": {
       "eyebrow": "Ekip üyeleri",
       "title": "Üyeyi devre dışı bırak",

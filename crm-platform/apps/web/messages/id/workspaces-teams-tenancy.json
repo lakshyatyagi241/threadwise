@@ -414,6 +414,13 @@
       "hint": "Selama Anda offline, obrolan baru tidak ditugaskan kepada Anda secara otomatis. Obrolan yang sudah Anda pegang tetap milik Anda.",
       "failed": "Tidak dapat mengubah"
     },
+    "myLeave": {
+      "label": "Cuti",
+      "onLeaveUntil": "Cuti hingga {date}",
+      "onLeaveOpen": "Sedang cuti",
+      "hint": "Beri tahu tim Anda bahwa Anda tidak masuk. Selama cuti, obrolan baru tidak ditugaskan kepada Anda secara otomatis.",
+      "title": "Cuti Anda"
+    },
     "deactivate": {
       "eyebrow": "Anggota tim",
       "title": "Nonaktifkan anggota",

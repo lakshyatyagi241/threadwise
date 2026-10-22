@@ -414,6 +414,13 @@
       "hint": "离线期间，系统不会自动给你分配新聊天。你已有的聊天仍归你。",
       "failed": "无法更改"
     },
+    "myLeave": {
+      "label": "休假",
+      "onLeaveUntil": "休假至 {date}",
+      "onLeaveOpen": "休假中",
+      "hint": "告知团队你不在。休假期间，系统不会自动给你分配新的会话。",
+      "title": "你的休假"
+    },
     "deactivate": {
       "eyebrow": "团队成员",
       "title": "停用成员",

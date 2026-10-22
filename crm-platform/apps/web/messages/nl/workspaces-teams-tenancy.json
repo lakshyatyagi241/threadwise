@@ -414,6 +414,13 @@
       "hint": "Zolang je offline bent, worden je geen nieuwe chats automatisch toegewezen. Chats die je al hebt, blijven van jou.",
       "failed": "Wijzigen is niet gelukt"
     },
+    "myLeave": {
+      "label": "Verlof",
+      "onLeaveUntil": "Met verlof tot {date}",
+      "onLeaveOpen": "Met verlof",
+      "hint": "Laat je team weten dat je afwezig bent. Tijdens je verlof worden er geen nieuwe chats automatisch aan je toegewezen.",
+      "title": "Jouw verlof"
+    },
     "deactivate": {
       "eyebrow": "Teamleden",
       "title": "Lid deactiveren",
