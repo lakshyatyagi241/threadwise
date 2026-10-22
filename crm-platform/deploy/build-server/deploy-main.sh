@@ -36,7 +36,7 @@ fi
 
 # Tells the Deployments chat space. Runs in the background and swallows everything: it must never fail or slow a release.
 HERE=$(cd "$(dirname "$0")" && pwd)
-notify() { ( "$HERE/notify-chat.sh" "$@" >/dev/null 2>&1 & ) 2>/dev/null; true; }
+notify() { ( DESK_CI_PREV_SHA="${last:-}" "$HERE/notify-chat.sh" "$@" >/dev/null 2>&1 & ) 2>/dev/null; true; }
 T0=$(date +%s); elapsed() { echo $(( $(date +%s) - T0 )); }
 
 status() { printf '{"at":"%s","sha":"%s","state":"%s","log":"%s"}\n' "$(date -Is)" "${TAG:-}" "$1" "${LOG:-}" > "$STATE/status.json"; }

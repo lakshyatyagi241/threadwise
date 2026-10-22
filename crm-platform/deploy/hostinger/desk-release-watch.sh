@@ -17,7 +17,7 @@ DESK=${DESK_DIR:-/opt/desk}
 FORMATTER=${DESK_WATCH_FORMATTER:-$HERE/deploy-message.py}
 mkdir -p "$STATE" 2>/dev/null
 
-env_get() { grep "^$1=" "$DESK/.env" 2>/dev/null | head -n1 | cut -d= -f2- | tr -d '"'"'"'[:space:]'; }
+env_get() { grep "^$1=" "$DESK/.env" 2>/dev/null | head -n1 | cut -d= -f2- | tr -d "\"'[:space:]"; }
 live_tag() {
   local slot; slot=$(tr -d '[:space:]' < "$DESK/.slot" 2>/dev/null)
   [ -n "$slot" ] || return 1
