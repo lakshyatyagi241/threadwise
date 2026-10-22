@@ -104,7 +104,7 @@ export function TemplateCard({
       )}
 
       <div className="mt-3 flex items-center gap-2">
-        {mayEdit && canEdit(tpl.status, tpl.templateType) ? (
+        {mayEdit && canEdit(tpl.status, tpl.templateType) && tpl.editBlock === null ? (
           <Link
             href={`/templates/${tpl.id}/edit`}
             className="flex-1 rounded-full border border-dashed border-brand py-[7px] text-center text-[11px] font-medium text-brand transition hover:border-solid hover:bg-brand hover:text-brand-foreground"
@@ -122,7 +122,7 @@ export function TemplateCard({
         >
           <EyeIcon className="size-3.5" />
         </Link>
-        {mayEdit && canDuplicate(tpl.status, tpl.templateType) && (
+        {mayEdit && canDuplicate(tpl.status, tpl.metaTemplateId, tpl.templateType) && (
           <Link
             href={`/templates/new?from=${tpl.id}`}
             title={t('duplicate')}

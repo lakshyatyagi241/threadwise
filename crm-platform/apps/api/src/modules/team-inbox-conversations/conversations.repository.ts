@@ -531,11 +531,15 @@ export class ConversationsRepository {
         handling = ${['resolved', 'closed', 'spam'].includes(patch.status) ? sql`NULL` : sql`handling`},
         handling_since = ${['resolved', 'closed', 'spam'].includes(patch.status) ? sql`NULL` : sql`handling_since`}
       WHERE org_id = ${orgId} AND id = ${id}`);
-    if (['resolved', 'closed', 'spam'].includes(patch.status)) {
-      await tx.execute(sql`
-        UPDATE conversation_handoffs SET status = 'resolved', completed_at = now()
-        WHERE org_id = ${orgId} AND conversation_id = ${id} AND status IN ('waiting', 'assigned')`);
-    }
+    if (['resolved', 'closed', 'spam'].includes(patch.status))
+      await this.resolveOpenHandoffs(tx, orgId, id);
+  }
+
+  /** A finished thread's open handoffs are resolved: nobody is waiting on them any more. Runs in the caller's transaction. */
+  private async resolveOpenHandoffs(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversation_handoffs SET status = 'resolved', completed_at = now()
+      WHERE org_id = ${orgId} AND conversation_id = ${id} AND status IN ('waiting', 'assigned')`);
   }
 
   /**
@@ -615,11 +619,25 @@ export class ConversationsRepository {
     }));
   }
 
-  /** Mark a thread as spam: the status moves, the wake time is dropped (a spam thread has nothing to wake for). */
+  /**
+   * Mark a thread as spam: the status moves, the wake time is dropped (a spam thread has nothing to wake for). A thread a person holds
+   * keeps its handling state and its open handoff, so the hold and the bot's mute survive the spam and taking it off spam. A thread nobody
+   * holds (a team queue included) is finished like any other: the handling state is cleared and the open handoffs resolved, as `setStatus`
+   * does.
+   */
   async markSpam(tx: Tx, orgId: number, id: number): Promise<void> {
+    const probe = await tx.execute(sql`
+      SELECT assignee_user_id IS NOT NULL AS held
+      FROM conversations WHERE org_id = ${orgId} AND id = ${id}`);
+    const held = rowsOf(probe)[0]?.held === true;
     await tx.execute(sql`
       UPDATE conversations SET status = 'spam', snoozed_until = NULL
       WHERE org_id = ${orgId} AND id = ${id}`);
+    if (held) return;
+    await tx.execute(sql`
+      UPDATE conversations SET handling = NULL, handling_since = NULL
+      WHERE org_id = ${orgId} AND id = ${id}`);
+    await this.resolveOpenHandoffs(tx, orgId, id);
   }
 
   /** Wake a snoozed thread: open again, wake time cleared. */

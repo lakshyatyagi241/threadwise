@@ -41,6 +41,8 @@ export interface TemplateRow {
   submittedAt: Date | null;
   lastSyncedAt: Date | null;
   pausedUntil: Date | null;
+  /** ISO times of the edits sent to Meta in the last 30 days (see meta-edit-rules.ts). */
+  metaEditLog: string[];
   providerConfigId: number | null;
   connectionUuid: string | null;
   rowVersion: number;
@@ -54,7 +56,7 @@ const SELECT = sql.raw(`
   t.id, t.uuid, t.user_id, t.template_name, t.language, t.header, t.template_body, t.footer, t.code_expiration_minutes,
   t.buttons, t.variable_map, t.category, t.meta_category, t.template_type, t.attachment_type, t.attachment_file,
   t.header_sample_url, t.header_location, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
-  t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until,
+  t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until, t.meta_edit_log,
   t.provider_config_id, c.uuid AS connection_uuid, t.row_version, t.created_at, t.updated_at,
   to_char(t.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
 
@@ -96,6 +98,7 @@ function toRow(r: Raw): TemplateRow {
     submittedAt: date(r.submitted_at),
     lastSyncedAt: date(r.last_synced_at),
     pausedUntil: date(r.paused_until),
+    metaEditLog: Array.isArray(r.meta_edit_log) ? (r.meta_edit_log as string[]) : [],
     providerConfigId: num(r.provider_config_id),
     connectionUuid: (r.connection_uuid as string | null) ?? null,
     rowVersion: Number(r.row_version),
@@ -155,6 +158,7 @@ export interface NewTemplate {
 export type TemplatePatch = Partial<Omit<NewTemplate, 'userId'>> & {
   rejectionReason?: string | null;
   pausedUntil?: Date | null;
+  metaEditLog?: string[];
 };
 
 const COLUMN: Record<keyof TemplatePatch, string> = {
@@ -185,9 +189,10 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   submittedAt: 'submitted_at',
   lastSyncedAt: 'last_synced_at',
   pausedUntil: 'paused_until',
+  metaEditLog: 'meta_edit_log',
   providerConfigId: 'provider_config_id',
 };
-const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap', 'headerLocation']);
+const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap', 'headerLocation', 'metaEditLog']);
 
 /** The library's status tabs as Reference reads them: a draft is "in review", a paused or disabled template is "rejected". */
 const GROUP_WHERE = {

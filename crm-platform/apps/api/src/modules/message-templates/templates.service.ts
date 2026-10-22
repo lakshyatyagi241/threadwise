@@ -37,6 +37,7 @@ import {
   type ResolvedWabaConnection,
 } from '../whatsapp-cloud-api-waba';
 import type { FlowTemplate } from './flow-template';
+import { metaEditBlockOf, metaEditLogAfter, type MetaEditBlock } from './meta-edit-rules';
 import { describeTemplateFailure, providerProblem } from './template-errors';
 import {
   detailWithMedia,
@@ -65,9 +66,9 @@ import {
 
 const MODULE = 'wa_templates';
 /** Statuses a template can still be edited in (TW-TPL-018, and Geta's "locked once approved"). */
-/** An approved or paused template is edited in place on Meta (Meta's own edit endpoint), as Reference does; the rest are replaced. */
+/** An approved, paused or rejected template Meta holds is edited in place on Meta (its edit endpoint); the rest are replaced. */
 const EDITABLE = new Set(['pending', 'rejected', 'draft', 'approved', 'paused']);
-const IN_PLACE = new Set(['approved', 'paused']);
+const IN_PLACE = new Set(['approved', 'paused', 'rejected']);
 
 /** Header example files Meta takes, and the size it allows for each (TW-TPL-009: 5 MB image, 16 MB video, 100 MB document). */
 const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxBytes: number }> = {
@@ -81,6 +82,20 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
 export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
 
 const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
+
+/** The refusal for an edit Meta would not take now: the template is under review, or past its edit limit. */
+const editBlocked = (block: MetaEditBlock): AppError =>
+  block.reason === 'in_review'
+    ? new AppError(
+        ERROR_CODES.TPL_NOT_EDITABLE,
+        'Meta is reviewing this template. It can be edited again once the review ends.',
+        HttpStatus.CONFLICT,
+      )
+    : new AppError(
+        ERROR_CODES.TPL_EDIT_LIMIT,
+        `Meta allows an approved template one edit in 24 hours and ten in 30 days. It can be edited again after ${block.until.toISOString()}.`,
+        HttpStatus.CONFLICT,
+      );
 
 const toIssue = (i: LintIssue): TplLintIssue => i;
 
@@ -302,6 +317,9 @@ export class TemplatesService {
           'Only a template that is a draft, in review, rejected, approved or paused can be edited. Copy it into a new template instead.',
           HttpStatus.CONFLICT,
         );
+      // Meta refuses an edit of a template under review, or past an approved template's edit limit.
+      const block = metaEditBlockOf(current, new Date());
+      if (block) throw editBlocked(block);
       if (current.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Template');
       if (current.providerConfigId === null)
         throw new AppError(
@@ -729,6 +747,7 @@ export class TemplatesService {
           submittedAt: now,
           lastSyncedAt: now,
           rejectionReason: null,
+          metaEditLog: metaEditLogAfter(row.metaEditLog, now),
         })) ?? row;
       await this.audit.record(tx, {
         module: MODULE,

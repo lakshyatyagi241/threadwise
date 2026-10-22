@@ -915,7 +915,10 @@
               "phone": "Call a number",
               "email": "Send an email",
               "agent": "Talk to a person"
-            }
+            },
+            "prev": "Previous card",
+            "next": "Next card",
+            "goTo": "Card {n}"
           },
           "condition": {
             "info": "Add rules (a variable, a comparison and a value). Join them with AND or OR, and nest groups when you need to.",

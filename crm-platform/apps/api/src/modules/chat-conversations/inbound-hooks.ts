@@ -56,8 +56,8 @@ export interface InboundMessageListener {
   readonly runsOnEmail?: true;
   /**
    * The listener answers the customer as a bot (a flow, the catalog concierge, a shop): it is skipped while the conversation waits for a
-   * person or is with one (`conversations.handling`, BL-400). The flow's run is not cancelled, it stays parked and answers again when the
-   * conversation is given back to the bot.
+   * person or is with one (`conversations.handling`, BL-400), and while it is marked spam. The flow's run is not cancelled, it stays
+   * parked and answers again when the conversation is given back to the bot or taken off spam.
    */
   readonly bot?: true;
   onStored(
@@ -87,7 +87,10 @@ export class InboundMessageHooks {
     @Optional() private readonly db?: DatabaseService,
   ) {}
 
-  /** True while a person (or the queue for one) holds the thread: the bot must stay silent. */
+  /**
+   * True while a person (or the queue for one) holds the thread, or the thread is spam: the bot must stay silent. Taking the thread off
+   * spam lifts the mute, and the bot answers the next message again.
+   */
   private async botMuted(event: InboundStoredEvent): Promise<boolean> {
     if (!this.db) return false;
     try {
@@ -95,14 +98,18 @@ export class InboundMessageHooks {
         tx.execute(
           // A chat the routing engine put in the queue because nobody could take it (`source = 'arrival'`) is not yet a person's: no
           // one has decided a person must answer, so a bot that was answering it keeps answering until one takes it.
-          sql`SELECT c.handling,
+          sql`SELECT c.handling, c.status = 'spam' AS spam,
                      EXISTS (SELECT 1 FROM conversation_handoffs h WHERE h.org_id = c.org_id AND h.conversation_id = c.id
                                AND h.status = 'waiting' AND h.source = 'arrival') AS arrival
               FROM conversations c WHERE c.org_id = ${event.orgId} AND c.id = ${event.conversationId}`,
         ),
       );
-      const row = (res as unknown as { rows: Array<{ handling: string | null; arrival: boolean }> })
-        .rows[0];
+      const row = (
+        res as unknown as {
+          rows: Array<{ handling: string | null; spam: boolean; arrival: boolean }>;
+        }
+      ).rows[0];
+      if (row?.spam === true) return true;
       if (row?.handling === 'waiting') return row.arrival !== true;
       return row?.handling === 'with_person';
     } catch (err) {

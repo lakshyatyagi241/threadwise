@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Templat ini tidak memiliki nomor WhatsApp yang terhubung untuk dikirim. Hubungkan nomor terlebih dahulu.",
       "TPL_IN_USE": "Templat ini tidak dapat dihapus karena sedang dipakai broadcast yang berjalan atau terjadwal.",
       "TPL_NOT_EDITABLE": "Hanya templat yang belum disetujui Meta atau yang ditolak yang dapat diedit.",
+      "TPL_EDIT_LIMIT": "Meta mengizinkan satu edit dalam 24 jam dan sepuluh dalam 30 hari untuk template yang disetujui. Coba lagi nanti.",
       "ROW_VERSION_CONFLICT": "Templat ini diubah orang lain saat Anda mengedit. Muat ulang untuk melihat versi terbaru, lalu terapkan perubahan Anda lagi.",
       "VALIDATION_FAILED": "Beberapa kolom tidak valid. Periksa kolom di bawah.",
       "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Segarkan sekarang",
       "editTemplate": "Edit template",
+      "editBlockedTitle": "Template ini tidak bisa diedit sekarang",
+      "editBlocked": "{reason, select, in_review {Meta sedang meninjau template ini. Template bisa diedit lagi setelah peninjauan selesai.} daily_limit {Meta mengizinkan satu edit dalam 24 jam untuk template yang disetujui. Template bisa diedit lagi setelah {when}.} monthly_limit {Meta mengizinkan sepuluh edit dalam 30 hari untuk template yang disetujui. Template bisa diedit lagi setelah {when}.} other {}}",
       "duplicateTemplate": "Duplikat template",
       "editResubmit": "Edit & kirim ulang",
       "submitToMeta": "Kirim ke Meta",

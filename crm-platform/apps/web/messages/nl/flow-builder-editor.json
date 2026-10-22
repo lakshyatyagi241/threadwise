@@ -1258,7 +1258,10 @@
               "phone": "Een nummer bellen",
               "email": "Een e-mail sturen",
               "agent": "Met een persoon praten"
-            }
+            },
+            "prev": "Vorige kaart",
+            "next": "Volgende kaart",
+            "goTo": "Kaart {n}"
           },
           "condition": {
             "info": "Voeg regels toe (een variabele, een vergelijking en een waarde). Koppel ze met AND of OR en nest groepen als dat nodig is.",

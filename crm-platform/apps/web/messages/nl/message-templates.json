@@ -35,6 +35,7 @@
       "TPL_NO_CONNECTION": "Aan dit sjabloon is geen WhatsApp-nummer gekoppeld om het mee in te dienen. Koppel eerst een nummer.",
       "TPL_IN_USE": "Dit sjabloon kan niet worden verwijderd omdat een lopende of geplande broadcast het gebruikt.",
       "TPL_NOT_EDITABLE": "Alleen een sjabloon dat Meta nog niet heeft goedgekeurd, of een dat is afgewezen, kan worden bewerkt.",
+      "TPL_EDIT_LIMIT": "Meta staat bij een goedgekeurd sjabloon één bewerking per 24 uur en tien per 30 dagen toe. Probeer het later opnieuw.",
       "ROW_VERSION_CONFLICT": "Iemand heeft dit sjabloon gewijzigd terwijl jij het bewerkte. Laad de pagina opnieuw om de nieuwste versie te zien en pas daarna je wijziging opnieuw toe.",
       "VALIDATION_FAILED": "Sommige velden zijn ongeldig. Controleer de velden hieronder.",
       "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw."
@@ -451,6 +452,8 @@
       },
       "refreshNow": "Nu vernieuwen",
       "editTemplate": "Sjabloon bewerken",
+      "editBlockedTitle": "Dit sjabloon kan nu niet worden bewerkt",
+      "editBlocked": "{reason, select, in_review {Meta beoordeelt dit sjabloon. Het kan weer worden bewerkt zodra de beoordeling klaar is.} daily_limit {Meta staat bij een goedgekeurd sjabloon één bewerking per 24 uur toe. Het kan weer worden bewerkt na {when}.} monthly_limit {Meta staat bij een goedgekeurd sjabloon tien bewerkingen per 30 dagen toe. Het kan weer worden bewerkt na {when}.} other {}}",
       "duplicateTemplate": "Sjabloon dupliceren",
       "editResubmit": "Bewerken en opnieuw indienen",
       "submitToMeta": "Indienen bij Meta",

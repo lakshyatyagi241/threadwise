@@ -231,7 +231,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
     ) : null;
 
   const editHref = `/templates/${tpl.id}/edit`;
-  const editable = mayEdit && canEdit(tpl.status, tpl.templateType);
+  const editable = mayEdit && canEdit(tpl.status, tpl.templateType) && tpl.editBlock === null;
   const submitBtn = (
     <div className="flex flex-wrap items-center gap-2">
       {usable.length > 1 && (
@@ -360,7 +360,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
                 {t('editTemplate')}
               </Link>
             )}
-            {mayEdit && canDuplicate(tpl.status, tpl.templateType) && (
+            {mayEdit && canDuplicate(tpl.status, tpl.metaTemplateId, tpl.templateType) && (
               <Link
                 href={`/templates/new?from=${tpl.id}`}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] hover:bg-muted"
@@ -414,6 +414,14 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             </div>
           </header>
 
+          {mayEdit && tpl.editBlock && (
+            <p className="mb-4 text-[13px] text-muted-foreground" data-testid="edit-blocked">
+              {t('editBlocked', {
+                reason: tpl.editBlock.reason,
+                when: tpl.editBlock.until ? stamp(tpl.editBlock.until) : '',
+              })}
+            </p>
+          )}
           {failure && <ErrorAlert className="mb-4" error={failure} />}
           {outcome?.metaError && (
             <Banner
