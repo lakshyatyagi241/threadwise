@@ -49,7 +49,7 @@ Nothing is deleted. Your rules, switches, team methods and owner mode stay saved
 
 1. In the operator console open **Add-ons** and find **Smart routing**. It starts as a draft: inactive and without a price. Untick **Free**, set the price and period, tick **Active**, save.
 2. Give it to a workspace like any other add-on, or let the workspace buy it from Plans.
-3. To include it in a plan instead, open **Plans**, the plan, **Features**, and under Chat switch on **Smart routing: auto-assignment and rules** and **Smart routing: contact owner and sticky agent**. To make a plan an entry plan, switch both off. A new plan starts with both off; plans that already exist are not changed until you edit them.
+3. To include it in a plan instead, open **Plans**, the plan, **Features**, and under Chat switch on **Smart routing: auto-assignment and rules** and **Smart routing: contact owner and sticky agent**. To make a plan an entry plan, switch both off. A new plan starts with both off, and a plan that does not store them does not include them.
 4. A workspace override beats both the plan and the add-on.
 
 ## If something looks wrong

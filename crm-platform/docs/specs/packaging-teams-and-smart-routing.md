@@ -23,25 +23,32 @@ Rules of the design:
   plan") and links to `/account/plans` (`AddonLockLink`); the API answers 422 `PLAN_FEATURE_LOCKED` (`feature`, `reason`, `upgradeUrl`).
 - **Nothing changes silently for an existing workspace.** See 3 and the decision on defaults below.
 
-### Plan defaults (decision, with the proof)
+### Plan defaults (owner decision 2026-10-22)
 
-`inbox_routing` and `inbox_assignment_sticky` keep `default: true` in the feature registry (`catalogue.ts`). `resolveFeature` reads a plan row's stored value and
-falls back to the registry default for a row that lacks the key (`storedFeature`). Flipping the default to `false` would therefore **lock every existing plan row
-that does not store the key**, with no migration or notice. A plan row only stores the key if it was saved from the operator editor after the key existed (the editor
-writes every key) or was seeded with it, so which rows lack it cannot be known from code alone.
+There are **no paying clients on this system yet**; existing clients will later be migrated onto plans that carry the flags and add-ons they have today
+(section 7). So there is no existing plan to protect, and the catalogue defaults of `inbox_routing` and `inbox_assignment_sticky` are now **`false`**: a plan
+does not include automatic assignment unless it says so. (An earlier revision of this change kept them `true` to protect plan rows that lack the key; that
+rule is withdrawn.)
 
-The real-data check: a `pg_dump` of the shared owner database `crm_owner` was restored into a scratch database and migrated to this branch. It holds **no
-`plans` rows at all** (both workspaces are on slug `growth` with no catalogue row, which the resolver treats as "nothing locked"), so it can neither prove nor
-disprove the flip for production, and the rule was: when it cannot be proven safe, do not flip. **The default stays `true`.**
+What `resolveFeature` does with a plan row that lacks the key: the order is platform-owned workspace (always on), the workspace's own override, "no catalogue row
+for the plan" (nothing is locked), then `storedFeature(plan.features, key)`, which returns the stored boolean or, when the row does not store the key,
+**the catalogue default**. So a plan row without the keys now reads `false`; a plan must store `true` to include Smart routing. The sample plans seeded by
+`seed-auth.ts` (fresh installs, inserted only when the slug is missing) now say it explicitly: Starter `false`/`false`, Growth and Scale `true`/`true`. This is the only
+seeded data that changed; no data migration rewrites any plan row.
 
-What was done instead, without touching any existing plan:
+What existed in the real-data copy (`pg_dump` of `crm_owner`, counts only):
 
-- **A new plan starts without the two flags.** The operator's plan form (`newPlanDraft`) takes the list `NEW_PLAN_FEATURES_OFF` from the contracts; every other
-  feature still starts on (Reference's rule). Existing plans are read from what they store, so the editor shows them as they behave today.
-- **To make an existing plan (for example Basic) an entry plan, an operator switches the two flags off on it**: Operator console, Plans, the plan, Features tab,
-  under the Chat line, switch off **Smart routing: auto-assignment and rules** and **Smart routing: contact owner and sticky agent**, save. This writes the keys
-  explicitly. Workspaces on that plan lose automatic assignment at that moment (see 3); that is the operator's decision, shown in the audit log (`platform.plan.updated`).
-- A plan created through the API without `features` still reads the registry default (`true`) for these keys: API clients that want an entry plan send them as false.
+| Plan slug | Catalogue row?                  | `inbox_routing`                      | `inbox_assignment_sticky` | `team_hierarchy` | `custom_roles` | Workspaces |
+| --------- | ------------------------------- | ------------------------------------ | ------------------------- | ---------------- | -------------- | ---------- |
+| `growth`  | no (the `plans` table is empty) | open: no row means nothing is locked | open                      | open             | open           | 2          |
+
+Both workspaces have no platform-owned flag, no overrides and no add-ons (`workspace_addons` is empty). They keep working because a workspace whose plan slug has
+no catalogue row is never locked. **The moment a `growth` row is created in the catalogue, they follow it**: create the plan with the flags the owner wants, or give
+those workspaces an override. The operator and the owner's own test workspace should not depend on a plan at all: mark them **platform-owned** (always unlocked), or
+set a workspace override of `inbox_routing` and `inbox_assignment_sticky` to `true` (Operator console, the workspace, Plans and overrides).
+
+The operator's plan form already starts a new plan with both off (`NEW_PLAN_FEATURES_OFF`, the same as the default now). Exact steps to set the tiers are in
+[api/smart-routing-packaging.md](../api/smart-routing-packaging.md) section 2.
 
 ## 2. Matrix
 
@@ -108,8 +115,8 @@ The tile is no longer locked as a whole (it holds base controls); each Smart rou
 
 ## 3. Impact analysis
 
-**Existing workspaces: nothing changes silently.** No default is flipped, no plan row is touched, the migration only inserts a draft pack, and the add-on is
-inactive. A workspace whose plan row lacks the keys keeps both flags on. The visible changes are (a) labels and lock hints name "Smart routing", (b) a team method
+**Existing workspaces.** There are no paying clients yet (section 1). No plan row is rewritten and the migration only inserts a draft pack. The two defaults are now
+`false`, so a catalogue plan row that does not store the keys no longer includes Smart routing; workspaces whose plan has no catalogue row stay open. The visible changes are (a) labels and lock hints name "Smart routing", (b) a team method
 change to round robin/least loaded is refused where the feature is off (before: stored and ignored), (c) the Auto-assignment tile no longer shows an "Upgrade" pill
 for a plan without routing (the page has base controls), (d) a due escalation of a plan without routing is dropped.
 
@@ -154,7 +161,7 @@ are catalogue rows and the add-on is the seeded `smart_routing` pack) unless not
 | Plan without permission                                                                                                                  | reader: 403 on write with the add-on live                                                                                                                                                               |
 | Agent scoped to another team                                                                                                             | claim refused, chat stays unassigned                                                                                                                                                                    |
 | Business hours need routing OR SLA                                                                                                       | locked with neither, open with either                                                                                                                                                                   |
-| Plan flag math (`resolveFeature`, `packGrants`, default not flipped, new-plan list)                                                      | `test/unit/plans-subscriptions-trials/smart-routing-packaging.spec.ts`                                                                                                                                  |
+| Plan flag math (`resolveFeature`, `packGrants`, default false, new-plan list)                                                            | `test/unit/plans-subscriptions-trials/smart-routing-packaging.spec.ts`                                                                                                                                  |
 | Web: every switch lock names the add-on and links; paywall names the add-on; team method lock helper; plan form starts without the flags | DOM and unit tests                                                                                                                                                                                      |
 | Already covered before this change                                                                                                       | `handoff.e2e.spec.ts` (queue, claim, rules at handoff behind the plan, losing the sticky feature, owner sync), `routing-rules.e2e.spec.ts` (override off locks everything), `routing-leave.e2e.spec.ts` |
 
@@ -192,4 +199,30 @@ switch since commit d2f0625de; it now expects the in-effect value.)
 6. Workspace business hours could not be edited with SLA but without routing: either feature opens them.
 7. New plans started with every feature on, including the two Smart routing flags: they start off (existing plans untouched).
 
+8. The registry default of the two flags is false (owner decision 2026-10-22); the seeded sample plans say it explicitly.
+
 Found and left as is: plain add-ons do not appear in a plan's `visibleAddons` (Marketplace-only by design); the stale business-hours test above.
+
+## 7. Client migration (for the later migration tool; not built)
+
+A migrated client arrives with a feature set they have today. Map it to **a plan + add-ons + overrides**, in this order of preference, so the result is data an operator
+can read and change:
+
+1. **Pick the plan tier** whose stored flags match most of what they have (Basic: neither Smart routing flag; a higher tier: both on, the caps they paid for).
+2. **Add-ons for the difference that is a product**: Smart routing missing from the tier but in use: a `workspace_addons` row for `smart_routing` (`status=active`,
+   `starts_at` = migration day, `ends_at` = their current paid-through date or null). Teams (hierarchy, custom roles, more teams): the same with `teams_permissions`.
+3. **Overrides for the rest**: anything that is one workspace's special case goes in `org_plan_state.overrides.features` / `.limits` (an override beats plan and add-on in both
+   directions), never into a shared plan row.
+4. **Operator and test workspaces**: `platform_owned = true`, or overrides, never a plan.
+
+| What the client has today                                             | Plan                                  | Add-on              | Override                                                        |
+| --------------------------------------------------------------------- | ------------------------------------- | ------------------- | --------------------------------------------------------------- |
+| No automatic assignment                                               | Basic                                 | none                | none                                                            |
+| Auto-assignment and rules, no sticky/owner modes                      | Basic                                 | none                | `inbox_routing: true`                                           |
+| Auto-assignment, rules, sticky agent, owner modes                     | tier with both flags, else Basic      | `smart_routing`     | none                                                            |
+| Parent teams, managers, custom roles, more teams than the plan allows | any                                   | `teams_permissions` | `limits.teams` if they have a specific number                   |
+| Teams cap lower than the teams they already have                      | the plan's cap                        | none                | none (existing teams are kept, new ones refused)                |
+| Round robin / least loaded team methods                               | tier with `inbox_routing`, else Basic | `smart_routing`     | none (a stored method on a plan without it is kept and skipped) |
+| Waiting-queue timers (once built), offline return                     | tier with `inbox_routing`, else Basic | `smart_routing`     | none                                                            |
+
+Check after migrating: `GET /v2/inbox/handoff-settings` as the workspace admin shows `available` for every capability; compare it with the table above.

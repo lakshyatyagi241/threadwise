@@ -101,15 +101,22 @@ describe('the Smart routing flags', () => {
   });
 });
 
-describe('the stored default is NOT flipped (it would lock every existing plan row that lacks the key)', () => {
-  it('a plan row that predates the keys still reads as granting them', () => {
-    expect(storedFeature({}, 'inbox_routing')).toBe(true);
-    expect(storedFeature({ automation: true }, 'inbox_assignment_sticky')).toBe(true);
-    expect(PLAN_FEATURE_DEFS.find((d) => d.key === 'inbox_routing')!.default).toBe(true);
-    expect(PLAN_FEATURE_DEFS.find((d) => d.key === 'inbox_assignment_sticky')!.default).toBe(true);
+describe('the entry plan has no automatic assignment by default (owner decision 2026-10-22: no paying clients to protect)', () => {
+  it('the registry default is false, so a plan row that does not store the keys does NOT include them', () => {
+    expect(storedFeature({}, 'inbox_routing')).toBe(false);
+    expect(storedFeature({ automation: true }, 'inbox_assignment_sticky')).toBe(false);
+    expect(PLAN_FEATURE_DEFS.find((d) => d.key === 'inbox_routing')!.default).toBe(false);
+    expect(PLAN_FEATURE_DEFS.find((d) => d.key === 'inbox_assignment_sticky')!.default).toBe(false);
   });
 
-  it('a NEW plan starts without them through the plan form list, not through the stored default', () => {
+  it('a plan that stores true has them; resolveFeature falls back to the default for a missing key', () => {
+    expect(resolveFeature(ent({ planFeatures: {} }), 'inbox_routing')).toBe(false);
+    expect(resolveFeature(ent({ planFeatures: { inbox_routing: true } }), 'inbox_routing')).toBe(
+      true,
+    );
+  });
+
+  it('the operator plan form lists both as off for a new plan', () => {
     expect([...NEW_PLAN_FEATURES_OFF].sort()).toEqual(SMART);
     for (const k of NEW_PLAN_FEATURES_OFF) {
       expect(

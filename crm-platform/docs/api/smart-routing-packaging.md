@@ -1,6 +1,6 @@
 # Smart routing packaging (operator how-to)
 
-Design and the full matrix: [specs/packaging-teams-and-smart-routing.md](../specs/packaging-teams-and-smart-routing.md). Owner guide in the Help center:
+Design, the matrix and the client-migration mapping: [specs/packaging-teams-and-smart-routing.md](../specs/packaging-teams-and-smart-routing.md). Owner guide in the Help center:
 "Smart routing add-on". Same shape as [teams-packaging.md](teams-packaging.md); read that first for how plain add-on packs are merged.
 
 The entry plan has **no automatic assignment**. **Smart routing** adds it, as an add-on or as part of a higher plan. It is two existing plan features, no new flag:
@@ -30,17 +30,28 @@ add-on cannot be saved at 0; untick it when you set the price). Idempotent, expa
    catalogue on the Plans page. Plain add-ons are not part of a plan's `visibleAddons` (that table is for Marketplace apps).
 4. To include Smart routing in a higher tier instead, switch the two features on for that plan (Plans, the plan, Features, Chat line).
 
-## 2. Making an existing plan an entry plan
+## 2. Setting the tiers (Basic off, higher tiers on)
 
-The registry default of both features stays `true` and is **not flipped**: a plan row that predates the keys (or was never re-saved) stores nothing for them and
-would be locked by a flip. See "Plan defaults" in the spec. To make a plan an entry plan:
+The catalogue default of both features is **false** (owner decision 2026-10-22: no paying clients yet; clients are migrated onto plans that carry what they have).
+`resolveFeature` order: platform-owned workspace (on), the workspace's override, a plan slug with no catalogue row (nothing locked), then the plan row: the stored
+boolean, and **when the row does not store the key, the catalogue default (false)**. So a plan includes Smart routing only if it stores `true`.
 
-1. Operator console, **Plans**, the plan (for example Basic), **Features** tab.
-2. Under **Chat**, switch off **Smart routing: auto-assignment and rules** and **Smart routing: contact owner and sticky agent**.
-3. Save. The editor writes every feature key, so the plan now stores both as false. Workspaces on it lose automatic assignment at that moment; stored rules and
-   settings are kept and come back when the flags do, chats already Waiting or assigned stay, escalation timers stop.
+State of the real-data copy (`crm_owner`, counts only):
 
-A plan created from the plan form starts with both off. A plan created through the API without a `features` object reads the default (true): send them as false.
+| Plan slug | Catalogue row           | `inbox_routing`               | `inbox_assignment_sticky` | `team_hierarchy` | `custom_roles` | Workspaces |
+| --------- | ----------------------- | ----------------------------- | ------------------------- | ---------------- | -------------- | ---------- |
+| `growth`  | none (`plans` is empty) | open (no row, nothing locked) | open                      | open             | open           | 2          |
+
+Operator steps, in the operator console:
+
+1. **Plans**, open (or create) **Basic**, **Features** tab, **Chat** line: switch **off** _Smart routing: auto-assignment and rules_ and _Smart routing: contact owner and sticky agent_. Save.
+2. For each higher tier (for example Growth, Scale): same screen, switch **on** both. Save. The editor writes every key, so each plan now stores both explicitly.
+3. Check that the **Teams** items under Platform (`team_hierarchy`, `custom_roles`) are set as you want for each tier.
+4. Give the add-on to one workspace: **Add-ons**, **Smart routing** (set the price and tick Active first, section 1), then the workspace's add-ons panel, or let the workspace buy it from Plans.
+5. Keep operator and test workspaces open: mark them **platform-owned**, or on the workspace page set the feature overrides `inbox_routing` and `inbox_assignment_sticky` to on.
+
+Fresh installs: `seed-auth.ts` seeds Starter (both off), Growth and Scale (both on), only when the slug is missing. A plan created from the plan form starts with both off.
+Creating a plan through the API without a `features` object reads the default (false).
 
 ## 3. What a workspace sees without it
 

@@ -125,10 +125,9 @@ export const PACK_GRANTABLE_FEATURES: readonly string[] = [
 ];
 
 /**
- * Flags a NEW plan starts without in the operator's plan form (everything else starts on). They are NOT the stored default: `default` in the
- * registry above is what a plan row that predates a key is taken to grant, and flipping it would silently lock every existing plan row that
- * lacks the key. These two are sold as the "Smart routing" add-on (or switched on per plan), so a plan the operator creates today starts
- * without them and an existing plan, saved or not, keeps what it has.
+ * Flags a NEW plan starts without in the operator's plan form (everything else starts on, Reference's rule). They match the registry default
+ * (false) on purpose: the form writes every key, so a plan saved from it stores them explicitly either way. These two are sold as the "Smart
+ * routing" add-on (or switched on per plan, which the operator does for the higher tiers).
  */
 export const NEW_PLAN_FEATURES_OFF: readonly string[] = [
   'inbox_routing',
@@ -178,13 +177,13 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'wa_storefront', group: 'messaging', productLine: 'chat', default: false },
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', productLine: 'chat', default: false },
-  // Sold as the "Smart routing" add-on (a pack may grant it) or switched on per plan. Default stays TRUE for plan rows that predate the key:
-  // flipping it would lock existing plans (see NEW_PLAN_FEATURES_OFF for how a NEW plan starts without it).
-  { key: 'inbox_routing', group: 'messaging', productLine: 'chat', default: true },
+  // Sold as the "Smart routing" add-on (a pack may grant it) or switched on per plan. Default FALSE: the entry plan has no automatic assignment. A plan row
+  // that does not store the key reads this default (storedFeature), so a plan must store `true` to include it; the sample plans and the operator's plan
+  // form do. Owner decision 2026-10-22: no paying clients yet, existing ones are migrated onto plans that carry what they have.
+  { key: 'inbox_routing', group: 'messaging', productLine: 'chat', default: false },
   // Owner first, keep in sync and the continuity window for the last handler (BL-402, docs/specs/conversation-handoff-and-assignment.md 7).
-  // Effective only together with `inbox_routing`. Default true: a plan row that predates the key and has routing gets it, so Standard keeps one
-  // switch; the owner can switch it off for one plan in plan management without a code change.
-  { key: 'inbox_assignment_sticky', group: 'messaging', productLine: 'chat', default: true },
+  // Effective only together with `inbox_routing`. Default false, with the other Smart routing flag (see above).
+  { key: 'inbox_assignment_sticky', group: 'messaging', productLine: 'chat', default: false },
   // WhatsApp calling from the inbox (TW-CALL-003). Default true: no plan row held it here before, so every one that predates it keeps calling.
   { key: 'waba_calling', group: 'messaging', productLine: 'chat', default: true },
   { key: 'inbox_kanban', group: 'messaging', productLine: 'chat', default: true },
