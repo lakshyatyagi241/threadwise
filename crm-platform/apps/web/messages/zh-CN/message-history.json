@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "收件箱",
+      "contact": "联系人",
       "flow": "流程",
       "auto_reply": "自动回复",
+      "automation": "自动化",
       "ai": "AI 助手",
       "api": "API",
       "broadcast": "群发",
+      "broadcast_test": "广播测试发送",
       "campaign": "营销活动",
       "scheduled": "定时",
       "other": "其他"
@@ -171,6 +174,7 @@
         "contact": "联系人",
         "message": "消息",
         "type": "类型",
+        "source": "来源",
         "status": "状态",
         "open": "打开"
       },
@@ -228,11 +232,13 @@
       "source": "发送方式",
       "sourceValue": {
         "inbox": "收件箱",
+        "contact": "联系人",
         "flow": "流程",
         "auto_reply": "自动回复",
         "ai": "AI 助手",
         "api": "API",
         "broadcast": "群发",
+        "broadcast_test": "广播测试发送",
         "campaign": "营销活动",
         "scheduled": "定时消息",
         "other": "其他"

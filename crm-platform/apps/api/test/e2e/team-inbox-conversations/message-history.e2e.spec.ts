@@ -1137,3 +1137,88 @@ describe('the query plan', () => {
     expect(k.total).toBe(5500);
   }, 120_000);
 });
+
+describe('the source column', () => {
+  let contactMsg: string;
+  let testRow: string;
+  let before: MessageHistorySummary;
+
+  beforeAll(async () => {
+    before = await get<MessageHistorySummary>(S.t.admin, `/v2/message-history/summary?${WIDE()}`);
+    const convId = Number(
+      (await q(`SELECT conversation_id FROM messages WHERE uuid = $1`, [S.ids.m1.slice(2)])).rows[0]
+        .conversation_id,
+    );
+    const sent = await message(S.t, convId, 90, {
+      dir: 'out',
+      at: ago(HOUR),
+      status: 'delivered',
+      body: 'Your order has shipped',
+      senderKind: 'agent',
+      senderUserId: S.t.adminUserId,
+      meta: { source: 'contact' },
+      providerId: 'wamid.C1',
+    });
+    contactMsg = `m:${sent.uuid}`;
+
+    const tplId = Number(
+      (await q(`SELECT id FROM wa_templates WHERE uuid = $1`, [S.templateUuid])).rows[0].id,
+    );
+    const campId = Number(
+      (await q(`SELECT id FROM wpcampaigns WHERE uuid = $1`, [S.campaignUuid])).rows[0].id,
+    );
+    const test = await q(
+      `INSERT INTO camp_test_sends (org_id, campaign_id, template_id, provider, to_phone, status, provider_message_id, created_by, created_at, updated_at)
+       VALUES ($1,$2,$3,'cloud_api','919800000055','delivered','wamid.T1',$4,$5::timestamptz,$5::timestamptz) RETURNING uuid`,
+      [S.t.orgId, campId, tplId, S.t.adminUserId, ago(30 * 60_000)],
+    );
+    testRow = `t:${test.rows[0].uuid as string}`;
+  }, 120_000);
+
+  it('a send from a contact drawer is Contact; a wizard test send is a row of its own: Broadcast Test Send, a template, no conversation', async () => {
+    const page = await list(S.t.admin, '?limit=100');
+    const by = (id: string) => page.data.find((r) => r.id === id)!;
+    expect(by(contactMsg)).toMatchObject({
+      source: 'contact',
+      entityKind: 'message',
+      direction: 'out',
+      status: 'delivered',
+    });
+    expect(by(testRow)).toMatchObject({
+      source: 'broadcast_test',
+      entityKind: 'test',
+      direction: 'out',
+      status: 'delivered',
+      type: 'template',
+      template: { name: 'welcome_tpl' },
+      entity: null,
+      conversationId: null,
+      recipient: { value: '+919800000055', masked: false },
+    });
+  });
+
+  it('a test send is visible only to a reader of every conversation; its drawer is a 404 for anyone else', async () => {
+    expect(rowIds(await list(S.agentOwn.token, '?limit=100'))).not.toContain(testRow);
+    expect(rowIds(await list(S.reader2.token, '?limit=100'))).toContain(testRow);
+    await get(S.agentOwn.token, `/v2/message-history/${testRow}`, 404);
+    const drawer = await get<MessageHistoryDetail>(S.t.admin, `/v2/message-history/${testRow}`);
+    expect(drawer).toMatchObject({ id: testRow, source: 'broadcast_test', body: null });
+    expect(
+      (await get<MessageHistoryDetail>(S.t.admin, `/v2/message-history/${contactMsg}`)).source,
+    ).toBe('contact');
+  });
+
+  it('the Source filter and the campaign filter pick them up; the cards count both as sent', async () => {
+    expect(rowIds(await list(S.t.admin, '?source=broadcast_test&limit=100'))).toEqual([testRow]);
+    expect(rowIds(await list(S.t.admin, '?source=contact&limit=100'))).toEqual([contactMsg]);
+    expect(rowIds(await list(S.t.admin, `?campaignId=${S.campaignUuid}&limit=100`))).toContain(
+      testRow,
+    );
+    const after = await get<MessageHistorySummary>(
+      S.t.admin,
+      `/v2/message-history/summary?${WIDE()}`,
+    );
+    expect(after.total).toBe(before.total + 2);
+    expect(after.sent).toBe(before.sent + 2);
+  });
+});

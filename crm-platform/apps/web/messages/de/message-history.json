@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Posteingang",
+      "contact": "Kontakt",
       "flow": "Flow",
       "auto_reply": "Automatische Antwort",
+      "automation": "Automatisierung",
       "ai": "KI-Assistent",
       "api": "API",
       "broadcast": "Massenversand",
+      "broadcast_test": "Test-Versand der Massennachricht",
       "campaign": "Kampagne",
       "scheduled": "Geplant",
       "other": "Sonstige"
@@ -171,6 +174,7 @@
         "contact": "Kontakt",
         "message": "Nachricht",
         "type": "Typ",
+        "source": "Quelle",
         "status": "Status",
         "open": "Öffnen"
       },
@@ -228,11 +232,13 @@
       "source": "Gesendet von",
       "sourceValue": {
         "inbox": "Posteingang",
+        "contact": "Kontakt",
         "flow": "Flow",
         "auto_reply": "Automatische Antwort",
         "ai": "KI-Assistent",
         "api": "API",
         "broadcast": "Massenversand",
+        "broadcast_test": "Test-Versand der Massennachricht",
         "campaign": "Kampagne",
         "scheduled": "Geplante Nachricht",
         "other": "Sonstige"

@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Caixa de entrada",
+      "contact": "Contato",
       "flow": "Fluxo",
       "auto_reply": "Resposta automática",
+      "automation": "Automação",
       "ai": "Assistente de IA",
       "api": "API",
       "broadcast": "Transmissão",
+      "broadcast_test": "Envio de teste de transmissão",
       "campaign": "Campanha",
       "scheduled": "Agendada",
       "other": "Outro"
@@ -171,6 +174,7 @@
         "contact": "Contato",
         "message": "Mensagem",
         "type": "Tipo",
+        "source": "Origem",
         "status": "Status",
         "open": "Abrir"
       },
@@ -228,11 +232,13 @@
       "source": "Enviado por",
       "sourceValue": {
         "inbox": "Caixa de entrada",
+        "contact": "Contato",
         "flow": "Fluxo",
         "auto_reply": "Resposta automática",
         "ai": "Assistente de IA",
         "api": "API",
         "broadcast": "Transmissão",
+        "broadcast_test": "Envio de teste de transmissão",
         "campaign": "Campanha",
         "scheduled": "Mensagem agendada",
         "other": "Outro"

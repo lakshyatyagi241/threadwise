@@ -2,9 +2,19 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import type { MessageHistoryRow } from '@crm/contracts';
+import type { MessageHistoryRow, MessageHistorySource } from '@crm/contracts';
 import { dayLabel, timeLabel } from '../lib/format';
 import { Avatar, DirectionMark, EyeIcon, StatusMark, TypePill, rowName } from './parts';
+
+/**
+ * The word the Source column shows. A flow and an auto reply are both automation to the person reading the table; the Source filter
+ * still lists them apart.
+ */
+export function sourceLabelKey(
+  source: MessageHistorySource,
+): 'automation' | Exclude<MessageHistorySource, 'flow' | 'auto_reply'> {
+  return source === 'flow' || source === 'auto_reply' ? 'automation' : source;
+}
 
 /** Reference's "Open" eye: a campaign, broadcast or scheduled row goes to that screen, everything else to the conversation. */
 export function openHref(row: MessageHistoryRow): string | null {
@@ -25,12 +35,13 @@ interface Props {
 }
 
 /**
- * The message table: When, Dir, Contact, Message, Type, Status, Open (Reference's columns, minus its select-all box, which had no
- * action). A row opens the drawer; the eye goes to the source. The number is already masked by the API for a caller who may not read
- * the contact. The text is customer-written, so it is marked for the help assistant to leave out.
+ * The message table: When, Dir, Contact, Message, Type, Source, Status, Open (Reference's columns, minus its select-all box, which had no
+ * action; Source is the one this port adds). A row opens the drawer; the eye goes to the source. The number is already masked by the API
+ * for a caller who may not read the contact. The text is customer-written, so it is marked for the help assistant to leave out.
  */
 export function HistoryTable({ rows, tz, selected, onOpen }: Props) {
   const t = useTranslations('message-history.table');
+  const source = useTranslations('message-history.source');
   const locale = useLocale();
   const now = new Date();
   return (
@@ -38,15 +49,17 @@ export function HistoryTable({ rows, tz, selected, onOpen }: Props) {
       <table className="w-full text-[12.5px]" data-testid="history-table">
         <thead className="border-b border-border bg-muted/50 text-muted-foreground">
           <tr>
-            {(['when', 'dir', 'contact', 'message', 'type', 'status'] as const).map((c) => (
-              <th
-                key={c}
-                scope="col"
-                className="px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]"
-              >
-                {t(`col.${c}`)}
-              </th>
-            ))}
+            {(['when', 'dir', 'contact', 'message', 'type', 'source', 'status'] as const).map(
+              (c) => (
+                <th
+                  key={c}
+                  scope="col"
+                  className="px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]"
+                >
+                  {t(`col.${c}`)}
+                </th>
+              ),
+            )}
             <th
               scope="col"
               className="px-3 py-2.5 text-end font-mono text-[10px] font-normal uppercase tracking-[0.14em]"
@@ -108,11 +121,18 @@ export function HistoryTable({ rows, tz, selected, onOpen }: Props) {
                   )}
                   <span data-agent-ignore>
                     {r.preview ??
-                      (r.entity ? t(`entity.${r.entity.kind}`, { name: r.entity.name }) : '—')}
+                      (r.entity
+                        ? t(`entity.${r.entity.kind}`, { name: r.entity.name })
+                        : r.entityKind === 'test'
+                          ? (r.template?.name ?? '—')
+                          : '—')}
                   </span>
                 </td>
                 <td className="px-3 py-3">
                   <TypePill type={r.type} />
+                </td>
+                <td className="px-3 py-3 text-foreground/80" data-testid="history-source">
+                  {source(sourceLabelKey(r.source))}
                 </td>
                 <td className="px-3 py-3">
                   <StatusMark status={r.status} />

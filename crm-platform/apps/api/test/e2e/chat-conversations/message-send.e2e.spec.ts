@@ -275,6 +275,29 @@ describe('a reply from the inbox', () => {
   }, 60_000);
 });
 
+describe('where a send came from', () => {
+  it('a send that says it came from a contact stores `contact` as its source (the Source column); a reply from the inbox stores none', async () => {
+    const t = await p.api.signup('snd-origin');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch, '919900000090');
+
+    const { message: fromContact } = await send(t, th, text('Hello from the contact drawer'), {
+      origin: 'contact',
+    });
+    const { message: fromInbox } = await send(t, th, text('A reply from the inbox'));
+    await waitStatus(fromContact.id, 'read');
+    await waitStatus(fromInbox.id, 'read');
+
+    const stored = await p.h.owner.query(
+      `SELECT uuid, meta->>'source' AS source FROM messages WHERE org_id = $1 AND uuid IN ($2, $3)`,
+      [t.orgId, fromContact.id, fromInbox.id],
+    );
+    const sourceOf = (id: string) => stored.rows.find((r) => r.uuid === id)?.source ?? null;
+    expect(sourceOf(fromContact.id)).toBe('contact');
+    expect(sourceOf(fromInbox.id)).toBeNull();
+  }, 120_000);
+});
+
 describe('an agent reply reopens a finished or spam thread', () => {
   const reopenedEvents = async (conversationId: number) =>
     (
