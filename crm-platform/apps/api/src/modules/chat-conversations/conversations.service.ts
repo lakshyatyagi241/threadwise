@@ -268,10 +268,13 @@ export class ConversationsService implements ConversationsFacade {
     return this.outbound.enqueue(input);
   }
 
-  async retryOutbound(messageId: string): Promise<MessageResponse> {
+  async retryOutbound(
+    messageId: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse> {
     // One Retry button for both directions: on a customer's message it starts the failed file download again.
     const inbound = await this.mediaFetch.retryIfInbound(messageId);
-    return inbound ?? this.outbound.retry(messageId);
+    return inbound ?? this.outbound.retry(messageId, templateComponents);
   }
 
   async listMessages(

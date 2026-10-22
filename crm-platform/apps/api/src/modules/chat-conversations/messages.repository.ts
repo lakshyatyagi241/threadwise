@@ -473,15 +473,19 @@ export class MessagesRepository {
     return (rowsOf(res)[0]?.category as string | null | undefined) ?? null;
   }
 
-  /** The agent's Retry: failed -> queued again, with a fresh dispatch generation. False when the message was not failed. */
+  /**
+   * The agent's Retry: failed -> queued again, with a fresh dispatch generation. `patch` is merged into `meta` in the same write (a Retry
+   * that stores the template components it rebuilt). False when the message was not failed.
+   */
   async requeue(
     tx: Tx,
     orgId: number,
     ref: { id: number; createdAt: string },
+    patch: Record<string, unknown> = {},
   ): Promise<{ generation: number } | null> {
     const res = await tx.execute(sql`
       UPDATE messages SET status = 'queued', failure_code = NULL, failure_reason = NULL,
-        meta = jsonb_set(meta, '{dispatchGeneration}', to_jsonb(COALESCE((meta ->> 'dispatchGeneration')::int, 1) + 1))
+        meta = jsonb_set(meta || ${JSON.stringify(patch)}::jsonb, '{dispatchGeneration}', to_jsonb(COALESCE((meta ->> 'dispatchGeneration')::int, 1) + 1))
       WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
         AND direction = 'out' AND status = 'failed'
       RETURNING (meta ->> 'dispatchGeneration')::int AS generation`);
