@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import type { SimpleStep } from '../../lib/simple-model';
 import { marksToHtml, RICH_TEXT_CLASS } from '../../lib/rich-text';
 
@@ -67,20 +71,7 @@ export function StepPreview({ step }: { step: SimpleStep }) {
   }
   if (step.type === 'carousel') {
     const cards = arr(d.cards).map(rec);
-    const image = str(cards[0]?.image).trim();
-    if (!image && cards.length === 0) return null;
-    return (
-      <div className="mt-3 flex items-center gap-2">
-        {image ? (
-          <img
-            src={image}
-            alt=""
-            className="h-14 w-20 rounded-md border border-border object-cover"
-          />
-        ) : null}
-        <span className="text-[12px] text-muted-foreground">{cards.length} ×</span>
-      </div>
-    );
+    return cards.length === 0 ? null : <CarouselPager cards={cards} />;
   }
   if (step.type === 'cta') {
     const actions = arr(d.actions)
@@ -103,4 +94,85 @@ export function StepPreview({ step }: { step: SimpleStep }) {
     );
   }
   return null;
+}
+
+/**
+ * A closed Carousel step: one card at a time as the customer sees it (picture, title, text, buttons), with arrows to walk through
+ * all of them and a dot for each card.
+ */
+function CarouselPager({ cards }: { cards: Array<Record<string, unknown>> }) {
+  const t = useTranslations('flb.builder.simple.editors');
+  const [at, setAt] = useState(0);
+  const here = Math.min(at, cards.length - 1);
+  const c = cards[here]!;
+  const image = str(c.image).trim();
+  const buttons = arr(c.buttons)
+    .map((b) => str(rec(b).label).trim())
+    .filter(Boolean);
+  const arrow =
+    'absolute top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg border border-border bg-background text-base leading-none text-foreground/70 shadow-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary';
+  return (
+    <div className="relative mt-3" data-testid="carousel-pager">
+      <div
+        data-testid="carousel-card"
+        className="overflow-hidden rounded-lg border border-border bg-background"
+      >
+        {image ? (
+          <img src={image} alt="" className="h-40 w-full object-cover" />
+        ) : (
+          <div className="h-24 w-full bg-muted" aria-hidden="true" />
+        )}
+        <div className="space-y-2 p-3">
+          {str(c.title).trim() ? (
+            <div className="text-[14px] font-semibold">{str(c.title)}</div>
+          ) : null}
+          {str(c.text).trim() ? (
+            <div className="line-clamp-3 text-[12.5px] text-muted-foreground">{str(c.text)}</div>
+          ) : null}
+          {buttons.map((label, j) => (
+            <div
+              key={j}
+              className="truncate rounded-full border border-brand/60 px-3 py-1.5 text-center text-[12.5px] font-semibold text-brand"
+            >
+              {label}
+            </div>
+          ))}
+        </div>
+      </div>
+      {here > 0 ? (
+        <button
+          type="button"
+          aria-label={t('carousel.prev')}
+          onClick={() => setAt(here - 1)}
+          className={`${arrow} start-1.5`}
+        >
+          ‹
+        </button>
+      ) : null}
+      {here < cards.length - 1 ? (
+        <button
+          type="button"
+          aria-label={t('carousel.next')}
+          onClick={() => setAt(here + 1)}
+          className={`${arrow} end-1.5`}
+        >
+          ›
+        </button>
+      ) : null}
+      {cards.length > 1 ? (
+        <div className="mt-2 flex justify-center gap-1.5">
+          {cards.map((_, j) => (
+            <button
+              key={j}
+              type="button"
+              aria-label={t('carousel.goTo', { n: j + 1 })}
+              aria-current={j === here ? 'true' : undefined}
+              onClick={() => setAt(j)}
+              className={`size-2.5 rounded-sm border border-brand outline-none focus-visible:ring-2 focus-visible:ring-primary ${j === here ? 'bg-brand' : 'bg-background'}`}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
 }

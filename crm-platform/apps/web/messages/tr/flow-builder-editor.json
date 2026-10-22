@@ -905,7 +905,10 @@
               "phone": "Bir numarayı ara",
               "email": "E-posta gönder",
               "agent": "Bir kişiyle konuş"
-            }
+            },
+            "prev": "Önceki kart",
+            "next": "Sonraki kart",
+            "goTo": "Kart {n}"
           },
           "condition": {
             "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",
