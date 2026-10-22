@@ -27,6 +27,7 @@ export interface StoredQueueTimers {
 
 export interface StoredHandoffSettings {
   queueTimers: StoredQueueTimers;
+  away: { returnUnanswered: boolean; autoOfflineMinutes: number | null };
   autoAssign: boolean;
   claimSetsOwner: boolean;
   ownerMode: OwnerMode;
@@ -85,12 +86,17 @@ export class HandoffRepository {
       SELECT s.handoff_auto_assign, s.handoff_claim_sets_owner, s.handoff_owner_mode, s.handoff_continuity_days,
              s.handoff_prompt_owner_on_reassign, s.handoff_notify_queue, s.routing_keep_contact_agent,
              s.handoff_wq_remind_minutes, s.handoff_wq_overflow_minutes, s.handoff_wq_overflow_team_id, ot.uuid AS wq_overflow_team_uuid,
-             s.handoff_wq_unclaimed_minutes, s.handoff_wq_unclaimed_action, s.handoff_wq_unclaimed_message
+             s.handoff_wq_unclaimed_minutes, s.handoff_wq_unclaimed_action, s.handoff_wq_unclaimed_message,
+             s.handoff_return_on_away, s.handoff_auto_offline_min
       FROM workspace_settings s
       LEFT JOIN teams ot ON ot.org_id = s.org_id AND ot.id = s.handoff_wq_overflow_team_id
       WHERE s.org_id = ${orgId}`);
     const r = rowsOf(res)[0];
     return {
+      away: {
+        returnUnanswered: r ? r.handoff_return_on_away === true : false,
+        autoOfflineMinutes: num(r?.handoff_auto_offline_min),
+      },
       queueTimers: {
         remindMinutes: num(r?.handoff_wq_remind_minutes),
         overflowMinutes: num(r?.handoff_wq_overflow_minutes),
@@ -115,11 +121,13 @@ export class HandoffRepository {
   async updateSettings(
     tx: Tx,
     orgId: number,
-    v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent' | 'queueTimers'>> & {
+    v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent' | 'queueTimers' | 'away'>> & {
       queueTimers?: Partial<Omit<StoredQueueTimers, 'overflowTeamUuid'>>;
+      away?: Partial<StoredHandoffSettings['away']>;
     },
   ): Promise<void> {
     const q = v.queueTimers ?? {};
+    const a = v.away ?? {};
     await tx.execute(
       sql`INSERT INTO workspace_settings (org_id) VALUES (${orgId}) ON CONFLICT (org_id) DO NOTHING`,
     );
@@ -132,6 +140,10 @@ export class HandoffRepository {
         ? sql`handoff_prompt_owner_on_reassign = ${v.promptOwnerOnReassign}`
         : null,
       v.notifyQueue !== undefined ? sql`handoff_notify_queue = ${v.notifyQueue}` : null,
+      a.returnUnanswered !== undefined ? sql`handoff_return_on_away = ${a.returnUnanswered}` : null,
+      a.autoOfflineMinutes !== undefined
+        ? sql`handoff_auto_offline_min = ${a.autoOfflineMinutes}`
+        : null,
       q.remindMinutes !== undefined ? sql`handoff_wq_remind_minutes = ${q.remindMinutes}` : null,
       q.overflowMinutes !== undefined
         ? sql`handoff_wq_overflow_minutes = ${q.overflowMinutes}`

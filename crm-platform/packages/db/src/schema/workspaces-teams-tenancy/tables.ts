@@ -394,6 +394,9 @@ export const workspaceSettings = pgTable(
       .notNull()
       .default('keep'),
     handoffWqUnclaimedMessage: text('handoff_wq_unclaimed_message'),
+    /** Away rules (migration 20270326090000): both off by default. */
+    handoffReturnOnAway: boolean('handoff_return_on_away').notNull().default(false),
+    handoffAutoOfflineMin: integer('handoff_auto_offline_min'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

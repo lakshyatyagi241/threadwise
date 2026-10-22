@@ -46,3 +46,4 @@ export {
   unofficialDisabled,
   UNOFFICIAL_WHATSAPP_KEY,
 } from './platform/unofficial-whatsapp-switch';
+export { AuthKeys } from './support/redis-keys';

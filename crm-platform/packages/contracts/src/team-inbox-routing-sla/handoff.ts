@@ -245,6 +245,8 @@ export const HANDOFF_GATES = {
   promptOwnerOnReassign: 'inbox_assignment_sticky',
   /** The waiting queue's reminder, overflow team and last step: part of automatic assignment, so the same plan feature. */
   queueTimers: 'inbox_routing',
+  /** Returning unanswered chats when someone goes offline or on leave, and setting inactive people offline. */
+  away: 'inbox_routing',
 } as const;
 export type HandoffGate = keyof typeof HANDOFF_GATES;
 
@@ -275,6 +277,18 @@ export const queueTimersSchema = z.object({
 });
 export type QueueTimers = z.infer<typeof queueTimersSchema>;
 
+/**
+ * Away rules (Auto-assignment > Waiting queue; Smart routing, both off by default): `returnUnanswered` puts the open chats a person holds whose
+ * customer is still waiting for a reply back in the team's queue when that person goes Offline or starts a leave; `autoOfflineMinutes` sets an
+ * Available person Offline after that many minutes without activity (null = never).
+ */
+export const AWAY_MAX_MINUTES = 1440;
+export const awaySchema = z.object({
+  returnUnanswered: z.boolean(),
+  autoOfflineMinutes: z.number().int().min(1).max(AWAY_MAX_MINUTES).nullable(),
+});
+export type AwayRules = z.infer<typeof awaySchema>;
+
 export const handoffSettingsSchema = z.object({
   /** Automatic assignment on or off (arrival routing and the "assignment rules" destination). Default on = today. */
   autoAssign: z.boolean(),
@@ -288,6 +302,8 @@ export const handoffSettingsSchema = z.object({
   notifyQueue: z.boolean(),
   /** The waiting queue's timers; when the plan lacks `available.queueTimers` they read as off (what is stored comes back on upgrade). */
   queueTimers: queueTimersSchema,
+  /** The away rules; read as off when the plan lacks `available.away` (what was saved comes back on upgrade). */
+  away: awaySchema,
   /** Per capability: false when the plan does not include it (the UI shows a lock and an upgrade hint, never a silent no-op). */
   available: z.object({
     autoAssign: z.boolean(),
@@ -296,13 +312,14 @@ export const handoffSettingsSchema = z.object({
     continuityWindow: z.boolean(),
     promptOwnerOnReassign: z.boolean(),
     queueTimers: z.boolean(),
+    away: z.boolean(),
   }),
 });
 export type HandoffSettings = z.infer<typeof handoffSettingsSchema>;
 
 export const updateHandoffSettingsSchema = handoffSettingsSchema
-  .omit({ available: true, queueTimers: true })
-  .extend({ queueTimers: queueTimersSchema.partial() })
+  .omit({ available: true, queueTimers: true, away: true })
+  .extend({ queueTimers: queueTimersSchema.partial(), away: awaySchema.partial() })
   .partial()
   .refine((v) => Object.keys(v).length > 0, { message: 'Nothing to change' });
 export type UpdateHandoffSettingsInput = z.infer<typeof updateHandoffSettingsSchema>;

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
+import { AwayService } from '../../../src/modules/team-inbox-routing-sla/away.service';
 import { QueueTimersService } from '../../../src/modules/team-inbox-routing-sla/queue-timers.service';
 import type { Tenant } from '../contacts-attributes-tags/support';
 import {
@@ -347,5 +348,146 @@ describe('claiming over your own chat limit', () => {
     const ok = await claim(second.uuid, { acknowledgeLimit: true });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
     expect(Number((await row(second.id)).assignee_user_id)).toBe(a1.userId);
+  });
+});
+
+describe('away rules: return unanswered chats, set inactive people offline', () => {
+  let t: Tenant;
+  let ch: SimChannel;
+  let a1: { token: string; userId: number };
+  let team: { id: number; uuid: string };
+  const away = () => get(AwayService);
+
+  const holdBy = async (token: string, uuid: string) => {
+    await sendToTeam(t, uuid, team.uuid);
+    const sum = (await p.api.as(token).get(`/v2/inbox/conversations/${uuid}`)).body;
+    const version = (sum.conversation ?? sum).rowVersion as number;
+    const res = await p.api
+      .as(token)
+      .post(`/v2/inbox/conversations/${uuid}/claim`)
+      .set('idempotency-key', randomUUID())
+      .send({ rowVersion: version });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+  };
+  const setAvailability = (token: string, status: 'online' | 'offline') =>
+    p.api.as(token).put('/v2/workspace/members/me/availability').send({ status });
+
+  beforeAll(async () => {
+    t = await p.api.signup('wqa');
+    ch = await simChannel(p, t);
+    a1 = await p.api.member(t, 'wqa1', AGENT);
+    team = (
+      await q(`INSERT INTO teams (org_id, name) VALUES ($1, 'Desk') RETURNING id, uuid`, [t.orgId])
+    ).rows[0];
+    await q(`INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`, [
+      t.orgId,
+      team.id,
+      a1.userId,
+    ]);
+  });
+
+  it('everything is off by default and nothing moves', async () => {
+    const s = await p.api.as(t.admin).get('/v2/inbox/handoff-settings');
+    expect(s.body.away).toEqual({ returnUnanswered: false, autoOfflineMinutes: null });
+    expect(s.body.available.away).toBe(true);
+    const c = await thread(t, ch);
+    await holdBy(a1.token, c.uuid);
+    expect((await setAvailability(a1.token, 'offline')).status).toBe(200);
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'offline')).toBe(0);
+    expect(Number((await row(c.id)).assignee_user_id)).toBe(a1.userId);
+    expect((await setAvailability(a1.token, 'online')).status).toBe(200);
+  });
+
+  it('going offline returns the chats whose customer still waits; answered chats, and people who are back, stay', async () => {
+    expect((await putSettings(t, { away: { returnUnanswered: true } })).status).toBe(200);
+    const waiting = await thread(t, ch);
+    const answered = await thread(t, ch);
+    await holdBy(a1.token, waiting.uuid);
+    await holdBy(a1.token, answered.uuid);
+    await q(`UPDATE conversations SET waiting_since = NULL WHERE id = $1`, [answered.id]); // a person replied
+
+    // still online: a stale event must not take anything
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'offline')).toBe(0);
+
+    expect((await setAvailability(a1.token, 'offline')).status).toBe(200);
+    const ev = await q(
+      `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'member.availability_changed' ORDER BY id DESC LIMIT 1`,
+      [t.orgId],
+    );
+    expect(ev.rows[0].payload).toMatchObject({ userId: a1.userId, status: 'offline' });
+
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'offline')).toBeGreaterThanOrEqual(1);
+    const back = await row(waiting.id);
+    expect(back.assignee_user_id).toBeNull();
+    expect(Number(back.assignee_team_id)).toBe(team.id); // the team keeps it
+    expect(back.handling).toBe('waiting');
+    expect(JSON.stringify((await card(t, waiting.uuid)).trace)).toContain('returned_offline');
+    expect(Number((await row(answered.id)).assignee_user_id)).toBe(a1.userId);
+
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'offline')).toBe(0); // idempotent
+    await setAvailability(a1.token, 'online');
+  });
+
+  it('a leave returns them too, without needing the offline switch', async () => {
+    const c = await thread(t, ch);
+    await holdBy(a1.token, c.uuid);
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'leave')).toBeGreaterThanOrEqual(1);
+    expect((await row(c.id)).assignee_user_id).toBeNull();
+  });
+
+  it('inactive people are set offline once, audited and announced; the limit is validated', async () => {
+    expect((await putSettings(t, { away: { autoOfflineMinutes: 0 } })).status).toBe(422);
+    expect((await putSettings(t, { away: { autoOfflineMinutes: 30 } })).status).toBe(200);
+    const later = new Date(Date.now() + 3 * 3_600_000); // three hours on: nobody has been active for 30 minutes
+    const n = await away().offlineInactive(t.orgId, 30, later);
+    expect(n).toBeGreaterThanOrEqual(1);
+    const status = (
+      await q(`SELECT status FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [
+        t.orgId,
+        a1.userId,
+      ])
+    ).rows[0].status;
+    expect(status).toBe('offline');
+    const ev = await q(
+      `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'member.availability_changed' AND payload->>'reason' = 'inactive'`,
+      [t.orgId],
+    );
+    expect(ev.rowCount).toBeGreaterThanOrEqual(1);
+    expect(await away().offlineInactive(t.orgId, 30, later)).toBe(0); // already offline: nothing again
+  });
+
+  it('is part of Smart routing: locked without it, nothing runs, saved choices come back', async () => {
+    await q(
+      `INSERT INTO org_plan_state (org_id, overrides) VALUES ($1, '{"features":{"inbox_routing":false}}'::jsonb)
+       ON CONFLICT (org_id) DO UPDATE SET overrides = EXCLUDED.overrides`,
+      [t.orgId],
+    );
+    const locked = await putSettings(t, {
+      away: { returnUnanswered: false, autoOfflineMinutes: 45 },
+    });
+    expect(locked.status).toBe(422);
+    expect(locked.body.code).toBe('PLAN_FEATURE_LOCKED');
+    const s = await p.api.as(t.admin).get('/v2/inbox/handoff-settings');
+    expect(s.body.available.away).toBe(false);
+    expect(s.body.away).toEqual({ returnUnanswered: false, autoOfflineMinutes: null });
+    const c = await thread(t, ch);
+    await holdBy(a1.token, c.uuid).catch(() => undefined);
+    expect(await away().returnUnanswered(t.orgId, a1.userId, 'leave')).toBe(0);
+    const a3 = await p.api.member(t, 'wqa3', AGENT);
+    const far = new Date(Date.now() + 9 * 3_600_000);
+    expect(await away().sweepInactive(far)).toBe(0); // locked: nobody is set offline
+    expect(
+      (
+        await q(`SELECT status FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [
+          t.orgId,
+          a3.userId,
+        ])
+      ).rowCount,
+    ).toBe(0);
+    await q(`UPDATE org_plan_state SET overrides = '{}'::jsonb WHERE org_id = $1`, [t.orgId]);
+    expect(await away().sweepInactive(far)).toBeGreaterThanOrEqual(1); // back on: it resumes
+    expect(
+      (await p.api.as(t.admin).get('/v2/inbox/handoff-settings')).body.away.returnUnanswered,
+    ).toBe(true);
   });
 });

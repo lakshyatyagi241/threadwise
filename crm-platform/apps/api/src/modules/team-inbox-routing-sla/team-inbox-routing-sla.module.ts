@@ -14,6 +14,7 @@ import { HandoffService } from './handoff.service';
 import { OwnerAlignmentService } from './owner-alignment.service';
 import { AssignmentService } from './assignment.service';
 import { BulkActionsService } from './bulk-actions.service';
+import { AwayService } from './away.service';
 import { QueueArrivalService } from './queue-arrival.service';
 import { QueueTimersService } from './queue-timers.service';
 import { RoutingEngine } from './routing-engine.service';
@@ -55,6 +56,7 @@ import { RoutingRulesService } from './routing-rules.service';
     RoutingEngine,
     QueueArrivalService,
     QueueTimersService,
+    AwayService,
     SlaPoliciesRepository,
     SlaPoliciesService,
     SlaClockService,
@@ -65,6 +67,7 @@ import { RoutingRulesService } from './routing-rules.service';
     HandoffService,
     HandoffRepository,
     QueueTimersService,
+    AwayService,
     RoutingEngine,
     RoutingRulesRepository,
     SlaClockService,

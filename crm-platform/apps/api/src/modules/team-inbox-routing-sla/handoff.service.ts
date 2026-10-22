@@ -198,6 +198,7 @@ export class HandoffService {
       continuityWindow: sticky,
       promptOwnerOnReassign: sticky,
       queueTimers: routing && (await has(HANDOFF_GATES.queueTimers)),
+      away: routing && (await has(HANDOFF_GATES.away)),
     };
   }
 
@@ -474,6 +475,13 @@ export class HandoffService {
       )
     )
       locked.push('queueTimers');
+    const aw = input.away;
+    if (
+      aw &&
+      !available.away &&
+      ((aw.returnUnanswered ?? false) === true || (aw.autoOfflineMinutes ?? null) !== null)
+    )
+      locked.push('away');
     if (locked.length > 0) {
       throw new AppError(
         ERROR_CODES.PLAN_FEATURE_LOCKED,
@@ -483,11 +491,12 @@ export class HandoffService {
       );
     }
     const stored = await this.db.tx(async (tx) => {
-      const { queueTimers: qIn, ...rest } = input;
+      const { queueTimers: qIn, away, ...rest } = input;
       const queueTimers = qIn ? await this.queueTimersToStore(tx, ctx.orgId, qIn) : undefined;
       await this.repo.updateSettings(tx, ctx.orgId, {
         ...rest,
         ...(queueTimers ? { queueTimers } : {}),
+        ...(away ? { away } : {}),
       });
       await this.audit.record(tx, {
         module: 'workspace_settings',
@@ -566,6 +575,7 @@ export class HandoffService {
       continuityDays: available.continuityWindow ? s.continuityDays : null,
       promptOwnerOnReassign: s.promptOwnerOnReassign && available.promptOwnerOnReassign,
       notifyQueue: s.notifyQueue,
+      away: available.away ? { ...s.away } : { returnUnanswered: false, autoOfflineMinutes: null },
       // What is in effect: a plan without the timers runs none (what was saved comes back on upgrade), so the screen shows them off.
       queueTimers: available.queueTimers
         ? {

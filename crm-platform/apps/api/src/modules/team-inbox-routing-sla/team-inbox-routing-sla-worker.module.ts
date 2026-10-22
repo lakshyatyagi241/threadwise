@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ChatConversationsModule } from '../chat-conversations';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
+import { AwayConsumer, AwaySweep } from './away.consumer';
 import { OwnerSyncConsumer } from './owner-sync.consumer';
 import { QueueTimersSweep } from './queue-timers-sweep.service';
 import { RoutingEscalationSweep } from './routing-escalation-sweep.service';
@@ -28,6 +29,8 @@ import { TeamInboxRoutingSlaModule } from './team-inbox-routing-sla.module';
     SlaSweepService,
     RoutingEscalationSweep,
     QueueTimersSweep,
+    AwayConsumer,
+    AwaySweep,
   ],
 })
 export class TeamInboxRoutingSlaWorkerModule {}
