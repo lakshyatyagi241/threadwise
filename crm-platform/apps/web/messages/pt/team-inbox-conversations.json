@@ -1059,7 +1059,10 @@
       "tagRemove": "Remover tag",
       "onLeave": "de licença",
       "onLeaveUntil": "de licença até {date}",
-      "spam": "Marcar como spam"
+      "spam": "Marcar como spam",
+      "markUnread": "Marcar como não lida",
+      "unsnooze": "Reativar",
+      "notSpam": "Marcar como não é spam"
     },
     "tags": {
       "tag": "Tag",

@@ -8,6 +8,7 @@ import {
   flbParseDate,
   flbParseDateTime,
   flbParseTime,
+  flbImageUrl,
   flbAskInputChoices,
   flbToRuntimeData,
 } from '@crm/contracts';
@@ -120,6 +121,16 @@ describe('checked answers (the console runtime rules, plus phone, alphanumeric a
     expect(flbAskInputChoices('age')).toContain('age');
     expect(flbAskInputChoices('alphanumeric')).toContain('alphanumeric');
     expect(flbAskInputChoices('date_of_birth')).toContain('date_of_birth');
+  });
+
+  it('a carousel picture address with spaces or capitals is written the way a browser asks for it', () => {
+    expect(flbImageUrl('https://cdn.test/My Photos/IMG 1234.JPG')).toBe(
+      'https://cdn.test/My%20Photos/IMG%201234.JPG',
+    );
+    expect(flbImageUrl('  http://x.test/a.jpeg ')).toBe('http://x.test/a.jpeg');
+    expect(flbImageUrl('javascript:alert(1)')).toBeNull();
+    expect(flbImageUrl('/relative/a.jpg')).toBeNull();
+    expect(flbImageUrl('')).toBeNull();
   });
 
   it('the ready-made wrong-answer texts: the console ones verbatim, and the date one names the shape', () => {

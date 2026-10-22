@@ -1,5 +1,6 @@
 import {
   flbCoordinateProblem,
+  flbImageUrl,
   flbParseCoordinate,
   flbSanitizeConditionGroup,
 } from '@crm/contracts';
@@ -173,7 +174,7 @@ const carousel: NodeExecutor = {
       .map((c) => ({
         title: ctx.render(c.title).trim(),
         text: ctx.render(c.text).trim(),
-        ...(/^https?:\/\/\S+$/i.test(str(c.image).trim()) ? { image: str(c.image).trim() } : {}),
+        ...(flbImageUrl(ctx.render(c.image)) ? { image: flbImageUrl(ctx.render(c.image))! } : {}),
         buttons: arr(c.buttons)
           .map(obj)
           .flatMap((b): CarouselCard['buttons'] => {

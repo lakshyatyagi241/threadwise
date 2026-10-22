@@ -1059,7 +1059,10 @@
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
       "onLeaveUntil": "{date} tarihine kadar izinli",
-      "spam": "Spam olarak işaretle"
+      "spam": "Spam olarak işaretle",
+      "markUnread": "Okunmadı olarak işaretle",
+      "unsnooze": "Ertelemeyi kaldır",
+      "notSpam": "Spam değil olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import type { ContactViewResponse } from '@crm/contracts';
 import { ToastProvider } from '@crm/ui';
 import {
   makeSession,
@@ -14,13 +15,17 @@ vi.mock('next/navigation', () => ({
 }));
 
 /** The quick chips under the toolbar: "Hot leads" filters by the lead score, so it is there only while lead scoring is on. */
-const draw = (scoring: 'on' | 'off' | 'unknown') =>
+const draw = (
+  scoring: 'on' | 'off' | 'unknown',
+  views: ContactViewResponse[] = [],
+  activeId = '',
+) =>
   renderAccount(
     <ToastProvider dismissLabel="Dismiss">
       <ViewsBar
         filters={DEFAULT_FILTERS}
         defaultLimit={DEFAULT_FILTERS.limit}
-        activeId=""
+        activeId={activeId}
         columnIds={['name']}
         keepsColumns={false}
         onSelect={() => undefined}
@@ -32,7 +37,7 @@ const draw = (scoring: 'on' | 'off' | 'unknown') =>
     {
       session: makeSession(),
       seed: [
-        [['contacts', 'views'], []],
+        [['contacts', 'views'], views],
         ...(scoring === 'unknown'
           ? []
           : [[['lead-scoring', 'status'], { enabled: scoring === 'on' }] as const]),
@@ -58,5 +63,34 @@ describe('the quick chips of the Contacts list', () => {
     const out = draw('unknown');
     expect(out).not.toContain('Hot leads');
     for (const chip of OTHER_CHIPS) expect(out, chip).toContain(chip);
+  });
+});
+
+const LONG_NAME = 'Enterprise leads in the north region who still need a call this week';
+
+describe('the picker of the views bar', () => {
+  it('cuts a long view name short on one line and keeps the full name as its hover title', () => {
+    const view: ContactViewResponse = {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: LONG_NAME,
+      filter: {},
+      position: 0,
+      isShared: false,
+      shareMode: 'me',
+      accessType: 'can_view',
+      sharedWith: [],
+      canEdit: true,
+      canManage: true,
+      createdBy: null,
+      isFavorite: false,
+      rowVersion: 1,
+      createdAt: '2026-10-12T00:00:00.000Z',
+      updatedAt: '2026-10-12T00:00:00.000Z',
+    };
+    const out = draw('on', [view], view.id);
+    const span = out.match(
+      new RegExp(`<span class="([^"]*)" title="${LONG_NAME}">${LONG_NAME}</span>`),
+    );
+    expect(span?.[1].split(' ')).toEqual(expect.arrayContaining(['max-w-[14rem]', 'truncate']));
   });
 });

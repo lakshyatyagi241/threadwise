@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
@@ -34,7 +34,6 @@ import {
 } from '../api/bulk';
 import {
   contactFilterBody,
-  DEFAULT_FILTERS,
   deleteContact,
   invalidateContacts,
   KEYS,
@@ -69,7 +68,7 @@ import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
 import { presetFilters, type PresetView } from '../lib/preset-views';
-import { filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
+import { defaultFiltersOf, filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
 import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
@@ -202,26 +201,24 @@ export function ContactsScreen() {
     );
   };
 
-  /** The view whose saved filters were last put in the URL (so landing on `?view=` applies them once). */
-  const appliedView = useRef('');
-
   /** A view tab: apply the filters it saved (all defaults for "All contacts"). */
   const selectView = (view: ContactViewResponse | null) => {
-    appliedView.current = view?.id ?? '';
-    const next = view
-      ? filtersOfView(view.filter, sizeDefault)
-      : { ...DEFAULT_FILTERS, limit: sizeDefault };
+    const next = view ? filtersOfView(view.filter, sizeDefault) : defaultFiltersOf(sizeDefault);
     router.replace(`${pathname}${withView(filtersToSearch(next, sizeDefault), view?.id ?? '')}`, {
       scroll: false,
     });
   };
 
+  /** Default filters, the open view still showing: "Reset filters" on an empty list keeps the view's tab. */
+  const resetFilters = () =>
+    router.replace(
+      `${pathname}${withView(filtersToSearch(defaultFiltersOf(sizeDefault), sizeDefault), viewId)}`,
+    );
+
   /** A built-in view: the filters it stands for, on top of the defaults, with no saved view open. */
   const selectPreset = (preset: PresetView) => {
-    appliedView.current = '';
     const next = {
-      ...DEFAULT_FILTERS,
-      limit: sizeDefault,
+      ...defaultFiltersOf(sizeDefault),
       ...presetFilters(preset, session.user.id),
     };
     router.replace(`${pathname}${filtersToSearch(next, sizeDefault)}`, { scroll: false });
@@ -355,25 +352,10 @@ export function ContactsScreen() {
   // A saved view can keep its own columns: while it is open they replace the person's, and edits to them stay on this
   // screen (a draft) until "Save current filters" stores them in the view.
   const viewsList = useContactViews(canReadViews);
+  // A bare `?view=ID` (no filter params) is not re-applied on landing: it opens every contact under the view's tab, marked
+  // "changed". That keeps a cleared view cleared on reload, and it means a link shared without its filters shows no saved
+  // filters. The saved filters arrive only with the URL (a tab click, or the editor's redirect).
   const activeView = viewId ? viewsList.data?.find((v) => v.id === viewId) : undefined;
-
-  // Landing on `?view=` with no filters in the URL (a fresh create, a reload, a shared link): apply what the view saved. Filters already
-  // in the URL (the tab was clicked, or a link carries them) are left as they are.
-  useEffect(() => {
-    if (!viewId) {
-      appliedView.current = '';
-      return;
-    }
-    if (!activeView || appliedView.current === viewId) return;
-    appliedView.current = viewId;
-    if (hasActiveFilter(filters)) return;
-    router.replace(
-      `${pathname}${withView(filtersToSearch(filtersOfView(activeView.filter, sizeDefault), sizeDefault), viewId)}`,
-      { scroll: false },
-    );
-    // Runs when the open view or its data changes; `filters` is read for the URL as it is now.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewId, activeView]);
 
   const savedViewCols = useMemo(
     () => (activeView ? (viewColumnsOf(activeView.filter) as ColumnId[] | null) : null),
@@ -1049,7 +1031,7 @@ export function ContactsScreen() {
                   actions={
                     <>
                       {filtered && (
-                        <Button variant="secondary" onClick={() => router.replace(pathname)}>
+                        <Button variant="secondary" onClick={resetFilters}>
                           {t('resetFilters')}
                         </Button>
                       )}

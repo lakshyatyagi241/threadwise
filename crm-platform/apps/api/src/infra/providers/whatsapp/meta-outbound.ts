@@ -230,7 +230,7 @@ export function buildMessageBody(
   }
 }
 
-function bodyComponents(variables: Record<string, string>): Array<Record<string, unknown>> {
+export function bodyComponents(variables: Record<string, string>): Array<Record<string, unknown>> {
   const parameters = templateBodyParameters(variables);
   return parameters.length ? [{ type: 'body', parameters }] : [];
 }

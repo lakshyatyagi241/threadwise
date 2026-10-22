@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 import { flowsApi } from '../../api/flows';
 import { useFlb } from '../../lib/msg';
+import { marksToHtml, RICH_TEXT_CLASS } from '../../lib/rich-text';
 import { FlowImage } from '../flow-image';
 import { createSimulator, type LogEntry, type SimFile, type Simulator } from './simulator';
 
@@ -160,9 +161,15 @@ export function LogBubble({
         )
       ) : null}
       {entry.text ? (
-        <div className="whitespace-pre-wrap px-1 text-[12.5px] leading-snug">
-          {entry.choices ? entry.choices.prompt : entry.text}
-        </div>
+        // The bot's words carry WhatsApp's marks (*bold*, _italic_, ~strike~, three backticks): drawn as the customer sees them. The
+        // text is escaped before the marks become tags.
+        <div
+          data-testid="test-bot-text"
+          className={`px-1 text-[12.5px] leading-snug ${RICH_TEXT_CLASS}`}
+          dangerouslySetInnerHTML={{
+            __html: marksToHtml(entry.choices ? entry.choices.prompt : entry.text),
+          }}
+        />
       ) : null}
       {entry.choices ? (
         <Choices

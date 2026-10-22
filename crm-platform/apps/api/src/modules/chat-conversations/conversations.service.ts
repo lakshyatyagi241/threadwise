@@ -268,10 +268,13 @@ export class ConversationsService implements ConversationsFacade {
     return this.outbound.enqueue(input);
   }
 
-  async retryOutbound(messageId: string): Promise<MessageResponse> {
+  async retryOutbound(
+    messageId: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse> {
     // One Retry button for both directions: on a customer's message it starts the failed file download again.
     const inbound = await this.mediaFetch.retryIfInbound(messageId);
-    return inbound ?? this.outbound.retry(messageId);
+    return inbound ?? this.outbound.retry(messageId, templateComponents);
   }
 
   async listMessages(
@@ -315,6 +318,21 @@ export class ConversationsService implements ConversationsFacade {
       const conv = await this.conversations.byUuid(tx, orgId, conversationId, true);
       if (!conv) throw conversationNotFound(conversationId);
       const unread = await this.conversations.setUnreadAfter(tx, orgId, conv.id, upToSeq);
+      const after = (await this.conversations.byId(tx, orgId, conv.id))!;
+      return { before: conv.unreadCount, unread, after };
+    });
+    if (done.unread !== done.before) {
+      await this.realtime.conversationChanged(orgId, done.after, ['unread'], { unread: true });
+    }
+    return { unreadCount: done.unread };
+  }
+
+  async markUnread(conversationId: string): Promise<{ unreadCount: number }> {
+    const orgId = RequestContextStore.orgId();
+    const done = await this.db.tx(async (tx) => {
+      const conv = await this.conversations.byUuid(tx, orgId, conversationId, true);
+      if (!conv) throw conversationNotFound(conversationId);
+      const unread = await this.conversations.setUnreadAtLeastOne(tx, orgId, conv.id);
       const after = (await this.conversations.byId(tx, orgId, conv.id))!;
       return { before: conv.unreadCount, unread, after };
     });

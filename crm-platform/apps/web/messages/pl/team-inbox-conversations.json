@@ -1059,7 +1059,10 @@
       "tagRemove": "Usuń tag",
       "onLeave": "na urlopie",
       "onLeaveUntil": "na urlopie do {date}",
-      "spam": "Oznacz jako spam"
+      "spam": "Oznacz jako spam",
+      "markUnread": "Oznacz jako nieprzeczytane",
+      "unsnooze": "Anuluj odłożenie",
+      "notSpam": "Oznacz jako nie spam"
     },
     "tags": {
       "tag": "Tag",
