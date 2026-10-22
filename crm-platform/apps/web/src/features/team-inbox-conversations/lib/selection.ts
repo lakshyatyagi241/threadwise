@@ -5,6 +5,7 @@ import {
   type ConversationStatus,
   type ConversationSummary,
 } from '@crm/contracts';
+import { isMine } from './list';
 import { dayParts, weekdayIn, zonedInstant } from './time';
 
 /**
@@ -136,6 +137,10 @@ export interface PickedState {
   allSnoozed: boolean;
   /** No picked conversation has an unread message: "Mark as read" becomes "Mark as unread". */
   allRead: boolean;
+  /** Some picked conversation is spam. Reopen (status open) would take it out of spam, so Reopen is not offered. */
+  someSpam: boolean;
+  /** Some picked conversation is snoozed. Reopen (status open) would wake it, so Reopen is not offered. */
+  someSnoozed: boolean;
   canUnassign: boolean;
   canRemoveTeam: boolean;
   /** False once every picked conversation is assigned to the caller already. */
@@ -158,9 +163,11 @@ export function pickedState(picked: ReadonlyArray<ConversationSummary>, meId: st
     allSpam: every((r) => r.status === 'spam'),
     allSnoozed: every((r) => r.status === 'snoozed'),
     allRead: every((r) => r.unreadCount === 0),
+    someSpam: some((r) => r.status === 'spam'),
+    someSnoozed: some((r) => r.status === 'snoozed'),
     canUnassign: none || some((r) => r.assignment.user !== null),
     canRemoveTeam: none || some((r) => r.assignment.team !== null),
-    canAssignMe: !every((r) => r.assignment.user?.id === meId),
+    canAssignMe: !every((r) => isMine(r, meId)),
     canMoveTo: (to) =>
       none || some((r) => r.status !== to && canMoveConversationStatus(r.status, to)),
     canAddTag: (tagId) => none || !every((r) => hasTag(r, tagId)),

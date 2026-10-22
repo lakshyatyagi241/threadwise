@@ -342,6 +342,35 @@ describe('the bulk bar', () => {
     expect(valuesOf('inbox-bulk-tag')).toEqual(['', 'remove:l-1']);
   });
 
+  it('offers Reopen for resolved or closed conversations only', () => {
+    const p = props({
+      picked: [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'closed' })],
+    });
+    render(<BulkBar {...p} />);
+    click('inbox-bulk-reopen');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'status', status: 'open' }]);
+  });
+
+  it('hides Reopen when a spam conversation is picked with a resolved one, and keeps Not spam off', () => {
+    const p = props({
+      picked: [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'spam' })],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-spam"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-not-spam"]')).toBeNull();
+  });
+
+  it('hides Reopen when a snoozed conversation is picked with a resolved one, and keeps the snooze menu', () => {
+    const p = props({
+      picked: [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'snoozed' })],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-unsnooze"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).not.toBeNull();
+  });
+
   it('reads in Arabic, not in English', () => {
     render(<BulkBar {...props()} />, 'ar');
     const text = host.textContent ?? '';
