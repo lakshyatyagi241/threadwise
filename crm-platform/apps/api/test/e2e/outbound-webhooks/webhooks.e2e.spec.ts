@@ -14,8 +14,9 @@ afterAll(async () => {
   await h?.stop();
 });
 
-// A documentation-range address (RFC 5737): public as far as the guard can tell, never routable, so a test never reaches a real host.
-const URL_OK = 'https://192.0.2.10/in';
+// A public address literal: the guard accepts it without a DNS lookup. Test sends go through the harness's stub transport, so no socket
+// is opened to it.
+const URL_OK = 'https://8.8.8.8/in';
 
 describe('webhooks CRUD', () => {
   it('creates, lists, changes and deletes, never returning the secret or the stored ciphertext', async () => {

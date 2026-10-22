@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   WEBHOOK_EVENTS,
   type CreateWebhookInput,
@@ -18,7 +18,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { assertPublicTarget } from '../webhook-fanout';
-import { send } from './send';
+import { send, WEBHOOK_TRANSPORT, type WebhookTransport } from './send';
 import { toDeliveryResponse, toWebhookResponse } from './webhooks.mapper';
 import { WebhooksRepository } from './webhooks.repository';
 
@@ -41,6 +41,7 @@ export class WebhooksService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly entitlements: PlanEntitlementService,
+    @Inject(WEBHOOK_TRANSPORT) private readonly transport: WebhookTransport,
   ) {}
 
   async list(): Promise<ListWebhooksResponse> {
@@ -181,7 +182,12 @@ export class WebhooksService {
       data: { message: 'This is a test delivery from your workspace.' },
     };
     const secret = target.secret ? this.crypto.decrypt(target.secret) : null;
-    const out = await send(this.crypto.decrypt(target.webhookUrl), secret, envelope);
+    const out = await send(
+      this.crypto.decrypt(target.webhookUrl),
+      secret,
+      envelope,
+      this.transport,
+    );
     const row = await this.db.tx(async (tx) => {
       const logged = await this.repo.logDelivery(tx, ctx.orgId, {
         webhookId: target.id,
