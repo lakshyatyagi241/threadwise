@@ -4,7 +4,7 @@ import type { InboxCounts, InboxTab } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { channelOwnerSql, type ConversationViewer } from '../../realtime';
-import { visibleToSql } from './visibility-sql';
+import { visibleToJoinedSql, visibleToSql } from './visibility-sql';
 
 type Raw = Record<string, unknown>;
 const rowsOf = (res: { rows: unknown[] }): Raw[] => res.rows as Raw[];
@@ -111,6 +111,9 @@ export interface ListFilter {
   limit: number;
   cursor?: ListCursor;
 }
+
+/** What the list and its badges share: every filter except the tab, the sort and the page. */
+export type CountFilter = Omit<ListFilter, 'tab' | 'sort' | 'limit' | 'cursor'>;
 
 /** Where the previous page ended, in the list's sort order (pinned first, then newest activity). Timestamps keep microseconds. */
 export interface ListCursor {
@@ -267,33 +270,107 @@ export class ConversationsRepository {
     viewer: ConversationViewer,
     f: ListFilter,
   ): Promise<InboxConversationRow[]> {
-    const where: SQL[] = [
-      sql`c.org_id = ${orgId}`,
-      sql`c.last_message_at IS NOT NULL`,
-      visibleToSql(viewer),
-      sql`c.archived = ${f.archived}`,
-    ];
+    const scope = this.scopeWhere(orgId, viewer, f);
+    const where: SQL[] = [...scope.where, sql`c.archived = ${f.archived}`];
 
     // The archive view shows everything archived whatever the tab or status (Reference rule); otherwise the tab and status narrow it.
     if (!f.archived) {
-      if (f.statuses && f.statuses.length > 0) {
-        // Resolved and closed are one thing to an agent, so choosing Resolved lists both.
-        const all = new Set(
-          f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s])),
-        );
-        where.push(
-          sql`c.status IN (${sql.join(
-            [...all].map((s) => sql`${s}`),
-            sql`, `,
-          )})`,
-        );
-      } else if (f.status === undefined) where.push(sql`c.status = 'open'`);
-      // Resolved and closed are one thing to an agent (the same Resolve button, the same reopen), so the Resolved view lists both.
-      else if (f.status === 'resolved') where.push(sql`c.status IN ('resolved', 'closed')`);
-      else if (f.status !== 'all') where.push(sql`c.status = ${f.status}`);
+      const status = this.statusCondition(f);
+      if (status) where.push(status);
       const tab = this.tabCondition(f.tab, viewer.userId);
       if (tab) where.push(tab);
     }
+    const oldest = f.sort === 'old';
+    if (f.cursor) where.push(this.cursorCondition(f.cursor, oldest));
+
+    const res = await tx.execute(sql`
+      SELECT ${SELECT_ROW} ${FROM_ROW} ${scope.joins}
+      WHERE ${sql.join(where, sql` AND `)}
+      ORDER BY ${
+        oldest
+          ? sql`c.last_message_at ASC, c.id ASC`
+          : sql`c.pinned_at DESC NULLS LAST, c.last_message_at DESC, c.id DESC`
+      }
+      LIMIT ${f.limit + 1}`);
+    return rowsOf(res).map(toRow);
+  }
+
+  /**
+   * The tab badges and the archived count over the rows the list reads for these filters. A badge is the list's own count for its tab,
+   * so it equals what the tab shows. The archive view ignores the tab and the status, as the list does, so there every tab badge is the
+   * archive's count.
+   *
+   * Two aggregates in one round trip. The live rows (not archived, status narrowed) are counted with those conditions in WHERE, so the
+   * planner reads the queue index (org, status, archived) rather than every conversation of the workspace; the tab conditions stay in
+   * FILTER, one pass. The archived count is its own aggregate, so it does not need the status either.
+   *
+   * The columns these conditions read (channel, assignee, unread count, handling) are the key of idx_conversations_live_badges
+   * (migration 20270323090000), which is what makes the live count index-only: keep the two in step when a badge changes.
+   */
+  async counts(
+    tx: Tx,
+    orgId: number,
+    viewer: ConversationViewer,
+    f: CountFilter,
+  ): Promise<InboxCounts> {
+    const scope = this.scopeWhere(orgId, viewer, f);
+    const from = sql`FROM conversations c ${scope.joins}`;
+    const where = (extra: SQL[]) => sql.join([...scope.where, ...extra], sql` AND `);
+
+    if (f.archived) {
+      const res = await tx.execute(
+        sql`SELECT count(*)::int AS n ${from} WHERE ${where([sql`c.archived`])}`,
+      );
+      const n = Number(rowsOf(res)[0]?.n ?? 0);
+      return { all: n, mine: n, unassigned: n, unread: n, waiting: n, archived: n };
+    }
+
+    const status = this.statusCondition(f);
+    const badge = (tab: Exclude<InboxTab, 'all'>) =>
+      sql`count(*) FILTER (WHERE ${this.tabPredicate(tab, viewer.userId)})::int`;
+    const live = sql`
+      SELECT
+        count(*)::int AS "all",
+        ${badge('mine')} AS mine,
+        ${badge('unassigned')} AS unassigned,
+        ${badge('unread')} AS unread,
+        ${badge('waiting')} AS waiting
+      ${from}
+      WHERE ${where([sql`c.archived = FALSE`, ...(status ? [status] : [])])}`;
+    const archived = sql`SELECT count(*)::int AS archived ${from} WHERE ${where([sql`c.archived = TRUE`])}`;
+
+    const res = await tx.execute(sql`
+      SELECT l."all", l.mine, l.unassigned, l.unread, l.waiting, a.archived
+      FROM (${live}) l CROSS JOIN (${archived}) a`);
+    const r = rowsOf(res)[0] ?? {};
+    return {
+      all: Number(r.all ?? 0),
+      mine: Number(r.mine ?? 0),
+      unassigned: Number(r.unassigned ?? 0),
+      unread: Number(r.unread ?? 0),
+      waiting: Number(r.waiting ?? 0),
+      archived: Number(r.archived ?? 0),
+    };
+  }
+
+  /**
+   * What the list and its badges share: the workspace, the rows the caller may see, and the channel, tag, assignment, agent, date and
+   * search filters. Not the status, the tab or the archive flag.
+   *
+   * Visibility comes as joins (`visibleToJoinedSql`, parity-tested against `visibleToSql`): the owner of a personal mailbox is read from the
+   * channel and mailbox rows once per row. The correlated sub-select `visibleToSql` uses re-runs per row and forces a serial plan.
+   */
+  private scopeWhere(
+    orgId: number,
+    viewer: ConversationViewer,
+    f: CountFilter,
+  ): { joins: SQL; where: SQL[] } {
+    const visible = visibleToJoinedSql(viewer);
+    const where: SQL[] = [
+      sql`c.org_id = ${orgId}`,
+      sql`c.last_message_at IS NOT NULL`,
+      visible.where,
+    ];
     if (f.channelId !== undefined) where.push(sql`c.channel_id = ${f.channelId}`);
     if (f.channelIds && f.channelIds.length > 0)
       where.push(
@@ -331,50 +408,26 @@ export class ConversationsRepository {
     }
     if (f.from) where.push(sql`c.last_message_at >= ${f.from}::date`);
     if (f.to) where.push(sql`c.last_message_at < (${f.to}::date + 1)`);
-    if (f.q) where.push(this.searchCondition(f.q));
-    const oldest = f.sort === 'old';
-    if (f.cursor) where.push(this.cursorCondition(f.cursor, oldest));
-
-    const res = await tx.execute(sql`
-      SELECT ${SELECT_ROW} ${FROM_ROW}
-      WHERE ${sql.join(where, sql` AND `)}
-      ORDER BY ${
-        oldest
-          ? sql`c.last_message_at ASC, c.id ASC`
-          : sql`c.pinned_at DESC NULLS LAST, c.last_message_at DESC, c.id DESC`
-      }
-      LIMIT ${f.limit + 1}`);
-    return rowsOf(res).map(toRow);
+    if (f.q) where.push(this.searchCondition(orgId, f.q));
+    return { joins: visible.joins, where };
   }
 
-  /** The tab badges, over the same visible set as the list, narrowed by channel only. One aggregate, so a badge equals what the list shows. */
-  async counts(
-    tx: Tx,
-    orgId: number,
-    viewer: ConversationViewer,
-    channelId?: number,
-  ): Promise<InboxCounts> {
-    const channel = channelId === undefined ? sql`TRUE` : sql`c.channel_id = ${channelId}`;
-    const active = sql`c.archived = FALSE AND c.status = 'open'`;
-    const res = await tx.execute(sql`
-      SELECT
-        count(*) FILTER (WHERE ${active})::int AS "all",
-        count(*) FILTER (WHERE ${active} AND c.assignee_user_id = ${viewer.userId})::int AS mine,
-        count(*) FILTER (WHERE ${active} AND c.assignee_user_id IS NULL)::int AS unassigned,
-        count(*) FILTER (WHERE ${active} AND c.unread_count > 0)::int AS unread,
-        count(*) FILTER (WHERE ${active} AND c.handling = 'waiting')::int AS waiting,
-        count(*) FILTER (WHERE c.archived)::int AS archived
-      FROM conversations c
-      WHERE c.org_id = ${orgId} AND c.last_message_at IS NOT NULL AND ${visibleToSql(viewer)} AND ${channel}`);
-    const r = rowsOf(res)[0] ?? {};
-    return {
-      all: Number(r.all ?? 0),
-      mine: Number(r.mine ?? 0),
-      unassigned: Number(r.unassigned ?? 0),
-      unread: Number(r.unread ?? 0),
-      waiting: Number(r.waiting ?? 0),
-      archived: Number(r.archived ?? 0),
-    };
+  /** The status the list narrows to, or none for every status. Open threads are the default. */
+  private statusCondition(f: CountFilter): SQL | null {
+    if (f.statuses && f.statuses.length > 0) {
+      // Resolved and closed are one thing to an agent, so choosing Resolved lists both.
+      const all = new Set(
+        f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s])),
+      );
+      return sql`c.status IN (${sql.join(
+        [...all].map((s) => sql`${s}`),
+        sql`, `,
+      )})`;
+    }
+    if (f.status === undefined) return sql`c.status = 'open'`;
+    // Resolved and closed are one thing to an agent (the same Resolve button, the same reopen), so the Resolved view lists both.
+    if (f.status === 'resolved') return sql`c.status IN ('resolved', 'closed')`;
+    return f.status === 'all' ? null : sql`c.status = ${f.status}`;
   }
 
   async byUuid(tx: Tx, orgId: number, uuid: string): Promise<InboxConversationRow | null> {
@@ -591,6 +644,11 @@ export class ConversationsRepository {
   }
 
   private tabCondition(tab: InboxTab, userId: number): SQL | null {
+    return tab === 'all' ? null : this.tabPredicate(tab, userId);
+  }
+
+  /** The rows one tab shows, as a condition on `c`. Shared by the list and the badges, so a badge can never count a different set. */
+  private tabPredicate(tab: Exclude<InboxTab, 'all'>, userId: number): SQL {
     switch (tab) {
       case 'mine':
         return sql`c.assignee_user_id = ${userId}`;
@@ -602,20 +660,26 @@ export class ConversationsRepository {
       // The queue a handoff put in front of a person (BL-397): who may see it is the ordinary visibility, applied before the tab.
       case 'waiting':
         return sql`c.handling = 'waiting'`;
-      case 'all':
-        return null;
     }
   }
 
-  /** Name, number or last message, as typed: the contact's name too, since a thread's own title can be older than a rename. */
-  private searchCondition(q: string): SQL {
+  /**
+   * Name, number or last message, as typed: the contact's name too, since a thread's own title can be older than a rename.
+   *
+   * The contact branch is a correlated EXISTS, as the list had it before. Measured as the app role (RLS on) with 300k named contacts:
+   * a typical contact-name term takes about 2 s, a term that matches every contact about 1.6 s. Id-list forms were tried and rejected:
+   * `= ANY (ARRAY(...))` took 68 s for the one-letter term (a per-row scan of a 300k-element list), and `IN (subquery)` did not hash
+   * within work_mem and degraded the same way. Narrow peer-name terms without the branch are index-driven; with it, every candidate is
+   * checked. Making the contact match index-driven for every term length needs a semi-join redesign and a decision on short terms.
+   */
+  private searchCondition(orgId: number, q: string): SQL {
     const like = likePattern(q);
     const parts = [
       sql`c.title ILIKE ${like}`,
       sql`c.peer_name ILIKE ${like}`,
       sql`c.peer_key ILIKE ${like}`,
       sql`c.preview ILIKE ${like}`,
-      sql`ct.name ILIKE ${like}`,
+      sql`EXISTS (SELECT 1 FROM contacts sc WHERE sc.org_id = c.org_id AND sc.id = c.contact_id AND sc.name ILIKE ${like})`,
     ];
     // "+91 98765-43210" must find 919876543210: compare the digits of the query with the digits stored as the peer key.
     const digits = q.replace(/\D/g, '');

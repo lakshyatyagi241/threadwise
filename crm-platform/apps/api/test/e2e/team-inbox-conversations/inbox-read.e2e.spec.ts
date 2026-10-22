@@ -206,6 +206,70 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     });
   });
 
+  it('the badges follow the filters on screen, each one equal to what its tab lists under them', async () => {
+    const resolved = await list(agent.token, '?status=resolved');
+    expect(resolved.meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 1,
+      unread: 0,
+      waiting: 0,
+      archived: 1,
+    });
+    expect((await list(agent.token, '?statuses=resolved,snoozed')).meta.counts).toMatchObject({
+      all: 2,
+      unassigned: 2,
+      archived: 1,
+    });
+    expect((await list(agent.token, '?status=all')).meta.counts).toEqual({
+      all: 6,
+      mine: 1,
+      unassigned: 4,
+      unread: 1,
+      waiting: 0,
+      archived: 1,
+    });
+    // Narrowed to unread threads, the other badges are the unread ones only, and the archived one is none.
+    expect((await list(agent.token, '?assignment=unattended')).meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 1,
+      unread: 1,
+      waiting: 0,
+      archived: 0,
+    });
+    // The tab is not a filter of the badges: every tab gives the same numbers.
+    expect((await list(agent.token, '?tab=unread')).meta.counts).toEqual(
+      (await list(agent.token)).meta.counts,
+    );
+    // The archive view ignores the tab and the status, so each tab badge is the archive's count, as its list shows.
+    const archive = await list(agent.token, '?archived=true&status=resolved');
+    expect(archive.meta.counts).toEqual({
+      all: 1,
+      mine: 1,
+      unassigned: 1,
+      unread: 1,
+      waiting: 1,
+      archived: 1,
+    });
+    expect(archive.data).toHaveLength(1);
+    // The counts endpoint takes the same filters and ignores the tab; an unknown status is still refused.
+    const viaCounts = await api.as(agent.token).get('/v2/inbox/counts?status=resolved&tab=mine');
+    expect(viaCounts.status).toBe(200);
+    expect(viaCounts.body).toEqual(resolved.meta.counts);
+    expect((await api.as(agent.token).get('/v2/inbox/counts?status=bogus')).status).toBe(422);
+    // A channel of nobody has no threads, so its badges are zero.
+    const stranger = await list(agent.token, '?channelId=0a5c1d92-1f64-4f9b-8a0e-0e8b6f5a77f1');
+    expect(stranger.meta.counts).toEqual({
+      all: 0,
+      mine: 0,
+      unassigned: 0,
+      unread: 0,
+      waiting: 0,
+      archived: 0,
+    });
+  });
+
   it('a limit above the maximum is a validation error, and limit 2 pages the whole set without repeats or gaps', async () => {
     expect((await api.as(agent.token).get('/v2/inbox/conversations?limit=500')).status).toBe(422);
     const seen: string[] = [];
