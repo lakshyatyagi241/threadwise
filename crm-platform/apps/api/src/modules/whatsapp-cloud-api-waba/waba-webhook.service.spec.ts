@@ -3,13 +3,13 @@ import { describe, expect, it, vi } from 'vitest';
 import { WabaWebhookService } from './waba-webhook.service';
 
 const SECRET = 'platform-secret';
-const body = (phone = 'p1') =>
+const body = (phone = 'p1', waba = 'w1') =>
   Buffer.from(
     JSON.stringify({
       object: 'whatsapp_business_account',
       entry: [
         {
-          id: 'w1',
+          id: waba,
           changes: [
             {
               field: 'messages',
@@ -105,6 +105,129 @@ describe('WabaWebhookService.receive: load shape', () => {
     });
     const raw = body();
     await svc.receive({ rawBody: raw, signatureHeader: sign(raw), queryKey: undefined });
+    expect(queue.add).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('WabaWebhookService.receive: numbers that are not ours', () => {
+  /** The connections table holds one number: phone p1 of WABA w1. */
+  const withOneConnection = () => {
+    const ctx = build();
+    ctx.db.privileged.mockImplementation(async (fn: (tx: unknown) => unknown) =>
+      fn({ execute: async () => ({ rows: [{ phone: 'p1', waba: 'w1' }] }) }),
+    );
+    return ctx;
+  };
+
+  it('answers a delivery for a number no connection owns without a lookup, a job or a worker pass', async () => {
+    const { svc, queue, providers, fanout, redis } = withOneConnection();
+    const raw = body('someone-elses-number', 'other-waba');
+    const out = await svc.receive({
+      rawBody: raw,
+      signatureHeader: sign(raw),
+      queryKey: undefined,
+    });
+    expect(out).toEqual({ queued: 0 });
+    expect(providers.payloadProviders).not.toHaveBeenCalled();
+    expect(queue.add).not.toHaveBeenCalled();
+    expect(fanout.forward).toHaveBeenCalledTimes(1); // forwarding to the platform's targets is unchanged
+    await new Promise((r) => setImmediate(r));
+    expect(redis.set).toHaveBeenCalledTimes(1); // and an exact repeat is absorbed
+  });
+
+  it('still refuses a forgery for a number that is not ours', async () => {
+    const { svc, queue } = withOneConnection();
+    await expect(
+      svc.receive({
+        rawBody: body('someone-elses-number', 'other-waba'),
+        signatureHeader: 'sha256=bad',
+        queryKey: undefined,
+      }),
+    ).rejects.toThrow();
+    expect(queue.add).not.toHaveBeenCalled();
+  });
+
+  it('queues a delivery for one of our numbers as before', async () => {
+    const { svc, queue, providers } = withOneConnection();
+    const raw = body('p1');
+    const out = await svc.receive({
+      rawBody: raw,
+      signatureHeader: sign(raw),
+      queryKey: undefined,
+    });
+    expect(out).toEqual({ queued: 1 });
+    expect(providers.payloadProviders).toHaveBeenCalledTimes(1);
+    expect(queue.add).toHaveBeenCalledTimes(1);
+  });
+
+  it('queues only the changes that could be ours when a delivery mixes both', async () => {
+    const { svc, queue } = withOneConnection();
+    const change = (phone: string) => ({
+      field: 'messages',
+      value: { metadata: { phone_number_id: phone }, messages: [{ id: phone }] },
+    });
+    const raw = Buffer.from(
+      JSON.stringify({
+        object: 'whatsapp_business_account',
+        entry: [{ id: 'w1', changes: [change('p1'), change('other')] }],
+      }),
+    );
+    // the second change names a number that is not ours, and a change that names a number is routed by it alone: only p1 is queued
+    await svc.receive({ rawBody: raw, signatureHeader: sign(raw), queryKey: undefined });
+    expect(queue.add).toHaveBeenCalledTimes(1);
+  });
+
+  it('finds a connection added after the index loaded, by its first delivery', async () => {
+    vi.useFakeTimers();
+    try {
+      const rows: Array<{ phone: string; waba: string }> = [{ phone: 'p1', waba: 'w1' }];
+      const { svc, queue, db } = build();
+      db.privileged.mockImplementation(async (fn: (tx: unknown) => unknown) =>
+        fn({ execute: async () => ({ rows: [...rows] }) }),
+      );
+      const first = body('p1');
+      await svc.receive({ rawBody: first, signatureHeader: sign(first), queryKey: undefined });
+      expect(queue.add).toHaveBeenCalledTimes(1);
+
+      rows.push({ phone: 'p-new', waba: 'w-new' }); // a number is connected a moment later
+      vi.advanceTimersByTime(100); // past the 50 ms an index may be when a delivery names nothing it knows
+      const fresh = body('p-new', 'w-new');
+      const out = await svc.receive({
+        rawBody: fresh,
+        signatureHeader: sign(fresh),
+        queryKey: undefined,
+      });
+      expect(out).toEqual({ queued: 1 });
+      expect(queue.add).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('does not query the connection list once per delivery under a flood of foreign numbers', async () => {
+    const { svc, db } = (() => {
+      const ctx = build();
+      ctx.db.privileged.mockImplementation(async (fn: (tx: unknown) => unknown) =>
+        fn({ execute: async () => ({ rows: [{ phone: 'p1', waba: 'w1' }] }) }),
+      );
+      return ctx;
+    })();
+    for (let i = 0; i < 200; i++) {
+      const raw = body(`foreign-${i}`, `fw-${i}`);
+      await svc.receive({ rawBody: raw, signatureHeader: sign(raw), queryKey: undefined });
+    }
+    expect(db.privileged.mock.calls.length).toBeLessThan(20);
+  });
+
+  it('treats every number as possibly ours when the connection list cannot be read', async () => {
+    const { svc, queue } = build(); // db.privileged answers nothing: the index never loads
+    const raw = body('someone-elses-number', 'other-waba');
+    const out = await svc.receive({
+      rawBody: raw,
+      signatureHeader: sign(raw),
+      queryKey: undefined,
+    });
+    expect(out).toEqual({ queued: 1 });
     expect(queue.add).toHaveBeenCalledTimes(1);
   });
 });
