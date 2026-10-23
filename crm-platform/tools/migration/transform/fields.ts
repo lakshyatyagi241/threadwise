@@ -234,6 +234,13 @@ export const fieldDefs: HandlerSpec = {
         reason: 'the app already has this property built in (or stores it in a column of the contact); it is not created again',
       };
     }
+    // a reserved key renamed to a name the workspace already uses would share one WaDesk key with that property
+    if (RESERVED_PROPERTY_KEYS.has(key) && ctx.idx.declaredKeys.has(propertyKeyOf(key)))
+      return {
+        kind: 'quarantine',
+        code: 'PROPERTY_KEY_CONFLICT',
+        reason: `the app reserves the key "${key}", and the workspace has a property named "${propertyKeyOf(key)}": not created`,
+      };
     const soft: Soft[] = [];
     if (RESERVED_PROPERTY_KEYS.has(key))
       soft.push({

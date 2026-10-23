@@ -451,7 +451,16 @@ export const contacts: HandlerSpec = {
       const alias = BUILT_IN_ALIAS[k];
       // an explicit value under the built-in key itself wins over the Waboo alias
       if (alias && doc[alias] !== undefined && doc[alias] !== null && doc[alias] !== '') continue;
-      setOwn(data, alias ?? propertyKeyOf(k), optionValueOf(k, s.value, ctx.idx));
+      // a renamed reserved key must not overwrite the workspace's own property of the same key (fields.ts quarantines that definition)
+      const target = propertyKeyOf(k);
+      if (target !== k && doc[target] !== undefined && doc[target] !== null) {
+        soft.push({
+          code: 'PROPERTY_KEY_CONFLICT',
+          reason: `"${k}" is stored as "${target}", which the contact also has as its own property: this value is not copied`,
+        });
+        continue;
+      }
+      setOwn(data, alias ?? target, optionValueOf(k, s.value, ctx.idx));
     }
     // Waboo lists Created Time and Modified Time as contact fields; WaDesk keeps them in created_at / updated_at. The same instants are also
     // kept in data (ISO text) so the two read-only field rows of the contact page have a value to show (README, "Contact properties").

@@ -19,7 +19,8 @@ const COPIES = [
   'published_provider = provider',
 ];
 
-describe('flow go-live copies the draft into the published copies', () => {
+// A text check: it reads the SQL, it does not run it. A wrong column or a missing WHERE clause would still pass here.
+describe('flow go-live copies the draft into the published copies (text check of load/flowstate.ts)', () => {
   it('the arming statement copies the draft and its trigger settings', () => {
     for (const c of COPIES) expect(flowstate, c).toContain(c);
   });
