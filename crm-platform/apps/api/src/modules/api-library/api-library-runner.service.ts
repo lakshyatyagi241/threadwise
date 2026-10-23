@@ -22,6 +22,9 @@ import {
   renderHeaders,
   readAnswer,
   renderUrl,
+  scrubSecretHeaders,
+  scrubSecretValues,
+  secretValuesOf,
   truncateText,
   type OutHeader,
   type VariableValues,
@@ -233,10 +236,13 @@ export class ApiLibraryRunner {
         res.headers,
         RUN_MAX_RESPONSE_BYTES,
       );
+      // A server that repeats the request back (a debugging page, an error) would show our secrets in the clear: hide them in what is shown and stored.
+      const secrets = secretValuesOf(url, headers);
+      const shownText = scrubSecretValues(answer.text, secrets);
       let bodyJson: unknown = null;
-      if (answer.isText && !truncated && answer.text.trim() !== '') {
+      if (answer.isText && !truncated && shownText.trim() !== '') {
         try {
-          bodyJson = JSON.parse(answer.text);
+          bodyJson = JSON.parse(shownText);
         } catch {
           /* not JSON: the text is all there is */
         }
@@ -254,11 +260,11 @@ export class ApiLibraryRunner {
             : `The server answered HTTP ${res.status}.`,
         request,
         response: {
-          headers: maskResponseHeaders(res.headers),
+          headers: scrubSecretHeaders(maskResponseHeaders(res.headers), secrets),
           contentType,
-          bodyText: truncateText(answer.text, RESPONSE_TEXT_LIMIT).text,
+          bodyText: truncateText(shownText, RESPONSE_TEXT_LIMIT).text,
           bodyJson,
-          truncated: truncated || answer.text.length > RESPONSE_TEXT_LIMIT,
+          truncated: truncated || shownText.length > RESPONSE_TEXT_LIMIT,
           sizeBytes: answer.sizeBytes,
         },
         processedPayload: processed,

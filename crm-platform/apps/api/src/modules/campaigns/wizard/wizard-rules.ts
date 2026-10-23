@@ -287,6 +287,19 @@ export interface CostLine {
  * What the wallet is expected to be charged: every destination's messages at its price; when the plan's monthly allowance covers part
  * of the send (plan mode), only the chargeable share of it, rounded up so the estimate never under-promises.
  */
+/**
+ * Whether the wallet covers the estimate the person is shown. The wallet's own launch rule (which `creditCheck` asks first) can let a
+ * send through when its internal estimate is lower than the one on the screen; the figure on the screen is what the person decides on,
+ * so a balance below it is not "sufficient". A platform-owned workspace is never billed.
+ */
+export function coversShownEstimate(f: {
+  platformOwned: boolean;
+  balanceMinor: number;
+  estimateMinor: number;
+}): boolean {
+  return f.platformOwned || f.estimateMinor <= 0 || f.balanceMinor >= f.estimateMinor;
+}
+
 export function estimateCost(
   lines: readonly CostLine[],
   chargeable: number,
