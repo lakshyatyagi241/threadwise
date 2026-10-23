@@ -213,6 +213,23 @@ export function truncateText(text: string, max: number): { text: string; truncat
     : { text, truncated: false };
 }
 
+/**
+ * The answer as the log keeps it. A Postgres text column refuses a NUL character, and a binary answer (an image, random bytes, a
+ * gzip body) has them: such an answer is logged as a note of its size and type, so the run still gets its line in the log.
+ */
+export function logResponseText(response: {
+  bodyText: string;
+  contentType: string | null;
+  headers: Record<string, string | string[]>;
+  sizeBytes: number;
+}): string {
+  if (!response.bodyText.includes('\u0000')) return response.bodyText;
+  const parts = [`${response.sizeBytes} bytes`, response.contentType ?? 'no content type'];
+  const encoding = response.headers['content-encoding'];
+  if (encoding) parts.push(`content-encoding ${String(encoding)}`);
+  return `[binary answer: ${parts.join(', ')}]`;
+}
+
 /** The response headers kept in a log: all of them, with cookies and anything secret-looking masked. */
 export function maskResponseHeaders(
   headers: Readonly<Record<string, string | string[] | undefined>>,
