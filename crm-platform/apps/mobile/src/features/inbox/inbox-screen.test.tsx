@@ -355,15 +355,10 @@ describe('InboxScreen', () => {
       ).toBeTruthy();
     });
 
-    it('switches to the archive and back with Clear all', async () => {
+    it('has no View category: the archive view is not offered in the window', async () => {
       await open();
-      await category('View');
-      await fireEvent.press(await screen.findByRole('radio', { name: 'Archived' }));
-      await save();
-      await waitFor(() => expect(lastFilters()).toMatchObject({ archived: true }));
-      expect(await screen.findByRole('button', { name: 'Remove filter: Archived' })).toBeTruthy();
-      await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
-      await waitFor(() => expect(lastFilters()).toMatchObject({ archived: false }));
+      await screen.findByRole('checkbox', { name: 'Snoozed' });
+      expect(screen.queryByRole('tab', { name: 'View' })).toBeNull();
     });
 
     const agent = (over: Record<string, unknown> = {}) => ({
@@ -450,9 +445,8 @@ describe('InboxScreen', () => {
       await open();
       await screen.findByRole('checkbox', { name: 'Snoozed' });
       expect(screen.getByRole('tab', { name: 'Chat status' })).toBeTruthy();
-      expect(screen.getByRole('tab', { name: 'View' })).toBeTruthy();
       expect(screen.queryByRole('tab', { name: 'Channel' })).toBeNull();
-      expect(screen.queryByRole('tab', { name: 'Labels' })).toBeNull();
+      expect(screen.queryByRole('tab', { name: 'Tags' })).toBeNull();
     });
 
     it('takes the choices off and applies at once with Clear all', async () => {

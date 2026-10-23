@@ -94,7 +94,7 @@ describe('FiltersSheet: the same filters as the web', () => {
       'Date range (last activity)',
     ]);
     expect(names).toContain('Channel');
-    expect(names[names.length - 1]).toBe('View');
+    expect(names).not.toContain('View');
   });
 
   it('offers resolved and spam but no separate "Closed", and takes several statuses at once', async () => {

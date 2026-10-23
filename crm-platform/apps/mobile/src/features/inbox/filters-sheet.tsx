@@ -55,7 +55,7 @@ const assignmentApplied = (picked: string | undefined): AssignmentFilter =>
 
 /**
  * The filter button of the Inbox, laid out like the Geta app, with the same filters as the web's Filters window: the categories (chat
- * status, conversation, sort by, date range, labels, channels, agents, and the archive view) down the left, the choices of the open one on the right, "Clear all" and "Apply" along the bottom. The channels, the labels and the agents are
+ * status, conversation, sort by, date range, tags, channels, agents) down the left, the choices of the open one on the right, "Clear all" and "Apply" along the bottom. The channels, the labels and the agents are
  * asked for when it opens; a person with none of one sees no such category. The status, channel, label and agent filters take
  * several choices (a conversation in or on any of them); sorting is the newest activity first (the default) or the oldest first.
  */
@@ -135,16 +135,6 @@ export function FiltersSheet({ visible, value, onApply, onClose }: Props) {
           },
         ]
       : []),
-    {
-      key: 'view',
-      title: t('inbox.filter.view'),
-      kind: 'single',
-      empty: 'active',
-      options: [
-        { value: 'active', label: t('inbox.filter.viewActive') },
-        { value: 'archived', label: t('inbox.filter.viewArchived') },
-      ],
-    },
   ];
   // The extra categories arrive a moment after the screen opens; the list is usable meanwhile, so a failure is only said.
   const loadError = channels.error ?? labels.error ?? agents.error;
@@ -162,7 +152,6 @@ export function FiltersSheet({ visible, value, onApply, onClose }: Props) {
         labels: value.labels.join(','),
         channels: value.channelIds.join(','),
         agents: value.agentIds.join(','),
-        view: value.archived ? 'archived' : 'active',
       }}
       error={loadError ? messageForError(loadError, t) : null}
       onApply={(picked) => {
@@ -176,7 +165,8 @@ export function FiltersSheet({ visible, value, onApply, onClose }: Props) {
           labels: idsApplied(picked.labels, value.labels),
           channelIds: idsApplied(picked.channels, value.channelIds),
           agentIds: idsApplied(picked.agents, value.agentIds),
-          archived: picked.view === 'archived',
+          // The window no longer offers the archive view; whatever was on stays as it was.
+          archived: value.archived,
         });
       }}
       onClose={onClose}
