@@ -103,12 +103,22 @@ export function parsePql(text: string): PqlAnswer | null {
     .trim()
     .replace(/^```(?:json)?\s*/i, '')
     .replace(/\s*```$/, '');
+  // A model may wrap the object in a sentence ("Here is the filter: {...}"): try the whole text, then the outermost braces.
+  const first = cleaned.indexOf('{');
+  const last = cleaned.lastIndexOf('}');
   let raw: unknown;
-  try {
-    raw = JSON.parse(cleaned);
-  } catch {
-    return null;
+  for (const candidate of [
+    cleaned,
+    ...(first >= 0 && last > first ? [cleaned.slice(first, last + 1)] : []),
+  ]) {
+    try {
+      raw = JSON.parse(candidate);
+      break;
+    } catch {
+      /* try the next */
+    }
   }
+  if (raw === undefined) return null;
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return null;
   const { rules, summary, ignored } = raw as Record<string, unknown>;
   return {

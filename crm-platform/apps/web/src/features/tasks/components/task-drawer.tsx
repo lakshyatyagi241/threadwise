@@ -26,6 +26,7 @@ import {
   useCompletionOffText,
 } from '@/features/sales-activities';
 import { CompleteWithOutcome, OutcomeSelect } from './outcome-select';
+import { clampOutcomeLabel } from '../lib/outcomes';
 import { RecordPicker } from './record-picker';
 import { useTaskActions } from './use-task-actions';
 
@@ -158,8 +159,13 @@ function DrawerBody({
           </span>
           <PriorityChip priority={task.priority} />
           {task.outcome && (
-            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-              {t('outcomeChip', { name: task.outcome.name })}
+            <span
+              className="inline-flex max-w-full items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium"
+              title={task.outcome.name}
+            >
+              <span className="truncate">
+                {t('outcomeChip', { name: clampOutcomeLabel(task.outcome.name, 100) })}
+              </span>
             </span>
           )}
           <DueText task={task} now={now} zone={zone} className="text-sm" />

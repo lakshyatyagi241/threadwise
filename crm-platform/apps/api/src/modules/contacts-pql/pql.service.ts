@@ -103,6 +103,10 @@ export class PqlService {
       });
     } catch (err) {
       const kind = err instanceof LeadScoringAiError ? err.kind : 'provider';
+      this.logger.warn(
+        { orgId, kind, model, detail: err instanceof Error ? err.message : String(err) },
+        'english search provider call failed',
+      );
       throw new AppError(
         ERROR_CODES.PQL_PROVIDER_FAILED,
         kind === 'auth'

@@ -80,7 +80,7 @@ function analytics(conversations: AnalyticsResponse['conversations']): Analytics
 }
 
 describe('AnalyticsScreen conversation tiles', () => {
-  it('shows Resolved and Closed as separate tiles, each with its own count', () => {
+  it('shows Resolved with its count and no tile for Closed conversations', () => {
     state.data = analytics({
       total: 5,
       open: 2,
@@ -91,8 +91,7 @@ describe('AnalyticsScreen conversation tiles', () => {
     });
     const out = html();
     expect(out).toContain('Resolved conversations');
-    expect(out).toContain('Closed conversations');
+    expect(out).not.toContain('Closed conversations');
     expect(out).toMatch(/Resolved conversations[\s\S]*?>2</);
-    expect(out).toMatch(/Closed conversations[\s\S]*?>1</);
   });
 });

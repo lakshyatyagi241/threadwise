@@ -31,16 +31,18 @@ export function AppliedFilters({
       {chips.map((chip) => (
         <span
           key={chip.id}
-          className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 py-1 ps-2.5 pe-1 text-brand"
+          className="inline-flex min-w-0 max-w-full items-center gap-1.5 overflow-hidden rounded-full border border-brand/40 bg-brand/10 py-1 ps-2.5 pe-1 text-brand"
         >
           {chip.kind === 'rules' && <SparkIcon />}
-          <span className="truncate">{chip.label}</span>
+          <span className="min-w-0 truncate" title={chip.label}>
+            {chip.label}
+          </span>
           <button
             type="button"
             onClick={() => onRemove(chip)}
             aria-label={t('removeFilter', { filter: chip.label })}
             title={t('clearFilter')}
-            className="inline-flex size-5 items-center justify-center rounded-full outline-none hover:bg-brand/20 focus-visible:ring-2 focus-visible:ring-primary"
+            className="inline-flex size-5 shrink-0 items-center justify-center rounded-full outline-none hover:bg-brand/20 focus-visible:ring-2 focus-visible:ring-primary"
           >
             <span aria-hidden="true">&times;</span>
           </button>

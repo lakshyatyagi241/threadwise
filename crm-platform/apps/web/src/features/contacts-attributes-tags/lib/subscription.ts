@@ -38,7 +38,34 @@ export function channelOptIn(c: Source, channel: OptInChannel): OptIn {
   return optInOf(c[LABEL[channel]] as string | null, c.isUnsubscribed);
 }
 
+/** The slice of the consent record the Subscription status card needs: each marketing channel's ledger state. */
+export type LedgerStates = ReadonlyArray<{ channel: string; purpose: string; state: string }>;
+
+/**
+ * One channel's opt-in with the consent ledger in view. The ledger is the proof and the label only a copy of it, so when the ledger
+ * has an answer for the channel it wins: a recorded grant reads Yes and a withdrawal reads No (opted out), whatever the label says.
+ * With no ledger answer (no ledger read yet, or no event on that channel) the label decides, as on the list. The contact's own
+ * opt-out flag still beats everything.
+ */
+export function channelOptInWithLedger(
+  c: Source,
+  channel: OptInChannel,
+  states: LedgerStates | undefined,
+): OptIn {
+  if (c.isUnsubscribed) return 'out';
+  const s = states?.find((x) => x.channel === channel && x.purpose === 'marketing')?.state;
+  if (s === 'granted') return 'yes';
+  if (s === 'withdrawn') return 'out';
+  return channelOptIn(c, channel);
+}
+
 /** The three channels in the order the Subscription status card lists them. */
-export function subscriptionRows(c: Source): Array<{ channel: OptInChannel; optIn: OptIn }> {
-  return OPT_IN_CHANNELS.map((channel) => ({ channel, optIn: channelOptIn(c, channel) }));
+export function subscriptionRows(
+  c: Source,
+  states?: LedgerStates,
+): Array<{ channel: OptInChannel; optIn: OptIn }> {
+  return OPT_IN_CHANNELS.map((channel) => ({
+    channel,
+    optIn: channelOptInWithLedger(c, channel, states),
+  }));
 }
