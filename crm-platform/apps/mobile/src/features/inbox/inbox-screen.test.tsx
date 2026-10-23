@@ -708,6 +708,83 @@ describe('InboxScreen', () => {
       );
     });
 
+    /** Shows two conversations with these facts, long-presses the first and ticks the second. */
+    const chooseTwo = async (over: Partial<typeof rohan>) => {
+      listCall.mockResolvedValue(
+        list([
+          { ...rohan, ...over },
+          { ...meera, ...over },
+        ]),
+      );
+      await show();
+      await fireEvent(await screen.findByRole('button', { name: /Rohan Mehta/ }), 'longPress');
+      await fireEvent.press(await screen.findByRole('checkbox', { name: /Meera Joshi/ }));
+      await screen.findByText('2 selected');
+    };
+
+    it('offers Unsnooze in place of Snooze when every chosen one is snoozed, and wakes them', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseTwo({ status: 'snoozed', unreadCount: 0 });
+      expect(screen.queryByRole('button', { name: 'Snooze' })).toBeNull();
+      await fireEvent.press(screen.getByRole('button', { name: 'Unsnooze' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'status', status: 'open' },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('offers Not spam in place of Mark as spam (and no Status) when every chosen one is spam', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseTwo({ status: 'spam', unreadCount: 0 });
+      expect(screen.queryByRole('button', { name: 'Mark as spam' })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Status' })).toBeNull();
+      await fireEvent.press(screen.getByRole('button', { name: 'Not spam' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'status', status: 'open' },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('offers Reopen in place of Status when every chosen one is resolved', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseTwo({ status: 'resolved', unreadCount: 0 });
+      expect(screen.queryByRole('button', { name: 'Status' })).toBeNull();
+      await fireEvent.press(screen.getByRole('button', { name: 'Reopen' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'status', status: 'open' },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('keeps the plain actions when the chosen ones are mixed, and hides Mark as read when nothing is unread', async () => {
+      // Rohan is open with unread messages, Meera snoozed with none: mixed, so Snooze and Status stay and Mark as read is useful.
+      await chooseBoth();
+      expect(await screen.findByRole('button', { name: 'Snooze' })).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Unsnooze' })).toBeNull();
+      expect(screen.getByRole('button', { name: 'Mark as read' })).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Cancel selection' }));
+      // Nothing unread among the chosen: nothing to mark.
+      await chooseTwo({ unreadCount: 0 });
+      expect(screen.queryByRole('button', { name: 'Mark as read' })).toBeNull();
+    });
+
+    it('does not offer the status they all have already in the Status sheet', async () => {
+      await chooseTwo({ status: 'open' });
+      await fireEvent.press(await screen.findByRole('button', { name: 'Status' }));
+      expect(await screen.findByText('Change status of 2 conversations')).toBeTruthy();
+      expect(screen.queryByRole('radio', { name: 'Open' })).toBeNull();
+      expect(screen.getByRole('radio', { name: 'Resolved' })).toBeTruthy();
+    });
+
     it('stays open and says why when the whole request failed', async () => {
       bulkCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
       await chooseBoth();

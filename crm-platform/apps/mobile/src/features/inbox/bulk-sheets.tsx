@@ -4,6 +4,7 @@ import {
   type BulkConversationAction,
   type BulkConversationsResponse,
   type ConversationPriority,
+  type ConversationStatus,
 } from '@crm/contracts';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +21,8 @@ interface Props {
   kind: BulkKind | null;
   /** The chosen conversations. */
   ids: readonly string[];
+  /** The status all of them already have (null when they differ): the Status sheet does not offer it again. */
+  currentStatus?: ConversationStatus | null;
   onClose: () => void;
   /** The answer, when the run finished (some of them may still have failed: it says which). */
   onDone: (result: BulkConversationsResponse) => void;
@@ -29,7 +32,7 @@ interface Props {
  * The sheets behind the bulk bar: pick a status, an agent or team, a label to add or take off, a priority or a snooze time, then
  * Save: one request for all the chosen conversations. A sheet stays open with the sentence when the whole request failed.
  */
-export function BulkSheets({ kind, ids, onClose, onDone }: Props) {
+export function BulkSheets({ kind, ids, currentStatus = null, onClose, onDone }: Props) {
   const { t } = useTranslation();
   const bulk = useBulk();
   const labels = useLabelLibrary(kind === 'label');
@@ -61,11 +64,13 @@ export function BulkSheets({ kind, ids, onClose, onDone }: Props) {
         groups={[
           {
             key: 'status',
-            // "Closed" is not offered here: a person picks Open or Resolved for several at once.
-            options: BULK_STATUS_TARGETS.filter((s) => s !== 'closed').map((s) => ({
-              value: s,
-              label: t(`inbox.status.${s}`),
-            })),
+            // "Closed" is not offered here (a person picks Open or Resolved for several at once), nor the status they all have already.
+            options: BULK_STATUS_TARGETS.filter((s) => s !== 'closed' && s !== currentStatus).map(
+              (s) => ({
+                value: s,
+                label: t(`inbox.status.${s}`),
+              }),
+            ),
           },
         ]}
         initial={{ status: '' }}

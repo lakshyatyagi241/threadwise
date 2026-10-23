@@ -6,27 +6,41 @@ import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
-export type BulkKind = 'read' | 'status' | 'assign' | 'label' | 'priority' | 'snooze' | 'spam';
+export type BulkKind =
+  | 'read'
+  | 'status'
+  | 'assign'
+  | 'label'
+  | 'priority'
+  | 'snooze'
+  | 'spam'
+  // The undo of an action, offered in its place when every chosen conversation is in that state (see bulk-context.ts).
+  | 'reopen'
+  | 'unsnooze'
+  | 'notSpam';
 
-const ITEMS: readonly { kind: BulkKind; icon: IconName }[] = [
-  { kind: 'read', icon: 'mail-open-outline' },
-  { kind: 'status', icon: 'swap-horizontal-outline' },
-  { kind: 'assign', icon: 'people-outline' },
-  { kind: 'label', icon: 'pricetag-outline' },
-  { kind: 'priority', icon: 'flag-outline' },
-  { kind: 'snooze', icon: 'alarm-outline' },
-  { kind: 'spam', icon: 'ban-outline' },
-];
+const ICONS: Record<BulkKind, IconName> = {
+  read: 'mail-open-outline',
+  status: 'swap-horizontal-outline',
+  assign: 'people-outline',
+  label: 'pricetag-outline',
+  priority: 'flag-outline',
+  snooze: 'alarm-outline',
+  spam: 'ban-outline',
+  reopen: 'refresh-outline',
+  unsnooze: 'notifications-off-outline',
+  notSpam: 'checkmark-circle-outline',
+};
 
 interface Props {
-  /** The actions the person may do to several conversations (each needs its own right on top of the bulk one). */
-  allowed: readonly BulkKind[];
+  /** The actions to offer, in order: what the person may do to several conversations and what fits the chosen ones (bulk-context.ts). */
+  kinds: readonly BulkKind[];
   busy: boolean;
   onPick: (kind: BulkKind) => void;
 }
 
 /** The row of actions at the bottom of the inbox while conversations are ticked: one tap opens the action for all of them. */
-export function BulkBar({ allowed, busy, onPick }: Props) {
+export function BulkBar({ kinds, busy, onPick }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -37,18 +51,18 @@ export function BulkBar({ allowed, busy, onPick }: Props) {
       style={[styles.bar, { backgroundColor: colors.surface, borderTopColor: colors.border }]}
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + spacing.xs }]}
     >
-      {ITEMS.filter((i) => allowed.includes(i.kind)).map((item) => (
+      {kinds.map((kind) => (
         <Pressable
-          key={item.kind}
+          key={kind}
           accessibilityRole="button"
-          accessibilityLabel={t(`inbox.bulk.${item.kind}`)}
+          accessibilityLabel={t(`inbox.bulk.${kind}`)}
           accessibilityState={{ disabled: busy }}
           disabled={busy}
-          onPress={() => onPick(item.kind)}
+          onPress={() => onPick(kind)}
           style={[styles.item, busy && styles.dim]}
         >
-          <Icon name={item.icon} size={22} color="primary" />
-          <Text variant="caption">{t(`inbox.bulk.${item.kind}`)}</Text>
+          <Icon name={ICONS[kind]} size={22} color="primary" />
+          <Text variant="caption">{t(`inbox.bulk.${kind}`)}</Text>
         </Pressable>
       ))}
     </ScrollView>

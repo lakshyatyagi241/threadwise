@@ -27,6 +27,7 @@ import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { BulkBar, type BulkKind } from './bulk-bar';
+import { bulkKindsFor, commonStatus } from './bulk-context';
 import { BulkSheets, useBulkInstant } from './bulk-sheets';
 import { ConversationRow } from './conversation-row';
 import { ConversationSkeleton } from './conversation-skeleton';
@@ -89,11 +90,14 @@ export function InboxScreen() {
       ['priority', 'inbox.conversation.priority'],
       ['snooze', 'inbox.conversation.snooze'],
       ['spam', 'inbox.conversation.resolve'],
+      // The undo of a status move is a move to Open: the same right as resolving.
+      ['reopen', 'inbox.conversation.resolve'],
+      ['unsnooze', 'inbox.conversation.resolve'],
+      ['notSpam', 'inbox.conversation.resolve'],
     ] as const
   )
     .filter(([, permission]) => canBulk && can(session.data, permission))
     .map(([kind]) => kind);
-
   const debounced = useDebouncedValue(typed.trim(), SEARCH_DEBOUNCE_MS);
   // Emptying the box shows the full list straight away; only typing waits for a pause.
   const q = typed.trim() === '' ? '' : debounced;
@@ -156,6 +160,11 @@ export function InboxScreen() {
   const live = useInboxLive();
   const query = useConversations(filters, allowed, focused && !live);
   const rows = useMemo(() => query.data?.pages.flatMap((p) => p.data) ?? [], [query.data]);
+  // What the chosen conversations are now (from the list), so the bar offers the undo of what they are in.
+  const selectedFacts = rows
+    .filter((row) => selected.includes(row.id))
+    .map((row) => ({ status: row.status, unreadCount: row.unreadCount }));
+  const bulkKinds = bulkKindsFor(selectedFacts, bulkAllowed);
   // The clock for "today" and "yesterday" moves only when the list does.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const now = useMemo(() => new Date(), [query.dataUpdatedAt]);
@@ -423,12 +432,15 @@ export function InboxScreen() {
       <View style={styles.screen}>{body()}</View>
       {selecting ? (
         <BulkBar
-          allowed={bulkAllowed}
+          kinds={bulkKinds}
           busy={bulkInstant.pending}
           onPick={(kind) => {
             setBulkError(null);
             if (kind === 'read') bulkInstant.run(selected, { type: 'mark_read' });
             else if (kind === 'spam') bulkInstant.run(selected, { type: 'spam' });
+            // Reopening, waking and "not spam" are all a move to Open.
+            else if (kind === 'reopen' || kind === 'unsnooze' || kind === 'notSpam')
+              bulkInstant.run(selected, { type: 'status', status: 'open' });
             else setBulkSheet(kind);
           }}
         />
@@ -436,6 +448,7 @@ export function InboxScreen() {
       <BulkSheets
         kind={bulkSheet}
         ids={selected}
+        currentStatus={commonStatus(selectedFacts)}
         onClose={() => setBulkSheet(null)}
         onDone={(result) => {
           setBulkResult(result);
