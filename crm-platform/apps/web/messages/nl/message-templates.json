@@ -281,7 +281,7 @@
         "uploading": "Uploaden",
         "keptSample": "Het opgeslagen voorbeeld blijft behouden. Kies een bestand om het te vervangen.",
         "noFile": "Geen bestand gekozen",
-        "limits": "Afbeelding tot 5 MB, video tot 16 MB, pdf tot 100 MB.",
+        "limits": "Afbeelding tot 5 MB, video tot 16 MB, pdf tot 10 MB.",
         "replace": "Bestand vervangen",
         "choose": "Voorbeeldbestand kiezen",
         "tooBig": "Deze {kind} is {size} MB. WhatsApp accepteert maximaal {max} MB. Kies een kleiner bestand.",

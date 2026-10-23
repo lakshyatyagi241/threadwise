@@ -79,9 +79,9 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
   png: { kind: 'image', maxBytes: 5 * 1024 * 1024 },
   mp4: { kind: 'media', maxBytes: 16 * 1024 * 1024 },
   '3gp': { kind: 'media', maxBytes: 16 * 1024 * 1024 },
-  pdf: { kind: 'document', maxBytes: 100 * 1024 * 1024 },
+  pdf: { kind: 'document', maxBytes: 10 * 1024 * 1024 },
 };
-export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
+export const MEDIA_UPLOAD_MAX_BYTES = 16 * 1024 * 1024;
 
 const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
 

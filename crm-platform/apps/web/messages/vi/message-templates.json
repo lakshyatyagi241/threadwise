@@ -281,7 +281,7 @@
         "uploading": "Đang tải lên",
         "keptSample": "Tệp mẫu đã lưu được giữ lại. Chọn tệp để thay thế.",
         "noFile": "Chưa chọn tệp",
-        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB, PDF tối đa 100 MB.",
+        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB, PDF tối đa 10 MB.",
         "replace": "Thay tệp",
         "choose": "Chọn tệp mẫu",
         "tooBig": "{kind} này có dung lượng {size} MB. WhatsApp chỉ chấp nhận tối đa {max} MB. Hãy chọn tệp nhỏ hơn.",
