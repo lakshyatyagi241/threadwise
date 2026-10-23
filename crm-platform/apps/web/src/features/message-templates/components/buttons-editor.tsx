@@ -25,7 +25,10 @@ import { ArrowDownIcon, ArrowUpIcon, PlusIcon, TrashIcon } from './icons';
 export function ButtonsEditor({
   rows,
   onChange,
+  kinds = ADDABLE_KINDS,
 }: {
+  /** The kinds of button that can be added (the button type of the form decides). */
+  kinds?: readonly AddableKind[];
   rows: ButtonRow[];
   onChange: (rows: ButtonRow[]) => void;
 }) {
@@ -38,7 +41,7 @@ export function ButtonsEditor({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
-        {ADDABLE_KINDS.map((k: AddableKind) => (
+        {kinds.map((k: AddableKind) => (
           <Button
             key={k}
             size="sm"
@@ -275,7 +278,7 @@ export function ButtonsEditor({
           phone: BUTTON_LIMITS.phone,
           copy: BUTTON_LIMITS.copy_code,
         })}
-        {addableKinds(rows).length === 0 && ` ${t('allUsed')}`}
+        {addableKinds(rows).filter((k) => kinds.includes(k)).length === 0 && ` ${t('allUsed')}`}
       </p>
     </div>
   );

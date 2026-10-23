@@ -26,6 +26,8 @@ export interface ParsedComponents {
   templateType: string;
   /** A carousel's cards (Meta's example file as the sample address); empty for every other type. */
   cards: TemplateCard[];
+  /** A limited-time offer's heading and countdown; null for every other type. */
+  limitedOffer: { text: string; hasExpiration: boolean } | null;
   variableMap: VariableMap;
 }
 
@@ -46,6 +48,14 @@ function slotsWithExamples(text: string, examples: string[]): VariableSlot[] {
     const example = examples[s.num - 1];
     return example ? { ...s, example } : s;
   });
+}
+
+/** The heading and countdown of Meta's LIMITED_TIME_OFFER component. */
+function offerOf(c: Component | undefined): { text: string; hasExpiration: boolean } | null {
+  const o = c?.limited_time_offer as Record<string, unknown> | undefined;
+  return typeof o?.text === 'string'
+    ? { text: o.text, hasExpiration: o.has_expiration !== false }
+    : null;
 }
 
 /** The cards of Meta's CAROUSEL component, as we store them (the picture is Meta's sample until the author uploads their own). */
@@ -114,7 +124,7 @@ export function parseRemoteComponents(
   const special = list.find((c) => ['CAROUSEL', 'LIMITED_TIME_OFFER'].includes(String(c.type)));
   let templateType = 'standard';
   if (isAuth) templateType = 'auth';
-  else if (special) templateType = String(special.type).toLowerCase();
+  else if (special) templateType = special.type === 'LIMITED_TIME_OFFER' ? 'lto' : 'carousel';
   else if (media) templateType = 'media';
 
   const map: VariableMap = {};
@@ -136,6 +146,7 @@ export function parseRemoteComponents(
     codeExpirationMinutes: typeof codeExp === 'number' ? codeExp : null,
     templateType,
     cards: templateType === 'carousel' ? cardsOfCarousel(special) : [],
+    limitedOffer: templateType === 'lto' ? offerOf(special) : null,
     variableMap: map,
   };
 }

@@ -32,6 +32,8 @@ export interface TemplateRow {
   headerLocation: unknown;
   /** A carousel's cards: `[{ format, image, headerHandle, headerSampleUrl, body, buttons }]`; null for every other type. */
   carouselData: unknown;
+  /** A limited-time-offer template's `{ text, hasExpiration }`; null for every other type. */
+  limitedOffer: unknown;
   parameterFormat: string;
   status: string;
   metaStatus: string | null;
@@ -57,7 +59,7 @@ export interface TemplateRow {
 const SELECT = sql.raw(`
   t.id, t.uuid, t.user_id, t.template_name, t.language, t.header, t.template_body, t.footer, t.code_expiration_minutes,
   t.buttons, t.variable_map, t.category, t.meta_category, t.template_type, t.attachment_type, t.attachment_file,
-  t.header_sample_url, t.header_media_key, t.header_location, t.carousel_data, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
+  t.header_sample_url, t.header_media_key, t.header_location, t.carousel_data, t.limited_offer, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
   t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until, t.meta_edit_log,
   t.provider_config_id, c.uuid AS connection_uuid, t.row_version, t.created_at, t.updated_at,
   to_char(t.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
@@ -90,6 +92,7 @@ function toRow(r: Raw): TemplateRow {
     headerMediaKey: (r.header_media_key as string | null) ?? null,
     headerLocation: r.header_location ?? null,
     carouselData: r.carousel_data ?? null,
+    limitedOffer: r.limited_offer ?? null,
     parameterFormat: String(r.parameter_format),
     status: String(r.status),
     metaStatus: (r.meta_status as string | null) ?? null,
@@ -149,6 +152,7 @@ export interface NewTemplate {
   headerMediaKey?: string | null;
   headerLocation?: unknown;
   carouselData?: unknown;
+  limitedOffer?: unknown;
   parameterFormat: string;
   status: string;
   metaStatus?: string | null;
@@ -186,6 +190,7 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   headerMediaKey: 'header_media_key',
   headerLocation: 'header_location',
   carouselData: 'carousel_data',
+  limitedOffer: 'limited_offer',
   parameterFormat: 'parameter_format',
   status: 'status',
   metaStatus: 'meta_status',
@@ -205,6 +210,7 @@ const JSON_COLUMNS = new Set<string>([
   'variableMap',
   'headerLocation',
   'carouselData',
+  'limitedOffer',
   'metaEditLog',
 ]);
 
@@ -393,12 +399,12 @@ export class TemplatesRepository {
     const res = await tx.execute(sql`
       INSERT INTO wa_templates (org_id, user_id, template_name, language, header, template_body, footer,
         code_expiration_minutes, buttons, variable_map, category, meta_category, template_type, attachment_type,
-        attachment_file, header_sample_url, header_media_key, header_location, carousel_data, parameter_format, status, meta_status, meta_template_id, quality_score,
+        attachment_file, header_sample_url, header_media_key, header_location, carousel_data, limited_offer, parameter_format, status, meta_status, meta_template_id, quality_score,
         rejection_reason_code, approved_at, paused_until, submitted_at, last_synced_at, provider_config_id, channel)
       VALUES (${orgId}, ${v.userId}, ${v.templateName}, ${v.language}, ${v.header}, ${v.templateBody}, ${v.footer},
         ${v.codeExpirationMinutes}, ${JSON.stringify(v.buttons)}::jsonb, ${JSON.stringify(v.variableMap ?? {})}::jsonb,
         ${v.category}, ${v.metaCategory}, ${v.templateType}, ${v.attachmentType}, ${v.attachmentFile},
-        ${v.headerSampleUrl}, ${v.headerMediaKey ?? null}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.carouselData == null ? null : JSON.stringify(v.carouselData)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
+        ${v.headerSampleUrl}, ${v.headerMediaKey ?? null}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.carouselData == null ? null : JSON.stringify(v.carouselData)}::jsonb, ${v.limitedOffer == null ? null : JSON.stringify(v.limitedOffer)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
         ${v.qualityScore ?? null}, ${v.rejectionReasonCode ?? null}, ${v.approvedAt ?? null}, ${v.pausedUntil ?? null},
         ${v.submittedAt ?? null},
         ${v.lastSyncedAt ?? null}, ${v.providerConfigId}, 'waba')

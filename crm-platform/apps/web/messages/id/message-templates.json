@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "daring",
       "cards": "Kartu carousel",
-      "cardEmpty": "Teks kartu {n}"
+      "cardEmpty": "Teks kartu {n}",
+      "offerExpires": "Segera berakhir",
+      "offerTextEmpty": "Judul penawaran"
     },
     "card": {
       "rejected": "Ditolak: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Templat autentikasi memiliki teks tetap, jadi tidak ada yang perlu dibuat."
       },
       "type": {
-        "label": "Jenis templat",
+        "label": "Jenis tombol",
         "standard": "Standar",
         "carousel": "Carousel",
-        "hint": "Carousel adalah pesan dengan deretan kartu yang bisa digeser. Setiap kartu punya gambar atau video, teks singkat, dan hingga dua tombol."
+        "hint": "Pilih bagaimana pesan berakhir. Carousel adalah barisan kartu; penawaran waktu terbatas memiliki judul penawaran dengan hitung mundur opsional dan tombol salin kode atau situs web.",
+        "none": "Tidak ada",
+        "buttons": "Salin kode, situs web, balasan cepat, dll.",
+        "lto": "Penawaran waktu terbatas",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Kartu",
@@ -415,6 +422,15 @@
         "buttonText": "Teks tombol",
         "buttonUrl": "URL situs web",
         "buttonPhone": "Nomor telepon"
+      },
+      "offer": {
+        "title": "Penawaran waktu terbatas",
+        "hint": "Muncul di bawah gambar atau video: judul dan, jika mau, hitung mundur hingga penawaran berakhir.",
+        "text": "Judul penawaran",
+        "textHint": "{used}/{max}",
+        "placeholder": "Penawaran segera berakhir!",
+        "countdown": "Tampilkan hitung mundur",
+        "countdownHint": "WhatsApp menampilkan sisa waktu hingga penawaran berakhir."
       }
     },
     "detail": {

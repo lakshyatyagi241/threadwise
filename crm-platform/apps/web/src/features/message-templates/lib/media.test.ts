@@ -21,10 +21,12 @@ describe('header media checks', () => {
 
   it('caps a PDF header example at 10 MB, as the team decided', () => {
     expect(MEDIA_MAX_BYTES.document).toBe(10 * 1024 * 1024);
-    expect(mediaProblem('document', { type: 'application/pdf', size: 10 * 1024 * 1024 })).toBeNull();
     expect(
-      mediaProblem('document', { type: 'application/pdf', size: 10 * 1024 * 1024 + 1 }),
-    ).toBe('tooBig');
+      mediaProblem('document', { type: 'application/pdf', size: 10 * 1024 * 1024 }),
+    ).toBeNull();
+    expect(mediaProblem('document', { type: 'application/pdf', size: 10 * 1024 * 1024 + 1 })).toBe(
+      'tooBig',
+    );
   });
 
   it('formats sizes in megabytes', () => {

@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Karten des Karussells",
-      "cardEmpty": "Text von Karte {n}"
+      "cardEmpty": "Text von Karte {n}",
+      "offerExpires": "Endet bald",
+      "offerTextEmpty": "Angebotsüberschrift"
     },
     "card": {
       "rejected": "Abgelehnt: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Authentifizierungsvorlagen haben einen festen Text, daher gibt es nichts zu entwerfen."
       },
       "type": {
-        "label": "Vorlagentyp",
+        "label": "Schaltflächentyp",
         "standard": "Standard",
         "carousel": "Karussell",
-        "hint": "Ein Karussell ist eine Nachricht mit einer Reihe von Karten zum Wischen. Jede Karte hat ein Bild oder Video, einen kurzen Text und bis zu zwei Schaltflächen."
+        "hint": "Wählen Sie, womit die Nachricht endet. Ein Karussell ist eine Reihe von Karten; ein zeitlich begrenztes Angebot hat eine Angebotsüberschrift mit optionalem Countdown und eine Schaltfläche zum Kopieren eines Codes oder zum Öffnen einer Website.",
+        "none": "Keine",
+        "buttons": "Code kopieren, Website, Schnellantworten usw.",
+        "lto": "Zeitlich begrenztes Angebot",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Karten",
@@ -415,6 +422,15 @@
         "buttonText": "Text der Schaltfläche",
         "buttonUrl": "Website-URL",
         "buttonPhone": "Telefonnummer"
+      },
+      "offer": {
+        "title": "Zeitlich begrenztes Angebot",
+        "hint": "Wird unter dem Bild oder Video angezeigt: eine Überschrift und, wenn Sie möchten, ein Countdown bis zum Ende des Angebots.",
+        "text": "Angebotsüberschrift",
+        "textHint": "{used}/{max}",
+        "placeholder": "Angebot läuft bald ab!",
+        "countdown": "Countdown anzeigen",
+        "countdownHint": "WhatsApp zeigt die verbleibende Zeit bis zum Ende des Angebots."
       }
     },
     "detail": {

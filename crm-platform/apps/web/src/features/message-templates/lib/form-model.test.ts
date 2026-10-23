@@ -25,6 +25,9 @@ import {
   withHeaderText,
   withKind,
   type FormState,
+  buttonTypeOf,
+  toFields,
+  withButtonType,
 } from './form-model';
 
 const CONN = '11111111-1111-4111-8111-111111111111';
@@ -352,5 +355,47 @@ describe('a carousel template', () => {
     expect(
       s.cards.every((c) => c.format === 'video' && !c.handle && !c.mediaKey && !c.previewUrl),
     ).toBe(true);
+  });
+});
+
+describe('button type', () => {
+  it('a limited-time offer is a Marketing template with a picture header, an offer and its two buttons', () => {
+    const s = withButtonType(initialState('c1'), 'lto');
+    expect(s).toMatchObject({ kind: 'lto', metaCategory: 'MARKETING', headerKind: 'image' });
+    expect(s.buttons.map((b) => b.kind)).toEqual(['copy_code', 'url']);
+    const f = toFields({
+      ...s,
+      name: 'summer',
+      offerText: ' Expiring offer! ',
+      body: 'Hello',
+      footer: 'ignored',
+    });
+    expect(f).toMatchObject({
+      templateType: 'lto',
+      attachmentType: 'image',
+      footer: null,
+      limitedOffer: { text: 'Expiring offer!', hasExpiration: true },
+    });
+  });
+
+  it('catalogue and flow put their one button in; none and buttons take the others out', () => {
+    expect(withButtonType(initialState(), 'catalogue').buttons.map((b) => b.kind)).toEqual([
+      'catalog',
+    ]);
+    const flow = withButtonType(initialState(), 'flow');
+    expect(flow.buttons.map((b) => b.kind)).toEqual(['form']);
+    expect(withButtonType(flow, 'buttons').buttons).toEqual([]);
+    expect(withButtonType(flow, 'none').buttons).toEqual([]);
+  });
+
+  it('is read back from a saved template', () => {
+    expect(buttonTypeOf({ templateType: 'lto', buttons: [] })).toBe('lto');
+    expect(buttonTypeOf({ templateType: 'carousel', buttons: [] })).toBe('carousel');
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'CATALOG' }] })).toBe(
+      'catalogue',
+    );
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'FLOW' }] })).toBe('flow');
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'URL' }] })).toBe('buttons');
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [] })).toBe('none');
   });
 });

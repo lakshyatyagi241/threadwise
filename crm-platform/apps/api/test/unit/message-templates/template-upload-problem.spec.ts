@@ -8,7 +8,12 @@ import { uploadProblem } from '../../../src/modules/message-templates/template-e
 describe('uploadProblem', () => {
   it('answers a provider throttle as a 429 that asks for a short wait, not as a refused file', () => {
     const throttled = WabaApiError.fromResponse(403, {
-      error: { message: 'Application request limit reached', code: 4, is_transient: true, fbtrace_id: 'AAA' },
+      error: {
+        message: 'Application request limit reached',
+        code: 4,
+        is_transient: true,
+        fbtrace_id: 'AAA',
+      },
     });
     const out = uploadProblem('Meta did not accept the file', throttled);
     expect(out).toBeInstanceOf(AppError);
@@ -19,14 +24,18 @@ describe('uploadProblem', () => {
   });
 
   it('keeps the outage answer for a transient failure that is not a throttle', () => {
-    const outage = WabaApiError.fromResponse(503, { error: { message: 'Service down', is_transient: true, fbtrace_id: 'CCC' } });
+    const outage = WabaApiError.fromResponse(503, {
+      error: { message: 'Service down', is_transient: true, fbtrace_id: 'CCC' },
+    });
     const out = uploadProblem('Meta did not accept the file', outage);
     expect(out.code).toBe(ERROR_CODES.WABA_PROVIDER_UNAVAILABLE);
     expect(out.getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
   });
 
   it('keeps the refusal answer for a file Meta rejects', () => {
-    const refusal = WabaApiError.fromResponse(400, { error: { message: 'Invalid parameter', code: 100, fbtrace_id: 'DDD' } });
+    const refusal = WabaApiError.fromResponse(400, {
+      error: { message: 'Invalid parameter', code: 100, fbtrace_id: 'DDD' },
+    });
     const out = uploadProblem('Meta did not accept the file', refusal);
     expect(out.code).toBe(ERROR_CODES.TPL_META_REJECTED);
     expect(out.getStatus()).toBe(HttpStatus.UNPROCESSABLE_ENTITY);

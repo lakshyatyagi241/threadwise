@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "çevrimiçi",
       "cards": "Karusel kartları",
-      "cardEmpty": "{n}. kartın metni"
+      "cardEmpty": "{n}. kartın metni",
+      "offerExpires": "Yakında bitiyor",
+      "offerTextEmpty": "Teklif başlığı"
     },
     "card": {
       "rejected": "Reddedildi: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Kimlik doğrulama şablonlarının metni sabittir, bu yüzden taslak hazırlanacak bir şey yok."
       },
       "type": {
-        "label": "Şablon türü",
+        "label": "Düğme türü",
         "standard": "Standart",
         "carousel": "Karusel",
-        "hint": "Karusel, kaydırılabilen bir kart sırası içeren bir mesajdır. Her kartta bir resim veya video, kısa bir metin ve en fazla iki düğme bulunur."
+        "hint": "Mesajın nasıl biteceğini seçin. Karusel bir kart sırasıdır; sınırlı süreli teklifte teklif başlığı (isteğe bağlı geri sayımla) ve kod kopyalama ya da web sitesi düğmesi bulunur.",
+        "none": "Yok",
+        "buttons": "Kodu kopyala, web sitesi, hızlı yanıtlar vb.",
+        "lto": "Sınırlı süreli teklif",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Kartlar",
@@ -415,6 +422,15 @@
         "buttonText": "Düğme metni",
         "buttonUrl": "Web sitesi URL'si",
         "buttonPhone": "Telefon numarası"
+      },
+      "offer": {
+        "title": "Sınırlı süreli teklif",
+        "hint": "Resmin veya videonun altında görünür: bir başlık ve isterseniz teklifin bitişine geri sayım.",
+        "text": "Teklif başlığı",
+        "textHint": "{used}/{max}",
+        "placeholder": "Süresi dolmak üzere!",
+        "countdown": "Geri sayımı göster",
+        "countdownHint": "WhatsApp teklifin bitmesine kalan süreyi gösterir."
       }
     },
     "detail": {

@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Karty karuzeli",
-      "cardEmpty": "Tekst karty {n}"
+      "cardEmpty": "Tekst karty {n}",
+      "offerExpires": "Wkrótce koniec",
+      "offerTextEmpty": "Nagłówek oferty"
     },
     "card": {
       "rejected": "Odrzucone: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Szablony uwierzytelniania mają stały tekst, więc nie ma czego przygotowywać."
       },
       "type": {
-        "label": "Typ szablonu",
+        "label": "Typ przycisku",
         "standard": "Standardowy",
         "carousel": "Karuzela",
-        "hint": "Karuzela to wiadomość z rzędem kart do przesuwania. Każda karta ma obraz lub wideo, krótki tekst i do dwóch przycisków."
+        "hint": "Wybierz, czym kończy się wiadomość. Karuzela to rząd kart; oferta czasowa ma nagłówek oferty z opcjonalnym odliczaniem oraz przycisk kopiowania kodu lub strony internetowej.",
+        "none": "Brak",
+        "buttons": "Kopiuj kod, strona internetowa, szybkie odpowiedzi itp.",
+        "lto": "Oferta czasowa",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Karty",
@@ -415,6 +422,15 @@
         "buttonText": "Tekst przycisku",
         "buttonUrl": "Adres URL strony",
         "buttonPhone": "Numer telefonu"
+      },
+      "offer": {
+        "title": "Oferta czasowa",
+        "hint": "Wyświetlany pod obrazem lub filmem: nagłówek i, jeśli chcesz, odliczanie do końca oferty.",
+        "text": "Nagłówek oferty",
+        "textHint": "{used}/{max}",
+        "placeholder": "Oferta wkrótce wygasa!",
+        "countdown": "Pokaż odliczanie",
+        "countdownHint": "WhatsApp pokazuje czas pozostały do końca oferty."
       }
     },
     "detail": {

@@ -325,6 +325,7 @@ export class TemplatesService {
         headerMediaKey: prepared.headerMediaKey,
         headerLocation: prepared.headerLocation,
         carouselData: prepared.cards.length > 0 ? prepared.cards : null,
+        limitedOffer: prepared.limitedOffer,
         parameterFormat: prepared.parameterFormat,
         status: input.submit ? 'pending' : 'draft',
         providerConfigId: target.id,
@@ -448,6 +449,7 @@ export class TemplatesService {
           headerMediaKey: effective.headerMediaKey,
           headerLocation: effective.headerLocation,
           carouselData: effective.cards.length > 0 ? effective.cards : null,
+          limitedOffer: effective.limitedOffer,
           parameterFormat: effective.parameterFormat,
           // An in-place edit keeps its live status until Meta takes the edit.
           ...(input.submit && !inPlace(current) ? { status: 'pending' } : {}),

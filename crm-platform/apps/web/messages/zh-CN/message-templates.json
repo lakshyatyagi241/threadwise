@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "在线",
       "cards": "轮播卡片",
-      "cardEmpty": "卡片 {n} 的文字"
+      "cardEmpty": "卡片 {n} 的文字",
+      "offerExpires": "即将结束",
+      "offerTextEmpty": "优惠标题"
     },
     "card": {
       "rejected": "已拒绝:{reason}",
@@ -391,10 +393,15 @@
         "authHint": "验证类模板的文本是固定的，无需起草。"
       },
       "type": {
-        "label": "模板类型",
+        "label": "按钮类型",
         "standard": "标准",
         "carousel": "轮播",
-        "hint": "轮播是一条带有一排可滑动卡片的消息。每张卡片包含一张图片或一个视频、一段简短文字和最多两个按钮。"
+        "hint": "选择消息的结尾形式。轮播是一排卡片；限时优惠包含优惠标题（可选倒计时）以及复制代码或网站按钮。",
+        "none": "无",
+        "buttons": "复制代码、网站、快捷回复等",
+        "lto": "限时优惠",
+        "catalogue": "商品目录",
+        "flow": "Flow"
       },
       "cards": {
         "title": "卡片",
@@ -415,6 +422,15 @@
         "buttonText": "按钮文字",
         "buttonUrl": "网站链接",
         "buttonPhone": "电话号码"
+      },
+      "offer": {
+        "title": "限时优惠",
+        "hint": "显示在图片或视频下方：一个标题，以及（可选的）优惠结束倒计时。",
+        "text": "优惠标题",
+        "textHint": "{used}/{max}",
+        "placeholder": "优惠即将结束！",
+        "countdown": "显示倒计时",
+        "countdownHint": "WhatsApp 会显示距优惠结束的剩余时间。"
       }
     },
     "detail": {

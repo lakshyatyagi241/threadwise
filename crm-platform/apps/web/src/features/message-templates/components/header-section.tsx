@@ -24,7 +24,10 @@ export function HeaderSection({
   onKind,
   onText,
   onUploaded,
+  kinds = HEADER_KINDS,
 }: {
+  /** The header kinds on offer (a limited-time offer allows only a picture or a video). */
+  kinds?: readonly HeaderKind[];
   state: FormState;
   headerError?: string;
   onKind: (k: HeaderKind) => void;
@@ -89,7 +92,7 @@ export function HeaderSection({
           value={kind}
           onChange={(e) => onKind(e.target.value as HeaderKind)}
         >
-          {HEADER_KINDS.map((k) => (
+          {kinds.map((k) => (
             <option key={k} value={k}>
               {t(`kind.${k}`)}
             </option>

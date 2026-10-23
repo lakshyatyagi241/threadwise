@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Schede del carosello",
-      "cardEmpty": "Testo della scheda {n}"
+      "cardEmpty": "Testo della scheda {n}",
+      "offerExpires": "Termina presto",
+      "offerTextEmpty": "Titolo dell’offerta"
     },
     "card": {
       "rejected": "Rifiutato: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "I template di autenticazione hanno un testo fisso, quindi non c'è nulla da redigere."
       },
       "type": {
-        "label": "Tipo di modello",
+        "label": "Tipo di pulsante",
         "standard": "Standard",
         "carousel": "Carosello",
-        "hint": "Un carosello è un messaggio con una fila di schede da scorrere. Ogni scheda ha un'immagine o un video, un testo breve e fino a due pulsanti."
+        "hint": "Scegli come finisce il messaggio. Un carosello è una fila di schede; un’offerta a tempo limitato ha un titolo dell’offerta con conto alla rovescia facoltativo e un pulsante per copiare un codice o aprire un sito.",
+        "none": "Nessuno",
+        "buttons": "Copia codice, sito web, risposte rapide ecc.",
+        "lto": "Offerta a tempo limitato",
+        "catalogue": "Catalogo",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Schede",
@@ -415,6 +422,15 @@
         "buttonText": "Testo del pulsante",
         "buttonUrl": "URL del sito web",
         "buttonPhone": "Numero di telefono"
+      },
+      "offer": {
+        "title": "Offerta a tempo limitato",
+        "hint": "Mostrato sotto l’immagine o il video: un titolo e, se vuoi, un conto alla rovescia fino alla fine dell’offerta.",
+        "text": "Titolo dell’offerta",
+        "textHint": "{used}/{max}",
+        "placeholder": "Offerta in scadenza!",
+        "countdown": "Mostra il conto alla rovescia",
+        "countdownHint": "WhatsApp mostra il tempo rimasto prima della fine dell’offerta."
       }
     },
     "detail": {

@@ -159,6 +159,19 @@ export function MessageBubble({
       ) : (
         <>
           <MediaBlock model={model} />
+          {model.offer && (
+            <div
+              className="mb-1.5 flex items-center justify-between gap-2 rounded-md bg-muted px-2 py-1.5 text-xs"
+              data-testid="bubble-offer"
+            >
+              <span className="font-semibold break-words">
+                {model.offer.text || t('offerTextEmpty')}
+              </span>
+              {model.offer.countdown && (
+                <span className="shrink-0 text-muted-foreground">{t('offerExpires')}</span>
+              )}
+            </div>
+          )}
           {model.headerKind === 'text' && model.headerText && (
             <div className="mb-1 font-semibold break-words">
               <FormattedText text={model.headerText} />
