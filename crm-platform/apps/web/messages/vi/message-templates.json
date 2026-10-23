@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, other {+# nút khác}}",
       "live": "Xem trước trực tiếp",
       "business": "Bloomly",
-      "online": "trực tuyến"
+      "online": "trực tuyến",
+      "cards": "Thẻ băng chuyền",
+      "cardEmpty": "Văn bản của thẻ {n}"
     },
     "card": {
       "rejected": "Bị từ chối: {reason}",
@@ -195,7 +197,8 @@
         "body": "Nội dung",
         "footer": "Chân trang",
         "buttons": "Nút",
-        "template": "Mẫu"
+        "template": "Mẫu",
+        "cards": "Thẻ"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Tạo bằng AI",
         "applied": "Bản nháp mẫu đã được AI điền sẵn. Hãy xem lại trước khi gửi duyệt.",
         "authHint": "Mẫu xác thực có nội dung cố định nên không cần soạn."
+      },
+      "type": {
+        "label": "Loại mẫu",
+        "standard": "Tiêu chuẩn",
+        "carousel": "Băng chuyền",
+        "hint": "Băng chuyền là tin nhắn có một hàng thẻ để vuốt xem. Mỗi thẻ có một hình ảnh hoặc video, một đoạn văn ngắn và tối đa hai nút."
+      },
+      "cards": {
+        "title": "Thẻ",
+        "hint": "Từ 2 đến 10 thẻ. Mọi thẻ dùng cùng loại tệp và cùng các nút.",
+        "format": "Thẻ hiển thị",
+        "formatImage": "Hình ảnh",
+        "formatVideo": "Video",
+        "count": "{used}/{max} thẻ",
+        "add": "Thêm thẻ",
+        "needTwo": "Băng chuyền cần ít nhất {min} thẻ.",
+        "card": "Thẻ {n}",
+        "remove": "Xóa thẻ {n}",
+        "noFile": "Chưa chọn tệp",
+        "uploading": "Đang tải lên",
+        "text": "Văn bản của thẻ",
+        "textCounter": "{used}/{max}",
+        "buttons": "Nút",
+        "buttonText": "Văn bản nút",
+        "buttonUrl": "URL trang web",
+        "buttonPhone": "Số điện thoại"
       }
     },
     "detail": {

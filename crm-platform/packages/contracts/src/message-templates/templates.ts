@@ -44,6 +44,37 @@ export const tplVariableMapSchema = z.object({
 });
 export type TplVariableMap = z.infer<typeof tplVariableMapSchema>;
 
+/** A carousel template holds 2 to 10 cards (Meta's limits): each a picture or video, a short text and up to two buttons. */
+export const TPL_CAROUSEL_MIN = 2;
+export const TPL_CAROUSEL_MAX = 10;
+export const TPL_CAROUSEL_BODY_MAX = 160;
+export const TPL_CAROUSEL_BUTTONS_MAX = 2;
+
+/** One card as the author sends it. */
+export const tplCardInputSchema = z.object({
+  format: z.enum(['image', 'video']).default('image'),
+  /** Object-storage key of the uploaded file (`POST /v2/templates/media` -> `mediaKey`): what a send shows. */
+  image: z.string().max(512).nullish(),
+  /** Handle Meta returned for the example file (same upload). Required to submit. */
+  headerHandle: z.string().max(2000).nullish(),
+  headerSampleUrl: z.string().max(2000).nullish(),
+  body: z.string().max(TPL_CAROUSEL_BODY_MAX),
+  buttons: z.array(tplButtonSchema).max(TPL_CAROUSEL_BUTTONS_MAX).default([]),
+});
+export type TplCardInput = z.infer<typeof tplCardInputSchema>;
+
+/** One card as the library and the form read it back. */
+export const tplCardSchema = z.object({
+  format: z.enum(['image', 'video']),
+  /** The stored file's key (sent back unchanged to keep the file), or an address when the card came from Meta. */
+  image: z.string().nullable(),
+  /** A link to draw the card's file with: a fresh link to the stored file on the detail, else Meta's sample address. */
+  imageUrl: z.string().nullable(),
+  body: z.string(),
+  buttons: z.array(tplButtonSchema),
+});
+export type TplCard = z.infer<typeof tplCardSchema>;
+
 export const tplAttachmentTypeSchema = z.enum(['none', 'image', 'video', 'document', 'location']);
 
 /** The map pin of a `location` header: WhatsApp renders 0,0 for a value out of range, so the range is enforced here. */
@@ -58,7 +89,7 @@ export type TplHeaderLocation = z.infer<typeof tplHeaderLocationSchema>;
 export const tplLintIssueSchema = z.object({
   code: z.string(),
   severity: z.enum(['error', 'warning']),
-  field: z.enum(['name', 'language', 'header', 'body', 'footer', 'buttons', 'template']),
+  field: z.enum(['name', 'language', 'header', 'body', 'footer', 'buttons', 'cards', 'template']),
   message: z.string(),
 });
 export type TplLintIssue = z.infer<typeof tplLintIssueSchema>;
@@ -101,6 +132,8 @@ export const templateSummarySchema = z.object({
   body: z.string(),
   footer: z.string().nullable(),
   buttons: z.array(tplButtonSchema),
+  /** The cards of a carousel template (empty for every other type). */
+  cards: z.array(tplCardSchema),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -166,7 +199,7 @@ const templateFields = {
     .trim()
     .regex(/^[a-z]{2,3}(_[A-Z]{2})?$/, 'a Meta language code such as en_US'),
   metaCategory: tplMetaCategorySchema,
-  templateType: z.enum(['standard', 'media', 'auth']).default('standard'),
+  templateType: z.enum(['standard', 'media', 'auth', 'carousel']).default('standard'),
   header: z.string().trim().max(60).nullish(),
   attachmentType: tplAttachmentTypeSchema.default('none'),
   /** Handle returned by `POST /v2/templates/media`; required for an image, video or document header. */
@@ -179,6 +212,8 @@ const templateFields = {
   body: z.string().max(TPL_BODY_MAX),
   footer: z.string().trim().max(60).nullish(),
   buttons: z.array(tplButtonSchema).max(10).default([]),
+  /** `templateType: 'carousel'` only: 2 to 10 cards. */
+  cards: z.array(tplCardInputSchema).max(TPL_CAROUSEL_MAX).optional(),
   variableMap: tplVariableMapSchema.optional(),
   codeExpirationMinutes: z.number().int().min(1).max(90).nullish(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']).default('POSITIONAL'),

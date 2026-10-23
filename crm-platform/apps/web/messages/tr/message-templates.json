@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, other {+# düğme daha}}",
       "live": "Canlı önizleme",
       "business": "Bloomly",
-      "online": "çevrimiçi"
+      "online": "çevrimiçi",
+      "cards": "Karusel kartları",
+      "cardEmpty": "{n}. kartın metni"
     },
     "card": {
       "rejected": "Reddedildi: {reason}",
@@ -195,7 +197,8 @@
         "body": "Gövde",
         "footer": "Alt bilgi",
         "buttons": "Düğmeler",
-        "template": "Şablon"
+        "template": "Şablon",
+        "cards": "Kartlar"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Yapay zekayla oluştur",
         "applied": "Şablon taslağı yapay zekayla dolduruldu. Göndermeden önce inceleyin.",
         "authHint": "Kimlik doğrulama şablonlarının metni sabittir, bu yüzden taslak hazırlanacak bir şey yok."
+      },
+      "type": {
+        "label": "Şablon türü",
+        "standard": "Standart",
+        "carousel": "Karusel",
+        "hint": "Karusel, kaydırılabilen bir kart sırası içeren bir mesajdır. Her kartta bir resim veya video, kısa bir metin ve en fazla iki düğme bulunur."
+      },
+      "cards": {
+        "title": "Kartlar",
+        "hint": "2 ila 10 kart. Tüm kartlar aynı dosya türünü ve aynı düğmeleri kullanır.",
+        "format": "Kartlar şunu gösterir",
+        "formatImage": "Resimler",
+        "formatVideo": "Videolar",
+        "count": "{used}/{max} kart",
+        "add": "Kart ekle",
+        "needTwo": "Bir karusel için en az {min} kart gerekir.",
+        "card": "Kart {n}",
+        "remove": "{n}. kartı kaldır",
+        "noFile": "Dosya seçilmedi",
+        "uploading": "Yükleniyor",
+        "text": "Kart metni",
+        "textCounter": "{used}/{max}",
+        "buttons": "Düğmeler",
+        "buttonText": "Düğme metni",
+        "buttonUrl": "Web sitesi URL'si",
+        "buttonPhone": "Telefon numarası"
       }
     },
     "detail": {

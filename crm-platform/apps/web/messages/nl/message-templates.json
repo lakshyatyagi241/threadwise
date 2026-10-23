@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# knop meer} other {+# knoppen meer}}",
       "live": "Live voorbeeld",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Carrouselkaarten",
+      "cardEmpty": "Tekst van kaart {n}"
     },
     "card": {
       "rejected": "Afgewezen: {reason}",
@@ -195,7 +197,8 @@
         "body": "Hoofdtekst",
         "footer": "Footer",
         "buttons": "Knoppen",
-        "template": "Sjabloon"
+        "template": "Sjabloon",
+        "cards": "Kaarten"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Bouwen met AI",
         "applied": "Sjabloonconcept ingevuld door AI. Controleer het voordat u het indient.",
         "authHint": "Authenticatiesjablonen hebben een vaste tekst, dus er valt niets te schrijven."
+      },
+      "type": {
+        "label": "Sjabloontype",
+        "standard": "Standaard",
+        "carousel": "Carrousel",
+        "hint": "Een carrousel is een bericht met een rij kaarten om doorheen te vegen. Elke kaart heeft een afbeelding of video, een korte tekst en maximaal twee knoppen."
+      },
+      "cards": {
+        "title": "Kaarten",
+        "hint": "2 tot 10 kaarten. Alle kaarten gebruiken hetzelfde soort bestand en dezelfde knoppen.",
+        "format": "Kaarten tonen",
+        "formatImage": "Afbeeldingen",
+        "formatVideo": "Video's",
+        "count": "{used}/{max} kaarten",
+        "add": "Kaart toevoegen",
+        "needTwo": "Een carrousel heeft minstens {min} kaarten nodig.",
+        "card": "Kaart {n}",
+        "remove": "Kaart {n} verwijderen",
+        "noFile": "Geen bestand gekozen",
+        "uploading": "Uploaden",
+        "text": "Kaarttekst",
+        "textCounter": "{used}/{max}",
+        "buttons": "Knoppen",
+        "buttonText": "Knoptekst",
+        "buttonUrl": "Website-URL",
+        "buttonPhone": "Telefoonnummer"
       }
     },
     "detail": {

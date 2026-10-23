@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# altro pulsante} other {+# altri pulsanti}}",
       "live": "Anteprima live",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Schede del carosello",
+      "cardEmpty": "Testo della scheda {n}"
     },
     "card": {
       "rejected": "Rifiutato: {reason}",
@@ -195,7 +197,8 @@
         "body": "Corpo",
         "footer": "Piè di pagina",
         "buttons": "Pulsanti",
-        "template": "Template"
+        "template": "Template",
+        "cards": "Schede"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Crea con AI",
         "applied": "Bozza del template compilata dall'AI. Rivedila prima di inviarla.",
         "authHint": "I template di autenticazione hanno un testo fisso, quindi non c'è nulla da redigere."
+      },
+      "type": {
+        "label": "Tipo di modello",
+        "standard": "Standard",
+        "carousel": "Carosello",
+        "hint": "Un carosello è un messaggio con una fila di schede da scorrere. Ogni scheda ha un'immagine o un video, un testo breve e fino a due pulsanti."
+      },
+      "cards": {
+        "title": "Schede",
+        "hint": "Da 2 a 10 schede. Tutte usano lo stesso tipo di file e gli stessi pulsanti.",
+        "format": "Le schede mostrano",
+        "formatImage": "Immagini",
+        "formatVideo": "Video",
+        "count": "{used}/{max} schede",
+        "add": "Aggiungi scheda",
+        "needTwo": "Un carosello richiede almeno {min} schede.",
+        "card": "Scheda {n}",
+        "remove": "Rimuovi la scheda {n}",
+        "noFile": "Nessun file scelto",
+        "uploading": "Caricamento",
+        "text": "Testo della scheda",
+        "textCounter": "{used}/{max}",
+        "buttons": "Pulsanti",
+        "buttonText": "Testo del pulsante",
+        "buttonUrl": "URL del sito web",
+        "buttonPhone": "Numero di telefono"
       }
     },
     "detail": {

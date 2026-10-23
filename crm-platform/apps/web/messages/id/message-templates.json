@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, other {+# tombol lainnya}}",
       "live": "Pratinjau langsung",
       "business": "Bloomly",
-      "online": "daring"
+      "online": "daring",
+      "cards": "Kartu carousel",
+      "cardEmpty": "Teks kartu {n}"
     },
     "card": {
       "rejected": "Ditolak: {reason}",
@@ -195,7 +197,8 @@
         "body": "Isi",
         "footer": "Footer",
         "buttons": "Tombol",
-        "template": "Templat"
+        "template": "Templat",
+        "cards": "Kartu"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Buat dengan AI",
         "applied": "Draf templat diisi dari AI. Tinjau sebelum Anda mengirimkannya.",
         "authHint": "Templat autentikasi memiliki teks tetap, jadi tidak ada yang perlu dibuat."
+      },
+      "type": {
+        "label": "Jenis templat",
+        "standard": "Standar",
+        "carousel": "Carousel",
+        "hint": "Carousel adalah pesan dengan deretan kartu yang bisa digeser. Setiap kartu punya gambar atau video, teks singkat, dan hingga dua tombol."
+      },
+      "cards": {
+        "title": "Kartu",
+        "hint": "2 sampai 10 kartu. Semua kartu memakai jenis berkas dan tombol yang sama.",
+        "format": "Kartu menampilkan",
+        "formatImage": "Gambar",
+        "formatVideo": "Video",
+        "count": "{used}/{max} kartu",
+        "add": "Tambah kartu",
+        "needTwo": "Carousel memerlukan minimal {min} kartu.",
+        "card": "Kartu {n}",
+        "remove": "Hapus kartu {n}",
+        "noFile": "Belum ada berkas dipilih",
+        "uploading": "Mengunggah",
+        "text": "Teks kartu",
+        "textCounter": "{used}/{max}",
+        "buttons": "Tombol",
+        "buttonText": "Teks tombol",
+        "buttonUrl": "URL situs web",
+        "buttonPhone": "Nomor telepon"
       }
     },
     "detail": {

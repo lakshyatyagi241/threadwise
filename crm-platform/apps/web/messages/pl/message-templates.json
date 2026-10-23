@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# kolejny przycisk} few {+# kolejne przyciski} many {+# kolejnych przycisków} other {+# kolejnego przycisku}}",
       "live": "Podgląd na żywo",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Karty karuzeli",
+      "cardEmpty": "Tekst karty {n}"
     },
     "card": {
       "rejected": "Odrzucone: {reason}",
@@ -195,7 +197,8 @@
         "body": "Treść",
         "footer": "Stopka",
         "buttons": "Przyciski",
-        "template": "Szablon"
+        "template": "Szablon",
+        "cards": "Karty"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Utwórz z AI",
         "applied": "Szablon został uzupełniony przez AI. Sprawdź go przed wysłaniem do weryfikacji.",
         "authHint": "Szablony uwierzytelniania mają stały tekst, więc nie ma czego przygotowywać."
+      },
+      "type": {
+        "label": "Typ szablonu",
+        "standard": "Standardowy",
+        "carousel": "Karuzela",
+        "hint": "Karuzela to wiadomość z rzędem kart do przesuwania. Każda karta ma obraz lub wideo, krótki tekst i do dwóch przycisków."
+      },
+      "cards": {
+        "title": "Karty",
+        "hint": "Od 2 do 10 kart. Wszystkie używają tego samego rodzaju pliku i tych samych przycisków.",
+        "format": "Karty pokazują",
+        "formatImage": "Obrazy",
+        "formatVideo": "Wideo",
+        "count": "{used}/{max} kart",
+        "add": "Dodaj kartę",
+        "needTwo": "Karuzela wymaga co najmniej {min} kart.",
+        "card": "Karta {n}",
+        "remove": "Usuń kartę {n}",
+        "noFile": "Nie wybrano pliku",
+        "uploading": "Przesyłanie",
+        "text": "Tekst karty",
+        "textCounter": "{used}/{max}",
+        "buttons": "Przyciski",
+        "buttonText": "Tekst przycisku",
+        "buttonUrl": "Adres URL strony",
+        "buttonPhone": "Numer telefonu"
       }
     },
     "detail": {

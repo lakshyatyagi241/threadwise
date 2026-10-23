@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# weitere Schaltfläche} other {+# weitere Schaltflächen}}",
       "live": "Live-Vorschau",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Karten des Karussells",
+      "cardEmpty": "Text von Karte {n}"
     },
     "card": {
       "rejected": "Abgelehnt: {reason}",
@@ -195,7 +197,8 @@
         "body": "Text",
         "footer": "Fußzeile",
         "buttons": "Schaltflächen",
-        "template": "Vorlage"
+        "template": "Vorlage",
+        "cards": "Karten"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Mit KI erstellen",
         "applied": "Vorlagenentwurf von der KI ausgefüllt. Prüfen Sie ihn, bevor Sie ihn einreichen.",
         "authHint": "Authentifizierungsvorlagen haben einen festen Text, daher gibt es nichts zu entwerfen."
+      },
+      "type": {
+        "label": "Vorlagentyp",
+        "standard": "Standard",
+        "carousel": "Karussell",
+        "hint": "Ein Karussell ist eine Nachricht mit einer Reihe von Karten zum Wischen. Jede Karte hat ein Bild oder Video, einen kurzen Text und bis zu zwei Schaltflächen."
+      },
+      "cards": {
+        "title": "Karten",
+        "hint": "2 bis 10 Karten. Alle Karten verwenden dieselbe Dateiart und dieselben Schaltflächen.",
+        "format": "Die Karten zeigen",
+        "formatImage": "Bilder",
+        "formatVideo": "Videos",
+        "count": "{used}/{max} Karten",
+        "add": "Karte hinzufügen",
+        "needTwo": "Ein Karussell braucht mindestens {min} Karten.",
+        "card": "Karte {n}",
+        "remove": "Karte {n} entfernen",
+        "noFile": "Keine Datei gewählt",
+        "uploading": "Wird hochgeladen",
+        "text": "Kartentext",
+        "textCounter": "{used}/{max}",
+        "buttons": "Schaltflächen",
+        "buttonText": "Text der Schaltfläche",
+        "buttonUrl": "Website-URL",
+        "buttonPhone": "Telefonnummer"
       }
     },
     "detail": {

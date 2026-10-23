@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, other {+#個のボタン}}",
       "live": "ライブプレビュー",
       "business": "Bloomly",
-      "online": "オンライン"
+      "online": "オンライン",
+      "cards": "カルーセルのカード",
+      "cardEmpty": "カード {n} のテキスト"
     },
     "card": {
       "rejected": "却下：{reason}",
@@ -195,7 +197,8 @@
         "body": "本文",
         "footer": "フッター",
         "buttons": "ボタン",
-        "template": "テンプレート"
+        "template": "テンプレート",
+        "cards": "カード"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "AIで作成",
         "applied": "AIでテンプレートの下書きを入力しました。送信前に内容を確認してください。",
         "authHint": "認証テンプレートの文面は固定のため、下書きを作成する内容がありません。"
+      },
+      "type": {
+        "label": "テンプレートの種類",
+        "standard": "標準",
+        "carousel": "カルーセル",
+        "hint": "カルーセルは、スワイプして見るカードが並んだメッセージです。各カードには画像または動画、短いテキスト、最大2つのボタンがあります。"
+      },
+      "cards": {
+        "title": "カード",
+        "hint": "カードは2〜10枚。すべて同じ種類のファイルと同じボタンを使います。",
+        "format": "カードの表示",
+        "formatImage": "画像",
+        "formatVideo": "動画",
+        "count": "{used}/{max} 枚",
+        "add": "カードを追加",
+        "needTwo": "カルーセルには最低{min}枚のカードが必要です。",
+        "card": "カード {n}",
+        "remove": "カード {n} を削除",
+        "noFile": "ファイルが選択されていません",
+        "uploading": "アップロード中",
+        "text": "カードのテキスト",
+        "textCounter": "{used}/{max}",
+        "buttons": "ボタン",
+        "buttonText": "ボタンのテキスト",
+        "buttonUrl": "ウェブサイトのURL",
+        "buttonPhone": "電話番号"
       }
     },
     "detail": {

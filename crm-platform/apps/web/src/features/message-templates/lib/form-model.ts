@@ -7,6 +7,7 @@ import {
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { buttonToRow, rowToButton, type ButtonRow } from './buttons';
+import { nextKey } from './buttons';
 import { DEFAULT_LANGUAGE } from './languages';
 import {
   fillSamples,
@@ -30,6 +31,48 @@ export const HEADER_KINDS: readonly HeaderKind[] = [
 export const isMediaKind = (k: HeaderKind): k is TplAttachment =>
   k === 'image' || k === 'video' || k === 'document';
 
+/** A carousel's cards (Meta: 2 to 10, a short text of up to 160 characters, up to two buttons). */
+export const CARDS_MIN = 2;
+export const CARDS_MAX = 10;
+export const CARD_BODY_MAX = 160;
+export const CARD_BUTTONS_MAX = 2;
+export type CardFormat = 'image' | 'video';
+export type TemplateKind = 'standard' | 'carousel';
+
+export interface CardRow {
+  /** Client-only identity for React keys. Never sent. */
+  key: string;
+  format: CardFormat;
+  /** Returned by the media upload (Meta's handle for the sample). */
+  handle: string;
+  fileName: string;
+  /** Object-storage key of the file uploaded now. */
+  mediaKey: string;
+  /** The key of the file already stored on a saved template (kept when no new file is chosen). */
+  image: string;
+  /** A link to draw the file with (not sent as a file). */
+  previewUrl: string;
+  body: string;
+  buttons: ButtonRow[];
+}
+
+export function newCard(format: CardFormat = 'image'): CardRow {
+  return {
+    key: `c${nextKey()}`,
+    format,
+    handle: '',
+    fileName: '',
+    mediaKey: '',
+    image: '',
+    previewUrl: '',
+    body: '',
+    buttons: [],
+  };
+}
+
+export const hasCardFile = (c: CardRow): boolean =>
+  Boolean(c.handle || c.mediaKey || c.image || c.previewUrl);
+
 export const NAME_MAX = 60;
 export const LOCATION_NAME_MAX = 100;
 export const LOCATION_ADDRESS_MAX = 200;
@@ -41,6 +84,9 @@ export const EXPIRY_MAX = 90;
 
 export interface FormState {
   connectionId: string;
+  /** `carousel`: a bubble of text and a row of cards; the header, footer and buttons of a standard template do not apply. */
+  kind: TemplateKind;
+  cards: CardRow[];
   name: string;
   language: string;
   metaCategory: TplMetaCategory;
@@ -72,6 +118,8 @@ export interface FormState {
 export function initialState(connectionId = ''): FormState {
   return {
     connectionId,
+    kind: 'standard',
+    cards: [],
     name: '',
     language: DEFAULT_LANGUAGE,
     metaCategory: 'UTILITY',
@@ -112,6 +160,42 @@ export const tidyName = (raw: string): string =>
 
 export const isAuth = (s: Pick<FormState, 'metaCategory'>): boolean =>
   s.metaCategory === 'AUTHENTICATION';
+
+export const isCarousel = (s: Pick<FormState, 'kind' | 'metaCategory'>): boolean =>
+  s.kind === 'carousel' && s.metaCategory !== 'AUTHENTICATION';
+
+/** Switching to a carousel starts with two empty cards; back to standard drops them. */
+export function withKind(s: FormState, kind: TemplateKind): FormState {
+  if (kind === s.kind) return s;
+  if (kind === 'carousel')
+    return { ...s, kind, cards: s.cards.length > 0 ? s.cards : [newCard(), newCard()] };
+  return { ...s, kind, cards: [] };
+}
+
+/** All the cards use one kind of file: choosing the other kind drops the files already chosen. */
+export function withCardFormat(s: FormState, format: CardFormat): FormState {
+  return {
+    ...s,
+    cards: s.cards.map((c) =>
+      c.format === format
+        ? c
+        : { ...c, format, handle: '', fileName: '', mediaKey: '', image: '', previewUrl: '' },
+    ),
+  };
+}
+
+/** The cards as the API stores them. A card without a new file keeps the file saved with the template. */
+export function cardsToFields(s: FormState): NonNullable<CreateTemplateInput['cards']> {
+  return s.cards.map((c) => ({
+    format: c.format,
+    image: c.mediaKey || c.image || null,
+    headerHandle: c.handle || null,
+    // The link a saved card is drawn with doubles as its sample, so the checks know it has a file.
+    headerSampleUrl: /^https?:\/\//i.test(c.previewUrl) ? c.previewUrl : null,
+    body: c.body.trim(),
+    buttons: c.buttons.map(rowToButton),
+  }));
+}
 
 /** Editing the body re-derives the mapping rows; typed samples of tokens still present are kept. */
 export function withBody(s: FormState, body: string): FormState {
@@ -191,6 +275,25 @@ export function toFields(s: FormState): Fields {
       parameterFormat: 'POSITIONAL',
     };
   }
+  if (isCarousel(s)) {
+    return {
+      name: s.name.trim(),
+      language,
+      metaCategory: s.metaCategory,
+      templateType: 'carousel',
+      header: null,
+      attachmentType: 'none',
+      headerHandle: null,
+      headerSampleUrl: null,
+      body: normalizePlaceholders(s.body),
+      footer: null,
+      buttons: [],
+      cards: cardsToFields(s),
+      variableMap: toVariableMap(null, { text: s.body, slots: s.bodySlots }),
+      codeExpirationMinutes: null,
+      parameterFormat: 'POSITIONAL',
+    };
+  }
   const textHeader = s.headerKind === 'text' && s.headerText.trim() !== '';
   const media = isMediaKind(s.headerKind);
   const attachmentType = isMediaKind(s.headerKind)
@@ -258,6 +361,18 @@ export function stateFromDetail(d: TemplateDetail): FormState {
   const meta: TplMetaCategory = d.metaCategory ?? 'UTILITY';
   return {
     connectionId: d.connectionId ?? '',
+    kind: d.templateType === 'carousel' ? 'carousel' : 'standard',
+    cards: (d.cards ?? []).map((c) => ({
+      key: `c${nextKey()}`,
+      format: c.format,
+      handle: '',
+      fileName: '',
+      mediaKey: '',
+      image: c.image && !/^https?:\/\//i.test(c.image) ? c.image : '',
+      previewUrl: c.imageUrl ?? '',
+      body: c.body,
+      buttons: c.buttons.map((b) => buttonToRow(b)),
+    })),
     name: d.name,
     language: d.language,
     metaCategory: meta,
@@ -281,8 +396,17 @@ export function stateFromDetail(d: TemplateDetail): FormState {
   };
 }
 
+export interface PreviewCard {
+  format: CardFormat;
+  imageUrl: string | null;
+  body: string;
+  buttons: Array<{ kind: ButtonRow['kind']; text: string }>;
+}
+
 export interface PreviewModel {
   auth: boolean;
+  /** A carousel's cards, drawn under the bubble. */
+  cards?: PreviewCard[];
   language: string;
   headerKind: HeaderKind;
   headerText: string;
@@ -297,6 +421,14 @@ export interface PreviewModel {
 export function previewOf(s: FormState): PreviewModel {
   return {
     auth: isAuth(s),
+    cards: isCarousel(s)
+      ? s.cards.map((c) => ({
+          format: c.format,
+          imageUrl: c.previewUrl || null,
+          body: c.body,
+          buttons: c.buttons.map((b) => ({ kind: b.kind, text: b.text })),
+        }))
+      : [],
     language: s.language,
     headerKind: s.headerKind,
     headerText: s.headerKind === 'text' ? fillSamples(s.headerText, s.headerSlots) : '',

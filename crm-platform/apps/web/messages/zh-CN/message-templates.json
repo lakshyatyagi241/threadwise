@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, other {另有 # 个按钮}}",
       "live": "实时预览",
       "business": "Bloomly",
-      "online": "在线"
+      "online": "在线",
+      "cards": "轮播卡片",
+      "cardEmpty": "卡片 {n} 的文字"
     },
     "card": {
       "rejected": "已拒绝:{reason}",
@@ -195,7 +197,8 @@
         "body": "正文",
         "footer": "页脚",
         "buttons": "按钮",
-        "template": "模板"
+        "template": "模板",
+        "cards": "卡片"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "使用 AI 生成",
         "applied": "已由 AI 填写模板草稿。提交前请先检查。",
         "authHint": "验证类模板的文本是固定的，无需起草。"
+      },
+      "type": {
+        "label": "模板类型",
+        "standard": "标准",
+        "carousel": "轮播",
+        "hint": "轮播是一条带有一排可滑动卡片的消息。每张卡片包含一张图片或一个视频、一段简短文字和最多两个按钮。"
+      },
+      "cards": {
+        "title": "卡片",
+        "hint": "2 到 10 张卡片。所有卡片使用同一种文件和相同的按钮。",
+        "format": "卡片显示",
+        "formatImage": "图片",
+        "formatVideo": "视频",
+        "count": "{used}/{max} 张卡片",
+        "add": "添加卡片",
+        "needTwo": "轮播至少需要 {min} 张卡片。",
+        "card": "卡片 {n}",
+        "remove": "删除卡片 {n}",
+        "noFile": "未选择文件",
+        "uploading": "上传中",
+        "text": "卡片文字",
+        "textCounter": "{used}/{max}",
+        "buttons": "按钮",
+        "buttonText": "按钮文字",
+        "buttonUrl": "网站链接",
+        "buttonPhone": "电话号码"
       }
     },
     "detail": {

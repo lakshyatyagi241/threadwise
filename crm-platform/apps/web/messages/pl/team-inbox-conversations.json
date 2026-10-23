@@ -716,6 +716,7 @@
         "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu.",
         "paused": "Wstrzymany przez WhatsApp. Można go wysłać ponownie po zakończeniu wstrzymania.",
         "media_header": "Ma nagłówek z obrazem, wideo lub dokumentem, którego nie można jeszcze wysłać ze skrzynki odbiorczej.",
+        "carousel": "To karuzela (karty z obrazami), której nie można jeszcze wysłać ze skrzynki odbiorczej.",
         "header_variable": "Ma zmienną w nagłówku, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
         "dynamic_button": "Ma link przycisku ze zmienną, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
         "authentication": "Szablony jednorazowego hasła są wysyłane przez system, a nie ze skrzynki odbiorczej.",

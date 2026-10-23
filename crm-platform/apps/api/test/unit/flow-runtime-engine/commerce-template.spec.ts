@@ -181,6 +181,40 @@ describe('a template with a media header or a button value', () => {
     });
   });
 
+  it('a carousel goes out with its cards: each card a picture link and its own button values', () => {
+    const t = tpl({
+      header: null,
+      buttons: [],
+      templateType: 'carousel',
+      body: 'Our picks for you',
+      variableMap: { body: [] },
+      cards: [
+        {
+          image: 'https://files.example/a.png',
+          format: 'image',
+          body: 'Summer sale',
+          buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/a' }],
+        },
+        {
+          image: 'https://files.example/b.png',
+          format: 'image',
+          body: 'Winter sale',
+          buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/b' }],
+        },
+      ],
+    });
+    const parts = richComponents(t, r);
+    const carousel = parts?.find((c) => c.type === 'carousel') as
+      | { cards: Array<{ card_index: number; components: Array<Record<string, unknown>> }> }
+      | undefined;
+    expect(carousel?.cards).toHaveLength(2);
+    expect(carousel?.cards[1]!.card_index).toBe(1);
+    expect(carousel?.cards[0]!.components[0]).toEqual({
+      type: 'header',
+      parameters: [{ type: 'image', image: { link: 'https://files.example/a.png' } }],
+    });
+  });
+
   it('an image header with no public link sends no header rather than a broken one', () => {
     const t = tpl({ header: null, attachmentType: 'image', headerMediaUrl: null });
     expect((richComponents(t, r) ?? []).some((c) => c.type === 'header')).toBe(false);

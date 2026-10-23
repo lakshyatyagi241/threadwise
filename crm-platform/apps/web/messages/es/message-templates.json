@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# botón más} other {+# botones más}}",
       "live": "Vista previa en vivo",
       "business": "Bloomly",
-      "online": "en línea"
+      "online": "en línea",
+      "cards": "Tarjetas del carrusel",
+      "cardEmpty": "Texto de la tarjeta {n}"
     },
     "card": {
       "rejected": "Rechazada: {reason}",
@@ -195,7 +197,8 @@
         "body": "Cuerpo",
         "footer": "Pie",
         "buttons": "Botones",
-        "template": "Plantilla"
+        "template": "Plantilla",
+        "cards": "Tarjetas"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Crear con IA",
         "applied": "Borrador de plantilla completado con IA. Revísalo antes de enviarlo.",
         "authHint": "Las plantillas de autenticación tienen un texto fijo, así que no hay nada que redactar."
+      },
+      "type": {
+        "label": "Tipo de plantilla",
+        "standard": "Estándar",
+        "carousel": "Carrusel",
+        "hint": "Un carrusel es un mensaje con una fila de tarjetas que se desliza. Cada tarjeta tiene una imagen o un vídeo, un texto corto y hasta dos botones."
+      },
+      "cards": {
+        "title": "Tarjetas",
+        "hint": "De 2 a 10 tarjetas. Todas usan el mismo tipo de archivo y los mismos botones.",
+        "format": "Las tarjetas muestran",
+        "formatImage": "Imágenes",
+        "formatVideo": "Vídeos",
+        "count": "{used}/{max} tarjetas",
+        "add": "Añadir tarjeta",
+        "needTwo": "Un carrusel necesita al menos {min} tarjetas.",
+        "card": "Tarjeta {n}",
+        "remove": "Quitar la tarjeta {n}",
+        "noFile": "Ningún archivo elegido",
+        "uploading": "Subiendo",
+        "text": "Texto de la tarjeta",
+        "textCounter": "{used}/{max}",
+        "buttons": "Botones",
+        "buttonText": "Texto del botón",
+        "buttonUrl": "URL del sitio web",
+        "buttonPhone": "Número de teléfono"
       }
     },
     "detail": {

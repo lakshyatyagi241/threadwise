@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# botão a mais} other {+# botões a mais}}",
       "live": "Pré-visualização ao vivo",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Cartões do carrossel",
+      "cardEmpty": "Texto do cartão {n}"
     },
     "card": {
       "rejected": "Rejeitado: {reason}",
@@ -195,7 +197,8 @@
         "body": "Corpo",
         "footer": "Rodapé",
         "buttons": "Botões",
-        "template": "Modelo"
+        "template": "Modelo",
+        "cards": "Cartões"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Criar com IA",
         "applied": "Rascunho do modelo preenchido pela IA. Revise-o antes de enviar.",
         "authHint": "Modelos de autenticação têm texto fixo, então não há o que gerar."
+      },
+      "type": {
+        "label": "Tipo de modelo",
+        "standard": "Padrão",
+        "carousel": "Carrossel",
+        "hint": "Um carrossel é uma mensagem com uma fileira de cartões para deslizar. Cada cartão tem uma imagem ou vídeo, um texto curto e até dois botões."
+      },
+      "cards": {
+        "title": "Cartões",
+        "hint": "De 2 a 10 cartões. Todos usam o mesmo tipo de arquivo e os mesmos botões.",
+        "format": "Os cartões mostram",
+        "formatImage": "Imagens",
+        "formatVideo": "Vídeos",
+        "count": "{used}/{max} cartões",
+        "add": "Adicionar cartão",
+        "needTwo": "Um carrossel precisa de pelo menos {min} cartões.",
+        "card": "Cartão {n}",
+        "remove": "Remover o cartão {n}",
+        "noFile": "Nenhum arquivo escolhido",
+        "uploading": "Enviando",
+        "text": "Texto do cartão",
+        "textCounter": "{used}/{max}",
+        "buttons": "Botões",
+        "buttonText": "Texto do botão",
+        "buttonUrl": "URL do site",
+        "buttonPhone": "Número de telefone"
       }
     },
     "detail": {
