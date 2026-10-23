@@ -142,7 +142,11 @@ const FIELD_COLS = cols([
   c('config', 'jsonb'),
 ]);
 
-/** The Waboo "Web Analytics Information" properties WaDesk has no built-in place for (visitor/UTM/device/IP facts and where the contact came from): ordinary, editable, visible fields. */
+/**
+ * The Waboo "Web Analytics Information" properties WaDesk has no built-in place for (visitor/UTM/device/IP facts and where the contact came
+ * from): ordinary visible fields that nobody edits by hand. They are read-only (the contact form shows them disabled, and the edit, bulk
+ * update, import and flow paths refuse to write them), because they record how the contact arrived and are filled in by capture.
+ */
 export const WEB_ANALYTICS_KEYS: ReadonlySet<string> = new Set([
   'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url',
   'utm_medium', 'utm_campaign', 'utm_source',
@@ -260,9 +264,9 @@ export const fieldDefs: HandlerSpec = {
             field_type: fieldType,
             is_required: bool(doc.required),
             is_hidden: !bool(doc.visible, true) || bool(doc.hidden_from_ui),
-            // the web-analytics fields are editable in WaDesk: the contact Edit panel lists only editable fields, so a read-only flag would keep
-            // the UTM / referrer / device fields out of it (Waboo shows all of them on the contact)
-            is_read_only: VISIBLE_TIME_KEYS.has(key) ? true : bool(doc.read_only) && !WEB_ANALYTICS_KEYS.has(key),
+            // the web-analytics fields are read-only: the contact form still lists them (disabled, with a "read only" badge), and no
+            // person, bulk update, import or flow can change them
+            is_read_only: VISIBLE_TIME_KEYS.has(key) || WEB_ANALYTICS_KEYS.has(key) ? true : bool(doc.read_only),
             is_masked: bool(doc.masked),
             is_unique: bool(doc.unique),
             // Waboo's own web-analytics properties are "system" there but have no built-in place in WaDesk: a system field is hidden on the
