@@ -271,6 +271,9 @@ export class WidgetPublicService {
     return this.db.txAs({ orgId }, async (tx) => {
       const { visitor, isNew } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
       await this.visitors.touch(tx, orgId, visitor.id);
+      // A visitor who left the page and is back (another page of the site, another day) has their open thread again.
+      if (visitor.conversationId !== null)
+        await this.inbox.reopenAfterLeave(tx, orgId, visitor.conversationId);
       const flowUuid =
         widget.flowId === null
           ? null
@@ -852,8 +855,20 @@ export class WidgetPublicService {
   async restart(
     token: string,
     req: PublicRequest,
+    fresh = false,
   ): Promise<{ widgetUuid: string; visitorUuid: string }> {
     const { orgId, widget } = await this.locateActive(token);
+    // "Restart this chat" stays in the same thread, with a line for the team; a visitor whose chat ended gets a new thread (`fresh`).
+    if (!fresh) {
+      const kept = await this.db.txAs({ orgId }, async (tx) => {
+        const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+        if (!resolved) return null;
+        if (resolved.visitor.conversationId !== null)
+          await this.inbox.markRestart(tx, orgId, resolved.visitor.conversationId);
+        return resolved.visitor.visitorUuid;
+      });
+      if (kept !== null) return { widgetUuid: widget.uuid, visitorUuid: kept };
+    }
     const visitor = await this.db.txAs({ orgId }, (tx) =>
       this.visitors.create(tx, orgId, widget.id, {
         referrer: req.referer.slice(0, 1024),
@@ -862,6 +877,22 @@ export class WidgetPublicService {
       }),
     );
     return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
+  /**
+   * The visitor ended the chat (`reason: 'ended'`) or the page closed (`'left'`, sent as the window unloads): the team's thread is
+   * resolved, so a chat nobody is in is not left open. A visitor with no thread yet has nothing to close.
+   */
+  async end(token: string, req: PublicRequest, reason: unknown): Promise<{ ok: true }> {
+    if (reason !== 'ended' && reason !== 'left')
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      if (!resolved || resolved.visitor.conversationId === null) return;
+      await this.inbox.closeThread(tx, orgId, resolved.visitor.conversationId, reason);
+    });
+    return { ok: true };
   }
 
   /**

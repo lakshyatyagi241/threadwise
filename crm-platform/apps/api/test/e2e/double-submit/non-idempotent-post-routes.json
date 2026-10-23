@@ -501,8 +501,12 @@
   "POST /v2/workspace/invitations/accept",
   "POST /v2/workspace/members/:id/resend-invite",
   "POST /v2/workspace/members/:id/reset-password",
+  "POST /widget/:token/api/end",
   "POST /widget/:token/api/feedback",
+  "POST /widget/:token/api/location",
   "POST /widget/:token/api/message",
+  "POST /widget/:token/api/rating",
   "POST /widget/:token/api/restart",
+  "POST /widget/:token/api/start",
   "POST /widget/:token/api/upload"
 ]

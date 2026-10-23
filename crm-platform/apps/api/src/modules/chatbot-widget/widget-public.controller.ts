@@ -252,6 +252,20 @@ export class WidgetPublicController {
     res.status(200).json(out);
   }
 
+  /** The visitor ended the chat (`?reason=ended`), or the page closed (`?reason=left`, sent with `navigator.sendBeacon`): the thread is resolved. */
+  @Post('api/end')
+  async end(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Query('reason') reason: string | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    res.status(200).json(await this.widgets.end(token, this.publicRequest(req, queryUuid), reason));
+  }
+
   /** A flow bot's window opened on an empty thread: the bot starts by itself. */
   @Post('api/start')
   async start(
@@ -317,16 +331,22 @@ export class WidgetPublicController {
       .json(await this.widgets.feedback(token, this.publicRequest(req, inputUuid), body));
   }
 
-  /** The visitor chose "Restart this chat" or "Close this chat": a fresh visitor, so the next load is a new conversation. */
+  /** "Restart this chat": the same visitor and thread, with a line for the team (`?fresh=1`: a new visitor, after the chat ended). */
   @Post('api/restart')
   async restart(
     @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Query('fresh') fresh: string | undefined,
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<void> {
     await this.cors(token, req, res);
     await this.widgets.enforceThrottle('message', req.ip ?? '');
-    const out = await this.widgets.restart(token, this.publicRequest(req, undefined));
+    const out = await this.widgets.restart(
+      token,
+      this.publicRequest(req, queryUuid),
+      fresh === '1',
+    );
     res.cookie(`wgt_vid_${out.widgetUuid}`, out.visitorUuid, {
       maxAge: YEAR_MS,
       httpOnly: true,

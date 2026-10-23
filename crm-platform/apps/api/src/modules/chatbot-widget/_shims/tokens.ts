@@ -153,6 +153,17 @@ export interface InboxGateway {
   flowUuidOf(tx: Tx, orgId: number, flowId: number): Promise<string | null>;
   /** Whether the visitor has already said (or been taken to have said) something on this thread. */
   hasCustomerLine(tx: Tx, orgId: number, conversationId: number): Promise<boolean>;
+  /** The visitor ended the chat or left the page: the thread is resolved (an ended chat says so on the thread); false when it was not open. */
+  closeThread(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    how: 'ended' | 'left',
+  ): Promise<boolean>;
+  /** A visitor who left comes back: a thread resolved because they left is open again, with no trace. */
+  reopenAfterLeave(tx: Tx, orgId: number, conversationId: number): Promise<void>;
+  /** The visitor restarted the chat: the same thread, with a line for the team, and a clean window. */
+  markRestart(tx: Tx, orgId: number, conversationId: number): Promise<void>;
   /** Writes the visitor's end-of-chat rating as one line on the thread; false when the thread already has one. */
   recordRating(
     tx: Tx,
