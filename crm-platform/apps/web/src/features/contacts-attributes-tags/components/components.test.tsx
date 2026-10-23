@@ -859,7 +859,7 @@ describe('applied filters and the selection bar', () => {
         <SelectionBar
           count={3}
           busy={false}
-          can={{ update: true, delete: true, export: true, createTags: true }}
+          can={{ update: true, delete: true, export: true, createTags: true, consent: true }}
           onClear={noop}
           onSendCampaign={noop}
           onExport={noop}
@@ -872,6 +872,7 @@ describe('applied filters and the selection bar', () => {
           onPicker={noop}
           onGroup={async () => true}
           onTagApply={async () => true}
+          onConsent={async () => true}
           {...over}
         />
       </QueryClientProvider>,
@@ -898,7 +899,9 @@ describe('applied filters and the selection bar', () => {
   });
 
   it('shows only what the permissions allow', () => {
-    const out = bar({ can: { update: false, delete: false, export: false, createTags: false } });
+    const out = bar({
+      can: { update: false, delete: false, export: false, createTags: false, consent: false },
+    });
     expect(out).toContain('Send campaign');
     for (const gone of ['Assign owner', 'Change stage', '>Tag<', 'Export', 'Delete', '>More<']) {
       expect(out, gone).not.toContain(gone);

@@ -111,7 +111,12 @@ export class ContactGroupsService {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact group', uuid);
 
-      const values: { name?: string; note?: string | null; color?: string | null } = {};
+      const values: {
+        name?: string;
+        note?: string | null;
+        color?: string | null;
+        updatedBy: number | null;
+      } = { updatedBy: ctx.userId };
       if (input.name !== undefined) values.name = input.name;
       // Absent keeps, null clears.
       if (input.note !== undefined) values.note = input.note;

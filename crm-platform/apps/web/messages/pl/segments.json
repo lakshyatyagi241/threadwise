@@ -196,7 +196,10 @@
       "next": "Następna",
       "pageOf": "Strona {page, number} z {pages, number}",
       "perPage": "Segmentów na stronie",
-      "perPageOption": "{count, number} na stronie"
+      "perPageOption": "{count, number} na stronie",
+      "colCreatedBy": "Utworzył",
+      "colCreatedAt": "Utworzono",
+      "colModifiedBy": "Zmodyfikował"
     },
     "actions": {
       "forbidden": "Nie masz uprawnień do wykonania tej czynności.",

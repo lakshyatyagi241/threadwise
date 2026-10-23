@@ -250,7 +250,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const hhmm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
   const held = (inc) => !!inc.owner && (!!inc.prUrl || inc.claimExpiresAt > now());
   const statusOf = (inc) => inc.state === 'resolved' ? 'resolved' : inc.state === 'released' ? 'released' : inc.prUrl ? 'pr_raised' : held(inc) ? 'claimed' : inc.state === 'escalated' ? 'escalated' : 'open';
-  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, kind: inc.kind, alertname: inc.alertname ?? null, meta: inc.meta ?? null, releasedSha: inc.releasedSha ?? null, prSummary: inc.prSummary ?? null, resolution: inc.resolution ?? null, tl: inc.tl.slice(-40), state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
+  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, kind: inc.kind, alertname: inc.alertname ?? null, meta: inc.meta ?? null, releasedSha: inc.releasedSha ?? null, prSummary: inc.prSummary ?? null, resolution: inc.resolution ?? null, tl: inc.tl.slice(-40), state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, prMerged: inc.prMerged ?? null, prClosed: inc.prClosed ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
   const sweepClaims = async () => {
     for (const inc of incidents.values()) if (inc.owner && !inc.prUrl && inc.state !== 'resolved' && inc.claimExpiresAt <= now()) { inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; await life(inc, '\u23F0 claim expired, incident is open again', { tl: 'claim expired, open again' }); }
   };
@@ -273,7 +273,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   }), id);
   const raisePr = (id, who, { url, number, summary }) => done(mutate(id, who, (inc) => {
     if (held(inc) && inc.owner !== who) return { code: 409, error: `claimed by ${inc.owner}`, owner: inc.owner };
-    inc.owner = who; inc.claimedAt ??= now(); inc.prUrl = url; inc.prNumber = number; inc.prSummary = String(summary ?? '').slice(0, 200); inc.prAt = now(); inc.claimExpiresAt = null;
+    inc.owner = who; inc.claimedAt ??= now(); inc.prUrl = url; inc.prNumber = number; inc.prSummary = String(summary ?? '').slice(0, 200); inc.prAt = now(); inc.claimExpiresAt = null; inc.prMerged = inc.prClosed = null;
     return { post: `\uD83D\uDD27 PR #${number} raised by ${who} at ${hhmm(now())}: ${summary} ${url}`, tl: `raised PR #${number}` };
   }), id);
   const addNote = (id, who, text) => done(mutate(id, who, (inc) => {
@@ -290,8 +290,21 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (inc.state === 'released') { inc.alertCleared = true; return true; } // Alertmanager's resolved counts as the verification; the verify loop posts RESOLVED
     inc.state = 'resolved'; resolution(inc, 'pr', extra); { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`; await life(inc, t, { announceToo: true, tl: `resolved by PR #${inc.prNumber}: alert verified clear` }); } return true;
   }
+  // PR poller results (pr-poller.mjs). Merged: card says "waiting for the release"; the release/clear logic still decides RESOLVED.
+  async function markPrMerged(id, { at, by, sha7: s7 }) {
+    const inc = incidents.get(id); if (!inc || !inc.prUrl || inc.prMerged || inc.state === 'resolved') return false;
+    inc.prMerged = { at, by, sha7: s7 };
+    await life(inc, `\uD83D\uDFE3 PR #${inc.prNumber} merged${by ? ` by ${by}` : ''} at ${hhmm(at)}, waiting for the release to go live`, { tl: `PR #${inc.prNumber} merged${by ? ` by ${by}` : ''}, waiting for the release` }); return true;
+  }
+  // Closed without merge: the incident goes back to needing a human; never auto-resolved.
+  async function markPrClosed(id) {
+    const inc = incidents.get(id); if (!inc || !inc.prUrl || inc.prMerged || inc.state === 'resolved') return false;
+    inc.prClosed = { number: inc.prNumber, at: now() };
+    inc.prUrl = inc.prNumber = inc.prAt = inc.owner = inc.claimedAt = inc.claimExpiresAt = null; inc.state = 'escalated';
+    await life(inc, `PR #${inc.prClosed.number} was closed without merging; needs a human`, { tl: `PR #${inc.prClosed.number} closed without merging` }); return true;
+  }
   return {
-    mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
+    markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
     setRelease, openDeployFailure, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),

@@ -8,6 +8,7 @@ import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
 import { handleIncidents, loadToken } from './incidents-api.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 import { createChatApp } from './chat-app.mjs';
+import { startPrPoller } from './pr-poller.mjs';
 
 export function loadUrls(env = process.env) {
   const urls = {};
@@ -107,6 +108,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     end(ok ? 200 : 502, JSON.stringify({ ok }));
   });
   const sweep = resolver && setInterval(() => resolver.sweepClaims?.().catch(() => {}), 60_000); sweep?.unref();
-  server.on('close', () => clearInterval(sweep));
-  return { server, metrics, send, log, resolver };
+  const prPoller = startPrPoller({ resolver, env, fetchImpl: fetchImpl ?? fetch, log });
+  server.on('close', () => { clearInterval(sweep); prPoller.stop(); });
+  return { server, metrics, send, log, resolver, prPoller };
 }

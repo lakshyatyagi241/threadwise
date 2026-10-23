@@ -382,3 +382,14 @@ test('watcher: the slow-statement card carries the incident key so the incident 
   await w.poll(); calls = 12; t = 1000; await w.poll();
   assert.equal(sent.at(-1).interactive.incidentId, 'st:7|d|r');
 });
+
+test('other channel: non-critical alerts go to the Other space only when NON_CRITICAL_CHANNEL=other; the URL loads from the secret file', async () => {
+  const w = { labels: { alertname: 'OutboxDeadRows', severity: 'warning' } };
+  assert.equal(channelFor(w, {}), 'none');
+  assert.equal(channelFor(w, { NON_CRITICAL_CHANNEL: 'other' }), 'other');
+  assert.equal(channelFor({ labels: { alertname: 'X', severity: 'critical' } }, { NON_CRITICAL_CHANNEL: 'other' }), 'critical'); // critical never moves
+  assert.equal(channelFor({ labels: { alertname: 'X', severity: 'warning', test: 'true' } }, { NON_CRITICAL_CHANNEL: 'other' }), 'none'); // tests stay out
+  const { loadUrls } = await import('./bridge.mjs');
+  const dir = fs.mkdtempSync('/tmp/gc-sec-'); fs.writeFileSync(`${dir}/gchat_other_url`, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t\n');
+  assert.equal(loadUrls({ GCHAT_SECRETS_DIR: dir }).other, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t');
+});
