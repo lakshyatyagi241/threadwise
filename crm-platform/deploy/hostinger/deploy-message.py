@@ -17,6 +17,7 @@ TOKEN_FILE = os.environ.get("DEPLOY_MSG_TOKEN_FILE", "/opt/desk/secrets/github_r
 STATE = os.environ.get("DESK_WATCH_STATE", "/var/lib/desk-release-watch")
 WEB = os.environ.get("DESK_COMMIT_URL_BASE", f"https://github.com/{REPO}")
 TIMEOUT, MAXBYTES, TTL, MAXLEN, DEADLINE = 6, 2_000_000, 3600, 1200, 25
+DETAIL_CAP = int(os.environ.get("DEPLOY_MSG_DETAIL_PRS", "9"))
 EVENTS = {
     "started": ("🚀", "Deploy in progress"), "progress": ("🚀", "Deploy in progress"),
     "live": ("✅", "Release live"), "succeeded": ("✅", "Release live"),
@@ -90,12 +91,24 @@ def prs_between(prev, new):
     """-> list of dicts (oldest first): number,title,author,merger ; or [] + direct commit info. Raises if the API is unusable."""
     commits = get(f"/repos/{REPO}/compare/{prev}...{new}").get("commits", []) if sha_ok(prev) and prev != new else [get(f"/repos/{REPO}/commits/{new}")]
     prs, seen, direct = [], set(), None
-    for i, c in enumerate(commits[-40:]):
+    window = commits[-40:]
+    rel = []  # the commits that carry a PR (merge commit or "(#N)" squash) plus the newest commit, oldest first
+    for i, c in enumerate(window):
         msg = (c.get("commit", {}).get("message") or "").split("\n")[0]
         m = re.match(r"Merge pull request #(\d+) from", msg) or re.search(r"\(#(\d+)\)\s*$", msg)
-        last = i == len(commits[-40:]) - 1
-        if not m and not last:
-            continue  # commits inside a merged branch; the merge commit carries the PR
+        last = i == len(window) - 1
+        if m or last:  # commits inside a merged branch are skipped: the merge commit carries the PR
+            rel.append((c, msg, m, last))
+    # Only the newest DETAIL_CAP PRs get title/author/merger (two GitHub calls each; the message lists at most 9). Older ones keep just their
+    # number, read from the commit message with no call, so a release of 50 commits cannot run out of the time limit.
+    detail_from = max(0, len(rel) - DETAIL_CAP)
+    for idx, (c, msg, m, last) in enumerate(rel):
+        if idx < detail_from:
+            n = int(m.group(1)) if m else 0
+            if n and n not in seen:
+                seen.add(n)
+                prs.append({"n": n, "title": "", "author": "unknown", "merger": "unknown"})
+            continue
         sha = c.get("sha", "")
         if not sha_ok(sha):
             continue
@@ -106,7 +119,7 @@ def prs_between(prev, new):
             n = p.get("number")
             if isinstance(n, int) and n not in seen:
                 seen.add(n)
-                # GitHub's commit->pulls list has no merged_by; the PR's own record does. One extra read per PR (the list is already capped).
+                # GitHub's commit->pulls list has no merged_by; the PR's own record does. One extra read per PR (capped by DETAIL_CAP).
                 full = p if p.get("merged_by") else (get(f"/repos/{REPO}/pulls/{n}") or {})
                 prs.append({"n": n, "title": clean(p.get("title")), "author": who(p.get("user")), "merger": who(full.get("merged_by") or p.get("merged_by"))})
     return prs, direct
@@ -150,6 +163,8 @@ def build(ev, prev, new, secs, note):
                     lines.append("• …and more")
                     break
                 lines.append(row)
+            if len(extra) > 8 and not lines[-1].startswith("• …and"):
+                lines.append(f"• …and {len(extra) - 8} more PRs (numbers only in the release record)")
     else:
         d = direct or {"subject": "unknown", "author": "unknown", "committer": None}
         lines += [f'Commit: "{d["subject"]}"', "PR: none (direct push)", f'Author: {d["author"]}', f'Deployed by: {d["committer"] or d["author"]}']

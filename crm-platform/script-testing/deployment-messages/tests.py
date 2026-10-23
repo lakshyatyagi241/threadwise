@@ -297,6 +297,18 @@ check("process mode: real `release <sha> <uuid>` shape announces with the DB pat
 # selftest fails on a stale heartbeat
 open(f"{S3}/heartbeat", "w").write(str(int(time.time()) - 500))
 check("--selftest exits 1 when the heartbeat is older than 120 s", subprocess.run(["bash", WATCH, "--selftest"], env={**ENV, "DESK_WATCH_STATE": S3}, capture_output=True).returncode == 1)
+# a big release (50 merged PRs) must still show PR details within the time limit: only the newest 9 get GitHub lookups
+big = [commit(sha(100 + i), f"Merge pull request #{200 + i} from dev/b{i}\n\nt", "alice", "web-flow") for i in range(50)]
+FIX.update(compare=big, pulls={sha(100 + i): [pr(200 + i, f"Feature {i}", "alice", "bob")] for i in range(50)}, by_tag=False)
+out, _ = run("live", A, B, "300")
+n_calls = len(hits)
+check("big release: newest PR shown with its details", '#249 "Feature 49"' in out and "Deployed by: @bob" in out, out[:300])
+check("big release: GitHub calls stay small (not 2 per PR for all 50)", n_calls <= 25, f"{n_calls} calls")
+check("big release: a note says the rest are not listed", "more PRs" in out, out[-300:])
+jout = subprocess.run([sys.executable, FMT, "--json", "live", A, B, "300"], env=ENV, capture_output=True, text=True, timeout=60).stdout
+jj = json.loads(jout)
+check("big release: --json still lists every PR number (the bridge resolves incidents from them)", len(jj["prs"]) >= 40 and 249 in jj["prs"], str(jj)[:200])
+
 # stall alarm: main ahead of the live tag for a while with no release after the newest commit
 def stall_run(date_epoch, since):
     c = commit(sha(9), "Merge pull request #77 from x/y\n\nthing", "alice"); c["commit"]["committer"] = {"date": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(date_epoch))}
