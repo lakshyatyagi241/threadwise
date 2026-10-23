@@ -189,10 +189,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
       WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
-    # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine. 2g (was 1g: the database sat
-    # at its cap under webhook load); keep PG_SHARED_BUFFERS about a quarter of it and PG_EFFECTIVE_CACHE_SIZE about three quarters.
+    # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine. 3g (was 2g, 1g before: the
+    # database sat at 1.75 of 2 GB while the host had 8 GB of free cache; prod was raised live with `docker update`, this keeps it on recreate); keep PG_SHARED_BUFFERS about a quarter of it and PG_EFFECTIVE_CACHE_SIZE about three quarters.
     # max_connections=100 covers the API slots (two during a switch), the webhook API and the worker at their pool sizes.
-    mem_limit: 2g
+    mem_limit: 3g
     logging: *app-logging
     command:
       - postgres
