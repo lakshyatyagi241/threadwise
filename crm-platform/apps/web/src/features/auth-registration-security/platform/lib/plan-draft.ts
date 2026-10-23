@@ -1,9 +1,11 @@
 import {
   NEW_PLAN_FEATURES_OFF,
   PACK_GRANTABLE_FEATURES,
+  PLAN_ADDON_OFFER_MODES,
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
   PLAN_UNLIMITED_FROM,
+  addonKindOf,
   checkPlanRules,
   isUnlimitedFor,
   limitZeroIsNone,
@@ -11,6 +13,8 @@ import {
   moneyCents,
   normaliseMoney,
   type CreatePlanRequest,
+  type PlanAddonOffer,
+  type PlanAddonOfferMode,
   type PlanAdminItem,
   type PlanBillingUnit,
   type PlanLimitKey,
@@ -56,8 +60,10 @@ export interface PlanDraft {
   /** Blank = unlimited (stored as 0). */
   limits: Record<string, string>;
   features: Record<string, boolean>;
-  /** Ids (uuid) of the Marketplace add-on packs the plan makes visible to its workspaces. */
+  /** Ids (uuid) of the Marketplace add-on packs (mini apps) the plan makes visible to its workspaces. */
   visibleAddons: string[];
+  /** Plain add-on id -> how the plan offers it. A pack with no entry is paid at its own price (see `offerFor`). */
+  addonOffers: Record<string, AddonOfferDraft>;
 }
 
 export type PlanScalarField =
@@ -73,10 +79,25 @@ export type PlanScalarField =
   | 'dataRetentionDays'
   | 'isFree'
   | 'isDefault';
-export type PlanField = PlanScalarField | 'visibleAddons' | `limits.${string}`;
+export type PlanField =
+  | PlanScalarField
+  | 'visibleAddons'
+  | `limits.${string}`
+  /** A refused add-on offer the API could not tie to one add-on. */
+  | 'addonOffers'
+  /** One add-on's offer (its price input), by the add-on's id. */
+  | `addonOffers.${string}`;
 
 export type PlanProblemCode =
-  'required' | 'tooLong' | 'money' | 'range' | 'whole' | 'server' | PlanRuleCode;
+  | 'required'
+  | 'tooLong'
+  | 'money'
+  | 'range'
+  | 'whole'
+  | 'server'
+  | 'addonPriceZero'
+  | 'addonGone'
+  | PlanRuleCode;
 export interface PlanProblem {
   code: PlanProblemCode;
   max?: number;
@@ -117,6 +138,7 @@ export function newPlanDraft(currency = 'USD'): PlanDraft {
       PLAN_FEATURE_KEYS.map((k) => [k, !NEW_PLAN_FEATURES_OFF.includes(k)]),
     ) as PlanDraft['features'],
     visibleAddons: [],
+    addonOffers: {},
   };
 }
 
@@ -157,6 +179,7 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
     ]),
     features: { ...p.moduleFeatures, ...p.features },
     visibleAddons: [...p.visibleAddons],
+    addonOffers: offersToDraft(p.addonOffers ?? []),
   };
 }
 
@@ -201,7 +224,18 @@ export function buildPlanRequest(
    * options never loaded AND the admin did not touch the Add-ons tab: it never saw the real list, so
    * the stored selection must not be overwritten (a stale or unloaded view must not wipe it).
    */
-  { includeAddons = true }: { includeAddons?: boolean } = {},
+  {
+    includeAddons = true,
+    addonPacks,
+  }: {
+    includeAddons?: boolean;
+    /**
+     * The plain add-ons the Add-ons tab lists (when they loaded). The request then carries an offer for EVERY one of them (no stored row
+     * = paid at the add-on's price), and the features those add-ons grant follow the offers, exactly as the API will write them.
+     * Without it only the draft's own offers (the stored ones) are sent back.
+     */
+    addonPacks?: readonly PackGrants[];
+  } = {},
 ):
   { body: CreatePlanRequest; problems?: undefined } | { body?: undefined; problems: PlanProblems } {
   const problems: PlanProblems = {};
@@ -266,6 +300,26 @@ export function buildPlanRequest(
     else target[key] = n;
   }
 
+  // Only the offers the plan holds (stored rows, and the ones the operator set in this edit). An add-on with no row is left alone, so a plan
+  // that carries only part of its features keeps them on a save that never touched that add-on.
+  const offerIds = Object.keys(draft.addonOffers);
+  const addonOffers: PlanAddonOffer[] = [];
+  for (const addonId of offerIds) {
+    const o = offerFor(draft, addonId);
+    const raw = o.mode === 'paid' ? o.amount.trim() : '';
+    let amount: string | null = null;
+    if (raw) {
+      if (!isMoney(raw)) problems[`addonOffers.${addonId}`] = { code: 'money' };
+      else if (moneyCents(raw) === 0)
+        problems[`addonOffers.${addonId}`] = { code: 'addonPriceZero' };
+      else amount = normaliseMoney(raw);
+    }
+    addonOffers.push({ addonId, mode: o.mode, amount });
+  }
+  const features = addonPacks
+    ? { ...draft.features, ...offerFeatures(draft, decidedPacks(draft, addonPacks)) }
+    : draft.features;
+
   // The cross-field rules, shared with the API. A field already known to be malformed keeps its own
   // message, and an offer is not compared against a price that could not be read.
   const skip = new Set<string>(Object.keys(problems));
@@ -302,20 +356,25 @@ export function buildPlanRequest(
       ctaLabel: cta,
       dataRetentionDays: retention!,
       limits,
-      features: Object.fromEntries(
-        Object.entries(draft.features).filter(([k]) => isRegistryFeature(k)),
-      ),
+      features: Object.fromEntries(Object.entries(features).filter(([k]) => isRegistryFeature(k))),
       moduleLimits,
       moduleFeatures: Object.fromEntries(
-        Object.entries(draft.features).filter(([k]) => !isRegistryFeature(k)),
+        Object.entries(features).filter(([k]) => !isRegistryFeature(k)),
       ),
       ...(includeAddons ? { visibleAddons: [...new Set(draft.visibleAddons)] } : {}),
+      addonOffers,
     },
   };
 }
 
-/** The form field an API validation path belongs to, or null when it has none. */
-export function planFieldForPath(path: string): PlanField | null {
+/**
+ * The form field an API validation path belongs to, or null when it has none. `addonOfferIds` is the order the request listed its
+ * `addonOffers` in, so `addonOffers.<i>.<field>` lands on that add-on's row (else on the tab as a whole).
+ */
+export function planFieldForPath(
+  path: string,
+  addonOfferIds: readonly string[] = [],
+): PlanField | null {
   const scalar: PlanScalarField[] = [
     'name',
     'subtitle',
@@ -332,6 +391,11 @@ export function planFieldForPath(path: string): PlanField | null {
   ];
   if ((scalar as string[]).includes(path)) return path as PlanScalarField;
   if (path === 'visibleAddons') return 'visibleAddons';
+  const offer = /^addonOffers(?:\.(\d+))?(?:\.|$)/.exec(path);
+  if (offer) {
+    const id = offer[1] === undefined ? undefined : addonOfferIds[Number(offer[1])];
+    return id ? `addonOffers.${id}` : 'addonOffers';
+  }
   const m = /^limits\.(\w+)$/.exec(path);
   if (m && (PLAN_LIMIT_KEYS as string[]).includes(m[1]!)) return path as PlanField;
   return null;
@@ -350,15 +414,22 @@ export function unknownAddonId(message: string): string | null {
  */
 export function problemsFromServer(
   errors: ReadonlyArray<{ path: string; message: string }>,
+  { addonOfferIds = [] }: { addonOfferIds?: readonly string[] } = {},
 ): PlanProblems {
   const out: PlanProblems = {};
   const unknown: string[] = [];
   for (const e of errors) {
-    const field = planFieldForPath(e.path);
+    const field = planFieldForPath(e.path, addonOfferIds);
     if (!field) continue;
     const id = field === 'visibleAddons' ? unknownAddonId(e.message) : null;
     if (id) {
       unknown.push(id);
+      continue;
+    }
+    // An add-on offer naming an add-on that no longer exists: the row says so in words, not with the raw code.
+    const gone = field.startsWith('addonOffers') ? unknownAddonId(e.message) : null;
+    if (gone) {
+      if (!(field in out)) out[field] = { code: 'addonGone' };
       continue;
     }
     if (!(field in out)) out[field] = { code: 'server', message: e.message };
@@ -419,71 +490,140 @@ export function toggleFeatures(
   return next;
 }
 
-// --- plain add-on packs included in the plan (Add-ons tab, "Included add-ons") ---------------------------------------------------
+// --- plain add-on offers (Add-ons tab, docs/specs/addons-plan-offers.md) ------------------------------------------------------------
 //
-// "Included in this plan" is not a stored list: it is DERIVED from `draft.features`. A pack is included when every feature key it grants
-// is on in the plan, which is the exact rule the workspace's add-on card and checkout use (`isIncludedInPlan`). So the switch, the Features
-// tab and the saved plan can never disagree: both tabs write the same keys.
+// Every plain add-on is Included, Paid (optionally at the plan's own price) or Hidden on a plan. The mode is the source of truth: the API
+// writes the add-on's feature keys on the plan from it (true when included, false otherwise), and the editor mirrors that in the draft's
+// `features` as the mode changes, so the Features tab (where those keys are locked) shows what the save will store.
 
 /** The part of an add-on pack (`AddonPack` from the API) these helpers read. */
 export interface PackGrants {
+  id: string;
   grants: { features: readonly string[]; limits: Readonly<Record<string, number>> };
 }
 
-export type PackCoverageState =
-  /** The pack grants no feature (limits only): there is nothing to include. */
-  'noFeatures' | 'none' | 'partial' | 'full';
-
-export interface PackCoverage {
-  state: PackCoverageState;
-  /** How many of the pack's feature keys are on in the plan. */
-  on: number;
-  total: number;
-  /** The pack's feature keys the plan does not have on. */
-  missing: string[];
+/** One add-on's offer as the form holds it. `amount` is the typed price ('' = the add-on's own price); it is only sent when paid. */
+export interface AddonOfferDraft {
+  mode: PlanAddonOfferMode;
+  amount: string;
 }
 
-/** How much of a pack the plan's features already cover. Pure; reads only `features`. */
-export function packCoverage(pack: PackGrants, features: PlanDraft['features']): PackCoverage {
-  const keys = [...new Set(pack.grants.features)];
-  const missing = keys.filter((k) => features[k] !== true);
-  const on = keys.length - missing.length;
-  const state: PackCoverageState =
-    keys.length === 0 ? 'noFeatures' : on === keys.length ? 'full' : on === 0 ? 'none' : 'partial';
-  return { state, on, total: keys.length, missing };
+/** What a pack with no stored row means: paid at the add-on's own price. */
+export const DEFAULT_OFFER: AddonOfferDraft = { mode: 'paid', amount: '' };
+
+/** The stored offers of a plan as the draft's map (a pack with no row is absent and reads as `DEFAULT_OFFER`). */
+export function offersToDraft(offers: PlanAdminItem['addonOffers']): PlanDraft['addonOffers'] {
+  return Object.fromEntries(
+    offers.map((o) => [
+      o.addonId,
+      { mode: o.mode, amount: o.mode === 'paid' && o.amount !== null ? o.amount : '' },
+    ]),
+  );
+}
+
+/** How the plan offers one pack: its draft row, or paid at the add-on's price. */
+export function offerFor(draft: Pick<PlanDraft, 'addonOffers'>, packId: string): AddonOfferDraft {
+  return draft.addonOffers[packId] ?? DEFAULT_OFFER;
+}
+
+/** The modes a pack can take: a capacity add-on (no feature) is never included, the plan sets its own cap on the Limits tab. */
+export function offerModesFor(pack: Pick<PackGrants, 'grants'>): readonly PlanAddonOfferMode[] {
+  return addonKindOf(pack.grants) === 'feature' ? PLAN_ADDON_OFFER_MODES : ['paid', 'hidden'];
 }
 
 /**
- * Include the pack in the plan (every feature key on) or take it out (every feature key explicitly OFF, not deleted: a plan row that
- * does not store a key falls back to the catalogue default, and the editor always stores every key, so "off" is written as false).
- * Switching on and then off therefore does not restore what a key was before; it ends at false. Limits are never touched (a pack's cap
- * deltas such as Teams +N are not part of plan inclusion; the cap is set on the Limits tab), nor are the Marketplace selection or any
- * feature the pack does not grant. A pack with no feature keys changes nothing.
+ * The plan's value for each feature key the packs grant: on when ANY pack granting it is included (a key two packs share stays on while
+ * one of them is included). Keys no pack grants are absent.
  */
-export function setPackIncluded(draft: PlanDraft, pack: PackGrants, on: boolean): PlanDraft {
-  if (pack.grants.features.length === 0) return draft;
-  return { ...draft, features: toggleFeatures(draft.features, pack.grants.features, on) };
+export function offerFeatures(
+  draft: Pick<PlanDraft, 'addonOffers'>,
+  packs: readonly PackGrants[],
+): Record<string, boolean> {
+  const out: Record<string, boolean> = {};
+  for (const p of packs) {
+    const on = offerFor(draft, p.id).mode === 'included';
+    for (const k of p.grants.features) out[k] = (out[k] ?? false) || on;
+  }
+  return out;
 }
 
-/** How many of the packs the plan fully includes (a partly covered pack is not counted). */
-export function includedPackCount(
+/**
+ * Set how the plan offers one pack, and bring the draft's `features` in line for the keys the packs grant (included -> true, otherwise
+ * false), so the Features tab reflects it at once. Switching away from Paid forgets the typed price. Included on a capacity add-on is
+ * refused (the draft is returned unchanged). Limits, the Marketplace selection and features no pack grants are never touched.
+ */
+export function setAddonOffer(
+  draft: PlanDraft,
+  pack: PackGrants,
+  mode: PlanAddonOfferMode,
   packs: readonly PackGrants[],
-  features: PlanDraft['features'],
+): PlanDraft {
+  if (!offerModesFor(pack).includes(mode)) return draft;
+  const was = offerFor(draft, pack.id);
+  const addonOffers = {
+    ...draft.addonOffers,
+    [pack.id]: { mode, amount: mode === 'paid' ? was.amount : '' },
+  };
+  const all = packs.some((p) => p.id === pack.id) ? packs : [...packs, pack];
+  return {
+    ...draft,
+    addonOffers,
+    features: {
+      ...draft.features,
+      ...offerFeatures({ addonOffers }, decidedPacks({ addonOffers }, all)),
+    },
+  };
+}
+
+/** The packs the plan holds an offer for (stored or set in this edit): only their features follow the offers. */
+export function decidedPacks<P extends Pick<PackGrants, 'id'>>(
+  draft: Pick<PlanDraft, 'addonOffers'>,
+  packs: readonly P[],
+): P[] {
+  return packs.filter((p) => p.id in draft.addonOffers);
+}
+
+/** The plan's own price for a paid pack, as typed ('' = the add-on's price). */
+export function setAddonOfferAmount(draft: PlanDraft, packId: string, amount: string): PlanDraft {
+  const was = offerFor(draft, packId);
+  if (was.mode !== 'paid') return draft;
+  return { ...draft, addonOffers: { ...draft.addonOffers, [packId]: { mode: 'paid', amount } } };
+}
+
+/**
+ * The feature keys a plain pack grants, each with the pack names that grant it: the Features tab shows them read-only ("Set by the
+ * Smart routing add-on on the Add-ons tab") and its Enable all / Disable all skip them.
+ */
+export function packLockedFeatures(
+  packs: ReadonlyArray<PackGrants & { name: string }>,
+): Map<string, string[]> {
+  const out = new Map<string, string[]>();
+  for (const p of packs)
+    for (const k of new Set(p.grants.features)) out.set(k, [...(out.get(k) ?? []), p.name]);
+  return out;
+}
+
+/** How many feature add-ons the plan includes (a capacity add-on is never counted). */
+export function includedPackCount(
+  draft: Pick<PlanDraft, 'addonOffers'>,
+  packs: readonly PackGrants[],
 ): number {
-  return packs.filter((p) => packCoverage(p, features).state === 'full').length;
+  return packs.filter(
+    (p) => addonKindOf(p.grants) === 'feature' && offerFor(draft, p.id).mode === 'included',
+  ).length;
 }
 
 /** Feature keys a pack grants that the shared entitlement resolver does not merge from a live pack (they still work on a plan). */
-export function unlistedPackFeatures(pack: PackGrants): string[] {
+export function unlistedPackFeatures(pack: Pick<PackGrants, 'grants'>): string[] {
   return pack.grants.features.filter((k) => !PACK_GRANTABLE_FEATURES.includes(k));
 }
 
-/** The Add-ons tab's total: Marketplace apps offered plus plain add-ons fully included. */
+/** The Add-ons tab's count: feature add-ons included plus the mini apps offered. */
 export function addonsSelectedCount(
-  draft: Pick<PlanDraft, 'features' | 'visibleAddons'>,
+  draft: Pick<PlanDraft, 'addonOffers' | 'visibleAddons'>,
   packs: readonly PackGrants[],
 ): number {
-  return draft.visibleAddons.length + includedPackCount(packs, draft.features);
+  return draft.visibleAddons.length + includedPackCount(draft, packs);
 }
 
 /** One add-on ticked or unticked. */
@@ -505,8 +645,15 @@ export function clearAddons(ids: readonly string[], remove: readonly string[]): 
 
 /** Whether anything differs from the draft the form opened with (drives the "unsaved changes" guard). */
 export function isPlanDraftDirty(initial: PlanDraft, current: PlanDraft): boolean {
-  // The add-on selection is a set: ticking an add-on back on must not read as a change because it moved to the end.
+  // The add-on selection is a set: ticking an add-on back on must not read as a change because it moved to the end. An offer put back to
+  // the default (paid, no price of its own) is the same as no row.
   const norm = (d: PlanDraft) =>
-    JSON.stringify({ ...d, visibleAddons: [...d.visibleAddons].sort() });
+    JSON.stringify({
+      ...d,
+      visibleAddons: [...d.visibleAddons].sort(),
+      addonOffers: Object.entries(d.addonOffers)
+        .filter(([, o]) => o.mode !== 'paid' || o.amount.trim() !== '')
+        .sort(([a], [b]) => a.localeCompare(b)),
+    });
   return norm(initial) !== norm(current);
 }

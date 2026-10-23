@@ -45,7 +45,8 @@
         "period": "Periodo",
         "grants": "Otorga",
         "status": "Estado",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "plans": "Planes"
       },
       "price": {
         "free": "Gratis",
@@ -156,7 +157,48 @@
           "months": "Suscripción mensual",
           "years": "Suscripción anual"
         },
-        "periodHint": "Los complementos son suscripciones. Los espacios de trabajo con una pasarela en línea se renuevan automáticamente; con transferencia bancaria o pago manual pagan de nuevo al terminar el periodo."
+        "periodHint": "Los complementos son suscripciones. Los espacios de trabajo con una pasarela en línea se renuevan automáticamente; con transferencia bancaria o pago manual pagan de nuevo al terminar el periodo.",
+        "planOffers": {
+          "title": "Planes",
+          "hint": "Cómo ofrece cada plan este complemento. Incluido: sin coste, el plan aporta sus funciones. De pago: los espacios de trabajo lo compran, al precio propio del plan si defines uno. Oculto: los espacios de trabajo del plan nunca lo ven.",
+          "noIncluded": "Este complemento solo amplía límites, así que ningún plan puede incluirlo. Cada plan define sus propios topes en su pestaña Límites.",
+          "empty": "Aún no hay planes.",
+          "freePlan": "Plan gratuito",
+          "inactivePlan": "Inactivo",
+          "modeLabel": "Cómo ofrece {plan} este complemento",
+          "modes": {
+            "included": "Incluido",
+            "paid": "De pago",
+            "hidden": "Oculto"
+          },
+          "priceLabel": "Precio en este plan",
+          "priceHint": "Vacío = el precio propio del complemento.",
+          "freePlanNote": "Se muestra en el plan gratuito, pero un espacio de trabajo necesita un plan de pago para comprarlo.",
+          "hiddenNote": "No se muestra a los espacios de trabajo de este plan. Un espacio de trabajo que ya lo compró lo conserva hasta que termine su periodo.",
+          "problems": {
+            "money": "Introduce un importe como 19 o 19.99.",
+            "zero": "Deja el precio vacío para usar el precio del complemento, o elige Incluido."
+          },
+          "errors": {
+            "generic": "No se pudieron guardar las ofertas de los planes.",
+            "forbidden": "Solo un superadministrador puede cambiar las ofertas de los planes.",
+            "notFound": "Este complemento ya no existe."
+          },
+          "saved": "Ofertas de los planes guardadas.",
+          "changed": "{count, plural, one {# plan cambiado} other {# planes cambiados}}",
+          "save": "Guardar ofertas de los planes"
+        }
+      },
+      "kind": {
+        "feature": "Función",
+        "capacity": "Capacidad"
+      },
+      "plans": {
+        "included": "Incluido: {plans}",
+        "paid": "De pago: {plans}",
+        "hidden": "Oculto: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Ningún plan"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "¿Necesitas créditos de mensajes? Recarga tu monedero; los créditos no son un complemento.",
-      "walletLink": "Recargar monedero"
+      "walletLink": "Recargar monedero",
+      "groups": {
+        "feature": "Complementos de funciones",
+        "capacity": "Complementos de capacidad"
+      }
     }
   }
 }

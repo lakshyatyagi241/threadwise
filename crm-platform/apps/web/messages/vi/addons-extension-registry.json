@@ -45,7 +45,8 @@
         "period": "Chu kỳ",
         "grants": "Cấp quyền",
         "status": "Trạng thái",
-        "actions": "Thao tác"
+        "actions": "Thao tác",
+        "plans": "Gói"
       },
       "price": {
         "free": "Miễn phí",
@@ -156,7 +157,48 @@
           "months": "Đăng ký theo tháng",
           "years": "Đăng ký theo năm"
         },
-        "periodHint": "Tiện ích bổ sung là gói đăng ký. Không gian làm việc dùng cổng thanh toán trực tuyến được gia hạn tự động; với chuyển khoản ngân hàng hoặc thanh toán ngoại tuyến, họ thanh toán lại khi kỳ kết thúc."
+        "periodHint": "Tiện ích bổ sung là gói đăng ký. Không gian làm việc dùng cổng thanh toán trực tuyến được gia hạn tự động; với chuyển khoản ngân hàng hoặc thanh toán ngoại tuyến, họ thanh toán lại khi kỳ kết thúc.",
+        "planOffers": {
+          "title": "Gói",
+          "hint": "Cách mỗi gói cung cấp tiện ích bổ sung này. Bao gồm: miễn phí, gói mang theo các tính năng của tiện ích. Trả phí: không gian làm việc mua tiện ích, theo giá riêng của gói nếu bạn đặt. Ẩn: không gian làm việc trong gói không bao giờ thấy tiện ích.",
+          "noIncluded": "Tiện ích này chỉ tăng giới hạn nên không gói nào có thể bao gồm nó. Mỗi gói đặt mức trần riêng trong tab Giới hạn của gói.",
+          "empty": "Chưa có gói nào.",
+          "freePlan": "Gói miễn phí",
+          "inactivePlan": "Không hoạt động",
+          "modeLabel": "Cách {plan} cung cấp tiện ích bổ sung này",
+          "modes": {
+            "included": "Bao gồm",
+            "paid": "Trả phí",
+            "hidden": "Ẩn"
+          },
+          "priceLabel": "Giá trong gói này",
+          "priceHint": "Để trống = giá riêng của tiện ích bổ sung.",
+          "freePlanNote": "Hiển thị trên gói miễn phí, nhưng không gian làm việc cần gói trả phí để mua.",
+          "hiddenNote": "Không hiển thị cho các không gian làm việc trong gói này. Không gian làm việc đã mua vẫn giữ nó đến khi hết kỳ hạn.",
+          "problems": {
+            "money": "Nhập số tiền như 19 hoặc 19.99.",
+            "zero": "Để trống giá để dùng giá của tiện ích bổ sung, hoặc chọn Bao gồm."
+          },
+          "errors": {
+            "generic": "Không thể lưu cách cung cấp theo gói.",
+            "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi cách cung cấp theo gói.",
+            "notFound": "Tiện ích bổ sung này không còn tồn tại."
+          },
+          "saved": "Đã lưu cách cung cấp theo gói.",
+          "changed": "{count, plural, one {# gói đã thay đổi} other {# gói đã thay đổi}}",
+          "save": "Lưu cách cung cấp theo gói"
+        }
+      },
+      "kind": {
+        "feature": "Tính năng",
+        "capacity": "Dung lượng"
+      },
+      "plans": {
+        "included": "Bao gồm: {plans}",
+        "paid": "Trả phí: {plans}",
+        "hidden": "Ẩn: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Không có gói nào"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Cần tín dụng tin nhắn? Hãy nạp ví thay vào đó; tín dụng không phải là tiện ích bổ sung.",
-      "walletLink": "Nạp ví"
+      "walletLink": "Nạp ví",
+      "groups": {
+        "feature": "Tiện ích bổ sung tính năng",
+        "capacity": "Tiện ích bổ sung dung lượng"
+      }
     }
   }
 }

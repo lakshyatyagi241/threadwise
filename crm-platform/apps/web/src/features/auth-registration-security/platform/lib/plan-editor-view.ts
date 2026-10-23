@@ -19,7 +19,7 @@ export type PlanTab = (typeof PLAN_TABS)[number];
 
 /** The tab a field's input lives on. */
 export function tabForField(field: PlanField): PlanTab {
-  if (field === 'visibleAddons') return 'addons';
+  if (field === 'visibleAddons' || field.startsWith('addonOffers')) return 'addons';
   if (field.startsWith('limits.')) return 'limits';
   return 'details';
 }

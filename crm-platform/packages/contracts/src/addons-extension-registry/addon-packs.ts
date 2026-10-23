@@ -36,6 +36,56 @@ export const addonGrantsSchema = z.object({
 });
 export type AddonGrants = z.infer<typeof addonGrantsSchema>;
 
+/**
+ * The two kinds of plain add-on (docs/specs/addons-plan-offers.md 1), derived from what the pack grants: one that grants at least one feature unlocks
+ * a module (`feature`, it may also add capacity, like Teams +10); one that only adds to limits is `capacity` (Extra seat, Contact boost). Only a
+ * feature add-on can be included in a plan.
+ */
+export type AddonKind = 'feature' | 'capacity';
+export const addonKindOf = (grants: { features: readonly string[] }): AddonKind =>
+  grants.features.length > 0 ? 'feature' : 'capacity';
+
+/** One plan's offer of a pack, as the operator's add-on list and pack editor show it (`GET platform/addons`). */
+export const addonPlanOfferSchema = z.object({
+  planId: uuidSchema,
+  planSlug: z.string(),
+  planName: z.string(),
+  planIsActive: z.boolean(),
+  planIsFree: z.boolean(),
+  /** `paid` also when the plan has no stored row (the default). */
+  mode: z.enum(['included', 'paid', 'hidden']),
+  /** The plan's own price for a paid offer, null = the pack's price. */
+  amount: z.string().nullable(),
+  /** False when no row is stored (the default applies). */
+  stored: z.boolean(),
+});
+export type AddonPlanOffer = z.infer<typeof addonPlanOfferSchema>;
+
+/** `PUT platform/addons/:id/plans`: the offers of this pack on the plans named; a plan not named keeps its offer. */
+export const setAddonPlanOffersRequestSchema = z.object({
+  offers: z
+    .array(
+      z
+        .object({
+          planId: uuidSchema,
+          mode: z.enum(['included', 'paid', 'hidden']),
+          amount: z.preprocess(blankToNull, moneySchema.nullable()).default(null),
+        })
+        .superRefine((o, ctx) => {
+          if (o.amount !== null && (o.mode !== 'paid' || moneyCents(o.amount) === 0))
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ['amount'],
+              message: 'Only a paid add-on has a price, and it is above zero.',
+            });
+        }),
+    )
+    .max(500)
+    .refine((o) => new Set(o.map((x) => x.planId)).size === o.length, 'List each plan once.'),
+});
+export type SetAddonPlanOffersRequest = z.input<typeof setAddonPlanOffersRequestSchema>;
+export type SetAddonPlanOffersPayload = z.output<typeof setAddonPlanOffersRequestSchema>;
+
 const limitInputSchema = z.union([z.number().int().min(-1).max(2_000_000_000), z.null()]);
 
 const addonFieldsShape = {
@@ -160,6 +210,10 @@ export const addonPackSchema = z.object({
   grants: addonGrantsSchema,
   /** Workspaces holding an active purchase (the delete guard). */
   activePurchases: z.number().int().nonnegative(),
+  /** `feature` or `capacity` (derived from `grants`, see `addonKindOf`). */
+  kind: z.enum(['feature', 'capacity']).default('feature'),
+  /** How every plan offers this pack (every plan, also the ones with no stored row, which read `paid`). */
+  planOffers: z.array(addonPlanOfferSchema).default([]),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -217,6 +271,8 @@ export const addonCardSchema = z.object({
    * "enabled by your account manager"). Null otherwise.
    */
   includedVia: z.enum(['plan', 'support']).nullable().default(null),
+  /** `feature` (unlocks a module) or `capacity` (adds to a limit); the list groups the cards by it. */
+  kind: z.enum(['feature', 'capacity']).default('feature'),
 });
 export type AddonCard = z.infer<typeof addonCardSchema>;
 
@@ -249,6 +305,19 @@ export const workspaceAddonsResponseSchema = z.object({
   catalog: z.array(addonCardSchema),
 });
 export type WorkspaceAddonsResponse = z.infer<typeof workspaceAddonsResponseSchema>;
+
+/**
+ * The operator's view of one workspace's add-ons (Workspaces > a workspace > Plan): the same cards the workspace sees, plus what the workspace does
+ * NOT see (add-ons its plan hides) and the feature overrides that beat the plan, so the operator can tell WHY each add-on is on or off.
+ */
+export const operatorWorkspaceAddonsResponseSchema = workspaceAddonsResponseSchema.extend({
+  hidden: z.array(z.object({ id: uuidSchema, slug: z.string(), name: z.string() })),
+  /** The workspace's own feature overrides (true / false), which win over the plan and every add-on. */
+  featureOverrides: z.record(z.string(), z.boolean()),
+  platformOwned: z.boolean(),
+  planName: z.string().nullable(),
+});
+export type OperatorWorkspaceAddonsResponse = z.infer<typeof operatorWorkspaceAddonsResponseSchema>;
 
 // --- one ownership state for every paid thing --------------------------------------------------------------------------------------------
 

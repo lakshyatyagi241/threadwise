@@ -4,6 +4,7 @@
       "switches": {
         "title": "Chattoewijzing",
         "intro": "Vier schakelaars dekken de meeste werkruimtes: zet ze aan en je hoeft nooit een regel aan te maken.",
+        "introBasic": "Je abonnement wijst chats niet automatisch toe: nieuwe chats wachten in de wachtrij tot iemand ze oppakt. Deze instellingen blijven gelden.",
         "order": "De volgorde voor een nieuwe chat: eerst contacteigenaar en Vaste medewerker, dan je regels (als je er hebt toegevoegd), dan Alle anderen en daarna de wachtrij.",
         "readOnly": "Je kunt deze schakelaars zien, maar niet wijzigen.",
         "saved": "Opgeslagen.",
@@ -11,8 +12,6 @@
         "loading": "Toewijzingsinstellingen laden",
         "loadFailed": "De toewijzingsinstellingen konden niet worden geladen.",
         "retry": "Opnieuw proberen",
-        "notInPlan": "Niet in je abonnement",
-        "upgradeHint": "Inbegrepen in de add-on Slimme routering of een hoger abonnement.",
         "stepFirst": "Wordt eerst gecontroleerd",
         "stepMaster": "Hoofdschakelaar",
         "stepAfter": "Na het oppakken",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Meer controle nodig? Voeg regels toe",
         "intro": "Optioneel. Met regels stuur je bepaalde chats (een kanaal, woorden in het bericht, een nieuw contact...) naar bepaalde medewerkers of teams. Zijn de vier schakelaars genoeg, dan hoef je nooit een regel aan te maken.",
-        "locked": "Regels maken deel uit van de add-on Slimme routering of een hoger abonnement. De wachtrij, claimen en handmatige toewijzing blijven beschikbaar.",
         "pipelineTitle": "Hoe een nieuwe chat wordt toegewezen",
         "pipeline": {
           "agent": "1. Contacteigenaar en Vaste medewerker",

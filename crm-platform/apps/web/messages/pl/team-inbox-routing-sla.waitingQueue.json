@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Kolejka oczekujących",
       "intro": "Czaty, których nikt nie przejął, czekają na karcie Oczekujące. Te opcjonalne kroki pomagają je obsłużyć. Każdy krok uruchamia się raz na czat, liczy tylko minuty, gdy zespół jest otwarty, i kończy się, gdy ktoś przejmie czat.",
+      "introBasic": "Czaty, których nikt nie przejął, czekają na karcie Oczekujące, aż ktoś je przejmie.",
       "remind": "Przypomnij zespołowi",
       "remindBody": "Powiadamia osoby, które mogą przejąć czat.",
       "overflow": "Zaproponuj innemu zespołowi",

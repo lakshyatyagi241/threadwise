@@ -45,7 +45,8 @@
         "period": "Periode",
         "grants": "Memberikan",
         "status": "Status",
-        "actions": "Aksi"
+        "actions": "Aksi",
+        "plans": "Paket"
       },
       "price": {
         "free": "Gratis",
@@ -156,7 +157,48 @@
           "months": "Langganan bulanan",
           "years": "Langganan tahunan"
         },
-        "periodHint": "Add-on adalah langganan. Ruang kerja pada gateway online diperpanjang otomatis; dengan transfer bank atau pembayaran offline, mereka membayar lagi saat periode berakhir."
+        "periodHint": "Add-on adalah langganan. Ruang kerja pada gateway online diperpanjang otomatis; dengan transfer bank atau pembayaran offline, mereka membayar lagi saat periode berakhir.",
+        "planOffers": {
+          "title": "Paket",
+          "hint": "Cara setiap paket menawarkan add-on ini. Disertakan: tanpa biaya, paket membawa fitur-fiturnya. Berbayar: ruang kerja membelinya, dengan harga khusus paket jika Anda menetapkannya. Tersembunyi: ruang kerja di paket tersebut tidak pernah melihatnya.",
+          "noIncluded": "Add-on ini hanya menambah batas, jadi tidak ada paket yang dapat menyertakannya. Setiap paket mengatur batasnya sendiri di tab Batas.",
+          "empty": "Belum ada paket.",
+          "freePlan": "Paket gratis",
+          "inactivePlan": "Nonaktif",
+          "modeLabel": "Cara {plan} menawarkan add-on ini",
+          "modes": {
+            "included": "Disertakan",
+            "paid": "Berbayar",
+            "hidden": "Tersembunyi"
+          },
+          "priceLabel": "Harga di paket ini",
+          "priceHint": "Kosong = harga add-on itu sendiri.",
+          "freePlanNote": "Ditampilkan di paket gratis, tetapi ruang kerja memerlukan paket berbayar untuk membelinya.",
+          "hiddenNote": "Tidak ditampilkan ke ruang kerja di paket ini. Ruang kerja yang sudah membelinya tetap memilikinya hingga masa berlakunya berakhir.",
+          "problems": {
+            "money": "Masukkan jumlah seperti 19 atau 19.99.",
+            "zero": "Kosongkan harga untuk memakai harga add-on, atau pilih Disertakan."
+          },
+          "errors": {
+            "generic": "Penawaran paket tidak dapat disimpan.",
+            "forbidden": "Hanya super admin yang dapat mengubah penawaran paket.",
+            "notFound": "Add-on ini sudah tidak ada."
+          },
+          "saved": "Penawaran paket disimpan.",
+          "changed": "{count, plural, one {# paket diubah} other {# paket diubah}}",
+          "save": "Simpan penawaran paket"
+        }
+      },
+      "kind": {
+        "feature": "Fitur",
+        "capacity": "Kapasitas"
+      },
+      "plans": {
+        "included": "Disertakan: {plans}",
+        "paid": "Berbayar: {plans}",
+        "hidden": "Tersembunyi: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Tidak ada paket"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Butuh kredit pesan? Isi ulang dompet Anda; kredit bukan add-on.",
-      "walletLink": "Isi ulang dompet"
+      "walletLink": "Isi ulang dompet",
+      "groups": {
+        "feature": "Add-on fitur",
+        "capacity": "Add-on kapasitas"
+      }
     }
   }
 }

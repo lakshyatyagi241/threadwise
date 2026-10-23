@@ -570,15 +570,21 @@
       "appLink": "Uygulamayı gör",
       "addonHint": "Bunu {addon} eklentisiyle mevcut planınıza da ekleyebilirsiniz.",
       "addonLink": "Eklentileri gör",
-      "addons": {
-        "smartRouting": "Akıllı yönlendirme",
-        "teamsPermissions": "Ekipler ve izinler"
-      },
       "addonsTabHint": "Eklentiler için planınızda Pazar yeri olması gerekmez. Planlar ve eklentiler bölümünden sahip olduklarınızı görebilir ve eklenti satın alabilirsiniz.",
-      "addonsTabLink": "Planlar ve eklentileri aç"
+      "addonsTabLink": "Planlar ve eklentileri aç",
+      "addonHintGeneric": "Planınız bunu bir eklenti olarak da sunuyor olabilir."
     },
     "lock": {
-      "link": "Planları ve eklentileri gör"
+      "link": "Planları ve eklentileri gör",
+      "offTitle": "Planınızda yok",
+      "offLead": "Bu bölüm şu anda çalışma alanınızın planına dahil değil.",
+      "buyTitle": "{addon} eklentisini {price} karşılığında ekleyin",
+      "buyLead": "Planınız {addon} eklentisini sunuyor. Bu bölümü açmak için ekleyin.",
+      "buyLink": "Eklentileri gör",
+      "askOwner": "Eklemesi için hesap sahibinden isteyin.",
+      "unavailableTitle": "{addon} için etkin bir ücretli plan gerekir",
+      "unavailableLead": "Önce ücretli bir plan seçin, ardından {addon} ekleyebilirsiniz.",
+      "viewPlans": "Planları gör"
     }
   }
 }

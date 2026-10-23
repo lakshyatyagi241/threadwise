@@ -200,7 +200,9 @@
       "autoReply": "Enviar una respuesta automática",
       "autoReplyBody": "Texto de la respuesta",
       "autoReplyHint": "Se envía como la empresa al cliente. Fuera de la ventana de 24 horas no se envía una respuesta libre.",
-      "whenHint": "Todas las condiciones que añadas deben cumplirse."
+      "whenHint": "Todas las condiciones que añadas deben cumplirse.",
+      "unavailableTitle": "Las reglas no están disponibles en tu plan",
+      "unavailableBody": "El plan de tu espacio de trabajo no incluye reglas de asignación. Los chats nuevos esperan en la cola, donde tu equipo puede tomarlos."
     },
     "sla": {
       "back": "Volver a Ajustes",

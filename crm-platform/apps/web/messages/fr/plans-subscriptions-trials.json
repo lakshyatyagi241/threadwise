@@ -570,15 +570,21 @@
       "appLink": "Voir l’application",
       "addonHint": "Vous pouvez aussi l'ajouter à votre offre actuelle avec le module {addon}.",
       "addonLink": "Voir les modules",
-      "addons": {
-        "smartRouting": "Routage intelligent",
-        "teamsPermissions": "Équipes et autorisations"
-      },
       "addonsTabHint": "Les modules complémentaires n’exigent pas le Marketplace dans votre offre. Vous pouvez quand même voir ce que vous possédez et en acheter depuis Offres et modules complémentaires.",
-      "addonsTabLink": "Ouvrir Offres et modules complémentaires"
+      "addonsTabLink": "Ouvrir Offres et modules complémentaires",
+      "addonHintGeneric": "Votre offre le propose peut-être aussi en module complémentaire."
     },
     "lock": {
-      "link": "Voir les offres et modules"
+      "link": "Voir les offres et modules",
+      "offTitle": "Non inclus dans votre offre",
+      "offLead": "Cette partie n’est pas incluse pour le moment dans l’offre de votre espace de travail.",
+      "buyTitle": "Ajoutez {addon} pour {price}",
+      "buyLead": "Votre offre propose {addon} en module complémentaire. Ajoutez-le pour activer cette partie.",
+      "buyLink": "Voir les modules",
+      "askOwner": "Demandez au propriétaire du compte de l’ajouter.",
+      "unavailableTitle": "{addon} nécessite une offre payante active",
+      "unavailableLead": "Choisissez d’abord une offre payante, puis vous pourrez y ajouter {addon}.",
+      "viewPlans": "Voir les offres"
     }
   }
 }

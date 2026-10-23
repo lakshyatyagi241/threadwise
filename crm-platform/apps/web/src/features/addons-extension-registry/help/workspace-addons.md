@@ -10,7 +10,7 @@ keywords: [add-on, addon, extra, pack, feature pack, buy, upgrade, boost]
 
 ## What it is for
 
-Add-ons are extra feature packs you buy on top of a paid plan, without changing the plan itself. A pack can switch on a feature your plan does not include, or raise a limit, for example by adding more of something your plan caps. Add-ons are monthly or yearly subscriptions. The same list appears on the Add-ons page, on the **Add-ons** tab of the Marketplace and under the plans on the Plans page.
+Add-ons are extra packs you buy on top of a paid plan, without changing the plan itself. There are two kinds, listed under their own headings: **Feature add-ons** switch on a part of the product your plan does not include (for example Smart routing), and **Capacity add-ons** raise a limit (for example an extra seat). Add-ons are monthly or yearly subscriptions. The same list appears on the Add-ons page, on the **Add-ons** tab of the Marketplace and under the plans on the Plans page.
 
 ## How to use it
 
@@ -26,10 +26,12 @@ Every card is in exactly one state:
 
 - **Included in your plan.** Your plan already gives you everything this add-on does, so there is nothing to buy and no charge. If an account manager switched the features on for your workspace, the card says so. If you were already paying for the add-on, it keeps running until the end of the term you paid for, is not refunded, and then stops renewing; the card shows the end date.
 - **Active.** You own it. The card shows when it renews, or until when it runs if it will not renew. A pack that adds to a limit also offers **Buy again**, which adds more on top.
-- **Buy add-on.** You can buy it now. If the add-on has an offer price, the card shows it next to the usual price.
+- **Buy add-on.** You can buy it now. The price is the one for your plan: the same add-on can cost differently on different plans. If the add-on has an offer price, the card shows it next to the usual price.
 - **Needs an active paid plan.** Your workspace is on a free plan, or your paid plan has ended. A notice at the top says which, and **View plans** opens [Plans](help:account-plans). Renew or choose a paid plan, then come back.
 
 If your plan only gives part of an add-on, the card stays buyable and lists only what you would still get.
+
+Some plans do not offer some add-ons at all. Those are not listed. If you already own one, it stays under **Add-ons you own** until its term ends, but it cannot be bought again on that plan.
 
 ## Renewal and payment
 

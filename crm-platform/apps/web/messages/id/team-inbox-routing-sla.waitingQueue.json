@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Antrean tunggu",
       "intro": "Chat yang belum diambil siapa pun menunggu di tab Menunggu. Langkah opsional ini membantu agar chat dijawab. Setiap langkah berjalan sekali per chat, hanya menghitung menit saat tim buka, dan berhenti begitu ada yang mengambil chat.",
+      "introBasic": "Chat yang belum diambil siapa pun menunggu di tab Menunggu sampai ada yang mengambilnya.",
       "remind": "Ingatkan tim",
       "remindBody": "Memberi tahu orang yang bisa mengambil chat.",
       "overflow": "Tawarkan ke tim lain",

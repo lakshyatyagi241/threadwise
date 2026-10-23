@@ -45,7 +45,8 @@
         "period": "Dönem",
         "grants": "Sağladıkları",
         "status": "Durum",
-        "actions": "İşlemler"
+        "actions": "İşlemler",
+        "plans": "Planlar"
       },
       "price": {
         "free": "Ücretsiz",
@@ -156,7 +157,48 @@
           "months": "Aylık abonelik",
           "years": "Yıllık abonelik"
         },
-        "periodHint": "Eklentiler aboneliktir. Çevrimiçi ödeme ağ geçidindeki çalışma alanları otomatik yenilenir; banka havalesi veya çevrimdışı ödemede dönem bitince yeniden öderler."
+        "periodHint": "Eklentiler aboneliktir. Çevrimiçi ödeme ağ geçidindeki çalışma alanları otomatik yenilenir; banka havalesi veya çevrimdışı ödemede dönem bitince yeniden öderler.",
+        "planOffers": {
+          "title": "Planlar",
+          "hint": "Her planın bu eklentiyi nasıl sunduğu. Dahil: ücretsizdir, plan eklentinin özelliklerini içerir. Ücretli: çalışma alanları satın alır; belirlediyseniz planın kendi fiyatıyla. Gizli: plandaki çalışma alanları onu hiç görmez.",
+          "noIncluded": "Bu eklenti yalnızca limitleri artırır, bu yüzden hiçbir plan onu dahil edemez. Her plan kendi üst sınırlarını Sınırlar sekmesinde belirler.",
+          "empty": "Henüz plan yok.",
+          "freePlan": "Ücretsiz plan",
+          "inactivePlan": "Etkin değil",
+          "modeLabel": "{plan} bu eklentiyi nasıl sunar",
+          "modes": {
+            "included": "Dahil",
+            "paid": "Ücretli",
+            "hidden": "Gizli"
+          },
+          "priceLabel": "Bu plandaki fiyat",
+          "priceHint": "Boş = eklentinin kendi fiyatı.",
+          "freePlanNote": "Ücretsiz planda gösterilir, ancak satın almak için çalışma alanının ücretli bir planı olmalıdır.",
+          "hiddenNote": "Bu plandaki çalışma alanlarına gösterilmez. Zaten satın almış bir çalışma alanı, süresi bitene kadar onu korur.",
+          "problems": {
+            "money": "19 veya 19.99 gibi bir tutar girin.",
+            "zero": "Eklentinin fiyatını kullanmak için fiyatı boş bırakın veya Dahil seçeneğini seçin."
+          },
+          "errors": {
+            "generic": "Plan teklifleri kaydedilemedi.",
+            "forbidden": "Plan tekliflerini yalnızca süper yönetici değiştirebilir.",
+            "notFound": "Bu eklenti artık mevcut değil."
+          },
+          "saved": "Plan teklifleri kaydedildi.",
+          "changed": "{count, plural, one {# plan değişti} other {# plan değişti}}",
+          "save": "Plan tekliflerini kaydet"
+        }
+      },
+      "kind": {
+        "feature": "Özellik",
+        "capacity": "Kapasite"
+      },
+      "plans": {
+        "included": "Dahil: {plans}",
+        "paid": "Ücretli: {plans}",
+        "hidden": "Gizli: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Plan yok"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Mesaj kredisi mi lazım? Bunun yerine cüzdanınıza yükleme yapın; krediler eklenti değildir.",
-      "walletLink": "Cüzdana yükle"
+      "walletLink": "Cüzdana yükle",
+      "groups": {
+        "feature": "Özellik eklentileri",
+        "capacity": "Kapasite eklentileri"
+      }
     }
   }
 }

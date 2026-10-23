@@ -5,12 +5,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addonPackSchema, type AddonPack, type GrantFieldsResponse } from '@crm/contracts';
+import {
+  PLAN_ADDON_OFFER_MODES,
+  addonKindOf,
+  addonPackSchema,
+  type AddonPack,
+  type AddonPlanOffer,
+  type GrantFieldsResponse,
+} from '@crm/contracts';
 import { Alert, Button, Card, ConfirmDialog, ToastProvider, cn, useToast } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { KEYS, fetchGrantFields, fetchPacks } from '../api';
 import { addonErrorKey } from '../lib/errors';
+import { planOfferSummary } from '../lib/pack-draft';
 import { Accent, ErrorBlock, LoadingBlock, PageHead } from './ui';
 
 const NS = 'addons-extension-registry.packs';
@@ -113,6 +121,15 @@ function Catalogue({
     new Intl.NumberFormat(locale, { style: 'currency', currency: p.currency }).format(
       Number(p.offerAmount ?? p.amount),
     );
+  const planName = (p: AddonPack, o: AddonPlanOffer) =>
+    o.mode === 'paid' && o.amount !== null
+      ? t('plans.withPrice', {
+          plan: o.planName,
+          price: new Intl.NumberFormat(locale, { style: 'currency', currency: p.currency }).format(
+            Number(o.amount),
+          ),
+        })
+      : o.planName;
 
   const chips = (p: AddonPack): string[] => [
     ...p.grants.features.map((k) => labelOf(fields, 'features', k)),
@@ -161,7 +178,7 @@ function Catalogue({
 
       <Card className="overflow-hidden rounded-2xl p-0">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] text-[12.5px]">
+          <table className="w-full min-w-[960px] text-[12.5px]">
             <caption className="sr-only">{t('table.label')}</caption>
             <thead className="border-b border-border bg-muted text-muted-foreground">
               <tr>
@@ -178,6 +195,9 @@ function Catalogue({
                   {t('table.grants')}
                 </th>
                 <th scope="col" className={cn(head, 'text-start')}>
+                  {t('table.plans')}
+                </th>
+                <th scope="col" className={cn(head, 'text-start')}>
                   {t('table.status')}
                 </th>
                 <th scope="col" className={cn(head, 'w-[210px] px-4 text-end')}>
@@ -188,7 +208,7 @@ function Catalogue({
             <tbody className="divide-y divide-border">
               {packs.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
                     <div className="text-[13px]">{t('empty.title')}</div>
                     {canEdit && (
                       <Link
@@ -203,10 +223,26 @@ function Catalogue({
               )}
               {packs.map((p) => {
                 const c = chips(p);
+                const kind = addonKindOf(p.grants);
+                const offers = planOfferSummary(p);
                 return (
                   <tr key={p.id} className="hover:bg-muted/50">
                     <td className="px-4 py-3">
-                      <div className="font-semibold">{p.name}</div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="font-semibold">{p.name}</span>
+                        <span
+                          data-testid={`pack-kind-${p.id}`}
+                          data-kind={kind}
+                          className={cn(
+                            'rounded-full px-1.5 py-0.5 font-mono text-[10px] uppercase',
+                            kind === 'feature'
+                              ? 'bg-primary/10 text-primary'
+                              : 'bg-muted text-muted-foreground',
+                          )}
+                        >
+                          {t(`kind.${kind}`)}
+                        </span>
+                      </div>
                       {p.subtitle && (
                         <div className="text-[11px] text-muted-foreground">{p.subtitle}</div>
                       )}
@@ -239,6 +275,32 @@ function Catalogue({
                             {t('grants.more', { count: c.length - MAX_CHIPS })}
                           </span>
                         )}
+                      </div>
+                    </td>
+                    <td className="px-2 py-3">
+                      <div className="max-w-[260px] space-y-1" data-testid={`pack-plans-${p.id}`}>
+                        {p.planOffers.length === 0 && (
+                          <span className="text-[11px] text-muted-foreground">
+                            {t('plans.none')}
+                          </span>
+                        )}
+                        {PLAN_ADDON_OFFER_MODES.filter((m) => offers[m].length > 0).map((m) => (
+                          <div
+                            key={m}
+                            data-mode={m}
+                            className={cn(
+                              'w-fit max-w-full rounded px-1.5 py-0.5 text-[11px]',
+                              m === 'included' && 'bg-primary/10 text-primary',
+                              m === 'paid' && 'bg-muted text-foreground',
+                              m === 'hidden' &&
+                                'border border-dashed border-border text-muted-foreground',
+                            )}
+                          >
+                            {t(`plans.${m}`, {
+                              plans: offers[m].map((o) => planName(p, o)).join(', '),
+                            })}
+                          </div>
+                        ))}
                       </div>
                     </td>
                     <td className="px-2 py-3">

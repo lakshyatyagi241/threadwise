@@ -234,7 +234,29 @@
         "ends": "Eindigt",
         "limits": "Effectieve limieten",
         "edit": "Bewerken en abonnement wijzigen",
-        "overrideNote": "Deze workspace heeft eigen limieten die die van het abonnement vervangen."
+        "overrideNote": "Deze workspace heeft eigen limieten die die van het abonnement vervangen.",
+        "addons": {
+          "title": "Add-ons",
+          "intro": "Wat deze werkruimte van elke add-on heeft, en waarom.",
+          "empty": "Er zijn geen add-ons te koop.",
+          "kind": {
+            "feature": "Functie-add-on",
+            "capacity": "Capaciteits-add-on"
+          },
+          "source": {
+            "plan": "Inbegrepen in abonnement",
+            "override": "Aangezet door overschrijving",
+            "platform": "Werkruimte van het platform",
+            "bought": "Gekocht",
+            "buy": "Te koop",
+            "unavailable": "Betaald abonnement nodig",
+            "hidden": "Verborgen in dit abonnement"
+          },
+          "renews": "Verlengt op {date}",
+          "ends": "Eindigt op {date}",
+          "lifetime": "Geen einddatum",
+          "overrides": "{count, plural, one {# functie-overschrijving gaat} other {# functie-overschrijvingen gaan}} voor het abonnement: {keys}. Wis ze in Abonnement bewerken en wijzigen."
+        }
       },
       "walletTab": {
         "open": "De volledige portemonnee openen",

@@ -1,10 +1,17 @@
 import {
+  PLAN_ADDON_OFFER_MODES,
+  addonKindOf,
   createAddonRequestSchema,
   isLegacyAddonPack,
+  isMoney,
   moneyCents,
+  normaliseMoney,
   type AddonPack,
+  type AddonPlanOffer,
   type CreateAddonPayload,
+  type PlanAddonOfferMode,
   type PlanBillingUnit,
+  type SetAddonPlanOffersRequest,
 } from '@crm/contracts';
 
 /** The add-on editor's form state: every input is text so a half-typed value never turns into NaN. */
@@ -159,3 +166,101 @@ export function grantParts(p: Pick<AddonPack, 'grants'>) {
 
 export const isDraftDirty = (a: PackDraft, b: PackDraft): boolean =>
   JSON.stringify(a) !== JSON.stringify(b);
+
+// --- how each plan offers this pack (pack editor "Plans" section, list "Plans" column; docs/specs/addons-plan-offers.md) -------------
+
+/** One plan's offer as the form holds it: `amount` is the typed plan price ('' = the add-on's own price), kept only while paid. */
+export interface PlanOfferDraft {
+  mode: PlanAddonOfferMode;
+  amount: string;
+}
+
+/** Plan id -> offer, for every plan the API listed (a plan with no stored row reads paid at the add-on's price). */
+export type PlanOffersDraft = Record<string, PlanOfferDraft>;
+
+export const planOffersToDraft = (p: Pick<AddonPack, 'planOffers'>): PlanOffersDraft =>
+  Object.fromEntries(
+    p.planOffers.map((o) => [
+      o.planId,
+      { mode: o.mode, amount: o.mode === 'paid' && o.amount !== null ? o.amount : '' },
+    ]),
+  );
+
+/** The modes a pack can take on a plan: a capacity add-on (limits only) is never included, the plan sets its own cap. */
+export const planOfferModes = (p: Pick<AddonPack, 'grants'>): readonly PlanAddonOfferMode[] =>
+  addonKindOf(p.grants) === 'feature' ? PLAN_ADDON_OFFER_MODES : ['paid', 'hidden'];
+
+/** A plan's mode changed: leaving Paid forgets the typed price. */
+export const setPlanOfferMode = (
+  d: PlanOffersDraft,
+  planId: string,
+  mode: PlanAddonOfferMode,
+): PlanOffersDraft => ({
+  ...d,
+  [planId]: { mode, amount: mode === 'paid' ? (d[planId]?.amount ?? '') : '' },
+});
+
+export const setPlanOfferAmount = (
+  d: PlanOffersDraft,
+  planId: string,
+  amount: string,
+): PlanOffersDraft => ({ ...d, [planId]: { mode: d[planId]?.mode ?? 'paid', amount } });
+
+/** Why a typed plan price was refused: not an amount, or zero (empty means "the add-on's price", Included means free). */
+export type PlanOfferProblem = 'money' | 'zero';
+
+export type PlanOffersBuild =
+  | { ok: true; body: SetAddonPlanOffersRequest }
+  | { ok: false; problems: Record<string, PlanOfferProblem> };
+
+const sameAmount = (a: string, b: string) =>
+  a === b || (isMoney(a) && isMoney(b) && normaliseMoney(a) === normaliseMoney(b));
+
+/**
+ * `PUT platform/addons/:id/plans` for the rows that differ from what the pack was loaded with (a plan not named keeps its offer), or the
+ * plans whose price cannot be sent. A blank price is null (the add-on's own price).
+ */
+export function buildPlanOffersRequest(
+  pack: Pick<AddonPack, 'planOffers'>,
+  d: PlanOffersDraft,
+): PlanOffersBuild {
+  const saved = planOffersToDraft(pack);
+  const problems: Record<string, PlanOfferProblem> = {};
+  const offers: SetAddonPlanOffersRequest['offers'] = [];
+  for (const { planId } of pack.planOffers) {
+    const now = d[planId] ?? saved[planId]!;
+    const was = saved[planId]!;
+    const raw = now.mode === 'paid' ? now.amount.trim() : '';
+    if (raw && !isMoney(raw)) problems[planId] = 'money';
+    else if (raw && moneyCents(raw) === 0) problems[planId] = 'zero';
+    if (now.mode === was.mode && sameAmount(raw, was.amount)) continue;
+    offers.push({
+      planId,
+      mode: now.mode,
+      amount: raw && isMoney(raw) ? normaliseMoney(raw) : null,
+    });
+  }
+  if (Object.keys(problems).length > 0) return { ok: false, problems };
+  return { ok: true, body: { offers } };
+}
+
+/** How many plans differ from what was loaded (the "Save plan offers" button is off at 0). */
+export const changedPlanOfferCount = (pack: Pick<AddonPack, 'planOffers'>, d: PlanOffersDraft) => {
+  const saved = planOffersToDraft(pack);
+  return pack.planOffers.filter(({ planId }) => {
+    const now = d[planId] ?? saved[planId]!;
+    const was = saved[planId]!;
+    return (
+      now.mode !== was.mode || !sameAmount(now.mode === 'paid' ? now.amount.trim() : '', was.amount)
+    );
+  }).length;
+};
+
+/** The add-ons list's "Plans" column: the plans grouped by mode, in the API's plan order (no stored row = paid at the add-on's price). */
+export function planOfferSummary(
+  p: Pick<AddonPack, 'planOffers'>,
+): Record<PlanAddonOfferMode, AddonPlanOffer[]> {
+  const out: Record<PlanAddonOfferMode, AddonPlanOffer[]> = { included: [], paid: [], hidden: [] };
+  for (const o of p.planOffers) out[o.mode].push(o);
+  return out;
+}

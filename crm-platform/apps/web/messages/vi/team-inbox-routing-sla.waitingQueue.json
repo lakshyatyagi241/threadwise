@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Hàng chờ",
       "intro": "Các cuộc trò chuyện chưa ai nhận sẽ chờ ở tab Đang chờ. Những bước tùy chọn này giúp chúng được trả lời. Mỗi bước chạy một lần cho mỗi cuộc trò chuyện, chỉ tính số phút nhóm đang mở cửa và dừng ngay khi có người nhận.",
+      "introBasic": "Các cuộc trò chuyện chưa ai nhận sẽ chờ ở tab Đang chờ cho đến khi có người nhận.",
       "remind": "Nhắc nhóm",
       "remindBody": "Báo cho những người có thể nhận cuộc trò chuyện.",
       "overflow": "Đề nghị cho nhóm khác",

@@ -7,6 +7,7 @@ import {
   workspaceHubDetailSchema,
   workspaceHubListResponseSchema,
   workspacePlanSchema,
+  operatorWorkspaceAddonsResponseSchema,
   type LifecycleStatus,
   type ListWorkspaceHubQuery,
   type RestoreOrgInput,
@@ -27,6 +28,7 @@ export const hubKeys = {
   list: (q: Record<string, string>) => ['operator', 'workspaces-hub', 'list', q] as const,
   detail: (id: string) => ['operator', 'workspaces-hub', 'detail', id] as const,
   plan: (id: string) => ['operator', 'workspaces-hub', 'plan', id] as const,
+  addons: (id: string) => ['operator', 'workspaces-hub', 'addons', id] as const,
 };
 
 export type HubListFilters = Partial<
@@ -76,6 +78,13 @@ export const impersonateOwner = (id: string, body: StartImpersonationRequest) =>
 /** One workspace's plan state (the attach dialog's input), from the plans domain. */
 export const fetchWorkspacePlan = (id: string, signal?: AbortSignal) =>
   operatorFetch(`/workspace-plans/${id}`, { schema: workspacePlanSchema, signal });
+
+/** One workspace's add-ons and why each is on or off (plan, purchase, override, hidden), from the add-on registry. */
+export const fetchWorkspaceAddons = (id: string, signal?: AbortSignal) =>
+  operatorFetch(`/addons/workspaces/${id}`, {
+    schema: operatorWorkspaceAddonsResponseSchema,
+    signal,
+  });
 
 /** Inactivity lifecycle (ADR-0028): its own operator path, a sibling of the hub's. */
 export const lifecycleKeys = {

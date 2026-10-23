@@ -433,6 +433,7 @@ describe('the Add-ons tab', () => {
         ownedRenews: false,
         state: 'buy',
         includedVia: null,
+        kind: 'feature',
       },
       {
         id: ID(2),
@@ -453,6 +454,7 @@ describe('the Add-ons tab', () => {
         ownedRenews: false,
         state: 'included',
         includedVia: 'plan',
+        kind: 'feature',
       },
     ],
     ...over,

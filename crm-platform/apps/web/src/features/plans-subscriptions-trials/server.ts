@@ -1,14 +1,20 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { entitlementsResponseSchema } from '@crm/contracts';
+import { entitlementsResponseSchema, type FeatureAddon } from '@crm/contracts';
 import { ACCESS_COOKIE } from '@/lib/auth/cookies';
 import { apiBase } from '@/lib/auth/server';
 
+export interface WorkspaceEntitlements {
+  features: ReadonlySet<string>;
+  /** The add-on that sells each feature an add-on may grant, with what this workspace's plan offers and its price. */
+  featureAddons: readonly FeatureAddon[];
+}
+
 /**
- * The plan features this workspace has, for the shell to lock the menu (TW-PLAN-021) and to draw the paywall (TW-PLAN-020). A set of keys, or
- * null when it cannot be read: unknown must never lock anything (a slow plan lookup must not make the whole menu look locked).
+ * What this workspace has, for the shell to lock the menu (TW-PLAN-021), to draw the paywall (TW-PLAN-020) and to name the add-on on a
+ * locked screen. Null when it cannot be read: unknown must never lock anything (a slow plan lookup must not make the whole menu look locked).
  */
-export async function fetchEnabledFeatures(): Promise<ReadonlySet<string> | null> {
+export async function fetchEntitlements(): Promise<WorkspaceEntitlements | null> {
   try {
     const at = (await cookies()).get(ACCESS_COOKIE)?.value;
     if (!at) return null;
@@ -19,8 +25,15 @@ export async function fetchEnabledFeatures(): Promise<ReadonlySet<string> | null
     });
     if (!res.ok) return null;
     const parsed = entitlementsResponseSchema.safeParse(await res.json());
-    return parsed.success ? new Set(parsed.data.features) : null;
+    return parsed.success
+      ? { features: new Set(parsed.data.features), featureAddons: parsed.data.featureAddons }
+      : null;
   } catch {
     return null;
   }
+}
+
+/** The plan feature keys alone (see `fetchEntitlements`); null when they cannot be read. */
+export async function fetchEnabledFeatures(): Promise<ReadonlySet<string> | null> {
+  return (await fetchEntitlements())?.features ?? null;
 }

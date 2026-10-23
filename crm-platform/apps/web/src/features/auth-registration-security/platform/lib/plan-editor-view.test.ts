@@ -43,6 +43,9 @@ describe('tabs and problems', () => {
     expect(tabForField('amount')).toBe('details');
     expect(tabForField('limits.users')).toBe('limits');
     expect(tabForField('visibleAddons')).toBe('addons');
+    // an add-on's plan price, and an offer error the API could not tie to one add-on
+    expect(tabForField('addonOffers.0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e01')).toBe('addons');
+    expect(tabForField('addonOffers')).toBe('addons');
   });
 
   it('lists the tabs with a problem in tab order, once each', () => {

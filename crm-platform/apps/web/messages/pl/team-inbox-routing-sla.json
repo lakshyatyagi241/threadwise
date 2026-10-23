@@ -200,7 +200,9 @@
       "autoReply": "Wyślij automatyczną odpowiedź",
       "autoReplyBody": "Treść odpowiedzi",
       "autoReplyHint": "Wysyłana do klienta w imieniu firmy. Poza 24-godzinnym oknem wolna odpowiedź nie jest wysyłana.",
-      "whenHint": "Każdy dodany warunek musi być spełniony."
+      "whenHint": "Każdy dodany warunek musi być spełniony.",
+      "unavailableTitle": "Reguły nie są dostępne w Twoim planie",
+      "unavailableBody": "Plan Twojego obszaru roboczego nie obejmuje reguł przydziału. Nowe czaty czekają w kolejce, skąd Twój zespół może je przejąć."
     },
     "sla": {
       "back": "Wróć do ustawień",

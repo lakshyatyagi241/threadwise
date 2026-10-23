@@ -13,6 +13,7 @@ import {
   countLimitsSet,
   isPlanDraftDirty,
   newPlanDraft,
+  offerFeatures,
   planToDraft,
   problemsFromServer,
   withToggle,
@@ -83,7 +84,7 @@ export function PlanEditor({
     retry: () => void addonQuery.refetch(),
   };
 
-  // The plain add-on packs the plan can include (a switch per pack) and, for a saved plan, who already pays for each.
+  // The plain add-on packs the plan offers (Included, Paid or Hidden per pack) and, for a saved plan, who already pays for each.
   const packQuery = useQuery({
     queryKey: PLAN_INCLUDABLE_PACKS_QUERY_KEY,
     queryFn: ({ signal }) => fetchIncludablePacks(signal),
@@ -119,9 +120,12 @@ export function PlanEditor({
           })
         : operatorFetch('/plans', { method: 'POST', body, schema: planAdminItemSchema }),
     onSuccess: (saved) => onSaved(saved, !plan),
-    onError: (err) => {
+    onError: (err, body) => {
       if (err instanceof ApiError && err.status === 422) {
-        const fromServer = problemsFromServer(err.fieldErrors);
+        // `addonOffers.<i>` errors land on the add-on the request listed at <i>.
+        const fromServer = problemsFromServer(err.fieldErrors, {
+          addonOfferIds: (body.addonOffers ?? []).map((o: { addonId: string }) => o.addonId),
+        });
         setProblems(fromServer);
         // Nothing the form can point at: say what the API said.
         if (Object.keys(fromServer).length === 0) setFailure(err);
@@ -167,6 +171,18 @@ export function PlanEditor({
         }
         return next;
       }
+      if (key === 'addonOffers') {
+        // Only the offers that actually changed lose their message (and the tab-wide one with them).
+        const next = { ...p };
+        delete next.addonOffers;
+        const offers = value as PlanDraft['addonOffers'];
+        for (const f of Object.keys(next) as PlanField[]) {
+          if (!f.startsWith('addonOffers.')) continue;
+          const id = f.slice('addonOffers.'.length);
+          if (JSON.stringify(draft.addonOffers[id]) !== JSON.stringify(offers[id])) delete next[f];
+        }
+        return next;
+      }
       if (!(key in p)) return p;
       const { [key as PlanField]: _drop, ...rest } = p;
       return rest;
@@ -184,8 +200,10 @@ export function PlanEditor({
     setFailure(null);
     // Send the add-on selection whenever the admin saw the real list (loaded) or edited it; when the options
     // never loaded and the tab was untouched, omit it so the stored selection is kept (see buildPlanRequest).
+    // Every listed plain add-on gets an offer in the request (and its features follow it), once the list has loaded.
     const built = buildPlanRequest(draft, {
       includeAddons: addonQuery.data !== undefined || addonsTouched,
+      addonPacks: packQuery.data ? packs : undefined,
     });
     if (built.problems) {
       setProblems(built.problems);
@@ -241,7 +259,8 @@ export function PlanEditor({
             active={tab}
             onChange={setTab}
             counts={{
-              featuresOn: countFeaturesOn(draft.features),
+              // What the save stores: an add-on's keys follow its offer.
+              featuresOn: countFeaturesOn({ ...draft.features, ...offerFeatures(draft, packs) }),
               limitsSet: countLimitsSet(draft.limits),
               addons: addonsSelectedCount(draft, packs),
             }}
@@ -250,7 +269,7 @@ export function PlanEditor({
               details: <PlanDetailsTab state={state} toggle={toggle} />,
               features: (
                 <>
-                  <FeaturesTab state={state} />
+                  <FeaturesTab state={state} packs={packs} />
                   <PlanModuleFields kind="features" state={state} />
                 </>
               ),
@@ -265,7 +284,7 @@ export function PlanEditor({
                   state={state}
                   addons={addons}
                   included={included}
-                  savedFeatures={initial.features}
+                  savedOffers={initial.addonOffers}
                   readOnly={!canEdit}
                   onTouched={() => setAddonsTouched(true)}
                 />

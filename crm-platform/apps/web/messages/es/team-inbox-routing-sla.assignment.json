@@ -4,6 +4,7 @@
       "switches": {
         "title": "Asignación de chats",
         "intro": "Cuatro interruptores cubren la mayoría de los espacios de trabajo: actívalos y no tendrás que crear ninguna regla.",
+        "introBasic": "Tu plan no asigna los chats automáticamente: los chats nuevos esperan en la cola hasta que alguien los toma. Estos ajustes siguen aplicándose.",
         "order": "El orden para un chat nuevo: primero el propietario del contacto y el Agente fijo, luego tus reglas (si añades alguna), después Todos los demás y por último la cola de espera.",
         "readOnly": "Puedes ver estos interruptores, pero no cambiarlos.",
         "saved": "Guardado.",
@@ -11,8 +12,6 @@
         "loading": "Cargando los ajustes de asignación",
         "loadFailed": "No se pudieron cargar los ajustes de asignación.",
         "retry": "Reintentar",
-        "notInPlan": "No incluido en tu plan",
-        "upgradeHint": "Incluido en el complemento Enrutamiento inteligente o en un plan superior.",
         "stepFirst": "Se comprueba primero",
         "stepMaster": "Interruptor principal",
         "stepAfter": "Tras tomar un chat",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "¿Necesitas más control? Añade reglas",
         "intro": "Opcional. Las reglas envían chats concretos (de un canal, con ciertas palabras en el mensaje, de un contacto nuevo...) a agentes o equipos concretos. Si los cuatro interruptores te bastan, no tendrás que crear ninguna.",
-        "locked": "Las reglas forman parte del complemento Enrutamiento inteligente o de un plan superior. Sigues teniendo la cola de espera, reclamar chats y la asignación manual.",
         "pipelineTitle": "Cómo se asigna un chat nuevo",
         "pipeline": {
           "agent": "1. Propietario del contacto y Agente fijo",

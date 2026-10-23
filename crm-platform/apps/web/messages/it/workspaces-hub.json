@@ -234,7 +234,29 @@
         "ends": "Scade",
         "limits": "Limiti effettivi",
         "edit": "Modifica e cambia piano",
-        "overrideNote": "Questo workspace ha limiti propri che sostituiscono quelli del piano."
+        "overrideNote": "Questo workspace ha limiti propri che sostituiscono quelli del piano.",
+        "addons": {
+          "title": "Componenti aggiuntivi",
+          "intro": "Cosa ha questo spazio di lavoro di ogni componente aggiuntivo, e perché.",
+          "empty": "Nessun componente aggiuntivo in vendita.",
+          "kind": {
+            "feature": "Componente funzionalità",
+            "capacity": "Componente capacità"
+          },
+          "source": {
+            "plan": "Incluso nel piano",
+            "override": "Attivato da una deroga",
+            "platform": "Spazio di lavoro della piattaforma",
+            "bought": "Acquistato",
+            "buy": "Acquistabile",
+            "unavailable": "Serve un piano a pagamento",
+            "hidden": "Nascosto in questo piano"
+          },
+          "renews": "Si rinnova il {date}",
+          "ends": "Termina il {date}",
+          "lifetime": "Nessuna data di fine",
+          "overrides": "{count, plural, one {# deroga di funzionalità prevale} other {# deroghe di funzionalità prevalgono}} sul piano: {keys}. Rimuovile in Modifica e cambia piano."
+        }
       },
       "walletTab": {
         "open": "Apri il wallet completo",

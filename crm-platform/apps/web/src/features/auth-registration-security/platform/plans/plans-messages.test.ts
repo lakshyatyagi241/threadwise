@@ -49,6 +49,8 @@ const dynamic: string[] = [
   ]),
   `${NS}.editor.tabSummary.error`,
   `${NS}.editor.problems.unknownAddon`,
+  `${NS}.editor.problems.addonPriceZero`,
+  `${NS}.editor.problems.addonGone`,
   ...['features', 'limits', 'addons', 'entitlements'].map((c) => `${NS}.table.${c}`),
   ...['ratio', 'features', 'limits', 'addons'].map((c) => `${NS}.counts.${c}`),
   ...PLAN_LIMIT_GROUPS.map((g) => `${NS}.editor.limitGroups.${g}`),

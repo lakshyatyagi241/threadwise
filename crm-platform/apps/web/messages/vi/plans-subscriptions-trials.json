@@ -570,15 +570,21 @@
       "appLink": "Xem ứng dụng",
       "addonHint": "Bạn cũng có thể thêm vào gói hiện tại bằng tiện ích {addon}.",
       "addonLink": "Xem tiện ích",
-      "addons": {
-        "smartRouting": "Định tuyến thông minh",
-        "teamsPermissions": "Nhóm và quyền"
-      },
       "addonsTabHint": "Tiện ích bổ sung không cần gói của bạn có Marketplace. Bạn vẫn có thể xem những gì mình có và mua tiện ích bổ sung trong Gói và tiện ích bổ sung.",
-      "addonsTabLink": "Mở Gói và tiện ích bổ sung"
+      "addonsTabLink": "Mở Gói và tiện ích bổ sung",
+      "addonHintGeneric": "Gói của bạn cũng có thể cung cấp tính năng này dưới dạng tiện ích bổ sung."
     },
     "lock": {
-      "link": "Xem gói và tiện ích"
+      "link": "Xem gói và tiện ích",
+      "offTitle": "Không có trong gói của bạn",
+      "offLead": "Phần này hiện không có trong gói của không gian làm việc.",
+      "buyTitle": "Thêm {addon} với giá {price}",
+      "buyLead": "Gói của bạn cung cấp {addon} dưới dạng tiện ích bổ sung. Thêm nó để bật phần này.",
+      "buyLink": "Xem tiện ích",
+      "askOwner": "Hãy nhờ chủ tài khoản thêm tiện ích này.",
+      "unavailableTitle": "{addon} cần một gói trả phí đang hoạt động",
+      "unavailableLead": "Hãy chọn một gói trả phí trước, sau đó bạn có thể thêm {addon} vào gói đó.",
+      "viewPlans": "Xem các gói"
     }
   }
 }
