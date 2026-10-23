@@ -14,7 +14,7 @@ description: >-
 
 Flow: `docs/runbooks/team-incident-flow.md`; setup for a new teammate: `docs/runbooks/team-onboarding-claude.md`. Tool: `node tools/chat-bridge/incident-cli.mjs` (config in `~/.config/threadwise/incidents.env`, mode 600, made by `incident-cli init`, checked by `incident-cli doctor`; never print it or paste it anywhere). Identity is `INCIDENT_WHO` from that file: 1-40 chars of letters, digits, space . _ @ - (NO parentheses; `Vedant-Claude` works, `Vedant (Claude)` gets 400). `INCIDENT_API_URL` is the host only, without `/incidents`. No SSH is needed or allowed.
 
-**5-minute auto-claim mode** (`/loop 5m`, prompt in `docs/runbooks/incident-schedule-prompt.md`): pick the oldest open `critical_alert` / `code_fix` / `deploy_failure` / `sentry_issue`, claim it (409 = next one), handle exactly ONE incident per run, answer in one line when nothing is open.
+**2-minute auto-claim mode** (`/loop 2m`, prompt in `docs/runbooks/incident-schedule-prompt.md`): pick the oldest open `critical_alert` / `code_fix` / `deploy_failure` / `sentry_issue`, claim it (409 = next one), handle exactly ONE incident per run, answer in one line when nothing is open.
 
 ## Rules that never bend
 
