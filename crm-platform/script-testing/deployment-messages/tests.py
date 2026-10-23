@@ -32,15 +32,19 @@ class Api(http.server.BaseHTTPRequestHandler):
         if MODE["fail"] == "slow": time.sleep(9)
         if self.headers.get("Authorization") != "Bearer " + TOKEN: return self._send(401, {})
         m = re.match(r"/repos/o/r/compare/(\w+)\.\.\.(\w+)$", self.path)
+        if m and FIX.get("by_tag"): return self._send(200, {"commits": [commit(m.group(2), f"Add feature (#{1000 + int(m.group(2), 16)})", "carol")]})
         if m: return self._send(200, {"commits": FIX.get("compare", [])})
         # Like the real GitHub: the commit->pulls LIST has no merged_by; only GET /pulls/<n> (the full PR) carries it.
         m = re.match(r"/repos/o/r/commits/(\w+)/pulls$", self.path)
+        if m and FIX.get("by_tag") and re.fullmatch(r"[0-9a-f]{7}", m.group(1)): return self._send(200, [{"number": 1000 + int(m.group(1), 16), "title": "T", "user": {"login": "carol"}}])
         if m: return self._send(200, [{k: v for k, v in p.items() if k != "merged_by"} for p in FIX.get("pulls", {}).get(m.group(1), [])])
         m = re.match(r"/repos/o/r/pulls/(\d+)$", self.path)
+        if m and FIX.get("by_tag"): return self._send(200, pr(int(m.group(1)), "T", "carol", "bob"))
         if m:
             full = [p for ps in FIX.get("pulls", {}).values() for p in ps if p.get("number") == int(m.group(1))]
             return self._send(200, full[0]) if full else self._send(404, {})
         m = re.match(r"/repos/o/r/commits/(\w+)$", self.path)
+        if m and FIX.get("by_tag") and re.fullmatch(r"[0-9a-f]{7}", m.group(1)): return self._send(200, commit(m.group(1), f"Add feature (#{1000 + int(m.group(1), 16)})", "carol"))
         if m: return self._send(200, FIX.get("single", {}))
         self._send(404, {})
 
@@ -171,7 +175,7 @@ D = tempfile.mkdtemp(); BIN = tempfile.mkdtemp()
 open(f"{D}/.slot", "w").write("blue\n"); open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={A[:9]}\nIMAGE_TAG={B[:9]}\n")
 open(f"{D}/url", "w").write(f"http://127.0.0.1:{chat.server_port}/hook\n")
 open(f"{BIN}/pgrep", "w").write(f"#!/bin/sh\n[ -f {D}/running ] && echo 4242\n"); os.chmod(f"{BIN}/pgrep", 0o755)
-wenv = {**ENV, "PATH": f"{BIN}:{os.environ['PATH']}", "DESK_DIR": D, "DESK_WATCH_URL_FILE": f"{D}/url", "DESK_WATCH_POLL": "1", "DESK_WATCH_SETTLE": "0", "DESK_WATCH_PROC": f"{D}/proc"}
+wenv = {**ENV, "PATH": f"{BIN}:{os.environ['PATH']}", "DESK_DIR": D, "DESK_WATCH_URL_FILE": f"{D}/url", "DESK_WATCH_POLL": "1", "DESK_WATCH_SETTLE": "0", "DESK_WATCH_PROC": f"{D}/proc", "DESK_WATCH_DB_POLL": "99999"}
 def deploy_call(cmd):
     """a running ci-entry.sh as sshd starts it: the forced command's argument is in SSH_ORIGINAL_COMMAND"""
     os.makedirs(f"{D}/proc/4242", exist_ok=True)
@@ -203,6 +207,7 @@ check("watcher: no secret path or token in the docker args", "ARGS" in dlog and 
 # deploy ends with the SAME live tag -> deploy_failure incident; then a failing docker must not block the post
 C = "c" * 40
 for fail in (False, True):
+    C = "c" * 40 if not fail else "d" * 40
     chat_posts.clear(); open(f"{D}/docker.log", "w").close()
     if fail: open(f"{D}/docker_fail", "w").close()
     open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={C}\n"); deploy_call(f"release {C} c7ec49a9-2d5a-4275-bd24-1ad2d94b4beb"); time.sleep(2.5)
@@ -227,6 +232,73 @@ check("notify-chat.sh uses the standard format", len(chat_posts) == 1 and "#34" 
 chat_posts.clear()
 subprocess.run(["bash", NOTIFY, "failed", B, "61", "see log"], env={**ENV, "GITHUB_TOKEN": "", "DEPLOY_MSG_TOKEN_FILE": "/nonexistent", "DESK_CI_GCHAT_URL_FILE": f"{D}/curl_url", "DESK_CI_FORMATTER": FMT, "DESK_CI_LOGS": D}, timeout=60)
 check("notify-chat.sh falls back without token", len(chat_posts) == 1 and "PR details unavailable" in chat_posts[0]["text"] and chat_posts[0]["text"].startswith("⚠️"), str(chat_posts))
+
+# 13 database-driven watcher: fake docker prints canned psql rows from a file edited during the test
+FIX.clear(); FIX["by_tag"] = True
+D2 = tempfile.mkdtemp(); B2 = tempfile.mkdtemp(); S2 = tempfile.mkdtemp()
+open(f"{D2}/.slot", "w").write("blue\n"); open(f"{D2}/.env", "w").write("SLOT_BLUE_TAG=0000001\nPOSTGRES_USER=crm\nPOSTGRES_DB=crmdb\nPOSTGRES_PASSWORD=" + TOKEN + "\n")
+open(f"{D2}/url", "w").write(f"http://127.0.0.1:{chat.server_port}/hook\n"); open(f"{D2}/rows", "w").close()
+open(f"{B2}/pgrep", "w").write("#!/bin/sh\n[ -f %s/running ] && echo 4242\nexit 0\n" % D2); os.chmod(f"{B2}/pgrep", 0o755)
+open(f"{B2}/docker", "w").write(f"""#!/bin/sh
+case "$*" in
+  *psql*) cat >> {D2}/sql.log; echo "ARGS $*" >> {D2}/psql_args.log; [ -f {D2}/psql_fail ] && {{ echo "psql: error: connection refused" >&2; exit 2; }}; cat {D2}/rows; exit 0 ;;
+  *) b=$(cat); echo "ARGS $*" >> {D2}/docker.log; echo "BODY $b" >> {D2}/docker.log ;;
+esac
+""".replace("{{", "{").replace("}}", "}")); os.chmod(f"{B2}/docker", 0o755)
+w2env = {**ENV, "PATH": f"{B2}:{os.environ['PATH']}", "DESK_DIR": D2, "DESK_WATCH_STATE": S2, "DESK_WATCH_URL_FILE": f"{D2}/url", "DESK_WATCH_POLL": "1", "DESK_WATCH_DB_POLL": "1", "DESK_WATCH_SETTLE": "0", "DESK_WATCH_PROC": f"{D2}/proc", "BUILD_STUCK_MINUTES": "20", "DESK_WATCH_DB_FAIL_SECS": "3"}
+NOWE = 2_000_000_000
+def row(i, st, step="", started_ago=0, err="", att=None):  # attempt|tag|state|step|started|updated|dbnow|error  (tag = 7 hex)
+    return f"{att or '00000000-0000-0000-0000-%012d' % i}|{i:07x}|{st}|{step}|{NOWE - started_ago}|{NOWE - started_ago}|{NOWE}|{err}\n"
+def setrows(*r): open(f"{D2}/rows", "w").write("".join(r))
+def start_w():
+    return subprocess.Popen(["bash", WATCH], env=w2env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+def texts(): return [p["text"] for p in chat_posts]
+def bodies(): return open(f"{D2}/docker.log").read() if os.path.exists(f"{D2}/docker.log") else ""
+chat_posts.clear()
+w2 = start_w(); time.sleep(3.5)
+check("db: empty table posts nothing; heartbeat written; --selftest ok", not chat_posts and os.path.exists(f"{S2}/heartbeat") and subprocess.run(["bash", WATCH, "--selftest"], env=w2env).returncode == 0)
+setrows(row(1, "releasing", "hooks", 30)); wait_for(lambda: len(chat_posts) >= 1, 6); time.sleep(3)
+setrows(row(1, "ok", "commit", 60)); wait_for(lambda: len(chat_posts) >= 2, 6); time.sleep(4)
+check("db: releasing then ok posts exactly 2 messages, no repeat over polls", len(chat_posts) == 2 and texts()[0].startswith("🚀 *Deploy in progress*") and "#1001" in texts()[0] and texts()[1].startswith("✅ *Release live*") and "Deployed by: @bob" in texts()[1], str(texts()))
+check("db: ok resolves incident through /release", wait_for(lambda: '"sha": "0000001"' in bodies(), 8), bodies())
+chat_posts.clear(); open(f"{D2}/docker.log", "w").close()
+setrows(row(2, "failed", "hooks", 90, "migration 0042 failed: relation x does not exist"), row(1, "ok", "commit", 60)); wait_for(lambda: chat_posts, 6); time.sleep(4)
+inc = bodies().count('"kind": "deploy_failure"')
+check("db: failed posts step + error once and opens exactly one incident", len(chat_posts) == 1 and texts()[0].startswith("❌ Release failed at step hooks: migration 0042 failed") and inc == 1, f"{texts()} inc={inc}")
+chat_posts.clear(); open(f"{D2}/docker.log", "w").close()
+setrows(row(3, "building", "build", 5 * 60), row(2, "failed", "hooks", 90, "x"))
+time.sleep(4)
+check("db: building row younger than 20 min posts nothing", not chat_posts, str(texts()))
+stuck = [row(100 + i, "building", "build", (30 + i) * 60) for i in range(14)]
+setrows(*stuck, row(3, "building", "build", 5 * 60)); wait_for(lambda: chat_posts, 8); time.sleep(5)
+b = bodies(); shas = set(re.findall(r'"attemptedSha": "(\w+)"', b))
+check("db: 14 stuck builds -> ONE grouped message, 8 listed", len(chat_posts) == 1 and "14 builds are stuck" in texts()[0] and texts()[0].count("#") == 8 and "(+6 more)" in texts()[0], str(texts()))
+wait_for(lambda: len(set(re.findall(r'"attemptedSha": "(\w+)"', bodies()))) >= 14, 15)
+shas = set(re.findall(r'"attemptedSha": "(\w+)"', bodies()))
+check("db: one deploy_failure incident per stuck tag", len(shas) == 14 and bodies().count('"kind": "deploy_failure"') == 14, f"{len(shas)} {bodies().count('deploy_failure')}")
+w2.terminate(); w2.wait(); n = len(chat_posts); w2 = start_w(); time.sleep(5)
+check("db: no repeats after watcher restart (state file)", len(chat_posts) == n and len(bodies().split("BODY")) - 1 == 14, f"{len(chat_posts)} vs {n}")
+chat_posts.clear(); open(f"{D2}/docker.log", "w").close()
+setrows(*stuck[1:], row(100, "ok", "commit", 40 * 60, att="00000000-0000-0000-0000-0000000000aa"), row(100, "building", "build", 40 * 60)); time.sleep(5)
+check("db: stuck tag later ok -> stuck message not repeated, incident resolved via /release", not any("stuck" in t for t in texts()) and '"sha": "0000064"' in bodies(), f"{texts()} {bodies()[:300]}")
+chat_posts.clear(); open(f"{D2}/psql_fail", "w").close(); wait_for(lambda: chat_posts, 12); time.sleep(5)
+check("db: psql failing for the limit posts the self-check ONCE", len(chat_posts) == 1 and texts()[0].startswith("⚠️ *Deployment watcher cannot see releases*"), str(texts()))
+sql = open(f"{D2}/sql.log").read(); args = open(f"{D2}/psql_args.log").read()
+check("db: SQL is a read-only SELECT (no write keywords)", sql.lstrip().upper().startswith("SELECT") and not re.search(r"\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|TRUNCATE|GRANT)\b", sql.upper()) and "LIMIT 30" in sql, sql[:200])
+check("db: password never in docker args or logs", TOKEN not in args and TOKEN not in open(f"{S2}/watch.log").read() and "-U crm -d crmdb" in args and "-X -q -t -A -F |" in args, args[:300])
+w2.terminate(); w2.wait()
+# process mode with the REAL command shape still works when the DB path is down (psql_fail still set)
+S3 = tempfile.mkdtemp(); chat_posts.clear()
+open(f"{D2}/.env", "w").write("SLOT_BLUE_TAG=%s\nPOSTGRES_USER=crm\nPOSTGRES_DB=crmdb\n" % ("a" * 9))
+os.makedirs(f"{D2}/proc/4242", exist_ok=True)
+open(f"{D2}/proc/4242/environ", "wb").write(b"SSH_ORIGINAL_COMMAND=release " + b"b" * 9 + b" c7ec49a9-2d5a-4275-bd24-1ad2d94b4beb\0"); open(f"{D2}/running", "w").close()
+w3 = subprocess.Popen(["bash", WATCH], env={**w2env, "DESK_WATCH_STATE": S3, "DESK_WATCH_DB_FAIL_SECS": "99999"}, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+wait_for(lambda: chat_posts, 8); w3.terminate(); w3.wait()
+check("process mode: real `release <sha> <uuid>` shape announces with the DB path down", len(chat_posts) == 1 and chat_posts[0]["text"].startswith("🚀") and "bbbbbbbbb" in chat_posts[0]["text"], str(texts()))
+# selftest fails on a stale heartbeat
+open(f"{S3}/heartbeat", "w").write(str(int(time.time()) - 500))
+check("--selftest exits 1 when the heartbeat is older than 120 s", subprocess.run(["bash", WATCH, "--selftest"], env={**ENV, "DESK_WATCH_STATE": S3}, capture_output=True).returncode == 1)
+for d in (D2, B2, S2, S3): shutil.rmtree(d, ignore_errors=True)
 
 shutil.rmtree(D, ignore_errors=True); shutil.rmtree(STATE, ignore_errors=True)
 bad = [n for n, ok in results if not ok]

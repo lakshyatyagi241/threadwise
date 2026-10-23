@@ -120,7 +120,7 @@ def build(ev, prev, new, secs, note):
         icon, title = "⚠️", f"Build did not finish for {(new or '')[:9]} (stuck at build for {secs} min). The release was not shipped."
         secs = ""
     new, prev = (new or "")[:9], (prev or "")[:9]
-    head = [f"{icon} *{title}*".strip()]
+    head = [title if ev == "dbfailed" else f"{icon} *{title}*"]
     ver = f"Version: `{new or 'unknown'}`" + (f" (was `{prev}`)" if prev else "")
     link = f"{WEB}/commit/{new}" if sha_ok(new) else ""
     tail = []

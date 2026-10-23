@@ -46,6 +46,21 @@ Deployed by: @dave
 ### Safety
 All GitHub text is untrusted: control characters and markdown/mention characters (`* _ ~ ` [ ] < > @ | \`) are removed, titles cut to 100 chars, logins must match `[A-Za-z0-9-]` (else `unknown`). The token is read from env or file by the formatter and sent as an HTTP header (never an argument, so not in `ps`), never printed or logged. Lookups are cached per request for 1 hour in `/var/lib/desk-release-watch/`.
 
+## Database-driven events (platform_releases)
+The watcher also reads `platform_releases` (last 30 rows by `updated_at`, one read-only SELECT every 20 s through `docker compose --env-file .env exec -T postgres psql`, path `/opt/desk` or `DESK_DIR`). Columns used: `attempt, tag, state, step, error, started_at, updated_at` (migration `20270204090000_platform_releases.sql`; states `building, shipping, releasing, ok, failed, rolled_back`). Process sniffing stays as the fallback; both share one dedupe state (`/var/lib/desk-release-watch/seen/<tag7>.<state>`), so a tag+state is announced once, also across restarts. If the table does not exist the watcher logs once and runs in process mode. The first run after install marks existing history as seen (no replay of old releases) but still reports builds that are stuck.
+
+| Row state | Message |
+|---|---|
+| `releasing` (first seen) | 🚀 Deploy in progress (PR, author, deployed by, commit link) |
+| `ok` | ✅ Release live (duration = since first seen releasing); calls bridge `/release`, which resolves the incident |
+| `failed` / `rolled_back` | ❌ Release failed at step `<step>`: `<error, 200 chars>`; opens a `deploy_failure` incident |
+| `building` longer than `BUILD_STUCK_MINUTES` (default 20) | ⚠️ Build did not finish for `<sha>` (stuck at build for N min). The release was not shipped. Once per tag, plus a `deploy_failure` incident per tag. Several at once: ONE message "N builds are stuck: #PRs..." (8 listed) |
+| no read for 10 min, or a live release with no row after 2 min | ⚠️ Deployment watcher cannot see releases (reason), once |
+
+**Why (production evidence):** the process sniffer had a regex bug (real call is `release <sha> <attempt-uuid>`, fixed in PR #936) and announced nothing for 17 hours. It also cannot see build failures: production `platform_releases` showed **14 attempts stuck at `state='building', step='build'` for 9 hours (13:39 to 20:46 UTC)** and nobody was told. Nothing alerted that the watcher itself had gone blind.
+
+**Watcher health:** the loop writes `/var/lib/desk-release-watch/heartbeat` (epoch seconds) every pass. `desk-release-watch.sh --selftest` exits 1 if it is missing or older than 120 s (use from cron or any monitor; no systemd `WatchdogSec` needed).
+
 ## Create the GitHub token (read-only)
 1. Sign in to GitHub as `lakshyatyagi241` (or an owner), open **Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token**.
 2. Token name `desk-release-watch`; **Resource owner** `lakshyatyagi241`; **Expiration** 90 days.
