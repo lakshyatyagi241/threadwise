@@ -1,5 +1,6 @@
 import {
   canMoveConversationStatus,
+  isFinishedWebchat,
   type BulkConversationsResponse,
   type BulkItemResult,
   type ConversationStatus,
@@ -141,6 +142,11 @@ export interface PickedState {
   someSpam: boolean;
   /** Some picked conversation is snoozed. Reopen (status open) would wake it, so Reopen is not offered. */
   someSnoozed: boolean;
+  /**
+   * Some picked conversation is a resolved or closed web chat: it takes no reopen, snooze or spam mark (the API refuses each), so the bar
+   * offers none of them while one is picked.
+   */
+  someFinishedWebchat: boolean;
   canUnassign: boolean;
   canRemoveTeam: boolean;
   /** False once every picked conversation is assigned to the caller already. */
@@ -165,11 +171,18 @@ export function pickedState(picked: ReadonlyArray<ConversationSummary>, meId: st
     allRead: every((r) => r.unreadCount === 0),
     someSpam: some((r) => r.status === 'spam'),
     someSnoozed: some((r) => r.status === 'snoozed'),
+    someFinishedWebchat: some((r) => isFinishedWebchat(r.channel.kind, r.status)),
     canUnassign: none || some((r) => r.assignment.user !== null),
     canRemoveTeam: none || some((r) => r.assignment.team !== null),
     canAssignMe: !every((r) => isMine(r, meId)),
     canMoveTo: (to) =>
-      none || some((r) => r.status !== to && canMoveConversationStatus(r.status, to)),
+      none ||
+      some(
+        (r) =>
+          r.status !== to &&
+          canMoveConversationStatus(r.status, to) &&
+          !(to === 'open' && isFinishedWebchat(r.channel.kind, r.status)),
+      ),
     canAddTag: (tagId) => none || !every((r) => hasTag(r, tagId)),
     canRemoveTag: (tagId) => none || some((r) => hasTag(r, tagId)),
   };

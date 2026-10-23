@@ -328,6 +328,7 @@
       },
       "readOnly": "Je kunt dit gesprek lezen, maar je hebt geen toestemming om te antwoorden.",
       "resolvedBanner": "Dit gesprek is opgelost. Heropen het om te antwoorden.",
+      "resolvedWebchatBanner": "Deze webchat is opgelost en kan niet opnieuw worden geopend.",
       "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
       "messagesLabel": "Berichten",

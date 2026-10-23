@@ -328,6 +328,7 @@
       },
       "readOnly": "Bạn có thể đọc cuộc trò chuyện này nhưng không có quyền trả lời.",
       "resolvedBanner": "Cuộc trò chuyện này đã được giải quyết. Hãy mở lại để trả lời.",
+      "resolvedWebchatBanner": "Cuộc trò chuyện web này đã được giải quyết và không thể mở lại.",
       "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
       "messagesLabel": "Tin nhắn",

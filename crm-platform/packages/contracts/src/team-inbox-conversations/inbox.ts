@@ -44,6 +44,15 @@ export function canMoveConversationStatus(
   return from === to || MOVES[from].includes(to);
 }
 
+/**
+ * A web chat that is resolved or closed is final for an agent. Its visitor's chat is over, so no route brings it back: not the status
+ * route (a reopen), not a snooze (it wakes as open), not the spam mark (taking it off spam is a reopen). The API refuses all three and
+ * the inbox offers none of them. Every other channel keeps the moves above.
+ */
+export function isFinishedWebchat(channelKind: string, status: ConversationStatus): boolean {
+  return channelKind === 'webchat' && (status === 'resolved' || status === 'closed');
+}
+
 // --- detail -------------------------------------------------------------------------------------------------------------
 
 /** The linked contact as the side panel shows it. Read through the contacts barrel; the panel links to the contact for the rest. */

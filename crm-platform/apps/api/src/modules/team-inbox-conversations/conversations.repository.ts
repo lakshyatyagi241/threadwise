@@ -71,6 +71,8 @@ export interface LockedConversation {
   id: number;
   uuid: string;
   channelId: number;
+  /** The channel's adapter family (`webchat`, `whatsapp_cloud`, ...): a finished web chat is final, whatever the channel did before. */
+  channelKind: string;
   status: string;
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
@@ -448,17 +450,20 @@ export class ConversationsRepository {
    */
   async lockByUuid(tx: Tx, orgId: number, uuid: string): Promise<LockedConversation | null> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.uuid, c.channel_id, c.status, c.assignee_user_id, c.assignee_team_id, c.assignee_agent_id,
+      SELECT c.id, c.uuid, c.channel_id, ch.kind AS channel_kind, c.status, c.assignee_user_id, c.assignee_team_id, c.assignee_agent_id,
              ${channelOwnerSql('c')} AS channel_owner_user_id,
              ${sql.raw(ts('c.resolved_at'))} AS resolved_at, c.row_version,
              c.handling, c.assigned_source, c.contact_id
-      FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid} FOR UPDATE OF c`);
+      FROM conversations c
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND c.uuid = ${uuid} FOR UPDATE OF c`);
     const r = rowsOf(res)[0];
     if (!r) return null;
     return {
       id: Number(r.id),
       uuid: r.uuid as string,
       channelId: Number(r.channel_id),
+      channelKind: r.channel_kind as string,
       status: r.status as string,
       assigneeUserId: int(r.assignee_user_id),
       assigneeTeamId: int(r.assignee_team_id),
