@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} ต่อหน้า",
       "colCreatedBy": "สร้างโดย",
       "colCreatedAt": "สร้างเมื่อ",
-      "colModifiedBy": "แก้ไขโดย",
-      "activity": "กิจกรรม",
-      "activityTitle": "กิจกรรมของเซ็กเมนต์"
+      "colModifiedBy": "แก้ไขโดย"
     },
     "actions": {
       "forbidden": "คุณไม่มีสิทธิ์ทำเช่นนั้น",

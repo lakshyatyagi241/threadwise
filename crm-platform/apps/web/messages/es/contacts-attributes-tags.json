@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {Ningún grupo} one {# grupo} other {# grupos}}",
       "noResultsTitle": "Ningún grupo coincide",
       "noResults": "Ningún nombre de grupo contiene lo que escribiste.",
-      "clearSearch": "Borrar búsqueda",
-      "activity": "Actividad",
-      "activityTitle": "Actividad de grupos"
+      "clearSearch": "Borrar búsqueda"
     },
     "import": {
       "eyebrow": "Importación masiva",

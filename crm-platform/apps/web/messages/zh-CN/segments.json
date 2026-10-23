@@ -199,9 +199,7 @@
       "perPageOption": "每页 {count, number} 条",
       "colCreatedBy": "创建人",
       "colCreatedAt": "创建时间",
-      "colModifiedBy": "修改人",
-      "activity": "活动记录",
-      "activityTitle": "分段活动记录"
+      "colModifiedBy": "修改人"
     },
     "actions": {
       "forbidden": "您没有执行此操作的权限。",

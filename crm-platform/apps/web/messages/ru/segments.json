@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} на странице",
       "colCreatedBy": "Создал",
       "colCreatedAt": "Создано",
-      "colModifiedBy": "Изменил",
-      "activity": "Журнал действий",
-      "activityTitle": "Журнал действий с сегментами"
+      "colModifiedBy": "Изменил"
     },
     "actions": {
       "forbidden": "У вас нет прав на это действие.",

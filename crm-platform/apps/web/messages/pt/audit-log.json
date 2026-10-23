@@ -176,25 +176,6 @@
     "common": {
       "close": "Fechar",
       "dismiss": "Dispensar"
-    },
-    "moduleActivity": {
-      "close": "Fechar",
-      "window": "Alterações dos últimos 30 dias, das mais recentes às mais antigas.",
-      "search": "Pesquisar atividade",
-      "searchPlaceholder": "Pesquisar por pessoa, ação ou campo",
-      "count": "{count, plural, =0 {Nenhum registro} one {# registro} other {# registros}}",
-      "loading": "Carregando atividade...",
-      "loadFailed": "Não foi possível carregar a atividade.",
-      "retry": "Tentar novamente",
-      "emptyTitle": "Nenhuma atividade ainda",
-      "empty": "As alterações feitas nesta tela aparecem aqui.",
-      "emptyFilteredTitle": "Nada corresponde",
-      "emptyFiltered": "Nenhum registro tem essa pessoa, ação ou campo.",
-      "colWhen": "Quando",
-      "colWho": "Quem",
-      "colWhat": "O quê",
-      "loadedOnly": "A pesquisa cobre apenas os registros carregados até agora.",
-      "loadMore": "Carregar mais"
     }
   }
 }

@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {Không có nhóm} one {# nhóm} other {# nhóm}}",
       "noResultsTitle": "Không có nhóm nào khớp",
       "noResults": "Không có tên nhóm nào chứa nội dung bạn nhập.",
-      "clearSearch": "Xóa tìm kiếm",
-      "activity": "Hoạt động",
-      "activityTitle": "Hoạt động nhóm"
+      "clearSearch": "Xóa tìm kiếm"
     },
     "import": {
       "eyebrow": "Nhập hàng loạt",

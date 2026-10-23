@@ -176,25 +176,6 @@
     "common": {
       "close": "Cerrar",
       "dismiss": "Descartar"
-    },
-    "moduleActivity": {
-      "close": "Cerrar",
-      "window": "Cambios de los últimos 30 días, del más reciente al más antiguo.",
-      "search": "Buscar actividad",
-      "searchPlaceholder": "Buscar por persona, acción o campo",
-      "count": "{count, plural, =0 {Ningún registro} one {# registro} other {# registros}}",
-      "loading": "Cargando actividad...",
-      "loadFailed": "No se pudo cargar la actividad.",
-      "retry": "Reintentar",
-      "emptyTitle": "Aún no hay actividad",
-      "empty": "Los cambios hechos en esta pantalla aparecen aquí.",
-      "emptyFilteredTitle": "Nada coincide",
-      "emptyFiltered": "Ningún registro tiene esa persona, acción o campo.",
-      "colWhen": "Cuándo",
-      "colWho": "Quién",
-      "colWhat": "Qué",
-      "loadedOnly": "La búsqueda cubre los registros cargados hasta ahora.",
-      "loadMore": "Cargar más"
     }
   }
 }

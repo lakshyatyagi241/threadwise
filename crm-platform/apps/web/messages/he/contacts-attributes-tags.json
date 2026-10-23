@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {אין קבוצות} one {קבוצה אחת} other {# קבוצות}}",
       "noResultsTitle": "אין קבוצות תואמות",
       "noResults": "אף שם קבוצה אינו מכיל את מה שהקלדת.",
-      "clearSearch": "ניקוי החיפוש",
-      "activity": "פעילות",
-      "activityTitle": "פעילות קבוצות"
+      "clearSearch": "ניקוי החיפוש"
     },
     "import": {
       "eyebrow": "ייבוא בכמות גדולה",

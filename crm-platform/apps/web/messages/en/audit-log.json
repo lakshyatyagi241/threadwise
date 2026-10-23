@@ -176,25 +176,6 @@
     "common": {
       "close": "Close",
       "dismiss": "Dismiss"
-    },
-    "moduleActivity": {
-      "close": "Close",
-      "window": "Changes from the last 30 days, newest first.",
-      "search": "Search activity",
-      "searchPlaceholder": "Search by person, action or field",
-      "count": "{count, plural, =0 {No entries} one {# entry} other {# entries}}",
-      "loading": "Loading activity...",
-      "loadFailed": "The activity could not be loaded.",
-      "retry": "Try again",
-      "emptyTitle": "No activity yet",
-      "empty": "Changes made on this screen show up here.",
-      "emptyFilteredTitle": "Nothing matches",
-      "emptyFiltered": "No entry has that person, action or field.",
-      "colWhen": "When",
-      "colWho": "Who",
-      "colWhat": "What",
-      "loadedOnly": "Search covers the entries loaded so far.",
-      "loadMore": "Load more"
     }
   }
 }

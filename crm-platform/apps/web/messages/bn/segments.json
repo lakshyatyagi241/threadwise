@@ -199,9 +199,7 @@
       "perPageOption": "প্রতি পৃষ্ঠায় {count, number}",
       "colCreatedBy": "তৈরি করেছেন",
       "colCreatedAt": "তৈরির সময়",
-      "colModifiedBy": "সংশোধন করেছেন",
-      "activity": "কার্যকলাপ",
-      "activityTitle": "সেগমেন্টের কার্যকলাপ"
+      "colModifiedBy": "সংশোধন করেছেন"
     },
     "actions": {
       "forbidden": "এটি করার অনুমতি আপনার নেই।",

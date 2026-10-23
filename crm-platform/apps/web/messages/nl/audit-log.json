@@ -176,25 +176,6 @@
     "common": {
       "close": "Sluiten",
       "dismiss": "Negeren"
-    },
-    "moduleActivity": {
-      "close": "Sluiten",
-      "window": "Wijzigingen van de afgelopen 30 dagen, nieuwste eerst.",
-      "search": "Activiteit doorzoeken",
-      "searchPlaceholder": "Zoeken op persoon, actie of veld",
-      "count": "{count, plural, =0 {Geen items} one {# item} other {# items}}",
-      "loading": "Activiteit laden...",
-      "loadFailed": "De activiteit kon niet worden geladen.",
-      "retry": "Opnieuw proberen",
-      "emptyTitle": "Nog geen activiteit",
-      "empty": "Wijzigingen op dit scherm verschijnen hier.",
-      "emptyFilteredTitle": "Niets gevonden",
-      "emptyFiltered": "Geen item heeft die persoon, actie of dat veld.",
-      "colWhen": "Wanneer",
-      "colWho": "Wie",
-      "colWhat": "Wat",
-      "loadedOnly": "Zoeken geldt alleen voor de tot nu toe geladen items.",
-      "loadMore": "Meer laden"
     }
   }
 }

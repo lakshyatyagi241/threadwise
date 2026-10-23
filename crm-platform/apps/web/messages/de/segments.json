@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} pro Seite",
       "colCreatedBy": "Erstellt von",
       "colCreatedAt": "Erstellt am",
-      "colModifiedBy": "Geändert von",
-      "activity": "Aktivität",
-      "activityTitle": "Segmentaktivität"
+      "colModifiedBy": "Geändert von"
     },
     "actions": {
       "forbidden": "Sie haben keine Berechtigung dafür.",
