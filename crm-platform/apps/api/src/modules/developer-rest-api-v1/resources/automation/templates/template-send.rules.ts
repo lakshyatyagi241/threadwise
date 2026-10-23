@@ -25,11 +25,16 @@ export interface SendFacts {
 /** Reference's sender gates, in its order, as the code each is answered with (`details.template_id` rides along). */
 export type SendBlock = 'not_approved' | 'paused' | 'quality_floor' | 'unsupported_template';
 
-export function sendBlockOf(t: SendFacts, now: Date): { code: SendBlock; message: string } | null {
-  const approved =
+/** Approved for sending: the local status says so, and Meta's status agrees when we hold one. Also the test for an edit that is refused (TW-API-034). */
+export function isApproved(t: Pick<SendFacts, 'status' | 'metaStatus'>): boolean {
+  return (
     (t.status === 'approved' || t.status === 'public') &&
-    (t.metaStatus === null || t.metaStatus === 'APPROVED');
-  if (!approved)
+    (t.metaStatus === null || t.metaStatus === 'APPROVED')
+  );
+}
+
+export function sendBlockOf(t: SendFacts, now: Date): { code: SendBlock; message: string } | null {
+  if (!isApproved(t))
     return { code: 'not_approved', message: 'This template is not approved by Meta yet.' };
   if (t.pausedUntil && t.pausedUntil.getTime() > now.getTime())
     return { code: 'paused', message: 'This template is paused by Meta.' };

@@ -39,7 +39,13 @@ import {
   sourceOfRow,
   toPublicTemplate,
 } from './template-public.mapper';
-import { bodyValuesOf, recipientDigits, renderBody, sendBlockOf } from './template-send.rules';
+import {
+  bodyValuesOf,
+  isApproved,
+  recipientDigits,
+  renderBody,
+  sendBlockOf,
+} from './template-send.rules';
 
 const NOT_FOUND = 'Template not found.';
 /** How many raw rows one filtered page may look through before it answers short (a workspace of mostly unsendable templates). */
@@ -180,6 +186,15 @@ export class V1TemplatesService {
   async update(uuid: string, v: V1UpdateTemplate): Promise<V1Template> {
     this.refuseUnstorable(v);
     const cur = await this.row(uuid);
+    // Editing approved text would diverge from what Meta holds, so it is refused and the template stays as it is (TW-API-034).
+    if (isApproved(cur)) {
+      throw v1Error(
+        'tpl_not_editable',
+        'The template is approved or otherwise not editable.',
+        HttpStatus.CONFLICT,
+        [{ path: 'template_id', message: uuid }],
+      );
+    }
     const attachment = (cur.attachmentType ?? 'none').toLowerCase();
     const input: UpdateTemplateInput = {
       name: v.template_name,
