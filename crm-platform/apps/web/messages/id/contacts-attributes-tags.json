@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {Tidak ada grup} one {# grup} other {# grup}}",
       "noResultsTitle": "Tidak ada grup yang cocok",
       "noResults": "Tidak ada nama grup yang mengandung kata yang Anda ketik.",
-      "clearSearch": "Hapus pencarian",
-      "activity": "Aktivitas",
-      "activityTitle": "Aktivitas grup"
+      "clearSearch": "Hapus pencarian"
     },
     "import": {
       "eyebrow": "Impor massal",

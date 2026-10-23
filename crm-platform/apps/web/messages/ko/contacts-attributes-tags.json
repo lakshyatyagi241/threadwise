@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {그룹 없음} one {#개 그룹} other {#개 그룹}}",
       "noResultsTitle": "일치하는 그룹이 없습니다",
       "noResults": "입력한 내용을 포함한 그룹 이름이 없습니다.",
-      "clearSearch": "검색 지우기",
-      "activity": "활동 기록",
-      "activityTitle": "그룹 활동 기록"
+      "clearSearch": "검색 지우기"
     },
     "import": {
       "eyebrow": "일괄 가져오기",

@@ -199,9 +199,7 @@
       "perPageOption": "페이지당 {count, number}개",
       "colCreatedBy": "작성자",
       "colCreatedAt": "생성일시",
-      "colModifiedBy": "수정자",
-      "activity": "활동 기록",
-      "activityTitle": "세그먼트 활동 기록"
+      "colModifiedBy": "수정자"
     },
     "actions": {
       "forbidden": "이 작업을 수행할 권한이 없습니다.",

@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} प्रति पेज",
       "colCreatedBy": "बनाने वाला",
       "colCreatedAt": "बनाने की तारीख",
-      "colModifiedBy": "संशोधित करने वाला",
-      "activity": "गतिविधि",
-      "activityTitle": "सेगमेंट गतिविधि"
+      "colModifiedBy": "संशोधित करने वाला"
     },
     "actions": {
       "forbidden": "आपके पास यह करने की अनुमति नहीं है।",

@@ -199,9 +199,7 @@
       "perPageOption": "1ページあたり {count, number} 件",
       "colCreatedBy": "作成者",
       "colCreatedAt": "作成日時",
-      "colModifiedBy": "更新者",
-      "activity": "アクティビティ",
-      "activityTitle": "セグメントのアクティビティ"
+      "colModifiedBy": "更新者"
     },
     "actions": {
       "forbidden": "その操作を行う権限がありません。",

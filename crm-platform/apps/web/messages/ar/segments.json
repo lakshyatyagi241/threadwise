@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} في الصفحة",
       "colCreatedBy": "أنشأه",
       "colCreatedAt": "تاريخ الإنشاء",
-      "colModifiedBy": "عدّله",
-      "activity": "النشاط",
-      "activityTitle": "نشاط الشرائح"
+      "colModifiedBy": "عدّله"
     },
     "actions": {
       "forbidden": "ليست لديك صلاحية لتنفيذ ذلك.",

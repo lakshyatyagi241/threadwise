@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {ไม่มีกลุ่ม} one {# กลุ่ม} other {# กลุ่ม}}",
       "noResultsTitle": "ไม่พบกลุ่มที่ตรงกัน",
       "noResults": "ไม่มีชื่อกลุ่มที่มีคำที่คุณพิมพ์",
-      "clearSearch": "ล้างการค้นหา",
-      "activity": "กิจกรรม",
-      "activityTitle": "กิจกรรมของกลุ่ม"
+      "clearSearch": "ล้างการค้นหา"
     },
     "import": {
       "eyebrow": "นำเข้าแบบกลุ่ม",

@@ -13,7 +13,6 @@ import {
   frozenEdge,
   isScrolledSideways,
 } from '@/features/contacts-attributes-tags';
-import { ModuleActivityDialog } from '@/features/notifications-activity-audit/audit/components/module-activity-dialog';
 import { formatDateTime } from '@/lib/format-datetime';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useSegmentCatalog } from '../api/lookups';
@@ -94,8 +93,6 @@ export function SegmentsScreen() {
   const me = useSession().user.id;
   const can = useSegmentCan();
   const canRead = useCan('record.segments.read');
-  const canSeeActivity = useCan('audit.log.read');
-  const [activity, setActivity] = useState(false);
   const list = useSegments(canRead);
   const lookups = useSegmentCatalog();
   const summaryCtx = useSummaryContext(lookups.catalog);
@@ -160,11 +157,6 @@ export function SegmentsScreen() {
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          {canSeeActivity && (
-            <Button variant="secondary" className="h-10 px-5" onClick={() => setActivity(true)}>
-              {t('activity')}
-            </Button>
-          )}
           {can.create && (
             <Button
               variant="brand"
@@ -306,14 +298,6 @@ export function SegmentsScreen() {
       </section>
 
       <SegmentDialogs controller={actions} />
-      {canSeeActivity && (
-        <ModuleActivityDialog
-          open={activity}
-          onClose={() => setActivity(false)}
-          module="segments"
-          title={t('activityTitle')}
-        />
-      )}
     </PageFill>
   );
 }

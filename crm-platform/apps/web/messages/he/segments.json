@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} בכל עמוד",
       "colCreatedBy": "נוצר על ידי",
       "colCreatedAt": "נוצר ב",
-      "colModifiedBy": "שונה על ידי",
-      "activity": "פעילות",
-      "activityTitle": "פעילות מקטעים"
+      "colModifiedBy": "שונה על ידי"
     },
     "actions": {
       "forbidden": "אין לכם הרשאה לבצע פעולה זו.",

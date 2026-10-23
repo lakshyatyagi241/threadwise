@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {グループなし} one {# 件のグループ} other {# 件のグループ}}",
       "noResultsTitle": "一致するグループはありません",
       "noResults": "入力した文字を含むグループ名はありません。",
-      "clearSearch": "検索をクリア",
-      "activity": "アクティビティ",
-      "activityTitle": "グループのアクティビティ"
+      "clearSearch": "検索をクリア"
     },
     "import": {
       "eyebrow": "一括インポート",

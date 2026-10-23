@@ -199,9 +199,7 @@
       "perPageOption": "Sayfa başına {count, number}",
       "colCreatedBy": "Oluşturan",
       "colCreatedAt": "Oluşturulma",
-      "colModifiedBy": "Değiştiren",
-      "activity": "Etkinlik",
-      "activityTitle": "Segment etkinliği"
+      "colModifiedBy": "Değiştiren"
     },
     "actions": {
       "forbidden": "Bunu yapmak için yetkiniz yok.",

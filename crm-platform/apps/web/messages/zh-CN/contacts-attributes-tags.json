@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {没有分组} one {# 个分组} other {# 个分组}}",
       "noResultsTitle": "没有匹配的分组",
       "noResults": "没有包含您输入内容的分组名称。",
-      "clearSearch": "清除搜索",
-      "activity": "活动记录",
-      "activityTitle": "分组活动记录"
+      "clearSearch": "清除搜索"
     },
     "import": {
       "eyebrow": "批量导入",

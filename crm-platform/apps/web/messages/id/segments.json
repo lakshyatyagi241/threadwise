@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} per halaman",
       "colCreatedBy": "Dibuat oleh",
       "colCreatedAt": "Dibuat pada",
-      "colModifiedBy": "Diubah oleh",
-      "activity": "Aktivitas",
-      "activityTitle": "Aktivitas segmen"
+      "colModifiedBy": "Diubah oleh"
     },
     "actions": {
       "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",

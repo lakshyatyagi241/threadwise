@@ -199,9 +199,7 @@
       "perPageOption": "فی صفحہ {count, number}",
       "colCreatedBy": "بنانے والا",
       "colCreatedAt": "بنانے کی تاریخ",
-      "colModifiedBy": "ترمیم کرنے والا",
-      "activity": "سرگرمی",
-      "activityTitle": "سیگمنٹ کی سرگرمی"
+      "colModifiedBy": "ترمیم کرنے والا"
     },
     "actions": {
       "forbidden": "آپ کو ایسا کرنے کی اجازت نہیں ہے۔",

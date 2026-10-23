@@ -25,7 +25,7 @@ If you want a list that fills itself from rules, use a segment instead. See [Seg
 ## Finding a group and seeing who changed it
 
 - Type in the search box above the table to narrow the list by name. The search looks through every group in the workspace, not only the rows on screen.
-- **Activity** opens the workspace audit trail for groups, newest first, for the last 30 days: who did what, and which fields changed. Search it by person, action or field name. It shows the names of the changed fields, never their values. You need permission to read the activity log to see the button.
+- **Who and when.** Each group shows who created it, when, who last changed it and when. The names are the people in your workspace.
 - **Modified by** and **Updated at** change when the group's name, note or colour is saved. Adding or removing contacts does not count as a change to the group.
 
 ## Putting contacts into a group

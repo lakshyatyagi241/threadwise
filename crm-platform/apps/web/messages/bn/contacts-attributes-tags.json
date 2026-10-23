@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {কোনো গ্রুপ নেই} one {# টি গ্রুপ} other {# টি গ্রুপ}}",
       "noResultsTitle": "মিলে যাওয়া কোনো গ্রুপ নেই",
       "noResults": "আপনার লেখা কোনো গ্রুপের নামে নেই।",
-      "clearSearch": "অনুসন্ধান মুছুন",
-      "activity": "কার্যকলাপ",
-      "activityTitle": "গ্রুপের কার্যকলাপ"
+      "clearSearch": "অনুসন্ধান মুছুন"
     },
     "import": {
       "eyebrow": "বাল্ক ইমপোর্ট",

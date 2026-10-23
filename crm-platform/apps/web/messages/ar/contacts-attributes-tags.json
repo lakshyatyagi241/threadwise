@@ -557,9 +557,7 @@
       "count": "{count, plural, =0 {لا توجد مجموعات} one {مجموعة واحدة} other {# مجموعات}}",
       "noResultsTitle": "لا توجد مجموعات مطابقة",
       "noResults": "لا يحتوي اسم أي مجموعة على ما كتبته.",
-      "clearSearch": "مسح البحث",
-      "activity": "النشاط",
-      "activityTitle": "نشاط المجموعات"
+      "clearSearch": "مسح البحث"
     },
     "import": {
       "eyebrow": "استيراد جماعي",

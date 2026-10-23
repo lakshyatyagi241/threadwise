@@ -199,9 +199,7 @@
       "perPageOption": "{count, number} per pagina",
       "colCreatedBy": "Gemaakt door",
       "colCreatedAt": "Aangemaakt op",
-      "colModifiedBy": "Gewijzigd door",
-      "activity": "Activiteit",
-      "activityTitle": "Segmentactiviteit"
+      "colModifiedBy": "Gewijzigd door"
     },
     "actions": {
       "forbidden": "Je hebt geen toestemming om dat te doen.",

@@ -28,11 +28,11 @@ You can also select **Save as segment** on the Contacts screen after setting fil
 - The "..." menu on a row offers **Edit rules**, **Duplicate**, **Export members (CSV)**, **Tag members**, **Add members to a group** and **Delete**. Tagging and grouping apply to the people who match right now.
 - **Recount members** refreshes a member count.
 
-## The list, search and activity
+## The list and search
 
 - The table shows each segment's rules, members, visibility, **Owner**, **Created by** and **Created at**, **Modified by** and **Updated**. A segment's creator is its owner when it was made. **Modified by** stays empty until someone changes the segment after this column was added.
 - The search box filters the segments you can see by name, description or owner. The **Mine** and **Shared** filters apply on top of it.
-- **Activity** opens the workspace audit trail for segments, newest first, for the last 30 days. Search it by person, action or field name. It shows the names of the changed fields, never their values. You need permission to read the activity log to see the button.
+- **Who and when.** Each segment shows who created it, when, who last changed it and when. The names are the people in your workspace.
 
 ## Sharing with specific people
 
