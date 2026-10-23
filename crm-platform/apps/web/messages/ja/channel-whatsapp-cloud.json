@@ -401,7 +401,37 @@
           "message": "{name}は接続されていないため、返信を送信できません。社内メモは引き続き使用できます。"
         },
         "open": "WhatsApp設定を開く",
-        "askAdmin": "チャネルを管理するユーザーに再接続を依頼してください。"
+        "askAdmin": "チャネルを管理するユーザーに再接続を依頼してください。",
+        "email": {
+          "needs_reconnect": {
+            "title": "このメールボックスは再接続が必要です。",
+            "message": "{name} は保存されたサインイン情報を受け付けなくなったため、返信を送信できません。内部メモは引き続き使えます。"
+          },
+          "error": {
+            "title": "このメールボックスで接続に問題が起きています。",
+            "message": "{name} はエラーの状態のため、返信を送信できません。内部メモは引き続き使えます。"
+          },
+          "not_connected": {
+            "title": "このメールボックスは切断されています。",
+            "message": "{name} は接続されていないため、再接続されるまで返信を送信できません。内部メモは引き続き使えます。"
+          },
+          "open": "メールボックスの設定を開く"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "このチャンネルは再接続が必要です。",
+            "message": "{name} は保存された認証情報を受け付けなくなったため、返信を送信できません。内部メモは引き続き使えます。"
+          },
+          "error": {
+            "title": "このチャンネルで接続に問題が起きています。",
+            "message": "{name} はエラーの状態のため、返信を送信できません。内部メモは引き続き使えます。"
+          },
+          "not_connected": {
+            "title": "このチャンネルはオフになっています。",
+            "message": "{name} は接続されていないため、返信を送信できません。内部メモは引き続き使えます。"
+          },
+          "open": "チャンネルの設定を開く"
+        }
       },
       "failure": {
         "openSettings": "WhatsApp設定を開く",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "WhatsAppグループへの送信はまだ利用できません。",
           "hint": "WhatsApp Businessアプリから返信してください。"
-        }
+        },
+        "openChannelSettings": "チャンネルの設定を開く"
       },
       "media": {
         "downloading": "ファイルをダウンロード中",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "この番号では{kind}を送信できません。",
           "unsupportedType": "WhatsAppはこの種類のファイルを受け付けません。対応形式は、JPEGとPNGの画像、MP4と3GPの動画、AAC、MP3、AMR、M4A、OGGの音声、PDF、Office、テキストのドキュメントです。",
           "empty": "ファイルが空です。"
+        },
+        "tip": "ファイルを添付。対応している形式とサイズ：{list}",
+        "tipLimit": {
+          "image": "画像は最大{mb} MB（{formats}）",
+          "video": "動画は最大{mb} MB（{formats}）",
+          "audio": "音声は最大{mb} MB（{formats}）",
+          "document": "ドキュメントは最大{mb} MB（{formats}）"
         }
       }
     }

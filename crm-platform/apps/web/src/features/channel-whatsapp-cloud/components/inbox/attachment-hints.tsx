@@ -21,6 +21,22 @@ export function AttachmentHints({ allowed }: { allowed: readonly string[] }) {
   );
 }
 
+/**
+ * The attach button's tooltip for a channel with WhatsApp's rules: the formats it takes and the size of each kind. Null when the
+ * channel takes nothing, so the caller keeps the plain label.
+ */
+export function useAttachTip() {
+  const t = useTranslations('channel-whatsapp-cloud.inbox.attach');
+  return (allowed: readonly string[]): string | null => {
+    const hints = limitHints(allowed);
+    if (hints.length === 0) return null;
+    const list = hints
+      .map((h) => t(`tipLimit.${h.kind}`, { mb: h.mb, formats: h.formats }))
+      .join(' · ');
+    return t('tip', { list });
+  };
+}
+
 /** The refusal of a file before it is uploaded, in the person's language. */
 export function useAttachmentError() {
   const t = useTranslations('channel-whatsapp-cloud.inbox.attach');

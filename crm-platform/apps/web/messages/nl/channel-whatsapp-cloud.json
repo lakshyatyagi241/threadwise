@@ -401,7 +401,37 @@
           "message": "{name} is niet gekoppeld, dus antwoorden kunnen niet worden verzonden. Interne notities werken nog."
         },
         "open": "De WhatsApp-instellingen openen",
-        "askAdmin": "Vraag iemand die kanalen beheert het opnieuw te koppelen."
+        "askAdmin": "Vraag iemand die kanalen beheert het opnieuw te koppelen.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Deze mailbox moet opnieuw worden verbonden.",
+            "message": "{name} accepteert de opgeslagen inloggegevens niet meer, dus er kunnen geen antwoorden worden verzonden. Interne notities werken nog wel."
+          },
+          "error": {
+            "title": "Deze mailbox heeft een verbindingsprobleem.",
+            "message": "{name} is in een foutstatus, dus er kunnen geen antwoorden worden verzonden. Interne notities werken nog wel."
+          },
+          "not_connected": {
+            "title": "Deze mailbox is niet verbonden.",
+            "message": "{name} is niet verbonden, dus er kunnen pas antwoorden worden verzonden als de verbinding is hersteld. Interne notities werken nog wel."
+          },
+          "open": "Mailboxinstellingen openen"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Dit kanaal moet opnieuw worden verbonden.",
+            "message": "{name} accepteert de opgeslagen gegevens niet meer, dus er kunnen geen antwoorden worden verzonden. Interne notities werken nog wel."
+          },
+          "error": {
+            "title": "Dit kanaal heeft een verbindingsprobleem.",
+            "message": "{name} is in een foutstatus, dus er kunnen geen antwoorden worden verzonden. Interne notities werken nog wel."
+          },
+          "not_connected": {
+            "title": "Dit kanaal is uitgeschakeld.",
+            "message": "{name} is niet verbonden, dus er kunnen geen antwoorden worden verzonden. Interne notities werken nog wel."
+          },
+          "open": "Kanaalinstellingen openen"
+        }
       },
       "failure": {
         "openSettings": "De WhatsApp-instellingen openen",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar.",
           "hint": "Antwoord vanuit de WhatsApp Business-app."
-        }
+        },
+        "openChannelSettings": "Kanaalinstellingen openen"
       },
       "media": {
         "downloading": "Bestand downloaden",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Dit nummer kan geen {kind} verzenden.",
           "unsupportedType": "WhatsApp accepteert dit bestandstype niet. Het ondersteunt JPEG- en PNG-afbeeldingen, MP4- en 3GP-video, AAC-, MP3-, AMR-, M4A- en OGG-audio, en PDF-, Office- en tekstdocumenten.",
           "empty": "Dat bestand is leeg."
+        },
+        "tip": "Een bestand bijvoegen. Ondersteunde indelingen en formaten: {list}",
+        "tipLimit": {
+          "image": "Afbeeldingen tot {mb} MB ({formats})",
+          "video": "Video's tot {mb} MB ({formats})",
+          "audio": "Audio tot {mb} MB ({formats})",
+          "document": "Documenten tot {mb} MB ({formats})"
         }
       }
     }

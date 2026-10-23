@@ -401,7 +401,37 @@
           "message": "{name} tidak terhubung, sehingga balasan tidak dapat dikirim. Catatan internal tetap berfungsi."
         },
         "open": "Buka pengaturan WhatsApp",
-        "askAdmin": "Minta orang yang mengelola kanal untuk menghubungkannya kembali."
+        "askAdmin": "Minta orang yang mengelola kanal untuk menghubungkannya kembali.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Kotak email ini perlu dihubungkan ulang.",
+            "message": "{name} tidak lagi menerima login yang tersimpan, jadi balasan tidak bisa dikirim. Catatan internal tetap berfungsi."
+          },
+          "error": {
+            "title": "Kotak email ini mengalami masalah koneksi.",
+            "message": "{name} sedang dalam status error, jadi balasan tidak bisa dikirim. Catatan internal tetap berfungsi."
+          },
+          "not_connected": {
+            "title": "Kotak email ini terputus.",
+            "message": "{name} tidak terhubung, jadi balasan tidak bisa dikirim sampai dihubungkan ulang. Catatan internal tetap berfungsi."
+          },
+          "open": "Buka pengaturan kotak email"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Saluran ini perlu dihubungkan ulang.",
+            "message": "{name} tidak lagi menerima kredensial yang tersimpan, jadi balasan tidak bisa dikirim. Catatan internal tetap berfungsi."
+          },
+          "error": {
+            "title": "Saluran ini mengalami masalah koneksi.",
+            "message": "{name} sedang dalam status error, jadi balasan tidak bisa dikirim. Catatan internal tetap berfungsi."
+          },
+          "not_connected": {
+            "title": "Saluran ini dinonaktifkan.",
+            "message": "{name} tidak terhubung, jadi balasan tidak bisa dikirim. Catatan internal tetap berfungsi."
+          },
+          "open": "Buka pengaturan saluran"
+        }
       },
       "failure": {
         "openSettings": "Buka pengaturan WhatsApp",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "Pengiriman ke grup WhatsApp belum tersedia.",
           "hint": "Balas dari aplikasi WhatsApp Business."
-        }
+        },
+        "openChannelSettings": "Buka pengaturan saluran"
       },
       "media": {
         "downloading": "Mengunduh file",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Nomor ini tidak dapat mengirim {kind}.",
           "unsupportedType": "WhatsApp tidak menerima jenis file ini. WhatsApp menerima gambar JPEG dan PNG, video MP4 dan 3GP, audio AAC, MP3, AMR, M4A dan OGG, serta dokumen PDF, Office dan teks.",
           "empty": "File itu kosong."
+        },
+        "tip": "Lampirkan file. Format dan ukuran yang didukung: {list}",
+        "tipLimit": {
+          "image": "Gambar hingga {mb} MB ({formats})",
+          "video": "Video hingga {mb} MB ({formats})",
+          "audio": "Audio hingga {mb} MB ({formats})",
+          "document": "Dokumen hingga {mb} MB ({formats})"
         }
       }
     }
