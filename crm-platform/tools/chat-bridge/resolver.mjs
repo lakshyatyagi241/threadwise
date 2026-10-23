@@ -26,7 +26,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const hard = Number(env.HARD_CANCEL_SECONDS ?? 120), holder = Number(env.CANCEL_BLOCKER_SECONDS ?? 30), idleBlock = Number(env.IDLE_BLOCKER_SECONDS ?? 60);
   const verifyMs = Number(env.VERIFY_SECONDS ?? 120) * 1000, pollMs = Number(env.VERIFY_POLL_MS ?? 2000), perHour = Number(env.AUTO_REMEDIATE_MAX_PER_HOUR ?? 3);
   const dir = env.INCIDENTS_DIR ?? 'incidents';
-  const kindOf = (pb) => (pb === 'code_fix' ? 'slow_statement' : pb === 'deploy_failure' ? 'deploy_failure' : 'critical_alert');
+  const kindOf = (pb) => (pb === 'code_fix' ? 'slow_statement' : pb === 'deploy_failure' ? 'deploy_failure' : pb === 'sentry_issue' ? 'sentry_issue' : 'critical_alert');
   const incidents = new Map(), pending = new Set(), acted = {}; let release = null, seq = 0;
   const count = (playbook, outcome) => metrics?.inc('crm_incident_total', `playbook="${playbook}",outcome="${outcome}"`);
   const audit = (o) => log({ evt: 'remediation_audit', mode, ...o });
@@ -46,6 +46,16 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const openDeployCard = async (inc) => {
     const m = inc.meta ?? {}, rows = [['Attempted', sha7(m.attemptedSha)], ...(m.liveSha ? [['Live', sha7(m.liveSha)]] : []), ...(m.prs?.length ? [['PRs', m.prs.map((n) => `#${Number(n)}`).join(' ')]] : []), ...(m.mergers?.length ? [['Merged by', m.mergers.join(' ')]] : []), ...(m.durationSeconds ? [['Took', `${Number(m.durationSeconds)} s`]] : [])];
     const title = '\uD83D\uDD34 Deploy failed or was refused', body = { text: `${title}: needs a human or a fix PR`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `needs a human or a fix PR, incident ${inc.id}` }, sections: [{ widgets: rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } })) }] } }] };
+    const failed = [];
+    for (const ch of inc.channels) if (!(await Promise.resolve(cardHook?.(ch, body, { threadKey: inc.threadKey, interactive: { incidentId: inc.id, firedAt: inc.startedAt } })).catch(() => false))) failed.push(ch);
+    return failed;
+  };
+  // Sentry issue card (app mode): the Sentry fields are untrusted text, so every value goes through esc(); the link is allow-listed when the incident is created.
+  const openSentryCard = async (inc) => {
+    const m = inc.meta ?? {}, rows = [['Project', m.project], ['Level', m.level], ['Events (last hour)', m.count], ['Users', m.userCount], ['Culprit', m.culprit], ...(m.frames?.length ? [['Stack (in-app)', m.frames.join('\n')]] : [])].filter(([, v]) => v !== '' && v != null);
+    const widgets = rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } }));
+    if (m.url) widgets.push({ decoratedText: { topLabel: 'Sentry', text: `<a href="${m.url}">${esc(m.shortId || 'open in Sentry')}</a>`, wrapText: true } });
+    const title = `\uD83D\uDD34 Sentry ${esc(m.level)}: ${esc(m.title)}`.slice(0, 200), body = { text: `${title}`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `${esc(m.project)}, incident ${inc.id}` }, sections: [{ widgets }] } }] };
     const failed = [];
     for (const ch of inc.channels) if (!(await Promise.resolve(cardHook?.(ch, body, { threadKey: inc.threadKey, interactive: { incidentId: inc.id, firedAt: inc.startedAt } })).catch(() => false))) failed.push(ch);
     return failed;
@@ -78,7 +88,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
       if (!(c.waiterSecs > 0)) w.push('blocks nobody');
       return w;
     },
-    db_pool: () => [], code_fix: () => [], service: () => [], deploy_failure: () => [],
+    db_pool: () => [], code_fix: () => [], service: () => [], deploy_failure: () => [], sentry_issue: () => [],
   };
   const describe = {
     cancel_select: (c) => `cancel pid ${c.row.pid} (${c.text.slice(0, 120)}, running ${Math.round(c.row.secs)} s) with pg_cancel_backend`,
@@ -137,6 +147,12 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
       if (failed.length) await Promise.all(failed.map((ch) => step(inc, '', c.message, ch))); // webhook mode / API failure: today's text + "Incident update" card
       return inc;
     } // informational: a human or a fix PR resolves it
+    if (inc.playbook === 'sentry_issue') {
+      inc.state = 'needs_fix'; count('sentry_issue', 'opened');
+      const failed = cardHook ? await openSentryCard(inc) : inc.channels;
+      if (failed.length) await Promise.all(failed.map((ch) => step(inc, '', c.message, ch)));
+      return inc;
+    } // a teammate's Claude fixes the code; resolved only after release + Sentry quiet
     await step(inc, 'DIAGNOSED', inc.diagnosis ?? 'see the first message of this thread');
     const why = pre[inc.playbook](c);
     if (why.length) { audit({ id: inc.id, result: 'refused', why }); await escalate(inc, `no safe action: ${why.join('; ')}`); return inc; }
@@ -234,10 +250,39 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
       if (inc.state === 'recovered_no_release' && (!inc.prUrl || set.has(prOf(inc)))) { inc.releasedSha = release.sha; inc.releasedAt = now(); await resolveByRelease(inc); continue; }
       if (inc.prUrl && inc.state !== 'released' && inc.prAt <= release.at && set.has(prOf(inc))) {
         inc.state = 'released'; inc.releasedSha = release.sha; inc.releasedAt = now();
+        if (inc.kind === 'sentry_issue') { await life(inc, `\uD83D\uDE80 PR #${inc.prNumber} is live in release ${sha7(release.sha)}; waiting for Sentry to show the issue resolved or ${Math.round(quietMs / 60e3)} min without new events`, { tl: `PR #${inc.prNumber} live in release ${sha7(release.sha)}, watching Sentry` }); await sentryEval(inc); continue; }
         await life(inc, `\uD83D\uDE80 PR #${inc.prNumber} is live in release ${sha7(release.sha)}; verifying for ${Math.round(verifyMs / 1000)}s that the problem is gone`, { tl: `PR #${inc.prNumber} live in release ${sha7(release.sha)}, verifying` });
         const p = verifyReleased(inc).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p)); pending.add(p);
       }
     }
+  }
+  // ---- Sentry issues (sentry-poller.mjs). One incident per issue id while open; reopened only if Sentry saw events after it was resolved.
+  const quietMs = Number(env.SENTRY_QUIET_MINUTES ?? 15) * 60e3;
+  const org = String(env.SENTRY_ORG || 'geta-ai-cj').replace(/[^a-z0-9-]/gi, '');
+  const linkOk = new RegExp(`^https://${org}\\.(?:[a-z]{2}\\.)?sentry\\.io/[A-Za-z0-9._~/?=&%+-]*$`);
+  const cl = (x, n) => String(x ?? '').replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ').trim().slice(0, n);
+  const openSentryIssue = async (sp) => {
+    if (!/^\d{1,20}$/.test(String(sp?.issueId))) return null;
+    const key = `sentry:${sp.issueId}`, last = [...incidents.values()].filter((i) => i.key === key).pop();
+    if (last && (last.state !== 'resolved' || !(Date.parse(sp.lastSeen) > (last.resolution?.at ?? Infinity)))) return last; // still open, or nothing new since it was resolved
+    const frames = (typeof sp.frames === 'function' ? await Promise.resolve(sp.frames()).catch(() => []) : sp.frames ?? []).slice(0, 5).map((f) => cl(f, 160));
+    const meta = { issueId: String(sp.issueId), shortId: cl(sp.shortId, 40), title: cl(sp.title, 200), culprit: cl(sp.culprit, 200), level: cl(sp.level, 12), project: cl(sp.project, 60), count: Number(sp.count) || 0, userCount: Number(sp.userCount) || 0, firstSeen: cl(sp.firstSeen, 40), lastSeen: cl(sp.lastSeen, 40), url: linkOk.test(sp.url ?? '') ? sp.url : '', rule: cl(sp.rule, 12), frames };
+    const message = `\uD83D\uDD34 Sentry ${meta.level}: ${meta.title} (${meta.project}, ${meta.count} events/h, ${meta.userCount} users) ${meta.culprit}`;
+    return handle({ playbook: 'sentry_issue', kind: 'sentry_issue', key, threadKey: `sentry-${meta.issueId}`, channel: sp.channel === 'critical' ? 'critical' : 'other', diagnosis: `${meta.level} in ${meta.project}: ${meta.title}`, suggestion: 'Fix the code at the in-app stack frames in meta.frames, then raise a PR', evidence: frames.join('; '), message, meta });
+  };
+  // Released PR: RESOLVED once Sentry shows the issue resolved, or nothing new arrived for quietMs after the release (status observed after the release).
+  async function sentryEval(inc) {
+    const s = inc.sentry; if (inc.state !== 'released' || !s || s.at < inc.releasedAt) return;
+    if (s.status === 'resolved' || now() - Math.max(s.lastSeen ?? 0, inc.releasedAt) >= quietMs) await resolveByRelease(inc);
+  }
+  async function sentryStatus(id, { status, lastSeen, by }) {
+    const inc = incidents.get(id); if (!inc || inc.kind !== 'sentry_issue' || inc.state === 'resolved') return false;
+    inc.sentry = { status, lastSeen, at: now() };
+    if (status === 'resolved' && !inc.prUrl) { // someone resolved it in Sentry with no PR
+      const who = cl(by, 40) || 'unknown'; inc.state = 'resolved'; count('sentry_issue', 'resolved'); resolution(inc, 'sentry', { by: who });
+      await life(inc, `\u2705 resolved in Sentry by ${who}, after ${fmtDur(now() - inc.startedAt)}`, { label: 'RESOLVED', announceToo: true, tl: `resolved in Sentry by ${who}` }); return true;
+    }
+    await sentryEval(inc); return true;
   }
   // A deploy that ended without changing the live version: one incident per attempted sha (dedup), resolved by the next live release.
   const openDeployFailure = ({ attemptedSha, liveSha, prs = [], mergers = [], durationSeconds = 0 }) => {
@@ -305,7 +350,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   }
   return {
     markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
-    setRelease, openDeployFailure, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
+    setRelease, openDeployFailure, openSentryIssue, sentryStatus, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),
     byKey: (k) => [...incidents.values()].find((i) => i.key === k),
