@@ -205,6 +205,7 @@
       "pqlIgnored": "Not understood: {parts}",
       "pqlNothing": "Nothing in that search could be turned into a filter.",
       "pqlFailed": "English search is unavailable right now. Try again.",
+      "pqlNoKey": "English search is not set up for this workspace yet. Ask an admin to add an OpenRouter key under AI keys.",
       "filter": "Filter",
       "filterAi": "Filter with AI",
       "filterAiHint": "Describe who you are looking for",
@@ -447,7 +448,8 @@
         "number": "Enter a number.",
         "integer": "Enter a whole number.",
         "email": "Enter a valid email address.",
-        "url": "Enter a full link starting with http:// or https://."
+        "url": "Enter a full link starting with http:// or https://.",
+        "phone": "Enter a valid phone number for the country picked."
       },
       "readOnlyField": "Read only",
       "yes": "Yes",
@@ -1339,6 +1341,9 @@
       "shared": "Shared",
       "privateHint": "Only you, and people who can edit every segment.",
       "sharedHint": "Everyone who can view segments.",
+      "specific": "Specific people",
+      "specificHint": "Only the people and teams you choose, plus you and people who can edit every segment.",
+      "shareRequired": "Choose at least one person or team to share with.",
       "cancel": "Cancel",
       "save": "Save and open rules",
       "created": "Created the segment \"{name}\". Refine its rules below.",
@@ -1357,7 +1362,7 @@
       "close": "Close",
       "apply": "Update {count, plural, one {# contact} other {# contacts}}",
       "properties": {
-        "title": "Custom properties",
+        "title": "Properties",
         "hint": "Properties you add here are set on {count, plural, one {the selected contact} other {all # selected contacts}}. Properties you do not add are not changed.",
         "add": "Add property",
         "search": "Search properties",
@@ -1369,6 +1374,7 @@
         "remove": "Remove {name}",
         "setValue": "Set a value",
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
+        "parentFirst": "First update {parent}, then this property: its choices depend on it.",
         "requiredNoClear": "A required property cannot be cleared.",
         "problemEmpty": "Enter a value, or choose Clear."
       },
@@ -1463,7 +1469,16 @@
       "templatePlaceholder": "Select a template",
       "noTemplates": "No approved templates for this number.",
       "openInInbox": "Open the chat in the inbox",
-      "notSendable": "This template cannot be filled in here ({reason}).",
+      "notSendable": "This template cannot be sent from here.",
+      "reason": {
+        "not_linked": "This number is not linked to a WhatsApp business account, so no template can be sent.",
+        "paused": "Paused by WhatsApp. It can be sent again once the pause ends.",
+        "media_header": "Has an image, video or document header, which cannot be sent from here yet.",
+        "header_variable": "Has a variable in the header, which cannot be filled in from here yet.",
+        "dynamic_button": "Has a button link with a variable, which cannot be filled in from here yet.",
+        "authentication": "One-time-password templates are sent by the system, not from here.",
+        "named_variables": "Uses named variables, which cannot be filled in from here yet."
+      },
       "variables": "Template variables",
       "preview": "Preview",
       "slot": "Variable {key}",

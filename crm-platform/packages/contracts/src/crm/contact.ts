@@ -271,8 +271,13 @@ export const bulkUpdateContactsSchema = z.object({
     status: z.string().max(64).nullish(),
     /** The IANA time zone to set on every contact (BL-193); `null` clears it. Recorded as set by staff. */
     timezone: contactTimezoneSchema.nullish(),
+    /** Built-in text properties to set on every contact (a first name is never blank; `null` clears the others). */
+    firstName: z.string().trim().min(1).max(191).optional(),
+    lastName: z.string().trim().max(191).nullish(),
+    source: z.string().trim().max(128).nullish(),
     /**
-     * Custom properties to set on every contact, by property key. Each key must be an active, editable custom
+     * Custom properties to set on every contact, by property key. The form's own text properties (title, middle_name, language,
+     * address, memo) are accepted here too, under their reserved keys. Each key must be an active, editable custom
      * property of the workspace (422 CON_PROPERTY_NOT_EDITABLE otherwise) and each value must fit the property's type
      * (422 VALIDATION_FAILED, nothing written). `null` (or a blank text / empty list) clears that key on every
      * contact; keys not named are left alone.

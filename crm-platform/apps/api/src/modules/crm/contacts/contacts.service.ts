@@ -40,7 +40,7 @@ import { stagesInUse, statusesInUse } from './contact-values-in-use';
 import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
-import { assertFormFieldLimits } from './form-field-limits';
+import { assertFormFieldLimits, FORM_FIELD_LIMITS, reservedTextPlan } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import {
   missingRequired,
@@ -1847,12 +1847,24 @@ export class ContactsService {
       // that does not fit its property's type is a 422 and nothing is changed.
       const customInput = input.values.customFields;
       if (customInput !== undefined) assertFormFieldLimits(customInput);
-      const propertyPlan =
-        customInput !== undefined && Object.keys(customInput).length > 0
+      // The form's own text properties live in `data` under reserved keys: they are not registry rows, so they are planned apart.
+      const registryInput = Object.fromEntries(
+        Object.entries(customInput ?? {}).filter(([k]) => !(k in FORM_FIELD_LIMITS)),
+      );
+      const registryPlan =
+        Object.keys(registryInput).length > 0
           ? planPropertyChanges(
-              await this.repo.editableProperties(tx, ctx.orgId, Object.keys(customInput)),
-              customInput,
+              await this.repo.editableProperties(tx, ctx.orgId, Object.keys(registryInput)),
+              registryInput,
             )
+          : undefined;
+      const reservedPlan = reservedTextPlan(customInput);
+      const propertyPlan =
+        registryPlan || reservedPlan
+          ? {
+              set: { ...registryPlan?.set, ...reservedPlan?.set },
+              clear: [...(registryPlan?.clear ?? []), ...(reservedPlan?.clear ?? [])],
+            }
           : undefined;
 
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
@@ -1904,6 +1916,21 @@ export class ContactsService {
         if (input.values.timezone !== undefined) {
           values.timezone = input.values.timezone;
           values.timezoneSource = input.values.timezone === null ? null : 'staff';
+        }
+        // Built-in text properties. The display name follows a first or last name that changes (a bulk "set" is the same name
+        // on every contact, which is what was asked for).
+        if (input.values.firstName !== undefined) values.firstName = input.values.firstName;
+        if (input.values.lastName !== undefined)
+          values.lastName = input.values.lastName?.trim() || null;
+        if (input.values.source !== undefined) values.source = input.values.source?.trim() || null;
+        if (input.values.firstName !== undefined || input.values.lastName !== undefined) {
+          values.name =
+            [
+              (values.firstName as string | null | undefined) ?? existing.firstName,
+              (values.lastName as string | null | undefined) ?? existing.lastName,
+            ]
+              .filter((p): p is string => !!p && p.trim() !== '')
+              .join(' ') || existing.name;
         }
         let changedKeys: string[] = [];
         if (propertyPlan) {

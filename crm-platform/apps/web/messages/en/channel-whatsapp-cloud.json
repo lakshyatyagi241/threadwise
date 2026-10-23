@@ -536,6 +536,13 @@
           "kindNotAllowed": "This number cannot send {kind}.",
           "unsupportedType": "WhatsApp does not accept this type of file. It takes JPEG and PNG images, MP4 and 3GP video, AAC, MP3, AMR, M4A and OGG audio, and PDF, Office and text documents.",
           "empty": "That file is empty."
+        },
+        "tip": "Attach a file. Supported formats and sizes: {list}",
+        "tipLimit": {
+          "image": "Images up to {mb} MB ({formats})",
+          "video": "Video up to {mb} MB ({formats})",
+          "audio": "Audio up to {mb} MB ({formats})",
+          "document": "Documents up to {mb} MB ({formats})"
         }
       }
     }

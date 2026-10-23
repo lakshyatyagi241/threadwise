@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { FieldDependencyResponse, FieldResponse } from '@crm/contracts';
 import {
   checkValue,
+  INVALID_PHONE,
   displayValue,
   emptyInput,
   inputKind,
@@ -64,6 +65,15 @@ describe('stored value <-> input', () => {
     expect(emptyInput(f('multiselect'))).toEqual([]);
     expect(emptyInput(f('checkbox'))).toBe('false');
     expect(emptyInput(f('text'))).toBe('');
+  });
+});
+
+describe('checkValue for a phone property', () => {
+  it('refuses only a number the phone input marked as not valid', () => {
+    expect(checkValue(f('phone'), INVALID_PHONE)).toBe('phone');
+    expect(checkValue(f('phone'), '+919876543210')).toBeNull();
+    expect(checkValue(f('phone'), '098 765')).toBeNull();
+    expect(checkValue(f('phone'), '')).toBeNull();
   });
 });
 

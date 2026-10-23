@@ -80,7 +80,9 @@ export function SubscriptionBody({
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.subscription');
   const canConsent = useCan('contacts.consent.read');
-  const rows = subscriptionRows(contact);
+  // The consent record is the proof behind the label: read it too, so the card cannot disagree with the Consent card.
+  const ledger = useContactConsent(contact.id, canConsent);
+  const rows = subscriptionRows(contact, ledger.data?.states);
   return (
     <>
       <ul className="divide-y divide-border">

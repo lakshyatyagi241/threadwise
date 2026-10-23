@@ -1,7 +1,7 @@
 // Pure helpers for the Google Chat bridge and the slow-query watcher: sanitizer, router, formatter, sender, dedup, rate limit.
 // No dependencies. Webhook URLs are secrets: nothing here logs or returns them.
 
-export const CHANNELS = ['critical', 'slowquery', 'deploy', 'other'];
+export const CHANNELS = ['critical', 'slowquery', 'deploy', 'other', 'sentry'];
 const MAX_TEXT = 3500; // Chat caps a message text at 4096 chars; cards are counted by the text they hold, keep a margin.
 const MAX_WIDGETS = 40;
 

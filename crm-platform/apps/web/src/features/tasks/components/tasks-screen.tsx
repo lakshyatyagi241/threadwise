@@ -144,13 +144,16 @@ export function TasksScreen() {
     if (out.failed > 0) toast(tb('someFailed', { count: out.failed }), 'danger');
   };
 
-  async function bulkComplete() {
+  async function bulkComplete(outcomeId?: string) {
     const ids = [...sel.ids];
-    const out = await guarded(() => tasksApi.bulkComplete(ids));
+    const reopen = filters.tab === 'completed';
+    const out = await guarded(() =>
+      reopen ? tasksApi.bulkReopen(ids, outcomeId) : tasksApi.bulkComplete(ids, outcomeId),
+    );
     if (!out) return;
     dispatch({ type: 'clear' });
     await invalidateTasks(qc);
-    report(tb('completed', { count: out.changed }), out);
+    report(tb(reopen ? 'reopened' : 'completed', { count: out.changed }), out);
   }
 
   async function bulkAssign(assigneeId: string | null) {
@@ -316,7 +319,8 @@ export function TasksScreen() {
           meId={session.user.id}
           canUpdate={can.update}
           canDelete={can.remove}
-          onComplete={() => void bulkComplete()}
+          completed={filters.tab === 'completed'}
+          onComplete={(outcomeId) => void bulkComplete(outcomeId)}
           onAssign={(id) => void bulkAssign(id)}
           onDelete={() => setConfirmBulkDelete(true)}
           onClear={() => dispatch({ type: 'clear' })}

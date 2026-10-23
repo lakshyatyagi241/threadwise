@@ -43,6 +43,26 @@ the way any restart does. **Decision:** do not run it unattended and do not do i
 The listener refuses to start on a non-loopback address without `OBS_METRICS_TOKEN` and logs why; an unauthenticated `/metrics`
 would be reachable by anything on the network.
 
+### Turning app metrics on, one service at a time
+
+On production `OBS_METRICS_PORT=0`, so Prometheus shows `crm-api`, `crm-api-hooks`, `crm-web` and `crm-worker` as down (nothing listens on 9464) and there is no per-route latency, pool or event-loop data. The first attempt to turn it on for every service at once crash-looped
+the worker (the cause was not recorded), and `deploy-observability.sh` has forced the port back to 0 on every run since.
+
+`docker-compose.yml` now takes a port per service, falling back to the global one: `OBS_METRICS_PORT_API` (both slots),
+`OBS_METRICS_PORT_HOOKS`, `OBS_METRICS_PORT_WEB` (both slots), `OBS_METRICS_PORT_WORKER`. With none of them and `OBS_METRICS_PORT=0`
+nothing changes. Re-run the stack deploy with `APP_METRICS=on deploy-observability.sh` so it stops forcing the port to 0.
+
+Out of working hours, owner picks the minute, one service per step, worker last:
+
+1. In `/opt/desk/.env` check `OBS_METRICS_TOKEN` is set, and keep `OBS_METRICS_PORT=0`.
+2. Add `OBS_METRICS_PORT_API=9464`. Release (blue-green: the idle slot starts with the listener) or
+   `docker compose --env-file .env up -d --no-deps <idle api slot>`.
+3. Look: `docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/targets`
+   shows `crm-api` up; `docker compose ps` shows no restarts. Wait ten minutes.
+4. Repeat for `OBS_METRICS_PORT_WEB`, then `OBS_METRICS_PORT_HOOKS`, then `OBS_METRICS_PORT_WORKER` (recreate with
+   `up -d --no-deps worker`; watch `docker logs --tail 100 desk-worker` and its restart count for the first ten minutes).
+5. Roll back a service: delete its `OBS_METRICS_PORT_*` line (or set it to 0) and recreate that service.
+
 **Test the destination before relying on it (EL-B14).** On the host Alertmanager is not published, so post to it from inside its container (no
 timestamps needed: it starts the alert now and resolves it after `resolve_timeout`, 5 minutes):
 

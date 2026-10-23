@@ -1,15 +1,26 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useId, useState, type FormEvent } from 'react';
+import { useId, useMemo, useState, type FormEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { ERROR_CODES } from '@crm/contracts';
 import { Alert, Button, Field, Input, Modal, Spinner, cn, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { SEGMENT_ROUTES, invalidateSegments, segmentFromFilters } from '@/features/segments';
+import {
+  SEGMENT_ROUTES,
+  SharePicker,
+  buildShareOptions,
+  emptySelection,
+  invalidateSegments,
+  segmentFromFilters,
+  selectionSize,
+  usePeople,
+  useTeams,
+  type ShareSelection,
+} from '@/features/segments';
 
-type Visibility = 'private' | 'shared';
+type Visibility = 'private' | 'shared' | 'specific';
 
 /**
  * "Save these filters as a segment": names the segment and asks the API to turn the contacts list's active filters into
@@ -49,12 +60,25 @@ function SaveForm({ filter, onClose }: { filter: object; onClose: () => void }) 
   const [name, setName] = useState('');
   const [visibility, setVisibility] = useState<Visibility>('private');
   const [missing, setMissing] = useState(false);
+  // "Specific people": who can see it, chosen in the same picker the segment editor uses.
+  const specific = visibility === 'specific';
+  const [shared, setShared] = useState<ShareSelection>(emptySelection);
+  const [noOne, setNoOne] = useState(false);
+  const people = usePeople();
+  const teams = useTeams(specific);
+  const shareOptions = useMemo(
+    () => buildShareOptions(people.data, teams.data),
+    [people.data, teams.data],
+  );
 
   const save = useMutation({
     mutationFn: () =>
-      segmentFromFilters({ name: name.trim(), visibility, filter } as Parameters<
-        typeof segmentFromFilters
-      >[0]),
+      segmentFromFilters({
+        name: name.trim(),
+        visibility,
+        ...(specific ? { sharedWith: shared } : {}),
+        filter,
+      } as Parameters<typeof segmentFromFilters>[0]),
     onSuccess: async (segment) => {
       await invalidateSegments(qc);
       toast(t('created', { name: segment.name }), 'success');
@@ -71,6 +95,11 @@ function SaveForm({ filter, onClose }: { filter: object; onClose: () => void }) 
       return;
     }
     setMissing(false);
+    if (specific && selectionSize(shared) === 0) {
+      setNoOne(true);
+      return;
+    }
+    setNoOne(false);
     save.mutate();
   }
 
@@ -103,8 +132,8 @@ function SaveForm({ filter, onClose }: { filter: object; onClose: () => void }) 
       </Field>
       <fieldset className="space-y-1.5">
         <legend className="text-sm font-medium">{t('visibility')}</legend>
-        <div role="radiogroup" aria-label={t('visibility')} className="grid gap-2 sm:grid-cols-2">
-          {(['private', 'shared'] as const).map((v) => (
+        <div role="radiogroup" aria-label={t('visibility')} className="grid gap-2 sm:grid-cols-3">
+          {(['private', 'shared', 'specific'] as const).map((v) => (
             <label
               key={v}
               className={cn(
@@ -122,12 +151,30 @@ function SaveForm({ filter, onClose }: { filter: object; onClose: () => void }) 
               <span>
                 <span className="block font-medium">{t(v)}</span>
                 <span className="block text-xs text-muted-foreground">
-                  {t(v === 'private' ? 'privateHint' : 'sharedHint')}
+                  {t(
+                    v === 'private'
+                      ? 'privateHint'
+                      : v === 'shared'
+                        ? 'sharedHint'
+                        : 'specificHint',
+                  )}
                 </span>
               </span>
             </label>
           ))}
         </div>
+        {specific && (
+          <SharePicker
+            options={shareOptions}
+            selection={shared}
+            loading={people.isLoading || teams.isLoading}
+            error={noOne ? t('shareRequired') : undefined}
+            onChange={(next) => {
+              setShared(next);
+              setNoOne(false);
+            }}
+          />
+        )}
       </fieldset>
       <div className="flex justify-end gap-2 border-t border-border pt-4">
         <Button variant="secondary" onClick={onClose} disabled={save.isPending}>

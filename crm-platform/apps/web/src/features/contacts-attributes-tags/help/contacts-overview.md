@@ -57,7 +57,8 @@ Every contact can have one **owner**, the person who looks after it. A contact y
 - The **...** menu at the end of the toolbar holds **Bulk upload**, **Export all**, **Remove duplicates**, **New group**, **Save as segment** (when filters are on) and **Show stats**.
 - **Bulk upload** takes a CSV with a header row. The preview shows which columns were recognised and how many contacts would be created, updated or rejected. Rejected rows can be downloaded.
 - **Remove duplicates** merges contacts sharing a phone number into the oldest one. It cannot be undone.
-- **Save as segment** turns the current filters into a [segment](help:segments-overview).
+- **Save as segment** turns the current filters into a [segment](help:segments-overview). Under **Who can see it** choose **Private**, **Shared** (everyone who can view segments) or **Specific people** (pick the people and teams who can see it).
+- **Update** on selected contacts sets the same values on all of them. **Add property** lists the built-in text properties (first name, last name, middle name, language, source, address, memo) beside your own. A phone property has a country picker, and a dependent property can be added only after the property it depends on has a value to set; its choices then follow that value.
 - The list and board buttons switch between the table and a board with one column per lifecycle stage. The refresh button reloads the list and the counts.
 - A contact can carry a quiet **Uncontacted** marker (a dot beside the name, a chip in its header): nobody on the team has reached out yet. The **Uncontacted** view and chip appear once any contact has it. Mark or unmark contacts from the **More** menu, and choose when it is set or cleared in [Uncontacted leads](help:uncontacted-leads).
 

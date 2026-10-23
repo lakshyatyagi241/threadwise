@@ -73,7 +73,7 @@ export function startSentryPoller({ resolver, env = process.env, fetchImpl = fet
         if (!rule) continue;
         const critical = i.level === 'fatal' || rule === 'spike';
         try {
-          await resolver.openSentryIssue({ issueId: String(i.id), shortId: clip(i.shortId, 40), title: clip(i.title, 200), culprit: clip(i.culprit, 200), level: clip(i.level, 12), project: clip(i.project?.slug ?? i.project?.name, 60), count: ev1h, userCount: Number(i.userCount) || 0, firstSeen: i.firstSeen, lastSeen: i.lastSeen, url: typeof i.permalink === 'string' ? i.permalink : '', channel: critical ? 'critical' : 'other', rule, frames: () => frames(i.id) });
+          await resolver.openSentryIssue({ issueId: String(i.id), shortId: clip(i.shortId, 40), title: clip(i.title, 200), culprit: clip(i.culprit, 200), level: clip(i.level, 12), project: clip(i.project?.slug ?? i.project?.name, 60), count: ev1h, userCount: Number(i.userCount) || 0, firstSeen: i.firstSeen, lastSeen: i.lastSeen, url: typeof i.permalink === 'string' ? i.permalink : '', channel: env.SENTRY_CHANNEL === 'sentry' ? 'sentry' : critical ? 'critical' : 'other', rule, frames: () => frames(i.id) });
         } catch (e) { log({ evt: 'sentry_open_failed', err: e?.name ?? 'error' }); }
       }
       baselined = true;

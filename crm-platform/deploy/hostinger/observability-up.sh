@@ -63,10 +63,10 @@ case "$kind" in
 esac
 if grep -q '^ALERTMANAGER_FILE=' .env; then sed -i "s/^ALERTMANAGER_FILE=.*/ALERTMANAGER_FILE=$file/" .env; else echo "ALERTMANAGER_FILE=$file" >> .env; fi
 if [ "$kind" = gchat ]; then
-  # Non-interactive: GCHAT_URL_DIR=<dir> with critical.url slowquery.url deploy.url other.url (a missing/empty file falls back to the prompt).
+  # Non-interactive: GCHAT_URL_DIR=<dir> with critical.url slowquery.url deploy.url other.url sentry.url (a missing/empty file falls back to the prompt).
   # Three Google Chat incoming-webhook URLs, hidden, written to secrets/gchat_*_url (read by the gchat-bridge only, never printed).
   # Enter keeps a current one; an empty file is created for a space left blank (that channel is then reported as unconfigured).
-  for ch in critical slowquery deploy other; do
+  for ch in critical slowquery deploy other sentry; do
     f="secrets/gchat_${ch}_url"
     if [ -n "${GCHAT_URL_DIR:-}" ] && [ -s "$GCHAT_URL_DIR/$ch.url" ]; then u="$(tr -d '\r\n' < "$GCHAT_URL_DIR/$ch.url")"
     else read -rsp "Google Chat webhook URL for the $ch space (hidden, Enter to keep/skip): " u || u=""; echo; fi

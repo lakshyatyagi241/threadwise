@@ -268,7 +268,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     const frames = (typeof sp.frames === 'function' ? await Promise.resolve(sp.frames()).catch(() => []) : sp.frames ?? []).slice(0, 5).map((f) => cl(f, 160));
     const meta = { issueId: String(sp.issueId), shortId: cl(sp.shortId, 40), title: cl(sp.title, 200), culprit: cl(sp.culprit, 200), level: cl(sp.level, 12), project: cl(sp.project, 60), count: Number(sp.count) || 0, userCount: Number(sp.userCount) || 0, firstSeen: cl(sp.firstSeen, 40), lastSeen: cl(sp.lastSeen, 40), url: linkOk.test(sp.url ?? '') ? sp.url : '', rule: cl(sp.rule, 12), frames };
     const message = `\uD83D\uDD34 Sentry ${meta.level}: ${meta.title} (${meta.project}, ${meta.count} events/h, ${meta.userCount} users) ${meta.culprit}`;
-    return handle({ playbook: 'sentry_issue', kind: 'sentry_issue', key, threadKey: `sentry-${meta.issueId}`, channel: sp.channel === 'critical' ? 'critical' : 'other', diagnosis: `${meta.level} in ${meta.project}: ${meta.title}`, suggestion: 'Fix the code at the in-app stack frames in meta.frames, then raise a PR', evidence: frames.join('; '), message, meta });
+    return handle({ playbook: 'sentry_issue', kind: 'sentry_issue', key, threadKey: `sentry-${meta.issueId}`, channel: ['critical', 'sentry'].includes(sp.channel) ? sp.channel : 'other', diagnosis: `${meta.level} in ${meta.project}: ${meta.title}`, suggestion: 'Fix the code at the in-app stack frames in meta.frames, then raise a PR', evidence: frames.join('; '), message, meta });
   };
   // Released PR: RESOLVED once Sentry shows the issue resolved, or nothing new arrived for quietMs after the release (status observed after the release).
   async function sentryEval(inc) {
