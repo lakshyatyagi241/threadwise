@@ -231,10 +231,54 @@ def stall(live, min_age, last_start_epoch):
         return json.dumps(off)
 
 
+BRIDGE_PATH = os.environ.get("DESK_BRIDGE_PATH", "crm-platform/tools/chat-bridge")
+
+
+def bridge_message(prev, new):
+    """--bridge <prev_sha> <new_sha>: the announcement for a Chat alert bridge update, in the release template. Only the PRs that touched
+    the bridge's folder between the two commits are listed. Degrades to the version line and 'PR details unavailable'. Never raises."""
+    new9, prev9 = (new or "")[:9], (prev or "")[:9]
+    head = "🔧 *Chat alert bridge updated*"
+    ver = f"Version: `{new9 or 'unknown'}`" + (f" (was `{prev9}`)" if prev9 else "") + (f" {WEB}/commit/{new9}" if sha_ok(new9) else "")
+    tail = "The alert bridge was restarted; open incidents held in its memory were cleared. " + time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+    try:
+        if not sha_ok(new):
+            raise RuntimeError("no sha")
+        commits = get(f"/repos/{REPO}/commits?sha={new}&path={BRIDGE_PATH}&per_page=30", ttl=0)
+        nums = []
+        for c in commits if isinstance(commits, list) else []:
+            sha = c.get("sha", "")
+            if prev and sha_ok(prev) and (sha.startswith(prev[:7]) or prev.startswith(sha[:7])):
+                break
+            msg = (c.get("commit", {}).get("message") or "").split("\n")[0]
+            m = re.search(r"\(#(\d+)\)\s*$", msg) or re.match(r"Merge pull request #(\d+) from", msg)
+            if m and int(m.group(1)) not in nums:
+                nums.append(int(m.group(1)))
+        prs = []
+        for n in nums[:DETAIL_CAP]:
+            full = get(f"/repos/{REPO}/pulls/{n}") or {}
+            prs.append({"n": n, "title": clean(full.get("title")), "author": who(full.get("user")), "merger": who(full.get("merged_by"))})
+        if not prs:
+            return "\n".join([head, ver, "No pull request found for this bridge change", tail])[:MAXLEN]
+        p0, rest = prs[0], prs[1:]
+        lines = [head, ver, f'PR: #{p0["n"]} "{p0["title"]}" {WEB}/pull/{p0["n"]}', f'Author: {p0["author"]}', f'Deployed by: {p0["merger"]}']
+        if rest:
+            lines.append("Also in this update:")
+            lines += [f'• #{q["n"]} "{q["title"]}" {q["author"]}' for q in rest[:8]]
+        return "\n".join(lines + [tail])[:MAXLEN]
+    except Exception as e:  # never log the token; only the error class
+        sys.stderr.write(f"deploy-message: bridge lookup failed ({type(e).__name__})\n")
+        return "\n".join([head, ver, "PR details unavailable", tail])[:MAXLEN]
+
+
 if __name__ == "__main__":
     if sys.argv[1:2] == ["--json"]:
         j = sys.argv[2:] + [""] * 5
         print(machine(j[0], j[1], j[2], j[3]))
+        sys.exit(0)
+    if sys.argv[1:2] == ["--bridge"]:
+        g = sys.argv[2:] + [""] * 3
+        print(bridge_message(g[0], g[1]))
         sys.exit(0)
     if sys.argv[1:2] == ["--stall"]:
         g = sys.argv[2:] + [""] * 3
