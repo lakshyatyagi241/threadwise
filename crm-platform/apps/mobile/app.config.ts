@@ -67,7 +67,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     name: `${APP_NAME}${v.nameSuffix}`,
     // Must equal the slug of the EAS project (expo.dev, owner getadevops); EAS refuses a build when they differ.
     slug: 'getaapp',
-    version: '1.0.0',
+    version: '1.0.1',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: v.scheme,
