@@ -325,14 +325,18 @@
           "quick_reply": "快速回复",
           "url": "访问网站",
           "phone": "拨打电话",
-          "copy_code": "复制验证码"
+          "copy_code": "复制验证码",
+          "form": "表单",
+          "catalog": "商品目录"
         },
         "kind": {
           "quick_reply": "快速回复",
           "url": "访问网站",
           "phone": "拨打电话",
           "copy_code": "复制验证码",
-          "other": "其他"
+          "other": "其他",
+          "form": "表单",
+          "catalog": "商品目录"
         },
         "count": "{used}/{max} 个按钮",
         "limitReached": "此类按钮最多 {max} 个。",
@@ -361,8 +365,17 @@
           "codeRequired": "请输入示例验证码。",
           "quickReplyVariable": "快速回复不能包含变量。",
           "urlExampleRequired": "请为网址变量提供示例值。",
-          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。"
-        }
+          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。",
+          "flowIdRequired": "请输入 Flow ID。",
+          "flowIdInvalid": "Flow ID 必须是数字。",
+          "screenRequired": "请输入页面 ID。",
+          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。"
+        },
+        "catalogHint": "打开你的 WhatsApp 商品目录。按钮显示“查看商品目录”，且必须是唯一的按钮。",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "已发布的 WhatsApp Flow 的数字 ID，可在 Meta 的 Flows 管理器中查看。",
+        "screen": "起始页面",
+        "screenHint": "表单打开时显示的页面 ID，例如 WELCOME。"
       },
       "result": {
         "metaRefused": "已保存,但 Meta 拒绝了该模板。",

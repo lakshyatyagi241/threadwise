@@ -325,14 +325,18 @@
           "quick_reply": "Szybka odpowiedź",
           "url": "Odwiedź stronę",
           "phone": "Zadzwoń",
-          "copy_code": "Kopiuj kod"
+          "copy_code": "Kopiuj kod",
+          "form": "Formularz",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Szybka odpowiedź",
           "url": "Odwiedź stronę",
           "phone": "Zadzwoń",
           "copy_code": "Kopiuj kod",
-          "other": "Inne"
+          "other": "Inne",
+          "form": "Formularz",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} przycisków",
         "limitReached": "Najwyżej {max} tego rodzaju.",
@@ -361,8 +365,17 @@
           "codeRequired": "Podaj przykładowy kod.",
           "quickReplyVariable": "Szybka odpowiedź nie może zawierać zmiennej.",
           "urlExampleRequired": "Podaj przykładową wartość dla zmiennej w adresie URL.",
-          "quickReplyPosition": "Szybkie odpowiedzi muszą być razem, na początku lub na końcu przycisków."
-        }
+          "quickReplyPosition": "Szybkie odpowiedzi muszą być razem, na początku lub na końcu przycisków.",
+          "flowIdRequired": "Wpisz ID Flow.",
+          "flowIdInvalid": "ID Flow to liczba.",
+          "screenRequired": "Wpisz ID ekranu.",
+          "catalogAlone": "Przycisku katalogu nie można łączyć z innymi przyciskami."
+        },
+        "catalogHint": "Otwiera Twój katalog WhatsApp. Przycisk ma napis „Zobacz katalog” i musi być jedynym przyciskiem.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "Numeryczny identyfikator opublikowanego WhatsApp Flow z menedżera Flows w Meta.",
+        "screen": "Ekran startowy",
+        "screenHint": "Identyfikator ekranu, na którym otwiera się formularz, np. WELCOME."
       },
       "result": {
         "metaRefused": "Zapisano, ale Meta odrzuciła szablon.",

@@ -325,14 +325,18 @@
           "quick_reply": "תגובה מהירה",
           "url": "בקר באתר",
           "phone": "התקשר",
-          "copy_code": "העתק קוד"
+          "copy_code": "העתק קוד",
+          "form": "טופס",
+          "catalog": "קטלוג"
         },
         "kind": {
           "quick_reply": "תגובה מהירה",
           "url": "בקר באתר",
           "phone": "התקשר",
           "copy_code": "העתק קוד",
-          "other": "אחר"
+          "other": "אחר",
+          "form": "טופס",
+          "catalog": "קטלוג"
         },
         "count": "{used}/{max} כפתורים",
         "limitReached": "עד {max} מסוג זה לכל היותר.",
@@ -361,8 +365,17 @@
           "codeRequired": "הזן קוד לדוגמה.",
           "quickReplyVariable": "תגובה מהירה לא יכולה להכיל משתנה.",
           "urlExampleRequired": "הזן ערך לדוגמה עבור משתנה הכתובת.",
-          "quickReplyPosition": "תגובות מהירות חייבות להיות יחד, בתחילה או בסוף הכפתורים."
-        }
+          "quickReplyPosition": "תגובות מהירות חייבות להיות יחד, בתחילה או בסוף הכפתורים.",
+          "flowIdRequired": "הזינו את מזהה ה-Flow.",
+          "flowIdInvalid": "מזהה ה-Flow הוא מספר.",
+          "screenRequired": "הזינו את מזהה המסך.",
+          "catalogAlone": "לא ניתן לשלב כפתור קטלוג עם כפתורים אחרים."
+        },
+        "catalogHint": "פותח את קטלוג ה-WhatsApp שלך. על הכפתור כתוב „הצגת הקטלוג” והוא חייב להיות הכפתור היחיד.",
+        "flowId": "מזהה WhatsApp Flow",
+        "flowIdHint": "המזהה המספרי של WhatsApp Flow שפורסם, ממנהל ה-Flows של Meta.",
+        "screen": "מסך פתיחה",
+        "screenHint": "מזהה המסך שבו נפתח הטופס, למשל WELCOME."
       },
       "result": {
         "metaRefused": "נשמר, אך Meta דחתה את התבנית.",

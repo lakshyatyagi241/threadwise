@@ -318,14 +318,18 @@
           "quick_reply": "Quick reply",
           "url": "Visit website",
           "phone": "Call phone",
-          "copy_code": "Copy code"
+          "copy_code": "Copy code",
+          "form": "Form",
+          "catalog": "Catalog"
         },
         "kind": {
           "quick_reply": "Quick reply",
           "url": "Visit website",
           "phone": "Call phone",
           "copy_code": "Copy code",
-          "other": "Other"
+          "other": "Other",
+          "form": "Form",
+          "catalog": "Catalog"
         },
         "count": "{used}/{max} buttons",
         "limitReached": "At most {max} of this kind.",
@@ -354,8 +358,17 @@
           "codeRequired": "Enter a sample code.",
           "quickReplyVariable": "A quick reply cannot contain a variable.",
           "urlExampleRequired": "Give a sample value for the URL variable.",
-          "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons."
-        }
+          "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons.",
+          "flowIdRequired": "Enter the Flow ID.",
+          "flowIdInvalid": "The Flow ID is a number.",
+          "screenRequired": "Enter the screen ID.",
+          "catalogAlone": "A catalog button cannot be combined with other buttons."
+        },
+        "catalogHint": "Opens your WhatsApp catalog. The button says “View catalog” and must be the only button.",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "The numeric ID of a published WhatsApp Flow, from Meta's Flows manager.",
+        "screen": "Opening screen",
+        "screenHint": "The ID of the screen the form opens on, for example WELCOME."
       },
       "result": {
         "metaRefused": "Saved, but Meta refused the template.",

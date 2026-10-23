@@ -108,7 +108,12 @@ export function ButtonsEditor({
                   <p className="text-sm text-muted-foreground">{t('keptAsIs', { text: r.text })}</p>
                 ) : (
                   <div className="grid gap-3 sm:grid-cols-2">
-                    {r.kind !== 'copy_code' && (
+                    {r.kind === 'catalog' && (
+                      <p className="text-sm text-muted-foreground sm:col-span-2">
+                        {t('catalogHint')}
+                      </p>
+                    )}
+                    {r.kind !== 'copy_code' && r.kind !== 'catalog' && (
                       <Field
                         label={t('text')}
                         htmlFor={`${id}-text`}
@@ -173,6 +178,47 @@ export function ButtonsEditor({
                         />
                       </Field>
                     )}
+                    {r.kind === 'form' && (
+                      <Field
+                        label={t('flowId')}
+                        htmlFor={`${id}-flow`}
+                        hint={t('flowIdHint')}
+                        error={
+                          err('flowIdRequired')
+                            ? t('issue.flowIdRequired')
+                            : err('flowIdInvalid')
+                              ? t('issue.flowIdInvalid')
+                              : undefined
+                        }
+                      >
+                        <Input
+                          id={`${id}-flow`}
+                          inputMode="numeric"
+                          dir="ltr"
+                          placeholder="1234567890123456"
+                          value={r.flowId}
+                          invalid={Boolean(err('flowIdRequired') || err('flowIdInvalid'))}
+                          onChange={(e) => patch(r.key, { flowId: e.target.value })}
+                        />
+                      </Field>
+                    )}
+                    {r.kind === 'form' && (
+                      <Field
+                        label={t('screen')}
+                        htmlFor={`${id}-screen`}
+                        hint={t('screenHint')}
+                        error={err('screenRequired') ? t('issue.screenRequired') : undefined}
+                      >
+                        <Input
+                          id={`${id}-screen`}
+                          dir="ltr"
+                          placeholder="WELCOME"
+                          value={r.screen}
+                          invalid={Boolean(err('screenRequired'))}
+                          onChange={(e) => patch(r.key, { screen: e.target.value })}
+                        />
+                      </Field>
+                    )}
                     {r.kind === 'phone' && (
                       <Field
                         label={t('phone')}
@@ -215,6 +261,9 @@ export function ButtonsEditor({
             );
           })}
         </ol>
+      )}
+      {issues.some((x) => x.code === 'catalogAlone') && (
+        <Alert tone="warning">{t('issue.catalogAlone')}</Alert>
       )}
       {issues.some((x) => x.code === 'quickReplyPosition') && (
         <Alert tone="warning">{t('issue.quickReplyPosition')}</Alert>

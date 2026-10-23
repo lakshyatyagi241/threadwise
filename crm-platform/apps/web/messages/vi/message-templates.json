@@ -325,14 +325,18 @@
           "quick_reply": "Trả lời nhanh",
           "url": "Truy cập trang web",
           "phone": "Gọi điện thoại",
-          "copy_code": "Sao chép mã"
+          "copy_code": "Sao chép mã",
+          "form": "Biểu mẫu",
+          "catalog": "Danh mục"
         },
         "kind": {
           "quick_reply": "Trả lời nhanh",
           "url": "Truy cập trang web",
           "phone": "Gọi điện thoại",
           "copy_code": "Sao chép mã",
-          "other": "Khác"
+          "other": "Khác",
+          "form": "Biểu mẫu",
+          "catalog": "Danh mục"
         },
         "count": "{used}/{max} nút",
         "limitReached": "Tối đa {max} nút loại này.",
@@ -361,8 +365,17 @@
           "codeRequired": "Nhập mã mẫu.",
           "quickReplyVariable": "Nút trả lời nhanh không thể chứa biến.",
           "urlExampleRequired": "Nhập giá trị mẫu cho biến URL.",
-          "quickReplyPosition": "Các nút trả lời nhanh phải nằm cùng nhau, ở đầu hoặc cuối danh sách nút."
-        }
+          "quickReplyPosition": "Các nút trả lời nhanh phải nằm cùng nhau, ở đầu hoặc cuối danh sách nút.",
+          "flowIdRequired": "Nhập ID Flow.",
+          "flowIdInvalid": "ID Flow là một số.",
+          "screenRequired": "Nhập ID màn hình.",
+          "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác."
+        },
+        "catalogHint": "Mở danh mục WhatsApp của bạn. Nút hiển thị “Xem danh mục” và phải là nút duy nhất.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "ID dạng số của một WhatsApp Flow đã xuất bản, lấy từ trình quản lý Flows của Meta.",
+        "screen": "Màn hình mở đầu",
+        "screenHint": "ID của màn hình mà biểu mẫu mở ra, ví dụ WELCOME."
       },
       "result": {
         "metaRefused": "Đã lưu, nhưng Meta từ chối mẫu.",

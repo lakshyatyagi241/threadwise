@@ -325,14 +325,18 @@
           "quick_reply": "Balasan cepat",
           "url": "Kunjungi situs",
           "phone": "Telepon",
-          "copy_code": "Salin kode"
+          "copy_code": "Salin kode",
+          "form": "Formulir",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Balasan cepat",
           "url": "Kunjungi situs",
           "phone": "Telepon",
           "copy_code": "Salin kode",
-          "other": "Lainnya"
+          "other": "Lainnya",
+          "form": "Formulir",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} tombol",
         "limitReached": "Maksimal {max} untuk jenis ini.",
@@ -361,8 +365,17 @@
           "codeRequired": "Masukkan kode contoh.",
           "quickReplyVariable": "Balasan cepat tidak boleh berisi variabel.",
           "urlExampleRequired": "Berikan nilai contoh untuk variabel URL.",
-          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol."
-        }
+          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol.",
+          "flowIdRequired": "Masukkan ID Flow.",
+          "flowIdInvalid": "ID Flow berupa angka.",
+          "screenRequired": "Masukkan ID layar.",
+          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain."
+        },
+        "catalogHint": "Membuka katalog WhatsApp Anda. Tombol bertuliskan “Lihat katalog” dan harus menjadi satu-satunya tombol.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "ID numerik WhatsApp Flow yang sudah dipublikasikan, dari pengelola Flows Meta.",
+        "screen": "Layar pembuka",
+        "screenHint": "ID layar tempat formulir dibuka, misalnya WELCOME."
       },
       "result": {
         "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
