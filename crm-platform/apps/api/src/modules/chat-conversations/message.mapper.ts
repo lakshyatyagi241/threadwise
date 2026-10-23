@@ -101,6 +101,23 @@ function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] 
   };
 }
 
+/** The cards of a carousel a flow sent (`meta.sentCarousel`, kept by `FlowSender`). */
+function sentCarouselOf(row: MessageRow): MessageResponse['sentCarousel'] {
+  const c = row.meta.sentCarousel as { cards?: unknown } | undefined;
+  if (row.direction !== 'out' || !c || !Array.isArray(c.cards)) return null;
+  return {
+    cards: (c.cards as Array<Record<string, unknown>>).map((card) => ({
+      title: str(card.title) ?? '',
+      text: str(card.text) ?? '',
+      image: str(card.image),
+      buttons: (Array.isArray(card.buttons)
+        ? (card.buttons as Array<Record<string, unknown>>)
+        : []
+      ).map((b) => ({ title: str(b.title) ?? '', url: str(b.url) })),
+    })),
+  };
+}
+
 /** The ad or link that opened the chat (Meta `referral`), on the message that carried it. */
 /**
  * The system lines the web app words in the reader's language: the consent line the STOP / START listener wrote (`meta.event =
@@ -350,6 +367,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     mentions: mentionsOf(row),
     groupDelivery: groupDeliveryOf(row),
     sentInteractive: sentInteractiveOf(row),
+    sentCarousel: sentCarouselOf(row),
     email: emailOf(row),
     unsupported:
       row.meta.unsupported === true &&
