@@ -33,7 +33,6 @@ export function ColumnHeaderMenu({
   onSort,
   onHide,
   onFilter,
-  unhide,
 }: {
   column: ColumnDef;
   label: string;
@@ -43,23 +42,16 @@ export function ColumnHeaderMenu({
   onHide?: () => void;
   /** Present when the column has a filter. */
   onFilter?: () => void;
-  /** The columns that are hidden now: when there are any, the menu offers "Unhide column" with the same list as the "+". */
-  unhide?: {
-    groups: ReadonlyArray<{ group: ColumnGroup; columns: ColumnDef[] }>;
-    onAdd: (id: ColumnId) => void;
-    onAddField?: () => void;
-  };
 }) {
   const t = useTranslations('contacts-attributes-tags.list');
   const locked = LOCKED_COLUMNS.includes(column.id);
   const hasSort = sort !== null && onSort;
   const hasHide = !locked && onHide;
-  const hasUnhide = unhide !== undefined && unhide.groups.length > 0;
-  if (!hasSort && !onFilter && !hasHide && !hasUnhide) return null;
+  if (!hasSort && !onFilter && !hasHide) return null;
   return (
     <RowMenu
       label={t('columnMenu', { column: label })}
-      width={hasUnhide ? 288 : 216}
+      width={216}
       className="size-6 shrink-0 rounded text-muted-foreground opacity-0 hover:bg-background hover:opacity-100 focus-visible:opacity-100 group-hover/th:opacity-100 aria-expanded:opacity-100 [@media(hover:none)]:opacity-100"
       trigger={<ChevronDownIcon className="mx-auto size-3.5" />}
     >
@@ -70,44 +62,27 @@ export function ColumnHeaderMenu({
           onSort={hasSort ? onSort : undefined}
           onFilter={onFilter}
           onHide={hasHide ? onHide : undefined}
-          unhide={hasUnhide ? unhide : undefined}
         />
       )}
     </RowMenu>
   );
 }
 
-/** What the column menu holds: its actions, or (after "Unhide column") the list of hidden columns. */
+/** What the column menu holds: sort, filter and hide. Hidden columns are brought back from the "+" at the end of the header row. */
 function HeaderMenuBody({
   close,
   sort,
   onSort,
   onFilter,
   onHide,
-  unhide,
 }: {
   close: () => void;
   sort: { active: 'asc' | 'desc' | null } | null;
   onSort?: (order: 'asc' | 'desc') => void;
   onFilter?: () => void;
   onHide?: () => void;
-  unhide?: {
-    groups: ReadonlyArray<{ group: ColumnGroup; columns: ColumnDef[] }>;
-    onAdd: (id: ColumnId) => void;
-    onAddField?: () => void;
-  };
 }) {
   const t = useTranslations('contacts-attributes-tags.list');
-  const [view, setView] = useState<'actions' | 'unhide'>('actions');
-  if (view === 'unhide' && unhide)
-    return (
-      <ColumnPickList
-        groups={unhide.groups}
-        onAdd={unhide.onAdd}
-        onAddField={unhide.onAddField}
-        close={close}
-      />
-    );
   return (
     <>
       {sort && onSort && (
@@ -142,7 +117,7 @@ function HeaderMenuBody({
           <FilterIcon /> {t('filterByColumn')}
         </RowMenuItem>
       )}
-      {(onHide || unhide) && (sort || onFilter) && <RowMenuSeparator />}
+      {onHide && (sort || onFilter) && <RowMenuSeparator />}
       {onHide && (
         <RowMenuItem
           onSelect={() => {
@@ -153,18 +128,14 @@ function HeaderMenuBody({
           <EyeIcon /> {t('hideColumn')}
         </RowMenuItem>
       )}
-      {unhide && (
-        <RowMenuItem onSelect={() => setView('unhide')}>
-          <PlusIcon className="size-3.5" /> {t('unhideColumn')}
-        </RowMenuItem>
-      )}
     </>
   );
 }
 
 /**
  * The "+" at the end of the header row: every column that is not shown yet, grouped (contact, lifecycle, related, consent,
- * activity, custom properties), with a search box. Picking one shows it at once; the choice is kept like the Columns panel's.
+ * activity, custom properties), with a search box and the title "Unhide column" (this is where a hidden column comes back).
+ * Picking one shows it at once; the choice is kept like the Columns panel's.
  */
 export function AddColumnPicker({
   groups,
@@ -186,15 +157,19 @@ export function AddColumnPicker({
       trigger={<PlusIcon className="mx-auto size-4" />}
     >
       {(close) => (
-        <ColumnPickList groups={groups} onAdd={onAdd} onAddField={onAddField} close={close} />
+        <>
+          <div className="px-3 pb-0.5 pt-2 text-xs font-semibold text-foreground">
+            {t('unhideColumn')}
+          </div>
+          <ColumnPickList groups={groups} onAdd={onAdd} onAddField={onAddField} close={close} />
+        </>
       )}
     </RowMenu>
   );
 }
 
 /**
- * The hidden columns, grouped, with a search box and (when the person may make one) "add a custom field as a column". Shared by the
- * header's "+" and the column menu's "Unhide column".
+ * The hidden columns, grouped, with a search box and (when the person may make one) "add a custom field as a column".
  */
 function ColumnPickList({
   groups,
