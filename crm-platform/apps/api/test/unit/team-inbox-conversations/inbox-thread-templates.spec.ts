@@ -328,7 +328,7 @@ describe('InboxThreadService: listing templates', () => {
     expect(hasMore).toBe(false);
   });
 
-  it('lists a template of another number disabled, with the reason, so it is never a mystery', async () => {
+  it("leaves out a template of another WhatsApp number: it can't be sent here and is not edited from here", async () => {
     const { list } = setup({
       rows: [
         template(),
@@ -338,7 +338,6 @@ describe('InboxThreadService: listing templates', () => {
     const { data } = await list();
     expect(data.map((t) => [t.name, t.sendable, t.reason])).toEqual([
       ['order_shipped', true, null],
-      ['other_line', false, 'other_number'],
     ]);
   });
 
