@@ -238,9 +238,10 @@ def bridge_message(prev, new):
     """--bridge <prev_sha> <new_sha>: the announcement for a Chat alert bridge update, in the release template. Only the PRs that touched
     the bridge's folder between the two commits are listed. Degrades to the version line and 'PR details unavailable'. Never raises."""
     new9, prev9 = (new or "")[:9], (prev or "")[:9]
-    head = "🔧 *Chat alert bridge updated*"
+    label = re.sub(r"[^A-Za-z0-9 ./_-]", "", os.environ.get("DESK_ANNOUNCE_LABEL", "Chat alert bridge"))[:40] or "Chat alert bridge"
+    head = f"🔧 *{label} updated*"
     ver = f"Version: `{new9 or 'unknown'}`" + (f" (was `{prev9}`)" if prev9 else "") + (f" {WEB}/commit/{new9}" if sha_ok(new9) else "")
-    tail = "The alert bridge was restarted; open incidents held in its memory were cleared. " + time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+    tail = ("The alert bridge was restarted; open incidents held in its memory were cleared. " if label == "Chat alert bridge" else "") + time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
     try:
         if not sha_ok(new):
             raise RuntimeError("no sha")
@@ -259,7 +260,7 @@ def bridge_message(prev, new):
             full = get(f"/repos/{REPO}/pulls/{n}") or {}
             prs.append({"n": n, "title": clean(full.get("title")), "author": who(full.get("user")), "merger": who(full.get("merged_by"))})
         if not prs:
-            return "\n".join([head, ver, "No pull request found for this bridge change", tail])[:MAXLEN]
+            return "\n".join([head, ver, f"No pull request found for this {label.lower()} change", tail])[:MAXLEN]
         p0, rest = prs[0], prs[1:]
         lines = [head, ver, f'PR: #{p0["n"]} "{p0["title"]}" {WEB}/pull/{p0["n"]}', f'Author: {p0["author"]}', f'Deployed by: {p0["merger"]}']
         if rest:
