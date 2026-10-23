@@ -250,3 +250,87 @@ test('REST claim and release edit the alert card in place (incident API / a team
   assert.equal(calls.length, 2);
   assert.ok(!JSON.stringify(calls[1].body).includes('is working on this'));
 });
+
+// ---- one card per incident: created once, edited through claim -> PR -> resolved ----
+async function bootInc(env = {}) {
+  const { createResolver } = await import('./resolver.mjs');
+  const f = fakes();
+  const b = startBridge({
+    env: { ...baseEnv, ...env }, urls: { critical: WH }, fetchImpl: f.fetchImpl, log: () => {},
+    resolverFactory: ({ post, metrics }) => createResolver({ env: { ...baseEnv, ...env, VERIFY_SECONDS: '0', VERIFY_POLL_MS: '1' }, post, promQuery: async () => 0, metrics, sleep: async () => {} }),
+  });
+  await new Promise((r) => b.server.listen(0, '127.0.0.1', r));
+  const port = b.server.address().port;
+  const am = (status) => fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ alerts: [{ status, fingerprint: 'fpx', labels: { alertname: 'ApiCallerLatencyHigh', severity: 'critical' }, annotations: { summary: 'slow' }, startsAt: new Date(Date.now() - 90000).toISOString(), endsAt: status === 'resolved' ? new Date().toISOString() : undefined }] }) });
+  return { b, f, am, close: () => { b.server.closeAllConnections(); b.server.close(); } };
+}
+const txt = (m) => JSON.stringify(m);
+
+test('one card: one create, then PATCH for claim, PR, note, resolved; no second top-level message; no announce', async () => {
+  const { b, f, am, close } = await bootInc();
+  await am('firing');
+  await b.resolver.settle();
+  const id = b.resolver.byKey('am:fpx').id;
+  const posts = () => f.log.api.filter((x) => x.method === 'POST');
+  assert.equal(posts().filter((x) => x.body.cardsV2[0].card.header.title.includes('FIRING')).length, 1);
+  await b.resolver.claim(id, 'Vedant-Claude');
+  assert.equal(f.log.api.at(-1).method, 'PATCH');
+  assert.match(txt(f.log.api.at(-1).body), /Vedant-Claude is working on this since/);
+  await b.resolver.addNote(id, 'Vedant-Claude', 'Pool <b>starved</b> by report job');
+  await b.resolver.raisePr(id, 'Vedant-Claude', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/77', number: 77, summary: 'Index the report query' });
+  let last = f.log.api.at(-1);
+  assert.equal(last.method, 'PATCH');
+  assert.match(last.url, /messages\/m1\?updateMask=text,cardsV2/);
+  assert.match(txt(last.body), /PR #77 \(Index the report query\)/);
+  assert.match(txt(last.body), /What Vedant-Claude found/);
+  assert.ok(!txt(last.body).includes('<b>starved'), 'note escaped');
+  assert.match(txt(last.body), /Timeline/);
+  await b.resolver.setRelease('abcdef1234567', [77]);
+  await b.resolver.settle();
+  await am('resolved');
+  await b.resolver.settle();
+  last = f.log.api.at(-1);
+  assert.match(txt(last.body), /RESOLVED/);
+  assert.match(txt(last.body), /Fixed by PR #77/);
+  assert.match(txt(last.body), /release abcdef1/);
+  assert.ok(!/Value now/.test(txt(last.body)));
+  assert.equal(posts().filter((x) => /working on this|raised|RESOLVED|released/.test(txt(x.body))).length, 0, 'no lifecycle message posted: the card carries it');
+  assert.equal(f.log.hooks.length, 0, 'no webhook post, no announce');
+  assert.ok(f.log.api.filter((x) => x.method === 'PATCH').length >= 4);
+  close();
+});
+
+test('one card: alert clears on its own -> card edited, no second message', async () => {
+  const { b, f, am, close } = await bootInc();
+  await am('firing');
+  await am('resolved');
+  assert.equal(f.log.api.filter((x) => x.method === 'POST' && /RESOLVED/.test(txt(x.body))).length, 0);
+  const last = f.log.api.at(-1);
+  assert.equal(last.method, 'PATCH');
+  assert.match(txt(last.body), /Cleared on its own, no code change/);
+  assert.match(txt(last.body), /What it measured/);
+  close();
+});
+
+test('webhook mode unchanged: resolved is a second webhook message with honest text', async () => {
+  const { b, f, am, close } = await bootInc({ CHAT_APP_ENABLED: 'false', ANNOUNCE_IN_SPACE: '0' });
+  await am('firing');
+  await am('resolved');
+  const posts = f.log.hooks;
+  assert.equal(f.log.api.length, 0);
+  assert.match(txt(posts.at(-1).body), /RESOLVED after/);
+  assert.match(txt(posts.at(-1).body), /What cleared it/);
+  assert.ok(!/Value now|What it was/.test(txt(posts.at(-1).body)));
+  close();
+});
+
+test('card stays under the Chat size limit with a long timeline and hostile text', async () => {
+  const { renderCard } = await import('./chat-app.mjs');
+  const base = { text: 'FIRING', cardsV2: [{ cardId: 'a', card: { header: { title: 'FIRING: X' }, sections: [{ widgets: Array.from({ length: 100 }, () => ({ decoratedText: { text: 'x'.repeat(700) } })) }] } }] };
+  const tl = Array.from({ length: 40 }, (_, i) => ({ t: 1e12 + i * 6e4, who: 'w'.repeat(500), text: `<script>${'y'.repeat(900)}\u0007` }));
+  const m = renderCard(base, { incidentId: 'i', snap: { status: 'pr_raised', owner: 'o', prNumber: 5, prUrl: 'javascript:alert(1)', prSummary: '<i>'.repeat(300), tl, notes: [{ who: 'a', text: 'z'.repeat(9000) }] } });
+  assert.ok(Buffer.byteLength(JSON.stringify(m)) <= 30000);
+  assert.ok(!/<script>|javascript:/.test(JSON.stringify(m)));
+  const t = m.cardsV2[0].card.sections.at(-1).widgets.find((w) => w.decoratedText?.topLabel === 'Timeline').decoratedText.text;
+  assert.equal(t.split('\n').length, 8);
+});
