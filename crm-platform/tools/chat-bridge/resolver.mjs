@@ -40,7 +40,16 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const announce = (inc, text) => env.ANNOUNCE_IN_SPACE === '0' ? undefined : Promise.all(inc.channels.map((ch) => post(ch, { text: `${text}\n(incident: ${inc.alertname ?? inc.playbook}, ${inc.id})`.slice(0, 400) }))).catch(() => {});
   // Lifecycle line (claim, PR, release, resolved): recorded on the incident timeline. When the Chat app edited the alert card (ownerHook true) that
   // card IS the message: no thread reply, no top-level announce. Webhook mode / no card: today's thread reply (+ announce) exactly as before.
-  let ownerHook = null;
+  let ownerHook = null, cardHook = null; // cardHook(channel, body, opts) -> true when the Chat app created the one editable card
+  const esc = (x) => String(x).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').slice(0, 200);
+  // App mode: the deploy failure is ONE interactive card; unknown values are left out. Returns the channels where it could not be created.
+  const openDeployCard = async (inc) => {
+    const m = inc.meta ?? {}, rows = [['Attempted', sha7(m.attemptedSha)], ...(m.liveSha ? [['Live', sha7(m.liveSha)]] : []), ...(m.prs?.length ? [['PRs', m.prs.map((n) => `#${Number(n)}`).join(' ')]] : []), ...(m.mergers?.length ? [['Merged by', m.mergers.join(' ')]] : []), ...(m.durationSeconds ? [['Took', `${Number(m.durationSeconds)} s`]] : [])];
+    const title = '\uD83D\uDD34 Deploy failed or was refused', body = { text: `${title}: needs a human or a fix PR`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `needs a human or a fix PR, incident ${inc.id}` }, sections: [{ widgets: rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } })) }] } }] };
+    const failed = [];
+    for (const ch of inc.channels) if (!(await Promise.resolve(cardHook?.(ch, body, { threadKey: inc.threadKey, interactive: { incidentId: inc.id, firedAt: inc.startedAt } })).catch(() => false))) failed.push(ch);
+    return failed;
+  };
   const life = async (inc, text, { who = 'bridge', tl, label = '', announceToo = false } = {}) => {
     inc.tl.push({ t: now(), who, text: String(tl ?? text).slice(0, 300) }); if (inc.tl.length > 40) inc.tl.shift();
     if (await Promise.resolve(ownerHook?.(inc.id)).catch(() => false)) return true;
@@ -122,7 +131,12 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   async function run(inc, c) {
     c.incident = inc;
     if (mode === 'off') return inc;
-    if (inc.playbook === 'deploy_failure') { inc.state = 'needs_fix'; count('deploy_failure', 'opened'); await step(inc, '', c.message); return inc; } // informational: a human or a fix PR resolves it
+    if (inc.playbook === 'deploy_failure') {
+      inc.state = 'needs_fix'; count('deploy_failure', 'opened');
+      const failed = cardHook ? await openDeployCard(inc) : inc.channels;
+      if (failed.length) await Promise.all(failed.map((ch) => step(inc, '', c.message, ch))); // webhook mode / API failure: today's text + "Incident update" card
+      return inc;
+    } // informational: a human or a fix PR resolves it
     await step(inc, 'DIAGNOSED', inc.diagnosis ?? 'see the first message of this thread');
     const why = pre[inc.playbook](c);
     if (why.length) { audit({ id: inc.id, result: 'refused', why }); await escalate(inc, `no safe action: ${why.join('; ')}`); return inc; }
@@ -277,7 +291,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     inc.state = 'resolved'; resolution(inc, 'pr', extra); { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`; await life(inc, t, { announceToo: true, tl: `resolved by PR #${inc.prNumber}: alert verified clear` }); } return true;
   }
   return {
-    mode, setOwnerHook: (f) => { ownerHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
+    mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
     setRelease, openDeployFailure, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),

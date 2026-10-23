@@ -334,3 +334,75 @@ test('card stays under the Chat size limit with a long timeline and hostile text
   const t = m.cardsV2[0].card.sections.at(-1).widgets.find((w) => w.decoratedText?.topLabel === 'Timeline').decoratedText.text;
   assert.equal(t.split('\n').length, 8);
 });
+
+// ---- STATUS line + deploy_failure as one card ----
+const statusOf = (m) => m.cardsV2[0].card.sections[0].widgets[0].decoratedText.text;
+const SUG = { decoratedText: { topLabel: 'Suggested action', text: 'Claim it (👀) so others know.' } };
+const mk = () => ({ text: 'FIRING', cardsV2: [{ cardId: 'a', card: { header: { title: 'FIRING: X' }, sections: [{ widgets: [{ decoratedText: { text: 'x' } }, structuredClone(SUG)] }] } }] });
+
+test('status line: open, claimed, PR raised, resolved by PR, cleared on its own; stale suggestion goes after claim', async () => {
+  const { renderCard } = await import('./chat-app.mjs');
+  const pr = 'https://github.com/lakshyatyagi241/threadwise/pull/77';
+  let m = renderCard(mk(), { incidentId: 'i' });
+  assert.equal(statusOf(m), '🟡 Status: Open, nobody has taken it yet');
+  assert.match(txt(m), /Claim it/);
+  m = renderCard(mk(), { incidentId: 'i', snap: { status: 'claimed', owner: '<b>Ved</b>', claimedAt: Date.UTC(2026, 0, 1, 9, 5) } });
+  assert.equal(statusOf(m), '🔵 Status: In progress, <b>&lt;b&gt;Ved&lt;/b&gt;</b> is working on this since 09:05 UTC');
+  assert.ok(!/Claim it/.test(txt(m)), 'stale suggestion removed');
+  m = renderCard(mk(), { incidentId: 'i', snap: { status: 'pr_raised', owner: 'Vedant-Claude', prNumber: 77, prUrl: pr } });
+  assert.equal(statusOf(m), `🔵 Status: In progress, <a href="${pr}">PR #77</a> raised by <b>Vedant-Claude</b>`);
+  m = renderCard(mk(), { incidentId: 'i', snap: { status: 'resolved', owner: 'Vedant-Claude', prNumber: 77, prUrl: pr, resolution: { kind: 'pr', at: 1, durationMs: 1 } } });
+  assert.equal(statusOf(m), `✅ Status: Resolved by <a href="${pr}">PR #77</a> (<b>Vedant-Claude</b>)`);
+  assert.ok(!/Claim it/.test(txt(m)));
+  assert.match(txt(m), /Fixed by PR #77/);
+  m = renderCard(mk(), { incidentId: 'i', snap: { status: 'resolved', resolution: { kind: 'self', at: 1, durationMs: 1 } } });
+  assert.equal(statusOf(m), '✅ Status: Cleared on its own');
+});
+
+async function deployRig({ apiFails = false, enabled = true } = {}) {
+  const { createChatApp } = await import('./chat-app.mjs');
+  const { createResolver } = await import('./resolver.mjs');
+  const api = { creates: [], updates: [], createMessage: async (ch, body, o) => (api.creates.push({ ch, body, o }), apiFails ? { ok: false, status: 500 } : { ok: true, name: 'spaces/AAA/messages/d1' }), updateMessage: async (ch, name, body) => (api.updates.push({ name, body }), { ok: true }) };
+  const posts = [];
+  const resolver = createResolver({ env: { ANNOUNCE_IN_SPACE: '1' }, post: async (c, m, o) => posts.push({ c, m, o }), sleep: async () => {} });
+  const app = createChatApp({ env: { CHAT_APP_ENABLED: String(enabled) }, api, verifier: {}, resolver, webhookSend: async () => {} });
+  if (app.enabled) { resolver.setOwnerHook((id, o) => app.syncCard(id, o)); resolver.setCardHook((c, b, o) => app.openCard(c, b, o)); }
+  return { api, posts, resolver };
+}
+const spec = { attemptedSha: 'bbbbbbb1', liveSha: '', prs: [5], mergers: ['@bob'], durationSeconds: 0 };
+
+test('deploy_failure in app mode: one create, then only edits (claim, PR, release-resolved); no thread or top-level message', async () => {
+  const { api, posts, resolver } = await deployRig();
+  await resolver.openDeployFailure(spec);
+  const id = resolver.byKey('deploy:bbbbbbb1').id;
+  assert.equal(api.creates.length, 1);
+  assert.equal(api.creates[0].ch, 'deploy');
+  assert.equal(api.creates[0].body.cardsV2[0].card.sections[0].widgets[0].decoratedText.text, '🟡 Status: Open, nobody has taken it yet');
+  assert.ok(!/unknown|Live|Took/.test(txt(api.creates[0].body)), 'unknown facts omitted');
+  assert.match(txt(api.creates[0].body), /Attempted[\s\S]*bbbbbbb[\s\S]*#5[\s\S]*@bob/);
+  await resolver.claim(id, 'Asha');
+  assert.match(txt(api.updates.at(-1).body), /In progress, <b>Asha<\/b> is working on this since/);
+  await resolver.raisePr(id, 'Asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/80', number: 80, summary: 'fix build' });
+  assert.match(txt(api.updates.at(-1).body), /PR #80<\/a> raised by <b>Asha/);
+  await resolver.setRelease('ccccccc1', [80]);
+  assert.match(txt(api.updates.at(-1).body), /✅ Status: Resolved by .*PR #80.*Asha/);
+  assert.match(txt(api.updates.at(-1).body), /RESOLVED/);
+  assert.equal(api.creates.length, 1);
+  assert.equal(posts.length, 0, 'webhook/post never used: no thread reply, no announce');
+});
+
+test('deploy_failure: a release alone resolves the card; webhook mode and API failure keep today\'s text + Incident update card', async () => {
+  let r = await deployRig();
+  await r.resolver.openDeployFailure(spec); await r.resolver.setRelease('ccccccc1', []);
+  assert.match(txt(r.api.updates.at(-1).body), /✅ Status: Resolved by release ccccccc/);
+  for (const o of [{ enabled: false }, { apiFails: true }]) {
+    r = await deployRig(o);
+    await r.resolver.openDeployFailure(spec);
+    assert.equal(r.posts.length, 1);
+    assert.match(r.posts[0].m.text, /Deploy failed or was refused: needs a human or a fix PR/);
+    assert.equal(r.posts[0].m.cardsV2[0].card.header.title, 'Incident update');
+    assert.match(txt(r.posts[0].m), /\(live: unknown\)/);
+    await r.resolver.claim(r.resolver.byKey('deploy:bbbbbbb1').id, 'Asha');
+    assert.ok(r.posts.length > 1, 'lifecycle lines still arrive as messages');
+  }
+});

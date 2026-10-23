@@ -28,6 +28,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
   app = createChatApp({ env, urls, fetchImpl, webhookSend, resolver, grafanaUrl, metrics, log });
   resolver?.setOwnerHook?.((id, owner) => app.syncCard?.(id, owner));
+  if (app.enabled) resolver?.setCardHook?.((ch, body, opts) => app.openCard(ch, body, opts));
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
     if (isTest(a)) { // never an incident/resolver call; dropped unless TEST_ALERTS_CHANNEL opts in
