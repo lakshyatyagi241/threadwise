@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import { sql } from 'drizzle-orm';
 import {
@@ -91,8 +91,8 @@ export class ScheduledRunService {
     private readonly outbox: OutboxService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     private readonly consentGate: ConsentGate,
-    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
-    @Optional() private readonly sendWindow?: SendWindowService,
+    // Quiet hours (BL-177). Required, not optional: a runner built without it would send marketing inside the hours without a sign.
+    private readonly sendWindow: SendWindowService,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -439,7 +439,6 @@ export class ScheduledRunService {
     refused: ReadonlyMap<number, string>,
   ): Promise<Map<number, SendHold>> {
     const held = new Map<number, SendHold>();
-    if (!this.sendWindow) return held;
     const purpose: PurposeInput = prepared.template
       ? purposeOfCategory(prepared.template.category)
       : 'marketing_messaging';

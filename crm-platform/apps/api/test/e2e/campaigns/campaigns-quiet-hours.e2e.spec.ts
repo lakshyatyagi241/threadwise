@@ -97,6 +97,8 @@ beforeAll(async () => {
         },
       }),
   });
+  // Built by hand to drive the hold rule. The worker's own graph is checked where Nest resolves it: workers.e2e asserts the resolved
+  // senders hold sendWindow and jobs, and booting CampaignsWorkerModule fails if either injection is missing.
   dispatch = new CampaignDispatchService(
     get<DatabaseService>(DatabaseService),
     get<CampaignsRepository>(CampaignsRepository),
@@ -116,10 +118,10 @@ beforeAll(async () => {
     get(CAMPAIGN_BILLING),
     get(CAMPAIGN_FLOW_STARTER),
     get(CAMPAIGN_SETTINGS),
-    get<ConsentPolicyService>(ConsentPolicyService),
-    get<ConsentGate>(ConsentGate),
     window,
     fakeJobs,
+    get<ConsentPolicyService>(ConsentPolicyService),
+    get<ConsentGate>(ConsentGate),
   );
 }, 240_000);
 

@@ -151,6 +151,8 @@ export function buildLab(h: Harness): Lab {
     get(CAMPAIGN_BILLING),
     get(CAMPAIGN_FLOW_STARTER),
     get(CAMPAIGN_SETTINGS),
+    get<SendWindowService>(SendWindowService),
+    jobs,
   );
   const series = new WizardSeriesService(
     db,
@@ -196,8 +198,8 @@ export function buildLab(h: Harness): Lab {
         return Promise.resolve({ ok: true, error: null });
       },
     },
-    undefined,
     get<SendWindowService>(SendWindowService),
+    undefined,
   );
   const tests = get<WizardTestSendService>(WizardTestSendService);
 

@@ -3,6 +3,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { MESSAGE_DELIVERY_EVENT } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
@@ -100,6 +101,7 @@ beforeAll(async () => {
     h.app.get(OutboxService),
     h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
     h.app.get(ConsentGate),
+    h.app.get(SendWindowService),
   );
   receipts = new ScheduledReceiptsService(db, h.app.get(OutboxService));
   consumer = new DeliveryBillingConsumer(

@@ -225,7 +225,7 @@ export function priceInCurrency(
     const margin = resolveMargin(layers, opts.country, opts.category);
     if (margin) {
       return {
-        priceMinor: priceFromMargin(opts.costMicros, margin.marginBps),
+        priceMinor: Math.max(MIN_CHARGE_MINOR, priceFromMargin(opts.costMicros, margin.marginBps)),
         metaCostMicros: opts.costMicros,
         matched: typed.matched,
         basis: 'margin',
@@ -234,7 +234,10 @@ export function priceInCurrency(
     }
   }
   return {
-    priceMinor: convertMinor(typed.priceMinor, opts.fromRate, opts.toRate),
+    priceMinor: Math.max(
+      MIN_CHARGE_MINOR,
+      convertMinor(typed.priceMinor, opts.fromRate, opts.toRate),
+    ),
     metaCostMicros: opts.costMicros,
     matched: typed.matched,
     basis: 'fixed',
@@ -255,17 +258,29 @@ export function pricingTable(
 ): Array<{ category: WalletCategory; priceMinor: number; free: boolean }> {
   const layers = opts.layers ?? { workspace: [], plan: [], platform: [] };
   return WALLET_CATEGORIES.map((category) => {
-    const { priceMinor } = priceMessageWithMargin(rows, layers, {
+    const priced = priceMessageWithMargin(rows, layers, {
       ...opts,
       category,
       pricingMode: opts.pricingMode ?? 'fixed',
     });
-    return { category, priceMinor, free: priceMinor <= 0 };
+    // Every message is charged: a category never shows as Free, whatever its card says.
+    const priceMinor = Math.max(MIN_CHARGE_MINOR, priced.priceMinor);
+    return { category, priceMinor, free: false };
   });
 }
 
 // --- settlement (TW-WALLET-009, -010) ----------------------------------------------------------------------------------------
 
+/**
+ * The least a WhatsApp, SMS or email message is ever charged, in hundredths of the currency. Nothing that goes out is free: a rate
+ * of 0 on a card or a switched-off rate is charged this minimum instead.
+ */
+export const MIN_CHARGE_MINOR = 1;
+
+/**
+ * Why a message is recorded free. `within_plan_free_quota` is no longer produced: the plan's monthly allowance does not make a
+ * WhatsApp, SMS or email message free any more. It stays in the type so rows written before that change still read.
+ */
 export type FreeReason = 'rate_is_zero' | 'within_plan_free_quota' | 'wallet_empty';
 
 export type Settlement =
@@ -275,35 +290,15 @@ export type Settlement =
 export interface SettlementFacts {
   priceMinor: number;
   balanceMinor: number;
-  /** Pay-per-message workspaces ignore the plan's allowance entirely. */
-  payPerMessage: boolean;
-  planActive: boolean;
-  /** The plan's monthly messages; 0 = unlimited. */
-  monthlyLimit: number;
-  /** Messages already counted this month, BEFORE this one. */
-  usedBefore: number;
-}
-
-/** Whether this message still fits the plan's free monthly allowance (TW-WALLET-010 rule 1). */
-export function withinFreeQuota(
-  f: Pick<SettlementFacts, 'planActive' | 'monthlyLimit' | 'usedBefore'>,
-): boolean {
-  if (!f.planActive) return false; // an ended plan or trial has no allowance at all
-  if (f.monthlyLimit <= 0) return true; // unlimited
-  return f.usedBefore + 1 <= f.monthlyLimit;
 }
 
 /**
- * Free or charged, and how much. A balance below the price is charged in part (the message already left: it is never
- * rejected), and the part not collected is the shortfall, recorded instead of silently lost. An empty wallet records the
- * message free with the whole price as shortfall (`wallet_empty`).
+ * Charged, always. A balance below the price is charged in part (the message already left: it is never rejected), and the part
+ * not collected is the shortfall, recorded instead of silently lost. An empty wallet records the message free with the whole price as
+ * shortfall (`wallet_empty`): nothing is charged, and the shortfall says what was owed.
  */
 export function decideSettlement(f: SettlementFacts): Settlement {
-  const price = Math.max(0, Math.trunc(f.priceMinor));
-  if (price === 0) return { outcome: 'free', reason: 'rate_is_zero', shortfallMinor: 0 };
-  if (!f.payPerMessage && withinFreeQuota(f)) {
-    return { outcome: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };
-  }
+  const price = Math.max(MIN_CHARGE_MINOR, Math.trunc(f.priceMinor));
   const have = Math.max(0, Math.trunc(f.balanceMinor));
   const charged = Math.min(price, have);
   if (charged === 0) return { outcome: 'free', reason: 'wallet_empty', shortfallMinor: price };
@@ -329,17 +324,12 @@ export function monthStart(now: Date): string {
 
 export interface LaunchFacts {
   platformOwned: boolean;
-  payPerMessage: boolean;
-  planActive: boolean;
-  monthlyLimit: number;
-  usedThisMonth: number;
-  recipients: number;
   balanceMinor: number;
-  /** What `recipients` messages cost at the audience's prices, hundredths; null = cannot estimate. */
+  /** What the audience costs at the audience's prices, hundredths (every recipient is charged); null = cannot estimate. */
   estimateMinor: number | null;
   /** How much of the estimate the balance must cover before a launch is allowed, percent (0 = only "not empty"). */
   coveragePercent: number;
-  /** One message at a price of 0 (a service reply) passes whatever the balance (the per-message check). */
+  /** One message with nothing to charge (no recipients) passes whatever the balance (the per-message check). */
   freeAllowed?: boolean;
 }
 
@@ -349,15 +339,10 @@ export type LaunchVerdict = { ok: true } | { ok: false; reason: 'empty' | 'insuf
  * Charging happens after delivery, so an empty wallet could otherwise blast a whole campaign for free. Reference blocked only on
  * a balance of 0 and compared nothing else (a 1-credit wallet launched 50,000 recipients). This keeps that rule and adds the
  * comparison Reference's own estimate was computed for and never used, with a configurable tolerance (coveragePercent).
+ * The plan's monthly allowance no longer lets a launch through with an empty wallet: every message is charged.
  */
 export function launchVerdict(f: LaunchFacts): LaunchVerdict {
   if (f.platformOwned) return { ok: true };
-  if (!f.payPerMessage) {
-    const fits =
-      f.planActive &&
-      (f.monthlyLimit <= 0 || f.usedThisMonth + Math.max(1, f.recipients) <= f.monthlyLimit);
-    if (fits) return { ok: true };
-  }
   if (f.freeAllowed && f.estimateMinor === 0) return { ok: true };
   if (f.balanceMinor <= 0) return { ok: false, reason: 'empty' };
   if (f.coveragePercent > 0 && f.estimateMinor !== null && f.estimateMinor > 0) {

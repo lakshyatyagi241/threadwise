@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { aiCostUsd } from '../../../src/modules/wallet-message-billing/ai-cost';
+import { MIN_CHARGE_MINOR } from '../../../src/modules/wallet-message-billing/wallet-rules';
 import {
   USAGE_DEFAULTS,
   billedMinutes,
@@ -54,16 +55,31 @@ describe('priceUsage', () => {
       reason: 'no_units',
     });
     const off = mergeUsageRates({
-      prices: { sms: { enabled: false } },
+      prices: { voice_call: { enabled: false } },
       costPlus: { ai: { enabled: false } },
     });
-    expect(priceUsage(off, { kind: 'sms', units: 2 })).toEqual({
+    expect(priceUsage(off, { kind: 'voice_call', units: 2 })).toEqual({
       basis: 'none',
       reason: 'switched_off',
     });
     expect(priceUsage(off, { kind: 'ai', units: 1, vendorCostUsd: 1 })).toEqual({
       basis: 'none',
       reason: 'switched_off',
+    });
+  });
+
+  it('never makes SMS or email free: a switched-off or zero rate is charged the minimum', () => {
+    const zeroed = mergeUsageRates({
+      prices: { sms: { enabled: false, priceMinor: 0 }, email: { enabled: false, priceMinor: 0 } },
+    });
+    expect(priceUsage(zeroed, { kind: 'sms', units: 2 })).toMatchObject({
+      basis: 'unit',
+      unitMinor: MIN_CHARGE_MINOR,
+      platformMinor: 2 * MIN_CHARGE_MINOR,
+    });
+    expect(priceUsage(zeroed, { kind: 'email', units: 1 })).toMatchObject({
+      basis: 'unit',
+      unitMinor: MIN_CHARGE_MINOR,
     });
   });
 
