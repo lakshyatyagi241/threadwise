@@ -341,3 +341,17 @@ test('api: POST /release and POST /incidents need the token and validate input',
   const g = await t.call('/incidents'); assert.ok(g.j.incidents.some((i) => i.kind === 'deploy_failure') && g.j.incidents.some((i) => i.kind === 'slow_statement'));
   t.close();
 });
+
+test('a critical alert with NO runbook entry still opens an incident (so the team can claim it); an unmapped warning does not', async () => {
+  const { startBridge } = await import('./bridge.mjs');
+  const handled = []; const posts = [];
+  const fetchImpl = async (u, o) => { posts.push(String(u)); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
+  const env = { CHAT_ALLOW_ANY_HOST: '1', GCHAT_CRITICAL_URL: 'http://x/c', GCHAT_SLOWQUERY_URL: 'http://x/s' };
+  const br = startBridge({ env, urls: { slowquery: 'http://x/s', critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: (s) => { handled.push(s); }, byKey: () => null }) });
+  await br.server.listen(0); const port = br.server.address().port;
+  const send = (alertname, severity, fp) => fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [{ status: 'firing', labels: { alertname, severity }, annotations: { summary: 's' }, fingerprint: fp }] }) });
+  await send('BrandNewUnmappedRule', 'critical', 'u1'); await send('BrandNewUnmappedWarning', 'warning', 'u2');
+  br.server.close();
+  assert.equal(handled.length, 1); assert.equal(handled[0].alertname, 'BrandNewUnmappedRule'); assert.equal(handled[0].playbook, 'service');
+  assert.match(handled[0].suggestion, /No runbook entry/); assert.ok(posts.every((u) => u.startsWith('http://x/c')));
+});
