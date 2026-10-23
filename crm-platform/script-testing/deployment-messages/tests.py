@@ -31,6 +31,7 @@ class Api(http.server.BaseHTTPRequestHandler):
         if MODE["fail"] == "500": return self._send(500, {"message": "boom"})
         if MODE["fail"] == "slow": time.sleep(9)
         if self.headers.get("Authorization") != "Bearer " + TOKEN: return self._send(401, {})
+        if self.path.startswith("/repos/o/r/commits?"): return self._send(200, FIX.get("bridge_commits", []))
         m = re.match(r"/repos/o/r/compare/(\w+)\.\.\.(\w+)$", self.path)
         if m and FIX.get("by_tag"): return self._send(200, {"commits": [commit(m.group(2), f"Add feature (#{1000 + int(m.group(2), 16)})", "carol")]})
         if m: return self._send(200, {"commits": FIX.get("compare", [])})
@@ -305,6 +306,23 @@ check("--announce posts exactly the given text once", len(chat_posts) == 1 and c
 pe = subprocess.run(["bash", WATCH, "--announce"], input="", env={**ENV, "DESK_WATCH_URL_FILE": f"{D}/url"}, capture_output=True, text=True, timeout=30)
 check("--announce with no text posts nothing and fails", pe.returncode == 2 and len(chat_posts) == 1, pe.stdout + pe.stderr)
 
+# bridge update announcement: only the PRs that touched the bridge folder, in the release template
+hs = lambda n: f"{n:07x}" + "f" * 33  # distinct 7-char prefixes (sha() starts with zeros)
+A9, N9 = hs(900), hs(903)
+FIX.update(by_tag=False, bridge_commits=[commit(hs(903), "feat(chat-bridge): card shows X (#903)", "alice"), commit(hs(902), "fix(chat-bridge): y (#902)", "bob"), commit(A9, "older bridge change (#900)", "carol")],
+           pulls={hs(903): [pr(903, "Card shows X", "alice", "dana")], hs(902): [pr(902, "Fix y", "bob", "dana")], A9: [pr(900, "Older", "carol", "dana")]})
+shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
+pb = subprocess.run([sys.executable, FMT, "--bridge", A9, N9], env=ENV, capture_output=True, text=True, timeout=60)
+check("--bridge: header, version and the newest bridge PR with author and merger", pb.stdout.startswith("🔧 *Chat alert bridge updated*") and '#903 "Card shows X"' in pb.stdout and "Author: @alice" in pb.stdout and "Deployed by: @dana" in pb.stdout, pb.stdout + pb.stderr)
+check("--bridge: lists the other bridge PR and stops at the previous version", '#902 "Fix y"' in pb.stdout and "#900" not in pb.stdout, pb.stdout)
+FIX.update(bridge_commits=[])
+pb2 = subprocess.run([sys.executable, FMT, "--bridge", A9, N9], env=ENV, capture_output=True, text=True, timeout=60)
+check("--bridge: no PR found says so, never crashes", "No pull request found" in pb2.stdout, pb2.stdout)
+MODE["fail"] = "500"
+pb3 = subprocess.run([sys.executable, FMT, "--bridge", A9, N9], env=ENV, capture_output=True, text=True, timeout=60)
+MODE["fail"] = None
+check("--bridge: GitHub down degrades to 'PR details unavailable'", "PR details unavailable" in pb3.stdout and pb3.stdout.startswith("🔧"), pb3.stdout)
+
 # a big release (50 merged PRs) must still show PR details within the time limit: only the newest 9 get GitHub lookups
 big = [commit(sha(100 + i), f"Merge pull request #{200 + i} from dev/b{i}\n\nt", "alice", "web-flow") for i in range(50)]
 FIX.update(compare=big, pulls={sha(100 + i): [pr(200 + i, f"Feature {i}", "alice", "bob")] for i in range(50)}, by_tag=False)
@@ -336,6 +354,19 @@ r2 = stall_two(now_ - 3600, now_ - 30)
 check("stall: keeps firing while new merges keep arriving (the OLDEST waiting commit counts, key is its sha)", r2["post"] is True and r2["head"] == sha(8) and "2 commit" in r2["text"], str(r2))
 check("stall: a release that started in the last 30 min suppresses it", stall_run(now_ - 3600, now_ - 60)["post"] is False)
 check("stall: a release that started long ago (and left the commits unreleased) does not suppress it", stall_run(now_ - 7200, now_ - 5400)["post"] is True)
+
+# watcher: a changed $BRIDGE_DIR/.version is announced once; the first sight is only recorded
+BD, S4 = tempfile.mkdtemp(), tempfile.mkdtemp()
+open(f"{BD}/.version", "w").write(hs(903))
+FIX.update(bridge_commits=[commit(hs(910), "feat(chat-bridge): newest bridge change (#904)", "alice"), commit(hs(903), "previous bridge version (#903)", "bob")], pulls={hs(910): [pr(904, "Newest bridge change", "alice", "dana")], hs(903): [pr(903, "Previous", "bob", "dana")]})
+chat_posts.clear()
+w4 = subprocess.Popen(["bash", WATCH], env={**w2env, "DESK_WATCH_STATE": S4, "DESK_BRIDGE_DIR": BD, "DESK_BRIDGE_POLL": "1"}, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+time.sleep(3.5)
+check("watcher: the first bridge version seen is recorded, not announced", not [t for t in texts() if t.startswith("🔧")] and open(f"{S4}/bridge.version").read().strip() == hs(903), str(texts()))
+open(f"{BD}/.version", "w").write(hs(910)); wait_for(lambda: any(t.startswith("🔧") for t in texts()), 8); time.sleep(3)
+ann = [t for t in texts() if t.startswith("🔧")]
+check("watcher: a new bridge version posts exactly one announcement with the PR template", len(ann) == 1 and "#904" in ann[0] and "Author: @alice" in ann[0] and "#903" not in ann[0], str([t[:80] for t in texts()]))
+w4.terminate(); w4.wait(); shutil.rmtree(BD, ignore_errors=True); shutil.rmtree(S4, ignore_errors=True)
 
 for d in (D2, B2, S2, S3): shutil.rmtree(d, ignore_errors=True)
 

@@ -156,9 +156,21 @@ stall_check() {
   once "stall-$head" && post "$text"
   return 0
 }
+# The Chat bridge is copied to production outside the release pipeline (deploy-bridge.sh writes its commit to $BRIDGE_DIR/.version). When that
+# commit changes, announce it once with the PR template. The first time a version is seen it is only recorded, never announced.
+BRIDGE_DIR=${DESK_BRIDGE_DIR:-/opt/chat-bridge}; BRIDGE_POLL=${DESK_BRIDGE_POLL:-30}; last_bridge=0
+bridge_check() {
+  local v last; v=$(tr -dc '0-9a-f' < "$BRIDGE_DIR/.version" 2>/dev/null | head -c 40); [ -n "$v" ] || return 0
+  last=$(cat "$STATE/bridge.version" 2>/dev/null || true)
+  [ "$v" = "$last" ] && return 0
+  echo "$v" > "$STATE/bridge.version"
+  [ -n "$last" ] && post "$(python3 "$FORMATTER" --bridge "$last" "$v" 2>>"$STATE/watch.log")"
+  return 0
+}
 while true; do
   date +%s > "$STATE/heartbeat"
   if [ $(( $(date +%s) - last_db )) -ge "$DB_POLL" ]; then last_db=$(date +%s); db_poll; fi
+  if [ $(( $(date +%s) - last_bridge )) -ge "$BRIDGE_POLL" ]; then last_bridge=$(date +%s); bridge_check; fi
   if [ "$active" = 0 ] && ! deploy_running && [ $(( $(date +%s) - last_stall )) -ge "$STALL_POLL" ]; then last_stall=$(date +%s); stall_check; fi
   if deploy_running; then
     rt=$(release_tag || true)
