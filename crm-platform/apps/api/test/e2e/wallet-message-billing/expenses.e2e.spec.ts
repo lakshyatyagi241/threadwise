@@ -303,19 +303,20 @@ describe('the day log', () => {
 
   beforeAll(async () => {
     days = await newTenant(h, 'expenses-days');
-    // Charges with no ledger lines: the day log counts them by their own day, status, channel and category.
-    const charge = (wamid: string, source: string, category: string, at: Date) =>
+    // Charges with no ledger lines: the day log counts them by their own day, type, status, channel and category.
+    const charge = (wamid: string, kind: string, source: string, category: string, at: Date) =>
       h.owner.query(
-        `INSERT INTO usage_charges (org_id, wamid, status, free_reason, source, category, to_country, billing_mode, created_at)
-         VALUES ($1, $2, 'free', 'rate_is_zero', $3, $4, 'IN', 'plan', $5)`,
-        [days.orgId, wamid, source, category, at.toISOString()],
+        `INSERT INTO usage_charges (org_id, wamid, kind, status, free_reason, source, category, to_country, billing_mode, created_at)
+         VALUES ($1, $2, $3, 'free', 'rate_is_zero', $4, $5, 'IN', 'plan', $6)`,
+        [days.orgId, wamid, kind, source, category, at.toISOString()],
       );
-    await charge('wamid.D.1', 'broadcast', 'marketing', now);
-    await charge('wamid.D.2', 'broadcast', 'marketing', now);
-    await charge('wamid.D.3', 'chat', 'utility', lateOn);
+    await charge('wamid.D.1', 'whatsapp_message', 'broadcast', 'marketing', now);
+    await charge('wamid.D.2', 'whatsapp_message', 'broadcast', 'marketing', now);
+    await charge('wamid.D.4', 'sms', 'broadcast', 'marketing', now);
+    await charge('wamid.D.3', 'whatsapp_message', 'chat', 'utility', lateOn);
   }, 60_000);
 
-  it('groups the messages of each day by status, channel and category, newest day first', async () => {
+  it('groups the messages of each day by type, status, channel and category, newest day first', async () => {
     const body = expenseDaysResponseSchema.parse(
       (await get(days, '/expenses/days?timeZone=UTC')).body,
     );
@@ -323,6 +324,15 @@ describe('the day log', () => {
     expect(body.data).toEqual([
       expect.objectContaining({
         day: dayIn('UTC', now),
+        kind: 'sms',
+        status: 'free',
+        source: 'broadcast',
+        category: 'marketing',
+        messages: 1,
+      }),
+      expect.objectContaining({
+        day: dayIn('UTC', now),
+        kind: 'whatsapp_message',
         status: 'free',
         source: 'broadcast',
         category: 'marketing',
@@ -330,6 +340,7 @@ describe('the day log', () => {
       }),
       expect.objectContaining({
         day: dayIn('UTC', lateOn),
+        kind: 'whatsapp_message',
         status: 'free',
         source: 'chat',
         category: 'utility',
@@ -341,7 +352,8 @@ describe('the day log', () => {
 
   it('pages one day at a time, and the cursor is the last day of the page', async () => {
     const first = expenseDaysResponseSchema.parse((await get(days, '/expenses/days?limit=1')).body);
-    expect(first.data.map((g) => g.day)).toEqual([dayIn('UTC', now)]);
+    // Both of the day's lines (the SMS and the WhatsApp message) arrive on the one page.
+    expect(first.data.map((g) => g.day)).toEqual([dayIn('UTC', now), dayIn('UTC', now)]);
     expect(first.page).toEqual({ nextCursor: dayIn('UTC', now), hasMore: true, limit: 1 });
 
     const second = expenseDaysResponseSchema.parse(

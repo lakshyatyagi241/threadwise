@@ -273,7 +273,7 @@
       "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
       "days": {
         "title": "Dagelijks logboek",
-        "subtitle": "Berichten gegroepeerd per dag, status, kanaal en categorie. Open een dag om elk bericht te zien.",
+        "subtitle": "Berichten gegroepeerd per dag, type, status, kanaal en categorie. Open een dag om elk bericht te zien.",
         "messagesOnDay": "{count} berichten",
         "viewDetails": "Details bekijken",
         "actions": "Acties",

@@ -273,7 +273,7 @@
       "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
       "days": {
         "title": "Registro giornaliero",
-        "subtitle": "Messaggi raggruppati per giorno, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
+        "subtitle": "Messaggi raggruppati per giorno, tipo, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
         "messagesOnDay": "{count} messaggi",
         "viewDetails": "Visualizza dettagli",
         "actions": "Azioni",
