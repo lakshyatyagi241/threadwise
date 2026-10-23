@@ -58,8 +58,9 @@ export function BulkPropertiesSection({
   const message = (p: BulkPropertyProblem) =>
     p === 'empty' ? t('properties.problemEmpty') : tf(`fieldProblem.${p}`);
 
+  // min-w-0: a fieldset is as wide as its widest unbreakable content by default, so one long property label stretched the whole dialog
   return (
-    <fieldset ref={sectionRef} className="space-y-2 border-t border-border pt-4">
+    <fieldset ref={sectionRef} className="min-w-0 space-y-2 border-t border-border pt-4">
       <legend className="text-sm font-medium">{t('properties.title')}</legend>
       <p className="text-xs text-muted-foreground">{t('properties.hint', { count })}</p>
 
@@ -70,7 +71,10 @@ export function BulkPropertiesSection({
             const problem = problems[f.key];
             const removeLabel = t('properties.remove', { name: f.label });
             return (
-              <li key={f.key} className="relative rounded-md border border-border p-2.5 pe-9">
+              <li
+                key={f.key}
+                className="relative min-w-0 rounded-md border border-border p-2.5 pe-9"
+              >
                 <button
                   type="button"
                   aria-label={removeLabel}
@@ -96,7 +100,7 @@ export function BulkPropertiesSection({
                   />
                 ) : (
                   <div className="space-y-1">
-                    <p className="text-sm font-medium" dir="auto">
+                    <p className="text-sm font-medium [overflow-wrap:anywhere]" dir="auto">
                       {f.label}
                     </p>
                     <p
@@ -153,14 +157,20 @@ export function BulkPropertiesSection({
                 <button
                   type="button"
                   className="flex w-full items-baseline justify-between gap-2 rounded px-2 py-1.5 text-start text-sm hover:bg-muted"
+                  title={`${f.label} /${f.key}`}
                   onClick={() => {
                     set(f.key, startingChange(f));
                     setPicking(false);
                     setQuery('');
                   }}
                 >
-                  <span dir="auto">{f.label}</span>
-                  <span dir="ltr" className="font-mono text-xs text-muted-foreground">
+                  <span dir="auto" className="min-w-0 [overflow-wrap:anywhere]">
+                    {f.label}
+                  </span>
+                  <span
+                    dir="ltr"
+                    className="max-w-[45%] shrink-0 truncate font-mono text-xs text-muted-foreground"
+                  >
                     /{f.key}
                   </span>
                 </button>
