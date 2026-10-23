@@ -314,7 +314,8 @@ def stall_two(old_epoch, new_epoch):
     return json.loads(subprocess.run([sys.executable, FMT, "--stall", A, "10", "0"], env=ENV, capture_output=True, text=True, timeout=60).stdout)
 r2 = stall_two(now_ - 3600, now_ - 30)
 check("stall: keeps firing while new merges keep arriving (the OLDEST waiting commit counts, key is its sha)", r2["post"] is True and r2["head"] == sha(8) and "2 commit" in r2["text"], str(r2))
-check("stall: a release event after the newest commit suppresses it", stall_run(now_ - 3600, now_ - 60)["post"] is False)
+check("stall: a release that started in the last 30 min suppresses it", stall_run(now_ - 3600, now_ - 60)["post"] is False)
+check("stall: a release that started long ago (and left the commits unreleased) does not suppress it", stall_run(now_ - 7200, now_ - 5400)["post"] is True)
 
 for d in (D2, B2, S2, S3): shutil.rmtree(d, ignore_errors=True)
 
