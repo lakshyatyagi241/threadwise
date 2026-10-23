@@ -14,6 +14,10 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['**/*.spec.ts', '**/*.test.ts'],
+    // DB_FAULT=deadlock: every retried transaction fails once with a deadlock after doing all its work (test/support/fault-injection.ts).
+    ...(process.env.DB_FAULT
+      ? { setupFiles: [resolve(__dirname, 'test/support/fault-injection.ts')] }
+      : {}),
     // Integration tests each own a Postgres container; running suites in
     // parallel would multiply containers and starve a laptop.
     fileParallelism: NO_DOCKER,
