@@ -67,7 +67,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
     const g = gate.allow(key);
     if (g !== 'send') { if (g === 'limited') suppressed++; metrics.inc('crm_slow_query_events_total', `kind="${g === 'limited' ? 'suppressed' : 'deduped'}"`); return false; }
     metrics.inc('crm_slow_query_events_total', `kind="${kind}"`);
-    await send(opts.channel, msg, { threadKey: opts.threadKey, meta: opts.meta });
+    await send(opts.channel, msg, { threadKey: opts.threadKey, meta: opts.meta, ...(opts.interactive ? { interactive: opts.interactive } : {}) });
     return true;
   };
   async function planHint(r, text) {
@@ -148,7 +148,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
           const threadKey = `st-${sha(key).slice(0, 16)}`;
           await emit('statement', `st:${key}`, card(`Slow statement: mean ${fmt(r.mean_exec_time, 0)} ms`, [
             ['Verdict', 'Slow execution (statement mean over threshold, new calls also slow)'], ['Calls since last poll', dCalls], ['Mean (lifetime / since poll)', `${fmt(r.mean_exec_time, 0)} ms / ${fmt(dMean, 0)} ms`], ['Max', `${fmt(r.max_exec_time, 0)} ms`], ['Rows (lifetime)', r.rows],
-            ['Database', r.datname ?? '-'], ['Role', r.rolname ?? '-'], ['Query (normalized)', text]]), { channel: 'slowquery', threadKey, meta: { kind: 'statement' } });
+            ['Database', r.datname ?? '-'], ['Role', r.rolname ?? '-'], ['Query (normalized)', text]]), { channel: 'slowquery', threadKey, meta: { kind: 'statement' }, interactive: { incidentId: `st:${key}` } }); // the card becomes the one message the incident edits (claim, PR, resolved)
           if (rcc.slow >= c.recurPolls && resolver) resolver.handle({ playbook: 'code_fix', key: `st:${key}`, threadKey, channel: 'slowquery', text, diagnosis: `Recurring slow statement: new calls averaged ${fmt(dMean, 0)} ms for ${rcc.slow} polls`, suggestion: 'add an index / rewrite the query', file: { normalized_query: text, queryid: r.queryid, database: r.datname, calls: r.calls, mean_ms: Number(r.mean_exec_time), max_ms: Number(r.max_exec_time), first_seen: new Date(rcc.first).toISOString(), last_seen: new Date(now()).toISOString(), verdict: 'recurring slow statement' } });
         }
         for (const [key, rc] of recur) if (!present.has(key) && ++rc.quiet >= c.recurPolls) { if (resolver) await resolver.statementRecovered(`st:${key}`); recur.delete(key); }
