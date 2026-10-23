@@ -58,11 +58,11 @@ def token():
     return t
 
 
-def get(path):
+def get(path, ttl=TTL):
     """GET with cache (1h, by path), 6 s timeout, size cap and an overall deadline. Raises on any failure."""
     cf = os.path.join(STATE, "cache-" + re.sub(r"[^A-Za-z0-9.]", "_", path)[-150:] + ".json")
     try:
-        if time.time() - os.path.getmtime(cf) < TTL:
+        if time.time() - os.path.getmtime(cf) < ttl:
             return json.load(open(cf))
     except (OSError, ValueError):
         pass
@@ -185,10 +185,45 @@ def machine(ev, prev, new, secs):
     return json.dumps(out)
 
 
+def stall(live, min_age, since_epoch):
+    """--stall <live_sha> <min_age_minutes> <epoch of the newest release event>: {"post": bool, "head": sha, "text": msg}.
+    post is true only when main has commits the live release lacks, the newest one is older than min_age, and no release event
+    happened after it (so a release in progress or just finished never raises it). Never raises; any failure -> post false."""
+    off = {"post": False}
+    try:
+        if not sha_ok(live):
+            return json.dumps(off)
+        c = get(f"/repos/{REPO}/compare/{live}...main", ttl=60)
+        commits = c.get("commits", [])
+        ahead = int(c.get("ahead_by", len(commits)) or 0)
+        if not ahead or not commits:
+            return json.dumps(off)
+        head = commits[-1]
+        when = ((head.get("commit") or {}).get("committer") or {}).get("date") or ""
+        t = time.mktime(time.strptime(when, "%Y-%m-%dT%H:%M:%SZ")) - time.timezone if when else 0
+        if not t or (time.time() - t) / 60 < float(min_age) or int(since_epoch or 0) >= t:
+            return json.dumps(off)
+        subj = [clean((x.get("commit", {}).get("message") or "").split("\n")[0], 70) for x in commits[-3:]][::-1]
+        mins = int((time.time() - t) / 60)
+        text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live, and no release has started for {mins} min.\n"
+                f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}` ({time.strftime('%H:%M UTC', time.gmtime(t))})\n"
+                + "\n".join(f"• {x}" for x in subj if x)
+                + "\nMerging does not deploy by itself: the build server must receive the GitHub push and start the release. "
+                  "Check its webhook service, its deploy log and its disk, and GitHub Settings > Webhooks > Recent deliveries.")
+        return json.dumps({"post": True, "head": head.get("sha", ""), "text": text[:MAXLEN]})
+    except Exception as e:
+        sys.stderr.write(f"deploy-message: stall check failed ({type(e).__name__})\n")
+        return json.dumps(off)
+
+
 if __name__ == "__main__":
     if sys.argv[1:2] == ["--json"]:
         j = sys.argv[2:] + [""] * 5
         print(machine(j[0], j[1], j[2], j[3]))
+        sys.exit(0)
+    if sys.argv[1:2] == ["--stall"]:
+        g = sys.argv[2:] + [""] * 3
+        print(stall(g[0], g[1] or "20", g[2]))
         sys.exit(0)
     if sys.argv[1:2] == ["--group"]:
         g = sys.argv[2:] + [""] * 3
