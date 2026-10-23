@@ -225,3 +225,28 @@ test('flag off: webhook only, unchanged card, route is 404', async () => {
   assert.equal((await b.post('/chat-app/events', click('claim', 'A'), auth())).status, 404);
   b.close();
 });
+
+test('REST claim and release edit the alert card in place (incident API / a teammate Claude, no button click)', async () => {
+  const { createChatApp } = await import('./chat-app.mjs');
+  const { createResolver } = await import('./resolver.mjs');
+  const calls = [];
+  const api = {
+    createMessage: async () => ({ ok: true, name: 'spaces/AAA/messages/m9' }),
+    updateMessage: async (ch, name, body) => (calls.push({ ch, name, body }), { ok: true }),
+  };
+  const resolver = createResolver({ env: { ANNOUNCE_IN_SPACE: '0' }, post: async () => {} });
+  const app = createChatApp({ env: { CHAT_APP_ENABLED: 'true' }, api, verifier: {}, resolver, webhookSend: async () => {} });
+  resolver.setOwnerHook((id, owner) => app.syncCard(id, owner));
+  await resolver.handle({ playbook: 'service', alertname: 'ApiDown', key: 'am:fp9', threadKey: 't9', channel: 'critical', diagnosis: 'd', suggestion: 's' });
+  await resolver.settle();
+  const id = resolver.list()[0].id;
+  const base = { text: 'ApiDown', cardsV2: [{ cardId: 'a', card: { header: { title: 'ApiDown' }, sections: [{ widgets: [{ decoratedText: { text: 'x' } }] }] } }] };
+  await app.send('critical', base, { threadKey: 't9', interactive: { incidentId: id } });
+  await resolver.claim(id, 'Asha-Claude');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].name, 'spaces/AAA/messages/m9');
+  assert.ok(JSON.stringify(calls[0].body).includes('Asha-Claude is working on this'));
+  await resolver.releaseClaim(id, 'Asha-Claude');
+  assert.equal(calls.length, 2);
+  assert.ok(!JSON.stringify(calls[1].body).includes('is working on this'));
+});
