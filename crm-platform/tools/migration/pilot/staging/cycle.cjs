@@ -1635,7 +1635,10 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
       (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
-      (s !== 'flow-state' || cfg.flowState !== 'inactive') && // "flowState": "inactive" in the client config keeps every flow a draft
+      // flow-state is NOT part of a migration: a live flow is enrolled by the app's worker as soon as it is published, and with no WhatsApp
+      // number connected those enrolments fail and stay failed, so a later cutover could never reach those contacts. The WhatsApp cutover
+      // arms the flows as its last step, once the number is connected (load/cutover.ts), so the flows stay drafts until then.
+      s !== 'flow-state' && // (the "flowState": "inactive" client setting is now the default)
       // the WhatsApp number (the last steps, so a failure there never costs the reports of the data migration): only on request (--activate-whatsapp, the panel's load passes it), never for a catch-up, and "whatsapp": "off" in the client config skips it
       ((s !== 'wa-credentials' && s !== 'wa-cutover') ||
         (flags['activate-whatsapp'] && cfg.whatsapp !== 'off')),
