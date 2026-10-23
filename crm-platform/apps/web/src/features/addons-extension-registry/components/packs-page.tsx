@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   PLAN_ADDON_OFFER_MODES,
-  addonKindOf,
   addonPackSchema,
   type AddonPack,
   type AddonPlanOffer,
@@ -223,7 +222,8 @@ function Catalogue({
               )}
               {packs.map((p) => {
                 const c = chips(p);
-                const kind = addonKindOf(p.grants);
+                const kind = p.kind;
+                const unlocksNothing = kind === 'feature' && p.grants.features.length === 0;
                 const offers = planOfferSummary(p);
                 return (
                   <tr key={p.id} className="hover:bg-muted/50">
@@ -242,6 +242,14 @@ function Catalogue({
                         >
                           {t(`kind.${kind}`)}
                         </span>
+                        {unlocksNothing && (
+                          <span
+                            data-testid={`pack-no-features-${p.id}`}
+                            className="rounded-full border border-warning/30 bg-warning/10 px-1.5 py-0.5 font-mono text-[10px] uppercase text-warning"
+                          >
+                            {t('noFeatures')}
+                          </span>
+                        )}
                       </div>
                       {p.subtitle && (
                         <div className="text-[11px] text-muted-foreground">{p.subtitle}</div>

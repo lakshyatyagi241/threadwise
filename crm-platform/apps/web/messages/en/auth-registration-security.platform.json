@@ -1349,13 +1349,17 @@
             "details": "Details and pricing",
             "features": "Features",
             "limits": "Limits",
-            "addons": "Add-ons"
+            "addons": "Add-ons",
+            "integrations": "Integrations",
+            "miniApps": "Mini apps"
           },
           "tabSummary": {
             "features": "{count} of {total} features on",
             "limits": "{count} of {total} limits set",
-            "addons": "{count} add-ons selected",
-            "error": "Has errors to fix"
+            "addons": "{count, plural, one {# add-on included or offered} other {# add-ons included or offered}}",
+            "error": "Has errors to fix",
+            "integrations": "Integrations included or offered: {count}",
+            "miniApps": "Mini apps included or offered: {count}"
           },
           "featuresUi": {
             "intro": "Switch off what this plan does not include. A workspace on the plan cannot open an area whose feature is off.",
@@ -1386,12 +1390,8 @@
             "total": "in total"
           },
           "addons": {
-            "intro": "Enabled add-ons are shown to workspaces on this plan in their Marketplace; they can only be used after the workspace buys them.",
             "search": "Search add-ons",
             "searchPlaceholder": "Search add-ons or apps",
-            "selectAll": "Select all",
-            "clear": "Clear",
-            "selected": "{count} of {total} selected",
             "loading": "Loading add-ons",
             "empty": "No paid add-ons exist yet",
             "emptyHint": "Add-ons are created in the Marketplace catalogue of the operator console. Once an app has a paid pack it is listed here.",
@@ -1710,9 +1710,6 @@
             "crm": "Sales CRM",
             "platform": "Shared by both"
           },
-          "marketplace": {
-            "title": "Mini apps offered on this plan"
-          },
           "offers": {
             "readOnly": "You can view this plan but not change it, so these controls are locked.",
             "featureTitle": "Feature add-ons",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "This add-on is a draft or switched off, so nobody can buy it yet. Including it in the plan still works.",
             "impactCount": "{count, plural, one {# workspace already pays for this add-on.} other {# workspaces already pay for this add-on.}} Their renewal will stop at the end of the current term, nothing is refunded and nothing is cancelled today.",
             "impactUnknown": "Workspaces on this plan that already pay for this add-on will stop renewing it at the end of their current term. Nothing is refunded and nothing is cancelled today. The number could not be loaded.",
-            "partlyNote": "This plan already gives part of this add-on ({features}). It stays as it is until you choose Included, Paid or Hidden here."
+            "partlyNote": "This plan already gives part of this add-on ({features}). It stays as it is until you choose Included, Paid or Hidden here.",
+            "needsFeatures": "Add the features it unlocks in Add-ons > {name} first"
+          },
+          "apps": {
+            "introMiniApps": "Mini apps are apps a workspace installs from the Marketplace. Included: free for workspaces on this plan. Paid: they can buy it at the app's own price. Hidden: they never see it. Included also switches on the plan features the app gives.",
+            "introIntegrations": "Integrations connect an outside service. Included: free for workspaces on this plan. Paid: they can buy it at the integration's own price. Hidden: they never see it. Included also switches on the plan features the integration gives.",
+            "setAll": "Set all shown to",
+            "summary": "{count} of {total} included or offered",
+            "priceHint": "Marketplace apps keep their own price; set it on the app's listing.",
+            "emptyIntegrations": "No paid integrations yet",
+            "emptyIntegrationsHint": "Free integrations need no setting here; Shopify and WooCommerce are switched on the Features tab."
           }
         }
       },

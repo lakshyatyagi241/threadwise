@@ -147,7 +147,9 @@
           "sortOrder": "Voer een geheel getal in.",
           "limits": "Limieten zijn gehele getallen, of -1 voor onbeperkt.",
           "form": "Controleer de gemarkeerde velden.",
-          "amountPositive": "Add-ons zijn maandelijkse of jaarlijkse abonnementen, dus de prijs moet hoger zijn dan nul."
+          "amountPositive": "Add-ons zijn maandelijkse of jaarlijkse abonnementen, dus de prijs moet hoger zijn dan nul.",
+          "features": "Vink minstens één functie aan, of maak er een capaciteits-add-on van.",
+          "limitsNeeded": "Voer minstens één limiet boven nul in, of maak er een functie-add-on van."
         },
         "legacy": {
           "title": "Verouderd pakket",
@@ -186,8 +188,23 @@
           },
           "saved": "Abonnementsaanbiedingen opgeslagen.",
           "changed": "{count, plural, one {# abonnement gewijzigd} other {# abonnementen gewijzigd}}",
-          "save": "Abonnementsaanbiedingen opslaan"
-        }
+          "save": "Abonnementsaanbiedingen opslaan",
+          "needFeatures": "Voeg eerst hierboven de functies toe die hij ontgrendelt"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Kies wat deze add-on doet. Alleen een functie-add-on kan in een abonnement worden opgenomen.",
+          "feature": {
+            "title": "Functie-add-on",
+            "body": "Ontgrendelt een deel van het product; kan ook capaciteit toevoegen."
+          },
+          "capacity": {
+            "title": "Capaciteits-add-on",
+            "body": "Verhoogt alleen een limiet (plekken, contacten...)."
+          }
+        },
+        "noFeaturesNotice": "Deze add-on ontgrendelt nog niets. Vink de functies aan die hij geeft, zodat abonnementen hem kunnen opnemen.",
+        "limitsHintCapacity": "Een capaciteits-add-on verhoogt alleen limieten. Voer een getal in dat bij het abonnement wordt OPGETELD (bijvoorbeeld +2 plekken). Gebruik -1 voor onbeperkt. Minstens één limiet is vereist."
       },
       "kind": {
         "feature": "Functie",
@@ -199,7 +216,8 @@
         "hidden": "Verborgen: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Geen abonnementen"
-      }
+      },
+      "noFeatures": "Nog geen functies"
     },
     "extensions": {
       "crumbHere": "Add-ons",

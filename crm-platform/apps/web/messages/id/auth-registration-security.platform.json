@@ -1349,13 +1349,17 @@
             "details": "Detail dan harga",
             "features": "Fitur",
             "limits": "Batas",
-            "addons": "Add-on"
+            "addons": "Add-on",
+            "integrations": "Integrasi",
+            "miniApps": "Aplikasi mini"
           },
           "tabSummary": {
             "features": "{count} dari {total} fitur aktif",
             "limits": "{count} dari {total} batas diatur",
-            "addons": "{count} add-on dipilih",
-            "error": "Ada kesalahan yang perlu diperbaiki"
+            "addons": "{count, plural, one {# add-on disertakan atau ditawarkan} other {# add-on disertakan atau ditawarkan}}",
+            "error": "Ada kesalahan yang perlu diperbaiki",
+            "integrations": "Integrasi yang disertakan atau ditawarkan: {count}",
+            "miniApps": "Aplikasi mini yang disertakan atau ditawarkan: {count}"
           },
           "featuresUi": {
             "intro": "Nonaktifkan yang tidak termasuk dalam paket ini. Ruang kerja pada paket tidak dapat membuka area yang fiturnya nonaktif.",
@@ -1386,12 +1390,8 @@
             "total": "secara total"
           },
           "addons": {
-            "intro": "Add-on yang diaktifkan ditampilkan kepada ruang kerja pada paket ini di Marketplace mereka; hanya dapat dipakai setelah ruang kerja membelinya.",
             "search": "Cari add-on",
             "searchPlaceholder": "Cari add-on atau aplikasi",
-            "selectAll": "Pilih semua",
-            "clear": "Hapus pilihan",
-            "selected": "{count} dari {total} dipilih",
             "loading": "Memuat add-on",
             "empty": "Belum ada add-on berbayar",
             "emptyHint": "Add-on dibuat di katalog Marketplace pada konsol operator. Setelah aplikasi memiliki paket berbayar, aplikasi itu tercantum di sini.",
@@ -1710,9 +1710,6 @@
             "crm": "CRM Penjualan",
             "platform": "Dipakai bersama"
           },
-          "marketplace": {
-            "title": "Aplikasi mini yang ditawarkan di paket ini"
-          },
           "offers": {
             "readOnly": "Anda dapat melihat paket ini tetapi tidak dapat mengubahnya, jadi kontrol ini dikunci.",
             "featureTitle": "Add-on fitur",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Add-on ini masih draf atau dinonaktifkan, jadi belum ada yang bisa membelinya. Menyertakannya dalam paket tetap berfungsi.",
             "impactCount": "{count, plural, other {# ruang kerja sudah membayar add-on ini.}} Perpanjangannya akan berhenti di akhir masa berjalan, tidak ada yang dikembalikan dananya, dan tidak ada yang dibatalkan hari ini.",
             "impactUnknown": "Ruang kerja di paket ini yang sudah membayar add-on ini akan berhenti memperpanjangnya di akhir masa berjalan. Tidak ada yang dikembalikan dananya dan tidak ada yang dibatalkan hari ini. Jumlahnya tidak dapat dimuat.",
-            "partlyNote": "Paket ini sudah memberi sebagian add-on ini ({features}). Tetap begitu sampai Anda memilih Termasuk, Berbayar, atau Tersembunyi di sini."
+            "partlyNote": "Paket ini sudah memberi sebagian add-on ini ({features}). Tetap begitu sampai Anda memilih Termasuk, Berbayar, atau Tersembunyi di sini.",
+            "needsFeatures": "Tambahkan dulu fitur yang dibukanya di Add-on > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Aplikasi mini adalah aplikasi yang dipasang ruang kerja dari Marketplace. Disertakan: gratis untuk ruang kerja di paket ini. Berbayar: mereka dapat membelinya dengan harga aplikasi itu sendiri. Tersembunyi: mereka tidak pernah melihatnya. Disertakan juga mengaktifkan fitur paket yang diberikan aplikasi.",
+            "introIntegrations": "Integrasi menghubungkan layanan eksternal. Disertakan: gratis untuk ruang kerja di paket ini. Berbayar: mereka dapat membelinya dengan harga integrasi itu sendiri. Tersembunyi: mereka tidak pernah melihatnya. Disertakan juga mengaktifkan fitur paket yang diberikannya.",
+            "setAll": "Atur semua yang ditampilkan ke",
+            "summary": "{count} dari {total} disertakan atau ditawarkan",
+            "priceHint": "Aplikasi Marketplace mempertahankan harganya sendiri; atur di listing aplikasi.",
+            "emptyIntegrations": "Belum ada integrasi berbayar",
+            "emptyIntegrationsHint": "Integrasi gratis tidak memerlukan pengaturan di sini; Shopify dan WooCommerce diaktifkan di tab Fitur."
           }
         }
       },

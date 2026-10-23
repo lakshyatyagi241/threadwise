@@ -147,7 +147,9 @@
           "sortOrder": "Inserisci un numero intero.",
           "limits": "I limiti sono numeri interi, oppure -1 per illimitato.",
           "form": "Controlla i campi evidenziati.",
-          "amountPositive": "I componenti aggiuntivi sono abbonamenti mensili o annuali, quindi il prezzo deve essere maggiore di zero."
+          "amountPositive": "I componenti aggiuntivi sono abbonamenti mensili o annuali, quindi il prezzo deve essere maggiore di zero.",
+          "features": "Seleziona almeno una funzionalità oppure rendilo un componente di capacità.",
+          "limitsNeeded": "Inserisci almeno un limite maggiore di zero oppure rendilo un componente di funzionalità."
         },
         "legacy": {
           "title": "Pacchetto precedente",
@@ -186,8 +188,23 @@
           },
           "saved": "Offerte dei piani salvate.",
           "changed": "{count, plural, one {# piano modificato} many {# piani modificati} other {# piani modificati}}",
-          "save": "Salva le offerte dei piani"
-        }
+          "save": "Salva le offerte dei piani",
+          "needFeatures": "Aggiungi prima qui sopra le funzionalità che sblocca"
+        },
+        "type": {
+          "title": "Tipo",
+          "hint": "Scegli cosa fa questo componente aggiuntivo. Solo un componente di funzionalità può essere incluso in un piano.",
+          "feature": {
+            "title": "Componente di funzionalità",
+            "body": "Sblocca una parte del prodotto; può anche aggiungere capacità."
+          },
+          "capacity": {
+            "title": "Componente di capacità",
+            "body": "Aggiunge solo a un limite (posti, contatti...)."
+          }
+        },
+        "noFeaturesNotice": "Questo componente non sblocca ancora nulla. Seleziona le funzionalità che offre così i piani possono includerlo.",
+        "limitsHintCapacity": "Un componente di capacità aggiunge solo ai limiti. Inserisci un numero da AGGIUNGERE al piano (ad esempio +2 posti). Usa -1 per illimitato. È richiesto almeno un limite."
       },
       "kind": {
         "feature": "Funzionalità",
@@ -199,7 +216,8 @@
         "hidden": "Nascosto: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Nessun piano"
-      }
+      },
+      "noFeatures": "Nessuna funzionalità"
     },
     "extensions": {
       "crumbHere": "Add-on",

@@ -1349,13 +1349,17 @@
             "details": "Chi tiết và giá",
             "features": "Tính năng",
             "limits": "Giới hạn",
-            "addons": "Tiện ích bổ sung"
+            "addons": "Tiện ích bổ sung",
+            "integrations": "Tích hợp",
+            "miniApps": "Ứng dụng mini"
           },
           "tabSummary": {
             "features": "{count} trên {total} tính năng đang bật",
             "limits": "{count} trên {total} giới hạn đã đặt",
-            "addons": "Đã chọn {count} tiện ích bổ sung",
-            "error": "Có lỗi cần sửa"
+            "addons": "{count, plural, one {# tiện ích bổ sung được bao gồm hoặc cung cấp} other {# tiện ích bổ sung được bao gồm hoặc cung cấp}}",
+            "error": "Có lỗi cần sửa",
+            "integrations": "Tích hợp được bao gồm hoặc cung cấp: {count}",
+            "miniApps": "Ứng dụng mini được bao gồm hoặc cung cấp: {count}"
           },
           "featuresUi": {
             "intro": "Tắt những gì gói này không bao gồm. Không gian làm việc dùng gói không thể mở khu vực có tính năng đang tắt.",
@@ -1386,12 +1390,8 @@
             "total": "tổng cộng"
           },
           "addons": {
-            "intro": "Các tiện ích bổ sung được bật sẽ hiển thị cho các không gian làm việc dùng gói này trong Marketplace; chỉ dùng được sau khi không gian làm việc mua.",
             "search": "Tìm tiện ích bổ sung",
             "searchPlaceholder": "Tìm tiện ích bổ sung hoặc ứng dụng",
-            "selectAll": "Chọn tất cả",
-            "clear": "Xóa",
-            "selected": "Đã chọn {count} trên {total}",
             "loading": "Đang tải tiện ích bổ sung",
             "empty": "Chưa có tiện ích bổ sung trả phí nào",
             "emptyHint": "Tiện ích bổ sung được tạo trong danh mục Marketplace của bảng điều khiển nhà điều hành. Khi một ứng dụng có gói trả phí, nó được liệt kê ở đây.",
@@ -1710,9 +1710,6 @@
             "crm": "CRM bán hàng",
             "platform": "Dùng chung cho cả hai"
           },
-          "marketplace": {
-            "title": "Ứng dụng mini được cung cấp trong gói này"
-          },
           "offers": {
             "readOnly": "Bạn có thể xem gói này nhưng không thể thay đổi, nên các điều khiển này bị khóa.",
             "featureTitle": "Tiện ích bổ sung tính năng",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Tiện ích này là bản nháp hoặc đang tắt, nên chưa ai có thể mua. Đưa nó vào gói vẫn hoạt động.",
             "impactCount": "{count, plural, other {# không gian làm việc đã trả tiền cho tiện ích này.}} Việc gia hạn của họ sẽ dừng khi kết thúc kỳ hiện tại, không hoàn tiền và hôm nay không hủy gì cả.",
             "impactUnknown": "Các không gian làm việc trong gói này đã trả tiền cho tiện ích này sẽ ngừng gia hạn khi kết thúc kỳ hiện tại. Không hoàn tiền và hôm nay không hủy gì cả. Không thể tải số lượng.",
-            "partlyNote": "Gói này đã cung cấp một phần tiện ích bổ sung này ({features}). Giữ nguyên cho đến khi bạn chọn Đã gồm, Trả phí hoặc Ẩn tại đây."
+            "partlyNote": "Gói này đã cung cấp một phần tiện ích bổ sung này ({features}). Giữ nguyên cho đến khi bạn chọn Đã gồm, Trả phí hoặc Ẩn tại đây.",
+            "needsFeatures": "Trước tiên hãy thêm các tính năng mà nó mở khóa trong Tiện ích bổ sung > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Ứng dụng mini là ứng dụng mà không gian làm việc cài đặt từ Marketplace. Bao gồm: miễn phí cho không gian làm việc trong gói này. Trả phí: họ có thể mua với giá riêng của ứng dụng. Ẩn: họ không bao giờ thấy. Chọn Bao gồm cũng bật các tính năng gói mà ứng dụng cung cấp.",
+            "introIntegrations": "Tích hợp kết nối một dịch vụ bên ngoài. Bao gồm: miễn phí cho không gian làm việc trong gói này. Trả phí: họ có thể mua với giá riêng của tích hợp. Ẩn: họ không bao giờ thấy. Chọn Bao gồm cũng bật các tính năng gói mà tích hợp cung cấp.",
+            "setAll": "Đặt tất cả mục đang hiển thị thành",
+            "summary": "{count} trên {total} được bao gồm hoặc cung cấp",
+            "priceHint": "Ứng dụng Marketplace giữ giá riêng; hãy đặt giá trong trang giới thiệu của ứng dụng.",
+            "emptyIntegrations": "Chưa có tích hợp trả phí",
+            "emptyIntegrationsHint": "Tích hợp miễn phí không cần thiết lập ở đây; Shopify và WooCommerce được bật ở tab Tính năng."
           }
         }
       },

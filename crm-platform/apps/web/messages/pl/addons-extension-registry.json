@@ -147,7 +147,9 @@
           "sortOrder": "Wpisz liczbę całkowitą.",
           "limits": "Limity to liczby całkowite lub -1 dla braku limitu.",
           "form": "Sprawdź zaznaczone pola.",
-          "amountPositive": "Dodatki to subskrypcje miesięczne lub roczne, więc cena musi być większa od zera."
+          "amountPositive": "Dodatki to subskrypcje miesięczne lub roczne, więc cena musi być większa od zera.",
+          "features": "Zaznacz co najmniej jedną funkcję lub zmień go na dodatek pojemności.",
+          "limitsNeeded": "Wpisz co najmniej jeden limit większy od zera lub zmień go na dodatek funkcji."
         },
         "legacy": {
           "title": "Pakiet dawny",
@@ -186,8 +188,23 @@
           },
           "saved": "Zapisano oferty planów.",
           "changed": "{count, plural, one {# plan zmieniony} few {# plany zmienione} many {# planów zmienionych} other {# planu zmienionego}}",
-          "save": "Zapisz oferty planów"
-        }
+          "save": "Zapisz oferty planów",
+          "needFeatures": "Najpierw dodaj powyżej funkcje, które odblokowuje"
+        },
+        "type": {
+          "title": "Typ",
+          "hint": "Wybierz, co robi ten dodatek. Do planu można włączyć tylko dodatek funkcji.",
+          "feature": {
+            "title": "Dodatek funkcji",
+            "body": "Odblokowuje część produktu; może też zwiększać pojemność."
+          },
+          "capacity": {
+            "title": "Dodatek pojemności",
+            "body": "Tylko zwiększa limit (stanowiska, kontakty...)."
+          }
+        },
+        "noFeaturesNotice": "Ten dodatek nic jeszcze nie odblokowuje. Zaznacz funkcje, które daje, aby plany mogły go uwzględnić.",
+        "limitsHintCapacity": "Dodatek pojemności tylko zwiększa limity. Wpisz liczbę, która zostanie DODANA do planu (na przykład +2 stanowiska). Użyj -1 dla braku limitu. Wymagany jest co najmniej jeden limit."
       },
       "kind": {
         "feature": "Funkcja",
@@ -199,7 +216,8 @@
         "hidden": "Ukryte: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Brak planów"
-      }
+      },
+      "noFeatures": "Brak funkcji"
     },
     "extensions": {
       "crumbHere": "Dodatki",

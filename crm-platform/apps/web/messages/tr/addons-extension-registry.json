@@ -147,7 +147,9 @@
           "sortOrder": "Bir tam sayı girin.",
           "limits": "Limitler tam sayı olmalıdır; sınırsız için -1 girin.",
           "form": "Vurgulanan alanları kontrol edin.",
-          "amountPositive": "Eklentiler aylık veya yıllık aboneliktir, bu yüzden fiyat sıfırdan büyük olmalıdır."
+          "amountPositive": "Eklentiler aylık veya yıllık aboneliktir, bu yüzden fiyat sıfırdan büyük olmalıdır.",
+          "features": "En az bir özellik işaretleyin veya bunu kapasite eklentisi yapın.",
+          "limitsNeeded": "Sıfırdan büyük en az bir sınır girin veya bunu özellik eklentisi yapın."
         },
         "legacy": {
           "title": "Eski paket",
@@ -186,8 +188,23 @@
           },
           "saved": "Plan teklifleri kaydedildi.",
           "changed": "{count, plural, one {# plan değişti} other {# plan değişti}}",
-          "save": "Plan tekliflerini kaydet"
-        }
+          "save": "Plan tekliflerini kaydet",
+          "needFeatures": "Önce yukarıda açtığı özellikleri ekleyin"
+        },
+        "type": {
+          "title": "Tür",
+          "hint": "Bu eklentinin ne yaptığını seçin. Bir pakete yalnızca özellik eklentisi dahil edilebilir.",
+          "feature": {
+            "title": "Özellik eklentisi",
+            "body": "Ürünün bir bölümünü açar; kapasite de ekleyebilir."
+          },
+          "capacity": {
+            "title": "Kapasite eklentisi",
+            "body": "Yalnızca bir sınırı artırır (koltuk, kişi...)."
+          }
+        },
+        "noFeaturesNotice": "Bu eklenti henüz hiçbir şeyin kilidini açmıyor. Paketlerin dahil edebilmesi için sağladığı özellikleri işaretleyin.",
+        "limitsHintCapacity": "Kapasite eklentisi yalnızca sınırları artırır. Pakete EKLENECEK bir sayı girin (örneğin +2 koltuk). Sınırsız için -1 kullanın. En az bir sınır gerekir."
       },
       "kind": {
         "feature": "Özellik",
@@ -199,7 +216,8 @@
         "hidden": "Gizli: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Plan yok"
-      }
+      },
+      "noFeatures": "Henüz özellik yok"
     },
     "extensions": {
       "crumbHere": "Eklentiler",

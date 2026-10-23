@@ -1,11 +1,10 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import {
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
-  addonKindOf,
   type AddonPack,
   type PlanAddonOfferMode,
   type PlanAddonOption,
@@ -14,19 +13,20 @@ import { Alert, Badge, Button, Checkbox, Input, Spinner } from '@crm/ui';
 import { SegmentedChoice } from '../ui/segmented-choice';
 import { formatMoney } from '../../account/plans/plan-format';
 import {
-  addonsSelectedCount,
-  clearAddons,
+  canIncludePack,
   offerFor,
   offerModesFor,
-  selectAddons,
+  packKind,
+  packsOfferedCount,
   setAddonOffer,
   setAddonOfferAmount,
   toggleAddon,
   unlistedPackFeatures,
   type PlanDraft,
+  type PlanField,
 } from '../lib/plan-draft';
-import { addonRows, addonSaleState, filterAddonRows, type AddonRow } from '../lib/plan-editor-view';
-import { NS, Section, ToolbarRow, fieldId, type EditorState } from './plan-editor-shared';
+import { staleAppIds } from '../lib/plan-editor-view';
+import { NS, Section, fieldId, type EditorState } from './plan-editor-shared';
 
 const PLANS_NS = 'auth-registration-security.platform.plans';
 
@@ -49,12 +49,13 @@ export interface IncludedPacksState {
 }
 
 /**
- * The Add-ons tab (docs/specs/addons-plan-offers.md 3), three sections:
- *   1. Feature add-ons (packs that grant a feature) and 2. Capacity add-ons (limits only): one row per plain pack with Included | Paid |
- *      Hidden (a capacity add-on has no Included: the plan sets its own cap on the Limits tab) and, when Paid, an optional price of this
+ * The Add-ons tab (docs/specs/addons-plan-offers.md 3): the plain add-on packs only, in two sections.
+ *   1. Feature add-ons and 2. Capacity add-ons, by the kind the operator stored on the pack (Smart routing is a feature add-on even
+ *      before it has features): one row each with Included | Paid | Hidden (a capacity add-on has no Included: the plan sets its own cap
+ *      on the Limits tab; a feature add-on with no features yet cannot be included either) and, when Paid, an optional price of this
  *      plan's own. The mode is what is saved; choosing it also sets the pack's feature keys in the draft, which the Features tab shows locked.
- *   3. Mini apps offered on this plan: the Marketplace packs this plan makes visible. Visible is not usable: a workspace still has to buy
- *      the app. A selected id the options no longer list stays as an "Unknown add-on" row so it can be unticked.
+ * Marketplace apps have their own tabs (Integrations, Mini apps). The only app thing left here is a selected id that no app lists any more,
+ * so it can still be removed.
  */
 export function AddonsTab({
   state,
@@ -71,11 +72,11 @@ export function AddonsTab({
   savedOffers: PlanDraft['addonOffers'];
   /** An operator who may read but not edit plans: every control is disabled and says why. */
   readOnly?: boolean;
-  /** Called on any change to the mini apps: the editor then always sends that selection (see buildPlanRequest). */
+  /** Called when a stale selected id is removed: the editor then always sends that selection (see buildPlanRequest). */
   onTouched: () => void;
 }) {
   const t = useTranslations(NS);
-  const total = addonsSelectedCount(state.draft, included.packs);
+  const total = packsOfferedCount(state.draft, included.packs);
   return (
     <div className="space-y-6">
       <p className="text-sm font-medium" aria-live="polite">
@@ -88,252 +89,91 @@ export function AddonsTab({
         savedOffers={savedOffers}
         readOnly={readOnly}
       />
-      <Section title={t('marketplace.title')}>
-        <MarketplaceAddons
-          state={state}
-          addons={addons}
-          readOnly={readOnly}
-          onTouched={onTouched}
-        />
-      </Section>
+      <StaleAddons
+        state={state}
+        addons={addons}
+        packIds={included.packs.map((p) => p.id)}
+        readOnly={readOnly}
+        onTouched={onTouched}
+      />
     </div>
   );
 }
 
-function MarketplaceAddons({
+/**
+ * What the plan still holds that nothing lists: a selected id that no app option has (a deleted pack) and the API's message about it, or an
+ * offer error naming an add-on that is on no tab. Renders nothing when there is none.
+ */
+function StaleAddons({
   state,
   addons,
+  packIds,
   readOnly,
   onTouched,
 }: {
   state: EditorState;
   addons: AddonOptionsState;
+  packIds: readonly string[];
   readOnly: boolean;
   onTouched: () => void;
 }) {
   const t = useTranslations(NS);
   const { draft, err, set } = state;
-  const [query, setQuery] = useState('');
-  const selected = draft.visibleAddons;
   const error = err('visibleAddons');
-
-  const change = (ids: string[]) => {
-    if (readOnly) return;
-    onTouched();
-    set('visibleAddons', ids);
-  };
-
-  const intro = <p className="text-xs text-muted-foreground">{t('addons.intro')}</p>;
-  const problem = error && (
-    <p id="plan-visibleAddons" tabIndex={-1} role="alert" className="text-xs text-danger">
-      {error}
-    </p>
+  const stale = addons.status === 'success' ? staleAppIds(addons.options, draft.visibleAddons) : [];
+  // An offer error on an id that is no pack and no app (it was deleted meanwhile) has no row of its own: say it here.
+  const known = new Set([...packIds, ...addons.options.map((o) => o.id)]);
+  const stray = (Object.keys(state.problems) as PlanField[]).filter(
+    (f) => f.startsWith('addonOffers.') && !known.has(f.slice('addonOffers.'.length)),
   );
-
-  if (addons.status === 'pending') {
-    return (
-      <div className="space-y-4">
-        {intro}
-        <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Spinner label={t('addons.loading')} /> {t('addons.loading')}
+  if (!error && stale.length === 0 && stray.length === 0) return null;
+  return (
+    <div className="space-y-2" data-testid="plan-stale-addons">
+      {stray.map((f) => (
+        <p key={f} id={fieldId(f)} tabIndex={-1} role="alert" className="text-xs text-danger">
+          {err(f)}
         </p>
-      </div>
-    );
-  }
-
-  if (addons.status === 'error') {
-    return (
-      <div className="space-y-4">
-        {intro}
-        <Alert tone="warning">
-          <div className="space-y-2">
-            <p>{t('addons.loadFailed')}</p>
-            <p>{t('addons.loadFailedKept')}</p>
-            <Button type="button" size="sm" variant="secondary" onClick={addons.retry}>
-              {t('addons.retry')}
-            </Button>
-          </div>
-        </Alert>
-        {problem}
-      </div>
-    );
-  }
-
-  const rows = addonRows(addons.options, selected);
-  const shown = filterAddonRows(rows, query);
-
-  if (addons.options.length === 0) {
-    return (
-      <div className="space-y-4">
-        {intro}
-        {problem}
-        {/* Stale selected ids (no option lists them) still get their rows, so they can be unticked. */}
-        {rows.length > 0 && (
-          <ul className="space-y-2">
-            {rows.map((row) => (
-              <li key={row.id}>
-                <AddonRowView
-                  row={row}
-                  disabled={readOnly}
-                  checked={selected.includes(row.id)}
-                  onChange={(on) => change(toggleAddon(selected, row.id, on))}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className="rounded-md border border-dashed border-border p-6 text-center">
-          <p className="text-sm font-medium">{t('addons.empty')}</p>
-          <p className="mt-1 text-xs text-muted-foreground">{t('addons.emptyHint')}</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      {intro}
-      {problem}
-      <ToolbarRow>
-        <Input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t('addons.searchPlaceholder')}
-          aria-label={t('addons.search')}
-          className="min-w-0 flex-1 basis-48"
-        />
-        <Button
-          type="button"
-          size="sm"
-          variant="ghost"
-          disabled={readOnly}
-          onClick={() =>
-            change(
-              selectAddons(
-                selected,
-                shown.map((r) => r.id),
-              ),
-            )
-          }
-        >
-          {t('addons.selectAll')}
-        </Button>
-        <Button
-          type="button"
-          size="sm"
-          variant="ghost"
-          disabled={readOnly}
-          onClick={() =>
-            change(
-              clearAddons(
-                selected,
-                shown.map((r) => r.id),
-              ),
-            )
-          }
-        >
-          {t('addons.clear')}
-        </Button>
-      </ToolbarRow>
-      <p className="text-xs text-muted-foreground" aria-live="polite">
-        {t('addons.selected', { count: selected.length, total: addons.options.length })}
-      </p>
-      {shown.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t('addons.noMatch')}</p>
-      ) : (
-        <ul className="space-y-2">
-          {shown.map((row) => (
-            <li key={row.id}>
-              <AddonRowView
-                row={row}
-                disabled={readOnly}
-                checked={selected.includes(row.id)}
-                onChange={(on) => change(toggleAddon(selected, row.id, on))}
-              />
-            </li>
-          ))}
-        </ul>
+      ))}
+      {error && (
+        <p id="plan-visibleAddons" tabIndex={-1} role="alert" className="text-xs text-danger">
+          {error}
+        </p>
       )}
-    </div>
-  );
-}
-
-function AddonRowView({
-  row,
-  checked,
-  disabled,
-  onChange,
-}: {
-  row: AddonRow;
-  disabled: boolean;
-  checked: boolean;
-  onChange: (on: boolean) => void;
-}) {
-  const t = useTranslations(NS);
-  const tp = useTranslations(PLANS_NS);
-  const locale = useLocale();
-
-  if (row.kind === 'unknown') {
-    return (
-      <div className="rounded-md border border-warning p-3" data-testid={`plan-addon-${row.id}`}>
-        <Checkbox
-          id={`plan-addon-${row.id}`}
-          checked={checked}
-          disabled={disabled}
-          onChange={(e) => onChange(e.target.checked)}
-          label={
-            <span className="block min-w-0 space-y-0.5">
-              <span className="flex flex-wrap items-center gap-1.5">
-                <span className="font-medium">{t('addons.unknown')}</span>
-                <Badge tone="danger">{t('addons.notOnSale')}</Badge>
-              </span>
-              <span
-                dir="ltr"
-                className="block break-all text-start font-mono text-xs text-muted-foreground"
-              >
-                {row.id}
-              </span>
-              <span className="block text-xs text-muted-foreground">{t('addons.unknownHint')}</span>
-            </span>
-          }
-        />
-      </div>
-    );
-  }
-
-  const { option } = row;
-  const sale = addonSaleState(option);
-  const price = formatMoney(option.amount, option.currency, locale);
-  const period = tp(`period.${option.billingUnit}`, { count: option.billingDuration });
-  return (
-    <div className="rounded-md border border-border p-3" data-testid={`plan-addon-${option.id}`}>
-      <Checkbox
-        id={`plan-addon-${option.id}`}
-        checked={checked}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.checked)}
-        label={
-          <span className="block min-w-0 space-y-0.5">
-            <span className="flex flex-wrap items-center gap-1.5">
-              <span className="font-medium">{option.name}</span>
-              {sale !== 'onSale' && <Badge tone="warning">{t('addons.notOnSale')}</Badge>}
-            </span>
-            <span className="block text-xs text-muted-foreground">
-              {t('addons.appLabel', { name: option.app.name })}
-            </span>
-            <span className="block text-xs font-medium">
-              {t('addons.price', { price, period })}
-            </span>
-            {sale === 'packInactive' && (
-              <span className="block text-xs text-warning">{t('addons.packInactive')}</span>
-            )}
-            {sale === 'appUnpublished' && (
-              <span className="block text-xs text-warning">{t('addons.appUnpublished')}</span>
-            )}
-          </span>
-        }
-      />
+      <ul className="space-y-2">
+        {stale.map((id) => (
+          <li key={id}>
+            <div className="rounded-md border border-warning p-3" data-testid={`plan-addon-${id}`}>
+              <Checkbox
+                id={`plan-addon-${id}`}
+                checked
+                disabled={readOnly}
+                onChange={() => {
+                  if (readOnly) return;
+                  onTouched();
+                  set('visibleAddons', toggleAddon(draft.visibleAddons, id, false));
+                }}
+                label={
+                  <span className="block min-w-0 space-y-0.5">
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-medium">{t('addons.unknown')}</span>
+                      <Badge tone="danger">{t('addons.notOnSale')}</Badge>
+                    </span>
+                    <span
+                      dir="ltr"
+                      className="block break-all text-start font-mono text-xs text-muted-foreground"
+                    >
+                      {id}
+                    </span>
+                    <span className="block text-xs text-muted-foreground">
+                      {t('addons.unknownHint')}
+                    </span>
+                  </span>
+                }
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -381,8 +221,8 @@ function PlainAddons({
     );
   }
 
-  const feature = included.packs.filter((p) => addonKindOf(p.grants) === 'feature');
-  const capacity = included.packs.filter((p) => addonKindOf(p.grants) === 'capacity');
+  const feature = included.packs.filter((p) => packKind(p) === 'feature');
+  const capacity = included.packs.filter((p) => packKind(p) === 'capacity');
   const rows = (packs: readonly AddonPack[]) => (
     <ul className="space-y-2">
       {packs.map((pack) => (
@@ -449,7 +289,9 @@ function OfferRow({
 
   const offer = offerFor(draft, pack.id);
   const modes = offerModesFor(pack);
-  const isCapacity = !modes.includes('included');
+  const isCapacity = packKind(pack) === 'capacity';
+  // A feature add-on that unlocks nothing yet has nothing to include: the option stays visible but cannot be chosen, and says why.
+  const needsFeatures = !isCapacity && !canIncludePack(pack);
   const limitEntries = Object.entries(pack.grants.limits);
   const unlisted = unlistedPackFeatures(pack);
   const featureLabel = (k: string) =>
@@ -528,10 +370,14 @@ function OfferRow({
           name={`plan-offer-${pack.id}`}
           label={t('offers.modeLabel', { name: pack.name })}
           value={offer.mode}
-          options={modes.map((m) => ({ value: m, label: t(`offers.modes.${m}`) }))}
+          options={modes.map((m) => ({
+            value: m,
+            label: t(`offers.modes.${m}`),
+            disabled: m === 'included' && needsFeatures,
+          }))}
           onChange={choose}
           disabled={readOnly}
-          describedBy={isCapacity ? reasonId : undefined}
+          describedBy={isCapacity || needsFeatures ? reasonId : undefined}
           testId={`plan-offer-${pack.id}`}
         />
       </div>
@@ -539,6 +385,11 @@ function OfferRow({
       {isCapacity && (
         <p id={reasonId} className="text-xs text-muted-foreground">
           {t('offers.noIncluded')}
+        </p>
+      )}
+      {needsFeatures && (
+        <p id={reasonId} className="text-xs text-muted-foreground">
+          {t('offers.needsFeatures', { name: pack.name })}
         </p>
       )}
 

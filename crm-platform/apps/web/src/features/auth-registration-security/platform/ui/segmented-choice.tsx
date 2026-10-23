@@ -21,7 +21,8 @@ export function SegmentedChoice<V extends string>({
   /** What the group is for, read by a screen reader. */
   label: string;
   value: V;
-  options: ReadonlyArray<{ value: V; label: string }>;
+  /** An option with `disabled` stays visible (and checked, if it is the value) but cannot be chosen; the caller says why in `describedBy`. */
+  options: ReadonlyArray<{ value: V; label: string; disabled?: boolean }>;
   onChange: (value: V) => void;
   disabled?: boolean;
   describedBy?: string;
@@ -39,6 +40,7 @@ export function SegmentedChoice<V extends string>({
     >
       {options.map((o) => {
         const checked = o.value === value;
+        const off = disabled || o.disabled === true;
         return (
           <label
             key={o.value}
@@ -46,9 +48,7 @@ export function SegmentedChoice<V extends string>({
               'relative inline-flex min-h-8 items-center rounded px-3 text-xs font-medium',
               'focus-within:ring-2 focus-within:ring-primary',
               checked ? 'bg-primary text-primary-foreground' : 'text-muted-foreground',
-              disabled
-                ? 'cursor-not-allowed opacity-60'
-                : !checked && 'cursor-pointer hover:bg-muted',
+              off ? 'cursor-not-allowed opacity-60' : !checked && 'cursor-pointer hover:bg-muted',
             )}
           >
             <input
@@ -56,7 +56,7 @@ export function SegmentedChoice<V extends string>({
               name={name}
               value={o.value}
               checked={checked}
-              disabled={disabled}
+              disabled={off}
               onChange={() => onChange(o.value)}
               className="sr-only"
               data-testid={testId ? `${testId}-${o.value}` : undefined}

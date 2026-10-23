@@ -1349,13 +1349,17 @@
             "details": "Szczegóły i cennik",
             "features": "Funkcje",
             "limits": "Limity",
-            "addons": "Dodatki"
+            "addons": "Dodatki",
+            "integrations": "Integracje",
+            "miniApps": "Miniaplikacje"
           },
           "tabSummary": {
             "features": "Włączone funkcje: {count} z {total}",
             "limits": "Ustawione limity: {count} z {total}",
-            "addons": "Wybrane dodatki: {count}",
-            "error": "Zawiera błędy do poprawienia"
+            "addons": "{count, plural, one {# dodatek wliczony lub oferowany} few {# dodatki wliczone lub oferowane} many {# dodatków wliczonych lub oferowanych} other {# dodatku wliczonego lub oferowanego}}",
+            "error": "Zawiera błędy do poprawienia",
+            "integrations": "Integracje wliczone lub oferowane: {count}",
+            "miniApps": "Miniaplikacje wliczone lub oferowane: {count}"
           },
           "featuresUi": {
             "intro": "Wyłącz to, czego ten plan nie obejmuje. Przestrzeń robocza na tym planie nie może otworzyć obszaru, którego funkcja jest wyłączona.",
@@ -1386,12 +1390,8 @@
             "total": "łącznie"
           },
           "addons": {
-            "intro": "Włączone dodatki są pokazywane przestrzeniom roboczym na tym planie w ich Marketplace; można ich używać dopiero po zakupie przez przestrzeń roboczą.",
             "search": "Szukaj dodatków",
             "searchPlaceholder": "Szukaj dodatków lub aplikacji",
-            "selectAll": "Zaznacz wszystko",
-            "clear": "Wyczyść",
-            "selected": "Wybrano {count} z {total}",
             "loading": "Ładowanie dodatków",
             "empty": "Nie istnieją jeszcze płatne dodatki",
             "emptyHint": "Dodatki tworzy się w katalogu Marketplace konsoli operatora. Gdy aplikacja ma płatny pakiet, pojawia się tutaj.",
@@ -1710,9 +1710,6 @@
             "crm": "CRM sprzedaży",
             "platform": "Wspólne dla obu"
           },
-          "marketplace": {
-            "title": "Miniaplikacje oferowane w tym planie"
-          },
           "offers": {
             "readOnly": "Możesz przeglądać ten plan, ale nie możesz go zmieniać, więc te ustawienia są zablokowane.",
             "featureTitle": "Dodatki z funkcjami",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Ten dodatek jest szkicem lub jest wyłączony, więc nikt jeszcze nie może go kupić. Uwzględnienie go w planie nadal działa.",
             "impactCount": "{count, plural, one {# przestrzeń robocza już płaci za ten dodatek.} few {# przestrzenie robocze już płacą za ten dodatek.} many {# przestrzeni roboczych już płaci za ten dodatek.} other {# przestrzeni roboczej już płaci za ten dodatek.}} Ich odnowienie zatrzyma się na końcu bieżącego okresu, nic nie zostanie zwrócone i dziś nic nie zostanie anulowane.",
             "impactUnknown": "Przestrzenie robocze w tym planie, które już płacą za ten dodatek, przestaną go odnawiać na koniec bieżącego okresu. Nic nie zostanie zwrócone i dziś nic nie zostanie anulowane. Nie udało się załadować liczby.",
-            "partlyNote": "Ten plan już daje część tego dodatku ({features}). Zostaje tak, dopóki nie wybierzesz tutaj W cenie, Płatny lub Ukryty."
+            "partlyNote": "Ten plan już daje część tego dodatku ({features}). Zostaje tak, dopóki nie wybierzesz tutaj W cenie, Płatny lub Ukryty.",
+            "needsFeatures": "Najpierw dodaj funkcje, które odblokowuje, w Dodatki > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Miniaplikacje to aplikacje, które przestrzeń robocza instaluje z Marketplace. Wliczone: bezpłatnie dla przestrzeni roboczych w tym planie. Płatne: mogą ją kupić po własnej cenie aplikacji. Ukryte: nigdy jej nie widzą. Wybranie opcji Wliczone włącza też funkcje planu, które daje aplikacja.",
+            "introIntegrations": "Integracje łączą zewnętrzną usługę. Wliczone: bezpłatnie dla przestrzeni roboczych w tym planie. Płatne: mogą ją kupić po własnej cenie integracji. Ukryte: nigdy jej nie widzą. Wybranie opcji Wliczone włącza też funkcje planu, które daje integracja.",
+            "setAll": "Ustaw wszystkie wyświetlone na",
+            "summary": "{count} z {total} wliczonych lub oferowanych",
+            "priceHint": "Aplikacje Marketplace zachowują własną cenę; ustaw ją na stronie aplikacji.",
+            "emptyIntegrations": "Nie ma jeszcze płatnych integracji",
+            "emptyIntegrationsHint": "Bezpłatne integracje nie wymagają tu ustawień; Shopify i WooCommerce włącza się na karcie Funkcje."
           }
         }
       },

@@ -1349,13 +1349,17 @@
             "details": "Ayrıntılar ve fiyatlandırma",
             "features": "Özellikler",
             "limits": "Sınırlar",
-            "addons": "Eklentiler"
+            "addons": "Eklentiler",
+            "integrations": "Entegrasyonlar",
+            "miniApps": "Mini uygulamalar"
           },
           "tabSummary": {
             "features": "{total} özellikten {count} tanesi açık",
             "limits": "{total} sınırdan {count} tanesi ayarlı",
-            "addons": "{count} eklenti seçildi",
-            "error": "Düzeltilecek hatalar var"
+            "addons": "{count, plural, one {# eklenti dahil veya sunuluyor} other {# eklenti dahil veya sunuluyor}}",
+            "error": "Düzeltilecek hatalar var",
+            "integrations": "Dahil edilen veya sunulan entegrasyonlar: {count}",
+            "miniApps": "Dahil edilen veya sunulan mini uygulamalar: {count}"
           },
           "featuresUi": {
             "intro": "Bu planın içermediği şeyleri kapatın. Plandaki bir çalışma alanı, özelliği kapalı olan bir alanı açamaz.",
@@ -1386,12 +1390,8 @@
             "total": "toplamda"
           },
           "addons": {
-            "intro": "Etkin eklentiler bu plandaki çalışma alanlarına Pazar yerinde gösterilir; yalnızca çalışma alanı satın aldıktan sonra kullanılabilir.",
             "search": "Eklenti ara",
             "searchPlaceholder": "Eklenti veya uygulama ara",
-            "selectAll": "Tümünü seç",
-            "clear": "Temizle",
-            "selected": "{total} içinden {count} seçildi",
             "loading": "Eklentiler yükleniyor",
             "empty": "Henüz ücretli eklenti yok",
             "emptyHint": "Eklentiler operatör konsolunun Pazar yeri kataloğunda oluşturulur. Bir uygulamanın ücretli paketi olduğunda burada listelenir.",
@@ -1710,9 +1710,6 @@
             "crm": "Satış CRM",
             "platform": "İkisi için ortak"
           },
-          "marketplace": {
-            "title": "Bu planda sunulan mini uygulamalar"
-          },
           "offers": {
             "readOnly": "Bu planı görüntüleyebilirsiniz ancak değiştiremezsiniz, bu yüzden bu denetimler kilitli.",
             "featureTitle": "Özellik eklentileri",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Bu eklenti taslak veya kapalı, bu yüzden henüz kimse satın alamaz. Plana dahil etmek yine de çalışır.",
             "impactCount": "{count, plural, one {# çalışma alanı bu eklenti için zaten ödeme yapıyor.} other {# çalışma alanı bu eklenti için zaten ödeme yapıyor.}} Yenilemeleri mevcut dönemin sonunda duracak, hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek.",
             "impactUnknown": "Bu plandaki ve bu eklenti için zaten ödeme yapan çalışma alanları, mevcut dönemlerinin sonunda yenilemeyi bırakacak. Hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek. Sayı yüklenemedi.",
-            "partlyNote": "Bu plan bu eklentinin bir kısmını zaten veriyor ({features}). Burada Dahil, Ücretli veya Gizli seçene kadar böyle kalır."
+            "partlyNote": "Bu plan bu eklentinin bir kısmını zaten veriyor ({features}). Burada Dahil, Ücretli veya Gizli seçene kadar böyle kalır.",
+            "needsFeatures": "Önce Eklentiler > {name} bölümünde açtığı özellikleri ekleyin"
+          },
+          "apps": {
+            "introMiniApps": "Mini uygulamalar, bir çalışma alanının Marketplace’ten kurduğu uygulamalardır. Dahil: bu plandaki çalışma alanları için ücretsiz. Ücretli: uygulamanın kendi fiyatıyla satın alabilirler. Gizli: onu hiç görmezler. Dahil seçeneği, uygulamanın sağladığı plan özelliklerini de açar.",
+            "introIntegrations": "Entegrasyonlar harici bir hizmeti bağlar. Dahil: bu plandaki çalışma alanları için ücretsiz. Ücretli: entegrasyonun kendi fiyatıyla satın alabilirler. Gizli: onu hiç görmezler. Dahil seçeneği, entegrasyonun sağladığı plan özelliklerini de açar.",
+            "setAll": "Gösterilenlerin tümünü şuna ayarla",
+            "summary": "{total} içinden {count} dahil veya sunuluyor",
+            "priceHint": "Marketplace uygulamaları kendi fiyatını korur; fiyatı uygulamanın sayfasında belirleyin.",
+            "emptyIntegrations": "Henüz ücretli entegrasyon yok",
+            "emptyIntegrationsHint": "Ücretsiz entegrasyonlar için burada ayar gerekmez; Shopify ve WooCommerce Özellikler sekmesinden açılır."
           }
         }
       },

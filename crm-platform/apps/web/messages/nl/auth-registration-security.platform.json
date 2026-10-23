@@ -1349,13 +1349,17 @@
             "details": "Details en prijzen",
             "features": "Functies",
             "limits": "Limieten",
-            "addons": "Add-ons"
+            "addons": "Add-ons",
+            "integrations": "Integraties",
+            "miniApps": "Mini-apps"
           },
           "tabSummary": {
             "features": "{count} van {total} functies aan",
             "limits": "{count} van {total} limieten ingesteld",
-            "addons": "{count} add-ons geselecteerd",
-            "error": "Bevat fouten die moeten worden opgelost"
+            "addons": "{count, plural, one {# add-on inbegrepen of aangeboden} other {# add-ons inbegrepen of aangeboden}}",
+            "error": "Bevat fouten die moeten worden opgelost",
+            "integrations": "Inbegrepen of aangeboden integraties: {count}",
+            "miniApps": "Inbegrepen of aangeboden mini-apps: {count}"
           },
           "featuresUi": {
             "intro": "Schakel uit wat dit plan niet bevat. Een workspace op het plan kan een gebied waarvan de functie uit staat niet openen.",
@@ -1386,12 +1390,8 @@
             "total": "in totaal"
           },
           "addons": {
-            "intro": "Ingeschakelde add-ons worden getoond aan workspaces op dit plan in hun Marktplaats; ze kunnen pas worden gebruikt nadat de workspace ze heeft gekocht.",
             "search": "Add-ons zoeken",
             "searchPlaceholder": "Zoek add-ons of apps",
-            "selectAll": "Alles selecteren",
-            "clear": "Wissen",
-            "selected": "{count} van {total} geselecteerd",
             "loading": "Add-ons laden",
             "empty": "Er bestaan nog geen betaalde add-ons",
             "emptyHint": "Add-ons worden aangemaakt in de Marktplaatscatalogus van de operatorconsole. Zodra een app een betaald pakket heeft, staat die hier.",
@@ -1710,9 +1710,6 @@
             "crm": "Verkoop-CRM",
             "platform": "Gedeeld door beide"
           },
-          "marketplace": {
-            "title": "Mini-apps aangeboden op dit abonnement"
-          },
           "offers": {
             "readOnly": "Je kunt dit abonnement bekijken maar niet wijzigen, dus deze instellingen zijn vergrendeld.",
             "featureTitle": "Functie-add-ons",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Deze add-on is een concept of staat uit, dus niemand kan hem nog kopen. Hem opnemen in het abonnement werkt wel.",
             "impactCount": "{count, plural, one {# werkruimte betaalt al voor deze add-on.} other {# werkruimtes betalen al voor deze add-on.}} Hun verlenging stopt aan het einde van de huidige periode, er wordt niets terugbetaald en er wordt vandaag niets geannuleerd.",
             "impactUnknown": "Werkruimtes op dit abonnement die al voor deze add-on betalen, verlengen hem niet meer aan het einde van hun huidige periode. Er wordt niets terugbetaald en er wordt vandaag niets geannuleerd. Het aantal kon niet worden geladen.",
-            "partlyNote": "Dit abonnement geeft al een deel van deze add-on ({features}). Dat blijft zo tot je hier Inbegrepen, Betaald of Verborgen kiest."
+            "partlyNote": "Dit abonnement geeft al een deel van deze add-on ({features}). Dat blijft zo tot je hier Inbegrepen, Betaald of Verborgen kiest.",
+            "needsFeatures": "Voeg eerst de functies toe die het ontgrendelt in Add-ons > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Mini-apps zijn apps die een werkruimte installeert via de Marketplace. Inbegrepen: gratis voor werkruimten op dit abonnement. Betaald: ze kunnen de app kopen tegen de eigen prijs. Verborgen: ze zien de app nooit. Inbegrepen zet ook de abonnementsfuncties aan die de app geeft.",
+            "introIntegrations": "Integraties koppelen een externe dienst. Inbegrepen: gratis voor werkruimten op dit abonnement. Betaald: ze kunnen de integratie kopen tegen de eigen prijs. Verborgen: ze zien de integratie nooit. Inbegrepen zet ook de abonnementsfuncties aan die de integratie geeft.",
+            "setAll": "Zet alle getoonde op",
+            "summary": "{count} van {total} inbegrepen of aangeboden",
+            "priceHint": "Marketplace-apps behouden hun eigen prijs; stel die in op de vermelding van de app.",
+            "emptyIntegrations": "Nog geen betaalde integraties",
+            "emptyIntegrationsHint": "Gratis integraties hebben hier geen instelling nodig; Shopify en WooCommerce schakel je in op het tabblad Functies."
           }
         }
       },

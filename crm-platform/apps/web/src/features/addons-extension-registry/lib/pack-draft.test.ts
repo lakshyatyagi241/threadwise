@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import type { AddonPlanOffer } from '@crm/contracts';
+import type { AddonPack, AddonPlanOffer } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import {
   buildPackRequest,
   buildPlanOffersRequest,
   changedPlanOfferCount,
   newPackDraft,
+  packProblemsFromError,
   packToDraft,
   planOfferModes,
   planOfferSummary,
   planOffersToDraft,
+  setPackKind,
   setPlanOfferAmount,
   setPlanOfferMode,
 } from './pack-draft';
@@ -17,6 +20,7 @@ const draft = (over: Partial<ReturnType<typeof newPackDraft>> = {}) => ({
   ...newPackDraft(),
   name: 'Extra seats',
   amount: '9',
+  features: ['analytics'],
   ...over,
 });
 
@@ -195,16 +199,20 @@ describe('plan offers of a pack (Plans section and list column)', () => {
     expect(s.hidden.map((o) => o.planName)).toEqual(['Free']);
   });
 
-  it('a capacity pack offers Paid | Hidden only', () => {
-    expect(planOfferModes({ grants: { features: ['analytics'], limits: {} } })).toEqual([
-      'included',
-      'paid',
-      'hidden',
+  it('a capacity pack offers Paid | Hidden only; a feature pack all three', () => {
+    expect(planOfferModes('feature', 2)).toEqual([
+      { mode: 'included', disabled: false },
+      { mode: 'paid', disabled: false },
+      { mode: 'hidden', disabled: false },
     ]);
-    expect(planOfferModes({ grants: { features: [], limits: { users: 1 } } })).toEqual([
-      'paid',
-      'hidden',
-    ]);
+    expect(planOfferModes('capacity', 0).map((m) => m.mode)).toEqual(['paid', 'hidden']);
+    expect(planOfferModes('capacity', 3).some((m) => m.disabled)).toBe(false);
+  });
+
+  it('a feature pack with no features shows Included but cannot pick it', () => {
+    const modes = planOfferModes('feature', 0);
+    expect(modes.map((m) => m.mode)).toEqual(['included', 'paid', 'hidden']);
+    expect(modes.filter((m) => m.disabled).map((m) => m.mode)).toEqual(['included']);
   });
 
   it('sends only the plans that changed, with a blank price as null', () => {
@@ -241,5 +249,117 @@ describe('plan offers of a pack (Plans section and list column)', () => {
     expect(
       buildPlanOffersRequest(pack, setPlanOfferAmount(planOffersToDraft(pack), PID(5), '0')),
     ).toEqual({ ok: false, problems: { [PID(5)]: 'zero' } });
+  });
+});
+
+describe('add-on type (feature or capacity)', () => {
+  const stored = (over: Partial<AddonPack> = {}): AddonPack => ({
+    id: '00000000-0000-4000-8000-000000000009',
+    slug: 'p',
+    name: 'Pack',
+    subtitle: null,
+    detail: null,
+    amount: '9.00',
+    offerAmount: null,
+    currency: 'USD',
+    billingUnit: 'months',
+    billingDuration: 1,
+    billingMode: 'recurring',
+    isFree: false,
+    isLifetime: false,
+    isActive: true,
+    sortOrder: 0,
+    grants: { features: ['inbox_routing'], limits: {} },
+    activePurchases: 0,
+    kind: 'feature',
+    planOffers: [],
+    rowVersion: 1,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...over,
+  });
+
+  it('a new pack is a feature add-on; an existing one starts at its stored kind', () => {
+    expect(newPackDraft().kind).toBe('feature');
+    expect(packToDraft(stored()).kind).toBe('feature');
+    const cap = packToDraft(
+      stored({ kind: 'capacity', grants: { features: [], limits: { users: 2 } } }),
+    );
+    expect(cap.kind).toBe('capacity');
+    expect(cap.features).toEqual([]);
+  });
+
+  it('the request carries the kind', () => {
+    const f = buildPackRequest(draft({ features: ['analytics'] }));
+    expect(f.ok && f.body.kind).toBe('feature');
+    const c = buildPackRequest(draft({ kind: 'capacity', limits: { users: '5' } }));
+    expect(c.ok && c.body.kind).toBe('capacity');
+  });
+
+  it('switching to Capacity clears the features from the form and the request; switching back restores them', () => {
+    const d = draft({ features: ['analytics', 'inbox_routing'], limits: { users: '3' } });
+    const cap = setPackKind(d, 'capacity');
+    expect(cap).toMatchObject({
+      kind: 'capacity',
+      features: [],
+      heldFeatures: ['analytics', 'inbox_routing'],
+    });
+    expect(cap.limits).toEqual({ users: '3' });
+    const r = buildPackRequest(cap);
+    expect(r.ok && r.body.features).toEqual([]);
+    const back = setPackKind(cap, 'feature');
+    expect(back).toMatchObject({
+      kind: 'feature',
+      features: ['analytics', 'inbox_routing'],
+      heldFeatures: [],
+    });
+    // switching to the type it already has changes nothing; ticks made after switching back are kept
+    expect(setPackKind(d, 'feature')).toBe(d);
+    expect(setPackKind({ ...back, features: ['x'] }, 'feature').features).toEqual(['x']);
+  });
+
+  it('a feature add-on needs at least one feature (limits are optional)', () => {
+    expect(buildPackRequest(draft({ features: [] }))).toEqual({
+      ok: false,
+      problems: { features: true },
+    });
+    expect(buildPackRequest(draft({ features: ['analytics'], limits: {} })).ok).toBe(true);
+    expect(buildPackRequest(draft({ features: ['analytics'], limits: { users: '2' } })).ok).toBe(
+      true,
+    );
+  });
+
+  it('a capacity add-on needs at least one non-zero limit and carries no feature', () => {
+    expect(buildPackRequest(draft({ kind: 'capacity' }))).toEqual({
+      ok: false,
+      problems: { limitsNeeded: true },
+    });
+    expect(buildPackRequest(draft({ kind: 'capacity', limits: { users: '0' } }))).toEqual({
+      ok: false,
+      problems: { limitsNeeded: true },
+    });
+    // a bad amount is the "limits" problem, not also "needs a limit"
+    expect(buildPackRequest(draft({ kind: 'capacity', limits: { users: '5x' } }))).toEqual({
+      ok: false,
+      problems: { limits: true },
+    });
+    expect(buildPackRequest(draft({ kind: 'capacity', limits: { users: '-1' } })).ok).toBe(true);
+  });
+
+  it('a stored feature add-on whose features were cleared cannot be saved until one is ticked', () => {
+    const d = packToDraft(stored({ grants: { features: [], limits: { users: 2 } } }));
+    expect(d.kind).toBe('feature');
+    expect(buildPackRequest(d)).toEqual({ ok: false, problems: { features: true } });
+    expect(buildPackRequest({ ...d, features: ['analytics'] }).ok).toBe(true);
+  });
+
+  it('maps the features / limits problems of a refused save onto those sections', () => {
+    const refused = (path: string) =>
+      new ApiError(422, 'VALIDATION_FAILED', 'x', undefined, [{ path, message: 'm' }]);
+    expect(packProblemsFromError(refused('features'))).toEqual({ features: true });
+    expect(packProblemsFromError(refused('limits'))).toEqual({ limitsNeeded: true });
+    expect(packProblemsFromError(refused('limits.users'))).toEqual({ limits: true });
+    expect(packProblemsFromError(refused('name'))).toEqual({});
+    expect(packProblemsFromError(new Error('x'))).toEqual({});
   });
 });

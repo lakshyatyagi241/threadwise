@@ -63,6 +63,8 @@ export const plans = pgTable(
      * Set on the billing add-on that sells one Marketplace app (20261023090000_mkt_pricing.sql). References marketplace_apps in the
      * database; not declared here because that table's schema file imports this one.
      */
+    /** A plain add-on's kind (feature / capacity), chosen by the operator; null on an older row (the kind is then derived from its grants). */
+    addonKind: text('addon_kind').$type<'feature' | 'capacity'>(),
     marketplaceAppId: idColumn('marketplace_app_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),

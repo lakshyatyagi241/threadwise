@@ -7,6 +7,7 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addonPackSchema,
+  type AddonKind,
   type AddonPack,
   type PlanAddonOfferMode,
   type PlanBillingUnit,
@@ -15,7 +16,6 @@ import {
 import { Alert, Button, Card, Checkbox, Input, Select, Spinner, cn } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
-import { SegmentedChoice } from '@/features/auth-registration-security/platform/ui/segmented-choice';
 import {
   PLANS_QUERY_KEY,
   PLAN_INCLUDABLE_PACKS_QUERY_KEY,
@@ -27,21 +27,25 @@ import {
   buildPlanOffersRequest,
   changedPlanOfferCount,
   newPackDraft,
+  packProblemsFromError,
   packToDraft,
   planOfferModes,
   planOffersToDraft,
   setPlanOfferAmount,
+  setPackKind,
   setPlanOfferMode,
   type PackDraft,
   type PackField,
   type PlanOfferProblem,
   type PlanOffersDraft,
 } from '../lib/pack-draft';
+import { OfferModeChoice } from './offer-mode-choice';
 import { Accent, ErrorBlock, LoadingBlock, PageHead } from './ui';
 
 const NS = 'addons-extension-registry.packs.editor';
 const UNITS: readonly PlanBillingUnit[] = ['days', 'weeks', 'months', 'years'];
 const FORM_ID = 'addonForm';
+const KINDS: readonly AddonKind[] = ['feature', 'capacity'];
 
 /** `/admin/addons/new` and `/admin/addons/:id/edit`: one page, two modes, as in Reference. */
 export function PackFormPage({ packId }: { packId?: string }) {
@@ -105,8 +109,15 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
     staleTime: 60_000,
   });
 
-  const set = <K extends keyof PackDraft>(k: K, v: PackDraft[K]) =>
+  const set = <K extends keyof PackDraft>(k: K, v: PackDraft[K]) => {
+    clearServerProblems();
     setDraft((d) => ({ ...d, [k]: v }));
+  };
+  const chooseKind = (kind: AddonKind) => {
+    clearServerProblems();
+    setProblems({});
+    setDraft((d) => setPackKind(d, kind));
+  };
 
   const save = useMutation({
     mutationFn: (body: object) =>
@@ -123,6 +134,13 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
     },
   });
 
+  // The API refused the features / limits of the pack: shown on those sections like the client check, until the form is edited.
+  const serverProblems = save.isError ? packProblemsFromError(save.error) : {};
+  function clearServerProblems() {
+    if (save.isError && Object.keys(serverProblems).length > 0) save.reset();
+  }
+  const shown: Partial<Record<PackField, true>> = { ...problems, ...serverProblems };
+
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const r = buildPackRequest(draft);
@@ -134,13 +152,16 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
     save.mutate(r.body);
   };
 
-  const errorKey = save.isError ? addonErrorKey(save.error) : null;
-  const problemList = (Object.keys(problems) as PackField[]).map((f) => t(`problems.${f}`));
+  const errorKey =
+    save.isError && Object.keys(serverProblems).length === 0 ? addonErrorKey(save.error) : null;
+  const problemList = (Object.keys(shown) as PackField[]).map((f) => t(`problems.${f}`));
   const toggleFeature = (key: string, on: boolean) =>
     set(
       'features',
       on ? [...new Set([...draft.features, key])] : draft.features.filter((k) => k !== key),
     );
+  const isFeature = draft.kind === 'feature';
+  const unlocksNothing = !!pack && isFeature && draft.features.length === 0;
   const currencies = fields.data?.currencies ?? [];
   const currencyOptions = currencies.some((c) => c.code === draft.currency)
     ? currencies
@@ -196,6 +217,11 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
           <p>{t('legacy.body')}</p>
         </Alert>
       )}
+      {unlocksNothing && (
+        <Alert tone="warning" className="rounded-2xl px-4 py-3" data-testid="no-features-notice">
+          {t('noFeaturesNotice')}
+        </Alert>
+      )}
       {(errorKey || problemList.length > 0) && (
         <Alert tone="danger" className="rounded-2xl px-4 py-3">
           <div className="mb-1 font-semibold">{t('fixTitle')}</div>
@@ -216,7 +242,39 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
       <form id={FORM_ID} onSubmit={submit} noValidate>
         <Card className="overflow-hidden rounded-2xl p-0">
           <fieldset disabled={!canEdit} className="space-y-8 p-5">
-            <Section first n="01" title={t('basics')} note={tc('required')}>
+            <Section first n="01" title={t('type.title')} hint={t('type.hint')}>
+              <div
+                role="radiogroup"
+                aria-label={t('type.title')}
+                data-testid="pack-kind"
+                data-value={draft.kind}
+                className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+              >
+                {KINDS.map((k) => (
+                  <label key={k} className="relative flex min-w-0 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="addon-kind"
+                      value={k}
+                      checked={draft.kind === k}
+                      onChange={() => chooseKind(k)}
+                      className="peer sr-only"
+                      data-testid={`pack-kind-${k}`}
+                    />
+                    <span className="flex w-full flex-col gap-1 rounded-xl border border-border px-4 py-3 hover:bg-muted peer-checked:border-primary peer-checked:bg-primary/5 peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-60">
+                      <span className="break-words text-[13px] font-semibold">
+                        {t(`type.${k}.title`)}
+                      </span>
+                      <span className="break-words text-xs text-muted-foreground">
+                        {t(`type.${k}.body`)}
+                      </span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </Section>
+
+            <Section n="02" title={t('basics')} note={tc('required')}>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
                   <label htmlFor="addon-name" className={LABEL}>
@@ -405,30 +463,67 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
               </div>
             </Section>
 
-            <Section n="02" title={t('features')} hint={t('featuresHint')}>
-              {fields.isPending && <Spinner label={tc('loading')} />}
-              {fields.isError && <Alert tone="danger">{tc('errors.unexpected')}</Alert>}
-              {fields.data && (
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {fields.data.features.map((f) => (
-                    <Checkbox
-                      key={f.key}
-                      id={`addon-feature-${f.key}`}
-                      label={f.core ? `${f.label} (${t('coreFeature')})` : f.label}
-                      checked={draft.features.includes(f.key)}
-                      // A core flag is in every plan: it can be unticked from a pack that already holds it, never added.
-                      disabled={f.core && !draft.features.includes(f.key)}
-                      onChange={(e) => toggleFeature(f.key, e.target.checked)}
-                      className="items-center rounded-lg border border-border px-3 py-2 text-[12.5px] hover:bg-muted"
-                    />
-                  ))}
-                </div>
-              )}
-            </Section>
+            {isFeature && (
+              <Section n="03" title={t('features')} hint={t('featuresHint')}>
+                {fields.isPending && <Spinner label={tc('loading')} />}
+                {fields.isError && <Alert tone="danger">{tc('errors.unexpected')}</Alert>}
+                {shown.features && (
+                  <p id="addon-features-problem" role="alert" className="mb-2 text-xs text-danger">
+                    {t('problems.features')}
+                  </p>
+                )}
+                {fields.data && (
+                  <div
+                    role="group"
+                    aria-label={t('features')}
+                    aria-invalid={shown.features || undefined}
+                    aria-describedby={shown.features ? 'addon-features-problem' : undefined}
+                    className={cn(
+                      'grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3',
+                      shown.features &&
+                        'rounded-xl ring-1 ring-danger/60 ring-offset-4 ring-offset-background',
+                    )}
+                  >
+                    {fields.data.features.map((f) => (
+                      <Checkbox
+                        key={f.key}
+                        id={`addon-feature-${f.key}`}
+                        label={f.core ? `${f.label} (${t('coreFeature')})` : f.label}
+                        checked={draft.features.includes(f.key)}
+                        // A core flag is in every plan: it can be unticked from a pack that already holds it, never added.
+                        disabled={f.core && !draft.features.includes(f.key)}
+                        onChange={(e) => toggleFeature(f.key, e.target.checked)}
+                        className="items-center rounded-lg border border-border px-3 py-2 text-[12.5px] hover:bg-muted"
+                      />
+                    ))}
+                  </div>
+                )}
+              </Section>
+            )}
 
-            <Section n="03" title={t('limits')} note={tc('optional')} hint={t('limitsHint')}>
+            <Section
+              n={isFeature ? '04' : '03'}
+              title={t('limits')}
+              note={isFeature ? tc('optional') : tc('required')}
+              hint={isFeature ? t('limitsHint') : t('limitsHintCapacity')}
+            >
+              {shown.limitsNeeded && (
+                <p id="addon-limits-problem" role="alert" className="mb-2 text-xs text-danger">
+                  {t('problems.limitsNeeded')}
+                </p>
+              )}
               {fields.data && (
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  role="group"
+                  aria-label={t('limits')}
+                  aria-invalid={shown.limitsNeeded || shown.limits || undefined}
+                  aria-describedby={shown.limitsNeeded ? 'addon-limits-problem' : undefined}
+                  className={cn(
+                    'grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3',
+                    (shown.limitsNeeded || shown.limits) &&
+                      'rounded-xl ring-1 ring-danger/60 ring-offset-4 ring-offset-background',
+                  )}
+                >
                   {fields.data.limits.map((l) => (
                     <div key={l.key}>
                       <label
@@ -472,7 +567,14 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
         </Card>
       </form>
 
-      {pack && <PlanOffersCard pack={pack} canEdit={canEdit} />}
+      {pack && (
+        <PlanOffersCard
+          pack={pack}
+          canEdit={canEdit}
+          featureCount={draft.features.length}
+          n={isFeature ? '05' : '04'}
+        />
+      )}
     </div>
   );
 }
@@ -482,7 +584,18 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
  * with an optional price of the plan's own when Paid. Saved on its own (`PUT platform/addons/:id/plans`, only the rows that changed), so
  * it never mixes with the pack's own save and its row version. The plan editor's Add-ons tab edits the same rows from the plan's side.
  */
-function PlanOffersCard({ pack, canEdit }: { pack: AddonPack; canEdit: boolean }) {
+function PlanOffersCard({
+  pack,
+  canEdit,
+  featureCount,
+  n,
+}: {
+  pack: AddonPack;
+  canEdit: boolean;
+  /** How many features the form currently ticks: with none, a feature add-on has nothing to include. */
+  featureCount: number;
+  n: string;
+}) {
   const t = useTranslations(`${NS}.planOffers`);
   const tc = useTranslations('addons-extension-registry.common');
   const qc = useQueryClient();
@@ -490,8 +603,9 @@ function PlanOffersCard({ pack, canEdit }: { pack: AddonPack; canEdit: boolean }
   const [draft, setDraft] = useState<PlanOffersDraft>(() => planOffersToDraft(pack));
   const [problems, setProblems] = useState<Record<string, PlanOfferProblem>>({});
   const [saved, setSaved] = useState(false);
-  const modes = planOfferModes(current);
-  const isCapacity = !modes.includes('included');
+  const modes = planOfferModes(pack.kind, featureCount);
+  const isCapacity = pack.kind === 'capacity';
+  const needsFeatures = modes.some((m) => m.mode === 'included' && m.disabled);
   const changed = changedPlanOfferCount(current, draft);
   const listPrice = current.offerAmount ?? current.amount;
 
@@ -541,8 +655,17 @@ function PlanOffersCard({ pack, canEdit }: { pack: AddonPack; canEdit: boolean }
   return (
     <Card className="overflow-hidden rounded-2xl p-0" data-testid="pack-plan-offers">
       <div className="space-y-4 p-5">
-        <Section first n="04" title={t('title')} hint={t('hint')}>
+        <Section first n={n} title={t('title')} hint={t('hint')}>
           {isCapacity && <p className="mb-3 text-xs text-muted-foreground">{t('noIncluded')}</p>}
+          {needsFeatures && (
+            <p
+              id="pack-plan-included-reason"
+              className="mb-3 text-xs text-muted-foreground"
+              data-testid="pack-plan-needs-features"
+            >
+              {t('needFeatures')}
+            </p>
+          )}
           {current.planOffers.length === 0 ? (
             <p className="text-sm text-muted-foreground">{t('empty')}</p>
           ) : (
@@ -572,13 +695,20 @@ function PlanOffersCard({ pack, canEdit }: { pack: AddonPack; canEdit: boolean }
                           </span>
                         )}
                       </div>
-                      <SegmentedChoice<PlanAddonOfferMode>
+                      <OfferModeChoice
                         name={`pack-plan-${o.planId}`}
                         label={t('modeLabel', { plan: o.planName })}
                         value={row.mode}
-                        options={modes.map((m) => ({ value: m, label: t(`modes.${m}`) }))}
-                        onChange={(m) => edit(setPlanOfferMode(draft, o.planId, m), o.planId)}
+                        options={modes.map((m) => ({
+                          value: m.mode,
+                          label: t(`modes.${m.mode}`),
+                          disabled: m.disabled,
+                        }))}
+                        onChange={(m: PlanAddonOfferMode) =>
+                          edit(setPlanOfferMode(draft, o.planId, m), o.planId)
+                        }
                         disabled={!canEdit || save.isPending}
+                        disabledDescribedBy="pack-plan-included-reason"
                         testId={`pack-plan-${o.planId}-mode`}
                       />
                     </div>

@@ -41,11 +41,12 @@ describe('plan_addon_offers', () => {
     features: Record<string, boolean>,
     limits: Record<string, number> = {},
     marketplaceAppId: number | null = null,
+    addonKind: 'feature' | 'capacity' | null = null,
   ): Promise<void> {
     const r = await owner.query(
-      `INSERT INTO plans (slug, kind, name, amount, features, limits, marketplace_app_id)
-       VALUES ($1, 'addon', $1, 9, $2, $3, $4) RETURNING id, uuid`,
-      [slug, JSON.stringify(features), JSON.stringify(limits), marketplaceAppId],
+      `INSERT INTO plans (slug, kind, name, amount, features, limits, marketplace_app_id, addon_kind)
+       VALUES ($1, 'addon', $1, 9, $2, $3, $4, $5) RETURNING id, uuid`,
+      [slug, JSON.stringify(features), JSON.stringify(limits), marketplaceAppId, addonKind],
     );
     packs[slug] = { id: Number(r.rows[0].id), uuid: String(r.rows[0].uuid) };
   }
@@ -68,11 +69,13 @@ describe('plan_addon_offers', () => {
     await plan('growth');
     await plan('free');
     await pack('smart', { inbox_routing: true, inbox_assignment_sticky: true });
-    await pack('seat', {}, { users: 1 });
+    await pack('seat', {}, { users: 1 }, null, 'capacity');
+    // a pack whose features were cleared: a feature add-on still to be filled in, which cannot be included
+    await pack('empty', {}, {}, null, 'feature');
     const cat = await owner.query('SELECT id FROM marketplace_categories LIMIT 1');
     const app = await owner.query(
-      `INSERT INTO marketplace_apps (slug, kind, category_id, name, tagline, status, pricing_model, price_amount, price_currency)
-       VALUES ('crm-booking', 'mini_app', $1, 'crm-booking', 't', 'draft', 'paid_monthly', 9, 'USD') RETURNING id`,
+      `INSERT INTO marketplace_apps (slug, kind, category_id, name, tagline, status, pricing_model, price_amount, price_currency, first_party, grants_plan_features)
+       VALUES ('crm-booking', 'mini_app', $1, 'crm-booking', 't', 'draft', 'paid_monthly', 9, 'USD', true, ARRAY['appointment_booking', 'mkt_crm-booking']) RETURNING id`,
       [cat.rows[0].id],
     );
     await pack('mkt_booking', { mkt_booking: true }, {}, Number(app.rows[0].id));
@@ -129,7 +132,7 @@ describe('plan_addon_offers', () => {
     expect(rows.rows[0].n).toBe(0);
   });
 
-  it('refuses including a capacity add-on, an unknown add-on and a Marketplace app pack', async () => {
+  it('refuses including a capacity add-on or one with no feature yet, and an unknown add-on; both can still be hidden', async () => {
     await expect(
       writePlanOffers(tx, plans.basic!.id, [
         { addonId: packs.seat!.uuid, mode: 'included', amount: null },
@@ -137,14 +140,77 @@ describe('plan_addon_offers', () => {
     ).rejects.toThrow(/validation/i);
     await expect(
       writePlanOffers(tx, plans.basic!.id, [
-        { addonId: packs.mkt_booking!.uuid, mode: 'hidden', amount: null },
+        { addonId: packs.empty!.uuid, mode: 'included', amount: null },
       ]),
     ).rejects.toThrow(/validation/i);
-    // A capacity add-on can still be hidden or priced per plan.
+    await expect(
+      writePlanOffers(tx, plans.basic!.id, [
+        { addonId: '00000000-0000-4000-8000-000000000000', mode: 'hidden', amount: null },
+      ]),
+    ).rejects.toThrow(/validation/i);
     await writePlanOffers(tx, plans.free!.id, [
       { addonId: packs.seat!.uuid, mode: 'hidden', amount: null },
+      { addonId: packs.empty!.uuid, mode: 'hidden', amount: null },
     ]);
     expect(offerOf(await offersOfPlanSlug(tx, 'free'), packs.seat!.id).mode).toBe('hidden');
+  });
+
+  const visibleOn = async (plan: string, pack: string) =>
+    (
+      await owner.query(
+        `SELECT 1 FROM plan_visible_addons WHERE plan_id = $1 AND addon_plan_id = $2`,
+        [plans[plan]!.id, packs[pack]!.id],
+      )
+    ).rows.length > 0;
+
+  it('a mini app: Paid makes it visible, Included also writes a row and its features, Hidden removes both (features only on a change)', async () => {
+    await owner.query(`DELETE FROM plan_visible_addons`);
+    // the plan already carries the app's feature on its own: Paid and Hidden never switch it off
+    await owner.query(
+      `UPDATE plans SET features = features || '{"appointment_booking": true}'::jsonb WHERE slug = 'growth'`,
+    );
+    const paid = await writePlanOffers(tx, plans.growth!.id, [
+      { addonId: packs.mkt_booking!.uuid, mode: 'paid', amount: null },
+    ]);
+    expect(paid.features).toEqual({});
+    expect(await visibleOn('growth', 'mkt_booking')).toBe(true);
+    expect((await offersOfPlanSlug(tx, 'growth')).has(packs.mkt_booking!.id)).toBe(false);
+
+    const inc = await writePlanOffers(tx, plans.basic!.id, [
+      { addonId: packs.mkt_booking!.uuid, mode: 'included', amount: null },
+    ]);
+    // its own mkt_ key is never put on a plan
+    expect(inc.features).toEqual({ appointment_booking: true });
+    expect(await visibleOn('basic', 'mkt_booking')).toBe(true);
+    expect(offerOf(await offersOfPlanSlug(tx, 'basic'), packs.mkt_booking!.id).mode).toBe(
+      'included',
+    );
+    // saving Included again changes nothing
+    expect(
+      (
+        await writePlanOffers(tx, plans.basic!.id, [
+          { addonId: packs.mkt_booking!.uuid, mode: 'included', amount: null },
+        ])
+      ).changed,
+    ).toEqual([]);
+
+    const hid = await writePlanOffers(tx, plans.basic!.id, [
+      { addonId: packs.mkt_booking!.uuid, mode: 'hidden', amount: null },
+    ]);
+    expect(hid.features).toEqual({ appointment_booking: false });
+    expect(await visibleOn('basic', 'mkt_booking')).toBe(false);
+    expect((await offersOfPlanSlug(tx, 'basic')).has(packs.mkt_booking!.id)).toBe(false);
+    // Hidden on a plan that never had it included leaves the plan's own feature alone
+    const hidGrowth = await writePlanOffers(tx, plans.growth!.id, [
+      { addonId: packs.mkt_booking!.uuid, mode: 'hidden', amount: null },
+    ]);
+    expect(hidGrowth.features).toEqual({});
+    expect(await visibleOn('growth', 'mkt_booking')).toBe(false);
+    await expect(
+      writePlanOffers(tx, plans.growth!.id, [
+        { addonId: packs.mkt_booking!.uuid, mode: 'paid', amount: '5.00' },
+      ]),
+    ).rejects.toThrow(/validation/i);
   });
 
   it('the table refuses a price on a non-paid offer and an app pack, whoever writes', async () => {
@@ -156,10 +222,16 @@ describe('plan_addon_offers', () => {
     ).rejects.toThrow(/chk_plan_addon_offers_amount/);
     await expect(
       owner.query(
-        `INSERT INTO plan_addon_offers (plan_id, addon_id, mode) VALUES ($1, $2, 'paid')`,
+        `INSERT INTO plan_addon_offers (plan_id, addon_id, mode, amount) VALUES ($1, $2, 'paid', 5)`,
         [plans.basic!.id, packs.mkt_booking!.id],
       ),
-    ).rejects.toThrow(/plain add-on/);
+    ).rejects.toThrow(/no plan price/);
+    await expect(
+      owner.query(
+        `INSERT INTO plan_addon_offers (plan_id, addon_id, mode) VALUES ($1, $2, 'paid')`,
+        [plans.basic!.id, plans.growth!.id],
+      ),
+    ).rejects.toThrow(/must be an add-on/);
     await expect(
       owner.query(
         `INSERT INTO plan_addon_offers (plan_id, addon_id, mode) VALUES ($1, $2, 'paid')`,
@@ -236,5 +308,30 @@ describe('plan_addon_offers', () => {
     // limits-only packs are never backfilled, and a partly covered plan stays paid
     expect(scale.has(packs.seat!.id)).toBe(false);
     expect(offerOf(await offersOfPlanSlug(tx, 'partial'), packs.smart!.id).mode).toBe('paid');
+  });
+
+  it('the migration backfills the add-on kind: capacity only when it adds limits and no feature, the seeded feature packs stay feature', async () => {
+    await owner.query(
+      `UPDATE plans SET addon_kind = NULL WHERE kind = 'addon' AND marketplace_app_id IS NULL`,
+    );
+    const file = readFileSync(
+      resolve(MIGRATIONS, '20270401090000_addon_kind_and_app_offers.sql'),
+      'utf8',
+    );
+    const from = file.indexOf('UPDATE plans p SET addon_kind');
+    await owner.query(file.slice(from, file.indexOf('CREATE OR REPLACE FUNCTION')));
+    const kinds = Object.fromEntries(
+      (
+        await owner.query(
+          `SELECT slug, addon_kind FROM plans WHERE kind = 'addon' AND marketplace_app_id IS NULL`,
+        )
+      ).rows.map((r) => [r.slug, r.addon_kind]),
+    );
+    expect(kinds).toMatchObject({
+      smart: 'feature',
+      seat: 'capacity',
+      empty: 'feature',
+      smart_routing: 'feature',
+    });
   });
 });

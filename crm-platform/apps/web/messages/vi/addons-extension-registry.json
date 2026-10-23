@@ -147,7 +147,9 @@
           "sortOrder": "Nhập một số nguyên.",
           "limits": "Giới hạn là số nguyên, hoặc -1 cho không giới hạn.",
           "form": "Kiểm tra các trường được đánh dấu.",
-          "amountPositive": "Tiện ích bổ sung là gói đăng ký theo tháng hoặc năm, nên giá phải lớn hơn 0."
+          "amountPositive": "Tiện ích bổ sung là gói đăng ký theo tháng hoặc năm, nên giá phải lớn hơn 0.",
+          "features": "Chọn ít nhất một tính năng, hoặc đổi thành tiện ích bổ sung dung lượng.",
+          "limitsNeeded": "Nhập ít nhất một giới hạn lớn hơn không, hoặc đổi thành tiện ích bổ sung tính năng."
         },
         "legacy": {
           "title": "Gói cũ",
@@ -186,8 +188,23 @@
           },
           "saved": "Đã lưu cách cung cấp theo gói.",
           "changed": "{count, plural, one {# gói đã thay đổi} other {# gói đã thay đổi}}",
-          "save": "Lưu cách cung cấp theo gói"
-        }
+          "save": "Lưu cách cung cấp theo gói",
+          "needFeatures": "Trước tiên hãy thêm các tính năng nó mở khóa ở trên"
+        },
+        "type": {
+          "title": "Loại",
+          "hint": "Chọn tiện ích bổ sung này làm gì. Chỉ tiện ích bổ sung tính năng mới có thể được đưa vào gói.",
+          "feature": {
+            "title": "Tiện ích bổ sung tính năng",
+            "body": "Mở khóa một phần sản phẩm; cũng có thể tăng dung lượng."
+          },
+          "capacity": {
+            "title": "Tiện ích bổ sung dung lượng",
+            "body": "Chỉ tăng một giới hạn (chỗ ngồi, liên hệ...)."
+          }
+        },
+        "noFeaturesNotice": "Tiện ích bổ sung này chưa mở khóa gì. Hãy chọn các tính năng nó cung cấp để các gói có thể đưa nó vào.",
+        "limitsHintCapacity": "Tiện ích bổ sung dung lượng chỉ tăng các giới hạn. Nhập một số để CỘNG thêm vào gói (ví dụ +2 chỗ ngồi). Dùng -1 cho không giới hạn. Cần ít nhất một giới hạn."
       },
       "kind": {
         "feature": "Tính năng",
@@ -199,7 +216,8 @@
         "hidden": "Ẩn: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Không có gói nào"
-      }
+      },
+      "noFeatures": "Chưa có tính năng"
     },
     "extensions": {
       "crumbHere": "Tiện ích bổ sung",

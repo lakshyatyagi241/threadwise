@@ -10,7 +10,7 @@ import {
   type GrantFieldsResponse,
   type SetAddonPlanOffersPayload,
   type UpdateAddonPayload,
-  addonKindOf,
+  derivedAddonKind,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { PLAN_FEATURE_DEFS, PLAN_LIMIT_DEFS } from '@crm/contracts';
@@ -55,6 +55,7 @@ interface PackRow {
   sort_order: number;
   features: unknown;
   limits: unknown;
+  addon_kind: 'feature' | 'capacity' | null;
   row_version: number;
   created_at: string;
   updated_at: string;
@@ -66,7 +67,7 @@ interface PackRow {
 const SELECT = sql.raw(`
   SELECT p.id::int AS id, p.uuid, p.slug, p.name, p.subtitle, p.detail, p.amount::text AS amount,
          p.offer_amount::text AS offer_amount, p.currency, p.billing_unit, p.billing_duration, p.billing_mode, p.is_free,
-         p.is_lifetime, p.is_active, p.sort_order, p.features, p.limits, p.row_version, p.created_at, p.updated_at,
+         p.is_lifetime, p.is_active, p.sort_order, p.features, p.limits, p.addon_kind, p.row_version, p.created_at, p.updated_at,
          (SELECT count(*)::int FROM workspace_addons a WHERE a.package_id = p.id) AS purchases,
          (SELECT count(*)::int FROM workspace_addons a
            WHERE a.package_id = p.id AND a.status = 'active' AND (a.ends_at IS NULL OR a.ends_at > now())) AS active_purchases
@@ -94,7 +95,8 @@ export function toPack(row: PackRow): AddonPack {
     // the grants column is read from the stored grants, not from a mirrored flag (TW-ADD-025 QUIRK 1)
     grants: readGrants(row.features, row.limits),
     activePurchases: row.active_purchases,
-    kind: addonKindOf(readGrants(row.features, row.limits)),
+    // The operator's choice; an older row falls back to what its grants say.
+    kind: row.addon_kind ?? derivedAddonKind(readGrants(row.features, row.limits)),
     planOffers: [],
     rowVersion: row.row_version,
     createdAt: new Date(row.created_at).toISOString(),
@@ -304,11 +306,11 @@ export class AddonPackService {
       const free = isZero(body.amount);
       const res = await tx.execute(sql`
         INSERT INTO plans (slug, kind, name, subtitle, detail, amount, offer_amount, currency, billing_unit,
-                           billing_duration, billing_mode, is_free, is_lifetime, is_active, sort_order, cta_label, limits, features)
+                           billing_duration, billing_mode, is_free, is_lifetime, is_active, sort_order, cta_label, limits, features, addon_kind)
         VALUES (${slug}, 'addon', ${body.name}, ${body.subtitle}, ${body.detail}, ${body.amount}::numeric,
                 ${body.offerAmount}::numeric, ${body.currency}, ${body.billingUnit}, ${body.billingDuration},
                 ${body.billingMode}, ${free}, ${body.isLifetime}, ${body.isActive}, ${body.sortOrder}, 'Add to plan',
-                ${JSON.stringify(grants.limits)}::jsonb, ${JSON.stringify(featuresColumn(grants))}::jsonb)
+                ${JSON.stringify(grants.limits)}::jsonb, ${JSON.stringify(featuresColumn(grants))}::jsonb, ${body.kind})
         RETURNING uuid
       `);
       const uuid = (res.rows[0] as unknown as { uuid: string }).uuid;
@@ -353,6 +355,7 @@ export class AddonPackService {
         sortOrder: before.sortOrder,
         features: before.grants.features,
         limits: before.grants.limits,
+        kind: before.kind,
         ...defined,
       };
       const checked = createAddonRequestSchema.safeParse(merged);
@@ -372,7 +375,8 @@ export class AddonPackService {
           currency = ${after.currency}, billing_unit = ${after.billingUnit},
           billing_duration = ${after.billingDuration}, billing_mode = ${after.billingMode}, is_free = ${isZero(after.amount)},
           is_lifetime = ${after.isLifetime}, is_active = ${after.isActive}, sort_order = ${after.sortOrder},
-          limits = ${JSON.stringify(grants.limits)}::jsonb, features = ${JSON.stringify(featuresColumn(grants))}::jsonb
+          limits = ${JSON.stringify(grants.limits)}::jsonb, features = ${JSON.stringify(featuresColumn(grants))}::jsonb,
+          addon_kind = ${after.kind}
         WHERE id = ${stored.id} AND row_version = ${patch.rowVersion}
         RETURNING id
       `);

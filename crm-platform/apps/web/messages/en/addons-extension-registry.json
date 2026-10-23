@@ -147,7 +147,9 @@
           "sortOrder": "Enter a whole number.",
           "limits": "Limits are whole numbers, or -1 for unlimited.",
           "form": "Check the highlighted fields.",
-          "amountPositive": "Add-ons are monthly or yearly subscriptions, so the price must be above zero."
+          "amountPositive": "Add-ons are monthly or yearly subscriptions, so the price must be above zero.",
+          "features": "Tick at least one feature, or make this a capacity add-on.",
+          "limitsNeeded": "Enter at least one limit above zero, or make this a feature add-on."
         },
         "legacy": {
           "title": "Legacy pack",
@@ -186,8 +188,23 @@
           },
           "saved": "Plan offers saved.",
           "changed": "{count, plural, one {# plan changed} other {# plans changed}}",
-          "save": "Save plan offers"
-        }
+          "save": "Save plan offers",
+          "needFeatures": "Add the features it unlocks above first"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Choose what this add-on does. Only a feature add-on can be included in a plan.",
+          "feature": {
+            "title": "Feature add-on",
+            "body": "Unlocks part of the product; can also add capacity."
+          },
+          "capacity": {
+            "title": "Capacity add-on",
+            "body": "Only adds to a limit (seats, contacts...)."
+          }
+        },
+        "noFeaturesNotice": "This add-on unlocks nothing yet. Tick the features it gives so plans can include it.",
+        "limitsHintCapacity": "A capacity add-on only adds to limits. Enter a number to ADD on top of the plan (for example +2 seats). Use -1 for unlimited. At least one limit is required."
       },
       "kind": {
         "feature": "Feature",
@@ -199,7 +216,8 @@
         "hidden": "Hidden: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "No plans"
-      }
+      },
+      "noFeatures": "No features yet"
     },
     "extensions": {
       "crumbHere": "Add-ons",

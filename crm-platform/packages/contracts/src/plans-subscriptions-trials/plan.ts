@@ -374,6 +374,8 @@ export const planAddonOptionSchema = z.object({
     name: z.string(),
     /** The listing's state: only `published` apps are listed to workspaces. */
     status: z.string(),
+    /** `mini_app` or `integration`: the plan editor lists them on their own tabs. */
+    kind: z.string().default('mini_app'),
   }),
 });
 export type PlanAddonOption = z.infer<typeof planAddonOptionSchema>;
