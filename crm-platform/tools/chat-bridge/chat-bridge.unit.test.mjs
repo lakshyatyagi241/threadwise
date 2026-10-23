@@ -393,3 +393,13 @@ test('other channel: non-critical alerts go to the Other space only when NON_CRI
   const dir = fs.mkdtempSync('/tmp/gc-sec-'); fs.writeFileSync(`${dir}/gchat_other_url`, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t\n');
   assert.equal(loadUrls({ GCHAT_SECRETS_DIR: dir }).other, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t');
 });
+
+test('an alert that clears on its own closes an unowned incident (so loops stop seeing it); an owned one or one with a PR stays', async () => {
+  const mk = async (key) => { const r = createResolver({ env: { ANNOUNCE_IN_SPACE: '0', INCIDENTS_DIR: fs.mkdtempSync('/tmp/inc-clr-') }, post: async () => {} }); await r.handle({ playbook: 'service', alertname: 'X', key, threadKey: 't', channel: 'critical', diagnosis: 'd', suggestion: 's' }); await r.settle(); return r; };
+  const a = await mk('am:a'); assert.equal(a.markCleared('am:a', { measured: 'm' }), true);
+  assert.equal(a.listFull()[0].status, 'resolved'); assert.equal(a.listFull()[0].resolution.kind, 'self');
+  assert.equal(a.markCleared('am:a'), false, 'already closed');
+  const b = await mk('am:b'); await b.claim(b.list()[0].id, 'asha'); assert.equal(b.markCleared('am:b'), false); assert.equal(b.listFull()[0].status, 'claimed');
+  const c = await mk('am:c'); await c.raisePr(c.list()[0].id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/5', number: 5, summary: 's' }); assert.equal(c.markCleared('am:c'), false);
+  assert.equal(c.listFull()[0].status, 'pr_raised');
+});
