@@ -36,6 +36,8 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     const body = { text: (label ? `${label}: ${text}` : String(text)).slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title: label || 'Incident update', subtitle: `incident ${inc.id} (${inc.playbook})` }, sections: [{ widgets: [{ decoratedText: { text: String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;'), wrapText: true } }] }] } }] };
     return Promise.all((channel ? [channel] : inc.channels).map((ch) => post(ch, body, { threadKey: inc.threadKey })));
   };
+  // Thread replies do not show in the space's main timeline, so claim/release/PR/RESOLVED lines are also posted top-level (no threadKey).
+  const announce = (inc, text) => env.ANNOUNCE_IN_SPACE === '0' ? undefined : Promise.all(inc.channels.map((ch) => post(ch, { text: `${text}\n(incident: ${inc.alertname ?? inc.playbook}, ${inc.id})`.slice(0, 400) }))).catch(() => {});
   const escalate = async (inc, why) => {
     inc.state = 'escalated'; count(inc.playbook, 'escalated'); audit({ id: inc.id, playbook: inc.playbook, result: 'escalated', why });
     await step(inc, 'ESCALATED', `NOT resolved, needs a human: ${why}. Suggested next step: ${inc.suggestion ?? 'see the diagnosis in this thread'}. Evidence: ${inc.evidence ?? 'see thread'}`, env.SLOW_QUERY_ESCALATE_TO_CRITICAL === 'true' ? 'critical' : inc.channel);
@@ -160,7 +162,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   // RESOLVED is only ever posted by this function, after the original condition was verified gone.
   const resolveByRelease = async (inc) => {
     const sha = inc.releasedSha ?? release.sha; inc.state = 'resolved'; count(inc.playbook, 'resolved'); closeFile(inc);
-    if (inc.prUrl) return step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${sha}, verified after ${Math.round((now() - (inc.releasedAt ?? inc.startedAt)) / 1000)}s; open for ${hm(now() - inc.startedAt)}`);
+    if (inc.prUrl) { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${sha}, verified after ${Math.round((now() - (inc.releasedAt ?? inc.startedAt)) / 1000)}s; open for ${hm(now() - inc.startedAt)}`; await step(inc, '', t); await announce(inc, t); return; }
     await step(inc, 'RESOLVED', `${inc.kind === 'deploy_failure' ? `a release is live again (${sha})` : 'statement is fast again (mean under threshold for the verification polls)'}; resolved by release ${sha}, after ${fmtDur(now() - inc.startedAt)}`);
   };
   // Released PR but the condition persists: back to open/escalated in the same thread, PR link cleared so a new PR can be registered. Never RESOLVED.
@@ -233,7 +235,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (inc.state === 'resolved') return { code: 409, error: 'incident already resolved' };
     const r = fn(inc); return r.error ? r : { code: 200, inc: view(inc), post: r.post };
   };
-  const done = async (r, inc) => { if (r.post) await step(incidents.get(inc ?? r.inc.id), '', r.post); delete r.post; return r; };
+  const done = async (r, inc) => { if (r.post) { const i = incidents.get(inc ?? r.inc.id); await step(i, '', r.post); if (!r.post.startsWith('\uD83D\uDCDD')) await announce(i, r.post); } delete r.post; return r; };
   const claim = (id, who) => done(mutate(id, who, (inc) => {
     if (held(inc) && inc.owner !== who) return { code: 409, error: `already claimed by ${inc.owner}`, owner: inc.owner };
     const fresh = !held(inc); inc.owner = who; if (fresh) inc.claimedAt = now(); inc.claimExpiresAt = now() + ttlMs();
@@ -259,7 +261,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     const inc = [...incidents.values()].find((i) => i.key === key && i.prUrl && i.state !== 'resolved');
     if (!inc) return false;
     if (inc.state === 'released') { inc.alertCleared = true; return true; } // Alertmanager's resolved counts as the verification; the verify loop posts RESOLVED
-    inc.state = 'resolved'; await step(inc, '', `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`); return true;
+    inc.state = 'resolved'; { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`; await step(inc, '', t); await announce(inc, t); } return true;
   }
   return {
     mode, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
