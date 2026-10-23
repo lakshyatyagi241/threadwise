@@ -33,6 +33,18 @@ If your plan only gives part of an add-on, the card stays buyable and lists only
 
 Some plans do not offer some add-ons at all. Those are not listed. If you already own one, it stays under **Add-ons you own** until its term ends, but it cannot be bought again on that plan.
 
+## Turn an included add-on off or on
+
+An add-on your plan includes is on from the start. On a card that says **Included in your plan** a second label shows **Active** or **Turned off**, and a person with permission to manage add-ons also sees **Turn off** (or **Turn on**).
+
+1. Select **Turn off** on the card. A window lists what will happen before anything changes: **What stops** (the features, anything that depends on them, chats waiting for an agent, routing rules and teams on an automatic method), **What is kept**, and **People** (who holds a custom role).
+2. If something customer-facing is affected, type the add-on's name to confirm. Otherwise one click is enough. Select **Turn off {add-on}**.
+3. The menu entries and screens of that add-on disappear or show that it is turned off. To bring it back, select **Turn on** on the same card. There is nothing to confirm, and it works as you left it.
+
+What is kept: the add-on's settings and data, and the permissions that roles hold for it (they stay in the role but do not apply until it is back on). Nothing is deleted and nothing is charged or refunded: the add-on is part of your plan either way.
+
+Who can do it: the owner and admins, who hold the **Turn included add-ons on or off** permission. Everyone else sees the state and a note to ask the account owner. Only add-ons your plan includes can be switched this way; an add-on you bought is cancelled from **Add-ons you own**, and a Marketplace app is managed from its own page.
+
 ## Renewal and payment
 
 Add-ons renew every term. With a card or another online method that supports it, the renewal is paid automatically. With bank transfer or offline payment nothing is charged for you: you pay again when the term ends, and the add-on stops at the end date if you do not. You can stop an automatic renewal from **Add-ons you own**; the add-on keeps working until the end of the term you paid for.

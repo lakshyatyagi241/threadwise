@@ -196,7 +196,10 @@
       "next": "Successiva",
       "pageOf": "Pagina {page, number} di {pages, number}",
       "perPage": "Segmenti per pagina",
-      "perPageOption": "{count, number} per pagina"
+      "perPageOption": "{count, number} per pagina",
+      "colCreatedBy": "Creato da",
+      "colCreatedAt": "Creato il",
+      "colModifiedBy": "Modificato da"
     },
     "actions": {
       "forbidden": "Non hai i permessi per eseguire questa operazione.",

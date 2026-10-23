@@ -105,11 +105,15 @@ export function applyAiDraft(s: FormState, draft: TplAiDraft): FormState {
     next = withHeaderKind(next, 'none');
   }
   next = withBody(next, draft.body.slice(0, BODY_MAX));
+  const buttons = rowsFromDraft(draft.buttons);
   return {
     ...next,
     name: tidyName(draft.name),
     footer: (draft.footer ?? '').trim().slice(0, FOOTER_MAX),
-    buttons: rowsFromDraft(draft.buttons),
+    kind: 'standard',
+    cards: [],
+    buttonType: buttons.length > 0 ? 'buttons' : 'none',
+    buttons,
   };
 }
 

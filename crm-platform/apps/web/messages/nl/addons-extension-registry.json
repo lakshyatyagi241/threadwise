@@ -370,7 +370,8 @@
         "includedOwned": "Je hebt deze add-on ook. Je abonnement bevat hem nu, dus je kunt hem opzeggen. Er wordt niets automatisch terugbetaald.",
         "includedEnds": "Inbegrepen in je abonnement. Je add-on eindigt op {date} en wordt niet verlengd.",
         "active": "Actief",
-        "ownedCount": "In bezit ×{count} · opnieuw kopen voegt meer toe"
+        "ownedCount": "In bezit ×{count} · opnieuw kopen voegt meer toe",
+        "turnedOff": "Uitgeschakeld"
       },
       "price": {
         "free": "Gratis",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Functie-add-ons",
         "capacity": "Capaciteits-add-ons"
+      },
+      "activation": {
+        "turnedOffNote": "Uitgeschakeld voor deze werkruimte. De instellingen blijven bewaard.",
+        "turnOff": "Uitschakelen",
+        "turnOn": "Inschakelen",
+        "askOwner": "Vraag de accounteigenaar om dit in of uit te schakelen.",
+        "doneOn": "{name} is ingeschakeld.",
+        "errors": {
+          "notToggleable": "{name} kan hier niet worden in- of uitgeschakeld. Alleen een add-on die in je abonnement zit, kan worden omgeschakeld.",
+          "forbidden": "Je hebt geen toestemming om add-ons in of uit te schakelen.",
+          "generic": "We konden {name} niet wijzigen. Probeer het opnieuw."
+        }
+      }
+    },
+    "toggle": {
+      "title": "{name} uitschakelen?",
+      "lead": "Dit verandert er. Je kunt het op elk moment weer inschakelen.",
+      "cancel": "Annuleren",
+      "confirm": "{name} uitschakelen",
+      "done": "{name} is uitgeschakeld. De instellingen blijven bewaard.",
+      "typeLabel": "Typ {name} om te bevestigen",
+      "typeHint": "Klantchats of mensen worden geraakt, dus typ de naam om te bevestigen.",
+      "groups": {
+        "stops": "Wat stopt",
+        "kept": "Wat bewaard blijft",
+        "people": "Mensen"
+      },
+      "items": {
+        "features_off": "Deze functies werken niet meer: {names}.",
+        "dependents_off": "Deze functies hebben ze nodig en stoppen dus ook: {names}.",
+        "roles_dormant": "{count, plural, one {# rol heeft rechten van deze add-on. Ze blijven bewaard, maar zijn inactief tot je de add-on weer inschakelt.} other {# rollen hebben rechten van deze add-on. Ze blijven bewaard, maar zijn inactief tot je de add-on weer inschakelt.}}",
+        "waiting_chats": "{count, plural, one {# chat wacht op een agent. Hij wordt niet automatisch doorgestuurd, dus iemand moet hem oppakken.} other {# chats wachten op een agent. Ze worden niet automatisch doorgestuurd, dus iemand moet ze oppakken.}}",
+        "routing_rules": "{count, plural, one {# routeringsregel stopt met het toewijzen van chats.} other {# routeringsregels stoppen met het toewijzen van chats.}}",
+        "auto_teams": "{count, plural, one {# team is ingesteld om chats automatisch toe te wijzen en stopt daarmee.} other {# teams zijn ingesteld om chats automatisch toe te wijzen en stoppen daarmee.}}",
+        "teams": "{count, plural, one {# team blijft bewaard, met zijn leden.} other {# teams blijven bewaard, met hun leden.}}",
+        "custom_role_holders": "{count, plural, one {# persoon heeft een aangepaste rol. De rol blijft bewaard, maar de rechten van deze add-on gelden niet meer.} other {# mensen hebben een aangepaste rol. De rollen blijven bewaard, maar de rechten van deze add-on gelden niet meer.}}",
+        "kept": "Je instellingen en gegevens blijven bewaard. Ze komen terug zoals je ze hebt achtergelaten wanneer je de add-on weer inschakelt."
       }
     }
   }

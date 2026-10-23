@@ -174,8 +174,6 @@ export class ContactConsentService {
     input: RecordConsentInput,
     idempotencyKey?: string,
   ): Promise<ContactConsent> {
-    const ctx = RequestContextStore.require();
-    const orgId = ctx.orgId;
     if (input.action === 'granted' && !(input.note ?? '').trim()) {
       throw new AppError(
         ERROR_CODES.CONSENT_NOTE_REQUIRED,
@@ -183,7 +181,23 @@ export class ContactConsentService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    await this.db.tx(async (tx) => {
+    await this.recordOne(contactUuid, input, idempotencyKey);
+    return this.forContact(contactUuid, { limit: 50 });
+  }
+
+  /**
+   * One consent event on one contact, in its own tenant transaction: the single edit (`record`) and the bulk consent action write through
+   * here, so the event, the state, the marketing flag, the audit row and the outbox event are the same for each. Returns whether an event
+   * was recorded (a repeat under the same Idempotency-Key records nothing). The caller checks the note of a grant.
+   */
+  async recordOne(
+    contactUuid: string,
+    input: RecordConsentInput,
+    idempotencyKey?: string,
+  ): Promise<boolean> {
+    const ctx = RequestContextStore.require();
+    const orgId = ctx.orgId;
+    return this.db.tx(async (tx) => {
       const c = await this.repo.contactByUuid(tx, orgId, contactUuid);
       if (!c) {
         throw new AppError(
@@ -208,7 +222,7 @@ export class ContactConsentService {
             HttpStatus.CONFLICT,
           );
         }
-        return;
+        return false;
       }
       const out = await this.recordInTx(tx, orgId, {
         contactId: c.id,
@@ -232,8 +246,8 @@ export class ContactConsentService {
           ctx.actorType === 'user' ? ctx.userId : null,
         );
       }
+      return out.recorded;
     });
-    return this.forContact(contactUuid, { limit: 50 });
   }
 
   /**

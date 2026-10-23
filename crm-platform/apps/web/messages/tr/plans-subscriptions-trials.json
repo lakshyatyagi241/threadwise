@@ -584,7 +584,13 @@
       "askOwner": "Eklemesi için hesap sahibinden isteyin.",
       "unavailableTitle": "{addon} için etkin bir ücretli plan gerekir",
       "unavailableLead": "Önce ücretli bir plan seçin, ardından {addon} ekleyebilirsiniz.",
-      "viewPlans": "Planları gör"
+      "viewPlans": "Planları gör",
+      "disabledTitle": "{addon} kapalı",
+      "disabledLead": "Planınız {addon} eklentisini içeriyor, ancak bu çalışma alanı için kapalı. Ayarları korunur.",
+      "disabledAsk": "Açması için hesap sahibinden isteyin.",
+      "turnOn": "Aç",
+      "turnOnForbidden": "Bunu açma yetkiniz yok. Hesap sahibinden isteyin.",
+      "turnOnFailed": "{addon} açılamadı. Lütfen tekrar deneyin."
     }
   }
 }

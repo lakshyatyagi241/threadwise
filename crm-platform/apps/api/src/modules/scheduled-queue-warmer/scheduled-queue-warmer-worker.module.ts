@@ -2,6 +2,7 @@ import { Module, type OnModuleInit } from '@nestjs/common';
 import { ContactConsentModule } from '../contact-consent';
 import { BroadcastReceiptsService, BroadcastsModule } from '../broadcasts';
 import { CampaignReceiptsService, CampaignsModule } from '../campaigns';
+import { SendWindowModule } from '../compliance-center';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule, ReceiptRouter } from '../node-bridge-runtime';
 import { WabaReceiptRegistry } from '../whatsapp-cloud-api-waba';
@@ -15,6 +16,8 @@ import { ScheduledRunService } from './scheduled-run.service';
  * The runs of scheduled messages: the due poller and the queue processor. Imported ONLY by WorkersModule (the worker
  * process): an API pod that also polled would multiply the load on the database. Shares the broadcast sender's pacing, daily
  * cap and one-run-per-number lease, so a number is never in a broadcast and a schedule at once.
+ *
+ * `SendWindowModule` is imported here for the same reason as in `CampaignsWorkerModule`: the quiet hours must reach the runner directly.
  */
 @Module({
   imports: [
@@ -24,6 +27,7 @@ import { ScheduledRunService } from './scheduled-run.service';
     CampaignsModule,
     CrmModule,
     ScheduledQueueWarmerModule,
+    SendWindowModule,
   ],
   providers: [
     ScheduledDueService,

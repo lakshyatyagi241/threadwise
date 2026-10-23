@@ -58,7 +58,11 @@
       "moreButtons": "{count, plural, one {+# botão a mais} other {+# botões a mais}}",
       "live": "Pré-visualização ao vivo",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Cartões do carrossel",
+      "cardEmpty": "Texto do cartão {n}",
+      "offerExpires": "Termina em breve",
+      "offerTextEmpty": "Título da oferta"
     },
     "card": {
       "rejected": "Rejeitado: {reason}",
@@ -195,7 +199,8 @@
         "body": "Corpo",
         "footer": "Rodapé",
         "buttons": "Botões",
-        "template": "Modelo"
+        "template": "Modelo",
+        "cards": "Cartões"
       }
     },
     "form": {
@@ -278,7 +283,7 @@
         "uploading": "Enviando",
         "keptSample": "O exemplo salvo é mantido. Escolha um arquivo para substituí-lo.",
         "noFile": "Nenhum arquivo escolhido",
-        "limits": "Imagem até 5 MB, vídeo até 16 MB, PDF até 100 MB.",
+        "limits": "Imagem até 5 MB, vídeo até 16 MB, PDF até 10 MB.",
         "replace": "Substituir arquivo",
         "choose": "Escolher arquivo de exemplo",
         "tooBig": "Este {kind} tem {size} MB. O WhatsApp aceita até {max} MB. Escolha um arquivo menor.",
@@ -322,14 +327,18 @@
           "quick_reply": "Resposta rápida",
           "url": "Visitar site",
           "phone": "Ligar",
-          "copy_code": "Copiar código"
+          "copy_code": "Copiar código",
+          "form": "Formulário",
+          "catalog": "Catálogo"
         },
         "kind": {
           "quick_reply": "Resposta rápida",
           "url": "Visitar site",
           "phone": "Ligar",
           "copy_code": "Copiar código",
-          "other": "Outro"
+          "other": "Outro",
+          "form": "Formulário",
+          "catalog": "Catálogo"
         },
         "count": "{used}/{max} botões",
         "limitReached": "No máximo {max} deste tipo.",
@@ -358,8 +367,17 @@
           "codeRequired": "Digite um código de exemplo.",
           "quickReplyVariable": "Uma resposta rápida não pode conter variável.",
           "urlExampleRequired": "Informe um valor de exemplo para a variável da URL.",
-          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões."
-        }
+          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões.",
+          "flowIdRequired": "Informe o ID do Flow.",
+          "flowIdInvalid": "O ID do Flow é um número.",
+          "screenRequired": "Informe o ID da tela.",
+          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões."
+        },
+        "catalogHint": "Abre o seu catálogo do WhatsApp. O botão diz “Ver catálogo” e deve ser o único botão.",
+        "flowId": "ID do WhatsApp Flow",
+        "flowIdHint": "O ID numérico de um WhatsApp Flow publicado, no gerenciador de Flows da Meta.",
+        "screen": "Tela inicial",
+        "screenHint": "O ID da tela em que o formulário abre, por exemplo WELCOME."
       },
       "result": {
         "metaRefused": "Salvo, mas a Meta recusou o modelo.",
@@ -373,6 +391,46 @@
         "open": "Criar com IA",
         "applied": "Rascunho do modelo preenchido pela IA. Revise-o antes de enviar.",
         "authHint": "Modelos de autenticação têm texto fixo, então não há o que gerar."
+      },
+      "type": {
+        "label": "Tipo de botão",
+        "standard": "Padrão",
+        "carousel": "Carrossel",
+        "hint": "Escolha como a mensagem termina. Um carrossel é uma fileira de cartões; uma oferta por tempo limitado tem um título de oferta com contagem regressiva opcional e um botão de copiar código ou de site.",
+        "none": "Nenhum",
+        "buttons": "Copiar código, site, respostas rápidas etc.",
+        "lto": "Oferta por tempo limitado",
+        "catalogue": "Catálogo",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Cartões",
+        "hint": "De 2 a 10 cartões. Todos usam o mesmo tipo de arquivo e os mesmos botões.",
+        "format": "Os cartões mostram",
+        "formatImage": "Imagens",
+        "formatVideo": "Vídeos",
+        "count": "{used}/{max} cartões",
+        "add": "Adicionar cartão",
+        "needTwo": "Um carrossel precisa de pelo menos {min} cartões.",
+        "card": "Cartão {n}",
+        "remove": "Remover o cartão {n}",
+        "noFile": "Nenhum arquivo escolhido",
+        "uploading": "Enviando",
+        "text": "Texto do cartão",
+        "textCounter": "{used}/{max}",
+        "buttons": "Botões",
+        "buttonText": "Texto do botão",
+        "buttonUrl": "URL do site",
+        "buttonPhone": "Número de telefone"
+      },
+      "offer": {
+        "title": "Oferta por tempo limitado",
+        "hint": "Aparece abaixo da imagem ou do vídeo: um título e, se quiser, uma contagem regressiva até o fim da oferta.",
+        "text": "Título da oferta",
+        "textHint": "{used}/{max}",
+        "placeholder": "Oferta por tempo limitado!",
+        "countdown": "Mostrar contagem regressiva",
+        "countdownHint": "O WhatsApp mostra o tempo restante até o fim da oferta."
       }
     },
     "detail": {

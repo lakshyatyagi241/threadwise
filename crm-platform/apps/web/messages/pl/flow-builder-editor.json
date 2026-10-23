@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (nie ma w przestrzeni roboczej)",
           "templateLabel": "Zatwierdzony szablon",
           "templateHint": "Tutaj pojawiają się tylko zatwierdzone szablony z przestrzeni roboczej. <link>Utwórz nowy →</link>",
+          "statusExits": "Dodaj wyjścia statusów (Wysłano, Dostarczono, Przeczytano, Odpowiedziano, Niepowodzenie)",
+          "statusExitsHint": "Przepływ opuszcza krok pierwszym wyjściem, do którego podłączono krok: Wysłano — gdy szablon zostanie przyjęty, Dostarczono lub Przeczytano — gdy zgłosi to WhatsApp, Odpowiedziano — gdy klient odpisze, Niepowodzenie — gdy nie udało się wysłać. Przycisk dotknięty przez klienta ma własne wyjście.",
           "type": "Typ",
           "kindText": "Tekst",
           "kindImage": "Obraz",

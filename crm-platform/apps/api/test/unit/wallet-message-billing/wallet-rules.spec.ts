@@ -5,6 +5,7 @@ import {
   csvCell,
   csvSafe,
   decideSettlement,
+  MIN_CHARGE_MINOR,
   formatMinor,
   aiChargeUsd,
   launchVerdict,
@@ -13,7 +14,6 @@ import {
   priceMessage,
   pricingTable,
   shouldAlertLowBalance,
-  withinFreeQuota,
   type RateCardRow,
 } from '../../../src/modules/wallet-message-billing/wallet-rules';
 
@@ -45,7 +45,7 @@ describe('priceMessage (TW-WALLET-004)', () => {
     );
   });
 
-  it('lets a row priced 0 win: free is deliberate, not a gap', () => {
+  it('a row priced 0 is 0 on the card: the charge floor is applied where it is priced', () => {
     const r = priceMessage(card, { ...on, country: 'GB', category: 'service' });
     expect(r.priceMinor).toBe(0);
   });
@@ -91,9 +91,12 @@ describe('priceMessage (TW-WALLET-004)', () => {
 });
 
 describe('pricingTable (TW-WALLET-024)', () => {
-  it('shows each category with Free for a zero price', () => {
+  it('shows no category as Free: a zero price is charged the minimum', () => {
     const t = pricingTable(card, { ...on, country: null });
-    expect(t.find((x) => x.category === 'service')).toMatchObject({ priceMinor: 0, free: true });
+    expect(t.find((x) => x.category === 'service')).toMatchObject({
+      priceMinor: MIN_CHARGE_MINOR,
+      free: false,
+    });
     expect(t.find((x) => x.category === 'marketing')).toMatchObject({
       priceMinor: 100,
       free: false,
@@ -102,10 +105,8 @@ describe('pricingTable (TW-WALLET-024)', () => {
 });
 
 describe('decideSettlement (TW-WALLET-009, -010)', () => {
-  const base = { payPerMessage: true, planActive: true, monthlyLimit: 0, usedBefore: 0 };
-
   it('charges the full price when the balance covers it', () => {
-    expect(decideSettlement({ ...base, priceMinor: 1200, balanceMinor: 10_000 })).toEqual({
+    expect(decideSettlement({ priceMinor: 1200, balanceMinor: 10_000 })).toEqual({
       outcome: 'charge',
       chargedMinor: 1200,
       shortfallMinor: 0,
@@ -113,7 +114,7 @@ describe('decideSettlement (TW-WALLET-009, -010)', () => {
   });
 
   it('charges what is there when the balance is short, and records the shortfall', () => {
-    expect(decideSettlement({ ...base, priceMinor: 1200, balanceMinor: 300 })).toEqual({
+    expect(decideSettlement({ priceMinor: 1200, balanceMinor: 300 })).toEqual({
       outcome: 'charge',
       chargedMinor: 300,
       shortfallMinor: 900,
@@ -121,93 +122,42 @@ describe('decideSettlement (TW-WALLET-009, -010)', () => {
   });
 
   it('records a message free with the whole price as shortfall when the wallet is empty', () => {
-    expect(decideSettlement({ ...base, priceMinor: 1200, balanceMinor: 0 })).toEqual({
+    expect(decideSettlement({ priceMinor: 1200, balanceMinor: 0 })).toEqual({
       outcome: 'free',
       reason: 'wallet_empty',
       shortfallMinor: 1200,
     });
   });
 
-  it('records a price of 0 as free without a shortfall', () => {
-    expect(decideSettlement({ ...base, priceMinor: 0, balanceMinor: 500 })).toEqual({
-      outcome: 'free',
-      reason: 'rate_is_zero',
+  it('never records a message free for its rate: a price of 0 is charged the minimum', () => {
+    expect(decideSettlement({ priceMinor: 0, balanceMinor: 500 })).toEqual({
+      outcome: 'charge',
+      chargedMinor: MIN_CHARGE_MINOR,
       shortfallMinor: 0,
     });
   });
 
-  it('in plan mode the first N messages of the month are free and the next one charges', () => {
-    const plan = { payPerMessage: false, planActive: true, monthlyLimit: 1000 };
-    expect(
-      decideSettlement({ ...plan, usedBefore: 999, priceMinor: 100, balanceMinor: 500 }),
-    ).toMatchObject({
-      outcome: 'free',
-      reason: 'within_plan_free_quota',
-    });
-    expect(
-      decideSettlement({ ...plan, usedBefore: 1000, priceMinor: 100, balanceMinor: 500 }),
-    ).toMatchObject({
+  it('the plan allowance no longer makes a message free: every one is charged', () => {
+    // 1,000 messages a month used up on the plan: the next message still costs its price.
+    expect(decideSettlement({ priceMinor: 100, balanceMinor: 500 })).toEqual({
       outcome: 'charge',
       chargedMinor: 100,
+      shortfallMinor: 0,
     });
   });
 
-  it('an expired plan has no free allowance: the wallet pays', () => {
-    expect(
-      decideSettlement({
-        payPerMessage: false,
-        planActive: false,
-        monthlyLimit: 1000,
-        usedBefore: 0,
-        priceMinor: 100,
-        balanceMinor: 500,
-      }),
-    ).toMatchObject({ outcome: 'charge' });
-  });
-
-  it('an unlimited plan never touches the wallet', () => {
-    expect(
-      decideSettlement({
-        payPerMessage: false,
-        planActive: true,
-        monthlyLimit: 0,
-        usedBefore: 5_000_000,
-        priceMinor: 100,
-        balanceMinor: 500,
-      }),
-    ).toMatchObject({ outcome: 'free', reason: 'within_plan_free_quota' });
-  });
-
-  it('pay-per-message ignores the plan allowance entirely', () => {
-    expect(
-      decideSettlement({
-        payPerMessage: true,
-        planActive: true,
-        monthlyLimit: 1000,
-        usedBefore: 0,
-        priceMinor: 100,
-        balanceMinor: 500,
-      }),
-    ).toMatchObject({ outcome: 'charge' });
-  });
-
-  it('never charges a negative or fractional price', () => {
-    expect(decideSettlement({ ...base, priceMinor: -5, balanceMinor: 500 })).toMatchObject({
-      outcome: 'free',
-      reason: 'rate_is_zero',
+  it('never charges a negative or fractional price below the minimum or with fractions', () => {
+    expect(decideSettlement({ priceMinor: -5, balanceMinor: 500 })).toMatchObject({
+      outcome: 'charge',
+      chargedMinor: MIN_CHARGE_MINOR,
     });
-    expect(decideSettlement({ ...base, priceMinor: 100.9, balanceMinor: 500 })).toMatchObject({
+    expect(decideSettlement({ priceMinor: 100.9, balanceMinor: 500 })).toMatchObject({
       chargedMinor: 100,
     });
   });
 });
 
-describe('withinFreeQuota and planIsActive', () => {
-  it('counts the message being settled: 999 used of 1000 still fits, 1000 does not', () => {
-    expect(withinFreeQuota({ planActive: true, monthlyLimit: 1000, usedBefore: 999 })).toBe(true);
-    expect(withinFreeQuota({ planActive: true, monthlyLimit: 1000, usedBefore: 1000 })).toBe(false);
-  });
-
+describe('planIsActive', () => {
   it('a plan is active until its end; a trial until its end; no end never expires', () => {
     const now = new Date('2026-10-05T00:00:00Z');
     expect(
@@ -228,11 +178,6 @@ describe('withinFreeQuota and planIsActive', () => {
 describe('launchVerdict (TW-WALLET-013)', () => {
   const f = {
     platformOwned: false,
-    payPerMessage: true,
-    planActive: true,
-    monthlyLimit: 0,
-    usedThisMonth: 0,
-    recipients: 100,
     balanceMinor: 0,
     estimateMinor: 10_000,
     coveragePercent: 100,
@@ -243,7 +188,7 @@ describe('launchVerdict (TW-WALLET-013)', () => {
   });
 
   it('per message: a free price passes an empty wallet, a paid one does not', () => {
-    const one = { ...f, recipients: 1, freeAllowed: true };
+    const one = { ...f, freeAllowed: true };
     expect(launchVerdict({ ...one, estimateMinor: 0 })).toEqual({ ok: true });
     expect(launchVerdict({ ...one, estimateMinor: 100 })).toEqual({ ok: false, reason: 'empty' });
     expect(launchVerdict({ ...one, balanceMinor: 50, estimateMinor: 100 })).toEqual({
@@ -254,16 +199,12 @@ describe('launchVerdict (TW-WALLET-013)', () => {
     expect(launchVerdict({ ...f, estimateMinor: 0 })).toEqual({ ok: false, reason: 'empty' });
   });
 
-  it('lets a classic workspace inside its free quota launch with an empty wallet', () => {
-    expect(
-      launchVerdict({ ...f, payPerMessage: false, monthlyLimit: 1000, usedThisMonth: 10 }),
-    ).toEqual({ ok: true });
+  it('does not let a plan with allowance left launch with an empty wallet: every message is charged', () => {
+    expect(launchVerdict({ ...f, estimateMinor: 1000 })).toEqual({ ok: false, reason: 'empty' });
   });
 
   it('refuses when the balance does not cover the estimate (Reference let a 1.00 wallet launch 50,000 messages)', () => {
-    expect(
-      launchVerdict({ ...f, balanceMinor: 100, recipients: 5000, estimateMinor: 500_000 }),
-    ).toEqual({
+    expect(launchVerdict({ ...f, balanceMinor: 100, estimateMinor: 500_000 })).toEqual({
       ok: false,
       reason: 'insufficient',
     });
@@ -288,10 +229,8 @@ describe('launchVerdict (TW-WALLET-013)', () => {
     expect(launchVerdict({ ...f, platformOwned: true })).toEqual({ ok: true });
   });
 
-  it('a plan that has ended does not get the free pass', () => {
-    expect(
-      launchVerdict({ ...f, payPerMessage: false, planActive: false, monthlyLimit: 1000 }),
-    ).toMatchObject({ ok: false });
+  it('a plan that has ended is charged the same as any other', () => {
+    expect(launchVerdict({ ...f, estimateMinor: 1000 })).toEqual({ ok: false, reason: 'empty' });
   });
 });
 

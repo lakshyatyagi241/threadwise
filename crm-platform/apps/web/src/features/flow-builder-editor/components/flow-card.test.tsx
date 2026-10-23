@@ -52,6 +52,12 @@ describe('flow card (TW-FLB-001)', () => {
     expect(advanced).not.toContain('bg-[#25D366]');
   });
 
+  it('an Advanced messaging flow opens on the canvas, not the Simple editor, in a Simple workspace', () => {
+    const html = card({ builder: 'advanced' });
+    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('href="/flows/simple/');
+  });
+
   it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
     const html = card();
     expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
@@ -106,12 +106,18 @@ export function FlowWhatsappCustomize({
   canEdit,
   defaults,
   onSaved,
+  onDirtyChange,
+  registerSave,
 }: {
   flowId: string;
   flowName: string;
   canEdit: boolean;
   defaults: WhatsappBotDefaults;
   onSaved?: (widget: Widget) => void;
+  /** Tells the builder when the button has changes that are not saved (a button never saved counts as having some). */
+  onDirtyChange?: (dirty: boolean) => void;
+  /** Hands the builder this form's save, so its Save button can run it; called with null when the form goes away. */
+  registerSave?: (save: (() => void) | null) => void;
 }) {
   const t = useTranslations('chatbotWidget.flowBot.whatsapp');
   const q = useFlowWidget(flowId);
@@ -133,6 +139,8 @@ export function FlowWhatsappCustomize({
       canEdit={canEdit}
       defaults={defaults}
       onSaved={onSaved}
+      onDirtyChange={onDirtyChange}
+      registerSave={registerSave}
     />
   );
 }
@@ -144,6 +152,8 @@ function Panel({
   canEdit,
   defaults,
   onSaved,
+  onDirtyChange,
+  registerSave,
 }: {
   flowId: string;
   initial: BuilderState;
@@ -151,6 +161,8 @@ function Panel({
   canEdit: boolean;
   defaults: WhatsappBotDefaults;
   onSaved?: (widget: Widget) => void;
+  onDirtyChange?: (dirty: boolean) => void;
+  registerSave?: (save: (() => void) | null) => void;
 }) {
   const t = useTranslations('chatbotWidget.flowBot.whatsapp');
   const w = useTranslations('chatbotWidget.whatsappBuilder');
@@ -167,6 +179,12 @@ function Panel({
   // What is shown, previewed and saved always follows the bot, so a number changed on the Trigger is never left behind here.
   const s = botTarget(look, defaults, !untouched);
   const hasNumber = splitNumber(defaults.phone) !== null;
+  // Unsaved when what would be saved differs from what the server holds (or nothing was ever saved).
+  const dirty =
+    untouched || JSON.stringify(s) !== JSON.stringify(botTarget(initial, defaults, !untouched));
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
 
   const save = async () => {
     if (busy) return;
@@ -201,6 +219,11 @@ function Panel({
       setBusy(false);
     }
   };
+
+  useEffect(() => {
+    registerSave?.(() => void save());
+    return () => registerSave?.(null);
+  });
 
   return (
     <div>

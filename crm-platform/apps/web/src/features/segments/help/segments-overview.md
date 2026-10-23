@@ -28,6 +28,12 @@ You can also select **Save as segment** on the Contacts screen after setting fil
 - The "..." menu on a row offers **Edit rules**, **Duplicate**, **Export members (CSV)**, **Tag members**, **Add members to a group** and **Delete**. Tagging and grouping apply to the people who match right now.
 - **Recount members** refreshes a member count.
 
+## The list and search
+
+- The table shows each segment's rules, members, visibility, **Owner**, **Created by** and **Created at**, **Modified by** and **Updated**. A segment's creator is its owner when it was made. **Modified by** stays empty until someone changes the segment after this column was added.
+- The search box filters the segments you can see by name, description or owner. The **Mine** and **Shared** filters apply on top of it.
+- **Who and when.** Each segment shows who created it, when, who last changed it and when. The names are the people in your workspace.
+
 ## Sharing with specific people
 
 Under **Who can see it**, choose **Specific people** to show the segment only to the people you pick, plus you and anyone who can edit every segment. Search the list by name or email, tick people (and teams, when you can see them) and check the count under the chips. You need to pick at least one, and up to 200. Choosing a team shares it with everyone who is on that team now, including people who join later.

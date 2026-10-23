@@ -584,7 +584,13 @@
       "askOwner": "Vraag de accounteigenaar om het toe te voegen.",
       "unavailableTitle": "{addon} vereist een actief betaald abonnement",
       "unavailableLead": "Kies eerst een betaald abonnement; daarna kun je {addon} toevoegen.",
-      "viewPlans": "Abonnementen bekijken"
+      "viewPlans": "Abonnementen bekijken",
+      "disabledTitle": "{addon} is uitgeschakeld",
+      "disabledLead": "Je abonnement bevat {addon}, maar het is uitgeschakeld voor deze werkruimte. De instellingen blijven bewaard.",
+      "disabledAsk": "Vraag de accounteigenaar om het in te schakelen.",
+      "turnOn": "Inschakelen",
+      "turnOnForbidden": "Je hebt geen toestemming om dit in te schakelen. Vraag het de accounteigenaar.",
+      "turnOnFailed": "We konden {addon} niet inschakelen. Probeer het opnieuw."
     }
   }
 }

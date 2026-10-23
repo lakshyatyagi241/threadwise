@@ -108,6 +108,8 @@ const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },
   sheet_check: { yes: 1, no: 2 },
+  // What happens to a sent template (the buttons are p0, p1, ... = ports 1, 2, ...): kept apart from them.
+  template: { sent: 101, delivered: 102, read: 103, replied: 104, failed: 105 },
 };
 
 const UNIT_SECONDS: Readonly<Record<string, number>> = {
@@ -468,6 +470,18 @@ export function compileGraph(input: unknown): RuntimeGraph {
       .map((e) => str(e.source)),
   );
   for (const n of nodes) if (n.type === 'Template') n.props.buttonsWired = tapWired.has(n.id);
+  // The status exits of a Template node that have a branch wired: the node waits for the first of them to happen.
+  const statusWired = new Map<string, string[]>();
+  for (const e of arr(g.flowEdges).map(obj) as BuilderEdge[]) {
+    const h = str(e.sourceHandle);
+    if (!['sent', 'delivered', 'read', 'replied', 'failed'].includes(h)) continue;
+    const list = statusWired.get(str(e.source)) ?? [];
+    if (!list.includes(h)) list.push(h);
+    statusWired.set(str(e.source), list);
+  }
+  for (const n of nodes)
+    if (n.type === 'Template')
+      n.props.statusWired = n.props.statusExits === true ? (statusWired.get(n.id) ?? []) : [];
   // A button that hands the visitor to a person and has nothing wired after it gets its own Assign agent step.
   const wired = new Set(edges.map((e) => e.from));
   for (const n of [...nodes]) {

@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
@@ -6,10 +7,16 @@ import { PlanFeaturesProvider } from '@/lib/plan-features';
 import { loadMessages } from '@/i18n/messages';
 import { FeatureAddonLock } from './feature-addon-lock';
 
-const perm = vi.hoisted(() => ({ canBuy: true }));
+const perm = vi.hoisted(() => ({ canBuy: true, canToggle: true }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
-  useCan: (k: string) => (k === 'paygw.checkout.create' ? perm.canBuy : true),
+  useCan: (k: string) =>
+    k === 'paygw.checkout.create'
+      ? perm.canBuy
+      : k === 'addons.activation.manage'
+        ? perm.canToggle
+        : true,
 }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: () => undefined }) }));
 vi.mock('next/link', () => ({
   default: ({
     children,
@@ -42,9 +49,11 @@ function render(
 ) {
   return renderToStaticMarkup(
     <NextIntlClientProvider locale={locale} messages={loadMessages(locale)} timeZone="UTC">
-      <PlanFeaturesProvider features={features} featureAddons={featureAddons}>
-        {el}
-      </PlanFeaturesProvider>
+      <QueryClientProvider client={new QueryClient()}>
+        <PlanFeaturesProvider features={features} featureAddons={featureAddons}>
+          {el}
+        </PlanFeaturesProvider>
+      </QueryClientProvider>
     </NextIntlClientProvider>,
   );
 }
@@ -148,6 +157,63 @@ describe('FeatureAddonLock', () => {
         [addon({ offer: 'unavailable' }), sticky],
       ),
     ).toContain('data-offer="buy"');
+  });
+
+  it('disabled: says the add-on is turned off and offers Turn it on to a person who may switch it, never a buy offer', () => {
+    perm.canToggle = true;
+    const out = render(
+      <FeatureAddonLock feature="inbox_routing" />,
+      [],
+      [addon({ offer: 'disabled' })],
+    );
+    expect(out).toContain('data-offer="disabled"');
+    expect(out).toContain('Smart routing is turned off');
+    expect(out).toContain('data-testid="feature-addon-lock-turn-on"');
+    expect(out).toContain('Turn it on');
+    expect(out).not.toContain('Ask your account owner');
+    expect(out).not.toContain('Add Smart routing');
+    expect(out).not.toContain('feature-addon-lock-buy');
+    expect(out).not.toContain('/account/plans');
+  });
+
+  it('disabled, for someone who may not switch it: asks the account owner, no button', () => {
+    perm.canToggle = false;
+    const out = render(
+      <FeatureAddonLock feature="inbox_routing" />,
+      [],
+      [addon({ offer: 'disabled' })],
+    );
+    perm.canToggle = true;
+    expect(out).toContain('data-offer="disabled"');
+    expect(out).toContain('Smart routing is turned off');
+    expect(out).toContain('Ask your account owner to turn it on.');
+    expect(out).not.toContain('feature-addon-lock-turn-on');
+    expect(out).not.toContain('feature-addon-lock-buy');
+  });
+
+  it('disabled wins over an offer to buy another add-on of the same screen', () => {
+    const out = render(
+      <FeatureAddonLock feature={['inbox_routing', 'inbox_assignment_sticky']} />,
+      [],
+      [addon({ offer: 'disabled' }), addon({ feature: 'inbox_assignment_sticky', offer: 'buy' })],
+    );
+    expect(out).toContain('data-offer="disabled"');
+  });
+
+  it('disabled reads in Arabic, for both people', () => {
+    for (const canToggle of [true, false]) {
+      perm.canToggle = canToggle;
+      const out = render(
+        <FeatureAddonLock feature="inbox_routing" />,
+        [],
+        [addon({ offer: 'disabled' })],
+        'ar',
+      );
+      expect(out).toContain('data-offer="disabled"');
+      expect(out).not.toContain('Ask your account owner to turn it on.');
+      expect(out).not.toContain('Turn it on');
+    }
+    perm.canToggle = true;
   });
 
   it('reads in Arabic too', () => {

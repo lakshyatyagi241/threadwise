@@ -6,6 +6,7 @@ import { useTimeZone, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import {
+  isFinishedWebchat,
   uuidSchema,
   type ConversationPriority,
   type ConversationSummary,
@@ -319,7 +320,8 @@ export function InboxScreen() {
 
   const toggleResolved = useCallback(async () => {
     const d = detail.detail;
-    if (!d || !can.resolve) return;
+    // The header toggle, the resolved bar and the `e` key all come here: a resolved web chat has nothing to toggle back to.
+    if (!d || !can.resolve || isFinishedWebchat(d.channel.kind, d.status)) return;
     const reopen = d.status === 'resolved' || d.status === 'closed';
     setResolving(true);
     const ok = await guarded(() =>
@@ -357,7 +359,7 @@ export function InboxScreen() {
   const snooze = useCallback(
     async (preset: SnoozePreset) => {
       const d = detail.detail;
-      if (!d || !can.snooze) return;
+      if (!d || !can.snooze || isFinishedWebchat(d.channel.kind, d.status)) return;
       setTriaging(true);
       const ok = await guarded(async () => {
         list.placeRow(
@@ -380,7 +382,8 @@ export function InboxScreen() {
 
   const markSpam = useCallback(async () => {
     const d = detail.detail;
-    if (!d || !can.resolve || d.status === 'spam') return;
+    if (!d || !can.resolve || d.status === 'spam' || isFinishedWebchat(d.channel.kind, d.status))
+      return;
     setTriaging(true);
     const ok = await guarded(async () => {
       list.placeRow(await inboxApi.markSpam(d.id, d.rowVersion));

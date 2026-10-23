@@ -371,6 +371,28 @@ describe('the bulk bar', () => {
     expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).not.toBeNull();
   });
 
+  it('offers no Reopen, snooze or spam when a resolved web chat is picked, and keeps resolve and close', () => {
+    const webchat = { id: 'c-1', kind: 'webchat', name: 'Site' };
+    const p = props({
+      picked: [
+        summary({ channel: webchat, status: 'resolved' }),
+        summary({ id: 'row-2', channel: webchat, status: 'open' }),
+      ],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-spam"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-close"]')).not.toBeNull();
+  });
+
+  it('still offers Reopen for resolved conversations on other channels', () => {
+    const p = props({ picked: [summary({ status: 'resolved' })] });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).not.toBeNull();
+  });
+
   it('reads in Arabic, not in English', () => {
     render(<BulkBar {...props()} />, 'ar');
     const text = host.textContent ?? '';

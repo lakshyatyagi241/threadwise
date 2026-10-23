@@ -401,7 +401,37 @@
           "message": "{name} n’est pas connecté ; les réponses ne peuvent donc pas être envoyées. Les notes internes fonctionnent toujours."
         },
         "open": "Ouvrir les paramètres WhatsApp",
-        "askAdmin": "Demandez à une personne qui gère les canaux de le reconnecter."
+        "askAdmin": "Demandez à une personne qui gère les canaux de le reconnecter.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Cette boîte mail doit être reconnectée.",
+            "message": "{name} n'accepte plus la connexion enregistrée, donc les réponses ne peuvent pas être envoyées. Les notes internes fonctionnent toujours."
+          },
+          "error": {
+            "title": "Cette boîte mail rencontre un problème de connexion.",
+            "message": "{name} est en erreur, donc les réponses ne peuvent pas être envoyées. Les notes internes fonctionnent toujours."
+          },
+          "not_connected": {
+            "title": "Cette boîte mail est déconnectée.",
+            "message": "{name} n'est pas connecté, donc les réponses ne peuvent pas être envoyées tant qu'il n'est pas reconnecté. Les notes internes fonctionnent toujours."
+          },
+          "open": "Ouvrir les paramètres de la boîte mail"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Ce canal doit être reconnecté.",
+            "message": "{name} n'accepte plus les identifiants enregistrés, donc les réponses ne peuvent pas être envoyées. Les notes internes fonctionnent toujours."
+          },
+          "error": {
+            "title": "Ce canal rencontre un problème de connexion.",
+            "message": "{name} est en erreur, donc les réponses ne peuvent pas être envoyées. Les notes internes fonctionnent toujours."
+          },
+          "not_connected": {
+            "title": "Ce canal est désactivé.",
+            "message": "{name} n'est pas connecté, donc les réponses ne peuvent pas être envoyées. Les notes internes fonctionnent toujours."
+          },
+          "open": "Ouvrir les paramètres du canal"
+        }
       },
       "failure": {
         "openSettings": "Ouvrir les paramètres WhatsApp",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "L’envoi vers les groupes WhatsApp n’est pas encore disponible.",
           "hint": "Répondez depuis l’application WhatsApp Business."
-        }
+        },
+        "openChannelSettings": "Ouvrir les paramètres du canal"
       },
       "media": {
         "downloading": "Téléchargement du fichier",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Ce numéro ne peut pas envoyer ce type de contenu : {kind}.",
           "unsupportedType": "WhatsApp n’accepte pas ce type de fichier. Il accepte les images JPEG et PNG, les vidéos MP4 et 3GP, l’audio AAC, MP3, AMR, M4A et OGG, ainsi que les documents PDF, Office et texte.",
           "empty": "Ce fichier est vide."
+        },
+        "tip": "Joindre un fichier. Formats et tailles acceptés : {list}",
+        "tipLimit": {
+          "image": "Images jusqu’à {mb} Mo ({formats})",
+          "video": "Vidéos jusqu’à {mb} Mo ({formats})",
+          "audio": "Audios jusqu’à {mb} Mo ({formats})",
+          "document": "Documents jusqu’à {mb} Mo ({formats})"
         }
       }
     }

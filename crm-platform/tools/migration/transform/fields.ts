@@ -1,6 +1,6 @@
 import { bool, isDeleted, isSecretName, str, type Doc } from '../util';
 import { c, rest, times, TS_COLS } from './common';
-import { BUILT_IN_ALIAS, CONTACT_FIELDS, REJECT_MARKER } from './contacts';
+import { BUILT_IN_ALIAS, CONTACT_FIELDS, propertyKeyOf, REJECT_MARKER, RESERVED_PROPERTY_KEYS } from './contacts';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Soft } from './types';
 
 /** Waboo property type -> fields.field_type (chk_fields_type). Unknown types become text and keep the original in config. */
@@ -142,7 +142,11 @@ const FIELD_COLS = cols([
   c('config', 'jsonb'),
 ]);
 
-/** The Waboo "Web Analytics Information" properties WaDesk has no built-in place for (visitor/UTM/device/IP facts and where the contact came from): ordinary, editable, visible fields. */
+/**
+ * The Waboo "Web Analytics Information" properties WaDesk has no built-in place for (visitor/UTM/device/IP facts and where the contact came
+ * from): ordinary visible fields that nobody edits by hand. They are read-only (the contact form shows them disabled, and the edit, bulk
+ * update, import and flow paths refuse to write them), because they record how the contact arrived and are filled in by capture.
+ */
 export const WEB_ANALYTICS_KEYS: ReadonlySet<string> = new Set([
   'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url',
   'utm_medium', 'utm_campaign', 'utm_source',
@@ -230,7 +234,19 @@ export const fieldDefs: HandlerSpec = {
         reason: 'the app already has this property built in (or stores it in a column of the contact); it is not created again',
       };
     }
+    // a reserved key renamed to a name the workspace already uses would share one WaDesk key with that property
+    if (RESERVED_PROPERTY_KEYS.has(key) && ctx.idx.declaredKeys.has(propertyKeyOf(key)))
+      return {
+        kind: 'quarantine',
+        code: 'PROPERTY_KEY_CONFLICT',
+        reason: `the app reserves the key "${key}", and the workspace has a property named "${propertyKeyOf(key)}": not created`,
+      };
     const soft: Soft[] = [];
+    if (RESERVED_PROPERTY_KEYS.has(key))
+      soft.push({
+        code: 'RESERVED_KEY_RENAMED',
+        reason: `the app reserves the key "${key}": the property is created as "${propertyKeyOf(key)}" and its values follow it`,
+      });
     const legacyType = String(doc.type ?? '');
     let fieldType = NAME_VALUED_KEYS.has(key) ? 'text' : TYPE_MAP[legacyType.toLowerCase()];
     if (!fieldType) {
@@ -255,14 +271,14 @@ export const fieldDefs: HandlerSpec = {
           row: {
             module_key: 'contacts',
             section_id: section?.table === 'field_sections' ? section.id : null,
-            key,
+            key: propertyKeyOf(key),
             label: str(doc.label) ?? key,
             field_type: fieldType,
             is_required: bool(doc.required),
             is_hidden: !bool(doc.visible, true) || bool(doc.hidden_from_ui),
-            // the web-analytics fields are editable in WaDesk: the contact Edit panel lists only editable fields, so a read-only flag would keep
-            // the UTM / referrer / device fields out of it (Waboo shows all of them on the contact)
-            is_read_only: VISIBLE_TIME_KEYS.has(key) ? true : bool(doc.read_only) && !WEB_ANALYTICS_KEYS.has(key),
+            // the web-analytics fields are read-only: the contact form still lists them (disabled, with a "read only" badge), and no
+            // person, bulk update, import or flow can change them
+            is_read_only: VISIBLE_TIME_KEYS.has(key) || WEB_ANALYTICS_KEYS.has(key) ? true : bool(doc.read_only),
             is_masked: bool(doc.masked),
             is_unique: bool(doc.unique),
             // Waboo's own web-analytics properties are "system" there but have no built-in place in WaDesk: a system field is hidden on the

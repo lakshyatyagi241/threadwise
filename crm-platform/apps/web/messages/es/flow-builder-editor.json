@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (no está en el espacio de trabajo)",
           "templateLabel": "Plantilla aprobada",
           "templateHint": "Aquí solo aparecen las plantillas aprobadas del espacio de trabajo. <link>Crear una nueva →</link>",
+          "statusExits": "Añadir salidas de estado (Enviado, Entregado, Leído, Respondido, Fallido)",
+          "statusExitsHint": "El flujo sale por la primera salida con un paso conectado: Enviado en cuanto se acepta la plantilla, Entregado o Leído cuando WhatsApp lo informa, Respondido cuando el cliente escribe, Fallido si no se pudo enviar. Un botón que pulse el cliente sale por su propia salida.",
           "type": "Tipo",
           "kindText": "Texto",
           "kindImage": "Imagen",

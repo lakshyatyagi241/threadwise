@@ -168,7 +168,7 @@ learn by `inbox.unread`.
 | `closed`   | open (reopen), resolved           |
 | `spam`     | open                              |
 
-Anything else is `422 CONVERSATION_STATUS_INVALID`. An agent's reply (`POST .../messages`) to a `resolved`, `closed` or `spam` thread moves it to `open` (Reference: a reply reopens), with a `reopened` event (`by: agent`). `snoozed` and `spam` are never a target here: they have their own routes.
+Anything else is `422 CONVERSATION_STATUS_INVALID`. A `resolved` or `closed` web chat (`channel.kind` `webchat`) is final: it cannot move to `open`, and a snooze or a spam mark of it is refused with the same `422`, on the single routes and per conversation in `bulk`. Other channels keep the table as it is. An agent's reply (`POST .../messages`) to a `resolved`, `closed` or `spam` thread moves it to `open` (Reference: a reply reopens), with a `reopened` event (`by: agent`). `snoozed` and `spam` are never a target here: they have their own routes.
 
 - `POST /v2/inbox/conversations/:id/snooze` `{ rowVersion, until }` parks the thread from **any** status (Reference: any status) until `until`
   (1 minute to 365 days ahead). It comes back to `open` by the wake-up sweep (every 30 seconds in the worker) or by a move to `open`. Snoozing to
@@ -222,7 +222,7 @@ same for `teamId`. At least one of the two must be present.
   cache), a team of this workspace; otherwise `422 CONVERSATION_ASSIGNEE_INVALID` and nothing changes. Reference's "assign nobody clears the person" quirk
   is gone: omit the field to leave it.
 - Assigning what is already assigned is a no-op. A stale `rowVersion` is `409`.
-- A `closed` conversation becomes `open` when assigned (resolved, snoozed and spam keep their status). Giving a thread to a person or a team takes it
+- A `closed` conversation becomes `open` when assigned (resolved, snoozed and spam keep their status); a `closed` web chat stays `closed`. Giving a thread to a person or a team takes it
   from an AI agent: `assignee_agent_id` is cleared and an `ai_handoff` event is written.
 - One transaction writes the columns, the timeline event (`assigned`, `reassigned` or `unassigned`, with from and to as uuids), the audit row and the
   outbox event `conversation.assigned` (`toUserId: null` is an unassignment: one event type for every change of who holds the thread).

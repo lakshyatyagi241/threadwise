@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (nicht im Arbeitsbereich)",
           "templateLabel": "Genehmigte Vorlage",
           "templateHint": "Hier werden nur genehmigte Vorlagen aus dem Arbeitsbereich angezeigt. <link>Neue erstellen →</link>",
+          "statusExits": "Status-Ausgänge hinzufügen (Gesendet, Zugestellt, Gelesen, Beantwortet, Fehlgeschlagen)",
+          "statusExitsHint": "Der Ablauf verlässt den Baustein über den ersten Ausgang mit angeschlossenem Schritt: Gesendet, sobald die Vorlage angenommen ist; Zugestellt oder Gelesen, wenn WhatsApp es meldet; Beantwortet, wenn der Kunde antwortet; Fehlgeschlagen, wenn sie nicht gesendet werden konnte. Eine vom Kunden gedrückte Schaltfläche nimmt ihren eigenen Ausgang.",
           "type": "Typ",
           "kindText": "Text",
           "kindImage": "Bild",

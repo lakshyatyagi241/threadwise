@@ -16,11 +16,17 @@ If you want a list that fills itself from rules, use a segment instead. See [Seg
 
 ## How to use it
 
-1. Open **Groups** in the CRM area of the menu, or go to `/contact-groups`. The screen is titled **Contact groups**, and each card shows the group's colour, name, note and how many contacts it holds.
-2. Select **New group** (or the **Create new group** tile).
+1. Open **Groups** in the CRM area of the menu, or go to `/contact-groups`. The screen is titled **Contact groups**, and each row shows the group's colour, name, note, how many contacts it holds, who created it and when, who last changed it and when.
+2. Select **New group**.
 3. Enter a **Group name**. Add a **Note** if you like and choose one of the five accent colours.
 4. Select **Save group**.
-5. Select **View contacts** on a card to open the Contacts list filtered to that group. Use the pencil to edit a group or the bin to delete it; deleting asks you to confirm.
+5. Select **View contacts** on a row to open the Contacts list filtered to that group. Use the pencil to edit a group or the bin to delete it; deleting asks you to confirm.
+
+## Finding a group and seeing who changed it
+
+- Type in the search box above the table to narrow the list by name. The search looks through every group in the workspace, not only the rows on screen.
+- **Who and when.** Each group shows who created it, when, who last changed it and when. The names are the people in your workspace.
+- **Modified by** and **Updated at** change when the group's name, note or colour is saved. Adding or removing contacts does not count as a change to the group.
 
 ## Putting contacts into a group
 

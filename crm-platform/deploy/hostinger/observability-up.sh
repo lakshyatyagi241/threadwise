@@ -44,6 +44,7 @@ fi
 umask 077
 mkdir -p secrets
 chmod 700 secrets
+[ -f secrets/sentry_token ] || { : > secrets/sentry_token; chmod 640 secrets/sentry_token; } # empty = Sentry feature off; compose needs the file to exist
 # printf, not echo: the token file must hold the token and nothing else, no newline.
 printf '%s' "$(grep '^OBS_METRICS_TOKEN=' .env | head -n1 | cut -d= -f2-)" > secrets/obs_metrics_token
 
@@ -62,10 +63,10 @@ case "$kind" in
 esac
 if grep -q '^ALERTMANAGER_FILE=' .env; then sed -i "s/^ALERTMANAGER_FILE=.*/ALERTMANAGER_FILE=$file/" .env; else echo "ALERTMANAGER_FILE=$file" >> .env; fi
 if [ "$kind" = gchat ]; then
-  # Non-interactive: GCHAT_URL_DIR=<dir> with critical.url slowquery.url deploy.url (a missing/empty file falls back to the prompt).
+  # Non-interactive: GCHAT_URL_DIR=<dir> with critical.url slowquery.url deploy.url other.url sentry.url (a missing/empty file falls back to the prompt).
   # Three Google Chat incoming-webhook URLs, hidden, written to secrets/gchat_*_url (read by the gchat-bridge only, never printed).
   # Enter keeps a current one; an empty file is created for a space left blank (that channel is then reported as unconfigured).
-  for ch in critical slowquery deploy; do
+  for ch in critical slowquery deploy other sentry; do
     f="secrets/gchat_${ch}_url"
     if [ -n "${GCHAT_URL_DIR:-}" ] && [ -s "$GCHAT_URL_DIR/$ch.url" ]; then u="$(tr -d '\r\n' < "$GCHAT_URL_DIR/$ch.url")"
     else read -rsp "Google Chat webhook URL for the $ch space (hidden, Enter to keep/skip): " u || u=""; echo; fi
@@ -74,7 +75,6 @@ if [ "$kind" = gchat ]; then
     fi
     [ -f "$f" ] || : > "$f"
   done
-  [ -s secrets/gchat_other_url ] && echo "note: leftover secrets/gchat_other_url is ignored (the other space was renamed to slowquery)"
   [ -f secrets/slow_query_pg_url ] || : > secrets/slow_query_pg_url
   [ -s secrets/alert_webhook_url ] || printf '%s' 'http://gchat-bridge:9095/alertmanager' > secrets/alert_webhook_url
   url=""

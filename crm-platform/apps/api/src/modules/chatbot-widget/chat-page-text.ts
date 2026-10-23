@@ -76,6 +76,9 @@ export const CHAT_TEXT_KEYS = [
   'noThanks',
   'rateStar',
   'minimize',
+  'countryCode',
+  'shareLocation',
+  'locationDenied',
 ] as const;
 export type ChatTextKey = (typeof CHAT_TEXT_KEYS)[number];
 
@@ -155,6 +158,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'No, thanks',
     '{n} of 5',
     'Minimize',
+    'Country code',
+    'Share my location',
+    'We could not get your location. Please allow location access and try again.',
   ]),
   ar: row([
     'متصل',
@@ -228,6 +234,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'لا، شكرًا',
     '{n} من 5',
     'تصغير',
+    'رمز الدولة',
+    'مشاركة موقعي',
+    'تعذّر الحصول على موقعك. يرجى السماح بالوصول إلى الموقع والمحاولة مرة أخرى.',
   ]),
   bn: row([
     'অনলাইন',
@@ -301,6 +310,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'না, ধন্যবাদ',
     '৫-এর মধ্যে {n}',
     'ছোট করুন',
+    'দেশের কোড',
+    'আমার অবস্থান শেয়ার করুন',
+    'আমরা আপনার অবস্থান পেতে পারিনি। অনুগ্রহ করে অবস্থানের অনুমতি দিয়ে আবার চেষ্টা করুন।',
   ]),
   de: row([
     'Online',
@@ -374,6 +386,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Nein, danke',
     '{n} von 5',
     'Minimieren',
+    'Ländervorwahl',
+    'Meinen Standort teilen',
+    'Wir konnten deinen Standort nicht ermitteln. Bitte erlaube den Standortzugriff und versuche es erneut.',
   ]),
   es: row([
     'En línea',
@@ -447,6 +462,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'No, gracias',
     '{n} de 5',
     'Minimizar',
+    'Código de país',
+    'Compartir mi ubicación',
+    'No pudimos obtener tu ubicación. Permite el acceso a la ubicación e inténtalo de nuevo.',
   ]),
   fr: row([
     'En ligne',
@@ -520,6 +538,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Non, merci',
     '{n} sur 5',
     'Réduire',
+    'Indicatif du pays',
+    'Partager ma position',
+    "Nous n'avons pas pu obtenir votre position. Autorisez l'accès à la localisation et réessayez.",
   ]),
   he: row([
     'מחובר',
@@ -593,6 +614,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'לא, תודה',
     '{n} מתוך 5',
     'מזעור',
+    'קידומת מדינה',
+    'שיתוף המיקום שלי',
+    'לא הצלחנו לקבל את המיקום שלך. אפשר גישה למיקום ונסה שוב.',
   ]),
   hi: row([
     'ऑनलाइन',
@@ -666,6 +690,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'नहीं, धन्यवाद',
     '5 में से {n}',
     'छोटा करें',
+    'देश कोड',
+    'मेरी लोकेशन साझा करें',
+    'हम आपकी लोकेशन नहीं पा सके। कृपया लोकेशन की अनुमति दें और फिर कोशिश करें।',
   ]),
   id: row([
     'Online',
@@ -739,6 +766,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Tidak, terima kasih',
     '{n} dari 5',
     'Perkecil',
+    'Kode negara',
+    'Bagikan lokasi saya',
+    'Kami tidak dapat memperoleh lokasi Anda. Izinkan akses lokasi lalu coba lagi.',
   ]),
   it: row([
     'Online',
@@ -812,6 +842,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'No, grazie',
     '{n} su 5',
     'Riduci a icona',
+    'Prefisso internazionale',
+    'Condividi la mia posizione',
+    "Non siamo riusciti a ottenere la tua posizione. Consenti l'accesso alla posizione e riprova.",
   ]),
   ja: row([
     'オンライン',
@@ -885,6 +918,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'いいえ、結構です',
     '5段階中{n}',
     '最小化',
+    '国番号',
+    '現在地を共有',
+    '位置情報を取得できませんでした。位置情報へのアクセスを許可して、もう一度お試しください。',
   ]),
   ko: row([
     '온라인',
@@ -958,6 +994,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     '아니요, 괜찮습니다',
     '5점 중 {n}점',
     '최소화',
+    '국가 코드',
+    '내 위치 공유',
+    '위치를 가져오지 못했습니다. 위치 접근을 허용한 후 다시 시도해 주세요.',
   ]),
   nl: row([
     'Online',
@@ -1031,6 +1070,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Nee, bedankt',
     '{n} van 5',
     'Minimaliseren',
+    'Landcode',
+    'Mijn locatie delen',
+    'We konden je locatie niet ophalen. Sta locatietoegang toe en probeer het opnieuw.',
   ]),
   pl: row([
     'Online',
@@ -1104,6 +1146,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Nie, dziękuję',
     '{n} z 5',
     'Zminimalizuj',
+    'Kierunkowy kraju',
+    'Udostępnij moją lokalizację',
+    'Nie udało się ustalić Twojej lokalizacji. Zezwól na dostęp do lokalizacji i spróbuj ponownie.',
   ]),
   pt: row([
     'Online',
@@ -1177,6 +1222,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Não, obrigado',
     '{n} de 5',
     'Minimizar',
+    'Código do país',
+    'Compartilhar minha localização',
+    'Não conseguimos obter sua localização. Permita o acesso à localização e tente de novo.',
   ]),
   ru: row([
     'В сети',
@@ -1250,6 +1298,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Нет, спасибо',
     '{n} из 5',
     'Свернуть',
+    'Код страны',
+    'Поделиться местоположением',
+    'Не удалось определить ваше местоположение. Разрешите доступ к геолокации и повторите попытку.',
   ]),
   th: row([
     'ออนไลน์',
@@ -1323,6 +1374,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'ไม่ ขอบคุณ',
     '{n} จาก 5',
     'ย่อเล็กสุด',
+    'รหัสประเทศ',
+    'แชร์ตำแหน่งของฉัน',
+    'เราไม่สามารถรับตำแหน่งของคุณได้ โปรดอนุญาตการเข้าถึงตำแหน่งแล้วลองอีกครั้ง',
   ]),
   tr: row([
     'Çevrimiçi',
@@ -1396,6 +1450,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Hayır, teşekkürler',
     '5 üzerinden {n}',
     'Küçült',
+    'Ülke kodu',
+    'Konumumu paylaş',
+    'Konumunuz alınamadı. Lütfen konum erişimine izin verin ve tekrar deneyin.',
   ]),
   ur: row([
     'آن لائن',
@@ -1469,6 +1526,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'نہیں، شکریہ',
     '5 میں سے {n}',
     'چھوٹا کریں',
+    'ملک کا کوڈ',
+    'میرا مقام شیئر کریں',
+    'ہم آپ کا مقام حاصل نہیں کر سکے۔ براہ کرم مقام تک رسائی کی اجازت دیں اور دوبارہ کوشش کریں۔',
   ]),
   vi: row([
     'Trực tuyến',
@@ -1542,6 +1602,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Không, cảm ơn',
     '{n} trên 5',
     'Thu nhỏ',
+    'Mã quốc gia',
+    'Chia sẻ vị trí của tôi',
+    'Chúng tôi không lấy được vị trí của bạn. Vui lòng cho phép truy cập vị trí và thử lại.',
   ]),
   'zh-CN': row([
     '在线',
@@ -1615,6 +1678,9 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     '不用了，谢谢',
     '{n} 分（满分 5 分）',
     '最小化',
+    '国家/地区代码',
+    '分享我的位置',
+    '无法获取您的位置。请允许访问位置信息后重试。',
   ]),
 };
 

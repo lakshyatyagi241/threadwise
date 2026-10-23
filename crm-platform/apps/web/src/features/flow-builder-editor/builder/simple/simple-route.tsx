@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { flowsApi } from '../../api/flows';
 import { FLB_KEYS } from '../../api/hooks';
+import { isSimpleBot } from '../../lib/builder-mode';
 import { SimpleScreen } from './simple-screen';
 
 /**
@@ -33,7 +34,7 @@ export function SimpleRoute({ flowId }: { flowId?: string }) {
     refetchOnWindowFocus: false,
     retry: false,
   });
-  const isBot = flowId ? flow.data?.flowType === 'chat' || flow.data?.flowType === 'web' : true;
+  const isBot = flowId ? !!flow.data && isSimpleBot(flow.data.flowType, flow.data.builder) : true;
   // Until the workspace mode and a saved flow's type are known, wait rather than mount the Simple screen for a flow that may belong on the canvas.
   const deciding = !!flowId && (overview.isPending || (mode === 'advanced' && flow.isPending));
   const redirectToAdvanced = mode === 'advanced' && !isBot && !deciding;

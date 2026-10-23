@@ -273,7 +273,7 @@
       "emptyFiltered": "Nic nie pasuje do tych filtrów. Zmień je lub zresetuj.",
       "days": {
         "title": "Dziennik dzienny",
-        "subtitle": "Wiadomości pogrupowane według dnia, statusu, kanału i kategorii. Otwórz dzień, aby zobaczyć każdą wiadomość.",
+        "subtitle": "Wiadomości pogrupowane według dnia, typu, statusu, kanału i kategorii. Otwórz dzień, aby zobaczyć każdą wiadomość.",
         "messagesOnDay": "{count} wiadomości",
         "viewDetails": "Zobacz szczegóły",
         "actions": "Działania",

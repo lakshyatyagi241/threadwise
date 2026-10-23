@@ -196,7 +196,10 @@
       "next": "הבא",
       "pageOf": "עמוד {page, number} מתוך {pages, number}",
       "perPage": "סגמנטים בכל עמוד",
-      "perPageOption": "{count, number} בכל עמוד"
+      "perPageOption": "{count, number} בכל עמוד",
+      "colCreatedBy": "נוצר על ידי",
+      "colCreatedAt": "נוצר ב",
+      "colModifiedBy": "שונה על ידי"
     },
     "actions": {
       "forbidden": "אין לכם הרשאה לבצע פעולה זו.",

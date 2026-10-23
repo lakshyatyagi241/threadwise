@@ -19,6 +19,7 @@ import {
   ChannelRegistryService,
   SendHeldError,
   type ConversationsFacade,
+  type RecordOutboundMedia,
 } from '../../chat-conversations';
 import { WalletGateService } from '../../wallet-message-billing';
 import { ChatUsageReporter } from '../../chat-conversations';
@@ -26,7 +27,7 @@ import { CapTally, DEFAULT_PACING } from '../caps';
 import { ConsentGate } from '../../contact-consent';
 import { flowMessagePurpose } from './flow-consent';
 import { profileOf, renderForChannel, threadTextOf, type Rendered } from './channel-render';
-import type { OutboundMessage, RunState, SendOutcome } from './types';
+import type { CarouselCard, OutboundMessage, RunState, SendOutcome } from './types';
 
 /** What a customer's file looks like inside a variable: the media store key, never a public link. */
 export const CHAT_MEDIA_PREFIX = 'chatmedia:';
@@ -152,13 +153,10 @@ export class FlowSender {
         peerKey: run.peerKey,
         ...(run.contactUuid ? { contactId: run.contactUuid } : {}),
         source: 'flow',
-        // The widget draws reply buttons itself, so its thread keeps the question and the buttons apart.
         ...withWebInput(
           run.channelKind,
           message,
-          webCarousel(run.channelKind, message) ??
-            webMedia(run.channelKind, rendered, envelope) ??
-            webButtons(run.channelKind, rendered),
+          flowThreadEntryOf(run.channelKind, message, rendered, envelope),
         ),
         providerMessageId: sent.providerMessageId,
         // A template node knows the name, language and values it sent (not the template's uuid, so the bubble has no header, footer or
@@ -332,18 +330,141 @@ export async function envelopeFor(
   }
 }
 
+/** What a flow message leaves in the thread: its line, and the extras the inbox bubble draws (`meta.sentInteractive`, `sentCarousel`, a file). */
+export interface FlowThreadEntry {
+  body: string;
+  meta?: Record<string, unknown>;
+  media?: RecordOutboundMedia;
+}
+
 /**
- * A carousel on a website chat thread is stored as its intro line with the cards in the meta the window reads (`widget_cards`); the
- * channel itself was sent the cards as text.
+ * What the thread keeps of a flow message, so the agent can see what the customer was sent and answered (the buttons, the list rows, the
+ * carousel's cards, the file). A message the channel could not draw as sent is kept as its text. The website chat window reads its own
+ * `widget_*` keys from the same line.
  */
-function webCarousel(
+export function flowThreadEntryOf(
   channelKind: string | null,
   message: OutboundMessage,
-): { body: string; meta: Record<string, unknown> } | null {
-  if (channelKind !== 'webchat' || message.kind !== 'carousel') return null;
+  r: Rendered,
+  envelope: unknown,
+): FlowThreadEntry {
+  const web = channelKind === 'webchat';
+  if (message.kind === 'carousel') {
+    return {
+      body: message.body,
+      meta: {
+        sentCarousel: { cards: message.cards.map(sentCardOf) },
+        ...(web ? { widget_cards: message.cards } : {}),
+      },
+    };
+  }
+  if (r.kind === 'media') {
+    const m = (
+      envelope as {
+        media?: {
+          key?: string;
+          mediaKind?: string;
+          mime?: string;
+          name?: string;
+          sha256?: string;
+          caption?: string;
+        };
+      } | null
+    )?.media;
+    if (m?.key) {
+      const kind = ['image', 'video', 'audio'].includes(String(m.mediaKind))
+        ? (String(m.mediaKind) as 'image' | 'video' | 'audio')
+        : 'document';
+      const name = m.name || r.filename || 'file';
+      return {
+        body: m.caption || '',
+        media: {
+          mediaKind: kind,
+          key: m.key,
+          mime: m.mime ?? 'application/octet-stream',
+          size: null,
+          name,
+          sha256: m.sha256 ?? null,
+        },
+        ...(web ? { meta: { widget_media: { key: m.key, kind, mime: m.mime ?? '', name } } } : {}),
+      };
+    }
+  }
+  if (r.kind === 'interactive') {
+    const sent = sentInteractiveOf(r.interactive);
+    if (sent) {
+      return {
+        body: r.interactive.body,
+        meta: {
+          sentInteractive: sent,
+          ...(web && r.interactive.type === 'buttons'
+            ? {
+                widget_buttons: r.interactive.buttons.map((b) => ({
+                  id: b.id,
+                  title: b.title,
+                  ...(b.icon ? { icon: b.icon } : {}),
+                })),
+              }
+            : {}),
+        },
+      };
+    }
+  }
+  return { body: threadTextOf(r) };
+}
+
+/** The buttons, list or link the bubble draws under a message, in the shape the inbox's own sends keep (`meta.sentInteractive`). */
+function sentInteractiveOf(
+  i: Extract<Rendered, { kind: 'interactive' }>['interactive'],
+): Record<string, unknown> | null {
+  switch (i.type) {
+    case 'buttons':
+      return {
+        type: 'buttons',
+        ...(i.header ? { header: i.header } : {}),
+        body: i.body,
+        ...(i.footer ? { footer: i.footer } : {}),
+        buttons: i.buttons.map((b) => ({ id: b.id, title: b.title })),
+      };
+    case 'list':
+      return {
+        type: 'list',
+        ...(i.header ? { header: i.header } : {}),
+        body: i.body,
+        ...(i.footer ? { footer: i.footer } : {}),
+        button: i.button,
+        sections: i.sections.map((s) => ({
+          ...(s.title ? { title: s.title } : {}),
+          rows: s.rows.map((r) => ({
+            id: r.id,
+            title: r.title,
+            ...(r.description ? { description: r.description } : {}),
+          })),
+        })),
+      };
+    case 'cta_url':
+      return {
+        type: 'cta_url',
+        ...(i.header ? { header: i.header } : {}),
+        body: i.body,
+        ...(i.footer ? { footer: i.footer } : {}),
+        text: i.text,
+        url: i.url,
+      };
+    default:
+      return null;
+  }
+}
+
+/** One carousel card as the bubble keeps it: a reply button has no address, a link button opens its own. */
+function sentCardOf(c: CarouselCard): Record<string, unknown> {
   return {
-    body: message.body,
-    meta: { widget_cards: message.cards },
+    title: c.title,
+    text: c.text,
+    image: c.image ?? null,
+    buttons: c.buttons.map((b) =>
+      b.kind === 'reply' ? { title: b.title, url: null } : { title: b.label, url: b.url },
+    ),
   };
 }
 
@@ -354,8 +475,11 @@ function webCarousel(
 function withWebInput(
   channelKind: string | null,
   message: OutboundMessage,
-  stored: { body: string; meta?: Record<string, unknown> },
-): { body: string; meta?: Record<string, unknown> } {
+  stored: FlowThreadEntry,
+): FlowThreadEntry {
+  // A question for the visitor's location: the window draws a "Share my location" button.
+  if (channelKind === 'webchat' && message.kind === 'location_request')
+    return { ...stored, meta: { ...stored.meta, widget_input: { type: 'location' } } };
   if (channelKind !== 'webchat' || message.kind !== 'text') return stored;
   if (!message.input && !message.links?.length) return stored;
   return {
@@ -366,55 +490,6 @@ function withWebInput(
       ...(message.links?.length ? { widget_links: message.links } : {}),
     },
   };
-}
-
-/**
- * A file the bot sent on a website chat thread is stored as a line with the file's object key, type and name in the meta the widget
- * reads (`widget_media`): the visitor's window draws it from there and reads the bytes through its own thread.
- */
-function webMedia(
-  channelKind: string | null,
-  r: Rendered,
-  envelope: unknown,
-): { body: string; meta: Record<string, unknown> } | null {
-  if (channelKind !== 'webchat' || r.kind !== 'media') return null;
-  const m = (
-    envelope as {
-      media?: { key?: string; mediaKind?: string; mime?: string; name?: string; caption?: string };
-    }
-  ).media;
-  if (!m?.key) return null;
-  const kind = ['image', 'video', 'audio'].includes(String(m.mediaKind))
-    ? String(m.mediaKind)
-    : 'document';
-  const name = m.name || r.filename || 'file';
-  return {
-    body: m.caption || '',
-    meta: { widget_media: { key: m.key, kind, mime: m.mime ?? '', name } },
-  };
-}
-
-/**
- * On a website chat thread a reply-button message is stored as the question alone, with the buttons in the meta the widget reads.
- * Every other channel (and every other kind of message) keeps the thread text with the options after it.
- */
-function webButtons(
-  channelKind: string | null,
-  r: Rendered,
-): { body: string; meta?: Record<string, unknown> } {
-  if (channelKind === 'webchat' && r.kind === 'interactive' && r.interactive.type === 'buttons') {
-    return {
-      body: r.interactive.body,
-      meta: {
-        widget_buttons: r.interactive.buttons.map((b) => ({
-          id: b.id,
-          title: b.title,
-          ...(b.icon ? { icon: b.icon } : {}),
-        })),
-      },
-    };
-  }
-  return { body: threadTextOf(r) };
 }
 
 /** What goes to the webchat channel for a reply-button message: the question as plain text (the buttons ride in the thread's meta). */

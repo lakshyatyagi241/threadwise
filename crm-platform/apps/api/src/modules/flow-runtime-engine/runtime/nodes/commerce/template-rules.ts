@@ -126,7 +126,7 @@ export function richComponents(
     parameterFormat: t.parameterFormat,
     variableMap: t.variableMap,
     buttons: t.buttons,
-    carouselData: null,
+    carouselData: t.cards ?? null,
     headerLocation: t.headerLocation ?? null,
   };
   const att = (t.attachmentType ?? '').toLowerCase();
@@ -135,7 +135,8 @@ export function richComponents(
     pull: (key) => render(`{{${key}}}`).trim(),
     mediaUrl: (path) => (/^https?:\/\//i.test(path) ? path : null),
   });
-  if (!richHeader && (vars.buttons?.length ?? 0) === 0) return null;
+  const carousel = t.templateType === 'carousel' && (t.cards?.length ?? 0) > 0;
+  if (!richHeader && !carousel && (vars.buttons?.length ?? 0) === 0) return null;
   const built = buildSend(shape, vars).components as Array<Record<string, unknown>>;
   return built.length > 0 ? built : null;
 }

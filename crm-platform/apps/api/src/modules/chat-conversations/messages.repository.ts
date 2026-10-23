@@ -145,7 +145,13 @@ export interface NewMessage {
   senderUserId?: number | null;
   senderAgentId?: number | null;
   body?: string | null;
-  media?: { key: string; mime: string; size: number; name: string; sha256: string } | null;
+  media?: {
+    key: string;
+    mime: string;
+    size: number | null;
+    name: string | null;
+    sha256: string | null;
+  } | null;
   latitude?: number | null;
   longitude?: number | null;
   status: MessageStatus;

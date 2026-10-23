@@ -26,6 +26,7 @@ import { providerProblem } from './template-errors';
 import {
   columnsOfState,
   mergeVariableMap,
+  mergeCards,
   parseRemoteComponents,
   sameLanguage,
   statePatchFrom,
@@ -33,6 +34,7 @@ import {
   type ParsedComponents,
 } from './template-remote';
 import { detailWithMedia } from './template-media';
+import { storedCardsOf } from './templates.mapper';
 import { MediaStorageService } from '../platform-settings-branding-storage';
 import { TemplatesRepository, type TemplatePatch, type TemplateRow } from './templates.repository';
 
@@ -287,6 +289,10 @@ export class TemplateSyncService {
           buttons: parsed.buttons,
           codeExpirationMinutes: parsed.codeExpirationMinutes,
           templateType: parsed.templateType,
+          limitedOffer: parsed.limitedOffer,
+          ...(parsed.templateType === 'carousel'
+            ? { carouselData: mergeCards(parsed.cards, storedCardsOf(known)) }
+            : {}),
           attachmentType: attachmentColumn(parsed),
           ...(parsed.headerSampleUrl ? { headerSampleUrl: parsed.headerSampleUrl } : {}),
           parameterFormat: remote.parameterFormat ?? known.parameterFormat,
@@ -325,6 +331,8 @@ export class TemplateSyncService {
         category: (state.metaCategory ?? 'UTILITY').toLowerCase(),
         metaCategory: state.metaCategory,
         templateType: parsed.templateType,
+        carouselData: parsed.templateType === 'carousel' ? parsed.cards : null,
+        limitedOffer: parsed.limitedOffer,
         attachmentType: attachmentColumn(parsed),
         attachmentFile: null,
         headerSampleUrl: parsed.headerSampleUrl,

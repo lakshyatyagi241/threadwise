@@ -296,7 +296,8 @@
         "connect": "Connect WhatsApp",
         "connectBody": "Connect your number so contacts can reply and you can message them."
       },
-      "unhideColumn": "Unhide column"
+      "unhideColumn": "Unhide column",
+      "resizeColumn": "Drag to resize {column}; double-click to reset"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -346,7 +347,25 @@
       "assignOwner": "Assign owner",
       "changeStage": "Change stage",
       "more": "More",
-      "held": "This record is protected and cannot be deleted at the moment."
+      "held": "This record is protected and cannot be deleted at the moment.",
+      "consent": "Marketing consent",
+      "consentTitle": "Marketing consent",
+      "consentChannel": "Channel",
+      "consentAction": "Change",
+      "consentSubscribe": "Subscribe",
+      "consentUnsubscribe": "Unsubscribe",
+      "consentNote": "How the contacts agreed",
+      "consentNotePlaceholder": "What they said or signed, and where",
+      "consentNoteRequired": "Say how the contacts agreed before subscribing them.",
+      "consentContinue": "Continue",
+      "consentBack": "Back",
+      "consentConfirm": "Record consent",
+      "consentSummary": "Mark {count, plural, one {# contact} other {# contacts}} as {change} on {channel}. Each one gets an entry in its consent history.",
+      "consentChangeGranted": "subscribed",
+      "consentChangeWithdrawn": "unsubscribed",
+      "consentAllMatching": "This applies to every contact the filter matches.",
+      "consentSubscribed": "{count, plural, one {# contact subscribed} other {# contacts subscribed}}",
+      "consentUnsubscribed": "{count, plural, one {# contact unsubscribed} other {# contacts unsubscribed}}"
     },
     "form": {
       "addEyebrow": "New contact",
@@ -498,7 +517,6 @@
       "loading": "Loading groups...",
       "unavailableTitle": "Groups are not available yet",
       "unavailableMessage": "The contact groups service is not live on this server, so groups cannot be listed or created yet.",
-      "contacts": "contacts",
       "viewContacts": "View contacts",
       "edit": "Edit group",
       "editNamed": "Edit group {name}",
@@ -506,8 +524,6 @@
       "deleteNamed": "Delete group {name}",
       "deleteTitle": "Delete this group?",
       "deleteMessage": "\"{name}\" will be removed from every contact that is in it. The contacts themselves are kept.",
-      "createTile": "Create new group",
-      "createTileHint": "Bucket contacts by segment, funnel stage, or interest.",
       "emptyTitle": "No groups yet",
       "emptyMessage": "Ask a workspace manager to create the first group.",
       "helpKicker": "Help - 0{n}",
@@ -527,7 +543,21 @@
       },
       "exists": "A group with this name already exists, so nothing new was created.",
       "import": "Import contacts",
-      "importInto": "Import"
+      "importInto": "Import",
+      "colName": "Name",
+      "colMembers": "Members",
+      "colCreatedBy": "Created by",
+      "colCreatedAt": "Created at",
+      "colModifiedBy": "Modified by",
+      "colUpdatedAt": "Updated at",
+      "colActions": "Actions",
+      "tableLabel": "Contact groups",
+      "search": "Search groups",
+      "searchPlaceholder": "Search by name",
+      "count": "{count, plural, =0 {No groups} one {# group} other {# groups}}",
+      "noResultsTitle": "No groups match",
+      "noResults": "No group name contains what you typed.",
+      "clearSearch": "Clear search"
     },
     "import": {
       "eyebrow": "Bulk import",

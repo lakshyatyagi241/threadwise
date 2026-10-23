@@ -196,7 +196,10 @@
       "next": "Далее",
       "pageOf": "Страница {page, number} из {pages, number}",
       "perPage": "Сегментов на странице",
-      "perPageOption": "{count, number} на странице"
+      "perPageOption": "{count, number} на странице",
+      "colCreatedBy": "Создал",
+      "colCreatedAt": "Создано",
+      "colModifiedBy": "Изменил"
     },
     "actions": {
       "forbidden": "У вас нет прав на это действие.",

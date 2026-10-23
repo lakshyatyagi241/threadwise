@@ -255,6 +255,35 @@ describe('the panel of a flow bot (a website chat bot)', () => {
   });
 });
 
+describe('a phone question', () => {
+  it('shows a country list beside the box and sends the number with the chosen code', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('<select id="cc" class="cc" hidden></select>');
+    expect(page).toContain('"code":"IN","dial":"91"');
+    expect(page).toContain("body = '+' + $('cc').value + ' ' + body.replace(/^0+/, '')");
+  });
+});
+
+describe('the chat opened on its own page', () => {
+  it('keeps the size the author chose instead of filling the browser', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('html.standalone body');
+    expect(page).toContain('if (window.parent !== window || PREVIEW) return;');
+    expect(page).toContain('"standard":{"w":404,"h":672}');
+  });
+});
+
+describe('ending, leaving and restarting the chat', () => {
+  it('tells the server when the chat ends or the page closes, and keeps the thread on a restart', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain("BASE + 'end?reason=ended'");
+    expect(page).toContain("navigator.sendBeacon(withVid(BASE + 'end?reason=left'))");
+    expect(page).toContain("'restart' + (ended ? '?fresh=1' : '')");
+    // Closing the page is not told to the server while the window reloads itself.
+    expect(page).toContain('if (PREVIEW || reloading || !storedUuid()) return;');
+  });
+});
+
 describe('the cross: end the conversation, rate it, or restart', () => {
   it('asks first, in every website bot inside the site panel', () => {
     for (const flow of [true, false]) {
@@ -274,7 +303,7 @@ describe('the cross: end the conversation, rate it, or restart', () => {
     expect(page).toContain(
       "sheetButton('danger', tx('endConversation', 'End conversation'), openRating)",
     );
-    expect(page).toContain('closeSheet(); rate(5).then(function () { startOver(true); })');
+    expect(page).toContain('closeSheet(); rate(5).then(function () { startOver(true, false); })');
     expect(page).toContain("sheetButton('ghost', tx('notNow', 'Not now'), closeSheet)");
     expect(page).toContain("tx('submitFeedback', 'Submit feedback')");
     expect(page).toContain("tx('noThanks', 'No, thanks')");

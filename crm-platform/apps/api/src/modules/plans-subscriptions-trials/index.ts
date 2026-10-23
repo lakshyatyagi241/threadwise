@@ -62,3 +62,10 @@ export {
   writeAddonOffers,
   type ResolvedOffer,
 } from './plan-addon-offers';
+export {
+  activationOf,
+  packIdOfApp,
+  setActivation,
+  syncAppActivation,
+  type ActivationState,
+} from './addon-activation';

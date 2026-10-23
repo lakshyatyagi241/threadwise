@@ -6,7 +6,7 @@ import {
   type TplMetaCategory,
   type UpdateTemplateInput,
 } from '@crm/contracts';
-import { buttonToRow, rowToButton, type ButtonRow } from './buttons';
+import { buttonToRow, newRow, nextKey, rowToButton, type ButtonRow } from './buttons';
 import { DEFAULT_LANGUAGE } from './languages';
 import {
   fillSamples,
@@ -30,6 +30,53 @@ export const HEADER_KINDS: readonly HeaderKind[] = [
 export const isMediaKind = (k: HeaderKind): k is TplAttachment =>
   k === 'image' || k === 'video' || k === 'document';
 
+/** A carousel's cards (Meta: 2 to 10, a short text of up to 160 characters, up to two buttons). */
+export const CARDS_MIN = 2;
+export const CARDS_MAX = 10;
+export const CARD_BODY_MAX = 160;
+export const CARD_BUTTONS_MAX = 2;
+export type CardFormat = 'image' | 'video';
+export type TemplateKind = 'standard' | 'carousel' | 'lto';
+/** The "Button type" choice on the form: it decides the shape of the template and which buttons can be added. */
+export const BUTTON_TYPES = ['none', 'buttons', 'lto', 'carousel', 'catalogue', 'flow'] as const;
+export type ButtonType = (typeof BUTTON_TYPES)[number];
+/** Meta's limit for the heading of a limited-time offer. */
+export const OFFER_TEXT_MAX = 16;
+
+export interface CardRow {
+  /** Client-only identity for React keys. Never sent. */
+  key: string;
+  format: CardFormat;
+  /** Returned by the media upload (Meta's handle for the sample). */
+  handle: string;
+  fileName: string;
+  /** Object-storage key of the file uploaded now. */
+  mediaKey: string;
+  /** The key of the file already stored on a saved template (kept when no new file is chosen). */
+  image: string;
+  /** A link to draw the file with (not sent as a file). */
+  previewUrl: string;
+  body: string;
+  buttons: ButtonRow[];
+}
+
+export function newCard(format: CardFormat = 'image'): CardRow {
+  return {
+    key: `c${nextKey()}`,
+    format,
+    handle: '',
+    fileName: '',
+    mediaKey: '',
+    image: '',
+    previewUrl: '',
+    body: '',
+    buttons: [],
+  };
+}
+
+export const hasCardFile = (c: CardRow): boolean =>
+  Boolean(c.handle || c.mediaKey || c.image || c.previewUrl);
+
 export const NAME_MAX = 60;
 export const LOCATION_NAME_MAX = 100;
 export const LOCATION_ADDRESS_MAX = 200;
@@ -41,6 +88,13 @@ export const EXPIRY_MAX = 90;
 
 export interface FormState {
   connectionId: string;
+  /** `carousel`: a bubble of text and a row of cards; the header, footer and buttons of a standard template do not apply. */
+  kind: TemplateKind;
+  buttonType: ButtonType;
+  /** `lto`: the offer's heading and whether it counts down to an expiry time. */
+  offerText: string;
+  offerCountdown: boolean;
+  cards: CardRow[];
   name: string;
   language: string;
   metaCategory: TplMetaCategory;
@@ -72,6 +126,11 @@ export interface FormState {
 export function initialState(connectionId = ''): FormState {
   return {
     connectionId,
+    kind: 'standard',
+    buttonType: 'none',
+    offerText: '',
+    offerCountdown: true,
+    cards: [],
     name: '',
     language: DEFAULT_LANGUAGE,
     metaCategory: 'UTILITY',
@@ -112,6 +171,101 @@ export const tidyName = (raw: string): string =>
 
 export const isAuth = (s: Pick<FormState, 'metaCategory'>): boolean =>
   s.metaCategory === 'AUTHENTICATION';
+
+export const isCarousel = (s: Pick<FormState, 'kind' | 'metaCategory'>): boolean =>
+  s.kind === 'carousel' && s.metaCategory !== 'AUTHENTICATION';
+
+export const isOffer = (s: Pick<FormState, 'kind' | 'metaCategory'>): boolean =>
+  s.kind === 'lto' && s.metaCategory !== 'AUTHENTICATION';
+
+/** The buttons the editor offers for each button type. */
+export const KINDS_OF_BUTTON_TYPE: Record<ButtonType, readonly ButtonRow['kind'][]> = {
+  none: [],
+  buttons: ['quick_reply', 'url', 'phone', 'copy_code'],
+  lto: ['copy_code', 'url'],
+  carousel: [],
+  catalogue: ['catalog'],
+  flow: ['form'],
+};
+
+/** Picking a button type reshapes the form: buttons that no longer fit go, and the ones the type is made of are added. */
+export function withButtonType(s: FormState, buttonType: ButtonType): FormState {
+  if (buttonType === s.buttonType) return s;
+  const allowed = KINDS_OF_BUTTON_TYPE[buttonType];
+  const keep = s.buttons.filter((b) => allowed.includes(b.kind));
+  const base = { ...s, buttonType, cards: [] as CardRow[] };
+  switch (buttonType) {
+    case 'carousel':
+      return { ...withKind(s, 'carousel'), buttonType, buttons: [] };
+    case 'lto': {
+      const media = s.headerKind === 'image' || s.headerKind === 'video';
+      return {
+        ...base,
+        kind: 'lto',
+        metaCategory: 'MARKETING',
+        headerKind: media ? s.headerKind : 'image',
+        headerText: '',
+        headerSlots: {},
+        footer: '',
+        buttons: keep.length > 0 ? keep : [newRow('copy_code'), newRow('url')],
+      };
+    }
+    case 'catalogue':
+      return { ...base, kind: 'standard', buttons: [newRow('catalog')] };
+    case 'flow':
+      return { ...base, kind: 'standard', buttons: keep.length > 0 ? keep : [newRow('form')] };
+    case 'buttons':
+      return { ...base, kind: 'standard', buttons: keep };
+    default:
+      return { ...base, kind: 'standard', buttons: [] };
+  }
+}
+
+/** The button type an existing template reads as. */
+export function buttonTypeOf(d: {
+  templateType: string;
+  buttons: Array<{ type: string }>;
+}): ButtonType {
+  if (d.templateType === 'carousel') return 'carousel';
+  if (d.templateType === 'lto' || d.templateType === 'limited_time_offer') return 'lto';
+  const types = d.buttons.map((b) => b.type.toUpperCase());
+  if (types.includes('CATALOG')) return 'catalogue';
+  if (types.includes('FLOW')) return 'flow';
+  return types.length > 0 ? 'buttons' : 'none';
+}
+
+/** Switching to a carousel starts with two empty cards; back to standard drops them. */
+export function withKind(s: FormState, kind: TemplateKind): FormState {
+  if (kind === s.kind) return s;
+  if (kind === 'carousel')
+    return { ...s, kind, cards: s.cards.length > 0 ? s.cards : [newCard(), newCard()] };
+  return { ...s, kind, cards: [] };
+}
+
+/** All the cards use one kind of file: choosing the other kind drops the files already chosen. */
+export function withCardFormat(s: FormState, format: CardFormat): FormState {
+  return {
+    ...s,
+    cards: s.cards.map((c) =>
+      c.format === format
+        ? c
+        : { ...c, format, handle: '', fileName: '', mediaKey: '', image: '', previewUrl: '' },
+    ),
+  };
+}
+
+/** The cards as the API stores them. A card without a new file keeps the file saved with the template. */
+export function cardsToFields(s: FormState): NonNullable<CreateTemplateInput['cards']> {
+  return s.cards.map((c) => ({
+    format: c.format,
+    image: c.mediaKey || c.image || null,
+    headerHandle: c.handle || null,
+    // The link a saved card is drawn with doubles as its sample, so the checks know it has a file.
+    headerSampleUrl: /^https?:\/\//i.test(c.previewUrl) ? c.previewUrl : null,
+    body: c.body.trim(),
+    buttons: c.buttons.map(rowToButton),
+  }));
+}
 
 /** Editing the body re-derives the mapping rows; typed samples of tokens still present are kept. */
 export function withBody(s: FormState, body: string): FormState {
@@ -191,6 +345,26 @@ export function toFields(s: FormState): Fields {
       parameterFormat: 'POSITIONAL',
     };
   }
+  if (isCarousel(s)) {
+    return {
+      name: s.name.trim(),
+      language,
+      metaCategory: s.metaCategory,
+      templateType: 'carousel',
+      header: null,
+      attachmentType: 'none',
+      headerHandle: null,
+      headerSampleUrl: null,
+      body: normalizePlaceholders(s.body),
+      footer: null,
+      buttons: [],
+      cards: cardsToFields(s),
+      variableMap: toVariableMap(null, { text: s.body, slots: s.bodySlots }),
+      codeExpirationMinutes: null,
+      parameterFormat: 'POSITIONAL',
+    };
+  }
+  const offer = isOffer(s);
   const textHeader = s.headerKind === 'text' && s.headerText.trim() !== '';
   const media = isMediaKind(s.headerKind);
   const attachmentType = isMediaKind(s.headerKind)
@@ -206,7 +380,7 @@ export function toFields(s: FormState): Fields {
     name: s.name.trim(),
     language,
     metaCategory: s.metaCategory,
-    templateType: attachmentType === 'none' ? 'standard' : 'media',
+    templateType: offer ? 'lto' : attachmentType === 'none' ? 'standard' : 'media',
     header: textHeader ? normalizePlaceholders(s.headerText.trim()) : null,
     attachmentType,
     headerHandle: media && s.headerHandle ? s.headerHandle : null,
@@ -214,8 +388,9 @@ export function toFields(s: FormState): Fields {
     headerMediaKey: media && s.headerMediaKey ? s.headerMediaKey : null,
     headerLocation: s.headerKind === 'location' ? locationOf(s) : null,
     body: normalizePlaceholders(s.body),
-    footer: s.footer.trim() ? s.footer.trim() : null,
+    footer: !offer && s.footer.trim() ? s.footer.trim() : null,
     buttons: s.buttons.map(rowToButton),
+    limitedOffer: offer ? { text: s.offerText.trim(), hasExpiration: s.offerCountdown } : null,
     variableMap,
     codeExpirationMinutes: null,
     parameterFormat: 'POSITIONAL',
@@ -258,6 +433,26 @@ export function stateFromDetail(d: TemplateDetail): FormState {
   const meta: TplMetaCategory = d.metaCategory ?? 'UTILITY';
   return {
     connectionId: d.connectionId ?? '',
+    kind:
+      d.templateType === 'carousel'
+        ? 'carousel'
+        : d.templateType === 'lto' || d.templateType === 'limited_time_offer'
+          ? 'lto'
+          : 'standard',
+    buttonType: buttonTypeOf(d),
+    offerText: d.limitedOffer?.text ?? '',
+    offerCountdown: d.limitedOffer?.hasExpiration ?? true,
+    cards: (d.cards ?? []).map((c) => ({
+      key: `c${nextKey()}`,
+      format: c.format,
+      handle: '',
+      fileName: '',
+      mediaKey: '',
+      image: c.image && !/^https?:\/\//i.test(c.image) ? c.image : '',
+      previewUrl: c.imageUrl ?? '',
+      body: c.body,
+      buttons: c.buttons.map((b) => buttonToRow(b)),
+    })),
     name: d.name,
     language: d.language,
     metaCategory: meta,
@@ -281,8 +476,19 @@ export function stateFromDetail(d: TemplateDetail): FormState {
   };
 }
 
+export interface PreviewCard {
+  format: CardFormat;
+  imageUrl: string | null;
+  body: string;
+  buttons: Array<{ kind: ButtonRow['kind']; text: string }>;
+}
+
 export interface PreviewModel {
   auth: boolean;
+  /** A carousel's cards, drawn under the bubble. */
+  cards?: PreviewCard[];
+  /** A limited-time offer's heading, drawn under the header. */
+  offer?: { text: string; countdown: boolean } | null;
   language: string;
   headerKind: HeaderKind;
   headerText: string;
@@ -297,6 +503,15 @@ export interface PreviewModel {
 export function previewOf(s: FormState): PreviewModel {
   return {
     auth: isAuth(s),
+    cards: isCarousel(s)
+      ? s.cards.map((c) => ({
+          format: c.format,
+          imageUrl: c.previewUrl || null,
+          body: c.body,
+          buttons: c.buttons.map((b) => ({ kind: b.kind, text: b.text })),
+        }))
+      : [],
+    offer: isOffer(s) ? { text: s.offerText, countdown: s.offerCountdown } : null,
     language: s.language,
     headerKind: s.headerKind,
     headerText: s.headerKind === 'text' ? fillSamples(s.headerText, s.headerSlots) : '',

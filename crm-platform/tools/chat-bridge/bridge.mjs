@@ -8,6 +8,8 @@ import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
 import { handleIncidents, loadToken } from './incidents-api.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 import { createChatApp } from './chat-app.mjs';
+import { startPrPoller } from './pr-poller.mjs';
+import { startSentryPoller } from './sentry-poller.mjs';
 
 export function loadUrls(env = process.env) {
   const urls = {};
@@ -27,6 +29,8 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   const grafanaUrl = env.GRAFANA_URL ?? '', token = loadToken(env);
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
   app = createChatApp({ env, urls, fetchImpl, webhookSend, resolver, grafanaUrl, metrics, log });
+  resolver?.setOwnerHook?.((id, owner) => app.syncCard?.(id, owner));
+  if (app.enabled) resolver?.setCardHook?.((ch, body, opts) => app.openCard(ch, body, opts));
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
     if (isTest(a)) { // never an incident/resolver call; dropped unless TEST_ALERTS_CHANNEL opts in
@@ -44,22 +48,27 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     if (a.status === 'resolved') {
       const end = Date.parse(a.endsAt); const dur = fmtDur((Number.isFinite(end) && end > 0 ? end : Date.now()) - started);
       threads.delete(fp);
-      if (await resolver?.alertCleared?.(`am:${fp}`)) return { ok: true }; // a PR was raised for it: RESOLVED names the PR
+      const measured = ev.rows[0]?.[0] ?? a.annotations?.summary ?? a.labels?.alertname, durationMs = (Number.isFinite(end) && end > 0 ? end : Date.now()) - started;
+      const extra = { measured, durationMs, ...(Number.isFinite(peak) ? { peak: peakTxt } : {}), ...(a.annotations?.threshold ? { threshold: a.annotations.threshold } : {}) };
+      if (await resolver?.alertCleared?.(`am:${fp}`, extra)) return { ok: true }; // a PR was raised for it: RESOLVED names the PR (the card, or the thread reply in webhook mode)
       const inc = resolver?.byKey(`am:${fp}`);
       if (inc && inc.state === 'resolved') return { ok: true }; // the resolver already posted RESOLVED after verification
+      if (app.enabled && await app.resolveCard(`am:${fp}`, { kind: 'self', at: Date.now(), ...extra })) return { ok: true }; // the one card is edited in place: no second message
       if (inc && inc.state === 'open') return send(ch, alertCard(a, { grafanaUrl, title: 'Alertmanager reports it cleared; resolver verification still running', extra: widgetsOf([['Note', 'RESOLVED is only posted after the verification passes']]) }), { threadKey });
-      const rows = [['What it was', a.annotations?.summary ?? a.labels?.alertname], ['Peak value seen', `${peakTxt} (sampled when the bridge saw it fire or repeat)`], ['Diagnosis at firing', known?.diag ?? 'not available (bridge restarted since it fired)'], ['Value now', ev.value == null ? 'n/a' : String(Number(ev.value.toPrecision(3)))]];
+      const owner = inc?.owner;
+      const rows = [['What it means', ev.entry?.meaning ?? a.annotations?.summary ?? a.labels?.alertname], ['What it measured', measured], ['How long it lasted', dur], ['Peak vs threshold', `${peakTxt}${a.annotations?.threshold ? ` vs ${a.annotations.threshold}` : ' (threshold: see the alert rule)'}; sampled when the bridge saw it fire or repeat`], ['What cleared it', owner ? `No PR was recorded; ${owner} was working on it.` : 'Cleared on its own: no code change, no action taken by a person.'], ['Owner / next step', owner ? `${owner}. Next step: add a note on what was found.` : 'Nobody was assigned. Next step: none, unless it comes back; then claim it.'], ['Diagnosis at firing', known?.diag ?? 'not available (bridge restarted since it fired)']];
       return send(ch, alertCard(a, { grafanaUrl, title: `RESOLVED after ${dur}${inc ? '' : ' (cleared on its own, no action taken)'}`, extra: widgetsOf(rows) }), { threadKey });
     }
     const diag = ev.entry ? `${ev.entry.meaning} Most likely: ${ev.entry.causes[0]}.` : '';
     if (known) {
       threads.put(fp, { ...known, peak });
+      if (app.enabled) return { ok: true }; // one message per incident: the card is the live view, no repeat reply
       const rows = [['Still firing for', fmtDur(Date.now() - started)], ...ev.rows];
       return send(ch, { text: `Still firing: ${a.labels?.alertname}`, cardsV2: [{ cardId: 'rep', card: { header: { title: `Still firing (${fmtDur(Date.now() - started)})` }, sections: [{ widgets: widgetsOf(rows) }] } }] }, { threadKey });
     }
     threads.put(fp, { threadKey, startedAt: started, peak, diag });
     // the FIRING card must be the thread parent: start the resolver (its replies) only after that post returned
-    const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey, interactive: { incidentId: resolver?.byKey(`am:${fp}`)?.id ?? `am:${fp}` } });
+    const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey, interactive: { incidentId: resolver?.byKey(`am:${fp}`)?.id ?? `am:${fp}`, firedAt: started } });
     if (resolver && (ev.entry || a.labels?.severity === 'critical')) { // a critical alert ALWAYS opens an incident, even a brand-new rule with no runbook entry yet
       const pool = /^DbPool/.test(a.labels?.alertname);
       resolver.handle({ playbook: pool ? 'db_pool' : 'service', alertname: a.labels?.alertname, action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry?.action ?? 'No runbook entry for this alert yet: add one in tools/chat-bridge/diagnosis.mjs', evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
@@ -100,6 +109,8 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     end(ok ? 200 : 502, JSON.stringify({ ok }));
   });
   const sweep = resolver && setInterval(() => resolver.sweepClaims?.().catch(() => {}), 60_000); sweep?.unref();
-  server.on('close', () => clearInterval(sweep));
-  return { server, metrics, send, log, resolver };
+  const prPoller = startPrPoller({ resolver, env, fetchImpl: fetchImpl ?? fetch, log });
+  const sentryPoller = startSentryPoller({ resolver, env, fetchImpl: fetchImpl ?? fetch, log });
+  server.on('close', () => { clearInterval(sweep); prPoller.stop(); sentryPoller.stop(); });
+  return { server, metrics, send, log, resolver, prPoller, sentryPoller };
 }

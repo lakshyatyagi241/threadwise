@@ -194,7 +194,7 @@ test('resolver: an escalated incident is not re-opened (and re-posted) on every 
 import { handleIncidents } from './incidents-api.mjs';
 async function teamRig(env = {}) {
   const { startBridge } = await import('./bridge.mjs'), posts = [];
-  const e = { INCIDENT_API_TOKEN: 'tok-test', AUTO_REMEDIATE: 'dry-run', ...env };
+  const e = { INCIDENT_API_TOKEN: 'tok-test', AUTO_REMEDIATE: 'dry-run', ANNOUNCE_IN_SPACE: '0', ...env };
   let now = 1_700_000_000_000, resolver;
   const br = startBridge({ env: e, urls: {}, log: () => {}, resolverFactory: ({ post }) => (resolver = createResolver({ env: e, post: async (c, m, o) => { posts.push({ c, t: m.text, k: o?.threadKey, card: JSON.stringify(m.cardsV2) }); }, now: () => now })) });
   await new Promise((r) => br.server.listen(0, '127.0.0.1', r));
@@ -291,7 +291,7 @@ test('loop: release containing the PR + alert gone -> released -> RESOLVED names
   assert.equal(r.get(id).kind, 'critical_alert');
   await r.setRelease('abc1234', [77]); assert.equal(r.get(id).status, 'released'); await r.settle();
   assert.equal(r.get(id).status, 'resolved');
-  assert.match(posts.at(-1).t, /^✅ RESOLVED by PR #77 \(owner vedant\), release abc1234, verified after \d+s; open for 0h \d+m$/); assert.equal(posts.at(-1).k, 'am-f1');
+  const th = posts.filter((p) => p.k); assert.match(th.at(-1).t, /^✅ RESOLVED by PR #77 \(owner vedant\), release abc1234, verified after \d+s; open for 0h \d+m$/); assert.equal(th.at(-1).k, 'am-f1');
 });
 test('loop: release NOT containing the PR changes nothing and posts nothing', async () => {
   const { r, posts, id } = await loopRig();
@@ -362,4 +362,34 @@ test('an alert with no runbook entry still gets a useful diagnosis (meaning from
   const txt = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
   assert.ok(rows.length >= 4); assert.match(txt, /What it means: Disk fills up/); assert.match(txt, /grep -rn "BrandNewrmrf" deploy\/observability/);
   assert.match(txt, /Claim it/); assert.ok(!/No runbook entry for this alert \(add one/.test(txt)); assert.ok(!txt.includes('; rm -rf'));
+});
+
+test('announce: claim, PR and RESOLVED are also posted top-level (no threadKey); notes are not', async () => {
+  const { r, posts, id } = await loopRig();
+  await r.releaseClaim(id, 'vedant'); await r.claim(id, 'asha'); await r.addNote(id, 'asha', 'looking at logs');
+  await r.setRelease('abc1234', [77]); await r.settle();
+  const top = posts.filter((p) => !p.k).map((p) => p.t);
+  assert.ok(top.some((t) => t.includes('asha is working on this') && t.includes('HighErrorRate')), 'claim announced top-level');
+  assert.ok(top.some((t) => t.includes('RESOLVED by PR #77')), 'RESOLVED announced top-level');
+  assert.ok(!top.some((t) => t.includes('looking at logs')), 'notes stay in the thread');
+  assert.ok(posts.some((p) => p.k === 'am-f1' && p.t.includes('asha is working on this')), 'thread reply kept');
+});
+
+test('watcher: the slow-statement card carries the incident key so the incident can edit that one card', async () => {
+  const sent = []; let t = 0; let calls = 10;
+  const query = async (sql) => (sql.includes('backend_type') ? { rows: [] } : { rows: [{ queryid: '7', datname: 'd', rolname: 'r', calls, total_exec_time: calls * 900, mean_exec_time: 900, max_exec_time: 2000, rows: 5, query: 'select * from t where a = $1' }] });
+  const w = createWatcher({ query, metrics: createMetrics(), send: async (c, msg, o) => sent.push(o), now: () => t, env: {} });
+  await w.poll(); calls = 12; t = 1000; await w.poll();
+  assert.equal(sent.at(-1).interactive.incidentId, 'st:7|d|r');
+});
+
+test('other channel: non-critical alerts go to the Other space only when NON_CRITICAL_CHANNEL=other; the URL loads from the secret file', async () => {
+  const w = { labels: { alertname: 'OutboxDeadRows', severity: 'warning' } };
+  assert.equal(channelFor(w, {}), 'none');
+  assert.equal(channelFor(w, { NON_CRITICAL_CHANNEL: 'other' }), 'other');
+  assert.equal(channelFor({ labels: { alertname: 'X', severity: 'critical' } }, { NON_CRITICAL_CHANNEL: 'other' }), 'critical'); // critical never moves
+  assert.equal(channelFor({ labels: { alertname: 'X', severity: 'warning', test: 'true' } }, { NON_CRITICAL_CHANNEL: 'other' }), 'none'); // tests stay out
+  const { loadUrls } = await import('./bridge.mjs');
+  const dir = fs.mkdtempSync('/tmp/gc-sec-'); fs.writeFileSync(`${dir}/gchat_other_url`, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t\n');
+  assert.equal(loadUrls({ GCHAT_SECRETS_DIR: dir }).other, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t');
 });

@@ -11,6 +11,7 @@ const h = vi.hoisted(() => ({
   screen: vi.fn((_props?: unknown): null => null),
   mode: 'advanced' as 'simple' | 'advanced',
   flowType: 'chat' as string,
+  builder: 'simple' as string,
   pending: false,
 }));
 
@@ -27,7 +28,11 @@ vi.mock('../../api/flows', () => ({
     get: () =>
       h.pending
         ? new Promise(() => undefined)
-        : Promise.resolve({ id: '11111111-1111-4111-8111-111111111111', flowType: h.flowType }),
+        : Promise.resolve({
+            id: '11111111-1111-4111-8111-111111111111',
+            flowType: h.flowType,
+            builder: h.builder,
+          }),
   },
 }));
 vi.mock('./simple-screen', () => ({ SimpleScreen: (p: unknown) => h.screen(p) }));
@@ -68,6 +73,7 @@ beforeEach(() => {
   h.screen.mockClear();
   h.mode = 'advanced';
   h.flowType = 'chat';
+  h.builder = 'simple';
   h.pending = false;
 });
 
@@ -96,6 +102,14 @@ describe('SimpleRoute in an Advanced workspace', () => {
     await mount();
     expect(h.replace).not.toHaveBeenCalled();
     expect(h.screen).toHaveBeenCalled();
+  });
+
+  it('sends a messaging flow built on the canvas to the canvas, not the Simple builder', async () => {
+    h.flowType = 'chat';
+    h.builder = 'advanced';
+    await mount();
+    expect(h.replace).toHaveBeenCalledWith(`/flows/builder/${FLOW}`);
+    expect(h.screen).not.toHaveBeenCalled();
   });
 
   it('waits for the flow type before deciding, so a bot never bounces', async () => {

@@ -17,6 +17,7 @@ TOKEN_FILE = os.environ.get("DEPLOY_MSG_TOKEN_FILE", "/opt/desk/secrets/github_r
 STATE = os.environ.get("DESK_WATCH_STATE", "/var/lib/desk-release-watch")
 WEB = os.environ.get("DESK_COMMIT_URL_BASE", f"https://github.com/{REPO}")
 TIMEOUT, MAXBYTES, TTL, MAXLEN, DEADLINE = 6, 2_000_000, 3600, 1200, 25
+DETAIL_CAP = int(os.environ.get("DEPLOY_MSG_DETAIL_PRS", "9"))
 EVENTS = {
     "started": ("🚀", "Deploy in progress"), "progress": ("🚀", "Deploy in progress"),
     "live": ("✅", "Release live"), "succeeded": ("✅", "Release live"),
@@ -58,11 +59,11 @@ def token():
     return t
 
 
-def get(path):
+def get(path, ttl=TTL):
     """GET with cache (1h, by path), 6 s timeout, size cap and an overall deadline. Raises on any failure."""
     cf = os.path.join(STATE, "cache-" + re.sub(r"[^A-Za-z0-9.]", "_", path)[-150:] + ".json")
     try:
-        if time.time() - os.path.getmtime(cf) < TTL:
+        if time.time() - os.path.getmtime(cf) < ttl:
             return json.load(open(cf))
     except (OSError, ValueError):
         pass
@@ -90,12 +91,24 @@ def prs_between(prev, new):
     """-> list of dicts (oldest first): number,title,author,merger ; or [] + direct commit info. Raises if the API is unusable."""
     commits = get(f"/repos/{REPO}/compare/{prev}...{new}").get("commits", []) if sha_ok(prev) and prev != new else [get(f"/repos/{REPO}/commits/{new}")]
     prs, seen, direct = [], set(), None
-    for i, c in enumerate(commits[-40:]):
+    window = commits[-40:]
+    rel = []  # the commits that carry a PR (merge commit or "(#N)" squash) plus the newest commit, oldest first
+    for i, c in enumerate(window):
         msg = (c.get("commit", {}).get("message") or "").split("\n")[0]
         m = re.match(r"Merge pull request #(\d+) from", msg) or re.search(r"\(#(\d+)\)\s*$", msg)
-        last = i == len(commits[-40:]) - 1
-        if not m and not last:
-            continue  # commits inside a merged branch; the merge commit carries the PR
+        last = i == len(window) - 1
+        if m or last:  # commits inside a merged branch are skipped: the merge commit carries the PR
+            rel.append((c, msg, m, last))
+    # Only the newest DETAIL_CAP PRs get title/author/merger (two GitHub calls each; the message lists at most 9). Older ones keep just their
+    # number, read from the commit message with no call, so a release of 50 commits cannot run out of the time limit.
+    detail_from = max(0, len(rel) - DETAIL_CAP)
+    for idx, (c, msg, m, last) in enumerate(rel):
+        if idx < detail_from:
+            n = int(m.group(1)) if m else 0
+            if n and n not in seen:
+                seen.add(n)
+                prs.append({"n": n, "title": "", "author": "unknown", "merger": "unknown"})
+            continue
         sha = c.get("sha", "")
         if not sha_ok(sha):
             continue
@@ -106,7 +119,7 @@ def prs_between(prev, new):
             n = p.get("number")
             if isinstance(n, int) and n not in seen:
                 seen.add(n)
-                # GitHub's commit->pulls list has no merged_by; the PR's own record does. One extra read per PR (the list is already capped).
+                # GitHub's commit->pulls list has no merged_by; the PR's own record does. One extra read per PR (capped by DETAIL_CAP).
                 full = p if p.get("merged_by") else (get(f"/repos/{REPO}/pulls/{n}") or {})
                 prs.append({"n": n, "title": clean(p.get("title")), "author": who(p.get("user")), "merger": who(full.get("merged_by") or p.get("merged_by"))})
     return prs, direct
@@ -150,6 +163,8 @@ def build(ev, prev, new, secs, note):
                     lines.append("• …and more")
                     break
                 lines.append(row)
+            if len(extra) > 8 and not lines[-1].startswith("• …and"):
+                lines.append(f"• …and {len(extra) - 8} more PRs (numbers only in the release record)")
     else:
         d = direct or {"subject": "unknown", "author": "unknown", "committer": None}
         lines += [f'Commit: "{d["subject"]}"', "PR: none (direct push)", f'Author: {d["author"]}', f'Deployed by: {d["committer"] or d["author"]}']
@@ -185,10 +200,45 @@ def machine(ev, prev, new, secs):
     return json.dumps(out)
 
 
+def stall(live, min_age, last_start_epoch):
+    """--stall <live_sha> <min_age_minutes> <epoch of the newest release START (0 = none)>: {"post": bool, "head": sha, "text": msg}.
+    post is true only when main has commits the live release lacks, the OLDEST one is older than min_age, and no release STARTED
+    in the last 30 minutes (one in progress or just attempted never raises it; a release that finished earlier without the commits does). Never raises; any failure -> post false."""
+    off = {"post": False}
+    try:
+        if not sha_ok(live):
+            return json.dumps(off)
+        c = get(f"/repos/{REPO}/compare/{live}...main", ttl=60)
+        commits = c.get("commits", [])
+        ahead = int(c.get("ahead_by", len(commits)) or 0)
+        if not ahead or not commits:
+            return json.dumps(off)
+        first, head = commits[0], commits[-1]  # compare lists oldest first: the stall is how long the OLDEST unreleased commit has waited
+        when = ((first.get("commit") or {}).get("committer") or {}).get("date") or ""
+        t = time.mktime(time.strptime(when, "%Y-%m-%dT%H:%M:%SZ")) - time.timezone if when else 0
+        if not t or (time.time() - t) / 60 < float(min_age) or (int(last_start_epoch or 0) and time.time() - int(last_start_epoch) < 1800):
+            return json.dumps(off)
+        subj = [clean((x.get("commit", {}).get("message") or "").split("\n")[0], 70) for x in commits[-3:]][::-1]
+        mins = int((time.time() - t) / 60)
+        text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live. The oldest has waited {mins} min and no new release has gone live.\n"
+                f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}`  Oldest waiting since {time.strftime('%H:%M UTC', time.gmtime(t))}\n"
+                + "\n".join(f"• {x}" for x in subj if x)
+                + "\nMerging does not deploy by itself: the build server must receive the GitHub push and start the release. "
+                  "Check its webhook service, its deploy log and its disk, and GitHub Settings > Webhooks > Recent deliveries.")
+        return json.dumps({"post": True, "head": first.get("sha", ""), "text": text[:MAXLEN]})
+    except Exception as e:
+        sys.stderr.write(f"deploy-message: stall check failed ({type(e).__name__})\n")
+        return json.dumps(off)
+
+
 if __name__ == "__main__":
     if sys.argv[1:2] == ["--json"]:
         j = sys.argv[2:] + [""] * 5
         print(machine(j[0], j[1], j[2], j[3]))
+        sys.exit(0)
+    if sys.argv[1:2] == ["--stall"]:
+        g = sys.argv[2:] + [""] * 3
+        print(stall(g[0], g[1] or "20", g[2]))
         sys.exit(0)
     if sys.argv[1:2] == ["--group"]:
         g = sys.argv[2:] + [""] * 3

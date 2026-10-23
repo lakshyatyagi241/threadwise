@@ -59,8 +59,12 @@
   "POST /v2/viber/inbound/{token}",
   "POST /v2/wechat/inbound/{token}",
   "POST /v2/woocommerce/webhook/{secret}",
+  "POST /widget/{token}/api/end",
   "POST /widget/{token}/api/feedback",
+  "POST /widget/{token}/api/location",
   "POST /widget/{token}/api/message",
+  "POST /widget/{token}/api/rating",
   "POST /widget/{token}/api/restart",
+  "POST /widget/{token}/api/start",
   "POST /widget/{token}/api/upload"
 ]

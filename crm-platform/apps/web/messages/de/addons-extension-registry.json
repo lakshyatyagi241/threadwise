@@ -370,7 +370,8 @@
         "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
         "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
         "active": "Aktiv",
-        "ownedCount": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu"
+        "ownedCount": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu",
+        "turnedOff": "Ausgeschaltet"
       },
       "price": {
         "free": "Kostenlos",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Funktions-Add-ons",
         "capacity": "Kapazitäts-Add-ons"
+      },
+      "activation": {
+        "turnedOffNote": "Für diesen Arbeitsbereich ausgeschaltet. Die Einstellungen bleiben erhalten.",
+        "turnOff": "Ausschalten",
+        "turnOn": "Einschalten",
+        "askOwner": "Bitte den Kontoinhaber, dies ein- oder auszuschalten.",
+        "doneOn": "{name} ist eingeschaltet.",
+        "errors": {
+          "notToggleable": "{name} lässt sich hier nicht ein- oder ausschalten. Nur ein im Tarif enthaltenes Add-on kann umgeschaltet werden.",
+          "forbidden": "Du hast keine Berechtigung, Add-ons ein- oder auszuschalten.",
+          "generic": "{name} konnte nicht geändert werden. Bitte versuche es erneut."
+        }
+      }
+    },
+    "toggle": {
+      "title": "{name} ausschalten?",
+      "lead": "Das ändert sich. Du kannst es jederzeit wieder einschalten.",
+      "cancel": "Abbrechen",
+      "confirm": "{name} ausschalten",
+      "done": "{name} ist ausgeschaltet. Die Einstellungen bleiben erhalten.",
+      "typeLabel": "Zur Bestätigung {name} eingeben",
+      "typeHint": "Kundenchats oder Personen sind betroffen. Gib zur Bestätigung den Namen ein.",
+      "groups": {
+        "stops": "Was stoppt",
+        "kept": "Was erhalten bleibt",
+        "people": "Personen"
+      },
+      "items": {
+        "features_off": "Diese Funktionen funktionieren nicht mehr: {names}.",
+        "dependents_off": "Diese Funktionen setzen sie voraus und stoppen daher ebenfalls: {names}.",
+        "roles_dormant": "{count, plural, one {# Rolle hat Berechtigungen dieses Add-ons. Sie behält sie, aber sie sind inaktiv, bis du das Add-on wieder einschaltest.} other {# Rollen haben Berechtigungen dieses Add-ons. Sie behalten sie, aber sie sind inaktiv, bis du das Add-on wieder einschaltest.}}",
+        "waiting_chats": "{count, plural, one {# Chat wartet auf einen Agenten. Er wird nicht automatisch zugewiesen, jemand muss ihn übernehmen.} other {# Chats warten auf einen Agenten. Sie werden nicht automatisch zugewiesen, jemand muss sie übernehmen.}}",
+        "routing_rules": "{count, plural, one {# Routing-Regel weist keine Chats mehr zu.} other {# Routing-Regeln weisen keine Chats mehr zu.}}",
+        "auto_teams": "{count, plural, one {# Team ist auf automatische Chat-Zuweisung eingestellt und hört damit auf.} other {# Teams sind auf automatische Chat-Zuweisung eingestellt und hören damit auf.}}",
+        "teams": "{count, plural, one {# Team bleibt mit seinen Mitgliedern erhalten.} other {# Teams bleiben mit ihren Mitgliedern erhalten.}}",
+        "custom_role_holders": "{count, plural, one {# Person hat eine benutzerdefinierte Rolle. Die Rolle bleibt erhalten, aber die Berechtigungen dieses Add-ons gelten nicht mehr.} other {# Personen haben eine benutzerdefinierte Rolle. Die Rollen bleiben erhalten, aber die Berechtigungen dieses Add-ons gelten nicht mehr.}}",
+        "kept": "Deine Einstellungen und Daten bleiben erhalten. Beim erneuten Einschalten sind sie wieder so, wie du sie verlassen hast."
       }
     }
   }

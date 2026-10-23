@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { WABA_VERTICALS, type WabaBusinessProfile } from '@crm/contracts';
-import { Alert, Button, Card, Field, Input, Select, Spinner, Textarea } from '@crm/ui';
+import { Alert, Button, Card, Field, Input, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { useProfile, useUpdateProfile, useUploadLogo } from '../api/hooks';
 import { isLogoFile } from '../api/logo';
 import { useErrorText } from './use-error-text';
@@ -32,6 +32,7 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
   const errorText = useErrorText();
   const update = useUpdateProfile(id);
   const upload = useUploadLogo(id);
+  const { toast } = useToast();
   const [v, setV] = useState({
     about: profile.about ?? '',
     description: profile.description ?? '',
@@ -44,7 +45,6 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
   const [logo, setLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
-  const [msg, setMsg] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const set = (k: keyof typeof v) => (e: { target: { value: string } }) =>
     setV((s) => ({ ...s, [k]: e.target.value }));
@@ -58,7 +58,6 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
   );
 
   const pick = (file: File | undefined) => {
-    setMsg(null);
     if (!file) return;
     if (!isLogoFile(file)) {
       // A refused pick also drops the picture picked before it, so a save never sends a picture the form has refused.
@@ -83,7 +82,6 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
     if (websites.some((w) => !/^https?:\/\//i.test(w)))
       return setErrors({ websites: t('websiteScheme') });
     setErrors({});
-    setMsg(null);
     try {
       // The picture goes first: Meta sets it by a handle the upload returns, then the text is saved with it. The picture leaves the
       // form only when both are saved; after a failed text save a retry sends the picture again, which Meta takes as before.
@@ -97,7 +95,7 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
         ...(v.vertical ? { vertical: v.vertical as (typeof WABA_VERTICALS)[number] } : {}),
       });
       clearLogo();
-      setMsg({ tone: 'success', text: t('saved') });
+      toast(t('saved'), 'success', { durationMs: 9000 });
     } catch (err) {
       const et = errorText(err);
       const byField: Record<string, string> = {};
@@ -107,7 +105,7 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
         else byField[fe.path] = fe.message;
       }
       if (Object.keys(byField).length) setErrors(byField);
-      setMsg({ tone: 'danger', text: et.text });
+      toast(et.text, 'danger');
     }
   };
 
@@ -116,11 +114,6 @@ function ProfileForm({ id, profile }: { id: string; profile: WabaBusinessProfile
 
   return (
     <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2" noValidate>
-      {msg && (
-        <div className="sm:col-span-2">
-          <Alert tone={msg.tone}>{msg.text}</Alert>
-        </div>
-      )}
       <fieldset className="sm:col-span-2 space-y-2">
         <legend className="font-medium">{t('logoTitle')}</legend>
         <p className="text-xs text-muted-foreground">{t('logoHint')}</p>

@@ -22,6 +22,8 @@ const card = (o: Partial<AddonCard>): AddonCard => ({
   state: 'buy',
   includedVia: null,
   kind: 'feature',
+  activation: 'active',
+  canToggle: false,
   ...o,
 });
 

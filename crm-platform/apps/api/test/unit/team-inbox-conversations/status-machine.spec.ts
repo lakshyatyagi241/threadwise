@@ -3,6 +3,7 @@ import {
   CONVERSATION_STATUSES,
   SETTABLE_CONVERSATION_STATUSES,
   canMoveConversationStatus,
+  isFinishedWebchat,
   setConversationStatusSchema,
   type ConversationStatus,
 } from '@crm/contracts';
@@ -65,5 +66,16 @@ describe('canMoveConversationStatus', () => {
     expect(
       setConversationStatusSchema.safeParse({ rowVersion: 3, status: 'resolved' }).success,
     ).toBe(true);
+  });
+});
+
+describe('isFinishedWebchat', () => {
+  it('is true for a resolved or closed web chat only', () => {
+    for (const status of CONVERSATION_STATUSES) {
+      const expected = status === 'resolved' || status === 'closed';
+      expect(isFinishedWebchat('webchat', status), `webchat ${status}`).toBe(expected);
+      expect(isFinishedWebchat('whatsapp_cloud', status), `whatsapp ${status}`).toBe(false);
+      expect(isFinishedWebchat('email', status), `email ${status}`).toBe(false);
+    }
   });
 });

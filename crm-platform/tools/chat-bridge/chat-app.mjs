@@ -18,33 +18,102 @@ const btn = (text, action, incidentId) => ({
 });
 const link = (text, url) => ({ text, onClick: { openLink: { url } } });
 
-// base = the plain alert message (no buttons). owner = display name when claimed.
-export function renderCard(base, { incidentId, owner, grafanaUrl = '', prUrl = PRS }) {
+// All alert, note and PR text is untrusted: strip control chars, escape, truncate. Only github PR URLs of this repo become links.
+const clean = (x, n = 200) => {
+  const t = String(x ?? '').replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, ' ').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+  return t.length > n ? `${t.slice(0, n - 1)}…` : t;
+};
+const PR_URL = /^https:\/\/github\.com\/lakshyatyagi241\/threadwise\/pull\/\d+$/;
+const hm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
+const dur = (ms) => { const m = Math.max(0, Math.round(ms / 60000)); return m < 1 ? `${Math.max(0, Math.round(ms / 1000))} s` : m < 120 ? `${m} min` : `${Math.floor(m / 60)} h ${m % 60} min`; };
+const MAX_BYTES = 30000; // Chat caps a message at 32,000 bytes
+const row = (k, v) => ({ decoratedText: { topLabel: k, text: v, wrapText: true } });
+const MAX_TL = 8;
+
+// Plain-words status rows from the incident snapshot (resolver.get). Pure; every dynamic string goes through clean().
+function lifeWidgets({ owner, snap, firedAt }) {
+  const w = [], pr = snap?.prNumber ? `PR #${Number(snap.prNumber)}${snap.prSummary ? ` (${clean(snap.prSummary, 120)})` : ''}` : '';
+  const res = snap?.resolution, done = snap?.status === 'resolved';
+  const who = clean(snap?.owner ?? owner, 60);
+  if (done && res) {
+    const how = res.kind === 'pr' ? `Fixed by ${pr || 'a PR'}${snap.owner ? `, raised by ${who}` : ''}${res.sha ? `, live in release ${clean(String(res.sha).slice(0, 7), 12)}` : ''}.`
+      : res.kind === 'release' ? `Resolved by release ${clean(String(res.sha ?? '').slice(0, 7), 12)}.`
+      : res.kind === 'sentry' ? `Resolved in Sentry by ${clean(res.by, 40)}.`
+      : res.kind === 'action' ? `Resolved automatically by ${clean(res.how, 200)}.`
+      : `Cleared on its own, no code change, after ${dur(res.durationMs)}.`;
+    w.push(row('✅ How it was resolved', how));
+    if (res.measured) w.push(row('What it measured', clean(res.measured, 120)));
+    w.push(row('How long / peak', `lasted ${dur(res.durationMs)}${res.peak ? `; peak ${clean(res.peak, 40)}${res.threshold ? ` vs threshold ${clean(res.threshold, 40)}` : ''}` : ''}; verified clear at ${hm(res.at)}`));
+  } else if (snap?.status === 'released') {
+    w.push(row('🚀 In release', `${pr} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}; verifying that the problem is gone.`));
+  } else if (snap?.prUrl) {
+    w.push(snap.prMerged ? row('🟣 PR merged', `${pr} is merged. Next step: none, wait for the release; this card resolves itself once it is live and verified.`) : row('🔧 PR raised', `${pr}${who ? ` by ${who}` : ''}. Next step: review and merge it; this card resolves itself when the alert clears after the release.`));
+  } else if (who && (snap?.status === 'claimed' || !snap)) {
+    w.push({ decoratedText: { text: `👀 ${who} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`, wrapText: true } });
+    w.push(row('Owner / next step', `${who} owns it. Next step: find the cause (see "What to check"), then raise a PR or note what was found.`));
+  } else {
+    w.push(row('Owner / next step', 'Nobody yet. Press "I\'m on it", then follow "What to check" above.'));
+  }
+  const found = (snap?.notes ?? []).at(-1);
+  if (found) w.push(row(`What ${clean(found.who, 40)} found`, clean(found.text, 600)));
+  const tl = [...(firedAt ? [{ t: firedAt, who: snap?.kind === 'deploy_failure' ? 'Deploy' : snap?.kind === 'sentry_issue' ? 'Sentry' : 'Alertmanager', text: snap?.kind === 'deploy_failure' ? 'deploy failed' : snap?.kind === 'sentry_issue' ? 'issue seen' : 'alert fired' }] : []), ...(snap?.tl ?? [])].slice(-MAX_TL);
+  if (tl.length) w.push(row('Timeline', tl.map((e) => `${hm(e.t)}  ${clean(e.who, 40)}: ${clean(e.text, 160)}`).join('\n')));
+  return w;
+}
+
+// One highlighted STATUS line at the top of the card body. Only names are bold (Chat decoratedText supports <b>, <a href>); every value is clean()ed first.
+function statusLine({ owner, snap }) {
+  const who = clean(snap?.owner ?? owner, 60), nm = who && `<b>${who}</b>`, n = snap?.prNumber ? Number(snap.prNumber) : 0;
+  const pr = n ? (snap.prUrl && PR_URL.test(snap.prUrl) ? `<a href="${snap.prUrl}">PR #${n}</a>` : `PR #${n}`) : '';
+  const res = snap?.resolution;
+  if (snap?.status === 'resolved') {
+    if (res?.kind === 'pr' || (pr && res?.kind !== 'self')) return `✅ Status: Resolved by ${pr || 'a PR'}${nm ? ` (${nm})` : ''}`;
+    if (res?.kind === 'release') return `✅ Status: Resolved by release ${clean(String(res.sha ?? '').slice(0, 7), 12)}`;
+    if (res?.kind === 'action') return '✅ Status: Resolved automatically';
+    if (res?.kind === 'sentry') return `✅ Status: Resolved in Sentry by ${clean(res.by, 40)}`;
+    return '✅ Status: Cleared on its own';
+  }
+  if (snap?.status === 'released') return `🔵 Status: In progress, ${pr || 'the PR'} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}, verifying`;
+  if (snap?.prMerged && pr) return `🟣 Status: ${pr} merged${snap.prMerged.by ? ` by ${clean(snap.prMerged.by, 40)}` : ''} at ${hm(snap.prMerged.at)}, waiting for the release to go live`;
+  if (snap?.prClosed && !pr) return `🟠 Status: PR #${Number(snap.prClosed.number) || 0} was closed without merging, needs a human`;
+  if (pr) return `🔵 Status: In progress, ${pr} raised${nm ? ` by ${nm}` : ''}`;
+  if (nm && (snap?.status === 'claimed' || !snap)) return `🔵 Status: In progress, ${nm} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`;
+  // Someone (a teammate's Claude) looked, left a note and let go: say so instead of going back to "nobody has taken it".
+  const rev = [...(snap?.notes ?? [])].reverse().find((n) => n.who && n.who !== 'bridge');
+  if (rev) return `🟠 Status: Reviewed by <b>${clean(rev.who, 40)}</b> at ${hm(rev.t)}, needs a human to take it`;
+  return '🟡 Status: Open, nobody has taken it yet';
+}
+
+// base = the plain alert message (no buttons). owner = display name when claimed. snap = incident snapshot (resolver.get) for the full life.
+export function renderCard(base, { incidentId, owner, grafanaUrl = '', prUrl = PRS, snap, firedAt }) {
   const m = structuredClone(base),
     card = m.cardsV2?.[0]?.card;
   if (!card) return m;
-  const widgets = [];
-  if (owner)
-    widgets.push({
-      decoratedText: {
-        text: `👀 ${String(owner).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c])} is working on this`,
-        wrapText: true,
-      },
-    });
+  const resolved = snap?.status === 'resolved';
+  const widgets = lifeWidgets({ owner, snap, firedAt });
+  const claimed = !resolved && !!(snap?.owner ?? owner);
+  const pr = snap?.prUrl && PR_URL.test(snap.prUrl) ? snap.prUrl : prUrl;
   widgets.push({
     buttonList: {
       buttons: [
-        owner ? btn('Release', 'release', incidentId) : btn("I'm on it", 'claim', incidentId),
-        link('Open PR', prUrl),
+        ...(resolved ? [] : [claimed ? btn('Release', 'release', incidentId) : btn("I'm on it", 'claim', incidentId)]),
+        link(snap?.prUrl && PR_URL.test(snap.prUrl) ? `PR #${Number(snap.prNumber)}` : 'Open PR', pr),
         ...(grafanaUrl ? [link('Open Grafana', grafanaUrl)] : []),
       ],
     },
   });
-  const keep = (w) => !w.buttonList; // our row replaces the alert's own Grafana button row
-  card.sections = [
-    ...card.sections.map((s) => ({ ...s, widgets: s.widgets.filter(keep) })),
-    { widgets },
-  ];
+  if (resolved) {
+    card.header.title = String(card.header.title).replace(/(FIRING|firing)/, '✅ RESOLVED');
+    m.text = String(m.text ?? '').replace(/firing/i, 'resolved');
+    for (const s of card.sections) for (const x of s.widgets) if (x.textParagraph) x.textParagraph.text = x.textParagraph.text.replace('(firing', '(resolved');
+  }
+  const taken = resolved || !!(snap?.owner ?? owner); // the "Claim it" suggestion is stale once somebody has it
+  const keep = (w) => !w.buttonList && !(taken && w.decoratedText?.topLabel === 'Suggested action'); // our row replaces the alert's own Grafana button row
+  card.sections = [...card.sections.map((s) => ({ ...s, widgets: s.widgets.filter(keep) })), { widgets }];
+  card.sections[0].widgets.unshift({ decoratedText: { text: statusLine({ owner, snap }), wrapText: true } });
+  if (resolved && (snap.kind === 'deploy_failure' || snap.kind === 'sentry_issue') && !/RESOLVED/.test(card.header.title)) card.header.title = `✅ RESOLVED: ${card.header.title}`;
+  // size guard: drop alert widgets from the end of the first section until the message fits
+  while (Buffer.byteLength(JSON.stringify(m)) > MAX_BYTES && card.sections[0].widgets.length > 2) card.sections[0].widgets.pop();
   return m;
 }
 
@@ -107,11 +176,19 @@ export function createChatApp({
     const r = await api.createMessage(channel, out, rest);
     if (r.ok) {
       if (interactive && r.name)
-        remember(r.name, { base: body, incidentId: interactive.incidentId });
+        remember(r.name, { base: body, incidentId: interactive.incidentId, channel, owner: null, firedAt: interactive.firedAt ?? now(), local: [] });
       return r;
     }
     log({ evt: 'chat_app_fallback_webhook', channel, status: r.status });
     return webhookSend(channel, body, rest); // the webhook cannot render buttons: send the plain card
+  }
+
+  // Create the one card for an incident through the API only (no webhook fallback). true = created and remembered, so later edits PATCH it.
+  async function openCard(channel, body, opts = {}) {
+    const { interactive, ...rest } = opts, r = await api.createMessage(channel, renderCard(body, { ...interactive, grafanaUrl }), rest);
+    if (!r.ok || !r.name) return false;
+    remember(r.name, { base: body, incidentId: interactive.incidentId, channel, owner: null, firedAt: interactive.firedAt ?? now(), local: [] });
+    return true;
   }
 
   const priv = (user, text) => ({
@@ -141,13 +218,21 @@ export function createChatApp({
       );
     const known = bases.get(msgName),
       base = known?.base ?? ev.message ?? {};
-    if (msgName && !known) remember(msgName, { base, incidentId: p.incidentId });
+    if (msgName && !known) remember(msgName, { base, incidentId: p.incidentId, owner: null, firedAt: now(), local: [] });
+    const ent = msgName ? bases.get(msgName) : null;
+    if (ent) {
+      ent.owner = action === 'claim' ? who : null; // the click response edits the card itself
+      if (!resolver?.get) ent.local.push({ t: now(), who, text: action === 'claim' ? 'claimed, working on this' : 'released the claim' });
+    }
+    const snap = resolver?.get?.(id) ?? (ent ? { owner: ent.owner, status: ent.owner ? 'claimed' : 'open', claimedAt: ent.owner ? now() : null, tl: ent.local, notes: [] } : undefined);
     return {
       actionResponse: { type: 'UPDATE_MESSAGE' },
       ...renderCard(base, {
         incidentId: p.incidentId,
         owner: action === 'claim' ? who : null,
         grafanaUrl,
+        snap,
+        firedAt: ent?.firedAt,
       }),
     };
   }
@@ -228,5 +313,26 @@ export function createChatApp({
       }),
     );
   }
-  return { enabled, send, handleHttp, handleEvent };
+  // Any lifecycle change (REST claim, PR, release, note, resolved): re-render the alert card from the resolver's snapshot and PATCH it in place.
+  // Returns true when a card shows the change (so the caller skips the thread reply and the top-level announce).
+  async function syncCard(incidentId, _owner, extra) {
+    let shown = false;
+    for (const [name, v] of [...bases]) {
+      if (resolveId(v.incidentId) !== incidentId || !v.channel) continue;
+      const snap = extra ?? resolver?.get?.(incidentId);
+      if (!snap) continue;
+      const body = renderCard(v.base, { incidentId: v.incidentId, owner: snap.owner ?? null, grafanaUrl, snap, firedAt: v.firedAt });
+      const sig = JSON.stringify(body);
+      if (v.sig === sig) { shown = true; continue; }
+      const r = await api.updateMessage(v.channel, name, body);
+      if (r?.ok) { v.sig = sig; v.owner = snap.owner ?? null; shown = true; } else log({ evt: 'chat_app_card_sync_failed', status: r?.status });
+    }
+    return shown;
+  }
+  // The Alertmanager "resolved" webhook in app mode: edit the original card instead of posting a second message. Returns true if it did.
+  const resolveCard = (key, resolution) => {
+    const inc = resolver?.byKey?.(key), snap = (inc && resolver.get(inc.id)) || {};
+    return syncCard(inc?.id ?? key, null, { ...snap, status: 'resolved', resolution, tl: [...(snap.tl ?? []), { t: resolution.at, who: 'Alertmanager', text: 'alert cleared' }] });
+  };
+  return { enabled, send, openCard, handleHttp, handleEvent, syncCard, resolveCard };
 }
