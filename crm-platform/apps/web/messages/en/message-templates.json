@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# more button} other {+# more buttons}}",
       "live": "Live preview",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Carousel cards",
+      "cardEmpty": "Text of card {n}"
     },
     "card": {
       "engine": "Meta WABA",
@@ -188,7 +190,8 @@
         "body": "Body",
         "footer": "Footer",
         "buttons": "Buttons",
-        "template": "Template"
+        "template": "Template",
+        "cards": "Cards"
       }
     },
     "form": {
@@ -366,6 +369,32 @@
         "open": "Build with AI",
         "applied": "Template draft filled from AI. Review it before you submit.",
         "authHint": "Authentication templates have a fixed text, so there is nothing to draft."
+      },
+      "type": {
+        "label": "Template type",
+        "standard": "Standard",
+        "carousel": "Carousel",
+        "hint": "A carousel is a message with a row of cards to swipe through. Each card has a picture or video, a short text and up to two buttons."
+      },
+      "cards": {
+        "title": "Cards",
+        "hint": "2 to 10 cards. Every card uses the same kind of file and the same buttons.",
+        "format": "Cards show",
+        "formatImage": "Pictures",
+        "formatVideo": "Videos",
+        "count": "{used}/{max} cards",
+        "add": "Add card",
+        "needTwo": "A carousel needs at least {min} cards.",
+        "card": "Card {n}",
+        "remove": "Remove card {n}",
+        "noFile": "No file chosen",
+        "uploading": "Uploading",
+        "text": "Card text",
+        "textCounter": "{used}/{max}",
+        "buttons": "Buttons",
+        "buttonText": "Button text",
+        "buttonUrl": "Website URL",
+        "buttonPhone": "Phone number"
       }
     },
     "detail": {

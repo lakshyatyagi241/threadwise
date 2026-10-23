@@ -716,6 +716,7 @@
         "not_linked": "Il canale di questa conversazione non è collegato a un numero WhatsApp, quindi non si può inviare nessun modello.",
         "paused": "Sospeso da WhatsApp. Potrà essere inviato di nuovo al termine della sospensione.",
         "media_header": "Ha un’intestazione con immagine, video o documento, che non può ancora essere inviata dall’Inbox.",
+        "carousel": "È un carosello (schede con immagini) e non può ancora essere inviato dalla posta in arrivo.",
         "header_variable": "Ha una variabile nell’intestazione, che non può ancora essere compilata dall’Inbox.",
         "dynamic_button": "Ha un link di pulsante con una variabile, che non può ancora essere compilata dall’Inbox.",
         "authentication": "I template con password monouso vengono inviati dal sistema, non dall’Inbox.",

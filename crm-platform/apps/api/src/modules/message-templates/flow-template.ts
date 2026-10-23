@@ -21,4 +21,11 @@ export interface FlowTemplate {
   headerMediaUrl?: string | null;
   /** The pin of a `location` header. */
   headerLocation?: unknown;
+  /** A carousel's cards, each with a link to its picture or video (the stored file, or Meta's sample for an import). */
+  cards?: Array<{
+    image: string;
+    format: 'image' | 'video';
+    body: string;
+    buttons: TplButton[];
+  }>;
 }

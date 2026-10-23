@@ -2,7 +2,7 @@ import type { TemplateDetail } from '@crm/contracts';
 import { canonicalStorageKey, storageKeyIsOwnedBy } from '../../common/storage-key-owner';
 import { headerFormatOf } from '../../infra/providers/whatsapp/template-vocab';
 import type { MediaStorageService, StoredLinker } from '../platform-settings-branding-storage';
-import { toDetail } from './templates.mapper';
+import { cardsViewOf, storedCardsOf, toDetail } from './templates.mapper';
 import type { TemplateRow } from './templates.repository';
 
 /** How long a link to a stored header file lasts; a fresh link is made at every read. */
@@ -45,8 +45,17 @@ export async function detailWithMedia(
   storage: MediaStorageService,
   row: TemplateRow,
 ): Promise<TemplateDetail> {
+  const link = await storage.linker(MEDIA_PREVIEW_TTL_S);
+  // A carousel's cards are linked the same way: each stored file gets a fresh link; a card from Meta keeps its sample address.
+  const links = new Map<string, string>();
+  for (const card of storedCardsOf(row)) {
+    if (!card.image || /^https?:\/\//i.test(card.image) || links.has(card.image)) continue;
+    const url = await link(card.image);
+    if (url) links.set(card.image, url);
+  }
   return {
     ...toDetail(row),
-    headerMediaUrl: await storedHeaderUrl(await storage.linker(MEDIA_PREVIEW_TTL_S), row),
+    cards: cardsViewOf(row, links),
+    headerMediaUrl: await storedHeaderUrl(link, row),
   };
 }

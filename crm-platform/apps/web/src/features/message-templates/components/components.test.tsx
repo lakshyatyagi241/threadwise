@@ -268,11 +268,44 @@ const summary = (over: Partial<TemplateSummary> = {}): TemplateSummary =>
       { type: 'URL', text: 'Take Survey', url: 'https://example.com' },
       { type: 'QUICK_REPLY', text: 'Later' },
     ],
+    cards: [],
     rowVersion: 1,
     createdAt: '2026-10-01T10:00:00.000Z',
     updatedAt: '2026-10-01T10:00:00.000Z',
     ...over,
   });
+
+describe('a carousel in the phone', () => {
+  it('draws each card under the bubble: its file, its text and its buttons', () => {
+    const out = html(
+      <MessageBubble
+        model={model({
+          body: 'Our picks',
+          cards: [
+            {
+              format: 'image',
+              imageUrl: 'https://files.example/a.png',
+              body: 'Summer sale',
+              buttons: [{ kind: 'url', text: 'Shop' }],
+            },
+            { format: 'video', imageUrl: null, body: '', buttons: [] },
+          ],
+        })}
+      />,
+    );
+    expect(out).toContain('data-testid="bubble-cards"');
+    expect(out.match(/data-testid="bubble-card"/g)).toHaveLength(2);
+    expect(out).toContain('https://files.example/a.png');
+    expect(out).toContain('Summer sale');
+    expect(out).toContain('Shop');
+    // An empty card says what goes there.
+    expect(out).toContain('Text of card 2');
+  });
+
+  it('adds nothing for a template without cards', () => {
+    expect(html(<MessageBubble model={model()} />)).not.toContain('bubble-cards');
+  });
+});
 
 describe('library card', () => {
   const card = (

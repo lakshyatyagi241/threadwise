@@ -58,7 +58,9 @@
       "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}",
       "live": "Aperçu en direct",
       "business": "Bloomly",
-      "online": "en ligne"
+      "online": "en ligne",
+      "cards": "Cartes du carrousel",
+      "cardEmpty": "Texte de la carte {n}"
     },
     "card": {
       "rejected": "Rejeté : {reason}",
@@ -195,7 +197,8 @@
         "body": "Corps",
         "footer": "Pied de page",
         "buttons": "Boutons",
-        "template": "Modèle"
+        "template": "Modèle",
+        "cards": "Cartes"
       }
     },
     "form": {
@@ -373,6 +376,32 @@
         "open": "Créer avec l'IA",
         "applied": "Brouillon du modèle rempli par l'IA. Relisez-le avant de le soumettre.",
         "authHint": "Les modèles d'authentification ont un texte fixe, il n'y a donc rien à rédiger."
+      },
+      "type": {
+        "label": "Type de modèle",
+        "standard": "Standard",
+        "carousel": "Carrousel",
+        "hint": "Un carrousel est un message avec une rangée de cartes à faire défiler. Chaque carte a une image ou une vidéo, un texte court et jusqu'à deux boutons."
+      },
+      "cards": {
+        "title": "Cartes",
+        "hint": "De 2 à 10 cartes. Toutes utilisent le même type de fichier et les mêmes boutons.",
+        "format": "Les cartes affichent",
+        "formatImage": "Des images",
+        "formatVideo": "Des vidéos",
+        "count": "{used}/{max} cartes",
+        "add": "Ajouter une carte",
+        "needTwo": "Un carrousel nécessite au moins {min} cartes.",
+        "card": "Carte {n}",
+        "remove": "Supprimer la carte {n}",
+        "noFile": "Aucun fichier choisi",
+        "uploading": "Envoi en cours",
+        "text": "Texte de la carte",
+        "textCounter": "{used}/{max}",
+        "buttons": "Boutons",
+        "buttonText": "Texte du bouton",
+        "buttonUrl": "URL du site web",
+        "buttonPhone": "Numéro de téléphone"
       }
     },
     "detail": {

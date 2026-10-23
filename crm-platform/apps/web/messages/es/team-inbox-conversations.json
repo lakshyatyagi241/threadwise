@@ -716,6 +716,7 @@
         "not_linked": "El canal de esta conversación no está vinculado a un número de WhatsApp, así que no se puede enviar ninguna plantilla.",
         "paused": "Pausada por WhatsApp. Se podrá enviar de nuevo cuando termine la pausa.",
         "media_header": "Tiene una cabecera de imagen, vídeo o documento, que todavía no se puede enviar desde la bandeja.",
+        "carousel": "Es un carrusel (tarjetas con imágenes) y aún no se puede enviar desde la bandeja.",
         "header_variable": "Tiene una variable en la cabecera, que todavía no se puede rellenar desde la bandeja.",
         "dynamic_button": "Tiene un enlace en un botón con una variable, que todavía no se puede rellenar desde la bandeja.",
         "authentication": "Las plantillas de contraseña de un solo uso las envía el sistema, no la bandeja.",

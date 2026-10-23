@@ -4,6 +4,7 @@ import {
   buildMetaTemplate,
   normalizeTemplateName,
   type MetaTemplateBody,
+  type TemplateCard,
   type TemplateDraft,
 } from './template-payload';
 import {
@@ -33,6 +34,8 @@ export interface AuthoredTemplate {
   body: string;
   footer?: string | null;
   buttons: TplButton[];
+  /** Carousel templates: the cards, as the author sent them. */
+  cards?: TemplateCard[];
   variableMap?: VariableMap;
   codeExpirationMinutes?: number | null;
   parameterFormat: 'POSITIONAL' | 'NAMED';
@@ -57,6 +60,8 @@ export interface PreparedTemplate {
   body: string;
   footer: string | null;
   buttons: TplButton[];
+  /** The cards of a carousel (stored in `carousel_data`); empty for every other type. */
+  cards: TemplateCard[];
   variableMap: VariableMap;
   codeExpirationMinutes: number | null;
   parameterFormat: 'POSITIONAL' | 'NAMED';
@@ -103,14 +108,16 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
   if (header) variableMap.header = header;
   if (body) variableMap.body = body;
 
-  const attachment = input.attachmentType === 'none' ? null : input.attachmentType;
+  const carousel = !auth && input.templateType === 'carousel';
+  // A carousel's picture or video lives on each card; the template itself has no header, footer or buttons.
+  const attachment = carousel || input.attachmentType === 'none' ? null : input.attachmentType;
   return {
     name: normalizeTemplateName(input.name),
     language: input.language,
     metaCategory: input.metaCategory,
     category: input.metaCategory.toLowerCase(),
     templateType: auth ? 'auth' : input.templateType,
-    header: auth || attachment ? null : text.header,
+    header: auth || carousel || attachment ? null : text.header,
     attachmentType: auth ? null : attachment,
     headerHandle:
       auth || !attachment || attachment === 'location' ? null : (input.headerHandle ?? null),
@@ -119,8 +126,9 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
       auth || !attachment || attachment === 'location' ? null : (input.headerMediaKey ?? null),
     headerLocation: !auth && attachment === 'location' ? (input.headerLocation ?? null) : null,
     body: text.body,
-    footer: auth ? null : text.footer,
-    buttons: auth ? [] : input.buttons,
+    footer: auth || carousel ? null : text.footer,
+    buttons: auth || carousel ? [] : input.buttons,
+    cards: carousel ? (input.cards ?? []) : [],
     variableMap,
     codeExpirationMinutes: auth ? (input.codeExpirationMinutes ?? null) : null,
     parameterFormat: input.parameterFormat,
@@ -140,6 +148,7 @@ export function draftOfPrepared(p: PreparedTemplate): TemplateDraft {
     body: p.body,
     footer: p.footer,
     buttons: p.buttons,
+    cards: p.cards,
     variableMap: p.variableMap,
     codeExpirationMinutes: p.codeExpirationMinutes,
     parameterFormat: p.parameterFormat,
@@ -164,6 +173,7 @@ export function lintPrepared(
     body: p.body,
     footer: p.footer,
     buttons: p.buttons,
+    cards: p.cards,
     variableMap: p.variableMap,
     parameterFormat: p.parameterFormat,
   });
@@ -172,5 +182,5 @@ export function lintPrepared(
 export const payloadOfPrepared = (p: PreparedTemplate): MetaTemplateBody =>
   buildMetaTemplate(draftOfPrepared(p));
 
-/** Template shapes this domain can build and send. The others (carousel, catalog...) are only displayed after an import. */
-export const BUILDABLE_TYPES = new Set(['standard', 'media', 'auth']);
+/** Template shapes this domain can build. The others (catalog, limited-time offer...) are only displayed after an import. */
+export const BUILDABLE_TYPES = new Set(['standard', 'media', 'auth', 'carousel']);

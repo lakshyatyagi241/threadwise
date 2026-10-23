@@ -2,7 +2,7 @@ import { countPlaceholders, tokensOf, type VariableMap } from './template-variab
 
 /**
  * The body of `POST /{waba}/message_templates` built from a stored template (TW-TPL-024). Pure; golden-file tested.
- * Covers standard (text/media) and authentication templates; carousel, catalog and limited-time-offer builders are separate work.
+ * Covers standard (text/media), authentication and carousel templates; catalog and limited-time-offer builders are separate work.
  */
 
 export type MediaFormat = 'IMAGE' | 'VIDEO' | 'DOCUMENT';
@@ -14,6 +14,16 @@ export interface TemplateButton {
   phone_number?: string;
   example?: string | string[];
   [k: string]: unknown;
+}
+
+/** One card of a carousel as it is stored and sent: the file is ours (`image`), Meta's own copy of the example is `headerHandle`. */
+export interface TemplateCard {
+  format?: 'image' | 'video' | string;
+  image?: string | null;
+  headerHandle?: string | null;
+  headerSampleUrl?: string | null;
+  body: string;
+  buttons?: TemplateButton[] | null;
 }
 
 export interface TemplateDraft {
@@ -30,6 +40,8 @@ export interface TemplateDraft {
   body: string;
   footer?: string | null;
   buttons?: TemplateButton[] | null;
+  /** `templateType: 'carousel'` only. */
+  cards?: TemplateCard[] | null;
   variableMap?: VariableMap | null;
   codeExpirationMinutes?: number | null;
   parameterFormat?: 'POSITIONAL' | 'NAMED' | null;
@@ -107,6 +119,26 @@ function buttonOf(b: TemplateButton): Record<string, unknown> {
   return out;
 }
 
+/** A carousel's CAROUSEL component: each card a picture or video, a short text and up to two buttons (all cards alike, as Meta requires). */
+function carouselOf(cards: TemplateCard[]): Record<string, unknown> {
+  return {
+    type: 'CAROUSEL',
+    cards: cards.slice(0, 10).map((c) => {
+      const components: Array<Record<string, unknown>> = [
+        {
+          type: 'HEADER',
+          format: String(c.format ?? 'image').toUpperCase() === 'VIDEO' ? 'VIDEO' : 'IMAGE',
+          example: { header_handle: [c.headerHandle ?? ''] },
+        },
+        { type: 'BODY', text: c.body },
+      ];
+      if (c.buttons?.length)
+        components.push({ type: 'BUTTONS', buttons: c.buttons.slice(0, 2).map(buttonOf) });
+      return { components };
+    }),
+  };
+}
+
 export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
   const category = metaCategoryOf(d);
   const auth = category === 'AUTHENTICATION' || d.templateType === 'auth';
@@ -121,6 +153,13 @@ export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
       type: 'BUTTONS',
       buttons: [otp ? buttonOf(otp) : { type: 'OTP', otp_type: 'COPY_CODE' }],
     });
+  } else if (d.templateType === 'carousel') {
+    // A carousel is the bubble's text and then the cards; it has no header, footer or buttons of its own.
+    const body: Record<string, unknown> = { type: 'BODY', text: d.body };
+    if (countPlaceholders(d.body) > 0)
+      body.example = { body_text: [bodyExamples(d.body, d.variableMap)] };
+    components.push(body);
+    components.push(carouselOf(d.cards ?? []));
   } else {
     const attach = (d.attachmentType ?? '').toLowerCase();
     const format = HEADER_FORMATS[attach];

@@ -716,6 +716,7 @@
         "not_linked": "Der Kanal dieses Gesprächs ist mit keiner WhatsApp-Nummer verbunden, daher kann keine Vorlage gesendet werden.",
         "paused": "Von WhatsApp pausiert. Sie kann erneut gesendet werden, sobald die Pause endet.",
         "media_header": "Hat einen Bild-, Video- oder Dokumentkopf, der im Posteingang noch nicht gesendet werden kann.",
+        "carousel": "Ist ein Karussell (Karten mit Bildern) und kann noch nicht aus dem Posteingang gesendet werden.",
         "header_variable": "Hat eine Variable im Kopf, die im Posteingang noch nicht ausgefüllt werden kann.",
         "dynamic_button": "Hat einen Schaltflächenlink mit einer Variable, die im Posteingang noch nicht ausgefüllt werden kann.",
         "authentication": "Vorlagen mit Einmalpasswort werden vom System gesendet, nicht aus dem Posteingang.",

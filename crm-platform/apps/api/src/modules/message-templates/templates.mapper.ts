@@ -5,6 +5,7 @@ import {
   type TemplateDetail,
   type TemplateSummary,
   type TplButton,
+  type TplCard,
   type TplHeaderLocation,
   type TplLintIssue,
   type TplMetaCategory,
@@ -13,7 +14,12 @@ import {
 } from '@crm/contracts';
 import { metaEditBlockOf } from './meta-edit-rules';
 import { lintTemplate, type LintInput } from './template-linter';
-import { buildMetaTemplate, metaCategoryOf, type TemplateDraft } from './template-payload';
+import {
+  buildMetaTemplate,
+  metaCategoryOf,
+  type TemplateCard,
+  type TemplateDraft,
+} from './template-payload';
 import type { TemplateRow } from './templates.repository';
 
 /** The only place a row becomes an API shape: internal ids never leave, `public` reads as approved, nulls become empty lists. */
@@ -35,6 +41,39 @@ export function categoryOf(
 
 const buttonsOf = (row: TemplateRow): TplButton[] =>
   Array.isArray(row.buttons) ? (row.buttons as TplButton[]) : [];
+
+/** The cards stored in `carousel_data`, each read defensively (an import can carry shapes we did not write). */
+export function storedCardsOf(row: Pick<TemplateRow, 'carouselData'>): TemplateCard[] {
+  if (!Array.isArray(row.carouselData)) return [];
+  return row.carouselData
+    .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
+    .map((c) => ({
+      format: String(c.format ?? 'image').toLowerCase() === 'video' ? 'video' : 'image',
+      image: typeof c.image === 'string' && c.image !== '' ? c.image : null,
+      headerHandle: typeof c.headerHandle === 'string' ? c.headerHandle : null,
+      headerSampleUrl: typeof c.headerSampleUrl === 'string' ? c.headerSampleUrl : null,
+      body: typeof c.body === 'string' ? c.body : '',
+      buttons: Array.isArray(c.buttons) ? (c.buttons as TplButton[]) : [],
+    }));
+}
+
+const isWebAddress = (v: string | null | undefined): v is string => /^https?:\/\//i.test(v ?? '');
+
+/** The cards as the library and the form read them. `links` maps a stored key to a fresh link (the detail asks storage; a list does not). */
+export function cardsViewOf(
+  row: Pick<TemplateRow, 'carouselData'>,
+  links: ReadonlyMap<string, string> = new Map(),
+): TplCard[] {
+  return storedCardsOf(row).map((c) => ({
+    format: c.format === 'video' ? 'video' : 'image',
+    image: c.image ?? null,
+    imageUrl:
+      (c.image ? (links.get(c.image) ?? (isWebAddress(c.image) ? c.image : null)) : null) ??
+      (isWebAddress(c.headerSampleUrl) ? c.headerSampleUrl : null),
+    body: c.body,
+    buttons: (c.buttons ?? []) as TplButton[],
+  }));
+}
 
 const variableMapOf = (row: TemplateRow): TplVariableMap =>
   row.variableMap && typeof row.variableMap === 'object' ? (row.variableMap as TplVariableMap) : {};
@@ -68,6 +107,7 @@ export function draftOf(row: TemplateRow): TemplateDraft {
     body: row.templateBody,
     footer: row.footer,
     buttons: buttonsOf(row),
+    cards: storedCardsOf(row),
     variableMap: variableMapOf(row),
     codeExpirationMinutes: row.codeExpirationMinutes,
     parameterFormat: parameterFormatOf(row),
@@ -88,6 +128,7 @@ export function lintInputOf(row: TemplateRow, strict = false): LintInput {
     body: d.body,
     footer: d.footer,
     buttons: d.buttons,
+    cards: d.cards,
     variableMap: d.variableMap,
     parameterFormat: d.parameterFormat,
   };
@@ -139,6 +180,7 @@ export function toSummary(row: TemplateRow): TemplateSummary {
     body: row.templateBody,
     footer: row.footer,
     buttons: buttonsOf(row),
+    cards: cardsViewOf(row),
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

@@ -4,7 +4,7 @@ import {
   tokensOf,
   type VariableMap,
 } from './template-variables';
-import { normalizeTemplateName, type TemplateButton } from './template-payload';
+import { normalizeTemplateName, type TemplateButton, type TemplateCard } from './template-payload';
 
 /**
  * Predicts Meta's rejections before a submit (TW-TPL-023), so failed submissions do not lower the WABA's quality score.
@@ -14,7 +14,7 @@ import { normalizeTemplateName, type TemplateButton } from './template-payload';
 export interface LintIssue {
   code: string;
   severity: 'error' | 'warning';
-  field: 'name' | 'language' | 'header' | 'body' | 'footer' | 'buttons' | 'template';
+  field: 'name' | 'language' | 'header' | 'body' | 'footer' | 'buttons' | 'cards' | 'template';
   message: string;
 }
 
@@ -31,6 +31,8 @@ export interface LintInput {
   body: string;
   footer?: string | null;
   buttons?: TemplateButton[] | null;
+  /** `templateType: 'carousel'` only. */
+  cards?: TemplateCard[] | null;
   variableMap?: VariableMap | null;
   parameterFormat?: 'POSITIONAL' | 'NAMED' | null;
 }
@@ -172,6 +174,12 @@ export function lintTemplate(t: LintInput): LintIssue[] {
     );
   }
 
+  if (t.templateType === 'carousel') {
+    lintCarousel(t.cards ?? [], e);
+    if (category !== 'MARKETING')
+      w('carousel_category', 'template', 'Meta reviews carousel templates as Marketing templates.');
+  }
+
   // Buttons
   const buttons = t.buttons ?? [];
   if (buttons.length > 10) e('buttons_many', 'buttons', 'A template can have at most 10 buttons.');
@@ -212,6 +220,57 @@ export function lintTemplate(t: LintInput): LintIssue[] {
       w('trigger_phrase', 'body', `"${phrase}" is a phrase Meta's review often flags.`);
 
   return out;
+}
+
+/** Meta's carousel rules: 2 to 10 cards, every card a picture (or every card a video) with a short text, and the same buttons on every card. */
+function lintCarousel(
+  cards: TemplateCard[],
+  e: (code: string, field: LintIssue['field'], message: string) => void,
+): void {
+  if (cards.length < 2) e('cards_few', 'cards', 'A carousel needs at least 2 cards.');
+  if (cards.length > 10) e('cards_many', 'cards', 'A carousel can have at most 10 cards.');
+  const formats = new Set(cards.map((c) => String(c.format ?? 'image').toLowerCase()));
+  if (formats.size > 1)
+    e(
+      'cards_format',
+      'cards',
+      'Every card must use the same kind of file: all pictures or all videos.',
+    );
+  const shape = (c: TemplateCard) => (c.buttons ?? []).map((b) => b.type.toUpperCase()).join(',');
+  if (new Set(cards.map(shape)).size > 1)
+    e(
+      'cards_buttons',
+      'cards',
+      'Every card must have the same buttons (same number and same types).',
+    );
+  cards.forEach((c, i) => {
+    const n = i + 1;
+    if (!c.headerHandle && !c.headerSampleUrl)
+      e('card_file', 'cards', `Card ${n} needs a picture or video.`);
+    const body = (c.body ?? '').trim();
+    if (!body) e('card_body', 'cards', `Card ${n} needs some text.`);
+    else if (body.length > 160)
+      e('card_body_long', 'cards', `Card ${n}'s text is longer than 160 characters.`);
+    if (/\{\{[^}]+\}\}/.test(c.body ?? ''))
+      e('card_variable', 'cards', `Card ${n}'s text cannot hold a variable yet.`);
+    if ((c.buttons ?? []).length === 0)
+      e('card_buttons_none', 'cards', `Card ${n} needs at least one button.`);
+    (c.buttons ?? []).forEach((b) => {
+      const type = b.type.toUpperCase();
+      if (!['QUICK_REPLY', 'URL', 'PHONE_NUMBER'].includes(type))
+        e(
+          'card_button_type',
+          'cards',
+          `Card ${n}: a card button can be a quick reply, a link or a phone number.`,
+        );
+      if (!b.text || b.text.length > 25)
+        e(
+          'card_button_text',
+          'cards',
+          `Card ${n}: button text is required and at most 25 characters.`,
+        );
+    });
+  });
 }
 
 export const hasErrors = (issues: LintIssue[]) => issues.some((i) => i.severity === 'error');

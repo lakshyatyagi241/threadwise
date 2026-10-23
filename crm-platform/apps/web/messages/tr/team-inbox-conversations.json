@@ -716,6 +716,7 @@
         "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez.",
         "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
         "media_header": "Görsel, video veya belge üstbilgisi var; bu, gelen kutusundan henüz gönderilemiyor.",
+        "carousel": "Bir karusel (resimli kartlar) ve henüz gelen kutusundan gönderilemiyor.",
         "header_variable": "Üstbilgide bir değişken var; bu, gelen kutusundan henüz doldurulamıyor.",
         "dynamic_button": "Değişken içeren bir düğme bağlantısı var; bu, gelen kutusundan henüz doldurulamıyor.",
         "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",

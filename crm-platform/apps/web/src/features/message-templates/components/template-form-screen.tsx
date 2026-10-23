@@ -47,6 +47,7 @@ import {
   contractIssues,
   initialState,
   isAuth,
+  isCarousel,
   previewOf,
   stateFromDetail,
   tidyName,
@@ -55,9 +56,12 @@ import {
   toLintInput,
   toUpdateInput,
   withBody,
+  withCardFormat,
   withHeaderKind,
   withHeaderText,
+  withKind,
   type FormState,
+  type TemplateKind,
 } from '../lib/form-model';
 import { languageOptions } from '../lib/languages';
 import { CATEGORIES, canEdit, isLive } from '../lib/status-model';
@@ -68,6 +72,7 @@ import { ErrorAlert } from './error-line';
 import { HeaderSection } from './header-section';
 import { IssueList, LintPanel } from './lint-panel';
 import { PhonePreview } from './message-bubble';
+import { CardsEditor } from './cards-editor';
 import { SparkIcon } from './icons';
 import { TemplateAiModal } from './template-ai-modal';
 import { useErrorText, type ErrorText } from './use-error-text';
@@ -327,6 +332,7 @@ function TemplateForm({
   // A template live on Meta is edited in place there: Meta keeps its name and language.
   const live = detail ? isLive(detail.status, detail.metaTemplateId) : false;
   const auth = isAuth(current);
+  const carousel = isCarousel(current);
   const nameOk = current.name.trim() !== '';
   const canDraft = nameOk && current.connectionId !== '' && !hasContractIssues && !busy;
   const canSubmit = canDraft && lintErrors === 0 && localButtonIssues.length === 0 && !checking;
@@ -572,6 +578,24 @@ function TemplateForm({
                 </Select>
                 <IssueList issues={issues} field="language" />
               </Field>
+              {!auth && (
+                <Field
+                  label={t('type.label')}
+                  htmlFor={`${base}-type`}
+                  hint={t('type.hint')}
+                  className="sm:col-span-2"
+                >
+                  <Select
+                    id={`${base}-type`}
+                    value={current.kind}
+                    disabled={live}
+                    onChange={(e) => setState((s) => withKind(s, e.target.value as TemplateKind))}
+                  >
+                    <option value="standard">{t('type.standard')}</option>
+                    <option value="carousel">{t('type.carousel')}</option>
+                  </Select>
+                </Field>
+              )}
             </div>
           </Section>
 
@@ -601,6 +625,56 @@ function TemplateForm({
               </Field>
               <p className="text-sm text-muted-foreground">{t('auth.fixedBody')}</p>
             </Section>
+          ) : carousel ? (
+            <>
+              <Section title={t('body.title')} hint={t('body.hint')}>
+                <Field
+                  label={t('body.label')}
+                  htmlFor={`${base}-body`}
+                  error={contract.body ? t('errors.body', { max: BODY_MAX }) : undefined}
+                >
+                  <Textarea
+                    id={`${base}-body`}
+                    ref={bodyRef}
+                    rows={4}
+                    value={current.body}
+                    invalid={Boolean(contract.body)}
+                    onChange={(e) => setState((s) => withBody(s, e.target.value))}
+                  />
+                  <p
+                    className={
+                      bodyCount.over ? 'text-xs text-danger' : 'text-xs text-muted-foreground'
+                    }
+                    aria-live="polite"
+                  >
+                    {t('body.counter', { used: bodyCount.used, max: bodyCount.max })}
+                  </p>
+                  <IssueList issues={issues} field="body" />
+                </Field>
+              </Section>
+
+              <Section title={t('variables.title')}>
+                <VariablesPanel
+                  headerText=""
+                  headerSlots={current.headerSlots}
+                  body={current.body}
+                  bodySlots={current.bodySlots}
+                  onHeader={(headerSlots) => set({ headerSlots })}
+                  onBody={(bodySlots) => set({ bodySlots })}
+                />
+              </Section>
+
+              <Section title={t('cards.title')} hint={t('cards.hint')}>
+                <CardsEditor
+                  connectionId={current.connectionId}
+                  format={current.cards[0]?.format ?? 'image'}
+                  cards={current.cards}
+                  onFormat={(f) => setState((s) => withCardFormat(s, f))}
+                  onChange={(cards) => set({ cards })}
+                />
+                <IssueList issues={issues} field="cards" />
+              </Section>
+            </>
           ) : (
             <>
               <Section title={t('header.title')} hint={t('header.hint')}>
