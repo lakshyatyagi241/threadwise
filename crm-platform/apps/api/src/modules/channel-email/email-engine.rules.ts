@@ -18,6 +18,26 @@ export const quotaMessage = (cap: number): string =>
 export const monthStart = (now: Date): Date =>
   new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
+/**
+ * Where a mail came from, as the expense log's source (short and lowercase). A sender that names itself in `screen.source` (an
+ * appointment message, a commerce notice, a broadcast) is trusted if it is a plain token; the rest name themselves in the client
+ * reference (`camp-`, `camptest-`, `lead-first-`); anything else is the engine's own business, a campaign.
+ */
+export function usageSourceOfSend(reference: string, screenSource?: string | null): string {
+  const own = (screenSource ?? '').trim().toLowerCase();
+  if (/^[a-z][a-z_]{0,23}$/.test(own)) return own;
+  switch (/^(camptest|camp|bcast|lead-first)-/.exec(reference)?.[1]) {
+    case 'camptest':
+      return 'test';
+    case 'bcast':
+      return 'broadcast';
+    case 'lead-first':
+      return 'lead';
+    default:
+      return 'campaign';
+  }
+}
+
 /** `camp-<campaign>-<contact>[-rN]` and `bcast-<broadcast>-<contact>`: the contact a send is for, or null for any other reference. */
 export function contactOfReference(ref: string): number | null {
   const m = /^(?:bcast|camp)-\d+-(\d+)(?:-r\d+)?$/.exec(ref);

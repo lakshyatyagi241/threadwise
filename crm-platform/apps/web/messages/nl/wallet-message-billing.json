@@ -40,8 +40,8 @@
       "topup": "Opwaardering",
       "earn": "Verdiend",
       "refund": "Terugbetaling",
-      "spend": "Berichtkosten",
-      "admin_adjust": "Correctie"
+      "admin_adjust": "Correctie",
+      "spend": "Gebruikskosten"
     },
     "categories": {
       "marketing": "Marketing",
@@ -146,9 +146,9 @@
         "all": "Alle",
         "topup": "Opwaarderingen",
         "earn": "Verdiensten",
-        "spend": "Berichtkosten",
         "refund": "Terugbetalingen",
-        "admin_adjust": "Correcties"
+        "admin_adjust": "Correcties",
+        "spend": "Gebruikskosten"
       },
       "summary": {
         "balance": "Huidig saldo",
@@ -192,19 +192,16 @@
       }
     },
     "expenses": {
-      "title": "Berichtkosten",
-      "subtitle": "Wat elk bericht heeft gekost, met welk sjabloon het is verzonden en wat is terugbetaald. De totalen omvatten alles wat past bij de filters.",
       "back": "Terug naar portemonnee",
       "breadcrumbLabel": "Kruimelpad",
       "breadcrumbWallet": "Portemonnee",
-      "breadcrumbExpenses": "Berichtkosten",
       "fullStatement": "Volledig overzicht",
       "summary": {
-        "messages": "Berichten",
         "charged": "Gefactureerd",
         "refunded": "Terugbetaald",
         "net": "Nettokosten",
-        "notBilled": "Niet gefactureerd"
+        "notBilled": "Niet gefactureerd",
+        "messages": "Items"
       },
       "filters": {
         "status": "Facturatiestatus",
@@ -222,7 +219,9 @@
         "to": "Tot",
         "apply": "Toepassen",
         "reset": "Resetten",
-        "rangeInverted": "De einddatum ligt voor de begindatum."
+        "rangeInverted": "De einddatum ligt voor de begindatum.",
+        "kind": "Type",
+        "allKinds": "Alle typen"
       },
       "breakdown": {
         "title": "Kosten per",
@@ -230,17 +229,17 @@
           "template": "Sjabloon",
           "source": "Kanaal",
           "category": "Categorie",
-          "country": "Land"
+          "country": "Land",
+          "kind": "Type"
         },
         "group": "Groep",
         "notRecorded": "Niet geregistreerd",
         "truncated": "De {count} grootste groepen worden getoond. Beperk de datums om de rest te zien.",
-        "empty": "Geen berichten komen overeen met deze filters."
+        "empty": "Niets komt overeen met deze filters."
       },
       "columns": {
         "date": "Datum",
         "template": "Sjabloon",
-        "campaign": "Campagne of broadcast",
         "channel": "Kanaal",
         "category": "Categorie",
         "country": "Land",
@@ -248,8 +247,10 @@
         "charged": "Gefactureerd",
         "refunded": "Terugbetaald",
         "net": "Netto",
-        "messages": "Berichten",
-        "notBilled": "Niet gefactureerd"
+        "notBilled": "Niet gefactureerd",
+        "campaign": "Campagne, broadcast of functie",
+        "messages": "Items",
+        "type": "Type"
       },
       "status": {
         "charged": "Gefactureerd",
@@ -264,9 +265,40 @@
         "no_wallet_owner": "Geen eigenaar van de portemonnee"
       },
       "uncollected": "{amount} niet geïncasseerd",
-      "emptyTitle": "Nog geen berichten",
-      "emptyBody": "Berichten die via campagnes, broadcasts, planningen en chats zijn verzonden, verschijnen hier met hun sjabloon en kosten.",
-      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze."
+      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
+      "title": "Uitgaven",
+      "subtitle": "Wat elk bericht, gesprek, AI-verzoek en elke opzoeking heeft gekost en waarvoor het was. De totalen omvatten alles wat bij de filters past.",
+      "breadcrumbExpenses": "Uitgaven",
+      "emptyTitle": "Nog geen uitgaven",
+      "emptyBody": "Berichten, gesprekken, AI-verzoeken en ander gebruik verschijnen hier met waarvoor ze waren en wat ze kostten.",
+      "units": {
+        "sms": "{count, plural, one {# segment} other {# segmenten}}",
+        "whatsapp_call": "{count, plural, one {# minuut} other {# minuten}}",
+        "voice_call": "{count, plural, one {# minuut} other {# minuten}}"
+      },
+      "sources": {
+        "lead_first": "Directe leadreactie",
+        "lead": "Directe leadreactie",
+        "test": "Testverzending",
+        "appointment": "Afspraakherinnering",
+        "lead_scoring": "Leadscore",
+        "lead_digest": "Chatsamenvatting",
+        "pql_search": "Contacten zoeken",
+        "growth_assistant": "Groeiassistent",
+        "ai_copilot": "AI-copilot",
+        "help_agent": "Hulpassistent",
+        "company_brief": "Bedrijfsprofiel",
+        "inbox_ai": "Antwoordassistent",
+        "template_ai": "Sjabloonbouwer",
+        "campaign_ai": "Campagneschrijver",
+        "campaign_ai_image": "Campagneafbeelding",
+        "kb_embedding": "Kennisbank",
+        "flow_ai": "Flowgenerator",
+        "widget_ai": "Chatbot op de website",
+        "growth": "Groei",
+        "telephony": "Telefoongesprekken",
+        "translation": "Vertaling"
+      }
     },
     "admin": {
       "admin": "Beheerder",
@@ -583,6 +615,40 @@
               "service": "Service"
             },
             "problems": "Overgeslagen rijen"
+          }
+        },
+        "usage": {
+          "title": "Prijzen voor ander gebruik",
+          "subtitle": "Wat sms'jes, e-mails, gesprekken, contactopzoekingen en andere chatkanalen uw klanten per eenheid kosten. Een prijs van 0 of een uitgeschakelde schakelaar wordt toch in het uitgavenlogboek bijgehouden, zonder iets te rekenen.",
+          "perUnit": "Prijs per {unit}",
+          "chargeFor": "{kind} in rekening brengen",
+          "units": {
+            "segment": "sms-segment",
+            "email": "e-mail",
+            "minute": "minuut",
+            "lookup": "opzoeking",
+            "message": "bericht"
+          },
+          "hints": {
+            "sms": "Wordt bovenop de rekening van de eigen sms-provider van de klant gerekend. Een segment is 160 tekens (70 bij niet-Latijnse tekst).",
+            "email": "Wordt bovenop de eigen mailbox van de klant gerekend. Elke verzonden e-mail telt één keer.",
+            "whatsapp_call": "Elke gestarte minuut van een WhatsApp-gesprek. Een gesprek dat niemand opnam is gratis.",
+            "voice_call": "Elke gestarte minuut van een gesprek dat de telefonieprovider van de klant meldt. Handmatig ingevoerde gesprekslogs worden nooit gerekend.",
+            "enrichment": "Elk contact dat bij de dataprovider van het platform wordt opgezocht.",
+            "chat_message": "Elk bericht via Telegram, Facebook, Instagram, LINE, Viber of WeChat. Gratis tot u een prijs instelt."
+          },
+          "costPlus": {
+            "title": "Berekend tegen de kosten van de leverancier plus een opslag",
+            "body": "AI-verzoeken en betaalde vertaling draaien op de eigen leverancierssleutels van het platform en worden berekend tegen wat de leverancier rekende, plus de opslag hieronder. Een werkruimte met een eigen sleutel wordt nooit belast."
+          },
+          "markup": "Opslag op de kosten van de leverancier",
+          "markupHint": "10 betekent dat een verzoek dat 1,00 kostte voor 1,10 wordt berekend.",
+          "saving": "Opslaan…",
+          "save": "Prijzen opslaan",
+          "saved": "Gebruiksprijzen opgeslagen",
+          "problems": {
+            "invalid": "Voer een bedrag in met maximaal 2 decimalen",
+            "tooHigh": "Dat is hoger dan de limiet"
           }
         }
       },
@@ -945,6 +1011,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp-bericht",
+      "sms": "sms",
+      "email": "E-mail",
+      "whatsapp_call": "WhatsApp-gesprek",
+      "voice_call": "Spraakgesprek",
+      "ai": "AI",
+      "translation": "Vertaling",
+      "enrichment": "Contactopzoeking",
+      "chat_message": "Chatbericht"
     }
   }
 }

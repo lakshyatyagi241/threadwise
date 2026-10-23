@@ -40,8 +40,8 @@
       "topup": "Nạp tiền",
       "earn": "Thu nhập",
       "refund": "Hoàn tiền",
-      "spend": "Phí tin nhắn",
-      "admin_adjust": "Điều chỉnh"
+      "admin_adjust": "Điều chỉnh",
+      "spend": "Phí sử dụng"
     },
     "categories": {
       "marketing": "Tiếp thị",
@@ -146,9 +146,9 @@
         "all": "Tất cả",
         "topup": "Nạp tiền",
         "earn": "Thu nhập",
-        "spend": "Phí tin nhắn",
         "refund": "Hoàn tiền",
-        "admin_adjust": "Điều chỉnh"
+        "admin_adjust": "Điều chỉnh",
+        "spend": "Phí sử dụng"
       },
       "summary": {
         "balance": "Số dư hiện tại",
@@ -192,19 +192,16 @@
       }
     },
     "expenses": {
-      "title": "Chi phí tin nhắn",
-      "subtitle": "Cho biết mỗi tin nhắn tốn bao nhiêu, dùng bản mẫu nào để gửi và số tiền đã hoàn lại. Tổng cộng bao gồm mọi mục khớp với bộ lọc.",
       "back": "Quay lại ví",
       "breadcrumbLabel": "Đường dẫn",
       "breadcrumbWallet": "Ví",
-      "breadcrumbExpenses": "Chi phí tin nhắn",
       "fullStatement": "Sao kê đầy đủ",
       "summary": {
-        "messages": "Tin nhắn",
         "charged": "Đã tính phí",
         "refunded": "Đã hoàn tiền",
         "net": "Chi phí ròng",
-        "notBilled": "Chưa tính phí"
+        "notBilled": "Chưa tính phí",
+        "messages": "Mục"
       },
       "filters": {
         "status": "Trạng thái",
@@ -222,7 +219,9 @@
         "to": "Đến",
         "apply": "Áp dụng",
         "reset": "Đặt lại",
-        "rangeInverted": "Ngày kết thúc trước ngày bắt đầu."
+        "rangeInverted": "Ngày kết thúc trước ngày bắt đầu.",
+        "kind": "Loại",
+        "allKinds": "Tất cả loại"
       },
       "breakdown": {
         "title": "Chi phí theo",
@@ -230,17 +229,17 @@
           "template": "Bản mẫu",
           "source": "Kênh",
           "category": "Thể loại",
-          "country": "Quốc gia"
+          "country": "Quốc gia",
+          "kind": "Loại"
         },
         "group": "Nhóm",
         "notRecorded": "Chưa ghi nhận",
         "truncated": "Đang hiển thị {count} nhóm lớn nhất. Thu hẹp khoảng ngày để xem phần còn lại.",
-        "empty": "Không có tin nhắn nào khớp với bộ lọc này."
+        "empty": "Không có gì khớp với các bộ lọc này."
       },
       "columns": {
         "date": "Ngày",
         "template": "Bản mẫu",
-        "campaign": "Chiến dịch hoặc tin phát",
         "channel": "Kênh",
         "category": "Thể loại",
         "country": "Quốc gia",
@@ -248,8 +247,10 @@
         "charged": "Đã tính phí",
         "refunded": "Đã hoàn tiền",
         "net": "Ròng",
-        "messages": "Tin nhắn",
-        "notBilled": "Chưa tính phí"
+        "notBilled": "Chưa tính phí",
+        "campaign": "Chiến dịch, gửi hàng loạt hoặc tính năng",
+        "messages": "Mục",
+        "type": "Loại"
       },
       "status": {
         "charged": "Đã tính phí",
@@ -264,9 +265,40 @@
         "no_wallet_owner": "Ví không có chủ sở hữu"
       },
       "uncollected": "{amount} chưa thu",
-      "emptyTitle": "Chưa có tin nhắn nào",
-      "emptyBody": "Tin nhắn gửi từ chiến dịch, tin phát, lịch gửi và trò chuyện sẽ hiện ở đây cùng bản mẫu và chi phí.",
-      "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại."
+      "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại.",
+      "title": "Chi phí",
+      "subtitle": "Mỗi tin nhắn, cuộc gọi, yêu cầu AI và lượt tra cứu tốn bao nhiêu và dùng cho việc gì. Tổng số bao gồm mọi thứ khớp với bộ lọc.",
+      "breadcrumbExpenses": "Chi phí",
+      "emptyTitle": "Chưa có chi phí nào",
+      "emptyBody": "Tin nhắn, cuộc gọi, yêu cầu AI và các mức sử dụng khác xuất hiện ở đây cùng mục đích và chi phí.",
+      "units": {
+        "sms": "{count, plural, other {# phân đoạn}}",
+        "whatsapp_call": "{count, plural, other {# phút}}",
+        "voice_call": "{count, plural, other {# phút}}"
+      },
+      "sources": {
+        "lead_first": "Phản hồi tức thì cho lead",
+        "lead": "Phản hồi tức thì cho lead",
+        "test": "Gửi thử",
+        "appointment": "Nhắc lịch hẹn",
+        "lead_scoring": "Chấm điểm lead",
+        "lead_digest": "Tóm tắt cuộc trò chuyện",
+        "pql_search": "Tìm kiếm liên hệ",
+        "growth_assistant": "Trợ lý tăng trưởng",
+        "ai_copilot": "Phi công phụ AI",
+        "help_agent": "Trợ lý trợ giúp",
+        "company_brief": "Hồ sơ công ty",
+        "inbox_ai": "Trợ lý trả lời",
+        "template_ai": "Trình tạo mẫu",
+        "campaign_ai": "Trình viết chiến dịch",
+        "campaign_ai_image": "Hình ảnh chiến dịch",
+        "kb_embedding": "Cơ sở kiến thức",
+        "flow_ai": "Trình tạo luồng",
+        "widget_ai": "Chatbot trên website",
+        "growth": "Tăng trưởng",
+        "telephony": "Cuộc gọi điện thoại",
+        "translation": "Dịch"
+      }
     },
     "admin": {
       "admin": "Quản trị",
@@ -583,6 +615,40 @@
               "service": "Dịch vụ"
             },
             "problems": "Các dòng đã bị bỏ qua"
+          }
+        },
+        "usage": {
+          "title": "Giá cho các mức sử dụng khác",
+          "subtitle": "SMS, email, cuộc gọi, tra cứu liên hệ và các kênh trò chuyện khác tính phí khách hàng của bạn bao nhiêu cho mỗi đơn vị. Giá bằng 0 hoặc công tắc đang tắt vẫn được ghi trong nhật ký chi phí và không bị tính phí.",
+          "perUnit": "Giá mỗi {unit}",
+          "chargeFor": "Tính phí {kind}",
+          "units": {
+            "segment": "phân đoạn SMS",
+            "email": "email",
+            "minute": "phút",
+            "lookup": "lượt tra cứu",
+            "message": "tin nhắn"
+          },
+          "hints": {
+            "sms": "Tính thêm trên hóa đơn của nhà cung cấp SMS riêng của khách hàng. Một phân đoạn là 160 ký tự (70 với văn bản không phải chữ Latin).",
+            "email": "Tính thêm trên hộp thư riêng của khách hàng. Mỗi email gửi đi được tính một lần.",
+            "whatsapp_call": "Mỗi phút đã bắt đầu của một cuộc gọi WhatsApp. Cuộc gọi không ai trả lời thì miễn phí.",
+            "voice_call": "Mỗi phút đã bắt đầu của một cuộc gọi do nhà cung cấp điện thoại của khách hàng báo cáo. Nhật ký cuộc gọi nhập tay không bao giờ bị tính phí.",
+            "enrichment": "Mỗi liên hệ được tra cứu qua nhà cung cấp dữ liệu của nền tảng.",
+            "chat_message": "Mỗi tin nhắn gửi qua Telegram, Facebook, Instagram, LINE, Viber hoặc WeChat. Miễn phí cho đến khi bạn đặt giá."
+          },
+          "costPlus": {
+            "title": "Tính theo chi phí của nhà cung cấp cộng phụ phí",
+            "body": "Yêu cầu AI và dịch có phí chạy bằng khóa nhà cung cấp của chính nền tảng và được tính theo số tiền nhà cung cấp thu, cộng phụ phí bên dưới. Không gian làm việc dùng khóa riêng không bao giờ bị tính phí."
+          },
+          "markup": "Phụ phí trên chi phí nhà cung cấp",
+          "markupHint": "10 nghĩa là một yêu cầu tốn 1,00 sẽ bị tính 1,10.",
+          "saving": "Đang lưu",
+          "save": "Lưu giá",
+          "saved": "Đã lưu giá sử dụng",
+          "problems": {
+            "invalid": "Nhập số tiền có tối đa 2 chữ số thập phân",
+            "tooHigh": "Vượt quá giới hạn"
           }
         }
       },
@@ -945,6 +1011,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "Tin nhắn WhatsApp",
+      "sms": "SMS",
+      "email": "Email",
+      "whatsapp_call": "Cuộc gọi WhatsApp",
+      "voice_call": "Cuộc gọi thoại",
+      "ai": "AI",
+      "translation": "Dịch",
+      "enrichment": "Tra cứu liên hệ",
+      "chat_message": "Tin nhắn trò chuyện"
     }
   }
 }

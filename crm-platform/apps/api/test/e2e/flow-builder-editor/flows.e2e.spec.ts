@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { fundWallet } from '../../support/fund-wallet';
 import { pngOfSize } from '../../support/images';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { FLOW_AI_PORT } from '../../../src/infra/providers/flow-builder-editor/flow-ai.port';
@@ -1441,6 +1442,86 @@ describe('AI flow generator (TW-FLB-025)', () => {
     const failed = await gen();
     expect(failed.status).toBe(502);
     expect(code(failed)).toBe('FLB_AI_PROVIDER_FAILED');
+  });
+
+  describe('on the platform key (paid from the wallet)', () => {
+    const FLOW = JSON.stringify({ flowNodes: [{ id: 'a', type: 'trigger' }], flowEdges: [] });
+    let stashed: unknown;
+    beforeAll(async () => {
+      // main seeds platform keys and keeps one row per provider: set them aside, give the platform an active OpenAI key, put them back.
+      stashed = (
+        await h.owner.query(
+          `SELECT coalesce(jsonb_agg(to_jsonb(k)), '[]'::jsonb) AS rows FROM admin_ai_keys k`,
+        )
+      ).rows[0].rows;
+      await h.owner.query(`DELETE FROM admin_ai_keys`);
+      await h.owner.query(
+        `INSERT INTO admin_ai_keys (provider, name, api_key, default_model, extra_config, is_active, sort_order)
+         VALUES ('openai','OpenAI','sk-platform','gpt-4o-mini',NULL,true,1)`,
+      );
+    });
+    afterAll(async () => {
+      await h.owner.query(`DELETE FROM admin_ai_keys`);
+      await h.owner.query(
+        `INSERT INTO admin_ai_keys SELECT * FROM jsonb_populate_recordset(NULL::admin_ai_keys, $1::jsonb)`,
+        [JSON.stringify(stashed)],
+      );
+    });
+    const charges = async (orgId: number) =>
+      (
+        await h.owner.query(
+          `SELECT kind, source, status, wamid, subject_name FROM usage_charges WHERE org_id = $1 AND kind = 'ai' ORDER BY id`,
+          [orgId],
+        )
+      ).rows;
+
+    it('an empty wallet is refused with 422 WALLET_EMPTY before the vendor is called', async () => {
+      const poor = await api.signup('flbgenpoor');
+      const seen = fake(FLOW);
+      const res = await api
+        .as(poor.admin)
+        .post('/v2/flows/ai-generate')
+        .send({ prompt: 'Greet the customer', model: 'gpt-4o-mini', provider: 'openai' });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(code(res)).toBe('WALLET_EMPTY');
+      expect(seen).toHaveLength(0);
+      expect(await charges(poor.orgId)).toHaveLength(0);
+    });
+
+    it('a funded wallet gets the flow and pays for it once, in the expense log as "AI flow generator"', async () => {
+      const rich = await api.signup('flbgenrich');
+      await fundWallet(h.app, rich.orgId);
+      const seen = fake(FLOW);
+      const res = await api
+        .as(rich.admin)
+        .post('/v2/flows/ai-generate')
+        .send({ prompt: 'Greet the customer', model: 'gpt-4o-mini', provider: 'openai' });
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      expect(seen).toHaveLength(1);
+      const rows = await charges(rich.orgId);
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toMatchObject({
+        source: 'flow_ai',
+        status: 'charged',
+        subject_name: 'AI flow generator',
+      });
+      expect(String(rows[0].wamid)).toMatch(/^flow_ai:/);
+    });
+
+    it("a workspace's own key is never charged, even with an empty wallet", async () => {
+      const own = await api.signup('flbgenown');
+      await h.owner.query(
+        `INSERT INTO ai_provider_keys (org_id, provider, api_key, is_active) VALUES ($1,'openai','sk-mine',true)`,
+        [own.orgId],
+      );
+      fake(FLOW);
+      const res = await api
+        .as(own.admin)
+        .post('/v2/flows/ai-generate')
+        .send({ prompt: 'Greet the customer', model: 'gpt-4o-mini', provider: 'openai' });
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      expect(await charges(own.orgId)).toHaveLength(0);
+    });
   });
 
   it('TW-FLB-025 #4: the prompt is validated: required, at most 2000 characters, a provider the generator implements', async () => {

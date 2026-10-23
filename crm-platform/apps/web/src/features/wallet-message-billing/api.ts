@@ -29,6 +29,7 @@ import {
   walletLogListSchema,
   walletSettingsSchema,
   walletSummarySchema,
+  walletUsageSettingsSchema,
   type AdjustWalletInput,
   type CreditPackageInput,
   type PricePreviewQuery,
@@ -37,6 +38,7 @@ import {
   type SetWorkspaceCurrencyInput,
   type UpdateSwitchesInput,
   type UpdateWalletSettingsInput,
+  type UpdateWalletUsageSettingsInput,
   type UpsertRateInput,
   type WalletLogQuery,
 } from '@crm/contracts';
@@ -58,6 +60,7 @@ export const KEYS = {
   pricing: (country: string | undefined) => ['wallet', 'pricing', country ?? 'any'] as const,
   overview: ['wallet', 'platform', 'overview'] as const,
   settings: ['wallet', 'platform', 'settings'] as const,
+  usageRates: ['wallet', 'platform', 'usage-rates'] as const,
   rates: ['wallet', 'platform', 'rates'] as const,
   metaCards: ['wallet', 'platform', 'meta-cards'] as const,
   metaCard: (currency: string) => ['wallet', 'platform', 'meta-cards', currency] as const,
@@ -160,6 +163,15 @@ export const operatorApi = {
     operatorFetch('/wallet/settings', { schema: walletSettingsSchema, signal }),
   saveSettings: (body: UpdateWalletSettingsInput) =>
     operatorFetch('/wallet/settings', { method: 'PUT', body, schema: walletSettingsSchema }),
+  /** What SMS, email, calls, contact lookups and chat channels cost per unit, and the markup on AI and translation. */
+  usageRates: (signal?: AbortSignal) =>
+    operatorFetch('/wallet/usage-rates', { schema: walletUsageSettingsSchema, signal }),
+  saveUsageRates: (body: UpdateWalletUsageSettingsInput) =>
+    operatorFetch('/wallet/usage-rates', {
+      method: 'PUT',
+      body,
+      schema: walletUsageSettingsSchema,
+    }),
   saveSwitches: (body: UpdateSwitchesInput) =>
     operatorFetch('/wallet/switches', { method: 'PUT', body, schema: walletSettingsSchema }),
   rates: (signal?: AbortSignal) =>

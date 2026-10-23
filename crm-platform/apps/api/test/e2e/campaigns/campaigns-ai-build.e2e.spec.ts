@@ -1,4 +1,6 @@
+import { HttpStatus } from '@nestjs/common';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { ERROR_CODES } from '@crm/contracts';
 import { Api, bearer, startHarness, type Harness } from '../contacts-attributes-tags/support';
 import { HttpCampaignAiAdapter } from '../../../src/infra/providers/campaigns/http-campaign-ai.adapter';
 import {
@@ -7,7 +9,9 @@ import {
   type CampaignAiImagePort,
 } from '../../../src/infra/providers/campaigns/campaign-ai-image.port';
 import { AiKeyResolver, AiTokenMeter } from '../../../src/modules/ai-keys-usage-admin';
+import { AppError } from '../../../src/common/errors/app-error';
 import { MarketingMediaService } from '../../../src/modules/broadcasts';
+import { AiChargeService } from '../../../src/modules/wallet-message-billing';
 
 /**
  * The rest of "Build with AI": a template draft from a brief (TW-TPL-016) and a picture for a campaign. The real app and a real
@@ -32,6 +36,22 @@ const withKey = (source: 'workspace' | 'admin' = 'workspace') =>
   vi
     .spyOn(h.app.get(AiKeyResolver), 'resolve')
     .mockResolvedValue({ key: 'sk-secret-key', source, model: null });
+
+/** The platform's key is paid for from the wallet: stand in for a funded wallet, or an empty one, without moving money. */
+const wallet = (empty = false) => {
+  const charges = h.app.get(AiChargeService);
+  return {
+    guard: vi.spyOn(charges, 'guardCall').mockImplementation(() => {
+      if (empty) {
+        return Promise.reject(
+          new AppError(ERROR_CODES.WALLET_EMPTY, 'empty', HttpStatus.UNPROCESSABLE_ENTITY),
+        );
+      }
+      return Promise.resolve();
+    }),
+    charge: vi.spyOn(charges, 'chargeCall').mockResolvedValue(0),
+  };
+};
 
 const tplBrief = {
   provider: 'openai',
@@ -142,6 +162,50 @@ describe('POST /v2/templates/ai-generate (TW-TPL-016)', () => {
     }
   });
 
+  it('on the platform key asks the wallet before the vendor (422 WALLET_EMPTY) and charges the answered call once', async () => {
+    const t = await api.signup('tplai6');
+    const resolve = withKey('admin');
+    const meter = vi.spyOn(h.app.get(AiTokenMeter), 'guard').mockResolvedValue(undefined);
+    const complete = vi.spyOn(HttpCampaignAiAdapter.prototype, 'complete').mockResolvedValue({
+      text: JSON.stringify({ template_name: 'x', body: 'Hi {{1}}' }),
+      promptTokens: 150,
+      completionTokens: 90,
+    });
+    const empty = wallet(true);
+    try {
+      const refused = await post(t, tplBrief);
+      expect(refused.status).toBe(422);
+      expect(code(refused)).toBe('WALLET_EMPTY');
+      expect(complete).not.toHaveBeenCalled();
+      expect(empty.charge).not.toHaveBeenCalled();
+    } finally {
+      empty.guard.mockRestore();
+      empty.charge.mockRestore();
+    }
+    const funded = wallet();
+    try {
+      const ok = await post(t, tplBrief);
+      expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+      expect(funded.charge).toHaveBeenCalledTimes(1);
+      expect(funded.charge).toHaveBeenCalledWith(
+        expect.objectContaining({
+          orgId: t.orgId,
+          keySource: 'admin',
+          label: 'AI template builder',
+          source: 'template_ai',
+          promptTokens: 150,
+          completionTokens: 90,
+        }),
+      );
+    } finally {
+      funded.guard.mockRestore();
+      funded.charge.mockRestore();
+      meter.mockRestore();
+      complete.mockRestore();
+      resolve.mockRestore();
+    }
+  });
+
   it("answers 422 CAMP_AI_LIMIT_REACHED when the platform key's monthly allowance is used up", async () => {
     const t = await api.signup('tplai5');
     const resolve = withKey('admin');
@@ -235,6 +299,52 @@ describe('POST /v2/campaigns/ai-image', () => {
     }
   });
 
+  it('on the platform key draws only with a funded wallet, and charges the price of the picture, not its tokens', async () => {
+    const t = await api.signup('img7');
+    const resolve = withKey('admin');
+    const storage = cloud();
+    const meter = vi.spyOn(h.app.get(AiTokenMeter), 'guard').mockResolvedValue(undefined);
+    const generate = vi
+      .spyOn(h.app.get<CampaignAiImagePort>(CAMPAIGN_AI_IMAGE_PORT), 'generate')
+      .mockResolvedValue({ bytes: png, mime: 'image/png' });
+    const upload = vi.spyOn(h.app.get(MarketingMediaService), 'upload').mockResolvedValue(stored);
+    const empty = wallet(true);
+    try {
+      const refused = await post(t, imgBrief);
+      expect(refused.status).toBe(422);
+      expect(code(refused)).toBe('WALLET_EMPTY');
+      expect(generate).not.toHaveBeenCalled();
+    } finally {
+      empty.guard.mockRestore();
+      empty.charge.mockRestore();
+    }
+    const funded = wallet();
+    try {
+      const ok = await post(t, { ...imgBrief, size: '1536x1024' });
+      expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+      expect(funded.charge).toHaveBeenCalledTimes(1);
+      expect(funded.charge).toHaveBeenCalledWith(
+        expect.objectContaining({
+          orgId: t.orgId,
+          keySource: 'admin',
+          label: 'AI campaign image',
+          source: 'campaign_ai_image',
+          promptTokens: 0,
+          completionTokens: 0,
+          reportedCostUsd: 0.25,
+        }),
+      );
+    } finally {
+      funded.guard.mockRestore();
+      funded.charge.mockRestore();
+      meter.mockRestore();
+      storage.mockRestore();
+      resolve.mockRestore();
+      generate.mockRestore();
+      upload.mockRestore();
+    }
+  });
+
   it('answers 422 CAMP_AI_IMAGE_REFUSED when the vendor refuses the prompt, with nothing stored or charged', async () => {
     const t = await api.signup('img4');
     const resolve = withKey();
@@ -266,17 +376,21 @@ describe('POST /v2/campaigns/ai-image', () => {
     const storage = cloud();
     const port = h.app.get<CampaignAiImagePort>(CAMPAIGN_AI_IMAGE_PORT);
     const guard = vi.spyOn(h.app.get(AiTokenMeter), 'guard').mockResolvedValue(undefined);
+    const funded = wallet();
     const generate = vi.spyOn(port, 'generate').mockRejectedValue(new Error('boom'));
     try {
       const failed = await post(t, imgBrief);
       expect(failed.status).toBe(502);
       expect(code(failed)).toBe('CAMP_AI_PROVIDER_FAILED');
+      expect(funded.charge).not.toHaveBeenCalled();
       guard.mockRejectedValue(new Error('used'));
       const over = await post(t, imgBrief);
       expect(over.status).toBe(422);
       expect(code(over)).toBe('CAMP_AI_LIMIT_REACHED');
     } finally {
       guard.mockRestore();
+      funded.guard.mockRestore();
+      funded.charge.mockRestore();
       generate.mockRestore();
       storage.mockRestore();
       resolve.mockRestore();

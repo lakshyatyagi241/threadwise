@@ -492,7 +492,7 @@ describe('the delivery subscriber (TW-WALLET-012)', () => {
     payload,
   });
 
-  it('charges on delivered, ignores sent for the Cloud API, refunds on failed', async () => {
+  it('charges a Cloud API message from sent, once, however delivered and read follow, and refunds on failed', async () => {
     const t = await tenant('d1');
     await fund(h, t.orgId, 10_000);
     const id = wamid();
@@ -504,10 +504,13 @@ describe('the delivery subscriber (TW-WALLET-012)', () => {
       category: 'marketing',
       source: 'campaign',
     };
+    // A message counts against the wallet from `sent` (isBillableStatus), so a run cannot spend money that is still in flight.
     await c.handle(event(t.orgId, { ...base, status: 'sent' }));
-    expect(await charges(h, t.orgId)).toHaveLength(0);
+    expect(await charges(h, t.orgId)).toHaveLength(1);
+    expect(await balanceMinor(h, t.orgId)).toBe(8800);
     await c.handle(event(t.orgId, { ...base, status: 'delivered' }));
     await c.handle(event(t.orgId, { ...base, status: 'read' }));
+    expect(await charges(h, t.orgId)).toHaveLength(1);
     expect(await balanceMinor(h, t.orgId)).toBe(8800);
     await c.handle(event(t.orgId, { ...base, status: 'failed' }));
     expect(await balanceMinor(h, t.orgId)).toBe(10_000);

@@ -13,6 +13,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
+import { CONVERSATIONS_MODULE, ChatUsageReporter } from '../chat-conversations';
 import {
   SendWindowService,
   scheduleWake,
@@ -54,6 +55,8 @@ interface Plan {
   buttons?: readonly unknown[];
   /** The broadcasts page sends marketing (held for the quiet hours); a reply typed in the inbox composer is service and is not (BL-191). */
   marketing?: boolean;
+  /** Where it came from, for the expense log: the broadcasts page or the inbox composer. */
+  source: 'broadcast' | 'inbox';
 }
 
 /** The queue job name of the run that takes up the people the quiet hours held back. Travels on the `ig-pull` queue. */
@@ -81,6 +84,10 @@ export interface IgHeldJob {
  * Consent (BL-141): the broadcasts page asks the ConsentGate for every thread before anything is sent (purpose marketing, channel
  * instagram), on the first send and on a release alike. A person it refuses is not messaged; the answer counts them as `skipped` with the
  * gate's reason codes in `skippedReasons`. The composer is never asked: it is service.
+ *
+ * Every message Instagram accepts is the platform's per-message fee (`chat_message` in the usage prices), reported on the message id
+ * Instagram returned. An empty wallet is refused before anything goes (422 `WALLET_EMPTY`; a held release is dropped like one whose plan
+ * lost broadcasts).
  */
 @Injectable()
 export class BroadcastsService {
@@ -97,6 +104,7 @@ export class BroadcastsService {
     private readonly sendWindow: SendWindowService,
     private readonly gate: ConsentGate,
     @InjectQueue(QUEUES.IG_PULL) private readonly queue: Queue,
+    private readonly usage: ChatUsageReporter,
   ) {}
 
   /** The linked accounts that are connected, each with its threads, and the Instagram templates. Empty accounts while the engine is off. */
@@ -143,6 +151,7 @@ export class BroadcastsService {
       threadIds: input.threadIds,
       text: (title) => personalize(input.message, title),
       marketing: true,
+      source: 'broadcast',
     });
   }
 
@@ -153,7 +162,12 @@ export class BroadcastsService {
       ? await this.db.tx((tx) => this.templates.find(tx, orgId, input.templateId!))
       : undefined;
     const body = composerBody(input.body, template);
-    return this.send({ threadIds: input.threadIds, text: () => body, buttons: template?.buttons });
+    return this.send({
+      threadIds: input.threadIds,
+      text: () => body,
+      buttons: template?.buttons,
+      source: 'inbox',
+    });
   }
 
   private async send(p: Plan): Promise<IgSendResult> {
@@ -168,6 +182,8 @@ export class BroadcastsService {
       );
     }
     const ids = [...new Set(p.threadIds)];
+    // The fee is taken after Instagram accepts a message, so an empty wallet is refused here, before the first one goes.
+    await this.usage.assertCanAfford(ctx.orgId, ids.length);
     const found = new Map(
       (await this.db.tx((tx) => this.inbox.findThreads(tx, ctx.orgId, ids))).map((t) => [
         t.uuid,
@@ -230,6 +246,7 @@ export class BroadcastsService {
             thread,
             text,
             p.buttons,
+            p.source,
           );
           if (out.ok) sent += 1;
           else fail(out.why);
@@ -269,11 +286,23 @@ export class BroadcastsService {
     thread: { id: number; uuid: string; rawJid: string | null },
     text: string,
     buttons: readonly unknown[] | undefined,
+    source: 'broadcast' | 'inbox',
   ): Promise<{ ok: true } | { ok: false; why: string | null }> {
     const engineId = engineThreadId(thread.rawJid);
     try {
       const res = await api.reply(engineId, shapeReply({ text, buttons }));
       if (!res.ok) return { ok: false, why: sendFailure(brand, res.status, res.error) };
+      // Accepted: the fee, before the copy into the thread. Never fails the send (it is already gone).
+      await this.usage.reportMessage(
+        orgId,
+        { module: CONVERSATIONS_MODULE, id: thread.id, uuid: thread.uuid, name: null },
+        {
+          channelKind: 'instagram',
+          peerKey: thread.rawJid ?? '',
+          providerMessageId: res.data.messageId ?? null,
+          source,
+        },
+      );
       // The message went: show it in the thread at once.
       try {
         await this.db.tx((tx) =>
@@ -333,6 +362,10 @@ export class BroadcastsService {
       this.logger.warn({ orgId }, 'held Instagram send dropped: Instagram is not connected');
       return { sent: 0, failed: job.items.length, held: 0, skipped: 0 };
     }
+    if ((await this.usage.refusal(orgId, job.items.length)) !== null) {
+      this.logger.warn({ orgId }, 'held Instagram send dropped: the wallet cannot pay for it');
+      return { sent: 0, failed: job.items.length, held: 0, skipped: 0 };
+    }
     const api = this.bridge.with(conn);
     const found = new Map(
       (
@@ -360,7 +393,16 @@ export class BroadcastsService {
         failed += 1;
         continue;
       }
-      const out = await this.deliver(orgId, userId, api, conn.brand, thread, r.text, job.buttons);
+      const out = await this.deliver(
+        orgId,
+        userId,
+        api,
+        conn.brand,
+        thread,
+        r.text,
+        job.buttons,
+        'broadcast',
+      );
       if (out.ok) sent += 1;
       else failed += 1;
     }

@@ -1,4 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { stableUsageId } from '../../common/stable-usage-id';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import type {
@@ -19,6 +21,7 @@ import {
   type AiCrmHistoryTurn,
 } from '../../infra/providers/ai-copilot-lead-finder/ai-crm-provider.port';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService } from '../wallet-message-billing';
 import { AiCrmActionsRepository } from './ai-crm-actions.repository';
 import { AiCrmToolkitService } from './ai-crm-toolkit.service';
 import { cacheMetrics } from '@crm/observability';
@@ -59,6 +62,7 @@ export class AiCrmCopilotService {
     private readonly actions: AiCrmActionsRepository,
     private readonly audit: AuditService,
     private readonly toolkit: AiCrmToolkitService,
+    private readonly wallet: AiChargeService,
     @Inject(AI_CRM_PROVIDER_PORT) private readonly provider: AiCrmProviderPort,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
@@ -119,8 +123,28 @@ export class AiCrmCopilotService {
       );
     }
     const { provider, model, key } = resolved;
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no turn (the copilot has no monthly token cap of
+    // its own). A workspace on its own key passes.
+    await this.wallet.guardCall(ctx.orgId, resolved.source);
 
     const toolDefs = this.toolkit.definitions();
+    // One turn is up to five vendor calls and is charged ONCE, at the end. The id is made here, once per turn: nothing retries a turn
+    // (the person asks again, which is a new turn with new vendor calls).
+    const usageId = stableUsageId('ai_copilot', ctx.orgId, randomUUID());
+    // What the vendor has answered so far, kept as it comes so a turn that fails on a later step is still charged for the earlier ones.
+    const spent = { promptTokens: 0, completionTokens: 0 };
+    const chargeTurn = (tokens: { promptTokens: number; completionTokens: number }) =>
+      this.wallet.chargeCall({
+        orgId: ctx.orgId,
+        keySource: resolved.source,
+        label: 'AI copilot',
+        source: 'ai_copilot',
+        usageId,
+        provider,
+        model,
+        promptTokens: tokens.promptTokens,
+        completionTokens: tokens.completionTokens,
+      });
     let outcome;
     try {
       outcome = await this.provider.runTurn(provider, {
@@ -131,6 +155,10 @@ export class AiCrmCopilotService {
         message,
         tools: toolDefs,
         isWriteTool: (name) => this.toolkit.kindOf(name) === 'write',
+        onUsage: (usage) => {
+          spent.promptTokens = usage.promptTokens;
+          spent.completionTokens = usage.completionTokens;
+        },
         executeReadTool: async (name, args) => {
           const result = await this.toolkit.execute(name, args);
           await this.log(
@@ -150,6 +178,8 @@ export class AiCrmCopilotService {
       });
     } catch (err) {
       this.logger.warn({ err: String(err), provider }, '[AICRM] provider turn failed');
+      // The steps the vendor did answer cost money even though the turn did not finish (a turn whose first call failed spent nothing).
+      await chargeTurn(spent);
       // Every other outcome (read, pendingWrite, confirm, cancel) leaves a row in ai_crm_actions; a provider
       // failure must too, or repeated vendor outages/bad keys leave no trace in the workspace's own audit trail.
       await this.log(
@@ -182,6 +212,7 @@ export class AiCrmCopilotService {
       .catch((err: unknown) =>
         this.logger.warn({ err: String(err) }, '[AICRM] token ledger write failed'),
       );
+    await chargeTurn(outcome);
 
     if (outcome.pendingWrite) {
       const summary = this.describeWrite(outcome.pendingWrite.tool, outcome.pendingWrite.args);
@@ -318,9 +349,7 @@ export class AiCrmCopilotService {
 
   // ---- provider resolution + prompt ---------------------------------------------------------------------------
 
-  private async resolveProvider(
-    orgId: number,
-  ): Promise<{
+  private async resolveProvider(orgId: number): Promise<{
     provider: string;
     model: string;
     key: string;

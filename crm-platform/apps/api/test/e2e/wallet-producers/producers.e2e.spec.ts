@@ -141,7 +141,7 @@ describe('broadcasts report delivery to the wallet', () => {
     expect(await reported(t2.orgId)).toEqual([]);
   });
 
-  it('the unofficial engine is charged on its send: `sent` reports once, a repeat does not; a Cloud engine `sent` reports nothing', async () => {
+  it('a message is charged from its send, whichever engine: `sent` reports once, a repeat does not', async () => {
     const t = await newTenant(h, 'bp3');
     const { bid, c } = await broadcast(t, 'baileys', 'processing', null);
     const progress = svc(BroadcastProgressService);
@@ -165,7 +165,8 @@ describe('broadcasts report delivery to the wallet', () => {
         providerMessageId: wamid(),
       }),
     );
-    expect(await reported(t2.orgId)).toEqual([]);
+    // The Cloud API is billed from `sent` too (isBillableStatus): a message already in flight is never free.
+    expect(await reported(t2.orgId)).toMatchObject([{ provider: 'waba', status: 'sent' }]);
   });
 });
 
@@ -253,7 +254,7 @@ describe('campaigns report delivery to the wallet', () => {
     ]);
   });
 
-  it('the inline send reports only for the engine that cannot report delivery', async () => {
+  it('the inline send reports every engine that has a message id, and none without one', async () => {
     const t = await newTenant(h, 'cp4');
     const events = svc(CampaignEvents);
     const db = svc(DatabaseService);
@@ -273,7 +274,10 @@ describe('campaigns report delivery to the wallet', () => {
       await events.deliveryReported(tx, t.orgId, b.id, b.c.id, 'pending', 'sent', wamid(), 'waba');
       await events.deliveryReported(tx, t.orgId, a.id, a.c.id, 'pending', 'sent', null, 'baileys');
     });
-    expect(await reported(t.orgId)).toMatchObject([{ provider: 'baileys', status: 'sent' }]);
+    expect(await reported(t.orgId)).toMatchObject([
+      { provider: 'baileys', status: 'sent' },
+      { provider: 'waba', status: 'sent' },
+    ]);
   });
 });
 

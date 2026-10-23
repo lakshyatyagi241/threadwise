@@ -1,8 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { emitUsageReported } from '../../kernel/outbox/usage-report';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../chat-conversations';
 import type { InboundContext } from '../whatsapp-cloud-api-waba';
+import { whatsappCallUsage } from './call-usage.rules';
 import { callBubble, digitsOf, metaTime } from './calling.rules';
 import { CallsRepository, type CallRow } from './calls.repository';
 import { CallPermissionService } from './call-permission.service';
@@ -28,6 +31,7 @@ export class CallEventsService {
     private readonly db: DatabaseService,
     private readonly repo: CallsRepository,
     private readonly permissions: CallPermissionService,
+    private readonly outbox: OutboxService,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -142,6 +146,11 @@ export class CallEventsService {
    * The call is over (TW-CALL-017): the row is closed with Meta's own status and duration (Meta's account of it wins over anything the
    * browser said), and the customer's thread gets one bubble saying what happened. A delivery repeated, or one for a call we never
    * saw, changes nothing more.
+   *
+   * The call is also reported to the wallet here, in the same transaction that closes the row: this is the one place where the call's
+   * real duration is known, and a call closed without being reported would be a call nobody was charged for. It is reported on EVERY
+   * terminate (a repeat included) because the wallet charges a Meta call id once; guarding it here instead would need a status check that
+   * a decline we closed locally (no duration yet) would defeat.
    */
   private async onTerminate(ctx: InboundContext, call: MetaCall): Promise<void> {
     const metaCallId = str(call.id);
@@ -160,6 +169,19 @@ export class CallEventsService {
       });
       await this.repo.logEvent(tx, ctx.orgId, row.id, 'terminate', call);
       const customer = row.direction === 'BUSINESS_INITIATED' ? row.toPhone : row.fromPhone;
+      // A call nobody answered has no minutes to bill and is not reported (see `whatsappCallUsage`).
+      const usage = whatsappCallUsage({ metaCallId, customerPhone: customer, durationSec });
+      if (usage) {
+        const reported = await emitUsageReported(this.outbox, tx, {
+          orgId: ctx.orgId,
+          aggregateModule: 'calls',
+          aggregateId: row.id,
+          report: usage,
+        });
+        // A bill that does not parse is dropped by design (it must not fail the call); say so, a lost charge should be found.
+        if (!reported)
+          this.logger.warn({ orgId: ctx.orgId, callId: row.id }, 'call usage not reported');
+      }
       const thread = await this.repo.threadFor(tx, ctx.orgId, ctx.configId, customer);
       return {
         row,

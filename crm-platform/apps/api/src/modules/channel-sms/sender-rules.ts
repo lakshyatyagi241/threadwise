@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { SMS_PROVIDER_LABEL, type ConnectSmsSenderInput, type SmsProvider } from '@crm/contracts';
 import { isAlphanumericFrom } from '../../infra/providers/channel-sms/sms-rules';
 
@@ -85,6 +85,42 @@ export const quotaMessage = (cap: number): string =>
 export function contactOfReference(ref: string): number | null {
   const m = /^(?:bcast|camp)-\d+-(\d+)(?:-r\d+)?$/.exec(ref);
   return m ? Number(m[1]) : null;
+}
+
+/** The broadcast or campaign a dispatcher reference (`bcast-<id>-<contact>`, `camp-<id>-<contact>[-rN]`) names, or null for any other. */
+export function subjectOfReference(
+  ref: string,
+): { kind: 'broadcast' | 'campaign'; id: number } | null {
+  const m = /^(bcast|camp)-(\d+)-\d+(?:-r\d+)?$/.exec(ref);
+  return m ? { kind: m[1] === 'bcast' ? 'broadcast' : 'campaign', id: Number(m[2]) } : null;
+}
+
+/**
+ * Where an SMS came from, for the customer's expense log: short, lowercase, at most 24 characters. The dispatchers' and the lead
+ * pipeline's references say it; a send that names its own screening source keeps that; anything else is an API send.
+ */
+export function usageSourceOf(ref: string, screenSource?: string | null): string {
+  const subject = subjectOfReference(ref);
+  if (subject) return subject.kind;
+  if (/^lead-first-\d+-\d+$/.test(ref)) return 'lead_first';
+  const own = (screenSource ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 24);
+  return own || 'api';
+}
+
+/**
+ * The outbox aggregate of one SMS's billing events. The charge (sent) and the refund (the carrier's failure report, which arrives from
+ * another process some seconds later) of ONE message must be drained in order, or a refund that overtakes its charge is lost; the
+ * drain keeps the order of events that share an aggregate. A number made from the provider's message id gives each message its own
+ * aggregate, so unrelated messages are still settled in parallel and one stuck event holds up nothing else. 48 bits: always a safe
+ * integer; two messages sharing a value only share a queue.
+ */
+export function usageAggregateOf(messageId: string): number {
+  return createHash('sha256').update(messageId).digest().readUIntBE(0, 6);
 }
 
 /** The calendar month a message counts in (Reference counted from the first day of the month, server time; here UTC). */

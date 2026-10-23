@@ -1,7 +1,10 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { emailMetaSchema } from '@crm/contracts';
+import { ERROR_CODES, emailMetaSchema } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
+import { AppError } from '../../common/errors/app-error';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { emitUsageReported } from '../../kernel/outbox/usage-report';
 import { DatabaseService } from '../../infra/db/database.service';
 import { resolveThreadKey, type OutgoingMail } from '../../infra/providers/channel-email';
 import { ChannelError } from '../../infra/providers/chat-conversations';
@@ -14,6 +17,7 @@ import {
 } from '../broadcasts';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../chat-conversations';
 import { ConsentGate, ConsentUnsubscribeService } from '../contact-consent';
+import { UsageBillingService } from '../wallet-message-billing';
 import { MailDriverError } from './drivers/mail-driver';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import {
@@ -28,15 +32,21 @@ import {
   monthStart,
   oneLine,
   quotaMessage,
+  usageSourceOfSend,
 } from './email-engine.rules';
 import { MailboxUnavailableError } from './mail-errors';
 import { MailPlan } from './mail-plan';
 import { MailSendGuard } from './mail-send.guard';
-import { MailTokens } from './mail-tokens.service';
+import { MAIL_AUDIT_MODULE, MailTokens } from './mail-tokens.service';
 import { MailboxesRepository, type MailboxRow } from './mailboxes.repository';
 
 /** How long a mailbox that is out of room for the hour asks the campaign to wait when it cannot say (a minute). */
 const DEFAULT_WAIT_MS = 60_000;
+
+/** How long a run waits when the wallet cannot pay for the next mail: long enough not to spin, short enough to resume soon after a top-up. */
+const WALLET_WAIT_MS = 15 * 60_000;
+/** An affordable answer is reused this long, so a campaign does not read the wallet once per recipient (the same window as the launch gate). */
+const AFFORDABLE_TTL_MS = 3_000;
 
 /**
  * The email engine for campaigns (Reference's `EmailCampaignRunner` transport, `?channel=email`). Registered in the shared
@@ -49,6 +59,12 @@ const DEFAULT_WAIT_MS = 60_000;
  * the bounce list (`MailSendGuard`: an address that hard-bounced is refused, and the hourly cap makes the run wait rather than fail),
  * the signed unsubscribe link with the one-click headers (RFC 8058), the send through the mailbox's driver, the books, and a copy of the
  * mail in the mailbox's inbox thread. A failure throws the operator's sentence, which the dispatcher stores on the recipient.
+ *
+ * Every mail that leaves is the platform's per-mail fee (`email` in the usage prices), whoever asked for it: a campaign, a test send, a
+ * broadcast, an appointment message or a lead's first message all send through here, so this is the one place that reports it. The
+ * fee is reported once the mailbox has accepted the mail, billed on the provider's message id, and a billing fault never fails or
+ * repeats a mail that already left. An empty wallet is refused before the mail is built: the run waits (`SenderThrottled`) and
+ * resumes after a top-up instead of failing its recipients.
  */
 @Injectable()
 export class EmailEngineSender implements EngineSender {
@@ -64,6 +80,8 @@ export class EmailEngineSender implements EngineSender {
     private readonly consentGate: ConsentGate,
     private readonly unsubscribe: ConsentUnsubscribeService,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly usage: UsageBillingService,
+    private readonly outbox: OutboxService,
   ) {}
 
   async open(orgId: number, sender: { id: number }): Promise<OpenedSender> {
@@ -82,6 +100,7 @@ export class EmailEngineSender implements EngineSender {
         : 0;
     if (cap > 0 && used >= cap) throw new Error(quotaMessage(cap));
 
+    let affordableUntil = 0;
     return {
       send: () => {
         throw new Error('Email sends the typed message, not a template.');
@@ -89,6 +108,10 @@ export class EmailEngineSender implements EngineSender {
       sendText: async (m) => {
         // Reference checks the cap once per run; counting this run's own mails keeps a long campaign from overshooting it.
         if (cap > 0 && used >= cap) throw new SenderRefused(quotaMessage(cap));
+        if (Date.now() >= affordableUntil) {
+          await this.assertAffordable(orgId);
+          affordableUntil = Date.now() + AFFORDABLE_TTL_MS;
+        }
         const out = await this.sendOne(orgId, mailbox.uuid, m);
         used += 1;
         return out;
@@ -147,12 +170,64 @@ export class EmailEngineSender implements EngineSender {
         const sent = await this.drivers
           .get(mailbox.provider)
           .send({ orgId, mailbox, access }, mail);
+        // First thing after the mailbox accepted it: whatever the bookkeeping below does, this mail left and is billed once.
+        await this.reportUsage(orgId, mailbox.id, sent.providerMessageId || mail.messageId, m);
         await this.guard.recordSent(orgId, mailbox, [m.to]);
         await this.mirror(orgId, mailbox, mail, m.text, contactId, sent);
         return { providerMessageId: sent.providerMessageId };
       });
     } catch (err) {
       throw this.asSendError(err);
+    }
+  }
+
+  /**
+   * The wallet must be able to pay for one more mail (422 `WALLET_EMPTY` otherwise). The run waits for a top-up rather than failing
+   * its recipients; a platform-owned workspace and a free price pass, and a failed billing lookup lets the mail through.
+   */
+  private async assertAffordable(orgId: number): Promise<void> {
+    try {
+      await this.usage.assertCanAfford(orgId, 'email');
+    } catch (err) {
+      if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) {
+        throw new SenderThrottled(err.message, WALLET_WAIT_MS);
+      }
+      throw err;
+    }
+  }
+
+  /**
+   * Reports the mail to the wallet in its own transaction. Never throws: the mail is gone, so a billing fault must not fail the send
+   * (a failed send is retried, and the person would get the mail twice). Billed on the provider's message id, so the same mail
+   * reported twice charges once.
+   */
+  private async reportUsage(
+    orgId: number,
+    mailboxId: number,
+    usageId: string,
+    m: OutgoingText,
+  ): Promise<void> {
+    try {
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        emitUsageReported(this.outbox, tx, {
+          orgId,
+          aggregateModule: MAIL_AUDIT_MODULE,
+          aggregateId: mailboxId,
+          report: {
+            kind: 'email',
+            usageId,
+            status: 'used',
+            units: 1,
+            source: usageSourceOfSend(m.clientReference, m.screen?.source),
+            provider: 'email',
+          },
+        }),
+      );
+    } catch (err) {
+      this.logger.warn(
+        { orgId, mailboxId, err: String(err) },
+        'email: the mail could not be billed',
+      );
     }
   }
 

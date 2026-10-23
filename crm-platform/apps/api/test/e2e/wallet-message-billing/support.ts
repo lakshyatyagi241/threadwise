@@ -1,7 +1,10 @@
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { PlatformSettingsService } from '../../../src/modules/auth';
 import {
+  AiChargeService,
   MessageBillingService,
+  UsageBillingService,
+  UsageSettingsService,
   WalletGateService,
   WalletLedgerService,
 } from '../../../src/modules/wallet-message-billing';
@@ -21,6 +24,8 @@ export const WALLET_SETTING_KEYS = [
   'billing.pay_per_message',
   // A suite that turns margin pricing on must not leave it on for the next one.
   'wallet.pricing_mode',
+  // Prices of SMS, email, calls, AI and the other usages.
+  'wallet.usage_rates',
 ];
 
 /** Typed handles on the services the engine tests drive directly. */
@@ -31,6 +36,9 @@ export function services(h: BspHarness) {
     ledger: h.app.get(WalletLedgerService, opts),
     billing: h.app.get(MessageBillingService, opts),
     gate: h.app.get(WalletGateService, opts),
+    usage: h.app.get(UsageBillingService, opts),
+    usageSettings: h.app.get(UsageSettingsService, opts),
+    ai: h.app.get(AiChargeService, opts),
     settings: h.app.get(PlatformSettingsService, opts),
   };
 }
@@ -76,7 +84,7 @@ export async function ledgerRows(h: BspHarness, orgId: number) {
 
 export async function charges(h: BspHarness, orgId: number) {
   const r = await h.owner.query(
-    `SELECT wamid, status, credits, price_credits, shortfall_credits, free_reason, billing_mode, to_country, category, cost_minor, cost_micros
+    `SELECT wamid, kind, units, status, credits, price_credits, shortfall_credits, free_reason, billing_mode, to_country, category, cost_minor, cost_micros
      FROM usage_charges WHERE org_id = $1 ORDER BY id`,
     [orgId],
   );
@@ -129,6 +137,7 @@ export async function fixedPricing(h: BspHarness) {
 export async function cleanWallet(h: BspHarness, startedAt: Date) {
   await h.owner.query(`DELETE FROM platform_settings WHERE key = ANY($1)`, [WALLET_SETTING_KEYS]);
   await h.owner.query(`DELETE FROM message_rates WHERE country_code IN ('QQ', 'ZZ', 'LI')`);
+  services(h).usageSettings.invalidate();
   await h.owner.query(`SELECT set_config('app.privileged', 'on', false)`);
   await h.owner.query(`DELETE FROM wallet_platform_log WHERE created_at >= $1`, [
     startedAt.toISOString(),

@@ -8,6 +8,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   expenseGroupBySchema,
   expenseStatusFilterSchema,
+  walletUsageKindSchema,
   type ExpenseEvent,
   type ExpenseGroup,
   type ExpenseGroupBy,
@@ -31,6 +32,12 @@ import { PagerBar } from './pager-bar';
 import { usePager } from './use-pager';
 
 const EXPENSE_PAGE = 25;
+/** The kinds whose count of units is worth a second line: segments of an SMS, minutes of a call. */
+const UNIT_KINDS: ReadonlySet<ExpenseEvent['kind']> = new Set([
+  'sms',
+  'whatsapp_call',
+  'voice_call',
+]);
 const STATUS_LABEL = {
   all: 'filters.statusAll',
   charged: 'filters.statusCharged',
@@ -39,6 +46,37 @@ const STATUS_LABEL = {
 } as const satisfies Record<ExpenseStatusFilter, string>;
 type Channel = (typeof CHANNELS)[number];
 type Category = (typeof CATEGORIES)[number];
+
+/**
+ * Where a charge that is not a campaign or chat message came from: an AI feature, a call, a reminder. Each has its own words in
+ * `expenses.sources`; a source this list does not know is shown as it is stored.
+ */
+const EXTRA_SOURCES = [
+  'lead_first',
+  'lead',
+  'test',
+  'appointment',
+  'lead_scoring',
+  'lead_digest',
+  'pql_search',
+  'growth_assistant',
+  'ai_copilot',
+  'help_agent',
+  'company_brief',
+  'inbox_ai',
+  'template_ai',
+  'campaign_ai',
+  'campaign_ai_image',
+  'kb_embedding',
+  'flow_ai',
+  'widget_ai',
+  'growth',
+  'telephony',
+  'translation',
+] as const;
+type ExtraSource = (typeof EXTRA_SOURCES)[number];
+const extraSourceKey = (source: string): ExtraSource | null =>
+  (EXTRA_SOURCES as readonly string[]).includes(source) ? (source as ExtraSource) : null;
 
 /** The channel key a row carries, mapped to the label the statement already uses. The team inbox's own sends are "chat" to the customer. */
 const channelKey = (source: string): Channel | null => {
@@ -116,6 +154,7 @@ function FilterBar({
 }) {
   const t = useTranslations('wallet-message-billing.expenses.filters');
   const tt = useTranslations('wallet-message-billing.expenses');
+  const tk = useTranslations('wallet-message-billing.kinds');
   const tch = useTranslations('wallet-message-billing.statement.channels');
   const tcat = useTranslations('wallet-message-billing.categories');
   const [draft, setDraft] = useState<ExpenseFilters>(applied);
@@ -137,7 +176,11 @@ function FilterBar({
 
   return (
     <Card>
-      <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6" role="search">
+      <form
+        onSubmit={submit}
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7"
+        role="search"
+      >
         <Field label={t('status')} htmlFor="ex-status">
           <Select
             id="ex-status"
@@ -150,6 +193,23 @@ function FilterBar({
             {expenseStatusFilterSchema.options.map((s) => (
               <option key={s} value={s}>
                 {tt(STATUS_LABEL[s])}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('kind')} htmlFor="ex-kind">
+          <Select
+            id="ex-kind"
+            value={draft.kind}
+            onChange={(e) => {
+              const v = walletUsageKindSchema.safeParse(e.target.value);
+              set('kind', v.success ? v.data : '');
+            }}
+          >
+            <option value="">{t('allKinds')}</option>
+            {walletUsageKindSchema.options.map((k) => (
+              <option key={k} value={k}>
+                {tk(k)}
               </option>
             ))}
           </Select>
@@ -318,12 +378,20 @@ export function GroupTable({
   const locale = useLocale();
   const tch = useTranslations('wallet-message-billing.statement.channels');
   const tcat = useTranslations('wallet-message-billing.categories');
+  const tk = useTranslations('wallet-message-billing.kinds');
+  const tsrc = useTranslations('wallet-message-billing.expenses.sources');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   const label = (key: string | null): string => {
     if (key === null) return t('breakdown.notRecorded');
+    if (groupBy === 'kind') {
+      const k = walletUsageKindSchema.safeParse(key);
+      return k.success ? tk(k.data) : key;
+    }
     if (groupBy === 'source') {
       const c = channelKey(key);
-      return c ? tch(c) : key;
+      if (c) return tch(c);
+      const x = extraSourceKey(key);
+      return x ? tsrc(x) : key;
     }
     if (groupBy === 'category') {
       return (CATEGORIES as readonly string[]).includes(key) ? tcat(key as Category) : key;
@@ -440,15 +508,19 @@ export function ExpenseTable({
   const tcat = useTranslations('wallet-message-billing.categories');
   const tstatus = useTranslations('wallet-message-billing.expenses.status');
   const tfree = useTranslations('wallet-message-billing.expenses.freeReason');
+  const tk = useTranslations('wallet-message-billing.kinds');
+  const tu = useTranslations('wallet-message-billing.expenses.units');
+  const tsrc = useTranslations('wallet-message-billing.expenses.sources');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[60rem] text-sm" aria-label={t('title')}>
+      <table className="w-full min-w-[66rem] text-sm" aria-label={t('title')}>
         <thead>
           <tr className="border-b border-border text-xs text-muted-foreground">
             {(
               [
                 ['date', 'text-start'],
+                ['type', 'text-start'],
                 ['template', 'text-start'],
                 ['campaign', 'text-start'],
                 ['channel', 'text-start'],
@@ -469,10 +541,21 @@ export function ExpenseTable({
         <tbody>
           {rows.map((r) => {
             const channel = r.source ? channelKey(r.source) : null;
+            const extra = r.source && !channel ? extraSourceKey(r.source) : null;
             return (
               <tr key={r.id} className="border-b border-border/60 align-top last:border-0">
                 <td className="px-2 py-2 whitespace-nowrap">
                   {formatWhen(r.createdAt, locale, timeZone)}
+                </td>
+                <td className="px-2 py-2">
+                  <div className="flex flex-col">
+                    <span>{tk(r.kind)}</span>
+                    {UNIT_KINDS.has(r.kind) && (
+                      <span className="text-xs text-muted-foreground">
+                        {tu(r.kind, { count: r.units })}
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className={cn('px-2 py-2', r.template === null && 'text-muted-foreground')}>
                   {r.template ?? t('breakdown.notRecorded')}
@@ -481,7 +564,11 @@ export function ExpenseTable({
                   {r.subjectName ?? t('breakdown.notRecorded')}
                 </td>
                 <td className="px-2 py-2">
-                  {channel ? tch(channel) : (r.source ?? t('breakdown.notRecorded'))}
+                  {channel
+                    ? tch(channel)
+                    : extra
+                      ? tsrc(extra)
+                      : (r.source ?? t('breakdown.notRecorded'))}
                 </td>
                 <td className="px-2 py-2">
                   {r.category && (CATEGORIES as readonly string[]).includes(r.category)

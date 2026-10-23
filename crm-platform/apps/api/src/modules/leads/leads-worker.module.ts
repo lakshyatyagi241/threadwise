@@ -7,6 +7,7 @@ import { CrmModule } from '../crm';
 import { EmailTemplatesModule } from '../email-templates';
 import { MessageTemplatesModule } from '../message-templates';
 import { NotificationPublisher, NotificationsRepository } from '../notifications';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { LeadFirstMessageLookups } from './lead-first-message.lookups';
 import { LeadFirstMessageSender } from './lead-first-message.sender';
 import { LeadFirstRepliesRepository } from './lead-first-replies.repository';
@@ -38,6 +39,8 @@ import { LeadSyncProcessor, LeadSyncSweepService } from './lead-sync.worker';
     BroadcastsModule,
     MessageTemplatesModule,
     EmailTemplatesModule,
+    // The first email is checked against the wallet before it is sent and billed when the mailbox accepts it.
+    WalletMessageBillingModule,
   ],
   providers: [
     NotificationsRepository,

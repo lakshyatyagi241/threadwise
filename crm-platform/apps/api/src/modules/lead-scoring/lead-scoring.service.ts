@@ -61,6 +61,9 @@ export type ScoreOutcome =
 /** How long a created or changed contact waits before it is scored: edits in a burst (an import, a form) become one call. */
 const AUTO_DELAY_MS = 20_000;
 
+/** The wallet key of one scoring call: its log row, so the same row is never charged twice. */
+const runCharge = (orgId: number, runId: number): string => `ai-lsc:${orgId}:run:${runId}`;
+
 const totalsOf = (r: Record<string, unknown>): LscCostTotals => {
   const scores = Number(r.scores);
   const cost = Number(r.cost_usd);
@@ -333,9 +336,14 @@ export class LeadScoringService {
     const parsed = parseScore(completion.text);
     if (!parsed) {
       // The call was paid for and the answer is unusable: log it with its cost, write nothing, do not retry (a retry pays again).
-      await this.logRun(orgId, { ...base, ...spent, status: 'failed', error: 'bad_response' });
+      const runId = await this.logRun(orgId, {
+        ...base,
+        ...spent,
+        status: 'failed',
+        error: 'bad_response',
+      });
       await this.recordTokens(orgId, cfg.model, spent, billedAgainst);
-      await this.chargeWallet(orgId, contactId, spent.costUsd, billedAgainst);
+      await this.chargeWallet(orgId, contactId, runId, spent.costUsd, billedAgainst);
       if (manual) {
         throw new AppError(
           ERROR_CODES.LSC_PROVIDER_FAILED,
@@ -352,7 +360,7 @@ export class LeadScoringService {
         reasons: parsed.reasons,
         model: cfg.model,
       });
-      await this.repo.insertRun(tx, orgId, {
+      const runId = await this.repo.insertRun(tx, orgId, {
         ...base,
         ...spent,
         status: written ? 'ok' : 'kept',
@@ -374,8 +382,14 @@ export class LeadScoringService {
       if (billedAgainst === 'admin') {
         await this.wallet.charge(
           tx,
-          { orgId, label: 'AI lead scoring', costUsd: spent.costUsd, source: 'ai.lead_scoring' },
-          `ai-lsc:${orgId}:${contactId}:${randomUUID()}`,
+          {
+            orgId,
+            label: 'AI lead scoring',
+            costUsd: spent.costUsd,
+            source: 'ai.lead_scoring',
+            provider: AI_PROVIDER,
+          },
+          runCharge(orgId, runId),
         );
       }
       if (written) {
@@ -587,29 +601,46 @@ export class LeadScoringService {
     return { status: 'skipped', reason };
   }
 
-  /** Charges a call that was paid for but produced no score (its own transaction). A failure is logged, never thrown. */
+  /**
+   * Charges a call that was paid for but produced no score (its own transaction). A failure is logged, never thrown. `runId` is the
+   * log row of that call; when the log write itself failed there is no row to name, so the charge gets a one-off key (a fresh one
+   * cannot double charge: this path is never retried, a retry would be a new vendor call).
+   */
   private async chargeWallet(
     orgId: number,
     contactId: number,
+    runId: number | null,
     costUsd: number,
     billedAgainst: 'admin' | 'workspace',
   ): Promise<void> {
     if (billedAgainst !== 'admin') return;
+    const key =
+      runId !== null ? runCharge(orgId, runId) : `ai-lsc:${orgId}:${contactId}:${randomUUID()}`;
     await this.db
       .txAs({ orgId, userId: null }, (tx) =>
         this.wallet.charge(
           tx,
-          { orgId, label: 'AI lead scoring', costUsd, source: 'ai.lead_scoring' },
-          `ai-lsc:${orgId}:${contactId}:${randomUUID()}`,
+          {
+            orgId,
+            label: 'AI lead scoring',
+            costUsd,
+            source: 'ai.lead_scoring',
+            provider: AI_PROVIDER,
+          },
+          key,
         ),
       )
       .catch((err) => this.logger.warn({ orgId, err }, 'lead scoring wallet charge failed'));
   }
 
-  private async logRun(orgId: number, w: RunWrite): Promise<void> {
-    await this.db
+  /** Writes a run row in its own transaction and returns its id, or null when the log write failed (logged, never thrown). */
+  private async logRun(orgId: number, w: RunWrite): Promise<number | null> {
+    return this.db
       .txAs({ orgId, userId: null }, (tx) => this.repo.insertRun(tx, orgId, w))
-      .catch((err) => this.logger.warn({ orgId, err }, 'lead scoring run not logged'));
+      .catch((err: unknown) => {
+        this.logger.warn({ orgId, err }, 'lead scoring run not logged');
+        return null;
+      });
   }
 
   private async recordTokens(

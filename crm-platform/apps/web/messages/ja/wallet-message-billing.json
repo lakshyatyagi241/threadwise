@@ -40,8 +40,8 @@
       "topup": "チャージ",
       "earn": "獲得",
       "refund": "返金",
-      "spend": "メッセージ料金",
-      "admin_adjust": "調整"
+      "admin_adjust": "調整",
+      "spend": "利用料金"
     },
     "categories": {
       "marketing": "マーケティング",
@@ -146,9 +146,9 @@
         "all": "すべて",
         "topup": "チャージ",
         "earn": "収益",
-        "spend": "メッセージ料金",
         "refund": "返金",
-        "admin_adjust": "調整"
+        "admin_adjust": "調整",
+        "spend": "利用料金"
       },
       "summary": {
         "balance": "現在の残高",
@@ -192,19 +192,16 @@
       }
     },
     "expenses": {
-      "title": "メッセージの費用",
-      "subtitle": "各メッセージの費用、送信に使ったテンプレート、返金された金額を表示します。合計は、フィルターに一致するすべての項目が対象です。",
       "back": "ウォレットに戻る",
       "breadcrumbLabel": "パンくずリスト",
       "breadcrumbWallet": "ウォレット",
-      "breadcrumbExpenses": "メッセージの費用",
       "fullStatement": "明細をすべて表示",
       "summary": {
-        "messages": "メッセージ",
         "charged": "請求額",
         "refunded": "返金額",
         "net": "実質費用",
-        "notBilled": "請求なし"
+        "notBilled": "請求なし",
+        "messages": "項目"
       },
       "filters": {
         "status": "ステータス",
@@ -222,7 +219,9 @@
         "to": "終了日",
         "apply": "適用",
         "reset": "リセット",
-        "rangeInverted": "終了日が開始日より前になっています。"
+        "rangeInverted": "終了日が開始日より前になっています。",
+        "kind": "種類",
+        "allKinds": "すべての種類"
       },
       "breakdown": {
         "title": "費用の集計単位",
@@ -230,17 +229,17 @@
           "template": "テンプレート",
           "source": "チャネル",
           "category": "カテゴリ",
-          "country": "国"
+          "country": "国",
+          "kind": "種類"
         },
         "group": "グループ",
         "notRecorded": "未記録",
         "truncated": "上位 {count} 件のグループを表示しています。残りを表示するには期間を絞り込んでください。",
-        "empty": "これらのフィルターに一致するメッセージはありません。"
+        "empty": "これらのフィルターに一致するものはありません。"
       },
       "columns": {
         "date": "日付",
         "template": "テンプレート",
-        "campaign": "キャンペーンまたは一斉配信",
         "channel": "チャネル",
         "category": "カテゴリ",
         "country": "国",
@@ -248,8 +247,10 @@
         "charged": "請求額",
         "refunded": "返金額",
         "net": "実質",
-        "messages": "メッセージ",
-        "notBilled": "請求なし"
+        "notBilled": "請求なし",
+        "campaign": "キャンペーン、一斉配信、または機能",
+        "messages": "項目",
+        "type": "種類"
       },
       "status": {
         "charged": "請求済み",
@@ -264,9 +265,40 @@
         "no_wallet_owner": "ウォレットの所有者がいません"
       },
       "uncollected": "{amount}が未回収です",
-      "emptyTitle": "まだメッセージがありません",
-      "emptyBody": "キャンペーン、一斉配信、スケジュール、チャットから送信されたメッセージが、テンプレートと費用とともにここに表示されます。",
-      "emptyFiltered": "これらのフィルターに一致する項目はありません。条件を変更するかリセットしてください。"
+      "emptyFiltered": "これらのフィルターに一致する項目はありません。条件を変更するかリセットしてください。",
+      "title": "費用",
+      "subtitle": "メッセージ、通話、AI リクエスト、検索ごとの費用と用途です。合計はフィルターに一致するすべてが対象です。",
+      "breadcrumbExpenses": "費用",
+      "emptyTitle": "費用はまだありません",
+      "emptyBody": "メッセージ、通話、AI リクエスト、その他の利用が、用途と費用とともにここに表示されます。",
+      "units": {
+        "sms": "{count, plural, other {# セグメント}}",
+        "whatsapp_call": "{count, plural, other {# 分}}",
+        "voice_call": "{count, plural, other {# 分}}"
+      },
+      "sources": {
+        "lead_first": "リードへの即時返信",
+        "lead": "リードへの即時返信",
+        "test": "テスト送信",
+        "appointment": "予約のリマインダー",
+        "lead_scoring": "リードスコアリング",
+        "lead_digest": "チャットの要約",
+        "pql_search": "連絡先検索",
+        "growth_assistant": "成長アシスタント",
+        "ai_copilot": "AI コパイロット",
+        "help_agent": "ヘルプアシスタント",
+        "company_brief": "企業サマリー",
+        "inbox_ai": "返信アシスタント",
+        "template_ai": "テンプレートビルダー",
+        "campaign_ai": "キャンペーンライター",
+        "campaign_ai_image": "キャンペーン画像",
+        "kb_embedding": "ナレッジベース",
+        "flow_ai": "フロージェネレーター",
+        "widget_ai": "ウェブサイトのチャットボット",
+        "growth": "成長",
+        "telephony": "電話通話",
+        "translation": "翻訳"
+      }
     },
     "admin": {
       "admin": "管理者",
@@ -583,6 +615,40 @@
               "service": "サービス"
             },
             "problems": "スキップされた行"
+          }
+        },
+        "usage": {
+          "title": "その他の利用料金",
+          "subtitle": "SMS、メール、通話、連絡先検索、その他のチャットチャネルが顧客に課す単位あたりの料金です。料金が 0 の場合やスイッチがオフの場合も、費用ログには記録されますが、請求はされません。",
+          "perUnit": "{unit}あたりの料金",
+          "chargeFor": "{kind}を課金する",
+          "units": {
+            "segment": "SMS セグメント",
+            "email": "メール",
+            "minute": "分",
+            "lookup": "検索",
+            "message": "メッセージ"
+          },
+          "hints": {
+            "sms": "顧客自身の SMS プロバイダーの請求に上乗せして課金されます。1 セグメントは 160 文字です(ラテン文字以外は 70 文字)。",
+            "email": "顧客自身のメールボックスの利用に上乗せして課金されます。送信したメール 1 通につき 1 回と数えます。",
+            "whatsapp_call": "WhatsApp 通話の開始した分ごとに課金されます。誰も応答しなかった通話は無料です。",
+            "voice_call": "顧客の電話プロバイダーが報告した通話の開始した分ごとに課金されます。手入力した通話ログは課金されません。",
+            "enrichment": "プラットフォームのデータプロバイダーで検索した連絡先ごとに課金されます。",
+            "chat_message": "Telegram、Facebook、Instagram、LINE、Viber、WeChat で送信したメッセージごとに課金されます。料金を設定するまでは無料です。"
+          },
+          "costPlus": {
+            "title": "ベンダーの費用に上乗せして課金",
+            "body": "AI リクエストと有料翻訳はプラットフォーム自身のベンダーキーで実行され、ベンダーの請求額に下記の上乗せ率を加えて課金されます。独自のキーを使うワークスペースには課金されません。"
+          },
+          "markup": "ベンダー費用への上乗せ率",
+          "markupHint": "10 は、費用 1.00 のリクエストを 1.10 で課金することを意味します。",
+          "saving": "保存中",
+          "save": "料金を保存",
+          "saved": "利用料金を保存しました",
+          "problems": {
+            "invalid": "小数点以下 2 桁までの金額を入力してください",
+            "tooHigh": "上限を超えています"
           }
         }
       },
@@ -945,6 +1011,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp メッセージ",
+      "sms": "SMS",
+      "email": "メール",
+      "whatsapp_call": "WhatsApp 通話",
+      "voice_call": "音声通話",
+      "ai": "AI",
+      "translation": "翻訳",
+      "enrichment": "連絡先の検索",
+      "chat_message": "チャットメッセージ"
     }
   }
 }

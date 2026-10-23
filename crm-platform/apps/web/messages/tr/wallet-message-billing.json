@@ -40,8 +40,8 @@
       "topup": "Yükleme",
       "earn": "Kazanç",
       "refund": "İade",
-      "spend": "Mesaj ücreti",
-      "admin_adjust": "Düzeltme"
+      "admin_adjust": "Düzeltme",
+      "spend": "Kullanım ücreti"
     },
     "categories": {
       "marketing": "Pazarlama",
@@ -146,9 +146,9 @@
         "all": "Tümü",
         "topup": "Bakiye yüklemeleri",
         "earn": "Kazançlar",
-        "spend": "Mesaj ücretleri",
         "refund": "İadeler",
-        "admin_adjust": "Düzeltmeler"
+        "admin_adjust": "Düzeltmeler",
+        "spend": "Kullanım ücretleri"
       },
       "summary": {
         "balance": "Mevcut bakiye",
@@ -192,19 +192,16 @@
       }
     },
     "expenses": {
-      "title": "Mesaj harcamaları",
-      "subtitle": "Her mesajın maliyetini, gönderildiği şablonu ve geri ödenen tutarı gösterir. Toplamlar filtrelerle eşleşen her şeyi kapsar.",
       "back": "Cüzdana dön",
       "breadcrumbLabel": "Gezinti yolu",
       "breadcrumbWallet": "Cüzdan",
-      "breadcrumbExpenses": "Mesaj harcamaları",
       "fullStatement": "Tam ekstre",
       "summary": {
-        "messages": "Mesajlar",
         "charged": "Ücretlendirildi",
         "refunded": "İade edildi",
         "net": "Net maliyet",
-        "notBilled": "Ücretlendirilmedi"
+        "notBilled": "Ücretlendirilmedi",
+        "messages": "Öğeler"
       },
       "filters": {
         "status": "Durum",
@@ -222,7 +219,9 @@
         "to": "Bitiş",
         "apply": "Uygula",
         "reset": "Sıfırla",
-        "rangeInverted": "Bitiş tarihi başlangıç tarihinden önce."
+        "rangeInverted": "Bitiş tarihi başlangıç tarihinden önce.",
+        "kind": "Tür",
+        "allKinds": "Tüm türler"
       },
       "breakdown": {
         "title": "Maliyet ölçütü",
@@ -230,17 +229,17 @@
           "template": "Şablon",
           "source": "Kanal",
           "category": "Kategori",
-          "country": "Ülke"
+          "country": "Ülke",
+          "kind": "Tür"
         },
         "group": "Grup",
         "notRecorded": "Kaydedilmedi",
         "truncated": "En büyük {count} grup gösteriliyor. Kalanları görmek için tarihleri daraltın.",
-        "empty": "Bu filtrelerle eşleşen mesaj yok."
+        "empty": "Bu filtrelerle eşleşen bir şey yok."
       },
       "columns": {
         "date": "Tarih",
         "template": "Şablon",
-        "campaign": "Kampanya veya yayın",
         "channel": "Kanal",
         "category": "Kategori",
         "country": "Ülke",
@@ -248,8 +247,10 @@
         "charged": "Ücretlendirildi",
         "refunded": "İade edildi",
         "net": "Net tutar",
-        "messages": "Mesajlar",
-        "notBilled": "Ücretlendirilmedi"
+        "notBilled": "Ücretlendirilmedi",
+        "campaign": "Kampanya, toplu gönderim veya özellik",
+        "messages": "Öğeler",
+        "type": "Tür"
       },
       "status": {
         "charged": "Ücretlendirildi",
@@ -264,9 +265,40 @@
         "no_wallet_owner": "Cüzdan sahibi yok"
       },
       "uncollected": "{amount} tahsil edilmedi",
-      "emptyTitle": "Henüz mesaj yok",
-      "emptyBody": "Kampanyalar, yayınlar, planlamalar ve sohbetlerden gönderilen mesajlar şablonu ve maliyetiyle burada görünür.",
-      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın."
+      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın.",
+      "title": "Harcamalar",
+      "subtitle": "Her mesajın, aramanın, YZ isteğinin ve sorgunun maliyeti ve ne için olduğu. Toplamlar, filtrelerle eşleşen her şeyi kapsar.",
+      "breadcrumbExpenses": "Harcamalar",
+      "emptyTitle": "Henüz harcama yok",
+      "emptyBody": "Mesajlar, aramalar, YZ istekleri ve diğer kullanım, ne için olduklarıyla ve maliyetleriyle burada görünür.",
+      "units": {
+        "sms": "{count, plural, one {# segment} other {# segment}}",
+        "whatsapp_call": "{count, plural, one {# dakika} other {# dakika}}",
+        "voice_call": "{count, plural, one {# dakika} other {# dakika}}"
+      },
+      "sources": {
+        "lead_first": "Anında potansiyel müşteri yanıtı",
+        "lead": "Anında potansiyel müşteri yanıtı",
+        "test": "Test gönderimi",
+        "appointment": "Randevu hatırlatması",
+        "lead_scoring": "Potansiyel müşteri puanlama",
+        "lead_digest": "Sohbet özeti",
+        "pql_search": "Kişi arama",
+        "growth_assistant": "Büyüme asistanı",
+        "ai_copilot": "YZ yardımcı pilotu",
+        "help_agent": "Yardım asistanı",
+        "company_brief": "Şirket özeti",
+        "inbox_ai": "Yanıt asistanı",
+        "template_ai": "Şablon oluşturucu",
+        "campaign_ai": "Kampanya yazarı",
+        "campaign_ai_image": "Kampanya görseli",
+        "kb_embedding": "Bilgi tabanı",
+        "flow_ai": "Akış oluşturucu",
+        "widget_ai": "Web sitesi sohbet botu",
+        "growth": "Büyüme",
+        "telephony": "Telefon aramaları",
+        "translation": "Çeviri"
+      }
     },
     "admin": {
       "admin": "Yönetici",
@@ -583,6 +615,40 @@
               "service": "Müşteri hizmeti"
             },
             "problems": "Atlanan satırlar"
+          }
+        },
+        "usage": {
+          "title": "Diğer kullanım fiyatları",
+          "subtitle": "SMS, e-posta, arama, kişi sorgusu ve diğer sohbet kanallarının müşterilerinize birim başına maliyeti. 0 fiyat veya kapalı bir anahtar harcama günlüğünde yine izlenir, ancak ücret alınmaz.",
+          "perUnit": "{unit} başına fiyat",
+          "chargeFor": "{kind} için ücret al",
+          "units": {
+            "segment": "SMS segmenti",
+            "email": "e-posta",
+            "minute": "dakika",
+            "lookup": "sorgu",
+            "message": "mesaj"
+          },
+          "hints": {
+            "sms": "Müşterinin kendi SMS sağlayıcısı faturasına ek olarak ücretlendirilir. Bir segment 160 karakterdir (Latin olmayan metinde 70).",
+            "email": "Müşterinin kendi posta kutusuna ek olarak ücretlendirilir. Gönderilen her e-posta bir kez sayılır.",
+            "whatsapp_call": "Bir WhatsApp aramasının başlayan her dakikası. Kimsenin yanıtlamadığı arama ücretsizdir.",
+            "voice_call": "Müşterinin telefon sağlayıcısının bildirdiği bir aramanın başlayan her dakikası. Elle girilen arama kayıtları hiçbir zaman ücretlendirilmez.",
+            "enrichment": "Platformun veri sağlayıcısında sorgulanan her kişi.",
+            "chat_message": "Telegram, Facebook, Instagram, LINE, Viber veya WeChat üzerinden gönderilen her mesaj. Fiyat belirleyene kadar ücretsiz."
+          },
+          "costPlus": {
+            "title": "Sağlayıcının maliyeti artı bir kâr payı üzerinden ücretlendirilir",
+            "body": "YZ istekleri ve ücretli çeviri, platformun kendi sağlayıcı anahtarlarıyla çalışır ve sağlayıcının aldığı tutar artı aşağıdaki kâr payı üzerinden ücretlendirilir. Kendi anahtarını kullanan çalışma alanından hiçbir zaman ücret alınmaz."
+          },
+          "markup": "Sağlayıcı maliyeti üzerine kâr payı",
+          "markupHint": "10, 1,00 maliyetli bir isteğin 1,10 olarak ücretlendirilmesi demektir.",
+          "saving": "Kaydediliyor",
+          "save": "Fiyatları kaydet",
+          "saved": "Kullanım fiyatları kaydedildi",
+          "problems": {
+            "invalid": "En fazla 2 ondalık basamaklı bir tutar girin",
+            "tooHigh": "Bu, sınırın üzerinde"
           }
         }
       },
@@ -945,6 +1011,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp mesajı",
+      "sms": "SMS",
+      "email": "E-posta",
+      "whatsapp_call": "WhatsApp araması",
+      "voice_call": "Sesli arama",
+      "ai": "YZ",
+      "translation": "Çeviri",
+      "enrichment": "Kişi sorgusu",
+      "chat_message": "Sohbet mesajı"
     }
   }
 }

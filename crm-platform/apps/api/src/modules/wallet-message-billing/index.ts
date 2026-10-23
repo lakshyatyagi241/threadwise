@@ -4,6 +4,7 @@
  *
  *   WalletLedgerService      credit or debit a workspace's wallet inside the caller's transaction, idempotent on a key
  *   MessageBillingService    settleDelivered / settleFailed, for a caller that already knows the provider message id
+ *   UsageBillingService      settle / settleFailed / assertCanAfford for everything that is not a WhatsApp message (SMS, email, calls, AI...)
  *   WalletGateService        assertCanLaunch: the bulk-send precheck
  *   WalletSettingsService    the platform's wallet economics (flat price, referral reward, switches)
  *
@@ -18,6 +19,10 @@ export {
   type SettleDelivered,
   type SettleOutcome,
 } from './message-billing.service';
+export { UsageBillingService, type SettleUsage, type UsageOutcome } from './usage-billing.service';
+export { UsageSettingsService } from './usage-settings.service';
+export { billedMinutes } from './usage-rules';
+export { aiCostUsd, type AiCostInput } from './ai-cost';
 export { AiChargeService } from './ai-charge.service';
 export { WalletGateService, type LaunchRequest, type SendRequest } from './wallet-gate.service';
 export { WalletSettingsService } from './wallet-settings.service';

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { TemplateAiController } from './template-ai.controller';
 import { TemplateAiService } from './template-ai.service';
@@ -12,12 +13,19 @@ import { TemplatesService } from './templates.service';
 /**
  * WhatsApp message templates (TPL). Provider access (Meta Graph, Interakt) is the global `WabaProvidersModule`; the audit and
  * outbox services, RBAC, the database and the upload guard (AuthModule) are global too. The number a template is sent through
- * comes from `WabaModule`.
+ * comes from `WabaModule`. "Build with AI" is paid from the workspace's wallet (WalletMessageBillingModule) when the platform's AI key
+ * answers.
  */
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 
 @Module({
-  imports: [WabaModule, PlansCoreModule, AiKeysUsageAdminModule, PlatformSettingsModule],
+  imports: [
+    WabaModule,
+    PlansCoreModule,
+    AiKeysUsageAdminModule,
+    PlatformSettingsModule,
+    WalletMessageBillingModule,
+  ],
   controllers: [TemplatesController, TemplateAiController],
   providers: [TemplatesRepository, TemplatesService, TemplateSyncService, TemplateAiService],
   exports: [TemplatesService, TemplateSyncService, TemplatesRepository],

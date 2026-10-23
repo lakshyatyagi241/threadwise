@@ -13,7 +13,7 @@ describe('expense filters in the address', () => {
   it('reads every filter and ignores anything it cannot read', () => {
     const f = parseExpenseFilters(
       params(
-        'status=refunded&from=2026-10-01&to=bad&template=%20order_update%20&source=campaign&category=utility&groupBy=country',
+        'status=refunded&from=2026-10-01&to=bad&template=%20order_update%20&source=campaign&category=utility&kind=sms&groupBy=country',
       ),
     );
     expect(f).toEqual({
@@ -23,10 +23,12 @@ describe('expense filters in the address', () => {
       template: 'order_update',
       source: 'campaign',
       category: 'utility',
+      kind: 'sms',
       groupBy: 'country',
     });
-    expect(parseExpenseFilters(params('status=bogus&groupBy=nope'))).toMatchObject({
+    expect(parseExpenseFilters(params('status=bogus&groupBy=nope&kind=telepathy'))).toMatchObject({
       status: 'all',
+      kind: '',
       groupBy: 'template',
     });
   });
@@ -39,6 +41,10 @@ describe('expense filters in the address', () => {
       template: undefined,
       source: undefined,
       category: undefined,
+      kind: undefined,
+    });
+    expect(toExpenseApiQuery({ ...EMPTY_EXPENSE_FILTERS, kind: 'ai' })).toMatchObject({
+      kind: 'ai',
     });
     expect(
       toExpenseApiQuery({ ...EMPTY_EXPENSE_FILTERS, status: 'free', groupBy: 'category' }),

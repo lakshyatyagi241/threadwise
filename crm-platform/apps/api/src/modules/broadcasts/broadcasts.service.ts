@@ -139,7 +139,9 @@ export class BroadcastsService {
       // Emergency halt and content screening once for the batch (the same hook every send path shares), then the wallet.
       await this.sendPolicy.screenBulk(orgId, '', { source: 'broadcast' });
       try {
-        // SMS is metered by its own monthly cap and never charged to the wallet, so an empty wallet does not stop it (TW-SMS-027).
+        // This check prices a message with the WhatsApp rate card, which is wrong for an SMS. An SMS is paid for per segment from the
+        // wallet at the operator's SMS price (usage billing), and the SMS engine asks the wallet before each send: an empty wallet
+        // pauses the run there instead of refusing the launch.
         if (!sms) await this.wallet.precheck(orgId, contactIds.length);
       } catch (err) {
         if (err instanceof AppError) throw err;

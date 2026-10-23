@@ -34,8 +34,8 @@ PUT /v2/platform/marketplace/apps/email/pricing
 ```
 
 This creates the billing add-on pack that sells the integration (`mkt_email`). The currency must be enabled on the platform. Publishing is refused with
-`409 MKT_VERSION_STATE` / `price_not_set` until this is done. Email has no cost per use on the platform's side (mail is not metered against the message cap
-or the wallet), so a trial is safe to offer.
+`409 MKT_VERSION_STATE` / `price_not_set` until this is done. Email has no vendor cost per use on the platform's side (the customer's own mailbox sends it, and it does not count against the plan's message cap), so a trial is safe to offer.
+Each mail that leaves is charged to the workspace's wallet as the platform's fee: set its price (usage price `email`, default 0.10) on the usage pricing page.
 
 ## 2. Show the billing add-on on the plans that should offer it
 
@@ -134,8 +134,8 @@ mailbox with no limit of its own; a manager sets one per mailbox in the hub), `M
 `MAIL_INBOUND_FLOOD_MAX` / `MAIL_INBOUND_FLOOD_WINDOW_S` (30 per 600 s), `MAIL_BOUNCE_BLOCK_DAYS` (7). The counters live in Redis (`mail:rl:*`, `mail:rr:*`,
 `mail:fl:*`, `mail:bounced:*`); deleting a key lifts that limit at once (for example `DEL mail:bounced:<orgId>:<address>` when a customer fixed their mailbox).
 
-| What you see                                         | Cause and fix                                                                                                      |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| A reply failed with `MAIL_RATE_LIMITED`              | the mailbox's hourly cap: raise it in the hub (Email, the mailbox card) or wait for the time in the message         |
-| A reply failed with `MAIL_RECIPIENT_BOUNCED`         | that address hard-bounced in the last days: correct the address, or `DEL` its Redis flag if the problem was fixed   |
-| Mail from one sender stops alerting                  | the flood limit: stored as automated and quiet; raise `MAIL_INBOUND_FLOOD_MAX` if that sender is legitimate        |
+| What you see                                 | Cause and fix                                                                                                     |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| A reply failed with `MAIL_RATE_LIMITED`      | the mailbox's hourly cap: raise it in the hub (Email, the mailbox card) or wait for the time in the message       |
+| A reply failed with `MAIL_RECIPIENT_BOUNCED` | that address hard-bounced in the last days: correct the address, or `DEL` its Redis flag if the problem was fixed |
+| Mail from one sender stops alerting          | the flood limit: stored as automated and quiet; raise `MAIL_INBOUND_FLOOD_MAX` if that sender is legitimate       |

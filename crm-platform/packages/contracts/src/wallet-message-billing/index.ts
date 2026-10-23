@@ -13,3 +13,4 @@ export * from './wallet';
 export * from './expenses';
 export * from './platform';
 export * from './events';
+export * from './usage';

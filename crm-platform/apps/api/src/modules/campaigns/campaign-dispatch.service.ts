@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { ERROR_CODES } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import {
   UNOFFICIAL_ENGINE,
@@ -6,6 +7,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { AppError } from '../../common/errors/app-error';
 import { SendWindowService } from '../compliance-center';
 import { ConsentGate, ConsentPolicyService, purposeOfCategory } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -79,7 +81,7 @@ import {
   cleanSubject,
   isEmailProvider,
   isMailableAddress,
-  isWalletFree,
+  isUsageBilled,
   normalizeAddress,
   subjectSource,
 } from './email-campaign-rules';
@@ -831,8 +833,9 @@ export class CampaignDispatchService {
     }
 
     // Free under the plan's monthly messages, else the wallet must cover this message: if not, the run stops (nothing is failed).
-    // SMS and email are never charged to the wallet, so an empty wallet does not stop them.
-    if (!isWalletFree(o.sender.engine)) {
+    // SMS and email are not priced by the WhatsApp rate card this check reads: their engines check the wallet themselves before each
+    // send (an empty wallet comes back from the send as WALLET_EMPTY, handled below), at the operator's SMS and email prices.
+    if (!isUsageBilled(o.sender.engine)) {
       const allowed = await this.billing.consume({ orgId, to, usedThisMonth: sentThisRun });
       if (!allowed) return 'wallet';
     }
@@ -886,6 +889,8 @@ export class CampaignDispatchService {
         providerMessageId = res.providerMessageId;
       }
     } catch (err) {
+      // The engine (SMS, email) found the wallet unable to pay for this message before sending it: the same stop as the check above.
+      if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) return 'wallet';
       if (err instanceof SenderThrottled) return { throttledMs: err.retryAfterMs };
       if (err instanceof SenderRefused) {
         await permanent(err.message);

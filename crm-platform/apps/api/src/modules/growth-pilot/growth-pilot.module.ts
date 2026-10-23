@@ -14,6 +14,7 @@ import { NotificationsModule } from '../notifications';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { GrowthActionsService } from './growth-actions.service';
 import { GrowthAssistantService } from './growth-assistant.service';
 import { GrowthAutomationService } from './growth-automation.service';
@@ -59,6 +60,7 @@ export const growthEnrichmentProvider = {
     PlansCoreModule,
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
+    WalletMessageBillingModule,
   ],
   controllers: [GrowthController],
   providers: [

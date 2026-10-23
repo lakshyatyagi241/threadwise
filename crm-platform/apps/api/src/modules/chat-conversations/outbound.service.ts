@@ -15,11 +15,12 @@ import {
 } from '../../infra/providers/whatsapp/group-peer';
 import { QUEUES } from '../../infra/queue/queues';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import { WalletGateService } from '../wallet-message-billing';
+import { UsageBillingService, WalletGateService } from '../wallet-message-billing';
 import { ChannelDispatcher } from './channel-dispatcher.service';
 import { ChannelRegistryService } from './channel-registry.service';
 import { ChannelsRepository } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
+import { usageKindOfChannel } from './chat-usage';
 import type { EnqueueOutboundInput, EnqueueOutboundResult } from './conversations.facade';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
 import {
@@ -87,6 +88,7 @@ export class OutboundService {
     private readonly dispatcher: ChannelDispatcher,
     private readonly plans: PlanEntitlementService,
     private readonly wallet: WalletGateService,
+    private readonly usage: UsageBillingService,
     private readonly realtime: ChatRealtimePublisher,
     private readonly view: MessageViewService,
     private readonly lifecycle: ConversationLifecycleService,
@@ -186,6 +188,7 @@ export class OutboundService {
         },
       };
       const groupMembers = await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
+      await this.assertUsageAffordable(orgId, runtime.kind, isReaction);
       await this.dispatcher.assertCanQueue(request, {
         monthlyUsed: await this.monthlyUsed(tx, orgId, runtime),
       });
@@ -314,6 +317,7 @@ export class OutboundService {
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
       await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
+      await this.assertUsageAffordable(orgId, runtime.kind, row.kind === 'reaction');
       // A template message sent before its components were stored gets the ones the caller rebuilt from the live template.
       const patch = templateComponents ? { templateComponents } : {};
       const retried = { ...row, meta: { ...row.meta, ...patch } };
@@ -444,6 +448,23 @@ export class OutboundService {
       `Message ${uuid} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  /**
+   * Email and the other chat channels cost the platform's per-message fee (`email`, `chat_message` in the usage prices), charged when
+   * the provider accepts the message. An empty wallet is refused here, before a row exists (422 `WALLET_EMPTY`), for the same reason
+   * the WhatsApp group send is: the fee is taken after the work, so an empty wallet would otherwise send for free. Independent of
+   * `metered` (the plan's monthly cap). A free price, a platform-owned workspace, an unbilled channel and a reaction pass; a failed
+   * billing lookup lets the send through.
+   */
+  private async assertUsageAffordable(
+    orgId: number,
+    channelKind: string,
+    isReaction: boolean,
+  ): Promise<void> {
+    const kind = usageKindOfChannel(channelKind);
+    if (!kind || isReaction) return;
+    await this.usage.assertCanAfford(orgId, kind);
   }
 
   /**

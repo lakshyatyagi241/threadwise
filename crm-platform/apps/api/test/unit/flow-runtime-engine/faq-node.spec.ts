@@ -57,7 +57,8 @@ describe('the "Answer from FAQ" step', () => {
     const t = setup({ assistant: UUID, query: '{{user_message}}' });
     await t.node.execute(t.ctx);
     expect(t.assistantId).toHaveBeenCalledWith(7, { kind: 'uuid', uuid: UUID });
-    expect(t.retrieve).toHaveBeenCalledWith(7, 12, 'what are your hours');
+    // The step key names the search for the wallet, so a step that runs again does not pay for its embedding twice.
+    expect(t.retrieve).toHaveBeenCalledWith(7, 12, 'what are your hours', 'flow:1:0:f:faq');
   });
 
   it('matches: sets the variables under the saved name, sends the answer and leaves by "Matched" (port 1)', async () => {
