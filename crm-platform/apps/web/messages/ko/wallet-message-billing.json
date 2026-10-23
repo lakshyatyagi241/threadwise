@@ -40,8 +40,8 @@
       "topup": "충전",
       "earn": "적립",
       "refund": "환불",
-      "admin_adjust": "조정",
-      "spend": "사용 요금"
+      "spend": "사용 요금",
+      "admin_adjust": "조정"
     },
     "categories": {
       "marketing": "마케팅",
@@ -146,9 +146,9 @@
         "all": "전체",
         "topup": "충전",
         "earn": "수익",
+        "spend": "사용 요금",
         "refund": "환불",
-        "admin_adjust": "조정",
-        "spend": "사용 요금"
+        "admin_adjust": "조정"
       },
       "summary": {
         "balance": "현재 잔액",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "지출",
+      "subtitle": "각 메시지, 통화, AI 요청, 조회에 든 비용과 용도입니다. 합계에는 필터와 일치하는 모든 항목이 포함됩니다.",
       "back": "지갑으로 돌아가기",
       "breadcrumbLabel": "탐색 경로",
       "breadcrumbWallet": "지갑",
+      "breadcrumbExpenses": "지출",
       "fullStatement": "전체 명세서",
       "summary": {
+        "messages": "항목",
         "charged": "청구됨",
         "refunded": "환불됨",
         "net": "순비용",
-        "notBilled": "청구 안 됨",
-        "messages": "항목"
+        "notBilled": "청구 안 됨"
       },
       "filters": {
         "status": "상태",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "날짜",
         "template": "템플릿",
+        "campaign": "캠페인, 대량 발송 또는 기능",
         "channel": "채널",
         "category": "카테고리",
         "country": "국가",
@@ -247,9 +251,8 @@
         "charged": "청구됨",
         "refunded": "환불됨",
         "net": "순액",
-        "notBilled": "청구 안 됨",
-        "campaign": "캠페인, 대량 발송 또는 기능",
         "messages": "항목",
+        "notBilled": "청구 안 됨",
         "type": "유형"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "지갑 소유자가 없습니다"
       },
       "uncollected": "{amount} 미징수",
-      "emptyFiltered": "이 필터와 일치하는 항목이 없습니다. 필터를 바꾸거나 초기화하세요.",
-      "title": "지출",
-      "subtitle": "각 메시지, 통화, AI 요청, 조회에 든 비용과 용도입니다. 합계에는 필터와 일치하는 모든 항목이 포함됩니다.",
-      "breadcrumbExpenses": "지출",
       "emptyTitle": "아직 지출이 없습니다",
       "emptyBody": "메시지, 통화, AI 요청 및 기타 사용 내역이 용도와 비용과 함께 여기에 표시됩니다.",
+      "emptyFiltered": "이 필터와 일치하는 항목이 없습니다. 필터를 바꾸거나 초기화하세요.",
+      "days": {
+        "title": "일별 로그",
+        "subtitle": "날짜, 상태, 채널, 카테고리별로 묶은 메시지입니다. 날짜를 열면 메시지를 하나씩 볼 수 있습니다.",
+        "messagesOnDay": "메시지 {count}건",
+        "viewDetails": "자세히 보기",
+        "actions": "작업",
+        "empty": "이 기간에는 메시지가 없습니다."
+      },
+      "log": {
+        "title": "메시지",
+        "forDay": "{date} 메시지",
+        "showAllDays": "모든 날짜 보기"
+      },
       "units": {
         "sms": "{count, plural, other {#개 세그먼트}}",
         "whatsapp_call": "{count, plural, other {#분}}",

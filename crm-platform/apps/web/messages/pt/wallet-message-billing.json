@@ -40,8 +40,8 @@
       "topup": "Recarga",
       "earn": "Ganho",
       "refund": "Reembolso",
-      "admin_adjust": "Ajuste",
-      "spend": "Cobrança de uso"
+      "spend": "Cobrança de uso",
+      "admin_adjust": "Ajuste"
     },
     "categories": {
       "marketing": "Marketing",
@@ -146,9 +146,9 @@
         "all": "Todos",
         "topup": "Recargas",
         "earn": "Ganhos",
+        "spend": "Cobranças de uso",
         "refund": "Reembolsos",
-        "admin_adjust": "Ajustes",
-        "spend": "Cobranças de uso"
+        "admin_adjust": "Ajustes"
       },
       "summary": {
         "balance": "Saldo atual",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Despesas",
+      "subtitle": "Quanto custou cada mensagem, chamada, solicitação de IA e consulta, e para que serviu. Os totais cobrem tudo o que corresponde aos filtros.",
       "back": "Voltar para a carteira",
       "breadcrumbLabel": "Trilha de navegação",
       "breadcrumbWallet": "Carteira",
+      "breadcrumbExpenses": "Despesas",
       "fullStatement": "Extrato completo",
       "summary": {
+        "messages": "Itens",
         "charged": "Cobrado",
         "refunded": "Reembolsado",
         "net": "Custo líquido",
-        "notBilled": "Não cobrado",
-        "messages": "Itens"
+        "notBilled": "Não cobrado"
       },
       "filters": {
         "status": "Situação",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Data",
         "template": "Modelo",
+        "campaign": "Campanha, transmissão ou recurso",
         "channel": "Canal",
         "category": "Categoria",
         "country": "País",
@@ -247,9 +251,8 @@
         "charged": "Cobrado",
         "refunded": "Reembolsado",
         "net": "Líquido",
-        "notBilled": "Não cobrado",
-        "campaign": "Campanha, transmissão ou recurso",
         "messages": "Itens",
+        "notBilled": "Não cobrado",
         "type": "Tipo"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Sem titular da carteira"
       },
       "uncollected": "{amount} não cobrados",
-      "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os.",
-      "title": "Despesas",
-      "subtitle": "Quanto custou cada mensagem, chamada, solicitação de IA e consulta, e para que serviu. Os totais cobrem tudo o que corresponde aos filtros.",
-      "breadcrumbExpenses": "Despesas",
       "emptyTitle": "Ainda não há despesas",
       "emptyBody": "Mensagens, chamadas, solicitações de IA e outros usos aparecem aqui com a finalidade e o custo de cada um.",
+      "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os.",
+      "days": {
+        "title": "Registo diário",
+        "subtitle": "Mensagens agrupadas por dia, estado, canal e categoria. Abra um dia para ver cada mensagem.",
+        "messagesOnDay": "{count} mensagens",
+        "viewDetails": "Ver detalhes",
+        "actions": "Ações",
+        "empty": "Não há mensagens nestes dias."
+      },
+      "log": {
+        "title": "Mensagens",
+        "forDay": "Mensagens de {date}",
+        "showAllDays": "Mostrar todos os dias"
+      },
       "units": {
         "sms": "{count, plural, one {# segmento} other {# segmentos}}",
         "whatsapp_call": "{count, plural, one {# minuto} other {# minutos}}",

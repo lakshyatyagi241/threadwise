@@ -31,6 +31,8 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   'modules/admin/users/users.controller.ts#me',
   // the plan catalogue behind the pricing cards every member sees when asked to upgrade
   'modules/plans-subscriptions-trials/plans.controller.ts#list',
+  // the add-ons catalogue every member sees on the Add-ons page; whether this member may buy one is checked at checkout (the card carries it)
+  'modules/addons-extension-registry/addons.controller.ts#list',
   // the member and team directories every workspace member can open (Reference shows them to any signed-in member); every write is gated
   'modules/workspaces-teams-tenancy/members.controller.ts#list',
   'modules/workspaces-teams-tenancy/members.controller.ts#summary',

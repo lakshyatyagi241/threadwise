@@ -5,6 +5,9 @@ import {
   walletExactSubtract,
   type ExpenseEvent,
   type ExpenseFilter,
+  type ExpenseDayGroup,
+  type ExpenseDaysQuery,
+  type ExpenseDaysResponse,
   type ExpenseFreeReason,
   type ExpenseGroup,
   type ExpenseGroupBy,
@@ -110,6 +113,80 @@ export class WalletExpensesService {
       };
     });
   }
+
+  /**
+   * The day log: one line per calendar day, status, channel and category, paged by day so a day's lines arrive together. The
+   * day is cut in the viewer's time zone, the same zone each message's time is shown in.
+   */
+  async days(query: ExpenseDaysQuery): Promise<ExpenseDaysResponse> {
+    const orgId = RequestContextStore.require().orgId;
+    const platform = await this.settings.currency();
+    return this.db.tx(async (tx) => {
+      const unit = await this.billing.forOrg(tx, orgId);
+      const where = filterSql(orgId, query, unit, platform);
+      const dayOf = sql`((uc.created_at AT TIME ZONE ${query.timeZone})::date)`;
+      // One extra day tells whether there is an older page, the same way the log's extra row does.
+      // The name is only needed when the template filter reads it, so the day queries skip the per-charge name lookup otherwise.
+      const names = Boolean(query.template);
+      // A day before the cursor's day is a charge before the cursor's local midnight: the same cut, on created_at, so the scan stops there.
+      const dayRes = await tx.execute(sql`
+        SELECT DISTINCT ${dayOf}::text AS day
+          ${fromSql(where, names)}
+          ${query.cursor ? sql`AND uc.created_at < (${query.cursor}::date::timestamp AT TIME ZONE ${query.timeZone})` : sql``}
+         ORDER BY day DESC
+         LIMIT ${query.limit + 1}`);
+      const found = (dayRes.rows as unknown as { day: string }[]).map((r) => r.day);
+      const pageDays = found.slice(0, query.limit);
+      const hasMore = found.length > query.limit;
+      const newest = pageDays[0];
+      const oldest = pageDays[pageDays.length - 1];
+      if (!newest || !oldest) {
+        return {
+          currency: unit,
+          data: [],
+          page: { nextCursor: null, hasMore: false, limit: query.limit },
+        };
+      }
+      // Every day in [oldest, newest] that has a message is on this page, so the range is exact. The created_at bounds let the
+      // partitioned table prune to the months it spans. The day is computed once, in a CTE: GROUP BY needs the same expression
+      // in the select list, and each repeated bind of the time zone would be a different parameter.
+      const groupRes = await tx.execute(sql`
+        WITH msgs AS (
+          SELECT (uc.created_at AT TIME ZONE ${query.timeZone})::date AS day, uc.status, ${CHANNEL} AS source, uc.category,
+                 ch.amount AS charged_amount, rf.amount AS refunded_amount
+            ${fromSql(where, names)}
+             AND uc.created_at >= (${oldest}::date::timestamp AT TIME ZONE ${query.timeZone})
+             AND uc.created_at < ((${newest}::date + 1)::timestamp AT TIME ZONE ${query.timeZone})
+        )
+        SELECT day::text AS day, status, source, category,
+               count(*)::int AS messages,
+               COALESCE(sum(-charged_amount), 0)::text AS charged_sum,
+               COALESCE(sum(refunded_amount), 0)::text AS refunded_sum
+          FROM msgs
+         WHERE day BETWEEN ${oldest}::date AND ${newest}::date
+         GROUP BY day, status, source, category
+         ORDER BY day DESC, status, source NULLS LAST, category NULLS LAST`);
+      return {
+        currency: unit,
+        data: (groupRes.rows as unknown as DayGroupRow[]).map(toDayGroup),
+        page: {
+          nextCursor: hasMore ? oldest : null,
+          hasMore,
+          limit: query.limit,
+        },
+      };
+    });
+  }
+}
+
+interface DayGroupRow {
+  day: string;
+  status: ExpenseStatus;
+  source: string | null;
+  category: string | null;
+  messages: number;
+  charged_sum: string;
+  refunded_sum: string;
 }
 
 interface ExpenseRow {
@@ -175,15 +252,20 @@ function totalsOf(r: TotalsRow): GroupRow {
   };
 }
 
-/** The filters as SQL on `usage_charges` (alias `uc`). A charge with no currency predates per-currency billing: the platform's. */
+/**
+ * The filters as SQL on `usage_charges` (alias `uc`). A charge with no currency predates per-currency billing: the platform's.
+ * `from` and `to` are calendar days in the viewer's time zone, so they cover the same messages the viewer sees under those dates.
+ */
 function filterSql(orgId: number, q: ExpenseFilter, unit: string, platform: string): SQL {
   const parts: SQL[] = [
     sql`uc.org_id = ${orgId}`,
     sql`(uc.currency = ${unit} OR (uc.currency IS NULL AND ${unit} = ${platform}))`,
   ];
   if (q.status !== 'all') parts.push(sql`uc.status = ${q.status}`);
-  if (q.from) parts.push(sql`uc.created_at >= ${q.from}::date`);
-  if (q.to) parts.push(sql`uc.created_at < (${q.to}::date + 1)`);
+  if (q.from)
+    parts.push(sql`uc.created_at >= (${q.from}::date::timestamp AT TIME ZONE ${q.timeZone})`);
+  if (q.to)
+    parts.push(sql`uc.created_at < ((${q.to}::date + 1)::timestamp AT TIME ZONE ${q.timeZone})`);
   if (q.template)
     parts.push(sql`lower(COALESCE(uc.template_name, legacy.template_name)) = lower(${q.template})`);
   // Stored lowercased by the settle path, so the filter is too: an API caller's "Campaign" matches "campaign".
@@ -202,12 +284,11 @@ function sourceSql(source: string): SQL {
  * The charge with its ledger lines: the money out (shown positive) and the money back. Both joins are by the wallet row, not by id alone.
  * `legacy` is the name the statement shows for a message: the broadcast or campaign that holds it, found by its provider message id. It
  * is read only for a charge with no name on it (sent before the name was copied onto the charge).
+ * `legacyNames` false leaves that join out: only a query that reads or filters by the name needs it (`where` refers to `legacy`).
  */
-function fromSql(where: SQL): SQL {
-  return sql`FROM usage_charges uc
-    LEFT JOIN wallet_transactions ch ON ch.org_id = uc.org_id AND ch.id = uc.wallet_tx_id
-    LEFT JOIN wallet_transactions rf ON rf.org_id = uc.org_id AND rf.id = uc.refund_tx_id
-    LEFT JOIN LATERAL (
+function fromSql(where: SQL, legacyNames = true): SQL {
+  const legacy = legacyNames
+    ? sql`LEFT JOIN LATERAL (
       SELECT n.template_name, n.subject_name FROM (
         SELECT t.template_name, b.name AS subject_name, 0 AS pref
           FROM broadcast_contacts bc
@@ -223,7 +304,12 @@ function fromSql(where: SQL): SQL {
       ) n
       ORDER BY n.pref
       LIMIT 1
-    ) legacy ON uc.kind = 'whatsapp_message' AND (uc.template_name IS NULL OR uc.subject_name IS NULL)
+    ) legacy ON uc.kind = 'whatsapp_message' AND (uc.template_name IS NULL OR uc.subject_name IS NULL)`
+    : sql``;
+  return sql`FROM usage_charges uc
+    LEFT JOIN wallet_transactions ch ON ch.org_id = uc.org_id AND ch.id = uc.wallet_tx_id
+    LEFT JOIN wallet_transactions rf ON rf.org_id = uc.org_id AND rf.id = uc.refund_tx_id
+    ${legacy}
     WHERE ${where}`;
 }
 
@@ -268,6 +354,25 @@ function toEvent(r: ExpenseRow): ExpenseEvent {
     netExact: walletExactSubtract(charged, refunded),
     uncollectedMinor: r.shortfall_credits,
     refundedAt: r.refunded_iso,
+  };
+}
+
+function toDayGroup(r: DayGroupRow): ExpenseDayGroup {
+  const charged = walletExactAmount(r.charged_sum);
+  const refunded = walletExactAmount(r.refunded_sum);
+  const net = walletExactSubtract(charged, refunded);
+  return {
+    day: r.day,
+    status: r.status,
+    source: r.source,
+    category: r.category,
+    messages: r.messages,
+    chargedMinor: decimalToMinor(charged),
+    chargedExact: charged,
+    refundedMinor: decimalToMinor(refunded),
+    refundedExact: refunded,
+    netMinor: decimalToMinor(net),
+    netExact: net,
   };
 }
 

@@ -26,9 +26,9 @@
         "all": "Todos",
         "topup": "Recargas",
         "earn": "Ganancias",
+        "spend": "Cargos por uso",
         "refund": "Reembolsos",
-        "admin_adjust": "Ajustes",
-        "spend": "Cargos por uso"
+        "admin_adjust": "Ajustes"
       },
       "summary": {
         "balance": "Saldo actual",
@@ -73,16 +73,19 @@
       "title": "Extracto del monedero"
     },
     "expenses": {
+      "title": "Gastos",
+      "subtitle": "Lo que costó cada mensaje, llamada, solicitud de IA y consulta, y para qué fue. Los totales abarcan todo lo que coincide con los filtros.",
       "back": "Volver al monedero",
       "breadcrumbLabel": "Ruta de navegación",
       "breadcrumbWallet": "Monedero",
+      "breadcrumbExpenses": "Gastos",
       "fullStatement": "Extracto completo",
       "summary": {
+        "messages": "Elementos",
         "charged": "Cobrado",
         "refunded": "Reembolsado",
         "net": "Coste neto",
-        "notBilled": "No facturado",
-        "messages": "Elementos"
+        "notBilled": "No facturado"
       },
       "filters": {
         "status": "Estado",
@@ -121,6 +124,7 @@
       "columns": {
         "date": "Fecha",
         "template": "Plantilla",
+        "campaign": "Campaña, difusión o función",
         "channel": "Canal",
         "category": "Categoría",
         "country": "País",
@@ -128,9 +132,8 @@
         "charged": "Cobrado",
         "refunded": "Reembolsado",
         "net": "Neto",
-        "notBilled": "No facturado",
-        "campaign": "Campaña, difusión o función",
         "messages": "Elementos",
+        "notBilled": "No facturado",
         "type": "Tipo"
       },
       "status": {
@@ -146,12 +149,22 @@
         "no_wallet_owner": "Sin titular del monedero"
       },
       "uncollected": "{amount} sin cobrar",
-      "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos.",
-      "title": "Gastos",
-      "subtitle": "Lo que costó cada mensaje, llamada, solicitud de IA y consulta, y para qué fue. Los totales abarcan todo lo que coincide con los filtros.",
-      "breadcrumbExpenses": "Gastos",
       "emptyTitle": "Aún no hay gastos",
       "emptyBody": "Aquí aparecen los mensajes, las llamadas, las solicitudes de IA y otros usos, con su finalidad y su costo.",
+      "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos.",
+      "days": {
+        "title": "Registro diario",
+        "subtitle": "Mensajes agrupados por día, estado, canal y categoría. Abre un día para ver cada mensaje.",
+        "messagesOnDay": "{count} mensajes",
+        "viewDetails": "Ver detalles",
+        "actions": "Acciones",
+        "empty": "No hay mensajes en estos días."
+      },
+      "log": {
+        "title": "Mensajes",
+        "forDay": "Mensajes del {date}",
+        "showAllDays": "Mostrar todos los días"
+      },
       "units": {
         "sms": "{count, plural, one {# segmento} other {# segmentos}}",
         "whatsapp_call": "{count, plural, one {# minuto} other {# minutos}}",
@@ -933,8 +946,8 @@
       "topup": "Recarga",
       "earn": "Ingreso",
       "refund": "Reembolso",
-      "admin_adjust": "Ajuste",
-      "spend": "Cargo por uso"
+      "spend": "Cargo por uso",
+      "admin_adjust": "Ajuste"
     },
     "categories": {
       "marketing": "Marketing",

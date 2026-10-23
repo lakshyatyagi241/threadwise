@@ -46,7 +46,7 @@ function Probe({ exists, set }: { exists: boolean; set: TabSet }) {
 const go = (k: BuilderTab) =>
   act(async () => host.querySelector<HTMLButtonElement>(`[data-go="${k}"]`)!.click());
 const shown = () => host.querySelector('[data-testid="tab"]')!.textContent;
-const mount = (exists: boolean, set: TabSet = { web: true }) =>
+const mount = (exists: boolean, set: TabSet = { faqs: true, web: true }) =>
   act(async () => root.render(<Probe exists={exists} set={set} />));
 
 beforeEach(() => {
@@ -73,12 +73,21 @@ describe('the builder tab and the address', () => {
     expect(shown()).toBe('build');
   });
 
-  it('opens on Build for an old ?tab=faqs link, and for Customize on a flow without it', async () => {
+  it('opens on FAQs for ?tab=faqs', async () => {
     window.history.replaceState(null, '', '/flows/simple/f1?tab=faqs');
     await mount(true);
+    expect(shown()).toBe('faqs');
+  });
+
+  it('opens on Build for FAQs the person may not read', async () => {
+    window.history.replaceState(null, '', '/flows/simple/f1?tab=faqs');
+    await mount(true, { faqs: false, web: true });
     expect(shown()).toBe('build');
+  });
+
+  it('opens on Build for Customize on a flow without it', async () => {
     window.history.replaceState(null, '', '/flows/simple/f1?tab=customize');
-    await mount(true, { web: false });
+    await mount(true, { faqs: true, web: false });
     expect(shown()).toBe('build');
   });
 

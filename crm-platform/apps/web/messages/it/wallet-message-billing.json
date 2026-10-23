@@ -40,8 +40,8 @@
       "topup": "Ricarica",
       "earn": "Guadagno",
       "refund": "Rimborso",
-      "admin_adjust": "Rettifica",
-      "spend": "Addebito di utilizzo"
+      "spend": "Addebito di utilizzo",
+      "admin_adjust": "Rettifica"
     },
     "categories": {
       "marketing": "Marketing",
@@ -146,9 +146,9 @@
         "all": "Tutti",
         "topup": "Ricariche",
         "earn": "Guadagni",
+        "spend": "Addebiti di utilizzo",
         "refund": "Rimborsi",
-        "admin_adjust": "Rettifiche",
-        "spend": "Addebiti di utilizzo"
+        "admin_adjust": "Rettifiche"
       },
       "summary": {
         "balance": "Saldo attuale",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Spese",
+      "subtitle": "Quanto è costato ogni messaggio, chiamata, richiesta di IA e ricerca, e a cosa serviva. I totali comprendono tutto ciò che corrisponde ai filtri.",
       "back": "Torna al wallet",
       "breadcrumbLabel": "Percorso di navigazione",
       "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Spese",
       "fullStatement": "Estratto conto completo",
       "summary": {
+        "messages": "Voci",
         "charged": "Addebitato",
         "refunded": "Rimborsato",
         "net": "Costo netto",
-        "notBilled": "Non addebitato",
-        "messages": "Voci"
+        "notBilled": "Non addebitato"
       },
       "filters": {
         "status": "Stato",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Data",
         "template": "Modello",
+        "campaign": "Campagna, broadcast o funzione",
         "channel": "Canale",
         "category": "Categoria",
         "country": "Paese",
@@ -247,9 +251,8 @@
         "charged": "Addebitato",
         "refunded": "Rimborsato",
         "net": "Netto",
-        "notBilled": "Non addebitato",
-        "campaign": "Campagna, broadcast o funzione",
         "messages": "Voci",
+        "notBilled": "Non addebitato",
         "type": "Tipo"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Nessun titolare del wallet"
       },
       "uncollected": "{amount} non riscossi",
-      "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
-      "title": "Spese",
-      "subtitle": "Quanto è costato ogni messaggio, chiamata, richiesta di IA e ricerca, e a cosa serviva. I totali comprendono tutto ciò che corrisponde ai filtri.",
-      "breadcrumbExpenses": "Spese",
       "emptyTitle": "Ancora nessuna spesa",
       "emptyBody": "Messaggi, chiamate, richieste di IA e altri utilizzi compaiono qui con la loro finalità e il loro costo.",
+      "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
+      "days": {
+        "title": "Registro giornaliero",
+        "subtitle": "Messaggi raggruppati per giorno, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
+        "messagesOnDay": "{count} messaggi",
+        "viewDetails": "Visualizza dettagli",
+        "actions": "Azioni",
+        "empty": "Nessun messaggio in questi giorni."
+      },
+      "log": {
+        "title": "Messaggi",
+        "forDay": "Messaggi del {date}",
+        "showAllDays": "Mostra tutti i giorni"
+      },
       "units": {
         "sms": "{count, plural, one {# segmento} other {# segmenti}}",
         "whatsapp_call": "{count, plural, one {# minuto} other {# minuti}}",

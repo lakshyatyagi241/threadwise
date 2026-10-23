@@ -581,6 +581,46 @@ describe('Location: coordinates and optional name / address', () => {
     expect(sent).toEqual([{ kind: 'location', latitude: 18.5204, longitude: 73.8567 }]);
   });
 
+  it('a link-mode step sends its pin with the coordinates only, then the name and address as a text', async () => {
+    const { sent } = await sendOf({
+      locMode: 'link',
+      mapsUrl: 'https://maps.app.goo.gl/AbCd123',
+      lat: '18.5204',
+      lng: '73.8567',
+      title: 'Our office',
+      address: 'MG Road',
+    });
+    expect(sent).toEqual([
+      { kind: 'location', latitude: 18.5204, longitude: 73.8567 },
+      { kind: 'text', body: '📍 *Our office*\nMG Road' },
+    ]);
+    // Nothing to follow: the pin goes alone.
+    const bare = await sendOf({
+      locMode: 'link',
+      mapsUrl: 'https://maps.app.goo.gl/AbCd123',
+      lat: '18.5204',
+      lng: '73.8567',
+    });
+    expect(bare.sent).toEqual([{ kind: 'location', latitude: 18.5204, longitude: 73.8567 }]);
+    // Typed coordinates still go as a pin with the name.
+    const typed = await sendOf({ locMode: 'coords', lat: '18.5204', lng: '73.8567', title: 'HQ' });
+    expect(typed.sent[0]).toMatchObject({ kind: 'location', name: 'HQ' });
+  });
+
+  it('a coordinate pair pasted into the link box is still a coordinates-only pin, the name following as a text', async () => {
+    const { sent } = await sendOf({
+      locMode: 'link',
+      mapsUrl: '18.5204, 73.8567',
+      lat: '18.5204',
+      lng: '73.8567',
+      title: 'Our office',
+    });
+    expect(sent).toEqual([
+      { kind: 'location', latitude: 18.5204, longitude: 73.8567 },
+      { kind: 'text', body: '📍 *Our office*' },
+    ]);
+  });
+
   it('reads a decimal comma the way the builder does', async () => {
     const { sent } = await sendOf({ lat: '18,5204', lng: '73,8567' });
     expect(sent[0]).toMatchObject({ kind: 'location', latitude: 18.5204, longitude: 73.8567 });

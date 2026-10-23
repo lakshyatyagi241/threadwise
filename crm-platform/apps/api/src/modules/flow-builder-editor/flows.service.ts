@@ -470,9 +470,10 @@ export class FlowsService {
           { path: 'widget', message: 'Open the Customize tab and save it once.' },
         ]);
       }
-      await this.repo.setPublished(tx, ctx.orgId, row.id, published);
+      // The widget's channel is written before the publish copies the trigger settings, so the live copy carries the tie.
       if (published && row.flowType === 'web')
         await this.repo.tieToWidgetChannel(tx, ctx.orgId, row.id);
+      await this.repo.setPublished(tx, ctx.orgId, row.id, published);
       await this.audit.record(tx, {
         module: FLOW_MODULE,
         recordId: row.id,

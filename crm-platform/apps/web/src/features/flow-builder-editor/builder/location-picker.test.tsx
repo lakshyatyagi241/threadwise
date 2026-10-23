@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import { LocationPicker, locationMode } from './location-picker';
+import { coordinatePatch, LocationPicker, locationMode } from './location-picker';
 
 // Messages are not loaded here: the key is the text.
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
@@ -15,6 +15,25 @@ describe('locationMode', () => {
     expect(locationMode({ lat: '18.5', lng: '73.8' })).toBe('coords');
     expect(locationMode({ lat: '', lng: '' })).toBe('link');
     expect(locationMode({})).toBe('link');
+  });
+});
+
+describe('coordinatePatch', () => {
+  it('a typed coordinate clears the pasted link, so the link box never names another place', () => {
+    expect(coordinatePatch('lat', '18.5204')).toEqual({ lat: '18.5204', mapsUrl: '' });
+    expect(coordinatePatch('lng', '73.8567')).toEqual({ lng: '73.8567', mapsUrl: '' });
+  });
+
+  it('a pair pasted into either box fills both and clears the link', () => {
+    expect(coordinatePatch('lat', '18.5204, 73.8567')).toEqual({
+      lat: '18.5204',
+      lng: '73.8567',
+      mapsUrl: '',
+    });
+  });
+
+  it('a lone decimal comma is a number, not a pair', () => {
+    expect(coordinatePatch('lat', '18,5204')).toEqual({ lat: '18,5204', mapsUrl: '' });
   });
 });
 

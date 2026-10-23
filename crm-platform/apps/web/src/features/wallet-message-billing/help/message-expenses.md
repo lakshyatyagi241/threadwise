@@ -5,7 +5,7 @@ summary: What every message, SMS, email, call, AI request and lookup cost, what 
 area: settings
 order: 31
 documents: [tile:wallet-message-billing]
-keywords: [expenses, spending, cost, template, message, sms, email, call, ai, type, log, per message, refund, failed, campaign, broadcast, breakdown, charges]
+keywords: [expenses, spending, cost, template, message, sms, email, call, ai, type, log, per message, refund, failed, campaign, broadcast, breakdown, charges, daily, day, view details]
 ---
 
 ## What it is for
@@ -18,10 +18,24 @@ The expense log answers two questions: what each charge was for, and what it cos
 2. Select **Expenses**. The page opens at [the expense log](/billing/wallet/expenses).
 3. Read the totals at the top: the number of items, what was charged, what came back, the net cost and how many items were not billed.
 4. Under **Cost by**, choose **Template**, **Channel**, **Category**, **Country** or **Type** to see the cost of each group. Each row shows its items, what was charged, what was refunded, the net cost and how many were not billed. **Type** shows what AI, SMS, email and calls cost next to WhatsApp messages.
-5. Below that is the list of items, newest first. Use **Next** and **Previous** to read further.
-6. To narrow the list, set a status, a type, a channel, a category, a template name or a date range, then select **Apply**. **Reset** clears them all.
+5. Below that is the **Daily log**, described in the next section. Select **View details** on a day to see every item from that day.
+6. Below the daily log is the list of items, newest first. Use **Next** and **Previous** to read further.
+7. To narrow the list, set a status, a type, a channel, a category, a template name or a date range, then select **Apply**. **Reset** clears them all.
 
 > The totals and the groups cover everything that matches the filters, not only the rows on the page.
+
+## The daily log
+
+The daily log turns many similar messages into a few lines. It has one block for each day, with the date and how many messages that day had. Under the date are the lines for that day: one for each status, channel and category.
+
+- **Status**, **Channel** and **Category** name the kind of message, such as Charged, Campaign and Marketing.
+- **Messages**, **Charged**, **Refunded** and **Net** add up the messages on that line.
+- Days are calendar days in your time zone, the same zone the time of each message is shown in.
+- The newest day comes first. The log shows 14 days a page; use **Next** and **Previous** to read older days.
+- Select **View details** on a day to show every message from that day in the list below. The **From** and **To** dates change to that day, and the totals above cover it.
+- Select **Show all days** above the message list to go back to the full date range.
+
+> The status, channel, category and template filters apply to the daily log as well. A day with no messages that match them is not shown.
 
 ## What each row shows
 
@@ -44,7 +58,7 @@ The expense log answers two questions: what each charge was for, and what it cos
 - **Type**: one kind of item, or all types.
 - **Channel** and **Category**: one value from the list.
 - **Template**: the template name. Capitals do not matter.
-- **From** and **To**: the date range. The end date cannot be before the start date.
+- **From** and **To**: the date range, in days in your time zone. The end date cannot be before the start date.
 - **Cost by**: the grouping. It is kept in the address, so a link to a grouping opens the same view.
 
 > Groups are listed largest cost first. When there are more than 200 groups, only the largest are shown and the page says so. Narrow the date range to see the rest.

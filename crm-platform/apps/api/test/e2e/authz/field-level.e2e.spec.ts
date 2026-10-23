@@ -608,7 +608,8 @@ const FAMILIES: Fam[] = [
     grants: ['api.keys.create', 'api.keys.read'],
     createUrl: '/v2/developer/keys',
     idOf: (j) => j.key.id,
-    body: (m) => ({ name: m }),
+    // A scope that needs no workspace permission, so a member who holds only api.keys.* may create the key (AZ-001).
+    body: (m) => ({ name: m, scopes: ['account:read'] }),
     extra: {
       prefix: 'wsk_hijacked',
       keyHash: 'hijacked',
@@ -1078,6 +1079,7 @@ describe('API key creation', () => {
       ...tenantFields('create'),
       ...privilegeFields(true),
       name: marker('key'),
+      scopes: ['account:read'],
       prefix: 'wsk_hijacked',
       keyHash: 'hijacked',
       revokedAt: OLD,

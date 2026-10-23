@@ -17,7 +17,6 @@ import {
   checkScopes,
   dateLabel,
   errorKind,
-  isFullAccess,
   isReadImplied,
   nameFieldError,
   quickstartCurl,
@@ -145,13 +144,6 @@ describe('time labels', () => {
   });
 });
 
-describe('isFullAccess', () => {
-  it('is true for a key with no scopes, as in Reference, and false once it has any', () => {
-    expect(isFullAccess(key())).toBe(true);
-    expect(isFullAccess(key({ scopes: ['contacts:read'] }))).toBe(false);
-  });
-});
-
 describe('scope picker rows', () => {
   it('has one row per resource and together they are every scope the API accepts, read before write', () => {
     expect(SCOPE_ROWS.map((r) => r.resource)).toEqual([...API_SCOPE_RESOURCES]);
@@ -177,32 +169,27 @@ describe('scope picker rows', () => {
 });
 
 describe('checkScopes', () => {
-  it('sends no scopes when the key is not restricted, whatever was ticked before', () => {
-    expect(checkScopes(false, [])).toEqual({ ok: true, scopes: [] });
-    expect(checkScopes(false, ['contacts:read'])).toEqual({ ok: true, scopes: [] });
-  });
-
-  it('refuses a restricted key with nothing ticked: an empty list would be full access', () => {
-    expect(checkScopes(true, [])).toEqual({ ok: false, error: 'noScopes' });
+  it('refuses a key with nothing ticked: the API refuses an empty list (AUTH-073)', () => {
+    expect(checkScopes([])).toEqual({ ok: false, error: 'noScopes' });
   });
 
   it('sends the ticked scopes in picker order', () => {
     const picked: ApiScope[] = ['messages:write', 'contacts:read', 'account:read'];
-    expect(checkScopes(true, picked)).toEqual({
+    expect(checkScopes(picked)).toEqual({
       ok: true,
       scopes: ['account:read', 'contacts:read', 'messages:write'],
     });
   });
 
   it('leaves out a read that its write already implies, and keeps a read on its own', () => {
-    expect(checkScopes(true, ['contacts:read', 'contacts:write', 'deals:read'])).toEqual({
+    expect(checkScopes(['contacts:read', 'contacts:write', 'deals:read'])).toEqual({
       ok: true,
       scopes: ['contacts:write', 'deals:read'],
     });
   });
 
   it('every scope ticked is sent as ticked, nothing invented', () => {
-    const all = checkScopes(true, [...API_SCOPES]);
+    const all = checkScopes([...API_SCOPES]);
     expect(all.ok && all.scopes).toEqual(API_SCOPES.filter((s) => !s.endsWith(':read')));
   });
 });

@@ -47,10 +47,28 @@ describe('parsePql', () => {
     const text = '```json\n{"rules":null,"summary":"x","ignored":[]}\n```';
     expect(parsePql(text)).toEqual({ rules: null, summary: 'x', ignored: [] });
   });
-  it('refuses a tree with an unknown operator or non JSON', () => {
+  it('refuses text that is not a JSON object', () => {
     expect(parsePql('nope')).toBeNull();
-    const rules = { type: 'group', combinator: 'and', children: [cond('name', 'drop_table', 'x')] };
-    expect(parsePql(JSON.stringify({ rules, summary: 's', ignored: [] }))).toBeNull();
+    expect(parsePql('[1, 2]')).toBeNull();
+  });
+  it('passes a tree the schema would refuse on to pruneRules, which drops only that condition', () => {
+    const rules = {
+      type: 'group',
+      combinator: 'and',
+      children: [cond('name', 'drop_table', 'x'), cond('name', 'contains', 'a')],
+    };
+    const answer = parsePql(JSON.stringify({ rules, summary: 's', ignored: [] }));
+    expect(answer).not.toBeNull();
+    const r = pruneRules(answer!.rules, catalog);
+    expect(r.dropped).toEqual(['name']);
+    expect(r.rules?.children).toEqual([cond('name', 'contains', 'a')]);
+  });
+  it('cuts a long summary and ignored list to the contract limits', () => {
+    const answer = parsePql(
+      JSON.stringify({ rules: null, summary: 'x'.repeat(400), ignored: ['y'.repeat(300), 3] }),
+    );
+    expect(answer?.summary).toHaveLength(300);
+    expect(answer?.ignored).toEqual(['y'.repeat(120)]);
   });
 });
 
@@ -71,6 +89,33 @@ describe('pruneRules kinds', () => {
     );
     expect(r.dropped).toEqual(['custom.city']);
     expect(r.rules?.children).toHaveLength(1);
+  });
+  it('drops a tag written as a name instead of its id, and keeps the rest', () => {
+    const r = pruneRules(
+      group(cond('tags', 'has_any', ['vip']), cond('custom.city', 'equals', 'Pune')),
+      catalog,
+    );
+    expect(r.dropped).toEqual(['tags']);
+    expect(r.rules?.children).toHaveLength(1);
+  });
+  it('drops a built-in condition with an operator its field does not have', () => {
+    const r = pruneRules(
+      group(cond('name', 'matches', 'vip'), cond('name', 'contains', 'vip')),
+      catalog,
+    );
+    expect(r.dropped).toEqual(['name']);
+    expect(r.rules?.children).toEqual([cond('name', 'contains', 'vip')]);
+  });
+  it('drops a condition with no value where one is needed', () => {
+    const r = pruneRules(group(cond('name', 'contains')), catalog);
+    expect(r.rules).toBeNull();
+    expect(r.dropped).toEqual(['name']);
+  });
+  it('drops a group nested deeper than the schema allows, and the conditions under it', () => {
+    const deep = group(group(group(group(cond('custom.city', 'equals', 'Pune')))));
+    const r = pruneRules(deep, catalog);
+    expect(r.rules).toBeNull();
+    expect(r.dropped).toEqual(['group']);
   });
 });
 

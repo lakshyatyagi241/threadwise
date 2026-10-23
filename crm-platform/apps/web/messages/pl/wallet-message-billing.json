@@ -40,8 +40,8 @@
       "topup": "Doładowanie",
       "earn": "Przychód",
       "refund": "Zwrot",
-      "admin_adjust": "Korekta",
-      "spend": "Opłata za użycie"
+      "spend": "Opłata za użycie",
+      "admin_adjust": "Korekta"
     },
     "categories": {
       "marketing": "Marketingowe",
@@ -146,9 +146,9 @@
         "all": "Wszystkie",
         "topup": "Doładowania",
         "earn": "Zarobki",
+        "spend": "Opłaty za użycie",
         "refund": "Zwroty",
-        "admin_adjust": "Korekty",
-        "spend": "Opłaty za użycie"
+        "admin_adjust": "Korekty"
       },
       "summary": {
         "balance": "Bieżące saldo",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Wydatki",
+      "subtitle": "Ile kosztowała każda wiadomość, każde połączenie, zapytanie AI i sprawdzenie oraz do czego służyło. Sumy obejmują wszystko, co pasuje do filtrów.",
       "back": "Wróć do portfela",
       "breadcrumbLabel": "Ścieżka nawigacji",
       "breadcrumbWallet": "Portfel",
+      "breadcrumbExpenses": "Wydatki",
       "fullStatement": "Pełne zestawienie",
       "summary": {
+        "messages": "Pozycje",
         "charged": "Obciążono",
         "refunded": "Zwrócono",
         "net": "Koszt netto",
-        "notBilled": "Nie naliczono",
-        "messages": "Pozycje"
+        "notBilled": "Nie naliczono"
       },
       "filters": {
         "status": "Stan rozliczenia",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Data",
         "template": "Szablon",
+        "campaign": "Kampania, wysyłka masowa lub funkcja",
         "channel": "Kanał",
         "category": "Kategoria",
         "country": "Kraj",
@@ -247,9 +251,8 @@
         "charged": "Obciążono",
         "refunded": "Zwrócono",
         "net": "Netto",
-        "notBilled": "Nie naliczono",
-        "campaign": "Kampania, wysyłka masowa lub funkcja",
         "messages": "Pozycje",
+        "notBilled": "Nie naliczono",
         "type": "Typ"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Brak właściciela portfela"
       },
       "uncollected": "Nieściągnięte: {amount}",
-      "emptyFiltered": "Nic nie pasuje do tych filtrów. Zmień je lub zresetuj.",
-      "title": "Wydatki",
-      "subtitle": "Ile kosztowała każda wiadomość, każde połączenie, zapytanie AI i sprawdzenie oraz do czego służyło. Sumy obejmują wszystko, co pasuje do filtrów.",
-      "breadcrumbExpenses": "Wydatki",
       "emptyTitle": "Brak wydatków",
       "emptyBody": "Wiadomości, połączenia, zapytania AI i inne użycie pojawiają się tutaj wraz z celem i kosztem.",
+      "emptyFiltered": "Nic nie pasuje do tych filtrów. Zmień je lub zresetuj.",
+      "days": {
+        "title": "Dziennik dzienny",
+        "subtitle": "Wiadomości pogrupowane według dnia, statusu, kanału i kategorii. Otwórz dzień, aby zobaczyć każdą wiadomość.",
+        "messagesOnDay": "{count} wiadomości",
+        "viewDetails": "Zobacz szczegóły",
+        "actions": "Działania",
+        "empty": "Brak wiadomości w tych dniach."
+      },
+      "log": {
+        "title": "Wiadomości",
+        "forDay": "Wiadomości z {date}",
+        "showAllDays": "Pokaż wszystkie dni"
+      },
       "units": {
         "sms": "{count, plural, one {# segment} few {# segmenty} many {# segmentów} other {# segmentu}}",
         "whatsapp_call": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",

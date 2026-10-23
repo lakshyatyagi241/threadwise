@@ -40,8 +40,8 @@
       "topup": "Recharge",
       "earn": "Gain",
       "refund": "Remboursement",
-      "admin_adjust": "Ajustement",
-      "spend": "Frais d'utilisation"
+      "spend": "Frais d'utilisation",
+      "admin_adjust": "Ajustement"
     },
     "categories": {
       "marketing": "Marketing",
@@ -146,9 +146,9 @@
         "all": "Tous",
         "topup": "Recharges",
         "earn": "Gains",
+        "spend": "Frais d'utilisation",
         "refund": "Remboursements",
-        "admin_adjust": "Ajustements",
-        "spend": "Frais d'utilisation"
+        "admin_adjust": "Ajustements"
       },
       "summary": {
         "balance": "Solde actuel",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Dépenses",
+      "subtitle": "Ce que chaque message, appel, requête d'IA et recherche a coûté, et à quoi il a servi. Les totaux couvrent tout ce qui correspond aux filtres.",
       "back": "Retour au portefeuille",
       "breadcrumbLabel": "Fil d’Ariane",
       "breadcrumbWallet": "Portefeuille",
+      "breadcrumbExpenses": "Dépenses",
       "fullStatement": "Relevé complet",
       "summary": {
+        "messages": "Éléments",
         "charged": "Facturé",
         "refunded": "Remboursé",
         "net": "Coût net",
-        "notBilled": "Non facturé",
-        "messages": "Éléments"
+        "notBilled": "Non facturé"
       },
       "filters": {
         "status": "Statut",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Envoyé le",
         "template": "Modèle",
+        "campaign": "Campagne, diffusion ou fonction",
         "channel": "Chaîne",
         "category": "Catégorie",
         "country": "Pays",
@@ -247,9 +251,8 @@
         "charged": "Facturé",
         "refunded": "Remboursé",
         "net": "Coût net",
-        "notBilled": "Non facturé",
-        "campaign": "Campagne, diffusion ou fonction",
         "messages": "Éléments",
+        "notBilled": "Non facturé",
         "type": "Type"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Aucun titulaire du portefeuille"
       },
       "uncollected": "{amount} non encaissés",
-      "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
-      "title": "Dépenses",
-      "subtitle": "Ce que chaque message, appel, requête d'IA et recherche a coûté, et à quoi il a servi. Les totaux couvrent tout ce qui correspond aux filtres.",
-      "breadcrumbExpenses": "Dépenses",
       "emptyTitle": "Aucune dépense pour l'instant",
       "emptyBody": "Les messages, appels, requêtes d'IA et autres usages apparaissent ici avec leur finalité et leur coût.",
+      "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
+      "days": {
+        "title": "Journal quotidien",
+        "subtitle": "Messages regroupées par jour, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
+        "messagesOnDay": "{count} messages",
+        "viewDetails": "Voir les détails",
+        "actions": "Actions",
+        "empty": "Aucun message ces jours-là."
+      },
+      "log": {
+        "title": "Messages",
+        "forDay": "Messages du {date}",
+        "showAllDays": "Afficher tous les jours"
+      },
       "units": {
         "sms": "{count, plural, one {# segment} other {# segments}}",
         "whatsapp_call": "{count, plural, one {# minute} other {# minutes}}",

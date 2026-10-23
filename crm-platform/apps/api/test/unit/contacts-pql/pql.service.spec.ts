@@ -156,6 +156,54 @@ describe('PqlService.translate', () => {
     expect(r.rules?.children).toHaveLength(1);
   });
 
+  it('keeps the good conditions when one is malformed instead of failing the search', async () => {
+    const rules = {
+      type: 'group',
+      combinator: 'and',
+      children: [
+        { type: 'condition', field: 'tags', operator: 'has_any', value: ['vip'] },
+        { type: 'condition', field: 'name', operator: 'contains', value: 'a' },
+      ],
+    };
+    const { svc } = make({
+      text: JSON.stringify({ rules, summary: 'Contacts named a', ignored: [] }),
+    });
+    const r = await run(() => svc.translate({ query: 'vip contacts named a' }));
+    expect(r.rules?.children).toEqual([
+      { type: 'condition', field: 'name', operator: 'contains', value: 'a' },
+    ]);
+    expect(r.summary).toBe('');
+    expect(r.ignored).toContain('unknown tags');
+  });
+
+  it('answers with nothing to apply, not an error, when a condition has no value', async () => {
+    const rules = {
+      type: 'group',
+      combinator: 'and',
+      children: [{ type: 'condition', field: 'name', operator: 'contains' }],
+    };
+    const { svc } = make({ text: JSON.stringify({ rules, summary: 'x', ignored: [] }) });
+    const r = await run(() =>
+      svc.translate({ query: 'make a filter of contact names containing' }),
+    );
+    expect(r.rules).toBeNull();
+    expect(r.ignored).toContain('unknown name');
+  });
+
+  it('caps a long summary and ignored list so the answer still fits the contract', async () => {
+    const { svc } = make({
+      text: JSON.stringify({
+        rules: null,
+        summary: 'x'.repeat(400),
+        ignored: Array.from({ length: 12 }, () => 'y'.repeat(200)),
+      }),
+    });
+    const r = await run(() => svc.translate({ query: 'a' }));
+    expect(r.summary.length).toBeLessThanOrEqual(300);
+    expect(r.ignored).toHaveLength(10);
+    expect(r.ignored.every((s) => s.length <= 120)).toBe(true);
+  });
+
   it('limits one user to 30 searches a minute', async () => {
     const { svc } = make({ text: JSON.stringify({ rules: null, summary: '', ignored: [] }) });
     for (let i = 0; i < 30; i++) await run(() => svc.translate({ query: 'a' }));

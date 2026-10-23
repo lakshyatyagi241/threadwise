@@ -40,8 +40,8 @@
       "topup": "Opwaardering",
       "earn": "Verdiend",
       "refund": "Terugbetaling",
-      "admin_adjust": "Correctie",
-      "spend": "Gebruikskosten"
+      "spend": "Gebruikskosten",
+      "admin_adjust": "Correctie"
     },
     "categories": {
       "marketing": "Marketing",
@@ -146,9 +146,9 @@
         "all": "Alle",
         "topup": "Opwaarderingen",
         "earn": "Verdiensten",
+        "spend": "Gebruikskosten",
         "refund": "Terugbetalingen",
-        "admin_adjust": "Correcties",
-        "spend": "Gebruikskosten"
+        "admin_adjust": "Correcties"
       },
       "summary": {
         "balance": "Huidig saldo",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Uitgaven",
+      "subtitle": "Wat elk bericht, gesprek, AI-verzoek en elke opzoeking heeft gekost en waarvoor het was. De totalen omvatten alles wat bij de filters past.",
       "back": "Terug naar portemonnee",
       "breadcrumbLabel": "Kruimelpad",
       "breadcrumbWallet": "Portemonnee",
+      "breadcrumbExpenses": "Uitgaven",
       "fullStatement": "Volledig overzicht",
       "summary": {
+        "messages": "Items",
         "charged": "Gefactureerd",
         "refunded": "Terugbetaald",
         "net": "Nettokosten",
-        "notBilled": "Niet gefactureerd",
-        "messages": "Items"
+        "notBilled": "Niet gefactureerd"
       },
       "filters": {
         "status": "Facturatiestatus",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Datum",
         "template": "Sjabloon",
+        "campaign": "Campagne, broadcast of functie",
         "channel": "Kanaal",
         "category": "Categorie",
         "country": "Land",
@@ -247,9 +251,8 @@
         "charged": "Gefactureerd",
         "refunded": "Terugbetaald",
         "net": "Netto",
-        "notBilled": "Niet gefactureerd",
-        "campaign": "Campagne, broadcast of functie",
         "messages": "Items",
+        "notBilled": "Niet gefactureerd",
         "type": "Type"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Geen eigenaar van de portemonnee"
       },
       "uncollected": "{amount} niet geïncasseerd",
-      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
-      "title": "Uitgaven",
-      "subtitle": "Wat elk bericht, gesprek, AI-verzoek en elke opzoeking heeft gekost en waarvoor het was. De totalen omvatten alles wat bij de filters past.",
-      "breadcrumbExpenses": "Uitgaven",
       "emptyTitle": "Nog geen uitgaven",
       "emptyBody": "Berichten, gesprekken, AI-verzoeken en ander gebruik verschijnen hier met waarvoor ze waren en wat ze kostten.",
+      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
+      "days": {
+        "title": "Dagelijks logboek",
+        "subtitle": "Berichten gegroepeerd per dag, status, kanaal en categorie. Open een dag om elk bericht te zien.",
+        "messagesOnDay": "{count} berichten",
+        "viewDetails": "Details bekijken",
+        "actions": "Acties",
+        "empty": "Er zijn op deze dagen geen berichten."
+      },
+      "log": {
+        "title": "Berichten",
+        "forDay": "Berichten van {date}",
+        "showAllDays": "Alle dagen tonen"
+      },
       "units": {
         "sms": "{count, plural, one {# segment} other {# segmenten}}",
         "whatsapp_call": "{count, plural, one {# minuut} other {# minuten}}",

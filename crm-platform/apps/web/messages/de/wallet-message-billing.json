@@ -40,8 +40,8 @@
       "topup": "Aufladung",
       "earn": "Gutschrift",
       "refund": "Erstattung",
-      "admin_adjust": "Korrektur",
-      "spend": "Nutzungsgebühr"
+      "spend": "Nutzungsgebühr",
+      "admin_adjust": "Korrektur"
     },
     "categories": {
       "marketing": "Marketing",
@@ -146,9 +146,9 @@
         "all": "Alle",
         "topup": "Aufladungen",
         "earn": "Erträge",
+        "spend": "Nutzungsgebühren",
         "refund": "Erstattungen",
-        "admin_adjust": "Anpassungen",
-        "spend": "Nutzungsgebühren"
+        "admin_adjust": "Anpassungen"
       },
       "summary": {
         "balance": "Aktuelles Guthaben",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Ausgaben",
+      "subtitle": "Was jede Nachricht, jeder Anruf, jede KI-Anfrage und jede Abfrage gekostet hat und wofür sie war. Die Summen umfassen alles, was zu den Filtern passt.",
       "back": "Zurück zum Wallet",
       "breadcrumbLabel": "Navigationspfad",
       "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Ausgaben",
       "fullStatement": "Vollständiger Kontoauszug",
       "summary": {
+        "messages": "Posten",
         "charged": "Berechnet",
         "refunded": "Erstattet",
         "net": "Nettokosten",
-        "notBilled": "Nicht berechnet",
-        "messages": "Posten"
+        "notBilled": "Nicht berechnet"
       },
       "filters": {
         "status": "Abrechnungsstatus",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Datum",
         "template": "Vorlage",
+        "campaign": "Kampagne, Broadcast oder Funktion",
         "channel": "Kanal",
         "category": "Kategorie",
         "country": "Land",
@@ -247,9 +251,8 @@
         "charged": "Berechnet",
         "refunded": "Erstattet",
         "net": "Netto",
-        "notBilled": "Nicht berechnet",
-        "campaign": "Kampagne, Broadcast oder Funktion",
         "messages": "Posten",
+        "notBilled": "Nicht berechnet",
         "type": "Typ"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Kein Wallet-Inhaber"
       },
       "uncollected": "{amount} nicht eingezogen",
-      "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen.",
-      "title": "Ausgaben",
-      "subtitle": "Was jede Nachricht, jeder Anruf, jede KI-Anfrage und jede Abfrage gekostet hat und wofür sie war. Die Summen umfassen alles, was zu den Filtern passt.",
-      "breadcrumbExpenses": "Ausgaben",
       "emptyTitle": "Noch keine Ausgaben",
       "emptyBody": "Nachrichten, Anrufe, KI-Anfragen und andere Nutzung erscheinen hier mit Zweck und Kosten.",
+      "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen.",
+      "days": {
+        "title": "Tagesprotokoll",
+        "subtitle": "Nachrichten nach Tag, Status, Kanal und Kategorie gruppiert. Öffnen Sie einen Tag, um jede Nachricht zu sehen.",
+        "messagesOnDay": "{count} Nachrichten",
+        "viewDetails": "Details anzeigen",
+        "actions": "Aktionen",
+        "empty": "An diesen Tagen gibt es keine Nachrichten."
+      },
+      "log": {
+        "title": "Nachrichten",
+        "forDay": "Nachrichten vom {date}",
+        "showAllDays": "Alle Tage anzeigen"
+      },
       "units": {
         "sms": "{count, plural, one {# Segment} other {# Segmente}}",
         "whatsapp_call": "{count, plural, one {# Minute} other {# Minuten}}",

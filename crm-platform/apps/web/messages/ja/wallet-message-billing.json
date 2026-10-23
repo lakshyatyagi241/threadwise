@@ -40,8 +40,8 @@
       "topup": "チャージ",
       "earn": "獲得",
       "refund": "返金",
-      "admin_adjust": "調整",
-      "spend": "利用料金"
+      "spend": "利用料金",
+      "admin_adjust": "調整"
     },
     "categories": {
       "marketing": "マーケティング",
@@ -146,9 +146,9 @@
         "all": "すべて",
         "topup": "チャージ",
         "earn": "収益",
+        "spend": "利用料金",
         "refund": "返金",
-        "admin_adjust": "調整",
-        "spend": "利用料金"
+        "admin_adjust": "調整"
       },
       "summary": {
         "balance": "現在の残高",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "費用",
+      "subtitle": "メッセージ、通話、AI リクエスト、検索ごとの費用と用途です。合計はフィルターに一致するすべてが対象です。",
       "back": "ウォレットに戻る",
       "breadcrumbLabel": "パンくずリスト",
       "breadcrumbWallet": "ウォレット",
+      "breadcrumbExpenses": "費用",
       "fullStatement": "明細をすべて表示",
       "summary": {
+        "messages": "項目",
         "charged": "請求額",
         "refunded": "返金額",
         "net": "実質費用",
-        "notBilled": "請求なし",
-        "messages": "項目"
+        "notBilled": "請求なし"
       },
       "filters": {
         "status": "ステータス",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "日付",
         "template": "テンプレート",
+        "campaign": "キャンペーン、一斉配信、または機能",
         "channel": "チャネル",
         "category": "カテゴリ",
         "country": "国",
@@ -247,9 +251,8 @@
         "charged": "請求額",
         "refunded": "返金額",
         "net": "実質",
-        "notBilled": "請求なし",
-        "campaign": "キャンペーン、一斉配信、または機能",
         "messages": "項目",
+        "notBilled": "請求なし",
         "type": "種類"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "ウォレットの所有者がいません"
       },
       "uncollected": "{amount}が未回収です",
-      "emptyFiltered": "これらのフィルターに一致する項目はありません。条件を変更するかリセットしてください。",
-      "title": "費用",
-      "subtitle": "メッセージ、通話、AI リクエスト、検索ごとの費用と用途です。合計はフィルターに一致するすべてが対象です。",
-      "breadcrumbExpenses": "費用",
       "emptyTitle": "費用はまだありません",
       "emptyBody": "メッセージ、通話、AI リクエスト、その他の利用が、用途と費用とともにここに表示されます。",
+      "emptyFiltered": "これらのフィルターに一致する項目はありません。条件を変更するかリセットしてください。",
+      "days": {
+        "title": "日別ログ",
+        "subtitle": "メッセージを日付・ステータス・チャネル・カテゴリでまとめています。日付を開くと各メッセージを確認できます。",
+        "messagesOnDay": "{count}件のメッセージ",
+        "viewDetails": "詳細を表示",
+        "actions": "操作",
+        "empty": "この期間のメッセージはありません。"
+      },
+      "log": {
+        "title": "メッセージ",
+        "forDay": "{date} のメッセージ",
+        "showAllDays": "すべての日を表示"
+      },
       "units": {
         "sms": "{count, plural, other {# セグメント}}",
         "whatsapp_call": "{count, plural, other {# 分}}",

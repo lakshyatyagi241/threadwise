@@ -40,8 +40,8 @@
       "topup": "Isi ulang",
       "earn": "Pendapatan",
       "refund": "Pengembalian dana",
-      "admin_adjust": "Penyesuaian",
-      "spend": "Biaya penggunaan"
+      "spend": "Biaya penggunaan",
+      "admin_adjust": "Penyesuaian"
     },
     "categories": {
       "marketing": "Pemasaran",
@@ -146,9 +146,9 @@
         "all": "Semua",
         "topup": "Isi ulang saldo",
         "earn": "Pendapatan",
+        "spend": "Biaya penggunaan",
         "refund": "Pengembalian dana",
-        "admin_adjust": "Penyesuaian",
-        "spend": "Biaya penggunaan"
+        "admin_adjust": "Penyesuaian"
       },
       "summary": {
         "balance": "Saldo saat ini",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Pengeluaran",
+      "subtitle": "Berapa biaya setiap pesan, panggilan, permintaan AI, dan pencarian, serta untuk apa. Total mencakup semua yang cocok dengan filter.",
       "back": "Kembali ke dompet",
       "breadcrumbLabel": "Jejak navigasi",
       "breadcrumbWallet": "Dompet",
+      "breadcrumbExpenses": "Pengeluaran",
       "fullStatement": "Laporan lengkap",
       "summary": {
+        "messages": "Item",
         "charged": "Ditagih",
         "refunded": "Dikembalikan",
         "net": "Biaya bersih",
-        "notBilled": "Tidak ditagih",
-        "messages": "Item"
+        "notBilled": "Tidak ditagih"
       },
       "filters": {
         "status": "Status tagihan",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Tanggal",
         "template": "Templat",
+        "campaign": "Kampanye, siaran, atau fitur",
         "channel": "Saluran",
         "category": "Kategori",
         "country": "Negara",
@@ -247,9 +251,8 @@
         "charged": "Ditagih",
         "refunded": "Dikembalikan",
         "net": "Bersih",
-        "notBilled": "Tidak ditagih",
-        "campaign": "Kampanye, siaran, atau fitur",
         "messages": "Item",
+        "notBilled": "Tidak ditagih",
         "type": "Jenis"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Tidak ada pemilik dompet"
       },
       "uncollected": "{amount} belum tertagih",
-      "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter.",
-      "title": "Pengeluaran",
-      "subtitle": "Berapa biaya setiap pesan, panggilan, permintaan AI, dan pencarian, serta untuk apa. Total mencakup semua yang cocok dengan filter.",
-      "breadcrumbExpenses": "Pengeluaran",
       "emptyTitle": "Belum ada pengeluaran",
       "emptyBody": "Pesan, panggilan, permintaan AI, dan penggunaan lain muncul di sini beserta tujuan dan biayanya.",
+      "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter.",
+      "days": {
+        "title": "Log harian",
+        "subtitle": "Pesan dikelompokkan menurut hari, status, saluran, dan kategori. Buka satu hari untuk melihat setiap pesan.",
+        "messagesOnDay": "{count} pesan",
+        "viewDetails": "Lihat detail",
+        "actions": "Tindakan",
+        "empty": "Tidak ada pesan pada hari-hari ini."
+      },
+      "log": {
+        "title": "Pesan",
+        "forDay": "Pesan pada {date}",
+        "showAllDays": "Tampilkan semua hari"
+      },
       "units": {
         "sms": "{count, plural, other {# segmen}}",
         "whatsapp_call": "{count, plural, other {# menit}}",

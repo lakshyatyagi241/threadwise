@@ -40,8 +40,8 @@
       "topup": "充值",
       "earn": "收入",
       "refund": "退款",
-      "admin_adjust": "调整",
-      "spend": "使用费"
+      "spend": "使用费",
+      "admin_adjust": "调整"
     },
     "categories": {
       "marketing": "营销",
@@ -146,9 +146,9 @@
         "all": "全部",
         "topup": "充值",
         "earn": "收入",
+        "spend": "使用费",
         "refund": "退款",
-        "admin_adjust": "调整",
-        "spend": "使用费"
+        "admin_adjust": "调整"
       },
       "summary": {
         "balance": "当前余额",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "支出",
+      "subtitle": "每条消息、每次通话、每个 AI 请求和每次查询的费用及其用途。合计涵盖所有符合筛选条件的项目。",
       "back": "返回钱包",
       "breadcrumbLabel": "面包屑导航",
       "breadcrumbWallet": "钱包",
+      "breadcrumbExpenses": "支出",
       "fullStatement": "完整账单明细",
       "summary": {
+        "messages": "项目",
         "charged": "已扣费",
         "refunded": "已退款",
         "net": "净费用",
-        "notBilled": "未计费",
-        "messages": "项目"
+        "notBilled": "未计费"
       },
       "filters": {
         "status": "状态",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "日期",
         "template": "模板",
+        "campaign": "活动、群发或功能",
         "channel": "频道",
         "category": "类别",
         "country": "国家",
@@ -247,9 +251,8 @@
         "charged": "已扣费",
         "refunded": "已退款",
         "net": "净额",
-        "notBilled": "未计费",
-        "campaign": "活动、群发或功能",
         "messages": "项目",
+        "notBilled": "未计费",
         "type": "类型"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "没有钱包所有者"
       },
       "uncollected": "未收取 {amount}",
-      "emptyFiltered": "没有符合这些筛选条件的内容。请更改或重置筛选条件。",
-      "title": "支出",
-      "subtitle": "每条消息、每次通话、每个 AI 请求和每次查询的费用及其用途。合计涵盖所有符合筛选条件的项目。",
-      "breadcrumbExpenses": "支出",
       "emptyTitle": "暂无支出",
       "emptyBody": "消息、通话、AI 请求和其他使用情况会连同用途和费用显示在这里。",
+      "emptyFiltered": "没有符合这些筛选条件的内容。请更改或重置筛选条件。",
+      "days": {
+        "title": "每日日志",
+        "subtitle": "按日期、状态、渠道和类别分组的消息。打开某一天即可查看每条消息。",
+        "messagesOnDay": "{count} 条消息",
+        "viewDetails": "查看详情",
+        "actions": "操作",
+        "empty": "这些日期没有消息。"
+      },
+      "log": {
+        "title": "消息",
+        "forDay": "{date}的消息",
+        "showAllDays": "显示所有日期"
+      },
       "units": {
         "sms": "{count, plural, other {# 个分段}}",
         "whatsapp_call": "{count, plural, other {# 分钟}}",

@@ -40,8 +40,8 @@
       "topup": "Nạp tiền",
       "earn": "Thu nhập",
       "refund": "Hoàn tiền",
-      "admin_adjust": "Điều chỉnh",
-      "spend": "Phí sử dụng"
+      "spend": "Phí sử dụng",
+      "admin_adjust": "Điều chỉnh"
     },
     "categories": {
       "marketing": "Tiếp thị",
@@ -146,9 +146,9 @@
         "all": "Tất cả",
         "topup": "Nạp tiền",
         "earn": "Thu nhập",
+        "spend": "Phí sử dụng",
         "refund": "Hoàn tiền",
-        "admin_adjust": "Điều chỉnh",
-        "spend": "Phí sử dụng"
+        "admin_adjust": "Điều chỉnh"
       },
       "summary": {
         "balance": "Số dư hiện tại",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Chi phí",
+      "subtitle": "Mỗi tin nhắn, cuộc gọi, yêu cầu AI và lượt tra cứu tốn bao nhiêu và dùng cho việc gì. Tổng số bao gồm mọi thứ khớp với bộ lọc.",
       "back": "Quay lại ví",
       "breadcrumbLabel": "Đường dẫn",
       "breadcrumbWallet": "Ví",
+      "breadcrumbExpenses": "Chi phí",
       "fullStatement": "Sao kê đầy đủ",
       "summary": {
+        "messages": "Mục",
         "charged": "Đã tính phí",
         "refunded": "Đã hoàn tiền",
         "net": "Chi phí ròng",
-        "notBilled": "Chưa tính phí",
-        "messages": "Mục"
+        "notBilled": "Chưa tính phí"
       },
       "filters": {
         "status": "Trạng thái",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Ngày",
         "template": "Bản mẫu",
+        "campaign": "Chiến dịch, gửi hàng loạt hoặc tính năng",
         "channel": "Kênh",
         "category": "Thể loại",
         "country": "Quốc gia",
@@ -247,9 +251,8 @@
         "charged": "Đã tính phí",
         "refunded": "Đã hoàn tiền",
         "net": "Ròng",
-        "notBilled": "Chưa tính phí",
-        "campaign": "Chiến dịch, gửi hàng loạt hoặc tính năng",
         "messages": "Mục",
+        "notBilled": "Chưa tính phí",
         "type": "Loại"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Ví không có chủ sở hữu"
       },
       "uncollected": "{amount} chưa thu",
-      "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại.",
-      "title": "Chi phí",
-      "subtitle": "Mỗi tin nhắn, cuộc gọi, yêu cầu AI và lượt tra cứu tốn bao nhiêu và dùng cho việc gì. Tổng số bao gồm mọi thứ khớp với bộ lọc.",
-      "breadcrumbExpenses": "Chi phí",
       "emptyTitle": "Chưa có chi phí nào",
       "emptyBody": "Tin nhắn, cuộc gọi, yêu cầu AI và các mức sử dụng khác xuất hiện ở đây cùng mục đích và chi phí.",
+      "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại.",
+      "days": {
+        "title": "Nhật ký theo ngày",
+        "subtitle": "Tin nhắn được nhóm theo ngày, trạng thái, kênh và danh mục. Mở một ngày để xem từng tin nhắn.",
+        "messagesOnDay": "{count} tin nhắn",
+        "viewDetails": "Xem chi tiết",
+        "actions": "Thao tác",
+        "empty": "Không có tin nhắn nào trong những ngày này."
+      },
+      "log": {
+        "title": "Tin nhắn",
+        "forDay": "Tin nhắn ngày {date}",
+        "showAllDays": "Hiển thị tất cả các ngày"
+      },
       "units": {
         "sms": "{count, plural, other {# phân đoạn}}",
         "whatsapp_call": "{count, plural, other {# phút}}",

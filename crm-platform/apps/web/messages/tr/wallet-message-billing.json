@@ -40,8 +40,8 @@
       "topup": "Yükleme",
       "earn": "Kazanç",
       "refund": "İade",
-      "admin_adjust": "Düzeltme",
-      "spend": "Kullanım ücreti"
+      "spend": "Kullanım ücreti",
+      "admin_adjust": "Düzeltme"
     },
     "categories": {
       "marketing": "Pazarlama",
@@ -146,9 +146,9 @@
         "all": "Tümü",
         "topup": "Bakiye yüklemeleri",
         "earn": "Kazançlar",
+        "spend": "Kullanım ücretleri",
         "refund": "İadeler",
-        "admin_adjust": "Düzeltmeler",
-        "spend": "Kullanım ücretleri"
+        "admin_adjust": "Düzeltmeler"
       },
       "summary": {
         "balance": "Mevcut bakiye",
@@ -192,16 +192,19 @@
       }
     },
     "expenses": {
+      "title": "Harcamalar",
+      "subtitle": "Her mesajın, aramanın, YZ isteğinin ve sorgunun maliyeti ve ne için olduğu. Toplamlar, filtrelerle eşleşen her şeyi kapsar.",
       "back": "Cüzdana dön",
       "breadcrumbLabel": "Gezinti yolu",
       "breadcrumbWallet": "Cüzdan",
+      "breadcrumbExpenses": "Harcamalar",
       "fullStatement": "Tam ekstre",
       "summary": {
+        "messages": "Öğeler",
         "charged": "Ücretlendirildi",
         "refunded": "İade edildi",
         "net": "Net maliyet",
-        "notBilled": "Ücretlendirilmedi",
-        "messages": "Öğeler"
+        "notBilled": "Ücretlendirilmedi"
       },
       "filters": {
         "status": "Durum",
@@ -240,6 +243,7 @@
       "columns": {
         "date": "Tarih",
         "template": "Şablon",
+        "campaign": "Kampanya, toplu gönderim veya özellik",
         "channel": "Kanal",
         "category": "Kategori",
         "country": "Ülke",
@@ -247,9 +251,8 @@
         "charged": "Ücretlendirildi",
         "refunded": "İade edildi",
         "net": "Net tutar",
-        "notBilled": "Ücretlendirilmedi",
-        "campaign": "Kampanya, toplu gönderim veya özellik",
         "messages": "Öğeler",
+        "notBilled": "Ücretlendirilmedi",
         "type": "Tür"
       },
       "status": {
@@ -265,12 +268,22 @@
         "no_wallet_owner": "Cüzdan sahibi yok"
       },
       "uncollected": "{amount} tahsil edilmedi",
-      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın.",
-      "title": "Harcamalar",
-      "subtitle": "Her mesajın, aramanın, YZ isteğinin ve sorgunun maliyeti ve ne için olduğu. Toplamlar, filtrelerle eşleşen her şeyi kapsar.",
-      "breadcrumbExpenses": "Harcamalar",
       "emptyTitle": "Henüz harcama yok",
       "emptyBody": "Mesajlar, aramalar, YZ istekleri ve diğer kullanım, ne için olduklarıyla ve maliyetleriyle burada görünür.",
+      "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın.",
+      "days": {
+        "title": "Günlük kayıt",
+        "subtitle": "Mesajlar gün, durum, kanal ve kategoriye göre gruplandı. Her mesajı görmek için bir günü açın.",
+        "messagesOnDay": "{count} mesaj",
+        "viewDetails": "Ayrıntıları gör",
+        "actions": "İşlemler",
+        "empty": "Bu günlerde mesaj yok."
+      },
+      "log": {
+        "title": "Mesajlar",
+        "forDay": "{date} tarihli mesajlar",
+        "showAllDays": "Tüm günleri göster"
+      },
       "units": {
         "sms": "{count, plural, one {# segment} other {# segment}}",
         "whatsapp_call": "{count, plural, one {# dakika} other {# dakika}}",

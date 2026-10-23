@@ -26,9 +26,9 @@
         "all": "הכול",
         "topup": "טעינות",
         "earn": "רווחים",
+        "spend": "חיובי שימוש",
         "refund": "החזרים",
-        "admin_adjust": "התאמות",
-        "spend": "חיובי שימוש"
+        "admin_adjust": "התאמות"
       },
       "summary": {
         "balance": "יתרה נוכחית",
@@ -73,16 +73,19 @@
       "title": "דף חשבון ארנק"
     },
     "expenses": {
+      "title": "הוצאות",
+      "subtitle": "כמה עלתה כל הודעה, שיחה, בקשת בינה מלאכותית וחיפוש, ולמה היא שימשה. הסכומים כוללים את כל מה שמתאים למסננים.",
       "back": "חזרה לארנק",
       "breadcrumbLabel": "נתיב ניווט",
       "breadcrumbWallet": "ארנק",
+      "breadcrumbExpenses": "הוצאות",
       "fullStatement": "דף חשבון מלא",
       "summary": {
+        "messages": "פריטים",
         "charged": "חויב",
         "refunded": "הוחזר",
         "net": "עלות נטו",
-        "notBilled": "לא חויב",
-        "messages": "פריטים"
+        "notBilled": "לא חויב"
       },
       "filters": {
         "status": "סטטוס",
@@ -121,6 +124,7 @@
       "columns": {
         "date": "תאריך",
         "template": "תבנית",
+        "campaign": "קמפיין, שידור או תכונה",
         "channel": "ערוץ",
         "category": "קטגוריה",
         "country": "מדינה",
@@ -128,9 +132,8 @@
         "charged": "חויב",
         "refunded": "הוחזר",
         "net": "נטו",
-        "notBilled": "לא חויב",
-        "campaign": "קמפיין, שידור או תכונה",
         "messages": "פריטים",
+        "notBilled": "לא חויב",
         "type": "סוג"
       },
       "status": {
@@ -146,12 +149,22 @@
         "no_wallet_owner": "אין בעלים לארנק"
       },
       "uncollected": "{amount} לא נגבו",
-      "emptyFiltered": "שום דבר לא תואם למסננים אלה. שנה אותם או אפס אותם.",
-      "title": "הוצאות",
-      "subtitle": "כמה עלתה כל הודעה, שיחה, בקשת בינה מלאכותית וחיפוש, ולמה היא שימשה. הסכומים כוללים את כל מה שמתאים למסננים.",
-      "breadcrumbExpenses": "הוצאות",
       "emptyTitle": "אין עדיין הוצאות",
       "emptyBody": "הודעות, שיחות, בקשות בינה מלאכותית ושימושים אחרים מופיעים כאן עם המטרה והעלות שלהם.",
+      "emptyFiltered": "שום דבר לא תואם למסננים אלה. שנה אותם או אפס אותם.",
+      "days": {
+        "title": "יומן יומי",
+        "subtitle": "הודעות מקובצות לפי יום, סטטוס, ערוץ וקטגוריה. פתחו יום כדי לראות כל הודעה.",
+        "messagesOnDay": "{count} הודעות",
+        "viewDetails": "הצגת פרטים",
+        "actions": "פעולות",
+        "empty": "אין הודעות בימים האלה."
+      },
+      "log": {
+        "title": "הודעות",
+        "forDay": "הודעות מתאריך {date}",
+        "showAllDays": "הצגת כל הימים"
+      },
       "units": {
         "sms": "{count, plural, one {# מקטע} two {# מקטעים} other {# מקטעים}}",
         "whatsapp_call": "{count, plural, one {# דקה} two {# דקות} other {# דקות}}",
@@ -933,8 +946,8 @@
       "topup": "טעינה",
       "earn": "רווח",
       "refund": "החזר",
-      "admin_adjust": "התאמה",
-      "spend": "חיוב שימוש"
+      "spend": "חיוב שימוש",
+      "admin_adjust": "התאמה"
     },
     "categories": {
       "marketing": "שיווק",
