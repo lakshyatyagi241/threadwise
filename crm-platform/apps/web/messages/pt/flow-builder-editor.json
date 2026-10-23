@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (não está no espaço de trabalho)",
           "templateLabel": "Template aprovado",
           "templateHint": "Apenas templates aprovados do espaço de trabalho aparecem aqui. <link>Criar um novo →</link>",
+          "statusExits": "Adicionar saídas de status (Enviado, Entregue, Lido, Respondido, Falhou)",
+          "statusExitsHint": "O fluxo sai pela primeira saída que tem uma etapa ligada: Enviado assim que o modelo é aceito, Entregue ou Lido quando o WhatsApp informa, Respondido quando o cliente escreve, Falhou se não foi possível enviar. Um botão tocado pelo cliente sai pela própria saída.",
           "type": "Tipo",
           "kindText": "Texto",
           "kindImage": "Imagem",

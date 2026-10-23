@@ -1292,6 +1292,8 @@
           "notInWorkspace": "{value} (not in workspace)",
           "templateLabel": "Approved template",
           "templateHint": "Only approved templates from the workspace appear here. <link>Create a new one →</link>",
+          "statusExits": "Add status exits (Sent, Delivered, Read, Replied, Failed)",
+          "statusExitsHint": "The flow leaves by the first exit that has a step wired: Sent as soon as the template is accepted, Delivered or Read when WhatsApp reports it, Replied when the customer writes back, Failed if it could not be sent. A button the customer taps leaves by its own exit.",
           "type": "Type",
           "kindText": "Text",
           "kindImage": "Image",
