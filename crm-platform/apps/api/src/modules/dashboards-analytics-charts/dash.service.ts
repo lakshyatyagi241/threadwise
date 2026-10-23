@@ -17,6 +17,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
+import { foldBreakdown } from './dash-breakdown';
 import { deltaPp, funnelOf, percentChange, totalsOf } from './dash-metrics';
 import {
   addDays,
@@ -116,8 +117,12 @@ export class DashService {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveDashWindow(range, tz, now, custom);
       if (!w) throw tooLong();
-      const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
-      const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
+      const [cur, prev] = await this.repo.countsMany(tx, orgId, [
+        { from: w.from, to: w.to },
+        { from: w.prevFrom, to: w.prevTo },
+      ]);
+      const current = totalsOf(cur!);
+      const previous = totalsOf(prev!);
       const hours = await this.repo.hourlyOut(tx, orgId, now, 20);
       return {
         range,
@@ -215,13 +220,15 @@ export class DashService {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
       if (!w) throw tooLong();
-      const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
-      const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
-      const days = await this.repo.buckets(tx, orgId, w.from, w.to, {
-        bucket: 'day',
-        fromDate: w.fromDate,
-        tz,
-      });
+      const [cur, prev] = await this.repo.countsMany(tx, orgId, [
+        { from: w.from, to: w.to },
+        { from: w.prevFrom, to: w.prevTo },
+      ]);
+      const current = totalsOf(cur!);
+      const previous = totalsOf(prev!);
+      const { days, types, heatmap } = foldBreakdown(
+        await this.repo.breakdown(tx, orgId, w.from, w.to, { fromDate: w.fromDate, tz }),
+      );
       const idx = Array.from({ length: w.days }, (_, i) => i);
       const at = (i: number) => days.get(i) ?? { sent: 0, delivered: 0, failed: 0 };
       const f = funnelOf(current, previous);
@@ -258,14 +265,14 @@ export class DashService {
           queued: idx.map((i) => Math.max(0, at(i).sent - at(i).delivered - at(i).failed)),
         },
         funnel: f,
-        types: (await this.repo.types(tx, orgId, w.from, w.to))
+        types: types
           .map((t) => ({
             key: t.key as AnalyticsResponse['types'][number]['key'],
             count: t.count,
             delivered: t.delivered,
           }))
           .sort((a, b) => b.count - a.count),
-        heatmap: await this.repo.heatmap(tx, orgId, w.from, w.to, tz),
+        heatmap,
         conversations: await this.repo.conversationStates(tx, orgId, w.from, w.to),
       };
     });
