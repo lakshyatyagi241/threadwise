@@ -1,3 +1,4 @@
+import { brotliDecompressSync, gunzipSync, inflateSync } from 'node:zlib';
 import {
   API_LIBRARY_SECRET_MASK,
   API_LIBRARY_TOKEN_RE,
@@ -341,4 +342,59 @@ export function responseVariableValues(
     out[`${apiName}.${p}`] = hit.found ? hit.value : '';
   }
   return out;
+}
+
+// --- reading an answer ---------------------------------------------------------------------------------------------------
+
+const BINARY_TYPE =
+  /^(image|audio|video|font)\/|^application\/(octet-stream|pdf|zip|gzip|x-tar|x-7z|vnd\.|msword|wasm)/i;
+
+/** Bytes a reader can show as text: a content type that is a file, or a NUL byte near the start, means it is not. */
+export function looksBinary(contentType: string | null, bytes: Buffer): boolean {
+  if (contentType && BINARY_TYPE.test(contentType.trim())) return true;
+  return bytes.subarray(0, 8192).includes(0);
+}
+
+export interface ReadAnswer {
+  /** What to show: the text, or one line naming what was not shown. */
+  text: string;
+  /** The answer is text (JSON can be read from it). */
+  isText: boolean;
+  /** The real size of the answer after any compression was undone. */
+  sizeBytes: number;
+}
+
+/**
+ * Turns the bytes of an answer into what the screen shows. A compressed answer (gzip, deflate, brotli: some servers send one
+ * whatever was asked) is unpacked first, with the output held to `maxBytes`; a file (image, PDF, archive) is named, not printed as
+ * symbols; the size is the bytes, not the length of a text made from them.
+ */
+export function readAnswer(
+  raw: Buffer,
+  headers: Record<string, string | string[] | undefined>,
+  maxBytes: number,
+): ReadAnswer {
+  const type = typeof headers['content-type'] === 'string' ? headers['content-type'] : null;
+  const encoding = String(headers['content-encoding'] ?? '')
+    .trim()
+    .toLowerCase();
+  let bytes = raw;
+  let note = '';
+  try {
+    if (encoding === 'gzip' || encoding === 'x-gzip')
+      bytes = gunzipSync(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'deflate') bytes = inflateSync(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'br') bytes = brotliDecompressSync(raw, { maxOutputLength: maxBytes });
+  } catch {
+    note = ' (it could not be unpacked)';
+    bytes = raw;
+  }
+  if (note !== '' || looksBinary(type, bytes)) {
+    return {
+      text: `[Not shown: ${type ?? 'binary data'}, ${bytes.length} bytes${note}]`,
+      isText: false,
+      sizeBytes: bytes.length,
+    };
+  }
+  return { text: bytes.toString('utf8'), isText: true, sizeBytes: bytes.length };
 }

@@ -109,7 +109,7 @@ export const apiLibraryVariableSourceSchema = z.enum(API_LIBRARY_VARIABLE_SOURCE
 
 export const apiLibraryVariableSchema = z.object({
   /** What is between the braces: `phone`, `order_id`, or `OtherApi.data.id` for another saved API's response field. */
-  name: z.string().trim().min(1).max(160),
+  name: z.string().trim().min(1, 'Enter the variable name.').max(160),
   source: apiLibraryVariableSourceSchema.default('contact'),
   /** Used by a test run, and by a flow that has no value for the name. Required, as in the old console. */
   defaultValue: z.string().min(1, 'A default value is required').max(2000),
@@ -158,7 +158,11 @@ export type ApiLibraryMapping = z.infer<typeof apiLibraryMappingSchema>;
 const definitionFields = {
   method: apiLibraryMethodSchema,
   /** May hold tokens. http or https; no credentials in the URL (use a header). */
-  url: z.string().trim().min(1).max(API_LIBRARY_URL_MAX),
+  url: z
+    .string()
+    .trim()
+    .min(1, 'Enter the address (URL) the request goes to.')
+    .max(API_LIBRARY_URL_MAX),
   payloadType: apiLibraryPayloadTypeSchema.default('application/json'),
   variables: z.array(apiLibraryVariableSchema).max(API_LIBRARY_MAX_VARIABLES).default([]),
   headers: z.array(apiLibraryHeaderInputSchema).max(API_LIBRARY_MAX_HEADERS).default([]),

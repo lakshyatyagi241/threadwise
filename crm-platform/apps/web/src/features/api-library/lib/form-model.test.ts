@@ -10,10 +10,13 @@ import {
   fromImport,
   fullSignature,
   headerIsSecret,
+  jsonErrorAt,
+  jsonProblemMessage,
   jsonStatus,
   keptSecretsAtRisk,
   originOf,
   requestSignature,
+  secretOverPlainHttp,
   syncVariables,
   usedTokens,
   type ApiFormState,
@@ -330,5 +333,34 @@ describe('signatures', () => {
     expect(fullSignature({ ...f, name: 'Other' })).not.toBe(fullSignature(f));
     expect(fullSignature({ ...f, responseVariables: ['a'] })).not.toBe(fullSignature(f));
     expect(fullSignature(f)).toBe(fullSignature({ ...f }));
+  });
+});
+
+describe('payload and address messages', () => {
+  it('says where unfinished JSON breaks, in one sentence', () => {
+    expect(jsonErrorAt('{"a": 1}')).toBeNull();
+    const at = jsonErrorAt('{"name": "x",');
+    expect(at).toEqual({ line: 1, column: expect.any(Number) });
+    const r = buildCreate(form({ method: 'POST', bodyText: '{"name": "x",' }));
+    expect(r.ok).toBe(false);
+    if (!r.ok)
+      expect(r.errors.fields.body).toMatch(
+        /^This is not valid JSON \(it breaks near line 1, column \d+\)\.$/,
+      );
+    expect(jsonProblemMessage('{"a":')).toContain('line 1');
+  });
+
+  it('asks for the address in plain words when it is empty', () => {
+    const r = buildCreate(form({ url: '   ' }));
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.fields.url).toBe('Enter the address (URL) the request goes to.');
+  });
+
+  it('warns about a password header sent over plain http only', () => {
+    const auth = { ...emptyHeader(), key: 'Authorization', value: 'Bearer x' };
+    expect(secretOverPlainHttp(form({ url: 'http://x.test/a', headers: [auth] }))).toBe(true);
+    expect(secretOverPlainHttp(form({ url: 'https://x.test/a', headers: [auth] }))).toBe(false);
+    const plain = { ...emptyHeader(), key: 'Accept', value: 'json' };
+    expect(secretOverPlainHttp(form({ url: 'http://x.test/a', headers: [plain] }))).toBe(false);
   });
 });
