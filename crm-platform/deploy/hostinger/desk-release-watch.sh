@@ -138,10 +138,24 @@ db_poll() {
 POLL=${DESK_WATCH_POLL:-10}; SETTLE=${DESK_WATCH_SETTLE:-20}
 active=0; attempted=""; tag_before=$(live_tag || true); started=0
 echo "$(date -u +%FT%TZ) watcher started, live tag ${tag_before:-unknown}" >> "$STATE/watch.log"
-last_db=0
+last_db=0; last_stall=0; STALL_POLL=${DESK_STALL_POLL:-300}; STALL_MIN=${DESK_STALL_MIN:-20}
+# Merging to main does not deploy by itself (the build server must run the release). If main is ahead of the live tag for STALL_MIN minutes with no
+# release event after the newest commit, post ONE warning per newest commit. Needs the read-only GitHub token; without it, silently nothing.
+stall_check() {
+  local live j newest
+  live=$(live_tag) || return 0
+  newest=$(ls -t "$STATE"/seen 2>/dev/null | head -n1); newest=$([ -n "$newest" ] && cat "$STATE/seen/$newest" 2>/dev/null || echo 0)
+  j=$(python3 "$FORMATTER" --stall "$live" "$STALL_MIN" "${newest:-0}" 2>>"$STATE/watch.log") || return 0
+  [ "$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("post"))' 2>/dev/null)" = True ] || return 0
+  local head text
+  head=$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin)["head"][:7])') && text=$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin)["text"])') || return 0
+  once "stall-$head" && post "$text"
+  return 0
+}
 while true; do
   date +%s > "$STATE/heartbeat"
   if [ $(( $(date +%s) - last_db )) -ge "$DB_POLL" ]; then last_db=$(date +%s); db_poll; fi
+  if [ "$active" = 0 ] && ! deploy_running && [ $(( $(date +%s) - last_stall )) -ge "$STALL_POLL" ]; then last_stall=$(date +%s); stall_check; fi
   if deploy_running; then
     rt=$(release_tag || true)
     if [ -n "$rt" ] && [ "$active" = 0 ]; then

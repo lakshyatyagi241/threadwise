@@ -297,6 +297,18 @@ check("process mode: real `release <sha> <uuid>` shape announces with the DB pat
 # selftest fails on a stale heartbeat
 open(f"{S3}/heartbeat", "w").write(str(int(time.time()) - 500))
 check("--selftest exits 1 when the heartbeat is older than 120 s", subprocess.run(["bash", WATCH, "--selftest"], env={**ENV, "DESK_WATCH_STATE": S3}, capture_output=True).returncode == 1)
+# stall alarm: main ahead of the live tag for a while with no release after the newest commit
+def stall_run(date_epoch, since):
+    c = commit(sha(9), "Merge pull request #77 from x/y\n\nthing", "alice"); c["commit"]["committer"] = {"date": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(date_epoch))}
+    FIX.update(compare=[c], by_tag=False); shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
+    p = subprocess.run([sys.executable, FMT, "--stall", A, "20", str(since)], env=ENV, capture_output=True, text=True, timeout=60)
+    return json.loads(p.stdout)
+now_ = int(time.time())
+r = stall_run(now_ - 3600, 0)
+check("stall: old unreleased commit posts the warning with live and newest sha", r["post"] is True and "Deploy stalled" in r["text"] and A[:9] in r["text"] and r["head"] == sha(9), str(r))
+check("stall: recent commit (under 20 min) does not post", stall_run(now_ - 300, 0)["post"] is False)
+check("stall: a release event after the newest commit suppresses it", stall_run(now_ - 3600, now_ - 60)["post"] is False)
+
 for d in (D2, B2, S2, S3): shutil.rmtree(d, ignore_errors=True)
 
 shutil.rmtree(D, ignore_errors=True); shutil.rmtree(STATE, ignore_errors=True)
