@@ -22,7 +22,7 @@ const loads = (file: string | undefined) => {
 
 describe('the app name and logo', () => {
   it('is Geta under the icon, with the suffix that tells a development or preview build apart', () => {
-    expect(BRAND_NAME).toBe('Geta');
+    expect(BRAND_NAME).toBe('GetaApp');
     expect(configFor('production').name).toBe(BRAND_NAME);
     expect(configFor('development').name).toBe(`${BRAND_NAME} (Dev)`);
     expect(configFor('preview').name).toBe(`${BRAND_NAME} (Preview)`);

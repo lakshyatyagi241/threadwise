@@ -24,7 +24,7 @@ function variantOf(raw: string | undefined): Variant {
 // PLACEHOLDER until the owner picks the store identity. A bundle id cannot change after the first store upload.
 const BASE_BUNDLE_ID = process.env.APP_BUNDLE_ID ?? 'ai.geta.crm';
 // The name under the icon. The same name is written in src/config/brand.ts for the screens inside the app.
-const APP_NAME = process.env.APP_NAME ?? 'Geta';
+const APP_NAME = process.env.APP_NAME ?? 'GetaApp';
 
 /**
  * CPU architectures compiled into an Android build. Both modern phone families by default; `ANDROID_ARCHS=arm64-v8a` makes the smallest
@@ -127,9 +127,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         'expo-image-picker',
         {
           cameraPermission:
-            'Geta uses the camera so you can take a photo to share in a conversation or attach to a contact.',
+            'GetaApp uses the camera so you can take a photo to share in a conversation or attach to a contact.',
           photosPermission:
-            'Geta reads a photo you choose so you can share it in a conversation or attach it to a contact.',
+            'GetaApp reads a photo you choose so you can share it in a conversation or attach it to a contact.',
           microphonePermission: false,
         },
       ],
