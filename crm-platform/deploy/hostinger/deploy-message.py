@@ -187,7 +187,7 @@ def machine(ev, prev, new, secs):
 
 def stall(live, min_age, since_epoch):
     """--stall <live_sha> <min_age_minutes> <epoch of the newest release event>: {"post": bool, "head": sha, "text": msg}.
-    post is true only when main has commits the live release lacks, the newest one is older than min_age, and no release event
+    post is true only when main has commits the live release lacks, the OLDEST one is older than min_age, and no release event
     happened after it (so a release in progress or just finished never raises it). Never raises; any failure -> post false."""
     off = {"post": False}
     try:
@@ -198,19 +198,19 @@ def stall(live, min_age, since_epoch):
         ahead = int(c.get("ahead_by", len(commits)) or 0)
         if not ahead or not commits:
             return json.dumps(off)
-        head = commits[-1]
-        when = ((head.get("commit") or {}).get("committer") or {}).get("date") or ""
+        first, head = commits[0], commits[-1]  # compare lists oldest first: the stall is how long the OLDEST unreleased commit has waited
+        when = ((first.get("commit") or {}).get("committer") or {}).get("date") or ""
         t = time.mktime(time.strptime(when, "%Y-%m-%dT%H:%M:%SZ")) - time.timezone if when else 0
         if not t or (time.time() - t) / 60 < float(min_age) or int(since_epoch or 0) >= t:
             return json.dumps(off)
         subj = [clean((x.get("commit", {}).get("message") or "").split("\n")[0], 70) for x in commits[-3:]][::-1]
         mins = int((time.time() - t) / 60)
-        text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live, and no release has started for {mins} min.\n"
-                f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}` ({time.strftime('%H:%M UTC', time.gmtime(t))})\n"
+        text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live. The oldest has waited {mins} min and no release has started.\n"
+                f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}`  Oldest waiting since {time.strftime('%H:%M UTC', time.gmtime(t))}\n"
                 + "\n".join(f"• {x}" for x in subj if x)
                 + "\nMerging does not deploy by itself: the build server must receive the GitHub push and start the release. "
                   "Check its webhook service, its deploy log and its disk, and GitHub Settings > Webhooks > Recent deliveries.")
-        return json.dumps({"post": True, "head": head.get("sha", ""), "text": text[:MAXLEN]})
+        return json.dumps({"post": True, "head": first.get("sha", ""), "text": text[:MAXLEN]})
     except Exception as e:
         sys.stderr.write(f"deploy-message: stall check failed ({type(e).__name__})\n")
         return json.dumps(off)
