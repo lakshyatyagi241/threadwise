@@ -26,6 +26,11 @@ try {
   const winner = x.code === 0 ? 'vedant' : 'asha';
   assert.equal(got.filter((m) => /is working on this/.test(m.text)).length, 1);
   assert.ok(got.every((m) => m.thread === 'am-e2e'), 'every reply is in the alert thread');
+  // loser of the race picks the next open incident instead (two teammates, two incidents)
+  await b.resolver.handle({ playbook: 'code_fix', key: 'st:e2e2', threadKey: 'am-e2e2', channel: 'slowquery', file: { queryid: '2' }, diagnosis: 'second' }); await b.resolver.settle();
+  const loser = winner === 'vedant' ? 'asha' : 'vedant', id2 = b.resolver.list().find((i) => i.id !== id).id;
+  assert.equal((await cli(loser, 'claim', id2)).code, 0, 'loser claims the next incident');
+  assert.equal((await cli(winner, 'claim', id2)).code, 1, 'and the winner cannot take that one');
   const p = await cli(winner, 'pr', id, 'https://github.com/lakshyatyagi241/threadwise/pull/4242?utm=x', 'add index on contacts');
   assert.equal(p.code, 0); assert.ok(got.some((m) => /PR #4242 raised by/.test(m.text) && !/utm/.test(m.text)));
   const rel = (sha, prs) => fetch(`${api}/release`, { method: 'POST', headers: { 'x-incident-token': token }, body: JSON.stringify({ sha, prs }) });

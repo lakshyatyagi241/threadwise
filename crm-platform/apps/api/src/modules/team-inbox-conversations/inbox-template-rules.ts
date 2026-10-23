@@ -242,3 +242,67 @@ export function templatePreviewOf(
     buttons: previewButtonsOf(t.buttons),
   };
 }
+
+/** A template an outbound text or media message is compared with: its body, optional text header and its buttons as the bubble draws them. */
+export interface MatchCandidate {
+  name: string;
+  body: string;
+  header: string | null;
+  buttons: MessageTemplateButton[];
+}
+
+/** Text as compared: WhatsApp's formatting marks, spacing and case do not tell two messages apart. */
+const matchKey = (s: string): string =>
+  s
+    .replace(/[*_~`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+/**
+ * A body as its fixed pieces: the text between the `{{token}}`s. Null when too little of it is fixed to tell templates apart. Matched
+ * piece by piece (never as a regular expression), so a long message cannot make the comparison slow.
+ */
+export function bodyPattern(body: string): string[] | null {
+  const mark = '\u0000';
+  const fixed = matchKey(body.replace(/\{\{\s*[a-zA-Z0-9_]+\s*\}\}/g, mark));
+  const pieces = fixed.split(mark);
+  if (pieces.join('').length < 20) return null;
+  return pieces;
+}
+
+/** Whether `key` is the pieces in order with at least one character in each gap (the place of a token). Linear in the text. */
+function matchesPieces(key: string, pieces: readonly string[]): boolean {
+  const first = pieces[0] ?? '';
+  if (!key.startsWith(first)) return false;
+  if (pieces.length === 1) return key === first;
+  const last = pieces[pieces.length - 1]!;
+  let at = first.length;
+  for (const piece of pieces.slice(1, -1)) {
+    const found = key.indexOf(piece, at + 1); // the gap before it holds at least one character
+    if (found < 0) return false;
+    at = found + piece.length;
+  }
+  return key.length - last.length >= at + 1 && key.endsWith(last);
+}
+
+/**
+ * The one template whose body (alone, or after its text header) is the message text, or null when none or several are. Only an exact
+ * reading counts: a message that merely resembles a template gets no buttons, because a wrong button is worse than a missing one.
+ */
+export function matchTemplateByBody(
+  text: string | null,
+  candidates: readonly MatchCandidate[],
+): MatchCandidate | null {
+  const key = text ? matchKey(text) : '';
+  if (key === '') return null;
+  const hits = candidates.filter((c) => {
+    if (c.buttons.length === 0) return false;
+    const plain = bodyPattern(c.body);
+    if (plain && matchesPieces(key, plain)) return true;
+    const head = c.header?.trim();
+    const withHead = head ? bodyPattern(`${head}\n${c.body}`) : null;
+    return withHead ? matchesPieces(key, withHead) : false;
+  });
+  return hits.length === 1 ? hits[0]! : null;
+}
