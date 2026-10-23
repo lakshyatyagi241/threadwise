@@ -182,7 +182,7 @@ describe('unit-priced usage', () => {
     });
   });
 
-  it('records a switched-off kind and a zero price free, charging nothing', async () => {
+  it('records a switched-off kind and a zero price free, but SMS and email are charged even when switched off', async () => {
     const t = await tenant('off1');
     await fund(h, t.orgId, 500);
     // chat_message defaults to 0: tracked, free.
@@ -197,8 +197,8 @@ describe('unit-priced usage', () => {
     services(h).settings.invalidate();
     services(h).usageSettings.invalidate();
     expect(await report(t.orgId, { kind: 'email' })).toMatchObject({
-      status: 'free',
-      reason: 'rate_is_zero',
+      status: 'charged',
+      chargedMinor: 10,
     });
     expect(await balanceMinor(h, t.orgId)).toBe(500);
     expect(await charges(h, t.orgId)).toHaveLength(2);

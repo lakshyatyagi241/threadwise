@@ -3,7 +3,6 @@ import type { WizardVariables } from '@crm/contracts';
 import type { MergeContact, MergeContext } from '../../../src/modules/crm';
 import {
   applyWizardVariables,
-  chargeableMessages,
   estimateCost,
   fillText,
   isFrequencyCap,
@@ -315,20 +314,6 @@ describe('cost', () => {
     expect(r.totalMinor).toBe(Math.ceil(100 * 80 * 0.5) + Math.ceil(10 * 350 * 0.5));
     expect(estimateCost(lines, 0).totalMinor).toBe(0);
     expect(estimateCost([], 0).totalMinor).toBe(0);
-  });
-
-  it('wallet mode charges every message; plan mode only what is beyond the monthly allowance (0 is unlimited)', () => {
-    const base = { recipients: 100, usedThisMonth: 950, planActive: true };
-    expect(chargeableMessages({ ...base, mode: 'wallet', monthlyLimit: 1000 })).toBe(100);
-    expect(chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 1000 })).toBe(50);
-    expect(chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 5000 })).toBe(0);
-    expect(chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 0 })).toBe(0);
-    expect(
-      chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 1000, planActive: false }),
-    ).toBe(100);
-    expect(
-      chargeableMessages({ ...base, usedThisMonth: 5000, mode: 'plan', monthlyLimit: 1000 }),
-    ).toBe(100);
   });
 });
 

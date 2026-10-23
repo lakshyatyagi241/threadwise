@@ -143,7 +143,7 @@ describe('priceInCurrency: a workspace billed in rupees', () => {
     expect(noMargin).toMatchObject({ basis: 'fixed', priceMinor: 99_600 });
   });
 
-  it('keeps a deliberately free message free', () => {
+  it('never makes a message free: a card priced 0 is charged the minimum, one paisa', () => {
     const free: RateCardRow[] = [
       { countryCode: '', category: 'service', priceMinor: 0, metaCostMicros: null },
     ];
@@ -153,7 +153,7 @@ describe('priceInCurrency: a workspace billed in rupees', () => {
       pricingMode: 'fixed',
       costMicros: 115_000,
     });
-    expect(priced.priceMinor).toBe(0);
+    expect(priced.priceMinor).toBe(1);
   });
 
   it('never prices a margin message below one paisa', () => {

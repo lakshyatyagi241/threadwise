@@ -24,7 +24,6 @@ import {
 import { WizardAudienceService, ELIGIBLE } from './wizard-audience.service';
 import { templateCategory } from './wizard-read.service';
 import {
-  chargeableMessages,
   estimateCost,
   fillText,
   resolveMapping,
@@ -92,13 +91,8 @@ export class WizardReviewService {
     const lines = await this.db.tx((tx) =>
       this.priceLines(tx, orgId, prepared.count, category, summary.currency),
     );
-    const chargeable = chargeableMessages({
-      mode: summary.billingMode,
-      recipients: prepared.count.recipients,
-      monthlyLimit: summary.plan.monthlyMessagesLimit,
-      usedThisMonth: summary.plan.usedThisMonth,
-      planActive: summary.plan.active,
-    });
+    // Every recipient is charged: the plan's monthly allowance no longer makes any of them free.
+    const chargeable = prepared.count.recipients;
     const cost = estimateCost(lines, chargeable);
     // The full price of every message, for display only: the wallet's rules above still decide what is charged and whether it may start.
     const full = estimateCost(

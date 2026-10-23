@@ -5,7 +5,7 @@ import {
   type WalletReportedKind,
   type WalletUnitPricedKind,
 } from '@crm/contracts';
-import { AI_MARKUP_BPS } from './wallet-rules';
+import { AI_MARKUP_BPS, MIN_CHARGE_MINOR } from './wallet-rules';
 
 /**
  * Pure rules of usage billing (everything that draws on the wallet besides a WhatsApp message). Nothing here reads the database or
@@ -24,6 +24,12 @@ export interface UsageRates {
   /** Markup on a vendor cost, basis points. */
   markupBps: number;
 }
+
+/**
+ * SMS and email are never free: their rate cannot be switched off or set to 0, and a charge is at least the minimum (MIN_CHARGE_MINOR).
+ * The rate on the pricing page sets the amount above that.
+ */
+const ALWAYS_CHARGED_KINDS: readonly string[] = ['sms', 'email'];
 
 /**
  * What a fresh install charges, in hundredths of the platform currency (a WhatsApp message defaults to 1.00). An operator changes
@@ -113,14 +119,17 @@ export function priceUsage(
 ): UsagePrice {
   if (isUnitPriced(u.kind)) {
     const rate = rates.prices[u.kind];
-    if (!rate.enabled) return { basis: 'none', reason: 'switched_off' };
-    if (rate.priceMinor <= 0) return { basis: 'none', reason: 'price_is_zero' };
+    // SMS and email are always charged: a switched-off or zero rate cannot make them free, so the charge is at least the minimum.
+    const alwaysCharged = ALWAYS_CHARGED_KINDS.includes(u.kind);
+    if (!alwaysCharged && !rate.enabled) return { basis: 'none', reason: 'switched_off' };
+    if (!alwaysCharged && rate.priceMinor <= 0) return { basis: 'none', reason: 'price_is_zero' };
+    const unitMinor = alwaysCharged ? Math.max(MIN_CHARGE_MINOR, rate.priceMinor) : rate.priceMinor;
     const units = Math.max(0, Math.trunc(u.units));
     if (units === 0) return { basis: 'none', reason: 'no_units' };
     return {
       basis: 'unit',
-      platformMinor: rate.priceMinor * units,
-      unitMinor: rate.priceMinor,
+      platformMinor: unitMinor * units,
+      unitMinor,
       units,
     };
   }

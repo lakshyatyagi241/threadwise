@@ -322,16 +322,3 @@ export function senderGuided(o: {
   if (BLOCKED_PHONE_STATUS.has(up(m.phone_status))) return false;
   return true;
 }
-
-/** Messages the wallet pays for: all of them in wallet mode; beyond the plan's remaining allowance in plan mode (a limit of 0 is unlimited). */
-export function chargeableMessages(o: {
-  mode: 'plan' | 'wallet';
-  recipients: number;
-  monthlyLimit: number;
-  usedThisMonth: number;
-  planActive: boolean;
-}): number {
-  if (o.mode === 'wallet' || !o.planActive) return o.recipients;
-  if (o.monthlyLimit <= 0) return 0;
-  return Math.max(0, Math.min(o.recipients, o.usedThisMonth + o.recipients - o.monthlyLimit));
-}

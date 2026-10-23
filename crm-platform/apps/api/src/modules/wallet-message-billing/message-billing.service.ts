@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { WalletDeliveryProvider } from '@crm/contracts';
-import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { BillingModeService } from '../bsp-billing-engine';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -16,7 +16,6 @@ import {
   CHANNEL_LABELS,
   decideSettlement,
   monthStart,
-  planIsActive,
   shouldAlertLowBalance,
 } from './wallet-rules';
 
@@ -83,9 +82,7 @@ export class MessageBillingService {
       );
       return { status: 'skipped', reason: 'platform_owned' };
     }
-    const monthlyLimit = resolveLimit(entitlements, 'monthly_messages');
     const now = new Date();
-    const planActive = planIsActive(entitlements, now);
     const s = await this.settings.effective();
     const category = (input.category ?? '').trim().toLowerCase() || null;
     const source = (input.source ?? '').trim().toLowerCase() || null;
@@ -115,20 +112,15 @@ export class MessageBillingService {
 
       // 3. count, price, decide
       const month = monthStart(now);
-      const counted = await tx.execute(sql`
+      await tx.execute(sql`
         INSERT INTO wallet_usage_months (org_id, month, messages) VALUES (${input.orgId}, ${month}::date, 1)
         ON CONFLICT (org_id, month) DO UPDATE SET messages = wallet_usage_months.messages + 1
         RETURNING messages`);
-      const usedBefore = Number((counted.rows[0] as { messages: number }).messages) - 1;
 
       const priced = await this.rates.price(tx, input.orgId, input.recipient, category, currency);
       const decision = decideSettlement({
         priceMinor: priced.priceMinor,
         balanceMinor: wallet.balanceMinor,
-        payPerMessage,
-        planActive,
-        monthlyLimit,
-        usedBefore,
       });
       const costMinor = this.rates.costMinor(priced.metaCostMicros);
 

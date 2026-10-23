@@ -1,4 +1,4 @@
-import { statSync } from 'node:fs';
+import { stat } from 'node:fs/promises';
 import { hostname } from 'node:os';
 import { Registry, type Gauge, type Histogram } from '@crm/observability';
 
@@ -158,14 +158,14 @@ export class Prober {
     if (this.running) return;
     this.running = true;
     try {
+      await this.readFiles();
       await Promise.all(
         this.targets.map(async (t) => {
           const o = await probeOnce(t.url, this.timeoutMs, this.doFetch);
           this.duration.observe(o.seconds, { target: t.name, result: o.result });
           const ok = o.result === 'ok' || (o.result === 'bad_status' && this.reachable.has(t.name));
           this.up.set(ok ? 1 : 0, { target: t.name });
-          if (ok)
-            this.lastSuccess.set(Math.floor(Date.now() / 1000), { target: t.name });
+          if (ok) this.lastSuccess.set(Math.floor(Date.now() / 1000), { target: t.name });
         }),
       );
     } finally {
@@ -184,11 +184,12 @@ export class Prober {
     this.timer = undefined;
   }
 
-  /** Marker files are read at scrape time, so the age is always current. */
-  private readFiles(): void {
+  /** Marker file ages are read once per round, off the event loop; the scrape only renders the last round. */
+  private async readFiles(): Promise<void> {
     for (const f of this.files) {
       try {
-        this.fileAge.set(Math.max(0, (Date.now() - statSync(f.path).mtimeMs) / 1000), { file: f.name });
+        const { mtimeMs } = await stat(f.path);
+        this.fileAge.set(Math.max(0, (Date.now() - mtimeMs) / 1000), { file: f.name });
         this.filePresent.set(1, { file: f.name });
       } catch {
         this.filePresent.set(0, { file: f.name });
@@ -197,7 +198,6 @@ export class Prober {
   }
 
   render(): string {
-    this.readFiles();
     return this.registry.render();
   }
 }

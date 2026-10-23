@@ -9,7 +9,7 @@ import {
 } from '../../../src/modules/platform-infrastructure/observability/event-loop/probe';
 
 describe('probe marker files and reachable targets (Sheet3 #73)', () => {
-  it('exports the age of an existing marker and 0 presence for a missing one', () => {
+  it('exports the age of an existing marker and 0 presence for a missing one', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'hr-'));
     const f = join(dir, '.last-ok');
     writeFileSync(f, '');
@@ -21,6 +21,7 @@ describe('probe marker files and reachable targets (Sheet3 #73)', () => {
         { name: 'offsite', path: join(dir, 'missing') },
       ],
     });
+    await p.runOnce();
     const out = p.render();
     const age = /crm_probe_file_age_seconds\{[^}]*file="backup"[^}]*\} ([\d.]+)/.exec(out);
     expect(Number(age?.[1])).toBeGreaterThan(99);
