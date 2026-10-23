@@ -200,7 +200,9 @@
       "autoReply": "发送自动回复",
       "autoReplyBody": "回复内容",
       "autoReplyHint": "以企业名义发送给客户。超出 24 小时窗口时，自由格式回复不会发送。",
-      "whenHint": "您添加的每个条件都必须匹配。"
+      "whenHint": "您添加的每个条件都必须匹配。",
+      "unavailableTitle": "你的套餐不提供规则",
+      "unavailableBody": "你的工作区套餐不包含分配规则。新会话会在队列中等待，你的团队可以在那里接手。"
     },
     "sla": {
       "back": "返回设置",

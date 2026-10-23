@@ -1364,7 +1364,8 @@
             "enableAll": "Tümünü etkinleştir",
             "disableAll": "Tümünü devre dışı bırak",
             "noMatch": "Aramanızla eşleşen özellik yok.",
-            "groupCount": "{total} içinden {count} açık"
+            "groupCount": "{total} içinden {count} açık",
+            "lockedBy": "Eklentiler sekmesindeki {addon} eklentisi tarafından belirlenir"
           },
           "limitsUi": {
             "intro": "Bir sınır, çalışma alanı ona ulaştığında işlemi durdurur. Sınırı kaldırmak için Sınırsız seçeneğini işaretleyin.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "Uygulama yayımlanmadı, bu yüzden çalışma alanları henüz göremez.",
             "appLabel": "Uygulama: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# eklenti seçildi} other {# eklenti seçildi}}"
+            "total": "{count, plural, one {# eklenti dahil veya sunuluyor} other {# eklenti dahil veya sunuluyor}}"
           },
           "featureHints": {
             "automation": "Sohbetlere yanıt veren ve onlar üzerinde işlem yapan akış oluşturucu ve otomasyonlar.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Bir plan hem ücretsiz hem özel teklifli olamaz.",
             "paid_needs_price": "0 üzerinde bir fiyat belirleyin veya planı ücretsiz olarak işaretleyin.",
             "offer_not_lower": "İndirimli fiyat plan fiyatından düşük olmalıdır.",
-            "default_needs_active": "Kayıt varsayılanı plan etkin olmalıdır."
+            "default_needs_active": "Kayıt varsayılanı plan etkin olmalıdır.",
+            "addonPriceZero": "Eklentinin fiyatını kullanmak için fiyatı boş bırakın veya Dahil seçeneğini seçin.",
+            "addonGone": "Bu eklenti artık mevcut değil. Sayfayı yeniden yükleyip tekrar kaydedin."
           },
           "limitHints": {
             "monthly_messages": "Takvim ayında gönderilen giden mesajlar. Hak aşıldığında cüzdandan ücret alınır.",
@@ -1708,31 +1711,41 @@
             "platform": "İkisi için ortak"
           },
           "marketplace": {
-            "title": "Bu plandaki çalışma alanlarına sunulan Marketplace uygulamaları"
+            "title": "Bu planda sunulan mini uygulamalar"
           },
-          "included": {
-            "title": "Bu plana dahil eklentiler",
-            "intro": "Bir eklentiyi dahil etmek için açın: bu plandaki çalışma alanları onu ücretsiz alır ve eklenti kartında \"Planınıza dahil\" yazar. Bu işlem Özellikler sekmesinde eklentinin özelliklerini tam olarak işaretler; orada işaretlemek de anahtarı değiştirir. Dahil olmayan eklentiler, etkin ücretli plandaki her çalışma alanına kendi fiyatıyla satılmaya devam eder.",
-            "readOnly": "Bu planı görüntüleyebilirsiniz ancak değiştiremezsiniz, bu yüzden bu anahtarlar kilitli.",
+          "offers": {
+            "readOnly": "Bu planı görüntüleyebilirsiniz ancak değiştiremezsiniz, bu yüzden bu denetimler kilitli.",
+            "featureTitle": "Özellik eklentileri",
+            "featureIntro": "Ürünün bir bölümünün kilidini açan eklentiler. Dahil: bu plandaki çalışma alanları onu ücretsiz alır ve kartında \"Planınıza dahil\" yazar. Ücretli: satın alabilirler; belirlediyseniz bu planın kendi fiyatıyla. Gizli: hiç görmezler. Eklentinin Özellikler sekmesindeki özellikleri bu seçimi izler.",
+            "capacityTitle": "Kapasite eklentileri",
+            "capacityIntro": "Yalnızca bir limiti artıran eklentiler, örneğin ek bir kullanıcı koltuğu. Bir planda ücretli veya gizlidir; planın kendi üst sınırları Sınırlar sekmesinde belirlenir.",
+            "noFeaturePacks": "Henüz özellik eklentisi yok.",
+            "adds": "Ekler: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "Sınırsız {name}",
+            "modeLabel": "{name} bu planda nasıl sunulur",
+            "modes": {
+              "included": "Dahil",
+              "paid": "Ücretli",
+              "hidden": "Gizli"
+            },
+            "noIncluded": "Bu eklenti yalnızca limitleri artırır, bu yüzden dahil edilemez. Bu planın kendi üst sınırını Sınırlar sekmesinde belirleyin.",
+            "priceLabel": "Bu plandaki fiyat ({currency})",
+            "priceHint": "Eklentinin kendi fiyatını kullanmak için boş bırakın.",
+            "includedCapacityNote": "Yalnızca özellikleri dahildir. Ek limitler ({limits}) bu plandaki çalışma alanlarına satılmaya devam eder.",
+            "hiddenNote": "Bu plandaki çalışma alanları bu eklentiyi görmez ve satın alamaz. Zaten satın almış bir çalışma alanı, süresi bitene kadar onu korur.",
+            "offNote": "Artık dahil değil: bu plandaki çalışma alanları eklentiyi satın almadıkça bu özellikleri kaybeder. Ayarları saklanır ve eklenti yeniden açıldığında geri gelir.",
             "loading": "Eklentiler yükleniyor",
             "loadFailed": "Eklentiler yüklenemedi. Hiçbir şey değiştirilmedi.",
             "empty": "Henüz eklenti yok",
             "emptyHint": "Akıllı yönlendirme ve Ekipler ve izinler gibi eklentiler, operatör konsolunda Eklentiler bölümünde oluşturulur.",
-            "stateFull": "Dahil",
-            "statePartial": "Kısmen dahil",
-            "stateNone": "Dahil değil",
             "noPrice": "Fiyat belirlenmedi",
             "gives": "Sağladığı: {features}",
-            "switchLabel": "{name} eklentisini bu plana dahil et",
-            "noFeatures": "Bu eklenti yalnızca limit ekler, bu yüzden dahil edilecek bir özellik yok. Limitleri plana dahil etmenin parçası değildir; planın kendi limitlerini Limitler sekmesinde belirleyin.",
-            "partial": "Kısmen dahil: bu planda {total} özelliğin {count} tanesi açık. Hâlâ kapalı: {missing}.",
-            "includeFully": "Tamamen dahil et",
-            "limitsNote": "Bu eklenti ayrıca ek limitler ({limits}) sağlar. Ek limit plana dahil etmenin parçası değildir ve burada hiçbir şey onu değiştirmez: planın kendi limitini Limitler sekmesinde belirleyin. Çalışma alanları ek limit için eklentiyi yine satın alır.",
             "unlistedNote": "Özelliklerinden bazıları ({features}) standart eklenti listesinin dışında. Yine de plan için açılabilirler; yalnızca bu eklentinin paket olarak satın alınması farklı çalışır.",
             "inactiveNote": "Bu eklenti taslak veya kapalı, bu yüzden henüz kimse satın alamaz. Plana dahil etmek yine de çalışır.",
             "impactCount": "{count, plural, one {# çalışma alanı bu eklenti için zaten ödeme yapıyor.} other {# çalışma alanı bu eklenti için zaten ödeme yapıyor.}} Yenilemeleri mevcut dönemin sonunda duracak, hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek.",
             "impactUnknown": "Bu plandaki ve bu eklenti için zaten ödeme yapan çalışma alanları, mevcut dönemlerinin sonunda yenilemeyi bırakacak. Hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek. Sayı yüklenemedi.",
-            "offNote": "Kapatıldı: bu plandaki çalışma alanları eklentiyi satın almadıkça bu özellikleri kaybeder ve eklenti onlar için fiyatıyla satın alınabilir hale gelir."
+            "partlyNote": "Bu plan bu eklentinin bir kısmını zaten veriyor ({features}). Burada Dahil, Ücretli veya Gizli seçene kadar böyle kalır."
           }
         }
       },

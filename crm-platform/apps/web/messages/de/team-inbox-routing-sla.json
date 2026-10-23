@@ -200,7 +200,9 @@
       "autoReply": "Eine automatische Antwort senden",
       "autoReplyBody": "Antworttext",
       "autoReplyHint": "Wird im Namen des Unternehmens an den Kunden gesendet. Außerhalb des 24-Stunden-Fensters wird keine freie Antwort gesendet.",
-      "whenHint": "Jede Bedingung, die du hinzufügst, muss zutreffen."
+      "whenHint": "Jede Bedingung, die du hinzufügst, muss zutreffen.",
+      "unavailableTitle": "Regeln sind in deinem Tarif nicht verfügbar",
+      "unavailableBody": "Der Tarif deines Workspace enthält keine Zuweisungsregeln. Neue Chats warten in der Warteschlange, wo dein Team sie übernehmen kann."
     },
     "sla": {
       "back": "Zurück zu den Einstellungen",

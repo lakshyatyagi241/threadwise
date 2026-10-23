@@ -200,7 +200,9 @@
       "autoReply": "Envoyer une réponse automatique",
       "autoReplyBody": "Texte de la réponse",
       "autoReplyHint": "Envoyée au nom de l'entreprise au client. Hors de la fenêtre de 24 heures, une réponse libre n'est pas envoyée.",
-      "whenHint": "Chaque condition que vous ajoutez doit correspondre."
+      "whenHint": "Chaque condition que vous ajoutez doit correspondre.",
+      "unavailableTitle": "Les règles ne sont pas disponibles avec votre offre",
+      "unavailableBody": "L’offre de votre espace de travail n’inclut pas les règles d’attribution. Les nouvelles conversations attendent dans la file, où votre équipe peut les prendre."
     },
     "sla": {
       "back": "Retour aux paramètres",

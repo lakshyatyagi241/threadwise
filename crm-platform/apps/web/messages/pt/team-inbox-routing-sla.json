@@ -200,7 +200,9 @@
       "autoReply": "Enviar uma resposta automática",
       "autoReplyBody": "Texto da resposta",
       "autoReplyHint": "Enviada como a empresa ao cliente. Fora da janela de 24 horas, uma resposta livre não é enviada.",
-      "whenHint": "Toda condição que você adicionar deve corresponder."
+      "whenHint": "Toda condição que você adicionar deve corresponder.",
+      "unavailableTitle": "As regras não estão disponíveis no seu plano",
+      "unavailableBody": "O plano do seu espaço de trabalho não inclui regras de atribuição. As novas conversas esperam na fila, onde sua equipe pode assumi-las."
     },
     "sla": {
       "back": "Voltar para Configurações",

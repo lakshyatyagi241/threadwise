@@ -39,7 +39,7 @@ Inbox, assigning by hand, the Waiting tab and Claim, the Human handoff step to a
 
 ## How to get it
 
-Open **Plans** from the account menu and look for **Smart routing** among the add-ons, or ask the account owner to. Some higher plans include it. Every locked option in the product links there. It does not need the Teams and permissions add-on: a rule can assign to people. Only a destination that is a team needs teams on your plan.
+Open **Plans** from the account menu and look for **Smart routing** among the add-ons, or ask the account owner to. Some higher plans include it, and some plans do not offer it at all; then it is not listed and the auto-assignment page shows only the controls every plan has. Every locked option in the product links there. It does not need the Teams and permissions add-on: a rule can assign to people. Only a destination that is a team needs teams on your plan.
 
 ## If your plan starts to include it
 
@@ -51,10 +51,10 @@ Nothing is deleted. Your rules, switches, team methods and owner mode stay saved
 
 ## For operators
 
-1. In the operator console open **Add-ons** and find **Smart routing**. It starts as a draft: inactive and without a price. Untick **Free**, set the price and period, tick **Active**, save.
-2. Give it to a workspace like any other add-on, or let the workspace buy it from Plans.
-3. To include it in a plan instead, open **Plans**, the plan, **Features**, and under Chat switch on **Smart routing: auto-assignment and rules** and **Smart routing: contact owner and sticky agent**. To make a plan an entry plan, switch both off. A new plan starts with both off, and a plan that does not store them does not include them.
-4. A workspace override beats both the plan and the add-on.
+1. In the operator console open **Add-ons** and find **Smart routing**. It starts as a draft: inactive and without a price. Set the price and period, tick **Active**, save.
+2. Decide per plan, in one place: open **Plans**, the plan, the **Add-ons** tab, and choose **Included** (no charge, the plan carries both Smart routing features), **Paid** (workspaces on the plan can buy it, at the add-on price or at a price you type for this plan) or **Hidden** (workspaces on the plan never see it). The same choice is on the add-on's own page under **Plans**, and the add-ons list shows it for every plan.
+3. The two Smart routing switches on a plan's **Features** tab follow that choice and cannot be changed there.
+4. A workspace override beats both the plan and the add-on. The workspace's **Plan** tab in **Workspaces** lists every add-on with the reason it is on or off, including overrides; clear an override in **Edit & change plan**.
 
 ## If something looks wrong
 

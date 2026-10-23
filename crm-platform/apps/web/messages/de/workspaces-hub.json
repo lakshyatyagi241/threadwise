@@ -234,7 +234,29 @@
         "ends": "Endet",
         "limits": "Wirksame Limits",
         "edit": "Bearbeiten und Tarif ändern",
-        "overrideNote": "Dieser Workspace hat eigene Limits, die die des Tarifs ersetzen."
+        "overrideNote": "Dieser Workspace hat eigene Limits, die die des Tarifs ersetzen.",
+        "addons": {
+          "title": "Add-ons",
+          "intro": "Was dieser Workspace von jedem Add-on hat und warum.",
+          "empty": "Keine Add-ons im Verkauf.",
+          "kind": {
+            "feature": "Funktions-Add-on",
+            "capacity": "Kapazitäts-Add-on"
+          },
+          "source": {
+            "plan": "Im Tarif enthalten",
+            "override": "Durch Überschreibung aktiviert",
+            "platform": "Workspace der Plattform",
+            "bought": "Gekauft",
+            "buy": "Kaufbar",
+            "unavailable": "Braucht einen bezahlten Tarif",
+            "hidden": "In diesem Tarif ausgeblendet"
+          },
+          "renews": "Verlängert sich am {date}",
+          "ends": "Endet am {date}",
+          "lifetime": "Kein Enddatum",
+          "overrides": "{count, plural, one {# Funktionsüberschreibung hat} other {# Funktionsüberschreibungen haben}} Vorrang vor dem Tarif: {keys}. Entferne sie unter Tarif bearbeiten und wechseln."
+        }
       },
       "walletTab": {
         "open": "Vollständiges Guthaben öffnen",

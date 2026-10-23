@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type {
-  AddonCard,
-  AddonUnavailableReason,
-  OwnedAddon,
-  WorkspaceAddonsResponse,
+import {
+  addonKindOf,
+  type AddonCard,
+  type AddonUnavailableReason,
+  type OperatorWorkspaceAddonsResponse,
+  type OwnedAddon,
+  type WorkspaceAddonsResponse,
 } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
-import { PlanEntitlementService, planKind } from '../plans-subscriptions-trials';
+import {
+  PlanEntitlementService,
+  offerOf,
+  offersOfPlanSlug,
+  planKind,
+} from '../plans-subscriptions-trials';
 import {
   addonLiveSql,
   cardState,
@@ -87,8 +95,40 @@ export class WorkspaceAddonsService {
    * partly covered pack lists only what is still missing.
    */
   async forWorkspace(orgId: number, canBuy = true): Promise<WorkspaceAddonsResponse> {
+    const { hidden: _hidden, ...out } = await this.list(orgId, canBuy, (fn) => this.db.tx(fn));
+    return out;
+  }
+
+  /**
+   * The operator's view of one workspace (the caller resolved its id through the operator's own store): the same list, run as that workspace, plus
+   * the add-ons its plan hides and the feature overrides that win over the plan, so the console can say why each add-on is on or off.
+   */
+  async forOperator(orgId: number): Promise<OperatorWorkspaceAddonsResponse> {
+    const e = await this.plans.forOrg(orgId, { ignorePacks: true });
+    const listed = await this.list(orgId, false, (fn) => this.db.txAs({ orgId, userId: null }, fn));
+    const featureOverrides = Object.fromEntries(
+      Object.entries(e?.overrides.features ?? {}).filter(([, v]) => typeof v === 'boolean'),
+    ) as Record<string, boolean>;
+    return {
+      ...listed,
+      featureOverrides,
+      platformOwned: e?.platformOwned ?? false,
+      planName: e?.planName ?? null,
+    };
+  }
+
+  private async list(
+    orgId: number,
+    canBuy: boolean,
+    run: <T>(fn: (tx: Tx) => Promise<T>) => Promise<T>,
+  ): Promise<WorkspaceAddonsResponse & { hidden: OperatorWorkspaceAddonsResponse['hidden'] }> {
     const live = sql.raw(addonLiveSql(await this.plans.graceDays()));
-    return this.db.tx(async (tx) => {
+    // The plan whose add-on offers apply (a lapsed paid plan's free fallback has its own): included / paid at a plan price / hidden.
+    // One resolution (packs ignored) feeds both the plan whose offers apply and what the plan already includes.
+    const planOnly = await this.plans.forOrg(orgId, { ignorePacks: true });
+    const offerPlanSlug = planOnly?.offerPlanSlug ?? null;
+    return run(async (tx) => {
+      const offers = offerPlanSlug ? await offersOfPlanSlug(tx, offerPlanSlug) : new Map();
       const stateRes = await tx.execute(sql`
         SELECT (p.id IS NOT NULL) AS plan_found, p.is_free, p.is_custom_quote, p.amount::text AS amount,
                s.plan_ends_at
@@ -150,17 +190,28 @@ export class WorkspaceAddonsService {
       const { included, support } = await this.plans.includedByPlanDetailed(
         orgId,
         packRows.flatMap((r) => readGrants(r.features, r.limits).features),
+        planOnly,
       );
-      const catalog: AddonCard[] = packRows.map((r) => {
+      const catalog: AddonCard[] = [];
+      const hidden: OperatorWorkspaceAddonsResponse['hidden'] = [];
+      for (const r of packRows) {
         const grants = readGrants(r.features, r.limits);
         const owned = ownedCount.get(r.id) ?? 0;
-        return {
+        const offer = offerOf(offers, r.id);
+        // A plan that hides an add-on does not list it; a workspace that still holds a purchase keeps seeing what it owns (it cannot buy again).
+        if (offer.mode === 'hidden' && owned === 0) {
+          hidden.push({ id: r.uuid, slug: r.slug, name: r.name });
+          continue;
+        }
+        const state = cardState(grants, owned, included, eligible && offer.mode !== 'hidden');
+        catalog.push({
           id: r.uuid,
           slug: r.slug,
           name: r.name,
           subtitle: r.subtitle,
-          amount: r.amount,
-          offerAmount: r.offer_amount,
+          // The plan's own price wins over the add-on's (and its offer price, which belongs to the add-on's list price).
+          amount: offer.amount ?? r.amount,
+          offerAmount: offer.amount ? null : r.offer_amount,
           currency: r.currency,
           isFree: r.is_free,
           isLifetime: r.is_lifetime,
@@ -171,14 +222,15 @@ export class WorkspaceAddonsService {
           ownedCount: owned,
           ownedEndsAt: latestEnd.get(r.id) ?? null,
           ownedRenews: renewing.has(r.id),
-          state: cardState(grants, owned, included, eligible),
+          state: offer.mode === 'hidden' && state === 'buy_again' ? 'active' : state,
           includedVia: isIncludedInPlan(grants, included)
             ? grants.features.some((k) => support.has(k))
               ? 'support'
               : 'plan'
             : null,
-        };
-      });
+          kind: addonKindOf(grants),
+        });
+      }
       const owned: OwnedAddon[] = ownedRows.map((r) => ({
         id: r.uuid,
         packId: r.pack_uuid,
@@ -187,7 +239,7 @@ export class WorkspaceAddonsService {
         endsAt: r.ends_at ? new Date(r.ends_at).toISOString() : null,
         renews: r.renews,
       }));
-      return { eligible, unavailableReason: reason, canBuy, owned, catalog };
+      return { eligible, unavailableReason: reason, canBuy, owned, catalog, hidden };
     });
   }
 }

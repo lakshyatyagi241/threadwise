@@ -234,7 +234,29 @@
         "ends": "结束时间",
         "limits": "生效的限额",
         "edit": "编辑并更改套餐",
-        "overrideNote": "此工作区有自己的限额，将取代套餐的限额。"
+        "overrideNote": "此工作区有自己的限额，将取代套餐的限额。",
+        "addons": {
+          "title": "附加组件",
+          "intro": "此工作区拥有每个附加组件的哪些内容，以及原因。",
+          "empty": "没有在售的附加组件。",
+          "kind": {
+            "feature": "功能附加组件",
+            "capacity": "容量附加组件"
+          },
+          "source": {
+            "plan": "套餐已包含",
+            "override": "由覆盖设置开启",
+            "platform": "平台自有工作区",
+            "bought": "已购买",
+            "buy": "可购买",
+            "unavailable": "需要付费套餐",
+            "hidden": "在此套餐中隐藏"
+          },
+          "renews": "{date} 续订",
+          "ends": "{date} 结束",
+          "lifetime": "无结束日期",
+          "overrides": "{count} 个功能覆盖设置优先于套餐：{keys}。请在“编辑和更换套餐”中清除。"
+        }
       },
       "walletTab": {
         "open": "打开完整钱包",

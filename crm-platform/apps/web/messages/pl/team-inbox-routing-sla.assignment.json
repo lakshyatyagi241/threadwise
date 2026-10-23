@@ -4,6 +4,7 @@
       "switches": {
         "title": "Przypisywanie czatów",
         "intro": "Cztery przełączniki wystarczają w większości przestrzeni roboczych: włącz je, a nie musisz tworzyć żadnych reguł.",
+        "introBasic": "Twój plan nie przydziela czatów automatycznie: nowe czaty czekają w kolejce, aż ktoś je przejmie. Te ustawienia nadal obowiązują.",
         "order": "Kolejność dla nowego czatu: najpierw Właściciel kontaktu i Stały agent, potem Twoje reguły (jeśli jakieś dodasz), potem Pozostali, a na końcu kolejka oczekujących.",
         "readOnly": "Możesz zobaczyć te przełączniki, ale nie możesz ich zmieniać.",
         "saved": "Zapisano.",
@@ -11,8 +12,6 @@
         "loading": "Wczytywanie ustawień przypisywania",
         "loadFailed": "Nie udało się wczytać ustawień przypisywania.",
         "retry": "Spróbuj ponownie",
-        "notInPlan": "Brak w Twoim planie",
-        "upgradeHint": "W dodatku Inteligentne kierowanie lub w wyższym planie.",
         "stepFirst": "Sprawdzane najpierw",
         "stepMaster": "Główny przełącznik",
         "stepAfter": "Po przejęciu czatu",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Potrzebujesz większej kontroli? Dodaj reguły",
         "intro": "Opcjonalne. Reguły kierują wybrane czaty (z danego kanału, ze słowami w wiadomości, od nowego kontaktu...) do wybranych agentów lub zespołów. Jeśli cztery przełączniki wystarczają, nie musisz tworzyć żadnej reguły.",
-        "locked": "Reguły są częścią dodatku Inteligentne kierowanie lub wyższego planu. Nadal masz kolejkę oczekujących, przejmowanie czatów i ręczne przydzielanie.",
         "pipelineTitle": "Jak przypisywany jest nowy czat",
         "pipeline": {
           "agent": "1. Właściciel kontaktu i Stały agent",

@@ -12,6 +12,7 @@ import {
   type PlanFeatureKey,
 } from '@crm/contracts';
 import { listingPathFor } from '@/features/_registry/app-listings';
+import { useFeatureAddon } from '@/lib/plan-features';
 import { fetchBillingPlans } from '../api';
 import { PLANS_PATH, SALES_PATH, formatMoney } from '../lib/format';
 
@@ -20,14 +21,6 @@ export interface PaywallGate {
   href: string;
   feature: string;
 }
-
-/** The add-on that sells a plan feature a pack may grant (PACK_GRANTABLE_FEATURES): the paywall says so next to the plans. */
-const ADDON_OF_FEATURE: Record<string, 'smartRouting' | 'teamsPermissions' | undefined> = {
-  inbox_routing: 'smartRouting',
-  inbox_assignment_sticky: 'smartRouting',
-  team_hierarchy: 'teamsPermissions',
-  custom_roles: 'teamsPermissions',
-};
 
 /** The feature a path needs: the longest gate whose path is a prefix of it (TW-PLAN-020: a page's feature comes from the route, not a separate map). */
 export function gateFor(pathname: string, gates: readonly PaywallGate[]): PaywallGate | null {
@@ -85,7 +78,17 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
   useEffect(() => ref.current?.focus(), []);
   const plans: BillingPlan[] = q.data?.data ?? [];
   const listing = canBrowseApps ? listingPathFor(feature) : null;
-  const addon = PACK_GRANTABLE_FEATURES.includes(feature) ? ADDON_OF_FEATURE[feature] : undefined;
+  // The add-on that sells the feature comes from the entitlements (`featureAddons`), named and priced for this plan: "buy" names it; an
+  // add-on the plan does not offer (hidden), or one that needs a paid plan first, adds no line. Unknown data keeps a generic line for a
+  // feature a pack may grant, so nothing is guessed.
+  const featureAddon = useFeatureAddon(feature);
+  const addonLine: 'named' | 'generic' | null = featureAddon
+    ? featureAddon.offer === 'buy'
+      ? 'named'
+      : null
+    : PACK_GRANTABLE_FEATURES.includes(feature)
+      ? 'generic'
+      : null;
 
   return (
     <div
@@ -163,9 +166,11 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
             </Link>
           </p>
         )}
-        {addon && (
+        {addonLine && (
           <p className="text-sm text-muted-foreground" data-testid="paywall-addon">
-            {t('addonHint', { addon: t(`addons.${addon}`) })}{' '}
+            {addonLine === 'named' && featureAddon
+              ? t('addonHint', { addon: featureAddon.addonName })
+              : t('addonHintGeneric')}{' '}
             <Link href={PLANS_PATH} className="font-medium text-primary hover:underline">
               {t('addonLink')}
             </Link>

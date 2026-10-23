@@ -234,7 +234,29 @@
         "ends": "Fin",
         "limits": "Limites effectives",
         "edit": "Modifier et changer de forfait",
-        "overrideNote": "Cet espace de travail a ses propres limites, qui remplacent celles du forfait."
+        "overrideNote": "Cet espace de travail a ses propres limites, qui remplacent celles du forfait.",
+        "addons": {
+          "title": "Modules complémentaires",
+          "intro": "Ce que cet espace de travail a de chaque module, et pourquoi.",
+          "empty": "Aucun module en vente.",
+          "kind": {
+            "feature": "Module de fonctionnalité",
+            "capacity": "Module de capacité"
+          },
+          "source": {
+            "plan": "Inclus dans le forfait",
+            "override": "Activé par une dérogation",
+            "platform": "Espace de travail de la plateforme",
+            "bought": "Acheté",
+            "buy": "Peut acheter",
+            "unavailable": "Nécessite un forfait payant",
+            "hidden": "Masqué sur ce forfait"
+          },
+          "renews": "Se renouvelle le {date}",
+          "ends": "Se termine le {date}",
+          "lifetime": "Sans date de fin",
+          "overrides": "{count, plural, one {# dérogation de fonctionnalité l’emporte} other {# dérogations de fonctionnalité l’emportent}} sur le forfait : {keys}. Supprimez-les dans Modifier et changer de forfait."
+        }
       },
       "walletTab": {
         "open": "Ouvrir le portefeuille complet",

@@ -1364,7 +1364,8 @@
             "enableAll": "Aktifkan semua",
             "disableAll": "Nonaktifkan semua",
             "noMatch": "Tidak ada fitur yang cocok dengan pencarian Anda.",
-            "groupCount": "{count} dari {total} aktif"
+            "groupCount": "{count} dari {total} aktif",
+            "lockedBy": "Diatur oleh add-on {addon} di tab Add-on"
           },
           "limitsUi": {
             "intro": "Batas menghentikan tindakan setelah ruang kerja mencapainya. Centang Tanpa batas untuk menghapus batas.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "Aplikasi belum dipublikasikan, jadi ruang kerja belum dapat melihatnya.",
             "appLabel": "Aplikasi: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, other {# add-on dipilih}}"
+            "total": "{count, plural, one {# add-on disertakan atau ditawarkan} other {# add-on disertakan atau ditawarkan}}"
           },
           "featureHints": {
             "automation": "Pembuat alur dan otomatisasi yang membalas dan bertindak pada percakapan.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Paket tidak boleh sekaligus gratis dan penawaran kustom.",
             "paid_needs_price": "Atur harga di atas 0, atau tandai paket sebagai gratis.",
             "offer_not_lower": "Harga penawaran harus lebih rendah dari harga paket.",
-            "default_needs_active": "Paket default pendaftaran harus aktif."
+            "default_needs_active": "Paket default pendaftaran harus aktif.",
+            "addonPriceZero": "Kosongkan harga untuk memakai harga add-on, atau pilih Disertakan.",
+            "addonGone": "Add-on ini sudah tidak ada. Muat ulang halaman dan simpan lagi."
           },
           "limitHints": {
             "monthly_messages": "Pesan keluar yang dikirim dalam bulan kalender. Melebihi kuota, dompet ditagih.",
@@ -1708,31 +1711,41 @@
             "platform": "Dipakai bersama"
           },
           "marketplace": {
-            "title": "Aplikasi Marketplace yang ditawarkan ke ruang kerja di paket ini"
+            "title": "Aplikasi mini yang ditawarkan di paket ini"
           },
-          "included": {
-            "title": "Add-on yang termasuk dalam paket ini",
-            "intro": "Aktifkan add-on untuk menyertakannya: ruang kerja di paket ini mendapatkannya tanpa biaya dan kartu add-on-nya bertuliskan \"Termasuk dalam paket Anda\". Ini mencentang tepat fitur-fitur add-on di tab Fitur, dan mencentangnya di sana juga mengubah sakelar. Add-on yang tidak disertakan tetap dijual dengan harganya sendiri ke setiap ruang kerja di paket berbayar aktif.",
-            "readOnly": "Anda dapat melihat paket ini tetapi tidak dapat mengubahnya, jadi sakelar ini dikunci.",
+          "offers": {
+            "readOnly": "Anda dapat melihat paket ini tetapi tidak dapat mengubahnya, jadi kontrol ini dikunci.",
+            "featureTitle": "Add-on fitur",
+            "featureIntro": "Add-on yang membuka bagian dari produk. Disertakan: ruang kerja di paket ini mendapatkannya tanpa biaya dan kartunya bertuliskan \"Termasuk dalam paket Anda\". Berbayar: mereka dapat membelinya, dengan harga khusus paket ini jika Anda menetapkannya. Tersembunyi: mereka tidak pernah melihatnya. Fitur add-on di tab Fitur mengikuti pilihan ini.",
+            "capacityTitle": "Add-on kapasitas",
+            "capacityIntro": "Add-on yang hanya menambah batas, seperti kursi pengguna tambahan. Di sebuah paket, add-on ini berbayar atau tersembunyi; batas milik paket diatur di tab Batas.",
+            "noFeaturePacks": "Belum ada add-on fitur.",
+            "adds": "Menambah: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} tanpa batas",
+            "modeLabel": "Cara {name} ditawarkan di paket ini",
+            "modes": {
+              "included": "Disertakan",
+              "paid": "Berbayar",
+              "hidden": "Tersembunyi"
+            },
+            "noIncluded": "Add-on ini hanya menambah batas, jadi tidak dapat disertakan. Atur batas milik paket ini di tab Batas.",
+            "priceLabel": "Harga di paket ini ({currency})",
+            "priceHint": "Kosongkan untuk memakai harga add-on itu sendiri.",
+            "includedCapacityNote": "Hanya fiturnya yang disertakan. Batas ekstra ({limits}) tetap dijual ke ruang kerja di paket ini.",
+            "hiddenNote": "Ruang kerja di paket ini tidak melihat add-on ini dan tidak dapat membelinya. Ruang kerja yang sudah membelinya tetap memilikinya hingga masa berlakunya berakhir.",
+            "offNote": "Tidak lagi disertakan: ruang kerja di paket ini kehilangan fitur-fitur ini kecuali mereka membeli add-on tersebut. Pengaturan mereka disimpan dan kembali saat add-on diaktifkan lagi.",
             "loading": "Memuat add-on",
             "loadFailed": "Add-on tidak dapat dimuat. Tidak ada yang diubah.",
             "empty": "Belum ada add-on",
             "emptyHint": "Add-on seperti Perutean pintar dan Tim dan izin dibuat di Add-on pada konsol operator.",
-            "stateFull": "Disertakan",
-            "statePartial": "Sebagian disertakan",
-            "stateNone": "Tidak disertakan",
             "noPrice": "Harga belum ditetapkan",
             "gives": "Memberikan: {features}",
-            "switchLabel": "Sertakan {name} dalam paket ini",
-            "noFeatures": "Add-on ini hanya menambah batas, jadi tidak ada fitur untuk disertakan. Batasnya bukan bagian dari penyertaan paket; atur batas milik paket di tab Batas.",
-            "partial": "Sebagian disertakan: {count} dari {total} fitur aktif di paket ini. Masih nonaktif: {missing}.",
-            "includeFully": "Sertakan sepenuhnya",
-            "limitsNote": "Add-on ini juga menambah batas ekstra ({limits}). Batas ekstra bukan bagian dari penyertaan paket dan tidak ada yang mengubahnya di sini: atur batas milik paket di tab Batas. Ruang kerja tetap membeli add-on untuk batas ekstra.",
             "unlistedNote": "Beberapa fiturnya ({features}) berada di luar daftar add-on standar. Fitur tersebut tetap dapat diaktifkan untuk paket; hanya cara membeli add-on ini sebagai paket yang berbeda.",
             "inactiveNote": "Add-on ini masih draf atau dinonaktifkan, jadi belum ada yang bisa membelinya. Menyertakannya dalam paket tetap berfungsi.",
             "impactCount": "{count, plural, other {# ruang kerja sudah membayar add-on ini.}} Perpanjangannya akan berhenti di akhir masa berjalan, tidak ada yang dikembalikan dananya, dan tidak ada yang dibatalkan hari ini.",
             "impactUnknown": "Ruang kerja di paket ini yang sudah membayar add-on ini akan berhenti memperpanjangnya di akhir masa berjalan. Tidak ada yang dikembalikan dananya dan tidak ada yang dibatalkan hari ini. Jumlahnya tidak dapat dimuat.",
-            "offNote": "Dinonaktifkan: ruang kerja di paket ini kehilangan fitur-fitur ini kecuali mereka membeli add-on, dan add-on menjadi dapat dibeli oleh mereka dengan harganya."
+            "partlyNote": "Paket ini sudah memberi sebagian add-on ini ({features}). Tetap begitu sampai Anda memilih Termasuk, Berbayar, atau Tersembunyi di sini."
           }
         }
       },

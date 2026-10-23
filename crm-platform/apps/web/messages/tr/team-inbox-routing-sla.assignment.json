@@ -4,6 +4,7 @@
       "switches": {
         "title": "Konuşma atama",
         "intro": "Dört anahtar çoğu çalışma alanı için yeterlidir: bunları açın, hiç kural oluşturmanız gerekmez.",
+        "introBasic": "Planınız sohbetleri otomatik atamaz: yeni sohbetler biri üstlenene kadar kuyrukta bekler. Bu ayarlar geçerli olmaya devam eder.",
         "order": "Yeni bir konuşma için sıra: önce Kişi Sahibi ve Sabit Temsilci, sonra kurallarınız (eklediyseniz), sonra Diğer herkes, en son bekleme kuyruğu.",
         "readOnly": "Bu anahtarları görebilirsiniz ama değiştiremezsiniz.",
         "saved": "Kaydedildi.",
@@ -11,8 +12,6 @@
         "loading": "Atama ayarları yükleniyor",
         "loadFailed": "Atama ayarları yüklenemedi.",
         "retry": "Yeniden dene",
-        "notInPlan": "Planınızda yok",
-        "upgradeHint": "Akıllı yönlendirme eklentisine veya daha üst bir plana dahildir.",
         "stepFirst": "İlk kontrol edilir",
         "stepMaster": "Ana anahtar",
         "stepAfter": "Üstlenmeden sonra",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Daha fazla denetim mi gerek? Kural ekleyin",
         "intro": "İsteğe bağlı. Kurallar belirli konuşmaları (bir kanalı, mesajdaki sözcükleri, yeni bir kişiyi...) belirli temsilcilere veya ekiplere yönlendirir. Dört anahtar yeterliyse hiç kural oluşturmanız gerekmez.",
-        "locked": "Kurallar Akıllı yönlendirme eklentisinin veya daha üst bir planın parçasıdır. Bekleme kuyruğu, sohbeti üstlenme ve elle atama kullanılmaya devam eder.",
         "pipelineTitle": "Yeni bir konuşma nasıl atanır",
         "pipeline": {
           "agent": "1. Kişi sahibi ve Sabit Temsilci",

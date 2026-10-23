@@ -10,7 +10,7 @@ import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { BackgroundErrorBanner } from '@/components/shell/background-error-banner';
-import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
+import { fetchEntitlements } from '@/features/plans-subscriptions-trials/server';
 import { fetchConnectedChannels } from '@/features/whatsapp-cloud-api-waba/server';
 import { HelpProvider } from '@/features/help-center';
 import { withVocabulary, type Tree } from '@/features/persona-vocabulary/lib/overlay';
@@ -54,7 +54,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   // The plan's features lock the menu entries that need one and drive the paywall sheet; unknown (null) locks nothing.
-  const enabledFeatures = await fetchEnabledFeatures();
+  const entitlements = await fetchEntitlements();
+  const enabledFeatures = entitlements?.features ?? null;
   const permissions = new Set(Object.keys(session.permissions));
   const capabilities = {
     ...CAPABILITIES_UNKNOWN,
@@ -108,8 +109,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           timeZone={session.effectiveTimezone}
           {...(messages !== baseMessages ? { messages } : {})}
         >
-          {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact). */}
-          <PlanFeaturesProvider features={enabledFeatures ? [...enabledFeatures] : null}>
+          {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact),
+              and the add-on that sells each locked feature, so a locked screen names it from data. */}
+          <PlanFeaturesProvider
+            features={enabledFeatures ? [...enabledFeatures] : null}
+            featureAddons={entitlements?.featureAddons ?? null}
+          >
             {/* The persona's view, for screens that decide what to draw inside another screen (contact tabs, Home cards). */}
             <PersonaProvider view={session.org.persona}>
               {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.

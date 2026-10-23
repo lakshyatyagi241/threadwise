@@ -45,7 +45,8 @@
         "period": "周期",
         "grants": "包含内容",
         "status": "状态",
-        "actions": "操作"
+        "actions": "操作",
+        "plans": "套餐"
       },
       "price": {
         "free": "免费",
@@ -156,7 +157,48 @@
           "months": "按月订阅",
           "years": "按年订阅"
         },
-        "periodHint": "附加组件是订阅。使用在线支付网关的工作区会自动续订；使用银行转账或线下支付时，周期结束后需要再次付款。"
+        "periodHint": "附加组件是订阅。使用在线支付网关的工作区会自动续订；使用银行转账或线下支付时，周期结束后需要再次付款。",
+        "planOffers": {
+          "title": "套餐",
+          "hint": "各套餐提供此附加组件的方式。包含：免费，套餐自带其功能。付费：工作区需购买，如果您设置了套餐专属价格，则按该价格计费。隐藏：该套餐的工作区完全看不到它。",
+          "noIncluded": "此附加组件只增加限额，因此任何套餐都无法包含它。套餐自身的上限在其“限制”标签页中设置。",
+          "empty": "还没有套餐。",
+          "freePlan": "免费套餐",
+          "inactivePlan": "未启用",
+          "modeLabel": "{plan}提供此附加组件的方式",
+          "modes": {
+            "included": "包含",
+            "paid": "付费",
+            "hidden": "隐藏"
+          },
+          "priceLabel": "此套餐中的价格",
+          "priceHint": "留空 = 附加组件自身的价格。",
+          "freePlanNote": "会在免费套餐中显示，但工作区需要付费套餐才能购买。",
+          "hiddenNote": "不向此套餐的工作区显示。已购买的工作区可继续使用到期限结束。",
+          "problems": {
+            "money": "请输入金额，例如 19 或 19.99。",
+            "zero": "将价格留空以使用附加组件的价格，或选择“包含”。"
+          },
+          "errors": {
+            "generic": "无法保存套餐提供设置。",
+            "forbidden": "只有超级管理员才能更改套餐提供设置。",
+            "notFound": "此附加组件已不存在。"
+          },
+          "saved": "套餐提供设置已保存。",
+          "changed": "{count, plural, one {已更改 # 个套餐} other {已更改 # 个套餐}}",
+          "save": "保存套餐提供设置"
+        }
+      },
+      "kind": {
+        "feature": "功能",
+        "capacity": "容量"
+      },
+      "plans": {
+        "included": "包含：{plans}",
+        "paid": "付费：{plans}",
+        "hidden": "隐藏：{plans}",
+        "withPrice": "{plan}（{price}）",
+        "none": "无套餐"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "需要消息额度？请改为给钱包充值；额度不是附加组件。",
-      "walletLink": "钱包充值"
+      "walletLink": "钱包充值",
+      "groups": {
+        "feature": "功能附加组件",
+        "capacity": "容量附加组件"
+      }
     }
   }
 }

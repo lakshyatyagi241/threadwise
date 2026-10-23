@@ -45,7 +45,8 @@
         "period": "Periodo",
         "grants": "Include",
         "status": "Stato",
-        "actions": "Azioni"
+        "actions": "Azioni",
+        "plans": "Piani"
       },
       "price": {
         "free": "Gratis",
@@ -156,7 +157,48 @@
           "months": "Abbonamento mensile",
           "years": "Abbonamento annuale"
         },
-        "periodHint": "I componenti aggiuntivi sono abbonamenti. Gli spazi di lavoro con un gateway online si rinnovano automaticamente; con bonifico bancario o pagamento offline pagano di nuovo alla fine del periodo."
+        "periodHint": "I componenti aggiuntivi sono abbonamenti. Gli spazi di lavoro con un gateway online si rinnovano automaticamente; con bonifico bancario o pagamento offline pagano di nuovo alla fine del periodo.",
+        "planOffers": {
+          "title": "Piani",
+          "hint": "Come ogni piano offre questo componente aggiuntivo. Incluso: senza costi, il piano porta con sé le sue funzionalità. A pagamento: gli spazi di lavoro lo acquistano, al prezzo specifico del piano se ne imposti uno. Nascosto: gli spazi di lavoro del piano non lo vedono mai.",
+          "noIncluded": "Questo componente aggiuntivo aumenta solo i limiti, quindi nessun piano può includerlo. Un piano imposta i propri limiti nella sua scheda Limiti.",
+          "empty": "Non ci sono ancora piani.",
+          "freePlan": "Piano gratuito",
+          "inactivePlan": "Inattivo",
+          "modeLabel": "Come {plan} offre questo componente aggiuntivo",
+          "modes": {
+            "included": "Incluso",
+            "paid": "A pagamento",
+            "hidden": "Nascosto"
+          },
+          "priceLabel": "Prezzo in questo piano",
+          "priceHint": "Vuoto = prezzo proprio del componente aggiuntivo.",
+          "freePlanNote": "Mostrato nel piano gratuito, ma per acquistarlo uno spazio di lavoro deve avere un piano a pagamento.",
+          "hiddenNote": "Non mostrato agli spazi di lavoro di questo piano. Uno spazio di lavoro che l’ha già acquistato lo mantiene fino alla fine del periodo.",
+          "problems": {
+            "money": "Inserisci un importo come 19 o 19.99.",
+            "zero": "Lascia vuoto il prezzo per usare quello del componente aggiuntivo, oppure scegli Incluso."
+          },
+          "errors": {
+            "generic": "Impossibile salvare le offerte dei piani.",
+            "forbidden": "Solo un super amministratore può modificare le offerte dei piani.",
+            "notFound": "Questo componente aggiuntivo non esiste più."
+          },
+          "saved": "Offerte dei piani salvate.",
+          "changed": "{count, plural, one {# piano modificato} many {# piani modificati} other {# piani modificati}}",
+          "save": "Salva le offerte dei piani"
+        }
+      },
+      "kind": {
+        "feature": "Funzionalità",
+        "capacity": "Capacità"
+      },
+      "plans": {
+        "included": "Incluso: {plans}",
+        "paid": "A pagamento: {plans}",
+        "hidden": "Nascosto: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Nessun piano"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Ti servono crediti messaggi? Ricarica invece il tuo portafoglio; i crediti non sono un componente aggiuntivo.",
-      "walletLink": "Ricarica il portafoglio"
+      "walletLink": "Ricarica il portafoglio",
+      "groups": {
+        "feature": "Componenti aggiuntivi di funzionalità",
+        "capacity": "Componenti aggiuntivi di capacità"
+      }
     }
   }
 }

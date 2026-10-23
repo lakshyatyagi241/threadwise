@@ -5,18 +5,37 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addonPackSchema, type AddonPack, type PlanBillingUnit } from '@crm/contracts';
+import {
+  addonPackSchema,
+  type AddonPack,
+  type PlanAddonOfferMode,
+  type PlanBillingUnit,
+  type SetAddonPlanOffersRequest,
+} from '@crm/contracts';
 import { Alert, Button, Card, Checkbox, Input, Select, Spinner, cn } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
+import { SegmentedChoice } from '@/features/auth-registration-security/platform/ui/segmented-choice';
+import {
+  PLANS_QUERY_KEY,
+  PLAN_INCLUDABLE_PACKS_QUERY_KEY,
+} from '@/features/auth-registration-security/platform/plans/plans-query';
 import { KEYS, fetchGrantFields, fetchPack } from '../api';
 import { addonErrorKey } from '../lib/errors';
 import {
   buildPackRequest,
+  buildPlanOffersRequest,
+  changedPlanOfferCount,
   newPackDraft,
   packToDraft,
+  planOfferModes,
+  planOffersToDraft,
+  setPlanOfferAmount,
+  setPlanOfferMode,
   type PackDraft,
   type PackField,
+  type PlanOfferProblem,
+  type PlanOffersDraft,
 } from '../lib/pack-draft';
 import { Accent, ErrorBlock, LoadingBlock, PageHead } from './ui';
 
@@ -452,6 +471,189 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
           </div>
         </Card>
       </form>
+
+      {pack && <PlanOffersCard pack={pack} canEdit={canEdit} />}
     </div>
+  );
+}
+
+/**
+ * The pack's "Plans" section (existing pack only): how every plan offers it, Included | Paid | Hidden (a capacity pack has no Included),
+ * with an optional price of the plan's own when Paid. Saved on its own (`PUT platform/addons/:id/plans`, only the rows that changed), so
+ * it never mixes with the pack's own save and its row version. The plan editor's Add-ons tab edits the same rows from the plan's side.
+ */
+function PlanOffersCard({ pack, canEdit }: { pack: AddonPack; canEdit: boolean }) {
+  const t = useTranslations(`${NS}.planOffers`);
+  const tc = useTranslations('addons-extension-registry.common');
+  const qc = useQueryClient();
+  const [current, setCurrent] = useState(pack);
+  const [draft, setDraft] = useState<PlanOffersDraft>(() => planOffersToDraft(pack));
+  const [problems, setProblems] = useState<Record<string, PlanOfferProblem>>({});
+  const [saved, setSaved] = useState(false);
+  const modes = planOfferModes(current);
+  const isCapacity = !modes.includes('included');
+  const changed = changedPlanOfferCount(current, draft);
+  const listPrice = current.offerAmount ?? current.amount;
+
+  const save = useMutation({
+    mutationFn: (body: SetAddonPlanOffersRequest) =>
+      operatorFetch(`/addons/${current.id}/plans`, {
+        method: 'PUT',
+        body,
+        schema: addonPackSchema,
+      }),
+    onSuccess: async (next) => {
+      setCurrent(next);
+      setDraft(planOffersToDraft(next));
+      setSaved(true);
+      // The list's Plans column, and the plans whose features the offers just set.
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: KEYS.packs }),
+        qc.invalidateQueries({ queryKey: PLANS_QUERY_KEY }),
+        qc.invalidateQueries({ queryKey: PLAN_INCLUDABLE_PACKS_QUERY_KEY }),
+      ]);
+    },
+  });
+
+  const edit = (next: PlanOffersDraft, planId: string) => {
+    setDraft(next);
+    setSaved(false);
+    save.reset();
+    if (problems[planId]) {
+      const { [planId]: _drop, ...rest } = problems;
+      setProblems(rest);
+    }
+  };
+
+  const submit = () => {
+    const r = buildPlanOffersRequest(current, draft);
+    if (!r.ok) {
+      setProblems(r.problems);
+      return;
+    }
+    setProblems({});
+    if (r.body.offers.length === 0) return;
+    save.mutate(r.body);
+  };
+
+  const errorKey = save.isError ? addonErrorKey(save.error) : null;
+
+  return (
+    <Card className="overflow-hidden rounded-2xl p-0" data-testid="pack-plan-offers">
+      <div className="space-y-4 p-5">
+        <Section first n="04" title={t('title')} hint={t('hint')}>
+          {isCapacity && <p className="mb-3 text-xs text-muted-foreground">{t('noIncluded')}</p>}
+          {current.planOffers.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{t('empty')}</p>
+          ) : (
+            <ul className="divide-y divide-border rounded-xl border border-border">
+              {current.planOffers.map((o) => {
+                const row = draft[o.planId] ?? { mode: o.mode, amount: '' };
+                const priceId = `pack-plan-${o.planId}-price`;
+                const problem = problems[o.planId];
+                return (
+                  <li
+                    key={o.planId}
+                    className="space-y-2 px-4 py-3"
+                    data-testid={`pack-plan-${o.planId}`}
+                    data-mode={row.mode}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                        <span className="break-words text-[13px] font-semibold">{o.planName}</span>
+                        {o.planIsFree && (
+                          <span className="rounded-full bg-muted px-1.5 py-0.5 font-mono text-[10px] uppercase text-muted-foreground">
+                            {t('freePlan')}
+                          </span>
+                        )}
+                        {!o.planIsActive && (
+                          <span className="rounded-full bg-muted px-1.5 py-0.5 font-mono text-[10px] uppercase text-muted-foreground">
+                            {t('inactivePlan')}
+                          </span>
+                        )}
+                      </div>
+                      <SegmentedChoice<PlanAddonOfferMode>
+                        name={`pack-plan-${o.planId}`}
+                        label={t('modeLabel', { plan: o.planName })}
+                        value={row.mode}
+                        options={modes.map((m) => ({ value: m, label: t(`modes.${m}`) }))}
+                        onChange={(m) => edit(setPlanOfferMode(draft, o.planId, m), o.planId)}
+                        disabled={!canEdit || save.isPending}
+                        testId={`pack-plan-${o.planId}-mode`}
+                      />
+                    </div>
+                    {row.mode === 'paid' && (
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label htmlFor={priceId} className="text-[11px] font-semibold">
+                          {t('priceLabel')}
+                        </label>
+                        <Input
+                          id={priceId}
+                          dir="ltr"
+                          inputMode="decimal"
+                          className="h-8 w-28 text-start font-mono text-[13px]"
+                          placeholder={listPrice}
+                          value={row.amount}
+                          disabled={!canEdit || save.isPending}
+                          invalid={!!problem}
+                          aria-describedby={`${priceId}-hint`}
+                          onChange={(e) =>
+                            edit(setPlanOfferAmount(draft, o.planId, e.target.value), o.planId)
+                          }
+                        />
+                        <span className="font-mono text-[11px] text-muted-foreground" dir="ltr">
+                          {current.currency}
+                        </span>
+                        <span id={`${priceId}-hint`} className="text-[11px] text-muted-foreground">
+                          {t('priceHint')}
+                        </span>
+                      </div>
+                    )}
+                    {row.mode === 'paid' && o.planIsFree && (
+                      <p className="text-[11px] text-muted-foreground">{t('freePlanNote')}</p>
+                    )}
+                    {row.mode === 'hidden' && (
+                      <p className="text-[11px] text-muted-foreground">{t('hiddenNote')}</p>
+                    )}
+                    {problem && (
+                      <p role="alert" className="text-[11px] text-danger">
+                        {t(`problems.${problem}`)}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Section>
+      </div>
+      {canEdit && current.planOffers.length > 0 && (
+        <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border bg-muted/40 px-5 py-4">
+          <p aria-live="polite" className="me-auto text-xs">
+            {save.isError ? (
+              <span role="alert" className="text-danger">
+                {errorKey === 'forbidden' || errorKey === 'notFound'
+                  ? t(`errors.${errorKey}`)
+                  : t('errors.generic')}
+              </span>
+            ) : saved ? (
+              <span className="text-success">{t('saved')}</span>
+            ) : changed > 0 ? (
+              <span className="text-muted-foreground">{t('changed', { count: changed })}</span>
+            ) : null}
+          </p>
+          <Button
+            type="button"
+            className="rounded-full px-5"
+            disabled={save.isPending || changed === 0}
+            onClick={submit}
+            data-testid="pack-plan-offers-save"
+          >
+            {save.isPending && <Spinner label={tc('saving')} />}
+            {t('save')}
+          </Button>
+        </div>
+      )}
+    </Card>
   );
 }

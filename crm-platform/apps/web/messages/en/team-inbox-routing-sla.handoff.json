@@ -1,8 +1,6 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "notInPlan": "Not in your plan",
-      "upgradeHint": "Included in the Smart routing add-on or a higher plan.",
       "owner": {
         "prompt": "Ask about the contact owner on reassign",
         "promptHint": "When a chat is given to someone else by hand, offer to make them the contact owner too.",

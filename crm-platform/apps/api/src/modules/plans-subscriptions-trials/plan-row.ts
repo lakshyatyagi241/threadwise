@@ -118,7 +118,12 @@ const iso = (v: string | Date): string => new Date(v).toISOString();
 
 export function toAdminItem(
   row: PlanRow,
-  extra: { inUse: number; isRegistrationDefault: boolean; visibleAddons: string[] },
+  extra: {
+    inUse: number;
+    isRegistrationDefault: boolean;
+    visibleAddons: string[];
+    addonOffers?: PlanAdminItem['addonOffers'];
+  },
 ): PlanAdminItem {
   const facts = toFacts(row);
   return {
@@ -154,6 +159,7 @@ export function toAdminItem(
       number
     >,
     visibleAddons: extra.visibleAddons,
+    addonOffers: extra.addonOffers ?? [],
     inUse: extra.inUse,
     isRegistrationDefault: extra.isRegistrationDefault,
     createdAt: iso(row.created_at),

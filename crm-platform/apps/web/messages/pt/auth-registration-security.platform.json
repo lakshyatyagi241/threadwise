@@ -1364,7 +1364,8 @@
             "enableAll": "Ativar todos",
             "disableAll": "Desativar todos",
             "noMatch": "Nenhum recurso corresponde à sua pesquisa.",
-            "groupCount": "{count} de {total} ativos"
+            "groupCount": "{count} de {total} ativos",
+            "lockedBy": "Definido pelo complemento {addon} na aba Complementos"
           },
           "limitsUi": {
             "intro": "Um limite impede a ação quando o espaço de trabalho o atinge. Marque Ilimitado para remover o limite.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "O app não está publicado, então os espaços de trabalho ainda não podem vê-lo.",
             "appLabel": "App: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# complemento selecionado} other {# complementos selecionados}}"
+            "total": "{count, plural, one {# complemento incluído ou oferecido} other {# complementos incluídos ou oferecidos}}"
           },
           "featureHints": {
             "automation": "O construtor de fluxos e as automações que respondem e agem nas conversas.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Um plano não pode ser gratuito e de orçamento personalizado ao mesmo tempo.",
             "paid_needs_price": "Defina um preço acima de 0 ou marque o plano como gratuito.",
             "offer_not_lower": "O preço promocional deve ser menor que o preço do plano.",
-            "default_needs_active": "O plano padrão de cadastro deve estar ativo."
+            "default_needs_active": "O plano padrão de cadastro deve estar ativo.",
+            "addonPriceZero": "Deixe o preço vazio para usar o preço do complemento ou escolha Incluído.",
+            "addonGone": "Este complemento não existe mais. Recarregue a página e salve novamente."
           },
           "limitHints": {
             "monthly_messages": "Mensagens enviadas no mês civil. Além da franquia, a carteira é cobrada.",
@@ -1708,31 +1711,41 @@
             "platform": "Compartilhado por ambos"
           },
           "marketplace": {
-            "title": "Apps do Marketplace oferecidos aos espaços de trabalho deste plano"
+            "title": "Miniapps oferecidos neste plano"
           },
-          "included": {
-            "title": "Complementos incluídos neste plano",
-            "intro": "Ative um complemento para incluí-lo: os espaços de trabalho deste plano o recebem sem custo e o cartão do complemento mostra \"Incluído no seu plano\". Isso marca exatamente os recursos do complemento na aba Recursos, e marcá-los lá altera o interruptor. Os complementos não incluídos continuam sendo vendidos pelo próprio preço a todos os espaços de trabalho em um plano pago ativo.",
-            "readOnly": "Você pode ver este plano, mas não alterá-lo, por isso estes interruptores estão bloqueados.",
+          "offers": {
+            "readOnly": "Você pode ver este plano, mas não alterá-lo, por isso estes controles estão bloqueados.",
+            "featureTitle": "Complementos de recursos",
+            "featureIntro": "Complementos que liberam uma parte do produto. Incluído: os espaços de trabalho deste plano o recebem sem custo e o cartão dele mostra \"Incluído no seu plano\". Pago: eles podem comprá-lo, pelo preço próprio deste plano se você definir um. Oculto: eles nunca o veem. Os recursos do complemento na aba Recursos seguem esta escolha.",
+            "capacityTitle": "Complementos de capacidade",
+            "capacityIntro": "Complementos que só aumentam um limite, como uma licença extra. Em um plano, eles são pagos ou ocultos; os limites do próprio plano são definidos na aba Limites.",
+            "noFeaturePacks": "Ainda não há complementos de recursos.",
+            "adds": "Adiciona: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} sem limite",
+            "modeLabel": "Como {name} é oferecido neste plano",
+            "modes": {
+              "included": "Incluído",
+              "paid": "Pago",
+              "hidden": "Oculto"
+            },
+            "noIncluded": "Este complemento só aumenta limites, por isso não pode ser incluído. Defina o limite do próprio plano na aba Limites.",
+            "priceLabel": "Preço neste plano ({currency})",
+            "priceHint": "Deixe vazio para usar o preço do próprio complemento.",
+            "includedCapacityNote": "Só os recursos dele estão incluídos. Os limites extras ({limits}) continuam à venda para os espaços de trabalho deste plano.",
+            "hiddenNote": "Os espaços de trabalho deste plano não veem este complemento e não podem comprá-lo. Um espaço de trabalho que já o comprou fica com ele até o fim do período.",
+            "offNote": "Não está mais incluído: os espaços de trabalho deste plano perdem esses recursos, a menos que comprem o complemento. As configurações deles são mantidas e voltam quando ele for ativado novamente.",
             "loading": "Carregando complementos",
             "loadFailed": "Não foi possível carregar os complementos. Nada foi alterado.",
             "empty": "Ainda não há complementos",
             "emptyHint": "Complementos como Roteamento inteligente e Equipes e permissões são criados em Complementos, no console do operador.",
-            "stateFull": "Incluído",
-            "statePartial": "Parcialmente incluído",
-            "stateNone": "Não incluído",
             "noPrice": "Sem preço definido",
             "gives": "Oferece: {features}",
-            "switchLabel": "Incluir {name} neste plano",
-            "noFeatures": "Este complemento só adiciona limites, então não há recurso para incluir. Os limites dele não fazem parte da inclusão no plano; defina os limites do próprio plano na aba Limites.",
-            "partial": "Parcialmente incluído: {count} de {total} recursos estão ativos neste plano. Ainda desativados: {missing}.",
-            "includeFully": "Incluir totalmente",
-            "limitsNote": "Este complemento também adiciona limites extras ({limits}). O limite extra não faz parte da inclusão no plano e nada aqui o altera: defina o limite do próprio plano na aba Limites. Os espaços de trabalho continuam comprando o complemento pelo limite extra.",
             "unlistedNote": "Alguns de seus recursos ({features}) estão fora da lista padrão de complementos. Ainda podem ser ativados para o plano; só muda a forma de comprar este complemento como pacote.",
             "inactiveNote": "Este complemento é um rascunho ou está desativado, então ninguém pode comprá-lo ainda. Incluí-lo no plano continua funcionando.",
             "impactCount": "{count, plural, one {# espaço de trabalho já paga por este complemento.} other {# espaços de trabalho já pagam por este complemento.}} A renovação deles será interrompida no fim do período atual, nada será reembolsado e nada será cancelado hoje.",
             "impactUnknown": "Os espaços de trabalho deste plano que já pagam por este complemento deixarão de renová-lo no fim do período atual. Nada será reembolsado e nada será cancelado hoje. Não foi possível carregar o número.",
-            "offNote": "Desativado: os espaços de trabalho deste plano perdem esses recursos, a menos que comprem o complemento, e ele passa a poder ser comprado por eles pelo preço."
+            "partlyNote": "Este plano já oferece parte deste complemento ({features}). Fica assim até você escolher Incluído, Pago ou Oculto aqui."
           }
         }
       },

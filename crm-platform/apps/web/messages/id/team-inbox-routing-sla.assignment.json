@@ -4,6 +4,7 @@
       "switches": {
         "title": "Penugasan chat",
         "intro": "Empat sakelar ini cukup untuk sebagian besar ruang kerja: aktifkan, dan Anda tidak perlu membuat aturan.",
+        "introBasic": "Paket Anda tidak menugaskan chat secara otomatis: chat baru menunggu di antrean sampai ada yang mengambilnya. Pengaturan ini tetap berlaku.",
         "order": "Urutan untuk chat baru: Pemilik Kontak dan Agen Tetap lebih dulu, lalu aturan Anda (jika ada), lalu Semua lainnya, lalu antrean tunggu.",
         "readOnly": "Anda dapat melihat sakelar ini tetapi tidak dapat mengubahnya.",
         "saved": "Tersimpan.",
@@ -11,8 +12,6 @@
         "loading": "Memuat pengaturan penugasan",
         "loadFailed": "Pengaturan penugasan tidak dapat dimuat.",
         "retry": "Coba lagi",
-        "notInPlan": "Tidak ada di paket Anda",
-        "upgradeHint": "Termasuk dalam add-on Perutean cerdas atau paket yang lebih tinggi.",
         "stepFirst": "Diperiksa pertama",
         "stepMaster": "Sakelar utama",
         "stepAfter": "Setelah chat diambil",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Perlu kontrol lebih? Tambahkan aturan",
         "intro": "Opsional. Aturan mengarahkan chat tertentu (saluran, kata dalam pesan, kontak baru...) ke agen atau tim tertentu. Jika keempat sakelar sudah cukup, Anda tidak perlu membuat aturan.",
-        "locked": "Aturan adalah bagian dari add-on Perutean cerdas atau paket yang lebih tinggi. Antrean tunggu, mengambil chat, dan penugasan manual tetap tersedia.",
         "pipelineTitle": "Cara chat baru ditugaskan",
         "pipeline": {
           "agent": "1. Pemilik kontak dan Agen Tetap",

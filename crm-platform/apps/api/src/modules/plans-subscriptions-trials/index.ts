@@ -52,3 +52,13 @@ export {
   planFeatureLabel,
 } from './plan-feature.guard';
 export { validityForState, fallsBackToFree } from './plan-lifecycle';
+export {
+  offersByAddon,
+  offersForAddon,
+  offersOfPlanSlug,
+  offerOf,
+  packFeatureKeys,
+  resyncIncludedPlans,
+  writeAddonOffers,
+  type ResolvedOffer,
+} from './plan-addon-offers';

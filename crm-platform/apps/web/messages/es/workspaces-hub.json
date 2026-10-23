@@ -234,7 +234,29 @@
         "ends": "Termina",
         "limits": "Límites efectivos",
         "edit": "Editar y cambiar plan",
-        "overrideNote": "Este espacio de trabajo tiene límites propios que reemplazan los del plan."
+        "overrideNote": "Este espacio de trabajo tiene límites propios que reemplazan los del plan.",
+        "addons": {
+          "title": "Complementos",
+          "intro": "Qué tiene este espacio de trabajo de cada complemento y por qué.",
+          "empty": "No hay complementos a la venta.",
+          "kind": {
+            "feature": "Complemento de función",
+            "capacity": "Complemento de capacidad"
+          },
+          "source": {
+            "plan": "Incluido en el plan",
+            "override": "Activado por una anulación",
+            "platform": "Espacio de trabajo de la plataforma",
+            "bought": "Comprado",
+            "buy": "Se puede comprar",
+            "unavailable": "Necesita un plan de pago",
+            "hidden": "Oculto en este plan"
+          },
+          "renews": "Se renueva el {date}",
+          "ends": "Termina el {date}",
+          "lifetime": "Sin fecha de fin",
+          "overrides": "{count, plural, one {# anulación de función prevalece} other {# anulaciones de función prevalecen}} sobre el plan: {keys}. Bórralas en Editar y cambiar plan."
+        }
       },
       "walletTab": {
         "open": "Abrir el monedero completo",

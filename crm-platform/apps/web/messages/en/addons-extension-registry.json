@@ -45,7 +45,8 @@
         "period": "Period",
         "grants": "Grants",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "plans": "Plans"
       },
       "price": {
         "free": "Free",
@@ -156,7 +157,48 @@
           "months": "Monthly subscription",
           "years": "Yearly subscription"
         },
-        "periodHint": "Add-ons are subscriptions. Workspaces on an online gateway are renewed automatically; with bank transfer or offline payment they pay again when the term ends."
+        "periodHint": "Add-ons are subscriptions. Workspaces on an online gateway are renewed automatically; with bank transfer or offline payment they pay again when the term ends.",
+        "planOffers": {
+          "title": "Plans",
+          "hint": "How each plan offers this add-on. Included: no charge, the plan carries its features. Paid: workspaces buy it, at the plan's own price if you set one. Hidden: workspaces on the plan never see it.",
+          "noIncluded": "This add-on only adds to limits, so no plan can include it. A plan sets its own caps on its Limits tab.",
+          "empty": "No plans exist yet.",
+          "freePlan": "Free plan",
+          "inactivePlan": "Inactive",
+          "modeLabel": "How {plan} offers this add-on",
+          "modes": {
+            "included": "Included",
+            "paid": "Paid",
+            "hidden": "Hidden"
+          },
+          "priceLabel": "Price on this plan",
+          "priceHint": "Empty = the add-on's own price.",
+          "freePlanNote": "Shown on the free plan, but a workspace needs a paid plan to buy it.",
+          "hiddenNote": "Not shown to workspaces on this plan. A workspace that already bought it keeps it until its term ends.",
+          "problems": {
+            "money": "Enter an amount such as 19 or 19.99.",
+            "zero": "Leave the price empty to use the add-on's price, or choose Included."
+          },
+          "errors": {
+            "generic": "The plan offers could not be saved.",
+            "forbidden": "Only a super admin can change plan offers.",
+            "notFound": "This add-on no longer exists."
+          },
+          "saved": "Plan offers saved.",
+          "changed": "{count, plural, one {# plan changed} other {# plans changed}}",
+          "save": "Save plan offers"
+        }
+      },
+      "kind": {
+        "feature": "Feature",
+        "capacity": "Capacity"
+      },
+      "plans": {
+        "included": "Included: {plans}",
+        "paid": "Paid: {plans}",
+        "hidden": "Hidden: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "No plans"
       }
     },
     "extensions": {
@@ -334,7 +376,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Need message credits? Top up your wallet instead; credits are not an add-on.",
-      "walletLink": "Top up wallet"
+      "walletLink": "Top up wallet",
+      "groups": {
+        "feature": "Feature add-ons",
+        "capacity": "Capacity add-ons"
+      }
     }
   }
 }

@@ -570,15 +570,21 @@
       "appLink": "앱 보기",
       "addonHint": "{addon} 애드온으로 현재 요금제에 추가할 수도 있습니다.",
       "addonLink": "애드온 보기",
-      "addons": {
-        "smartRouting": "스마트 라우팅",
-        "teamsPermissions": "팀 및 권한"
-      },
       "addonsTabHint": "부가 기능은 요금제에 마켓플레이스가 없어도 쓸 수 있습니다. 요금제 및 부가 기능에서 보유 현황을 보고 부가 기능을 구매할 수 있습니다.",
-      "addonsTabLink": "요금제 및 부가 기능 열기"
+      "addonsTabLink": "요금제 및 부가 기능 열기",
+      "addonHintGeneric": "요금제에서 애드온으로도 제공될 수 있습니다."
     },
     "lock": {
-      "link": "요금제 및 애드온 보기"
+      "link": "요금제 및 애드온 보기",
+      "offTitle": "요금제에 포함되지 않음",
+      "offLead": "이 부분은 현재 워크스페이스 요금제에 포함되어 있지 않습니다.",
+      "buyTitle": "{price}에 {addon} 추가",
+      "buyLead": "요금제에서 {addon}을(를) 애드온으로 제공합니다. 추가하면 이 부분이 켜집니다.",
+      "buyLink": "애드온 보기",
+      "askOwner": "계정 소유자에게 추가를 요청하세요.",
+      "unavailableTitle": "{addon}을(를) 사용하려면 활성 유료 요금제가 필요합니다",
+      "unavailableLead": "먼저 유료 요금제를 선택한 다음 {addon}을(를) 추가할 수 있습니다.",
+      "viewPlans": "요금제 보기"
     }
   }
 }

@@ -570,15 +570,21 @@
       "appLink": "Bekijk de app",
       "addonHint": "Je kunt het ook aan je huidige abonnement toevoegen met de add-on {addon}.",
       "addonLink": "Add-ons bekijken",
-      "addons": {
-        "smartRouting": "Slimme routering",
-        "teamsPermissions": "Teams en machtigingen"
-      },
       "addonsTabHint": "Voor add-ons heeft je abonnement de Marketplace niet nodig. Bij Abonnementen en add-ons zie je nog steeds wat je hebt en kun je add-ons kopen.",
-      "addonsTabLink": "Open Abonnementen en add-ons"
+      "addonsTabLink": "Open Abonnementen en add-ons",
+      "addonHintGeneric": "Je abonnement biedt het mogelijk ook als add-on aan."
     },
     "lock": {
-      "link": "Abonnementen en add-ons bekijken"
+      "link": "Abonnementen en add-ons bekijken",
+      "offTitle": "Niet in je abonnement",
+      "offLead": "Dit onderdeel zit op dit moment niet in het abonnement van je workspace.",
+      "buyTitle": "Voeg {addon} toe voor {price}",
+      "buyLead": "Je abonnement biedt {addon} aan als add-on. Voeg het toe om dit onderdeel aan te zetten.",
+      "buyLink": "Add-ons bekijken",
+      "askOwner": "Vraag de accounteigenaar om het toe te voegen.",
+      "unavailableTitle": "{addon} vereist een actief betaald abonnement",
+      "unavailableLead": "Kies eerst een betaald abonnement; daarna kun je {addon} toevoegen.",
+      "viewPlans": "Abonnementen bekijken"
     }
   }
 }

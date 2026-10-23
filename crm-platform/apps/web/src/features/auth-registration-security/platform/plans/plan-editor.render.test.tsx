@@ -69,6 +69,8 @@ const plain = (over: Partial<AddonPack> & { id: string }): AddonPack => ({
   sortOrder: 0,
   grants: { features: ['inbox_routing', 'inbox_assignment_sticky'], limits: {} },
   activePurchases: 0,
+  kind: 'feature',
+  planOffers: [],
   rowVersion: 1,
   createdAt: '2026-10-01T00:00:00.000Z',
   updatedAt: '2026-10-01T00:00:00.000Z',
@@ -83,7 +85,7 @@ const included = (over: Partial<IncludedPacksState> = {}): IncludedPacksState =>
   ...over,
 });
 
-const SAVED = newPlanDraft().features;
+const SAVED: PlanDraft['addonOffers'] = {};
 
 const render = (el: ReturnType<typeof createElement>, locale: 'en' | 'ar' = 'en') =>
   renderWithMessages(el, { locale });
@@ -154,7 +156,7 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
           state: state(),
           addons: addons({ status: 'pending' }),
           included: included(),
-          savedFeatures: SAVED,
+          savedOffers: SAVED,
           onTouched: () => undefined,
         }),
         locale,
@@ -165,7 +167,7 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
         state: state(),
         addons: addons({ status: 'error' }),
         included: included(),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
@@ -176,7 +178,7 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
         state: state(),
         addons: addons({}),
         included: included(),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
@@ -192,7 +194,7 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
           options: [pack({ id: A }), pack({ id: B, name: 'Draft pack', isActive: false })],
         }),
         included: included(),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
@@ -206,16 +208,10 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
     expect(html).toContain('bg-warning/5');
   });
 
-  it('lists the plain add-ons in their own section with a switch, apart from the Marketplace apps', () => {
+  it('groups the plain add-ons into Feature and Capacity sections, apart from the mini apps', () => {
     const html = render(
       createElement(AddonsTab, {
-        state: state({
-          features: {
-            ...newPlanDraft().features,
-            inbox_routing: true,
-            inbox_assignment_sticky: true,
-          },
-        }),
+        state: state({ addonOffers: { [SMART]: { mode: 'included', amount: '' } } }),
         addons: addons({ options: [pack({ id: A })] }),
         included: included({
           packs: [
@@ -223,41 +219,86 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
             plain({
               id: LIMITS_ONLY,
               name: 'More teams',
+              kind: 'capacity',
               grants: { features: [], limits: { teams: 5 } },
             }),
           ],
         }),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
     );
-    expect(html).toContain(`data-testid="plan-pack-${SMART}"`);
-    expect(html).toContain(`data-coverage="full"`);
-    // A limits-only pack has nothing to include: its switch is disabled.
-    expect(html).toContain(`data-coverage="noFeatures"`);
-    expect(html).toContain(`data-testid="plan-addon-${A}"`);
-    expect(html).toContain('role="switch"');
+    expect(html).toMatch(
+      new RegExp(`data-testid="plan-pack-${SMART}" data-kind="feature" data-mode="included"`),
+    );
+    expect(html).toMatch(
+      new RegExp(`data-testid="plan-pack-${LIMITS_ONLY}" data-kind="capacity" data-mode="paid"`),
+    );
+    // the feature section comes before the capacity section, the mini apps last
+    expect(html.indexOf(`plan-pack-${SMART}`)).toBeLessThan(
+      html.indexOf(`plan-pack-${LIMITS_ONLY}`),
+    );
+    expect(html.indexOf(`plan-pack-${LIMITS_ONLY}`)).toBeLessThan(html.indexOf(`plan-addon-${A}`));
+    expect(html.match(/role="radiogroup"/g)).toHaveLength(2);
+    // Included is offered for the feature add-on, never for the capacity one (which says why)
+    expect(html).toContain(`data-testid="plan-offer-${SMART}-included"`);
+    expect(html).not.toContain(`data-testid="plan-offer-${LIMITS_ONLY}-included"`);
+    expect(html).toContain(`data-testid="plan-offer-${LIMITS_ONLY}-paid"`);
+    expect(html).toContain(`data-testid="plan-offer-${LIMITS_ONLY}-hidden"`);
+    expect(html).toContain(`aria-describedby="plan-offer-${LIMITS_ONLY}-reason"`);
+    expect(html).toContain(`id="plan-offer-${LIMITS_ONLY}-reason"`);
+    // Paid shows the optional price box, with the add-on's own price as its placeholder
+    expect(html).toContain(`id="plan-addonOffers-${LIMITS_ONLY}"`);
+    expect(html).toContain('placeholder="9.00"');
+    expect(html).not.toContain(`id="plan-addonOffers-${SMART}"`);
   });
 
-  it('shows partial coverage with a button, the limits note, the draft note and the renewal impact', () => {
-    const partial = render(
+  it('omits the capacity section when no add-on is limits-only, and flags one not on sale', () => {
+    const html = render(
       createElement(AddonsTab, {
-        state: state({ features: { ...newPlanDraft().features, inbox_routing: true } }),
+        state: state(),
         addons: addons({}),
         included: included({ packs: [plain({ id: SMART, isActive: false })] }),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
     );
-    expect(partial).toContain('data-coverage="partial"');
-    expect(partial).toContain('<button');
+    expect(html).not.toContain('data-kind="capacity"');
+    expect(html).toContain('bg-warning/5');
+    expect(html.match(/<h3/g)).toHaveLength(2);
+  });
+
+  it('a hidden add-on has no price box; a price problem shows on its row', () => {
+    const html = render(
+      createElement(AddonsTab, {
+        state: state(
+          {
+            addonOffers: {
+              [SMART]: { mode: 'hidden', amount: '' },
+              [TEAMS]: { mode: 'paid', amount: '0' },
+            },
+          },
+          { [`addonOffers.${TEAMS}`]: { code: 'addonPriceZero' } },
+        ),
+        addons: addons({}),
+        included: included({ packs: [plain({ id: SMART }), plain({ id: TEAMS, name: 'Teams' })] }),
+        savedOffers: SAVED,
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(html).toContain(`data-mode="hidden"`);
+    expect(html).not.toContain(`id="plan-addonOffers-${SMART}"`);
+    expect(html).toContain(`id="plan-addonOffers-${TEAMS}"`);
+    expect(html).toContain('Broken');
+  });
+
+  it('says how many workspaces stop renewing when an add-on becomes included, and what is lost when it stops', () => {
     const teams = render(
       createElement(AddonsTab, {
-        state: state({
-          features: { ...newPlanDraft().features, team_hierarchy: true, custom_roles: true },
-        }),
+        state: state({ addonOffers: { [TEAMS]: { mode: 'included', amount: '' } } }),
         addons: addons({}),
         included: included({
           packs: [
@@ -270,48 +311,78 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
           ],
           impact: new Map([[TEAMS, 3]]),
         }),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
     );
-    expect(teams).toContain('data-coverage="full"');
     // A pack that also sells a cap is never stopped by inclusion: no renewal-stop sentence for it.
     expect(teams).not.toContain('role="status"');
     const stops = render(
       createElement(AddonsTab, {
-        state: state({
-          features: {
-            ...newPlanDraft().features,
-            inbox_routing: true,
-            inbox_assignment_sticky: true,
-          },
-        }),
+        state: state({ addonOffers: { [SMART]: { mode: 'included', amount: '' } } }),
         addons: addons({}),
         included: included({ packs: [plain({ id: SMART })], impact: new Map([[SMART, 4]]) }),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         onTouched: () => undefined,
       }),
       locale,
     );
     expect(stops).toContain('role="status"');
     expect(stops).toContain('4');
+    const off = render(
+      createElement(AddonsTab, {
+        state: state(),
+        addons: addons({}),
+        included: included({ packs: [plain({ id: SMART })] }),
+        savedOffers: { [SMART]: { mode: 'included', amount: '' } },
+        onTouched: () => undefined,
+      }),
+      locale,
+    );
+    expect(off).toContain('role="status"');
   });
 
-  it('locks every switch for an operator who cannot edit plans', () => {
+  it('locks every control for an operator who cannot edit plans', () => {
     const html = render(
       createElement(AddonsTab, {
         state: state(),
         addons: addons({}),
         included: included({ packs: [plain({ id: SMART })] }),
-        savedFeatures: SAVED,
+        savedOffers: SAVED,
         readOnly: true,
         onTouched: () => undefined,
       }),
       locale,
     );
+    const radios = html.match(/<input[^>]*type="radio"[^>]*>/g) ?? [];
+    expect(radios).toHaveLength(3);
+    for (const r of radios) expect(r).toContain('disabled');
+    expect(html).toMatch(/<input[^>]*id="plan-addonOffers-[^"]*"[^>]*disabled/);
+  });
+
+  it('the Features tab shows a key an add-on grants read-only, naming the add-on', () => {
+    const html = render(
+      createElement(FeaturesTab, {
+        state: state({ addonOffers: { [SMART]: { mode: 'included', amount: '' } } }),
+        packs: [plain({ id: SMART })],
+      }),
+      locale,
+    );
+    expect(html).toContain('data-testid="plan-feature-inbox_routing-locked"');
+    expect(html).toContain('data-testid="plan-feature-inbox_assignment_sticky-locked"');
+    expect(html).not.toContain('data-testid="plan-feature-sales_pipeline-locked"');
     expect(html).toMatch(
-      /<button[^>]*role="switch"[^>]*disabled|<button[^>]*disabled[^>]*role="switch"/,
+      /<button[^>]*id="plan-feature-inbox_routing"[^>]*>|<button[^>]*role="switch"[^>]*id="plan-feature-inbox_routing"/,
+    );
+    const sw = /<button[^>]*id="plan-feature-inbox_routing"[^>]*>/.exec(html)?.[0] ?? '';
+    expect(sw).toContain('disabled');
+    // shown as the save will store it: included -> on
+    expect(sw).toContain('aria-checked="true"');
+    expect(html).toContain('Smart routing');
+    // nothing is locked while the add-ons are not known
+    expect(render(createElement(FeaturesTab, { state: state() }), locale)).not.toContain(
+      '-locked"',
     );
   });
 
@@ -364,6 +435,7 @@ function plan(over: Partial<PlanAdminItem> = {}): PlanAdminItem {
     moduleFeatures: {},
     moduleLimits: {},
     visibleAddons: [A, B],
+    addonOffers: [],
     inUse: 0,
     isRegistrationDefault: false,
     createdAt: '2026-10-01T00:00:00.000Z',

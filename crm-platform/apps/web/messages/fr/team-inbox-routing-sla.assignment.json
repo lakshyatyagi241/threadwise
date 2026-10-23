@@ -4,6 +4,7 @@
       "switches": {
         "title": "Assignation des chats",
         "intro": "Quatre commutateurs couvrent la plupart des espaces de travail : activez-les et vous n’avez plus besoin de créer de règle.",
+        "introBasic": "Votre offre n’attribue pas les conversations automatiquement : les nouvelles conversations attendent dans la file jusqu’à ce que quelqu’un les prenne. Ces réglages restent appliqués.",
         "order": "L’ordre pour un nouveau chat : d’abord le propriétaire du contact et l’agent habituel, puis vos règles (si vous en ajoutez), puis « Tous les autres », puis la file d’attente.",
         "readOnly": "Vous pouvez voir ces commutateurs, mais pas les modifier.",
         "saved": "Enregistré.",
@@ -11,8 +12,6 @@
         "loading": "Chargement des paramètres d’assignation",
         "loadFailed": "Impossible de charger les paramètres d’assignation.",
         "retry": "Réessayer",
-        "notInPlan": "Non inclus dans votre offre",
-        "upgradeHint": "Inclus dans le module Routage intelligent ou dans une offre supérieure.",
         "stepFirst": "Vérifié en premier",
         "stepMaster": "Commutateur principal",
         "stepAfter": "Après une prise en charge",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Besoin de plus de contrôle ? Ajoutez des règles",
         "intro": "Facultatif. Les règles envoient certains chats (un canal, des mots dans le message, un nouveau contact...) à certains agents ou équipes. Si les quatre commutateurs suffisent, vous n’avez jamais besoin de créer de règle.",
-        "locked": "Les règles font partie du module Routage intelligent ou d'une offre supérieure. Vous gardez la file d'attente, la prise en charge et l'attribution manuelle.",
         "pipelineTitle": "Comment un nouveau chat est assigné",
         "pipeline": {
           "agent": "1. Propriétaire du contact et agent habituel",
