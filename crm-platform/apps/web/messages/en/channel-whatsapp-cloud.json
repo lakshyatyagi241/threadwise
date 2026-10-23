@@ -401,10 +401,41 @@
           "message": "{name} is not connected, so replies cannot be sent. Internal notes still work."
         },
         "open": "Open the WhatsApp settings",
-        "askAdmin": "Ask someone who manages channels to reconnect it."
+        "askAdmin": "Ask someone who manages channels to reconnect it.",
+        "email": {
+          "needs_reconnect": {
+            "title": "This mailbox needs to be reconnected.",
+            "message": "{name} no longer accepts the saved sign-in, so replies cannot be sent. Internal notes still work."
+          },
+          "error": {
+            "title": "This mailbox has a connection problem.",
+            "message": "{name} is in an error state, so replies cannot be sent. Internal notes still work."
+          },
+          "not_connected": {
+            "title": "This mailbox is disconnected.",
+            "message": "{name} is not connected, so replies cannot be sent until it is reconnected. Internal notes still work."
+          },
+          "open": "Open the mailbox settings"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "This channel needs to be reconnected.",
+            "message": "{name} no longer accepts the saved credentials, so replies cannot be sent. Internal notes still work."
+          },
+          "error": {
+            "title": "This channel has a connection problem.",
+            "message": "{name} is in an error state, so replies cannot be sent. Internal notes still work."
+          },
+          "not_connected": {
+            "title": "This channel is switched off.",
+            "message": "{name} is not connected, so replies cannot be sent. Internal notes still work."
+          },
+          "open": "Open the channel settings"
+        }
       },
       "failure": {
         "openSettings": "Open the WhatsApp settings",
+        "openChannelSettings": "Open the channel settings",
         "windowClosed": {
           "title": "The 24-hour reply window had closed.",
           "hint": "WhatsApp only allows free-form replies within 24 hours of the customer's last message. Wait for them to write again."
