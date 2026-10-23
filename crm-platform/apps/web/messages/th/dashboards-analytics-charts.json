@@ -322,7 +322,7 @@
         "conversationsOpen": "การสนทนาที่เปิดอยู่",
         "conversationsResolved": "การสนทนาที่แก้ไขแล้ว",
         "conversationsClosed": "การสนทนาที่ปิดแล้ว",
-        "conversationsAssigned": "มอบหมายแล้ว",
+        "conversationsAssigned": "มอบหมายให้ใครก็ได้",
         "conversationsUnassigned": "ยังไม่ได้มอบหมาย",
         "conversationsTotal": "{count, plural, other {# การสนทนา}}"
       },

@@ -322,7 +322,7 @@
         "conversationsOpen": "کھلی گفتگو",
         "conversationsResolved": "حل شدہ گفتگو",
         "conversationsClosed": "بند گفتگو",
-        "conversationsAssigned": "تفویض شدہ",
+        "conversationsAssigned": "کسی کو تفویض شدہ",
         "conversationsUnassigned": "غیر تفویض شدہ",
         "conversationsTotal": "{count, plural, one {# گفتگو} other {# گفتگوئیں}}"
       },
