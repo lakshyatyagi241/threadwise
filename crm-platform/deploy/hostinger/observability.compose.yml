@@ -182,6 +182,7 @@ services:
       # Google Chat app (docs/runbooks/google-chat-app.md). Off by default: webhooks only, exactly as before.
       CHAT_APP_ENABLED: ${CHAT_APP_ENABLED:-false}
       CHAT_APP_AUDIENCE: ${CHAT_APP_AUDIENCE:-}
+      SENTRY_CHANNEL: ${SENTRY_CHANNEL:-}  # sentry = every Sentry issue goes to the Sentry space (secrets/gchat_sentry_url); empty = fatal/spike to critical, the rest to other
       CHAT_APP_ENDPOINT_URL: ${CHAT_APP_ENDPOINT_URL:-}  # the events URL set in the Chat API console: the audience of the "HTTP endpoint URL" kind of token
       INCIDENT_CLAIM_TTL_HOURS: ${INCIDENT_CLAIM_TTL_HOURS:-4}
     # The image runs as the non-root user `app`, so a fresh named volume would be root-owned and unwritable: a small tmpfs instead
@@ -197,7 +198,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, gchat_other_url, slow_query_pg_url, incident_api_token, github_read_token, sentry_token]
+    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, gchat_other_url, gchat_sentry_url, slow_query_pg_url, incident_api_token, github_read_token, sentry_token]
     networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-gchat-bridge:9095, only for /incidents (traefik-incidents.yml.template)
 
   grafana:
@@ -233,6 +234,8 @@ secrets:
     file: ./secrets/gchat_deploy_url
   gchat_other_url:
     file: ./secrets/gchat_other_url
+  gchat_sentry_url:
+    file: ./secrets/gchat_sentry_url
   slow_query_pg_url:
     file: ./secrets/slow_query_pg_url
   incident_api_token:
