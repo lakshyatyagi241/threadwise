@@ -134,7 +134,7 @@ export class InboundIngestService {
 
     let result: TxResult;
     try {
-      result = await this.db.txAs({ orgId }, (tx) =>
+      result = await this.db.retry.txAs({ orgId }, (tx) =>
         this.store(tx, orgId, channel, runtime, peerKey, m, stored),
       );
     } catch (err) {

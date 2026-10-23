@@ -84,7 +84,7 @@ export class InboxTagsService {
 
   async update(uuid: string, input: UpdateInboxTagInput): Promise<InboxTag> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
+    return this.db.retry.tx(async (tx) => {
       const existing = await this.tags.byUuid(tx, ctx.orgId, uuid);
       if (!existing) throw tagNotFound();
       let updated: boolean;

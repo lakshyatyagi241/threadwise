@@ -490,7 +490,7 @@ export class HandoffService {
         locked.map((path) => ({ path, message: 'plan_locked' })),
       );
     }
-    const stored = await this.db.tx(async (tx) => {
+    const stored = await this.db.retry.tx(async (tx) => {
       const { queueTimers: qIn, away, ...rest } = input;
       const queueTimers = qIn ? await this.queueTimersToStore(tx, ctx.orgId, qIn) : undefined;
       await this.repo.updateSettings(tx, ctx.orgId, {

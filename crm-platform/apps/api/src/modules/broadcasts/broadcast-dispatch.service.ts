@@ -129,7 +129,7 @@ export class BroadcastDispatchService {
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
   async run(orgId: number, broadcastId: number): Promise<DispatchResult> {
-    const prep = await this.db.tx(async (tx) => {
+    const prep = await this.db.retry.tx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT status, provider, device_id, template_id, template_overrides FROM broadcasts
         WHERE org_id = ${orgId} AND id = ${broadcastId} FOR UPDATE`);

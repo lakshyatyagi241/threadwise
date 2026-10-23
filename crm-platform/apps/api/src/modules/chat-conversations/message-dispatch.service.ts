@@ -139,7 +139,7 @@ export class MessageDispatchService {
     | 'skipped'
     | { row: MessageRow; conv: ConversationRow; runtime: ChannelRuntime; envelope: unknown }
   > {
-    return this.db.txAs({ orgId }, async (tx) => {
+    return this.db.retry.txAs({ orgId }, async (tx) => {
       const row = await this.messages.byUuid(tx, orgId, messageUuid);
       if (!row || row.direction !== 'out') return 'missing' as const;
       if (row.status !== 'queued') return 'skipped' as const;
@@ -190,7 +190,7 @@ export class MessageDispatchService {
     sent: DispatchResult,
     channel: Pick<ChannelRuntime, 'kind' | 'externalId'>,
   ): Promise<void> {
-    const done = await this.db.txAs({ orgId }, async (tx) => {
+    const done = await this.db.retry.txAs({ orgId }, async (tx) => {
       // The thread's lock first (the order every writer takes), then the message.
       const lockedConv = (await this.conversations.byId(tx, orgId, conv.id, true))!;
       const moved = await this.messages.markSent(tx, orgId, ref, {
@@ -273,7 +273,7 @@ export class MessageDispatchService {
     ref: { id: number; createdAt: string },
     err: SendHeldError,
   ): Promise<void> {
-    const conversationUuid = await this.db.txAs({ orgId }, async (tx) => {
+    const conversationUuid = await this.db.retry.txAs({ orgId }, async (tx) => {
       const moved = await this.messages.setHold(tx, orgId, ref, err.hold);
       if (!moved) return null;
       await this.messages.insertEvent(tx, orgId, ref, 'held', { ...err.hold });
@@ -333,7 +333,7 @@ export class MessageDispatchService {
         ? `${classified.reason} (gave up after ${options.attempt} attempts)`
         : classified.reason,
     };
-    const done = await this.db.txAs({ orgId }, async (tx) => {
+    const done = await this.db.retry.txAs({ orgId }, async (tx) => {
       const moved = await this.messages.markFailed(tx, orgId, ref, failure);
       if (!moved) return null;
       await this.messages.insertEvent(tx, orgId, ref, 'failed', {
