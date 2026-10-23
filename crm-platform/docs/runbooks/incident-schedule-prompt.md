@@ -1,8 +1,10 @@
-# Scheduled incident check: the 5-minute AUTO-CLAIM prompt
+# Scheduled incident check: the 2-minute AUTO-CLAIM prompt
 
 Each teammate runs this in their OWN Claude Code session, under their own name. It uses only `incident-cli` and the config file `~/.config/threadwise/incidents.env` (set up once: [team-onboarding-claude.md](team-onboarding-claude.md)). No SSH, no production access. Flow: [team-incident-flow.md](team-incident-flow.md).
 
-Start it in Claude Code with `/loop 5m <the block below>` (or a 5-minute cron through the schedule tool). Schedules live only while the session is open and expire after 7 days: re-paste it after that or after a restart.
+**What the team sees live (Google Chat app, one card per incident):** the moment your Claude runs `claim`, the card says "In progress, <your name>"; a PR makes it "PR #N raised"; a merge makes it "PR #N merged, waiting for the release"; the bridge, never Claude, sets "Resolved". If your Claude finds an ops-only problem it cannot fix in code, it leaves a `note` and `release-claim`: the card then says "Reviewed by <your name>, needs a human to take it" and shows the note, so nobody is shown as working on it and nobody is left guessing. A 2-minute interval means a new incident shows an owner within about 2 minutes.
+
+Start it in Claude Code with `/loop 2m <the block below>` (or a 2-minute cron through the schedule tool). Schedules live only while the session is open and expire after 7 days: re-paste it after that or after a restart.
 
 Replace `{{WHO}}` (your name as shown in the thread: letters, digits, space . _ @ - , max 40, no parentheses; example `Vedant-Claude`) and `{{REPO_PATH}}`.
 
