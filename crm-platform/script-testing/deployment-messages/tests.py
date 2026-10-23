@@ -306,7 +306,14 @@ def stall_run(date_epoch, since):
 now_ = int(time.time())
 r = stall_run(now_ - 3600, 0)
 check("stall: old unreleased commit posts the warning with live and newest sha", r["post"] is True and "Deploy stalled" in r["text"] and A[:9] in r["text"] and r["head"] == sha(9), str(r))
-check("stall: recent commit (under 20 min) does not post", stall_run(now_ - 300, 0)["post"] is False)
+check("stall: recent commit (under 10 min) does not post", stall_run(now_ - 300, 0)["post"] is False)
+def stall_two(old_epoch, new_epoch):
+    a_ = commit(sha(8), "old merge (#1)", "alice"); a_["commit"]["committer"] = {"date": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(old_epoch))}
+    b_ = commit(sha(9), "new merge (#2)", "bob"); b_["commit"]["committer"] = {"date": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(new_epoch))}
+    FIX.update(compare=[a_, b_], by_tag=False); shutil.rmtree(STATE, ignore_errors=True); os.makedirs(STATE)
+    return json.loads(subprocess.run([sys.executable, FMT, "--stall", A, "10", "0"], env=ENV, capture_output=True, text=True, timeout=60).stdout)
+r2 = stall_two(now_ - 3600, now_ - 30)
+check("stall: keeps firing while new merges keep arriving (the OLDEST waiting commit counts, key is its sha)", r2["post"] is True and r2["head"] == sha(8) and "2 commit" in r2["text"], str(r2))
 check("stall: a release event after the newest commit suppresses it", stall_run(now_ - 3600, now_ - 60)["post"] is False)
 
 for d in (D2, B2, S2, S3): shutil.rmtree(d, ignore_errors=True)

@@ -138,8 +138,8 @@ db_poll() {
 POLL=${DESK_WATCH_POLL:-10}; SETTLE=${DESK_WATCH_SETTLE:-20}
 active=0; attempted=""; tag_before=$(live_tag || true); started=0
 echo "$(date -u +%FT%TZ) watcher started, live tag ${tag_before:-unknown}" >> "$STATE/watch.log"
-last_db=0; last_stall=0; STALL_POLL=${DESK_STALL_POLL:-300}; STALL_MIN=${DESK_STALL_MIN:-20}
-# Merging to main does not deploy by itself (the build server must run the release). If main is ahead of the live tag for STALL_MIN minutes with no
+last_db=0; last_stall=0; STALL_POLL=${DESK_STALL_POLL:-60}; STALL_MIN=${DESK_STALL_MIN:-10}
+# Merging to main does not deploy by itself (the build server must run the release). If main is ahead of the live tag for STALL_MIN minutes (default 10) with no
 # release event after the newest commit, post ONE warning per newest commit. Needs the read-only GitHub token; without it, silently nothing.
 stall_check() {
   local live j newest
