@@ -95,3 +95,12 @@ test('Sentry shows it resolved right after release -> RESOLVED; resolved in Sent
   assert.equal(r.resolver.get(a.id).status, 'resolved'); assert.equal(r.resolver.get(b.id).resolution.by, 'Priya');
   assert.match(JSON.stringify(r.updates.at(-1)), /Resolved in Sentry by Priya|RESOLVED/);
 });
+
+test('SENTRY_CHANNEL=sentry sends every Sentry issue (fatal and plain) to the Sentry space as one card each', async () => {
+  const r = await rig({ env: { SENTRY_CHANNEL: 'sentry' } }); r.set([]); await r.poller.tick();
+  r.set([issue({ id: '7', level: 'fatal' }), issue({ id: '8' })]);
+  await r.poller.tick(); await r.poller.tick(); await r.resolver.settle();
+  assert.equal(r.creates.length, 2);
+  assert.deepEqual(r.creates.map((c) => c.ch), ['sentry', 'sentry']);
+  assert.ok(r.incs().every((i) => i.channel === 'sentry'));
+});
