@@ -191,7 +191,7 @@ export function MessageBubble({
       )}
       <p className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
         {t('time')}
-        <CheckIcon className="h-3 w-3.5 text-brand" />
+        <CheckIcon className="h-2.5 w-4 text-brand" />
       </p>
       {(shown.length > 0 || model.auth) && (
         <ul className="mt-1.5 space-y-1 border-t border-border pt-1.5" data-testid="bubble-buttons">
