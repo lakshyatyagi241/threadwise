@@ -325,14 +325,18 @@
           "quick_reply": "ตอบกลับด่วน",
           "url": "เยี่ยมชมเว็บไซต์",
           "phone": "โทรศัพท์",
-          "copy_code": "คัดลอกรหัส"
+          "copy_code": "คัดลอกรหัส",
+          "form": "แบบฟอร์ม",
+          "catalog": "แคตตาล็อก"
         },
         "kind": {
           "quick_reply": "ตอบกลับด่วน",
           "url": "เยี่ยมชมเว็บไซต์",
           "phone": "โทรศัพท์",
           "copy_code": "คัดลอกรหัส",
-          "other": "อื่นๆ"
+          "other": "อื่นๆ",
+          "form": "แบบฟอร์ม",
+          "catalog": "แคตตาล็อก"
         },
         "count": "{used}/{max} ปุ่ม",
         "limitReached": "ไม่เกิน {max} ปุ่มประเภทนี้",
@@ -361,8 +365,17 @@
           "codeRequired": "กรอกรหัสตัวอย่าง",
           "quickReplyVariable": "ปุ่มตอบกลับด่วนใส่ตัวแปรไม่ได้",
           "urlExampleRequired": "กรอกค่าตัวอย่างสำหรับตัวแปรใน URL",
-          "quickReplyPosition": "ปุ่มตอบกลับด่วนต้องอยู่รวมกัน ที่ตอนต้นหรือตอนท้ายของปุ่ม"
-        }
+          "quickReplyPosition": "ปุ่มตอบกลับด่วนต้องอยู่รวมกัน ที่ตอนต้นหรือตอนท้ายของปุ่ม",
+          "flowIdRequired": "กรอกรหัส Flow",
+          "flowIdInvalid": "รหัส Flow ต้องเป็นตัวเลข",
+          "screenRequired": "กรอกรหัสหน้าจอ",
+          "catalogAlone": "ปุ่มแคตตาล็อกใช้ร่วมกับปุ่มอื่นไม่ได้"
+        },
+        "catalogHint": "เปิดแคตตาล็อก WhatsApp ของคุณ ปุ่มจะแสดงว่า “ดูแคตตาล็อก” และต้องเป็นปุ่มเดียวเท่านั้น",
+        "flowId": "รหัส WhatsApp Flow",
+        "flowIdHint": "รหัสตัวเลขของ WhatsApp Flow ที่เผยแพร่แล้ว จากตัวจัดการ Flows ของ Meta",
+        "screen": "หน้าจอแรก",
+        "screenHint": "รหัสของหน้าจอที่แบบฟอร์มเปิดขึ้น เช่น WELCOME"
       },
       "result": {
         "metaRefused": "บันทึกแล้ว แต่ Meta ปฏิเสธเทมเพลต",

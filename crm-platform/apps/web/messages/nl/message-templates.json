@@ -325,14 +325,18 @@
           "quick_reply": "Snel antwoord",
           "url": "Website bezoeken",
           "phone": "Telefoon bellen",
-          "copy_code": "Code kopiëren"
+          "copy_code": "Code kopiëren",
+          "form": "Formulier",
+          "catalog": "Catalogus"
         },
         "kind": {
           "quick_reply": "Snel antwoord",
           "url": "Website bezoeken",
           "phone": "Telefoon bellen",
           "copy_code": "Code kopiëren",
-          "other": "Overig"
+          "other": "Overig",
+          "form": "Formulier",
+          "catalog": "Catalogus"
         },
         "count": "{used}/{max} knoppen",
         "limitReached": "Maximaal {max} van dit type.",
@@ -361,8 +365,17 @@
           "codeRequired": "Voer een voorbeeldcode in.",
           "quickReplyVariable": "Een snel antwoord kan geen variabele bevatten.",
           "urlExampleRequired": "Geef een voorbeeldwaarde op voor de URL-variabele.",
-          "quickReplyPosition": "Snelle antwoorden moeten samen staan, aan het begin of aan het eind van de knoppen."
-        }
+          "quickReplyPosition": "Snelle antwoorden moeten samen staan, aan het begin of aan het eind van de knoppen.",
+          "flowIdRequired": "Vul het Flow-ID in.",
+          "flowIdInvalid": "Het Flow-ID is een getal.",
+          "screenRequired": "Vul het scherm-ID in.",
+          "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd."
+        },
+        "catalogHint": "Opent uw WhatsApp-catalogus. De knop zegt “Catalogus bekijken” en moet de enige knop zijn.",
+        "flowId": "WhatsApp Flow-ID",
+        "flowIdHint": "Het numerieke ID van een gepubliceerde WhatsApp Flow, uit de Flows-beheerder van Meta.",
+        "screen": "Openingsscherm",
+        "screenHint": "Het ID van het scherm waarop het formulier opent, bijvoorbeeld WELCOME."
       },
       "result": {
         "metaRefused": "Opgeslagen, maar Meta heeft het sjabloon geweigerd.",

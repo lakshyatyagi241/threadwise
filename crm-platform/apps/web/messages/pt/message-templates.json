@@ -325,14 +325,18 @@
           "quick_reply": "Resposta rápida",
           "url": "Visitar site",
           "phone": "Ligar",
-          "copy_code": "Copiar código"
+          "copy_code": "Copiar código",
+          "form": "Formulário",
+          "catalog": "Catálogo"
         },
         "kind": {
           "quick_reply": "Resposta rápida",
           "url": "Visitar site",
           "phone": "Ligar",
           "copy_code": "Copiar código",
-          "other": "Outro"
+          "other": "Outro",
+          "form": "Formulário",
+          "catalog": "Catálogo"
         },
         "count": "{used}/{max} botões",
         "limitReached": "No máximo {max} deste tipo.",
@@ -361,8 +365,17 @@
           "codeRequired": "Digite um código de exemplo.",
           "quickReplyVariable": "Uma resposta rápida não pode conter variável.",
           "urlExampleRequired": "Informe um valor de exemplo para a variável da URL.",
-          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões."
-        }
+          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões.",
+          "flowIdRequired": "Informe o ID do Flow.",
+          "flowIdInvalid": "O ID do Flow é um número.",
+          "screenRequired": "Informe o ID da tela.",
+          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões."
+        },
+        "catalogHint": "Abre o seu catálogo do WhatsApp. O botão diz “Ver catálogo” e deve ser o único botão.",
+        "flowId": "ID do WhatsApp Flow",
+        "flowIdHint": "O ID numérico de um WhatsApp Flow publicado, no gerenciador de Flows da Meta.",
+        "screen": "Tela inicial",
+        "screenHint": "O ID da tela em que o formulário abre, por exemplo WELCOME."
       },
       "result": {
         "metaRefused": "Salvo, mas a Meta recusou o modelo.",

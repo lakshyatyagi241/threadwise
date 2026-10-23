@@ -160,3 +160,51 @@ describe('carousel templates', () => {
     ]);
   });
 });
+
+describe('form and catalog buttons', () => {
+  const lint = (buttons: Array<Record<string, unknown>>) =>
+    lintTemplate({
+      name: 'promo',
+      language: 'en_US',
+      metaCategory: 'MARKETING',
+      templateType: 'standard',
+      body: 'Hello',
+      buttons,
+    } as Parameters<typeof lintTemplate>[0]).map((i) => i.code);
+
+  it('a form button needs a numeric Flow id and a screen', () => {
+    expect(lint([{ type: 'FLOW', text: 'Book' }])).toEqual(
+      expect.arrayContaining(['flow_id', 'flow_screen']),
+    );
+    expect(
+      lint([
+        {
+          type: 'FLOW',
+          text: 'Book',
+          flow_id: '123',
+          flow_action: 'navigate',
+          navigate_screen: 'A',
+        },
+      ]),
+    ).not.toEqual(expect.arrayContaining(['flow_id', 'flow_screen']));
+  });
+
+  it('a catalog button cannot sit with other buttons, and is sent as CATALOG', () => {
+    expect(
+      lint([
+        { type: 'CATALOG', text: 'View catalog' },
+        { type: 'QUICK_REPLY', text: 'Hi' },
+      ]),
+    ).toContain('catalog_alone');
+    const body = buildMetaTemplate({
+      name: 'shop',
+      templateType: 'standard',
+      body: 'Hello',
+      buttons: [{ type: 'CATALOG', text: 'View catalog' }],
+    });
+    expect(body.components.at(-1)).toEqual({
+      type: 'BUTTONS',
+      buttons: [{ type: 'CATALOG', text: 'View catalog' }],
+    });
+  });
+});

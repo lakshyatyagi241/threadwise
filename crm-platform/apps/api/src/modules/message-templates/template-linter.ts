@@ -54,10 +54,14 @@ const TRIGGER_PHRASES = [
 ];
 
 const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/gu;
-const BUTTON_LIMIT = { QUICK_REPLY: 10, URL: 2, PHONE_NUMBER: 1, COPY_CODE: 1, FLOW: 1 } as Record<
-  string,
-  number
->;
+const BUTTON_LIMIT = {
+  QUICK_REPLY: 10,
+  URL: 2,
+  PHONE_NUMBER: 1,
+  COPY_CODE: 1,
+  FLOW: 1,
+  CATALOG: 1,
+} as Record<string, number>;
 
 export function lintTemplate(t: LintInput): LintIssue[] {
   const out: LintIssue[] = [];
@@ -189,6 +193,10 @@ export function lintTemplate(t: LintInput): LintIssue[] {
     counts[type] = (counts[type] ?? 0) + 1;
     if (type !== 'COPY_CODE' && type !== 'FLOW' && (!b.text || b.text.length > 25))
       e('button_text', 'buttons', 'Button text is required and at most 25 characters.');
+    if (type === 'FLOW' && !b.flow_name && !b.flow_json && !/^\d+$/.test(String(b.flow_id ?? '')))
+      e('flow_id', 'buttons', 'A form button needs the numeric id of a WhatsApp Flow.');
+    if (type === 'FLOW' && b.flow_action !== 'data_exchange' && !b.navigate_screen && !b.flow_json)
+      e('flow_screen', 'buttons', 'A form button needs the screen it opens on.');
     if (type === 'QUICK_REPLY' && /\{\{[^}]+\}\}/.test(b.text ?? ''))
       e('button_variable', 'buttons', 'Quick reply text cannot contain a variable.');
     if (type === 'URL' && countPlaceholders(b.url ?? '') > 1)
@@ -201,6 +209,8 @@ export function lintTemplate(t: LintInput): LintIssue[] {
         'buttons',
         `At most ${BUTTON_LIMIT[type]} ${type.replace('_', ' ').toLowerCase()} button(s).`,
       );
+  if (buttons.length > 1 && buttons.some((b) => b.type.toUpperCase() === 'CATALOG'))
+    e('catalog_alone', 'buttons', 'A catalog button cannot be combined with other buttons.');
   const qr = buttons.map((b) => b.type.toUpperCase() === 'QUICK_REPLY');
   const first = qr.indexOf(true);
   const last = qr.lastIndexOf(true);

@@ -325,14 +325,18 @@
           "quick_reply": "Schnellantwort",
           "url": "Website besuchen",
           "phone": "Telefonnummer anrufen",
-          "copy_code": "Code kopieren"
+          "copy_code": "Code kopieren",
+          "form": "Formular",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Schnellantwort",
           "url": "Website besuchen",
           "phone": "Anrufen",
           "copy_code": "Code kopieren",
-          "other": "Sonstige"
+          "other": "Sonstige",
+          "form": "Formular",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} Schaltflächen",
         "limitReached": "Höchstens {max} dieser Art.",
@@ -361,8 +365,17 @@
           "codeRequired": "Geben Sie einen Beispielcode ein.",
           "quickReplyVariable": "Eine Schnellantwort darf keine Variable enthalten.",
           "urlExampleRequired": "Geben Sie einen Beispielwert für die URL-Variable an.",
-          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen."
-        }
+          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen.",
+          "flowIdRequired": "Geben Sie die Flow-ID ein.",
+          "flowIdInvalid": "Die Flow-ID ist eine Zahl.",
+          "screenRequired": "Geben Sie die Bildschirm-ID ein.",
+          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren."
+        },
+        "catalogHint": "Öffnet Ihren WhatsApp-Katalog. Die Schaltfläche heißt „Katalog ansehen“ und muss die einzige Schaltfläche sein.",
+        "flowId": "WhatsApp-Flow-ID",
+        "flowIdHint": "Die numerische ID eines veröffentlichten WhatsApp Flows aus dem Flows-Manager von Meta.",
+        "screen": "Startbildschirm",
+        "screenHint": "Die ID des Bildschirms, mit dem sich das Formular öffnet, zum Beispiel WELCOME."
       },
       "result": {
         "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",

@@ -325,14 +325,18 @@
           "quick_reply": "Risposta rapida",
           "url": "Visita il sito",
           "phone": "Chiama",
-          "copy_code": "Copia codice"
+          "copy_code": "Copia codice",
+          "form": "Modulo",
+          "catalog": "Catalogo"
         },
         "kind": {
           "quick_reply": "Risposta rapida",
           "url": "Visita il sito",
           "phone": "Chiama",
           "copy_code": "Copia codice",
-          "other": "Altro"
+          "other": "Altro",
+          "form": "Modulo",
+          "catalog": "Catalogo"
         },
         "count": "{used}/{max} pulsanti",
         "limitReached": "Al massimo {max} di questo tipo.",
@@ -361,8 +365,17 @@
           "codeRequired": "Inserisci un codice di esempio.",
           "quickReplyVariable": "Una risposta rapida non può contenere una variabile.",
           "urlExampleRequired": "Inserisci un valore di esempio per la variabile dell’URL.",
-          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti."
-        }
+          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti.",
+          "flowIdRequired": "Inserisci l’ID del Flow.",
+          "flowIdInvalid": "L’ID del Flow è un numero.",
+          "screenRequired": "Inserisci l’ID della schermata.",
+          "catalogAlone": "Un pulsante catalogo non può essere combinato con altri pulsanti."
+        },
+        "catalogHint": "Apre il tuo catalogo WhatsApp. Il pulsante riporta «Vedi catalogo» e deve essere l’unico pulsante.",
+        "flowId": "ID del WhatsApp Flow",
+        "flowIdHint": "L’ID numerico di un WhatsApp Flow pubblicato, dal gestore Flows di Meta.",
+        "screen": "Schermata iniziale",
+        "screenHint": "L’ID della schermata con cui si apre il modulo, ad esempio WELCOME."
       },
       "result": {
         "metaRefused": "Salvato, ma Meta ha rifiutato il template.",

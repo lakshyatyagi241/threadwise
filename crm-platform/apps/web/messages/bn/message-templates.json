@@ -325,14 +325,18 @@
           "quick_reply": "কুইক রিপ্লাই",
           "url": "ওয়েবসাইট ভিজিট করুন",
           "phone": "ফোনে কল করুন",
-          "copy_code": "কোড কপি করুন"
+          "copy_code": "কোড কপি করুন",
+          "form": "ফর্ম",
+          "catalog": "ক্যাটালগ"
         },
         "kind": {
           "quick_reply": "কুইক রিপ্লাই",
           "url": "ওয়েবসাইট ভিজিট করুন",
           "phone": "ফোনে কল করুন",
           "copy_code": "কোড কপি করুন",
-          "other": "অন্যান্য"
+          "other": "অন্যান্য",
+          "form": "ফর্ম",
+          "catalog": "ক্যাটালগ"
         },
         "count": "{used}/{max} বাটন",
         "limitReached": "এই ধরনের সর্বোচ্চ {max}টি।",
@@ -361,8 +365,17 @@
           "codeRequired": "একটি নমুনা কোড লিখুন।",
           "quickReplyVariable": "কুইক রিপ্লাইয়ে কোনো ভেরিয়েবল থাকতে পারে না।",
           "urlExampleRequired": "URL ভেরিয়েবলের জন্য একটি নমুনা মান দিন।",
-          "quickReplyPosition": "কুইক রিপ্লাই একসাথে, বাটনের শুরুতে বা শেষে থাকতে হবে।"
-        }
+          "quickReplyPosition": "কুইক রিপ্লাই একসাথে, বাটনের শুরুতে বা শেষে থাকতে হবে।",
+          "flowIdRequired": "Flow ID লিখুন।",
+          "flowIdInvalid": "Flow ID একটি সংখ্যা।",
+          "screenRequired": "স্ক্রিন ID লিখুন।",
+          "catalogAlone": "ক্যাটালগ বোতাম অন্য বোতামের সাথে একসাথে ব্যবহার করা যায় না।"
+        },
+        "catalogHint": "আপনার WhatsApp ক্যাটালগ খোলে। বোতামে “ক্যাটালগ দেখুন” লেখা থাকে এবং এটি একমাত্র বোতাম হতে হবে।",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "প্রকাশিত WhatsApp Flow-এর সংখ্যাসূচক ID, Meta-র Flows ম্যানেজার থেকে।",
+        "screen": "শুরুর স্ক্রিন",
+        "screenHint": "যে স্ক্রিনে ফর্ম খোলে তার ID, যেমন WELCOME।"
       },
       "result": {
         "metaRefused": "সংরক্ষিত হয়েছে, কিন্তু Meta টেমপ্লেটটি প্রত্যাখ্যান করেছে।",

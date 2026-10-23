@@ -325,14 +325,18 @@
           "quick_reply": "رد سريع",
           "url": "زيارة موقع",
           "phone": "اتصال هاتفي",
-          "copy_code": "نسخ الرمز"
+          "copy_code": "نسخ الرمز",
+          "form": "نموذج",
+          "catalog": "كتالوج"
         },
         "kind": {
           "quick_reply": "رد سريع",
           "url": "زيارة موقع",
           "phone": "اتصال هاتفي",
           "copy_code": "نسخ الرمز",
-          "other": "أخرى"
+          "other": "أخرى",
+          "form": "نموذج",
+          "catalog": "كتالوج"
         },
         "count": "{used}/{max} أزرار",
         "limitReached": "{max} كحد أقصى من هذا النوع.",
@@ -361,8 +365,17 @@
           "codeRequired": "أدخل رمزًا نموذجيًا.",
           "quickReplyVariable": "لا يمكن أن يحتوي الرد السريع على متغير.",
           "urlExampleRequired": "أعطِ قيمة نموذجية لمتغير عنوان URL.",
-          "quickReplyPosition": "يجب أن تكون الردود السريعة معًا، في بداية الأزرار أو نهايتها."
-        }
+          "quickReplyPosition": "يجب أن تكون الردود السريعة معًا، في بداية الأزرار أو نهايتها.",
+          "flowIdRequired": "أدخل معرّف Flow.",
+          "flowIdInvalid": "معرّف Flow رقم.",
+          "screenRequired": "أدخل معرّف الشاشة.",
+          "catalogAlone": "لا يمكن الجمع بين زر الكتالوج وأزرار أخرى."
+        },
+        "catalogHint": "يفتح كتالوج واتساب الخاص بك. يظهر على الزر «عرض الكتالوج» ويجب أن يكون الزر الوحيد.",
+        "flowId": "معرّف WhatsApp Flow",
+        "flowIdHint": "المعرّف الرقمي لـ WhatsApp Flow منشور، من مدير Flows في Meta.",
+        "screen": "شاشة الفتح",
+        "screenHint": "معرّف الشاشة التي يفتح عليها النموذج، مثل WELCOME."
       },
       "result": {
         "metaRefused": "تم الحفظ، لكن Meta رفضت القالب.",
