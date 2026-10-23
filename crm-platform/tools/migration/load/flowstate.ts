@@ -171,7 +171,7 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
           UPDATE flows SET published_flow_data = flow_data, published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
             published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
             published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id, published_provider = provider
-          WHERE org_id = ${orgId} AND id = ANY(${liveIds}) AND is_published AND published_flow_data IS NULL`);
+          WHERE org_id = ${orgId} AND id IN (${sql.join(liveIds.map((id) => sql`${id}`), sql`, `)}) AND is_published AND published_flow_data IS NULL`);
     });
     const armed = plan.filter((p) => p.live).map((p) => p.row.uuid);
     await worker.db.execute(sql`
