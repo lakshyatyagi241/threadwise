@@ -53,6 +53,7 @@ import {
 import { NotificationsService } from '../notifications';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
+import { assertNotFinishedWebchat } from './finished-webchat';
 import { canActOn } from '../../kernel/rbac/scope';
 
 const MODULE_KEY = 'conversations';
@@ -338,6 +339,7 @@ export class InboxConversationsService {
           [{ path: 'status', message: `${from} -> ${to} is not allowed` }],
         );
       }
+      if (to === 'open') assertNotFinishedWebchat(locked.channelKind, from, 'reopened');
 
       const finishing = to === 'resolved' || to === 'closed';
       const reopening = to === 'open' && (from === 'resolved' || from === 'closed');
