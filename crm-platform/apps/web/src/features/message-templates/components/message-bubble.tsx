@@ -6,6 +6,7 @@ import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { WhatsAppText } from '@/components/whatsapp-text';
 import type { PreviewModel } from '../lib/form-model';
 import {
+  CheckIcon,
   CopyIcon,
   DocumentIcon,
   ImageIcon,
@@ -175,7 +176,10 @@ export function MessageBubble({
           )}
         </>
       )}
-      <p className="mt-1 text-end text-[10px] text-muted-foreground">{t('time')} ✓✓</p>
+      <p className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
+        {t('time')}
+        <CheckIcon className="h-3 w-3.5 text-brand" />
+      </p>
       {(shown.length > 0 || model.auth) && (
         <ul className="mt-1.5 space-y-1 border-t border-border pt-1.5" data-testid="bubble-buttons">
           {model.auth ? (
