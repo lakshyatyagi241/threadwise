@@ -1,22 +1,34 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type { AddonCard, OwnedAddon, WorkspaceAddonsResponse } from '@crm/contracts';
-import { Alert, Badge, Button } from '@crm/ui';
-import { KEYS, fetchWorkspaceAddons } from '../api';
+import { Alert, Badge, Button, Spinner } from '@crm/ui';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { KEYS, enableAddon, fetchWorkspaceAddons } from '../api';
+import {
+  AddonToggleDialog,
+  activationErrorKey,
+  useAfterActivationChange,
+} from './addon-toggle-dialog';
 import { CancelAddonRenewal } from './cancel-addon-renewal';
 import { ErrorBlock, LoadingBlock } from './ui';
 
 const NS = 'addons-extension-registry.list';
 const KINDS = ['feature', 'capacity'] as const;
 
+/** The message under the list after a switch: the add-on's name is in the sentence, so it reads on its own. */
+type Status = { tone: 'success' | 'danger'; text: string } | null;
+
 /**
  * THE add-ons list: one component and one card style for every place a workspace sees add-ons (the Plans page, `/addons` and the Marketplace
  * Add-ons tab). It owns its data (`GET /addons`), so a mount is one line. Visibility is decided by the API, not here:
  * every card is in exactly one state (`AddonCard.state`):
- *   included     the plan already grants everything the add-on gives: "Included in your plan", no button
+ *   included     the plan already grants everything the add-on gives: "Included in your plan", no buy button. A second chip says Active or
+ *                Turned off; a plain add-on (`canToggle`) can be turned off (after a preview of what changes) and on again by a person who
+ *                holds `addons.activation.manage`, everyone else sees the state and is told to ask the account owner
  *   active       held: renewal or end date; "Buy again" appears only for stackable limit boosts (state `buy_again`)
  *   buy          price per period and a button (disabled with a reason for a member who may not buy)
  *   unavailable  the workspace is not on an active paid plan: the reason and a link to the plans
@@ -37,8 +49,13 @@ export function AddonsList() {
 /** The list for already-loaded data (what the screen tests render). */
 export function AddonsListView({ data }: { data: WorkspaceAddonsResponse }) {
   const t = useTranslations(NS);
+  const [status, setStatus] = useState<Status>(null);
   return (
     <div className="space-y-4" data-testid="addons-list">
+      {/* Always in the page, so the sentence is announced when it appears. */}
+      <div aria-live="polite" data-testid="addons-status">
+        {status && <Alert tone={status.tone}>{status.text}</Alert>}
+      </div>
       {!data.eligible && <UnavailableNotice reason={data.unavailableReason} />}
       {data.owned.length > 0 && <OwnedList owned={data.owned} />}
       {data.catalog.length === 0 ? (
@@ -70,7 +87,7 @@ export function AddonsListView({ data }: { data: WorkspaceAddonsResponse }) {
               >
                 {cards.map((c) => (
                   <li key={c.id} className="flex min-w-0">
-                    <AddonCardView card={c} canBuy={data.canBuy} />
+                    <AddonCardView card={c} canBuy={data.canBuy} onStatus={setStatus} />
                   </li>
                 ))}
               </ul>
@@ -134,7 +151,15 @@ function OwnedList({ owned }: { owned: readonly OwnedAddon[] }) {
   );
 }
 
-function AddonCardView({ card, canBuy }: { card: AddonCard; canBuy: boolean }) {
+function AddonCardView({
+  card,
+  canBuy,
+  onStatus,
+}: {
+  card: AddonCard;
+  canBuy: boolean;
+  onStatus: (status: Status) => void;
+}) {
   const t = useTranslations(NS);
   const fmt = useFormatter();
   const headingId = `addon-${card.slug}-title`;
@@ -210,7 +235,18 @@ function AddonCardView({ card, canBuy }: { card: AddonCard; canBuy: boolean }) {
       <div className="mt-auto space-y-1.5">
         {card.state === 'included' && (
           <div data-testid={`addon-${card.slug}-included`} className="space-y-1">
-            <Badge tone="success">{t('state.included')}</Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge tone="success">{t('state.included')}</Badge>
+              <Badge
+                tone={card.activation === 'disabled' ? 'warning' : 'success'}
+                data-testid={`addon-${card.slug}-activation`}
+              >
+                {card.activation === 'disabled' ? t('state.turnedOff') : t('state.active')}
+              </Badge>
+            </div>
+            {card.activation === 'disabled' && (
+              <p className="text-xs text-muted-foreground">{t('activation.turnedOffNote')}</p>
+            )}
             {card.includedVia === 'support' && (
               <p className="text-xs text-muted-foreground">{t('state.includedSupport')}</p>
             )}
@@ -220,6 +256,9 @@ function AddonCardView({ card, canBuy }: { card: AddonCard; canBuy: boolean }) {
                   ? t('state.includedEnds', { date: date(card.ownedEndsAt) })
                   : t('state.includedOwned')}
               </p>
+            )}
+            {card.canToggle && (
+              <ActivationControl card={card} titleId={headingId} onStatus={onStatus} />
             )}
           </div>
         )}
@@ -272,5 +311,96 @@ function AddonCardView({ card, canBuy }: { card: AddonCard; canBuy: boolean }) {
         )}
       </div>
     </article>
+  );
+}
+
+/**
+ * Turn off / Turn on for an included plain add-on. A person without `addons.activation.manage` sees only the state and the way to
+ * get it changed. Turning off goes through the preview dialog; turning on is one action with nothing to confirm.
+ */
+function ActivationControl({
+  card,
+  titleId,
+  onStatus,
+}: {
+  card: AddonCard;
+  titleId: string;
+  onStatus: (status: Status) => void;
+}) {
+  const t = useTranslations(NS);
+  const can = useCan('addons.activation.manage');
+  if (!can) {
+    return (
+      <p className="text-xs text-muted-foreground" data-testid={`addon-${card.slug}-ask-owner`}>
+        {t('activation.askOwner')}
+      </p>
+    );
+  }
+  return <ActivationButtons card={card} titleId={titleId} onStatus={onStatus} />;
+}
+
+function ActivationButtons({
+  card,
+  titleId,
+  onStatus,
+}: {
+  card: AddonCard;
+  titleId: string;
+  onStatus: (status: Status) => void;
+}) {
+  const t = useTranslations(NS);
+  const after = useAfterActivationChange();
+  const [open, setOpen] = useState(false);
+  const turnOn = useMutation({
+    mutationFn: () => enableAddon(card.id),
+    onSuccess: async () => {
+      await after();
+      onStatus({ tone: 'success', text: t('activation.doneOn', { name: card.name }) });
+    },
+    onError: (e) =>
+      onStatus({
+        tone: 'danger',
+        text: t(`activation.errors.${activationErrorKey(e)}`, { name: card.name }),
+      }),
+  });
+
+  if (card.activation === 'disabled') {
+    return (
+      <Button
+        size="sm"
+        aria-describedby={titleId}
+        disabled={turnOn.isPending}
+        data-testid={`addon-${card.slug}-turn-on`}
+        onClick={() => {
+          onStatus(null);
+          turnOn.mutate();
+        }}
+      >
+        {turnOn.isPending && <Spinner />}
+        {t('activation.turnOn')}
+      </Button>
+    );
+  }
+  return (
+    <>
+      <Button
+        size="sm"
+        variant="secondary"
+        aria-describedby={titleId}
+        data-testid={`addon-${card.slug}-turn-off`}
+        onClick={() => {
+          onStatus(null);
+          setOpen(true);
+        }}
+      >
+        {t('activation.turnOff')}
+      </Button>
+      <AddonToggleDialog
+        card={card}
+        open={open}
+        onClose={() => setOpen(false)}
+        onDone={(text) => onStatus({ tone: 'success', text })}
+      />
+    </>
   );
 }

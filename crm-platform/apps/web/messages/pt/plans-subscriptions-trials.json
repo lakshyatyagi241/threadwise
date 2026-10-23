@@ -584,7 +584,13 @@
       "askOwner": "Peça ao proprietário da conta para adicioná-lo.",
       "unavailableTitle": "{addon} precisa de um plano pago ativo",
       "unavailableLead": "Escolha primeiro um plano pago; depois você pode adicionar {addon} a ele.",
-      "viewPlans": "Ver planos"
+      "viewPlans": "Ver planos",
+      "disabledTitle": "{addon} está desativado",
+      "disabledLead": "Seu plano inclui {addon}, mas ele está desativado para este espaço de trabalho. As configurações foram mantidas.",
+      "disabledAsk": "Peça ao proprietário da conta para ativá-lo.",
+      "turnOn": "Ativar",
+      "turnOnForbidden": "Você não tem permissão para ativá-lo. Peça ao proprietário da conta.",
+      "turnOnFailed": "Não foi possível ativar {addon}. Tente novamente."
     }
   }
 }

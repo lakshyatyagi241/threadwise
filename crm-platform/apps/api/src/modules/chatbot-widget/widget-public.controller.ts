@@ -252,6 +252,37 @@ export class WidgetPublicController {
     res.status(200).json(out);
   }
 
+  /** A flow bot's window opened on an empty thread: the bot starts by itself. */
+  @Post('api/start')
+  async start(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    res.status(200).json(await this.widgets.start(token, this.publicRequest(req, queryUuid)));
+  }
+
+  /** The visitor shared their location when a flow bot asked for it. */
+  @Post('api/location')
+  async location(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Body() body: Record<string, unknown> | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const inputUuid =
+      queryUuid ?? (typeof body?.visitor_uuid === 'string' ? body.visitor_uuid : undefined);
+    res
+      .status(200)
+      .json(await this.widgets.shareLocation(token, this.publicRequest(req, inputUuid), body));
+  }
+
   /** The visitor's stars when they end the chat (and "Restart chat", which sends five on its own). */
   @Post('api/rating')
   async rating(

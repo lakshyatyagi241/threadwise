@@ -146,3 +146,31 @@ export const orgPlanState = pgTable('org_plan_state', {
   updatedAt: updatedAt(),
   rowVersion: rowVersion(),
 });
+
+/**
+ * Mirror of 20270402090000_workspace_addon_activation.sql: a workspace's own switch on an add-on it is entitled to. `disabled` is an opt-out (the
+ * add-on's features stop applying to that workspace); no row means active. Covers plain add-ons and the add-on of a Marketplace app.
+ */
+export const workspaceAddonActivation = pgTable(
+  'workspace_addon_activation',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    addonId: idColumn('addon_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    state: text('state').$type<'active' | 'disabled'>().notNull().default('disabled'),
+    source: text('source').$type<'user' | 'operator' | 'system'>().notNull().default('user'),
+    changedBy: idColumn('changed_by'),
+    changedAt: timestamp('changed_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    uniqueIndex('workspace_addon_activation_org_addon_key').on(t.orgId, t.addonId),
+    index('idx_workspace_addon_activation_addon').on(t.addonId),
+  ],
+);

@@ -388,6 +388,13 @@ export const widgetRatingRequestSchema = z.object({
 });
 export type WidgetRatingRequest = z.infer<typeof widgetRatingRequestSchema>;
 
+/** `POST /widget/<token>/api/location`: where the visitor is, when a flow bot asked for it and they pressed "Share my location". */
+export const widgetLocationRequestSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+});
+export type WidgetLocationRequest = z.infer<typeof widgetLocationRequestSchema>;
+
 /** The kinds of file a flow bot can show in the chat window. */
 export const WIDGET_MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 export type WidgetMediaKind = (typeof WIDGET_MEDIA_KINDS)[number];

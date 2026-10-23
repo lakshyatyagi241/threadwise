@@ -10,6 +10,7 @@ import {
   judgeAgeAnswer,
   toPublicLauncher,
   widgetFeedbackRequestSchema,
+  widgetLocationRequestSchema,
   widgetRatingRequestSchema,
   widgetMessageRequestSchema,
   type AgeVerdict,
@@ -861,6 +862,74 @@ export class WidgetPublicService {
       }),
     );
     return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
+  /**
+   * A flow bot that opens by itself (`POST api/start`): the first time the window opens on an empty thread the bot starts at its first
+   * step, instead of waiting for the visitor to write. The start rides the inbox's own queue as a tap on the bot's start step, so the
+   * same rules apply as for any message; the line is kept for the team ("Opened the chat") and left out of what the window shows.
+   */
+  async start(token: string, req: PublicRequest): Promise<{ ok: true }> {
+    const { orgId, widget } = await this.locateActive(token);
+    if (widget.flowId === null) return { ok: true };
+    const forInbox: WidgetForInbox = {
+      id: widget.id,
+      uuid: widget.uuid,
+      userId: widget.userId,
+      name: widget.name,
+      welcomeMessage: widget.welcomeMessage,
+      assistantUuid: widget.assistantUuid,
+    };
+    const flowUuid = await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, true);
+      if (!resolved) return null;
+      if (
+        resolved.visitor.conversationId !== null &&
+        (await this.inbox.hasCustomerLine(tx, orgId, resolved.visitor.conversationId))
+      )
+        return null;
+      return this.inbox.flowUuidOf(tx, orgId, widget.flowId!);
+    });
+    if (flowUuid === null) return { ok: true };
+    const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
+    await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
+      providerMessageId: `wgt-${randomUUID()}`,
+      peerKey: peer.peerKey,
+      ...(peer.peerName ? { peerName: peer.peerName } : {}),
+      kind: 'interactive',
+      body: 'Opened the chat',
+      meta: { interactive: { id: `go:${flowUuid}:__start`, title: 'Opened the chat' } },
+      providerTimestamp: new Date(),
+    });
+    return { ok: true };
+  }
+
+  /** A flow bot asked for the visitor's location and they shared it (`POST api/location`): it joins the thread like a pin on WhatsApp. */
+  async shareLocation(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
+    const parsed = widgetLocationRequestSchema.safeParse(rawBody ?? {});
+    if (!parsed.success)
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    if (widget.flowId === null)
+      throw new WidgetPublicError(422, { message: 'This chat does not take a location.' });
+    const forInbox: WidgetForInbox = {
+      id: widget.id,
+      uuid: widget.uuid,
+      userId: widget.userId,
+      name: widget.name,
+      welcomeMessage: widget.welcomeMessage,
+      assistantUuid: widget.assistantUuid,
+    };
+    const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
+    await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
+      providerMessageId: `wgt-${randomUUID()}`,
+      peerKey: peer.peerKey,
+      ...(peer.peerName ? { peerName: peer.peerName } : {}),
+      kind: 'location',
+      location: { latitude: parsed.data.latitude, longitude: parsed.data.longitude },
+      providerTimestamp: new Date(),
+    });
+    return { ok: true };
   }
 
   /** The visitor's stars when they end the chat (`POST api/rating`). A visitor with no thread yet has nothing to rate. */

@@ -217,6 +217,64 @@ function MessageBody({
     );
   }
 
+  // A carousel a flow sent: its intro line, then each card in order with its picture, text and buttons.
+  if (m.sentCarousel) {
+    return (
+      <div data-testid="inbox-sent-carousel" className="space-y-1.5">
+        {caption && <WhatsAppText text={caption} />}
+        <ul className="space-y-1.5">
+          {m.sentCarousel.cards.map((c, i) => {
+            const image = safeHttpHref(c.image);
+            return (
+              <li
+                key={i}
+                data-testid="inbox-sent-carousel-card"
+                className="space-y-1 rounded-lg bg-background/50 px-2 py-1.5 text-xs"
+              >
+                {image && (
+                  <img
+                    src={image}
+                    alt={c.title}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="max-h-32 w-full rounded object-cover"
+                  />
+                )}
+                {c.title && (
+                  <p dir="auto" className="font-semibold break-words">
+                    {c.title}
+                  </p>
+                )}
+                {c.text && (
+                  <p dir="auto" className="break-words">
+                    {c.text}
+                  </p>
+                )}
+                {c.buttons.length > 0 && (
+                  <BubbleButtonList testId="inbox-sent-carousel-buttons" className="-mx-2 mt-1.5">
+                    {c.buttons.map((b, j) => {
+                      // A link button opens its address; a reply button has nothing to open.
+                      const href = safeHttpHref(b.url);
+                      return (
+                        <BubbleButton
+                          key={j}
+                          href={href}
+                          testId="inbox-sent-carousel-button"
+                          icon={href ? <LinkIcon width={14} height={14} aria-hidden /> : undefined}
+                          label={b.title}
+                        />
+                      );
+                    })}
+                  </BubbleButtonList>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   if (m.kind === 'interactive' && (m.interactive || caption)) {
     // A Flow answer has no chip, only its text lines: show those as they are, with their line breaks.
     if (!m.interactive && caption && caption.includes('\n')) {

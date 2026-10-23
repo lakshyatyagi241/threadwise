@@ -584,7 +584,13 @@
       "askOwner": "Ask your account owner to add it.",
       "unavailableTitle": "{addon} needs an active paid plan",
       "unavailableLead": "Choose a paid plan first, then you can add {addon} to it.",
-      "viewPlans": "View plans"
+      "viewPlans": "View plans",
+      "disabledTitle": "{addon} is turned off",
+      "disabledLead": "Your plan includes {addon}, but it is turned off for this workspace. Its settings are kept.",
+      "disabledAsk": "Ask your account owner to turn it on.",
+      "turnOn": "Turn it on",
+      "turnOnForbidden": "You don't have permission to turn this on. Ask your account owner.",
+      "turnOnFailed": "We couldn't turn {addon} on. Please try again."
     }
   }
 }

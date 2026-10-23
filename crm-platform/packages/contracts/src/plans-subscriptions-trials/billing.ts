@@ -332,12 +332,13 @@ export type PlanSettings = z.infer<typeof planSettingsSchema>;
  *   buy         it can be bought now (`amount` is what it costs on this plan)
  *   unavailable listed but not buyable now (the workspace is not on an active paid plan)
  *   hidden      the plan does not offer it
+ *   disabled    the plan includes it but the workspace turned it off (it can switch it back on)
  */
 export const featureAddonSchema = z.object({
   feature: z.string(),
   addonSlug: z.string(),
   addonName: z.string(),
-  offer: z.enum(['included', 'owned', 'buy', 'unavailable', 'hidden']),
+  offer: z.enum(['included', 'owned', 'buy', 'unavailable', 'hidden', 'disabled']),
   amount: z.string(),
   currency: z.string(),
   billingUnit: z.string(),

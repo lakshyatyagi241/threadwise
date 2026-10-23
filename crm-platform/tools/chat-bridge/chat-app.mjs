@@ -107,7 +107,7 @@ export function createChatApp({
     const r = await api.createMessage(channel, out, rest);
     if (r.ok) {
       if (interactive && r.name)
-        remember(r.name, { base: body, incidentId: interactive.incidentId });
+        remember(r.name, { base: body, incidentId: interactive.incidentId, channel, owner: null });
       return r;
     }
     log({ evt: 'chat_app_fallback_webhook', channel, status: r.status });
@@ -141,7 +141,8 @@ export function createChatApp({
       );
     const known = bases.get(msgName),
       base = known?.base ?? ev.message ?? {};
-    if (msgName && !known) remember(msgName, { base, incidentId: p.incidentId });
+    if (msgName && !known) remember(msgName, { base, incidentId: p.incidentId, owner: null });
+    if (msgName) bases.get(msgName).owner = action === 'claim' ? who : null; // the click response edits the card itself
     return {
       actionResponse: { type: 'UPDATE_MESSAGE' },
       ...renderCard(base, {
@@ -228,5 +229,14 @@ export function createChatApp({
       }),
     );
   }
-  return { enabled, send, handleHttp, handleEvent };
+  // A claim/release/PR that did not come from the card button (the incident REST API, a teammate's Claude): edit the alert card to match.
+  async function syncCard(incidentId, owner) {
+    for (const [name, v] of [...bases]) {
+      if (resolveId(v.incidentId) !== incidentId || (v.owner ?? null) === owner || !v.channel) continue;
+      const r = await api.updateMessage(v.channel, name, renderCard(v.base, { incidentId: v.incidentId, owner, grafanaUrl }));
+      if (r?.ok) v.owner = owner;
+      else log({ evt: 'chat_app_card_sync_failed', status: r?.status });
+    }
+  }
+  return { enabled, send, handleHttp, handleEvent, syncCard };
 }

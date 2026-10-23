@@ -434,6 +434,8 @@ describe('the Add-ons tab', () => {
         state: 'buy',
         includedVia: null,
         kind: 'feature',
+        activation: 'active',
+        canToggle: false,
       },
       {
         id: ID(2),
@@ -455,6 +457,8 @@ describe('the Add-ons tab', () => {
         state: 'included',
         includedVia: 'plan',
         kind: 'feature',
+        activation: 'active',
+        canToggle: false,
       },
     ],
     ...over,

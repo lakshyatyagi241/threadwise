@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Popover, cn } from '@crm/ui';
 import { PQL_QUERY_MAX } from '@crm/contracts';
-import { AdvancedFilter } from '@/features/segments';
+import { AdvancedFilter, SegmentConditions } from '@/features/segments';
 import { ApiError } from '@/lib/api/errors';
 import { askPql } from '../api/pql';
 import { ownerTokens, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
@@ -339,6 +339,7 @@ export function FilterPanel(p: FilterPanelProps) {
               {t('quickFilters')}
             </p>
             {entry('segment', t('segmentLabel'), segmentName)}
+            {f.segment && <SegmentConditions segmentId={f.segment} />}
             {entry('tag', t('tagLabel'), tagName)}
             {entry('owner', t('ownerLabel'), ownerName)}
             {(p.teams.length > 0 || f.team !== '') && entry('team', t('teamLabel'), teamName)}

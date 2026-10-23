@@ -459,6 +459,7 @@ export class SqlInboxGateway implements InboxGateway {
                meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
         FROM messages
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
+          AND COALESCE(RIGHT(meta->'interactive'->>'id', 8), '') <> ':__start'
         ORDER BY id DESC LIMIT ${limit}
       ) t ORDER BY id`);
     return (res.rows as unknown as LineRow[]).map(toLine);
@@ -471,6 +472,7 @@ export class SqlInboxGateway implements InboxGateway {
              meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
+        AND COALESCE(RIGHT(meta->'interactive'->>'id', 8), '') <> ':__start'
       ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }
@@ -488,6 +490,19 @@ export class SqlInboxGateway implements InboxGateway {
                          ELSE jsonb_set(meta, '{feedback}', to_jsonb(${value}::text)) END
        WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
        RETURNING id`);
+    return (res.rows as unknown[]).length > 0;
+  }
+
+  async flowUuidOf(tx: Tx, orgId: number, flowId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid FROM flows WHERE org_id = ${orgId} AND id = ${flowId}`,
+    );
+    return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
+  }
+
+  async hasCustomerLine(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM messages WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'in' LIMIT 1`);
     return (res.rows as unknown[]).length > 0;
   }
 

@@ -322,7 +322,7 @@
         "conversationsOpen": "खुली बातचीत",
         "conversationsResolved": "हल की गई बातचीत",
         "conversationsClosed": "बंद बातचीत",
-        "conversationsAssigned": "असाइन की गई",
+        "conversationsAssigned": "किसी को भी असाइन की गई",
         "conversationsUnassigned": "असाइन नहीं की गई",
         "conversationsTotal": "{count, plural, one {# बातचीत} other {# बातचीतें}}"
       },

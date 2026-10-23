@@ -235,7 +235,8 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (inc.state === 'resolved') return { code: 409, error: 'incident already resolved' };
     const r = fn(inc); return r.error ? r : { code: 200, inc: view(inc), post: r.post };
   };
-  const done = async (r, inc) => { if (r.post) { const i = incidents.get(inc ?? r.inc.id); await step(i, '', r.post); if (!r.post.startsWith('\uD83D\uDCDD')) await announce(i, r.post); } delete r.post; return r; };
+  let ownerHook = null; // the Chat app edits the alert card when an owner is set or cleared (REST claims do not go through the card button)
+  const done = async (r, inc) => { if (r.post) { const i = incidents.get(inc ?? r.inc.id); await step(i, '', r.post); if (!r.post.startsWith('\uD83D\uDCDD')) await announce(i, r.post); if (!r.post.startsWith('\uD83D\uDCDD')) await Promise.resolve(ownerHook?.(i.id, i.owner ?? null)).catch(() => {}); } delete r.post; return r; };
   const claim = (id, who) => done(mutate(id, who, (inc) => {
     if (held(inc) && inc.owner !== who) return { code: 409, error: `already claimed by ${inc.owner}`, owner: inc.owner };
     const fresh = !held(inc); inc.owner = who; if (fresh) inc.claimedAt = now(); inc.claimExpiresAt = now() + ttlMs();
@@ -264,7 +265,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     inc.state = 'resolved'; { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`; await step(inc, '', t); await announce(inc, t); } return true;
   }
   return {
-    mode, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
+    mode, setOwnerHook: (f) => { ownerHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
     setRelease, openDeployFailure, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),

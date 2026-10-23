@@ -149,6 +149,10 @@ export interface InboxGateway {
     id: number,
     value: 'up' | 'down' | null,
   ): Promise<boolean>;
+  /** The public id of the flow a flow bot runs, for the step that starts it when the chat opens. */
+  flowUuidOf(tx: Tx, orgId: number, flowId: number): Promise<string | null>;
+  /** Whether the visitor has already said (or been taken to have said) something on this thread. */
+  hasCustomerLine(tx: Tx, orgId: number, conversationId: number): Promise<boolean>;
   /** Writes the visitor's end-of-chat rating as one line on the thread; false when the thread already has one. */
   recordRating(
     tx: Tx,

@@ -45,6 +45,16 @@ Open **Plans** from the account menu and look for **Smart routing** among the ad
 
 If you upgrade to a plan that includes Smart routing while you hold the add-on, the add-on stays active until the end of the term you paid for and then does not renew. You are not charged again for it and nothing is refunded early. Its card shows **Included in your plan** and the date it ends, and the account's billing admins get a notice.
 
+## Turn an included add-on off or on
+
+When your plan includes Smart routing it is on from the start, and your workspace can turn it off and on again. Open the add-ons list (**Plans**, then **Add-ons**) and find the card that says **Included in your plan**; it shows **Active** or **Turned off**.
+
+- **Turn off** first shows what changes. Smart routing stops assigning new conversations: chats that are waiting stay in **Waiting** until someone claims them, routing rules stop applying, and teams set to Round robin or Least loaded stop assigning. Because customers' chats are affected, you type the add-on's name to confirm.
+- **What is kept:** your rules, switches, team methods, owner mode and teams stay saved, and so do the permissions your roles hold for it (they do not apply while it is off).
+- **Turn on** brings it back as you left it, with nothing to confirm. Chats that arrived while it was off are not routed afterwards; they wait for a claim.
+- A locked option or screen says **Smart routing is turned off** with a **Turn it on** button for people who may switch it, and **Ask your account owner to turn it on** for everyone else.
+- **Who:** the owner and admins can switch it. Other people see the state only.
+
 ## If it ends
 
 Nothing is deleted. Your rules, switches, team methods and owner mode stay saved but stop being applied: new conversations wait for a claim, chats already waiting or assigned stay where they are, and timers that were counting stop. Everything works again, as you left it, when Smart routing returns.

@@ -322,7 +322,7 @@
         "conversationsOpen": "Cuộc trò chuyện đang mở",
         "conversationsResolved": "Cuộc trò chuyện đã giải quyết",
         "conversationsClosed": "Cuộc trò chuyện đã đóng",
-        "conversationsAssigned": "Đã phân công",
+        "conversationsAssigned": "Đã gán cho ai đó",
         "conversationsUnassigned": "Chưa phân công",
         "conversationsTotal": "{count, plural, other {# cuộc trò chuyện}}"
       },

@@ -584,7 +584,13 @@
       "askOwner": "Minta pemilik akun untuk menambahkannya.",
       "unavailableTitle": "{addon} memerlukan paket berbayar yang aktif",
       "unavailableLead": "Pilih paket berbayar terlebih dahulu, lalu Anda dapat menambahkan {addon} ke paket itu.",
-      "viewPlans": "Lihat paket"
+      "viewPlans": "Lihat paket",
+      "disabledTitle": "{addon} nonaktif",
+      "disabledLead": "Paket Anda menyertakan {addon}, tetapi add-on ini dinonaktifkan untuk ruang kerja ini. Pengaturannya tetap disimpan.",
+      "disabledAsk": "Minta pemilik akun untuk mengaktifkannya.",
+      "turnOn": "Aktifkan",
+      "turnOnForbidden": "Anda tidak memiliki izin untuk mengaktifkannya. Minta pemilik akun.",
+      "turnOnFailed": "Kami tidak dapat mengaktifkan {addon}. Silakan coba lagi."
     }
   }
 }

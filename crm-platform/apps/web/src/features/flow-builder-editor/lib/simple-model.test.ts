@@ -721,6 +721,8 @@ describe('steps per channel', () => {
         'condition',
         'ask',
         'ask_file',
+        'location',
+        'ask_location',
         'delay',
         'cta',
         'webhook',

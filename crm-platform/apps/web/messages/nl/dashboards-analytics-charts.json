@@ -322,7 +322,7 @@
         "conversationsOpen": "Open gesprekken",
         "conversationsResolved": "Opgeloste gesprekken",
         "conversationsClosed": "Gesloten gesprekken",
-        "conversationsAssigned": "Toegewezen",
+        "conversationsAssigned": "Aan iemand toegewezen",
         "conversationsUnassigned": "Niet toegewezen",
         "conversationsTotal": "{count, plural, one {# gesprek} other {# gesprekken}}"
       },
