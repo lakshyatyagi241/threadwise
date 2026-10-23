@@ -6,6 +6,7 @@ export { invalidateSegments, segmentFromFilters, useSegments } from './api/segme
 export { ROUTES as SEGMENT_ROUTES, cleanSegmentParam } from './lib/url';
 export type { Segment } from './api/schemas';
 export { AdvancedFilter, appliedConditionCount } from './components/advanced-filter';
+export { SegmentConditions } from './components/segment-conditions';
 export { RulesEditor, useRulesDraft, type RulesDraft } from './components/rules-editor';
 export { usePeople, useTeams, useTeamFilterOptions, useSegmentCatalog, propertyLookups } from './api/lookups';
 // The rule builder as a whole (nested AND/OR groups, field / operator / value pickers), for screens that edit a condition tree of their own
