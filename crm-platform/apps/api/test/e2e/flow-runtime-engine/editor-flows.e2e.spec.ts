@@ -1,3 +1,4 @@
+import { fundWallet } from '../../support/fund-wallet';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -132,6 +133,8 @@ const say = (t: Tenant, ch: SimChannel, peer: string, text: string) =>
 
 async function arrangeOrg(label: string) {
   const t = await p.api.signup(label);
+  // The AI step runs on the platform's key, which the workspace's wallet pays for.
+  await fundWallet(p.h.app, t.orgId);
   const ch = await openChannel(p, t);
   return { t, ch };
 }

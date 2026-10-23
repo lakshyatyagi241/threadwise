@@ -3,7 +3,12 @@ import {
   type UpdateCallRecordingSettingsInput,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
+import { DatabaseService } from '../../../src/infra/db/database.service';
 import { CallRecordingSettingsService } from '../../../src/modules/calling-voice/call-recording-settings.service';
+import {
+  BillingCurrencyService,
+  WalletLedgerService,
+} from '../../../src/modules/wallet-message-billing';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 
 export { Api, type Tenant };
@@ -98,6 +103,29 @@ export async function startCallPipeline(): Promise<CallPipeline> {
 }
 
 // --- arranging ---------------------------------------------------------------------------------------------------------------
+
+/**
+ * Puts money in a workspace's wallet through the ledger, the way a paid top-up does (hundredths of its billing currency). A call is paid
+ * usage: placing one with an empty wallet is refused (422 `WALLET_EMPTY`), so a spec that places a call funds the workspace first.
+ */
+export async function fundWallet(p: CallPipeline, t: Tenant, minor = 100_000): Promise<void> {
+  const opts = { strict: false } as const;
+  const db = p.h.app.get(DatabaseService, opts);
+  const ledger = p.h.app.get(WalletLedgerService, opts);
+  const currency = p.h.app.get(BillingCurrencyService, opts);
+  await db.txAs({ orgId: t.orgId, userId: null }, async (tx) => {
+    await ledger.post(tx, {
+      orgId: t.orgId,
+      unit: await currency.forOrg(tx, t.orgId),
+      type: 'topup',
+      direction: 'in',
+      amountMinor: minor,
+      idempotencyKey: `fund:${t.orgId}:${Math.random()}`,
+      source: 'topup.conversion',
+      description: 'Wallet top-up',
+    });
+  });
+}
 
 export interface CallNumber {
   configId: number;

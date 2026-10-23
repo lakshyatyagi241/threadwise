@@ -92,7 +92,7 @@ export class MessageBillingService {
     const templateName = (input.templateName ?? '').trim() || null;
     const subjectName = (input.subjectName ?? '').trim() || null;
 
-    const outcome = await this.db.txAs({ orgId: input.orgId, userId: null }, async (tx) => {
+    const outcome = await this.db.retry.txAs({ orgId: input.orgId, userId: null }, async (tx) => {
       // 1. claim
       const claim = await tx.execute(sql`
         INSERT INTO usage_charge_keys (org_id, provider_message_id) VALUES (${input.orgId}, ${wamid})
@@ -256,12 +256,13 @@ export class MessageBillingService {
   async settleFailed(
     orgId: number,
     providerMessageId: string,
+    opts?: { description?: string; source?: string },
   ): Promise<{ refunded: boolean; refundedMinor: number; balanceAfterMinor: number }> {
     const wamid = providerMessageId.trim();
     if (!wamid || orgId <= NO_ORG)
       return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
     const s = await this.settings.effective();
-    return this.db.txAs({ orgId, userId: null }, async (tx) => {
+    return this.db.retry.txAs({ orgId, userId: null }, async (tx) => {
       const found = await tx.execute(sql`
         SELECT id, charge_id, charge_created_at::text AS charge_created_at, status FROM usage_charge_keys
         WHERE org_id = ${orgId} AND provider_message_id = ${wamid} FOR UPDATE`);
@@ -304,8 +305,8 @@ export class MessageBillingService {
           direction: 'in',
           amountMinor: charge.credits,
           idempotencyKey: `refund:${chargeId}`,
-          source: 'message.refund',
-          description: 'Refund - message not delivered',
+          source: opts?.source ?? 'message.refund',
+          description: opts?.description ?? 'Refund - message not delivered',
           subject: { type: 'usage_charge', id: chargeId },
           meta: { wamid, moneyMinor: charge.credits },
         });
@@ -332,6 +333,25 @@ export class MessageBillingService {
         balanceAfterMinor: wallet?.balanceMinor ?? 0,
       };
     });
+  }
+
+  /**
+   * After a spend that is not a message (usage billing): raises the low-balance alert when the balance is at or under the threshold,
+   * at most once per 6 hours. The threshold is set in the platform currency, so a wallet in another currency compares at the rate on file.
+   */
+  async alertIfLow(
+    tx: Tx,
+    orgId: number,
+    wallet: { id: number; lowBalanceAlertedAt: Date | null },
+    balanceAfterMinor: number,
+    currency: string,
+    now: Date = new Date(),
+  ): Promise<void> {
+    const s = await this.settings.effective();
+    const threshold = await this.billing.fromPlatform(s.lowBalanceThresholdMinor, currency);
+    if (shouldAlertLowBalance(balanceAfterMinor, threshold, wallet.lowBalanceAlertedAt, now)) {
+      await this.raiseLowBalance(tx, orgId, wallet.id, balanceAfterMinor, threshold, currency, now);
+    }
   }
 
   private async raiseLowBalance(

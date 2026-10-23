@@ -22,7 +22,7 @@ import { AUDIENCE_LIMIT, mediaKindFor, progressPct } from './broadcast-rules';
 import { ChannelsRepository } from './channels.repository';
 import { LineBroadcastsRepository, type LineBroadcastRow } from './line-broadcasts.repository';
 
-const MODULE_KEY = 'line_broadcasts';
+export const MODULE_KEY = 'line_broadcasts';
 const LIST_LIMIT = 50;
 
 export interface LineBroadcastJob {

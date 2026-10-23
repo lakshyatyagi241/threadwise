@@ -15,6 +15,7 @@ import { MetaCardsSection } from './meta-cards';
 import { PricingModeCard } from './pricing-mode-card';
 import { RateGrid } from './rate-grid';
 import { SwitchesCard } from './switches-card';
+import { UsagePricesSection } from './usage-prices-card';
 
 /** "Message pricing" (wallet rules): the flat economics, the two master switches and the per-country rate grid. */
 export function PricingPage() {
@@ -53,6 +54,7 @@ export function PricingPage() {
           <SwitchesCard settings={settings.data} canEdit={canEdit} />
         </>
       )}
+      <UsagePricesSection canEdit={canEdit} />
       <MetaCardsSection canEdit={canEdit} />
       {rates.isPending ? (
         <LoadingBlock />

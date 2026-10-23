@@ -29,6 +29,7 @@ import {
   syncMetaSchema,
   updateSwitchesSchema,
   updateWalletSettingsSchema,
+  updateWalletUsageSettingsSchema,
   walletLogQuerySchema,
   type AdjustWalletInput,
   type CreditPackageInput,
@@ -43,6 +44,7 @@ import {
   type SyncMetaInput,
   type UpdateSwitchesInput,
   type UpdateWalletSettingsInput,
+  type UpdateWalletUsageSettingsInput,
   type WalletLogQuery,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent } from '../../common/decorators';
@@ -55,6 +57,7 @@ import { MetaRateCardService } from './meta-rate-card.service';
 import { PlatformMarginsService } from './platform-margins.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletService, type Operator } from './platform-wallet.service';
+import { UsageSettingsService } from './usage-settings.service';
 import { WalletSettingsService } from './wallet-settings.service';
 
 function operatorId(): number {
@@ -80,6 +83,7 @@ export class PlatformWalletController {
     private readonly margins: PlatformMarginsService,
     private readonly packages: CreditPackagesService,
     private readonly settings: WalletSettingsService,
+    private readonly usage: UsageSettingsService,
     private readonly platform: PlatformSettingsService,
   ) {}
 
@@ -127,6 +131,29 @@ export class PlatformWalletController {
   async saveSwitches(@Body(zodPipe(updateSwitchesSchema)) body: UpdateSwitchesInput) {
     await this.settings.saveSwitches(body, await this.me());
     return this.getSettings();
+  }
+
+  @Get('usage-rates')
+  @ApiOperation({
+    summary:
+      'What SMS, email, calls, contact lookups and the other chat channels cost per unit, and the markup on AI and translation',
+  })
+  async getUsageRates() {
+    return this.usage.view();
+  }
+
+  @Put('usage-rates')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: 'Save per-unit prices, the AI and translation switches and the vendor-cost markup',
+    description:
+      'Send only what changes. A price of 0 or a switched-off kind is tracked in the expense log and charged nothing.',
+  })
+  async saveUsageRates(
+    @Body(zodPipe(updateWalletUsageSettingsSchema)) body: UpdateWalletUsageSettingsInput,
+  ) {
+    await this.usage.save(body, await this.me());
+    return this.usage.view();
   }
 
   // --- rates -------------------------------------------------------------------------------------------------------------------

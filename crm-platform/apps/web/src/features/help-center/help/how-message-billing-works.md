@@ -1,41 +1,61 @@
 ---
 id: how-message-billing-works
-title: How message billing works
-summary: How WhatsApp messages are paid for: the plan allowance, the wallet, when a charge or refund happens, and what stops a bulk send from starting.
+title: How billing works
+summary: How your wallet pays for WhatsApp messages, SMS, email, calls and AI: the plan allowance, what each costs, when charges and refunds happen, what pauses work.
 area: account
 order: 60
 documents: [tile:wallet-message-billing]
-keywords: [billing, wallet, per message, allowance, charge, refund, balance, currency, usage, metered]
+keywords: [billing, wallet, per message, allowance, charge, refund, balance, currency, usage, metered, sms, email, call, ai, translation, lookup, expenses]
 ---
 
 ## What it is for
 
-This guide explains the rules behind the numbers on your wallet: what is free, what is charged, when the money moves and why a send can be refused. For the screens themselves, see [Expenses, wallet and statement](help:wallet-statement) and [Wallet top-up](help:wallet-top-up).
+This guide explains the rules behind the numbers on your wallet: what is free, what is charged, when the money moves and why a send or a request can be refused. For the screens themselves, see [Expenses, wallet and statement](help:wallet-statement), [Expenses](help:message-expenses) and [Wallet top-up](help:wallet-top-up).
 
-## Two ways messages are paid for
+## Two ways WhatsApp messages are paid for
 
 The **How billing works** card on the wallet screen says which one applies to your workspace.
 
 - **Plan.** Your plan includes a number of messages every month. Messages inside that allowance are free. Each message beyond it is charged to your wallet. A plan with no maximum has no allowance to run out, and a plan that has ended no longer has an allowance. See [Plans](help:account-plans).
-- **Pay per message.** Every delivered message is charged to the wallet, whatever your plan includes. Messages are billed through the platform: your wallet and subscription pay for them.
+- **Pay per message.** Every WhatsApp message is charged to the wallet, whatever your plan includes. Messages are billed through the platform: your wallet and subscription pay for them.
+
+The plan allowance applies to WhatsApp messages only. Everything else below is charged to the wallet from the first unit.
 
 ## What is charged, and when
 
-- A message is charged when WhatsApp reports it **Delivered** or **Read**, not when you press send. Each message is charged once, however many updates arrive for it.
-- If WhatsApp reports a failure after a charge was taken, the same amount is refunded once. A message that failed is not charged.
+- A WhatsApp message is charged when WhatsApp accepts it for sending, not when you press send and not later when it is delivered. Each message is charged once, however many updates arrive for it.
+- If WhatsApp reports a failure after a charge was taken, the same amount is refunded once. A message that failed is not charged. SMS, email and the other chat channels are not refunded: their fee is taken when the message is accepted.
 - The price depends on the recipient's country and the message category: Marketing, Utility, Authentication or Service. Some prices are zero, and a zero price is simply not charged.
-- Only WhatsApp messages are charged. Messages your customers send to you, and messages on Telegram, Facebook or Instagram, are not.
-- Everything that moves your balance appears on the statement: a **Message charge** line names the country, the category and where the message came from, such as Campaign, Broadcast, Flow, Scheduled or Chat. Refunds, top-ups and adjustments appear too.
+- Messages your customers send to you are never charged.
+- Everything that moves your balance appears on the statement: a **Usage charge** line names what it was for, such as the country and category of a WhatsApp message, an SMS, an email or an AI feature. Refunds, top-ups and adjustments appear too.
 
-## What is checked before a bulk send
+## What else uses the wallet
 
-Because the charge comes after delivery, an empty wallet could otherwise let a whole audience through for free. So a broadcast, a campaign or a scheduled message is checked when you launch it, and again when you resume or resend a campaign:
+Each of these is a charge on top of anything you already pay your own provider. Each appears on the expense log under its **Type**.
 
-- If you are paying per message, or the plan allowance cannot cover the audience, the wallet must cover the estimated cost of the send. By default the balance must cover all of it.
+- **SMS.** Every segment of a text, charged when the carrier accepts it. A segment is 160 characters, or 70 for text in a non-Latin script. The charge is not refunded if the carrier later reports the text undelivered.
+- **Email.** Each email you send, from the inbox, a campaign, a reminder or an instant reply to a new lead. A bounced email keeps its charge.
+- **WhatsApp calls.** Every minute a call has started, once the call ends. A call of 61 seconds is two minutes. A call nobody answered is free.
+- **Phone calls from your telephony provider.** The same per-minute charge, for calls your provider reports as completed. A call you log by hand is only a record and is never charged.
+- **AI.** Replies, summaries, lead scoring, contact search, template and campaign writing, images, the flow generator, knowledge base indexing and search, the website chatbot and the AI steps of a flow, whenever they run on the platform's own AI account. The charge is what the AI vendor charged plus a markup set by the platform. A workspace that saved its own AI key pays its vendor directly and the wallet is not touched.
+- **Translation** by a paid translation service. Free services are never charged.
+- **Contact lookups** with the platform's data provider, once per contact.
+- **Telegram, Facebook, Instagram, LINE, Viber and WeChat.** These messages are listed on the expense log. They are charged only when the platform has set a price for them.
+
+Never charged: anything inbound, calls you typed in by hand, messages in the test chat, WhatsApp sent from a personal number linked by QR code, and the platform's own emails to you such as password resets.
+
+The platform sets each price. A price of zero, or a charge the platform has switched off, is still listed on the expense log as **Not billed**.
+
+## What is checked before work starts
+
+Because most charges come after the work, an empty wallet could otherwise let a whole audience or a long run through for free. So:
+
+- A broadcast, a campaign or a scheduled message is checked when you launch it, and again when you resume or resend a campaign. If you are paying per message, or the plan allowance cannot cover the audience, the wallet must cover the estimated cost of the send. By default the balance must cover all of it.
 - If the wallet is empty you see "Your message wallet is empty. Top up to start sending." If it is too low you see "Your wallet balance doesn't cover this send. Top up to start sending."
-- A refused launch creates nothing, so there is nothing to clean up. Top up and launch again.
+- An SMS, an email, a call or an AI request is checked just before it happens. If the wallet cannot pay you see "Your wallet balance is too low for this SMS. Top up to continue." with the name of what you were doing, or "Your wallet balance is empty. Top up to use AI features." for AI. A long SMS or email run pauses instead and carries on after you top up.
+- A refused launch or request creates nothing, so there is nothing to clean up. Top up and try again.
 
-Single replies in the Team inbox are not checked against the wallet before they are sent. They are checked against your plan's monthly message limit instead. Once that limit is reached, a reply is refused with "Your plan's monthly message limit has been reached."
+Single WhatsApp replies in the Team inbox are not checked against the wallet before they are sent. They are checked against your plan's monthly message limit instead. Once that limit is reached, a reply is refused with "Your plan's monthly message limit has been reached."
 
 ## Balance, top-ups and warnings
 
@@ -53,7 +73,8 @@ Seeing the wallet needs the permission to view the wallet balance, and the state
 
 ## If something looks wrong
 
-- **The balance did not change after sending.** The charge is taken when WhatsApp reports the message delivered, so it can lag. Free messages never change it: those inside your plan allowance and those with a zero price. If delivery updates are missing altogether, see [Incoming messages or delivery updates are missing](help:whatsapp-incoming-missing).
-- **I was charged for a message that failed.** The refund is a separate **Refund** line on the statement. If it is missing after a few minutes, contact support with the message time and number.
+- **The balance did not change after sending.** The charge is taken when the message is accepted, and for SMS, email, calls and AI a moment after the work, so it can lag. Free items never change it: WhatsApp messages inside your plan allowance, anything with a zero price, and anything that is never charged. Open [Expenses](help:message-expenses) and look for the item: **Not billed** shows the reason. If delivery updates are missing altogether, see [Incoming messages or delivery updates are missing](help:whatsapp-incoming-missing).
+- **I was charged for a WhatsApp message that failed.** The refund is a separate **Refund** line on the statement. If it is missing after a few minutes, contact support with the message time and number. SMS, email and chat-channel fees are not refunded.
+- **An SMS, email or AI request is refused although I have money.** The wallet must cover the price of that one item. Check the balance, then top up and try again.
 - **A launch is still refused after I topped up.** The top-up counts once its order is **Paid** in [Order history](help:order-history). A bank transfer needs approval first.
 - **The wallet is in the wrong currency.** Check the currency in Workspace settings. If it is right and the wallet still shows another currency, the platform cannot bill in it yet. Ask support.

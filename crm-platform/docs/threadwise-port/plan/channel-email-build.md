@@ -25,7 +25,7 @@ Built in a second pass on the same driver port (see 'Phase 2 seams (as built)'):
    a separate Google OAuth client from Calendar because the Gmail restricted scopes need Google verification. Scopes: `openid email gmail.readonly gmail.send`.
    Signed OAuth state with its own purpose string (copy the Calendar pattern; extract a shared helper only if it stays small). Tokens sealed with CryptoService.
 6. Disconnect keeps the conversations (channel -> disconnected, read-only), a reconnect of the same address reattaches (deviation from Reference, recorded).
-7. Emails are not metered against the message cap/wallet (`metered:false`); own limit `email_mailboxes`.
+7. Emails are not metered against the plan's message cap (`metered:false`); own limit `email_mailboxes`. Since the wallet work every mail that leaves is the platform's per-mail fee (usage kind `email`, charged to the wallet and shown in the expense log), separate from `metered`: see api/channel-email.md "The per-mail fee".
 8. Gating: controllers `@RequirePlanFeature('email_channel')`; adapter send and the sync job also refuse when the feature is lost (lapse keeps data, closes sending/sync);
    web: the Settings tile is in Settings > Integrations with `gates: { permission: 'mail.mailboxes.read', planFeature: 'email_channel' }` (visible but locked with the upgrade mark without the feature, like Shopify and WooCommerce) and a hidden nav entry (`inMenu: false`) so `/email` shows the plan paywall. Permissions `mail.mailboxes.read` / `mail.mailboxes.manage` (replying uses the existing inbox reply permission).
 

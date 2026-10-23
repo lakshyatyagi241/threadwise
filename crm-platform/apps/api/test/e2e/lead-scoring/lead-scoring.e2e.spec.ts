@@ -306,6 +306,16 @@ describe('scoring one contact', () => {
       [t.orgId],
     );
     expect(audit.rows[0].delta.leadScore.new).toBe(res.body.score);
+    // The wallet charge is keyed by the run row, so the same run can never be charged twice.
+    const runRow = await h.owner.query(
+      `SELECT id FROM lead_scoring_runs WHERE org_id = $1 AND uuid = $2`,
+      [t.orgId, run.id],
+    );
+    const claimed = await h.owner.query(
+      `SELECT 1 FROM usage_charge_keys WHERE org_id = $1 AND provider_message_id = $2`,
+      [t.orgId, `ai:ai-lsc:${t.orgId}:run:${runRow.rows[0].id}`],
+    );
+    expect(claimed.rows).toHaveLength(1);
 
     const s = await ws(t.admin).settings();
     expect(s.body.keySource).toBe('admin');
@@ -806,6 +816,21 @@ describe('reading the conversation (a pilot feature of the demo workspace)', () 
       expect(contact.body.leadScoreSource).toBe('ai');
       expect(contact.body.leadScore).toBe(78);
     }, 60_000);
+
+    it('takes the reading from the wallet under the digest row it wrote, once', async () => {
+      const written = await h.owner.query(
+        `SELECT id FROM lead_chat_digests WHERE org_id = $1 AND contact_id = $2 AND source = 'ai'`,
+        [demo.orgId, c.contactId],
+      );
+      expect(written.rows).toHaveLength(1);
+      const claimed = await h.owner.query(
+        `SELECT provider_message_id FROM usage_charge_keys WHERE org_id = $1 AND provider_message_id LIKE 'ai:lead-digest:%'`,
+        [demo.orgId],
+      );
+      expect(
+        claimed.rows.map((r: { provider_message_id: string }) => r.provider_message_id),
+      ).toContain(`ai:lead-digest:${written.rows[0].id}`);
+    });
 
     it('lists the suggestion, counts it in the settings, and keeps the log of the reading', async () => {
       const list = await api.as(demo.admin).get('/v2/lead-scoring/suggestions');

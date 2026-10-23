@@ -90,6 +90,7 @@ export class ReceiptsService {
         if (conv)
           await this.deliveries.report(tx, orgId, {
             channelKind: channel.kind,
+            channelExternalId: channel.externalId,
             conversationId: conv.id,
             peerKey: conv.peerKey,
             status: receipt.status,

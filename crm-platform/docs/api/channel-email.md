@@ -330,6 +330,31 @@ A mailbox is also an **engine** for campaigns: a campaign whose `senderKey` is `
 with the mailbox's own limits (`MailSendGuard`: the bounce list and the hourly cap), the consent gate and the signed unsubscribe link, and each mail is written into the mailbox's inbox thread.
 The plan limit `email_monthly` (mails sent in a calendar month, replies and campaign mail together, 0 = unlimited) is new. The whole behaviour is documented in [campaigns.md](campaigns.md#email-campaigns).
 
+## The per-mail fee (wallet)
+
+Every mail a workspace sends is charged to its wallet and appears in its expense log (`usage_charges`, kind `email`). The charge is the platform's
+fee: the mailbox is the customer's own, so the platform has no vendor cost. The price per mail is the operator's (usage price `email`, default 0.10,
+set on the usage pricing page), never hard-coded. It is separate from the plan limits: `metered` (the plan's monthly message cap) stays off for email,
+and `email_monthly` and `email_mailboxes` apply as before. Platform-owned workspaces are not charged.
+
+| Mail                                                                     | Charged | `source`                         |
+| ------------------------------------------------------------------------ | ------- | -------------------------------- |
+| A reply from the inbox (an agent, an auto-reply, a flow, a consent mail) | yes     | `inbox`, `auto_reply`, `flow`... |
+| A campaign mail, a campaign test send                                    | yes     | `campaign`, `test`               |
+| A booking confirmation or reminder, a lead's first message               | yes     | `appointment`, `test`, `lead`    |
+| A mail a mailbox receives, a bounce notice                               | never   | not reported                     |
+| The platform's own mail (password reset, invites, notices)               | never   | does not go through a mailbox    |
+
+- **Before sending.** An inbox reply is refused at enqueue with `422 WALLET_EMPTY` (nothing stored, nothing queued) when the wallet cannot pay for one mail. The
+  campaign engine asks per recipient (an affordable answer is reused for 3 seconds): a wallet that cannot pay makes the engine answer `SenderThrottled`,
+  so the run puts the recipient back and waits 15 minutes (a campaign resumes by itself after a top-up; nobody is marked failed; a booking or lead message is held).
+  A price of 0, a switched-off price and a failed wallet lookup let the mail through.
+- **After the mailbox accepts.** One `usage.reported` outbox event (`kind: "email"`, `usageId` = the provider message id (Gmail id, Graph id or the deterministic
+  IMAP id), `units` 1, `provider` `email`). The worker's billing consumer prices it and writes the expense row; it is idempotent per message id, so a send the
+  dispatcher repeats charges once. A reply is reported in the transaction that marks it sent; a campaign mail in its own transaction, and a billing fault there
+  is logged and never fails or repeats a mail that already left.
+- **No refund on a bounce.** A bounce arrives as inbound mail and changes no status; the fee stays. (Decision for the owner.)
+
 ## Contact timeline (E-19)
 
 Mail of a **shared** mailbox is written to the contact's Activity Timeline (`GET /v2/contacts/:id/activities`, the CRM's route and record scope) by the Email channel, not by the CRM:

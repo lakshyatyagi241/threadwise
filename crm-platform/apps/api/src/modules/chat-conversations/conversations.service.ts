@@ -115,7 +115,7 @@ export class ConversationsService implements ConversationsFacade {
     input: RecordOutboundInput,
   ): Promise<{ messageId: string; thread: ThreadRef }> {
     const orgId = RequestContextStore.orgId();
-    const done = await this.db.tx(async (tx) => {
+    const done = await this.db.retry.tx(async (tx) => {
       const channel = await this.channelOrThrow(tx, orgId, input.channelId);
       const peerKey = normalizePeerKey(channel.kind, input.peerKey);
       if (!peerKey) throw AppError.validation('peerKey is not usable on this channel');

@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import request from 'supertest';
 import { deriveStateKey, newState, signState } from '../../../src/modules/channel-email/mail-state';
-import { startPipeline, type Pipeline } from '../chat-conversations/pipeline-support';
+import { fundWallet, startPipeline, type Pipeline } from '../chat-conversations/pipeline-support';
 import type { Tenant } from '../contacts-attributes-tags/support';
 import { FakeGmail, type FakeAccount } from './fake-gmail';
 
@@ -70,6 +70,8 @@ export async function setMailPlan(
 export async function mailWorkspace(p: Pipeline, label: string, mailboxes = 3): Promise<Tenant> {
   const t = await p.api.signup(label);
   await setMailPlan(p, t.orgId, { mailboxes });
+  // Every mail is the platform's per-mail fee and an empty wallet is refused: the workspace can pay.
+  await fundWallet(p, t);
   return t;
 }
 

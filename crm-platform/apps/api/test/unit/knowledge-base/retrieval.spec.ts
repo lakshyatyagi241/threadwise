@@ -54,6 +54,21 @@ function build(s: Setup = {}) {
 }
 
 describe('KbRetrievalService', () => {
+  it('hands the caller usage id to the embedding, so a search is billed under the message that asked', async () => {
+    const { svc, embedQuery } = build();
+    await svc.retrieve(1, 7, 'can I return my order?', 'widget:42');
+    expect(embedQuery).toHaveBeenCalledWith(1, 'can I return my order?', 'widget:42');
+  });
+
+  it('falls back to the whole base when the wallet cannot pay for the search', async () => {
+    const { svc } = build({
+      embedError: new KbUnavailableError('wallet', 'Your wallet balance is empty.'),
+    });
+    const out = await svc.retrieve(1, 7, 'can I return my order?', 'widget:42');
+    expect(out.grounded).toBe(false);
+    expect(out.passages[0]!.text).toBe('Whole base text');
+  });
+
   it('reads the best few passages and tells the agent to stay inside them', async () => {
     const { svc, chunks } = build({
       near: [

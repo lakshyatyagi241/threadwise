@@ -26,7 +26,7 @@
         "all": "Todos",
         "topup": "Recargas",
         "earn": "Ganancias",
-        "spend": "Cargos por mensajes",
+        "spend": "Cargos por uso",
         "refund": "Reembolsos",
         "admin_adjust": "Ajustes"
       },
@@ -73,15 +73,15 @@
       "title": "Extracto del monedero"
     },
     "expenses": {
-      "title": "Gastos de mensajes",
-      "subtitle": "Lo que costó cada mensaje, la plantilla con la que se envió y lo que se devolvió. Los totales incluyen todo lo que coincide con los filtros.",
+      "title": "Gastos",
+      "subtitle": "Lo que costó cada mensaje, llamada, solicitud de IA y consulta, y para qué fue. Los totales abarcan todo lo que coincide con los filtros.",
       "back": "Volver al monedero",
       "breadcrumbLabel": "Ruta de navegación",
       "breadcrumbWallet": "Monedero",
-      "breadcrumbExpenses": "Gastos de mensajes",
+      "breadcrumbExpenses": "Gastos",
       "fullStatement": "Extracto completo",
       "summary": {
-        "messages": "Mensajes",
+        "messages": "Elementos",
         "charged": "Cobrado",
         "refunded": "Reembolsado",
         "net": "Coste neto",
@@ -103,7 +103,9 @@
         "to": "Hasta",
         "apply": "Aplicar",
         "reset": "Restablecer",
-        "rangeInverted": "La fecha de fin es anterior a la fecha de inicio."
+        "rangeInverted": "La fecha de fin es anterior a la fecha de inicio.",
+        "kind": "Tipo",
+        "allKinds": "Todos los tipos"
       },
       "breakdown": {
         "title": "Coste por",
@@ -111,17 +113,18 @@
           "template": "Plantilla",
           "source": "Canal",
           "category": "Categoría",
-          "country": "País"
+          "country": "País",
+          "kind": "Tipo"
         },
         "group": "Grupo",
         "notRecorded": "Sin registrar",
         "truncated": "Se muestran los {count} grupos más grandes. Acota las fechas para ver el resto.",
-        "empty": "Ningún mensaje coincide con estos filtros."
+        "empty": "Nada coincide con estos filtros."
       },
       "columns": {
         "date": "Fecha",
         "template": "Plantilla",
-        "campaign": "Campaña o difusión",
+        "campaign": "Campaña, difusión o función",
         "channel": "Canal",
         "category": "Categoría",
         "country": "País",
@@ -129,8 +132,9 @@
         "charged": "Cobrado",
         "refunded": "Reembolsado",
         "net": "Neto",
-        "messages": "Mensajes",
-        "notBilled": "No facturado"
+        "messages": "Elementos",
+        "notBilled": "No facturado",
+        "type": "Tipo"
       },
       "status": {
         "charged": "Cobrado",
@@ -145,8 +149,8 @@
         "no_wallet_owner": "Sin titular del monedero"
       },
       "uncollected": "{amount} sin cobrar",
-      "emptyTitle": "Aún no hay mensajes",
-      "emptyBody": "Aquí aparecen los mensajes enviados desde campañas, difusiones, programaciones y chats, con su plantilla y su coste.",
+      "emptyTitle": "Aún no hay gastos",
+      "emptyBody": "Aquí aparecen los mensajes, las llamadas, las solicitudes de IA y otros usos, con su finalidad y su costo.",
       "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos.",
       "days": {
         "title": "Registro diario",
@@ -160,6 +164,34 @@
         "title": "Mensajes",
         "forDay": "Mensajes del {date}",
         "showAllDays": "Mostrar todos los días"
+      },
+      "units": {
+        "sms": "{count, plural, one {# segmento} other {# segmentos}}",
+        "whatsapp_call": "{count, plural, one {# minuto} other {# minutos}}",
+        "voice_call": "{count, plural, one {# minuto} other {# minutos}}"
+      },
+      "sources": {
+        "lead_first": "Respuesta inmediata a leads",
+        "lead": "Respuesta inmediata a leads",
+        "test": "Envío de prueba",
+        "appointment": "Recordatorio de cita",
+        "lead_scoring": "Puntuación de leads",
+        "lead_digest": "Resumen del chat",
+        "pql_search": "Búsqueda de contactos",
+        "growth_assistant": "Asistente de crecimiento",
+        "ai_copilot": "Copiloto de IA",
+        "help_agent": "Asistente de ayuda",
+        "company_brief": "Resumen de empresa",
+        "inbox_ai": "Asistente de respuestas",
+        "template_ai": "Creador de plantillas",
+        "campaign_ai": "Redactor de campañas",
+        "campaign_ai_image": "Imagen de campaña",
+        "kb_embedding": "Base de conocimiento",
+        "flow_ai": "Generador de flujos",
+        "widget_ai": "Chatbot del sitio web",
+        "growth": "Crecimiento",
+        "telephony": "Llamadas telefónicas",
+        "translation": "Traducción"
       }
     },
     "admin": {
@@ -477,6 +509,40 @@
               "service": "Servicio"
             },
             "problems": "Filas omitidas"
+          }
+        },
+        "usage": {
+          "title": "Precios de otros usos",
+          "subtitle": "Lo que cuestan a tus clientes, por unidad, los SMS, los correos, las llamadas, las consultas de contactos y otros canales de chat. Un precio de 0 o un interruptor apagado se sigue registrando en el registro de gastos, sin cobrar nada.",
+          "perUnit": "Precio por {unit}",
+          "chargeFor": "Cobrar por {kind}",
+          "units": {
+            "segment": "segmento de SMS",
+            "email": "correo electrónico",
+            "minute": "minuto",
+            "lookup": "consulta",
+            "message": "mensaje"
+          },
+          "hints": {
+            "sms": "Se cobra además de la factura del proveedor de SMS del propio cliente. Un segmento son 160 caracteres (70 en texto no latino).",
+            "email": "Se cobra además del buzón del propio cliente. Cada correo enviado cuenta una vez.",
+            "whatsapp_call": "Cada minuto iniciado de una llamada de WhatsApp. Una llamada que nadie contestó es gratis.",
+            "voice_call": "Cada minuto iniciado de una llamada que informa el proveedor de telefonía del cliente. Los registros de llamadas escritos a mano nunca se cobran.",
+            "enrichment": "Cada contacto consultado con el proveedor de datos de la plataforma.",
+            "chat_message": "Cada mensaje enviado por Telegram, Facebook, Instagram, LINE, Viber o WeChat. Gratis hasta que fijes un precio."
+          },
+          "costPlus": {
+            "title": "Se cobra al costo del proveedor más un recargo",
+            "body": "Las solicitudes de IA y la traducción de pago usan las claves de proveedor de la propia plataforma y se cobran a lo que cobró el proveedor, más el recargo de abajo. Un espacio de trabajo con su propia clave nunca se cobra."
+          },
+          "markup": "Recargo sobre el costo del proveedor",
+          "markupHint": "10 significa que una solicitud que costó 1,00 se cobra a 1,10.",
+          "saving": "Guardando",
+          "save": "Guardar precios",
+          "saved": "Precios de uso guardados",
+          "problems": {
+            "invalid": "Introduce un importe con 2 decimales como máximo",
+            "tooHigh": "Supera el límite"
           }
         }
       },
@@ -880,7 +946,7 @@
       "topup": "Recarga",
       "earn": "Ingreso",
       "refund": "Reembolso",
-      "spend": "Cargo por mensaje",
+      "spend": "Cargo por uso",
       "admin_adjust": "Ajuste"
     },
     "categories": {
@@ -958,6 +1024,17 @@
       "noCharge": "Sin cargo",
       "perMessage": "por mensaje",
       "footer": "Se cobra cuando se entrega un mensaje. El precio depende del país del destinatario y de la categoría del mensaje."
+    },
+    "kinds": {
+      "whatsapp_message": "Mensaje de WhatsApp",
+      "sms": "SMS",
+      "email": "Correo electrónico",
+      "whatsapp_call": "Llamada de WhatsApp",
+      "voice_call": "Llamada de voz",
+      "ai": "IA",
+      "translation": "Traducción",
+      "enrichment": "Consulta de contacto",
+      "chat_message": "Mensaje de chat"
     }
   }
 }

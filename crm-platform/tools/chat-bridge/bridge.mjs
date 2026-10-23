@@ -7,6 +7,7 @@ import { CHANNELS, alertCard, channelFor, createMetrics, createSender, isTest, i
 import { diagnose, diagnosisRows, promQuery } from './diagnosis.mjs';
 import { handleIncidents, loadToken } from './incidents-api.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
+import { createChatApp } from './chat-app.mjs';
 
 export function loadUrls(env = process.env) {
   const urls = {};
@@ -21,9 +22,11 @@ const safeRead = (f) => { try { return fs.readFileSync(f, 'utf8'); } catch { ret
 export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl, metrics = createMetrics(), resolverFactory, threads = createThreads(), log = (o) => console.log(JSON.stringify({ t: new Date().toISOString(), ...o })) } = {}) {
   // Guard: a typo must never send alert text to another host. Tests opt out with CHAT_ALLOW_ANY_HOST=1 and a local fake receiver.
   for (const [c, u] of Object.entries(urls)) if (!/^https:\/\/chat\.googleapis\.com\//.test(u) && env.CHAT_ALLOW_ANY_HOST !== '1') { delete urls[c]; log({ evt: 'chat_url_rejected', channel: c }); }
-  const send = createSender({ urls, fetchImpl, metrics, log, baseMs: Number(env.CHAT_RETRY_BASE_MS ?? 500), retries: Number(env.CHAT_RETRIES ?? 3) });
+  const webhookSend = createSender({ urls, fetchImpl, metrics, log, baseMs: Number(env.CHAT_RETRY_BASE_MS ?? 500), retries: Number(env.CHAT_RETRIES ?? 3) });
+  let app; const send = (...a) => (app?.enabled ? app.send : webhookSend)(...a); // CHAT_APP_ENABLED=true: post as the Chat app, webhook fallback per message
   const grafanaUrl = env.GRAFANA_URL ?? '', token = loadToken(env);
   const resolver = resolverFactory?.({ post: (...a) => send(...a), promQuery: (e) => promQuery(e, env, fetchImpl ?? fetch), metrics });
+  app = createChatApp({ env, urls, fetchImpl, webhookSend, resolver, grafanaUrl, metrics, log });
   // One thread per alert fingerprint: first firing = top-level card with diagnosis, repeats and resolve = replies in that thread.
   async function handleAlert(a) {
     if (isTest(a)) { // never an incident/resolver call; dropped unless TEST_ALERTS_CHANNEL opts in
@@ -56,7 +59,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     }
     threads.put(fp, { threadKey, startedAt: started, peak, diag });
     // the FIRING card must be the thread parent: start the resolver (its replies) only after that post returned
-    const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey });
+    const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey, interactive: { incidentId: resolver?.byKey(`am:${fp}`)?.id ?? `am:${fp}` } });
     if (resolver && ev.entry) {
       const pool = /^DbPool/.test(a.labels?.alertname);
       resolver.handle({ playbook: pool ? 'db_pool' : 'service', alertname: a.labels?.alertname, action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
@@ -82,6 +85,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
       if (!/^[0-9a-f]{7,40}$/i.test(j?.sha ?? '') || (j.prs != null && !(Array.isArray(j.prs) && j.prs.length <= 100 && j.prs.every((n) => Number.isInteger(n) && n > 0)))) return end(400, '{"error":"bad sha or prs"}');
       await resolver?.setRelease(j.sha, j.prs ?? []); return end(200, '{"ok":true}');
     }
+    if (app.enabled && req.url === '/chat-app/events') return app.handleHttp(req, res);
     if (req.method !== 'POST' || !/^\/(alertmanager)?$/.test(req.url ?? '')) return end(404, '{}');
     let raw = '';
     for await (const c of req) { raw += c; if (raw.length > 2_000_000) return end(413, '{}'); }

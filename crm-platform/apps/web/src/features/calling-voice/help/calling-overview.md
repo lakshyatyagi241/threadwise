@@ -68,6 +68,10 @@ When calling is on and the number is not blocked, **Place a test call** appears 
 
 > Keep the call to the inbox screens. Leaving them hangs up a live call. Only one call can be active in a browser tab.
 
+## What a call costs
+
+A WhatsApp call is charged to your wallet for every minute it started, once it ends: a call of 61 seconds is two minutes, and a call nobody answered is free. Calls reported by your telephony provider are charged the same way. Calls you log by hand are only records and are never charged. An empty wallet stops you placing a new call. See [How message billing works](help:how-message-billing-works).
+
 ## Plan and access
 
 The Calling tile needs the **WhatsApp calling** plan feature and the right to use calling. Without that right you cannot call at all. Turning calling on or off needs the calling management right. Without it you can see each number's state, but the buttons are hidden.

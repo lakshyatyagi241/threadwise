@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  embedBatchKey,
   isSearchable,
   normalise,
   pickPassages,
@@ -68,5 +69,24 @@ describe('sourceText', () => {
       'Hello',
     );
     expect(sourceText({ kind: 'url', content: null, question: null, answer: null })).toBe('');
+  });
+});
+
+describe('embedBatchKey (what names one embedding batch for the wallet)', () => {
+  const batch = [
+    { id: 11, text: 'Opening hours are nine to five.' },
+    { id: 12, text: 'Refunds take seven days.' },
+  ];
+
+  it('is the same for the same passages and text, so a batch embedded again after a failed write bills once', () => {
+    expect(embedBatchKey(batch)).toBe(embedBatchKey(batch.map((b) => ({ ...b }))));
+    expect(embedBatchKey(batch)).toMatch(/^[0-9a-f]{32}$/);
+  });
+
+  it('changes when a passage is edited, replaced or reordered', () => {
+    const key = embedBatchKey(batch);
+    expect(embedBatchKey([batch[0]!, { id: 12, text: 'Refunds take ten days.' }])).not.toBe(key);
+    expect(embedBatchKey([batch[0]!, { id: 13, text: batch[1]!.text }])).not.toBe(key);
+    expect(embedBatchKey([batch[1]!, batch[0]!])).not.toBe(key);
   });
 });

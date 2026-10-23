@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { pageInfoSchema } from '../common/pagination';
 import { timeZoneSchema } from '../common/time-zone';
 import { exactAmountSchema, walletBillingModeSchema } from './wallet';
+import { walletUsageKindSchema } from './usage';
 
 /**
  * The message expense log: one row per billable message, with the template, the channel and what the message cost. It reads the
@@ -22,7 +23,7 @@ export const expenseFreeReasonSchema = z.enum([
 export type ExpenseFreeReason = z.infer<typeof expenseFreeReasonSchema>;
 
 /** The dimensions the summary can group by. */
-export const expenseGroupBySchema = z.enum(['template', 'source', 'category', 'country']);
+export const expenseGroupBySchema = z.enum(['template', 'source', 'category', 'country', 'kind']);
 export type ExpenseGroupBy = z.infer<typeof expenseGroupBySchema>;
 
 /** A calendar day, `YYYY-MM-DD`, that exists: `2026-13-45` is refused here, not left to fail as a database error. */
@@ -47,6 +48,8 @@ export const expenseFilterSchema = z.object({
   template: z.string().trim().max(512).optional(),
   source: z.string().trim().max(24).optional(),
   category: z.string().trim().max(24).optional(),
+  /** What was billed: a WhatsApp message, an SMS, an email, a call, an AI call... */
+  kind: walletUsageKindSchema.optional(),
 });
 export type ExpenseFilter = z.infer<typeof expenseFilterSchema>;
 
@@ -69,8 +72,12 @@ export const expenseDaysQuerySchema = expenseFilterSchema.extend({
 export type ExpenseDaysQuery = z.infer<typeof expenseDaysQuerySchema>;
 
 export const expenseEventSchema = z.object({
-  /** The provider's message id: the one WhatsApp shows for the message. Not an internal id. */
+  /** The provider's message id: the one WhatsApp shows for the message (or the SMS sid, the call id...). Not an internal id. */
   id: z.string().min(1).max(191),
+  /** What this expense is for. */
+  kind: walletUsageKindSchema,
+  /** What the price was taken over: segments, minutes; 1 for a message, an email or an AI call. */
+  units: z.number().int().min(0),
   createdAt: z.string(),
   status: expenseStatusSchema,
   billingMode: walletBillingModeSchema,

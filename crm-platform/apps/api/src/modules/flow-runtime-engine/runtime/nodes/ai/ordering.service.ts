@@ -777,6 +777,9 @@ export class OrderingFlowService {
     maxTokens: number,
     temperature: number,
   ): Promise<unknown> {
+    // A flow's Webhook node reaches this over the public API, so there is no step to name the call by. Each call is its own charge (no
+    // usage id: the AI call service names it with a fresh random one). Neither the caller's Idempotency-Key nor its x-request-id may
+    // name it: a client could repeat one value to get every call free on the platform's AI key.
     const out = await this.ai.call({
       orgId,
       model,

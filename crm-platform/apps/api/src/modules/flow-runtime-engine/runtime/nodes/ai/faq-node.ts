@@ -49,7 +49,13 @@ export class FaqNodes implements NodeExecutor {
     }
 
     const query = ctx.render(d.query ?? '{{user_message}}').trim();
-    const found = await this.retrieval.retrieve(ctx.run.orgId, assistantId, query);
+    // The step key names this search for the wallet: a step that runs again does not pay for its embedding twice.
+    const found = await this.retrieval.retrieve(
+      ctx.run.orgId,
+      assistantId,
+      query,
+      `${ctx.stepKey}:faq`,
+    );
     // Only passages the search matched count: text it has not indexed yet is appended to the list as context, not as a match.
     const best = found.grounded
       ? found.passages.slice(0, found.hits ?? 0).find((p) => p.text.trim() !== '')

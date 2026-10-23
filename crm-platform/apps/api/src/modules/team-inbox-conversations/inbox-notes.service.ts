@@ -117,7 +117,7 @@ export class InboxNotesService {
 
   async remove(uuid: string, noteUuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
-    await this.db.tx(async (tx) => {
+    await this.db.retry.tx(async (tx) => {
       const locked = await this.repo.lockByUuid(tx, ctx.orgId, uuid);
       if (!locked) throw conversationNotFound();
       const viewer = await this.access.viewer(tx, ctx);

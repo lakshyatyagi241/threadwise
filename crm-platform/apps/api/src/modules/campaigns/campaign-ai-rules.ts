@@ -69,8 +69,38 @@ export function parseCampaignCopy(raw: string): CampaignAiGenerateResponse['camp
   };
 }
 
-/** What one generated picture counts for on the AI usage ledger: images are priced per picture, so the ledger gets a flat token-equivalent. */
+/**
+ * What one generated picture counts for on the AI usage ledger (the monthly token allowance): images are priced per picture, so the
+ * allowance gets a flat token-equivalent. What the picture costs in money is `aiImageCostUsd`.
+ */
 export const AI_IMAGE_TOKEN_EQUIVALENT = 4000;
+
+/**
+ * What a picture costs when the model is not in the table below: the dearest price in it. The model name comes from the request, so a
+ * name nobody priced must never be the cheap way to draw a picture on the platform's key.
+ */
+export const AI_IMAGE_DEFAULT_COST_USD = 0.25;
+
+/**
+ * What the vendor charges for ONE picture, in US dollars, by image model and by shape: `square` is 1024x1024, `rectangle` is the two
+ * 1536px sizes. Images are priced per picture, not per token, so this figure is passed to the wallet as the vendor's own cost; the
+ * operator's markup is added on top there, so nothing here includes it. The figures are OpenAI's list prices at the model's default
+ * quality (the adapter does not ask for another), kept a little on the generous side like the token estimates: review them when the
+ * vendor's price list changes. A model that is not listed costs `AI_IMAGE_DEFAULT_COST_USD`, the dearest figure here.
+ */
+// A Map, not an object: the model name comes from the request and must not reach `constructor` or `__proto__`.
+const AI_IMAGE_COST_USD: ReadonlyMap<string, { square: number; rectangle: number }> = new Map([
+  ['gpt-image-1', { square: 0.167, rectangle: 0.25 }],
+  ['dall-e-3', { square: 0.04, rectangle: 0.08 }],
+  ['dall-e-2', { square: 0.02, rectangle: 0.02 }],
+]);
+
+/** The vendor's price for one picture of this model and size, in US dollars. Pure. */
+export function aiImageCostUsd(model: string, size: CampaignAiImageInput['size']): number {
+  const price = AI_IMAGE_COST_USD.get(model.trim().toLowerCase());
+  if (!price) return AI_IMAGE_DEFAULT_COST_USD;
+  return size === '1024x1024' ? price.square : price.rectangle;
+}
 
 /** The prompt the image model reads: the brief as one description, with the rules that keep a marketing picture usable. */
 export function imagePromptOf(i: CampaignAiImageInput): string {

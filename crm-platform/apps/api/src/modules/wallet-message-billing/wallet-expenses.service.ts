@@ -41,6 +41,7 @@ const GROUP_KEY: Record<ExpenseGroupBy, { group: SQL; label: SQL }> = {
   source: { group: CHANNEL, label: CHANNEL },
   category: { group: sql`uc.category`, label: sql`uc.category` },
   country: { group: sql`uc.to_country`, label: sql`uc.to_country` },
+  kind: { group: sql`uc.kind`, label: sql`uc.kind` },
 };
 
 /**
@@ -65,7 +66,7 @@ export class WalletExpensesService {
       const unit = await this.billing.forOrg(tx, orgId);
       const where = filterSql(orgId, query, unit, platform);
       const res = await tx.execute(sql`
-        SELECT uc.id, uc.created_at::text AS cursor_at, to_char(uc.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS created_iso, uc.wamid, uc.status,
+        SELECT uc.id, uc.kind, uc.units, uc.created_at::text AS cursor_at, to_char(uc.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS created_iso, uc.wamid, uc.status,
                uc.billing_mode, uc.free_reason, uc.source, uc.provider, uc.to_country, uc.category,
                COALESCE(uc.template_name, legacy.template_name) AS template_name,
                COALESCE(uc.subject_name, legacy.subject_name) AS subject_name, uc.shortfall_credits, to_char(uc.refunded_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS refunded_iso,
@@ -190,6 +191,8 @@ interface DayGroupRow {
 
 interface ExpenseRow {
   id: string | number;
+  kind: ExpenseEvent['kind'];
+  units: number;
   cursor_at: string;
   created_iso: string;
   wamid: string;
@@ -268,6 +271,7 @@ function filterSql(orgId: number, q: ExpenseFilter, unit: string, platform: stri
   // Stored lowercased by the settle path, so the filter is too: an API caller's "Campaign" matches "campaign".
   if (q.source) parts.push(sourceSql(q.source.toLowerCase()));
   if (q.category) parts.push(sql`uc.category = ${q.category.toLowerCase()}`);
+  if (q.kind) parts.push(sql`uc.kind = ${q.kind}`);
   return sql.join(parts, sql` AND `);
 }
 
@@ -300,7 +304,7 @@ function fromSql(where: SQL, legacyNames = true): SQL {
       ) n
       ORDER BY n.pref
       LIMIT 1
-    ) legacy ON uc.template_name IS NULL OR uc.subject_name IS NULL`
+    ) legacy ON uc.kind = 'whatsapp_message' AND (uc.template_name IS NULL OR uc.subject_name IS NULL)`
     : sql``;
   return sql`FROM usage_charges uc
     LEFT JOIN wallet_transactions ch ON ch.org_id = uc.org_id AND ch.id = uc.wallet_tx_id
@@ -330,6 +334,8 @@ function toEvent(r: ExpenseRow): ExpenseEvent {
   const refunded = walletExactAmount(r.refunded_exact);
   return {
     id: r.wamid,
+    kind: r.kind,
+    units: r.units,
     createdAt: r.created_iso,
     status: r.status,
     billingMode: r.billing_mode,

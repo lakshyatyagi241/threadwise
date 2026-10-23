@@ -77,6 +77,11 @@ async function planFeature(t: Tenant, on: boolean, limits: Record<string, number
     JSON.stringify({ features: { help_agent: on }, limits }),
   ]);
 }
+const fundWallet = (t: Tenant, balance: number) =>
+  h.owner.query(
+    `INSERT INTO wallets (org_id, unit, balance) VALUES ($1, 'USD', $2) ON CONFLICT (org_id, unit) DO UPDATE SET balance = $2`,
+    [t.orgId, balance],
+  );
 const flip = (t: Tenant, enabled: boolean) =>
   api.as(t.admin).put('/v2/help-agent/settings').send({ enabled });
 const start = (token: string, route = '/contacts') =>
@@ -121,6 +126,8 @@ beforeEach(async () => {
   llm.next = reply();
   admin = await api.signup('hlp');
   await planFeature(admin, true);
+  // The platform's key is paid for from the workspace wallet (WALLET_EMPTY without a balance).
+  await fundWallet(admin, 100);
 });
 
 describe('help agent: the three switches', () => {
@@ -256,6 +263,29 @@ describe('help agent: a task', () => {
       [admin.orgId],
     );
     expect(task.rows[0]).toEqual({ steps: 2, p: 240, c: 60 });
+  });
+
+  it('takes each answered step from the wallet, keyed by task and step', async () => {
+    const { taskId } = (await start(admin.admin)).body;
+    await complete(admin.admin, taskId);
+    await complete(admin.admin, taskId);
+    const keys = await h.owner.query(
+      `SELECT provider_message_id FROM usage_charge_keys WHERE org_id = $1 ORDER BY provider_message_id`,
+      [admin.orgId],
+    );
+    expect(keys.rows.map((r: { provider_message_id: string }) => r.provider_message_id)).toEqual([
+      `ai:ai-help:${admin.orgId}:${taskId}:1`,
+      `ai:ai-help:${admin.orgId}:${taskId}:2`,
+    ]);
+  });
+
+  it('refuses before the vendor is called when the wallet is empty', async () => {
+    await fundWallet(admin, 0);
+    const { taskId } = (await start(admin.admin)).body;
+    const res = await complete(admin.admin, taskId);
+    expect(res.status).toBe(422);
+    expect(res.body.code).toBe('WALLET_EMPTY');
+    expect(llm.calls).toHaveLength(0);
   });
 
   it('stops at the step budget on the server, whatever the browser says', async () => {

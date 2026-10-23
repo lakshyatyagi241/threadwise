@@ -18,6 +18,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ConsentGate } from '../../contact-consent';
 import { ContactResolverService } from '../../crm';
+import { UsageBillingService } from '../../wallet-message-billing';
 import { CallLogEntriesRepository } from './call-log-entries.repository';
 import { CallLogEntriesService, contactRequired } from './call-log-entries.service';
 import { e164Of } from './call-logging.rules';
@@ -39,7 +40,8 @@ const unsupported = (message: string) =>
  *    for marketing, for a contact with no recorded grant on the voice channel.
  *
  * The finished call is not written here: the provider reports it on the connection's callback, and the placement kept below hands the
- * entry its handler and contact.
+ * entry its handler and contact. The same callback is what charges the wallet (`voice_call`, per started minute), so an empty wallet is
+ * refused before the provider is asked: 422 `WALLET_EMPTY`.
  */
 @Injectable()
 export class ClickToCallService {
@@ -53,6 +55,7 @@ export class ClickToCallService {
     private readonly gate: ConsentGate,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly usage: UsageBillingService,
   ) {}
 
   /** The gate's answer for a call to this contact or number, without placing anything. */
@@ -114,7 +117,9 @@ export class ClickToCallService {
       );
     }
 
-    // 2. The provider rings. Its refusal is an expected outcome, not a fault.
+    // 2. The provider rings, and the call is paid usage: refuse an empty wallet while nothing has been rung. A failed lookup lets it through.
+    await this.usage.assertCanAfford(ctx.orgId, 'voice_call', 1);
+    // The provider's refusal is an expected outcome, not a fault.
     const placed = await plan.provider.clickToCall({
       agentNumber: plan.agent,
       customerNumber: plan.customer,

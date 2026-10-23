@@ -1,3 +1,4 @@
+import { fundWallet } from '../../support/fund-wallet';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { simInbound } from '../chat-conversations/pipeline-support';
 import {
@@ -37,6 +38,8 @@ beforeAll(async () => {
   model = await startStubModel();
   await setPlatformKey(p, true);
   t = await p.api.signup('flrai');
+  // A call on the platform's key is paid from the workspace's wallet and refused before the vendor when it is empty.
+  await fundWallet(p.h.app, t.orgId);
   ch = await simChannel(p as never, t);
 }, 300_000);
 afterAll(async () => {
@@ -417,6 +420,7 @@ describe('natural-language ordering (TW-FLR-042)', () => {
 
   beforeAll(async () => {
     to = await p.api.signup('flrorder');
+    await fundWallet(p.h.app, to.orgId);
     svc = p.h.app.get(
       (await import('../../../src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.service'))
         .OrderingFlowService,
@@ -589,6 +593,7 @@ describe('natural-language ordering (TW-FLR-042)', () => {
 
   it('is tenant isolated: another workspace sees none of this stock or carts', async () => {
     const other = await p.api.signup('flrorder2');
+    await fundWallet(p.h.app, other.orgId);
     model.answer = () => '{"items":[{"name":"wings","qty":1}]}';
     const r = await system(other.orgId, () =>
       svc.parse(other.orgId, { customer_phone: peer, text: 'wings' }),

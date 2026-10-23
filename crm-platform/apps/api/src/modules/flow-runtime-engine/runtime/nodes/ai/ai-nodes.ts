@@ -179,6 +179,7 @@ export class AiNodes implements NodeExecutor {
       // a conversation's turns are natural language and the fields are read from the transcript on exit.
       json: cfg.extract && !cfg.conversational,
       fields: cfg.fields,
+      usageId: `${ctx.stepKey}:turn`,
     });
     let reply = AI_FALLBACK_REPLY;
     if (out.agentMissing) ctx.note('the AI agent no longer exists: the step used its own settings');
@@ -224,6 +225,7 @@ export class AiNodes implements NodeExecutor {
       agentUse: cfg.useAgent ? 'model' : undefined,
       json: true,
       fields: cfg.fields,
+      usageId: `${ctx.stepKey}:extract`,
     });
     if (!out.ok) {
       ctx.note(`extract on exit failed (${out.error})`);

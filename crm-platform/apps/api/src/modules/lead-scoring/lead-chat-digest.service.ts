@@ -1,6 +1,7 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
+import { randomUUID } from 'node:crypto';
 import {
   ERROR_CODES,
   type LscInsight,
@@ -24,6 +25,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { ContactsService } from '../crm';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { AiChargeService } from '../wallet-message-billing';
 import {
   LeadChatDigestRepository,
   toSuggestion,
@@ -93,6 +95,7 @@ export class LeadChatDigestService {
     private readonly listeners: ChatDigestListeners,
     private readonly stageLines: LeadStageLineService,
     private readonly plans: PlanEntitlementService,
+    private readonly wallet: AiChargeService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadDigestJob>,
   ) {}
@@ -335,6 +338,16 @@ export class LeadChatDigestService {
         }
       }
     }
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no call (no cost to the platform). A workspace on
+    // its own key pays its vendor directly and passes.
+    try {
+      await this.wallet.guardCall(orgId, billedAgainst);
+    } catch (err) {
+      if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY && !manual) {
+        return skip('wallet_empty', 'WALLET_EMPTY', err.message, billedAgainst);
+      }
+      throw err;
+    }
 
     const allowed = suggestableStages(stages, brief.lifecycleStage);
     const prompt = digestPrompt({
@@ -396,8 +409,14 @@ export class LeadChatDigestService {
     });
     if (!parsed) {
       // Paid for and unusable: log it with its cost, write nothing, do not retry (a retry pays again).
-      await this.logRun(orgId, { ...base, ...spent, status: 'failed', error: 'bad_response' });
+      const runId = await this.logRun(orgId, {
+        ...base,
+        ...spent,
+        status: 'failed',
+        error: 'bad_response',
+      });
       await this.recordTokens(orgId, cfg.model, spent, billedAgainst);
+      await this.chargeUnusable(orgId, contactId, runId, spent.costUsd, billedAgainst);
       if (manual) {
         throw new AppError(
           ERROR_CODES.LSC_PROVIDER_FAILED,
@@ -470,6 +489,20 @@ export class LeadChatDigestService {
         },
         tx,
       );
+      // Keyed by the digest row: the charge is part of the transaction that writes the reading, so it is taken once, with it.
+      if (billedAgainst === 'admin') {
+        await this.wallet.charge(
+          tx,
+          {
+            orgId,
+            label: 'AI chat summary',
+            costUsd: spent.costUsd,
+            source: 'lead_digest',
+            provider: AI_PROVIDER,
+          },
+          `lead-digest:${digestId}`,
+        );
+      }
       if (written) {
         await this.audit.record(tx, {
           module: CONTACTS_MODULE_KEY,
@@ -742,10 +775,46 @@ export class LeadChatDigestService {
 
   // --- internals ----------------------------------------------------------------------------------------------------
 
-  private async logRun(orgId: number, w: RunWrite): Promise<void> {
-    await this.db
+  /** Writes a run row in its own transaction and returns its id, or null when the log write failed (logged, never thrown). */
+  private async logRun(orgId: number, w: RunWrite): Promise<number | null> {
+    return this.db
       .txAs({ orgId, userId: null }, (tx) => this.repo.insertRun(tx, orgId, w))
-      .catch((err) => this.logger.warn({ orgId, err }, 'chat digest run not logged'));
+      .catch((err: unknown) => {
+        this.logger.warn({ orgId, err }, 'chat digest run not logged');
+        return null;
+      });
+  }
+
+  /**
+   * Charges a call that was paid for but produced no reading (its own transaction; a failure is logged, never thrown). Keyed by the run
+   * row of that call; when the log write itself failed there is no row to name, so the key is a one-off (this path is never retried:
+   * a retry would be a new vendor call).
+   */
+  private async chargeUnusable(
+    orgId: number,
+    contactId: number,
+    runId: number | null,
+    costUsd: number,
+    billedAgainst: 'admin' | 'workspace',
+  ): Promise<void> {
+    if (billedAgainst !== 'admin') return;
+    const key =
+      runId !== null ? `lead-digest-run:${runId}` : `lead-digest-run:${contactId}:${randomUUID()}`;
+    await this.db
+      .txAs({ orgId, userId: null }, (tx) =>
+        this.wallet.charge(
+          tx,
+          {
+            orgId,
+            label: 'AI chat summary',
+            costUsd,
+            source: 'lead_digest',
+            provider: AI_PROVIDER,
+          },
+          key,
+        ),
+      )
+      .catch((err) => this.logger.warn({ orgId, err }, 'chat digest wallet charge failed'));
   }
 
   private async recordTokens(

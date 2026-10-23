@@ -68,7 +68,7 @@ Email mailboxes connects the addresses your customers write to, such as support@
 - On a **Shared** mailbox, each email you receive from a contact and each reply you send also appears on that contact's **Activity Timeline** as **Email received from ...** or **Email sent to ...**, with the subject and the first words, once per email. Automatic mail and bounce notices are left out, and so is everything on a **Personal** mailbox, so private mail never shows on a page other people can read. Only people who may see the contact see these lines.
 - **Signatures** (on the Email screen) are added at the end of replies. A mailbox can have a shared signature, and each agent can keep their own, which is used first. Write `{{name}}`, `{{title}}` and `{{phone}}` and they are filled in with the details of the person who sends. Agents change only their own signatures; changing a mailbox's shared signature needs the right to manage mailboxes.
 - An email takes up to 10 files, each up to 10 MB and 20 MB together. A file that is too big, too many, or a type email cannot carry is refused with the reason. Files you attach but do not send expire after a day.
-- Emails do not count against your message quota or wallet.
+- Each email you send is charged to your wallet at the email price, and it also counts against your plan's monthly email limit. With an empty wallet a send is refused with a message asking you to top up. See [How message billing works](help:how-message-billing-works).
 
 ## Plan and access
 
@@ -84,6 +84,7 @@ You need the permission to view mailboxes to open the screen, and the manage per
 - **Test credentials says the secure connection could not be verified.** The server certificate is not valid for that server name, or the security setting does not match the port. Check the server name and choose the security the provider documents.
 - **Test credentials says the server could not be reached, or the address is not allowed.** Check the server name and port. Addresses on a private network are refused for safety.
 - **I cannot choose Personal.** An administrator has to turn personal mailboxes on in Email sharing, and your role needs the personal mailbox permission.
+- **An email conversation in the inbox says "This mailbox is disconnected" (or "needs to be reconnected") and the reply box is off.** The mailbox behind that conversation was removed, disconnected or needs reconnecting, so replies cannot go out. Internal notes still work and the history stays. Select **Open the mailbox settings** in the banner (or open **Email**), then **Reconnect** the same address. Someone without the manage permission sees a note to ask an administrator.
 - **The status is Error.** The line below it shows the last problem. Select **Sync now**; if it keeps failing, reconnect the mailbox.
 - **Mail is missing from the inbox.** Spam, trash and drafts are skipped, and so is mail you sent yourself from Gmail. Check that the status is Connected and that the last synced time moves.
 - **A reply was refused.** The mail provider can refuse an address or a message that is too large. Fix the addresses in Cc and Bcc or shorten the text and send again.

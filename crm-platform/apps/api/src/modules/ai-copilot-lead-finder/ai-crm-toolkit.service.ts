@@ -695,12 +695,13 @@ export class AiCrmToolkitService {
         subjectId: null,
       };
     } catch (err) {
-      // A brief that cannot be written (no AI key, too soon, the provider down) is an answer to relay, not a crash of the turn.
+      // A brief that cannot be written (no AI key, too soon, the provider down, the wallet empty) is an answer to relay, not a crash of the turn.
       if (
         err instanceof AppError &&
         (err.code === ERROR_CODES.COMPANY_BRIEF_AI_UNAVAILABLE ||
           err.code === ERROR_CODES.COMPANY_BRIEF_RATE_LIMITED ||
-          err.code === ERROR_CODES.COMPANY_BRIEF_PROVIDER_FAILED)
+          err.code === ERROR_CODES.COMPANY_BRIEF_PROVIDER_FAILED ||
+          err.code === ERROR_CODES.WALLET_EMPTY)
       ) {
         return { ok: false, summary: err.message, data: {} };
       }

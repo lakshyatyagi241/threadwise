@@ -7,6 +7,7 @@ import { CallLogRetentionService } from '../../../src/modules/calling-voice/logg
 import {
   addNumber,
   enableRecording,
+  fundWallet,
   saveRecordingRules,
   startCallPipeline,
   type CallPipeline,
@@ -1337,6 +1338,7 @@ describe('telephony', () => {
 
   it('places a click-to-call, then logs the finished call under the person and the contact who placed it', async () => {
     const { t, contactId, number } = await setup('ctc1', { phone: '+919811400001' });
+    await fundWallet(p, t);
     const c = await connect(t);
     const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
     fake.placed.length = 0;
@@ -1393,6 +1395,7 @@ describe('telephony', () => {
 
   it('refuses a click-to-call a provider cannot place, a disabled connection, and a provider refusal, without logging anything', async () => {
     const { t, contactId } = await setup('ctc2', { phone: '+919811400001' });
+    await fundWallet(p, t);
     const generic = await connect(t, { provider: 'generic', label: 'Relay' });
     const noBridge = await post(t.admin, '/v2/calls/click-to-call', {
       connectionId: generic.id,
@@ -1451,6 +1454,7 @@ describe('telephony', () => {
 
   it('refuses a marketing call to a Do-Not-Call number before the provider is asked, and still allows a service call and logging', async () => {
     const { t, contactId, number } = await setup('dnc1', { phone: '+919811400009' });
+    await fundWallet(p, t);
     const c = await connect(t);
     const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
     fake.placed.length = 0;
