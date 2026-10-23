@@ -328,6 +328,14 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     return { post: `\uD83D\uDCDD ${who}: ${text}`, tl: 'added a note' };
   }), id);
   // The alert cleared (verified by Alertmanager's resolved) after a PR was raised: resolved by that PR.
+  // The alert cleared on its own (no PR): close the incident so the loops stop seeing it as open. Skipped while someone holds it or has a PR (alertCleared handles PRs).
+  const markCleared = (key, extra = {}) => {
+    const inc = [...incidents.values()].find((i) => i.key === key && i.state !== 'resolved' && !i.prUrl && !held(i));
+    if (!inc) return false;
+    inc.state = 'resolved'; resolution(inc, 'self', extra); count(inc.playbook, 'cleared'); closeFile?.(inc);
+    inc.tl.push({ t: now(), who: 'Alertmanager', text: 'alert cleared on its own' });
+    return true;
+  };
   async function alertCleared(key, extra = {}) { // extra: { measured, peak, durationMs } from the bridge (what the alert measured)
     const inc = [...incidents.values()].find((i) => i.key === key && i.prUrl && i.state !== 'resolved');
     if (!inc) return false;
@@ -350,7 +358,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   }
   return {
     markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
-    setRelease, openDeployFailure, openSentryIssue, sentryStatus, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
+    setRelease, openDeployFailure, openSentryIssue, sentryStatus, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared, markCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),
     byKey: (k) => [...incidents.values()].find((i) => i.key === k),
