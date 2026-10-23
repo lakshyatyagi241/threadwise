@@ -1,0 +1,11 @@
+{
+  "id": "stack-deploy",
+  "title": "Observability deploy script and host self-check (dry run and stubs)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 1, "full": 1 },
+  "heavy": false,
+  "needs": ["bash", "git"],
+  "proves": "deploy-observability.sh in DESK_DEPLOY_DRYRUN=1 shows every step, copies every traefik template by glob, drops the REVOKE line, forces OBS_METRICS_PORT=0, stops naming a missing or malformed webhook file, never posts a test alert and never prints the webhook URLs; stack-selfcheck.sh passes against healthy stubs, fails each check separately, and --notify posts once per hour per failing check without the URL in arguments or output.",
+  "doesNotProve": "Anything on the real host: ssh, DNS, docker, Postgres role creation, Traefik, the systemd install, or delivery to real Google Chat. The deploy script has never been run against production.",
+  "report": null
+}
