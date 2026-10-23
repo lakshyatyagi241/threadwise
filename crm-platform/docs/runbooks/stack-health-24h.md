@@ -6,10 +6,9 @@ Two layers: a check on the host that tells the Critical Google Chat space when t
 
 `deploy/hostinger/stack-selfcheck.sh` is read-only. It checks: grafana, prometheus, alertmanager, gchat-bridge and probe are Up and healthy; `desk-release-watch` is active and its heartbeat file (`/var/lib/desk-release-watch/heartbeat`, only if present) is younger than 120 s; the bridge answers `/health`; Prometheus target `crm-chat-bridge` is up; the bridge got a Watchdog in the last 15 minutes; the disk has more than 15% free. One `OK` or `FAIL` line per check, exit 1 on any FAIL.
 
-Install (as root on the host; the script is copied to `/opt/desk` by `deploy-observability.sh`, or copy it by hand):
+Install (as root on the host; `deploy-observability.sh` copies the script to `/opt/desk`):
 
 ```bash
-install -m 755 /opt/desk/release-watch-src/../stack-selfcheck.sh /opt/desk/stack-selfcheck.sh   # or scp it once
 ( crontab -l 2>/dev/null; echo '*/5 * * * * /opt/desk/stack-selfcheck.sh --notify >/dev/null 2>&1' ) | crontab -
 /opt/desk/stack-selfcheck.sh        # run once by hand to see the lines
 ```

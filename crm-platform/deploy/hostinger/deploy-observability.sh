@@ -80,11 +80,11 @@ fi
 step "2 copy files"
 TPL=$(cd "$SRC/deploy/hostinger" && ls traefik-*.yml.template)   # glob: every Traefik template
 # shellcheck disable=SC2086
-put "$SRC/deploy/hostinger" /opt/desk observability.compose.yml observability-up.sh $TPL
+put "$SRC/deploy/hostinger" /opt/desk observability.compose.yml observability-up.sh stack-selfcheck.sh $TPL
 put "$SRC/deploy/observability" /opt/observability .
 put "$SRC/tools/chat-bridge" /opt/chat-bridge .
 put "$SRC/deploy/hostinger" /opt/desk/release-watch-src desk-release-watch.sh deploy-message.py desk-release-watch.service install-release-watch.sh
-rx 'chmod +x /opt/desk/observability-up.sh'
+rx 'chmod +x /opt/desk/observability-up.sh /opt/desk/stack-selfcheck.sh'
 rx 'cd /opt/desk/release-watch-src && if [ "$(id -u)" = 0 ]; then DESK_DIR=/opt/desk bash install-release-watch.sh; else sudo -n env DESK_DIR=/opt/desk bash install-release-watch.sh; fi'
 
 step "3 webhook secrets (temp dir $RT, removed after step 5)"
