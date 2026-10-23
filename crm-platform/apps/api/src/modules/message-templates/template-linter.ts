@@ -228,10 +228,19 @@ export function lintTemplate(t: LintInput): LintIssue[] {
     );
 
   // Trigger phrases
-  const text = `${body} ${t.header ?? ''} ${t.footer ?? ''}`.toLowerCase();
-  for (const phrase of TRIGGER_PHRASES)
-    if (text.includes(phrase))
-      w('trigger_phrase', 'body', `"${phrase}" is a phrase Meta's review often flags.`);
+  // Each phrase is reported under the part of the template that holds it, so removing it from there clears it (a phrase left in the
+  // header or footer used to be reported under the body, where it could not be found). A curly apostrophe counts as a straight one.
+  const plain = (v: string | null | undefined) => (v ?? '').replace(/[‘’]/g, "'").toLowerCase();
+  for (const [field, value] of [
+    ['body', body],
+    ['header', t.header],
+    ['footer', t.footer],
+  ] as const) {
+    const text = plain(value);
+    for (const phrase of TRIGGER_PHRASES)
+      if (text.includes(phrase))
+        w('trigger_phrase', field, `"${phrase}" is a phrase Meta's review often flags.`);
+  }
 
   return out;
 }

@@ -92,5 +92,24 @@ export const aiagSourceSchema = z.object({
 });
 export type AiagSource = z.infer<typeof aiagSourceSchema>;
 
+/** How much of an entry's text the preview returns (the rest is in the entry, and is still what the agent reads). */
+export const AIAG_PREVIEW_MAX = 20_000;
+
+/** What the "View" of a knowledge entry shows: the text the agent reads (a Q&A pair as its question and answer). */
+export const aiagSourcePreviewSchema = z.object({
+  id: uuidSchema,
+  kind: z.enum(AIAG_SOURCE_KINDS),
+  label: z.string(),
+  url: z.string().nullable(),
+  status: z.enum(AIAG_SOURCE_STATUSES),
+  question: z.string().nullable(),
+  answer: z.string().nullable(),
+  /** The text of a page, a file or pasted text; null for a Q&A pair and for an entry not read yet. */
+  text: z.string().nullable(),
+  /** The text was longer than the preview and is cut. */
+  truncated: z.boolean(),
+});
+export type AiagSourcePreview = z.infer<typeof aiagSourcePreviewSchema>;
+
 export const listAiagSourcesResponseSchema = z.object({ data: z.array(aiagSourceSchema) });
 export type ListAiagSourcesResponse = z.infer<typeof listAiagSourcesResponseSchema>;

@@ -105,6 +105,15 @@ export const unmappedSlots = (issues: readonly StepIssue[]): string[] =>
     .filter((i) => i.code === 'variable_unmapped')
     .map((i) => i.path.replace(/^variables\./, ''));
 
+/** The slots whose fallback is missing (a field mapping with no fallback value). */
+export const fallbackSlots = (issues: readonly StepIssue[]): string[] =>
+  issues
+    .filter((i) => i.code === 'variable_fallback_required')
+    .map((i) => i.path.replace(/^variables\./, ''));
+
+/** The two problems a variable's mapping can have (the Compose step shows both beside the mapping). */
+export const MAPPING_CODES: readonly string[] = ['variable_unmapped', 'variable_fallback_required'];
+
 export const issueFor = (issues: readonly StepIssue[], path: string): StepIssue | undefined =>
   issues.find((i) => i.path === path);
 

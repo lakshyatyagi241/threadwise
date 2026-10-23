@@ -15,7 +15,7 @@ import { Alert, Field, Input, Select } from '@crm/ui';
 import { MessageBubble } from '@/features/message-templates/components/message-bubble';
 import { prefillVariables, previewModelWithText, wouldPrefill } from '../lib/templates';
 import { useVariablePreview } from '../api/wizard';
-import { unmappedSlots, type StepIssue } from '../lib/issues';
+import { fallbackSlots, unmappedSlots, type StepIssue } from '../lib/issues';
 import { Chip, ErrorBlock, Skeleton, WizardCard } from './parts';
 import { useSettled } from './use-settled';
 
@@ -33,6 +33,7 @@ function SlotRow({
   source,
   properties,
   invalid,
+  fallbackMissing,
   disabled,
   onChange,
 }: {
@@ -40,11 +41,14 @@ function SlotRow({
   source: WizardVariableSource | undefined;
   properties: readonly CustomProperty[];
   invalid: boolean;
+  /** The mapping is a contact field with no fallback value yet. */
+  fallbackMissing?: boolean;
   disabled?: boolean;
   onChange: (source: WizardVariableSource | null) => void;
 }) {
   const t = useTranslations('campaigns.wizard.review');
   const tf = useTranslations('campaigns.wizard.fields');
+  const ti = useTranslations('campaigns.wizard.issues');
   const uid = useId();
   // What the row shows comes from the saved source; only a choice with no source yet (an empty fixed text, "Fixed" picked
   // before typing) is held here.
@@ -124,9 +128,15 @@ function SlotRow({
                 )}
               </Select>
             </Field>
-            <Field label={t('fallback')} htmlFor={`${uid}-fb`} className="space-y-1">
+            <Field
+              label={`${t('fallback')} *`}
+              htmlFor={`${uid}-fb`}
+              className="space-y-1"
+              error={fallbackMissing ? ti('variable_fallback_required') : undefined}
+            >
               <Input
                 id={`${uid}-fb`}
+                invalid={fallbackMissing}
                 value={fallback}
                 maxLength={WIZARD_VARIABLE_TEXT_MAX}
                 disabled={disabled || !field}
@@ -249,6 +259,7 @@ export function VariablesCard({
   const t = useTranslations('campaigns.wizard.review');
   const slots = template?.slots ?? [];
   const missing = new Set(unmappedSlots(issues));
+  const needFallback = new Set(fallbackSlots(issues));
 
   // Placeholders the template names after a contact field or a custom property start mapped to it.
   useEffect(() => {
@@ -285,6 +296,7 @@ export function VariablesCard({
                 source={variables[s.slot]}
                 properties={properties}
                 invalid={showIssues && missing.has(s.slot)}
+                fallbackMissing={showIssues && needFallback.has(s.slot)}
                 disabled={disabled}
                 onChange={(src) => onVariable(s.slot, src)}
               />

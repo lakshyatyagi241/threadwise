@@ -125,3 +125,25 @@ export function prefillVariables(
 /** True when `prefillVariables` would change something. */
 export const wouldPrefill = (before: WizardVariables, after: WizardVariables): boolean =>
   Object.keys(after).length !== Object.keys(before).length;
+
+/** The connection uuid of a `waba:<uuid>` sender key, or null for any other kind of sender. */
+export function wabaConnectionOfKey(senderKey: string): string | null {
+  const m = /^waba:([0-9a-f-]{36})$/i.exec(senderKey);
+  return m ? m[1]!.toLowerCase() : null;
+}
+
+/**
+ * The templates the chosen number(s) can send. A template belongs to one WhatsApp number's account, so with WhatsApp numbers chosen
+ * only theirs are offered (the server refuses the rest at launch). With no WhatsApp number chosen (nothing picked yet, or another kind
+ * of sender) the list is left as it is; a template with no known number is kept.
+ */
+export function templatesForSenders(
+  list: readonly WizardTemplate[],
+  senderKeys: readonly string[],
+): WizardTemplate[] {
+  const wanted = new Set(
+    senderKeys.map(wabaConnectionOfKey).filter((c): c is string => c !== null),
+  );
+  if (wanted.size === 0) return [...list];
+  return list.filter((t) => !t.connectionId || wanted.has(t.connectionId.toLowerCase()));
+}

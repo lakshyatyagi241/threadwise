@@ -101,7 +101,13 @@ export function TestPanel({
                   </dd>
                 </div>
               )}
-              {result.response?.truncated && <div className="text-warning">{t('truncated')}</div>}
+              {result.response?.truncated && (
+                <div className="text-warning">
+                  {result.response.sizeBytes >= 1024 * 1024
+                    ? t('truncated')
+                    : t('truncatedShown', { kb: Math.round(result.response.sizeBytes / 1024) })}
+                </div>
+              )}
             </dl>
             {!result.ok && (
               <Alert tone="danger">

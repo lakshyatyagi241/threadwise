@@ -35,7 +35,7 @@ The API Library holds calls to other systems that your flows can run: look up an
 4. Fill in a **default value** for each variable the form lists. A test run, and a flow that has no value of its own, use it.
 5. Add **headers** if the other system needs them, such as an `Authorization` header.
 6. For POST, PUT and PATCH, write the **payload** as JSON, or switch the payload type to multipart form data and add fields one by one.
-7. Select **Run test**. The response appears on the right: its status, time, headers and body.
+7. Select **Run test**. The response appears on the right: its status, time, headers and body. A compressed reply is unpacked for you, a file (an image or a PDF) is named with its size instead of being printed, and a long reply shows its first part with the real size. Tests are limited to 20 a minute per person. A warning appears when the address starts with `http://` and a header carries a password or key.
 8. Pick what to keep from the answer (see below), then select **Save**. An API is saved only after a test run has passed.
 
 To start from an existing call, select **Import API's** on the list and paste a cURL command. A new API opens with the method, URL, headers and payload filled in.

@@ -63,6 +63,7 @@ export class WizardReadService {
       attachmentType: r.attachmentType,
       attachmentUrl: r.attachmentFile ? this.templates.mediaUrl(r.attachmentFile) : null,
       senderLabel: r.senderLabel,
+      connectionId: r.configUuid,
       slots: templateSlots({
         templateBody: r.body,
         header: r.header,

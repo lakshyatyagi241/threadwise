@@ -11,6 +11,8 @@ import {
   wizardAudienceHasSource,
   wizardDraftSchema,
   wizardLaunchIssues,
+  wizardRetryEndMax,
+  wizardVariableNeedsFallback,
   wizardScheduleSchema,
   wizardStepIssues,
   wizardVariableSourceSchema,
@@ -169,7 +171,7 @@ describe('step validation (the web before Next, the API at launch)', () => {
     templateId: T,
     senderKey: 'waba:3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11',
     audience: { ...EMPTY_WIZARD_AUDIENCE, groupIds: [T] },
-    variables: { 'body.1': { kind: 'field', field: 'first_name' } },
+    variables: { 'body.1': { kind: 'field', field: 'first_name', fallback: 'there' } },
   });
 
   it('step 1 needs a name and a template', () => {
@@ -249,6 +251,16 @@ describe('step validation (the web before Next, the API at launch)', () => {
         { now: NOW },
       ),
     ).toEqual([]);
+    // At most 7 days from today (2026-10-06): the 13th is the last day.
+    const withEnd = (endDate: string) =>
+      wizardStepIssues(
+        4,
+        draft({ ...base, retries: { enabled: true, endDate, timezone: 'UTC' } }),
+        { now: NOW },
+      ).map((i) => i.code);
+    expect(withEnd('2026-10-13')).toEqual([]);
+    expect(withEnd('2026-10-14')).toEqual(['retry_end_too_far']);
+    expect(wizardRetryEndMax(NOW, 'UTC')).toBe('2026-10-13');
     // Retries off: the end date is not looked at.
     expect(
       wizardStepIssues(4, draft({ ...base, retries: { enabled: false, endDate: '2020-01-01' } }), {
@@ -321,5 +333,34 @@ describe('the retry window', () => {
     const first = new Date('2026-10-06T10:17:42Z');
     expect(retryInstant(first, 1).toISOString()).toBe('2026-10-07T10:17:42.000Z');
     expect(retryInstant(first, 3).toISOString()).toBe('2026-10-09T10:17:42.000Z');
+  });
+});
+
+describe('a contact-field variable needs a fallback', () => {
+  const field = (fallback: string | null) => ({ kind: 'field' as const, field: 'name', fallback });
+  it('says so for a field with no fallback, not for fixed text or a filled fallback', () => {
+    expect(wizardVariableNeedsFallback(field(null))).toBe(true);
+    expect(wizardVariableNeedsFallback(field('  '))).toBe(true);
+    expect(wizardVariableNeedsFallback(field('there'))).toBe(false);
+    expect(wizardVariableNeedsFallback({ kind: 'fixed', text: 'Hi' })).toBe(false);
+  });
+
+  it('blocks the variables step until each field mapping has one', () => {
+    const slots = ['body.1', 'body.2'];
+    const codes = (d: WizardDraft) =>
+      wizardStepIssues(3, d, { slots, now: NOW }).map((i) => i.code);
+    expect(
+      codes(
+        draft({ variables: { 'body.1': field(null), 'body.2': { kind: 'fixed', text: 'x' } } }),
+      ),
+    ).toEqual(['variable_fallback_required']);
+    expect(
+      codes(
+        draft({ variables: { 'body.1': field('there'), 'body.2': { kind: 'fixed', text: 'x' } } }),
+      ),
+    ).toEqual([]);
+    expect(codes(draft({ variables: { 'body.2': { kind: 'fixed', text: 'x' } } }))).toEqual([
+      'variable_unmapped',
+    ]);
   });
 });

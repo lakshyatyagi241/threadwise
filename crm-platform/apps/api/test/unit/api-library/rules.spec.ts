@@ -1,3 +1,4 @@
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { API_LIBRARY_SECRET_MASK } from '@crm/contracts';
 import {
@@ -9,6 +10,8 @@ import {
   maskJsonText,
   maskResponseHeaders,
   maskUrl,
+  looksBinary,
+  readAnswer,
   renderBody,
   renderHeaders,
   renderText,
@@ -251,5 +254,39 @@ describe('numbered pages', () => {
     expect(numberedPage(['e'], 5, 3, 2).page.hasMore).toBe(false);
     expect(numberedPage([], 5, 9, 2)).toMatchObject({ data: [], total: 5, totalPages: 3 });
     expect(numberedPage([], 0, 1, 25)).toMatchObject({ total: 0, totalPages: 1 });
+  });
+});
+
+describe('readAnswer', () => {
+  it('unpacks a gzip answer and counts the real bytes', () => {
+    const text = JSON.stringify({ hello: 'world' });
+    const out = readAnswer(
+      gzipSync(text),
+      { 'content-encoding': 'gzip', 'content-type': 'application/json' },
+      1 << 20,
+    );
+    expect(out).toEqual({ text, isText: true, sizeBytes: text.length });
+  });
+
+  it('names a file instead of printing it as symbols, with its byte size', () => {
+    const png = Buffer.alloc(102_400, 7);
+    const out = readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
+    expect(out.isText).toBe(false);
+    expect(out.sizeBytes).toBe(102_400);
+    expect(out.text).toContain('image/png');
+    expect(out.text).toContain('102400 bytes');
+  });
+
+  it('treats a NUL byte as binary even with a text type, and plain text as text', () => {
+    expect(looksBinary('text/plain', Buffer.from([65, 0, 66]))).toBe(true);
+    expect(readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100).isText).toBe(
+      true,
+    );
+  });
+
+  it('does not throw on a broken compressed answer', () => {
+    const out = readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
+    expect(out.isText).toBe(false);
+    expect(out.text).toContain('could not be unpacked');
   });
 });
