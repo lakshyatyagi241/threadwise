@@ -264,6 +264,15 @@ describe('a phone question', () => {
   });
 });
 
+describe('the chat opened on its own page', () => {
+  it('keeps the size the author chose instead of filling the browser', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('html.standalone body');
+    expect(page).toContain('if (window.parent !== window || PREVIEW) return;');
+    expect(page).toContain('"standard":{"w":404,"h":672}');
+  });
+});
+
 describe('the cross: end the conversation, rate it, or restart', () => {
   it('asks first, in every website bot inside the site panel', () => {
     for (const flow of [true, false]) {

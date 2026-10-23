@@ -129,7 +129,7 @@ export class BroadcastDispatchService {
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
   async run(orgId: number, broadcastId: number): Promise<DispatchResult> {
-    const prep = await this.db.tx(async (tx) => {
+    const prep = await this.db.retry.tx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT status, provider, device_id, template_id, template_overrides FROM broadcasts
         WHERE org_id = ${orgId} AND id = ${broadcastId} FOR UPDATE`);
@@ -367,8 +367,10 @@ export class BroadcastDispatchService {
             }
           }
 
-          // The wallet must pay for this message: when it cannot, the run stops here (nobody is failed) until a top-up and Resume.
-          if (to) {
+          // The wallet must pay for this message: when it cannot, the run stops here (nobody is failed) until a top-up and Resume. An SMS
+          // is not priced by the WhatsApp rate card this check reads: the SMS engine asks the wallet for the SMS price itself, before
+          // each send, and a refusal comes back from the send (handled below).
+          if (to && sender.engine !== 'sms') {
             try {
               await this.wallet.precheckSend(orgId, to, {
                 source: 'broadcast',
@@ -456,6 +458,25 @@ export class BroadcastDispatchService {
             await this.recordSent(orgId, broadcastId, contactId, sent.providerMessageId);
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
+            // An engine that bills its own sends (SMS) found the wallet unable to pay for this message before sending it: the same stop as
+            // the check above. The recipient goes back to pending and the run waits for a top-up and Resume; nobody is failed.
+            if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) {
+              await this.db.tx(async (tx) => {
+                await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+                  status: 'pending',
+                });
+                await this.progress.recompute(tx, orgId, broadcastId);
+                await this.progress.pause(tx, orgId, broadcastId, {
+                  reason: 'manual',
+                  at: this.runtime.now().toISOString(),
+                });
+              });
+              this.logger.warn(
+                { orgId, broadcastId },
+                '[BCAST] paused: wallet cannot cover the next message',
+              );
+              return 'paused';
+            }
             // A send held back by the per-number limiter (queue too deep) is put back the same way, so it is sent later, never failed.
             if (
               (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) ||

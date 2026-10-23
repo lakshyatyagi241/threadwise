@@ -28,7 +28,7 @@ import { planBroadcast } from '../load/broadcast';
 import { resolveInbox, type InboxOptions, type InboxSettings } from '../inbox/config';
 import { planFor } from '../load/inbox';
 import { STEPS, transformDoc } from '../transform';
-import { CONTACT_FIELDS, REJECT_MARKER } from '../transform/contacts';
+import { CONTACT_FIELDS, propertyKeyOf, REJECT_MARKER } from '../transform/contacts';
 import { isBuiltInKey } from '../transform/fields';
 import { buildIndex } from '../transform/source-index';
 import type { HandlerSpec, Outcome, Row, TableSpec } from '../transform/types';
@@ -816,12 +816,14 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         const have = new Set((found.rows as Array<{ key: string }>).map((r) => r.key));
         for (const [k, n] of fieldSeen) {
           if (Object.hasOwn(spec.fields, k) || REJECT_MARKER.test(k)) continue;
-          if (have.has(k) || isBuiltInKey(k)) {
+          // a reserved Waboo key is created under its prefixed key (transform/contacts.ts propertyKeyOf): look for that one
+          const appKey = propertyKeyOf(k);
+          if (have.has(appKey) || isBuiltInKey(k)) {
             fieldRows.push({
               step: spec.handler,
               field: shown(k),
               seen: n,
-              where: have.has(k)
+              where: have.has(appKey)
                 ? 'contacts.data (matching fields row)'
                 : 'contacts.data (a built-in property of the app: no fields row)',
               verdict: 'stored-in-data',

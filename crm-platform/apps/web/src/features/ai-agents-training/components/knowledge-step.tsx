@@ -29,9 +29,12 @@ type AddKind = (typeof KINDS)[number];
 export function KnowledgeStep({
   assistantId,
   canEdit,
+  compact = false,
 }: {
   assistantId: string | null;
   canEdit: boolean;
+  /** Without the step number, title and ownership note: the entries inside another screen (a flow's FAQs tab). */
+  compact?: boolean;
 }) {
   const t = useTranslations('aiTraining.knowledge');
   const qc = useQueryClient();
@@ -63,15 +66,19 @@ export function KnowledgeStep({
 
   return (
     <div data-step="5">
-      <div className="mb-4 flex items-center gap-2.5">
-        <span className="inline-flex size-[23px] shrink-0 items-center justify-center rounded-[7px] bg-muted font-mono text-[10px] font-semibold text-brand">
-          05
-        </span>
-        <span className="flex-1 text-lg leading-none">{t('title')}</span>
-        <span className="font-mono text-[10px] text-muted-foreground">{t('tag')}</span>
-      </div>
+      {compact ? null : (
+        <>
+          <div className="mb-4 flex items-center gap-2.5">
+            <span className="inline-flex size-[23px] shrink-0 items-center justify-center rounded-[7px] bg-muted font-mono text-[10px] font-semibold text-brand">
+              05
+            </span>
+            <span className="flex-1 text-lg leading-none">{t('title')}</span>
+            <span className="font-mono text-[10px] text-muted-foreground">{t('tag')}</span>
+          </div>
 
-      <p className="mb-3 text-[12.5px] text-muted-foreground">{t('ownedNote')}</p>
+          <p className="mb-3 text-[12.5px] text-muted-foreground">{t('ownedNote')}</p>
+        </>
+      )}
 
       {assistantId === null ? (
         <p className="rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground">

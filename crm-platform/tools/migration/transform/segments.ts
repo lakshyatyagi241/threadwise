@@ -1,5 +1,6 @@
 import { isDeleted, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
+import { propertyKeyOf } from './contacts';
 import { TYPE_MAP } from './fields';
 import type { Ctx, HandlerSpec, Outcome, Soft, TargetRef } from './types';
 
@@ -132,16 +133,36 @@ function condition(field: string, kind: Kind, wop: string, value: unknown): Node
   }
 }
 
-/** The kind of a Waboo rule field and the WaDesk name it gets (custom.<key> for a property the target has). */
+/** The kind of a Waboo rule field and the WaDesk name it gets (custom.<key> for a property the target has; a reserved key is prefixed). */
 function fieldOf(name: string, ctx: Ctx): { field: string; kind: Kind } {
   const b = BUILTIN[name];
   if (b) return b;
   const def = ctx.idx.fieldsByName.get(name);
   if (!def || !ctx.idx.declaredKeys.has(name)) throw new Unsupported(`field "${name}" is not a property of this workspace`);
-  if (!CUSTOM_KEY.test(name)) throw new Unsupported(`field "${name}" cannot be a WaDesk custom property key`);
+  const key = propertyKeyOf(name);
+  if (!CUSTOM_KEY.test(key)) throw new Unsupported(`field "${name}" cannot be a WaDesk custom property key`);
   const kind = KIND_OF_TYPE[TYPE_MAP[String(def.type ?? '').toLowerCase()] ?? 'text'];
   if (!kind) throw new Unsupported(`field "${name}" has a type WaDesk cannot filter`);
-  return { field: `custom.${name}`, kind };
+  return { field: `custom.${key}`, kind };
+}
+
+/** The app keeps a contact view's name at 3 to 50 characters (packages/contracts crm/contact-view.ts). A longer name is cut, a shorter one gets " view". */
+export const VIEW_NAME_MIN = 3;
+export const VIEW_NAME_MAX = 50;
+export function fitViewName(raw: string): { name: string; soft: Soft[] } {
+  const t = raw.trim();
+  if (t.length > VIEW_NAME_MAX)
+    return {
+      // never cut between the two halves of a surrogate pair (an emoji), which would leave a broken character
+      name: t.slice(0, VIEW_NAME_MAX - (/[\uD800-\uDBFF]/.test(t[VIEW_NAME_MAX - 1] ?? '') ? 1 : 0)).trimEnd(),
+      soft: [{ code: 'VIEW_NAME_CUT', reason: `the view name is ${t.length} characters; WaDesk keeps ${VIEW_NAME_MIN} to ${VIEW_NAME_MAX}, so it is cut` }],
+    };
+  if (t.length < VIEW_NAME_MIN)
+    return {
+      name: `${t} view`.trim(),
+      soft: [{ code: 'VIEW_NAME_EXTENDED', reason: `the view name is shorter than ${VIEW_NAME_MIN} characters; " view" is added` }],
+    };
+  return { name: t, soft: [] };
 }
 
 export function convertTree(raw: unknown, ctx: Ctx): Node {
@@ -292,7 +313,7 @@ export const savedViews: HandlerSpec = {
     if (isDeleted(doc)) return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'is_deleted or deleted_time is set' };
     if ((str(doc.type) ?? '').toLowerCase() === 'system')
       return { kind: 'exclude', code: 'SYSTEM_VIEW', reason: 'a system view exists natively in WaDesk (My, Unassigned and All Contacts)' };
-    const name = str(doc.name);
+    const name = str(doc.name)?.trim();
     if (!name || name.length > 191) return { kind: 'quarantine', code: 'INVALID_NAME', reason: 'view name is empty or longer than 191 characters' };
     let filter: Record<string, unknown> = {};
     const fq = doc.filter_query as Doc | null | undefined;
@@ -310,6 +331,8 @@ export const savedViews: HandlerSpec = {
     }
     const t = times(doc, ctx.fallbackAt);
     const soft: Soft[] = [...t.soft];
+    const viewName = fitViewName(name);
+    soft.push(...viewName.soft);
     const owner = doc.created_by !== undefined && doc.created_by !== null ? ctx.ref('user', doc.created_by) : undefined;
     const sharedWith = (str(doc.shared_with) ?? '').toLowerCase();
     // Waboo's user_list holds the people a view is shared with, the creator included. A view kept to its creator (me) that lists another
@@ -343,7 +366,7 @@ export const savedViews: HandlerSpec = {
           table: 'contact_views',
           sub: '',
           row: {
-            name,
+            name: viewName.name,
             filter,
             position: Math.max(0, Math.trunc(num(doc.position) ?? 0)),
             // the service keeps share_mode and is_shared in step; without it the column default 'me' hides a shared view from everyone else

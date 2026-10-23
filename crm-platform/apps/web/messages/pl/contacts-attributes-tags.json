@@ -283,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Etap",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Utworzono",
-      "shortModified": "Zmodyfikowano",
       "firstRun": {
         "title": "Dodaj pierwsze kontakty",
         "message": "Dodaj osoby, z którymi rozmawiasz. Kontakty są używane w wiadomościach, kampaniach, zadaniach i transakcjach.",
@@ -298,7 +296,8 @@
       "teamFilter": "Filtruj według zespołu",
       "allTeams": "Wszystkie zespoły",
       "teamFormer": "Dawny zespół",
-      "unhideColumn": "Pokaż kolumnę"
+      "unhideColumn": "Pokaż kolumnę",
+      "resizeColumn": "Przeciągnij, aby zmienić szerokość kolumny {column}; dwukrotne kliknięcie przywraca"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -1338,7 +1337,7 @@
         "closePicker": "Zamknij",
         "changed": "Właściwości do zmiany",
         "clear": "Wyczyść",
-        "keep": "Zachowaj",
+        "remove": "Usuń {name}",
         "setValue": "Ustaw wartość",
         "willClear": "Zostanie opróżniona dla {count, plural, one {zaznaczonego kontaktu} few {wszystkich # zaznaczonych kontaktów} many {wszystkich # zaznaczonych kontaktów} other {wszystkich # zaznaczonych kontaktów}}.",
         "requiredNoClear": "Wymaganej właściwości nie można wyczyścić.",

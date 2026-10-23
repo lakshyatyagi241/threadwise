@@ -287,8 +287,6 @@
       "shortEmail": "Email",
       "shortStage": "Stage",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Created",
-      "shortModified": "Modified",
       "firstRun": {
         "title": "Add your first contacts",
         "message": "Bring in the people you talk to. Contacts are used for messages, campaigns, tasks and deals.",
@@ -298,7 +296,8 @@
         "connect": "Connect WhatsApp",
         "connectBody": "Connect your number so contacts can reply and you can message them."
       },
-      "unhideColumn": "Unhide column"
+      "unhideColumn": "Unhide column",
+      "resizeColumn": "Drag to resize {column}; double-click to reset"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -1338,7 +1337,7 @@
         "closePicker": "Close",
         "changed": "Properties to change",
         "clear": "Clear",
-        "keep": "Keep",
+        "remove": "Remove {name}",
         "setValue": "Set a value",
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
         "requiredNoClear": "A required property cannot be cleared.",

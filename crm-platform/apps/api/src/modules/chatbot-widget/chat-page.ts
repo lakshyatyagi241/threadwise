@@ -1,3 +1,4 @@
+import { CHAT_SIZE_PX } from '@crm/contracts';
 import { jsString } from './embed-script';
 import { flbPhoneCountries } from '@crm/contracts';
 import { CHAT_TEXT, RTL_LOCALES } from './chat-page-text';
@@ -31,6 +32,10 @@ const STYLE = `
 :root { --accent: #5B4DDB; --accent-ink: #FFFFFF; --accent-soft: #EFEDFB; --accent-line: #C9C3F3; }
 html, body { margin: 0; padding: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; height: 100%; -webkit-font-smoothing: antialiased; }
 body { display: flex; flex-direction: column; background: #fff; }
+/* Opened on its own (the preview link, a test), the chat is the real window: the size the author chose, in the middle of a plain page. */
+html.standalone { background: #e9ebf5; }
+html.standalone body { width: var(--win-w); max-width: calc(100% - 32px); height: min(var(--win-h), calc(100% - 48px)); margin: 24px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(24,26,54,.24); position: relative; }
+@media (max-width: 480px) { html.standalone { background: #fff; } html.standalone body { width: auto; max-width: none; height: 100%; margin: 0; border-radius: 0; box-shadow: none; } }
 @keyframes rowIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes dot { 0%, 60%, 100% { opacity: .3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
 @media (prefers-reduced-motion: reduce) { .row, .chips, .typing i { animation: none !important; } .body { scroll-behavior: auto !important; } }
@@ -228,6 +233,7 @@ const SCRIPT = `
   var PREVIEW = __PREVIEW__;
   var T = __TEXT__;
   var COUNTRIES = __COUNTRIES__;
+  var SIZES = __SIZES__;
   // The window's own words, in the visitor's language (English is the fallback for a missing key).
   function tx(key, fallback) { return (T && T[key]) || fallback; }
   var VKEY = 'wsnap_vid_' + TOKEN;
@@ -938,7 +944,8 @@ const SCRIPT = `
       var el = document.createElement('div');
       el.className = 'card';
       el.setAttribute('role', 'listitem');
-      if (c.image && /^https?:\\/\\//i.test(c.image)) {
+      var cardImg = imgUrl(c.image);
+      if (cardImg) {
         var img = document.createElement('img');
         img.alt = c.title || '';
         img.loading = 'lazy';
@@ -948,9 +955,9 @@ const SCRIPT = `
           if (img.dataset.retry) { img.remove(); return; }
           img.dataset.retry = '1';
           img.referrerPolicy = 'origin';
-          img.src = c.image;
+          img.src = cardImg;
         };
-        img.src = c.image;
+        img.src = cardImg;
         el.appendChild(img);
       }
       var cb = document.createElement('div');
@@ -1050,9 +1057,19 @@ const SCRIPT = `
     $('msgs').appendChild(box);
   }
 
+  // On its own page (not inside a site's panel) the window keeps the size the author chose instead of filling the browser.
+  function frameStandalone() {
+    if (window.parent !== window || PREVIEW) return;
+    var sz = SIZES[CHAT.size] || SIZES.standard;
+    var root = document.documentElement;
+    root.style.setProperty('--win-w', sz.w + 'px');
+    root.style.setProperty('--win-h', sz.h + 'px');
+    root.classList.add('standalone');
+  }
   function paintChrome() {
     // The options first: the header fill and the direction depend on them.
     applyOptions();
+    frameStandalone();
     document.body.style.background = cfg.body_bg_kind === 'image' && cfg.body_bg_image_url ? '#fff' : cfg.body_bg_color || '#F7F8FC';
     var msgs = $('msgs');
     var safeUrl = '';
@@ -1518,6 +1535,7 @@ export function renderChatPage(w: ChatPageWidget): string {
   const script = SCRIPT.replace('__TOKEN__', () => jsString(w.token))
     .replace('__FLOW__', w.flow ? 'true' : 'false')
     .replace('__PREVIEW__', w.preview ? 'true' : 'false')
+    .replace('__SIZES__', () => JSON.stringify(CHAT_SIZE_PX))
     .replace('__TEXT__', () =>
       JSON.stringify(CHAT_TEXT[locale])
         .replace(/</g, '\\u003c')

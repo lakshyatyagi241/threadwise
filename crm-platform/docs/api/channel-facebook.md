@@ -98,6 +98,13 @@ it to answer a `channel = facebook` thread: `fb:<page>:<psid>` is a DM, `fb:<pag
 
 `fb-backfill` (one job per connected Page), `fb-broadcast` (one job per broadcast run).
 
+## Per-message fee (wallet)
+
+Every message Messenger accepts is charged to the workspace's wallet and appears in its expense log (`usage_charges`, kind `chat_message`): the platform's fee on top of the customer's own account. The price is the operator's (usage price `chat_message`; default 0, so a fresh install tracks the messages and charges nothing until it is priced). An inbox reply is billed by the shared pipeline, see [chat-conversations.md](chat-conversations.md#outbound-outboundservice-messagedispatchservice).
+
+- **Broadcast.** One `usage.reported` per person Meta accepts (`source` `broadcast`, the broadcast's name), billed on the message id Meta returned (a send with no id is billed on the recipient row), in its own transaction right after the recipient is marked `sent`. A billing fault is logged and never fails the recipient.
+- **Empty wallet.** Before each batch the sender asks the wallet. When it cannot pay, the run stops: nobody is failed, what is left stays `pending`, the broadcast goes back to `draft` with the reason in `lastError`, and **Start** continues it after a top-up.
+
 ## Quiet hours (BL-191)
 
 Messenger broadcasts are marketing, so a recipient whose contact's local time is inside the workspace's quiet hours (Compliance center) is held, not denied: the recipient stays `pending`, the rest of the audience is sent, the broadcast stays `sending`, and a delayed job takes the held recipients up at the first opening, asking the ConsentGate again. `GET` of the broadcast list returns `held` (how many wait) and `heldUntil` (the first instant one of them may be messaged) on each broadcast. See [compliance.md](compliance.md).

@@ -40,7 +40,7 @@
       "topup": "Top-up",
       "earn": "Earning",
       "refund": "Refund",
-      "spend": "Message charge",
+      "spend": "Usage charge",
       "admin_adjust": "Adjustment"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Open the full statement",
         "emptyTitle": "No activity yet",
         "emptyBody": "Top-ups, message charges and refunds appear here."
-      }
+      },
+      "messageExpenses": "Message expenses"
     },
     "activity": {
       "description": "Description",
@@ -145,7 +146,7 @@
         "all": "All",
         "topup": "Top-ups",
         "earn": "Earnings",
-        "spend": "Message charges",
+        "spend": "Usage charges",
         "refund": "Refunds",
         "admin_adjust": "Adjustments"
       },
@@ -188,6 +189,139 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp message",
+      "sms": "SMS",
+      "email": "Email",
+      "whatsapp_call": "WhatsApp call",
+      "voice_call": "Voice call",
+      "ai": "AI",
+      "translation": "Translation",
+      "enrichment": "Contact lookup",
+      "chat_message": "Chat message"
+    },
+    "expenses": {
+      "title": "Expenses",
+      "subtitle": "What each message, call, AI request and lookup cost, and what it was for. The totals cover everything that matches the filters.",
+      "back": "Back to wallet",
+      "breadcrumbLabel": "Breadcrumb",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Expenses",
+      "fullStatement": "Full statement",
+      "summary": {
+        "messages": "Items",
+        "charged": "Charged",
+        "refunded": "Refunded",
+        "net": "Net cost",
+        "notBilled": "Not billed"
+      },
+      "filters": {
+        "status": "Status",
+        "statusAll": "All",
+        "statusCharged": "Charged",
+        "statusFree": "Not billed",
+        "statusRefunded": "Refunded",
+        "template": "Template",
+        "templatePlaceholder": "Template name",
+        "channel": "Channel",
+        "category": "Category",
+        "allChannels": "All channels",
+        "allCategories": "All categories",
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "reset": "Reset",
+        "rangeInverted": "The end date is before the start date.",
+        "kind": "Type",
+        "allKinds": "All types"
+      },
+      "breakdown": {
+        "title": "Cost by",
+        "groupBy": {
+          "template": "Template",
+          "source": "Channel",
+          "category": "Category",
+          "country": "Country",
+          "kind": "Type"
+        },
+        "group": "Group",
+        "notRecorded": "Not recorded",
+        "truncated": "Showing the {count} largest groups. Narrow the dates to see the rest.",
+        "empty": "Nothing matches these filters."
+      },
+      "days": {
+        "title": "Daily log",
+        "subtitle": "Messages grouped by day, status, channel and category. Open a day to see each message.",
+        "messagesOnDay": "{count} messages",
+        "viewDetails": "View details",
+        "actions": "Actions",
+        "empty": "No messages on these days."
+      },
+      "log": {
+        "title": "Messages",
+        "forDay": "Messages on {date}",
+        "showAllDays": "Show all days"
+      },
+      "columns": {
+        "date": "Date",
+        "template": "Template",
+        "campaign": "Campaign, broadcast or feature",
+        "channel": "Channel",
+        "category": "Category",
+        "country": "Country",
+        "status": "Status",
+        "charged": "Charged",
+        "refunded": "Refunded",
+        "net": "Net",
+        "messages": "Items",
+        "notBilled": "Not billed",
+        "type": "Type"
+      },
+      "status": {
+        "charged": "Charged",
+        "free": "Not billed",
+        "refunded": "Refunded",
+        "refundedOn": "Returned {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Included in your plan",
+        "wallet_empty": "Wallet was empty",
+        "rate_is_zero": "Rate is zero",
+        "no_wallet_owner": "No wallet owner"
+      },
+      "uncollected": "{amount} not collected",
+      "emptyTitle": "No expenses yet",
+      "emptyBody": "Messages, calls, AI requests and other usage appear here with what they were for and what they cost.",
+      "emptyFiltered": "Nothing matches these filters. Change or reset them.",
+      "units": {
+        "sms": "{count, plural, one {# segment} other {# segments}}",
+        "whatsapp_call": "{count, plural, one {# minute} other {# minutes}}",
+        "voice_call": "{count, plural, one {# minute} other {# minutes}}"
+      },
+      "sources": {
+        "lead_first": "Instant lead reply",
+        "lead": "Instant lead reply",
+        "test": "Test send",
+        "appointment": "Appointment reminder",
+        "lead_scoring": "Lead scoring",
+        "lead_digest": "Chat summary",
+        "pql_search": "Contact search",
+        "growth_assistant": "Growth assistant",
+        "ai_copilot": "AI copilot",
+        "help_agent": "Help assistant",
+        "company_brief": "Company brief",
+        "inbox_ai": "Reply assistant",
+        "template_ai": "Template builder",
+        "campaign_ai": "Campaign writer",
+        "campaign_ai_image": "Campaign image",
+        "kb_embedding": "Knowledge base",
+        "flow_ai": "Flow generator",
+        "widget_ai": "Website chatbot",
+        "growth": "Growth",
+        "telephony": "Phone calls",
+        "translation": "Translation"
       }
     },
     "admin": {
@@ -505,6 +639,40 @@
               "service": "Service"
             },
             "problems": "Rows that were skipped"
+          }
+        },
+        "usage": {
+          "title": "Other usage prices",
+          "subtitle": "What SMS, email, calls, contact lookups and other chat channels cost your customers, per unit. A price of 0 or a switch that is off is still tracked in the expense log, and charged nothing.",
+          "perUnit": "Price per {unit}",
+          "chargeFor": "Charge for {kind}",
+          "units": {
+            "segment": "SMS segment",
+            "email": "email",
+            "minute": "minute",
+            "lookup": "lookup",
+            "message": "message"
+          },
+          "hints": {
+            "sms": "Charged on top of the customer's own SMS provider bill. A segment is 160 characters (70 for non-Latin text).",
+            "email": "Charged on top of the customer's own mailbox. Each email sent counts once.",
+            "whatsapp_call": "Every started minute of a WhatsApp call. A call nobody answered is free.",
+            "voice_call": "Every started minute of a call reported by the customer's telephony provider. Call logs typed by hand are never charged.",
+            "enrichment": "Each contact looked up with the platform's data provider.",
+            "chat_message": "Each message sent on Telegram, Facebook, Instagram, LINE, Viber or WeChat. Free until you set a price."
+          },
+          "costPlus": {
+            "title": "Charged at the vendor's cost plus a markup",
+            "body": "AI requests and paid translation run on the platform's own vendor keys and are charged at what the vendor charged, plus the markup below. A workspace on its own key is never charged."
+          },
+          "markup": "Markup on the vendor's cost",
+          "markupHint": "10 means a request that cost 1.00 is charged 1.10.",
+          "saving": "Saving",
+          "save": "Save prices",
+          "saved": "Usage prices saved",
+          "problems": {
+            "invalid": "Enter an amount with at most 2 decimals",
+            "tooHigh": "That is above the limit"
           }
         }
       },

@@ -4,14 +4,20 @@ Money is always an integer count of **hundredths** of the currency unit (`...Min
 
 ## Customer (workspace user) — `/v2/wallet`
 
-| Route                                               | Permission                | What                                                                                                                    |
-| --------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `GET /wallet/summary`                               | `wallet.balance.read`     | balance, billing mode (`wallet`/`plan`), 30-day spent/earned/topped-up/refunded, plan allowance, low-balance flag       |
-| `GET /wallet/ledger?limit&cursor`                   | `wallet.statement.read`   | recent entries, newest first, signed by direction                                                                       |
-| `GET /wallet/statement?type&from&to&q&limit&cursor` | `wallet.statement.read`   | filters, totals over the whole filtered set, per-message context. `type`: all, topup, earn, spend, refund, admin_adjust |
-| `GET /wallet/statement.csv` (same query)            | `wallet.statement.export` | oldest first, formula-safe, at most 50,000 rows                                                                         |
-| `GET /wallet/pricing?country=XX`                    | `wallet.balance.read`     | base price of each category, for THIS workspace (its override, its plan)                                                |
-| `GET /wallet/snapshot`                              | `wallet.balance.read`     | one-call view for the mobile app and the extension (mode, balance, messages left, month spend; -1 = unlimited)          |
+| Route                                                                            | Permission                | What                                                                                                                    |
+| -------------------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `GET /wallet/summary`                                                            | `wallet.balance.read`     | balance, billing mode (`wallet`/`plan`), 30-day spent/earned/topped-up/refunded, plan allowance, low-balance flag       |
+| `GET /wallet/ledger?limit&cursor`                                                | `wallet.statement.read`   | recent entries, newest first, signed by direction                                                                       |
+| `GET /wallet/statement?type&from&to&q&limit&cursor`                              | `wallet.statement.read`   | filters, totals over the whole filtered set, per-message context. `type`: all, topup, earn, spend, refund, admin_adjust |
+| `GET /wallet/statement.csv` (same query)                                         | `wallet.statement.export` | oldest first, formula-safe, at most 50,000 rows                                                                         |
+| `GET /wallet/pricing?country=XX`                                                 | `wallet.balance.read`     | base price of each category, for THIS workspace (its override, its plan)                                                |
+| `GET /wallet/snapshot`                                                           | `wallet.balance.read`     | one-call view for the mobile app and the extension (mode, balance, messages left, month spend; -1 = unlimited)          |
+| `GET /wallet/expenses?status&kind&source&category&template&from&to&limit&cursor` | `wallet.statement.read`   | the expense log: one row per charge with its `kind`, `units`, template or feature, amounts charged, refunded and net    |
+| `GET /wallet/expenses/summary?groupBy=template\|source\|category\|country\|kind` | `wallet.statement.read`   | the same filters, totals over the whole filtered set, and the cost of each group                                        |
+
+### What draws on the wallet
+
+Everything that costs the customer money writes one `usage_charges` row, whose `kind` (`whatsapp_message`, `sms`, `email`, `whatsapp_call`, `voice_call`, `ai`, `translation`, `enrichment`, `chat_message`) and `units` (SMS segments, call minutes, 1 otherwise) the expense log shows. A WhatsApp message is priced by the rate card (below). The rest are priced by the operator (`GET/PUT /platform/wallet/usage-rates`): a per-unit price for SMS, email, WhatsApp calls, voice calls, contact lookups and the other chat channels, and the vendor cost plus a markup for AI and paid translation (only when the platform's own vendor key paid, never for a workspace on its own key). A price of 0, a kind switched off and a call nobody answered are recorded free (`rate_is_zero`). Not charged by design: inbound, hand-typed call logs, the simulator and the `whatsapp_qr` personal-number channel. SMS and email run on the customer's own provider account, so their price is a platform fee on top.
 
 Top-ups are bought through the payment checkout (`/v2/billing/checkout/wallet/*`, domain PAYGW); a paid order posts to the ledger through `WalletLedgerService` with the order uuid as idempotency key.
 
@@ -31,6 +37,10 @@ The **note is mandatory** (5–500 chars): refused by the request schema, again 
 `GET/PUT margins?plan=` (platform default or one plan) · `DELETE margins/:id` · `GET/PUT workspaces/:id/margins` (override; **a note is mandatory**, written to the workspace log and the audit trail; `removeIds` removes) · `GET pricing/preview?workspaceId&country&category` (Meta cost, matched margin and layer, price) · `PUT switches {pricingMode}`.
 Meta's cost comes from the rate card (`rates`, `rates/import`, `rates/sync-meta`).
 
+### Usage prices
+
+`GET /v2/platform/wallet/usage-rates` -> `{currency, prices[{kind, enabled, priceMinor, unit}], costPlus[{kind, enabled}], markupBps, updatedAt}` · `PUT` with `{prices?[{kind, enabled?, price?}], costPlus?[{kind, enabled}], markupBps?}` (money as text, send only what changes). Stored in the platform setting `wallet.usage_rates`; defaults of a fresh install: SMS 0.50 a segment, email 0.10, WhatsApp and voice calls 1.00 a started minute, contact lookup 0.20, other chat channels 0 (tracked, free until priced), markup 10% (1000 basis points). Every save writes a `platform.usage_rates.saved` row with the old and new values.
+
 ### Credit packages (TW-WALLET-019)
 
 `GET/POST packages` · `PUT packages/:id` (`rowVersion`, stale = 409) · `POST packages/:id/toggle` · `DELETE packages/:id`. Catalogue only; there is no bundle checkout (Reference retired it).
@@ -41,7 +51,8 @@ Meta's cost comes from the rate card (`rates`, `rates/import`, `rates/sync-meta`
 
 ## Settlement (no HTTP)
 
-A channel emits `message.delivery_reported` (`provider`, `providerMessageId`, `status`, `recipient`, `category`, `source`) through the outbox; the worker's `DeliveryBillingConsumer` is the only thing that charges. `delivered`/`read` charge (Baileys also on `sent`); `failed`/`undelivered` refund the exact charge once. Idempotent per message id (`usage_charge_keys`), one wallet row lock per workspace, partial charge when the balance is short (shortfall recorded), free reasons `rate_is_zero | within_plan_free_quota | wallet_empty`.
+A channel emits `message.delivery_reported` (`provider`, `providerMessageId`, `status`, `recipient`, `category`, `source`) through the outbox; the worker's `DeliveryBillingConsumer` is the only thing that charges. `sent`, `delivered` and `read` charge (once per message id, whichever arrives first); `failed`/`undelivered` refund the exact charge once. Idempotent per message id (`usage_charge_keys`), one wallet row lock per workspace, partial charge when the balance is short (shortfall recorded), free reasons `rate_is_zero | within_plan_free_quota | wallet_empty`.
+Everything else is reported as `usage.reported` (`kind`, `usageId`, `status: used|failed`, `units`, `label`, `source`, `provider`, `vendorCostUsd`) by the code that did the work, through `emitUsageReported` (`kernel/outbox/usage-report.ts`) in the same transaction; the worker's `UsageBillingConsumer` (`UsageBillingService`) claims `<kind>:<usageId>` in `usage_charge_keys` (so a usage reported twice charges once), takes the wallet row lock, prices it, posts a `spend` entry (`source: usage.<kind>`) and writes the `usage_charges` row; `failed` gives the exact charge back. A wallet that cannot cover the price pays what it has and the shortfall goes to `wallet_events`. AI call sites use `AiChargeService.guardCall` before and `chargeCall` after the vendor call. Work that costs money is refused before it starts with `UsageBillingService.assertCanAfford(orgId, kind, units)` (`422 WALLET_EMPTY`; free kinds and platform-owned workspaces pass, a failed lookup lets the work through). A charge is never below 0.01 of the currency.
 Bulk sends call `WalletGateService.assertCanLaunch({orgId, source, recipients, phones?, category?})` before creating rows (`422 WALLET_EMPTY`).
 
 ## Logs

@@ -21,6 +21,7 @@ import { sealJson } from '../../common/crypto/sealed-json';
 import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { WebhookFanoutService } from '../webhook-fanout';
 import { verifyPayloadProviders, WhatsAppProviderResolver } from '../whatsapp-provider-registry';
+import { KnownNumbers } from './known-numbers';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import {
   authenticateWebhook,
@@ -46,6 +47,8 @@ export interface WabaIngestJob {
  */
 const ROUTE_CACHE_MS = 30_000;
 const ROUTE_CACHE_MAX = 2_000;
+/** How old the list of our numbers may be when a delivery names none of them (known-numbers.ts). */
+const MISS_REFRESH_MS = 50;
 /**
  * An authenticated delivery is remembered by (body, signature, url key) for this long; the same request again is answered at once.
  * Only a request that was authenticated and queued leaves a mark, so a forgery can never hit it.
@@ -69,6 +72,8 @@ export class WabaWebhookService {
     hasBuiltin: boolean;
   }>(ROUTE_CACHE_MS, ROUTE_CACHE_MAX);
   private readonly secretsCache = new TtlCache<string[] | null>(ROUTE_CACHE_MS, ROUTE_CACHE_MAX);
+  /** The ids of the connections that are ours: a delivery for any other number is answered here instead of queued (known-numbers.ts). */
+  private readonly known = new KnownNumbers(() => this.loadKnownIds());
 
   constructor(
     private readonly db: WebhookDb,
@@ -177,13 +182,27 @@ export class WabaWebhookService {
     // Numbers on a provider of the registry are authenticated by that provider's own scheme (signature, shared secret header, or the
     // URL secret for a provider that signs nothing). A number on a built-in route keeps the rule above, unchanged.
     const phoneIds = changes.map((c) => c.phoneNumberId).filter((p): p is string => Boolean(p));
-    const { custom, hasBuiltin } = await this.providersCache.get(
-      JSON.stringify([...new Set(phoneIds)].sort()),
-      () => this.providers.payloadProviders(phoneIds, (fn) => this.db.privileged(fn)),
-      // A provider the registry does not know yet comes back as a placeholder with no base URL; it is not kept, so a provider created
-      // a moment ago is found again at the resolver's own 2 s reload, not after this cache's 30 s.
-      (r) => r.custom.every((p) => p.baseUrl !== ''),
-    );
+    // Null (never loaded) means "maybe ours": everything below then runs as it always did.
+    let known = await this.known.snapshot();
+    // Nothing in it is ours: look once more at an index that is at most MISS_REFRESH_MS old, so a connection added a moment ago is not
+    // taken for a foreign number (and the flood of foreign ones costs at most one small query per MISS_REFRESH_MS).
+    if (
+      known !== null &&
+      changes.length > 0 &&
+      !changes.some((c) => known!.has(c.phoneNumberId, c.wabaId))
+    ) {
+      known = await this.known.snapshot(MISS_REFRESH_MS);
+    }
+    const mayBeOurs = (c: WebhookChange) => known === null || known.has(c.phoneNumberId, c.wabaId);
+    const { custom, hasBuiltin } = changes.some(mayBeOurs)
+      ? await this.providersCache.get(
+          JSON.stringify([...new Set(phoneIds)].sort()),
+          () => this.providers.payloadProviders(phoneIds, (fn) => this.db.privileged(fn)),
+          // A provider the registry does not know yet comes back as a placeholder with no base URL; it is not kept, so a provider created
+          // a moment ago is found again at the resolver's own 2 s reload, not after this cache's 30 s.
+          (r) => r.custom.every((p) => p.baseUrl !== ''),
+        )
+      : { custom: [], hasBuiltin: false }; // no connection owns any of these numbers: the lookup would answer exactly this
     let ok = auth.ok;
     let reason = auth.ok ? '' : auth.reason;
     if (custom.length > 0) {
@@ -212,7 +231,9 @@ export class WabaWebhookService {
       fields: [...new Set(changes.map((c) => c.field))],
     });
 
-    const actionable = changes.filter((c) => HANDLED_FIELDS.has(c.field));
+    // A change for a number no connection owns would be dropped by the worker after a database lookup (waba-ingest.service.ts): it is
+    // answered here instead, which is most of what the public receiver gets.
+    const actionable = changes.filter((c) => HANDLED_FIELDS.has(c.field) && mayBeOurs(c));
     if (actionable.length === 0) {
       void this.markSeen(replayKey);
       return { queued: 0 };
@@ -338,6 +359,23 @@ export class WabaWebhookService {
   }
 
   /** True when the request came from an address listed in `WABA_TRUSTED_FORWARDER_IPS` (an IPv4-mapped IPv6 form is unwrapped). */
+  /** Every phone number id and WABA id of a connection of this platform (any status: the route lookup ranks, it does not filter on it). */
+  private async loadKnownIds(): Promise<{ phones: string[]; wabas: string[] }> {
+    const res = await this.db.privileged((tx) =>
+      tx.execute(
+        sql`SELECT meta_json ->> 'phone_number_id' AS phone, meta_json ->> 'waba_id' AS waba
+              FROM wa_provider_configs WHERE provider = 'waba'`,
+      ),
+    );
+    const phones = new Set<string>();
+    const wabas = new Set<string>();
+    for (const r of res.rows as Array<{ phone: string | null; waba: string | null }>) {
+      if (r.phone) phones.add(r.phone);
+      if (r.waba) wabas.add(r.waba);
+    }
+    return { phones: [...phones], wabas: [...wabas] };
+  }
+
   private isTrustedForwarder(ip: string | undefined): boolean {
     if (!ip) return false;
     const plain = ip.replace(/^::ffff:/i, '');

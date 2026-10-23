@@ -283,8 +283,6 @@
       "shortEmail": "邮箱",
       "shortStage": "阶段",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "创建时间",
-      "shortModified": "修改时间",
       "firstRun": {
         "title": "添加您的第一批联系人",
         "message": "导入您常联系的人。联系人可用于消息、营销活动、任务和交易。",
@@ -298,7 +296,8 @@
       "teamFilter": "按团队筛选",
       "allTeams": "所有团队",
       "teamFormer": "原团队",
-      "unhideColumn": "显示列"
+      "unhideColumn": "显示列",
+      "resizeColumn": "拖动以调整“{column}”的宽度；双击重置"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -1338,7 +1337,7 @@
         "closePicker": "关闭",
         "changed": "要更改的属性",
         "clear": "清空",
-        "keep": "保持不变",
+        "remove": "移除{name}",
         "setValue": "设置值",
         "willClear": "将清空{count, plural, other {所选的全部 # 个联系人}}的该值。",
         "requiredNoClear": "必填属性无法清空。",

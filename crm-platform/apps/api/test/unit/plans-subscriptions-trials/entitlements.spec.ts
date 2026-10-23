@@ -313,6 +313,9 @@ function fakeDb(rows: unknown[]): DatabaseService {
   const tx = { execute: async () => ({ rows }) };
   return {
     txAs: async (_tenant: unknown, fn: (t: typeof tx) => Promise<unknown>) => fn(tx),
+    // the grace days setting (PlanStore): no row here, so the default applies
+    privileged: async (fn: (t: unknown) => Promise<unknown>) =>
+      fn({ execute: async () => ({ rows: [] }) }),
   } as unknown as DatabaseService;
 }
 

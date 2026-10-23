@@ -40,7 +40,7 @@
       "topup": "충전",
       "earn": "적립",
       "refund": "환불",
-      "spend": "메시지 요금",
+      "spend": "사용 요금",
       "admin_adjust": "조정"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "전체 명세서 열기",
         "emptyTitle": "아직 활동이 없습니다",
         "emptyBody": "충전, 메시지 요금 및 환불 내역이 여기에 표시됩니다."
-      }
+      },
+      "messageExpenses": "메시지 비용"
     },
     "activity": {
       "description": "설명",
@@ -145,7 +146,7 @@
         "all": "전체",
         "topup": "충전",
         "earn": "수익",
-        "spend": "메시지 요금",
+        "spend": "사용 요금",
         "refund": "환불",
         "admin_adjust": "조정"
       },
@@ -188,6 +189,128 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "지출",
+      "subtitle": "각 메시지, 통화, AI 요청, 조회에 든 비용과 용도입니다. 합계에는 필터와 일치하는 모든 항목이 포함됩니다.",
+      "back": "지갑으로 돌아가기",
+      "breadcrumbLabel": "탐색 경로",
+      "breadcrumbWallet": "지갑",
+      "breadcrumbExpenses": "지출",
+      "fullStatement": "전체 명세서",
+      "summary": {
+        "messages": "항목",
+        "charged": "청구됨",
+        "refunded": "환불됨",
+        "net": "순비용",
+        "notBilled": "청구 안 됨"
+      },
+      "filters": {
+        "status": "상태",
+        "statusAll": "전체",
+        "statusCharged": "청구됨",
+        "statusFree": "청구 안 됨",
+        "statusRefunded": "환불됨",
+        "template": "템플릿",
+        "templatePlaceholder": "템플릿 이름",
+        "channel": "채널",
+        "category": "카테고리",
+        "allChannels": "모든 채널",
+        "allCategories": "모든 카테고리",
+        "from": "시작",
+        "to": "종료",
+        "apply": "적용",
+        "reset": "초기화",
+        "rangeInverted": "종료일이 시작일보다 앞입니다.",
+        "kind": "유형",
+        "allKinds": "모든 유형"
+      },
+      "breakdown": {
+        "title": "기준별 비용",
+        "groupBy": {
+          "template": "템플릿",
+          "source": "채널",
+          "category": "카테고리",
+          "country": "국가",
+          "kind": "유형"
+        },
+        "group": "그룹",
+        "notRecorded": "기록 없음",
+        "truncated": "가장 큰 {count}개 그룹을 표시합니다. 나머지를 보려면 기간을 좁히세요.",
+        "empty": "이 필터와 일치하는 항목이 없습니다."
+      },
+      "columns": {
+        "date": "날짜",
+        "template": "템플릿",
+        "campaign": "캠페인, 대량 발송 또는 기능",
+        "channel": "채널",
+        "category": "카테고리",
+        "country": "국가",
+        "status": "상태",
+        "charged": "청구됨",
+        "refunded": "환불됨",
+        "net": "순액",
+        "messages": "항목",
+        "notBilled": "청구 안 됨",
+        "type": "유형"
+      },
+      "status": {
+        "charged": "청구됨",
+        "free": "청구 안 됨",
+        "refunded": "환불됨",
+        "refundedOn": "{date}에 환불됨"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "요금제에 포함됨",
+        "wallet_empty": "지갑 잔액이 없었습니다",
+        "rate_is_zero": "요금이 0입니다",
+        "no_wallet_owner": "지갑 소유자가 없습니다"
+      },
+      "uncollected": "{amount} 미징수",
+      "emptyTitle": "아직 지출이 없습니다",
+      "emptyBody": "메시지, 통화, AI 요청 및 기타 사용 내역이 용도와 비용과 함께 여기에 표시됩니다.",
+      "emptyFiltered": "이 필터와 일치하는 항목이 없습니다. 필터를 바꾸거나 초기화하세요.",
+      "days": {
+        "title": "일별 로그",
+        "subtitle": "날짜, 상태, 채널, 카테고리별로 묶은 메시지입니다. 날짜를 열면 메시지를 하나씩 볼 수 있습니다.",
+        "messagesOnDay": "메시지 {count}건",
+        "viewDetails": "자세히 보기",
+        "actions": "작업",
+        "empty": "이 기간에는 메시지가 없습니다."
+      },
+      "log": {
+        "title": "메시지",
+        "forDay": "{date} 메시지",
+        "showAllDays": "모든 날짜 보기"
+      },
+      "units": {
+        "sms": "{count, plural, other {#개 세그먼트}}",
+        "whatsapp_call": "{count, plural, other {#분}}",
+        "voice_call": "{count, plural, other {#분}}"
+      },
+      "sources": {
+        "lead_first": "리드 즉시 답장",
+        "lead": "리드 즉시 답장",
+        "test": "테스트 발송",
+        "appointment": "예약 알림",
+        "lead_scoring": "리드 점수",
+        "lead_digest": "채팅 요약",
+        "pql_search": "연락처 검색",
+        "growth_assistant": "성장 도우미",
+        "ai_copilot": "AI 코파일럿",
+        "help_agent": "도움말 도우미",
+        "company_brief": "회사 요약",
+        "inbox_ai": "답장 도우미",
+        "template_ai": "템플릿 빌더",
+        "campaign_ai": "캠페인 작성기",
+        "campaign_ai_image": "캠페인 이미지",
+        "kb_embedding": "지식 베이스",
+        "flow_ai": "플로우 생성기",
+        "widget_ai": "웹사이트 챗봇",
+        "growth": "성장",
+        "telephony": "전화 통화",
+        "translation": "번역"
       }
     },
     "admin": {
@@ -505,6 +628,40 @@
               "service": "서비스"
             },
             "problems": "건너뛴 행"
+          }
+        },
+        "usage": {
+          "title": "기타 사용 요금",
+          "subtitle": "SMS, 이메일, 통화, 연락처 조회 및 기타 채팅 채널이 고객에게 단위당 얼마를 부과하는지 설정합니다. 요금이 0이거나 스위치가 꺼져 있어도 지출 로그에는 기록되며 요금은 부과되지 않습니다.",
+          "perUnit": "{unit}당 요금",
+          "chargeFor": "{kind} 요금 부과",
+          "units": {
+            "segment": "SMS 세그먼트",
+            "email": "이메일",
+            "minute": "분",
+            "lookup": "조회",
+            "message": "메시지"
+          },
+          "hints": {
+            "sms": "고객이 직접 쓰는 SMS 제공업체 청구서에 더해 부과됩니다. 한 세그먼트는 160자입니다(라틴 문자가 아니면 70자).",
+            "email": "고객이 직접 쓰는 사서함에 더해 부과됩니다. 보낸 이메일 한 통을 한 번으로 셉니다.",
+            "whatsapp_call": "WhatsApp 통화의 시작된 분마다 부과됩니다. 아무도 받지 않은 통화는 무료입니다.",
+            "voice_call": "고객의 전화 제공업체가 보고한 통화의 시작된 분마다 부과됩니다. 직접 입력한 통화 기록에는 부과되지 않습니다.",
+            "enrichment": "플랫폼의 데이터 제공업체에서 조회한 연락처마다 부과됩니다.",
+            "chat_message": "Telegram, Facebook, Instagram, LINE, Viber 또는 WeChat으로 보낸 메시지마다 부과됩니다. 요금을 설정하기 전까지는 무료입니다."
+          },
+          "costPlus": {
+            "title": "공급업체 비용에 마크업을 더해 부과",
+            "body": "AI 요청과 유료 번역은 플랫폼 자체의 공급업체 키로 실행되며, 공급업체가 청구한 금액에 아래 마크업을 더해 부과됩니다. 자체 키를 쓰는 워크스페이스에는 부과되지 않습니다."
+          },
+          "markup": "공급업체 비용에 대한 마크업",
+          "markupHint": "10은 비용이 1.00인 요청을 1.10으로 부과한다는 뜻입니다.",
+          "saving": "저장 중",
+          "save": "요금 저장",
+          "saved": "사용 요금을 저장했습니다",
+          "problems": {
+            "invalid": "소수점 이하 2자리까지의 금액을 입력하세요",
+            "tooHigh": "한도를 초과했습니다"
           }
         }
       },
@@ -867,6 +1024,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp 메시지",
+      "sms": "SMS",
+      "email": "이메일",
+      "whatsapp_call": "WhatsApp 통화",
+      "voice_call": "음성 통화",
+      "ai": "AI",
+      "translation": "번역",
+      "enrichment": "연락처 조회",
+      "chat_message": "채팅 메시지"
     }
   }
 }

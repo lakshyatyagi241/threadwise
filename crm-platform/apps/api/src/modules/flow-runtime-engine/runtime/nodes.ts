@@ -1,5 +1,6 @@
 import {
   flbCoordinateProblem,
+  flbImageUrl,
   flbParseCoordinate,
   flbSanitizeConditionGroup,
 } from '@crm/contracts';
@@ -173,7 +174,7 @@ const carousel: NodeExecutor = {
       .map((c) => ({
         title: ctx.render(c.title).trim(),
         text: ctx.render(c.text).trim(),
-        ...(/^https?:\/\/\S+$/i.test(str(c.image).trim()) ? { image: str(c.image).trim() } : {}),
+        ...(flbImageUrl(ctx.render(c.image)) ? { image: flbImageUrl(ctx.render(c.image))! } : {}),
         buttons: arr(c.buttons)
           .map(obj)
           .flatMap((b): CarouselCard['buttons'] => {
@@ -509,23 +510,38 @@ const location: NodeExecutor = {
     const longitude = flbParseCoordinate(p.longitude)!;
     const name = ctx.render(p.title);
     const address = ctx.render(p.address);
+    // A link-mode step sends its pin with the coordinates only, which come from the pasted Maps link. A pin that carries a name and
+    // an address gets looked up by them in Maps, which can open a different spot than the link the author chose.
+    const linkMode = str(p.locMode) === 'link';
     let out = await ctx.send({
       kind: 'location',
       latitude,
       longitude,
-      ...(name ? { name } : {}),
-      ...(address ? { address } : {}),
+      ...(!linkMode && name ? { name } : {}),
+      ...(!linkMode && address ? { address } : {}),
     });
+    const pinSent = out.ok;
     if (!out.ok && !out.halt) {
-      const link = `https://maps.google.com/?q=${latitude},${longitude}`;
+      const pinLink = `https://maps.google.com/?q=${latitude},${longitude}`;
       out = await ctx.send({
         kind: 'text',
-        body: [name ? `📍 *${name}*` : '📍 Location', address, link].filter(Boolean).join('\n'),
+        body: [name ? `📍 *${name}*` : '📍 Location', address, pinLink].filter(Boolean).join('\n'),
       });
     }
     if (!out.ok) {
       const stop = failed(out, 'skip', ctx);
       if (stop) return stop;
+    }
+    // The name and address a link-mode pin leaves out follow as a text: text is not looked up by place.
+    if (pinSent && linkMode && (name || address)) {
+      const detail = await ctx.send({
+        kind: 'text',
+        body: [name ? `📍 *${name}*` : '📍 Location', address].filter(Boolean).join('\n'),
+      });
+      if (!detail.ok) {
+        const stop = failed(detail, 'skip', ctx);
+        if (stop) return stop;
+      }
     }
     return advance;
   },

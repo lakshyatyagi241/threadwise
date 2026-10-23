@@ -10,7 +10,6 @@ import { ApiError } from '@/lib/api/errors';
 import { usePlanFeature } from '@/lib/plan-features';
 import { useVocab } from '@/features/persona-vocabulary';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
 import {
   refresh,
   routingApi,
@@ -27,6 +26,7 @@ import {
   shadowedRules,
   neverMatches,
 } from '../lib/pipeline';
+import { useSmartRouting } from '../lib/smart-routing';
 import { namesSummary, whenChips } from '../lib/summary';
 import { AssignmentSwitches } from './assignment-switches';
 import { BusinessHoursDialog } from './business-hours-dialog';
@@ -43,7 +43,9 @@ const reason = (e: unknown, fallback: string) =>
  * owner, claim sets owner) with Advanced under them; then the OPTIONAL layer "Need more control? Add rules": the one pipeline (the switches'
  * contact-owner and sticky step, your rules in priority order, Everyone else pinned last, then the waiting queue), where it applies, and a
  * "Try it" box that dry-runs the engine. A workspace that only wants the four switches never creates a rule. Reading needs
- * `inbox.settings.read`, changing `inbox.routing.manage`; a plan without Routing rules gets the paywall sheet and the switches its plan allows.
+ * `inbox.settings.read`, changing `inbox.routing.manage`. The base controls (claim sets owner, queue alert, the waiting-queue note, business
+ * hours with `inbox_sla`) always show; the Smart routing parts (switches, rules, Everyone else, Try it, timers) show only when the workspace
+ * has them (`useSmartRouting`), else one add-on card stands in their place (nothing when the plan does not offer the add-on).
  */
 export function AutoAssignmentScreen() {
   const t = useTranslations('team-inbox-routing-sla.page');
@@ -55,9 +57,11 @@ export function AutoAssignmentScreen() {
   const canManage = useCan('inbox.routing.manage');
   // The workspace hours are read by the rules and by SLA clocks, so a plan with SLA keeps the editor even without Smart routing.
   const slaInPlan = usePlanFeature('inbox_sla');
+  // The rules list is not even asked for when the plan is known to lack Smart routing (the API would refuse it).
+  const routingInPlan = usePlanFeature('inbox_routing');
   const qc = useQueryClient();
   const { toast } = useToast();
-  const rules = useRules('', canRead);
+  const rules = useRules('', canRead && routingInPlan);
   const assignees = useAssignees(canRead);
   const handoffSettings = useHandoffSettings(canRead);
   const [busy, setBusy] = useState<string | null>(null);
@@ -126,6 +130,10 @@ export function AutoAssignmentScreen() {
     await refresh(qc);
   }
 
+  const locked = isCode(rules.error, 'PLAN_FEATURE_LOCKED');
+  // Hooks run on every render, before the early return below.
+  const { routing } = useSmartRouting(handoffSettings.data, locked);
+
   if (!canRead) {
     return (
       <section className="mx-auto max-w-4xl">
@@ -134,7 +142,6 @@ export function AutoAssignmentScreen() {
     );
   }
 
-  const locked = isCode(rules.error, 'PLAN_FEATURE_LOCKED');
   const atLimit = first?.limit != null && first.total >= first.limit;
 
   return (
@@ -161,7 +168,7 @@ export function AutoAssignmentScreen() {
             })}
           </p>
         </div>
-        {canRead && (!locked || slaInPlan) && (
+        {canRead && (routing || slaInPlan) && (
           <Button variant="secondary" onClick={() => setHoursOpen(true)}>
             {t('businessHours')}
           </Button>
@@ -174,7 +181,10 @@ export function AutoAssignmentScreen() {
         onClose={() => setHoursOpen(false)}
       />
 
-      <AssignmentSwitches onAutoEnabled={locked ? async () => undefined : onAutoEnabled} />
+      <AssignmentSwitches
+        onAutoEnabled={routing ? onAutoEnabled : async () => undefined}
+        rulesLocked={locked}
+      />
 
       {handoffSettings.data && (
         <WaitingQueueSection
@@ -186,126 +196,118 @@ export function AutoAssignmentScreen() {
         />
       )}
 
-      <section className="space-y-4" data-testid="rules-layer" aria-labelledby="rules-title">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h2 id="rules-title" className="text-lg font-semibold">
-              {tr('title')}
-            </h2>
-            <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{tr('intro')}</p>
-          </div>
-          {canManage && !locked && (
-            <div className="text-end">
-              {atLimit ? (
-                <Button disabled>{tr('add')}</Button>
-              ) : (
-                <Link href="/auto-assignment/new">
-                  <Button>{tr('add')}</Button>
-                </Link>
-              )}
-              {first?.limit != null && (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {atLimit
-                    ? t('limitReached', { limit: first.limit })
-                    : t('limitUsed', { used: first.total, limit: first.limit })}
-                </p>
-              )}
+      {routing && (
+        <section className="space-y-4" data-testid="rules-layer" aria-labelledby="rules-title">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h2 id="rules-title" className="text-lg font-semibold">
+                {tr('title')}
+              </h2>
+              <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{tr('intro')}</p>
             </div>
-          )}
-        </div>
-
-        {locked ? (
-          <Alert tone="info">
-            <span data-testid="rules-locked">
-              {tr('locked')} <AddonLockLink />
-            </span>
-          </Alert>
-        ) : (
-          <>
-            <Pipeline />
-            <p className="text-sm font-medium" data-testid="never-changes">
-              {tr('never')}
-            </p>
-
-            {blockers.map((b) => (
-              <Alert key={b.blocker.id} tone="warning">
-                <span data-testid="shadow-warning">
-                  {tr('shadowed', {
-                    count: b.blocked.length,
-                    blocker: b.blocker.name,
-                    names: b.blocked.map((r) => r.name).join(', '),
-                  })}
-                </span>
-              </Alert>
-            ))}
-
-            {rules.isPending ? (
-              <div className="flex justify-center p-10" role="status" aria-label={tr('loading')}>
-                <Spinner />
-              </div>
-            ) : rules.isError ? (
-              <Alert tone="danger">
-                {tr('loadFailed')}{' '}
-                <button
-                  type="button"
-                  className="font-semibold underline"
-                  onClick={() => void rules.refetch()}
-                >
-                  {t('retry')}
-                </button>
-              </Alert>
-            ) : (
-              <>
-                {ordered.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-border p-4 text-sm text-muted-foreground">
-                    <p className="font-medium text-foreground">{tr('emptyTitle')}</p>
-                    <p>{tr('empty')}</p>
-                  </div>
+            {canManage && (
+              <div className="text-end">
+                {atLimit ? (
+                  <Button disabled>{tr('add')}</Button>
                 ) : (
-                  <ol className="space-y-3" aria-label={t('list')}>
-                    {ordered.map((r, i) => (
-                      <RuleRow
-                        key={r.id}
-                        rule={r}
-                        index={i}
-                        last={i === ordered.length - 1}
-                        searching={false}
-                        names={names}
-                        busy={busy === r.id}
-                        canManage={canManage}
-                        shadowed={blocked.has(r.id)}
-                        onToggle={(on) => void toggle(r, on)}
-                        onMove={(dir) => reorderTo(i, i + dir)}
-                        onDragStart={() => setDragFrom(i)}
-                        onDragEnd={() => setDragFrom(null)}
-                        onDropHere={() => {
-                          if (dragFrom !== null) reorderTo(dragFrom, i);
-                          setDragFrom(null);
-                        }}
-                        onDuplicate={() =>
-                          void run(
-                            r.id,
-                            async () => {
-                              await routingApi.duplicate(r.id);
-                              toast(t('duplicated'), 'success');
-                            },
-                            t('duplicateFailed'),
-                          )
-                        }
-                        onDelete={() => setDeleting(r)}
-                      />
-                    ))}
-                  </ol>
+                  <Link href="/auto-assignment/new">
+                    <Button>{tr('add')}</Button>
+                  </Link>
                 )}
-                <EveryoneElseRow rule={everyoneElse} names={names} canManage={canManage} />
-              </>
+                {first?.limit != null && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {atLimit
+                      ? t('limitReached', { limit: first.limit })
+                      : t('limitUsed', { used: first.total, limit: first.limit })}
+                  </p>
+                )}
+              </div>
             )}
-          </>
-        )}
-      </section>
+          </div>
 
-      {!locked && <TryItPanel names={names} />}
-      {!locked && <WhereThisApplies />}
+          <Pipeline />
+          <p className="text-sm font-medium" data-testid="never-changes">
+            {tr('never')}
+          </p>
+
+          {blockers.map((b) => (
+            <Alert key={b.blocker.id} tone="warning">
+              <span data-testid="shadow-warning">
+                {tr('shadowed', {
+                  count: b.blocked.length,
+                  blocker: b.blocker.name,
+                  names: b.blocked.map((r) => r.name).join(', '),
+                })}
+              </span>
+            </Alert>
+          ))}
+
+          {rules.isPending ? (
+            <div className="flex justify-center p-10" role="status" aria-label={tr('loading')}>
+              <Spinner />
+            </div>
+          ) : rules.isError ? (
+            <Alert tone="danger">
+              {tr('loadFailed')}{' '}
+              <button
+                type="button"
+                className="font-semibold underline"
+                onClick={() => void rules.refetch()}
+              >
+                {t('retry')}
+              </button>
+            </Alert>
+          ) : (
+            <>
+              {ordered.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border p-4 text-sm text-muted-foreground">
+                  <p className="font-medium text-foreground">{tr('emptyTitle')}</p>
+                  <p>{tr('empty')}</p>
+                </div>
+              ) : (
+                <ol className="space-y-3" aria-label={t('list')}>
+                  {ordered.map((r, i) => (
+                    <RuleRow
+                      key={r.id}
+                      rule={r}
+                      index={i}
+                      last={i === ordered.length - 1}
+                      searching={false}
+                      names={names}
+                      busy={busy === r.id}
+                      canManage={canManage}
+                      shadowed={blocked.has(r.id)}
+                      onToggle={(on) => void toggle(r, on)}
+                      onMove={(dir) => reorderTo(i, i + dir)}
+                      onDragStart={() => setDragFrom(i)}
+                      onDragEnd={() => setDragFrom(null)}
+                      onDropHere={() => {
+                        if (dragFrom !== null) reorderTo(dragFrom, i);
+                        setDragFrom(null);
+                      }}
+                      onDuplicate={() =>
+                        void run(
+                          r.id,
+                          async () => {
+                            await routingApi.duplicate(r.id);
+                            toast(t('duplicated'), 'success');
+                          },
+                          t('duplicateFailed'),
+                        )
+                      }
+                      onDelete={() => setDeleting(r)}
+                    />
+                  ))}
+                </ol>
+              )}
+              <EveryoneElseRow rule={everyoneElse} names={names} canManage={canManage} />
+            </>
+          )}
+        </section>
+      )}
+
+      {routing && <TryItPanel names={names} />}
+      {routing && <WhereThisApplies />}
 
       <ConfirmDialog
         open={deleting !== null}

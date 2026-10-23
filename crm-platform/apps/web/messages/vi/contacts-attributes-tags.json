@@ -283,8 +283,6 @@
       "shortEmail": "Email",
       "shortStage": "Giai đoạn",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Ngày tạo",
-      "shortModified": "Đã sửa",
       "firstRun": {
         "title": "Thêm liên hệ đầu tiên của bạn",
         "message": "Đưa những người bạn trò chuyện vào đây. Liên hệ được dùng cho tin nhắn, chiến dịch, công việc và giao dịch.",
@@ -298,7 +296,8 @@
       "teamFilter": "Lọc theo nhóm",
       "allTeams": "Tất cả nhóm",
       "teamFormer": "Nhóm cũ",
-      "unhideColumn": "Hiện cột"
+      "unhideColumn": "Hiện cột",
+      "resizeColumn": "Kéo để đổi độ rộng {column}; nhấp đúp để đặt lại"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -1338,7 +1337,7 @@
         "closePicker": "Đóng",
         "changed": "Thuộc tính cần thay đổi",
         "clear": "Xóa giá trị",
-        "keep": "Giữ nguyên",
+        "remove": "Xóa {name}",
         "setValue": "Đặt giá trị",
         "willClear": "Sẽ được làm trống trên {count, plural, =1 {liên hệ đã chọn} other {tất cả # liên hệ đã chọn}}.",
         "requiredNoClear": "Không thể xóa giá trị của thuộc tính bắt buộc.",

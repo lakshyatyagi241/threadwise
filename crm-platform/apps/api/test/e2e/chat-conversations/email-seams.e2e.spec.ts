@@ -16,6 +16,7 @@ import type { Tenant } from '../contacts-attributes-tags/support';
 import { FakeEmailAdapter } from './fake-email-adapter';
 import {
   asUser,
+  fundWallet,
   scalar,
   simChannel,
   simInbound,
@@ -41,6 +42,8 @@ beforeAll(async () => {
   p = await startPipeline();
   p.h.app.get(ChannelAdapterRegistry).register(adapter);
   t = await p.api.signup('mail');
+  // A reply is the platform's per-mail fee, and an empty wallet is refused.
+  await fundWallet(p, t);
   // An email channel belongs to a mailbox (channels.external_id = the mailbox uuid); a channel with no mailbox row is treated as
   // someone's personal one and fails closed (TW-MAIL-035), so the fixture is a real shared mailbox.
   const mb = await p.h.owner.query(

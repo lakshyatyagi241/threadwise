@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { UnrecoverableError } from 'bullmq';
 
-vi.mock('../../../src/modules/outbound-webhooks/send', () => ({ send: vi.fn() }));
+vi.mock('../../../src/modules/outbound-webhooks/send', () => ({
+  send: vi.fn(),
+  WEBHOOK_TRANSPORT: 'WEBHOOK_TRANSPORT',
+}));
 
 import { send } from '../../../src/modules/outbound-webhooks/send';
 import { WebhookDeliveryProcessor } from '../../../src/modules/outbound-webhooks/webhook-delivery.processor';
@@ -87,7 +90,12 @@ describe('WebhookDeliveryProcessor', () => {
       logDelivery: log,
       recordResult: result,
     };
-    return { p: new WebhookDeliveryProcessor(as(db), as(repo), as(crypto)), log, result };
+    // `send` is mocked above, so the transport the processor is given is never called.
+    return {
+      p: new WebhookDeliveryProcessor(as(db), as(repo), as(crypto), as(vi.fn())),
+      log,
+      result,
+    };
   };
   const out = (o: Partial<Awaited<ReturnType<typeof send>>>) => ({
     ok: false,

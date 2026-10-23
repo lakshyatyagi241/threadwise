@@ -93,7 +93,12 @@ export type MarketAvailability = z.infer<typeof marketAvailabilitySchema>;
  * (`plan_grants`) the plan ITSELF carries every plan feature the app would grant (the app's own `mkt_` key aside), so the app adds nothing the
  * plan lacks. Installing the app stays free in all three cases.
  */
-export const marketIncludedBySchema = z.enum(['plan_feature', 'min_plan', 'plan_grants']);
+export const marketIncludedBySchema = z.enum([
+  'plan_feature',
+  'min_plan',
+  'plan_grants',
+  'plan_offer',
+]);
 export type MarketIncludedBy = z.infer<typeof marketIncludedBySchema>;
 
 /** How many days ahead of its end a paid period may be renewed (one more month is bought on top of the remaining time). */
@@ -370,6 +375,8 @@ export function includedBy(f: {
   catalogue: readonly string[];
   /** The plan alone (no add-on, no app) already grants every plan feature the app grants; false when the app grants none. */
   planCarriesGrants?: boolean;
+  /** The operator set this app to Included on the workspace's plan (plan editor, Mini apps / Integrations tab). */
+  planOfferIncluded?: boolean;
 }): MarketIncludedBy | null {
   if (f.includedPlanFeature && f.planFeatureOn) return 'plan_feature';
   if (f.includedMinPlan && f.orgPlanSlug && !f.planLapsed) {
@@ -377,6 +384,7 @@ export function includedBy(f: {
     const have = f.catalogue.indexOf(f.orgPlanSlug);
     if (need >= 0 && have >= need) return 'min_plan';
   }
+  if (f.planOfferIncluded) return 'plan_offer';
   if (f.planCarriesGrants) return 'plan_grants';
   return null;
 }

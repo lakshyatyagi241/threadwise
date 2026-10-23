@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { FieldResponse } from '@crm/contracts';
 import { Button, Input } from '@crm/ui';
@@ -12,12 +12,13 @@ import {
   type BulkPropertyProblem,
 } from '../lib/bulk-properties';
 import { PropertyInput } from './custom-fields-section';
+import { XIcon } from './icons';
 
 /**
  * The "Custom properties" part of the bulk update dialog. Every property starts on Keep and is not listed; "Add property"
  * opens a searchable list (it stays usable with dozens of properties) and adds one row at a time. A row holds the property's own
  * typed input (the same one the contact form uses) and two ways out: "Clear" empties the property on every selected contact,
- * "Keep" takes the row away again so that property is left alone.
+ * the cross in the corner takes the row away again so that property is left alone.
  */
 export function BulkPropertiesSection({
   fields,
@@ -39,6 +40,7 @@ export function BulkPropertiesSection({
   const t = useTranslations('contacts-attributes-tags.bulkUpdate');
   const tf = useTranslations('contacts-attributes-tags.form');
   const [picking, setPicking] = useState(false);
+  const sectionRef = useRef<HTMLFieldSetElement>(null);
   const [query, setQuery] = useState('');
   const byKey = new Map(fields.map((f) => [f.key, f]));
   const rows = Object.keys(changes)
@@ -56,8 +58,9 @@ export function BulkPropertiesSection({
   const message = (p: BulkPropertyProblem) =>
     p === 'empty' ? t('properties.problemEmpty') : tf(`fieldProblem.${p}`);
 
+  // min-w-0: a fieldset is as wide as its widest unbreakable content by default, so one long property label stretched the whole dialog
   return (
-    <fieldset className="space-y-2 border-t border-border pt-4">
+    <fieldset ref={sectionRef} className="min-w-0 space-y-2 border-t border-border pt-4">
       <legend className="text-sm font-medium">{t('properties.title')}</legend>
       <p className="text-xs text-muted-foreground">{t('properties.hint', { count })}</p>
 
@@ -66,8 +69,27 @@ export function BulkPropertiesSection({
           {rows.map((f) => {
             const change = changes[f.key]!;
             const problem = problems[f.key];
+            const removeLabel = t('properties.remove', { name: f.label });
             return (
-              <li key={f.key} className="rounded-md border border-border p-2.5">
+              <li
+                key={f.key}
+                className="relative min-w-0 rounded-md border border-border p-2.5 pe-9"
+              >
+                <button
+                  type="button"
+                  aria-label={removeLabel}
+                  title={removeLabel}
+                  onClick={() => {
+                    remove(f.key);
+                    // The × unmounts with its row, so hand focus to Add property rather than drop it to the page.
+                    sectionRef.current
+                      ?.querySelector<HTMLButtonElement>('[data-add-property]')
+                      ?.focus();
+                  }}
+                  className="absolute end-1.5 top-1.5 rounded p-1 text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <XIcon className="size-3.5" />
+                </button>
                 {change.mode === 'set' ? (
                   <PropertyInput
                     field={f}
@@ -78,7 +100,7 @@ export function BulkPropertiesSection({
                   />
                 ) : (
                   <div className="space-y-1">
-                    <p className="text-sm font-medium" dir="auto">
+                    <p className="text-sm font-medium [overflow-wrap:anywhere]" dir="auto">
                       {f.label}
                     </p>
                     <p
@@ -111,9 +133,6 @@ export function BulkPropertiesSection({
                       {t('properties.setValue')}
                     </Button>
                   )}
-                  <Button type="button" size="sm" variant="ghost" onClick={() => remove(f.key)}>
-                    {t('properties.keep')}
-                  </Button>
                 </div>
               </li>
             );
@@ -138,14 +157,20 @@ export function BulkPropertiesSection({
                 <button
                   type="button"
                   className="flex w-full items-baseline justify-between gap-2 rounded px-2 py-1.5 text-start text-sm hover:bg-muted"
+                  title={`${f.label} /${f.key}`}
                   onClick={() => {
                     set(f.key, startingChange(f));
                     setPicking(false);
                     setQuery('');
                   }}
                 >
-                  <span dir="auto">{f.label}</span>
-                  <span dir="ltr" className="font-mono text-xs text-muted-foreground">
+                  <span dir="auto" className="min-w-0 [overflow-wrap:anywhere]">
+                    {f.label}
+                  </span>
+                  <span
+                    dir="ltr"
+                    className="max-w-[45%] shrink-0 truncate font-mono text-xs text-muted-foreground"
+                  >
                     /{f.key}
                   </span>
                 </button>
@@ -173,7 +198,13 @@ export function BulkPropertiesSection({
         </div>
       ) : (
         anyEditable && (
-          <Button type="button" size="sm" variant="secondary" onClick={() => setPicking(true)}>
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            data-add-property
+            onClick={() => setPicking(true)}
+          >
             {t('properties.add')}
           </Button>
         )

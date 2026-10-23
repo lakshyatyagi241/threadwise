@@ -283,8 +283,6 @@
       "shortEmail": "이메일",
       "shortStage": "단계",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "생성일",
-      "shortModified": "수정일",
       "firstRun": {
         "title": "첫 연락처를 추가하세요",
         "message": "대화하는 사람들을 가져오세요. 연락처는 메시지, 캠페인, 작업, 거래에 사용됩니다.",
@@ -298,7 +296,8 @@
       "teamFilter": "팀별 필터",
       "allTeams": "모든 팀",
       "teamFormer": "이전 팀",
-      "unhideColumn": "열 다시 표시"
+      "unhideColumn": "열 다시 표시",
+      "resizeColumn": "끌어서 {column} 너비 조절, 두 번 클릭하면 초기화"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -1338,7 +1337,7 @@
         "closePicker": "닫기",
         "changed": "변경할 속성",
         "clear": "지우기",
-        "keep": "유지",
+        "remove": "{name} 제거",
         "setValue": "값 설정",
         "willClear": "{count, plural, one {선택한 연락처} other {선택한 연락처 #명 모두}}에서 비워집니다.",
         "requiredNoClear": "필수 속성은 지울 수 없습니다.",

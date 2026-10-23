@@ -10,7 +10,7 @@ import { senderObject } from './channel-rules';
 import { ChannelsRepository } from './channels.repository';
 import { broadcastMessage } from './viber-message';
 import { VibBroadcastsRepository, type VibBroadcastRow } from './vib-broadcasts.repository';
-import type { VibBroadcastJob } from './vib-broadcasts.service';
+import { MODULE_KEY, type VibBroadcastJob } from './vib-broadcasts.service';
 import { QUEUES } from '../../infra/queue/queues';
 import {
   HELD_TABLES,
@@ -20,9 +20,17 @@ import {
   scheduleWake,
   splitByQuietHours,
 } from '../compliance-center';
+import { ChatUsageReporter, type BroadcastUsageRef } from '../chat-conversations';
 import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 
 export type VibRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
+
+const usageRef = (b: VibBroadcastRow): BroadcastUsageRef => ({
+  module: MODULE_KEY,
+  id: b.id,
+  uuid: b.uuid,
+  name: b.name,
+});
 
 /**
  * Sends one Viber broadcast (TW-VIB-013), run by the `viber-broadcast` worker job. Each batch is a SINGLE `broadcast_message` call for up
@@ -38,6 +46,10 @@ export type VibRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
  * Consent (BL-141): every batch asks the ConsentGate first (purpose marketing, channel viber), so the first send is screened like a
  * release is. A user the gate refuses is left out of the call and recorded `failed` with `Not messaged: consent (<reason>)` (Viber's
  * recipient statuses have no `blocked`); the broadcast itself still ends `done`.
+ *
+ * Every user Viber accepts is the platform's per-message fee (`chat_message` in the usage prices). A batch shares ONE message token, so
+ * the fee is reported per user on `<token>:<user id>`, the same id the user's inbox copy carries: a later `failed` receipt for that
+ * user gives it back. Before each batch the wallet is asked: when it cannot pay, the run stops with nobody failed (see `waitForWallet`).
  */
 @Injectable()
 export class VibBroadcastSenderService {
@@ -56,6 +68,7 @@ export class VibBroadcastSenderService {
     @InjectQueue(QUEUES.VIBER_BROADCAST) private readonly queue: Queue<VibBroadcastJob>,
     @Inject(VIBER_API) private readonly viber: ViberApiFactory,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
+    private readonly usage: ChatUsageReporter,
   ) {}
 
   async run(orgId: number, broadcastId: number): Promise<VibRunResult> {
@@ -103,6 +116,11 @@ export class VibBroadcastSenderService {
       broadcast = await load();
       if (!broadcast || broadcast.status !== 'sending') return 'stopped';
       const current = broadcast;
+
+      // The whole batch is asked for, not one message: its fees settle a moment after the send, so a wallet of one message must not
+      // pass the check for a batch of hundreds.
+      const noMoney = await this.usage.refusal(orgId, BATCH_SIZE);
+      if (noMoney) return this.waitForWallet(orgId, broadcastId, noMoney);
 
       const batch = await this.db.txAs({ orgId }, (tx) =>
         this.repo.claim(tx, orgId, broadcastId, BATCH_SIZE, lastId),
@@ -175,6 +193,17 @@ export class VibBroadcastSenderService {
         await this.repo.recompute(tx, orgId, broadcastId);
       });
 
+      // Billed whether or not the user has a thread: Viber accepted the message. Without a token (it should always return one) the
+      // recipient row is the only id there is.
+      for (const r of send) {
+        if (outcome.failed.has(r.userId)) continue;
+        await this.usage.reportMessage(orgId, usageRef(current), {
+          channelKind: 'viber',
+          peerKey: r.userId,
+          providerMessageId: token !== null ? `${token}:${r.userId}` : `${current.uuid}:${r.id}`,
+        });
+      }
+
       if (token !== null) {
         for (const r of send) {
           if (outcome.failed.has(r.userId) || r.conversationId === null) continue;
@@ -189,6 +218,26 @@ export class VibBroadcastSenderService {
       }
       await this.sleep(BATCH_GAP_MS);
     }
+  }
+
+  /**
+   * The wallet cannot pay for the next batch. Nobody is failed and nobody is lost: what is left stays pending, the reason is kept on the
+   * broadcast and it goes back to a draft, which is what Pause does; Start continues it after a top-up.
+   */
+  private async waitForWallet(
+    orgId: number,
+    broadcastId: number,
+    why: string,
+  ): Promise<VibRunResult> {
+    await this.db.txAs({ orgId }, async (tx) => {
+      await this.repo.recompute(tx, orgId, broadcastId);
+      await this.repo.setStatus(tx, orgId, broadcastId, 'draft', { lastError: why.slice(0, 255) });
+    });
+    this.logger.warn(
+      { orgId, broadcastId },
+      '[VIB] broadcast stopped: the wallet cannot pay for the next batch',
+    );
+    return 'stopped';
   }
 
   /** A failure to copy into the thread never fails the send (Reference). */

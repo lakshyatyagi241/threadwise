@@ -234,7 +234,29 @@
         "ends": "Koniec",
         "limits": "Obowiązujące limity",
         "edit": "Edytuj i zmień plan",
-        "overrideNote": "Ta przestrzeń robocza ma własne limity, które zastępują limity planu."
+        "overrideNote": "Ta przestrzeń robocza ma własne limity, które zastępują limity planu.",
+        "addons": {
+          "title": "Dodatki",
+          "intro": "Co ten obszar roboczy ma z każdego dodatku i dlaczego.",
+          "empty": "Brak dodatków w sprzedaży.",
+          "kind": {
+            "feature": "Dodatek funkcji",
+            "capacity": "Dodatek pojemności"
+          },
+          "source": {
+            "plan": "W planie",
+            "override": "Włączone nadpisaniem",
+            "platform": "Obszar roboczy platformy",
+            "bought": "Kupione",
+            "buy": "Można kupić",
+            "unavailable": "Wymaga płatnego planu",
+            "hidden": "Ukryte w tym planie"
+          },
+          "renews": "Odnawia się {date}",
+          "ends": "Kończy się {date}",
+          "lifetime": "Bez daty końca",
+          "overrides": "{count, plural, one {# nadpisanie funkcji ma} few {# nadpisania funkcji mają} many {# nadpisań funkcji ma} other {# nadpisania funkcji mają}} pierwszeństwo przed planem: {keys}. Usuń je w Edytuj i zmień plan."
+        }
       },
       "walletTab": {
         "open": "Otwórz pełny portfel",

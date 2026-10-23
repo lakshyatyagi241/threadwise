@@ -324,7 +324,31 @@ export type PlanSettings = z.infer<typeof planSettingsSchema>;
 // --- entitlements for the app shell (TW-PLAN-020, 021) ------------------------------------------------------------
 
 /** The plan features the workspace has, as keys: the shell locks menu entries and draws the paywall sheet from it. */
-export const entitlementsResponseSchema = z.object({ features: z.array(z.string()) });
+/**
+ * For a plan feature that a plain add-on grants: which add-on, and how the workspace's plan offers it (docs/specs/addons-plan-offers.md 4). A locked
+ * screen names the add-on from this instead of from code, and draws nothing when the offer is `hidden`.
+ *   included    the plan includes the add-on (or an override gives the feature)
+ *   owned       the workspace holds a live purchase of it
+ *   buy         it can be bought now (`amount` is what it costs on this plan)
+ *   unavailable listed but not buyable now (the workspace is not on an active paid plan)
+ *   hidden      the plan does not offer it
+ */
+export const featureAddonSchema = z.object({
+  feature: z.string(),
+  addonSlug: z.string(),
+  addonName: z.string(),
+  offer: z.enum(['included', 'owned', 'buy', 'unavailable', 'hidden']),
+  amount: z.string(),
+  currency: z.string(),
+  billingUnit: z.string(),
+  billingDuration: z.number().int(),
+});
+export type FeatureAddon = z.infer<typeof featureAddonSchema>;
+
+export const entitlementsResponseSchema = z.object({
+  features: z.array(z.string()),
+  featureAddons: z.array(featureAddonSchema).default([]),
+});
 export type EntitlementsResponse = z.infer<typeof entitlementsResponseSchema>;
 
 /** `unlocks`: only the plans that include this feature (the paywall sheet lists exactly those). */

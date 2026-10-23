@@ -283,8 +283,6 @@
       "shortEmail": "Correo",
       "shortStage": "Etapa",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Creado",
-      "shortModified": "Modificado",
       "firstRun": {
         "title": "Añade tus primeros contactos",
         "message": "Trae a las personas con las que hablas. Los contactos se usan para mensajes, campañas, tareas y negocios.",
@@ -298,7 +296,8 @@
       "teamFilter": "Filtrar por equipo",
       "allTeams": "Todos los equipos",
       "teamFormer": "Equipo anterior",
-      "unhideColumn": "Mostrar columna"
+      "unhideColumn": "Mostrar columna",
+      "resizeColumn": "Arrastra para cambiar el ancho de {column}; doble clic para restablecer"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -1338,7 +1337,7 @@
         "closePicker": "Cerrar",
         "changed": "Propiedades a cambiar",
         "clear": "Borrar",
-        "keep": "Mantener",
+        "remove": "Quitar {name}",
         "setValue": "Definir un valor",
         "willClear": "Se vaciará en {count, plural, one {el contacto seleccionado} other {los # contactos seleccionados}}.",
         "requiredNoClear": "Una propiedad obligatoria no se puede borrar.",

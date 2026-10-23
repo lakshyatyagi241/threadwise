@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { liveTrigger } from '../../../../flow-runtime-engine';
 import type { FlowRow } from './flows.v1.mapper';
 
 type Raw = Record<string, unknown>;
 
 const SELECT = sql`
-  f.id, f.uuid, f.flow_name, f.trigger_kind, f.is_published, f.is_active, f.category, f.created_at, f.updated_at,
+  f.id, f.uuid, f.flow_name, ${liveTrigger('trigger_kind', 'f')} AS trigger_kind, f.is_published, f.is_active, f.category, f.created_at, f.updated_at,
   to_char(f.updated_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS updated_at_iso,
   (SELECT count(*)::int FROM flow_subscribers s WHERE s.org_id = f.org_id AND s.flow_id = f.id) AS subscribers`;
 

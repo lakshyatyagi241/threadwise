@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { briefLines, parseCampaignCopy } from '../../../src/modules/campaigns/campaign-ai-rules';
+import {
+  AI_IMAGE_DEFAULT_COST_USD,
+  aiImageCostUsd,
+  briefLines,
+  parseCampaignCopy,
+} from '../../../src/modules/campaigns/campaign-ai-rules';
 
 describe('Build with AI: the brief', () => {
   it('names only the fields that were filled in', () => {
@@ -54,5 +59,29 @@ describe('Build with AI: the answer', () => {
     expect(parseCampaignCopy('Sure! Here is your campaign')).toBeNull();
     expect(parseCampaignCopy('[1,2]')).toBeNull();
     expect(parseCampaignCopy('null')).toBeNull();
+  });
+});
+
+describe('what one generated picture costs the platform', () => {
+  it('is the vendor price of the model, higher for the wide and tall sizes', () => {
+    expect(aiImageCostUsd('gpt-image-1', '1024x1024')).toBe(0.167);
+    expect(aiImageCostUsd('gpt-image-1', '1536x1024')).toBe(0.25);
+    expect(aiImageCostUsd('gpt-image-1', '1024x1536')).toBe(0.25);
+    expect(aiImageCostUsd('dall-e-3', '1024x1024')).toBe(0.04);
+    expect(aiImageCostUsd('dall-e-3', '1536x1024')).toBe(0.08);
+    expect(aiImageCostUsd('dall-e-2', '1024x1024')).toBe(0.02);
+  });
+
+  it('ignores case and stray spaces in the model name', () => {
+    expect(aiImageCostUsd('  GPT-Image-1 ', '1024x1024')).toBe(0.167);
+  });
+
+  it('is the standard 1024px price for a model that is not in the table, and never a free picture', () => {
+    expect(aiImageCostUsd('some-new-model', '1024x1024')).toBe(AI_IMAGE_DEFAULT_COST_USD);
+    expect(AI_IMAGE_DEFAULT_COST_USD).toBe(0.25);
+    // A request cannot reach a property of the table's object by naming the model after it.
+    for (const model of ['constructor', '__proto__', 'toString', 'hasOwnProperty']) {
+      expect(aiImageCostUsd(model, '1024x1024')).toBe(AI_IMAGE_DEFAULT_COST_USD);
+    }
   });
 });

@@ -287,6 +287,15 @@ export const messageResponseSchema = z.object({
   forwarded: z.boolean().optional(),
   /** The message was brought in by an imported history (`meta.historySync`): the bubble marks it. Absent on a live message. */
   imported: z.boolean().optional(),
+  /**
+   * An outbound text or media message that is not stored as a template message (an imported history, or a copy of what the business
+   * sent from its phone) but whose words are exactly one approved template's body: that template's buttons, so the bubble shows the
+   * call-to-action it had when it was sent. Set when the thread is listed; absent otherwise.
+   */
+  matchedTemplate: z
+    .object({ name: z.string(), buttons: z.array(messageTemplateButtonSchema) })
+    .nullable()
+    .optional(),
   /** Set for an inbound media message: whether its file could be stored. */
   mediaState: messageMediaStateSchema.nullable().optional(),
   /** Present while `mediaState` is `failed`: a stable code (`MEDIA_EXPIRED`, `MEDIA_TOO_LARGE`, ...) and a reason an agent can read. */

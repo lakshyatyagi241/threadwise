@@ -283,8 +283,6 @@
       "shortEmail": "อีเมล",
       "shortStage": "ขั้น",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "สร้างเมื่อ",
-      "shortModified": "แก้ไขเมื่อ",
       "firstRun": {
         "title": "เพิ่มผู้ติดต่อแรกของคุณ",
         "message": "นำคนที่คุณติดต่อด้วยเข้ามา ผู้ติดต่อใช้สำหรับข้อความ แคมเปญ งาน และดีล",
@@ -298,7 +296,8 @@
       "teamFilter": "กรองตามทีม",
       "allTeams": "ทุกทีม",
       "teamFormer": "ทีมเดิม",
-      "unhideColumn": "แสดงคอลัมน์"
+      "unhideColumn": "แสดงคอลัมน์",
+      "resizeColumn": "ลากเพื่อปรับขนาด {column}; ดับเบิลคลิกเพื่อรีเซ็ต"
     },
     "bulk": {
       "label": "การดำเนินการสำหรับผู้ติดต่อที่เลือก",
@@ -1338,7 +1337,7 @@
         "closePicker": "ปิด",
         "changed": "คุณสมบัติที่จะเปลี่ยน",
         "clear": "ล้าง",
-        "keep": "เก็บไว้",
+        "remove": "ลบ {name}",
         "setValue": "ตั้งค่า",
         "willClear": "จะถูกล้างค่าของ{count, plural, one {ผู้ติดต่อที่เลือก} other {ผู้ติดต่อที่เลือกทั้ง # ราย}}",
         "requiredNoClear": "ไม่สามารถล้างคุณสมบัติที่จำเป็นได้",

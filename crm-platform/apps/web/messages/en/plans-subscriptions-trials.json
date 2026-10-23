@@ -570,15 +570,21 @@
       "compare": "Compare all plans",
       "addonHint": "You can also add it to your current plan with the {addon} add-on.",
       "addonLink": "See add-ons",
-      "addons": {
-        "smartRouting": "Smart routing",
-        "teamsPermissions": "Teams and permissions"
-      },
       "addonsTabHint": "Add-ons do not need the Marketplace on your plan. You can still see what you own and buy add-ons from Plans and add-ons.",
-      "addonsTabLink": "Open Plans and add-ons"
+      "addonsTabLink": "Open Plans and add-ons",
+      "addonHintGeneric": "Your plan may also offer it as an add-on."
     },
     "lock": {
-      "link": "See plans and add-ons"
+      "link": "See plans and add-ons",
+      "offTitle": "Not on your plan",
+      "offLead": "This part is not included in your workspace's plan right now.",
+      "buyTitle": "Add {addon} for {price}",
+      "buyLead": "Your plan offers {addon} as an add-on. Add it to switch this part on.",
+      "buyLink": "See add-ons",
+      "askOwner": "Ask your account owner to add it.",
+      "unavailableTitle": "{addon} needs an active paid plan",
+      "unavailableLead": "Choose a paid plan first, then you can add {addon} to it.",
+      "viewPlans": "View plans"
     }
   }
 }

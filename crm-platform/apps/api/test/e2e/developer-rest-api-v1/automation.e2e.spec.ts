@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
+import { RequestContextStore } from '../../../src/common/context/request-context';
 import { Api, startHarness, tenantWithKey, type Harness, type Tenant } from './support';
 
 /**
@@ -929,6 +930,48 @@ describe('customer API v1: automation', () => {
         expect(res.status, path).toBe(401);
         expect(res.body.error.code).toBe('missing_api_key');
       }
+    });
+
+    it('GET /flows and the runtime list show the trigger and provider a live flow runs on, not a draft edit saved after Publish', async () => {
+      const { tenant, call } = await tenantWithKey(api, 'flow-live-trigger');
+      const live = await seedFlow(tenant, { name: 'Live bot' });
+      // What Publish keeps (flows.repository setPublished): the trigger settings as they were when the flow went live.
+      await h.owner.query(
+        `UPDATE flows SET published_flow_data = flow_data, published_trigger_kind = 'keyword', published_trigger_value = NULL,
+           published_trigger_keywords = 'hi', published_trigger_config = NULL, published_trigger_device_id = NULL,
+           published_trigger_channel_id = NULL, published_provider = 'simulator'
+         WHERE org_id = $1 AND id = $2`,
+        [tenant.orgId, live.id],
+      );
+      // A draft edit saved after Publish: the builder's columns change, the live bot keeps the published settings.
+      await h.owner.query(
+        `UPDATE flows SET trigger_kind = 'schedule', trigger_keywords = NULL, provider = 'baileys' WHERE org_id = $1 AND id = $2`,
+        [tenant.orgId, live.id],
+      );
+
+      const listed = await call.get('/flows');
+      expect(listed.status, JSON.stringify(listed.body)).toBe(200);
+      expect(listed.body.data.find((f: { id: string }) => f.id === live.uuid)).toMatchObject({
+        trigger: 'keyword',
+      });
+
+      const svc = h.app.get(
+        (await import('../../../src/modules/flow-runtime-engine')).FlowRuntimeService,
+      );
+      const runtime = await RequestContextStore.run(
+        {
+          requestId: 'spec-live-trigger',
+          orgId: tenant.orgId,
+          actorType: 'system',
+          actorId: null,
+          userId: null,
+        },
+        () => svc.listFlows(),
+      );
+      expect(runtime.data.find((f) => f.id === live.uuid)).toMatchObject({
+        trigger: 'keyword',
+        provider: 'simulator',
+      });
     });
 
     it("GET /flows lists live, paused and draft flows by last update with the subscriber count, and never another workspace's (TW-API-044)", async () => {

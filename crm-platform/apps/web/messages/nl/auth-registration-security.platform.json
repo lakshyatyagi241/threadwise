@@ -1349,13 +1349,17 @@
             "details": "Details en prijzen",
             "features": "Functies",
             "limits": "Limieten",
-            "addons": "Add-ons"
+            "addons": "Add-ons",
+            "integrations": "Integraties",
+            "miniApps": "Mini-apps"
           },
           "tabSummary": {
             "features": "{count} van {total} functies aan",
             "limits": "{count} van {total} limieten ingesteld",
-            "addons": "{count} add-ons geselecteerd",
-            "error": "Bevat fouten die moeten worden opgelost"
+            "addons": "{count, plural, one {# add-on inbegrepen of aangeboden} other {# add-ons inbegrepen of aangeboden}}",
+            "error": "Bevat fouten die moeten worden opgelost",
+            "integrations": "Inbegrepen of aangeboden integraties: {count}",
+            "miniApps": "Inbegrepen of aangeboden mini-apps: {count}"
           },
           "featuresUi": {
             "intro": "Schakel uit wat dit plan niet bevat. Een workspace op het plan kan een gebied waarvan de functie uit staat niet openen.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Alles inschakelen",
             "disableAll": "Alles uitschakelen",
             "noMatch": "Geen functies gevonden voor je zoekopdracht.",
-            "groupCount": "{count} van {total} aan"
+            "groupCount": "{count} van {total} aan",
+            "lockedBy": "Ingesteld door de add-on {addon} op het tabblad Add-ons"
           },
           "limitsUi": {
             "intro": "Een limiet stopt de actie zodra de workspace die bereikt. Vink Onbeperkt aan om de limiet te verwijderen.",
@@ -1385,12 +1390,8 @@
             "total": "in totaal"
           },
           "addons": {
-            "intro": "Ingeschakelde add-ons worden getoond aan workspaces op dit plan in hun Marktplaats; ze kunnen pas worden gebruikt nadat de workspace ze heeft gekocht.",
             "search": "Add-ons zoeken",
             "searchPlaceholder": "Zoek add-ons of apps",
-            "selectAll": "Alles selecteren",
-            "clear": "Wissen",
-            "selected": "{count} van {total} geselecteerd",
             "loading": "Add-ons laden",
             "empty": "Er bestaan nog geen betaalde add-ons",
             "emptyHint": "Add-ons worden aangemaakt in de Marktplaatscatalogus van de operatorconsole. Zodra een app een betaald pakket heeft, staat die hier.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "De app is niet gepubliceerd, dus workspaces kunnen hem nog niet zien.",
             "appLabel": "App: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# add-on geselecteerd} other {# add-ons geselecteerd}}"
+            "total": "{count, plural, one {# add-on inbegrepen of aangeboden} other {# add-ons inbegrepen of aangeboden}}"
           },
           "featureHints": {
             "automation": "De flowbuilder en automatiseringen die op gesprekken reageren en erop handelen.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Een plan kan niet tegelijk gratis en offerte op maat zijn.",
             "paid_needs_price": "Stel een prijs boven 0 in, of markeer het plan als gratis.",
             "offer_not_lower": "De aanbiedingsprijs moet lager zijn dan de prijs van het plan.",
-            "default_needs_active": "Het standaardplan bij aanmelden moet actief zijn."
+            "default_needs_active": "Het standaardplan bij aanmelden moet actief zijn.",
+            "addonPriceZero": "Laat de prijs leeg om de prijs van de add-on te gebruiken, of kies Inbegrepen.",
+            "addonGone": "Deze add-on bestaat niet meer. Laad de pagina opnieuw en sla nogmaals op."
           },
           "limitHints": {
             "monthly_messages": "Uitgaande berichten die in de kalendermaand zijn verstuurd. Boven het budget wordt de wallet belast.",
@@ -1707,32 +1710,49 @@
             "crm": "Verkoop-CRM",
             "platform": "Gedeeld door beide"
           },
-          "marketplace": {
-            "title": "Marketplace-apps die worden aangeboden aan werkruimtes op dit abonnement"
-          },
-          "included": {
-            "title": "Add-ons inbegrepen in dit abonnement",
-            "intro": "Zet een add-on aan om hem op te nemen: werkruimtes op dit abonnement krijgen hem zonder kosten en op de kaart van de add-on staat \"Inbegrepen in je abonnement\". Hiermee worden precies de functies van de add-on aangevinkt op het tabblad Functies, en als je ze daar aanvinkt, schakelt de schakelaar mee. Add-ons die niet zijn opgenomen, worden nog steeds tegen hun eigen prijs verkocht aan elke werkruimte met een actief betaald abonnement.",
-            "readOnly": "Je kunt dit abonnement bekijken maar niet wijzigen, dus deze schakelaars zijn vergrendeld.",
+          "offers": {
+            "readOnly": "Je kunt dit abonnement bekijken maar niet wijzigen, dus deze instellingen zijn vergrendeld.",
+            "featureTitle": "Functie-add-ons",
+            "featureIntro": "Add-ons die een deel van het product ontgrendelen. Inbegrepen: werkruimtes op dit abonnement krijgen hem zonder kosten en op de kaart staat \"Inbegrepen in je abonnement\". Betaald: ze kunnen hem kopen, tegen de eigen prijs van dit abonnement als je die instelt. Verborgen: ze zien hem nooit. De functies van de add-on op het tabblad Functies volgen deze keuze.",
+            "capacityTitle": "Capaciteits-add-ons",
+            "capacityIntro": "Add-ons die alleen een limiet verhogen, zoals een extra gebruikersplek. Op een abonnement zijn ze betaald of verborgen; de eigen limieten van het abonnement stel je in op het tabblad Limieten.",
+            "noFeaturePacks": "Er zijn nog geen functie-add-ons.",
+            "adds": "Voegt toe: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "Onbeperkt {name}",
+            "modeLabel": "Hoe {name} op dit abonnement wordt aangeboden",
+            "modes": {
+              "included": "Inbegrepen",
+              "paid": "Betaald",
+              "hidden": "Verborgen"
+            },
+            "noIncluded": "Deze add-on verhoogt alleen limieten en kan dus niet worden inbegrepen. Stel de eigen limiet van dit abonnement in op het tabblad Limieten.",
+            "priceLabel": "Prijs op dit abonnement ({currency})",
+            "priceHint": "Laat leeg om de eigen prijs van de add-on te gebruiken.",
+            "includedCapacityNote": "Alleen de functies zijn inbegrepen. De extra limieten ({limits}) blijven te koop voor werkruimtes op dit abonnement.",
+            "hiddenNote": "Werkruimtes op dit abonnement zien deze add-on niet en kunnen hem niet kopen. Een werkruimte die hem al heeft gekocht, houdt hem tot het einde van de looptijd.",
+            "offNote": "Niet meer inbegrepen: werkruimtes op dit abonnement verliezen deze functies, tenzij ze de add-on kopen. Hun instellingen blijven bewaard en komen terug zodra hij weer aan staat.",
             "loading": "Add-ons laden",
             "loadFailed": "De add-ons konden niet worden geladen. Er is niets gewijzigd.",
             "empty": "Er zijn nog geen add-ons",
             "emptyHint": "Add-ons zoals Slimme routering en Teams en machtigingen maak je aan onder Add-ons in de operatorconsole.",
-            "stateFull": "Inbegrepen",
-            "statePartial": "Gedeeltelijk inbegrepen",
-            "stateNone": "Niet inbegrepen",
             "noPrice": "Geen prijs ingesteld",
             "gives": "Geeft: {features}",
-            "switchLabel": "{name} opnemen in dit abonnement",
-            "noFeatures": "Deze add-on voegt alleen limieten toe, dus er is geen functie om op te nemen. Zijn limieten maken geen deel uit van opname in het abonnement; stel de eigen limieten van het abonnement in op het tabblad Limieten.",
-            "partial": "Gedeeltelijk inbegrepen: {count} van {total} functies staan aan in dit abonnement. Nog uit: {missing}.",
-            "includeFully": "Volledig opnemen",
-            "limitsNote": "Deze add-on voegt ook extra limieten toe ({limits}). De extra limiet maakt geen deel uit van opname in het abonnement en niets hier wijzigt die: stel de eigen limiet van het abonnement in op het tabblad Limieten. Werkruimtes kopen de add-on nog steeds voor de extra limiet.",
             "unlistedNote": "Sommige functies ({features}) staan niet op de standaardlijst van add-ons. Ze kunnen nog steeds voor het abonnement worden aangezet; alleen het kopen van deze add-on als pakket werkt anders.",
             "inactiveNote": "Deze add-on is een concept of staat uit, dus niemand kan hem nog kopen. Hem opnemen in het abonnement werkt wel.",
             "impactCount": "{count, plural, one {# werkruimte betaalt al voor deze add-on.} other {# werkruimtes betalen al voor deze add-on.}} Hun verlenging stopt aan het einde van de huidige periode, er wordt niets terugbetaald en er wordt vandaag niets geannuleerd.",
             "impactUnknown": "Werkruimtes op dit abonnement die al voor deze add-on betalen, verlengen hem niet meer aan het einde van hun huidige periode. Er wordt niets terugbetaald en er wordt vandaag niets geannuleerd. Het aantal kon niet worden geladen.",
-            "offNote": "Uitgezet: werkruimtes op dit abonnement verliezen deze functies tenzij ze de add-on kopen, en de add-on wordt voor hen koopbaar tegen zijn prijs."
+            "partlyNote": "Dit abonnement geeft al een deel van deze add-on ({features}). Dat blijft zo tot je hier Inbegrepen, Betaald of Verborgen kiest.",
+            "needsFeatures": "Voeg eerst de functies toe die het ontgrendelt in Add-ons > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Mini-apps zijn apps die een werkruimte installeert via de Marketplace. Inbegrepen: gratis voor werkruimten op dit abonnement. Betaald: ze kunnen de app kopen tegen de eigen prijs. Verborgen: ze zien de app nooit. Inbegrepen zet ook de abonnementsfuncties aan die de app geeft.",
+            "introIntegrations": "Integraties koppelen een externe dienst. Inbegrepen: gratis voor werkruimten op dit abonnement. Betaald: ze kunnen de integratie kopen tegen de eigen prijs. Verborgen: ze zien de integratie nooit. Inbegrepen zet ook de abonnementsfuncties aan die de integratie geeft.",
+            "setAll": "Zet alle getoonde op",
+            "summary": "{count} van {total} inbegrepen of aangeboden",
+            "priceHint": "Marketplace-apps behouden hun eigen prijs; stel die in op de vermelding van de app.",
+            "emptyIntegrations": "Nog geen betaalde integraties",
+            "emptyIntegrationsHint": "Gratis integraties hebben hier geen instelling nodig; Shopify en WooCommerce schakel je in op het tabblad Functies."
           }
         }
       },

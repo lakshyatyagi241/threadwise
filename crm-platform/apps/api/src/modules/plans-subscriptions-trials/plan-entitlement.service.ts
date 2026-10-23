@@ -64,6 +64,11 @@ export interface Entitlements {
    * `planFeatures`.
    */
   packLimits?: Record<string, number>;
+  /**
+   * The plan whose add-on offers apply (docs/specs/addons-plan-offers.md): the stored plan, or the free plan a lapsed paid plan fell back to (its
+   * offers follow its flags). Null when the workspace's plan has no catalogue row.
+   */
+  offerPlanSlug?: string | null;
 }
 
 /**
@@ -160,6 +165,7 @@ export class PlanEntitlementService {
 
   /** The organization's resolved entitlements, or null when it does not exist. */
   async forOrg(orgId: number, opts: { ignorePacks?: boolean } = {}): Promise<Entitlements | null> {
+    const packGrace = Math.max(0, Math.min(30, Math.trunc(await this.graceDays())));
     const res = await this.db.txAs({ orgId, userId: null }, (tx) =>
       tx.execute(sql`
         SELECT o.plan AS plan_slug,
@@ -183,7 +189,14 @@ export class PlanEntitlementService {
                (SELECT coalesce(jsonb_agg(jsonb_build_object('features', ap.features, 'limits', ap.limits)), '[]'::jsonb)
                   FROM workspace_addons wa
                   JOIN plans ap ON ap.id = wa.package_id AND ap.kind = 'addon' AND ap.marketplace_app_id IS NULL
-                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())) AS generic_packs
+                 WHERE wa.org_id = o.id AND wa.status = 'active'
+                   AND (wa.ends_at IS NULL OR wa.ends_at > now()
+                        -- the autopay grace the add-on list and the registry resolver also count (addonLiveSql), so a pack in grace is
+                        -- "owned" on the card AND on in the gates
+                        OR EXISTS (SELECT 1 FROM subscriptions sb
+                                   WHERE sb.org_id = wa.org_id AND sb.workspace_addon_id = wa.id AND sb.kind = 'addon'
+                                     AND sb.status IN ('active', 'past_due')
+                                     AND wa.ends_at > now() - make_interval(days => ${packGrace})))) AS generic_packs
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -219,6 +232,7 @@ export class PlanEntitlementService {
     let planLimits = row.plan_limits ?? {};
     let planFeatures = row.plan_features ?? {};
     let visibleIds = (row.visible_app_ids ?? []).map(Number);
+    let offerPlanSlug: string | null = row.plan_found ? row.plan_slug : null;
     if (fallsBackToFree(state)) {
       // A lapsed paid plan locks to the free plan: paid flags lock and the caps shrink (TW-PLAN-016). With no free plan in
       // the catalogue there is nothing to fall back to, so the stored plan keeps applying rather than locking everything.
@@ -227,6 +241,7 @@ export class PlanEntitlementService {
         planLimits = free.limits;
         planFeatures = free.features;
         visibleIds = await this.visibleAppIds(free.id);
+        offerPlanSlug = free.slug;
       }
     }
     // A Marketplace app a workspace has subscribed to may grant plan features (a first-party app that owns one, e.g. a paid booking app).
@@ -272,6 +287,7 @@ export class PlanEntitlementService {
       },
       appWithheld: withheld,
       ...(Object.keys(packed.limits).length > 0 ? { packLimits: packed.limits } : {}),
+      offerPlanSlug,
     };
   }
 
@@ -298,6 +314,7 @@ export class PlanEntitlementService {
   /** The first active free plan by catalogue order (Reference's "free package"), or null when the catalogue has none. */
   private async freePlan(): Promise<{
     id: number;
+    slug: string;
     limits: Record<string, unknown>;
     features: Record<string, unknown>;
   } | null> {
@@ -310,7 +327,7 @@ export class PlanEntitlementService {
     if (!row) return null;
     const facts = toFacts(row);
     return planKind(facts) === 'free'
-      ? { id: Number(row.id), limits: row.limits, features: row.features }
+      ? { id: Number(row.id), slug: row.slug, limits: row.limits, features: row.features }
       : null;
   }
 
@@ -340,8 +357,10 @@ export class PlanEntitlementService {
   async includedByPlanDetailed(
     orgId: number,
     keys: readonly string[],
+    /** The caller's own `forOrg(orgId, { ignorePacks: true })`, so it is not resolved twice. */
+    resolved?: Entitlements | null,
   ): Promise<{ included: Set<string>; support: Set<string> }> {
-    const e = await this.forOrg(orgId, { ignorePacks: true });
+    const e = resolved !== undefined ? resolved : await this.forOrg(orgId, { ignorePacks: true });
     const included = new Set<string>();
     const support = new Set<string>();
     if (!e) return { included, support };

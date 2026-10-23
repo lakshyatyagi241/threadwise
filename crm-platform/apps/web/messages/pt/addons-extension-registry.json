@@ -45,7 +45,8 @@
         "period": "Período",
         "grants": "Concede",
         "status": "Status",
-        "actions": "Ações"
+        "actions": "Ações",
+        "plans": "Planos"
       },
       "price": {
         "free": "Grátis",
@@ -146,7 +147,9 @@
           "sortOrder": "Informe um número inteiro.",
           "limits": "Os limites são números inteiros, ou -1 para ilimitado.",
           "form": "Verifique os campos destacados.",
-          "amountPositive": "Complementos são assinaturas mensais ou anuais, então o preço deve ser maior que zero."
+          "amountPositive": "Complementos são assinaturas mensais ou anuais, então o preço deve ser maior que zero.",
+          "features": "Marque pelo menos um recurso ou transforme-o em um complemento de capacidade.",
+          "limitsNeeded": "Informe pelo menos um limite acima de zero ou transforme-o em um complemento de recurso."
         },
         "legacy": {
           "title": "Pacote legado",
@@ -156,8 +159,65 @@
           "months": "Assinatura mensal",
           "years": "Assinatura anual"
         },
-        "periodHint": "Complementos são assinaturas. Espaços de trabalho em um gateway online são renovados automaticamente; com transferência bancária ou pagamento offline, pagam novamente quando o período termina."
-      }
+        "periodHint": "Complementos são assinaturas. Espaços de trabalho em um gateway online são renovados automaticamente; com transferência bancária ou pagamento offline, pagam novamente quando o período termina.",
+        "planOffers": {
+          "title": "Planos",
+          "hint": "Como cada plano oferece este complemento. Incluído: sem custo, o plano traz os recursos dele. Pago: os espaços de trabalho o compram, pelo preço próprio do plano se você definir um. Oculto: os espaços de trabalho do plano nunca o veem.",
+          "noIncluded": "Este complemento só aumenta limites, por isso nenhum plano pode incluí-lo. Cada plano define os próprios limites na aba Limites.",
+          "empty": "Ainda não há planos.",
+          "freePlan": "Plano gratuito",
+          "inactivePlan": "Inativo",
+          "modeLabel": "Como {plan} oferece este complemento",
+          "modes": {
+            "included": "Incluído",
+            "paid": "Pago",
+            "hidden": "Oculto"
+          },
+          "priceLabel": "Preço neste plano",
+          "priceHint": "Vazio = preço do próprio complemento.",
+          "freePlanNote": "Aparece no plano gratuito, mas um espaço de trabalho precisa de um plano pago para comprá-lo.",
+          "hiddenNote": "Não aparece para os espaços de trabalho deste plano. Um espaço de trabalho que já o comprou fica com ele até o fim do período.",
+          "problems": {
+            "money": "Informe um valor como 19 ou 19.99.",
+            "zero": "Deixe o preço vazio para usar o preço do complemento ou escolha Incluído."
+          },
+          "errors": {
+            "generic": "Não foi possível salvar as ofertas dos planos.",
+            "forbidden": "Só um superadministrador pode alterar as ofertas dos planos.",
+            "notFound": "Este complemento não existe mais."
+          },
+          "saved": "Ofertas dos planos salvas.",
+          "changed": "{count, plural, one {# plano alterado} other {# planos alterados}}",
+          "save": "Salvar ofertas dos planos",
+          "needFeatures": "Antes, adicione acima os recursos que ele desbloqueia"
+        },
+        "type": {
+          "title": "Tipo",
+          "hint": "Escolha o que este complemento faz. Somente um complemento de recurso pode ser incluído em um plano.",
+          "feature": {
+            "title": "Complemento de recurso",
+            "body": "Desbloqueia parte do produto; também pode aumentar a capacidade."
+          },
+          "capacity": {
+            "title": "Complemento de capacidade",
+            "body": "Apenas soma a um limite (assentos, contatos...)."
+          }
+        },
+        "noFeaturesNotice": "Este complemento ainda não desbloqueia nada. Marque os recursos que ele oferece para que os planos possam incluí-lo.",
+        "limitsHintCapacity": "Um complemento de capacidade apenas soma aos limites. Informe um número para SOMAR ao plano (por exemplo +2 assentos). Use -1 para ilimitado. É necessário pelo menos um limite."
+      },
+      "kind": {
+        "feature": "Recurso",
+        "capacity": "Capacidade"
+      },
+      "plans": {
+        "included": "Incluído: {plans}",
+        "paid": "Pago: {plans}",
+        "hidden": "Oculto: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Nenhum plano"
+      },
+      "noFeatures": "Ainda sem recursos"
     },
     "extensions": {
       "crumbHere": "Complementos",
@@ -334,7 +394,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Precisa de créditos de mensagens? Recarregue sua carteira; créditos não são um complemento.",
-      "walletLink": "Recarregar carteira"
+      "walletLink": "Recarregar carteira",
+      "groups": {
+        "feature": "Complementos de recursos",
+        "capacity": "Complementos de capacidade"
+      }
     }
   }
 }

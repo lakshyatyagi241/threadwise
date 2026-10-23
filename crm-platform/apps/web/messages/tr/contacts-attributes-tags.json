@@ -283,8 +283,6 @@
       "shortEmail": "E-posta",
       "shortStage": "Aşama",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Oluşturuldu",
-      "shortModified": "Değiştirildi",
       "firstRun": {
         "title": "İlk kişilerinizi ekleyin",
         "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",
@@ -298,7 +296,8 @@
       "teamFilter": "Ekibe göre filtrele",
       "allTeams": "Tüm ekipler",
       "teamFormer": "Eski ekip",
-      "unhideColumn": "Sütunu göster"
+      "unhideColumn": "Sütunu göster",
+      "resizeColumn": "{column} sütununu yeniden boyutlandırmak için sürükleyin; sıfırlamak için çift tıklayın"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -1338,7 +1337,7 @@
         "closePicker": "Kapat",
         "changed": "Değiştirilecek özellikler",
         "clear": "Temizle",
-        "keep": "Koru",
+        "remove": "{name} alanını kaldır",
         "setValue": "Değer ayarla",
         "willClear": "{count, plural, one {Seçili kişide} other {seçili # kişinin tümünde}} boşaltılacak.",
         "requiredNoClear": "Zorunlu bir özellik temizlenemez.",

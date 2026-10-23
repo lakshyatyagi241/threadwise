@@ -428,7 +428,12 @@ export class WidgetPublicService {
     if (stored.assistant) {
       // What the agent knows about THIS message: the few best passages of its own knowledge base (it reads the whole base only when
       // the search cannot run). Read here, with no transaction open: the search may call the embedding vendor.
-      const found = await this.kb.retrieve(orgId, stored.assistant.id, data.body);
+      const found = await this.kb.retrieve(
+        orgId,
+        stored.assistant.id,
+        data.body,
+        `widget:${stored.inbound.id}`,
+      );
       replyText = await this.aiReply.reply({
         orgId,
         assistant: stored.assistant,
@@ -442,6 +447,7 @@ export class WidgetPublicService {
         grounded: found.grounded,
         history: stored.history,
         visitorMessage: data.body,
+        messageId: stored.inbound.id,
       });
     }
 

@@ -125,6 +125,34 @@ describe('OpenRouter adapter', () => {
     expect(out.promptTokens).toBe(130);
   });
 
+  it("adds up the vendor's own cost across the requests of a big batch, and leaves it out when none is reported", async () => {
+    const fetchMock = vi.fn(async (_u: string, init: RequestInit) => {
+      const n = (JSON.parse(init.body as string).input as string[]).length;
+      return new Response(
+        JSON.stringify({
+          data: Array.from({ length: n }, (_, i) => ({ index: i, embedding: vec(2) })),
+          usage: { prompt_tokens: n, cost: 0.001 },
+        }),
+        { status: 200 },
+      );
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const out = await ai.embed({
+      apiKey: 'k',
+      model: 'm',
+      inputs: Array.from({ length: 70 }, (_, i) => `t${i}`),
+      dimensions: 2,
+    });
+    expect(out.costUsd).toBeCloseTo(0.002, 9);
+
+    vi.stubGlobal(
+      'fetch',
+      answer(200, { data: [{ index: 0, embedding: vec(2) }], usage: { prompt_tokens: 2 } }),
+    );
+    const free = await ai.embed({ apiKey: 'k', model: 'm', inputs: ['a'], dimensions: 2 });
+    expect(free).not.toHaveProperty('costUsd');
+  });
+
   it('refuses a vector of the wrong width instead of storing it', async () => {
     vi.stubGlobal('fetch', answer(200, { data: [{ index: 0, embedding: vec(5) }] }));
     await expect(

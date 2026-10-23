@@ -25,6 +25,7 @@ const card = (n: number, over: Partial<AddonCard> = {}): AddonCard => ({
   ownedRenews: false,
   state: 'buy',
   includedVia: null,
+  kind: 'feature',
   ...over,
 });
 
@@ -80,6 +81,32 @@ describe.each(['en', 'ar'] as const)('the shared add-ons list (%s)', (locale) =>
     expect(out).toContain('href="/billing/checkout/pack_4"');
     expect(out).toContain('data-testid="addon-pack_2-included"');
     expect(out).toContain('data-testid="addon-pack_3-active"');
+  });
+
+  it('groups the cards under Feature add-ons and Capacity add-ons, and leaves out an empty group', () => {
+    const both = html(
+      data({ catalog: [card(1), card(2, { kind: 'capacity' }), card(3, { kind: 'feature' })] }),
+    );
+    expect(both).toContain('data-testid="addons-group-feature"');
+    expect(both).toContain('data-testid="addons-group-capacity"');
+    expect(both).toContain('aria-labelledby="addons-group-feature"');
+    // feature cards first, then capacity; each card sits in its own group
+    const feature = both.slice(
+      both.indexOf('data-testid="addons-group-feature"'),
+      both.indexOf('data-testid="addons-group-capacity"'),
+    );
+    expect(feature).toContain('data-testid="addon-pack_1"');
+    expect(feature).toContain('data-testid="addon-pack_3"');
+    expect(feature).not.toContain('data-testid="addon-pack_2"');
+    expect(both.indexOf('data-testid="addon-pack_2"')).toBeGreaterThan(
+      both.indexOf('data-testid="addons-group-capacity"'),
+    );
+    const featureOnly = html(data({ catalog: [card(1)] }));
+    expect(featureOnly).toContain('data-testid="addons-group-feature"');
+    expect(featureOnly).not.toContain('data-testid="addons-group-capacity"');
+    const capacityOnly = html(data({ catalog: [card(2, { kind: 'capacity' })] }));
+    expect(capacityOnly).not.toContain('data-testid="addons-group-feature"');
+    expect(capacityOnly).toContain('data-testid="addons-group-capacity"');
   });
 
   it('a free plan gets a clear message and an upgrade link, and no buy link', () => {

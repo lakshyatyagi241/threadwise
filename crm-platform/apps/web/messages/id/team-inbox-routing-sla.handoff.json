@@ -1,8 +1,6 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "notInPlan": "Tidak ada di paket Anda",
-      "upgradeHint": "Termasuk dalam add-on Perutean cerdas atau paket yang lebih tinggi.",
       "owner": {
         "prompt": "Tanyakan soal pemilik kontak saat penugasan ulang",
         "promptHint": "Saat chat diberikan ke orang lain secara manual, tawarkan untuk menjadikannya pemilik kontak juga.",

@@ -45,7 +45,8 @@
         "period": "Zeitraum",
         "grants": "Gewährt",
         "status": "Status",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "plans": "Tarife"
       },
       "price": {
         "free": "Kostenlos",
@@ -146,7 +147,9 @@
           "sortOrder": "Geben Sie eine ganze Zahl ein.",
           "limits": "Limits sind ganze Zahlen oder -1 für unbegrenzt.",
           "form": "Prüfen Sie die markierten Felder.",
-          "amountPositive": "Add-ons sind monatliche oder jährliche Abonnements, daher muss der Preis über null liegen."
+          "amountPositive": "Add-ons sind monatliche oder jährliche Abonnements, daher muss der Preis über null liegen.",
+          "features": "Wählen Sie mindestens eine Funktion oder machen Sie daraus ein Kapazitäts-Add-on.",
+          "limitsNeeded": "Geben Sie mindestens ein Limit über null ein oder machen Sie daraus ein Funktions-Add-on."
         },
         "legacy": {
           "title": "Altes Paket",
@@ -156,8 +159,65 @@
           "months": "Monatliches Abonnement",
           "years": "Jährliches Abonnement"
         },
-        "periodHint": "Add-ons sind Abonnements. Workspaces mit einem Online-Zahlungsanbieter verlängern sich automatisch; bei Banküberweisung oder Offline-Zahlung zahlen sie am Ende der Laufzeit erneut."
-      }
+        "periodHint": "Add-ons sind Abonnements. Workspaces mit einem Online-Zahlungsanbieter verlängern sich automatisch; bei Banküberweisung oder Offline-Zahlung zahlen sie am Ende der Laufzeit erneut.",
+        "planOffers": {
+          "title": "Tarife",
+          "hint": "Wie jeder Tarif dieses Add-on anbietet. Enthalten: ohne Aufpreis, der Tarif bringt seine Funktionen mit. Kostenpflichtig: Workspaces kaufen es, zum eigenen Preis des Tarifs, falls Sie einen festlegen. Ausgeblendet: Workspaces in diesem Tarif sehen es nie.",
+          "noIncluded": "Dieses Add-on erweitert nur Limits, daher kann kein Tarif es enthalten. Ein Tarif legt seine eigenen Obergrenzen im Tab „Limits“ fest.",
+          "empty": "Es gibt noch keine Tarife.",
+          "freePlan": "Kostenloser Tarif",
+          "inactivePlan": "Inaktiv",
+          "modeLabel": "Wie {plan} dieses Add-on anbietet",
+          "modes": {
+            "included": "Enthalten",
+            "paid": "Kostenpflichtig",
+            "hidden": "Ausgeblendet"
+          },
+          "priceLabel": "Preis in diesem Tarif",
+          "priceHint": "Leer = eigener Preis des Add-ons.",
+          "freePlanNote": "Wird im kostenlosen Tarif angezeigt, aber zum Kaufen braucht ein Workspace einen kostenpflichtigen Tarif.",
+          "hiddenNote": "Wird Workspaces in diesem Tarif nicht angezeigt. Ein Workspace, der es bereits gekauft hat, behält es bis zum Ende seiner Laufzeit.",
+          "problems": {
+            "money": "Geben Sie einen Betrag wie 19 oder 19.99 ein.",
+            "zero": "Lassen Sie den Preis leer, um den Preis des Add-ons zu verwenden, oder wählen Sie „Enthalten“."
+          },
+          "errors": {
+            "generic": "Die Tarifangebote konnten nicht gespeichert werden.",
+            "forbidden": "Nur ein Super-Admin kann Tarifangebote ändern.",
+            "notFound": "Dieses Add-on existiert nicht mehr."
+          },
+          "saved": "Tarifangebote gespeichert.",
+          "changed": "{count, plural, one {# Tarif geändert} other {# Tarife geändert}}",
+          "save": "Tarifangebote speichern",
+          "needFeatures": "Fügen Sie zuerst oben die Funktionen hinzu, die es freischaltet"
+        },
+        "type": {
+          "title": "Typ",
+          "hint": "Wählen Sie, was dieses Add-on bewirkt. Nur ein Funktions-Add-on kann in einen Tarif aufgenommen werden.",
+          "feature": {
+            "title": "Funktions-Add-on",
+            "body": "Schaltet einen Teil des Produkts frei; kann auch Kapazität hinzufügen."
+          },
+          "capacity": {
+            "title": "Kapazitäts-Add-on",
+            "body": "Erhöht nur ein Limit (Plätze, Kontakte ...)."
+          }
+        },
+        "noFeaturesNotice": "Dieses Add-on schaltet noch nichts frei. Haken Sie die Funktionen an, die es bietet, damit Tarife es aufnehmen können.",
+        "limitsHintCapacity": "Ein Kapazitäts-Add-on erhöht nur Limits. Geben Sie eine Zahl ein, die zum Tarif ADDIERT wird (zum Beispiel +2 Plätze). -1 steht für unbegrenzt. Mindestens ein Limit ist erforderlich."
+      },
+      "kind": {
+        "feature": "Funktion",
+        "capacity": "Kapazität"
+      },
+      "plans": {
+        "included": "Enthalten: {plans}",
+        "paid": "Kostenpflichtig: {plans}",
+        "hidden": "Ausgeblendet: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Keine Tarife"
+      },
+      "noFeatures": "Noch keine Funktionen"
     },
     "extensions": {
       "crumbHere": "Add-ons",
@@ -334,7 +394,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Brauchen Sie Nachrichten-Guthaben? Laden Sie stattdessen Ihr Wallet auf; Guthaben ist kein Add-on.",
-      "walletLink": "Wallet aufladen"
+      "walletLink": "Wallet aufladen",
+      "groups": {
+        "feature": "Funktions-Add-ons",
+        "capacity": "Kapazitäts-Add-ons"
+      }
     }
   }
 }

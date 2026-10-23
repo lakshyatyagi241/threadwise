@@ -15,6 +15,9 @@ export const paginationQuerySchema = z.object({
   cursor: cursorSchema.optional(),
   order: z.enum(['asc', 'desc']).default('desc'),
 });
+/** The deepest page number a numbered-page list accepts. OFFSET makes the database skip every row before the page, so an unbounded page number is a request to read the whole table. */
+export const MAX_PAGE_NUMBER = 100_000;
+
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 
 export const pageInfoSchema = z.object({

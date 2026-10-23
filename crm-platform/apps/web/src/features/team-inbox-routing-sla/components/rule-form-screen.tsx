@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent, type ReactNode } from 'react';
@@ -28,7 +28,8 @@ import {
 } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
+import { FeatureAddonLock } from '@/features/plans-subscriptions-trials/components/feature-addon-lock';
+import { useFeatureAddon, usePlanFeature } from '@/lib/plan-features';
 import { useSegmentCatalog } from '@/features/segments/api/lookups';
 import { refresh, routingApi, useAssignees, useFlowChoices, useRule } from '../api/routing';
 import {
@@ -53,12 +54,33 @@ const isCode = (e: unknown, code: string) => e instanceof ApiError && e.code ===
 const reason = (e: unknown, fallback: string) =>
   e instanceof ApiError && e.message ? e.message : fallback;
 
+/**
+ * What the rule form shows in place of the form when the workspace lacks Smart routing (`inbox_routing`): the add-on card, or, when the
+ * plan does not offer the add-on at all (`hidden`), a plain "not available on your plan" note with no upsell.
+ */
+function RulesUnavailable() {
+  const t = useTranslations('team-inbox-routing-sla.form');
+  const addon = useFeatureAddon('inbox_routing');
+  if (addon?.offer === 'hidden') {
+    return (
+      <div
+        className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground"
+        data-testid="rules-unavailable"
+      >
+        <p className="font-medium text-foreground">{t('unavailableTitle')}</p>
+        <p className="mt-1">{t('unavailableBody')}</p>
+      </div>
+    );
+  }
+  return <FeatureAddonLock feature="inbox_routing" off />;
+}
+
 /** `/auto-assignment/new` and `/auto-assignment/:id`: one rule, as a form. Without an `id` it is a new rule. */
 export function RuleFormScreen({ id, everyoneElse }: { id?: string; everyoneElse?: boolean }) {
   const t = useTranslations('team-inbox-routing-sla.form');
   const canManage = useCan('inbox.routing.manage');
-  const pathname = usePathname();
-  const rule = useRule(id ?? null);
+  const routingInPlan = usePlanFeature('inbox_routing');
+  const rule = useRule(routingInPlan ? (id ?? null) : null);
 
   const back = (
     <Link href="/auto-assignment" className="text-sm text-muted-foreground hover:text-foreground">
@@ -71,6 +93,14 @@ export function RuleFormScreen({ id, everyoneElse }: { id?: string; everyoneElse
       <section className="mx-auto max-w-3xl space-y-4">
         {back}
         <Alert tone="warning">{t('noAccess')}</Alert>
+      </section>
+    );
+  }
+  if (!routingInPlan) {
+    return (
+      <section className="mx-auto max-w-3xl space-y-4">
+        {back}
+        <RulesUnavailable />
       </section>
     );
   }
@@ -89,11 +119,12 @@ export function RuleFormScreen({ id, everyoneElse }: { id?: string; everyoneElse
     const missing = rule.error instanceof ApiError && rule.error.status === 404;
     return (
       <section className="mx-auto max-w-3xl space-y-4">
-        {locked && (
-          <PlanPaywall gates={[{ href: pathname, feature: 'inbox_routing' }]} enabled={[]} />
-        )}
         {back}
-        <Alert tone="danger">{missing ? t('notFound') : t('loadFailed')}</Alert>
+        {locked ? (
+          <RulesUnavailable />
+        ) : (
+          <Alert tone="danger">{missing ? t('notFound') : t('loadFailed')}</Alert>
+        )}
       </section>
     );
   }
@@ -138,7 +169,6 @@ export function RuleFormBody({
   const [busy, setBusy] = useState<'save' | 'activate' | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
-  const pathname = usePathname();
 
   const set = <K extends keyof RuleForm>(key: K, value: RuleForm[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -344,9 +374,7 @@ export function RuleFormBody({
 
   return (
     <form onSubmit={onSubmit} className="space-y-6" noValidate>
-      {locked && (
-        <PlanPaywall gates={[{ href: pathname, feature: 'inbox_routing' }]} enabled={[]} />
-      )}
+      {locked && <RulesUnavailable />}
       <header>
         <h1 className="text-3xl font-semibold tracking-tight">
           {rule ? t('editTitle') : t('createTitle')}

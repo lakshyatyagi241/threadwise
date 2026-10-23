@@ -46,7 +46,7 @@ import { QuotePreview } from './quote-preview';
 import { ReactionBar } from './reaction-bar';
 import { BotReturnedLine } from './bot-returned-line';
 import { StageChangeLine } from './stage-change-line';
-import { TemplateMessage } from './template-message';
+import { MatchedTemplateButtons, TemplateMessage } from './template-message';
 
 const BUBBLE = 'relative max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[70%]';
 
@@ -466,6 +466,7 @@ export const MessageBubble = memo(function MessageBubble({
             )}
             {m.replyToMessageId && <QuotePreview message={quoted} variant="bubble" />}
             <MessageBody message={m} onRetry={onRetry} />
+            {m.matchedTemplate && <MatchedTemplateButtons buttons={m.matchedTemplate.buttons} />}
             {m.reaction && m.kind !== 'reaction' && (
               <span
                 data-testid="inbox-customer-reaction"

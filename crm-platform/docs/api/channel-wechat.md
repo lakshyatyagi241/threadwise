@@ -87,6 +87,10 @@ the app does not count or block them.
 Not enforced: the plan flags `access_wechat`, `wechat_broadcasts` and `wechat_channels_limit` and the platform switch `wechat_enabled`
 (one plan feature, `extra_channels`, gates all of it).
 
+## Per-message fee (wallet)
+
+An inbox reply on a WeChat channel is billed by the shared pipeline as kind `chat_message` (see [chat-conversations.md](chat-conversations.md#outbound-outboundservice-messagedispatchservice)). A **broadcast** is not billed: it is one mass-send call with no recipient rows, so there is no per-recipient id to bill on.
+
 ## Quiet hours (BL-191)
 
 A WeChat broadcast is one mass-send call, so the whole broadcast waits when the workspace clock is inside the quiet hours: it stays `sending` and `heldUntil` is set on it (null otherwise). The call is made at the opening. See [compliance.md](compliance.md).

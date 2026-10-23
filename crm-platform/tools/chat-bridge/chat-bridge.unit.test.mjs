@@ -194,7 +194,7 @@ test('resolver: an escalated incident is not re-opened (and re-posted) on every 
 import { handleIncidents } from './incidents-api.mjs';
 async function teamRig(env = {}) {
   const { startBridge } = await import('./bridge.mjs'), posts = [];
-  const e = { INCIDENT_API_TOKEN: 'tok-test', AUTO_REMEDIATE: 'dry-run', ...env };
+  const e = { INCIDENT_API_TOKEN: 'tok-test', AUTO_REMEDIATE: 'dry-run', ANNOUNCE_IN_SPACE: '0', ...env };
   let now = 1_700_000_000_000, resolver;
   const br = startBridge({ env: e, urls: {}, log: () => {}, resolverFactory: ({ post }) => (resolver = createResolver({ env: e, post: async (c, m, o) => { posts.push({ c, t: m.text, k: o?.threadKey, card: JSON.stringify(m.cardsV2) }); }, now: () => now })) });
   await new Promise((r) => br.server.listen(0, '127.0.0.1', r));
@@ -291,7 +291,7 @@ test('loop: release containing the PR + alert gone -> released -> RESOLVED names
   assert.equal(r.get(id).kind, 'critical_alert');
   await r.setRelease('abc1234', [77]); assert.equal(r.get(id).status, 'released'); await r.settle();
   assert.equal(r.get(id).status, 'resolved');
-  assert.match(posts.at(-1).t, /^✅ RESOLVED by PR #77 \(owner vedant\), release abc1234, verified after \d+s; open for 0h \d+m$/); assert.equal(posts.at(-1).k, 'am-f1');
+  const th = posts.filter((p) => p.k); assert.match(th.at(-1).t, /^✅ RESOLVED by PR #77 \(owner vedant\), release abc1234, verified after \d+s; open for 0h \d+m$/); assert.equal(th.at(-1).k, 'am-f1');
 });
 test('loop: release NOT containing the PR changes nothing and posts nothing', async () => {
   const { r, posts, id } = await loopRig();
@@ -340,4 +340,37 @@ test('api: POST /release and POST /incidents need the token and validate input',
   assert.deepEqual([a.s, a.j.deduped, b.s, b.j.deduped, b.j.id === a.j.id], [201, false, 200, true, true]);
   const g = await t.call('/incidents'); assert.ok(g.j.incidents.some((i) => i.kind === 'deploy_failure') && g.j.incidents.some((i) => i.kind === 'slow_statement'));
   t.close();
+});
+
+test('a critical alert with NO runbook entry still opens an incident (so the team can claim it); an unmapped warning does not', async () => {
+  const { startBridge } = await import('./bridge.mjs');
+  const handled = []; const posts = [];
+  const fetchImpl = async (u, o) => { posts.push(String(u)); return { ok: true, status: 200, json: async () => ({}), text: async () => '' }; };
+  const env = { CHAT_ALLOW_ANY_HOST: '1', GCHAT_CRITICAL_URL: 'http://x/c', GCHAT_SLOWQUERY_URL: 'http://x/s' };
+  const br = startBridge({ env, urls: { slowquery: 'http://x/s', critical: 'http://x/c' }, fetchImpl, log: () => {}, resolverFactory: () => ({ handle: (s) => { handled.push(s); }, byKey: () => null }) });
+  await br.server.listen(0); const port = br.server.address().port;
+  const send = (alertname, severity, fp) => fetch(`http://127.0.0.1:${port}/alertmanager`, { method: 'POST', body: JSON.stringify({ alerts: [{ status: 'firing', labels: { alertname, severity }, annotations: { summary: 's' }, fingerprint: fp }] }) });
+  await send('BrandNewUnmappedRule', 'critical', 'u1'); await send('BrandNewUnmappedWarning', 'warning', 'u2');
+  br.server.close();
+  assert.equal(handled.length, 1); assert.equal(handled[0].alertname, 'BrandNewUnmappedRule'); assert.equal(handled[0].playbook, 'service');
+  assert.match(handled[0].suggestion, /No runbook entry/); assert.ok(posts.every((u) => u.startsWith('http://x/c')));
+});
+
+test('an alert with no runbook entry still gets a useful diagnosis (meaning from its own text, where to look, what to do) and nothing unsafe', async () => {
+  const { diagnosisRows } = await import('./diagnosis.mjs');
+  const rows = diagnosisRows({ labels: { alertname: 'Brand New; rm -rf /' }, annotations: { description: 'Disk fills\nup <b>fast</b>' } }, { entry: null, rows: [] });
+  const txt = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
+  assert.ok(rows.length >= 4); assert.match(txt, /What it means: Disk fills up/); assert.match(txt, /grep -rn "BrandNewrmrf" deploy\/observability/);
+  assert.match(txt, /Claim it/); assert.ok(!/No runbook entry for this alert \(add one/.test(txt)); assert.ok(!txt.includes('; rm -rf'));
+});
+
+test('announce: claim, PR and RESOLVED are also posted top-level (no threadKey); notes are not', async () => {
+  const { r, posts, id } = await loopRig();
+  await r.releaseClaim(id, 'vedant'); await r.claim(id, 'asha'); await r.addNote(id, 'asha', 'looking at logs');
+  await r.setRelease('abc1234', [77]); await r.settle();
+  const top = posts.filter((p) => !p.k).map((p) => p.t);
+  assert.ok(top.some((t) => t.includes('asha is working on this') && t.includes('HighErrorRate')), 'claim announced top-level');
+  assert.ok(top.some((t) => t.includes('RESOLVED by PR #77')), 'RESOLVED announced top-level');
+  assert.ok(!top.some((t) => t.includes('looking at logs')), 'notes stay in the thread');
+  assert.ok(posts.some((p) => p.k === 'am-f1' && p.t.includes('asha is working on this')), 'thread reply kept');
 });

@@ -40,7 +40,7 @@
       "topup": "Recharge",
       "earn": "Gain",
       "refund": "Remboursement",
-      "spend": "Débit de message",
+      "spend": "Frais d'utilisation",
       "admin_adjust": "Ajustement"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Ouvrir le relevé complet",
         "emptyTitle": "Aucune activité pour le moment",
         "emptyBody": "Les recharges, débits de messages et remboursements apparaissent ici."
-      }
+      },
+      "messageExpenses": "Dépenses de messages"
     },
     "activity": {
       "description": "Description",
@@ -145,7 +146,7 @@
         "all": "Tous",
         "topup": "Recharges",
         "earn": "Gains",
-        "spend": "Frais de messages",
+        "spend": "Frais d'utilisation",
         "refund": "Remboursements",
         "admin_adjust": "Ajustements"
       },
@@ -188,6 +189,128 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Dépenses",
+      "subtitle": "Ce que chaque message, appel, requête d'IA et recherche a coûté, et à quoi il a servi. Les totaux couvrent tout ce qui correspond aux filtres.",
+      "back": "Retour au portefeuille",
+      "breadcrumbLabel": "Fil d’Ariane",
+      "breadcrumbWallet": "Portefeuille",
+      "breadcrumbExpenses": "Dépenses",
+      "fullStatement": "Relevé complet",
+      "summary": {
+        "messages": "Éléments",
+        "charged": "Facturé",
+        "refunded": "Remboursé",
+        "net": "Coût net",
+        "notBilled": "Non facturé"
+      },
+      "filters": {
+        "status": "Statut",
+        "statusAll": "Tous",
+        "statusCharged": "Facturé",
+        "statusFree": "Non facturé",
+        "statusRefunded": "Remboursé",
+        "template": "Modèle",
+        "templatePlaceholder": "Nom du modèle",
+        "channel": "Chaîne",
+        "category": "Catégorie",
+        "allChannels": "Toutes les chaînes",
+        "allCategories": "Toutes les catégories",
+        "from": "Du",
+        "to": "Au",
+        "apply": "Appliquer",
+        "reset": "Réinitialiser",
+        "rangeInverted": "La date de fin est antérieure à la date de début.",
+        "kind": "Type",
+        "allKinds": "Tous les types"
+      },
+      "breakdown": {
+        "title": "Coût par",
+        "groupBy": {
+          "template": "Modèle",
+          "source": "Chaîne",
+          "category": "Catégorie",
+          "country": "Pays",
+          "kind": "Type"
+        },
+        "group": "Groupe",
+        "notRecorded": "Non enregistré",
+        "truncated": "Affichage des {count} groupes les plus importants. Réduisez la période pour voir le reste.",
+        "empty": "Aucun résultat pour ces filtres."
+      },
+      "columns": {
+        "date": "Envoyé le",
+        "template": "Modèle",
+        "campaign": "Campagne, diffusion ou fonction",
+        "channel": "Chaîne",
+        "category": "Catégorie",
+        "country": "Pays",
+        "status": "Statut",
+        "charged": "Facturé",
+        "refunded": "Remboursé",
+        "net": "Coût net",
+        "messages": "Éléments",
+        "notBilled": "Non facturé",
+        "type": "Type"
+      },
+      "status": {
+        "charged": "Facturé",
+        "free": "Non facturé",
+        "refunded": "Remboursé",
+        "refundedOn": "Remboursé le {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Inclus dans votre forfait",
+        "wallet_empty": "Le portefeuille était vide",
+        "rate_is_zero": "Le tarif est nul",
+        "no_wallet_owner": "Aucun titulaire du portefeuille"
+      },
+      "uncollected": "{amount} non encaissés",
+      "emptyTitle": "Aucune dépense pour l'instant",
+      "emptyBody": "Les messages, appels, requêtes d'IA et autres usages apparaissent ici avec leur finalité et leur coût.",
+      "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
+      "days": {
+        "title": "Journal quotidien",
+        "subtitle": "Messages regroupées par jour, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
+        "messagesOnDay": "{count} messages",
+        "viewDetails": "Voir les détails",
+        "actions": "Actions",
+        "empty": "Aucun message ces jours-là."
+      },
+      "log": {
+        "title": "Messages",
+        "forDay": "Messages du {date}",
+        "showAllDays": "Afficher tous les jours"
+      },
+      "units": {
+        "sms": "{count, plural, one {# segment} other {# segments}}",
+        "whatsapp_call": "{count, plural, one {# minute} other {# minutes}}",
+        "voice_call": "{count, plural, one {# minute} other {# minutes}}"
+      },
+      "sources": {
+        "lead_first": "Réponse instantanée aux leads",
+        "lead": "Réponse instantanée aux leads",
+        "test": "Envoi de test",
+        "appointment": "Rappel de rendez-vous",
+        "lead_scoring": "Scoring des leads",
+        "lead_digest": "Résumé du chat",
+        "pql_search": "Recherche de contacts",
+        "growth_assistant": "Assistant de croissance",
+        "ai_copilot": "Copilote IA",
+        "help_agent": "Assistant d'aide",
+        "company_brief": "Fiche entreprise",
+        "inbox_ai": "Assistant de réponse",
+        "template_ai": "Créateur de modèles",
+        "campaign_ai": "Rédacteur de campagnes",
+        "campaign_ai_image": "Image de campagne",
+        "kb_embedding": "Base de connaissances",
+        "flow_ai": "Générateur de flux",
+        "widget_ai": "Chatbot du site web",
+        "growth": "Croissance",
+        "telephony": "Appels téléphoniques",
+        "translation": "Traduction"
       }
     },
     "admin": {
@@ -505,6 +628,40 @@
               "service": "Service"
             },
             "problems": "Lignes ignorées"
+          }
+        },
+        "usage": {
+          "title": "Tarifs des autres usages",
+          "subtitle": "Ce que les SMS, e-mails, appels, recherches de contacts et autres canaux de chat coûtent à vos clients, par unité. Un prix de 0 ou un interrupteur désactivé reste suivi dans le journal des dépenses, sans rien facturer.",
+          "perUnit": "Prix par {unit}",
+          "chargeFor": "Facturer {kind}",
+          "units": {
+            "segment": "segment de SMS",
+            "email": "e-mail",
+            "minute": "minute",
+            "lookup": "recherche",
+            "message": "message"
+          },
+          "hints": {
+            "sms": "Facturé en plus de la facture du fournisseur SMS du client. Un segment compte 160 caractères (70 pour un texte non latin).",
+            "email": "Facturé en plus de la boîte mail du client. Chaque e-mail envoyé compte une fois.",
+            "whatsapp_call": "Chaque minute entamée d'un appel WhatsApp. Un appel resté sans réponse est gratuit.",
+            "voice_call": "Chaque minute entamée d'un appel signalé par le fournisseur de téléphonie du client. Les appels saisis à la main ne sont jamais facturés.",
+            "enrichment": "Chaque contact recherché auprès du fournisseur de données de la plateforme.",
+            "chat_message": "Chaque message envoyé sur Telegram, Facebook, Instagram, LINE, Viber ou WeChat. Gratuit tant que vous n'avez pas fixé de prix."
+          },
+          "costPlus": {
+            "title": "Facturé au coût du fournisseur plus une marge",
+            "body": "Les requêtes d'IA et la traduction payante utilisent les clés fournisseur de la plateforme et sont facturées au prix payé au fournisseur, plus la marge ci-dessous. Un espace de travail avec sa propre clé n'est jamais facturé."
+          },
+          "markup": "Marge sur le coût du fournisseur",
+          "markupHint": "10 signifie qu'une requête ayant coûté 1,00 est facturée 1,10.",
+          "saving": "Enregistrement",
+          "save": "Enregistrer les tarifs",
+          "saved": "Tarifs d'utilisation enregistrés",
+          "problems": {
+            "invalid": "Saisissez un montant avec 2 décimales au maximum",
+            "tooHigh": "Dépasse la limite"
           }
         }
       },
@@ -867,6 +1024,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "Message WhatsApp",
+      "sms": "SMS",
+      "email": "E-mail",
+      "whatsapp_call": "Appel WhatsApp",
+      "voice_call": "Appel vocal",
+      "ai": "IA",
+      "translation": "Traduction",
+      "enrichment": "Recherche de contact",
+      "chat_message": "Message de chat"
     }
   }
 }

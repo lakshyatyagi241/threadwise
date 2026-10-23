@@ -8,7 +8,7 @@ import {
   emailCleared,
   isEmailProvider,
   isMailableAddress,
-  isWalletFree,
+  isUsageBilled,
   normalizeAddress,
   subjectSource,
 } from '../../../src/modules/campaigns/email-campaign-rules';
@@ -21,10 +21,10 @@ describe('which campaigns are email campaigns', () => {
       expect(isEmailProvider(p)).toBe(false);
   });
 
-  it('SMS and email are never charged to the wallet; WhatsApp is', () => {
-    expect(isWalletFree('email')).toBe(true);
-    expect(isWalletFree('sms')).toBe(true);
-    for (const p of ['waba', 'baileys', 'twilio', null]) expect(isWalletFree(p)).toBe(false);
+  it('SMS and email are paid per message by usage billing, so the WhatsApp-priced wallet checks skip them; WhatsApp is not skipped', () => {
+    expect(isUsageBilled('email')).toBe(true);
+    expect(isUsageBilled('sms')).toBe(true);
+    for (const p of ['waba', 'baileys', 'twilio', null]) expect(isUsageBilled(p)).toBe(false);
   });
 });
 

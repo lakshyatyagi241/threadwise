@@ -1,0 +1,1279 @@
+{
+  "generatedBy": "tools/pagination-audit/scan.mjs",
+  "summary": {
+    "listRoutes": 145,
+    "cursor": 109,
+    "page": 12,
+    "offset": 2,
+    "limitOnly": 22,
+    "uncapped": 0,
+    "offsetSites": 18,
+    "offsetFiles": 15,
+    "countStarSites": 1052
+  },
+  "routes": [
+    {
+      "file": "apps/api/src/modules/admin/roles/roles.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "paginationQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/admin/users/users.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listUsersQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/api-library/api-library.controller.ts",
+      "route": "apis",
+      "handler": "list",
+      "schema": "listApiLibraryApisQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/api-library/api-library.controller.ts",
+      "route": "apis/:id/logs",
+      "handler": "apiLogs",
+      "schema": "listApiLibraryLogsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/api-library/api-library.controller.ts",
+      "route": "logs",
+      "handler": "allLogs",
+      "schema": "listApiLibraryLogsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listAppointmentsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listAppointmentsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/audit-log/audit-log.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "auditLogQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/auth/controllers/account.controller.ts",
+      "route": "sessions",
+      "handler": "sessions",
+      "schema": "sessionListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts",
+      "route": "events",
+      "handler": "events",
+      "schema": "securityEventListQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/bsp-billing-engine/reseller-platform.controller.ts",
+      "route": "allocations",
+      "handler": "list",
+      "schema": "listBspAllocationsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/bsp-billing-engine/reseller-platform.controller.ts",
+      "route": "dashboard",
+      "handler": "dashboard",
+      "schema": "bspDashboardQuerySchema",
+      "style": "limit-only",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/call-logs.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "callLogListQuerySchema",
+      "style": "page",
+      "cap": "CALL_LOG_MAX_PAGE_SIZE",
+      "maxPage": "100000"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/logging/call-logging.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "contactCallsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaigns-read.controller.ts",
+      "route": ":id/recipients",
+      "handler": "recipients",
+      "schema": "listRecipientsQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "MAX_PAGE_NUMBER"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaigns-read.controller.ts",
+      "route": ":id/summary/people",
+      "handler": "campaignSummaryPeople",
+      "schema": "campaignSummaryPeopleQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaigns-read.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listCampaignsQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "MAX_PAGE_NUMBER"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/summary/broadcast-summary.controller.ts",
+      "route": ":id/summary/people",
+      "handler": "people",
+      "schema": "campaignSummaryPeopleQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts",
+      "route": "broadcasts",
+      "handler": "list",
+      "schema": "listWizardBroadcastsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/catalog-products/catalog.controller.ts",
+      "route": "activity",
+      "handler": "activity",
+      "schema": "catalogActivityQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/channel-facebook/insights.controller.ts",
+      "route": "/",
+      "handler": "view",
+      "schema": "insightsQuerySchema",
+      "style": "page",
+      "cap": "fixed"
+    },
+    {
+      "file": "apps/api/src/modules/channel-facebook/posts.controller.ts",
+      "route": "posts",
+      "handler": "list",
+      "schema": "listFbPostsQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "MAX_PAGE_NUMBER"
+    },
+    {
+      "file": "apps/api/src/modules/compliance-center/compliance.controller.ts",
+      "route": "dnc",
+      "handler": "listDnc",
+      "schema": "dncListQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts",
+      "route": "contacts/:uuid",
+      "handler": "forContact",
+      "schema": "consentEventsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts",
+      "route": "events",
+      "handler": "events",
+      "schema": "consentEventsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/coupons.controller.ts",
+      "route": "coupons",
+      "handler": "list",
+      "schema": "couponListQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "100_000"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/currencies.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "currencyListQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "100_000"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/referrals.controller.ts",
+      "route": "referrals",
+      "handler": "list",
+      "schema": "referralListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/attributes/attributes.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listAttributesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/companies/companies.controller.ts",
+      "route": ":id/activity",
+      "handler": "activity",
+      "schema": "listCompanyActivityQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/companies/companies.controller.ts",
+      "route": ":id/contacts",
+      "handler": "contacts",
+      "schema": "listCompanyContactsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/companies/companies.controller.ts",
+      "route": "select-data",
+      "handler": "selectData",
+      "schema": "companySelectQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/contact-assignment/contact-assignment.controller.ts",
+      "route": "runs",
+      "handler": "runs",
+      "schema": "listAssignmentRunsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts",
+      "route": "exports",
+      "handler": "exports",
+      "schema": "exportHistoryQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/contact-groups/contact-groups.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listContactGroupsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/contact-meetings/contact-meetings.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listContactMeetingsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/contacts/contacts.controller.ts",
+      "route": "select-data",
+      "handler": "selectData",
+      "schema": "contactSelectQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/deals/deals.controller.ts",
+      "route": ":id/activities",
+      "handler": "listActivities",
+      "schema": "listDealActivitiesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/deals/deals.controller.ts",
+      "route": "tasks",
+      "handler": "tasks",
+      "schema": "listDealTasksQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/field-sections/field-sections.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listFieldSectionsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/fields/fields.controller.ts",
+      "route": ":id/option-search",
+      "handler": "searchOptions",
+      "schema": "searchFieldOptionsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/fields/fields.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listFieldsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/credit-notes.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listCreditNotesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/invoices.controller.ts",
+      "route": ":id/events",
+      "handler": "events",
+      "schema": "invoiceEventsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/invoices.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listInvoicesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/invoices.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "linkedInvoicesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/invoices.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "linkedInvoicesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/payments.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listPaymentsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/payments.controller.ts",
+      "route": "outstanding",
+      "handler": "outstanding",
+      "schema": "outstandingQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/recurring-invoices.controller.ts",
+      "route": ":id/runs",
+      "handler": "runs",
+      "schema": "listRecurringRunsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/recurring-invoices.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listRecurringInvoicesQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/sales-orders.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listSalesOrdersQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/owner-reassign/owner-reassign.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "ownerReassignListQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs.controller.ts",
+      "route": ":id/events",
+      "handler": "events",
+      "schema": "listSalesDocEventsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listSalesDocsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/segments/segments.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listSegmentsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/status-options/status-options.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listStatusOptionsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/tags/tags.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listTagsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listTasksQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts",
+      "route": "my",
+      "handler": "mine",
+      "schema": "listTasksQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/email-templates/email-templates.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listEmailTemplatesQuerySchema",
+      "style": "cursor",
+      "cap": "EMAIL_TEMPLATE_LIST_MAX"
+    },
+    {
+      "file": "apps/api/src/modules/failed-operations/failed-operations.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "failedOperationsQuerySchema",
+      "style": "limit-only",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listFlowsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts",
+      "route": "builder-context/commerce-products",
+      "handler": "commerceProducts",
+      "schema": "flbCommerceProductsQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/flow-builder-editor/platform-flow-templates.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listAdminFlowTemplatesQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime-public.controller.ts",
+      "route": ":id/subscribers",
+      "handler": "subscribers",
+      "schema": "listFlowSubscribersQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "route": "flows/:flowId/subscribers",
+      "handler": "subscribers",
+      "schema": "listFlowSubscribersQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "route": "history",
+      "handler": "history",
+      "schema": "listFlowHistoryQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "route": "retries",
+      "handler": "retries",
+      "schema": "listFlowRetriesQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "route": "runs",
+      "handler": "runs",
+      "schema": "listFlowRunsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-submissions.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listFormSubmissionsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/forms.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listFormsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/forms-links-groups/wa-chat-links.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "waChatLinkListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/forms-links-groups/wa-forms.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "waFormListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts",
+      "route": "actions",
+      "handler": "listActions",
+      "schema": "growthActionsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring-platform.controller.ts",
+      "route": "runs",
+      "handler": "runs",
+      "schema": "lscPlatformRunsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring-platform.controller.ts",
+      "route": "workspaces",
+      "handler": "workspaces",
+      "schema": "lscPlatformWorkspacesQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring.controller.ts",
+      "route": "runs",
+      "handler": "runs",
+      "schema": "lscRunsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring.controller.ts",
+      "route": "suggestions",
+      "handler": "suggestions",
+      "schema": "lscSuggestionsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-inbox.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listLeadInboxQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-inbox.controller.ts",
+      "route": "runs",
+      "handler": "runs",
+      "schema": "listLeadSyncRunsQuerySchema",
+      "style": "limit-only",
+      "cap": "50"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-sources.controller.ts",
+      "route": ":id/events",
+      "handler": "events",
+      "schema": "listLeadEventsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketing-site-cms/operator-pages.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "blogAdminListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketing-site-cms/operator-pages.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "cmsContactListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketing-site-cms/operator-site.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "announcementListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts",
+      "route": "blog",
+      "handler": "blogIndex",
+      "schema": "blogPublicQuerySchema",
+      "style": "cursor",
+      "cap": "50"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/marketplace.controller.ts",
+      "route": "apps",
+      "handler": "apps",
+      "schema": "marketAppListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/marketplace.controller.ts",
+      "route": "installations/:id/events",
+      "handler": "events",
+      "schema": "marketConnectionEventsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/marketplace.controller.ts",
+      "route": "requests",
+      "handler": "listRequests",
+      "schema": "marketRequestListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/platform-marketplace.controller.ts",
+      "route": "apps",
+      "handler": "apps",
+      "schema": "marketOperatorAppListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/platform-marketplace.controller.ts",
+      "route": "requests",
+      "handler": "requests",
+      "schema": "marketOperatorRequestListQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/platform-marketplace.controller.ts",
+      "route": "subscriptions",
+      "handler": "subscriptions",
+      "schema": "marketOperatorSubscriptionListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/message-templates/templates.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listTemplatesQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/node-bridge.controller.ts",
+      "route": "unofficial/workspace-options",
+      "handler": "unofficialWorkspaceOptions",
+      "schema": "unofficialWorkspaceOptionsQuerySchema",
+      "style": "limit-only",
+      "cap": "20"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/node-bridge.controller.ts",
+      "route": "unofficial/workspaces",
+      "handler": "listUnofficialWorkspaces",
+      "schema": "unofficialWorkspaceListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/notifications.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listNotificationsQuerySchema",
+      "style": "cursor",
+      "cap": "50"
+    },
+    {
+      "file": "apps/api/src/modules/outbound-webhooks/webhooks.controller.ts",
+      "route": ":id/deliveries",
+      "handler": "deliveries",
+      "schema": "listWebhookDeliveriesQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/plans-subscriptions-trials/platform-workspace-plans.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "workspacePlanListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/platform-deployments/deployments.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "deploymentsQuerySchema",
+      "style": "limit-only",
+      "cap": "DEPLOYMENT_LIST_MAX"
+    },
+    {
+      "file": "apps/api/src/modules/platform-deployments/deployments.controller.ts",
+      "route": "publishes",
+      "handler": "publishes",
+      "schema": "publishesQuerySchema",
+      "style": "limit-only",
+      "cap": "DEPLOYMENT_LIST_MAX"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.controller.ts",
+      "route": "invoices",
+      "handler": "invoices",
+      "schema": "invoicesQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "100000"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.controller.ts",
+      "route": "invoices/export",
+      "handler": "exportInvoices",
+      "schema": "invoicesQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "100000"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.controller.ts",
+      "route": "subscriptions",
+      "handler": "subscriptionList",
+      "schema": "adminSubscriptionsQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "100000"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/checkout.controller.ts",
+      "route": "orders",
+      "handler": "listOrders",
+      "schema": "paygwOrdersQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/platform-support-desk/customer-tickets.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "customerTicketListQuerySchema",
+      "style": "limit-only",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/platform-support-desk/operator-tickets.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "operatorTicketListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/platform-support-desk/platform-inbox.controller.ts",
+      "route": "audit",
+      "handler": "audit",
+      "schema": "inboxAuditQuerySchema",
+      "style": "limit-only",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/platform-support-desk/platform-inbox.controller.ts",
+      "route": "queue",
+      "handler": "queue",
+      "schema": "inboxQueueQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listLegalHoldsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts",
+      "route": "export",
+      "handler": "export",
+      "schema": "listLegalHoldsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts",
+      "route": "requests",
+      "handler": "list",
+      "schema": "listPrivacyRequestsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/scheduled.controller.ts",
+      "route": ":id/recipients",
+      "handler": "recipients",
+      "schema": "listScheduleRecipientsQuerySchema",
+      "style": "offset",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/scheduled.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listSchedulesQuerySchema",
+      "style": "offset",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/store-orders-sales/contact-store-orders.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listContactStoreOrdersQuerySchema",
+      "style": "limit-only",
+      "cap": "50"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/admin/store-coupons.controller.ts",
+      "route": ":id/usages",
+      "handler": "usages",
+      "schema": "listStoreCouponUsagesQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/admin/store-coupons.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listStoreCouponsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/admin/store-customers.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listStoreCustomersQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/admin/store-groups.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listStoreGroupsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/admin/store-orders.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listStoreOrdersQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/admin/store-payments.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listStorePaymentsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts",
+      "route": ":slug/home",
+      "handler": "home",
+      "schema": "publicHomeQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "MAX_PAGE_NUMBER"
+    },
+    {
+      "file": "apps/api/src/modules/team-chat/team-chat.controller.ts",
+      "route": "channels/:id/messages",
+      "handler": "listMessages",
+      "schema": "listTchatMessagesQuerySchema",
+      "style": "cursor",
+      "cap": "clamped"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox.controller.ts",
+      "route": "conversations",
+      "handler": "list",
+      "schema": "listConversationsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox.controller.ts",
+      "route": "conversations/:id/group-members",
+      "handler": "groupMembers",
+      "schema": "listConversationGroupMembersQuerySchema",
+      "style": "limit-only",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-conversations/message-history.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listMessageHistoryQuerySchema",
+      "style": "cursor",
+      "cap": "MESSAGE_HISTORY_PAGE_LIMIT.max"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-conversations/saved-replies/saved-replies.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listSavedRepliesQuerySchema",
+      "style": "cursor",
+      "cap": "SAVED_REPLY_LIST_MAX"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-routing-sla/routing-rules.controller.ts",
+      "route": "rules",
+      "handler": "list",
+      "schema": "listRoutingRulesQuerySchema",
+      "style": "cursor",
+      "cap": "ROUTING_LIST_MAX"
+    },
+    {
+      "file": "apps/api/src/modules/waboo-migration/waboo-migration.controller.ts",
+      "route": "batches",
+      "handler": "listBatches",
+      "schema": "wabooMigrationRunsQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/waboo-migration/waboo-migration.controller.ts",
+      "route": "runs",
+      "handler": "list",
+      "schema": "wabooMigrationRunsQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.controller.ts",
+      "route": "logs",
+      "handler": "logs",
+      "schema": "walletLogQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.controller.ts",
+      "route": "workspaces",
+      "handler": "workspaces",
+      "schema": "platformWalletListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/wallet.controller.ts",
+      "route": "ledger",
+      "handler": "ledger",
+      "schema": "walletLedgerQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/wallet.controller.ts",
+      "route": "statement",
+      "handler": "statement",
+      "schema": "statementQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/wallet.controller.ts",
+      "route": "statement.csv",
+      "handler": "statementCsv",
+      "schema": "statementQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/webhook-fanout/webhook-fanout.controller.ts",
+      "route": "failures",
+      "handler": "failures",
+      "schema": "webhookFailuresQuerySchema",
+      "style": "limit-only",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/customer-profiles.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listCustomersQuerySchema",
+      "style": "page",
+      "cap": "fixed",
+      "maxPage": "10_000"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "wabaGroupListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups.controller.ts",
+      "route": ":gid/participants",
+      "handler": "members",
+      "schema": "waDeviceGroupMembersQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/devices.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listDevicesQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-provider-admin/whatsapp-providers.controller.ts",
+      "route": "assignments",
+      "handler": "listAssignments",
+      "schema": "listAssignmentsQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave.controller.ts",
+      "route": "leaves",
+      "handler": "list",
+      "schema": "listMemberLeavesQuerySchema",
+      "style": "limit-only",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/members.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listWspMembersQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspace-lifecycle.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listOrgLifecycleQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listWorkspaceHubQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/teams.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listWspTeamsQuerySchema",
+      "style": "cursor",
+      "cap": "200"
+    }
+  ],
+  "offsetSites": [
+    {
+      "file": "apps/api/src/modules/api-library/api-library-logs.repository.ts",
+      "line": 172,
+      "text": "LIMIT ${paged ? f.limit : f.limit + 1}${paged ? sql` OFFSET ${f.offset}` : sql``}`);"
+    },
+    {
+      "file": "apps/api/src/modules/api-library/api-library.repository.ts",
+      "line": 135,
+      "text": "LIMIT ${paged ? f.limit : f.limit + 1}${paged ? sql` OFFSET ${f.offset}` : sql``}`);"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+      "line": 150,
+      "text": "LIMIT ${limit} OFFSET ${offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+      "line": 1370,
+      "text": "SELECT r.id FROM wp_campaign_contacts r WHERE ${where} ORDER BY r.id DESC LIMIT ${o.limit} OFFSET ${o.offset})"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+      "line": 1373,
+      "text": "${RECIPIENT_SELECT} WHERE ${where} ORDER BY r.id DESC LIMIT ${o.limit} OFFSET ${o.offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard-contacts.service.ts",
+      "line": 62,
+      "text": "ORDER BY contacts.id DESC LIMIT ${q.perPage} OFFSET ${(q.page - 1) * q.perPage}`);"
+    },
+    {
+      "file": "apps/api/src/modules/catalog-products/sql-storefront-reader.ts",
+      "line": 117,
+      "text": "OFFSET ${page.offset} LIMIT ${page.limit}`);"
+    },
+    {
+      "file": "apps/api/src/modules/channel-facebook/posts.repository.ts",
+      "line": 126,
+      "text": "LIMIT ${limit} OFFSET ${offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/coupon-admin.service.ts",
+      "line": 144,
+      "text": "ORDER BY id DESC LIMIT ${COUPON_PAGE_SIZE} OFFSET ${offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/currency-admin.service.ts",
+      "line": 127,
+      "text": "ORDER BY code ASC LIMIT ${CURRENCY_PAGE_SIZE} OFFSET ${offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+      "line": 161,
+      "text": "LIMIT ${f.limit} OFFSET ${f.offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+      "line": 438,
+      "text": "LIMIT ${f.limit} OFFSET ${f.offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+      "line": 592,
+      "text": "LIMIT ${f.limit} OFFSET ${f.offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/platform-subscriptions.service.ts",
+      "line": 65,
+      "text": "LIMIT ${PAGE_SIZE} OFFSET ${(q.page - 1) * PAGE_SIZE}`);"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-engagement.service.ts",
+      "line": 153,
+      "text": "ORDER BY c.id LIMIT ${q.limit} OFFSET ${q.offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-read.service.ts",
+      "line": 91,
+      "text": "LIMIT ${q.limit} OFFSET ${q.offset}`);"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts",
+      "line": 153,
+      "text": "ORDER BY c.id OFFSET 1 LIMIT 4`,"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/customer-profiles.service.ts",
+      "line": 72,
+      "text": "LIMIT ${CUSTOMER_PAGE_SIZE} OFFSET ${(query.page - 1) * CUSTOMER_PAGE_SIZE}`,"
+    }
+  ]
+}

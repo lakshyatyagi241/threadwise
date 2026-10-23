@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Bekleme kuyruğu",
       "intro": "Kimsenin üstlenmediği sohbetler Bekleyen sekmesinde bekler. Bu isteğe bağlı adımlar yanıtlanmalarına yardım eder. Her adım sohbet başına bir kez çalışır, yalnızca ekibin açık olduğu dakikaları sayar ve biri sohbeti üstlenir üstlenmez durur.",
+      "introBasic": "Kimsenin üstlenmediği sohbetler, biri üstlenene kadar Bekleyen sekmesinde bekler.",
       "remind": "Ekibi hatırlat",
       "remindBody": "Sohbeti üstlenebilecek kişilere haber verir.",
       "overflow": "Başka bir ekibe öner",

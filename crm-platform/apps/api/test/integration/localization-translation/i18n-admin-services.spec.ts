@@ -133,7 +133,9 @@ describe('i18n operator services (language registry and provider catalogue)', ()
     workspace = new TranslationSettingsService(
       db,
       plans,
-      new TranslationUsageService(db, store),
+      new TranslationUsageService(db, store, new OutboxService(), {
+        assertCanAfford: async () => undefined,
+      } as never),
       router,
       new AuditService(),
       new OutboxService(),

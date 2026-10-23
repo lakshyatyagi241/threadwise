@@ -11,9 +11,12 @@ import {
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { QUEUES } from '../../../infra/queue/queues';
+import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { emitUsageReported } from '../../../kernel/outbox/usage-report';
 import { ConsentGate } from '../../contact-consent';
 import { ContactResolverService, ContactsService } from '../../crm';
 import { CallRecordingSettingsService } from '../call-recording-settings.service';
+import { telephonyCallUsage } from '../call-usage.rules';
 import { CallLoggingSettingsService } from './call-logging-settings.service';
 import { CallLogEntriesRepository, type NewEntry } from './call-log-entries.repository';
 import { CallLogEntriesService, runAsSystem } from './call-log-entries.service';
@@ -39,7 +42,10 @@ export type TelephonyApplyResult = 'created' | 'duplicate' | 'ignored';
  *    entry's source is `web_click_to_call`; any other call is `telephony`, with no handler (the provider does not tell us who answered);
  *  - a recording reference is kept only if the ConsentGate allows recording this call (the workspace switch is on, and the connection's
  *    owner attests the notice is played, in the "announcement" consent mode); otherwise the call is logged without it. Audio is never fetched;
- *  - idempotent: the entry is unique on (source, connection + the provider's call id).
+ *  - idempotent: the entry is unique on (source, connection + the provider's call id);
+ *  - a call the provider reports COMPLETED with talk time is paid usage: it is reported to the wallet (`voice_call`, every started minute)
+ *    in the transaction that inserts the entry, once per entry. A call a person typed in or a phone reported never comes through here
+ *    and is never billed.
  */
 @Injectable()
 export class TelephonyEventsService {
@@ -54,6 +60,7 @@ export class TelephonyEventsService {
     private readonly settings: CallLoggingSettingsService,
     private readonly recordingSettings: CallRecordingSettingsService,
     private readonly gate: ConsentGate,
+    private readonly outbox: OutboxService,
   ) {}
 
   async apply(job: TelephonyJob): Promise<TelephonyApplyResult> {
@@ -103,6 +110,30 @@ export class TelephonyEventsService {
           activitySource: 'system',
         } satisfies NewEntry & { activitySource: 'user' | 'system' });
 
+        // Only the delivery that created the entry reports it: a redelivery finds the entry and charges nothing. (The wallet also
+        // charges one call id once, which covers the entry being written under another source after its click-to-call placement is gone.)
+        if (created) {
+          const usage = telephonyCallUsage({
+            connectionUuid,
+            callId: event.callId,
+            status: event.status,
+            durationSec: event.durationSec,
+            customerPhone: phone,
+            provider: conn.provider,
+          });
+          if (usage) {
+            const reported = await emitUsageReported(this.outbox, tx, {
+              orgId,
+              aggregateModule: 'call_log_entries',
+              aggregateId: entry.id,
+              report: usage,
+            });
+            // A bill that does not parse is dropped by design (it must not fail the entry); say so, a lost charge should be found.
+            if (!reported)
+              this.logger.warn({ orgId, entry: entry.uuid }, '[CALL] call usage not reported');
+          }
+        }
+
         await tx.execute(sql`
           UPDATE telephony_connections SET last_event_at = now() WHERE org_id = ${orgId} AND id = ${conn.id}`);
         if (placed) {
@@ -118,13 +149,14 @@ export class TelephonyEventsService {
 
   private async connection(tx: Tx, orgId: number, uuid: string) {
     const res = await tx.execute(sql`
-      SELECT id, label, status, plays_recording_notice
+      SELECT id, label, provider, status, plays_recording_notice
       FROM telephony_connections WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`);
     const r = rowsOf(res)[0];
     return r
       ? {
           id: Number(r.id),
           label: String(r.label),
+          provider: String(r.provider),
           status: String(r.status),
           playsNotice: r.plays_recording_notice === true,
         }

@@ -24,6 +24,7 @@ export class OpenRouterKbAiAdapter implements KbAiPort {
   async embed(req: KbEmbedRequest): Promise<KbEmbedResult> {
     const vectors: number[][] = [];
     let promptTokens = 0;
+    let costUsd = 0;
     for (let i = 0; i < req.inputs.length; i += EMBED_BATCH) {
       const batch = req.inputs.slice(i, i + EMBED_BATCH);
       const json = (await this.post('/embeddings', req.apiKey, {
@@ -32,7 +33,7 @@ export class OpenRouterKbAiAdapter implements KbAiPort {
         encoding_format: 'float',
       })) as {
         data?: Array<{ index?: number; embedding?: unknown }>;
-        usage?: { prompt_tokens?: number; total_tokens?: number };
+        usage?: { prompt_tokens?: number; total_tokens?: number; cost?: number };
       };
       const rows = json.data;
       if (!Array.isArray(rows) || rows.length !== batch.length) {
@@ -53,8 +54,9 @@ export class OpenRouterKbAiAdapter implements KbAiPort {
         vectors.push(v as number[]);
       }
       promptTokens += num(json.usage?.prompt_tokens) || num(json.usage?.total_tokens);
+      costUsd += num(json.usage?.cost);
     }
-    return { vectors, promptTokens };
+    return { vectors, promptTokens, ...(costUsd > 0 ? { costUsd } : {}) };
   }
 
   private async post(path: string, apiKey: string, body: unknown): Promise<unknown> {

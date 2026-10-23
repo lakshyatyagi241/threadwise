@@ -21,6 +21,7 @@ PT="docker run --rm -v $OBS:/r -w /r --entrypoint promtool prom/prometheus:v2.55
 AM="docker run --rm -v $OBS:/r --entrypoint amtool prom/alertmanager:v0.27.0"
 
 st_run unit node --test tools/chat-bridge/chat-bridge.unit.test.mjs
+st_run setup_unit node --test tools/chat-bridge/incident-setup.unit.test.mjs
 st_run promtool_check $PT check rules /r/slow-query.rules.yml
 st_run promtool_test $PT test rules slow-query.rules.test.yml
 st_run amtool_gchat $AM check-config /r/alertmanager.gchat.yml

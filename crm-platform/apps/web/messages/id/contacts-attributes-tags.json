@@ -283,8 +283,6 @@
       "shortEmail": "Email",
       "shortStage": "Tahap",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Dibuat",
-      "shortModified": "Diubah",
       "firstRun": {
         "title": "Tambahkan kontak pertama Anda",
         "message": "Bawa masuk orang-orang yang Anda ajak bicara. Kontak dipakai untuk pesan, kampanye, tugas, dan deal.",
@@ -298,7 +296,8 @@
       "teamFilter": "Filter menurut tim",
       "allTeams": "Semua tim",
       "teamFormer": "Tim sebelumnya",
-      "unhideColumn": "Tampilkan kolom"
+      "unhideColumn": "Tampilkan kolom",
+      "resizeColumn": "Seret untuk mengubah lebar {column}; klik dua kali untuk mengatur ulang"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -1338,7 +1337,7 @@
         "closePicker": "Tutup",
         "changed": "Properti yang diubah",
         "clear": "Kosongkan",
-        "keep": "Pertahankan",
+        "remove": "Hapus {name}",
         "setValue": "Atur nilai",
         "willClear": "Akan dikosongkan pada {count, plural, one {kontak yang dipilih} other {semua # kontak yang dipilih}}.",
         "requiredNoClear": "Properti wajib tidak dapat dikosongkan.",

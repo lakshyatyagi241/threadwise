@@ -63,6 +63,8 @@ export const plans = pgTable(
      * Set on the billing add-on that sells one Marketplace app (20261023090000_mkt_pricing.sql). References marketplace_apps in the
      * database; not declared here because that table's schema file imports this one.
      */
+    /** A plain add-on's kind (feature / capacity), chosen by the operator; null on an older row (the kind is then derived from its grants). */
+    addonKind: text('addon_kind').$type<'feature' | 'capacity'>(),
     marketplaceAppId: idColumn('marketplace_app_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -98,6 +100,31 @@ export const planVisibleAddons = pgTable(
   (t) => [
     primaryKey({ columns: [t.planId, t.addonPlanId] }),
     index('idx_plan_visible_addons_addon').on(t.addonPlanId),
+  ],
+);
+
+/**
+ * Mirror of 20270331090100_plan_addon_offers.sql: how a plan offers a plain add-on (no Marketplace app). `included` (no charge, the plan carries
+ * the add-on's features), `paid` (buyable; `amount` null = the add-on's own price) or `hidden` (not listed, not buyable). No row = paid at the
+ * add-on's price. docs/specs/addons-plan-offers.md.
+ */
+export const planAddonOffers = pgTable(
+  'plan_addon_offers',
+  {
+    planId: idColumn('plan_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    addonId: idColumn('addon_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    mode: text('mode').$type<'included' | 'paid' | 'hidden'>().notNull(),
+    amount: numeric('amount', { precision: 12, scale: 2 }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.planId, t.addonId] }),
+    index('idx_plan_addon_offers_addon').on(t.addonId),
   ],
 );
 

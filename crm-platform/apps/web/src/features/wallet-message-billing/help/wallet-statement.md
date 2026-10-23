@@ -11,7 +11,7 @@ keywords:
 
 ## What it is for
 
-The wallet screen shows your message balance and how it has moved in the last 30 days. It also explains how messages are billed for your workspace. The full statement lists every movement on the wallet: top-ups, message charges, refunds and manual adjustments, each with its balance after the change.
+The wallet screen shows your message balance and how it has moved in the last 30 days. It also explains how messages are billed for your workspace. The full statement lists every movement on the wallet: top-ups, usage charges, refunds and manual adjustments, each with its balance after the change.
 
 ## How to use it
 
@@ -22,11 +22,13 @@ The wallet screen shows your message balance and how it has moved in the last 30
 5. On the statement, choose a type, a from and to date, or words to search for, then select **Apply**. **Reset** clears them.
 6. Select **Export CSV** to download the rows that match the filters.
 
+> To see what each charge was for, such as the template of a WhatsApp message, an SMS, an email, a call or an AI request, open **Expenses** from the wallet screen. See [Expenses](help:message-expenses).
+
 > The totals on the statement cover everything that matches the filters, not only the rows on the page. Amounts are shown exactly as the wallet holds them, up to three or four decimals (for example 0.958), so the rows, the totals and the balance add up. "Messages used this month" is the same number you see on the plan page and in Analytics.
 
 ## Options and settings
 
-- **Type**: all movements, top-ups, earnings, message charges, refunds or adjustments.
+- **Type**: all movements, top-ups, earnings, usage charges, refunds or adjustments.
 - **From and to**: the date range. The end date cannot be before the start date.
 - **Search**: matches the description or the reason of a movement.
 - **Columns**: the statement and the exported CSV have the same columns. Channel, Recipient, Template, Country, Category and Engine appear only when at least one movement in the list has a value for them, so a column is never blank for every row. Category is filled for movements brought over from the old platform.

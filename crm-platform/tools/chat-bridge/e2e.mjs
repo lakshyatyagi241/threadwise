@@ -50,9 +50,10 @@ try {
   let n = posts.length;
   await post('/alertmanager', { alerts: [alert('CritA', 'critical')] });
   check('critical goes to Critical space only', posts.slice(n).length === 1 && posts[n].channel === 'critical');
+  await new Promise((r) => setTimeout(r, 2500)); // every critical alert now opens an incident, so the resolver also replies in the thread: let those land before the next baseline
   n = posts.length; await post('/alertmanager', { alerts: [alert('WarnA', 'warning')] });
   check('plain warning is dropped and counted not_routed', posts.length === n && mval(await metrics(), 'crm_chat_bridge_dropped_total{reason="not_routed"}') >= 1);
-  n = posts.length; await post('/alertmanager', { alerts: [alert('CritA', 'critical', 'resolved')] });
+  n = posts.length; await post('/alertmanager', { alerts: [alert('CritA', 'critical', 'resolved')] }); await new Promise((r) => setTimeout(r, 1500));
   check('resolved is posted', posts.slice(n).length === 1 && /resolved/.test(posts[n].body));
   const rc = await (await fetch(`http://127.0.0.1:${BP}/route-check`, { method: 'POST', body: JSON.stringify({ kind: 'slow_query', severity: 'critical' }) })).json();
   check('/route-check: critical slow query -> slowquery, posts nothing', rc.channel === 'slowquery' && posts.length === n + 1);

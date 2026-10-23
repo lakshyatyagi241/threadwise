@@ -8,14 +8,24 @@ import {
   type AddonPackListResponse,
   type CreateAddonPayload,
   type GrantFieldsResponse,
+  type SetAddonPlanOffersPayload,
   type UpdateAddonPayload,
+  derivedAddonKind,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { PLAN_FEATURE_DEFS, PLAN_LIMIT_DEFS } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { AuthAuditService, PlatformStore } from '../auth';
-import { slugifyPlanName, uniquePlanSlug } from '../plans-subscriptions-trials';
+import {
+  offersByAddon,
+  offersForAddon,
+  packFeatureKeys,
+  resyncIncludedPlans,
+  slugifyPlanName,
+  uniquePlanSlug,
+  writeAddonOffers,
+} from '../plans-subscriptions-trials';
 import {
   featuresColumn,
   normaliseGrants,
@@ -45,6 +55,7 @@ interface PackRow {
   sort_order: number;
   features: unknown;
   limits: unknown;
+  addon_kind: 'feature' | 'capacity' | null;
   row_version: number;
   created_at: string;
   updated_at: string;
@@ -56,7 +67,7 @@ interface PackRow {
 const SELECT = sql.raw(`
   SELECT p.id::int AS id, p.uuid, p.slug, p.name, p.subtitle, p.detail, p.amount::text AS amount,
          p.offer_amount::text AS offer_amount, p.currency, p.billing_unit, p.billing_duration, p.billing_mode, p.is_free,
-         p.is_lifetime, p.is_active, p.sort_order, p.features, p.limits, p.row_version, p.created_at, p.updated_at,
+         p.is_lifetime, p.is_active, p.sort_order, p.features, p.limits, p.addon_kind, p.row_version, p.created_at, p.updated_at,
          (SELECT count(*)::int FROM workspace_addons a WHERE a.package_id = p.id) AS purchases,
          (SELECT count(*)::int FROM workspace_addons a
            WHERE a.package_id = p.id AND a.status = 'active' AND (a.ends_at IS NULL OR a.ends_at > now())) AS active_purchases
@@ -84,6 +95,9 @@ export function toPack(row: PackRow): AddonPack {
     // the grants column is read from the stored grants, not from a mirrored flag (TW-ADD-025 QUIRK 1)
     grants: readGrants(row.features, row.limits),
     activePurchases: row.active_purchases,
+    // The operator's choice; an older row falls back to what its grants say.
+    kind: row.addon_kind ?? derivedAddonKind(readGrants(row.features, row.limits)),
+    planOffers: [],
     rowVersion: row.row_version,
     createdAt: new Date(row.created_at).toISOString(),
     updatedAt: new Date(row.updated_at).toISOString(),
@@ -196,18 +210,67 @@ export class AddonPackService {
   // --- reads -----------------------------------------------------------------------------------------------------
 
   async list(): Promise<AddonPackListResponse> {
-    const rows = await this.platform.tx(async (tx) => {
+    const { rows, offers } = await this.platform.tx(async (tx) => {
       const res = await tx.execute(
         sql`${SELECT} WHERE p.kind = 'addon' AND p.marketplace_app_id IS NULL ORDER BY p.sort_order ASC, p.amount ASC, p.slug ASC`,
       );
-      return res.rows as unknown as PackRow[];
+      return { rows: res.rows as unknown as PackRow[], offers: await offersByAddon(tx) };
     });
-    const data = rows.map(toPack);
+    const data = rows.map((r) => ({ ...toPack(r), planOffers: offers.get(Number(r.id)) ?? [] }));
     return { data, summary: { total: data.length, active: data.filter((p) => p.isActive).length } };
   }
 
   async get(uuid: string): Promise<AddonPack> {
-    return this.platform.tx(async (tx) => toPack(await this.byUuid(tx, uuid)));
+    return this.platform.tx(async (tx) => this.withOffers(tx, await this.byUuid(tx, uuid)));
+  }
+
+  /** A workspace's row id from its uuid, for the operator's view of its add-ons; null when there is none. */
+  async workspaceOrgId(uuid: string): Promise<number | null> {
+    return this.platform.tx(async (tx) => {
+      const res = await tx.execute(
+        sql`SELECT id::int AS id FROM organizations WHERE uuid = ${uuid}::uuid`,
+      );
+      return (res.rows[0] as { id: number } | undefined)?.id ?? null;
+    });
+  }
+
+  private async withOffers(tx: Tx, row: PackRow): Promise<AddonPack> {
+    return { ...toPack(row), planOffers: await offersForAddon(tx, Number(row.id)) };
+  }
+
+  /**
+   * How each plan offers this pack (docs/specs/addons-plan-offers.md): included, paid (optionally at the plan's own price) or hidden. Each plan
+   * named is written and its features set to match; the others keep theirs. One audit event naming the plans that changed.
+   */
+  async setPlanOffers(uuid: string, body: SetAddonPlanOffersPayload): Promise<AddonPack> {
+    const operatorId = this.operatorId();
+    return this.tx(async (tx) => {
+      const stored = await this.byUuid(tx, uuid, true);
+      const before = await offersForAddon(tx, Number(stored.id));
+      const plans = await writeAddonOffers(
+        tx,
+        { id: Number(stored.id), uuid: stored.uuid },
+        body.offers,
+      );
+      if (plans.length > 0) {
+        const after = await offersForAddon(tx, Number(stored.id));
+        await this.record(tx, 'platform.addon.plan_offers_updated', operatorId, {
+          slug: stored.slug,
+          plans,
+          changes: after
+            .filter((a) => plans.includes(a.planSlug))
+            .map((a) => {
+              const b = before.find((x) => x.planId === a.planId);
+              return {
+                plan: a.planSlug,
+                from: b ? { mode: b.mode, amount: b.amount } : null,
+                to: { mode: a.mode, amount: a.amount },
+              };
+            }),
+        });
+      }
+      return this.withOffers(tx, await this.byUuid(tx, uuid));
+    });
   }
 
   // --- writes ----------------------------------------------------------------------------------------------------
@@ -243,11 +306,11 @@ export class AddonPackService {
       const free = isZero(body.amount);
       const res = await tx.execute(sql`
         INSERT INTO plans (slug, kind, name, subtitle, detail, amount, offer_amount, currency, billing_unit,
-                           billing_duration, billing_mode, is_free, is_lifetime, is_active, sort_order, cta_label, limits, features)
+                           billing_duration, billing_mode, is_free, is_lifetime, is_active, sort_order, cta_label, limits, features, addon_kind)
         VALUES (${slug}, 'addon', ${body.name}, ${body.subtitle}, ${body.detail}, ${body.amount}::numeric,
                 ${body.offerAmount}::numeric, ${body.currency}, ${body.billingUnit}, ${body.billingDuration},
                 ${body.billingMode}, ${free}, ${body.isLifetime}, ${body.isActive}, ${body.sortOrder}, 'Add to plan',
-                ${JSON.stringify(grants.limits)}::jsonb, ${JSON.stringify(featuresColumn(grants))}::jsonb)
+                ${JSON.stringify(grants.limits)}::jsonb, ${JSON.stringify(featuresColumn(grants))}::jsonb, ${body.kind})
         RETURNING uuid
       `);
       const uuid = (res.rows[0] as unknown as { uuid: string }).uuid;
@@ -292,6 +355,7 @@ export class AddonPackService {
         sortOrder: before.sortOrder,
         features: before.grants.features,
         limits: before.grants.limits,
+        kind: before.kind,
         ...defined,
       };
       const checked = createAddonRequestSchema.safeParse(merged);
@@ -311,11 +375,19 @@ export class AddonPackService {
           currency = ${after.currency}, billing_unit = ${after.billingUnit},
           billing_duration = ${after.billingDuration}, billing_mode = ${after.billingMode}, is_free = ${isZero(after.amount)},
           is_lifetime = ${after.isLifetime}, is_active = ${after.isActive}, sort_order = ${after.sortOrder},
-          limits = ${JSON.stringify(grants.limits)}::jsonb, features = ${JSON.stringify(featuresColumn(grants))}::jsonb
+          limits = ${JSON.stringify(grants.limits)}::jsonb, features = ${JSON.stringify(featuresColumn(grants))}::jsonb,
+          addon_kind = ${after.kind}
         WHERE id = ${stored.id} AND row_version = ${patch.rowVersion}
         RETURNING id
       `);
       if (res.rows.length === 0) throw AppError.rowVersionConflict('The add-on');
+      // Plans that include this add-on follow its features (an included add-on means the plan carries every feature it grants).
+      await resyncIncludedPlans(
+        tx,
+        Number(stored.id),
+        packFeatureKeys(stored.features),
+        packFeatureKeys(featuresColumn(grants)),
+      );
 
       const row = await this.byUuid(tx, uuid);
       const changes = diff(before, toPack(row));

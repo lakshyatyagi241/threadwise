@@ -1349,13 +1349,17 @@
             "details": "Dettagli e prezzi",
             "features": "Funzionalità",
             "limits": "Limiti",
-            "addons": "Componenti aggiuntivi"
+            "addons": "Componenti aggiuntivi",
+            "integrations": "Integrazioni",
+            "miniApps": "Mini app"
           },
           "tabSummary": {
             "features": "{count} funzionalità attive su {total}",
             "limits": "{count} limiti impostati su {total}",
-            "addons": "{count} componenti aggiuntivi selezionati",
-            "error": "Contiene errori da correggere"
+            "addons": "{count, plural, one {# componente aggiuntivo incluso o offerto} many {# componenti aggiuntivi inclusi o offerti} other {# componenti aggiuntivi inclusi o offerti}}",
+            "error": "Contiene errori da correggere",
+            "integrations": "Integrazioni incluse od offerte: {count}",
+            "miniApps": "Mini app incluse od offerte: {count}"
           },
           "featuresUi": {
             "intro": "Disattiva ciò che questo piano non include. Un workspace con questo piano non può aprire un'area la cui funzionalità è disattivata.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Abilita tutte",
             "disableAll": "Disabilita tutte",
             "noMatch": "Nessuna funzionalità corrisponde alla ricerca.",
-            "groupCount": "{count} attive su {total}"
+            "groupCount": "{count} attive su {total}",
+            "lockedBy": "Impostato dal componente aggiuntivo {addon} nella scheda Componenti aggiuntivi"
           },
           "limitsUi": {
             "intro": "Un limite blocca l'azione quando il workspace lo raggiunge. Seleziona Illimitato per rimuovere il limite.",
@@ -1385,12 +1390,8 @@
             "total": "in totale"
           },
           "addons": {
-            "intro": "I componenti aggiuntivi abilitati vengono mostrati ai workspace con questo piano nel loro Marketplace; possono essere usati solo dopo che il workspace li ha acquistati.",
             "search": "Cerca componenti aggiuntivi",
             "searchPlaceholder": "Cerca componenti aggiuntivi o app",
-            "selectAll": "Seleziona tutti",
-            "clear": "Cancella",
-            "selected": "{count} selezionati su {total}",
             "loading": "Caricamento dei componenti aggiuntivi",
             "empty": "Non esiste ancora alcun componente aggiuntivo a pagamento",
             "emptyHint": "I componenti aggiuntivi vengono creati nel catalogo Marketplace della console operatori. Quando un'app ha un pacchetto a pagamento, compare qui.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "L'app non è pubblicata, quindi i workspace non possono ancora vederla.",
             "appLabel": "App: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# componente aggiuntivo selezionato} other {# componenti aggiuntivi selezionati}}"
+            "total": "{count, plural, one {# componente aggiuntivo incluso o offerto} many {# componenti aggiuntivi inclusi o offerti} other {# componenti aggiuntivi inclusi o offerti}}"
           },
           "featureHints": {
             "automation": "Il generatore di flussi e le automazioni che rispondono alle conversazioni e agiscono su di esse.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Un piano non può essere contemporaneamente gratuito e con preventivo personalizzato.",
             "paid_needs_price": "Imposta un prezzo superiore a 0 oppure contrassegna il piano come gratuito.",
             "offer_not_lower": "Il prezzo in offerta deve essere inferiore al prezzo del piano.",
-            "default_needs_active": "Il piano predefinito per la registrazione deve essere attivo."
+            "default_needs_active": "Il piano predefinito per la registrazione deve essere attivo.",
+            "addonPriceZero": "Lascia vuoto il prezzo per usare quello del componente aggiuntivo, oppure scegli Incluso.",
+            "addonGone": "Questo componente aggiuntivo non esiste più. Ricarica la pagina e salva di nuovo."
           },
           "limitHints": {
             "monthly_messages": "Messaggi in uscita inviati nel mese di calendario. Oltre il limite incluso viene addebitato il wallet.",
@@ -1707,32 +1710,49 @@
             "crm": "CRM vendite",
             "platform": "Condiviso da entrambi"
           },
-          "marketplace": {
-            "title": "App del Marketplace offerte agli spazi di lavoro di questo piano"
-          },
-          "included": {
-            "title": "Componenti aggiuntivi inclusi in questo piano",
-            "intro": "Attiva un componente aggiuntivo per includerlo: gli spazi di lavoro di questo piano lo ricevono senza costi e la sua scheda mostra \"Incluso nel tuo piano\". Questo seleziona esattamente le funzioni del componente nella scheda Funzioni, e selezionarle lì cambia l’interruttore. I componenti non inclusi continuano a essere venduti al proprio prezzo a ogni spazio di lavoro con un piano a pagamento attivo.",
-            "readOnly": "Puoi vedere questo piano ma non modificarlo, quindi questi interruttori sono bloccati.",
+          "offers": {
+            "readOnly": "Puoi vedere questo piano ma non modificarlo, quindi questi controlli sono bloccati.",
+            "featureTitle": "Componenti aggiuntivi di funzionalità",
+            "featureIntro": "Componenti aggiuntivi che sbloccano una parte del prodotto. Incluso: gli spazi di lavoro di questo piano lo ricevono senza costi e la sua scheda mostra \"Incluso nel tuo piano\". A pagamento: possono acquistarlo, al prezzo specifico di questo piano se ne imposti uno. Nascosto: non lo vedono mai. Le funzionalità del componente nella scheda Funzionalità seguono questa scelta.",
+            "capacityTitle": "Componenti aggiuntivi di capacità",
+            "capacityIntro": "Componenti aggiuntivi che aumentano solo un limite, come un posto in più. In un piano sono a pagamento o nascosti; i limiti propri del piano si impostano nella scheda Limiti.",
+            "noFeaturePacks": "Non ci sono ancora componenti aggiuntivi di funzionalità.",
+            "adds": "Aggiunge: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name}: illimitato",
+            "modeLabel": "Come {name} è offerto in questo piano",
+            "modes": {
+              "included": "Incluso",
+              "paid": "A pagamento",
+              "hidden": "Nascosto"
+            },
+            "noIncluded": "Questo componente aggiuntivo aumenta solo i limiti, quindi non può essere incluso. Imposta il limite proprio di questo piano nella scheda Limiti.",
+            "priceLabel": "Prezzo in questo piano ({currency})",
+            "priceHint": "Lascia vuoto per usare il prezzo proprio del componente aggiuntivo.",
+            "includedCapacityNote": "Sono incluse solo le sue funzionalità. I limiti extra ({limits}) restano in vendita per gli spazi di lavoro di questo piano.",
+            "hiddenNote": "Gli spazi di lavoro di questo piano non vedono questo componente aggiuntivo e non possono acquistarlo. Uno spazio di lavoro che l’ha già acquistato lo mantiene fino alla fine del periodo.",
+            "offNote": "Non più incluso: gli spazi di lavoro di questo piano perdono queste funzionalità, a meno che non acquistino il componente aggiuntivo. Le loro impostazioni vengono conservate e tornano quando viene riattivato.",
             "loading": "Caricamento dei componenti aggiuntivi",
             "loadFailed": "Impossibile caricare i componenti aggiuntivi. Non è stato modificato nulla.",
             "empty": "Non ci sono ancora componenti aggiuntivi",
             "emptyHint": "Componenti come Instradamento intelligente e Team e autorizzazioni si creano in Componenti aggiuntivi nella console operatore.",
-            "stateFull": "Incluso",
-            "statePartial": "Incluso in parte",
-            "stateNone": "Non incluso",
             "noPrice": "Nessun prezzo impostato",
             "gives": "Offre: {features}",
-            "switchLabel": "Includi {name} in questo piano",
-            "noFeatures": "Questo componente aggiunge solo limiti, quindi non c’è nessuna funzione da includere. I suoi limiti non fanno parte dell’inclusione nel piano; imposta i limiti propri del piano nella scheda Limiti.",
-            "partial": "Incluso in parte: {count} funzioni su {total} sono attive in questo piano. Ancora disattivate: {missing}.",
-            "includeFully": "Includi per intero",
-            "limitsNote": "Questo componente aggiunge anche limiti extra ({limits}). Il limite extra non fa parte dell’inclusione nel piano e nulla qui lo modifica: imposta il limite proprio del piano nella scheda Limiti. Gli spazi di lavoro continuano ad acquistare il componente per il limite extra.",
             "unlistedNote": "Alcune sue funzioni ({features}) non sono nell’elenco standard dei componenti. Possono comunque essere attivate per il piano; cambia solo il modo di acquistare questo componente come pacchetto.",
             "inactiveNote": "Questo componente è una bozza o è disattivato, quindi nessuno può ancora acquistarlo. Includerlo nel piano funziona comunque.",
             "impactCount": "{count, plural, one {# spazio di lavoro paga già questo componente.} other {# spazi di lavoro pagano già questo componente.}} Il loro rinnovo si fermerà alla fine del periodo corrente, non viene rimborsato nulla e oggi non viene annullato nulla.",
             "impactUnknown": "Gli spazi di lavoro di questo piano che pagano già questo componente non lo rinnoveranno più alla fine del periodo corrente. Non viene rimborsato nulla e oggi non viene annullato nulla. Non è stato possibile caricare il numero.",
-            "offNote": "Disattivato: gli spazi di lavoro di questo piano perdono queste funzioni a meno che non acquistino il componente, che diventa acquistabile per loro al suo prezzo."
+            "partlyNote": "Questo piano dà già parte di questo componente aggiuntivo ({features}). Resta così finché non scegli Incluso, A pagamento o Nascosto qui.",
+            "needsFeatures": "Aggiungi prima le funzionalità che sblocca in Componenti aggiuntivi > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Le mini app sono app che uno spazio di lavoro installa dal Marketplace. Incluso: gratis per gli spazi di lavoro di questo piano. A pagamento: possono acquistarla al prezzo proprio dell’app. Nascosto: non la vedono mai. Incluso attiva anche le funzionalità del piano che l’app offre.",
+            "introIntegrations": "Le integrazioni collegano un servizio esterno. Incluso: gratis per gli spazi di lavoro di questo piano. A pagamento: possono acquistarla al prezzo proprio dell’integrazione. Nascosto: non la vedono mai. Incluso attiva anche le funzionalità del piano che offre.",
+            "setAll": "Imposta tutti quelli mostrati su",
+            "summary": "{count} su {total} inclusi od offerti",
+            "priceHint": "Le app del Marketplace mantengono il proprio prezzo; impostalo nella scheda dell’app.",
+            "emptyIntegrations": "Ancora nessuna integrazione a pagamento",
+            "emptyIntegrationsHint": "Le integrazioni gratuite non richiedono impostazioni qui; Shopify e WooCommerce si attivano nella scheda Funzionalità."
           }
         }
       },

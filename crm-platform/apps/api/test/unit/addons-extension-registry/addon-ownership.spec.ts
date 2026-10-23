@@ -7,6 +7,7 @@ import {
   isLegacyAddonPack,
   ownershipFromAccess,
   resolveOwnership,
+  operatorWorkspaceAddonsResponseSchema,
   workspaceAddonsResponseSchema,
 } from '@crm/contracts';
 import { cardState } from '../../../src/modules/addons-extension-registry/addon-grants';
@@ -166,6 +167,11 @@ interface World {
   /** feature keys the PLAN grants, and the subset that is only an override / platform-owned */
   planGrants: string[];
   support?: string[];
+  /** stored offers of the workspace's plan (plan_addon_offers), by pack row id */
+  offers?: Array<{ addon_id: string; mode: string; amount: string | null }>;
+  overrides?: Record<string, unknown>;
+  /** the operator asks for a workspace uuid that does not exist */
+  missing?: boolean;
 }
 
 const dialect = new PgDialect();
@@ -176,6 +182,8 @@ function service(w: World) {
     execute: async (q: unknown) => {
       const text = dialect.sqlToQuery(q as never).sql;
       queries.push(text);
+      if (text.includes('FROM organizations WHERE uuid'))
+        return { rows: w.missing ? [] : [{ id: 1 }] };
       if (text.includes('FROM organizations o'))
         return {
           rows: [
@@ -189,16 +197,28 @@ function service(w: World) {
             },
           ],
         };
+      if (text.includes('FROM plan_addon_offers o')) return { rows: w.offers ?? [] };
       if (text.includes('FROM workspace_addons a')) return { rows: w.owned };
       if (text.includes("kind = 'addon'")) return { rows: w.packs };
       throw new Error(`unexpected query: ${text}`);
     },
   };
   const svc = new WorkspaceAddonsService(
-    { tx: async (fn: (t: typeof tx) => unknown) => fn(tx) } as never,
+    {
+      tx: async (fn: (t: typeof tx) => unknown) => fn(tx),
+      txAs: async (_t: unknown, fn: (t: typeof tx) => unknown) => fn(tx),
+      privileged: async (fn: (t: typeof tx) => unknown) => fn(tx),
+    } as never,
     { planFeatures: async () => [], planLimits: async () => [] } as never,
     {
       graceDays: async () => 7,
+      // no plan offers stored in these cases (every pack paid at its own price); offer cases live in plan-addon-offers.spec.ts
+      forOrg: async () => ({
+        offerPlanSlug: w.offers ? 'pro' : null,
+        overrides: { features: w.overrides ?? {} },
+        platformOwned: false,
+        planName: 'Pro',
+      }),
       includedByPlanDetailed: async (_o: number, keys: string[]) => ({
         included: new Set(keys.filter((k) => w.planGrants.includes(k))),
         support: new Set(keys.filter((k) => (w.support ?? []).includes(k))),
@@ -387,5 +407,87 @@ describe('the workspace add-on list', () => {
     const { svc } = service({ plan: {}, packs: [pack({})], owned: [own({})], planGrants: [] });
     const r = await svc.forWorkspace(1, true);
     for (const c of r.catalog) expect(addonCardSchema.safeParse(c).success).toBe(true);
+  });
+});
+
+describe('the workspace add-on list follows the plan offers (docs/specs/addons-plan-offers.md)', () => {
+  const seat = pack({
+    id: 2,
+    uuid: '33333333-3333-4333-8333-333333333333',
+    slug: 'extra_seat',
+    name: 'Extra seat',
+    features: {},
+    limits: { users: 1 },
+  });
+
+  it('a hidden add-on is not listed; a plan price replaces the add-on price and its offer; cards carry their kind', async () => {
+    const { svc } = service({
+      plan: {},
+      packs: [pack({ offer_amount: '7.00' }), seat],
+      owned: [],
+      planGrants: [],
+      offers: [
+        { addon_id: '1', mode: 'paid', amount: '199.00' },
+        { addon_id: '2', mode: 'hidden', amount: null },
+      ],
+    });
+    const r = await svc.forWorkspace(1, true);
+    expect(r.catalog.map((c) => c.slug)).toEqual(['smart_routing']);
+    expect(r.catalog[0]).toMatchObject({
+      amount: '199.00',
+      offerAmount: null,
+      state: 'buy',
+      kind: 'feature',
+    });
+    expect(workspaceAddonsResponseSchema.safeParse(r).success).toBe(true);
+  });
+
+  it('a hidden add-on the workspace still holds stays listed as owned and cannot be bought again', async () => {
+    const { svc } = service({
+      plan: {},
+      packs: [seat],
+      owned: [own({ pack_uuid: seat.uuid, package_id: 2, name: 'Extra seat' })],
+      planGrants: [],
+      offers: [{ addon_id: '2', mode: 'hidden', amount: null }],
+    });
+    const r = await svc.forWorkspace(1, true);
+    expect(r.catalog.map((c) => [c.slug, c.state, c.kind])).toEqual([
+      ['extra_seat', 'active', 'capacity'],
+    ]);
+  });
+
+  it('no stored offer: paid at the add-on price, as before', async () => {
+    const { svc } = service({ plan: {}, packs: [pack({})], owned: [], planGrants: [], offers: [] });
+    const r = await svc.forWorkspace(1, true);
+    expect(r.catalog[0]).toMatchObject({ amount: '9.00', state: 'buy' });
+  });
+});
+
+describe("the operator's view of a workspace's add-ons", () => {
+  it('lists what the plan hides and the feature overrides that win over the plan', async () => {
+    const seat = pack({
+      id: 2,
+      uuid: '33333333-3333-4333-8333-333333333333',
+      slug: 'extra_seat',
+      name: 'Extra seat',
+      features: {},
+      limits: { users: 1 },
+    });
+    const { svc } = service({
+      plan: {},
+      packs: [pack({}), seat],
+      owned: [],
+      planGrants: ['inbox_routing', 'inbox_assignment_sticky'],
+      support: ['inbox_routing', 'inbox_assignment_sticky'],
+      offers: [{ addon_id: '2', mode: 'hidden', amount: null }],
+      overrides: { inbox_routing: true, inbox_assignment_sticky: true, users: 5 },
+    });
+    const r = await svc.forOperator(1);
+    expect(operatorWorkspaceAddonsResponseSchema.safeParse(r).success).toBe(true);
+    expect(r!.catalog.map((c) => [c.slug, c.state, c.includedVia])).toEqual([
+      ['smart_routing', 'included', 'support'],
+    ]);
+    expect(r!.hidden.map((h) => h.slug)).toEqual(['extra_seat']);
+    expect(r!.featureOverrides).toEqual({ inbox_routing: true, inbox_assignment_sticky: true });
   });
 });

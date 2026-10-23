@@ -94,6 +94,21 @@ export function TemplateMessage({
 }
 
 /**
+ * The buttons under a message that is not stored as a template message but reads exactly as one template's body (an imported history, a
+ * copy of what the business sent from its phone): the same rows a template message shows, so both draw the call-to-action.
+ */
+export function MatchedTemplateButtons({ buttons }: { buttons: MessageTemplateButton[] }) {
+  if (buttons.length === 0) return null;
+  return (
+    <BubbleButtonList testId="inbox-matched-template-buttons">
+      {buttons.map((b, i) => (
+        <TemplateButtonRow key={i} button={b} />
+      ))}
+    </BubbleButtonList>
+  );
+}
+
+/**
  * A media header as the thread plays or shows it: the template's file through the same image, video and document parts a message's
  * own media uses. Without a link (the template has no file left, or it is a location pin) it is the marker.
  */

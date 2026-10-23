@@ -10,6 +10,7 @@ import { EmailTemplatesModule } from '../email-templates';
 import { MessageTemplatesModule } from '../message-templates';
 import { NotificationsModule } from '../notifications';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { ConversationEventsRepository } from './conversation-events.repository';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
@@ -46,7 +47,8 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
  * Team inbox, conversations (TIB1): the agent-facing API over the conversation core. It reads the list and the header itself (the
  * visibility rule is its own), and reaches the message pipeline only through `ConversationsFacade`.
  *
- * Kernel services (audit, outbox, RBAC), the database, realtime and the chat media store are global.
+ * Kernel services (audit, outbox, RBAC), the database, realtime and the chat media store are global. The composer's AI button is paid
+ * from the workspace's wallet (WalletMessageBillingModule) when the platform's AI key answers.
  */
 @Module({
   imports: [
@@ -59,6 +61,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     MessageTemplatesModule,
     NotificationsModule,
     PlansCoreModule,
+    WalletMessageBillingModule,
   ],
   // The transfer controller first: `export` and `import` must not be read as a reply id.
   controllers: [

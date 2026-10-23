@@ -35,7 +35,14 @@ import {
   type Harness,
   type Tenant,
 } from '../contacts-attributes-tags/support';
-import { installFakeSms, planWithSms, switchSmsOn, type FakeSms } from './support';
+import {
+  fundWallet,
+  installFakeSms,
+  planWithSms,
+  switchSmsOn,
+  usageEvents,
+  type FakeSms,
+} from './support';
 
 /**
  * Sending SMS through broadcasts and campaigns, and the delivery reports that follow (TW-SMS-014 to 024, 026, 030). The real app,
@@ -118,10 +125,13 @@ async function arrange(
     provider?: 'twilio' | 'msg91';
     body?: string;
     limits?: Record<string, number>;
+    /** The wallet balance in hundredths: every SMS is paid for per segment, so a sender needs money (0 = an empty wallet). */
+    wallet?: number;
   } = {},
 ): Promise<Arranged> {
   const t = await api.signup(label);
   await planWithSms(h, t, { limits: o.limits });
+  if ((o.wallet ?? 100_000) > 0) await fundWallet(h, t, o.wallet ?? 100_000);
   const connected = await post(t.admin, '/v2/sms/senders', {
     provider: o.provider ?? 'twilio',
     fromNumber: o.from ?? '+17372508034',
@@ -256,7 +266,7 @@ describe('TW-SMS-016, 030: the SMS composer', () => {
     expect(on.body.senders).toEqual([]);
   });
 
-  it('a broadcast on an SMS sender needs the sms plan feature, and is never held by the wallet', async () => {
+  it('a broadcast on an SMS sender needs the sms plan feature, and is not checked at launch against the WhatsApp-priced wallet gate', async () => {
     const a = await arrange('c3', 2);
     const wallet = h.app.get<WalletGate>(WALLET_GATE as never, { strict: false });
     const precheck = vi.spyOn(wallet, 'precheck').mockRejectedValue(new Error('wallet empty'));
@@ -755,7 +765,7 @@ describe('TW-SMS-018, 019: campaigns', () => {
     expect((await crows(c.id)).map((r) => r.status)).toEqual(['sent', 'delivered', 'sent']);
   });
 
-  it('opted-out contacts are skipped, a campaign on an SMS sender needs the plan feature and is never held by the wallet', async () => {
+  it('opted-out contacts are skipped, a campaign on an SMS sender needs the plan feature and is not checked at launch against the WhatsApp-priced wallet gate', async () => {
     const a = await arrange('p2', 2);
     await h.owner.query(
       `UPDATE contacts SET is_unsubscribed = true WHERE org_id = $1 AND name = 'Asha1'`,
@@ -791,5 +801,165 @@ describe('TW-SMS-018, 019: campaigns', () => {
     const r = await crows(c.id);
     expect(JSON.stringify(r)).not.toContain('tok-1');
     expect(r[0]!.error_message).toBe('Twilio refused it');
+  });
+});
+
+/**
+ * Every SMS a workspace sends is paid for from its wallet: the engine asks the wallet before it sends and reports what the provider
+ * accepted (`usage.reported`, one charge per provider message id, priced by the operator's SMS price). The worker's billing consumer
+ * takes the money; its own spec (wallet-message-billing/usage) covers the pricing, so this one checks what the SMS side hands it.
+ */
+describe('SMS is paid for from the wallet', () => {
+  const twilioReport = (fields: Record<string, string>) =>
+    api
+      .http()
+      .post('/v2/sms/status')
+      .type('form')
+      .set('x-twilio-signature', twilioSignature('tok-1', STATUS_URL, fields))
+      .send(fields);
+
+  it('reports every accepted message once: the provider id, the real segment count, who asked and the broadcast name', async () => {
+    const a = await arrange('u1', 2);
+    sms.send = (n) => ({ ok: true, messageId: `SMU${n}`, segments: n === 1 ? 1 : 3 });
+    const b = await createBroadcast(a, { name: 'Diwali offer' });
+    expect(await run(a.t, b.id)).toBe('finished');
+
+    const events = await usageEvents(h, a.t);
+    expect(events).toHaveLength(2);
+    expect(events[0]).toMatchObject({
+      kind: 'sms',
+      usageId: 'SMU1',
+      status: 'used',
+      units: 1,
+      source: 'broadcast',
+      provider: 'twilio',
+      subjectName: 'Diwali offer',
+    });
+    expect(events[1]).toMatchObject({ usageId: 'SMU2', units: 3, source: 'broadcast' });
+    expect(events[0]!.recipient).toMatch(/^\+?91981/);
+    // The plan's monthly counter keeps working beside the wallet.
+    expect(await used(a.t)).toBe(2);
+  });
+
+  it('reports a MSG91 message under its request id', async () => {
+    const a = await arrange('u1b', 1, { provider: 'msg91', from: 'THRDWS' });
+    sms.send = { ok: true, messageId: 'REQ-91-1', segments: 2 };
+    const b = await createBroadcast(a);
+    await run(a.t, b.id);
+    expect(await usageEvents(h, a.t)).toMatchObject([
+      { kind: 'sms', usageId: 'REQ-91-1', units: 2, provider: 'msg91' },
+    ]);
+  });
+
+  it('reports nothing for a message the provider refused', async () => {
+    const a = await arrange('u2', 2);
+    sms.send = { ok: false, error: 'HTTP 503' };
+    const b = await createBroadcast(a);
+    await run(a.t, b.id);
+    expect(await broadcast(b.id)).toMatchObject({ status: 'failed', fail_count: 2 });
+    expect(await usageEvents(h, a.t)).toEqual([]);
+  });
+
+  it('an empty wallet stops a broadcast before anything is sent: nobody is failed, nothing is reported', async () => {
+    const a = await arrange('u3', 2, { wallet: 0 });
+    const b = await createBroadcast(a);
+    expect(await run(a.t, b.id)).toBe('paused');
+    expect(sms.sendCalls).toHaveLength(0);
+    expect((await recipients(b.id)).map((x) => x.status)).toEqual(['pending', 'pending']);
+    expect(await broadcast(b.id)).toMatchObject({ status: 'paused', fail_count: 0 });
+    // The allowance is not taken for a message that was never sent.
+    expect(await used(a.t)).toBe(0);
+    expect(await usageEvents(h, a.t)).toEqual([]);
+  });
+
+  it("the platform's own workspace sends with an empty wallet", async () => {
+    const a = await arrange('u4', 2, { wallet: 0 });
+    await h.owner.query(`UPDATE org_plan_state SET platform_owned = true WHERE org_id = $1`, [
+      a.t.orgId,
+    ]);
+    const b = await createBroadcast(a);
+    expect(await run(a.t, b.id)).toBe('finished');
+    expect(sms.sendCalls).toHaveLength(2);
+  });
+
+  it('a carrier callback never gives the fee back: the callback is signed with a secret the workspace holds, so it cannot decide a refund', async () => {
+    const a = await arrange('u5', 2);
+    const b = await createBroadcast(a);
+    await run(a.t, b.id);
+
+    expect((await twilioReport({ MessageSid: 'SM0002', MessageStatus: 'delivered' })).status).toBe(
+      204,
+    );
+    const failed = await twilioReport({
+      MessageSid: 'SM0001',
+      MessageStatus: 'undelivered',
+      ErrorCode: '30003',
+    });
+    expect(failed.status).toBe(204);
+    // The recipient follows the callback; the wallet does not: the two charges stand and nothing is reported as failed.
+    expect((await usageEvents(h, a.t)).map((e) => [e.usageId, e.status])).toEqual([
+      ['SM0001', 'used'],
+      ['SM0002', 'used'],
+    ]);
+  });
+
+  describe('a campaign', () => {
+    async function campaign(a: Arranged, extra: object = {}) {
+      const res = await post(a.t.admin, '/v2/campaigns', {
+        name: 'SMS campaign',
+        type: 'text',
+        customMessage: 'Hi {{name}}',
+        scheduleType: 'now',
+        senderKey: a.key,
+        contactIds: a.contacts,
+        ...extra,
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(201);
+      const row = (
+        await h.owner.query(`SELECT id FROM wpcampaigns WHERE uuid = $1`, [res.body.campaign.id])
+      ).rows[0];
+      return { id: Number(row.id), orgId: a.t.orgId };
+    }
+    const statuses = async (id: number) =>
+      (
+        await h.owner.query(
+          `SELECT status FROM wp_campaign_contacts WHERE campaign_id = $1 ORDER BY id`,
+          [id],
+        )
+      ).rows.map((r) => r.status as string);
+    const runCampaign = (c: { id: number; orgId: number }) =>
+      RequestContextStore.run(
+        {
+          requestId: `c-${c.id}`,
+          orgId: c.orgId,
+          actorType: 'system',
+          actorId: null,
+          userId: null,
+        },
+        () => campaigns.run(c.orgId, c.id),
+      );
+
+    it('reports each message with the campaign name', async () => {
+      const a = await arrange('u6', 2);
+      sms.send = (n) => ({ ok: true, messageId: `SMC${n}`, segments: 1 });
+      const c = await campaign(a, { name: 'Winter sale' });
+      expect(await runCampaign(c)).toBe('finished');
+      expect(await usageEvents(h, a.t)).toMatchObject([
+        { usageId: 'SMC1', source: 'campaign', subjectName: 'Winter sale', units: 1 },
+        { usageId: 'SMC2', source: 'campaign', subjectName: 'Winter sale', units: 1 },
+      ]);
+    });
+
+    it('an empty wallet pauses it before anything is sent: the recipients stay queued, nobody is failed', async () => {
+      const a = await arrange('u7', 2, { wallet: 0 });
+      const c = await campaign(a);
+      expect(await runCampaign(c)).toBe('halted');
+      expect(sms.sendCalls).toHaveLength(0);
+      expect(await statuses(c.id)).toEqual(['queued', 'queued']);
+      expect(
+        (await h.owner.query(`SELECT status FROM wpcampaigns WHERE id = $1`, [c.id])).rows[0],
+      ).toMatchObject({ status: 'paused' });
+      expect(await usageEvents(h, a.t)).toEqual([]);
+    });
   });
 });

@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -12,6 +13,7 @@ import {
   type FlowAiPort,
 } from '../../infra/providers/flow-builder-editor/flow-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService } from '../wallet-message-billing';
 
 const INSTRUCTION = (action: InboxRewriteAction, language: string | undefined): string => {
   switch (action) {
@@ -31,8 +33,10 @@ const SYSTEM_PROMPT =
 
 /**
  * The composer's AI button (rewrite, fix, tone, length). The key is the workspace's own when its plan allows one, else the platform's;
- * the platform's key is asked for the monthly allowance first and the tokens go to the ledger either way. Nothing is stored or sent:
- * the agent reads the result in the box and sends it, or not. The vendor call is the flow builder's text port (OpenAI, Anthropic, Gemini and OpenRouter), asked for plain text, not JSON. It reports no token counts, so the ledger gets an estimate (about four characters a token).
+ * the platform's key is asked for the monthly allowance and then the wallet first (422 WALLET_EMPTY), the tokens go to the ledger either
+ * way, and the wallet pays for the call when the platform's key answered. Nothing is stored or sent: the agent reads the result in the
+ * box and sends it, or not. The vendor call is the flow builder's text port (OpenAI, Anthropic, Gemini and OpenRouter), asked for plain
+ * text, not JSON. It reports no token counts, so the ledger and the wallet charge get an estimate (about four characters a token).
  */
 @Injectable()
 export class InboxAiService {
@@ -41,6 +45,7 @@ export class InboxAiService {
   constructor(
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
+    private readonly wallet: AiChargeService,
     @Inject(FLOW_AI_PORT) private readonly ai: FlowAiPort,
   ) {}
 
@@ -65,6 +70,11 @@ export class InboxAiService {
         );
       }
     }
+    // The platform's key is also paid for from the workspace's wallet: an empty wallet is refused before the vendor is called.
+    await this.wallet.guardCall(orgId, resolved.source);
+
+    // One id per vendor call; the request id is whatever `x-request-id` the caller sent, so it cannot name a charge.
+    const usageId = randomUUID();
     let text = '';
     try {
       const maxTokens = await this.keys.capMaxTokens(input.provider, 1200);
@@ -80,17 +90,31 @@ export class InboxAiService {
           temperature: 0.4,
           json: false,
         })) ?? '';
+      const promptTokens = Math.ceil((SYSTEM_PROMPT.length + userPrompt.length) / 4);
+      const completionTokens = Math.ceil(text.length / 4);
       await this.meter
         .record(orgId, {
           provider: input.provider,
           model: input.model,
-          promptTokens: Math.ceil((SYSTEM_PROMPT.length + userPrompt.length) / 4),
-          completionTokens: Math.ceil(text.length / 4),
+          promptTokens,
+          completionTokens,
           billedAgainst: resolved.source,
         })
         .catch((err: unknown) =>
           this.logger.warn({ err: String(err) }, '[INBOX] the AI token ledger write failed'),
         );
+      // Inside the try on purpose: a vendor that failed above is never charged.
+      await this.wallet.chargeCall({
+        orgId,
+        keySource: resolved.source,
+        label: 'AI reply assistant',
+        source: 'inbox_ai',
+        usageId,
+        provider: input.provider,
+        model: input.model,
+        promptTokens,
+        completionTokens,
+      });
     } catch (err) {
       this.logger.warn({ err: String(err) }, '[INBOX] message rewrite failed');
     }

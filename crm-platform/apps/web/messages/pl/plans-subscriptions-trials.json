@@ -570,15 +570,21 @@
       "appLink": "Zobacz aplikację",
       "addonHint": "Możesz też dodać go do obecnego planu jako dodatek {addon}.",
       "addonLink": "Zobacz dodatki",
-      "addons": {
-        "smartRouting": "Inteligentne kierowanie",
-        "teamsPermissions": "Zespoły i uprawnienia"
-      },
       "addonsTabHint": "Dodatki nie wymagają Marketplace w Twoim planie. W sekcji Plany i dodatki nadal zobaczysz, co posiadasz, i kupisz dodatki.",
-      "addonsTabLink": "Otwórz Plany i dodatki"
+      "addonsTabLink": "Otwórz Plany i dodatki",
+      "addonHintGeneric": "Twój plan może też oferować to jako dodatek."
     },
     "lock": {
-      "link": "Zobacz plany i dodatki"
+      "link": "Zobacz plany i dodatki",
+      "offTitle": "Nie ma w Twoim planie",
+      "offLead": "Ta część nie jest obecnie objęta planem Twojego obszaru roboczego.",
+      "buyTitle": "Dodaj {addon} za {price}",
+      "buyLead": "Twój plan oferuje {addon} jako dodatek. Dodaj go, aby włączyć tę część.",
+      "buyLink": "Zobacz dodatki",
+      "askOwner": "Poproś właściciela konta o dodanie.",
+      "unavailableTitle": "{addon} wymaga aktywnego płatnego planu",
+      "unavailableLead": "Najpierw wybierz płatny plan, a potem możesz dodać do niego {addon}.",
+      "viewPlans": "Zobacz plany"
     }
   }
 }

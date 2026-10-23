@@ -9,6 +9,11 @@
 # unchanged -> POST /incidents (deploy_failure). Never touches the release, never takes its lock, never fails it. Secrets are never logged.
 #   desk-release-watch.sh                                   loop forever (systemd service)
 #   desk-release-watch.sh --test                            post one clearly labelled TEST card (text only)
+# DATABASE-DRIVEN as well: every DESK_WATCH_DB_POLL s (20) it reads the last 30 rows of platform_releases (read-only SELECT through
+# `docker compose exec postgres psql`) and announces releasing / ok / failed, plus ONE message when a tag stays in `building` for
+# BUILD_STUCK_MINUTES (20) (several stuck tags are grouped in one message). Deduped by tag+state in $STATE/seen/ (survives restarts).
+# The process sniffing above stays as the fallback; both paths share the same dedupe keys. Heartbeat: $STATE/heartbeat every loop.
+#   desk-release-watch.sh --selftest                        exit 1 if the heartbeat is older than 120 s (cron / monitoring check)
 #   desk-release-watch.sh --dry-run <prev> <new> [secs] [event]   print the message that WOULD be posted; posts nothing
 set -u
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -55,6 +60,9 @@ notify_bridge() { # notify_bridge live|unchanged <prev> <new> <secs>
 bridge_bg() { ( notify_bridge "$@" ) >/dev/null 2>&1 & }
 
 case "${1:-}" in
+  --selftest)
+    hb=$(cat "$STATE/heartbeat" 2>/dev/null); [ -n "$hb" ] && [ $(( $(date +%s) - hb )) -le 120 ] && { echo "ok"; exit 0; }
+    echo "heartbeat missing or older than 120 s"; exit 1 ;;
   --test)
     post "🧪 *TEST* - Test message, not a real deployment. The production release watcher is connected to this space. Live release right now: \`$(live_tag || echo unknown)\`."
     echo "test sent, http $(cat "$STATE/last_http" 2>/dev/null)"; exit 0 ;;
@@ -69,28 +77,87 @@ deploy_running() { pgrep -f "$DESK/ci-entry.sh" >/dev/null 2>&1; }
 release_tag() {
   local pid t
   for pid in $(pgrep -f "$DESK/ci-entry.sh" 2>/dev/null); do
-    t=$(tr '\0' '\n' < "${DESK_WATCH_PROC:-/proc}/$pid/environ" 2>/dev/null | sed -n 's/^SSH_ORIGINAL_COMMAND=release \([0-9a-fA-F]\{7,40\}\)$/\1/p' | head -n1)
+    t=$(tr '\0' '\n' < "${DESK_WATCH_PROC:-/proc}/$pid/environ" 2>/dev/null | sed -n 's/^SSH_ORIGINAL_COMMAND=release \([0-9a-fA-F]\{7,40\}\)\( [^ ]*\)\{0,3\}$/\1/p' | head -n1)
     [ -n "$t" ] && { printf '%s' "$t"; return 0; }
   done
   return 1
 }
+# ---- database-driven path -------------------------------------------------------------------------------------------------------
+STUCK_MIN=${BUILD_STUCK_MINUTES:-20}; DB_POLL=${DESK_WATCH_DB_POLL:-20}; DB_FAIL_SECS=${DESK_WATCH_DB_FAIL_SECS:-600}
+# read-only: one SELECT, sent on stdin; the password never appears (psql runs inside the container with its own env)
+DB_SQL="SELECT attempt, tag, state, COALESCE(step,''), extract(epoch from started_at)::bigint, extract(epoch from updated_at)::bigint, extract(epoch from now())::bigint, replace(replace(COALESCE(error,''),E'\\n',' '),'|','/') FROM platform_releases ORDER BY updated_at DESC LIMIT 30;"
+once() { [ -e "$STATE/seen/$1" ] && return 1; mkdir -p "$STATE/seen"; date +%s > "$STATE/seen/$1"; return 0; }  # once <tag7>.<state>
+alert_selfcheck() { once "selfcheck.$1" && post "⚠️ *Deployment watcher cannot see releases* ($2)"; return 0; }
+db_poll() {
+  local now rows rc att tag st step started upd dbnow err good="" stuck="" nstuck=0 maxage=0 prev live t f age first=0
+  now=$(date +%s); live=$(live_tag || true); prev=$(cat "$STATE/last_ok" 2>/dev/null)
+  rows=$(cd "$DESK" 2>/dev/null && timeout 20 docker compose --env-file .env exec -T postgres psql -X -q -t -A -F '|' -U "$(env_get POSTGRES_USER)" -d "$(env_get POSTGRES_DB)" <<<"$DB_SQL" 2>"$STATE/psql.err"); rc=$?
+  if [ $rc -ne 0 ]; then
+    if grep -q 'does not exist' "$STATE/psql.err" 2>/dev/null; then
+      [ -e "$STATE/db_missing" ] || { : > "$STATE/db_missing"; echo "$(date -u +%FT%TZ) platform_releases missing: process mode only" >> "$STATE/watch.log"; }
+      return 0
+    fi
+    echo "$(date -u +%FT%TZ) psql failed rc=$rc" >> "$STATE/watch.log"
+    [ -e "$STATE/db_okat" ] || echo "$now" > "$STATE/db_okat"
+    [ $(( now - $(cat "$STATE/db_okat") )) -ge "$DB_FAIL_SECS" ] && alert_selfcheck read "cannot read platform_releases for $(( DB_FAIL_SECS / 60 )) min"
+    return 0
+  fi
+  echo "$now" > "$STATE/db_okat"; rm -f "$STATE/seen/selfcheck.read" "$STATE/db_missing"
+  [ -e "$STATE/seeded" ] || first=1   # first ever run: history is marked as seen (no replay), stuck builds are still announced
+  while IFS='|' read -r att tag st step started upd dbnow err; do
+    [ -n "$tag" ] && case "$st" in releasing|shipping|ok) good="$good ${tag:0:7}";; esac
+  done <<<"$rows"
+  while IFS='|' read -r att tag st step started upd dbnow err; do   # newest first -> tac below keeps chronological order
+    [ -n "$tag" ] || continue
+    local k=${tag:0:7}
+    case "$st" in
+      releasing) once "$k.releasing" && { [ $first = 1 ] || { post "$(msg started "$prev" "$tag")"; }; } ;;
+      ok) once "$k.ok" && [ $first = 0 ] && {
+            local dur=$(( upd - started )); [ -e "$STATE/seen/$k.releasing" ] && dur=$(( now - $(cat "$STATE/seen/$k.releasing") ))
+            post "$(msg live "$prev" "$tag" "$dur")"; bridge_bg live "$prev" "$tag" "$dur"; echo "$k" > "$STATE/last_ok"; prev=$k; } ;;
+      failed|rolled_back) once "$k.failed" && [ $first = 0 ] && {
+            post "$(msg dbfailed "$prev" "$tag" 0 "❌ Release failed at step ${step:-unknown}: $(printf '%.200s' "$err")")"; bridge_bg unchanged "$live" "$tag" 0; } ;;
+      building) age=$(( (dbnow - started) / 60 ))
+            if [ $age -ge "$STUCK_MIN" ]; then case "$good $stuck" in *" $k"*) ;; *) [ -e "$STATE/seen/$k.stuck" ] || { stuck="$stuck $k"; nstuck=$((nstuck+1)); [ $age -gt $maxage ] && maxage=$age; }; esac; fi ;;
+    esac
+  done < <(printf '%s\n' "$rows" | tac)
+  if [ $nstuck -gt 0 ]; then
+    for t in $stuck; do once "$t.stuck"; done
+    if [ $nstuck = 1 ]; then post "$(msg stuck "" "${stuck# }" "$maxage")"; else post "$(python3 "$FORMATTER" --group "${stuck# }" "$maxage" 2>>"$STATE/watch.log" || echo "⚠️ $nstuck builds are stuck")"; fi
+    # one grouped message is the whole notice: no per-build incident (13 near-identical "Deploy failed" cards, no PRs known, were posted when this was per tag)
+  fi
+  : > "$STATE/seeded"
+  # self-check 2: a release the process path announced as live has no row in platform_releases after 2 min -> the table is not being fed
+  for f in "$STATE"/proc_live.*; do
+    [ -e "$f" ] || continue; t=${f##*.}
+    if grep -q "^[^|]*|$t" <<<"$rows"; then rm -f "$f"
+    elif [ $(( now - $(cat "$f") )) -gt 120 ]; then alert_selfcheck "stale.$t" "newest row is older than the live release $t"; rm -f "$f"; fi
+  done
+  return 0
+}
 POLL=${DESK_WATCH_POLL:-10}; SETTLE=${DESK_WATCH_SETTLE:-20}
 active=0; attempted=""; tag_before=$(live_tag || true); started=0
 echo "$(date -u +%FT%TZ) watcher started, live tag ${tag_before:-unknown}" >> "$STATE/watch.log"
+last_db=0
 while true; do
+  date +%s > "$STATE/heartbeat"
+  if [ $(( $(date +%s) - last_db )) -ge "$DB_POLL" ]; then last_db=$(date +%s); db_poll; fi
   if deploy_running; then
     rt=$(release_tag || true)
     if [ -n "$rt" ] && [ "$active" = 0 ]; then
       active=1; attempted=$rt; started=$(date +%s); tag_before=$(live_tag || true)
-      post "$(msg started "$tag_before" "$attempted")"
+      once "${attempted:0:7}.releasing" && post "$(msg started "$tag_before" "$attempted")"
     fi
   elif [ "$active" = 1 ]; then
     sleep "$SETTLE"   # let the slot switch and .env settle
     active=0; now=$(live_tag || true); dur=$(( $(date +%s) - started ))
     if [ -n "$now" ] && [ "${now:0:7}" = "${attempted:0:7}" ]; then
-      post "$(msg live "$tag_before" "$now" "$dur")"
-      bridge_bg live "$tag_before" "$now" "$dur"
-    else
+      if once "${now:0:7}.ok"; then
+        post "$(msg live "$tag_before" "$now" "$dur")"
+        bridge_bg live "$tag_before" "$now" "$dur"; echo "${now:0:7}" > "$STATE/last_ok"
+      fi
+      date +%s > "$STATE/proc_live.${now:0:7}"
+    elif once "${attempted:0:7}.failed"; then
       post "$(msg unchanged "$now" "$attempted" "$dur" "It was rolled back or refused. Check the build server log.")"
       bridge_bg unchanged "$now" "$attempted" "$dur"
     fi
