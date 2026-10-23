@@ -584,7 +584,13 @@
       "askOwner": "请让账户所有者添加。",
       "unavailableTitle": "{addon} 需要有效的付费套餐",
       "unavailableLead": "请先选择付费套餐，然后即可为其添加 {addon}。",
-      "viewPlans": "查看套餐"
+      "viewPlans": "查看套餐",
+      "disabledTitle": "{addon} 已关闭",
+      "disabledLead": "你的套餐包含 {addon},但它已在此工作区关闭。其设置会保留。",
+      "disabledAsk": "请让账户所有者开启它。",
+      "turnOn": "开启它",
+      "turnOnForbidden": "你没有开启它的权限。请联系账户所有者。",
+      "turnOnFailed": "无法开启 {addon}。请重试。"
     }
   }
 }

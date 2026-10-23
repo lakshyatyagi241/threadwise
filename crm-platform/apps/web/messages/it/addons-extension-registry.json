@@ -370,7 +370,8 @@
         "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
         "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
         "active": "Attivo",
-        "ownedCount": "Posseduto ×{count} · riacquistando se ne aggiungono altri"
+        "ownedCount": "Posseduto ×{count} · riacquistando se ne aggiungono altri",
+        "turnedOff": "Disattivato"
       },
       "price": {
         "free": "Gratis",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Componenti aggiuntivi di funzionalità",
         "capacity": "Componenti aggiuntivi di capacità"
+      },
+      "activation": {
+        "turnedOffNote": "Disattivato per questo spazio di lavoro. Le sue impostazioni sono conservate.",
+        "turnOff": "Disattiva",
+        "turnOn": "Attiva",
+        "askOwner": "Chiedi al proprietario dell’account di attivarlo o disattivarlo.",
+        "doneOn": "{name} è attivato.",
+        "errors": {
+          "notToggleable": "{name} non può essere attivato o disattivato qui. Si può cambiare solo un componente aggiuntivo incluso nel tuo piano.",
+          "forbidden": "Non hai il permesso di attivare o disattivare i componenti aggiuntivi.",
+          "generic": "Non è stato possibile modificare {name}. Riprova."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Disattivare {name}?",
+      "lead": "Ecco cosa cambia. Puoi riattivarlo in qualsiasi momento.",
+      "cancel": "Annulla",
+      "confirm": "Disattiva {name}",
+      "done": "{name} è disattivato. Le sue impostazioni sono conservate.",
+      "typeLabel": "Digita {name} per confermare",
+      "typeHint": "Sono interessate chat dei clienti o persone, quindi digita il nome per confermare.",
+      "groups": {
+        "stops": "Cosa si ferma",
+        "kept": "Cosa viene conservato",
+        "people": "Persone"
+      },
+      "items": {
+        "features_off": "Queste funzioni smettono di funzionare: {names}.",
+        "dependents_off": "Queste funzioni ne dipendono, quindi si fermano anch’esse: {names}.",
+        "roles_dormant": "{count, plural, one {# ruolo ha permessi di questo componente. Li conserva, ma restano inattivi finché non lo riattivi.} many {# di ruoli hanno permessi di questo componente. Li conservano, ma restano inattivi finché non lo riattivi.} other {# ruoli hanno permessi di questo componente. Li conservano, ma restano inattivi finché non lo riattivi.}}",
+        "waiting_chats": "{count, plural, one {# chat attende un agente. Non verrà instradata automaticamente, quindi qualcuno deve prenderla in carico.} many {# di chat attendono un agente. Non verranno instradate automaticamente, quindi qualcuno deve prenderle in carico.} other {# chat attendono un agente. Non verranno instradate automaticamente, quindi qualcuno deve prenderle in carico.}}",
+        "routing_rules": "{count, plural, one {# regola di instradamento smette di assegnare chat.} many {# di regole di instradamento smettono di assegnare chat.} other {# regole di instradamento smettono di assegnare chat.}}",
+        "auto_teams": "{count, plural, one {# team è impostato per assegnare le chat automaticamente e smette di farlo.} many {# di team sono impostati per assegnare le chat automaticamente e smettono di farlo.} other {# team sono impostati per assegnare le chat automaticamente e smettono di farlo.}}",
+        "teams": "{count, plural, one {# team viene conservato, con i suoi membri.} many {# di team vengono conservati, con i loro membri.} other {# team vengono conservati, con i loro membri.}}",
+        "custom_role_holders": "{count, plural, one {# persona ha un ruolo personalizzato. Il ruolo viene conservato, ma i permessi di questo componente non si applicano più.} many {# di persone hanno un ruolo personalizzato. I ruoli vengono conservati, ma i permessi di questo componente non si applicano più.} other {# persone hanno un ruolo personalizzato. I ruoli vengono conservati, ma i permessi di questo componente non si applicano più.}}",
+        "kept": "Le tue impostazioni e i tuoi dati sono conservati. Tornano come li hai lasciati quando lo riattivi."
       }
     }
   }

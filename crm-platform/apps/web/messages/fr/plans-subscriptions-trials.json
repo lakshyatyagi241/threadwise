@@ -584,7 +584,13 @@
       "askOwner": "Demandez au propriétaire du compte de l’ajouter.",
       "unavailableTitle": "{addon} nécessite une offre payante active",
       "unavailableLead": "Choisissez d’abord une offre payante, puis vous pourrez y ajouter {addon}.",
-      "viewPlans": "Voir les offres"
+      "viewPlans": "Voir les offres",
+      "disabledTitle": "{addon} est désactivé",
+      "disabledLead": "Votre offre inclut {addon}, mais il est désactivé pour cet espace de travail. Ses paramètres sont conservés.",
+      "disabledAsk": "Demandez au propriétaire du compte de l’activer.",
+      "turnOn": "L’activer",
+      "turnOnForbidden": "Vous n’avez pas l’autorisation de l’activer. Demandez au propriétaire du compte.",
+      "turnOnFailed": "Nous n’avons pas pu activer {addon}. Veuillez réessayer."
     }
   }
 }

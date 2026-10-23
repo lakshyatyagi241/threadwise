@@ -584,7 +584,13 @@
       "askOwner": "Hãy nhờ chủ tài khoản thêm tiện ích này.",
       "unavailableTitle": "{addon} cần một gói trả phí đang hoạt động",
       "unavailableLead": "Hãy chọn một gói trả phí trước, sau đó bạn có thể thêm {addon} vào gói đó.",
-      "viewPlans": "Xem các gói"
+      "viewPlans": "Xem các gói",
+      "disabledTitle": "{addon} đã tắt",
+      "disabledLead": "Gói của bạn có {addon}, nhưng nó đã bị tắt cho không gian làm việc này. Cài đặt của nó vẫn được giữ lại.",
+      "disabledAsk": "Hãy nhờ chủ tài khoản bật nó.",
+      "turnOn": "Bật lại",
+      "turnOnForbidden": "Bạn không có quyền bật tính năng này. Hãy nhờ chủ tài khoản.",
+      "turnOnFailed": "Chúng tôi không thể bật {addon}. Vui lòng thử lại."
     }
   }
 }

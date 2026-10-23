@@ -1,8 +1,16 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { AddonCard, OwnedAddon, WorkspaceAddonsResponse } from '@crm/contracts';
-import { renderAccount } from '@/features/auth-registration-security/account/render-test-utils';
+import {
+  makeSession,
+  renderAccount,
+} from '@/features/auth-registration-security/account/render-test-utils';
 import { KEYS } from '../api';
 import { AddonsList } from './addons-list';
+
+// The turn off / turn on controls refresh the page after a switch; a static render has no router.
+vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: () => undefined }) }));
+
+const MANAGER = makeSession({ permissions: { 'addons.activation.manage': 'all' } });
 
 const ID = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 
@@ -26,6 +34,8 @@ const card = (n: number, over: Partial<AddonCard> = {}): AddonCard => ({
   state: 'buy',
   includedVia: null,
   kind: 'feature',
+  activation: 'active',
+  canToggle: false,
   ...over,
 });
 
@@ -49,8 +59,58 @@ const data = (over: Partial<WorkspaceAddonsResponse> = {}): WorkspaceAddonsRespo
 });
 
 describe.each(['en', 'ar'] as const)('the shared add-ons list (%s)', (locale) => {
-  const html = (d: WorkspaceAddonsResponse) =>
-    renderAccount(<AddonsList />, { locale, seed: [[KEYS.workspace, d]] });
+  const html = (d: WorkspaceAddonsResponse, session = makeSession()) =>
+    renderAccount(<AddonsList />, { locale, seed: [[KEYS.workspace, d]], session });
+  const included = (over: Partial<AddonCard> = {}) =>
+    card(1, { state: 'included', includedVia: 'plan', grantBullets: [], canToggle: true, ...over });
+
+  it('an included, active add-on shows both chips and a Turn off button only to a person who may switch it', () => {
+    const can = html(data({ catalog: [included()] }), MANAGER);
+    expect(can).toContain('data-testid="addon-pack_1-included"');
+    expect(can).toContain('data-testid="addon-pack_1-activation"');
+    expect(can).toContain('data-testid="addon-pack_1-turn-off"');
+    expect(can).toContain('aria-describedby="addon-pack_1-title"');
+    expect(can).not.toContain('data-testid="addon-pack_1-turn-on"');
+    expect(can).not.toContain('/billing/checkout/');
+
+    const cannot = html(data({ catalog: [included()] }));
+    expect(cannot).toContain('data-testid="addon-pack_1-activation"');
+    expect(cannot).toContain('data-testid="addon-pack_1-ask-owner"');
+    expect(cannot).not.toContain('data-testid="addon-pack_1-turn-off"');
+    expect(cannot).not.toContain('data-testid="addon-pack_1-turn-on"');
+  });
+
+  it('a turned-off included add-on says so, offers Turn on, and never a buy button', () => {
+    const out = html(data({ catalog: [included({ activation: 'disabled' })] }), MANAGER);
+    expect(out).toContain('data-testid="addon-pack_1-turn-on"');
+    expect(out).not.toContain('data-testid="addon-pack_1-turn-off"');
+    expect(out).not.toContain('/billing/checkout/');
+    expect(out).not.toContain('data-testid="addon-pack_1-active"');
+    // the active chip and the turned-off chip are different words
+    const active = html(data({ catalog: [included()] }), MANAGER);
+    expect(out).not.toBe(active);
+    if (locale === 'en') {
+      expect(out).toContain('Turned off');
+      expect(out).toContain('Turned off for this workspace. Its settings are kept.');
+      expect(out).toContain('Turn on');
+      expect(active).toContain('Included in your plan');
+      expect(active).toContain('Turn off');
+    } else {
+      expect(out).not.toContain('Turned off for this workspace');
+    }
+  });
+
+  it('an included add-on that cannot be switched (an app, or given by support) has no control and no ask hint', () => {
+    const out = html(data({ catalog: [included({ canToggle: false })] }), MANAGER);
+    expect(out).toContain('data-testid="addon-pack_1-activation"');
+    expect(out).not.toContain('-turn-off"');
+    expect(out).not.toContain('-turn-on"');
+    expect(out).not.toContain('-ask-owner"');
+  });
+
+  it('keeps the live region for the switch message in the page', () => {
+    expect(html(data({ catalog: [card(1)] }))).toContain('data-testid="addons-status"');
+  });
 
   it('a buy card has the price per period, the renewal wording and a checkout link', () => {
     const out = html(data({ catalog: [card(1)] }));

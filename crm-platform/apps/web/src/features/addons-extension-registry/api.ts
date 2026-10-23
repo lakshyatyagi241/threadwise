@@ -1,4 +1,6 @@
 import {
+  addonActivationResponseSchema,
+  addonImpactSchema,
   addonPackListResponseSchema,
   addonPackSchema,
   extensionsPageResponseSchema,
@@ -18,6 +20,8 @@ export const KEYS = {
   fields: ['operator', 'addon-grant-fields'] as const,
   extensions: ['operator', 'extensions'] as const,
   workspace: ['workspace-addons'] as const,
+  impact: (id: string, action: 'disable' | 'enable') =>
+    ['workspace-addons', 'impact', id, action] as const,
 };
 
 export const fetchPacks = (signal?: AbortSignal) =>
@@ -34,6 +38,33 @@ export const fetchExtensionsPage = (signal?: AbortSignal) =>
 
 export const fetchWorkspaceAddons = (signal?: AbortSignal) =>
   apiFetch('/addons', { schema: workspaceAddonsResponseSchema, signal });
+
+/** What turning an included add-on off (or on) does for this workspace, read before the person confirms. */
+export const fetchAddonImpact = (id: string, action: 'disable' | 'enable', signal?: AbortSignal) =>
+  apiFetch(`/addons/${id}/impact`, { query: { action }, schema: addonImpactSchema, signal });
+
+/** Turns an add-on the plan includes off for the workspace; the caller has seen the impact and confirms. Settings and data are kept. */
+export const disableAddon = (id: string) =>
+  apiFetch(`/addons/${id}/disable`, {
+    method: 'POST',
+    body: { confirm: true },
+    schema: addonActivationResponseSchema,
+  });
+
+/** Turns it back on. Needs no confirmation: everything is as it was left. */
+export const enableAddon = (id: string) =>
+  apiFetch(`/addons/${id}/enable`, { method: 'POST', schema: addonActivationResponseSchema });
+
+/**
+ * Turns an add-on back on from a locked screen, which knows the add-on by its slug (`FeatureAddon.addonSlug`) and not by its id:
+ * the id comes from the workspace's own add-ons list.
+ */
+export async function enableAddonBySlug(slug: string) {
+  const list = await fetchWorkspaceAddons();
+  const card = list.catalog.find((c) => c.slug === slug);
+  if (!card) throw new Error(`add-on ${slug} is not in the workspace add-ons list`);
+  return enableAddon(card.id);
+}
 
 /** Stops one add-on purchase from renewing; its paid term keeps running to the end date. */
 export const cancelAddonRenewal = (id: string) =>

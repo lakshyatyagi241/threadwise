@@ -6,6 +6,7 @@ import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AddonEntitlementService } from './addon-entitlement.service';
 import { AddonFulfilmentHooks } from './addon-fulfilment-hooks';
 import { AddonFulfilmentService } from './addon-fulfilment.service';
+import { AddonLifecycleService } from './addon-lifecycle.service';
 import { AddonPackService } from './addon-pack.service';
 import { AddonsController } from './addons.controller';
 import { EngineConnectionService } from './engine-connections.service';
@@ -41,6 +42,7 @@ import { WorkspaceAddonsService } from './workspace-addons.service';
     AddonFulfilmentHooks,
     AddonFulfilmentService,
     WorkspaceAddonsService,
+    AddonLifecycleService,
     ExtensionTokenService,
   ],
   exports: [

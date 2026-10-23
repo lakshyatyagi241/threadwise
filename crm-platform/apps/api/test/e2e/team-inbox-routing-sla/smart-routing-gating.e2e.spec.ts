@@ -999,3 +999,137 @@ describe('plan add-on offers: hidden, a plan price, included (docs/specs/addons-
     }
   });
 });
+
+describe('a workspace turns an add-on its plan includes off and on (docs/specs/addons-lifecycle-and-permissions.md)', () => {
+  const impact = (token: string, id: string, action = 'disable') =>
+    p.api.as(token).get(`/v2/addons/${id}/impact?action=${action}`);
+  const toggle = (token: string, id: string, what: 'disable' | 'enable', body?: object) =>
+    p.api
+      .as(token)
+      .post(`/v2/addons/${id}/${what}`)
+      .set('idempotency-key', randomUUID())
+      .send(body ?? {});
+  const ent = (t: Tenant) => get(PlanEntitlementService).featureEnabled(t.orgId, 'inbox_routing');
+  const sticky = (t: Tenant) =>
+    get(PlanEntitlementService).featureEnabled(t.orgId, 'inbox_assignment_sticky');
+  let uuid = '';
+  const card = async (t: Tenant) => {
+    const res = await p.api.as(t.admin).get('/v2/addons');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return (
+      res.body.catalog as Array<{
+        slug: string;
+        state: string;
+        activation: string;
+        canToggle: boolean;
+      }>
+    ).find((c) => c.slug === 'smart_routing')!;
+  };
+
+  beforeAll(async () => {
+    await q(
+      `UPDATE plans SET is_active = true, is_free = false, amount = 9 WHERE slug = 'smart_routing'`,
+    );
+    uuid = String((await q(`SELECT uuid FROM plans WHERE slug = 'smart_routing'`)).rows[0].uuid);
+    // the operator set Smart routing to Included on the pro plan (what the editor writes)
+    await q(
+      `INSERT INTO plan_addon_offers (plan_id, addon_id, mode) SELECT id, $1, 'included' FROM plans WHERE slug = 'sr_pro'
+       ON CONFLICT (plan_id, addon_id) DO UPDATE SET mode = 'included'`,
+      [packId],
+    );
+  });
+  afterAll(async () => {
+    await q(`DELETE FROM plan_addon_offers WHERE addon_id = $1`, [packId]);
+  });
+
+  it('off keeps everything stored but switches both features and the permission-linked work off; on restores them', async () => {
+    const t = await p.api.signup('sla1');
+    await onPlan(t, 'sr_pro');
+    expect(await ent(t)).toBe(true);
+    expect(await sticky(t)).toBe(true);
+    expect(await card(t)).toMatchObject({
+      state: 'included',
+      activation: 'active',
+      canToggle: true,
+    });
+
+    const pre = await impact(t.admin, uuid);
+    expect(pre.status, JSON.stringify(pre.body)).toBe(200);
+    const codes = (pre.body.items as Array<{ code: string }>).map((i) => i.code);
+    expect(codes).toContain('features_off');
+    expect(codes).toContain('kept');
+
+    // the route refuses a call that has not seen the impact
+    expect((await toggle(t.admin, uuid, 'disable', {})).status).toBe(422);
+    const off = await toggle(t.admin, uuid, 'disable', { confirm: true });
+    expect(off.status, JSON.stringify(off.body)).toBeLessThan(300);
+    expect(off.body.activation).toBe('disabled');
+    expect(await ent(t)).toBe(false);
+    expect(await sticky(t)).toBe(false);
+    // the card still says included (the plan still includes it), now turned off
+    expect(await card(t)).toMatchObject({
+      state: 'included',
+      activation: 'disabled',
+      canToggle: true,
+    });
+    // the locked screens read "disabled" (turn it back on), not a buy offer
+    const entitlements = await p.api.as(t.admin).get('/v2/billing/entitlements');
+    expect(
+      (entitlements.body.featureAddons as Array<{ feature: string; offer: string }>).find(
+        (f) => f.feature === 'inbox_routing',
+      )?.offer,
+    ).toBe('disabled');
+    // the rules route is closed the way a plan without the feature is
+    expect((await rules(t.admin)).status).toBe(422);
+
+    // switching off twice changes nothing; on restores it
+    expect((await toggle(t.admin, uuid, 'disable', { confirm: true })).status).toBeLessThan(300);
+    const on = await toggle(t.admin, uuid, 'enable');
+    expect(on.status, JSON.stringify(on.body)).toBeLessThan(300);
+    expect(await ent(t)).toBe(true);
+    expect(await sticky(t)).toBe(true);
+    expect((await rules(t.admin)).status).toBe(200);
+  });
+
+  it('a feature that needs another is off whenever that one is off (declared once, in the registry)', async () => {
+    const t = await p.api.signup('sla2');
+    await onPlan(t, 'sr_basic');
+    await override(t, { inbox_routing: false, inbox_assignment_sticky: true });
+    expect(await sticky(t)).toBe(false);
+    await override(t, { inbox_routing: true, inbox_assignment_sticky: true });
+    expect(await sticky(t)).toBe(true);
+  });
+
+  it('only an add-on the plan includes can be switched: a bought one, an unknown one and a member without the permission are refused', async () => {
+    const t = await p.api.signup('sla3');
+    await onPlan(t, 'sr_basic');
+    await buy(t, packId);
+    const bought = await toggle(t.admin, uuid, 'disable', { confirm: true });
+    expect(bought.status).toBe(422);
+    expect(bought.body.code).toBe('PAYGW_ADDON_NOT_TOGGLEABLE');
+    expect(
+      (await toggle(t.admin, '00000000-0000-4000-8000-000000000000', 'disable', { confirm: true }))
+        .status,
+    ).toBe(404);
+
+    const inc = await p.api.signup('sla4');
+    await onPlan(inc, 'sr_pro');
+    const agent = await p.api.member(inc, 'sla4a', AGENT);
+    expect((await toggle(agent.token, uuid, 'disable', { confirm: true })).status).toBe(403);
+    expect((await impact(agent.token, uuid)).status).toBe(403);
+    expect(await ent(inc)).toBe(true);
+  });
+
+  it('the impact names what is at risk: waiting chats ask for a typed confirmation', async () => {
+    const t = await p.api.signup('sla5');
+    await onPlan(t, 'sr_pro');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch);
+    await q(`UPDATE conversations SET handling = 'waiting' WHERE id = $1`, [th.id]);
+    const pre = await impact(t.admin, uuid);
+    expect(pre.status, JSON.stringify(pre.body)).toBe(200);
+    const items = pre.body.items as Array<{ code: string; count: number; risk: boolean }>;
+    expect(items.find((i) => i.code === 'waiting_chats')).toMatchObject({ count: 1, risk: true });
+    expect(pre.body.requiresConfirm).toBe(true);
+  });
+});

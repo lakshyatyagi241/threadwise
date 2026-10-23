@@ -584,7 +584,13 @@
       "askOwner": "アカウントオーナーに追加を依頼してください。",
       "unavailableTitle": "{addon} には有効な有料プランが必要です",
       "unavailableLead": "まず有料プランを選ぶと、そこに {addon} を追加できます。",
-      "viewPlans": "プランを見る"
+      "viewPlans": "プランを見る",
+      "disabledTitle": "{addon} はオフです",
+      "disabledLead": "ご利用のプランには {addon} が含まれていますが、このワークスペースではオフになっています。設定は保持されます。",
+      "disabledAsk": "オンにするには、アカウントオーナーに依頼してください。",
+      "turnOn": "オンにする",
+      "turnOnForbidden": "オンにする権限がありません。アカウントオーナーに依頼してください。",
+      "turnOnFailed": "{addon} をオンにできませんでした。もう一度お試しください。"
     }
   }
 }

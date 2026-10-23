@@ -370,7 +370,8 @@
         "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
         "includedEnds": "Inclus dans votre offre. Votre module se termine le {date} et ne sera pas renouvelé.",
         "active": "Actif",
-        "ownedCount": "Possédé ×{count} · racheter en ajoute davantage"
+        "ownedCount": "Possédé ×{count} · racheter en ajoute davantage",
+        "turnedOff": "Désactivé"
       },
       "price": {
         "free": "Gratuit",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Modules complémentaires de fonctionnalités",
         "capacity": "Modules complémentaires de capacité"
+      },
+      "activation": {
+        "turnedOffNote": "Désactivé pour cet espace de travail. Ses paramètres sont conservés.",
+        "turnOff": "Désactiver",
+        "turnOn": "Activer",
+        "askOwner": "Demandez au propriétaire du compte de l’activer ou de le désactiver.",
+        "doneOn": "{name} est activé.",
+        "errors": {
+          "notToggleable": "{name} ne peut pas être activé ni désactivé ici. Seul un module inclus dans votre offre peut être basculé.",
+          "forbidden": "Vous n’avez pas l’autorisation d’activer ou de désactiver des modules complémentaires.",
+          "generic": "Nous n’avons pas pu modifier {name}. Veuillez réessayer."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Désactiver {name} ?",
+      "lead": "Voici ce qui change. Vous pouvez le réactiver à tout moment.",
+      "cancel": "Annuler",
+      "confirm": "Désactiver {name}",
+      "done": "{name} est désactivé. Ses paramètres sont conservés.",
+      "typeLabel": "Saisissez {name} pour confirmer",
+      "typeHint": "Des conversations clients ou des personnes sont concernées : saisissez le nom pour confirmer.",
+      "groups": {
+        "stops": "Ce qui s’arrête",
+        "kept": "Ce qui est conservé",
+        "people": "Personnes"
+      },
+      "items": {
+        "features_off": "Ces fonctionnalités cessent de fonctionner : {names}.",
+        "dependents_off": "Ces fonctionnalités en dépendent, elles s’arrêtent donc aussi : {names}.",
+        "roles_dormant": "{count, plural, one {# rôle détient des autorisations de ce module. Il les conserve, mais elles sont inactives tant que vous ne le réactivez pas.} many {# de rôles détiennent des autorisations de ce module. Ils les conservent, mais elles sont inactives tant que vous ne le réactivez pas.} other {# rôles détiennent des autorisations de ce module. Ils les conservent, mais elles sont inactives tant que vous ne le réactivez pas.}}",
+        "waiting_chats": "{count, plural, one {# conversation attend un agent. Elle ne sera pas routée automatiquement : quelqu’un doit la prendre en charge.} many {# de conversations attendent un agent. Elles ne seront pas routées automatiquement : quelqu’un doit les prendre en charge.} other {# conversations attendent un agent. Elles ne seront pas routées automatiquement : quelqu’un doit les prendre en charge.}}",
+        "routing_rules": "{count, plural, one {# règle de routage cesse d’attribuer des conversations.} many {# de règles de routage cessent d’attribuer des conversations.} other {# règles de routage cessent d’attribuer des conversations.}}",
+        "auto_teams": "{count, plural, one {# équipe est réglée pour attribuer les conversations automatiquement et cesse de le faire.} many {# d’équipes sont réglées pour attribuer les conversations automatiquement et cessent de le faire.} other {# équipes sont réglées pour attribuer les conversations automatiquement et cessent de le faire.}}",
+        "teams": "{count, plural, one {# équipe est conservée, avec ses membres.} many {# d’équipes sont conservées, avec leurs membres.} other {# équipes sont conservées, avec leurs membres.}}",
+        "custom_role_holders": "{count, plural, one {# personne a un rôle personnalisé. Son rôle est conservé, mais les autorisations de ce module cessent de s’appliquer.} many {# de personnes ont un rôle personnalisé. Leurs rôles sont conservés, mais les autorisations de ce module cessent de s’appliquer.} other {# personnes ont un rôle personnalisé. Leurs rôles sont conservés, mais les autorisations de ce module cessent de s’appliquer.}}",
+        "kept": "Vos paramètres et vos données sont conservés. Ils reviennent tels que vous les avez laissés lorsque vous le réactivez."
       }
     }
   }

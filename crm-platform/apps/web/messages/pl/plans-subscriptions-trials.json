@@ -584,7 +584,13 @@
       "askOwner": "Poproś właściciela konta o dodanie.",
       "unavailableTitle": "{addon} wymaga aktywnego płatnego planu",
       "unavailableLead": "Najpierw wybierz płatny plan, a potem możesz dodać do niego {addon}.",
-      "viewPlans": "Zobacz plany"
+      "viewPlans": "Zobacz plany",
+      "disabledTitle": "{addon} jest wyłączony",
+      "disabledLead": "Twój plan obejmuje {addon}, ale dodatek jest wyłączony dla tego obszaru roboczego. Jego ustawienia są zachowane.",
+      "disabledAsk": "Poproś właściciela konta o jego włączenie.",
+      "turnOn": "Włącz",
+      "turnOnForbidden": "Nie masz uprawnień, aby to włączyć. Poproś właściciela konta.",
+      "turnOnFailed": "Nie udało się włączyć dodatku {addon}. Spróbuj ponownie."
     }
   }
 }
