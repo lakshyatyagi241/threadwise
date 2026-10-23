@@ -12,6 +12,9 @@ import {
   maskUrl,
   looksBinary,
   readAnswer,
+  scrubSecretHeaders,
+  scrubSecretValues,
+  secretValuesOf,
   renderBody,
   renderHeaders,
   renderText,
@@ -288,5 +291,46 @@ describe('readAnswer', () => {
     const out = readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
     expect(out.isText).toBe(false);
     expect(out.text).toContain('could not be unpacked');
+  });
+});
+
+describe('secrets the other server repeats back', () => {
+  const url = 'https://httpbin.org/get?api_key=QAFAKEKEY777&token=QAFAKETOK888&page=2';
+  const secrets = secretValuesOf(url, [
+    { key: 'Authorization', value: 'Bearer abcd1234', secret: true },
+    { key: 'Accept', value: 'application/json', secret: false },
+  ]);
+
+  it('collects secret query values and secret header values, not ordinary ones', () => {
+    expect(secrets).toEqual(
+      expect.arrayContaining(['QAFAKEKEY777', 'QAFAKETOK888', 'Bearer abcd1234', 'abcd1234']),
+    );
+    expect(secrets).not.toContain('2');
+    expect(secrets).not.toContain('application/json');
+  });
+
+  it('hides them wherever the reply repeats them, encoded or not', () => {
+    const reply = JSON.stringify({
+      args: { api_key: 'QAFAKEKEY777', token: 'QAFAKETOK888', page: '2' },
+      url: 'https://httpbin.org/get?token=QAFAKETOK888',
+      auth: 'Bearer abcd1234',
+    });
+    const out = scrubSecretValues(reply, secrets);
+    expect(out).not.toContain('QAFAKEKEY777');
+    expect(out).not.toContain('QAFAKETOK888');
+    expect(out).not.toContain('abcd1234');
+    expect(out).toContain('"page":"2"');
+    expect(
+      scrubSecretValues('a%20b%2Bc', secretValuesOf('https://x.test/?token=a%20b%2Bc', [])),
+    ).toBe(scrubSecretValues('a%20b%2Bc', ['a b+c']));
+  });
+
+  it('hides them in response headers too', () => {
+    const h = scrubSecretHeaders(
+      { 'x-echo': 'token=QAFAKETOK888', 'content-type': 'application/json' },
+      secrets,
+    );
+    expect(h['x-echo']).not.toContain('QAFAKETOK888');
+    expect(h['content-type']).toBe('application/json');
   });
 });
