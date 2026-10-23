@@ -273,7 +273,7 @@
       "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın.",
       "days": {
         "title": "Günlük kayıt",
-        "subtitle": "Mesajlar gün, durum, kanal ve kategoriye göre gruplandı. Her mesajı görmek için bir günü açın.",
+        "subtitle": "Mesajlar gün, tür, durum, kanal ve kategoriye göre gruplandı. Her mesajı görmek için bir günü açın.",
         "messagesOnDay": "{count} mesaj",
         "viewDetails": "Ayrıntıları gör",
         "actions": "İşlemler",

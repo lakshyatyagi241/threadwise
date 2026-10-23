@@ -253,7 +253,7 @@
       },
       "days": {
         "title": "Daily log",
-        "subtitle": "Messages grouped by day, status, channel and category. Open a day to see each message.",
+        "subtitle": "Messages grouped by day, type, status, channel and category. Open a day to see each message.",
         "messagesOnDay": "{count} messages",
         "viewDetails": "View details",
         "actions": "Actions",

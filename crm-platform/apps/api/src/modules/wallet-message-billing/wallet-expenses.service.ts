@@ -152,20 +152,20 @@ export class WalletExpensesService {
       // in the select list, and each repeated bind of the time zone would be a different parameter.
       const groupRes = await tx.execute(sql`
         WITH msgs AS (
-          SELECT (uc.created_at AT TIME ZONE ${query.timeZone})::date AS day, uc.status, ${CHANNEL} AS source, uc.category,
+          SELECT (uc.created_at AT TIME ZONE ${query.timeZone})::date AS day, uc.kind, uc.status, ${CHANNEL} AS source, uc.category,
                  ch.amount AS charged_amount, rf.amount AS refunded_amount
             ${fromSql(where, names)}
              AND uc.created_at >= (${oldest}::date::timestamp AT TIME ZONE ${query.timeZone})
              AND uc.created_at < ((${newest}::date + 1)::timestamp AT TIME ZONE ${query.timeZone})
         )
-        SELECT day::text AS day, status, source, category,
+        SELECT day::text AS day, kind, status, source, category,
                count(*)::int AS messages,
                COALESCE(sum(-charged_amount), 0)::text AS charged_sum,
                COALESCE(sum(refunded_amount), 0)::text AS refunded_sum
           FROM msgs
          WHERE day BETWEEN ${oldest}::date AND ${newest}::date
-         GROUP BY day, status, source, category
-         ORDER BY day DESC, status, source NULLS LAST, category NULLS LAST`);
+         GROUP BY day, kind, status, source, category
+         ORDER BY day DESC, kind, status, source NULLS LAST, category NULLS LAST`);
       return {
         currency: unit,
         data: (groupRes.rows as unknown as DayGroupRow[]).map(toDayGroup),
@@ -181,6 +181,7 @@ export class WalletExpensesService {
 
 interface DayGroupRow {
   day: string;
+  kind: ExpenseDayGroup['kind'];
   status: ExpenseStatus;
   source: string | null;
   category: string | null;
@@ -363,6 +364,7 @@ function toDayGroup(r: DayGroupRow): ExpenseDayGroup {
   const net = walletExactSubtract(charged, refunded);
   return {
     day: r.day,
+    kind: r.kind,
     status: r.status,
     source: r.source,
     category: r.category,
