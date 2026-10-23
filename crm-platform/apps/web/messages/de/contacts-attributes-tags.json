@@ -653,7 +653,8 @@
         "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt",
         "invalid_timezone": "ungültige Zeitzone",
         "legal_hold": "Geschützter Datensatz, nicht geändert",
-        "invalid_property_value": "Der Wert der benutzerdefinierten Eigenschaft passt nicht zu ihrem Typ oder ihren Optionen"
+        "invalid_property_value": "Der Wert der benutzerdefinierten Eigenschaft passt nicht zu ihrem Typ oder ihren Optionen",
+        "invalid_property_value_column": "Spalte \"{column}\": Der Wert passt nicht zu ihrem Typ oder ihren Optionen"
       },
       "statusHint": "Wird auf Kontakte angewendet, die diese Datei erstellt.",
       "queued": "Warten auf den Start...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Tariflimit überschritten",
       "limitExceededNote": "Einige neue Kontakte wurden nicht importiert, weil das Kontaktlimit Ihres Tarifs erreicht wurde.",
       "rejectsFailed": "Die abgelehnten Zeilen konnten nicht heruntergeladen werden.",
+      "sampleFailed": "Die Beispieldatei konnte nicht heruntergeladen werden. Bitte versuchen Sie es erneut.",
       "groupRequired": "Diese Kontakte hinzufügen zu",
       "groupExisting": "Einer vorhandenen Gruppe",
       "groupNew": "Einer neuen Gruppe",

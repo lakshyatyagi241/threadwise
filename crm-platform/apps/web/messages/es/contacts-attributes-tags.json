@@ -653,7 +653,8 @@
         "duplicate_in_file": "número repetido, combinado con una fila anterior",
         "invalid_timezone": "zona horaria no válida",
         "legal_hold": "registro protegido, sin cambios",
-        "invalid_property_value": "el valor de la propiedad personalizada no coincide con su tipo ni con sus opciones"
+        "invalid_property_value": "el valor de la propiedad personalizada no coincide con su tipo ni con sus opciones",
+        "invalid_property_value_column": "columna \"{column}\": el valor no coincide con su tipo o sus opciones"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Límite del plan superado",
       "limitExceededNote": "Algunos contactos nuevos no se importaron porque se alcanzó el límite de contactos de tu plan.",
       "rejectsFailed": "No se pudieron descargar las filas rechazadas.",
+      "sampleFailed": "No se pudo descargar el archivo de ejemplo. Inténtalo de nuevo.",
       "groupRequired": "Añadir estos contactos a",
       "groupExisting": "Un grupo existente",
       "groupNew": "Un grupo nuevo",

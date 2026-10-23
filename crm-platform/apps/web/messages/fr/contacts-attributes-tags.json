@@ -653,7 +653,8 @@
         "duplicate_in_file": "numéro répété, fusionné avec une ligne précédente",
         "invalid_timezone": "fuseau horaire non valide",
         "legal_hold": "enregistrement protégé, non modifié",
-        "invalid_property_value": "la valeur de la propriété personnalisée ne correspond pas à son type ni à ses options"
+        "invalid_property_value": "la valeur de la propriété personnalisée ne correspond pas à son type ni à ses options",
+        "invalid_property_value_column": "colonne « {column} » : la valeur ne correspond pas à son type ou à ses options"
       },
       "statusHint": "Appliqué aux contacts créés par ce fichier.",
       "queued": "En attente de démarrage...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Limite du forfait dépassée",
       "limitExceededNote": "Certains nouveaux contacts n’ont pas été importés, car la limite de contacts de votre forfait a été atteinte.",
       "rejectsFailed": "Impossible de télécharger les lignes rejetées.",
+      "sampleFailed": "Le fichier d’exemple n’a pas pu être téléchargé. Réessayez.",
       "groupRequired": "Ajouter ces contacts à",
       "groupExisting": "Un groupe existant",
       "groupNew": "Un nouveau groupe",

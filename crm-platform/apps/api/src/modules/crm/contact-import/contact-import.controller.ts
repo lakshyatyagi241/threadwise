@@ -26,7 +26,7 @@ import {
 import { ActorKinds, RequirePermission } from '../../../common/decorators';
 import { AppError } from '../../../common/errors/app-error';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
-import { ContactImportService, sampleCsv, type UploadedCsv } from './contact-import.service';
+import { ContactImportService, type UploadedCsv } from './contact-import.service';
 import { UTF8_BOM } from '../contact-bulk/csv-writer';
 
 const upload = FileInterceptor('file', { limits: { fileSize: IMPORT_MAX_BYTES, files: 1 } });
@@ -65,9 +65,12 @@ export class ContactImportController {
   @RequirePermission('record.contacts.import')
   @Header('Content-Type', 'text/csv; charset=utf-8')
   @Header('Content-Disposition', 'attachment; filename="contacts-sample.csv"')
-  @ApiOperation({ summary: 'A sample CSV in the importer format' })
-  sample(): string {
-    return sampleCsv();
+  @ApiOperation({
+    summary:
+      'A sample CSV in the importer format: every built-in column and one example per custom property of the workspace',
+  })
+  async sample(): Promise<string> {
+    return UTF8_BOM + (await this.imports.sample());
   }
 
   @Post('preview')

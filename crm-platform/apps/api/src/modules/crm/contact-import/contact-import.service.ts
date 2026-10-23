@@ -7,8 +7,6 @@ import {
   IMPORT_FIELDS,
   IMPORT_MAX_BYTES,
   IMPORT_MAX_ROWS,
-  IMPORT_SAMPLE_HEADERS,
-  IMPORT_SAMPLE_ROWS,
   IMPORT_SYNC_MAX_ROWS,
   detectImportColumns,
   type ContactImportJob,
@@ -37,6 +35,7 @@ import { toImportJobResponse } from './contact-import.mapper';
 import { ContactImportRepository } from './contact-import.repository';
 import { parseCsv } from './csv-parser';
 import { resolvePropertyColumns, type ImportProperty } from './import-properties';
+import { sampleCsv } from './import-sample';
 import {
   builtinColumns,
   extractRow,
@@ -108,13 +107,6 @@ export function decodeUpload(file: UploadedCsv | undefined): {
   };
 }
 
-/** The sample file, built from the importer's own header names. */
-export function sampleCsv(): string {
-  return (
-    csvLine([...IMPORT_SAMPLE_HEADERS]) + IMPORT_SAMPLE_ROWS.map((r) => csvLine([...r])).join('')
-  );
-}
-
 interface Analysis {
   delimiter: string;
   headers: string[];
@@ -171,7 +163,12 @@ export function analyzeCsv(
     else {
       invalidCount += 1;
       if (invalid.length < INVALID_SAMPLES) {
-        invalid.push({ row: r.line, reason: r.reason, values: r.values });
+        invalid.push({
+          row: r.line,
+          reason: r.reason,
+          ...(r.column === undefined ? {} : { column: r.column }),
+          values: r.values,
+        });
       }
     }
   }
@@ -256,6 +253,11 @@ export class ContactImportService {
   private importableProperties(): Promise<PropertyDef[]> {
     const ctx = RequestContextStore.require();
     return this.db.tx((tx) => this.contacts.importableProperties(tx, ctx.orgId));
+  }
+
+  /** The sample file for this workspace: every built-in column, and a column with an example of each custom property the importer fills. */
+  async sample(): Promise<string> {
+    return sampleCsv(await this.importableProperties());
   }
 
   async preview(
@@ -375,7 +377,7 @@ export class ContactImportService {
       throw fileInvalid(
         'No row in the file could be imported.',
         a.invalid.map((i) => ({
-          path: `row ${i.row}`,
+          path: i.column ? `row ${i.row}, column ${i.column}` : `row ${i.row}`,
           message: i.reason,
         })),
       );
@@ -509,7 +511,7 @@ export class ContactImportService {
     });
   }
 
-  /** The rejected rows as a CSV: the line, the reason and the original cells, to fix and re-upload. */
+  /** The rejected rows as a CSV: the line, the reason, the column that failed and the original cells, to fix and re-upload. */
   async rejectsCsv(uuid: string): Promise<string> {
     const ctx = RequestContextStore.require();
     const row = await this.db.tx((tx) => this.jobs.findByUuid(tx, ctx.orgId, uuid));
@@ -518,9 +520,15 @@ export class ContactImportService {
     const columns: string[] = [];
     for (const r of row.rejects)
       for (const k of Object.keys(r.values ?? {})) if (!columns.includes(k)) columns.push(k);
-    let out = csvLine(['row', 'reason', ...columns]);
+    // The header names come from the uploaded file, so they are guarded like the cells under them.
+    let out = csvLine(['row', 'reason', 'column', ...columns.map(guardFormula)]);
     for (const r of row.rejects) {
-      out += csvLine([r.row, r.reason, ...columns.map((c) => guardFormula(r.values?.[c] ?? ''))]);
+      out += csvLine([
+        r.row,
+        r.reason,
+        guardFormula(r.column ?? ''),
+        ...columns.map((c) => guardFormula(r.values?.[c] ?? '')),
+      ]);
     }
     return out;
   }

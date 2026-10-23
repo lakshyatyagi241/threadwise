@@ -653,7 +653,8 @@
         "duplicate_in_file": "号码重复，已合并到前面的行",
         "invalid_timezone": "时区无效",
         "legal_hold": "受保护的记录，未更改",
-        "invalid_property_value": "自定义属性的值与其类型或选项不符"
+        "invalid_property_value": "自定义属性的值与其类型或选项不符",
+        "invalid_property_value_column": "列\"{column}\"：值与该列的类型或选项不匹配"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -666,6 +667,7 @@
       "limitExceeded": "超出套餐上限",
       "limitExceededNote": "由于已达套餐的联系人上限，部分新联系人未能导入。",
       "rejectsFailed": "无法下载被拒绝的行。",
+      "sampleFailed": "无法下载示例文件，请重试。",
       "groupRequired": "将这些联系人添加到",
       "groupExisting": "现有群组",
       "groupNew": "新群组",

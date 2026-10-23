@@ -653,7 +653,8 @@
         "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
         "invalid_timezone": "ongeldige tijdzone",
         "legal_hold": "beschermd record, niet gewijzigd",
-        "invalid_property_value": "de waarde van de aangepaste eigenschap past niet bij het type of de opties ervan"
+        "invalid_property_value": "de waarde van de aangepaste eigenschap past niet bij het type of de opties ervan",
+        "invalid_property_value_column": "kolom \"{column}\": de waarde past niet bij het type of de opties ervan"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Boven abonnementslimiet",
       "limitExceededNote": "Sommige nieuwe contacten zijn niet geïmporteerd omdat de contactlimiet van je abonnement is bereikt.",
       "rejectsFailed": "De afgewezen rijen konden niet worden gedownload.",
+      "sampleFailed": "Het voorbeeldbestand kon niet worden gedownload. Probeer het opnieuw.",
       "groupRequired": "Deze contacten toevoegen aan",
       "groupExisting": "Een bestaande groep",
       "groupNew": "Een nieuwe groep",

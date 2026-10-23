@@ -4,13 +4,7 @@ import { useEffect, useId, useMemo, useState, type DragEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ImportConsent } from '@/features/contact-consent';
 import { useTranslations } from 'next-intl';
-import {
-  IMPORT_FIELDS,
-  IMPORT_MAX_BYTES,
-  IMPORT_REJECT_REASONS,
-  type ImportField,
-  GROUP_NAME_MAX,
-} from '@crm/contracts';
+import { IMPORT_FIELDS, IMPORT_MAX_BYTES, type ImportField, GROUP_NAME_MAX } from '@crm/contracts';
 import {
   Alert,
   Button,
@@ -28,17 +22,18 @@ import { invalidateContacts, KEYS } from '../api/contacts';
 import { createGroup, useGroups } from '../api/groups';
 import {
   downloadRejects,
+  downloadSampleCsv,
   getImportJob,
   isImportFinished,
   previewImport,
-  sampleCsv,
   startImport,
   type ImportOptions,
 } from '../api/import-export';
 import { useTags } from '../api/tags';
 import type { ContactImportJob, ContactImportPreview } from '../api/schemas';
-import { downloadBlob, downloadCsv } from '../lib/download';
+import { downloadBlob } from '../lib/download';
 import { errorKind } from '../lib/errors';
+import { importRejectText } from '../lib/import-reason';
 import { statusChoices } from '../lib/option-sets';
 import { importSummaryParts } from '../lib/import-summary';
 import { ErrorLine } from './error-line';
@@ -223,6 +218,14 @@ function ImportBody({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finishedId]);
 
+  async function downloadSample() {
+    try {
+      downloadBlob('contacts-sample.csv', await downloadSampleCsv());
+    } catch {
+      toast(t('sampleFailed'), 'danger');
+    }
+  }
+
   function choose(next: File | undefined) {
     setFileError(false);
     if (!next) return;
@@ -314,7 +317,7 @@ function ImportBody({
         <div className="border-t border-border px-3 py-2">
           <button
             type="button"
-            onClick={() => downloadCsv('contacts-sample.csv', sampleCsv())}
+            onClick={() => void downloadSample()}
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
           >
             <DownloadIcon /> {t('sample')}
@@ -536,8 +539,6 @@ function PreviewPanel({
   const fields = more ? IMPORT_FIELDS : MAIN_FIELDS;
   const properties = preview.properties ?? [];
   const totals = preview.totals;
-  const reason = (r: string) =>
-    (IMPORT_REJECT_REASONS as readonly string[]).includes(r) ? t(`reasons.${r}`) : r;
   // The sample shows the first 12 columns, so a custom property's column near the end is not cut off.
   const headers = preview.headers.slice(0, 12);
 
@@ -696,7 +697,7 @@ function PreviewPanel({
           <div className="text-xs font-medium">{t('invalidSamples')}</div>
           <ul className="space-y-0.5 text-xs text-danger">
             {preview.invalidSamples.slice(0, 5).map((i) => (
-              <li key={i.row}>{t('rowReason', { row: i.row, reason: reason(i.reason) })}</li>
+              <li key={i.row}>{t('rowReason', { row: i.row, reason: importRejectText(i, t) })}</li>
             ))}
           </ul>
         </div>
