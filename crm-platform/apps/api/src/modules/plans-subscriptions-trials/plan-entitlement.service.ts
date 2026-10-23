@@ -5,6 +5,7 @@ import {
   PACK_GRANTABLE_FEATURES,
   PACK_GRANTABLE_LIMITS,
   PLAN_UNLIMITED_FROM,
+  featureRequires,
   isPlanFeatureKey,
   PLAN_UPGRADE_PATH,
   limitZeroIsNone,
@@ -69,6 +70,11 @@ export interface Entitlements {
    * offers follow its flags). Null when the workspace's plan has no catalogue row.
    */
   offerPlanSlug?: string | null;
+  /**
+   * Plan features the workspace itself switched off by turning an add-on off (`workspace_addon_activation`, docs/specs/addons-lifecycle-and-permissions.md):
+   * off for the workspace while the plan or a purchase still entitles it, unless another live add-on grants the same feature. Absent = none.
+   */
+  disabledFeatures?: readonly string[];
 }
 
 /**
@@ -101,7 +107,9 @@ interface EntitlementRow {
   /** The live app add-ons the workspace owns, each with the state of its installation (see app-grants.ts). */
   app_packs: Array<{ slug: string; features: unknown; install: AppPack['install'] }> | null;
   /** The live plain add-on packs (no Marketplace app): only the keys in PACK_GRANTABLE_* are read from them. */
-  generic_packs: Array<{ features: unknown; limits: unknown }> | null;
+  generic_packs: Array<{ id?: number; features: unknown; limits: unknown }> | null;
+  /** The add-ons the workspace itself switched off (`workspace_addon_activation`), with the plan features each grants. */
+  disabled_addons: Array<{ id: number; features: unknown; app_features: string[] | null }> | null;
 }
 
 /**
@@ -186,7 +194,7 @@ export class PlanEntitlementService {
                   JOIN marketplace_apps ma ON ma.id = ap.marketplace_app_id
                   LEFT JOIN workspace_app_installations wi ON wi.org_id = wa.org_id AND wi.app_id = ap.marketplace_app_id
                  WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())) AS app_packs,
-               (SELECT coalesce(jsonb_agg(jsonb_build_object('features', ap.features, 'limits', ap.limits)), '[]'::jsonb)
+               (SELECT coalesce(jsonb_agg(jsonb_build_object('id', ap.id, 'features', ap.features, 'limits', ap.limits)), '[]'::jsonb)
                   FROM workspace_addons wa
                   JOIN plans ap ON ap.id = wa.package_id AND ap.kind = 'addon' AND ap.marketplace_app_id IS NULL
                  WHERE wa.org_id = o.id AND wa.status = 'active'
@@ -196,7 +204,12 @@ export class PlanEntitlementService {
                         OR EXISTS (SELECT 1 FROM subscriptions sb
                                    WHERE sb.org_id = wa.org_id AND sb.workspace_addon_id = wa.id AND sb.kind = 'addon'
                                      AND sb.status IN ('active', 'past_due')
-                                     AND wa.ends_at > now() - make_interval(days => ${packGrace})))) AS generic_packs
+                                     AND wa.ends_at > now() - make_interval(days => ${packGrace})))) AS generic_packs,
+               (SELECT coalesce(jsonb_agg(jsonb_build_object('id', ap.id, 'features', ap.features, 'app_features', to_jsonb(ma.grants_plan_features))), '[]'::jsonb)
+                  FROM workspace_addon_activation wac
+                  JOIN plans ap ON ap.id = wac.addon_id AND ap.kind = 'addon'
+                  LEFT JOIN marketplace_apps ma ON ma.id = ap.marketplace_app_id
+                 WHERE wac.org_id = o.id AND wac.state = 'disabled') AS disabled_addons
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -266,6 +279,29 @@ export class PlanEntitlementService {
         ...Object.fromEntries(packed.features.map((k) => [k, true])),
       };
     }
+    // What the workspace switched off: the features of every add-on it disabled, less any a still-live add-on of its own also grants.
+    const trueKeys = (f: unknown): string[] =>
+      f && typeof f === 'object'
+        ? Object.entries(f as Record<string, unknown>)
+            .filter(([, v]) => v === true)
+            .map(([k]) => k)
+        : [];
+    const disabledRows = opts.ignorePacks ? [] : (row.disabled_addons ?? []);
+    const disabledIds = new Set(disabledRows.map((d) => Number(d.id)));
+    const liveElsewhere = new Set<string>([
+      ...Object.keys(granted),
+      ...(row.generic_packs ?? [])
+        .filter((p) => !disabledIds.has(Number(p.id)))
+        .flatMap((p) => trueKeys(p.features)),
+    ]);
+    const disabledFeatures = [
+      ...new Set(
+        disabledRows.flatMap((d) => [
+          ...trueKeys(d.features),
+          ...(d.app_features ?? []).filter((k) => !k.startsWith('mkt_')),
+        ]),
+      ),
+    ].filter((k) => !liveElsewhere.has(k));
     return {
       orgId,
       planSlug: row.plan_slug,
@@ -288,6 +324,7 @@ export class PlanEntitlementService {
       appWithheld: withheld,
       ...(Object.keys(packed.limits).length > 0 ? { packLimits: packed.limits } : {}),
       offerPlanSlug,
+      ...(disabledFeatures.length > 0 ? { disabledFeatures } : {}),
     };
   }
 
@@ -464,9 +501,16 @@ export function featureLocked(
 export function resolveFeature(e: Entitlements, key: PlanFeatureKey): boolean {
   if (e.platformOwned) return true;
   const override = e.overrides.features?.[key];
-  if (typeof override === 'boolean') return override;
-  if (!e.planKnown) return true;
-  return storedFeature(e.planFeatures, key);
+  if (override === false) return false;
+  // The workspace turned the add-on that grants it off: off, even when the plan still carries it (or nothing is locked for a plan with no row).
+  // An operator's override ON still beats that.
+  if (override !== true) {
+    if (e.disabledFeatures?.includes(key)) return false;
+    if (!(!e.planKnown ? true : storedFeature(e.planFeatures, key))) return false;
+  }
+  // A feature that needs another one is on only while that one is on (declared once, on the feature: `requires` in the registry): an override ON
+  // does not lift it, so a dependent never works on its own.
+  return featureRequires(key).every((r) => resolveFeature(e, r as PlanFeatureKey));
 }
 
 export function resolveLimit(e: Entitlements, key: PlanLimitKey): number {

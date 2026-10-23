@@ -13,6 +13,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   PlanEntitlementService,
+  activationOf,
   offerOf,
   offersOfPlanSlug,
   planKind,
@@ -130,6 +131,8 @@ export class WorkspaceAddonsService {
     const offerPlanSlug = planOnly?.offerPlanSlug ?? null;
     return run(async (tx) => {
       const offers = offerPlanSlug ? await offersOfPlanSlug(tx, offerPlanSlug) : new Map();
+      // The workspace's own switches (an included add-on it turned off).
+      const activation = await activationOf(tx, orgId);
       const stateRes = await tx.execute(sql`
         SELECT (p.id IS NOT NULL) AS plan_found, p.is_free, p.is_custom_quote, p.amount::text AS amount,
                s.plan_ends_at
@@ -230,6 +233,9 @@ export class WorkspaceAddonsService {
               : 'plan'
             : null,
           kind: r.addon_kind ?? derivedAddonKind(grants),
+          // Only an included add-on can be turned off by the workspace; everything else is bought, hidden or unavailable.
+          activation: activation.get(r.id) === 'disabled' ? 'disabled' : 'active',
+          canToggle: state === 'included',
         });
       }
       const owned: OwnedAddon[] = ownedRows.map((r) => ({

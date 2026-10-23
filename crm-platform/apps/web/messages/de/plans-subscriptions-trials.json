@@ -584,7 +584,13 @@
       "askOwner": "Bitte den Kontoinhaber, es hinzuzufügen.",
       "unavailableTitle": "{addon} braucht einen aktiven bezahlten Tarif",
       "unavailableLead": "Wähle zuerst einen bezahlten Tarif, dann kannst du {addon} hinzufügen.",
-      "viewPlans": "Tarife ansehen"
+      "viewPlans": "Tarife ansehen",
+      "disabledTitle": "{addon} ist ausgeschaltet",
+      "disabledLead": "Dein Tarif enthält {addon}, aber es ist für diesen Arbeitsbereich ausgeschaltet. Die Einstellungen bleiben erhalten.",
+      "disabledAsk": "Bitte den Kontoinhaber, es einzuschalten.",
+      "turnOn": "Einschalten",
+      "turnOnForbidden": "Du hast keine Berechtigung, dies einzuschalten. Bitte den Kontoinhaber.",
+      "turnOnFailed": "{addon} konnte nicht eingeschaltet werden. Bitte versuche es erneut."
     }
   }
 }

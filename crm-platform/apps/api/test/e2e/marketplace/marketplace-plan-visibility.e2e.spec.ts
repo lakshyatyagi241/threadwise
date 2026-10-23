@@ -532,3 +532,61 @@ describe('the operator sets a mini app to Included, Paid or Hidden on a plan (do
     expect(priced.status).toBe(422);
   });
 });
+
+describe("an app's disable and uninstall record the workspace's own switch on its add-on (docs/specs/addons-lifecycle-and-permissions.md)", () => {
+  it('disable and uninstall write an opt-out row, enable and install lift it; a pause the subscription causes is not an opt-out', async () => {
+    await publishListing(h, tokens(), {
+      manifest: miniManifest({ id: 'vis-delta', name: 'Vis Delta', scopes: ['contacts.read'] }),
+    });
+    await price('vis-delta');
+    const delta = await packUuid('vis-delta');
+    const made = await plans().post('', {
+      name: 'Switches',
+      slug: 'vis_switch',
+      amount: '49',
+      features: { marketplace: true },
+      addonOffers: [{ addonId: delta, mode: 'included' }],
+    });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    const T = await api.signup('visT');
+    await h.owner.query(`UPDATE organizations SET plan = 'vis_switch' WHERE id = $1`, [T.orgId]);
+    const state = async () =>
+      (
+        await one<{ state: string } | undefined>(
+          `SELECT a.state FROM workspace_addon_activation a
+           JOIN plans p ON p.id = a.addon_id JOIN marketplace_apps m ON m.id = p.marketplace_app_id
+           WHERE a.org_id = $1 AND m.slug = 'vis-delta'`,
+          [T.orgId],
+        )
+      )?.state ?? null;
+
+    const inst = await install(T, 'vis-delta');
+    expect(inst.status, JSON.stringify(inst.body)).toBeLessThan(300);
+    expect(await state()).toBeNull(); // an ordinary install leaves no row
+    const row = await one<{ uuid: string; row_version: number }>(
+      `SELECT uuid, row_version FROM workspace_app_installations WHERE org_id = $1`,
+      [T.orgId],
+    );
+    const dis = await mp(T).post(`/installations/${row.uuid}/disable`, {
+      rowVersion: row.row_version,
+    });
+    expect(dis.status, JSON.stringify(dis.body)).toBe(200);
+    expect(await state()).toBe('disabled');
+    const row2 = await one<{ row_version: number }>(
+      `SELECT row_version FROM workspace_app_installations WHERE org_id = $1`,
+      [T.orgId],
+    );
+    const en = await mp(T).post(`/installations/${row.uuid}/enable`, {
+      rowVersion: row2.row_version,
+    });
+    expect(en.status, JSON.stringify(en.body)).toBe(200);
+    expect(await state()).toBe('active');
+
+    const gone = await mp(T).post(`/installations/${row.uuid}/uninstall`, { dataChoice: 'keep' });
+    expect(gone.status, JSON.stringify(gone.body)).toBe(204);
+    expect(await state()).toBe('disabled');
+    const again = await install(T, 'vis-delta');
+    expect(again.status, JSON.stringify(again.body)).toBeLessThan(300);
+    expect(await state()).toBe('active');
+  });
+});

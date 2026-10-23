@@ -111,6 +111,13 @@ export class BillingService {
                                            AND wa.ends_at > now() - make_interval(days => ${grace})))) AS owned
         FROM plans WHERE kind = 'addon' AND marketplace_app_id IS NULL
         ORDER BY sort_order, amount, slug`);
+      // The add-ons the workspace itself switched off (a plan that includes one still shows it, as "turned off", with a way back on).
+      const off = await tx.execute(
+        sql`SELECT addon_id::int AS addon_id FROM workspace_addon_activation WHERE org_id = ${e.orgId} AND state = 'disabled'`,
+      );
+      const disabled = new Set(
+        (off.rows as Array<{ addon_id: number }>).map((r) => Number(r.addon_id)),
+      );
       const offers = e.offerPlanSlug ? await offersOfPlanSlug(tx, e.offerPlanSlug) : new Map();
       // The same "may buy add-ons" rule as the add-on list: a paid plan that is running (a trial of it counts).
       const paidActive = ['paid_active', 'paid_grace', 'free_trial'].includes(e.state);
@@ -125,11 +132,13 @@ export class BillingService {
               : 'included'
             : r.owned
               ? 'owned'
-              : offer.mode === 'hidden' || !r.is_active
-                ? 'hidden'
-                : offer.mode === 'included' || !paidActive
-                  ? 'unavailable'
-                  : 'buy';
+              : disabled.has(Number(r.id)) && offer.mode === 'included'
+                ? 'disabled'
+                : offer.mode === 'hidden' || !r.is_active
+                  ? 'hidden'
+                  : offer.mode === 'included' || !paidActive
+                    ? 'unavailable'
+                    : 'buy';
           out.push({
             feature,
             addonSlug: r.slug as string,
