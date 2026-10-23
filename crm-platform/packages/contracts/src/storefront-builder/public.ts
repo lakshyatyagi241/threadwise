@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { MAX_PAGE_NUMBER } from '../common/pagination';
 
 /**
  * The public shop (TW-STORE-009..021). Nothing here needs a sign-in: the buyer is anonymous, the shop is named by its slug (or
@@ -85,7 +86,7 @@ export const publicShopSchema = z.object({
 export type PublicShop = z.infer<typeof publicShopSchema>;
 
 export const publicHomeQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
+  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).default(1),
   /** `1` on a "Show more" fetch: the call is not a page view, so the daily view counter is left alone (TW-STORE-020). */
   partial: z.enum(['1']).optional(),
 });

@@ -1,0 +1,87 @@
+{
+  "rows": 300000,
+  "reps": 7,
+  "measuredAt": "2026-10-22T10:57:15.448Z",
+  "cases": [
+    {
+      "filter": "none",
+      "offset": 0,
+      "beforeMs": 0.4,
+      "afterMs": 0.9,
+      "sameRows": true,
+      "speedup": 0.4
+    },
+    {
+      "filter": "none",
+      "offset": 1000,
+      "beforeMs": 4.8,
+      "afterMs": 1.3,
+      "sameRows": true,
+      "speedup": 3.7
+    },
+    {
+      "filter": "none",
+      "offset": 50000,
+      "beforeMs": 288,
+      "afterMs": 18,
+      "sameRows": true,
+      "speedup": 16
+    },
+    {
+      "filter": "none",
+      "offset": 150000,
+      "beforeMs": 1557.4,
+      "afterMs": 60,
+      "sameRows": true,
+      "speedup": 26
+    },
+    {
+      "filter": "none",
+      "offset": 299900,
+      "beforeMs": 1583.1,
+      "afterMs": 126.6,
+      "sameRows": true,
+      "speedup": 12.5
+    },
+    {
+      "filter": "delivered",
+      "offset": 0,
+      "beforeMs": 0.7,
+      "afterMs": 0.7,
+      "sameRows": true,
+      "speedup": 1
+    },
+    {
+      "filter": "delivered",
+      "offset": 1000,
+      "beforeMs": 4.9,
+      "afterMs": 3.3,
+      "sameRows": true,
+      "speedup": 1.5
+    },
+    {
+      "filter": "delivered",
+      "offset": 50000,
+      "beforeMs": 342.7,
+      "afterMs": 51.1,
+      "sameRows": true,
+      "speedup": 6.7
+    },
+    {
+      "filter": "delivered",
+      "offset": 150000,
+      "beforeMs": 1440.5,
+      "afterMs": 68,
+      "sameRows": true,
+      "speedup": 21.2
+    },
+    {
+      "filter": "delivered",
+      "offset": 299900,
+      "beforeMs": 1605.1,
+      "afterMs": 65.4,
+      "sameRows": true,
+      "speedup": 24.5
+    }
+  ]
+}
