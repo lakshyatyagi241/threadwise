@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
-import { Fragment, useState, type ReactNode } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { MenuItem, MenuSeparator, cn } from '@crm/ui';
 import { CompanyLink } from '@/features/companies';
@@ -158,10 +164,37 @@ const WIDTH: Record<string, number> = {
   source: 170,
   nextFollowUp: 190,
 };
-const widthOf = (id: ColumnId) => WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
+/** What a column is by default, or the width its owner dragged it to. */
+const widthOf = (id: ColumnId, custom: Readonly<Record<string, number>> = {}) =>
+  custom[id] ?? WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
 
-export function tableMinWidth(columns: readonly ColumnDef[], selectable = true): number {
-  return (selectable ? SELECT_W : 0) + columns.reduce((sum, c) => sum + widthOf(c.id), 0);
+export function tableMinWidth(
+  columns: readonly ColumnDef[],
+  selectable = true,
+  custom: Readonly<Record<string, number>> = {},
+): number {
+  return (selectable ? SELECT_W : 0) + columns.reduce((sum, c) => sum + widthOf(c.id, custom), 0);
+}
+
+// Column widths the person dragged to, kept in this browser (the choice of columns is kept the same way).
+const WIDTHS_KEY = 'cat:contacts:column-widths';
+export const MIN_COLUMN_WIDTH = 80;
+export const MAX_COLUMN_WIDTH = 640;
+const clampWidth = (w: number) =>
+  Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, Math.round(w)));
+
+export function readColumnWidths(raw: string | null): Record<string, number> {
+  if (!raw) return {};
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return {};
+    const out: Record<string, number> = {};
+    for (const [k, v] of Object.entries(parsed))
+      if (typeof v === 'number' && Number.isFinite(v)) out[k] = clampWidth(v);
+    return out;
+  } catch {
+    return {};
+  }
 }
 
 /** Leading icon of a column header, by the kind of data the column holds. */
@@ -968,6 +1001,54 @@ export function ContactsTable({
   const t = useTranslations('contacts-attributes-tags.list');
   const [dragging, setDragging] = useState<ColumnId | null>(null);
   const [over, setOver] = useState<ColumnId | null>(null);
+  const [widths, setWidths] = useState<Record<string, number>>({});
+  const [resizing, setResizing] = useState<ColumnId | null>(null);
+  useEffect(() => {
+    try {
+      setWidths(readColumnWidths(window.localStorage.getItem(WIDTHS_KEY)));
+    } catch {
+      /* private mode: the widths just are not kept */
+    }
+  }, []);
+  const keepWidths = (next: Record<string, number>) => {
+    try {
+      window.localStorage.setItem(WIDTHS_KEY, JSON.stringify(next));
+    } catch {
+      /* private mode */
+    }
+  };
+  const startResize = (e: ReactPointerEvent<HTMLElement>, id: ColumnId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const head = e.currentTarget.closest('th');
+    if (!head) return;
+    const startX = e.clientX;
+    const startW = head.getBoundingClientRect().width;
+    const rtl = getComputedStyle(head).direction === 'rtl';
+    let latest = widths;
+    setResizing(id);
+    const move = (ev: PointerEvent) => {
+      const dx = (ev.clientX - startX) * (rtl ? -1 : 1);
+      latest = { ...latest, [id]: clampWidth(startW + dx) };
+      setWidths(latest);
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      setResizing(null);
+      keepWidths(latest);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+  };
+  const resetWidth = (id: ColumnId) => {
+    const { [id]: _gone, ...rest } = widths;
+    setWidths(rest);
+    keepWidths(rest);
+  };
+  const resized = Object.keys(widths).length > 0;
   const locale = useLocale();
   const timeZone = useTimeZone();
   // The shadow along the frozen edge shows only once something has scrolled underneath it.
@@ -983,16 +1064,25 @@ export function ContactsTable({
       className="thin-scrollbar relative h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
       <table
-        className="w-full table-fixed border-separate border-spacing-0 text-sm"
-        style={{ minWidth: tableMinWidth(columns, selectable) + (columnTools ? ADD_W : 0) }}
+        className={cn(
+          'table-fixed border-separate border-spacing-0 text-sm',
+          // Once a column has been dragged the table is exactly as wide as its columns, so making one narrower really does.
+          !resized && 'w-full',
+        )}
+        style={{
+          minWidth: tableMinWidth(columns, selectable, widths) + (columnTools ? ADD_W : 0),
+          ...(resized
+            ? { width: tableMinWidth(columns, selectable, widths) + (columnTools ? ADD_W : 0) }
+            : {}),
+        }}
       >
         <colgroup>
           {selectable && <col style={{ width: SELECT_W }} />}
           {columns.map((c) => (
             <col
               key={c.id}
-              className={c.id === 'name' ? 'w-[200px] sm:w-[270px]' : undefined}
-              style={c.id === 'name' ? undefined : { width: widthOf(c.id) }}
+              className={c.id === 'name' && !widths.name ? 'w-[200px] sm:w-[270px]' : undefined}
+              style={c.id === 'name' && !widths.name ? undefined : { width: widthOf(c.id, widths) }}
             />
           ))}
           {columnTools && <col style={{ width: ADD_W }} />}
@@ -1027,7 +1117,7 @@ export function ContactsTable({
                   aria-sort={
                     active ? (sort!.order === 'asc' ? 'ascending' : 'descending') : undefined
                   }
-                  draggable={movable}
+                  draggable={movable && resizing === null}
                   onDragStart={
                     movable
                       ? (e) => {
@@ -1108,6 +1198,21 @@ export function ContactsTable({
                       />
                     )}
                   </div>
+                  <span
+                    role="separator"
+                    aria-orientation="vertical"
+                    aria-label={t('resizeColumn', { column: label })}
+                    title={t('resizeColumn', { column: label })}
+                    data-resize-handle={c.id}
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
+                    onPointerDown={(e) => startResize(e, c.id)}
+                    onDoubleClick={() => resetWidth(c.id)}
+                    className={cn(
+                      'absolute inset-y-0 end-0 z-10 w-2 cursor-col-resize touch-none select-none after:absolute after:inset-y-2 after:end-0 after:w-px after:bg-border hover:after:w-0.5 hover:after:bg-brand',
+                      resizing === c.id && 'after:w-0.5 after:bg-brand',
+                    )}
+                  />
                 </th>
               );
             })}

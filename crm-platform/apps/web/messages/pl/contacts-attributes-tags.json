@@ -296,7 +296,8 @@
       "teamFilter": "Filtruj według zespołu",
       "allTeams": "Wszystkie zespoły",
       "teamFormer": "Dawny zespół",
-      "unhideColumn": "Pokaż kolumnę"
+      "unhideColumn": "Pokaż kolumnę",
+      "resizeColumn": "Przeciągnij, aby zmienić szerokość kolumny {column}; dwukrotne kliknięcie przywraca"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",

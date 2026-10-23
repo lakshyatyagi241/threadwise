@@ -296,7 +296,8 @@
       "teamFilter": "Nach Team filtern",
       "allTeams": "Alle Teams",
       "teamFormer": "Früheres Team",
-      "unhideColumn": "Spalte einblenden"
+      "unhideColumn": "Spalte einblenden",
+      "resizeColumn": "Ziehen, um {column} anzupassen; Doppelklick setzt zurück"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",

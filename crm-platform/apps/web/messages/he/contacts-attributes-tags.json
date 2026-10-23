@@ -296,7 +296,8 @@
       "teamFilter": "סינון לפי צוות",
       "allTeams": "כל הצוותים",
       "teamFormer": "צוות קודם",
-      "unhideColumn": "הצגת עמודה"
+      "unhideColumn": "הצגת עמודה",
+      "resizeColumn": "גרור כדי לשנות את רוחב {column}; לחיצה כפולה לאיפוס"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",

@@ -296,7 +296,8 @@
       "teamFilter": "Ekibe göre filtrele",
       "allTeams": "Tüm ekipler",
       "teamFormer": "Eski ekip",
-      "unhideColumn": "Sütunu göster"
+      "unhideColumn": "Sütunu göster",
+      "resizeColumn": "{column} sütununu yeniden boyutlandırmak için sürükleyin; sıfırlamak için çift tıklayın"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",

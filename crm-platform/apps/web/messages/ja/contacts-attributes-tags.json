@@ -296,7 +296,8 @@
       "teamFilter": "チームで絞り込む",
       "allTeams": "すべてのチーム",
       "teamFormer": "以前のチーム",
-      "unhideColumn": "列を再表示"
+      "unhideColumn": "列を再表示",
+      "resizeColumn": "ドラッグして「{column}」の幅を変更、ダブルクリックでリセット"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
