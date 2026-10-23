@@ -170,6 +170,13 @@ export function narrowsCounts(f: ListFilters): boolean {
 const norm = (s: string | null | undefined) => (s ?? '').toLocaleLowerCase();
 
 /**
+ * The statuses one choice of the status box or the Filters window shows. Resolved stands for resolved and closed: one thing to an agent,
+ * and the server's list (`statusCondition`) lists both under it, so a socket row must match the same way.
+ */
+const statusesOf = (s: ConversationStatus): ConversationStatus[] =>
+  s === 'resolved' ? ['resolved', 'closed'] : [s];
+
+/**
  * Whether a row belongs in the list for these filters, for deciding what to do with a row a socket event changed.
  * Search is approximate (the server also looks inside the preview); a row that was loaded for a search is kept unless it
  * clearly stopped matching.
@@ -181,11 +188,11 @@ export function matchesFilters(
 ): boolean {
   if (row.archived !== f.archived) return false;
   if (f.statuses.length > 0) {
-    const ok = f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s]));
+    const ok = f.statuses.flatMap(statusesOf);
     if (!ok.includes(row.status)) return false;
   } else if (f.status === 'open') {
     if (row.status !== 'open') return false;
-  } else if (f.status !== 'all' && row.status !== f.status) return false;
+  } else if (f.status !== 'all' && !statusesOf(f.status).includes(row.status)) return false;
   if (f.channelId && row.channel.id !== f.channelId) return false;
   if (f.channelIds.length > 0 && !f.channelIds.includes(row.channel.id)) return false;
   // A row does not carry its contact's tags, so under the contact scope the server's answer stands (see the `upsert` case).

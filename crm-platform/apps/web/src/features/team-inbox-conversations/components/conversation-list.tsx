@@ -73,6 +73,9 @@ export interface ConversationListProps {
  * The left pane: title and refresh, search, the All / Mine / Unassigned / Unread tabs with counts, the status and channel
  * filters, and the conversations with "load more" by cursor. The empty states tell a workspace with no channel what to do first.
  */
+/** The channel box's value while the Filters window chose channels: not a channel and not "All channels" (value ""), so it can be shown. */
+const CHANNELS_CHOSEN = '__channels_chosen';
+
 export function ConversationList(props: ConversationListProps) {
   const t = useTranslations('team-inbox-conversations.list');
   const errorText = useErrorText();
@@ -200,12 +203,18 @@ export function ConversationList(props: ConversationListProps) {
           {showChannel && (
             <Select
               aria-label={t('channelFilter')}
-              value={filters.channelIds.length > 0 ? '' : (filters.channelId ?? '')}
+              value={filters.channelIds.length > 0 ? CHANNELS_CHOSEN : (filters.channelId ?? '')}
               onChange={(e) =>
                 props.onFilters({ channelId: e.target.value || null, channelIds: [] })
               }
               className="h-8 text-xs"
             >
+              {/* The Filters window narrowed the list to some channels: the box says so, rather than "All channels". */}
+              {filters.channelIds.length > 0 && (
+                <option value={CHANNELS_CHOSEN} disabled>
+                  {t('filters.channels')}
+                </option>
+              )}
               <option value="">{t('allChannels')}</option>
               <ChannelKindOptions channels={channels!} />
               <EmailChannelOptions channels={channels!} />
