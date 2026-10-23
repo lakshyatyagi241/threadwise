@@ -99,7 +99,8 @@
         "fullStatement": "সম্পূর্ণ স্টেটমেন্ট খুলুন",
         "emptyTitle": "এখনও কোনো কার্যকলাপ নেই",
         "emptyBody": "টপ-আপ, মেসেজ চার্জ ও রিফান্ড এখানে দেখা যাবে।"
-      }
+      },
+      "messageExpenses": "মেসেজের খরচ"
     },
     "activity": {
       "description": "বিবরণ",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "মেসেজের খরচ",
+      "subtitle": "প্রতিটি মেসেজের খরচ, কোন টেমপ্লেটে পাঠানো হয়েছিল এবং কী ফেরত এসেছে তা দেখুন। মোট হিসাবে ফিল্টারের সঙ্গে মেলে এমন সবকিছু অন্তর্ভুক্ত।",
+      "back": "ওয়ালেটে ফিরে যান",
+      "breadcrumbLabel": "নেভিগেশন পথ",
+      "breadcrumbWallet": "ওয়ালেট",
+      "breadcrumbExpenses": "মেসেজের খরচ",
+      "fullStatement": "সম্পূর্ণ স্টেটমেন্ট",
+      "summary": {
+        "messages": "মেসেজ",
+        "charged": "চার্জ করা হয়েছে",
+        "refunded": "ফেরত দেওয়া হয়েছে",
+        "net": "নিট খরচ",
+        "notBilled": "বিল করা হয়নি"
+      },
+      "filters": {
+        "status": "অবস্থা",
+        "statusAll": "সব",
+        "statusCharged": "চার্জ করা হয়েছে",
+        "statusFree": "বিল করা হয়নি",
+        "statusRefunded": "ফেরত দেওয়া হয়েছে",
+        "template": "টেমপ্লেট",
+        "templatePlaceholder": "টেমপ্লেটের নাম",
+        "channel": "চ্যানেল",
+        "category": "বিভাগ",
+        "allChannels": "সব চ্যানেল",
+        "allCategories": "সব বিভাগ",
+        "from": "থেকে",
+        "to": "পর্যন্ত",
+        "apply": "প্রয়োগ করুন",
+        "reset": "রিসেট করুন",
+        "rangeInverted": "শেষের তারিখ শুরুর তারিখের আগে।"
+      },
+      "breakdown": {
+        "title": "খরচ অনুযায়ী",
+        "groupBy": {
+          "template": "টেমপ্লেট",
+          "source": "চ্যানেল",
+          "category": "বিভাগ",
+          "country": "দেশ"
+        },
+        "group": "গ্রুপ",
+        "notRecorded": "রেকর্ড করা হয়নি",
+        "truncated": "সবচেয়ে বড় {count}টি গ্রুপ দেখানো হচ্ছে। বাকিগুলো দেখতে তারিখ সংকুচিত করুন।",
+        "empty": "এই ফিল্টারের সঙ্গে কোনো মেসেজ মেলেনি।"
+      },
+      "columns": {
+        "date": "তারিখ",
+        "template": "টেমপ্লেট",
+        "campaign": "ক্যাম্পেইন বা ব্রডকাস্ট",
+        "channel": "চ্যানেল",
+        "category": "বিভাগ",
+        "country": "দেশ",
+        "status": "অবস্থা",
+        "charged": "চার্জ করা হয়েছে",
+        "refunded": "ফেরত দেওয়া হয়েছে",
+        "net": "নিট",
+        "messages": "মেসেজ",
+        "notBilled": "বিল করা হয়নি"
+      },
+      "status": {
+        "charged": "চার্জ করা হয়েছে",
+        "free": "বিল করা হয়নি",
+        "refunded": "ফেরত দেওয়া হয়েছে",
+        "refundedOn": "{date} তারিখে ফেরত দেওয়া হয়েছে"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "আপনার প্ল্যানে অন্তর্ভুক্ত",
+        "wallet_empty": "ওয়ালেট খালি ছিল",
+        "rate_is_zero": "রেট শূন্য",
+        "no_wallet_owner": "ওয়ালেটের কোনো মালিক নেই"
+      },
+      "uncollected": "{amount} সংগ্রহ করা হয়নি",
+      "emptyTitle": "এখনও কোনো মেসেজ নেই",
+      "emptyBody": "ক্যাম্পেইন, ব্রডকাস্ট, সময়সূচি ও চ্যাট থেকে পাঠানো মেসেজ টেমপ্লেট ও খরচসহ এখানে দেখা যাবে।",
+      "emptyFiltered": "এই ফিল্টারের সঙ্গে কিছুই মেলেনি। এগুলো পরিবর্তন করুন বা রিসেট করুন।",
+      "days": {
+        "title": "দৈনিক লগ",
+        "subtitle": "দিন, অবস্থা, চ্যানেল ও ক্যাটাগরি অনুযায়ী গোষ্ঠীভুক্ত বার্তা। প্রতিটি বার্তা দেখতে একটি দিন খুলুন।",
+        "messagesOnDay": "{count}টি বার্তা",
+        "viewDetails": "বিস্তারিত দেখুন",
+        "actions": "কার্যাবলি",
+        "empty": "এই দিনগুলোতে কোনো বার্তা নেই।"
+      },
+      "log": {
+        "title": "বার্তা",
+        "forDay": "{date}-এর বার্তা",
+        "showAllDays": "সব দিন দেখান"
       }
     },
     "admin": {

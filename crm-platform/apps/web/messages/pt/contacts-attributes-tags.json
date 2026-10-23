@@ -283,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Estágio",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Criado",
-      "shortModified": "Modificado",
       "firstRun": {
         "title": "Adicione seus primeiros contatos",
         "message": "Traga as pessoas com quem você conversa. Os contatos são usados em mensagens, campanhas, tarefas e negócios.",
@@ -1338,7 +1336,7 @@
         "closePicker": "Fechar",
         "changed": "Propriedades a alterar",
         "clear": "Limpar",
-        "keep": "Manter",
+        "remove": "Remover {name}",
         "setValue": "Definir um valor",
         "willClear": "Será esvaziada em {count, plural, one {o contato selecionado} other {todos os # contatos selecionados}}.",
         "requiredNoClear": "Uma propriedade obrigatória não pode ser limpa.",

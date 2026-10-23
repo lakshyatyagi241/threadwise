@@ -894,12 +894,13 @@ const SCRIPT = `
       var el = document.createElement('div');
       el.className = 'card';
       el.setAttribute('role', 'listitem');
-      if (c.image && /^https?:\\/\\//i.test(c.image)) {
+      var cardImg = imgUrl(c.image);
+      if (cardImg) {
         var img = document.createElement('img');
         img.alt = c.title || '';
         img.loading = 'lazy';
         img.referrerPolicy = 'no-referrer';
-        img.src = c.image;
+        img.src = cardImg;
         el.appendChild(img);
       }
       var cb = document.createElement('div');

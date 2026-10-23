@@ -1947,6 +1947,7 @@
       "webBot": {
         "aria": "Các phần của luồng",
         "build": "Xây dựng",
+        "faqs": "Câu hỏi thường gặp",
         "customize": "Tùy chỉnh",
         "saveFirst": "Hãy lưu luồng trước.",
         "needsCustomizing": "Widget vẫn dùng giao diện mặc định. Hãy mở Tùy chỉnh.",
@@ -1954,6 +1955,13 @@
         "deploy": "Triển khai",
         "customizeFirstWhatsapp": "Hãy tùy chỉnh nút WhatsApp và lưu một lần trước khi xuất bản.",
         "install": "Cài đặt"
+      },
+      "faqsPanel": {
+        "intro": "Câu hỏi thường gặp là các mục trong kiến thức của tác nhân AI. Đây là của tác nhân mà luồng này dùng để trả lời: thêm câu hỏi và câu trả lời ở đây để tác nhân sử dụng.",
+        "noAgent": "Luồng này chưa dùng tác nhân AI. Thêm bước Trợ lý AI hoặc Trả lời từ FAQ và chọn một tác nhân: FAQ của nó sẽ hiện ở đây.",
+        "agent": "Tác nhân AI",
+        "openAgent": "Mở trong Huấn luyện AI",
+        "unknownAgent": "Tác nhân AI (không tìm thấy)"
       },
       "buttonIcon": {
         "label": "Biểu tượng (tùy chọn)",

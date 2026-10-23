@@ -1059,7 +1059,10 @@
       "tagRemove": "移除标签",
       "onLeave": "休假中",
       "onLeaveUntil": "休假至 {date}",
-      "spam": "标记为垃圾信息"
+      "spam": "标记为垃圾信息",
+      "markUnread": "标为未读",
+      "unsnooze": "取消暂时搁置",
+      "notSpam": "标记为非垃圾信息"
     },
     "tags": {
       "tag": "标签",

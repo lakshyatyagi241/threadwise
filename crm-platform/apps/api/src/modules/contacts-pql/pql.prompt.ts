@@ -1,10 +1,11 @@
 import {
+  PQL_IGNORED_ITEM_MAX,
+  PQL_IGNORED_MAX,
   PQL_QUERY_MAX,
+  PQL_SUMMARY_MAX,
   SEGMENT_BUILTIN_FIELDS,
   SEGMENT_OPERATORS_BY_KIND,
   SEGMENT_VALUE_SHAPE,
-  pqlResultSchema,
-  type PqlResult,
   type SegmentFieldKind,
 } from '@crm/contracts';
 
@@ -83,8 +84,21 @@ export function pqlPrompt(
   return { system, user: query.slice(0, PQL_QUERY_MAX) };
 }
 
-/** The model's text as a PqlResult, or null when it is not one. Tolerates a fenced block. */
-export function parsePql(text: string): PqlResult | null {
+/**
+ * The model's answer before its rules are checked. The rules stay unknown here: pruneRules checks them one condition at a time, so one
+ * bad condition costs only itself, not the whole search.
+ */
+export interface PqlAnswer {
+  rules: unknown;
+  summary: string;
+  ignored: string[];
+}
+
+/**
+ * The model's text as an answer, or null when it is not a JSON object. Tolerates a fenced block. The summary and the ignored list are
+ * cut to the contract's limits, so a long sentence from the model cannot make the whole answer unusable.
+ */
+export function parsePql(text: string): PqlAnswer | null {
   const cleaned = text
     .trim()
     .replace(/^```(?:json)?\s*/i, '')
@@ -95,6 +109,16 @@ export function parsePql(text: string): PqlResult | null {
   } catch {
     return null;
   }
-  const parsed = pqlResultSchema.safeParse(raw);
-  return parsed.success ? parsed.data : null;
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return null;
+  const { rules, summary, ignored } = raw as Record<string, unknown>;
+  return {
+    rules: rules ?? null,
+    summary: typeof summary === 'string' ? summary.slice(0, PQL_SUMMARY_MAX) : '',
+    ignored: Array.isArray(ignored)
+      ? ignored
+          .filter((s): s is string => typeof s === 'string' && s.trim() !== '')
+          .map((s) => s.slice(0, PQL_IGNORED_ITEM_MAX))
+          .slice(0, PQL_IGNORED_MAX)
+      : [],
+  };
 }

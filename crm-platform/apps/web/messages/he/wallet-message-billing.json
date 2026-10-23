@@ -72,6 +72,96 @@
       },
       "title": "דף חשבון ארנק"
     },
+    "expenses": {
+      "title": "הוצאות הודעות",
+      "subtitle": "כמה עלתה כל הודעה, התבנית שבה נשלחה והסכום שהוחזר. הסיכומים כוללים כל מה שתואם את המסננים.",
+      "back": "חזרה לארנק",
+      "breadcrumbLabel": "נתיב ניווט",
+      "breadcrumbWallet": "ארנק",
+      "breadcrumbExpenses": "הוצאות הודעות",
+      "fullStatement": "דף חשבון מלא",
+      "summary": {
+        "messages": "הודעות",
+        "charged": "חויב",
+        "refunded": "הוחזר",
+        "net": "עלות נטו",
+        "notBilled": "לא חויב"
+      },
+      "filters": {
+        "status": "סטטוס",
+        "statusAll": "הכול",
+        "statusCharged": "חויב",
+        "statusFree": "לא חויב",
+        "statusRefunded": "הוחזר",
+        "template": "תבנית",
+        "templatePlaceholder": "שם התבנית",
+        "channel": "ערוץ",
+        "category": "קטגוריה",
+        "allChannels": "כל הערוצים",
+        "allCategories": "כל הקטגוריות",
+        "from": "מ־",
+        "to": "עד",
+        "apply": "החל",
+        "reset": "איפוס",
+        "rangeInverted": "תאריך הסיום מוקדם מתאריך ההתחלה."
+      },
+      "breakdown": {
+        "title": "עלות לפי",
+        "groupBy": {
+          "template": "תבנית",
+          "source": "ערוץ",
+          "category": "קטגוריה",
+          "country": "מדינה"
+        },
+        "group": "קבוצה",
+        "notRecorded": "לא נרשם",
+        "truncated": "מוצגות {count} הקבוצות הגדולות ביותר. צמצם את התאריכים כדי לראות את השאר.",
+        "empty": "אין הודעות שתואמות למסננים אלה."
+      },
+      "columns": {
+        "date": "תאריך",
+        "template": "תבנית",
+        "campaign": "קמפיין או שידור",
+        "channel": "ערוץ",
+        "category": "קטגוריה",
+        "country": "מדינה",
+        "status": "סטטוס",
+        "charged": "חויב",
+        "refunded": "הוחזר",
+        "net": "נטו",
+        "messages": "הודעות",
+        "notBilled": "לא חויב"
+      },
+      "status": {
+        "charged": "חויב",
+        "free": "לא חויב",
+        "refunded": "הוחזר",
+        "refundedOn": "הוחזר ב־{date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "כלול בתוכנית שלך",
+        "wallet_empty": "הארנק היה ריק",
+        "rate_is_zero": "התעריף הוא אפס",
+        "no_wallet_owner": "אין בעלים לארנק"
+      },
+      "uncollected": "{amount} לא נגבו",
+      "emptyTitle": "עדיין אין הודעות",
+      "emptyBody": "הודעות שנשלחו מקמפיינים, משידורים, מתזמונים ומצ׳אטים יופיעו כאן עם התבנית והעלות שלהן.",
+      "emptyFiltered": "שום דבר לא תואם למסננים אלה. שנה אותם או אפס אותם.",
+      "days": {
+        "title": "יומן יומי",
+        "subtitle": "הודעות מקובצות לפי יום, סטטוס, ערוץ וקטגוריה. פתחו יום כדי לראות כל הודעה.",
+        "messagesOnDay": "{count} הודעות",
+        "viewDetails": "הצגת פרטים",
+        "actions": "פעולות",
+        "empty": "אין הודעות בימים האלה."
+      },
+      "log": {
+        "title": "הודעות",
+        "forDay": "הודעות מתאריך {date}",
+        "showAllDays": "הצגת כל הימים"
+      }
+    },
     "admin": {
       "admin": "מנהל",
       "wallet": "ארנק",
@@ -849,7 +939,8 @@
         "fullStatement": "פתח את דף החשבון המלא",
         "emptyTitle": "אין פעילות עדיין",
         "emptyBody": "טעינות, חיובי הודעות והחזרים יופיעו כאן."
-      }
+      },
+      "messageExpenses": "הוצאות הודעות"
     },
     "activity": {
       "description": "תיאור",

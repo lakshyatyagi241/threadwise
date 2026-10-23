@@ -99,7 +99,8 @@
         "fullStatement": "Abrir o extrato completo",
         "emptyTitle": "Nenhuma atividade ainda",
         "emptyBody": "Recargas, cobranças de mensagens e reembolsos aparecem aqui."
-      }
+      },
+      "messageExpenses": "Gastos com mensagens"
     },
     "activity": {
       "description": "Descrição",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Gastos com mensagens",
+      "subtitle": "Quanto custou cada mensagem, o modelo com que foi enviada e o que foi devolvido. Os totais incluem tudo o que corresponde aos filtros.",
+      "back": "Voltar para a carteira",
+      "breadcrumbLabel": "Trilha de navegação",
+      "breadcrumbWallet": "Carteira",
+      "breadcrumbExpenses": "Gastos com mensagens",
+      "fullStatement": "Extrato completo",
+      "summary": {
+        "messages": "Mensagens",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "net": "Custo líquido",
+        "notBilled": "Não cobrado"
+      },
+      "filters": {
+        "status": "Situação",
+        "statusAll": "Todos",
+        "statusCharged": "Cobrado",
+        "statusFree": "Não cobrado",
+        "statusRefunded": "Reembolsado",
+        "template": "Modelo",
+        "templatePlaceholder": "Nome do modelo",
+        "channel": "Canal",
+        "category": "Categoria",
+        "allChannels": "Todos os canais",
+        "allCategories": "Todas as categorias",
+        "from": "De",
+        "to": "Até",
+        "apply": "Aplicar",
+        "reset": "Redefinir",
+        "rangeInverted": "A data final é anterior à data inicial."
+      },
+      "breakdown": {
+        "title": "Custo por",
+        "groupBy": {
+          "template": "Modelo",
+          "source": "Canal",
+          "category": "Categoria",
+          "country": "País"
+        },
+        "group": "Grupo",
+        "notRecorded": "Não registrado",
+        "truncated": "Mostrando os {count} maiores grupos. Restrinja as datas para ver o restante.",
+        "empty": "Nenhuma mensagem corresponde a estes filtros."
+      },
+      "columns": {
+        "date": "Data",
+        "template": "Modelo",
+        "campaign": "Campanha ou transmissão",
+        "channel": "Canal",
+        "category": "Categoria",
+        "country": "País",
+        "status": "Situação",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "net": "Líquido",
+        "messages": "Mensagens",
+        "notBilled": "Não cobrado"
+      },
+      "status": {
+        "charged": "Cobrado",
+        "free": "Não cobrado",
+        "refunded": "Reembolsado",
+        "refundedOn": "Devolvido em {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Incluído no seu plano",
+        "wallet_empty": "A carteira estava vazia",
+        "rate_is_zero": "A tarifa é zero",
+        "no_wallet_owner": "Sem titular da carteira"
+      },
+      "uncollected": "{amount} não cobrados",
+      "emptyTitle": "Ainda não há mensagens",
+      "emptyBody": "As mensagens enviadas por campanhas, transmissões, agendamentos e conversas aparecem aqui com o modelo e o custo.",
+      "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os.",
+      "days": {
+        "title": "Registo diário",
+        "subtitle": "Mensagens agrupadas por dia, estado, canal e categoria. Abra um dia para ver cada mensagem.",
+        "messagesOnDay": "{count} mensagens",
+        "viewDetails": "Ver detalhes",
+        "actions": "Ações",
+        "empty": "Não há mensagens nestes dias."
+      },
+      "log": {
+        "title": "Mensagens",
+        "forDay": "Mensagens de {date}",
+        "showAllDays": "Mostrar todos os dias"
       }
     },
     "admin": {

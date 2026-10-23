@@ -59,6 +59,8 @@ export const bulkConversationActionSchema = z.discriminatedUnion('type', [
     teamId: uuidSchema.nullable().optional(),
   }),
   z.object({ type: z.literal('mark_read') }),
+  /** Makes every named conversation unread again: its unread count goes to at least one. */
+  z.object({ type: z.literal('mark_unread') }),
   z.object({ type: z.literal('priority'), priority: conversationPrioritySchema }),
   z.object({ type: z.literal('snooze'), until: snoozeUntilSchema }),
   /** Marks every named conversation as spam (the single route is `POST .../spam`). */

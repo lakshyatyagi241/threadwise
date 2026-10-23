@@ -99,7 +99,8 @@
         "fullStatement": "Buka laporan lengkap",
         "emptyTitle": "Belum ada aktivitas",
         "emptyBody": "Isi ulang, biaya pesan, dan pengembalian dana akan muncul di sini."
-      }
+      },
+      "messageExpenses": "Biaya pesan"
     },
     "activity": {
       "description": "Deskripsi",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Biaya pesan",
+      "subtitle": "Biaya tiap pesan, templat yang dipakai untuk mengirimnya, dan dana yang dikembalikan. Total mencakup semua yang cocok dengan filter.",
+      "back": "Kembali ke dompet",
+      "breadcrumbLabel": "Jejak navigasi",
+      "breadcrumbWallet": "Dompet",
+      "breadcrumbExpenses": "Biaya pesan",
+      "fullStatement": "Laporan lengkap",
+      "summary": {
+        "messages": "Pesan",
+        "charged": "Ditagih",
+        "refunded": "Dikembalikan",
+        "net": "Biaya bersih",
+        "notBilled": "Tidak ditagih"
+      },
+      "filters": {
+        "status": "Status tagihan",
+        "statusAll": "Semua",
+        "statusCharged": "Ditagih",
+        "statusFree": "Tidak ditagih",
+        "statusRefunded": "Dikembalikan",
+        "template": "Templat",
+        "templatePlaceholder": "Nama templat",
+        "channel": "Saluran",
+        "category": "Kategori",
+        "allChannels": "Semua saluran",
+        "allCategories": "Semua kategori",
+        "from": "Dari",
+        "to": "Sampai",
+        "apply": "Terapkan",
+        "reset": "Atur ulang",
+        "rangeInverted": "Tanggal akhir lebih awal dari tanggal mulai."
+      },
+      "breakdown": {
+        "title": "Biaya menurut",
+        "groupBy": {
+          "template": "Templat",
+          "source": "Saluran",
+          "category": "Kategori",
+          "country": "Negara"
+        },
+        "group": "Kelompok",
+        "notRecorded": "Tidak tercatat",
+        "truncated": "Menampilkan {count} kelompok terbesar. Persempit tanggal untuk melihat sisanya.",
+        "empty": "Tidak ada pesan yang cocok dengan filter ini."
+      },
+      "columns": {
+        "date": "Tanggal",
+        "template": "Templat",
+        "campaign": "Kampanye atau siaran",
+        "channel": "Saluran",
+        "category": "Kategori",
+        "country": "Negara",
+        "status": "Status tagihan",
+        "charged": "Ditagih",
+        "refunded": "Dikembalikan",
+        "net": "Bersih",
+        "messages": "Pesan",
+        "notBilled": "Tidak ditagih"
+      },
+      "status": {
+        "charged": "Ditagih",
+        "free": "Tidak ditagih",
+        "refunded": "Dikembalikan",
+        "refundedOn": "Dikembalikan {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Termasuk dalam paket Anda",
+        "wallet_empty": "Dompet kosong",
+        "rate_is_zero": "Tarifnya nol",
+        "no_wallet_owner": "Tidak ada pemilik dompet"
+      },
+      "uncollected": "{amount} belum tertagih",
+      "emptyTitle": "Belum ada pesan",
+      "emptyBody": "Pesan yang dikirim dari kampanye, siaran, jadwal, dan chat akan muncul di sini beserta templat dan biayanya.",
+      "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter.",
+      "days": {
+        "title": "Log harian",
+        "subtitle": "Pesan dikelompokkan menurut hari, status, saluran, dan kategori. Buka satu hari untuk melihat setiap pesan.",
+        "messagesOnDay": "{count} pesan",
+        "viewDetails": "Lihat detail",
+        "actions": "Tindakan",
+        "empty": "Tidak ada pesan pada hari-hari ini."
+      },
+      "log": {
+        "title": "Pesan",
+        "forDay": "Pesan pada {date}",
+        "showAllDays": "Tampilkan semua hari"
       }
     },
     "admin": {

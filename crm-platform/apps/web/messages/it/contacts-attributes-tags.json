@@ -283,8 +283,6 @@
       "shortEmail": "Email",
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Creato",
-      "shortModified": "Modificato",
       "firstRun": {
         "title": "Aggiungi i tuoi primi contatti",
         "message": "Porta dentro le persone con cui parli. I contatti servono per messaggi, campagne, attività e trattative.",
@@ -1338,7 +1336,7 @@
         "closePicker": "Chiudi",
         "changed": "Proprietà da modificare",
         "clear": "Svuota",
-        "keep": "Mantieni",
+        "remove": "Rimuovi {name}",
         "setValue": "Imposta un valore",
         "willClear": "Verrà svuotata su {count, plural, one {il contatto selezionato} other {tutti i # contatti selezionati}}.",
         "requiredNoClear": "Una proprietà obbligatoria non può essere svuotata.",

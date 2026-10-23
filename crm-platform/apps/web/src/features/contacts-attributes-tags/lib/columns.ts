@@ -106,8 +106,6 @@ const SHORT_LABEL: Partial<Record<FixedColumnId, string>> = {
   email: 'shortEmail',
   stage: 'shortStage',
   whatsapp: 'shortWhatsapp',
-  createdOn: 'shortCreated',
-  modifiedOn: 'shortModified',
 };
 
 /**

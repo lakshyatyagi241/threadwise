@@ -112,6 +112,8 @@ export class CampaignEvents {
         recipient: facts.phone,
         category: facts.category,
         source: 'campaign',
+        templateName: facts.templateName,
+        subjectName: facts.campaignName,
       },
     });
   }

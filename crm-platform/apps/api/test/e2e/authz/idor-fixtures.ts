@@ -1104,7 +1104,7 @@ const devKeys: Spec = {
       c,
       t,
       '/v2/developer/keys',
-      { name: m },
+      { name: m, scopes: ['account:read'] },
     );
     return base(m, { ids: { id: k.key.id }, secrets: [k.secret, k.key.prefix].filter(Boolean) });
   },

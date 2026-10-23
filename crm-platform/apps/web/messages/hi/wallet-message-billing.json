@@ -99,7 +99,8 @@
         "fullStatement": "पूरा स्टेटमेंट खोलें",
         "emptyTitle": "अभी कोई गतिविधि नहीं",
         "emptyBody": "टॉप-अप, संदेश शुल्क और रिफ़ंड यहाँ दिखेंगे।"
-      }
+      },
+      "messageExpenses": "संदेश खर्च"
     },
     "activity": {
       "description": "विवरण",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "संदेश खर्च",
+      "subtitle": "हर संदेश पर कितना खर्च हुआ, वह किस टेम्पलेट के साथ गया और उस पर क्या वापस आया। कुल योग में फ़िल्टर से मेल खाने वाली सभी चीज़ें शामिल हैं।",
+      "back": "वॉलेट पर वापस जाएँ",
+      "breadcrumbLabel": "ब्रेडक्रम्ब",
+      "breadcrumbWallet": "वॉलेट",
+      "breadcrumbExpenses": "संदेश खर्च",
+      "fullStatement": "पूरा स्टेटमेंट",
+      "summary": {
+        "messages": "संदेश",
+        "charged": "शुल्क लिया गया",
+        "refunded": "रिफ़ंड किया गया",
+        "net": "शुद्ध लागत",
+        "notBilled": "बिल नहीं किया गया"
+      },
+      "filters": {
+        "status": "स्थिति",
+        "statusAll": "सभी",
+        "statusCharged": "शुल्क लिया गया",
+        "statusFree": "बिल नहीं किया गया",
+        "statusRefunded": "रिफ़ंड किया गया",
+        "template": "टेम्पलेट",
+        "templatePlaceholder": "टेम्पलेट का नाम",
+        "channel": "चैनल",
+        "category": "श्रेणी",
+        "allChannels": "सभी चैनल",
+        "allCategories": "सभी श्रेणियाँ",
+        "from": "से",
+        "to": "तक",
+        "apply": "लागू करें",
+        "reset": "रीसेट करें",
+        "rangeInverted": "समाप्ति की तारीख शुरुआत की तारीख से पहले है।"
+      },
+      "breakdown": {
+        "title": "इसके अनुसार लागत",
+        "groupBy": {
+          "template": "टेम्पलेट",
+          "source": "चैनल",
+          "category": "श्रेणी",
+          "country": "देश"
+        },
+        "group": "समूह",
+        "notRecorded": "दर्ज नहीं किया गया",
+        "truncated": "सबसे बड़े {count} समूह दिखाए जा रहे हैं। बाकी देखने के लिए तारीखें सीमित करें।",
+        "empty": "इन फ़िल्टरों से कोई संदेश मेल नहीं खाता।"
+      },
+      "columns": {
+        "date": "तारीख",
+        "template": "टेम्पलेट",
+        "campaign": "अभियान या ब्रॉडकास्ट",
+        "channel": "चैनल",
+        "category": "श्रेणी",
+        "country": "देश",
+        "status": "स्थिति",
+        "charged": "शुल्क लिया गया",
+        "refunded": "रिफ़ंड किया गया",
+        "net": "शुद्ध",
+        "messages": "संदेश",
+        "notBilled": "बिल नहीं किया गया"
+      },
+      "status": {
+        "charged": "शुल्क लिया गया",
+        "free": "बिल नहीं किया गया",
+        "refunded": "रिफ़ंड किया गया",
+        "refundedOn": "{date} को लौटाया गया"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "आपके प्लान में शामिल",
+        "wallet_empty": "वॉलेट खाली था",
+        "rate_is_zero": "दर शून्य है",
+        "no_wallet_owner": "वॉलेट का कोई मालिक नहीं"
+      },
+      "uncollected": "{amount} वसूला नहीं गया",
+      "emptyTitle": "अभी कोई संदेश नहीं है",
+      "emptyBody": "अभियानों, ब्रॉडकास्ट, शेड्यूल और चैट से भेजे गए संदेश उनके टेम्पलेट और लागत के साथ यहाँ दिखेंगे।",
+      "emptyFiltered": "इन फ़िल्टरों से कुछ मेल नहीं खाता। इन्हें बदलें या रीसेट करें।",
+      "days": {
+        "title": "दैनिक लॉग",
+        "subtitle": "संदेश दिन, स्थिति, चैनल और श्रेणी के अनुसार समूहित। हर संदेश देखने के लिए कोई दिन खोलें।",
+        "messagesOnDay": "{count} संदेश",
+        "viewDetails": "विवरण देखें",
+        "actions": "कार्य",
+        "empty": "इन दिनों कोई संदेश नहीं है।"
+      },
+      "log": {
+        "title": "संदेश",
+        "forDay": "{date} के संदेश",
+        "showAllDays": "सभी दिन दिखाएँ"
       }
     },
     "admin": {

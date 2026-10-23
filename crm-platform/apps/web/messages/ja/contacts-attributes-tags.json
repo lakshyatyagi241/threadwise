@@ -283,8 +283,6 @@
       "shortEmail": "メール",
       "shortStage": "ステージ",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "作成日",
-      "shortModified": "更新日",
       "firstRun": {
         "title": "最初の連絡先を追加しましょう",
         "message": "やり取りしている相手を取り込みましょう。連絡先はメッセージ、キャンペーン、タスク、取引に使われます。",
@@ -1338,7 +1336,7 @@
         "closePicker": "閉じる",
         "changed": "変更するプロパティ",
         "clear": "クリア",
-        "keep": "変更しない",
+        "remove": "{name}を削除",
         "setValue": "値を設定",
         "willClear": "{count, plural, other {選択したすべての#件の連絡先}}で空になります。",
         "requiredNoClear": "必須プロパティはクリアできません。",

@@ -24,6 +24,7 @@ const UNDERLYING: Record<BulkConversationAction['type'], readonly string[]> = {
   status: [PERM.resolve],
   assign: [PERM.assign, PERM.assignSelf],
   mark_read: [PERM.read],
+  mark_unread: [PERM.read],
   priority: [PERM.priority],
   snooze: [PERM.snooze],
   spam: [PERM.resolve],
@@ -162,6 +163,10 @@ export class BulkActionsService {
       }
       case 'mark_read': {
         const { unreadCount } = await this.conversations.markRead(id, { upToSeq: known.msgSeq });
+        return unreadCount === known.unreadCount ? 'unchanged' : 'done';
+      }
+      case 'mark_unread': {
+        const { unreadCount } = await this.conversations.markUnread(id);
         return unreadCount === known.unreadCount ? 'unchanged' : 'done';
       }
     }

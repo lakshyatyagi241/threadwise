@@ -99,7 +99,8 @@
         "fullStatement": "Het volledige overzicht openen",
         "emptyTitle": "Nog geen activiteit",
         "emptyBody": "Opwaarderingen, berichtkosten en terugbetalingen verschijnen hier."
-      }
+      },
+      "messageExpenses": "Berichtkosten"
     },
     "activity": {
       "description": "Omschrijving",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Berichtkosten",
+      "subtitle": "Wat elk bericht heeft gekost, met welk sjabloon het is verzonden en wat is terugbetaald. De totalen omvatten alles wat past bij de filters.",
+      "back": "Terug naar portemonnee",
+      "breadcrumbLabel": "Kruimelpad",
+      "breadcrumbWallet": "Portemonnee",
+      "breadcrumbExpenses": "Berichtkosten",
+      "fullStatement": "Volledig overzicht",
+      "summary": {
+        "messages": "Berichten",
+        "charged": "Gefactureerd",
+        "refunded": "Terugbetaald",
+        "net": "Nettokosten",
+        "notBilled": "Niet gefactureerd"
+      },
+      "filters": {
+        "status": "Facturatiestatus",
+        "statusAll": "Alle",
+        "statusCharged": "Gefactureerd",
+        "statusFree": "Niet gefactureerd",
+        "statusRefunded": "Terugbetaald",
+        "template": "Sjabloon",
+        "templatePlaceholder": "Naam van sjabloon",
+        "channel": "Kanaal",
+        "category": "Categorie",
+        "allChannels": "Alle kanalen",
+        "allCategories": "Alle categorieën",
+        "from": "Van",
+        "to": "Tot",
+        "apply": "Toepassen",
+        "reset": "Resetten",
+        "rangeInverted": "De einddatum ligt voor de begindatum."
+      },
+      "breakdown": {
+        "title": "Kosten per",
+        "groupBy": {
+          "template": "Sjabloon",
+          "source": "Kanaal",
+          "category": "Categorie",
+          "country": "Land"
+        },
+        "group": "Groep",
+        "notRecorded": "Niet geregistreerd",
+        "truncated": "De {count} grootste groepen worden getoond. Beperk de datums om de rest te zien.",
+        "empty": "Geen berichten komen overeen met deze filters."
+      },
+      "columns": {
+        "date": "Datum",
+        "template": "Sjabloon",
+        "campaign": "Campagne of broadcast",
+        "channel": "Kanaal",
+        "category": "Categorie",
+        "country": "Land",
+        "status": "Facturatiestatus",
+        "charged": "Gefactureerd",
+        "refunded": "Terugbetaald",
+        "net": "Netto",
+        "messages": "Berichten",
+        "notBilled": "Niet gefactureerd"
+      },
+      "status": {
+        "charged": "Gefactureerd",
+        "free": "Niet gefactureerd",
+        "refunded": "Terugbetaald",
+        "refundedOn": "Teruggestort op {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Inbegrepen in je abonnement",
+        "wallet_empty": "De portemonnee was leeg",
+        "rate_is_zero": "Het tarief is nul",
+        "no_wallet_owner": "Geen eigenaar van de portemonnee"
+      },
+      "uncollected": "{amount} niet geïncasseerd",
+      "emptyTitle": "Nog geen berichten",
+      "emptyBody": "Berichten die via campagnes, broadcasts, planningen en chats zijn verzonden, verschijnen hier met hun sjabloon en kosten.",
+      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
+      "days": {
+        "title": "Dagelijks logboek",
+        "subtitle": "Berichten gegroepeerd per dag, status, kanaal en categorie. Open een dag om elk bericht te zien.",
+        "messagesOnDay": "{count} berichten",
+        "viewDetails": "Details bekijken",
+        "actions": "Acties",
+        "empty": "Er zijn op deze dagen geen berichten."
+      },
+      "log": {
+        "title": "Berichten",
+        "forDay": "Berichten van {date}",
+        "showAllDays": "Alle dagen tonen"
       }
     },
     "admin": {

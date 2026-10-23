@@ -625,6 +625,7 @@ export function InboxScreen() {
                     bar: (
                       <BulkBar
                         count={bulk.selection.size}
+                        picked={bulk.picked}
                         inView={list.state.rows.length}
                         allInViewSelected={bulk.allInView}
                         busy={bulk.busy}

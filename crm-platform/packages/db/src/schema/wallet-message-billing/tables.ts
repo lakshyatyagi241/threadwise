@@ -189,6 +189,10 @@ export const usageCharges = pgTable(
     costMicros: bigint('cost_micros', { mode: 'number' }),
     refundedAt: timestamp('refunded_at', { withTimezone: true }),
     refundTxId: idColumn('refund_tx_id'),
+    /** The template as it was sent, copied at settle time; null on charges from before the expense log. */
+    templateName: text('template_name'),
+    /** The campaign, broadcast or schedule name at send time; null for chat and flow sends and older charges. */
+    subjectName: text('subject_name'),
   },
   (t) => [
     primaryKey({ columns: [t.id, t.createdAt] }),

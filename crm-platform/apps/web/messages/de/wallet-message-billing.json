@@ -99,7 +99,8 @@
         "fullStatement": "Vollständigen Kontoauszug öffnen",
         "emptyTitle": "Noch keine Aktivität",
         "emptyBody": "Aufladungen, Nachrichtenkosten und Erstattungen erscheinen hier."
-      }
+      },
+      "messageExpenses": "Nachrichtenkosten"
     },
     "activity": {
       "description": "Beschreibung",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Nachrichtenkosten",
+      "subtitle": "Was jede Nachricht gekostet hat, mit welcher Vorlage sie versendet wurde und was zurückgebucht wurde. Die Summen umfassen alles, was den Filtern entspricht.",
+      "back": "Zurück zum Wallet",
+      "breadcrumbLabel": "Navigationspfad",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Nachrichtenkosten",
+      "fullStatement": "Vollständiger Kontoauszug",
+      "summary": {
+        "messages": "Nachrichten",
+        "charged": "Berechnet",
+        "refunded": "Erstattet",
+        "net": "Nettokosten",
+        "notBilled": "Nicht berechnet"
+      },
+      "filters": {
+        "status": "Abrechnungsstatus",
+        "statusAll": "Alle",
+        "statusCharged": "Berechnet",
+        "statusFree": "Nicht berechnet",
+        "statusRefunded": "Erstattet",
+        "template": "Vorlage",
+        "templatePlaceholder": "Name der Vorlage",
+        "channel": "Kanal",
+        "category": "Kategorie",
+        "allChannels": "Alle Kanäle",
+        "allCategories": "Alle Kategorien",
+        "from": "Von",
+        "to": "Bis",
+        "apply": "Anwenden",
+        "reset": "Zurücksetzen",
+        "rangeInverted": "Das Enddatum liegt vor dem Startdatum."
+      },
+      "breakdown": {
+        "title": "Kosten nach",
+        "groupBy": {
+          "template": "Vorlage",
+          "source": "Kanal",
+          "category": "Kategorie",
+          "country": "Land"
+        },
+        "group": "Gruppe",
+        "notRecorded": "Nicht erfasst",
+        "truncated": "Die {count} größten Gruppen werden angezeigt. Zum Anzeigen der restlichen Gruppen den Zeitraum eingrenzen.",
+        "empty": "Keine Nachrichten entsprechen diesen Filtern."
+      },
+      "columns": {
+        "date": "Datum",
+        "template": "Vorlage",
+        "campaign": "Kampagne oder Broadcast",
+        "channel": "Kanal",
+        "category": "Kategorie",
+        "country": "Land",
+        "status": "Abrechnungsstatus",
+        "charged": "Berechnet",
+        "refunded": "Erstattet",
+        "net": "Netto",
+        "messages": "Nachrichten",
+        "notBilled": "Nicht berechnet"
+      },
+      "status": {
+        "charged": "Berechnet",
+        "free": "Nicht berechnet",
+        "refunded": "Erstattet",
+        "refundedOn": "Erstattet am {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Im Tarif enthalten",
+        "wallet_empty": "Das Wallet war leer",
+        "rate_is_zero": "Der Preis ist null",
+        "no_wallet_owner": "Kein Wallet-Inhaber"
+      },
+      "uncollected": "{amount} nicht eingezogen",
+      "emptyTitle": "Noch keine Nachrichten",
+      "emptyBody": "Nachrichten aus Kampagnen, Broadcasts, Zeitplänen und Chats erscheinen hier mit Vorlage und Kosten.",
+      "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen.",
+      "days": {
+        "title": "Tagesprotokoll",
+        "subtitle": "Nachrichten nach Tag, Status, Kanal und Kategorie gruppiert. Öffnen Sie einen Tag, um jede Nachricht zu sehen.",
+        "messagesOnDay": "{count} Nachrichten",
+        "viewDetails": "Details anzeigen",
+        "actions": "Aktionen",
+        "empty": "An diesen Tagen gibt es keine Nachrichten."
+      },
+      "log": {
+        "title": "Nachrichten",
+        "forDay": "Nachrichten vom {date}",
+        "showAllDays": "Alle Tage anzeigen"
       }
     },
     "admin": {

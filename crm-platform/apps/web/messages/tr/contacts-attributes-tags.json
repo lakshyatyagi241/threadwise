@@ -283,8 +283,6 @@
       "shortEmail": "E-posta",
       "shortStage": "Aşama",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Oluşturuldu",
-      "shortModified": "Değiştirildi",
       "firstRun": {
         "title": "İlk kişilerinizi ekleyin",
         "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",
@@ -1338,7 +1336,7 @@
         "closePicker": "Kapat",
         "changed": "Değiştirilecek özellikler",
         "clear": "Temizle",
-        "keep": "Koru",
+        "remove": "{name} alanını kaldır",
         "setValue": "Değer ayarla",
         "willClear": "{count, plural, one {Seçili kişide} other {seçili # kişinin tümünde}} boşaltılacak.",
         "requiredNoClear": "Zorunlu bir özellik temizlenemez.",

@@ -99,7 +99,8 @@
         "fullStatement": "明細をすべて表示",
         "emptyTitle": "アクティビティはまだありません",
         "emptyBody": "チャージ、メッセージ料金、返金がここに表示されます。"
-      }
+      },
+      "messageExpenses": "メッセージの費用"
     },
     "activity": {
       "description": "説明",
@@ -188,6 +189,96 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "メッセージの費用",
+      "subtitle": "各メッセージの費用、送信に使ったテンプレート、返金された金額を表示します。合計は、フィルターに一致するすべての項目が対象です。",
+      "back": "ウォレットに戻る",
+      "breadcrumbLabel": "パンくずリスト",
+      "breadcrumbWallet": "ウォレット",
+      "breadcrumbExpenses": "メッセージの費用",
+      "fullStatement": "明細をすべて表示",
+      "summary": {
+        "messages": "メッセージ",
+        "charged": "請求額",
+        "refunded": "返金額",
+        "net": "実質費用",
+        "notBilled": "請求なし"
+      },
+      "filters": {
+        "status": "ステータス",
+        "statusAll": "すべて",
+        "statusCharged": "請求済み",
+        "statusFree": "請求なし",
+        "statusRefunded": "返金済み",
+        "template": "テンプレート",
+        "templatePlaceholder": "テンプレート名",
+        "channel": "チャネル",
+        "category": "カテゴリ",
+        "allChannels": "すべてのチャネル",
+        "allCategories": "すべてのカテゴリ",
+        "from": "開始日",
+        "to": "終了日",
+        "apply": "適用",
+        "reset": "リセット",
+        "rangeInverted": "終了日が開始日より前になっています。"
+      },
+      "breakdown": {
+        "title": "費用の集計単位",
+        "groupBy": {
+          "template": "テンプレート",
+          "source": "チャネル",
+          "category": "カテゴリ",
+          "country": "国"
+        },
+        "group": "グループ",
+        "notRecorded": "未記録",
+        "truncated": "上位 {count} 件のグループを表示しています。残りを表示するには期間を絞り込んでください。",
+        "empty": "これらのフィルターに一致するメッセージはありません。"
+      },
+      "columns": {
+        "date": "日付",
+        "template": "テンプレート",
+        "campaign": "キャンペーンまたは一斉配信",
+        "channel": "チャネル",
+        "category": "カテゴリ",
+        "country": "国",
+        "status": "ステータス",
+        "charged": "請求額",
+        "refunded": "返金額",
+        "net": "実質",
+        "messages": "メッセージ",
+        "notBilled": "請求なし"
+      },
+      "status": {
+        "charged": "請求済み",
+        "free": "請求なし",
+        "refunded": "返金済み",
+        "refundedOn": "{date}に返金"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "プランに含まれています",
+        "wallet_empty": "ウォレットの残高がありませんでした",
+        "rate_is_zero": "料金が0です",
+        "no_wallet_owner": "ウォレットの所有者がいません"
+      },
+      "uncollected": "{amount}が未回収です",
+      "emptyTitle": "まだメッセージがありません",
+      "emptyBody": "キャンペーン、一斉配信、スケジュール、チャットから送信されたメッセージが、テンプレートと費用とともにここに表示されます。",
+      "emptyFiltered": "これらのフィルターに一致する項目はありません。条件を変更するかリセットしてください。",
+      "days": {
+        "title": "日別ログ",
+        "subtitle": "メッセージを日付・ステータス・チャネル・カテゴリでまとめています。日付を開くと各メッセージを確認できます。",
+        "messagesOnDay": "{count}件のメッセージ",
+        "viewDetails": "詳細を表示",
+        "actions": "操作",
+        "empty": "この期間のメッセージはありません。"
+      },
+      "log": {
+        "title": "メッセージ",
+        "forDay": "{date} のメッセージ",
+        "showAllDays": "すべての日を表示"
       }
     },
     "admin": {

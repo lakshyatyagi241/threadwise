@@ -21,6 +21,9 @@ import {
   saveRatesResultSchema,
   seedRatesResultSchema,
   setWorkspaceCurrencyResultSchema,
+  expenseDaysResponseSchema,
+  expenseListResponseSchema,
+  expenseSummaryResponseSchema,
   statementResponseSchema,
   syncMetaResultSchema,
   walletLedgerResponseSchema,
@@ -43,12 +46,19 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { fileNameFromDisposition } from './lib/download';
 import { toApiQuery, type StatementFilters } from './lib/statement-filters';
+import { toExpenseApiQuery, type ExpenseFilters } from './lib/expense-filters';
 
 export const KEYS = {
   summary: ['wallet', 'summary'] as const,
   ledger: (cursor: string | undefined) => ['wallet', 'ledger', cursor ?? 'first'] as const,
   statement: (filters: StatementFilters, cursor: string | undefined) =>
     ['wallet', 'statement', filters, cursor ?? 'first'] as const,
+  expenses: (filters: ExpenseFilters, timeZone: string, cursor: string | undefined) =>
+    ['wallet', 'expenses', filters, timeZone, cursor ?? 'first'] as const,
+  expenseSummary: (filters: ExpenseFilters, timeZone: string) =>
+    ['wallet', 'expenses', 'summary', filters, timeZone] as const,
+  expenseDays: (filters: ExpenseFilters, timeZone: string, cursor: string | undefined) =>
+    ['wallet', 'expenses', 'days', filters, timeZone, cursor ?? 'first'] as const,
   pricing: (country: string | undefined) => ['wallet', 'pricing', country ?? 'any'] as const,
   overview: ['wallet', 'platform', 'overview'] as const,
   settings: ['wallet', 'platform', 'settings'] as const,
@@ -86,6 +96,39 @@ export const customerApi = {
     apiFetch('/wallet/statement', {
       query: { ...toApiQuery(filters), limit, cursor },
       schema: statementResponseSchema,
+      signal,
+    }),
+  /** The message expense log, one row per billable message. `timeZone` is the viewer's: the dates in the filters are its days. */
+  expenses: (
+    filters: ExpenseFilters,
+    timeZone: string,
+    cursor: string | undefined,
+    limit: number,
+    signal?: AbortSignal,
+  ) =>
+    apiFetch('/wallet/expenses', {
+      query: { ...toExpenseApiQuery(filters), timeZone, limit, cursor },
+      schema: expenseListResponseSchema,
+      signal,
+    }),
+  /** Message expenses grouped by the chosen dimension, with totals over the whole filtered set. */
+  expenseSummary: (filters: ExpenseFilters, timeZone: string, signal?: AbortSignal) =>
+    apiFetch('/wallet/expenses/summary', {
+      query: { ...toExpenseApiQuery(filters), timeZone, groupBy: filters.groupBy },
+      schema: expenseSummaryResponseSchema,
+      signal,
+    }),
+  /** Message expenses by calendar day, status, channel and category. Pages by day: pass the last day's `nextCursor` back. */
+  expenseDays: (
+    filters: ExpenseFilters,
+    timeZone: string,
+    cursor: string | undefined,
+    limit: number,
+    signal?: AbortSignal,
+  ) =>
+    apiFetch('/wallet/expenses/days', {
+      query: { ...toExpenseApiQuery(filters), timeZone, limit, cursor },
+      schema: expenseDaysResponseSchema,
       signal,
     }),
   pricing: (country: string | undefined, signal?: AbortSignal) =>
