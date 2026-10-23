@@ -454,3 +454,23 @@ test('PR poll: no token file = disabled; token never logged; hostile login not t
   await poll(gh({ merged: true, merged_by: { login: '<b>x</b>' }, merged_at: '2026-10-23T10:05:00Z' })).tick();
   assert.equal(b.resolver.get(id).prMerged.by, null); close();
 });
+
+test('a note without a claim (or after a release) shows "Reviewed by <name>, needs a human" instead of "nobody has taken it"', async () => {
+  const { createChatApp } = await import('./chat-app.mjs');
+  const { createResolver } = await import('./resolver.mjs');
+  const calls = [];
+  const api = { createMessage: async () => ({ ok: true, name: 'spaces/AAA/messages/m5' }), updateMessage: async (ch, name, body) => (calls.push(JSON.stringify(body)), { ok: true }) };
+  const resolver = createResolver({ env: { ANNOUNCE_IN_SPACE: '0' }, post: async () => {} });
+  const app = createChatApp({ env: { CHAT_APP_ENABLED: 'true' }, api, verifier: {}, resolver, webhookSend: async () => {} });
+  resolver.setOwnerHook((id, owner) => app.syncCard(id, owner));
+  await resolver.handle({ playbook: 'service', alertname: 'OutboxDeadRows', key: 'am:fp5', threadKey: 't5', channel: 'other', diagnosis: 'd', suggestion: 's' });
+  await resolver.settle();
+  const id = resolver.list()[0].id;
+  const base = { text: 'x', cardsV2: [{ cardId: 'a', card: { header: { title: 'x' }, sections: [{ widgets: [{ decoratedText: { text: 'y' } }] }] } }] };
+  await app.send('other', base, { threadKey: 't5', interactive: { incidentId: id } });
+  await resolver.addNote(id, 'Punya-Claude', 'one outbox row is dead; needs the operator CLI');
+  const last = calls.at(-1) ?? '';
+  assert.ok(last.includes('Reviewed by <b>Punya-Claude</b>'), 'reviewed status shown');
+  assert.ok(!last.includes('nobody has taken it yet'), 'not shown as untouched');
+  assert.ok(last.includes('needs the operator CLI'), 'the note stays on the card');
+});
