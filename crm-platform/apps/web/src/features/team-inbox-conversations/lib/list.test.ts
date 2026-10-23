@@ -39,6 +39,13 @@ describe('matchesFilters', () => {
     expect(matchesFilters(summary({ status: 'spam' }), f({ status: 'all' }), ME)).toBe(true);
   });
 
+  it('a single Resolved status takes closed too, as the server lists it, so a closed row a socket event brings stays', () => {
+    const resolvedView = f({ status: 'resolved' });
+    expect(matchesFilters(summary({ status: 'closed' }), resolvedView, ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'open' }), resolvedView, ME)).toBe(false);
+    expect(matchesFilters(summary({ status: 'snoozed' }), resolvedView, ME)).toBe(false);
+  });
+
   it('Mine is what is assigned to the caller', () => {
     const mine = summary({ assignment: assignedTo(ME) });
     const theirs = summary({ assignment: assignedTo(id(8)) });
