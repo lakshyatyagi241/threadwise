@@ -44,6 +44,7 @@ fi
 umask 077
 mkdir -p secrets
 chmod 700 secrets
+[ -f secrets/sentry_token ] || { : > secrets/sentry_token; chmod 640 secrets/sentry_token; } # empty = Sentry feature off; compose needs the file to exist
 # printf, not echo: the token file must hold the token and nothing else, no newline.
 printf '%s' "$(grep '^OBS_METRICS_TOKEN=' .env | head -n1 | cut -d= -f2-)" > secrets/obs_metrics_token
 

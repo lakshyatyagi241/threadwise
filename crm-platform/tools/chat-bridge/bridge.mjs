@@ -9,6 +9,7 @@ import { handleIncidents, loadToken } from './incidents-api.mjs';
 import { createThreads, fmtDur } from './threads.mjs';
 import { createChatApp } from './chat-app.mjs';
 import { startPrPoller } from './pr-poller.mjs';
+import { startSentryPoller } from './sentry-poller.mjs';
 
 export function loadUrls(env = process.env) {
   const urls = {};
@@ -109,6 +110,7 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
   });
   const sweep = resolver && setInterval(() => resolver.sweepClaims?.().catch(() => {}), 60_000); sweep?.unref();
   const prPoller = startPrPoller({ resolver, env, fetchImpl: fetchImpl ?? fetch, log });
-  server.on('close', () => { clearInterval(sweep); prPoller.stop(); });
-  return { server, metrics, send, log, resolver, prPoller };
+  const sentryPoller = startSentryPoller({ resolver, env, fetchImpl: fetchImpl ?? fetch, log });
+  server.on('close', () => { clearInterval(sweep); prPoller.stop(); sentryPoller.stop(); });
+  return { server, metrics, send, log, resolver, prPoller, sentryPoller };
 }

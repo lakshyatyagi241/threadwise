@@ -38,6 +38,7 @@ function lifeWidgets({ owner, snap, firedAt }) {
   if (done && res) {
     const how = res.kind === 'pr' ? `Fixed by ${pr || 'a PR'}${snap.owner ? `, raised by ${who}` : ''}${res.sha ? `, live in release ${clean(String(res.sha).slice(0, 7), 12)}` : ''}.`
       : res.kind === 'release' ? `Resolved by release ${clean(String(res.sha ?? '').slice(0, 7), 12)}.`
+      : res.kind === 'sentry' ? `Resolved in Sentry by ${clean(res.by, 40)}.`
       : res.kind === 'action' ? `Resolved automatically by ${clean(res.how, 200)}.`
       : `Cleared on its own, no code change, after ${dur(res.durationMs)}.`;
     w.push(row('✅ How it was resolved', how));
@@ -55,7 +56,7 @@ function lifeWidgets({ owner, snap, firedAt }) {
   }
   const found = (snap?.notes ?? []).at(-1);
   if (found) w.push(row(`What ${clean(found.who, 40)} found`, clean(found.text, 600)));
-  const tl = [...(firedAt ? [{ t: firedAt, who: snap?.kind === 'deploy_failure' ? 'Deploy' : 'Alertmanager', text: snap?.kind === 'deploy_failure' ? 'deploy failed' : 'alert fired' }] : []), ...(snap?.tl ?? [])].slice(-MAX_TL);
+  const tl = [...(firedAt ? [{ t: firedAt, who: snap?.kind === 'deploy_failure' ? 'Deploy' : snap?.kind === 'sentry_issue' ? 'Sentry' : 'Alertmanager', text: snap?.kind === 'deploy_failure' ? 'deploy failed' : snap?.kind === 'sentry_issue' ? 'issue seen' : 'alert fired' }] : []), ...(snap?.tl ?? [])].slice(-MAX_TL);
   if (tl.length) w.push(row('Timeline', tl.map((e) => `${hm(e.t)}  ${clean(e.who, 40)}: ${clean(e.text, 160)}`).join('\n')));
   return w;
 }
@@ -69,6 +70,7 @@ function statusLine({ owner, snap }) {
     if (res?.kind === 'pr' || (pr && res?.kind !== 'self')) return `✅ Status: Resolved by ${pr || 'a PR'}${nm ? ` (${nm})` : ''}`;
     if (res?.kind === 'release') return `✅ Status: Resolved by release ${clean(String(res.sha ?? '').slice(0, 7), 12)}`;
     if (res?.kind === 'action') return '✅ Status: Resolved automatically';
+    if (res?.kind === 'sentry') return `✅ Status: Resolved in Sentry by ${clean(res.by, 40)}`;
     return '✅ Status: Cleared on its own';
   }
   if (snap?.status === 'released') return `🔵 Status: In progress, ${pr || 'the PR'} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}, verifying`;
@@ -106,7 +108,7 @@ export function renderCard(base, { incidentId, owner, grafanaUrl = '', prUrl = P
   const keep = (w) => !w.buttonList && !(taken && w.decoratedText?.topLabel === 'Suggested action'); // our row replaces the alert's own Grafana button row
   card.sections = [...card.sections.map((s) => ({ ...s, widgets: s.widgets.filter(keep) })), { widgets }];
   card.sections[0].widgets.unshift({ decoratedText: { text: statusLine({ owner, snap }), wrapText: true } });
-  if (resolved && snap.kind === 'deploy_failure' && !/RESOLVED/.test(card.header.title)) card.header.title = `✅ RESOLVED: ${card.header.title}`;
+  if (resolved && (snap.kind === 'deploy_failure' || snap.kind === 'sentry_issue') && !/RESOLVED/.test(card.header.title)) card.header.title = `✅ RESOLVED: ${card.header.title}`;
   // size guard: drop alert widgets from the end of the first section until the message fits
   while (Buffer.byteLength(JSON.stringify(m)) > MAX_BYTES && card.sections[0].widgets.length > 2) card.sections[0].widgets.pop();
   return m;
