@@ -1,6 +1,6 @@
 import { bool, isDeleted, isSecretName, str, type Doc } from '../util';
 import { c, rest, times, TS_COLS } from './common';
-import { BUILT_IN_ALIAS, CONTACT_FIELDS, REJECT_MARKER } from './contacts';
+import { BUILT_IN_ALIAS, CONTACT_FIELDS, propertyKeyOf, REJECT_MARKER, RESERVED_PROPERTY_KEYS } from './contacts';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Soft } from './types';
 
 /** Waboo property type -> fields.field_type (chk_fields_type). Unknown types become text and keep the original in config. */
@@ -234,7 +234,19 @@ export const fieldDefs: HandlerSpec = {
         reason: 'the app already has this property built in (or stores it in a column of the contact); it is not created again',
       };
     }
+    // a reserved key renamed to a name the workspace already uses would share one WaDesk key with that property
+    if (RESERVED_PROPERTY_KEYS.has(key) && ctx.idx.declaredKeys.has(propertyKeyOf(key)))
+      return {
+        kind: 'quarantine',
+        code: 'PROPERTY_KEY_CONFLICT',
+        reason: `the app reserves the key "${key}", and the workspace has a property named "${propertyKeyOf(key)}": not created`,
+      };
     const soft: Soft[] = [];
+    if (RESERVED_PROPERTY_KEYS.has(key))
+      soft.push({
+        code: 'RESERVED_KEY_RENAMED',
+        reason: `the app reserves the key "${key}": the property is created as "${propertyKeyOf(key)}" and its values follow it`,
+      });
     const legacyType = String(doc.type ?? '');
     let fieldType = NAME_VALUED_KEYS.has(key) ? 'text' : TYPE_MAP[legacyType.toLowerCase()];
     if (!fieldType) {
@@ -259,7 +271,7 @@ export const fieldDefs: HandlerSpec = {
           row: {
             module_key: 'contacts',
             section_id: section?.table === 'field_sections' ? section.id : null,
-            key,
+            key: propertyKeyOf(key),
             label: str(doc.label) ?? key,
             field_type: fieldType,
             is_required: bool(doc.required),
