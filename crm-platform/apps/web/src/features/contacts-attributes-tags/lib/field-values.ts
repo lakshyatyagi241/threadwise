@@ -107,7 +107,10 @@ export function inputToValue(field: TypedField, input: InputValue | undefined): 
   return text;
 }
 
-export type ValueProblem = 'required' | 'number' | 'integer' | 'email' | 'url';
+export type ValueProblem = 'required' | 'number' | 'integer' | 'email' | 'url' | 'phone';
+
+/** What a phone property's input holds while the number typed is not a valid one (it is never sent: `checkValue` refuses it). */
+export const INVALID_PHONE = '!';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -141,6 +144,8 @@ export function checkValue(
       return EMAIL.test(text) ? null : 'email';
     case 'url':
       return validUrl(text) ? null : 'url';
+    case 'tel':
+      return text === INVALID_PHONE ? 'phone' : null;
     default:
       return null;
   }

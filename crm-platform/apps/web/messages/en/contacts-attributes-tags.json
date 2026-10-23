@@ -429,7 +429,8 @@
         "number": "Enter a number.",
         "integer": "Enter a whole number.",
         "email": "Enter a valid email address.",
-        "url": "Enter a full link starting with http:// or https://."
+        "url": "Enter a full link starting with http:// or https://.",
+        "phone": "Enter a valid phone number for the country picked."
       },
       "readOnlyField": "Read only",
       "yes": "Yes",
@@ -1310,6 +1311,9 @@
       "shared": "Shared",
       "privateHint": "Only you, and people who can edit every segment.",
       "sharedHint": "Everyone who can view segments.",
+      "specific": "Specific people",
+      "specificHint": "Only the people and teams you choose, plus you and people who can edit every segment.",
+      "shareRequired": "Choose at least one person or team to share with.",
       "cancel": "Cancel",
       "save": "Save and open rules",
       "created": "Created the segment \"{name}\". Refine its rules below.",
@@ -1328,7 +1332,7 @@
       "close": "Close",
       "apply": "Update {count, plural, one {# contact} other {# contacts}}",
       "properties": {
-        "title": "Custom properties",
+        "title": "Properties",
         "hint": "Properties you add here are set on {count, plural, one {the selected contact} other {all # selected contacts}}. Properties you do not add are not changed.",
         "add": "Add property",
         "search": "Search properties",
@@ -1340,6 +1344,7 @@
         "remove": "Remove {name}",
         "setValue": "Set a value",
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
+        "parentFirst": "First update {parent}, then this property: its choices depend on it.",
         "requiredNoClear": "A required property cannot be cleared.",
         "problemEmpty": "Enter a value, or choose Clear."
       },

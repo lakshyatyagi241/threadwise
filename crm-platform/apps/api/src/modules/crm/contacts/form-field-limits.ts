@@ -30,3 +30,25 @@ export function assertFormFieldLimits(customFields: Record<string, unknown> | un
     over,
   );
 }
+
+/**
+ * The reserved text keys of a `customFields` object as a plan: text is set (trimmed), blank text or `null` clears the key. Other
+ * keys are left to the registry; a value that is not text is refused.
+ */
+export function reservedTextPlan(
+  customFields: Record<string, unknown> | undefined,
+): { set: Record<string, string>; clear: string[] } | undefined {
+  if (!customFields) return undefined;
+  const plan = { set: {} as Record<string, string>, clear: [] as string[] };
+  const bad: Array<{ path: string; message: string }> = [];
+  for (const key of Object.keys(FORM_FIELD_LIMITS)) {
+    if (!(key in customFields)) continue;
+    const v = customFields[key];
+    if (v === null || (typeof v === 'string' && v.trim() === '')) plan.clear.push(key);
+    else if (typeof v === 'string') plan.set[key] = v.trim();
+    else bad.push({ path: `customFields.${key}`, message: 'must be text' });
+  }
+  if (bad.length > 0)
+    throw AppError.validation('Not text: ' + bad.map((b) => b.path).join(', ') + '.', bad);
+  return plan.clear.length + Object.keys(plan.set).length > 0 ? plan : undefined;
+}
