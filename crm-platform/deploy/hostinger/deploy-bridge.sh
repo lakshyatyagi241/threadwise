@@ -8,7 +8,7 @@ cd "$(dirname "$0")/../.."
 SERVER=${SERVER:-root@187.127.155.227}
 SSH_OPTS=(-o BatchMode=yes -o IdentitiesOnly=yes ${SSH_KEY:+-i "$SSH_KEY"})
 run() { ssh "${SSH_OPTS[@]}" "$SERVER" "$@"; }
-SHA=$(git rev-parse HEAD)
+SHA=$(git log -1 --format=%H -- tools/chat-bridge)  # the last commit that changed the bridge (not HEAD), so a redeploy of unchanged code is not announced
 tar -c --exclude='*.test.mjs' -C tools/chat-bridge . | run 'tar -x -C /opt/chat-bridge'
 printf '%s' "$SHA" | run 'cat > /opt/chat-bridge/.version'   # the release watcher announces the change from this file
 run 'docker restart desk-gchat-bridge >/dev/null'

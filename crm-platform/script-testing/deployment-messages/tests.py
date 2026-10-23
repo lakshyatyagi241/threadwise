@@ -318,6 +318,8 @@ check("--bridge: lists the other bridge PR and stops at the previous version", '
 FIX.update(bridge_commits=[])
 pb2 = subprocess.run([sys.executable, FMT, "--bridge", A9, N9], env=ENV, capture_output=True, text=True, timeout=60)
 check("--bridge: no PR found says so, never crashes", "No pull request found" in pb2.stdout, pb2.stdout)
+pbl = subprocess.run([sys.executable, FMT, "--bridge", A9, N9], env={**ENV, "DESK_ANNOUNCE_LABEL": "Release watcher"}, capture_output=True, text=True, timeout=60)
+check("--bridge: the label names what changed and the bridge-restart sentence is left out", pbl.stdout.startswith("🔧 *Release watcher updated*") and "bridge was restarted" not in pbl.stdout, pbl.stdout)
 MODE["fail"] = "500"
 pb3 = subprocess.run([sys.executable, FMT, "--bridge", A9, N9], env=ENV, capture_output=True, text=True, timeout=60)
 MODE["fail"] = None
@@ -359,6 +361,7 @@ check("stall: a release that started long ago (and left the commits unreleased) 
 BD, S4 = tempfile.mkdtemp(), tempfile.mkdtemp()
 open(f"{BD}/.version", "w").write(hs(903))
 FIX.update(bridge_commits=[commit(hs(910), "feat(chat-bridge): newest bridge change (#904)", "alice"), commit(hs(903), "previous bridge version (#903)", "bob")], pulls={hs(910): [pr(904, "Newest bridge change", "alice", "dana")], hs(903): [pr(903, "Previous", "bob", "dana")]})
+os.makedirs(f"{D2}/release-watch-src", exist_ok=True); open(f"{D2}/release-watch-src/.version", "w").write(hs(903))
 chat_posts.clear()
 w4 = subprocess.Popen(["bash", WATCH], env={**w2env, "DESK_WATCH_STATE": S4, "DESK_BRIDGE_DIR": BD, "DESK_BRIDGE_POLL": "1"}, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 time.sleep(3.5)
@@ -366,6 +369,9 @@ check("watcher: the first bridge version seen is recorded, not announced", not [
 open(f"{BD}/.version", "w").write(hs(910)); wait_for(lambda: any(t.startswith("🔧") for t in texts()), 8); time.sleep(3)
 ann = [t for t in texts() if t.startswith("🔧")]
 check("watcher: a new bridge version posts exactly one announcement with the PR template", len(ann) == 1 and "#904" in ann[0] and "Author: @alice" in ann[0] and "#903" not in ann[0], str([t[:80] for t in texts()]))
+open(f"{D2}/release-watch-src/.version", "w").write(hs(910)); wait_for(lambda: len([t for t in texts() if t.startswith("🔧")]) >= 2, 8); time.sleep(2)
+ann2 = [t for t in texts() if t.startswith("🔧")]
+check("watcher: a changed watcher version is announced as 'Release watcher updated' (once, after the bridge one)", len(ann2) == 2 and ann2[1].startswith("🔧 *Release watcher updated*") and "bridge was restarted" not in ann2[1], str([t[:70] for t in texts()]))
 w4.terminate(); w4.wait(); shutil.rmtree(BD, ignore_errors=True); shutil.rmtree(S4, ignore_errors=True)
 
 for d in (D2, B2, S2, S3): shutil.rmtree(d, ignore_errors=True)
