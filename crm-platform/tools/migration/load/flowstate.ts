@@ -161,8 +161,21 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
     for (const p of todo)
       await withTenant(worker.db, { orgId }, (tx) =>
         tx.execute(sql`
-          UPDATE flows SET is_published = true, is_active = true, published_at = coalesce(${p.at}::timestamptz, now()), row_version = row_version + 1
+          UPDATE flows SET is_published = true, is_active = true, published_at = coalesce(${p.at}::timestamptz, now()), row_version = row_version + 1,
+            published_flow_data = flow_data, published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
+            published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
+            published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id, published_provider = provider
           WHERE org_id = ${orgId} AND id = ${Number(p.row.id)}`),
+      );
+    // A live flow the runtime reads from its published copies (2028 and 2029 migrations). A flow armed by an earlier run has no copy yet:
+    // without one the runtime reads the draft, so a saved edit or a typed keyword would go live before Publish. Copy the draft now, as Publish does.
+    for (const p of plan.filter((x) => x.live && x.row.is_published && x.row.is_active))
+      await withTenant(worker.db, { orgId }, (tx) =>
+        tx.execute(sql`
+          UPDATE flows SET published_flow_data = flow_data, published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
+            published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
+            published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id, published_provider = provider
+          WHERE org_id = ${orgId} AND id = ${Number(p.row.id)} AND is_published AND published_flow_data IS NULL`),
       );
     const armed = plan.filter((p) => p.live).map((p) => p.row.uuid);
     await worker.db.execute(sql`

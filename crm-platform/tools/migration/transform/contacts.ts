@@ -92,6 +92,27 @@ export const BUILT_IN_ALIAS: Readonly<Record<string, string>> = {
   street_address: 'address',
 };
 
+/**
+ * Waboo properties whose key the app reserves (a system attribute or a contact-page key, packages/contracts attribute.ts): the app refuses
+ * a custom property with that key. They are created and filled under the same key with this prefix, so their values stay visible. Not an
+ * alias: no built-in property reads them. test/reserved-keys.pure.spec.ts fails when this list drifts from the contracts.
+ */
+export const RESERVED_RENAME_PREFIX = 'waboo_';
+export const RESERVED_PROPERTY_KEYS: ReadonlySet<string> = new Set([
+  'business_name',
+  'company_name',
+  'contact_group',
+  'mobile',
+  'name',
+  'phone_number',
+  'tags',
+  'today',
+  'uuid',
+]);
+/** The key a Waboo property gets in WaDesk: its own, or the prefixed one when the app reserves it. */
+export const propertyKeyOf = (key: string): string =>
+  RESERVED_PROPERTY_KEYS.has(key) ? `${RESERVED_RENAME_PREFIX}${key}` : key;
+
 /** Test seam: the verifier's independent oracle must catch a bug injected here. */
 export const transformHooks = {
   phoneOf: (raw: string, cc: string | null, def: string | null) => phoneOf(raw, cc, def),
@@ -430,7 +451,7 @@ export const contacts: HandlerSpec = {
       const alias = BUILT_IN_ALIAS[k];
       // an explicit value under the built-in key itself wins over the Waboo alias
       if (alias && doc[alias] !== undefined && doc[alias] !== null && doc[alias] !== '') continue;
-      setOwn(data, alias ?? k, optionValueOf(k, s.value, ctx.idx));
+      setOwn(data, alias ?? propertyKeyOf(k), optionValueOf(k, s.value, ctx.idx));
     }
     // Waboo lists Created Time and Modified Time as contact fields; WaDesk keeps them in created_at / updated_at. The same instants are also
     // kept in data (ISO text) so the two read-only field rows of the contact page have a value to show (README, "Contact properties").
