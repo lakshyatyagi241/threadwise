@@ -91,6 +91,11 @@ export type ContactFilter = z.infer<typeof contactFilterSchema>;
 export const BULK_IDS_MAX = 5000;
 /** Largest number of contacts one filter-based bulk request will change. */
 export const BULK_FILTER_MAX = 50_000;
+/**
+ * Largest number of contacts one bulk consent request records. Each contact is its own transaction (the same write as the single
+ * consent edit), so the request is kept well inside an HTTP call; a longer selection is sent in slices.
+ */
+export const BULK_CONSENT_MAX = 500;
 /** Largest number of rows one export call returns. */
 export const EXPORT_MAX_ROWS = 200_000;
 

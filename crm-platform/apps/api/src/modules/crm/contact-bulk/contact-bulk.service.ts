@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Readable } from 'node:stream';
 import { promisify } from 'node:util';
@@ -10,6 +10,8 @@ import {
   EXPORT_MAX_ROWS,
   ERROR_CODES,
   canonicalizePhone,
+  BULK_CONSENT_MAX,
+  type BulkConsentContactsInput,
   type BulkDeleteContactsInput,
   type ExportHistoryQuery,
   type ExportHistoryResponse,
@@ -28,6 +30,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { ContactConsentService } from '../../contact-consent';
 import { PersonalDataErasureService } from '../../privacy';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -80,6 +83,8 @@ interface Resolved {
  */
 @Injectable()
 export class ContactBulkService {
+  private readonly logger = new Logger(ContactBulkService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: ContactBulkRepository,
@@ -92,6 +97,7 @@ export class ContactBulkService {
     private readonly erasure: PersonalDataErasureService,
     private readonly touch: ContactTouchService,
     private readonly rbac: RbacService,
+    private readonly consentLedger: ContactConsentService,
   ) {}
 
   private meta(): ActorMeta {
@@ -270,6 +276,70 @@ export class ContactBulkService {
           : 0;
       return this.result(r, changed);
     });
+  }
+
+  // --- marketing consent -------------------------------------------------------------------
+
+  /**
+   * Records marketing consent for one channel on a selection (ids, or everything a filter matches inside the caller's update scope).
+   * Each contact gets the same ledger event, state, marketing flag, audit row and outbox event as the single consent edit, in its own
+   * transaction, so one refused contact never sinks the rest. `changed` counts the events recorded; a contact that already has the same
+   * event under the request's Idempotency-Key records nothing. The caller holds `contacts.consent.manage` (checked by the route).
+   */
+  async consent(
+    input: BulkConsentContactsInput,
+    scope: RecordScope,
+    idempotencyKey?: string,
+  ): Promise<BulkSelectionResult> {
+    const { r, uuids } = await this.db.tx(async (tx) => {
+      const r = await this.resolve(tx, input, scope, { maxMatched: BULK_CONSENT_MAX });
+      const uuids = r.idsMode
+        ? r.foundUuids
+        : r.where && r.matched > 0
+          ? await this.repo.uuids(tx, r.where, r.matched)
+          : [];
+      return { r, uuids };
+    });
+
+    const event = {
+      channel: input.channel,
+      purpose: 'marketing' as const,
+      action: input.action,
+      source: 'manual' as const,
+      note: input.note,
+      evidence: {},
+    };
+    const succeeded: string[] = [];
+    const failed: BulkSelectionResult['failed'] = [];
+    let changed = 0;
+    for (const uuid of uuids) {
+      try {
+        const recorded = await this.consentLedger.recordOne(
+          uuid,
+          event,
+          idempotencyKey ? `${idempotencyKey}:${uuid}` : undefined,
+        );
+        succeeded.push(uuid);
+        if (recorded) changed += 1;
+      } catch (err) {
+        if (!(err instanceof AppError)) {
+          this.logger.error({ err, uuid }, 'bulk consent failed on a contact');
+        }
+        failed.push({
+          id: uuid,
+          code: err instanceof AppError ? String(err.code) : 'INTERNAL_ERROR',
+          message: err instanceof AppError ? err.message : 'Consent could not be recorded',
+        });
+      }
+    }
+
+    const base = this.result(r, changed);
+    return {
+      ...base,
+      succeeded: r.idsMode ? succeeded : [],
+      failed: [...base.failed, ...failed].slice(0, FAILED_LIST_MAX),
+      failedCount: base.failedCount + failed.length,
+    };
   }
 
   // --- tags --------------------------------------------------------------------------------
