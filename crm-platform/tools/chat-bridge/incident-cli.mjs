@@ -1,13 +1,16 @@
 #!/usr/bin/env node
-// Team incident CLI: node incident-cli.mjs list [status] | show <id> | claim <id> | release-claim <id> | pr <id> <url> "<summary>" | note <id> "<text>"
+// Team incident CLI: node incident-cli.mjs init | doctor | list [status] | show <id> | claim <id> | release-claim <id> | pr <id> <url> "<summary>" | note <id> "<text>"
 // Config from env INCIDENT_API_URL, INCIDENT_API_USER, INCIDENT_API_PASSWORD, INCIDENT_API_TOKEN or ~/.config/threadwise/incidents.env (KEY=VALUE, mode 600).
 // Identity: INCIDENT_WHO or `git config user.name`. Secrets are never printed. Exit 0 ok, 1 refused/failed, 2 usage/config.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { doctor, init, normalizeUrl } from './incident-setup.mjs';
 
 export async function run(argv, env = process.env, out = console.log) {
+  if (argv[0] === 'doctor') return doctor(env, out);
+  if (argv[0] === 'init') return init(env, out);
   const file = path.join(env.HOME ?? os.homedir(), '.config/threadwise/incidents.env'), cfg = { ...env };
   try {
     if (fs.statSync(file).mode & 0o077) { out(`refusing to read ${file}: chmod 600 it`); return 2; }
@@ -22,7 +25,7 @@ export async function run(argv, env = process.env, out = console.log) {
   const headers = { 'x-incident-token': cfg.INCIDENT_API_TOKEN, 'content-type': 'application/json' };
   if (cfg.INCIDENT_API_USER) headers.authorization = 'Basic ' + Buffer.from(`${cfg.INCIDENT_API_USER}:${cfg.INCIDENT_API_PASSWORD ?? ''}`).toString('base64');
   let r;
-  try { r = await fetch(cfg.INCIDENT_API_URL.replace(/\/+$/, '') + route[1], { method: route[0], headers, body: route[2] ? JSON.stringify({ ...route[2], who }) : undefined }); } catch (e) { out(`cannot reach the incident API: ${e?.cause?.code ?? e?.code ?? 'error'}`); return 1; }
+  try { r = await fetch(normalizeUrl(cfg.INCIDENT_API_URL).url + route[1], { method: route[0], headers, body: route[2] ? JSON.stringify({ ...route[2], who }) : undefined }); } catch (e) { out(`cannot reach the incident API: ${e?.cause?.code ?? e?.code ?? 'error'}`); return 1; }
   const j = await r.json().catch(() => ({}));
   if (!r.ok) { out(`refused (${r.status}): ${j.error ?? 'error'}${j.owner ? ` (owner: ${j.owner})` : ''}`); return 1; }
   if (cmd === 'list') for (const i of j.incidents) out(`${i.id}  ${i.status.padEnd(9)}  ${(i.kind ?? i.playbook).padEnd(14)}  owner=${i.owner ?? '-'}  ${i.prUrl ?? ''}`);
