@@ -256,6 +256,7 @@ export class MessageBillingService {
   async settleFailed(
     orgId: number,
     providerMessageId: string,
+    opts?: { description?: string; source?: string },
   ): Promise<{ refunded: boolean; refundedMinor: number; balanceAfterMinor: number }> {
     const wamid = providerMessageId.trim();
     if (!wamid || orgId <= NO_ORG)
@@ -304,8 +305,8 @@ export class MessageBillingService {
           direction: 'in',
           amountMinor: charge.credits,
           idempotencyKey: `refund:${chargeId}`,
-          source: 'message.refund',
-          description: 'Refund - message not delivered',
+          source: opts?.source ?? 'message.refund',
+          description: opts?.description ?? 'Refund - message not delivered',
           subject: { type: 'usage_charge', id: chargeId },
           meta: { wamid, moneyMinor: charge.credits },
         });
@@ -332,6 +333,25 @@ export class MessageBillingService {
         balanceAfterMinor: wallet?.balanceMinor ?? 0,
       };
     });
+  }
+
+  /**
+   * After a spend that is not a message (usage billing): raises the low-balance alert when the balance is at or under the threshold,
+   * at most once per 6 hours. The threshold is set in the platform currency, so a wallet in another currency compares at the rate on file.
+   */
+  async alertIfLow(
+    tx: Tx,
+    orgId: number,
+    wallet: { id: number; lowBalanceAlertedAt: Date | null },
+    balanceAfterMinor: number,
+    currency: string,
+    now: Date = new Date(),
+  ): Promise<void> {
+    const s = await this.settings.effective();
+    const threshold = await this.billing.fromPlatform(s.lowBalanceThresholdMinor, currency);
+    if (shouldAlertLowBalance(balanceAfterMinor, threshold, wallet.lowBalanceAlertedAt, now)) {
+      await this.raiseLowBalance(tx, orgId, wallet.id, balanceAfterMinor, threshold, currency, now);
+    }
   }
 
   private async raiseLowBalance(

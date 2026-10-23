@@ -68,7 +68,7 @@ Email mailboxes connects the addresses your customers write to, such as support@
 - On a **Shared** mailbox, each email you receive from a contact and each reply you send also appears on that contact's **Activity Timeline** as **Email received from ...** or **Email sent to ...**, with the subject and the first words, once per email. Automatic mail and bounce notices are left out, and so is everything on a **Personal** mailbox, so private mail never shows on a page other people can read. Only people who may see the contact see these lines.
 - **Signatures** (on the Email screen) are added at the end of replies. A mailbox can have a shared signature, and each agent can keep their own, which is used first. Write `{{name}}`, `{{title}}` and `{{phone}}` and they are filled in with the details of the person who sends. Agents change only their own signatures; changing a mailbox's shared signature needs the right to manage mailboxes.
 - An email takes up to 10 files, each up to 10 MB and 20 MB together. A file that is too big, too many, or a type email cannot carry is refused with the reason. Files you attach but do not send expire after a day.
-- Emails do not count against your message quota or wallet.
+- Each email you send is charged to your wallet at the email price, and it also counts against your plan's monthly email limit. With an empty wallet a send is refused with a message asking you to top up. See [How message billing works](help:how-message-billing-works).
 
 ## Plan and access
 

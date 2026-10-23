@@ -1,5 +1,8 @@
+import { randomUUID } from 'node:crypto';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { isWalletEmpty } from '../../../../../common/errors/wallet-empty';
+import { stableUsageId } from '../../../../../common/stable-usage-id';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import {
   FLOW_AI_PORT,
@@ -7,6 +10,7 @@ import {
 } from '../../../../../infra/providers/flow-runtime-engine/flow-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../../../../ai-keys-usage-admin';
 import { GROUNDED_NOTE, KbRetrievalService } from '../../../../knowledge-base';
+import { AiChargeService } from '../../../../wallet-message-billing';
 import { type FlowRef } from '../flow-refs';
 import { agentSystemPrompt, extractionSuffix, providerOfModel } from './ai-rules';
 
@@ -31,13 +35,20 @@ export interface AiCallInput {
   fields?: readonly string[];
   /** The vendor is put in JSON mode but the prompt is left as the caller wrote it (the ordering parser has its own). */
   vendorJsonOnly?: boolean;
+  /**
+   * Names THIS call for the wallet: the step key plus what the call is (`<stepKey>:turn`, `<stepKey>:extract`), so a step that runs again
+   * after a lost write is charged once. A node makes more than one call, so the caller adds the suffix. Without one the call is charged
+   * under a fresh id (correct, but a retry of it would be charged again).
+   */
+  usageId?: string;
 }
 
 export type AiCallOutcome = (
   | { ok: true; reply: string; provider: string }
   /**
    * `no_key`: neither the workspace nor the platform has an active key for the vendor. `limit_reached`: the workspace used its monthly
-   * platform-key allowance. `provider_failed`: the vendor errored, timed out or returned nothing (Reference answered 502).
+   * platform-key allowance, or its wallet cannot pay for a call on the platform's key (the flow takes its fallback path either way).
+   * `provider_failed`: the vendor errored, timed out or returned nothing (Reference answered 502).
    */
   | {
       ok: false;
@@ -89,8 +100,9 @@ interface AgentProfile {
 /**
  * The flow AI node's one door to a model (TW-FLR-030, Reference's `POST /api/flow-node/ai-call`): picks the vendor from the model name,
  * forces JSON in extraction mode, adds what the attached assistant knows about the message (a few passages of its own knowledge base) to the system prompt, resolves the key (the
- * workspace's own, else the platform's), asks the monthly allowance before using the platform's key, calls the vendor behind the port,
- * and writes the token ledger. It never throws: every failure is an outcome, so a provider problem never crashes a step.
+ * workspace's own, else the platform's), asks the monthly allowance and the wallet before using the platform's key, calls the vendor
+ * behind the port, writes the token ledger and charges the wallet when the platform's key paid. It never throws: every failure is an
+ * outcome, so a provider problem never crashes a step.
  */
 @Injectable()
 export class AiCallService {
@@ -102,6 +114,7 @@ export class AiCallService {
     private readonly meter: AiTokenMeter,
     @Inject(FLOW_AI_PORT) private readonly port: FlowAiPort,
     private readonly retrieval: KbRetrievalService,
+    private readonly charge: AiChargeService,
   ) {}
 
   async call(input: AiCallInput): Promise<AiCallOutcome> {
@@ -166,17 +179,34 @@ export class AiCallService {
           };
         }
       }
+      // The same fallback for an empty wallet: the platform's key must not be spent for a workspace that cannot pay for it.
+      try {
+        await this.charge.guardCall(input.orgId, resolved.source);
+      } catch (err) {
+        if (!isWalletEmpty(err)) throw err;
+        return {
+          ok: false,
+          error: 'limit_reached',
+          provider,
+          message: 'The wallet balance is empty',
+        };
+      }
+      // One id for this call; the embedding of its knowledge search hangs under it.
+      const usageId = stableUsageId(input.usageId ?? `anon:${randomUUID()}`);
 
       let system = eff.systemPrompt;
       if (input.json) system += extractionSuffix(input.fields ?? []);
       const assistant = input.agentUse === 'model' ? null : assistantRefOf(input.assistantId);
       if (assistant) {
-        const kb = await this.knowledge(input.orgId, assistant, input.userPrompt).catch(
-          (err: unknown) => {
-            this.logger.warn({ err: String(err) }, '[FLR] knowledge base lookup failed');
-            return { text: '', grounded: false };
-          },
-        );
+        const kb = await this.knowledge(
+          input.orgId,
+          assistant,
+          input.userPrompt,
+          stableUsageId(usageId, 'kb'),
+        ).catch((err: unknown) => {
+          this.logger.warn({ err: String(err) }, '[FLR] knowledge base lookup failed');
+          return { text: '', grounded: false };
+        });
         if (kb.text !== '' || kb.grounded) {
           system += `\n\n--- Knowledge base ---\n${kb.text || '(no matching excerpts)'}\n--- End knowledge base ---`;
         }
@@ -205,6 +235,22 @@ export class AiCallService {
         .catch((err: unknown) =>
           this.logger.warn({ err: String(err) }, '[FLR] the AI token ledger write failed'),
         );
+      // Never throws, and does nothing for a workspace on its own key. Only a call the vendor answered is charged. A vendor that
+      // answered without saying what it used is priced from the text (4 characters a token), not given away.
+      const counted = result.promptTokens + result.completionTokens > 0;
+      await this.charge.chargeCall({
+        orgId: input.orgId,
+        keySource: resolved.source,
+        label: 'AI flow step',
+        source: 'flow',
+        usageId,
+        provider,
+        model: eff.model,
+        promptTokens: counted
+          ? result.promptTokens
+          : Math.ceil((system.length + input.userPrompt.length) / 4),
+        completionTokens: counted ? result.completionTokens : Math.ceil(result.text.length / 4),
+      });
       if (result.text.trim() === '') {
         return {
           ok: false,
@@ -254,6 +300,7 @@ export class AiCallService {
     orgId: number,
     ref: FlowRef,
     message: string,
+    usageId: string,
   ): Promise<{ text: string; grounded: boolean }> {
     // The workspace's own assistant by row id or uuid; another tenant's (or no) assistant has no row here, so no knowledge.
     const assistantId = await this.db.txAs({ orgId, userId: null }, async (tx) => {
@@ -265,7 +312,7 @@ export class AiCallService {
       return own.rows.length === 0 ? null : Number((own.rows[0] as { id: number | string }).id);
     });
     if (assistantId === null) return { text: '', grounded: false };
-    const found = await this.retrieval.retrieve(orgId, assistantId, message);
+    const found = await this.retrieval.retrieve(orgId, assistantId, message, usageId);
     const parts: string[] = [];
     let budget = KNOWLEDGE_BUDGET;
     for (const p of found.passages) {

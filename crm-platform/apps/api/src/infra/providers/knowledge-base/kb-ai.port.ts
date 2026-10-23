@@ -15,6 +15,8 @@ export interface KbEmbedResult {
   /** One vector per input, in input order. */
   vectors: number[][];
   promptTokens: number;
+  /** What the vendor charged for the whole call in US dollars, when its answer says (OpenRouter's `usage.cost`); absent otherwise. */
+  costUsd?: number;
 }
 
 export type KbAiErrorKind =

@@ -72,6 +72,7 @@ describe('OutboundService.assertGroupSendable for a personal number', () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
     );
     const tx = { execute: vi.fn(async () => ({ rows: row ? [row] : [] })) };
     const run = () =>

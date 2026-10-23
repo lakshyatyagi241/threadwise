@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import {
   ERROR_CODES,
   type BroadcastAssistantInput,
@@ -13,6 +14,7 @@ import {
 } from '../../infra/providers/lead-scoring/lead-scoring-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { AI_PROVIDER, LeadScoringConfigService, maskPii } from '../lead-scoring';
+import { AiChargeService } from '../wallet-message-billing';
 import { GrowthGateService } from './growth-gate.service';
 import { GrowthService } from './growth.service';
 import { GrowthRepository } from './growth.repository';
@@ -35,6 +37,7 @@ export class GrowthAssistantService {
     private readonly config: LeadScoringConfigService,
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
+    private readonly wallet: AiChargeService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
   ) {}
 
@@ -86,6 +89,8 @@ export class GrowthAssistantService {
       );
     }
     if (resolved.source === 'admin') await this.meter.guard(orgId);
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no call. Their own key passes.
+    await this.wallet.guardCall(orgId, resolved.source);
 
     const prompt = assistantPrompt(maskPii(input.goal), candidates);
     let completion;
@@ -119,6 +124,19 @@ export class GrowthAssistantService {
         billedAgainst: resolved.source,
       })
       .catch(() => undefined);
+    // One id per recommendation, made here: nothing retries this path (a repeat is a new vendor call, so a new charge).
+    await this.wallet.chargeCall({
+      orgId,
+      keySource: resolved.source,
+      label: 'AI growth assistant',
+      source: 'growth_assistant',
+      usageId: `growth-assistant:${orgId}:${randomUUID()}`,
+      provider: AI_PROVIDER,
+      model: cfg.model,
+      promptTokens: completion.promptTokens,
+      completionTokens: completion.completionTokens,
+      reportedCostUsd: completion.costUsd,
+    });
     const parsed = parseRecommendation(completion.text, candidates);
     if (!parsed) {
       throw new AppError(

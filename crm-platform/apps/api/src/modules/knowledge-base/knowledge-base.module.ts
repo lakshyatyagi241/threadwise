@@ -3,6 +3,7 @@ import { KB_AI_PORT } from '../../infra/providers/knowledge-base/kb-ai.port';
 import { FixtureKbAiAdapter } from '../../infra/providers/knowledge-base/fixture-kb-ai.adapter';
 import { OpenRouterKbAiAdapter } from '../../infra/providers/knowledge-base/openrouter-kb-ai.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { KbChunkRepository } from './kb-chunk.repository';
 import { KbConfigService } from './kb-config.service';
 import { KbEmbeddingService } from './kb-embedding.service';
@@ -28,11 +29,12 @@ export const kbAiProvider = {
 
 /**
  * The knowledge base search every AI agent reads through: passages of the agent's own entries, embedded and searched by meaning.
- * No controller: nothing about it is set by a workspace user. The worker-only piece (the embedding queue) is in
+ * Embedding on the platform's key is charged to the workspace's wallet (WalletMessageBillingModule: the API and the worker both
+ * resolve it through this import). No controller: nothing about it is set by a workspace user. The worker-only piece (the embedding queue) is in
  * KnowledgeBaseWorkerModule. Registered in app.module.ts.
  */
 @Module({
-  imports: [AiKeysUsageAdminModule],
+  imports: [AiKeysUsageAdminModule, WalletMessageBillingModule],
   providers: [
     kbAiProvider,
     KbConfigService,

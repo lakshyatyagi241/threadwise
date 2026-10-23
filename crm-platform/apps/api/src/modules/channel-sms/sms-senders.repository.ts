@@ -208,6 +208,22 @@ export class SmsSendersRepository {
       WHERE org_id = ${orgId} AND metric = ${metric} AND period = ${period}`);
   }
 
+  // --- the expense log (what an SMS is shown as) ------------------------------------------------------------------------------
+
+  /** The name of the broadcast or campaign a send belongs to, for the customer's expense log; null when it is gone. */
+  async subjectName(
+    tx: Tx,
+    orgId: number,
+    subject: { kind: 'broadcast' | 'campaign'; id: number },
+  ): Promise<string | null> {
+    const res = await tx.execute(
+      subject.kind === 'broadcast'
+        ? sql`SELECT name FROM broadcasts WHERE org_id = ${orgId} AND id = ${subject.id}`
+        : sql`SELECT campaign_name AS name FROM wpcampaigns WHERE org_id = ${orgId} AND id = ${subject.id}`,
+    );
+    return (res.rows[0] as { name: string | null } | undefined)?.name ?? null;
+  }
+
   // --- contacts (the send-side opt-out, TW-SMS-024) ---------------------------------------------------------------------------
 
   async isOptedOut(tx: Tx, orgId: number, contactId: number): Promise<boolean> {

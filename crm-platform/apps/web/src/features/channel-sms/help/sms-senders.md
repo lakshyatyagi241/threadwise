@@ -35,7 +35,7 @@ SMS senders connects the numbers or sender names you text from. SMS here is send
 
 ## Plan and access
 
-You need the permission to view SMS senders to open the screen, and the manage permission to connect, switch or remove a sender. SMS needs a plan that includes it; without one the entry in Settings is locked. Texts count against your plan's monthly SMS quota and are never charged to the WhatsApp wallet.
+You need the permission to view SMS senders to open the screen, and the manage permission to connect, switch or remove a sender. SMS needs a plan that includes it; without one the entry in Settings is locked. Texts count against your plan's monthly SMS quota, and every SMS segment is also charged to your wallet. When the wallet cannot pay, a broadcast or campaign pauses and the rest of the recipients wait until you top up.
 
 ## If something looks wrong
 

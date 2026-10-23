@@ -32,6 +32,16 @@ export { ExternalChannelIngest, type ExternalAccount } from './external-channel-
 export { ChatConversationsWorkerModule } from './chat-conversations-worker.module';
 export { MessageMediaAccessPolicy } from './media-access.policy';
 export { normalizePeerKey, identityOfPeer, isPhoneChannel } from './peer-key';
+// The platform's per-message fee on email and the chat channels: what is billed, under which key (the channels' own broadcast senders use it).
+export {
+  chatUsageId,
+  chatUsageReport,
+  usageKindOfChannel,
+  type ChatUsageInput,
+  type ChatUsageKind,
+} from './chat-usage';
+export { ChatUsageReporter, type BroadcastUsageRef } from './chat-usage-reporter';
+export { CONVERSATIONS_MODULE } from './conversation-lifecycle.service';
 export {
   InboundMessageHooks,
   type InboundMessageListener,

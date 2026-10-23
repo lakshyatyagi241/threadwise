@@ -228,7 +228,7 @@ describe('activity table', () => {
     );
     expect(html).toContain('-$0.50');
     expect(html).toContain('+$1,000.00');
-    expect(html).toContain('Message charge');
+    expect(html).toContain('Usage charge');
     expect(html).toContain('Top-up');
     expect(html).toContain('text-danger');
     expect(html).toContain('text-success');

@@ -111,7 +111,7 @@ export class MessageDispatchService {
       return this.failed(orgId, row, ref, err, options, runtime.uuid);
     }
 
-    await this.markSent(orgId, row, conv, ref, sent, runtime.kind);
+    await this.markSent(orgId, row, conv, ref, sent, runtime);
     // After the commit: a receipt finds its message through the ledger row this transaction wrote.
     await this.dispatcher.scheduleReceipts(runtime, sent);
     return 'sent';
@@ -188,7 +188,7 @@ export class MessageDispatchService {
     conv: ConversationRow,
     ref: { id: number; createdAt: string },
     sent: DispatchResult,
-    channelKind: string,
+    channel: Pick<ChannelRuntime, 'kind' | 'externalId'>,
   ): Promise<void> {
     const done = await this.db.txAs({ orgId }, async (tx) => {
       // The thread's lock first (the order every writer takes), then the message.
@@ -214,7 +214,8 @@ export class MessageDispatchService {
         },
       );
       await this.deliveries.report(tx, orgId, {
-        channelKind,
+        channelKind: channel.kind,
+        channelExternalId: channel.externalId,
         conversationId: conv.id,
         peerKey: conv.peerKey,
         status: 'sent',

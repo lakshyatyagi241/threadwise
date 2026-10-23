@@ -111,6 +111,13 @@ call's message token on their row. A call Viber rejects as a whole fails every u
 sent copy is mirrored into the user's thread as an outbound message (`source: broadcast`). Counters are recomputed from the rows. Events:
 `viber.broadcast.created|started|paused|retry_requested|deleted`.
 
+## Per-message fee (wallet)
+
+Every message Viber accepts is charged to the workspace's wallet and appears in its expense log (`usage_charges`, kind `chat_message`): the platform's fee on top of the customer's own account. The price is the operator's (usage price `chat_message`; default 0, so a fresh install tracks the messages and charges nothing until it is priced). An inbox reply is billed by the shared pipeline, see [chat-conversations.md](chat-conversations.md#outbound-outboundservice-messagedispatchservice).
+
+- **Broadcast.** A batch of up to 300 users is one call with one message token, so the fee is reported per user that was not in `failed_list`, billed on `<token>:<user id>` (`source` `broadcast`, the broadcast's name): the same id the user's inbox copy carries. A later Viber `failed` receipt for that user reports the id `failed` and gives the fee back (an inbox reply and a broadcast copy alike); `delivered` and `seen` report nothing. A billing fault is logged and never fails the recipient.
+- **Empty wallet.** Before each batch the sender asks the wallet. When it cannot pay, the run stops: nobody is failed, what is left stays `pending`, the broadcast goes back to `draft` with the reason in `lastError`, and **Start** continues it after a top-up.
+
 ## Quiet hours (BL-191)
 
 Viber broadcasts are marketing, so a recipient whose contact's local time is inside the workspace's quiet hours (Compliance center) is held, not denied: the recipient stays `pending`, the rest of the audience is sent, the broadcast stays `sending`, and a delayed job takes the held recipients up at the first opening, asking the ConsentGate again. `GET` of the broadcast list returns `held` (how many wait) and `heldUntil` (the first instant one of them may be messaged) on each broadcast. See [compliance.md](compliance.md).

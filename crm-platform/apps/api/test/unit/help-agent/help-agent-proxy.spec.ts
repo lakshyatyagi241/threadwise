@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { HttpStatus, Logger } from '@nestjs/common';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
@@ -139,12 +139,55 @@ describe('help agent: the model proxy', () => {
     expect(t.repo.tasks[0]).toMatchObject({ steps: 1, promptTokens: 120, completionTokens: 30 });
   });
 
+  it('takes the step from the wallet inside the ledger transaction when the platform key paid, keyed by task and step', async () => {
+    const { t, taskId } = await ready();
+    await t.as(() => t.proxy.complete(taskId, goodBody));
+    await t.as(() => t.proxy.complete(taskId, goodBody));
+    expect(t.wallet.guarded).toEqual([
+      { orgId: 1, keySource: 'admin' },
+      { orgId: 1, keySource: 'admin' },
+    ]);
+    expect(t.wallet.charges.map((c) => c.key)).toEqual([
+      `ai-help:1:${taskId}:1`,
+      `ai-help:1:${taskId}:2`,
+    ]);
+    expect(t.wallet.charges[0]).toMatchObject({
+      viaTx: true,
+      input: { orgId: 1, label: 'AI help assistant', source: 'help_agent', provider: 'openai' },
+    });
+    expect(t.wallet.charges[0]!.input.costUsd).toBeGreaterThan(0);
+  });
+
+  it('refuses before the vendor is called when the wallet cannot pay for the platform key', async () => {
+    const { t, taskId } = await ready();
+    t.wallet.guardError = new AppError(
+      ERROR_CODES.WALLET_EMPTY,
+      'empty',
+      HttpStatus.UNPROCESSABLE_ENTITY,
+    );
+    expect(await codeOf(t.as(() => t.proxy.complete(taskId, goodBody)))).toBe(
+      ERROR_CODES.WALLET_EMPTY,
+    );
+    expect(t.port.calls).toHaveLength(0);
+    expect(t.wallet.charges).toHaveLength(0);
+  });
+
+  it('charges nothing when the vendor gave no answer', async () => {
+    const { t, taskId } = await ready();
+    t.port.next = new HelpAgentLlmError(503, 'down');
+    await codeOf(t.as(() => t.proxy.complete(taskId, goodBody)));
+    expect(t.wallet.charges).toHaveLength(0);
+  });
+
   it('bills a workspace key to the workspace and does not ask the platform allowance', async () => {
     const { t, taskId } = await ready({ HELP_AGENT_MODEL: 'gpt-configured' });
     t.keys.resolved = { key: 'sk-workspace', source: 'workspace', model: null };
     await t.as(() => t.proxy.complete(taskId, goodBody));
     expect(t.meter.guarded).toEqual([]);
     expect(t.meter.recorded[0]!.usage.billedAgainst).toBe('workspace');
+    // The wallet is asked (it passes a workspace key) but nothing is taken: they pay their vendor directly.
+    expect(t.wallet.guarded).toEqual([{ orgId: 1, keySource: 'workspace' }]);
+    expect(t.wallet.charges).toHaveLength(0);
   });
 
   it('is unavailable when a workspace key brings no model and none is configured', async () => {

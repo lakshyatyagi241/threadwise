@@ -16,6 +16,7 @@ import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba
 import { SendWindowService } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { UsageBillingService } from '../wallet-message-billing';
 import { WabaConnectService } from '../whatsapp-cloud-api-waba';
 import { digitsOf, isPermissionRefusal, usableAnswer } from './calling.rules';
 import { CallsRepository, type CallRow } from './calls.repository';
@@ -49,6 +50,7 @@ export class CallActionsService {
     @Inject(CALLING_GRAPH) private readonly graph: CallingGraph,
     private readonly consentGate: ConsentGate,
     private readonly sendWindow: SendWindowService,
+    private readonly usage: UsageBillingService,
   ) {}
 
   // --- dial ------------------------------------------------------------------------------------------------------------------
@@ -57,6 +59,7 @@ export class CallActionsService {
    * Places an outbound call (TW-CALL-008). Permission first: with no usable grant no call is placed, a permission request goes out
    * instead and the answer is 422 `CALL_PERMISSION_REQUESTED`. The call row is written before Meta is asked (the correlation id comes
    * back in the connect webhook) and, unlike Reference, is marked `failed` when Meta refuses, so no `ringing` call is left behind.
+   * A call is paid usage (every started minute, charged when Meta ends it), so an empty wallet is refused up front: 422 `WALLET_EMPTY`.
    */
   async dial(input: DialInput): Promise<DialResult> {
     const { orgId, userId } = caller();
@@ -91,6 +94,8 @@ export class CallActionsService {
       }
     }
     await this.assertCallingWindow(orgId, ctx.contactId, ctx.conversationId, to);
+    // Before the permission request too: a workspace that cannot pay for the call must not message the customer to ask for it.
+    await this.usage.assertCanAfford(orgId, 'whatsapp_call', 1);
     if (!(await this.permissions.mayCall(orgId, ctx.number.id, to))) {
       const alreadyPermitted = await this.permissions.send(orgId, ctx.number, ctx.conn, to);
       if (!alreadyPermitted) throw this.permissionRequested();

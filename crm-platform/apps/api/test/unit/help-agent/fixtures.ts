@@ -177,6 +177,40 @@ export class FakeMeter {
   }
 }
 
+export class FakeWallet {
+  guarded: Array<{ orgId: number; keySource: string }> = [];
+  charges: Array<{
+    viaTx: boolean;
+    input: {
+      orgId: number;
+      label: string;
+      costUsd: number;
+      source: string;
+      provider?: string | null;
+    };
+    key: string;
+  }> = [];
+  guardError: Error | null = null;
+  async guardCall(orgId: number, keySource: string) {
+    this.guarded.push({ orgId, keySource });
+    if (this.guardError) throw this.guardError;
+  }
+  async charge(
+    tx: Tx,
+    input: {
+      orgId: number;
+      label: string;
+      costUsd: number;
+      source: string;
+      provider?: string | null;
+    },
+    key: string,
+  ) {
+    this.charges.push({ viaTx: tx !== undefined, input, key });
+    return 0;
+  }
+}
+
 export const baseCtx = (over: Partial<RequestContext> = {}): RequestContext => ({
   requestId: 'req-1',
   orgId: 1,
@@ -194,6 +228,7 @@ export function build(envOver: Record<string, string> = {}) {
   const port = new FakePort();
   const keys = new FakeKeys();
   const meter = new FakeMeter();
+  const wallet = new FakeWallet();
   const agent = new HelpAgentService(
     db as never,
     repo as unknown as HelpAgentRepository,
@@ -206,12 +241,13 @@ export function build(envOver: Record<string, string> = {}) {
     agent,
     keys as never,
     meter as never,
+    wallet as never,
     port,
     env,
   );
   const as = <T>(fn: () => Promise<T>, ctx: RequestContext = baseCtx()): Promise<T> =>
     RequestContextStore.run(ctx, fn);
-  return { env, repo, db, audit, port, keys, meter, agent, proxy, as };
+  return { env, repo, db, audit, port, keys, meter, wallet, agent, proxy, as };
 }
 
 export const goodBody = {

@@ -29,6 +29,8 @@ const wrap = (el: ReactElement) =>
 
 const event = (over: Partial<ExpenseEvent>): ExpenseEvent => ({
   id: 'wamid.X',
+  kind: 'whatsapp_message',
+  units: 1,
   createdAt: '2026-10-19T10:30:00.000Z',
   status: 'charged',
   billingMode: 'wallet',
@@ -51,6 +53,28 @@ const event = (over: Partial<ExpenseEvent>): ExpenseEvent => ({
 });
 
 describe('message expense log', () => {
+  it('shows what each expense is: a message, an SMS with its segments, a call with its minutes, an AI request', () => {
+    const html = wrap(
+      <ExpenseTable
+        rows={[
+          event({ id: 'a', kind: 'whatsapp_message' }),
+          event({ id: 'b', kind: 'sms', units: 3, template: null, subjectName: 'Spring promo' }),
+          event({ id: 'c', kind: 'whatsapp_call', units: 1, template: null, subjectName: null }),
+          event({ id: 'd', kind: 'ai', template: null, subjectName: 'AI lead scoring' }),
+        ]}
+        currency="USD"
+      />,
+    );
+    expect(html).toContain('WhatsApp message');
+    expect(html).toContain('>SMS<');
+    expect(html).toContain('3 segments');
+    expect(html).toContain('WhatsApp call');
+    expect(html).toContain('1 minute');
+    expect(html).toContain('AI lead scoring');
+    // An AI request has no units line: one request is one request.
+    expect(html).not.toContain('1 request');
+  });
+
   it('shows the template, the campaign, the category and what the message cost', () => {
     const html = wrap(<ExpenseTable rows={[event({})]} currency="USD" />);
     expect(html).toContain('order_update');

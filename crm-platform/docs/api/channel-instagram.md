@@ -56,6 +56,13 @@ Instagram only lets an account message someone who already wrote to it, so recip
 
 `errors` holds up to five reasons, each cut to 120 characters ("IgDesk HTTP 400: Outside the 24 hour window"). A thread that is not the organization's or not an Instagram thread counts as failed. Every message that went is shown in its thread at once, with the engine's id so the pull does not show it again. Nothing is kept as a broadcast record.
 
+## Per-message fee (wallet)
+
+Every message Instagram accepts is charged to the workspace's wallet and appears in its expense log (`usage_charges`, kind `chat_message`): the platform's fee on top of the customer's own account. The price is the operator's (usage price `chat_message`; default 0, so a fresh install tracks the messages and charges nothing until it is priced). An inbox reply is billed by the shared pipeline, see [chat-conversations.md](chat-conversations.md#outbound-outboundservice-messagedispatchservice).
+
+- **Reply-only sends.** `POST /v2/instagram/broadcasts` (`source` `broadcast`) and `POST /v2/instagram/composer/send` (`source` `inbox`) report one `usage.reported` per thread Instagram accepts, billed on the message id Instagram returned (a send with no id is not billed), right after the send and before the copy into the thread; a billing fault is logged and never fails the send. A message the account sent from the Instagram app itself, seen later by the pull, is not billed.
+- **Empty wallet.** Both routes check the wallet for one message per picked thread before anything is sent and answer `422 WALLET_EMPTY`. A held send that is released later (quiet hours) is dropped and counted `failed` when the wallet cannot pay by then.
+
 ## Quiet hours (BL-191)
 
 `POST /v2/instagram/broadcasts` is marketing: a thread whose contact's local time is inside the workspace's quiet hours is held, not denied. The answer is `{ sent, failed, errors, held, heldUntil }` and a delayed job sends the held threads at the opening (the ConsentGate and the 24 hour window are asked again then). `POST /v2/instagram/composer/send` (a person answering in the inbox) is never held. See [compliance.md](compliance.md).

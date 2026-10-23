@@ -8,7 +8,10 @@ import {
   quotaMessage,
   randomToken,
   senderKey,
+  subjectOfReference,
+  usageAggregateOf,
   usagePeriod,
+  usageSourceOf,
 } from '../../../src/modules/channel-sms/sender-rules';
 
 const parse = (v: Record<string, unknown>) =>
@@ -126,6 +129,40 @@ describe('addresses, references and the month', () => {
     expect(contactOfReference('camp-7-9-r2')).toBe(9);
     expect(contactOfReference('camptest-7-1700000000000-0')).toBeNull();
     expect(contactOfReference('whatever')).toBeNull();
+  });
+
+  it('the broadcast or campaign a dispatcher reference names, else null', () => {
+    expect(subjectOfReference('bcast-12-345')).toEqual({ kind: 'broadcast', id: 12 });
+    expect(subjectOfReference('camp-7-9')).toEqual({ kind: 'campaign', id: 7 });
+    expect(subjectOfReference('camp-7-9-r2')).toEqual({ kind: 'campaign', id: 7 });
+    expect(subjectOfReference('camptest-7-1700000000000-0')).toBeNull();
+    expect(subjectOfReference('lead-first-1-5')).toBeNull();
+    expect(subjectOfReference('')).toBeNull();
+  });
+
+  it("where an SMS came from, for the expense log: the reference first, then the send's own source, else api", () => {
+    expect(usageSourceOf('bcast-12-345')).toBe('broadcast');
+    expect(usageSourceOf('camp-7-9-r1')).toBe('campaign');
+    expect(usageSourceOf('lead-first-1-5')).toBe('lead_first');
+    // a reference of the lead pipeline's shape wins over a source the caller typed
+    expect(usageSourceOf('lead-first-1-5', 'appointment')).toBe('lead_first');
+    expect(usageSourceOf('appt-msg-abc', 'Appointment')).toBe('appointment');
+    expect(usageSourceOf('x', ' Flow Builder! ')).toBe('flow_builder');
+    expect(usageSourceOf('x', 'a'.repeat(40))).toHaveLength(24);
+    expect(usageSourceOf('whatever')).toBe('api');
+    expect(usageSourceOf('whatever', '  ')).toBe('api');
+    expect(usageSourceOf('whatever', null)).toBe('api');
+  });
+
+  it('the billing aggregate of a message is stable, per message, and a safe integer for the outbox column', () => {
+    const a = usageAggregateOf('SM0123456789abcdef0123456789abcdef');
+    expect(usageAggregateOf('SM0123456789abcdef0123456789abcdef')).toBe(a);
+    expect(usageAggregateOf('SM0123456789abcdef0123456789abcdee')).not.toBe(a);
+    for (const id of ['SM1', 'msg91-request-id', 'x'.repeat(191)]) {
+      const n = usageAggregateOf(id);
+      expect(Number.isSafeInteger(n)).toBe(true);
+      expect(n).toBeGreaterThanOrEqual(0);
+    }
   });
 
   it('the allowance month is the UTC calendar month; the quota sentence names the cap', () => {

@@ -33,6 +33,11 @@ export interface AiCrmTurnInput {
   isWriteTool: (name: string) => boolean;
   /** Runs a READ tool and returns its result; never called for a write tool. */
   executeReadTool: (name: string, args: Record<string, unknown>) => Promise<AiCrmToolCallResult>;
+  /**
+   * Called after every vendor answer with the tokens used so far in this turn. A turn that throws on a later step has no outcome to
+   * read the tokens from, and the earlier steps were already paid for: this is how the caller still learns what to charge.
+   */
+  onUsage?: (usage: { promptTokens: number; completionTokens: number }) => void;
 }
 
 export interface AiCrmExecutedAction {
