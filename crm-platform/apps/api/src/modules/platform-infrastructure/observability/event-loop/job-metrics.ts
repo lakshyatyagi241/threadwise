@@ -1,4 +1,12 @@
 import type { RuntimeMonitor } from '@crm/observability';
+import { reportJobFailure } from '../sentry';
+
+interface FailureEmitter {
+  on(
+    event: 'failed',
+    listener: (job: { name?: string; attemptsMade?: number } | undefined, err: Error) => void,
+  ): unknown;
+}
 
 /** The BullMQ `Job` fields the timing needs. Structural, so the hook is testable without Redis. */
 export interface JobTimingFields {
@@ -59,6 +67,18 @@ export function jobTimings(job: JobTimingFields | undefined): JobTimings | null 
  * Feeds a worker's finished jobs to the monitor. The queue label is the worker's queue name (a fixed set, see `QUEUES`); job ids,
  * names, data and error messages never reach a metric. One observation per job that reaches a final state.
  */
+/** Sends every final job failure to Sentry, tagged by queue. `failed` fires only for a final state, so a retry is not reported. */
+export function attachJobFailureReporting(worker: ObservableWorker): void {
+  // BullMQ passes the error as the second argument of `failed`; the metrics shape above only types the job.
+  (worker as unknown as FailureEmitter).on('failed', (job, err) =>
+    reportJobFailure(err, {
+      queue: worker.name,
+      name: job?.name,
+      attemptsMade: job?.attemptsMade,
+    }),
+  );
+}
+
 export function attachJobMetrics(
   worker: ObservableWorker,
   monitor: Pick<RuntimeMonitor, 'observeJob'>,

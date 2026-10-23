@@ -1,5 +1,6 @@
 'use client';
 
+import * as Sentry from '@sentry/nextjs';
 import { useEffect } from 'react';
 import { Alert, Button } from '@crm/ui';
 import { useRa } from './use-ra';
@@ -17,7 +18,8 @@ export function RecordAssignmentRouteError({
 }) {
   const { t } = useRa();
   useEffect(() => {
-    console.error(error);
+    // A boundary swallows the error, so Sentry's global handlers never see it: report it here.
+    Sentry.captureException(error);
   }, [error]);
   return (
     <section className="mx-auto max-w-5xl space-y-3" data-testid="record-assignment-error">

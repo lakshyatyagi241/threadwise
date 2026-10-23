@@ -1,7 +1,7 @@
 import { WorkerHost } from '@nestjs/bullmq';
 import { Injectable, Logger, Module, type OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
-import { attachJobMetrics, type ObservableWorker } from './job-metrics';
+import { attachJobFailureReporting, attachJobMetrics, type ObservableWorker } from './job-metrics';
 import { getRuntimeMonitor } from '@crm/observability';
 
 /**
@@ -19,15 +19,19 @@ export class JobMetricsService implements OnApplicationBootstrap {
 
   onApplicationBootstrap(): number {
     const monitor = getRuntimeMonitor();
-    if (!monitor) return 0;
     let attached = 0;
     for (const wrapper of this.discovery.getProviders()) {
       const instance: unknown = wrapper.instance;
       if (!(instance instanceof WorkerHost)) continue;
       try {
         // A BullMQ Worker's `on` is overloaded per event; the hook only needs the completed/failed shape.
-        attachJobMetrics(instance.worker as unknown as ObservableWorker, monitor);
-        attached += 1;
+        const worker = instance.worker as unknown as ObservableWorker;
+        // Error reporting does not depend on the runtime monitor being on.
+        attachJobFailureReporting(worker);
+        if (monitor) {
+          attachJobMetrics(worker, monitor);
+          attached += 1;
+        }
       } catch (err) {
         this.logger.warn({ err, processor: wrapper.name }, 'job metrics not attached to a worker');
       }
