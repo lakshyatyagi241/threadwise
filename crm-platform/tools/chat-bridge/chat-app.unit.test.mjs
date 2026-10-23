@@ -406,3 +406,51 @@ test('deploy_failure: a release alone resolves the card; webhook mode and API fa
     assert.ok(r.posts.length > 1, 'lifecycle lines still arrive as messages');
   }
 });
+
+// ---- PR merged poller ----
+const PRURL = 'https://github.com/lakshyatyagi241/threadwise/pull/971';
+const gh = (body, ok = true) => { const calls = []; const f = async (u, o) => { calls.push({ u, o }); if (body instanceof Error) throw body; return { ok, text: async () => JSON.stringify(body) }; }; f.calls = calls; return f; };
+async function withPr() {
+  const t = await bootInc(); await t.am('firing'); await t.b.resolver.settle();
+  const id = t.b.resolver.byKey('am:fpx').id;
+  await t.b.resolver.raisePr(id, 'Ved', { url: PRURL, number: 971, summary: 's' });
+  const patches = () => t.f.log.api.filter((x) => x.method === 'PATCH');
+  const { startPrPoller } = await import('./pr-poller.mjs');
+  const poll = (fetchImpl, readFile = () => 'tok-secret\n') => startPrPoller({ resolver: t.b.resolver, env: {}, fetchImpl, readFile });
+  return { ...t, id, patches, poll };
+}
+test('PR merged: card edited once to the merged status, no new post, then release still resolves', async () => {
+  const { b, f, am, id, patches, poll, close } = await withPr();
+  const g = gh({ merged: true, merged_by: { login: 'lakshya-ty' }, merged_at: '2026-10-23T10:05:00Z', merge_commit_sha: 'abcdef1234567890abcdef1234567890abcdef12' });
+  const p = poll(g); const posts = f.log.api.filter((x) => x.method === 'POST').length, n0 = patches().length;
+  await p.tick(); await p.tick();
+  assert.equal(g.calls.length, 1, 'merged incident is not polled again');
+  assert.match(g.calls[0].u, /repos\/lakshyatyagi241\/threadwise\/pulls\/971$/);
+  assert.equal(patches().length, n0 + 1);
+  assert.match(txt(patches().at(-1).body), /🟣 Status: .*PR #971.* merged by lakshya-ty at 10:05 UTC, waiting for the release to go live/);
+  assert.match(txt(patches().at(-1).body), /PR #971 merged by lakshya-ty/);
+  assert.equal(f.log.api.filter((x) => x.method === 'POST').length, posts);
+  assert.equal(b.resolver.get(id).prMerged.sha7, 'abcdef1');
+  await b.resolver.setRelease('abcdef1234567', [971]); await b.resolver.settle(); await am('resolved'); await b.resolver.settle();
+  assert.match(txt(patches().at(-1).body), /✅ Status: Resolved by/);
+  p.stop(); close();
+});
+test('PR closed without merge: card says so, needs a human, not resolved', async () => {
+  const { b, id, patches, poll, close } = await withPr();
+  await poll(gh({ merged: false, state: 'closed' })).tick();
+  assert.match(txt(patches().at(-1).body), /PR #971 was closed without merging/);
+  assert.notEqual(b.resolver.get(id).status, 'resolved'); assert.equal(b.resolver.get(id).status, 'escalated');
+  close();
+});
+test('PR poll: failing fetch, bad json, 404 leave the card unchanged and never throw', async () => {
+  const { patches, poll, close } = await withPr(); const n = patches().length;
+  for (const g of [gh(new Error('boom')), gh({}, false), gh(new DOMException('t', 'TimeoutError'))]) await poll(g).tick();
+  assert.equal(patches().length, n); close();
+});
+test('PR poll: no token file = disabled; token never logged; hostile login not trusted', async () => {
+  const { poll, b, id, close } = await withPr();
+  const g = gh({}); const off = poll(g, () => { throw new Error('ENOENT'); });
+  await off.tick(); assert.equal(off.enabled, false); assert.equal(g.calls.length, 0);
+  await poll(gh({ merged: true, merged_by: { login: '<b>x</b>' }, merged_at: '2026-10-23T10:05:00Z' })).tick();
+  assert.equal(b.resolver.get(id).prMerged.by, null); close();
+});
