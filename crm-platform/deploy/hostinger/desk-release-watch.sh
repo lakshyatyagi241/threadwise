@@ -124,7 +124,7 @@ db_poll() {
   if [ $nstuck -gt 0 ]; then
     for t in $stuck; do once "$t.stuck"; done
     if [ $nstuck = 1 ]; then post "$(msg stuck "" "${stuck# }" "$maxage")"; else post "$(python3 "$FORMATTER" --group "${stuck# }" "$maxage" 2>>"$STATE/watch.log" || echo "⚠️ $nstuck builds are stuck")"; fi
-    ( for t in $stuck; do notify_bridge unchanged "$live" "$t" 0; done ) >/dev/null 2>&1 &
+    # one grouped message is the whole notice: no per-build incident (13 near-identical "Deploy failed" cards, no PRs known, were posted when this was per tag)
   fi
   : > "$STATE/seeded"
   # self-check 2: a release the process path announced as live has no row in platform_releases after 2 min -> the table is not being fed
