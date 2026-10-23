@@ -85,6 +85,13 @@ class ProbeController {
   @Post('body') body() {
     return {};
   }
+  @Post('v2/public/webhooks/probe') webhook() {
+    return { received: true };
+  }
+  @Post('v2/public/webhooks/refused') refused() {
+    this.log.warn('webhook refused');
+    throw new BadRequestException('refused');
+  }
 }
 
 @Module({
@@ -187,6 +194,13 @@ describe('structured logging (Sheet3 #74)', () => {
   it('health probes are not logged at info', async () => {
     const { logs } = await hit('/health');
     expect(logs.filter((o) => o.level === 'info' || o.level === 'warn').length).toBe(0);
+  });
+
+  it('an accepted provider webhook writes no request line; a refused one is still logged by its handler', async () => {
+    const ok = await hit('/v2/public/webhooks/probe', { method: 'POST' });
+    expect(ok.logs).toEqual([]);
+    const refused = await hit('/v2/public/webhooks/refused', { method: 'POST' });
+    expect(refused.logs.some((o) => o.msg === 'webhook refused')).toBe(true);
   });
 
   it('a 5 MB body is not copied into the log', async () => {
