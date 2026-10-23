@@ -473,11 +473,23 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   const relinked = await relinkedConversations(db, client);
   // chat-status closed conversations Waboo has closed (same trigger; run_log _chat/chat_status)
   const statusChanged = await statusChangedConversations(db, client);
+  // the app's analytics trigger on messages stamps first_inbound_at / first_replied_at on the conversation when a counted message arrives at
+  // or after the feed cut-over (the app's an_msg_feed_cutover); that stamp is an UPDATE, so it moves updated_at and row_version too
+  const FEED_CUTOVER = '2026-10-21T07:13:06.165671Z';
+  const feedStamped = new Set(
+    (
+      await tenant((tx) =>
+        tx.execute(sql`SELECT uuid::text AS uuid FROM conversations WHERE org_id = ${orgId}
+          AND (first_inbound_at >= ${FEED_CUTOVER}::timestamptz OR first_replied_at >= ${FEED_CUTOVER}::timestamptz)`),
+      )
+    ).rows.map((r) => String((r as { uuid: string }).uuid)),
+  );
   const touched = (uuid: unknown): boolean =>
     reparsed.has(String(uuid)) ||
     appended.has(String(uuid)) ||
     relinked.has(String(uuid)) ||
-    statusChanged.has(String(uuid));
+    statusChanged.has(String(uuid)) ||
+    feedStamped.has(String(uuid));
   for (const th of threads) {
     const set = convOfThread.get(th.key);
     if (!set || set.size !== 1) continue;
