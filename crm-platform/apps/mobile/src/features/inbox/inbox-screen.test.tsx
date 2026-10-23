@@ -553,7 +553,7 @@ describe('InboxScreen', () => {
       expect(screen.getByRole('button', { name: 'Mark as read' })).toBeTruthy();
       expect(screen.getByRole('button', { name: 'Status' })).toBeTruthy();
       expect(screen.getByRole('button', { name: 'Mark as spam' })).toBeTruthy();
-      for (const name of ['Assign', 'Labels', 'Priority', 'Snooze']) {
+      for (const name of ['Assign', 'Tags', 'Priority', 'Snooze']) {
         expect(screen.queryByRole('button', { name })).toBeNull();
       }
     });
@@ -602,6 +602,9 @@ describe('InboxScreen', () => {
       await chooseBoth();
       await fireEvent.press(await screen.findByRole('button', { name: 'Status' }));
       expect(await screen.findByText('Change status of 2 conversations')).toBeTruthy();
+      // Only Open and Resolved are offered for several at once.
+      expect(screen.getByRole('radio', { name: 'Open' })).toBeTruthy();
+      expect(screen.queryByRole('radio', { name: 'Closed' })).toBeNull();
       await fireEvent.press(screen.getByRole('radio', { name: 'Resolved' }));
       await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       await waitFor(() =>
@@ -655,10 +658,10 @@ describe('InboxScreen', () => {
       ]);
       bulkCall.mockResolvedValue(result());
       await chooseBoth();
-      await fireEvent.press(await screen.findByRole('button', { name: 'Labels' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Tags' }));
       await screen.findByRole('radio', { name: 'VIP' });
       // Taking the label off instead changes the mode, but there is still no label.
-      await fireEvent.press(screen.getByRole('radio', { name: 'Take the label off' }));
+      await fireEvent.press(screen.getByRole('radio', { name: 'Take the tag off' }));
       expect(
         screen.getByRole('button', { name: 'Save changes' }).props.accessibilityState.disabled,
       ).toBe(true);
@@ -709,7 +712,7 @@ describe('InboxScreen', () => {
       bulkCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
       await chooseBoth();
       await fireEvent.press(await screen.findByRole('button', { name: 'Status' }));
-      await fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
       await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
       expect(screen.getByRole('button', { name: 'Save changes' })).toBeTruthy();

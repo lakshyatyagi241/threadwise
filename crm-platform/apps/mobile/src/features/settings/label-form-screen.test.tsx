@@ -76,7 +76,7 @@ describe('LabelFormScreen: a new label', () => {
     await renderApp(<LabelFormScreen />);
     await fill('Name', 'VIP');
     await press('Save changes');
-    expect(await screen.findByText('A label with that name already exists.')).toBeTruthy();
+    expect(await screen.findByText('A tag with that name already exists.')).toBeTruthy();
     expect(router.back).not.toHaveBeenCalled();
   });
 
@@ -87,7 +87,7 @@ describe('LabelFormScreen: a new label', () => {
     await renderApp(<LabelFormScreen />);
     await fill('Name', 'VIP');
     await press('Save changes');
-    expect(await screen.findByText("You have reached your plan's limit of labels.")).toBeTruthy();
+    expect(await screen.findByText("You have reached your plan's limit of tags.")).toBeTruthy();
     await press('Save changes');
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
   });
@@ -105,7 +105,7 @@ describe('LabelFormScreen: a new label', () => {
   it('does not open for a person who may not manage labels', async () => {
     jest.mocked(fetchSession).mockResolvedValue(session);
     await renderApp(<LabelFormScreen />);
-    expect(await screen.findByText('You do not have permission to manage labels.')).toBeTruthy();
+    expect(await screen.findByText('You do not have permission to manage tags.')).toBeTruthy();
     expect(screen.queryByLabelText('Name')).toBeNull();
   });
 });
@@ -150,7 +150,7 @@ describe('LabelFormScreen: editing a label', () => {
     await fill('Name', 'Mine');
     listCall.mockResolvedValue(libraryOf([{ ...vip, name: 'Theirs', rowVersion: 3 }]));
     await press('Save changes');
-    expect(await screen.findByText(/Someone else changed this label first/)).toBeTruthy();
+    expect(await screen.findByText(/Someone else changed this tag first/)).toBeTruthy();
     await waitFor(() => expect(screen.getByLabelText('Name').props.value).toBe('Theirs'));
   });
 

@@ -61,7 +61,11 @@ export function BulkSheets({ kind, ids, onClose, onDone }: Props) {
         groups={[
           {
             key: 'status',
-            options: BULK_STATUS_TARGETS.map((s) => ({ value: s, label: t(`inbox.status.${s}`) })),
+            // "Closed" is not offered here: a person picks Open or Resolved for several at once.
+            options: BULK_STATUS_TARGETS.filter((s) => s !== 'closed').map((s) => ({
+              value: s,
+              label: t(`inbox.status.${s}`),
+            })),
           },
         ]}
         initial={{ status: '' }}

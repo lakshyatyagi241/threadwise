@@ -226,7 +226,7 @@ describe('ConversationDetailsScreen: actions', () => {
     await screen.findByRole('header', { name: 'Rohan Mehta' });
     expect(screen.getByLabelText('Status: Open')).toBeTruthy();
     expect(screen.getByLabelText('Priority: Normal')).toBeTruthy();
-    expect(screen.getByLabelText('Labels: VIP')).toBeTruthy();
+    expect(screen.getByLabelText('Tags: VIP')).toBeTruthy();
     expect(screen.getByLabelText('Assigned agent: Unassigned')).toBeTruthy();
     // No right to change them: none of the rows is a button.
     expect(screen.queryByRole('button', { name: 'Status' })).toBeNull();

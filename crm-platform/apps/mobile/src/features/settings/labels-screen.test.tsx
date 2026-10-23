@@ -44,23 +44,23 @@ describe('LabelsScreen', () => {
       pathname: '/label-form',
       params: { labelId: vip.id },
     });
-    await press('New label');
+    await press('New tag');
     expect(router.push).toHaveBeenLastCalledWith('/label-form');
   });
 
   it('says so when there are no labels yet', async () => {
     listCall.mockResolvedValue(libraryOf([]));
     await renderApp(<LabelsScreen />);
-    expect(await screen.findByText('No labels yet')).toBeTruthy();
-    expect(screen.getByText(/Make your first label with the round button/)).toBeTruthy();
+    expect(await screen.findByText('No tags yet')).toBeTruthy();
+    expect(screen.getByText(/Make your first tag with the round button/)).toBeTruthy();
   });
 
   it('does not list anything, and offers no add button, for a person who may not manage labels', async () => {
     jest.mocked(fetchSession).mockResolvedValue(session);
     await renderApp(<LabelsScreen />);
-    expect(await screen.findByText('You do not have permission to manage labels.')).toBeTruthy();
+    expect(await screen.findByText('You do not have permission to manage tags.')).toBeTruthy();
     expect(listCall).not.toHaveBeenCalled();
-    expect(screen.queryByRole('button', { name: 'New label' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'New tag' })).toBeNull();
   });
 
   it('shows the failure with a way to try again', async () => {
@@ -75,7 +75,7 @@ describe('LabelsScreen', () => {
     deleteCall.mockResolvedValue(undefined);
     await renderApp(<LabelsScreen />);
     await press('Delete VIP');
-    expect(await screen.findByText('Delete this label?')).toBeTruthy();
+    expect(await screen.findByText('Delete this tag?')).toBeTruthy();
     expect(
       screen.getByText(
         '"VIP" will be removed from every conversation and every contact that carries it. This cannot be undone.',
@@ -83,7 +83,7 @@ describe('LabelsScreen', () => {
     ).toBeTruthy();
     await fireEvent.press(screen.getAllByRole('button', { name: 'Delete' }).at(-1)!);
     await waitFor(() => expect(deleteCall).toHaveBeenCalledWith(vip.id));
-    expect(await screen.findByText('Label deleted.')).toBeTruthy();
+    expect(await screen.findByText('Tag deleted.')).toBeTruthy();
   });
 
   it('keeps the label when the person cancels', async () => {
@@ -98,7 +98,7 @@ describe('LabelsScreen', () => {
     await renderApp(<LabelsScreen />);
     await press('Delete VIP');
     await fireEvent.press(screen.getAllByRole('button', { name: 'Delete' }).at(-1)!);
-    expect(await screen.findByText('Label deleted.')).toBeTruthy();
+    expect(await screen.findByText('Tag deleted.')).toBeTruthy();
     deleteCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'x'));
     await press('Delete Billing');
     await fireEvent.press(screen.getAllByRole('button', { name: 'Delete' }).at(-1)!);

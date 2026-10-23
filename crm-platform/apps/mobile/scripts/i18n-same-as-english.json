@@ -219,6 +219,8 @@
     "inbox.filter.labels",
     "inbox.filter.labelsChip",
     "inbox.filter.statusChip",
+    "inbox.filter.tags",
+    "inbox.filter.tagsChip",
     "inbox.kind.audio",
     "inbox.kind.sticker",
     "inbox.kind.video",
@@ -272,9 +274,7 @@
     "tabs.dashboard",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "tasks.form.minute",
-    "inbox.filter.tags",
-    "inbox.filter.tagsChip"
+    "tasks.form.minute"
   ],
   "es": [
     "auth.emailPlaceholder",
@@ -905,6 +905,8 @@
     "inbox.filter.labelsChip",
     "inbox.filter.open",
     "inbox.filter.statusChip",
+    "inbox.filter.tags",
+    "inbox.filter.tagsChip",
     "inbox.filter.title",
     "inbox.kind.audio",
     "inbox.kind.contact",
@@ -971,9 +973,7 @@
     "tasks.filter.group.status",
     "tasks.filter.status.open",
     "tasks.form.contact",
-    "tasks.status.open",
-    "inbox.filter.tags",
-    "inbox.filter.tagsChip"
+    "tasks.status.open"
   ],
   "pl": [
     "calls.summary.purposes.demo",
@@ -1092,6 +1092,7 @@
     "deals.stages.tab",
     "inbox.assign.availability.offline",
     "inbox.assign.availability.online",
+    "inbox.bulk.label",
     "inbox.bulk.status",
     "inbox.channel.facebook",
     "inbox.channel.instagram",
@@ -1099,8 +1100,13 @@
     "inbox.channel.whatsapp",
     "inbox.details.bot",
     "inbox.details.contactStatus",
+    "inbox.details.labels",
     "inbox.details.status",
+    "inbox.filter.labels",
+    "inbox.filter.labelsChip",
     "inbox.filter.statusChip",
+    "inbox.filter.tags",
+    "inbox.filter.tagsChip",
     "inbox.priority.normal",
     "inbox.row.label",
     "inbox.row.labelUnread",
@@ -1141,9 +1147,7 @@
     "settings.teams.strategies.manual",
     "tabs.menu",
     "tasks.details.status",
-    "tasks.filter.group.status",
-    "inbox.filter.tags",
-    "inbox.filter.tagsChip"
+    "tasks.filter.group.status"
   ],
   "ru": [
     "auth.emailPlaceholder",

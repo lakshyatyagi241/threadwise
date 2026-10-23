@@ -42,7 +42,7 @@ describe('SettingsScreen', () => {
     await show();
     for (const name of [
       'Saved replies',
-      'Labels',
+      'Tags',
       'Business hours',
       'Auto-assignment',
       'Team members',
@@ -72,7 +72,7 @@ describe('SettingsScreen', () => {
     expect(mockNavigate).toHaveBeenLastCalledWith('/members');
     await press('Teams');
     expect(mockNavigate).toHaveBeenLastCalledWith('/teams');
-    await press('Labels');
+    await press('Tags');
     expect(mockNavigate).toHaveBeenLastCalledWith('/labels');
   });
 
