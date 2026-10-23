@@ -116,6 +116,7 @@ export const automationFlows: HandlerSpec = {
         c('trigger_config', 'jsonb'),
         c('provider', 'text'),
         c('flow_type', 'text'),
+        c('builder', 'text'),
         c('is_published', 'boolean'),
         c('is_active', 'boolean'),
         c('published_at', 'timestamptz'),
