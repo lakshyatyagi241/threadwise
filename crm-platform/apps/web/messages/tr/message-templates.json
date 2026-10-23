@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "çevrimiçi",
       "cards": "Karusel kartları",
-      "cardEmpty": "{n}. kartın metni"
+      "cardEmpty": "{n}. kartın metni",
+      "offerExpires": "Yakında bitiyor",
+      "offerTextEmpty": "Teklif başlığı"
     },
     "card": {
       "rejected": "Reddedildi: {reason}",
@@ -281,7 +283,7 @@
         "uploading": "Yükleniyor",
         "keptSample": "Kayıtlı örnek korunur. Değiştirmek için bir dosya seçin.",
         "noFile": "Dosya seçilmedi",
-        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 100 MB.",
+        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 10 MB.",
         "replace": "Dosyayı değiştir",
         "choose": "Örnek dosya seç",
         "tooBig": "Bu {kind} {size} MB. WhatsApp en fazla {max} MB kabul eder. Daha küçük bir dosya seçin.",
@@ -325,14 +327,18 @@
           "quick_reply": "Hızlı yanıt",
           "url": "Web sitesini ziyaret et",
           "phone": "Telefonu ara",
-          "copy_code": "Kodu kopyala"
+          "copy_code": "Kodu kopyala",
+          "form": "Form",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Hızlı yanıt",
           "url": "Web sitesini ziyaret et",
           "phone": "Telefonu ara",
           "copy_code": "Kodu kopyala",
-          "other": "Diğer"
+          "other": "Diğer",
+          "form": "Form",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} düğme",
         "limitReached": "Bu türden en fazla {max} tane.",
@@ -361,8 +367,17 @@
           "codeRequired": "Bir örnek kod girin.",
           "quickReplyVariable": "Hızlı yanıt bir değişken içeremez.",
           "urlExampleRequired": "URL değişkeni için bir örnek değer girin.",
-          "quickReplyPosition": "Hızlı yanıtlar birlikte, düğmelerin başında veya sonunda olmalıdır."
-        }
+          "quickReplyPosition": "Hızlı yanıtlar birlikte, düğmelerin başında veya sonunda olmalıdır.",
+          "flowIdRequired": "Flow kimliğini girin.",
+          "flowIdInvalid": "Flow kimliği bir sayıdır.",
+          "screenRequired": "Ekran kimliğini girin.",
+          "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz."
+        },
+        "catalogHint": "WhatsApp kataloğunuzu açar. Düğmede “Kataloğu görüntüle” yazar ve tek düğme olmalıdır.",
+        "flowId": "WhatsApp Flow kimliği",
+        "flowIdHint": "Meta’nın Flows yöneticisinden yayımlanmış bir WhatsApp Flow’un sayısal kimliği.",
+        "screen": "Açılış ekranı",
+        "screenHint": "Formun açıldığı ekranın kimliği, örneğin WELCOME."
       },
       "result": {
         "metaRefused": "Kaydedildi, ancak Meta şablonu reddetti.",
@@ -378,10 +393,15 @@
         "authHint": "Kimlik doğrulama şablonlarının metni sabittir, bu yüzden taslak hazırlanacak bir şey yok."
       },
       "type": {
-        "label": "Şablon türü",
+        "label": "Düğme türü",
         "standard": "Standart",
         "carousel": "Karusel",
-        "hint": "Karusel, kaydırılabilen bir kart sırası içeren bir mesajdır. Her kartta bir resim veya video, kısa bir metin ve en fazla iki düğme bulunur."
+        "hint": "Mesajın nasıl biteceğini seçin. Karusel bir kart sırasıdır; sınırlı süreli teklifte teklif başlığı (isteğe bağlı geri sayımla) ve kod kopyalama ya da web sitesi düğmesi bulunur.",
+        "none": "Yok",
+        "buttons": "Kodu kopyala, web sitesi, hızlı yanıtlar vb.",
+        "lto": "Sınırlı süreli teklif",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Kartlar",
@@ -402,6 +422,15 @@
         "buttonText": "Düğme metni",
         "buttonUrl": "Web sitesi URL'si",
         "buttonPhone": "Telefon numarası"
+      },
+      "offer": {
+        "title": "Sınırlı süreli teklif",
+        "hint": "Resmin veya videonun altında görünür: bir başlık ve isterseniz teklifin bitişine geri sayım.",
+        "text": "Teklif başlığı",
+        "textHint": "{used}/{max}",
+        "placeholder": "Süresi dolmak üzere!",
+        "countdown": "Geri sayımı göster",
+        "countdownHint": "WhatsApp teklifin bitmesine kalan süreyi gösterir."
       }
     },
     "detail": {

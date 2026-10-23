@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Karten des Karussells",
-      "cardEmpty": "Text von Karte {n}"
+      "cardEmpty": "Text von Karte {n}",
+      "offerExpires": "Endet bald",
+      "offerTextEmpty": "Angebotsüberschrift"
     },
     "card": {
       "rejected": "Abgelehnt: {reason}",
@@ -281,7 +283,7 @@
         "uploading": "Wird hochgeladen",
         "keptSample": "Das gespeicherte Beispiel bleibt erhalten. Wählen Sie eine Datei, um es zu ersetzen.",
         "noFile": "Keine Datei ausgewählt",
-        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 100 MB.",
+        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 10 MB.",
         "replace": "Datei ersetzen",
         "choose": "Beispieldatei auswählen",
         "tooBig": "Dieses {kind} ist {size} MB groß. WhatsApp akzeptiert bis zu {max} MB. Wählen Sie eine kleinere Datei.",
@@ -325,14 +327,18 @@
           "quick_reply": "Schnellantwort",
           "url": "Website besuchen",
           "phone": "Telefonnummer anrufen",
-          "copy_code": "Code kopieren"
+          "copy_code": "Code kopieren",
+          "form": "Formular",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Schnellantwort",
           "url": "Website besuchen",
           "phone": "Anrufen",
           "copy_code": "Code kopieren",
-          "other": "Sonstige"
+          "other": "Sonstige",
+          "form": "Formular",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} Schaltflächen",
         "limitReached": "Höchstens {max} dieser Art.",
@@ -361,8 +367,17 @@
           "codeRequired": "Geben Sie einen Beispielcode ein.",
           "quickReplyVariable": "Eine Schnellantwort darf keine Variable enthalten.",
           "urlExampleRequired": "Geben Sie einen Beispielwert für die URL-Variable an.",
-          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen."
-        }
+          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen.",
+          "flowIdRequired": "Geben Sie die Flow-ID ein.",
+          "flowIdInvalid": "Die Flow-ID ist eine Zahl.",
+          "screenRequired": "Geben Sie die Bildschirm-ID ein.",
+          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren."
+        },
+        "catalogHint": "Öffnet Ihren WhatsApp-Katalog. Die Schaltfläche heißt „Katalog ansehen“ und muss die einzige Schaltfläche sein.",
+        "flowId": "WhatsApp-Flow-ID",
+        "flowIdHint": "Die numerische ID eines veröffentlichten WhatsApp Flows aus dem Flows-Manager von Meta.",
+        "screen": "Startbildschirm",
+        "screenHint": "Die ID des Bildschirms, mit dem sich das Formular öffnet, zum Beispiel WELCOME."
       },
       "result": {
         "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",
@@ -378,10 +393,15 @@
         "authHint": "Authentifizierungsvorlagen haben einen festen Text, daher gibt es nichts zu entwerfen."
       },
       "type": {
-        "label": "Vorlagentyp",
+        "label": "Schaltflächentyp",
         "standard": "Standard",
         "carousel": "Karussell",
-        "hint": "Ein Karussell ist eine Nachricht mit einer Reihe von Karten zum Wischen. Jede Karte hat ein Bild oder Video, einen kurzen Text und bis zu zwei Schaltflächen."
+        "hint": "Wählen Sie, womit die Nachricht endet. Ein Karussell ist eine Reihe von Karten; ein zeitlich begrenztes Angebot hat eine Angebotsüberschrift mit optionalem Countdown und eine Schaltfläche zum Kopieren eines Codes oder zum Öffnen einer Website.",
+        "none": "Keine",
+        "buttons": "Code kopieren, Website, Schnellantworten usw.",
+        "lto": "Zeitlich begrenztes Angebot",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Karten",
@@ -402,6 +422,15 @@
         "buttonText": "Text der Schaltfläche",
         "buttonUrl": "Website-URL",
         "buttonPhone": "Telefonnummer"
+      },
+      "offer": {
+        "title": "Zeitlich begrenztes Angebot",
+        "hint": "Wird unter dem Bild oder Video angezeigt: eine Überschrift und, wenn Sie möchten, ein Countdown bis zum Ende des Angebots.",
+        "text": "Angebotsüberschrift",
+        "textHint": "{used}/{max}",
+        "placeholder": "Angebot läuft bald ab!",
+        "countdown": "Countdown anzeigen",
+        "countdownHint": "WhatsApp zeigt die verbleibende Zeit bis zum Ende des Angebots."
       }
     },
     "detail": {

@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Schede del carosello",
-      "cardEmpty": "Testo della scheda {n}"
+      "cardEmpty": "Testo della scheda {n}",
+      "offerExpires": "Termina presto",
+      "offerTextEmpty": "Titolo dell’offerta"
     },
     "card": {
       "rejected": "Rifiutato: {reason}",
@@ -281,7 +283,7 @@
         "uploading": "Caricamento",
         "keptSample": "Il campione salvato viene mantenuto. Scegli un file per sostituirlo.",
         "noFile": "Nessun file scelto",
-        "limits": "Immagine fino a 5 MB, video fino a 16 MB, PDF fino a 100 MB.",
+        "limits": "Immagine fino a 5 MB, video fino a 16 MB, PDF fino a 10 MB.",
         "replace": "Sostituisci file",
         "choose": "Scegli file di esempio",
         "tooBig": "Questo {kind} pesa {size} MB. WhatsApp accetta fino a {max} MB. Scegli un file più piccolo.",
@@ -325,14 +327,18 @@
           "quick_reply": "Risposta rapida",
           "url": "Visita il sito",
           "phone": "Chiama",
-          "copy_code": "Copia codice"
+          "copy_code": "Copia codice",
+          "form": "Modulo",
+          "catalog": "Catalogo"
         },
         "kind": {
           "quick_reply": "Risposta rapida",
           "url": "Visita il sito",
           "phone": "Chiama",
           "copy_code": "Copia codice",
-          "other": "Altro"
+          "other": "Altro",
+          "form": "Modulo",
+          "catalog": "Catalogo"
         },
         "count": "{used}/{max} pulsanti",
         "limitReached": "Al massimo {max} di questo tipo.",
@@ -361,8 +367,17 @@
           "codeRequired": "Inserisci un codice di esempio.",
           "quickReplyVariable": "Una risposta rapida non può contenere una variabile.",
           "urlExampleRequired": "Inserisci un valore di esempio per la variabile dell’URL.",
-          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti."
-        }
+          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti.",
+          "flowIdRequired": "Inserisci l’ID del Flow.",
+          "flowIdInvalid": "L’ID del Flow è un numero.",
+          "screenRequired": "Inserisci l’ID della schermata.",
+          "catalogAlone": "Un pulsante catalogo non può essere combinato con altri pulsanti."
+        },
+        "catalogHint": "Apre il tuo catalogo WhatsApp. Il pulsante riporta «Vedi catalogo» e deve essere l’unico pulsante.",
+        "flowId": "ID del WhatsApp Flow",
+        "flowIdHint": "L’ID numerico di un WhatsApp Flow pubblicato, dal gestore Flows di Meta.",
+        "screen": "Schermata iniziale",
+        "screenHint": "L’ID della schermata con cui si apre il modulo, ad esempio WELCOME."
       },
       "result": {
         "metaRefused": "Salvato, ma Meta ha rifiutato il template.",
@@ -378,10 +393,15 @@
         "authHint": "I template di autenticazione hanno un testo fisso, quindi non c'è nulla da redigere."
       },
       "type": {
-        "label": "Tipo di modello",
+        "label": "Tipo di pulsante",
         "standard": "Standard",
         "carousel": "Carosello",
-        "hint": "Un carosello è un messaggio con una fila di schede da scorrere. Ogni scheda ha un'immagine o un video, un testo breve e fino a due pulsanti."
+        "hint": "Scegli come finisce il messaggio. Un carosello è una fila di schede; un’offerta a tempo limitato ha un titolo dell’offerta con conto alla rovescia facoltativo e un pulsante per copiare un codice o aprire un sito.",
+        "none": "Nessuno",
+        "buttons": "Copia codice, sito web, risposte rapide ecc.",
+        "lto": "Offerta a tempo limitato",
+        "catalogue": "Catalogo",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Schede",
@@ -402,6 +422,15 @@
         "buttonText": "Testo del pulsante",
         "buttonUrl": "URL del sito web",
         "buttonPhone": "Numero di telefono"
+      },
+      "offer": {
+        "title": "Offerta a tempo limitato",
+        "hint": "Mostrato sotto l’immagine o il video: un titolo e, se vuoi, un conto alla rovescia fino alla fine dell’offerta.",
+        "text": "Titolo dell’offerta",
+        "textHint": "{used}/{max}",
+        "placeholder": "Offerta in scadenza!",
+        "countdown": "Mostra il conto alla rovescia",
+        "countdownHint": "WhatsApp mostra il tempo rimasto prima della fine dell’offerta."
       }
     },
     "detail": {

@@ -1,8 +1,6 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
-import { resolveLimit, PlanEntitlementService } from '../plans-subscriptions-trials';
-import { BillingModeService } from '../bsp-billing-engine';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { countryOfPhone } from './phone-country';
@@ -11,7 +9,7 @@ import { RateCardService } from './rate-card.service';
 import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
 import { WalletSettingsService } from './wallet-settings.service';
-import { launchVerdict, monthStart, planIsActive } from './wallet-rules';
+import { launchVerdict } from './wallet-rules';
 import { cacheMetrics, cacheSize } from '@crm/observability';
 
 const cache = cacheMetrics('wallet_send_ok');
@@ -68,7 +66,6 @@ export class WalletGateService {
     private readonly billing: BillingCurrencyService,
     private readonly settings: WalletSettingsService,
     private readonly plans: PlanEntitlementService,
-    private readonly mode: BillingModeService,
     private readonly log: WalletLogService,
   ) {}
 
@@ -171,14 +168,10 @@ export class WalletGateService {
     const entitlements = await this.plans.forOrg(req.orgId);
     if (!entitlements) return null;
     const s = await this.settings.effective();
-    const now = new Date();
     const facts = await this.db.txAs({ orgId: req.orgId, userId: null }, async (tx) => {
       // The balance and the estimate are both in the workspace's billing currency.
       const unit = await this.billing.forOrg(tx, req.orgId);
       const wallet = await this.repo.peekWallet(tx, req.orgId, unit);
-      const used = await tx.execute(sql`
-        SELECT messages FROM wallet_usage_months WHERE org_id = ${req.orgId} AND month = ${monthStart(now)}::date`);
-      const payPerMessage = await this.mode.isPayPerMessage(tx, req.orgId);
       // One price per destination country, by the resolver that charges a delivered message (margins, Meta's card for this
       // currency and fixed prices included), so the estimate is the price it will really be charged at.
       const prices = new Map<string | null, number>();
@@ -196,45 +189,32 @@ export class WalletGateService {
       }
       return {
         balance: wallet?.balanceMinor ?? 0,
-        usedThisMonth: Number((used.rows[0] as { messages?: number } | undefined)?.messages ?? 0),
-        payPerMessage,
         prices,
         currency: unit,
       };
     });
     const balanceMinor = facts.balance;
-    const monthlyLimit = resolveLimit(entitlements, 'monthly_messages');
-    const planActive = planIsActive(entitlements, now);
 
-    // Plan mode pays only for what exceeds the allowance.
-    let estimateMinor: number | null = null;
-    let chargeable: number;
-    if (facts.payPerMessage || !planActive) chargeable = req.recipients;
-    else if (monthlyLimit <= 0) chargeable = 0;
-    else chargeable = Math.max(0, facts.usedThisMonth + req.recipients - monthlyLimit);
+    // Every recipient is charged: the plan's monthly allowance no longer makes any of them free.
     const price = (phone: string | null) =>
       facts.prices.get(phone ? countryOfPhone(phone) : null) ?? facts.prices.get(null) ?? 0;
-    if (chargeable > 0) {
+    let estimateMinor: number | null = 0;
+    if (req.recipients > 0) {
       if (req.phones && req.phones.length > 0) {
-        // The first `chargeable` numbers stand for the chargeable part; for a mixed audience this is an upper-bound sample.
-        const sample = req.phones.slice(0, chargeable);
+        // The first `recipients` numbers stand for the audience; for a mixed audience this is an upper-bound sample.
+        const sample = req.phones.slice(0, req.recipients);
         const sum = sample.reduce((acc, p) => acc + price(p), 0);
         estimateMinor =
-          sample.length >= chargeable ? sum : sum + (chargeable - sample.length) * price(null);
+          sample.length >= req.recipients
+            ? sum
+            : sum + (req.recipients - sample.length) * price(null);
       } else {
-        estimateMinor = chargeable * price(null);
+        estimateMinor = req.recipients * price(null);
       }
-    } else {
-      estimateMinor = 0;
     }
 
     const verdict = launchVerdict({
       platformOwned: entitlements.platformOwned,
-      payPerMessage: facts.payPerMessage,
-      planActive,
-      monthlyLimit,
-      usedThisMonth: facts.usedThisMonth,
-      recipients: req.recipients,
       balanceMinor,
       estimateMinor,
       coveragePercent: s.launchCoveragePercent,

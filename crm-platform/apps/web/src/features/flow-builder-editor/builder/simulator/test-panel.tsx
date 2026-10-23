@@ -41,23 +41,58 @@ export interface TestPanelProps {
 function Choices({
   choices,
   live,
+  canPick = live,
   onPick,
 }: {
   choices: NonNullable<LogEntry['choices']>;
+  /** The run is waiting on this menu right now; an answered one is dimmed but, in the test chat, can still be tapped. */
   live: boolean;
+  canPick?: boolean;
   onPick: (label: string) => void;
 }): ReactElement {
   const tr = useTranslations('flb.builder.testRunner');
   const [open, setOpen] = useState(false);
   const pill =
     'flex w-full items-center justify-center gap-1.5 rounded-md border border-[#0b8a73]/40 bg-white px-2 py-1.5 text-[12.5px] font-medium text-[#0b8a73] transition disabled:cursor-default disabled:opacity-50 enabled:hover:bg-[#0b8a73]/10';
+  if (choices.kind === 'links') {
+    return (
+      <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5" data-testid="choices-links">
+        {(choices.links ?? []).map((l, i) => {
+          const phone = l.type === 'phone' || l.type === 'call_now';
+          const copy = l.type === 'copy';
+          const href = phone ? `tel:${l.value.replace(/\s+/g, '')}` : copy ? undefined : l.value;
+          const cls = pill.replace('disabled:cursor-default disabled:opacity-50 ', '');
+          return href ? (
+            <a
+              key={i}
+              className={`${cls} no-underline`}
+              href={href}
+              target={phone ? undefined : '_blank'}
+              rel="noopener noreferrer"
+            >
+              {l.label}
+            </a>
+          ) : (
+            <button
+              key={i}
+              type="button"
+              className={cls}
+              onClick={() => void navigator.clipboard?.writeText(l.value)}
+            >
+              {l.label}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
   if (choices.kind === 'list') {
     return (
       <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5" data-testid="choices-list">
         <button
           type="button"
           className={pill}
-          disabled={!live}
+          disabled={!canPick}
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
         >
@@ -72,7 +107,7 @@ function Choices({
           </svg>
           {choices.button || tr('choose')}
         </button>
-        {open && live && (
+        {open && canPick && (
           <ul className="max-h-44 overflow-y-auto rounded-md border border-black/10 bg-white">
             {choices.labels.map((l, i) => (
               <li key={i}>
@@ -96,7 +131,13 @@ function Choices({
   return (
     <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5" data-testid="choices-buttons">
       {choices.labels.map((l, i) => (
-        <button key={i} type="button" className={pill} disabled={!live} onClick={() => onPick(l)}>
+        <button
+          key={i}
+          type="button"
+          className={`${pill} ${live ? '' : 'opacity-60'}`}
+          disabled={!canPick}
+          onClick={() => onPick(l)}
+        >
           {l}
         </button>
       ))}
@@ -108,7 +149,10 @@ export function LogBubble({
   entry,
   live = false,
   onPick,
+  canRewind = false,
 }: {
+  /** An earlier menu can be answered again. */
+  canRewind?: boolean;
   entry: LogEntry;
   /** This message is the one the run is waiting on, so its buttons can be tapped. */
   live?: boolean;
@@ -175,6 +219,7 @@ export function LogBubble({
         <Choices
           choices={entry.choices}
           live={live && Boolean(onPick)}
+          canPick={(live || canRewind) && Boolean(onPick)}
           onPick={(l) => onPick?.(l)}
         />
       ) : null}
@@ -222,6 +267,7 @@ export function TestPanel({
       callWebhook: (req) => flowsApi.testWebhook(req),
       onLog: (e) => setLog((prev) => prev.concat(e)),
       onReset: () => setLog([]),
+      onTruncate: (n) => setLog((prev) => prev.slice(0, n)),
       onAwaiting: (a) => {
         setAwaiting(a);
         setWaitType(a ? (simRef.current?.current()?.type ?? null) : null);
@@ -247,6 +293,7 @@ export function TestPanel({
   }, [log]);
 
   if (!open) return null;
+  const live = (i: number) => awaiting && i === log.length - 1;
 
   const send = () => {
     if (!val.trim() || !awaiting) return;
@@ -310,8 +357,11 @@ export function TestPanel({
           <LogBubble
             key={i}
             entry={entry}
-            live={awaiting && i === log.length - 1}
-            onPick={(label) => simRef.current?.send(label)}
+            live={live(i)}
+            canRewind
+            onPick={(label) =>
+              live(i) ? simRef.current?.send(label) : simRef.current?.pickAgain(i, label)
+            }
           />
         ))}
       </div>

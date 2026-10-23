@@ -1,4 +1,4 @@
-import type { TplButton, TplHeaderLocation } from '@crm/contracts';
+import type { TplButton, TplHeaderLocation, TplLimitedOffer } from '@crm/contracts';
 import { lintTemplate, type LintIssue } from './template-linter';
 import {
   buildMetaTemplate,
@@ -36,6 +36,8 @@ export interface AuthoredTemplate {
   buttons: TplButton[];
   /** Carousel templates: the cards, as the author sent them. */
   cards?: TemplateCard[];
+  /** Limited-time-offer templates: the offer's heading and whether it counts down. */
+  limitedOffer?: TplLimitedOffer | null;
   variableMap?: VariableMap;
   codeExpirationMinutes?: number | null;
   parameterFormat: 'POSITIONAL' | 'NAMED';
@@ -62,6 +64,8 @@ export interface PreparedTemplate {
   buttons: TplButton[];
   /** The cards of a carousel (stored in `carousel_data`); empty for every other type. */
   cards: TemplateCard[];
+  /** The offer of a limited-time-offer template (stored in `limited_offer`); null for every other type. */
+  limitedOffer: TplLimitedOffer | null;
   variableMap: VariableMap;
   codeExpirationMinutes: number | null;
   parameterFormat: 'POSITIONAL' | 'NAMED';
@@ -109,6 +113,7 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
   if (body) variableMap.body = body;
 
   const carousel = !auth && input.templateType === 'carousel';
+  const offer = !auth && input.templateType === 'lto';
   // A carousel's picture or video lives on each card; the template itself has no header, footer or buttons.
   const attachment = carousel || input.attachmentType === 'none' ? null : input.attachmentType;
   return {
@@ -126,9 +131,10 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
       auth || !attachment || attachment === 'location' ? null : (input.headerMediaKey ?? null),
     headerLocation: !auth && attachment === 'location' ? (input.headerLocation ?? null) : null,
     body: text.body,
-    footer: auth || carousel ? null : text.footer,
+    footer: auth || carousel || offer ? null : text.footer,
     buttons: auth || carousel ? [] : input.buttons,
     cards: carousel ? (input.cards ?? []) : [],
+    limitedOffer: offer ? (input.limitedOffer ?? null) : null,
     variableMap,
     codeExpirationMinutes: auth ? (input.codeExpirationMinutes ?? null) : null,
     parameterFormat: input.parameterFormat,
@@ -149,6 +155,7 @@ export function draftOfPrepared(p: PreparedTemplate): TemplateDraft {
     footer: p.footer,
     buttons: p.buttons,
     cards: p.cards,
+    limitedOffer: p.limitedOffer,
     variableMap: p.variableMap,
     codeExpirationMinutes: p.codeExpirationMinutes,
     parameterFormat: p.parameterFormat,
@@ -174,6 +181,7 @@ export function lintPrepared(
     footer: p.footer,
     buttons: p.buttons,
     cards: p.cards,
+    limitedOffer: p.limitedOffer,
     variableMap: p.variableMap,
     parameterFormat: p.parameterFormat,
   });
@@ -182,5 +190,5 @@ export function lintPrepared(
 export const payloadOfPrepared = (p: PreparedTemplate): MetaTemplateBody =>
   buildMetaTemplate(draftOfPrepared(p));
 
-/** Template shapes this domain can build. The others (catalog, limited-time offer...) are only displayed after an import. */
-export const BUILDABLE_TYPES = new Set(['standard', 'media', 'auth', 'carousel']);
+/** Template shapes this domain can build. The others (catalog...) are only displayed after an import. */
+export const BUILDABLE_TYPES = new Set(['standard', 'media', 'auth', 'carousel', 'lto']);

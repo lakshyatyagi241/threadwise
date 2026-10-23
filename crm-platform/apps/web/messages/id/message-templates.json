@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "daring",
       "cards": "Kartu carousel",
-      "cardEmpty": "Teks kartu {n}"
+      "cardEmpty": "Teks kartu {n}",
+      "offerExpires": "Segera berakhir",
+      "offerTextEmpty": "Judul penawaran"
     },
     "card": {
       "rejected": "Ditolak: {reason}",
@@ -281,7 +283,7 @@
         "uploading": "Mengunggah",
         "keptSample": "Contoh yang tersimpan tetap ada. Pilih file untuk menggantinya.",
         "noFile": "Belum ada file dipilih",
-        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 100 MB.",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 10 MB.",
         "replace": "Ganti file",
         "choose": "Pilih file contoh",
         "tooBig": "{kind} ini berukuran {size} MB. WhatsApp menerima hingga {max} MB. Pilih file yang lebih kecil.",
@@ -325,14 +327,18 @@
           "quick_reply": "Balasan cepat",
           "url": "Kunjungi situs",
           "phone": "Telepon",
-          "copy_code": "Salin kode"
+          "copy_code": "Salin kode",
+          "form": "Formulir",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Balasan cepat",
           "url": "Kunjungi situs",
           "phone": "Telepon",
           "copy_code": "Salin kode",
-          "other": "Lainnya"
+          "other": "Lainnya",
+          "form": "Formulir",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} tombol",
         "limitReached": "Maksimal {max} untuk jenis ini.",
@@ -361,8 +367,17 @@
           "codeRequired": "Masukkan kode contoh.",
           "quickReplyVariable": "Balasan cepat tidak boleh berisi variabel.",
           "urlExampleRequired": "Berikan nilai contoh untuk variabel URL.",
-          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol."
-        }
+          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol.",
+          "flowIdRequired": "Masukkan ID Flow.",
+          "flowIdInvalid": "ID Flow berupa angka.",
+          "screenRequired": "Masukkan ID layar.",
+          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain."
+        },
+        "catalogHint": "Membuka katalog WhatsApp Anda. Tombol bertuliskan “Lihat katalog” dan harus menjadi satu-satunya tombol.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "ID numerik WhatsApp Flow yang sudah dipublikasikan, dari pengelola Flows Meta.",
+        "screen": "Layar pembuka",
+        "screenHint": "ID layar tempat formulir dibuka, misalnya WELCOME."
       },
       "result": {
         "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
@@ -378,10 +393,15 @@
         "authHint": "Templat autentikasi memiliki teks tetap, jadi tidak ada yang perlu dibuat."
       },
       "type": {
-        "label": "Jenis templat",
+        "label": "Jenis tombol",
         "standard": "Standar",
         "carousel": "Carousel",
-        "hint": "Carousel adalah pesan dengan deretan kartu yang bisa digeser. Setiap kartu punya gambar atau video, teks singkat, dan hingga dua tombol."
+        "hint": "Pilih bagaimana pesan berakhir. Carousel adalah barisan kartu; penawaran waktu terbatas memiliki judul penawaran dengan hitung mundur opsional dan tombol salin kode atau situs web.",
+        "none": "Tidak ada",
+        "buttons": "Salin kode, situs web, balasan cepat, dll.",
+        "lto": "Penawaran waktu terbatas",
+        "catalogue": "Katalog",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Kartu",
@@ -402,6 +422,15 @@
         "buttonText": "Teks tombol",
         "buttonUrl": "URL situs web",
         "buttonPhone": "Nomor telepon"
+      },
+      "offer": {
+        "title": "Penawaran waktu terbatas",
+        "hint": "Muncul di bawah gambar atau video: judul dan, jika mau, hitung mundur hingga penawaran berakhir.",
+        "text": "Judul penawaran",
+        "textHint": "{used}/{max}",
+        "placeholder": "Penawaran segera berakhir!",
+        "countdown": "Tampilkan hitung mundur",
+        "countdownHint": "WhatsApp menampilkan sisa waktu hingga penawaran berakhir."
       }
     },
     "detail": {

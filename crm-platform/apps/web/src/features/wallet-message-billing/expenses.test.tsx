@@ -173,6 +173,7 @@ describe('message expense log', () => {
 describe('daily log', () => {
   const day = (over: Partial<ExpenseDayGroup>): ExpenseDayGroup => ({
     day: '2026-10-19',
+    kind: 'whatsapp_message',
     status: 'charged',
     source: 'broadcast',
     category: 'marketing',
@@ -212,6 +213,21 @@ describe('daily log', () => {
     expect(html).toContain('Marketing');
     expect(html).toContain('Not billed');
     expect(html).toContain('$17.868');
+    expect(html.match(/View details/g)).toHaveLength(1);
+  });
+
+  it('splits a day by type, so an SMS and a WhatsApp message on the same channel are separate lines', () => {
+    const html = wrap(
+      <DayTable
+        groups={[day({ kind: 'whatsapp_message', messages: 2 }), day({ kind: 'sms', messages: 1 })]}
+        currency="USD"
+        onViewDay={() => undefined}
+      />,
+    );
+    expect(html).toContain('Type');
+    expect(html).toContain('WhatsApp message');
+    expect(html).toContain('SMS');
+    expect(html.match(/Broadcast/g)).toHaveLength(2);
     expect(html.match(/View details/g)).toHaveLength(1);
   });
 

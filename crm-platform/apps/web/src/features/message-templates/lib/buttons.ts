@@ -1,9 +1,17 @@
 import type { TplButton } from '@crm/contracts';
 import { countPlaceholders } from './variables';
 
-export type ButtonKind = 'quick_reply' | 'url' | 'phone' | 'copy_code' | 'other';
+export type ButtonKind =
+  'quick_reply' | 'url' | 'phone' | 'copy_code' | 'form' | 'catalog' | 'other';
 /** The kinds an operator can add. `other` is a stored button this editor does not author (it is kept as it is). */
-export const ADDABLE_KINDS = ['quick_reply', 'url', 'phone', 'copy_code'] as const;
+export const ADDABLE_KINDS = [
+  'quick_reply',
+  'url',
+  'phone',
+  'copy_code',
+  'form',
+  'catalog',
+] as const;
 export type AddableKind = (typeof ADDABLE_KINDS)[number];
 
 /** Meta's limits per template (the server linter enforces the same). */
@@ -13,7 +21,11 @@ export const BUTTON_LIMITS = {
   url: 2,
   phone: 1,
   copy_code: 1,
+  form: 1,
+  catalog: 1,
 } as const;
+/** What the catalog button says: Meta fixes it. */
+export const CATALOG_BUTTON_TEXT = 'View catalog';
 export const BUTTON_TEXT_MAX = 25;
 /** Reference's editor stops at three buttons ("WhatsApp reliably renders only 3"); Meta's own limit above still applies to imports. */
 export const EDITOR_BUTTON_MAX = 3;
@@ -24,9 +36,9 @@ export type ButtonMode = (typeof BUTTON_MODES)[number];
 
 /** The kinds a row may take in each mode (a call to action is a website, a phone or a copy-code button). */
 export const MODE_KINDS: Record<ButtonMode, readonly AddableKind[]> = {
-  cta: ['url', 'phone', 'copy_code'],
+  cta: ['url', 'phone', 'copy_code', 'form', 'catalog'],
   reply: ['quick_reply'],
-  mix: ['url', 'quick_reply', 'phone', 'copy_code'],
+  mix: ['url', 'quick_reply', 'phone', 'copy_code', 'form'],
 };
 
 /** The mode a saved set of buttons reads as: only quick replies, only calls to action, or both. */
@@ -45,6 +57,9 @@ export interface ButtonRow {
   phone: string;
   /** Sample for a URL with a variable, or the coupon code of a copy-code button. */
   example: string;
+  /** A form button: the WhatsApp Flow id and the screen it opens on. */
+  flowId: string;
+  screen: string;
   /** A stored button of a type this editor does not author, round-tripped unchanged. */
   raw?: TplButton;
 }
@@ -53,7 +68,7 @@ let seq = 0;
 export const nextKey = (): string => `b${++seq}`;
 
 export function newRow(kind: AddableKind, key = nextKey()): ButtonRow {
-  return { key, kind, text: '', url: '', phone: '', example: '' };
+  return { key, kind, text: '', url: '', phone: '', example: '', flowId: '', screen: '' };
 }
 
 export const count = (rows: ButtonRow[], kind: ButtonKind): number =>
@@ -65,6 +80,8 @@ export function canAdd(
   kind: AddableKind,
   max: number = BUTTON_LIMITS.total,
 ): boolean {
+  // A catalog button stands alone: nothing goes next to it, and it goes next to nothing.
+  if (kind === 'catalog' ? rows.length > 0 : rows.some((r) => r.kind === 'catalog')) return false;
   return (
     rows.length < Math.min(max, BUTTON_LIMITS.total) && count(rows, kind) < BUTTON_LIMITS[kind]
   );
@@ -78,6 +95,8 @@ const TYPE_OF: Record<AddableKind, string> = {
   url: 'URL',
   phone: 'PHONE_NUMBER',
   copy_code: 'COPY_CODE',
+  form: 'FLOW',
+  catalog: 'CATALOG',
 };
 
 export function rowToButton(r: ButtonRow): TplButton {
@@ -88,7 +107,13 @@ export function rowToButton(r: ButtonRow): TplButton {
     b.example = r.example.trim();
     return b;
   }
+  if (kind === 'catalog') return { type: 'CATALOG', text: CATALOG_BUTTON_TEXT };
   b.text = r.text.trim();
+  if (kind === 'form') {
+    b.flow_id = r.flowId.trim();
+    b.flow_action = 'navigate';
+    b.navigate_screen = r.screen.trim();
+  }
   if (kind === 'url') {
     b.url = r.url.trim();
     if (countPlaceholders(r.url) > 0 && r.example.trim()) b.example = r.example.trim();
@@ -105,6 +130,8 @@ export function buttonToRow(b: TplButton, key = nextKey()): ButtonRow {
     url: b.url ?? '',
     phone: b.phone_number ?? '',
     example: Array.isArray(b.example) ? (b.example[0] ?? '') : (b.example ?? ''),
+    flowId: String(b.flow_id ?? ''),
+    screen: String(b.navigate_screen ?? ''),
     raw: b,
   };
   switch (b.type.toUpperCase()) {
@@ -116,6 +143,11 @@ export function buttonToRow(b: TplButton, key = nextKey()): ButtonRow {
       return { ...base, kind: 'phone', raw: undefined };
     case 'COPY_CODE':
       return { ...base, kind: 'copy_code', raw: undefined };
+    // A form that submits to our own endpoint (`data_exchange`) has no screen to open on: this editor leaves it as it is.
+    case 'FLOW':
+      return b.flow_action === 'data_exchange' ? base : { ...base, kind: 'form', raw: undefined };
+    case 'CATALOG':
+      return { ...base, kind: 'catalog', raw: undefined };
     default:
       return base;
   }
@@ -130,7 +162,11 @@ export type ButtonIssueCode =
   | 'codeRequired'
   | 'quickReplyVariable'
   | 'urlExampleRequired'
-  | 'quickReplyPosition';
+  | 'quickReplyPosition'
+  | 'flowIdRequired'
+  | 'flowIdInvalid'
+  | 'screenRequired'
+  | 'catalogAlone';
 
 export interface ButtonIssue {
   /** The row it belongs to, or null for a problem of the whole list. */
@@ -143,7 +179,7 @@ export function buttonIssues(rows: ButtonRow[]): ButtonIssue[] {
   const out: ButtonIssue[] = [];
   for (const r of rows) {
     if (r.kind === 'other') continue;
-    if (r.kind !== 'copy_code') {
+    if (r.kind !== 'copy_code' && r.kind !== 'catalog') {
       if (!r.text.trim()) out.push({ rowKey: r.key, code: 'textRequired' });
       else if (r.text.trim().length > BUTTON_TEXT_MAX)
         out.push({ rowKey: r.key, code: 'textTooLong' });
@@ -156,10 +192,17 @@ export function buttonIssues(rows: ButtonRow[]): ButtonIssue[] {
       else if (countPlaceholders(r.url) > 0 && !r.example.trim())
         out.push({ rowKey: r.key, code: 'urlExampleRequired' });
     }
+    if (r.kind === 'form') {
+      if (!r.flowId.trim()) out.push({ rowKey: r.key, code: 'flowIdRequired' });
+      else if (!/^\d+$/.test(r.flowId.trim())) out.push({ rowKey: r.key, code: 'flowIdInvalid' });
+      if (!r.screen.trim()) out.push({ rowKey: r.key, code: 'screenRequired' });
+    }
     if (r.kind === 'phone' && !r.phone.trim()) out.push({ rowKey: r.key, code: 'phoneRequired' });
     if (r.kind === 'copy_code' && !r.example.trim())
       out.push({ rowKey: r.key, code: 'codeRequired' });
   }
+  if (rows.length > 1 && rows.some((r) => r.kind === 'catalog'))
+    out.push({ rowKey: null, code: 'catalogAlone' });
   const qr = rows.map((r) => r.kind === 'quick_reply');
   const first = qr.indexOf(true);
   const last = qr.lastIndexOf(true);

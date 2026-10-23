@@ -1005,6 +1005,7 @@ export function ContactsTable({
   const [resizing, setResizing] = useState<ColumnId | null>(null);
   useEffect(() => {
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read after mount so the server and first paint agree
       setWidths(readColumnWidths(window.localStorage.getItem(WIDTHS_KEY)));
     } catch {
       /* private mode: the widths just are not kept */

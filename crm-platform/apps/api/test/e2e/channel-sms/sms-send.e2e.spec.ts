@@ -3,6 +3,8 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { CampaignJobs } from '../../../src/modules/campaigns/campaign-jobs';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
 import { twilioSignature } from '../../../src/infra/providers/channel-sms/twilio-signature';
 import { BroadcastDispatchService } from '../../../src/modules/broadcasts/broadcast-dispatch.service';
@@ -91,6 +93,8 @@ beforeAll(async () => {
     get(CAMPAIGN_BILLING),
     get(CAMPAIGN_FLOW_STARTER),
     get(CAMPAIGN_SETTINGS),
+    get<SendWindowService>(SendWindowService),
+    get<CampaignJobs>(CampaignJobs),
   );
 }, 240_000);
 

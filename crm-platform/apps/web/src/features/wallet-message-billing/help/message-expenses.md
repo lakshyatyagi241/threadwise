@@ -26,7 +26,7 @@ The expense log answers two questions: what each charge was for, and what it cos
 
 ## The daily log
 
-The daily log turns many similar messages into a few lines. It has one block for each day, with the date and how many messages that day had. Under the date are the lines for that day: one for each status, channel and category.
+The daily log turns many similar messages into a few lines. It has one block for each day, with the date and how many messages that day had. Under the date are the lines for that day: one for each type, status, channel and category.
 
 - **Status**, **Channel** and **Category** name the kind of message, such as Charged, Campaign and Marketing.
 - **Messages**, **Charged**, **Refunded** and **Net** add up the messages on that line.

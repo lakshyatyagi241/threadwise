@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "en ligne",
       "cards": "Cartes du carrousel",
-      "cardEmpty": "Texte de la carte {n}"
+      "cardEmpty": "Texte de la carte {n}",
+      "offerExpires": "Se termine bientôt",
+      "offerTextEmpty": "Titre de l’offre"
     },
     "card": {
       "rejected": "Rejeté : {reason}",
@@ -281,7 +283,7 @@
         "uploading": "Envoi en cours",
         "keptSample": "L’exemple enregistré est conservé. Choisissez un fichier pour le remplacer.",
         "noFile": "Aucun fichier choisi",
-        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 100 Mo.",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 10 Mo.",
         "replace": "Remplacer le fichier",
         "choose": "Choisir un fichier exemple",
         "tooBig": "Ce {kind} fait {size} Mo. WhatsApp accepte jusqu’à {max} Mo. Choisissez un fichier plus petit.",
@@ -325,14 +327,18 @@
           "quick_reply": "Réponse rapide",
           "url": "Visiter le site web",
           "phone": "Appeler",
-          "copy_code": "Copier le code"
+          "copy_code": "Copier le code",
+          "form": "Formulaire",
+          "catalog": "Catalogue"
         },
         "kind": {
           "quick_reply": "Réponse rapide",
           "url": "Visiter le site web",
           "phone": "Appeler",
           "copy_code": "Copier le code",
-          "other": "Autre"
+          "other": "Autre",
+          "form": "Formulaire",
+          "catalog": "Catalogue"
         },
         "count": "{used}/{max} boutons",
         "limitReached": "{max} de ce type au maximum.",
@@ -361,8 +367,17 @@
           "codeRequired": "Saisissez un code exemple.",
           "quickReplyVariable": "Une réponse rapide ne peut pas contenir de variable.",
           "urlExampleRequired": "Donnez une valeur exemple pour la variable de l’URL.",
-          "quickReplyPosition": "Les réponses rapides doivent être regroupées, au début ou à la fin des boutons."
-        }
+          "quickReplyPosition": "Les réponses rapides doivent être regroupées, au début ou à la fin des boutons.",
+          "flowIdRequired": "Saisissez l’ID du Flow.",
+          "flowIdInvalid": "L’ID du Flow est un nombre.",
+          "screenRequired": "Saisissez l’ID de l’écran.",
+          "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons."
+        },
+        "catalogHint": "Ouvre votre catalogue WhatsApp. Le bouton affiche « Voir le catalogue » et doit être le seul bouton.",
+        "flowId": "ID du WhatsApp Flow",
+        "flowIdHint": "L’ID numérique d’un WhatsApp Flow publié, dans le gestionnaire de Flows de Meta.",
+        "screen": "Écran d’ouverture",
+        "screenHint": "L’ID de l’écran sur lequel le formulaire s’ouvre, par exemple WELCOME."
       },
       "result": {
         "metaRefused": "Enregistré, mais Meta a refusé le modèle.",
@@ -378,10 +393,15 @@
         "authHint": "Les modèles d'authentification ont un texte fixe, il n'y a donc rien à rédiger."
       },
       "type": {
-        "label": "Type de modèle",
+        "label": "Type de bouton",
         "standard": "Standard",
         "carousel": "Carrousel",
-        "hint": "Un carrousel est un message avec une rangée de cartes à faire défiler. Chaque carte a une image ou une vidéo, un texte court et jusqu'à deux boutons."
+        "hint": "Choisissez comment le message se termine. Un carrousel est une rangée de cartes ; une offre à durée limitée a un titre d’offre avec compte à rebours facultatif et un bouton pour copier un code ou ouvrir un site.",
+        "none": "Aucun",
+        "buttons": "Copier le code, site web, réponses rapides, etc.",
+        "lto": "Offre à durée limitée",
+        "catalogue": "Catalogue",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Cartes",
@@ -402,6 +422,15 @@
         "buttonText": "Texte du bouton",
         "buttonUrl": "URL du site web",
         "buttonPhone": "Numéro de téléphone"
+      },
+      "offer": {
+        "title": "Offre à durée limitée",
+        "hint": "Affiché sous l’image ou la vidéo : un titre et, si vous le souhaitez, un compte à rebours jusqu’à la fin de l’offre.",
+        "text": "Titre de l’offre",
+        "textHint": "{used}/{max}",
+        "placeholder": "Offre bientôt terminée !",
+        "countdown": "Afficher un compte à rebours",
+        "countdownHint": "WhatsApp affiche le temps restant avant la fin de l’offre."
       }
     },
     "detail": {

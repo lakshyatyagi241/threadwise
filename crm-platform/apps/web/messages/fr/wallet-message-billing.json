@@ -273,7 +273,7 @@
       "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
       "days": {
         "title": "Journal quotidien",
-        "subtitle": "Messages regroupées par jour, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
+        "subtitle": "Messages regroupées par jour, type, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
         "messagesOnDay": "{count} messages",
         "viewDetails": "Voir les détails",
         "actions": "Actions",

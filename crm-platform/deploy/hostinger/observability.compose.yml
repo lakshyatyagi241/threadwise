@@ -182,6 +182,7 @@ services:
       # Google Chat app (docs/runbooks/google-chat-app.md). Off by default: webhooks only, exactly as before.
       CHAT_APP_ENABLED: ${CHAT_APP_ENABLED:-false}
       CHAT_APP_AUDIENCE: ${CHAT_APP_AUDIENCE:-}
+      CHAT_APP_ENDPOINT_URL: ${CHAT_APP_ENDPOINT_URL:-}  # the events URL set in the Chat API console: the audience of the "HTTP endpoint URL" kind of token
       INCIDENT_CLAIM_TTL_HOURS: ${INCIDENT_CLAIM_TTL_HOURS:-4}
     # The image runs as the non-root user `app`, so a fresh named volume would be root-owned and unwritable: a small tmpfs instead
     # (incident files then reset when the container restarts; /incidents and the Chat threads keep the history that matters).

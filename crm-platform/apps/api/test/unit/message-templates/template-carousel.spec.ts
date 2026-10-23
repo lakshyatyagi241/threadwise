@@ -160,3 +160,104 @@ describe('carousel templates', () => {
     ]);
   });
 });
+
+describe('form and catalog buttons', () => {
+  const lint = (buttons: Array<Record<string, unknown>>) =>
+    lintTemplate({
+      name: 'promo',
+      language: 'en_US',
+      metaCategory: 'MARKETING',
+      templateType: 'standard',
+      body: 'Hello',
+      buttons,
+    } as Parameters<typeof lintTemplate>[0]).map((i) => i.code);
+
+  it('a form button needs a numeric Flow id and a screen', () => {
+    expect(lint([{ type: 'FLOW', text: 'Book' }])).toEqual(
+      expect.arrayContaining(['flow_id', 'flow_screen']),
+    );
+    expect(
+      lint([
+        {
+          type: 'FLOW',
+          text: 'Book',
+          flow_id: '123',
+          flow_action: 'navigate',
+          navigate_screen: 'A',
+        },
+      ]),
+    ).not.toEqual(expect.arrayContaining(['flow_id', 'flow_screen']));
+  });
+
+  it('a catalog button cannot sit with other buttons, and is sent as CATALOG', () => {
+    expect(
+      lint([
+        { type: 'CATALOG', text: 'View catalog' },
+        { type: 'QUICK_REPLY', text: 'Hi' },
+      ]),
+    ).toContain('catalog_alone');
+    const body = buildMetaTemplate({
+      name: 'shop',
+      templateType: 'standard',
+      body: 'Hello',
+      buttons: [{ type: 'CATALOG', text: 'View catalog' }],
+    });
+    expect(body.components.at(-1)).toEqual({
+      type: 'BUTTONS',
+      buttons: [{ type: 'CATALOG', text: 'View catalog' }],
+    });
+  });
+});
+
+describe('limited-time offer templates', () => {
+  const offer = {
+    name: 'Summer Offer',
+    language: 'en_US',
+    metaCategory: 'MARKETING',
+    templateType: 'lto',
+    header: null,
+    attachmentType: 'image',
+    headerHandle: '4::aW1h',
+    body: 'Hi {{1}}, our sale ends soon',
+    footer: 'ignored',
+    buttons: [
+      { type: 'COPY_CODE', example: 'SAVE20' },
+      { type: 'URL', text: 'Shop', url: 'https://example.com' },
+    ],
+    limitedOffer: { text: 'Expiring offer!', hasExpiration: true },
+    variableMap: { body: [{ num: 1, key: 'name', example: 'Anya' }] },
+    parameterFormat: 'POSITIONAL' as const,
+  };
+
+  it('is sent as header, LIMITED_TIME_OFFER, body and buttons (no footer)', () => {
+    const prepared = prepareTemplate({ ...offer, attachmentType: 'image' } as never);
+    const types = buildMetaTemplate({
+      ...offer,
+      limitedOffer: prepared.limitedOffer,
+    } as never).components.map((c) => c.type);
+    expect(types).toEqual(['HEADER', 'LIMITED_TIME_OFFER', 'BODY', 'BUTTONS']);
+    expect(prepared.footer).toBeNull();
+  });
+
+  it('is linted: Marketing, a heading of 16 characters, a picture header, a copy-code or website button', () => {
+    const ok = lintTemplate({ ...offer, hasHeaderFile: true } as never);
+    expect(ok.filter((i) => i.severity === 'error')).toEqual([]);
+    const bad = lintTemplate({
+      ...offer,
+      metaCategory: 'UTILITY',
+      limitedOffer: { text: 'This heading is much too long', hasExpiration: true },
+      attachmentType: 'document',
+      buttons: [{ type: 'QUICK_REPLY', text: 'Hi' }],
+      hasHeaderFile: true,
+    } as never).map((i) => i.code);
+    expect(bad).toEqual(
+      expect.arrayContaining([
+        'lto_category',
+        'lto_text_long',
+        'lto_header',
+        'lto_buttons',
+        'lto_button_type',
+      ]),
+    );
+  });
+});

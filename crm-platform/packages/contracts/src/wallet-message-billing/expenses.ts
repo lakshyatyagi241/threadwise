@@ -143,9 +143,10 @@ export const expenseSummaryResponseSchema = z.object({
 });
 export type ExpenseSummaryResponse = z.infer<typeof expenseSummaryResponseSchema>;
 
-/** One line of the day log: the messages of one calendar day (in the viewer's time zone) with one status, channel and category. `source` and `category` null = not recorded. */
+/** One line of the day log: the messages of one calendar day (in the viewer's time zone) with one type, status, channel and category. `source` and `category` null = not recorded. */
 export const expenseDayGroupSchema = z.object({
   day: isoDay,
+  kind: walletUsageKindSchema,
   status: expenseStatusSchema,
   source: z.string().nullable(),
   category: z.string().nullable(),

@@ -24,6 +24,7 @@ import { CallingReadinessService } from './calling-readiness.service';
 import { CallingWabaSink } from './calling-waba.sink';
 import { CallingWebhookController } from './calling-webhook.controller';
 import { CallingController } from './calling.controller';
+import { CallingWindowService } from './calling-window.service';
 import { CallsRepository } from './calls.repository';
 import { CallIngestService } from './logging/call-ingest.service';
 import { CallLogEntriesRepository } from './logging/call-log-entries.repository';
@@ -69,6 +70,7 @@ import { TelephonyWebhookService } from './logging/telephony-webhook.service';
     CallingGraphClient,
     { provide: CALLING_GRAPH, useExisting: CallingGraphClient },
     CallsRepository,
+    CallingWindowService,
     CallLogsRepository,
     CallLogsService,
     CallingNumbersService,

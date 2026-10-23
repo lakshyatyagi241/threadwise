@@ -79,9 +79,9 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
   png: { kind: 'image', maxBytes: 5 * 1024 * 1024 },
   mp4: { kind: 'media', maxBytes: 16 * 1024 * 1024 },
   '3gp': { kind: 'media', maxBytes: 16 * 1024 * 1024 },
-  pdf: { kind: 'document', maxBytes: 100 * 1024 * 1024 },
+  pdf: { kind: 'document', maxBytes: 10 * 1024 * 1024 },
 };
-export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
+export const MEDIA_UPLOAD_MAX_BYTES = 16 * 1024 * 1024;
 
 const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
 
@@ -325,6 +325,7 @@ export class TemplatesService {
         headerMediaKey: prepared.headerMediaKey,
         headerLocation: prepared.headerLocation,
         carouselData: prepared.cards.length > 0 ? prepared.cards : null,
+        limitedOffer: prepared.limitedOffer,
         parameterFormat: prepared.parameterFormat,
         status: input.submit ? 'pending' : 'draft',
         providerConfigId: target.id,
@@ -448,6 +449,7 @@ export class TemplatesService {
           headerMediaKey: effective.headerMediaKey,
           headerLocation: effective.headerLocation,
           carouselData: effective.cards.length > 0 ? effective.cards : null,
+          limitedOffer: effective.limitedOffer,
           parameterFormat: effective.parameterFormat,
           // An in-place edit keeps its live status until Meta takes the edit.
           ...(input.submit && !inPlace(current) ? { status: 'pending' } : {}),

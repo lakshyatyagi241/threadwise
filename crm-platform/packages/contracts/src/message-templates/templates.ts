@@ -44,6 +44,14 @@ export const tplVariableMapSchema = z.object({
 });
 export type TplVariableMap = z.infer<typeof tplVariableMapSchema>;
 
+/** A limited-time-offer template: the offer's heading (Meta: at most 16 characters) and whether it counts down to an expiry time. */
+export const TPL_OFFER_TEXT_MAX = 16;
+export const tplLimitedOfferSchema = z.object({
+  text: z.string().trim().min(1).max(TPL_OFFER_TEXT_MAX),
+  hasExpiration: z.boolean().default(true),
+});
+export type TplLimitedOffer = z.infer<typeof tplLimitedOfferSchema>;
+
 /** A carousel template holds 2 to 10 cards (Meta's limits): each a picture or video, a short text and up to two buttons. */
 export const TPL_CAROUSEL_MIN = 2;
 export const TPL_CAROUSEL_MAX = 10;
@@ -134,6 +142,8 @@ export const templateSummarySchema = z.object({
   buttons: z.array(tplButtonSchema),
   /** The cards of a carousel template (empty for every other type). */
   cards: z.array(tplCardSchema),
+  /** The offer of a limited-time-offer template (null for every other type). */
+  limitedOffer: z.object({ text: z.string(), hasExpiration: z.boolean() }).nullish(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -199,7 +209,7 @@ const templateFields = {
     .trim()
     .regex(/^[a-z]{2,3}(_[A-Z]{2})?$/, 'a Meta language code such as en_US'),
   metaCategory: tplMetaCategorySchema,
-  templateType: z.enum(['standard', 'media', 'auth', 'carousel']).default('standard'),
+  templateType: z.enum(['standard', 'media', 'auth', 'carousel', 'lto']).default('standard'),
   header: z.string().trim().max(60).nullish(),
   attachmentType: tplAttachmentTypeSchema.default('none'),
   /** Handle returned by `POST /v2/templates/media`; required for an image, video or document header. */
@@ -214,6 +224,8 @@ const templateFields = {
   buttons: z.array(tplButtonSchema).max(10).default([]),
   /** `templateType: 'carousel'` only: 2 to 10 cards. */
   cards: z.array(tplCardInputSchema).max(TPL_CAROUSEL_MAX).optional(),
+  /** `templateType: 'lto'` only. */
+  limitedOffer: tplLimitedOfferSchema.nullish(),
   variableMap: tplVariableMapSchema.optional(),
   codeExpirationMinutes: z.number().int().min(1).max(90).nullish(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']).default('POSITIONAL'),

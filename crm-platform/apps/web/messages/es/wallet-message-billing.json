@@ -154,7 +154,7 @@
       "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos.",
       "days": {
         "title": "Registro diario",
-        "subtitle": "Mensajes agrupados por día, estado, canal y categoría. Abre un día para ver cada mensaje.",
+        "subtitle": "Mensajes agrupados por día, tipo, estado, canal y categoría. Abre un día para ver cada mensaje.",
         "messagesOnDay": "{count} mensajes",
         "viewDetails": "Ver detalles",
         "actions": "Acciones",

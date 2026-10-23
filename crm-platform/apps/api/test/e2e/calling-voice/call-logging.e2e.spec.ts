@@ -4,6 +4,7 @@ import { signTelephonyCallback } from '../../../src/infra/providers/telephony';
 import { FakeTelephonyProvider } from '../../../src/infra/providers/telephony';
 import { CallRecordingRetentionService } from '../../../src/modules/calling-voice/call-recording-retention.service';
 import { CallLogRetentionService } from '../../../src/modules/calling-voice/logging/call-log-retention.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import {
   addNumber,
   enableRecording,
@@ -1522,6 +1523,72 @@ describe('telephony', () => {
       (await post(t.admin, '/v2/calls/check', { contactId, purpose: 'marketing' })).body,
     ).toEqual({ decision: 'deny', reason: 'withdrawn' });
     expect((await post(t.admin, '/v2/calls/check', { contactId })).body.decision).toBe('allow');
+  });
+
+  it('refuses a click-to-call outside the calling window before the provider rings, and the preflight says deny', async () => {
+    const { t, contactId } = await setup('ctw1', { phone: '+919811400011' });
+    await fundWallet(p, t);
+    const c = await connect(t);
+    const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
+    fake.placed.length = 0;
+    // Calling hours 09:00 to 18:00 on every day. The contact's +91 number is read on India's clock.
+    await p.h.owner.query(
+      `INSERT INTO compliance_settings (org_id, calling_window_enabled, calling_start, calling_end, calling_days) VALUES ($1, true, '09:00', '18:00', '{1,2,3,4,5,6,7}')`,
+      [t.orgId],
+    );
+    const window = p.h.app.get(SendWindowService, { strict: false });
+    const clock = window.now;
+    window.now = () => new Date('2030-10-15T16:00:00Z'); // 21:30 in India: the window is closed
+    try {
+      expect((await post(t.admin, '/v2/calls/check', { contactId })).body).toEqual({
+        decision: 'deny',
+        reason: 'outside_calling_window',
+      });
+      const res = await post(t.admin, '/v2/calls/click-to-call', {
+        connectionId: c.id,
+        contactId,
+        agentPhone: '+919000000001',
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(res.body.code).toBe('CALL_OUTSIDE_WINDOW');
+      expect(res.body.errors).toEqual([{ path: 'opensAt', message: '2030-10-16T03:30:00.000Z' }]);
+      expect(fake.placed).toHaveLength(0);
+      expect(
+        await rows(`SELECT 1 FROM telephony_click_calls WHERE org_id = $1`, [t.orgId]),
+      ).toHaveLength(0);
+    } finally {
+      window.now = clock;
+    }
+  });
+
+  it('refuses a click-to-call by number to a contact the person may not read, outside the window, and names no zone', async () => {
+    const { t, number } = await setup('ctw2', { phone: '+919811400012' });
+    await fundWallet(p, t);
+    const c = await connect(t);
+    const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
+    fake.placed.length = 0;
+    await p.h.owner.query(
+      `INSERT INTO compliance_settings (org_id, calling_window_enabled, calling_start, calling_end, calling_days) VALUES ($1, true, '09:00', '18:00', '{1,2,3,4,5,6,7}')`,
+      [t.orgId],
+    );
+    const window = p.h.app.get(SendWindowService, { strict: false });
+    const clock = window.now;
+    window.now = () => new Date('2030-10-15T16:00:00Z'); // 21:30 in India: the window is closed
+    try {
+      const mate = await p.api.member(t, 'Placer', [['call.logs.create']]);
+      const res = await post(mate.token, '/v2/calls/click-to-call', {
+        connectionId: c.id,
+        customerPhone: number,
+        agentPhone: '+919000000001',
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(res.body.code).toBe('CALL_OUTSIDE_WINDOW');
+      // The person cannot read this contact, so the refusal gives the instant the window opens and nothing about the contact's zone.
+      expect(res.body.errors).toEqual([{ path: 'opensAt', message: '2030-10-16T03:30:00.000Z' }]);
+      expect(fake.placed).toHaveLength(0);
+    } finally {
+      window.now = clock;
+    }
   });
 
   describe('a reference to a recording', () => {

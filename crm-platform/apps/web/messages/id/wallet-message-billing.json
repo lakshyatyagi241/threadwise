@@ -273,7 +273,7 @@
       "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter.",
       "days": {
         "title": "Log harian",
-        "subtitle": "Pesan dikelompokkan menurut hari, status, saluran, dan kategori. Buka satu hari untuk melihat setiap pesan.",
+        "subtitle": "Pesan dikelompokkan menurut hari, jenis, status, saluran, dan kategori. Buka satu hari untuk melihat setiap pesan.",
         "messagesOnDay": "{count} pesan",
         "viewDetails": "Lihat detail",
         "actions": "Tindakan",

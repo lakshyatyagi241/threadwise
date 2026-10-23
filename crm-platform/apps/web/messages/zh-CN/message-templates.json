@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "在线",
       "cards": "轮播卡片",
-      "cardEmpty": "卡片 {n} 的文字"
+      "cardEmpty": "卡片 {n} 的文字",
+      "offerExpires": "即将结束",
+      "offerTextEmpty": "优惠标题"
     },
     "card": {
       "rejected": "已拒绝:{reason}",
@@ -281,7 +283,7 @@
         "uploading": "上传中",
         "keptSample": "已保存的示例将被保留。选择文件即可替换。",
         "noFile": "未选择文件",
-        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 100 MB。",
+        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 10 MB。",
         "replace": "替换文件",
         "choose": "选择示例文件",
         "tooBig": "此{kind}为 {size} MB。WhatsApp 最大接受 {max} MB。请选择较小的文件。",
@@ -325,14 +327,18 @@
           "quick_reply": "快速回复",
           "url": "访问网站",
           "phone": "拨打电话",
-          "copy_code": "复制验证码"
+          "copy_code": "复制验证码",
+          "form": "表单",
+          "catalog": "商品目录"
         },
         "kind": {
           "quick_reply": "快速回复",
           "url": "访问网站",
           "phone": "拨打电话",
           "copy_code": "复制验证码",
-          "other": "其他"
+          "other": "其他",
+          "form": "表单",
+          "catalog": "商品目录"
         },
         "count": "{used}/{max} 个按钮",
         "limitReached": "此类按钮最多 {max} 个。",
@@ -361,8 +367,17 @@
           "codeRequired": "请输入示例验证码。",
           "quickReplyVariable": "快速回复不能包含变量。",
           "urlExampleRequired": "请为网址变量提供示例值。",
-          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。"
-        }
+          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。",
+          "flowIdRequired": "请输入 Flow ID。",
+          "flowIdInvalid": "Flow ID 必须是数字。",
+          "screenRequired": "请输入页面 ID。",
+          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。"
+        },
+        "catalogHint": "打开你的 WhatsApp 商品目录。按钮显示“查看商品目录”，且必须是唯一的按钮。",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "已发布的 WhatsApp Flow 的数字 ID，可在 Meta 的 Flows 管理器中查看。",
+        "screen": "起始页面",
+        "screenHint": "表单打开时显示的页面 ID，例如 WELCOME。"
       },
       "result": {
         "metaRefused": "已保存,但 Meta 拒绝了该模板。",
@@ -378,10 +393,15 @@
         "authHint": "验证类模板的文本是固定的，无需起草。"
       },
       "type": {
-        "label": "模板类型",
+        "label": "按钮类型",
         "standard": "标准",
         "carousel": "轮播",
-        "hint": "轮播是一条带有一排可滑动卡片的消息。每张卡片包含一张图片或一个视频、一段简短文字和最多两个按钮。"
+        "hint": "选择消息的结尾形式。轮播是一排卡片；限时优惠包含优惠标题（可选倒计时）以及复制代码或网站按钮。",
+        "none": "无",
+        "buttons": "复制代码、网站、快捷回复等",
+        "lto": "限时优惠",
+        "catalogue": "商品目录",
+        "flow": "Flow"
       },
       "cards": {
         "title": "卡片",
@@ -402,6 +422,15 @@
         "buttonText": "按钮文字",
         "buttonUrl": "网站链接",
         "buttonPhone": "电话号码"
+      },
+      "offer": {
+        "title": "限时优惠",
+        "hint": "显示在图片或视频下方：一个标题，以及（可选的）优惠结束倒计时。",
+        "text": "优惠标题",
+        "textHint": "{used}/{max}",
+        "placeholder": "优惠即将结束！",
+        "countdown": "显示倒计时",
+        "countdownHint": "WhatsApp 会显示距优惠结束的剩余时间。"
       }
     },
     "detail": {
