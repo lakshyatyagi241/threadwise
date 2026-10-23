@@ -401,7 +401,37 @@
           "message": "{name} ist nicht verbunden, daher können keine Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
         },
         "open": "WhatsApp-Einstellungen öffnen",
-        "askAdmin": "Bitten Sie jemanden, der Kanäle verwaltet, sie neu zu verbinden."
+        "askAdmin": "Bitten Sie jemanden, der Kanäle verwaltet, sie neu zu verbinden.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Dieses Postfach muss erneut verbunden werden.",
+            "message": "{name} akzeptiert die gespeicherte Anmeldung nicht mehr, daher können keine Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
+          },
+          "error": {
+            "title": "Bei diesem Postfach gibt es ein Verbindungsproblem.",
+            "message": "Die Verbindung von {name} ist fehlerhaft, daher können keine Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
+          },
+          "not_connected": {
+            "title": "Dieses Postfach ist getrennt.",
+            "message": "Die Verbindung von {name} besteht nicht, daher können erst nach einer erneuten Verbindung Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
+          },
+          "open": "Postfacheinstellungen öffnen"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Dieser Kanal muss erneut verbunden werden.",
+            "message": "{name} akzeptiert die gespeicherten Zugangsdaten nicht mehr, daher können keine Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
+          },
+          "error": {
+            "title": "Bei diesem Kanal gibt es ein Verbindungsproblem.",
+            "message": "Die Verbindung von {name} ist fehlerhaft, daher können keine Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
+          },
+          "not_connected": {
+            "title": "Dieser Kanal ist ausgeschaltet.",
+            "message": "Die Verbindung von {name} besteht nicht, daher können keine Antworten gesendet werden. Interne Notizen funktionieren weiterhin."
+          },
+          "open": "Kanaleinstellungen öffnen"
+        }
       },
       "failure": {
         "openSettings": "WhatsApp-Einstellungen öffnen",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar.",
           "hint": "Antworten Sie über die WhatsApp-Business-App."
-        }
+        },
+        "openChannelSettings": "Kanaleinstellungen öffnen"
       },
       "media": {
         "downloading": "Datei wird heruntergeladen",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Diese Nummer kann keine {kind} senden.",
           "unsupportedType": "WhatsApp akzeptiert diesen Dateityp nicht. Erlaubt sind JPEG- und PNG-Bilder, MP4- und 3GP-Videos, AAC-, MP3-, AMR-, M4A- und OGG-Audio sowie PDF-, Office- und Textdokumente.",
           "empty": "Diese Datei ist leer."
+        },
+        "tip": "Datei anhängen. Unterstützte Formate und Größen: {list}",
+        "tipLimit": {
+          "image": "Bilder bis {mb} MB ({formats})",
+          "video": "Videos bis {mb} MB ({formats})",
+          "audio": "Audio bis {mb} MB ({formats})",
+          "document": "Dokumente bis {mb} MB ({formats})"
         }
       }
     }

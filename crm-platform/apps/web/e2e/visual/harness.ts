@@ -83,7 +83,12 @@ export async function newContext(browser: Browser, s: Scenario) {
       origins: storage.origins,
     },
   });
-  await ctx.clock.setFixedTime(new Date(cfg.fixedTime));
+  // The date is fixed; the hour is the server's, because the greeting ("Good morning") is chosen from the hour on the server and again in
+  // the browser, and two different hours is a hydration mismatch (React error 418) that is not what this suite is looking for.
+  // The greeting itself is rewritten to one string below, so the baseline does not depend on the hour.
+  const fixed = new Date(cfg.fixedTime);
+  fixed.setUTCHours(new Date().getUTCHours());
+  await ctx.clock.setFixedTime(fixed);
   // no randomness in what is drawn: ids, jitter and shuffles come from a fixed sequence
   await ctx.addInitScript(() => {
     let seed = 42;
@@ -108,6 +113,7 @@ const normalizeText = () => {
       '1 hour ago',
     ],
     [/\b(?:just now|yesterday|today)\b/gi, 'today'],
+    [/\bGood (?:morning|afternoon|evening|night)\b/g, 'Good morning'],
   ];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node: Node | null;

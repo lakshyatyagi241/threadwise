@@ -14,6 +14,7 @@ import { MessageBubble } from './wa-bubble';
 const DOT = {
   approved: 'bg-success',
   pending: 'bg-warning',
+  draft: 'bg-muted-foreground',
   rejected: 'bg-danger',
 } as const;
 

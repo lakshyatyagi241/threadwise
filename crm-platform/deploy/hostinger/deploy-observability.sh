@@ -4,6 +4,9 @@
 #   deploy-observability.sh [--check-only] [--yes] [git-ref]        (default ref: origin/main)
 # Env: HOST (default 187.127.155.227), GRAFANA_DOMAIN (grafana-desk.wabo.ai), PROMETHEUS_DOMAIN (prometheus-desk.wabo.ai),
 #      GCHAT_DIR (default ~/gchat; files critical_url slowquery_url deploy_url), DESK_DEPLOY_DRYRUN=1 (print remote commands, run none).
+#      APP_METRICS (default off): off forces OBS_METRICS_PORT=0 in .env, as before. on leaves .env's OBS_METRICS_* alone, so the app
+#      metrics ports you set (OBS_METRICS_PORT, or one service at a time with OBS_METRICS_PORT_API / _HOOKS / _WEB / _WORKER) survive
+#      the re-run. Staged procedure: docs/performance/event-loop/event-loop-observability-runbook.md, "Turning app metrics on".
 # Files come from `git archive <ref>`, never from the working tree. It never posts a test alert or message, never prints a secret.
 set -euo pipefail
 
@@ -12,6 +15,7 @@ GRAFANA_DOMAIN="${GRAFANA_DOMAIN:-grafana-desk.wabo.ai}"
 PROMETHEUS_DOMAIN="${PROMETHEUS_DOMAIN:-prometheus-desk.wabo.ai}"
 GCHAT_DIR="${GCHAT_DIR:-$HOME/gchat}"
 DRY="${DESK_DEPLOY_DRYRUN:-0}"
+APP_METRICS="${APP_METRICS:-off}"
 CHECK_ONLY=0; YES=0; REF=""
 for a in "$@"; do case "$a" in
   --check-only) CHECK_ONLY=1 ;; --yes) YES=1 ;; -h|--help) sed -n 2,8p "$0"; exit 0 ;;
@@ -122,8 +126,14 @@ setv GRAFANA_DOMAIN $GRAFANA_DOMAIN
 setv PROMETHEUS_DOMAIN $PROMETHEUS_DOMAIN
 setv CHAT_BRIDGE_DIR /opt/chat-bridge
 printf 'gchat\n\n\n' | GCHAT_URL_DIR=$RT ./observability-up.sh
-setv OBS_METRICS_PORT 0
-echo "OBS_METRICS_PORT forced to 0 (app metrics stay off)"
+if [ "$APP_METRICS" = on ]; then
+  # observability-up.sh just wrote OBS_METRICS_PORT=9464, which would turn every service on at once: put back what was there before.
+  if grep -q '^OBS_METRICS_PORT=' .env.bak-predeploy; then setv OBS_METRICS_PORT "\$(grep '^OBS_METRICS_PORT=' .env.bak-predeploy | cut -d= -f2-)"; else setv OBS_METRICS_PORT 0; fi
+  echo "app metrics: OBS_METRICS_* left as they were before this run (APP_METRICS=on)"
+else
+  setv OBS_METRICS_PORT 0
+  echo "OBS_METRICS_PORT forced to 0 (app metrics stay off)"
+fi
 rm -rf $RT
 REMOTE
 RT_MADE=0

@@ -297,6 +297,14 @@ check("process mode: real `release <sha> <uuid>` shape announces with the DB pat
 # selftest fails on a stale heartbeat
 open(f"{S3}/heartbeat", "w").write(str(int(time.time()) - 500))
 check("--selftest exits 1 when the heartbeat is older than 120 s", subprocess.run(["bash", WATCH, "--selftest"], env={**ENV, "DESK_WATCH_STATE": S3}, capture_output=True).returncode == 1)
+# --announce: one free-text post to the Deployments space (bridge updates), nothing else
+open(f"{D}/url", "w").write(f"http://127.0.0.1:{chat.server_port}/hook\n")
+chat_posts.clear()
+pa = subprocess.run(["bash", WATCH, "--announce"], input="🔧 *Chat alert bridge updated*\nVersion: `abc123def`", env={**ENV, "DESK_WATCH_URL_FILE": f"{D}/url"}, capture_output=True, text=True, timeout=30)
+check("--announce posts exactly the given text once", len(chat_posts) == 1 and chat_posts[0]["text"].startswith("🔧") and "abc123def" in chat_posts[0]["text"], str(chat_posts) + pa.stderr)
+pe = subprocess.run(["bash", WATCH, "--announce"], input="", env={**ENV, "DESK_WATCH_URL_FILE": f"{D}/url"}, capture_output=True, text=True, timeout=30)
+check("--announce with no text posts nothing and fails", pe.returncode == 2 and len(chat_posts) == 1, pe.stdout + pe.stderr)
+
 # a big release (50 merged PRs) must still show PR details within the time limit: only the newest 9 get GitHub lookups
 big = [commit(sha(100 + i), f"Merge pull request #{200 + i} from dev/b{i}\n\nt", "alice", "web-flow") for i in range(50)]
 FIX.update(compare=big, pulls={sha(100 + i): [pr(200 + i, f"Feature {i}", "alice", "bob")] for i in range(50)}, by_tag=False)

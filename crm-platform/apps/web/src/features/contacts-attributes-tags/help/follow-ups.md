@@ -5,7 +5,8 @@ summary: Give every contact a next follow-up, let it move automatically when you
 area: settings
 order: 41
 documents: [tile:follow-ups]
-keywords: [follow up, follow-up, reminder, next action, snooze, someday, overdue, default date, alert time]
+keywords:
+  [follow up, follow-up, reminder, next action, snooze, someday, overdue, default date, alert time]
 ---
 
 ## What it is for

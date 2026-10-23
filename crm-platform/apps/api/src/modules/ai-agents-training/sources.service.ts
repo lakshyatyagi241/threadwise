@@ -1,10 +1,12 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   AIAG_FILE_EXTENSIONS,
+  AIAG_PREVIEW_MAX,
   AIAG_SOURCE_LIMITS,
   ERROR_CODES,
   type AddAiagSourceInput,
   type AiagSource,
+  type AiagSourcePreview,
   type ListAiagSourcesResponse,
   type UploadAiagSourceFields,
 } from '@crm/contracts';
@@ -64,6 +66,25 @@ export class SourcesService {
       return this.repo.listFor(tx, orgId, a.id);
     });
     return { data: rows.map(toSource) };
+  }
+
+  /** One entry's text for the "View" panel (read access, like the list). */
+  async preview(uuid: string): Promise<AiagSourcePreview> {
+    const orgId = RequestContextStore.orgId();
+    const row = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
+    if (!row) throw AppError.notFound('Knowledge entry', uuid);
+    const content = row.content ?? null;
+    return {
+      id: row.uuid,
+      kind: row.kind as AiagSourcePreview['kind'],
+      label: row.label,
+      url: row.url,
+      status: row.status as AiagSourcePreview['status'],
+      question: row.question,
+      answer: row.answer,
+      text: content === null ? null : content.slice(0, AIAG_PREVIEW_MAX),
+      truncated: content !== null && content.length > AIAG_PREVIEW_MAX,
+    };
   }
 
   async add(assistantUuid: string, input: AddAiagSourceInput): Promise<AiagSource> {

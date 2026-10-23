@@ -5,6 +5,7 @@
     "loading": "Loading",
     "empty": "Nothing here yet",
     "retry": "Try again",
+    "clearSearch": "Clear search",
     "search": "Search",
     "unexpected": "Something went wrong",
     "fatal": {

@@ -172,6 +172,10 @@ export interface BulkUpdateValues {
   otherLostReason?: string | null;
   /** An IANA time zone to set on every contact (BL-193); `null` clears it. Recorded as set by staff. */
   timezone?: string | null;
+  /** Built-in text properties; a first name is never blank, `null` clears the others. */
+  firstName?: string;
+  lastName?: string | null;
+  source?: string | null;
   /** Custom properties by key, in their stored type; `null` clears that property on every contact. Keys left out are not touched. */
   customFields?: Record<string, unknown>;
 }

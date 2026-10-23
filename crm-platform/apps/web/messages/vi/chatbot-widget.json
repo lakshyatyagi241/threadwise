@@ -415,6 +415,10 @@
         "tooLarge": "Ảnh lớn hơn 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Toàn trang",
+      "close": "Thoát toàn trang"
+    },
     "flowBot": {
       "customize": {
         "loading": "Đang tải widget…",

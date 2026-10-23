@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useContactConsent } from '@/features/contact-consent';
 import { CompanyLink, useCanPickCompany } from '@/features/companies';
 import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, bandOf, useLeadScoringEnabled } from '@/features/lead-scoring';
@@ -15,7 +16,7 @@ import { useContactFields } from '../../api/properties';
 import type { ContactRow } from '../../api/schemas';
 import { countryOfPhone, timeZoneOf } from '../../lib/contact-overview';
 import { formatMoney, isNotAvailableToYou } from '../../lib/contact-data';
-import { channelOptIn, type OptIn, type OptInChannel } from '../../lib/subscription';
+import { channelOptInWithLedger, type OptIn, type OptInChannel } from '../../lib/subscription';
 import type { AddTarget, SectionId } from '../../lib/sections';
 import { TimezoneCard } from '../timezone-card';
 import { CheckIcon, MailIcon, SmsIcon, WhatsAppIcon, XIcon } from '../icons';
@@ -40,10 +41,12 @@ const CHANNELS: ReadonlyArray<{ channel: OptInChannel; Icon: typeof SmsIcon }> =
 export function ChannelTicks({ contact }: { contact: ContactRow }) {
   const t = useTranslations('contacts-attributes-tags.contact.subscription');
   const word: Record<OptIn, string> = { yes: t('yes'), no: t('no'), out: t('optedOut') };
+  const canConsent = useCan('contacts.consent.read');
+  const ledger = useContactConsent(contact.id, canConsent);
   return (
     <span className="inline-flex items-center gap-2">
       {CHANNELS.map(({ channel, Icon }) => {
-        const v = channelOptIn(contact, channel);
+        const v = channelOptInWithLedger(contact, channel, ledger.data?.states);
         const said = `${t(`channel.${channel}`)}: ${word[v]}`;
         return (
           <span key={channel} title={said} className="inline-flex items-center gap-0.5">

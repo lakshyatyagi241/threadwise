@@ -401,7 +401,37 @@
           "message": "{name} chưa được kết nối nên không thể gửi trả lời. Ghi chú nội bộ vẫn dùng được."
         },
         "open": "Mở cài đặt WhatsApp",
-        "askAdmin": "Hãy nhờ người quản lý kênh kết nối lại."
+        "askAdmin": "Hãy nhờ người quản lý kênh kết nối lại.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Hộp thư này cần được kết nối lại.",
+            "message": "{name} không còn chấp nhận thông tin đăng nhập đã lưu, nên không thể gửi phản hồi. Ghi chú nội bộ vẫn hoạt động."
+          },
+          "error": {
+            "title": "Hộp thư này đang gặp sự cố kết nối.",
+            "message": "{name} đang ở trạng thái lỗi, nên không thể gửi phản hồi. Ghi chú nội bộ vẫn hoạt động."
+          },
+          "not_connected": {
+            "title": "Hộp thư này đã ngắt kết nối.",
+            "message": "{name} chưa được kết nối, nên không thể gửi phản hồi cho đến khi kết nối lại. Ghi chú nội bộ vẫn hoạt động."
+          },
+          "open": "Mở cài đặt hộp thư"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Kênh này cần được kết nối lại.",
+            "message": "{name} không còn chấp nhận thông tin xác thực đã lưu, nên không thể gửi phản hồi. Ghi chú nội bộ vẫn hoạt động."
+          },
+          "error": {
+            "title": "Kênh này đang gặp sự cố kết nối.",
+            "message": "{name} đang ở trạng thái lỗi, nên không thể gửi phản hồi. Ghi chú nội bộ vẫn hoạt động."
+          },
+          "not_connected": {
+            "title": "Kênh này đã bị tắt.",
+            "message": "{name} chưa được kết nối, nên không thể gửi phản hồi. Ghi chú nội bộ vẫn hoạt động."
+          },
+          "open": "Mở cài đặt kênh"
+        }
       },
       "failure": {
         "openSettings": "Mở cài đặt WhatsApp",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "Chưa hỗ trợ gửi đến nhóm WhatsApp.",
           "hint": "Hãy trả lời từ ứng dụng WhatsApp Business."
-        }
+        },
+        "openChannelSettings": "Mở cài đặt kênh"
       },
       "media": {
         "downloading": "Đang tải tệp xuống",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Số này không thể gửi {kind}.",
           "unsupportedType": "WhatsApp không chấp nhận loại tệp này. WhatsApp nhận ảnh JPEG và PNG, video MP4 và 3GP, âm thanh AAC, MP3, AMR, M4A và OGG, cùng tài liệu PDF, Office và văn bản.",
           "empty": "Tệp này trống."
+        },
+        "tip": "Đính kèm tệp. Định dạng và kích thước được hỗ trợ: {list}",
+        "tipLimit": {
+          "image": "Ảnh tối đa {mb} MB ({formats})",
+          "video": "Video tối đa {mb} MB ({formats})",
+          "audio": "Âm thanh tối đa {mb} MB ({formats})",
+          "document": "Tài liệu tối đa {mb} MB ({formats})"
         }
       }
     }

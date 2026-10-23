@@ -6,7 +6,11 @@ export { ReconnectBanner, TemplatesSoon } from './components/inbox/reconnect-ban
 export { FailureNote } from './components/inbox/failure-note';
 export { MediaStateNote } from './components/inbox/media-state-note';
 export { InteractiveChip, ContactCards } from './components/inbox/message-extras';
-export { AttachmentHints, useAttachmentError } from './components/inbox/attachment-hints';
+export {
+  AttachmentHints,
+  useAttachmentError,
+  useAttachTip,
+} from './components/inbox/attachment-hints';
 export { checkAttachment, acceptAttribute, hasWhatsappLimits, limitHints } from './lib/limits';
 export { channelFamily, channelSettingsHref, channelState, sendBlocked } from './lib/status';
 export { describeFailure } from './lib/failure';

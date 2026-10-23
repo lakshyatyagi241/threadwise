@@ -24,6 +24,7 @@ import {
   acceptAttribute,
   checkAttachment,
   hasWhatsappLimits,
+  useAttachTip,
   useAttachmentError,
 } from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
@@ -216,6 +217,7 @@ export function Composer(props: ComposerProps) {
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
   const attachmentError = useAttachmentError();
+  const attachTip = useAttachTip();
   // The newest text, for an insert that finishes after a round trip to the server.
   const textRef = useRef(text);
   useEffect(() => {
@@ -537,7 +539,7 @@ export function Composer(props: ComposerProps) {
           />
           <button
             type="button"
-            title={t('attach')}
+            title={(limited && attachTip(limited.allowed)) || t('attach')}
             aria-label={t('attach')}
             disabled={disabled}
             onClick={() => input.current?.click()}

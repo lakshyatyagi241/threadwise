@@ -624,7 +624,11 @@ export function DetailScreen({ id }: { id: string }) {
           },
           { id: 'overview', label: t('tabs.overview'), content: overview },
           { id: 'statistics', label: t('tabs.statistics'), content: <StatisticsTab id={id} /> },
-          { id: 'messages', label: t('tabs.messages'), content: <RecipientsTab id={id} timezone={zone} /> },
+          {
+            id: 'messages',
+            label: t('tabs.messages'),
+            content: <RecipientsTab id={id} timezone={zone} />,
+          },
           { id: 'engagement', label: t('tabs.engagement'), content: <EngagementTab d={d} /> },
           { id: 'replies', label: t('tabs.replies', { count: n.replies }), content: replies },
           {

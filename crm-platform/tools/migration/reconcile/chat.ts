@@ -604,7 +604,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     alarm(
       `PARTITION: ${dflt} message(s) of this organization sit in messages_default (a monthly partition is missing)`,
     );
-  const notMapped = `NOT EXISTS (SELECT 1 FROM migration.id_map i WHERE i.source_client = '${client.replace(/'/g, "''")}' AND i.source_collection = 'chathistory' AND i.target_table = 'messages' AND i.target_id = m.id AND i.target_uuid = m.uuid)`;
+  const notMapped = `NOT EXISTS (SELECT 1 FROM migration.id_map i WHERE i.source_client = '${client.replace(/'/g, "''")}' AND i.source_collection = 'chathistory' AND i.target_table = 'messages' AND i.target_org_id = m.org_id AND i.target_id = m.id AND i.target_uuid = m.uuid)`; // target_org_id is the middle column of id_map_target_idx: without it the lookup cannot seek by (target_table, org, id)
   const queued = await q1(
     `SELECT count(*) AS n FROM messages m WHERE m.org_id = ${orgId} AND m.status NOT IN ${a.allowExtraRows ? "('received', 'sent', 'delivered', 'read', 'failed')" : "('received', 'sent')"} AND NOT ${notMapped}`,
   );

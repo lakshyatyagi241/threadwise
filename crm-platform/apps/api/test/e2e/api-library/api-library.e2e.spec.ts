@@ -67,6 +67,10 @@ beforeAll(async () => {
       } else if (path === '/gzipped') {
         res.writeHead(200, { 'content-type': 'application/json', 'content-encoding': 'gzip' });
         res.end(Buffer.from([0x1f, 0x8b, 0x08, 0, 0, 0, 0, 0]));
+      } else if (path === '/late-nul') {
+        // text by its type, but a NUL past the first 8 KB, where the answer reader does not look
+        res.writeHead(200, { 'content-type': 'text/plain' });
+        res.end(Buffer.concat([Buffer.alloc(9000, 0x61), Buffer.from([0])]));
       } else {
         res.writeHead(404);
         res.end();
@@ -502,8 +506,10 @@ describe('test runs', () => {
   it('a binary or compressed answer is still logged, with a note in place of the bytes', async () => {
     const t = await api.signup('alib12');
     for (const [path, note] of [
-      ['/binary', '[binary answer: 12 bytes, image/png]'],
-      ['/gzipped', '[binary answer: 8 bytes, application/json, content-encoding gzip]'],
+      ['/binary', '[Not shown: image/png, 12 bytes]'],
+      ['/gzipped', '[Not shown: application/json, 8 bytes (it could not be unpacked)]'],
+      // the answer reader sees text here; the log guard keeps the NUL out of the Postgres text column
+      ['/late-nul', '[binary answer: 9001 bytes, text/plain]'],
     ] as const) {
       const res = await api
         .as(t.admin)
@@ -523,7 +529,7 @@ describe('test runs', () => {
       expect(log.responseBody).toBe(note);
     }
     const list = await api.as(t.admin).get('/v2/api-library/logs');
-    expect(list.body.data).toHaveLength(2);
+    expect(list.body.data).toHaveLength(3);
   });
 
   it('a processing function reshapes the payload before it is sent; one that fails is reported, not sent', async () => {

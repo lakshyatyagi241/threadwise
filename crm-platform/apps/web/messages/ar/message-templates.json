@@ -124,6 +124,7 @@
         "all": "الكل",
         "approved": "موافق عليه",
         "pending": "قيد المراجعة",
+        "draft": "مسودة",
         "rejected": "مرفوض"
       },
       "quickStartTitle": "بداية سريعة",
@@ -156,6 +157,7 @@
       "legend": {
         "approved": "موافق عليه",
         "pending": "قيد المراجعة",
+        "draft": "مسودة",
         "rejected": "مرفوض"
       },
       "helpLabel": "مساعدة - 0{n}",

@@ -25,19 +25,31 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 @Injectable()
 export class OpenRouterLeadScoringAiAdapter implements LeadScoringAiPort {
   async complete(req: LeadScoreRequest): Promise<LeadScoreCompletion> {
-    const json = (await this.post(req.apiKey, {
+    const body = {
       model: req.model,
       max_tokens: req.maxTokens,
       temperature: 0,
-      response_format: { type: 'json_object' },
-      // Scoring needs a judgement, not a long chain of thought: keep a reasoning model cheap and quick.
-      reasoning: { effort: 'low' },
       usage: { include: true },
       messages: [
         { role: 'system', content: req.system },
         { role: 'user', content: req.user },
       ],
-    })) as {
+    };
+    let answer: unknown;
+    try {
+      answer = await this.post(req.apiKey, {
+        ...body,
+        response_format: { type: 'json_object' },
+        // Scoring needs a judgement, not a long chain of thought: keep a reasoning model cheap and quick.
+        reasoning: { effort: 'low' },
+      });
+    } catch (err) {
+      // Some upstream providers of a model refuse `response_format` or `reasoning` with a 400: ask again with the plain request (the
+      // prompts already say "answer with JSON only"), instead of failing the feature for a parameter the model does not take.
+      if (!(err instanceof LeadScoringAiError) || !err.message.endsWith('answered 400')) throw err;
+      answer = await this.post(req.apiKey, body);
+    }
+    const json = answer as {
       choices?: Array<{ message?: { content?: string } }>;
       usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number };
     };

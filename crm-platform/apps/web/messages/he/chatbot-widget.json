@@ -415,6 +415,10 @@
         "tooLarge": "התמונה גדולה מ-1 MB."
       }
     },
+    "fullPage": {
+      "open": "עמוד מלא",
+      "close": "יציאה מעמוד מלא"
+    },
     "flowBot": {
       "customize": {
         "loading": "טוען את הווידג'ט…",

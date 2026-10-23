@@ -98,17 +98,8 @@ export const ArrowLeftIcon = (p: IconProps) => (
 );
 /** The double tick WhatsApp draws next to the time of a sent message. */
 export const CheckIcon = (p: IconProps) => (
-  <svg
-    viewBox="0 0 18 12"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.6"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    {...p}
-  >
-    <path d="M1 6.5 4 9.5 9.5 3M7.5 9.5l1-1M9 6.5 13.5 2" />
+  <svg viewBox="0 3 16 10" fill="currentColor" aria-hidden="true" {...p}>
+    <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" />
   </svg>
 );
 export const TickIcon = (p: IconProps) => (

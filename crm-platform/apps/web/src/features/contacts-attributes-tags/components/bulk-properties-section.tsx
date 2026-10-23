@@ -1,12 +1,19 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { FieldResponse } from '@crm/contracts';
+import type {
+  FieldDependencyResponse,
+  FieldOptionDependencyResponse,
+  FieldResponse,
+} from '@crm/contracts';
 import { Button, Input } from '@crm/ui';
 import {
   addableProperties,
+  changesAfter,
   startingChange,
+  waitingParents,
+  withBulkCascade,
   type BulkPropertyChange,
   type BulkPropertyChanges,
   type BulkPropertyProblem,
@@ -22,6 +29,8 @@ import { XIcon } from './icons';
  */
 export function BulkPropertiesSection({
   fields,
+  dependencies = [],
+  optionDependencies = [],
   changes,
   problems,
   count,
@@ -30,6 +39,9 @@ export function BulkPropertiesSection({
 }: {
   /** The workspace's contact properties (any state; the section offers only the editable ones). */
   fields: readonly FieldResponse[];
+  /** The cascades of the properties: a dependent property is offered once its parent has a value to set. */
+  dependencies?: readonly FieldDependencyResponse[];
+  optionDependencies?: readonly FieldOptionDependencyResponse[];
   changes: BulkPropertyChanges;
   /** Shown under each row; empty until the person tried to apply. */
   problems: Readonly<Record<string, BulkPropertyProblem>>;
@@ -42,7 +54,11 @@ export function BulkPropertiesSection({
   const [picking, setPicking] = useState(false);
   const sectionRef = useRef<HTMLFieldSetElement>(null);
   const [query, setQuery] = useState('');
-  const byKey = new Map(fields.map((f) => [f.key, f]));
+  const offered = useMemo(
+    () => withBulkCascade(fields, dependencies, optionDependencies, changes),
+    [fields, dependencies, optionDependencies, changes],
+  );
+  const byKey = new Map(offered.map((f) => [f.key, f]));
   const rows = Object.keys(changes)
     .map((k) => byKey.get(k))
     .filter((f): f is FieldResponse => f !== undefined);
@@ -50,11 +66,10 @@ export function BulkPropertiesSection({
   const anyEditable = addableProperties(fields, {}, '').length > 0;
   if (!anyEditable && rows.length === 0) return null;
 
-  const set = (key: string, change: BulkPropertyChange) => onChange({ ...changes, [key]: change });
-  const remove = (key: string) => {
-    const { [key]: _gone, ...rest } = changes;
-    onChange(rest);
-  };
+  const set = (key: string, change: BulkPropertyChange) =>
+    onChange(changesAfter(changes, key, change, fields, dependencies, optionDependencies));
+  const remove = (key: string) =>
+    onChange(changesAfter(changes, key, null, fields, dependencies, optionDependencies));
   const message = (p: BulkPropertyProblem) =>
     p === 'empty' ? t('properties.problemEmpty') : tf(`fieldProblem.${p}`);
 
@@ -152,30 +167,39 @@ export function BulkPropertiesSection({
             onChange={(e) => setQuery(e.target.value)}
           />
           <ul className="mt-2 max-h-48 overflow-y-auto" aria-label={t('properties.available')}>
-            {addable.map((f) => (
-              <li key={f.key}>
-                <button
-                  type="button"
-                  className="flex w-full items-baseline justify-between gap-2 rounded px-2 py-1.5 text-start text-sm hover:bg-muted"
-                  title={`${f.label} /${f.key}`}
-                  onClick={() => {
-                    set(f.key, startingChange(f));
-                    setPicking(false);
-                    setQuery('');
-                  }}
-                >
-                  <span dir="auto" className="min-w-0 [overflow-wrap:anywhere]">
-                    {f.label}
-                  </span>
-                  <span
-                    dir="ltr"
-                    className="max-w-[45%] shrink-0 truncate font-mono text-xs text-muted-foreground"
+            {addable.map((f) => {
+              const waiting = waitingParents(f, dependencies, fields, changes);
+              const blocked = waiting.length > 0;
+              const why = blocked
+                ? t('properties.parentFirst', { parent: waiting.map((p) => p.label).join(', ') })
+                : undefined;
+              return (
+                <li key={f.key}>
+                  <button
+                    type="button"
+                    disabled={blocked}
+                    aria-disabled={blocked}
+                    className="flex w-full items-baseline justify-between gap-2 rounded px-2 py-1.5 text-start text-sm hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent"
+                    title={why ?? `${f.label} /${f.key}`}
+                    onClick={() => {
+                      set(f.key, startingChange(f));
+                      setPicking(false);
+                      setQuery('');
+                    }}
                   >
-                    /{f.key}
-                  </span>
-                </button>
-              </li>
-            ))}
+                    <span dir="auto" className="min-w-0 [overflow-wrap:anywhere]">
+                      {f.label}
+                    </span>
+                    <span
+                      dir="ltr"
+                      className="max-w-[45%] shrink-0 truncate font-mono text-xs text-muted-foreground"
+                    >
+                      /{f.key}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
             {addable.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-muted-foreground">
                 {t('properties.noMatch')}

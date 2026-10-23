@@ -209,6 +209,7 @@
       "payloadJson": "JSON",
       "payloadForm": "Multipart form data",
       "url": "URL",
+      "plainHttpWarning": "This address starts with http://, so the password or key in your headers would travel unencrypted. Use https:// if the server supports it.",
       "urlHint": "Use the '{ }' button to put a variable in the address.",
       "variablesHint": "Every variable used above needs a default value. A test run and a flow with no value of its own use it.",
       "headersHint": "A secret reads as ******** after you save. Leave it alone to keep it.",
@@ -216,6 +217,7 @@
       "json": {
         "valid": "Valid JSON.",
         "empty": "Leave empty to send no payload.",
+        "invalidAt": "This is not valid JSON (it breaks near line {line}, column {column}).",
         "invalid": "This is not valid JSON.",
         "shape": "The payload must be a JSON object or a list.",
         "format": "Format JSON"
@@ -323,6 +325,7 @@
       "empty": "Run a test to see the response here.",
       "passed": "Passed",
       "failedRun": "Failed",
+      "truncatedShown": "Showing the first part of a {kb} KB answer",
       "truncated": "Answer cut at 1 MB",
       "passedToast": "API tested successfully.",
       "runCodeFirst": "Run the code to test the function before testing the API.",

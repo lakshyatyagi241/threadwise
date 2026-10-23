@@ -18,6 +18,7 @@ import { TemplateAiModal } from '@/features/message-templates/components/templat
 import { SenderSharePicker } from './sender-share-picker';
 import { SenderEmptyNotice, SenderLoading } from '../../components/sender-empty';
 import { issueFor, type StepIssue } from '../lib/issues';
+import { templatesForSenders } from '../lib/templates';
 import { TemplatePicker, type TemplatesQuery } from './template-picker';
 import { TemplatePreview } from './template-preview';
 
@@ -77,6 +78,14 @@ export function StepTemplate({
   const t = useTranslations('campaigns.wizard.template');
   const ti = useTranslations('campaigns.wizard.issues');
   const selected = templates.data?.data.find((x) => x.id === templateId) ?? null;
+  // Only the templates of the chosen number(s): a template of another number cannot be sent from this one.
+  const chosenKeys = senderKeys.length > 1 ? senderKeys : senderKey ? [senderKey] : [];
+  const offered = {
+    ...templates,
+    data: templates.data
+      ? { ...templates.data, data: templatesForSenders(templates.data.data, chosenKeys) }
+      : undefined,
+  };
   const router = useRouter();
   const mayCreateTemplate = useCan('tpl.templates.create');
   const [aiOpen, setAiOpen] = useState(false);
@@ -186,7 +195,7 @@ export function StepTemplate({
           </div>
           <p className="text-xs text-muted-foreground">{t('pickHint')}</p>
           <TemplatePicker
-            templates={templates}
+            templates={offered}
             createHref={mayCreateTemplate ? newTemplateHref(senderKey) : null}
             selectedId={templateId}
             onSelect={(tpl) => !disabled && onTemplate(tpl)}
