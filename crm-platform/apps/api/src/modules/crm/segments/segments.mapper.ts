@@ -4,6 +4,7 @@ import type {
   SegmentRules,
   SegmentSharedWith,
 } from '@crm/contracts';
+import { personOf } from '../../../common/person-ref';
 import type { SegmentRow, SegmentShareView } from './segments.repository';
 
 /** The people and teams of one segment as the repository reads them. */
@@ -47,6 +48,8 @@ export function toSegmentResponse(
     invalidConditions,
     canEdit,
     rowVersion: row.rowVersion,
+    createdBy: personOf(row.createdByUuid, row.createdByName),
+    updatedBy: personOf(row.updatedByUuid, row.updatedByName),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

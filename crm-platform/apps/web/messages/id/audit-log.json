@@ -176,6 +176,25 @@
     "common": {
       "close": "Tutup",
       "dismiss": "Abaikan"
+    },
+    "moduleActivity": {
+      "close": "Tutup",
+      "window": "Perubahan 30 hari terakhir, terbaru di atas.",
+      "search": "Cari aktivitas",
+      "searchPlaceholder": "Cari berdasarkan orang, tindakan, atau kolom",
+      "count": "{count, plural, =0 {Tidak ada catatan} one {# catatan} other {# catatan}}",
+      "loading": "Memuat aktivitas...",
+      "loadFailed": "Aktivitas tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "emptyTitle": "Belum ada aktivitas",
+      "empty": "Perubahan yang dibuat di layar ini akan muncul di sini.",
+      "emptyFilteredTitle": "Tidak ada yang cocok",
+      "emptyFiltered": "Tidak ada catatan dengan orang, tindakan, atau kolom itu.",
+      "colWhen": "Kapan",
+      "colWho": "Siapa",
+      "colWhat": "Apa",
+      "loadedOnly": "Pencarian hanya mencakup catatan yang sudah dimuat.",
+      "loadMore": "Muat lainnya"
     }
   }
 }

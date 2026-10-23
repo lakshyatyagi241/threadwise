@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@crm/ui';
+import { ModuleActivityDialog } from '@/features/notifications-activity-audit/audit/components/module-activity-dialog';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import type { ContactGroup } from '../api/schemas';
 import { GroupModal } from './group-modal';
@@ -17,8 +18,10 @@ export function GroupsScreen() {
   const session = useSession();
   const canManage = useCan('record.contacts.update');
   const canImport = useCan('record.contacts.import');
+  const canSeeActivity = useCan('audit.log.read');
   const [importing, setImporting] = useState<ContactGroup | 'any' | null>(null);
   const [editing, setEditing] = useState<ContactGroup | 'new' | null>(null);
+  const [activity, setActivity] = useState(false);
 
   return (
     <section className="space-y-5">
@@ -37,6 +40,11 @@ export function GroupsScreen() {
           >
             {t('allContacts')}
           </Link>
+          {canSeeActivity && (
+            <Button variant="secondary" onClick={() => setActivity(true)}>
+              {t('activity')}
+            </Button>
+          )}
           {canImport && (
             <Button variant="secondary" onClick={() => setImporting('any')}>
               <UploadIcon /> {t('import')}
@@ -50,11 +58,16 @@ export function GroupsScreen() {
         </div>
       </div>
 
-      <GroupsPanel
-        onCreate={() => setEditing('new')}
-        onEdit={setEditing}
-        onImport={canImport ? setImporting : undefined}
-      />
+      <GroupsPanel onEdit={setEditing} onImport={canImport ? setImporting : undefined} />
+
+      {canSeeActivity && (
+        <ModuleActivityDialog
+          open={activity}
+          onClose={() => setActivity(false)}
+          module="contact_groups"
+          title={t('activityTitle')}
+        />
+      )}
 
       <div className="grid gap-4 lg:grid-cols-3">
         {(['one', 'two', 'three'] as const).map((k, i) => (

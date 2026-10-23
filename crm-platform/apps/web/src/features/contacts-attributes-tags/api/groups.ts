@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { CreateContactGroupInput, UpdateContactGroupInput } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { KEYS } from './contacts';
@@ -13,12 +13,20 @@ import {
   type CreateContactGroupResponse,
 } from './schemas';
 
-/** Every group, newest first, with its workspace-wide member count. */
-export function useGroups() {
+/**
+ * Every group, newest first, with its workspace-wide member count. `q` narrows it by name on the server; a search has its own cache
+ * entry, so the pickers that read the whole list keep theirs. Invalidating `KEYS.groups` covers both.
+ */
+export function useGroups(q?: string) {
+  const search = q?.trim() ? q.trim() : undefined;
   return useQuery({
-    queryKey: KEYS.groups,
+    queryKey: search ? ([...KEYS.groups, 'search', search] as const) : KEYS.groups,
     queryFn: ({ signal }) =>
-      fetchAllPages('/contact-groups', contactGroupResponseSchema, {}, { signal }),
+      fetchAllPages('/contact-groups', contactGroupResponseSchema, search ? { q: search } : {}, {
+        signal,
+      }),
+    // Typing a search keeps the rows on screen until the narrower list arrives.
+    placeholderData: keepPreviousData,
     retry: false,
   });
 }

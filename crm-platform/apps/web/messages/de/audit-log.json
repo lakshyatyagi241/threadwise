@@ -176,6 +176,25 @@
     "common": {
       "close": "Schließen",
       "dismiss": "Ausblenden"
+    },
+    "moduleActivity": {
+      "close": "Schließen",
+      "window": "Änderungen der letzten 30 Tage, neueste zuerst.",
+      "search": "Aktivität durchsuchen",
+      "searchPlaceholder": "Nach Person, Aktion oder Feld suchen",
+      "count": "{count, plural, =0 {Keine Einträge} one {# Eintrag} other {# Einträge}}",
+      "loading": "Aktivität wird geladen...",
+      "loadFailed": "Die Aktivität konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Noch keine Aktivität",
+      "empty": "Änderungen auf dieser Seite erscheinen hier.",
+      "emptyFilteredTitle": "Keine Treffer",
+      "emptyFiltered": "Kein Eintrag enthält diese Person, Aktion oder dieses Feld.",
+      "colWhen": "Wann",
+      "colWho": "Wer",
+      "colWhat": "Was",
+      "loadedOnly": "Die Suche umfasst bisher geladene Einträge.",
+      "loadMore": "Mehr laden"
     }
   }
 }

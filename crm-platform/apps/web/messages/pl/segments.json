@@ -196,7 +196,12 @@
       "next": "Następna",
       "pageOf": "Strona {page, number} z {pages, number}",
       "perPage": "Segmentów na stronie",
-      "perPageOption": "{count, number} na stronie"
+      "perPageOption": "{count, number} na stronie",
+      "colCreatedBy": "Utworzył",
+      "colCreatedAt": "Utworzono",
+      "colModifiedBy": "Zmodyfikował",
+      "activity": "Aktywność",
+      "activityTitle": "Aktywność segmentów"
     },
     "actions": {
       "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
