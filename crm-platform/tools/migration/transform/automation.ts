@@ -123,6 +123,9 @@ export const automationFlows: HandlerSpec = {
         c('updated_at', 'timestamptz'),
       ],
       constants: FLOW_CONSTANTS,
+      // the flow-state step arms the live automations (is_published, is_active, published_at) and its UPDATE moves updated_at and row_version:
+      // the step's run record (migration.run_log _flows) is the check for those columns
+      skipCompare: ['is_published', 'is_active', 'published_at', 'updated_at', 'row_version'],
       // what the live application changes once people work in the app (publish, edit, bind a channel)
       liveColumns: [
         'flow_name',
