@@ -176,6 +176,25 @@
     "common": {
       "close": "Fermer",
       "dismiss": "Ignorer"
+    },
+    "moduleActivity": {
+      "close": "Fermer",
+      "window": "Modifications des 30 derniers jours, les plus récentes d’abord.",
+      "search": "Rechercher dans l’activité",
+      "searchPlaceholder": "Rechercher par personne, action ou champ",
+      "count": "{count, plural, =0 {Aucune entrée} one {# entrée} other {# entrées}}",
+      "loading": "Chargement de l’activité...",
+      "loadFailed": "L’activité n’a pas pu être chargée.",
+      "retry": "Réessayer",
+      "emptyTitle": "Aucune activité pour l’instant",
+      "empty": "Les modifications faites sur cet écran apparaissent ici.",
+      "emptyFilteredTitle": "Aucun résultat",
+      "emptyFiltered": "Aucune entrée ne correspond à cette personne, action ou ce champ.",
+      "colWhen": "Quand",
+      "colWho": "Qui",
+      "colWhat": "Quoi",
+      "loadedOnly": "La recherche porte sur les entrées chargées jusqu’ici.",
+      "loadMore": "Charger plus"
     }
   }
 }

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { uuidSchema } from '../common/ids';
+import { personRefSchema, uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
 import { contactResponseSchema } from '../crm/contact';
 import { hexColorSchema } from '../contacts-attributes-tags/contact-group';
@@ -92,6 +92,10 @@ export const segmentResponseSchema = z.object({
   /** Whether the caller may edit or delete it. */
   canEdit: z.boolean(),
   rowVersion: z.number().int(),
+  /** The owner when it was made; null when that user was removed or the segment predates the column. */
+  createdBy: personRefSchema.nullable(),
+  /** Who made the last change; null until the first change after the column was added. */
+  updatedBy: personRefSchema.nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });

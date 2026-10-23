@@ -196,7 +196,12 @@
       "next": "Tiếp",
       "pageOf": "Trang {page, number} / {pages, number}",
       "perPage": "Số phân khúc mỗi trang",
-      "perPageOption": "{count, number} mỗi trang"
+      "perPageOption": "{count, number} mỗi trang",
+      "colCreatedBy": "Người tạo",
+      "colCreatedAt": "Ngày tạo",
+      "colModifiedBy": "Người sửa",
+      "activity": "Hoạt động",
+      "activityTitle": "Hoạt động phân khúc"
     },
     "actions": {
       "forbidden": "Bạn không có quyền thực hiện thao tác này.",

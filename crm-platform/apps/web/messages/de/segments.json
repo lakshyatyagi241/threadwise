@@ -196,7 +196,12 @@
       "next": "Weiter",
       "pageOf": "Seite {page, number} von {pages, number}",
       "perPage": "Segmente pro Seite",
-      "perPageOption": "{count, number} pro Seite"
+      "perPageOption": "{count, number} pro Seite",
+      "colCreatedBy": "Erstellt von",
+      "colCreatedAt": "Erstellt am",
+      "colModifiedBy": "Geändert von",
+      "activity": "Aktivität",
+      "activityTitle": "Segmentaktivität"
     },
     "actions": {
       "forbidden": "Sie haben keine Berechtigung dafür.",

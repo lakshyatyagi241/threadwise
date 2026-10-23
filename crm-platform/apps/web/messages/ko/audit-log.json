@@ -176,6 +176,25 @@
     "common": {
       "close": "닫기",
       "dismiss": "닫기"
+    },
+    "moduleActivity": {
+      "close": "닫기",
+      "window": "최근 30일간의 변경 내역(최신순).",
+      "search": "활동 검색",
+      "searchPlaceholder": "사람, 작업 또는 항목으로 검색",
+      "count": "{count, plural, =0 {기록 없음} one {#건의 기록} other {#건의 기록}}",
+      "loading": "활동 기록을 불러오는 중...",
+      "loadFailed": "활동 기록을 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "emptyTitle": "아직 활동 기록이 없습니다",
+      "empty": "이 화면에서 변경한 내용이 여기에 표시됩니다.",
+      "emptyFilteredTitle": "일치하는 항목이 없습니다",
+      "emptyFiltered": "해당 사람, 작업 또는 항목이 포함된 기록이 없습니다.",
+      "colWhen": "일시",
+      "colWho": "누가",
+      "colWhat": "내용",
+      "loadedOnly": "검색은 지금까지 불러온 기록만 대상으로 합니다.",
+      "loadMore": "더 보기"
     }
   }
 }

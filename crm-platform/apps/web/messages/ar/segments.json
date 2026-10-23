@@ -196,7 +196,12 @@
       "next": "التالي",
       "pageOf": "الصفحة {page, number} من {pages, number}",
       "perPage": "عدد الشرائح في الصفحة",
-      "perPageOption": "{count, number} في الصفحة"
+      "perPageOption": "{count, number} في الصفحة",
+      "colCreatedBy": "أنشأه",
+      "colCreatedAt": "تاريخ الإنشاء",
+      "colModifiedBy": "عدّله",
+      "activity": "النشاط",
+      "activityTitle": "نشاط الشرائح"
     },
     "actions": {
       "forbidden": "ليست لديك صلاحية لتنفيذ ذلك.",

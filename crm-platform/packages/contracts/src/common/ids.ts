@@ -8,6 +8,10 @@ import { z } from 'zod';
 export const uuidSchema = z.string().uuid();
 export type Uuid = z.infer<typeof uuidSchema>;
 
+/** A staff member as a list prints them: the uuid and the name. Null wherever a row has no person (a removed user, a system write). */
+export const personRefSchema = z.object({ id: uuidSchema, name: z.string() });
+export type PersonRef = z.infer<typeof personRefSchema>;
+
 /** Human-facing identifier, e.g. CON-00001 / SNAP26-000123. */
 export const displayIdSchema = z.string().regex(/^[A-Z0-9]+-[0-9]+$/);
 

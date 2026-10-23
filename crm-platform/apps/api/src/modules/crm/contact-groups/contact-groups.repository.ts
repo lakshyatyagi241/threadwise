@@ -13,6 +13,10 @@ export interface ContactGroupRow {
   color: string | null;
   memberCount: number;
   rowVersion: number;
+  createdByUuid: string | null;
+  createdByName: string | null;
+  updatedByUuid: string | null;
+  updatedByName: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +29,10 @@ interface RawGroupRow {
   color: string | null;
   member_count: number;
   row_version: number;
+  created_by_uuid: string | null;
+  created_by_name: string | null;
+  updated_by_uuid: string | null;
+  updated_by_name: string | null;
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -37,6 +45,10 @@ const toRow = (r: RawGroupRow): ContactGroupRow => ({
   color: r.color,
   memberCount: Number(r.member_count),
   rowVersion: Number(r.row_version),
+  createdByUuid: r.created_by_uuid,
+  createdByName: r.created_by_name,
+  updatedByUuid: r.updated_by_uuid,
+  updatedByName: r.updated_by_name,
   createdAt: new Date(r.created_at),
   updatedAt: new Date(r.updated_at),
 });
@@ -55,9 +67,13 @@ const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 export class ContactGroupsRepository {
   private readonly selectSql = sql`
     SELECT g.id, g.uuid, g.name, g.note, g.color, g.row_version, g.created_at, g.updated_at,
+           cb.uuid AS created_by_uuid, cb.full_name AS created_by_name,
+           ub.uuid AS updated_by_uuid, ub.full_name AS updated_by_name,
            (SELECT count(*) FROM contact_group_members m
              WHERE m.org_id = g.org_id AND m.group_id = g.id)::int AS member_count
     FROM contact_groups g
+    LEFT JOIN users cb ON cb.org_id = g.org_id AND cb.id = g.created_by
+    LEFT JOIN users ub ON ub.org_id = g.org_id AND ub.id = g.updated_by
   `;
 
   /** Newest first, `limit + 1` rows. */
@@ -149,18 +165,22 @@ export class ContactGroupsRepository {
     return row ? { id: Number(row.id), uuid: row.uuid } : undefined;
   }
 
-  /** Optimistic update. Zero rows means somebody else committed first. */
+  /** Optimistic update. Zero rows means somebody else committed first. `updatedBy` is always set: every accepted patch is a change. */
   async updateWithVersion(
     tx: Tx,
     orgId: number,
     id: number,
     expectedVersion: number,
-    values: { name?: string; note?: string | null; color?: string | null },
+    values: {
+      name?: string;
+      note?: string | null;
+      color?: string | null;
+      updatedBy: number | null;
+    },
   ): Promise<boolean> {
     const result = await tx
       .update(contactGroups)
-      // an empty patch still has to be a valid UPDATE: it just touches the row
-      .set(Object.keys(values).length > 0 ? values : { updatedAt: new Date() })
+      .set(values)
       .where(
         and(
           eq(contactGroups.orgId, orgId),

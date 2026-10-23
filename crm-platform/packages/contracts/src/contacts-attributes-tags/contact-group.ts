@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { uuidSchema } from '../common/ids';
+import { personRefSchema, uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
 
 /**
@@ -23,6 +23,9 @@ export const contactGroupResponseSchema = z.object({
   /** Contacts in the group, workspace-wide; filters do not change it. */
   memberCount: z.number().int(),
   rowVersion: z.number().int(),
+  createdBy: personRefSchema.nullable(),
+  /** Null until the group is first renamed, re-noted or re-coloured. */
+  updatedBy: personRefSchema.nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });

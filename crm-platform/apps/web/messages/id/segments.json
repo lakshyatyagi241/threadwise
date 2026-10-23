@@ -196,7 +196,12 @@
       "next": "Berikutnya",
       "pageOf": "Halaman {page, number} dari {pages, number}",
       "perPage": "Segmen per halaman",
-      "perPageOption": "{count, number} per halaman"
+      "perPageOption": "{count, number} per halaman",
+      "colCreatedBy": "Dibuat oleh",
+      "colCreatedAt": "Dibuat pada",
+      "colModifiedBy": "Diubah oleh",
+      "activity": "Aktivitas",
+      "activityTitle": "Aktivitas segmen"
     },
     "actions": {
       "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",

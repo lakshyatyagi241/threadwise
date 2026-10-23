@@ -176,6 +176,25 @@
     "common": {
       "close": "סגור",
       "dismiss": "התעלם"
+    },
+    "moduleActivity": {
+      "close": "סגירה",
+      "window": "שינויים מ-30 הימים האחרונים, החדשים ראשונים.",
+      "search": "חיפוש בפעילות",
+      "searchPlaceholder": "חיפוש לפי אדם, פעולה או שדה",
+      "count": "{count, plural, =0 {אין רשומות} one {רשומה אחת} other {# רשומות}}",
+      "loading": "טוען פעילות...",
+      "loadFailed": "לא ניתן היה לטעון את הפעילות.",
+      "retry": "נסה שוב",
+      "emptyTitle": "עדיין אין פעילות",
+      "empty": "שינויים שייעשו במסך זה יופיעו כאן.",
+      "emptyFilteredTitle": "אין התאמות",
+      "emptyFiltered": "אין רשומה עם האדם, הפעולה או השדה הזה.",
+      "colWhen": "מתי",
+      "colWho": "מי",
+      "colWhat": "מה",
+      "loadedOnly": "החיפוש חל על הרשומות שנטענו עד כה.",
+      "loadMore": "טען עוד"
     }
   }
 }

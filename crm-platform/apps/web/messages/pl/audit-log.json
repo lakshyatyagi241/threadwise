@@ -176,6 +176,25 @@
     "common": {
       "close": "Zamknij",
       "dismiss": "Odrzuć"
+    },
+    "moduleActivity": {
+      "close": "Zamknij",
+      "window": "Zmiany z ostatnich 30 dni, najnowsze na górze.",
+      "search": "Szukaj w aktywności",
+      "searchPlaceholder": "Szukaj po osobie, czynności lub polu",
+      "count": "{count, plural, =0 {Brak wpisów} one {# wpis} other {# wpisów}}",
+      "loading": "Wczytywanie aktywności...",
+      "loadFailed": "Nie udało się wczytać aktywności.",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak aktywności",
+      "empty": "Zmiany wykonane na tym ekranie pojawią się tutaj.",
+      "emptyFilteredTitle": "Nic nie pasuje",
+      "emptyFiltered": "Żaden wpis nie ma tej osoby, czynności ani pola.",
+      "colWhen": "Kiedy",
+      "colWho": "Kto",
+      "colWhat": "Co",
+      "loadedOnly": "Wyszukiwanie obejmuje tylko wczytane dotąd wpisy.",
+      "loadMore": "Wczytaj więcej"
     }
   }
 }

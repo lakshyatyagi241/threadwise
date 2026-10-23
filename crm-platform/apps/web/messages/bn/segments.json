@@ -196,7 +196,12 @@
       "next": "পরবর্তী",
       "pageOf": "পৃষ্ঠা {page, number} / {pages, number}",
       "perPage": "প্রতি পৃষ্ঠায় সেগমেন্ট",
-      "perPageOption": "প্রতি পৃষ্ঠায় {count, number}"
+      "perPageOption": "প্রতি পৃষ্ঠায় {count, number}",
+      "colCreatedBy": "তৈরি করেছেন",
+      "colCreatedAt": "তৈরির সময়",
+      "colModifiedBy": "সংশোধন করেছেন",
+      "activity": "কার্যকলাপ",
+      "activityTitle": "সেগমেন্টের কার্যকলাপ"
     },
     "actions": {
       "forbidden": "এটি করার অনুমতি আপনার নেই।",

@@ -196,7 +196,12 @@
       "next": "ถัดไป",
       "pageOf": "หน้า {page, number} จาก {pages, number}",
       "perPage": "เซกเมนต์ต่อหน้า",
-      "perPageOption": "{count, number} ต่อหน้า"
+      "perPageOption": "{count, number} ต่อหน้า",
+      "colCreatedBy": "สร้างโดย",
+      "colCreatedAt": "สร้างเมื่อ",
+      "colModifiedBy": "แก้ไขโดย",
+      "activity": "กิจกรรม",
+      "activityTitle": "กิจกรรมของเซ็กเมนต์"
     },
     "actions": {
       "forbidden": "คุณไม่มีสิทธิ์ทำเช่นนั้น",
