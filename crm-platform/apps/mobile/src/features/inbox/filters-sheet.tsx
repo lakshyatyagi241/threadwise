@@ -99,9 +99,9 @@ export function FiltersSheet({ visible, value, onApply, onClose }: Props) {
       ? [
           {
             key: 'labels',
-            title: t('inbox.filter.labels'),
+            title: t('inbox.filter.tags'),
             kind: 'multi' as const,
-            searchLabel: t('inbox.filter.searchLabels'),
+            searchLabel: t('inbox.filter.searchTags'),
             options: (labels.data ?? []).map((l) => ({ value: l.id, label: l.name })),
           },
         ]

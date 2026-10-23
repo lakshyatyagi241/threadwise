@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * The Bot cell next to "Assign labels" under the thread header, as in the Geta app: it shows that the bot is answering this
+ * The Bot cell next to "Assign tags" under the thread header, as in the Geta app: it shows that the bot is answering this
  * conversation, or, while a person holds it (or it waits in the queue), offers "Return to bot" (`inbox.conversation.reply`), the web
  * handoff bar's button. Nothing is drawn for a conversation no bot ever handled.
  */

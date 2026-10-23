@@ -993,6 +993,8 @@
       "channel": "Kênh",
       "labels": "Nhãn",
       "searchLabels": "Tìm nhãn",
+      "tags": "Thẻ",
+      "searchTags": "Tìm thẻ",
       "agent": "Nhân viên",
       "searchAgents": "Tìm nhân viên",
       "me": "Bạn",
@@ -1004,6 +1006,7 @@
       "sortChip": "Sắp xếp: {{name}}",
       "channelChip": "Kênh: {{name}}",
       "labelsChip": "Nhãn: {{names}}",
+      "tagsChip": "Thẻ: {{names}}",
       "archivedChip": "Đã lưu trữ",
       "conversation": "Cuộc trò chuyện",
       "conversationAny": "Bất kỳ",
@@ -1088,14 +1091,15 @@
         "answering": "Bot đang trả lời"
       },
       "labels": {
-        "open": "Gán nhãn",
-        "title": "Gán nhãn",
+        "open": "Gán thẻ",
+        "title": "Gán thẻ",
         "close": "Đóng",
-        "empty": "Chưa có nhãn nào.",
-        "emptyCreate": "Chưa có nhãn nào. Nhập tên bên dưới để tạo nhãn.",
+        "empty": "Chưa có thẻ nào.",
+        "emptyCreate": "Chưa có thẻ nào. Nhập tên bên dưới để tạo thẻ.",
         "newLabel": "Nhãn mới",
+        "newTag": "Thẻ mới",
         "add": "Thêm",
-        "failed": "Không thể thay đổi nhãn. Hãy thử lại."
+        "failed": "Không thể thay đổi thẻ. Hãy thử lại."
       },
       "assignment": {
         "none": "Chưa phân công",

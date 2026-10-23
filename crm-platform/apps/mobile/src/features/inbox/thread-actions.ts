@@ -26,7 +26,7 @@ interface Input {
 
 /**
  * The lines of the three dots for this conversation and this person, in the order the reference app lists them: View details
- * (always), Change status (when another status is reachable), Assign labels, Assign agent, Mark as spam (not on one that is already spam: its way back is the header's Not spam). Priority, snooze and waking a snoozed
+ * (always), Change status (when another status is reachable), Assign tags, Assign agent, Mark as spam (not on one that is already spam: its way back is the header's Not spam). Priority, snooze and waking a snoozed
  * conversation are on the details screen.
  */
 export function menuActionsFor(input: Input): MenuAction[] {

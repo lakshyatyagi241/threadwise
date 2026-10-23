@@ -1035,6 +1035,8 @@
       "channel": "Canal",
       "labels": "Rótulos",
       "searchLabels": "Buscar rótulos",
+      "tags": "Tags",
+      "searchTags": "Buscar tags",
       "agent": "Agente",
       "searchAgents": "Pesquisar agentes",
       "me": "Você",
@@ -1046,6 +1048,7 @@
       "sortChip": "Ordem: {{name}}",
       "channelChip": "Canal: {{name}}",
       "labelsChip": "Rótulos: {{names}}",
+      "tagsChip": "Tags: {{names}}",
       "archivedChip": "Arquivadas",
       "conversation": "Conversa",
       "conversationAny": "Qualquer",
@@ -1132,14 +1135,15 @@
         "answering": "O bot está respondendo"
       },
       "labels": {
-        "open": "Atribuir rótulos",
-        "title": "Atribuir rótulos",
+        "open": "Atribuir tags",
+        "title": "Atribuir tags",
         "close": "Fechar",
-        "empty": "Ainda não há rótulos.",
-        "emptyCreate": "Ainda não há rótulos. Digite um nome abaixo para criar um.",
+        "empty": "Ainda não há tags.",
+        "emptyCreate": "Ainda não há tags. Digite um nome abaixo para criar uma.",
         "newLabel": "Novo rótulo",
+        "newTag": "Nova tag",
         "add": "Adicionar",
-        "failed": "Não foi possível alterar os rótulos. Tente novamente."
+        "failed": "Não foi possível alterar as tags. Tente novamente."
       },
       "assignment": {
         "none": "Não atribuída",

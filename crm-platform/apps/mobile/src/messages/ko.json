@@ -993,6 +993,8 @@
       "channel": "채널",
       "labels": "라벨",
       "searchLabels": "라벨 검색",
+      "tags": "태그",
+      "searchTags": "태그 검색",
       "agent": "담당자",
       "searchAgents": "담당자 검색",
       "me": "나",
@@ -1004,6 +1006,7 @@
       "sortChip": "정렬: {{name}}",
       "channelChip": "채널: {{name}}",
       "labelsChip": "라벨: {{names}}",
+      "tagsChip": "태그: {{names}}",
       "archivedChip": "보관됨",
       "conversation": "대화",
       "conversationAny": "전체",
@@ -1088,14 +1091,15 @@
         "answering": "봇이 응대 중"
       },
       "labels": {
-        "open": "라벨 지정",
-        "title": "라벨 지정",
+        "open": "태그 지정",
+        "title": "태그 지정",
         "close": "닫기",
-        "empty": "아직 라벨이 없습니다.",
-        "emptyCreate": "아직 라벨이 없습니다. 아래에 이름을 입력해 만드세요.",
+        "empty": "아직 태그가 없습니다.",
+        "emptyCreate": "아직 태그가 없습니다. 아래에 이름을 입력해 만드세요.",
         "newLabel": "새 라벨",
+        "newTag": "새 태그",
         "add": "추가",
-        "failed": "라벨을 변경하지 못했습니다. 다시 시도하세요."
+        "failed": "태그를 변경하지 못했습니다. 다시 시도하세요."
       },
       "assignment": {
         "none": "미배정",

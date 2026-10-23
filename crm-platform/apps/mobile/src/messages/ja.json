@@ -993,6 +993,8 @@
       "channel": "チャネル",
       "labels": "ラベル",
       "searchLabels": "ラベルを検索",
+      "tags": "タグ",
+      "searchTags": "タグを検索",
       "agent": "担当者",
       "searchAgents": "担当者を検索",
       "me": "自分",
@@ -1004,6 +1006,7 @@
       "sortChip": "並べ替え：{{name}}",
       "channelChip": "チャネル: {{name}}",
       "labelsChip": "ラベル: {{names}}",
+      "tagsChip": "タグ: {{names}}",
       "archivedChip": "アーカイブ済み",
       "conversation": "会話",
       "conversationAny": "すべて",
@@ -1088,14 +1091,15 @@
         "answering": "ボットが対応中"
       },
       "labels": {
-        "open": "ラベルを割り当て",
-        "title": "ラベルを割り当て",
+        "open": "タグを割り当て",
+        "title": "タグを割り当て",
         "close": "閉じる",
-        "empty": "ラベルはまだありません。",
-        "emptyCreate": "ラベルはまだありません。下に名前を入力して作成できます。",
+        "empty": "タグはまだありません。",
+        "emptyCreate": "タグはまだありません。下に名前を入力して作成できます。",
         "newLabel": "新しいラベル",
+        "newTag": "新しいタグ",
         "add": "追加",
-        "failed": "ラベルを変更できませんでした。もう一度お試しください。"
+        "failed": "タグを変更できませんでした。もう一度お試しください。"
       },
       "assignment": {
         "none": "未割り当て",

@@ -1056,6 +1056,8 @@
       "channel": "Kanał",
       "labels": "Etykiety",
       "searchLabels": "Szukaj etykiet",
+      "tags": "Tagi",
+      "searchTags": "Szukaj tagów",
       "agent": "Agent",
       "searchAgents": "Szukaj agentów",
       "me": "Ty",
@@ -1067,6 +1069,7 @@
       "sortChip": "Sortowanie: {{name}}",
       "channelChip": "Kanał: {{name}}",
       "labelsChip": "Etykiety: {{names}}",
+      "tagsChip": "Tagi: {{names}}",
       "archivedChip": "Zarchiwizowane",
       "conversation": "Rozmowa",
       "conversationAny": "Dowolna",
@@ -1154,14 +1157,15 @@
         "answering": "Odpowiada bot"
       },
       "labels": {
-        "open": "Przypisz etykiety",
-        "title": "Przypisz etykiety",
+        "open": "Przypisz tagi",
+        "title": "Przypisz tagi",
         "close": "Zamknij",
-        "empty": "Nie ma jeszcze etykiet.",
-        "emptyCreate": "Nie ma jeszcze etykiet. Wpisz poniżej nazwę, aby utworzyć nową.",
+        "empty": "Nie ma jeszcze tagów.",
+        "emptyCreate": "Nie ma jeszcze tagów. Wpisz poniżej nazwę, aby utworzyć nowy.",
         "newLabel": "Nowa etykieta",
+        "newTag": "Nowy tag",
         "add": "Dodaj",
-        "failed": "Nie udało się zmienić etykiet. Spróbuj ponownie."
+        "failed": "Nie udało się zmienić tagów. Spróbuj ponownie."
       },
       "assignment": {
         "none": "Nieprzypisana",

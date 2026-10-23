@@ -993,6 +993,8 @@
       "channel": "Saluran",
       "labels": "Label",
       "searchLabels": "Cari label",
+      "tags": "Tag",
+      "searchTags": "Cari tag",
       "agent": "Agen",
       "searchAgents": "Cari agen",
       "me": "Anda",
@@ -1004,6 +1006,7 @@
       "sortChip": "Urutan: {{name}}",
       "channelChip": "Saluran: {{name}}",
       "labelsChip": "Label: {{names}}",
+      "tagsChip": "Tag: {{names}}",
       "archivedChip": "Diarsipkan",
       "conversation": "Percakapan",
       "conversationAny": "Apa saja",
@@ -1088,14 +1091,15 @@
         "answering": "Bot sedang menjawab"
       },
       "labels": {
-        "open": "Tetapkan label",
-        "title": "Tetapkan label",
+        "open": "Tetapkan tag",
+        "title": "Tetapkan tag",
         "close": "Tutup",
-        "empty": "Belum ada label.",
-        "emptyCreate": "Belum ada label. Ketik nama di bawah untuk membuatnya.",
+        "empty": "Belum ada tag.",
+        "emptyCreate": "Belum ada tag. Ketik nama di bawah untuk membuatnya.",
         "newLabel": "Label baru",
+        "newTag": "Tag baru",
         "add": "Tambah",
-        "failed": "Label tidak dapat diubah. Coba lagi."
+        "failed": "Tag tidak dapat diubah. Coba lagi."
       },
       "assignment": {
         "none": "Belum ditugaskan",

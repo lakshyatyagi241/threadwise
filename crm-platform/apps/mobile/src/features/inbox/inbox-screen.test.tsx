@@ -340,7 +340,7 @@ describe('InboxScreen', () => {
         },
       ]);
       await open();
-      await category('Labels');
+      await category('Tags');
       await fireEvent.press(await screen.findByRole('checkbox', { name: 'VIP' }));
       await fireEvent.press(screen.getByRole('checkbox', { name: 'Cold' }));
       await save();
@@ -351,7 +351,7 @@ describe('InboxScreen', () => {
         ]),
       );
       expect(
-        await screen.findByRole('button', { name: 'Remove filter: Labels: VIP, Cold' }),
+        await screen.findByRole('button', { name: 'Remove filter: Tags: VIP, Cold' }),
       ).toBeTruthy();
     });
 

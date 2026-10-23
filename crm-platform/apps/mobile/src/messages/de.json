@@ -1014,6 +1014,8 @@
       "channel": "Kanal",
       "labels": "Labels",
       "searchLabels": "Labels suchen",
+      "tags": "Tags",
+      "searchTags": "Tags suchen",
       "agent": "Mitarbeiter",
       "searchAgents": "Mitarbeiter suchen",
       "me": "Sie",
@@ -1025,6 +1027,7 @@
       "sortChip": "Sortierung: {{name}}",
       "channelChip": "Kanal: {{name}}",
       "labelsChip": "Labels: {{names}}",
+      "tagsChip": "Tags: {{names}}",
       "archivedChip": "Archiviert",
       "conversation": "Konversation",
       "conversationAny": "Beliebig",
@@ -1110,14 +1113,15 @@
         "answering": "Der Bot antwortet"
       },
       "labels": {
-        "open": "Labels zuweisen",
-        "title": "Labels zuweisen",
+        "open": "Tags zuweisen",
+        "title": "Tags zuweisen",
         "close": "Schließen",
-        "empty": "Es gibt noch keine Labels.",
-        "emptyCreate": "Es gibt noch keine Labels. Geben Sie unten einen Namen ein, um eines zu erstellen.",
+        "empty": "Es gibt noch keine Tags.",
+        "emptyCreate": "Es gibt noch keine Tags. Geben Sie unten einen Namen ein, um einen zu erstellen.",
         "newLabel": "Neues Label",
+        "newTag": "Neuer Tag",
         "add": "Hinzufügen",
-        "failed": "Die Labels konnten nicht geändert werden. Versuchen Sie es erneut."
+        "failed": "Die Tags konnten nicht geändert werden. Versuchen Sie es erneut."
       },
       "assignment": {
         "none": "Nicht zugewiesen",

@@ -1014,6 +1014,8 @@
       "channel": "Channel",
       "labels": "Labels",
       "searchLabels": "Search labels",
+      "tags": "Tags",
+      "searchTags": "Search tags",
       "agent": "Agent",
       "searchAgents": "Search agents",
       "me": "You",
@@ -1025,6 +1027,7 @@
       "sortChip": "Sort: {{name}}",
       "channelChip": "Channel: {{name}}",
       "labelsChip": "Labels: {{names}}",
+      "tagsChip": "Tags: {{names}}",
       "archivedChip": "Archived",
       "conversation": "Conversation",
       "conversationAny": "Any",
@@ -1110,14 +1113,15 @@
         "answering": "The bot is answering"
       },
       "labels": {
-        "open": "Assign labels",
-        "title": "Assign labels",
+        "open": "Assign tags",
+        "title": "Assign tags",
         "close": "Close",
-        "empty": "There are no labels yet.",
-        "emptyCreate": "There are no labels yet. Type a name below to make one.",
+        "empty": "There are no tags yet.",
+        "emptyCreate": "There are no tags yet. Type a name below to make one.",
         "newLabel": "New label",
+        "newTag": "New tag",
         "add": "Add",
-        "failed": "Couldn't change the labels. Try again."
+        "failed": "Couldn't change the tags. Try again."
       },
       "assignment": {
         "none": "Not assigned",

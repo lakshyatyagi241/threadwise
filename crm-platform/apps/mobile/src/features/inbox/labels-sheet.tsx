@@ -31,7 +31,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** The sheet that opens from "Assign labels": every label of the workspace, ticked for the ones this conversation has. */
+/** The sheet that opens from "Assign tags": every label of the workspace, ticked for the ones this conversation has. */
 export function LabelsSheet({ visible, conversationId, applied, canCreate, onClose }: Props) {
   return (
     <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
@@ -161,7 +161,7 @@ function SheetBody({ conversationId, applied, canCreate, onClose }: Omit<Props, 
             <View style={styles.add}>
               <View style={styles.addField}>
                 <TextField
-                  label={t('inbox.thread.labels.newLabel')}
+                  label={t('inbox.thread.labels.newTag')}
                   value={name}
                   onChangeText={setName}
                   onSubmitEditing={add}

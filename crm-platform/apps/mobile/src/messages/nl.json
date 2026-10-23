@@ -1014,6 +1014,8 @@
       "channel": "Kanaal",
       "labels": "Labels",
       "searchLabels": "Labels zoeken",
+      "tags": "Tags",
+      "searchTags": "Tags zoeken",
       "agent": "Medewerker",
       "searchAgents": "Zoek medewerkers",
       "me": "Jij",
@@ -1025,6 +1027,7 @@
       "sortChip": "Sortering: {{name}}",
       "channelChip": "Kanaal: {{name}}",
       "labelsChip": "Labels: {{names}}",
+      "tagsChip": "Tags: {{names}}",
       "archivedChip": "Gearchiveerd",
       "conversation": "Gesprek",
       "conversationAny": "Alle",
@@ -1110,14 +1113,15 @@
         "answering": "De bot antwoordt"
       },
       "labels": {
-        "open": "Labels toewijzen",
-        "title": "Labels toewijzen",
+        "open": "Tags toewijzen",
+        "title": "Tags toewijzen",
         "close": "Sluiten",
-        "empty": "Er zijn nog geen labels.",
-        "emptyCreate": "Er zijn nog geen labels. Typ hieronder een naam om er een te maken.",
+        "empty": "Er zijn nog geen tags.",
+        "emptyCreate": "Er zijn nog geen tags. Typ hieronder een naam om er een te maken.",
         "newLabel": "Nieuw label",
+        "newTag": "Nieuwe tag",
         "add": "Toevoegen",
-        "failed": "De labels konden niet worden gewijzigd. Probeer het opnieuw."
+        "failed": "De tags konden niet worden gewijzigd. Probeer het opnieuw."
       },
       "assignment": {
         "none": "Niet toegewezen",

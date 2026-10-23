@@ -109,7 +109,7 @@ export function FilterStrip({
   if (filters.labels.length > 0) {
     chips.push({
       key: 'labels',
-      text: t('inbox.filter.labelsChip', {
+      text: t('inbox.filter.tagsChip', {
         names: labelNames.length > 0 ? labelNames.join(', ') : String(filters.labels.length),
       }),
       onRemove: onClearLabels,

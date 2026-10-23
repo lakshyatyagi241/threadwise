@@ -574,7 +574,7 @@ describe('ThreadScreen: the three dots', () => {
   const dots = () => screen.findByRole('button', { name: 'More actions' });
   const choose = async (name: string) =>
     await fireEvent.press(await screen.findByRole('menuitem', { name }));
-  const FOUR = ['View details', 'Change status', 'Assign labels', 'Assign agent', 'Mark as spam'];
+  const FOUR = ['View details', 'Change status', 'Assign tags', 'Assign agent', 'Mark as spam'];
 
   beforeEach(() => {
     libraryCall.mockResolvedValue([]);
@@ -612,7 +612,7 @@ describe('ThreadScreen: the three dots', () => {
     await loaded();
     await fireEvent.press(await dots());
     const lines = (await screen.findAllByRole('menuitem')).map((n) => n.props.accessibilityLabel);
-    expect(lines).toEqual(['View details', 'Change status', 'Assign labels', 'Mark as spam']);
+    expect(lines).toEqual(['View details', 'Change status', 'Assign tags', 'Mark as spam']);
   });
 
   it('changes the status from the ones the current status allows, with the row version it read', async () => {
@@ -727,7 +727,7 @@ describe('ThreadScreen: the three dots', () => {
     await show();
     await loaded();
     await fireEvent.press(await dots());
-    await choose('Assign labels');
+    await choose('Assign tags');
     expect(await screen.findByRole('checkbox', { name: 'VIP' })).toBeTruthy();
   });
 });
@@ -848,7 +848,7 @@ describe('ThreadScreen: the Bot cell under the header', () => {
 describe('ThreadScreen: labels', () => {
   const withVip = () => detail({ labels: [VIP], rowVersion: 7 });
   const open = async () =>
-    await fireEvent.press(await screen.findByRole('button', { name: 'Assign labels' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Assign tags' }));
 
   beforeEach(() => {
     libraryCall.mockResolvedValue([inLibrary(VIP), inLibrary(COLD)]);
@@ -859,7 +859,7 @@ describe('ThreadScreen: labels', () => {
     arrange({ detail: withVip() });
     await show();
     await loaded();
-    const button = await screen.findByRole('button', { name: 'Assign labels' });
+    const button = await screen.findByRole('button', { name: 'Assign tags' });
     expect(button.props.accessibilityValue).toEqual({ text: 'VIP' });
     // Nothing is asked of the API until the sheet opens.
     expect(libraryCall).not.toHaveBeenCalled();
@@ -870,7 +870,7 @@ describe('ThreadScreen: labels', () => {
     arrange();
     await show();
     await loaded();
-    expect(await screen.findByRole('button', { name: 'Assign labels' })).toBeTruthy();
+    expect(await screen.findByRole('button', { name: 'Assign tags' })).toBeTruthy();
   });
 
   it('is not offered without the permission to label, whatever else the person may do', async () => {
@@ -878,7 +878,7 @@ describe('ThreadScreen: labels', () => {
     arrange();
     await show();
     await loaded();
-    expect(screen.queryByRole('button', { name: 'Assign labels' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Assign tags' })).toBeNull();
   });
 
   it('ticks the labels the conversation has, and puts one on or takes one off', async () => {
@@ -935,7 +935,7 @@ describe('ThreadScreen: labels', () => {
     await show();
     await loaded();
     await open();
-    await fireEvent.changeText(await screen.findByLabelText('New label'), '  Hot ');
+    await fireEvent.changeText(await screen.findByLabelText('New tag'), '  Hot ');
     await fireEvent.press(screen.getByRole('button', { name: 'Add' }));
     await waitFor(() =>
       expect(applyCall).toHaveBeenCalledWith(CONVERSATION_ID, { name: 'Hot' }, expect.any(String)),
@@ -949,7 +949,7 @@ describe('ThreadScreen: labels', () => {
     await loaded();
     await open();
     await screen.findByRole('checkbox', { name: 'VIP' });
-    expect(screen.queryByLabelText('New label')).toBeNull();
+    expect(screen.queryByLabelText('New tag')).toBeNull();
   });
 
   it('says so when a label could not be changed', async () => {
@@ -960,7 +960,7 @@ describe('ThreadScreen: labels', () => {
     await loaded();
     await open();
     await fireEvent.press(await screen.findByRole('checkbox', { name: 'Cold' }));
-    expect(await screen.findByText("Couldn't change the labels. Try again.")).toBeTruthy();
+    expect(await screen.findByText("Couldn't change the tags. Try again.")).toBeTruthy();
   });
 
   it('says when the labels could not be loaded, and loads them on retry', async () => {

@@ -4,7 +4,7 @@ import { apiFetch } from '@/lib/api';
 /**
  * Labels are on the conversation, as in the reference's inbox (`/v2/inbox/tags*` and `/v2/inbox/conversations/:id/tags*`; the web renamed labels to tags and kept `/labels*` as aliases).
  * The workspace has one label library that contacts share, but a label put on a thread is not a tag on the contact. These are the
- * calls behind the "Assign labels" sheet of a thread.
+ * calls behind the "Assign tags" sheet of a thread.
  */
 
 /** Every label of the workspace (`inbox.conversation.read`), with how many conversations carry it. */
