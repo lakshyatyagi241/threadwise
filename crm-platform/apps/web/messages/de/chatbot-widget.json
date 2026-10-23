@@ -415,6 +415,10 @@
         "tooLarge": "Das Bild ist größer als 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Vollbild",
+      "close": "Vollbild beenden"
+    },
     "flowBot": {
       "customize": {
         "loading": "Widget wird geladen …",
