@@ -322,7 +322,7 @@
         "conversationsOpen": "Otwarte rozmowy",
         "conversationsResolved": "Rozwiązane rozmowy",
         "conversationsClosed": "Zamknięte rozmowy",
-        "conversationsAssigned": "Przypisane",
+        "conversationsAssigned": "Przypisane do kogokolwiek",
         "conversationsUnassigned": "Nieprzypisane",
         "conversationsTotal": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}"
       },
