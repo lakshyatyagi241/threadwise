@@ -4,6 +4,7 @@ import {
   applyMapping,
   buildMultipart,
   extractByPath,
+  logResponseText,
   maskHeaders,
   maskJson,
   maskJsonText,
@@ -227,6 +228,36 @@ describe('response paths', () => {
       'Orders.data.nope': '',
       'Orders.data.tags': ['a', 'b'],
     });
+  });
+});
+
+describe('the answer a log keeps', () => {
+  const answer = (bodyText: string, extra: Partial<Parameters<typeof logResponseText>[0]> = {}) =>
+    logResponseText({
+      bodyText,
+      contentType: null,
+      headers: {},
+      sizeBytes: Buffer.byteLength(bodyText),
+      ...extra,
+    });
+
+  it('keeps a text answer as it is', () => {
+    expect(answer('{"id":7}', { contentType: 'application/json' })).toBe('{"id":7}');
+  });
+
+  it('replaces an answer with a NUL character (a binary body) by a note of its size and type', () => {
+    const bodyText = '\u0089PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR';
+    const note = answer(bodyText, { contentType: 'image/png', sizeBytes: 163 });
+    expect(note).toBe('[binary answer: 163 bytes, image/png]');
+    expect(note).not.toContain('\u0000');
+  });
+
+  it('says so when the binary answer names no content type and was sent compressed', () => {
+    const note = answer('\u001f\u008b\u0008\u0000\u0000\u0000', {
+      sizeBytes: 26,
+      headers: { 'content-encoding': 'gzip' },
+    });
+    expect(note).toBe('[binary answer: 26 bytes, no content type, content-encoding gzip]');
   });
 });
 

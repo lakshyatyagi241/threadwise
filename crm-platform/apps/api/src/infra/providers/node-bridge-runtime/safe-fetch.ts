@@ -110,6 +110,8 @@ export interface SafeResponse {
   text: string;
   /** Only set when the request asked for `truncate` and the answer was cut. */
   truncated?: boolean;
+  /** Only set with `truncate`: the bytes read (`text` is those bytes decoded as UTF-8, so its length can differ). */
+  bytes?: number;
 }
 
 export interface SafeFetchOptions {
@@ -165,6 +167,7 @@ export class SafeFetch {
         headers: res.headers,
         text: buffer.toString('utf8'),
         truncated,
+        bytes: buffer.length,
       };
     }
     const body = await this.read(res, maxBytes);

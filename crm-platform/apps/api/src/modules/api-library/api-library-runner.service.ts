@@ -253,7 +253,7 @@ export class ApiLibraryRunner {
           bodyText: truncateText(res.text, RESPONSE_TEXT_LIMIT).text,
           bodyJson,
           truncated: truncated || res.text.length > RESPONSE_TEXT_LIMIT,
-          sizeBytes: Buffer.byteLength(res.text),
+          sizeBytes: res.bytes ?? Buffer.byteLength(res.text),
         },
         processedPayload: processed,
       };
