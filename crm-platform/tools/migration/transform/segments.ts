@@ -153,7 +153,8 @@ export function fitViewName(raw: string): { name: string; soft: Soft[] } {
   const t = raw.trim();
   if (t.length > VIEW_NAME_MAX)
     return {
-      name: t.slice(0, VIEW_NAME_MAX).trimEnd(),
+      // never cut between the two halves of a surrogate pair (an emoji), which would leave a broken character
+      name: t.slice(0, VIEW_NAME_MAX - (/[\uD800-\uDBFF]/.test(t[VIEW_NAME_MAX - 1] ?? '') ? 1 : 0)).trimEnd(),
       soft: [{ code: 'VIEW_NAME_CUT', reason: `the view name is ${t.length} characters; WaDesk keeps ${VIEW_NAME_MIN} to ${VIEW_NAME_MAX}, so it is cut` }],
     };
   if (t.length < VIEW_NAME_MIN)
@@ -312,7 +313,7 @@ export const savedViews: HandlerSpec = {
     if (isDeleted(doc)) return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'is_deleted or deleted_time is set' };
     if ((str(doc.type) ?? '').toLowerCase() === 'system')
       return { kind: 'exclude', code: 'SYSTEM_VIEW', reason: 'a system view exists natively in WaDesk (My, Unassigned and All Contacts)' };
-    const name = str(doc.name);
+    const name = str(doc.name)?.trim();
     if (!name || name.length > 191) return { kind: 'quarantine', code: 'INVALID_NAME', reason: 'view name is empty or longer than 191 characters' };
     let filter: Record<string, unknown> = {};
     const fq = doc.filter_query as Doc | null | undefined;
