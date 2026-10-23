@@ -144,7 +144,8 @@ last_db=0; last_stall=0; STALL_POLL=${DESK_STALL_POLL:-60}; STALL_MIN=${DESK_STA
 stall_check() {
   local live j newest
   live=$(live_tag) || return 0
-  newest=$(ls -t "$STATE"/seen 2>/dev/null | head -n1); newest=$([ -n "$newest" ] && cat "$STATE/seen/$newest" 2>/dev/null || echo 0)
+  newest=0  # epoch of the newest release START (building/shipping/releasing marker); finished releases do not suppress the alarm
+  for f in "$STATE"/seen/*.building "$STATE"/seen/*.shipping "$STATE"/seen/*.releasing; do [ -e "$f" ] && { e=$(cat "$f" 2>/dev/null); [ "${e:-0}" -gt "$newest" ] 2>/dev/null && newest=$e; }; done
   j=$(python3 "$FORMATTER" --stall "$live" "$STALL_MIN" "${newest:-0}" 2>>"$STATE/watch.log") || return 0
   [ "$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("post"))' 2>/dev/null)" = True ] || return 0
   local head text

@@ -185,10 +185,10 @@ def machine(ev, prev, new, secs):
     return json.dumps(out)
 
 
-def stall(live, min_age, since_epoch):
-    """--stall <live_sha> <min_age_minutes> <epoch of the newest release event>: {"post": bool, "head": sha, "text": msg}.
-    post is true only when main has commits the live release lacks, the OLDEST one is older than min_age, and no release event
-    happened after it (so a release in progress or just finished never raises it). Never raises; any failure -> post false."""
+def stall(live, min_age, last_start_epoch):
+    """--stall <live_sha> <min_age_minutes> <epoch of the newest release START (0 = none)>: {"post": bool, "head": sha, "text": msg}.
+    post is true only when main has commits the live release lacks, the OLDEST one is older than min_age, and no release STARTED
+    in the last 30 minutes (one in progress or just attempted never raises it; a release that finished earlier without the commits does). Never raises; any failure -> post false."""
     off = {"post": False}
     try:
         if not sha_ok(live):
@@ -201,11 +201,11 @@ def stall(live, min_age, since_epoch):
         first, head = commits[0], commits[-1]  # compare lists oldest first: the stall is how long the OLDEST unreleased commit has waited
         when = ((first.get("commit") or {}).get("committer") or {}).get("date") or ""
         t = time.mktime(time.strptime(when, "%Y-%m-%dT%H:%M:%SZ")) - time.timezone if when else 0
-        if not t or (time.time() - t) / 60 < float(min_age) or int(since_epoch or 0) >= t:
+        if not t or (time.time() - t) / 60 < float(min_age) or (int(last_start_epoch or 0) and time.time() - int(last_start_epoch) < 1800):
             return json.dumps(off)
         subj = [clean((x.get("commit", {}).get("message") or "").split("\n")[0], 70) for x in commits[-3:]][::-1]
         mins = int((time.time() - t) / 60)
-        text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live. The oldest has waited {mins} min and no release has started.\n"
+        text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live. The oldest has waited {mins} min and no new release has gone live.\n"
                 f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}`  Oldest waiting since {time.strftime('%H:%M UTC', time.gmtime(t))}\n"
                 + "\n".join(f"• {x}" for x in subj if x)
                 + "\nMerging does not deploy by itself: the build server must receive the GitHub push and start the release. "
