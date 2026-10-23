@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value}（不在工作区中）",
           "templateLabel": "已审核通过的模板",
           "templateHint": "此处仅显示工作区中已审核通过的模板。<link>创建新模板 →</link>",
+          "statusExits": "添加状态出口（已发送、已送达、已读、已回复、失败）",
+          "statusExitsHint": "流程会从第一个已连接步骤的出口离开：模板一经接受即为“已发送”，WhatsApp 报告后为“已送达”或“已读”，客户回复时为“已回复”，无法发送时为“失败”。客户点击的按钮会从它自己的出口离开。",
           "type": "类型",
           "kindText": "文本",
           "kindImage": "图片",
@@ -1947,6 +1949,7 @@
       "webBot": {
         "aria": "流程分区",
         "build": "构建",
+        "faqs": "常见问题",
         "customize": "自定义",
         "saveFirst": "请先保存流程。",
         "needsCustomizing": "小组件仍在使用默认外观。请打开“自定义”。",
@@ -1954,6 +1957,13 @@
         "deploy": "部署",
         "customizeFirstWhatsapp": "发布前，请先自定义 WhatsApp 按钮并保存一次。",
         "install": "安装"
+      },
+      "faqsPanel": {
+        "intro": "常见问题是 AI 代理知识中的条目。这里的属于此流程用来回答的代理：在此添加问答，代理就会使用。",
+        "noAgent": "此流程尚未使用 AI 代理。添加“AI 助手”或“从常见问题回答”步骤并选择代理，它的常见问题会显示在这里。",
+        "agent": "AI 代理",
+        "openAgent": "在 AI 训练中打开",
+        "unknownAgent": "AI 代理（未找到）"
       },
       "buttonIcon": {
         "label": "图标(可选)",
@@ -2353,6 +2363,8 @@
         "number": "数字",
         "alphanumeric": "字母和数字",
         "date": "日期",
+        "datetime": "日期和时间",
+        "time": "时间",
         "age": "年龄",
         "date_of_birth": "出生日期"
       },
@@ -2364,6 +2376,8 @@
         "number": "请输入有效的数字",
         "alphanumeric": "请仅使用字母和数字",
         "date": "请输入有效的日期（{format}）",
+        "datetime": "请输入有效的日期和时间（{format} HH:MM）",
+        "time": "请输入有效的时间（HH:MM）",
         "age": "请以整数输入您的年龄",
         "date_of_birth": "请输入有效的日期({format})"
       },

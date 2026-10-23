@@ -21,6 +21,8 @@ export function compatiblePropertyTypes(
     case 'date':
     case 'date_of_birth':
       return ['date', 'text'];
+    case 'datetime':
+      return ['datetime', 'text'];
     default:
       return ['text', 'long_text'];
   }

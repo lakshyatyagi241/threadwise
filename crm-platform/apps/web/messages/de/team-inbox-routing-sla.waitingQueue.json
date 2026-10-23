@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Warteschlange",
       "intro": "Chats, die niemand übernommen hat, warten im Tab Wartend. Diese optionalen Schritte helfen, sie zu beantworten. Jeder Schritt läuft einmal pro Chat, zählt nur die Minuten, in denen das Team geöffnet ist, und endet, sobald jemand den Chat übernimmt.",
+      "introBasic": "Chats, die niemand übernommen hat, warten im Tab Wartend, bis jemand sie übernimmt.",
       "remind": "Team erinnern",
       "remindBody": "Benachrichtigt die Personen, die den Chat übernehmen können.",
       "overflow": "Einem anderen Team anbieten",

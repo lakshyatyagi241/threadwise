@@ -111,7 +111,7 @@ export class MessageDispatchService {
       return this.failed(orgId, row, ref, err, options, runtime.uuid);
     }
 
-    await this.markSent(orgId, row, conv, ref, sent, runtime.kind);
+    await this.markSent(orgId, row, conv, ref, sent, runtime);
     // After the commit: a receipt finds its message through the ledger row this transaction wrote.
     await this.dispatcher.scheduleReceipts(runtime, sent);
     return 'sent';
@@ -139,7 +139,7 @@ export class MessageDispatchService {
     | 'skipped'
     | { row: MessageRow; conv: ConversationRow; runtime: ChannelRuntime; envelope: unknown }
   > {
-    return this.db.txAs({ orgId }, async (tx) => {
+    return this.db.retry.txAs({ orgId }, async (tx) => {
       const row = await this.messages.byUuid(tx, orgId, messageUuid);
       if (!row || row.direction !== 'out') return 'missing' as const;
       if (row.status !== 'queued') return 'skipped' as const;
@@ -188,9 +188,9 @@ export class MessageDispatchService {
     conv: ConversationRow,
     ref: { id: number; createdAt: string },
     sent: DispatchResult,
-    channelKind: string,
+    channel: Pick<ChannelRuntime, 'kind' | 'externalId'>,
   ): Promise<void> {
-    const done = await this.db.txAs({ orgId }, async (tx) => {
+    const done = await this.db.retry.txAs({ orgId }, async (tx) => {
       // The thread's lock first (the order every writer takes), then the message.
       const lockedConv = (await this.conversations.byId(tx, orgId, conv.id, true))!;
       const moved = await this.messages.markSent(tx, orgId, ref, {
@@ -214,7 +214,8 @@ export class MessageDispatchService {
         },
       );
       await this.deliveries.report(tx, orgId, {
-        channelKind,
+        channelKind: channel.kind,
+        channelExternalId: channel.externalId,
         conversationId: conv.id,
         peerKey: conv.peerKey,
         status: 'sent',
@@ -272,7 +273,7 @@ export class MessageDispatchService {
     ref: { id: number; createdAt: string },
     err: SendHeldError,
   ): Promise<void> {
-    const conversationUuid = await this.db.txAs({ orgId }, async (tx) => {
+    const conversationUuid = await this.db.retry.txAs({ orgId }, async (tx) => {
       const moved = await this.messages.setHold(tx, orgId, ref, err.hold);
       if (!moved) return null;
       await this.messages.insertEvent(tx, orgId, ref, 'held', { ...err.hold });
@@ -332,7 +333,7 @@ export class MessageDispatchService {
         ? `${classified.reason} (gave up after ${options.attempt} attempts)`
         : classified.reason,
     };
-    const done = await this.db.txAs({ orgId }, async (tx) => {
+    const done = await this.db.retry.txAs({ orgId }, async (tx) => {
       const moved = await this.messages.markFailed(tx, orgId, ref, failure);
       if (!moved) return null;
       await this.messages.insertEvent(tx, orgId, ref, 'failed', {

@@ -4,6 +4,7 @@
       "switches": {
         "title": "Assegnazione delle conversazioni",
         "intro": "Quattro interruttori coprono la maggior parte degli spazi di lavoro: attivali e non dovrai mai creare una regola.",
+        "introBasic": "Il tuo piano non assegna le chat automaticamente: le nuove chat restano in coda finché qualcuno non le prende. Queste impostazioni restano valide.",
         "order": "L’ordine per una nuova conversazione: prima Responsabile del contatto e Agente abituale, poi le tue regole (se ne aggiungi), poi Tutti gli altri, infine la coda di attesa.",
         "readOnly": "Puoi vedere questi interruttori ma non modificarli.",
         "saved": "Salvato.",
@@ -11,8 +12,6 @@
         "loading": "Caricamento delle impostazioni di assegnazione",
         "loadFailed": "Impossibile caricare le impostazioni di assegnazione.",
         "retry": "Riprova",
-        "notInPlan": "Non incluso nel tuo piano",
-        "upgradeHint": "Incluso nel componente aggiuntivo Instradamento intelligente o in un piano superiore.",
         "stepFirst": "Controllato per primo",
         "stepMaster": "Interruttore principale",
         "stepAfter": "Dopo una presa in carico",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Serve più controllo? Aggiungi regole",
         "intro": "Facoltativo. Le regole inviano conversazioni specifiche (un canale, parole nel messaggio, un nuovo contatto...) ad agenti o team specifici. Se i quattro interruttori bastano, non devi crearne nessuna.",
-        "locked": "Le regole fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore. Restano disponibili la coda d'attesa, la presa in carico e l'assegnazione manuale.",
         "pipelineTitle": "Come viene assegnata una nuova conversazione",
         "pipeline": {
           "agent": "1. Responsabile del contatto e Agente abituale",

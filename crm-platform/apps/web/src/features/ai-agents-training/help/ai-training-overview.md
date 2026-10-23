@@ -41,6 +41,7 @@ Each agent has **one knowledge base of its own**. What you add here belongs to t
 - **Live URL.** Give a public page address. The page is read in the background, so the entry shows **Reading…** for a moment. If a page cannot be read (for example it needs a sign-in or is private) the entry says so with the reason; remove it and paste the text instead.
 - **Free text.** Paste a help snippet or a policy.
 - **Add FAQ.** Type a question and its answer. Select **Add another question** to add several in one go; each pair is saved as its own entry. FAQs are just entries in the knowledge base, not a separate feature: there is no FAQ tab, score or setting to manage.
+- **View.** Select **View** on an entry to read what the agent reads from it: the text of a page or a file, your pasted text, or a question with its answer. Very long text is cut in the preview only.
 - **File.** Upload a PDF, DOCX, TXT, Markdown, CSV or HTML file of up to 10 MB. The text is extracted for you. A scanned PDF with no text layer cannot be read: paste its text instead.
 
 When a customer asks something, the agent looks through its knowledge by meaning and answers from the few most relevant parts. If the answer is not there, it says it does not know instead of guessing, or hands over to a person if you set a handoff phrase. Removing an entry stops the agent using it for new replies. A few well-chosen pages or one FAQ per common question usually does more than loading a whole site.

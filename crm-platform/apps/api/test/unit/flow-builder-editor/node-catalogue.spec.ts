@@ -203,6 +203,22 @@ describe('node catalogue: ports and handle naming (TW-FLB-017)', () => {
     expect(flbPortsFor({ type: 'template', data: { tpl: 't' } }).map((x) => x.id)).toEqual(['out']);
   });
 
+  it('a template with status exits adds Sent, Delivered, Read, Replied and Failed (after its buttons) and drops the plain out', () => {
+    const ids = (ctx?: object) =>
+      flbPortsFor({ type: 'template', data: { tpl: 't', statusExits: true } }, ctx).map(
+        (x) => x.id,
+      );
+    expect(ids()).toEqual(['sent', 'delivered', 'read', 'replied', 'failed']);
+    expect(ids({ templateButtons: () => [{ label: 'Yes' }] })).toEqual([
+      'p0',
+      'sent',
+      'delivered',
+      'read',
+      'replied',
+      'failed',
+    ]);
+  });
+
   it('labels follow the node data: the trigger kind, sheets mode, deal action, telegram wait', () => {
     expect(flbPortsFor({ type: 'trigger', data: { kind: 'tag_added' } })[0]!.label).toBe(
       'on tag added',

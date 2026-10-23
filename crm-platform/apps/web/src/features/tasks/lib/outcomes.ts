@@ -8,7 +8,11 @@ export function outcomeChoices(
   offered: readonly Pick<TaskOutcomeResponse, 'id' | 'name' | 'isActive'>[],
   current: TaskOutcomeRef | null,
 ): TaskOutcomeRef[] {
-  const out: TaskOutcomeRef[] = offered.map((o) => ({ id: o.id, name: o.name, isActive: o.isActive }));
+  const out: TaskOutcomeRef[] = offered.map((o) => ({
+    id: o.id,
+    name: o.name,
+    isActive: o.isActive,
+  }));
   if (current && !out.some((o) => o.id === current.id)) out.push(current);
   return out;
 }
@@ -31,4 +35,18 @@ export function validateOutcomeName(
   if (n === '') return 'nameRequired';
   if ([...n].length > max) return 'nameTooLong';
   return null;
+}
+
+/** The most characters of an outcome name drawn in a chip, a menu or a select option; the full name goes in the tooltip. */
+export const OUTCOME_LABEL_MAX = 60;
+
+/** Shortens a long outcome name for a narrow place (never cuts a surrogate pair); a short name is returned as it is. */
+export function clampOutcomeLabel(name: string, max: number = OUTCOME_LABEL_MAX): string {
+  const chars = [...name];
+  return chars.length <= max
+    ? name
+    : `${chars
+        .slice(0, max - 1)
+        .join('')
+        .trimEnd()}…`;
 }

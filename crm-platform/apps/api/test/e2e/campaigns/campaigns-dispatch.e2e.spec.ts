@@ -4,6 +4,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import {
   EngineSenderRegistry,
   LinkTracker,
@@ -111,6 +112,8 @@ beforeAll(async () => {
     get(CAMPAIGN_BILLING),
     get(CAMPAIGN_FLOW_STARTER),
     get(CAMPAIGN_SETTINGS),
+    get<SendWindowService>(SendWindowService),
+    jobs,
   );
   sweeper = new CampaignSweeper(
     get<DatabaseService>(DatabaseService),

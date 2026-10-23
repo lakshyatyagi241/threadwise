@@ -58,15 +58,15 @@ describe('BulkPropertiesSection', () => {
     ).toBe('');
   });
 
-  it('starts on Keep: an "Add property" button, no rows', () => {
+  it('starts with no rows: an "Add property" button only', () => {
     const out = html(<BulkPropertiesSection {...base} fields={[f('city', 'text')]} changes={{}} />);
-    expect(out).toContain('Custom properties');
+    expect(out).toContain('Properties');
     expect(out).toContain('Add property');
     expect(out).not.toContain('Label city');
     expect(out).toContain('all 3 selected contacts');
   });
 
-  it('draws each added property with its typed input, a Clear action and a Keep action', () => {
+  it('draws each added property with its typed input, a Clear action and a remove cross', () => {
     const out = html(
       <BulkPropertiesSection
         {...base}
@@ -90,7 +90,9 @@ describe('BulkPropertiesSection', () => {
     expect(out).toContain('type="date"');
     expect(out).toContain('value="2026-03-04"');
     expect((out.match(/>Clear</g) ?? []).length).toBe(4);
-    expect((out.match(/>Keep</g) ?? []).length).toBe(4);
+    expect((out.match(/aria-label="Remove Label /g) ?? []).length).toBe(4);
+    expect(out).toContain('aria-label="Remove Label city"');
+    expect(out).not.toContain('>Keep<');
   });
 
   it('a cleared property shows what will happen and offers "Set a value"; a required one cannot be cleared', () => {

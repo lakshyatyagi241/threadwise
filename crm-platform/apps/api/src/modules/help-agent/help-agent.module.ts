@@ -7,6 +7,7 @@ import {
 } from '../../infra/providers/help-agent/http-help-agent-llm.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { HelpAgentProxyService } from './help-agent-proxy.service';
 import { HelpAgentController } from './help-agent.controller';
 import { HelpAgentRepository } from './help-agent.repository';
@@ -18,7 +19,7 @@ import { HelpAgentService } from './help-agent.service';
  * tokens go to its ledger. Registered in app.module.ts.
  */
 @Module({
-  imports: [AiKeysUsageAdminModule, PlansCoreModule],
+  imports: [AiKeysUsageAdminModule, PlansCoreModule, WalletMessageBillingModule],
   controllers: [HelpAgentController],
   providers: [
     { provide: HELP_AGENT_ENV, useFactory: () => readHelpAgentEnv() },

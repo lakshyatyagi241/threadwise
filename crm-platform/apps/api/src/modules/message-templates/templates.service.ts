@@ -40,7 +40,7 @@ import {
 } from '../whatsapp-cloud-api-waba';
 import type { FlowTemplate } from './flow-template';
 import { metaEditBlockOf, metaEditLogAfter, type MetaEditBlock } from './meta-edit-rules';
-import { describeTemplateFailure, providerProblem } from './template-errors';
+import { describeTemplateFailure, uploadProblem } from './template-errors';
 import {
   detailWithMedia,
   headerPreviewUrl,
@@ -58,7 +58,7 @@ import {
 import type { LintIssue } from './template-linter';
 import { buildMetaTemplate, normalizeTemplateName } from './template-payload';
 import { columnsOfState, sameLanguage, statePatchFrom, type CurrentState } from './template-remote';
-import { draftOf, lintOf, statusOf, toDetail, toSummary } from './templates.mapper';
+import { draftOf, lintOf, statusOf, storedCardsOf, toDetail, toSummary } from './templates.mapper';
 import {
   TemplatesRepository,
   encodeNameCursor,
@@ -79,9 +79,9 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
   png: { kind: 'image', maxBytes: 5 * 1024 * 1024 },
   mp4: { kind: 'media', maxBytes: 16 * 1024 * 1024 },
   '3gp': { kind: 'media', maxBytes: 16 * 1024 * 1024 },
-  pdf: { kind: 'document', maxBytes: 100 * 1024 * 1024 },
+  pdf: { kind: 'document', maxBytes: 10 * 1024 * 1024 },
 };
-export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
+export const MEDIA_UPLOAD_MAX_BYTES = 16 * 1024 * 1024;
 
 const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
 
@@ -223,6 +223,8 @@ export class TemplatesService {
     });
     if (!row) return null;
     const d = toDetail(row);
+    // A carousel's cards are sent with a link to each stored file (fresh, an hour is long enough for the send that follows).
+    const cards = await this.cardsForFlow(row);
     return {
       id: row.id,
       uuid: row.uuid,
@@ -239,7 +241,29 @@ export class TemplatesService {
       attachmentType: row.attachmentType,
       headerMediaUrl: /^https?:\/\//i.test(row.headerSampleUrl ?? '') ? row.headerSampleUrl : null,
       headerLocation: row.headerLocation,
+      ...(cards.length > 0 ? { cards } : {}),
     };
+  }
+
+  private async cardsForFlow(row: TemplateRow): Promise<NonNullable<FlowTemplate['cards']>> {
+    const stored = storedCardsOf(row);
+    if (row.templateType !== 'carousel' || stored.length === 0) return [];
+    const link = await this.storage.linker(MEDIA_PREVIEW_TTL_S);
+    const out: NonNullable<FlowTemplate['cards']> = [];
+    for (const c of stored) {
+      const image = c.image
+        ? /^https?:\/\//i.test(c.image)
+          ? c.image
+          : ((await link(c.image)) ?? '')
+        : '';
+      out.push({
+        image,
+        format: c.format === 'video' ? 'video' : 'image',
+        body: c.body,
+        buttons: c.buttons ?? [],
+      });
+    }
+    return out;
   }
 
   /** Instant feedback for the form (TW-TPL-023): the same preparation and rules as a save, nothing stored, nothing sent. */
@@ -267,6 +291,7 @@ export class TemplatesService {
     const ctx = RequestContextStore.require();
     const prepared = prepareTemplate(input);
     this.assertOwnMedia(ctx.orgId, prepared.headerMediaKey);
+    for (const c of prepared.cards) this.assertOwnMedia(ctx.orgId, c.image ?? null);
     const issues = lintPrepared(prepared, Boolean(prepared.headerHandle), input.name);
     if (input.submit) {
       this.requireSubmitRight();
@@ -299,6 +324,8 @@ export class TemplatesService {
         headerSampleUrl: prepared.headerSampleUrl,
         headerMediaKey: prepared.headerMediaKey,
         headerLocation: prepared.headerLocation,
+        carouselData: prepared.cards.length > 0 ? prepared.cards : null,
+        limitedOffer: prepared.limitedOffer,
         parameterFormat: prepared.parameterFormat,
         status: input.submit ? 'pending' : 'draft',
         providerConfigId: target.id,
@@ -331,8 +358,9 @@ export class TemplatesService {
     if (input.submit) this.requireSubmitRight();
     const prepared = prepareTemplate(input);
     this.assertOwnMedia(ctx.orgId, prepared.headerMediaKey);
+    for (const c of prepared.cards) this.assertOwnMedia(ctx.orgId, c.image ?? null);
 
-    const { row, issues, edit, replacedKey } = await this.db.tx(async (tx) => {
+    const { row, issues, edit, replacedKey, droppedCardKeys } = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
       if (!current) throw this.notFound();
       if (!EDITABLE.has(statusOf(current)) || !BUILDABLE_TYPES.has(current.templateType))
@@ -366,8 +394,20 @@ export class TemplatesService {
       const sameMedia = prepared.attachmentType === (current.attachmentType ?? null);
       const handle = prepared.headerHandle ?? (sameMedia ? current.attachmentFile : null);
       const mediaKey = prepared.headerMediaKey ?? (sameMedia ? current.headerMediaKey : null);
+      // A card whose file did not change keeps the handle and the sample already stored for it.
+      const storedCards = storedCardsOf(current);
+      const cards = prepared.cards.map((c, i) => {
+        const old = storedCards[i];
+        const same = Boolean(old && c.image && old.image === c.image);
+        return {
+          ...c,
+          headerHandle: c.headerHandle ?? (same ? (old!.headerHandle ?? null) : null),
+          headerSampleUrl: c.headerSampleUrl ?? (same ? (old!.headerSampleUrl ?? null) : null),
+        };
+      });
       const effective: PreparedTemplate = {
         ...prepared,
+        cards,
         headerHandle: prepared.attachmentType ? handle : null,
         headerMediaKey: prepared.attachmentType ? mediaKey : null,
         headerSampleUrl: prepared.headerSampleUrl ?? (sameMedia ? current.headerSampleUrl : null),
@@ -408,6 +448,8 @@ export class TemplatesService {
           headerSampleUrl: effective.headerSampleUrl,
           headerMediaKey: effective.headerMediaKey,
           headerLocation: effective.headerLocation,
+          carouselData: effective.cards.length > 0 ? effective.cards : null,
+          limitedOffer: effective.limitedOffer,
           parameterFormat: effective.parameterFormat,
           // An in-place edit keeps its live status until Meta takes the edit.
           ...(input.submit && !inPlace(current) ? { status: 'pending' } : {}),
@@ -431,9 +473,21 @@ export class TemplatesService {
         current.headerMediaKey && current.headerMediaKey !== saved.headerMediaKey
           ? current.headerMediaKey
           : null;
-      return { row: saved, issues: found, edit: inPlace(current), replacedKey: replaced };
+      // A card file that is no longer used is released like a replaced header.
+      const kept = new Set(effective.cards.map((c) => c.image));
+      const dropped = storedCards
+        .map((c) => c.image)
+        .filter((k): k is string => Boolean(k) && !/^https?:\/\//i.test(k!) && !kept.has(k!));
+      return {
+        row: saved,
+        issues: found,
+        edit: inPlace(current),
+        replacedKey: replaced,
+        droppedCardKeys: dropped,
+      };
     });
     if (replacedKey) await this.releaseHeaderCopy(ctx.orgId, replacedKey);
+    for (const key of droppedCardKeys) await this.releaseHeaderCopy(ctx.orgId, key);
 
     const target = input.submit ? await this.connection({ id: row.providerConfigId! }) : null;
     if (target) this.requireUsable(target);
@@ -571,7 +625,7 @@ export class TemplatesService {
       });
     } catch (e) {
       await this.releaseHeaderCopy(orgId, key);
-      throw providerProblem('Meta did not accept the file', e);
+      throw uploadProblem('Meta did not accept the file', e);
     }
     return {
       handle,

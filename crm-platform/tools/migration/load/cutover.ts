@@ -1065,7 +1065,7 @@ export async function cutover(o: CutoverOptions): Promise<number> {
       const ids = [...armed];
       if (ids.length > 0)
         await withTenant(worker.db, { orgId }, (tx) =>
-          tx.execute(sql`UPDATE flows SET is_published = false, is_active = false, published_at = NULL, row_version = row_version + 1
+          tx.execute(sql`UPDATE flows SET is_published = false, is_active = false, published_at = NULL, published_flow_data = NULL, row_version = row_version + 1
                          WHERE org_id = ${orgId} AND uuid::text IN (${sql.join(
                            ids.map((u) => sql`${u}`),
                            sql`, `,

@@ -20,6 +20,7 @@ import {
   maskUrl,
   renderBody,
   renderHeaders,
+  readAnswer,
   renderUrl,
   truncateText,
   type OutHeader,
@@ -227,10 +228,15 @@ export class ApiLibraryRunner {
       const contentType =
         typeof res.headers['content-type'] === 'string' ? res.headers['content-type'] : null;
       const truncated = res.truncated === true;
+      const answer = readAnswer(
+        res.raw ?? Buffer.from(res.text, 'utf8'),
+        res.headers,
+        RUN_MAX_RESPONSE_BYTES,
+      );
       let bodyJson: unknown = null;
-      if (!truncated && res.text.trim() !== '') {
+      if (answer.isText && !truncated && answer.text.trim() !== '') {
         try {
-          bodyJson = JSON.parse(res.text);
+          bodyJson = JSON.parse(answer.text);
         } catch {
           /* not JSON: the text is all there is */
         }
@@ -250,10 +256,10 @@ export class ApiLibraryRunner {
         response: {
           headers: maskResponseHeaders(res.headers),
           contentType,
-          bodyText: truncateText(res.text, RESPONSE_TEXT_LIMIT).text,
+          bodyText: truncateText(answer.text, RESPONSE_TEXT_LIMIT).text,
           bodyJson,
-          truncated: truncated || res.text.length > RESPONSE_TEXT_LIMIT,
-          sizeBytes: Buffer.byteLength(res.text),
+          truncated: truncated || answer.text.length > RESPONSE_TEXT_LIMIT,
+          sizeBytes: answer.sizeBytes,
         },
         processedPayload: processed,
       };

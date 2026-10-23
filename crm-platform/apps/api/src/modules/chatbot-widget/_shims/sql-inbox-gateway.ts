@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { flbImageUrl } from '@crm/contracts';
 import { ContactsService } from '../../crm';
 import {
   AI_SOURCE,
@@ -110,7 +111,7 @@ const cardsOf = (raw: unknown): NonNullable<InboxLine['cards']> | null => {
     .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
     .slice(0, 10)
     .map((c) => {
-      const image = String(c.image ?? '');
+      const image = flbImageUrl(c.image);
       const buttons: NonNullable<InboxLine['cards']>[number]['buttons'] = [];
       for (const b of (Array.isArray(c.buttons) ? c.buttons : []).slice(0, 2)) {
         if (typeof b !== 'object' || b === null) continue;
@@ -131,7 +132,7 @@ const cardsOf = (raw: unknown): NonNullable<InboxLine['cards']> | null => {
       return {
         title: String(c.title ?? '').slice(0, 80),
         text: String(c.text ?? '').slice(0, 300),
-        ...(/^https?:\/\/\S+$/i.test(image) ? { image } : {}),
+        ...(image === null ? {} : { image }),
         buttons,
       };
     })
@@ -458,6 +459,8 @@ export class SqlInboxGateway implements InboxGateway {
                meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
         FROM messages
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
+          AND COALESCE(RIGHT(meta->'interactive'->>'id', 8), '') <> ':__start'
+          AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0)
         ORDER BY id DESC LIMIT ${limit}
       ) t ORDER BY id`);
     return (res.rows as unknown as LineRow[]).map(toLine);
@@ -470,6 +473,8 @@ export class SqlInboxGateway implements InboxGateway {
              meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
+        AND COALESCE(RIGHT(meta->'interactive'->>'id', 8), '') <> ':__start'
+        AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0)
       ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }
@@ -488,6 +493,89 @@ export class SqlInboxGateway implements InboxGateway {
        WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
        RETURNING id`);
     return (res.rows as unknown[]).length > 0;
+  }
+
+  async flowUuidOf(tx: Tx, orgId: number, flowId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid FROM flows WHERE org_id = ${orgId} AND id = ${flowId}`,
+    );
+    return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
+  }
+
+  async hasCustomerLine(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM messages WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'in'
+        AND COALESCE(meta->>'source', '') <> 'restart'
+        AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0) LIMIT 1`);
+    return (res.rows as unknown[]).length > 0;
+  }
+
+  async closeThread(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    how: 'ended' | 'left',
+  ): Promise<boolean> {
+    const done = await tx.execute(sql`
+      UPDATE conversations
+         SET status = 'resolved', resolved_at = now(),
+             routing_meta = jsonb_set(COALESCE(routing_meta, '{}'::jsonb), '{closedBy}', to_jsonb(${how}::text))
+       WHERE org_id = ${orgId} AND id = ${conversationId} AND status = 'open'
+      RETURNING id`);
+    if ((done.rows as unknown[]).length === 0) return false;
+    // A visitor who left leaves no line (a visitor moving to another page of the site looks the same and comes back at once); one who
+    // ended the chat says so.
+    if (how === 'ended')
+      await this.append(tx, orgId, conversationId, {
+        direction: 'in',
+        senderKind: 'customer',
+        status: 'received',
+        body: 'Ended the chat',
+        meta: { source: 'ended', channel: 'chatbot_widget' },
+      });
+    return true;
+  }
+
+  async reopenAfterLeave(tx: Tx, orgId: number, conversationId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'open', resolved_at = NULL, routing_meta = routing_meta - 'closedBy'
+       WHERE org_id = ${orgId} AND id = ${conversationId} AND status = 'resolved' AND routing_meta->>'closedBy' = 'left'`);
+  }
+
+  async markRestart(tx: Tx, orgId: number, conversationId: number): Promise<void> {
+    // The thread goes on in the same conversation; the window starts clean (it shows nothing from before this line), the team sees it.
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'open', resolved_at = NULL
+       WHERE org_id = ${orgId} AND id = ${conversationId} AND status = 'resolved'`);
+    await this.append(tx, orgId, conversationId, {
+      direction: 'in',
+      senderKind: 'customer',
+      status: 'received',
+      body: 'Restarted the chat',
+      meta: { source: 'restart', channel: 'chatbot_widget' },
+    });
+  }
+
+  async recordRating(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    rating: number,
+    comment: string,
+  ): Promise<boolean> {
+    const had = await tx.execute(sql`
+      SELECT 1 FROM messages
+       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND meta->>'source' = 'rating' LIMIT 1`);
+    if ((had.rows as unknown[]).length > 0) return false;
+    const body = `Rated this chat ${rating}/5${comment ? `: ${truncate(comment, 1000)}` : ''}`;
+    await this.append(tx, orgId, conversationId, {
+      direction: 'in',
+      senderKind: 'customer',
+      status: 'received',
+      body,
+      meta: { source: 'rating', channel: 'chatbot_widget', widget_rating: { rating, comment } },
+    });
+    return true;
   }
 
   async mediaOf(
@@ -516,6 +604,7 @@ export class SqlInboxGateway implements InboxGateway {
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND id > ${since}
         AND COALESCE(meta->>'source', '') <> 'welcome'
+        AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0)
       ORDER BY id`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }

@@ -142,6 +142,15 @@ export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
 
 // ---------------------------------------------------------------------------------------- variables
 
+/**
+ * A placeholder filled from a contact field needs a fallback: a contact without that field would otherwise get an empty value, which
+ * WhatsApp refuses for the whole message. Fixed text is its own value.
+ */
+export const wizardVariableNeedsFallback = (v: {
+  kind: string;
+  fallback?: string | null;
+}): boolean => v.kind === 'field' && (v.fallback ?? '').trim() === '';
+
 /** `body.1` and `header.1` are the template's numbered placeholders, `button.0` the dynamic part of the first button's link. */
 export const wizardSlotKeySchema = z
   .string()
@@ -386,6 +395,8 @@ export const wizardTemplateSchema = z.object({
   attachmentUrl: z.string().nullable(),
   /** The WhatsApp number it is sent from. */
   senderLabel: z.string().nullable(),
+  /** The WhatsApp connection (number) the template belongs to: a send from another number cannot use it. */
+  connectionId: uuidSchema.nullish(),
   slots: z.array(wizardTemplateSlotSchema),
 });
 export type WizardTemplate = z.infer<typeof wizardTemplateSchema>;
@@ -908,12 +919,14 @@ export interface WizardIssue {
     | 'sender_required'
     | 'audience_required'
     | 'variable_unmapped'
+    | 'variable_fallback_required'
     | 'schedule_in_past'
     | 'schedule_end_before_start'
     | 'recurrence_invalid'
     | 'retry_end_required'
     | 'retry_end_before_send'
     | 'retry_end_in_past'
+    | 'retry_end_too_far'
     | 'template_b_required'
     | 'auto_end_in_past'
     | 'auto_end_before_send'
@@ -976,21 +989,31 @@ export function wizardStepIssues(
   }
   if (step === 3) {
     for (const slot of ctx.slots ?? []) {
-      if (!draft.variables[slot])
-        out.push({ path: `variables.${slot}`, code: 'variable_unmapped' });
+      const v = draft.variables[slot];
+      if (!v) out.push({ path: `variables.${slot}`, code: 'variable_unmapped' });
+      else if (wizardVariableNeedsFallback(v))
+        out.push({ path: `variables.${slot}`, code: 'variable_fallback_required' });
     }
     if (draft.abTesting) {
       for (const slot of ctx.slotsB ?? []) {
-        if (!draft.variablesB[slot])
-          out.push({ path: `variablesB.${slot}`, code: 'variable_unmapped' });
+        const v = draft.variablesB[slot];
+        if (!v) out.push({ path: `variablesB.${slot}`, code: 'variable_unmapped' });
+        else if (wizardVariableNeedsFallback(v))
+          out.push({ path: `variablesB.${slot}`, code: 'variable_fallback_required' });
       }
     }
     (ctx.slotsSequence ?? []).forEach((slots, i) => {
       for (const slot of slots) {
-        if (!draft.templateSequence[i]?.variables[slot])
+        const v = draft.templateSequence[i]?.variables[slot];
+        if (!v)
           out.push({
             path: `templateSequence.${i}.variables.${slot}`,
             code: 'variable_unmapped',
+          });
+        else if (wizardVariableNeedsFallback(v))
+          out.push({
+            path: `templateSequence.${i}.variables.${slot}`,
+            code: 'variable_fallback_required',
           });
       }
     });
@@ -1045,6 +1068,8 @@ export function wizardStepIssues(
         );
         if (closes.getTime() <= ctx.now.getTime())
           out.push({ path: 'retries.endDate', code: 'retry_end_in_past' });
+        else if (end > wizardRetryEndMax(ctx.now, zoneName))
+          out.push({ path: 'retries.endDate', code: 'retry_end_too_far' });
         const first = firstRunInstant(draft.schedule);
         if (first && closes.getTime() <= first.getTime()) {
           out.push({ path: 'retries.endDate', code: 'retry_end_before_send' });
@@ -1134,3 +1159,19 @@ export const wizardSendersResponseSchema = z.object({
   hidden: z.array(senderHiddenSchema),
 });
 export type WizardSendersResponse = z.infer<typeof wizardSendersResponseSchema>;
+
+/** Retries run for at most this many days after today. */
+export const WIZARD_RETRY_MAX_DAYS = 7;
+
+/** The last end date (`YYYY-MM-DD`, in the draft's time zone) a retry window may have: today plus {@link WIZARD_RETRY_MAX_DAYS}. */
+export function wizardRetryEndMax(now: Date, timeZone: string): string {
+  const today = new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now);
+  const d = new Date(`${today}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + WIZARD_RETRY_MAX_DAYS);
+  return d.toISOString().slice(0, 10);
+}

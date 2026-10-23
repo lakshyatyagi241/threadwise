@@ -415,6 +415,10 @@
         "tooLarge": "画像のサイズが1 MBを超えています。"
       }
     },
+    "fullPage": {
+      "open": "全画面",
+      "close": "全画面を終了"
+    },
     "flowBot": {
       "customize": {
         "loading": "ウィジェットを読み込んでいます…",

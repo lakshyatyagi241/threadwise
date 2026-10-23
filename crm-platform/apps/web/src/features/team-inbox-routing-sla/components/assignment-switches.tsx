@@ -7,7 +7,7 @@ import { useState, type ReactNode } from 'react';
 import type { HandoffSettings, UpdateHandoffSettingsInput } from '@crm/contracts';
 import { Alert, Badge, Input, Spinner, Switch, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
+import { FeatureAddonLock } from '@/features/plans-subscriptions-trials/components/feature-addon-lock';
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
@@ -16,6 +16,7 @@ import {
   useRoutingSettings,
   useUpdateHandoffSettings,
 } from '../api/routing';
+import { useSmartRouting } from '../lib/smart-routing';
 
 /**
  * The top of `/auto-assignment` (spec H13 to H20): four plain switches in the owner's own wording, with the order they run in. They map to
@@ -25,10 +26,20 @@ import {
  *  3. Assign Chat to Contact Owner = the owner mode is not `independent` (owner first);
  *  4. Assign Agent as Contact Owner = `claimSetsOwner` (a claim sets the owner when the contact has none).
  * The extras (keep in sync, the sticky window, the reassign prompt, the queue alert) sit under Advanced.
+ * Smart routing parts the workspace lacks (`useSmartRouting`: the master switch needs `inbox_routing`; Sticky Agent, the contact owner and
+ * the owner and continuity extras also need `inbox_assignment_sticky`) are not drawn: one `FeatureAddonLock` card stands in their place
+ * (nothing at all when the plan does not offer the add-on). "Assign Agent as Contact Owner" and the queue alert are base and always shown.
+ * Stored values are never changed by this; they come back when the add-on does. `rulesLocked`: the rules list was refused by the plan.
  * `onAutoEnabled` lets the page create the "Everyone else: distribute evenly" row when the admin turns Auto Assignment on and the workspace
  * has no such row yet; nothing is ever created at deploy time.
  */
-export function AssignmentSwitches({ onAutoEnabled }: { onAutoEnabled: () => Promise<void> }) {
+export function AssignmentSwitches({
+  onAutoEnabled,
+  rulesLocked = false,
+}: {
+  onAutoEnabled: () => Promise<void>;
+  rulesLocked?: boolean;
+}) {
   const t = useTranslations('team-inbox-routing-sla.assign.switches');
   const ta = useTranslations('team-inbox-routing-sla.assign.advanced');
   const th = useTranslations('team-inbox-routing-sla.handoffSettings');
@@ -39,7 +50,8 @@ export function AssignmentSwitches({ onAutoEnabled }: { onAutoEnabled: () => Pro
   const q = useHandoffSettings(canRead);
   const save = useUpdateHandoffSettings();
   const data = q.data;
-  const keepQuery = useRoutingSettings(canRead && data?.available.autoAssign === true);
+  const smart = useSmartRouting(data, rulesLocked);
+  const keepQuery = useRoutingSettings(canRead && data !== undefined && smart.sticky);
   const [keepBusy, setKeepBusy] = useState(false);
 
   const failed = (e: unknown) =>
@@ -88,7 +100,12 @@ export function AssignmentSwitches({ onAutoEnabled }: { onAutoEnabled: () => Pro
   const off = !data.autoAssign;
   const ownerOn = data.ownerMode !== 'independent';
   const stickyOn = keepQuery.data?.keepContactAgent ?? false;
-  const planAuto = data.available.autoAssign;
+  const { routing, sticky } = smart;
+  // Each extra also asks the server's own answer for it.
+  const showOwner = sticky && data.available.ownerFirst;
+  const showSync = sticky && data.available.keepInSync;
+  const showWindow = sticky && data.available.continuityWindow;
+  const showPrompt = sticky && data.available.promptOwnerOnReassign;
 
   return (
     <section
@@ -100,83 +117,88 @@ export function AssignmentSwitches({ onAutoEnabled }: { onAutoEnabled: () => Pro
         <h2 id="switches-title" className="text-lg font-semibold">
           {t('title')}
         </h2>
-        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{t('intro')}</p>
-        <p className="mt-1 max-w-3xl text-sm text-muted-foreground" data-testid="switch-order">
-          {t('order')}
+        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+          {routing ? t('intro') : t('introBasic')}
         </p>
+        {routing && (
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground" data-testid="switch-order">
+            {t('order')}
+          </p>
+        )}
       </div>
       {!canManage && <Alert tone="info">{t('readOnly')}</Alert>}
+      {smart.lock && <FeatureAddonLock feature={smart.lock} off />}
 
       <div className="divide-y divide-border rounded-xl border border-border bg-background">
-        <SwitchRow
-          id="auto"
-          step={t('stepMaster')}
-          title={t('auto.title')}
-          locked={!planAuto}
-          lockedText={[t('notInPlan'), t('upgradeHint')]}
-          control={
-            <Switch
-              label={t('auto.title')}
-              checked={data.autoAssign}
-              disabled={!canManage || busy || !planAuto}
-              onCheckedChange={(on) => change({ autoAssign: on }, on ? onAutoEnabled : undefined)}
-            />
-          }
-        >
-          <p>{t('auto.body')}</p>
-          <p className="mt-1 text-xs">
-            {t.rich('auto.limitHint', {
-              link: (chunks) => (
-                <Link href="/team-members" className="font-medium text-primary hover:underline">
-                  {chunks}
-                </Link>
-              ),
-            })}
-          </p>
-          {off && planAuto && <p className="mt-1 text-xs text-warning">{t('auto.off')}</p>}
-        </SwitchRow>
+        {routing && (
+          <SwitchRow
+            id="auto"
+            step={t('stepMaster')}
+            title={t('auto.title')}
+            control={
+              <Switch
+                label={t('auto.title')}
+                checked={data.autoAssign}
+                disabled={!canManage || busy}
+                onCheckedChange={(on) => change({ autoAssign: on }, on ? onAutoEnabled : undefined)}
+              />
+            }
+          >
+            <p>{t('auto.body')}</p>
+            <p className="mt-1 text-xs">
+              {t.rich('auto.limitHint', {
+                link: (chunks) => (
+                  <Link href="/team-members" className="font-medium text-primary hover:underline">
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </p>
+            {off && <p className="mt-1 text-xs text-warning">{t('auto.off')}</p>}
+          </SwitchRow>
+        )}
 
-        <SwitchRow
-          id="sticky"
-          step={t('stepFirst')}
-          title={t('sticky.title')}
-          locked={!planAuto}
-          lockedText={[t('notInPlan'), t('upgradeHint')]}
-          dimmed={off && planAuto}
-          control={
-            <Switch
-              label={t('sticky.title')}
-              checked={stickyOn}
-              disabled={!canManage || keepBusy || !planAuto || keepQuery.isPending}
-              onCheckedChange={(on) => void setKeep(on)}
-            />
-          }
-        >
-          <p>{t('sticky.body')}</p>
-          <p className="mt-1 text-xs">{t('sticky.withWindow')}</p>
-          {off && planAuto && <p className="mt-1 text-xs">{t('needsAuto')}</p>}
-        </SwitchRow>
+        {sticky && (
+          <SwitchRow
+            id="sticky"
+            step={t('stepFirst')}
+            title={t('sticky.title')}
+            dimmed={off}
+            control={
+              <Switch
+                label={t('sticky.title')}
+                checked={stickyOn}
+                disabled={!canManage || keepBusy || keepQuery.isPending}
+                onCheckedChange={(on) => void setKeep(on)}
+              />
+            }
+          >
+            <p>{t('sticky.body')}</p>
+            <p className="mt-1 text-xs">{t('sticky.withWindow')}</p>
+            {off && <p className="mt-1 text-xs">{t('needsAuto')}</p>}
+          </SwitchRow>
+        )}
 
-        <SwitchRow
-          id="owner"
-          step={t('stepFirst')}
-          title={t('owner.title')}
-          locked={!data.available.ownerFirst}
-          lockedText={[t('notInPlan'), t('upgradeHint')]}
-          dimmed={off && planAuto}
-          control={
-            <Switch
-              label={t('owner.title')}
-              checked={ownerOn}
-              disabled={!canManage || busy || !data.available.ownerFirst}
-              onCheckedChange={(on) => change({ ownerMode: on ? 'owner_first' : 'independent' })}
-            />
-          }
-        >
-          <p>{t('owner.body')}</p>
-          <p className="mt-1 text-xs">{t('owner.wins')}</p>
-          {off && planAuto && <p className="mt-1 text-xs">{t('needsAuto')}</p>}
-        </SwitchRow>
+        {showOwner && (
+          <SwitchRow
+            id="owner"
+            step={t('stepFirst')}
+            title={t('owner.title')}
+            dimmed={off}
+            control={
+              <Switch
+                label={t('owner.title')}
+                checked={ownerOn}
+                disabled={!canManage || busy}
+                onCheckedChange={(on) => change({ ownerMode: on ? 'owner_first' : 'independent' })}
+              />
+            }
+          >
+            <p>{t('owner.body')}</p>
+            <p className="mt-1 text-xs">{t('owner.wins')}</p>
+            {off && <p className="mt-1 text-xs">{t('needsAuto')}</p>}
+          </SwitchRow>
+        )}
 
         <SwitchRow
           id="claim"
@@ -202,44 +224,49 @@ export function AssignmentSwitches({ onAutoEnabled }: { onAutoEnabled: () => Pro
           <span className="ms-2 text-xs font-normal text-muted-foreground">{ta('hint')}</span>
         </summary>
         <div className="space-y-4 border-t border-border p-4">
+          {showSync && (
+            <AdvancedRow
+              id="sync"
+              title={ta('sync.title')}
+              hint={ta('sync.body')}
+              extra={ownerOn ? null : ta('sync.needsOwner')}
+              control={
+                <Switch
+                  label={ta('sync.title')}
+                  checked={data.ownerMode === 'keep_in_sync'}
+                  disabled={!canManage || busy || !ownerOn}
+                  onCheckedChange={(on) =>
+                    change({ ownerMode: on ? 'keep_in_sync' : 'owner_first' })
+                  }
+                />
+              }
+            />
+          )}
+          {showWindow && (
+            <ContinuityRow
+              key={String(data.continuityDays)}
+              settings={data}
+              disabled={!canManage || busy}
+              onChange={(days) => change({ continuityDays: days })}
+            />
+          )}
+          {showPrompt && (
+            <AdvancedRow
+              id="prompt"
+              title={th('owner.prompt')}
+              hint={th('owner.promptHint')}
+              control={
+                <Switch
+                  label={th('owner.prompt')}
+                  checked={data.promptOwnerOnReassign}
+                  disabled={!canManage || busy}
+                  onCheckedChange={(on) => change({ promptOwnerOnReassign: on })}
+                />
+              }
+            />
+          )}
           <AdvancedRow
-            title={ta('sync.title')}
-            hint={ta('sync.body')}
-            extra={ownerOn ? null : ta('sync.needsOwner')}
-            locked={!data.available.keepInSync}
-            notInPlan={th('notInPlan')}
-            upgrade={th('upgradeHint')}
-            control={
-              <Switch
-                label={ta('sync.title')}
-                checked={data.ownerMode === 'keep_in_sync'}
-                disabled={!canManage || busy || !data.available.keepInSync || !ownerOn}
-                onCheckedChange={(on) => change({ ownerMode: on ? 'keep_in_sync' : 'owner_first' })}
-              />
-            }
-          />
-          <ContinuityRow
-            key={String(data.continuityDays)}
-            settings={data}
-            disabled={!canManage || busy}
-            onChange={(days) => change({ continuityDays: days })}
-          />
-          <AdvancedRow
-            title={th('owner.prompt')}
-            hint={th('owner.promptHint')}
-            locked={!data.available.promptOwnerOnReassign}
-            notInPlan={th('notInPlan')}
-            upgrade={th('upgradeHint')}
-            control={
-              <Switch
-                label={th('owner.prompt')}
-                checked={data.promptOwnerOnReassign}
-                disabled={!canManage || busy || !data.available.promptOwnerOnReassign}
-                onCheckedChange={(on) => change({ promptOwnerOnReassign: on })}
-              />
-            }
-          />
-          <AdvancedRow
+            id="queue-alert"
             title={th('queue.notify')}
             hint={th('queue.notifyHint')}
             control={
@@ -267,8 +294,6 @@ function SwitchRow({
   id,
   step,
   title,
-  locked,
-  lockedText,
   dimmed,
   control,
   children,
@@ -276,8 +301,6 @@ function SwitchRow({
   id: string;
   step: string;
   title: string;
-  locked?: boolean;
-  lockedText?: [string, string];
   dimmed?: boolean;
   control: ReactNode;
   children: ReactNode;
@@ -291,14 +314,8 @@ function SwitchRow({
         <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-foreground">
           {title}
           <Badge tone="neutral">{step}</Badge>
-          {locked && lockedText && <Badge tone="warning">{lockedText[0]}</Badge>}
         </p>
         <div className="mt-1">{children}</div>
-        {locked && lockedText && (
-          <p className="mt-1 text-xs text-warning" data-testid={`switch-${id}-lock`}>
-            {lockedText[1]} <AddonLockLink />
-          </p>
-        )}
       </div>
       {control}
     </div>
@@ -306,36 +323,27 @@ function SwitchRow({
 }
 
 function AdvancedRow({
+  id,
   title,
   hint,
   extra,
-  locked,
-  notInPlan,
-  upgrade,
   control,
 }: {
+  id: string;
   title: string;
   hint: string;
   extra?: string | null;
-  locked?: boolean;
-  notInPlan?: string;
-  upgrade?: string;
   control: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
+    <div
+      className="flex flex-wrap items-start justify-between gap-4"
+      data-testid={`advanced-${id}`}
+    >
       <div className="min-w-0 max-w-xl">
-        <p className="flex flex-wrap items-center gap-2 text-sm font-medium">
-          {title}
-          {locked && notInPlan && <Badge tone="warning">{notInPlan}</Badge>}
-        </p>
+        <p className="text-sm font-medium">{title}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
         {extra && <p className="mt-0.5 text-xs text-muted-foreground">{extra}</p>}
-        {locked && upgrade && (
-          <p className="mt-0.5 text-xs text-warning">
-            {upgrade} <AddonLockLink />
-          </p>
-        )}
       </div>
       {control}
     </div>
@@ -353,7 +361,6 @@ function ContinuityRow({
   onChange: (days: number | null) => void;
 }) {
   const th = useTranslations('team-inbox-routing-sla.handoffSettings');
-  const locked = !settings.available.continuityWindow;
   const saved = settings.continuityDays;
   const [text, setText] = useState(saved === null ? '' : String(saved));
   const commit = () => {
@@ -365,17 +372,15 @@ function ContinuityRow({
   };
   return (
     <AdvancedRow
+      id="window"
       title={th('owner.window')}
       hint={th('owner.windowHint')}
-      locked={locked}
-      notInPlan={th('notInPlan')}
-      upgrade={th('upgradeHint')}
       control={
         <span className="flex items-center gap-2">
           <Switch
             label={th('owner.window')}
             checked={saved !== null}
-            disabled={disabled || locked}
+            disabled={disabled}
             onCheckedChange={(on) => onChange(on ? 30 : null)}
           />
           {saved !== null && (
@@ -389,7 +394,7 @@ function ContinuityRow({
                 data-testid="handoff-continuity-days"
                 className="h-9 w-20"
                 value={text}
-                disabled={disabled || locked}
+                disabled={disabled}
                 onChange={(e) => setText(e.target.value)}
                 onBlur={commit}
               />

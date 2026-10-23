@@ -247,23 +247,7 @@
         "title": "Häufig gestellte Fragen"
       },
       "addons": {
-        "title": "Add-ons",
-        "owned": "Ihre Add-ons",
-        "oneTime": "einmalig",
-        "buy": "Add-on kaufen",
-        "buyAgain": "Erneut kaufen",
-        "active": "Aktiv",
-        "included": "In deinem Tarif enthalten",
-        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
-        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
-        "unlimitedBullet": "{label} unbegrenzt",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ Tag} other {/ {count} Tage}}",
-          "weeks": "{count, plural, one {/ Woche} other {/ {count} Wochen}}",
-          "months": "{count, plural, one {/ Monat} other {/ {count} Monate}}",
-          "years": "{count, plural, one {/ Jahr} other {/ {count} Jahre}}"
-        }
+        "title": "Add-ons"
       },
       "renewal": {
         "renewsOn": "Ihr Tarif verlängert sich automatisch am {date}.",
@@ -586,13 +570,27 @@
       "appLink": "App ansehen",
       "addonHint": "Du kannst es auch mit dem Add-on {addon} zu deinem aktuellen Tarif hinzufügen.",
       "addonLink": "Add-ons ansehen",
-      "addons": {
-        "smartRouting": "Intelligentes Routing",
-        "teamsPermissions": "Teams und Berechtigungen"
-      }
+      "addonsTabHint": "Für Add-ons braucht Ihr Tarif den Marketplace nicht. Unter „Tarife und Add-ons“ sehen Sie weiterhin, was Sie besitzen, und können Add-ons kaufen.",
+      "addonsTabLink": "Tarife und Add-ons öffnen",
+      "addonHintGeneric": "Dein Tarif bietet es eventuell auch als Add-on an."
     },
     "lock": {
-      "link": "Tarife und Add-ons ansehen"
+      "link": "Tarife und Add-ons ansehen",
+      "offTitle": "Nicht in deinem Tarif",
+      "offLead": "Dieser Teil ist im Tarif deines Workspace derzeit nicht enthalten.",
+      "buyTitle": "{addon} für {price} hinzufügen",
+      "buyLead": "Dein Tarif bietet {addon} als Add-on an. Füge es hinzu, um diesen Teil einzuschalten.",
+      "buyLink": "Add-ons ansehen",
+      "askOwner": "Bitte den Kontoinhaber, es hinzuzufügen.",
+      "unavailableTitle": "{addon} braucht einen aktiven bezahlten Tarif",
+      "unavailableLead": "Wähle zuerst einen bezahlten Tarif, dann kannst du {addon} hinzufügen.",
+      "viewPlans": "Tarife ansehen",
+      "disabledTitle": "{addon} ist ausgeschaltet",
+      "disabledLead": "Dein Tarif enthält {addon}, aber es ist für diesen Arbeitsbereich ausgeschaltet. Die Einstellungen bleiben erhalten.",
+      "disabledAsk": "Bitte den Kontoinhaber, es einzuschalten.",
+      "turnOn": "Einschalten",
+      "turnOnForbidden": "Du hast keine Berechtigung, dies einzuschalten. Bitte den Kontoinhaber.",
+      "turnOnFailed": "{addon} konnte nicht eingeschaltet werden. Bitte versuche es erneut."
     }
   }
 }

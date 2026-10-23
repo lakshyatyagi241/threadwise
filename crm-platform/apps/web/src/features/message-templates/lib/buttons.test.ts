@@ -20,7 +20,15 @@ const row = (kind: Parameters<typeof newRow>[0], p: Partial<ReturnType<typeof ne
 
 describe('button limits', () => {
   it('matches Meta: 10 in all, 10 quick replies, 2 URLs, 1 phone, 1 copy code', () => {
-    expect(BUTTON_LIMITS).toEqual({ total: 10, quick_reply: 10, url: 2, phone: 1, copy_code: 1 });
+    expect(BUTTON_LIMITS).toEqual({
+      total: 10,
+      quick_reply: 10,
+      url: 2,
+      phone: 1,
+      copy_code: 1,
+      form: 1,
+      catalog: 1,
+    });
   });
 
   it('stops adding a kind at its limit', () => {
@@ -28,7 +36,7 @@ describe('button limits', () => {
     expect(canAdd(rows, 'url')).toBe(false);
     expect(canAdd(rows, 'phone')).toBe(false);
     expect(canAdd(rows, 'quick_reply')).toBe(true);
-    expect(addableKinds(rows)).toEqual(['quick_reply', 'copy_code']);
+    expect(addableKinds(rows)).toEqual(['quick_reply', 'copy_code', 'form']);
   });
 
   it('stops everything at ten buttons', () => {
@@ -67,7 +75,7 @@ describe('button rows and the API shape', () => {
   it('reads stored buttons back, and keeps a type it does not author', () => {
     expect(buttonToRow({ type: 'URL', text: 'Shop', url: 'https://x.test' }).kind).toBe('url');
     expect(buttonToRow({ type: 'quick_reply', text: 'Hi' }).kind).toBe('quick_reply');
-    const flow = { type: 'FLOW', text: 'Open', flow_id: '1' };
+    const flow = { type: 'FLOW', text: 'Open', flow_id: '1', flow_action: 'data_exchange' };
     const r = buttonToRow(flow);
     expect(r.kind).toBe('other');
     expect(rowToButton(r)).toEqual(flow);
@@ -134,5 +142,33 @@ describe("Reference's three-button editor", () => {
     expect(MODE_KINDS.reply).toEqual(['quick_reply']);
     expect(MODE_KINDS.cta).not.toContain('quick_reply');
     expect(MODE_KINDS.mix).toContain('quick_reply');
+  });
+});
+
+describe('form and catalog buttons', () => {
+  it('a form button is a FLOW button that opens a screen, and reads back', () => {
+    const row = { ...newRow('form'), text: 'Book', flowId: '123456', screen: 'WELCOME' };
+    const b = rowToButton(row);
+    expect(b).toEqual({
+      type: 'FLOW',
+      text: 'Book',
+      flow_id: '123456',
+      flow_action: 'navigate',
+      navigate_screen: 'WELCOME',
+    });
+    expect(buttonToRow(b)).toMatchObject({ kind: 'form', flowId: '123456', screen: 'WELCOME' });
+    expect(buttonIssues([newRow('form')]).map((i) => i.code)).toEqual([
+      'textRequired',
+      'flowIdRequired',
+      'screenRequired',
+    ]);
+  });
+
+  it('a catalog button has fixed text and stands alone', () => {
+    expect(rowToButton(newRow('catalog'))).toEqual({ type: 'CATALOG', text: 'View catalog' });
+    expect(buttonIssues([newRow('catalog')])).toEqual([]);
+    expect(canAdd([newRow('catalog')], 'url')).toBe(false);
+    expect(canAdd([newRow('url')], 'catalog')).toBe(false);
+    expect(canAdd([], 'catalog')).toBe(true);
   });
 });

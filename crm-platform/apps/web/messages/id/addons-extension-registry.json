@@ -45,7 +45,8 @@
         "period": "Periode",
         "grants": "Memberikan",
         "status": "Status",
-        "actions": "Aksi"
+        "actions": "Aksi",
+        "plans": "Paket"
       },
       "price": {
         "free": "Gratis",
@@ -124,7 +125,8 @@
           "billingMode": "Penagihan",
           "sortOrder": "Urutan",
           "isActive": "Aktif",
-          "isLifetime": "Seumur hidup (sekali bayar)"
+          "isLifetime": "Seumur hidup (sekali bayar)",
+          "period": "Periode penagihan"
         },
         "modes": {
           "one_time": "Sekali bayar (beli lagi setelah berakhir)",
@@ -144,9 +146,78 @@
           "billingDuration": "Masukkan bilangan bulat 1 atau lebih.",
           "sortOrder": "Masukkan bilangan bulat.",
           "limits": "Batas berupa bilangan bulat, atau -1 untuk tanpa batas.",
-          "form": "Periksa kolom yang disorot."
-        }
-      }
+          "form": "Periksa kolom yang disorot.",
+          "amountPositive": "Add-on adalah langganan bulanan atau tahunan, jadi harga harus di atas nol.",
+          "features": "Centang setidaknya satu fitur, atau jadikan ini add-on kapasitas.",
+          "limitsNeeded": "Masukkan setidaknya satu batas di atas nol, atau jadikan ini add-on fitur."
+        },
+        "legacy": {
+          "title": "Paket lama",
+          "body": "Paket ini dibuat sebelum add-on menjadi langganan. Paket ini tetap dijual persis seperti sebelumnya (penagihannya ditampilkan tetapi tidak dapat diubah), dan ruang kerja yang memilikinya tidak terpengaruh. Anda masih dapat mengubah nama, harga, fitur, dan batasnya, atau menghentikan penjualannya. Paket baru berupa langganan bulanan atau tahunan."
+        },
+        "periods": {
+          "months": "Langganan bulanan",
+          "years": "Langganan tahunan"
+        },
+        "periodHint": "Add-on adalah langganan. Ruang kerja pada gateway online diperpanjang otomatis; dengan transfer bank atau pembayaran offline, mereka membayar lagi saat periode berakhir.",
+        "planOffers": {
+          "title": "Paket",
+          "hint": "Cara setiap paket menawarkan add-on ini. Disertakan: tanpa biaya, paket membawa fitur-fiturnya. Berbayar: ruang kerja membelinya, dengan harga khusus paket jika Anda menetapkannya. Tersembunyi: ruang kerja di paket tersebut tidak pernah melihatnya.",
+          "noIncluded": "Add-on ini hanya menambah batas, jadi tidak ada paket yang dapat menyertakannya. Setiap paket mengatur batasnya sendiri di tab Batas.",
+          "empty": "Belum ada paket.",
+          "freePlan": "Paket gratis",
+          "inactivePlan": "Nonaktif",
+          "modeLabel": "Cara {plan} menawarkan add-on ini",
+          "modes": {
+            "included": "Disertakan",
+            "paid": "Berbayar",
+            "hidden": "Tersembunyi"
+          },
+          "priceLabel": "Harga di paket ini",
+          "priceHint": "Kosong = harga add-on itu sendiri.",
+          "freePlanNote": "Ditampilkan di paket gratis, tetapi ruang kerja memerlukan paket berbayar untuk membelinya.",
+          "hiddenNote": "Tidak ditampilkan ke ruang kerja di paket ini. Ruang kerja yang sudah membelinya tetap memilikinya hingga masa berlakunya berakhir.",
+          "problems": {
+            "money": "Masukkan jumlah seperti 19 atau 19.99.",
+            "zero": "Kosongkan harga untuk memakai harga add-on, atau pilih Disertakan."
+          },
+          "errors": {
+            "generic": "Penawaran paket tidak dapat disimpan.",
+            "forbidden": "Hanya super admin yang dapat mengubah penawaran paket.",
+            "notFound": "Add-on ini sudah tidak ada."
+          },
+          "saved": "Penawaran paket disimpan.",
+          "changed": "{count, plural, one {# paket diubah} other {# paket diubah}}",
+          "save": "Simpan penawaran paket",
+          "needFeatures": "Tambahkan dulu fitur yang dibukanya di atas"
+        },
+        "type": {
+          "title": "Jenis",
+          "hint": "Pilih fungsi add-on ini. Hanya add-on fitur yang dapat disertakan dalam paket.",
+          "feature": {
+            "title": "Add-on fitur",
+            "body": "Membuka sebagian produk; juga dapat menambah kapasitas."
+          },
+          "capacity": {
+            "title": "Add-on kapasitas",
+            "body": "Hanya menambah batas (kursi, kontak...)."
+          }
+        },
+        "noFeaturesNotice": "Add-on ini belum membuka apa pun. Centang fitur yang diberikannya agar paket dapat menyertakannya.",
+        "limitsHintCapacity": "Add-on kapasitas hanya menambah batas. Masukkan angka untuk DITAMBAHKAN ke paket (misalnya +2 kursi). Gunakan -1 untuk tanpa batas. Setidaknya satu batas wajib diisi."
+      },
+      "kind": {
+        "feature": "Fitur",
+        "capacity": "Kapasitas"
+      },
+      "plans": {
+        "included": "Disertakan: {plans}",
+        "paid": "Berbayar: {plans}",
+        "hidden": "Tersembunyi: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Tidak ada paket"
+      },
+      "noFeatures": "Belum ada fitur"
     },
     "extensions": {
       "crumbHere": "Add-on",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Add-on",
       "description": "Paket fitur tambahan yang Anda beli di luar langganan.",
-      "needPlanTitle": "Add-on membutuhkan paket aktif",
-      "needPlanBody": "Add-on adalah paket fitur tambahan yang Anda beli di luar langganan. Pilih paket terlebih dahulu, lalu kembali ke sini untuk menambah fitur.",
-      "viewPlans": "Lihat paket",
-      "noneTitle": "Tidak ada add-on tersedia",
-      "noneBody": "Saat ini tidak ada add-on yang ditawarkan. Periksa lagi nanti.",
-      "ownedTitle": "Add-on Anda",
-      "ownedBody": "Paket aktif yang digabungkan ke paket Anda saat ini.",
-      "ends": "Berakhir {date}",
-      "lifetime": "Seumur hidup",
-      "autoRenews": "Perpanjang otomatis",
       "renewal": {
         "cancel": "Batalkan perpanjangan",
         "confirmTitle": "Batalkan perpanjangan?",
@@ -277,37 +338,105 @@
         "forbidden": "Anda tidak memiliki izin untuk mengubah paket.",
         "none": "Tidak ada langganan aktif yang dapat dibatalkan.",
         "failed": "Kami tidak dapat membatalkan perpanjangan. Silakan coba lagi."
-      },
-      "active": "Aktif",
-      "included": "Termasuk dalam paket Anda",
-      "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
-      "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-on",
-      "catalogBody": "Buka fitur tambahan di atas paket Anda saat ini. Tidak perlu mengganti paket.",
-      "count": "{count, plural, other {# add-on}}",
-      "free": "Gratis",
-      "lifetimePrice": "sekali bayar",
-      "per": "/ {unit}",
-      "units": {
-        "days": "hari",
-        "weeks": "minggu",
-        "months": "bulan",
-        "years": "tahun"
-      },
-      "buy": "Tambah ke paket",
-      "buyAgain": "Beli lagi",
-      "owned": "Dimiliki ×{count} · membeli lagi menambah jumlahnya",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} tanpa batas",
-        "add": "+{amount} {name}"
-      },
-      "error": "Add-on tidak dapat dimuat."
+      }
     },
     "planFields": {
       "fromModule": "dari modul yang terpasang",
       "unlimited": "Tak terbatas"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-on memerlukan paket berbayar yang aktif",
+        "free_plan": "Anda berada di paket gratis. Add-on adalah tambahan yang dibeli di atas paket berbayar.",
+        "plan_expired": "Paket berbayar Anda telah berakhir, sehingga add-on dijeda. Perpanjang paket Anda untuk membeli atau memperpanjang add-on.",
+        "no_plan": "Ruang kerja Anda belum memiliki paket. Pilih paket berbayar untuk menggunakan add-on.",
+        "cta": "Lihat paket"
+      },
+      "unavailableCard": "Memerlukan paket berbayar yang aktif",
+      "empty": {
+        "title": "Tidak ada add-on yang dijual",
+        "body": "Saat ini tidak ada add-on yang ditawarkan. Periksa lagi nanti."
+      },
+      "listLabel": "Add-on yang dijual",
+      "owned": {
+        "title": "Add-on yang Anda miliki",
+        "renews": "Diperpanjang pada {date}",
+        "ends": "Aktif hingga {date}. Tidak akan diperpanjang otomatis.",
+        "lifetime": "Seumur hidup"
+      },
+      "state": {
+        "included": "Termasuk dalam paket Anda",
+        "includedSupport": "Diaktifkan oleh manajer akun Anda.",
+        "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
+        "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
+        "active": "Aktif",
+        "ownedCount": "Dimiliki ×{count} · membeli lagi menambah jumlahnya",
+        "turnedOff": "Nonaktif"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "sekali bayar",
+        "per": {
+          "days": "{count, plural, other {/ {count} hari}}",
+          "weeks": "{count, plural, other {/ {count} minggu}}",
+          "months": "{count, plural, other {/ {count} bulan}}",
+          "years": "{count, plural, other {/ {count} tahun}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Diperpanjang setiap periode. Dibayar otomatis dengan kartu; dengan transfer bank atau pembayaran offline, Anda membayar lagi saat periode berakhir.",
+        "oneTime": "Pembelian sekali bayar. Tidak diperpanjang."
+      },
+      "buy": "Beli add-on",
+      "buyAgain": "Beli lagi",
+      "cannotBuyHint": "Tanyakan kepada pemilik akun Anda. Hanya orang yang boleh membeli untuk ruang kerja ini yang dapat memulai pembelian.",
+      "bullets": {
+        "unlimited": "{name} tanpa batas",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Butuh kredit pesan? Isi ulang dompet Anda; kredit bukan add-on.",
+      "walletLink": "Isi ulang dompet",
+      "groups": {
+        "feature": "Add-on fitur",
+        "capacity": "Add-on kapasitas"
+      },
+      "activation": {
+        "turnedOffNote": "Dinonaktifkan untuk ruang kerja ini. Pengaturannya tetap disimpan.",
+        "turnOff": "Nonaktifkan",
+        "turnOn": "Aktifkan",
+        "askOwner": "Minta pemilik akun untuk mengaktifkan atau menonaktifkannya.",
+        "doneOn": "{name} diaktifkan.",
+        "errors": {
+          "notToggleable": "{name} tidak dapat diaktifkan atau dinonaktifkan di sini. Hanya add-on yang termasuk dalam paket Anda yang dapat dialihkan.",
+          "forbidden": "Anda tidak memiliki izin untuk mengaktifkan atau menonaktifkan add-on.",
+          "generic": "Kami tidak dapat mengubah {name}. Silakan coba lagi."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Nonaktifkan {name}?",
+      "lead": "Berikut yang akan berubah. Anda dapat mengaktifkannya kembali kapan saja.",
+      "cancel": "Batal",
+      "confirm": "Nonaktifkan {name}",
+      "done": "{name} dinonaktifkan. Pengaturannya tetap disimpan.",
+      "typeLabel": "Ketik {name} untuk mengonfirmasi",
+      "typeHint": "Obrolan pelanggan atau orang akan terdampak, jadi ketik nama untuk mengonfirmasi.",
+      "groups": {
+        "stops": "Yang berhenti",
+        "kept": "Yang tetap disimpan",
+        "people": "Orang"
+      },
+      "items": {
+        "features_off": "Fitur ini berhenti berfungsi: {names}.",
+        "dependents_off": "Fitur ini bergantung padanya, jadi ikut berhenti: {names}.",
+        "roles_dormant": "{count, plural, other {# peran memiliki izin add-on ini. Izin tetap disimpan, tetapi tidak aktif sampai Anda mengaktifkannya kembali.}}",
+        "waiting_chats": "{count, plural, other {# obrolan menunggu agen. Obrolan tidak akan diarahkan otomatis, jadi seseorang harus mengambilnya.}}",
+        "routing_rules": "{count, plural, other {# aturan perutean berhenti menugaskan obrolan.}}",
+        "auto_teams": "{count, plural, other {# tim diatur untuk menugaskan obrolan secara otomatis dan akan berhenti melakukannya.}}",
+        "teams": "{count, plural, other {# tim tetap disimpan beserta anggotanya.}}",
+        "custom_role_holders": "{count, plural, other {# orang memiliki peran khusus. Perannya tetap disimpan, tetapi izin add-on ini tidak lagi berlaku.}}",
+        "kept": "Pengaturan dan data Anda tetap disimpan. Semuanya kembali seperti yang Anda tinggalkan saat Anda mengaktifkannya lagi."
+      }
     }
   }
 }

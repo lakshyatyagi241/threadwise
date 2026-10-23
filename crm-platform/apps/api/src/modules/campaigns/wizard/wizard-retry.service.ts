@@ -371,7 +371,7 @@ export class WizardRetryService {
   ): Promise<void> {
     const { orgId } = c;
     await asSystem(orgId, () =>
-      this.db.txAs({ orgId }, async (tx) => {
+      this.db.retry.txAs({ orgId }, async (tx) => {
         if (o.log) {
           await tx.execute(sql`
             UPDATE camp_retry_attempts SET outcome = ${o.outcome}, provider_message_id = ${o.wamid},

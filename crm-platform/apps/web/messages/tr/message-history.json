@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Gelen kutusu",
+      "contact": "Kişi",
       "flow": "Akış",
       "auto_reply": "Otomatik yanıt",
+      "automation": "Otomasyon",
       "ai": "Yapay zekâ asistanı",
       "api": "API",
       "broadcast": "Toplu gönderim",
+      "broadcast_test": "Yayın test gönderimi",
       "campaign": "Kampanya",
       "scheduled": "Zamanlanmış",
       "other": "Diğer"
@@ -171,6 +174,7 @@
         "contact": "Kişi",
         "message": "Mesaj",
         "type": "Tür",
+        "source": "Kaynak",
         "status": "Durum",
         "open": "Aç"
       },
@@ -228,11 +232,13 @@
       "source": "Gönderen",
       "sourceValue": {
         "inbox": "Gelen kutusu",
+        "contact": "Kişi",
         "flow": "Akış",
         "auto_reply": "Otomatik yanıt",
         "ai": "Yapay zekâ asistanı",
         "api": "API",
         "broadcast": "Toplu gönderim",
+        "broadcast_test": "Yayın test gönderimi",
         "campaign": "Kampanya",
         "scheduled": "Zamanlanmış mesaj",
         "other": "Diğer"

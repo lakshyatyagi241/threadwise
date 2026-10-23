@@ -247,23 +247,7 @@
         "title": "Pertanyaan yang sering diajukan"
       },
       "addons": {
-        "title": "Add-on",
-        "owned": "Add-on yang Anda miliki",
-        "oneTime": "sekali bayar",
-        "buy": "Beli add-on",
-        "buyAgain": "Beli lagi",
-        "active": "Aktif",
-        "included": "Termasuk dalam paket Anda",
-        "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
-        "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
-        "unlimitedBullet": "{label} tanpa batas",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} hari}}",
-          "weeks": "{count, plural, other {/ {count} minggu}}",
-          "months": "{count, plural, other {/ {count} bulan}}",
-          "years": "{count, plural, other {/ {count} tahun}}"
-        }
+        "title": "Add-on"
       },
       "renewal": {
         "renewsOn": "Paket Anda diperpanjang otomatis pada {date}.",
@@ -586,13 +570,27 @@
       "appLink": "Lihat aplikasi",
       "addonHint": "Anda juga dapat menambahkannya ke paket saat ini dengan add-on {addon}.",
       "addonLink": "Lihat add-on",
-      "addons": {
-        "smartRouting": "Perutean cerdas",
-        "teamsPermissions": "Tim dan izin"
-      }
+      "addonsTabHint": "Pengaya tidak memerlukan Marketplace pada paket Anda. Anda tetap bisa melihat yang Anda miliki dan membeli pengaya dari Paket dan pengaya.",
+      "addonsTabLink": "Buka Paket dan pengaya",
+      "addonHintGeneric": "Paket Anda mungkin juga menawarkannya sebagai add-on."
     },
     "lock": {
-      "link": "Lihat paket dan add-on"
+      "link": "Lihat paket dan add-on",
+      "offTitle": "Tidak ada di paket Anda",
+      "offLead": "Bagian ini saat ini tidak termasuk dalam paket ruang kerja Anda.",
+      "buyTitle": "Tambahkan {addon} seharga {price}",
+      "buyLead": "Paket Anda menawarkan {addon} sebagai add-on. Tambahkan untuk mengaktifkan bagian ini.",
+      "buyLink": "Lihat add-on",
+      "askOwner": "Minta pemilik akun untuk menambahkannya.",
+      "unavailableTitle": "{addon} memerlukan paket berbayar yang aktif",
+      "unavailableLead": "Pilih paket berbayar terlebih dahulu, lalu Anda dapat menambahkan {addon} ke paket itu.",
+      "viewPlans": "Lihat paket",
+      "disabledTitle": "{addon} nonaktif",
+      "disabledLead": "Paket Anda menyertakan {addon}, tetapi add-on ini dinonaktifkan untuk ruang kerja ini. Pengaturannya tetap disimpan.",
+      "disabledAsk": "Minta pemilik akun untuk mengaktifkannya.",
+      "turnOn": "Aktifkan",
+      "turnOnForbidden": "Anda tidak memiliki izin untuk mengaktifkannya. Minta pemilik akun.",
+      "turnOnFailed": "Kami tidak dapat mengaktifkan {addon}. Silakan coba lagi."
     }
   }
 }

@@ -4,6 +4,9 @@ import { AddonRedundancyService } from '../../../src/modules/platform-payment-ga
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { WorkspaceAddonsService } from '../../../src/modules/addons-extension-registry/workspace-addons.service';
 import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import type { Tx } from '@crm/db';
+import { writeAddonOffers } from '../../../src/modules/plans-subscriptions-trials/plan-addon-offers';
 import { RoutingEngine } from '../../../src/modules/team-inbox-routing-sla/routing-engine.service';
 import { OwnerSyncConsumer } from '../../../src/modules/team-inbox-routing-sla/owner-sync.consumer';
 import type { Tenant } from '../contacts-attributes-tags/support';
@@ -709,10 +712,22 @@ describe('an add-on the plan already includes is not offered, and cannot be boug
     expect((await catalog(t)).eligible).toBe(false);
   });
 
-  it('owner decision: a FREE plan sees no add-ons at all (an add-on needs an active paid plan)', async () => {
+  it('a FREE plan cannot buy add-ons: listed as unavailable with the reason (Part B), or not at all where the plan hides them', async () => {
     const t = await p.api.signup('srf');
     await onPlan(t, 'sr_free');
-    expect(await catalog(t)).toEqual({ eligible: false, owned: [], catalog: [] });
+    const c = await catalog(t);
+    expect(c.eligible).toBe(false);
+    expect(new Set(c.catalog.map((x) => x.state))).toEqual(new Set(['unavailable']));
+    // the operator hides an add-on on the free plan (docs/specs/addons-plan-offers.md): it is no longer listed
+    await q(
+      `INSERT INTO plan_addon_offers (plan_id, addon_id, mode) SELECT id, $1, 'hidden' FROM plans WHERE slug = 'sr_free'`,
+      [teamsPackId],
+    );
+    try {
+      expect((await catalog(t)).catalog.map((x) => x.slug)).not.toContain('teams_permissions');
+    } finally {
+      await q(`DELETE FROM plan_addon_offers WHERE addon_id = $1`, [teamsPackId]);
+    }
     const q2 = await quote(t, 'sr_partial');
     expect(q2.status).toBe(422);
     expect(q2.body.code).toBe('PAYGW_PLAN_NOT_PURCHASABLE');
@@ -878,5 +893,243 @@ describe('an add-on the plan starts to include stops renewing at the end of its 
     await onPlan(t, 'sr_pro');
     expect(await svc().sweep()).toBeGreaterThanOrEqual(1);
     expect((await statusOf(subId!)).status).toBe('canceled');
+  });
+});
+
+describe('plan add-on offers: hidden, a plan price, included (docs/specs/addons-plan-offers.md)', () => {
+  const offer = (planSlug: string, mode: string, amount: number | null = null) =>
+    q(
+      `INSERT INTO plan_addon_offers (plan_id, addon_id, mode, amount)
+       SELECT p.id, $2, $3, $4 FROM plans p WHERE p.slug = $1
+       ON CONFLICT (plan_id, addon_id) DO UPDATE SET mode = EXCLUDED.mode, amount = EXCLUDED.amount`,
+      [planSlug, packId, mode, amount],
+    );
+  const clear = () => q(`DELETE FROM plan_addon_offers WHERE addon_id = $1`, [packId]);
+  const addons = async (t: Tenant) => {
+    const res = await p.api.as(t.admin).get('/v2/addons');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return res.body as { catalog: Array<{ slug: string; state: string; amount: string }> };
+  };
+  const quote = (t: Tenant) =>
+    p.api.as(t.admin).get(`/v2/billing/checkout/plans/smart_routing/quote`);
+
+  it('hidden: not listed, the entitlements say hidden, and checkout refuses it', async () => {
+    await q(
+      `UPDATE plans SET is_active = true, is_free = false, amount = 9 WHERE slug = 'smart_routing'`,
+    );
+    await offer('sr_basic', 'hidden');
+    try {
+      const t = await p.api.signup('soh');
+      await onPlan(t, 'sr_basic');
+      expect((await addons(t)).catalog.map((c) => c.slug)).not.toContain('smart_routing');
+      const ent = await p.api.as(t.admin).get('/v2/billing/entitlements');
+      expect(ent.status).toBe(200);
+      expect(
+        (ent.body.featureAddons as Array<{ feature: string; offer: string }>).find(
+          (f) => f.feature === 'inbox_routing',
+        )?.offer,
+      ).toBe('hidden');
+      const q1 = await quote(t);
+      expect(q1.status).toBe(422);
+      expect(q1.body.code).toBe('PAYGW_ADDON_NOT_OFFERED');
+    } finally {
+      await clear();
+    }
+  });
+
+  it('an add-on that is not on sale (draft) reads hidden, so a locked screen offers nothing', async () => {
+    await q(`UPDATE plans SET is_active = false WHERE slug = 'smart_routing'`);
+    try {
+      const t = await p.api.signup('sod');
+      await onPlan(t, 'sr_basic');
+      const ent = await p.api.as(t.admin).get('/v2/billing/entitlements');
+      expect(ent.status).toBe(200);
+      expect(
+        (ent.body.featureAddons as Array<{ feature: string; offer: string }>).find(
+          (f) => f.feature === 'inbox_routing',
+        )?.offer,
+      ).toBe('hidden');
+    } finally {
+      await q(`UPDATE plans SET is_active = true WHERE slug = 'smart_routing'`);
+    }
+  });
+
+  it('paid at a plan price: the card and the quote charge the plan price', async () => {
+    await q(
+      `UPDATE plans SET is_active = true, is_free = false, amount = 9 WHERE slug = 'smart_routing'`,
+    );
+    const t = await p.api.signup('sop');
+    await onPlan(t, 'sr_basic');
+    const base = await quote(t);
+    expect(base.status, JSON.stringify(base.body)).toBe(200);
+    await offer('sr_basic', 'paid', 18);
+    try {
+      const card = (await addons(t)).catalog.find((c) => c.slug === 'smart_routing')!;
+      expect(card).toMatchObject({ state: 'buy', amount: '18.00' });
+      const priced = await quote(t);
+      expect(priced.status, JSON.stringify(priced.body)).toBe(200);
+      expect(Number(priced.body.subtotal)).toBeCloseTo(Number(base.body.subtotal) * 2, 2);
+    } finally {
+      await clear();
+    }
+  });
+
+  it('included (the pack editor write) turns the features on for the plan, and paid turns them off again', async () => {
+    const plan = await q(`SELECT uuid FROM plans WHERE slug = 'sr_basic'`);
+    const pack = await q(`SELECT uuid FROM plans WHERE id = $1`, [packId]);
+    const t = await p.api.signup('soi');
+    await onPlan(t, 'sr_basic');
+    const db = drizzle(p.h.owner) as unknown as Tx;
+    const put = (mode: 'included' | 'paid') =>
+      writeAddonOffers(db, { id: packId, uuid: String(pack.rows[0].uuid) }, [
+        { planId: String(plan.rows[0].uuid), mode, amount: null },
+      ]);
+    try {
+      expect(await put('included')).toEqual(['sr_basic']);
+      expect(await get(PlanEntitlementService).featureEnabled(t.orgId, 'inbox_routing')).toBe(true);
+      expect(await put('paid')).toEqual(['sr_basic']);
+      expect(await get(PlanEntitlementService).featureEnabled(t.orgId, 'inbox_routing')).toBe(
+        false,
+      );
+    } finally {
+      await clear();
+      await q(
+        `UPDATE plans SET features = features || '{"inbox_routing": false, "inbox_assignment_sticky": false}'::jsonb WHERE slug = 'sr_basic'`,
+      );
+    }
+  });
+});
+
+describe('a workspace turns an add-on its plan includes off and on (docs/specs/addons-lifecycle-and-permissions.md)', () => {
+  const impact = (token: string, id: string, action = 'disable') =>
+    p.api.as(token).get(`/v2/addons/${id}/impact?action=${action}`);
+  const toggle = (token: string, id: string, what: 'disable' | 'enable', body?: object) =>
+    p.api
+      .as(token)
+      .post(`/v2/addons/${id}/${what}`)
+      .set('idempotency-key', randomUUID())
+      .send(body ?? {});
+  const ent = (t: Tenant) => get(PlanEntitlementService).featureEnabled(t.orgId, 'inbox_routing');
+  const sticky = (t: Tenant) =>
+    get(PlanEntitlementService).featureEnabled(t.orgId, 'inbox_assignment_sticky');
+  let uuid = '';
+  const card = async (t: Tenant) => {
+    const res = await p.api.as(t.admin).get('/v2/addons');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return (
+      res.body.catalog as Array<{
+        slug: string;
+        state: string;
+        activation: string;
+        canToggle: boolean;
+      }>
+    ).find((c) => c.slug === 'smart_routing')!;
+  };
+
+  beforeAll(async () => {
+    await q(
+      `UPDATE plans SET is_active = true, is_free = false, amount = 9 WHERE slug = 'smart_routing'`,
+    );
+    uuid = String((await q(`SELECT uuid FROM plans WHERE slug = 'smart_routing'`)).rows[0].uuid);
+    // the operator set Smart routing to Included on the pro plan (what the editor writes)
+    await q(
+      `INSERT INTO plan_addon_offers (plan_id, addon_id, mode) SELECT id, $1, 'included' FROM plans WHERE slug = 'sr_pro'
+       ON CONFLICT (plan_id, addon_id) DO UPDATE SET mode = 'included'`,
+      [packId],
+    );
+  });
+  afterAll(async () => {
+    await q(`DELETE FROM plan_addon_offers WHERE addon_id = $1`, [packId]);
+  });
+
+  it('off keeps everything stored but switches both features and the permission-linked work off; on restores them', async () => {
+    const t = await p.api.signup('sla1');
+    await onPlan(t, 'sr_pro');
+    expect(await ent(t)).toBe(true);
+    expect(await sticky(t)).toBe(true);
+    expect(await card(t)).toMatchObject({
+      state: 'included',
+      activation: 'active',
+      canToggle: true,
+    });
+
+    const pre = await impact(t.admin, uuid);
+    expect(pre.status, JSON.stringify(pre.body)).toBe(200);
+    const codes = (pre.body.items as Array<{ code: string }>).map((i) => i.code);
+    expect(codes).toContain('features_off');
+    expect(codes).toContain('kept');
+
+    // the route refuses a call that has not seen the impact
+    expect((await toggle(t.admin, uuid, 'disable', {})).status).toBe(422);
+    const off = await toggle(t.admin, uuid, 'disable', { confirm: true });
+    expect(off.status, JSON.stringify(off.body)).toBeLessThan(300);
+    expect(off.body.activation).toBe('disabled');
+    expect(await ent(t)).toBe(false);
+    expect(await sticky(t)).toBe(false);
+    // the card still says included (the plan still includes it), now turned off
+    expect(await card(t)).toMatchObject({
+      state: 'included',
+      activation: 'disabled',
+      canToggle: true,
+    });
+    // the locked screens read "disabled" (turn it back on), not a buy offer
+    const entitlements = await p.api.as(t.admin).get('/v2/billing/entitlements');
+    expect(
+      (entitlements.body.featureAddons as Array<{ feature: string; offer: string }>).find(
+        (f) => f.feature === 'inbox_routing',
+      )?.offer,
+    ).toBe('disabled');
+    // the rules route is closed the way a plan without the feature is
+    expect((await rules(t.admin)).status).toBe(422);
+
+    // switching off twice changes nothing; on restores it
+    expect((await toggle(t.admin, uuid, 'disable', { confirm: true })).status).toBeLessThan(300);
+    const on = await toggle(t.admin, uuid, 'enable');
+    expect(on.status, JSON.stringify(on.body)).toBeLessThan(300);
+    expect(await ent(t)).toBe(true);
+    expect(await sticky(t)).toBe(true);
+    expect((await rules(t.admin)).status).toBe(200);
+  });
+
+  it('a feature that needs another is off whenever that one is off (declared once, in the registry)', async () => {
+    const t = await p.api.signup('sla2');
+    await onPlan(t, 'sr_basic');
+    await override(t, { inbox_routing: false, inbox_assignment_sticky: true });
+    expect(await sticky(t)).toBe(false);
+    await override(t, { inbox_routing: true, inbox_assignment_sticky: true });
+    expect(await sticky(t)).toBe(true);
+  });
+
+  it('only an add-on the plan includes can be switched: a bought one, an unknown one and a member without the permission are refused', async () => {
+    const t = await p.api.signup('sla3');
+    await onPlan(t, 'sr_basic');
+    await buy(t, packId);
+    const bought = await toggle(t.admin, uuid, 'disable', { confirm: true });
+    expect(bought.status).toBe(422);
+    expect(bought.body.code).toBe('PAYGW_ADDON_NOT_TOGGLEABLE');
+    expect(
+      (await toggle(t.admin, '00000000-0000-4000-8000-000000000000', 'disable', { confirm: true }))
+        .status,
+    ).toBe(404);
+
+    const inc = await p.api.signup('sla4');
+    await onPlan(inc, 'sr_pro');
+    const agent = await p.api.member(inc, 'sla4a', AGENT);
+    expect((await toggle(agent.token, uuid, 'disable', { confirm: true })).status).toBe(403);
+    expect((await impact(agent.token, uuid)).status).toBe(403);
+    expect(await ent(inc)).toBe(true);
+  });
+
+  it('the impact names what is at risk: waiting chats ask for a typed confirmation', async () => {
+    const t = await p.api.signup('sla5');
+    await onPlan(t, 'sr_pro');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch);
+    await q(`UPDATE conversations SET handling = 'waiting' WHERE id = $1`, [th.id]);
+    const pre = await impact(t.admin, uuid);
+    expect(pre.status, JSON.stringify(pre.body)).toBe(200);
+    const items = pre.body.items as Array<{ code: string; count: number; risk: boolean }>;
+    expect(items.find((i) => i.code === 'waiting_chats')).toMatchObject({ count: 1, risk: true });
+    expect(pre.body.requiresConfirm).toBe(true);
   });
 });

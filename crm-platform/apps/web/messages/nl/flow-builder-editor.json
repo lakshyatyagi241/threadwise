@@ -1615,6 +1615,8 @@
           "notInWorkspace": "{value} (niet in workspace)",
           "templateLabel": "Goedgekeurd sjabloon",
           "templateHint": "Hier verschijnen alleen goedgekeurde sjablonen uit de workspace. <link>Maak een nieuwe aan →</link>",
+          "statusExits": "Statusuitgangen toevoegen (Verzonden, Afgeleverd, Gelezen, Beantwoord, Mislukt)",
+          "statusExitsHint": "De flow verlaat de stap via de eerste uitgang met een gekoppelde stap: Verzonden zodra de sjabloon is geaccepteerd, Afgeleverd of Gelezen wanneer WhatsApp dat meldt, Beantwoord wanneer de klant terugschrijft, Mislukt als verzenden niet lukte. Een knop die de klant aantikt neemt zijn eigen uitgang.",
           "type": "Type",
           "kindText": "Tekst",
           "kindImage": "Afbeelding",
@@ -1805,6 +1807,7 @@
       "webBot": {
         "aria": "Flow-secties",
         "build": "Bouwen",
+        "faqs": "FAQ",
         "customize": "Aanpassen",
         "saveFirst": "Sla eerst de flow op.",
         "needsCustomizing": "De widget gebruikt nog de standaardlook. Open Aanpassen.",
@@ -1812,6 +1815,13 @@
         "deploy": "Implementeren",
         "customizeFirstWhatsapp": "Pas je WhatsApp-knop aan en sla hem één keer op voordat je publiceert.",
         "install": "Installeren"
+      },
+      "faqsPanel": {
+        "intro": "FAQ's zijn items in de kennis van een AI-agent. Deze horen bij de agent waarmee deze flow antwoordt: voeg hier vragen en antwoorden toe en de agent gebruikt ze.",
+        "noAgent": "Deze flow gebruikt nog geen AI-agent. Voeg een stap AI-assistent of Antwoord uit FAQ toe en kies een agent: zijn FAQ's verschijnen hier.",
+        "agent": "AI-agent",
+        "openAgent": "Openen in AI-training",
+        "unknownAgent": "AI-agent (niet gevonden)"
       },
       "buttonIcon": {
         "label": "Pictogram (optioneel)",
@@ -2211,6 +2221,8 @@
         "number": "Getal",
         "alphanumeric": "Letters en cijfers",
         "date": "Datum",
+        "datetime": "Datum en tijd",
+        "time": "Tijd",
         "age": "Leeftijd",
         "date_of_birth": "Geboortedatum"
       },
@@ -2222,6 +2234,8 @@
         "number": "Voer een geldig getal in",
         "alphanumeric": "Gebruik alleen letters en cijfers",
         "date": "Voer een geldige datum in ({format})",
+        "datetime": "Voer een geldige datum en tijd in ({format} HH:MM)",
+        "time": "Voer een geldige tijd in (HH:MM)",
         "age": "Voer je leeftijd in als geheel getal",
         "date_of_birth": "Voer een geldige datum in ({format})"
       },

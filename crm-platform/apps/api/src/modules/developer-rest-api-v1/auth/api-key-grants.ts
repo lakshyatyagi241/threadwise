@@ -6,7 +6,7 @@ import type { Grant, GrantSet } from '../../../kernel/rbac/rbac.service';
  * (`ctx.grants`) to decide how far they may see. A key is not a staff member and holds no role, so the guard builds a grant set from the
  * key's scopes: exactly the capabilities of the routes it may call, always with `all` record scope (Reference: a key sees the whole workspace).
  *
- * A key with no scopes is full access (TW-API-008) and gets the union.
+ * A key holds at least one scope. A key with none gets no grants at all.
  */
 export const SCOPE_PERMISSIONS: Record<ApiScope, readonly string[]> = {
   'account:read': [],
@@ -66,11 +66,8 @@ export const SCOPE_PERMISSIONS: Record<ApiScope, readonly string[]> = {
   'webhooks:write': [],
 };
 
-const ALL_SCOPES = Object.keys(SCOPE_PERMISSIONS) as ApiScope[];
-
-/** Scope list of a key, expanded: `<r>:write` brings `<r>:read` with it. Empty means every scope. */
+/** Scope list of a key, expanded: `<r>:write` brings `<r>:read` with it. */
 export function effectiveScopes(held: readonly string[]): ApiScope[] {
-  if (held.length === 0) return ALL_SCOPES;
   const out = new Set<ApiScope>();
   for (const scope of held) {
     if (!(scope in SCOPE_PERMISSIONS)) continue;
@@ -91,8 +88,7 @@ export function grantsForScopes(held: readonly string[]): GrantSet {
 
 /**
  * The workspace permissions a key minted with `held` scopes would reach, per scope. A key is never more powerful than the member who
- * mints it (AZ-001), so key creation checks every entry against the creator's own grants. An empty list is the unrestricted key and needs
- * every permission any scope reaches.
+ * mints it (AZ-001), so key creation checks every entry against the creator's own grants.
  */
 export function permissionsNeededByScopes(
   held: readonly string[],

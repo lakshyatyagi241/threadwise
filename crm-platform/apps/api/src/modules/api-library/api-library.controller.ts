@@ -30,6 +30,7 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { Throttle } from '../platform-infrastructure';
 import { ApiLibraryService } from './api-library.service';
 import { ApiLibraryLogsService } from './api-library-logs.service';
 import { ApiLibraryRunService } from './api-library-run.service';
@@ -68,7 +69,9 @@ export class ApiLibraryController {
     return this.apis.options();
   }
 
+  // Every test is a real request to somebody else's server: 20 a minute per person is plenty for a person and stops a loop.
   @Post('apis/test')
+  @Throttle({ limit: 20, windowSeconds: 60, by: 'actor' })
   @HttpCode(HttpStatus.OK)
   @RequirePermission('integ.apilibrary.test')
   @ApiOperation({

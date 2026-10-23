@@ -283,8 +283,6 @@
       "shortEmail": "E-Mail",
       "shortStage": "Phase",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Erstellt",
-      "shortModified": "Geändert",
       "firstRun": {
         "title": "Fügen Sie Ihre ersten Kontakte hinzu",
         "message": "Holen Sie die Menschen herein, mit denen Sie sprechen. Kontakte werden für Nachrichten, Kampagnen, Aufgaben und Deals verwendet.",
@@ -298,7 +296,8 @@
       "teamFilter": "Nach Team filtern",
       "allTeams": "Alle Teams",
       "teamFormer": "Früheres Team",
-      "unhideColumn": "Spalte einblenden"
+      "unhideColumn": "Spalte einblenden",
+      "resizeColumn": "Ziehen, um {column} anzupassen; Doppelklick setzt zurück"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -348,7 +347,25 @@
       "assignOwner": "Verantwortlichen zuweisen",
       "changeStage": "Phase ändern",
       "more": "Mehr",
-      "held": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden."
+      "held": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden.",
+      "consent": "Marketing-Einwilligung",
+      "consentTitle": "Marketing-Einwilligung",
+      "consentChannel": "Kanal",
+      "consentAction": "Ändern",
+      "consentSubscribe": "Anmelden",
+      "consentUnsubscribe": "Abmelden",
+      "consentNote": "Wie die Kontakte zugestimmt haben",
+      "consentNotePlaceholder": "Was sie gesagt oder unterschrieben haben, und wo",
+      "consentNoteRequired": "Gib an, wie die Kontakte zugestimmt haben, bevor du sie anmeldest.",
+      "consentContinue": "Weiter",
+      "consentBack": "Zurück",
+      "consentConfirm": "Einwilligung speichern",
+      "consentSummary": "{count, plural, one {# Kontakt} other {# Kontakte}} als {change} für {channel} markieren. Jeder erhält einen Eintrag in seinem Einwilligungsverlauf.",
+      "consentChangeGranted": "angemeldet",
+      "consentChangeWithdrawn": "abgemeldet",
+      "consentAllMatching": "Dies gilt für alle Kontakte, die der Filter findet.",
+      "consentSubscribed": "{count, plural, one {# Kontakt angemeldet} other {# Kontakte angemeldet}}",
+      "consentUnsubscribed": "{count, plural, one {# Kontakt abgemeldet} other {# Kontakte abgemeldet}}"
     },
     "form": {
       "addEyebrow": "Neuer Kontakt",
@@ -500,7 +517,6 @@
       "loading": "Gruppen werden geladen...",
       "unavailableTitle": "Gruppen sind noch nicht verfügbar",
       "unavailableMessage": "Der Dienst für Kontaktgruppen ist auf diesem Server nicht aktiv, daher können Gruppen noch nicht aufgelistet oder erstellt werden.",
-      "contacts": "Kontakte",
       "viewContacts": "Kontakte ansehen",
       "edit": "Gruppe bearbeiten",
       "editNamed": "Gruppe {name} bearbeiten",
@@ -508,8 +524,6 @@
       "deleteNamed": "Gruppe {name} löschen",
       "deleteTitle": "Diese Gruppe löschen?",
       "deleteMessage": "„{name}“ wird von jedem Kontakt entfernt, der dazugehört. Die Kontakte selbst bleiben erhalten.",
-      "createTile": "Neue Gruppe erstellen",
-      "createTileHint": "Ordnen Sie Kontakte nach Segment, Funnel-Phase oder Interesse.",
       "emptyTitle": "Noch keine Gruppen",
       "emptyMessage": "Bitten Sie einen Workspace-Manager, die erste Gruppe zu erstellen.",
       "helpKicker": "Hilfe - 0{n}",
@@ -529,7 +543,21 @@
       },
       "exists": "Eine Gruppe mit diesem Namen existiert bereits, daher wurde nichts Neues erstellt.",
       "import": "Kontakte importieren",
-      "importInto": "Importieren"
+      "importInto": "Importieren",
+      "colName": "Name",
+      "colMembers": "Mitglieder",
+      "colCreatedBy": "Erstellt von",
+      "colCreatedAt": "Erstellt am",
+      "colModifiedBy": "Geändert von",
+      "colUpdatedAt": "Aktualisiert am",
+      "colActions": "Aktionen",
+      "tableLabel": "Kontaktgruppen",
+      "search": "Gruppen suchen",
+      "searchPlaceholder": "Nach Name suchen",
+      "count": "{count, plural, =0 {Keine Gruppen} one {# Gruppe} other {# Gruppen}}",
+      "noResultsTitle": "Keine passenden Gruppen",
+      "noResults": "Kein Gruppenname enthält Ihre Eingabe.",
+      "clearSearch": "Suche zurücksetzen"
     },
     "import": {
       "eyebrow": "Massenimport",
@@ -624,7 +652,8 @@
         "invalid_date_of_birth": "Das Geburtsdatum ist kein Datum mit dem Jahr zuerst, das ein Geburtsdatum sein kann",
         "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt",
         "invalid_timezone": "ungültige Zeitzone",
-        "legal_hold": "Geschützter Datensatz, nicht geändert"
+        "legal_hold": "Geschützter Datensatz, nicht geändert",
+        "invalid_property_value": "Der Wert der benutzerdefinierten Eigenschaft passt nicht zu ihrem Typ oder ihren Optionen"
       },
       "statusHint": "Wird auf Kontakte angewendet, die diese Datei erstellt.",
       "queued": "Warten auf den Start...",
@@ -642,7 +671,9 @@
       "groupNew": "Einer neuen Gruppe",
       "groupPick": "Gruppe auswählen",
       "groupNewPlaceholder": "Name der neuen Gruppe",
-      "groupRequiredHint": "Jeder importierte Kontakt wird dieser einen Gruppe hinzugefügt. Die Gruppenspalte der Datei wird ignoriert, sofern Sie sie nicht oben zuordnen."
+      "groupRequiredHint": "Jeder importierte Kontakt wird dieser einen Gruppe hinzugefügt. Die Gruppenspalte der Datei wird ignoriert, sofern Sie sie nicht oben zuordnen.",
+      "customProperties": "Benutzerdefinierte Eigenschaften",
+      "customPropertiesHint": "Eine Spalte, deren Kopfzeile der Name der Eigenschaft ist (oder attr:key, wie der Export ihn schreibt), füllt diese Eigenschaft. Eine leere Zelle behält den Wert, den der Kontakt bereits hat."
     },
     "detail": {
       "back": "Alle Kontakte",
@@ -1335,7 +1366,7 @@
         "closePicker": "Schließen",
         "changed": "Zu ändernde Eigenschaften",
         "clear": "Leeren",
-        "keep": "Beibehalten",
+        "remove": "{name} entfernen",
         "setValue": "Wert festlegen",
         "willClear": "Wird für {count, plural, one {den ausgewählten Kontakt} other {alle # ausgewählten Kontakte}} geleert.",
         "requiredNoClear": "Eine Pflichteigenschaft kann nicht geleert werden.",
@@ -1431,6 +1462,7 @@
       "template": "WhatsApp-Vorlage",
       "templatePlaceholder": "Vorlage auswählen",
       "noTemplates": "Keine genehmigten Vorlagen für diese Nummer.",
+      "openInInbox": "Chat im Posteingang öffnen",
       "notSendable": "Diese Vorlage kann hier nicht ausgefüllt werden ({reason}).",
       "variables": "Vorlagenvariablen",
       "preview": "Vorschau",

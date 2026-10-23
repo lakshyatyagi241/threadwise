@@ -13,6 +13,7 @@ import {
   splitByQuietHours,
   heldSummaries,
 } from '../compliance-center';
+import { ChatUsageReporter, type BroadcastUsageRef } from '../chat-conversations';
 import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 import { INBOX_INGEST, type InboxIngest } from './_shims/tokens';
 import {
@@ -24,11 +25,18 @@ import {
 } from './broadcast-rules';
 import { ChannelsRepository } from './channels.repository';
 import { LineBroadcastsRepository, type LineBroadcastRow } from './line-broadcasts.repository';
-import type { LineBroadcastJob } from './line-broadcasts.service';
+import { MODULE_KEY, type LineBroadcastJob } from './line-broadcasts.service';
 import { LineTokenService } from './line-token.service';
 import { broadcastMessages, type MediaKind } from './message-builders';
 
 export type LineRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
+
+const usageRef = (b: LineBroadcastRow): BroadcastUsageRef => ({
+  module: MODULE_KEY,
+  id: b.id,
+  uuid: b.uuid,
+  name: b.name,
+});
 
 /**
  * Sends one LINE broadcast, run by the `line-broadcast` worker job. People are claimed in batches of 40 with `FOR UPDATE SKIP LOCKED`
@@ -43,6 +51,10 @@ export type LineRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
  * Quiet hours (BL-191): after the gate, a person whose local time is inside the workspace's quiet hours is HELD, not denied. They go back
  * to `pending` with the instant they may be messaged, the rest of the audience goes, and when only held people are left the run ends and a
  * delayed job takes them up at the first opening (asking the gate again, as every batch does).
+ *
+ * Every push LINE accepts is the platform's per-message fee (`chat_message` in the usage prices): one unit per person however many
+ * message objects the push carried, reported on the first message id LINE returned. Before each batch the wallet is asked: when it
+ * cannot pay, the run stops with nobody failed (see `waitForWallet`).
  */
 @Injectable()
 export class LineBroadcastSenderService {
@@ -62,6 +74,7 @@ export class LineBroadcastSenderService {
     @InjectQueue(QUEUES.LINE_BROADCAST) private readonly queue: Queue<LineBroadcastJob>,
     @Inject(LINE_API) private readonly line: LineApiFactory,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
+    private readonly usage: ChatUsageReporter,
   ) {}
 
   async run(orgId: number, broadcastId: number): Promise<LineRunResult> {
@@ -100,6 +113,11 @@ export class LineBroadcastSenderService {
       broadcast = await load();
       if (!broadcast || broadcast.status !== 'sending') return 'stopped';
       const current = broadcast;
+
+      // The whole batch is asked for, not one message: its fees settle a moment after the send, so a wallet of one message must not
+      // pass the check for a batch of hundreds.
+      const noMoney = await this.usage.refusal(orgId, BATCH_SIZE);
+      if (noMoney) return this.waitForWallet(orgId, broadcastId, noMoney);
 
       const batch = await this.db.txAs({ orgId }, (tx) =>
         this.repo.claim(tx, orgId, broadcastId, BATCH_SIZE, lastId),
@@ -157,6 +175,14 @@ export class LineBroadcastSenderService {
             error,
           }),
         );
+        if (res.ok) {
+          await this.usage.reportMessage(orgId, usageRef(current), {
+            channelKind: 'line',
+            peerKey: r.userId,
+            // A push that came back without a message id is billed on the recipient row.
+            providerMessageId: providerMessageId ?? `${current.uuid}:${r.id}`,
+          });
+        }
         if (res.ok && r.conversationId !== null) {
           await this.mirror(orgId, current.uuid, r.conversationId, text, providerMessageId);
         }
@@ -164,6 +190,26 @@ export class LineBroadcastSenderService {
       }
       await this.db.txAs({ orgId }, (tx) => this.repo.recompute(tx, orgId, broadcastId));
     }
+  }
+
+  /**
+   * The wallet cannot pay for the next message. Nobody is failed and nobody is lost: what is left stays pending, the reason is kept on the
+   * broadcast and it goes back to a draft, which is what Pause does; Start continues it after a top-up.
+   */
+  private async waitForWallet(
+    orgId: number,
+    broadcastId: number,
+    why: string,
+  ): Promise<LineRunResult> {
+    await this.db.txAs({ orgId }, async (tx) => {
+      await this.repo.recompute(tx, orgId, broadcastId);
+      await this.repo.setStatus(tx, orgId, broadcastId, 'draft', { lastError: why.slice(0, 255) });
+    });
+    this.logger.warn(
+      { orgId, broadcastId },
+      '[LINE] broadcast stopped: the wallet cannot pay for the next message',
+    );
+    return 'stopped';
   }
 
   /** A failure to copy into the thread never fails the send (Reference). */

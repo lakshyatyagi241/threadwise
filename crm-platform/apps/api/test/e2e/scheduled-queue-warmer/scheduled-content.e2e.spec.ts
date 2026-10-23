@@ -5,6 +5,7 @@ import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { QUEUES } from '../../../src/infra/queue/queues';
 import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import {
@@ -89,6 +90,7 @@ beforeAll(async () => {
     h.app.get(OutboxService),
     h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
     h.app.get(ConsentGate),
+    h.app.get(SendWindowService),
   );
   // An object store in memory behind the real storage service. Until a test turns it on, media is local disk, as on a fresh install.
   const storage = h.app.get(MediaStorageService, { strict: false }) as unknown as Record<
@@ -252,8 +254,7 @@ const due = (uuid: string) =>
   );
 
 /** A file that passes the upload policy's content check: the PNG signature, then padding to `size` bytes. */
-const png = (size: number) =>
-  pngOfSize(size);
+const png = (size: number) => pngOfSize(size);
 const upload = (t: Tenant, buf: Buffer, name = 'offer.png') =>
   api
     .as(t.admin)

@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "Posta in arrivo",
+      "contact": "Contatto",
       "flow": "Flusso",
       "auto_reply": "Risposta automatica",
+      "automation": "Automazione",
       "ai": "Assistente IA",
       "api": "API",
       "broadcast": "Invio di massa",
+      "broadcast_test": "Invio di prova della trasmissione",
       "campaign": "Campagna",
       "scheduled": "Programmato",
       "other": "Altro"
@@ -171,6 +174,7 @@
         "contact": "Contatto",
         "message": "Messaggio",
         "type": "Tipo",
+        "source": "Origine",
         "status": "Stato",
         "open": "Apri"
       },
@@ -228,11 +232,13 @@
       "source": "Inviato da",
       "sourceValue": {
         "inbox": "Posta in arrivo",
+        "contact": "Contatto",
         "flow": "Flusso",
         "auto_reply": "Risposta automatica",
         "ai": "Assistente IA",
         "api": "API",
         "broadcast": "Invio di massa",
+        "broadcast_test": "Invio di prova della trasmissione",
         "campaign": "Campagna",
         "scheduled": "Messaggio programmato",
         "other": "Altro"

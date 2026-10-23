@@ -45,7 +45,8 @@
         "period": "Okres",
         "grants": "Przyznaje",
         "status": "Status",
-        "actions": "Akcje"
+        "actions": "Akcje",
+        "plans": "Plany"
       },
       "price": {
         "free": "Bezpłatnie",
@@ -124,7 +125,8 @@
           "billingMode": "Rozliczanie",
           "sortOrder": "Kolejność",
           "isActive": "Aktywny",
-          "isLifetime": "Dożywotnio (jednorazowo)"
+          "isLifetime": "Dożywotnio (jednorazowo)",
+          "period": "Okres rozliczeniowy"
         },
         "modes": {
           "one_time": "Jednorazowo (kup ponownie po wygaśnięciu)",
@@ -144,9 +146,78 @@
           "billingDuration": "Wpisz liczbę całkowitą równą 1 lub większą.",
           "sortOrder": "Wpisz liczbę całkowitą.",
           "limits": "Limity to liczby całkowite lub -1 dla braku limitu.",
-          "form": "Sprawdź zaznaczone pola."
-        }
-      }
+          "form": "Sprawdź zaznaczone pola.",
+          "amountPositive": "Dodatki to subskrypcje miesięczne lub roczne, więc cena musi być większa od zera.",
+          "features": "Zaznacz co najmniej jedną funkcję lub zmień go na dodatek pojemności.",
+          "limitsNeeded": "Wpisz co najmniej jeden limit większy od zera lub zmień go na dodatek funkcji."
+        },
+        "legacy": {
+          "title": "Pakiet dawny",
+          "body": "Ten pakiet utworzono, zanim dodatki stały się subskrypcjami. Nadal jest sprzedawany dokładnie tak jak wcześniej (jego rozliczenie jest widoczne, ale nie można go zmienić), a przestrzenie robocze, które go mają, nie są naruszone. Nadal możesz edytować nazwę, cenę, funkcje i limity albo wycofać go ze sprzedaży. Nowe pakiety to subskrypcje miesięczne lub roczne."
+        },
+        "periods": {
+          "months": "Subskrypcja miesięczna",
+          "years": "Subskrypcja roczna"
+        },
+        "periodHint": "Dodatki to subskrypcje. Przestrzenie robocze z bramką online odnawiają się automatycznie; przy przelewie bankowym lub płatności offline płacą ponownie po zakończeniu okresu.",
+        "planOffers": {
+          "title": "Plany",
+          "hint": "Jak każdy plan oferuje ten dodatek. Wliczone: bez opłaty, plan zawiera jego funkcje. Płatne: przestrzenie robocze go kupują, po cenie planu, jeśli ją ustawisz. Ukryte: przestrzenie robocze w tym planie nigdy go nie widzą.",
+          "noIncluded": "Ten dodatek tylko zwiększa limity, więc żaden plan nie może go wliczyć. Plan ustawia własne limity na swojej karcie Limity.",
+          "empty": "Nie ma jeszcze planów.",
+          "freePlan": "Plan bezpłatny",
+          "inactivePlan": "Nieaktywny",
+          "modeLabel": "{plan}: sposób oferowania tego dodatku",
+          "modes": {
+            "included": "Wliczone",
+            "paid": "Płatne",
+            "hidden": "Ukryte"
+          },
+          "priceLabel": "Cena w tym planie",
+          "priceHint": "Puste = własna cena dodatku.",
+          "freePlanNote": "Widoczny w planie bezpłatnym, ale do zakupu przestrzeń robocza potrzebuje planu płatnego.",
+          "hiddenNote": "Niewidoczny dla przestrzeni roboczych w tym planie. Przestrzeń robocza, która już go kupiła, zachowuje go do końca okresu.",
+          "problems": {
+            "money": "Wpisz kwotę, np. 19 lub 19.99.",
+            "zero": "Pozostaw cenę pustą, aby użyć ceny dodatku, lub wybierz Wliczone."
+          },
+          "errors": {
+            "generic": "Nie udało się zapisać ofert planów.",
+            "forbidden": "Tylko superadministrator może zmieniać oferty planów.",
+            "notFound": "Ten dodatek już nie istnieje."
+          },
+          "saved": "Zapisano oferty planów.",
+          "changed": "{count, plural, one {# plan zmieniony} few {# plany zmienione} many {# planów zmienionych} other {# planu zmienionego}}",
+          "save": "Zapisz oferty planów",
+          "needFeatures": "Najpierw dodaj powyżej funkcje, które odblokowuje"
+        },
+        "type": {
+          "title": "Typ",
+          "hint": "Wybierz, co robi ten dodatek. Do planu można włączyć tylko dodatek funkcji.",
+          "feature": {
+            "title": "Dodatek funkcji",
+            "body": "Odblokowuje część produktu; może też zwiększać pojemność."
+          },
+          "capacity": {
+            "title": "Dodatek pojemności",
+            "body": "Tylko zwiększa limit (stanowiska, kontakty...)."
+          }
+        },
+        "noFeaturesNotice": "Ten dodatek nic jeszcze nie odblokowuje. Zaznacz funkcje, które daje, aby plany mogły go uwzględnić.",
+        "limitsHintCapacity": "Dodatek pojemności tylko zwiększa limity. Wpisz liczbę, która zostanie DODANA do planu (na przykład +2 stanowiska). Użyj -1 dla braku limitu. Wymagany jest co najmniej jeden limit."
+      },
+      "kind": {
+        "feature": "Funkcja",
+        "capacity": "Pojemność"
+      },
+      "plans": {
+        "included": "Wliczone: {plans}",
+        "paid": "Płatne: {plans}",
+        "hidden": "Ukryte: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Brak planów"
+      },
+      "noFeatures": "Brak funkcji"
     },
     "extensions": {
       "crumbHere": "Dodatki",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Dodatki",
       "description": "Dodatkowe pakiety funkcji kupowane ponad subskrypcję.",
-      "needPlanTitle": "Dodatki wymagają aktywnego planu",
-      "needPlanBody": "Dodatki to dodatkowe pakiety funkcji kupowane ponad subskrypcję. Najpierw wybierz plan, a potem wróć tutaj, aby dodać funkcje.",
-      "viewPlans": "Zobacz plany",
-      "noneTitle": "Brak dostępnych dodatków",
-      "noneBody": "Obecnie nie oferujemy żadnych dodatków. Zajrzyj później.",
-      "ownedTitle": "Twoje dodatki",
-      "ownedBody": "Aktywne pakiety dołączone do Twojego obecnego planu.",
-      "ends": "Kończy się {date}",
-      "lifetime": "Dożywotnio",
-      "autoRenews": "Odnawia się automatycznie",
       "renewal": {
         "cancel": "Anuluj odnawianie",
         "confirmTitle": "Anulować odnawianie?",
@@ -277,37 +338,105 @@
         "forbidden": "Nie masz uprawnień do zmiany planu.",
         "none": "Brak aktywnej subskrypcji do anulowania.",
         "failed": "Nie udało się anulować odnawiania. Spróbuj ponownie."
-      },
-      "active": "Aktywny",
-      "included": "W cenie Twojego planu",
-      "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
-      "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
-      "cardEyebrow": "Dodatek",
-      "catalogTitle": "Dodatki",
-      "catalogBody": "Odblokuj dodatkowe funkcje ponad obecny plan. Zmiana planu nie jest potrzebna.",
-      "count": "{count, plural, one {# dodatek} few {# dodatki} many {# dodatków} other {# dodatku}}",
-      "free": "Bezpłatnie",
-      "lifetimePrice": "jednorazowo",
-      "per": "/ {unit}",
-      "units": {
-        "days": "dni",
-        "weeks": "tygodnie",
-        "months": "miesiące",
-        "years": "lata"
-      },
-      "buy": "Dodaj do planu",
-      "buyAgain": "Kup ponownie",
-      "owned": "Posiadane ×{count} · ponowny zakup dodaje więcej",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Bez limitu: {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "Nie udało się załadować dodatków."
+      }
     },
     "planFields": {
       "fromModule": "z zainstalowanego modułu",
       "unlimited": "Bez limitu"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Dodatki wymagają aktywnego planu płatnego",
+        "free_plan": "Masz plan bezpłatny. Dodatki to rozszerzenia kupowane do planu płatnego.",
+        "plan_expired": "Twój plan płatny wygasł, więc dodatki są wstrzymane. Odnów plan, aby kupować lub odnawiać dodatki.",
+        "no_plan": "Twoja przestrzeń robocza nie ma jeszcze planu. Wybierz plan płatny, aby korzystać z dodatków.",
+        "cta": "Zobacz plany"
+      },
+      "unavailableCard": "Wymaga aktywnego planu płatnego",
+      "empty": {
+        "title": "Brak dodatków w sprzedaży",
+        "body": "Obecnie nie oferujemy żadnych dodatków. Zajrzyj później."
+      },
+      "listLabel": "Dodatki w sprzedaży",
+      "owned": {
+        "title": "Twoje dodatki",
+        "renews": "Odnowi się {date}",
+        "ends": "Aktywny do {date}. Nie odnowi się automatycznie.",
+        "lifetime": "Dożywotnio"
+      },
+      "state": {
+        "included": "W cenie Twojego planu",
+        "includedSupport": "Włączone przez Twojego opiekuna konta.",
+        "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
+        "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
+        "active": "Aktywny",
+        "ownedCount": "Posiadane ×{count} · ponowny zakup dodaje więcej",
+        "turnedOff": "Wyłączony"
+      },
+      "price": {
+        "free": "Bezpłatnie",
+        "oneTime": "jednorazowo",
+        "per": {
+          "days": "{count, plural, one {/ dzień} few {/ {count} dni} many {/ {count} dni} other {/ {count} dnia}}",
+          "weeks": "{count, plural, one {/ tydzień} few {/ {count} tygodnie} many {/ {count} tygodni} other {/ {count} tygodnia}}",
+          "months": "{count, plural, one {/ miesiąc} few {/ {count} miesiące} many {/ {count} miesięcy} other {/ {count} miesiąca}}",
+          "years": "{count, plural, one {/ rok} few {/ {count} lata} many {/ {count} lat} other {/ {count} roku}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Odnawia się co okres. Płatność automatyczna kartą; przy przelewie bankowym lub płatności offline płacisz ponownie po zakończeniu okresu.",
+        "oneTime": "Zakup jednorazowy. Nie odnawia się."
+      },
+      "buy": "Kup dodatek",
+      "buyAgain": "Kup ponownie",
+      "cannotBuyHint": "Zapytaj właściciela konta. Zakup mogą rozpocząć tylko osoby uprawnione do kupowania dla tej przestrzeni roboczej.",
+      "bullets": {
+        "unlimited": "Bez limitu: {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Potrzebujesz kredytów na wiadomości? Doładuj zamiast tego portfel; kredyty nie są dodatkiem.",
+      "walletLink": "Doładuj portfel",
+      "groups": {
+        "feature": "Dodatki z funkcjami",
+        "capacity": "Dodatki pojemnościowe"
+      },
+      "activation": {
+        "turnedOffNote": "Wyłączony dla tego obszaru roboczego. Jego ustawienia są zachowane.",
+        "turnOff": "Wyłącz",
+        "turnOn": "Włącz",
+        "askOwner": "Poproś właściciela konta o włączenie lub wyłączenie.",
+        "doneOn": "{name} jest włączony.",
+        "errors": {
+          "notToggleable": "Nie można tutaj włączyć ani wyłączyć dodatku {name}. Przełączyć można tylko dodatek wliczony w Twój plan.",
+          "forbidden": "Nie masz uprawnień do włączania ani wyłączania dodatków.",
+          "generic": "Nie udało się zmienić dodatku {name}. Spróbuj ponownie."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Wyłączyć {name}?",
+      "lead": "Oto, co się zmieni. Możesz go ponownie włączyć w dowolnej chwili.",
+      "cancel": "Anuluj",
+      "confirm": "Wyłącz {name}",
+      "done": "{name} jest wyłączony. Jego ustawienia są zachowane.",
+      "typeLabel": "Wpisz {name}, aby potwierdzić",
+      "typeHint": "Dotyczy to czatów z klientami lub osób, więc wpisz nazwę, aby potwierdzić.",
+      "groups": {
+        "stops": "Co przestanie działać",
+        "kept": "Co zostanie zachowane",
+        "people": "Osoby"
+      },
+      "items": {
+        "features_off": "Te funkcje przestaną działać: {names}.",
+        "dependents_off": "Te funkcje ich wymagają, więc też przestaną działać: {names}.",
+        "roles_dormant": "{count, plural, one {# rola ma uprawnienia tego dodatku. Zachowa je, ale będą nieaktywne, dopóki go ponownie nie włączysz.} few {# role mają uprawnienia tego dodatku. Zachowają je, ale będą nieaktywne, dopóki go ponownie nie włączysz.} many {# ról ma uprawnienia tego dodatku. Zachowają je, ale będą nieaktywne, dopóki go ponownie nie włączysz.} other {# roli ma uprawnienia tego dodatku. Zachowa je, ale będą nieaktywne, dopóki go ponownie nie włączysz.}}",
+        "waiting_chats": "{count, plural, one {# czat czeka na agenta. Nie zostanie przypisany automatycznie, więc ktoś musi go przejąć.} few {# czaty czekają na agenta. Nie zostaną przypisane automatycznie, więc ktoś musi je przejąć.} many {# czatów czeka na agenta. Nie zostaną przypisane automatycznie, więc ktoś musi je przejąć.} other {# czatu czeka na agenta. Nie zostanie przypisane automatycznie, więc ktoś musi je przejąć.}}",
+        "routing_rules": "{count, plural, one {# reguła routingu przestanie przypisywać czaty.} few {# reguły routingu przestaną przypisywać czaty.} many {# reguł routingu przestanie przypisywać czaty.} other {# reguły routingu przestanie przypisywać czaty.}}",
+        "auto_teams": "{count, plural, one {# zespół jest ustawiony na automatyczne przypisywanie czatów i przestanie to robić.} few {# zespoły są ustawione na automatyczne przypisywanie czatów i przestaną to robić.} many {# zespołów jest ustawionych na automatyczne przypisywanie czatów i przestanie to robić.} other {# zespołu jest ustawionych na automatyczne przypisywanie czatów i przestanie to robić.}}",
+        "teams": "{count, plural, one {# zespół zostanie zachowany wraz z członkami.} few {# zespoły zostaną zachowane wraz z członkami.} many {# zespołów zostanie zachowanych wraz z członkami.} other {# zespołu zostanie zachowane wraz z członkami.}}",
+        "custom_role_holders": "{count, plural, one {# osoba ma rolę niestandardową. Jej rola zostanie zachowana, ale uprawnienia tego dodatku przestaną obowiązywać.} few {# osoby mają rolę niestandardową. Ich role zostaną zachowane, ale uprawnienia tego dodatku przestaną obowiązywać.} many {# osób ma rolę niestandardową. Ich role zostaną zachowane, ale uprawnienia tego dodatku przestaną obowiązywać.} other {# osoby ma rolę niestandardową. Ich role zostaną zachowane, ale uprawnienia tego dodatku przestaną obowiązywać.}}",
+        "kept": "Twoje ustawienia i dane są zachowane. Po ponownym włączeniu wrócą w takim stanie, w jakim je zostawiłeś."
+      }
     }
   }
 }

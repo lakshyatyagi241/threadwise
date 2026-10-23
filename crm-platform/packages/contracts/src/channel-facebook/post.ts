@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { MAX_PAGE_NUMBER } from '../common/pagination';
 
 /**
  * Facebook posts (TW-FB-016 to 018): composed on a connected Page, published now or scheduled, listed with filters, retried and
@@ -56,7 +57,7 @@ export const listFbPostsQuerySchema = z.object({
   q: z.string().trim().max(200).optional(),
   /** Only one Page's posts. */
   account: uuidSchema.optional(),
-  page: z.coerce.number().int().min(1).default(1),
+  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).default(1),
 });
 export type ListFbPostsQuery = z.infer<typeof listFbPostsQuerySchema>;
 

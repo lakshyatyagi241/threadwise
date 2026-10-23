@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "इनबॉक्स",
+      "contact": "संपर्क",
       "flow": "फ़्लो",
       "auto_reply": "ऑटो-रिप्लाई",
+      "automation": "ऑटोमेशन",
       "ai": "AI असिस्टेंट",
       "api": "API",
       "broadcast": "ब्रॉडकास्ट",
+      "broadcast_test": "ब्रॉडकास्ट टेस्ट भेजना",
       "campaign": "कैंपेन",
       "scheduled": "निर्धारित",
       "other": "अन्य"
@@ -171,6 +174,7 @@
         "contact": "संपर्क",
         "message": "संदेश",
         "type": "प्रकार",
+        "source": "स्रोत",
         "status": "स्थिति",
         "open": "खोलें"
       },
@@ -228,11 +232,13 @@
       "source": "किसने भेजा",
       "sourceValue": {
         "inbox": "इनबॉक्स",
+        "contact": "संपर्क",
         "flow": "फ़्लो",
         "auto_reply": "ऑटो-रिप्लाई",
         "ai": "AI असिस्टेंट",
         "api": "API",
         "broadcast": "ब्रॉडकास्ट",
+        "broadcast_test": "ब्रॉडकास्ट टेस्ट भेजना",
         "campaign": "कैंपेन",
         "scheduled": "निर्धारित संदेश",
         "other": "अन्य"

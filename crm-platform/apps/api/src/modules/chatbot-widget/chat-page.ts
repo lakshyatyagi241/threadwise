@@ -1,4 +1,6 @@
+import { CHAT_SIZE_PX } from '@crm/contracts';
 import { jsString } from './embed-script';
+import { flbPhoneCountries } from '@crm/contracts';
 import { CHAT_TEXT, RTL_LOCALES } from './chat-page-text';
 
 /**
@@ -30,6 +32,10 @@ const STYLE = `
 :root { --accent: #5B4DDB; --accent-ink: #FFFFFF; --accent-soft: #EFEDFB; --accent-line: #C9C3F3; }
 html, body { margin: 0; padding: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; height: 100%; -webkit-font-smoothing: antialiased; }
 body { display: flex; flex-direction: column; background: #fff; }
+/* Opened on its own (the preview link, a test), the chat is the real window: the size the author chose, in the middle of a plain page. */
+html.standalone { background: #e9ebf5; }
+html.standalone body { width: var(--win-w); max-width: calc(100% - 32px); height: min(var(--win-h), calc(100% - 48px)); margin: 24px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(24,26,54,.24); position: relative; }
+@media (max-width: 480px) { html.standalone { background: #fff; } html.standalone body { width: auto; max-width: none; height: 100%; margin: 0; border-radius: 0; box-shadow: none; } }
 @keyframes rowIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes dot { 0%, 60%, 100% { opacity: .3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
 @media (prefers-reduced-motion: reduce) { .row, .chips, .typing i { animation: none !important; } .body { scroll-behavior: auto !important; } }
@@ -57,8 +63,24 @@ body { display: flex; flex-direction: column; background: #fff; }
 .pop[hidden] { display: none; }
 .pop.at-start { inset-inline-end: auto; inset-inline-start: 10px; }
 .pop .mi { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; text-align: start; font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 10px; border-radius: 10px; cursor: pointer; color: inherit; text-decoration: none; }
-#endpop { width: auto; min-width: 210px; gap: 2px; }
-#endpop .mi svg { flex: none; opacity: .75; }
+/* The cross asks before it ends the chat, then asks for a rating. */
+.modal { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(32,34,46,.42); backdrop-filter: blur(3px); }
+.modal[hidden] { display: none; }
+.sheet { width: min(330px, 100%); max-height: 100%; overflow-y: auto; background: #fff; color: #20222e; border-radius: 22px; padding: 24px 20px 16px; text-align: center; box-shadow: 0 20px 50px rgba(30,32,60,.3); display: flex; flex-direction: column; align-items: center; }
+.sheet .wi { width: 44px; height: 44px; border-radius: 50%; background: #fdeceb; color: #d24b43; display: grid; place-items: center; margin-bottom: 14px; }
+.sheet .q { margin: 0 0 16px; font-weight: 600; font-size: 15.5px; line-height: 1.4; overflow-wrap: anywhere; }
+.sheet button { width: 100%; min-height: 44px; border-radius: 12px; font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; padding: 9px 12px; white-space: normal; overflow-wrap: anywhere; }
+.sheet .danger { border: 0; background: #d64a41; color: #fff; }
+.sheet .danger:hover { background: #bf3d35; }
+.sheet .outline { margin-top: 8px; min-height: 42px; font-size: 14px; font-weight: 500; border: 1px solid #e3e5f0; background: #fff; color: #20222e; }
+.sheet .outline:hover { background: #f6f7fc; }
+.sheet .ghost { margin-top: 8px; min-height: 36px; font-size: 13px; font-weight: 500; border: 0; background: transparent; color: #6b7088; }
+.sheet .accent { border: 0; background: var(--accent); color: var(--accent-ink); }
+.sheet textarea { width: 100%; min-height: 84px; resize: none; border: 1px solid var(--accent); border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 14px; margin-bottom: 14px; color: inherit; }
+.stars { display: flex; gap: 6px; margin: 2px 0 6px; }
+.sheet .stars button { width: 34px; min-height: 34px; padding: 0; border: 0; background: transparent; color: #d8dbe6; font-size: 30px; line-height: 1; }
+.sheet .stars button.on { color: #f5a623; }
+.rlabel { min-height: 18px; margin-bottom: 14px; font-size: 13px; font-weight: 600; color: var(--accent); }
 .pop .mi:hover { background: var(--accent-soft); color: var(--accent); }
 .pop .mi img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; flex: none; }
 .pop.blocks { display: grid; grid-template-columns: 1fr 1fr; }
@@ -179,6 +201,13 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
 .input-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input-row .cc { flex: none; width: 92px; max-width: 34%; border: 0; border-inline-end: 1px solid #dfe2ee; border-radius: 0; background: transparent; font: inherit; font-size: 13.5px; font-weight: 600; color: #2c2e3d; padding: 8px 4px 8px 0; text-overflow: ellipsis; cursor: pointer; outline: none; }
+.input-row .cc[hidden] { display: none; }
+.input-row .locbtn { display: none; flex: 1; justify-content: center; }
+.input-row.loc { padding: 5px; }
+.input-row.loc #txt, .input-row.loc #send, .input-row.loc .cc { display: none; }
+.input-row.loc .locbtn { display: inline-flex; background: var(--accent); color: var(--accent-ink); }
+.input-row.loc + .hint { display: none; }
 .input-row input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; font: inherit; font-size: 14.5px; padding: 9px 0; color: #2c2e3d; }
 .input-row button { display: inline-flex; align-items: center; gap: 7px; flex: none; height: 38px; padding: 0 16px; border: 0; border-radius: 14px; font: inherit; font-weight: 700; font-size: 13px; cursor: pointer; }
 .input-row button:disabled { opacity: .5; cursor: not-allowed; }
@@ -203,6 +232,8 @@ const SCRIPT = `
   var FLOW = __FLOW__;
   var PREVIEW = __PREVIEW__;
   var T = __TEXT__;
+  var COUNTRIES = __COUNTRIES__;
+  var SIZES = __SIZES__;
   // The window's own words, in the visitor's language (English is the fallback for a missing key).
   function tx(key, fallback) { return (T && T[key]) || fallback; }
   var VKEY = 'wsnap_vid_' + TOKEN;
@@ -212,6 +243,8 @@ const SCRIPT = `
   var API_HIS = BASE + 'history';
   var API_UP = BASE + 'upload';
   var API_FB = BASE + 'feedback';
+  var API_RATE = BASE + 'rating';
+  var API_LOC = BASE + 'location';
 
   // The visitor id lives in the iframe's own localStorage, not only in a cookie: the page runs in a cross-site frame where
   // third-party cookies are often blocked, and without it every visit would start a new conversation.
@@ -232,23 +265,47 @@ const SCRIPT = `
   // What the newest bot question waits for: the keyboard, a date picker or an attach button. It follows the newest bot line, so a
   // retry after a wrong answer (which carries the same input) keeps it.
   var hint = null;
-  function fmtDate(iso, fmt) {
-    var m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(iso);
-    if (!m) return iso;
-    return String(fmt || 'dd-mm-yyyy').replace('yyyy', m[1]).replace('yy', m[1].slice(2)).replace('dd', m[3]).replace('mm', m[2]);
+  // A date or date-time answer is typed in the question's own shape (a native date picker would show the browser's shape instead).
+  function dateShape(h) {
+    if (h && h.type === 'time') return 'HH:MM';
+    var f = String((h && h.format) || 'dd-mm-yyyy').toUpperCase();
+    return h && h.type === 'datetime' ? f + ' HH:MM' : f;
+  }
+  // A phone question shows a country list beside the box; the number goes out as +<code> <number>, so it is judged by that country's rules.
+  function flagOf(code) {
+    return code.length === 2 ? String.fromCodePoint(127397 + code.charCodeAt(0), 127397 + code.charCodeAt(1)) : '';
+  }
+  function paintCountries(h) {
+    var cc = $('cc');
+    if (!cc.options.length) {
+      COUNTRIES.forEach(function (c) {
+        var o = document.createElement('option');
+        o.value = c.dial;
+        o.dataset.code = c.code;
+        o.textContent = '+' + c.dial + ' ' + flagOf(c.code) + ' ' + c.name;
+        cc.appendChild(o);
+      });
+      cc.setAttribute('aria-label', tx('countryCode', 'Country code'));
+    }
+    var want = String((h && h.country) || ((navigator.language || '').split('-')[1] || '') || 'IN').toUpperCase();
+    for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
   }
   function setHint(h) {
     hint = h && h.type && h.type !== 'text' && h.type !== 'alphanumeric' ? h : null;
     var t = $('txt'), row = document.querySelector('.input-row'), type = hint ? hint.type : 'text';
     t.value = ''; syncSend();
-    t.type = type === 'email' ? 'email' : type === 'phone' ? 'tel' : type === 'date' ? 'date' : 'text';
+    var ccBox = $('cc');
+    ccBox.hidden = type !== 'phone';
+    if (type === 'phone') paintCountries(hint);
+    t.type = type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'text';
     if (type === 'number') t.setAttribute('inputmode', 'decimal');
     else if (type === 'phone') t.setAttribute('inputmode', 'tel');
     else if (type === 'email') t.setAttribute('inputmode', 'email');
     else t.removeAttribute('inputmode');
     t.setAttribute('autocomplete', type === 'name' ? 'name' : type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'off');
-    t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' ? '' : tx('typeMessage', 'Type a message\\u2026');
-    row.className = 'input-row' + (type === 'file' ? ' file' : '');
+    t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' || type === 'time' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
+    row.className = 'input-row' + (type === 'file' ? ' file' : type === 'location' ? ' loc' : '');
+    $('locbtn').textContent = '\\uD83D\\uDCCD ' + tx('shareLocation', 'Share my location');
     var f = $('file');
     f.accept = type === 'file' && hint.accept && hint.accept.length ? hint.accept.map(function (e) { return '.' + e; }).join(',') : '';
   }
@@ -355,10 +412,21 @@ const SCRIPT = `
     if (first) hdr.insertBefore(b, first); else hdr.appendChild(b);
     pipBtn = b;
   }
+  // A flow bot opens by itself: the first time the window is open on an empty thread the bot starts at its first step, and does not
+  // wait for the visitor to write. The site's panel tells the page when it is opened (a page of its own is open from the start).
+  var windowOpened = window.parent === window, botReady = false, botStarted = false;
+  function startBot() {
+    if (!FLOW || PREVIEW || !botReady || !windowOpened || botStarted) return;
+    botStarted = true;
+    fetch(withVid(BASE + 'start'), { method: 'POST', credentials: 'include' })
+      .then(function () { showTyping(); burstPoll(); })
+      .catch(function () {});
+  }
   window.addEventListener('message', function (e) {
     var d = e.data;
     if (!d || e.source !== window.parent) return;
-    if (d.wgt === 'pip-state') { PIPSTATE = { supported: d.supported === true, active: d.active === true }; ensurePipButton(); }
+    if (d.wgt === 'opened') { windowOpened = true; startBot(); }
+    else if (d.wgt === 'pip-state') { PIPSTATE = { supported: d.supported === true, active: d.active === true }; ensurePipButton(); }
     else if (d.wgt === 'pip-ask' && CHAT.pip) pipCard(tx('pipAsk', 'Keep chatting in a floating window when you switch tabs?'), [{ label: tx('pipAllow', 'Allow'), run: function () { toParent({ wgt: 'ask-notify' }); } }, { label: tx('pipNo', 'Not now'), no: true }]);
     else if (d.wgt === 'pip-offer' && CHAT.pip) pipCard(tx('pipOffer', 'Continue chatting in a floating window?'), [{ label: tx('pipYes', 'Float the chat'), run: function () { toParent({ wgt: 'pip' }); } }, { label: tx('pipNo', 'Not now'), no: true }]);
   });
@@ -426,21 +494,118 @@ const SCRIPT = `
   }
 
   var popsBound = false;
-  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; $('endpop').hidden = true; }
-  // Close this chat / Restart this chat: the server makes a fresh visitor (a fresh conversation), the window keeps its id and
-  // loads again. Close also asks the site to hide the panel. The Customize preview has no conversation, so it only hides.
-  function startOver(hide) {
+  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; }
+  // Restart this chat keeps the visitor and the thread (the team sees a line saying so) and the window starts clean. Ending the chat
+  // resolves the thread and makes a fresh visitor, so the next visit is a new chat. Either way the window loads again, and closing the
+  // page (not this reload) tells the server the visitor left. The Customize preview has no conversation, so it only hides.
+  var reloading = false;
+  function startOver(hide, ended) {
     closePops();
+    reloading = true;
     function done() {
       if (hide) { try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (e) {} }
       if (!PREVIEW) location.reload();
     }
     if (PREVIEW) { done(); return; }
-    fetch(BASE + 'restart', { method: 'POST', credentials: 'include' })
+    var ending = ended
+      ? fetch(withVid(BASE + 'end?reason=ended'), { method: 'POST', credentials: 'include' }).catch(function () {})
+      : Promise.resolve();
+    ending
+      .then(function () { return fetch(withVid(BASE + 'restart' + (ended ? '?fresh=1' : '')), { method: 'POST', credentials: 'include' }); })
       .then(function (r) { return r.json(); })
       .then(function (j) { if (j && j.visitor_uuid) storeUuid(j.visitor_uuid); })
       .catch(function () {})
       .then(done);
+  }
+  window.addEventListener('pagehide', function () {
+    if (PREVIEW || reloading || !storedUuid()) return;
+    try { navigator.sendBeacon(withVid(BASE + 'end?reason=left')); } catch (e) {}
+  });
+  // The cross asks first. "End conversation" then asks for a rating and closes the chat (the thread is resolved and the next visit is a
+  // new chat); "Restart chat" gives the default five stars and starts the same thread over; "Not now" only closes the question.
+  function rate(stars, comment) {
+    if (PREVIEW) return Promise.resolve();
+    var payload = { rating: stars };
+    if (comment) payload.comment = comment;
+    var vid = storedUuid();
+    if (vid) payload.visitor_uuid = vid;
+    return fetch(API_RATE, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(function () {});
+  }
+  function sheet(build) {
+    var m = $('endmodal');
+    m.textContent = '';
+    var sh = document.createElement('div');
+    sh.className = 'sheet';
+    sh.setAttribute('role', 'dialog');
+    sh.setAttribute('aria-modal', 'true');
+    build(sh);
+    m.appendChild(sh);
+    m.hidden = false;
+    var first = sh.querySelector('button');
+    if (first) first.focus();
+  }
+  function closeSheet() { var m = $('endmodal'); m.hidden = true; m.textContent = ''; }
+  function sheetButton(cls, label, fn) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.textContent = label; b.onclick = fn;
+    return b;
+  }
+  function openEnd() {
+    sheet(function (sh) {
+      var wi = document.createElement('div');
+      wi.className = 'wi';
+      wi.appendChild(svg(22, ['M12 9v4', 'M12 17h.01', 'M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z']));
+      sh.appendChild(wi);
+      var q = document.createElement('p');
+      q.className = 'q';
+      q.id = 'endq';
+      q.textContent = tx('endTitle', 'Are you sure you want to end conversation?');
+      sh.setAttribute('aria-labelledby', 'endq');
+      sh.appendChild(q);
+      sh.appendChild(sheetButton('danger', tx('endConversation', 'End conversation'), openRating));
+      sh.appendChild(sheetButton('outline', tx('restartChat', 'Restart chat'), function () { closeSheet(); rate(5).then(function () { startOver(true, false); }); }));
+      sh.appendChild(sheetButton('ghost', tx('notNow', 'Not now'), closeSheet));
+    });
+  }
+  function openRating() {
+    var stars = 5;
+    sheet(function (sh) {
+      var t = document.createElement('p');
+      t.className = 'q';
+      t.textContent = tx('rateTitle', 'Please rate your experience with us.');
+      sh.appendChild(t);
+      var row = document.createElement('div');
+      row.className = 'stars';
+      row.setAttribute('role', 'radiogroup');
+      var lab = document.createElement('div');
+      lab.className = 'rlabel';
+      lab.setAttribute('role', 'status');
+      var names = [tx('rate1', 'Very poor'), tx('rate2', 'Poor'), tx('rate3', 'Average'), tx('rate4', 'Good'), tx('rate5', 'Excellent')];
+      var bs = [];
+      function paint() {
+        bs.forEach(function (b, i) { b.className = i < stars ? 'on' : ''; b.setAttribute('aria-checked', String(i + 1 === stars)); });
+        lab.textContent = names[stars - 1];
+      }
+      for (var i = 1; i <= 5; i++) (function (n) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('role', 'radio');
+        b.setAttribute('aria-label', tx('rateStar', '{n} / 5').replace('{n}', String(n)));
+        b.textContent = '\u2605';
+        b.onclick = function () { stars = n; paint(); };
+        bs.push(b);
+        row.appendChild(b);
+      })(i);
+      sh.appendChild(row);
+      sh.appendChild(lab);
+      var ta = document.createElement('textarea');
+      ta.maxLength = 1000;
+      ta.placeholder = tx('suggestPh', 'Type your suggestions here...');
+      sh.appendChild(ta);
+      sh.appendChild(sheetButton('accent', tx('submitFeedback', 'Submit feedback'), function () { closeSheet(); rate(stars, ta.value.trim()).then(function () { startOver(true, true); }); }));
+      sh.appendChild(sheetButton('ghost', tx('noThanks', 'No, thanks'), function () { closeSheet(); startOver(true, true); }));
+      paint();
+    });
   }
   // The header's bell (notification cards) and menu (rows or blocks).
   function paintHeaderPops(hdr) {
@@ -790,12 +955,20 @@ const SCRIPT = `
       var el = document.createElement('div');
       el.className = 'card';
       el.setAttribute('role', 'listitem');
-      if (c.image && /^https?:\\/\\//i.test(c.image)) {
+      var cardImg = imgUrl(c.image);
+      if (cardImg) {
         var img = document.createElement('img');
         img.alt = c.title || '';
         img.loading = 'lazy';
         img.referrerPolicy = 'no-referrer';
-        img.src = c.image;
+        // A picture a host will not give without a referrer is asked for once more with the window's origin; failing that, the card shows without it.
+        img.onerror = function () {
+          if (img.dataset.retry) { img.remove(); return; }
+          img.dataset.retry = '1';
+          img.referrerPolicy = 'origin';
+          img.src = cardImg;
+        };
+        img.src = cardImg;
         el.appendChild(img);
       }
       var cb = document.createElement('div');
@@ -895,9 +1068,19 @@ const SCRIPT = `
     $('msgs').appendChild(box);
   }
 
+  // On its own page (not inside a site's panel) the window keeps the size the author chose instead of filling the browser.
+  function frameStandalone() {
+    if (window.parent !== window || PREVIEW) return;
+    var sz = SIZES[CHAT.size] || SIZES.standard;
+    var root = document.documentElement;
+    root.style.setProperty('--win-w', sz.w + 'px');
+    root.style.setProperty('--win-h', sz.h + 'px');
+    root.classList.add('standalone');
+  }
   function paintChrome() {
     // The options first: the header fill and the direction depend on them.
     applyOptions();
+    frameStandalone();
     document.body.style.background = cfg.body_bg_kind === 'image' && cfg.body_bg_image_url ? '#fff' : cfg.body_bg_color || '#F7F8FC';
     var msgs = $('msgs');
     var safeUrl = '';
@@ -967,27 +1150,26 @@ const SCRIPT = `
       };
       hdr.appendChild(ex);
     }
-    // Inside the site's panel (any website bot) the window has its own cross. It opens two choices: close this chat (the panel hides
-    // and the next visit starts fresh) or restart this chat (a fresh conversation right now).
+    // Inside the site's panel (any website bot) the window has its own cross. It asks whether to end the conversation (see openEnd).
     if (window.parent !== window) {
       var x = document.createElement('button');
       x.type = 'button';
       x.className = 'hx';
       x.dataset.end = '1';
       x.setAttribute('aria-label', tx('closeChat', 'Close chat'));
-      x.setAttribute('aria-haspopup', 'true');
+      x.setAttribute('aria-haspopup', 'dialog');
       x.appendChild(svg(20, ['M6 6l12 12', 'M18 6L6 18']));
-      var ep = $('endpop');
-      ep.textContent = '';
-      [['closeThis', 'Close this chat', true, ['M6 6l12 12', 'M18 6L6 18']], ['restartThis', 'Restart this chat', false, ['M3 12a9 9 0 1 0 3-6.7', 'M3 4v5h5']]].forEach(function (o) {
-        var mi = document.createElement('button');
-        mi.type = 'button'; mi.className = 'mi'; mi.setAttribute('role', 'menuitem');
-        mi.appendChild(svg(16, o[3]));
-        var sp = document.createElement('span'); sp.textContent = tx(o[0], o[1]); mi.appendChild(sp);
-        mi.onclick = function () { startOver(o[2]); };
-        ep.appendChild(mi);
-      });
-      x.onclick = function (e) { e.stopPropagation(); var on = ep.hidden; closePops(); ep.hidden = !on; };
+      x.onclick = function (e) { e.stopPropagation(); closePops(); openEnd(); };
+      // Minimize: the panel folds back into the launcher ball and the conversation stays as it is.
+      var mn = document.createElement('button');
+      mn.type = 'button';
+      mn.className = 'hx';
+      mn.dataset.minimize = '1';
+      mn.setAttribute('aria-label', tx('minimize', 'Minimize'));
+      mn.title = tx('minimize', 'Minimize');
+      mn.appendChild(svg(20, ['M6 19h12']));
+      mn.onclick = function (e) { e.stopPropagation(); closePops(); try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (err) {} };
+      hdr.appendChild(mn);
       hdr.appendChild(x);
     }
     var acc = cfg.button_bg || '#5B4DDB';
@@ -1173,6 +1355,8 @@ const SCRIPT = `
         } else {
           intakeDone = true;
           $('send').disabled = false;
+          botReady = transcript.length === 0;
+          startBot();
         }
         if (ageAsk && ageLocked()) blockChat(false);
       });
@@ -1180,12 +1364,37 @@ const SCRIPT = `
     // with a disabled Send button.
   }
 
+  // The visitor shares where they are, when the bot asked: the browser's own permission prompt decides.
+  function shareLocation() {
+    var b = $('locbtn');
+    if (PREVIEW || b.disabled) return;
+    if (!navigator.geolocation) { addBubble('in', tx('locationDenied', 'We could not get your location. Please allow location access and try again.'), { input: hint }); return; }
+    b.disabled = true;
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      b.disabled = false;
+      visitorSpeaks();
+      addBubble('out', '\\uD83D\\uDCCD ' + tx('shareLocation', 'Share my location'));
+      showTyping();
+      var payload = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+      var vid = storedUuid();
+      if (vid) payload.visitor_uuid = vid;
+      fetch(API_LOC, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function () { burstPoll(); })
+        .catch(function () { addBubble('in', tx('failed', "Sorry, that didn't go through. Please try again."), { input: hint }); });
+    }, function () {
+      b.disabled = false;
+      addBubble('in', tx('locationDenied', 'We could not get your location. Please allow location access and try again.'), { input: hint });
+    }, { enableHighAccuracy: false, timeout: 15000 });
+  }
+  $('locbtn').addEventListener('click', shareLocation);
+
   function send(tapTitle, tapId) {
     if (PREVIEW) return;
     var txt = $('txt');
     var body = typeof tapTitle === 'string' ? tapTitle : (txt.value || '').trim();
     if (!body) return;
-    if (hint && hint.type === 'date' && typeof tapTitle !== 'string') body = fmtDate(body, hint.format);
+    // A phone answer typed without a plus gets the chosen country's code in front of it.
+    if (typeof tapTitle !== 'string' && hint && hint.type === 'phone' && body.charAt(0) !== '+') body = '+' + $('cc').value + ' ' + body.replace(/^0+/, '');
     visitorSpeaks();
     toParent({ wgt: 'activity' });
     if (typeof tapTitle !== 'string') txt.value = '';
@@ -1337,8 +1546,14 @@ export function renderChatPage(w: ChatPageWidget): string {
   const script = SCRIPT.replace('__TOKEN__', () => jsString(w.token))
     .replace('__FLOW__', w.flow ? 'true' : 'false')
     .replace('__PREVIEW__', w.preview ? 'true' : 'false')
+    .replace('__SIZES__', () => JSON.stringify(CHAT_SIZE_PX))
     .replace('__TEXT__', () =>
       JSON.stringify(CHAT_TEXT[locale])
+        .replace(/</g, '\\u003c')
+        .replace(/\u2028|\u2029/g, ' '),
+    )
+    .replace('__COUNTRIES__', () =>
+      JSON.stringify(flbPhoneCountries(locale))
         .replace(/</g, '\\u003c')
         .replace(/\u2028|\u2029/g, ' '),
     );
@@ -1353,7 +1568,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <body>
 <header class="header" id="hdr"></header>
 <div class="pop" id="menupop" hidden role="menu"></div>
-<div class="pop" id="endpop" hidden role="menu"></div>
+<div class="modal" id="endmodal" hidden></div>
 <div class="pop" id="noticepop" hidden></div>
 <div class="banner" id="banner" hidden></div>
 <div class="stage">
@@ -1366,6 +1581,8 @@ export function renderChatPage(w: ChatPageWidget): string {
 <div class="sugg" id="sugg" hidden></div>
 <div id="intake" class="intake" style="display:none"></div>
 <div class="input-row">
+<select id="cc" class="cc" hidden></select>
+<button id="locbtn" class="locbtn" type="button">Share my location</button>
 <input id="txt" type="text" placeholder="Type a message…" aria-label="Type a message" autocomplete="off" />
 <label class="att" id="att"><input id="file" type="file" hidden /><span aria-hidden="true">&#128206;</span><span>Attach a file</span></label>
 <button class="mic" id="mic" type="button" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>

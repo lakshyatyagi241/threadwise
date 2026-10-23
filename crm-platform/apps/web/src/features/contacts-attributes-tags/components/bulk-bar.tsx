@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, Checkbox, Input, Popover, Select, Spinner } from '@crm/ui';
+import { Button, Checkbox, Input, Popover, Select, Spinner, Textarea } from '@crm/ui';
+import { CONSENT_CHANNELS, type ConsentAction, type ConsentChannel } from '@crm/contracts';
 import { useGroups } from '../api/groups';
 import { sameTagName, TAG_NAME_MAX, useTags } from '../api/tags';
 import { errorKind } from '../lib/errors';
@@ -14,7 +15,14 @@ export interface TagChoice {
 }
 
 /** Which bulk picker is open (they open from the "More actions" menu). */
-export type BulkPicker = 'groupAdd' | 'groupRemove' | 'tagAdd' | 'tagRemove' | null;
+export type BulkPicker = 'groupAdd' | 'groupRemove' | 'tagAdd' | 'tagRemove' | 'consent' | null;
+
+/** One marketing consent change for the selection: a channel, subscribe or unsubscribe, and the note a subscription needs. */
+export interface ConsentChoice {
+  channel: ConsentChannel;
+  action: ConsentAction;
+  note?: string;
+}
 
 /**
  * The group and tag pickers of the bulk actions (TW-CON-019..024). They are popovers anchored to the "More actions"
@@ -23,18 +31,34 @@ export type BulkPicker = 'groupAdd' | 'groupRemove' | 'tagAdd' | 'tagRemove' | n
 export function BulkPickers({
   picker,
   canCreateTags,
+  count,
   onClose,
   onGroup,
   onTag,
+  onConsent,
 }: {
   picker: BulkPicker;
   canCreateTags: boolean;
+  /** How many contacts the selection holds; `null` for "all matching" (the count is then not known here). */
+  count?: number | null;
   onClose: () => void;
   onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
   onTag: (action: 'add' | 'remove', choices: TagChoice[]) => Promise<boolean>;
+  /** Only the selection bar offers marketing consent; a row's own menu does not. */
+  onConsent?: (choice: ConsentChoice) => Promise<boolean>;
 }) {
   return (
     <>
+      {onConsent && (
+        <ConsentPicker
+          open={picker === 'consent'}
+          count={count ?? null}
+          onClose={onClose}
+          onApply={async (choice) => {
+            if (await onConsent(choice)) onClose();
+          }}
+        />
+      )}
       <GroupPicker
         open={picker === 'groupAdd' || picker === 'groupRemove'}
         action={picker === 'groupRemove' ? 'remove' : 'add'}
@@ -226,6 +250,139 @@ function TagPicker({
           {t('apply')}
         </Button>
       </div>
+    </Popover>
+  );
+}
+
+/**
+ * Marketing consent for the selection, one channel at a time. Two steps: the form (channel, subscribe or unsubscribe, and for a
+ * subscription the note of how the contacts agreed), then a confirmation that says what will be written, before anything is sent.
+ */
+function ConsentPicker({
+  open,
+  count,
+  onClose,
+  onApply,
+}: {
+  open: boolean;
+  count: number | null;
+  onClose: () => void;
+  onApply: (choice: ConsentChoice) => Promise<void>;
+}) {
+  const t = useTranslations('contacts-attributes-tags.bulk');
+  const tc = useTranslations('contact-consent.card.channel');
+  const [channel, setChannel] = useState<ConsentChannel>('whatsapp');
+  const [action, setAction] = useState<ConsentAction>('granted');
+  const [note, setNote] = useState('');
+  const [step, setStep] = useState<'form' | 'confirm'>('form');
+  const [problem, setProblem] = useState(false);
+  const [pending, setPending] = useState(false);
+  const needsNote = action === 'granted';
+  const choice: ConsentChoice = { channel, action, ...(needsNote ? { note: note.trim() } : {}) };
+
+  function reset() {
+    setStep('form');
+    setProblem(false);
+    setNote('');
+  }
+
+  function next() {
+    if (needsNote && !note.trim()) return setProblem(true);
+    setProblem(false);
+    setStep('confirm');
+  }
+
+  return (
+    <Popover
+      open={open}
+      onClose={() => {
+        reset();
+        onClose();
+      }}
+      label={t('consentTitle')}
+    >
+      <div className="text-xs font-semibold">{t('consentTitle')}</div>
+      {step === 'form' ? (
+        <>
+          <Select
+            aria-label={t('consentChannel')}
+            value={channel}
+            onChange={(e) => setChannel(e.target.value as ConsentChannel)}
+          >
+            {CONSENT_CHANNELS.map((c) => (
+              <option key={c} value={c}>
+                {tc(c)}
+              </option>
+            ))}
+          </Select>
+          <Select
+            aria-label={t('consentAction')}
+            value={action}
+            onChange={(e) => setAction(e.target.value as ConsentAction)}
+          >
+            <option value="granted">{t('consentSubscribe')}</option>
+            <option value="withdrawn">{t('consentUnsubscribe')}</option>
+          </Select>
+          {needsNote && (
+            <Textarea
+              aria-label={t('consentNote')}
+              placeholder={t('consentNotePlaceholder')}
+              maxLength={500}
+              rows={2}
+              value={note}
+              invalid={problem}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          )}
+          {problem && (
+            <p role="alert" className="text-xs text-danger">
+              {t('consentNoteRequired')}
+            </p>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" size="sm" onClick={onClose}>
+              {t('cancel')}
+            </Button>
+            <Button size="sm" onClick={next}>
+              {t('consentContinue')}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <p className="text-sm">
+            {t('consentSummary', {
+              channel: tc(channel),
+              change: t(action === 'granted' ? 'consentChangeGranted' : 'consentChangeWithdrawn'),
+              count: count ?? 0,
+            })}
+          </p>
+          {count === null && (
+            <p className="text-xs text-muted-foreground">{t('consentAllMatching')}</p>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" size="sm" onClick={() => setStep('form')}>
+              {t('consentBack')}
+            </Button>
+            <Button
+              size="sm"
+              disabled={pending}
+              onClick={async () => {
+                setPending(true);
+                try {
+                  await onApply(choice);
+                  reset();
+                } finally {
+                  setPending(false);
+                }
+              }}
+            >
+              {pending && <Spinner />}
+              {t('consentConfirm')}
+            </Button>
+          </div>
+        </>
+      )}
     </Popover>
   );
 }

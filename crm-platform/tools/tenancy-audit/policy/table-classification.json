@@ -154,6 +154,11 @@
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
+  "plan_addon_offers": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue (plan x plain add-on mode and price), catalogue_read, write operator-only",
+    "reviewed": "2026-10-22 (policy text written in 20270331090100_plan_addon_offers.sql)"
+  },
   "plans": {
     "class": "GLOBAL",
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",

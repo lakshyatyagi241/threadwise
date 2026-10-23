@@ -4,6 +4,7 @@
       "switches": {
         "title": "Atribuição de chats",
         "intro": "Quatro chaves cobrem a maioria dos espaços de trabalho: ative-as e você nunca precisará criar uma regra.",
+        "introBasic": "Seu plano não atribui conversas automaticamente: as novas conversas esperam na fila até alguém assumi-las. Estas configurações continuam valendo.",
         "order": "A ordem para um chat novo: primeiro o responsável pelo contato e o Agente fixo, depois suas regras (se você adicionar alguma), depois Todos os demais e por último a fila de espera.",
         "readOnly": "Você pode ver estas chaves, mas não pode alterá-las.",
         "saved": "Salvo.",
@@ -11,8 +12,6 @@
         "loading": "Carregando as configurações de atribuição",
         "loadFailed": "Não foi possível carregar as configurações de atribuição.",
         "retry": "Tentar novamente",
-        "notInPlan": "Não incluído no seu plano",
-        "upgradeHint": "Incluído no complemento Roteamento inteligente ou em um plano superior.",
         "stepFirst": "Verificado primeiro",
         "stepMaster": "Chave principal",
         "stepAfter": "Depois de assumir",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Precisa de mais controle? Adicione regras",
         "intro": "Opcional. As regras enviam chats específicos (de um canal, com certas palavras na mensagem, de um contato novo...) para agentes ou equipes específicos. Se as quatro chaves forem suficientes, você nunca precisará criar uma.",
-        "locked": "As regras fazem parte do complemento Roteamento inteligente ou de um plano superior. Você continua com a fila de espera, a captura de conversas e a atribuição manual.",
         "pipelineTitle": "Como um chat novo é atribuído",
         "pipeline": {
           "agent": "1. Responsável pelo contato e Agente fixo",

@@ -30,6 +30,17 @@ export const flows = pgTable(
     userId: idColumn('user_id'),
     flowName: text('flow_name').notNull(),
     flowData: jsonb('flow_data'),
+    // 2028_flows_published_flow_data.sql: the graph as it was when the flow was last published; a published flow runs this copy.
+    publishedFlowData: jsonb('published_flow_data'),
+    // 2029_flows_published_trigger_snapshot.sql: the trigger settings and sender as they were when the flow was last published; a
+    // published flow matches and sends on these, not on the draft columns above.
+    publishedTriggerKind: text('published_trigger_kind'),
+    publishedTriggerValue: bigint('published_trigger_value', { mode: 'number' }),
+    publishedTriggerKeywords: text('published_trigger_keywords'),
+    publishedTriggerConfig: jsonb('published_trigger_config'),
+    publishedTriggerDeviceId: idColumn('published_trigger_device_id'),
+    publishedTriggerChannelId: idColumn('published_trigger_channel_id'),
+    publishedProvider: text('published_provider'),
     flowFilePath: text('flow_file_path'),
     category: text('category'),
     triggerKind: text('trigger_kind').notNull().default('keyword'),

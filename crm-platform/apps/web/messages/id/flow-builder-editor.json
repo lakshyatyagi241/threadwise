@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (tidak ada di workspace)",
           "templateLabel": "Templat yang disetujui",
           "templateHint": "Hanya templat yang disetujui dari workspace yang tampil di sini. <link>Buat yang baru →</link>",
+          "statusExits": "Tambahkan jalur status (Terkirim, Sampai, Dibaca, Dibalas, Gagal)",
+          "statusExitsHint": "Alur keluar lewat jalur pertama yang memiliki langkah terhubung: Terkirim begitu templat diterima, Sampai atau Dibaca saat WhatsApp melaporkan, Dibalas saat pelanggan menulis, Gagal jika tidak bisa dikirim. Tombol yang diketuk pelanggan keluar lewat jalurnya sendiri.",
           "type": "Jenis",
           "kindText": "Teks",
           "kindImage": "Gambar",
@@ -1947,6 +1949,7 @@
       "webBot": {
         "aria": "Bagian alur",
         "build": "Bangun",
+        "faqs": "FAQ",
         "customize": "Sesuaikan",
         "saveFirst": "Simpan alur terlebih dahulu.",
         "needsCustomizing": "Widget masih memakai tampilan default. Buka Sesuaikan.",
@@ -1954,6 +1957,13 @@
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Kustomisasi tombol WhatsApp Anda dan simpan sekali sebelum mempublikasikan.",
         "install": "Pasang"
+      },
+      "faqsPanel": {
+        "intro": "FAQ adalah entri dalam pengetahuan agen AI. Ini milik agen yang dipakai alur ini untuk menjawab: tambahkan pertanyaan dan jawaban di sini dan agen akan memakainya.",
+        "noAgent": "Alur ini belum memakai agen AI. Tambahkan langkah Asisten AI atau Jawab dari FAQ dan pilih agen: FAQ-nya muncul di sini.",
+        "agent": "Agen AI",
+        "openAgent": "Buka di Pelatihan AI",
+        "unknownAgent": "Agen AI (tidak ditemukan)"
       },
       "buttonIcon": {
         "label": "Ikon (opsional)",
@@ -2353,6 +2363,8 @@
         "number": "Angka",
         "alphanumeric": "Huruf dan angka",
         "date": "Tanggal",
+        "datetime": "Tanggal dan waktu",
+        "time": "Waktu",
         "age": "Usia",
         "date_of_birth": "Tanggal lahir"
       },
@@ -2364,6 +2376,8 @@
         "number": "Masukkan angka yang valid",
         "alphanumeric": "Gunakan huruf dan angka saja",
         "date": "Masukkan tanggal yang valid ({format})",
+        "datetime": "Masukkan tanggal dan waktu yang valid ({format} HH:MM)",
+        "time": "Masukkan waktu yang valid (HH:MM)",
         "age": "Masukkan usia Anda sebagai bilangan bulat",
         "date_of_birth": "Masukkan tanggal yang valid ({format})"
       },

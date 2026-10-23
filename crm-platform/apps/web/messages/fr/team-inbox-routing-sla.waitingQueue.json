@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "File d'attente",
       "intro": "Les conversations que personne n'a prises attendent dans l'onglet En attente. Ces étapes facultatives aident à les traiter. Chaque étape s'exécute une fois par conversation, ne compte que les minutes où l'équipe est ouverte et s'arrête dès que quelqu'un prend la conversation.",
+      "introBasic": "Les conversations que personne n’a prises attendent dans l’onglet En attente jusqu’à ce que quelqu’un les prenne.",
       "remind": "Rappeler l'équipe",
       "remindBody": "Prévient les personnes qui peuvent prendre la conversation.",
       "overflow": "Proposer à une autre équipe",

@@ -1,7 +1,7 @@
 // Pure helpers for the Google Chat bridge and the slow-query watcher: sanitizer, router, formatter, sender, dedup, rate limit.
 // No dependencies. Webhook URLs are secrets: nothing here logs or returns them.
 
-export const CHANNELS = ['critical', 'slowquery', 'deploy'];
+export const CHANNELS = ['critical', 'slowquery', 'deploy', 'other', 'sentry'];
 const MAX_TEXT = 3500; // Chat caps a message text at 4096 chars; cards are counted by the text they hold, keep a margin.
 const MAX_WIDGETS = 40;
 
@@ -28,7 +28,7 @@ export const isTest = (a) => a?.labels?.test === 'true';
 export const isSlowQuery = (a) => a?.labels?.group === 'slow_query' || a?.labels?.kind === 'slow_query';
 
 // Routing: test -> none (TEST_ALERTS_CHANNEL=none|slowquery|critical, demos/tests only); slow_query (any severity) -> slowquery; severity=critical -> critical; the rest -> NON_CRITICAL_CHANNEL
-// (none|slowquery, default none = dropped). The deploy channel is never chosen here (release watcher and notify-chat.sh only).
+// (none|slowquery|other, default none = dropped; other = the Other alerts space, needs secrets/gchat_other_url). The deploy channel is never chosen here (release watcher and notify-chat.sh only).
 export function routeFor(a, env = process.env) {
   if (isTest(a)) { // test alerts never reach a production channel unless a demo/test opts in
     const c = env.TEST_ALERTS_CHANNEL;
@@ -37,6 +37,7 @@ export function routeFor(a, env = process.env) {
   if (isSlowQuery(a)) return { channel: 'slowquery', reason: 'slow query (any severity)' };
   if (a?.labels?.severity === 'critical') return { channel: 'critical', reason: 'severity=critical' };
   if (env.NON_CRITICAL_CHANNEL === 'slowquery') return { channel: 'slowquery', reason: 'NON_CRITICAL_CHANNEL=slowquery' };
+  if (env.NON_CRITICAL_CHANNEL === 'other') return { channel: 'other', reason: 'NON_CRITICAL_CHANNEL=other (the Other alerts space)' };
   return { channel: 'none', reason: 'not routed: only critical and slow-query alerts reach Chat' };
 }
 export const channelFor = (a, env) => routeFor(a, env).channel;
@@ -58,6 +59,7 @@ function alertWidgets(a, grafanaUrl) {
   if (where) w.push({ decoratedText: { topLabel: 'Instance / job', text: esc(trunc(where, 200)) } });
   const t = [`started ${fmtTime(a.startsAt)}`, resolved && fmtTime(a.endsAt) ? `ended ${fmtTime(a.endsAt)}` : ''].filter(Boolean).join(', ');
   if (t) w.push({ decoratedText: { topLabel: 'Time', text: t } });
+  if ((n.runbook || n.runbook_url) && !safeUrl(n.runbook_url ?? n.runbook)) w.push({ decoratedText: { topLabel: 'Runbook', text: esc(trunc(n.runbook_url ?? n.runbook, 300)), wrapText: true } }); // repo path, no link possible
   const buttons = [];
   if (n.runbook_url || n.runbook) buttons.push({ text: 'Runbook', onClick: { openLink: { url: safeUrl(n.runbook_url ?? n.runbook) } } });
   const g = n.dashboard_url ?? (grafanaUrl ? `${grafanaUrl.replace(/\/$/, '')}/alerting/list` : '');

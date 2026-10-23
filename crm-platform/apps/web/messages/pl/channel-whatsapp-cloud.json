@@ -401,7 +401,37 @@
           "message": "{name} nie jest połączony, więc nie można wysyłać odpowiedzi. Notatki wewnętrzne nadal działają."
         },
         "open": "Otwórz ustawienia WhatsApp",
-        "askAdmin": "Poproś osobę zarządzającą kanałami o ponowne połączenie."
+        "askAdmin": "Poproś osobę zarządzającą kanałami o ponowne połączenie.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Ta skrzynka e-mail wymaga ponownego połączenia.",
+            "message": "{name} nie akceptuje już zapisanego logowania, więc nie można wysyłać odpowiedzi. Notatki wewnętrzne nadal działają."
+          },
+          "error": {
+            "title": "Ta skrzynka e-mail ma problem z połączeniem.",
+            "message": "Połączenie z {name} jest w stanie błędu, więc nie można wysyłać odpowiedzi. Notatki wewnętrzne nadal działają."
+          },
+          "not_connected": {
+            "title": "Ta skrzynka e-mail jest rozłączona.",
+            "message": "Brak połączenia z {name}, więc nie można wysyłać odpowiedzi, dopóki połączenie nie zostanie przywrócone. Notatki wewnętrzne nadal działają."
+          },
+          "open": "Otwórz ustawienia skrzynki e-mail"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Ten kanał wymaga ponownego połączenia.",
+            "message": "{name} nie akceptuje już zapisanych danych logowania, więc nie można wysyłać odpowiedzi. Notatki wewnętrzne nadal działają."
+          },
+          "error": {
+            "title": "Ten kanał ma problem z połączeniem.",
+            "message": "Połączenie z {name} jest w stanie błędu, więc nie można wysyłać odpowiedzi. Notatki wewnętrzne nadal działają."
+          },
+          "not_connected": {
+            "title": "Ten kanał jest wyłączony.",
+            "message": "Brak połączenia z {name}, więc nie można wysyłać odpowiedzi. Notatki wewnętrzne nadal działają."
+          },
+          "open": "Otwórz ustawienia kanału"
+        }
       },
       "failure": {
         "openSettings": "Otwórz ustawienia WhatsApp",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne.",
           "hint": "Odpowiedz z aplikacji WhatsApp Business."
-        }
+        },
+        "openChannelSettings": "Otwórz ustawienia kanału"
       },
       "media": {
         "downloading": "Pobieranie pliku",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Ten numer nie może wysyłać: {kind}.",
           "unsupportedType": "WhatsApp nie akceptuje tego typu pliku. Obsługuje obrazy JPEG i PNG, wideo MP4 i 3GP, audio AAC, MP3, AMR, M4A i OGG oraz dokumenty PDF, Office i tekstowe.",
           "empty": "Ten plik jest pusty."
+        },
+        "tip": "Dołącz plik. Obsługiwane formaty i rozmiary: {list}",
+        "tipLimit": {
+          "image": "Obrazy do {mb} MB ({formats})",
+          "video": "Wideo do {mb} MB ({formats})",
+          "audio": "Audio do {mb} MB ({formats})",
+          "document": "Dokumenty do {mb} MB ({formats})"
         }
       }
     }

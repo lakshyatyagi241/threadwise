@@ -415,6 +415,10 @@
         "tooLarge": "이미지가 1 MB보다 큽니다."
       }
     },
+    "fullPage": {
+      "open": "전체 화면",
+      "close": "전체 화면 종료"
+    },
     "flowBot": {
       "customize": {
         "loading": "위젯을 불러오는 중…",

@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Wachtrij",
       "intro": "Chats die niemand heeft opgepakt wachten op het tabblad Wachtend. Deze optionele stappen helpen om ze te beantwoorden. Elke stap loopt één keer per chat, telt alleen de minuten dat het team open is en stopt zodra iemand de chat oppakt.",
+      "introBasic": "Chats die niemand heeft opgepakt wachten op het tabblad Wachtend tot iemand ze oppakt.",
       "remind": "Het team herinneren",
       "remindBody": "Waarschuwt de mensen die de chat kunnen oppakken.",
       "overflow": "Aanbieden aan een ander team",

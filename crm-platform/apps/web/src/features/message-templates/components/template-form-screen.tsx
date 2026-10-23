@@ -47,6 +47,7 @@ import {
   contractIssues,
   initialState,
   isAuth,
+  isCarousel,
   previewOf,
   stateFromDetail,
   tidyName,
@@ -55,19 +56,29 @@ import {
   toLintInput,
   toUpdateInput,
   withBody,
+  withCardFormat,
   withHeaderKind,
   withHeaderText,
+  withButtonType,
   type FormState,
+  type ButtonType,
+  type HeaderKind,
+  BUTTON_TYPES,
+  KINDS_OF_BUTTON_TYPE,
+  OFFER_TEXT_MAX,
+  isOffer,
 } from '../lib/form-model';
 import { languageOptions } from '../lib/languages';
 import { CATEGORIES, canEdit, isLive } from '../lib/status-model';
 import { connectionLabel, usableConnections } from '../lib/sync';
 import { tokensOf } from '../lib/variables';
 import { ButtonsEditor } from './buttons-editor';
+import type { AddableKind } from '../lib/buttons';
 import { ErrorAlert } from './error-line';
 import { HeaderSection } from './header-section';
 import { IssueList, LintPanel } from './lint-panel';
 import { PhonePreview } from './message-bubble';
+import { CardsEditor } from './cards-editor';
 import { SparkIcon } from './icons';
 import { TemplateAiModal } from './template-ai-modal';
 import { useErrorText, type ErrorText } from './use-error-text';
@@ -98,6 +109,9 @@ function Section({ title, hint, children }: { title: string; hint?: string; chil
 }
 
 /** TW-TPL-005/006: `/templates/new` and `/templates/[id]/edit`. Edit loads the saved template first. */
+/** A limited-time offer shows a picture or a video above its text. */
+const OFFER_HEADER_KINDS: readonly HeaderKind[] = ['image', 'video'];
+
 export function TemplateFormScreen({
   id,
   copyFrom,
@@ -327,6 +341,8 @@ function TemplateForm({
   // A template live on Meta is edited in place there: Meta keeps its name and language.
   const live = detail ? isLive(detail.status, detail.metaTemplateId) : false;
   const auth = isAuth(current);
+  const carousel = isCarousel(current);
+  const offer = isOffer(current);
   const nameOk = current.name.trim() !== '';
   const canDraft = nameOk && current.connectionId !== '' && !hasContractIssues && !busy;
   const canSubmit = canDraft && lintErrors === 0 && localButtonIssues.length === 0 && !checking;
@@ -572,6 +588,29 @@ function TemplateForm({
                 </Select>
                 <IssueList issues={issues} field="language" />
               </Field>
+              {!auth && (
+                <Field
+                  label={t('type.label')}
+                  htmlFor={`${base}-type`}
+                  hint={t('type.hint')}
+                  className="sm:col-span-2"
+                >
+                  <Select
+                    id={`${base}-type`}
+                    value={current.buttonType}
+                    disabled={live}
+                    onChange={(e) =>
+                      setState((s) => withButtonType(s, e.target.value as ButtonType))
+                    }
+                  >
+                    {BUTTON_TYPES.map((b) => (
+                      <option key={b} value={b}>
+                        {t(`type.${b}`)}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              )}
             </div>
           </Section>
 
@@ -601,12 +640,63 @@ function TemplateForm({
               </Field>
               <p className="text-sm text-muted-foreground">{t('auth.fixedBody')}</p>
             </Section>
+          ) : carousel ? (
+            <>
+              <Section title={t('body.title')} hint={t('body.hint')}>
+                <Field
+                  label={t('body.label')}
+                  htmlFor={`${base}-body`}
+                  error={contract.body ? t('errors.body', { max: BODY_MAX }) : undefined}
+                >
+                  <Textarea
+                    id={`${base}-body`}
+                    ref={bodyRef}
+                    rows={4}
+                    value={current.body}
+                    invalid={Boolean(contract.body)}
+                    onChange={(e) => setState((s) => withBody(s, e.target.value))}
+                  />
+                  <p
+                    className={
+                      bodyCount.over ? 'text-xs text-danger' : 'text-xs text-muted-foreground'
+                    }
+                    aria-live="polite"
+                  >
+                    {t('body.counter', { used: bodyCount.used, max: bodyCount.max })}
+                  </p>
+                  <IssueList issues={issues} field="body" />
+                </Field>
+              </Section>
+
+              <Section title={t('variables.title')}>
+                <VariablesPanel
+                  headerText=""
+                  headerSlots={current.headerSlots}
+                  body={current.body}
+                  bodySlots={current.bodySlots}
+                  onHeader={(headerSlots) => set({ headerSlots })}
+                  onBody={(bodySlots) => set({ bodySlots })}
+                />
+              </Section>
+
+              <Section title={t('cards.title')} hint={t('cards.hint')}>
+                <CardsEditor
+                  connectionId={current.connectionId}
+                  format={current.cards[0]?.format ?? 'image'}
+                  cards={current.cards}
+                  onFormat={(f) => setState((s) => withCardFormat(s, f))}
+                  onChange={(cards) => set({ cards })}
+                />
+                <IssueList issues={issues} field="cards" />
+              </Section>
+            </>
           ) : (
             <>
               <Section title={t('header.title')} hint={t('header.hint')}>
                 <HeaderSection
                   state={current}
                   headerError={contract.header ? t('errors.header') : undefined}
+                  kinds={offer ? OFFER_HEADER_KINDS : undefined}
                   onKind={(k) => setState((s) => withHeaderKind(s, k))}
                   onText={(v) => setState((s) => withHeaderText(s, v))}
                   onUploaded={(r) =>
@@ -620,6 +710,42 @@ function TemplateForm({
                 />
                 <IssueList issues={issues} field="header" />
               </Section>
+
+              {offer && (
+                <Section title={t('offer.title')} hint={t('offer.hint')}>
+                  <Field
+                    label={t('offer.text')}
+                    htmlFor={`${base}-offer`}
+                    hint={t('offer.textHint', {
+                      used: current.offerText.length,
+                      max: OFFER_TEXT_MAX,
+                    })}
+                  >
+                    <Input
+                      id={`${base}-offer`}
+                      value={current.offerText}
+                      maxLength={OFFER_TEXT_MAX + 10}
+                      placeholder={t('offer.placeholder')}
+                      invalid={current.offerText.length > OFFER_TEXT_MAX}
+                      onChange={(e) => set({ offerText: e.target.value })}
+                    />
+                  </Field>
+                  <label className="flex items-start gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      checked={current.offerCountdown}
+                      onChange={(e) => set({ offerCountdown: e.target.checked })}
+                    />
+                    <span>
+                      {t('offer.countdown')}
+                      <span className="block text-xs text-muted-foreground">
+                        {t('offer.countdownHint')}
+                      </span>
+                    </span>
+                  </label>
+                </Section>
+              )}
 
               <Section title={t('body.title')} hint={t('body.hint')}>
                 <div role="toolbar" aria-label={t('body.toolbar')} className="flex flex-wrap gap-1">
@@ -673,33 +799,41 @@ function TemplateForm({
                 />
               </Section>
 
-              <Section title={t('footer.title')}>
-                <Field
-                  label={t('footer.label')}
-                  htmlFor={`${base}-footer`}
-                  hint={t('footer.hint', { used: current.footer.length, max: FOOTER_MAX })}
-                  error={contract.footer ? t('errors.footer') : undefined}
-                >
-                  <Input
-                    id={`${base}-footer`}
-                    value={current.footer}
-                    maxLength={FOOTER_MAX + 20}
-                    invalid={Boolean(contract.footer)}
-                    onChange={(e) => set({ footer: e.target.value })}
-                  />
-                  <OptOutFooterSuggestion
-                    footer={current.footer}
-                    max={FOOTER_MAX}
-                    onUse={(line) => set({ footer: line })}
-                  />
-                  <IssueList issues={issues} field="footer" />
-                </Field>
-              </Section>
+              {!offer && (
+                <Section title={t('footer.title')}>
+                  <Field
+                    label={t('footer.label')}
+                    htmlFor={`${base}-footer`}
+                    hint={t('footer.hint', { used: current.footer.length, max: FOOTER_MAX })}
+                    error={contract.footer ? t('errors.footer') : undefined}
+                  >
+                    <Input
+                      id={`${base}-footer`}
+                      value={current.footer}
+                      maxLength={FOOTER_MAX + 20}
+                      invalid={Boolean(contract.footer)}
+                      onChange={(e) => set({ footer: e.target.value })}
+                    />
+                    <OptOutFooterSuggestion
+                      footer={current.footer}
+                      max={FOOTER_MAX}
+                      onUse={(line) => set({ footer: line })}
+                    />
+                    <IssueList issues={issues} field="footer" />
+                  </Field>
+                </Section>
+              )}
 
-              <Section title={t('buttons.title')} hint={t('buttons.hint')}>
-                <ButtonsEditor rows={current.buttons} onChange={(buttons) => set({ buttons })} />
-                <IssueList issues={issues} field="buttons" />
-              </Section>
+              {current.buttonType !== 'none' && (
+                <Section title={t('buttons.title')} hint={t('buttons.hint')}>
+                  <ButtonsEditor
+                    rows={current.buttons}
+                    kinds={KINDS_OF_BUTTON_TYPE[current.buttonType] as AddableKind[]}
+                    onChange={(buttons) => set({ buttons })}
+                  />
+                  <IssueList issues={issues} field="buttons" />
+                </Section>
+              )}
             </>
           )}
           <IssueList issues={issues} field="template" />

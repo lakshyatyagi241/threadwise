@@ -7,6 +7,7 @@ import type {
   DetectedTranslation,
   TranslationDriver,
 } from '../../infra/providers/localization-translation/translation-driver.port';
+import { fingerprint } from '../../common/stable-usage-id';
 import { lookupCommonPhrase } from './common-phrases';
 import { detectScriptLanguage } from './language-detector';
 import { ProviderRouterService, type TranslationContext } from './provider-router.service';
@@ -28,7 +29,9 @@ const FAILED = '__failed__';
  *
  * Layers, cheapest first: the offline dictionary, a 24-hour cache, then the provider chain. Providers are tried in
  * order until one answers; a call that reached a provider is recorded in the usage ledger against the workspace in
- * `ctx`. Nothing here throws on a provider problem: the caller gets null and sends the original text.
+ * `ctx`. A paid provider (DeepL, Google Cloud) is skipped for a workspace whose wallet cannot pay for it, and its answers are charged
+ * to that wallet (see TranslationUsageService); a cache hit costs nothing. Nothing here throws on a provider problem: the caller gets
+ * null and sends the original text.
  *
  * Differences from Reference, each deliberate:
  *   - the workspace is passed in, not read from whoever is logged in, so residency and the ledger work for webhooks
@@ -75,8 +78,14 @@ export class TranslationService {
 
     const started = Date.now();
     let tried = 0;
+    let walletSkipped = false;
     for (const driver of drivers) {
       if (tried > 0 && Date.now() - started > CHAIN_BUDGET_MS) break;
+      // A paid provider is only asked for a workspace whose wallet can pay; the next provider is tried instead.
+      if (!(await this.usage.canUse(ctx.orgId, driver.slug))) {
+        walletSkipped = true;
+        continue;
+      }
       tried += 1;
       const out = await driver.translate(clean, src, dst);
       if (out) {
@@ -87,12 +96,14 @@ export class TranslationService {
           charsIn: [...clean].length,
           charsOut: [...out].length,
           wasFallback: tried > 1,
+          textHash: fingerprint(clean),
         });
         await this.cache.set(key, out, SUCCESS_TTL);
         return out;
       }
     }
-    await this.cache.set(key, FAILED, FAILURE_TTL);
+    // The cache is shared by every workspace: a refusal that came from THIS wallet must not be served to one that can pay.
+    if (!walletSkipped) await this.cache.set(key, FAILED, FAILURE_TTL);
     return null;
   }
 
@@ -128,10 +139,15 @@ export class TranslationService {
     let servedBy: TranslationDriver | null = null;
     let tried = 0;
     let servedAt = 0;
+    let walletSkipped = false;
     const started = Date.now();
 
     for (const driver of drivers) {
       if (tried > 0 && Date.now() - started > CHAIN_BUDGET_MS) break;
+      if (!(await this.usage.canUse(ctx.orgId, driver.slug))) {
+        walletSkipped = true;
+        continue;
+      }
       tried += 1;
       const r = await driver.detectAndTranslate(clean, dst);
       if (!servedBy && (r.language || r.text)) {
@@ -151,13 +167,17 @@ export class TranslationService {
         charsIn: [...clean].length,
         charsOut: merged.text ? [...merged.text].length : 0,
         wasFallback: servedAt > 1 || tried > 1,
+        textHash: fingerprint(clean),
       });
     }
-    await this.cache.set(
-      key,
-      JSON.stringify(merged),
-      merged.language && merged.text ? SUCCESS_TTL : FAILURE_TTL,
-    );
+    // Only an answer that was not shaped by this workspace's wallet is shared through the cache (see `translate`).
+    if (!walletSkipped || (merged.language && merged.text)) {
+      await this.cache.set(
+        key,
+        JSON.stringify(merged),
+        merged.language && merged.text ? SUCCESS_TTL : FAILURE_TTL,
+      );
+    }
     return merged;
   }
 

@@ -378,6 +378,23 @@ export const widgetFeedbackRequestSchema = z.object({
 });
 export type WidgetFeedbackRequest = z.infer<typeof widgetFeedbackRequestSchema>;
 
+/**
+ * `POST /widget/<token>/api/rating`: the visitor's stars (and a few words) when they end the chat. "Restart chat" sends the default five
+ * stars on its own. The team sees it as one line on the thread; a second one on the same thread is ignored.
+ */
+export const widgetRatingRequestSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().trim().max(1000).optional(),
+});
+export type WidgetRatingRequest = z.infer<typeof widgetRatingRequestSchema>;
+
+/** `POST /widget/<token>/api/location`: where the visitor is, when a flow bot asked for it and they pressed "Share my location". */
+export const widgetLocationRequestSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+});
+export type WidgetLocationRequest = z.infer<typeof widgetLocationRequestSchema>;
+
 /** The kinds of file a flow bot can show in the chat window. */
 export const WIDGET_MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 export type WidgetMediaKind = (typeof WIDGET_MEDIA_KINDS)[number];

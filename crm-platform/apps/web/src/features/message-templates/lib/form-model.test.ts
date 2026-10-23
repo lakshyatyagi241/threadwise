@@ -18,10 +18,16 @@ import {
   toCreateInput,
   toLintInput,
   toUpdateInput,
+  newCard,
   withBody,
+  withCardFormat,
   withHeaderKind,
   withHeaderText,
+  withKind,
   type FormState,
+  buttonTypeOf,
+  toFields,
+  withButtonType,
 } from './form-model';
 
 const CONN = '11111111-1111-4111-8111-111111111111';
@@ -248,5 +254,148 @@ describe('location header', () => {
   it('clears the pin when the attachment changes', () => {
     const s = withHeaderKind(pin({ locationName: 'HQ' }), 'image');
     expect([s.latitude, s.longitude, s.locationName, s.locationAddress]).toEqual(['', '', '', '']);
+  });
+});
+
+describe('a carousel template', () => {
+  const card = (over: Record<string, unknown> = {}) => ({
+    ...newCard(),
+    handle: '4::aGFuZGxl',
+    mediaKey: 'template-media/1/a.png',
+    previewUrl: 'https://files.example/a.png',
+    body: 'Summer sale',
+    buttons: [{ ...newRow('url'), text: 'Shop', url: 'https://example.com/shop' }],
+    ...over,
+  });
+  const carousel = (cards = [card(), card({ body: 'Winter sale' })]): FormState => ({
+    ...withKind(filled({ name: 'seasonal', metaCategory: 'MARKETING', footer: 'x' }), 'carousel'),
+    cards,
+  });
+
+  it('starts with two empty cards and drops them when it goes back to standard', () => {
+    const s = withKind(initialState(CONN), 'carousel');
+    expect(s.cards).toHaveLength(2);
+    expect(withKind(s, 'standard').cards).toEqual([]);
+  });
+
+  it('sends its cards and none of the header, footer or buttons of a standard template', () => {
+    const f = toCreateInput(carousel(), false);
+    expect(f).toMatchObject({
+      templateType: 'carousel',
+      header: null,
+      footer: null,
+      buttons: [],
+      attachmentType: 'none',
+    });
+    expect(f.cards).toEqual([
+      {
+        format: 'image',
+        image: 'template-media/1/a.png',
+        headerHandle: '4::aGFuZGxl',
+        headerSampleUrl: 'https://files.example/a.png',
+        body: 'Summer sale',
+        buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/shop' }],
+      },
+      expect.objectContaining({ body: 'Winter sale' }),
+    ]);
+    expect(createTemplateInputSchema.safeParse(f).success).toBe(true);
+  });
+
+  it("keeps a saved card's file when no new one is chosen, and shows it in the preview", () => {
+    const detail = {
+      id: '22222222-2222-4222-8222-222222222222',
+      name: 'seasonal',
+      language: 'en_US',
+      metaCategory: 'MARKETING',
+      status: 'draft',
+      connectionId: CONN,
+      header: null,
+      attachmentType: 'none',
+      headerSampleUrl: null,
+      body: 'Our picks',
+      footer: null,
+      buttons: [],
+      variableMap: {},
+      codeExpirationMinutes: null,
+      parameterFormat: 'POSITIONAL',
+      templateType: 'carousel',
+      cards: [
+        {
+          format: 'image',
+          image: 'template-media/1/a.png',
+          imageUrl: 'https://files.example/a.png',
+          body: 'One',
+          buttons: [],
+        },
+        {
+          format: 'image',
+          image: null,
+          imageUrl: 'https://scontent.example/b.png',
+          body: 'Two',
+          buttons: [],
+        },
+      ],
+    } as unknown as TemplateDetail;
+    const s = stateFromDetail(detail);
+    expect(s.kind).toBe('carousel');
+    const f = toUpdateInput(s, 1, false);
+    expect(f.cards![0]).toMatchObject({ image: 'template-media/1/a.png', headerHandle: null });
+    expect(f.cards![1]).toMatchObject({
+      image: null,
+      headerSampleUrl: 'https://scontent.example/b.png',
+    });
+    expect(previewOf(s).cards?.map((c) => c.imageUrl)).toEqual([
+      'https://files.example/a.png',
+      'https://scontent.example/b.png',
+    ]);
+  });
+
+  it('drops the chosen files when the cards change from pictures to videos', () => {
+    const s = withCardFormat(carousel(), 'video');
+    expect(
+      s.cards.every((c) => c.format === 'video' && !c.handle && !c.mediaKey && !c.previewUrl),
+    ).toBe(true);
+  });
+});
+
+describe('button type', () => {
+  it('a limited-time offer is a Marketing template with a picture header, an offer and its two buttons', () => {
+    const s = withButtonType(initialState('c1'), 'lto');
+    expect(s).toMatchObject({ kind: 'lto', metaCategory: 'MARKETING', headerKind: 'image' });
+    expect(s.buttons.map((b) => b.kind)).toEqual(['copy_code', 'url']);
+    const f = toFields({
+      ...s,
+      name: 'summer',
+      offerText: ' Expiring offer! ',
+      body: 'Hello',
+      footer: 'ignored',
+    });
+    expect(f).toMatchObject({
+      templateType: 'lto',
+      attachmentType: 'image',
+      footer: null,
+      limitedOffer: { text: 'Expiring offer!', hasExpiration: true },
+    });
+  });
+
+  it('catalogue and flow put their one button in; none and buttons take the others out', () => {
+    expect(withButtonType(initialState(), 'catalogue').buttons.map((b) => b.kind)).toEqual([
+      'catalog',
+    ]);
+    const flow = withButtonType(initialState(), 'flow');
+    expect(flow.buttons.map((b) => b.kind)).toEqual(['form']);
+    expect(withButtonType(flow, 'buttons').buttons).toEqual([]);
+    expect(withButtonType(flow, 'none').buttons).toEqual([]);
+  });
+
+  it('is read back from a saved template', () => {
+    expect(buttonTypeOf({ templateType: 'lto', buttons: [] })).toBe('lto');
+    expect(buttonTypeOf({ templateType: 'carousel', buttons: [] })).toBe('carousel');
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'CATALOG' }] })).toBe(
+      'catalogue',
+    );
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'FLOW' }] })).toBe('flow');
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'URL' }] })).toBe('buttons');
+    expect(buttonTypeOf({ templateType: 'standard', buttons: [] })).toBe('none');
   });
 });

@@ -58,7 +58,11 @@
       "moreButtons": "{count, plural, one {+# more button} other {+# more buttons}}",
       "live": "Live preview",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Carousel cards",
+      "cardEmpty": "Text of card {n}",
+      "offerExpires": "Ends soon",
+      "offerTextEmpty": "Offer heading"
     },
     "card": {
       "engine": "Meta WABA",
@@ -113,6 +117,7 @@
         "all": "All",
         "approved": "Approved",
         "pending": "In review",
+        "draft": "Draft",
         "rejected": "Rejected"
       },
       "quickStartTitle": "Quick start",
@@ -145,6 +150,7 @@
       "legend": {
         "approved": "Approved",
         "pending": "In review",
+        "draft": "Draft",
         "rejected": "Rejected"
       },
       "helpLabel": "Help - 0{n}",
@@ -188,7 +194,8 @@
         "body": "Body",
         "footer": "Footer",
         "buttons": "Buttons",
-        "template": "Template"
+        "template": "Template",
+        "cards": "Cards"
       }
     },
     "form": {
@@ -271,7 +278,7 @@
         "uploading": "Uploading",
         "keptSample": "The saved sample is kept. Choose a file to replace it.",
         "noFile": "No file chosen",
-        "limits": "Image up to 5 MB, video up to 16 MB, PDF up to 100 MB.",
+        "limits": "Image up to 5 MB, video up to 16 MB, PDF up to 10 MB.",
         "replace": "Replace file",
         "choose": "Choose sample file",
         "tooBig": "This {kind} is {size} MB. WhatsApp accepts up to {max} MB. Choose a smaller file.",
@@ -315,14 +322,18 @@
           "quick_reply": "Quick reply",
           "url": "Visit website",
           "phone": "Call phone",
-          "copy_code": "Copy code"
+          "copy_code": "Copy code",
+          "form": "Form",
+          "catalog": "Catalog"
         },
         "kind": {
           "quick_reply": "Quick reply",
           "url": "Visit website",
           "phone": "Call phone",
           "copy_code": "Copy code",
-          "other": "Other"
+          "other": "Other",
+          "form": "Form",
+          "catalog": "Catalog"
         },
         "count": "{used}/{max} buttons",
         "limitReached": "At most {max} of this kind.",
@@ -351,8 +362,17 @@
           "codeRequired": "Enter a sample code.",
           "quickReplyVariable": "A quick reply cannot contain a variable.",
           "urlExampleRequired": "Give a sample value for the URL variable.",
-          "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons."
-        }
+          "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons.",
+          "flowIdRequired": "Enter the Flow ID.",
+          "flowIdInvalid": "The Flow ID is a number.",
+          "screenRequired": "Enter the screen ID.",
+          "catalogAlone": "A catalog button cannot be combined with other buttons."
+        },
+        "catalogHint": "Opens your WhatsApp catalog. The button says “View catalog” and must be the only button.",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "The numeric ID of a published WhatsApp Flow, from Meta's Flows manager.",
+        "screen": "Opening screen",
+        "screenHint": "The ID of the screen the form opens on, for example WELCOME."
       },
       "result": {
         "metaRefused": "Saved, but Meta refused the template.",
@@ -366,6 +386,46 @@
         "open": "Build with AI",
         "applied": "Template draft filled from AI. Review it before you submit.",
         "authHint": "Authentication templates have a fixed text, so there is nothing to draft."
+      },
+      "type": {
+        "label": "Button type",
+        "standard": "Standard",
+        "carousel": "Carousel",
+        "hint": "Pick what the message ends with. A carousel is a row of cards; a limited-time offer has an offer heading with an optional countdown, and a copy-code or website button.",
+        "none": "None",
+        "buttons": "Copy code, website, quick replies etc.",
+        "lto": "Limited time offer",
+        "catalogue": "Catalogue",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Cards",
+        "hint": "2 to 10 cards. Every card uses the same kind of file and the same buttons.",
+        "format": "Cards show",
+        "formatImage": "Pictures",
+        "formatVideo": "Videos",
+        "count": "{used}/{max} cards",
+        "add": "Add card",
+        "needTwo": "A carousel needs at least {min} cards.",
+        "card": "Card {n}",
+        "remove": "Remove card {n}",
+        "noFile": "No file chosen",
+        "uploading": "Uploading",
+        "text": "Card text",
+        "textCounter": "{used}/{max}",
+        "buttons": "Buttons",
+        "buttonText": "Button text",
+        "buttonUrl": "Website URL",
+        "buttonPhone": "Phone number"
+      },
+      "offer": {
+        "title": "Limited time offer",
+        "hint": "Shown under the picture or video: a heading and, if you like, a countdown to the end of the offer.",
+        "text": "Offer heading",
+        "textHint": "{used}/{max}",
+        "placeholder": "Expiring offer!",
+        "countdown": "Show a countdown",
+        "countdownHint": "WhatsApp shows the time left until the offer ends."
       }
     },
     "detail": {

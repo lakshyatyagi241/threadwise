@@ -415,6 +415,10 @@
         "tooLarge": "图片超过 1 MB。"
       }
     },
+    "fullPage": {
+      "open": "全屏",
+      "close": "退出全屏"
+    },
     "flowBot": {
       "customize": {
         "loading": "正在加载小组件…",

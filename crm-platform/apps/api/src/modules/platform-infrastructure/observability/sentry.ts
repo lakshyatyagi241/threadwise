@@ -41,8 +41,23 @@ export function initSentry(service: ServiceName, env: NodeJS.ProcessEnv = proces
   const dsn = env.SENTRY_DSN?.trim();
   if (!dsn || enabled) return enabled;
 
+  Sentry.init(sentryOptions(service, dsn, env));
+  enabled = true;
+  return true;
+}
+
+/**
+ * `tracePropagationTargets: []` keeps the SDK from adding `sentry-trace` and `baggage` headers (our release and workspace ids) to the
+ * requests this server makes to other people's servers: the API library's test button, webhooks, media downloads. Nothing of ours
+ * reads them on the other side.
+ */
+export function sentryOptions(
+  service: ServiceName,
+  dsn: string,
+  env: NodeJS.ProcessEnv,
+): Sentry.NodeOptions {
   const traces = Number(env.SENTRY_TRACES_SAMPLE_RATE);
-  Sentry.init({
+  return {
     dsn,
     environment: env.NODE_ENV ?? 'development',
     release: env.GIT_SHA || undefined,
@@ -54,9 +69,8 @@ export function initSentry(service: ServiceName, env: NodeJS.ProcessEnv = proces
     initialScope: { tags: { service } },
     beforeSend: scrubSentryEvent,
     beforeSendSpan: scrubSentrySpan,
-  });
-  enabled = true;
-  return true;
+    tracePropagationTargets: [],
+  };
 }
 
 export const sentryEnabled = (): boolean => enabled;

@@ -275,6 +275,52 @@ describe('Message History (en)', () => {
     expect(text()).toContain('Load more');
   });
 
+  it('the Source column says where each row came from: flows and auto replies are Automation, a contact send is Contact, a test send is Broadcast Test Send', () => {
+    state.feed = {
+      rows: [
+        row({ id: `m:${U}`, source: 'flow', direction: 'out', status: 'sent' }),
+        row({
+          id: `m:${U.replace('0b6f', '1b6f')}`,
+          source: 'auto_reply',
+          direction: 'out',
+          status: 'sent',
+        }),
+        row({
+          id: `m:${U.replace('0b6f', '2b6f')}`,
+          source: 'contact',
+          direction: 'out',
+          status: 'delivered',
+        }),
+        row({
+          id: `t:${U.replace('0b6f', '3b6f')}`,
+          entityKind: 'test',
+          source: 'broadcast_test',
+          direction: 'out',
+          status: 'delivered',
+          type: 'template',
+          contact: { id: null, name: null },
+          recipient: { value: '+919800000055', masked: false },
+          preview: null,
+          channel: null,
+          conversationId: null,
+          template: { id: U, name: 'welcome_tpl' },
+        }),
+      ],
+      pending: false,
+      error: false,
+    };
+    show('en');
+    expect(host.querySelector('[data-testid="history-table"] thead')?.textContent).toContain(
+      'Source',
+    );
+    const cells = [...host.querySelectorAll('[data-testid="history-source"]')].map(
+      (c) => c.textContent,
+    );
+    expect(cells).toEqual(['Automation', 'Automation', 'Contact', 'Broadcast Test Send']);
+    const testRow = host.querySelector('[data-id^="t:"]');
+    expect(testRow?.textContent).toContain('welcome_tpl');
+  });
+
   it('marks customer-written text so the help assistant leaves it out', () => {
     show('en');
     const marked = [...host.querySelectorAll('[data-agent-ignore]')].map((e) => e.textContent);

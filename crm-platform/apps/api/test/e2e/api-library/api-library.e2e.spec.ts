@@ -60,6 +60,17 @@ beforeAll(async () => {
       } else if (path === '/fail') {
         res.writeHead(503, { 'content-type': 'application/json' });
         res.end('{"error":"down"}');
+      } else if (path === '/binary') {
+        // a PNG header: NUL bytes, which a Postgres text column refuses
+        res.writeHead(200, { 'content-type': 'image/png' });
+        res.end(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0x0d]));
+      } else if (path === '/gzipped') {
+        res.writeHead(200, { 'content-type': 'application/json', 'content-encoding': 'gzip' });
+        res.end(Buffer.from([0x1f, 0x8b, 0x08, 0, 0, 0, 0, 0]));
+      } else if (path === '/late-nul') {
+        // text by its type, but a NUL past the first 8 KB, where the answer reader does not look
+        res.writeHead(200, { 'content-type': 'text/plain' });
+        res.end(Buffer.concat([Buffer.alloc(9000, 0x61), Buffer.from([0])]));
       } else {
         res.writeHead(404);
         res.end();
@@ -490,6 +501,35 @@ describe('test runs', () => {
       [t.orgId],
     );
     expect(leak.rows[0].n).toBe(0);
+  });
+
+  it('a binary or compressed answer is still logged, with a note in place of the bytes', async () => {
+    const t = await api.signup('alib12');
+    for (const [path, note] of [
+      ['/binary', '[Not shown: image/png, 12 bytes]'],
+      ['/gzipped', '[Not shown: application/json, 8 bytes (it could not be unpacked)]'],
+      // the answer reader sees text here; the log guard keeps the NUL out of the Postgres text column
+      ['/late-nul', '[binary answer: 9001 bytes, text/plain]'],
+    ] as const) {
+      const res = await api
+        .as(t.admin)
+        .post('/v2/api-library/apis/test')
+        .send(def({ method: 'GET', url: `${base}${path}`, body: null, headers: [] }));
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      expect(res.body).toMatchObject({ ok: true, status: 200 });
+      expect(res.body.logId, `${path} must be logged`).toBeTruthy();
+
+      const log = (await api.as(t.admin).get(`/v2/api-library/logs/${res.body.logId}`)).body;
+      expect(log).toMatchObject({
+        source: 'test',
+        ok: true,
+        statusCode: 200,
+        url: `${base}${path}`,
+      });
+      expect(log.responseBody).toBe(note);
+    }
+    const list = await api.as(t.admin).get('/v2/api-library/logs');
+    expect(list.body.data).toHaveLength(3);
   });
 
   it('a processing function reshapes the payload before it is sent; one that fails is reported, not sent', async () => {

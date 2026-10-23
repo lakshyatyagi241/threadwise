@@ -6,6 +6,7 @@ import {
   monthStart,
   oneLine,
   quotaMessage,
+  usageSourceOfSend,
 } from '../../../src/modules/channel-email/email-engine.rules';
 
 /** The pure rules of the email engine that sends a campaign. */
@@ -84,5 +85,31 @@ describe('the two bodies of a campaign mail', () => {
 describe('one line', () => {
   it('turns line breaks into one space and trims', () => {
     expect(oneLine(' a\r\nb\n\nc ')).toBe('a b c');
+  });
+});
+
+describe('where a billed mail came from', () => {
+  it('a sender that names itself is trusted when it is a plain token', () => {
+    expect(usageSourceOfSend('appt-msg-1f3a', 'appointment')).toBe('appointment');
+    expect(usageSourceOfSend('appt-msg-1f3a', 'Test')).toBe('test');
+    expect(usageSourceOfSend('order-9', 'commerce')).toBe('commerce');
+  });
+
+  it('a token that is not plain is ignored, not stored', () => {
+    expect(usageSourceOfSend('camp-1-2', "x'; drop")).toBe('campaign');
+    expect(usageSourceOfSend('camp-1-2', 'a'.repeat(40))).toBe('campaign');
+    expect(usageSourceOfSend('camp-1-2', '')).toBe('campaign');
+  });
+
+  it('reads the client reference of the senders that pass no screen', () => {
+    expect(usageSourceOfSend('camp-12-345')).toBe('campaign');
+    expect(usageSourceOfSend('camp-12-345-r2')).toBe('campaign');
+    expect(usageSourceOfSend('camptest-3-1700000000-x')).toBe('test');
+    expect(usageSourceOfSend('lead-first-4-9')).toBe('lead');
+    expect(usageSourceOfSend('bcast-9-7')).toBe('broadcast');
+  });
+
+  it("an unknown reference is the engine's own business: a campaign", () => {
+    expect(usageSourceOfSend('whatever')).toBe('campaign');
   });
 });

@@ -340,13 +340,16 @@ export class LeadScoringRepository {
 
   // --- the log ------------------------------------------------------------------------------------------------------
 
-  async insertRun(tx: Tx, orgId: number, w: RunWrite): Promise<void> {
-    await tx.execute(sql`
+  /** Writes the attempt and returns its row id: the stable name of that ONE call, which the wallet charge keys on. */
+  async insertRun(tx: Tx, orgId: number, w: RunWrite): Promise<number> {
+    const res = await tx.execute(sql`
       INSERT INTO lead_scoring_runs (org_id, contact_id, contact_name, status, trigger, score, previous_score, reasons, model,
                                      prompt_tokens, completion_tokens, cost_usd, cost_source, billed_against, duration_ms, error)
       VALUES (${orgId}, ${w.contactId}, ${w.contactName}, ${w.status}, ${w.trigger}, ${w.score}, ${w.previousScore},
               ${w.reasons ? JSON.stringify(w.reasons) : null}::jsonb, ${w.model}, ${w.promptTokens}, ${w.completionTokens},
-              ${usdString(w.costUsd)}::numeric, ${w.costSource}, ${w.billedAgainst}, ${w.durationMs}, ${w.error})`);
+              ${usdString(w.costUsd)}::numeric, ${w.costSource}, ${w.billedAgainst}, ${w.durationMs}, ${w.error})
+      RETURNING id`);
+    return num((res.rows[0] as Raw).id);
   }
 
   /** Runs billed to the platform key by this workspace in the last hour (the hourly cost guard counts attempts that reached the vendor). */

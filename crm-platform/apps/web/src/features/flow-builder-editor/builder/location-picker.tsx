@@ -26,6 +26,19 @@ export function locationMode(d: Data): Mode {
   return str(d.lat).trim() || str(d.lng).trim() ? 'coords' : 'link';
 }
 
+/**
+ * What a typed coordinate writes. "18.5204, 73.8567" pasted into either box fills both. A typed value clears the pasted link, so the
+ * link box never shows a place other than the one the coordinates name.
+ */
+export function coordinatePatch(key: 'lat' | 'lng', value: string): Record<string, unknown> {
+  // (a lone `18,5204` is a decimal comma, not a pair: the separator needs a space, a semicolon, or a dotted second number)
+  const pair = /^\s*(-?\d+(?:\.\d+)?)\s*(?:;|,\s+|,(?=-?\d+\.))\s*(-?\d+(?:\.\d+)?)\s*$/.exec(
+    value,
+  );
+  if (pair) return { lat: pair[1], lng: pair[2], mapsUrl: '' };
+  return { [key]: value, mapsUrl: '' };
+}
+
 const inputClass = (invalid: boolean) =>
   cn(
     'w-full rounded-lg border bg-background px-3 py-2 text-[13px] outline-none focus:ring-4',
@@ -134,18 +147,7 @@ export function LocationPicker({
     if (next !== mode) patch({ locMode: next });
   };
 
-  const onCoord = (key: 'lat' | 'lng', value: string) => {
-    // "18.5204, 73.8567" pasted into either box fills both.
-    // (a lone `18,5204` is a decimal comma, not a pair: the separator needs a space, a semicolon, or a dotted second number)
-    const pair = /^\s*(-?\d+(?:\.\d+)?)\s*(?:;|,\s+|,(?=-?\d+\.))\s*(-?\d+(?:\.\d+)?)\s*$/.exec(
-      value,
-    );
-    if (pair) {
-      patch({ lat: pair[1], lng: pair[2] });
-      return;
-    }
-    patch({ [key]: value });
-  };
+  const onCoord = (key: 'lat' | 'lng', value: string) => patch(coordinatePatch(key, value));
   const normalise = (key: 'lat' | 'lng') => {
     setTouched((s) => ({ ...s, [key]: true }));
     const raw = key === 'lat' ? lat : lng;

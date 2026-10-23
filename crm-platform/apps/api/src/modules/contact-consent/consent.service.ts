@@ -165,6 +165,17 @@ export class ContactConsentService {
         },
       });
     }
+    // A marketing grant from ANY path (the Consent card, an import or form, a START keyword) leaves the channel's label reading
+    // `subscribed`, so the Subscription status card, the list and the segment filters agree with the ledger.
+    if (input.action === 'granted' && purpose === 'marketing') {
+      await this.markSubscribed(
+        tx,
+        orgId,
+        input.contactId,
+        input.channel,
+        input.actorUserId ?? null,
+      );
+    }
     return { recorded: true, stateChanged: t.stateChanged, flagChanged, eventId: ev.uuid };
   }
 
@@ -174,8 +185,6 @@ export class ContactConsentService {
     input: RecordConsentInput,
     idempotencyKey?: string,
   ): Promise<ContactConsent> {
-    const ctx = RequestContextStore.require();
-    const orgId = ctx.orgId;
     if (input.action === 'granted' && !(input.note ?? '').trim()) {
       throw new AppError(
         ERROR_CODES.CONSENT_NOTE_REQUIRED,
@@ -183,7 +192,23 @@ export class ContactConsentService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    await this.db.tx(async (tx) => {
+    await this.recordOne(contactUuid, input, idempotencyKey);
+    return this.forContact(contactUuid, { limit: 50 });
+  }
+
+  /**
+   * One consent event on one contact, in its own tenant transaction: the single edit (`record`) and the bulk consent action write through
+   * here, so the event, the state, the marketing flag, the audit row and the outbox event are the same for each. Returns whether an event
+   * was recorded (a repeat under the same Idempotency-Key records nothing). The caller checks the note of a grant.
+   */
+  async recordOne(
+    contactUuid: string,
+    input: RecordConsentInput,
+    idempotencyKey?: string,
+  ): Promise<boolean> {
+    const ctx = RequestContextStore.require();
+    const orgId = ctx.orgId;
+    return this.db.tx(async (tx) => {
       const c = await this.repo.contactByUuid(tx, orgId, contactUuid);
       if (!c) {
         throw new AppError(
@@ -208,9 +233,9 @@ export class ContactConsentService {
             HttpStatus.CONFLICT,
           );
         }
-        return;
+        return false;
       }
-      await this.recordInTx(tx, orgId, {
+      const out = await this.recordInTx(tx, orgId, {
         contactId: c.id,
         channel: input.channel,
         purpose: input.purpose,
@@ -223,8 +248,29 @@ export class ContactConsentService {
         idempotencyKey: key,
         announceOptIn: true,
       });
+      return out.recorded;
     });
-    return this.forContact(contactUuid, { limit: 50 });
+  }
+
+  /**
+   * The contacts list and the segment filters read the channel's label, not the ledger. A marketing grant
+   * recorded sets the label to `subscribed` (the event just written is the proof), so the card agrees with the Consent card.
+   */
+  private async markSubscribed(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    channel: ConsentChannel,
+    actorUserId: number | null,
+  ): Promise<void> {
+    const changed = await this.repo.setSubscribedStatus(tx, orgId, contactId, channel, actorUserId);
+    if (!changed) return;
+    await this.audit.record(tx, {
+      module: 'contacts',
+      recordId: contactId,
+      action: 'update',
+      delta: { [`${channel}SubscriptionStatus`]: { old: changed.from, new: 'subscribed' } },
+    });
   }
 
   /** The Consent card: the state per channel, the roll-up, and the newest events. */

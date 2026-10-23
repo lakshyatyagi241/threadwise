@@ -463,3 +463,130 @@ describe('a plan save carries the rest of the plan with it', () => {
     ).toBe(0);
   });
 });
+
+describe('the operator sets a mini app to Included, Paid or Hidden on a plan (docs/specs/addons-plan-offers.md)', () => {
+  it('Included is free and installable, Paid is visible and buyable, Hidden does not exist for the workspace; the options carry the app kind', async () => {
+    await publishListing(h, tokens(), {
+      manifest: miniManifest({ id: 'vis-gamma', name: 'Vis Gamma', scopes: ['contacts.read'] }),
+    });
+    await price('vis-gamma');
+    const gamma = await packUuid('vis-gamma');
+    const opts = planAddonOptionsResponseSchema.parse(
+      (await plans().get('/addon-options')).body,
+    ).data;
+    expect(opts.find((o) => o.app.slug === 'vis-gamma')?.app.kind).toBe('mini_app');
+
+    const made = await plans().post('', {
+      name: 'Offers',
+      slug: 'vis_offers',
+      amount: '49',
+      features: { marketplace: true },
+      addonOffers: [{ addonId: gamma, mode: 'included' }],
+    });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    const item = planAdminItemSchema.parse(made.body);
+    expect(item.visibleAddons).toEqual([gamma]);
+    expect(item.addonOffers).toEqual([{ addonId: gamma, mode: 'included', amount: null }]);
+    await h.owner.query(`UPDATE organizations SET plan = 'vis_offers' WHERE id = $1`, [S.orgId]);
+
+    // Included: listed, free, and the install goes straight through
+    expect(await listSlugs(S)).toContain('vis-gamma');
+    const d = await detail(S, 'vis-gamma');
+    expect(d.pricing.access).toBe('included');
+    expect(d.pricing.includedBy).toBe('plan_offer');
+    const inst = await install(S, 'vis-gamma');
+    expect(inst.status, JSON.stringify(inst.body)).toBeLessThan(300);
+    // a crafted checkout for an app the plan includes is refused
+    const q = await http()
+      .get(
+        `/v2/billing/checkout/plans/${(await one<{ slug: string }>(`SELECT slug FROM plans WHERE marketplace_app_id = (SELECT id FROM marketplace_apps WHERE slug = 'vis-gamma')`)).slug}/quote`,
+      )
+      .set(bearer(S.admin));
+    expect(q.status).toBe(422);
+
+    // Paid: visible and buyable at the app's own price, no offer row
+    const paid = await plans().patch(`/${item.id}`, {
+      addonOffers: [{ addonId: gamma, mode: 'paid' }],
+    });
+    expect(paid.status, JSON.stringify(paid.body)).toBe(200);
+    expect(planAdminItemSchema.parse(paid.body).addonOffers).toEqual([]);
+    expect(planAdminItemSchema.parse(paid.body).visibleAddons).toEqual([gamma]);
+    expect((await detail(S, 'vis-gamma')).pricing.access).not.toBe('included');
+
+    // Hidden: gone for a workspace that does not hold it (S installed it above, so a fresh workspace stands in)
+    const hidden = await plans().patch(`/${item.id}`, {
+      addonOffers: [{ addonId: gamma, mode: 'hidden' }],
+    });
+    expect(hidden.status, JSON.stringify(hidden.body)).toBe(200);
+    expect(planAdminItemSchema.parse(hidden.body).visibleAddons).toEqual([]);
+    const fresh = await api.signup('visH');
+    await h.owner.query(`UPDATE organizations SET plan = 'vis_offers' WHERE id = $1`, [
+      fresh.orgId,
+    ]);
+    expect(await listSlugs(fresh)).not.toContain('vis-gamma');
+
+    // a price on an app's offer is refused
+    const priced = await plans().patch(`/${item.id}`, {
+      addonOffers: [{ addonId: gamma, mode: 'paid', amount: '5' }],
+    });
+    expect(priced.status).toBe(422);
+  });
+});
+
+describe("an app's disable and uninstall record the workspace's own switch on its add-on (docs/specs/addons-lifecycle-and-permissions.md)", () => {
+  it('disable and uninstall write an opt-out row, enable and install lift it; a pause the subscription causes is not an opt-out', async () => {
+    await publishListing(h, tokens(), {
+      manifest: miniManifest({ id: 'vis-delta', name: 'Vis Delta', scopes: ['contacts.read'] }),
+    });
+    await price('vis-delta');
+    const delta = await packUuid('vis-delta');
+    const made = await plans().post('', {
+      name: 'Switches',
+      slug: 'vis_switch',
+      amount: '49',
+      features: { marketplace: true },
+      addonOffers: [{ addonId: delta, mode: 'included' }],
+    });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    const T = await api.signup('visT');
+    await h.owner.query(`UPDATE organizations SET plan = 'vis_switch' WHERE id = $1`, [T.orgId]);
+    const state = async () =>
+      (
+        await one<{ state: string } | undefined>(
+          `SELECT a.state FROM workspace_addon_activation a
+           JOIN plans p ON p.id = a.addon_id JOIN marketplace_apps m ON m.id = p.marketplace_app_id
+           WHERE a.org_id = $1 AND m.slug = 'vis-delta'`,
+          [T.orgId],
+        )
+      )?.state ?? null;
+
+    const inst = await install(T, 'vis-delta');
+    expect(inst.status, JSON.stringify(inst.body)).toBeLessThan(300);
+    expect(await state()).toBeNull(); // an ordinary install leaves no row
+    const row = await one<{ uuid: string; row_version: number }>(
+      `SELECT uuid, row_version FROM workspace_app_installations WHERE org_id = $1`,
+      [T.orgId],
+    );
+    const dis = await mp(T).post(`/installations/${row.uuid}/disable`, {
+      rowVersion: row.row_version,
+    });
+    expect(dis.status, JSON.stringify(dis.body)).toBe(200);
+    expect(await state()).toBe('disabled');
+    const row2 = await one<{ row_version: number }>(
+      `SELECT row_version FROM workspace_app_installations WHERE org_id = $1`,
+      [T.orgId],
+    );
+    const en = await mp(T).post(`/installations/${row.uuid}/enable`, {
+      rowVersion: row2.row_version,
+    });
+    expect(en.status, JSON.stringify(en.body)).toBe(200);
+    expect(await state()).toBe('active');
+
+    const gone = await mp(T).post(`/installations/${row.uuid}/uninstall`, { dataChoice: 'keep' });
+    expect(gone.status, JSON.stringify(gone.body)).toBe(204);
+    expect(await state()).toBe('disabled');
+    const again = await install(T, 'vis-delta');
+    expect(again.status, JSON.stringify(again.body)).toBeLessThan(300);
+    expect(await state()).toBe('active');
+  });
+});

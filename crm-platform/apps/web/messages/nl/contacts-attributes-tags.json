@@ -283,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Aangemaakt",
-      "shortModified": "Gewijzigd",
       "firstRun": {
         "title": "Voeg je eerste contacten toe",
         "message": "Haal de mensen binnen met wie je praat. Contacten gebruik je voor berichten, campagnes, taken en deals.",
@@ -298,7 +296,8 @@
       "teamFilter": "Filteren op team",
       "allTeams": "Alle teams",
       "teamFormer": "Voormalig team",
-      "unhideColumn": "Kolom tonen"
+      "unhideColumn": "Kolom tonen",
+      "resizeColumn": "Sleep om {column} te vergroten of verkleinen; dubbelklik om te herstellen"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -348,7 +347,25 @@
       "assignOwner": "Eigenaar toewijzen",
       "changeStage": "Fase wijzigen",
       "more": "Meer",
-      "held": "Dit record is beschermd en kan momenteel niet worden verwijderd."
+      "held": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "consent": "Marketingtoestemming",
+      "consentTitle": "Marketingtoestemming",
+      "consentChannel": "Kanaal",
+      "consentAction": "Wijzigen",
+      "consentSubscribe": "Inschrijven",
+      "consentUnsubscribe": "Uitschrijven",
+      "consentNote": "Hoe de contacten hebben ingestemd",
+      "consentNotePlaceholder": "Wat ze zeiden of ondertekenden, en waar",
+      "consentNoteRequired": "Geef aan hoe de contacten hebben ingestemd voordat je ze inschrijft.",
+      "consentContinue": "Doorgaan",
+      "consentBack": "Terug",
+      "consentConfirm": "Toestemming vastleggen",
+      "consentSummary": "Markeer {count, plural, one {# contact} other {# contacten}} als {change} op {channel}. Elk krijgt een vermelding in de toestemmingsgeschiedenis.",
+      "consentChangeGranted": "ingeschreven",
+      "consentChangeWithdrawn": "uitgeschreven",
+      "consentAllMatching": "Dit geldt voor alle contacten die het filter vindt.",
+      "consentSubscribed": "{count, plural, one {# contact ingeschreven} other {# contacten ingeschreven}}",
+      "consentUnsubscribed": "{count, plural, one {# contact uitgeschreven} other {# contacten uitgeschreven}}"
     },
     "form": {
       "addEyebrow": "Nieuw contact",
@@ -500,7 +517,6 @@
       "loading": "Groepen laden...",
       "unavailableTitle": "Groepen zijn nog niet beschikbaar",
       "unavailableMessage": "De service voor contactgroepen is niet live op deze server, dus groepen kunnen nog niet worden getoond of gemaakt.",
-      "contacts": "contacten",
       "viewContacts": "Contacten bekijken",
       "edit": "Groep bewerken",
       "editNamed": "Groep {name} bewerken",
@@ -508,8 +524,6 @@
       "deleteNamed": "Groep {name} verwijderen",
       "deleteTitle": "Deze groep verwijderen?",
       "deleteMessage": "\"{name}\" wordt verwijderd bij elk contact dat erin zit. De contacten zelf blijven bewaard.",
-      "createTile": "Nieuwe groep maken",
-      "createTileHint": "Deel contacten in op segment, funnelfase of interesse.",
       "emptyTitle": "Nog geen groepen",
       "emptyMessage": "Vraag een workspace-manager om de eerste groep te maken.",
       "helpKicker": "Hulp - 0{n}",
@@ -529,7 +543,21 @@
       },
       "exists": "Er bestaat al een groep met deze naam, dus er is niets nieuws gemaakt.",
       "import": "Contacten importeren",
-      "importInto": "Importeren"
+      "importInto": "Importeren",
+      "colName": "Naam",
+      "colMembers": "Leden",
+      "colCreatedBy": "Gemaakt door",
+      "colCreatedAt": "Aangemaakt op",
+      "colModifiedBy": "Gewijzigd door",
+      "colUpdatedAt": "Bijgewerkt op",
+      "colActions": "Acties",
+      "tableLabel": "Contactgroepen",
+      "search": "Groepen zoeken",
+      "searchPlaceholder": "Zoeken op naam",
+      "count": "{count, plural, =0 {Geen groepen} one {# groep} other {# groepen}}",
+      "noResultsTitle": "Geen groepen gevonden",
+      "noResults": "Geen groepsnaam bevat wat u heeft getypt.",
+      "clearSearch": "Zoekopdracht wissen"
     },
     "import": {
       "eyebrow": "Bulkimport",
@@ -624,7 +652,8 @@
         "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn",
         "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
         "invalid_timezone": "ongeldige tijdzone",
-        "legal_hold": "beschermd record, niet gewijzigd"
+        "legal_hold": "beschermd record, niet gewijzigd",
+        "invalid_property_value": "de waarde van de aangepaste eigenschap past niet bij het type of de opties ervan"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -642,7 +671,9 @@
       "groupNew": "Een nieuwe groep",
       "groupPick": "Kies een groep",
       "groupNewPlaceholder": "Naam van nieuwe groep",
-      "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt."
+      "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt.",
+      "customProperties": "Aangepaste eigenschappen",
+      "customPropertiesHint": "Een kolom waarvan de kop de naam van de eigenschap is (of attr:key, zoals de export die schrijft), vult die eigenschap. Een lege cel behoudt de waarde die het contact al heeft."
     },
     "detail": {
       "back": "Alle contacten",
@@ -1335,7 +1366,7 @@
         "closePicker": "Sluiten",
         "changed": "Te wijzigen eigenschappen",
         "clear": "Wissen",
-        "keep": "Behouden",
+        "remove": "{name} verwijderen",
         "setValue": "Waarde instellen",
         "willClear": "Wordt leeggemaakt voor {count, plural, one {het geselecteerde contact} other {alle # geselecteerde contacten}}.",
         "requiredNoClear": "Een verplichte eigenschap kan niet worden gewist.",
@@ -1431,6 +1462,7 @@
       "template": "WhatsApp-sjabloon",
       "templatePlaceholder": "Selecteer een sjabloon",
       "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
+      "openInInbox": "Chat openen in de inbox",
       "notSendable": "Dit sjabloon kan hier niet worden ingevuld ({reason}).",
       "variables": "Sjabloonvariabelen",
       "preview": "Voorbeeld",

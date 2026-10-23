@@ -12,7 +12,9 @@ export default {
   target: '100% critical data paths reviewed; measurable before/after evidence',
   async run() {
     const orphanWrites = [],
-      ioInTx = [];
+      ioInTx = [],
+      rawWrites = [];
+    let singleRawInserts = 0;
     let txCount = 0,
       auditCalls = 0;
     for (const f of apiSrc()) {
@@ -29,6 +31,29 @@ export default {
             `${rel(f)}:${lineAt(raw, mt.index)}  ${mt[0].replace(/\s+/g, ' ')}  <- first argument is '${arg || 'none'}', not a transaction`,
           );
       }
+      // 3. a write on the raw handle is outside any transaction: one statement is atomic, a query-builder write or two statements are not
+      for (const mt of raw.matchAll(
+        /\b(?:this\.)?db\.(?:primary|replica)\s*\.\s*(?:insert|update|delete)\s*\(/g,
+      ))
+        rawWrites.push(
+          `${rel(f)}:${lineAt(raw, mt.index)}  ${mt[0].replace(/\s+/g, '')} on the raw handle, use db.tx/txAs`,
+        );
+      for (const mt of raw.matchAll(
+        /\b(?:this\.)?db\.(?:primary|replica)\s*\.\s*execute\(\s*sql`([^`]*)`/g,
+      )) {
+        const stmt = mt[1].replace(/;\s*$/, '');
+        if (
+          !/\b(?:insert\s+into|update\s+\w+\s+set|delete\s+from|merge\s+into|truncate)\b/i.test(
+            stmt,
+          )
+        )
+          continue; // a read or a lookup function
+        if (stmt.includes(';'))
+          rawWrites.push(
+            `${rel(f)}:${lineAt(raw, mt.index)}  more than one statement on the raw handle, not atomic`,
+          );
+        else singleRawInserts++;
+      }
       // 2. network I/O while a transaction is open
       for (const mt of m.matchAll(TX_OPEN)) {
         txCount++;
@@ -43,6 +68,12 @@ export default {
       }
     }
     const checks = [
+      expectNone(
+        'tx-no-raw-writes',
+        'No write on the raw primary/replica handle, which runs outside a transaction, except one single-statement SQL (atomic by itself)',
+        rawWrites,
+        { severity: 'high' },
+      ),
       expectNone(
         'tx-audit-outbox',
         "audit.record / outbox.emit always run on the caller's transaction (same commit or same rollback)",
@@ -63,6 +94,8 @@ export default {
         'audit/outbox calls': auditCalls,
         'audit/outbox off-transaction': orphanWrites.length,
         'I/O in transaction': ioInTx.length,
+        'writes on the raw handle': rawWrites.length,
+        'single-statement raw writes (allowed)': singleRawInserts,
       },
       target: {
         met: orphanWrites.length === 0 ? true : false,

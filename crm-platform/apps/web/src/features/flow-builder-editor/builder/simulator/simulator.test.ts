@@ -288,6 +288,29 @@ describe('simulator: nodes', () => {
     expect(await run('lt', '1', 'name')).toMatch(/NO$/);
   });
 
+  it('an answered menu can be answered again: the chat rolls back to it', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('b', 'buttons', { prompt: 'Pick', options: ['One', 'Two'], var: 'choice' }),
+      node('m0', 'message', { text: 'got {{choice}}' }),
+      node('m1', 'message', { text: 'then {{choice}}' }),
+    ];
+    const edges = [edge('t', 'out', 'b'), edge('b', 'p0', 'm0'), edge('b', 'p1', 'm1')];
+    const h = harness(nodes, edges, { onTruncate: (n) => void (cut = n) });
+    let cut = -1;
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('One');
+    await h.settle();
+    expect(h.texts()).toContain('got One');
+    const menu = h.log.findIndex((e) => e.choices?.kind === 'buttons');
+    h.sim.pickAgain(menu, 'Two');
+    await h.settle();
+    expect(cut).toBe(menu + 1);
+    expect(h.texts()).toContain('then Two');
+  });
+
   it('buttons: number and title matching, unwired port message', async () => {
     const nodes = [
       node('t', 'trigger'),
@@ -532,7 +555,7 @@ describe('simulator: integration and channel nodes (copy verified against the ru
       '(simulated) published Meta form Survey sent → out',
       'Copy sent to +911: Hi Anya',
       'Follow us\nhttps://ig.me/m/shop',
-      '(CTA)\n[url] Go → https://x.y',
+      'Go',
       '(location) HQ\n1 Road\nlat 12.5, lng 77.1',
       'Flow ended.',
     ]);
@@ -577,25 +600,30 @@ describe('simulator: integration and channel nodes (copy verified against the ru
 });
 
 describe('simulator: location', () => {
-  const run = async (data: Record<string, unknown>) => {
+  const run = async (data: Record<string, unknown>, count = 1) => {
     const h = harness([node('t', 'trigger'), node('l', 'location', data)], [edge('t', 'out', 'l')]);
     h.sim.start();
     h.sim.send('x');
     await h.settle();
-    return h.texts().slice(2, 3);
+    return h.texts().slice(2, 2 + count);
   };
-  it('shows the pin the runtime would send, name and address optional', async () => {
+  it('shows what the runtime would send, name and address optional', async () => {
     expect(await run({ title: 'HQ', address: '1 Road', lat: '12.5', lng: '77.1' })).toEqual([
       '(location) HQ\n1 Road\nlat 12.5, lng 77.1',
     ]);
+    // A link-mode pin carries the coordinates only; the name follows as a text, so Maps has no name to look the place up by.
     expect(
-      await run({
-        locMode: 'link',
-        mapsUrl: 'https://maps.google.com/?q=1.5,2.5',
-        lat: '1.5',
-        lng: '2.5',
-      }),
-    ).toEqual(['(location) \n\nlat 1.5, lng 2.5']);
+      await run(
+        {
+          locMode: 'link',
+          mapsUrl: 'maps.google.com/?q=1.5,2.5',
+          lat: '1.5',
+          lng: '2.5',
+          title: 'HQ',
+        },
+        2,
+      ),
+    ).toEqual(['(location) \n\nlat 1.5, lng 2.5', '(location) HQ\n']);
   });
   it('says the step is skipped when it has no real coordinates, like the runtime', async () => {
     for (const data of [{}, { lat: '0', lng: '0' }, { lat: '95', lng: '1' }])

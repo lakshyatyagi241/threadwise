@@ -8,6 +8,7 @@ import {
 } from '../../infra/providers/localization-translation/redis-stores';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import {
   CONVERSATION_MESSAGE_STORE,
   PgConversationMessageStore,
@@ -37,7 +38,8 @@ import { TranslationService } from './translation.service';
  * Registered in app.module.ts.
  */
 @Module({
-  imports: [PlansCoreModule],
+  // WalletMessageBillingModule: a paid provider (DeepL, Google Cloud) is charged to the workspace's wallet and gated on it.
+  imports: [PlansCoreModule, WalletMessageBillingModule],
   controllers: [
     PlatformLanguagesController,
     PublicLanguagesController,

@@ -21,6 +21,7 @@ import type { HubAccess } from '../lib/permissions';
 import { useRowActions } from '../lib/use-row-actions';
 import { ActionDialogs } from './action-dialogs';
 import { Breadcrumb } from './breadcrumb';
+import { WorkspaceAddonsBlock } from './workspace-addons-block';
 import { LastActiveCell, OwnerCell } from './cells';
 import { RowActions, actionsFor, type HubActionId } from './row-actions';
 
@@ -320,6 +321,7 @@ function PlanTab({
         </dl>
         {row.limits.overridden && <p className="mt-3 text-sm text-warning">{t('overrideNote')}</p>}
       </div>
+      <WorkspaceAddonsBlock workspaceId={row.workspaceId} />
       <Button variant="secondary" disabled={!canEdit} onClick={onEdit}>
         {t('edit')}
       </Button>

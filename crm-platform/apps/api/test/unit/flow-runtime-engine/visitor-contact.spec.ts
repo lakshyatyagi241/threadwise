@@ -1,26 +1,17 @@
 import { describe, expect, it, vi } from 'vitest';
 import { compileGraph } from '../../../src/modules/flow-runtime-engine/graph/compile-graph';
+import type { RuntimeGraph } from '../../../src/modules/flow-runtime-engine/graph/runtime-graph';
 import {
   applyCustomReply,
   executeCurrent,
   type StepDeps,
-  type StepOutcome,
 } from '../../../src/modules/flow-runtime-engine/runtime/engine-core';
 import { AskInputNode } from '../../../src/modules/flow-runtime-engine/runtime/nodes/actions/ask-input-node';
-import {
-  decodeInbound,
-  type InboundInput,
-} from '../../../src/modules/flow-runtime-engine/runtime/reply-router';
+import { decodeInbound } from '../../../src/modules/flow-runtime-engine/runtime/reply-router';
 import type {
-  InboundReply,
   OutboundMessage,
   RunState,
 } from '../../../src/modules/flow-runtime-engine/runtime/types';
-import {
-  renderForChannel,
-  profileOf,
-} from '../../../src/modules/flow-runtime-engine/runtime/channel-render';
-import { interpolate } from '../../../src/modules/flow-runtime-engine/runtime/variables';
 
 /** A website chat visitor is made a contact only when they give an email or a phone inside the flow, not by trying the bot out. */
 
@@ -46,7 +37,7 @@ const graph = compileGraph({
   ],
 });
 
-function runOf(graph: ReturnType<typeof builder>, over: Partial<RunState> = {}): RunState {
+function runOf(graph: RuntimeGraph, over: Partial<RunState> = {}): RunState {
   return {
     id: 1,
     uuid: 'run-uuid',

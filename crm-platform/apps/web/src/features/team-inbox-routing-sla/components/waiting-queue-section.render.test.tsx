@@ -7,6 +7,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { HandoffSettings, QueueTimers } from '@crm/contracts';
 import { loadMessages } from '@/i18n/messages';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -69,20 +70,22 @@ afterEach(() => {
   act(() => root.unmount());
   host.remove();
 });
-const render = (s: HandoffSettings, canManage = true) =>
+const render = (s: HandoffSettings, canManage = true, features: string[] | null = null) =>
   act(() => {
     root.render(
-      <QueryClientProvider client={new QueryClient()}>
-        <NextIntlClientProvider locale="en" messages={loadMessages('en')} timeZone="UTC">
-          <ToastProvider>
-            <WaitingQueueSection
-              settings={s}
-              teams={[{ id: 't1', name: 'Desk B' }]}
-              canManage={canManage}
-            />
-          </ToastProvider>
-        </NextIntlClientProvider>
-      </QueryClientProvider>,
+      <PlanFeaturesProvider features={features}>
+        <QueryClientProvider client={new QueryClient()}>
+          <NextIntlClientProvider locale="en" messages={loadMessages('en')} timeZone="UTC">
+            <ToastProvider>
+              <WaitingQueueSection
+                settings={s}
+                teams={[{ id: 't1', name: 'Desk B' }]}
+                canManage={canManage}
+              />
+            </ToastProvider>
+          </NextIntlClientProvider>
+        </QueryClientProvider>
+      </PlanFeaturesProvider>,
     );
   });
 const click = (el: Element | null) => act(() => (el as HTMLElement).click());
@@ -98,15 +101,28 @@ describe('the Waiting queue section', () => {
     expect(host.querySelector('input[type="number"]')).toBeNull();
   });
 
-  it('is locked without Smart routing: shown, disabled, names the add-on and links to Plans', () => {
+  it('without Smart routing keeps the note on where unclaimed chats wait and draws none of the steps', () => {
     render(settings(OFF, false));
-    expect(host.querySelector('[data-testid="waiting-queue-lock"]')!.textContent).toContain(
-      'Smart routing add-on',
+    expect(host.textContent).toContain('Waiting queue');
+    expect(host.querySelector('[data-testid="waiting-queue-note"]')!.textContent).toContain(
+      'wait in the Waiting tab until someone claims them',
     );
-    expect(host.querySelector('a[href="/account/plans"]')).not.toBeNull();
     for (const id of ['remind', 'overflow', 'final', 'away', 'offline'])
-      expect((switchOf(id) as HTMLButtonElement).disabled).toBe(true);
+      expect(switchOf(id)).toBeNull();
     expect(host.textContent).not.toContain('Save');
+  });
+
+  it('a plan known to lack inbox_routing hides the steps even before the server says so', () => {
+    render(settings(), true, ['inbox_sla']);
+    expect(switchOf('remind')).toBeNull();
+    expect(switchOf('away')).toBeNull();
+    expect(host.querySelector('[data-testid="waiting-queue-note"]')).not.toBeNull();
+  });
+
+  it('with Smart routing shows every step', () => {
+    render(settings(), true, ['inbox_routing']);
+    for (const id of ['remind', 'overflow', 'final', 'away', 'offline'])
+      expect(switchOf(id)).not.toBeNull();
   });
 
   it('refuses an incomplete step instead of sending it, then saves a complete one', () => {

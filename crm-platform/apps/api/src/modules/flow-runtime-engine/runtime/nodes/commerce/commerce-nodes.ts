@@ -22,7 +22,14 @@ export class CommerceNodes implements NodeExecutor {
 
   constructor(template: TemplateNode, book: BookNode, shop: ShopNode, form: FormNode) {
     this.byType = new Map<string, NodeExecutor>([
-      ['Template', { types: ['Template'], execute: (c) => template.execute(c) }],
+      [
+        'Template',
+        {
+          types: ['Template'],
+          execute: (c) => template.execute(c),
+          onReply: (c, r) => template.onReply(c, r),
+        },
+      ],
       [
         'BookAppointment',
         {

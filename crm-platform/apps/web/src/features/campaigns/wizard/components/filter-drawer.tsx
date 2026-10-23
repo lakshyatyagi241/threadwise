@@ -39,6 +39,8 @@ export function FilterDrawer({
     setPending(rules);
     onClose();
   };
+  // With no condition (and no search) every contact would "match": that is not a result of the filter, so no number is shown.
+  const noConditions = conditionTotal(pending) === 0 && search.trim() === '';
   const changed = JSON.stringify(pending) !== JSON.stringify(rules);
 
   const apply = () => {
@@ -75,11 +77,13 @@ export function FilterDrawer({
           className="rounded-md border border-border bg-muted/50 px-3 py-2 text-sm"
           data-testid="filter-live"
         >
-          {live.isPending || !settled.settled || live.isFetching
-            ? t('filterCounting')
-            : live.data
-              ? t('filterMatches', { count: live.data.total })
-              : t('filterCountFailed')}
+          {noConditions
+            ? t('filterNoConditions')
+            : live.isPending || !settled.settled || live.isFetching
+              ? t('filterCounting')
+              : live.data
+                ? t('filterMatches', { count: live.data.total })
+                : t('filterCountFailed')}
         </p>
         <AudienceConditions
           key={epoch}

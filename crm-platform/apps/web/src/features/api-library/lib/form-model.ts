@@ -344,12 +344,39 @@ function mapIssues(issues: ZodIssue[], state: ApiFormState, headerRowIds: string
 
 export type Built<T> = { ok: true; input: T } | { ok: false; errors: FormErrors };
 
-function bodyErrors(problem: BodyProblem): FormErrors {
+/**
+ * Where JSON text stops making sense, as a 1-based line and column, or null when the text parses (or the engine names no place:
+ * then the end of the text is the best guess, which is what "unexpected end" means).
+ */
+export function jsonErrorAt(text: string): { line: number; column: number } | null {
+  try {
+    JSON.parse(text);
+    return null;
+  } catch (e) {
+    const m = e instanceof Error ? e.message : '';
+    const ff = /line (\d+) column (\d+)/.exec(m);
+    if (ff) return { line: Number(ff[1]), column: Number(ff[2]) };
+    const at = /position (\d+)/.exec(m);
+    const pos = Math.min(at ? Number(at[1]) : text.length, text.length);
+    const before = text.slice(0, pos).split('\n');
+    return { line: before.length, column: before[before.length - 1]!.length + 1 };
+  }
+}
+
+/** The one sentence for a payload that is not JSON: says where it breaks. */
+export function jsonProblemMessage(text: string): string {
+  const at = jsonErrorAt(text.trim());
+  return at
+    ? `This is not valid JSON (it breaks near line ${at.line}, column ${at.column}).`
+    : 'This is not valid JSON.';
+}
+
+function bodyErrors(problem: BodyProblem, text: string): FormErrors {
   return {
     fields: {
       body:
         problem === 'json'
-          ? 'The payload is not valid JSON.'
+          ? jsonProblemMessage(text)
           : 'The payload must be a JSON object or list.',
     },
     general: [],
@@ -359,7 +386,7 @@ function bodyErrors(problem: BodyProblem): FormErrors {
 /** The create body, or the problems to show (the same shared rules the API runs again on save). */
 export function buildCreate(state: ApiFormState): Built<CreateApiLibraryApiInput> {
   const d = definitionOf(state);
-  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem) };
+  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem, state.bodyText) };
   const r = createApiLibraryApiSchema.safeParse({ name: state.name, ...d.def });
   return r.success
     ? { ok: true, input: r.data }
@@ -371,7 +398,7 @@ export function buildUpdate(
   rowVersion: number,
 ): Built<UpdateApiLibraryApiInput> {
   const d = definitionOf(state);
-  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem) };
+  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem, state.bodyText) };
   const r = updateApiLibraryApiSchema.safeParse({ ...d.def, rowVersion });
   return r.success
     ? { ok: true, input: r.data }
@@ -381,7 +408,7 @@ export function buildUpdate(
 /** The test body. `apiId` lets a header held as the mask use the stored secret (same address only). */
 export function buildTest(state: ApiFormState, apiId?: string): Built<TestApiLibraryApiInput> {
   const d = definitionOf(state);
-  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem) };
+  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem, state.bodyText) };
   const r = testApiLibraryApiSchema.safeParse({
     ...d.def,
     ...(state.name.trim() !== '' ? { name: state.name.trim() } : {}),
@@ -449,3 +476,13 @@ export function keptSecretsAtRisk(savedUrl: string, state: ApiFormState): boolea
 /** A header is secret when ticked or when its name reads like one (the API decides the same way). */
 export const headerIsSecret = (h: Pick<HeaderRow, 'key' | 'secret'>): boolean =>
   h.secret || apiLibraryIsSensitiveName(h.key);
+
+/**
+ * A password-like header (an Authorization header, an API key, or one ticked secret) going to a plain `http://` address would cross
+ * the network readable by anyone on the way. True when the form is about to do that; it only warns, because some servers on a
+ * private network have no https.
+ */
+export function secretOverPlainHttp(state: ApiFormState): boolean {
+  if (!/^http:\/\//i.test(state.url.trim())) return false;
+  return state.headers.some((h) => h.key.trim() !== '' && headerIsSecret(h));
+}

@@ -45,7 +45,8 @@
         "period": "Chu kỳ",
         "grants": "Cấp quyền",
         "status": "Trạng thái",
-        "actions": "Thao tác"
+        "actions": "Thao tác",
+        "plans": "Gói"
       },
       "price": {
         "free": "Miễn phí",
@@ -124,7 +125,8 @@
           "billingMode": "Thanh toán",
           "sortOrder": "Thứ tự sắp xếp",
           "isActive": "Hoạt động",
-          "isLifetime": "Trọn đời (một lần)"
+          "isLifetime": "Trọn đời (một lần)",
+          "period": "Chu kỳ thanh toán"
         },
         "modes": {
           "one_time": "Một lần (mua lại sau khi hết hạn)",
@@ -144,9 +146,78 @@
           "billingDuration": "Nhập số nguyên từ 1 trở lên.",
           "sortOrder": "Nhập một số nguyên.",
           "limits": "Giới hạn là số nguyên, hoặc -1 cho không giới hạn.",
-          "form": "Kiểm tra các trường được đánh dấu."
-        }
-      }
+          "form": "Kiểm tra các trường được đánh dấu.",
+          "amountPositive": "Tiện ích bổ sung là gói đăng ký theo tháng hoặc năm, nên giá phải lớn hơn 0.",
+          "features": "Chọn ít nhất một tính năng, hoặc đổi thành tiện ích bổ sung dung lượng.",
+          "limitsNeeded": "Nhập ít nhất một giới hạn lớn hơn không, hoặc đổi thành tiện ích bổ sung tính năng."
+        },
+        "legacy": {
+          "title": "Gói cũ",
+          "body": "Gói này được tạo trước khi tiện ích bổ sung trở thành gói đăng ký. Gói vẫn được bán đúng như trước (thông tin thanh toán được hiển thị nhưng không thể đổi), và các không gian làm việc đang sở hữu không bị ảnh hưởng. Bạn vẫn có thể sửa tên, giá, tính năng và giới hạn, hoặc ngừng bán. Gói mới là đăng ký theo tháng hoặc theo năm."
+        },
+        "periods": {
+          "months": "Đăng ký theo tháng",
+          "years": "Đăng ký theo năm"
+        },
+        "periodHint": "Tiện ích bổ sung là gói đăng ký. Không gian làm việc dùng cổng thanh toán trực tuyến được gia hạn tự động; với chuyển khoản ngân hàng hoặc thanh toán ngoại tuyến, họ thanh toán lại khi kỳ kết thúc.",
+        "planOffers": {
+          "title": "Gói",
+          "hint": "Cách mỗi gói cung cấp tiện ích bổ sung này. Bao gồm: miễn phí, gói mang theo các tính năng của tiện ích. Trả phí: không gian làm việc mua tiện ích, theo giá riêng của gói nếu bạn đặt. Ẩn: không gian làm việc trong gói không bao giờ thấy tiện ích.",
+          "noIncluded": "Tiện ích này chỉ tăng giới hạn nên không gói nào có thể bao gồm nó. Mỗi gói đặt mức trần riêng trong tab Giới hạn của gói.",
+          "empty": "Chưa có gói nào.",
+          "freePlan": "Gói miễn phí",
+          "inactivePlan": "Không hoạt động",
+          "modeLabel": "Cách {plan} cung cấp tiện ích bổ sung này",
+          "modes": {
+            "included": "Bao gồm",
+            "paid": "Trả phí",
+            "hidden": "Ẩn"
+          },
+          "priceLabel": "Giá trong gói này",
+          "priceHint": "Để trống = giá riêng của tiện ích bổ sung.",
+          "freePlanNote": "Hiển thị trên gói miễn phí, nhưng không gian làm việc cần gói trả phí để mua.",
+          "hiddenNote": "Không hiển thị cho các không gian làm việc trong gói này. Không gian làm việc đã mua vẫn giữ nó đến khi hết kỳ hạn.",
+          "problems": {
+            "money": "Nhập số tiền như 19 hoặc 19.99.",
+            "zero": "Để trống giá để dùng giá của tiện ích bổ sung, hoặc chọn Bao gồm."
+          },
+          "errors": {
+            "generic": "Không thể lưu cách cung cấp theo gói.",
+            "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi cách cung cấp theo gói.",
+            "notFound": "Tiện ích bổ sung này không còn tồn tại."
+          },
+          "saved": "Đã lưu cách cung cấp theo gói.",
+          "changed": "{count, plural, one {# gói đã thay đổi} other {# gói đã thay đổi}}",
+          "save": "Lưu cách cung cấp theo gói",
+          "needFeatures": "Trước tiên hãy thêm các tính năng nó mở khóa ở trên"
+        },
+        "type": {
+          "title": "Loại",
+          "hint": "Chọn tiện ích bổ sung này làm gì. Chỉ tiện ích bổ sung tính năng mới có thể được đưa vào gói.",
+          "feature": {
+            "title": "Tiện ích bổ sung tính năng",
+            "body": "Mở khóa một phần sản phẩm; cũng có thể tăng dung lượng."
+          },
+          "capacity": {
+            "title": "Tiện ích bổ sung dung lượng",
+            "body": "Chỉ tăng một giới hạn (chỗ ngồi, liên hệ...)."
+          }
+        },
+        "noFeaturesNotice": "Tiện ích bổ sung này chưa mở khóa gì. Hãy chọn các tính năng nó cung cấp để các gói có thể đưa nó vào.",
+        "limitsHintCapacity": "Tiện ích bổ sung dung lượng chỉ tăng các giới hạn. Nhập một số để CỘNG thêm vào gói (ví dụ +2 chỗ ngồi). Dùng -1 cho không giới hạn. Cần ít nhất một giới hạn."
+      },
+      "kind": {
+        "feature": "Tính năng",
+        "capacity": "Dung lượng"
+      },
+      "plans": {
+        "included": "Bao gồm: {plans}",
+        "paid": "Trả phí: {plans}",
+        "hidden": "Ẩn: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Không có gói nào"
+      },
+      "noFeatures": "Chưa có tính năng"
     },
     "extensions": {
       "crumbHere": "Tiện ích bổ sung",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Tiện ích bổ sung",
       "description": "Các gói tính năng bổ sung bạn mua thêm ngoài gói đăng ký.",
-      "needPlanTitle": "Tiện ích bổ sung cần một gói đang hoạt động",
-      "needPlanBody": "Tiện ích bổ sung là các gói tính năng bổ sung bạn mua thêm ngoài gói đăng ký. Hãy chọn gói trước, rồi quay lại đây để thêm tính năng.",
-      "viewPlans": "Xem các gói",
-      "noneTitle": "Không có tiện ích bổ sung",
-      "noneBody": "Hiện chưa có tiện ích bổ sung nào được cung cấp. Hãy quay lại sau.",
-      "ownedTitle": "Tiện ích bổ sung của bạn",
-      "ownedBody": "Các gói đang hoạt động được gộp vào gói hiện tại của bạn.",
-      "ends": "Kết thúc {date}",
-      "lifetime": "Trọn đời",
-      "autoRenews": "Tự động gia hạn",
       "renewal": {
         "cancel": "Hủy gia hạn",
         "confirmTitle": "Hủy gia hạn?",
@@ -277,37 +338,105 @@
         "forbidden": "Bạn không có quyền thay đổi gói.",
         "none": "Không có đăng ký đang hoạt động để hủy.",
         "failed": "Chúng tôi không thể hủy gia hạn. Vui lòng thử lại."
-      },
-      "active": "Hoạt động",
-      "included": "Đã có trong gói của bạn",
-      "includedOwned": "Bạn cũng đang có tiện ích này. Gói của bạn giờ đã bao gồm nó nên bạn có thể hủy tiện ích. Không có khoản nào được hoàn tự động.",
-      "includedEnds": "Đã có trong gói của bạn. Tiện ích của bạn kết thúc vào {date} và sẽ không gia hạn.",
-      "cardEyebrow": "Tiện ích bổ sung",
-      "catalogTitle": "Tiện ích bổ sung",
-      "catalogBody": "Mở khóa thêm tính năng ngoài gói hiện tại. Không cần đổi gói.",
-      "count": "{count, plural, other {# tiện ích bổ sung}}",
-      "free": "Miễn phí",
-      "lifetimePrice": "một lần",
-      "per": "/ {unit}",
-      "units": {
-        "days": "ngày",
-        "weeks": "tuần",
-        "months": "tháng",
-        "years": "năm"
-      },
-      "buy": "Thêm vào gói",
-      "buyAgain": "Mua lại",
-      "owned": "Đã sở hữu ×{count} · mua lại sẽ cộng thêm",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} không giới hạn",
-        "add": "+{amount} {name}"
-      },
-      "error": "Không thể tải tiện ích bổ sung."
+      }
     },
     "planFields": {
       "fromModule": "từ một module đã cài đặt",
       "unlimited": "Không giới hạn"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Tiện ích bổ sung cần gói trả phí đang hoạt động",
+        "free_plan": "Bạn đang dùng gói miễn phí. Tiện ích bổ sung là phần mua thêm trên một gói trả phí.",
+        "plan_expired": "Gói trả phí của bạn đã kết thúc nên các tiện ích bổ sung tạm dừng. Hãy gia hạn gói để mua hoặc gia hạn tiện ích bổ sung.",
+        "no_plan": "Không gian làm việc của bạn chưa có gói. Hãy chọn một gói trả phí để dùng tiện ích bổ sung.",
+        "cta": "Xem các gói"
+      },
+      "unavailableCard": "Cần gói trả phí đang hoạt động",
+      "empty": {
+        "title": "Không có tiện ích bổ sung nào đang bán",
+        "body": "Hiện chưa có tiện ích bổ sung nào được cung cấp. Hãy quay lại sau."
+      },
+      "listLabel": "Tiện ích bổ sung đang bán",
+      "owned": {
+        "title": "Tiện ích bổ sung bạn đang có",
+        "renews": "Gia hạn vào {date}",
+        "ends": "Hoạt động đến {date}. Sẽ không tự động gia hạn.",
+        "lifetime": "Trọn đời"
+      },
+      "state": {
+        "included": "Đã có trong gói của bạn",
+        "includedSupport": "Được quản lý tài khoản của bạn bật.",
+        "includedOwned": "Bạn cũng đang có tiện ích này. Gói của bạn giờ đã bao gồm nó nên bạn có thể hủy tiện ích. Không có khoản nào được hoàn tự động.",
+        "includedEnds": "Đã có trong gói của bạn. Tiện ích của bạn kết thúc vào {date} và sẽ không gia hạn.",
+        "active": "Hoạt động",
+        "ownedCount": "Đã sở hữu ×{count} · mua lại sẽ cộng thêm",
+        "turnedOff": "Đã tắt"
+      },
+      "price": {
+        "free": "Miễn phí",
+        "oneTime": "một lần",
+        "per": {
+          "days": "{count, plural, other {/ {count} ngày}}",
+          "weeks": "{count, plural, other {/ {count} tuần}}",
+          "months": "{count, plural, other {/ {count} tháng}}",
+          "years": "{count, plural, other {/ {count} năm}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Gia hạn mỗi kỳ. Thanh toán tự động bằng thẻ; với chuyển khoản ngân hàng hoặc thanh toán ngoại tuyến, bạn thanh toán lại khi kỳ kết thúc.",
+        "oneTime": "Mua một lần. Không gia hạn."
+      },
+      "buy": "Mua tiện ích bổ sung",
+      "buyAgain": "Mua lại",
+      "cannotBuyHint": "Hãy hỏi chủ tài khoản của bạn. Chỉ những người được phép mua cho không gian làm việc này mới có thể bắt đầu mua.",
+      "bullets": {
+        "unlimited": "{name} không giới hạn",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Cần tín dụng tin nhắn? Hãy nạp ví thay vào đó; tín dụng không phải là tiện ích bổ sung.",
+      "walletLink": "Nạp ví",
+      "groups": {
+        "feature": "Tiện ích bổ sung tính năng",
+        "capacity": "Tiện ích bổ sung dung lượng"
+      },
+      "activation": {
+        "turnedOffNote": "Đã tắt cho không gian làm việc này. Cài đặt của nó vẫn được giữ lại.",
+        "turnOff": "Tắt",
+        "turnOn": "Bật",
+        "askOwner": "Hãy nhờ chủ tài khoản bật hoặc tắt tính năng này.",
+        "doneOn": "{name} đã được bật.",
+        "errors": {
+          "notToggleable": "Không thể bật hoặc tắt {name} tại đây. Chỉ có thể chuyển đổi tiện ích bổ sung có trong gói của bạn.",
+          "forbidden": "Bạn không có quyền bật hoặc tắt tiện ích bổ sung.",
+          "generic": "Chúng tôi không thể thay đổi {name}. Vui lòng thử lại."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Tắt {name}?",
+      "lead": "Đây là những gì sẽ thay đổi. Bạn có thể bật lại bất cứ lúc nào.",
+      "cancel": "Hủy",
+      "confirm": "Tắt {name}",
+      "done": "{name} đã được tắt. Cài đặt của nó vẫn được giữ lại.",
+      "typeLabel": "Nhập {name} để xác nhận",
+      "typeHint": "Cuộc trò chuyện với khách hàng hoặc một số người sẽ bị ảnh hưởng, vì vậy hãy nhập tên để xác nhận.",
+      "groups": {
+        "stops": "Những gì sẽ dừng",
+        "kept": "Những gì được giữ lại",
+        "people": "Mọi người"
+      },
+      "items": {
+        "features_off": "Các tính năng này ngừng hoạt động: {names}.",
+        "dependents_off": "Các tính năng này cần chúng nên cũng sẽ dừng: {names}.",
+        "roles_dormant": "{count, plural, other {# vai trò có quyền của tiện ích này. Các quyền vẫn được giữ lại nhưng không hoạt động cho đến khi bạn bật lại.}}",
+        "waiting_chats": "{count, plural, other {# cuộc trò chuyện đang chờ nhân viên. Chúng sẽ không được tự động phân công, nên cần có người nhận xử lý.}}",
+        "routing_rules": "{count, plural, other {# quy tắc phân luồng sẽ ngừng phân công cuộc trò chuyện.}}",
+        "auto_teams": "{count, plural, other {# nhóm được đặt để tự động phân công cuộc trò chuyện và sẽ ngừng làm vậy.}}",
+        "teams": "{count, plural, other {# nhóm được giữ lại cùng các thành viên.}}",
+        "custom_role_holders": "{count, plural, other {# người có vai trò tùy chỉnh. Vai trò vẫn được giữ lại nhưng quyền của tiện ích này không còn áp dụng.}}",
+        "kept": "Cài đặt và dữ liệu của bạn được giữ lại. Chúng sẽ trở lại như bạn đã để khi bạn bật lại."
+      }
     }
   }
 }

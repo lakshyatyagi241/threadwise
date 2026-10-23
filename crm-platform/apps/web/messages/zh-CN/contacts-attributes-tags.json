@@ -283,8 +283,6 @@
       "shortEmail": "邮箱",
       "shortStage": "阶段",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "创建时间",
-      "shortModified": "修改时间",
       "firstRun": {
         "title": "添加您的第一批联系人",
         "message": "导入您常联系的人。联系人可用于消息、营销活动、任务和交易。",
@@ -298,7 +296,8 @@
       "teamFilter": "按团队筛选",
       "allTeams": "所有团队",
       "teamFormer": "原团队",
-      "unhideColumn": "显示列"
+      "unhideColumn": "显示列",
+      "resizeColumn": "拖动以调整“{column}”的宽度；双击重置"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -348,7 +347,25 @@
       "assignOwner": "分配负责人",
       "changeStage": "更改阶段",
       "more": "更多",
-      "held": "此记录受保护，目前无法删除。"
+      "held": "此记录受保护，目前无法删除。",
+      "consent": "营销同意",
+      "consentTitle": "营销同意",
+      "consentChannel": "渠道",
+      "consentAction": "更改",
+      "consentSubscribe": "订阅",
+      "consentUnsubscribe": "取消订阅",
+      "consentNote": "联系人同意的方式",
+      "consentNotePlaceholder": "他们说了什么或签署了什么，以及在哪里",
+      "consentNoteRequired": "订阅前请说明联系人是如何同意的。",
+      "consentContinue": "继续",
+      "consentBack": "返回",
+      "consentConfirm": "记录同意",
+      "consentSummary": "将 {count, plural, other {# 位联系人}} 在 {channel} 上标记为{change}。每位联系人的同意记录中都会新增一条。",
+      "consentChangeGranted": "已订阅",
+      "consentChangeWithdrawn": "已取消订阅",
+      "consentAllMatching": "这将应用于筛选条件匹配的所有联系人。",
+      "consentSubscribed": "{count, plural, other {# 位联系人已订阅}}",
+      "consentUnsubscribed": "{count, plural, other {# 位联系人已取消订阅}}"
     },
     "form": {
       "addEyebrow": "新建联系人",
@@ -500,7 +517,6 @@
       "loading": "正在加载分组...",
       "unavailableTitle": "暂不支持分组",
       "unavailableMessage": "此服务器上联系人分组服务尚未上线，因此暂时无法列出或创建分组。",
-      "contacts": "位联系人",
       "viewContacts": "查看联系人",
       "edit": "编辑分组",
       "editNamed": "编辑分组 {name}",
@@ -508,8 +524,6 @@
       "deleteNamed": "删除分组 {name}",
       "deleteTitle": "删除此分组？",
       "deleteMessage": "“{name}”将从其中的每位联系人身上移除。联系人本身会保留。",
-      "createTile": "创建新分组",
-      "createTileHint": "按细分、漏斗阶段或兴趣对联系人归类。",
       "emptyTitle": "暂无分组",
       "emptyMessage": "请联系工作区管理者创建第一个分组。",
       "helpKicker": "帮助 - 0{n}",
@@ -529,7 +543,21 @@
       },
       "exists": "已存在同名分组，因此未创建新分组。",
       "import": "导入联系人",
-      "importInto": "导入"
+      "importInto": "导入",
+      "colName": "名称",
+      "colMembers": "成员数",
+      "colCreatedBy": "创建人",
+      "colCreatedAt": "创建时间",
+      "colModifiedBy": "修改人",
+      "colUpdatedAt": "更新时间",
+      "colActions": "操作",
+      "tableLabel": "联系人分组",
+      "search": "搜索分组",
+      "searchPlaceholder": "按名称搜索",
+      "count": "{count, plural, =0 {没有分组} one {# 个分组} other {# 个分组}}",
+      "noResultsTitle": "没有匹配的分组",
+      "noResults": "没有包含您输入内容的分组名称。",
+      "clearSearch": "清除搜索"
     },
     "import": {
       "eyebrow": "批量导入",
@@ -624,7 +652,8 @@
         "invalid_date_of_birth": "出生日期不是可作为出生日期的年份在前的日期",
         "duplicate_in_file": "号码重复，已合并到前面的行",
         "invalid_timezone": "时区无效",
-        "legal_hold": "受保护的记录，未更改"
+        "legal_hold": "受保护的记录，未更改",
+        "invalid_property_value": "自定义属性的值与其类型或选项不符"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -642,7 +671,9 @@
       "groupNew": "新群组",
       "groupPick": "选择群组",
       "groupNewPlaceholder": "新群组名称",
-      "groupRequiredHint": "每个导入的联系人都会加入这一个群组。除非您在上方映射，否则文件自带的群组列将被忽略。"
+      "groupRequiredHint": "每个导入的联系人都会加入这一个群组。除非您在上方映射，否则文件自带的群组列将被忽略。",
+      "customProperties": "自定义属性",
+      "customPropertiesHint": "表头为属性名称（或导出时写入的 attr:key）的列会填入该属性。空白单元格保留联系人已有的值。"
     },
     "detail": {
       "back": "所有联系人",
@@ -1335,7 +1366,7 @@
         "closePicker": "关闭",
         "changed": "要更改的属性",
         "clear": "清空",
-        "keep": "保持不变",
+        "remove": "移除{name}",
         "setValue": "设置值",
         "willClear": "将清空{count, plural, other {所选的全部 # 个联系人}}的该值。",
         "requiredNoClear": "必填属性无法清空。",
@@ -1431,6 +1462,7 @@
       "template": "WhatsApp 模板",
       "templatePlaceholder": "选择模板",
       "noTemplates": "此号码没有已审核通过的模板。",
+      "openInInbox": "在收件箱中打开聊天",
       "notSendable": "此模板无法在此处填写（{reason}）。",
       "variables": "模板变量",
       "preview": "预览",

@@ -18,12 +18,12 @@ export const apiKeyStatusSchema = z.enum(['active', 'revoked']);
 export type ApiKeyStatusValue = z.infer<typeof apiKeyStatusSchema>;
 
 /**
- * `scopes` is the restriction picked in the console. Omitted or empty means full access (Reference parity, TW-API-008): the console form
- * refuses "restrict" with nothing picked, so an empty list is never sent for a key the person meant to restrict.
+ * `scopes` is what the key may do, picked in the console, and a key holds at least one. An empty list is refused: it used to mean full
+ * access (TW-API-008), and keys created that way were migrated to the explicit list of every scope.
  */
 export const createApiKeySchema = z.object({
   name: z.string().trim().min(1).max(API_KEY_NAME_MAX),
-  scopes: z.array(apiScopeSchema).max(API_SCOPES.length).optional(),
+  scopes: z.array(apiScopeSchema).min(1).max(API_SCOPES.length),
 });
 export type CreateApiKeyInput = z.infer<typeof createApiKeySchema>;
 
@@ -33,7 +33,7 @@ export const apiKeyResponseSchema = z.object({
   name: z.string(),
   prefix: z.string(),
   status: apiKeyStatusSchema,
-  /** The scopes the key is restricted to. Empty is full access. */
+  /** The scopes the key may use. Every key has at least one; an empty list would grant nothing. */
   scopes: z.array(apiScopeSchema),
   lastUsedAt: z.string().datetime().nullable(),
   expiresAt: z.string().datetime().nullable(),

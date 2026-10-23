@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (çalışma alanında değil)",
           "templateLabel": "Onaylı şablon",
           "templateHint": "Yalnızca çalışma alanındaki onaylı şablonlar burada görünür. <link>Yeni bir tane oluşturun →</link>",
+          "statusExits": "Durum çıkışları ekle (Gönderildi, Teslim edildi, Okundu, Yanıtlandı, Başarısız)",
+          "statusExitsHint": "Akış, bağlı bir adımı olan ilk çıkıştan ayrılır: şablon kabul edilir edilmez Gönderildi, WhatsApp bildirince Teslim edildi veya Okundu, müşteri yazınca Yanıtlandı, gönderilemezse Başarısız. Müşterinin dokunduğu düğme kendi çıkışından ayrılır.",
           "type": "Tür",
           "kindText": "Metin",
           "kindImage": "Görsel",
@@ -1947,6 +1949,7 @@
       "webBot": {
         "aria": "Akış bölümleri",
         "build": "Oluştur",
+        "faqs": "SSS",
         "customize": "Özelleştir",
         "saveFirst": "Önce akışı kaydedin.",
         "needsCustomizing": "Widget hâlâ varsayılan görünümü kullanıyor. Özelleştir'i açın.",
@@ -1954,6 +1957,13 @@
         "deploy": "Yayına al",
         "customizeFirstWhatsapp": "Yayınlamadan önce WhatsApp düğmenizi özelleştirin ve bir kez kaydedin.",
         "install": "Yükle"
+      },
+      "faqsPanel": {
+        "intro": "SSS, bir yapay zeka aracısının bilgisindeki kayıtlardır. Buradakiler bu akışın yanıt verdiği aracıya aittir: buraya soru ve cevap ekleyin, aracı bunları kullanır.",
+        "noAgent": "Bu akış henüz bir yapay zeka aracısı kullanmıyor. Yapay zeka asistanı veya SSS'den yanıtla adımı ekleyip bir aracı seçin: SSS'leri burada görünür.",
+        "agent": "Yapay zeka aracısı",
+        "openAgent": "Yapay Zeka Eğitimi'nde aç",
+        "unknownAgent": "Yapay zeka aracısı (bulunamadı)"
       },
       "buttonIcon": {
         "label": "Simge (isteğe bağlı)",
@@ -2353,6 +2363,8 @@
         "number": "Sayı",
         "alphanumeric": "Harfler ve sayılar",
         "date": "Tarih",
+        "datetime": "Tarih ve saat",
+        "time": "Saat",
         "age": "Yaş",
         "date_of_birth": "Doğum tarihi"
       },
@@ -2364,6 +2376,8 @@
         "number": "Lütfen geçerli bir sayı girin",
         "alphanumeric": "Lütfen yalnızca harf ve rakam kullanın",
         "date": "Lütfen geçerli bir tarih girin ({format})",
+        "datetime": "Lütfen geçerli bir tarih ve saat girin ({format} HH:MM)",
+        "time": "Lütfen geçerli bir saat girin (HH:MM)",
         "age": "Lütfen yaşınızı tam sayı olarak girin",
         "date_of_birth": "Lütfen geçerli bir tarih girin ({format})"
       },

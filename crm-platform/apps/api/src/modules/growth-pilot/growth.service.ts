@@ -21,6 +21,7 @@ import {
   type UpdateGrowthSettingsInput,
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
+import { isWalletEmpty } from '../../common/errors/wallet-empty';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   EnrichmentError,
@@ -28,10 +29,14 @@ import {
   type GrowthEnrichmentPort,
 } from '../../infra/providers/growth-enrichment/growth-enrichment.port';
 import { AuditService } from '../../kernel/audit/audit.service';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { emitUsageReported } from '../../kernel/outbox/usage-report';
 import { CampaignsRepository } from '../campaigns';
 import { ContactGroupsService, ContactsService } from '../crm';
 import { LeadStageLineService } from '../lead-scoring';
+import { UsageBillingService } from '../wallet-message-billing';
 import { auc } from './growth.rules';
+import { enrichmentUsageId, isBillableLookup } from './growth-enrichment-billing';
 import { GrowthGateService, type GrowthContext } from './growth-gate.service';
 import { GrowthRepository } from './growth.repository';
 import {
@@ -81,6 +86,8 @@ export class GrowthService {
     private readonly stageLines: LeadStageLineService,
     private readonly campaigns: CampaignsRepository,
     @Inject(GROWTH_ENRICHMENT_PORT) private readonly enrichment: GrowthEnrichmentPort,
+    private readonly usage: UsageBillingService,
+    private readonly outbox: OutboxService,
   ) {}
 
   // --- settings -----------------------------------------------------------------------------------------------------
@@ -546,13 +553,21 @@ export class GrowthService {
     };
   }
 
-  /** The button: the same, after the gate. */
+  /**
+   * The button: the same, after the gate. A lookup costs the workspace's wallet, so a wallet that cannot pay for one is refused here
+   * (422 `WALLET_EMPTY`, the screen says to top up); the daily run does the same check and just stops.
+   */
   async enrich(orgId: number): Promise<number> {
     await this.gate.require(orgId, 'enrichment');
+    if (this.enrichment.configured()) await this.usage.assertCanAfford(orgId, 'enrichment');
     return this.runEnrichment(orgId);
   }
 
-  /** Looks up a batch of contacts with a business email. Inert without a configured provider. Returns how many were asked about. */
+  /**
+   * Looks up a batch of contacts with a business email. Inert without a configured provider. Returns how many were asked about. Each
+   * lookup is asked of the wallet first and stops the run quietly when it cannot pay (the contact stays a candidate for the next run),
+   * and each one that reached the provider is billed as one `enrichment` usage in the same transaction that saves its answer.
+   */
   async runEnrichment(orgId: number, limit = 50): Promise<number> {
     if (!this.enrichment.configured()) return 0;
     const batch = await this.db.txAs({ orgId, userId: null }, (tx) =>
@@ -560,6 +575,13 @@ export class GrowthService {
     );
     let asked = 0;
     for (const c of batch) {
+      try {
+        await this.usage.assertCanAfford(orgId, 'enrichment');
+      } catch (err) {
+        if (!isWalletEmpty(err)) throw err;
+        this.logger.log({ orgId, asked }, 'enrichment stopped: the wallet cannot pay for a lookup');
+        break;
+      }
       let status: 'found' | 'not_found' | 'failed' = 'failed';
       let data: Record<string, unknown> = {};
       try {
@@ -576,9 +598,22 @@ export class GrowthService {
         }
         this.logger.warn({ orgId, err }, 'enrichment lookup failed');
       }
-      await this.db.txAs({ orgId, userId: null }, (tx) =>
-        this.repo.saveEnrichment(tx, orgId, c.id, this.enrichment.provider, status, data),
-      );
+      await this.db.txAs({ orgId, userId: null }, async (tx) => {
+        await this.repo.saveEnrichment(tx, orgId, c.id, this.enrichment.provider, status, data);
+        if (!isBillableLookup(status)) return;
+        await emitUsageReported(this.outbox, tx, {
+          orgId,
+          aggregateModule: 'growth_enrichment',
+          aggregateId: c.id,
+          report: {
+            kind: 'enrichment',
+            usageId: enrichmentUsageId(c.id, new Date()),
+            units: 1,
+            source: 'growth',
+            provider: this.enrichment.provider,
+          },
+        });
+      });
       asked += 1;
     }
     return asked;

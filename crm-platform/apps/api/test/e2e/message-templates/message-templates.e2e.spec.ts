@@ -243,6 +243,76 @@ describe('create and submit (TW-TPL-007, 024, 025)', () => {
     );
   });
 
+  it('creates a carousel template: cards are saved, sent to Meta as a CAROUSEL component and read back with their files', async () => {
+    const t = await api.signup('tcar');
+    const conn = await seedConnection(t);
+    meta = happyMeta({ category: 'MARKETING' });
+    const cards = [
+      {
+        format: 'image',
+        headerHandle: '4::aGFuZGxl',
+        headerSampleUrl: 'https://scontent.example/a.png',
+        body: 'Summer sale',
+        buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/shop' }],
+      },
+      {
+        format: 'image',
+        headerHandle: '4::aGFuZGxl',
+        headerSampleUrl: 'https://scontent.example/b.png',
+        body: 'Winter sale',
+        buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/shop' }],
+      },
+    ];
+    const res = await send(
+      t.admin,
+      'post',
+      '/v2/templates',
+      form(conn.uuid, {
+        name: 'Seasonal Cards',
+        metaCategory: 'MARKETING',
+        templateType: 'carousel',
+        body: 'Our picks for you',
+        variableMap: undefined,
+        cards,
+      }),
+    );
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.template).toMatchObject({ templateType: 'carousel', name: 'seasonal_cards' });
+    expect(res.body.template.cards).toHaveLength(2);
+    expect(res.body.template.cards[0]).toMatchObject({
+      format: 'image',
+      body: 'Summer sale',
+      imageUrl: 'https://scontent.example/a.png',
+    });
+
+    const create = calls.find((c) => c.method === 'POST')!;
+    const components = (create.json as { components: Array<Record<string, unknown>> }).components;
+    expect(components.map((c) => c.type)).toEqual(['BODY', 'CAROUSEL']);
+    expect((components[1] as { cards: unknown[] }).cards).toHaveLength(2);
+
+    const row = (await templateRows(t.orgId))[0];
+    expect(row.template_type).toBe('carousel');
+    expect(row.carousel_data).toHaveLength(2);
+
+    // One card is not a carousel: refused before anything is sent.
+    calls = [];
+    const one = await send(
+      t.admin,
+      'post',
+      '/v2/templates',
+      form(conn.uuid, {
+        name: 'One Card',
+        metaCategory: 'MARKETING',
+        templateType: 'carousel',
+        body: 'Just one',
+        variableMap: undefined,
+        cards: cards.slice(0, 1),
+      }),
+    );
+    expect(one.status).toBe(422);
+    expect(calls).toHaveLength(0);
+  });
+
   it('a draft is saved without calling Meta', async () => {
     const t = await api.signup('td');
     const conn = await seedConnection(t);
@@ -546,14 +616,15 @@ describe('the library: sort, status tabs and counts', () => {
         (x: { name: string }) => x.name,
       );
     expect(await group('approved')).toEqual(['a_ok']);
-    expect(await group('pending')).toEqual(['b_wait', 'c_draft']);
+    expect(await group('pending')).toEqual(['b_wait']);
+    expect(await group('draft')).toEqual(['c_draft']);
     expect(await group('rejected')).toEqual(['d_no', 'e_paused']);
 
     const counts = await api.as(t.admin).get('/v2/templates/counts?statusGroup=pending');
     expect(counts.status, JSON.stringify(counts.body)).toBe(200);
     expect(counts.body).toEqual({
       categories: { all: 5, UTILITY: 4, MARKETING: 1 },
-      statuses: { all: 5, approved: 1, pending: 2, rejected: 2 },
+      statuses: { all: 5, approved: 1, pending: 1, draft: 1, rejected: 2 },
       filtered: 2,
     });
   });

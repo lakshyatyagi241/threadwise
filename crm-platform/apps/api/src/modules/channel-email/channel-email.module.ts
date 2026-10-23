@@ -9,6 +9,7 @@ import { CrmModule } from '../crm';
 import { EmailTemplatesModule } from '../email-templates';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { EmailAttachmentsController } from './email-attachments.controller';
 import { EmailChannelAdapter } from './email-channel.adapter';
 import { EmailEngineSender } from './email-engine.sender';
@@ -43,6 +44,8 @@ import { MailboxesService } from './mailboxes.service';
     EmailTemplatesModule,
     PlatformSettingsModule,
     PlansCoreModule,
+    // The per-mail fee: a campaign or system mail is reported and an empty wallet refused (UsageBillingService).
+    WalletMessageBillingModule,
   ],
   controllers: [
     MailboxesController,

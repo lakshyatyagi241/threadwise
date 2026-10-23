@@ -247,23 +247,7 @@
         "title": "Domande frequenti"
       },
       "addons": {
-        "title": "Add-on",
-        "owned": "Add-on posseduti",
-        "oneTime": "una tantum",
-        "buy": "Acquista add-on",
-        "buyAgain": "Acquista di nuovo",
-        "active": "Attivo",
-        "included": "Incluso nel tuo piano",
-        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
-        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
-        "unlimitedBullet": "{label} illimitati",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ giorno} other {/ {count} giorni}}",
-          "weeks": "{count, plural, one {/ settimana} other {/ {count} settimane}}",
-          "months": "{count, plural, one {/ mese} other {/ {count} mesi}}",
-          "years": "{count, plural, one {/ anno} other {/ {count} anni}}"
-        }
+        "title": "Add-on"
       },
       "renewal": {
         "renewsOn": "Il tuo piano si rinnova automaticamente il {date}.",
@@ -586,13 +570,27 @@
       "appLink": "Vedi l’app",
       "addonHint": "Puoi anche aggiungerlo al tuo piano attuale con il componente {addon}.",
       "addonLink": "Vedi componenti aggiuntivi",
-      "addons": {
-        "smartRouting": "Instradamento intelligente",
-        "teamsPermissions": "Team e autorizzazioni"
-      }
+      "addonsTabHint": "I componenti aggiuntivi non richiedono il Marketplace nel tuo piano. Da Piani e componenti aggiuntivi puoi comunque vedere cosa possiedi e acquistarne altri.",
+      "addonsTabLink": "Apri Piani e componenti aggiuntivi",
+      "addonHintGeneric": "Il tuo piano potrebbe offrirlo anche come componente aggiuntivo."
     },
     "lock": {
-      "link": "Vedi piani e componenti aggiuntivi"
+      "link": "Vedi piani e componenti aggiuntivi",
+      "offTitle": "Non incluso nel tuo piano",
+      "offLead": "Questa parte al momento non è inclusa nel piano del tuo spazio di lavoro.",
+      "buyTitle": "Aggiungi {addon} a {price}",
+      "buyLead": "Il tuo piano offre {addon} come componente aggiuntivo. Aggiungilo per attivare questa parte.",
+      "buyLink": "Vedi componenti aggiuntivi",
+      "askOwner": "Chiedi al proprietario dell’account di aggiungerlo.",
+      "unavailableTitle": "{addon} richiede un piano a pagamento attivo",
+      "unavailableLead": "Scegli prima un piano a pagamento, poi potrai aggiungervi {addon}.",
+      "viewPlans": "Vedi piani",
+      "disabledTitle": "{addon} è disattivato",
+      "disabledLead": "Il tuo piano include {addon}, ma è disattivato per questo spazio di lavoro. Le sue impostazioni sono conservate.",
+      "disabledAsk": "Chiedi al proprietario dell’account di attivarlo.",
+      "turnOn": "Attivalo",
+      "turnOnForbidden": "Non hai il permesso di attivarlo. Chiedilo al proprietario dell’account.",
+      "turnOnFailed": "Non è stato possibile attivare {addon}. Riprova."
     }
   }
 }

@@ -154,6 +154,7 @@ groups:
         for: 3m
         labels: { severity: critical }
         annotations:
+          runbook: 'docs/runbooks/health-readiness.md'
           summary: 'The {{ $labels.target }} probe has failed for 3 minutes: callers get no answer'
           description: 'The probe could not get a 2xx/3xx answer. If the metrics scrape of the API also fails the process is down or blocked; if only /ready fails a dependency is down.'
 

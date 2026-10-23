@@ -1615,6 +1615,8 @@
           "notInWorkspace": "{value} (non presente nel workspace)",
           "templateLabel": "Template approvato",
           "templateHint": "Qui compaiono solo i template approvati del workspace. <link>Creane uno nuovo →</link>",
+          "statusExits": "Aggiungi uscite di stato (Inviato, Consegnato, Letto, Risposto, Non riuscito)",
+          "statusExitsHint": "Il flusso esce dalla prima uscita con un passaggio collegato: Inviato appena il modello è accettato, Consegnato o Letto quando WhatsApp lo segnala, Risposto quando il cliente scrive, Non riuscito se l'invio non è stato possibile. Un pulsante toccato dal cliente esce dalla propria uscita.",
           "type": "Tipo",
           "kindText": "Testo",
           "kindImage": "Immagine",
@@ -1805,6 +1807,7 @@
       "webBot": {
         "aria": "Sezioni del flusso",
         "build": "Crea",
+        "faqs": "FAQ",
         "customize": "Personalizza",
         "saveFirst": "Salva prima il flusso.",
         "needsCustomizing": "Il widget usa ancora l’aspetto predefinito. Apri Personalizza.",
@@ -1812,6 +1815,13 @@
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Personalizza il pulsante WhatsApp e salvalo una volta prima di pubblicare.",
         "install": "Installa"
+      },
+      "faqsPanel": {
+        "intro": "Le FAQ sono voci della conoscenza di un agente IA. Queste appartengono all'agente con cui risponde questo flusso: aggiungi qui domande e risposte e l'agente le userà.",
+        "noAgent": "Questo flusso non usa ancora un agente IA. Aggiungi un passaggio Assistente IA o Rispondi dalle FAQ e scegli un agente: le sue FAQ compariranno qui.",
+        "agent": "Agente IA",
+        "openAgent": "Apri in Addestramento IA",
+        "unknownAgent": "Agente IA (non trovato)"
       },
       "buttonIcon": {
         "label": "Icona (facoltativo)",
@@ -2211,6 +2221,8 @@
         "number": "Numero",
         "alphanumeric": "Lettere e numeri",
         "date": "Data",
+        "datetime": "Data e ora",
+        "time": "Ora",
         "age": "Età",
         "date_of_birth": "Data di nascita"
       },
@@ -2222,6 +2234,8 @@
         "number": "Inserisci un numero valido",
         "alphanumeric": "Usa solo lettere e numeri",
         "date": "Inserisci una data valida ({format})",
+        "datetime": "Inserisci una data e un'ora valide ({format} HH:MM)",
+        "time": "Inserisci un'ora valida (HH:MM)",
         "age": "Inserisci la tua età come numero intero",
         "date_of_birth": "Inserisci una data valida ({format})"
       },

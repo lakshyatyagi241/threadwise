@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { ContactViewResponse } from '@crm/contracts';
 import { DEFAULT_FILTERS } from '../api/contacts';
+import { filtersToSearch, parseFilters } from './filters';
 import {
   composeViewFilter,
+  defaultFiltersOf,
   filtersOfView,
   pickerViews,
   sameFilters,
+  searchOfView,
   tabViews,
   viewChanged,
   viewColumnsOf,
@@ -92,6 +95,34 @@ describe('withView / viewIdOf', () => {
     expect(viewIdOf(new URLSearchParams(`view=${ID}`))).toBe(ID);
     expect(viewIdOf(new URLSearchParams('view=1'))).toBe('');
     expect(viewIdOf(new URLSearchParams(''))).toBe('');
+  });
+});
+
+describe('searchOfView', () => {
+  it('carries the saved filters and the open view, never the page', () => {
+    const saved = viewFilterOf({ ...DEFAULT_FILTERS, lifecycleStage: 'lead', page: 3 });
+    const search = searchOfView(saved, ID);
+    const p = new URLSearchParams(search);
+    expect(p.get('stage')).toBe('lead');
+    expect(p.get('view')).toBe(ID);
+    expect(p.has('page')).toBe(false);
+  });
+  it('reads back to the same filters the view saved, so the list opens on them', () => {
+    const saved = viewFilterOf({ ...DEFAULT_FILTERS, q: 'asha', sort: 'name', order: 'asc' });
+    const back = parseFilters(new URLSearchParams(searchOfView(saved, ID)), DEFAULT_FILTERS.limit);
+    expect(back).toMatchObject({ q: 'asha', sort: 'name', order: 'asc', page: 1 });
+  });
+  it('is just the view when the view saved no filters', () => {
+    expect(searchOfView({}, ID)).toBe(`?view=${ID}`);
+  });
+});
+
+describe('defaultFiltersOf (Reset filters)', () => {
+  it('is the default filters at the page size the person chose', () => {
+    expect(defaultFiltersOf(25)).toEqual({ ...DEFAULT_FILTERS, limit: 25 });
+  });
+  it('resets to all contacts with only the view still in the address', () => {
+    expect(withView(filtersToSearch(defaultFiltersOf(25), 25), ID)).toBe(`?view=${ID}`);
   });
 });
 

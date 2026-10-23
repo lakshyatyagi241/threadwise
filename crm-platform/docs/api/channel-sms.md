@@ -159,15 +159,18 @@ There is no send route of its own. SMS is an engine of the broadcast and campaig
   and the workspace's SMS templates (`wa_templates.channel = 'sms'`, approved); empty while `sms_enabled` is off. The default composer
   never lists an SMS sender or template.
 - **Create.** `POST /broadcasts` with `senderKeys: ["sms:<uuid>"]` and `POST /campaigns` with `senderKey: "sms:<uuid>"` need the plan feature
-  `sms` (422 `PLAN_FEATURE_LOCKED`) as well as `broadcast` / `campaign`, and are never held by the wallet precheck (SMS is never
-  charged to the wallet). A campaign on SMS drops buttons and quick replies. "Send later" is honoured: the broadcast waits for its time.
+  `sms` (422 `PLAN_FEATURE_LOCKED`) as well as `broadcast` / `campaign`. The launch wallet precheck is skipped for SMS because it prices a
+  message with the WhatsApp rate card; an SMS is paid for per segment at the operator's SMS price and checked against the wallet before
+  each send (see Billing below). A campaign on SMS drops buttons and quick replies. "Send later" is honoured: the broadcast waits for its time.
 - **Per recipient.** The dispatcher has already merged that contact's variables (named variables included). The SMS engine then:
   1. refuses a contact who opted out after the audience was built ("This contact has opted out of messages.");
-  2. takes one message from the month's allowance (below);
-  3. sends the text only (header, footer, buttons and media are not SMS) through Twilio (`From`, `To` as `+digits`, `Body`, and a
+  2. asks the wallet whether it can pay for the message's segments; if not, throws 422 `WALLET_EMPTY` and sends nothing (the dispatcher
+     puts the recipient back and pauses the run, see Billing);
+  3. takes one message from the month's allowance (below);
+  4. sends the text only (header, footer, buttons and media are not SMS) through Twilio (`From`, `To` as `+digits`, `Body`, and a
      `StatusCallback` to the report address) or MSG91 (the flow route when the sender has a DLT template id, otherwise the plain route);
-  4. returns the provider's message id, stored on the recipient, or throws the operator sentence (stored as the recipient's error).
-     There is no pacing gap and no batch cooldown for SMS.
+  5. reports the accepted message to the wallet (Billing), then returns the provider's message id, stored on the recipient, or throws the
+     operator sentence (stored as the recipient's error). There is no pacing gap and no batch cooldown for SMS.
 - **Errors, in the operator's words.** Twilio 572006, 21608, 21211, 21606, 21212, 21610 and 21614 and MSG91's auth key, DLT template,
   sender id and credit refusals are translated; any other text is the provider's own, else `HTTP <status>`, else "SMS send failed".
   A Twilio **21610** (the recipient replied STOP at Twilio) also flags the contact `is_unsubscribed` so the next run does not try again.
@@ -176,6 +179,21 @@ There is no send route of its own. SMS is an engine of the broadcast and campaig
   in `plan_usage` (metric `sms_sent`). A spent month fails the whole run before anything is sent; during a run each message reserves its
   place atomically, so the cap is never overshot, and a message the provider refuses gives its place back. The sentence:
   "You've reached your plan's limit of N SMS messages a month. Upgrade your plan to send more." The usage panel shows it as `sms_monthly`.
+- **Billing.** Every SMS a workspace sends is charged to its wallet and appears in its expense log (`usage_charges`, kind `sms`). The
+  charge is the platform's fee on top of the customer's own Twilio or MSG91 bill; the price per segment is the operator's (default 0.50, set
+  on the usage pricing page), never hard-coded. Platform-owned workspaces are not charged.
+  - **Before sending**, the engine calls `UsageBillingService.assertCanAfford(orgId, 'sms', segments)`. A wallet that cannot pay throws 422
+    `WALLET_EMPTY` before anything leaves: a broadcast goes to `paused` and a campaign to `paused` with every unsent recipient still waiting
+    (nobody is marked failed), and a lead's first message is held (`wallet_empty`) and asked again; a top-up and Resume continue it.
+  - **After the provider accepts**, the engine writes one `usage.reported` outbox event (`kind: "sms"`, `usageId` = the provider message id
+    (Twilio SID or MSG91 request id), `units` = the provider's own segment count, `source` = `broadcast`, `campaign` or `lead_first`, `provider` =
+    `twilio` or `msg91`, the recipient number, and the broadcast or campaign name). The worker's billing consumer prices it, takes the money
+    and writes the expense row; it is idempotent per message id. A billing fault is logged with the message id and never fails or retries a
+    message that already left.
+  - **No refund on a delivery report.** A failed or undelivered report (below) moves the recipient and changes nothing on the wallet: the
+    callback is signed with a secret the workspace itself holds (its own Twilio auth token, its own MSG91 report address), so it cannot be
+    what gives the platform's fee back. The fee is taken when the carrier accepts the message and stays.
+  - Not billed: the Twilio Lookup (the customer's own Twilio account), a message the provider refused, and anything inbound.
 - **Segments.** `measureSms` (`@crm/contracts`) says how many segments a text costs: 160 / 153 per segment in GSM-7, 70 / 67 in UCS-2
   (any character outside GSM makes the whole text UCS-2), extension characters cost two units. UCS-2 counts UTF-16 units, so an emoji
   is two (Reference counted one and under-counted).
@@ -205,11 +223,12 @@ the providers retry hard and disable a webhook that keeps failing.
 - **Effect.** The report goes to the campaign recipient first, then the broadcast recipient, through their own state machines: a recipient
   only moves forward (sent, then delivered or failed), a late `sent` can never undo `delivered`, a repeat changes nothing, the counters move
   by the change, and a failure keeps `<code> <text>` (or "SMS undelivered"). Broadcast recipients now get delivery too (Reference left them
-  `sent` forever).
+  `sent` forever). A failed or undelivered report does not touch the wallet (Billing). The first message to a lead has no recipient
+  row, so its report is dropped as before.
 
 ## Not built
 
 Everything that exists only to receive texts (the inbound webhook, inbox threads, STOP capture from replies, automation on inbound texts,
-replying from the inbox; TW-SMS-D01 to D08). Also not built yet: a per-message SMS record with segments and cost (TW-SMS-027, 029; the
-plan decision is no new table), a recipient-level retry that skips permanent failures, and SMS templates created through the templates API
+replying from the inbox; TW-SMS-D01 to D08). Also not built yet: a per-message SMS record on the broadcast or campaign itself (TW-SMS-027, 029;
+the per-message segments and cost are in the customer's expense log, `usage_charges`), a recipient-level retry that skips permanent failures, and SMS templates created through the templates API
 (that domain's create path is still WhatsApp-only; the composer already reads `channel = 'sms'` rows).

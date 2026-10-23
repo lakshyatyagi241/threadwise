@@ -3,8 +3,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { ToastProvider } from '@crm/ui';
-import type { HandoffSettings, RoutingTestResponse } from '@crm/contracts';
+import type { FeatureAddon, HandoffSettings, RoutingTestResponse } from '@crm/contracts';
 import { loadMessages } from '@/i18n/messages';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
 import { U1, rule } from '../lib/fixtures';
 import { AssignmentSwitches } from './assignment-switches';
 import { EveryoneElseRow } from './everyone-else-row';
@@ -59,15 +60,35 @@ vi.mock('../api/routing', () => ({
   useRoutingSettings: () => ({ data: { keepContactAgent: keep }, isPending: false }),
 }));
 
+/** The plan features and add-on offers the layout hands down; null = unknown (nothing hidden). */
+let plan: { features: string[] | null; featureAddons: FeatureAddon[] | null } = {
+  features: null,
+  featureAddons: null,
+};
 const wrap = (el: React.ReactElement, locale = 'en') =>
   renderToStaticMarkup(
     <NextIntlClientProvider locale={locale} messages={loadMessages(locale)} timeZone="UTC">
-      <QueryClientProvider client={new QueryClient()}>
-        <ToastProvider dismissLabel="Dismiss">{el}</ToastProvider>
-      </QueryClientProvider>
+      <PlanFeaturesProvider features={plan.features} featureAddons={plan.featureAddons}>
+        <QueryClientProvider client={new QueryClient()}>
+          <ToastProvider dismissLabel="Dismiss">{el}</ToastProvider>
+        </QueryClientProvider>
+      </PlanFeaturesProvider>
     </NextIntlClientProvider>,
   );
 const switches = () => wrap(<AssignmentSwitches onAutoEnabled={async () => undefined} />);
+const smartRouting = (offer: FeatureAddon['offer']): FeatureAddon[] =>
+  ['inbox_routing', 'inbox_assignment_sticky'].map((feature) => ({
+    feature,
+    addonSlug: 'smart_routing',
+    addonName: 'Smart routing',
+    offer,
+    amount: '199.00',
+    currency: 'INR',
+    billingUnit: 'months',
+    billingDuration: 1,
+  }));
+const SMART_SWITCHES = /data-testid="switch-(auto|sticky|owner)"/;
+const SMART_ADVANCED = /data-testid="advanced-(sync|window|prompt)"/;
 
 describe('the four switches', () => {
   it('shows the four switches in the owner wording, in the order they run, with Advanced under them', () => {
@@ -103,7 +124,36 @@ describe('the four switches', () => {
     expect(out).toContain('the contact owner still wins');
   });
 
-  it('on a basic plan keeps every control visible, locks what the plan lacks and shows the upgrade hint, but leaves the claim switch usable', () => {
+  it('without Smart routing draws none of its switches, keeps the base controls and shows one add-on card', () => {
+    data = base;
+    plan = { features: ['inbox_sla'], featureAddons: smartRouting('buy') };
+    const out = switches();
+    plan = { features: null, featureAddons: null };
+    expect(out).not.toMatch(SMART_SWITCHES);
+    expect(out).not.toMatch(SMART_ADVANCED);
+    expect(out).not.toContain('data-testid="switch-order"');
+    // base: claim sets the contact owner, the queue alert
+    expect(out).toContain('data-testid="switch-claim"');
+    expect(out).toContain('Assign Agent as Contact Owner');
+    expect(out).toContain('data-testid="advanced-queue-alert"');
+    expect(out.match(/data-testid="feature-addon-lock"/g)).toHaveLength(1);
+    expect(out).toMatch(/Add Smart routing for ₹199\.00 \/ month/);
+    expect(out).toContain('href="/account/plans"');
+    expect(out).toContain('new chats wait in the queue until someone claims them');
+  });
+
+  it('when the plan does not offer the add-on (hidden) shows the base controls and no card at all', () => {
+    data = base;
+    plan = { features: [], featureAddons: smartRouting('hidden') };
+    const out = switches();
+    plan = { features: null, featureAddons: null };
+    expect(out).not.toMatch(SMART_SWITCHES);
+    expect(out).not.toContain('feature-addon-lock');
+    expect(out).toContain('data-testid="switch-claim"');
+    expect(out).toContain('data-testid="advanced-queue-alert"');
+  });
+
+  it("follows the server's answer too: a plan the settings call reports without routing hides the switches", () => {
     data = {
       ...base,
       available: {
@@ -117,26 +167,43 @@ describe('the four switches', () => {
       },
     };
     const out = switches();
-    expect(out).toContain('Not in your plan');
-    // Every locked control names the add-on that unlocks it and links to where it is bought.
-    expect(out).toContain('Smart routing add-on');
-    expect(out).toContain('href="/account/plans"');
-    expect((out.match(/data-testid="switch-(auto|sticky|owner)-lock"/g) ?? []).length).toBe(3);
+    data = base;
+    expect(out).not.toMatch(SMART_SWITCHES);
+    expect(out).toContain('data-testid="feature-addon-lock"');
     const claim = out.slice(
       out.indexOf('data-testid="switch-claim"'),
       out.indexOf('data-testid="advanced"'),
     );
+    expect(claim).toContain('role="switch"');
     expect(claim).not.toContain('disabled=""');
-    const auto = out.slice(
-      out.indexOf('data-testid="switch-auto"'),
-      out.indexOf('data-testid="switch-sticky"'),
-    );
-    expect(auto).toContain('disabled=""');
   });
 
-  it('a plan with routing has no upgrade hint', () => {
+  it('routing without the sticky feature keeps the master switch and locks only the sticky parts', () => {
     data = base;
-    expect(switches()).not.toMatch(/upgrade/i);
+    plan = { features: ['inbox_routing'], featureAddons: smartRouting('included') };
+    const out = switches();
+    plan = { features: null, featureAddons: null };
+    expect(out).toContain('data-testid="switch-auto"');
+    expect(out).not.toContain('data-testid="switch-sticky"');
+    expect(out).not.toContain('data-testid="switch-owner"');
+    expect(out).not.toMatch(SMART_ADVANCED);
+    expect(out).toContain('data-offer="off"');
+  });
+
+  it('with Smart routing shows every switch and extra, and no card', () => {
+    data = base;
+    plan = {
+      features: ['inbox_routing', 'inbox_assignment_sticky'],
+      featureAddons: smartRouting('owned'),
+    };
+    const out = switches();
+    plan = { features: null, featureAddons: null };
+    for (const id of ['auto', 'sticky', 'owner', 'claim'])
+      expect(out).toContain(`data-testid="switch-${id}"`);
+    for (const id of ['sync', 'window', 'prompt', 'queue-alert'])
+      expect(out).toContain(`data-testid="advanced-${id}"`);
+    expect(out).not.toContain('feature-addon-lock');
+    expect(out).not.toMatch(/upgrade/i);
   });
 
   it('without the manage right shows the read-only notice and disables the switches', () => {

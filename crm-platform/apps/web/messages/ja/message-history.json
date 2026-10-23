@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "受信トレイ",
+      "contact": "連絡先",
       "flow": "フロー",
       "auto_reply": "自動返信",
+      "automation": "自動化",
       "ai": "AIアシスタント",
       "api": "API",
       "broadcast": "一斉配信",
+      "broadcast_test": "一斉配信のテスト送信",
       "campaign": "キャンペーン",
       "scheduled": "予約",
       "other": "その他"
@@ -171,6 +174,7 @@
         "contact": "連絡先",
         "message": "メッセージ",
         "type": "種別",
+        "source": "送信元",
         "status": "ステータス",
         "open": "開く"
       },
@@ -228,11 +232,13 @@
       "source": "送信元",
       "sourceValue": {
         "inbox": "受信トレイ",
+        "contact": "連絡先",
         "flow": "フロー",
         "auto_reply": "自動返信",
         "ai": "AIアシスタント",
         "api": "API",
         "broadcast": "一斉配信",
+        "broadcast_test": "一斉配信のテスト送信",
         "campaign": "キャンペーン",
         "scheduled": "予約メッセージ",
         "other": "その他"

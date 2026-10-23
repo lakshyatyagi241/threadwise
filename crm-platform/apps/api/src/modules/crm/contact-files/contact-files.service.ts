@@ -11,6 +11,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { storageKeyOrg } from '../../../common/storage-key-owner';
 import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { ChatMediaStore } from '../../../infra/providers/chat-conversations/media';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
@@ -20,12 +21,20 @@ import { ContactFilesRepository } from './contact-files.repository';
 
 const MODULE_KEY = 'contact_files';
 
+/** The shape multer hands over (memory storage). */
+export interface UploadedContactFile {
+  originalname: string;
+  buffer: Buffer;
+  size: number;
+}
+
 @Injectable()
 export class ContactFilesService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: ContactFilesRepository,
     private readonly contactsRepo: ContactsRepository,
+    private readonly media: ChatMediaStore,
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
@@ -49,13 +58,50 @@ export class ContactFilesService {
     });
   }
 
+  /**
+   * Stores the bytes of a file sent as multipart field `file`, then records it on the contact. The bytes go through the chat media
+   * door, so the type is read from the content, the size limit is the one for that type, and the stored size is measured here.
+   */
+  async upload(
+    contactUuid: string,
+    file: UploadedContactFile | undefined,
+  ): Promise<ContactFileResponse> {
+    const ctx = RequestContextStore.require();
+    if (!file || file.size === 0) {
+      throw AppError.validation('A file is required', [
+        { path: 'file', message: 'send the file as multipart field "file"' },
+      ]);
+    }
+    // Checked before any bytes are stored, and again when the record is written: the contact may change while the file is read.
+    await this.db.tx((tx) => this.writableContact(tx, ctx.orgId, contactUuid));
+
+    const stored = await this.media.store({
+      orgId: ctx.orgId,
+      filename: file.originalname,
+      buffer: file.buffer,
+      category: 'contact_file',
+    });
+    try {
+      return await this.db.tx(async (tx) => {
+        const contact = await this.writableContact(tx, ctx.orgId, contactUuid);
+        return this.record(tx, contact.id, {
+          fileName: stored.name,
+          fileSizeBytes: stored.size,
+          storageKey: stored.key,
+          mimeType: stored.mime,
+        });
+      });
+    } catch (err) {
+      // The record was not kept, so nothing points at these bytes: they go.
+      await this.media.remove(ctx.orgId, stored.key).catch(() => undefined);
+      throw err;
+    }
+  }
+
   async create(contactUuid: string, input: CreateContactFileInput): Promise<ContactFileResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
-      const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
-      const contactId = contact.id;
+      const contact = await this.writableContact(tx, ctx.orgId, contactUuid);
 
       // AZ-009: a key minted per workspace looks like `<area>/<orgId>/...`; it may only name the caller's own workspace.
       // TI-022: compared in the form the storage layer acts on (`storage/chat/7/x` is `chat/7/x`).
@@ -69,26 +115,7 @@ export class ContactFilesService {
         );
       }
 
-      const created = await this.repo.insert(tx, ctx.orgId, {
-        contactId,
-        fileName: input.fileName,
-        fileSizeBytes: input.fileSizeBytes,
-        storageKey: input.storageKey,
-        mimeType: input.mimeType,
-        uploadedBy: ctx.userId,
-      });
-      await this.contactsRepo.bumpLastActivity(tx, ctx.orgId, contactId);
-
-      await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
-      await this.outbox.emit(tx, {
-        aggregateModule: MODULE_KEY,
-        aggregateId: created.id,
-        eventType: 'contact_file.created',
-        payload: { uuid: created.uuid, fileName: input.fileName },
-      });
-
-      const row = await this.repo.findById(tx, ctx.orgId, created.id);
-      return toContactFileResponse(row!);
+      return this.record(tx, contact.id, input);
     });
   }
 
@@ -117,6 +144,47 @@ export class ContactFilesService {
       });
       await this.repo.deleteById(tx, ctx.orgId, existing.id);
     });
+  }
+
+  private async record(
+    tx: Parameters<ContactsRepository['resolveContactRef']>[0],
+    contactId: number,
+    input: Pick<CreateContactFileInput, 'fileName' | 'fileSizeBytes' | 'storageKey' | 'mimeType'>,
+  ): Promise<ContactFileResponse> {
+    const ctx = RequestContextStore.require();
+    const created = await this.repo.insert(tx, ctx.orgId, {
+      contactId,
+      fileName: input.fileName,
+      fileSizeBytes: input.fileSizeBytes,
+      storageKey: input.storageKey,
+      mimeType: input.mimeType,
+      uploadedBy: ctx.userId,
+    });
+    await this.contactsRepo.bumpLastActivity(tx, ctx.orgId, contactId);
+
+    await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
+    await this.outbox.emit(tx, {
+      aggregateModule: MODULE_KEY,
+      aggregateId: created.id,
+      eventType: 'contact_file.created',
+      payload: { uuid: created.uuid, fileName: input.fileName },
+    });
+
+    const row = await this.repo.findById(tx, ctx.orgId, created.id);
+    return toContactFileResponse(row!);
+  }
+
+  /** The contact, when the caller may add or remove its files (`record.contacts.update`, in the caller's scope). */
+  private async writableContact(
+    tx: Parameters<ContactsRepository['resolveContactRef']>[0],
+    orgId: number,
+    uuid: string,
+  ) {
+    const ctx = RequestContextStore.require();
+    const contact = await this.requireContact(tx, orgId, uuid);
+    const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
+    await assertContactScope(tx, this.contactsRepo, orgId, scope, ctx.userId!, contact);
+    return contact;
   }
 
   private async requireContact(

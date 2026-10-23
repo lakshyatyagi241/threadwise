@@ -11,6 +11,7 @@ const CONV = '6f1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e10';
 const TPL = '8a1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e11';
 const CLIENT = '9b1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e12';
 const WABA = 7;
+const MSG = 'b2c1c7a5-3d7a-4a53-9b6e-2f0d2c1a9e13';
 
 const ctx: RequestContext = { requestId: 'r', orgId: 1, actorType: 'user', actorId: 5, userId: 5 };
 
@@ -39,9 +40,15 @@ const template = (over: Partial<TemplateRow> = {}): TemplateRow =>
   }) as TemplateRow;
 
 function setup(
-  opts: { rows?: TemplateRow[]; found?: TemplateRow | null; channelWaba?: number | null } = {},
+  opts: {
+    rows?: TemplateRow[];
+    found?: TemplateRow | null;
+    channelWaba?: number | null;
+    sent?: { templateId: number; variables: Record<string, string>; hasComponents: boolean } | null;
+  } = {},
 ) {
   const enqueueOutbound = vi.fn().mockResolvedValue({ message: { id: 'm1' } });
+  const retryOutbound = vi.fn().mockResolvedValue({ kind: 'text' });
   const listCalls: Array<Record<string, unknown>> = [];
   const tx = {};
   const service = new InboxThreadService(
@@ -54,12 +61,21 @@ function setup(
         channelOwnerUserId: null,
       }),
       byUuid: async () => ({ channelId: 3 }),
+      recordByMessageUuid: async () => ({
+        id: 1,
+        status: 'open',
+        assigneeUserId: 5,
+        assigneeTeamId: null,
+        channelOwnerUserId: null,
+      }),
+      templateSendOf: async () => (opts.sent === undefined ? null : opts.sent),
     } as never,
     {
       viewer: async () => ({}),
       assertVisible: () => undefined,
       assertCan: async () => undefined,
       assertNotAssignedToOther: () => undefined,
+      canSee: () => true,
     } as never,
     {} as never,
     {
@@ -73,9 +89,10 @@ function setup(
         return opts.rows ?? [template()];
       },
       findByUuid: async () => (opts.found === undefined ? template() : opts.found),
+      findById: async () => (opts.found === undefined ? template() : opts.found),
     } as never,
     {} as never,
-    { enqueueOutbound } as never,
+    { enqueueOutbound, retryOutbound } as never,
     { previewLinker: async () => async () => null } as never,
   );
   const send = (input: Partial<Extract<SendMessageInput, { kind: 'template' }>> = {}) =>
@@ -90,8 +107,59 @@ function setup(
     );
   const list = (q: { q?: string } = {}) =>
     RequestContextStore.run(ctx, () => service.listTemplates(CONV, q));
-  return { send, list, enqueueOutbound, listCalls };
+  const retry = () => RequestContextStore.run(ctx, () => service.retry(MSG));
+  return { send, list, enqueueOutbound, listCalls, retry, retryOutbound };
 }
+
+describe('InboxThreadService: retrying a template message', () => {
+  const sent = { templateId: 11, variables: { '1': 'Ana', '2': 'A12' }, hasComponents: false };
+  const copyCodeTemplate = template({
+    buttons: [
+      { type: 'QUICK_REPLY', text: 'Hey' },
+      { type: 'COPY_CODE', example: 'TEST30' },
+    ],
+  });
+
+  it('rebuilds the components of a message sent before they were stored, from the live template', async () => {
+    const { retry, retryOutbound } = setup({ sent, found: copyCodeTemplate });
+    await retry();
+    expect(retryOutbound).toHaveBeenCalledWith(MSG, [
+      {
+        type: 'body',
+        parameters: [
+          { type: 'text', text: 'Ana' },
+          { type: 'text', text: 'A12' },
+        ],
+      },
+      {
+        type: 'button',
+        sub_type: 'copy_code',
+        index: 1,
+        parameters: [{ type: 'coupon_code', coupon_code: 'TEST30' }],
+      },
+    ]);
+  });
+
+  it('leaves the components alone when the message already has them', async () => {
+    const { retry, retryOutbound } = setup({
+      sent: { ...sent, hasComponents: true },
+      found: copyCodeTemplate,
+    });
+    await retry();
+    expect(retryOutbound).toHaveBeenCalledWith(MSG, undefined);
+  });
+
+  it('refuses a Retry whose template now has a copy-code button with no code', async () => {
+    const { retry, retryOutbound } = setup({
+      sent,
+      found: template({ buttons: [{ type: 'COPY_CODE' }] }),
+    });
+    await expect(retry()).rejects.toMatchObject({
+      code: ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE,
+    });
+    expect(retryOutbound).not.toHaveBeenCalled();
+  });
+});
 
 describe('InboxThreadService: sending a template', () => {
   it('hands the core the template, the values and the body as the customer reads it', async () => {
@@ -108,7 +176,53 @@ describe('InboxThreadService: sending a template', () => {
       variables: { '1': 'Ana', '2': 'A12' },
       body: 'Hi Ana, order A12 shipped.',
       templateId: 11,
+      components: [
+        {
+          type: 'body',
+          parameters: [
+            { type: 'text', text: 'Ana' },
+            { type: 'text', text: 'A12' },
+          ],
+        },
+      ],
     });
+  });
+
+  it('sends a copy-code button with the code the template holds: the inbox has no value to type for it', async () => {
+    const { send, enqueueOutbound } = setup({
+      found: template({
+        buttons: [
+          { type: 'QUICK_REPLY', text: 'Hey' },
+          { type: 'COPY_CODE', example: 'TEST30' },
+        ],
+      }),
+    });
+    await send();
+    expect(enqueueOutbound.mock.calls[0]![0].content.components).toEqual([
+      {
+        type: 'body',
+        parameters: [
+          { type: 'text', text: 'Ana' },
+          { type: 'text', text: 'A12' },
+        ],
+      },
+      {
+        type: 'button',
+        sub_type: 'copy_code',
+        index: 1,
+        parameters: [{ type: 'coupon_code', coupon_code: 'TEST30' }],
+      },
+    ]);
+  });
+
+  it('refuses a copy-code button with no code rather than sending "-"', async () => {
+    const { send, enqueueOutbound } = setup({
+      found: template({ buttons: [{ type: 'COPY_CODE' }] }),
+    });
+    await expect(send()).rejects.toMatchObject({
+      code: ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE,
+    });
+    expect(enqueueOutbound).not.toHaveBeenCalled();
   });
 
   it('trims the values and drops any the template does not have', async () => {
@@ -214,7 +328,7 @@ describe('InboxThreadService: listing templates', () => {
     expect(hasMore).toBe(false);
   });
 
-  it('lists a template of another number disabled, with the reason, so it is never a mystery', async () => {
+  it("leaves out a template of another WhatsApp number: it can't be sent here and is not edited from here", async () => {
     const { list } = setup({
       rows: [
         template(),
@@ -224,7 +338,6 @@ describe('InboxThreadService: listing templates', () => {
     const { data } = await list();
     expect(data.map((t) => [t.name, t.sendable, t.reason])).toEqual([
       ['order_shipped', true, null],
-      ['other_line', false, 'other_number'],
     ]);
   });
 

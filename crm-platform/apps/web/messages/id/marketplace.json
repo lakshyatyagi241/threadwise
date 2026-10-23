@@ -11,7 +11,8 @@
       "installed": "Terpasang · Marketplace",
       "manage": "Kelola aplikasi · Marketplace",
       "requests": "Permintaan · Marketplace",
-      "addons": "Pengaya · Marketplace"
+      "addons": "Pengaya · Marketplace",
+      "developer": "Developer · Marketplace"
     },
     "common": {
       "dismiss": "Tutup",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Aplikasi mini",
         "integration": "Integrasi",
-        "addon": "Pengaya"
+        "addon": "Pengaya",
+        "developer": "Developer"
       },
       "installed": "Terpasang",
       "installedLimit": "Terpasang ({installed} dari {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Buka",
       "empty": {
-        "title": "Tidak ada pengaya tersedia",
-        "message": "Pengaya yang disertakan peran dan paket Anda akan muncul di sini."
+        "title": "Tidak ada alat developer yang tersedia",
+        "message": "Alat developer yang termasuk dalam peran dan paket Anda akan muncul di sini."
       },
       "soon": "Segera hadir",
       "upgrade": "Tingkatkan"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Pembayaran dibatalkan",
         "message": "Tidak ada yang ditagihkan. Berlangganan lagi kapan pun Anda siap."
+      }
+    },
+    "addonsTab": {
+      "intro": "Paket fitur tambahan yang Anda beli di atas paket Anda. Yang sudah termasuk dalam paket Anda diberi tanda dan tidak dikenai biaya.",
+      "developerHint": "Mencari REST API, webhook, atau alat developer lainnya?",
+      "developerLink": "Buka tab Developer"
+    },
+    "developerTab": {
+      "intro": "Alat untuk developer dan admin teknis: kunci API, webhook, penerbitan, dan terjemahan. Anda hanya melihat yang diizinkan oleh peran dan paket Anda."
+    },
+    "connector": {
+      "builtIn": "Bawaan",
+      "status": {
+        "connected": "Terhubung",
+        "notConnected": "Belum terhubung",
+        "upgrade": "Tingkatkan",
+        "soon": "Segera hadir"
+      },
+      "cta": {
+        "open": "Buka",
+        "manage": "Kelola",
+        "connect": "Hubungkan"
       }
     }
   }

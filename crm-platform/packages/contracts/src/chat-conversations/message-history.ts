@@ -33,14 +33,19 @@ export const MESSAGE_HISTORY_RANGE_DAYS: Record<MessageHistoryRange, number> = {
   '90d': 90,
 };
 
-/** What sent or received the message. `inbox` is a person in the inbox and every inbound message. */
+/**
+ * What sent or received the message. `inbox` is a person in the inbox and every inbound message; `contact` is a single send from a
+ * contact's drawer; `broadcast_test` is the test send of the broadcast wizard (a row of its own, not a message).
+ */
 export const MESSAGE_HISTORY_SOURCES = [
   'inbox',
+  'contact',
   'flow',
   'auto_reply',
   'ai',
   'api',
   'broadcast',
+  'broadcast_test',
   'campaign',
   'scheduled',
   'other',
@@ -78,21 +83,22 @@ export const MESSAGE_HISTORY_TYPES = [
 export const messageHistoryTypeSchema = z.enum(MESSAGE_HISTORY_TYPES);
 export type MessageHistoryType = z.infer<typeof messageHistoryTypeSchema>;
 
-/** Where a row came from: a message row, or the recipient row of a broadcast, a campaign or a scheduled message. */
+/** Where a row came from: a message row, or the recipient row of a broadcast, a campaign or a scheduled message, or a test send. */
 export const MESSAGE_HISTORY_ENTITY_KINDS = [
   'message',
   'broadcast',
   'campaign',
   'scheduled',
+  'test',
 ] as const;
 export const messageHistoryEntityKindSchema = z.enum(MESSAGE_HISTORY_ENTITY_KINDS);
 export type MessageHistoryEntityKind = z.infer<typeof messageHistoryEntityKindSchema>;
 
-/** `m:<uuid>`, `b:<uuid>`, `c:<uuid>`, `s:<uuid>`: the entity kind and the uuid of the message or recipient row. */
+/** `m:<uuid>`, `b:<uuid>`, `c:<uuid>`, `s:<uuid>`, `t:<uuid>`: the entity kind and the uuid of the message or recipient row. */
 export const messageHistoryIdSchema = z
   .string()
   .regex(
-    /^[mbcs]:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    /^[mbcst]:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
     'Not a history id',
   );
 

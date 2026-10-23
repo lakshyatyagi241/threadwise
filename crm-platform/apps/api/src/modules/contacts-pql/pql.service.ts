@@ -1,13 +1,15 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import {
   ERROR_CODES,
+  PQL_IGNORED_ITEM_MAX,
+  PQL_IGNORED_MAX,
   segmentKindForFieldType,
   fieldTypeSchema,
   type PqlRequest,
   type PqlResult,
-  type SegmentGroup,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -19,6 +21,7 @@ import {
   type LeadScoringAiPort,
 } from '../../infra/providers/lead-scoring/lead-scoring-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService } from '../wallet-message-billing';
 import {
   PQL_AI_PROVIDER,
   PQL_MAX_COMPLETION_TOKENS,
@@ -58,6 +61,7 @@ export class PqlService {
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
     private readonly rbac: RbacService,
+    private readonly wallet: AiChargeService,
     @Inject(PQL_AI_PORT) private readonly ai: LeadScoringAiPort,
   ) {}
 
@@ -81,6 +85,8 @@ export class PqlService {
       );
     }
     if (resolved.source === 'admin') await this.meter.guard(orgId);
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no call. Their own key passes.
+    await this.wallet.guardCall(orgId, resolved.source);
 
     const catalog = await this.loadCatalog(orgId);
     const model = process.env.PQL_MODEL?.trim() || PQL_DEFAULT_MODEL;
@@ -97,6 +103,10 @@ export class PqlService {
       });
     } catch (err) {
       const kind = err instanceof LeadScoringAiError ? err.kind : 'provider';
+      this.logger.warn(
+        { orgId, kind, model, detail: err instanceof Error ? err.message : String(err) },
+        'english search provider call failed',
+      );
       throw new AppError(
         ERROR_CODES.PQL_PROVIDER_FAILED,
         kind === 'auth'
@@ -114,22 +124,40 @@ export class PqlService {
         billedAgainst: resolved.source,
       })
       .catch((err) => this.logger.warn({ orgId, err }, 'pql usage not recorded'));
+    // The vendor answered, so the call is paid for even when the answer turns out unusable below. The id is generated here, once per
+    // search, and not taken from the request id: a client may send its own `x-request-id` and reuse it, which would make every later
+    // search free.
+    await this.wallet.chargeCall({
+      orgId,
+      keySource: resolved.source,
+      label: 'AI contact search',
+      source: 'pql_search',
+      usageId: `pql:${orgId}:${randomUUID()}`,
+      provider: PQL_AI_PROVIDER,
+      model,
+      promptTokens: completion.promptTokens,
+      completionTokens: completion.completionTokens,
+      reportedCostUsd: completion.costUsd,
+    });
 
-    const parsed = parsePql(completion.text);
-    if (!parsed) {
+    const answer = parsePql(completion.text);
+    if (!answer) {
       throw new AppError(
         ERROR_CODES.PQL_PROVIDER_FAILED,
         'English search got an answer it could not use. Try rewording the search.',
         HttpStatus.BAD_GATEWAY,
       );
     }
-    if (!parsed.rules) return parsed;
-    const pruned = pruneRules(parsed.rules as unknown as SegmentGroup, catalog);
+    if (answer.rules === null)
+      return { rules: null, summary: answer.summary, ignored: answer.ignored };
+    const pruned = pruneRules(answer.rules, catalog);
     return {
       rules: pruned.rules as PqlResult['rules'],
       // The model's sentence describes every condition it wrote; once any was dropped it would overstate the filter.
-      summary: pruned.dropped.length > 0 ? '' : parsed.summary,
-      ignored: [...parsed.ignored, ...pruned.dropped.map((f) => `unknown ${f}`)].slice(0, 10),
+      summary: pruned.dropped.length > 0 ? '' : answer.summary,
+      ignored: [...answer.ignored, ...pruned.dropped.map((f) => `unknown ${f}`)]
+        .map((s) => s.slice(0, PQL_IGNORED_ITEM_MAX))
+        .slice(0, PQL_IGNORED_MAX),
     };
   }
 

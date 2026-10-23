@@ -6,6 +6,7 @@ import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { CallActionsService } from './call-actions.service';
 import { CallLogsController } from './call-logs.controller';
@@ -23,6 +24,7 @@ import { CallingReadinessService } from './calling-readiness.service';
 import { CallingWabaSink } from './calling-waba.sink';
 import { CallingWebhookController } from './calling-webhook.controller';
 import { CallingController } from './calling.controller';
+import { CallingWindowService } from './calling-window.service';
 import { CallsRepository } from './calls.repository';
 import { CallIngestService } from './logging/call-ingest.service';
 import { CallLogEntriesRepository } from './logging/call-log-entries.repository';
@@ -53,6 +55,8 @@ import { TelephonyWebhookService } from './logging/telephony-webhook.service';
     SendWindowModule,
     WabaModule,
     PlansCoreModule,
+    // The wallet gate before a paid call (`UsageBillingService.assertCanAfford`). The charge itself is an outbox event the wallet's worker settles.
+    WalletMessageBillingModule,
   ],
   controllers: [
     CallingController,
@@ -66,6 +70,7 @@ import { TelephonyWebhookService } from './logging/telephony-webhook.service';
     CallingGraphClient,
     { provide: CALLING_GRAPH, useExisting: CallingGraphClient },
     CallsRepository,
+    CallingWindowService,
     CallLogsRepository,
     CallLogsService,
     CallingNumbersService,

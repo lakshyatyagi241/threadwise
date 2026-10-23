@@ -13,13 +13,14 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CALLING_GRAPH, type CallingGraph } from '../../infra/providers/calling-voice';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
-import { SendWindowService } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { UsageBillingService } from '../wallet-message-billing';
 import { WabaConnectService } from '../whatsapp-cloud-api-waba';
 import { digitsOf, isPermissionRefusal, usableAnswer } from './calling.rules';
 import { CallsRepository, type CallRow } from './calls.repository';
 import { CallPermissionService } from './call-permission.service';
+import { CallingWindowService } from './calling-window.service';
 import { caller, notFound, refused, unprocessable, usableNumber } from './calling-support';
 
 /** Meta needs a moment between pre_accept and accept; accept without it clips the opening audio (TW-CALL-013 rule 3). */
@@ -48,7 +49,8 @@ export class CallActionsService {
     private readonly plans: PlanEntitlementService,
     @Inject(CALLING_GRAPH) private readonly graph: CallingGraph,
     private readonly consentGate: ConsentGate,
-    private readonly sendWindow: SendWindowService,
+    private readonly callingWindow: CallingWindowService,
+    private readonly usage: UsageBillingService,
   ) {}
 
   // --- dial ------------------------------------------------------------------------------------------------------------------
@@ -57,6 +59,7 @@ export class CallActionsService {
    * Places an outbound call (TW-CALL-008). Permission first: with no usable grant no call is placed, a permission request goes out
    * instead and the answer is 422 `CALL_PERMISSION_REQUESTED`. The call row is written before Meta is asked (the correlation id comes
    * back in the connect webhook) and, unlike Reference, is marked `failed` when Meta refuses, so no `ringing` call is left behind.
+   * A call is paid usage (every started minute, charged when Meta ends it), so an empty wallet is refused up front: 422 `WALLET_EMPTY`.
    */
   async dial(input: DialInput): Promise<DialResult> {
     const { orgId, userId } = caller();
@@ -90,7 +93,13 @@ export class CallActionsService {
         throw unprocessable('CONSENT_OPTED_OUT', 'This contact has asked not to be called.');
       }
     }
-    await this.assertCallingWindow(orgId, ctx.contactId, ctx.conversationId, to);
+    await this.callingWindow.assertOpen(orgId, {
+      contactId: ctx.contactId,
+      conversationId: ctx.conversationId,
+      phone: to,
+    });
+    // Before the permission request too: a workspace that cannot pay for the call must not message the customer to ask for it.
+    await this.usage.assertCanAfford(orgId, 'whatsapp_call', 1);
     if (!(await this.permissions.mayCall(orgId, ctx.number.id, to))) {
       const alreadyPermitted = await this.permissions.send(orgId, ctx.number, ctx.conn, to);
       if (!alreadyPermitted) throw this.permissionRequested();
@@ -144,35 +153,6 @@ export class CallActionsService {
       }
       throw refused(err, 'Meta refused the call');
     }
-  }
-
-  /**
-   * The calling window (BL-177): a business-initiated call outside the hours the workspace set is refused, because a live call cannot wait
-   * for the window to open (a message would be held; a call has no queue). The refusal names the instant the window opens. A call back to
-   * someone who reached us in the last 24 hours (a message or a call) is service and is never held. Runs before anything is asked of Meta,
-   * so no permission request goes out and no call row is written.
-   */
-  private async assertCallingWindow(
-    orgId: number,
-    contactId: number | null,
-    conversationId: number | null,
-    to: string,
-  ): Promise<void> {
-    const decision = await this.sendWindow.check(orgId, 'call', { contactId, phone: to });
-    if (decision.decision !== 'hold') return;
-    const answered = await this.db.tx((tx) =>
-      this.repo.contactedUsRecently(tx, orgId, { conversationId, phone: to, hours: 24 }),
-    );
-    if (answered) return;
-    throw unprocessable(
-      'CALL_OUTSIDE_WINDOW',
-      `Calls to this contact are allowed from ${decision.until}. It is outside the workspace's calling hours.`,
-      [
-        { path: 'opensAt', message: decision.until },
-        ...(decision.zone ? [{ path: 'zone', message: decision.zone }] : []),
-        { path: 'zoneSource', message: decision.zoneSource },
-      ],
-    );
   }
 
   private permissionRequested(): AppError {

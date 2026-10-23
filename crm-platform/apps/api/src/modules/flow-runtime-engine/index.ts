@@ -15,6 +15,8 @@ export { FlowTriggerService, type OrderPlaced } from './triggers/trigger.service
 export { FlowEngine } from './runtime/engine.service';
 // The operator-facing reads and enrolment (flows, subscribers, enrol one contact), for the customer REST API's `/api/v1/flows`.
 export { FlowRuntimeService } from './flow-runtime.service';
+// The trigger a flow runs on (the copy kept at Publish while it is live), for any list of flows that shows it.
+export { liveTrigger } from './runtime/live-graph';
 // Where a store domain binds what the Commerce shop node needs: stock, the native product list, a checkout link (TW-FLR-041).
 export {
   FlowShopGate,

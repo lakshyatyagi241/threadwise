@@ -46,6 +46,8 @@ import {
   fullSignature,
   jsonStatus,
   keptSecretsAtRisk,
+  jsonErrorAt,
+  secretOverPlainHttp,
   newRowId,
   noErrors,
   requestSignature,
@@ -442,6 +444,7 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
 
             <SectionCard id="alib-s-headers" title={t('sections.headers')} hint={t('headersHint')}>
               {addressAtRisk && <SecretAddressWarning />}
+              {secretOverPlainHttp(form) && <Alert tone="warning">{t('plainHttpWarning')}</Alert>}
               <HeadersEditor
                 rows={form.headers}
                 errors={errors}
@@ -502,9 +505,14 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
                       onChange={(v) => update({ bodyText: v })}
                     />
                     <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs">
-                      {body === 'invalid' && (
+                      {body === 'invalid' && errors.fields.body === undefined && (
                         <span role="alert" className="text-danger">
-                          {t('json.invalid')}
+                          {(() => {
+                            const at = jsonErrorAt(form.bodyText.trim());
+                            return at
+                              ? t('json.invalidAt', { line: at.line, column: at.column })
+                              : t('json.invalid');
+                          })()}
                         </span>
                       )}
                       {body === 'shape' && (

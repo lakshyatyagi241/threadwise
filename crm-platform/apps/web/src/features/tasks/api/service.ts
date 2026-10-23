@@ -83,13 +83,28 @@ export const tasksApi = {
   remove: (id: string): Promise<void> => call(`/tasks/${id}`, { method: 'DELETE' }),
 
   // bulk (at most 200 ids per call; bigger selections go out in chunks, each partial failure is counted)
-  async bulkComplete(ids: readonly string[]): Promise<BulkOutcome> {
+  /** `outcomeId` records that outcome on every task completed; absent keeps each task's own. */
+  async bulkComplete(ids: readonly string[], outcomeId?: string): Promise<BulkOutcome> {
     return sum(
       await Promise.all(
         chunk(ids).map((c) =>
           call('/tasks/bulk/complete', {
             method: 'POST',
-            body: { ids: c },
+            body: outcomeId ? { ids: c, outcomeId } : { ids: c },
+            schema: taskBulkResultSchema,
+          }),
+        ),
+      ),
+    );
+  },
+  /** Reopens the done tasks; `outcomeId` also sets that outcome on each. */
+  async bulkReopen(ids: readonly string[], outcomeId?: string): Promise<BulkOutcome> {
+    return sum(
+      await Promise.all(
+        chunk(ids).map((c) =>
+          call('/tasks/bulk/reopen', {
+            method: 'POST',
+            body: outcomeId ? { ids: c, outcomeId } : { ids: c },
             schema: taskBulkResultSchema,
           }),
         ),

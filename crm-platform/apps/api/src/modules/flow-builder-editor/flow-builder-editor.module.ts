@@ -8,6 +8,7 @@ import { LocalFlowMediaAdapter } from '../../infra/providers/flow-builder-editor
 import { FlowRuntimeEngineModule } from '../flow-runtime-engine';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
 import { FlowMediaController } from './flow-media.controller';
@@ -36,7 +37,14 @@ import { MapsLinkService } from './maps-link.service';
  * through BOT_PUBLISH_PORT.
  */
 @Module({
-  imports: [PlansCoreModule, PlatformSettingsModule, FlowRuntimeEngineModule, GoogleAccountModule],
+  imports: [
+    PlansCoreModule,
+    PlatformSettingsModule,
+    FlowRuntimeEngineModule,
+    GoogleAccountModule,
+    // AiChargeService: "Generate with AI" on the platform's key is charged to the workspace's wallet.
+    WalletMessageBillingModule,
+  ],
   controllers: [
     FlowsController,
     GetaPublishController,

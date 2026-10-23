@@ -7,4 +7,8 @@ base=$(git rev-parse --verify -q '@{upstream}' || git rev-parse --verify -q orig
 git diff --name-only "$base"..HEAD | grep -qE '(^|/)(apps|packages)/' || exit 0
 root=$(git rev-parse --show-toplevel)
 dir="$root"; [ -f "$dir/tools/sast-report/run.mjs" ] || dir="$root/crm-platform"
-cd "$dir" && node tools/sast-report/run.mjs --no-deps --fail-on high
+cd "$dir" || exit 1
+node tools/sast-report/run.mjs --no-deps --fail-on high || exit 1
+# AUTH-099: the static part of the security regression that CI runs on a pull request (GitHub Actions is off on this account). No database and no test suites here.
+node tools/authz-audit/run.mjs || exit 1
+node tools/tenancy-audit/run.mjs --static || exit 1

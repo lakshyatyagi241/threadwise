@@ -69,10 +69,10 @@ export class BroadcastInboxMirrorService {
         // not name a channel yet (it still carries a device id), so a workspace with several channels gets the oldest matching thread.
         const conv = (
           await tx.execute(sql`
-            SELECT id FROM conversations
+            SELECT id, channel_id FROM conversations
             WHERE org_id = ${orgId} AND (contact_id = ${contactId} OR peer_key = ${digits})
             ORDER BY id LIMIT 1`)
-        ).rows[0] as { id: number | string } | undefined;
+        ).rows[0] as { id: number | string; channel_id: number | string } | undefined;
         if (!conv) return false;
 
         const tpl =
@@ -100,6 +100,16 @@ export class BroadcastInboxMirrorService {
             AND (meta ->> 'src_key' = ${key} OR (${providerMessageId}::text IS NOT NULL AND meta ->> 'wa_message_id' = ${providerMessageId}))
           LIMIT 1`);
         if (seen.rows.length > 0) return false;
+        // The same send can already be in the thread under its WhatsApp message id: brought in by the imported history of the number, or
+        // as a copy of what the business sent. Every other writer goes through the message ledger (one row per provider id), and this
+        // bubble was written around it, so the one send showed twice. Ask the ledger first, and take a place in it below.
+        if (providerMessageId) {
+          const held = await tx.execute(sql`
+            SELECT 1 FROM message_ledger
+            WHERE org_id = ${orgId} AND channel_id = ${Number(conv.channel_id)} AND kind = 'provider_id' AND key = ${providerMessageId}
+            LIMIT 1`);
+          if (held.rows.length > 0) return false;
+        }
 
         const buttons = Array.isArray(tpl?.buttons) && tpl.buttons.length > 0 ? tpl.buttons : null;
         const meta = {
@@ -125,14 +135,23 @@ export class BroadcastInboxMirrorService {
           UPDATE conversations SET msg_seq = msg_seq + 1, last_message_id = ${id}, last_message_at = now(),
                                    last_outbound_at = now(), preview = left(${body}, ${PREVIEW_LENGTH})
           WHERE org_id = ${orgId} AND id = ${Number(conv.id)} RETURNING msg_seq`);
-        await tx.execute(sql`
+        const written = await tx.execute(sql`
           INSERT INTO messages (id, org_id, conversation_id, seq, direction, kind, sender_kind, template_id, body, status, meta,
                                 provider_ts, sent_at, delivered_at, read_at)
           VALUES (${id}, ${orgId}, ${Number(conv.id)}, ${Number((bumped.rows[0] as { msg_seq: number | string }).msg_seq)},
                   'out', ${tpl ? 'template' : 'text'}, 'broadcast',
                   ${b.template_id === null ? null : Number(b.template_id)}, ${body}, ${status},
                   ${JSON.stringify(meta)}::jsonb, now(), now(),
-                  ${status === 'sent' ? null : sql`now()`}, ${status === 'read' ? sql`now()` : null})`);
+                  ${status === 'sent' ? null : sql`now()`}, ${status === 'read' ? sql`now()` : null})
+          RETURNING created_at::text AS created_at`);
+        if (providerMessageId) {
+          // So a later import or copy of this very send finds it and adds nothing.
+          await tx.execute(sql`
+            INSERT INTO message_ledger (org_id, channel_id, kind, key, message_id, message_created_at, conversation_id)
+            VALUES (${orgId}, ${Number(conv.channel_id)}, 'provider_id', ${providerMessageId}, ${id},
+                    ${(written.rows[0] as { created_at: string }).created_at}::timestamptz, ${Number(conv.id)})
+            ON CONFLICT (org_id, channel_id, kind, key) DO NOTHING`);
+        }
         return true;
       });
     } catch (err) {

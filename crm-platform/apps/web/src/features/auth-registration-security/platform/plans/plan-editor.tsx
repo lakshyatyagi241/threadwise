@@ -9,10 +9,12 @@ import { ApiError } from '@/lib/api/errors';
 import {
   buildPlanRequest,
   countFeaturesOn,
-  addonsSelectedCount,
+  appsOfferedCount,
+  packsOfferedCount,
   countLimitsSet,
   isPlanDraftDirty,
   newPlanDraft,
+  offerFeatures,
   planToDraft,
   problemsFromServer,
   withToggle,
@@ -22,6 +24,8 @@ import {
   type PlanProblems,
 } from '../lib/plan-draft';
 import {
+  appOptionsFor,
+  appTabsOf,
   firstProblemField,
   tabForField,
   tabsWithProblems,
@@ -29,6 +33,7 @@ import {
 } from '../lib/plan-editor-view';
 import { useCanEdit } from '../operator-context';
 import { operatorFetch } from '../operator-fetch';
+import { AppOffersTab } from './app-offers-tab';
 import { AddonsTab, type AddonOptionsState, type IncludedPacksState } from './addons-tab';
 import { FeaturesTab } from './features-tab';
 import { LimitsTab } from './limits-tab';
@@ -46,8 +51,8 @@ import {
 } from './plans-query';
 
 /**
- * Create or edit one plan in a dialog with four tabs (TW-PLAN-002's steps: details and pricing, then
- * features, limits and the Marketplace add-ons the plan makes visible). The slug is derived by the
+ * Create or edit one plan in a dialog with six tabs (TW-PLAN-002's steps: details and pricing, then
+ * features, limits, the plain add-ons, and the Integrations and Mini apps the plan offers). The slug is derived by the
  * server on create and never changes. Validation is the same set of rules the API applies
  * (`checkPlanRules`), so most mistakes are caught before the request; whatever the API still refuses
  * is shown against its field, and the editor jumps to the first tab that holds a problem.
@@ -82,8 +87,10 @@ export function PlanEditor({
     options: addonQuery.data?.data ?? [],
     retry: () => void addonQuery.refetch(),
   };
+  // Which tab lists each Marketplace app, to open the right one when the API refuses an offer.
+  const appTabs = useMemo(() => appTabsOf(addons.options), [addons.options]);
 
-  // The plain add-on packs the plan can include (a switch per pack) and, for a saved plan, who already pays for each.
+  // The plain add-on packs the plan offers (Included, Paid or Hidden per pack) and, for a saved plan, who already pays for each.
   const packQuery = useQuery({
     queryKey: PLAN_INCLUDABLE_PACKS_QUERY_KEY,
     queryFn: ({ signal }) => fetchIncludablePacks(signal),
@@ -119,9 +126,12 @@ export function PlanEditor({
           })
         : operatorFetch('/plans', { method: 'POST', body, schema: planAdminItemSchema }),
     onSuccess: (saved) => onSaved(saved, !plan),
-    onError: (err) => {
+    onError: (err, body) => {
       if (err instanceof ApiError && err.status === 422) {
-        const fromServer = problemsFromServer(err.fieldErrors);
+        // `addonOffers.<i>` errors land on the add-on the request listed at <i>.
+        const fromServer = problemsFromServer(err.fieldErrors, {
+          addonOfferIds: (body.addonOffers ?? []).map((o: { addonId: string }) => o.addonId),
+        });
         setProblems(fromServer);
         // Nothing the form can point at: say what the API said.
         if (Object.keys(fromServer).length === 0) setFailure(err);
@@ -145,9 +155,9 @@ export function PlanEditor({
 
   /** Jump to the first tab that holds a problem and focus its field. */
   function showProblems(p: PlanProblems) {
-    const first = firstProblemField(p);
+    const first = firstProblemField(p, appTabs);
     if (!first) return;
-    setTab(tabForField(first));
+    setTab(tabForField(first, appTabs));
     // The tab's panel mounts on the next render; focus once it has.
     requestAnimationFrame(() =>
       requestAnimationFrame(() => document.getElementById(fieldId(first))?.focus()),
@@ -164,6 +174,18 @@ export function PlanEditor({
           if (!f.startsWith('limits.')) continue;
           const k = f.slice('limits.'.length) as keyof PlanDraft['limits'];
           if (draft.limits[k] !== (value as PlanDraft['limits'])[k]) delete next[f];
+        }
+        return next;
+      }
+      if (key === 'addonOffers') {
+        // Only the offers that actually changed lose their message (and the tab-wide one with them).
+        const next = { ...p };
+        delete next.addonOffers;
+        const offers = value as PlanDraft['addonOffers'];
+        for (const f of Object.keys(next) as PlanField[]) {
+          if (!f.startsWith('addonOffers.')) continue;
+          const id = f.slice('addonOffers.'.length);
+          if (JSON.stringify(draft.addonOffers[id]) !== JSON.stringify(offers[id])) delete next[f];
         }
         return next;
       }
@@ -184,8 +206,12 @@ export function PlanEditor({
     setFailure(null);
     // Send the add-on selection whenever the admin saw the real list (loaded) or edited it; when the options
     // never loaded and the tab was untouched, omit it so the stored selection is kept (see buildPlanRequest).
+    // Every listed plain add-on gets an offer in the request (and its features follow it), once the list has loaded.
     const built = buildPlanRequest(draft, {
       includeAddons: addonQuery.data !== undefined || addonsTouched,
+      addonPacks: packQuery.data ? packs : undefined,
+      // Every listed Marketplace app gets an offer too (amount null), once the list has loaded.
+      appIds: addonQuery.data ? addons.options.map((o) => o.id) : undefined,
     });
     if (built.problems) {
       setProblems(built.problems);
@@ -214,7 +240,7 @@ export function PlanEditor({
     set,
     err: (field) => message(problems[field]),
   };
-  const errorTabs = tabsWithProblems(problems);
+  const errorTabs = tabsWithProblems(problems, appTabs);
 
   return (
     <Modal
@@ -241,16 +267,25 @@ export function PlanEditor({
             active={tab}
             onChange={setTab}
             counts={{
-              featuresOn: countFeaturesOn(draft.features),
+              // What the save stores: an add-on's keys follow its offer.
+              featuresOn: countFeaturesOn({ ...draft.features, ...offerFeatures(draft, packs) }),
               limitsSet: countLimitsSet(draft.limits),
-              addons: addonsSelectedCount(draft, packs),
+              addons: packsOfferedCount(draft, packs),
+              integrations: appsOfferedCount(
+                draft,
+                appOptionsFor(addons.options, 'integrations').map((o) => o.id),
+              ),
+              miniApps: appsOfferedCount(
+                draft,
+                appOptionsFor(addons.options, 'miniApps').map((o) => o.id),
+              ),
             }}
             errorTabs={errorTabs}
             panels={{
               details: <PlanDetailsTab state={state} toggle={toggle} />,
               features: (
                 <>
-                  <FeaturesTab state={state} />
+                  <FeaturesTab state={state} packs={packs} />
                   <PlanModuleFields kind="features" state={state} />
                 </>
               ),
@@ -265,7 +300,25 @@ export function PlanEditor({
                   state={state}
                   addons={addons}
                   included={included}
-                  savedFeatures={initial.features}
+                  savedOffers={initial.addonOffers}
+                  readOnly={!canEdit}
+                  onTouched={() => setAddonsTouched(true)}
+                />
+              ),
+              integrations: (
+                <AppOffersTab
+                  tab="integrations"
+                  state={state}
+                  addons={addons}
+                  readOnly={!canEdit}
+                  onTouched={() => setAddonsTouched(true)}
+                />
+              ),
+              miniApps: (
+                <AppOffersTab
+                  tab="miniApps"
+                  state={state}
+                  addons={addons}
                   readOnly={!canEdit}
                   onTouched={() => setAddonsTouched(true)}
                 />

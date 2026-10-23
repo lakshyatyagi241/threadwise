@@ -326,6 +326,32 @@ describe('AI node (TW-FLR-030)', () => {
     expect(d.setVars).toMatchObject({ 'reply.NAME': 'Asha', 'reply.PHONE': '555' });
   });
 
+  it("names each model call for the wallet by the step key plus what the call is (a turn is not the exit's extraction)", async () => {
+    const turn = new FakeAi([ok('Hi')]);
+    const a = ctx('ChatGPT', {}, { user_message: 'hello' });
+    a.c.stepKey = 'flow:run1:4:n1';
+    await nodes(turn).execute(a.c);
+    expect(turn.calls[0]!.usageId).toBe('flow:run1:4:n1:turn');
+
+    const exit = new FakeAi([ok('{"NAME":"Asha"}')]);
+    const b = ctx(
+      'ChatGPT',
+      { conversational: true, extract: true, fields: ['NAME'], exit_keyword: 'done' },
+      {},
+      { ok: true },
+      {
+        nodeId: 'n1',
+        variable: 'user_message',
+        kind: 'Custom',
+        handler: 'ChatGPT',
+        data: { history: [{ role: 'user', content: 'I am Asha' }] },
+      },
+    );
+    b.c.stepKey = 'flow:run1:5:n1:reply';
+    await nodes(exit).onReply(b.c, { kind: 'text', id: '', text: 'done' });
+    expect(exit.calls[0]!.usageId).toBe('flow:run1:5:n1:reply:extract');
+  });
+
   it('a failed exit extraction still lets the customer leave', async () => {
     const ai = new FakeAi([
       { ok: false, error: 'provider_failed', provider: 'openai', message: 'x' },

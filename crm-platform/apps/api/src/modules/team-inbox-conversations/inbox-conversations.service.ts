@@ -53,6 +53,7 @@ import {
 import { NotificationsService } from '../notifications';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
+import { assertNotFinishedWebchat } from './finished-webchat';
 import { canActOn } from '../../kernel/rbac/scope';
 
 const MODULE_KEY = 'conversations';
@@ -289,6 +290,21 @@ export class InboxConversationsService {
     uuid: string,
     input: MarkConversationReadInput,
   ): Promise<MarkConversationReadResponse> {
+    await this.assertReadable(uuid);
+    const { unreadCount } = await this.conversations.markRead(uuid, input.upToSeq);
+    // The thread is read, so its bell rows are too (on every device), and an alert for a message that lands while it is open is skipped.
+    await this.notifications.markConversationRead(uuid);
+    return { conversationId: uuid, unreadCount };
+  }
+
+  /** The bulk "Mark as unread": the same visibility check as `markRead`; the counter and the `inbox.unread` signal are the core's. */
+  async markUnread(uuid: string): Promise<{ unreadCount: number }> {
+    await this.assertReadable(uuid);
+    return this.conversations.markUnread(uuid);
+  }
+
+  /** The visibility check of both mark routes: a thread the caller cannot see is `CONVERSATION_NOT_FOUND`, as a missing one is. */
+  private async assertReadable(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
       const viewer = await this.access.viewer(tx, ctx);
@@ -296,10 +312,6 @@ export class InboxConversationsService {
       if (!record) throw conversationNotFound();
       this.access.assertVisible(viewer, record);
     });
-    const { unreadCount } = await this.conversations.markRead(uuid, input.upToSeq);
-    // The thread is read, so its bell rows are too (on every device), and an alert for a message that lands while it is open is skipped.
-    await this.notifications.markConversationRead(uuid);
-    return { conversationId: uuid, unreadCount };
   }
 
   /** Resolve, close, or reopen, along the legal moves (`canMoveConversationStatus`). */
@@ -327,6 +339,7 @@ export class InboxConversationsService {
           [{ path: 'status', message: `${from} -> ${to} is not allowed` }],
         );
       }
+      if (to === 'open') assertNotFinishedWebchat(locked.channelKind, from, 'reopened');
 
       const finishing = to === 'resolved' || to === 'closed';
       const reopening = to === 'open' && (from === 'resolved' || from === 'closed');

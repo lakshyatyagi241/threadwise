@@ -6,6 +6,11 @@ import {
   flbAskNeedsInputCheck,
   flbCleanAskInputType,
   flbParseDate,
+  flbParseDateTime,
+  flbParseTime,
+  flbPhoneCountries,
+  flbImageUrl,
+  flbAskInputChoices,
   flbToRuntimeData,
 } from '@crm/contracts';
 import { compileGraph } from '../../../src/modules/flow-runtime-engine/graph/compile-graph';
@@ -78,6 +83,78 @@ describe('checked answers (the console runtime rules, plus phone, alphanumeric a
     for (const f of FLB_DATE_FORMATS) expect(flbParseDate('abc', f)).toBeNull();
     expect(ok('date', '15-08-2026', { dateFormat: 'dd-mm-yyyy' })).toBe(true);
     expect(ok('date', '15-08-2026', { dateFormat: 'mm/dd/yyyy' })).toBe(false);
+  });
+
+  it('date and time: the date in the chosen shape, then a 24-hour or am/pm time', () => {
+    const ok = (raw: string, fmt = 'yyyy-mm-dd') =>
+      flbAskInputCheck('datetime', raw, { dateFormat: fmt }).ok;
+    expect(ok('2026-08-15 14:30')).toBe(true);
+    expect(ok('2026-08-15 2:30 pm')).toBe(true);
+    expect(ok('2026-08-15')).toBe(false);
+    expect(ok('2026-08-15 25:00')).toBe(false);
+    expect(ok('2026-08-15 13:00 pm')).toBe(false);
+    expect(ok('15-08-2026 14:30')).toBe(false);
+    expect(ok('15-08-2026 09:05', 'dd-mm-yyyy')).toBe(true);
+    expect(flbParseDateTime('2026-08-15 2:30 pm', 'yyyy-mm-dd')).toBe('2026-08-15T14:30');
+    expect(flbParseDateTime('2026-08-15 12:05 am', 'yyyy-mm-dd')).toBe('2026-08-15T00:05');
+    expect(flbAskInputWrongText('datetime', 'yyyy-mm-dd')).toBe(
+      'Please enter a valid date and time (YYYY-MM-DD HH:MM)',
+    );
+  });
+
+  it('time: 24-hour or am/pm, and the picker no longer offers the repeated types', () => {
+    expect(flbAskInputCheck('time', '14:30').ok).toBe(true);
+    expect(flbAskInputCheck('time', '2:30 pm').ok).toBe(true);
+    expect(flbAskInputCheck('time', '25:00').ok).toBe(false);
+    expect(flbAskInputCheck('time', '13:00 am').ok).toBe(false);
+    expect(flbParseTime('2:05 pm')).toBe('14:05');
+    expect(flbAskInputChoices('text')).toEqual([
+      'text',
+      'name',
+      'email',
+      'phone',
+      'number',
+      'date',
+      'datetime',
+      'time',
+    ]);
+    // A question that already uses a retired type keeps it, so opening it changes nothing.
+    expect(flbAskInputChoices('age')).toContain('age');
+    expect(flbAskInputChoices('alphanumeric')).toContain('alphanumeric');
+    expect(flbAskInputChoices('date_of_birth')).toContain('date_of_birth');
+  });
+
+  it("phone: with a country code the country's own rules decide, and the number is kept as +<code><number>", () => {
+    expect(flbAskInputCheck('phone', '+91 98765 43210')).toEqual({
+      ok: true,
+      value: '+919876543210',
+    });
+    expect(flbAskInputCheck('phone', '+1 (415) 555-2671')).toEqual({
+      ok: true,
+      value: '+14155552671',
+    });
+    // 9 digits is a number elsewhere but not an Indian mobile number.
+    expect(flbAskInputCheck('phone', '+91 98765 4321').ok).toBe(false);
+    expect(flbAskInputCheck('phone', '+999 123').ok).toBe(false);
+    // Without a plus it only has to look like a number, as before.
+    expect(flbAskInputCheck('phone', '98765 43210')).toEqual({ ok: true, value: '9876543210' });
+  });
+
+  it("the chat's country list names every country with its dial code", () => {
+    const list = flbPhoneCountries('en');
+    expect(list.length).toBeGreaterThan(200);
+    expect(list.find((c) => c.code === 'IN')).toEqual({ code: 'IN', dial: '91', name: 'India' });
+    expect(flbPhoneCountries('hi').find((c) => c.code === 'IN')!.name).not.toBe('India');
+  });
+
+  it('a carousel picture address with spaces or capitals is written the way a browser asks for it', () => {
+    expect(flbImageUrl('https://cdn.test/My Photos/IMG 1234.JPG')).toBe(
+      'https://cdn.test/My%20Photos/IMG%201234.JPG',
+    );
+    expect(flbImageUrl('  http://x.test/a.jpeg ')).toBe('http://x.test/a.jpeg');
+    expect(flbImageUrl('javascript:alert(1)')).toBeNull();
+    expect(flbImageUrl('/relative/a.jpg')).toBeNull();
+    expect(flbImageUrl('')).toBeNull();
   });
 
   it('the ready-made wrong-answer texts: the console ones verbatim, and the date one names the shape', () => {

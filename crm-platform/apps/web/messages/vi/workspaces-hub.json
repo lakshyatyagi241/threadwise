@@ -234,7 +234,29 @@
         "ends": "Kết thúc",
         "limits": "Giới hạn hiệu lực",
         "edit": "Chỉnh sửa và đổi gói",
-        "overrideNote": "Không gian làm việc này có giới hạn riêng thay thế giới hạn của gói."
+        "overrideNote": "Không gian làm việc này có giới hạn riêng thay thế giới hạn của gói.",
+        "addons": {
+          "title": "Tiện ích bổ sung",
+          "intro": "Không gian làm việc này có gì từ mỗi tiện ích bổ sung, và vì sao.",
+          "empty": "Không có tiện ích bổ sung nào đang bán.",
+          "kind": {
+            "feature": "Tiện ích tính năng",
+            "capacity": "Tiện ích dung lượng"
+          },
+          "source": {
+            "plan": "Có trong gói",
+            "override": "Bật bằng ghi đè",
+            "platform": "Không gian làm việc của nền tảng",
+            "bought": "Đã mua",
+            "buy": "Có thể mua",
+            "unavailable": "Cần gói trả phí",
+            "hidden": "Ẩn trong gói này"
+          },
+          "renews": "Gia hạn {date}",
+          "ends": "Kết thúc {date}",
+          "lifetime": "Không có ngày kết thúc",
+          "overrides": "{count} ghi đè tính năng được ưu tiên hơn gói: {keys}. Xóa chúng trong Sửa & đổi gói."
+        }
       },
       "walletTab": {
         "open": "Mở toàn bộ ví",

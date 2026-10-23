@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "صندوق الوارد",
+      "contact": "جهة الاتصال",
       "flow": "مسار",
       "auto_reply": "رد تلقائي",
+      "automation": "الأتمتة",
       "ai": "مساعد الذكاء الاصطناعي",
       "api": "API",
       "broadcast": "بث",
+      "broadcast_test": "اختبار إرسال البث",
       "campaign": "حملة",
       "scheduled": "مجدولة",
       "other": "أخرى"
@@ -171,6 +174,7 @@
         "contact": "جهة الاتصال",
         "message": "الرسالة",
         "type": "النوع",
+        "source": "المصدر",
         "status": "الحالة",
         "open": "فتح"
       },
@@ -228,11 +232,13 @@
       "source": "أُرسلت بواسطة",
       "sourceValue": {
         "inbox": "صندوق الوارد",
+        "contact": "جهة الاتصال",
         "flow": "مسار",
         "auto_reply": "رد تلقائي",
         "ai": "مساعد الذكاء الاصطناعي",
         "api": "API",
         "broadcast": "بث",
+        "broadcast_test": "اختبار إرسال البث",
         "campaign": "حملة",
         "scheduled": "رسالة مجدولة",
         "other": "أخرى"

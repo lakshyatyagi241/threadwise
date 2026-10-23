@@ -15,11 +15,15 @@ describe('api key scopes and grants (TW-API-008)', () => {
     }
   });
 
-  it('gives a key with no scopes every grant, always with the whole workspace in view', () => {
-    const grants = grantsForScopes([]);
+  it('gives a key with no scopes no grant at all (AUTH-073: no implicit full access)', () => {
+    expect(grantsForScopes([]).size).toBe(0);
+    expect(effectiveScopes([])).toEqual([]);
+  });
+
+  it('gives a scoped key its grants with the whole workspace in view', () => {
+    const grants = grantsForScopes(['contacts:write']);
     expect(grants.get('record.contacts.read')).toEqual({ effect: 'allow', scope: 'all' });
     expect(grants.get('record.contacts.delete')).toEqual({ effect: 'allow', scope: 'all' });
-    expect(grants.get('bcast.broadcasts.create')).toEqual({ effect: 'allow', scope: 'all' });
     for (const g of grants.values()) expect(g.scope).toBe('all');
   });
 
@@ -39,8 +43,9 @@ describe('api key scopes and grants (TW-API-008)', () => {
     expect([...grantsForScopes(['nonsense:read']).keys()]).toEqual([]);
   });
 
-  it('allows a route when the key has no scopes, the scope, or the write scope for a read route', () => {
-    expect(scopeAllows([], 'contacts:write')).toBe(true);
+  it('refuses every route for a key with no scopes, and allows the scope or the write scope for a read route', () => {
+    expect(scopeAllows([], 'contacts:write')).toBe(false);
+    expect(scopeAllows([], 'contacts:read')).toBe(false);
     expect(scopeAllows(['contacts:read'], 'contacts:read')).toBe(true);
     expect(scopeAllows(['contacts:write'], 'contacts:read')).toBe(true);
     expect(scopeAllows(['contacts:read'], 'contacts:write')).toBe(false);

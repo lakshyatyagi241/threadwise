@@ -247,23 +247,7 @@
         "title": "常见问题"
       },
       "addons": {
-        "title": "附加包",
-        "owned": "您已拥有的附加包",
-        "oneTime": "一次性",
-        "buy": "购买附加包",
-        "buyAgain": "再次购买",
-        "active": "有效",
-        "included": "已包含在你的套餐中",
-        "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
-        "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
-        "unlimitedBullet": "无限{label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} 天}}",
-          "weeks": "{count, plural, other {/ {count} 周}}",
-          "months": "{count, plural, other {/ {count} 个月}}",
-          "years": "{count, plural, other {/ {count} 年}}"
-        }
+        "title": "附加包"
       },
       "renewal": {
         "renewsOn": "您的套餐将于 {date} 自动续订。",
@@ -586,13 +570,27 @@
       "appLink": "查看应用",
       "addonHint": "你也可以通过{addon}附加组件将其加入当前套餐。",
       "addonLink": "查看附加组件",
-      "addons": {
-        "smartRouting": "智能路由",
-        "teamsPermissions": "团队和权限"
-      }
+      "addonsTabHint": "使用附加功能不需要套餐包含应用市场。你仍可在“套餐与附加功能”中查看已拥有的内容并购买附加功能。",
+      "addonsTabLink": "打开“套餐与附加功能”",
+      "addonHintGeneric": "你的套餐也可能以附加组件的形式提供它。"
     },
     "lock": {
-      "link": "查看套餐和附加组件"
+      "link": "查看套餐和附加组件",
+      "offTitle": "不在你的套餐中",
+      "offLead": "此部分目前不包含在你的工作区套餐中。",
+      "buyTitle": "以 {price} 添加 {addon}",
+      "buyLead": "你的套餐以附加组件形式提供 {addon}。添加后即可开启此部分。",
+      "buyLink": "查看附加组件",
+      "askOwner": "请让账户所有者添加。",
+      "unavailableTitle": "{addon} 需要有效的付费套餐",
+      "unavailableLead": "请先选择付费套餐，然后即可为其添加 {addon}。",
+      "viewPlans": "查看套餐",
+      "disabledTitle": "{addon} 已关闭",
+      "disabledLead": "你的套餐包含 {addon},但它已在此工作区关闭。其设置会保留。",
+      "disabledAsk": "请让账户所有者开启它。",
+      "turnOn": "开启它",
+      "turnOnForbidden": "你没有开启它的权限。请联系账户所有者。",
+      "turnOnFailed": "无法开启 {addon}。请重试。"
     }
   }
 }

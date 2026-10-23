@@ -601,6 +601,8 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'condition',
   'ask',
   'ask_file',
+  'location',
+  'ask_location',
   'delay',
   'cta',
   'webhook',
@@ -621,6 +623,8 @@ const PRESET_VAR: Record<string, string> = {
   number: 'number',
   alphanumeric: 'code',
   date: 'date',
+  datetime: 'date_time',
+  time: 'time',
   age: 'age',
   date_of_birth: 'date_of_birth',
 };

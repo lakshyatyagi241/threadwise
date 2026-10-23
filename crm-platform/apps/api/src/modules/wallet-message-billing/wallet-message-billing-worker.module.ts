@@ -7,6 +7,9 @@ import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { DeliveryBillingConsumer } from './delivery.consumer';
 import { MessageBillingService } from './message-billing.service';
+import { UsageBillingService } from './usage-billing.service';
+import { UsageBillingConsumer } from './usage.consumer';
+import { UsageSettingsService } from './usage-settings.service';
 import { BillingCurrencyService } from './billing-currency.service';
 import { MetaRateCardService } from './meta-rate-card.service';
 import { PlatformRatesService } from './platform-rates.service';
@@ -33,6 +36,8 @@ import { WalletRepository } from './wallet.repository';
     RateCardService,
     WalletLedgerService,
     MessageBillingService,
+    UsageSettingsService,
+    UsageBillingService,
     PlatformWalletService,
     PlatformRatesService,
     MetaRateCardService,
@@ -41,6 +46,7 @@ import { WalletRepository } from './wallet.repository';
     NotificationPublisher,
     WalletRealtimePublisher,
     DeliveryBillingConsumer,
+    UsageBillingConsumer,
     WalletNotificationsConsumer,
     WalletReconcileJob,
   ],

@@ -18,6 +18,8 @@ export const SETTING_KEYS = {
   perCountry: 'wallet.per_country_enabled',
   payPerMessage: 'billing.pay_per_message',
   pricingMode: 'wallet.pricing_mode',
+  /** What SMS, email, calls, AI and the other usages cost: per-unit prices and the markup on a vendor cost (UsageSettingsService). */
+  usageRates: 'wallet.usage_rates',
 } as const;
 
 interface Economics {

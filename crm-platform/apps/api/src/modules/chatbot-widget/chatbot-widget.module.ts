@@ -10,6 +10,7 @@ import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { SqlAssistantDirectory } from './_shims/sql-assistant-directory';
 import { SqlInboxGateway } from './_shims/sql-inbox-gateway';
 import {
@@ -48,6 +49,8 @@ import { WidgetsService } from './widgets.service';
     CrmModule,
     KnowledgeBaseModule,
     TeamInboxRoutingSlaModule,
+    // AiChargeService: the assistant's reply runs on the platform's key and is charged to the workspace's wallet.
+    WalletMessageBillingModule,
   ],
   controllers: [
     WidgetsController,

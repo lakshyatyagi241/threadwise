@@ -9,10 +9,12 @@ import type {
   FieldSectionResponse,
 } from '@crm/contracts';
 import { Badge, Checkbox, Field, Input, Select, Textarea } from '@crm/ui';
+import { PhoneField } from '@/features/auth-registration-security/shared/phone-field';
 import { hasLazyOptions, useFieldOptionSearch, useLazyOptionLabels } from '../api/properties';
 import { withCascadeChoices } from '../lib/cascade';
 import {
   emptyInput,
+  INVALID_PHONE,
   inputKind,
   isCascadeLink,
   isEmptyInput,
@@ -138,9 +140,11 @@ export function PropertyInput({
 
   const label = (
     <>
-      <span dir="auto">{field.label}</span>
+      <span dir="auto" className="[overflow-wrap:anywhere]">
+        {field.label}
+      </span>
       {field.isRequired && kind !== 'checkbox' ? ' *' : ''}{' '}
-      <span dir="ltr" className="font-mono text-xs text-muted-foreground">
+      <span dir="ltr" className="font-mono text-xs text-muted-foreground [overflow-wrap:anywhere]">
         /{field.key}
       </span>
       {readOnly && <Badge className="ms-1.5 align-middle">{t('readOnlyField')}</Badge>}
@@ -232,6 +236,14 @@ export function PropertyInput({
           checked={text === 'true'}
           disabled={readOnly}
           onChange={(e) => onChange(e.target.checked ? 'true' : 'false')}
+        />
+      ) : kind === 'tel' ? (
+        // A country picker beside the number, like the contact's own phone: the value kept is the international (E.164) number.
+        <PhoneField
+          id={id}
+          initial={text.startsWith('+') ? text : null}
+          invalid={Boolean(error)}
+          onChange={(v) => onChange(v.e164 ?? (v.empty ? '' : INVALID_PHONE))}
         />
       ) : (
         <Input

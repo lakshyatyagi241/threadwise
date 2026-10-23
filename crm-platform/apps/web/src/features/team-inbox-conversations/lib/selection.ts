@@ -1,4 +1,12 @@
-import type { BulkConversationsResponse, BulkItemResult } from '@crm/contracts';
+import {
+  canMoveConversationStatus,
+  isFinishedWebchat,
+  type BulkConversationsResponse,
+  type BulkItemResult,
+  type ConversationStatus,
+  type ConversationSummary,
+} from '@crm/contracts';
+import { isMine } from './list';
 import { dayParts, weekdayIn, zonedInstant } from './time';
 
 /**
@@ -115,4 +123,67 @@ export function snoozeUntil(preset: SnoozePreset, now: Date, timeZone?: string):
   }
   at.setHours(9, 0, 0, 0);
   return at.toISOString();
+}
+
+/**
+ * What the picked conversations have in common, which is what the bulk bar's labels follow. When every picked conversation is already
+ * in the state an action undoes, the action's reverse replaces it ("Mark as spam" becomes "Mark as not spam"); otherwise the forward
+ * action stays. An action that would change nothing for any picked conversation is not offered. With nothing picked every action is
+ * offered (the bar is then disabled anyway).
+ */
+export interface PickedState {
+  /** Every picked conversation is spam: the spam button becomes "Mark as not spam" (status open). */
+  allSpam: boolean;
+  /** Every picked conversation is snoozed: the snooze menu becomes "Unsnooze" (status open). */
+  allSnoozed: boolean;
+  /** No picked conversation has an unread message: "Mark as read" becomes "Mark as unread". */
+  allRead: boolean;
+  /** Some picked conversation is spam. Reopen (status open) would take it out of spam, so Reopen is not offered. */
+  someSpam: boolean;
+  /** Some picked conversation is snoozed. Reopen (status open) would wake it, so Reopen is not offered. */
+  someSnoozed: boolean;
+  /**
+   * Some picked conversation is a resolved or closed web chat: it takes no reopen, snooze or spam mark (the API refuses each), so the bar
+   * offers none of them while one is picked.
+   */
+  someFinishedWebchat: boolean;
+  canUnassign: boolean;
+  canRemoveTeam: boolean;
+  /** False once every picked conversation is assigned to the caller already. */
+  canAssignMe: boolean;
+  /** Some picked conversation can move to this status (and is not in it already). */
+  canMoveTo: (to: ConversationStatus) => boolean;
+  /** Some picked conversation lacks this tag. */
+  canAddTag: (tagId: string) => boolean;
+  /** Some picked conversation carries this tag. */
+  canRemoveTag: (tagId: string) => boolean;
+}
+
+export function pickedState(picked: ReadonlyArray<ConversationSummary>, meId: string): PickedState {
+  const none = picked.length === 0;
+  const every = (test: (r: ConversationSummary) => boolean) =>
+    picked.length > 0 && picked.every(test);
+  const some = (test: (r: ConversationSummary) => boolean) => picked.some(test);
+  const hasTag = (r: ConversationSummary, tagId: string) => r.labels.some((l) => l.id === tagId);
+  return {
+    allSpam: every((r) => r.status === 'spam'),
+    allSnoozed: every((r) => r.status === 'snoozed'),
+    allRead: every((r) => r.unreadCount === 0),
+    someSpam: some((r) => r.status === 'spam'),
+    someSnoozed: some((r) => r.status === 'snoozed'),
+    someFinishedWebchat: some((r) => isFinishedWebchat(r.channel.kind, r.status)),
+    canUnassign: none || some((r) => r.assignment.user !== null),
+    canRemoveTeam: none || some((r) => r.assignment.team !== null),
+    canAssignMe: !every((r) => isMine(r, meId)),
+    canMoveTo: (to) =>
+      none ||
+      some(
+        (r) =>
+          r.status !== to &&
+          canMoveConversationStatus(r.status, to) &&
+          !(to === 'open' && isFinishedWebchat(r.channel.kind, r.status)),
+      ),
+    canAddTag: (tagId) => none || !every((r) => hasTag(r, tagId)),
+    canRemoveTag: (tagId) => none || some((r) => hasTag(r, tagId)),
+  };
 }

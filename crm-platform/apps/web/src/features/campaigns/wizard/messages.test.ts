@@ -149,6 +149,7 @@ const DYNAMIC = [
     'retry_end_required',
     'retry_end_before_send',
     'retry_end_in_past',
+    'retry_end_too_far',
     'schedule_required',
     'no_recipients',
     'insufficient_balance',

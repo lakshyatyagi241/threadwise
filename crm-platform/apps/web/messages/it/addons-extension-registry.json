@@ -45,7 +45,8 @@
         "period": "Periodo",
         "grants": "Include",
         "status": "Stato",
-        "actions": "Azioni"
+        "actions": "Azioni",
+        "plans": "Piani"
       },
       "price": {
         "free": "Gratis",
@@ -124,7 +125,8 @@
           "billingMode": "Fatturazione",
           "sortOrder": "Ordine",
           "isActive": "Attivo",
-          "isLifetime": "A vita (una tantum)"
+          "isLifetime": "A vita (una tantum)",
+          "period": "Periodo di fatturazione"
         },
         "modes": {
           "one_time": "Una tantum (riacquistabile alla scadenza)",
@@ -144,9 +146,78 @@
           "billingDuration": "Inserisci un numero intero pari o superiore a 1.",
           "sortOrder": "Inserisci un numero intero.",
           "limits": "I limiti sono numeri interi, oppure -1 per illimitato.",
-          "form": "Controlla i campi evidenziati."
-        }
-      }
+          "form": "Controlla i campi evidenziati.",
+          "amountPositive": "I componenti aggiuntivi sono abbonamenti mensili o annuali, quindi il prezzo deve essere maggiore di zero.",
+          "features": "Seleziona almeno una funzionalità oppure rendilo un componente di capacità.",
+          "limitsNeeded": "Inserisci almeno un limite maggiore di zero oppure rendilo un componente di funzionalità."
+        },
+        "legacy": {
+          "title": "Pacchetto precedente",
+          "body": "Questo pacchetto è stato creato prima che i componenti aggiuntivi diventassero abbonamenti. Continua a essere venduto esattamente come prima (la fatturazione è mostrata ma non modificabile) e gli spazi di lavoro che lo possiedono non sono toccati. Puoi ancora modificarne nome, prezzo, funzioni e limiti, o toglierlo dalla vendita. I nuovi pacchetti sono abbonamenti mensili o annuali."
+        },
+        "periods": {
+          "months": "Abbonamento mensile",
+          "years": "Abbonamento annuale"
+        },
+        "periodHint": "I componenti aggiuntivi sono abbonamenti. Gli spazi di lavoro con un gateway online si rinnovano automaticamente; con bonifico bancario o pagamento offline pagano di nuovo alla fine del periodo.",
+        "planOffers": {
+          "title": "Piani",
+          "hint": "Come ogni piano offre questo componente aggiuntivo. Incluso: senza costi, il piano porta con sé le sue funzionalità. A pagamento: gli spazi di lavoro lo acquistano, al prezzo specifico del piano se ne imposti uno. Nascosto: gli spazi di lavoro del piano non lo vedono mai.",
+          "noIncluded": "Questo componente aggiuntivo aumenta solo i limiti, quindi nessun piano può includerlo. Un piano imposta i propri limiti nella sua scheda Limiti.",
+          "empty": "Non ci sono ancora piani.",
+          "freePlan": "Piano gratuito",
+          "inactivePlan": "Inattivo",
+          "modeLabel": "Come {plan} offre questo componente aggiuntivo",
+          "modes": {
+            "included": "Incluso",
+            "paid": "A pagamento",
+            "hidden": "Nascosto"
+          },
+          "priceLabel": "Prezzo in questo piano",
+          "priceHint": "Vuoto = prezzo proprio del componente aggiuntivo.",
+          "freePlanNote": "Mostrato nel piano gratuito, ma per acquistarlo uno spazio di lavoro deve avere un piano a pagamento.",
+          "hiddenNote": "Non mostrato agli spazi di lavoro di questo piano. Uno spazio di lavoro che l’ha già acquistato lo mantiene fino alla fine del periodo.",
+          "problems": {
+            "money": "Inserisci un importo come 19 o 19.99.",
+            "zero": "Lascia vuoto il prezzo per usare quello del componente aggiuntivo, oppure scegli Incluso."
+          },
+          "errors": {
+            "generic": "Impossibile salvare le offerte dei piani.",
+            "forbidden": "Solo un super amministratore può modificare le offerte dei piani.",
+            "notFound": "Questo componente aggiuntivo non esiste più."
+          },
+          "saved": "Offerte dei piani salvate.",
+          "changed": "{count, plural, one {# piano modificato} many {# piani modificati} other {# piani modificati}}",
+          "save": "Salva le offerte dei piani",
+          "needFeatures": "Aggiungi prima qui sopra le funzionalità che sblocca"
+        },
+        "type": {
+          "title": "Tipo",
+          "hint": "Scegli cosa fa questo componente aggiuntivo. Solo un componente di funzionalità può essere incluso in un piano.",
+          "feature": {
+            "title": "Componente di funzionalità",
+            "body": "Sblocca una parte del prodotto; può anche aggiungere capacità."
+          },
+          "capacity": {
+            "title": "Componente di capacità",
+            "body": "Aggiunge solo a un limite (posti, contatti...)."
+          }
+        },
+        "noFeaturesNotice": "Questo componente non sblocca ancora nulla. Seleziona le funzionalità che offre così i piani possono includerlo.",
+        "limitsHintCapacity": "Un componente di capacità aggiunge solo ai limiti. Inserisci un numero da AGGIUNGERE al piano (ad esempio +2 posti). Usa -1 per illimitato. È richiesto almeno un limite."
+      },
+      "kind": {
+        "feature": "Funzionalità",
+        "capacity": "Capacità"
+      },
+      "plans": {
+        "included": "Incluso: {plans}",
+        "paid": "A pagamento: {plans}",
+        "hidden": "Nascosto: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Nessun piano"
+      },
+      "noFeatures": "Nessuna funzionalità"
     },
     "extensions": {
       "crumbHere": "Add-on",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Add-on",
       "description": "Pacchetti di funzionalità extra da acquistare in aggiunta al tuo abbonamento.",
-      "needPlanTitle": "Gli add-on richiedono un piano attivo",
-      "needPlanBody": "Gli add-on sono pacchetti di funzionalità extra da acquistare in aggiunta al tuo abbonamento. Scegli prima un piano, poi torna qui per aggiungere funzionalità.",
-      "viewPlans": "Vedi i piani",
-      "noneTitle": "Nessun add-on disponibile",
-      "noneBody": "Al momento non ci sono add-on in offerta. Riprova più tardi.",
-      "ownedTitle": "I tuoi add-on",
-      "ownedBody": "Pacchetti attivi uniti al tuo piano attuale.",
-      "ends": "Scade il {date}",
-      "lifetime": "A vita",
-      "autoRenews": "Rinnovo automatico",
       "renewal": {
         "cancel": "Annulla rinnovo",
         "confirmTitle": "Annullare il rinnovo?",
@@ -277,37 +338,105 @@
         "forbidden": "Non hai l'autorizzazione per modificare il piano.",
         "none": "Non c'è alcun abbonamento attivo da annullare.",
         "failed": "Non è stato possibile annullare il rinnovo. Riprova."
-      },
-      "active": "Attivo",
-      "included": "Incluso nel tuo piano",
-      "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
-      "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-on",
-      "catalogBody": "Sblocca funzionalità extra in aggiunta al tuo piano attuale. Nessun cambio di piano necessario.",
-      "count": "{count, plural, one {# add-on} many {# add-on} other {# add-on}}",
-      "free": "Gratis",
-      "lifetimePrice": "una tantum",
-      "per": "/ {unit}",
-      "units": {
-        "days": "giorni",
-        "weeks": "settimane",
-        "months": "mesi",
-        "years": "anni"
-      },
-      "buy": "Aggiungi al piano",
-      "buyAgain": "Riacquista",
-      "owned": "Posseduto ×{count} · riacquistando se ne aggiungono altri",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} illimitati",
-        "add": "+{amount} {name}"
-      },
-      "error": "Impossibile caricare gli add-on."
+      }
     },
     "planFields": {
       "fromModule": "da un modulo installato",
       "unlimited": "Illimitato"
+    },
+    "list": {
+      "unavailable": {
+        "title": "I componenti aggiuntivi richiedono un piano a pagamento attivo",
+        "free_plan": "Sei su un piano gratuito. I componenti aggiuntivi sono extra che acquisti in più rispetto a un piano a pagamento.",
+        "plan_expired": "Il tuo piano a pagamento è terminato, quindi i componenti aggiuntivi sono in pausa. Rinnova il piano per acquistare o rinnovare componenti.",
+        "no_plan": "Il tuo spazio di lavoro non ha ancora un piano. Scegli un piano a pagamento per usare i componenti aggiuntivi.",
+        "cta": "Vedi i piani"
+      },
+      "unavailableCard": "Richiede un piano a pagamento attivo",
+      "empty": {
+        "title": "Nessun componente aggiuntivo in vendita",
+        "body": "Al momento non c’è nessun componente aggiuntivo in offerta. Riprova più tardi."
+      },
+      "listLabel": "Componenti aggiuntivi in vendita",
+      "owned": {
+        "title": "I tuoi componenti aggiuntivi",
+        "renews": "Si rinnova il {date}",
+        "ends": "Attivo fino al {date}. Non si rinnoverà automaticamente.",
+        "lifetime": "A vita"
+      },
+      "state": {
+        "included": "Incluso nel tuo piano",
+        "includedSupport": "Attivato dal tuo account manager.",
+        "includedOwned": "Hai anche questo componente aggiuntivo. Il tuo piano ora lo include, quindi puoi annullarlo. Nulla viene rimborsato automaticamente.",
+        "includedEnds": "Incluso nel tuo piano. Il tuo componente aggiuntivo termina il {date} e non si rinnoverà.",
+        "active": "Attivo",
+        "ownedCount": "Posseduto ×{count} · riacquistando se ne aggiungono altri",
+        "turnedOff": "Disattivato"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "una tantum",
+        "per": {
+          "days": "{count, plural, one {/ giorno} other {/ {count} giorni}}",
+          "weeks": "{count, plural, one {/ settimana} other {/ {count} settimane}}",
+          "months": "{count, plural, one {/ mese} other {/ {count} mesi}}",
+          "years": "{count, plural, one {/ anno} other {/ {count} anni}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Si rinnova a ogni periodo. Pagato automaticamente con carta; con bonifico bancario o pagamento offline paghi di nuovo alla fine del periodo.",
+        "oneTime": "Acquisto una tantum. Non si rinnova."
+      },
+      "buy": "Acquista add-on",
+      "buyAgain": "Riacquista",
+      "cannotBuyHint": "Chiedi al proprietario del tuo account. Solo chi può acquistare per questo spazio di lavoro può avviare un acquisto.",
+      "bullets": {
+        "unlimited": "{name} illimitati",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Ti servono crediti messaggi? Ricarica invece il tuo portafoglio; i crediti non sono un componente aggiuntivo.",
+      "walletLink": "Ricarica il portafoglio",
+      "groups": {
+        "feature": "Componenti aggiuntivi di funzionalità",
+        "capacity": "Componenti aggiuntivi di capacità"
+      },
+      "activation": {
+        "turnedOffNote": "Disattivato per questo spazio di lavoro. Le sue impostazioni sono conservate.",
+        "turnOff": "Disattiva",
+        "turnOn": "Attiva",
+        "askOwner": "Chiedi al proprietario dell’account di attivarlo o disattivarlo.",
+        "doneOn": "{name} è attivato.",
+        "errors": {
+          "notToggleable": "{name} non può essere attivato o disattivato qui. Si può cambiare solo un componente aggiuntivo incluso nel tuo piano.",
+          "forbidden": "Non hai il permesso di attivare o disattivare i componenti aggiuntivi.",
+          "generic": "Non è stato possibile modificare {name}. Riprova."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Disattivare {name}?",
+      "lead": "Ecco cosa cambia. Puoi riattivarlo in qualsiasi momento.",
+      "cancel": "Annulla",
+      "confirm": "Disattiva {name}",
+      "done": "{name} è disattivato. Le sue impostazioni sono conservate.",
+      "typeLabel": "Digita {name} per confermare",
+      "typeHint": "Sono interessate chat dei clienti o persone, quindi digita il nome per confermare.",
+      "groups": {
+        "stops": "Cosa si ferma",
+        "kept": "Cosa viene conservato",
+        "people": "Persone"
+      },
+      "items": {
+        "features_off": "Queste funzioni smettono di funzionare: {names}.",
+        "dependents_off": "Queste funzioni ne dipendono, quindi si fermano anch’esse: {names}.",
+        "roles_dormant": "{count, plural, one {# ruolo ha permessi di questo componente. Li conserva, ma restano inattivi finché non lo riattivi.} many {# di ruoli hanno permessi di questo componente. Li conservano, ma restano inattivi finché non lo riattivi.} other {# ruoli hanno permessi di questo componente. Li conservano, ma restano inattivi finché non lo riattivi.}}",
+        "waiting_chats": "{count, plural, one {# chat attende un agente. Non verrà instradata automaticamente, quindi qualcuno deve prenderla in carico.} many {# di chat attendono un agente. Non verranno instradate automaticamente, quindi qualcuno deve prenderle in carico.} other {# chat attendono un agente. Non verranno instradate automaticamente, quindi qualcuno deve prenderle in carico.}}",
+        "routing_rules": "{count, plural, one {# regola di instradamento smette di assegnare chat.} many {# di regole di instradamento smettono di assegnare chat.} other {# regole di instradamento smettono di assegnare chat.}}",
+        "auto_teams": "{count, plural, one {# team è impostato per assegnare le chat automaticamente e smette di farlo.} many {# di team sono impostati per assegnare le chat automaticamente e smettono di farlo.} other {# team sono impostati per assegnare le chat automaticamente e smettono di farlo.}}",
+        "teams": "{count, plural, one {# team viene conservato, con i suoi membri.} many {# di team vengono conservati, con i loro membri.} other {# team vengono conservati, con i loro membri.}}",
+        "custom_role_holders": "{count, plural, one {# persona ha un ruolo personalizzato. Il ruolo viene conservato, ma i permessi di questo componente non si applicano più.} many {# di persone hanno un ruolo personalizzato. I ruoli vengono conservati, ma i permessi di questo componente non si applicano più.} other {# persone hanno un ruolo personalizzato. I ruoli vengono conservati, ma i permessi di questo componente non si applicano più.}}",
+        "kept": "Le tue impostazioni e i tuoi dati sono conservati. Tornano come li hai lasciati quando lo riattivi."
+      }
     }
   }
 }

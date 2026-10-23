@@ -1,14 +1,18 @@
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { API_LIBRARY_SECRET_MASK } from '@crm/contracts';
 import {
   applyMapping,
   buildMultipart,
   extractByPath,
+  logResponseText,
   maskHeaders,
   maskJson,
   maskJsonText,
   maskResponseHeaders,
   maskUrl,
+  looksBinary,
+  readAnswer,
   renderBody,
   renderHeaders,
   renderText,
@@ -230,6 +234,36 @@ describe('response paths', () => {
   });
 });
 
+describe('the answer a log keeps', () => {
+  const answer = (bodyText: string, extra: Partial<Parameters<typeof logResponseText>[0]> = {}) =>
+    logResponseText({
+      bodyText,
+      contentType: null,
+      headers: {},
+      sizeBytes: Buffer.byteLength(bodyText),
+      ...extra,
+    });
+
+  it('keeps a text answer as it is', () => {
+    expect(answer('{"id":7}', { contentType: 'application/json' })).toBe('{"id":7}');
+  });
+
+  it('replaces an answer with a NUL character (a binary body) by a note of its size and type', () => {
+    const bodyText = '\u0089PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR';
+    const note = answer(bodyText, { contentType: 'image/png', sizeBytes: 163 });
+    expect(note).toBe('[binary answer: 163 bytes, image/png]');
+    expect(note).not.toContain('\u0000');
+  });
+
+  it('says so when the binary answer names no content type and was sent compressed', () => {
+    const note = answer('\u001f\u008b\u0008\u0000\u0000\u0000', {
+      sizeBytes: 26,
+      headers: { 'content-encoding': 'gzip' },
+    });
+    expect(note).toBe('[binary answer: 26 bytes, no content type, content-encoding gzip]');
+  });
+});
+
 describe('numbered pages', () => {
   it('derives the totals: at least one page, hasMore until the last, empty beyond it', async () => {
     const { numberedPage } = await import('../../../src/modules/api-library/api-library.mapper');
@@ -251,5 +285,39 @@ describe('numbered pages', () => {
     expect(numberedPage(['e'], 5, 3, 2).page.hasMore).toBe(false);
     expect(numberedPage([], 5, 9, 2)).toMatchObject({ data: [], total: 5, totalPages: 3 });
     expect(numberedPage([], 0, 1, 25)).toMatchObject({ total: 0, totalPages: 1 });
+  });
+});
+
+describe('readAnswer', () => {
+  it('unpacks a gzip answer and counts the real bytes', () => {
+    const text = JSON.stringify({ hello: 'world' });
+    const out = readAnswer(
+      gzipSync(text),
+      { 'content-encoding': 'gzip', 'content-type': 'application/json' },
+      1 << 20,
+    );
+    expect(out).toEqual({ text, isText: true, sizeBytes: text.length });
+  });
+
+  it('names a file instead of printing it as symbols, with its byte size', () => {
+    const png = Buffer.alloc(102_400, 7);
+    const out = readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
+    expect(out.isText).toBe(false);
+    expect(out.sizeBytes).toBe(102_400);
+    expect(out.text).toContain('image/png');
+    expect(out.text).toContain('102400 bytes');
+  });
+
+  it('treats a NUL byte as binary even with a text type, and plain text as text', () => {
+    expect(looksBinary('text/plain', Buffer.from([65, 0, 66]))).toBe(true);
+    expect(readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100).isText).toBe(
+      true,
+    );
+  });
+
+  it('does not throw on a broken compressed answer', () => {
+    const out = readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
+    expect(out.isText).toBe(false);
+    expect(out.text).toContain('could not be unpacked');
   });
 });

@@ -16,10 +16,12 @@ import {
   type OpenedSender,
   type PacingSettingsSource,
 } from '../../../src/modules/broadcasts';
+import { CampaignDispatchService } from '../../../src/modules/campaigns/campaign-dispatch.service';
 import { CampaignProcessor } from '../../../src/modules/campaigns/campaign.processor';
 import { ContactImportProcessor } from '../../../src/modules/crm/contact-import/contact-import.processor';
 import { OutboundRegistry, type EngineTransport } from '../../../src/modules/node-bridge-runtime';
 import { ScheduledRunProcessor } from '../../../src/modules/scheduled-queue-warmer/scheduled-run.processor';
+import { ScheduledRunService } from '../../../src/modules/scheduled-queue-warmer/scheduled-run.service';
 import { WebhookDeliveryProcessor } from '../../../src/modules/outbound-webhooks/webhook-delivery.processor';
 import { MessageDispatchProcessor } from '../../../src/modules/chat-conversations/message-dispatch.processor';
 import {
@@ -161,6 +163,22 @@ beforeAll(async () => {
 afterAll(async () => {
   globalThis.fetch = realFetch;
   await h?.stop();
+});
+
+// The senders the workers run carry the quiet-hours service and the catch-up queue (BL-177, BL-192). Both are required injections, so a
+// module graph without them fails at boot; this pins the instances the worker actually resolves, not hand-built copies in the specs.
+it('the campaign and scheduled senders in the worker are wired to the quiet hours and the catch-up queue', () => {
+  const campaign = h.app.get(CampaignDispatchService, { strict: false }) as unknown as Record<
+    string,
+    unknown
+  >;
+  const scheduled = h.app.get(ScheduledRunService, { strict: false }) as unknown as Record<
+    string,
+    unknown
+  >;
+  expect(campaign.sendWindow).toBeDefined();
+  expect(campaign.jobs).toBeDefined();
+  expect(scheduled.sendWindow).toBeDefined();
 });
 
 // ---- the stand-in edges ----------------------------------------------------------------------------------------------------

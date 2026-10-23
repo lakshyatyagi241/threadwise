@@ -45,7 +45,8 @@
         "period": "Dönem",
         "grants": "Sağladıkları",
         "status": "Durum",
-        "actions": "İşlemler"
+        "actions": "İşlemler",
+        "plans": "Planlar"
       },
       "price": {
         "free": "Ücretsiz",
@@ -124,7 +125,8 @@
           "billingMode": "Faturalama",
           "sortOrder": "Sıralama",
           "isActive": "Etkin",
-          "isLifetime": "Ömür boyu (tek seferlik)"
+          "isLifetime": "Ömür boyu (tek seferlik)",
+          "period": "Faturalama dönemi"
         },
         "modes": {
           "one_time": "Tek seferlik (bittikten sonra tekrar satın alınır)",
@@ -144,9 +146,78 @@
           "billingDuration": "1 veya daha büyük bir tam sayı girin.",
           "sortOrder": "Bir tam sayı girin.",
           "limits": "Limitler tam sayı olmalıdır; sınırsız için -1 girin.",
-          "form": "Vurgulanan alanları kontrol edin."
-        }
-      }
+          "form": "Vurgulanan alanları kontrol edin.",
+          "amountPositive": "Eklentiler aylık veya yıllık aboneliktir, bu yüzden fiyat sıfırdan büyük olmalıdır.",
+          "features": "En az bir özellik işaretleyin veya bunu kapasite eklentisi yapın.",
+          "limitsNeeded": "Sıfırdan büyük en az bir sınır girin veya bunu özellik eklentisi yapın."
+        },
+        "legacy": {
+          "title": "Eski paket",
+          "body": "Bu paket, eklentiler abonelik olmadan önce oluşturuldu. Tıpkı eskisi gibi satılmaya devam eder (faturalaması gösterilir ancak değiştirilemez) ve onu kullanan çalışma alanları etkilenmez. Adını, fiyatını, özelliklerini ve limitlerini yine düzenleyebilir veya satıştan kaldırabilirsiniz. Yeni paketler aylık veya yıllık aboneliktir."
+        },
+        "periods": {
+          "months": "Aylık abonelik",
+          "years": "Yıllık abonelik"
+        },
+        "periodHint": "Eklentiler aboneliktir. Çevrimiçi ödeme ağ geçidindeki çalışma alanları otomatik yenilenir; banka havalesi veya çevrimdışı ödemede dönem bitince yeniden öderler.",
+        "planOffers": {
+          "title": "Planlar",
+          "hint": "Her planın bu eklentiyi nasıl sunduğu. Dahil: ücretsizdir, plan eklentinin özelliklerini içerir. Ücretli: çalışma alanları satın alır; belirlediyseniz planın kendi fiyatıyla. Gizli: plandaki çalışma alanları onu hiç görmez.",
+          "noIncluded": "Bu eklenti yalnızca limitleri artırır, bu yüzden hiçbir plan onu dahil edemez. Her plan kendi üst sınırlarını Sınırlar sekmesinde belirler.",
+          "empty": "Henüz plan yok.",
+          "freePlan": "Ücretsiz plan",
+          "inactivePlan": "Etkin değil",
+          "modeLabel": "{plan} bu eklentiyi nasıl sunar",
+          "modes": {
+            "included": "Dahil",
+            "paid": "Ücretli",
+            "hidden": "Gizli"
+          },
+          "priceLabel": "Bu plandaki fiyat",
+          "priceHint": "Boş = eklentinin kendi fiyatı.",
+          "freePlanNote": "Ücretsiz planda gösterilir, ancak satın almak için çalışma alanının ücretli bir planı olmalıdır.",
+          "hiddenNote": "Bu plandaki çalışma alanlarına gösterilmez. Zaten satın almış bir çalışma alanı, süresi bitene kadar onu korur.",
+          "problems": {
+            "money": "19 veya 19.99 gibi bir tutar girin.",
+            "zero": "Eklentinin fiyatını kullanmak için fiyatı boş bırakın veya Dahil seçeneğini seçin."
+          },
+          "errors": {
+            "generic": "Plan teklifleri kaydedilemedi.",
+            "forbidden": "Plan tekliflerini yalnızca süper yönetici değiştirebilir.",
+            "notFound": "Bu eklenti artık mevcut değil."
+          },
+          "saved": "Plan teklifleri kaydedildi.",
+          "changed": "{count, plural, one {# plan değişti} other {# plan değişti}}",
+          "save": "Plan tekliflerini kaydet",
+          "needFeatures": "Önce yukarıda açtığı özellikleri ekleyin"
+        },
+        "type": {
+          "title": "Tür",
+          "hint": "Bu eklentinin ne yaptığını seçin. Bir pakete yalnızca özellik eklentisi dahil edilebilir.",
+          "feature": {
+            "title": "Özellik eklentisi",
+            "body": "Ürünün bir bölümünü açar; kapasite de ekleyebilir."
+          },
+          "capacity": {
+            "title": "Kapasite eklentisi",
+            "body": "Yalnızca bir sınırı artırır (koltuk, kişi...)."
+          }
+        },
+        "noFeaturesNotice": "Bu eklenti henüz hiçbir şeyin kilidini açmıyor. Paketlerin dahil edebilmesi için sağladığı özellikleri işaretleyin.",
+        "limitsHintCapacity": "Kapasite eklentisi yalnızca sınırları artırır. Pakete EKLENECEK bir sayı girin (örneğin +2 koltuk). Sınırsız için -1 kullanın. En az bir sınır gerekir."
+      },
+      "kind": {
+        "feature": "Özellik",
+        "capacity": "Kapasite"
+      },
+      "plans": {
+        "included": "Dahil: {plans}",
+        "paid": "Ücretli: {plans}",
+        "hidden": "Gizli: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Plan yok"
+      },
+      "noFeatures": "Henüz özellik yok"
     },
     "extensions": {
       "crumbHere": "Eklentiler",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Eklentiler",
       "description": "Aboneliğinize ek olarak satın aldığınız özellik paketleri.",
-      "needPlanTitle": "Eklentiler için etkin bir plan gerekir",
-      "needPlanBody": "Eklentiler, aboneliğinize ek olarak satın aldığınız özellik paketleridir. Önce bir plan seçin, ardından özellik eklemek için buraya dönün.",
-      "viewPlans": "Planları gör",
-      "noneTitle": "Kullanılabilir eklenti yok",
-      "noneBody": "Şu anda sunulan eklenti yok. Daha sonra tekrar kontrol edin.",
-      "ownedTitle": "Eklentileriniz",
-      "ownedBody": "Mevcut planınıza eklenen etkin paketler.",
-      "ends": "Bitiş: {date}",
-      "lifetime": "Ömür boyu",
-      "autoRenews": "Otomatik yenilenir",
       "renewal": {
         "cancel": "Yenilemeyi iptal et",
         "confirmTitle": "Yenileme iptal edilsin mi?",
@@ -277,37 +338,105 @@
         "forbidden": "Planı değiştirme izniniz yok.",
         "none": "İptal edilecek etkin bir abonelik yok.",
         "failed": "Yenilemeyi iptal edemedik. Lütfen tekrar deneyin."
-      },
-      "active": "Etkin",
-      "included": "Planınıza dahil",
-      "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
-      "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
-      "cardEyebrow": "Eklenti",
-      "catalogTitle": "Eklentiler",
-      "catalogBody": "Mevcut planınızın üzerine ek özelliklerin kilidini açın. Plan değişikliği gerekmez.",
-      "count": "{count, plural, one {# eklenti} other {# eklenti}}",
-      "free": "Ücretsiz",
-      "lifetimePrice": "tek seferlik",
-      "per": "/ {unit}",
-      "units": {
-        "days": "gün",
-        "weeks": "hafta",
-        "months": "ay",
-        "years": "yıl"
-      },
-      "buy": "Plana ekle",
-      "buyAgain": "Tekrar satın al",
-      "owned": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Sınırsız {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "Eklentiler yüklenemedi."
+      }
     },
     "planFields": {
       "fromModule": "yüklü bir modülden",
       "unlimited": "Sınırsız"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Eklentiler için etkin bir ücretli plan gerekir",
+        "free_plan": "Ücretsiz plandasınız. Eklentiler, ücretli planın üzerine satın aldığınız ek özelliklerdir.",
+        "plan_expired": "Ücretli planınız sona erdi, bu yüzden eklentiler duraklatıldı. Eklenti satın almak veya yenilemek için planınızı yenileyin.",
+        "no_plan": "Çalışma alanınızın henüz bir planı yok. Eklentileri kullanmak için ücretli bir plan seçin.",
+        "cta": "Planları gör"
+      },
+      "unavailableCard": "Etkin bir ücretli plan gerekir",
+      "empty": {
+        "title": "Satışta eklenti yok",
+        "body": "Şu anda sunulan eklenti yok. Daha sonra tekrar bakın."
+      },
+      "listLabel": "Satıştaki eklentiler",
+      "owned": {
+        "title": "Sahip olduğunuz eklentiler",
+        "renews": "{date} tarihinde yenilenir",
+        "ends": "{date} tarihine kadar etkin. Otomatik olarak yenilenmeyecek.",
+        "lifetime": "Ömür boyu"
+      },
+      "state": {
+        "included": "Planınıza dahil",
+        "includedSupport": "Hesap yöneticiniz tarafından etkinleştirildi.",
+        "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
+        "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
+        "active": "Etkin",
+        "ownedCount": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler",
+        "turnedOff": "Kapalı"
+      },
+      "price": {
+        "free": "Ücretsiz",
+        "oneTime": "tek seferlik",
+        "per": {
+          "days": "{count, plural, other {/ {count} gün}}",
+          "weeks": "{count, plural, other {/ {count} hafta}}",
+          "months": "{count, plural, other {/ {count} ay}}",
+          "years": "{count, plural, other {/ {count} yıl}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Her dönem yenilenir. Kartla ödemede otomatik ödenir; banka havalesi veya çevrimdışı ödemede dönem bitince yeniden ödersiniz.",
+        "oneTime": "Tek seferlik satın alma. Yenilenmez."
+      },
+      "buy": "Eklenti satın al",
+      "buyAgain": "Tekrar satın al",
+      "cannotBuyHint": "Hesap sahibinize danışın. Yalnızca bu çalışma alanı için satın alma yetkisi olanlar satın alma başlatabilir.",
+      "bullets": {
+        "unlimited": "Sınırsız {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Mesaj kredisi mi lazım? Bunun yerine cüzdanınıza yükleme yapın; krediler eklenti değildir.",
+      "walletLink": "Cüzdana yükle",
+      "groups": {
+        "feature": "Özellik eklentileri",
+        "capacity": "Kapasite eklentileri"
+      },
+      "activation": {
+        "turnedOffNote": "Bu çalışma alanı için kapalı. Ayarları korunur.",
+        "turnOff": "Kapat",
+        "turnOn": "Aç",
+        "askOwner": "Açması veya kapatması için hesap sahibinden isteyin.",
+        "doneOn": "{name} açıldı.",
+        "errors": {
+          "notToggleable": "{name} burada açılamaz veya kapatılamaz. Yalnızca planınıza dahil olan bir eklenti değiştirilebilir.",
+          "forbidden": "Eklentileri açma veya kapatma yetkiniz yok.",
+          "generic": "{name} değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      }
+    },
+    "toggle": {
+      "title": "{name} kapatılsın mı?",
+      "lead": "Değişecekler burada. İstediğiniz zaman tekrar açabilirsiniz.",
+      "cancel": "İptal",
+      "confirm": "{name} eklentisini kapat",
+      "done": "{name} kapatıldı. Ayarları korunur.",
+      "typeLabel": "Onaylamak için {name} yazın",
+      "typeHint": "Müşteri sohbetleri veya kişiler etkileniyor, bu yüzden onaylamak için adı yazın.",
+      "groups": {
+        "stops": "Neler durur",
+        "kept": "Neler korunur",
+        "people": "Kişiler"
+      },
+      "items": {
+        "features_off": "Bu özellikler çalışmayı durdurur: {names}.",
+        "dependents_off": "Bu özellikler bunlara bağlı olduğundan onlar da durur: {names}.",
+        "roles_dormant": "{count, plural, one {# rol bu eklentinin izinlerine sahip. İzinleri korur, ancak eklentiyi tekrar açana kadar etkin olmaz.} other {# rol bu eklentinin izinlerine sahip. İzinleri korurlar, ancak eklentiyi tekrar açana kadar etkin olmaz.}}",
+        "waiting_chats": "{count, plural, one {# sohbet bir temsilci bekliyor. Otomatik yönlendirilmeyecek, bu yüzden birinin üstlenmesi gerekir.} other {# sohbet bir temsilci bekliyor. Otomatik yönlendirilmeyecek, bu yüzden birinin üstlenmesi gerekir.}}",
+        "routing_rules": "{count, plural, one {# yönlendirme kuralı sohbet atamayı bırakır.} other {# yönlendirme kuralı sohbet atamayı bırakır.}}",
+        "auto_teams": "{count, plural, one {# ekip sohbetleri otomatik atayacak şekilde ayarlı ve bunu yapmayı bırakır.} other {# ekip sohbetleri otomatik atayacak şekilde ayarlı ve bunu yapmayı bırakır.}}",
+        "teams": "{count, plural, one {# ekip üyeleriyle birlikte korunur.} other {# ekip üyeleriyle birlikte korunur.}}",
+        "custom_role_holders": "{count, plural, one {# kişinin özel bir rolü var. Rolü korunur, ancak bu eklentinin izinleri geçerli olmaz.} other {# kişinin özel bir rolü var. Rolleri korunur, ancak bu eklentinin izinleri geçerli olmaz.}}",
+        "kept": "Ayarlarınız ve verileriniz korunur. Tekrar açtığınızda bıraktığınız gibi geri gelir."
+      }
     }
   }
 }

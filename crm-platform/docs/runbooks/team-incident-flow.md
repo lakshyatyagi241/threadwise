@@ -28,7 +28,7 @@ node tools/chat-bridge/incident-cli.mjs note <id> "checked: not a plan regressio
 node tools/chat-bridge/incident-cli.mjs release-claim <id>
 ```
 
-Claude does this for you via the `handle-alert` skill (`.claude/skills/handle-alert/SKILL.md`); a scheduled version: [incident-schedule-prompt.md](incident-schedule-prompt.md).
+Claude does this for you via the `handle-alert` skill (`.claude/skills/handle-alert/SKILL.md`); the 5-minute auto-claim loop: [incident-schedule-prompt.md](incident-schedule-prompt.md).
 
 ## Credentials for a new teammate
 
@@ -38,20 +38,7 @@ The API sits at `https://<PROMETHEUS_DOMAIN>/incidents` (default `prometheus-des
 cd /opt/desk && cat secrets/incidents_basic_password; echo; cat secrets/incident_api_token; echo
 ```
 
-Each teammate stores them on their own machine, mode 600, never committed:
-
-```
-mkdir -p ~/.config/threadwise && umask 077 && cat > ~/.config/threadwise/incidents.env <<'X'
-INCIDENT_API_URL=https://prometheus-desk.wabo.ai
-INCIDENT_API_USER=incidents
-INCIDENT_API_PASSWORD=<password>
-INCIDENT_API_TOKEN=<token>
-INCIDENT_WHO=<your name>
-X
-chmod 600 ~/.config/threadwise/incidents.env
-```
-
-The CLI refuses a file that is group/world readable. Rotate: delete the two files in `secrets/`, run `./observability-up.sh`, `docker compose ... up -d --force-recreate gchat-bridge`, redistribute.
+Each teammate then runs `node tools/chat-bridge/incident-cli.mjs init` and `... doctor` (writes the file with mode 600, URL is the host only, name without parentheses). Step by step: [team-onboarding-claude.md](team-onboarding-claude.md). The CLI refuses a file that is group/world readable. Rotate: delete the two files in `secrets/`, run `./observability-up.sh`, `docker compose ... up -d --force-recreate gchat-bridge`, redistribute.
 
 ## Limits
 
@@ -59,3 +46,10 @@ The CLI refuses a file that is group/world readable. Rotate: delete the two file
 - Incidents live in the bridge's memory (200 max, lost on restart); the threads in Chat keep the history.
 - One shared token: it identifies the team, not the person; `who` is self-declared. Fine for 2-3 trusted people.
 - `AUTO_REMEDIATE=off` creates no incidents at all, so there is nothing to claim.
+
+## Closing the loop (release-aware)
+
+- The release watcher (`deploy/hostinger/desk-release-watch.sh`) posts to Deployments, then calls the bridge in the background (`docker exec desk-gchat-bridge`, token read inside the container): `POST /release {sha, prs, at}` after "Release live", `POST /incidents` (kind `deploy_failure`, one per attempted sha) when the live version did not change. A bridge failure is logged and never delays the Deployments post.
+- Only incidents whose PR number is in `prs` become `released`; other releases change nothing. Then, for `VERIFY_SECONDS` (default 120): critical alerts need the alert not firing (Prometheus `ALERTS{alertname=...,alertstate="firing"}` or Alertmanager resolved); slow statements need the recovered polls (`SLOW_VERIFY_SECONDS`, default 600); a deploy failure resolves on the next live release.
+- Pass: `RESOLVED by PR #N (owner X), release <sha>, verified after Ns; open for Hh Mm`. Fail: `Released PR #N but the problem is still there`, status back to `escalated`, never RESOLVED.
+- Kinds: `critical_alert`, `slow_statement`, `deploy_failure` (shown by `GET /incidents` and `incident-cli list`).

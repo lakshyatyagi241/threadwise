@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -16,6 +17,7 @@ import {
 } from '../../infra/providers/flow-runtime-engine/flow-ai.port';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService } from '../wallet-message-billing';
 import {
   BRIEF_CACHE_MS,
   BRIEF_COOLDOWN_MS,
@@ -59,7 +61,9 @@ interface ResolvedAi {
  *   2. the same facts within a day return the stored brief and call nothing (`regenerate` skips this);
  *   3. no key available is 422 COMPANY_BRIEF_AI_UNAVAILABLE and nothing is sent anywhere;
  *   4. a second generation within 30 seconds is refused (429), so a double click or a loop costs one call;
- *   5. the answer must be a brief; one that is not is 502 and the previous brief is kept.
+ *   5. on the platform's key the monthly allowance and then the wallet must cover it (422 WALLET_EMPTY before the vendor is called); a
+ *      brief written on the workspace's own key costs the workspace nothing here;
+ *   6. the answer must be a brief; one that is not is 502 and the previous brief is kept (the vendor call itself is still paid for).
  *
  * The audit trail records who generated a brief for which company, with the model and token counts, and never the facts or the text.
  */
@@ -73,6 +77,7 @@ export class CompanyBriefsService {
     private readonly facts: BriefFactsService,
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
+    private readonly wallet: AiChargeService,
     private readonly audit: AuditService,
     @Inject(FLOW_AI_PORT) private readonly ai: FlowAiPort,
   ) {}
@@ -131,7 +136,12 @@ export class CompanyBriefsService {
 
     // Tokens billed to the platform's key count against the workspace's monthly allowance; its own key does not.
     if (resolved.source === 'admin') await this.meter.guard(ctx.orgId);
+    // The platform's key is also paid for from the workspace's wallet: an empty wallet is refused here, before the vendor is called.
+    await this.wallet.guardCall(ctx.orgId, resolved.source);
 
+    // One id per vendor call, not the request id: the request id is whatever `x-request-id` the caller sent, and charging the same id
+    // twice takes nothing the second time.
+    const usageId = randomUUID();
     const prompt = briefPrompt(gathered.facts, new Date().toISOString().slice(0, 10));
     let completion;
     try {
@@ -164,6 +174,18 @@ export class CompanyBriefsService {
       .catch((err: unknown) =>
         this.logger.warn({ err: String(err) }, 'company brief usage not recorded'),
       );
+    // The vendor answered, so the call is paid for even when the answer turns out not to be a brief.
+    await this.wallet.chargeCall({
+      orgId: ctx.orgId,
+      keySource: resolved.source,
+      label: 'AI company brief',
+      source: 'company_brief',
+      usageId,
+      provider: resolved.provider,
+      model: resolved.model,
+      promptTokens: completion.promptTokens,
+      completionTokens: completion.completionTokens,
+    });
 
     const content = parseBrief(completion.text);
     if (!content) {

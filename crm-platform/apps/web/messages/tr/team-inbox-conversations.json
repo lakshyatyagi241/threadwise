@@ -328,6 +328,7 @@
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
       "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
+      "resolvedWebchatBanner": "Bu web sohbeti çözüldü ve yeniden açılamaz.",
       "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
@@ -715,6 +716,7 @@
         "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez.",
         "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
         "media_header": "Görsel, video veya belge üstbilgisi var; bu, gelen kutusundan henüz gönderilemiyor.",
+        "carousel": "Bir karusel (resimli kartlar) ve henüz gelen kutusundan gönderilemiyor.",
         "header_variable": "Üstbilgide bir değişken var; bu, gelen kutusundan henüz doldurulamıyor.",
         "dynamic_button": "Değişken içeren bir düğme bağlantısı var; bu, gelen kutusundan henüz doldurulamıyor.",
         "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",
@@ -1059,7 +1061,10 @@
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
       "onLeaveUntil": "{date} tarihine kadar izinli",
-      "spam": "Spam olarak işaretle"
+      "spam": "Spam olarak işaretle",
+      "markUnread": "Okunmadı olarak işaretle",
+      "unsnooze": "Ertelemeyi kaldır",
+      "notSpam": "Spam değil olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",

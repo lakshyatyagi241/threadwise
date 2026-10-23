@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Coda d'attesa",
       "intro": "Le chat che nessuno ha preso restano nella scheda In attesa. Questi passaggi facoltativi aiutano a rispondere. Ogni passaggio viene eseguito una volta per chat, conta solo i minuti in cui il team è aperto e si ferma appena qualcuno prende la chat.",
+      "introBasic": "Le chat che nessuno ha preso restano nella scheda In attesa finché qualcuno non le prende.",
       "remind": "Ricorda al team",
       "remindBody": "Avvisa chi può prendere la chat.",
       "overflow": "Offri a un altro team",

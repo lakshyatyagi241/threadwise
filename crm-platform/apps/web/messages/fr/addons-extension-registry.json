@@ -45,7 +45,8 @@
         "period": "Période",
         "grants": "Accorde",
         "status": "Statut",
-        "actions": "Actions"
+        "actions": "Actions",
+        "plans": "Forfaits"
       },
       "price": {
         "free": "Gratuit",
@@ -124,7 +125,8 @@
           "billingMode": "Facturation",
           "sortOrder": "Ordre de tri",
           "isActive": "Actif",
-          "isLifetime": "À vie (paiement unique)"
+          "isLifetime": "À vie (paiement unique)",
+          "period": "Période de facturation"
         },
         "modes": {
           "one_time": "Paiement unique (rachat possible à l’expiration)",
@@ -144,9 +146,78 @@
           "billingDuration": "Saisissez un nombre entier supérieur ou égal à 1.",
           "sortOrder": "Saisissez un nombre entier.",
           "limits": "Les limites sont des nombres entiers, ou -1 pour illimité.",
-          "form": "Vérifiez les champs en surbrillance."
-        }
-      }
+          "form": "Vérifiez les champs en surbrillance.",
+          "amountPositive": "Les modules complémentaires sont des abonnements mensuels ou annuels : le prix doit être supérieur à zéro.",
+          "features": "Cochez au moins une fonctionnalité ou faites-en un module de capacité.",
+          "limitsNeeded": "Saisissez au moins une limite supérieure à zéro ou faites-en un module de fonctionnalité."
+        },
+        "legacy": {
+          "title": "Pack hérité",
+          "body": "Ce pack a été créé avant que les modules complémentaires deviennent des abonnements. Il continue d’être vendu exactement comme avant (sa facturation est affichée mais ne peut pas être modifiée) et les espaces de travail qui le possèdent ne sont pas affectés. Vous pouvez toujours modifier son nom, son prix, ses fonctionnalités et ses limites, ou le retirer de la vente. Les nouveaux packs sont des abonnements mensuels ou annuels."
+        },
+        "periods": {
+          "months": "Abonnement mensuel",
+          "years": "Abonnement annuel"
+        },
+        "periodHint": "Les modules complémentaires sont des abonnements. Les espaces de travail sur une passerelle en ligne sont renouvelés automatiquement ; avec un virement bancaire ou un paiement hors ligne, ils paient à nouveau à la fin de la période.",
+        "planOffers": {
+          "title": "Forfaits",
+          "hint": "Comment chaque forfait propose ce module complémentaire. Inclus : sans frais, le forfait apporte ses fonctionnalités. Payant : les espaces de travail l’achètent, au prix propre au forfait si vous en définissez un. Masqué : les espaces de travail de ce forfait ne le voient jamais.",
+          "noIncluded": "Ce module complémentaire n’ajoute que des limites, aucun forfait ne peut donc l’inclure. Un forfait définit ses propres plafonds dans son onglet Limites.",
+          "empty": "Aucun forfait pour l’instant.",
+          "freePlan": "Forfait gratuit",
+          "inactivePlan": "Inactif",
+          "modeLabel": "Comment {plan} propose ce module complémentaire",
+          "modes": {
+            "included": "Inclus",
+            "paid": "Payant",
+            "hidden": "Masqué"
+          },
+          "priceLabel": "Prix dans ce forfait",
+          "priceHint": "Vide = prix propre au module complémentaire.",
+          "freePlanNote": "Affiché sur le forfait gratuit, mais un espace de travail doit avoir un forfait payant pour l’acheter.",
+          "hiddenNote": "Non affiché aux espaces de travail de ce forfait. Un espace de travail qui l’a déjà acheté le conserve jusqu’à la fin de sa période.",
+          "problems": {
+            "money": "Saisissez un montant comme 19 ou 19.99.",
+            "zero": "Laissez le prix vide pour utiliser celui du module complémentaire, ou choisissez Inclus."
+          },
+          "errors": {
+            "generic": "Impossible d’enregistrer les offres des forfaits.",
+            "forbidden": "Seul un super administrateur peut modifier les offres des forfaits.",
+            "notFound": "Ce module complémentaire n’existe plus."
+          },
+          "saved": "Offres des forfaits enregistrées.",
+          "changed": "{count, plural, one {# forfait modifié} many {# forfaits modifiés} other {# forfaits modifiés}}",
+          "save": "Enregistrer les offres des forfaits",
+          "needFeatures": "Ajoutez d'abord ci-dessus les fonctionnalités qu'il débloque"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Choisissez ce que fait ce module complémentaire. Seul un module de fonctionnalité peut être inclus dans une offre.",
+          "feature": {
+            "title": "Module de fonctionnalité",
+            "body": "Débloque une partie du produit ; peut aussi ajouter de la capacité."
+          },
+          "capacity": {
+            "title": "Module de capacité",
+            "body": "Ajoute uniquement à une limite (sièges, contacts...)."
+          }
+        },
+        "noFeaturesNotice": "Ce module ne débloque encore rien. Cochez les fonctionnalités qu'il apporte pour que les offres puissent l'inclure.",
+        "limitsHintCapacity": "Un module de capacité ajoute uniquement aux limites. Saisissez un nombre à AJOUTER à l'offre (par exemple +2 sièges). Utilisez -1 pour illimité. Au moins une limite est requise."
+      },
+      "kind": {
+        "feature": "Fonctionnalité",
+        "capacity": "Capacité"
+      },
+      "plans": {
+        "included": "Inclus : {plans}",
+        "paid": "Payant : {plans}",
+        "hidden": "Masqué : {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Aucun forfait"
+      },
+      "noFeatures": "Aucune fonctionnalité"
     },
     "extensions": {
       "crumbHere": "Modules complémentaires",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Modules complémentaires",
       "description": "Packs de fonctionnalités supplémentaires à acheter en plus de votre abonnement.",
-      "needPlanTitle": "Un forfait actif est nécessaire pour les modules complémentaires",
-      "needPlanBody": "Les modules complémentaires sont des packs de fonctionnalités supplémentaires à acheter en plus de votre abonnement. Choisissez d’abord un forfait, puis revenez ici pour ajouter des fonctionnalités.",
-      "viewPlans": "Voir les forfaits",
-      "noneTitle": "Aucun module complémentaire disponible",
-      "noneBody": "Aucun module complémentaire n’est proposé actuellement. Revenez plus tard.",
-      "ownedTitle": "Vos modules complémentaires",
-      "ownedBody": "Packs actifs ajoutés à votre forfait actuel.",
-      "ends": "Se termine le {date}",
-      "lifetime": "À vie",
-      "autoRenews": "Renouvellement automatique",
       "renewal": {
         "cancel": "Annuler le renouvellement",
         "confirmTitle": "Annuler le renouvellement ?",
@@ -277,37 +338,105 @@
         "forbidden": "Vous n’avez pas l’autorisation de modifier le forfait.",
         "none": "Il n’y a aucun abonnement actif à annuler.",
         "failed": "Nous n’avons pas pu annuler le renouvellement. Veuillez réessayer."
-      },
-      "active": "Actif",
-      "included": "Inclus dans votre offre",
-      "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
-      "includedEnds": "Inclus dans votre offre. Votre module se termine le {date} et ne sera pas renouvelé.",
-      "cardEyebrow": "Module complémentaire",
-      "catalogTitle": "Modules complémentaires",
-      "catalogBody": "Débloquez des fonctionnalités supplémentaires en plus de votre forfait actuel. Aucun changement de forfait nécessaire.",
-      "count": "{count, plural, one {# module complémentaire} other {# modules complémentaires}}",
-      "free": "Gratuit",
-      "lifetimePrice": "paiement unique",
-      "per": "/ {unit}",
-      "units": {
-        "days": "jours",
-        "weeks": "semaines",
-        "months": "mois",
-        "years": "ans"
-      },
-      "buy": "Ajouter au forfait",
-      "buyAgain": "Racheter",
-      "owned": "Possédé ×{count} · racheter en ajoute davantage",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} illimité(e)",
-        "add": "+{amount} {name}"
-      },
-      "error": "Les modules complémentaires n’ont pas pu être chargés."
+      }
     },
     "planFields": {
       "fromModule": "depuis un module installé",
       "unlimited": "Illimité"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Les modules complémentaires nécessitent un forfait payant actif",
+        "free_plan": "Vous êtes sur un forfait gratuit. Les modules complémentaires sont des extras achetés en plus d’un forfait payant.",
+        "plan_expired": "Votre forfait payant est terminé, les modules complémentaires sont donc en pause. Renouvelez votre forfait pour acheter ou renouveler des modules.",
+        "no_plan": "Votre espace de travail n’a pas encore de forfait. Choisissez un forfait payant pour utiliser les modules complémentaires.",
+        "cta": "Voir les forfaits"
+      },
+      "unavailableCard": "Nécessite un forfait payant actif",
+      "empty": {
+        "title": "Aucun module complémentaire en vente",
+        "body": "Aucun module complémentaire n’est proposé pour le moment. Revenez plus tard."
+      },
+      "listLabel": "Modules complémentaires en vente",
+      "owned": {
+        "title": "Vos modules complémentaires",
+        "renews": "Se renouvelle le {date}",
+        "ends": "Actif jusqu’au {date}. Il ne se renouvellera pas automatiquement.",
+        "lifetime": "À vie"
+      },
+      "state": {
+        "included": "Inclus dans votre offre",
+        "includedSupport": "Activé par votre gestionnaire de compte.",
+        "includedOwned": "Vous détenez aussi ce module. Votre offre l'inclut désormais, vous pouvez donc l'annuler. Rien n'est remboursé automatiquement.",
+        "includedEnds": "Inclus dans votre offre. Votre module se termine le {date} et ne sera pas renouvelé.",
+        "active": "Actif",
+        "ownedCount": "Possédé ×{count} · racheter en ajoute davantage",
+        "turnedOff": "Désactivé"
+      },
+      "price": {
+        "free": "Gratuit",
+        "oneTime": "paiement unique",
+        "per": {
+          "days": "{count, plural, one {/ jour} other {/ {count} jours}}",
+          "weeks": "{count, plural, one {/ semaine} other {/ {count} semaines}}",
+          "months": "{count, plural, one {/ mois} other {/ {count} mois}}",
+          "years": "{count, plural, one {/ an} other {/ {count} ans}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Se renouvelle à chaque période. Payé automatiquement par carte ; avec un virement bancaire ou un paiement hors ligne, vous payez à nouveau à la fin de la période.",
+        "oneTime": "Achat unique. Il ne se renouvelle pas."
+      },
+      "buy": "Acheter le module",
+      "buyAgain": "Racheter",
+      "cannotBuyHint": "Demandez au propriétaire de votre compte. Seules les personnes autorisées à acheter pour cet espace de travail peuvent lancer un achat.",
+      "bullets": {
+        "unlimited": "{name} illimité(e)",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Besoin de crédits de messages ? Rechargez plutôt votre portefeuille ; les crédits ne sont pas un module complémentaire.",
+      "walletLink": "Recharger le portefeuille",
+      "groups": {
+        "feature": "Modules complémentaires de fonctionnalités",
+        "capacity": "Modules complémentaires de capacité"
+      },
+      "activation": {
+        "turnedOffNote": "Désactivé pour cet espace de travail. Ses paramètres sont conservés.",
+        "turnOff": "Désactiver",
+        "turnOn": "Activer",
+        "askOwner": "Demandez au propriétaire du compte de l’activer ou de le désactiver.",
+        "doneOn": "{name} est activé.",
+        "errors": {
+          "notToggleable": "{name} ne peut pas être activé ni désactivé ici. Seul un module inclus dans votre offre peut être basculé.",
+          "forbidden": "Vous n’avez pas l’autorisation d’activer ou de désactiver des modules complémentaires.",
+          "generic": "Nous n’avons pas pu modifier {name}. Veuillez réessayer."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Désactiver {name} ?",
+      "lead": "Voici ce qui change. Vous pouvez le réactiver à tout moment.",
+      "cancel": "Annuler",
+      "confirm": "Désactiver {name}",
+      "done": "{name} est désactivé. Ses paramètres sont conservés.",
+      "typeLabel": "Saisissez {name} pour confirmer",
+      "typeHint": "Des conversations clients ou des personnes sont concernées : saisissez le nom pour confirmer.",
+      "groups": {
+        "stops": "Ce qui s’arrête",
+        "kept": "Ce qui est conservé",
+        "people": "Personnes"
+      },
+      "items": {
+        "features_off": "Ces fonctionnalités cessent de fonctionner : {names}.",
+        "dependents_off": "Ces fonctionnalités en dépendent, elles s’arrêtent donc aussi : {names}.",
+        "roles_dormant": "{count, plural, one {# rôle détient des autorisations de ce module. Il les conserve, mais elles sont inactives tant que vous ne le réactivez pas.} many {# de rôles détiennent des autorisations de ce module. Ils les conservent, mais elles sont inactives tant que vous ne le réactivez pas.} other {# rôles détiennent des autorisations de ce module. Ils les conservent, mais elles sont inactives tant que vous ne le réactivez pas.}}",
+        "waiting_chats": "{count, plural, one {# conversation attend un agent. Elle ne sera pas routée automatiquement : quelqu’un doit la prendre en charge.} many {# de conversations attendent un agent. Elles ne seront pas routées automatiquement : quelqu’un doit les prendre en charge.} other {# conversations attendent un agent. Elles ne seront pas routées automatiquement : quelqu’un doit les prendre en charge.}}",
+        "routing_rules": "{count, plural, one {# règle de routage cesse d’attribuer des conversations.} many {# de règles de routage cessent d’attribuer des conversations.} other {# règles de routage cessent d’attribuer des conversations.}}",
+        "auto_teams": "{count, plural, one {# équipe est réglée pour attribuer les conversations automatiquement et cesse de le faire.} many {# d’équipes sont réglées pour attribuer les conversations automatiquement et cessent de le faire.} other {# équipes sont réglées pour attribuer les conversations automatiquement et cessent de le faire.}}",
+        "teams": "{count, plural, one {# équipe est conservée, avec ses membres.} many {# d’équipes sont conservées, avec leurs membres.} other {# équipes sont conservées, avec leurs membres.}}",
+        "custom_role_holders": "{count, plural, one {# personne a un rôle personnalisé. Son rôle est conservé, mais les autorisations de ce module cessent de s’appliquer.} many {# de personnes ont un rôle personnalisé. Leurs rôles sont conservés, mais les autorisations de ce module cessent de s’appliquer.} other {# personnes ont un rôle personnalisé. Leurs rôles sont conservés, mais les autorisations de ce module cessent de s’appliquer.}}",
+        "kept": "Vos paramètres et vos données sont conservés. Ils reviennent tels que vous les avez laissés lorsque vous le réactivez."
+      }
     }
   }
 }

@@ -328,6 +328,7 @@
       },
       "readOnly": "You can read this conversation but you do not have permission to reply.",
       "resolvedBanner": "This conversation is resolved. Reopen it to reply.",
+      "resolvedWebchatBanner": "This web chat is resolved and cannot be reopened.",
       "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
       "messagesLabel": "Messages",
@@ -715,6 +716,7 @@
         "not_linked": "This conversation's channel is not linked to a WhatsApp number, so no template can be sent from it.",
         "paused": "Paused by WhatsApp. It can be sent again once the pause ends.",
         "media_header": "Has an image, video or document header, which cannot be sent from the inbox yet.",
+        "carousel": "Is a carousel (cards with pictures), which cannot be sent from the inbox yet.",
         "header_variable": "Has a variable in the header, which cannot be filled in from the inbox yet.",
         "dynamic_button": "Has a button link with a variable, which cannot be filled in from the inbox yet.",
         "authentication": "One-time-password templates are sent by the system, not from the inbox.",
@@ -1033,6 +1035,7 @@
       "selectAllInView": "Select all {count} in view",
       "done": "Done",
       "markRead": "Mark as read",
+      "markUnread": "Mark as unread",
       "resolve": "Resolve",
       "close": "Close",
       "reopen": "Reopen",
@@ -1042,6 +1045,7 @@
       "removeTeam": "Remove team",
       "priority": "Priority",
       "snooze": "Snooze",
+      "unsnooze": "Unsnooze",
       "snoozePreset": {
         "oneHour": "1 hour",
         "threeHours": "3 hours",
@@ -1059,7 +1063,8 @@
       "tagRemove": "Remove tag",
       "onLeave": "on leave",
       "onLeaveUntil": "on leave until {date}",
-      "spam": "Mark as spam"
+      "spam": "Mark as spam",
+      "notSpam": "Mark as not spam"
     },
     "tags": {
       "tag": "Tag",

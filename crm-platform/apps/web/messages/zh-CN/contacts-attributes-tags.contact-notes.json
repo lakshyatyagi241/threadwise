@@ -120,7 +120,12 @@
         "keep": "保留文件",
         "deleted": "文件已移除",
         "deleteFailed": "无法移除文件。请重试。",
-        "forbidden": "您没有移除文件的权限。"
+        "forbidden": "您没有移除文件的权限。",
+        "upload": "添加文件",
+        "uploading": "正在上传文件",
+        "added": "文件已添加",
+        "uploadFailed": "无法添加文件，请重试。",
+        "uploadRejected": "不允许此文件类型，或文件过大。"
       }
     }
   }

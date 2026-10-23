@@ -12,6 +12,7 @@ describe('property types a bot step may create', () => {
     expect(compatiblePropertyTypes('answer', 'phone')).toEqual(['phone', 'text']);
     expect(compatiblePropertyTypes('answer', 'number')).toContain('decimal');
     expect(compatiblePropertyTypes('answer', 'date')).toEqual(['date', 'text']);
+    expect(compatiblePropertyTypes('answer', 'datetime')).toEqual(['datetime', 'text']);
     expect(compatiblePropertyTypes('answer', 'text')).toEqual(['text', 'long_text']);
     expect(compatiblePropertyTypes('answer')).toEqual(['text', 'long_text']);
   });

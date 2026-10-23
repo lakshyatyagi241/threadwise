@@ -86,6 +86,8 @@ describe('cellToPropertyValue (BL-196)', () => {
     const revenue = defs[1]!;
     expect(cellToPropertyValue(revenue, '120,000')).toBe(120000);
     expect(cellToPropertyValue(revenue, 'lots')).toBe('lots');
+    // A decimal comma is not a thousands separator: "12,5" is not stored as 125.
+    expect(cellToPropertyValue(revenue, '12,5')).toBe('12,5');
   });
 
   it('reads a checkbox from the usual words', () => {

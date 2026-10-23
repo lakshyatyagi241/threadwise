@@ -196,7 +196,10 @@
       "next": "اگلا",
       "pageOf": "صفحہ {page, number} از {pages, number}",
       "perPage": "فی صفحہ سیگمنٹس",
-      "perPageOption": "فی صفحہ {count, number}"
+      "perPageOption": "فی صفحہ {count, number}",
+      "colCreatedBy": "بنانے والا",
+      "colCreatedAt": "بنانے کی تاریخ",
+      "colModifiedBy": "ترمیم کرنے والا"
     },
     "actions": {
       "forbidden": "آپ کو ایسا کرنے کی اجازت نہیں ہے۔",

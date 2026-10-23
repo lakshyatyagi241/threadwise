@@ -18,6 +18,9 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ConsentGate } from '../../contact-consent';
 import { ContactResolverService } from '../../crm';
+import { UsageBillingService } from '../../wallet-message-billing';
+import { digitsOf } from '../calling.rules';
+import { CallingWindowService } from '../calling-window.service';
 import { CallLogEntriesRepository } from './call-log-entries.repository';
 import { CallLogEntriesService, contactRequired } from './call-log-entries.service';
 import { e164Of } from './call-logging.rules';
@@ -39,7 +42,8 @@ const unsupported = (message: string) =>
  *    for marketing, for a contact with no recorded grant on the voice channel.
  *
  * The finished call is not written here: the provider reports it on the connection's callback, and the placement kept below hands the
- * entry its handler and contact.
+ * entry its handler and contact. The same callback is what charges the wallet (`voice_call`, per started minute), so an empty wallet is
+ * refused before the provider is asked: 422 `WALLET_EMPTY`.
  */
 @Injectable()
 export class ClickToCallService {
@@ -53,6 +57,8 @@ export class ClickToCallService {
     private readonly gate: ConsentGate,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly usage: UsageBillingService,
+    private readonly callingWindow: CallingWindowService,
   ) {}
 
   /** The gate's answer for a call to this contact or number, without placing anything. */
@@ -63,11 +69,29 @@ export class ClickToCallService {
     if (input.customerPhone && !phone) {
       throw contactRequired('customerPhone', 'That is not a phone number.');
     }
-    return this.db.tx(async (tx) => {
+    const found = await this.db.tx(async (tx) => {
       const subject = await this.subjectOf(tx, ctx, input.contactId, phone);
       const verdict = await this.verdict(ctx.orgId, subject.subject, input.purpose);
-      return { decision: verdict.decision, reason: verdict.reason };
+      const number =
+        phone ??
+        (subject.contact
+          ? e164Of(await this.repo.contactPhone(tx, ctx.orgId, subject.contact.id), cc)
+          : null);
+      return { subject, verdict, number };
     });
+    if (found.verdict.decision !== 'allow') {
+      return { decision: found.verdict.decision, reason: found.verdict.reason };
+    }
+    // The calling window refuses the same way place() does, so the preflight does not say "allowed" to a call that will be refused.
+    // The answer stays a bare reason: the instant the window opens is only given by place().
+    const closed = await this.callingWindow.closedUntil(ctx.orgId, {
+      contactId: found.subject.subject.type === 'contact' ? found.subject.subject.id : null,
+      conversationId: null,
+      phone: digitsOf(found.number ?? ''),
+    });
+    return closed === null
+      ? { decision: 'allow', reason: found.verdict.reason }
+      : { decision: 'deny', reason: 'outside_calling_window' };
   }
 
   async place(input: ClickToCallInput): Promise<ClickToCallResult> {
@@ -113,8 +137,18 @@ export class ClickToCallService {
         [{ path: 'reason', message: verdict.reason }],
       );
     }
+    // The calling window (BL-177): a call the workspace starts outside its hours is refused before the provider rings anyone. Every
+    // business-initiated call is held, service calls too, unlike a message: a call cannot wait in a queue. The 24 hour callback
+    // exemption lets back a person who reached us. docs/specs/privacy-and-data-governance.md section 11.5 states the rule.
+    await this.callingWindow.assertOpen(ctx.orgId, {
+      contactId: plan.subject.subject.type === 'contact' ? plan.subject.subject.id : null,
+      conversationId: null,
+      phone: digitsOf(plan.customer),
+    });
 
-    // 2. The provider rings. Its refusal is an expected outcome, not a fault.
+    // 2. The provider rings, and the call is paid usage: refuse an empty wallet while nothing has been rung. A failed lookup lets it through.
+    await this.usage.assertCanAfford(ctx.orgId, 'voice_call', 1);
+    // The provider's refusal is an expected outcome, not a fault.
     const placed = await plan.provider.clickToCall({
       agentNumber: plan.agent,
       customerNumber: plan.customer,

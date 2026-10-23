@@ -28,6 +28,16 @@ describe('test panel', () => {
     expect(html).toContain('disabled=""');
   });
 
+  it("the bot's marks are drawn, not shown as asterisks, and the text is escaped", () => {
+    const html = renderToStaticMarkup(
+      <LogBubble entry={{ kind: 'bot', text: '*Creating new web bot*\n_soon_ <b>x</b>' }} />,
+    );
+    expect(html).toContain('<b>Creating new web bot</b>');
+    expect(html).toContain('<i>soon</i>');
+    expect(html).not.toContain('*Creating');
+    expect(html).toContain('&lt;b&gt;x&lt;/b&gt;');
+  });
+
   it('bubbles: system italic, user right, bot media by kind', () => {
     const r = (e: Parameters<typeof LogBubble>[0]['entry']) =>
       renderToStaticMarkup(<LogBubble entry={e} />);

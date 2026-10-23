@@ -1349,13 +1349,17 @@
             "details": "详情与定价",
             "features": "功能",
             "limits": "限制",
-            "addons": "附加组件"
+            "addons": "附加组件",
+            "integrations": "集成",
+            "miniApps": "迷你应用"
           },
           "tabSummary": {
             "features": "已开启 {count}/{total} 项功能",
             "limits": "已设置 {count}/{total} 项限制",
-            "addons": "已选择 {count} 个附加组件",
-            "error": "有待修复的错误"
+            "addons": "{count, plural, one {已包含或提供 # 个附加组件} other {已包含或提供 # 个附加组件}}",
+            "error": "有待修复的错误",
+            "integrations": "已包含或提供的集成：{count}",
+            "miniApps": "已包含或提供的迷你应用：{count}"
           },
           "featuresUi": {
             "intro": "关闭此套餐不包含的功能。使用该套餐的工作区无法打开功能已关闭的区域。",
@@ -1364,7 +1368,8 @@
             "enableAll": "全部启用",
             "disableAll": "全部停用",
             "noMatch": "没有匹配的功能。",
-            "groupCount": "已开启 {count}/{total}"
+            "groupCount": "已开启 {count}/{total}",
+            "lockedBy": "由“附加组件”标签页中的 {addon} 附加组件设置"
           },
           "limitsUi": {
             "intro": "工作区达到上限后，相应操作将被阻止。勾选不限可取消上限。",
@@ -1385,12 +1390,8 @@
             "total": "总计"
           },
           "addons": {
-            "intro": "已启用的附加组件会显示在使用此套餐的工作区的应用市场中；工作区购买后才能使用。",
             "search": "搜索附加组件",
             "searchPlaceholder": "搜索附加组件或应用",
-            "selectAll": "全选",
-            "clear": "清除",
-            "selected": "已选择 {count}/{total}",
             "loading": "正在加载附加组件",
             "empty": "尚无付费附加组件",
             "emptyHint": "附加组件在运维控制台的应用市场目录中创建。应用拥有付费包后，会在此处列出。",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "该应用尚未发布，因此工作区暂时无法看到。",
             "appLabel": "应用：{name}",
             "price": "{price} {period}",
-            "total": "{count, plural, other {已选择 # 个附加组件}}"
+            "total": "{count, plural, one {已包含或提供 # 个附加组件} other {已包含或提供 # 个附加组件}}"
           },
           "featureHints": {
             "automation": "用于回复对话并根据对话执行操作的流程构建器和自动化。",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "套餐不能同时是免费和定制报价。",
             "paid_needs_price": "请设置大于 0 的价格，或将套餐标记为免费。",
             "offer_not_lower": "优惠价必须低于套餐价格。",
-            "default_needs_active": "注册默认套餐必须处于启用状态。"
+            "default_needs_active": "注册默认套餐必须处于启用状态。",
+            "addonPriceZero": "将价格留空以使用附加组件的价格，或选择“包含”。",
+            "addonGone": "此附加组件已不存在。请重新加载页面后再次保存。"
           },
           "limitHints": {
             "monthly_messages": "日历月内发送的出站消息。超出额度后将从钱包扣费。",
@@ -1707,32 +1710,49 @@
             "crm": "销售 CRM",
             "platform": "两者共用"
           },
-          "marketplace": {
-            "title": "向此套餐的工作区提供的应用市场应用"
-          },
-          "included": {
-            "title": "此套餐包含的附加组件",
-            "intro": "打开某个附加组件即可将其纳入套餐：此套餐的工作区可免费获得，其附加组件卡片会显示“已包含在您的套餐中”。这会在“功能”标签页中勾选该附加组件的全部功能，在那里勾选这些功能也会切换开关。未包含的附加组件仍以各自的价格销售给所有使用有效付费套餐的工作区。",
-            "readOnly": "您只能查看此套餐而无法修改，因此这些开关已锁定。",
+          "offers": {
+            "readOnly": "您只能查看此套餐而无法修改，因此这些控件已锁定。",
+            "featureTitle": "功能附加组件",
+            "featureIntro": "用于解锁产品某一部分的附加组件。包含：此套餐的工作区可免费获得，其卡片会显示“已包含在你的套餐中”。付费：工作区可以购买，如果您设置了此套餐专属价格，则按该价格计费。隐藏：工作区完全看不到它。“功能”标签页中该附加组件的功能会随此选择变化。",
+            "capacityTitle": "容量附加组件",
+            "capacityIntro": "只增加某项限额的附加组件，例如额外席位。在套餐中只能设为付费或隐藏；套餐自身的上限请在“限制”标签页设置。",
+            "noFeaturePacks": "还没有功能附加组件。",
+            "adds": "增加：{limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name}不限",
+            "modeLabel": "{name}在此套餐中的提供方式",
+            "modes": {
+              "included": "包含",
+              "paid": "付费",
+              "hidden": "隐藏"
+            },
+            "noIncluded": "此附加组件只增加限额，因此无法包含在套餐中。请在“限制”标签页设置此套餐自身的上限。",
+            "priceLabel": "此套餐中的价格（{currency}）",
+            "priceHint": "留空则使用附加组件自身的价格。",
+            "includedCapacityNote": "仅包含其功能。额外限额（{limits}）仍向此套餐的工作区出售。",
+            "hiddenNote": "此套餐的工作区看不到此附加组件，也无法购买。已购买的工作区可继续使用到期限结束。",
+            "offNote": "不再包含：此套餐的工作区除非购买该附加组件，否则将失去这些功能。其设置会保留，重新开启后即可恢复。",
             "loading": "正在加载附加组件",
             "loadFailed": "无法加载附加组件。未做任何更改。",
             "empty": "还没有附加组件",
             "emptyHint": "智能路由、团队与权限等附加组件在运营商控制台的“附加组件”中创建。",
-            "stateFull": "已包含",
-            "statePartial": "部分包含",
-            "stateNone": "未包含",
             "noPrice": "未设置价格",
             "gives": "提供：{features}",
-            "switchLabel": "将 {name} 纳入此套餐",
-            "noFeatures": "此附加组件只增加限额，因此没有可纳入的功能。其限额不属于套餐纳入的范围；请在“限额”标签页设置套餐自身的限额。",
-            "partial": "部分包含：此套餐已开启 {total} 项功能中的 {count} 项。仍未开启：{missing}。",
-            "includeFully": "完全纳入",
-            "limitsNote": "此附加组件还增加了额外限额（{limits}）。额外限额不属于套餐纳入的范围，这里也不会更改它：请在“限额”标签页设置套餐自身的限额。工作区仍需购买该附加组件以获得额外限额。",
             "unlistedNote": "它的部分功能（{features}）不在标准附加组件列表中。仍可为套餐开启；只是将此附加组件作为套餐包购买的方式有所不同。",
             "inactiveNote": "此附加组件是草稿或已关闭，因此暂时无人能购买。将其纳入套餐仍然有效。",
             "impactCount": "{count, plural, other {已有 # 个工作区在为此附加组件付费。}}它们的续订将在当前周期结束时停止，不会退款，今天也不会取消任何内容。",
             "impactUnknown": "此套餐中已为该附加组件付费的工作区，将在当前周期结束时停止续订。不会退款，今天也不会取消任何内容。无法加载数量。",
-            "offNote": "已关闭：除非购买该附加组件，否则此套餐的工作区将失去这些功能，该附加组件将按其价格供它们购买。"
+            "partlyNote": "此套餐已包含该附加组件的一部分（{features}）。在这里选择“包含”“付费”或“隐藏”之前，它保持不变。",
+            "needsFeatures": "请先在“附加组件”>“{name}”中添加它解锁的功能"
+          },
+          "apps": {
+            "introMiniApps": "迷你应用是工作区从 Marketplace 安装的应用。包含：此套餐的工作区免费使用。付费：可按应用自己的价格购买。隐藏：工作区看不到它。选择“包含”时，也会开启该应用提供的套餐功能。",
+            "introIntegrations": "集成用于连接外部服务。包含：此套餐的工作区免费使用。付费：可按集成自己的价格购买。隐藏：工作区看不到它。选择“包含”时，也会开启该集成提供的套餐功能。",
+            "setAll": "将显示的全部设为",
+            "summary": "{total} 项中已包含或提供 {count} 项",
+            "priceHint": "Marketplace 应用保留自己的价格，请在应用的列表页中设置。",
+            "emptyIntegrations": "暂无付费集成",
+            "emptyIntegrationsHint": "免费集成无需在此设置；Shopify 和 WooCommerce 在“功能”标签页中开启。"
           }
         }
       },

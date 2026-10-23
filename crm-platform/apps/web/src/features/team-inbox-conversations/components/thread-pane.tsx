@@ -4,6 +4,7 @@ import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
+import { isFinishedWebchat } from '@crm/contracts';
 import type {
   ConversationPriority,
   ChannelResponse,
@@ -216,6 +217,8 @@ export function ThreadPane(props: ThreadPaneProps) {
     isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
   // A resolved or closed thread takes no message from any agent: the input is gone until someone reopens it (the API refuses too).
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  // A resolved web chat is final: no reopen, no snooze and no spam mark from any control (the API refuses each).
+  const finishedWebchat = detail ? isFinishedWebchat(detail.channel.kind, detail.status) : false;
   const replyDisabled = windowClosed || channelDown || groupBlock !== null || resolved;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
@@ -364,9 +367,9 @@ export function ThreadPane(props: ThreadPaneProps) {
                 snoozed={detail.status === 'snoozed'}
                 spam={detail.status === 'spam'}
                 canPriority={props.can.priority ?? false}
-                canSnooze={props.can.snooze ?? false}
+                canSnooze={(props.can.snooze ?? false) && !finishedWebchat}
                 canWake={props.can.resolve}
-                canSpam={props.can.resolve}
+                canSpam={props.can.resolve && !finishedWebchat}
                 busy={props.triage.busy}
                 onPriority={props.triage.onPriority}
                 onSnooze={props.triage.onSnooze}
@@ -401,7 +404,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                   {t('assignToMe')}
                 </Button>
               )}
-            {detail && props.can.resolve && (
+            {detail && props.can.resolve && !finishedWebchat && (
               <Button
                 variant="secondary"
                 size="sm"
@@ -503,8 +506,8 @@ export function ThreadPane(props: ThreadPaneProps) {
           data-testid="inbox-resolved-bar"
           className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground"
         >
-          <span>{t('resolvedBanner')}</span>
-          {props.can.resolve && (
+          <span>{finishedWebchat ? t('resolvedWebchatBanner') : t('resolvedBanner')}</span>
+          {props.can.resolve && !finishedWebchat && (
             <Button
               type="button"
               variant="secondary"

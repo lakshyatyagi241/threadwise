@@ -415,6 +415,10 @@
         "tooLarge": "De afbeelding is groter dan 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Volledige pagina",
+      "close": "Volledige pagina sluiten"
+    },
     "flowBot": {
       "customize": {
         "loading": "Widget laden…",

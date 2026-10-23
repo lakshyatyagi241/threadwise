@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Cola de espera",
       "intro": "Los chats que nadie ha tomado esperan en la pestaña Espera. Estos pasos opcionales ayudan a que se atiendan. Cada paso se ejecuta una vez por chat, cuenta solo los minutos en que el equipo está abierto y se detiene en cuanto alguien toma el chat.",
+      "introBasic": "Los chats que nadie ha tomado esperan en la pestaña Espera hasta que alguien los toma.",
       "remind": "Recordar al equipo",
       "remindBody": "Avisa a quienes pueden tomar el chat.",
       "overflow": "Ofrecer a otro equipo",

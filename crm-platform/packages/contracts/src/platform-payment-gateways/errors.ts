@@ -13,6 +13,10 @@ export const PAYGW_ERROR_CODES = {
   PAYGW_PLAN_NOT_PURCHASABLE: 'PAYGW_PLAN_NOT_PURCHASABLE',
   /** A plain add-on every feature of which the workspace's plan already includes: nothing left to buy (422). */
   PAYGW_ADDON_INCLUDED: 'PAYGW_ADDON_INCLUDED',
+  /** A plain add-on the workspace's plan does not offer (the plan's offer is `hidden`, docs/specs/addons-plan-offers.md) (422). */
+  PAYGW_ADDON_NOT_OFFERED: 'PAYGW_ADDON_NOT_OFFERED',
+  /** An add-on the workspace cannot switch itself: it is bought (cancel the renewal instead), a Marketplace app (use the Marketplace), or not included in the plan (422). */
+  PAYGW_ADDON_NOT_TOGGLEABLE: 'PAYGW_ADDON_NOT_TOGGLEABLE',
   PAYGW_DOWNGRADE_NOT_ALLOWED: 'PAYGW_DOWNGRADE_NOT_ALLOWED',
   PAYGW_AMOUNT_TOO_LOW: 'PAYGW_AMOUNT_TOO_LOW',
   PAYGW_COUPON_UNAVAILABLE: 'PAYGW_COUPON_UNAVAILABLE',

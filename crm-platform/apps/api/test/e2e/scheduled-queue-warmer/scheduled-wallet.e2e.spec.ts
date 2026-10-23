@@ -3,6 +3,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { MESSAGE_DELIVERY_EVENT } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
@@ -100,6 +101,7 @@ beforeAll(async () => {
     h.app.get(OutboxService),
     h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
     h.app.get(ConsentGate),
+    h.app.get(SendWindowService),
   );
   receipts = new ScheduledReceiptsService(db, h.app.get(OutboxService));
   consumer = new DeliveryBillingConsumer(
@@ -265,8 +267,8 @@ const events = async (orgId: number) =>
 
 // --- the chain -----------------------------------------------------------------------------------------------------------------
 
-describe('a Cloud API schedule: charged when the provider says delivered, refunded when it says failed', () => {
-  it('charges each delivered message once however many reports follow, and refunds a failure once', async () => {
+describe('a Cloud API schedule: charged when the provider accepts it, refunded when it says failed', () => {
+  it('charges each message once however many reports follow, and refunds a failure once', async () => {
     const { t, cloud } = await arrange('w1');
     const tpl = await template(t);
     const made = await post(
@@ -282,18 +284,9 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     expect(sent).toHaveLength(3);
     const ids = sent.map((s) => s.id);
 
-    // sent: the wallet is told nothing for the Cloud API, and nothing was held when the message left
-    expect(await drain(t.orgId)).toBe(0);
-    expect(await balance(t.orgId)).toBe(start);
-    expect((await recipients(id)).map((r) => r.status)).toEqual(['sent', 'sent', 'sent']);
-
-    // the provider's own "sent" is a repeat: no event
-    expect(await receipt(ids[0]!, 'sent')).toBe(true);
-    expect(await events(t.orgId)).toHaveLength(0);
-
-    // delivered: one event each, one charge each, from the wallet's subscriber
-    for (const x of ids) expect(await receipt(x, 'delivered')).toBe(true);
+    // sent: the Cloud API reports the message to the wallet from `sent` (isBillableStatus), so each one is charged as it leaves
     expect(await drain(t.orgId)).toBe(3);
+    expect((await recipients(id)).map((r) => r.status)).toEqual(['sent', 'sent', 'sent']);
     const after = await charges(t.orgId);
     expect(after).toHaveLength(3);
     expect(
@@ -307,6 +300,16 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     expect((await events(t.orgId)).map((e) => e.aggregate_module)).toEqual(
       Array(3).fill('scheduled_messages'),
     );
+
+    // the provider's own "sent" is a repeat: no new event
+    expect(await receipt(ids[0]!, 'sent')).toBe(true);
+    expect(await events(t.orgId)).toHaveLength(3);
+
+    // delivered is reported too, and a message already charged is never charged again
+    for (const x of ids) expect(await receipt(x, 'delivered')).toBe(true);
+    await drain(t.orgId);
+    expect(await charges(t.orgId)).toHaveLength(3);
+    expect(await balance(t.orgId)).toBe(start - 3 * price);
 
     // the same report twice, a read after delivered, and a late "sent" never charge again
     for (const x of ids) expect(await receipt(x, 'delivered')).toBe(true);
@@ -332,7 +335,7 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     expect((await recipients(id)).map((r) => r.status).sort()).toEqual(['failed', 'read', 'read']);
   });
 
-  it('charges nothing for a message that failed before it was delivered, and nothing is left to refund', async () => {
+  it('gives a message that failed before it was delivered its charge back, so it costs nothing in the end', async () => {
     const { t, cloud } = await arrange('w2');
     const tpl = await template(t);
     const made = await post(
@@ -349,9 +352,13 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     const start = await balance(t.orgId);
     await due(id);
     await run(t, id);
+    // each message was charged as it left; the provider then says it failed, so each charge goes back and the net cost is nothing
+    await drain(t.orgId);
     for (const s of sent) await receipt(s.id, 'failed');
     await drain(t.orgId);
-    expect(await charges(t.orgId)).toHaveLength(0);
+    const rows = await charges(t.orgId);
+    expect(rows).toHaveLength(2);
+    expect(rows.every((c) => c.status === 'refunded')).toBe(true);
     expect(await balance(t.orgId)).toBe(start);
     // the schedule shows both as failed with the provider's text, and the funnel agrees
     expect((await recipients(id)).map((r) => r.status)).toEqual(['failed', 'failed']);

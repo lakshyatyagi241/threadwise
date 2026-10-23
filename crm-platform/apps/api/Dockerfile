@@ -42,10 +42,19 @@ RUN pnpm --filter @crm/tax build \
  && pnpm --filter @crm/observability build \
  && pnpm --filter @crm/api build
 
-# Strip dev dependencies from what ships.
+# Strip dev dependencies from what ships, and everything that is not run: `pnpm deploy` copies the whole package directory, so /out held
+# the sources and tests of the API (about 50 MB) and its own dist a second time (`cp -r apps/api/dist /out/dist` landed INSIDE the dist
+# the deploy had already copied: dist/dist, 66 MB that nothing loads). What runs is dist, the production node_modules and the migrations.
+# The workspace packages arrive as copies too (package.json main is their dist), so their sources go as well. pnpm also installs the
+# glibc build of each native package next to the musl one; this image is Alpine (musl), so the glibc ones are never loaded.
 RUN pnpm --filter @crm/api --prod deploy /out \
+ && rm -rf /out/dist \
  && cp -r apps/api/dist /out/dist \
- && cp -r packages/db/migrations /out/migrations
+ && cp -r packages/db/migrations /out/migrations \
+ && cd /out \
+ && rm -rf src test scripts incidents README.md Dockerfile nest-cli.json tsconfig*.json vitest.config.ts \
+ && rm -rf node_modules/@crm/*/src node_modules/@crm/*/tsconfig*.json \
+ && rm -rf node_modules/.pnpm/*-linux-x64-gnu@* node_modules/.pnpm/@img+sharp-linux-x64@* node_modules/.pnpm/@img+sharp-libvips-linux-x64@*
 
 # --- runtime ---------------------------------------------------------------
 FROM node:22-alpine AS runtime

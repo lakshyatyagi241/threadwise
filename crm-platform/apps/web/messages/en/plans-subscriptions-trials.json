@@ -247,23 +247,7 @@
         "title": "Frequently asked questions"
       },
       "addons": {
-        "title": "Add-ons",
-        "owned": "Add-ons you own",
-        "oneTime": "one-time",
-        "buy": "Buy add-on",
-        "buyAgain": "Buy again",
-        "active": "Active",
-        "included": "Included in your plan",
-        "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
-        "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
-        "unlimitedBullet": "Unlimited {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ day} other {/ {count} days}}",
-          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
-          "months": "{count, plural, one {/ month} other {/ {count} months}}",
-          "years": "{count, plural, one {/ year} other {/ {count} years}}"
-        }
+        "title": "Add-ons"
       },
       "renewal": {
         "renewsOn": "Your plan renews automatically on {date}.",
@@ -586,13 +570,27 @@
       "compare": "Compare all plans",
       "addonHint": "You can also add it to your current plan with the {addon} add-on.",
       "addonLink": "See add-ons",
-      "addons": {
-        "smartRouting": "Smart routing",
-        "teamsPermissions": "Teams and permissions"
-      }
+      "addonsTabHint": "Add-ons do not need the Marketplace on your plan. You can still see what you own and buy add-ons from Plans and add-ons.",
+      "addonsTabLink": "Open Plans and add-ons",
+      "addonHintGeneric": "Your plan may also offer it as an add-on."
     },
     "lock": {
-      "link": "See plans and add-ons"
+      "link": "See plans and add-ons",
+      "offTitle": "Not on your plan",
+      "offLead": "This part is not included in your workspace's plan right now.",
+      "buyTitle": "Add {addon} for {price}",
+      "buyLead": "Your plan offers {addon} as an add-on. Add it to switch this part on.",
+      "buyLink": "See add-ons",
+      "askOwner": "Ask your account owner to add it.",
+      "unavailableTitle": "{addon} needs an active paid plan",
+      "unavailableLead": "Choose a paid plan first, then you can add {addon} to it.",
+      "viewPlans": "View plans",
+      "disabledTitle": "{addon} is turned off",
+      "disabledLead": "Your plan includes {addon}, but it is turned off for this workspace. Its settings are kept.",
+      "disabledAsk": "Ask your account owner to turn it on.",
+      "turnOn": "Turn it on",
+      "turnOnForbidden": "You don't have permission to turn this on. Ask your account owner.",
+      "turnOnFailed": "We couldn't turn {addon} on. Please try again."
     }
   }
 }

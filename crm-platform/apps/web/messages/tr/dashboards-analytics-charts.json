@@ -322,7 +322,7 @@
         "conversationsOpen": "Açık görüşmeler",
         "conversationsResolved": "Çözülen görüşmeler",
         "conversationsClosed": "Kapatılan görüşmeler",
-        "conversationsAssigned": "Atanmış",
+        "conversationsAssigned": "Birine atanmış",
         "conversationsUnassigned": "Atanmamış",
         "conversationsTotal": "{count, plural, one {# görüşme} other {# görüşme}}"
       },

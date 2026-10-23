@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ConversationsRepository } from './conversations.repository';
 import { DeliveryReporter } from './delivery-reporter';
 import { ChannelsRepository } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { MessagesRepository } from './messages.repository';
+import { MessageStatusHooks } from './status-hooks';
 
 export type ReceiptJob = {
   orgId: number;
@@ -47,12 +48,16 @@ export class ReceiptsService {
     private readonly realtime: ChatRealtimePublisher,
     private readonly conversations: ConversationsRepository,
     private readonly deliveries: DeliveryReporter,
+    @Optional() private readonly statusHooks?: MessageStatusHooks,
   ) {}
 
   async apply(job: ReceiptJob): Promise<ReceiptOutcome> {
     const { orgId, receipt } = job;
     const at = new Date(receipt.at);
 
+    const heard: { at: { channelId: number; channelKind: string; peerKey: string } | null } = {
+      at: null,
+    };
     const done = await this.db.txAs({ orgId }, async (tx) => {
       const channel = await this.channelsRepo.byUuid(tx, orgId, job.channelUuid);
       if (!channel) return 'channel_missing' as const;
@@ -88,8 +93,11 @@ export class ReceiptsService {
       if (outcome === 'advanced' && message) {
         const conv = await this.conversations.byId(tx, orgId, message.conversationId);
         if (conv)
+          heard.at = { channelId: channel.id, channelKind: channel.kind, peerKey: conv.peerKey };
+        if (conv)
           await this.deliveries.report(tx, orgId, {
             channelKind: channel.kind,
+            channelExternalId: channel.externalId,
             conversationId: conv.id,
             peerKey: conv.peerKey,
             status: receipt.status,
@@ -109,6 +117,22 @@ export class ReceiptsService {
         receipt.status,
         at,
       );
+      if (this.statusHooks && heard.at && done.message.direction === 'out')
+        await this.statusHooks.run({
+          orgId,
+          channelId: heard.at.channelId,
+          conversationId: done.message.conversationId,
+          channelUuid: job.channelUuid,
+          channelKind: heard.at.channelKind,
+          peerKey: heard.at.peerKey,
+          status: receipt.status,
+          templateId: done.message.templateId,
+          templateName:
+            typeof done.message.meta.templateName === 'string'
+              ? done.message.meta.templateName
+              : null,
+          messageCreatedAt: done.message.createdAt,
+        });
       return 'applied';
     }
     return 'ignored';
