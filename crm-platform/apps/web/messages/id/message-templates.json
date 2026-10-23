@@ -281,7 +281,7 @@
         "uploading": "Mengunggah",
         "keptSample": "Contoh yang tersimpan tetap ada. Pilih file untuk menggantinya.",
         "noFile": "Belum ada file dipilih",
-        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 100 MB.",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 10 MB.",
         "replace": "Ganti file",
         "choose": "Pilih file contoh",
         "tooBig": "{kind} ini berukuran {size} MB. WhatsApp menerima hingga {max} MB. Pilih file yang lebih kecil.",

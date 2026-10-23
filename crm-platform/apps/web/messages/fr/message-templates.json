@@ -281,7 +281,7 @@
         "uploading": "Envoi en cours",
         "keptSample": "L’exemple enregistré est conservé. Choisissez un fichier pour le remplacer.",
         "noFile": "Aucun fichier choisi",
-        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 100 Mo.",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 10 Mo.",
         "replace": "Remplacer le fichier",
         "choose": "Choisir un fichier exemple",
         "tooBig": "Ce {kind} fait {size} Mo. WhatsApp accepte jusqu’à {max} Mo. Choisissez un fichier plus petit.",

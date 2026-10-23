@@ -281,7 +281,7 @@
         "uploading": "Wird hochgeladen",
         "keptSample": "Das gespeicherte Beispiel bleibt erhalten. Wählen Sie eine Datei, um es zu ersetzen.",
         "noFile": "Keine Datei ausgewählt",
-        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 100 MB.",
+        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 10 MB.",
         "replace": "Datei ersetzen",
         "choose": "Beispieldatei auswählen",
         "tooBig": "Dieses {kind} ist {size} MB groß. WhatsApp akzeptiert bis zu {max} MB. Wählen Sie eine kleinere Datei.",

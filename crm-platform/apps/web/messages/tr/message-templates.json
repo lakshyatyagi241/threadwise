@@ -281,7 +281,7 @@
         "uploading": "Yükleniyor",
         "keptSample": "Kayıtlı örnek korunur. Değiştirmek için bir dosya seçin.",
         "noFile": "Dosya seçilmedi",
-        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 100 MB.",
+        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 10 MB.",
         "replace": "Dosyayı değiştir",
         "choose": "Örnek dosya seç",
         "tooBig": "Bu {kind} {size} MB. WhatsApp en fazla {max} MB kabul eder. Daha küçük bir dosya seçin.",

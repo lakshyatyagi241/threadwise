@@ -281,7 +281,7 @@
         "uploading": "上传中",
         "keptSample": "已保存的示例将被保留。选择文件即可替换。",
         "noFile": "未选择文件",
-        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 100 MB。",
+        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 10 MB。",
         "replace": "替换文件",
         "choose": "选择示例文件",
         "tooBig": "此{kind}为 {size} MB。WhatsApp 最大接受 {max} MB。请选择较小的文件。",
