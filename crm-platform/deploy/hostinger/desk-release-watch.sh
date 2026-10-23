@@ -66,6 +66,9 @@ case "${1:-}" in
   --test)
     post "🧪 *TEST* - Test message, not a real deployment. The production release watcher is connected to this space. Live release right now: \`$(live_tag || echo unknown)\`."
     echo "test sent, http $(cat "$STATE/last_http" 2>/dev/null)"; exit 0 ;;
+  --announce) # text on stdin (up to 1200 chars) -> one post to the Deployments space; used by deploy-bridge.sh so bridge updates are announced
+    txt=$(head -c 1200); [ -n "$txt" ] || { echo "no text on stdin"; exit 2; }
+    post "$txt"; echo "announced, http $(cat "$STATE/last_http" 2>/dev/null)"; exit 0 ;;
   --dry-run)
     [ $# -ge 3 ] || { echo "usage: $0 --dry-run <prev_sha> <new_sha> [seconds] [started|live|unchanged]"; exit 2; }
     msg "${5:-live}" "$2" "$3" "${4:-}"; exit 0 ;;
