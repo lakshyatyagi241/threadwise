@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (tidak ada di workspace)",
           "templateLabel": "Templat yang disetujui",
           "templateHint": "Hanya templat yang disetujui dari workspace yang tampil di sini. <link>Buat yang baru →</link>",
+          "statusExits": "Tambahkan jalur status (Terkirim, Sampai, Dibaca, Dibalas, Gagal)",
+          "statusExitsHint": "Alur keluar lewat jalur pertama yang memiliki langkah terhubung: Terkirim begitu templat diterima, Sampai atau Dibaca saat WhatsApp melaporkan, Dibalas saat pelanggan menulis, Gagal jika tidak bisa dikirim. Tombol yang diketuk pelanggan keluar lewat jalurnya sendiri.",
           "type": "Jenis",
           "kindText": "Teks",
           "kindImage": "Gambar",

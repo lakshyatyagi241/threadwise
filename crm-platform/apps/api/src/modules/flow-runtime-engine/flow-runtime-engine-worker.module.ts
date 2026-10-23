@@ -11,6 +11,7 @@ import { CampaignFlowStarterImpl } from './runtime/campaign-flow-starter';
 import { CatalogProductsModule } from '../catalog-products';
 import { CatalogConciergeListener } from './runtime/nodes/commerce/catalog-concierge.listener';
 import { CatalogCartResume, CommerceResume } from './runtime/nodes/commerce/commerce-resume';
+import { TemplateStatusResume } from './runtime/nodes/commerce/template-status-resume';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
 import { SocialHandoffConsumer } from './runtime/nodes/actions/social-handoff.consumer';
 import { FlowRunProcessor } from './runtime/flow-run.processor';
@@ -54,6 +55,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     LeadFlowConsumer,
     FlowScheduleSweeper,
     CommerceResume,
+    TemplateStatusResume,
     CatalogCartResume,
     CatalogConciergeListener,
     SocialHandoffConsumer,
