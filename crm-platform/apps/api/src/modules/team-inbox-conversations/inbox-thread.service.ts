@@ -41,6 +41,9 @@ import {
   renderBody,
   sendComponentsOf,
   templatePreviewOf,
+  matchTemplateByBody,
+  previewButtonsOf,
+  type MatchCandidate,
 } from './inbox-template-rules';
 import { MediaUploadsRepository } from './media-uploads.repository';
 
@@ -83,7 +86,10 @@ export class InboxThreadService {
       this.access.assertVisible(viewer, record);
     });
     const page = await this.conversations.listMessages(uuid, query);
-    return { ...page, data: await this.withTemplatePreviews(page.data) };
+    return {
+      ...page,
+      data: await this.withMatchedTemplates(await this.withTemplatePreviews(page.data)),
+    };
   }
 
   /**
@@ -119,6 +125,43 @@ export class InboxThreadService {
     return messages.map((m) => {
       const preview = m.template?.templateId ? byUuid.get(m.template.templateId) : undefined;
       return preview && m.template ? { ...m, template: { ...m.template, preview } } : m;
+    });
+  }
+
+  /**
+   * A message the business sent that is not stored as a template message (an imported history, a copy of what it sent from its phone)
+   * keeps no link to its template, so it showed no buttons while the same template sent from here did. When its words are exactly one
+   * approved template's body, the thread gets that template's buttons (`matchedTemplate`). One query for the page, and none when the
+   * page has no such message.
+   */
+  private async withMatchedTemplates(messages: MessageResponse[]): Promise<MessageResponse[]> {
+    const loose = messages.filter(
+      (m) =>
+        m.direction === 'out' &&
+        m.kind !== 'template' &&
+        m.template === null &&
+        (m.body ?? '').trim() !== '' &&
+        (m.kind === 'text' || m.kind === 'image' || m.kind === 'video' || m.kind === 'document'),
+    );
+    if (loose.length === 0) return messages;
+    const orgId = RequestContextStore.orgId();
+    const rows = await this.db.tx((tx) =>
+      this.templates.list(tx, orgId, { limit: 300, statusGroup: 'approved' }),
+    );
+    const candidates: MatchCandidate[] = rows
+      .map((r) => ({
+        name: r.templateName,
+        body: r.templateBody,
+        header: r.header,
+        buttons: previewButtonsOf(r.buttons),
+      }))
+      .filter((c) => c.buttons.length > 0);
+    if (candidates.length === 0) return messages;
+    const looseIds = new Set(loose.map((m) => m.id));
+    return messages.map((m) => {
+      if (!looseIds.has(m.id)) return m;
+      const hit = matchTemplateByBody(m.body, candidates);
+      return hit ? { ...m, matchedTemplate: { name: hit.name, buttons: hit.buttons } } : m;
     });
   }
 

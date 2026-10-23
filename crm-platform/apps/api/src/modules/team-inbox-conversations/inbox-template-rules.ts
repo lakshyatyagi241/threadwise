@@ -242,3 +242,49 @@ export function templatePreviewOf(
     buttons: previewButtonsOf(t.buttons),
   };
 }
+
+/** A template an outbound text or media message is compared with: its body, optional text header and its buttons as the bubble draws them. */
+export interface MatchCandidate {
+  name: string;
+  body: string;
+  header: string | null;
+  buttons: MessageTemplateButton[];
+}
+
+/** Text as compared: WhatsApp's formatting marks, spacing and case do not tell two messages apart. */
+const matchKey = (s: string): string =>
+  s
+    .replace(/[*_~`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** A body as a pattern: its words must match, each `{{token}}` stands for any text. Null when too little of it is fixed to tell templates apart. */
+export function bodyPattern(body: string): RegExp | null {
+  const mark = '\u0000';
+  const fixed = matchKey(body.replace(/\{\{\s*[a-zA-Z0-9_]+\s*\}\}/g, mark));
+  if (fixed.split(mark).join('').length < 20) return null;
+  return new RegExp(`^${fixed.split(mark).map(escapeRe).join('.+?')}$`, 's');
+}
+
+/**
+ * The one template whose body (alone, or after its text header) is the message text, or null when none or several are. Only an exact
+ * reading counts: a message that merely resembles a template gets no buttons, because a wrong button is worse than a missing one.
+ */
+export function matchTemplateByBody(
+  text: string | null,
+  candidates: readonly MatchCandidate[],
+): MatchCandidate | null {
+  const key = text ? matchKey(text) : '';
+  if (key === '') return null;
+  const hits = candidates.filter((c) => {
+    if (c.buttons.length === 0) return false;
+    const plain = bodyPattern(c.body);
+    if (plain?.test(key)) return true;
+    const head = c.header?.trim();
+    return head ? (bodyPattern(`${head}\n${c.body}`)?.test(key) ?? false) : false;
+  });
+  return hits.length === 1 ? hits[0]! : null;
+}

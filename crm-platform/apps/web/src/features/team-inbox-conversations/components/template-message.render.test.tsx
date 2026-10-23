@@ -5,7 +5,7 @@ import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { MessageTemplate, MessageTemplateHeader } from '@crm/contracts';
-import { TemplateMessage } from './template-message';
+import { MatchedTemplateButtons, TemplateMessage } from './template-message';
 
 const messages = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'team-inbox-conversations.json'), 'utf8'),
@@ -77,5 +77,26 @@ describe('template message media header', () => {
     );
     expect(out).toContain('data-format="location"');
     expect(out).not.toContain('files.example');
+  });
+});
+
+describe('buttons under a message that reads as a template (imported history)', () => {
+  it('draws the same rows a template message does, with a link for a fixed URL button', () => {
+    const out = html(
+      <MatchedTemplateButtons
+        buttons={[
+          { type: 'url', text: 'Sponsor Online', url: 'https://example.org/annadanam' },
+          { type: 'phone', text: 'Call us', phone: '+6582994062' },
+        ]}
+      />,
+    );
+    expect(out).toContain('data-testid="inbox-matched-template-buttons"');
+    expect(out).toContain('Sponsor Online');
+    expect(out).toContain('Call us');
+    expect(out).toContain('href="https://example.org/annadanam"');
+  });
+
+  it('draws nothing for an empty list', () => {
+    expect(html(<MatchedTemplateButtons buttons={[]} />)).toBe('');
   });
 });
