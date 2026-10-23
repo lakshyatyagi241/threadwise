@@ -653,7 +653,8 @@
         "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem",
         "invalid_timezone": "nieprawidłowa strefa czasowa",
         "legal_hold": "rekord chroniony, bez zmian",
-        "invalid_property_value": "wartość właściwości niestandardowej nie pasuje do jej typu ani opcji"
+        "invalid_property_value": "wartość właściwości niestandardowej nie pasuje do jej typu ani opcji",
+        "invalid_property_value_column": "kolumna „{column}”: wartość nie pasuje do jej typu ani opcji"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Przekroczono limit planu",
       "limitExceededNote": "Część nowych kontaktów nie została zaimportowana, ponieważ osiągnięto limit kontaktów w Twoim planie.",
       "rejectsFailed": "Nie udało się pobrać odrzuconych wierszy.",
+      "sampleFailed": "Nie udało się pobrać pliku przykładowego. Spróbuj ponownie.",
       "groupRequired": "Dodaj te kontakty do",
       "groupExisting": "Istniejącej grupy",
       "groupNew": "Nowej grupy",

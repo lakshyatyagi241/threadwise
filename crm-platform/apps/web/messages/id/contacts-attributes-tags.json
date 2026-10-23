@@ -653,7 +653,8 @@
         "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
         "invalid_timezone": "zona waktu tidak valid",
         "legal_hold": "catatan dilindungi, tidak diubah",
-        "invalid_property_value": "nilai properti kustom tidak sesuai dengan tipe atau opsinya"
+        "invalid_property_value": "nilai properti kustom tidak sesuai dengan tipe atau opsinya",
+        "invalid_property_value_column": "kolom \"{column}\": nilai tidak sesuai dengan tipe atau pilihannya"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Melebihi batas paket",
       "limitExceededNote": "Sebagian kontak baru tidak diimpor karena batas kontak paket Anda telah tercapai.",
       "rejectsFailed": "Baris yang ditolak tidak dapat diunduh.",
+      "sampleFailed": "File contoh tidak dapat diunduh. Coba lagi.",
       "groupRequired": "Tambahkan kontak ini ke",
       "groupExisting": "Grup yang sudah ada",
       "groupNew": "Grup baru",

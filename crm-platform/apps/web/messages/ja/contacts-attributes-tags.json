@@ -653,7 +653,8 @@
         "duplicate_in_file": "重複した番号、前の行に統合",
         "invalid_timezone": "タイムゾーンが無効です",
         "legal_hold": "保護されたレコードのため変更されませんでした",
-        "invalid_property_value": "カスタムプロパティの値が、その型または選択肢に合いません"
+        "invalid_property_value": "カスタムプロパティの値が、その型または選択肢に合いません",
+        "invalid_property_value_column": "列「{column}」: 値が列の形式または選択肢に合いません"
       },
       "statusHint": "このファイルで作成される連絡先に適用されます。",
       "queued": "開始を待機中...",
@@ -666,6 +667,7 @@
       "limitExceeded": "プランの上限超過",
       "limitExceededNote": "プランの連絡先上限に達したため、一部の新規連絡先はインポートされませんでした。",
       "rejectsFailed": "却下された行をダウンロードできませんでした。",
+      "sampleFailed": "サンプルファイルをダウンロードできませんでした。もう一度お試しください。",
       "groupRequired": "これらの連絡先の追加先",
       "groupExisting": "既存のグループ",
       "groupNew": "新しいグループ",

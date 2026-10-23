@@ -1,7 +1,6 @@
 import { ERROR_CODES, type StatusOptionResponse } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { selectionBody } from '../api/bulk';
-import { sampleCsv } from '../api/import-export';
 import type { ContactRow } from '../api/schemas';
 import { ApiError } from '@/lib/api/errors';
 import { deleteFailure, errorKind, fieldErrors, jobTitleFailure, planLimitOf } from './errors';
@@ -209,15 +208,6 @@ describe('selectionBody (TW-CON-019)', () => {
         imported: undefined,
       },
     });
-  });
-});
-
-describe('sampleCsv (TW-CON-032)', () => {
-  it('is built from the importer header names, with a quoted multi-group cell', () => {
-    const lines = sampleCsv().trim().split('\r\n');
-    expect(lines[0]).toBe('name,last_name,country_code,mobile,email,group,language');
-    expect(lines).toHaveLength(3);
-    expect(lines[1]).toContain('"VIP, New leads"');
   });
 });
 

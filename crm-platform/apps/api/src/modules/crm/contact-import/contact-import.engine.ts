@@ -44,6 +44,7 @@ const MAX_NEW_GROUPS = 2000;
 interface Reject {
   row: number;
   reason: string;
+  column?: string;
   values?: Record<string, string>;
 }
 
@@ -147,7 +148,8 @@ export class ContactImportEngine {
     const tenant = { orgId, userId };
     const options = contactImportOptionsSchema.parse(job.options);
     const parsed = parseCsv(job.sourceCsv!, options.delimiter as Delimiter | undefined);
-    const header = parsed.records[0]?.cells ?? [];
+    // Trimmed as the preview and the sync import trim it, so a column is named the same way on every path.
+    const header = (parsed.records[0]?.cells ?? []).map((h) => h.trim());
     const mapping = resolveMapping(header, options.mapping);
     const catalog = await this.db.txAs(tenant, (tx) =>
       this.contactsRepo.importableProperties(tx, orgId),
@@ -384,10 +386,16 @@ export class ContactImportEngine {
     options: ContactImportOptions,
     properties: readonly ImportProperty[],
   ): Promise<void> {
-    const reject = (row: number, reason: ImportRejectReason, values?: Record<string, string>) => {
+    const reject = (
+      row: number,
+      reason: ImportRejectReason,
+      values?: Record<string, string>,
+      column?: string,
+    ) => {
       state.counters.invalid += reason === 'plan_limit_reached' ? 0 : 1;
       if (reason === 'plan_limit_reached') state.counters.limitExceeded += 1;
-      if (state.rejects.length < IMPORT_REJECTS_MAX) state.rejects.push({ row, reason, values });
+      if (state.rejects.length < IMPORT_REJECTS_MAX)
+        state.rejects.push({ row, reason, values, ...(column === undefined ? {} : { column }) });
     };
 
     // 1. validate
@@ -398,7 +406,7 @@ export class ContactImportEngine {
         properties,
       });
       if (r.ok) valid.push(r.row);
-      else reject(r.line, r.reason, r.values);
+      else reject(r.line, r.reason, r.values, r.column);
     }
     if (valid.length === 0) return;
     if (state.remaining !== null) state.remaining = await this.quota.remainingLocked(tx, orgId);

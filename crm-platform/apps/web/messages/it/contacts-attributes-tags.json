@@ -653,7 +653,8 @@
         "duplicate_in_file": "numero ripetuto, unito a una riga precedente",
         "invalid_timezone": "fuso orario non valido",
         "legal_hold": "record protetto, non modificato",
-        "invalid_property_value": "il valore della proprietà personalizzata non corrisponde al suo tipo o alle sue opzioni"
+        "invalid_property_value": "il valore della proprietà personalizzata non corrisponde al suo tipo o alle sue opzioni",
+        "invalid_property_value_column": "colonna \"{column}\": il valore non corrisponde al suo tipo o alle sue opzioni"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Oltre il limite del piano",
       "limitExceededNote": "Alcuni nuovi contatti non sono stati importati perché è stato raggiunto il limite di contatti del tuo piano.",
       "rejectsFailed": "Non è stato possibile scaricare le righe rifiutate.",
+      "sampleFailed": "Impossibile scaricare il file di esempio. Riprova.",
       "groupRequired": "Aggiungi questi contatti a",
       "groupExisting": "Un gruppo esistente",
       "groupNew": "Un nuovo gruppo",
