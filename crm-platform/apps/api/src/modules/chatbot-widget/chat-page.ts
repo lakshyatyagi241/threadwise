@@ -495,23 +495,34 @@ const SCRIPT = `
 
   var popsBound = false;
   function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; }
-  // Close this chat / Restart this chat: the server makes a fresh visitor (a fresh conversation), the window keeps its id and
-  // loads again. Close also asks the site to hide the panel. The Customize preview has no conversation, so it only hides.
-  function startOver(hide) {
+  // Restart this chat keeps the visitor and the thread (the team sees a line saying so) and the window starts clean. Ending the chat
+  // resolves the thread and makes a fresh visitor, so the next visit is a new chat. Either way the window loads again, and closing the
+  // page (not this reload) tells the server the visitor left. The Customize preview has no conversation, so it only hides.
+  var reloading = false;
+  function startOver(hide, ended) {
     closePops();
+    reloading = true;
     function done() {
       if (hide) { try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (e) {} }
       if (!PREVIEW) location.reload();
     }
     if (PREVIEW) { done(); return; }
-    fetch(BASE + 'restart', { method: 'POST', credentials: 'include' })
+    var ending = ended
+      ? fetch(withVid(BASE + 'end?reason=ended'), { method: 'POST', credentials: 'include' }).catch(function () {})
+      : Promise.resolve();
+    ending
+      .then(function () { return fetch(withVid(BASE + 'restart' + (ended ? '?fresh=1' : '')), { method: 'POST', credentials: 'include' }); })
       .then(function (r) { return r.json(); })
       .then(function (j) { if (j && j.visitor_uuid) storeUuid(j.visitor_uuid); })
       .catch(function () {})
       .then(done);
   }
-  // The cross asks first. "End conversation" then asks for a rating and closes the chat; "Restart chat" gives the default five stars and
-  // closes it too (the next visit starts fresh); "Not now" only closes the question.
+  window.addEventListener('pagehide', function () {
+    if (PREVIEW || reloading || !storedUuid()) return;
+    try { navigator.sendBeacon(withVid(BASE + 'end?reason=left')); } catch (e) {}
+  });
+  // The cross asks first. "End conversation" then asks for a rating and closes the chat (the thread is resolved and the next visit is a
+  // new chat); "Restart chat" gives the default five stars and starts the same thread over; "Not now" only closes the question.
   function rate(stars, comment) {
     if (PREVIEW) return Promise.resolve();
     var payload = { rating: stars };
@@ -552,7 +563,7 @@ const SCRIPT = `
       sh.setAttribute('aria-labelledby', 'endq');
       sh.appendChild(q);
       sh.appendChild(sheetButton('danger', tx('endConversation', 'End conversation'), openRating));
-      sh.appendChild(sheetButton('outline', tx('restartChat', 'Restart chat'), function () { closeSheet(); rate(5).then(function () { startOver(true); }); }));
+      sh.appendChild(sheetButton('outline', tx('restartChat', 'Restart chat'), function () { closeSheet(); rate(5).then(function () { startOver(true, false); }); }));
       sh.appendChild(sheetButton('ghost', tx('notNow', 'Not now'), closeSheet));
     });
   }
@@ -591,8 +602,8 @@ const SCRIPT = `
       ta.maxLength = 1000;
       ta.placeholder = tx('suggestPh', 'Type your suggestions here...');
       sh.appendChild(ta);
-      sh.appendChild(sheetButton('accent', tx('submitFeedback', 'Submit feedback'), function () { closeSheet(); rate(stars, ta.value.trim()).then(function () { startOver(true); }); }));
-      sh.appendChild(sheetButton('ghost', tx('noThanks', 'No, thanks'), function () { closeSheet(); startOver(true); }));
+      sh.appendChild(sheetButton('accent', tx('submitFeedback', 'Submit feedback'), function () { closeSheet(); rate(stars, ta.value.trim()).then(function () { startOver(true, true); }); }));
+      sh.appendChild(sheetButton('ghost', tx('noThanks', 'No, thanks'), function () { closeSheet(); startOver(true, true); }));
       paint();
     });
   }

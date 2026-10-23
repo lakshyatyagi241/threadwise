@@ -460,6 +460,7 @@ export class SqlInboxGateway implements InboxGateway {
         FROM messages
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
           AND COALESCE(RIGHT(meta->'interactive'->>'id', 8), '') <> ':__start'
+          AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0)
         ORDER BY id DESC LIMIT ${limit}
       ) t ORDER BY id`);
     return (res.rows as unknown as LineRow[]).map(toLine);
@@ -473,6 +474,7 @@ export class SqlInboxGateway implements InboxGateway {
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
         AND COALESCE(RIGHT(meta->'interactive'->>'id', 8), '') <> ':__start'
+        AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0)
       ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }
@@ -502,8 +504,56 @@ export class SqlInboxGateway implements InboxGateway {
 
   async hasCustomerLine(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
     const res = await tx.execute(sql`
-      SELECT 1 FROM messages WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'in' LIMIT 1`);
+      SELECT 1 FROM messages WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'in'
+        AND COALESCE(meta->>'source', '') <> 'restart'
+        AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0) LIMIT 1`);
     return (res.rows as unknown[]).length > 0;
+  }
+
+  async closeThread(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    how: 'ended' | 'left',
+  ): Promise<boolean> {
+    const done = await tx.execute(sql`
+      UPDATE conversations
+         SET status = 'resolved', resolved_at = now(),
+             routing_meta = jsonb_set(COALESCE(routing_meta, '{}'::jsonb), '{closedBy}', to_jsonb(${how}::text))
+       WHERE org_id = ${orgId} AND id = ${conversationId} AND status = 'open'
+      RETURNING id`);
+    if ((done.rows as unknown[]).length === 0) return false;
+    // A visitor who left leaves no line (a visitor moving to another page of the site looks the same and comes back at once); one who
+    // ended the chat says so.
+    if (how === 'ended')
+      await this.append(tx, orgId, conversationId, {
+        direction: 'in',
+        senderKind: 'customer',
+        status: 'received',
+        body: 'Ended the chat',
+        meta: { source: 'ended', channel: 'chatbot_widget' },
+      });
+    return true;
+  }
+
+  async reopenAfterLeave(tx: Tx, orgId: number, conversationId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'open', resolved_at = NULL, routing_meta = routing_meta - 'closedBy'
+       WHERE org_id = ${orgId} AND id = ${conversationId} AND status = 'resolved' AND routing_meta->>'closedBy' = 'left'`);
+  }
+
+  async markRestart(tx: Tx, orgId: number, conversationId: number): Promise<void> {
+    // The thread goes on in the same conversation; the window starts clean (it shows nothing from before this line), the team sees it.
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'open', resolved_at = NULL
+       WHERE org_id = ${orgId} AND id = ${conversationId} AND status = 'resolved'`);
+    await this.append(tx, orgId, conversationId, {
+      direction: 'in',
+      senderKind: 'customer',
+      status: 'received',
+      body: 'Restarted the chat',
+      meta: { source: 'restart', channel: 'chatbot_widget' },
+    });
   }
 
   async recordRating(
@@ -554,6 +604,7 @@ export class SqlInboxGateway implements InboxGateway {
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND id > ${since}
         AND COALESCE(meta->>'source', '') <> 'welcome'
+        AND id > COALESCE((SELECT max(r.id) FROM messages r WHERE r.org_id = ${orgId} AND r.conversation_id = ${conversationId} AND r.meta->>'source' = 'restart'), 0)
       ORDER BY id`);
     return (res.rows as unknown as LineRow[]).map(toLine);
   }
