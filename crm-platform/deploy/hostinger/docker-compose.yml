@@ -396,6 +396,7 @@ services:
     image: desk-api:${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
     environment:
       <<: *api-env
+      OBS_METRICS_PORT: ${OBS_METRICS_PORT_API:-${OBS_METRICS_PORT:-0}}
       WORKER_MODE: 'false'
       OBS_RELEASE: ${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
 
@@ -405,6 +406,7 @@ services:
     image: desk-api:${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
     environment:
       <<: *api-env
+      OBS_METRICS_PORT: ${OBS_METRICS_PORT_API:-${OBS_METRICS_PORT:-0}}
       WORKER_MODE: 'false'
       OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
 
@@ -423,6 +425,7 @@ services:
       dokploy-network: {}
     environment:
       <<: *api-env
+      OBS_METRICS_PORT: ${OBS_METRICS_PORT_HOOKS:-${OBS_METRICS_PORT:-0}}
       WORKER_MODE: 'false'
       DB_POOL_MAX: '8'
       # Only warnings and errors: this process takes the public webhooks (about 140 a second on prod) and its info lines were pure cost.
@@ -435,6 +438,7 @@ services:
     image: desk-web:${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
     environment:
       <<: *web-env
+      OBS_METRICS_PORT: ${OBS_METRICS_PORT_WEB:-${OBS_METRICS_PORT:-0}}
       API_URL: http://desk-api-blue:3000
       OBS_RELEASE: ${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
 
@@ -444,6 +448,7 @@ services:
     image: desk-web:${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
     environment:
       <<: *web-env
+      OBS_METRICS_PORT: ${OBS_METRICS_PORT_WEB:-${OBS_METRICS_PORT:-0}}
       API_URL: http://desk-api-green:3000
       OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
 
@@ -468,6 +473,7 @@ services:
       start_period: 40s
     environment:
       <<: *api-env
+      OBS_METRICS_PORT: ${OBS_METRICS_PORT_WORKER:-${OBS_METRICS_PORT:-0}}
       WORKER_MODE: 'true'
       OBS_RELEASE: ${IMAGE_TAG:-local}
       DATABASE_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
