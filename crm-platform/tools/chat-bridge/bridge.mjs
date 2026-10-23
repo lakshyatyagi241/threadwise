@@ -60,9 +60,9 @@ export function startBridge({ env = process.env, urls = loadUrls(env), fetchImpl
     threads.put(fp, { threadKey, startedAt: started, peak, diag });
     // the FIRING card must be the thread parent: start the resolver (its replies) only after that post returned
     const card = await send(ch, alertCard(a, { grafanaUrl, extra: widgetsOf(diagnosisRows(a, ev)) }), { threadKey, interactive: { incidentId: resolver?.byKey(`am:${fp}`)?.id ?? `am:${fp}` } });
-    if (resolver && ev.entry) {
+    if (resolver && (ev.entry || a.labels?.severity === 'critical')) { // a critical alert ALWAYS opens an incident, even a brand-new rule with no runbook entry yet
       const pool = /^DbPool/.test(a.labels?.alertname);
-      resolver.handle({ playbook: pool ? 'db_pool' : 'service', alertname: a.labels?.alertname, action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry.action, evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
+      resolver.handle({ playbook: pool ? 'db_pool' : 'service', alertname: a.labels?.alertname, action: a.labels?.alertname, key: `am:${fp}`, threadKey, channel: ch, diagnosis: diag, suggestion: ev.entry?.action ?? 'No runbook entry for this alert yet: add one in tools/chat-bridge/diagnosis.mjs', evidence: ev.rows.map(([k, v]) => `${k}: ${v}`).join('; ') || 'n/a', verify: async () => true });
     }
     return card;
   }
