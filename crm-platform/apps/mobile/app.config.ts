@@ -65,7 +65,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   return {
     ...config,
     name: `${APP_NAME}${v.nameSuffix}`,
-    slug: 'crm-mobile',
+    // Must equal the slug of the EAS project (expo.dev, owner getadevops); EAS refuses a build when they differ.
+    slug: 'getaapp',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
