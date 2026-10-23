@@ -24,6 +24,8 @@ EVENTS = {
     "failed": ("⚠️", "Release failed or rolled back"), "skipped": ("⚠️", "Release skipped"),
 }
 _t0 = time.time()
+# DB-driven events: the head line is the note (built by the watcher); "stuck" builds the head from the minutes in `seconds`.
+HEADLINE = {"dbfailed": "❌", "stuck": "⚠️"}
 
 
 def clean(s, n=100):
@@ -112,8 +114,13 @@ def prs_between(prev, new):
 
 def build(ev, prev, new, secs, note):
     icon, title = EVENTS.get(ev, ("ℹ️", "Release " + clean(ev, 30)))
+    if ev == "dbfailed":  # note = "❌ Release failed at step X: error"; shown as the head line, not repeated below
+        icon, title, note = "", clean(note, 260), ""
+    elif ev == "stuck":
+        icon, title = "⚠️", f"Build did not finish for {(new or '')[:9]} (stuck at build for {secs} min). The release was not shipped."
+        secs = ""
     new, prev = (new or "")[:9], (prev or "")[:9]
-    head = [f"{icon} *{title}*"]
+    head = [f"{icon} *{title}*".strip()]
     ver = f"Version: `{new or 'unknown'}`" + (f" (was `{prev}`)" if prev else "")
     link = f"{WEB}/commit/{new}" if sha_ok(new) else ""
     tail = []
@@ -152,6 +159,20 @@ def build(ev, prev, new, secs, note):
     return "\n".join(lines)[:MAXLEN]
 
 
+def group(shas, mins):
+    """--group a,b,c <minutes>: ONE message for several stuck builds (cap 8 listed)."""
+    shas = [x for x in shas.replace(",", " ").split() if sha_ok(x)]
+    nums = []
+    for x in shas[:8]:
+        try:
+            ps, _ = prs_between("", x)
+            nums.append("#" + str(ps[-1]["n"]) if ps else x[:7])
+        except Exception:
+            nums.append(x[:7])
+    more = f" (+{len(shas) - 8} more)" if len(shas) > 8 else ""
+    return f"⚠️ *{len(shas)} builds are stuck*: {' '.join(nums)}{more}\nNone of them was shipped (stuck at build for up to {mins} min).\n" + time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+
+
 def machine(ev, prev, new, secs):
     """--json: {sha, prev, prs:[numbers], mergers:[logins], status, seconds, prsKnown}; same lookup and caps as the chat message. Never raises."""
     out = {"sha": new, "prev": prev, "prs": [], "mergers": [], "status": ev, "seconds": int(secs) if str(secs).isdigit() else 0, "prsKnown": False}
@@ -168,6 +189,10 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["--json"]:
         j = sys.argv[2:] + [""] * 5
         print(machine(j[0], j[1], j[2], j[3]))
+        sys.exit(0)
+    if sys.argv[1:2] == ["--group"]:
+        g = sys.argv[2:] + [""] * 3
+        print(group(g[0], g[1]))
         sys.exit(0)
     a = sys.argv[1:] + [""] * 5
     try:
