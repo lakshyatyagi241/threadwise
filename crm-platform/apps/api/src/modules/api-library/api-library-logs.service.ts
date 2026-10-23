@@ -10,7 +10,7 @@ import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { numberedPage, toLogDetail, toLogItem } from './api-library.mapper';
-import { maskJsonText, truncateText } from './api-library.rules';
+import { logResponseText, maskJsonText, truncateText } from './api-library.rules';
 import { ApiLibraryRepository } from './api-library.repository';
 import { ApiLibraryLogsRepository, type NewLog } from './api-library-logs.repository';
 import { LOG_BODY_LIMIT, type RunOutcome } from './api-library-runner.service';
@@ -80,7 +80,8 @@ export class ApiLibraryLogsService {
 
   /**
    * Writes one run into the log on the transaction given. The outcome already carries the masked request; the response body is cut
-   * to LOG_BODY_LIMIT here. A failed write is a warning and not the run's failure: the call already happened.
+   * to LOG_BODY_LIMIT here, and a binary answer is logged as a note (see logResponseText). A failed write is a warning and not the
+   * run's failure: the call already happened.
    */
   async record(
     tx: Tx,
@@ -91,7 +92,7 @@ export class ApiLibraryLogsService {
     try {
       // A JSON answer is stored with its secret-looking keys masked (a token in the answer must not outlive the run in a log).
       const body = outcome.response
-        ? truncateText(maskJsonText(outcome.response.bodyText), LOG_BODY_LIMIT)
+        ? truncateText(maskJsonText(logResponseText(outcome.response)), LOG_BODY_LIMIT)
         : null;
       return await this.repo.insert(tx, orgId, {
         apiUuid: run.apiUuid,
