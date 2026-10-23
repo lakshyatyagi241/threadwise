@@ -415,6 +415,10 @@
         "tooLarge": "Ukuran gambar melebihi 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Layar penuh",
+      "close": "Keluar dari layar penuh"
+    },
     "flowBot": {
       "customize": {
         "loading": "Memuat widget…",

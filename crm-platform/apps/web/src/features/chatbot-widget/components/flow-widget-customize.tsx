@@ -15,6 +15,7 @@ import {
   type BuilderState,
 } from '../lib/builder-model';
 import { WebChatPreview, type PreviewSurface } from './web-chat-preview';
+import { FullPageButton, FullPageView } from './preview-full-page';
 import { WebBrandCard } from './web-brand-card';
 import { WebConversationCard } from './web-conversation-card';
 import { WebBehaviourCard } from './web-behaviour-card';
@@ -132,6 +133,7 @@ function Panel({
   const [flash, setFlash] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [surface, setSurface] = useState<PreviewSurface>('chat');
+  const [fullPage, setFullPage] = useState(false);
   const set = (patch: Partial<BuilderState>) => setS((prev) => ({ ...prev, ...patch }));
   // What the form started from (a save restarts it from what the server stored): the look is unsaved when it differs, or was never saved.
   const [baseline] = useState(() => JSON.stringify([initial, initialDomains]));
@@ -350,24 +352,27 @@ function Panel({
         ) : null}
       </div>
       <div className="flex min-w-0 flex-col bg-muted/40 p-4 sm:p-6" data-testid="customize-stage">
-        <div className="mx-auto mb-4 flex w-fit flex-wrap justify-center gap-0.5 rounded-full border border-border bg-background p-1">
-          {surfaces.map((k) => (
-            <button
-              key={k}
-              type="button"
-              data-surface={k}
-              aria-pressed={surface === k}
-              onClick={() => setSurface(k)}
-              className={cn(
-                'rounded-full px-3.5 py-1.5 text-[12.5px] font-bold',
-                surface === k
-                  ? 'bg-brand text-brand-foreground'
-                  : 'text-muted-foreground hover:bg-muted',
-              )}
-            >
-              {t(`surfaces.${k}`)}
-            </button>
-          ))}
+        <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+          <div className="flex w-fit flex-wrap justify-center gap-0.5 rounded-full border border-border bg-background p-1">
+            {surfaces.map((k) => (
+              <button
+                key={k}
+                type="button"
+                data-surface={k}
+                aria-pressed={surface === k}
+                onClick={() => setSurface(k)}
+                className={cn(
+                  'rounded-full px-3.5 py-1.5 text-[12.5px] font-bold',
+                  surface === k
+                    ? 'bg-brand text-brand-foreground'
+                    : 'text-muted-foreground hover:bg-muted',
+                )}
+              >
+                {t(`surfaces.${k}`)}
+              </button>
+            ))}
+          </div>
+          <FullPageButton open={fullPage} onToggle={() => setFullPage((on) => !on)} />
         </div>
         {/* A site's page behind the widget, as a visitor meets it. */}
         <div className="relative min-h-0 flex-1 overflow-auto rounded-2xl border border-border bg-background p-5">
@@ -389,6 +394,38 @@ function Panel({
           </div>
         </div>
         <p className="mt-3 text-center text-[11px] text-muted-foreground">{t('preview.hint')}</p>
+        {fullPage ? (
+          <FullPageView
+            onClose={() => setFullPage(false)}
+            label={t('preview.title')}
+            header={
+              <div className="flex w-fit flex-wrap justify-center gap-0.5 rounded-full border border-border bg-background p-1">
+                {surfaces.map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    aria-pressed={surface === k}
+                    onClick={() => setSurface(k)}
+                    className={cn(
+                      'rounded-full px-3.5 py-1.5 text-[12.5px] font-bold',
+                      surface === k
+                        ? 'bg-brand text-brand-foreground'
+                        : 'text-muted-foreground hover:bg-muted',
+                    )}
+                  >
+                    {t(`surfaces.${k}`)}
+                  </button>
+                ))}
+              </div>
+            }
+          >
+            {surface === 'closed' ? (
+              <WebLauncherPreview flowId={flowId} s={s} />
+            ) : (
+              <WebChatPreview flowId={flowId} s={s} surface={surface} />
+            )}
+          </FullPageView>
+        ) : null}
       </div>
     </div>
   );

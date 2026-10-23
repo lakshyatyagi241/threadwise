@@ -728,6 +728,10 @@
         "tooLarge": "The image is larger than 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Full page",
+      "close": "Exit full page"
+    },
     "webBots": {
       "title": "Website chat bots",
       "intro": "Every bot you built for website chat and the widget it runs in. Open a row to change the widget's look or copy its embed code.",
