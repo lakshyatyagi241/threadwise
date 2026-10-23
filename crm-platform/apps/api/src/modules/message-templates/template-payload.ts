@@ -1,8 +1,9 @@
+import type { TplLimitedOffer } from '@crm/contracts';
 import { countPlaceholders, tokensOf, type VariableMap } from './template-variables';
 
 /**
  * The body of `POST /{waba}/message_templates` built from a stored template (TW-TPL-024). Pure; golden-file tested.
- * Covers standard (text/media), authentication and carousel templates; catalog and limited-time-offer builders are separate work.
+ * Covers standard (text/media), authentication, carousel and limited-time-offer templates; catalog and limited-time-offer builders are separate work.
  */
 
 export type MediaFormat = 'IMAGE' | 'VIDEO' | 'DOCUMENT';
@@ -42,6 +43,8 @@ export interface TemplateDraft {
   buttons?: TemplateButton[] | null;
   /** `templateType: 'carousel'` only. */
   cards?: TemplateCard[] | null;
+  /** `templateType: 'lto'` only. */
+  limitedOffer?: TplLimitedOffer | null;
   variableMap?: VariableMap | null;
   codeExpirationMinutes?: number | null;
   parameterFormat?: 'POSITIONAL' | 'NAMED' | null;
@@ -167,6 +170,14 @@ export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
       const header: Record<string, unknown> = { type: 'HEADER', format };
       if (format !== 'LOCATION') header.example = { header_handle: [d.headerHandle ?? ''] };
       components.push(header);
+      if (d.templateType === 'lto' && d.limitedOffer)
+        components.push({
+          type: 'LIMITED_TIME_OFFER',
+          limited_time_offer: {
+            text: d.limitedOffer.text,
+            has_expiration: d.limitedOffer.hasExpiration,
+          },
+        });
     } else if (d.header) {
       const header: Record<string, unknown> = { type: 'HEADER', format: 'TEXT', text: d.header };
       if (countPlaceholders(d.header) > 0) {
@@ -187,7 +198,7 @@ export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
     if (countPlaceholders(d.body) > 0)
       body.example = { body_text: [bodyExamples(d.body, d.variableMap)] };
     components.push(body);
-    if (d.footer) components.push({ type: 'FOOTER', text: d.footer });
+    if (d.footer && d.templateType !== 'lto') components.push({ type: 'FOOTER', text: d.footer });
     if (d.buttons?.length)
       components.push({ type: 'BUTTONS', buttons: d.buttons.slice(0, 10).map(buttonOf) });
   }

@@ -208,3 +208,56 @@ describe('form and catalog buttons', () => {
     });
   });
 });
+
+describe('limited-time offer templates', () => {
+  const offer = {
+    name: 'Summer Offer',
+    language: 'en_US',
+    metaCategory: 'MARKETING',
+    templateType: 'lto',
+    header: null,
+    attachmentType: 'image',
+    headerHandle: '4::aW1h',
+    body: 'Hi {{1}}, our sale ends soon',
+    footer: 'ignored',
+    buttons: [
+      { type: 'COPY_CODE', example: 'SAVE20' },
+      { type: 'URL', text: 'Shop', url: 'https://example.com' },
+    ],
+    limitedOffer: { text: 'Expiring offer!', hasExpiration: true },
+    variableMap: { body: [{ num: 1, key: 'name', example: 'Anya' }] },
+    parameterFormat: 'POSITIONAL' as const,
+  };
+
+  it('is sent as header, LIMITED_TIME_OFFER, body and buttons (no footer)', () => {
+    const prepared = prepareTemplate({ ...offer, attachmentType: 'image' } as never);
+    const types = buildMetaTemplate({
+      ...offer,
+      limitedOffer: prepared.limitedOffer,
+    } as never).components.map((c) => c.type);
+    expect(types).toEqual(['HEADER', 'LIMITED_TIME_OFFER', 'BODY', 'BUTTONS']);
+    expect(prepared.footer).toBeNull();
+  });
+
+  it('is linted: Marketing, a heading of 16 characters, a picture header, a copy-code or website button', () => {
+    const ok = lintTemplate({ ...offer, hasHeaderFile: true } as never);
+    expect(ok.filter((i) => i.severity === 'error')).toEqual([]);
+    const bad = lintTemplate({
+      ...offer,
+      metaCategory: 'UTILITY',
+      limitedOffer: { text: 'This heading is much too long', hasExpiration: true },
+      attachmentType: 'document',
+      buttons: [{ type: 'QUICK_REPLY', text: 'Hi' }],
+      hasHeaderFile: true,
+    } as never).map((i) => i.code);
+    expect(bad).toEqual(
+      expect.arrayContaining([
+        'lto_category',
+        'lto_text_long',
+        'lto_header',
+        'lto_buttons',
+        'lto_button_type',
+      ]),
+    );
+  });
+});

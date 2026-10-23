@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "en ligne",
       "cards": "Cartes du carrousel",
-      "cardEmpty": "Texte de la carte {n}"
+      "cardEmpty": "Texte de la carte {n}",
+      "offerExpires": "Se termine bientôt",
+      "offerTextEmpty": "Titre de l’offre"
     },
     "card": {
       "rejected": "Rejeté : {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Les modèles d'authentification ont un texte fixe, il n'y a donc rien à rédiger."
       },
       "type": {
-        "label": "Type de modèle",
+        "label": "Type de bouton",
         "standard": "Standard",
         "carousel": "Carrousel",
-        "hint": "Un carrousel est un message avec une rangée de cartes à faire défiler. Chaque carte a une image ou une vidéo, un texte court et jusqu'à deux boutons."
+        "hint": "Choisissez comment le message se termine. Un carrousel est une rangée de cartes ; une offre à durée limitée a un titre d’offre avec compte à rebours facultatif et un bouton pour copier un code ou ouvrir un site.",
+        "none": "Aucun",
+        "buttons": "Copier le code, site web, réponses rapides, etc.",
+        "lto": "Offre à durée limitée",
+        "catalogue": "Catalogue",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Cartes",
@@ -415,6 +422,15 @@
         "buttonText": "Texte du bouton",
         "buttonUrl": "URL du site web",
         "buttonPhone": "Numéro de téléphone"
+      },
+      "offer": {
+        "title": "Offre à durée limitée",
+        "hint": "Affiché sous l’image ou la vidéo : un titre et, si vous le souhaitez, un compte à rebours jusqu’à la fin de l’offre.",
+        "text": "Titre de l’offre",
+        "textHint": "{used}/{max}",
+        "placeholder": "Offre bientôt terminée !",
+        "countdown": "Afficher un compte à rebours",
+        "countdownHint": "WhatsApp affiche le temps restant avant la fin de l’offre."
       }
     },
     "detail": {

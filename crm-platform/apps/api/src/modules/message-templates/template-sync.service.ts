@@ -289,6 +289,7 @@ export class TemplateSyncService {
           buttons: parsed.buttons,
           codeExpirationMinutes: parsed.codeExpirationMinutes,
           templateType: parsed.templateType,
+          limitedOffer: parsed.limitedOffer,
           ...(parsed.templateType === 'carousel'
             ? { carouselData: mergeCards(parsed.cards, storedCardsOf(known)) }
             : {}),
@@ -331,6 +332,7 @@ export class TemplateSyncService {
         metaCategory: state.metaCategory,
         templateType: parsed.templateType,
         carouselData: parsed.templateType === 'carousel' ? parsed.cards : null,
+        limitedOffer: parsed.limitedOffer,
         attachmentType: attachmentColumn(parsed),
         attachmentFile: null,
         headerSampleUrl: parsed.headerSampleUrl,

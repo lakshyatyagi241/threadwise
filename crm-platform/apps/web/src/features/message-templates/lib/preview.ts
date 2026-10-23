@@ -22,6 +22,9 @@ export function previewOfSummary(
         return { kind: r.kind, text: r.text };
       }),
     })),
+    offer: s.limitedOffer
+      ? { text: s.limitedOffer.text, countdown: s.limitedOffer.hasExpiration }
+      : null,
     language: s.language,
     headerKind,
     headerText: headerKind === 'text' ? (s.header ?? '') : '',

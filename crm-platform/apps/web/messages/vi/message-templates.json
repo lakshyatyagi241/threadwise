@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "trực tuyến",
       "cards": "Thẻ băng chuyền",
-      "cardEmpty": "Văn bản của thẻ {n}"
+      "cardEmpty": "Văn bản của thẻ {n}",
+      "offerExpires": "Sắp kết thúc",
+      "offerTextEmpty": "Tiêu đề ưu đãi"
     },
     "card": {
       "rejected": "Bị từ chối: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Mẫu xác thực có nội dung cố định nên không cần soạn."
       },
       "type": {
-        "label": "Loại mẫu",
+        "label": "Loại nút",
         "standard": "Tiêu chuẩn",
         "carousel": "Băng chuyền",
-        "hint": "Băng chuyền là tin nhắn có một hàng thẻ để vuốt xem. Mỗi thẻ có một hình ảnh hoặc video, một đoạn văn ngắn và tối đa hai nút."
+        "hint": "Chọn cách tin nhắn kết thúc. Carousel là một hàng thẻ; ưu đãi có thời hạn có tiêu đề ưu đãi kèm đếm ngược tùy chọn và nút sao chép mã hoặc trang web.",
+        "none": "Không có",
+        "buttons": "Sao chép mã, trang web, trả lời nhanh, v.v.",
+        "lto": "Ưu đãi có thời hạn",
+        "catalogue": "Danh mục",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Thẻ",
@@ -415,6 +422,15 @@
         "buttonText": "Văn bản nút",
         "buttonUrl": "URL trang web",
         "buttonPhone": "Số điện thoại"
+      },
+      "offer": {
+        "title": "Ưu đãi có thời hạn",
+        "hint": "Hiển thị bên dưới hình ảnh hoặc video: một tiêu đề và, nếu muốn, bộ đếm ngược đến khi ưu đãi kết thúc.",
+        "text": "Tiêu đề ưu đãi",
+        "textHint": "{used}/{max}",
+        "placeholder": "Ưu đãi sắp hết hạn!",
+        "countdown": "Hiển thị đếm ngược",
+        "countdownHint": "WhatsApp hiển thị thời gian còn lại đến khi ưu đãi kết thúc."
       }
     },
     "detail": {

@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Carousel cards",
-      "cardEmpty": "Text of card {n}"
+      "cardEmpty": "Text of card {n}",
+      "offerExpires": "Ends soon",
+      "offerTextEmpty": "Offer heading"
     },
     "card": {
       "engine": "Meta WABA",
@@ -384,10 +386,15 @@
         "authHint": "Authentication templates have a fixed text, so there is nothing to draft."
       },
       "type": {
-        "label": "Template type",
+        "label": "Button type",
         "standard": "Standard",
         "carousel": "Carousel",
-        "hint": "A carousel is a message with a row of cards to swipe through. Each card has a picture or video, a short text and up to two buttons."
+        "hint": "Pick what the message ends with. A carousel is a row of cards; a limited-time offer has an offer heading with an optional countdown, and a copy-code or website button.",
+        "none": "None",
+        "buttons": "Copy code, website, quick replies etc.",
+        "lto": "Limited time offer",
+        "catalogue": "Catalogue",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Cards",
@@ -408,6 +415,15 @@
         "buttonText": "Button text",
         "buttonUrl": "Website URL",
         "buttonPhone": "Phone number"
+      },
+      "offer": {
+        "title": "Limited time offer",
+        "hint": "Shown under the picture or video: a heading and, if you like, a countdown to the end of the offer.",
+        "text": "Offer heading",
+        "textHint": "{used}/{max}",
+        "placeholder": "Expiring offer!",
+        "countdown": "Show a countdown",
+        "countdownHint": "WhatsApp shows the time left until the offer ends."
       }
     },
     "detail": {

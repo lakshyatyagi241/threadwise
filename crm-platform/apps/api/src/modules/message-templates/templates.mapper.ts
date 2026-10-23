@@ -59,6 +59,18 @@ export function storedCardsOf(row: Pick<TemplateRow, 'carouselData'>): TemplateC
 
 const isWebAddress = (v: string | null | undefined): v is string => /^https?:\/\//i.test(v ?? '');
 
+/** The offer stored in `limited_offer`, read defensively (an import can carry other shapes); null when there is none. */
+export function limitedOfferOf(
+  row: Pick<TemplateRow, 'limitedOffer'>,
+): { text: string; hasExpiration: boolean } | null {
+  const o = row.limitedOffer;
+  if (typeof o !== 'object' || o === null) return null;
+  const r = o as Record<string, unknown>;
+  return typeof r.text === 'string'
+    ? { text: r.text, hasExpiration: r.hasExpiration !== false }
+    : null;
+}
+
 /** The cards as the library and the form read them. `links` maps a stored key to a fresh link (the detail asks storage; a list does not). */
 export function cardsViewOf(
   row: Pick<TemplateRow, 'carouselData'>,
@@ -108,6 +120,7 @@ export function draftOf(row: TemplateRow): TemplateDraft {
     footer: row.footer,
     buttons: buttonsOf(row),
     cards: storedCardsOf(row),
+    limitedOffer: limitedOfferOf(row),
     variableMap: variableMapOf(row),
     codeExpirationMinutes: row.codeExpirationMinutes,
     parameterFormat: parameterFormatOf(row),
@@ -129,6 +142,7 @@ export function lintInputOf(row: TemplateRow, strict = false): LintInput {
     footer: d.footer,
     buttons: d.buttons,
     cards: d.cards,
+    limitedOffer: d.limitedOffer,
     variableMap: d.variableMap,
     parameterFormat: d.parameterFormat,
   };
@@ -181,6 +195,7 @@ export function toSummary(row: TemplateRow): TemplateSummary {
     footer: row.footer,
     buttons: buttonsOf(row),
     cards: cardsViewOf(row),
+    limitedOffer: limitedOfferOf(row),
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

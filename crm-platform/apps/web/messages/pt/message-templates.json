@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Cartões do carrossel",
-      "cardEmpty": "Texto do cartão {n}"
+      "cardEmpty": "Texto do cartão {n}",
+      "offerExpires": "Termina em breve",
+      "offerTextEmpty": "Título da oferta"
     },
     "card": {
       "rejected": "Rejeitado: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Modelos de autenticação têm texto fixo, então não há o que gerar."
       },
       "type": {
-        "label": "Tipo de modelo",
+        "label": "Tipo de botão",
         "standard": "Padrão",
         "carousel": "Carrossel",
-        "hint": "Um carrossel é uma mensagem com uma fileira de cartões para deslizar. Cada cartão tem uma imagem ou vídeo, um texto curto e até dois botões."
+        "hint": "Escolha como a mensagem termina. Um carrossel é uma fileira de cartões; uma oferta por tempo limitado tem um título de oferta com contagem regressiva opcional e um botão de copiar código ou de site.",
+        "none": "Nenhum",
+        "buttons": "Copiar código, site, respostas rápidas etc.",
+        "lto": "Oferta por tempo limitado",
+        "catalogue": "Catálogo",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Cartões",
@@ -415,6 +422,15 @@
         "buttonText": "Texto do botão",
         "buttonUrl": "URL do site",
         "buttonPhone": "Número de telefone"
+      },
+      "offer": {
+        "title": "Oferta por tempo limitado",
+        "hint": "Aparece abaixo da imagem ou do vídeo: um título e, se quiser, uma contagem regressiva até o fim da oferta.",
+        "text": "Título da oferta",
+        "textHint": "{used}/{max}",
+        "placeholder": "Oferta por tempo limitado!",
+        "countdown": "Mostrar contagem regressiva",
+        "countdownHint": "O WhatsApp mostra o tempo restante até o fim da oferta."
       }
     },
     "detail": {

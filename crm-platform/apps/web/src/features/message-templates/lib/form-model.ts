@@ -6,8 +6,7 @@ import {
   type TplMetaCategory,
   type UpdateTemplateInput,
 } from '@crm/contracts';
-import { buttonToRow, rowToButton, type ButtonRow } from './buttons';
-import { nextKey } from './buttons';
+import { buttonToRow, newRow, nextKey, rowToButton, type ButtonRow } from './buttons';
 import { DEFAULT_LANGUAGE } from './languages';
 import {
   fillSamples,
@@ -37,7 +36,12 @@ export const CARDS_MAX = 10;
 export const CARD_BODY_MAX = 160;
 export const CARD_BUTTONS_MAX = 2;
 export type CardFormat = 'image' | 'video';
-export type TemplateKind = 'standard' | 'carousel';
+export type TemplateKind = 'standard' | 'carousel' | 'lto';
+/** The "Button type" choice on the form: it decides the shape of the template and which buttons can be added. */
+export const BUTTON_TYPES = ['none', 'buttons', 'lto', 'carousel', 'catalogue', 'flow'] as const;
+export type ButtonType = (typeof BUTTON_TYPES)[number];
+/** Meta's limit for the heading of a limited-time offer. */
+export const OFFER_TEXT_MAX = 16;
 
 export interface CardRow {
   /** Client-only identity for React keys. Never sent. */
@@ -86,6 +90,10 @@ export interface FormState {
   connectionId: string;
   /** `carousel`: a bubble of text and a row of cards; the header, footer and buttons of a standard template do not apply. */
   kind: TemplateKind;
+  buttonType: ButtonType;
+  /** `lto`: the offer's heading and whether it counts down to an expiry time. */
+  offerText: string;
+  offerCountdown: boolean;
   cards: CardRow[];
   name: string;
   language: string;
@@ -119,6 +127,9 @@ export function initialState(connectionId = ''): FormState {
   return {
     connectionId,
     kind: 'standard',
+    buttonType: 'none',
+    offerText: '',
+    offerCountdown: true,
     cards: [],
     name: '',
     language: DEFAULT_LANGUAGE,
@@ -163,6 +174,65 @@ export const isAuth = (s: Pick<FormState, 'metaCategory'>): boolean =>
 
 export const isCarousel = (s: Pick<FormState, 'kind' | 'metaCategory'>): boolean =>
   s.kind === 'carousel' && s.metaCategory !== 'AUTHENTICATION';
+
+export const isOffer = (s: Pick<FormState, 'kind' | 'metaCategory'>): boolean =>
+  s.kind === 'lto' && s.metaCategory !== 'AUTHENTICATION';
+
+/** The buttons the editor offers for each button type. */
+export const KINDS_OF_BUTTON_TYPE: Record<ButtonType, readonly ButtonRow['kind'][]> = {
+  none: [],
+  buttons: ['quick_reply', 'url', 'phone', 'copy_code'],
+  lto: ['copy_code', 'url'],
+  carousel: [],
+  catalogue: ['catalog'],
+  flow: ['form'],
+};
+
+/** Picking a button type reshapes the form: buttons that no longer fit go, and the ones the type is made of are added. */
+export function withButtonType(s: FormState, buttonType: ButtonType): FormState {
+  if (buttonType === s.buttonType) return s;
+  const allowed = KINDS_OF_BUTTON_TYPE[buttonType];
+  const keep = s.buttons.filter((b) => allowed.includes(b.kind));
+  const base = { ...s, buttonType, cards: [] as CardRow[] };
+  switch (buttonType) {
+    case 'carousel':
+      return { ...withKind(s, 'carousel'), buttonType, buttons: [] };
+    case 'lto': {
+      const media = s.headerKind === 'image' || s.headerKind === 'video';
+      return {
+        ...base,
+        kind: 'lto',
+        metaCategory: 'MARKETING',
+        headerKind: media ? s.headerKind : 'image',
+        headerText: '',
+        headerSlots: {},
+        footer: '',
+        buttons: keep.length > 0 ? keep : [newRow('copy_code'), newRow('url')],
+      };
+    }
+    case 'catalogue':
+      return { ...base, kind: 'standard', buttons: [newRow('catalog')] };
+    case 'flow':
+      return { ...base, kind: 'standard', buttons: keep.length > 0 ? keep : [newRow('form')] };
+    case 'buttons':
+      return { ...base, kind: 'standard', buttons: keep };
+    default:
+      return { ...base, kind: 'standard', buttons: [] };
+  }
+}
+
+/** The button type an existing template reads as. */
+export function buttonTypeOf(d: {
+  templateType: string;
+  buttons: Array<{ type: string }>;
+}): ButtonType {
+  if (d.templateType === 'carousel') return 'carousel';
+  if (d.templateType === 'lto' || d.templateType === 'limited_time_offer') return 'lto';
+  const types = d.buttons.map((b) => b.type.toUpperCase());
+  if (types.includes('CATALOG')) return 'catalogue';
+  if (types.includes('FLOW')) return 'flow';
+  return types.length > 0 ? 'buttons' : 'none';
+}
 
 /** Switching to a carousel starts with two empty cards; back to standard drops them. */
 export function withKind(s: FormState, kind: TemplateKind): FormState {
@@ -294,6 +364,7 @@ export function toFields(s: FormState): Fields {
       parameterFormat: 'POSITIONAL',
     };
   }
+  const offer = isOffer(s);
   const textHeader = s.headerKind === 'text' && s.headerText.trim() !== '';
   const media = isMediaKind(s.headerKind);
   const attachmentType = isMediaKind(s.headerKind)
@@ -309,7 +380,7 @@ export function toFields(s: FormState): Fields {
     name: s.name.trim(),
     language,
     metaCategory: s.metaCategory,
-    templateType: attachmentType === 'none' ? 'standard' : 'media',
+    templateType: offer ? 'lto' : attachmentType === 'none' ? 'standard' : 'media',
     header: textHeader ? normalizePlaceholders(s.headerText.trim()) : null,
     attachmentType,
     headerHandle: media && s.headerHandle ? s.headerHandle : null,
@@ -317,8 +388,9 @@ export function toFields(s: FormState): Fields {
     headerMediaKey: media && s.headerMediaKey ? s.headerMediaKey : null,
     headerLocation: s.headerKind === 'location' ? locationOf(s) : null,
     body: normalizePlaceholders(s.body),
-    footer: s.footer.trim() ? s.footer.trim() : null,
+    footer: !offer && s.footer.trim() ? s.footer.trim() : null,
     buttons: s.buttons.map(rowToButton),
+    limitedOffer: offer ? { text: s.offerText.trim(), hasExpiration: s.offerCountdown } : null,
     variableMap,
     codeExpirationMinutes: null,
     parameterFormat: 'POSITIONAL',
@@ -361,7 +433,15 @@ export function stateFromDetail(d: TemplateDetail): FormState {
   const meta: TplMetaCategory = d.metaCategory ?? 'UTILITY';
   return {
     connectionId: d.connectionId ?? '',
-    kind: d.templateType === 'carousel' ? 'carousel' : 'standard',
+    kind:
+      d.templateType === 'carousel'
+        ? 'carousel'
+        : d.templateType === 'lto' || d.templateType === 'limited_time_offer'
+          ? 'lto'
+          : 'standard',
+    buttonType: buttonTypeOf(d),
+    offerText: d.limitedOffer?.text ?? '',
+    offerCountdown: d.limitedOffer?.hasExpiration ?? true,
     cards: (d.cards ?? []).map((c) => ({
       key: `c${nextKey()}`,
       format: c.format,
@@ -407,6 +487,8 @@ export interface PreviewModel {
   auth: boolean;
   /** A carousel's cards, drawn under the bubble. */
   cards?: PreviewCard[];
+  /** A limited-time offer's heading, drawn under the header. */
+  offer?: { text: string; countdown: boolean } | null;
   language: string;
   headerKind: HeaderKind;
   headerText: string;
@@ -429,6 +511,7 @@ export function previewOf(s: FormState): PreviewModel {
           buttons: c.buttons.map((b) => ({ kind: b.kind, text: b.text })),
         }))
       : [],
+    offer: isOffer(s) ? { text: s.offerText, countdown: s.offerCountdown } : null,
     language: s.language,
     headerKind: s.headerKind,
     headerText: s.headerKind === 'text' ? fillSamples(s.headerText, s.headerSlots) : '',

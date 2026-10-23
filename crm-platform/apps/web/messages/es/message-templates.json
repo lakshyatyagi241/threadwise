@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "en línea",
       "cards": "Tarjetas del carrusel",
-      "cardEmpty": "Texto de la tarjeta {n}"
+      "cardEmpty": "Texto de la tarjeta {n}",
+      "offerExpires": "Termina pronto",
+      "offerTextEmpty": "Título de la oferta"
     },
     "card": {
       "rejected": "Rechazada: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Las plantillas de autenticación tienen un texto fijo, así que no hay nada que redactar."
       },
       "type": {
-        "label": "Tipo de plantilla",
+        "label": "Tipo de botón",
         "standard": "Estándar",
         "carousel": "Carrusel",
-        "hint": "Un carrusel es un mensaje con una fila de tarjetas que se desliza. Cada tarjeta tiene una imagen o un vídeo, un texto corto y hasta dos botones."
+        "hint": "Elige con qué termina el mensaje. Un carrusel es una fila de tarjetas; una oferta por tiempo limitado tiene un título de oferta con cuenta atrás opcional y un botón de copiar código o de sitio web.",
+        "none": "Ninguno",
+        "buttons": "Copiar código, sitio web, respuestas rápidas, etc.",
+        "lto": "Oferta por tiempo limitado",
+        "catalogue": "Catálogo",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Tarjetas",
@@ -415,6 +422,15 @@
         "buttonText": "Texto del botón",
         "buttonUrl": "URL del sitio web",
         "buttonPhone": "Número de teléfono"
+      },
+      "offer": {
+        "title": "Oferta por tiempo limitado",
+        "hint": "Se muestra bajo la imagen o el vídeo: un título y, si quieres, una cuenta atrás hasta el fin de la oferta.",
+        "text": "Título de la oferta",
+        "textHint": "{used}/{max}",
+        "placeholder": "¡Oferta que caduca!",
+        "countdown": "Mostrar cuenta atrás",
+        "countdownHint": "WhatsApp muestra el tiempo que queda hasta el fin de la oferta."
       }
     },
     "detail": {

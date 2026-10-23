@@ -60,7 +60,9 @@
       "business": "Bloomly",
       "online": "online",
       "cards": "Carrouselkaarten",
-      "cardEmpty": "Tekst van kaart {n}"
+      "cardEmpty": "Tekst van kaart {n}",
+      "offerExpires": "Eindigt binnenkort",
+      "offerTextEmpty": "Titel van de aanbieding"
     },
     "card": {
       "rejected": "Afgewezen: {reason}",
@@ -391,10 +393,15 @@
         "authHint": "Authenticatiesjablonen hebben een vaste tekst, dus er valt niets te schrijven."
       },
       "type": {
-        "label": "Sjabloontype",
+        "label": "Knoptype",
         "standard": "Standaard",
         "carousel": "Carrousel",
-        "hint": "Een carrousel is een bericht met een rij kaarten om doorheen te vegen. Elke kaart heeft een afbeelding of video, een korte tekst en maximaal twee knoppen."
+        "hint": "Kies waarmee het bericht eindigt. Een carrousel is een rij kaarten; een tijdelijke aanbieding heeft een aanbiedingstitel met optionele aftelling en een knop om een code te kopiëren of een website te openen.",
+        "none": "Geen",
+        "buttons": "Code kopiëren, website, snelle antwoorden enz.",
+        "lto": "Tijdelijke aanbieding",
+        "catalogue": "Catalogus",
+        "flow": "Flow"
       },
       "cards": {
         "title": "Kaarten",
@@ -415,6 +422,15 @@
         "buttonText": "Knoptekst",
         "buttonUrl": "Website-URL",
         "buttonPhone": "Telefoonnummer"
+      },
+      "offer": {
+        "title": "Tijdelijke aanbieding",
+        "hint": "Verschijnt onder de afbeelding of video: een titel en, als u wilt, een aftelling tot het einde van de aanbieding.",
+        "text": "Titel van de aanbieding",
+        "textHint": "{used}/{max}",
+        "placeholder": "Aanbieding verloopt bijna!",
+        "countdown": "Aftelling tonen",
+        "countdownHint": "WhatsApp toont de tijd die nog resteert tot het einde van de aanbieding."
       }
     },
     "detail": {

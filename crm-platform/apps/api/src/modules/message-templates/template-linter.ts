@@ -33,6 +33,8 @@ export interface LintInput {
   buttons?: TemplateButton[] | null;
   /** `templateType: 'carousel'` only. */
   cards?: TemplateCard[] | null;
+  /** `templateType: 'lto'` only. */
+  limitedOffer?: { text: string; hasExpiration?: boolean } | null;
   variableMap?: VariableMap | null;
   parameterFormat?: 'POSITIONAL' | 'NAMED' | null;
 }
@@ -184,6 +186,8 @@ export function lintTemplate(t: LintInput): LintIssue[] {
       w('carousel_category', 'template', 'Meta reviews carousel templates as Marketing templates.');
   }
 
+  if (t.templateType === 'lto') lintOffer(t, category, e);
+
   // Buttons
   const buttons = t.buttons ?? [];
   if (buttons.length > 10) e('buttons_many', 'buttons', 'A template can have at most 10 buttons.');
@@ -230,6 +234,33 @@ export function lintTemplate(t: LintInput): LintIssue[] {
       w('trigger_phrase', 'body', `"${phrase}" is a phrase Meta's review often flags.`);
 
   return out;
+}
+
+/** Meta's limited-time-offer rules: Marketing only, a picture or video header, a heading of up to 16 characters, a short body, and a copy-code or website button. */
+function lintOffer(
+  t: LintInput,
+  category: string,
+  e: (code: string, field: LintIssue['field'], message: string) => void,
+): void {
+  const text = (t.limitedOffer?.text ?? '').trim();
+  if (category !== 'MARKETING')
+    e('lto_category', 'template', 'A limited-time offer must be a Marketing template.');
+  if (!text) e('lto_text', 'template', 'The offer needs a heading, such as "Expiring offer!".');
+  else if (text.length > 16)
+    e('lto_text_long', 'template', 'The offer heading can have at most 16 characters.');
+  const media = (t.attachmentType ?? '').toLowerCase();
+  if (media !== 'image' && media !== 'video')
+    e('lto_header', 'header', 'A limited-time offer needs a picture or video header.');
+  if (t.body.length > 600) e('lto_body', 'body', 'The body can have at most 600 characters.');
+  const types = (t.buttons ?? []).map((b) => b.type.toUpperCase());
+  if (!types.includes('COPY_CODE') && !types.includes('URL'))
+    e('lto_buttons', 'buttons', 'Add a copy-code or a website button to the offer.');
+  if (types.some((x) => x !== 'COPY_CODE' && x !== 'URL'))
+    e(
+      'lto_button_type',
+      'buttons',
+      'A limited-time offer allows only copy-code and website buttons.',
+    );
 }
 
 /** Meta's carousel rules: 2 to 10 cards, every card a picture (or every card a video) with a short text, and the same buttons on every card. */
