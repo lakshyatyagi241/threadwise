@@ -54,6 +54,20 @@ export interface RecordOutboundInput {
    * customer read. Ignored on a `system` line. Without it the line is plain text, as before.
    */
   template?: RecordOutboundTemplate;
+  /**
+   * A file the other domain sent, already in the chat media store: the line is then that file's message (an image, a video, ...) with
+   * `body` as its caption, so the bubble draws the file. Ignored on a `system` line.
+   */
+  media?: RecordOutboundMedia;
+}
+
+export interface RecordOutboundMedia {
+  mediaKind: 'image' | 'video' | 'audio' | 'document';
+  key: string;
+  mime: string;
+  size: number | null;
+  name: string | null;
+  sha256: string | null;
 }
 
 export interface RecordOutboundTemplate {
