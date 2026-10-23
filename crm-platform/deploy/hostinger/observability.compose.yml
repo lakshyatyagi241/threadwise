@@ -188,7 +188,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, slow_query_pg_url, incident_api_token]
+    secrets: [gchat_critical_url, gchat_slowquery_url, gchat_deploy_url, gchat_other_url, slow_query_pg_url, incident_api_token]
     networks: [default, dokploy-network] # dokploy-network: Traefik reaches it as desk-gchat-bridge:9095, only for /incidents (traefik-incidents.yml.template)
 
   grafana:
@@ -222,6 +222,8 @@ secrets:
     file: ./secrets/gchat_slowquery_url
   gchat_deploy_url:
     file: ./secrets/gchat_deploy_url
+  gchat_other_url:
+    file: ./secrets/gchat_other_url
   slow_query_pg_url:
     file: ./secrets/slow_query_pg_url
   incident_api_token:
