@@ -40,7 +40,7 @@ import {
 } from '../whatsapp-cloud-api-waba';
 import type { FlowTemplate } from './flow-template';
 import { metaEditBlockOf, metaEditLogAfter, type MetaEditBlock } from './meta-edit-rules';
-import { describeTemplateFailure, providerProblem } from './template-errors';
+import { describeTemplateFailure, uploadProblem } from './template-errors';
 import {
   detailWithMedia,
   headerPreviewUrl,
@@ -571,7 +571,7 @@ export class TemplatesService {
       });
     } catch (e) {
       await this.releaseHeaderCopy(orgId, key);
-      throw providerProblem('Meta did not accept the file', e);
+      throw uploadProblem('Meta did not accept the file', e);
     }
     return {
       handle,

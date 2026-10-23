@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
-import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
+import { WabaApiError, classifySendError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 
 /**
  * Meta's refusal of a template call, in words an operator can act on (Reference `errorHint`, TW-TPL-025 rule 9). Meta's own
@@ -65,4 +65,18 @@ export function providerProblem(what: string, e: unknown): AppError {
         `${what}: ${f.message}`,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
+}
+
+/**
+ * A failed header-example upload. A provider throttle (Meta's or Interakt's code 4) is not a refusal of the file: it is a 429 that
+ * says so and asks for a short wait. Anything else reads as `providerProblem` does.
+ */
+export function uploadProblem(what: string, e: unknown): AppError {
+  if (e instanceof WabaApiError && classifySendError(e) === 'rate_limited')
+    return new AppError(
+      ERROR_CODES.RATE_LIMITED,
+      'The WhatsApp provider is limiting uploads right now. Wait a minute, then try the file again.',
+      HttpStatus.TOO_MANY_REQUESTS,
+    );
+  return providerProblem(what, e);
 }
