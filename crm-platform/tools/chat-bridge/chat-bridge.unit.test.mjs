@@ -355,3 +355,11 @@ test('a critical alert with NO runbook entry still opens an incident (so the tea
   assert.equal(handled.length, 1); assert.equal(handled[0].alertname, 'BrandNewUnmappedRule'); assert.equal(handled[0].playbook, 'service');
   assert.match(handled[0].suggestion, /No runbook entry/); assert.ok(posts.every((u) => u.startsWith('http://x/c')));
 });
+
+test('an alert with no runbook entry still gets a useful diagnosis (meaning from its own text, where to look, what to do) and nothing unsafe', async () => {
+  const { diagnosisRows } = await import('./diagnosis.mjs');
+  const rows = diagnosisRows({ labels: { alertname: 'Brand New; rm -rf /' }, annotations: { description: 'Disk fills\nup <b>fast</b>' } }, { entry: null, rows: [] });
+  const txt = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
+  assert.ok(rows.length >= 4); assert.match(txt, /What it means: Disk fills up/); assert.match(txt, /grep -rn "BrandNewrmrf" deploy\/observability/);
+  assert.match(txt, /Claim it/); assert.ok(!/No runbook entry for this alert \(add one/.test(txt)); assert.ok(!txt.includes('; rm -rf'));
+});
