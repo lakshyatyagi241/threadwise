@@ -23,12 +23,14 @@ import { type Translate } from '../../lib/msg';
 export type LogMedia = { kind: string; url: string; filename: string };
 /** The tap targets of a Quick replies / List / Poll message: the panel draws them as buttons under the bubble, as WhatsApp does. */
 export type LogChoices = {
-  kind: 'buttons' | 'list' | 'poll';
+  kind: 'buttons' | 'list' | 'poll' | 'links';
   /** The message body without the numbered fallback lines. */
   prompt: string;
   labels: string[];
   /** The list's opener label ("Choose below"). */
   button?: string;
+  /** A Link button message: the buttons open an address or call, they do not answer the bot. */
+  links?: Array<{ type: string; label: string; value: string }>;
 };
 export type LogEntry = {
   kind: 'system' | 'user' | 'bot';
@@ -86,6 +88,8 @@ export interface SimulatorOptions {
   onLog: (entry: LogEntry) => void;
   /** Called when `start()` resets the transcript. */
   onReset?: () => void;
+  /** The transcript is cut back to its first `length` entries (a menu answered again). */
+  onTruncate?: (length: number) => void;
   onAwaiting: (awaiting: boolean) => void;
   /** Random source for the simulated order id. */
   random?: () => number;
@@ -100,6 +104,8 @@ export interface Simulator {
   sendFile: (file: SimFile) => void;
   /** The operator answers an Ask for location node with a (fake) shared location. */
   sendLocation: (loc: SimLocation) => void;
+  /** The operator taps an option of an earlier menu: the chat rolls back to that menu (entry `index`) and answers it again. */
+  pickAgain: (index: number, label: string) => void;
   /** The node the run is parked on or executing; null before the first message and after the end. */
   current: () => FlowNode | null;
   /** Variables of the current run (a copy). */
@@ -161,8 +167,16 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   /** Wrong replies given to the Ask for file / location node the run is parked on. */
   let askAttempts = 0;
 
-  const log = (kind: LogEntry['kind'], text: string, media?: LogMedia, choices?: LogChoices) =>
+  /** The run as it stood when each menu was shown, by transcript index, so an earlier menu can be answered again. */
+  let logged = 0;
+  let snapshots = new Map<number, { node: FlowNode; vars: Vars }>();
+
+  const log = (kind: LogEntry['kind'], text: string, media?: LogMedia, choices?: LogChoices) => {
+    if (choices && choices.kind !== 'links' && current)
+      snapshots.set(logged, { node: current, vars: { ...vars } });
+    logged += 1;
     opts.onLog({ kind, text, ...(media ? { media } : {}), ...(choices ? { choices } : {}) });
+  };
   const sys = (t: string) => log('system', t);
   const bot = (t: string, media?: LogMedia, choices?: LogChoices) => log('bot', t, media, choices);
 
@@ -446,12 +460,28 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       }
       case 'cta': {
         const actions = arr(d.actions).map(rec);
-        const lines = actions.length
-          ? actions
-              .map((a) => `[${str(a.type) || 'url'}] ${str(a.label)} → ${str(a.value)}`)
-              .join('\n')
-          : `[${str(d.kind) || 'url'}] ${str(d.label)} → ${str(d.url || d.phone || d.code)}`;
-        bot(tx('cta', { lines }));
+        const links = (
+          actions.length
+            ? actions.map((a) => ({
+                type: str(a.type) || 'url',
+                label: str(a.label),
+                value: str(a.value),
+              }))
+            : [
+                {
+                  type: str(d.kind) || 'url',
+                  label: str(d.label),
+                  value: str(d.url || d.phone || d.code),
+                },
+              ]
+        ).map((l) => ({ ...l, value: interp(l.value, v) }));
+        const body = interp(d.bodyText || d.text, v);
+        bot(body || links.map((l) => l.label).join(' · '), undefined, {
+          kind: 'links',
+          prompt: body,
+          labels: links.map((l) => l.label),
+          links,
+        });
         return advance('out');
       }
       case 'location': {
@@ -620,6 +650,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       .filter(Boolean);
     vars = { name: 'Anya', phone: '+919876543210' };
     pendingStart = first;
+    logged = 0;
+    snapshots = new Map();
     sys(
       expectedKeywords.length
         ? tx('typeKeyword', { first: expectedKeywords[0]!, list: expectedKeywords.join(', ') })
@@ -815,9 +847,23 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     }
   };
 
+  const pickAgain = (index: number, label: string): void => {
+    const snap = snapshots.get(index);
+    if (!snap) return;
+    runId += 1;
+    for (const k of [...snapshots.keys()]) if (k > index) snapshots.delete(k);
+    vars = { ...snap.vars };
+    current = snap.node;
+    logged = index + 1;
+    opts.onTruncate?.(index + 1);
+    opts.onAwaiting(true);
+    send(label);
+  };
+
   return {
     start,
     send,
+    pickAgain,
     sendFile,
     sendLocation,
     current: () => current,
