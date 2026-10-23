@@ -65,24 +65,35 @@ export function createAppAuth({ env = process.env, fetchImpl = fetch, now = Date
 
 const CERTS_URL =
   'https://www.googleapis.com/service_accounts/v1/metadata/x509/chat@system.gserviceaccount.com';
+const JWKS_URL = 'https://www.googleapis.com/oauth2/v3/certs';
 export const CHAT_ISSUER = 'chat@system.gserviceaccount.com';
-// Verifies the "project number" mode token (self-signed by chat@system.gserviceaccount.com). Returns claims or throws.
+const OIDC_ISSUERS = ['https://accounts.google.com', 'accounts.google.com'];
+// Verifies what Google Chat sends to the events endpoint. Two kinds exist, chosen in the Chat API console:
+//  - "Project Number": a JWT self-signed by chat@system.gserviceaccount.com (iss), audience = the project number (CHAT_APP_AUDIENCE);
+//  - "HTTP endpoint URL": a Google OIDC ID token (iss accounts.google.com), audience = the endpoint URL (CHAT_APP_ENDPOINT_URL), with
+//    email = chat@system.gserviceaccount.com. Disabled while CHAT_APP_ENDPOINT_URL is unset.
+// Returns claims or throws.
 export function createTokenVerifier({ env = process.env, fetchImpl = fetch, now = Date.now } = {}) {
-  let certs = null,
-    at = 0;
-  const load = async (force) => {
-    if (!force && certs && now() - at < 3600e3) return certs;
-    const r = await fetchImpl(hostOverride(env, 'CHAT_APP_CERTS_URL', CERTS_URL), {
+  const cache = { x509: { v: null, at: 0 }, jwks: { v: null, at: 0 } };
+  const load = async (kind, force) => {
+    const c = cache[kind];
+    if (!force && c.v && now() - c.at < 3600e3) return c.v;
+    const r = await fetchImpl(hostOverride(env, kind === 'x509' ? 'CHAT_APP_CERTS_URL' : 'CHAT_APP_JWKS_URL', kind === 'x509' ? CERTS_URL : JWKS_URL), {
       signal: AbortSignal.timeout(5000),
     });
     if (!r.ok) throw new Error('certs fetch failed');
-    certs = await r.json();
-    at = now();
-    return certs;
+    c.v = await r.json();
+    c.at = now();
+    return c.v;
+  };
+  const publicKey = async (kind, kid) => {
+    const find = (set) => (kind === 'x509' ? set[kid] : (set.keys ?? []).find((k) => k.kid === kid));
+    let k = find(await load(kind, false));
+    if (!k) k = find(await load(kind, true)); // key rotation: one forced refetch
+    if (!k) throw new Error('unknown kid');
+    return createPublicKey(kind === 'x509' ? k : { key: k, format: 'jwk' });
   };
   return async function verify(token) {
-    const audience = env.CHAT_APP_AUDIENCE;
-    if (!audience) throw new Error('CHAT_APP_AUDIENCE not set');
     const parts = typeof token === 'string' ? token.split('.') : [];
     if (parts.length !== 3) throw new Error('malformed');
     let header, claims;
@@ -93,19 +104,15 @@ export function createTokenVerifier({ env = process.env, fetchImpl = fetch, now 
       throw new Error('malformed');
     }
     if (header.alg !== 'RS256') throw new Error('alg');
-    let pem = (await load(false))[header.kid];
-    if (!pem) pem = (await load(true))[header.kid]; // key rotation: one forced refetch
-    if (!pem) throw new Error('unknown kid');
-    if (
-      !createVerify('RSA-SHA256')
-        .update(`${parts[0]}.${parts[1]}`)
-        .verify(createPublicKey(pem), parts[2], 'base64url')
-    )
-      throw new Error('signature');
-    if (claims.iss !== CHAT_ISSUER) throw new Error('iss');
+    const oidc = OIDC_ISSUERS.includes(claims.iss);
+    if (!oidc && claims.iss !== CHAT_ISSUER) throw new Error('iss');
+    const audience = oidc ? env.CHAT_APP_ENDPOINT_URL : env.CHAT_APP_AUDIENCE;
+    if (!audience) throw new Error(oidc ? 'CHAT_APP_ENDPOINT_URL not set' : 'CHAT_APP_AUDIENCE not set');
+    const key = await publicKey(oidc ? 'jwks' : 'x509', header.kid);
+    if (!createVerify('RSA-SHA256').update(`${parts[0]}.${parts[1]}`).verify(key, parts[2], 'base64url')) throw new Error('signature');
     if (claims.aud !== audience) throw new Error('aud');
-    if (!(typeof claims.exp === 'number' && claims.exp * 1000 > now() - 30_000))
-      throw new Error('exp');
+    if (oidc && (claims.email !== CHAT_ISSUER || claims.email_verified === false)) throw new Error('email'); // only Google Chat itself, not any Google account
+    if (!(typeof claims.exp === 'number' && claims.exp * 1000 > now() - 30_000)) throw new Error('exp');
     return claims;
   };
 }
