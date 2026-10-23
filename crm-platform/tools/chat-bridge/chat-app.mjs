@@ -46,7 +46,7 @@ function lifeWidgets({ owner, snap, firedAt }) {
   } else if (snap?.status === 'released') {
     w.push(row('🚀 In release', `${pr} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}; verifying that the problem is gone.`));
   } else if (snap?.prUrl) {
-    w.push(row('🔧 PR raised', `${pr}${who ? ` by ${who}` : ''}. Next step: review and merge it; this card resolves itself when the alert clears after the release.`));
+    w.push(snap.prMerged ? row('🟣 PR merged', `${pr} is merged. Next step: none, wait for the release; this card resolves itself once it is live and verified.`) : row('🔧 PR raised', `${pr}${who ? ` by ${who}` : ''}. Next step: review and merge it; this card resolves itself when the alert clears after the release.`));
   } else if (who && (snap?.status === 'claimed' || !snap)) {
     w.push({ decoratedText: { text: `👀 ${who} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`, wrapText: true } });
     w.push(row('Owner / next step', `${who} owns it. Next step: find the cause (see "What to check"), then raise a PR or note what was found.`));
@@ -72,6 +72,8 @@ function statusLine({ owner, snap }) {
     return '✅ Status: Cleared on its own';
   }
   if (snap?.status === 'released') return `🔵 Status: In progress, ${pr || 'the PR'} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}, verifying`;
+  if (snap?.prMerged && pr) return `🟣 Status: ${pr} merged${snap.prMerged.by ? ` by ${clean(snap.prMerged.by, 40)}` : ''} at ${hm(snap.prMerged.at)}, waiting for the release to go live`;
+  if (snap?.prClosed && !pr) return `🟠 Status: PR #${Number(snap.prClosed.number) || 0} was closed without merging, needs a human`;
   if (pr) return `🔵 Status: In progress, ${pr} raised${nm ? ` by ${nm}` : ''}`;
   if (nm && (snap?.status === 'claimed' || !snap)) return `🔵 Status: In progress, ${nm} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`;
   return '🟡 Status: Open, nobody has taken it yet';
