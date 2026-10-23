@@ -296,7 +296,8 @@
       "teamFilter": "Filteren op team",
       "allTeams": "Alle teams",
       "teamFormer": "Voormalig team",
-      "unhideColumn": "Kolom tonen"
+      "unhideColumn": "Kolom tonen",
+      "resizeColumn": "Sleep om {column} te vergroten of verkleinen; dubbelklik om te herstellen"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",

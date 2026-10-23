@@ -296,7 +296,8 @@
       "teamFilter": "Filtra per team",
       "allTeams": "Tutti i team",
       "teamFormer": "Team precedente",
-      "unhideColumn": "Mostra colonna"
+      "unhideColumn": "Mostra colonna",
+      "resizeColumn": "Trascina per ridimensionare {column}; doppio clic per ripristinare"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",

@@ -296,7 +296,8 @@
       "teamFilter": "Filter menurut tim",
       "allTeams": "Semua tim",
       "teamFormer": "Tim sebelumnya",
-      "unhideColumn": "Tampilkan kolom"
+      "unhideColumn": "Tampilkan kolom",
+      "resizeColumn": "Seret untuk mengubah lebar {column}; klik dua kali untuk mengatur ulang"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",

@@ -296,7 +296,8 @@
         "connect": "Connect WhatsApp",
         "connectBody": "Connect your number so contacts can reply and you can message them."
       },
-      "unhideColumn": "Unhide column"
+      "unhideColumn": "Unhide column",
+      "resizeColumn": "Drag to resize {column}; double-click to reset"
     },
     "bulk": {
       "label": "Actions for the selected contacts",

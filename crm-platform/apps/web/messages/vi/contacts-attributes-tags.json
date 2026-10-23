@@ -296,7 +296,8 @@
       "teamFilter": "Lọc theo nhóm",
       "allTeams": "Tất cả nhóm",
       "teamFormer": "Nhóm cũ",
-      "unhideColumn": "Hiện cột"
+      "unhideColumn": "Hiện cột",
+      "resizeColumn": "Kéo để đổi độ rộng {column}; nhấp đúp để đặt lại"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",

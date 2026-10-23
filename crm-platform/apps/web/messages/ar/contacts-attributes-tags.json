@@ -296,7 +296,8 @@
       "teamFilter": "التصفية حسب الفريق",
       "allTeams": "كل الفرق",
       "teamFormer": "فريق سابق",
-      "unhideColumn": "إظهار عمود"
+      "unhideColumn": "إظهار عمود",
+      "resizeColumn": "اسحب لتغيير عرض {column}؛ انقر مرتين لإعادة الضبط"
     },
     "bulk": {
       "label": "إجراءات على جهات الاتصال المحددة",
