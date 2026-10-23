@@ -13,54 +13,62 @@ the owner's three remaining complaints:
 | --------------------- | ------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------- |
 | **Feature add-on**    | Unlocks a module of the product                              | Smart routing, Teams and permissions           | Admin > Add-ons (pack) + plan editor Add-ons tab | Plans and add-ons, Marketplace > Add-ons; the module's own screen |
 | **Capacity add-on**   | Adds to a limit; no feature                                  | Extra seat, Contact boost                      | same                                             | same                                                       |
-| **Mini app**          | A first-party app the workspace installs                     | Appointments, Forms                            | Admin > Marketplace catalogue (listing + pricing) | Marketplace > Mini apps                                    |
-| **Integration**       | A connection to an outside service; never sold by itself     | Razorpay, Google, Shopify, WooCommerce         | nothing per plan (a plan feature may gate it)    | Marketplace > Integrations                                 |
+| **Mini app**          | A first-party app the workspace installs                     | Appointments, Forms                            | Admin > Marketplace (listing + price) + plan editor Mini apps tab | Marketplace > Mini apps                  |
+| **Integration**       | A connection to an outside service                           | Razorpay, Google, Shopify, WooCommerce         | Marketplace listing (paid ones) + plan editor Integrations tab | Marketplace > Integrations                 |
 
-Feature vs capacity is **derived** from the pack: a pack that grants at least one feature is a feature add-on (it may also add capacity, like Teams
-+10); a pack with limits only is a capacity add-on. No new column.
+**Feature vs capacity is the operator's choice** (Type in the add-on editor, stored in `plans.addon_kind`). A feature add-on unlocks at least one feature and may also add
+capacity (Teams +10); a capacity add-on only adds to limits. It used to be derived from the grants, which read a pack whose features were cleared as a capacity add-on
+(Smart routing could not be included). Rules: feature needs a feature, capacity needs a limit and no feature. A row written without a kind falls back to the derived kind.
+
+Built-in connectors (Shopify, WooCommerce) are plan features, not packs: they stay on the Features tab. Free integrations and free mini apps have no pack, so they have no
+offer; the Integrations and Mini apps tabs list the PAID ones.
 
 Wallet top-ups are not add-ons (unchanged, Part B5).
 
 ## 2. The plan x add-on matrix (new)
 
-Every plan says, for every add-on (feature or capacity), one of three things:
+Every plan says, for every add-on, mini app and integration, one of three things:
 
 | Mode         | Workspace on this plan                                              | Price                                   |
 | ------------ | ------------------------------------------------------------------- | --------------------------------------- |
-| **Included** | Has the add-on's features, no charge. Card: "Included in your plan" | none                                    |
-| **Paid**     | Sees the card and can buy it                                         | the plan's own price, else the add-on's |
+| **Included** | Has it, no charge. Card: "Included in your plan"                    | none                                    |
+| **Paid**     | Sees the card and can buy it                                         | the plan's own price (plain add-ons only), else its own |
 | **Hidden**   | Never sees it; checkout refuses it                                   | n/a                                     |
 
 Rules:
 
-- Stored in `plan_addon_offers (plan_id, addon_id, mode, amount)`. `amount` is null = the add-on's own price. Only for plain add-ons (no Marketplace
-  app); mini apps keep their own rules (`plan_visible_addons`, "Included in plans" on the listing).
-- **No row = Paid at the add-on's price**: exactly today's behaviour, so nothing changes for a plan nobody edited.
-- **Included is only for feature add-ons.** A capacity add-on cannot be "included": the plan sets its own cap on the Limits tab. A feature add-on that
-  also adds capacity (Teams +10) includes the **features** only; the extra capacity stays on sale.
-- **Included writes the features.** On save the API sets every feature the add-on grants to `true` on the plan when the mode is Included, and to
-  `false` when it is Paid or Hidden. The Features tab shows these keys locked with "Set by the Smart routing add-on (Add-ons tab)". So there is one
-  switch, and every gate in the product (which reads the plan's features) follows it without change.
+- Stored in `plan_addon_offers (plan_id, addon_id, mode, amount)`.
+  - **Plain add-ons**: `amount` null = the add-on's own price. No row = Paid at the add-on's price (today's behaviour, so an untouched plan is unchanged). Included writes the add-on's
+    features on the plan; Paid and Hidden turn them off.
+  - **Mini apps and integrations** (add-ons with a `marketplace_app_id`): an app keeps its own price, so `amount` is always null. Visibility stays in `plan_visible_addons`
+    (a row = visible) and is written together with the offer: **Hidden** = no visible row; **Paid** = visible row, no offer row; **Included** = visible row plus an `included` offer row.
+    No row of either = Hidden (as today). The features the app's listing grants (`grants_plan_features`, never its own `mkt_` key) are switched on when it BECOMES included and off when it
+    stops being included; saving Paid or Hidden for an app that was never included never touches a feature the plan carried on its own.
+  - The Marketplace reads Included as `includedBy: 'plan_offer'` (after the listing's own rules, before `plan_grants`): the card says "Included in your plan", there is no subscribe
+    button, installing is free, and checkout refuses a subscription.
+- **Included is only for add-ons that unlock something.** A capacity add-on cannot be included (the plan sets its own cap on the Limits tab), nor a feature add-on that has no feature yet.
+- **Included writes the features.** (plain add-ons: see above.) So there is one switch, and every gate in the product follows it without change.
 - **Free plan**: Paid means "shown, needs a paid plan to buy" (the existing `unavailable` card with "View plans"). Hidden hides it.
 - **Already bought, then Hidden**: the workspace keeps what it paid for until the term ends; the owned row still shows. It cannot buy again.
-- **Paid -> Included**: the renewal-stop job ends the paid renewal at cycle end (unchanged job, Part A).
+- **Paid -> Included**: the renewal-stop job ends the paid renewal at cycle end (plain add-ons; unchanged job, Part A).
 - **Included -> Paid/Hidden**: the features go off for workspaces on the plan that did not buy the add-on. Their settings are kept, not deleted, and
   come back when the add-on is bought or included again.
 
 ## 3. Operator console
 
-**Plan editor > Add-ons tab** (rebuilt):
+**Plan editor tabs**: Details and pricing | Features | Limits | **Add-ons** | **Integrations** | **Mini apps**.
 
-- Section **Feature add-ons**: one row per add-on, a segmented control `Included | Paid | Hidden`, and when Paid a price field (placeholder = the add-on's
-  price; empty = use it). Row text says what it gives ("Gives: Smart routing: auto-assignment and rules, ...").
-- Section **Capacity add-ons**: same row, control `Paid | Hidden` (Included is not offered, with the reason).
-- Section **Mini apps offered on this plan**: the existing Marketplace checklist, renamed.
-- Impact line (existing endpoint): switching an add-on to Included says how many workspaces already pay for it and that their renewal stops.
+- **Add-ons**: Feature add-ons and Capacity add-ons sections. One row per add-on, a segmented control `Included | Paid | Hidden` (capacity: `Paid | Hidden`), and when Paid a price field
+  (placeholder = the add-on's price; empty = use it). Row text says what it gives. A feature add-on with no feature yet cannot be Included (the row says why).
+- **Integrations** and **Mini apps**: one row per paid Marketplace app of that kind, the same `Included | Paid | Hidden` control, no price field (an app keeps its price), search, and a
+  "set all shown to" shortcut. Each tab has a count chip (included plus offered).
+- Impact line (existing endpoint, plain add-ons): switching to Included says how many workspaces already pay for it and that their renewal stops.
 
 **Features tab**: a key granted by any add-on is read-only with "Set by <add-on> on the Add-ons tab".
 
 **Admin > Add-ons** (was "Add-on packs"):
 
+- The add-on editor has a **Type** (Feature add-on / Capacity add-on) that decides which sections show and what the plan editor offers.
 - List gets a **Plans** column: "Included: Growth, Enterprise · Paid: Basic (₹199) · Hidden: Free".
 - Pack editor gets a **Plans** section with the same per-plan control (same storage, saved with the pack's own button via `PUT /platform/addons/:id/plans`).
 
@@ -99,4 +107,6 @@ the "Edit & change plan" dialog clears it.
 ## 7. Migration
 
 `plan_addon_offers` is created and backfilled with **Included** for every plan whose features already cover every feature of a feature add-on (so the
-editor shows what plans already do). Nothing else is written; no plan's features change.
+editor shows what plans already do). `20270401090000_addon_kind_and_app_offers.sql` adds `plans.addon_kind` (backfilled: the two seeded feature packs and any pack with a feature are
+`feature`; a pack with limits and no feature is `capacity`; an empty pack is an unfinished `feature` add-on) and lets the offers table take an app's add-on (no price). Nothing else is
+written; no plan's features, visible apps or offers change.

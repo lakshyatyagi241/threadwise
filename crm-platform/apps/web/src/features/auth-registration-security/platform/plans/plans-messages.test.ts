@@ -43,11 +43,25 @@ const dynamic: string[] = [
   ...(['perMonth', 'perBroadcast', 'perMinute', 'perPlanPeriod', 'total'] as const).map(
     (u) => `${NS}.editor.limitUnits.${u}`,
   ),
-  ...(['details', 'features', 'limits', 'addons'] as const).flatMap((tab) => [
-    `${NS}.editor.tabs.${tab}`,
-    ...(tab === 'details' ? [] : [`${NS}.editor.tabSummary.${tab}`]),
-  ]),
+  ...(['details', 'features', 'limits', 'addons', 'integrations', 'miniApps'] as const).flatMap(
+    (tab) => [
+      `${NS}.editor.tabs.${tab}`,
+      ...(tab === 'details' ? [] : [`${NS}.editor.tabSummary.${tab}`]),
+    ],
+  ),
   `${NS}.editor.tabSummary.error`,
+  ...(
+    [
+      'introMiniApps',
+      'introIntegrations',
+      'setAll',
+      'summary',
+      'priceHint',
+      'emptyIntegrations',
+      'emptyIntegrationsHint',
+    ] as const
+  ).map((k) => `${NS}.editor.apps.${k}`),
+  `${NS}.editor.offers.needsFeatures`,
   `${NS}.editor.problems.unknownAddon`,
   `${NS}.editor.problems.addonPriceZero`,
   `${NS}.editor.problems.addonGone`,

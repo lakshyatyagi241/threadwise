@@ -112,6 +112,11 @@ const addonFieldsShape = {
   sortOrder: z.number().int().min(0).max(100_000).default(0),
   features: z.array(z.string().regex(ADDON_KEY_RE)).max(200).default([]),
   limits: z.record(z.string().regex(ADDON_KEY_RE), limitInputSchema).default({}),
+  /**
+   * `feature` unlocks part of the product (it may also add capacity, like Teams +10); `capacity` only adds to limits. Left out, a pack that
+   * grants a feature is a feature add-on and any other is a capacity add-on with limits, else a feature add-on still to be filled in.
+   */
+  kind: z.enum(['feature', 'capacity']).optional(),
 };
 
 export interface AddonRuleInput {
@@ -152,15 +157,49 @@ export const defaultAddonBillingMode = (p: {
 }): 'one_time' | 'recurring' =>
   p.isLifetime || moneyCents(p.amount) === 0 ? 'one_time' : 'recurring';
 
+/** The kind a pack has when the client names none: what its grants say (an empty pack is an unfinished feature add-on). */
+export const derivedAddonKind = (p: {
+  features: readonly string[];
+  limits: Readonly<Record<string, number | null>>;
+}): AddonKind =>
+  p.features.length === 0 && Object.values(p.limits).some((v) => typeof v === 'number' && v !== 0)
+    ? 'capacity'
+    : 'feature';
+
 export const createAddonRequestSchema = z
   .object(addonFieldsShape)
   .superRefine((value, ctx) => {
     for (const issue of checkAddonRules(value)) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
     }
+    // Only a kind the client named is held to its grants: an older client that names none keeps creating packs as before.
+    const kind = value.kind;
+    if (kind === 'feature' && value.features.length === 0)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['features'],
+        message: 'A feature add-on unlocks at least one feature. Tick the features it gives.',
+      });
+    if (kind === 'capacity' && value.features.length > 0)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['features'],
+        message:
+          'A capacity add-on only adds to limits. Untick its features, or make it a feature add-on.',
+      });
+    if (
+      kind === 'capacity' &&
+      !Object.values(value.limits).some((v) => typeof v === 'number' && v !== 0)
+    )
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['limits'],
+        message: 'A capacity add-on adds to at least one limit.',
+      });
   })
   .transform((value) => ({
     ...value,
+    kind: value.kind ?? derivedAddonKind(value),
     billingMode: value.billingMode ?? defaultAddonBillingMode(value),
   }));
 export type CreateAddonRequest = z.input<typeof createAddonRequestSchema>;

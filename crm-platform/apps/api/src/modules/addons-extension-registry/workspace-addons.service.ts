@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
-  addonKindOf,
+  derivedAddonKind,
   type AddonCard,
   type AddonUnavailableReason,
   type OperatorWorkspaceAddonsResponse,
@@ -52,6 +52,7 @@ interface CardRow {
   billing_duration: number;
   features: unknown;
   limits: unknown;
+  addon_kind: 'feature' | 'capacity' | null;
 }
 
 /**
@@ -183,7 +184,7 @@ export class WorkspaceAddonsService {
 
       const catRes = await tx.execute(sql`
         SELECT id::int AS id, uuid, slug, name, subtitle, amount::text AS amount, offer_amount::text AS offer_amount,
-               currency, is_free, is_lifetime, billing_unit, billing_duration, billing_mode, features, limits
+               currency, is_free, is_lifetime, billing_unit, billing_duration, billing_mode, features, limits, addon_kind
         FROM plans WHERE kind = 'addon' AND is_active AND marketplace_app_id IS NULL ORDER BY sort_order ASC, amount ASC, slug ASC
       `);
       const packRows = catRes.rows as unknown as CardRow[];
@@ -228,7 +229,7 @@ export class WorkspaceAddonsService {
               ? 'support'
               : 'plan'
             : null,
-          kind: addonKindOf(grants),
+          kind: r.addon_kind ?? derivedAddonKind(grants),
         });
       }
       const owned: OwnedAddon[] = ownedRows.map((r) => ({

@@ -82,6 +82,20 @@ describe.each(['en', 'ar'] as const)('admin add-ons list (%s)', (locale) => {
     expect(out).toMatch(new RegExp(`data-testid="pack-kind-${ID(2)}" data-kind="capacity"`));
   });
 
+  it('takes the badge from the stored kind, and warns on a feature add-on that unlocks nothing', () => {
+    // grants say capacity-ish (no features) but the operator stored Feature: the badge follows the stored kind
+    const out = html([
+      pack(1, { grants: { features: [], limits: { users: 2 } } }),
+      pack(2, { kind: 'capacity', grants: { features: [], limits: { users: 1 } } }),
+      pack(3),
+    ]);
+    expect(out).toMatch(new RegExp(`data-testid="pack-kind-${ID(1)}" data-kind="feature"`));
+    expect(out).toContain(`data-testid="pack-no-features-${ID(1)}"`);
+    expect(out).not.toContain(`data-testid="pack-no-features-${ID(2)}"`);
+    expect(out).not.toContain(`data-testid="pack-no-features-${ID(3)}"`);
+    expect(out).toContain(locale === 'en' ? 'No features yet' : 'لا ميزات بعد');
+  });
+
   it('summarises how every plan offers the pack, in Included, Paid and Hidden chips', () => {
     const out = html([pack(1)]);
     const cell = out.slice(out.indexOf(`data-testid="pack-plans-${ID(1)}"`));
@@ -117,7 +131,8 @@ describe.each(['en', 'ar'] as const)('pack editor Plans section (%s)', (locale) 
     const out = html(pack(1));
     expect(out).toContain('data-testid="pack-plan-offers"');
     for (const o of OFFERS) expect(out).toContain(`data-testid="pack-plan-${o.planId}"`);
-    expect(out.match(/role="radiogroup"/g)).toHaveLength(OFFERS.length);
+    // one group per plan, plus the type choice at the top
+    expect(out.match(/role="radiogroup"/g)).toHaveLength(OFFERS.length + 1);
     expect(out).toContain(`data-testid="pack-plan-${ID(103)}-mode-included"`);
     // paid rows have the price box, with the plan's own price filled in and the add-on's price as placeholder
     expect(out).toContain(`id="pack-plan-${ID(102)}-price"`);
@@ -135,12 +150,76 @@ describe.each(['en', 'ar'] as const)('pack editor Plans section (%s)', (locale) 
     expect(out).toContain(`data-testid="pack-plan-${ID(103)}-mode-hidden"`);
   });
 
+  it('a feature pack with no features disables Included and says why, and shows the notice', () => {
+    const out = html(pack(1, { grants: { features: [], limits: { users: 2 } } }));
+    expect(out).toContain('data-testid="pack-plan-needs-features"');
+    expect(out).toContain('data-testid="no-features-notice"');
+    const included =
+      out.match(/<input[^>]*data-testid="pack-plan-[^"]*-mode-included"[^>]*>/g) ?? [];
+    expect(included).toHaveLength(OFFERS.length);
+    for (const r of included) {
+      expect(r).toContain('disabled');
+      expect(r).toContain('aria-describedby="pack-plan-included-reason"');
+    }
+    expect(out).toContain(`data-testid="pack-plan-${ID(103)}-mode-paid"`);
+    // a pack that unlocks something has neither
+    const ok = html(pack(1));
+    expect(ok).not.toContain('pack-plan-needs-features');
+    expect(ok).not.toContain('no-features-notice');
+    expect(ok.match(/<input[^>]*-mode-included"[^>]*>/g)?.some((r) => r.includes('disabled'))).toBe(
+      false,
+    );
+  });
+
   it('is not shown while creating a pack, and is read-only without edit rights', () => {
     expect(html(null)).not.toContain('data-testid="pack-plan-offers"');
     const ro = html(pack(1), 'support');
-    const radios = ro.match(/<input[^>]*type="radio"[^>]*>/g) ?? [];
+    const radios = (ro.match(/<input[^>]*type="radio"[^>]*>/g) ?? []).filter((r) =>
+      r.includes('pack-plan-'),
+    );
     expect(radios.length).toBeGreaterThan(0);
     for (const r of radios) expect(r).toContain('disabled');
     expect(ro).not.toContain('pack-plan-offers-save');
+  });
+});
+
+describe.each(['en', 'ar'] as const)('pack editor type and sections (%s)', (locale) => {
+  const html = (p: AddonPack | null) =>
+    renderWithMessages(createElement(PackFormPage, { packId: p?.id }), {
+      locale,
+      seed: [...(p ? [[KEYS.pack(p.id), p] as const] : []), [KEYS.fields, FIELDS_FULL]],
+    });
+  const FIELDS_FULL = {
+    features: [{ key: 'inbox_routing', label: 'Smart routing', core: false }],
+    limits: [{ key: 'users', label: 'Users' }],
+    currencies: [{ code: 'USD', name: 'US dollar' }],
+  };
+
+  it('a new pack defaults to Feature: type cards, features and limits shown, no Plans section', () => {
+    const out = html(null);
+    expect(out).toContain('data-testid="pack-kind"');
+    expect(out).toMatch(/data-testid="pack-kind-feature"/);
+    expect(out).toMatch(
+      /<input[^>]*checked=""[^>]*data-testid="pack-kind-feature"|<input[^>]*data-testid="pack-kind-feature"[^>]*checked=""/,
+    );
+    expect(out).toContain('id="addon-feature-inbox_routing"');
+    expect(out).toContain('id="addon-limit-users"');
+    expect(out).not.toContain('data-testid="no-features-notice"');
+  });
+
+  it('a capacity add-on shows only the Limit boosts section', () => {
+    const out = html(pack(1, { kind: 'capacity', grants: { features: [], limits: { users: 2 } } }));
+    expect(out).toMatch(
+      /<input[^>]*checked=""[^>]*data-testid="pack-kind-capacity"|<input[^>]*data-testid="pack-kind-capacity"[^>]*checked=""/,
+    );
+    expect(out).not.toContain('id="addon-feature-inbox_routing"');
+    expect(out).toContain('id="addon-limit-users"');
+    expect(out).not.toContain('data-testid="no-features-notice"');
+  });
+
+  it('a feature add-on with no features shows the notice', () => {
+    const out = html(pack(1, { grants: { features: [], limits: { users: 2 } } }));
+    expect(out).toContain('data-testid="no-features-notice"');
+    expect(out).toContain('id="addon-feature-inbox_routing"');
   });
 });

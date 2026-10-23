@@ -1349,13 +1349,17 @@
             "details": "Dettagli e prezzi",
             "features": "Funzionalità",
             "limits": "Limiti",
-            "addons": "Componenti aggiuntivi"
+            "addons": "Componenti aggiuntivi",
+            "integrations": "Integrazioni",
+            "miniApps": "Mini app"
           },
           "tabSummary": {
             "features": "{count} funzionalità attive su {total}",
             "limits": "{count} limiti impostati su {total}",
-            "addons": "{count} componenti aggiuntivi selezionati",
-            "error": "Contiene errori da correggere"
+            "addons": "{count, plural, one {# componente aggiuntivo incluso o offerto} many {# componenti aggiuntivi inclusi o offerti} other {# componenti aggiuntivi inclusi o offerti}}",
+            "error": "Contiene errori da correggere",
+            "integrations": "Integrazioni incluse od offerte: {count}",
+            "miniApps": "Mini app incluse od offerte: {count}"
           },
           "featuresUi": {
             "intro": "Disattiva ciò che questo piano non include. Un workspace con questo piano non può aprire un'area la cui funzionalità è disattivata.",
@@ -1386,12 +1390,8 @@
             "total": "in totale"
           },
           "addons": {
-            "intro": "I componenti aggiuntivi abilitati vengono mostrati ai workspace con questo piano nel loro Marketplace; possono essere usati solo dopo che il workspace li ha acquistati.",
             "search": "Cerca componenti aggiuntivi",
             "searchPlaceholder": "Cerca componenti aggiuntivi o app",
-            "selectAll": "Seleziona tutti",
-            "clear": "Cancella",
-            "selected": "{count} selezionati su {total}",
             "loading": "Caricamento dei componenti aggiuntivi",
             "empty": "Non esiste ancora alcun componente aggiuntivo a pagamento",
             "emptyHint": "I componenti aggiuntivi vengono creati nel catalogo Marketplace della console operatori. Quando un'app ha un pacchetto a pagamento, compare qui.",
@@ -1710,9 +1710,6 @@
             "crm": "CRM vendite",
             "platform": "Condiviso da entrambi"
           },
-          "marketplace": {
-            "title": "Mini app offerte in questo piano"
-          },
           "offers": {
             "readOnly": "Puoi vedere questo piano ma non modificarlo, quindi questi controlli sono bloccati.",
             "featureTitle": "Componenti aggiuntivi di funzionalità",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Questo componente è una bozza o è disattivato, quindi nessuno può ancora acquistarlo. Includerlo nel piano funziona comunque.",
             "impactCount": "{count, plural, one {# spazio di lavoro paga già questo componente.} other {# spazi di lavoro pagano già questo componente.}} Il loro rinnovo si fermerà alla fine del periodo corrente, non viene rimborsato nulla e oggi non viene annullato nulla.",
             "impactUnknown": "Gli spazi di lavoro di questo piano che pagano già questo componente non lo rinnoveranno più alla fine del periodo corrente. Non viene rimborsato nulla e oggi non viene annullato nulla. Non è stato possibile caricare il numero.",
-            "partlyNote": "Questo piano dà già parte di questo componente aggiuntivo ({features}). Resta così finché non scegli Incluso, A pagamento o Nascosto qui."
+            "partlyNote": "Questo piano dà già parte di questo componente aggiuntivo ({features}). Resta così finché non scegli Incluso, A pagamento o Nascosto qui.",
+            "needsFeatures": "Aggiungi prima le funzionalità che sblocca in Componenti aggiuntivi > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Le mini app sono app che uno spazio di lavoro installa dal Marketplace. Incluso: gratis per gli spazi di lavoro di questo piano. A pagamento: possono acquistarla al prezzo proprio dell’app. Nascosto: non la vedono mai. Incluso attiva anche le funzionalità del piano che l’app offre.",
+            "introIntegrations": "Le integrazioni collegano un servizio esterno. Incluso: gratis per gli spazi di lavoro di questo piano. A pagamento: possono acquistarla al prezzo proprio dell’integrazione. Nascosto: non la vedono mai. Incluso attiva anche le funzionalità del piano che offre.",
+            "setAll": "Imposta tutti quelli mostrati su",
+            "summary": "{count} su {total} inclusi od offerti",
+            "priceHint": "Le app del Marketplace mantengono il proprio prezzo; impostalo nella scheda dell’app.",
+            "emptyIntegrations": "Ancora nessuna integrazione a pagamento",
+            "emptyIntegrationsHint": "Le integrazioni gratuite non richiedono impostazioni qui; Shopify e WooCommerce si attivano nella scheda Funzionalità."
           }
         }
       },

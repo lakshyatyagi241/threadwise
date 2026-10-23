@@ -33,6 +33,8 @@ interface Row {
   paid_until: string | null;
   catalogue: string[] | null;
   org_plan: string | null;
+  /** The operator set the app to Included on the buyer's plan. */
+  plan_offer_included: boolean | null;
 }
 
 /**
@@ -65,7 +67,11 @@ export async function assertMarketplacePack(
            (SELECT max(w.ends_at) FROM workspace_addons w
              WHERE w.org_id = ${orgId} AND w.package_id = p.id AND w.status = 'active' AND w.ends_at > now()) AS paid_until,
            (SELECT array_agg(c.slug ORDER BY c.sort_order, c.amount, c.slug) FROM plans c WHERE c.kind = 'plan') AS catalogue,
-           (SELECT o.plan FROM organizations o WHERE o.id = ${orgId}) AS org_plan
+           (SELECT o.plan FROM organizations o WHERE o.id = ${orgId}) AS org_plan,
+           EXISTS (SELECT 1 FROM plan_addon_offers po
+                    JOIN plans pl ON pl.id = po.plan_id AND pl.kind = 'plan'
+                    JOIN organizations og ON og.plan = pl.slug AND og.id = ${orgId}
+                   WHERE po.addon_id = p.id AND po.mode = 'included') AS plan_offer_included
     FROM plans p
     LEFT JOIN marketplace_apps a ON a.id = p.marketplace_app_id
     LEFT JOIN marketplace_subscriptions s ON s.org_id = ${orgId} AND s.app_id = p.marketplace_app_id
@@ -79,6 +85,7 @@ export async function assertMarketplacePack(
     r.held === true ||
     r.included_plan_feature !== null ||
     r.included_min_plan !== null ||
+    r.plan_offer_included === true ||
     (await planShowsApp(Number(r.app_id)));
 
   const grantKeys = (r.grants_plan_features ?? []).filter((k) => !isMarketEntitlementKey(k));
@@ -100,6 +107,7 @@ export async function assertMarketplacePack(
         planLapsed: false,
         catalogue: r.catalogue ?? [],
         planCarriesGrants,
+        planOfferIncluded: r.plan_offer_included === true,
       }) !== null,
     remainingDays: r.paid_until ? daysUntil(new Date(r.paid_until), new Date()) : null,
   });

@@ -147,7 +147,9 @@
           "sortOrder": "Geben Sie eine ganze Zahl ein.",
           "limits": "Limits sind ganze Zahlen oder -1 für unbegrenzt.",
           "form": "Prüfen Sie die markierten Felder.",
-          "amountPositive": "Add-ons sind monatliche oder jährliche Abonnements, daher muss der Preis über null liegen."
+          "amountPositive": "Add-ons sind monatliche oder jährliche Abonnements, daher muss der Preis über null liegen.",
+          "features": "Wählen Sie mindestens eine Funktion oder machen Sie daraus ein Kapazitäts-Add-on.",
+          "limitsNeeded": "Geben Sie mindestens ein Limit über null ein oder machen Sie daraus ein Funktions-Add-on."
         },
         "legacy": {
           "title": "Altes Paket",
@@ -186,8 +188,23 @@
           },
           "saved": "Tarifangebote gespeichert.",
           "changed": "{count, plural, one {# Tarif geändert} other {# Tarife geändert}}",
-          "save": "Tarifangebote speichern"
-        }
+          "save": "Tarifangebote speichern",
+          "needFeatures": "Fügen Sie zuerst oben die Funktionen hinzu, die es freischaltet"
+        },
+        "type": {
+          "title": "Typ",
+          "hint": "Wählen Sie, was dieses Add-on bewirkt. Nur ein Funktions-Add-on kann in einen Tarif aufgenommen werden.",
+          "feature": {
+            "title": "Funktions-Add-on",
+            "body": "Schaltet einen Teil des Produkts frei; kann auch Kapazität hinzufügen."
+          },
+          "capacity": {
+            "title": "Kapazitäts-Add-on",
+            "body": "Erhöht nur ein Limit (Plätze, Kontakte ...)."
+          }
+        },
+        "noFeaturesNotice": "Dieses Add-on schaltet noch nichts frei. Haken Sie die Funktionen an, die es bietet, damit Tarife es aufnehmen können.",
+        "limitsHintCapacity": "Ein Kapazitäts-Add-on erhöht nur Limits. Geben Sie eine Zahl ein, die zum Tarif ADDIERT wird (zum Beispiel +2 Plätze). -1 steht für unbegrenzt. Mindestens ein Limit ist erforderlich."
       },
       "kind": {
         "feature": "Funktion",
@@ -199,7 +216,8 @@
         "hidden": "Ausgeblendet: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Keine Tarife"
-      }
+      },
+      "noFeatures": "Noch keine Funktionen"
     },
     "extensions": {
       "crumbHere": "Add-ons",

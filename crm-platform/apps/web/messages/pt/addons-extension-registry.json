@@ -147,7 +147,9 @@
           "sortOrder": "Informe um número inteiro.",
           "limits": "Os limites são números inteiros, ou -1 para ilimitado.",
           "form": "Verifique os campos destacados.",
-          "amountPositive": "Complementos são assinaturas mensais ou anuais, então o preço deve ser maior que zero."
+          "amountPositive": "Complementos são assinaturas mensais ou anuais, então o preço deve ser maior que zero.",
+          "features": "Marque pelo menos um recurso ou transforme-o em um complemento de capacidade.",
+          "limitsNeeded": "Informe pelo menos um limite acima de zero ou transforme-o em um complemento de recurso."
         },
         "legacy": {
           "title": "Pacote legado",
@@ -186,8 +188,23 @@
           },
           "saved": "Ofertas dos planos salvas.",
           "changed": "{count, plural, one {# plano alterado} other {# planos alterados}}",
-          "save": "Salvar ofertas dos planos"
-        }
+          "save": "Salvar ofertas dos planos",
+          "needFeatures": "Antes, adicione acima os recursos que ele desbloqueia"
+        },
+        "type": {
+          "title": "Tipo",
+          "hint": "Escolha o que este complemento faz. Somente um complemento de recurso pode ser incluído em um plano.",
+          "feature": {
+            "title": "Complemento de recurso",
+            "body": "Desbloqueia parte do produto; também pode aumentar a capacidade."
+          },
+          "capacity": {
+            "title": "Complemento de capacidade",
+            "body": "Apenas soma a um limite (assentos, contatos...)."
+          }
+        },
+        "noFeaturesNotice": "Este complemento ainda não desbloqueia nada. Marque os recursos que ele oferece para que os planos possam incluí-lo.",
+        "limitsHintCapacity": "Um complemento de capacidade apenas soma aos limites. Informe um número para SOMAR ao plano (por exemplo +2 assentos). Use -1 para ilimitado. É necessário pelo menos um limite."
       },
       "kind": {
         "feature": "Recurso",
@@ -199,7 +216,8 @@
         "hidden": "Oculto: {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Nenhum plano"
-      }
+      },
+      "noFeatures": "Ainda sem recursos"
     },
     "extensions": {
       "crumbHere": "Complementos",

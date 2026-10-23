@@ -227,6 +227,7 @@ export function buildPlanRequest(
   {
     includeAddons = true,
     addonPacks,
+    appIds,
   }: {
     includeAddons?: boolean;
     /**
@@ -235,6 +236,12 @@ export function buildPlanRequest(
      * Without it only the draft's own offers (the stored ones) are sent back.
      */
     addonPacks?: readonly PackGrants[];
+    /**
+     * The ids of the Marketplace apps the Integrations and Mini apps tabs list (when they loaded). The request then carries one offer for
+     * EVERY one of them (amount null: an app keeps its own price) with its effective mode, and `visibleAddons` is derived from those
+     * modes, so the two cannot disagree. Without it the draft's own offer rows are sent back as they are.
+     */
+    appIds?: readonly string[];
   } = {},
 ):
   { body: CreatePlanRequest; problems?: undefined } | { body?: undefined; problems: PlanProblems } {
@@ -302,7 +309,8 @@ export function buildPlanRequest(
 
   // Only the offers the plan holds (stored rows, and the ones the operator set in this edit). An add-on with no row is left alone, so a plan
   // that carries only part of its features keeps them on a save that never touched that add-on.
-  const offerIds = Object.keys(draft.addonOffers);
+  const listedApps = new Set(appIds ?? []);
+  const offerIds = Object.keys(draft.addonOffers).filter((id) => !listedApps.has(id));
   const addonOffers: PlanAddonOffer[] = [];
   for (const addonId of offerIds) {
     const o = offerFor(draft, addonId);
@@ -316,6 +324,18 @@ export function buildPlanRequest(
     }
     addonOffers.push({ addonId, mode: o.mode, amount });
   }
+  for (const addonId of listedApps) {
+    addonOffers.push({ addonId, mode: appModeFor(draft, addonId), amount: null });
+  }
+  // Visible = Paid or Included. A listed app follows its mode; an id no option lists (stale) is left as the draft holds it.
+  const visibleAddons = [
+    ...new Set([
+      ...draft.visibleAddons.filter(
+        (id) => !listedApps.has(id) || appModeFor(draft, id) !== 'hidden',
+      ),
+      ...[...listedApps].filter((id) => appModeFor(draft, id) !== 'hidden'),
+    ]),
+  ];
   const features = addonPacks
     ? { ...draft.features, ...offerFeatures(draft, decidedPacks(draft, addonPacks)) }
     : draft.features;
@@ -361,7 +381,7 @@ export function buildPlanRequest(
       moduleFeatures: Object.fromEntries(
         Object.entries(features).filter(([k]) => !isRegistryFeature(k)),
       ),
-      ...(includeAddons ? { visibleAddons: [...new Set(draft.visibleAddons)] } : {}),
+      ...(includeAddons ? { visibleAddons } : {}),
       addonOffers,
     },
   };
@@ -499,6 +519,11 @@ export function toggleFeatures(
 /** The part of an add-on pack (`AddonPack` from the API) these helpers read. */
 export interface PackGrants {
   id: string;
+  /**
+   * The kind the operator chose for the pack (stored). Smart routing is a feature add-on even while no feature is ticked on it yet, so the
+   * kind is read from here and never worked out from the grants. A caller with no stored kind (older data) falls back to the grants.
+   */
+  kind?: 'feature' | 'capacity';
   grants: { features: readonly string[]; limits: Readonly<Record<string, number>> };
 }
 
@@ -526,9 +551,24 @@ export function offerFor(draft: Pick<PlanDraft, 'addonOffers'>, packId: string):
   return draft.addonOffers[packId] ?? DEFAULT_OFFER;
 }
 
-/** The modes a pack can take: a capacity add-on (no feature) is never included, the plan sets its own cap on the Limits tab. */
-export function offerModesFor(pack: Pick<PackGrants, 'grants'>): readonly PlanAddonOfferMode[] {
-  return addonKindOf(pack.grants) === 'feature' ? PLAN_ADDON_OFFER_MODES : ['paid', 'hidden'];
+/** Feature or capacity: the kind the operator stored on the pack (the grants only decide for data that carries none). */
+export function packKind(pack: Pick<PackGrants, 'kind' | 'grants'>): 'feature' | 'capacity' {
+  return pack.kind ?? addonKindOf(pack.grants);
+}
+
+/** The modes a pack can take: a capacity add-on is never included, the plan sets its own cap on the Limits tab. */
+export function offerModesFor(
+  pack: Pick<PackGrants, 'kind' | 'grants'>,
+): readonly PlanAddonOfferMode[] {
+  return packKind(pack) === 'feature' ? PLAN_ADDON_OFFER_MODES : ['paid', 'hidden'];
+}
+
+/**
+ * Whether a pack can be Included right now: a feature add-on that unlocks no feature yet has nothing to include (the operator adds the
+ * features under Add-ons first), and a capacity add-on is never included.
+ */
+export function canIncludePack(pack: Pick<PackGrants, 'kind' | 'grants'>): boolean {
+  return packKind(pack) === 'feature' && pack.grants.features.length > 0;
 }
 
 /**
@@ -559,6 +599,9 @@ export function setAddonOffer(
   packs: readonly PackGrants[],
 ): PlanDraft {
   if (!offerModesFor(pack).includes(mode)) return draft;
+  // Nothing to include yet: keep a pack that is already included as it is, refuse a new inclusion.
+  if (mode === 'included' && !canIncludePack(pack) && offerFor(draft, pack.id).mode !== 'included')
+    return draft;
   const was = offerFor(draft, pack.id);
   const addonOffers = {
     ...draft.addonOffers,
@@ -608,9 +651,8 @@ export function includedPackCount(
   draft: Pick<PlanDraft, 'addonOffers'>,
   packs: readonly PackGrants[],
 ): number {
-  return packs.filter(
-    (p) => addonKindOf(p.grants) === 'feature' && offerFor(draft, p.id).mode === 'included',
-  ).length;
+  return packs.filter((p) => packKind(p) === 'feature' && offerFor(draft, p.id).mode === 'included')
+    .length;
 }
 
 /** Feature keys a pack grants that the shared entitlement resolver does not merge from a live pack (they still work on a plan). */
@@ -618,29 +660,75 @@ export function unlistedPackFeatures(pack: Pick<PackGrants, 'grants'>): string[]
   return pack.grants.features.filter((k) => !PACK_GRANTABLE_FEATURES.includes(k));
 }
 
-/** The Add-ons tab's count: feature add-ons included plus the mini apps offered. */
-export function addonsSelectedCount(
-  draft: Pick<PlanDraft, 'addonOffers' | 'visibleAddons'>,
+/** How many plain add-ons the plan includes or offers (Included + Paid; Hidden is not counted). A pack with no stored row is paid. */
+export function packsOfferedCount(
+  draft: Pick<PlanDraft, 'addonOffers'>,
   packs: readonly PackGrants[],
 ): number {
-  return draft.visibleAddons.length + includedPackCount(draft, packs);
+  return packs.filter((p) => offerFor(draft, p.id).mode !== 'hidden').length;
 }
 
-/** One add-on ticked or unticked. */
+// --- Marketplace apps (Integrations and Mini apps tabs) ------------------------------------------------------------------------------
+//
+// An app pack takes the same three modes as a plain add-on but has no price of its own here (it keeps the price on its Marketplace listing).
+// Stored as: `visibleAddons` holds every app that is Paid or Included, and `addonOffers` holds a row with mode 'included' for each app
+// that is Included. The draft keeps the two in step, so a mode is always read from both (see `appModeFor`) and never drifts.
+
+/** How the plan offers one Marketplace app: its offer row if it has one, else Paid when it is visible, else Hidden. */
+export function appModeFor(
+  draft: Pick<PlanDraft, 'addonOffers' | 'visibleAddons'>,
+  appId: string,
+): PlanAddonOfferMode {
+  const row = draft.addonOffers[appId];
+  if (row) return row.mode;
+  return draft.visibleAddons.includes(appId) ? 'paid' : 'hidden';
+}
+
+/**
+ * Set how the plan offers one Marketplace app, keeping `visibleAddons` and `addonOffers` together: Paid and Included make it visible,
+ * Hidden removes it, and only Included keeps an offer row. The app's own plan features are never touched here (the API switches them).
+ * The same draft object comes back when nothing would change, so an untouched plan stays unchanged.
+ */
+export function setAppOffer(draft: PlanDraft, appId: string, mode: PlanAddonOfferMode): PlanDraft {
+  const visible = draft.visibleAddons.includes(appId);
+  const row = draft.addonOffers[appId];
+  const wantVisible = mode !== 'hidden';
+  const sameRow = mode === 'included' ? row?.mode === 'included' : row === undefined;
+  if (visible === wantVisible && sameRow) return draft;
+
+  const { [appId]: _drop, ...others } = draft.addonOffers;
+  return {
+    ...draft,
+    visibleAddons: wantVisible
+      ? visible
+        ? draft.visibleAddons
+        : [...draft.visibleAddons, appId]
+      : draft.visibleAddons.filter((id) => id !== appId),
+    addonOffers: mode === 'included' ? { ...others, [appId]: { mode, amount: '' } } : others,
+  };
+}
+
+/** Set every given app to one mode (the "Set all shown to" control). */
+export function setAppOffers(
+  draft: PlanDraft,
+  appIds: readonly string[],
+  mode: PlanAddonOfferMode,
+): PlanDraft {
+  return appIds.reduce((d, id) => setAppOffer(d, id, mode), draft);
+}
+
+/** How many of the given apps the plan includes or offers (Included + Paid; Hidden is not counted). */
+export function appsOfferedCount(
+  draft: Pick<PlanDraft, 'addonOffers' | 'visibleAddons'>,
+  appIds: readonly string[],
+): number {
+  return appIds.filter((id) => appModeFor(draft, id) !== 'hidden').length;
+}
+
+/** One stale id ticked or unticked in `visibleAddons` (an app no option lists any more, shown so it can be removed). */
 export function toggleAddon(ids: readonly string[], id: string, on: boolean): string[] {
   const rest = ids.filter((x) => x !== id);
   return on ? [...rest, id] : rest;
-}
-
-/** Add every id (the visible rows) to the selection, keeping what is already selected and each id once. */
-export function selectAddons(ids: readonly string[], add: readonly string[]): string[] {
-  return [...new Set([...ids, ...add])];
-}
-
-/** Drop the given ids (the visible rows) from the selection. */
-export function clearAddons(ids: readonly string[], remove: readonly string[]): string[] {
-  const drop = new Set(remove);
-  return ids.filter((x) => !drop.has(x));
 }
 
 /** Whether anything differs from the draft the form opened with (drives the "unsaved changes" guard). */

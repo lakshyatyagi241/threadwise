@@ -1349,13 +1349,17 @@
             "details": "详情与定价",
             "features": "功能",
             "limits": "限制",
-            "addons": "附加组件"
+            "addons": "附加组件",
+            "integrations": "集成",
+            "miniApps": "迷你应用"
           },
           "tabSummary": {
             "features": "已开启 {count}/{total} 项功能",
             "limits": "已设置 {count}/{total} 项限制",
-            "addons": "已选择 {count} 个附加组件",
-            "error": "有待修复的错误"
+            "addons": "{count, plural, one {已包含或提供 # 个附加组件} other {已包含或提供 # 个附加组件}}",
+            "error": "有待修复的错误",
+            "integrations": "已包含或提供的集成：{count}",
+            "miniApps": "已包含或提供的迷你应用：{count}"
           },
           "featuresUi": {
             "intro": "关闭此套餐不包含的功能。使用该套餐的工作区无法打开功能已关闭的区域。",
@@ -1386,12 +1390,8 @@
             "total": "总计"
           },
           "addons": {
-            "intro": "已启用的附加组件会显示在使用此套餐的工作区的应用市场中；工作区购买后才能使用。",
             "search": "搜索附加组件",
             "searchPlaceholder": "搜索附加组件或应用",
-            "selectAll": "全选",
-            "clear": "清除",
-            "selected": "已选择 {count}/{total}",
             "loading": "正在加载附加组件",
             "empty": "尚无付费附加组件",
             "emptyHint": "附加组件在运维控制台的应用市场目录中创建。应用拥有付费包后，会在此处列出。",
@@ -1710,9 +1710,6 @@
             "crm": "销售 CRM",
             "platform": "两者共用"
           },
-          "marketplace": {
-            "title": "此套餐提供的迷你应用"
-          },
           "offers": {
             "readOnly": "您只能查看此套餐而无法修改，因此这些控件已锁定。",
             "featureTitle": "功能附加组件",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "此附加组件是草稿或已关闭，因此暂时无人能购买。将其纳入套餐仍然有效。",
             "impactCount": "{count, plural, other {已有 # 个工作区在为此附加组件付费。}}它们的续订将在当前周期结束时停止，不会退款，今天也不会取消任何内容。",
             "impactUnknown": "此套餐中已为该附加组件付费的工作区，将在当前周期结束时停止续订。不会退款，今天也不会取消任何内容。无法加载数量。",
-            "partlyNote": "此套餐已包含该附加组件的一部分（{features}）。在这里选择“包含”“付费”或“隐藏”之前，它保持不变。"
+            "partlyNote": "此套餐已包含该附加组件的一部分（{features}）。在这里选择“包含”“付费”或“隐藏”之前，它保持不变。",
+            "needsFeatures": "请先在“附加组件”>“{name}”中添加它解锁的功能"
+          },
+          "apps": {
+            "introMiniApps": "迷你应用是工作区从 Marketplace 安装的应用。包含：此套餐的工作区免费使用。付费：可按应用自己的价格购买。隐藏：工作区看不到它。选择“包含”时，也会开启该应用提供的套餐功能。",
+            "introIntegrations": "集成用于连接外部服务。包含：此套餐的工作区免费使用。付费：可按集成自己的价格购买。隐藏：工作区看不到它。选择“包含”时，也会开启该集成提供的套餐功能。",
+            "setAll": "将显示的全部设为",
+            "summary": "{total} 项中已包含或提供 {count} 项",
+            "priceHint": "Marketplace 应用保留自己的价格，请在应用的列表页中设置。",
+            "emptyIntegrations": "暂无付费集成",
+            "emptyIntegrationsHint": "免费集成无需在此设置；Shopify 和 WooCommerce 在“功能”标签页中开启。"
           }
         }
       },

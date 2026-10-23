@@ -1349,13 +1349,17 @@
             "details": "Detalles y precios",
             "features": "Funciones",
             "limits": "Límites",
-            "addons": "Complementos"
+            "addons": "Complementos",
+            "integrations": "Integraciones",
+            "miniApps": "Miniapps"
           },
           "tabSummary": {
             "features": "{count} de {total} funciones activadas",
             "limits": "{count} de {total} límites definidos",
-            "addons": "{count} complementos seleccionados",
-            "error": "Tiene errores por corregir"
+            "addons": "{count, plural, one {# complemento incluido u ofrecido} other {# complementos incluidos u ofrecidos}}",
+            "error": "Tiene errores por corregir",
+            "integrations": "Integraciones incluidas u ofrecidas: {count}",
+            "miniApps": "Miniapps incluidas u ofrecidas: {count}"
           },
           "featuresUi": {
             "intro": "Desactiva lo que este plan no incluye. Un espacio de trabajo con este plan no puede abrir un área cuya función esté desactivada.",
@@ -1386,12 +1390,8 @@
             "total": "en total"
           },
           "addons": {
-            "intro": "Los complementos habilitados se muestran a los espacios de trabajo de este plan en su Marketplace; solo se pueden usar después de que el espacio de trabajo los compre.",
             "search": "Buscar complementos",
             "searchPlaceholder": "Buscar complementos o aplicaciones",
-            "selectAll": "Seleccionar todo",
-            "clear": "Borrar",
-            "selected": "{count} de {total} seleccionados",
             "loading": "Cargando complementos",
             "empty": "Aún no existen complementos de pago",
             "emptyHint": "Los complementos se crean en el catálogo del Marketplace de la consola de operador. Cuando una aplicación tiene un paquete de pago, aparece aquí.",
@@ -1710,9 +1710,6 @@
             "crm": "CRM de ventas",
             "platform": "Compartido por ambos"
           },
-          "marketplace": {
-            "title": "Miniapps ofrecidas en este plan"
-          },
           "offers": {
             "readOnly": "Puedes ver este plan pero no modificarlo, así que estos controles están bloqueados.",
             "featureTitle": "Complementos de funciones",
@@ -1745,7 +1742,17 @@
             "inactiveNote": "Este complemento es un borrador o está desactivado, así que nadie puede comprarlo todavía. Incluirlo en el plan sigue funcionando.",
             "impactCount": "{count, plural, one {# espacio de trabajo ya paga este complemento.} other {# espacios de trabajo ya pagan este complemento.}} Su renovación se detendrá al final del periodo actual, no se reembolsa nada y hoy no se cancela nada.",
             "impactUnknown": "Los espacios de trabajo de este plan que ya pagan este complemento dejarán de renovarlo al final de su periodo actual. No se reembolsa nada y hoy no se cancela nada. No se pudo cargar la cifra.",
-            "partlyNote": "Este plan ya ofrece parte de este complemento ({features}). Se queda así hasta que elijas Incluido, De pago u Oculto aquí."
+            "partlyNote": "Este plan ya ofrece parte de este complemento ({features}). Se queda así hasta que elijas Incluido, De pago u Oculto aquí.",
+            "needsFeatures": "Primero añade las funciones que desbloquea en Complementos > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Las miniapps son aplicaciones que un espacio de trabajo instala desde el Marketplace. Incluido: gratis para los espacios de trabajo de este plan. De pago: pueden comprarla al precio propio de la app. Oculto: nunca la ven. Incluido también activa las funciones del plan que da la app.",
+            "introIntegrations": "Las integraciones conectan un servicio externo. Incluido: gratis para los espacios de trabajo de este plan. De pago: pueden comprarla al precio propio de la integración. Oculto: nunca la ven. Incluido también activa las funciones del plan que da la integración.",
+            "setAll": "Establecer todos los mostrados en",
+            "summary": "{count} de {total} incluidos u ofrecidos",
+            "priceHint": "Las apps del Marketplace conservan su propio precio; defínelo en la ficha de la app.",
+            "emptyIntegrations": "Aún no hay integraciones de pago",
+            "emptyIntegrationsHint": "Las integraciones gratuitas no necesitan ningún ajuste aquí; Shopify y WooCommerce se activan en la pestaña Funciones."
           }
         }
       },

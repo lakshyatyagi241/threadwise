@@ -65,38 +65,64 @@ interface PackRow {
   uuid: string;
   name: string;
   features: string[];
+  /** The plain add-on's kind (stored, else derived); null for an add-on of a Marketplace app. */
+  kind: 'feature' | 'capacity' | null;
+  /** The Marketplace app's row id for an app's add-on (a mini app or an integration), else null. */
+  appId: number | null;
 }
 
-async function plainPacks(tx: Tx, uuids: readonly string[]): Promise<Map<string, PackRow>> {
+async function offerPacks(tx: Tx, uuids: readonly string[]): Promise<Map<string, PackRow>> {
   if (uuids.length === 0) return new Map();
   const res = await tx.execute(sql`
-    SELECT id::text AS id, uuid, name, features FROM plans
-    WHERE kind = 'addon' AND marketplace_app_id IS NULL
-      AND uuid = ANY(${`{${uuids.join(',')}}`}::uuid[])`);
+    SELECT p.id::text AS id, p.uuid, p.name, p.features, p.limits, p.addon_kind, p.marketplace_app_id::text AS app_id,
+           a.grants_plan_features AS app_features
+    FROM plans p LEFT JOIN marketplace_apps a ON a.id = p.marketplace_app_id
+    WHERE p.kind = 'addon' AND p.uuid = ANY(${`{${uuids.join(',')}}`}::uuid[])`);
   return new Map(
-    (res.rows as Raw[]).map((r) => [
-      r.uuid as string,
-      {
-        id: Number(r.id),
-        uuid: r.uuid as string,
-        name: r.name as string,
-        features: packFeatureKeys(r.features),
-      },
-    ]),
+    (res.rows as Raw[]).map((r) => {
+      const isApp = r.app_id !== null && r.app_id !== undefined;
+      const own = packFeatureKeys(r.features);
+      const hasLimits =
+        r.limits && typeof r.limits === 'object'
+          ? Object.values(r.limits as Record<string, unknown>).some(
+              (v) => typeof v === 'number' && v !== 0,
+            )
+          : false;
+      return [
+        r.uuid as string,
+        {
+          id: Number(r.id),
+          uuid: r.uuid as string,
+          name: r.name as string,
+          // An app's plan features are the ones its listing grants (never its own `mkt_` key, which only a purchase grants).
+          features: isApp
+            ? ((r.app_features as string[] | null) ?? []).filter((k) => !k.startsWith('mkt_'))
+            : own,
+          kind: isApp
+            ? null
+            : ((r.addon_kind as 'feature' | 'capacity' | null) ??
+              (own.length === 0 && hasLimits ? 'capacity' : 'feature')),
+          appId: isApp ? Number(r.app_id) : null,
+        } satisfies PackRow,
+      ];
+    }),
   );
 }
 
 /**
- * Writes the offers named (an add-on not named keeps its stored offer) and returns the plan features they imply: every feature of an included add-on
- * true, every feature of a paid or hidden one false. The caller merges that into the plan's `features` in the same transaction. Refuses an unknown
- * add-on, a Marketplace app's add-on, and "included" for an add-on that grants no feature (a capacity add-on: the plan sets its own cap).
+ * Writes the offers named (an add-on not named keeps its stored offer) and returns the plan features they imply. For a plain add-on every
+ * feature of an included one is true and of a paid or hidden one false. For an add-on of a Marketplace app (mini app or integration) the
+ * features it grants follow only a CHANGE of inclusion (on when it becomes included, off when it stops), so saving a plan never switches off a
+ * feature the plan carried on its own, and Paid / Hidden are stored as before in `plan_visible_addons` (a row = visible; only Included needs
+ * a row here). The caller merges the features into the plan's `features` in the same transaction.
+ * Refuses an unknown add-on, "included" for a capacity add-on (the plan sets its own cap) or one with no feature yet, and a price on an app.
  */
 export async function writePlanOffers(
   tx: Tx,
   planId: number,
   offers: readonly PlanAddonOffer[],
 ): Promise<{ features: Record<string, boolean>; changed: string[] }> {
-  const packs = await plainPacks(
+  const packs = await offerPacks(
     tx,
     offers.map((o) => o.addonId),
   );
@@ -105,10 +131,20 @@ export async function writePlanOffers(
     const p = packs.get(o.addonId);
     if (!p)
       issues.push({ path: `addonOffers.${i}.addonId`, message: `unknown_addon:${o.addonId}` });
-    else if (o.mode === 'included' && p.features.length === 0)
+    else if (p.appId !== null && o.amount !== null)
+      issues.push({
+        path: `addonOffers.${i}.amount`,
+        message: `${p.name} keeps its own price: set it in the Marketplace.`,
+      });
+    else if (p.appId === null && o.mode === 'included' && p.kind === 'capacity')
       issues.push({
         path: `addonOffers.${i}.mode`,
         message: `${p.name} only adds to limits, so it cannot be included. Set the plan's own cap on the Limits tab.`,
+      });
+    else if (p.appId === null && o.mode === 'included' && p.features.length === 0)
+      issues.push({
+        path: `addonOffers.${i}.mode`,
+        message: `${p.name} unlocks no feature yet, so there is nothing to include. Add its features first.`,
       });
   });
   if (issues.length > 0) throw AppError.validation('The add-on offers failed validation.', issues);
@@ -123,9 +159,45 @@ export async function writePlanOffers(
   const changed: string[] = [];
   for (const o of offers) {
     const p = packs.get(o.addonId)!;
+    const was = have.get(o.addonId);
+    if (p.appId !== null) {
+      // A mini app or an integration: Included keeps a row, Paid and Hidden none; visibility stays in plan_visible_addons.
+      const wasIncluded = was?.mode === 'included';
+      if (o.mode === 'included' && !wasIncluded) for (const k of p.features) features[k] = true;
+      if (o.mode !== 'included' && wasIncluded)
+        for (const k of p.features) features[k] = features[k] === true;
+      if (o.mode === 'included') {
+        if (!wasIncluded) {
+          await tx.execute(sql`
+            INSERT INTO plan_addon_offers (plan_id, addon_id, mode) VALUES (${planId}, ${p.id}, 'included')
+            ON CONFLICT (plan_id, addon_id) DO UPDATE SET mode = 'included', amount = NULL`);
+          changed.push(p.uuid);
+        }
+      } else if (was) {
+        await tx.execute(
+          sql`DELETE FROM plan_addon_offers WHERE plan_id = ${planId} AND addon_id = ${p.id}`,
+        );
+        changed.push(p.uuid);
+      }
+      const visible = await tx.execute(
+        sql`SELECT 1 FROM plan_visible_addons WHERE plan_id = ${planId} AND addon_plan_id = ${p.id}`,
+      );
+      const isVisible = visible.rows.length > 0;
+      if (o.mode === 'hidden' && isVisible) {
+        await tx.execute(
+          sql`DELETE FROM plan_visible_addons WHERE plan_id = ${planId} AND addon_plan_id = ${p.id}`,
+        );
+        if (!changed.includes(p.uuid)) changed.push(p.uuid);
+      } else if (o.mode !== 'hidden' && !isVisible) {
+        await tx.execute(
+          sql`INSERT INTO plan_visible_addons (plan_id, addon_plan_id) VALUES (${planId}, ${p.id})`,
+        );
+        if (!changed.includes(p.uuid)) changed.push(p.uuid);
+      }
+      continue;
+    }
     // A key two add-ons grant is on when ANY of them is included (included wins over paid / hidden, whatever the order).
     for (const k of p.features) features[k] = features[k] === true || o.mode === 'included';
-    const was = have.get(o.addonId);
     // "paid at the add-on's price" is the default: store no row for it, so the table holds only real decisions.
     if (o.mode === 'paid' && o.amount === null) {
       if (was) {

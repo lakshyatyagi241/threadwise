@@ -147,7 +147,9 @@
           "sortOrder": "Saisissez un nombre entier.",
           "limits": "Les limites sont des nombres entiers, ou -1 pour illimité.",
           "form": "Vérifiez les champs en surbrillance.",
-          "amountPositive": "Les modules complémentaires sont des abonnements mensuels ou annuels : le prix doit être supérieur à zéro."
+          "amountPositive": "Les modules complémentaires sont des abonnements mensuels ou annuels : le prix doit être supérieur à zéro.",
+          "features": "Cochez au moins une fonctionnalité ou faites-en un module de capacité.",
+          "limitsNeeded": "Saisissez au moins une limite supérieure à zéro ou faites-en un module de fonctionnalité."
         },
         "legacy": {
           "title": "Pack hérité",
@@ -186,8 +188,23 @@
           },
           "saved": "Offres des forfaits enregistrées.",
           "changed": "{count, plural, one {# forfait modifié} many {# forfaits modifiés} other {# forfaits modifiés}}",
-          "save": "Enregistrer les offres des forfaits"
-        }
+          "save": "Enregistrer les offres des forfaits",
+          "needFeatures": "Ajoutez d'abord ci-dessus les fonctionnalités qu'il débloque"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Choisissez ce que fait ce module complémentaire. Seul un module de fonctionnalité peut être inclus dans une offre.",
+          "feature": {
+            "title": "Module de fonctionnalité",
+            "body": "Débloque une partie du produit ; peut aussi ajouter de la capacité."
+          },
+          "capacity": {
+            "title": "Module de capacité",
+            "body": "Ajoute uniquement à une limite (sièges, contacts...)."
+          }
+        },
+        "noFeaturesNotice": "Ce module ne débloque encore rien. Cochez les fonctionnalités qu'il apporte pour que les offres puissent l'inclure.",
+        "limitsHintCapacity": "Un module de capacité ajoute uniquement aux limites. Saisissez un nombre à AJOUTER à l'offre (par exemple +2 sièges). Utilisez -1 pour illimité. Au moins une limite est requise."
       },
       "kind": {
         "feature": "Fonctionnalité",
@@ -199,7 +216,8 @@
         "hidden": "Masqué : {plans}",
         "withPrice": "{plan} ({price})",
         "none": "Aucun forfait"
-      }
+      },
+      "noFeatures": "Aucune fonctionnalité"
     },
     "extensions": {
       "crumbHere": "Modules complémentaires",
