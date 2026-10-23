@@ -14,17 +14,10 @@ export function isSimpleBot(flowType: FlowType | string, builder?: string | null
 }
 
 /**
- * Where "Open" goes. In a workspace on the Advanced builder every flow is an automation and opens on the canvas with the automation nodes.
- * Otherwise a bot (see `isSimpleBot`) opens in the Simple builder, and an automation (the canvas: a messaging flow built on it, and call
- * flows) opens on the Advanced canvas. Pass the flow's `builder` too: the flow decides, not only its type.
+ * Where "Open" goes. The flow decides, whatever the workspace's builder setting: a bot (see `isSimpleBot`) opens in the Simple builder,
+ * and an automation (a messaging flow built on the canvas, a call flow) opens on the Advanced canvas with every node.
  */
-export function openHref(
-  id: string,
-  flowType: FlowType | string,
-  mode: BuilderMode = 'simple',
-  builder?: string | null,
-): string {
-  if (mode === 'advanced') return `/flows/builder/${id}`;
+export function openHref(id: string, flowType: FlowType | string, builder?: string | null): string {
   return isSimpleBot(flowType, builder) ? `/flows/simple/${id}` : `/flows/builder/${id}`;
 }
 
