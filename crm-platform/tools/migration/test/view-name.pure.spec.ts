@@ -12,6 +12,12 @@ describe('saved view names fit the app rule (3 to 50 characters)', () => {
     expect(out.soft.map((s) => s.code)).toEqual(['VIEW_NAME_CUT']);
   });
 
+  it('never cuts an emoji in half', () => {
+    const out = fitViewName(`${'a'.repeat(49)}😀tail`);
+    expect(out.name).toBe('a'.repeat(49));
+    expect(/[\uD800-\uDBFF]$/.test(out.name)).toBe(false);
+  });
+
   it('does not leave a space at the cut', () => {
     const out = fitViewName(`${'a'.repeat(49)} bbbb`);
     expect(out.name.endsWith(' ')).toBe(false);
