@@ -259,14 +259,31 @@ const matchKey = (s: string): string =>
     .trim()
     .toLowerCase();
 
-const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/** A body as a pattern: its words must match, each `{{token}}` stands for any text. Null when too little of it is fixed to tell templates apart. */
-export function bodyPattern(body: string): RegExp | null {
+/**
+ * A body as its fixed pieces: the text between the `{{token}}`s. Null when too little of it is fixed to tell templates apart. Matched
+ * piece by piece (never as a regular expression), so a long message cannot make the comparison slow.
+ */
+export function bodyPattern(body: string): string[] | null {
   const mark = '\u0000';
   const fixed = matchKey(body.replace(/\{\{\s*[a-zA-Z0-9_]+\s*\}\}/g, mark));
-  if (fixed.split(mark).join('').length < 20) return null;
-  return new RegExp(`^${fixed.split(mark).map(escapeRe).join('.+?')}$`, 's');
+  const pieces = fixed.split(mark);
+  if (pieces.join('').length < 20) return null;
+  return pieces;
+}
+
+/** Whether `key` is the pieces in order with at least one character in each gap (the place of a token). Linear in the text. */
+function matchesPieces(key: string, pieces: readonly string[]): boolean {
+  const first = pieces[0] ?? '';
+  if (!key.startsWith(first)) return false;
+  if (pieces.length === 1) return key === first;
+  const last = pieces[pieces.length - 1]!;
+  let at = first.length;
+  for (const piece of pieces.slice(1, -1)) {
+    const found = key.indexOf(piece, at + 1); // the gap before it holds at least one character
+    if (found < 0) return false;
+    at = found + piece.length;
+  }
+  return key.length - last.length >= at + 1 && key.endsWith(last);
 }
 
 /**
@@ -282,9 +299,10 @@ export function matchTemplateByBody(
   const hits = candidates.filter((c) => {
     if (c.buttons.length === 0) return false;
     const plain = bodyPattern(c.body);
-    if (plain?.test(key)) return true;
+    if (plain && matchesPieces(key, plain)) return true;
     const head = c.header?.trim();
-    return head ? (bodyPattern(`${head}\n${c.body}`)?.test(key) ?? false) : false;
+    const withHead = head ? bodyPattern(`${head}\n${c.body}`) : null;
+    return withHead ? matchesPieces(key, withHead) : false;
   });
   return hits.length === 1 ? hits[0]! : null;
 }

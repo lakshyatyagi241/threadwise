@@ -75,4 +75,15 @@ describe('matching a message the business sent to a template by its body', () =>
       'Evening offer for everyone\nWelcome to a blissful evening with Lord Jagannatha\n\nPlease Donate Generously and be blessed';
     expect(matchTemplateByBody(sent, [withHeader])?.name).toBe('hdr');
   });
+
+  it('stays fast on a long message against a body with many variables (no backtracking)', () => {
+    const body = Array.from(
+      { length: 12 },
+      (_, i) => `part number ${i} of the offer {{${i + 1}}}`,
+    ).join(' and ');
+    const long = 'part number 0 of the offer '.repeat(150) + 'tail that never matches';
+    const started = Date.now();
+    expect(matchTemplateByBody(long, [{ ...other, body }])).toBeNull();
+    expect(Date.now() - started).toBeLessThan(200);
+  });
 });
