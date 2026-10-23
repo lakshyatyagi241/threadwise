@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { consentActionSchema, consentChannelSchema } from '../contact-consent/vocabulary';
 import { queryBoolean } from './query-helpers';
 import {
   contactSelectionShape,
@@ -71,6 +72,21 @@ export const bulkTagContactsSchema = withSelection({
   name: z.string().trim().min(1).max(64).optional(),
 });
 export type BulkTagContactsInput = z.infer<typeof bulkTagContactsSchema>;
+
+/**
+ * Marketing consent for one channel on the selection (`POST /contacts/bulk/consent`). It writes what the single contact edit writes, one
+ * ledger event per contact, through the same path. A grant needs the note of how the contact agreed, as the single edit does (422
+ * CONSENT_NOTE_REQUIRED there); a withdrawal needs none.
+ */
+export const bulkConsentContactsSchema = withSelection({
+  channel: consentChannelSchema,
+  action: consentActionSchema,
+  note: z.string().trim().max(500).optional(),
+}).refine((v) => v.action !== 'granted' || (v.note ?? '').length > 0, {
+  message: 'Say why the contacts agreed before subscribing them',
+  path: ['note'],
+});
+export type BulkConsentContactsInput = z.infer<typeof bulkConsentContactsSchema>;
 
 export const exportContactsSchema = withSelection({
   /** UTF-8 byte-order mark, so spreadsheets decode non-ASCII names. */

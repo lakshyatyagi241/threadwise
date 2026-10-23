@@ -22,6 +22,7 @@ import type { ContactTouchChannel } from '@crm/contracts';
 import { bulkSetUncontacted, reportContactTouch } from '../api/lead-handling';
 import { useAttributes, useContactFilterValues, useStatusOptions } from '../api/attributes';
 import {
+  bulkConsent,
   bulkDelete,
   bulkGroupMembership,
   bulkOwner,
@@ -90,7 +91,7 @@ import {
   type BulkTarget,
 } from '../lib/selection';
 import { useStoredChoice } from '../lib/use-stored-choice';
-import { type BulkPicker, type TagChoice } from './bulk-bar';
+import { type BulkPicker, type ConsentChoice, type TagChoice } from './bulk-bar';
 import { BulkUpdateDialog } from './bulk-update-dialog';
 import { ContactFormModal } from './contact-form-modal';
 import { ContactQuickView } from './contact-quick-view';
@@ -164,6 +165,8 @@ export function ContactsScreen() {
   const canMerge = useCan('record.contacts.merge');
   const canCreateGroups = useCan('record.contact-groups.create');
   const canCreateTags = useCan('record.tags.create');
+  // Marketing consent is the consent right (the single contact edit's), on top of the update right the selection needs.
+  const canConsent = useCan('contacts.consent.manage');
   const canReadSegments = useCan('record.segments.read');
   const canCreateSegments = useCan('record.segments.create');
   const canReadViews = useCan('record.contact-views.read');
@@ -559,6 +562,21 @@ export function ContactsScreen() {
     return true;
   }
 
+  /** Marketing consent for one channel on the selection (the bulk consent action): a grant or a withdrawal, reported per contact. */
+  async function onBulkConsent(choice: ConsentChoice): Promise<boolean> {
+    const out = await guarded(() => bulkConsent(target(), choice));
+    if (!out) return false;
+    dispatch({ type: 'clear' });
+    await refresh();
+    report(
+      tb(choice.action === 'granted' ? 'consentSubscribed' : 'consentUnsubscribed', {
+        count: out.changed,
+      }),
+      out,
+    );
+    return true;
+  }
+
   async function onBulkTag(action: 'add' | 'remove', choices: TagChoice[]): Promise<boolean> {
     let out: Awaited<ReturnType<typeof bulkTag>> | null | undefined = null;
     for (const choice of choices) {
@@ -877,6 +895,7 @@ export function ContactsScreen() {
                 delete: canDelete,
                 export: canExport,
                 createTags: canCreateTags,
+                consent: canConsent,
               }}
               onClear={() => dispatch({ type: 'clear' })}
               onSendCampaign={() => void onSendCampaign()}
@@ -890,6 +909,7 @@ export function ContactsScreen() {
               onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
               onGroup={onBulkGroup}
               onTagApply={onBulkTag}
+              onConsent={onBulkConsent}
             />
           ) : (
             canReadViews && (
