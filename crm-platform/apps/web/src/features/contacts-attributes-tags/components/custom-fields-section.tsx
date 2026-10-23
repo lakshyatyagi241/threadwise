@@ -138,9 +138,11 @@ export function PropertyInput({
 
   const label = (
     <>
-      <span dir="auto">{field.label}</span>
+      <span dir="auto" className="[overflow-wrap:anywhere]">
+        {field.label}
+      </span>
       {field.isRequired && kind !== 'checkbox' ? ' *' : ''}{' '}
-      <span dir="ltr" className="font-mono text-xs text-muted-foreground">
+      <span dir="ltr" className="font-mono text-xs text-muted-foreground [overflow-wrap:anywhere]">
         /{field.key}
       </span>
       {readOnly && <Badge className="ms-1.5 align-middle">{t('readOnlyField')}</Badge>}
