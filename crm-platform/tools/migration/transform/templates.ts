@@ -106,6 +106,9 @@ export const templates: HandlerSpec = {
         ...TS_COLS,
       ],
       fp: ['template_name', 'language', 'template_body', 'status', 'meta_template_id'],
+      // the template-quality step (pilot/templates/quality.cjs) writes the Meta rating, and with it updated_at and row_version: its own
+      // step output is the check for those columns
+      skipCompare: ['quality_score', 'updated_at', 'row_version'],
       constants: { row_version: 1 },
     },
   },

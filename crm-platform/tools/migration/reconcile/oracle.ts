@@ -12,6 +12,9 @@ const TIME_NAMES = ['created_time', 'modified_time'];
 const VISIBLE_SYSTEM_NAMES = ['original_lifecycle_stage', 'original_lifecycle_stage_date', 'created_by', 'updated_by', 'chatbot_language'];
 const NAME_VALUED_NAMES = ['original_lifecycle_stage', 'created_by', 'updated_by'];
 
+/** Written from the README ("Contact properties"), not imported from the transform: the Waboo property names the app reserves; they are created with a waboo_ prefix. */
+const RESERVED_RENAMED = ['business_name', 'company_name', 'contact_group', 'mobile', 'name', 'phone_number', 'tags', 'today', 'uuid'];
+
 /** Written from the README ("Contact properties"), not imported from the transform: the Waboo web-analytics property names that become ordinary fields. */
 const WEB_ANALYTICS_NAMES = [
   'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url', 'utm_medium', 'utm_campaign', 'utm_source',
@@ -349,15 +352,18 @@ export class TableOracle {
           ...this.dates(doc),
         };
       case 'fields': {
-        const key = text(doc.name);
+        const name = text(doc.name);
+        // the app reserves these keys: the migration creates them as waboo_<key> (transform/contacts.ts RESERVED_PROPERTY_KEYS)
+        const key = RESERVED_RENAMED.includes(name) ? `waboo_${name}` : name;
         return {
           module_key: 'contacts',
           key,
-          label: text(doc.label) || key,
-          field_type: NAME_VALUED_NAMES.includes(key) ? 'text' : (FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text'),
+          label: text(doc.label) || name,
+          field_type: NAME_VALUED_NAMES.includes(name) ? 'text' : (FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text'),
           is_required: truthy(doc.required),
           is_hidden: !visible(doc.visible) || truthy(doc.hidden_from_ui),
-          is_read_only: TIME_NAMES.includes(String(doc.name)) ? true : truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
+          // the web-analytics properties are read-only in WaDesk (2029_web_analytics_fields_read_only; the tool writes the same flag)
+          is_read_only: TIME_NAMES.includes(name) || WEB_ANALYTICS_NAMES.includes(name) ? true : truthy(doc.read_only),
           is_masked: truthy(doc.masked),
           is_unique: truthy(doc.unique),
           // the verifier's own copy of the rule (README, "Contact properties"): the 22 web-analytics names are never system fields
