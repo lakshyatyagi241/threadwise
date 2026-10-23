@@ -69,7 +69,7 @@ deploy_running() { pgrep -f "$DESK/ci-entry.sh" >/dev/null 2>&1; }
 release_tag() {
   local pid t
   for pid in $(pgrep -f "$DESK/ci-entry.sh" 2>/dev/null); do
-    t=$(tr '\0' '\n' < "${DESK_WATCH_PROC:-/proc}/$pid/environ" 2>/dev/null | sed -n 's/^SSH_ORIGINAL_COMMAND=release \([0-9a-fA-F]\{7,40\}\)$/\1/p' | head -n1)
+    t=$(tr '\0' '\n' < "${DESK_WATCH_PROC:-/proc}/$pid/environ" 2>/dev/null | sed -n 's/^SSH_ORIGINAL_COMMAND=release \([0-9a-fA-F]\{7,40\}\)\( [^ ]*\)\{0,3\}$/\1/p' | head -n1)
     [ -n "$t" ] && { printf '%s' "$t"; return 0; }
   done
   return 1

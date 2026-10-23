@@ -184,7 +184,7 @@ time.sleep(1.5)
 deploy_call("sync"); time.sleep(2.5); os.remove(f"{D}/running"); time.sleep(1.5)
 deploy_call("load"); time.sleep(2.5); os.remove(f"{D}/running"); time.sleep(1.5)
 check("watcher: sync and load calls post nothing (no duplicate 'in progress')", len(chat_posts) == 0, str(chat_posts))
-deploy_call(f"release {B[:9]}"); time.sleep(3)
+deploy_call(f"release {B[:9]} c7ec49a9-2d5a-4275-bd24-1ad2d94b4beb"); time.sleep(3)  # the real shape: sha, then the release attempt id
 check("watcher: the release call announces once, with the NEW version as attempted", len(chat_posts) == 1 and chat_posts[0]["text"].startswith("🚀") and f"`{B[:9]}`" in chat_posts[0]["text"] and f"(was `{A[:9]}`)" in chat_posts[0]["text"], str(chat_posts))
 # fake docker: slow (2 s) on purpose, records args + stdin; fails when D/docker_fail exists
 open(f"{BIN}/docker", "w").write(f'#!/bin/sh\nsleep 2\nb=$(cat)\necho "ARGS $*" >> {D}/docker.log\necho "BODY $b" >> {D}/docker.log\n[ ! -f {D}/docker_fail ]\n'); os.chmod(f"{BIN}/docker", 0o755)
@@ -205,7 +205,7 @@ C = "c" * 40
 for fail in (False, True):
     chat_posts.clear(); open(f"{D}/docker.log", "w").close()
     if fail: open(f"{D}/docker_fail", "w").close()
-    open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={C}\n"); deploy_call(f"release {C}"); time.sleep(2.5)
+    open(f"{D}/.env", "w").write(f"SLOT_BLUE_TAG={B[:9]}\nIMAGE_TAG={C}\n"); deploy_call(f"release {C} c7ec49a9-2d5a-4275-bd24-1ad2d94b4beb"); time.sleep(2.5)
     os.remove(f"{D}/running"); wait_for(lambda: any(p["text"].startswith("⚠️") for p in chat_posts), 8)
     posted = any("did not change" in p["text"] for p in chat_posts)
     wait_for(lambda: "BODY" in open(f"{D}/docker.log").read(), 8); dl = open(f"{D}/docker.log").read()
