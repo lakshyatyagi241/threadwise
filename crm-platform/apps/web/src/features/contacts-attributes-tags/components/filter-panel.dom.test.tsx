@@ -11,10 +11,10 @@ import { FilterPanel, type FilterPanelProps } from './filter-panel';
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 // The segment the contacts list is filtered to, as `GET /segments/:id` returns it (only what the panel reads).
-const state = vi.hoisted(() => ({ segment: undefined as unknown }));
+const state = vi.hoisted(() => ({ segment: undefined as unknown, failed: false }));
 vi.mock('@/features/segments/api/segments', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/features/segments/api/segments')>()),
-  useSegment: () => ({ data: state.segment }),
+  useSegment: (id: string) => ({ data: id === SEG ? state.segment : undefined }),
 }));
 vi.mock('@/features/segments/api/lookups', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/features/segments/api/lookups')>()),
@@ -22,7 +22,7 @@ vi.mock('@/features/segments/api/lookups', async (importOriginal) => ({
     catalog,
     lookups,
     ready: true,
-    failed: false,
+    failed: state.failed,
     personName: () => undefined,
   }),
 }));
@@ -119,6 +119,7 @@ afterEach(() => {
   act(() => root.unmount());
   host.remove();
   state.segment = undefined;
+  state.failed = false;
 });
 
 describe('FilterPanel with a segment applied', () => {
@@ -137,6 +138,15 @@ describe('FilterPanel with a segment applied', () => {
     mount(<FilterPanel {...panel(SEG)} />);
     openFilter();
     expect(host.textContent).toContain('Contacts match any of these');
+  });
+
+  it('draws no conditions when a lookup failed, rather than reading a live value as deleted', () => {
+    state.segment = segmentWith('and', [QUALIFIED]);
+    state.failed = true;
+    mount(<FilterPanel {...panel(SEG)} />);
+    openFilter();
+    expect(host.textContent).toContain('Hot leads');
+    expect(host.textContent).not.toContain('Contacts match');
   });
 
   it('shows no segment conditions when the list is not filtered to a segment', () => {

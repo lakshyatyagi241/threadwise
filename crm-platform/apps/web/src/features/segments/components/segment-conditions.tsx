@@ -10,7 +10,7 @@ import { useSummaryContext } from './use-summary';
 /**
  * A segment's own conditions, in the words its page uses. The contacts list filtered to a segment applies these rules on the
  * server, so the Filter panel shows them too: otherwise the person sees a segment name and nothing about what it matches. Draws
- * nothing while the segment cannot be read (the list still filters).
+ * nothing while the segment cannot be read or a lookup failed (the list still filters).
  */
 export function SegmentConditions({ segmentId }: { segmentId: string }) {
   const t = useTranslations('segments.detail');
@@ -28,6 +28,8 @@ export function SegmentConditions({ segmentId }: { segmentId: string }) {
       />
     );
   }
+  // A failed lookup leaves its list short, so a live tag or owner would read as deleted: draw nothing instead.
+  if (lookups.failed) return null;
   const lines = summarizeConditions(fromWire(segment.rules), ctx);
   if (lines.length === 0) return null;
   return (
