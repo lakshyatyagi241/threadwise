@@ -8,6 +8,7 @@ import {
   flbParseDate,
   flbParseDateTime,
   flbParseTime,
+  flbPhoneCountries,
   flbImageUrl,
   flbAskInputChoices,
   flbToRuntimeData,
@@ -121,6 +122,29 @@ describe('checked answers (the console runtime rules, plus phone, alphanumeric a
     expect(flbAskInputChoices('age')).toContain('age');
     expect(flbAskInputChoices('alphanumeric')).toContain('alphanumeric');
     expect(flbAskInputChoices('date_of_birth')).toContain('date_of_birth');
+  });
+
+  it("phone: with a country code the country's own rules decide, and the number is kept as +<code><number>", () => {
+    expect(flbAskInputCheck('phone', '+91 98765 43210')).toEqual({
+      ok: true,
+      value: '+919876543210',
+    });
+    expect(flbAskInputCheck('phone', '+1 (415) 555-2671')).toEqual({
+      ok: true,
+      value: '+14155552671',
+    });
+    // 9 digits is a number elsewhere but not an Indian mobile number.
+    expect(flbAskInputCheck('phone', '+91 98765 4321').ok).toBe(false);
+    expect(flbAskInputCheck('phone', '+999 123').ok).toBe(false);
+    // Without a plus it only has to look like a number, as before.
+    expect(flbAskInputCheck('phone', '98765 43210')).toEqual({ ok: true, value: '9876543210' });
+  });
+
+  it("the chat's country list names every country with its dial code", () => {
+    const list = flbPhoneCountries('en');
+    expect(list.length).toBeGreaterThan(200);
+    expect(list.find((c) => c.code === 'IN')).toEqual({ code: 'IN', dial: '91', name: 'India' });
+    expect(flbPhoneCountries('hi').find((c) => c.code === 'IN')!.name).not.toBe('India');
   });
 
   it('a carousel picture address with spaces or capitals is written the way a browser asks for it', () => {

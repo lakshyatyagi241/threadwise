@@ -1,4 +1,9 @@
 import {
+  getCountries,
+  getCountryCallingCode,
+  parsePhoneNumberFromString,
+} from 'libphonenumber-js/min';
+import {
   isPlausibleBirthDate,
   MAX_GATE_AGE,
   MIN_GATE_AGE,
@@ -244,6 +249,30 @@ export function flbParseTime(raw: string): string | null {
   return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
 }
 
+/** One entry of the chat's country picker for a phone question: the ISO code, the dial code without the plus, and the country's name. */
+export interface FlbPhoneCountry {
+  code: string;
+  dial: string;
+  name: string;
+}
+
+/** Every country a number can be dialled in, named in `locale` and sorted by name, for the country list beside a phone question's box. */
+export function flbPhoneCountries(locale: string): FlbPhoneCountry[] {
+  let names: Intl.DisplayNames | null = null;
+  try {
+    names = new Intl.DisplayNames([locale, 'en'], { type: 'region' });
+  } catch {
+    names = null;
+  }
+  return getCountries()
+    .map((code) => ({
+      code,
+      dial: String(getCountryCallingCode(code)),
+      name: names?.of(code) ?? code,
+    }))
+    .sort((x, y) => x.name.localeCompare(y.name, locale));
+}
+
 export type FlbAskInputResult = { ok: true; value: string } | { ok: false };
 
 /**
@@ -272,6 +301,12 @@ export function flbAskInputCheck(
       return ALNUM.test(text) ? { ok: true, value: text } : { ok: false };
     case 'phone': {
       const digits = text.replace(/[\s().-]/g, '');
+      // With a country code the number is judged by that country's own rules (length and shape) and kept as +<code><number>. Without
+      // one it only has to look like a phone number, as before.
+      if (digits.startsWith('+')) {
+        const parsed = parsePhoneNumberFromString(digits);
+        return parsed?.isValid() ? { ok: true, value: parsed.number } : { ok: false };
+      }
       return PHONE.test(digits) ? { ok: true, value: digits } : { ok: false };
     }
     case 'date':

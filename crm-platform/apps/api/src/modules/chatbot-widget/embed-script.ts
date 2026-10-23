@@ -354,6 +354,8 @@ ${
     ? `  function toggle() {
     var opening = panel.style.display === 'none';
     panel.style.display = opening ? 'block' : 'none';
+    // A flow bot starts by itself the first time its window is opened.
+    if (opening) { try { frame.contentWindow.postMessage({ wgt: 'opened' }, '*'); } catch (e) {} }
     if (opening) {
       // The opening animation ends on transform:none, which would undo the centring of an expanded window.
       if (!panel._corner) panel.style.animation = 'wgtIn .22s cubic-bezier(.2,.7,.3,1) both';
