@@ -404,7 +404,14 @@ export function StepCompose({
             {picker(
               'camp-template',
               form.templateId,
-              (v) => patch({ templateId: v, templateOverrides: null }),
+              (v) =>
+                patch({
+                  templateId: v,
+                  templateOverrides: null,
+                  ...(v !== '' && v === form.templateIdB
+                    ? { templateIdB: '', templateOverridesB: null }
+                    : {}),
+                }),
               templates,
               t('pickTemplate'),
             )}
@@ -445,7 +452,7 @@ export function StepCompose({
                   'camp-template-b',
                   form.templateIdB,
                   (v) => patch({ templateIdB: v, templateOverridesB: null }),
-                  templates,
+                  templates.filter((x) => x.id !== form.templateId),
                   t('sameTemplate'),
                 )}
               </Field>

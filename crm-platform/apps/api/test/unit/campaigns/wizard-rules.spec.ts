@@ -3,6 +3,7 @@ import type { WizardVariables } from '@crm/contracts';
 import type { MergeContact, MergeContext } from '../../../src/modules/crm';
 import {
   applyWizardVariables,
+  campaignZone,
   estimateCost,
   fillText,
   isFrequencyCap,
@@ -362,5 +363,27 @@ describe('senderGuided', () => {
     expect(meta({ name_status: 'DECLINED' })).toBe(false);
     for (const s of ['BANNED', 'restricted', 'DELETED', 'MIGRATED', 'PENDING'])
       expect(meta({ phone_status: s })).toBe(false);
+  });
+});
+
+describe('campaignZone', () => {
+  it('prefers the scheduled zone, then the retry zone, then the workspace zone (never UTC by default)', () => {
+    expect(
+      campaignZone({
+        scheduledZone: 'Asia/Kolkata',
+        retriesZone: 'UTC',
+        workspaceZone: 'Europe/Paris',
+      }),
+    ).toBe('Asia/Kolkata');
+    expect(
+      campaignZone({
+        scheduledZone: null,
+        retriesZone: 'Asia/Dubai',
+        workspaceZone: 'Europe/Paris',
+      }),
+    ).toBe('Asia/Dubai');
+    expect(
+      campaignZone({ scheduledZone: null, retriesZone: null, workspaceZone: 'Asia/Kolkata' }),
+    ).toBe('Asia/Kolkata');
   });
 });

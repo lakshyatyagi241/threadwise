@@ -69,6 +69,7 @@ export function RecurrencePanel({
         </svg>
         {valid ? words.recurrence(valid) : <span>{t('ruleIncomplete')}</span>}
       </div>
+      <Alert tone="warning">{t('recurringWarning')}</Alert>
       {ruleIssue && <Alert tone="danger">{ti(ruleIssue.code)}</Alert>}
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -110,7 +111,15 @@ export function RecurrencePanel({
             ))}
           </Select>
         </Field>
-        <Field label={t('repeatEvery')} htmlFor={`${uid}-every`}>
+        <Field
+          label={t('repeatEvery')}
+          htmlFor={`${uid}-every`}
+          error={
+            rule.interval < 1 || rule.interval > RECURRENCE_INTERVAL_MAX
+              ? t('repeatRange', { max: RECURRENCE_INTERVAL_MAX })
+              : undefined
+          }
+        >
           <div className="flex items-center gap-2">
             <Input
               id={`${uid}-every`}
@@ -119,7 +128,7 @@ export function RecurrencePanel({
               max={RECURRENCE_INTERVAL_MAX}
               value={rule.interval || ''}
               disabled={disabled}
-              invalid={rule.interval < 1}
+              invalid={rule.interval < 1 || rule.interval > RECURRENCE_INTERVAL_MAX}
               className="w-24"
               onChange={(e) => patch({ interval: Math.trunc(Number(e.target.value)) || 0 })}
             />

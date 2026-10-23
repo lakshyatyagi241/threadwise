@@ -13,7 +13,7 @@ const CHECKS: Array<{ key: string; fails: Problem[] }> = [
   { key: 'sender', fails: ['sender'] },
   { key: 'content', fails: ['message', 'template', 'flow', 'media', 'subject'] },
   { key: 'audience', fails: ['audience'] },
-  { key: 'schedule', fails: ['date', 'time', 'window', 'throttle', 'expiry'] },
+  { key: 'schedule', fails: ['date', 'time', 'window', 'throttle', 'pacing', 'expiry'] },
 ];
 
 /**

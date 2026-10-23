@@ -149,7 +149,7 @@ describe('variables', () => {
   });
 
   it('asks for a template when there is none', () => {
-    expect(card({ template: null })).toContain('Go back and choose a template first.');
+    expect(card({ template: null })).toContain('Choose a template first.');
   });
 
   it('shows sample messages for real contacts and flags empty placeholders', () => {

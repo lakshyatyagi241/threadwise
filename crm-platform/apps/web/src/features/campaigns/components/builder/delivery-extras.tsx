@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { WIZARD_PACING_LIMITS, pacingOutOfRange, type WizardPacingNumberKey } from '@crm/contracts';
 import { Field, Input } from '@crm/ui';
 
 export const PACING_KEYS = [
@@ -53,20 +54,31 @@ export function SmartDelivery({
   error?: string | undefined;
 }) {
   const t = useTranslations('campaigns.builder.delivery');
-  const num = (key: PacingKey, label: string, hint: string, max: number, min = 0) => (
-    <Field label={label} htmlFor={`camp-${key}`} hint={hint}>
-      <Input
-        id={`camp-${key}`}
-        type="number"
-        inputMode="numeric"
-        min={min}
-        max={max}
-        value={values[key]}
-        onChange={(e) => onChange(key, e.target.value)}
-        placeholder={t('default')}
-      />
-    </Field>
-  );
+  const num = (key: WizardPacingNumberKey, label: string, hint: string) => {
+    const { min, max } = WIZARD_PACING_LIMITS[key];
+    const raw = values[key].trim();
+    const bad = raw !== '' && pacingOutOfRange(key, Number(raw));
+    return (
+      <Field
+        label={label}
+        htmlFor={`camp-${key}`}
+        hint={hint}
+        error={bad ? t('range', { min, max }) : undefined}
+      >
+        <Input
+          id={`camp-${key}`}
+          type="number"
+          inputMode="numeric"
+          min={min}
+          max={max}
+          invalid={bad}
+          value={values[key]}
+          onChange={(e) => onChange(key, e.target.value)}
+          placeholder={t('default')}
+        />
+      </Field>
+    );
+  };
   return (
     <div className="rounded-xl border border-border p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -79,11 +91,11 @@ export function SmartDelivery({
         {t('smartIntro')} {t('smartZone', { zone })}
       </p>
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {num('throttleMinSec', t('throttleMin'), t('throttleHint'), 3600)}
-        {num('throttleMaxSec', t('throttleMax'), t('throttleMaxHint'), 3600)}
-        {num('dailyLimit', t('dailyLimit'), t('dailyHint'), 100000, 1)}
-        {num('batchSize', t('batchSize'), t('batchHint'), 10000, 1)}
-        {num('batchPauseMin', t('batchPause'), t('batchPauseHint'), 1440)}
+        {num('throttleMinSec', t('throttleMin'), t('throttleHint'))}
+        {num('throttleMaxSec', t('throttleMax'), t('throttleMaxHint'))}
+        {num('dailyLimit', t('dailyLimit'), t('dailyHint'))}
+        {num('batchSize', t('batchSize'), t('batchHint'))}
+        {num('batchPauseMin', t('batchPause'), t('batchPauseHint'))}
       </div>
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <Field label={t('windowStart')} htmlFor="camp-wstart">

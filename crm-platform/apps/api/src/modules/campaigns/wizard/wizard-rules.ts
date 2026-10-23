@@ -287,6 +287,18 @@ export interface CostLine {
  * What the wallet is expected to be charged: every destination's messages at its price; when the plan's monthly allowance covers part
  * of the send (plan mode), only the chargeable share of it, rounded up so the estimate never under-promises.
  */
+/**
+ * The zone a campaign's times are read in: a scheduled send's own zone, else the retry window's, else the workspace's (never a
+ * hidden UTC: the Messages tab, the analytics and the CSV export all show times in it).
+ */
+export function campaignZone(f: {
+  scheduledZone: string | null;
+  retriesZone: string | null | undefined;
+  workspaceZone: string;
+}): string {
+  return f.scheduledZone ?? f.retriesZone ?? f.workspaceZone;
+}
+
 export function estimateCost(
   lines: readonly CostLine[],
   chargeable: number,
