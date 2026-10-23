@@ -473,14 +473,17 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   const relinked = await relinkedConversations(db, client);
   // chat-status closed conversations Waboo has closed (same trigger; run_log _chat/chat_status)
   const statusChanged = await statusChangedConversations(db, client);
-  // the app's analytics trigger on messages stamps first_inbound_at / first_replied_at on the conversation when a counted message arrives at
-  // or after the feed cut-over (the app's an_msg_feed_cutover); that stamp is an UPDATE, so it moves updated_at and row_version too
+  // the app's analytics trigger on messages runs for each counted message at or after the feed cut-over (the app's an_msg_feed_cutover)
+  // and then fills first_inbound_at / first_replied_at on the conversation (from its older messages too): that is an UPDATE, so it moves
+  // updated_at and row_version. So: every conversation with such a message, or with such a stamp, is touched by the app, not by the import
   const FEED_CUTOVER = '2026-10-21T07:13:06.165671Z';
   const feedStamped = new Set(
     (
       await tenant((tx) =>
-        tx.execute(sql`SELECT uuid::text AS uuid FROM conversations WHERE org_id = ${orgId}
-          AND (first_inbound_at >= ${FEED_CUTOVER}::timestamptz OR first_replied_at >= ${FEED_CUTOVER}::timestamptz)`),
+        tx.execute(sql`SELECT c.uuid::text AS uuid FROM conversations c WHERE c.org_id = ${orgId} AND (
+          c.first_inbound_at >= ${FEED_CUTOVER}::timestamptz OR c.first_replied_at >= ${FEED_CUTOVER}::timestamptz
+          OR EXISTS (SELECT 1 FROM messages m WHERE m.org_id = c.org_id AND m.conversation_id = c.id
+            AND m.created_at >= ${FEED_CUTOVER}::timestamptz AND m.kind NOT IN ('system', 'reaction')))`),
       )
     ).rows.map((r) => String((r as { uuid: string }).uuid)),
   );
