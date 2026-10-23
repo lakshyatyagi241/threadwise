@@ -845,7 +845,7 @@ async function runVerify(ctx) {
   const knownGaps = await tenant(
     db,
     org.id,
-    async () => Number((await db.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key IS NULL AND COALESCE((meta->'legacy'->>'contentUnavailable')::boolean, false) AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker')`, [org.id])).rows[0].n)),
+    async () => Number((await db.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key IS NULL AND COALESCE((meta->'legacy'->>'contentUnavailable')::boolean, false) AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker')`, [org.id])).rows[0].n),
     true,
   );
   say(`objects checked=${jobs.length} (${head ? 'size only' : 'size + sha256 where known'}) problems: ${lines(bad)}`);
