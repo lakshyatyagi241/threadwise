@@ -374,3 +374,11 @@ test('announce: claim, PR and RESOLVED are also posted top-level (no threadKey);
   assert.ok(!top.some((t) => t.includes('looking at logs')), 'notes stay in the thread');
   assert.ok(posts.some((p) => p.k === 'am-f1' && p.t.includes('asha is working on this')), 'thread reply kept');
 });
+
+test('watcher: the slow-statement card carries the incident key so the incident can edit that one card', async () => {
+  const sent = []; let t = 0; let calls = 10;
+  const query = async (sql) => (sql.includes('backend_type') ? { rows: [] } : { rows: [{ queryid: '7', datname: 'd', rolname: 'r', calls, total_exec_time: calls * 900, mean_exec_time: 900, max_exec_time: 2000, rows: 5, query: 'select * from t where a = $1' }] });
+  const w = createWatcher({ query, metrics: createMetrics(), send: async (c, msg, o) => sent.push(o), now: () => t, env: {} });
+  await w.poll(); calls = 12; t = 1000; await w.poll();
+  assert.equal(sent.at(-1).interactive.incidentId, 'st:7|d|r');
+});
