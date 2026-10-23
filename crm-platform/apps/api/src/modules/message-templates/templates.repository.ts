@@ -115,8 +115,8 @@ export interface ListFilter {
   limit: number;
   cursor?: string;
   status?: string;
-  /** The library's status tab: approved / pending (in review and drafts) / rejected (rejected, paused, disabled). */
-  statusGroup?: 'approved' | 'pending' | 'rejected';
+  /** The library's status tab: approved / pending (in review) / draft (saved, not submitted yet) / rejected (rejected, paused, disabled). */
+  statusGroup?: 'approved' | 'pending' | 'draft' | 'rejected';
   sort?: 'newest' | 'oldest' | 'name-asc' | 'name-desc';
   category?: string;
   connectionUuid?: string;
@@ -208,10 +208,11 @@ const JSON_COLUMNS = new Set<string>([
   'metaEditLog',
 ]);
 
-/** The library's status tabs as Reference reads them: a draft is "in review", a paused or disabled template is "rejected". */
+/** The library's status tabs: a draft has a tab of its own (Reference lumped it under "in review"); a paused or disabled template is "rejected". */
 const GROUP_WHERE = {
   approved: sql`t.status IN ('approved', 'public')`,
-  pending: sql`t.status IN ('pending', 'draft')`,
+  pending: sql`t.status = 'pending'`,
+  draft: sql`t.status = 'draft'`,
   rejected: sql`t.status IN ('rejected', 'paused', 'disabled')`,
 } as const;
 
@@ -319,18 +320,26 @@ export class TemplatesRepository {
         count(*)::int AS n,
         count(*) FILTER (WHERE ${GROUP_WHERE.approved})::int AS approved,
         count(*) FILTER (WHERE ${GROUP_WHERE.pending})::int AS pending,
+        count(*) FILTER (WHERE ${GROUP_WHERE.draft})::int AS draft,
         count(*) FILTER (WHERE ${GROUP_WHERE.rejected})::int AS rejected
       FROM wa_templates t
       WHERE t.org_id = ${orgId}
       GROUP BY 1`);
     const categories: Record<string, number> = { all: 0 };
-    const statuses: Record<string, number> = { all: 0, approved: 0, pending: 0, rejected: 0 };
+    const statuses: Record<string, number> = {
+      all: 0,
+      approved: 0,
+      pending: 0,
+      draft: 0,
+      rejected: 0,
+    };
     for (const r of tabs.rows as Array<Record<string, unknown>>) {
       const n = Number(r.n);
       categories.all += n;
       statuses.all += n;
       statuses.approved += Number(r.approved);
       statuses.pending += Number(r.pending);
+      statuses.draft += Number(r.draft);
       statuses.rejected += Number(r.rejected);
       if (r.cat) categories[String(r.cat)] = (categories[String(r.cat)] ?? 0) + n;
     }

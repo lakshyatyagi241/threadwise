@@ -70,7 +70,7 @@ describe('status model', () => {
   it("groups statuses the way the library's tabs count them", () => {
     expect(statusGroupOf('approved')).toBe('approved');
     expect(statusGroupOf('pending')).toBe('pending');
-    expect(statusGroupOf('draft')).toBe('pending');
+    expect(statusGroupOf('draft')).toBe('draft');
     expect(statusGroupOf('rejected')).toBe('rejected');
     expect(statusGroupOf('paused')).toBe('rejected');
     expect(statusGroupOf('disabled')).toBe('rejected');

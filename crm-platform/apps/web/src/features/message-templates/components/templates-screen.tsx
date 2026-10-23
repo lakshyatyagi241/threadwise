@@ -29,6 +29,7 @@ const DOT: Record<StatusTab, string> = {
   all: 'bg-border',
   approved: 'bg-success',
   pending: 'bg-warning',
+  draft: 'bg-muted-foreground',
   rejected: 'bg-danger',
 };
 
@@ -429,7 +430,7 @@ export function TemplatesScreen() {
                 {t('filteredTemplates')}
               </span>
               <span className="flex items-center gap-3">
-                {(['approved', 'pending', 'rejected'] as const).map((s) => (
+                {(['approved', 'pending', 'draft', 'rejected'] as const).map((s) => (
                   <span key={s} className="flex items-center gap-1.5">
                     <span className={cn('size-1.5 rounded-full', DOT[s])} aria-hidden="true" />
                     {t(`legend.${s}`)}

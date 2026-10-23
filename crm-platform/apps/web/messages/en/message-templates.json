@@ -115,6 +115,7 @@
         "all": "All",
         "approved": "Approved",
         "pending": "In review",
+        "draft": "Draft",
         "rejected": "Rejected"
       },
       "quickStartTitle": "Quick start",
@@ -147,6 +148,7 @@
       "legend": {
         "approved": "Approved",
         "pending": "In review",
+        "draft": "Draft",
         "rejected": "Rejected"
       },
       "helpLabel": "Help - 0{n}",

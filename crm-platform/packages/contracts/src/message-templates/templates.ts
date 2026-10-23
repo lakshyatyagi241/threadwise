@@ -158,7 +158,7 @@ export type TemplateDetail = z.infer<typeof templateDetailSchema>;
  * The library's three status tabs (Reference's "effective status"): approved; in review (pending and drafts); rejected (rejected,
  * paused, disabled). A row Meta no longer lists (`deleted`) is only found under All.
  */
-export const tplStatusGroupSchema = z.enum(['approved', 'pending', 'rejected']);
+export const tplStatusGroupSchema = z.enum(['approved', 'pending', 'draft', 'rejected']);
 export type TplStatusGroup = z.infer<typeof tplStatusGroupSchema>;
 
 export const tplSortSchema = z.enum(['newest', 'oldest', 'name-asc', 'name-desc']);

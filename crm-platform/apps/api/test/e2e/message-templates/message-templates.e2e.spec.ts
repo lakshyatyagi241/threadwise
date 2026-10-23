@@ -616,14 +616,15 @@ describe('the library: sort, status tabs and counts', () => {
         (x: { name: string }) => x.name,
       );
     expect(await group('approved')).toEqual(['a_ok']);
-    expect(await group('pending')).toEqual(['b_wait', 'c_draft']);
+    expect(await group('pending')).toEqual(['b_wait']);
+    expect(await group('draft')).toEqual(['c_draft']);
     expect(await group('rejected')).toEqual(['d_no', 'e_paused']);
 
     const counts = await api.as(t.admin).get('/v2/templates/counts?statusGroup=pending');
     expect(counts.status, JSON.stringify(counts.body)).toBe(200);
     expect(counts.body).toEqual({
       categories: { all: 5, UTILITY: 4, MARKETING: 1 },
-      statuses: { all: 5, approved: 1, pending: 2, rejected: 2 },
+      statuses: { all: 5, approved: 1, pending: 1, draft: 1, rejected: 2 },
       filtered: 2,
     });
   });
