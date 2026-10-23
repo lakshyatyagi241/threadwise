@@ -439,6 +439,69 @@ describe('a website chat bot answers its visitor', () => {
     expect(await says('B')).toBe('Version B');
   });
 
+  it('ending the chat resolves the thread, leaving closes it until the visitor is back, and a restart stays in the same thread', async () => {
+    const { token } = await liveBot(
+      'Sessions bot',
+      graph([trigger(), node('m', 'message', { text: 'Hello again' })], [edge('t', 'm')]),
+    );
+    const visitor = await api.visitor(token);
+    await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+    await linesUntil(token, visitor, 'the bot greets', (all) =>
+      all.some((l) => l.body === 'Hello again'),
+    );
+    const post = (path: string) =>
+      request(p.h.app.getHttpServer()).post(
+        `/widget/${token}/api/${path}${path.includes('?') ? '&' : '?'}visitor_uuid=${visitor}`,
+      );
+    const state = async () =>
+      (
+        await api.h.owner.query(
+          `SELECT c.status, c.routing_meta->>'closedBy' AS closed_by FROM conversations c
+             JOIN chatbot_widget_visitors v ON v.org_id = c.org_id AND v.conversation_id = c.id
+            WHERE c.org_id = $1 AND v.visitor_uuid = $2`,
+          [t.orgId, visitor],
+        )
+      ).rows[0];
+    const lines = async (like: string) =>
+      (
+        await api.h.owner.query(
+          `SELECT count(*)::int AS n FROM messages m
+             JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+            WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.body = $3`,
+          [t.orgId, visitor, like],
+        )
+      ).rows[0].n as number;
+
+    expect((await post('end?reason=nonsense')).status).toBe(422);
+    // The page closes: the thread is resolved with no line, and the visitor loading the chat again has it open.
+    expect((await post('end?reason=left')).status).toBe(200);
+    expect(await state()).toEqual({ status: 'resolved', closed_by: 'left' });
+    expect(await lines('Ended the chat')).toBe(0);
+    expect(
+      (
+        await request(p.h.app.getHttpServer()).get(
+          `/widget/${token}/api/config?visitor_uuid=${visitor}`,
+        )
+      ).status,
+    ).toBe(200);
+    expect(await state()).toEqual({ status: 'open', closed_by: null });
+
+    // Restart: the same thread, with a line for the team, and the window shows nothing from before it.
+    const same = await post('restart');
+    expect(same.status).toBe(200);
+    expect(same.body.visitor_uuid).toBe(visitor);
+    expect(await lines('Restarted the chat')).toBe(1);
+    const fresh = await api.pub(token).history(visitor, 0);
+    expect(((fresh.body.messages ?? []) as Line[]).some((l) => l.body === 'Hello again')).toBe(
+      false,
+    );
+
+    // Ending the chat resolves the thread and says so.
+    expect((await post('end?reason=ended')).status).toBe(200);
+    expect((await state()).status).toBe('resolved');
+    expect(await lines('Ended the chat')).toBe(1);
+  });
+
   it('shows link, call and email buttons on a bot line, and drops any address a browser must not open', async () => {
     const { token } = await liveBot(
       'Links bot',

@@ -146,18 +146,22 @@ export function BulkBar(props: BulkBarProps) {
                 {t('close')}
               </Button>
             )}
-            {/* Reopen sends status open to every picked conversation: it would un-spam or wake the spam and snoozed ones among them. */}
-            {state.canMoveTo('open') && !state.someSpam && !state.someSnoozed && (
-              <Button
-                size="sm"
-                variant="secondary"
-                disabled={disabled}
-                data-testid="inbox-bulk-reopen"
-                onClick={() => props.onRun({ type: 'status', status: 'open' })}
-              >
-                {t('reopen')}
-              </Button>
-            )}
+            {/* Reopen sends status open to every picked conversation: it would un-spam or wake the spam and snoozed ones among them, and no
+                resolved web chat is reopened (`someFinishedWebchat`). */}
+            {state.canMoveTo('open') &&
+              !state.someSpam &&
+              !state.someSnoozed &&
+              !state.someFinishedWebchat && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled}
+                  data-testid="inbox-bulk-reopen"
+                  onClick={() => props.onRun({ type: 'status', status: 'open' })}
+                >
+                  {t('reopen')}
+                </Button>
+              )}
             {state.allSpam ? (
               <Button
                 size="sm"
@@ -169,15 +173,17 @@ export function BulkBar(props: BulkBarProps) {
                 {t('notSpam')}
               </Button>
             ) : (
-              <Button
-                size="sm"
-                variant="secondary"
-                disabled={disabled}
-                data-testid="inbox-bulk-spam"
-                onClick={() => props.onRun({ type: 'spam' })}
-              >
-                {t('spam')}
-              </Button>
+              !state.someFinishedWebchat && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled}
+                  data-testid="inbox-bulk-spam"
+                  onClick={() => props.onRun({ type: 'spam' })}
+                >
+                  {t('spam')}
+                </Button>
+              )
             )}
           </>
         )}
@@ -244,7 +250,7 @@ export function BulkBar(props: BulkBarProps) {
             ))}
           </Select>
         )}
-        {can.snooze && !unsnoozeShown && (
+        {can.snooze && !unsnoozeShown && !state.someFinishedWebchat && (
           <Select
             aria-label={t('snooze')}
             data-testid="inbox-bulk-snooze"

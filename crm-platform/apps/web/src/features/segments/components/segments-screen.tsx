@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Button, EmptyState, Input, Select, Spinner, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import {
@@ -13,6 +13,8 @@ import {
   frozenEdge,
   isScrolledSideways,
 } from '@/features/contacts-attributes-tags';
+import { ModuleActivityDialog } from '@/features/notifications-activity-audit/audit/components/module-activity-dialog';
+import { formatDateTime } from '@/lib/format-datetime';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useSegmentCatalog } from '../api/lookups';
 import { useSegments } from '../api/segments';
@@ -72,7 +74,10 @@ const WIDTHS = {
   members: 150,
   visibility: 120,
   owner: 150,
-  updated: 170,
+  createdBy: 150,
+  createdAt: 180,
+  modifiedBy: 150,
+  updated: 180,
   actions: 56,
 } as const;
 const MIN_WIDTH = Object.values(WIDTHS).reduce((a, b) => a + b, 0);
@@ -89,6 +94,8 @@ export function SegmentsScreen() {
   const me = useSession().user.id;
   const can = useSegmentCan();
   const canRead = useCan('record.segments.read');
+  const canSeeActivity = useCan('audit.log.read');
+  const [activity, setActivity] = useState(false);
   const list = useSegments(canRead);
   const lookups = useSegmentCatalog();
   const summaryCtx = useSummaryContext(lookups.catalog);
@@ -152,11 +159,22 @@ export function SegmentsScreen() {
             <p className="mt-0.5 hidden text-sm text-muted-foreground sm:block">{t('subtitle')}</p>
           </div>
         </div>
-        {can.create && (
-          <Button variant="brand" className="h-10 px-5" onClick={() => router.push(ROUTES.create)}>
-            <PlusIcon /> {t('create')}
-          </Button>
-        )}
+        <div className="flex shrink-0 items-center gap-2">
+          {canSeeActivity && (
+            <Button variant="secondary" className="h-10 px-5" onClick={() => setActivity(true)}>
+              {t('activity')}
+            </Button>
+          )}
+          {can.create && (
+            <Button
+              variant="brand"
+              className="h-10 px-5"
+              onClick={() => router.push(ROUTES.create)}
+            >
+              <PlusIcon /> {t('create')}
+            </Button>
+          )}
+        </div>
       </header>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -288,6 +306,14 @@ export function SegmentsScreen() {
       </section>
 
       <SegmentDialogs controller={actions} />
+      {canSeeActivity && (
+        <ModuleActivityDialog
+          open={activity}
+          onClose={() => setActivity(false)}
+          module="segments"
+          title={t('activityTitle')}
+        />
+      )}
     </PageFill>
   );
 }
@@ -307,7 +333,7 @@ function ListSkeleton({ label }: { label: string }) {
   );
 }
 
-function SegmentsTable({
+export function SegmentsTable({
   rows,
   actions,
   sentence,
@@ -321,7 +347,8 @@ function SegmentsTable({
   can: ReturnType<typeof useSegmentCan>;
 }) {
   const t = useTranslations('segments.hub');
-  const format = useFormatter();
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   const [scrolled, setScrolled] = useState(false);
   return (
     <div
@@ -341,6 +368,9 @@ function SegmentsTable({
           <col style={{ width: WIDTHS.members }} />
           <col style={{ width: WIDTHS.visibility }} />
           <col style={{ width: WIDTHS.owner }} />
+          <col style={{ width: WIDTHS.createdBy }} />
+          <col style={{ width: WIDTHS.createdAt }} />
+          <col style={{ width: WIDTHS.modifiedBy }} />
           <col style={{ width: WIDTHS.updated }} />
           <col style={{ width: WIDTHS.actions }} />
         </colgroup>
@@ -360,6 +390,15 @@ function SegmentsTable({
             </th>
             <th scope="col" className={th}>
               {t('colOwner')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colCreatedBy')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colCreatedAt')}
+            </th>
+            <th scope="col" className={th}>
+              {t('colModifiedBy')}
             </th>
             <th scope="col" className={th}>
               {t('colUpdated')}
@@ -428,8 +467,21 @@ function SegmentsTable({
                     {owner ?? '-'}
                   </span>
                 </td>
-                <td className="border-b border-border px-3 py-2 tabular-nums text-muted-foreground">
-                  {format.dateTime(new Date(s.updatedAt), { dateStyle: 'medium' })}
+                <td className="max-w-0 border-b border-border px-3 py-2">
+                  <span title={s.createdBy?.name} className="block truncate">
+                    {s.createdBy?.name ?? '-'}
+                  </span>
+                </td>
+                <td className="whitespace-nowrap border-b border-border px-3 py-2 tabular-nums text-muted-foreground">
+                  {formatDateTime(s.createdAt, locale, timeZone)}
+                </td>
+                <td className="max-w-0 border-b border-border px-3 py-2">
+                  <span title={s.updatedBy?.name} className="block truncate">
+                    {s.updatedBy?.name ?? '-'}
+                  </span>
+                </td>
+                <td className="whitespace-nowrap border-b border-border px-3 py-2 tabular-nums text-muted-foreground">
+                  {formatDateTime(s.updatedAt, locale, timeZone)}
                 </td>
                 <td
                   className={cn(

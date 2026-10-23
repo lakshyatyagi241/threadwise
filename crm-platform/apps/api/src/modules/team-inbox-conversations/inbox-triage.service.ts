@@ -13,6 +13,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ConversationEventsRepository } from './conversation-events.repository';
 import { toConversationSummary } from './conversation.mapper';
+import { assertNotFinishedWebchat } from './finished-webchat';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
@@ -102,6 +103,7 @@ export class InboxTriageService {
       await this.access.assertCan(tx, ctx, PERM.snooze, locked);
 
       const from = locked.status as ConversationStatus;
+      assertNotFinishedWebchat(locked.channelKind, from, 'snoozed');
       const before = (await this.repo.byUuid(tx, ctx.orgId, uuid))!;
       if (
         from === 'snoozed' &&
@@ -149,6 +151,7 @@ export class InboxTriageService {
       const from = locked.status as ConversationStatus;
       const before = (await this.repo.byUuid(tx, ctx.orgId, uuid))!;
       if (from === 'spam') return { changed: false as const, row: before };
+      assertNotFinishedWebchat(locked.channelKind, from, 'marked as spam');
       if (locked.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Conversation');
 
       await this.repo.markSpam(tx, ctx.orgId, locked.id);

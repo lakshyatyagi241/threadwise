@@ -22,7 +22,7 @@ Goal: your Claude claims, fixes and drafts a PR for production alerts under YOUR
 
 ## What you will see in Google Chat
 
-When your Claude claims an incident, a REPLY appears INSIDE the alert's thread: `👀 <name> is working on this`. Open the thread with the "N replies" link under the alert card; it is not a badge on the card itself (webhooks cannot edit cards; with the optional Google Chat app the card is edited too). Later replies: `🔧 PR #N raised by <name>`, `🤝 released`, `✅ RESOLVED` (posted by the bridge after the release, never by Claude).
+When your Claude claims an incident, a REPLY appears INSIDE the alert's thread: `👀 <name> is working on this`. Open the thread with the "N replies" link under the alert card; it is not a badge on the card itself (webhooks cannot edit cards; with the Google Chat app enabled there are no extra messages at all: the one alert card is edited in place through claim, PR and resolved, with a Timeline on it). Later replies: `🔧 PR #N raised by <name>`, `🤝 released`, `✅ RESOLVED` (posted by the bridge after the release, never by Claude).
 
 ## Two Claudes, one incident
 

@@ -328,6 +328,7 @@
       },
       "readOnly": "Anda dapat membaca percakapan ini tetapi tidak memiliki izin untuk membalas.",
       "resolvedBanner": "Percakapan ini sudah diselesaikan. Buka kembali untuk membalas.",
+      "resolvedWebchatBanner": "Chat web ini sudah diselesaikan dan tidak dapat dibuka kembali.",
       "assignedToOther": "Obrolan ini ditugaskan ke agen lain. Tugaskan ke diri Anda terlebih dahulu untuk membalas.",
       "typing": "{count, plural, other {# anggota tim sedang mengetik}}",
       "messagesLabel": "Pesan",

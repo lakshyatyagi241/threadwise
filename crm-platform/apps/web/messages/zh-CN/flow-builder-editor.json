@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value}（不在工作区中）",
           "templateLabel": "已审核通过的模板",
           "templateHint": "此处仅显示工作区中已审核通过的模板。<link>创建新模板 →</link>",
+          "statusExits": "添加状态出口（已发送、已送达、已读、已回复、失败）",
+          "statusExitsHint": "流程会从第一个已连接步骤的出口离开：模板一经接受即为“已发送”，WhatsApp 报告后为“已送达”或“已读”，客户回复时为“已回复”，无法发送时为“失败”。客户点击的按钮会从它自己的出口离开。",
           "type": "类型",
           "kindText": "文本",
           "kindImage": "图片",

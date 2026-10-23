@@ -284,9 +284,10 @@ export class InboxThreadService {
   }
 
   /**
-   * The approved templates of the workspace, for the picker, as Reference lists them. A template that cannot be sent from this
-   * conversation (another WhatsApp number, or the channel is not linked to one) is listed with that reason, disabled; one the inbox
-   * cannot fill in is listed with its reason too. A template that is not approved is left out.
+   * The approved templates of the workspace, for the picker (the inbox's and the contact's send drawer). A template of ANOTHER WhatsApp
+   * number is left out: it can never be sent from this conversation, and nobody edits another number's template from here. When the
+   * channel is not linked to a number every template is listed with that reason, disabled; one the inbox cannot fill in is listed with
+   * its reason too. A template that is not approved is left out.
    */
   async listTemplates(
     uuid: string,
@@ -306,16 +307,13 @@ export class InboxThreadService {
         ...(query.q ? { q: query.q } : {}),
       });
       // Filtered before the page is cut, so a row dropped by `isApproved` never leaves a short page that says there is more.
-      const approved = rows.filter((t) => isApproved(t));
+      const approved = rows.filter(
+        (t) => isApproved(t) && (wabaConfigId === null || t.providerConfigId === wabaConfigId),
+      );
       const hasMore = approved.length > INBOX_TEMPLATE_LIST_MAX;
       const data = approved.slice(0, INBOX_TEMPLATE_LIST_MAX).map((t): InboxTemplateOption => {
         // The same refusals as the send (`templateContent`), checked first so the picker names the real reason.
-        const reason =
-          wabaConfigId === null
-            ? 'not_linked'
-            : t.providerConfigId !== wabaConfigId
-              ? 'other_number'
-              : blockReason(t, now);
+        const reason = wabaConfigId === null ? 'not_linked' : blockReason(t, now);
         return {
           id: t.uuid,
           name: t.templateName,

@@ -176,6 +176,25 @@
     "common": {
       "close": "Đóng",
       "dismiss": "Bỏ qua"
+    },
+    "moduleActivity": {
+      "close": "Đóng",
+      "window": "Thay đổi trong 30 ngày gần đây, mới nhất trước.",
+      "search": "Tìm trong hoạt động",
+      "searchPlaceholder": "Tìm theo người, thao tác hoặc trường",
+      "count": "{count, plural, =0 {Không có bản ghi} one {# bản ghi} other {# bản ghi}}",
+      "loading": "Đang tải hoạt động...",
+      "loadFailed": "Không thể tải hoạt động.",
+      "retry": "Thử lại",
+      "emptyTitle": "Chưa có hoạt động nào",
+      "empty": "Các thay đổi thực hiện trên màn hình này sẽ hiển thị ở đây.",
+      "emptyFilteredTitle": "Không có kết quả khớp",
+      "emptyFiltered": "Không có bản ghi nào có người, thao tác hoặc trường đó.",
+      "colWhen": "Thời gian",
+      "colWho": "Ai",
+      "colWhat": "Nội dung",
+      "loadedOnly": "Tìm kiếm chỉ áp dụng cho các bản ghi đã tải.",
+      "loadMore": "Tải thêm"
     }
   }
 }

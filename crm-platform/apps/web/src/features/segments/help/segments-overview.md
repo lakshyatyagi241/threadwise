@@ -29,6 +29,12 @@ You can also select **Save as segment** on the Contacts screen after setting fil
 - **Recount members** refreshes a member count.
 - On a segment's members list, choose the columns you want: the **+** at the end of the header row adds one, and a column's menu has **Hide**. Your choice is kept in this browser and is separate from the Contact Hub's columns until you make it.
 
+## The list, search and activity
+
+- The table shows each segment's rules, members, visibility, **Owner**, **Created by** and **Created at**, **Modified by** and **Updated**. A segment's creator is its owner when it was made. **Modified by** stays empty until someone changes the segment after this column was added.
+- The search box filters the segments you can see by name, description or owner. The **Mine** and **Shared** filters apply on top of it.
+- **Activity** opens the workspace audit trail for segments, newest first, for the last 30 days. Search it by person, action or field name. It shows the names of the changed fields, never their values. You need permission to read the activity log to see the button.
+
 ## Sharing with specific people
 
 Under **Who can see it**, choose **Specific people** to show the segment only to the people you pick, plus you and anyone who can edit every segment. Search the list by name or email, tick people (and teams, when you can see them) and check the count under the chips. You need to pick at least one, and up to 200. Choosing a team shares it with everyone who is on that team now, including people who join later.

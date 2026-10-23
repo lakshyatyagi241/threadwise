@@ -5,7 +5,11 @@ import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, Select, Spinner, cn } from '@crm/ui';
-import { type ConversationEvent, type InboxConversationDetail } from '@crm/contracts';
+import {
+  isFinishedWebchat,
+  type ConversationEvent,
+  type InboxConversationDetail,
+} from '@crm/contracts';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactNotesSection } from '@/features/contacts-attributes-tags';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
@@ -251,6 +255,8 @@ function AssigneeSection(props: ContactPanelProps) {
   const current = detail.assignment.user;
   const currentTeam = detail.assignment.team;
   const resolved = detail.status === 'resolved' || detail.status === 'closed';
+  // A resolved web chat is final: the panel offers no reopen (the API refuses it too).
+  const finishedWebchat = isFinishedWebchat(detail.channel.kind, detail.status);
   const awayMark = users.find((u) => u.id === current?.id)?.onLeave ?? null;
   const availability =
     (current && props.presence.get(current.id)) ??
@@ -390,7 +396,7 @@ function AssigneeSection(props: ContactPanelProps) {
             {t('assignee.unassign')}
           </Button>
         )}
-        {can.resolve && (
+        {can.resolve && !finishedWebchat && (
           <Button
             size="sm"
             variant={resolved ? 'secondary' : 'primary'}

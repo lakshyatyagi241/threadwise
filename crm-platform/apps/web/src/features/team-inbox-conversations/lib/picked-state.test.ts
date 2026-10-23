@@ -70,4 +70,20 @@ describe('pickedState', () => {
       true,
     );
   });
+
+  it('never offers Reopen for a resolved or closed web chat, alone or with others', () => {
+    const webchat = { channel: { id: 'c-1', kind: 'webchat', name: 'Site' } };
+    const alone = pickedState([summary({ ...webchat, status: 'resolved' })], 'u-me');
+    expect(alone.someFinishedWebchat).toBe(true);
+    expect(alone.canMoveTo('open')).toBe(false);
+    const withEmail = pickedState(
+      [summary({ ...webchat, status: 'closed' }), summary({ id: 'row-2', status: 'resolved' })],
+      'u-me',
+    );
+    expect(withEmail.someFinishedWebchat).toBe(true);
+    expect(withEmail.canMoveTo('open')).toBe(true);
+    expect(pickedState([summary({ ...webchat, status: 'open' })], 'u-me').someFinishedWebchat).toBe(
+      false,
+    );
+  });
 });

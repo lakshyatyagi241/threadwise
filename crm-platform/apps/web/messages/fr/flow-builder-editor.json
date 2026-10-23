@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (absent de l’espace de travail)",
           "templateLabel": "Modèle approuvé",
           "templateHint": "Seuls les modèles approuvés de l’espace de travail apparaissent ici. <link>En créer un nouveau →</link>",
+          "statusExits": "Ajouter des sorties de statut (Envoyé, Distribué, Lu, Répondu, Échec)",
+          "statusExitsHint": "Le flux sort par la première sortie qui a une étape reliée : Envoyé dès que le modèle est accepté, Distribué ou Lu quand WhatsApp le signale, Répondu quand le client écrit, Échec si l'envoi a été impossible. Un bouton touché par le client sort par sa propre sortie.",
           "type": "Type",
           "kindText": "Texte",
           "kindImage": "Image",

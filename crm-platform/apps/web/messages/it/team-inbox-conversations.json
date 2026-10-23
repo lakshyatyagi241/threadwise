@@ -328,6 +328,7 @@
       },
       "readOnly": "Puoi leggere questa conversazione, ma non hai l’autorizzazione per rispondere.",
       "resolvedBanner": "Questa conversazione è risolta. Riaprila per rispondere.",
+      "resolvedWebchatBanner": "Questa chat web è risolta e non può essere riaperta.",
       "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnala prima a te stesso per rispondere.",
       "typing": "{count, plural, one {Un collega sta scrivendo} other {# colleghi stanno scrivendo}}",
       "messagesLabel": "Messaggi",

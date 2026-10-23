@@ -196,7 +196,12 @@
       "next": "Volgende",
       "pageOf": "Pagina {page, number} van {pages, number}",
       "perPage": "Segmenten per pagina",
-      "perPageOption": "{count, number} per pagina"
+      "perPageOption": "{count, number} per pagina",
+      "colCreatedBy": "Gemaakt door",
+      "colCreatedAt": "Aangemaakt op",
+      "colModifiedBy": "Gewijzigd door",
+      "activity": "Activiteit",
+      "activityTitle": "Segmentactiviteit"
     },
     "actions": {
       "forbidden": "Je hebt geen toestemming om dat te doen.",

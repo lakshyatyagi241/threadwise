@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { Field, Notice, SelectInput, TextArea, TextInput } from '../kit';
+import { Check, Field, Notice, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import { acceptFor, str, withCurrent } from './helpers';
 import { InfoBox, Link, UploadBox, UploadedFile, uploadFile, V } from './parts';
@@ -30,7 +30,7 @@ export function MessageForm({ data: d, set }: FormProps) {
   );
 }
 
-export function TemplateForm({ data: d, setMany, env }: FormProps) {
+export function TemplateForm({ data: d, set, setMany, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.send');
   const templates = env.ctx.templates;
   const opts = withCurrent(
@@ -65,6 +65,11 @@ export function TemplateForm({ data: d, setMany, env }: FormProps) {
           template_id = {str(d.tplId)}
         </div>
       ) : null}
+      <Field hint={t('statusExitsHint')}>
+        <Check checked={d.statusExits === true} onChange={(on) => set('statusExits', on)}>
+          {t('statusExits')}
+        </Check>
+      </Field>
     </>
   );
 }

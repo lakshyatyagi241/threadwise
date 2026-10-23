@@ -159,3 +159,20 @@ describe('the notes tab of the inbox contact panel', () => {
     expect(el.textContent).toContain('no contact to attach notes to');
   });
 });
+
+describe('the resolve control of the contact panel', () => {
+  const site = { id: id(900), kind: 'webchat', name: 'Site' };
+  const may = { assign: false, assignSelf: false, resolve: true };
+
+  it.each(['resolved', 'closed'] as const)('offers no reopen for a %s web chat', async (status) => {
+    const el = await show(props({ detail: detail({ status, channel: site }), can: may }));
+    expect(el.querySelector('[data-testid="inbox-panel-resolve"]')).toBeNull();
+  });
+
+  it('still reopens a resolved conversation on another channel', async () => {
+    const el = await show(props({ detail: detail({ status: 'resolved' }), can: may }));
+    expect(el.querySelector('[data-testid="inbox-panel-resolve"]')?.textContent).toContain(
+      'Reopen',
+    );
+  });
+});

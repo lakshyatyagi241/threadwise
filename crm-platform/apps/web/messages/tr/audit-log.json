@@ -176,6 +176,25 @@
     "common": {
       "close": "Kapat",
       "dismiss": "Kapat"
+    },
+    "moduleActivity": {
+      "close": "Kapat",
+      "window": "Son 30 günün değişiklikleri, en yenisi önce.",
+      "search": "Etkinlikte ara",
+      "searchPlaceholder": "Kişi, işlem veya alana göre ara",
+      "count": "{count, plural, =0 {Kayıt yok} one {# kayıt} other {# kayıt}}",
+      "loading": "Etkinlik yükleniyor...",
+      "loadFailed": "Etkinlik yüklenemedi.",
+      "retry": "Yeniden dene",
+      "emptyTitle": "Henüz etkinlik yok",
+      "empty": "Bu ekranda yapılan değişiklikler burada görünür.",
+      "emptyFilteredTitle": "Eşleşen bir şey yok",
+      "emptyFiltered": "Bu kişi, işlem veya alanı içeren kayıt yok.",
+      "colWhen": "Ne zaman",
+      "colWho": "Kim",
+      "colWhat": "Ne",
+      "loadedOnly": "Arama şimdiye kadar yüklenen kayıtları kapsar.",
+      "loadMore": "Daha fazla yükle"
     }
   }
 }

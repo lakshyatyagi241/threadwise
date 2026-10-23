@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (çalışma alanında değil)",
           "templateLabel": "Onaylı şablon",
           "templateHint": "Yalnızca çalışma alanındaki onaylı şablonlar burada görünür. <link>Yeni bir tane oluşturun →</link>",
+          "statusExits": "Durum çıkışları ekle (Gönderildi, Teslim edildi, Okundu, Yanıtlandı, Başarısız)",
+          "statusExitsHint": "Akış, bağlı bir adımı olan ilk çıkıştan ayrılır: şablon kabul edilir edilmez Gönderildi, WhatsApp bildirince Teslim edildi veya Okundu, müşteri yazınca Yanıtlandı, gönderilemezse Başarısız. Müşterinin dokunduğu düğme kendi çıkışından ayrılır.",
           "type": "Tür",
           "kindText": "Metin",
           "kindImage": "Görsel",

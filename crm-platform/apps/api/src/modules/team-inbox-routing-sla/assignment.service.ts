@@ -3,7 +3,9 @@ import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   REALTIME_EVENT,
+  isFinishedWebchat,
   type AssignConversationInput,
+  type ConversationStatus,
   type ConversationSummary,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -331,7 +333,10 @@ export class AssignmentService {
     const humanAssigned = next.userId !== null || next.teamId !== null;
     const takesFromAi =
       (humanAssigned || extra.releaseAi === true) && locked.assigneeAgentId !== null;
-    const reopens = locked.status === 'closed';
+    // Giving a closed thread to someone reopens it, except a web chat: a finished web chat is final, so it stays closed with its assignee.
+    const reopens =
+      locked.status === 'closed' &&
+      !isFinishedWebchat(locked.channelKind, locked.status as ConversationStatus);
     const handlingNext = this.nextHandling(locked.handling, next.userId, extra.handling ?? 'auto');
     const handlingChanged = handlingNext !== locked.handling;
     const source: AssignedSource | null = humanAssigned

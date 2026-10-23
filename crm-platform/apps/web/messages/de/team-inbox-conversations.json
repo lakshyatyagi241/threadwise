@@ -328,6 +328,7 @@
       },
       "readOnly": "Sie können diese Unterhaltung lesen, aber Sie sind nicht berechtigt zu antworten.",
       "resolvedBanner": "Diese Unterhaltung ist gelöst. Öffnen Sie sie erneut, um zu antworten.",
+      "resolvedWebchatBanner": "Dieser Webchat ist abgeschlossen und kann nicht wieder geöffnet werden.",
       "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weisen Sie ihn zuerst sich selbst zu, um zu antworten.",
       "typing": "{count, plural, one {Ein Teammitglied schreibt} other {# Teammitglieder schreiben}}",
       "messagesLabel": "Nachrichten",

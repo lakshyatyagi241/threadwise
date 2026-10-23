@@ -328,6 +328,7 @@
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
       "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
+      "resolvedWebchatBanner": "Bu web sohbeti çözüldü ve yeniden açılamaz.",
       "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",

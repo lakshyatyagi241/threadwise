@@ -1615,6 +1615,8 @@
           "notInWorkspace": "{value} (non presente nel workspace)",
           "templateLabel": "Template approvato",
           "templateHint": "Qui compaiono solo i template approvati del workspace. <link>Creane uno nuovo →</link>",
+          "statusExits": "Aggiungi uscite di stato (Inviato, Consegnato, Letto, Risposto, Non riuscito)",
+          "statusExitsHint": "Il flusso esce dalla prima uscita con un passaggio collegato: Inviato appena il modello è accettato, Consegnato o Letto quando WhatsApp lo segnala, Risposto quando il cliente scrive, Non riuscito se l'invio non è stato possibile. Un pulsante toccato dal cliente esce dalla propria uscita.",
           "type": "Tipo",
           "kindText": "Testo",
           "kindImage": "Immagine",

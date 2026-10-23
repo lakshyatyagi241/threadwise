@@ -1262,6 +1262,8 @@
           "notInWorkspace": "{value} (không có trong không gian làm việc)",
           "templateLabel": "Mẫu đã được duyệt",
           "templateHint": "Chỉ các mẫu đã được duyệt trong không gian làm việc mới hiển thị ở đây. <link>Tạo mẫu mới →</link>",
+          "statusExits": "Thêm lối ra theo trạng thái (Đã gửi, Đã nhận, Đã đọc, Đã trả lời, Thất bại)",
+          "statusExitsHint": "Luồng thoát qua lối ra đầu tiên có bước được nối: Đã gửi ngay khi mẫu được chấp nhận, Đã nhận hoặc Đã đọc khi WhatsApp báo, Đã trả lời khi khách nhắn lại, Thất bại nếu không gửi được. Nút khách bấm sẽ thoát qua lối ra riêng của nó.",
           "type": "Loại",
           "kindText": "Văn bản",
           "kindImage": "Ảnh",

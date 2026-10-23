@@ -1615,6 +1615,8 @@
           "notInWorkspace": "{value} (niet in workspace)",
           "templateLabel": "Goedgekeurd sjabloon",
           "templateHint": "Hier verschijnen alleen goedgekeurde sjablonen uit de workspace. <link>Maak een nieuwe aan →</link>",
+          "statusExits": "Statusuitgangen toevoegen (Verzonden, Afgeleverd, Gelezen, Beantwoord, Mislukt)",
+          "statusExitsHint": "De flow verlaat de stap via de eerste uitgang met een gekoppelde stap: Verzonden zodra de sjabloon is geaccepteerd, Afgeleverd of Gelezen wanneer WhatsApp dat meldt, Beantwoord wanneer de klant terugschrijft, Mislukt als verzenden niet lukte. Een knop die de klant aantikt neemt zijn eigen uitgang.",
           "type": "Type",
           "kindText": "Tekst",
           "kindImage": "Afbeelding",

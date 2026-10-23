@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Button, Menu, MenuItem } from '@crm/ui';
-import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
+import { BulkPickers, type BulkPicker, type ConsentChoice, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
   DownloadIcon,
@@ -17,7 +17,7 @@ export interface SelectionBarProps {
   /** Selected rows, or `null` when the selection stands for everything matching the filter. */
   count: number | null;
   busy: boolean;
-  can: { update: boolean; delete: boolean; export: boolean; createTags: boolean };
+  can: { update: boolean; delete: boolean; export: boolean; createTags: boolean; consent: boolean };
   onClear: () => void;
   onSendCampaign: () => void;
   onExport: () => void;
@@ -34,6 +34,8 @@ export interface SelectionBarProps {
   onPicker: (p: BulkPicker) => void;
   onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
   onTagApply: (action: 'add' | 'remove', choices: TagChoice[]) => Promise<boolean>;
+  /** Records marketing consent for one channel on the selection (the "Marketing consent" item of More). */
+  onConsent: (choice: ConsentChoice) => Promise<boolean>;
 }
 
 const action = 'h-8 gap-1.5 whitespace-nowrap px-2.5 text-[13px]';
@@ -118,6 +120,11 @@ export function SelectionBar(p: SelectionBarProps) {
           <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={off}>
             {t('untag')}
           </MenuItem>
+          {p.can.consent && (
+            <MenuItem onSelect={() => p.onPicker('consent')} disabled={off}>
+              {t('consent')}
+            </MenuItem>
+          )}
           <MenuItem onSelect={() => p.onMarkUncontacted(false)} disabled={off}>
             {tu('markContacted')}
           </MenuItem>
@@ -143,9 +150,11 @@ export function SelectionBar(p: SelectionBarProps) {
       <BulkPickers
         picker={p.picker}
         canCreateTags={p.can.createTags}
+        count={p.count}
         onClose={() => p.onPicker(null)}
         onGroup={p.onGroup}
         onTag={p.onTagApply}
+        onConsent={p.onConsent}
       />
     </div>
   );

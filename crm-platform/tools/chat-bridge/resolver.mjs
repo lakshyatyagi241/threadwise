@@ -38,6 +38,24 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   };
   // Thread replies do not show in the space's main timeline, so claim/release/PR/RESOLVED lines are also posted top-level (no threadKey).
   const announce = (inc, text) => env.ANNOUNCE_IN_SPACE === '0' ? undefined : Promise.all(inc.channels.map((ch) => post(ch, { text: `${text}\n(incident: ${inc.alertname ?? inc.playbook}, ${inc.id})`.slice(0, 400) }))).catch(() => {});
+  // Lifecycle line (claim, PR, release, resolved): recorded on the incident timeline. When the Chat app edited the alert card (ownerHook true) that
+  // card IS the message: no thread reply, no top-level announce. Webhook mode / no card: today's thread reply (+ announce) exactly as before.
+  let ownerHook = null, cardHook = null; // cardHook(channel, body, opts) -> true when the Chat app created the one editable card
+  const esc = (x) => String(x).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').slice(0, 200);
+  // App mode: the deploy failure is ONE interactive card; unknown values are left out. Returns the channels where it could not be created.
+  const openDeployCard = async (inc) => {
+    const m = inc.meta ?? {}, rows = [['Attempted', sha7(m.attemptedSha)], ...(m.liveSha ? [['Live', sha7(m.liveSha)]] : []), ...(m.prs?.length ? [['PRs', m.prs.map((n) => `#${Number(n)}`).join(' ')]] : []), ...(m.mergers?.length ? [['Merged by', m.mergers.join(' ')]] : []), ...(m.durationSeconds ? [['Took', `${Number(m.durationSeconds)} s`]] : [])];
+    const title = '\uD83D\uDD34 Deploy failed or was refused', body = { text: `${title}: needs a human or a fix PR`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `needs a human or a fix PR, incident ${inc.id}` }, sections: [{ widgets: rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } })) }] } }] };
+    const failed = [];
+    for (const ch of inc.channels) if (!(await Promise.resolve(cardHook?.(ch, body, { threadKey: inc.threadKey, interactive: { incidentId: inc.id, firedAt: inc.startedAt } })).catch(() => false))) failed.push(ch);
+    return failed;
+  };
+  const life = async (inc, text, { who = 'bridge', tl, label = '', announceToo = false } = {}) => {
+    inc.tl.push({ t: now(), who, text: String(tl ?? text).slice(0, 300) }); if (inc.tl.length > 40) inc.tl.shift();
+    if (await Promise.resolve(ownerHook?.(inc.id)).catch(() => false)) return true;
+    await step(inc, label, text); if (announceToo) await announce(inc, text); return false;
+  };
+  const resolution = (inc, kind, extra = {}) => { inc.resolution = { kind, at: now(), durationMs: now() - inc.startedAt, sha: inc.releasedSha ?? null, ...extra }; };
   const escalate = async (inc, why) => {
     inc.state = 'escalated'; count(inc.playbook, 'escalated'); audit({ id: inc.id, playbook: inc.playbook, result: 'escalated', why });
     await step(inc, 'ESCALATED', `NOT resolved, needs a human: ${why}. Suggested next step: ${inc.suggestion ?? 'see the diagnosis in this thread'}. Evidence: ${inc.evidence ?? 'see thread'}`, env.SLOW_QUERY_ESCALATE_TO_CRITICAL === 'true' ? 'critical' : inc.channel);
@@ -113,7 +131,12 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   async function run(inc, c) {
     c.incident = inc;
     if (mode === 'off') return inc;
-    if (inc.playbook === 'deploy_failure') { inc.state = 'needs_fix'; count('deploy_failure', 'opened'); await step(inc, '', c.message); return inc; } // informational: a human or a fix PR resolves it
+    if (inc.playbook === 'deploy_failure') {
+      inc.state = 'needs_fix'; count('deploy_failure', 'opened');
+      const failed = cardHook ? await openDeployCard(inc) : inc.channels;
+      if (failed.length) await Promise.all(failed.map((ch) => step(inc, '', c.message, ch))); // webhook mode / API failure: today's text + "Incident update" card
+      return inc;
+    } // informational: a human or a fix PR resolves it
     await step(inc, 'DIAGNOSED', inc.diagnosis ?? 'see the first message of this thread');
     const why = pre[inc.playbook](c);
     if (why.length) { audit({ id: inc.id, result: 'refused', why }); await escalate(inc, `no safe action: ${why.join('; ')}`); return inc; }
@@ -141,7 +164,8 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     await step(inc, 'VERIFIED', `condition stayed cleared for ${fmtDur(verifyMs)} (same check as the detection)`);
     inc.state = 'resolved'; count(inc.playbook, 'resolved');
     const how = inc.playbook === 'cancel_select' ? `cancelling pid ${c.row.pid} (pg_cancel_backend, not terminated)` : inc.playbook === 'terminate_idle' ? `terminating idle-in-transaction pid ${c.row.pid}` : inc.playbook;
-    await step(inc, 'RESOLVED', `resolved by ${how}, after ${fmtDur(now() - inc.startedAt)}`);
+    resolution(inc, 'action', { how });
+    await life(inc, `resolved by ${how}, after ${fmtDur(now() - inc.startedAt)}`, { label: 'RESOLVED', tl: `resolved by ${how}` });
     return inc;
   }
 
@@ -151,7 +175,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     if (mode === 'off') return Promise.resolve(null);
     const dup = spec.key && [...incidents.values()].find((i) => i.key === spec.key && i.state !== 'resolved');
     if (dup) return Promise.resolve(dup);
-    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), notes: [], events: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence, kind: spec.kind ?? kindOf(spec.playbook), alertname: spec.alertname, meta: spec.meta };
+    const inc = { id: `inc-${now().toString(36)}-${++seq}`, key: spec.key, playbook: spec.playbook, threadKey: spec.threadKey, channel: spec.channel ?? 'slowquery', channels: spec.channels ?? [spec.channel ?? 'slowquery'], state: 'open', startedAt: now(), notes: [], events: [], tl: [], diagnosis: spec.diagnosis, suggestion: spec.suggestion, evidence: spec.evidence, kind: spec.kind ?? kindOf(spec.playbook), alertname: spec.alertname, meta: spec.meta };
     incidents.set(inc.id, inc); if (incidents.size > 200) incidents.delete(incidents.keys().next().value);
     const p = run(inc, spec).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p));
     pending.add(p); return p;
@@ -162,14 +186,15 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   // RESOLVED is only ever posted by this function, after the original condition was verified gone.
   const resolveByRelease = async (inc) => {
     const sha = inc.releasedSha ?? release.sha; inc.state = 'resolved'; count(inc.playbook, 'resolved'); closeFile(inc);
-    if (inc.prUrl) { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${sha}, verified after ${Math.round((now() - (inc.releasedAt ?? inc.startedAt)) / 1000)}s; open for ${hm(now() - inc.startedAt)}`; await step(inc, '', t); await announce(inc, t); return; }
-    await step(inc, 'RESOLVED', `${inc.kind === 'deploy_failure' ? `a release is live again (${sha})` : 'statement is fast again (mean under threshold for the verification polls)'}; resolved by release ${sha}, after ${fmtDur(now() - inc.startedAt)}`);
+    resolution(inc, inc.prUrl ? 'pr' : 'release', { sha, ...(inc.alertExtra ?? {}) });
+    if (inc.prUrl) { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}), release ${sha}, verified after ${Math.round((now() - (inc.releasedAt ?? inc.startedAt)) / 1000)}s; open for ${hm(now() - inc.startedAt)}`; await life(inc, t, { announceToo: true, tl: `resolved by PR #${inc.prNumber}, release ${sha7(sha)}` }); return; }
+    await life(inc, `${inc.kind === 'deploy_failure' ? `a release is live again (${sha})` : 'statement is fast again (mean under threshold for the verification polls)'}; resolved by release ${sha}, after ${fmtDur(now() - inc.startedAt)}`, { label: 'RESOLVED', tl: `resolved by release ${sha7(sha)}` });
   };
   // Released PR but the condition persists: back to open/escalated in the same thread, PR link cleared so a new PR can be registered. Never RESOLVED.
   const stillThere = async (inc) => {
     const n = inc.prNumber, sha = inc.releasedSha; inc.notes.push({ t: now(), who: 'bridge', text: `PR #${n} released in ${sha} did not fix it` });
     inc.prUrl = inc.prNumber = inc.prAt = inc.owner = inc.claimedAt = inc.claimExpiresAt = null; inc.state = 'escalated'; count(inc.playbook, 'released_not_fixed');
-    await step(inc, '', `\u26A0\uFE0F Released PR #${n} but the problem is still there (release ${sha}). The incident is open again: claim it and try again.`);
+    await life(inc, `\u26A0\uFE0F Released PR #${n} but the problem is still there (release ${sha}). The incident is open again: claim it and try again.`, { tl: `PR #${n} released but the problem is still there; open again` });
   };
   // Condition gone? alert: ALERTS{...firing} absent in Prometheus (or Alertmanager's resolved webhook seen); slow statement: the watcher's recovered polls (statementRecovered).
   const alertGone = async (inc) => {
@@ -209,7 +234,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
       if (inc.state === 'recovered_no_release' && (!inc.prUrl || set.has(prOf(inc)))) { inc.releasedSha = release.sha; inc.releasedAt = now(); await resolveByRelease(inc); continue; }
       if (inc.prUrl && inc.state !== 'released' && inc.prAt <= release.at && set.has(prOf(inc))) {
         inc.state = 'released'; inc.releasedSha = release.sha; inc.releasedAt = now();
-        await step(inc, '', `\uD83D\uDE80 PR #${inc.prNumber} is live in release ${sha7(release.sha)}; verifying for ${Math.round(verifyMs / 1000)}s that the problem is gone`);
+        await life(inc, `\uD83D\uDE80 PR #${inc.prNumber} is live in release ${sha7(release.sha)}; verifying for ${Math.round(verifyMs / 1000)}s that the problem is gone`, { tl: `PR #${inc.prNumber} live in release ${sha7(release.sha)}, verifying` });
         const p = verifyReleased(inc).catch((e) => log({ evt: 'resolver_error', code: e?.code ?? 'error' })).finally(() => pending.delete(p)); pending.add(p);
       }
     }
@@ -225,47 +250,48 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   const hhmm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
   const held = (inc) => !!inc.owner && (!!inc.prUrl || inc.claimExpiresAt > now());
   const statusOf = (inc) => inc.state === 'resolved' ? 'resolved' : inc.state === 'released' ? 'released' : inc.prUrl ? 'pr_raised' : held(inc) ? 'claimed' : inc.state === 'escalated' ? 'escalated' : 'open';
-  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, kind: inc.kind, alertname: inc.alertname ?? null, meta: inc.meta ?? null, releasedSha: inc.releasedSha ?? null, state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
+  const view = (inc) => ({ id: inc.id, playbook: inc.playbook, kind: inc.kind, alertname: inc.alertname ?? null, meta: inc.meta ?? null, releasedSha: inc.releasedSha ?? null, prSummary: inc.prSummary ?? null, resolution: inc.resolution ?? null, tl: inc.tl.slice(-40), state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
   const sweepClaims = async () => {
-    for (const inc of incidents.values()) if (inc.owner && !inc.prUrl && inc.state !== 'resolved' && inc.claimExpiresAt <= now()) { inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; await step(inc, '', '\u23F0 claim expired, incident is open again'); }
+    for (const inc of incidents.values()) if (inc.owner && !inc.prUrl && inc.state !== 'resolved' && inc.claimExpiresAt <= now()) { inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; await life(inc, '\u23F0 claim expired, incident is open again', { tl: 'claim expired, open again' }); }
   };
   const mutate = (id, who, fn) => {
     const inc = incidents.get(id);
     if (!inc) return { code: 404, error: 'unknown incident' };
     if (inc.state === 'resolved') return { code: 409, error: 'incident already resolved' };
-    const r = fn(inc); return r.error ? r : { code: 200, inc: view(inc), post: r.post };
+    const r = fn(inc); return r.error ? r : { code: 200, inc: view(inc), post: r.post, tl: r.tl, who };
   };
-  let ownerHook = null; // the Chat app edits the alert card when an owner is set or cleared (REST claims do not go through the card button)
-  const done = async (r, inc) => { if (r.post) { const i = incidents.get(inc ?? r.inc.id); await step(i, '', r.post); if (!r.post.startsWith('\uD83D\uDCDD')) await announce(i, r.post); if (!r.post.startsWith('\uD83D\uDCDD')) await Promise.resolve(ownerHook?.(i.id, i.owner ?? null)).catch(() => {}); } delete r.post; return r; };
+  // ownerHook (the Chat app's syncCard) edits the alert card for REST claims too; it returns true when the card shows the change.
+  const done = async (r, inc) => { if (r.post) { const i = incidents.get(inc ?? r.inc.id), note = r.post.startsWith('\uD83D\uDCDD'); await life(i, r.post, { who: r.who, tl: r.tl, announceToo: !note }); } delete r.post; delete r.tl; delete r.who; return r; };
   const claim = (id, who) => done(mutate(id, who, (inc) => {
     if (held(inc) && inc.owner !== who) return { code: 409, error: `already claimed by ${inc.owner}`, owner: inc.owner };
     const fresh = !held(inc); inc.owner = who; if (fresh) inc.claimedAt = now(); inc.claimExpiresAt = now() + ttlMs();
-    return { post: fresh ? `\uD83D\uDC40 ${who} is working on this (claimed ${hhmm(inc.claimedAt)})` : undefined };
+    return { post: fresh ? `\uD83D\uDC40 ${who} is working on this (claimed ${hhmm(inc.claimedAt)})` : undefined, tl: 'claimed, working on this' };
   }), id);
   const releaseClaim = (id, who) => done(mutate(id, who, (inc) => {
     if (!held(inc) || inc.owner !== who) return { code: 409, error: 'not claimed by you' };
-    inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; return { post: `\uD83E\uDD1D ${who} released this incident` };
+    inc.owner = null; inc.claimedAt = inc.claimExpiresAt = null; return { post: `\uD83E\uDD1D ${who} released this incident`, tl: 'released the claim' };
   }), id);
   const raisePr = (id, who, { url, number, summary }) => done(mutate(id, who, (inc) => {
     if (held(inc) && inc.owner !== who) return { code: 409, error: `claimed by ${inc.owner}`, owner: inc.owner };
-    inc.owner = who; inc.claimedAt ??= now(); inc.prUrl = url; inc.prNumber = number; inc.prAt = now(); inc.claimExpiresAt = null;
-    return { post: `\uD83D\uDD27 PR #${number} raised by ${who} at ${hhmm(now())}: ${summary} ${url}` };
+    inc.owner = who; inc.claimedAt ??= now(); inc.prUrl = url; inc.prNumber = number; inc.prSummary = String(summary ?? '').slice(0, 200); inc.prAt = now(); inc.claimExpiresAt = null;
+    return { post: `\uD83D\uDD27 PR #${number} raised by ${who} at ${hhmm(now())}: ${summary} ${url}`, tl: `raised PR #${number}` };
   }), id);
   const addNote = (id, who, text) => done(mutate(id, who, (inc) => {
     if (held(inc) && inc.owner !== who) return { code: 409, error: `claimed by ${inc.owner}`, owner: inc.owner };
     inc.notes.push({ t: now(), who, text }); if (inc.notes.length > 50) inc.notes.shift();
     if (held(inc) && !inc.prUrl) inc.claimExpiresAt = now() + ttlMs(); // activity renews the claim
-    return { post: `\uD83D\uDCDD ${who}: ${text}` };
+    return { post: `\uD83D\uDCDD ${who}: ${text}`, tl: 'added a note' };
   }), id);
   // The alert cleared (verified by Alertmanager's resolved) after a PR was raised: resolved by that PR.
-  async function alertCleared(key) {
+  async function alertCleared(key, extra = {}) { // extra: { measured, peak, durationMs } from the bridge (what the alert measured)
     const inc = [...incidents.values()].find((i) => i.key === key && i.prUrl && i.state !== 'resolved');
     if (!inc) return false;
+    inc.alertExtra = extra;
     if (inc.state === 'released') { inc.alertCleared = true; return true; } // Alertmanager's resolved counts as the verification; the verify loop posts RESOLVED
-    inc.state = 'resolved'; { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`; await step(inc, '', t); await announce(inc, t); } return true;
+    inc.state = 'resolved'; resolution(inc, 'pr', extra); { const t = `\u2705 RESOLVED by PR #${inc.prNumber} (owner ${inc.owner ?? 'n/a'}): the alert verified cleared after the fix, after ${fmtDur(now() - inc.startedAt)}`; await life(inc, t, { announceToo: true, tl: `resolved by PR #${inc.prNumber}: alert verified clear` }); } return true;
   }
   return {
-    mode, setOwnerHook: (f) => { ownerHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
+    mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
     setRelease, openDeployFailure, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),

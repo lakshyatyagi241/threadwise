@@ -176,6 +176,25 @@
     "common": {
       "close": "关闭",
       "dismiss": "忽略"
+    },
+    "moduleActivity": {
+      "close": "关闭",
+      "window": "最近 30 天的变更，最新的在前。",
+      "search": "搜索活动",
+      "searchPlaceholder": "按人员、操作或字段搜索",
+      "count": "{count, plural, =0 {没有记录} one {# 条记录} other {# 条记录}}",
+      "loading": "正在加载活动记录...",
+      "loadFailed": "无法加载活动记录。",
+      "retry": "重试",
+      "emptyTitle": "暂无活动记录",
+      "empty": "在此页面所做的更改会显示在这里。",
+      "emptyFilteredTitle": "没有匹配项",
+      "emptyFiltered": "没有包含该人员、操作或字段的记录。",
+      "colWhen": "时间",
+      "colWho": "人员",
+      "colWhat": "内容",
+      "loadedOnly": "搜索范围仅限已加载的记录。",
+      "loadMore": "加载更多"
     }
   }
 }

@@ -222,6 +222,7 @@ export class SegmentsService {
         color: input.color ?? null,
         visibility: input.visibility,
         ownerId: ctx.userId,
+        createdBy: ctx.userId,
         rules: input.rules,
         rulesVersion: SEGMENT_RULES_VERSION,
       });
@@ -330,6 +331,8 @@ export class SegmentsService {
         if (input.rowVersion !== existing.rowVersion) throw AppError.rowVersionConflict('Segment');
         return this.respondAfterWrite(tx, ctx.orgId, existing.id);
       }
+      // Only a real change is attributed: the no-op above never reaches the trigger, so it never moves updated_at either.
+      values.updatedBy = ctx.userId;
 
       let updated: boolean;
       try {
