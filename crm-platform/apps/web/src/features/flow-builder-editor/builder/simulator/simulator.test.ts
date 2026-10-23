@@ -288,6 +288,29 @@ describe('simulator: nodes', () => {
     expect(await run('lt', '1', 'name')).toMatch(/NO$/);
   });
 
+  it('an answered menu can be answered again: the chat rolls back to it', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('b', 'buttons', { prompt: 'Pick', options: ['One', 'Two'], var: 'choice' }),
+      node('m0', 'message', { text: 'got {{choice}}' }),
+      node('m1', 'message', { text: 'then {{choice}}' }),
+    ];
+    const edges = [edge('t', 'out', 'b'), edge('b', 'p0', 'm0'), edge('b', 'p1', 'm1')];
+    const h = harness(nodes, edges, { onTruncate: (n) => void (cut = n) });
+    let cut = -1;
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('One');
+    await h.settle();
+    expect(h.texts()).toContain('got One');
+    const menu = h.log.findIndex((e) => e.choices?.kind === 'buttons');
+    h.sim.pickAgain(menu, 'Two');
+    await h.settle();
+    expect(cut).toBe(menu + 1);
+    expect(h.texts()).toContain('then Two');
+  });
+
   it('buttons: number and title matching, unwired port message', async () => {
     const nodes = [
       node('t', 'trigger'),
@@ -532,7 +555,7 @@ describe('simulator: integration and channel nodes (copy verified against the ru
       '(simulated) published Meta form Survey sent → out',
       'Copy sent to +911: Hi Anya',
       'Follow us\nhttps://ig.me/m/shop',
-      '(CTA)\n[url] Go → https://x.y',
+      'Go',
       '(location) HQ\n1 Road\nlat 12.5, lng 77.1',
       'Flow ended.',
     ]);
