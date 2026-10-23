@@ -854,6 +854,8 @@ export class ContactsService {
    * Exception: a built-in contact column (`email`, `name`, ...) is written by `setFieldFromFlow`, the same path as the "Update contact
    * field" step, so "also save the answer on the contact property" works for them. That path emits `contact.updated` with `via: 'flow'`,
    * which flow triggers skip and webhooks receive.
+   * A read-only property (the Web Analytics Information ones, any a workspace flagged) is never written from a flow: it is not an
+   * editable property for anyone, and a flow is something an administrator configures.
    */
   async setPropertyFromFlow(
     orgId: number,
@@ -868,7 +870,7 @@ export class ContactsService {
     }
     return this.db.txAs({ orgId }, async (tx) => {
       const field = await tx.execute(
-        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true AND is_read_only = false`,
       );
       if (field.rows.length === 0) return false;
       const row = await this.repo.findById(tx, orgId, contactId);
@@ -893,6 +895,7 @@ export class ContactsService {
    * columns (`FLOW_CONTACT_COLUMNS`) or an active custom property of this workspace by key; anything else is refused (`false`), so a
    * key typed by hand cannot write where it should not (the phone and the dedupe keys are never writable here). A blank value clears
    * a column except the name. `contact.updated` is emitted with `via: 'flow'` so webhooks hear it and the flow triggers skip it.
+   * A read-only property is refused like an unknown one (see `setPropertyFromFlow`).
    * Returns the value as stored, or null when nothing could be written.
    */
   async setFieldFromFlow(
@@ -923,7 +926,7 @@ export class ContactsService {
         delta = { [clean]: { old: row.current ?? null, new: next } };
       } else {
         const field = await tx.execute(
-          sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+          sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true AND is_read_only = false`,
         );
         if (field.rows.length === 0) return null;
         const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
