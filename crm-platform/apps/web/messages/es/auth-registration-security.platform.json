@@ -1349,13 +1349,17 @@
             "details": "Detalles y precios",
             "features": "Funciones",
             "limits": "Límites",
-            "addons": "Complementos"
+            "addons": "Complementos",
+            "integrations": "Integraciones",
+            "miniApps": "Miniapps"
           },
           "tabSummary": {
             "features": "{count} de {total} funciones activadas",
             "limits": "{count} de {total} límites definidos",
-            "addons": "{count} complementos seleccionados",
-            "error": "Tiene errores por corregir"
+            "addons": "{count, plural, one {# complemento incluido u ofrecido} other {# complementos incluidos u ofrecidos}}",
+            "error": "Tiene errores por corregir",
+            "integrations": "Integraciones incluidas u ofrecidas: {count}",
+            "miniApps": "Miniapps incluidas u ofrecidas: {count}"
           },
           "featuresUi": {
             "intro": "Desactiva lo que este plan no incluye. Un espacio de trabajo con este plan no puede abrir un área cuya función esté desactivada.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Activar todas",
             "disableAll": "Desactivar todas",
             "noMatch": "Ninguna función coincide con tu búsqueda.",
-            "groupCount": "{count} de {total} activadas"
+            "groupCount": "{count} de {total} activadas",
+            "lockedBy": "Lo define el complemento {addon} en la pestaña Complementos"
           },
           "limitsUi": {
             "intro": "Un tope detiene la acción cuando el espacio de trabajo lo alcanza. Marca Ilimitado para quitar el tope.",
@@ -1385,12 +1390,8 @@
             "total": "en total"
           },
           "addons": {
-            "intro": "Los complementos habilitados se muestran a los espacios de trabajo de este plan en su Marketplace; solo se pueden usar después de que el espacio de trabajo los compre.",
             "search": "Buscar complementos",
             "searchPlaceholder": "Buscar complementos o aplicaciones",
-            "selectAll": "Seleccionar todo",
-            "clear": "Borrar",
-            "selected": "{count} de {total} seleccionados",
             "loading": "Cargando complementos",
             "empty": "Aún no existen complementos de pago",
             "emptyHint": "Los complementos se crean en el catálogo del Marketplace de la consola de operador. Cuando una aplicación tiene un paquete de pago, aparece aquí.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "La aplicación no está publicada, así que los espacios de trabajo aún no pueden verla.",
             "appLabel": "Aplicación: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# complemento seleccionado} other {# complementos seleccionados}}"
+            "total": "{count, plural, one {# complemento incluido u ofrecido} other {# complementos incluidos u ofrecidos}}"
           },
           "featureHints": {
             "automation": "El creador de flujos y las automatizaciones que responden y actúan sobre las conversaciones.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Un plan no puede ser gratuito y de presupuesto personalizado a la vez.",
             "paid_needs_price": "Define un precio superior a 0 o marca el plan como gratuito.",
             "offer_not_lower": "El precio de oferta debe ser inferior al precio del plan.",
-            "default_needs_active": "El plan predeterminado del registro debe estar activo."
+            "default_needs_active": "El plan predeterminado del registro debe estar activo.",
+            "addonPriceZero": "Deja el precio vacío para usar el precio del complemento, o elige Incluido.",
+            "addonGone": "Este complemento ya no existe. Recarga la página y guarda de nuevo."
           },
           "limitHints": {
             "monthly_messages": "Mensajes salientes enviados en el mes natural. Por encima de la cuota se cobra del monedero.",
@@ -1707,32 +1710,49 @@
             "crm": "CRM de ventas",
             "platform": "Compartido por ambos"
           },
-          "marketplace": {
-            "title": "Apps del Marketplace ofrecidas a los espacios de trabajo de este plan"
-          },
-          "included": {
-            "title": "Complementos incluidos en este plan",
-            "intro": "Activa un complemento para incluirlo: los espacios de trabajo de este plan lo reciben sin coste y su tarjeta dice \"Incluido en tu plan\". Esto marca exactamente las funciones del complemento en la pestaña Funciones, y marcarlas allí cambia el interruptor. Los complementos no incluidos se siguen vendiendo a su propio precio a todos los espacios de trabajo con un plan de pago activo.",
-            "readOnly": "Puedes ver este plan pero no modificarlo, así que estos interruptores están bloqueados.",
+          "offers": {
+            "readOnly": "Puedes ver este plan pero no modificarlo, así que estos controles están bloqueados.",
+            "featureTitle": "Complementos de funciones",
+            "featureIntro": "Complementos que desbloquean una parte del producto. Incluido: los espacios de trabajo de este plan lo reciben sin coste y su tarjeta dice \"Incluido en tu plan\". De pago: pueden comprarlo, al precio propio de este plan si defines uno. Oculto: nunca lo ven. Las funciones del complemento en la pestaña Funciones siguen esta elección.",
+            "capacityTitle": "Complementos de capacidad",
+            "capacityIntro": "Complementos que solo amplían un límite, como un puesto extra. En un plan son de pago u ocultos; los topes propios del plan se definen en la pestaña Límites.",
+            "noFeaturePacks": "Aún no hay complementos de funciones.",
+            "adds": "Añade: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} sin límite",
+            "modeLabel": "Cómo se ofrece {name} en este plan",
+            "modes": {
+              "included": "Incluido",
+              "paid": "De pago",
+              "hidden": "Oculto"
+            },
+            "noIncluded": "Este complemento solo amplía límites, así que no se puede incluir. Define el tope propio de este plan en la pestaña Límites.",
+            "priceLabel": "Precio en este plan ({currency})",
+            "priceHint": "Déjalo vacío para usar el precio propio del complemento.",
+            "includedCapacityNote": "Solo se incluyen sus funciones. Los límites extra ({limits}) siguen a la venta para los espacios de trabajo de este plan.",
+            "hiddenNote": "Los espacios de trabajo de este plan no ven este complemento y no pueden comprarlo. Un espacio de trabajo que ya lo compró lo conserva hasta que termine su periodo.",
+            "offNote": "Ya no está incluido: los espacios de trabajo de este plan pierden estas funciones salvo que compren el complemento. Su configuración se conserva y vuelve cuando se active de nuevo.",
             "loading": "Cargando complementos",
             "loadFailed": "No se pudieron cargar los complementos. No se cambió nada.",
             "empty": "Aún no hay complementos",
             "emptyHint": "Complementos como Enrutamiento inteligente y Equipos y permisos se crean en Complementos, en la consola del operador.",
-            "stateFull": "Incluido",
-            "statePartial": "Incluido en parte",
-            "stateNone": "No incluido",
             "noPrice": "Sin precio definido",
             "gives": "Ofrece: {features}",
-            "switchLabel": "Incluir {name} en este plan",
-            "noFeatures": "Este complemento solo añade límites, así que no hay ninguna función que incluir. Sus límites no forman parte de la inclusión en el plan; define los límites propios del plan en la pestaña Límites.",
-            "partial": "Incluido en parte: {count} de {total} funciones están activas en este plan. Siguen desactivadas: {missing}.",
-            "includeFully": "Incluir por completo",
-            "limitsNote": "Este complemento también añade límites extra ({limits}). El límite extra no forma parte de la inclusión en el plan y nada de aquí lo cambia: define el límite propio del plan en la pestaña Límites. Los espacios de trabajo siguen comprando el complemento por el límite extra.",
             "unlistedNote": "Algunas de sus funciones ({features}) no están en la lista estándar de complementos. Aún se pueden activar para el plan; solo cambia la forma de comprar este complemento como paquete.",
             "inactiveNote": "Este complemento es un borrador o está desactivado, así que nadie puede comprarlo todavía. Incluirlo en el plan sigue funcionando.",
             "impactCount": "{count, plural, one {# espacio de trabajo ya paga este complemento.} other {# espacios de trabajo ya pagan este complemento.}} Su renovación se detendrá al final del periodo actual, no se reembolsa nada y hoy no se cancela nada.",
             "impactUnknown": "Los espacios de trabajo de este plan que ya pagan este complemento dejarán de renovarlo al final de su periodo actual. No se reembolsa nada y hoy no se cancela nada. No se pudo cargar la cifra.",
-            "offNote": "Desactivado: los espacios de trabajo de este plan pierden estas funciones salvo que compren el complemento, y pasa a poder comprarse a su precio."
+            "partlyNote": "Este plan ya ofrece parte de este complemento ({features}). Se queda así hasta que elijas Incluido, De pago u Oculto aquí.",
+            "needsFeatures": "Primero añade las funciones que desbloquea en Complementos > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Las miniapps son aplicaciones que un espacio de trabajo instala desde el Marketplace. Incluido: gratis para los espacios de trabajo de este plan. De pago: pueden comprarla al precio propio de la app. Oculto: nunca la ven. Incluido también activa las funciones del plan que da la app.",
+            "introIntegrations": "Las integraciones conectan un servicio externo. Incluido: gratis para los espacios de trabajo de este plan. De pago: pueden comprarla al precio propio de la integración. Oculto: nunca la ven. Incluido también activa las funciones del plan que da la integración.",
+            "setAll": "Establecer todos los mostrados en",
+            "summary": "{count} de {total} incluidos u ofrecidos",
+            "priceHint": "Las apps del Marketplace conservan su propio precio; defínelo en la ficha de la app.",
+            "emptyIntegrations": "Aún no hay integraciones de pago",
+            "emptyIntegrationsHint": "Las integraciones gratuitas no necesitan ningún ajuste aquí; Shopify y WooCommerce se activan en la pestaña Funciones."
           }
         }
       },

@@ -57,11 +57,9 @@ export class ApiKeysService {
   async create(input: CreateApiKeyInput): Promise<CreateApiKeyResponse> {
     const ctx = RequestContextStore.require();
     if (ctx.userId == null) throw AppError.unauthenticated();
-    // No scopes (omitted or empty) is a full-access key, as in Reference (TW-API-008).
-    const scopes = [...new Set(input.scopes ?? [])];
-    // An explicit scope list cannot exceed the creator's own permissions. An unrestricted key (`[]`) is still minted, as the product
-    // defines it, but the bearer guard caps every call to the creator's live grants (AZ-001), so it can never do more than they can.
-    if (scopes.length > 0) this.assertCreatorHolds(ctx.grants, scopes);
+    // A key holds at least one scope (the contract refuses an empty list), and it can never hold one its creator lacks (AZ-001).
+    const scopes = [...new Set(input.scopes)];
+    this.assertCreatorHolds(ctx.grants, scopes);
 
     for (let attempt = 1; ; attempt += 1) {
       const raw = generateRawKey();

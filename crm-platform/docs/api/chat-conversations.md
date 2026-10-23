@@ -197,7 +197,7 @@ A failed send throws `ChannelError { code, retryable }`: retryable goes back to 
 - `assertCanQueue(request, { monthlyUsed? })`, when the agent presses send (nothing is stored yet): channel `connected` (`CHANNEL_DISCONNECTED`),
   the channel can carry that kind (`CHANNEL_CAPABILITY_UNSUPPORTED`), the 24 hour window is open for anything but a template
   (`SERVICE_WINDOW_CLOSED`), and for a metered channel the plan's `monthly_messages` has room (`PLAN_LIMIT_REACHED`; the caller supplies the count, it owns
-  the message table).
+  the message table). `metered` is only this cap: the wallet fee of email and the chat channels is checked by `OutboundService` (see "Outbound").
 - `send(request)`, in the worker: the same channel and window checks again, then `OUTBOUND_SEND_GUARD.beforeSend` (the auth domain's
   `SendPolicyService` and `EmergencyHaltService`, so the halt stops what is already queued), then the adapter, once per `clientReference`: a send that
   succeeded is remembered 24 hours in Redis, so a retry returns the stored answer and a concurrent duplicate gets a retryable `DISPATCH_IN_FLIGHT`.
@@ -318,6 +318,24 @@ Guards at enqueue (`ChannelDispatcher.assertCanQueue`; nothing is stored when on
 (`monthly_messages`: outbound messages of metered channels this month that did not fail, counted only for a workspace whose plan has a cap; the simulator is
 never metered). At send time (the worker, `ChannelDispatcher.send`): the channel and window again, then the emergency halt and content screen
 (`OUTBOUND_SEND_GUARD`), so a halt stops what is already queued.
+
+**The per-message fee (email and the chat channels).** `metered` is only the plan's monthly cap, and email and the external channels are `metered: false`. The
+platform's fee is separate from it: every outbound message of an `email`, `telegram`, `facebook`, `instagram`, `line`, `viber` or `wechat` channel is charged to
+the workspace's wallet and appears in its expense log (`usage_charges`; kind `email` for a mail, `chat_message` for the others). WhatsApp Cloud keeps its own
+per-message rate card; the simulator, `whatsapp_qr` (a personal number: unbilled by product decision) and the web chat are never billed. The price is the
+operator's (usage prices `email`, default 0.10, and `chat_message`, default 0 = tracked in the log and free until priced), never hard-coded.
+
+| Step                      | Where                                                                          | Rule                                                                                                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Before it is stored       | `OutboundService.enqueue` and `retry` (`assertUsageAffordable`)                | `UsageBillingService.assertCanAfford`: `422 WALLET_EMPTY`, nothing stored or queued. A reaction, a free price and a platform-owned workspace pass; a failed lookup lets it through                    |
+| When the provider accepts | `MessageDispatchService.markSent` -> `DeliveryReporter.report` (`reportUsage`) | one `usage.reported` in the transaction that marks the message `sent`: `usageId` = the provider message id, 1 unit, `source` = who sent it (`inbox`, `auto_reply`...), `provider` = the channel kind  |
+| Viber `failed` receipt    | `ReceiptsService.apply` -> `DeliveryReporter.report`                           | nothing: no refund, because the receipt is signed with the workspace's own bot token and cannot decide one. A `delivered` or `read` receipt reports nothing; the other chat channels have no receipts |
+
+- Telegram's id is `<chat>:<message id>` and a message id is only unique inside one chat of one bot, so its billing key is `tg<bot row id>:<chat>:<message id>` (`chatUsageId`).
+- One message is one unit, however many parts the provider split it into (LINE and Messenger return only the first id). The recipient is sent only for a phone channel, so no chat or email charge carries a country.
+- The channels' own broadcast senders (Telegram, Messenger, LINE, Viber, Instagram's reply-only send) do not use this pipeline; they report through `ChatUsageReporter` with `source` `broadcast`,
+- A flow's reply on an email or chat channel also goes straight through the dispatcher (`FlowSender`), so it is gated with `ChatUsageReporter.assertSendable` before it is sent and reported with `source` `flow` (aggregate module `flow_runs`) once the provider accepts it. Same id, so a message that also passes the inbox pipeline is still charged once. WeChat's mass send has no recipient rows and is not billed.
+  see each channel's doc. The pure rules (which channel is billed, the key, the payload) are `chat-conversations/chat-usage.ts`.
 
 The worker's `dispatch`: re-read the message (a job carries ids only); skip it unless `queued`; write an `attempt` event BEFORE the provider is called; send
 through the dispatcher (one provider call per client reference, answered from Redis for 24 h after a success); on success one transaction moves

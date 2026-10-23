@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 /**
  * The Carousel step of a website chat bot: a row of cards the visitor scrolls through, each with a picture, a title, a line of text and
  * up to two buttons. A button either REPLIES (the visitor's tap continues the flow down that button's own exit) or OPENS something

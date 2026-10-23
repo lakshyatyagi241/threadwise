@@ -7,6 +7,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createDbClient, runMigrations, withPrivileged, withTenant, type DbClient } from '@crm/db';
 import type { DatabaseService } from '../../../src/infra/db/database.service';
 import type { PlatformStore } from '../../../src/modules/auth';
+import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
+import type { UsageBillingService } from '../../../src/modules/wallet-message-billing';
 import { TranslationUsageService } from '../../../src/modules/localization-translation/translation-usage.service';
 
 /**
@@ -90,7 +92,10 @@ describe('i18n schema, RLS and the usage ledger', () => {
     const store = {
       tx: (fn: Parameters<PlatformStore['tx']>[0]) => withPrivileged(dbClient.db, fn),
     } as unknown as PlatformStore;
-    usage = new TranslationUsageService(db, store);
+    // A paid call is also reported to the wallet through the real outbox; the wallet's own gate is not under test here.
+    usage = new TranslationUsageService(db, store, new OutboxService(), {
+      assertCanAfford: async () => undefined,
+    } as unknown as UsageBillingService);
   }, 180_000);
 
   afterAll(async () => {
@@ -368,6 +373,46 @@ describe('i18n schema, RLS and the usage ledger', () => {
         { provider_slug: 'deepl', chars_in: 100, chars_out: 90, cost: 2000, was_fallback: false },
         { provider_slug: 'google_gtx', chars_in: 40, chars_out: 38, cost: 0, was_fallback: true },
       ]);
+    });
+
+    it('reports a paid provider call to the wallet as one usage event in the same transaction, and a free one not', async () => {
+      await owner.query(`DELETE FROM translation_usage`);
+      await owner.query(
+        `DELETE FROM event_outbox WHERE org_id = $1 AND event_type = 'usage.reported'`,
+        [orgA],
+      );
+      await usage.record(orgA, {
+        providerSlug: 'deepl',
+        sourceLang: 'es',
+        targetLang: 'en',
+        charsIn: 100,
+        charsOut: 90,
+        wasFallback: false,
+        textHash: 'abc',
+      });
+      await usage.record(orgA, {
+        providerSlug: 'google_gtx',
+        sourceLang: 'es',
+        targetLang: 'en',
+        charsIn: 40,
+        charsOut: 38,
+        wasFallback: true,
+      });
+      const events = (
+        await owner.query(
+          `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'usage.reported'`,
+          [orgA],
+        )
+      ).rows as Array<{ payload: Record<string, unknown> }>;
+      expect(events).toHaveLength(1);
+      expect(events[0]!.payload).toMatchObject({
+        kind: 'translation',
+        provider: 'deepl',
+        source: 'translation',
+        label: 'Translation',
+        vendorCostUsd: 0.002,
+      });
+      expect(events[0]!.payload.usageId).toMatch(/^deepl:[0-9a-f]{32}$/);
     });
 
     it('records nothing without a workspace', async () => {

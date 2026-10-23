@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { guardedRequest } from '../../infra/net/guarded-http';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WEBHOOK_TRANSPORT } from './send';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
@@ -9,6 +11,11 @@ import { WebhooksService } from './webhooks.service';
 @Module({
   imports: [PlansCoreModule],
   controllers: [WebhooksController],
-  providers: [CryptoService, WebhooksRepository, WebhooksService],
+  providers: [
+    CryptoService,
+    WebhooksRepository,
+    WebhooksService,
+    { provide: WEBHOOK_TRANSPORT, useValue: guardedRequest },
+  ],
 })
 export class OutboundWebhooksModule {}

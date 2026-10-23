@@ -1349,13 +1349,17 @@
             "details": "Details and pricing",
             "features": "Features",
             "limits": "Limits",
-            "addons": "Add-ons"
+            "addons": "Add-ons",
+            "integrations": "Integrations",
+            "miniApps": "Mini apps"
           },
           "tabSummary": {
             "features": "{count} of {total} features on",
             "limits": "{count} of {total} limits set",
-            "addons": "{count} add-ons selected",
-            "error": "Has errors to fix"
+            "addons": "{count, plural, one {# add-on included or offered} other {# add-ons included or offered}}",
+            "error": "Has errors to fix",
+            "integrations": "Integrations included or offered: {count}",
+            "miniApps": "Mini apps included or offered: {count}"
           },
           "featuresUi": {
             "intro": "Switch off what this plan does not include. A workspace on the plan cannot open an area whose feature is off.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Enable all",
             "disableAll": "Disable all",
             "noMatch": "No features match your search.",
-            "groupCount": "{count} of {total} on"
+            "groupCount": "{count} of {total} on",
+            "lockedBy": "Set by the {addon} add-on on the Add-ons tab"
           },
           "limitsUi": {
             "intro": "A cap stops the action once the workspace reaches it. Tick Unlimited to remove the cap.",
@@ -1385,12 +1390,8 @@
             "total": "in total"
           },
           "addons": {
-            "intro": "Enabled add-ons are shown to workspaces on this plan in their Marketplace; they can only be used after the workspace buys them.",
             "search": "Search add-ons",
             "searchPlaceholder": "Search add-ons or apps",
-            "selectAll": "Select all",
-            "clear": "Clear",
-            "selected": "{count} of {total} selected",
             "loading": "Loading add-ons",
             "empty": "No paid add-ons exist yet",
             "emptyHint": "Add-ons are created in the Marketplace catalogue of the operator console. Once an app has a paid pack it is listed here.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "The app is not published, so workspaces cannot see it yet.",
             "appLabel": "App: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# add-on selected} other {# add-ons selected}}"
+            "total": "{count, plural, one {# add-on included or offered} other {# add-ons included or offered}}"
           },
           "featureHints": {
             "automation": "The flow builder and automations that reply to and act on conversations.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "A plan cannot be both free and custom quote.",
             "paid_needs_price": "Set a price above 0, or mark the plan as free.",
             "offer_not_lower": "The offer price must be lower than the plan price.",
-            "default_needs_active": "The signup default plan must be active."
+            "default_needs_active": "The signup default plan must be active.",
+            "addonPriceZero": "Leave the price empty to use the add-on's price, or choose Included.",
+            "addonGone": "This add-on no longer exists. Reload the page and save again."
           },
           "limitHints": {
             "monthly_messages": "Outbound messages sent in the calendar month. Beyond the allowance the wallet is charged.",
@@ -1707,32 +1710,49 @@
             "crm": "Sales CRM",
             "platform": "Shared by both"
           },
-          "marketplace": {
-            "title": "Marketplace apps offered to workspaces on this plan"
-          },
-          "included": {
-            "title": "Add-ons included in this plan",
-            "intro": "Switch an add-on on to include it: workspaces on this plan get it at no charge and its add-on card says \"Included in your plan\". This ticks exactly the add-on's features on the Features tab, and ticking them there flips the switch. Add-ons that are not included are still sold at their own price to every workspace on an active paid plan.",
-            "readOnly": "You can view this plan but not change it, so these switches are locked.",
+          "offers": {
+            "readOnly": "You can view this plan but not change it, so these controls are locked.",
+            "featureTitle": "Feature add-ons",
+            "featureIntro": "Add-ons that unlock a part of the product. Included: workspaces on this plan get it at no charge and its card says \"Included in your plan\". Paid: they can buy it, at this plan's own price if you set one. Hidden: they never see it. The add-on's features on the Features tab follow this choice.",
+            "capacityTitle": "Capacity add-ons",
+            "capacityIntro": "Add-ons that only add to a limit, such as an extra seat. On a plan they are paid or hidden; the plan's own caps are set on the Limits tab.",
+            "noFeaturePacks": "No feature add-ons exist yet.",
+            "adds": "Adds: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "Unlimited {name}",
+            "modeLabel": "How {name} is offered on this plan",
+            "modes": {
+              "included": "Included",
+              "paid": "Paid",
+              "hidden": "Hidden"
+            },
+            "noIncluded": "This add-on only adds to limits, so it cannot be included. Set this plan's own cap on the Limits tab.",
+            "priceLabel": "Price on this plan ({currency})",
+            "priceHint": "Leave empty to use the add-on's own price.",
+            "includedCapacityNote": "Only its features are included. The extra limits ({limits}) stay on sale for workspaces on this plan.",
+            "hiddenNote": "Workspaces on this plan do not see this add-on and cannot buy it. A workspace that already bought it keeps it until its term ends.",
+            "offNote": "No longer included: workspaces on this plan lose these features unless they buy the add-on. Their settings are kept and come back when it is on again.",
             "loading": "Loading add-ons",
             "loadFailed": "The add-ons could not be loaded. Nothing was changed.",
             "empty": "No add-ons exist yet",
             "emptyHint": "Add-ons such as Smart routing and Teams and permissions are created under Add-ons in the operator console.",
-            "stateFull": "Included",
-            "statePartial": "Partly included",
-            "stateNone": "Not included",
             "noPrice": "No price set",
             "gives": "Gives: {features}",
-            "switchLabel": "Include {name} in this plan",
-            "noFeatures": "This add-on only adds limits, so there is no feature to include. Its limits are not part of plan inclusion; set the plan's own limits on the Limits tab.",
-            "partial": "Partly included: {count} of {total} features are on in this plan. Still off: {missing}.",
-            "includeFully": "Include fully",
-            "limitsNote": "This add-on also adds extra limits ({limits}). The extra limit is not part of plan inclusion and nothing here changes it: set the plan's own limit on the Limits tab. Workspaces still buy the add-on for the extra limit.",
             "unlistedNote": "Some of its features ({features}) are outside the standard add-on list. They can still be switched on for the plan; only buying this add-on as a pack works differently.",
             "inactiveNote": "This add-on is a draft or switched off, so nobody can buy it yet. Including it in the plan still works.",
             "impactCount": "{count, plural, one {# workspace already pays for this add-on.} other {# workspaces already pay for this add-on.}} Their renewal will stop at the end of the current term, nothing is refunded and nothing is cancelled today.",
             "impactUnknown": "Workspaces on this plan that already pay for this add-on will stop renewing it at the end of their current term. Nothing is refunded and nothing is cancelled today. The number could not be loaded.",
-            "offNote": "Switched off: workspaces on this plan lose these features unless they buy the add-on, and it becomes buyable for them at its price."
+            "partlyNote": "This plan already gives part of this add-on ({features}). It stays as it is until you choose Included, Paid or Hidden here.",
+            "needsFeatures": "Add the features it unlocks in Add-ons > {name} first"
+          },
+          "apps": {
+            "introMiniApps": "Mini apps are apps a workspace installs from the Marketplace. Included: free for workspaces on this plan. Paid: they can buy it at the app's own price. Hidden: they never see it. Included also switches on the plan features the app gives.",
+            "introIntegrations": "Integrations connect an outside service. Included: free for workspaces on this plan. Paid: they can buy it at the integration's own price. Hidden: they never see it. Included also switches on the plan features the integration gives.",
+            "setAll": "Set all shown to",
+            "summary": "{count} of {total} included or offered",
+            "priceHint": "Marketplace apps keep their own price; set it on the app's listing.",
+            "emptyIntegrations": "No paid integrations yet",
+            "emptyIntegrationsHint": "Free integrations need no setting here; Shopify and WooCommerce are switched on the Features tab."
           }
         }
       },

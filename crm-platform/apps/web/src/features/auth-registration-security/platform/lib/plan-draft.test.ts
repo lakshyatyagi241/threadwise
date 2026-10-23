@@ -8,21 +8,29 @@ import { createPlanRequestSchema } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
   buildPlanRequest,
-  addonsSelectedCount,
-  clearAddons,
+  appModeFor,
+  appsOfferedCount,
+  canIncludePack,
   countFeaturesOn,
   countLimitsSet,
   includedPackCount,
   isPlanDraftDirty,
   limitIsUnlimited,
   newPlanDraft,
-  packCoverage,
+  offerFeatures,
+  offerFor,
+  offerModesFor,
+  packLockedFeatures,
   planFieldForPath,
   planToDraft,
   problemsFromServer,
-  selectAddons,
+  packKind,
+  packsOfferedCount,
+  setAddonOffer,
+  setAddonOfferAmount,
+  setAppOffer,
+  setAppOffers,
   setLimitUnlimited,
-  setPackIncluded,
   toggleAddon,
   toggleFeatures,
   unknownAddonId,
@@ -146,6 +154,7 @@ const stored: PlanAdminItem = {
   moduleFeatures: {},
   moduleLimits: {},
   visibleAddons: [],
+  addonOffers: [],
   inUse: 2,
   isRegistrationDefault: false,
   createdAt: '2026-10-01T00:00:00.000Z',
@@ -355,7 +364,6 @@ describe('isPlanDraftDirty', () => {
 
 const A = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d21';
 const B = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d22';
-const C = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d23';
 
 describe('limits: unlimited <-> 0', () => {
   it('blank and 0 are unlimited, a positive number is a cap', () => {
@@ -429,12 +437,6 @@ describe('add-on selection', () => {
     expect(toggleAddon([], A, true)).toEqual([A]);
     expect(toggleAddon([A], A, true)).toEqual([A]);
     expect(toggleAddon([A, B], A, false)).toEqual([B]);
-  });
-
-  it('select all adds the visible ids and keeps the others; clear removes only the visible ones', () => {
-    expect(selectAddons([C], [A, B, C])).toEqual([C, A, B]);
-    expect(clearAddons([A, B, C], [A, C])).toEqual([B]);
-    expect(clearAddons([A], [])).toEqual([A]);
   });
 });
 
@@ -576,147 +578,384 @@ describe('the teams cap (0 is solo, blank is unlimited)', () => {
   });
 });
 
-describe('plain add-on packs included in the plan (derived from the features)', () => {
-  const SMART = { grants: { features: ['inbox_routing', 'inbox_assignment_sticky'], limits: {} } };
+describe('plain add-on offers (Included | Paid | Hidden per plan)', () => {
+  const SMART = {
+    id: '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e01',
+    name: 'Smart routing',
+    grants: { features: ['inbox_routing', 'inbox_assignment_sticky'], limits: {} },
+  };
   const TEAMS = {
+    id: '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e02',
+    name: 'Teams and permissions',
     grants: { features: ['team_hierarchy', 'custom_roles'], limits: { teams: 10 } },
   };
-  const LIMITS_ONLY = { grants: { features: [], limits: { teams: 5 } } };
-  const OUTSIDE = { grants: { features: ['inbox_routing', 'some_module_flag'], limits: {} } };
+  const SEATS = {
+    id: '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e03',
+    name: 'Extra seat',
+    grants: { features: [], limits: { users: 1 } },
+  };
+  const OUTSIDE = {
+    id: '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e04',
+    name: 'Module pack',
+    grants: { features: ['inbox_routing', 'some_module_flag'], limits: {} },
+  };
+  const PACKS = [SMART, TEAMS, SEATS];
   const allOff = () => toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
 
-  it('reads none / partial / full from the plan features', () => {
-    const none = packCoverage(SMART, allOff());
-    expect(none).toEqual({
-      state: 'none',
-      on: 0,
-      total: 2,
-      missing: ['inbox_routing', 'inbox_assignment_sticky'],
+  it('a draft starts from the stored offers; a pack with no row is paid at the add-on price', () => {
+    const d = planToDraft({
+      ...stored,
+      addonOffers: [
+        { addonId: SMART.id, mode: 'included', amount: null },
+        { addonId: SEATS.id, mode: 'paid', amount: '199.00' },
+        { addonId: OUTSIDE.id, mode: 'hidden', amount: null },
+      ],
     });
-    const part = packCoverage(SMART, { ...allOff(), inbox_routing: true });
-    expect(part.state).toBe('partial');
-    expect(part.missing).toEqual(['inbox_assignment_sticky']);
-    expect(
-      packCoverage(SMART, { ...allOff(), inbox_routing: true, inbox_assignment_sticky: true })
-        .state,
-    ).toBe('full');
+    expect(offerFor(d, SMART.id)).toEqual({ mode: 'included', amount: '' });
+    expect(offerFor(d, SEATS.id)).toEqual({ mode: 'paid', amount: '199.00' });
+    expect(offerFor(d, OUTSIDE.id)).toEqual({ mode: 'hidden', amount: '' });
+    expect(offerFor(d, TEAMS.id)).toEqual({ mode: 'paid', amount: '' });
+    expect(newPlanDraft().addonOffers).toEqual({});
+    // an older API without the field reads as "nothing stored"
+    expect(planToDraft({ ...stored, addonOffers: undefined as never }).addonOffers).toEqual({});
   });
 
-  it('a new plan starts without Smart routing (NEW_PLAN_FEATURES_OFF), so the pack starts as none', () => {
-    expect(packCoverage(SMART, newPlanDraft().features).state).toBe('none');
-    for (const k of NEW_PLAN_FEATURES_OFF) expect(newPlanDraft().features[k]).toBe(false);
-  });
-
-  it('a pack with no feature keys (limits only) has nothing to include and is never changed', () => {
-    expect(packCoverage(LIMITS_ONLY, newPlanDraft().features).state).toBe('noFeatures');
+  it('a capacity add-on (limits only) offers Paid | Hidden, never Included', () => {
+    expect(offerModesFor(SMART)).toEqual(['included', 'paid', 'hidden']);
+    expect(offerModesFor(TEAMS)).toEqual(['included', 'paid', 'hidden']);
+    expect(offerModesFor(SEATS)).toEqual(['paid', 'hidden']);
     const d = filled();
-    expect(setPackIncluded(d, LIMITS_ONLY, true)).toBe(d);
-    expect(setPackIncluded(d, LIMITS_ONLY, false)).toBe(d);
+    expect(setAddonOffer(d, SEATS, 'included', PACKS)).toBe(d);
+    expect(offerFor(setAddonOffer(d, SEATS, 'hidden', PACKS), SEATS.id).mode).toBe('hidden');
   });
 
-  it('switching on ticks exactly the pack keys; the Features tab flips the state both ways', () => {
+  it('choosing a mode sets the pack feature keys: included -> on, paid or hidden -> off', () => {
     const d = { ...filled(), features: allOff() };
-    const on = setPackIncluded(d, SMART, true);
+    const on = setAddonOffer(d, SMART, 'included', PACKS);
     expect(on.features.inbox_routing).toBe(true);
     expect(on.features.inbox_assignment_sticky).toBe(true);
     expect(countFeaturesOn(on.features)).toBe(2);
-    expect(packCoverage(SMART, on.features).state).toBe('full');
-    // one key ticked away on the Features tab makes the pack partial, ticking it back makes it full again
-    const featuresTab = { ...on.features, inbox_routing: false };
-    expect(packCoverage(SMART, featuresTab).state).toBe('partial');
-    expect(packCoverage(SMART, { ...featuresTab, inbox_routing: true }).state).toBe('full');
-    // both keys ticked on the Features tab (no switch involved) read as included
-    expect(
-      packCoverage(
-        SMART,
-        toggleFeatures(allOff(), ['inbox_routing', 'inbox_assignment_sticky'], true),
-      ).state,
-    ).toBe('full');
+    const hidden = setAddonOffer(on, SMART, 'hidden', PACKS);
+    expect(hidden.features.inbox_routing).toBe(false);
+    expect(hidden.features.inbox_assignment_sticky).toBe(false);
+    expect('inbox_routing' in hidden.features).toBe(true);
+    const paid = setAddonOffer(on, SMART, 'paid', PACKS);
+    expect(paid.features.inbox_routing).toBe(false);
   });
 
-  it('"include fully" on a partly covered pack completes it without touching other features', () => {
-    const d = { ...filled(), features: { ...allOff(), inbox_routing: true, sales_pipeline: true } };
-    const done = setPackIncluded(d, SMART, true);
-    expect(packCoverage(SMART, done.features).state).toBe('full');
-    expect(done.features.sales_pipeline).toBe(true);
-    expect(countFeaturesOn(done.features)).toBe(3);
-  });
-
-  it('switching off writes false explicitly (it does not restore a previous value and does not delete the key)', () => {
-    const d = { ...filled(), features: { ...allOff(), inbox_routing: true } };
-    const on = setPackIncluded(d, SMART, true);
-    const off = setPackIncluded(on, SMART, false);
-    expect(off.features.inbox_routing).toBe(false);
-    expect(off.features.inbox_assignment_sticky).toBe(false);
-    expect('inbox_routing' in off.features).toBe(true);
-    expect(packCoverage(SMART, off.features).state).toBe('none');
-  });
-
-  it('a pack with limits: only its features move; the limit values are left exactly as they are', () => {
-    const d = filled({ limits: { ...newPlanDraft().limits, teams: '7' } });
-    const on = setPackIncluded(d, TEAMS, true);
+  it('a pack with limits: only its features move; limits and the rest of the draft stay', () => {
+    const d = filled({ limits: { ...newPlanDraft().limits, teams: '7' }, visibleAddons: ['a'] });
+    const on = setAddonOffer(d, TEAMS, 'included', PACKS);
     expect(on.features.team_hierarchy).toBe(true);
-    expect(on.features.custom_roles).toBe(true);
     expect(on.limits).toEqual(d.limits);
-    expect(setPackIncluded(on, TEAMS, false).limits).toEqual(d.limits);
+    expect({ ...on, features: d.features, addonOffers: d.addonOffers }).toEqual(d);
   });
 
-  it('does not touch the Marketplace selection or the rest of the draft', () => {
-    const d = filled({ visibleAddons: ['a', 'b'] });
-    const on = setPackIncluded(d, SMART, true);
-    expect(on.visibleAddons).toEqual(['a', 'b']);
-    expect({ ...on, features: d.features }).toEqual(d);
-  });
-
-  it('keys outside the catalogue can be ticked on the plan and are stored as module features', () => {
-    expect(unlistedPackFeatures(OUTSIDE)).toEqual(['some_module_flag']);
-    expect(unlistedPackFeatures(SMART)).toEqual([]);
-    const on = setPackIncluded(filled(), OUTSIDE, true);
-    expect(packCoverage(OUTSIDE, on.features).state).toBe('full');
-    const body = buildPlanRequest(on).body!;
-    expect(body.moduleFeatures.some_module_flag).toBe(true);
-    expect(body.features.inbox_routing).toBe(true);
-    const off = buildPlanRequest(setPackIncluded(on, OUTSIDE, false)).body!;
-    expect(off.moduleFeatures.some_module_flag).toBe(false);
-  });
-
-  it('a plan saved from the editor stores every feature key explicitly, on and off', () => {
-    const off = buildPlanRequest(setPackIncluded(filled(), SMART, false)).body!;
-    for (const k of PLAN_FEATURE_KEYS) expect(typeof off.features[k]).toBe('boolean');
-    expect(off.features.inbox_routing).toBe(false);
-    const on = buildPlanRequest(setPackIncluded(filled(), SMART, true)).body!;
-    for (const k of PLAN_FEATURE_KEYS) expect(typeof on.features[k]).toBe('boolean');
-    expect(on.features.inbox_routing).toBe(true);
-    expect(on.features.inbox_assignment_sticky).toBe(true);
-  });
-
-  it('editing a plan that already has the keys on: the pack reads full and a save keeps them on', () => {
-    const plan = planToDraft({
-      ...stored,
-      features: { ...stored.features, inbox_routing: true, inbox_assignment_sticky: true },
-    });
-    expect(packCoverage(SMART, plan.features).state).toBe('full');
-    expect(buildPlanRequest(plan).body!.features.inbox_routing).toBe(true);
-  });
-
-  it('counts fully included packs plus the Marketplace apps offered (a partly covered pack is not counted)', () => {
-    const features = {
-      ...allOff(),
+  it('a key two packs share stays on while one of them is included', () => {
+    const packs = [SMART, OUTSIDE];
+    const d = setAddonOffer(
+      setAddonOffer(filled(), SMART, 'included', packs),
+      OUTSIDE,
+      'hidden',
+      packs,
+    );
+    expect(d.features.inbox_routing).toBe(true);
+    expect(d.features.some_module_flag).toBe(false);
+    expect(offerFeatures(d, packs)).toEqual({
       inbox_routing: true,
       inbox_assignment_sticky: true,
-      team_hierarchy: true,
-    };
-    expect(includedPackCount([SMART, TEAMS, LIMITS_ONLY], features)).toBe(1);
-    expect(
-      addonsSelectedCount({ features, visibleAddons: ['a', 'b'] }, [SMART, TEAMS, LIMITS_ONLY]),
-    ).toBe(3);
-    expect(addonsSelectedCount({ features: allOff(), visibleAddons: [] }, [])).toBe(0);
+      some_module_flag: false,
+    });
   });
 
-  it('the draft is dirty after a switch and clean again after it is put back', () => {
+  it('a plan price is kept only while paid; switching away forgets it', () => {
+    const d = setAddonOfferAmount(filled(), SMART.id, '199');
+    expect(offerFor(d, SMART.id)).toEqual({ mode: 'paid', amount: '199' });
+    const inc = setAddonOffer(d, SMART, 'included', PACKS);
+    expect(offerFor(inc, SMART.id).amount).toBe('');
+    // a price cannot be typed for a hidden add-on
+    const hid = setAddonOffer(filled(), SMART, 'hidden', PACKS);
+    expect(setAddonOfferAmount(hid, SMART.id, '5')).toBe(hid);
+  });
+
+  it("the request carries the offers the plan holds, and those packs' features follow them", () => {
+    const d = setAddonOfferAmount(
+      setAddonOffer(
+        setAddonOffer({ ...filled(), features: allOff() }, SMART, 'included', PACKS),
+        SEATS,
+        'paid',
+        PACKS,
+      ),
+      SEATS.id,
+      ' 199 ',
+    );
+    const body = buildPlanRequest(d, { addonPacks: PACKS }).body!;
+    expect(body.addonOffers).toEqual([
+      { addonId: SMART.id, mode: 'included', amount: null },
+      { addonId: SEATS.id, mode: 'paid', amount: '199.00' },
+    ]);
+    expect(body.features.inbox_routing).toBe(true);
+    // an untouched plan with no stored offer sends none: nothing about any add-on changes
+    expect(buildPlanRequest(filled(), { addonPacks: PACKS }).body!.addonOffers).toEqual([]);
+    expect(createPlanRequestSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('a plan that carries only part of an add-on keeps it on a save that never touched the add-on', () => {
+    const d = filled({ features: { ...allOff(), inbox_routing: true, team_hierarchy: true } });
+    const body = buildPlanRequest(d, { addonPacks: PACKS }).body!;
+    expect(body.features.inbox_routing).toBe(true);
+    expect(body.features.team_hierarchy).toBe(true);
+    // switching another add-on does not touch it either
+    const other = buildPlanRequest(setAddonOffer(d, SEATS, 'hidden', PACKS), {
+      addonPacks: PACKS,
+    }).body!;
+    expect(other.features.inbox_routing).toBe(true);
+    // choosing Paid for it on purpose turns its features off, as the API stores
+    const paid = buildPlanRequest(setAddonOffer(d, SMART, 'paid', PACKS), {
+      addonPacks: PACKS,
+    }).body!;
+    expect(paid.features.inbox_routing).toBe(false);
+  });
+
+  it('without the pack list only the stored offers are sent back, and the features are left as drafted', () => {
+    const d = planToDraft({
+      ...stored,
+      features: { ...stored.features, inbox_routing: true },
+      addonOffers: [{ addonId: SEATS.id, mode: 'hidden', amount: null }],
+    });
+    const body = buildPlanRequest(d).body!;
+    expect(body.addonOffers).toEqual([{ addonId: SEATS.id, mode: 'hidden', amount: null }]);
+    expect(body.features.inbox_routing).toBe(true);
+    expect(buildPlanRequest(filled()).body!.addonOffers).toEqual([]);
+  });
+
+  it('refuses a malformed or zero plan price on its own row', () => {
+    const bad = buildPlanRequest(setAddonOfferAmount(filled(), SEATS.id, '1.2.3'), {
+      addonPacks: PACKS,
+    });
+    expect(bad.problems?.[`addonOffers.${SEATS.id}`]).toEqual({ code: 'money' });
+    const zero = buildPlanRequest(setAddonOfferAmount(filled(), SEATS.id, '0'), {
+      addonPacks: PACKS,
+    });
+    expect(zero.problems?.[`addonOffers.${SEATS.id}`]).toEqual({ code: 'addonPriceZero' });
+  });
+
+  it('maps addonOffers.<i> errors to the add-on the request listed at <i>', () => {
+    const ids = [SMART.id, SEATS.id];
+    expect(planFieldForPath('addonOffers.1.mode', ids)).toBe(`addonOffers.${SEATS.id}`);
+    expect(planFieldForPath('addonOffers.5.mode', ids)).toBe('addonOffers');
+    expect(planFieldForPath('addonOffers')).toBe('addonOffers');
+    expect(
+      problemsFromServer(
+        [
+          { path: 'addonOffers.1.mode', message: 'Extra seat only adds to limits.' },
+          { path: 'addonOffers.0.addonId', message: `unknown_addon:${SMART.id}` },
+        ],
+        { addonOfferIds: ids },
+      ),
+    ).toEqual({
+      [`addonOffers.${SEATS.id}`]: { code: 'server', message: 'Extra seat only adds to limits.' },
+      [`addonOffers.${SMART.id}`]: { code: 'addonGone' },
+    });
+  });
+
+  it('locks every key a pack grants, naming the packs', () => {
+    const locked = packLockedFeatures([SMART, OUTSIDE, SEATS]);
+    expect(locked.get('inbox_routing')).toEqual(['Smart routing', 'Module pack']);
+    expect(locked.get('inbox_assignment_sticky')).toEqual(['Smart routing']);
+    expect(locked.has('users')).toBe(false);
+    expect(locked.has('sales_pipeline')).toBe(false);
+  });
+
+  it('keys outside the catalogue are stored as module features', () => {
+    expect(unlistedPackFeatures(OUTSIDE)).toEqual(['some_module_flag']);
+    expect(unlistedPackFeatures(SMART)).toEqual([]);
+    const on = setAddonOffer(filled(), OUTSIDE, 'included', [OUTSIDE]);
+    const body = buildPlanRequest(on, { addonPacks: [OUTSIDE] }).body!;
+    expect(body.moduleFeatures.some_module_flag).toBe(true);
+    expect(body.features.inbox_routing).toBe(true);
+  });
+
+  it('counts the included feature add-ons, and the add-ons offered (Included + Paid, never Hidden)', () => {
+    const d = setAddonOffer(
+      setAddonOffer(filled({ visibleAddons: ['a', 'b'] }), SMART, 'included', PACKS),
+      SEATS,
+      'hidden',
+      PACKS,
+    );
+    expect(includedPackCount(d, PACKS)).toBe(1);
+    // Smart routing included, Teams paid (no row), Extra seat hidden; the mini apps are not counted here
+    expect(packsOfferedCount(d, PACKS)).toBe(2);
+    expect(packsOfferedCount(newPlanDraft(), [])).toBe(0);
+  });
+
+  it('the kind is the one stored on the pack, never worked out from its grants', () => {
+    // Smart routing with no features yet: still a feature add-on (a grants-based kind would read capacity)
+    const EMPTY_FEATURE = {
+      id: 'e',
+      kind: 'feature' as const,
+      grants: { features: [], limits: { users: 1 } },
+    };
+    const CAPACITY = {
+      id: 'c',
+      kind: 'capacity' as const,
+      grants: { features: [], limits: { users: 1 } },
+    };
+    expect(packKind(EMPTY_FEATURE)).toBe('feature');
+    expect(packKind(CAPACITY)).toBe('capacity');
+    // data that carries no kind falls back to the grants
+    expect(packKind(SEATS)).toBe('capacity');
+    expect(packKind(SMART)).toBe('feature');
+    expect(offerModesFor(EMPTY_FEATURE)).toEqual(['included', 'paid', 'hidden']);
+    expect(offerModesFor(CAPACITY)).toEqual(['paid', 'hidden']);
+  });
+
+  it('a feature add-on with no features cannot be included; one already included stays', () => {
+    const EMPTY = { id: 'e', kind: 'feature' as const, grants: { features: [], limits: {} } };
+    expect(canIncludePack(EMPTY)).toBe(false);
+    expect(canIncludePack(SMART)).toBe(true);
+    expect(canIncludePack({ kind: 'capacity', grants: { features: ['x'], limits: {} } })).toBe(
+      false,
+    );
+    const d = filled();
+    expect(setAddonOffer(d, EMPTY, 'included', [EMPTY])).toBe(d);
+    expect(offerFor(setAddonOffer(d, EMPTY, 'hidden', [EMPTY]), 'e').mode).toBe('hidden');
+    const was = filled({ addonOffers: { e: { mode: 'included', amount: '' } } });
+    expect(setAddonOffer(was, EMPTY, 'included', [EMPTY]).addonOffers.e?.mode).toBe('included');
+  });
+
+  it('the draft is dirty after a mode change and clean again once it is put back', () => {
     const initial = { ...filled(), features: allOff() };
-    const on = setPackIncluded(initial, SMART, true);
+    const on = setAddonOffer(initial, SMART, 'included', PACKS);
     expect(isPlanDraftDirty(initial, on)).toBe(true);
-    expect(isPlanDraftDirty(initial, setPackIncluded(on, SMART, false))).toBe(false);
+    // back to paid at the add-on price = the same as no row
+    expect(isPlanDraftDirty(initial, setAddonOffer(on, SMART, 'paid', PACKS))).toBe(false);
+    expect(isPlanDraftDirty(initial, setAddonOfferAmount(initial, SMART.id, '5'))).toBe(true);
+  });
+});
+
+describe('Marketplace app offers (Integrations and Mini apps tabs)', () => {
+  const APP1 = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c2a01';
+  const APP2 = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c2a02';
+  const APP3 = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c2a03';
+  const GONE = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c2aff';
+
+  it('reads the mode from the offer row, else Paid when visible, else Hidden', () => {
+    const d = filled({
+      visibleAddons: [APP1, APP2],
+      addonOffers: { [APP2]: { mode: 'included', amount: '' } },
+    });
+    expect(appModeFor(d, APP1)).toBe('paid');
+    expect(appModeFor(d, APP2)).toBe('included');
+    expect(appModeFor(d, APP3)).toBe('hidden');
+    expect(appsOfferedCount(d, [APP1, APP2, APP3])).toBe(2);
+  });
+
+  it('setAppOffer keeps visibleAddons and the Included row in step', () => {
+    const d = filled();
+    const paid = setAppOffer(d, APP1, 'paid');
+    expect(paid.visibleAddons).toEqual([APP1]);
+    expect(paid.addonOffers).toEqual({});
+    const inc = setAppOffer(paid, APP1, 'included');
+    expect(inc.visibleAddons).toEqual([APP1]);
+    expect(inc.addonOffers[APP1]).toEqual({ mode: 'included', amount: '' });
+    const hidden = setAppOffer(inc, APP1, 'hidden');
+    expect(hidden.visibleAddons).toEqual([]);
+    expect(hidden.addonOffers).toEqual({});
+    // an app's plan features are never touched
+    expect(hidden.features).toEqual(d.features);
+    const back = setAppOffer(inc, APP1, 'paid');
+    expect(back.visibleAddons).toEqual([APP1]);
+    expect(back.addonOffers[APP1]).toBeUndefined();
+  });
+
+  it('repairs a row that drifted: Included but not visible becomes visible, Hidden drops the row', () => {
+    const drift = filled({ addonOffers: { [APP1]: { mode: 'included', amount: '' } } });
+    expect(setAppOffer(drift, APP1, 'included').visibleAddons).toEqual([APP1]);
+    expect(setAppOffer(drift, APP1, 'hidden').addonOffers).toEqual({});
+  });
+
+  it('returns the same draft when nothing would change', () => {
+    const d = filled({
+      visibleAddons: [APP1],
+      addonOffers: { [APP2]: { mode: 'included', amount: '' } },
+    });
+    const withApp2Visible = { ...d, visibleAddons: [APP1, APP2] };
+    expect(setAppOffer(withApp2Visible, APP1, 'paid')).toBe(withApp2Visible);
+    expect(setAppOffer(withApp2Visible, APP2, 'included')).toBe(withApp2Visible);
+    expect(setAppOffer(withApp2Visible, APP3, 'hidden')).toBe(withApp2Visible);
+  });
+
+  it('sets many at once', () => {
+    const d = setAppOffers(filled(), [APP1, APP2], 'included');
+    expect(d.visibleAddons).toEqual([APP1, APP2]);
+    expect(Object.keys(d.addonOffers).sort()).toEqual([APP1, APP2]);
+    expect(setAppOffers(d, [APP1, APP2], 'hidden').visibleAddons).toEqual([]);
+  });
+
+  it('the request carries one offer per listed app with amount null, and visibleAddons follows the modes', () => {
+    const d = setAppOffer(
+      setAppOffer(filled({ visibleAddons: [GONE] }), APP1, 'included'),
+      APP2,
+      'paid',
+    );
+    const body = buildPlanRequest(d, { appIds: [APP1, APP2, APP3] }).body!;
+    expect(body.addonOffers).toEqual([
+      { addonId: APP1, mode: 'included', amount: null },
+      { addonId: APP2, mode: 'paid', amount: null },
+      { addonId: APP3, mode: 'hidden', amount: null },
+    ]);
+    // the app ids are visible when Paid or Included; a stale id nobody lists is left alone
+    expect([...body.visibleAddons!].sort()).toEqual([APP1, APP2, GONE].sort());
+    expect(createPlanRequestSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('plain add-on offers are sent exactly as before next to the app offers', () => {
+    const PACK = {
+      id: '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e01',
+      grants: { features: ['inbox_routing'], limits: {} },
+    };
+    const d = setAppOffer(setAddonOffer(filled(), PACK, 'hidden', [PACK]), APP1, 'paid');
+    const ids = buildPlanRequest(d, { appIds: [APP1], addonPacks: [PACK] }).body!.addonOffers!.map(
+      (o: { addonId: string }) => o.addonId,
+    );
+    expect(ids).toEqual([PACK.id, APP1]);
+  });
+
+  it('without the app list, stored Included app rows are sent back as they are and visibleAddons is unchanged', () => {
+    const d = filled({
+      visibleAddons: [APP1, APP2],
+      addonOffers: { [APP2]: { mode: 'included', amount: '' } },
+    });
+    const body = buildPlanRequest(d).body!;
+    expect(body.addonOffers).toEqual([{ addonId: APP2, mode: 'included', amount: null }]);
+    expect(body.visibleAddons).toEqual([APP1, APP2]);
+  });
+
+  it('an untouched stored plan is unchanged, and putting a mode back is not a change either', () => {
+    const base = planToDraft({
+      ...stored,
+      visibleAddons: [APP1, APP2],
+      addonOffers: [{ addonId: APP2, mode: 'included', amount: null }],
+    });
+    expect(appModeFor(base, APP1)).toBe('paid');
+    expect(appModeFor(base, APP2)).toBe('included');
+    expect(isPlanDraftDirty(base, base)).toBe(false);
+    expect(isPlanDraftDirty(base, setAppOffer(base, APP1, 'paid'))).toBe(false);
+    const edited = setAppOffer(base, APP1, 'hidden');
+    expect(isPlanDraftDirty(base, edited)).toBe(true);
+    expect(isPlanDraftDirty(base, setAppOffer(edited, APP1, 'paid'))).toBe(false);
+    expect(isPlanDraftDirty(base, setAppOffer(base, APP2, 'paid'))).toBe(true);
+  });
+
+  it('maps an error on an app offer to the app the request listed at that position', () => {
+    const body = buildPlanRequest(setAppOffer(filled(), APP1, 'included'), {
+      appIds: [APP1],
+    }).body!;
+    const ids = body.addonOffers!.map((o: { addonId: string }) => o.addonId);
+    const p = problemsFromServer([{ path: 'addonOffers.0', message: `unknown_addon:${APP1}` }], {
+      addonOfferIds: ids,
+    });
+    expect(p[`addonOffers.${APP1}`]?.code).toBe('addonGone');
   });
 });

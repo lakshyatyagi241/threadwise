@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { liveFlowData } from './runtime/live-graph';
+import { liveFlowData, liveTrigger } from './runtime/live-graph';
 import {
   ERROR_CODES,
   FLOW_ENROLL_MAX_CONTACTS,
@@ -874,7 +874,7 @@ export class FlowRuntimeService {
    */
   async analytics(q: FlowAnalyticsQuery): Promise<FlowAnalytics> {
     const orgId = this.org();
-    return this.db.tx(async (tx) => {
+    return this.db.retry.tx(async (tx) => {
       const { from, to } = windowOf(q);
       const flowIdSql = q.flowId
         ? sql`(SELECT id FROM flows WHERE org_id = ${orgId} AND uuid = ${q.flowId}::uuid)`
@@ -1028,7 +1028,8 @@ export class FlowRuntimeService {
     const orgId = this.org();
     return this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT f.uuid, f.flow_name, f.flow_type, f.trigger_kind, f.is_published, f.is_active, f.provider, f.updated_at,
+        SELECT f.uuid, f.flow_name, f.flow_type, ${liveTrigger('trigger_kind', 'f')} AS trigger_kind, f.is_published, f.is_active,
+               ${liveTrigger('provider', 'f')} AS provider, f.updated_at,
                (SELECT count(*)::int FROM flow_subscribers s WHERE s.org_id = f.org_id AND s.flow_id = f.id) AS subscribers_count
         FROM flows f WHERE f.org_id = ${orgId} ORDER BY f.updated_at DESC LIMIT 500`);
       const data = rowsOf(res).map((r) => this.publicFlowOf(r));
@@ -1040,7 +1041,8 @@ export class FlowRuntimeService {
     const orgId = this.org();
     return this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT f.uuid, f.flow_name, f.flow_type, f.trigger_kind, f.is_published, f.is_active, f.provider, f.updated_at,
+        SELECT f.uuid, f.flow_name, f.flow_type, ${liveTrigger('trigger_kind', 'f')} AS trigger_kind, f.is_published, f.is_active,
+               ${liveTrigger('provider', 'f')} AS provider, f.updated_at,
                (SELECT count(*)::int FROM flow_subscribers s WHERE s.org_id = f.org_id AND s.flow_id = f.id) AS subscribers_count
         FROM flows f WHERE f.org_id = ${orgId} AND f.uuid = ${flowUuid}::uuid`);
       const r = rowsOf(res)[0];

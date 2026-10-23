@@ -135,6 +135,11 @@ beforeAll(async () => {
       `UPDATE org_plan_state SET overrides = jsonb_set(overrides, '{features}', '{"lead_scoring": true}'::jsonb, true) WHERE org_id = $1`,
       [t.orgId],
     );
+    // Reading a chat and the broadcast assistant run on the platform's key, which the workspace wallet pays for (WALLET_EMPTY without a balance).
+    await h.owner.query(
+      `INSERT INTO wallets (org_id, unit, balance) VALUES ($1, 'USD', 100) ON CONFLICT (org_id, unit) DO UPDATE SET balance = 100`,
+      [t.orgId],
+    );
     return t;
   };
 

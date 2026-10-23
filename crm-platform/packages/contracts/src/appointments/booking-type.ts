@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { dealValueSchema, currencyCodeSchema } from '../deals-pipelines/money';
+import { timeZoneSchema } from '../common/time-zone';
 
 /**
  * Booking types (TW-APPT-005..015): the services a workspace sells time for. Everything a type owns (weekly hours, date overrides,
@@ -57,21 +58,7 @@ export const BOOKING_QUESTIONS_MAX = 20;
 export const BOOKING_OVERRIDES_MAX = 400;
 export const BOOKING_REMINDER_MAX_MINUTES = 43_200; // 30 days
 
-/** A valid IANA zone name, checked by the platform's own tz database. */
-export function isValidTimeZone(tz: string): boolean {
-  try {
-    new Intl.DateTimeFormat('en-US', { timeZone: tz });
-    return true;
-  } catch {
-    return false;
-  }
-}
-export const timeZoneSchema = z
-  .string()
-  .trim()
-  .min(1)
-  .max(64)
-  .refine(isValidTimeZone, 'timezone must be an IANA zone such as "Asia/Kolkata"');
+export { isValidTimeZone, timeZoneSchema } from '../common/time-zone';
 
 /** `HH:MM`, 24-hour. */
 export const clockTimeSchema = z

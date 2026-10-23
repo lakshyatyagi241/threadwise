@@ -95,7 +95,7 @@ export class InboxTriageService {
   async snooze(uuid: string, input: SnoozeConversationInput): Promise<ConversationSummary> {
     const ctx = RequestContextStore.require();
     const until = new Date(input.until);
-    const result = await this.db.tx(async (tx) => {
+    const result = await this.db.retry.tx(async (tx) => {
       const locked = await this.repo.lockByUuid(tx, ctx.orgId, uuid);
       if (!locked) throw conversationNotFound();
       this.access.assertVisible(await this.access.viewer(tx, ctx), locked);
@@ -140,7 +140,7 @@ export class InboxTriageService {
    */
   async markSpam(uuid: string, input: MarkSpamConversationInput): Promise<ConversationSummary> {
     const ctx = RequestContextStore.require();
-    const result = await this.db.tx(async (tx) => {
+    const result = await this.db.retry.tx(async (tx) => {
       const locked = await this.repo.lockByUuid(tx, ctx.orgId, uuid);
       if (!locked) throw conversationNotFound();
       this.access.assertVisible(await this.access.viewer(tx, ctx), locked);

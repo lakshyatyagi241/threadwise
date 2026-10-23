@@ -30,9 +30,11 @@ describe('wallet top-ups are never add-ons', () => {
     const svc = new AddonPackService(platform as never, {} as never, {} as never);
     const out = await svc.list();
     expect(out.data).toEqual([]);
-    expect(seen).toHaveLength(1);
+    // the packs, then how every plan offers them (plain packs only on both sides)
+    expect(seen).toHaveLength(2);
     expect(seen[0]).toContain("p.kind = 'addon'");
     expect(seen[0]).toContain('p.marketplace_app_id IS NULL');
-    expect(seen[0]).not.toMatch(/wallet/i);
+    expect(seen[1]).toContain("ap.kind = 'addon' AND ap.marketplace_app_id IS NULL");
+    expect(seen.join(' ')).not.toMatch(/wallet/i);
   });
 });

@@ -21,6 +21,7 @@ import {
   saveRatesResultSchema,
   seedRatesResultSchema,
   setWorkspaceCurrencyResultSchema,
+  expenseDaysResponseSchema,
   expenseListResponseSchema,
   expenseSummaryResponseSchema,
   statementResponseSchema,
@@ -29,6 +30,7 @@ import {
   walletLogListSchema,
   walletSettingsSchema,
   walletSummarySchema,
+  walletUsageSettingsSchema,
   type AdjustWalletInput,
   type CreditPackageInput,
   type PricePreviewQuery,
@@ -37,6 +39,7 @@ import {
   type SetWorkspaceCurrencyInput,
   type UpdateSwitchesInput,
   type UpdateWalletSettingsInput,
+  type UpdateWalletUsageSettingsInput,
   type UpsertRateInput,
   type WalletLogQuery,
 } from '@crm/contracts';
@@ -52,12 +55,16 @@ export const KEYS = {
   ledger: (cursor: string | undefined) => ['wallet', 'ledger', cursor ?? 'first'] as const,
   statement: (filters: StatementFilters, cursor: string | undefined) =>
     ['wallet', 'statement', filters, cursor ?? 'first'] as const,
-  expenses: (filters: ExpenseFilters, cursor: string | undefined) =>
-    ['wallet', 'expenses', filters, cursor ?? 'first'] as const,
-  expenseSummary: (filters: ExpenseFilters) => ['wallet', 'expenses', 'summary', filters] as const,
+  expenses: (filters: ExpenseFilters, timeZone: string, cursor: string | undefined) =>
+    ['wallet', 'expenses', filters, timeZone, cursor ?? 'first'] as const,
+  expenseSummary: (filters: ExpenseFilters, timeZone: string) =>
+    ['wallet', 'expenses', 'summary', filters, timeZone] as const,
+  expenseDays: (filters: ExpenseFilters, timeZone: string, cursor: string | undefined) =>
+    ['wallet', 'expenses', 'days', filters, timeZone, cursor ?? 'first'] as const,
   pricing: (country: string | undefined) => ['wallet', 'pricing', country ?? 'any'] as const,
   overview: ['wallet', 'platform', 'overview'] as const,
   settings: ['wallet', 'platform', 'settings'] as const,
+  usageRates: ['wallet', 'platform', 'usage-rates'] as const,
   rates: ['wallet', 'platform', 'rates'] as const,
   metaCards: ['wallet', 'platform', 'meta-cards'] as const,
   metaCard: (currency: string) => ['wallet', 'platform', 'meta-cards', currency] as const,
@@ -94,23 +101,37 @@ export const customerApi = {
       schema: statementResponseSchema,
       signal,
     }),
-  /** The message expense log, one row per billable message. */
+  /** The message expense log, one row per billable message. `timeZone` is the viewer's: the dates in the filters are its days. */
   expenses: (
     filters: ExpenseFilters,
+    timeZone: string,
     cursor: string | undefined,
     limit: number,
     signal?: AbortSignal,
   ) =>
     apiFetch('/wallet/expenses', {
-      query: { ...toExpenseApiQuery(filters), limit, cursor },
+      query: { ...toExpenseApiQuery(filters), timeZone, limit, cursor },
       schema: expenseListResponseSchema,
       signal,
     }),
   /** Message expenses grouped by the chosen dimension, with totals over the whole filtered set. */
-  expenseSummary: (filters: ExpenseFilters, signal?: AbortSignal) =>
+  expenseSummary: (filters: ExpenseFilters, timeZone: string, signal?: AbortSignal) =>
     apiFetch('/wallet/expenses/summary', {
-      query: { ...toExpenseApiQuery(filters), groupBy: filters.groupBy },
+      query: { ...toExpenseApiQuery(filters), timeZone, groupBy: filters.groupBy },
       schema: expenseSummaryResponseSchema,
+      signal,
+    }),
+  /** Message expenses by calendar day, status, channel and category. Pages by day: pass the last day's `nextCursor` back. */
+  expenseDays: (
+    filters: ExpenseFilters,
+    timeZone: string,
+    cursor: string | undefined,
+    limit: number,
+    signal?: AbortSignal,
+  ) =>
+    apiFetch('/wallet/expenses/days', {
+      query: { ...toExpenseApiQuery(filters), timeZone, limit, cursor },
+      schema: expenseDaysResponseSchema,
       signal,
     }),
   pricing: (country: string | undefined, signal?: AbortSignal) =>
@@ -160,6 +181,15 @@ export const operatorApi = {
     operatorFetch('/wallet/settings', { schema: walletSettingsSchema, signal }),
   saveSettings: (body: UpdateWalletSettingsInput) =>
     operatorFetch('/wallet/settings', { method: 'PUT', body, schema: walletSettingsSchema }),
+  /** What SMS, email, calls, contact lookups and chat channels cost per unit, and the markup on AI and translation. */
+  usageRates: (signal?: AbortSignal) =>
+    operatorFetch('/wallet/usage-rates', { schema: walletUsageSettingsSchema, signal }),
+  saveUsageRates: (body: UpdateWalletUsageSettingsInput) =>
+    operatorFetch('/wallet/usage-rates', {
+      method: 'PUT',
+      body,
+      schema: walletUsageSettingsSchema,
+    }),
   saveSwitches: (body: UpdateSwitchesInput) =>
     operatorFetch('/wallet/switches', { method: 'PUT', body, schema: walletSettingsSchema }),
   rates: (signal?: AbortSignal) =>

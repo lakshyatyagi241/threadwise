@@ -16,6 +16,7 @@ import { CatalogProductsModule } from '../../../../catalog-products';
 import { CrmModule } from '../../../../crm';
 import { KnowledgeBaseModule } from '../../../../knowledge-base';
 import { LocalizationTranslationModule } from '../../../../localization-translation';
+import { WalletMessageBillingModule } from '../../../../wallet-message-billing';
 import { FlowRefResolver } from '../flow-refs';
 import { AiCallService } from './ai-call.service';
 import { AiNodes } from './ai-nodes';
@@ -30,6 +31,8 @@ import { OrderingFlowService } from './ordering.service';
     CrmModule,
     KnowledgeBaseModule,
     LocalizationTranslationModule,
+    // AiChargeService: a call on the platform's key is charged to the workspace's wallet (this module also runs in the worker).
+    WalletMessageBillingModule,
   ],
   providers: [
     AiNodes,

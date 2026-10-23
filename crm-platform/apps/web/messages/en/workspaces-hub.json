@@ -234,7 +234,29 @@
         "ends": "Ends",
         "limits": "Effective limits",
         "edit": "Edit & change plan",
-        "overrideNote": "This workspace has its own limits that replace the plan's."
+        "overrideNote": "This workspace has its own limits that replace the plan's.",
+        "addons": {
+          "title": "Add-ons",
+          "intro": "What this workspace has of each add-on, and why.",
+          "empty": "No add-ons are on sale.",
+          "kind": {
+            "feature": "Feature add-on",
+            "capacity": "Capacity add-on"
+          },
+          "source": {
+            "plan": "Included by plan",
+            "override": "Switched on by override",
+            "platform": "Platform-owned workspace",
+            "bought": "Bought",
+            "buy": "Can buy",
+            "unavailable": "Needs a paid plan",
+            "hidden": "Hidden on this plan"
+          },
+          "renews": "Renews {date}",
+          "ends": "Ends {date}",
+          "lifetime": "No end date",
+          "overrides": "{count, plural, one {# feature override beats} other {# feature overrides beat}} the plan: {keys}. Clear them in Edit & change plan."
+        }
       },
       "walletTab": {
         "open": "Open the full wallet",

@@ -776,6 +776,45 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
     ).toBe("Sorry, I'm having trouble right now. A team member will follow up shortly.");
   });
 
+  it('the answered reply is charged to the widget\'s workspace wallet: once, as "AI website chatbot" in the expense log', async () => {
+    const { w } = await aiWidget({ name: 'AI pay' });
+    const uuid = await api.visitor(w.embedToken);
+    ai.next = 'A paid reply';
+    const res = await api.pub(w.embedToken).message({ body: 'hello', visitor_uuid: uuid });
+    expect(res.body.reply.body).toBe('A paid reply');
+    const rows = (
+      await h.owner.query(
+        `SELECT source, status, wamid, subject_name FROM usage_charges
+         WHERE org_id = $1 AND kind = 'ai' AND source = 'widget_ai' ORDER BY id DESC LIMIT 1`,
+        [t.orgId],
+      )
+    ).rows;
+    expect(rows[0]).toMatchObject({
+      source: 'widget_ai',
+      status: 'charged',
+      subject_name: 'AI website chatbot',
+    });
+    expect(String(rows[0].wamid)).toMatch(/^widget_ai:\d+$/);
+  });
+
+  it("an empty wallet answers the visitor with the assistant's fallback message and never calls the vendor", async () => {
+    const poor = await api.signup('wgpoor');
+    const a = await api.assistant(poor, { fallback: 'We will reply by email.', unfunded: true });
+    const w = await api.widget(poor.admin, { name: 'AI poor', mode: 'ai', assistantId: a.uuid });
+    const uuid = await api.visitor(w.embedToken);
+    ai.next = 'must not be asked';
+    ai.calls.length = 0;
+    const res = await api.pub(w.embedToken).message({ body: 'hello', visitor_uuid: uuid });
+    expect(res.status).toBe(200);
+    expect(res.body.reply.body).toBe('We will reply by email.');
+    expect(ai.calls).toHaveLength(0);
+    const n = await h.owner.query(
+      `SELECT count(*)::int AS n FROM usage_charges WHERE org_id = $1 AND kind = 'ai'`,
+      [poor.orgId],
+    );
+    expect(n.rows[0].n).toBe(0);
+  });
+
   it("TW-WGT-016 rule 5: the assistant's token cap, temperature and model reach the vendor", async () => {
     const a = await api.assistant(t, { name: 'Tuned', model: 'gpt-test' });
     await h.owner.query(

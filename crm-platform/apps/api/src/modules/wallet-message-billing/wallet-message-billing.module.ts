@@ -13,6 +13,8 @@ import { PlatformWalletController } from './platform-wallet.controller';
 import { PlatformWalletService } from './platform-wallet.service';
 import { RateCardService } from './rate-card.service';
 import { WalletController } from './wallet.controller';
+import { UsageBillingService } from './usage-billing.service';
+import { UsageSettingsService } from './usage-settings.service';
 import { WalletExpensesService } from './wallet-expenses.service';
 import { WalletExportService } from './wallet-export.service';
 import { WalletGateService } from './wallet-gate.service';
@@ -29,6 +31,8 @@ const SERVICES = [
   RateCardService,
   WalletLedgerService,
   MessageBillingService,
+  UsageSettingsService,
+  UsageBillingService,
   WalletGateService,
   AiChargeService,
   WalletQueryService,
@@ -56,6 +60,8 @@ const IMPORTS = [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule
   exports: [
     WalletLedgerService,
     MessageBillingService,
+    UsageBillingService,
+    UsageSettingsService,
     WalletGateService,
     AiChargeService,
     WalletSettingsService,

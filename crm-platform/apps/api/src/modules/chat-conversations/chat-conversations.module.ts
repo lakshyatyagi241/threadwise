@@ -14,6 +14,7 @@ import { ChannelVault } from './channel-vault';
 import { ChannelWebhooksController } from './channel-webhooks.controller';
 import { ChannelWebhooksService } from './channel-webhooks.service';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
+import { ChatUsageReporter } from './chat-usage-reporter';
 import { DeviceGroupThreadTitleService } from './device-group-thread-title.service';
 import { CloudGroupThreadReader } from './cloud-group-thread.reader';
 import { PersonalGroupThreadReader } from './personal-group-thread.reader';
@@ -107,6 +108,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ExternalChannelIngest,
     ReceiptsService,
     DeliveryReporter,
+    ChatUsageReporter,
     OutboundService,
     MessageDispatchService,
     MediaFetchService,
@@ -144,6 +146,8 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     CloudGroupThreadReader,
     // Where the flow runtime (and any later reader of inbound traffic) listens.
     InboundMessageHooks,
+    // Where the channels' own broadcast senders report the platform's per-message fee and ask whether the wallet can pay for the next batch.
+    ChatUsageReporter,
     // The pipelines the workers drive.
     InboundIngestService,
     ReceiptsService,

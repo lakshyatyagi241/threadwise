@@ -1,4 +1,10 @@
+import { randomUUID } from 'node:crypto';
+import { DatabaseService } from '../../../src/infra/db/database.service';
 import { PlatformSettingsService } from '../../../src/modules/auth';
+import {
+  BillingCurrencyService,
+  WalletLedgerService,
+} from '../../../src/modules/wallet-message-billing';
 import {
   SMS_GATEWAY,
   type SmsCredentials,
@@ -78,4 +84,52 @@ export async function planWithSms(
     t.orgId,
     JSON.stringify({ features: { sms: opts.sms ?? true }, limits: opts.limits ?? {} }),
   ]);
+}
+
+/**
+ * Puts money in the workspace's wallet through the ledger, the way a paid top-up does, in the currency the workspace is billed in.
+ * An SMS is paid for per segment (default 0.50), so a workspace that sends one needs a balance; hundredths.
+ */
+export async function fundWallet(h: Harness, t: Tenant, minor = 100_000): Promise<void> {
+  const get = <T>(token: unknown) => h.app.get<T>(token as never, { strict: false });
+  const db = get<DatabaseService>(DatabaseService);
+  const ledger = get<WalletLedgerService>(WalletLedgerService);
+  const billing = get<BillingCurrencyService>(BillingCurrencyService);
+  await db.txAs({ orgId: t.orgId, userId: null }, async (tx) => {
+    await ledger.post(tx, {
+      orgId: t.orgId,
+      unit: await billing.forOrg(tx, t.orgId),
+      type: 'topup',
+      direction: 'in',
+      amountMinor: minor,
+      idempotencyKey: `fund:${t.orgId}:${randomUUID()}`,
+      source: 'topup.conversion',
+      description: 'Wallet top-up',
+    });
+  });
+}
+
+/** The `usage.reported` events the workspace's sends wrote to the outbox, oldest first (the worker's billing consumer settles them). */
+export async function usageEvents(h: Harness, t: Tenant) {
+  const res = await h.owner.query(
+    `SELECT aggregate_module, aggregate_id, payload FROM event_outbox
+     WHERE org_id = $1 AND event_type = 'usage.reported' ORDER BY id`,
+    [t.orgId],
+  );
+  return res.rows.map((r) => ({
+    aggregateModule: r.aggregate_module as string,
+    aggregateId: Number(r.aggregate_id),
+    ...(r.payload as Record<string, unknown>),
+  })) as Array<{
+    aggregateModule: string;
+    aggregateId: number;
+    kind: string;
+    usageId: string;
+    status: string;
+    units: number;
+    recipient?: string | null;
+    source?: string | null;
+    provider?: string | null;
+    subjectName?: string | null;
+  }>;
 }

@@ -200,7 +200,9 @@
       "autoReply": "Een automatisch antwoord sturen",
       "autoReplyBody": "Tekst van het antwoord",
       "autoReplyHint": "Wordt namens het bedrijf naar de klant gestuurd. Buiten het venster van 24 uur wordt een vrij antwoord niet verstuurd.",
-      "whenHint": "Elke voorwaarde die je toevoegt, moet passen."
+      "whenHint": "Elke voorwaarde die je toevoegt, moet passen.",
+      "unavailableTitle": "Regels zijn niet beschikbaar in je abonnement",
+      "unavailableBody": "Het abonnement van je workspace bevat geen toewijzingsregels. Nieuwe chats wachten in de wachtrij, waar je team ze kan oppakken."
     },
     "sla": {
       "back": "Terug naar instellingen",

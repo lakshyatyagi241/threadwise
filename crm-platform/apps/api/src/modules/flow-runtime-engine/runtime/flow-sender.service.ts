@@ -21,6 +21,7 @@ import {
   type ConversationsFacade,
 } from '../../chat-conversations';
 import { WalletGateService } from '../../wallet-message-billing';
+import { ChatUsageReporter } from '../../chat-conversations';
 import { CapTally, DEFAULT_PACING } from '../caps';
 import { ConsentGate } from '../../contact-consent';
 import { flowMessagePurpose } from './flow-consent';
@@ -63,6 +64,7 @@ export class FlowSender {
     private readonly dispatcher: ChannelDispatcher,
     private readonly tally: CapTally,
     private readonly wallet: WalletGateService,
+    private readonly usage: ChatUsageReporter,
     private readonly fetcher: SafeFetch,
     private readonly media: ChatMediaStore,
     private readonly consentGate: ConsentGate,
@@ -92,6 +94,9 @@ export class FlowSender {
           category: 'utility',
         });
       }
+
+      // Email and the other chat channels carry the platform's per-message fee: an empty wallet stops a flow's reply like any send.
+      await this.usage.assertSendable(run.orgId, run.channelKind);
 
       const deviceId = run.channelKind === 'whatsapp_qr' ? await this.deviceOf(run) : null;
       if (deviceId !== null) {
@@ -168,7 +173,21 @@ export class FlowSender {
             }
           : {}),
       });
-      if (!sent.replayed) await this.dispatcher.scheduleReceipts(runtime, sent);
+      if (!sent.replayed) {
+        await this.dispatcher.scheduleReceipts(runtime, sent);
+        // The flow sends straight through the dispatcher, past the inbox pipeline that bills these channels: the fee is reported here.
+        await this.usage.reportMessage(
+          run.orgId,
+          { module: 'flow_runs', id: run.id, uuid: run.uuid, name: null },
+          {
+            channelKind: run.channelKind,
+            peerKey: run.peerKey,
+            providerMessageId: sent.providerMessageId,
+            scope: runtime.externalId ?? null,
+            source: 'flow',
+          },
+        );
+      }
       // One tick per node that sends, not per message: a Message with five replies counts once (TW-FLR-020 rule 4).
       if (deviceId !== null && index === 0) await this.tally.bump(run.orgId, 'baileys', deviceId);
       return { ok: true };

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { describeFailure, needsChannelFix } from '../../lib/failure';
-import { channelSettingsHref } from './reconnect-banner';
+import { channelFamily, channelSettingsHref } from '../../lib/status';
 
 export interface FailureNoteProps {
   failure: { code: string | null; reason: string | null } | null;
@@ -42,7 +42,7 @@ export function FailureNote({
             href={channelSettingsHref(channelKind)}
             className="font-medium underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-danger"
           >
-            {t('openSettings')}
+            {t(channelFamily(channelKind) === 'whatsapp' ? 'openSettings' : 'openChannelSettings')}
           </Link>
         </>
       )}

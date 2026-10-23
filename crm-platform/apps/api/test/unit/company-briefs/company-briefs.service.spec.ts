@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { ERROR_CODES } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
@@ -34,6 +35,7 @@ function make(opts: {
   text?: string;
   fail?: boolean;
   facts?: BriefFacts;
+  walletEmpty?: boolean;
 }) {
   let stored: BriefRow | undefined = opts.existing
     ? ({
@@ -83,6 +85,18 @@ function make(opts: {
     guard: vi.fn(async (..._args: unknown[]) => undefined),
     record: vi.fn(async (..._args: unknown[]) => undefined),
   };
+  const wallet = {
+    guardCall: vi.fn(async (..._args: unknown[]) => {
+      if (opts.walletEmpty) {
+        throw new AppError(
+          ERROR_CODES.WALLET_EMPTY,
+          'The wallet is empty.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }),
+    chargeCall: vi.fn(async (..._args: unknown[]) => 0),
+  };
   const audit = { record: vi.fn(async (..._args: unknown[]) => undefined) };
   const ai = {
     complete: vi.fn(async (..._args: unknown[]) => {
@@ -96,10 +110,11 @@ function make(opts: {
     facts as never,
     keys as never,
     meter as never,
+    wallet as never,
     audit as never,
     ai as never,
   );
-  return { svc, repo, facts, keys, meter, audit, ai };
+  return { svc, repo, facts, keys, meter, wallet, audit, ai };
 }
 const run = <T>(fn: () => Promise<T>) => RequestContextStore.run(ctx, fn);
 const code = async (p: Promise<unknown>) => {
@@ -226,6 +241,85 @@ describe('Generate brief (BL-194)', () => {
       ERROR_CODES.COMPANY_BRIEF_PROVIDER_FAILED,
     );
     expect(t.meter.record).toHaveBeenCalledTimes(1);
+    expect(t.repo.upsert).not.toHaveBeenCalled();
+  });
+
+  it('on the platform key the wallet is asked after the allowance and before the vendor, and the call is charged once after it answered', async () => {
+    const t = make({ key: { provider: 'anthropic', source: 'admin' } });
+    await run(() => t.svc.generate('c-1', 'all', { regenerate: false }));
+    const order = (f: { mock: { invocationCallOrder: number[] } }) =>
+      f.mock.invocationCallOrder[0]!;
+    expect(order(t.meter.guard)).toBeLessThan(order(t.wallet.guardCall));
+    expect(order(t.wallet.guardCall)).toBeLessThan(order(t.ai.complete));
+    expect(order(t.ai.complete)).toBeLessThan(order(t.meter.record));
+    expect(order(t.meter.record)).toBeLessThan(order(t.wallet.chargeCall));
+    expect(t.wallet.guardCall).toHaveBeenCalledWith(1, 'admin');
+    expect(t.wallet.chargeCall).toHaveBeenCalledTimes(1);
+    expect(t.wallet.chargeCall).toHaveBeenCalledWith({
+      orgId: 1,
+      keySource: 'admin',
+      label: 'AI company brief',
+      source: 'company_brief',
+      usageId: expect.any(String),
+      provider: 'anthropic',
+      model: 'claude-haiku-4-5-20251001',
+      promptTokens: 120,
+      completionTokens: 60,
+    });
+  });
+
+  it('every generation is its own charge: the usage id is new for each call, whatever the request id is', async () => {
+    const a = make({ key: { source: 'admin' }, existing: {} });
+    const b = make({ key: { source: 'admin' }, existing: {} });
+    await run(() => a.svc.generate('c-1', 'all', { regenerate: true }));
+    await run(() => b.svc.generate('c-1', 'all', { regenerate: true }));
+    const ids = [a, b].flatMap((t) =>
+      t.wallet.chargeCall.mock.calls.map((c) => (c[0] as { usageId: string }).usageId),
+    );
+    expect(ids).toHaveLength(2);
+    expect(new Set(ids).size).toBe(2);
+    expect(ids).not.toContain('r');
+  });
+
+  it('on the workspace key it hands the call to the wallet as workspace-paid, which charges nothing', async () => {
+    const t = make({ key: { source: 'workspace' } });
+    await run(() => t.svc.generate('c-1', 'all', { regenerate: false }));
+    expect(t.wallet.guardCall).toHaveBeenCalledWith(1, 'workspace');
+    expect(t.wallet.chargeCall).toHaveBeenCalledWith(
+      expect.objectContaining({ keySource: 'workspace' }),
+    );
+  });
+
+  it('an empty wallet on the platform key is 422 WALLET_EMPTY before the vendor is called, and stores nothing', async () => {
+    const t = make({ key: { source: 'admin' }, walletEmpty: true });
+    expect(await code(run(() => t.svc.generate('c-1', 'all', { regenerate: false })))).toBe(
+      ERROR_CODES.WALLET_EMPTY,
+    );
+    expect(t.ai.complete).not.toHaveBeenCalled();
+    expect(t.meter.record).not.toHaveBeenCalled();
+    expect(t.wallet.chargeCall).not.toHaveBeenCalled();
+    expect(t.repo.upsert).not.toHaveBeenCalled();
+  });
+
+  it('a failed vendor call, a cached brief and a refused double click charge nothing', async () => {
+    const failed = make({ key: { source: 'admin' }, fail: true });
+    await code(run(() => failed.svc.generate('c-1', 'all', { regenerate: false })));
+    expect(failed.wallet.chargeCall).not.toHaveBeenCalled();
+
+    const cached = make({ key: { source: 'admin' }, existing: {} });
+    await run(() => cached.svc.generate('c-1', 'all', { regenerate: false }));
+    expect(cached.wallet.guardCall).not.toHaveBeenCalled();
+    expect(cached.wallet.chargeCall).not.toHaveBeenCalled();
+
+    const quick = make({ key: { source: 'admin' }, existing: { updatedAt: new Date() } });
+    await code(run(() => quick.svc.generate('c-1', 'all', { regenerate: true })));
+    expect(quick.wallet.chargeCall).not.toHaveBeenCalled();
+  });
+
+  it('an answer that is not a brief is still paid for: the vendor did the work', async () => {
+    const t = make({ key: { source: 'admin' }, text: 'Sure! Here is a brief.' });
+    await code(run(() => t.svc.generate('c-1', 'all', { regenerate: false })));
+    expect(t.wallet.chargeCall).toHaveBeenCalledTimes(1);
     expect(t.repo.upsert).not.toHaveBeenCalled();
   });
 

@@ -45,7 +45,8 @@
         "period": "Période",
         "grants": "Accorde",
         "status": "Statut",
-        "actions": "Actions"
+        "actions": "Actions",
+        "plans": "Forfaits"
       },
       "price": {
         "free": "Gratuit",
@@ -146,7 +147,9 @@
           "sortOrder": "Saisissez un nombre entier.",
           "limits": "Les limites sont des nombres entiers, ou -1 pour illimité.",
           "form": "Vérifiez les champs en surbrillance.",
-          "amountPositive": "Les modules complémentaires sont des abonnements mensuels ou annuels : le prix doit être supérieur à zéro."
+          "amountPositive": "Les modules complémentaires sont des abonnements mensuels ou annuels : le prix doit être supérieur à zéro.",
+          "features": "Cochez au moins une fonctionnalité ou faites-en un module de capacité.",
+          "limitsNeeded": "Saisissez au moins une limite supérieure à zéro ou faites-en un module de fonctionnalité."
         },
         "legacy": {
           "title": "Pack hérité",
@@ -156,8 +159,65 @@
           "months": "Abonnement mensuel",
           "years": "Abonnement annuel"
         },
-        "periodHint": "Les modules complémentaires sont des abonnements. Les espaces de travail sur une passerelle en ligne sont renouvelés automatiquement ; avec un virement bancaire ou un paiement hors ligne, ils paient à nouveau à la fin de la période."
-      }
+        "periodHint": "Les modules complémentaires sont des abonnements. Les espaces de travail sur une passerelle en ligne sont renouvelés automatiquement ; avec un virement bancaire ou un paiement hors ligne, ils paient à nouveau à la fin de la période.",
+        "planOffers": {
+          "title": "Forfaits",
+          "hint": "Comment chaque forfait propose ce module complémentaire. Inclus : sans frais, le forfait apporte ses fonctionnalités. Payant : les espaces de travail l’achètent, au prix propre au forfait si vous en définissez un. Masqué : les espaces de travail de ce forfait ne le voient jamais.",
+          "noIncluded": "Ce module complémentaire n’ajoute que des limites, aucun forfait ne peut donc l’inclure. Un forfait définit ses propres plafonds dans son onglet Limites.",
+          "empty": "Aucun forfait pour l’instant.",
+          "freePlan": "Forfait gratuit",
+          "inactivePlan": "Inactif",
+          "modeLabel": "Comment {plan} propose ce module complémentaire",
+          "modes": {
+            "included": "Inclus",
+            "paid": "Payant",
+            "hidden": "Masqué"
+          },
+          "priceLabel": "Prix dans ce forfait",
+          "priceHint": "Vide = prix propre au module complémentaire.",
+          "freePlanNote": "Affiché sur le forfait gratuit, mais un espace de travail doit avoir un forfait payant pour l’acheter.",
+          "hiddenNote": "Non affiché aux espaces de travail de ce forfait. Un espace de travail qui l’a déjà acheté le conserve jusqu’à la fin de sa période.",
+          "problems": {
+            "money": "Saisissez un montant comme 19 ou 19.99.",
+            "zero": "Laissez le prix vide pour utiliser celui du module complémentaire, ou choisissez Inclus."
+          },
+          "errors": {
+            "generic": "Impossible d’enregistrer les offres des forfaits.",
+            "forbidden": "Seul un super administrateur peut modifier les offres des forfaits.",
+            "notFound": "Ce module complémentaire n’existe plus."
+          },
+          "saved": "Offres des forfaits enregistrées.",
+          "changed": "{count, plural, one {# forfait modifié} many {# forfaits modifiés} other {# forfaits modifiés}}",
+          "save": "Enregistrer les offres des forfaits",
+          "needFeatures": "Ajoutez d'abord ci-dessus les fonctionnalités qu'il débloque"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Choisissez ce que fait ce module complémentaire. Seul un module de fonctionnalité peut être inclus dans une offre.",
+          "feature": {
+            "title": "Module de fonctionnalité",
+            "body": "Débloque une partie du produit ; peut aussi ajouter de la capacité."
+          },
+          "capacity": {
+            "title": "Module de capacité",
+            "body": "Ajoute uniquement à une limite (sièges, contacts...)."
+          }
+        },
+        "noFeaturesNotice": "Ce module ne débloque encore rien. Cochez les fonctionnalités qu'il apporte pour que les offres puissent l'inclure.",
+        "limitsHintCapacity": "Un module de capacité ajoute uniquement aux limites. Saisissez un nombre à AJOUTER à l'offre (par exemple +2 sièges). Utilisez -1 pour illimité. Au moins une limite est requise."
+      },
+      "kind": {
+        "feature": "Fonctionnalité",
+        "capacity": "Capacité"
+      },
+      "plans": {
+        "included": "Inclus : {plans}",
+        "paid": "Payant : {plans}",
+        "hidden": "Masqué : {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Aucun forfait"
+      },
+      "noFeatures": "Aucune fonctionnalité"
     },
     "extensions": {
       "crumbHere": "Modules complémentaires",
@@ -334,7 +394,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Besoin de crédits de messages ? Rechargez plutôt votre portefeuille ; les crédits ne sont pas un module complémentaire.",
-      "walletLink": "Recharger le portefeuille"
+      "walletLink": "Recharger le portefeuille",
+      "groups": {
+        "feature": "Modules complémentaires de fonctionnalités",
+        "capacity": "Modules complémentaires de capacité"
+      }
     }
   }
 }

@@ -163,7 +163,6 @@
       "addToGroup": "إضافة إلى مجموعة",
       "tag": "وسم",
       "scrollArea": "جدول جهات الاتصال، قابل للتمرير",
-      "resizeColumn": "تغيير عرض عمود {column}",
       "previous": "السابق",
       "next": "التالي",
       "refresh": "تحديث",
@@ -298,7 +297,8 @@
       "teamFilter": "التصفية حسب الفريق",
       "allTeams": "كل الفرق",
       "teamFormer": "فريق سابق",
-      "unhideColumn": "إظهار عمود"
+      "unhideColumn": "إظهار عمود",
+      "resizeColumn": "اسحب لتغيير عرض {column}؛ انقر مرتين لإعادة الضبط"
     },
     "bulk": {
       "label": "إجراءات على جهات الاتصال المحددة",

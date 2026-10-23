@@ -4,6 +4,7 @@
       "switches": {
         "title": "Chat assignment",
         "intro": "Four switches cover most workspaces: turn them on and you never have to create a rule.",
+        "introBasic": "Your plan does not assign chats automatically: new chats wait in the queue until someone claims them. These settings still apply.",
         "order": "The order for a new chat: Contact Owner and Sticky Agent first, then your rules (if you add any), then Everyone else, then the waiting queue.",
         "readOnly": "You can see these switches but not change them.",
         "saved": "Saved.",
@@ -11,8 +12,6 @@
         "loading": "Loading the assignment settings",
         "loadFailed": "The assignment settings could not be loaded.",
         "retry": "Try again",
-        "notInPlan": "Not in your plan",
-        "upgradeHint": "Included in the Smart routing add-on or a higher plan.",
         "stepFirst": "Checked first",
         "stepMaster": "Master switch",
         "stepAfter": "After a claim",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Need more control? Add rules",
         "intro": "Optional. Rules send particular chats (a channel, words in the message, a new contact...) to particular agents or teams. If the four switches are enough, you never have to create one.",
-        "locked": "Rules are part of the Smart routing add-on or a higher plan. You still have the waiting queue, claiming and manual assignment.",
         "pipelineTitle": "How a new chat is assigned",
         "pipeline": {
           "agent": "1. Contact owner and Sticky Agent",

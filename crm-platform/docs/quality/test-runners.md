@@ -38,3 +38,4 @@ One folder per tested area under [script-testing/](../../script-testing/), each 
 | critical-path-drill | not in the table run | - | new: real faults to the fake Chat Critical space; `bash script-testing/critical-path-drill/run.sh --quick` (see its README for what is proven) |
 - `chat-alerts` (Google Chat bridge + slow-query watcher, fake Chat receiver): PASS in full mode (65 s, 28 checks); it is new and not yet part of the table above.
 - `deployment-messages` (deployment message standard: formatter, release watcher, build-server notifier; fake GitHub API and fake Chat receiver): PASS in `--quick` (24 s, 26 checks); new, not in the table above.
+- `stack-deploy` (deploy-observability.sh dry run and stack-selfcheck.sh against stubs; no network, no host): PASS in `--quick` (50 checks); new, not in the table above. Never run against the real host.

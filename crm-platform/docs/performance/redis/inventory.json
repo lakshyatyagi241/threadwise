@@ -2308,12 +2308,12 @@
       "commands": ["del", "get", "setex"],
       "writes": [
         {
-          "line": 420,
+          "line": 449,
           "cmd": "setex",
           "ttl": "EX HISTORY_TTL_SECONDS"
         },
         {
-          "line": 450,
+          "line": 479,
           "cmd": "setex",
           "ttl": "EX PENDING_TTL_SECONDS"
         }
@@ -3094,7 +3094,7 @@
       "commands": ["del", "set"],
       "writes": [
         {
-          "line": 92,
+          "line": 93,
           "cmd": "set",
           "ttl": "EX LOCK_S"
         }
@@ -3106,7 +3106,7 @@
       "commands": ["getbuffer", "set"],
       "writes": [
         {
-          "line": 86,
+          "line": 124,
           "cmd": "set",
           "ttl": "EX QUERY_CACHE_TTL_S"
         }
@@ -3593,7 +3593,7 @@
       "commands": ["exists", "set"],
       "writes": [
         {
-          "line": 269,
+          "line": 290,
           "cmd": "set",
           "ttl": "EX REPLAY_WINDOW_S"
         }

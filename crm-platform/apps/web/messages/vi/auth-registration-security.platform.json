@@ -1349,13 +1349,17 @@
             "details": "Chi tiết và giá",
             "features": "Tính năng",
             "limits": "Giới hạn",
-            "addons": "Tiện ích bổ sung"
+            "addons": "Tiện ích bổ sung",
+            "integrations": "Tích hợp",
+            "miniApps": "Ứng dụng mini"
           },
           "tabSummary": {
             "features": "{count} trên {total} tính năng đang bật",
             "limits": "{count} trên {total} giới hạn đã đặt",
-            "addons": "Đã chọn {count} tiện ích bổ sung",
-            "error": "Có lỗi cần sửa"
+            "addons": "{count, plural, one {# tiện ích bổ sung được bao gồm hoặc cung cấp} other {# tiện ích bổ sung được bao gồm hoặc cung cấp}}",
+            "error": "Có lỗi cần sửa",
+            "integrations": "Tích hợp được bao gồm hoặc cung cấp: {count}",
+            "miniApps": "Ứng dụng mini được bao gồm hoặc cung cấp: {count}"
           },
           "featuresUi": {
             "intro": "Tắt những gì gói này không bao gồm. Không gian làm việc dùng gói không thể mở khu vực có tính năng đang tắt.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Bật tất cả",
             "disableAll": "Tắt tất cả",
             "noMatch": "Không có tính năng nào khớp với tìm kiếm.",
-            "groupCount": "Bật {count} trên {total}"
+            "groupCount": "Bật {count} trên {total}",
+            "lockedBy": "Được đặt bởi tiện ích bổ sung {addon} trong tab Tiện ích bổ sung"
           },
           "limitsUi": {
             "intro": "Giới hạn sẽ chặn hành động khi không gian làm việc đạt tới. Chọn Không giới hạn để bỏ giới hạn.",
@@ -1385,12 +1390,8 @@
             "total": "tổng cộng"
           },
           "addons": {
-            "intro": "Các tiện ích bổ sung được bật sẽ hiển thị cho các không gian làm việc dùng gói này trong Marketplace; chỉ dùng được sau khi không gian làm việc mua.",
             "search": "Tìm tiện ích bổ sung",
             "searchPlaceholder": "Tìm tiện ích bổ sung hoặc ứng dụng",
-            "selectAll": "Chọn tất cả",
-            "clear": "Xóa",
-            "selected": "Đã chọn {count} trên {total}",
             "loading": "Đang tải tiện ích bổ sung",
             "empty": "Chưa có tiện ích bổ sung trả phí nào",
             "emptyHint": "Tiện ích bổ sung được tạo trong danh mục Marketplace của bảng điều khiển nhà điều hành. Khi một ứng dụng có gói trả phí, nó được liệt kê ở đây.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "Ứng dụng chưa được xuất bản nên các không gian làm việc chưa thấy được.",
             "appLabel": "Ứng dụng: {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, other {Đã chọn # tiện ích bổ sung}}"
+            "total": "{count, plural, one {# tiện ích bổ sung được bao gồm hoặc cung cấp} other {# tiện ích bổ sung được bao gồm hoặc cung cấp}}"
           },
           "featureHints": {
             "automation": "Trình tạo luồng và tự động hóa để phản hồi và xử lý các cuộc trò chuyện.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Một gói không thể vừa miễn phí vừa báo giá tùy chỉnh.",
             "paid_needs_price": "Đặt giá lớn hơn 0, hoặc đánh dấu gói là miễn phí.",
             "offer_not_lower": "Giá ưu đãi phải thấp hơn giá của gói.",
-            "default_needs_active": "Gói mặc định khi đăng ký phải đang hoạt động."
+            "default_needs_active": "Gói mặc định khi đăng ký phải đang hoạt động.",
+            "addonPriceZero": "Để trống giá để dùng giá của tiện ích bổ sung, hoặc chọn Bao gồm.",
+            "addonGone": "Tiện ích bổ sung này không còn tồn tại. Hãy tải lại trang và lưu lại."
           },
           "limitHints": {
             "monthly_messages": "Tin nhắn gửi đi trong tháng dương lịch. Vượt hạn mức sẽ trừ vào ví.",
@@ -1707,32 +1710,49 @@
             "crm": "CRM bán hàng",
             "platform": "Dùng chung cho cả hai"
           },
-          "marketplace": {
-            "title": "Ứng dụng Marketplace được cung cấp cho không gian làm việc trong gói này"
-          },
-          "included": {
-            "title": "Tiện ích bổ sung có trong gói này",
-            "intro": "Bật một tiện ích bổ sung để đưa vào gói: các không gian làm việc trong gói này nhận được miễn phí và thẻ của tiện ích ghi \"Đã bao gồm trong gói của bạn\". Thao tác này chọn đúng các tính năng của tiện ích trong tab Tính năng, và chọn chúng ở đó cũng đổi công tắc. Các tiện ích không được đưa vào vẫn được bán theo giá riêng cho mọi không gian làm việc có gói trả phí đang hoạt động.",
-            "readOnly": "Bạn có thể xem gói này nhưng không thể thay đổi, nên các công tắc này bị khóa.",
+          "offers": {
+            "readOnly": "Bạn có thể xem gói này nhưng không thể thay đổi, nên các điều khiển này bị khóa.",
+            "featureTitle": "Tiện ích bổ sung tính năng",
+            "featureIntro": "Các tiện ích bổ sung mở khóa một phần của sản phẩm. Bao gồm: các không gian làm việc trong gói này nhận miễn phí và thẻ của tiện ích ghi \"Đã có trong gói của bạn\". Trả phí: họ có thể mua, theo giá riêng của gói này nếu bạn đặt. Ẩn: họ không bao giờ thấy tiện ích. Các tính năng của tiện ích trong tab Tính năng sẽ theo lựa chọn này.",
+            "capacityTitle": "Tiện ích bổ sung dung lượng",
+            "capacityIntro": "Các tiện ích bổ sung chỉ tăng một giới hạn, chẳng hạn thêm một suất người dùng. Trong một gói, chúng là trả phí hoặc ẩn; mức trần riêng của gói được đặt trong tab Giới hạn.",
+            "noFeaturePacks": "Chưa có tiện ích bổ sung tính năng nào.",
+            "adds": "Thêm: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} không giới hạn",
+            "modeLabel": "Cách {name} được cung cấp trong gói này",
+            "modes": {
+              "included": "Bao gồm",
+              "paid": "Trả phí",
+              "hidden": "Ẩn"
+            },
+            "noIncluded": "Tiện ích này chỉ tăng giới hạn nên không thể được bao gồm. Hãy đặt mức trần riêng của gói này trong tab Giới hạn.",
+            "priceLabel": "Giá trong gói này ({currency})",
+            "priceHint": "Để trống để dùng giá riêng của tiện ích bổ sung.",
+            "includedCapacityNote": "Chỉ các tính năng của tiện ích được bao gồm. Các giới hạn bổ sung ({limits}) vẫn được bán cho các không gian làm việc trong gói này.",
+            "hiddenNote": "Các không gian làm việc trong gói này không thấy tiện ích bổ sung này và không thể mua. Không gian làm việc đã mua vẫn giữ nó đến khi hết kỳ hạn.",
+            "offNote": "Không còn được bao gồm: các không gian làm việc trong gói này mất các tính năng này trừ khi họ mua tiện ích bổ sung. Cài đặt của họ được giữ lại và sẽ trở lại khi tiện ích được bật lại.",
             "loading": "Đang tải tiện ích bổ sung",
             "loadFailed": "Không thể tải các tiện ích bổ sung. Chưa có gì bị thay đổi.",
             "empty": "Chưa có tiện ích bổ sung nào",
             "emptyHint": "Các tiện ích như Định tuyến thông minh và Nhóm và quyền được tạo trong mục Tiện ích bổ sung của bảng điều khiển nhà điều hành.",
-            "stateFull": "Đã bao gồm",
-            "statePartial": "Bao gồm một phần",
-            "stateNone": "Chưa bao gồm",
             "noPrice": "Chưa đặt giá",
             "gives": "Cung cấp: {features}",
-            "switchLabel": "Đưa {name} vào gói này",
-            "noFeatures": "Tiện ích này chỉ thêm giới hạn nên không có tính năng nào để đưa vào. Giới hạn của nó không thuộc phần đưa vào gói; hãy đặt giới hạn riêng của gói trong tab Giới hạn.",
-            "partial": "Bao gồm một phần: {count} trên {total} tính năng đang bật trong gói này. Vẫn đang tắt: {missing}.",
-            "includeFully": "Bao gồm đầy đủ",
-            "limitsNote": "Tiện ích này còn thêm các giới hạn bổ sung ({limits}). Giới hạn bổ sung không thuộc phần đưa vào gói và không có gì ở đây thay đổi nó: hãy đặt giới hạn riêng của gói trong tab Giới hạn. Các không gian làm việc vẫn mua tiện ích để có giới hạn bổ sung.",
             "unlistedNote": "Một số tính năng của nó ({features}) nằm ngoài danh sách tiện ích tiêu chuẩn. Chúng vẫn có thể được bật cho gói; chỉ cách mua tiện ích này dưới dạng gói là khác.",
             "inactiveNote": "Tiện ích này là bản nháp hoặc đang tắt, nên chưa ai có thể mua. Đưa nó vào gói vẫn hoạt động.",
             "impactCount": "{count, plural, other {# không gian làm việc đã trả tiền cho tiện ích này.}} Việc gia hạn của họ sẽ dừng khi kết thúc kỳ hiện tại, không hoàn tiền và hôm nay không hủy gì cả.",
             "impactUnknown": "Các không gian làm việc trong gói này đã trả tiền cho tiện ích này sẽ ngừng gia hạn khi kết thúc kỳ hiện tại. Không hoàn tiền và hôm nay không hủy gì cả. Không thể tải số lượng.",
-            "offNote": "Đã tắt: các không gian làm việc trong gói này mất các tính năng này trừ khi họ mua tiện ích, và tiện ích trở thành có thể mua với giá của nó."
+            "partlyNote": "Gói này đã cung cấp một phần tiện ích bổ sung này ({features}). Giữ nguyên cho đến khi bạn chọn Đã gồm, Trả phí hoặc Ẩn tại đây.",
+            "needsFeatures": "Trước tiên hãy thêm các tính năng mà nó mở khóa trong Tiện ích bổ sung > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Ứng dụng mini là ứng dụng mà không gian làm việc cài đặt từ Marketplace. Bao gồm: miễn phí cho không gian làm việc trong gói này. Trả phí: họ có thể mua với giá riêng của ứng dụng. Ẩn: họ không bao giờ thấy. Chọn Bao gồm cũng bật các tính năng gói mà ứng dụng cung cấp.",
+            "introIntegrations": "Tích hợp kết nối một dịch vụ bên ngoài. Bao gồm: miễn phí cho không gian làm việc trong gói này. Trả phí: họ có thể mua với giá riêng của tích hợp. Ẩn: họ không bao giờ thấy. Chọn Bao gồm cũng bật các tính năng gói mà tích hợp cung cấp.",
+            "setAll": "Đặt tất cả mục đang hiển thị thành",
+            "summary": "{count} trên {total} được bao gồm hoặc cung cấp",
+            "priceHint": "Ứng dụng Marketplace giữ giá riêng; hãy đặt giá trong trang giới thiệu của ứng dụng.",
+            "emptyIntegrations": "Chưa có tích hợp trả phí",
+            "emptyIntegrationsHint": "Tích hợp miễn phí không cần thiết lập ở đây; Shopify và WooCommerce được bật ở tab Tính năng."
           }
         }
       },

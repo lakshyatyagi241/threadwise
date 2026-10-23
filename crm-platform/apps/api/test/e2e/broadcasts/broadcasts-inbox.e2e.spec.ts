@@ -172,4 +172,46 @@ describe('TW-BCAST-028: inbox mirroring', () => {
     );
     expect(await bubbles(b.orgId)).toHaveLength(0);
   });
+
+  it('writes the send into the message ledger, so an import or a copy of the same send is a duplicate and adds nothing', async () => {
+    const t = await api.signup('m-ledger');
+    const s = await setup(t, { thread: true });
+    expect(await mirror.mirror(t.orgId, s.broadcastId, s.contactId, 'sent', s.wamid)).toBe(true);
+    const ledger = (
+      await h.owner.query(
+        `SELECT l.message_id, m.id FROM message_ledger l JOIN messages m ON m.org_id = l.org_id AND m.id = l.message_id
+         WHERE l.org_id = $1 AND l.kind = 'provider_id' AND l.key = $2`,
+        [t.orgId, s.wamid],
+      )
+    ).rows;
+    expect(ledger).toHaveLength(1);
+    // the report again (delivered): still one bubble, still one ledger row
+    await mirror.mirror(t.orgId, s.broadcastId, s.contactId, 'delivered', s.wamid);
+    expect(await bubbles(t.orgId)).toHaveLength(1);
+  });
+
+  it('writes nothing when the same send is already in the thread under its WhatsApp message id (an imported copy came first)', async () => {
+    const t = await api.signup('m-imported');
+    const s = await setup(t, { thread: true });
+    const conv = (
+      await h.owner.query(`SELECT id, channel_id FROM conversations WHERE id = $1`, [s.convId])
+    ).rows[0];
+    const msg = (
+      await h.owner.query(
+        `INSERT INTO messages (id, org_id, conversation_id, seq, direction, kind, sender_kind, body, status, meta)
+         VALUES (nextval('messages_id_seq'), $1, $2, 1, 'out', 'text', 'system', 'imported copy', 'sent', '{"historySync":true}'::jsonb)
+         RETURNING id, created_at::text AS created_at`,
+        [t.orgId, conv.id],
+      )
+    ).rows[0];
+    await h.owner.query(
+      `INSERT INTO message_ledger (org_id, channel_id, kind, key, message_id, message_created_at, conversation_id)
+       VALUES ($1, $2, 'provider_id', $3, $4, $5::timestamptz, $6)`,
+      [t.orgId, conv.channel_id, s.wamid, msg.id, msg.created_at, conv.id],
+    );
+    expect(await mirror.mirror(t.orgId, s.broadcastId, s.contactId, 'sent', s.wamid)).toBe(false);
+    const rows = await bubbles(t.orgId);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].body).toBe('imported copy');
+  });
 });

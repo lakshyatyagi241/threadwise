@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { ERROR_CODES } from '@crm/contracts';
+import { AppError } from '../../../src/common/errors/app-error';
 import type {
   FlowAiPort,
   FlowAiRequest,
@@ -17,11 +19,15 @@ interface Setup {
   grounded?: boolean;
   /** The AI agent's row as the profile query returns it; null = no such agent. */
   agent?: Record<string, unknown> | null;
+  /** The wallet cannot pay for a call on the platform's key. */
+  walletEmpty?: boolean;
 }
 
 function build(s: Setup = {}) {
   const sent: FlowAiRequest[] = [];
   const recorded: unknown[] = [];
+  const charged: Array<Record<string, unknown>> = [];
+  const searched: unknown[][] = [];
   const port: FlowAiPort = {
     complete: async (req) => {
       sent.push(req);
@@ -58,17 +64,32 @@ function build(s: Setup = {}) {
         },
       }),
   };
+  // The real gate refuses only a call on the platform's key; the real charge ignores any other key. The fake keeps both rules.
+  const charge = {
+    guardCall: async (_org: number, source: string) => {
+      if (s.walletEmpty && source === 'admin') {
+        throw new AppError(ERROR_CODES.WALLET_EMPTY, 'empty', 422);
+      }
+    },
+    chargeCall: async (call: Record<string, unknown>) => {
+      charged.push(call);
+      return 0;
+    },
+  };
   const retrieval = {
-    retrieve: async () => ({
-      grounded: s.grounded === true,
-      passages: (s.sources ?? []).map((r) => ({
-        label: String(r.label),
-        text:
-          r.kind === 'qa'
-            ? `Q: ${String(r.question)}\nA: ${String(r.answer)}`
-            : String(r.content ?? ''),
-      })),
-    }),
+    retrieve: async (...args: unknown[]) => {
+      searched.push(args);
+      return {
+        grounded: s.grounded === true,
+        passages: (s.sources ?? []).map((r) => ({
+          label: String(r.label),
+          text:
+            r.kind === 'qa'
+              ? `Q: ${String(r.question)}\nA: ${String(r.answer)}`
+              : String(r.content ?? ''),
+        })),
+      };
+    },
   };
   const svc = new AiCallService(
     db as never,
@@ -76,8 +97,9 @@ function build(s: Setup = {}) {
     meter as never,
     port,
     retrieval as never,
+    charge as never,
   );
-  return { svc, sent, recorded };
+  return { svc, sent, recorded, charged, searched };
 }
 
 const base = {
@@ -158,6 +180,81 @@ describe('AI call service (the ai-call endpoint semantics, TW-FLR-030)', () => {
     const { svc, recorded } = build({ guardFails: true, source: 'workspace' });
     expect((await svc.call(base)).ok).toBe(true);
     expect(recorded[0]).toMatchObject({ billedAgainst: 'workspace' });
+  });
+
+  describe('the wallet', () => {
+    it('answers limit_reached on an empty wallet and never calls the vendor', async () => {
+      const { svc, sent, charged, recorded } = build({ walletEmpty: true });
+      const out = await svc.call({ ...base, usageId: 'flow:r:1:n:turn' });
+      expect(out).toMatchObject({ ok: false, error: 'limit_reached', message: expect.any(String) });
+      expect(sent).toHaveLength(0);
+      expect(recorded).toHaveLength(0);
+      expect(charged).toHaveLength(0);
+    });
+
+    it('does not stop a workspace on its own key for an empty wallet', async () => {
+      const { svc, sent } = build({ walletEmpty: true, source: 'workspace' });
+      expect((await svc.call(base)).ok).toBe(true);
+      expect(sent).toHaveLength(1);
+    });
+
+    it('charges the answered call under the caller id, with the tokens the vendor reported', async () => {
+      const { svc, charged } = build();
+      await svc.call({ ...base, usageId: 'flow:r:1:n:turn' });
+      expect(charged).toEqual([
+        {
+          orgId: 1,
+          keySource: 'admin',
+          label: 'AI flow step',
+          source: 'flow',
+          usageId: 'flow:r:1:n:turn',
+          provider: 'openai',
+          model: 'gpt-4o-mini',
+          promptTokens: 10,
+          completionTokens: 5,
+        },
+      ]);
+    });
+
+    it('passes the key side along, so a workspace key is left uncharged by the real service', async () => {
+      const { svc, charged } = build({ source: 'workspace' });
+      await svc.call({ ...base, usageId: 'u' });
+      expect(charged[0]).toMatchObject({ keySource: 'workspace' });
+    });
+
+    it('charges a call with no caller id under a fresh id each time', async () => {
+      const { svc, charged } = build();
+      await svc.call(base);
+      await svc.call(base);
+      expect(charged[0]!.usageId).not.toBe(charged[1]!.usageId);
+    });
+
+    it('prices a call from the text, 4 characters a token, when the vendor reported no tokens', async () => {
+      const { svc, charged } = build({
+        vendor: { text: 'abcdefgh', promptTokens: 0, completionTokens: 0 },
+      });
+      await svc.call({ ...base, usageId: 'u' });
+      // 'Sys' + 'Hi' = 5 characters in, 8 out.
+      expect(charged[0]).toMatchObject({ promptTokens: 2, completionTokens: 2 });
+    });
+
+    it('does not charge a failed vendor call or a call that never started', async () => {
+      const failed = build({ vendor: new Error('AI provider answered 500') });
+      await failed.svc.call({ ...base, usageId: 'u' });
+      expect(failed.charged).toHaveLength(0);
+      const noKey = build({ key: null, source: 'none' });
+      await noKey.svc.call({ ...base, usageId: 'u' });
+      expect(noKey.charged).toHaveLength(0);
+    });
+
+    it('charges an empty completion (the vendor billed the prompt) and hangs the knowledge search under the call id', async () => {
+      const { svc, charged, searched } = build({
+        vendor: { text: ' ', promptTokens: 3, completionTokens: 0 },
+      });
+      await svc.call({ ...base, assistantId: 4, usageId: 'flow:r:1:n:turn' });
+      expect(charged).toHaveLength(1);
+      expect(searched[0]![3]).toBe('flow:r:1:n:turn:kb');
+    });
   });
 
   it('turns a vendor error into provider_failed, never a throw', async () => {

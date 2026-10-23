@@ -103,6 +103,7 @@ function make(s: Setup = {}) {
     'engine' in s ? s.engine : name === 'sms' || name === 'email' ? { open } : undefined,
   );
   const purposeOfTemplate = vi.fn(async () => s.templatePurpose ?? 'service_messaging');
+  const assertCanAfford = vi.fn(async (..._a: unknown[]) => undefined);
   const sender = new LeadFirstMessageSender(
     { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({}) } as never,
     {
@@ -155,8 +156,17 @@ function make(s: Setup = {}) {
     } as never,
     { get: engineGet } as never,
     { openConversationFor, enqueueOutbound } as never,
+    { assertCanAfford } as never,
   );
-  return { sender, enqueueOutbound, openConversationFor, sendText, open, purposeOfTemplate };
+  return {
+    sender,
+    enqueueOutbound,
+    openConversationFor,
+    sendText,
+    open,
+    purposeOfTemplate,
+    assertCanAfford,
+  };
 }
 
 const verdict = (p: Preparation) => (p.kind === 'verdict' ? p.verdict : null);
@@ -364,6 +374,32 @@ describe('SMS', () => {
   });
 });
 
+describe('SMS and the wallet', () => {
+  const sms = {
+    tplChannel: 'sms',
+    tpl: template({ templateBody: 'Hi {{first_name}}, we got your enquiry.', variableMap: null }),
+  };
+
+  it('an SMS the engine refuses because the wallet is empty is held for a top-up, not failed', async () => {
+    const m = make(sms);
+    m.sendText.mockRejectedValueOnce(new AppError(ERROR_CODES.WALLET_EMPTY, 'wallet empty', 422));
+    const p = await m.sender.prepare(ORG, reply('sms'), config('sms'), contact(), NOW);
+    if (p.kind !== 'ready') throw new Error('not ready');
+    await expect(p.prepared.deliver()).resolves.toEqual({
+      kind: 'verdict',
+      verdict: { status: 'held', reason: 'wallet_empty' },
+    });
+  });
+
+  it('bills nothing here: the SMS engine is the one place an SMS is billed', async () => {
+    const m = make(sms);
+    const p = await m.sender.prepare(ORG, reply('sms'), config('sms'), contact(), NOW);
+    if (p.kind !== 'ready') throw new Error('not ready');
+    await p.prepared.deliver();
+    expect(m.assertCanAfford).not.toHaveBeenCalled();
+  });
+});
+
 describe('email', () => {
   it('sends the rendered template as typed text from a shared mailbox, with the subject as the header', async () => {
     const m = make();
@@ -379,6 +415,31 @@ describe('email', () => {
       header: 'Welcome Ada',
       clientReference: 'lead-first-1-5',
     });
+  });
+
+  it('checks the wallet before the mailbox is called, and bills nothing here: the email engine is the one place a mail is billed', async () => {
+    const m = make();
+    const p = await m.sender.prepare(ORG, reply('email'), config('email'), contact(), NOW);
+    if (p.kind !== 'ready') throw new Error(JSON.stringify(p));
+    await expect(p.prepared.deliver()).resolves.toEqual({ kind: 'sent' });
+    expect(m.assertCanAfford).toHaveBeenCalledWith(ORG, 'email', 1);
+    expect(m.assertCanAfford.mock.invocationCallOrder[0]!).toBeLessThan(
+      m.sendText.mock.invocationCallOrder[0]!,
+    );
+  });
+
+  it('an empty wallet holds the mail before it is sent: nothing is sent', async () => {
+    const m = make();
+    m.assertCanAfford.mockRejectedValueOnce(
+      new AppError(ERROR_CODES.WALLET_EMPTY, 'wallet empty', 422),
+    );
+    const p = await m.sender.prepare(ORG, reply('email'), config('email'), contact(), NOW);
+    if (p.kind !== 'ready') throw new Error('not ready');
+    await expect(p.prepared.deliver()).resolves.toEqual({
+      kind: 'verdict',
+      verdict: { status: 'held', reason: 'wallet_empty' },
+    });
+    expect(m.sendText).not.toHaveBeenCalled();
   });
 
   it('needs an address, a shared mailbox and a template the workspace can use', async () => {
@@ -449,6 +510,8 @@ describe('verdictOfEngineError', () => {
         'no_consent',
       ],
       [new SenderThrottled('mailbox is full for the hour', 60_000), 'held', 'channel_unavailable'],
+      [new AppError(ERROR_CODES.WALLET_EMPTY, 'wallet empty', 422), 'held', 'wallet_empty'],
+      [new AppError(ERROR_CODES.AUTH_SEND_HALTED, 'halted', 403), 'held', 'send_halted'],
       [new SenderRefused('Address bounced before'), 'failed', 'provider_error'],
       [new Error('socket hang up'), 'failed', 'provider_error'],
       ['a string', 'failed', 'provider_error'],

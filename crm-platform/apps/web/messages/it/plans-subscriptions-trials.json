@@ -570,15 +570,21 @@
       "appLink": "Vedi l’app",
       "addonHint": "Puoi anche aggiungerlo al tuo piano attuale con il componente {addon}.",
       "addonLink": "Vedi componenti aggiuntivi",
-      "addons": {
-        "smartRouting": "Instradamento intelligente",
-        "teamsPermissions": "Team e autorizzazioni"
-      },
       "addonsTabHint": "I componenti aggiuntivi non richiedono il Marketplace nel tuo piano. Da Piani e componenti aggiuntivi puoi comunque vedere cosa possiedi e acquistarne altri.",
-      "addonsTabLink": "Apri Piani e componenti aggiuntivi"
+      "addonsTabLink": "Apri Piani e componenti aggiuntivi",
+      "addonHintGeneric": "Il tuo piano potrebbe offrirlo anche come componente aggiuntivo."
     },
     "lock": {
-      "link": "Vedi piani e componenti aggiuntivi"
+      "link": "Vedi piani e componenti aggiuntivi",
+      "offTitle": "Non incluso nel tuo piano",
+      "offLead": "Questa parte al momento non è inclusa nel piano del tuo spazio di lavoro.",
+      "buyTitle": "Aggiungi {addon} a {price}",
+      "buyLead": "Il tuo piano offre {addon} come componente aggiuntivo. Aggiungilo per attivare questa parte.",
+      "buyLink": "Vedi componenti aggiuntivi",
+      "askOwner": "Chiedi al proprietario dell’account di aggiungerlo.",
+      "unavailableTitle": "{addon} richiede un piano a pagamento attivo",
+      "unavailableLead": "Scegli prima un piano a pagamento, poi potrai aggiungervi {addon}.",
+      "viewPlans": "Vedi piani"
     }
   }
 }

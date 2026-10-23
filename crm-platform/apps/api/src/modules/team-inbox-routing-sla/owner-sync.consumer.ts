@@ -73,7 +73,7 @@ export class OwnerSyncConsumer implements OutboxSubscriber, OnModuleInit {
   async sync(orgId: number, contactUuid: string, now: Date = new Date()): Promise<number> {
     if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) return 0;
     if (!(await this.entitlements.featureEnabled(orgId, HANDOFF_GATES.keepInSync))) return 0;
-    const plan = await this.db.txAs({ orgId }, async (tx) => {
+    const plan = await this.db.retry.txAs({ orgId }, async (tx) => {
       const settings = await this.repo.settings(tx, orgId);
       if (settings.ownerMode !== 'keep_in_sync') return null;
       const res = await tx.execute(

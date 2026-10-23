@@ -5,8 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import type { ExpenseEvent, ExpenseGroup } from '@crm/contracts';
-import { ExpenseTable, GroupTable } from './components/customer/expenses-page';
+import type { ExpenseDayGroup, ExpenseEvent, ExpenseGroup } from '@crm/contracts';
+import { DayTable, ExpenseTable, GroupTable } from './components/customer/expenses-page';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: () => undefined }),
@@ -29,6 +29,8 @@ const wrap = (el: ReactElement) =>
 
 const event = (over: Partial<ExpenseEvent>): ExpenseEvent => ({
   id: 'wamid.X',
+  kind: 'whatsapp_message',
+  units: 1,
   createdAt: '2026-10-19T10:30:00.000Z',
   status: 'charged',
   billingMode: 'wallet',
@@ -51,6 +53,28 @@ const event = (over: Partial<ExpenseEvent>): ExpenseEvent => ({
 });
 
 describe('message expense log', () => {
+  it('shows what each expense is: a message, an SMS with its segments, a call with its minutes, an AI request', () => {
+    const html = wrap(
+      <ExpenseTable
+        rows={[
+          event({ id: 'a', kind: 'whatsapp_message' }),
+          event({ id: 'b', kind: 'sms', units: 3, template: null, subjectName: 'Spring promo' }),
+          event({ id: 'c', kind: 'whatsapp_call', units: 1, template: null, subjectName: null }),
+          event({ id: 'd', kind: 'ai', template: null, subjectName: 'AI lead scoring' }),
+        ]}
+        currency="USD"
+      />,
+    );
+    expect(html).toContain('WhatsApp message');
+    expect(html).toContain('>SMS<');
+    expect(html).toContain('3 segments');
+    expect(html).toContain('WhatsApp call');
+    expect(html).toContain('1 minute');
+    expect(html).toContain('AI lead scoring');
+    // An AI request has no units line: one request is one request.
+    expect(html).not.toContain('1 request');
+  });
+
   it('shows the template, the campaign, the category and what the message cost', () => {
     const html = wrap(<ExpenseTable rows={[event({})]} currency="USD" />);
     expect(html).toContain('order_update');
@@ -142,6 +166,63 @@ describe('message expense log', () => {
     expect(html).toContain('order_update');
     expect(html).toContain('$17.868');
     expect(html).toContain('$11.912');
+    expect(html).toContain('Not recorded');
+  });
+});
+
+describe('daily log', () => {
+  const day = (over: Partial<ExpenseDayGroup>): ExpenseDayGroup => ({
+    day: '2026-10-19',
+    status: 'charged',
+    source: 'broadcast',
+    category: 'marketing',
+    messages: 3,
+    chargedMinor: 1788,
+    chargedExact: '17.868',
+    refundedMinor: 0,
+    refundedExact: '0.00',
+    netMinor: 1788,
+    netExact: '17.868',
+    ...over,
+  });
+
+  it('shows each day once, with its lines underneath and one View details button for the day', () => {
+    const html = wrap(
+      <DayTable
+        groups={[
+          day({}),
+          day({
+            status: 'free',
+            source: 'chat',
+            category: 'utility',
+            messages: 1,
+            chargedMinor: 0,
+            chargedExact: '0.00',
+            netMinor: 0,
+            netExact: '0.00',
+          }),
+        ]}
+        currency="USD"
+        onViewDay={() => undefined}
+      />,
+    );
+    expect(html).toContain('Oct 19, 2026');
+    expect(html).toContain('4 messages');
+    expect(html).toContain('Broadcast');
+    expect(html).toContain('Marketing');
+    expect(html).toContain('Not billed');
+    expect(html).toContain('$17.868');
+    expect(html.match(/View details/g)).toHaveLength(1);
+  });
+
+  it('shows a line with no channel or category as not recorded', () => {
+    const html = wrap(
+      <DayTable
+        groups={[day({ source: null, category: null })]}
+        currency="USD"
+        onViewDay={() => undefined}
+      />,
+    );
     expect(html).toContain('Not recorded');
   });
 });

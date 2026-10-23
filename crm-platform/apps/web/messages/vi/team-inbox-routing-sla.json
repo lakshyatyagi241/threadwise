@@ -200,7 +200,9 @@
       "autoReply": "Gửi trả lời tự động",
       "autoReplyBody": "Nội dung trả lời",
       "autoReplyHint": "Được gửi cho khách hàng dưới tên doanh nghiệp. Ngoài cửa sổ 24 giờ, trả lời tự do sẽ không được gửi.",
-      "whenHint": "Mọi điều kiện bạn thêm đều phải khớp."
+      "whenHint": "Mọi điều kiện bạn thêm đều phải khớp.",
+      "unavailableTitle": "Gói của bạn không có quy tắc",
+      "unavailableBody": "Gói của không gian làm việc không bao gồm quy tắc phân công. Cuộc trò chuyện mới sẽ chờ trong hàng đợi, nơi nhóm của bạn có thể nhận chúng."
     },
     "sla": {
       "back": "Quay lại Cài đặt",

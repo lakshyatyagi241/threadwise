@@ -3,7 +3,8 @@
 Goal: every add-on behaves the same way. **Included in the plan = no charge, and the workspace's add-on card says "Included in your plan". Not
 included = priced and buyable.** The operator decides this per plan, from the plan editor, without having to know which feature keys a pack grants.
 
-Parts: **A** (this change) the operator can include a plain add-on in a plan from the Add-ons tab. **B** and **C** are placeholders below.
+Parts: **A** the operator can include a plain add-on in a plan from the Add-ons tab. **B** one add-ons list and ownership state. **C** Marketplace tabs. **D** per-plan
+Included / Paid / Hidden with a plan price: [addons-plan-offers.md](addons-plan-offers.md) (replaces Part A's derived switch with a stored choice).
 
 ## Part A: include a plain add-on in a plan (plan editor, Add-ons tab)
 

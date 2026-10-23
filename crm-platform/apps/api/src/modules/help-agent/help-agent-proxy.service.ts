@@ -11,6 +11,7 @@ import {
 } from '../../infra/providers/help-agent/help-agent-llm.port';
 import { HELP_AGENT_ENV } from '../../infra/providers/help-agent/http-help-agent-llm.adapter';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService, aiCostUsd } from '../wallet-message-billing';
 import { sanitiseCompletionRequest, taskExpired } from './help-agent-rules';
 import { HelpAgentRepository } from './help-agent.repository';
 import { HelpAgentService } from './help-agent.service';
@@ -22,7 +23,8 @@ import { HelpAgentService } from './help-agent.service';
  * Per call: the task must be the caller's own and open; the workspace switch is read again (turning it off takes effect on the next
  * step); the request is cut down to the parts the proxy trusts; the key is resolved the way every AI domain does it (the workspace's own
  * when its plan allows, else the platform's); the monthly allowance is asked when the platform pays; the step is taken from the budget in
- * one statement; the vendor is called behind the port; the tokens go to the AI usage ledger and onto the task.
+ * one statement; the vendor is called behind the port; the tokens go to the AI usage ledger and onto the task, and when the platform's
+ * key paid the step is taken from the workspace wallet in that same transaction.
  *
  * Nothing in the request or the answer is logged: only ids and counts.
  */
@@ -36,6 +38,7 @@ export class HelpAgentProxyService {
     private readonly agent: HelpAgentService,
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
+    private readonly wallet: AiChargeService,
     @Inject(HELP_AGENT_LLM_PORT) private readonly port: HelpAgentLlmPort,
     @Inject(HELP_AGENT_ENV) private readonly env: HelpAgentEnv,
   ) {}
@@ -94,6 +97,8 @@ export class HelpAgentProxyService {
       throw this.unavailable('The Help assistant is not set up yet. Ask the platform owner.');
     }
     if (resolved.source === 'admin') await this.meter.guard(orgId);
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no call. Their own key passes.
+    await this.wallet.guardCall(orgId, resolved.source);
 
     // 3. The vendor.
     let result;
@@ -119,7 +124,8 @@ export class HelpAgentProxyService {
       );
     }
 
-    // 4. The ledger and the task's own count, together.
+    // 4. The ledger, the task's own count and the wallet charge, together. The charge is keyed by the step this call reserved: a step
+    // is taken once and never reused, so the step answered is charged once however the request is repeated.
     await this.db.tx(async (tx) => {
       await this.meter.record(
         orgId,
@@ -136,6 +142,24 @@ export class HelpAgentProxyService {
         prompt: result.promptTokens,
         completion: result.completionTokens,
       });
+      if (resolved.source === 'admin') {
+        await this.wallet.charge(
+          tx,
+          {
+            orgId,
+            label: 'AI help assistant',
+            costUsd: aiCostUsd({
+              provider,
+              model,
+              promptTokens: result.promptTokens,
+              completionTokens: result.completionTokens,
+            }),
+            source: 'help_agent',
+            provider,
+          },
+          `ai-help:${orgId}:${taskId.toLowerCase()}:${reserved.step}`,
+        );
+      }
     });
     this.logger.log(
       {

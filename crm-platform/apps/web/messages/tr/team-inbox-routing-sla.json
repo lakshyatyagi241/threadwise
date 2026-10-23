@@ -200,7 +200,9 @@
       "autoReply": "Otomatik yanıt gönder",
       "autoReplyBody": "Yanıt metni",
       "autoReplyHint": "Müşteriye işletme adına gönderilir. 24 saatlik pencerenin dışında serbest yanıt gönderilmez.",
-      "whenHint": "Eklediğiniz her koşul eşleşmelidir."
+      "whenHint": "Eklediğiniz her koşul eşleşmelidir.",
+      "unavailableTitle": "Planınızda kurallar kullanılamıyor",
+      "unavailableBody": "Çalışma alanınızın planı atama kurallarını içermiyor. Yeni sohbetler kuyrukta bekler; ekibiniz onları oradan üstlenebilir."
     },
     "sla": {
       "back": "Ayarlara dön",

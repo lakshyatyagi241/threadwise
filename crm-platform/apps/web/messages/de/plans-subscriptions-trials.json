@@ -570,15 +570,21 @@
       "appLink": "App ansehen",
       "addonHint": "Du kannst es auch mit dem Add-on {addon} zu deinem aktuellen Tarif hinzufügen.",
       "addonLink": "Add-ons ansehen",
-      "addons": {
-        "smartRouting": "Intelligentes Routing",
-        "teamsPermissions": "Teams und Berechtigungen"
-      },
       "addonsTabHint": "Für Add-ons braucht Ihr Tarif den Marketplace nicht. Unter „Tarife und Add-ons“ sehen Sie weiterhin, was Sie besitzen, und können Add-ons kaufen.",
-      "addonsTabLink": "Tarife und Add-ons öffnen"
+      "addonsTabLink": "Tarife und Add-ons öffnen",
+      "addonHintGeneric": "Dein Tarif bietet es eventuell auch als Add-on an."
     },
     "lock": {
-      "link": "Tarife und Add-ons ansehen"
+      "link": "Tarife und Add-ons ansehen",
+      "offTitle": "Nicht in deinem Tarif",
+      "offLead": "Dieser Teil ist im Tarif deines Workspace derzeit nicht enthalten.",
+      "buyTitle": "{addon} für {price} hinzufügen",
+      "buyLead": "Dein Tarif bietet {addon} als Add-on an. Füge es hinzu, um diesen Teil einzuschalten.",
+      "buyLink": "Add-ons ansehen",
+      "askOwner": "Bitte den Kontoinhaber, es hinzuzufügen.",
+      "unavailableTitle": "{addon} braucht einen aktiven bezahlten Tarif",
+      "unavailableLead": "Wähle zuerst einen bezahlten Tarif, dann kannst du {addon} hinzufügen.",
+      "viewPlans": "Tarife ansehen"
     }
   }
 }

@@ -40,7 +40,7 @@
       "topup": "Doładowanie",
       "earn": "Przychód",
       "refund": "Zwrot",
-      "spend": "Opłata za wiadomość",
+      "spend": "Opłata za użycie",
       "admin_adjust": "Korekta"
     },
     "categories": {
@@ -146,7 +146,7 @@
         "all": "Wszystkie",
         "topup": "Doładowania",
         "earn": "Zarobki",
-        "spend": "Opłaty za wiadomości",
+        "spend": "Opłaty za użycie",
         "refund": "Zwroty",
         "admin_adjust": "Korekty"
       },
@@ -192,15 +192,15 @@
       }
     },
     "expenses": {
-      "title": "Koszty wiadomości",
-      "subtitle": "Ile kosztowała każda wiadomość, szablon, z którym ją wysłano, i co zostało zwrócone. Sumy obejmują wszystko, co pasuje do filtrów.",
+      "title": "Wydatki",
+      "subtitle": "Ile kosztowała każda wiadomość, każde połączenie, zapytanie AI i sprawdzenie oraz do czego służyło. Sumy obejmują wszystko, co pasuje do filtrów.",
       "back": "Wróć do portfela",
       "breadcrumbLabel": "Ścieżka nawigacji",
       "breadcrumbWallet": "Portfel",
-      "breadcrumbExpenses": "Koszty wiadomości",
+      "breadcrumbExpenses": "Wydatki",
       "fullStatement": "Pełne zestawienie",
       "summary": {
-        "messages": "Wiadomości",
+        "messages": "Pozycje",
         "charged": "Obciążono",
         "refunded": "Zwrócono",
         "net": "Koszt netto",
@@ -222,7 +222,9 @@
         "to": "Do",
         "apply": "Zastosuj",
         "reset": "Resetuj",
-        "rangeInverted": "Data końcowa jest wcześniejsza niż początkowa."
+        "rangeInverted": "Data końcowa jest wcześniejsza niż początkowa.",
+        "kind": "Typ",
+        "allKinds": "Wszystkie typy"
       },
       "breakdown": {
         "title": "Koszt wg",
@@ -230,17 +232,18 @@
           "template": "Szablon",
           "source": "Kanał",
           "category": "Kategoria",
-          "country": "Kraj"
+          "country": "Kraj",
+          "kind": "Typ"
         },
         "group": "Grupa",
         "notRecorded": "Nie zarejestrowano",
         "truncated": "Pokazano {count} największych grup. Zawęź daty, aby zobaczyć resztę.",
-        "empty": "Żadne wiadomości nie pasują do tych filtrów."
+        "empty": "Nic nie pasuje do tych filtrów."
       },
       "columns": {
         "date": "Data",
         "template": "Szablon",
-        "campaign": "Kampania lub rozgłoszenie",
+        "campaign": "Kampania, wysyłka masowa lub funkcja",
         "channel": "Kanał",
         "category": "Kategoria",
         "country": "Kraj",
@@ -248,8 +251,9 @@
         "charged": "Obciążono",
         "refunded": "Zwrócono",
         "net": "Netto",
-        "messages": "Wiadomości",
-        "notBilled": "Nie naliczono"
+        "messages": "Pozycje",
+        "notBilled": "Nie naliczono",
+        "type": "Typ"
       },
       "status": {
         "charged": "Obciążono",
@@ -264,9 +268,50 @@
         "no_wallet_owner": "Brak właściciela portfela"
       },
       "uncollected": "Nieściągnięte: {amount}",
-      "emptyTitle": "Brak wiadomości",
-      "emptyBody": "Wiadomości wysłane z kampanii, rozgłoszeń, harmonogramów i czatów pojawią się tutaj wraz z szablonem i kosztem.",
-      "emptyFiltered": "Nic nie pasuje do tych filtrów. Zmień je lub zresetuj."
+      "emptyTitle": "Brak wydatków",
+      "emptyBody": "Wiadomości, połączenia, zapytania AI i inne użycie pojawiają się tutaj wraz z celem i kosztem.",
+      "emptyFiltered": "Nic nie pasuje do tych filtrów. Zmień je lub zresetuj.",
+      "days": {
+        "title": "Dziennik dzienny",
+        "subtitle": "Wiadomości pogrupowane według dnia, statusu, kanału i kategorii. Otwórz dzień, aby zobaczyć każdą wiadomość.",
+        "messagesOnDay": "{count} wiadomości",
+        "viewDetails": "Zobacz szczegóły",
+        "actions": "Działania",
+        "empty": "Brak wiadomości w tych dniach."
+      },
+      "log": {
+        "title": "Wiadomości",
+        "forDay": "Wiadomości z {date}",
+        "showAllDays": "Pokaż wszystkie dni"
+      },
+      "units": {
+        "sms": "{count, plural, one {# segment} few {# segmenty} many {# segmentów} other {# segmentu}}",
+        "whatsapp_call": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+        "voice_call": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}"
+      },
+      "sources": {
+        "lead_first": "Natychmiastowa odpowiedź na lead",
+        "lead": "Natychmiastowa odpowiedź na lead",
+        "test": "Wysyłka testowa",
+        "appointment": "Przypomnienie o spotkaniu",
+        "lead_scoring": "Ocena leadów",
+        "lead_digest": "Podsumowanie czatu",
+        "pql_search": "Wyszukiwanie kontaktów",
+        "growth_assistant": "Asystent wzrostu",
+        "ai_copilot": "Copilot AI",
+        "help_agent": "Asystent pomocy",
+        "company_brief": "Karta firmy",
+        "inbox_ai": "Asystent odpowiedzi",
+        "template_ai": "Kreator szablonów",
+        "campaign_ai": "Autor kampanii",
+        "campaign_ai_image": "Obraz kampanii",
+        "kb_embedding": "Baza wiedzy",
+        "flow_ai": "Generator przepływów",
+        "widget_ai": "Chatbot na stronie",
+        "growth": "Wzrost",
+        "telephony": "Połączenia telefoniczne",
+        "translation": "Tłumaczenie"
+      }
     },
     "admin": {
       "admin": "Administrator",
@@ -583,6 +628,40 @@
               "service": "Usługa"
             },
             "problems": "Wiersze, które zostały pominięte"
+          }
+        },
+        "usage": {
+          "title": "Ceny pozostałego użycia",
+          "subtitle": "Ile SMS-y, e-maile, połączenia, sprawdzenia kontaktów i inne kanały czatu kosztują Twoich klientów za jednostkę. Cena 0 lub wyłączony przełącznik są nadal rejestrowane w dzienniku wydatków, bez naliczania opłaty.",
+          "perUnit": "Cena za {unit}",
+          "chargeFor": "Pobieraj opłatę za {kind}",
+          "units": {
+            "segment": "segment SMS",
+            "email": "e-mail",
+            "minute": "minutę",
+            "lookup": "sprawdzenie",
+            "message": "wiadomość"
+          },
+          "hints": {
+            "sms": "Naliczane dodatkowo do rachunku klienta u jego dostawcy SMS. Segment to 160 znaków (70 dla tekstu nielacińskiego).",
+            "email": "Naliczane dodatkowo do własnej skrzynki pocztowej klienta. Każdy wysłany e-mail liczy się raz.",
+            "whatsapp_call": "Każda rozpoczęta minuta połączenia WhatsApp. Połączenie, na które nikt nie odpowiedział, jest bezpłatne.",
+            "voice_call": "Każda rozpoczęta minuta połączenia zgłoszonego przez dostawcę telefonii klienta. Dzienniki połączeń wpisane ręcznie nigdy nie są obciążane.",
+            "enrichment": "Każdy kontakt sprawdzony u dostawcy danych platformy.",
+            "chat_message": "Każda wiadomość wysłana przez Telegram, Facebook, Instagram, LINE, Viber lub WeChat. Bezpłatna, dopóki nie ustawisz ceny."
+          },
+          "costPlus": {
+            "title": "Naliczane według kosztu dostawcy plus narzut",
+            "body": "Zapytania AI i płatne tłumaczenia korzystają z własnych kluczy dostawców platformy i są naliczane według kwoty dostawcy plus narzut poniżej. Przestrzeń robocza z własnym kluczem nigdy nie jest obciążana."
+          },
+          "markup": "Narzut na koszt dostawcy",
+          "markupHint": "10 oznacza, że zapytanie, które kosztowało 1,00, jest naliczane za 1,10.",
+          "saving": "Zapisywanie",
+          "save": "Zapisz ceny",
+          "saved": "Ceny użycia zapisane",
+          "problems": {
+            "invalid": "Wpisz kwotę z maksymalnie 2 miejscami po przecinku",
+            "tooHigh": "Przekracza limit"
           }
         }
       },
@@ -945,6 +1024,17 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "Wiadomość WhatsApp",
+      "sms": "SMS",
+      "email": "E-mail",
+      "whatsapp_call": "Połączenie WhatsApp",
+      "voice_call": "Połączenie głosowe",
+      "ai": "AI",
+      "translation": "Tłumaczenie",
+      "enrichment": "Sprawdzenie kontaktu",
+      "chat_message": "Wiadomość czatu"
     }
   }
 }

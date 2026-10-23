@@ -200,7 +200,9 @@
       "autoReply": "Kirim balasan otomatis",
       "autoReplyBody": "Teks balasan",
       "autoReplyHint": "Dikirim kepada pelanggan atas nama bisnis. Di luar jendela 24 jam, balasan bebas tidak dikirim.",
-      "whenHint": "Setiap kondisi yang Anda tambahkan harus cocok."
+      "whenHint": "Setiap kondisi yang Anda tambahkan harus cocok.",
+      "unavailableTitle": "Aturan tidak tersedia di paket Anda",
+      "unavailableBody": "Paket ruang kerja Anda tidak mencakup aturan penugasan. Chat baru menunggu di antrean, tempat tim Anda dapat mengambilnya."
     },
     "sla": {
       "back": "Kembali ke Pengaturan",

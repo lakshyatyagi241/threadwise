@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, type FormEvent } from 'react';
+import { Fragment, useState, type FormEvent } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   expenseGroupBySchema,
   expenseStatusFilterSchema,
+  type ExpenseDayGroup,
+  walletUsageKindSchema,
   type ExpenseEvent,
   type ExpenseGroup,
   type ExpenseGroupBy,
@@ -20,6 +22,7 @@ import { formatAmount, formatNet } from '../../lib/money';
 import {
   EMPTY_EXPENSE_FILTERS,
   expenseRangeInverted,
+  expenseSingleDay,
   parseExpenseFilters,
   toExpenseSearch,
   type ExpenseFilters,
@@ -31,6 +34,13 @@ import { PagerBar } from './pager-bar';
 import { usePager } from './use-pager';
 
 const EXPENSE_PAGE = 25;
+/** The kinds whose count of units is worth a second line: segments of an SMS, minutes of a call. */
+const UNIT_KINDS: ReadonlySet<ExpenseEvent['kind']> = new Set([
+  'sms',
+  'whatsapp_call',
+  'voice_call',
+]);
+const DAY_PAGE = 14;
 const STATUS_LABEL = {
   all: 'filters.statusAll',
   charged: 'filters.statusCharged',
@@ -40,11 +50,81 @@ const STATUS_LABEL = {
 type Channel = (typeof CHANNELS)[number];
 type Category = (typeof CATEGORIES)[number];
 
+/**
+ * Where a charge that is not a campaign or chat message came from: an AI feature, a call, a reminder. Each has its own words in
+ * `expenses.sources`; a source this list does not know is shown as it is stored.
+ */
+const EXTRA_SOURCES = [
+  'lead_first',
+  'lead',
+  'test',
+  'appointment',
+  'lead_scoring',
+  'lead_digest',
+  'pql_search',
+  'growth_assistant',
+  'ai_copilot',
+  'help_agent',
+  'company_brief',
+  'inbox_ai',
+  'template_ai',
+  'campaign_ai',
+  'campaign_ai_image',
+  'kb_embedding',
+  'flow_ai',
+  'widget_ai',
+  'growth',
+  'telephony',
+  'translation',
+] as const;
+type ExtraSource = (typeof EXTRA_SOURCES)[number];
+const extraSourceKey = (source: string): ExtraSource | null =>
+  (EXTRA_SOURCES as readonly string[]).includes(source) ? (source as ExtraSource) : null;
+
 /** The channel key a row carries, mapped to the label the statement already uses. The team inbox's own sends are "chat" to the customer. */
 const channelKey = (source: string): Channel | null => {
   if (source === 'inbox') return 'chat';
   return (CHANNELS as readonly string[]).includes(source) ? (source as Channel) : null;
 };
+
+/** A charge's channel as the statement labels it; `notRecorded` when the charge has none. */
+const channelLabel = (
+  source: string | null,
+  notRecorded: string,
+  tch: (key: Channel) => string,
+  tsrc: (key: ExtraSource) => string,
+): string => {
+  if (source === null) return notRecorded;
+  const c = channelKey(source);
+  if (c) return tch(c);
+  const x = extraSourceKey(source);
+  return x ? tsrc(x) : source;
+};
+
+/** A charge's pricing category as the statement labels it; `notRecorded` when the charge has none. */
+const categoryLabel = (
+  category: string | null,
+  notRecorded: string,
+  tcat: (key: Category) => string,
+): string => {
+  if (category === null) return notRecorded;
+  return (CATEGORIES as readonly string[]).includes(category)
+    ? tcat(category as Category)
+    : category;
+};
+
+/** The badge tone of a message's status: a charge reads as a cost, a free message as good news. */
+const statusTone = (status: ExpenseEvent['status']): 'danger' | 'success' | 'neutral' =>
+  status === 'charged' ? 'danger' : status === 'free' ? 'success' : 'neutral';
+
+/** A calendar day (`YYYY-MM-DD`) as the viewer's locale shows it. It is already the viewer's own day, so it is formatted in UTC, which cannot shift it. */
+const formatDay = (day: string, locale: string): string =>
+  new Intl.DateTimeFormat(locale, {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(`${day}T00:00:00Z`));
 
 /** The customer's message expense log: what each message cost, with its template, and the cost of each group. */
 export function ExpensesPage() {
@@ -98,7 +178,14 @@ function ExpensesBody() {
         <>
           <FilterBar applied={applied} onApply={go} onReset={() => go(EMPTY_EXPENSE_FILTERS)} />
           <ExpenseSummary filters={applied} onGroupBy={(groupBy) => go({ ...applied, groupBy })} />
-          <ExpenseLog filters={applied} />
+          <ExpenseDayLog
+            filters={applied}
+            onViewDay={(day) => go({ ...applied, from: day, to: day })}
+          />
+          <ExpenseLog
+            filters={applied}
+            onShowAllDays={() => go({ ...applied, from: '', to: '' })}
+          />
         </>
       )}
     </>
@@ -116,6 +203,7 @@ function FilterBar({
 }) {
   const t = useTranslations('wallet-message-billing.expenses.filters');
   const tt = useTranslations('wallet-message-billing.expenses');
+  const tk = useTranslations('wallet-message-billing.kinds');
   const tch = useTranslations('wallet-message-billing.statement.channels');
   const tcat = useTranslations('wallet-message-billing.categories');
   const [draft, setDraft] = useState<ExpenseFilters>(applied);
@@ -137,7 +225,11 @@ function FilterBar({
 
   return (
     <Card>
-      <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6" role="search">
+      <form
+        onSubmit={submit}
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7"
+        role="search"
+      >
         <Field label={t('status')} htmlFor="ex-status">
           <Select
             id="ex-status"
@@ -150,6 +242,23 @@ function FilterBar({
             {expenseStatusFilterSchema.options.map((s) => (
               <option key={s} value={s}>
                 {tt(STATUS_LABEL[s])}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('kind')} htmlFor="ex-kind">
+          <Select
+            id="ex-kind"
+            value={draft.kind}
+            onChange={(e) => {
+              const v = walletUsageKindSchema.safeParse(e.target.value);
+              set('kind', v.success ? v.data : '');
+            }}
+          >
+            <option value="">{t('allKinds')}</option>
+            {walletUsageKindSchema.options.map((k) => (
+              <option key={k} value={k}>
+                {tk(k)}
               </option>
             ))}
           </Select>
@@ -233,9 +342,10 @@ function ExpenseSummary({
 }) {
   const t = useTranslations('wallet-message-billing.expenses');
   const locale = useLocale();
+  const timeZone = useTimeZone() ?? 'UTC';
   const q = useQuery({
-    queryKey: KEYS.expenseSummary(filters),
-    queryFn: ({ signal }) => customerApi.expenseSummary(filters, signal),
+    queryKey: KEYS.expenseSummary(filters, timeZone),
+    queryFn: ({ signal }) => customerApi.expenseSummary(filters, timeZone, signal),
     placeholderData: keepPreviousData,
   });
   if (q.isPending) return <LoadingBlock />;
@@ -318,17 +428,18 @@ export function GroupTable({
   const locale = useLocale();
   const tch = useTranslations('wallet-message-billing.statement.channels');
   const tcat = useTranslations('wallet-message-billing.categories');
+  const tk = useTranslations('wallet-message-billing.kinds');
+  const tsrc = useTranslations('wallet-message-billing.expenses.sources');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   const label = (key: string | null): string => {
-    if (key === null) return t('breakdown.notRecorded');
-    if (groupBy === 'source') {
-      const c = channelKey(key);
-      return c ? tch(c) : key;
+    if (groupBy === 'kind') {
+      if (key === null) return t('breakdown.notRecorded');
+      const k = walletUsageKindSchema.safeParse(key);
+      return k.success ? tk(k.data) : key;
     }
-    if (groupBy === 'category') {
-      return (CATEGORIES as readonly string[]).includes(key) ? tcat(key as Category) : key;
-    }
-    return key;
+    if (groupBy === 'source') return channelLabel(key, t('breakdown.notRecorded'), tch, tsrc);
+    if (groupBy === 'category') return categoryLabel(key, t('breakdown.notRecorded'), tcat);
+    return key ?? t('breakdown.notRecorded');
   };
   if (groups.length === 0) {
     return <p className="text-sm text-muted-foreground">{t('breakdown.empty')}</p>;
@@ -383,8 +494,16 @@ export function GroupTable({
   );
 }
 
-function ExpenseLog({ filters }: { filters: ExpenseFilters }) {
+function ExpenseLog({
+  filters,
+  onShowAllDays,
+}: {
+  filters: ExpenseFilters;
+  onShowAllDays: () => void;
+}) {
   const t = useTranslations('wallet-message-billing.expenses');
+  const locale = useLocale();
+  const timeZone = useTimeZone() ?? 'UTC';
   const pager = usePager();
   // A new filter set starts again at the first page.
   const filtersKey = toExpenseSearch(filters);
@@ -394,8 +513,9 @@ function ExpenseLog({ filters }: { filters: ExpenseFilters }) {
     pager.reset();
   }
   const q = useQuery({
-    queryKey: KEYS.expenses(filters, pager.cursor),
-    queryFn: ({ signal }) => customerApi.expenses(filters, pager.cursor, EXPENSE_PAGE, signal),
+    queryKey: KEYS.expenses(filters, timeZone, pager.cursor),
+    queryFn: ({ signal }) =>
+      customerApi.expenses(filters, timeZone, pager.cursor, EXPENSE_PAGE, signal),
     placeholderData: keepPreviousData,
   });
   if (q.isPending) return <LoadingBlock />;
@@ -409,8 +529,19 @@ function ExpenseLog({ filters }: { filters: ExpenseFilters }) {
       />
     );
   }
+  const day = expenseSingleDay(filters);
   return (
     <Card className="space-y-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-base font-semibold">
+          {day ? t('log.forDay', { date: formatDay(day, locale) }) : t('log.title')}
+        </h2>
+        {day && (
+          <Button size="sm" variant="secondary" onClick={onShowAllDays}>
+            {t('log.showAllDays')}
+          </Button>
+        )}
+      </div>
       <ExpenseTable rows={d.data} currency={d.currency} />
       {(pager.hasPrev || d.page.hasMore) && (
         <PagerBar
@@ -423,6 +554,162 @@ function ExpenseLog({ filters }: { filters: ExpenseFilters }) {
         />
       )}
     </Card>
+  );
+}
+
+/**
+ * The day log: one line per day, status, channel and category, so a day of repeated messages reads as a few lines. "View details"
+ * opens that day's messages in the log below. Pages by day, so a day's lines are never split across two pages.
+ */
+function ExpenseDayLog({
+  filters,
+  onViewDay,
+}: {
+  filters: ExpenseFilters;
+  onViewDay: (day: string) => void;
+}) {
+  const t = useTranslations('wallet-message-billing.expenses');
+  const timeZone = useTimeZone() ?? 'UTC';
+  const pager = usePager();
+  // A new filter set starts again at the newest day.
+  const filtersKey = toExpenseSearch(filters);
+  const [seenFilters, setSeenFilters] = useState(filtersKey);
+  if (seenFilters !== filtersKey) {
+    setSeenFilters(filtersKey);
+    pager.reset();
+  }
+  const q = useQuery({
+    queryKey: KEYS.expenseDays(filters, timeZone, pager.cursor),
+    queryFn: ({ signal }) =>
+      customerApi.expenseDays(filters, timeZone, pager.cursor, DAY_PAGE, signal),
+    placeholderData: keepPreviousData,
+  });
+  if (q.isPending) return <LoadingBlock />;
+  if (q.isError) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />;
+  const d = q.data;
+  // Nothing to group: the message log below shows the empty state and why.
+  if (d.data.length === 0 && !pager.hasPrev) return null;
+  return (
+    <Card className="space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-base font-semibold">{t('days.title')}</h2>
+        <p className="text-xs text-muted-foreground">{t('days.subtitle')}</p>
+      </div>
+      <DayTable groups={d.data} currency={d.currency} onViewDay={onViewDay} />
+      {(pager.hasPrev || d.page.hasMore) && (
+        <PagerBar
+          page={pager.page}
+          hasPrev={pager.hasPrev}
+          hasNext={d.page.hasMore && d.page.nextCursor !== null}
+          busy={q.isPlaceholderData}
+          onPrev={pager.prev}
+          onNext={() => d.page.nextCursor && pager.next(d.page.nextCursor)}
+        />
+      )}
+    </Card>
+  );
+}
+
+export function DayTable({
+  groups,
+  currency,
+  onViewDay,
+}: {
+  groups: readonly ExpenseDayGroup[];
+  currency: string;
+  onViewDay: (day: string) => void;
+}) {
+  const t = useTranslations('wallet-message-billing.expenses');
+  const locale = useLocale();
+  const tch = useTranslations('wallet-message-billing.statement.channels');
+  const tsrc = useTranslations('wallet-message-billing.expenses.sources');
+  const tcat = useTranslations('wallet-message-billing.categories');
+  const tstatus = useTranslations('wallet-message-billing.expenses.status');
+  const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
+  if (groups.length === 0) {
+    return <p className="text-sm text-muted-foreground">{t('days.empty')}</p>;
+  }
+  // The API sends each day's lines together, newest day first; a Map keeps that order.
+  const byDay = new Map<string, ExpenseDayGroup[]>();
+  for (const g of groups) byDay.set(g.day, [...(byDay.get(g.day) ?? []), g]);
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[60rem] text-sm" aria-label={t('days.title')}>
+        <thead>
+          <tr className="border-b border-border text-xs text-muted-foreground">
+            {(
+              [
+                ['date', 'text-start'],
+                ['status', 'text-start'],
+                ['channel', 'text-start'],
+                ['category', 'text-start'],
+                ['messages', 'text-end'],
+                ['charged', 'text-end'],
+                ['refunded', 'text-end'],
+                ['net', 'text-end'],
+              ] as const
+            ).map(([c, align]) => (
+              <th key={c} scope="col" className={cn('px-2 py-2 font-medium', align)}>
+                {t(`columns.${c}`)}
+              </th>
+            ))}
+            <th scope="col" className="px-2 py-2 text-end font-medium">
+              <span className="sr-only">{t('days.actions')}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...byDay].map(([day, rows]) => (
+            <Fragment key={day}>
+              <tr className="border-b border-border bg-muted/40">
+                <th
+                  scope="rowgroup"
+                  className="whitespace-nowrap px-2 py-2 text-start font-semibold"
+                >
+                  {formatDay(day, locale)}
+                </th>
+                <td colSpan={7} className="px-2 py-2 text-muted-foreground">
+                  {t('days.messagesOnDay', { count: rows.reduce((n, r) => n + r.messages, 0) })}
+                </td>
+                <td className="px-2 py-2 text-end">
+                  <Button size="sm" variant="secondary" onClick={() => onViewDay(day)}>
+                    {t('days.viewDetails')}
+                  </Button>
+                </td>
+              </tr>
+              {rows.map((r) => (
+                <tr
+                  key={`${r.status}-${r.source ?? ''}-${r.category ?? ''}`}
+                  className="border-b border-border/60 align-top last:border-0"
+                >
+                  <td className="px-2 py-2" />
+                  <td className="px-2 py-2">
+                    <Badge tone={statusTone(r.status)}>{tstatus(r.status)}</Badge>
+                  </td>
+                  <td className={cn('px-2 py-2', r.source === null && 'text-muted-foreground')}>
+                    {channelLabel(r.source, t('breakdown.notRecorded'), tch, tsrc)}
+                  </td>
+                  <td className={cn('px-2 py-2', r.category === null && 'text-muted-foreground')}>
+                    {categoryLabel(r.category, t('breakdown.notRecorded'), tcat)}
+                  </td>
+                  <td className="px-2 py-2 text-end tabular-nums">{r.messages}</td>
+                  <td className="px-2 py-2 text-end tabular-nums">
+                    {money(r.chargedMinor, r.chargedExact)}
+                  </td>
+                  <td className="px-2 py-2 text-end tabular-nums">
+                    {money(r.refundedMinor, r.refundedExact)}
+                  </td>
+                  <td className="px-2 py-2 text-end tabular-nums">
+                    {formatNet(r.netMinor, currency, locale, r.netExact)}
+                  </td>
+                  <td className="px-2 py-2" />
+                </tr>
+              ))}
+            </Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -440,15 +727,19 @@ export function ExpenseTable({
   const tcat = useTranslations('wallet-message-billing.categories');
   const tstatus = useTranslations('wallet-message-billing.expenses.status');
   const tfree = useTranslations('wallet-message-billing.expenses.freeReason');
+  const tk = useTranslations('wallet-message-billing.kinds');
+  const tu = useTranslations('wallet-message-billing.expenses.units');
+  const tsrc = useTranslations('wallet-message-billing.expenses.sources');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[60rem] text-sm" aria-label={t('title')}>
+      <table className="w-full min-w-[66rem] text-sm" aria-label={t('title')}>
         <thead>
           <tr className="border-b border-border text-xs text-muted-foreground">
             {(
               [
                 ['date', 'text-start'],
+                ['type', 'text-start'],
                 ['template', 'text-start'],
                 ['campaign', 'text-start'],
                 ['channel', 'text-start'],
@@ -468,11 +759,20 @@ export function ExpenseTable({
         </thead>
         <tbody>
           {rows.map((r) => {
-            const channel = r.source ? channelKey(r.source) : null;
             return (
               <tr key={r.id} className="border-b border-border/60 align-top last:border-0">
                 <td className="px-2 py-2 whitespace-nowrap">
                   {formatWhen(r.createdAt, locale, timeZone)}
+                </td>
+                <td className="px-2 py-2">
+                  <div className="flex flex-col">
+                    <span>{tk(r.kind)}</span>
+                    {UNIT_KINDS.has(r.kind) && (
+                      <span className="text-xs text-muted-foreground">
+                        {tu(r.kind, { count: r.units })}
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className={cn('px-2 py-2', r.template === null && 'text-muted-foreground')}>
                   {r.template ?? t('breakdown.notRecorded')}
@@ -481,27 +781,15 @@ export function ExpenseTable({
                   {r.subjectName ?? t('breakdown.notRecorded')}
                 </td>
                 <td className="px-2 py-2">
-                  {channel ? tch(channel) : (r.source ?? t('breakdown.notRecorded'))}
+                  {channelLabel(r.source, t('breakdown.notRecorded'), tch, tsrc)}
                 </td>
                 <td className="px-2 py-2">
-                  {r.category && (CATEGORIES as readonly string[]).includes(r.category)
-                    ? tcat(r.category as Category)
-                    : (r.category ?? t('breakdown.notRecorded'))}
+                  {categoryLabel(r.category, t('breakdown.notRecorded'), tcat)}
                 </td>
                 <td className="px-2 py-2">{r.country ?? t('breakdown.notRecorded')}</td>
                 <td className="px-2 py-2">
                   <div className="flex flex-col gap-1">
-                    <Badge
-                      tone={
-                        r.status === 'charged'
-                          ? 'danger'
-                          : r.status === 'free'
-                            ? 'success'
-                            : 'neutral'
-                      }
-                    >
-                      {tstatus(r.status)}
-                    </Badge>
+                    <Badge tone={statusTone(r.status)}>{tstatus(r.status)}</Badge>
                     {r.status === 'free' && r.freeReason && (
                       <span className="text-xs text-muted-foreground">{tfree(r.freeReason)}</span>
                     )}

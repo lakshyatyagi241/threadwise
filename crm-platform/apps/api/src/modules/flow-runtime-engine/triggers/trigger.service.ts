@@ -5,6 +5,7 @@ import { flbCondRulesOf, flbIsCondGroup, type FlowRunSource } from '@crm/contrac
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ContactsService, SegmentsService } from '../../crm';
 import { evalRule, evaluateConditionTree } from '../runtime/condition';
+import { liveTrigger } from '../runtime/live-graph';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
 import { isOutsideBusinessHours } from './business-hours';
 import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
@@ -431,8 +432,10 @@ export class FlowTriggerService {
   ): Promise<KeywordFlow | null> {
     const all = await this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(sql`
-        SELECT id, trigger_keywords, trigger_channel_id, provider, is_published, is_active FROM flows
-        WHERE org_id = ${orgId} AND trigger_kind = 'keyword' AND coalesce(trigger_keywords, '') <> '' ORDER BY id`)) as unknown as Rows;
+        SELECT id, ${liveTrigger('trigger_keywords')} AS trigger_keywords, ${liveTrigger('trigger_channel_id')} AS trigger_channel_id,
+               ${liveTrigger('provider')} AS provider, is_published, is_active FROM flows
+        WHERE org_id = ${orgId} AND ${liveTrigger('trigger_kind')} = 'keyword'
+          AND coalesce(${liveTrigger('trigger_keywords')}, '') <> '' ORDER BY id`)) as unknown as Rows;
       return res.rows;
     });
     const live = all.filter((f) => f.is_published && f.is_active);
@@ -514,8 +517,8 @@ export class FlowTriggerService {
     const flowIds = await this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(sql`
         SELECT id FROM flows
-        WHERE org_id = ${orgId} AND is_published AND is_active AND trigger_kind = ${kind}
-          AND coalesce(trigger_value, 0) = ${value} ORDER BY id`)) as unknown as Rows;
+        WHERE org_id = ${orgId} AND is_published AND is_active AND ${liveTrigger('trigger_kind')} = ${kind}
+          AND coalesce(${liveTrigger('trigger_value')}, 0) = ${value} ORDER BY id`)) as unknown as Rows;
       return res.rows.map((r) => Number(r.id));
     });
     return this.startFlows(orgId, flowIds, contactId, source, triggerRef, variables, on, hops);
@@ -528,8 +531,8 @@ export class FlowTriggerService {
   ): Promise<Array<{ id: number; config: Record<string, unknown> }>> {
     return this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(sql`
-        SELECT id, trigger_config FROM flows
-        WHERE org_id = ${orgId} AND is_published AND is_active AND trigger_kind = ${kind} ORDER BY id`)) as unknown as Rows;
+        SELECT id, ${liveTrigger('trigger_config')} AS trigger_config FROM flows
+        WHERE org_id = ${orgId} AND is_published AND is_active AND ${liveTrigger('trigger_kind')} = ${kind} ORDER BY id`)) as unknown as Rows;
       return res.rows.map((r) => ({
         id: Number(r.id),
         config:

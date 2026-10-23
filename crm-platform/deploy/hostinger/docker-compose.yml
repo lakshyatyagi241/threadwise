@@ -425,6 +425,8 @@ services:
       <<: *api-env
       WORKER_MODE: 'false'
       DB_POOL_MAX: '8'
+      # Only warnings and errors: this process takes the public webhooks (about 140 a second on prod) and its info lines were pure cost.
+      LOG_LEVEL: warn
       OBS_RELEASE: ${HOOKS_TAG:-${IMAGE_TAG:-local}}
 
   web-blue:

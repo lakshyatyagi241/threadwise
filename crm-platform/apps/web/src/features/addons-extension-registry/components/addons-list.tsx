@@ -10,6 +10,7 @@ import { CancelAddonRenewal } from './cancel-addon-renewal';
 import { ErrorBlock, LoadingBlock } from './ui';
 
 const NS = 'addons-extension-registry.list';
+const KINDS = ['feature', 'capacity'] as const;
 
 /**
  * THE add-ons list: one component and one card style for every place a workspace sees add-ons (the Plans page, `/addons` and the Marketplace
@@ -20,7 +21,7 @@ const NS = 'addons-extension-registry.list';
  *   buy          price per period and a button (disabled with a reason for a member who may not buy)
  *   unavailable  the workspace is not on an active paid plan: the reason and a link to the plans
  * It works for any workspace on an active paid plan whether or not the plan has the `marketplace` feature (the add-ons list is not
- * part of the paywalled Marketplace).
+ * part of the paywalled Marketplace). The cards are grouped Feature add-ons / Capacity add-ons (`AddonCard.kind`); an empty group is left out.
  */
 export function AddonsList() {
   const q = useQuery({
@@ -46,16 +47,36 @@ export function AddonsListView({ data }: { data: WorkspaceAddonsResponse }) {
           <p className="mt-1 text-sm text-muted-foreground">{t('empty.body')}</p>
         </div>
       ) : (
-        <ul
-          aria-label={t('listLabel')}
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
-        >
-          {data.catalog.map((c) => (
-            <li key={c.id} className="flex min-w-0">
-              <AddonCardView card={c} canBuy={data.canBuy} />
-            </li>
-          ))}
-        </ul>
+        KINDS.map((kind) => {
+          // Anything not marked capacity is a feature add-on (the contract's default), so no card can fall out of both groups.
+          const cards = data.catalog.filter(
+            (c) => (c.kind === 'capacity' ? 'capacity' : 'feature') === kind,
+          );
+          if (cards.length === 0) return null;
+          const headingId = `addons-group-${kind}`;
+          return (
+            <section
+              key={kind}
+              aria-labelledby={headingId}
+              className="space-y-2"
+              data-testid={`addons-group-${kind}`}
+            >
+              <h3 id={headingId} className="text-sm font-semibold">
+                {t(`groups.${kind}`)}
+              </h3>
+              <ul
+                aria-label={t('listLabel')}
+                className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
+              >
+                {cards.map((c) => (
+                  <li key={c.id} className="flex min-w-0">
+                    <AddonCardView card={c} canBuy={data.canBuy} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })
       )}
       <p className="text-xs text-muted-foreground">
         {t('walletNote')}{' '}
@@ -146,9 +167,10 @@ function AddonCardView({ card, canBuy }: { card: AddonCard; canBuy: boolean }) {
       className="flex w-full min-w-0 flex-col gap-3 rounded-xl border border-border bg-background p-5"
     >
       <div>
-        <h3 id={headingId} className="break-words font-semibold">
+        {/* Under its group's heading. */}
+        <h4 id={headingId} className="break-words font-semibold">
           {card.name}
-        </h3>
+        </h4>
         {card.subtitle && (
           <p className="break-words text-sm text-muted-foreground">{card.subtitle}</p>
         )}

@@ -4,13 +4,18 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { PLAN_FEATURE_KEYS, PLAN_LIMIT_KEYS } from '@crm/contracts';
 import { Tabs } from '@crm/ui';
-import type { PlanTab } from '../lib/plan-editor-view';
+import { PLAN_TABS, type PlanTab } from '../lib/plan-editor-view';
 import { NS } from './plan-editor-shared';
 
 export interface TabCounts {
   featuresOn: number;
   limitsSet: number;
+  /** Plain add-ons the plan includes or offers (Included + Paid). */
   addons: number;
+  /** Integrations the plan includes or offers. */
+  integrations: number;
+  /** Mini apps the plan includes or offers. */
+  miniApps: number;
 }
 
 function TabLabel({
@@ -41,10 +46,10 @@ function TabLabel({
               total: PLAN_LIMIT_KEYS.length,
             }),
           }
-        : tab === 'addons'
+        : tab === 'addons' || tab === 'integrations' || tab === 'miniApps'
           ? {
-              text: String(counts.addons),
-              full: t('tabSummary.addons', { count: counts.addons }),
+              text: String(counts[tab]),
+              full: t(`tabSummary.${tab}`, { count: counts[tab] }),
             }
           : null;
   return (
@@ -71,7 +76,7 @@ function TabLabel({
 }
 
 /**
- * The editor's four sections as tabs (Details and pricing, Features, Limits, Add-ons). On a phone the
+ * The editor's six sections as tabs (Details and pricing, Features, Limits, Add-ons, Integrations, Mini apps). On a phone the
  * strip scrolls sideways inside itself (the shared Tabs list), never the page. Each tab shows a count
  * and an error dot while a problem sits inside it.
  */
@@ -88,11 +93,11 @@ export function PlanEditorTabs({
   errorTabs: readonly PlanTab[];
   panels: Record<PlanTab, ReactNode>;
 }) {
-  const tabs: PlanTab[] = ['details', 'features', 'limits', 'addons'];
+  const tabs: readonly PlanTab[] = PLAN_TABS;
   return (
     <Tabs
-      // On a phone all four tabs must be visible at once: the strip wraps to two rows instead of
-      // hiding Limits and Add-ons behind a sideways scroll.
+      // On a phone every tab must be visible at once: the strip wraps to more rows instead of
+      // hiding the last ones behind a sideways scroll.
       className="[&>[role=tablist]]:flex-wrap [&>[role=tablist]]:overflow-visible"
       value={active}
       onValueChange={(id) => onChange(id as PlanTab)}

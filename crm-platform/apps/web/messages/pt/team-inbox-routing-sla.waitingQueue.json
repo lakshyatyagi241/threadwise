@@ -3,6 +3,7 @@
     "waitingQueue": {
       "title": "Fila de espera",
       "intro": "As conversas que ninguém assumiu esperam na aba Em espera. Estes passos opcionais ajudam a atendê-las. Cada passo roda uma vez por conversa, conta só os minutos em que a equipe está aberta e para assim que alguém assume a conversa.",
+      "introBasic": "As conversas que ninguém assumiu esperam na aba Em espera até alguém assumi-las.",
       "remind": "Lembrar a equipe",
       "remindBody": "Avisa quem pode assumir a conversa.",
       "overflow": "Oferecer a outra equipe",

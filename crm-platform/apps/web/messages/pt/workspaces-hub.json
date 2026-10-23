@@ -234,7 +234,29 @@
         "ends": "Termina em",
         "limits": "Limites efetivos",
         "edit": "Editar e alterar plano",
-        "overrideNote": "Este espaço de trabalho tem limites próprios que substituem os do plano."
+        "overrideNote": "Este espaço de trabalho tem limites próprios que substituem os do plano.",
+        "addons": {
+          "title": "Complementos",
+          "intro": "O que este espaço de trabalho tem de cada complemento e por quê.",
+          "empty": "Nenhum complemento à venda.",
+          "kind": {
+            "feature": "Complemento de recurso",
+            "capacity": "Complemento de capacidade"
+          },
+          "source": {
+            "plan": "Incluído no plano",
+            "override": "Ativado por substituição",
+            "platform": "Espaço de trabalho da plataforma",
+            "bought": "Comprado",
+            "buy": "Pode comprar",
+            "unavailable": "Precisa de um plano pago",
+            "hidden": "Oculto neste plano"
+          },
+          "renews": "Renova em {date}",
+          "ends": "Termina em {date}",
+          "lifetime": "Sem data de término",
+          "overrides": "{count, plural, one {# substituição de recurso prevalece} other {# substituições de recurso prevalecem}} sobre o plano: {keys}. Remova-as em Editar e trocar plano."
+        }
       },
       "walletTab": {
         "open": "Abrir a carteira completa",

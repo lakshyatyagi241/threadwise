@@ -1,8 +1,10 @@
 import {
   expenseGroupBySchema,
   expenseStatusFilterSchema,
+  walletUsageKindSchema,
   type ExpenseGroupBy,
   type ExpenseStatusFilter,
+  type WalletUsageKind,
 } from '@crm/contracts';
 
 export interface ExpenseFilters {
@@ -12,6 +14,8 @@ export interface ExpenseFilters {
   template: string;
   source: string;
   category: string;
+  /** What was billed (a message, an SMS, a call, an AI request...); empty = everything. */
+  kind: WalletUsageKind | '';
   groupBy: ExpenseGroupBy;
 }
 
@@ -22,6 +26,7 @@ export const EMPTY_EXPENSE_FILTERS: ExpenseFilters = {
   template: '',
   source: '',
   category: '',
+  kind: '',
   groupBy: 'template',
 };
 
@@ -35,6 +40,7 @@ interface ParamReader {
 export function parseExpenseFilters(params: ParamReader): ExpenseFilters {
   const status = expenseStatusFilterSchema.safeParse(params.get('status'));
   const groupBy = expenseGroupBySchema.safeParse(params.get('groupBy'));
+  const kind = walletUsageKindSchema.safeParse(params.get('kind'));
   const from = params.get('from') ?? '';
   const to = params.get('to') ?? '';
   return {
@@ -44,6 +50,7 @@ export function parseExpenseFilters(params: ParamReader): ExpenseFilters {
     template: (params.get('template') ?? '').trim().slice(0, 512),
     source: (params.get('source') ?? '').trim().slice(0, 24),
     category: (params.get('category') ?? '').trim().slice(0, 24),
+    kind: kind.success ? kind.data : '',
     groupBy: groupBy.success ? groupBy.data : 'template',
   };
 }
@@ -57,6 +64,7 @@ export function toExpenseApiQuery(f: ExpenseFilters): Record<string, string | un
     template: f.template.trim() || undefined,
     source: f.source.trim() || undefined,
     category: f.category.trim() || undefined,
+    kind: f.kind || undefined,
   };
 }
 
@@ -72,3 +80,7 @@ export function toExpenseSearch(f: ExpenseFilters): string {
 /** A range that ends before it starts matches nothing: the form says so instead of sending it. */
 export const expenseRangeInverted = (f: ExpenseFilters): boolean =>
   Boolean(f.from && f.to && f.from > f.to);
+
+/** The one day the log is narrowed to (what a day's "View details" sets), or '' when the range is not a single day. */
+export const expenseSingleDay = (f: ExpenseFilters): string =>
+  f.from && f.from === f.to ? f.from : '';

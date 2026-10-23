@@ -296,7 +296,8 @@
       "teamFilter": "দল অনুযায়ী ফিল্টার",
       "allTeams": "সব দল",
       "teamFormer": "সাবেক দল",
-      "unhideColumn": "কলাম দেখান"
+      "unhideColumn": "কলাম দেখান",
+      "resizeColumn": "{column} এর প্রস্থ বদলাতে টানুন; রিসেট করতে ডাবল-ক্লিক করুন"
     },
     "bulk": {
       "label": "নির্বাচিত কন্টাক্টের অ্যাকশন",

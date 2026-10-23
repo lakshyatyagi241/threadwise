@@ -46,7 +46,7 @@ export class SmsStatusService {
     return cRow ? Number(cRow.receipt_org_id) : null;
   }
 
-  private async apply(r: ParsedReport): Promise<void> {
+  private async apply(orgId: number, r: ParsedReport): Promise<void> {
     const receipt: DeliveryReceipt = {
       providerMessageId: r.messageId,
       status: r.status,
@@ -60,8 +60,11 @@ export class SmsStatusService {
         : {}),
     };
     // A campaign's recipient first, then a broadcast's (each answers false for a message that is not its own).
-    if (await this.campaignReceipts.handle(receipt)) return;
-    await this.broadcastReceipts.handle(receipt);
+    if (!(await this.campaignReceipts.handle(receipt)))
+      await this.broadcastReceipts.handle(receipt);
+    // No refund here, on purpose. The SMS fee is taken when the carrier accepts the message. This callback is signed with a secret the
+    // workspace itself holds (its own Twilio auth token, its own MSG91 report address), so its word that a message "failed" cannot be
+    // what gives the platform's fee back: a workspace could report every message undelivered and send for free.
   }
 
   /**
@@ -86,7 +89,7 @@ export class SmsStatusService {
         );
       });
       if (!proven) throw AppError.unauthenticated('Invalid signature');
-      await this.apply(report);
+      await this.apply(orgId, report);
     } catch (err) {
       if (err instanceof AppError) throw err;
       this.logger.error({ err: String(err) }, 'sms status (twilio) failed');
@@ -106,7 +109,7 @@ export class SmsStatusService {
       const orgId = await this.orgOf(report.messageId);
       // A secret speaks only for its own workspace's messages.
       if (orgId === null || orgId !== Number(hit.sender_org_id)) return;
-      await this.apply(report);
+      await this.apply(orgId, report);
     } catch (err) {
       this.logger.error({ err: String(err) }, 'sms status (msg91) failed');
     }

@@ -4,6 +4,7 @@
       "switches": {
         "title": "Chat-Zuweisung",
         "intro": "Vier Schalter decken die meisten Workspaces ab: Schalte sie ein, und du musst keine Regel anlegen.",
+        "introBasic": "Dein Tarif weist Chats nicht automatisch zu: Neue Chats warten in der Warteschlange, bis jemand sie übernimmt. Diese Einstellungen gelten weiterhin.",
         "order": "Die Reihenfolge für einen neuen Chat: zuerst Kontaktbesitzer und Stammagent, dann deine Regeln (falls du welche anlegst), dann „Alle anderen“, dann die Warteschlange.",
         "readOnly": "Du kannst diese Schalter sehen, aber nicht ändern.",
         "saved": "Gespeichert.",
@@ -11,8 +12,6 @@
         "loading": "Zuweisungseinstellungen werden geladen",
         "loadFailed": "Die Zuweisungseinstellungen konnten nicht geladen werden.",
         "retry": "Erneut versuchen",
-        "notInPlan": "Nicht in deinem Tarif",
-        "upgradeHint": "Enthalten im Add-on Intelligentes Routing oder in einem höheren Tarif.",
         "stepFirst": "Wird zuerst geprüft",
         "stepMaster": "Hauptschalter",
         "stepAfter": "Nach der Übernahme",
@@ -51,7 +50,6 @@
       "rules": {
         "title": "Mehr Kontrolle nötig? Regeln hinzufügen",
         "intro": "Optional. Mit Regeln lenkst du bestimmte Chats (einen Kanal, Wörter in der Nachricht, einen neuen Kontakt ...) an bestimmte Agenten oder Teams. Wenn dir die vier Schalter genügen, musst du nie eine Regel anlegen.",
-        "locked": "Regeln sind Teil des Add-ons Intelligentes Routing oder eines höheren Tarifs. Die Warteschlange, das Übernehmen und die manuelle Zuweisung bleiben erhalten.",
         "pipelineTitle": "So wird ein neuer Chat zugewiesen",
         "pipeline": {
           "agent": "1. Kontaktbesitzer und Stammagent",

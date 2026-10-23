@@ -134,8 +134,8 @@ function Panel({
   const [surface, setSurface] = useState<PreviewSurface>('chat');
   const set = (patch: Partial<BuilderState>) => setS((prev) => ({ ...prev, ...patch }));
   // What the form started from (a save restarts it from what the server stored): the look is unsaved when it differs, or was never saved.
-  const baseline = useRef(JSON.stringify([initial, initialDomains]));
-  const dirty = untouched || JSON.stringify([s, domains]) !== baseline.current;
+  const [baseline] = useState(() => JSON.stringify([initial, initialDomains]));
+  const dirty = untouched || JSON.stringify([s, domains]) !== baseline;
   useEffect(() => {
     onDirtyChange?.(dirty);
   }, [dirty, onDirtyChange]);

@@ -1,8 +1,6 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "notInPlan": "Niet in je abonnement",
-      "upgradeHint": "Inbegrepen in de add-on Slimme routering of een hoger abonnement.",
       "owner": {
         "prompt": "Vragen naar de contacteigenaar bij hertoewijzing",
         "promptHint": "Als een gesprek handmatig aan iemand anders wordt gegeven, bied dan aan die persoon ook contacteigenaar te maken.",

@@ -1,8 +1,6 @@
 {
   "team-inbox-routing-sla": {
     "handoffSettings": {
-      "notInPlan": "プラン対象外",
-      "upgradeHint": "スマートルーティングアドオン、またはより上位のプランに含まれます。",
       "owner": {
         "prompt": "再割り当て時に連絡先の担当者について確認する",
         "promptHint": "チャットを手動で別の人に渡すとき、その人を連絡先の担当者にするかどうかを確認します。",

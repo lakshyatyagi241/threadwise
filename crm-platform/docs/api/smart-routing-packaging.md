@@ -28,12 +28,12 @@ add-on cannot be saved at 0; untick it when you set the price). Idempotent, expa
 2. Pick the **Billing period** (monthly or yearly subscription), enter a price above zero, tick **Active**, save. Add-ons are subscriptions: the seeded draft is not a legacy pack, so it can be converted here. See [specs/addons-marketplace-unification.md](../specs/addons-marketplace-unification.md) (Part B) for how renewal works on an offline gateway.
 3. Give it to a workspace like any other add-on pack (the workspace's add-ons panel, or checkout once it is active). Workspaces on a paid plan see it in the add-on
    catalogue on the Plans page. Plain add-ons are not part of a plan's `visibleAddons` (that table is for Marketplace apps).
-4. To include Smart routing in a higher tier instead: Plans, open the plan, **Add-ons** tab, section **Add-ons included in this plan**, switch **Smart routing** on, save. The switch ticks the two
-   features (`inbox_routing`, `inbox_assignment_sticky`) on the Features tab and is derived from them, so the old route (Plans, the plan, Features, Chat line, tick both) still works and flips the switch.
-   A pack with only one of its two features on shows **Partly included** with an **Include fully** button. For a saved plan the row says how many of its workspaces already pay for the add-on: their renewal
-   stops at the end of the current term (section 5), nothing is refunded and nothing is cancelled when you save. Switching it off: workspaces on the plan lose the features unless they buy the add-on, which
-   is then buyable for them at its price. Add-ons that are not included are still sold to every workspace on an active paid plan (no per-plan visibility for plain add-ons).
-   Design and impact: [specs/addons-marketplace-unification.md](../specs/addons-marketplace-unification.md).
+4. Per plan, choose how the plan offers it (docs/specs/addons-plan-offers.md): Plans, open the plan, **Add-ons** tab, **Feature add-ons**, Smart routing row:
+   **Included** (no charge; the plan's two features `inbox_routing`, `inbox_assignment_sticky` are set on when you save), **Paid** (buyable on this plan, at the add-on's price or a
+   price you type for this plan) or **Hidden** (not listed, checkout answers 422 `PAYGW_ADDON_NOT_OFFERED`). The two features on the Features tab are locked and follow this choice.
+   The same control is on the add-on's own page (**Add-ons**, Smart routing, **Plans**), saved with `PUT /v2/platform/addons/:id/plans`. For a saved plan, switching to Included says how
+   many of its workspaces already pay: their renewal stops at the end of the current term (section 5). Switching to Paid or Hidden turns the features off for workspaces on the plan that
+   did not buy it; their settings are kept.
 
 ## 2. Setting the tiers (Basic off, higher tiers on)
 
@@ -49,8 +49,8 @@ State of the real-data copy (`crm_owner`, counts only):
 
 Operator steps, in the operator console:
 
-1. **Plans**, open (or create) **Basic**, **Features** tab, **Chat** line: switch **off** _Smart routing: auto-assignment and rules_ and _Smart routing: contact owner and sticky agent_. Save.
-2. For each higher tier (for example Growth, Scale): same screen, switch **on** both. Save. The editor writes every key, so each plan now stores both explicitly.
+1. **Plans**, open (or create) **Basic**, **Add-ons** tab: Smart routing **Paid** (optionally with a Basic price) or **Hidden**. Save.
+2. For each higher tier (for example Growth, Scale): same tab, Smart routing **Included**. Save. The plan then stores both features `true`.
 3. Check that the **Teams** items under Platform (`team_hierarchy`, `custom_roles`) are set as you want for each tier.
 4. Give the add-on to one workspace: **Add-ons**, **Smart routing** (set the price and tick Active first, section 1), then the workspace's add-ons panel, or let the workspace buy it from Plans.
 5. Keep operator and test workspaces open: mark them **platform-owned**, or on the workspace page set the feature overrides `inbox_routing` and `inbox_assignment_sticky` to on.
@@ -83,7 +83,7 @@ notice and an email, and the card reads "Included in your plan. Your add-on ends
 - Switching a workspace back to a plan that does not cover the add-on does not restart a stopped renewal; the workspace buys it again if it wants it.
 - A pack that adds a cap (Teams: +10 teams) is never stopped, because the plan does not give that cap.
 
-## 6. Owner decision needed: free plans see no add-ons
+## 6. Free plans
 
-Add-ons are offered only on an active PAID plan (TW-ADD-033, `eligible` in the add-ons screen and checked in checkout). A **free** Basic plan therefore sees no add-ons at all, so
-Smart routing could not be bought on it. Either make Basic a small paid plan, or change this rule. It has not been changed.
+Add-ons are bought only on an active PAID plan (TW-ADD-033, `eligible` in the add-ons screen and checked in checkout). A free plan lists them as **Needs an active paid plan** (Part B),
+unless the operator sets them to **Hidden** on that plan, which removes them from the list entirely.

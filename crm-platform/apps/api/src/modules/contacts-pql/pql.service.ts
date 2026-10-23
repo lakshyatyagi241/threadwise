@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import {
@@ -20,6 +21,7 @@ import {
   type LeadScoringAiPort,
 } from '../../infra/providers/lead-scoring/lead-scoring-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService } from '../wallet-message-billing';
 import {
   PQL_AI_PROVIDER,
   PQL_MAX_COMPLETION_TOKENS,
@@ -59,6 +61,7 @@ export class PqlService {
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
     private readonly rbac: RbacService,
+    private readonly wallet: AiChargeService,
     @Inject(PQL_AI_PORT) private readonly ai: LeadScoringAiPort,
   ) {}
 
@@ -82,6 +85,8 @@ export class PqlService {
       );
     }
     if (resolved.source === 'admin') await this.meter.guard(orgId);
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no call. Their own key passes.
+    await this.wallet.guardCall(orgId, resolved.source);
 
     const catalog = await this.loadCatalog(orgId);
     const model = process.env.PQL_MODEL?.trim() || PQL_DEFAULT_MODEL;
@@ -119,6 +124,21 @@ export class PqlService {
         billedAgainst: resolved.source,
       })
       .catch((err) => this.logger.warn({ orgId, err }, 'pql usage not recorded'));
+    // The vendor answered, so the call is paid for even when the answer turns out unusable below. The id is generated here, once per
+    // search, and not taken from the request id: a client may send its own `x-request-id` and reuse it, which would make every later
+    // search free.
+    await this.wallet.chargeCall({
+      orgId,
+      keySource: resolved.source,
+      label: 'AI contact search',
+      source: 'pql_search',
+      usageId: `pql:${orgId}:${randomUUID()}`,
+      provider: PQL_AI_PROVIDER,
+      model,
+      promptTokens: completion.promptTokens,
+      completionTokens: completion.completionTokens,
+      reportedCostUsd: completion.costUsd,
+    });
 
     const answer = parsePql(completion.text);
     if (!answer) {

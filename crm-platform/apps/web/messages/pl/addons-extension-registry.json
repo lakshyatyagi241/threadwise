@@ -45,7 +45,8 @@
         "period": "Okres",
         "grants": "Przyznaje",
         "status": "Status",
-        "actions": "Akcje"
+        "actions": "Akcje",
+        "plans": "Plany"
       },
       "price": {
         "free": "Bezpłatnie",
@@ -146,7 +147,9 @@
           "sortOrder": "Wpisz liczbę całkowitą.",
           "limits": "Limity to liczby całkowite lub -1 dla braku limitu.",
           "form": "Sprawdź zaznaczone pola.",
-          "amountPositive": "Dodatki to subskrypcje miesięczne lub roczne, więc cena musi być większa od zera."
+          "amountPositive": "Dodatki to subskrypcje miesięczne lub roczne, więc cena musi być większa od zera.",
+          "features": "Zaznacz co najmniej jedną funkcję lub zmień go na dodatek pojemności.",
+          "limitsNeeded": "Wpisz co najmniej jeden limit większy od zera lub zmień go na dodatek funkcji."
         },
         "legacy": {
           "title": "Pakiet dawny",
@@ -156,8 +159,65 @@
           "months": "Subskrypcja miesięczna",
           "years": "Subskrypcja roczna"
         },
-        "periodHint": "Dodatki to subskrypcje. Przestrzenie robocze z bramką online odnawiają się automatycznie; przy przelewie bankowym lub płatności offline płacą ponownie po zakończeniu okresu."
-      }
+        "periodHint": "Dodatki to subskrypcje. Przestrzenie robocze z bramką online odnawiają się automatycznie; przy przelewie bankowym lub płatności offline płacą ponownie po zakończeniu okresu.",
+        "planOffers": {
+          "title": "Plany",
+          "hint": "Jak każdy plan oferuje ten dodatek. Wliczone: bez opłaty, plan zawiera jego funkcje. Płatne: przestrzenie robocze go kupują, po cenie planu, jeśli ją ustawisz. Ukryte: przestrzenie robocze w tym planie nigdy go nie widzą.",
+          "noIncluded": "Ten dodatek tylko zwiększa limity, więc żaden plan nie może go wliczyć. Plan ustawia własne limity na swojej karcie Limity.",
+          "empty": "Nie ma jeszcze planów.",
+          "freePlan": "Plan bezpłatny",
+          "inactivePlan": "Nieaktywny",
+          "modeLabel": "{plan}: sposób oferowania tego dodatku",
+          "modes": {
+            "included": "Wliczone",
+            "paid": "Płatne",
+            "hidden": "Ukryte"
+          },
+          "priceLabel": "Cena w tym planie",
+          "priceHint": "Puste = własna cena dodatku.",
+          "freePlanNote": "Widoczny w planie bezpłatnym, ale do zakupu przestrzeń robocza potrzebuje planu płatnego.",
+          "hiddenNote": "Niewidoczny dla przestrzeni roboczych w tym planie. Przestrzeń robocza, która już go kupiła, zachowuje go do końca okresu.",
+          "problems": {
+            "money": "Wpisz kwotę, np. 19 lub 19.99.",
+            "zero": "Pozostaw cenę pustą, aby użyć ceny dodatku, lub wybierz Wliczone."
+          },
+          "errors": {
+            "generic": "Nie udało się zapisać ofert planów.",
+            "forbidden": "Tylko superadministrator może zmieniać oferty planów.",
+            "notFound": "Ten dodatek już nie istnieje."
+          },
+          "saved": "Zapisano oferty planów.",
+          "changed": "{count, plural, one {# plan zmieniony} few {# plany zmienione} many {# planów zmienionych} other {# planu zmienionego}}",
+          "save": "Zapisz oferty planów",
+          "needFeatures": "Najpierw dodaj powyżej funkcje, które odblokowuje"
+        },
+        "type": {
+          "title": "Typ",
+          "hint": "Wybierz, co robi ten dodatek. Do planu można włączyć tylko dodatek funkcji.",
+          "feature": {
+            "title": "Dodatek funkcji",
+            "body": "Odblokowuje część produktu; może też zwiększać pojemność."
+          },
+          "capacity": {
+            "title": "Dodatek pojemności",
+            "body": "Tylko zwiększa limit (stanowiska, kontakty...)."
+          }
+        },
+        "noFeaturesNotice": "Ten dodatek nic jeszcze nie odblokowuje. Zaznacz funkcje, które daje, aby plany mogły go uwzględnić.",
+        "limitsHintCapacity": "Dodatek pojemności tylko zwiększa limity. Wpisz liczbę, która zostanie DODANA do planu (na przykład +2 stanowiska). Użyj -1 dla braku limitu. Wymagany jest co najmniej jeden limit."
+      },
+      "kind": {
+        "feature": "Funkcja",
+        "capacity": "Pojemność"
+      },
+      "plans": {
+        "included": "Wliczone: {plans}",
+        "paid": "Płatne: {plans}",
+        "hidden": "Ukryte: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Brak planów"
+      },
+      "noFeatures": "Brak funkcji"
     },
     "extensions": {
       "crumbHere": "Dodatki",
@@ -334,7 +394,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Potrzebujesz kredytów na wiadomości? Doładuj zamiast tego portfel; kredyty nie są dodatkiem.",
-      "walletLink": "Doładuj portfel"
+      "walletLink": "Doładuj portfel",
+      "groups": {
+        "feature": "Dodatki z funkcjami",
+        "capacity": "Dodatki pojemnościowe"
+      }
     }
   }
 }

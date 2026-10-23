@@ -80,7 +80,16 @@ export async function diagnose(alert, { env = process.env, fetchImpl = fetch } =
 // Widgets rows for the card: why (meaning, ordered causes), what to check, what to do (suggestion only), live evidence.
 export function diagnosisRows(alert, ev) {
   const d = ev.entry;
-  if (!d) return [['Diagnosis', 'No runbook entry for this alert (add one in tools/chat-bridge/diagnosis.mjs).']];
+  if (!d) { // a brand-new rule: still give the claimer somewhere to start (all text below is plain, the alert's own words are untrusted and cut short)
+    const name = String(alert?.labels?.alertname ?? 'this alert').replace(/[^A-Za-z0-9_]/g, '').slice(0, 60) || 'this_alert';
+    const said = String(alert?.annotations?.description ?? alert?.annotations?.summary ?? '').replace(/[\u0000-\u001f]/g, ' ').slice(0, 280);
+    return [
+      ['What it means', said || 'The alert gave no description.'],
+      ['Likely causes', 'Not in the runbook map yet, so there is no ranked list. The rule itself is the best clue.'],
+      ['What to check', `- Open the Grafana button and find the panel for this metric\n- Read the rule: grep -rn "${name}" deploy/observability\n- Look at the last release in the Deployments space`],
+      ['Suggested action', 'Claim it (👀) so others know. Add a runbook entry for this alert as part of the fix: tools/chat-bridge/diagnosis.mjs.'],
+    ];
+  }
   return [['What it means', d.meaning], ['Likely causes (most likely first)', d.causes.map((c, i) => `${i + 1}. ${c}`).join('\n')], ...(ev.rows.length ? [['Live evidence (Prometheus)', ev.rows.map(([k, v]) => `${k}: ${v}`).join('\n')]] : [['Live evidence', 'unavailable (Prometheus unreachable or no data)']]),
     ['What to check', d.check.map((c) => `- ${c}`).join('\n')], ['Suggested action (never auto-executed)', d.action]];
 }

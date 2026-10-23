@@ -296,7 +296,8 @@
       "teamFilter": "팀별 필터",
       "allTeams": "모든 팀",
       "teamFormer": "이전 팀",
-      "unhideColumn": "열 다시 표시"
+      "unhideColumn": "열 다시 표시",
+      "resizeColumn": "끌어서 {column} 너비 조절, 두 번 클릭하면 초기화"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",

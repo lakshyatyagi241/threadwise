@@ -570,15 +570,21 @@
       "appLink": "Ver la app",
       "addonHint": "También puedes añadirlo a tu plan actual con el complemento {addon}.",
       "addonLink": "Ver complementos",
-      "addons": {
-        "smartRouting": "Enrutamiento inteligente",
-        "teamsPermissions": "Equipos y permisos"
-      },
       "addonsTabHint": "Los complementos no necesitan el Marketplace en tu plan. Aun así puedes ver lo que tienes y comprar complementos desde Planes y complementos.",
-      "addonsTabLink": "Abrir Planes y complementos"
+      "addonsTabLink": "Abrir Planes y complementos",
+      "addonHintGeneric": "Puede que tu plan también lo ofrezca como complemento."
     },
     "lock": {
-      "link": "Ver planes y complementos"
+      "link": "Ver planes y complementos",
+      "offTitle": "No incluido en tu plan",
+      "offLead": "Esta parte no está incluida ahora mismo en el plan de tu espacio de trabajo.",
+      "buyTitle": "Añade {addon} por {price}",
+      "buyLead": "Tu plan ofrece {addon} como complemento. Añádelo para activar esta parte.",
+      "buyLink": "Ver complementos",
+      "askOwner": "Pide al propietario de la cuenta que lo añada.",
+      "unavailableTitle": "{addon} necesita un plan de pago activo",
+      "unavailableLead": "Elige primero un plan de pago y después podrás añadirle {addon}.",
+      "viewPlans": "Ver planes"
     }
   }
 }

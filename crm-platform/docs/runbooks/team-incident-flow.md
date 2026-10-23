@@ -28,7 +28,7 @@ node tools/chat-bridge/incident-cli.mjs note <id> "checked: not a plan regressio
 node tools/chat-bridge/incident-cli.mjs release-claim <id>
 ```
 
-Claude does this for you via the `handle-alert` skill (`.claude/skills/handle-alert/SKILL.md`); a scheduled version: [incident-schedule-prompt.md](incident-schedule-prompt.md).
+Claude does this for you via the `handle-alert` skill (`.claude/skills/handle-alert/SKILL.md`); the 5-minute auto-claim loop: [incident-schedule-prompt.md](incident-schedule-prompt.md).
 
 ## Credentials for a new teammate
 
@@ -38,20 +38,7 @@ The API sits at `https://<PROMETHEUS_DOMAIN>/incidents` (default `prometheus-des
 cd /opt/desk && cat secrets/incidents_basic_password; echo; cat secrets/incident_api_token; echo
 ```
 
-Each teammate stores them on their own machine, mode 600, never committed:
-
-```
-mkdir -p ~/.config/threadwise && umask 077 && cat > ~/.config/threadwise/incidents.env <<'X'
-INCIDENT_API_URL=https://prometheus-desk.wabo.ai
-INCIDENT_API_USER=incidents
-INCIDENT_API_PASSWORD=<password>
-INCIDENT_API_TOKEN=<token>
-INCIDENT_WHO=<your name>
-X
-chmod 600 ~/.config/threadwise/incidents.env
-```
-
-The CLI refuses a file that is group/world readable. Rotate: delete the two files in `secrets/`, run `./observability-up.sh`, `docker compose ... up -d --force-recreate gchat-bridge`, redistribute.
+Each teammate then runs `node tools/chat-bridge/incident-cli.mjs init` and `... doctor` (writes the file with mode 600, URL is the host only, name without parentheses). Step by step: [team-onboarding-claude.md](team-onboarding-claude.md). The CLI refuses a file that is group/world readable. Rotate: delete the two files in `secrets/`, run `./observability-up.sh`, `docker compose ... up -d --force-recreate gchat-bridge`, redistribute.
 
 ## Limits
 

@@ -242,7 +242,10 @@ source, off by default):
   hours; the template, sender and address for the channel (`skipped` with a reason when one is missing); quiet hours; the ConsentGate;
   then the dispatcher of the channel (WhatsApp: `ConversationsFacade.enqueueOutbound`, which checks the connection, the plan's monthly cap,
   the wallet, the emergency halt and the consent again and holds a marketing template for the quiet hours; SMS and email: the broadcast
-  engines, which check the sender, the plan's cap and, for email, the bounce list and the unsubscribe link).
+  engines, which check the sender, the plan's cap and, for email, the bounce list and the unsubscribe link). An SMS or an email is
+  paid for from the wallet like any other message the workspace sends: an empty wallet holds the message (`held / wallet_empty`) and it
+  is asked again; one the provider accepted is billed once, by its provider message id (by the SMS engine or the email engine), and shows
+  in the expense log with the source `lead_first` (an SMS) or `lead` (an email).
 - **Consent is never inferred.** A WhatsApp **utility** template is a service message (allowed unless the contact withdrew the service
   purpose on that channel); a **marketing** template is marketing. SMS and email have no template categories in this product and every
   one the business starts is marketing: it needs a recorded grant on the channel where the workspace requires one, waits out quiet hours,

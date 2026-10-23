@@ -570,15 +570,21 @@
       "appLink": "アプリを見る",
       "addonHint": "{addon}アドオンで、現在のプランに追加することもできます。",
       "addonLink": "アドオンを見る",
-      "addons": {
-        "smartRouting": "スマートルーティング",
-        "teamsPermissions": "チームと権限"
-      },
       "addonsTabHint": "アドオンの利用にプランのマーケットプレイス機能は不要です。「プランとアドオン」から、所有中のものを確認しアドオンを購入できます。",
-      "addonsTabLink": "プランとアドオンを開く"
+      "addonsTabLink": "プランとアドオンを開く",
+      "addonHintGeneric": "ご利用のプランでは、アドオンとして追加できる場合もあります。"
     },
     "lock": {
-      "link": "プランとアドオンを見る"
+      "link": "プランとアドオンを見る",
+      "offTitle": "ご利用のプランに含まれていません",
+      "offLead": "この部分は現在、ワークスペースのプランに含まれていません。",
+      "buyTitle": "{addon} を {price} で追加",
+      "buyLead": "ご利用のプランでは {addon} をアドオンとして提供しています。追加するとこの部分が有効になります。",
+      "buyLink": "アドオンを見る",
+      "askOwner": "アカウントオーナーに追加を依頼してください。",
+      "unavailableTitle": "{addon} には有効な有料プランが必要です",
+      "unavailableLead": "まず有料プランを選ぶと、そこに {addon} を追加できます。",
+      "viewPlans": "プランを見る"
     }
   }
 }

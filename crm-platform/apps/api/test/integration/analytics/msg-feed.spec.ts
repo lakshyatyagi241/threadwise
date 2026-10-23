@@ -256,10 +256,7 @@ describe('message feed rollup', () => {
       await setStatus(old, 'sent'); // an old message's change is the base rollup's business
       const live = await insert({ org: o.id, conv, at: after(min(24)) });
       await q(`UPDATE messages SET status = status WHERE id = $1`, [live]);
-      await q(`UPDATE messages SET deleted_at = now() WHERE id = $1`, [live]); // deleting is not a status change (decision D10)
-      expect(await events(conv)).toHaveLength(1); // only the one live message's creation
-      // the History's scan leaves a deleted message out and the rollup keeps it (D10): undo it so the parity tests compare like with like
-      await q(`UPDATE messages SET deleted_at = NULL WHERE id = $1`, [live]);
+      expect(await events(conv)).toHaveLength(1); // only the one live message's creation (deleting is covered by msg-feed-deletes.spec.ts)
     });
 
     it('never fails the message when the event cannot be written', async () => {
@@ -275,10 +272,13 @@ describe('message feed rollup', () => {
       } finally {
         await q(`ALTER TABLE an_events DROP CONSTRAINT zz_fail`);
         // that message has no event by design (the writer fails open); drop it so the parity tests below compare like with like
+        // triggers off: the delete trigger would subtract a message the stream never added
+        await q(`ALTER TABLE messages DISABLE TRIGGER trg_messages_feed_delete`);
         await q(`DELETE FROM messages WHERE conversation_id = $1 AND created_at = $2`, [
           o.convs[3],
           after(min(40)).toISOString(),
         ]);
+        await q(`ALTER TABLE messages ENABLE TRIGGER trg_messages_feed_delete`);
       }
     });
 

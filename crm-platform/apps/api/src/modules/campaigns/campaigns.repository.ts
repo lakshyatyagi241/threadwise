@@ -1370,7 +1370,16 @@ export class CampaignsRepository {
     const total = await tx.execute(sql`
       SELECT count(*)::int AS n FROM wp_campaign_contacts r
       LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id WHERE ${where}`);
-    const res = await tx.execute(sql`
+    // Page of ids first, details after. OFFSET skips rows, and every skipped row would otherwise be joined to its contact and have the
+    // sender column evaluated for nothing: on a broadcast of a few hundred thousand recipients page 5,000 cost seconds. With no search
+    // text the filter needs only this table, so the ids come from the narrow index and the joins run for the 50 rows shown.
+    const res =
+      o.q === ''
+        ? await tx.execute(sql`
+      ${RECIPIENT_SELECT} WHERE r.org_id = ${orgId} AND r.id IN (
+        SELECT r.id FROM wp_campaign_contacts r WHERE ${where} ORDER BY r.id DESC LIMIT ${o.limit} OFFSET ${o.offset})
+      ORDER BY r.id DESC`)
+        : await tx.execute(sql`
       ${RECIPIENT_SELECT} WHERE ${where} ORDER BY r.id DESC LIMIT ${o.limit} OFFSET ${o.offset}`);
     return {
       rows: (res.rows as Raw[]).map(toRecipient),

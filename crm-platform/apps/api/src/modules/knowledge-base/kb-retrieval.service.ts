@@ -48,9 +48,18 @@ export class KbRetrievalService {
     private readonly chunks: KbChunkRepository,
   ) {}
 
-  async retrieve(orgId: number, assistantId: number, message: string): Promise<KbRetrieval> {
+  /**
+   * `usageId` names the customer message being answered (a flow step, an inbound message id): the embedding of its search is billed
+   * once under it, and not at all when the vector is already cached.
+   */
+  async retrieve(
+    orgId: number,
+    assistantId: number,
+    message: string,
+    usageId?: string,
+  ): Promise<KbRetrieval> {
     try {
-      const searched = await this.search(orgId, assistantId, message);
+      const searched = await this.search(orgId, assistantId, message, usageId);
       if (searched) return searched;
     } catch (err) {
       if (!(err instanceof KbUnavailableError)) {
@@ -76,6 +85,7 @@ export class KbRetrievalService {
     orgId: number,
     assistantId: number,
     message: string,
+    usageId?: string,
   ): Promise<KbRetrieval | null> {
     if (!isSearchable(message)) return null;
     const cfg = await this.config.get();
@@ -87,7 +97,7 @@ export class KbRetrievalService {
     );
     if (ready === 0) return null;
 
-    const q = await this.embeddings.embedQuery(orgId, queryText(message));
+    const q = await this.embeddings.embedQuery(orgId, queryText(message), usageId);
     const { near, unindexed } = await this.db.txAs({ orgId, userId: null }, async (tx) => ({
       near: await this.chunks.nearest(
         tx,

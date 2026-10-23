@@ -106,3 +106,42 @@ describe('BulkPropertiesSection remove cross', () => {
     expect(crossFor('Label must')).toBeNull();
   });
 });
+
+describe('BulkPropertiesSection with a very long property label', () => {
+  const long = 'ThisIsAVeryLongPropertyLabelWithoutAnySpacesAtAllToSeeWhetherTheDialogOverflows';
+
+  it('lets the section shrink to the dialog, and the picker row wrap the label and cut the key, instead of stretching the dialog', () => {
+    mount(
+      <Harness
+        fields={[f('long_one', 'text', { label: long }), f('short', 'text')]}
+        initial={{}}
+      />,
+    );
+    const fieldset = host.querySelector('fieldset')!;
+    // a fieldset is as wide as its widest unbreakable content unless told otherwise
+    expect(fieldset.className).toContain('min-w-0');
+    act(() => {
+      host.querySelector<HTMLButtonElement>('[data-add-property]')!.click();
+    });
+    const row = Array.from(host.querySelectorAll('li button')).find((b) =>
+      b.textContent?.includes(long),
+    )!;
+    const [label, key] = Array.from(row.querySelectorAll('span'));
+    expect(label!.className).toContain('min-w-0');
+    expect(label!.className).toContain('[overflow-wrap:anywhere]');
+    expect(key!.className).toContain('truncate');
+    expect(row.getAttribute('title')).toContain(long);
+  });
+
+  it('wraps the label of a property already added to the update', () => {
+    mount(
+      <Harness
+        fields={[f('long_one', 'text', { label: long })]}
+        initial={{ long_one: { mode: 'clear' } }}
+      />,
+    );
+    const li = host.querySelector('li')!;
+    expect(li.className).toContain('min-w-0');
+    expect(li.querySelector('p')!.className).toContain('[overflow-wrap:anywhere]');
+  });
+});

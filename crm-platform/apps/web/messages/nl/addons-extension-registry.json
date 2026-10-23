@@ -45,7 +45,8 @@
         "period": "Periode",
         "grants": "Biedt",
         "status": "Status",
-        "actions": "Acties"
+        "actions": "Acties",
+        "plans": "Abonnementen"
       },
       "price": {
         "free": "Gratis",
@@ -146,7 +147,9 @@
           "sortOrder": "Voer een geheel getal in.",
           "limits": "Limieten zijn gehele getallen, of -1 voor onbeperkt.",
           "form": "Controleer de gemarkeerde velden.",
-          "amountPositive": "Add-ons zijn maandelijkse of jaarlijkse abonnementen, dus de prijs moet hoger zijn dan nul."
+          "amountPositive": "Add-ons zijn maandelijkse of jaarlijkse abonnementen, dus de prijs moet hoger zijn dan nul.",
+          "features": "Vink minstens één functie aan, of maak er een capaciteits-add-on van.",
+          "limitsNeeded": "Voer minstens één limiet boven nul in, of maak er een functie-add-on van."
         },
         "legacy": {
           "title": "Verouderd pakket",
@@ -156,8 +159,65 @@
           "months": "Maandabonnement",
           "years": "Jaarabonnement"
         },
-        "periodHint": "Add-ons zijn abonnementen. Werkruimtes met een online betaalprovider worden automatisch verlengd; bij bankoverschrijving of offline betaling betalen ze opnieuw als de periode afloopt."
-      }
+        "periodHint": "Add-ons zijn abonnementen. Werkruimtes met een online betaalprovider worden automatisch verlengd; bij bankoverschrijving of offline betaling betalen ze opnieuw als de periode afloopt.",
+        "planOffers": {
+          "title": "Abonnementen",
+          "hint": "Hoe elk abonnement deze add-on aanbiedt. Inbegrepen: zonder kosten, het abonnement bevat de functies. Betaald: werkruimtes kopen hem, tegen de eigen prijs van het abonnement als je die instelt. Verborgen: werkruimtes op het abonnement zien hem nooit.",
+          "noIncluded": "Deze add-on verhoogt alleen limieten, dus geen enkel abonnement kan hem bevatten. Een abonnement stelt zijn eigen limieten in op het tabblad Limieten.",
+          "empty": "Er zijn nog geen abonnementen.",
+          "freePlan": "Gratis abonnement",
+          "inactivePlan": "Inactief",
+          "modeLabel": "Hoe {plan} deze add-on aanbiedt",
+          "modes": {
+            "included": "Inbegrepen",
+            "paid": "Betaald",
+            "hidden": "Verborgen"
+          },
+          "priceLabel": "Prijs op dit abonnement",
+          "priceHint": "Leeg = de eigen prijs van de add-on.",
+          "freePlanNote": "Zichtbaar op het gratis abonnement, maar een werkruimte heeft een betaald abonnement nodig om hem te kopen.",
+          "hiddenNote": "Niet zichtbaar voor werkruimtes op dit abonnement. Een werkruimte die hem al heeft gekocht, houdt hem tot het einde van de looptijd.",
+          "problems": {
+            "money": "Voer een bedrag in, zoals 19 of 19,99.",
+            "zero": "Laat de prijs leeg om de prijs van de add-on te gebruiken, of kies Inbegrepen."
+          },
+          "errors": {
+            "generic": "De abonnementsaanbiedingen konden niet worden opgeslagen.",
+            "forbidden": "Alleen een superbeheerder kan abonnementsaanbiedingen wijzigen.",
+            "notFound": "Deze add-on bestaat niet meer."
+          },
+          "saved": "Abonnementsaanbiedingen opgeslagen.",
+          "changed": "{count, plural, one {# abonnement gewijzigd} other {# abonnementen gewijzigd}}",
+          "save": "Abonnementsaanbiedingen opslaan",
+          "needFeatures": "Voeg eerst hierboven de functies toe die hij ontgrendelt"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Kies wat deze add-on doet. Alleen een functie-add-on kan in een abonnement worden opgenomen.",
+          "feature": {
+            "title": "Functie-add-on",
+            "body": "Ontgrendelt een deel van het product; kan ook capaciteit toevoegen."
+          },
+          "capacity": {
+            "title": "Capaciteits-add-on",
+            "body": "Verhoogt alleen een limiet (plekken, contacten...)."
+          }
+        },
+        "noFeaturesNotice": "Deze add-on ontgrendelt nog niets. Vink de functies aan die hij geeft, zodat abonnementen hem kunnen opnemen.",
+        "limitsHintCapacity": "Een capaciteits-add-on verhoogt alleen limieten. Voer een getal in dat bij het abonnement wordt OPGETELD (bijvoorbeeld +2 plekken). Gebruik -1 voor onbeperkt. Minstens één limiet is vereist."
+      },
+      "kind": {
+        "feature": "Functie",
+        "capacity": "Capaciteit"
+      },
+      "plans": {
+        "included": "Inbegrepen: {plans}",
+        "paid": "Betaald: {plans}",
+        "hidden": "Verborgen: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Geen abonnementen"
+      },
+      "noFeatures": "Nog geen functies"
     },
     "extensions": {
       "crumbHere": "Add-ons",
@@ -334,7 +394,11 @@
         "add": "+{amount} {name}"
       },
       "walletNote": "Berichtcredits nodig? Laad in plaats daarvan je wallet op; credits zijn geen add-on.",
-      "walletLink": "Wallet opladen"
+      "walletLink": "Wallet opladen",
+      "groups": {
+        "feature": "Functie-add-ons",
+        "capacity": "Capaciteits-add-ons"
+      }
     }
   }
 }

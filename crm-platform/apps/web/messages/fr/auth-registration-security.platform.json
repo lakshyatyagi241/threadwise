@@ -1349,13 +1349,17 @@
             "details": "Détails et tarification",
             "features": "Fonctionnalités",
             "limits": "Limites",
-            "addons": "Modules complémentaires"
+            "addons": "Modules complémentaires",
+            "integrations": "Intégrations",
+            "miniApps": "Mini-applications"
           },
           "tabSummary": {
             "features": "{count} fonctionnalités sur {total} activées",
             "limits": "{count} limites sur {total} définies",
-            "addons": "{count} modules complémentaires sélectionnés",
-            "error": "Erreurs à corriger"
+            "addons": "{count, plural, one {# module complémentaire inclus ou proposé} many {# modules complémentaires inclus ou proposés} other {# modules complémentaires inclus ou proposés}}",
+            "error": "Erreurs à corriger",
+            "integrations": "Intégrations incluses ou proposées : {count}",
+            "miniApps": "Mini-applications incluses ou proposées : {count}"
           },
           "featuresUi": {
             "intro": "Désactivez ce que cette offre n’inclut pas. Un espace de travail sur cette offre ne peut pas ouvrir une zone dont la fonctionnalité est désactivée.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Tout activer",
             "disableAll": "Tout désactiver",
             "noMatch": "Aucune fonctionnalité ne correspond à votre recherche.",
-            "groupCount": "{count} sur {total} activées"
+            "groupCount": "{count} sur {total} activées",
+            "lockedBy": "Défini par le module complémentaire {addon} dans l’onglet Modules complémentaires"
           },
           "limitsUi": {
             "intro": "Un plafond arrête l’action une fois atteint par l’espace de travail. Cochez Illimité pour supprimer le plafond.",
@@ -1385,12 +1390,8 @@
             "total": "au total"
           },
           "addons": {
-            "intro": "Les modules complémentaires activés sont présentés aux espaces de travail de cette offre dans leur Marketplace ; ils ne sont utilisables qu’après achat par l’espace de travail.",
             "search": "Rechercher des modules complémentaires",
             "searchPlaceholder": "Rechercher des modules complémentaires ou des applications",
-            "selectAll": "Tout sélectionner",
-            "clear": "Effacer",
-            "selected": "{count} sur {total} sélectionnés",
             "loading": "Chargement des modules complémentaires",
             "empty": "Aucun module complémentaire payant n’existe encore",
             "emptyHint": "Les modules complémentaires sont créés dans le catalogue Marketplace de la console opérateur. Dès qu’une application a un pack payant, elle est listée ici.",
@@ -1405,7 +1406,7 @@
             "appUnpublished": "L’application n’est pas publiée, les espaces de travail ne peuvent donc pas encore la voir.",
             "appLabel": "Application : {name}",
             "price": "{price} {period}",
-            "total": "{count, plural, one {# module complémentaire sélectionné} other {# modules complémentaires sélectionnés}}"
+            "total": "{count, plural, one {# module complémentaire inclus ou proposé} many {# modules complémentaires inclus ou proposés} other {# modules complémentaires inclus ou proposés}}"
           },
           "featureHints": {
             "automation": "Le créateur de flux et les automatisations qui répondent aux conversations et agissent dessus.",
@@ -1659,7 +1660,9 @@
             "custom_not_free": "Une offre ne peut pas être à la fois gratuite et sur devis.",
             "paid_needs_price": "Définissez un prix supérieur à 0, ou marquez l’offre comme gratuite.",
             "offer_not_lower": "Le prix promotionnel doit être inférieur au prix de l’offre.",
-            "default_needs_active": "L’offre par défaut à l’inscription doit être active."
+            "default_needs_active": "L’offre par défaut à l’inscription doit être active.",
+            "addonPriceZero": "Laissez le prix vide pour utiliser celui du module complémentaire, ou choisissez Inclus.",
+            "addonGone": "Ce module complémentaire n’existe plus. Rechargez la page et enregistrez à nouveau."
           },
           "limitHints": {
             "monthly_messages": "Messages sortants envoyés dans le mois calendaire. Au-delà du quota, le portefeuille est débité.",
@@ -1707,32 +1710,49 @@
             "crm": "CRM commercial",
             "platform": "Partagé par les deux"
           },
-          "marketplace": {
-            "title": "Applications du Marketplace proposées aux espaces de travail de ce forfait"
-          },
-          "included": {
-            "title": "Modules complémentaires inclus dans ce forfait",
-            "intro": "Activez un module complémentaire pour l’inclure : les espaces de travail de ce forfait l’obtiennent sans frais et sa carte indique « Inclus dans votre forfait ». Cela coche exactement les fonctionnalités du module dans l’onglet Fonctionnalités, et les cocher là-bas fait basculer le commutateur. Les modules non inclus restent vendus à leur propre prix à tout espace de travail ayant un forfait payant actif.",
-            "readOnly": "Vous pouvez consulter ce forfait mais pas le modifier, ces commutateurs sont donc verrouillés.",
+          "offers": {
+            "readOnly": "Vous pouvez consulter ce forfait mais pas le modifier, ces commandes sont donc verrouillées.",
+            "featureTitle": "Modules complémentaires de fonctionnalités",
+            "featureIntro": "Modules complémentaires qui débloquent une partie du produit. Inclus : les espaces de travail de ce forfait l’obtiennent sans frais et sa carte indique « Inclus dans votre offre ». Payant : ils peuvent l’acheter, au prix propre à ce forfait si vous en définissez un. Masqué : ils ne le voient jamais. Les fonctionnalités du module dans l’onglet Fonctionnalités suivent ce choix.",
+            "capacityTitle": "Modules complémentaires de capacité",
+            "capacityIntro": "Modules complémentaires qui augmentent seulement une limite, comme un siège supplémentaire. Dans un forfait, ils sont payants ou masqués ; les plafonds propres au forfait se définissent dans l’onglet Limites.",
+            "noFeaturePacks": "Aucun module complémentaire de fonctionnalités pour l’instant.",
+            "adds": "Ajoute : {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} : illimité",
+            "modeLabel": "Comment {name} est proposé dans ce forfait",
+            "modes": {
+              "included": "Inclus",
+              "paid": "Payant",
+              "hidden": "Masqué"
+            },
+            "noIncluded": "Ce module complémentaire n’ajoute que des limites, il ne peut donc pas être inclus. Définissez le plafond propre à ce forfait dans l’onglet Limites.",
+            "priceLabel": "Prix dans ce forfait ({currency})",
+            "priceHint": "Laissez vide pour utiliser le prix propre au module complémentaire.",
+            "includedCapacityNote": "Seules ses fonctionnalités sont incluses. Les limites supplémentaires ({limits}) restent en vente pour les espaces de travail de ce forfait.",
+            "hiddenNote": "Les espaces de travail de ce forfait ne voient pas ce module complémentaire et ne peuvent pas l’acheter. Un espace de travail qui l’a déjà acheté le conserve jusqu’à la fin de sa période.",
+            "offNote": "N’est plus inclus : les espaces de travail de ce forfait perdent ces fonctionnalités, sauf s’ils achètent le module complémentaire. Leurs paramètres sont conservés et reviennent lorsqu’il est réactivé.",
             "loading": "Chargement des modules complémentaires",
             "loadFailed": "Impossible de charger les modules complémentaires. Rien n’a été modifié.",
             "empty": "Aucun module complémentaire pour l’instant",
             "emptyHint": "Les modules comme Routage intelligent et Équipes et autorisations se créent sous Modules complémentaires dans la console opérateur.",
-            "stateFull": "Inclus",
-            "statePartial": "Partiellement inclus",
-            "stateNone": "Non inclus",
             "noPrice": "Aucun prix défini",
             "gives": "Donne : {features}",
-            "switchLabel": "Inclure {name} dans ce forfait",
-            "noFeatures": "Ce module n’ajoute que des limites, il n’y a donc aucune fonctionnalité à inclure. Ses limites ne font pas partie de l’inclusion dans le forfait ; définissez les limites propres au forfait dans l’onglet Limites.",
-            "partial": "Partiellement inclus : {count} fonctionnalités sur {total} sont activées dans ce forfait. Encore désactivées : {missing}.",
-            "includeFully": "Inclure entièrement",
-            "limitsNote": "Ce module ajoute aussi des limites supplémentaires ({limits}). La limite supplémentaire ne fait pas partie de l’inclusion dans le forfait et rien ici ne la modifie : définissez la limite propre au forfait dans l’onglet Limites. Les espaces de travail achètent toujours le module pour la limite supplémentaire.",
             "unlistedNote": "Certaines de ses fonctionnalités ({features}) ne figurent pas dans la liste standard des modules. Elles peuvent quand même être activées pour le forfait ; seul l’achat de ce module en tant que pack fonctionne différemment.",
             "inactiveNote": "Ce module est un brouillon ou désactivé, personne ne peut donc encore l’acheter. L’inclure dans le forfait fonctionne quand même.",
             "impactCount": "{count, plural, one {# espace de travail paie déjà ce module.} other {# espaces de travail paient déjà ce module.}} Leur renouvellement s’arrêtera à la fin de la période en cours, rien n’est remboursé et rien n’est annulé aujourd’hui.",
             "impactUnknown": "Les espaces de travail de ce forfait qui paient déjà ce module ne le renouvelleront plus à la fin de leur période en cours. Rien n’est remboursé et rien n’est annulé aujourd’hui. Le nombre n’a pas pu être chargé.",
-            "offNote": "Désactivé : les espaces de travail de ce forfait perdent ces fonctionnalités à moins d’acheter le module, qui devient achetable pour eux à son prix."
+            "partlyNote": "Ce forfait donne déjà une partie de ce module ({features}). Cela reste ainsi tant que vous ne choisissez pas Inclus, Payant ou Masqué ici.",
+            "needsFeatures": "Ajoutez d’abord les fonctionnalités qu’il débloque dans Modules complémentaires > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Les mini-applications sont des applications qu’un espace de travail installe depuis le Marketplace. Inclus : gratuit pour les espaces de travail de ce forfait. Payant : ils peuvent l’acheter au prix propre de l’application. Masqué : ils ne la voient jamais. Inclus active aussi les fonctionnalités du forfait que l’application apporte.",
+            "introIntegrations": "Les intégrations connectent un service externe. Inclus : gratuit pour les espaces de travail de ce forfait. Payant : ils peuvent l’acheter au prix propre de l’intégration. Masqué : ils ne la voient jamais. Inclus active aussi les fonctionnalités du forfait qu’elle apporte.",
+            "setAll": "Définir tous les éléments affichés sur",
+            "summary": "{count} sur {total} inclus ou proposés",
+            "priceHint": "Les applications du Marketplace gardent leur propre prix ; définissez-le dans la fiche de l’application.",
+            "emptyIntegrations": "Aucune intégration payante pour le moment",
+            "emptyIntegrationsHint": "Les intégrations gratuites n’ont besoin d’aucun réglage ici ; Shopify et WooCommerce s’activent dans l’onglet Fonctionnalités."
           }
         }
       },
