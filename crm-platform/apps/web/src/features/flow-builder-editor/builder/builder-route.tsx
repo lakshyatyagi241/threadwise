@@ -8,13 +8,15 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { flowsApi } from '../api/flows';
 import { FLB_KEYS } from '../api/hooks';
 import { FLASH_KEY } from '../components/flows-screen';
-import { newHref } from '../lib/builder-mode';
+import { isSimpleBot, newHref } from '../lib/builder-mode';
 import { BuilderScreen } from './builder-screen';
 
 /**
  * The builder route: refuses people without the read key, and shows the one-time flash the list left (import, clone,
- * duplicate) the way Reference's redirect flash message does. When the platform admin offers only the Simple builder, a messaging
- * flow is sent there instead (a call flow, and "Generate with AI", have no Simple version and stay on the canvas).
+ * duplicate) the way Reference's redirect flash message does. When the platform admin offers only the Simple builder, a bot
+ * (WhatsApp or website chat, see `isSimpleBot`) is sent to the Simple builder. A saved automation (a messaging flow built on the
+ * canvas, a call flow) stays on the canvas, and so does "Generate with AI": they have no Simple version. The flow's own type and
+ * builder decide, not the URL, so a link from the list never opens an automation in the Simple builder.
  */
 export function BuilderRoute({ flowId }: { flowId?: string }) {
   const allowed = useCan('flb.flows.read');
@@ -25,10 +27,27 @@ export function BuilderRoute({ flowId }: { flowId?: string }) {
     queryKey: FLB_KEYS.overview,
     queryFn: ({ signal }) => flowsApi.overview(signal),
   });
-  const toSimple =
+  const simpleOnly =
     overview.data?.builderMode === 'simple' &&
     params.get('type') !== 'call' &&
     !params.has('ai_prompt');
+  const flow = useQuery({
+    queryKey: FLB_KEYS.flow(flowId ?? ''),
+    queryFn: ({ signal }) => flowsApi.get(flowId!, signal),
+    enabled: !!flowId && simpleOnly,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+  // Until the saved flow's type and builder are known, wait rather than mount the canvas (or the Simple screen) for a bot.
+  const deciding = simpleOnly && !!flowId && flow.isPending;
+  // A failed load keeps the old answer for a Simple-only workspace: the Simple builder, which shows its own error.
+  const toSimple =
+    simpleOnly &&
+    (!flowId ||
+      flow.isError ||
+      (!!flow.data && isSimpleBot(flow.data.flowType, flow.data.builder)));
   // Reference sends an agent or viewer to the team inbox instead of leaving them on a dead end.
   useEffect(() => {
     if (!allowed) router.replace('/inbox');
@@ -49,6 +68,6 @@ export function BuilderRoute({ flowId }: { flowId?: string }) {
     }
   }, [toast]);
   // Wait for the platform setting so the canvas does not flash for a workspace that only has the Simple builder.
-  if (!allowed || toSimple || overview.isPending) return null;
+  if (!allowed || toSimple || deciding || overview.isPending) return null;
   return <BuilderScreen flowId={flowId} />;
 }

@@ -323,7 +323,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
 
       <div className="mt-4 flex items-center gap-2">
         <Link
-          href={openHref(flow.id, flow.flowType, actions.builderMode)}
+          href={openHref(flow.id, flow.flowType, actions.builderMode, flow.builder)}
           className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
         >
           {t('openBuilder')}
@@ -509,7 +509,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
-            href={openHref(flow.id, flow.flowType, actions.builderMode)}
+            href={openHref(flow.id, flow.flowType, actions.builderMode, flow.builder)}
             className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
           >
             {t('open')}
