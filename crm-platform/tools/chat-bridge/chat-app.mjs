@@ -78,6 +78,9 @@ function statusLine({ owner, snap }) {
   if (snap?.prClosed && !pr) return `🟠 Status: PR #${Number(snap.prClosed.number) || 0} was closed without merging, needs a human`;
   if (pr) return `🔵 Status: In progress, ${pr} raised${nm ? ` by ${nm}` : ''}`;
   if (nm && (snap?.status === 'claimed' || !snap)) return `🔵 Status: In progress, ${nm} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`;
+  // Someone (a teammate's Claude) looked, left a note and let go: say so instead of going back to "nobody has taken it".
+  const rev = [...(snap?.notes ?? [])].reverse().find((n) => n.who && n.who !== 'bridge');
+  if (rev) return `🟠 Status: Reviewed by <b>${clean(rev.who, 40)}</b> at ${hm(rev.t)}, needs a human to take it`;
   return '🟡 Status: Open, nobody has taken it yet';
 }
 
