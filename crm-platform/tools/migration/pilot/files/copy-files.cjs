@@ -770,6 +770,8 @@ async function runVerify(ctx) {
         `SELECT kind, count(*)::int AS n FROM messages
           WHERE org_id = $1 AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND media_key IS NULL
             AND COALESCE(meta->'legacy'->>'mediaUrl', '') !~* '^https?://' AND meta->'legacy' IS NOT NULL AND meta->'legacy'->>'src' = 'waboo'
+            -- flagged by the parser (inbox/parse.ts flagMediaWithoutFile): Waboo's dump has no file, so there is nothing to copy; a known gap, not a failure
+            AND COALESCE((meta->'legacy'->>'contentUnavailable')::boolean, false) = false
           GROUP BY kind`,
         [org.id],
       )).rows,
@@ -839,7 +841,15 @@ async function runVerify(ctx) {
   for (const r of left) tally(pointing, `${r.t}@${urlId(r.url)?.host ?? '(not a URL)'}${cfg.allowedHosts.includes(urlId(r.url)?.host) ? ' [waboo host]' : ''}`);
   const failedByReason = new Map();
   for (const e of state.values()) if (e.status === 'failed') tally(failedByReason, e.reason);
+  // media the dump has no file for (flagged by the parser): nothing to copy, reported as a known gap rather than a failure
+  const knownGaps = await tenant(
+    db,
+    org.id,
+    async () => Number((await db.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key IS NULL AND COALESCE((meta->'legacy'->>'contentUnavailable')::boolean, false) AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker')`, [org.id])).rows[0].n)),
+    true,
+  );
   say(`objects checked=${jobs.length} (${head ? 'size only' : 'size + sha256 where known'}) problems: ${lines(bad)}`);
+  say(`known gaps, no file in Waboo's dump (not copied, not a failure): ${knownGaps}`);
   say(`stored message files by kind: ${lines(byKind)}`);
   say(`rows still pointing at a URL: ${left.length}  by table@host: ${lines(pointing)}`);
   say(`last recorded failure per file (state): ${lines(failedByReason)}`);
