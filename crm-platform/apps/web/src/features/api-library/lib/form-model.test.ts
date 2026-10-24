@@ -17,8 +17,11 @@ import {
   originOf,
   requestSignature,
   secretOverPlainHttp,
+  sentTokens,
+  sentVariables,
   syncVariables,
   usedTokens,
+  withSentVariables,
   type ApiFormState,
 } from './form-model';
 
@@ -80,8 +83,43 @@ describe('variables are declared from the tokens in use', () => {
     expect(usedTokens(f)).toEqual(['x']);
   });
 
-  it('ignores the payload of a GET', () => {
-    expect(usedTokens(form({ method: 'GET', bodyText: '{"a": "{{x}}"}' }))).toEqual([]);
+  it('keeps the payload variables of a GET in the form but does not send them', () => {
+    const f = form({ method: 'GET', bodyText: '{"a": "{{x}}"}' });
+    expect(sentTokens(f)).toEqual([]);
+    expect(usedTokens(f)).toEqual(['x']);
+    expect(sentVariables(f)).toEqual([]);
+  });
+
+  it('keeps a variable default through a switch to GET and back to POST', () => {
+    const post = form({
+      method: 'POST',
+      url: 'https://x.test/{{hv}}',
+      bodyText: '{"k": "{{mv}}"}',
+    });
+    const typed = syncVariables({
+      ...post,
+      variables: post.variables.map((v) => ({ ...v, defaultValue: 'zz' })),
+    });
+    const get = syncVariables({ ...typed, method: 'GET' });
+    expect(get.variables.map((v) => [v.name, v.defaultValue])).toEqual([
+      ['hv', 'zz'],
+      ['mv', 'zz'],
+    ]);
+    const back = syncVariables({ ...get, method: 'POST' });
+    expect(back.variables).toEqual(typed.variables);
+  });
+
+  it('shows and sends only the variables the method sends, and writes edits back to the hidden ones too', () => {
+    const f = syncVariables({
+      ...form({ method: 'POST', url: 'https://x.test/{{hv}}', bodyText: '{"k": "{{mv}}"}' }),
+      method: 'GET',
+    });
+    expect(sentVariables(f).map((v) => v.name)).toEqual(['hv']);
+    const edited = withSentVariables(f, [{ ...f.variables[0]!, defaultValue: 'zz' }]);
+    expect(edited.map((v) => [v.name, v.defaultValue])).toEqual([
+      ['hv', 'zz'],
+      ['mv', ''],
+    ]);
   });
 
   it('returns the same state when nothing changed', () => {
@@ -95,6 +133,12 @@ describe('validation with the shared rules', () => {
     const r = buildCreate(form({ url: 'https://x.test/{{order_id}}' }));
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors.fields['variable:order_id']).toMatch(/default value/i);
+  });
+
+  it('does not ask for the default of a payload variable a GET does not send', () => {
+    const post = form({ method: 'POST', bodyText: '{"k": "{{mv}}"}' });
+    const r = buildCreate({ ...post, method: 'GET' });
+    expect(r.ok && r.input.variables).toEqual([]);
   });
 
   it('accepts a filled definition and trims the URL', () => {

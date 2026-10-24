@@ -111,29 +111,64 @@ function parsedBody(text: string): ApiLibraryBody | undefined {
   }
 }
 
-/** Every `{{token}}` the URL, header values and payload use. A payload that is not valid JSON yet is scanned as plain text. */
-export function usedTokens(state: ApiFormState): string[] {
-  const hasBody = apiLibraryMethodHasBody(state.method);
-  let bodyTokens: string[] = [];
-  let body: ApiLibraryBody = null;
-  if (hasBody && state.payloadType === 'multipart/form-data') {
-    body = Object.fromEntries(
-      state.fieldRows.filter((r) => r.key.trim() !== '').map((r) => [r.key.trim(), r.value]),
-    );
-  } else if (hasBody) {
-    const parsed = parsedBody(state.bodyText);
-    if (parsed === undefined) bodyTokens = apiLibraryTokensOf(state.bodyText);
-    else body = parsed;
+/**
+ * The payload the form holds, whatever the method is: its value, or (text that is not JSON yet) the tokens scanned as plain text.
+ * Multipart form fields are always a value.
+ */
+function heldPayload(state: ApiFormState): { body: ApiLibraryBody; textTokens: string[] } {
+  if (state.payloadType === 'multipart/form-data') {
+    const rows = state.fieldRows.filter((r) => r.key.trim() !== '');
+    return { body: Object.fromEntries(rows.map((r) => [r.key.trim(), r.value])), textTokens: [] };
   }
+  const parsed = parsedBody(state.bodyText);
+  return parsed === undefined
+    ? { body: null, textTokens: apiLibraryTokensOf(state.bodyText) }
+    : { body: parsed, textTokens: [] };
+}
+
+/** Every `{{token}}` the request sends: the URL, the header values and, for a method that carries a payload, the payload. */
+export function sentTokens(state: ApiFormState): string[] {
+  const hasBody = apiLibraryMethodHasBody(state.method);
+  const held = heldPayload(state);
   const out = apiLibraryDefinitionTokens({
     url: state.url,
     headers: state.headers
       .filter((h) => h.key.trim() !== '')
       .map((h) => ({ key: h.key, value: h.value, secret: h.secret })),
-    body,
+    body: hasBody ? held.body : null,
   });
-  for (const t of bodyTokens) if (!out.includes(t)) out.push(t);
+  if (hasBody) for (const t of held.textTokens) if (!out.includes(t)) out.push(t);
   return out;
+}
+
+/**
+ * Every `{{token}}` the form holds: the sent ones, and those in a payload the method does not send. A GET keeps its payload in the
+ * form (only the request leaves it out), so the variables of that payload keep their defaults for when the method changes back.
+ */
+export function usedTokens(state: ApiFormState): string[] {
+  const out = sentTokens(state);
+  const held = heldPayload(state);
+  const hidden = [
+    ...apiLibraryDefinitionTokens({ url: '', headers: [], body: held.body }),
+    ...held.textTokens,
+  ];
+  for (const t of hidden) if (!out.includes(t)) out.push(t);
+  return out;
+}
+
+/** The declared variables the request sends. The others (used only by a payload the method does not send) stay in the form, hidden. */
+export function sentVariables(state: ApiFormState): ApiLibraryVariable[] {
+  const sent = new Set(sentTokens(state).map((t) => t.toLowerCase()));
+  return state.variables.filter((v) => sent.has(v.name.toLowerCase()));
+}
+
+/** Writes the rows the form showed back into its variables. The hidden ones keep their values. */
+export function withSentVariables(
+  state: ApiFormState,
+  shown: ApiLibraryVariable[],
+): ApiLibraryVariable[] {
+  const byName = new Map(shown.map((v) => [v.name.toLowerCase(), v]));
+  return state.variables.map((v) => byName.get(v.name.toLowerCase()) ?? v);
 }
 
 /**
@@ -282,7 +317,7 @@ function definitionOf(state: ApiFormState) {
       method: state.method,
       url: state.url.trim(),
       payloadType,
-      variables: state.variables.map((v) => ({
+      variables: sentVariables(state).map((v) => ({
         name: v.name,
         source: v.source,
         defaultValue: v.defaultValue,

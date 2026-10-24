@@ -51,7 +51,9 @@ import {
   newRowId,
   noErrors,
   requestSignature,
+  sentVariables,
   syncVariables,
+  withSentVariables,
   type ApiFormState,
   type Built,
   type FormErrors,
@@ -438,10 +440,10 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
               hint={t('variablesHint')}
             >
               <VariablesPanel
-                variables={form.variables}
+                variables={sentVariables(form)}
                 errors={errors}
                 disabled={disabled}
-                onChange={(v) => update({ variables: v })}
+                onChange={(v) => update({ variables: withSentVariables(form, v) })}
               />
             </SectionCard>
 
