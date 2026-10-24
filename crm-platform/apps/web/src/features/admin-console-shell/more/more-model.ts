@@ -201,7 +201,10 @@ export function normaliseHref(raw: string): string {
   return `/${v}`;
 }
 
-/** Reads the stored list: bad JSON, a non-list, or no usable entry means the defaults; custom entries that normalise to `#` are dropped. */
+/**
+ * Reads the stored list: bad JSON, a non-list, or no usable entry means the defaults; custom entries that normalise to `#` are dropped.
+ * A saved preset that is no longer offered (New auto reply, whose screen is not built) is dropped too: its address would be a 404.
+ */
 export function loadShortcuts(raw: string | null, defaults: readonly Shortcut[]): Shortcut[] {
   if (!raw) return [...defaults];
   let parsed: unknown;
@@ -216,6 +219,7 @@ export function loadShortcuts(raw: string | null, defaults: readonly Shortcut[])
     if (!e || typeof e !== 'object') continue;
     const r = e as Record<string, unknown>;
     if (typeof r.id !== 'string' || typeof r.title !== 'string') continue;
+    if (r.custom !== true && !Object.hasOwn(SHORTCUT_PRESETS, r.id)) continue;
     const href = normaliseHref(typeof r.href === 'string' ? r.href : '');
     if (r.custom === true && href === '#') continue;
     out.push({
