@@ -62,8 +62,10 @@ export class CampaignAiImageService {
 
     // Nothing is drawn (or charged) when the picture could not be kept: a provider cannot fetch a file on local disk.
     if (!(await this.media.canStore())) {
-      throw AppError.validation(
+      throw new AppError(
+        ERROR_CODES.CAMP_AI_STORAGE_REQUIRED,
         'Files for messages need cloud object storage: ask the platform admin to turn it on, or paste a public address instead',
+        HttpStatus.UNPROCESSABLE_ENTITY,
         [{ path: 'file', message: 'Storage is local.' }],
       );
     }

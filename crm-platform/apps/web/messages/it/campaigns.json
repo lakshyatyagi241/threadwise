@@ -241,7 +241,8 @@
         "expiry": "La data di fine deve essere successiva alla data di invio, altrimenti la campagna scadrebbe prima ancora di essere inviata.",
         "media": "Inserisci un indirizzo completo che inizi con http:// o https://.",
         "sender": "Scegli un mittente.",
-        "subject": "Riduci l'oggetto a 150 caratteri o meno."
+        "subject": "Riduci l'oggetto a 150 caratteri o meno.",
+        "pacing": "Controlla l'invio intelligente: ogni numero deve essere un intero compreso nell'intervallo consentito."
       },
       "submit": {
         "save": "Salva modifiche",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Attesa massima prima di un messaggio.",
         "batchPauseHint": "Minuti di pausa dopo ogni lotto.",
         "retryFailed": "Riprova automaticamente i messaggi falliti",
-        "retryFailedHint": "Un messaggio che fallisce per un motivo temporaneo viene riprovato alcune volte, con una pausa tra i tentativi. Disattiva per inviare ogni messaggio una sola volta."
+        "retryFailedHint": "Un messaggio che fallisce per un motivo temporaneo viene riprovato alcune volte, con una pausa tra i tentativi. Disattiva per inviare ogni messaggio una sola volta.",
+        "range": "Inserisci un numero intero da {min} a {max}."
       },
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
       "draftChip": "Bozza / non salvata",
@@ -595,7 +597,8 @@
           "expiry": "La data di fine deve essere successiva alla data di invio, altrimenti la campagna scadrebbe prima di partire.",
           "media": "Inserisci un indirizzo completo che inizi con http:// o https://.",
           "sender": "Scegli un mittente.",
-          "subject": "Riduci l'oggetto a 150 caratteri o meno."
+          "subject": "Riduci l'oggetto a 150 caratteri o meno.",
+          "pacing": "Controlla l'invio intelligente: ogni numero deve essere un intero compreso nell'intervallo consentito."
         },
         "from": "Da",
         "subject": "Oggetto",
@@ -686,6 +689,7 @@
             "providerFailed": "Il servizio immagini non ha risposto. Riprova tra un momento.",
             "badJson": "Il servizio immagini ha inviato una risposta inattesa. Riprova.",
             "imageRefused": "OpenAI ha rifiutato di generare questa immagine. Modifica il prodotto, l'offerta o le note e riprova.",
+            "storageRequired": "Le immagini richiedono l'archiviazione di oggetti cloud: chiedi all'amministratore della piattaforma di attivarla. Il testo della campagna è stato mantenuto.",
             "invalid": "Controlla il brief: il nome dell'attività è obbligatorio e alcuni campi sono troppo lunghi.",
             "forbidden": "Non hai il permesso di creare campagne.",
             "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "I follow-up funzionano solo con un numero WhatsApp Cloud API. Scegline uno nel passaggio 1 o rimuovi i follow-up.",
         "sequence_not_recurring": "I modelli a rotazione funzionano solo con una campagna ricorrente. Scegli una pianificazione ricorrente o rimuovi i modelli aggiuntivi.",
         "sequence_with_ab": "I modelli a rotazione non possono essere combinati con un test A/B. Disattiva il test A/B o rimuovi i modelli aggiuntivi.",
-        "sequence_template_required": "Scegli un modello per ogni passo dell'ordine o rimuovi quelli vuoti."
+        "sequence_template_required": "Scegli un modello per ogni passo dell'ordine o rimuovi quelli vuoti.",
+        "variable_fallback_required": "Inserisci un valore di riserva per ogni variabile che proviene da un campo del contatto: viene usato per i contatti senza valore.",
+        "retry_end_too_far": "I tentativi possono durare al massimo 7 giorni da oggi. Scegli una data di fine più vicina.",
+        "template_b_same": "La variante B richiede un modello diverso dalla variante A.",
+        "pacing_out_of_range": "Controlla l'invio intelligente: un numero è fuori dall'intervallo consentito."
       },
       "template": {
         "previewOnline": "online",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Versione dell'informativa: {version}.",
         "modePrevious": "Invia agli invii precedenti",
         "previousHint": "Raggiungi di nuovo le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, non ha letto, ha risposto o ha cliccato.",
-        "chipPrevious": "{count, plural, one {# invio precedente} other {# invii precedenti}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# invio precedente} other {# invii precedenti}} ({outcome})",
+        "filterNoConditions": "Aggiungi una condizione per vedere quanti contatti corrispondono."
       },
       "review": {
         "intro": "Controlla il costo, indicaci con cosa viene compilata ogni variabile del template e rivedi il broadcast.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Invii precedenti: {names} ({outcome})",
         "sumSplit": "Ripartizione tra i numeri",
         "sumSplitCount": "{count, plural, one {# destinatario} other {# destinatari}} ({percent}%)",
-        "sumSplitPercent": "{percent}% del pubblico"
+        "sumSplitPercent": "{percent}% del pubblico",
+        "sumCostCharged": "Addebitato sul portafoglio: {amount} (il tuo piano copre il resto)"
       },
       "test": {
         "title": "Invia un messaggio WhatsApp di prova",
@@ -1547,7 +1557,9 @@
         "retriesInfoCost": "Nessun costo extra: un messaggio viene addebitato solo quando è consegnato.",
         "recurringTitle": "Broadcast ricorrente",
         "recurringHint": "Invia questo con una programmazione ricorrente",
-        "occurrences": "esecuzioni"
+        "occurrences": "esecuzioni",
+        "recurringWarning": "Questa trasmissione si ripete secondo la sua pianificazione. Ogni esecuzione va al pubblico così com'è in quel momento, e ogni messaggio viene addebitato sul portafoglio.",
+        "repeatRange": "Inserisci un numero intero da 1 a {max}."
       },
       "words": {
         "now": "Inviato subito, una sola volta.",

@@ -241,7 +241,8 @@
         "expiry": "La date de fin doit être postérieure à la date d’envoi, sinon la campagne expirerait avant même d’être envoyée.",
         "media": "Saisissez une adresse complète commençant par http:// ou https://.",
         "sender": "Choisissez un expéditeur.",
-        "subject": "Raccourcissez l'objet à 150 caractères ou moins."
+        "subject": "Raccourcissez l'objet à 150 caractères ou moins.",
+        "pacing": "Vérifiez la distribution intelligente : chaque nombre doit être un entier compris dans sa plage autorisée."
       },
       "submit": {
         "save": "Enregistrer les modifications",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Le délai d'attente le plus long avant un message.",
         "batchPauseHint": "Minutes de pause après chaque lot.",
         "retryFailed": "Réessayer automatiquement les messages en échec",
-        "retryFailedHint": "Un message qui échoue pour une raison temporaire est renvoyé plusieurs fois, avec une pause entre les essais. Désactivez pour envoyer chaque message une seule fois."
+        "retryFailedHint": "Un message qui échoue pour une raison temporaire est renvoyé plusieurs fois, avec une pause entre les essais. Désactivez pour envoyer chaque message une seule fois.",
+        "range": "Saisissez un nombre entier de {min} à {max}."
       },
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
       "draftChip": "Brouillon / non enregistré",
@@ -595,7 +597,8 @@
           "expiry": "La date de fin doit être postérieure à la date d'envoi, sinon la campagne expirerait avant tout envoi.",
           "media": "Saisissez une adresse complète commençant par http:// ou https://.",
           "sender": "Choisissez un expéditeur.",
-          "subject": "Raccourcissez l'objet à 150 caractères ou moins."
+          "subject": "Raccourcissez l'objet à 150 caractères ou moins.",
+          "pacing": "Vérifiez la distribution intelligente : chaque nombre doit être un entier compris dans sa plage autorisée."
         },
         "from": "De",
         "subject": "Objet",
@@ -686,6 +689,7 @@
             "providerFailed": "Le service d'images n'a pas répondu. Réessayez dans un instant.",
             "badJson": "Le service d'images a renvoyé une réponse inattendue. Réessayez.",
             "imageRefused": "OpenAI a refusé de générer cette image. Modifiez le produit, l'offre ou les notes, puis réessayez.",
+            "storageRequired": "Les images nécessitent un stockage objet cloud : demandez à l'administrateur de la plateforme de l'activer. Le texte de la campagne est conservé.",
             "invalid": "Vérifiez le brief : le nom de l'entreprise est obligatoire et certains champs sont trop longs.",
             "forbidden": "Vous n'avez pas l'autorisation de créer des campagnes.",
             "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Les relances ne fonctionnent qu'avec un numéro WhatsApp Cloud API. Choisissez-en un à l'étape 1 ou supprimez les relances.",
         "sequence_not_recurring": "Les modèles en alternance ne fonctionnent qu'avec une campagne récurrente. Choisissez une planification récurrente ou retirez les modèles supplémentaires.",
         "sequence_with_ab": "Les modèles en alternance ne peuvent pas être combinés avec un test A/B. Désactivez le test A/B ou retirez les modèles supplémentaires.",
-        "sequence_template_required": "Choisissez un modèle pour chaque étape de l'ordre, ou retirez les étapes vides."
+        "sequence_template_required": "Choisissez un modèle pour chaque étape de l'ordre, ou retirez les étapes vides.",
+        "variable_fallback_required": "Saisissez une valeur de secours pour chaque variable issue d'un champ de contact : elle sert aux contacts qui n'ont pas de valeur.",
+        "retry_end_too_far": "Les relances peuvent durer 7 jours au maximum à partir d'aujourd'hui. Choisissez une date de fin plus proche.",
+        "template_b_same": "La variante B doit utiliser un autre modèle que la variante A.",
+        "pacing_out_of_range": "Vérifiez la distribution intelligente : un nombre est hors de sa plage autorisée."
       },
       "template": {
         "previewOnline": "en ligne",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Version de la mention : {version}.",
         "modePrevious": "Envoyer aux envois précédents",
         "previousHint": "Ciblez à nouveau les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, n'ont pas lu, ont répondu ou ont cliqué.",
-        "chipPrevious": "{count, plural, one {# envoi antérieur} many {# d'envois antérieurs} other {# envois antérieurs}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# envoi antérieur} many {# d'envois antérieurs} other {# envois antérieurs}} ({outcome})",
+        "filterNoConditions": "Ajoutez une condition pour voir combien de contacts correspondent."
       },
       "review": {
         "intro": "Vérifiez le coût, indiquez par quoi chaque variable du modèle est remplie et examinez la diffusion.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Envois précédents : {names} ({outcome})",
         "sumSplit": "Répartition entre les numéros",
         "sumSplitCount": "{count, plural, one {# destinataire} other {# destinataires}} ({percent} %)",
-        "sumSplitPercent": "{percent} % de l'audience"
+        "sumSplitPercent": "{percent} % de l'audience",
+        "sumCostCharged": "Débité de votre portefeuille : {amount} (votre forfait couvre le reste)"
       },
       "test": {
         "title": "Envoyer un message WhatsApp de test",
@@ -1547,7 +1557,9 @@
         "retriesInfoCost": "Aucun coût supplémentaire : un message n’est facturé que lorsqu’il est distribué.",
         "recurringTitle": "Diffusion récurrente",
         "recurringHint": "Envoyer ceci selon une planification récurrente",
-        "occurrences": "exécutions"
+        "occurrences": "exécutions",
+        "recurringWarning": "Cette diffusion se répète selon son planning. Chaque exécution est envoyée à l'audience telle qu'elle est à ce moment-là, et chaque message est débité de votre portefeuille.",
+        "repeatRange": "Saisissez un nombre entier de 1 à {max}."
       },
       "words": {
         "now": "Envoyée tout de suite, une seule fois.",

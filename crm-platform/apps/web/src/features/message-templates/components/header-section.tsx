@@ -57,7 +57,8 @@ export function HeaderSection({
   const kind = state.headerKind;
 
   function pick(file: File | undefined) {
-    if (!file || !isMediaKind(kind)) return;
+    // While an upload runs, a pick is ignored: Choose is disabled then too, and a second upload would race the first.
+    if (!file || !isMediaKind(kind) || upload.isPending) return;
     // A new pick starts clean: an error from the last upload must not stay beside the result of this one.
     upload.reset();
     const p = mediaProblem(kind, file);

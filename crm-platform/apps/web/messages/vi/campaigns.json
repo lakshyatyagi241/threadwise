@@ -241,7 +241,8 @@
         "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi được gửi.",
         "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
         "sender": "Chọn người gửi.",
-        "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự."
+        "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự.",
+        "pacing": "Kiểm tra Gửi thông minh: mọi số phải là số nguyên nằm trong khoảng cho phép."
       },
       "submit": {
         "save": "Lưu thay đổi",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Thời gian chờ lâu nhất trước một tin nhắn.",
         "batchPauseHint": "Số phút nghỉ sau mỗi lô.",
         "retryFailed": "Tự động thử lại các tin nhắn thất bại",
-        "retryFailedHint": "Tin nhắn thất bại vì lý do tạm thời sẽ được thử lại vài lần, có khoảng nghỉ giữa các lần. Tắt để mỗi tin nhắn chỉ gửi một lần."
+        "retryFailedHint": "Tin nhắn thất bại vì lý do tạm thời sẽ được thử lại vài lần, có khoảng nghỉ giữa các lần. Tắt để mỗi tin nhắn chỉ gửi một lần.",
+        "range": "Nhập một số nguyên từ {min} đến {max}."
       },
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
       "draftChip": "Bản nháp / chưa lưu",
@@ -595,7 +597,8 @@
           "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi gửi.",
           "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
           "sender": "Chọn người gửi.",
-          "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự."
+          "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự.",
+          "pacing": "Kiểm tra Gửi thông minh: mọi số phải là số nguyên nằm trong khoảng cho phép."
         },
         "from": "Từ",
         "subject": "Tiêu đề",
@@ -686,6 +689,7 @@
             "providerFailed": "Dịch vụ tạo ảnh không phản hồi. Vui lòng thử lại sau giây lát.",
             "badJson": "Dịch vụ tạo ảnh trả về dữ liệu không mong đợi. Vui lòng thử lại.",
             "imageRefused": "OpenAI từ chối vẽ ảnh này. Hãy thay đổi sản phẩm, ưu đãi hoặc ghi chú rồi thử lại.",
+            "storageRequired": "Hình ảnh cần lưu trữ đối tượng trên đám mây: hãy nhờ quản trị viên nền tảng bật tính năng này. Nội dung chiến dịch đã được giữ lại.",
             "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
             "forbidden": "Bạn không có quyền tạo chiến dịch.",
             "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Tin theo dõi chỉ hoạt động với số WhatsApp Cloud API. Hãy chọn một số ở bước 1 hoặc xóa các tin theo dõi.",
         "sequence_not_recurring": "Mẫu gửi luân phiên chỉ hoạt động với chiến dịch lặp lại. Hãy chọn lịch lặp lại hoặc xóa các mẫu bổ sung.",
         "sequence_with_ab": "Mẫu gửi luân phiên không thể kết hợp với thử nghiệm A/B. Hãy tắt thử nghiệm A/B hoặc xóa các mẫu bổ sung.",
-        "sequence_template_required": "Chọn một mẫu cho mỗi bước trong thứ tự hoặc xóa các bước trống."
+        "sequence_template_required": "Chọn một mẫu cho mỗi bước trong thứ tự hoặc xóa các bước trống.",
+        "variable_fallback_required": "Nhập giá trị dự phòng cho mọi biến lấy từ trường liên hệ: giá trị này dùng cho các liên hệ không có dữ liệu.",
+        "retry_end_too_far": "Thử lại có thể kéo dài tối đa 7 ngày kể từ hôm nay. Hãy chọn ngày kết thúc gần hơn.",
+        "template_b_same": "Biến thể B cần một mẫu khác với biến thể A.",
+        "pacing_out_of_range": "Kiểm tra Gửi thông minh: có một số nằm ngoài khoảng cho phép."
       },
       "template": {
         "previewOnline": "trực tuyến",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Phiên bản thông báo: {version}.",
         "modePrevious": "Gửi đến các lần gửi trước",
         "previousHint": "Nhắm lại những người mà các broadcast và chiến dịch trước đó đã gửi đến, có thể chỉ gồm người đã đọc, chưa đọc, đã trả lời hoặc đã nhấp vào liên kết.",
-        "chipPrevious": "{count, plural, other {# lần gửi trước}} ({outcome})"
+        "chipPrevious": "{count, plural, other {# lần gửi trước}} ({outcome})",
+        "filterNoConditions": "Thêm một điều kiện để xem có bao nhiêu liên hệ phù hợp."
       },
       "review": {
         "intro": "Kiểm tra chi phí, cho chúng tôi biết mỗi biến của mẫu được điền bằng gì, và xem lại đợt gửi hàng loạt.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Lần gửi trước: {names} ({outcome})",
         "sumSplit": "Phân chia theo số",
         "sumSplitCount": "{count, plural, other {# người nhận}} ({percent}%)",
-        "sumSplitPercent": "{percent}% đối tượng"
+        "sumSplitPercent": "{percent}% đối tượng",
+        "sumCostCharged": "Trừ vào ví của bạn: {amount} (phần còn lại do gói của bạn chi trả)"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1547,7 +1557,9 @@
         "retriesInfoCost": "Không tốn thêm chi phí: bạn chỉ bị tính phí khi tin nhắn được gửi tới.",
         "recurringTitle": "Gửi hàng loạt định kỳ",
         "recurringHint": "Gửi theo lịch định kỳ",
-        "occurrences": "lần chạy"
+        "occurrences": "lần chạy",
+        "recurringWarning": "Đợt phát này lặp lại theo lịch. Mỗi lần chạy gửi tới đối tượng ở thời điểm đó, và mỗi tin nhắn được trừ vào ví của bạn.",
+        "repeatRange": "Nhập một số nguyên từ 1 đến {max}."
       },
       "words": {
         "now": "Gửi ngay, một lần.",
