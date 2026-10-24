@@ -1391,7 +1391,7 @@
           "ruleOff": "tắt",
           "orderPlaced": "Kích hoạt cho mọi đơn hàng mới. Khách của đơn được khớp với một liên hệ đã lưu và ghi danh.",
           "automatic": "Tự động kích hoạt — không cần cấu hình thêm.",
-          "away": "Kích hoạt cho mọi tin nhắn đến khi <b>chế độ Vắng mặt</b> đang BẬT. Bật chế độ Vắng mặt tại trang <link>Trả lời tự động</link>. Mỗi liên hệ được ghi danh một lần.",
+          "away": "Kích hoạt cho mọi tin nhắn đến khi <b>chế độ Vắng mặt</b> đang BẬT. Mỗi liên hệ được ghi danh một lần.",
           "outOfHours": "Kích hoạt cho mọi tin nhắn đến <b>ngoài giờ làm việc</b> của không gian làm việc. Đặt giờ làm việc trong cài đặt không gian làm việc. Mỗi liên hệ được ghi danh một lần.",
           "manualEnroll": "Bạn sẽ ghi danh liên hệ thủ công từ <link>danh sách /flows</link> bằng nút <b>Ghi danh</b> cạnh luồng này.",
           "ext": {

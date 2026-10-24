@@ -43,3 +43,12 @@ describe('Comment to DM trigger with no keyword rules (row 229)', () => {
     expect(html).not.toContain('/auto-reply');
   });
 });
+
+describe('Away trigger notice with no Auto Reply page (row 235)', () => {
+  it('shows the notice as plain text with no link to /auto-reply, which is not built yet', () => {
+    const html = renderTrigger({ kind: 'away', channel: 'instagram' });
+
+    expect(html).toContain('Each contact is enrolled once.');
+    expect(html).not.toContain('/auto-reply');
+  });
+});

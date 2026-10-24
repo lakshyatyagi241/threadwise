@@ -415,14 +415,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
 
       {kind === 'order_placed' ? <Notice>{t('orderPlaced')}</Notice> : null}
       {kind === 'contact_created' || kind === 'opt_in' ? <Notice>{t('automatic')}</Notice> : null}
-      {kind === 'away' ? (
-        <Notice>
-          {t.rich('away', {
-            b,
-            link: (chunks) => <Link href="/auto-reply">{chunks}</Link>,
-          })}
-        </Notice>
-      ) : null}
+      {kind === 'away' ? <Notice>{t.rich('away', { b })}</Notice> : null}
       {kind === 'out_of_hours' ? <Notice>{t.rich('outOfHours', { b })}</Notice> : null}
       {kind === 'manual_enroll' ? (
         <Notice>

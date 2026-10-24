@@ -1744,7 +1744,7 @@
           "ruleOff": "disattiva",
           "orderPlaced": "Scatta per ogni nuovo ordine. Il cliente dell’ordine viene abbinato a un contatto salvato e inserito.",
           "automatic": "Scatta automaticamente — non serve altra configurazione.",
-          "away": "Scatta per ogni messaggio in arrivo mentre la <b>modalità Assente</b> è ATTIVA. Attiva o disattiva la modalità Assente dalla pagina <link>Risposta automatica</link>. Ogni contatto viene inserito una sola volta.",
+          "away": "Scatta per ogni messaggio in arrivo mentre la <b>modalità Assente</b> è ATTIVA. Ogni contatto viene inserito una sola volta.",
           "outOfHours": "Scatta per ogni messaggio in arrivo fuori dall’<b>orario di lavoro del workspace</b>. Imposta l’orario di lavoro nelle impostazioni del workspace. Ogni contatto viene inserito una sola volta.",
           "manualEnroll": "Inserirai i contatti manualmente dall’<link>elenco /flows</link> con il pulsante <b>Inserisci</b> accanto a questo flow.",
           "ext": {

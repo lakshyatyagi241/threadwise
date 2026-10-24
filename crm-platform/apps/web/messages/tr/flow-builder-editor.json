@@ -1391,7 +1391,7 @@
           "ruleOff": "kapalı",
           "orderPlaced": "Her yeni sipariş için tetiklenir. Siparişin müşterisi kayıtlı bir kişiyle eşleştirilir ve kaydedilir.",
           "automatic": "Otomatik tetiklenir — ek bir ayar gerekmez.",
-          "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Uzakta modunu <link>Otomatik Yanıt</link> sayfasından değiştirin. Her kişi bir kez kaydedilir.",
+          "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Her kişi bir kez kaydedilir.",
           "outOfHours": "<b>Çalışma alanınızın iş saatleri dışında</b> gelen her mesajda tetiklenir. İş saatlerini çalışma alanı ayarlarınızda belirleyin. Her kişi bir kez kaydedilir.",
           "manualEnroll": "Kişileri, <link>/flows listesinden</link> bu akışın yanındaki <b>Akışa ekle</b> düğmesiyle elle ekleyeceksiniz.",
           "ext": {

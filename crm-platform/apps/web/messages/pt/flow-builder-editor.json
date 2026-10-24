@@ -1391,7 +1391,7 @@
           "ruleOff": "desativada",
           "orderPlaced": "Dispara em todo novo pedido. O cliente do pedido é associado a um contato salvo e inscrito.",
           "automatic": "Dispara automaticamente — nenhuma configuração extra necessária.",
-          "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Alterne o modo Ausente na página <link>Resposta automática</link>. Cada contato é inscrito uma vez.",
+          "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Cada contato é inscrito uma vez.",
           "outOfHours": "Dispara em qualquer mensagem recebida <b>fora do horário comercial do seu espaço de trabalho</b>. Defina o horário comercial nas configurações do espaço de trabalho. Cada contato é inscrito uma vez.",
           "manualEnroll": "Você inscreverá contatos manualmente na <link>lista /flows</link> pelo botão <b>Inscrever</b> ao lado deste fluxo.",
           "ext": {

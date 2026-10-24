@@ -1391,7 +1391,7 @@
           "ruleOff": "wył.",
           "orderPlaced": "Uruchamia się przy każdym nowym zamówieniu. Klient zamówienia zostaje dopasowany do zapisanego kontaktu i zapisany do przepływu.",
           "automatic": "Uruchamia się automatycznie — nie wymaga dodatkowej konfiguracji.",
-          "away": "Uruchamia się przy każdej przychodzącej wiadomości, gdy włączony jest tryb <b>Nieobecność</b>. Przełącz go na stronie <link>Automatycznej odpowiedzi</link>. Każdy kontakt zapisywany jest raz.",
+          "away": "Uruchamia się przy każdej przychodzącej wiadomości, gdy włączony jest tryb <b>Nieobecność</b>. Każdy kontakt zapisywany jest raz.",
           "outOfHours": "Uruchamia się przy każdej przychodzącej wiadomości, która przyjdzie <b>poza godzinami pracy</b> przestrzeni roboczej. Ustaw godziny pracy w ustawieniach przestrzeni roboczej. Każdy kontakt zapisywany jest raz.",
           "manualEnroll": "Kontakty będziesz zapisywać ręcznie z <link>listy /flows</link> przyciskiem <b>Zapisz</b> obok tego przepływu.",
           "ext": {

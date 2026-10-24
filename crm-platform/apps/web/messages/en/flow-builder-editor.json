@@ -1421,7 +1421,7 @@
           "ruleOff": "off",
           "orderPlaced": "Fires for every new order. The order's customer is matched to a saved contact and enrolled.",
           "automatic": "Fires automatically — no extra config needed.",
-          "away": "Fires on any incoming message while <b>Away mode</b> is ON. Toggle Away mode from the <link>Auto Reply</link> page. Each contact is enrolled once.",
+          "away": "Fires on any incoming message while <b>Away mode</b> is ON. Each contact is enrolled once.",
           "outOfHours": "Fires on any incoming message that arrives <b>outside your workspace Business Hours</b>. Set Business Hours in your workspace settings. Each contact is enrolled once.",
           "manualEnroll": "You'll enroll contacts manually from the <link>/flows list</link> via the <b>Enroll</b> button next to this flow.",
           "ext": {
