@@ -374,9 +374,14 @@ export class ContactAssignmentRepository {
     }));
     if (!skipOffline) return rows;
     // "Skip people who are offline": Away by their own choice or outside their working hours (the effective status, docs/specs/agent-status-bar.md).
-    const statuses = await loadAgentStatuses(tx, orgId, rows.map((r) => r.id), {
-      automationAllowed: statusAutomation,
-    });
+    const statuses = await loadAgentStatuses(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+      {
+        automationAllowed: statusAutomation,
+      },
+    );
     return rows.filter((r) => !isAwayForOwnership(statuses.get(r.id)));
   }
 
@@ -403,7 +408,9 @@ export class ContactAssignmentRepository {
           ids.map((i) => sql`${i}`),
           sql`, `,
         )})`);
-    const statuses = await loadAgentStatuses(tx, orgId, ids, { automationAllowed: statusAutomation });
+    const statuses = await loadAgentStatuses(tx, orgId, ids, {
+      automationAllowed: statusAutomation,
+    });
     return new Map(
       (res.rows as Raw[]).map((r) => [
         Number(r.id),

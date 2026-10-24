@@ -104,7 +104,10 @@ const setStatus = (token: string, s: 'online' | 'offline') =>
   api.as(token).put('/v2/workspace/members/me/availability').send({ status: s });
 const myHours = (token: string) => api.as(token).get('/v2/workspace/members/me/working-hours');
 const saveMyHours = (token: string, body: unknown) =>
-  api.as(token).put('/v2/workspace/members/me/working-hours').send(body as object);
+  api
+    .as(token)
+    .put('/v2/workspace/members/me/working-hours')
+    .send(body as object);
 
 describe('my status', () => {
   it('an agent with no status row is Available, and the answer keeps the old two-word status', async () => {
@@ -131,16 +134,21 @@ describe('my status', () => {
 
     const away = await setStatus(token, 'offline');
     expect(away.status, JSON.stringify(away.body)).toBe(200);
-    expect(away.body).toMatchObject({ status: 'offline', state: 'away', reason: 'manual', manual: true });
+    expect(away.body).toMatchObject({
+      status: 'offline',
+      state: 'away',
+      reason: 'manual',
+      manual: true,
+    });
 
     // Working hours that make "now" outside, with automation on: the manual Away expires at the next boundary, and the person
     // chooses Available explicitly.
     expect((await saveMyHours(token, closedNow())).status).toBe(200);
     const stored = (
-      await h.owner.query(`SELECT status, preferences FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [
-        t.orgId,
-        a.userId,
-      ])
+      await h.owner.query(
+        `SELECT status, preferences FROM agent_statuses WHERE org_id = $1 AND user_id = $2`,
+        [t.orgId, a.userId],
+      )
     ).rows[0];
     expect(stored.status).toBe('offline');
     expect(stored.preferences.availability.manual.status).toBe('offline');
@@ -155,7 +163,10 @@ describe('my status', () => {
     const t = await api.signup('ast3');
     const a = await addMember(t, 'Cy Agent', 'Agent');
     const token = await signIn(t.slug, a.email);
-    expect([400, 422]).toContain((await api.as(token).put('/v2/workspace/members/me/availability').send({ status: 'busy' })).status);
+    expect([400, 422]).toContain(
+      (await api.as(token).put('/v2/workspace/members/me/availability').send({ status: 'busy' }))
+        .status,
+    );
     expect((await api.http().get('/v2/workspace/members/me/availability')).status).toBe(401);
   });
 });
@@ -170,14 +181,24 @@ describe('working hours automate the status', () => {
     expect((await saveMyHours(ta, closedNow())).status).toBe(200);
 
     const mine = await status(ta);
-    expect(mine.body).toMatchObject({ state: 'away', reason: 'schedule', status: 'offline', manual: false });
+    expect(mine.body).toMatchObject({
+      state: 'away',
+      reason: 'schedule',
+      status: 'offline',
+      manual: false,
+    });
     expect(mine.body.changesAt).toBeTruthy();
     // Nothing was written to the stored status: the schedule is evaluated, not stored.
-    const row = await h.owner.query(`SELECT status FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [t.orgId, a.userId]);
+    const row = await h.owner.query(
+      `SELECT status FROM agent_statuses WHERE org_id = $1 AND user_id = $2`,
+      [t.orgId, a.userId],
+    );
     expect(row.rows[0].status).toBe('online');
 
     const members = await api.as(t.admin).get('/v2/workspace/members?limit=100');
-    const byId = new Map((members.body.data as Array<{ id: string; presence: string }>).map((m) => [m.id, m.presence]));
+    const byId = new Map(
+      (members.body.data as Array<{ id: string; presence: string }>).map((m) => [m.id, m.presence]),
+    );
     expect(byId.get(a.uuid)).toBe('away');
     expect(byId.get(b.uuid)).toBe('online');
 
@@ -196,7 +217,10 @@ describe('working hours automate the status', () => {
     expect((await saveMyHours(ta, openNow())).status).toBe(200);
     expect((await status(ta)).body).toMatchObject({ state: 'available', reason: 'default' });
     expect((await saveMyHours(ta, closedNow(false))).status).toBe(200);
-    expect((await status(ta)).body).toMatchObject({ state: 'available', hours: { automate: false } });
+    expect((await status(ta)).body).toMatchObject({
+      state: 'available',
+      hours: { automate: false },
+    });
   });
 
   it('an empty schedule with Automate on is always Available and flagged', async () => {
@@ -207,7 +231,10 @@ describe('working hours automate the status', () => {
     const saved = await saveMyHours(ta, emptyWeek());
     expect(saved.status, JSON.stringify(saved.body)).toBe(200);
     expect(saved.body.emptySchedule).toBe(true);
-    expect((await status(ta)).body).toMatchObject({ state: 'available', hours: { emptySchedule: true } });
+    expect((await status(ta)).body).toMatchObject({
+      state: 'available',
+      hours: { emptySchedule: true },
+    });
   });
 
   it('a person on leave is Away by leave, and a manual Available set during the leave beats it', async () => {
@@ -221,7 +248,10 @@ describe('working hours automate the status', () => {
       [t.orgId, a.userId],
     );
     expect((await status(ta)).body).toMatchObject({ state: 'away', reason: 'leave' });
-    expect((await setStatus(ta, 'online')).body).toMatchObject({ state: 'available', reason: 'manual' });
+    expect((await setStatus(ta, 'online')).body).toMatchObject({
+      state: 'available',
+      reason: 'manual',
+    });
   });
 
   it('changing the hours revives nothing: a manual Away that already ended stays ended', async () => {
@@ -240,7 +270,10 @@ describe('working hours automate the status', () => {
     expect((await status(ta)).body).toMatchObject({ state: 'available' });
     expect((await saveMyHours(ta, openNow())).status).toBe(200);
     expect((await status(ta)).body).toMatchObject({ state: 'available', manual: false });
-    const after = await h.owner.query(`SELECT status FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [t.orgId, a.userId]);
+    const after = await h.owner.query(
+      `SELECT status FROM agent_statuses WHERE org_id = $1 AND user_id = $2`,
+      [t.orgId, a.userId],
+    );
     expect(after.rows[0].status).toBe('online');
   });
 });
@@ -266,7 +299,10 @@ describe('the plan flags', () => {
       state: 'available',
       features: { bar: false, automation: false },
     });
-    expect((await setStatus(ta, 'offline')).body).toMatchObject({ state: 'away', reason: 'manual' });
+    expect((await setStatus(ta, 'offline')).body).toMatchObject({
+      state: 'away',
+      reason: 'manual',
+    });
     await flags(t, { automation: true });
     expect((await myHours(ta)).body.automate).toBe(true);
   });
@@ -285,9 +321,15 @@ describe('who may change whose hours', () => {
     const tViewer = await signIn(t.slug, viewer.email);
 
     expect((await saveMyHours(tAgent, openNow())).status).toBe(200);
-    const denied = await api.as(tAgent).put(`/v2/workspace/members/${other.uuid}/working-hours`).send(openNow());
+    const denied = await api
+      .as(tAgent)
+      .put(`/v2/workspace/members/${other.uuid}/working-hours`)
+      .send(openNow());
     expect(denied.status).toBe(403);
-    const ok = await api.as(tManager).put(`/v2/workspace/members/${other.uuid}/working-hours`).send(closedNow());
+    const ok = await api
+      .as(tManager)
+      .put(`/v2/workspace/members/${other.uuid}/working-hours`)
+      .send(closedNow());
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
     expect(ok.body).toMatchObject({ memberId: other.uuid, canEdit: true });
 
@@ -298,7 +340,14 @@ describe('who may change whose hours', () => {
     // A Viewer has Time off for themselves (scope own), so their own hours too.
     expect((await saveMyHours(tViewer, openNow())).status).toBe(200);
     // The write through :id with your own id works for an agent too.
-    expect((await api.as(tAgent).put(`/v2/workspace/members/${agent.uuid}/working-hours`).send(openNow())).status).toBe(200);
+    expect(
+      (
+        await api
+          .as(tAgent)
+          .put(`/v2/workspace/members/${agent.uuid}/working-hours`)
+          .send(openNow())
+      ).status,
+    ).toBe(200);
   });
 
   it('validates the body: a bad zone, a window with equal times', async () => {
@@ -306,7 +355,9 @@ describe('who may change whose hours', () => {
     await flags(t, {});
     const a = await addMember(t, 'Pat Agent', 'Agent');
     const ta = await signIn(t.slug, a.email);
-    expect([400, 422]).toContain((await saveMyHours(ta, { ...openNow(), timezone: 'Mars/Base' })).status);
+    expect([400, 422]).toContain(
+      (await saveMyHours(ta, { ...openNow(), timezone: 'Mars/Base' })).status,
+    );
     const equal = { ...openNow(), days: week({ enabled: true, from: '09:00', to: '09:00' }) };
     expect([400, 422]).toContain((await saveMyHours(ta, equal)).status);
   });
@@ -321,7 +372,12 @@ describe('tenant isolation', () => {
     const a = await addMember(t1, 'Quin Agent', 'Agent');
     const ta = await signIn(t1.slug, a.email);
     expect((await saveMyHours(ta, closedNow())).status).toBe(200);
-    expect((await api.as(t2.admin).get(`/v2/workspace/members/${a.uuid}/working-hours`)).status).toBe(404);
-    expect((await api.as(t2.admin).put(`/v2/workspace/members/${a.uuid}/working-hours`).send(openNow())).status).toBe(404);
+    expect(
+      (await api.as(t2.admin).get(`/v2/workspace/members/${a.uuid}/working-hours`)).status,
+    ).toBe(404);
+    expect(
+      (await api.as(t2.admin).put(`/v2/workspace/members/${a.uuid}/working-hours`).send(openNow()))
+        .status,
+    ).toBe(404);
   });
 });

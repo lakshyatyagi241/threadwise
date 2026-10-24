@@ -56,7 +56,9 @@ export class AssigneesService {
       const shown = (people.rows as Raw[]).filter((r) => canOpenInbox.has(Number(r.id)));
       const cal = await loadWorkspaceCalendar(tx, ctx.orgId);
       const ids = shown.map((r) => Number(r.id));
-      const statuses = await loadAgentStatuses(tx, ctx.orgId, ids, { automationAllowed: automation });
+      const statuses = await loadAgentStatuses(tx, ctx.orgId, ids, {
+        automationAllowed: automation,
+      });
       const away = await onLeaveMap(tx, ctx.orgId, ids, cal.today);
       // Somebody who chose Available during their own leave is available (manual choice beats leave): no "on leave" mark.
       for (const id of [...away.keys()]) if (statuses.get(id)?.routable) away.delete(id);
@@ -113,4 +115,3 @@ export class AssigneesService {
     });
   }
 }
-
