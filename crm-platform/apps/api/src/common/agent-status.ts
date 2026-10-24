@@ -366,3 +366,79 @@ export async function loadAgentStatuses(
   }
   return out;
 }
+
+// --- writing --------------------------------------------------------------------------------------------------------------------
+
+export interface StatusRow {
+  status: string | null;
+  preferences: unknown;
+}
+
+/** The person's status row, locked for update when `lock` (two tabs saving at once must not lose each other's change). */
+export async function readStatusRow(
+  tx: Tx,
+  orgId: number,
+  userId: number,
+  lock = false,
+): Promise<StatusRow> {
+  const res = await tx.execute(
+    lock
+      ? sql`SELECT status, preferences FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId} FOR UPDATE`
+      : sql`SELECT status, preferences FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId}`,
+  );
+  const r = (res.rows as Raw[])[0];
+  return { status: (r?.status as string | undefined) ?? null, preferences: r?.preferences ?? null };
+}
+
+/**
+ * Writes the stored status (when `status` is given) and this feature's part of `preferences` in one upsert. Other keys of `preferences`
+ * are never touched; the counters and the round-robin clock of the row stay as the inbox keeps them. The heartbeat moves only when the
+ * status does.
+ */
+export async function writeAvailability(
+  tx: Tx,
+  orgId: number,
+  userId: number,
+  next: { status?: 'online' | 'offline'; availability: AvailabilityPrefs },
+): Promise<void> {
+  const availability = JSON.stringify(next.availability);
+  const statusExpr =
+    next.status === undefined ? sql`agent_statuses.status` : sql`${next.status}::text`;
+  const seenExpr = next.status === undefined ? sql`agent_statuses.last_seen_at` : sql`now()`;
+  await tx.execute(sql`
+    INSERT INTO agent_statuses (org_id, user_id, status, last_seen_at, preferences)
+    VALUES (${orgId}, ${userId}, ${next.status ?? 'online'}, now(),
+            jsonb_build_object('availability', ${availability}::jsonb))
+    ON CONFLICT (org_id, user_id) DO UPDATE SET
+      status = ${statusExpr},
+      last_seen_at = ${seenExpr},
+      preferences = COALESCE(agent_statuses.preferences, '{}'::jsonb)
+        || jsonb_build_object('availability', ${availability}::jsonb)`);
+}
+
+// --- words for the screens -------------------------------------------------------------------------------------------------------
+
+/**
+ * The four words the inbox screens know for a person: `online` = Available, `offline` = Away (their own choice, or on leave), `away` = Away
+ * because they are outside their working hours, `busy` = the legacy busy value. Used by the assignee picker and the member and team lists.
+ */
+export type PresenceWord = 'online' | 'away' | 'busy' | 'offline';
+
+export function presenceWord(
+  s: { trace: string; routable: boolean; busy: boolean } | undefined,
+): PresenceWord {
+  if (!s || s.routable) return 'online';
+  if (s.busy) return 'busy';
+  return s.trace === 'outside_working_hours' ? 'away' : 'offline';
+}
+
+/** `presenceWord` for many people at once (the member list, a team's members): three queries, whatever the count. */
+export async function presenceFor(
+  tx: Tx,
+  orgId: number,
+  userIds: readonly number[],
+  automationAllowed: boolean,
+): Promise<Map<number, PresenceWord>> {
+  const statuses = await loadAgentStatuses(tx, orgId, userIds, { automationAllowed });
+  return new Map(userIds.map((id) => [id, presenceWord(statuses.get(id))] as const));
+}
