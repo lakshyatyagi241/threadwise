@@ -489,6 +489,7 @@ function WizardBody({
 const KNOWN_ISSUES: ReadonlySet<string> = new Set([
   'name_required',
   'template_required',
+  'template_b_same',
   'audience_required',
   'variable_unmapped',
   'variable_fallback_required',

@@ -288,6 +288,18 @@ export interface CostLine {
  * of the send (plan mode), only the chargeable share of it, rounded up so the estimate never under-promises.
  */
 /**
+ * The zone a campaign's times are read in: a scheduled send's own zone, else the retry window's, else the workspace's (never a
+ * hidden UTC: the Messages tab, the analytics and the CSV export all show times in it).
+ */
+export function campaignZone(f: {
+  scheduledZone: string | null;
+  retriesZone: string | null | undefined;
+  workspaceZone: string;
+}): string {
+  return f.scheduledZone ?? f.retriesZone ?? f.workspaceZone;
+}
+
+/**
  * Whether the wallet covers the estimate the person is shown. The wallet's own launch rule (which `creditCheck` asks first) can let a
  * send through when its internal estimate is lower than the one on the screen; the figure on the screen is what the person decides on,
  * so a balance below it is not "sufficient". A platform-owned workspace is never billed.

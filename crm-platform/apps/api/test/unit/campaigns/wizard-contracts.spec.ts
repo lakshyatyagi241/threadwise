@@ -3,6 +3,7 @@ import {
   EMPTY_WIZARD_AUDIENCE,
   EMPTY_WIZARD_DRAFT,
   firstRunInstant,
+  pacingOutOfRange,
   parseTestRecipients,
   retryInstant,
   retryWindowCloses,
@@ -362,5 +363,38 @@ describe('a contact-field variable needs a fallback', () => {
     expect(codes(draft({ variables: { 'body.2': { kind: 'fixed', text: 'x' } } }))).toEqual([
       'variable_unmapped',
     ]);
+  });
+});
+
+describe('A/B test and Smart Delivery rules', () => {
+  const base = {
+    name: 'Offer',
+    templateId: T,
+    senderKey: 'waba:3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11',
+    audience: { ...EMPTY_WIZARD_AUDIENCE, groupIds: [T] },
+  };
+  const U = '4f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a22';
+  const codes = (step: 1 | 4, d: WizardDraft) =>
+    wizardStepIssues(step, d, { now: NOW }).map((i) => i.code);
+
+  it('variant B must be a different template from variant A', () => {
+    expect(codes(1, draft({ ...base, abTesting: true, templateIdB: null }))).toContain(
+      'template_b_required',
+    );
+    expect(codes(1, draft({ ...base, abTesting: true, templateIdB: T }))).toEqual([
+      'template_b_same',
+    ]);
+    expect(codes(1, draft({ ...base, abTesting: true, templateIdB: U }))).toEqual([]);
+    expect(codes(1, draft({ ...base, abTesting: false, templateIdB: T }))).toEqual([]);
+  });
+
+  it('flags a Smart Delivery number outside its range', () => {
+    expect(pacingOutOfRange('dailyLimit', 0)).toBe(true);
+    expect(pacingOutOfRange('dailyLimit', 100_000)).toBe(false);
+    expect(pacingOutOfRange('batchPauseMin', 1441)).toBe(true);
+    expect(pacingOutOfRange('batchSize', null)).toBe(false);
+    expect(pacingOutOfRange('throttleMinSec', 1.5)).toBe(true);
+    const d = { ...draft({ ...base }), pacing: { dailyLimit: 0 } } as WizardDraft;
+    expect(codes(4, d)).toContain('pacing_out_of_range');
   });
 });

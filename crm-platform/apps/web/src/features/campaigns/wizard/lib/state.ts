@@ -111,6 +111,10 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
           ...d,
           templateId,
           variables: keepMatchingVariables(d.variables, action.template),
+          // The same template on both sides of an A/B test tests nothing: B is chosen again.
+          ...(templateId !== null && templateId === d.templateIdB
+            ? { templateIdB: null, variablesB: {} }
+            : {}),
         },
       };
     }

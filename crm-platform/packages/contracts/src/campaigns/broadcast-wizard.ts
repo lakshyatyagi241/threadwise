@@ -237,6 +237,25 @@ export type WizardRetries = z.infer<typeof wizardRetriesSchema>;
  * Smart Delivery, as the campaign builder has it: a random gap per recipient, batches with a pause, a daily limit and the hours a send
  * may run in (read in the campaign's zone). Every value is optional; blank means the platform default. Same bounds as a campaign.
  */
+export const WIZARD_PACING_LIMITS = {
+  throttleMinSec: { min: 0, max: 3600 },
+  throttleMaxSec: { min: 0, max: 3600 },
+  batchSize: { min: 1, max: 10_000 },
+  batchPauseMin: { min: 0, max: 1440 },
+  dailyLimit: { min: 1, max: 100_000 },
+} as const;
+export type WizardPacingNumberKey = keyof typeof WIZARD_PACING_LIMITS;
+
+/** True when a Smart Delivery number is set and is not a whole number inside its limits (blank is fine: the platform default). */
+export const pacingOutOfRange = (
+  key: WizardPacingNumberKey,
+  value: number | null | undefined,
+): boolean => {
+  if (value === null || value === undefined) return false;
+  const { min, max } = WIZARD_PACING_LIMITS[key];
+  return !Number.isInteger(value) || value < min || value > max;
+};
+
 export const wizardPacingSchema = z.object({
   throttleMinSec: z.number().int().min(0).max(3600).nullish(),
   throttleMaxSec: z.number().int().min(0).max(3600).nullish(),
@@ -928,10 +947,12 @@ export interface WizardIssue {
     | 'retry_end_in_past'
     | 'retry_end_too_far'
     | 'template_b_required'
+    | 'template_b_same'
     | 'auto_end_in_past'
     | 'auto_end_before_send'
     | 'auto_end_recurring'
     | 'pacing_range'
+    | 'pacing_out_of_range'
     | 'follow_up_template_required'
     | 'follow_up_flow_required'
     | 'follow_up_cloud_api_only'
@@ -982,6 +1003,13 @@ export function wizardStepIssues(
       out.push({ path: 'senderKey', code: 'sender_required' });
     if (draft.abTesting && draft.templateIdB === null)
       out.push({ path: 'templateIdB', code: 'template_b_required' });
+    // An A/B test compares two templates: the same one on both sides tests nothing.
+    else if (
+      draft.abTesting &&
+      draft.templateIdB !== null &&
+      draft.templateIdB === draft.templateId
+    )
+      out.push({ path: 'templateIdB', code: 'template_b_same' });
   }
   if (step === 2) {
     if (!wizardAudienceHasSource(draft.audience))
@@ -1036,6 +1064,9 @@ export function wizardStepIssues(
       }
     }
     const p = draft.pacing;
+    for (const key of Object.keys(WIZARD_PACING_LIMITS) as WizardPacingNumberKey[])
+      if (pacingOutOfRange(key, p[key]))
+        out.push({ path: `pacing.${key}`, code: 'pacing_out_of_range' });
     if (p.throttleMinSec != null && p.throttleMaxSec != null && p.throttleMaxSec < p.throttleMinSec)
       out.push({ path: 'pacing.throttleMaxSec', code: 'pacing_range' });
     if ((p.windowStart == null) !== (p.windowEnd == null))
