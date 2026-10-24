@@ -153,7 +153,7 @@ stall_check() {
   [ "$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("post"))' 2>/dev/null)" = True ] || return 0
   local head text
   head=$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin)["head"][:7])') && text=$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin)["text"])') || return 0
-  once "stall-$head" && post "$text"
+  once "stall-$head-$(( $(date +%s) / 21600 ))" && post "$text"  # head is the OLDEST waiting commit, so it never changes during a stall: re-warn every 6 h, not once ever
   return 0
 }
 # The Chat bridge is copied to production outside the release pipeline (deploy-bridge.sh writes its commit to $BRIDGE_DIR/.version). When that
