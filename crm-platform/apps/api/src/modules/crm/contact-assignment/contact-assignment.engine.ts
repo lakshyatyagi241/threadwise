@@ -440,7 +440,8 @@ export class ContactAssignmentEngine {
       (this.rbac.can(grants, key).allowed ? openers : noAccess).push(id);
     }
     const statusAutomation =
-      rule.skipOffline && (await this.entitlements.featureEnabled(orgId, 'agent_status_automation'));
+      rule.skipOffline &&
+      (await this.entitlements.featureEnabled(orgId, 'agent_status_automation'));
     const pool = await this.repo.candidates(
       tx,
       orgId,

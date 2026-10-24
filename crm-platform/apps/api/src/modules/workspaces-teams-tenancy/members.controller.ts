@@ -109,7 +109,8 @@ export class MembersController {
   @Get(':id/working-hours')
   @RequirePermission('team.leave.read')
   @ApiOperation({
-    summary: "A member's working hours (read with team.leave.read; `canEdit` says whether the caller may change them)",
+    summary:
+      "A member's working hours (read with team.leave.read; `canEdit` says whether the caller may change them)",
   })
   async workingHours(@Param('id', ParseUUIDPipe) id: string) {
     return this.status.hoursOfMember(id);

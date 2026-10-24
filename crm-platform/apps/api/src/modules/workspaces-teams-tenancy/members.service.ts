@@ -585,7 +585,10 @@ export class MembersService {
   private async applyPresence(tx: Tx, orgId: number, rows: MemberRow[]): Promise<void> {
     const joined = rows.filter((r) => r.status === 'active' && r.joinedAt !== null);
     if (joined.length === 0) return;
-    const automation = await this.entitlements.featureEnabled(orgId, AGENT_STATUS_AUTOMATION_FEATURE);
+    const automation = await this.entitlements.featureEnabled(
+      orgId,
+      AGENT_STATUS_AUTOMATION_FEATURE,
+    );
     const words = await presenceFor(
       tx,
       orgId,

@@ -119,10 +119,15 @@ export class AwayService {
     return rowsOf(res).length > 0;
   }
 
-  private async isAway(tx: Tx, orgId: number, userId: number, automation: boolean): Promise<boolean> {
-    const st = (await loadAgentStatuses(tx, orgId, [userId], { automationAllowed: automation })).get(
-      userId,
-    );
+  private async isAway(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    automation: boolean,
+  ): Promise<boolean> {
+    const st = (
+      await loadAgentStatuses(tx, orgId, [userId], { automationAllowed: automation })
+    ).get(userId);
     return st !== undefined && !st.routable;
   }
 
