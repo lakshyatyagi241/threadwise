@@ -653,7 +653,8 @@
         "duplicate_in_file": "número repetido, mesclado a uma linha anterior",
         "invalid_timezone": "fuso horário inválido",
         "legal_hold": "registo protegido, não alterado",
-        "invalid_property_value": "o valor da propriedade personalizada não corresponde ao seu tipo ou às suas opções"
+        "invalid_property_value": "o valor da propriedade personalizada não corresponde ao seu tipo ou às suas opções",
+        "invalid_property_value_column": "coluna \"{column}\": o valor não corresponde ao tipo ou às opções dela"
       },
       "statusHint": "Aplicado aos contatos que este arquivo cria.",
       "queued": "Aguardando para iniciar...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Acima do limite do plano",
       "limitExceededNote": "Alguns novos contatos não foram importados porque o limite de contatos do seu plano foi atingido.",
       "rejectsFailed": "Não foi possível baixar as linhas rejeitadas.",
+      "sampleFailed": "Não foi possível baixar o arquivo de exemplo. Tente novamente.",
       "groupRequired": "Adicionar estes contatos a",
       "groupExisting": "Um grupo existente",
       "groupNew": "Um novo grupo",

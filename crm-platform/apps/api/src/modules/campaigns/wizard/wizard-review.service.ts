@@ -24,6 +24,7 @@ import {
 import { WizardAudienceService, ELIGIBLE } from './wizard-audience.service';
 import { templateCategory } from './wizard-read.service';
 import {
+  coversShownEstimate,
   estimateCost,
   fillText,
   resolveMapping,
@@ -110,6 +111,17 @@ export class WizardReviewService {
     } catch (err) {
       if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) sufficient = false;
       else throw err;
+    }
+    // The number on the screen decides too: a balance under the estimate shown does not go on, whatever the wallet rule's own sample says.
+    if (
+      sufficient &&
+      !coversShownEstimate({
+        platformOwned,
+        balanceMinor: summary.balanceMinor,
+        estimateMinor: cost.totalMinor,
+      })
+    ) {
+      sufficient = false;
     }
     return {
       currency: summary.currency,

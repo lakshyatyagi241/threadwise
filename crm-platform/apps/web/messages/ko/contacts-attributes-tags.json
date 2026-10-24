@@ -653,7 +653,8 @@
         "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨",
         "invalid_timezone": "잘못된 시간대",
         "legal_hold": "보호된 레코드, 변경되지 않음",
-        "invalid_property_value": "사용자 지정 속성 값이 해당 속성의 유형이나 선택 항목과 맞지 않습니다"
+        "invalid_property_value": "사용자 지정 속성 값이 해당 속성의 유형이나 선택 항목과 맞지 않습니다",
+        "invalid_property_value_column": "\"{column}\" 열: 값이 이 열의 유형이나 선택 항목과 맞지 않습니다"
       },
       "statusHint": "이 파일이 생성하는 연락처에 적용됩니다.",
       "queued": "시작 대기 중...",
@@ -666,6 +667,7 @@
       "limitExceeded": "요금제 한도 초과",
       "limitExceededNote": "요금제의 연락처 한도에 도달하여 일부 새 연락처를 가져오지 못했습니다.",
       "rejectsFailed": "거부된 행을 다운로드하지 못했습니다.",
+      "sampleFailed": "샘플 파일을 다운로드할 수 없습니다. 다시 시도하세요.",
       "groupRequired": "이 연락처를 추가할 대상",
       "groupExisting": "기존 그룹",
       "groupNew": "새 그룹",

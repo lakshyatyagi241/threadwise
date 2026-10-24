@@ -653,7 +653,8 @@
         "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
         "invalid_timezone": "geçersiz saat dilimi",
         "legal_hold": "korumalı kayıt, değiştirilmedi",
-        "invalid_property_value": "özel özelliğin değeri, türüne ya da seçeneklerine uymuyor"
+        "invalid_property_value": "özel özelliğin değeri, türüne ya da seçeneklerine uymuyor",
+        "invalid_property_value_column": "\"{column}\" sütunu: değer, bu sütunun türüne veya seçeneklerine uymuyor"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Plan sınırı aşıldı",
       "limitExceededNote": "Planınızın kişi sınırına ulaşıldığı için bazı yeni kişiler içe aktarılmadı.",
       "rejectsFailed": "Reddedilen satırlar indirilemedi.",
+      "sampleFailed": "Örnek dosya indirilemedi. Lütfen tekrar deneyin.",
       "groupRequired": "Bu kişileri şuraya ekle",
       "groupExisting": "Mevcut bir grup",
       "groupNew": "Yeni bir grup",

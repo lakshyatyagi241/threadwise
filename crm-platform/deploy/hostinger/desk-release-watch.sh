@@ -159,13 +159,17 @@ stall_check() {
 # The Chat bridge is copied to production outside the release pipeline (deploy-bridge.sh writes its commit to $BRIDGE_DIR/.version). When that
 # commit changes, announce it once with the PR template. The first time a version is seen it is only recorded, never announced.
 BRIDGE_DIR=${DESK_BRIDGE_DIR:-/opt/chat-bridge}; BRIDGE_POLL=${DESK_BRIDGE_POLL:-30}; last_bridge=0
-bridge_check() {
-  local v last; v=$(tr -dc '0-9a-f' < "$BRIDGE_DIR/.version" 2>/dev/null | head -c 40); [ -n "$v" ] || return 0
-  last=$(cat "$STATE/bridge.version" 2>/dev/null || true)
+component_check() { # component_check <version file> <state file> <label> <git path>: announce once when the commit in the version file changes (first sight is only recorded)
+  local v last; v=$(tr -dc '0-9a-f' < "$1" 2>/dev/null | head -c 40); [ -n "$v" ] || return 0
+  last=$(cat "$STATE/$2" 2>/dev/null || true)
   [ "$v" = "$last" ] && return 0
-  echo "$v" > "$STATE/bridge.version"
-  [ -n "$last" ] && post "$(python3 "$FORMATTER" --bridge "$last" "$v" 2>>"$STATE/watch.log")"
+  echo "$v" > "$STATE/$2"
+  [ -n "$last" ] && post "$(DESK_ANNOUNCE_LABEL="$3" DESK_BRIDGE_PATH="$4" python3 "$FORMATTER" --bridge "$last" "$v" 2>>"$STATE/watch.log")"
   return 0
+}
+bridge_check() {
+  component_check "$BRIDGE_DIR/.version" bridge.version "Chat alert bridge" crm-platform/tools/chat-bridge
+  component_check "$DESK/release-watch-src/.version" watcher.version "Release watcher" crm-platform/deploy/hostinger
 }
 while true; do
   date +%s > "$STATE/heartbeat"

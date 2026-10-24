@@ -161,7 +161,9 @@ export const contactImportJobs = pgTable(
     limitExceeded: integer('limit_exceeded').notNull().default(0),
     options: jsonb('options').$type<Record<string, unknown>>().notNull().default({}),
     rejects: jsonb('rejects')
-      .$type<Array<{ row: number; reason: string; values?: Record<string, string> }>>()
+      .$type<
+        Array<{ row: number; reason: string; column?: string; values?: Record<string, string> }>
+      >()
       .notNull()
       .default([]),
     sourceCsv: text('source_csv'),

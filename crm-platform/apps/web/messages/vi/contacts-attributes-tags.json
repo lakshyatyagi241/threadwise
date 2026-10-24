@@ -653,7 +653,8 @@
         "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước",
         "invalid_timezone": "múi giờ không hợp lệ",
         "legal_hold": "bản ghi được bảo vệ, không thay đổi",
-        "invalid_property_value": "giá trị của thuộc tính tùy chỉnh không khớp với loại hoặc tùy chọn của nó"
+        "invalid_property_value": "giá trị của thuộc tính tùy chỉnh không khớp với loại hoặc tùy chọn của nó",
+        "invalid_property_value_column": "cột \"{column}\": giá trị không khớp với kiểu hoặc các lựa chọn của cột"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -666,6 +667,7 @@
       "limitExceeded": "Vượt giới hạn của gói",
       "limitExceededNote": "Một số liên hệ mới chưa được nhập vì đã đạt giới hạn liên hệ của gói.",
       "rejectsFailed": "Không thể tải xuống các dòng bị từ chối.",
+      "sampleFailed": "Không tải được tệp mẫu. Vui lòng thử lại.",
       "groupRequired": "Thêm các liên hệ này vào",
       "groupExisting": "Một nhóm có sẵn",
       "groupNew": "Một nhóm mới",

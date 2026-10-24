@@ -1,6 +1,7 @@
 import { getQueueToken } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { IMPORT_SAMPLE_HEADERS } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { ContactImportEngine } from '../../../src/modules/crm';
 import { Api, startHarness, type Harness, type Tenant } from './support';
@@ -70,13 +71,15 @@ describe('the sample file (TW-CON-032)', () => {
     t = await api.signup('smp');
   });
 
-  it('TW-CON-032 #1: GET returns the 3-line CSV as an attachment', async () => {
+  it('TW-CON-032 #1: GET returns the sample as an attachment: a BOM, the built-in columns, two contacts', async () => {
     const res = await api.as(t.admin).get('/v2/contacts/import/sample');
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toMatch(/text\/csv/);
     expect(res.headers['content-disposition']).toContain('contacts-sample.csv');
     expect(res.text.trimEnd().split('\n')).toHaveLength(3);
-    expect(res.text.split('\n')[0]).toBe('name,last_name,country_code,mobile,email,group,language');
+    const header = res.text.slice(BOM.length).split('\n')[0]!.split(',');
+    expect(res.text.startsWith(BOM)).toBe(true);
+    expect(header.slice(0, IMPORT_SAMPLE_HEADERS.length)).toEqual([...IMPORT_SAMPLE_HEADERS]);
   });
 
   it('TW-CON-032 #3: a member without the import capability is refused', async () => {
@@ -157,8 +160,8 @@ describe('importing (TW-CON-027)', () => {
       .replace(new RegExp(`^${BOM}`), '')
       .trimEnd()
       .split('\n');
-    expect(lines[0]).toBe('row,reason,name,mobile');
-    expect(lines.slice(1)).toEqual(['3,missing_name,,9812300002', '4,missing_phone,No Number,']);
+    expect(lines[0]).toBe('row,reason,column,name,mobile');
+    expect(lines.slice(1)).toEqual(['3,missing_name,,,9812300002', '4,missing_phone,,No Number,']);
   });
 
   it('TW-CON-027 #3: a header "Full Name, WhatsApp, Lists" is recognised and the groups are created and linked', async () => {

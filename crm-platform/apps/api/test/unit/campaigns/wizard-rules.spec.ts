@@ -4,6 +4,7 @@ import type { MergeContact, MergeContext } from '../../../src/modules/crm';
 import {
   applyWizardVariables,
   campaignZone,
+  coversShownEstimate,
   estimateCost,
   fillText,
   isFrequencyCap,
@@ -385,5 +386,24 @@ describe('campaignZone', () => {
     expect(
       campaignZone({ scheduledZone: null, retriesZone: null, workspaceZone: 'Asia/Kolkata' }),
     ).toBe('Asia/Kolkata');
+  });
+});
+
+describe('coversShownEstimate', () => {
+  it('needs the balance to reach the estimate shown', () => {
+    expect(
+      coversShownEstimate({ platformOwned: false, balanceMinor: 2200, estimateMinor: 2201 }),
+    ).toBe(false);
+    expect(
+      coversShownEstimate({ platformOwned: false, balanceMinor: 2200, estimateMinor: 2200 }),
+    ).toBe(true);
+  });
+  it('passes a free send and a platform-owned workspace', () => {
+    expect(coversShownEstimate({ platformOwned: false, balanceMinor: 0, estimateMinor: 0 })).toBe(
+      true,
+    );
+    expect(
+      coversShownEstimate({ platformOwned: true, balanceMinor: 0, estimateMinor: 99_999 }),
+    ).toBe(true);
   });
 });

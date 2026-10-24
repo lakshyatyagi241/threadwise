@@ -415,3 +415,71 @@ export function readAnswer(
   }
   return { text: bytes.toString('utf8'), isText: true, sizeBytes: bytes.length };
 }
+
+// --- secrets the other server repeats back ---------------------------------------------------------------------------------
+
+/** A value shorter than this is not worth hiding: it would also hit ordinary words in the reply. */
+const MIN_SECRET_LENGTH = 4;
+
+/**
+ * The secret values this request carried: the value of every query parameter that reads like a secret, and every secret header's
+ * value (for `Authorization: Bearer abc` also `abc` alone). A server that echoes its request (a debugging endpoint, an error page)
+ * repeats them in its answer, which would otherwise be shown and stored in the clear.
+ */
+export function secretValuesOf(url: string, headers: readonly OutHeader[]): string[] {
+  const out = new Set<string>();
+  const add = (v: string) => {
+    const t = v.trim();
+    if (t.length >= MIN_SECRET_LENGTH) out.add(t);
+  };
+  const q = url.indexOf('?');
+  if (q >= 0) {
+    const hash = url.indexOf('#', q);
+    for (const pair of url.slice(q + 1, hash < 0 ? undefined : hash).split('&')) {
+      const eq = pair.indexOf('=');
+      if (eq < 0) continue;
+      let name = pair.slice(0, eq);
+      let value = pair.slice(eq + 1);
+      try {
+        name = decodeURIComponent(name);
+        value = decodeURIComponent(value);
+      } catch {
+        /* keep the raw text */
+      }
+      if (apiLibraryIsSensitiveName(name)) add(value);
+    }
+  }
+  for (const h of headers) {
+    if (!(h.secret || apiLibraryIsSensitiveName(h.key))) continue;
+    add(h.value);
+    const word = /^\s*(?:bearer|basic|token)\s+(.+)$/i.exec(h.value);
+    if (word) add(word[1]!);
+  }
+  return [...out].sort((a, b) => b.length - a.length);
+}
+
+/** `text` with every given secret (and its URL-encoded form) replaced by the mask. */
+export function scrubSecretValues(text: string, secrets: readonly string[]): string {
+  let out = text;
+  for (const secret of secrets) {
+    for (const form of new Set([secret, encodeURIComponent(secret)])) {
+      if (form !== '') out = out.split(form).join(API_LIBRARY_SECRET_MASK);
+    }
+  }
+  return out;
+}
+
+/** The same for a response's headers (a value or a list of values). */
+export function scrubSecretHeaders(
+  headers: Readonly<Record<string, string | string[]>>,
+  secrets: readonly string[],
+): Record<string, string | string[]> {
+  return Object.fromEntries(
+    Object.entries(headers).map(([k, v]) => [
+      k,
+      Array.isArray(v)
+        ? v.map((x) => scrubSecretValues(x, secrets))
+        : scrubSecretValues(v, secrets),
+    ]),
+  );
+}

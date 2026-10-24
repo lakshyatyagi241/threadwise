@@ -657,7 +657,8 @@
         "duplicate_in_file": "repeated number, merged into an earlier row",
         "invalid_timezone": "invalid time zone",
         "legal_hold": "protected record, not changed",
-        "invalid_property_value": "custom property value does not fit its type or options"
+        "invalid_property_value": "custom property value does not fit its type or options",
+        "invalid_property_value_column": "column \"{column}\": the value does not fit its type or options"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",
@@ -670,6 +671,7 @@
       "limitExceeded": "Over plan limit",
       "limitExceededNote": "Some new contacts were not imported because the contact limit of your plan was reached.",
       "rejectsFailed": "The rejected rows could not be downloaded.",
+      "sampleFailed": "The sample file could not be downloaded. Try again.",
       "groupRequired": "Add these contacts to",
       "groupExisting": "An existing group",
       "groupNew": "A new group",

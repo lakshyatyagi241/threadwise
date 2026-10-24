@@ -161,19 +161,79 @@ export function detectImportColumns(headers: readonly string[]): Record<string, 
   return detected;
 }
 
-/** The sample file is built from the importer's own header names so it can never drift from them. */
+/**
+ * The sample file's built-in columns, in the importer's own header names so the sample cannot drift from them. One column per
+ * built-in field (a test holds the list to IMPORT_FIELDS); the workspace's custom properties are added by the API.
+ */
 export const IMPORT_SAMPLE_HEADERS = [
   'name',
+  'first_name',
   'last_name',
-  'country_code',
   'mobile',
+  'country_code',
   'email',
   'group',
+  'tags',
   'language',
+  'title',
+  'address',
+  'memo',
+  'status',
+  'source',
+  'timezone',
+  'marketing_consent',
+  'sms_consent',
+  'email_consent',
+  'date_of_birth',
+  'minor',
 ] as const;
 export const IMPORT_SAMPLE_ROWS: readonly (readonly string[])[] = [
-  ['Aarav Sharma', 'Sharma', '91', '9812345678', 'aarav@example.com', 'VIP, New leads', 'en'],
-  ['Priya Patel', 'Patel', '91', '9898765432', 'priya@example.com', 'Customers', 'en'],
+  [
+    'Aarav Sharma',
+    'Aarav',
+    'Sharma',
+    '9812345678',
+    '91',
+    'aarav@example.com',
+    'VIP, New leads',
+    'Trial, Referral',
+    'en',
+    'Mr',
+    '12 MG Road, Bengaluru',
+    'Asked about the annual plan',
+    'prospect',
+    'Website',
+    'Asia/Kolkata',
+    // No consent for the WhatsApp and SMS numbers, which may belong to someone: a file confirmed with this sample must not grant them.
+    // The email address is example.com, which no one owns, so its yes shows the format.
+    'no',
+    'no',
+    'yes',
+    '1990-05-14',
+    'no',
+  ],
+  [
+    'Priya Patel',
+    'Priya',
+    'Patel',
+    '9898765432',
+    '91',
+    'priya@example.com',
+    'Customers',
+    'Newsletter',
+    'en',
+    'Ms',
+    '4 Park Street, Kolkata',
+    'Renewal due in March',
+    'customer',
+    'Referral',
+    'Asia/Kolkata',
+    'no',
+    'no',
+    'yes',
+    '1988-11-02',
+    'no',
+  ],
 ];
 
 // --- consent column ----------------------------------------------------------------------
@@ -322,6 +382,8 @@ export const importRowIssueSchema = z.object({
   /** 1-based line in the file, header included. */
   row: z.number().int(),
   reason: z.string(),
+  /** The header of the column that failed, when one column is to blame (`invalid_property_value`). */
+  column: z.string().optional(),
   values: z.record(z.string()).optional(),
 });
 export type ImportRowIssue = z.infer<typeof importRowIssueSchema>;
