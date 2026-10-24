@@ -1,3 +1,5 @@
+import { widenToWords } from '@/lib/whatsapp-format';
+
 /** The `n/max` counter and whether it is over. */
 export const counter = (text: string, max: number) => ({
   used: text.length,
@@ -21,14 +23,17 @@ export function wrapSelection(
 /**
  * Turns a marker on or off around the selection. Already marked (inside the selection or
  * right outside it) → the marker is removed; otherwise it is wrapped like `wrapSelection`.
+ * A one-character mark (`*`, `_`, `~`) takes whole words, since WhatsApp shows it only at a word edge.
  */
 export function toggleSelection(
   value: string,
-  start: number,
-  end: number,
+  from: number,
+  to: number,
   marker: string,
   fallback = 'text',
 ): { value: string; start: number; end: number } {
+  const { start, end } =
+    marker.length === 1 ? widenToWords(value, from, to) : { start: from, end: to };
   const inner = value.slice(start, end);
   if (inner.length > marker.length * 2 && inner.startsWith(marker) && inner.endsWith(marker)) {
     const picked = inner.slice(marker.length, inner.length - marker.length);

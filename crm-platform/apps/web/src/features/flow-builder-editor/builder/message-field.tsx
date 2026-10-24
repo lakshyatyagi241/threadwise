@@ -14,9 +14,18 @@ import {
   type ListKind,
   type MarkKind,
 } from '../lib/message-tools';
-import { htmlToMarks, marksToHtml, placeCaret, RICH_TEXT_CLASS } from '../lib/rich-text';
+import {
+  htmlToMarks,
+  marksToHtml,
+  placeCaret,
+  RICH_TEXT_CLASS,
+  widenSelection,
+} from '../lib/rich-text';
 
 type Panel = 'format' | 'emoji' | 'variable' | null;
+
+/** The browser commands that put a WhatsApp mark on the selection. */
+const MARK_COMMANDS = new Set(['bold', 'italic', 'strikeThrough']);
 
 const Glyph = ({ d }: { d: string }) => (
   <svg
@@ -135,6 +144,7 @@ export function MessageField({
     // A shortcut arrives while the words are still selected: take that selection, not the one the last mouse or key left behind.
     remember();
     if (!focusBox()) return;
+    if (MARK_COMMANDS.has(command) && ref.current) widenSelection(ref.current);
     document.execCommand(command, false, arg);
     sync();
     remember();
