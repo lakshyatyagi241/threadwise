@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "I controlli hanno trovato problemi che Meta rifiuterebbe. Non è stato inviato nulla. Correggi gli errori elencati a destra.",
       "TPL_META_REJECTED": "Meta ha rifiutato il template. Il motivo è qui sotto; il template è conservato come bozza così puoi correggerlo e riprovare.",
       "TPL_NO_CONNECTION": "Questo template non ha un numero WhatsApp collegato con cui inviarlo. Collega prima un numero.",
+      "TPL_HEADER_STORAGE_REQUIRED": "I file di intestazione richiedono l'archiviazione di oggetti cloud. Chiedi all'amministratore della piattaforma di attivarla.",
       "TPL_IN_USE": "Questo template non può essere eliminato perché lo usa un broadcast in corso o programmato.",
       "TPL_NOT_EDITABLE": "Si può modificare solo un template che Meta non ha ancora approvato, o uno che ha rifiutato.",
       "TPL_EDIT_LIMIT": "Meta consente una modifica ogni 24 ore e dieci in 30 giorni per un modello approvato. Riprova più tardi.",
@@ -124,7 +125,8 @@
         "all": "Tutti",
         "approved": "Approvato",
         "pending": "In revisione",
-        "rejected": "Rifiutato"
+        "rejected": "Rifiutato",
+        "draft": "Bozza"
       },
       "quickStartTitle": "Guida rapida",
       "quickStart": "Leggi le <link>Linee guida dei template</link> prima di inviare a Meta per mantenere i tempi di approvazione sotto le 24 ore.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Approvati",
         "pending": "In revisione",
-        "rejected": "Rifiutati"
+        "rejected": "Rifiutati",
+        "draft": "Bozza"
       },
       "helpLabel": "Aiuto - 0{n}",
       "help": {

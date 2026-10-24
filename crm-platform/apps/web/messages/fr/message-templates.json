@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Les vérifications ont relevé des problèmes que Meta refuserait. Rien n’a été envoyé. Corrigez les erreurs listées à droite.",
       "TPL_META_REJECTED": "Meta a refusé le modèle. Le motif est indiqué ci-dessous ; le modèle est conservé en brouillon pour que vous puissiez le corriger et réessayer.",
       "TPL_NO_CONNECTION": "Ce modèle n’a pas de numéro WhatsApp connecté pour être soumis. Connectez d’abord un numéro.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Les fichiers d'en-tête nécessitent un stockage objet cloud. Demandez à l'administrateur de la plateforme de l'activer.",
       "TPL_IN_USE": "Ce modèle ne peut pas être supprimé car une diffusion en cours ou programmée l’utilise.",
       "TPL_NOT_EDITABLE": "Seul un modèle que Meta n’a pas encore approuvé, ou qu’il a rejeté, peut être modifié.",
       "TPL_EDIT_LIMIT": "Meta autorise une modification en 24 heures et dix en 30 jours pour un modèle approuvé. Réessayez plus tard.",
@@ -124,7 +125,8 @@
         "all": "Tous",
         "approved": "Approuvé",
         "pending": "En cours d'examen",
-        "rejected": "Refusé"
+        "rejected": "Refusé",
+        "draft": "Brouillon"
       },
       "quickStartTitle": "Démarrage rapide",
       "quickStart": "Lisez les <link>consignes relatives aux modèles</link> avant de soumettre à Meta pour garder des délais d'approbation sous 24 h.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Approuvés",
         "pending": "En cours d'examen",
-        "rejected": "Refusés"
+        "rejected": "Refusés",
+        "draft": "Brouillon"
       },
       "helpLabel": "Aide - 0{n}",
       "help": {

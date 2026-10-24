@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "The checks found problems that Meta would reject. Nothing was sent. Fix the errors listed on the right.",
       "TPL_META_REJECTED": "Meta refused the template. Its reason is below; the template is kept as a draft so you can fix it and try again.",
       "TPL_NO_CONNECTION": "This template has no connected WhatsApp number to submit through. Connect a number first.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Header files need cloud object storage. Ask the platform admin to turn it on.",
       "TPL_IN_USE": "This template cannot be deleted because a running or scheduled broadcast uses it.",
       "TPL_NOT_EDITABLE": "Only a template that is not disabled and that Meta still lists can be edited.",
       "TPL_EDIT_LIMIT": "Meta allows one edit in 24 hours and ten in 30 days on an approved template. Try again later.",

@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Kiểm tra phát hiện các lỗi mà Meta sẽ từ chối. Chưa có gì được gửi. Hãy sửa các lỗi được liệt kê bên phải.",
       "TPL_META_REJECTED": "Meta đã từ chối mẫu. Lý do ở bên dưới; mẫu được giữ làm bản nháp để bạn có thể sửa và thử lại.",
       "TPL_NO_CONNECTION": "Mẫu này không có số WhatsApp nào được kết nối để gửi. Hãy kết nối một số trước.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Tệp tiêu đề cần lưu trữ đối tượng trên đám mây. Hãy nhờ quản trị viên nền tảng bật tính năng này.",
       "TPL_IN_USE": "Không thể xóa mẫu này vì có chiến dịch Gửi hàng loạt đang chạy hoặc đã lên lịch đang dùng nó.",
       "TPL_NOT_EDITABLE": "Chỉ có thể chỉnh sửa mẫu chưa được Meta duyệt hoặc mẫu bị Meta từ chối.",
       "TPL_EDIT_LIMIT": "Meta cho phép một lần chỉnh sửa trong 24 giờ và mười lần trong 30 ngày đối với mẫu đã được duyệt. Hãy thử lại sau.",
@@ -124,7 +125,8 @@
         "all": "Tất cả",
         "approved": "Đã duyệt",
         "pending": "Đang xem xét",
-        "rejected": "Bị từ chối"
+        "rejected": "Bị từ chối",
+        "draft": "Bản nháp"
       },
       "quickStartTitle": "Bắt đầu nhanh",
       "quickStart": "Hãy đọc <link>Hướng dẫn về mẫu tin</link> trước khi gửi lên Meta để thời gian duyệt dưới 24 giờ.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Đã duyệt",
         "pending": "Đang xem xét",
-        "rejected": "Bị từ chối"
+        "rejected": "Bị từ chối",
+        "draft": "Bản nháp"
       },
       "helpLabel": "Trợ giúp - 0{n}",
       "help": {

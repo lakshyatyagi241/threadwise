@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Kontroller, Meta'nın reddedeceği sorunlar buldu. Hiçbir şey gönderilmedi. Sağdaki listelenen hataları düzeltin.",
       "TPL_META_REJECTED": "Meta şablonu reddetti. Nedeni aşağıda; şablonu düzeltip yeniden deneyebilmeniz için taslak olarak saklandı.",
       "TPL_NO_CONNECTION": "Bu şablonun gönderileceği bağlı bir WhatsApp numarası yok. Önce bir numara bağlayın.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Üst bilgi dosyaları bulut nesne depolama gerektirir. Platform yöneticisinden bunu açmasını isteyin.",
       "TPL_IN_USE": "Bu şablon, çalışan veya zamanlanmış bir toplu gönderim tarafından kullanıldığı için silinemez.",
       "TPL_NOT_EDITABLE": "Yalnızca Meta'nın henüz onaylamadığı veya reddettiği şablonlar düzenlenebilir.",
       "TPL_EDIT_LIMIT": "Meta, onaylı bir şablonda 24 saatte bir ve 30 günde on düzenlemeye izin verir. Daha sonra tekrar deneyin.",
@@ -124,7 +125,8 @@
         "all": "Tümü",
         "approved": "Onaylandı",
         "pending": "İncelemede",
-        "rejected": "Reddedildi"
+        "rejected": "Reddedildi",
+        "draft": "Taslak"
       },
       "quickStartTitle": "Hızlı başlangıç",
       "quickStart": "Onay sürelerini 24 saatin altında tutmak için Meta'ya göndermeden önce <link>Şablon Yönergeleri</link>'ni okuyun.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Onaylandı",
         "pending": "İncelemede",
-        "rejected": "Reddedildi"
+        "rejected": "Reddedildi",
+        "draft": "Taslak"
       },
       "helpLabel": "Yardım - 0{n}",
       "help": {

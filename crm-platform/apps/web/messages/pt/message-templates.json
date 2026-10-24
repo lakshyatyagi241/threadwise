@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "As verificações encontraram problemas que a Meta rejeitaria. Nada foi enviado. Corrija os erros listados à direita.",
       "TPL_META_REJECTED": "A Meta recusou o modelo. O motivo está abaixo; o modelo foi mantido como rascunho para você corrigi-lo e tentar novamente.",
       "TPL_NO_CONNECTION": "Este modelo não tem um número de WhatsApp conectado para envio. Conecte um número primeiro.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Os arquivos de cabeçalho precisam de armazenamento de objetos na nuvem. Peça ao administrador da plataforma para ativá-lo.",
       "TPL_IN_USE": "Este modelo não pode ser excluído porque uma transmissão em andamento ou agendada o utiliza.",
       "TPL_NOT_EDITABLE": "Somente um modelo que a Meta ainda não aprovou, ou que rejeitou, pode ser editado.",
       "TPL_EDIT_LIMIT": "A Meta permite uma edição a cada 24 horas e dez a cada 30 dias em um modelo aprovado. Tente novamente mais tarde.",
@@ -124,7 +125,8 @@
         "all": "Todos",
         "approved": "Aprovado",
         "pending": "Em análise",
-        "rejected": "Rejeitado"
+        "rejected": "Rejeitado",
+        "draft": "Rascunho"
       },
       "quickStartTitle": "Início rápido",
       "quickStart": "Leia as <link>Diretrizes de modelos</link> antes de enviar à Meta para manter a aprovação em menos de 24 h.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Aprovados",
         "pending": "Em análise",
-        "rejected": "Rejeitados"
+        "rejected": "Rejeitados",
+        "draft": "Rascunho"
       },
       "helpLabel": "Ajuda - 0{n}",
       "help": {

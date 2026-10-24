@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Die Prüfungen haben Probleme gefunden, die Meta ablehnen würde. Es wurde nichts gesendet. Beheben Sie die rechts aufgeführten Fehler.",
       "TPL_META_REJECTED": "Meta hat die Vorlage abgelehnt. Der Grund steht unten; die Vorlage wird als Entwurf gespeichert, damit Sie sie korrigieren und erneut senden können.",
       "TPL_NO_CONNECTION": "Dieser Vorlage ist keine verbundene WhatsApp-Nummer zum Einreichen zugeordnet. Verbinden Sie zuerst eine Nummer.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Kopfzeilen-Dateien benötigen Cloud-Objektspeicher. Bitten Sie den Plattform-Administrator, ihn einzuschalten.",
       "TPL_IN_USE": "Diese Vorlage kann nicht gelöscht werden, weil sie in einem laufenden oder geplanten Broadcast verwendet wird.",
       "TPL_NOT_EDITABLE": "Nur eine Vorlage, die Meta noch nicht genehmigt hat, oder eine abgelehnte Vorlage kann bearbeitet werden.",
       "TPL_EDIT_LIMIT": "Meta erlaubt bei einer genehmigten Vorlage eine Bearbeitung in 24 Stunden und zehn in 30 Tagen. Versuchen Sie es später erneut.",
@@ -124,7 +125,8 @@
         "all": "Alle",
         "approved": "Genehmigt",
         "pending": "In Prüfung",
-        "rejected": "Abgelehnt"
+        "rejected": "Abgelehnt",
+        "draft": "Entwurf"
       },
       "quickStartTitle": "Schnellstart",
       "quickStart": "Lesen Sie die <link>Vorlagenrichtlinien</link>, bevor Sie bei Meta einreichen, damit die Genehmigung unter 24 Std. bleibt.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Genehmigt",
         "pending": "In Prüfung",
-        "rejected": "Abgelehnt"
+        "rejected": "Abgelehnt",
+        "draft": "Entwurf"
       },
       "helpLabel": "Hilfe - 0{n}",
       "help": {

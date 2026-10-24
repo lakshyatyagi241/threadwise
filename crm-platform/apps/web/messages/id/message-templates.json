@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Pemeriksaan menemukan masalah yang akan ditolak Meta. Tidak ada yang dikirim. Perbaiki kesalahan yang tercantum di sebelah kanan.",
       "TPL_META_REJECTED": "Meta menolak templat. Alasannya ada di bawah; templat disimpan sebagai draf agar Anda dapat memperbaikinya dan mencoba lagi.",
       "TPL_NO_CONNECTION": "Templat ini tidak memiliki nomor WhatsApp yang terhubung untuk dikirim. Hubungkan nomor terlebih dahulu.",
+      "TPL_HEADER_STORAGE_REQUIRED": "File header memerlukan penyimpanan objek cloud. Minta admin platform untuk mengaktifkannya.",
       "TPL_IN_USE": "Templat ini tidak dapat dihapus karena sedang dipakai broadcast yang berjalan atau terjadwal.",
       "TPL_NOT_EDITABLE": "Hanya templat yang belum disetujui Meta atau yang ditolak yang dapat diedit.",
       "TPL_EDIT_LIMIT": "Meta mengizinkan satu edit dalam 24 jam dan sepuluh dalam 30 hari untuk template yang disetujui. Coba lagi nanti.",
@@ -124,7 +125,8 @@
         "all": "Semua",
         "approved": "Disetujui",
         "pending": "Dalam tinjauan",
-        "rejected": "Ditolak"
+        "rejected": "Ditolak",
+        "draft": "Draf"
       },
       "quickStartTitle": "Mulai cepat",
       "quickStart": "Baca <link>Panduan Template</link> sebelum mengirim ke Meta agar waktu persetujuan tetap di bawah 24 jam.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Disetujui",
         "pending": "Dalam tinjauan",
-        "rejected": "Ditolak"
+        "rejected": "Ditolak",
+        "draft": "Draf"
       },
       "helpLabel": "Bantuan - 0{n}",
       "help": {

@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "De controles hebben problemen gevonden die Meta zou afwijzen. Er is niets verzonden. Los de fouten rechts op.",
       "TPL_META_REJECTED": "Meta heeft het sjabloon geweigerd. De reden staat hieronder; het sjabloon blijft bewaard als concept zodat je het kunt aanpassen en opnieuw kunt proberen.",
       "TPL_NO_CONNECTION": "Aan dit sjabloon is geen WhatsApp-nummer gekoppeld om het mee in te dienen. Koppel eerst een nummer.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Kopbestanden hebben cloud-objectopslag nodig. Vraag de platformbeheerder om die in te schakelen.",
       "TPL_IN_USE": "Dit sjabloon kan niet worden verwijderd omdat een lopende of geplande broadcast het gebruikt.",
       "TPL_NOT_EDITABLE": "Alleen een sjabloon dat Meta nog niet heeft goedgekeurd, of een dat is afgewezen, kan worden bewerkt.",
       "TPL_EDIT_LIMIT": "Meta staat bij een goedgekeurd sjabloon één bewerking per 24 uur en tien per 30 dagen toe. Probeer het later opnieuw.",
@@ -124,7 +125,8 @@
         "all": "Alle",
         "approved": "Goedgekeurd",
         "pending": "In beoordeling",
-        "rejected": "Afgewezen"
+        "rejected": "Afgewezen",
+        "draft": "Concept"
       },
       "quickStartTitle": "Snel starten",
       "quickStart": "Lees de <link>sjabloonrichtlijnen</link> voordat je indient bij Meta, zodat de goedkeuring binnen 24 uur klaar is.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Goedgekeurd",
         "pending": "In beoordeling",
-        "rejected": "Afgewezen"
+        "rejected": "Afgewezen",
+        "draft": "Concept"
       },
       "helpLabel": "Hulp - 0{n}",
       "help": {
