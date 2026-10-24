@@ -908,7 +908,11 @@
             },
             "prev": "Carte précédente",
             "next": "Carte suivante",
-            "goTo": "Carte {n}"
+            "goTo": "Carte {n}",
+            "saveCopy": "Enregistrer une copie",
+            "saveCopyHint": "Enregistre cette image sur notre serveur pour que le chat de chaque visiteur puisse l'afficher. Une image d'un site qui refuse de la partager ne peut pas être copiée : importez-la à la place.",
+            "saving": "Enregistrement…",
+            "copyFailed": "Impossible d'enregistrer une copie : {message}"
           },
           "condition": {
             "info": "Ajoutez des règles (une variable, une comparaison et une valeur). Reliez-les par AND ou OR et imbriquez des groupes si besoin.",

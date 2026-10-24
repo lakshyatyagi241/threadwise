@@ -908,7 +908,11 @@
             },
             "prev": "Kartu sebelumnya",
             "next": "Kartu berikutnya",
-            "goTo": "Kartu {n}"
+            "goTo": "Kartu {n}",
+            "saveCopy": "Simpan salinan",
+            "saveCopyHint": "Menyimpan gambar ini di server kami agar chat setiap pengunjung dapat menampilkannya. Gambar dari situs yang menolak membagikannya tidak bisa disalin: unggah saja.",
+            "saving": "Menyimpan…",
+            "copyFailed": "Tidak dapat menyimpan salinan: {message}"
           },
           "condition": {
             "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",

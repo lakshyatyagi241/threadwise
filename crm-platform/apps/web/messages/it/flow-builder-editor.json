@@ -1261,7 +1261,11 @@
             },
             "prev": "Scheda precedente",
             "next": "Scheda successiva",
-            "goTo": "Scheda {n}"
+            "goTo": "Scheda {n}",
+            "saveCopy": "Salva una copia",
+            "saveCopyHint": "Salva questa immagine sul nostro server, così la chat di ogni visitatore può mostrarla. Un'immagine di un sito che non ne consente la condivisione non può essere copiata: caricala al suo posto.",
+            "saving": "Salvataggio…",
+            "copyFailed": "Impossibile salvare una copia: {message}"
           },
           "condition": {
             "info": "Aggiungi regole (una variabile, un confronto e un valore). Uniscile con AND o OR e annida gruppi quando serve.",

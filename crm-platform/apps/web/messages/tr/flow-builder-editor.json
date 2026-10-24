@@ -908,7 +908,11 @@
             },
             "prev": "Önceki kart",
             "next": "Sonraki kart",
-            "goTo": "Kart {n}"
+            "goTo": "Kart {n}",
+            "saveCopy": "Kopyasını kaydet",
+            "saveCopyHint": "Bu resmi sunucumuzda saklar, böylece her ziyaretçinin sohbeti onu gösterebilir. Paylaşıma izin vermeyen bir siteden alınan resim kopyalanamaz: bunun yerine yükleyin.",
+            "saving": "Kaydediliyor…",
+            "copyFailed": "Kopya kaydedilemedi: {message}"
           },
           "condition": {
             "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",

@@ -908,7 +908,11 @@
             },
             "prev": "Poprzednia karta",
             "next": "Następna karta",
-            "goTo": "Karta {n}"
+            "goTo": "Karta {n}",
+            "saveCopy": "Zapisz kopię",
+            "saveCopyHint": "Zapisuje to zdjęcie na naszym serwerze, aby czat każdego odwiedzającego mógł je pokazać. Zdjęcia z witryny, która nie zezwala na jego udostępnianie, nie można skopiować: prześlij je zamiast tego.",
+            "saving": "Zapisywanie…",
+            "copyFailed": "Nie udało się zapisać kopii: {message}"
           },
           "condition": {
             "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
