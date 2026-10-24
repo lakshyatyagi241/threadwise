@@ -46,7 +46,11 @@ describe('error reporting tags', () => {
     const worker = Object.assign(new EventEmitter(), { name: 'broadcast-send' });
     attachJobFailureReporting(worker as never);
     const err = new Error('provider down');
-    worker.emit('failed', { name: 'send', attemptsMade: 3, data: { phone: '+910000000000' } }, err);
+    worker.emit(
+      'failed',
+      { name: 'send', attemptsMade: 3, finishedOn: 1, data: { phone: '+910000000000' } },
+      err,
+    );
 
     expect(captureException).toHaveBeenCalledWith(err);
     expect(scope.setTag).toHaveBeenCalledWith('queue', 'broadcast-send');
@@ -55,5 +59,12 @@ describe('error reporting tags', () => {
     expect(JSON.stringify([scope.setTag.mock.calls, scope.setExtra.mock.calls])).not.toContain(
       '+9100',
     );
+  });
+
+  it('does not report an attempt that BullMQ will retry', () => {
+    const worker = Object.assign(new EventEmitter(), { name: 'broadcast-send' });
+    attachJobFailureReporting(worker as never);
+    worker.emit('failed', { name: 'send', attemptsMade: 1 }, new Error('transient'));
+    expect(captureException).not.toHaveBeenCalled();
   });
 });
