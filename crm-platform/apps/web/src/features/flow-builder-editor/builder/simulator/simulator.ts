@@ -29,7 +29,7 @@ export type LogChoices = {
   labels: string[];
   /** The list's opener label ("Choose below"). */
   button?: string;
-  /** A Link button message: the buttons open an address or call, they do not answer the bot. */
+  /** A Link button message: its one button opens a web address, it does not answer the bot. */
   links?: Array<{ type: string; label: string; value: string }>;
 };
 export type LogEntry = {
@@ -459,6 +459,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return advance('out');
       }
       case 'cta': {
+        // Message by message, as the runtime's cta step sends them. A WhatsApp link message holds one URL button: the first web link
+        // is that button, each further one (two at most) is a message of its own labelled by its text. A call, a copy code and a
+        // link that is not a web address are text lines.
         const actions = arr(d.actions).map(rec);
         const links = (
           actions.length
@@ -474,14 +477,60 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
                   value: str(d.url || d.phone || d.code),
                 },
               ]
-        ).map((l) => ({ ...l, value: interp(l.value, v) }));
+        )
+          .filter((l) => l.value.trim() !== '')
+          .map((l) => ({ ...l, value: interp(l.value, v).trim() }));
+        const isWebLink = (l: { type: string; value: string }) =>
+          ['url', 'visit'].includes(l.type) && /^https?:\/\//.test(l.value);
+        const textLine = (l: { type: string; label: string; value: string }) => {
+          const label =
+            l.label ||
+            (l.type === 'copy'
+              ? 'Copy'
+              : l.type === 'phone' || l.type === 'call_now'
+                ? 'Call'
+                : 'Visit');
+          if (l.type === 'phone' || l.type === 'call_now')
+            return `☏ ${label}: ${l.value.replace(/^tel:/i, '')}`;
+          if (l.type === 'copy') return `${label}:\n\`${l.value}\``;
+          return `${label}: ${l.value}`;
+        };
+        const header = interp(d.headerText, v).trim();
+        const footer = interp(d.footerText, v).trim();
         const body = interp(d.bodyText || d.text, v);
-        bot(body || links.map((l) => l.label).join(' · '), undefined, {
-          kind: 'links',
-          prompt: body,
-          labels: links.map((l) => l.label),
-          links,
-        });
+        const web = links.find(isWebLink);
+        if (web) {
+          const extra = links
+            .filter((l) => l !== web && !isWebLink(l))
+            .slice(0, 2)
+            .map(textLine)
+            .join('\n');
+          const main = [body, extra].filter(Boolean).join('\n').trim() || web.label || 'Visit';
+          const text = [header && `*${header}*`, main, footer && `_${footer}_`]
+            .filter(Boolean)
+            .join('\n\n');
+          bot(text, undefined, { kind: 'links', prompt: text, labels: [web.label], links: [web] });
+          for (const l of links.filter((x) => x !== web && isWebLink(x)).slice(0, 2)) {
+            const label = (l.label || 'Visit').slice(0, 20);
+            bot(label, undefined, {
+              kind: 'links',
+              prompt: label,
+              labels: [label],
+              links: [{ ...l, label }],
+            });
+          }
+          return advance('out');
+        }
+        const text = [
+          header && `*${header}*`,
+          body,
+          links.map(textLine).join('\n\n'),
+          footer && `_${footer}_`,
+        ]
+          .filter(Boolean)
+          .join('\n\n')
+          .trim();
+        if (text) bot(text);
         return advance('out');
       }
       case 'location': {

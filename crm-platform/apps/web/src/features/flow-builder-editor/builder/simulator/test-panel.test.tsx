@@ -56,4 +56,26 @@ describe('test panel', () => {
       r({ kind: 'bot', text: '', media: { kind: 'document', url: '/x/b.pdf', filename: '' } }),
     ).toContain('b.pdf');
   });
+
+  it('a Link button message is one bubble with one button that opens the web address', () => {
+    const html = renderToStaticMarkup(
+      <LogBubble
+        entry={{
+          kind: 'bot',
+          text: 'Read more',
+          choices: {
+            kind: 'links',
+            prompt: 'Read more',
+            labels: ['Shop'],
+            links: [{ type: 'url', label: 'Shop', value: 'https://example.com/shop' }],
+          },
+        }}
+      />,
+    );
+    expect(html).toContain('data-testid="choices-links"');
+    expect(html.match(/<a /g)).toHaveLength(1);
+    expect(html).toContain('href="https://example.com/shop"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('>Shop</a>');
+  });
 });
