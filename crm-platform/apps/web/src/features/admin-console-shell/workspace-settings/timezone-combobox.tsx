@@ -35,7 +35,8 @@ export function TimezoneCombobox({
   const matches = useMemo(() => filterTimeZones(zones, search ?? ''), [zones, search]);
 
   useEffect(() => {
-    if (open) document.getElementById(`${listId}-${active}`)?.scrollIntoView?.({ block: 'nearest' });
+    if (open)
+      document.getElementById(`${listId}-${active}`)?.scrollIntoView?.({ block: 'nearest' });
   }, [active, open, listId]);
 
   const openList = () => {

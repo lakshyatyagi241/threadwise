@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { FlowFeatured, FlowSummary } from '@crm/contracts';
@@ -157,5 +159,14 @@ describe('featured card (TW-FLB-002)', () => {
     );
     expect(html).toContain('emptyPreview');
     expect(html).toContain('no waits');
+  });
+});
+
+describe('dark mode text on the flows screen', () => {
+  it('lifts brand-coloured text to the light primary on the dark surfaces (the featured flow was unreadable)', () => {
+    const css = readFileSync(join(__dirname, '../builder/builder.css'), 'utf8');
+    expect(css).toMatch(
+      /\[data-theme='dark'\] \.flb-root \.text-brand:not\(\[class\*='flb-mint'\]\) \{\s*color: var\(--primary\);/,
+    );
   });
 });

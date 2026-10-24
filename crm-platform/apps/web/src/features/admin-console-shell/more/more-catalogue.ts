@@ -98,14 +98,7 @@ export const CATALOGUE: readonly CatalogueCard[] = [
     icon: 'contacts',
     badge: false,
   },
-  {
-    id: 'auto-reply',
-    hrefs: ['/auto-reply'],
-    cat: 'automation',
-    tone: 'mint',
-    icon: 'reply',
-    badge: false,
-  },
+  // Auto Reply: its page is not built yet (/auto-reply is a 404), so it is not listed; add it back when the screen ships.
   { id: 'warmer', hrefs: ['/warmer'], cat: 'other', tone: 'mint', icon: 'clock', badge: false },
   {
     id: 'scheduled',

@@ -52,6 +52,15 @@
   --flb-yes: var(--flb-green);
 }
 
+/*
+ * In dark mode the brand blue (#3214db) is darker than the dark card behind it, so brand-coloured text on this screen's dark
+ * surfaces (the featured flow's pills and its preview nodes, the flow cards) could not be read. It takes the light primary instead;
+ * a chip that keeps its light mint background (`--flb-mint`) keeps the dark text that suits it.
+ */
+[data-theme='dark'] .flb-root .text-brand:not([class*='flb-mint']) {
+  color: var(--primary);
+}
+
 .flb-root .canvas-dots {
   background-color: var(--muted);
   background-image: radial-gradient(circle, rgb(var(--flb-shadow) / 0.1) 1px, transparent 1px);

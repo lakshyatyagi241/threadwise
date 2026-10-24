@@ -165,7 +165,7 @@ export const SHORTCUT_URL_MAX = 160;
 
 /** The five a fresh browser shows. Copy comes from messages by `id`, so the subtitle is always true. */
 export const DEFAULT_SHORTCUT_IDS = [
-  'new-auto-reply',
+  'new-broadcast',
   'schedule-send',
   'test-webhook',
   'export-history',
@@ -174,7 +174,6 @@ export const DEFAULT_SHORTCUT_IDS = [
 
 /** Presets that can be added back. Addresses are this app's screens. */
 export const SHORTCUT_PRESETS: Record<string, { href: string; icon: string }> = {
-  'new-auto-reply': { href: '/auto-reply', icon: 'reply' },
   'schedule-send': { href: '/scheduled', icon: 'clock' },
   'test-webhook': { href: '/webhooks', icon: 'webhook' },
   'export-history': { href: '/message-history', icon: 'history' },
