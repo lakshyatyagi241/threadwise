@@ -383,13 +383,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         <Field label={t('rulesLabel')} hint={t('rulesHint')}>
           {ctx.keywordRules.length === 0 ? (
             <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11.5px] leading-snug text-amber-800">
-              {t.rich('rulesNone', {
-                link: (chunks) => (
-                  <Link href="/auto-reply" strong>
-                    {chunks}
-                  </Link>
-                ),
-              })}
+              {t('rulesNone')}
             </div>
           ) : (
             <div className="max-h-52 divide-y divide-border overflow-y-auto rounded-lg border border-border bg-background">

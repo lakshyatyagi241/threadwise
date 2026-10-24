@@ -1739,7 +1739,7 @@
           "stageHint": "Wanneer een deal naar deze pipelinefase wordt verplaatst, wordt het gekoppelde contact ingeschreven. Beheer fases op het /deals-bord.",
           "rulesLabel": "Koppelen aan reactie-trefwoordregels",
           "rulesHint": "Vink de regels aan die deze flow moeten starten. Laat alles uit om te draaien bij elke Reactie → DM-regel.",
-          "rulesNone": "Nog geen Reactie → DM-trefwoordregels. Maak ze aan op <link>/auto-reply</link> (Instagram · trigger \"Reactie → DM\") en kies ze daarna hier.",
+          "rulesNone": "Nog geen Reactie → DM-trefwoordregels, dus hier valt niets te kiezen.",
           "ruleFallback": "Regel {id}",
           "ruleOff": "uit",
           "orderPlaced": "Wordt geactiveerd bij elke nieuwe bestelling. De klant van de bestelling wordt gekoppeld aan een opgeslagen contact en ingeschreven.",

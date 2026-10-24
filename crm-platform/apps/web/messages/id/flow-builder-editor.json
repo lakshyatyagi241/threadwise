@@ -1386,7 +1386,7 @@
           "stageHint": "Saat deal dipindahkan KE tahap pipeline ini, kontak terkaitnya didaftarkan. Kelola tahap di papan /deals.",
           "rulesLabel": "Kaitkan ke aturan kata kunci komentar",
           "rulesHint": "Centang aturan yang harus meluncurkan alur ini. Biarkan semua tidak dicentang untuk berjalan pada aturan Komentar → DM apa pun.",
-          "rulesNone": "Belum ada aturan kata kunci Komentar → DM. Buat di <link>/auto-reply</link> (Instagram · trigger \"Comment → DM\"), lalu pilih di sini.",
+          "rulesNone": "Belum ada aturan kata kunci Komentar → DM, jadi tidak ada yang bisa dipilih di sini.",
           "ruleFallback": "Aturan {id}",
           "ruleOff": "nonaktif",
           "orderPlaced": "Aktif untuk setiap pesanan baru. Pelanggan pesanan dicocokkan dengan kontak tersimpan dan didaftarkan.",

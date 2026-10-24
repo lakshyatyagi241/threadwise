@@ -1386,7 +1386,7 @@
           "stageHint": "Khi thương vụ được chuyển VÀO giai đoạn phễu này, liên hệ liên kết sẽ được ghi danh. Quản lý giai đoạn trên bảng /deals.",
           "rulesLabel": "Gắn vào quy tắc từ khóa bình luận",
           "rulesHint": "Chọn các quy tắc sẽ khởi chạy luồng này. Để trống tất cả để chạy với mọi quy tắc Bình luận → DM.",
-          "rulesNone": "Chưa có quy tắc từ khóa Bình luận → DM nào. Tạo tại <link>/auto-reply</link> (Instagram · kích hoạt “Bình luận → DM”), rồi chọn tại đây.",
+          "rulesNone": "Chưa có quy tắc từ khóa Bình luận → DM nào, nên chưa có gì để chọn ở đây.",
           "ruleFallback": "Quy tắc {id}",
           "ruleOff": "tắt",
           "orderPlaced": "Kích hoạt cho mọi đơn hàng mới. Khách của đơn được khớp với một liên hệ đã lưu và ghi danh.",
