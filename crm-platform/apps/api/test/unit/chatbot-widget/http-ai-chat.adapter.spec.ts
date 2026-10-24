@@ -105,4 +105,18 @@ describe('HttpAiChatAdapter (the vendor answer and what it used)', () => {
     expect(groqBody).toMatchObject({ model: 'm', max_tokens: 50 });
     expect(groqBody).not.toHaveProperty('max_completion_tokens');
   });
+
+  it('keeps max_tokens when WGT_AI_OPENAI_BASE_URL points at a gateway', async () => {
+    const f = json({ choices: [{ message: { content: 'Hello' } }] });
+    vi.stubGlobal('fetch', f);
+    await adapter({
+      WGT_AI_OPENAI_API_KEY: 'k',
+      WGT_AI_OPENAI_BASE_URL: 'http://gateway.test/v1/',
+    }).complete(req('openai'));
+    const [url, init] = f.mock.calls[0] as unknown as [string, RequestInit];
+    const body = JSON.parse(init.body as string) as Record<string, unknown>;
+    expect(url).toBe('http://gateway.test/v1/chat/completions');
+    expect(body).toMatchObject({ max_tokens: 50 });
+    expect(body).not.toHaveProperty('max_completion_tokens');
+  });
 });

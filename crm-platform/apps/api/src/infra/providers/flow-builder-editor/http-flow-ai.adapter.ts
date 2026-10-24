@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { FlowAiPort, FlowAiRequest } from './flow-ai.port';
+import { openAiOutputLimit } from '../openai-output-limit';
 
 const TIMEOUT_MS = 90_000;
 
@@ -45,10 +46,7 @@ export class HttpFlowAiAdapter implements FlowAiPort {
     r: FlowAiRequest,
     url = 'https://api.openai.com/v1/chat/completions',
   ): Promise<string | null> {
-    // OpenAI's current models reject `max_tokens`, so OpenAI gets `max_completion_tokens` (the help agent's adapter sends the same
-    // field). OpenRouter's endpoint still takes the older name.
-    const limit =
-      r.provider === 'openai' ? { max_completion_tokens: r.maxTokens } : { max_tokens: r.maxTokens };
+    const limit = openAiOutputLimit(r.maxTokens, r.provider === 'openai');
     const j = (await this.post(
       url,
       { Authorization: `Bearer ${r.apiKey}` },
