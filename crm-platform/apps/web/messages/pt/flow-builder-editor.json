@@ -1386,7 +1386,7 @@
           "stageHint": "Quando um negócio é movido PARA este estágio do funil, o contato vinculado é inscrito. Gerencie os estágios no quadro /deals.",
           "rulesLabel": "Vincular a regras de palavra-chave de comentário",
           "rulesHint": "Marque as regras que devem iniciar este fluxo. Deixe todas desmarcadas para rodar em qualquer regra de Comentário → DM.",
-          "rulesNone": "Nenhuma regra de palavra-chave de Comentário → DM ainda. Crie-as em <link>/auto-reply</link> (Instagram · gatilho “Comentário → DM”) e escolha-as aqui.",
+          "rulesNone": "Ainda não há regras de palavra-chave de Comentário → DM, por isso não há nada para escolher aqui.",
           "ruleFallback": "Regra {id}",
           "ruleOff": "desativada",
           "orderPlaced": "Dispara em todo novo pedido. O cliente do pedido é associado a um contato salvo e inscrito.",

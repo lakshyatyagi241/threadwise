@@ -1386,7 +1386,7 @@
           "stageHint": "Gdy szansa zostaje przeniesiona NA ten etap lejka, powiązany kontakt jest zapisywany. Etapy zarządzasz na tablicy /deals.",
           "rulesLabel": "Powiąż z regułami słów kluczowych komentarzy",
           "rulesHint": "Zaznacz reguły, które mają uruchamiać ten przepływ. Jeśli nic nie zaznaczysz, przepływ działa przy każdej regule Komentarz → DM.",
-          "rulesNone": "Brak reguł Komentarz → DM ze słowami kluczowymi. Utwórz je w <link>/auto-reply</link> (Instagram · wyzwalacz „Komentarz → DM”), a następnie wybierz tutaj.",
+          "rulesNone": "Brak reguł Komentarz → DM ze słowami kluczowymi, więc nie ma tu nic do wyboru.",
           "ruleFallback": "Reguła {id}",
           "ruleOff": "wył.",
           "orderPlaced": "Uruchamia się przy każdym nowym zamówieniu. Klient zamówienia zostaje dopasowany do zapisanego kontaktu i zapisany do przepływu.",

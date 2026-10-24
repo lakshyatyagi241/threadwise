@@ -1386,7 +1386,7 @@
           "stageHint": "Bir fırsat bu satış hattı aşamasına taşındığında, bağlı kişi kaydedilir. Aşamaları /deals panosunda yönetin.",
           "rulesLabel": "Yorum anahtar kelime kurallarına bağla",
           "rulesHint": "Bu akışı başlatması gereken kuralları işaretleyin. Hiçbirini işaretlemezseniz herhangi bir Yorum → DM kuralında çalışır.",
-          "rulesNone": "Henüz Yorum → DM anahtar kelime kuralı yok. <link>/auto-reply</link> üzerinde oluşturun (Instagram · tetikleyici \"Yorum → DM\"), ardından burada seçin.",
+          "rulesNone": "Henüz Yorum → DM anahtar kelime kuralı yok, bu yüzden burada seçilecek bir şey yok.",
           "ruleFallback": "Kural {id}",
           "ruleOff": "kapalı",
           "orderPlaced": "Her yeni sipariş için tetiklenir. Siparişin müşterisi kayıtlı bir kişiyle eşleştirilir ve kaydedilir.",

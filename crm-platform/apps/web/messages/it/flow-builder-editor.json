@@ -1739,7 +1739,7 @@
           "stageHint": "Quando una trattativa viene spostata in questa fase della pipeline, il contatto collegato viene inserito. Gestisci le fasi nella bacheca /deals.",
           "rulesLabel": "Collega alle regole di parole chiave dei commenti",
           "rulesHint": "Seleziona le regole che devono avviare questo flow. Lascia tutto deselezionato per eseguirlo con qualsiasi regola Commento → DM.",
-          "rulesNone": "Nessuna regola di parole chiave Commento → DM ancora. Creale in <link>/auto-reply</link> (Instagram · trigger «Commento → DM»), poi scegliele qui.",
+          "rulesNone": "Nessuna regola di parole chiave Commento → DM ancora, quindi qui non c’è nulla da scegliere.",
           "ruleFallback": "Regola {id}",
           "ruleOff": "disattiva",
           "orderPlaced": "Scatta per ogni nuovo ordine. Il cliente dell’ordine viene abbinato a un contatto salvato e inserito.",

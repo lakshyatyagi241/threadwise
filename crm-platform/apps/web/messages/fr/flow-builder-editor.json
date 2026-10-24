@@ -1386,7 +1386,7 @@
           "stageHint": "Quand une opportunité est déplacée DANS cette étape du pipeline, son contact lié est inscrit. Gérez les étapes sur le tableau /deals.",
           "rulesLabel": "Lier aux règles de mots-clés de commentaires",
           "rulesHint": "Cochez les règles qui doivent lancer ce flux. Laissez tout décoché pour s’exécuter sur toute règle Commentaire → DM.",
-          "rulesNone": "Aucune règle de mots-clés Commentaire → DM pour l’instant. Créez-en sur <link>/auto-reply</link> (Instagram · déclencheur « Commentaire → DM »), puis choisissez-les ici.",
+          "rulesNone": "Aucune règle de mots-clés Commentaire → DM pour l’instant, il n’y a donc rien à choisir ici.",
           "ruleFallback": "Règle {id}",
           "ruleOff": "désactivée",
           "orderPlaced": "Se déclenche pour chaque nouvelle commande. Le client de la commande est associé à un contact enregistré et inscrit.",

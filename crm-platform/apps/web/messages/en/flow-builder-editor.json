@@ -1416,7 +1416,7 @@
           "stageHint": "When a deal is moved INTO this pipeline stage, its linked contact is enrolled. Manage stages on the /deals board.",
           "rulesLabel": "Bind to comment keyword rules",
           "rulesHint": "Tick the rules that should launch this flow. Leave all unticked to run on any Comment → DM rule.",
-          "rulesNone": "No Comment → DM keyword rules yet. Create them on <link>/auto-reply</link> (Instagram · trigger \"Comment → DM\"), then pick them here.",
+          "rulesNone": "No Comment → DM keyword rules yet, so there is nothing to pick here.",
           "ruleFallback": "Rule {id}",
           "ruleOff": "off",
           "orderPlaced": "Fires for every new order. The order's customer is matched to a saved contact and enrolled.",

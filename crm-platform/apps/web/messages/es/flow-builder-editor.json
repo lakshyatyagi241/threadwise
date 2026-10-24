@@ -1386,7 +1386,7 @@
           "stageHint": "Cuando un negocio pasa A esta etapa del embudo, su contacto vinculado se inscribe. Gestiona las etapas en el tablero /deals.",
           "rulesLabel": "Vincular a reglas de palabras clave de comentarios",
           "rulesHint": "Marca las reglas que deben lanzar este flujo. Deja todas sin marcar para ejecutarlo con cualquier regla Comentario → mensaje directo.",
-          "rulesNone": "Aún no hay reglas de palabras clave Comentario → mensaje directo. Créalas en <link>/auto-reply</link> (Instagram · disparador \"Comentario → mensaje directo\") y elígelas aquí.",
+          "rulesNone": "Aún no hay reglas de palabras clave Comentario → mensaje directo, así que no hay nada que elegir aquí.",
           "ruleFallback": "Regla {id}",
           "ruleOff": "desactivada",
           "orderPlaced": "Se activa con cada pedido nuevo. El cliente del pedido se asocia a un contacto guardado y se inscribe.",

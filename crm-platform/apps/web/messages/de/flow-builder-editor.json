@@ -1386,7 +1386,7 @@
           "stageHint": "Wenn ein Deal in diese Pipeline-Phase verschoben wird, wird der verknüpfte Kontakt aufgenommen. Phasen verwalten Sie auf der Deals-Übersicht /deals.",
           "rulesLabel": "An Kommentar-Schlüsselwortregeln binden",
           "rulesHint": "Markieren Sie die Regeln, die diesen Flow starten sollen. Lassen Sie alle unmarkiert, damit er bei jeder Regel Kommentar → DM läuft.",
-          "rulesNone": "Noch keine Kommentar-→-DM-Schlüsselwortregeln vorhanden. Erstellen Sie sie unter <link>/auto-reply</link> (Instagram · Auslöser „Kommentar → DM“) und wählen Sie sie dann hier aus.",
+          "rulesNone": "Noch keine Kommentar-→-DM-Schlüsselwortregeln vorhanden, daher gibt es hier nichts auszuwählen.",
           "ruleFallback": "Regel {id}",
           "ruleOff": "aus",
           "orderPlaced": "Wird für jede neue Bestellung ausgelöst. Der Kunde der Bestellung wird einem gespeicherten Kontakt zugeordnet und aufgenommen.",
