@@ -35,7 +35,7 @@ The entry plan has no automatic assignment, and everything below works on it:
 - The **Human handoff** step in flows, the AI assistant's handoff and **Send to queue** by a teammate. See [Human handoff](help:flows-human-handoff).
 - The **Waiting** tab, **Claim**, assigning by hand, the handoff card and the notification to the team. See [Waiting queue and claiming](help:waiting-queue).
 - Sending a conversation to one named person or to one team. A team set to **Manual** keeps it in its queue.
-- **Return to bot**, **Time off** and **Available / Offline** in the account menu, and the status dots on Team members.
+- **Return to bot**, **Time off** and **Available / Away** in the account menu, and the status dots on Team members.
 - **Claiming makes you the contact owner**, and the alert to the team when a conversation is waiting.
 
 ## With Smart routing
