@@ -25,4 +25,4 @@ The owner modes and the window are part of **Smart routing** ([Smart routing add
 
 ## If something looks wrong
 
-A chat that did not go back to the usual agent usually means that person is away, offline, at their chat limit, or past the window in days. A conversation already assigned by a flow, a person or a handoff is never changed by these settings.
+A chat that did not go back to the usual agent usually means that person is away, at their chat limit, or past the window in days. A conversation already assigned by a flow, a person or a handoff is never changed by these settings.

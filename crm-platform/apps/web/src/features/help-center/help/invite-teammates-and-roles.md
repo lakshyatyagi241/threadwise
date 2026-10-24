@@ -39,7 +39,7 @@ There is also a second **Team members** screen at `/settings/team`. There you se
 ## Check that it worked
 
 1. Stay on **Team members**. A person who has not accepted yet is marked **pending**. Select **Resend invite** if the email did not arrive.
-2. Once they have signed in, their row shows whether they are online, away, busy or offline.
+2. Once they have signed in, their row shows whether they are available, away (including outside their working hours) or busy.
 3. To change a role later, pick another one in the role list on their row. To stop someone's access, select **Remove from workspace**.
 
 ## Put them in a team

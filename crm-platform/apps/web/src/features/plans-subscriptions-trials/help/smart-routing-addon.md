@@ -35,7 +35,7 @@ The entry plan keeps assignment simple: new conversations wait in the **Waiting*
 
 ## What stays on every plan
 
-Inbox, assigning by hand, the Waiting tab and Claim, the Human handoff step to a named person or team, Return to bot, **Time off** and **Available / Offline**. See [What your plan includes for handoff and assignment](help:handoff-and-assignment-plans).
+Inbox, assigning by hand, the Waiting tab and Claim, the Human handoff step to a named person or team, Return to bot, **Time off** and **Available / Away**. See [What your plan includes for handoff and assignment](help:handoff-and-assignment-plans).
 
 ## How to get it
 

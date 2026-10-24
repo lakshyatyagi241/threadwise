@@ -40,7 +40,7 @@ Only records without an owner are assigned. An owner a person set is never repla
 3. Choose the module tab, then select **Create rule**.
 4. Give the rule a name and add its conditions: pick a field, then how to compare it, then a value. Join conditions with **All (AND)** or **Any (OR)** and use **Add group** for more complex rules. Leave the conditions empty to make a fallback rule.
 5. Under **Assign to**, choose the method and the people or teams, then select **Save and activate**, or **Save as paused** to prepare it without using it yet.
-6. Use **Test with a record** to pick a real record and see which rule would take it and who would get it. Nothing is changed. Under each rule, **Left out** names the people the rule could not use and why: they cannot open that kind of record, they are no longer active, they are on leave today, or they are offline.
+6. Use **Test with a record** to pick a real record and see which rule would take it and who would get it. Nothing is changed. Under each rule, **Left out** names the people the rule could not use and why: they cannot open that kind of record, they are no longer active, they are on leave today, or they are away (by their own choice or outside their working hours).
 
 ## Priority and fallback
 
@@ -59,7 +59,7 @@ Only records without an owner are assigned. An owner a person set is never repla
 ## Who is available
 
 - People on leave are always skipped. A specific-user rule uses that person's delegate while they are away.
-- People who are offline are skipped when **Skip people who are offline** is on, which is the default.
+- People who are away are skipped when **Skip people who are away** is on, which is the default.
 - If a rule matches but nobody is available, the next rule is tried and the run log records that nobody was available.
 
 ## Teams are a pool of people
@@ -77,6 +77,6 @@ Seeing the rules needs the permission to view record assignment. Changing them a
 ## If something looks wrong
 
 - **Nothing is assigned.** Check the switch is on, the rule is active, and the record had no owner when it arrived. Use **Test with a record** with the same record.
-- **A rule matches but nobody gets it.** Everyone it names is on leave, offline, no longer active, or cannot open that kind of record (the role needs the permission to see contacts, companies or deals). **Test with a record** shows who was left out and why. Add a team or another person, give the role the permission, name a delegate, or turn off **Skip people who are offline**.
+- **A rule matches but nobody gets it.** Everyone it names is on leave, away, no longer active, or cannot open that kind of record (the role needs the permission to see contacts, companies or deals). **Test with a record** shows who was left out and why. Add a team or another person, give the role the permission, name a delegate, or turn off **Skip people who are away**.
 - **Imported records are not assigned.** Turn on **Also assign imported records**.
 - **The rule list changed after I saved.** Someone else edited the rule. The latest version is loaded, so check it and apply your change again.
