@@ -179,6 +179,30 @@ describe('the definition rules', () => {
     );
   });
 
+  it('mapping: two rows cannot save into the same contact property', () => {
+    expect(
+      problems({
+        ...ok,
+        mapping: [
+          { path: 'slideshow.title', contactProperty: 'decimal_number' },
+          { path: 'slideshow.author', contactProperty: 'decimal_number' },
+        ],
+      }),
+    ).toEqual([
+      'mapping.0.contactProperty: Two rows save into the same contact property',
+      'mapping.1.contactProperty: Two rows save into the same contact property',
+    ]);
+    expect(
+      problems({
+        ...ok,
+        mapping: [
+          { path: 'a', contactProperty: 'name' },
+          { path: 'b', contactProperty: 'title' },
+        ],
+      }),
+    ).toEqual([]);
+  });
+
   it('update replaces the definition and carries the lock; a test run may omit the name', () => {
     const { name: _n, ...noName } = ok;
     expect(updateApiLibraryApiSchema.safeParse({ ...noName, rowVersion: 2 }).success).toBe(true);

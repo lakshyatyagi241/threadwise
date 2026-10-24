@@ -303,7 +303,11 @@
         "choose": "Wybierz właściwość",
         "removeN": "Usuń wiersz {n}",
         "pick": "Wybierz ścieżkę z ostatniej odpowiedzi testowej",
-        "add": "Dodaj wiersz"
+        "add": "Dodaj wiersz",
+        "propertyDuplicate": "Inny wiersz zapisuje do tej właściwości. Do pola trafia tylko jedna wartość, więc wybierz inną właściwość.",
+        "propertyRequired": "Wybierz właściwość kontaktu, do której zapisuje ten wiersz.",
+        "numberText": "Pole liczbowe przyjmuje tylko liczby. Ostatni test zwrócił tutaj „{value}”, a ten tekst zostałby zapisany bez zmian.",
+        "numberUntested": "Uruchom test, aby sprawdzić, czy to pole odpowiedzi zwraca liczbę."
       },
       "responseVars": {
         "none": "Żadne pola nie są jeszcze udostępnione przepływom.",

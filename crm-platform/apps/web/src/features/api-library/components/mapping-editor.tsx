@@ -6,11 +6,16 @@ import {
   API_LIBRARY_MAX_MAPPINGS,
   API_LIBRARY_MAX_RESPONSE_VARIABLES,
   API_LIBRARY_PATH_RE,
+  apiLibraryDuplicateMappingRows,
   type ApiLibraryContactProperty,
 } from '@crm/contracts';
 import { Button, Input, Select } from '@crm/ui';
 import { emptyMapping, type FormErrors, type MappingRow } from '../lib/form-model';
+import { numberWarning } from '../lib/mapping-warnings';
 import { leavesOf } from '../lib/paths';
+
+/** A value cut to one short line, for a hint or a picker entry. */
+const shortText = (value: string): string => (value.length > 40 ? `${value.slice(0, 39)}…` : value);
 
 /** "Pick a path from the last test response": a list of every value in the answer, so no path has to be typed from memory. */
 function PathPicker({
@@ -42,7 +47,7 @@ function PathPicker({
       <option value="">{options.length === 0 ? t('noPaths') : label}</option>
       {options.map((l) => (
         <option key={l.path} value={l.path}>
-          {l.path} = {l.value.length > 40 ? `${l.value.slice(0, 39)}…` : l.value}
+          {l.path} = {shortText(l.value)}
         </option>
       ))}
     </Select>
@@ -71,6 +76,15 @@ export function MappingEditor({
   const patch = (i: number, p: Partial<MappingRow>) =>
     onChange(rows.map((r, j) => (j === i ? { ...r, ...p } : r)));
   const known = new Set(properties.map((p) => p.key));
+  const duplicates = new Set(apiLibraryDuplicateMappingRows(rows));
+  const answers = useMemo(
+    () => new Map(leavesOf(lastJson).map((l) => [l.path, l.value])),
+    [lastJson],
+  );
+  /** What a path held in the last test: undefined before any test, null when the answer has no such path. */
+  const answerOf = (path: string): string | null | undefined =>
+    lastJson == null ? undefined : (answers.get(path) ?? null);
+  const typeOf = (key: string) => properties.find((p) => p.key === key)?.type;
 
   return (
     <div className="space-y-3">
@@ -103,6 +117,12 @@ export function MappingEditor({
             <tbody>
               {rows.map((r, i) => {
                 const err = errors.fields[`mapping:${r.id}`];
+                const propertyErr = errors.fields[`mappingProperty:${r.id}`];
+                const duplicate = duplicates.has(i);
+                const number =
+                  r.path.trim() === ''
+                    ? null
+                    : numberWarning(typeOf(r.contactProperty), answerOf(r.path.trim()));
                 return (
                   <tr key={r.id} className="align-top">
                     <td className="p-1">
@@ -140,6 +160,26 @@ export function MappingEditor({
                           </option>
                         ))}
                       </Select>
+                      {duplicate && (
+                        <p role="alert" className="mt-1 text-xs text-danger">
+                          {t('propertyDuplicate')}
+                        </p>
+                      )}
+                      {!duplicate && propertyErr !== undefined && (
+                        <p role="alert" className="mt-1 text-xs text-danger">
+                          {t('propertyRequired')}
+                        </p>
+                      )}
+                      {number?.kind === 'untested' && (
+                        <p role="status" className="mt-1 text-xs text-muted-foreground">
+                          {t('numberUntested')}
+                        </p>
+                      )}
+                      {number?.kind === 'text' && (
+                        <p role="status" className="mt-1 text-xs text-warning">
+                          {t('numberText', { value: shortText(number.value) })}
+                        </p>
+                      )}
                     </td>
                     <td className="p-1">
                       <Input

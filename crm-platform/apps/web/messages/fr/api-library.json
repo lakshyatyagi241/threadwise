@@ -303,7 +303,11 @@
         "choose": "Choisissez une propriété",
         "removeN": "Supprimer la ligne {n}",
         "pick": "Choisissez un chemin dans la dernière réponse du test",
-        "add": "Ajouter une ligne"
+        "add": "Ajouter une ligne",
+        "propertyDuplicate": "Une autre ligne enregistre dans cette propriété. Un champ ne reçoit qu’une valeur, choisissez donc une autre propriété.",
+        "propertyRequired": "Choisissez la propriété de contact dans laquelle cette ligne enregistre.",
+        "numberText": "Un champ numérique n’accepte que des nombres. Le dernier test a renvoyé « {value} » ici, et ce texte serait enregistré tel quel.",
+        "numberUntested": "Lancez un test pour vérifier que ce champ de réponse renvoie un nombre."
       },
       "responseVars": {
         "none": "Aucun champ exposé aux flux pour le moment.",

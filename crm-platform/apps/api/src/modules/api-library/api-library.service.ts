@@ -35,15 +35,16 @@ const MODULE_KEY = 'api_library';
 export const MAX_APIS = 200;
 
 /** The contact's own text fields a flow can write (the rule of ContactsService.setFieldFromFlow), with the words the picker shows. */
-export const WRITABLE_CONTACT_FIELDS: ReadonlyArray<{ key: string; label: string }> = [
-  { key: 'name', label: 'Name' },
-  { key: 'first_name', label: 'First name' },
-  { key: 'last_name', label: 'Last name' },
-  { key: 'email', label: 'Email' },
-  { key: 'title', label: 'Title' },
-  { key: 'language', label: 'Language' },
-  { key: 'address', label: 'Address' },
-];
+export const WRITABLE_CONTACT_FIELDS: ReadonlyArray<{ key: string; label: string; type: string }> =
+  [
+    { key: 'name', label: 'Name', type: 'text' },
+    { key: 'first_name', label: 'First name', type: 'text' },
+    { key: 'last_name', label: 'Last name', type: 'text' },
+    { key: 'email', label: 'Email', type: 'email' },
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'language', label: 'Language', type: 'text' },
+    { key: 'address', label: 'Address', type: 'text' },
+  ];
 
 export function isUniqueViolation(err: unknown): boolean {
   const e = err as { code?: string; cause?: { code?: string } } | null;
@@ -218,7 +219,12 @@ export class ApiLibraryService {
         ...WRITABLE_CONTACT_FIELDS.map((f) => ({ ...f, kind: 'system' as const })),
         ...feed.custom
           .filter((c) => !taken.has(c.key))
-          .map((c) => ({ key: c.key, label: c.name, kind: 'custom' as const })),
+          .map((c) => ({
+            key: c.key,
+            label: c.name,
+            type: c.type ?? 'text',
+            kind: 'custom' as const,
+          })),
       ],
     };
   }

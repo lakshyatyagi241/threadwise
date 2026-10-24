@@ -48,7 +48,7 @@ vi.mock('../api/hooks', () => ({
   useApiLibraryOptions: () => state.options,
   useApiLogApis: () => state.logApis,
   useContactProperties: () =>
-    q({ data: { data: [{ key: 'email', label: 'Email', kind: 'system' }] } }),
+    q({ data: { data: [{ key: 'email', label: 'Email', type: 'email', kind: 'system' }] } }),
 }));
 
 import { ApiFormScreen } from './api-form-screen';
@@ -56,6 +56,7 @@ import { ApiListScreen, ApiTable } from './api-list-screen';
 import { DeleteApiDialog } from './delete-api-dialog';
 import { LogsPanel } from './logs-panel';
 import { LogsScreen } from './logs-screen';
+import { MappingEditor } from './mapping-editor';
 import { PageHeader } from './page-chrome';
 import { Pagination } from './pagination';
 import { ResponseTree } from './response-tree';
@@ -352,6 +353,66 @@ describe('response tree', () => {
   it('cannot pick a key the path syntax cannot hold', () => {
     const out = html(<ResponseTree {...props} json={{ 'a b': 1 }} />);
     expect(out).toContain('path not supported');
+  });
+});
+
+describe('response mapping warnings', () => {
+  const properties = [
+    { key: 'name', label: 'Name', type: 'text', kind: 'system' as const },
+    { key: 'decimal_number', label: 'Decimal Number', type: 'decimal', kind: 'custom' as const },
+  ];
+  const row = (id: string, path: string, contactProperty: string) => ({
+    id,
+    path,
+    contactProperty,
+    defaultValue: '',
+  });
+  const mapping = (rows: ReturnType<typeof row>[], lastJson: unknown) =>
+    html(
+      <MappingEditor
+        rows={rows}
+        onChange={() => undefined}
+        properties={properties}
+        propertiesState="ready"
+        lastJson={lastJson}
+        errors={{ fields: {}, general: [] }}
+      />,
+    );
+  const answer = { slideshow: { title: 'Sample Slide Show', author: 'Yours Truly' } };
+
+  it('says two rows cannot save into one property, on both rows', () => {
+    const out = mapping(
+      [
+        row('m1', 'slideshow.title', 'decimal_number'),
+        row('m2', 'slideshow.author', 'decimal_number'),
+      ],
+      answer,
+    );
+    expect(out.split('Another row saves into this property').length - 1).toBe(2);
+  });
+
+  it('warns when the last test returned text for a number property', () => {
+    const out = mapping([row('m1', 'slideshow.title', 'decimal_number')], answer);
+    expect(out).toContain('A number field takes numbers only');
+    expect(out).toContain('Sample Slide Show');
+  });
+
+  it('asks for a test before judging a number property, and says nothing once a number is answered', () => {
+    expect(mapping([row('m1', 'slideshow.title', 'decimal_number')], null)).toContain(
+      'Run a test to check that this response field gives a number.',
+    );
+    expect(
+      mapping([row('m1', 'slideshow.title', 'decimal_number')], { slideshow: { title: 7 } }),
+    ).not.toContain('takes numbers only');
+  });
+
+  it('stays quiet for a text property, and for a path the answer does not have', () => {
+    expect(mapping([row('m1', 'slideshow.title', 'name')], answer)).not.toContain(
+      'takes numbers only',
+    );
+    expect(mapping([row('m1', 'slideshow.missing', 'decimal_number')], answer)).not.toContain(
+      'takes numbers only',
+    );
   });
 });
 

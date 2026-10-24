@@ -303,7 +303,11 @@
         "choose": "Elige una propiedad",
         "removeN": "Quitar la fila {n}",
         "pick": "Elige una ruta de la última respuesta de prueba",
-        "add": "Agregar fila"
+        "add": "Agregar fila",
+        "propertyDuplicate": "Otra fila guarda en esta propiedad. Un campo solo admite un valor, así que elige otra propiedad.",
+        "propertyRequired": "Elige la propiedad de contacto en la que guarda esta fila.",
+        "numberText": "Un campo numérico solo acepta números. La última prueba devolvió “{value}” aquí, y ese texto se guardaría tal cual.",
+        "numberUntested": "Haz una prueba para comprobar que este campo de la respuesta devuelve un número."
       },
       "responseVars": {
         "none": "Aún no hay campos expuestos a los flujos.",

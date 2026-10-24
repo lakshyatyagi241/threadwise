@@ -62,6 +62,8 @@ In the test response, select **+** beside a value to choose what it is for:
 - **Save as contact property** adds a row to the contact mapping. Choose the property it is written to, and a default to write when the field is empty.
 - **Both** does both.
 
+Two rows cannot save into the same contact property: only one value fits in a field, so the form asks you to pick another. A number property warns when the last test returned text for that row, because the text would be saved as it is.
+
 A value inside a list offers **this item** (`items[0].name`) or **every item** (`items[].name`, collected into a list). You can also add a path by hand, or pick one from the last test response.
 
 ## Logs

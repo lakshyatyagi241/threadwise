@@ -222,11 +222,27 @@ describe('validation with the shared rules', () => {
       mapping: [
         { id: 'm1', path: 'data.id', contactProperty: 'email', defaultValue: '' },
         { id: 'm2', path: 'data.id', contactProperty: 'phone', defaultValue: '' },
-        { id: 'm3', path: 'bad path', contactProperty: 'phone', defaultValue: '' },
+        { id: 'm3', path: 'bad path', contactProperty: 'title', defaultValue: '' },
       ],
     });
     const r = buildCreate(f);
     expect(!r.ok && Object.keys(r.errors.fields).sort()).toEqual(['mapping:m2', 'mapping:m3']);
+  });
+
+  it('flags two rows saving into one contact property, and a row with none, on the property', () => {
+    const f = form({
+      mapping: [
+        { id: 'm1', path: 'slideshow.title', contactProperty: 'decimal_number', defaultValue: '' },
+        { id: 'm2', path: 'slideshow.author', contactProperty: 'decimal_number', defaultValue: '' },
+        { id: 'm3', path: 'slideshow.date', contactProperty: '', defaultValue: '' },
+      ],
+    });
+    const r = buildCreate(f);
+    expect(!r.ok && Object.keys(r.errors.fields).sort()).toEqual([
+      'mappingProperty:m1',
+      'mappingProperty:m2',
+      'mappingProperty:m3',
+    ]);
   });
 
   it('update carries the row version and has no name', () => {

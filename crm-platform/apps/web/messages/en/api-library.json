@@ -304,7 +304,11 @@
         "choose": "Choose a property",
         "removeN": "Remove row {n}",
         "pick": "Pick a path from the last test response",
-        "add": "Add row"
+        "add": "Add row",
+        "propertyDuplicate": "Another row saves into this property. Only one value can go into a field, so pick a different one.",
+        "propertyRequired": "Choose the contact property this row saves into.",
+        "numberText": "A number field takes numbers only. The last test returned “{value}” here, and that text would be saved as it is.",
+        "numberUntested": "Run a test to check that this response field gives a number."
       },
       "responseVars": {
         "none": "No fields exposed to flows yet.",

@@ -303,7 +303,11 @@
         "choose": "Eigenschaft auswählen",
         "removeN": "Zeile {n} entfernen",
         "pick": "Wähle einen Pfad aus der letzten Testantwort",
-        "add": "Zeile hinzufügen"
+        "add": "Zeile hinzufügen",
+        "propertyDuplicate": "Eine andere Zeile speichert in dieselbe Eigenschaft. In ein Feld passt nur ein Wert, wähle daher eine andere Eigenschaft.",
+        "propertyRequired": "Wähle die Kontakteigenschaft, in die diese Zeile speichert.",
+        "numberText": "Ein Zahlenfeld nimmt nur Zahlen an. Der letzte Test lieferte hier „{value}“, und dieser Text würde unverändert gespeichert.",
+        "numberUntested": "Starte einen Test, um zu prüfen, ob dieses Antwortfeld eine Zahl liefert."
       },
       "responseVars": {
         "none": "Noch keine Felder für Flows freigegeben.",

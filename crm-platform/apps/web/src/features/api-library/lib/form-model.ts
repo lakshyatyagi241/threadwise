@@ -341,7 +341,7 @@ function definitionOf(state: ApiFormState) {
 }
 
 export interface FormErrors {
-  /** By field: `name`, `method`, `url`, `body`, `functionCode`, `payloadType`, `header:<rowId>`, `variable:<name>`, `mapping:<rowId>`. */
+  /** By field: `name`, `method`, `url`, `body`, `functionCode`, `payloadType`, `header:<rowId>`, `variable:<name>`, `mapping:<rowId>` (the path), `mappingProperty:<rowId>` (the contact property). */
   fields: Record<string, string>;
   /** Problems with no single field (shown above the buttons). */
   general: string[];
@@ -365,7 +365,10 @@ function mapIssues(issues: ZodIssue[], state: ApiFormState, headerRowIds: string
       put(`variable:${state.variables[n]!.name.toLowerCase()}`, issue.message);
     else if (head === 'variables') out.general.push(issue.message);
     else if (head === 'mapping' && n >= 0 && mappingRows[n])
-      put(`mapping:${mappingRows[n]!.id}`, issue.message);
+      put(
+        `${leaf === 'contactProperty' ? 'mappingProperty' : 'mapping'}:${mappingRows[n]!.id}`,
+        issue.message,
+      );
     else if (head === 'responseVariables') out.general.push(issue.message);
     else if (
       typeof head === 'string' &&

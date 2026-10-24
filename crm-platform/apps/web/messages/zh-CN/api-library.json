@@ -302,7 +302,11 @@
         "choose": "选择属性",
         "removeN": "删除第 {n} 行",
         "pick": "从上次测试响应中选择路径",
-        "add": "添加行"
+        "add": "添加行",
+        "propertyDuplicate": "另一行也保存到这个属性。一个字段只能放一个值，请换一个属性。",
+        "propertyRequired": "请选择这一行要保存到的联系人属性。",
+        "numberText": "数字字段只能保存数字。上次测试在这里返回了“{value}”，这段文字会原样保存。",
+        "numberUntested": "运行一次测试，确认这个响应字段返回的是数字。"
       },
       "responseVars": {
         "none": "尚无向流程开放的字段。",
