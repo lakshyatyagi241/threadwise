@@ -4,12 +4,35 @@ import type { FlowAiPort, FlowAiRequest, FlowAiResult } from './flow-ai.port';
 /** Reference's Node executor gave the Laravel endpoint 30 seconds; a vendor slower than that fails the node's turn. */
 const TIMEOUT_MS = 30_000;
 
+interface OpenAiCompatibleVendor {
+  baseEnv: string;
+  baseUrl: string;
+  /** OpenAI's current models reject `max_tokens` and take `max_completion_tokens`; the other vendors still take `max_tokens`. */
+  maxTokensKey: 'max_tokens' | 'max_completion_tokens';
+}
+
 /** Vendors that speak the OpenAI chat-completions dialect, with the environment variable that overrides the base URL (tests, gateways). */
-const OPENAI_COMPATIBLE: Record<string, { baseEnv: string; baseUrl: string }> = {
-  openai: { baseEnv: 'FLR_AI_OPENAI_BASE_URL', baseUrl: 'https://api.openai.com/v1' },
-  mistral: { baseEnv: 'FLR_AI_MISTRAL_BASE_URL', baseUrl: 'https://api.mistral.ai/v1' },
-  deepseek: { baseEnv: 'FLR_AI_DEEPSEEK_BASE_URL', baseUrl: 'https://api.deepseek.com/v1' },
-  groq: { baseEnv: 'FLR_AI_GROQ_BASE_URL', baseUrl: 'https://api.groq.com/openai/v1' },
+const OPENAI_COMPATIBLE: Record<string, OpenAiCompatibleVendor> = {
+  openai: {
+    baseEnv: 'FLR_AI_OPENAI_BASE_URL',
+    baseUrl: 'https://api.openai.com/v1',
+    maxTokensKey: 'max_completion_tokens',
+  },
+  mistral: {
+    baseEnv: 'FLR_AI_MISTRAL_BASE_URL',
+    baseUrl: 'https://api.mistral.ai/v1',
+    maxTokensKey: 'max_tokens',
+  },
+  deepseek: {
+    baseEnv: 'FLR_AI_DEEPSEEK_BASE_URL',
+    baseUrl: 'https://api.deepseek.com/v1',
+    maxTokensKey: 'max_tokens',
+  },
+  groq: {
+    baseEnv: 'FLR_AI_GROQ_BASE_URL',
+    baseUrl: 'https://api.groq.com/openai/v1',
+    maxTokensKey: 'max_tokens',
+  },
 };
 
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
@@ -43,7 +66,7 @@ export class HttpFlowAiAdapter implements FlowAiPort {
 
   private async openaiCompatible(
     req: FlowAiRequest,
-    vendor: { baseEnv: string; baseUrl: string },
+    vendor: OpenAiCompatibleVendor,
   ): Promise<FlowAiResult> {
     const base = (process.env[vendor.baseEnv]?.trim() || vendor.baseUrl).replace(/\/+$/, '');
     const json = (await this.post(
@@ -51,7 +74,7 @@ export class HttpFlowAiAdapter implements FlowAiPort {
       { authorization: `Bearer ${req.apiKey}` },
       {
         model: req.model,
-        max_tokens: req.maxTokens,
+        [vendor.maxTokensKey]: req.maxTokens,
         temperature: req.temperature,
         ...(req.json ? { response_format: { type: 'json_object' } } : {}),
         messages: [
