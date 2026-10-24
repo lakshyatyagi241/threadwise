@@ -1,4 +1,3 @@
--- bluegreen-ok: an_base_replies is a TEMP table created and dropped inside an_msg_feed_rebuild_base; no persistent table is dropped and the old slot never sees it.
 -- 2030_msg_feed_deletes
 -- The message feed rollup only ever added: a message deleted afterwards (by a person, or with its conversation) stayed counted, while the
 -- legacy query (FEED_MESSAGES, deleted_at IS NULL) reads the live table. On prod, workspace 15 showed 3,072 against 2,867 after the
