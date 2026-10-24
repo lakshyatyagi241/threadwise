@@ -865,3 +865,85 @@ describe('simulator: Answer from FAQ', () => {
     expect(h.texts().some((t) => t.includes('No path forward (port "no_match")'))).toBe(true);
   });
 });
+
+describe('simulator: cta messages, as the runtime sends them', () => {
+  /** The bot's messages of one cta node run with these data, in order. */
+  const botMessages = async (data: Record<string, unknown>) => {
+    const h = harness(
+      [node('t', 'trigger'), node('c', 'cta', data), node('e', 'end')],
+      [edge('t', 'out', 'c'), edge('c', 'out', 'e')],
+    );
+    h.sim.start();
+    h.sim.send('x');
+    await h.settle();
+    return h.log.filter((e) => e.kind === 'bot');
+  };
+
+  it('one web link is the message button; a call stays a text line of the same message', async () => {
+    const [msg, ...more] = await botMessages({
+      bodyText: 'Read more',
+      actions: [
+        { type: 'url', label: 'Shop', value: 'https://example.com/shop' },
+        { type: 'phone', label: 'Call us', value: '+91 98765 43210' },
+      ],
+    });
+    expect(more).toHaveLength(0);
+    expect(msg!.text).toBe('Read more\n☏ Call us: +91 98765 43210');
+    expect(msg!.choices).toEqual({
+      kind: 'links',
+      prompt: 'Read more\n☏ Call us: +91 98765 43210',
+      labels: ['Shop'],
+      links: [{ type: 'url', label: 'Shop', value: 'https://example.com/shop' }],
+    });
+  });
+
+  it('each further web link is a message of its own, labelled by its text (20 characters)', async () => {
+    const [first, second, third, ...rest] = await botMessages({
+      bodyText: 'Pick one',
+      actions: [
+        { type: 'url', label: 'Shop', value: 'https://example.com/shop' },
+        { type: 'url', label: 'Docs', value: 'https://example.com/docs' },
+        {
+          type: 'url',
+          label: 'Read the full article today',
+          value: 'https://example.com/article',
+        },
+        { type: 'url', label: 'Dropped', value: 'https://example.com/dropped' },
+      ],
+    });
+    expect(rest).toHaveLength(0);
+    expect(first!.text).toBe('Pick one');
+    expect(first!.choices?.links).toEqual([
+      { type: 'url', label: 'Shop', value: 'https://example.com/shop' },
+    ]);
+    expect(second!.text).toBe('Docs');
+    expect(second!.choices?.links).toEqual([
+      { type: 'url', label: 'Docs', value: 'https://example.com/docs' },
+    ]);
+    expect(third!.text).toBe('Read the full article today'.slice(0, 20));
+    expect(third!.choices?.links?.[0]?.value).toBe('https://example.com/article');
+  });
+
+  it('header and footer frame the message; no body falls back to the button text', async () => {
+    const [msg] = await botMessages({
+      headerText: 'Deal',
+      bodyText: '',
+      footerText: 'Ends soon',
+      actions: [{ type: 'url', label: 'Go', value: 'https://example.com/go' }],
+    });
+    expect(msg!.text).toBe('*Deal*\n\nGo\n\n_Ends soon_');
+    expect(msg!.choices?.labels).toEqual(['Go']);
+  });
+
+  it('a link that is not a web address is text, not a button; a copy code is text too', async () => {
+    const [msg] = await botMessages({
+      bodyText: 'Codes',
+      actions: [
+        { type: 'url', label: 'Site', value: 'example.com' },
+        { type: 'copy', label: 'Code', value: 'SAVE10' },
+      ],
+    });
+    expect(msg!.text).toBe('Codes\n\nSite: example.com\n\nCode:\n`SAVE10`');
+    expect(msg!.choices).toBeUndefined();
+  });
+});

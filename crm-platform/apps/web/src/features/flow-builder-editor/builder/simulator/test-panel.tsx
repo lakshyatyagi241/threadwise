@@ -52,37 +52,28 @@ function Choices({
 }): ReactElement {
   const tr = useTranslations('flb.builder.testRunner');
   const [open, setOpen] = useState(false);
+  const listRef = useRef<HTMLUListElement>(null);
   const pill =
     'flex w-full items-center justify-center gap-1.5 rounded-md border border-[#0b8a73]/40 bg-white px-2 py-1.5 text-[12.5px] font-medium text-[#0b8a73] transition disabled:cursor-default disabled:opacity-50 enabled:hover:bg-[#0b8a73]/10';
+  useEffect(() => {
+    // The chat clips at its bottom edge: an open menu near it would hide its last options until the chat is scrolled.
+    if (open) listRef.current?.scrollIntoView?.({ block: 'nearest' });
+  }, [open]);
   if (choices.kind === 'links') {
+    const cls = pill.replace('disabled:cursor-default disabled:opacity-50 ', '');
     return (
       <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5" data-testid="choices-links">
-        {(choices.links ?? []).map((l, i) => {
-          const phone = l.type === 'phone' || l.type === 'call_now';
-          const copy = l.type === 'copy';
-          const href = phone ? `tel:${l.value.replace(/\s+/g, '')}` : copy ? undefined : l.value;
-          const cls = pill.replace('disabled:cursor-default disabled:opacity-50 ', '');
-          return href ? (
-            <a
-              key={i}
-              className={`${cls} no-underline`}
-              href={href}
-              target={phone ? undefined : '_blank'}
-              rel="noopener noreferrer"
-            >
-              {l.label}
-            </a>
-          ) : (
-            <button
-              key={i}
-              type="button"
-              className={cls}
-              onClick={() => void navigator.clipboard?.writeText(l.value)}
-            >
-              {l.label}
-            </button>
-          );
-        })}
+        {(choices.links ?? []).map((l, i) => (
+          <a
+            key={i}
+            className={`${cls} no-underline`}
+            href={l.value}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {l.label}
+          </a>
+        ))}
       </div>
     );
   }
@@ -108,7 +99,10 @@ function Choices({
           {choices.button || tr('choose')}
         </button>
         {open && canPick && (
-          <ul className="max-h-44 overflow-y-auto rounded-md border border-black/10 bg-white">
+          <ul
+            ref={listRef}
+            className="max-h-44 overflow-y-auto rounded-md border border-black/10 bg-white"
+          >
             {choices.labels.map((l, i) => (
               <li key={i}>
                 <button
