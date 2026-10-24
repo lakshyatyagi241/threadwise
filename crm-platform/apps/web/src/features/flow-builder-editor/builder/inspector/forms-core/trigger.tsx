@@ -214,11 +214,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
 
       {kind === 'date_field_match' ? (
         <Field label={t('ext.fieldLabel')} hint={t('ext.fieldHint')}>
-          <TextInput
-            value={d.field}
-            placeholder="birthday"
-            onChange={(v) => set('field', v)}
-          />
+          <TextInput value={d.field} placeholder="birthday" onChange={(v) => set('field', v)} />
         </Field>
       ) : null}
 
