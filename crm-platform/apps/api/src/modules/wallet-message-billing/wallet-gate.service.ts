@@ -1,6 +1,8 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
+import { BillingModeService } from '../bsp-billing-engine';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { countryOfPhone } from './phone-country';
@@ -9,7 +11,8 @@ import { RateCardService } from './rate-card.service';
 import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
 import { WalletSettingsService } from './wallet-settings.service';
-import { launchVerdict } from './wallet-rules';
+import { UsageBillingService } from './usage-billing.service';
+import { launchVerdict, monthStart, planIsActive } from './wallet-rules';
 import { cacheMetrics, cacheSize } from '@crm/observability';
 
 const cache = cacheMetrics('wallet_send_ok');
@@ -66,7 +69,9 @@ export class WalletGateService {
     private readonly billing: BillingCurrencyService,
     private readonly settings: WalletSettingsService,
     private readonly plans: PlanEntitlementService,
+    private readonly mode: BillingModeService,
     private readonly log: WalletLogService,
+    private readonly usage: UsageBillingService,
   ) {}
 
   private readonly sendOk = new Map<string, number>();
@@ -155,6 +160,21 @@ export class WalletGateService {
   }
 
   /**
+   * The launch check of an SMS or email run (TW-WALLET-013): the balance must cover one message per recipient at the operator's SMS or
+   * email price, before any row exists (422 `WALLET_EMPTY` otherwise). These are priced by usage billing, not by the WhatsApp card that
+   * `assertCanLaunch` reads. One segment per SMS is assumed here (a lower bound); the SMS engine checks each message again before it
+   * leaves. A failed lookup lets the launch through, like the other gates. Nothing to send (0 recipients) passes.
+   */
+  async assertCanLaunchUsage(
+    orgId: number,
+    kind: 'sms' | 'email',
+    recipients: number,
+  ): Promise<void> {
+    if (recipients <= 0) return;
+    await this.usage.assertCanAfford(orgId, kind, recipients);
+  }
+
+  /**
    * What a send to `recipients` people would meet at the wallet right now: the verdict, the balance and the estimate (hundredths of the
    * workspace's billing currency). Null when the workspace is unknown. May throw (a billing read failed): the callers decide what that
    * means (the launch gate lets the send through, the composer's quote shows no estimate).
@@ -168,10 +188,17 @@ export class WalletGateService {
     const entitlements = await this.plans.forOrg(req.orgId);
     if (!entitlements) return null;
     const s = await this.settings.effective();
+    const now = new Date();
     const facts = await this.db.txAs({ orgId: req.orgId, userId: null }, async (tx) => {
       // The balance and the estimate are both in the workspace's billing currency.
       const unit = await this.billing.forOrg(tx, req.orgId);
       const wallet = await this.repo.peekWallet(tx, req.orgId, unit);
+      const payPerMessage = await this.mode.isPayPerMessage(tx, req.orgId);
+      const used = await tx.execute(sql`
+        SELECT messages FROM wallet_usage_months WHERE org_id = ${req.orgId} AND month = ${monthStart(now)}::date`);
+      const usedThisMonth = Number(
+        (used.rows[0] as { messages: number } | undefined)?.messages ?? 0,
+      );
       // One price per destination country, by the resolver that charges a delivered message (margins, Meta's card for this
       // currency and fixed prices included), so the estimate is the price it will really be charged at.
       const prices = new Map<string | null, number>();
@@ -191,11 +218,13 @@ export class WalletGateService {
         balance: wallet?.balanceMinor ?? 0,
         prices,
         currency: unit,
+        payPerMessage,
+        usedThisMonth,
       };
     });
     const balanceMinor = facts.balance;
 
-    // Every recipient is charged: the plan's monthly allowance no longer makes any of them free.
+    // Recipients beyond the plan's monthly allowance are charged: the allowance covers the first ones (launchVerdict).
     const price = (phone: string | null) =>
       facts.prices.get(phone ? countryOfPhone(phone) : null) ?? facts.prices.get(null) ?? 0;
     let estimateMinor: number | null = 0;
@@ -215,6 +244,11 @@ export class WalletGateService {
 
     const verdict = launchVerdict({
       platformOwned: entitlements.platformOwned,
+      payPerMessage: facts.payPerMessage,
+      planActive: planIsActive(entitlements, now),
+      monthlyLimit: resolveLimit(entitlements, 'monthly_messages'),
+      usedThisMonth: facts.usedThisMonth,
+      recipients: req.recipients,
       balanceMinor,
       estimateMinor,
       coveragePercent: s.launchCoveragePercent,
