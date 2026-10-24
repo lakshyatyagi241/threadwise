@@ -947,3 +947,128 @@ describe('simulator: cta messages, as the runtime sends them', () => {
     expect(msg!.choices).toBeUndefined();
   });
 });
+
+describe('simulator: carousel (website chat)', () => {
+  const card = (image: string, title: string, buttons: Array<Record<string, unknown>> = []) => ({
+    image,
+    title,
+    text: `${title} text`,
+    buttons,
+  });
+  const reply = (label: string) => ({ type: 'reply', label, value: '', team: '', note: '' });
+  const link = (type: string, label: string, value: string) => ({
+    type,
+    label,
+    value,
+    team: '',
+    note: '',
+  });
+
+  it('shows every card with its picture, JPEG, JPG and PNG alike', async () => {
+    const cards = [
+      card('https://cdn.example.com/photo.jpeg', 'JPEG', [reply('Pick')]),
+      card('https://cdn.example.com/photo.jpg', 'JPG', [reply('Pick')]),
+      card('https://cdn.example.com/photo.png', 'PNG', [reply('Pick')]),
+    ];
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', { text: 'Our range', cards, var: 'choice' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.text).toBe('Our range');
+    expect(shown.cards!.map((c) => c.image)).toEqual([
+      'https://cdn.example.com/photo.jpeg',
+      'https://cdn.example.com/photo.jpg',
+      'https://cdn.example.com/photo.png',
+    ]);
+    expect(shown.cards!.map((c) => c.title)).toEqual(['JPEG', 'JPG', 'PNG']);
+    expect(h.awaiting()).toBe(true);
+  });
+
+  it('a picture that is not a web address is not drawn, the card still shows', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', { cards: [card('ftp://x/photo.jpg', 'Bad picture', [reply('Ok')])] }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards![0]!.image).toBeNull();
+    expect(shown.cards![0]!.title).toBe('Bad picture');
+  });
+
+  it('a reply tap continues down that button exit, numbered in card order', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          card('https://cdn.example.com/a.jpg', 'First', [reply('Yes')]),
+          card('https://cdn.example.com/b.jpg', 'Second', [
+            link('url', 'Site', 'https://example.com'),
+            reply('No'),
+          ]),
+        ],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const edges = [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')];
+    const h = harness(nodes, edges);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('No', 1);
+    await h.settle();
+    expect(h.texts()).toContain('took no');
+    expect(h.texts()).not.toContain('took yes');
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards![1]!.buttons).toEqual([
+      { label: 'Site', exit: null, href: 'https://example.com' },
+      { label: 'No', exit: 1, href: null },
+    ]);
+  });
+
+  it('a typed answer is matched by the reply label', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [card('', 'Only', [reply('Yes')]), card('', 'Other', [reply('No')])],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('no');
+    await h.settle();
+    expect(h.texts()).toContain('took no');
+  });
+
+  it('a carousel with no reply button carries on by its next wire', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          card('https://cdn.example.com/a.png', 'Only', [
+            link('url', 'Open', 'https://example.com'),
+          ]),
+        ],
+      }),
+      node('m', 'message', { text: 'carried on' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'next', 'm')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    expect(h.texts()).toContain('carried on');
+    expect(h.awaiting()).toBe(false);
+  });
+});

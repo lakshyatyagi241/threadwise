@@ -912,7 +912,8 @@
             "saveCopy": "Guardar una copia",
             "saveCopyHint": "Guarda esta imagen en nuestro servidor para que el chat de cada visitante pueda mostrarla. Una imagen de un sitio que no permite compartirla no se puede copiar: súbela en su lugar.",
             "saving": "Guardando…",
-            "copyFailed": "No se pudo guardar una copia: {message}"
+            "copyFailed": "No se pudo guardar una copia: {message}",
+            "imageFormats": "Formatos aceptados: JPG, JPEG o PNG."
           },
           "condition": {
             "info": "Añade reglas (una variable, una comparación y un valor). Únelas con AND u OR y anida grupos cuando lo necesites.",

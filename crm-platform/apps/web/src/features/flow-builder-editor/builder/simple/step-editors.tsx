@@ -505,6 +505,9 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                   placeholder="https://"
                   onChange={(e) => patchCard(ci, { image: e.target.value })}
                 />
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  {t('carousel.imageFormats')}
+                </p>
                 {needsCopy(str(c.image)) ? (
                   <SaveCopy
                     url={str(c.image)}
