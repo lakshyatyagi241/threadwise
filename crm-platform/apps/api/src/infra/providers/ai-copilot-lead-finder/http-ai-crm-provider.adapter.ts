@@ -63,7 +63,14 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
       const json = (await this.post(
         `${base}/chat/completions`,
         { authorization: `Bearer ${input.apiKey}` },
-        { model: input.model, max_tokens: MAX_TOKENS, temperature: 0.2, messages, tools },
+        {
+          model: input.model,
+          // OpenAI's current models reject `max_tokens` and take `max_completion_tokens`.
+          max_completion_tokens: MAX_TOKENS,
+          temperature: 0.2,
+          messages,
+          tools,
+        },
       )) as {
         choices?: Array<{ message?: { content?: string; tool_calls?: OpenAiToolCall[] } }>;
         usage?: { prompt_tokens?: number; completion_tokens?: number };
