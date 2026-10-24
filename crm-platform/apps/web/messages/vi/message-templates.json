@@ -183,7 +183,8 @@
       "confirm": "Xóa mẫu",
       "cancel": "Hủy",
       "done": "Đã xóa “{name}”.",
-      "inUseHelp": "Mở chiến dịch Gửi hàng loạt đang dùng mẫu này rồi hủy hoặc chọn mẫu khác, sau đó xóa mẫu này."
+      "inUseHelp": "Mở chiến dịch Gửi hàng loạt đang dùng mẫu này rồi hủy hoặc chọn mẫu khác, sau đó xóa mẫu này.",
+      "messageDraft": "Xóa “{name}”? Mẫu này chưa từng được gửi tới Meta nên chỉ bị xóa ở đây."
     },
     "lint": {
       "title": "Kiểm tra trước khi gửi",

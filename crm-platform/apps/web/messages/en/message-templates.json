@@ -173,6 +173,7 @@
     "delete": {
       "title": "Delete template",
       "message": "Delete \"{name}\"? It is removed here and on Meta, and it can no longer be sent.",
+      "messageDraft": "Delete \"{name}\"? It has never been sent to Meta, so it is only removed here.",
       "confirm": "Delete template",
       "cancel": "Cancel",
       "done": "Deleted \"{name}\".",

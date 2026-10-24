@@ -183,7 +183,8 @@
       "confirm": "Elimina template",
       "cancel": "Annulla",
       "done": "«{name}» eliminato.",
-      "inUseHelp": "Apri il broadcast che usa questo template e annullalo oppure scegli un altro template, poi elimina questo."
+      "inUseHelp": "Apri il broadcast che usa questo template e annullalo oppure scegli un altro template, poi elimina questo.",
+      "messageDraft": "Eliminare “{name}”? Non è mai stato inviato a Meta, quindi viene rimosso solo qui."
     },
     "lint": {
       "title": "Controlli prima dell’invio",

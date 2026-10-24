@@ -183,7 +183,8 @@
       "confirm": "Sjabloon verwijderen",
       "cancel": "Annuleren",
       "done": "\"{name}\" verwijderd.",
-      "inUseHelp": "Open de broadcast die dit sjabloon gebruikt en annuleer die of kies een ander sjabloon, en verwijder daarna dit sjabloon."
+      "inUseHelp": "Open de broadcast die dit sjabloon gebruikt en annuleer die of kies een ander sjabloon, en verwijder daarna dit sjabloon.",
+      "messageDraft": "„{name}” verwijderen? Hij is nooit naar Meta verzonden, dus hij wordt alleen hier verwijderd."
     },
     "lint": {
       "title": "Controles vóór indienen",

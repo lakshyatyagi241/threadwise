@@ -183,7 +183,8 @@
       "confirm": "Şablonu sil",
       "cancel": "İptal",
       "done": "\"{name}\" silindi.",
-      "inUseHelp": "Bu şablonu kullanan toplu gönderimi açın ve iptal edin ya da başka bir şablon seçin; ardından bunu silin."
+      "inUseHelp": "Bu şablonu kullanan toplu gönderimi açın ve iptal edin ya da başka bir şablon seçin; ardından bunu silin.",
+      "messageDraft": "“{name}” silinsin mi? Meta’ya hiç gönderilmedi, bu yüzden yalnızca burada kaldırılacak."
     },
     "lint": {
       "title": "Gönderim öncesi kontroller",
