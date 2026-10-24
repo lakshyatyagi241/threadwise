@@ -242,9 +242,33 @@ describe('More hub (TW-ASHELL-020, 021)', () => {
     ).toBeNull();
     const raw = JSON.stringify([
       { id: 'c9', title: 'Gone', href: '', custom: true },
-      { id: 'ok', title: 'Ok', href: '/ok' },
+      { id: 'ok', title: 'Ok', href: '/ok', custom: true },
     ]);
     expect(loadShortcuts(raw, defaults).map((s) => s.id)).toEqual(['ok']);
+  });
+
+  it('drops a saved preset that is no longer offered (New auto reply, /auto-reply is a 404), keeps the rest', () => {
+    const raw = JSON.stringify([
+      {
+        id: 'new-auto-reply',
+        title: 'New auto reply',
+        subtitle: '',
+        href: '/auto-reply',
+        icon: 'reply',
+      },
+      {
+        id: 'schedule-send',
+        title: 'Schedule send',
+        subtitle: '',
+        href: '/scheduled',
+        icon: 'clock',
+      },
+      { id: 'constructor', title: 'Odd', subtitle: '', href: '/odd', icon: 'link' },
+      { id: 'mine', title: 'Mine', subtitle: '', href: '/reports', icon: 'link', custom: true },
+    ]);
+    const list = loadShortcuts(raw, defaults);
+    expect(list.map((s) => s.id)).toEqual(['schedule-send', 'mine']);
+    expect(list.map((s) => s.href)).toEqual(['/scheduled', '/reports']);
   });
 
   it('cannot add the same preset twice, and moves entries up and down', () => {
