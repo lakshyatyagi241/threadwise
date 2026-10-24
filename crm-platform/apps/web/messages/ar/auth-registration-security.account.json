@@ -566,7 +566,9 @@
             "record_assignment": "قواعد تعيين السجلات",
             "team_hierarchy": "التسلسل الهرمي للفرق والمديرون",
             "custom_roles": "أدوار مخصصة ونطاقات",
-            "inbox_assignment_sticky": "التوجيه الذكي: مالك جهة الاتصال والوكيل الثابت"
+            "inbox_assignment_sticky": "التوجيه الذكي: مالك جهة الاتصال والوكيل الثابت",
+            "agent_status_bar": "شريط الحالة",
+            "agent_status_automation": "أتمتة الحالة"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

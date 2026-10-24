@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Dostępny",
+        "away": "Nieobecny",
+        "onLeaveUntil": "Na urlopie do {date}",
+        "onLeaveOpen": "Na urlopie",
+        "awayHours": "Nieobecny poza godzinami pracy",
+        "label": "Twój status"
+      },
+      "menu": {
+        "title": "Menu statusu",
+        "update": "Zaktualizuj status",
+        "setAway": "Ustaw jako nieobecny",
+        "setAvailable": "Ustaw jako dostępny",
+        "failed": "Nie udało się zmienić statusu.",
+        "automate": "Automatyzuj status",
+        "manage": "Zarządzaj godzinami pracy i nieobecnością",
+        "workingHours": "Godziny pracy",
+        "timeOff": "Urlop",
+        "outsideNotice": "Poza godzinami pracy",
+        "locked": "Pasek statusu jest zawarty w wyższym planie. Przełącznik Dostępny / Nieobecny w menu konta nadal działa."
+      },
+      "hours": {
+        "title": "Twoje godziny pracy",
+        "titleFor": "Godziny pracy: {name}",
+        "lead": "Wybierz, kiedy jesteś dostępny. Poza tymi godzinami Twój status automatycznie zmienia się na Nieobecny.",
+        "leadOther": "Wybierz, kiedy ta osoba jest dostępna. Poza tymi godzinami jej status automatycznie zmienia się na Nieobecny.",
+        "locked": "Automatyczny status według godzin pracy jest zawarty w wyższym planie.",
+        "viewOnly": "Możesz zobaczyć te godziny, ale nie możesz ich zmienić.",
+        "automate": "Automatyzuj mój status",
+        "automateHint": "Nieobecny poza tymi godzinami, Dostępny w ich trakcie. Status ustawiony ręcznie trwa do kolejnej zmiany godzin.",
+        "emptyWarning": "Żaden dzień nie jest otwarty, więc zawsze będziesz widoczny jako Dostępny. Otwórz co najmniej jeden dzień.",
+        "timezone": "Strefa czasowa",
+        "timezoneHint": "Punktem wyjścia jest strefa czasowa Twojego obszaru roboczego ({zone}).",
+        "useWorkspaceZone": "Użyj strefy czasowej obszaru roboczego"
+      },
+      "members": {
+        "hoursAction": "Godziny pracy"
+      }
+    }
+  }
+}

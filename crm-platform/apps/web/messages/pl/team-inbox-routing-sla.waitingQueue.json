@@ -28,9 +28,9 @@
         "message": "Napisz wiadomość."
       },
       "away": "Zwracaj nieodpowiedziane czaty, gdy ktoś jest nieobecny",
-      "awayBody": "Gdy ktoś przejdzie w tryb Offline lub zacznie urlop, czaty, na które klient wciąż czeka, wracają do kolejki zespołu.",
-      "offline": "Ustawiaj nieaktywne osoby jako Offline",
-      "offlineBody": "Osoba Dostępna, która nic nie zrobiła przez ten czas, zostaje ustawiona jako Offline. Sama wraca do trybu Dostępny."
+      "awayBody": "Gdy osoba zmienia status na Nieobecny lub zaczyna urlop, jej czaty, na które klient nadal czeka, wracają do kolejki zespołu.",
+      "offline": "Ustawiaj nieaktywne osoby jako nieobecne",
+      "offlineBody": "Dostępna osoba, która przez ten czas nic nie zrobiła, zostaje ustawiona jako Nieobecna. Sama może wrócić do Dostępnego."
     }
   }
 }

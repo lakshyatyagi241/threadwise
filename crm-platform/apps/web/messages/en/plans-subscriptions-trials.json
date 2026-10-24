@@ -67,6 +67,8 @@
       "inbox_sla": "SLA policies",
       "inbox_routing": "Smart routing: auto-assignment and rules",
       "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
+      "agent_status_bar": "Status bar: Available / Away control in the top bar and the Inbox",
+      "agent_status_automation": "Automate status: personal working hours and automatic Away",
       "waba_calling": "WhatsApp calling",
       "inbox_kanban": "Kanban view",
       "team_performance": "Team performance",

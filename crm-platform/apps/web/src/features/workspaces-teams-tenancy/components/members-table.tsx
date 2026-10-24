@@ -17,7 +17,7 @@ import {
   roleOptions,
 } from '../lib/roles';
 import { Avatar } from './parts';
-import { CalendarIcon, LockIcon, MailIcon, PencilIcon, TrashIcon } from './icons';
+import { CalendarIcon, ClockIcon, LockIcon, MailIcon, PencilIcon, TrashIcon } from './icons';
 
 export interface RowActions {
   onRole: (member: WspMember, roleId: string) => void;
@@ -28,6 +28,8 @@ export interface RowActions {
   onLeave: (member: WspMember) => void;
   /** Opens the Change member dialog (phone number and chat limit). */
   onEdit: (member: WspMember) => void;
+  /** Opens the working hours dialog of this member (Settings > Team, the hours that can set their status to Away). */
+  onHours?: (member: WspMember) => void;
   /** The workspace's time zone, in which the last login is shown. */
   timeZone: string | null;
   /** Open leaves of the workspace and its calendar day, for the badge beside a name. */
@@ -82,6 +84,7 @@ function MemberRow({
 }) {
   const t = useTranslations('workspaces-teams-tenancy.members');
   const tt = useTranslations('workspaces-teams-tenancy.tiers');
+  const ts = useTranslations('workspaces-teams-tenancy.status');
   const locale = useLocale();
   const current = primaryRole(member);
   const joined = joinedDate(member.joinedAt, locale);
@@ -219,6 +222,17 @@ function MemberRow({
               onClick={() => actions.onLeave(member)}
             >
               <CalendarIcon />
+            </IconAction>
+          )}
+          {member.status === 'active' && actions.onHours && (
+            <IconAction
+              label={ts('members.hoursAction')}
+              tone="primary"
+              disabled={busy}
+              testId={`hours-${member.email}`}
+              onClick={() => actions.onHours?.(member)}
+            >
+              <ClockIcon />
             </IconAction>
           )}
           {canResend(member, me) && (

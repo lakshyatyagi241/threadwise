@@ -1449,7 +1449,9 @@
             "record_assignment": "Menugaskan kontak, perusahaan, dan transaksi baru ke pemilik penjualan yang tepat berdasarkan aturan prioritas.",
             "team_hierarchy": "Tim induk, ketua tim, dan manajer yang melihat timnya serta tim di bawahnya.",
             "custom_roles": "Buat dan ubah peran, lalu pilih cakupan (milik sendiri, tim, atau semua data) untuk setiap izin.",
-            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron, jendela kontak yang kembali, dan pertanyaan saat menugaskan ulang. Bagian dari add-on Perutean cerdas."
+            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron, jendela kontak yang kembali, dan pertanyaan saat menugaskan ulang. Bagian dari add-on Perutean cerdas.",
+            "agent_status_bar": "Kontrol status Tersedia / Tidak di tempat di bilah atas dan di bagian atas Kotak Masuk, dengan Setel sebagai tidak di tempat / tersedia dan tautan ke Cuti. Sakelar Tersedia / Tidak di tempat di menu akun terbuka untuk semua paket.",
+            "agent_status_automation": "Jam kerja pribadi dengan zona waktu, Tidak di tempat di luar jam itu, pemberitahuan Di luar jam kerja, dan penugasan yang melewati orang di luar jam kerjanya. Diperlukan untuk menyimpan jadwal; tanpanya jadwal yang tersimpan dipertahankan tetapi diabaikan."
           },
           "units": {
             "days": "Hari",
@@ -1644,7 +1646,9 @@
             "record_assignment": "Aturan penugasan data (tugaskan otomatis kontak, perusahaan, dan transaksi)",
             "team_hierarchy": "Hierarki tim dan manajer",
             "custom_roles": "Peran kustom dan cakupan",
-            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
+            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap",
+            "agent_status_bar": "Bilah status: kontrol Tersedia / Tidak di tempat di bilah atas dan Kotak Masuk",
+            "agent_status_automation": "Otomatiskan status: jam kerja pribadi dan Tidak di tempat otomatis"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",

@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Available",
+        "away": "Away",
+        "onLeaveUntil": "On leave until {date}",
+        "onLeaveOpen": "On leave",
+        "awayHours": "Away outside working hours",
+        "label": "Your status"
+      },
+      "menu": {
+        "title": "Status menu",
+        "update": "Update status",
+        "setAway": "Set as away",
+        "setAvailable": "Set as available",
+        "failed": "Could not change your status.",
+        "automate": "Automate status",
+        "manage": "Manage working hours and out of office",
+        "workingHours": "Working hours",
+        "timeOff": "Time off",
+        "outsideNotice": "Outside of working hours",
+        "locked": "The status bar is included in a higher plan. The Available / Away switch in your account menu still works."
+      },
+      "hours": {
+        "title": "Your working hours",
+        "titleFor": "Working hours of {name}",
+        "lead": "Choose when you are available. Outside these hours your status switches to Away by itself.",
+        "leadOther": "Choose when this person is available. Outside these hours their status switches to Away by itself.",
+        "locked": "Automatic status from working hours is included in a higher plan.",
+        "viewOnly": "You can see these hours but not change them.",
+        "automate": "Automate my status",
+        "automateHint": "Away outside these hours, Available inside them. A status you set by hand lasts until the next change of hours.",
+        "emptyWarning": "No day is open, so you will always show as Available. Open at least one day.",
+        "timezone": "Time zone",
+        "timezoneHint": "Starts from your workspace time zone ({zone}).",
+        "useWorkspaceZone": "Use the workspace time zone"
+      },
+      "members": {
+        "hoursAction": "Working hours"
+      }
+    }
+  }
+}

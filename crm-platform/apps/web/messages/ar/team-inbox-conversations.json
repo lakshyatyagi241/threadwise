@@ -548,17 +548,17 @@
         "onLeave": "في إجازة",
         "onLeaveUntil": "في إجازة حتى {date}",
         "availability": {
-          "online": "متصل",
-          "away": "بعيد",
+          "online": "متاح",
+          "away": "بعيد، خارج ساعات العمل",
           "busy": "مشغول",
-          "offline": "غير متصل"
+          "offline": "بعيد"
         }
       },
       "presence": {
-        "online": "متصل",
-        "away": "غائب",
+        "online": "متاح",
+        "away": "بعيد، خارج ساعات العمل",
         "busy": "مشغول",
-        "offline": "غير متصل"
+        "offline": "بعيد"
       },
       "notes": {
         "tab": "ملاحظات جهة الاتصال",

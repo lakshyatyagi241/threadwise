@@ -28,9 +28,9 @@
         "message": "Schrijf het bericht."
       },
       "away": "Onbeantwoorde chats teruggeven als iemand afwezig is",
-      "awayBody": "Wanneer iemand Offline gaat of verlof start, gaan de chats die diegene heeft en waar de klant nog op wacht terug naar de wachtrij van het team.",
-      "offline": "Inactieve mensen op Offline zetten",
-      "offlineBody": "Iemand die Beschikbaar is maar zo lang niets heeft gedaan, wordt op Offline gezet. Diegene zet zichzelf weer op Beschikbaar."
+      "awayBody": "Als iemand op Afwezig gaat of verlof start, gaan de chats die diegene heeft en waarop de klant nog wacht terug naar de wachtrij van het team.",
+      "offline": "Inactieve mensen op Afwezig zetten",
+      "offlineBody": "Een beschikbare persoon die zo lang niets heeft gedaan, wordt op Afwezig gezet. Diegene kan zelf weer op Beschikbaar overschakelen."
     }
   }
 }

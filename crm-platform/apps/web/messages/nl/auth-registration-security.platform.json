@@ -1449,7 +1449,9 @@
             "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar.",
             "team_hierarchy": "Bovenliggende teams, teamleiders en managers die hun team en de teams eronder zien.",
             "custom_roles": "Maak en bewerk rollen en kies per recht een bereik (eigen, team of alle records).",
-            "inbox_assignment_sticky": "Toewijzing met eigenaar eerst en synchroon, het venster voor terugkerende contacten en de vraag bij hertoewijzing. Onderdeel van de add-on Slimme routering."
+            "inbox_assignment_sticky": "Toewijzing met eigenaar eerst en synchroon, het venster voor terugkerende contacten en de vraag bij hertoewijzing. Onderdeel van de add-on Slimme routering.",
+            "agent_status_bar": "De statusknop Beschikbaar / Afwezig in de bovenbalk en bovenaan de Inbox, met Instellen als afwezig / beschikbaar en de link naar Verlof. De schakelaar Beschikbaar / Afwezig in het accountmenu staat open voor elk abonnement.",
+            "agent_status_automation": "Persoonlijke werktijden met tijdzone, Afwezig daarbuiten, de melding Buiten werktijd en toewijzing die mensen buiten hun tijden overslaat. Nodig om een rooster op te slaan; zonder blijft een opgeslagen rooster bewaard maar wordt het genegeerd."
           },
           "units": {
             "days": "Dagen",
@@ -1644,7 +1646,9 @@
             "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)",
             "team_hierarchy": "Teamhiërarchie en managers",
             "custom_roles": "Eigen rollen en bereiken",
-            "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
+            "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker",
+            "agent_status_bar": "Statusbalk: knop Beschikbaar / Afwezig in de bovenbalk en de Inbox",
+            "agent_status_automation": "Status automatiseren: persoonlijke werktijden en automatisch afwezig"
           },
           "problems": {
             "required": "Dit veld is verplicht.",

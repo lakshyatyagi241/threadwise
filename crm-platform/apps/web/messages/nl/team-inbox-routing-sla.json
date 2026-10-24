@@ -151,7 +151,7 @@
         "outside": "Alleen buiten zakelijke uren"
       },
       "thenTitle": "Toewijzen aan",
-      "thenHint": "Medewerkers die inactief, offline, bezig zijn of de inbox niet kunnen openen, worden overgeslagen.",
+      "thenHint": "Inactieve, afwezige of bezette agenten en agenten die de inbox niet kunnen openen worden overgeslagen.",
       "strategy": "Hoe kiezen",
       "strategyHint": {
         "round_robin": "Om de beurt: de gesprekken gaan om de beurt naar de gekozen medewerkers, zodat iedereen even veel krijgt. De regel onthoudt wie de volgende is.",
@@ -288,10 +288,10 @@
         "lastSeen": "Laatst gezien"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Afwezig",
+        "online": "Beschikbaar",
+        "away": "Afwezig, buiten werktijd",
         "busy": "Bezet",
-        "offline": "Offline"
+        "offline": "Afwezig"
       }
     },
     "businessHours": {

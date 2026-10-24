@@ -76,7 +76,7 @@
       "unknownPerson": "Ex-membro",
       "unknownTeam": "Equipe removida",
       "teamName": "Equipe: {name}",
-      "skipsOffline": "Ignora pessoas que estão offline",
+      "skipsOffline": "Ignora pessoas ausentes",
       "reassigns": "Reatribui ao atualizar",
       "activeFor": "A regra {name} está ativa",
       "dragHandle": "Arraste {name} para mudar sua prioridade",
@@ -136,7 +136,7 @@
         "noPeople": "Nenhuma pessoa encontrada.",
         "removePerson": "Remover {name}",
         "onLeave": "de licença",
-        "skipOffline": "Ignorar pessoas que estão offline",
+        "skipOffline": "Ignorar pessoas ausentes",
         "skipOfflineHint": "Pessoas de licença são sempre ignoradas.",
         "reassign": "Reatribuir quando uma atualização fizer o registro passar a corresponder a esta regra",
         "reassignHint": "Vale apenas para registros que este mecanismo atribuiu por conta própria, e só enquanto ninguém tiver alterado o responsável desde então. Desativado por padrão: um registro é atribuído uma única vez."
@@ -220,7 +220,7 @@
         "disabled": "A atribuição de registros está desativada neste espaço de trabalho, então nada aconteceria.",
         "has_owner": "{record} já tem um responsável, então nenhuma regra seria executada. Um responsável definido por alguém nunca é substituído.",
         "no_rule": "Nenhuma regra ativa corresponde a {record}.",
-        "nobody_available": "Uma regra corresponde a {record}, mas todos os nomeados estão de licença, offline ou não estão mais aqui.",
+        "nobody_available": "Uma regra corresponde a {record}, mas todas as pessoas que ela nomeia estão de licença, ausentes ou não estão mais aqui.",
         "plan": "Seu plano não inclui regras de atribuição de registros.",
         "not_found": "Esse registro não foi encontrado. Ele pode ter sido excluído ou estar fora do que você pode ver."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: não pode abrir este tipo de registro",
         "inactive": "{name}: não está mais ativo",
         "on_leave": "{name}: de licença hoje",
-        "offline": "{name}: offline"
+        "offline": "{name}: ausente"
       }
     },
     "log": {

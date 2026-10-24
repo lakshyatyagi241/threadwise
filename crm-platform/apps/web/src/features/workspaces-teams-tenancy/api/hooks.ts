@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import {
   wspMemberSchema,
   wspTeamSchema,
+  type AgentStatus,
+  type UpdateMemberWorkingHoursInput,
   type WspAvailability,
   type WspRoleTier,
 } from '@crm/contracts';
@@ -17,6 +19,7 @@ export const KEYS = {
   members: ['workspaces-teams-tenancy', 'members'] as const,
   teams: ['workspaces-teams-tenancy', 'teams'] as const,
   availability: ['workspaces-teams-tenancy', 'availability'] as const,
+  hours: (id: string) => ['workspaces-teams-tenancy', 'working-hours', id] as const,
 };
 
 /** Header numbers, the roles the caller may grant, the seat line and what the caller may do. */
@@ -73,22 +76,47 @@ export function useRefreshWorkspace() {
   return () => qc.invalidateQueries({ queryKey: KEYS.all });
 }
 
-/** The caller's own Available / Offline switch. A failed read (an operator session, no network) simply hides the control. */
+/** Longest a timer may wait (setTimeout overflows past about 24.8 days). */
+const MAX_TIMER_MS = 2_000_000_000;
+
+/**
+ * The caller's own status (Available / Away and why). A failed read (an operator session, no network) simply hides the control.
+ * It follows what changes it without a click: another tab (refetch on focus and every minute), a schedule boundary (a timer at the
+ * `changesAt` the server announced), a leave starting at midnight.
+ */
 export function useMyAvailability() {
   const qc = useQueryClient();
   const query = useQuery({
     queryKey: KEYS.availability,
     queryFn: ({ signal }) => wspApi.myAvailability(signal),
     retry: false,
-    staleTime: 60_000,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
+    refetchInterval: 60_000,
   });
+  const changesAt = query.data?.changesAt ?? null;
+  useEffect(() => {
+    if (!changesAt) return;
+    const wait = Math.min(Math.max(Date.parse(changesAt) - Date.now() + 1000, 1000), MAX_TIMER_MS);
+    const id = setTimeout(() => void qc.invalidateQueries({ queryKey: KEYS.availability }), wait);
+    return () => clearTimeout(id);
+  }, [changesAt, qc]);
   const set = useMutation({
     mutationFn: (status: WspAvailability['status']) => wspApi.setMyAvailability({ status }),
     // The switch moves at once; a failed call puts it back.
     onMutate: async (status) => {
       await qc.cancelQueries({ queryKey: KEYS.availability });
-      const previous = qc.getQueryData<WspAvailability>(KEYS.availability);
-      qc.setQueryData<WspAvailability>(KEYS.availability, { status });
+      const previous = qc.getQueryData<AgentStatus>(KEYS.availability);
+      if (previous) {
+        qc.setQueryData<AgentStatus>(KEYS.availability, {
+          ...previous,
+          status,
+          state: status === 'online' ? 'available' : 'away',
+          reason: 'manual',
+          manual: true,
+          leaveUntil: null,
+        });
+      }
       return { previous };
     },
     onError: (_err, _status, ctx) => {
@@ -97,4 +125,27 @@ export function useMyAvailability() {
     onSuccess: (data) => qc.setQueryData(KEYS.availability, data),
   });
   return { query, set };
+}
+
+/** The working hours of the caller (`me`) or, for a manager, of a member; read only while `enabled`. */
+export function useWorkingHours(id: string, enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.hours(id),
+    queryFn: ({ signal }) => wspApi.workingHours(id, signal),
+    enabled,
+    retry: false,
+    staleTime: 0,
+  });
+}
+
+export function useSaveWorkingHours(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UpdateMemberWorkingHoursInput) => wspApi.saveWorkingHours(id, input),
+    onSuccess: async (data) => {
+      qc.setQueryData(KEYS.hours(id), data);
+      await qc.invalidateQueries({ queryKey: KEYS.availability });
+      await qc.invalidateQueries({ queryKey: KEYS.members });
+    },
+  });
 }

@@ -91,7 +91,9 @@
       "record_assignment": "Quy tắc phân công bản ghi",
       "team_hierarchy": "Phân cấp nhóm và quản lý",
       "custom_roles": "Vai trò tùy chỉnh và phạm vi",
-      "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
+      "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định",
+      "agent_status_bar": "Thanh trạng thái: điều khiển Sẵn sàng / Vắng mặt trên thanh trên cùng và Hộp thư đến",
+      "agent_status_automation": "Tự động hóa trạng thái: giờ làm việc cá nhân và Vắng mặt tự động"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",

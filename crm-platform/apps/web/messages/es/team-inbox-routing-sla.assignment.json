@@ -18,7 +18,7 @@
         "needsAuto": "Solo se usa mientras la Asignación automática está activada.",
         "auto": {
           "title": "Asignación automática",
-          "body": "Los chats nuevos se reparten de forma equitativa entre los agentes que aceptan chats (no desconectados, ocupados ni de baja). Cuando todos los agentes han alcanzado su límite de chats, los chats nuevos esperan en la cola.",
+          "body": "Los chats nuevos se reparten por igual entre los agentes que aceptan chats (no ausentes, ocupados ni de baja). Cuando todos los agentes alcanzan su límite de chats, los chats nuevos esperan en la cola.",
           "limitHint": "Define el límite de chats de cada agente en su perfil, en <link>Miembros del equipo</link>.",
           "off": "Desactivado: no se asigna nada automáticamente, ni por una regla ni por el propietario del contacto. Los chats esperan en la cola hasta que alguien los tome o un flujo indique a una persona."
         },
@@ -85,7 +85,7 @@
         "notSet": "Aún sin configurar: los chats que ninguna regla toma esperan en la cola.",
         "mode": "Qué pasa con esos chats",
         "evenly": "Repartir de forma equitativa entre todos los agentes",
-        "evenlyHint": "Por turnos o al menos ocupado entre todos los que pueden abrir la bandeja de entrada y están disponibles: no desconectados, ocupados, de baja ni en su límite de chats.",
+        "evenlyHint": "Rotación o menos ocupado entre todos los que pueden abrir la bandeja y están disponibles: no ausentes, ocupados, de baja ni en su límite de chats.",
         "listed": "Elegir agentes o equipos",
         "listedNow": "Ahora: {who}.",
         "listedEdit": "Cambiar los agentes o equipos",
@@ -185,11 +185,12 @@
         "skippedTitle": "Excluidos",
         "skip": {
           "on_leave": "de baja",
-          "offline_busy_or_at_capacity": "desconectado, ocupado o en su límite de chats",
+          "offline_busy_or_at_capacity": "ausente, ocupado o en su límite de chats",
           "cannot_read": "no puede abrir la bandeja de entrada",
           "no_owner": "el contacto no tiene propietario",
           "no_previous_handler_in_window": "no hay un agente anterior para este contacto",
-          "not_an_active_member": "no es un miembro activo"
+          "not_an_active_member": "no es un miembro activo",
+          "outside_working_hours": "fuera de su horario laboral"
         },
         "outside": "Simular que es fuera del horario laboral",
         "inside": "Simular que es dentro del horario laboral",

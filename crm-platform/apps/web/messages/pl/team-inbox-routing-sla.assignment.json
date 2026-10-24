@@ -18,7 +18,7 @@
         "needsAuto": "Działa tylko wtedy, gdy włączone jest Automatyczne przypisywanie.",
         "auto": {
           "title": "Automatyczne przypisywanie",
-          "body": "Nowe czaty są dzielone po równo między agentów, którzy przyjmują czaty (nie są offline, zajęci ani na urlopie). Gdy każdy agent osiągnie swój limit czatów, nowe czaty czekają w kolejce.",
+          "body": "Nowe czaty są dzielone po równo między agentów przyjmujących czaty (nie nieobecnych, zajętych ani na urlopie). Gdy każdy agent osiągnie limit czatów, nowe czaty czekają w kolejce.",
           "limitHint": "Limit czatów każdego agenta ustawisz w jego profilu w sekcji <link>Członkowie zespołu</link>.",
           "off": "Wyłączone: nic nie jest przypisywane automatycznie, ani przez regułę, ani przez właściciela kontaktu. Czaty czekają w kolejce, aż ktoś je przejmie lub przepływ wskaże osobę."
         },
@@ -85,7 +85,7 @@
         "notSet": "Jeszcze nie skonfigurowano: czaty, których nie przejmie żadna reguła, czekają w kolejce.",
         "mode": "Co dzieje się z tymi czatami",
         "evenly": "Rozdziel po równo między wszystkich agentów",
-        "evenlyHint": "Po kolei lub najmniej zajęty wśród wszystkich, którzy mają dostęp do skrzynki odbiorczej i są dostępni: nie są offline, zajęci, na urlopie ani przy limicie czatów.",
+        "evenlyHint": "Po kolei lub najmniej zajęty spośród wszystkich, którzy mogą otworzyć skrzynkę i są dostępni: nie nieobecni, zajęci, na urlopie ani przy limicie czatów.",
         "listed": "Wybierz agentów lub zespoły",
         "listedNow": "Teraz: {who}.",
         "listedEdit": "Zmień agentów lub zespoły",
@@ -185,11 +185,12 @@
         "skippedTitle": "Pominięci",
         "skip": {
           "on_leave": "na urlopie",
-          "offline_busy_or_at_capacity": "offline, zajęty lub przy limicie czatów",
+          "offline_busy_or_at_capacity": "nieobecny, zajęty lub przy limicie czatów",
           "cannot_read": "nie ma dostępu do skrzynki odbiorczej",
           "no_owner": "kontakt nie ma właściciela",
           "no_previous_handler_in_window": "brak wcześniejszego agenta dla tego kontaktu",
-          "not_an_active_member": "nie jest aktywnym członkiem"
+          "not_an_active_member": "nie jest aktywnym członkiem",
+          "outside_working_hours": "poza godzinami pracy"
         },
         "outside": "Udawaj, że jest poza godzinami pracy",
         "inside": "Udawaj, że jest w godzinach pracy",

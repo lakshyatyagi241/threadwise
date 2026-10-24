@@ -151,7 +151,7 @@
         "outside": "Chỉ ngoài giờ làm việc"
       },
       "thenTitle": "Giao cho",
-      "thenHint": "Nhân viên không hoạt động, ngoại tuyến, đang bận hoặc không thể mở hộp thư sẽ bị bỏ qua.",
+      "thenHint": "Nhân viên không hoạt động, vắng mặt, bận hoặc không mở được hộp thư đến sẽ bị bỏ qua.",
       "strategy": "Cách chọn",
       "strategyHint": {
         "round_robin": "Luân phiên: các cuộc trò chuyện được chia lần lượt cho những nhân viên đã chọn để mọi người nhận phần việc như nhau. Quy tắc ghi nhớ lượt tiếp theo là ai.",
@@ -288,10 +288,10 @@
         "lastSeen": "Lần cuối hoạt động"
       },
       "statuses": {
-        "online": "Trực tuyến",
-        "away": "Vắng mặt",
+        "online": "Sẵn sàng",
+        "away": "Vắng mặt, ngoài giờ làm việc",
         "busy": "Bận",
-        "offline": "Ngoại tuyến"
+        "offline": "Vắng mặt"
       }
     },
     "businessHours": {

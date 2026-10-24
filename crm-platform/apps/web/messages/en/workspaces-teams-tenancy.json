@@ -66,10 +66,10 @@
       "pending": "pending",
       "you": "You",
       "presence": {
-        "online": "Online",
-        "away": "Away",
+        "online": "Available",
+        "away": "Away, outside working hours",
         "busy": "Busy",
-        "offline": "Offline"
+        "offline": "Away"
       },
       "inactive": "Inactive",
       "roleFor": "Role of {name}",
@@ -410,8 +410,8 @@
     "availability": {
       "label": "Availability",
       "available": "Available",
-      "offline": "Offline",
-      "hint": "While you are offline, no new chats are assigned to you automatically. Chats you already have stay yours.",
+      "offline": "Away",
+      "hint": "While you are away, no new chats are assigned to you automatically. Chats you already have stay yours.",
       "failed": "Could not change"
     },
     "myLeave": {

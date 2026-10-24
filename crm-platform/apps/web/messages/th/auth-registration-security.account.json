@@ -566,7 +566,9 @@
             "record_assignment": "กฎการมอบหมายระเบียน",
             "team_hierarchy": "ลำดับชั้นทีมและผู้จัดการ",
             "custom_roles": "บทบาทที่กำหนดเองและขอบเขต",
-            "inbox_assignment_sticky": "การกำหนดเส้นทางอัจฉริยะ: เจ้าของผู้ติดต่อและเอเจนต์ประจำ"
+            "inbox_assignment_sticky": "การกำหนดเส้นทางอัจฉริยะ: เจ้าของผู้ติดต่อและเอเจนต์ประจำ",
+            "agent_status_bar": "แถบสถานะ",
+            "agent_status_automation": "ตั้งสถานะอัตโนมัติ"
           },
           "cta": {
             "continueFree": "ใช้ฟรีต่อ",
