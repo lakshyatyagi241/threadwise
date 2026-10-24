@@ -1552,6 +1552,7 @@
         "retriesTitle": "启用重试",
         "retriesToggle": "重试被 Meta 暂扣的消息",
         "retryEnd": "设置结束日期",
+        "retryEndPlaceholder": "从现在起，最长 {days} 天",
         "retriesInfoWhy": "重试仅适用于因 Meta 频率限制而失败的消息（错误 {code}）。",
         "retriesInfoWhen": "它们按固定的 {hours} 小时间隔运行，直到结束日期。",
         "retriesInfoCost": "无额外费用：仅在消息送达时才会扣费。",

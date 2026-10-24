@@ -1552,6 +1552,7 @@
         "retriesTitle": "Bật thử lại",
         "retriesToggle": "Thử lại các tin nhắn bị Meta giữ lại",
         "retryEnd": "Đặt ngày kết thúc",
+        "retryEndPlaceholder": "Từ bây giờ, tối đa {days} ngày",
         "retriesInfoWhy": "Thử lại chỉ dành cho các tin nhắn thất bại do giới hạn tần suất của Meta (lỗi {code}).",
         "retriesInfoWhen": "Chúng chạy đúng theo khoảng {hours} giờ cho đến ngày kết thúc.",
         "retriesInfoCost": "Không tốn thêm chi phí: bạn chỉ bị tính phí khi tin nhắn được gửi tới.",

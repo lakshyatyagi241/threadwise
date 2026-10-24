@@ -1552,6 +1552,7 @@
         "retriesTitle": "Activer les nouvelles tentatives",
         "retriesToggle": "Réessayer les messages que Meta retient",
         "retryEnd": "Définir une date de fin",
+        "retryEndPlaceholder": "À partir de maintenant, jusqu'à {days} jours",
         "retriesInfoWhy": "Les nouvelles tentatives ne concernent que les messages en échec à cause du plafonnement de fréquence de Meta (erreur {code}).",
         "retriesInfoWhen": "Elles s’exécutent à intervalles exacts de {hours} heures jusqu’à la date de fin.",
         "retriesInfoCost": "Aucun coût supplémentaire : un message n’est facturé que lorsqu’il est distribué.",

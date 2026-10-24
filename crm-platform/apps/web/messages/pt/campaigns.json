@@ -1552,6 +1552,7 @@
         "retriesTitle": "Ativar novas tentativas",
         "retriesToggle": "Tentar novamente as mensagens retidas pela Meta",
         "retryEnd": "Definir uma data de término",
+        "retryEndPlaceholder": "De agora, até {days} dias",
         "retriesInfoWhy": "As novas tentativas valem somente para mensagens que falham por causa do limite de frequência da Meta (erro {code}).",
         "retriesInfoWhen": "Elas são executadas em intervalos exatos de {hours} horas até a data de término.",
         "retriesInfoCost": "Sem custo extra: você só é cobrado por uma mensagem quando ela é entregue.",

@@ -1552,6 +1552,7 @@
         "retriesTitle": "Nieuwe pogingen activeren",
         "retriesToggle": "Berichten opnieuw proberen die Meta tegenhoudt",
         "retryEnd": "Een einddatum instellen",
+        "retryEndPlaceholder": "Vanaf nu, tot {days} dagen",
         "retriesInfoWhy": "Nieuwe pogingen zijn alleen voor berichten die mislukken door de frequentielimiet van Meta (fout {code}).",
         "retriesInfoWhen": "Ze worden precies om de {hours} uur uitgevoerd tot de einddatum.",
         "retriesInfoCost": "Geen extra kosten: je betaalt pas voor een bericht wanneer het is afgeleverd.",

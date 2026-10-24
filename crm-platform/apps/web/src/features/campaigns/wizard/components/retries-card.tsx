@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import {
   FREQUENCY_CAP_ERROR_CODE,
   WIZARD_RETRY_INTERVAL_HOURS,
+  WIZARD_RETRY_MAX_DAYS,
   type WizardRetries,
 } from '@crm/contracts';
 import { Alert, Field, Switch } from '@crm/ui';
@@ -55,6 +56,7 @@ export function RetriesCard({
               value={retries.endDate ?? ''}
               disabled={disabled}
               invalid={Boolean(issue)}
+              placeholder={t('retryEndPlaceholder', { days: WIZARD_RETRY_MAX_DAYS })}
               onChange={(endDate) => onRetries({ ...retries, endDate: endDate || null })}
             />
           </Field>

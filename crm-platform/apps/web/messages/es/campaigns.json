@@ -1552,6 +1552,7 @@
         "retriesTitle": "Activar reintentos",
         "retriesToggle": "Reintenta los mensajes que Meta retiene",
         "retryEnd": "Define una fecha de fin",
+        "retryEndPlaceholder": "Desde ahora, hasta {days} días",
         "retriesInfoWhy": "Los reintentos son solo para los mensajes que fallan por el límite de frecuencia de Meta (error {code}).",
         "retriesInfoWhen": "Se ejecutan exactamente a intervalos de {hours} horas hasta la fecha de fin.",
         "retriesInfoCost": "Sin coste extra: solo se cobra un mensaje cuando se entrega.",

@@ -1552,6 +1552,7 @@
         "retriesTitle": "재시도 활성화",
         "retriesToggle": "Meta가 보류한 메시지를 재시도합니다",
         "retryEnd": "종료 날짜 설정",
+        "retryEndPlaceholder": "지금부터 최대 {days}일",
         "retriesInfoWhy": "재시도는 Meta의 빈도 제한(오류 {code})으로 실패한 메시지에만 적용됩니다.",
         "retriesInfoWhen": "종료 날짜까지 정확히 {hours}시간 간격으로 실행됩니다.",
         "retriesInfoCost": "추가 비용 없음: 메시지가 전달될 때만 요금이 부과됩니다.",
