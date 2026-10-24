@@ -226,7 +226,16 @@ export function SummaryCard({
           )}
         </Row>
         <Row label={t('sumCost')}>
-          {credit ? formatMinor(credit.estimatedCostMinor, credit.currency, locale) : '-'}
+          {credit ? formatMinor(credit.fullCostMinor, credit.currency, locale) : '-'}
+          {credit &&
+            !credit.platformOwned &&
+            credit.estimatedCostMinor !== credit.fullCostMinor && (
+              <span className="block text-xs text-muted-foreground">
+                {t('sumCostCharged', {
+                  amount: formatMinor(credit.estimatedCostMinor, credit.currency, locale),
+                })}
+              </span>
+            )}
         </Row>
         <Row label={t('sumVariables')}>
           {slots.length === 0 ? (

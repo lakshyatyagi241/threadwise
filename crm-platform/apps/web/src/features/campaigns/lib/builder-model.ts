@@ -1,3 +1,4 @@
+import { pacingOutOfRange, type WizardPacingNumberKey } from '@crm/contracts';
 import {
   CAMPAIGN_EMAIL_SUBJECT_MAX,
   type CampaignConfig,
@@ -277,6 +278,7 @@ export type Problem =
   | 'time'
   | 'window'
   | 'throttle'
+  | 'pacing'
   | 'expiry'
   | 'media'
   | 'subject';
@@ -322,6 +324,20 @@ export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[]
     const min = num(f.throttleMinSec);
     const max = num(f.throttleMaxSec);
     if (min !== null && max !== null && max < min) out.push('throttle');
+    // Every Smart Delivery number must be a whole number inside its limits (the server refuses anything else).
+    const forms: Record<WizardPacingNumberKey, string> = {
+      throttleMinSec: f.throttleMinSec,
+      throttleMaxSec: f.throttleMaxSec,
+      dailyLimit: f.dailyLimit,
+      batchSize: f.batchSize,
+      batchPauseMin: f.batchPauseMin,
+    };
+    if (
+      (Object.keys(forms) as WizardPacingNumberKey[]).some((k) =>
+        pacingOutOfRange(k, num(forms[k])),
+      )
+    )
+      out.push('pacing');
   }
   if (f.scheduleType !== 'now' && f.expiresAt !== '' && f.sendDate !== '') {
     if (f.expiresAt <= `${f.sendDate}T${f.sendTime || '00:00'}`) out.push('expiry');

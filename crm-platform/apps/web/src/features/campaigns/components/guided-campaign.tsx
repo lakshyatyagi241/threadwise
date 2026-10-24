@@ -495,11 +495,13 @@ export function GuidedCampaign({
                               }
                             >
                               <option value="">{tg('pickTemplate')}</option>
-                              {usable.map((x) => (
-                                <option key={x.id} value={x.id}>
-                                  {x.name} · {x.language}
-                                </option>
-                              ))}
+                              {usable
+                                .filter((x) => x.id !== draft.templateId)
+                                .map((x) => (
+                                  <option key={x.id} value={x.id}>
+                                    {x.name} · {x.language}
+                                  </option>
+                                ))}
                             </Select>
                           </Field>
                         </div>
@@ -524,8 +526,13 @@ export function GuidedCampaign({
                             label={`${tg('templateB')} *`}
                             htmlFor="camp-template-b"
                             error={
-                              visible.some((i) => i.path === 'templateIdB')
-                                ? ti('template_b_required')
+                              visible.find((i) => i.path === 'templateIdB')
+                                ? ti(
+                                    visible.find((i) => i.path === 'templateIdB')!.code ===
+                                      'template_b_same'
+                                      ? 'template_b_same'
+                                      : 'template_b_required',
+                                  )
                                 : undefined
                             }
                           >
