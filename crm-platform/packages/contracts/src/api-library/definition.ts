@@ -233,6 +233,22 @@ export function apiLibraryDefinitionTokens(
   return out;
 }
 
+/**
+ * The mapping rows whose contact property another row also saves into. Only one value can land in a field, so the other would be
+ * lost without a word. A row with no property is not compared (it is refused on its own).
+ */
+export function apiLibraryDuplicateMappingRows(
+  mapping: ReadonlyArray<{ contactProperty: string }>,
+): number[] {
+  const out: number[] = [];
+  mapping.forEach((m, i) => {
+    const key = m.contactProperty.trim();
+    if (key !== '' && mapping.some((o, j) => j !== i && o.contactProperty.trim() === key))
+      out.push(i);
+  });
+  return out;
+}
+
 /** The cross-field rules, as `[path, message]` problems (empty when the definition is acceptable). Pure: the API runs it again on save. */
 export function apiLibraryDefinitionProblems(
   d: ApiLibraryDefinitionShape,
@@ -312,6 +328,8 @@ export function apiLibraryDefinitionProblems(
     if (paths.has(m.path)) problems.push([`mapping.${i}.path`, `"${m.path}" is mapped twice`]);
     paths.add(m.path);
   });
+  for (const i of apiLibraryDuplicateMappingRows(d.mapping))
+    problems.push([`mapping.${i}.contactProperty`, 'Two rows save into the same contact property']);
   return problems;
 }
 

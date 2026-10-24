@@ -303,7 +303,11 @@
         "choose": "Escolha uma propriedade",
         "removeN": "Remover linha {n}",
         "pick": "Escolha um caminho da última resposta de teste",
-        "add": "Adicionar linha"
+        "add": "Adicionar linha",
+        "propertyDuplicate": "Outra linha salva nesta propriedade. Um campo recebe só um valor, então escolha outra propriedade.",
+        "propertyRequired": "Escolha a propriedade do contato em que esta linha salva.",
+        "numberText": "Um campo numérico aceita só números. O último teste devolveu “{value}” aqui, e esse texto seria salvo como está.",
+        "numberUntested": "Faça um teste para verificar se este campo da resposta devolve um número."
       },
       "responseVars": {
         "none": "Nenhum campo exposto aos fluxos ainda.",

@@ -303,7 +303,11 @@
         "choose": "Pilih properti",
         "removeN": "Hapus baris {n}",
         "pick": "Pilih jalur dari respons uji terakhir",
-        "add": "Tambah baris"
+        "add": "Tambah baris",
+        "propertyDuplicate": "Baris lain menyimpan ke properti ini. Satu kolom hanya menerima satu nilai, jadi pilih properti lain.",
+        "propertyRequired": "Pilih properti kontak tempat baris ini menyimpan.",
+        "numberText": "Kolom angka hanya menerima angka. Tes terakhir mengembalikan “{value}” di sini, dan teks itu akan disimpan apa adanya.",
+        "numberUntested": "Jalankan tes untuk memastikan kolom respons ini memberi angka."
       },
       "responseVars": {
         "none": "Belum ada kolom yang ditampilkan ke alur.",

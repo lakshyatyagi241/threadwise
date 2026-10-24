@@ -95,6 +95,8 @@ export type DeleteApiLibraryApiQuery = z.infer<typeof deleteApiLibraryApiQuerySc
 export const apiLibraryContactPropertySchema = z.object({
   key: z.string(),
   label: z.string(),
+  /** The property's type (`text`, `email`, `integer`, `decimal`, ...): the form warns when a text answer goes into a number. */
+  type: z.string(),
   kind: z.enum(['system', 'custom']),
 });
 export type ApiLibraryContactProperty = z.infer<typeof apiLibraryContactPropertySchema>;

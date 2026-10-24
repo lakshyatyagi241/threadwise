@@ -303,7 +303,11 @@
         "choose": "Bir özellik seçin",
         "removeN": "{n}. satırı kaldır",
         "pick": "Son test yanıtından bir yol seçin",
-        "add": "Satır ekle"
+        "add": "Satır ekle",
+        "propertyDuplicate": "Başka bir satır bu özelliğe kaydediyor. Bir alana yalnızca tek değer girer, bu yüzden başka bir özellik seçin.",
+        "propertyRequired": "Bu satırın kaydedeceği kişi özelliğini seçin.",
+        "numberText": "Sayı alanı yalnızca sayı kabul eder. Son testte burada “{value}” döndü ve bu metin olduğu gibi kaydedilecek.",
+        "numberUntested": "Bu yanıt alanının sayı verdiğini doğrulamak için bir test çalıştırın."
       },
       "responseVars": {
         "none": "Akışlara henüz açılmış alan yok.",

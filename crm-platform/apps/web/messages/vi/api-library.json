@@ -303,7 +303,11 @@
         "choose": "Chọn thuộc tính",
         "removeN": "Xóa dòng {n}",
         "pick": "Chọn đường dẫn từ phản hồi kiểm thử gần nhất",
-        "add": "Thêm dòng"
+        "add": "Thêm dòng",
+        "propertyDuplicate": "Một dòng khác cũng lưu vào thuộc tính này. Mỗi trường chỉ nhận một giá trị, nên hãy chọn thuộc tính khác.",
+        "propertyRequired": "Chọn thuộc tính liên hệ mà dòng này sẽ lưu vào.",
+        "numberText": "Trường số chỉ nhận số. Lần kiểm thử gần nhất trả về “{value}” ở đây, và văn bản đó sẽ được lưu nguyên như vậy.",
+        "numberUntested": "Chạy một lần kiểm thử để xác nhận trường phản hồi này trả về số."
       },
       "responseVars": {
         "none": "Chưa có trường nào được hiển thị cho luồng.",

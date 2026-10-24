@@ -303,7 +303,11 @@
         "choose": "Kies een eigenschap",
         "removeN": "Rij {n} verwijderen",
         "pick": "Kies een pad uit het laatste testantwoord",
-        "add": "Rij toevoegen"
+        "add": "Rij toevoegen",
+        "propertyDuplicate": "Een andere rij slaat op in deze eigenschap. In een veld past maar één waarde, dus kies een andere eigenschap.",
+        "propertyRequired": "Kies de contacteigenschap waarin deze rij opslaat.",
+        "numberText": "Een getalveld accepteert alleen getallen. De laatste test gaf hier “{value}” terug, en die tekst wordt zo opgeslagen.",
+        "numberUntested": "Voer een test uit om te controleren of dit antwoordveld een getal geeft."
       },
       "responseVars": {
         "none": "Nog geen velden beschikbaar voor flows.",

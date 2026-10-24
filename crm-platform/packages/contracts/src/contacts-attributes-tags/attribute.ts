@@ -160,6 +160,8 @@ export const attributePickerFeedSchema = z.object({
       name: z.string(),
       description: z.string().nullable(),
       value: z.string().nullable(),
+      /** The attribute's field type (`decimal`, `text`, ...). Optional: older callers do not send it. */
+      type: z.string().optional(),
     }),
   ),
 });
