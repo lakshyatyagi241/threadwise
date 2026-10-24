@@ -145,7 +145,10 @@ export class AgentStatusService {
     return this.save(ctx.userId!, null, input);
   }
 
-  async saveMember(uuid: string, input: UpdateMemberWorkingHoursInput): Promise<MemberWorkingHours> {
+  async saveMember(
+    uuid: string,
+    input: UpdateMemberWorkingHoursInput,
+  ): Promise<MemberWorkingHours> {
     return this.save(null, uuid, input);
   }
 
@@ -155,7 +158,11 @@ export class AgentStatusService {
     input: UpdateMemberWorkingHoursInput,
   ): Promise<MemberWorkingHours> {
     const ctx = RequestContextStore.require();
-    await this.entitlements.assertFeature(ctx.orgId, AGENT_STATUS_AUTOMATION_FEATURE, LOCKED_MESSAGE);
+    await this.entitlements.assertFeature(
+      ctx.orgId,
+      AGENT_STATUS_AUTOMATION_FEATURE,
+      LOCKED_MESSAGE,
+    );
     const flags = await this.flags(ctx.orgId);
     return this.db.tx(async (tx) => {
       const target =
@@ -202,7 +209,9 @@ export class AgentStatusService {
         action: 'member.working_hours_changed',
         delta: {
           workingHours: {
-            old: prefs.hours ? { automate: prefs.hours.automate, timezone: prefs.hours.timezone } : null,
+            old: prefs.hours
+              ? { automate: prefs.hours.automate, timezone: prefs.hours.timezone }
+              : null,
             new: { automate: input.automate, timezone: input.timezone },
           },
         },
@@ -232,6 +241,7 @@ export class AgentStatusService {
     const map = await loadAgentStatuses(tx, orgId, [userId], {
       automationAllowed: flags.automation,
       now,
+      wantChangesAt: true,
     });
     return map.get(userId)!;
   }

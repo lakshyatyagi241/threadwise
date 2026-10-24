@@ -49,6 +49,11 @@ export interface StatusInput {
   leave: { startsOn: string; endsOn: string | null } | null;
   workspaceTimezone: string;
   now: Date;
+  /**
+   * Compute `changesAt` for the schedule case (the next boundary). Only the status endpoints need it; routing and the lists leave it
+   * off because finding the boundary costs a scan of the coming days per person.
+   */
+  wantChangesAt?: boolean;
 }
 
 /** What a skip is called in a trace line and in the picker text. */
@@ -84,18 +89,26 @@ export function isOutsideOwnHours(hours: PersonalWorkingHours, at: Date): boolea
 
 // --- schedule boundaries -----------------------------------------------------------------------------------------------------
 
+const OFFSET_FORMATTERS = new Map<string, Intl.DateTimeFormat>();
+
 /** The zone's offset from UTC in ms at an instant (DST-aware, from the zone's own rules). */
 function offsetMs(timeZone: string, at: Date): number {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: resolveTimezone(timeZone),
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(at);
+  const tz = resolveTimezone(timeZone);
+  let f = OFFSET_FORMATTERS.get(tz);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    });
+    OFFSET_FORMATTERS.set(tz, f);
+  }
+  const parts = f.formatToParts(at);
   const n = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
   const asUtc = Date.UTC(n('year'), n('month') - 1, n('day'), n('hour'), n('minute'), n('second'));
   return asUtc - Math.floor(at.getTime() / 1000) * 1000;
@@ -173,7 +186,9 @@ export function effectiveAgentStatus(input: StatusInput): EffectiveStatus {
 
   // An expiring manual choice: only while automation is active, `until` is honoured.
   const manualExpired =
-    automationActive && input.manual?.until != null && now.getTime() >= Date.parse(input.manual.until);
+    automationActive &&
+    input.manual?.until != null &&
+    now.getTime() >= Date.parse(input.manual.until);
   const manualChangesAt =
     automationActive && input.manual?.until != null && !manualExpired
       ? new Date(input.manual.until)
@@ -234,7 +249,7 @@ export function effectiveAgentStatus(input: StatusInput): EffectiveStatus {
 
   if (automationActive && hours) {
     const outside = isOutsideOwnHours(hours, now);
-    const changesAt = nextScheduleChange(hours, now);
+    const changesAt = input.wantChangesAt ? nextScheduleChange(hours, now) : null;
     if (outside) {
       return {
         ...base,
@@ -323,7 +338,7 @@ export async function loadAgentStatuses(
   tx: Tx,
   orgId: number,
   userIds: readonly number[],
-  opts: { automationAllowed: boolean; now?: Date },
+  opts: { automationAllowed: boolean; now?: Date; wantChangesAt?: boolean },
 ): Promise<Map<number, LoadedStatus>> {
   const out = new Map<number, LoadedStatus>();
   if (userIds.length === 0) return out;
@@ -361,6 +376,7 @@ export async function loadAgentStatuses(
       leave: leaveOf.get(id) ?? null,
       workspaceTimezone: cal.timezone,
       now,
+      wantChangesAt: opts.wantChangesAt,
     });
     out.set(id, { ...status, storedStatus: (row?.status as string | undefined) ?? null });
   }

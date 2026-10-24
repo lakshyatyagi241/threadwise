@@ -38,7 +38,6 @@ export function AgentStatusMenu({ variant }: { variant: 'topbar' | 'inbox' }) {
   const locale = useLocale();
   const session = useOptionalSession();
   const { query, set } = useMyAvailability();
-  const leave = useMyLeave();
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [hoursOpen, setHoursOpen] = useState(false);
@@ -180,20 +179,12 @@ export function AgentStatusMenu({ variant }: { variant: 'topbar' | 'inbox' }) {
                   >
                     {t('menu.workingHours')}
                   </button>
-                  {leave.allowed && (
-                    <button
-                      type="button"
-                      role="menuitem"
-                      data-testid="agent-status-timeoff"
-                      className={ITEM}
-                      onClick={() => {
-                        close();
-                        setLeaveOpen(true);
-                      }}
-                    >
-                      {t('menu.timeOff')}
-                    </button>
-                  )}
+                  <TimeOffItem
+                    onOpen={() => {
+                      close();
+                      setLeaveOpen(true);
+                    }}
+                  />
                 </div>
               )}
             </div>
@@ -205,5 +196,26 @@ export function AgentStatusMenu({ variant }: { variant: 'topbar' | 'inbox' }) {
       {hoursOpen && <WorkingHoursDialog memberId="me" open onClose={() => setHoursOpen(false)} />}
       {leaveOpen && <MyLeaveDialog open onClose={() => setLeaveOpen(false)} />}
     </div>
+  );
+}
+
+/**
+ * The Time off line. Its own component so the members summary and the leave panel are only read once the person opens this part of the
+ * menu, not on every page the pill is drawn on. Nothing is drawn for a role without `team.leave.manage` (like the account menu's row).
+ */
+function TimeOffItem({ onOpen }: { onOpen: () => void }) {
+  const t = useTranslations('workspaces-teams-tenancy.status');
+  const leave = useMyLeave();
+  if (!leave.allowed) return null;
+  return (
+    <button
+      type="button"
+      role="menuitem"
+      data-testid="agent-status-timeoff"
+      className={ITEM}
+      onClick={onOpen}
+    >
+      {t('menu.timeOff')}
+    </button>
   );
 }

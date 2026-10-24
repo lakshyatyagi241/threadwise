@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   AGENT_STATUS_AUTOMATION_FEATURE,
-  type AgentAvailability,
   type InboxAssignee,
   type InboxAssigneeTeam,
   type InboxAssigneesResponse,
