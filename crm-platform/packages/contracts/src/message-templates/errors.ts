@@ -9,6 +9,8 @@ export const TPL_ERROR_CODES = {
   TPL_META_REJECTED: 'TPL_META_REJECTED',
   /** The template has no connected number to submit through. */
   TPL_NO_CONNECTION: 'TPL_NO_CONNECTION',
+  /** A header example cannot be kept: the workspace has no cloud object storage, so the file is refused before the provider is called. */
+  TPL_HEADER_STORAGE_REQUIRED: 'TPL_HEADER_STORAGE_REQUIRED',
   /** A running or scheduled broadcast uses this template. */
   TPL_IN_USE: 'TPL_IN_USE',
   /** Only a template Meta has not approved yet, or one that was rejected, can be edited in place. */

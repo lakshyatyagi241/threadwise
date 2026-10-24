@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Sprawdzenie wykryło problemy, które Meta by odrzuciła. Nic nie zostało wysłane. Popraw błędy wymienione po prawej.",
       "TPL_META_REJECTED": "Meta odrzuciła szablon. Powód jest poniżej; szablon został zachowany jako wersja robocza, abyś mógł go poprawić i spróbować ponownie.",
       "TPL_NO_CONNECTION": "Ten szablon nie ma połączonego numeru WhatsApp, przez który można go wysłać. Najpierw połącz numer.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Pliki nagłówka wymagają chmurowego magazynu obiektów. Poproś administratora platformy o jego włączenie.",
       "TPL_IN_USE": "Tego szablonu nie można usunąć, ponieważ używa go trwająca lub zaplanowana wiadomość masowa.",
       "TPL_NOT_EDITABLE": "Edytować można tylko szablon, którego Meta jeszcze nie zatwierdziła, lub odrzucony.",
       "TPL_EDIT_LIMIT": "Meta zezwala na jedną edycję w ciągu 24 godzin i dziesięć w ciągu 30 dni dla zatwierdzonego szablonu. Spróbuj później.",
@@ -124,7 +125,8 @@
         "all": "Wszystkie",
         "approved": "Zatwierdzone",
         "pending": "W weryfikacji",
-        "rejected": "Odrzucone"
+        "rejected": "Odrzucone",
+        "draft": "Wersja robocza"
       },
       "quickStartTitle": "Szybki start",
       "quickStart": "Przeczytaj <link>Wytyczne dotyczące szablonów</link> przed wysłaniem do Meta, aby zatwierdzenie trwało poniżej 24 godz.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Zatwierdzone",
         "pending": "W weryfikacji",
-        "rejected": "Odrzucone"
+        "rejected": "Odrzucone",
+        "draft": "Wersja robocza"
       },
       "helpLabel": "Pomoc - 0{n}",
       "help": {

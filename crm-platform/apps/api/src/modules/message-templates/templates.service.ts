@@ -612,8 +612,10 @@ export class TemplatesService {
     const key = `${templateMediaFolder(orgId)}${checked.storedName}`;
     const stored = await this.storage.put(key, file.buffer, checked.mime);
     if (!stored)
-      throw AppError.validation(
+      throw new AppError(
+        ERROR_CODES.TPL_HEADER_STORAGE_REQUIRED,
         'Header files for templates need cloud object storage: ask the platform admin to turn it on',
+        HttpStatus.UNPROCESSABLE_ENTITY,
         [{ path: 'file', message: 'Storage is local.' }],
       );
     let handle: string;

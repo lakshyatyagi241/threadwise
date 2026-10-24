@@ -58,6 +58,8 @@ export function HeaderSection({
 
   function pick(file: File | undefined) {
     if (!file || !isMediaKind(kind)) return;
+    // A new pick starts clean: an error from the last upload must not stay beside the result of this one.
+    upload.reset();
     const p = mediaProblem(kind, file);
     if (p) {
       setProblem(

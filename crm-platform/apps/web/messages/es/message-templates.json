@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Las comprobaciones encontraron problemas que Meta rechazaría. No se envió nada. Corrige los errores que aparecen a la derecha.",
       "TPL_META_REJECTED": "Meta rechazó la plantilla. El motivo aparece abajo; la plantilla se guarda como borrador para que puedas corregirla y volver a intentarlo.",
       "TPL_NO_CONNECTION": "Esta plantilla no tiene un número de WhatsApp conectado para enviarla. Conecta primero un número.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Los archivos de encabezado necesitan almacenamiento de objetos en la nube. Pide al administrador de la plataforma que lo active.",
       "TPL_IN_USE": "Esta plantilla no se puede eliminar porque la usa una difusión en curso o programada.",
       "TPL_NOT_EDITABLE": "Solo se puede editar una plantilla que Meta todavía no haya aprobado o que haya rechazado.",
       "TPL_EDIT_LIMIT": "Meta permite una edición cada 24 horas y diez cada 30 días en una plantilla aprobada. Inténtalo más tarde.",
@@ -124,7 +125,8 @@
         "all": "Todas",
         "approved": "Aprobada",
         "pending": "En revisión",
-        "rejected": "Rechazada"
+        "rejected": "Rechazada",
+        "draft": "Borrador"
       },
       "quickStartTitle": "Inicio rápido",
       "quickStart": "Lee las <link>Directrices de plantillas</link> antes de enviar a Meta para mantener los tiempos de aprobación por debajo de 24 h.",
@@ -156,7 +158,8 @@
       "legend": {
         "approved": "Aprobadas",
         "pending": "En revisión",
-        "rejected": "Rechazadas"
+        "rejected": "Rechazadas",
+        "draft": "Borrador"
       },
       "helpLabel": "Ayuda - 0{n}",
       "help": {
