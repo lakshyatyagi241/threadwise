@@ -2,6 +2,8 @@
  * The composer's formatting buttons for a plain chat message. WhatsApp reads `*bold*`, `_italic_` and `~strike~` and shows lines that
  * start with `- ` or `1. ` as lists, so the buttons write those marks into the text; there is no underline (WhatsApp has none).
  */
+import { widenToWords } from '@/lib/whatsapp-format';
+
 export interface Edit {
   text: string;
   /** The selection after the edit. */
@@ -13,9 +15,11 @@ export type Mark = '*' | '_' | '~';
 
 /**
  * Wraps the selection in `mark`, or takes the mark off when the selection is already wrapped (inside the selection or just around
- * it). With nothing selected it puts a pair of marks at the caret and leaves the caret between them.
+ * it). With nothing selected it puts a pair of marks at the caret and leaves the caret between them. A partly selected word is widened
+ * to the whole word first: WhatsApp shows a mark only at a word edge.
  */
-export function toggleMark(text: string, start: number, end: number, mark: Mark): Edit {
+export function toggleMark(text: string, from: number, to: number, mark: Mark): Edit {
+  const { start, end } = widenToWords(text, from, to);
   const sel = text.slice(start, end);
   if (sel.length >= 2 && sel.startsWith(mark) && sel.endsWith(mark)) {
     const inner = sel.slice(1, -1);

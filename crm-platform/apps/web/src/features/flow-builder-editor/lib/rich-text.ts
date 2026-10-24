@@ -4,6 +4,8 @@
  * pure halves: marks -> HTML for the box, and the box's DOM -> marks again.
  */
 
+import { widenToWords } from '@/lib/whatsapp-format';
+
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -141,4 +143,38 @@ export function placeCaret(root: Node, n: number): Range {
     range.collapse(false);
   } else range.collapse(true);
   return range;
+}
+
+/** The box's text, a line break as one character, counted the way `visibleOffset` and `placeCaret` count it. */
+function visibleText(root: Node): string {
+  const parts: string[] = [];
+  const walk = (node: Node): void => {
+    if (node.nodeType === 3) parts.push(node.nodeValue ?? '');
+    else if (node.nodeName === 'BR') parts.push('\n');
+    else node.childNodes.forEach(walk);
+  };
+  walk(root);
+  return parts.join('');
+}
+
+/**
+ * Widens the box's selection to whole words before a mark goes on it: a mark shows only at a word edge, so bold on part of a word would
+ * be written as stray marks and drawn as plain text. Leaves the selection alone when it already starts and ends at word edges.
+ */
+export function widenSelection(root: HTMLElement): void {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+  const range = sel.getRangeAt(0);
+  if (!root.contains(range.startContainer) || !root.contains(range.endContainer)) return;
+  const start = visibleOffset(root, range.startContainer, range.startOffset);
+  const end = visibleOffset(root, range.endContainer, range.endOffset);
+  const wide = widenToWords(visibleText(root), start, end);
+  if (wide.start === start && wide.end === end) return;
+  const from = placeCaret(root, wide.start);
+  const to = placeCaret(root, wide.end);
+  const next = document.createRange();
+  next.setStart(from.startContainer, from.startOffset);
+  next.setEnd(to.startContainer, to.startOffset);
+  sel.removeAllRanges();
+  sel.addRange(next);
 }

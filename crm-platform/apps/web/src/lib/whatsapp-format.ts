@@ -152,3 +152,23 @@ export function parseWhatsApp(text: string, opts: ParseOptions = {}): Block[] {
   }
   return blocks;
 }
+
+const WORD_CHAR = /[\p{L}\p{N}_]/u;
+
+/**
+ * Widens a selection to whole words, for an editor that puts a mark on it. A marker only opens and closes at a word edge (see above), so
+ * a mark round part of a word would stay plain text. A selection that already starts and ends at word edges, or is empty, comes back as it is.
+ */
+export function widenToWords(
+  text: string,
+  start: number,
+  end: number,
+): { start: number; end: number } {
+  if (start === end) return { start, end };
+  let s = start;
+  while (s > 0 && WORD_CHAR.test(text.charAt(s - 1)) && WORD_CHAR.test(text.charAt(s))) s -= 1;
+  let e = end;
+  while (e < text.length && WORD_CHAR.test(text.charAt(e)) && WORD_CHAR.test(text.charAt(e - 1)))
+    e += 1;
+  return { start: s, end: e };
+}
