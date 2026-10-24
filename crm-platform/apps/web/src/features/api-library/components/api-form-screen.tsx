@@ -235,7 +235,11 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
   const guard = useLeaveGuard(dirty && !save.isSuccess);
 
   function runTest() {
+    // A new run replaces the earlier outcome, even when it stops before a request is sent. Otherwise an old pass stays on screen under the new error.
+    setResult(null);
+    setTestedSig(null);
     setBlocked(null);
+    setTestFailure(null);
     const b = buildTest(form, saved?.id);
     if (!b.ok) {
       setShowErrors(true);
@@ -246,7 +250,6 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
       setBlocked(tt('runCodeFirst'));
       return;
     }
-    setTestFailure(null);
     run.mutate({ input: b.input, sig });
   }
 
