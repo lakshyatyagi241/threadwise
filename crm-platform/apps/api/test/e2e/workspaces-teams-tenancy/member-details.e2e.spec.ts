@@ -243,11 +243,11 @@ describe('my availability', () => {
 
     const first = await api.as(ta).get('/v2/workspace/members/me/availability');
     expect(first.status).toBe(200);
-    expect(first.body).toEqual({ status: 'online' });
+    expect(first.body).toMatchObject({ status: 'online', state: 'available' });
 
     const off = await api.as(ta).put('/v2/workspace/members/me/availability').send({ status: 'offline' });
     expect(off.status, JSON.stringify(off.body)).toBe(200);
-    expect(off.body).toEqual({ status: 'offline' });
+    expect(off.body).toMatchObject({ status: 'offline', state: 'away', reason: 'manual' });
     expect((await api.as(ta).get('/v2/workspace/members/me/availability')).body.status).toBe('offline');
 
     const stored = await h.owner.query(
@@ -255,12 +255,14 @@ describe('my availability', () => {
       [t.orgId],
     );
     // Only the caller's own row exists: nobody else was touched.
-    expect(stored.rows).toEqual([{ user_id: String(a.userId), status: 'offline' }]);
+    expect(stored.rows.map((r) => ({ user_id: Number(r.user_id), status: r.status }))).toEqual([
+      { user_id: a.userId, status: 'offline' },
+    ]);
     expect((await member(t.admin, a.uuid)).presence).toBe('offline');
     expect(b.userId).not.toBe(a.userId);
 
     const on = await api.as(ta).put('/v2/workspace/members/me/availability').send({ status: 'online' });
-    expect(on.body).toEqual({ status: 'online' });
+    expect(on.body).toMatchObject({ status: 'online', state: 'available' });
     expect((await member(t.admin, a.uuid)).presence).toBe('online');
   });
 

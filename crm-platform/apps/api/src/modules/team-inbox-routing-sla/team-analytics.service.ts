@@ -5,9 +5,11 @@ import {
   type TeamAnalyticsRange,
   type TeamAnalyticsResponse,
 } from '@crm/contracts';
+import { presenceFor } from '../../common/agent-status';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 
 type Raw = Record<string, unknown>;
 
@@ -29,7 +31,10 @@ const oneDecimal = (v: unknown): number | null =>
  */
 @Injectable()
 export class TeamAnalyticsService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly entitlements: PlanEntitlementService,
+  ) {}
 
   async report(query: TeamAnalyticsQuery): Promise<TeamAnalyticsResponse> {
     const ctx = RequestContextStore.require();
@@ -105,7 +110,7 @@ export class TeamAnalyticsService {
           ? []
           : ((
               await tx.execute(sql`
-                SELECT u.id, u.uuid, u.full_name, COALESCE(s.status, 'offline') AS status, s.last_seen_at,
+                SELECT u.id, u.uuid, u.full_name, s.last_seen_at,
                        (SELECT count(*)::int FROM conversations c
                          WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND c.archived = FALSE
                            AND c.status = 'open') AS load
@@ -116,6 +121,13 @@ export class TeamAnalyticsService {
                 )})`)
             ).rows as Raw[]);
 
+      // The status column is the EFFECTIVE status (manual choice, leave, working hours), not the stored word.
+      const words = await presenceFor(
+        tx,
+        orgId,
+        ids,
+        await this.entitlements.featureEnabled(orgId, 'agent_status_automation'),
+      );
       const agents = people
         .map((p) => {
           const id = Number(p.id);
@@ -125,7 +137,7 @@ export class TeamAnalyticsService {
             replies: repliesBy.get(id) ?? 0,
             resolved: resolvedBy.get(id) ?? 0,
             avgResponseMin: avgBy.get(id) ?? null,
-            status: p.status as string,
+            status: words.get(id) ?? 'online',
             currentLoad: Number(p.load),
             lastSeenAt: p.last_seen_at ? new Date(p.last_seen_at as string).toISOString() : null,
           };

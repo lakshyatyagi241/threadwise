@@ -14,6 +14,7 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { presenceFor } from '../../common/agent-status';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -87,6 +88,7 @@ export class TeamsService {
         this.repo.members(tx, ctx.orgId, ids),
         this.repo.usage(tx, ctx.orgId, ids),
       ]);
+      await this.applyPresence(tx, ctx.orgId, members);
       return {
         data: items.map((t) =>
           toTeamResponse(
@@ -424,7 +426,20 @@ export class TeamsService {
       this.repo.members(tx, orgId, [team.id]),
       this.repo.usage(tx, orgId, [team.id]),
     ]);
+    await this.applyPresence(tx, orgId, members);
     return toTeamResponse(team, members, usage[0]);
+  }
+
+  /** The dot beside a member is the EFFECTIVE status (docs/specs/agent-status-bar.md), read for all the listed people in one go. */
+  private async applyPresence(
+    tx: Tx,
+    orgId: number,
+    rows: Array<{ userId: number; presence: string | null }>,
+  ): Promise<void> {
+    if (rows.length === 0) return;
+    const ids = [...new Set(rows.map((r) => r.userId))];
+    const words = await presenceFor(tx, orgId, ids, await this.plan.statusAutomationEnabled(orgId));
+    for (const r of rows) r.presence = words.get(r.userId) ?? 'online';
   }
 
   private async requireTeam(tx: Tx, orgId: number, uuid: string): Promise<TeamRow> {
