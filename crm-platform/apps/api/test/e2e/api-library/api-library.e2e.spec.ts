@@ -777,6 +777,7 @@ describe('contact properties', () => {
     expect(res.body.data.find((p: any) => p.key === 'city_x')).toEqual({
       key: 'city_x',
       label: 'City X',
+      type: 'text',
       kind: 'custom',
     });
     expect(res.body.data.find((p: any) => p.key === 'email').kind).toBe('system');
