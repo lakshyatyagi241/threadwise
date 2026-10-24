@@ -132,6 +132,8 @@ export const PACK_GRANTABLE_FEATURES: readonly string[] = [
 export const NEW_PLAN_FEATURES_OFF: readonly string[] = [
   'inbox_routing',
   'inbox_assignment_sticky',
+  'agent_status_bar',
+  'agent_status_automation',
   'appointment_confirm_buttons',
   'appointment_rebook_steps',
 ];
@@ -258,6 +260,13 @@ export const PLAN_FEATURE_DEFS = [
   // "Teams and permissions" add-on (a pack may grant them, see PACK_GRANTABLE_FEATURES).
   { key: 'team_hierarchy', group: 'advanced', productLine: 'platform', default: true },
   { key: 'custom_roles', group: 'advanced', productLine: 'platform', default: true },
+  // The personal status control (docs/specs/agent-status-bar.md): the Available / Away pill in the global top bar and at the top of the Inbox sidebar, with
+  // "Set as away / available" and the link to Time off. Default FALSE (owner rule: every new feature has its own flag, the owner decides per plan). The
+  // Available / Away switch in the account menu is NOT gated: it existed before this flag.
+  { key: 'agent_status_bar', group: 'messaging', productLine: 'chat', default: false },
+  // Automate status: a personal weekly schedule and time zone, Away outside it, the "Outside of working hours" notice and the routing skip
+  // (`outside_working_hours`). Default FALSE. Off: saving a schedule is 422 PLAN_FEATURE_LOCKED, a stored schedule is kept and ignored.
+  { key: 'agent_status_automation', group: 'messaging', productLine: 'chat', default: false },
 ] as const satisfies ReadonlyArray<{
   key: string;
   group: PlanFeatureGroup;
@@ -306,6 +315,8 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   inbox_sla: 'SLA policies',
   inbox_routing: 'Smart routing: auto-assignment and rules',
   inbox_assignment_sticky: 'Smart routing: contact owner and sticky agent',
+  agent_status_bar: 'Status bar: Available / Away control in the top bar and the Inbox',
+  agent_status_automation: 'Automate status: personal working hours and automatic Away',
   waba_calling: 'WhatsApp calling',
   inbox_kanban: 'Kanban view',
   team_performance: 'Team performance',
@@ -366,6 +377,8 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'inbox_sla',
   'inbox_routing',
   'inbox_assignment_sticky',
+  'agent_status_bar',
+  'agent_status_automation',
   'waba_calling',
   'inbox_kanban',
   'team_performance',
