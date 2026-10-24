@@ -126,6 +126,16 @@ describe('masking', () => {
       `https://x.test/p?a=1&api_key=${API_LIBRARY_SECRET_MASK}&token=${API_LIBRARY_SECRET_MASK}#frag`,
     );
     expect(maskUrl('https://x.test/p')).toBe('https://x.test/p');
+    // A user and password in the address are hidden in what is stored and shown; the path and query are kept
+    expect(maskUrl('https://qauser:FAKE@httpbin.org/basic-auth/qauser/FAKE')).toBe(
+      `https://${API_LIBRARY_SECRET_MASK}@httpbin.org/basic-auth/qauser/FAKE`,
+    );
+    expect(maskUrl('https://u@x.test:8443/p?q=a@b')).toBe(
+      `https://${API_LIBRARY_SECRET_MASK}@x.test:8443/p?q=a@b`,
+    );
+    expect(maskUrl('https://x.test/p/a@b?api_key=K')).toBe(
+      `https://x.test/p/a@b?api_key=${API_LIBRARY_SECRET_MASK}`,
+    );
     expect(
       maskJson({ user: 'u', password: 'p', nested: { accessToken: 't', list: [{ secret: 's' }] } }),
     ).toEqual({
@@ -338,6 +348,15 @@ describe('secrets the other server repeats back', () => {
     );
     expect(secrets).not.toContain('2');
     expect(secrets).not.toContain('application/json');
+  });
+
+  it('takes the password of an address as a secret, and hides it where the address is repeated', () => {
+    const creds = secretValuesOf('https://qauser:QAFAKEPASS9@httpbin.org/basic-auth/qauser/x', []);
+    expect(creds).toEqual(['QAFAKEPASS9']);
+    expect(
+      scrubSecretValues('{"url":"https://qauser:QAFAKEPASS9@httpbin.org"}', creds),
+    ).not.toContain('QAFAKEPASS9');
+    expect(secretValuesOf('https://httpbin.org/x', [])).toEqual([]);
   });
 
   it('hides them wherever the reply repeats them, encoded or not', () => {
