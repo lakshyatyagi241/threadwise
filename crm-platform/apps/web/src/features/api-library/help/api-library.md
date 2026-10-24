@@ -42,7 +42,7 @@ To start from an existing call, select **Import API's** on the list and paste a 
 
 ## Variables
 
-Every `{{name}}` you type in the URL, a header value or the payload becomes a variable in the **Variables** section, and disappears from it when you remove it from the text. Backspace right after a variable removes it whole. A variable's value at run time comes from, in order: the value typed in the flow step, the flow's own variable of that name, the contact's property of that name, and finally the default you saved.
+Every `{{name}}` you type in the URL, a header value or the payload becomes a variable in the **Variables** section, and disappears from it when you remove it from the text. Backspace right after a variable removes it whole. A GET does not send the payload, so its variables leave the list while the method is GET, with the values you typed kept; switch back to POST, PUT or PATCH and they return. A variable's value at run time comes from, in order: the value typed in the flow step, the flow's own variable of that name, the contact's property of that name, and finally the default you saved.
 
 ## Secrets
 
