@@ -77,6 +77,11 @@ export interface WalletGate {
    */
   precheck(orgId: number, count: number, opts?: WalletGateOptions): Promise<void>;
   /**
+   * The launch precheck of an SMS or email run (TW-WALLET-013): the balance must cover one message per recipient at the usage price
+   * (SMS or email), not the WhatsApp card. Throws 422 `WALLET_EMPTY`. Called before any row exists, like `precheck`.
+   */
+  precheckUsage(orgId: number, kind: 'sms' | 'email', count: number): Promise<void>;
+  /**
    * The per-recipient check of a running send: throws 422 `WALLET_EMPTY` when the wallet cannot pay for this one message, so a run
    * (or several started on the same balance) stops once the money is spent. Same exemptions as `precheck`; a free message passes.
    */

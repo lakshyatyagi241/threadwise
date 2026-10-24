@@ -107,8 +107,9 @@ export class BroadcastsActionsService {
 
       await this.sendPolicy.screenBulk(ctx.orgId, '', { source: 'broadcast' });
       try {
-        // An SMS is not priced by the WhatsApp rate card this check reads; the SMS engine checks the wallet before each send.
-        if (row.provider !== 'sms') await this.wallet.precheck(ctx.orgId, failed);
+        // An SMS is priced at the SMS usage price, not the WhatsApp rate card this check reads: the balance must cover the retried ones.
+        if (row.provider === 'sms') await this.wallet.precheckUsage(ctx.orgId, 'sms', failed);
+        else await this.wallet.precheck(ctx.orgId, failed);
       } catch (err) {
         if (err instanceof AppError) throw err;
         throw refuse(

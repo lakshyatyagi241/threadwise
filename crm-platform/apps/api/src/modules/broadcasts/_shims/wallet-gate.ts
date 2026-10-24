@@ -17,6 +17,10 @@ export class BillingWalletGate implements WalletGate {
     });
   }
 
+  precheckUsage(orgId: number, kind: 'sms' | 'email', count: number): Promise<void> {
+    return this.gate.assertCanLaunchUsage(orgId, kind, count);
+  }
+
   precheckSend(
     orgId: number,
     to: string,

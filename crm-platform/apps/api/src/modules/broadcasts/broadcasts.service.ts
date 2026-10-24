@@ -139,10 +139,11 @@ export class BroadcastsService {
       // Emergency halt and content screening once for the batch (the same hook every send path shares), then the wallet.
       await this.sendPolicy.screenBulk(orgId, '', { source: 'broadcast' });
       try {
-        // This check prices a message with the WhatsApp rate card, which is wrong for an SMS. An SMS is paid for per segment from the
-        // wallet at the operator's SMS price (usage billing), and the SMS engine asks the wallet before each send: an empty wallet
-        // pauses the run there instead of refusing the launch.
-        if (!sms) await this.wallet.precheck(orgId, contactIds.length);
+        // A WhatsApp card check prices a message with the WhatsApp rate card, which is wrong for an SMS. An SMS broadcast is checked at the
+        // operator's SMS price (usage billing): the balance must cover every recipient before anything is created. The SMS engine checks
+        // each message again before it leaves.
+        if (sms) await this.wallet.precheckUsage(orgId, 'sms', contactIds.length);
+        else await this.wallet.precheck(orgId, contactIds.length);
       } catch (err) {
         if (err instanceof AppError) throw err;
         throw refuse(

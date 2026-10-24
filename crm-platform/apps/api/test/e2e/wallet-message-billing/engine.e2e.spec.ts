@@ -322,12 +322,13 @@ describe('settleDelivered (TW-WALLET-009)', () => {
 });
 
 describe('plan allowance (TW-WALLET-010)', () => {
-  it('charges every message: the plan allowance no longer makes the first N of the month free', async () => {
+  it('the first N messages of the month are free inside the allowance, then charged', async () => {
     const t = await tenant('q1', { reseller: false });
     await setPlan(h, t.orgId, { monthly: 2 });
     await fund(h, t.orgId, 5000);
-    expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
-    expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
+    const free = { status: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };
+    expect(await settle(t.orgId)).toMatchObject(free);
+    expect(await settle(t.orgId)).toMatchObject(free);
     expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
     expect((await charges(h, t.orgId)).map((c) => c.billing_mode)).toEqual([
       'plan',
@@ -363,14 +364,14 @@ describe('plan allowance (TW-WALLET-010)', () => {
     expect(await settle(t.orgId)).toMatchObject({ status: 'charged' });
   });
 
-  it('charges concurrent deliveries exactly once each: 5 racing with money for all of them are all charged', async () => {
+  it('counts concurrent deliveries exactly once each: 5 racing against an allowance of 3 leave 3 free and 2 charged', async () => {
     const t = await tenant('q5', { reseller: false });
     await setPlan(h, t.orgId, { monthly: 3 });
     await fund(h, t.orgId, 50_000);
     await Promise.all(Array.from({ length: 5 }, () => settle(t.orgId)));
     const rows = await charges(h, t.orgId);
-    expect(rows.filter((r) => r.status === 'free')).toHaveLength(0);
-    expect(rows.filter((r) => r.status === 'charged')).toHaveLength(5);
+    expect(rows.filter((r) => r.status === 'free')).toHaveLength(3);
+    expect(rows.filter((r) => r.status === 'charged')).toHaveLength(2);
   });
 });
 
@@ -580,11 +581,19 @@ describe('the launch gate (TW-WALLET-013)', () => {
     ).resolves.toBeUndefined();
   });
 
-  it('does not let a classic workspace launch on its plan allowance with an empty wallet: every message is charged', async () => {
+  it('lets a classic workspace launch on an empty wallet while its allowance covers every recipient', async () => {
     const t = await tenant('g4', { reseller: false });
     await setPlan(h, t.orgId, { monthly: 1000 });
     await expect(
       services(h).gate.assertCanLaunch({ orgId: t.orgId, source: 'broadcast', recipients: 100 }),
+    ).resolves.toBeUndefined();
+  });
+
+  it('refuses a classic launch that runs past the allowance on an empty wallet', async () => {
+    const t = await tenant('g6', { reseller: false });
+    await setPlan(h, t.orgId, { monthly: 1000 });
+    await expect(
+      services(h).gate.assertCanLaunch({ orgId: t.orgId, source: 'broadcast', recipients: 1001 }),
     ).rejects.toMatchObject({ code: ERROR_CODES.WALLET_EMPTY });
   });
 

@@ -105,8 +105,13 @@ describe('pricingTable (TW-WALLET-024)', () => {
 });
 
 describe('decideSettlement (TW-WALLET-009, -010)', () => {
+  // Pay-per-message: no allowance, so these pin the charge rules alone.
+  const paid = { payPerMessage: true, planActive: true, monthlyLimit: 0, usedBefore: 0 };
+  // A plan workspace with 1,000 messages a month and none used yet.
+  const plan = { payPerMessage: false, planActive: true, monthlyLimit: 1000, usedBefore: 0 };
+
   it('charges the full price when the balance covers it', () => {
-    expect(decideSettlement({ priceMinor: 1200, balanceMinor: 10_000 })).toEqual({
+    expect(decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 10_000 })).toEqual({
       outcome: 'charge',
       chargedMinor: 1200,
       shortfallMinor: 0,
@@ -114,7 +119,7 @@ describe('decideSettlement (TW-WALLET-009, -010)', () => {
   });
 
   it('charges what is there when the balance is short, and records the shortfall', () => {
-    expect(decideSettlement({ priceMinor: 1200, balanceMinor: 300 })).toEqual({
+    expect(decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 300 })).toEqual({
       outcome: 'charge',
       chargedMinor: 300,
       shortfallMinor: 900,
@@ -122,7 +127,7 @@ describe('decideSettlement (TW-WALLET-009, -010)', () => {
   });
 
   it('records a message free with the whole price as shortfall when the wallet is empty', () => {
-    expect(decideSettlement({ priceMinor: 1200, balanceMinor: 0 })).toEqual({
+    expect(decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 0 })).toEqual({
       outcome: 'free',
       reason: 'wallet_empty',
       shortfallMinor: 1200,
@@ -130,28 +135,65 @@ describe('decideSettlement (TW-WALLET-009, -010)', () => {
   });
 
   it('never records a message free for its rate: a price of 0 is charged the minimum', () => {
-    expect(decideSettlement({ priceMinor: 0, balanceMinor: 500 })).toEqual({
+    expect(decideSettlement({ ...paid, priceMinor: 0, balanceMinor: 500 })).toEqual({
       outcome: 'charge',
       chargedMinor: MIN_CHARGE_MINOR,
       shortfallMinor: 0,
     });
   });
 
-  it('the plan allowance no longer makes a message free: every one is charged', () => {
-    // 1,000 messages a month used up on the plan: the next message still costs its price.
-    expect(decideSettlement({ priceMinor: 100, balanceMinor: 500 })).toEqual({
+  it('a plan message inside the monthly allowance is free, whatever the balance', () => {
+    expect(
+      decideSettlement({ ...plan, priceMinor: 100, balanceMinor: 0, usedBefore: 999 }),
+    ).toEqual({
+      outcome: 'free',
+      reason: 'within_plan_free_quota',
+      shortfallMinor: 0,
+    });
+  });
+
+  it('a plan message past the allowance is charged', () => {
+    expect(
+      decideSettlement({ ...plan, priceMinor: 100, balanceMinor: 500, usedBefore: 1000 }),
+    ).toEqual({
       outcome: 'charge',
       chargedMinor: 100,
       shortfallMinor: 0,
     });
   });
 
+  it('a pay-per-message workspace ignores the allowance: every message is charged', () => {
+    expect(decideSettlement({ ...paid, priceMinor: 100, balanceMinor: 500 })).toEqual({
+      outcome: 'charge',
+      chargedMinor: 100,
+      shortfallMinor: 0,
+    });
+  });
+
+  it('an unlimited plan has no allowance to spend from: its message is charged', () => {
+    expect(
+      decideSettlement({ ...plan, monthlyLimit: 0, priceMinor: 100, balanceMinor: 500 }),
+    ).toEqual({ outcome: 'charge', chargedMinor: 100, shortfallMinor: 0 });
+  });
+
+  it('a lapsed plan has no allowance: its message is charged', () => {
+    expect(
+      decideSettlement({ ...plan, planActive: false, priceMinor: 100, balanceMinor: 500 }),
+    ).toEqual({ outcome: 'charge', chargedMinor: 100, shortfallMinor: 0 });
+  });
+
+  it('a plan past its allowance with an empty wallet is recorded free as wallet_empty, with its price as shortfall', () => {
+    expect(
+      decideSettlement({ ...plan, priceMinor: 100, balanceMinor: 0, usedBefore: 1000 }),
+    ).toEqual({ outcome: 'free', reason: 'wallet_empty', shortfallMinor: 100 });
+  });
+
   it('never charges a negative or fractional price below the minimum or with fractions', () => {
-    expect(decideSettlement({ priceMinor: -5, balanceMinor: 500 })).toMatchObject({
+    expect(decideSettlement({ ...paid, priceMinor: -5, balanceMinor: 500 })).toMatchObject({
       outcome: 'charge',
       chargedMinor: MIN_CHARGE_MINOR,
     });
-    expect(decideSettlement({ priceMinor: 100.9, balanceMinor: 500 })).toMatchObject({
+    expect(decideSettlement({ ...paid, priceMinor: 100.9, balanceMinor: 500 })).toMatchObject({
       chargedMinor: 100,
     });
   });
@@ -178,6 +220,11 @@ describe('planIsActive', () => {
 describe('launchVerdict (TW-WALLET-013)', () => {
   const f = {
     platformOwned: false,
+    payPerMessage: true,
+    planActive: true,
+    monthlyLimit: 0,
+    usedThisMonth: 0,
+    recipients: 1,
     balanceMinor: 0,
     estimateMinor: 10_000,
     coveragePercent: 100,
@@ -199,8 +246,41 @@ describe('launchVerdict (TW-WALLET-013)', () => {
     expect(launchVerdict({ ...f, estimateMinor: 0 })).toEqual({ ok: false, reason: 'empty' });
   });
 
-  it('does not let a plan with allowance left launch with an empty wallet: every message is charged', () => {
-    expect(launchVerdict({ ...f, estimateMinor: 1000 })).toEqual({ ok: false, reason: 'empty' });
+  it('lets a plan launch on an empty wallet while its allowance covers every recipient', () => {
+    const plan = {
+      ...f,
+      payPerMessage: false,
+      monthlyLimit: 1000,
+      usedThisMonth: 990,
+      recipients: 10,
+    };
+    expect(launchVerdict({ ...plan, estimateMinor: 1000 })).toEqual({ ok: true });
+  });
+
+  it('refuses a plan launch that runs past the allowance on an empty wallet', () => {
+    const plan = {
+      ...f,
+      payPerMessage: false,
+      monthlyLimit: 1000,
+      usedThisMonth: 990,
+      recipients: 11,
+    };
+    expect(launchVerdict({ ...plan, estimateMinor: 1100 })).toEqual({ ok: false, reason: 'empty' });
+  });
+
+  it('a lapsed plan has no allowance: an empty wallet refuses the launch', () => {
+    const plan = { ...f, payPerMessage: false, planActive: false, monthlyLimit: 1000 };
+    expect(launchVerdict({ ...plan, estimateMinor: 1000 })).toEqual({ ok: false, reason: 'empty' });
+  });
+
+  it('an unlimited plan has no allowance to launch on: an empty wallet refuses it', () => {
+    const plan = { ...f, payPerMessage: false, monthlyLimit: 0, usedThisMonth: 0, recipients: 5 };
+    expect(launchVerdict({ ...plan, estimateMinor: 5000 })).toEqual({ ok: false, reason: 'empty' });
+  });
+
+  it('a pay-per-message workspace ignores its allowance', () => {
+    const paid = { ...f, payPerMessage: true, monthlyLimit: 1000, usedThisMonth: 0 };
+    expect(launchVerdict({ ...paid, estimateMinor: 1000 })).toEqual({ ok: false, reason: 'empty' });
   });
 
   it('refuses when the balance does not cover the estimate (Reference let a 1.00 wallet launch 50,000 messages)', () => {

@@ -864,16 +864,39 @@ describe('SMS is paid for from the wallet', () => {
     expect(await usageEvents(h, a.t)).toEqual([]);
   });
 
-  it('an empty wallet stops a broadcast before anything is sent: nobody is failed, nothing is reported', async () => {
+  it('an empty wallet refuses an SMS broadcast at launch: nothing is created and nothing is sent', async () => {
     const a = await arrange('u3', 2, { wallet: 0 });
-    const b = await createBroadcast(a);
-    expect(await run(a.t, b.id)).toBe('paused');
+    const res = await post(a.t.admin, '/v2/broadcasts', {
+      name: 'SMS offer',
+      templateId: a.templateId,
+      contactIds: a.contacts,
+      senderKeys: [a.key],
+      scheduleType: 'now',
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(422);
+    expect(res.body.code).toBe('WALLET_EMPTY');
     expect(sms.sendCalls).toHaveLength(0);
-    expect((await recipients(b.id)).map((x) => x.status)).toEqual(['pending', 'pending']);
-    expect(await broadcast(b.id)).toMatchObject({ status: 'paused', fail_count: 0 });
-    // The allowance is not taken for a message that was never sent.
+    expect(
+      (await h.owner.query(`SELECT count(*)::int AS n FROM broadcasts WHERE org_id = $1`, [a.t.orgId]))
+        .rows[0],
+    ).toMatchObject({ n: 0 });
     expect(await used(a.t)).toBe(0);
     expect(await usageEvents(h, a.t)).toEqual([]);
+  });
+
+  it('a balance below the whole broadcast refuses its launch, not only an empty wallet', async () => {
+    // Two SMS at 1 segment each need more than 1 hundredth; a balance of 1 cannot cover them.
+    const a = await arrange('u3b', 2, { wallet: 1 });
+    const res = await post(a.t.admin, '/v2/broadcasts', {
+      name: 'SMS offer',
+      templateId: a.templateId,
+      contactIds: a.contacts,
+      senderKeys: [a.key],
+      scheduleType: 'now',
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(422);
+    expect(res.body.code).toBe('WALLET_EMPTY');
+    expect(sms.sendCalls).toHaveLength(0);
   });
 
   it("the platform's own workspace sends with an empty wallet", async () => {
@@ -954,15 +977,23 @@ describe('SMS is paid for from the wallet', () => {
       ]);
     });
 
-    it('an empty wallet pauses it before anything is sent: the recipients stay queued, nobody is failed', async () => {
+    it('an empty wallet refuses an SMS campaign at launch: nothing is created and nothing is sent', async () => {
       const a = await arrange('u7', 2, { wallet: 0 });
-      const c = await campaign(a);
-      expect(await runCampaign(c)).toBe('halted');
+      const res = await post(a.t.admin, '/v2/campaigns', {
+        name: 'SMS campaign',
+        type: 'text',
+        customMessage: 'Hi {{name}}',
+        scheduleType: 'now',
+        senderKey: a.key,
+        contactIds: a.contacts,
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(res.body.code).toBe('WALLET_EMPTY');
       expect(sms.sendCalls).toHaveLength(0);
-      expect(await statuses(c.id)).toEqual(['queued', 'queued']);
       expect(
-        (await h.owner.query(`SELECT status FROM wpcampaigns WHERE id = $1`, [c.id])).rows[0],
-      ).toMatchObject({ status: 'paused' });
+        (await h.owner.query(`SELECT count(*)::int AS n FROM wpcampaigns WHERE org_id = $1`, [a.t.orgId]))
+          .rows[0],
+      ).toMatchObject({ n: 0 });
       expect(await usageEvents(h, a.t)).toEqual([]);
     });
   });

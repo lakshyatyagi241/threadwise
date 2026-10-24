@@ -1,4 +1,5 @@
 import {
+  isUnlimitedLimit,
   priceFromMargin,
   type MarginSource,
   type MessageContext,
@@ -278,8 +279,9 @@ export function pricingTable(
 export const MIN_CHARGE_MINOR = 1;
 
 /**
- * Why a message is recorded free. `within_plan_free_quota` is no longer produced: the plan's monthly allowance does not make a
- * WhatsApp, SMS or email message free any more. It stays in the type so rows written before that change still read.
+ * Why a message is recorded free. `within_plan_free_quota`: a plan workspace's WhatsApp message that fits its monthly allowance.
+ * `wallet_empty`: the wallet cannot pay for it (it already left, so it is recorded with its price as shortfall). `rate_is_zero` is
+ * no longer produced: a rate of 0 is charged the minimum. It stays in the type so rows written before that change still read.
  */
 export type FreeReason = 'rate_is_zero' | 'within_plan_free_quota' | 'wallet_empty';
 
@@ -290,15 +292,37 @@ export type Settlement =
 export interface SettlementFacts {
   priceMinor: number;
   balanceMinor: number;
+  /** Pay-per-message workspaces ignore the plan's allowance entirely. */
+  payPerMessage: boolean;
+  planActive: boolean;
+  /** The plan's monthly messages; 0 = unlimited. */
+  monthlyLimit: number;
+  /** Messages already counted this month, BEFORE this one. */
+  usedBefore: number;
 }
 
 /**
- * Charged, always. A balance below the price is charged in part (the message already left: it is never rejected), and the part
- * not collected is the shortfall, recorded instead of silently lost. An empty wallet records the message free with the whole price as
- * shortfall (`wallet_empty`): nothing is charged, and the shortfall says what was owed.
+ * Whether this message still fits the plan's free monthly allowance (TW-WALLET-010 rule 1). An unlimited plan has no allowance to spend
+ * from, so its messages are charged (the wallet copy says the same: no allowance text for an unlimited plan).
+ */
+export function withinFreeQuota(
+  f: Pick<SettlementFacts, 'planActive' | 'monthlyLimit' | 'usedBefore'>,
+): boolean {
+  if (!f.planActive) return false; // an ended plan or trial has no allowance at all
+  if (isUnlimitedLimit(f.monthlyLimit)) return false;
+  return f.usedBefore + 1 <= f.monthlyLimit;
+}
+
+/**
+ * Free inside the plan's allowance; otherwise charged. A balance below the price is charged in part (the message already left: it is
+ * never rejected), and the part not collected is the shortfall, recorded instead of silently lost. An empty wallet records the message
+ * free with the whole price as shortfall (`wallet_empty`): nothing is charged, and the shortfall says what was owed.
  */
 export function decideSettlement(f: SettlementFacts): Settlement {
   const price = Math.max(MIN_CHARGE_MINOR, Math.trunc(f.priceMinor));
+  if (!f.payPerMessage && withinFreeQuota(f)) {
+    return { outcome: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };
+  }
   const have = Math.max(0, Math.trunc(f.balanceMinor));
   const charged = Math.min(price, have);
   if (charged === 0) return { outcome: 'free', reason: 'wallet_empty', shortfallMinor: price };
@@ -324,6 +348,14 @@ export function monthStart(now: Date): string {
 
 export interface LaunchFacts {
   platformOwned: boolean;
+  /** Pay-per-message workspaces ignore the plan's allowance entirely. */
+  payPerMessage: boolean;
+  planActive: boolean;
+  /** The plan's monthly messages; 0 = unlimited. */
+  monthlyLimit: number;
+  /** Messages already counted this month, before this launch. */
+  usedThisMonth: number;
+  recipients: number;
   balanceMinor: number;
   /** What the audience costs at the audience's prices, hundredths (every recipient is charged); null = cannot estimate. */
   estimateMinor: number | null;
@@ -339,10 +371,18 @@ export type LaunchVerdict = { ok: true } | { ok: false; reason: 'empty' | 'insuf
  * Charging happens after delivery, so an empty wallet could otherwise blast a whole campaign for free. Reference blocked only on
  * a balance of 0 and compared nothing else (a 1-credit wallet launched 50,000 recipients). This keeps that rule and adds the
  * comparison Reference's own estimate was computed for and never used, with a configurable tolerance (coveragePercent).
- * The plan's monthly allowance no longer lets a launch through with an empty wallet: every message is charged.
+ * A plan workspace whose allowance covers every recipient launches on any balance: those messages are free. Beyond the allowance,
+ * the usual rule applies.
  */
 export function launchVerdict(f: LaunchFacts): LaunchVerdict {
   if (f.platformOwned) return { ok: true };
+  if (!f.payPerMessage) {
+    const fits =
+      f.planActive &&
+      !isUnlimitedLimit(f.monthlyLimit) &&
+      f.usedThisMonth + Math.max(1, f.recipients) <= f.monthlyLimit;
+    if (fits) return { ok: true };
+  }
   if (f.freeAllowed && f.estimateMinor === 0) return { ok: true };
   if (f.balanceMinor <= 0) return { ok: false, reason: 'empty' };
   if (f.coveragePercent > 0 && f.estimateMinor !== null && f.estimateMinor > 0) {

@@ -13,6 +13,7 @@ import {
   isGroupPeer,
   personalGroupSendBlock,
 } from '../../infra/providers/whatsapp/group-peer';
+import { deliveryProviderOf } from '../../kernel/outbox/delivery-report';
 import { QUEUES } from '../../infra/queue/queues';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { UsageBillingService, WalletGateService } from '../wallet-message-billing';
@@ -189,6 +190,7 @@ export class OutboundService {
       };
       const groupMembers = await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.assertUsageAffordable(orgId, runtime.kind, isReaction);
+      await this.assertMessageAffordable(orgId, runtime.kind, conv.peerKey, isReaction);
       await this.dispatcher.assertCanQueue(request, {
         monthlyUsed: await this.monthlyUsed(tx, orgId, runtime),
       });
@@ -318,6 +320,12 @@ export class OutboundService {
         : null;
       await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.assertUsageAffordable(orgId, runtime.kind, row.kind === 'reaction');
+      await this.assertMessageAffordable(
+        orgId,
+        runtime.kind,
+        conv.peerKey,
+        row.kind === 'reaction',
+      );
       // A template message sent before its components were stored gets the ones the caller rebuilt from the live template.
       const patch = templateComponents ? { templateComponents } : {};
       const retried = { ...row, meta: { ...row.meta, ...patch } };
@@ -465,6 +473,22 @@ export class OutboundService {
     const kind = usageKindOfChannel(channelKind);
     if (!kind || isReaction) return;
     await this.usage.assertCanAfford(orgId, kind);
+  }
+
+  /**
+   * A WhatsApp message to one person is the paid message of the wallet (TW-WALLET-009): refuse before a row exists when the wallet
+   * cannot pay for it and the plan's allowance does not cover it (422 `WALLET_EMPTY`). Without this check an inbox or template send
+   * with an empty wallet went out and was recorded free. A group send has its own check (`assertGroupSendable`), a reaction is free,
+   * and a channel whose messages are not billed (the simulator, a personal number) passes.
+   */
+  private async assertMessageAffordable(
+    orgId: number,
+    channelKind: string,
+    peerKey: string,
+    isReaction: boolean,
+  ): Promise<void> {
+    if (isReaction || isGroupPeer(peerKey) || deliveryProviderOf(channelKind) === null) return;
+    await this.wallet.assertCanSend({ orgId, source: 'inbox', to: peerKey });
   }
 
   /**
