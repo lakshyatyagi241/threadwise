@@ -13,6 +13,7 @@ import {
   wizardDraftSchema,
   wizardLaunchIssues,
   wizardRetryEndMax,
+  wizardRetryEndRange,
   wizardVariableNeedsFallback,
   wizardScheduleSchema,
   wizardStepIssues,
@@ -262,6 +263,24 @@ describe('step validation (the web before Next, the API at launch)', () => {
     expect(withEnd('2026-10-13')).toEqual([]);
     expect(withEnd('2026-10-14')).toEqual(['retry_end_too_far']);
     expect(wizardRetryEndMax(NOW, 'UTC')).toBe('2026-10-13');
+    // The calendar offers exactly the same days: today to the 13th.
+    expect(
+      wizardRetryEndRange(draft({ ...base, retries: { enabled: true, timezone: 'UTC' } }), NOW),
+    ).toEqual({ min: '2026-10-06', max: '2026-10-13' });
+    // A later first send moves the first day to the send's day: the window must close after it.
+    const later = {
+      schedule: { mode: 'scheduled' as const, date: '2026-10-10', time: '09:00', timezone: 'UTC' },
+    };
+    expect(
+      wizardRetryEndRange(draft({ ...later, retries: { enabled: true, timezone: 'UTC' } }), NOW),
+    ).toEqual({ min: '2026-10-10', max: '2026-10-13' });
+    expect(
+      wizardStepIssues(
+        4,
+        draft({ ...later, retries: { enabled: true, endDate: '2026-10-09', timezone: 'UTC' } }),
+        { now: NOW },
+      ).map((i) => i.code),
+    ).toContain('retry_end_before_send');
     // Retries off: the end date is not looked at.
     expect(
       wizardStepIssues(4, draft({ ...base, retries: { enabled: false, endDate: '2020-01-01' } }), {

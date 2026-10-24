@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { SenderHidden, WizardDraftResponse, WizardSender } from '@crm/contracts';
+import {
+  wizardRetryEndRange,
+  type SenderHidden,
+  type WizardDraftResponse,
+  type WizardSender,
+} from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, Field, Select, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { isUsableProperty, useContactFields } from '@/features/contacts-attributes-tags';
@@ -649,6 +654,7 @@ export function GuidedCampaign({
                       />
                       <RetriesCard
                         retries={draft.retries}
+                        range={wizardRetryEndRange(draft, new Date())}
                         issues={visible}
                         onRetries={(retries) => act({ type: 'retries', retries })}
                       />

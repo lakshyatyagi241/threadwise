@@ -8,11 +8,12 @@ import {
   dateLabel,
   dialPoint,
   dialValue,
+  dayOff,
   formatClock,
-  isoOf,
   monthGrid,
   parseClock,
   shiftMonth,
+  todayIso,
   type ClockTime,
 } from '../lib/pickers';
 
@@ -92,6 +93,7 @@ export function DatePicker({
   id,
   value,
   min,
+  max,
   disabled,
   invalid,
   placeholder,
@@ -100,6 +102,7 @@ export function DatePicker({
   id?: string;
   value: string;
   min?: string;
+  max?: string;
   disabled?: boolean;
   invalid?: boolean;
   placeholder?: string;
@@ -108,7 +111,7 @@ export function DatePicker({
   const t = useTranslations('campaigns.wizard.pickers');
   const locale = useLocale();
   const [open, setOpen] = useState(false);
-  const seed = /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : (min ?? isoOf(2026, 0, 1));
+  const seed = /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : (min ?? todayIso());
   const [view, setView] = useState({
     year: Number(seed.slice(0, 4)),
     month0: Number(seed.slice(5, 7)) - 1,
@@ -180,7 +183,7 @@ export function DatePicker({
           </div>
           <div className="mt-1 grid grid-cols-7 gap-y-1">
             {weeks.flat().map((d) => {
-              const off = min !== undefined && d.iso < min;
+              const off = dayOff(d.iso, min, max);
               const on = d.iso === picked;
               return (
                 <button
