@@ -106,6 +106,7 @@ export function CarouselForm({ data: d, set, env }: FormProps) {
                 placeholder="https://"
                 onChange={(v) => patch(i, { image: v })}
               />
+              <p className="mt-1 text-[11px] text-muted-foreground">{t('imageFormats')}</p>
             </div>
             {needsCopy(c.image) ? (
               <SaveCopy

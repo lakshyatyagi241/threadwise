@@ -912,7 +912,8 @@
             "saveCopy": "Kopie speichern",
             "saveCopyHint": "Speichert dieses Bild auf unserem Server, damit der Chat es jedem Besucher zeigen kann. Ein Bild von einer Seite, die das Teilen verweigert, kann nicht kopiert werden: laden Sie es stattdessen hoch.",
             "saving": "Wird gespeichert…",
-            "copyFailed": "Kopie konnte nicht gespeichert werden: {message}"
+            "copyFailed": "Kopie konnte nicht gespeichert werden: {message}",
+            "imageFormats": "Zulässige Formate: JPG, JPEG oder PNG."
           },
           "condition": {
             "info": "Fügen Sie Regeln hinzu (eine Variable, einen Vergleich und einen Wert). Verknüpfen Sie sie mit AND oder OR und verschachteln Sie bei Bedarf Gruppen.",

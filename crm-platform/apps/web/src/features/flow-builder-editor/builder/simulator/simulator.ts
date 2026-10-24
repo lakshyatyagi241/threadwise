@@ -1,6 +1,9 @@
 import {
   flbAskFileAccepts,
+  flbCarouselReplies,
   flbCleanAskFileExtensions,
+  flbCleanCarouselCards,
+  flbImageUrl,
   flbIsCondGroup,
   flbReadLocation,
   flbSanitizeConditionGroup,
@@ -32,11 +35,20 @@ export type LogChoices = {
   /** A Link button message: its one button opens a web address, it does not answer the bot. */
   links?: Array<{ type: string; label: string; value: string }>;
 };
+/** A Carousel card as the test chat draws it. A reply button carries its exit number (`p<n>`); a link button carries its address. */
+export type LogCard = {
+  /** The picture address, when it is one the chat may load (http or https). */
+  image: string | null;
+  title: string;
+  text: string;
+  buttons: Array<{ label: string; exit: number | null; href: string | null }>;
+};
 export type LogEntry = {
   kind: 'system' | 'user' | 'bot';
   text: string;
   media?: LogMedia;
   choices?: LogChoices;
+  cards?: LogCard[];
 };
 
 /** Pause between two simulated steps, ms. */
@@ -61,6 +73,14 @@ export interface SimLocation {
 const askRetries = (d: Record<string, unknown>): number => {
   const n = Math.trunc(Number(d.retries ?? 2));
   return Math.min(10, Math.max(0, Number.isFinite(n) ? n : 2));
+};
+/** The address a Carousel link button opens in the test chat: a page, a call or an email; null when the value is empty or not a page. */
+const carouselHref = (type: string, value: string): string | null => {
+  const v = value.trim();
+  if (v === '') return null;
+  if (type === 'phone') return `tel:${v}`;
+  if (type === 'email') return `mailto:${v}`;
+  return /^https?:\/\/\S+$/i.test(v) ? v : null;
 };
 const MEDIA_KIND_OF_MIME = (mime: string): string => {
   const m = mime.toLowerCase();
@@ -98,14 +118,14 @@ export interface SimulatorOptions {
 export interface Simulator {
   /** (Re)start a run: the bot waits for the operator's first message. */
   start: () => void;
-  /** The operator's message. */
-  send: (text: string) => void;
+  /** The operator's message. `exit` is set when the operator taps a Carousel card's reply button: that button's exit, not the label, decides. */
+  send: (text: string, exit?: number) => void;
   /** The operator answers an Ask for file / image node with a (fake) file: only its name, type and caption matter. */
   sendFile: (file: SimFile) => void;
   /** The operator answers an Ask for location node with a (fake) shared location. */
   sendLocation: (loc: SimLocation) => void;
   /** The operator taps an option of an earlier menu: the chat rolls back to that menu (entry `index`) and answers it again. */
-  pickAgain: (index: number, label: string) => void;
+  pickAgain: (index: number, label: string, exit?: number) => void;
   /** The node the run is parked on or executing; null before the first message and after the end. */
   current: () => FlowNode | null;
   /** Variables of the current run (a copy). */
@@ -171,14 +191,30 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   let logged = 0;
   let snapshots = new Map<number, { node: FlowNode; vars: Vars }>();
 
-  const log = (kind: LogEntry['kind'], text: string, media?: LogMedia, choices?: LogChoices) => {
-    if (choices && choices.kind !== 'links' && current)
-      snapshots.set(logged, { node: current, vars: { ...vars } });
+  const log = (
+    kind: LogEntry['kind'],
+    text: string,
+    media?: LogMedia,
+    choices?: LogChoices,
+    cards?: LogCard[],
+  ) => {
+    // A menu, or a Carousel with a reply button, can be answered again later: keep the run as it stood when it was shown.
+    const menu =
+      (choices && choices.kind !== 'links') ||
+      (cards ?? []).some((c) => c.buttons.some((b) => b.exit !== null));
+    if (menu && current) snapshots.set(logged, { node: current, vars: { ...vars } });
     logged += 1;
-    opts.onLog({ kind, text, ...(media ? { media } : {}), ...(choices ? { choices } : {}) });
+    opts.onLog({
+      kind,
+      text,
+      ...(media ? { media } : {}),
+      ...(choices ? { choices } : {}),
+      ...(cards?.length ? { cards } : {}),
+    });
   };
   const sys = (t: string) => log('system', t);
-  const bot = (t: string, media?: LogMedia, choices?: LogChoices) => log('bot', t, media, choices);
+  const bot = (t: string, media?: LogMedia, choices?: LogChoices, cards?: LogCard[]) =>
+    log('bot', t, media, choices, cards);
 
   const findNode = (id: string) => nodes.find((n) => n.id === id) ?? null;
   const stop = () => {
@@ -280,6 +316,32 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           filename: str(d.filename),
         });
         return advance('out');
+      }
+      case 'carousel': {
+        // Every card's reply buttons take the exits in card order, the same numbers the graph and the runtime use. A card with
+        // nothing in it is not shown, as the runtime leaves it out; its buttons still count for the numbers.
+        let replyExits = 0;
+        const shown: LogCard[] = [];
+        for (const c of flbCleanCarouselCards(d.cards)) {
+          const buttons = c.buttons.map((b) =>
+            b.type === 'reply' || b.type === 'agent'
+              ? { label: interp(b.label, v), exit: replyExits++, href: null }
+              : { label: interp(b.label, v), exit: null, href: carouselHref(b.type, b.value) },
+          );
+          const image = flbImageUrl(c.image);
+          if (c.title === '' && c.text === '' && image === null) continue;
+          shown.push({
+            image,
+            title: interp(c.title, v),
+            text: interp(c.text, v),
+            buttons,
+          });
+        }
+        if (shown.length === 0) return advance('next');
+        bot(interp(d.text, v), undefined, undefined, shown);
+        if (replyExits === 0) return advance('next');
+        opts.onAwaiting(true);
+        return;
       }
       case 'buttons':
       case 'list':
@@ -812,7 +874,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     answerAsk(node, { kind: 'location', loc });
   };
 
-  const send = (value: string): void => {
+  const send = (value: string, exit?: number): void => {
     // First message: open the conversation. An off-keyword opener still runs, with a soft note.
     if (!current && pendingStart) {
       log('user', value);
@@ -851,6 +913,13 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       if (next) later(STEP_DELAY_MS, () => stepTest(next));
       else if (handle) sys(tx('portNotConnected', { port: handle }));
       else sys(tx('nothingAfterAsk'));
+    } else if (node.type === 'carousel') {
+      // A tap on a card's reply button names its exit; a typed answer is matched by the button's label, as a menu is.
+      const labels = flbCarouselReplies(d.cards).map((r) => r.label);
+      const idx = exit ?? pickIndex(labels, value);
+      vars[str(d.var) || 'choice'] = labels[idx] || value;
+      opts.onAwaiting(false);
+      route(node, `p${idx}`, tx('optionNotConnected', { port: `p${idx}`, n: idx + 1 }));
     } else if (node.type === 'buttons' || node.type === 'list' || node.type === 'poll') {
       // List items are objects: match and save their title, never the object ("[object Object]").
       const raw = arr(d.options);
@@ -896,7 +965,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     }
   };
 
-  const pickAgain = (index: number, label: string): void => {
+  const pickAgain = (index: number, label: string, exit?: number): void => {
     const snap = snapshots.get(index);
     if (!snap) return;
     runId += 1;
@@ -906,7 +975,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     logged = index + 1;
     opts.onTruncate?.(index + 1);
     opts.onAwaiting(true);
-    send(label);
+    send(label, exit);
   };
 
   return {

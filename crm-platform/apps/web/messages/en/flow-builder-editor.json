@@ -929,6 +929,7 @@
             "goTo": "Card {n}",
             "saveCopy": "Save a copy",
             "saveCopyHint": "Keeps this picture on our server, so every visitor's chat can show it. A picture on a site that refuses to share it cannot be copied: upload it instead.",
+            "imageFormats": "Accepted formats: JPG, JPEG or PNG.",
             "saving": "Saving…",
             "copyFailed": "Could not save a copy: {message}"
           },

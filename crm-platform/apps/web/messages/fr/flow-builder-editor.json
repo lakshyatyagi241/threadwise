@@ -912,7 +912,8 @@
             "saveCopy": "Enregistrer une copie",
             "saveCopyHint": "Enregistre cette image sur notre serveur pour que le chat de chaque visiteur puisse l'afficher. Une image d'un site qui refuse de la partager ne peut pas être copiée : importez-la à la place.",
             "saving": "Enregistrement…",
-            "copyFailed": "Impossible d'enregistrer une copie : {message}"
+            "copyFailed": "Impossible d'enregistrer une copie : {message}",
+            "imageFormats": "Formats acceptés : JPG, JPEG ou PNG."
           },
           "condition": {
             "info": "Ajoutez des règles (une variable, une comparaison et une valeur). Reliez-les par AND ou OR et imbriquez des groupes si besoin.",

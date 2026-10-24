@@ -7,7 +7,13 @@ import { flowsApi } from '../../api/flows';
 import { useFlb } from '../../lib/msg';
 import { marksToHtml, RICH_TEXT_CLASS } from '../../lib/rich-text';
 import { FlowImage } from '../flow-image';
-import { createSimulator, type LogEntry, type SimFile, type Simulator } from './simulator';
+import {
+  createSimulator,
+  type LogCard,
+  type LogEntry,
+  type SimFile,
+  type Simulator,
+} from './simulator';
 
 /** Files the operator can "send" to an Ask for file / image node: nothing is uploaded, the runtime only reads the name and type. */
 export const SAMPLE_FILES: ReadonlyArray<{ id: string; file: SimFile }> = [
@@ -139,10 +145,86 @@ function Choices({
   );
 }
 
+/** The cards of a Carousel step as the visitor sees them: a picture, a title, a line of text and up to two buttons. A reply button is tapped like a menu entry. */
+function CarouselCards({
+  cards,
+  canTap,
+  onTap,
+}: {
+  cards: LogCard[];
+  canTap: boolean;
+  onTap: (label: string, exit: number) => void;
+}): ReactElement {
+  const pill =
+    'flex w-full items-center justify-center rounded-md border border-[#0b8a73]/40 bg-white px-2 py-1.5 text-[12.5px] font-medium text-[#0b8a73] no-underline transition disabled:cursor-default disabled:opacity-50 enabled:hover:bg-[#0b8a73]/10';
+  return (
+    <div className="flex flex-col gap-2" data-testid="test-carousel">
+      {cards.map((c, i) => (
+        <div
+          key={i}
+          data-testid="test-carousel-card"
+          className="overflow-hidden rounded-md border border-black/10 bg-background"
+        >
+          {c.image ? (
+            <FlowImage
+              src={c.image}
+              where="test chat carousel card"
+              className="h-[130px] w-full bg-muted object-cover"
+            />
+          ) : null}
+          <div className="space-y-0.5 px-2.5 py-2">
+            {c.title ? (
+              <div className="text-[12.5px] font-semibold leading-snug">{c.title}</div>
+            ) : null}
+            {c.text ? (
+              <div className="text-[12px] leading-snug text-muted-foreground">{c.text}</div>
+            ) : null}
+          </div>
+          {c.buttons.length > 0 ? (
+            <div className="space-y-1 border-t border-black/10 px-2.5 py-2">
+              {c.buttons.map((b, j) => {
+                if (b.exit === null)
+                  return b.href ? (
+                    <a
+                      key={j}
+                      className={pill}
+                      href={b.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {b.label}
+                    </a>
+                  ) : (
+                    <span key={j} className={pill}>
+                      {b.label}
+                    </span>
+                  );
+                const exit = b.exit;
+                return (
+                  <button
+                    key={j}
+                    type="button"
+                    className={pill}
+                    disabled={!canTap}
+                    onClick={() => onTap(b.label, exit)}
+                  >
+                    {b.label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function LogBubble({
   entry,
   live = false,
   onPick,
+  onCardTap,
   canRewind = false,
 }: {
   /** An earlier menu can be answered again. */
@@ -151,6 +233,8 @@ export function LogBubble({
   /** This message is the one the run is waiting on, so its buttons can be tapped. */
   live?: boolean;
   onPick?: (label: string) => void;
+  /** A Carousel card's reply button was tapped: its label and exit number. */
+  onCardTap?: (label: string, exit: number) => void;
 }): ReactElement {
   if (entry.kind === 'system')
     return (
@@ -215,6 +299,13 @@ export function LogBubble({
           live={live && Boolean(onPick)}
           canPick={(live || canRewind) && Boolean(onPick)}
           onPick={(l) => onPick?.(l)}
+        />
+      ) : null}
+      {entry.cards ? (
+        <CarouselCards
+          cards={entry.cards}
+          canTap={(live || canRewind) && Boolean(onCardTap)}
+          onTap={(label, exit) => onCardTap?.(label, exit)}
         />
       ) : null}
     </div>
@@ -355,6 +446,11 @@ export function TestPanel({
             canRewind
             onPick={(label) =>
               live(i) ? simRef.current?.send(label) : simRef.current?.pickAgain(i, label)
+            }
+            onCardTap={(label, exit) =>
+              live(i)
+                ? simRef.current?.send(label, exit)
+                : simRef.current?.pickAgain(i, label, exit)
             }
           />
         ))}

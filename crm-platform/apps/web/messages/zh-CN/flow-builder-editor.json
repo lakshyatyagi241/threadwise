@@ -912,7 +912,8 @@
             "saveCopy": "保存副本",
             "saveCopyHint": "将此图片保存到我们的服务器，使每位访客的聊天都能显示。拒绝共享的网站上的图片无法复制，请改为上传。",
             "saving": "正在保存…",
-            "copyFailed": "无法保存副本：{message}"
+            "copyFailed": "无法保存副本：{message}",
+            "imageFormats": "支持的格式：JPG、JPEG 或 PNG。"
           },
           "condition": {
             "info": "添加规则（变量、比较和值）。用 AND 或 OR 连接，需要时可嵌套分组。",

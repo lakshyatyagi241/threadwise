@@ -912,7 +912,8 @@
             "saveCopy": "Zapisz kopię",
             "saveCopyHint": "Zapisuje to zdjęcie na naszym serwerze, aby czat każdego odwiedzającego mógł je pokazać. Zdjęcia z witryny, która nie zezwala na jego udostępnianie, nie można skopiować: prześlij je zamiast tego.",
             "saving": "Zapisywanie…",
-            "copyFailed": "Nie udało się zapisać kopii: {message}"
+            "copyFailed": "Nie udało się zapisać kopii: {message}",
+            "imageFormats": "Akceptowane formaty: JPG, JPEG lub PNG."
           },
           "condition": {
             "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
