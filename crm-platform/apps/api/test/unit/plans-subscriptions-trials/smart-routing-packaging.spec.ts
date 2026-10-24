@@ -118,7 +118,9 @@ describe('the entry plan has no automatic assignment by default (owner decision 
   });
 
   it('the operator plan form lists both as off for a new plan', () => {
-    expect([...NEW_PLAN_FEATURES_OFF].sort()).toEqual([...SMART, ...REMINDER_UPGRADES].sort());
+    expect([...NEW_PLAN_FEATURES_OFF].sort()).toEqual(
+      [...SMART, ...REMINDER_UPGRADES, 'agent_status_bar', 'agent_status_automation'].sort(),
+    );
     for (const k of NEW_PLAN_FEATURES_OFF) {
       expect(
         PLAN_FEATURE_DEFS.some((d) => d.key === k),

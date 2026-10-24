@@ -70,6 +70,8 @@ describe('registry', () => {
       'inbox_sla',
       'inbox_routing',
       'inbox_assignment_sticky',
+      'agent_status_bar',
+      'agent_status_automation',
       'waba_calling',
       'inbox_kanban',
       'team_performance',
