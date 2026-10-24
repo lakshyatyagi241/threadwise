@@ -118,12 +118,33 @@ export function maskHeaders(headers: readonly OutHeader[]): Record<string, strin
   return out;
 }
 
-/** Masks the value of every query parameter that reads like a secret (`?api_key=...`). The rest of the URL is kept. */
+/**
+ * The index of the `@` that ends the user part of an address (`https://user:pass@host`), or -1 when the address has none.
+ * Only the authority is searched, so an `@` in the path or the query is not taken for one.
+ */
+function userinfoEnd(url: string): number {
+  const start = url.indexOf('://') + 3;
+  if (start < 3) return -1;
+  const end = url.slice(start).search(/[/?#]/);
+  const at = url.lastIndexOf('@', end < 0 ? url.length : start + end - 1);
+  return at < start ? -1 : at;
+}
+
+/**
+ * Masks what a log or a screen must not show of an address: the user and password of `https://user:pass@host` (the mask stands in
+ * for them, so the reader still sees that there were credentials) and the value of every query parameter that reads like a secret
+ * (`?api_key=...`). The rest of the URL is kept.
+ */
 export function maskUrl(url: string): string {
-  const q = url.indexOf('?');
-  if (q < 0) return url;
-  const hash = url.indexOf('#', q);
-  const query = url.slice(q + 1, hash < 0 ? undefined : hash);
+  const at = userinfoEnd(url);
+  const bare =
+    at < 0
+      ? url
+      : `${url.slice(0, url.indexOf('://') + 3)}${API_LIBRARY_SECRET_MASK}${url.slice(at)}`;
+  const q = bare.indexOf('?');
+  if (q < 0) return bare;
+  const hash = bare.indexOf('#', q);
+  const query = bare.slice(q + 1, hash < 0 ? undefined : hash);
   const masked = query
     .split('&')
     .map((pair) => {
@@ -140,7 +161,20 @@ export function maskUrl(url: string): string {
         : pair;
     })
     .join('&');
-  return `${url.slice(0, q + 1)}${masked}${hash < 0 ? '' : url.slice(hash)}`;
+  return `${bare.slice(0, q + 1)}${masked}${hash < 0 ? '' : bare.slice(hash)}`;
+}
+
+/** The password of `https://user:pass@host`, decoded; null when the address has none. */
+function passwordIn(url: string): string | null {
+  const at = userinfoEnd(url);
+  const colon = url.indexOf(':', url.indexOf('://') + 3);
+  if (at < 0 || colon < 0 || colon > at) return null;
+  const raw = url.slice(colon + 1, at);
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
 }
 
 /** Masks the value of every key that reads like a secret, at any depth. */
@@ -411,8 +445,8 @@ export function readAnswer(
 const MIN_SECRET_LENGTH = 4;
 
 /**
- * The secret values this request carried: the value of every query parameter that reads like a secret, and every secret header's
- * value (for `Authorization: Bearer abc` also `abc` alone). A server that echoes its request (a debugging endpoint, an error page)
+ * The secret values this request carried: the password in the address, the value of every query parameter that reads like a secret,
+ * and every secret header's value (for `Authorization: Bearer abc` also `abc` alone). A server that echoes its request (a debugging endpoint, an error page)
  * repeats them in its answer, which would otherwise be shown and stored in the clear.
  */
 export function secretValuesOf(url: string, headers: readonly OutHeader[]): string[] {
@@ -421,6 +455,8 @@ export function secretValuesOf(url: string, headers: readonly OutHeader[]): stri
     const t = v.trim();
     if (t.length >= MIN_SECRET_LENGTH) out.add(t);
   };
+  const password = passwordIn(url);
+  if (password !== null) add(password);
   const q = url.indexOf('?');
   if (q >= 0) {
     const hash = url.indexOf('#', q);
