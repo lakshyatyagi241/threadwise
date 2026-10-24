@@ -1552,6 +1552,7 @@
         "retriesTitle": "Wiederholungen aktivieren",
         "retriesToggle": "Nachrichten wiederholen, die von Meta zurückgehalten werden",
         "retryEnd": "Enddatum festlegen",
+        "retryEndPlaceholder": "Ab jetzt, bis zu {days} Tage",
         "retriesInfoWhy": "Wiederholungen gelten nur für Nachrichten, die wegen der Frequenzbegrenzung von Meta fehlschlagen (Fehler {code}).",
         "retriesInfoWhen": "Sie laufen genau im Abstand von {hours} Stunden bis zum Enddatum.",
         "retriesInfoCost": "Keine Zusatzkosten: Eine Nachricht wird Ihnen nur berechnet, wenn sie zugestellt wird.",

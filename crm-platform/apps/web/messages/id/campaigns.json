@@ -1552,6 +1552,7 @@
         "retriesTitle": "Aktifkan percobaan ulang",
         "retriesToggle": "Coba ulang pesan yang ditahan Meta",
         "retryEnd": "Atur tanggal akhir",
+        "retryEndPlaceholder": "Mulai sekarang, hingga {days} hari",
         "retriesInfoWhy": "Percobaan ulang hanya untuk pesan yang gagal karena pembatasan frekuensi Meta (error {code}).",
         "retriesInfoWhen": "Dijalankan tepat pada interval {hours} jam hingga tanggal akhir.",
         "retriesInfoCost": "Tanpa biaya tambahan: Anda hanya dikenai biaya untuk pesan saat tersampaikan.",

@@ -1552,6 +1552,7 @@
         "retriesTitle": "再試行を有効にする",
         "retriesToggle": "Metaが保留したメッセージを再試行",
         "retryEnd": "終了日を設定",
+        "retryEndPlaceholder": "今から{days}日以内",
         "retriesInfoWhy": "再試行の対象は、Metaの配信頻度制限(エラー{code})で失敗したメッセージのみです。",
         "retriesInfoWhen": "終了日まで、ちょうど{hours}時間間隔で実行されます。",
         "retriesInfoCost": "追加費用はありません。メッセージが配信されたときにのみ課金されます。",

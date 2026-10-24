@@ -1595,6 +1595,7 @@
         "retriesTitle": "Activate Retries",
         "retriesToggle": "Retry messages that Meta holds back",
         "retryEnd": "Set an end date",
+        "retryEndPlaceholder": "From now, up to {days} days",
         "retriesInfoWhy": "Retries are only for messages that fail because of Meta's frequency capping (error {code}).",
         "retriesInfoWhen": "They run at exactly {hours}-hour intervals until the end date.",
         "retriesInfoCost": "No extra cost: you are only charged for a message when it is delivered.",

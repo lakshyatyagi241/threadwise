@@ -1552,6 +1552,7 @@
         "retriesTitle": "Yeniden denemeleri etkinleştir",
         "retriesToggle": "Meta'nın tuttuğu mesajları yeniden dene",
         "retryEnd": "Bitiş tarihi belirle",
+        "retryEndPlaceholder": "Şimdiden itibaren en fazla {days} gün",
         "retriesInfoWhy": "Yeniden denemeler yalnızca Meta sıklık sınırlaması nedeniyle başarısız olan mesajlar içindir (hata {code}).",
         "retriesInfoWhen": "Bitiş tarihine kadar tam olarak {hours} saatlik aralıklarla çalışırlar.",
         "retriesInfoCost": "Ek maliyet yok: bir mesaj için yalnızca iletildiğinde ücretlendirilirsiniz.",

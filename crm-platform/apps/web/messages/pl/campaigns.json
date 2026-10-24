@@ -1552,6 +1552,7 @@
         "retriesTitle": "Włącz ponawianie",
         "retriesToggle": "Ponawiaj wiadomości wstrzymane przez Meta",
         "retryEnd": "Ustaw datę zakończenia",
+        "retryEndPlaceholder": "Od teraz, najwyżej {days} dni",
         "retriesInfoWhy": "Ponawianie dotyczy tylko wiadomości, które nie zostały wysłane z powodu limitu częstotliwości Meta (błąd {code}).",
         "retriesInfoWhen": "Są uruchamiane dokładnie w odstępach {hours}-godzinnych do daty zakończenia.",
         "retriesInfoCost": "Bez dodatkowych kosztów: opłata za wiadomość jest naliczana tylko po jej dostarczeniu.",

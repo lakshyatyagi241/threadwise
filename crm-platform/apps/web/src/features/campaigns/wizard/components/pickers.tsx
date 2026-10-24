@@ -94,6 +94,7 @@ export function DatePicker({
   min,
   disabled,
   invalid,
+  placeholder,
   onChange,
 }: {
   id?: string;
@@ -101,6 +102,7 @@ export function DatePicker({
   min?: string;
   disabled?: boolean;
   invalid?: boolean;
+  placeholder?: string;
   onChange: (iso: string) => void;
 }) {
   const t = useTranslations('campaigns.wizard.pickers');
@@ -142,7 +144,7 @@ export function DatePicker({
         className={TRIGGER}
       >
         <span className={value ? '' : 'text-muted-foreground'}>
-          {value ? dateLabel(value) : t('datePlaceholder')}
+          {value ? dateLabel(value) : (placeholder ?? t('datePlaceholder'))}
         </span>
         <CalendarIcon />
       </button>
