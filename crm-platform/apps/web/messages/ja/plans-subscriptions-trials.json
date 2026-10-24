@@ -91,7 +91,9 @@
       "record_assignment": "レコード割り当てルール",
       "team_hierarchy": "チーム階層とマネージャー",
       "custom_roles": "カスタムロールとスコープ",
-      "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者"
+      "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者",
+      "agent_status_bar": "ステータスバー：上部バーと受信トレイの対応可能 / 離席中の操作",
+      "agent_status_automation": "ステータスの自動化：個人の勤務時間と自動の離席中"
     },
     "limitGroups": {
       "messaging": "メッセージング",

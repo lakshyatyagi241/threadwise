@@ -152,7 +152,7 @@
         "outside": "Only outside business hours"
       },
       "thenTitle": "Assign to",
-      "thenHint": "Agents who are inactive, offline, busy or cannot open the inbox are skipped.",
+      "thenHint": "Agents who are inactive, away, busy or cannot open the inbox are skipped.",
       "strategy": "How to choose",
       "strategyHint": {
         "round_robin": "Round robin: the conversations go to the chosen agents in turn, so everyone gets the same share. The rule remembers whose turn is next.",
@@ -288,10 +288,10 @@
         "lastSeen": "Last seen"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Away",
+        "online": "Available",
+        "away": "Away, outside working hours",
         "busy": "Busy",
-        "offline": "Offline"
+        "offline": "Away"
       }
     },
     "businessHours": {

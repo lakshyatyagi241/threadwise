@@ -91,7 +91,9 @@
       "record_assignment": "Regeln zur Datensatzzuweisung",
       "team_hierarchy": "Teamhierarchie und Manager",
       "custom_roles": "Eigene Rollen und Bereiche",
-      "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
+      "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent",
+      "agent_status_bar": "Statusleiste: Verfügbar / Nicht verfügbar in der oberen Leiste und im Posteingang",
+      "agent_status_automation": "Status automatisieren: persönliche Arbeitszeiten und automatisch nicht verfügbar"
     },
     "limitGroups": {
       "messaging": "Nachrichten",

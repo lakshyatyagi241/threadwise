@@ -76,7 +76,7 @@
       "unknownPerson": "Były członek",
       "unknownTeam": "Usunięty zespół",
       "teamName": "Zespół: {name}",
-      "skipsOffline": "Pomija osoby offline",
+      "skipsOffline": "Pomija osoby nieobecne",
       "reassigns": "Przypisuje ponownie przy aktualizacji",
       "activeFor": "Reguła {name} jest aktywna",
       "dragHandle": "Przeciągnij {name}, aby zmienić priorytet",
@@ -136,7 +136,7 @@
         "noPeople": "Brak pasujących osób.",
         "removePerson": "Usuń: {name}",
         "onLeave": "na urlopie",
-        "skipOffline": "Pomijaj osoby offline",
+        "skipOffline": "Pomijaj osoby nieobecne",
         "skipOfflineHint": "Osoby na urlopie są zawsze pomijane.",
         "reassign": "Przypisz ponownie, gdy aktualizacja sprawi, że ta reguła zacznie pasować",
         "reassignHint": "Dotyczy tylko rekordów przypisanych wcześniej przez ten silnik i tylko dopóki nikt nie zmienił opiekuna. Domyślnie wyłączone: rekord jest przypisywany raz."
@@ -220,7 +220,7 @@
         "disabled": "Przypisywanie rekordów jest wyłączone dla tego obszaru roboczego, więc nic by się nie stało.",
         "has_owner": "{record} ma już opiekuna, więc żadna reguła by się nie uruchomiła. Opiekun ustawiony przez osobę nigdy nie jest zastępowany.",
         "no_rule": "Żadna aktywna reguła nie pasuje do: {record}.",
-        "nobody_available": "Reguła pasuje do: {record}, ale wszyscy wskazani w niej są na urlopie, offline lub już ich tu nie ma.",
+        "nobody_available": "Reguła pasuje do: {record}, ale wszyscy wskazani są na urlopie, nieobecni lub już ich tu nie ma.",
         "plan": "Twój plan nie obejmuje reguł przypisywania rekordów.",
         "not_found": "Nie znaleziono tego rekordu. Mógł zostać usunięty lub jest poza tym, co możesz zobaczyć."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: nie może otworzyć tego typu rekordu",
         "inactive": "{name}: już nieaktywny",
         "on_leave": "{name}: dziś na urlopie",
-        "offline": "{name}: offline"
+        "offline": "{name}: nieobecny"
       }
     },
     "log": {

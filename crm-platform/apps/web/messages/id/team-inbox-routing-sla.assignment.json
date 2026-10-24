@@ -18,7 +18,7 @@
         "needsAuto": "Hanya berlaku saat Penugasan Otomatis aktif.",
         "auto": {
           "title": "Penugasan Otomatis",
-          "body": "Chat baru dibagikan merata ke agen yang sedang menerima chat (tidak offline, sibuk, atau cuti). Jika semua agen sudah mencapai batas chat, chat baru menunggu di antrean.",
+          "body": "Chat baru dibagi rata di antara agen yang menerima chat (tidak sedang tidak di tempat, sibuk, atau cuti). Saat semua agen mencapai batas chat, chat baru menunggu di antrean.",
           "limitHint": "Atur batas chat setiap agen di profilnya pada <link>Anggota tim</link>.",
           "off": "Nonaktif: tidak ada yang ditugaskan otomatis, baik oleh aturan maupun oleh pemilik kontak. Chat menunggu di antrean sampai ada yang mengambilnya atau sebuah alur menunjuk seseorang."
         },
@@ -85,7 +85,7 @@
         "notSet": "Belum diatur: chat yang tidak diambil aturan mana pun menunggu di antrean.",
         "mode": "Apa yang terjadi pada chat tersebut",
         "evenly": "Bagikan merata ke semua agen",
-        "evenlyHint": "Bergiliran atau paling sedikit kesibukan di antara semua orang yang dapat membuka inbox dan tersedia: tidak offline, sibuk, cuti, atau mencapai batas chat.",
+        "evenlyHint": "Round robin atau paling tidak sibuk di antara semua yang dapat membuka kotak masuk dan tersedia: bukan yang tidak di tempat, sibuk, cuti, atau mencapai batas chat.",
         "listed": "Pilih agen atau tim",
         "listedNow": "Saat ini: {who}.",
         "listedEdit": "Ubah agen atau tim",
@@ -185,11 +185,12 @@
         "skippedTitle": "Dilewati",
         "skip": {
           "on_leave": "sedang cuti",
-          "offline_busy_or_at_capacity": "offline, sibuk, atau mencapai batas chat",
+          "offline_busy_or_at_capacity": "tidak di tempat, sibuk, atau mencapai batas chat",
           "cannot_read": "tidak dapat membuka inbox",
           "no_owner": "kontak tidak punya pemilik",
           "no_previous_handler_in_window": "belum ada agen sebelumnya untuk kontak ini",
-          "not_an_active_member": "bukan anggota aktif"
+          "not_an_active_member": "bukan anggota aktif",
+          "outside_working_hours": "di luar jam kerja"
         },
         "outside": "Anggap di luar jam kerja",
         "inside": "Anggap dalam jam kerja",

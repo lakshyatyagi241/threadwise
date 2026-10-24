@@ -1449,7 +1449,9 @@
             "record_assignment": "Giao liên hệ, công ty và giao dịch mới cho đúng người phụ trách bán hàng theo các quy tắc ưu tiên.",
             "team_hierarchy": "Nhóm cha, trưởng nhóm và quản lý, những người xem được nhóm của mình và các nhóm bên dưới.",
             "custom_roles": "Tạo và sửa vai trò, rồi chọn phạm vi (của mình, của nhóm hoặc tất cả bản ghi) cho từng quyền.",
-            "inbox_assignment_sticky": "Giao ưu tiên chủ sở hữu và đồng bộ, khoảng thời gian cho liên hệ quay lại và câu hỏi khi giao lại. Thuộc tiện ích Định tuyến thông minh."
+            "inbox_assignment_sticky": "Giao ưu tiên chủ sở hữu và đồng bộ, khoảng thời gian cho liên hệ quay lại và câu hỏi khi giao lại. Thuộc tiện ích Định tuyến thông minh.",
+            "agent_status_bar": "Điều khiển trạng thái Sẵn sàng / Vắng mặt trên thanh trên cùng và đầu Hộp thư đến, kèm Đặt là vắng mặt / sẵn sàng và liên kết đến Nghỉ phép. Công tắc Sẵn sàng / Vắng mặt trong menu tài khoản mở cho mọi gói.",
+            "agent_status_automation": "Giờ làm việc cá nhân kèm múi giờ, Vắng mặt ngoài giờ, thông báo Ngoài giờ làm việc và việc phân công bỏ qua người ngoài giờ. Cần tính năng này để lưu lịch; nếu không, lịch đã lưu được giữ nhưng bị bỏ qua."
           },
           "units": {
             "days": "Ngày",
@@ -1644,7 +1646,9 @@
             "record_assignment": "Quy tắc phân công bản ghi (tự động phân công liên hệ, công ty và giao dịch)",
             "team_hierarchy": "Phân cấp nhóm và quản lý",
             "custom_roles": "Vai trò tùy chỉnh và phạm vi",
-            "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định"
+            "inbox_assignment_sticky": "Định tuyến thông minh: chủ liên hệ và nhân viên cố định",
+            "agent_status_bar": "Thanh trạng thái: điều khiển Sẵn sàng / Vắng mặt trên thanh trên cùng và Hộp thư đến",
+            "agent_status_automation": "Tự động hóa trạng thái: giờ làm việc cá nhân và Vắng mặt tự động"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",

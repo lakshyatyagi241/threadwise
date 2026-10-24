@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Sẵn sàng",
+        "away": "Vắng mặt",
+        "onLeaveUntil": "Nghỉ phép đến {date}",
+        "onLeaveOpen": "Đang nghỉ phép",
+        "awayHours": "Vắng mặt ngoài giờ làm việc",
+        "label": "Trạng thái của bạn"
+      },
+      "menu": {
+        "title": "Menu trạng thái",
+        "update": "Cập nhật trạng thái",
+        "setAway": "Đặt là vắng mặt",
+        "setAvailable": "Đặt là sẵn sàng",
+        "failed": "Không thể đổi trạng thái của bạn.",
+        "automate": "Tự động hóa trạng thái",
+        "manage": "Quản lý giờ làm việc và nghỉ vắng",
+        "workingHours": "Giờ làm việc",
+        "timeOff": "Nghỉ phép",
+        "outsideNotice": "Ngoài giờ làm việc",
+        "locked": "Thanh trạng thái có trong gói cao hơn. Công tắc Sẵn sàng / Vắng mặt trong menu tài khoản vẫn hoạt động."
+      },
+      "hours": {
+        "title": "Giờ làm việc của bạn",
+        "titleFor": "Giờ làm việc của {name}",
+        "lead": "Chọn thời gian bạn sẵn sàng. Ngoài khung giờ này, trạng thái của bạn tự chuyển sang Vắng mặt.",
+        "leadOther": "Chọn thời gian người này sẵn sàng. Ngoài khung giờ này, trạng thái của họ tự chuyển sang Vắng mặt.",
+        "locked": "Trạng thái tự động theo giờ làm việc có trong gói cao hơn.",
+        "viewOnly": "Bạn có thể xem giờ này nhưng không thể thay đổi.",
+        "automate": "Tự động hóa trạng thái của tôi",
+        "automateHint": "Vắng mặt ngoài khung giờ này, Sẵn sàng trong khung giờ. Trạng thái bạn đặt thủ công kéo dài đến lần đổi giờ tiếp theo.",
+        "emptyWarning": "Không có ngày nào mở, nên bạn sẽ luôn hiện là Sẵn sàng. Hãy mở ít nhất một ngày.",
+        "timezone": "Múi giờ",
+        "timezoneHint": "Bắt đầu từ múi giờ của không gian làm việc ({zone}).",
+        "useWorkspaceZone": "Dùng múi giờ của không gian làm việc"
+      },
+      "members": {
+        "hoursAction": "Giờ làm việc"
+      }
+    }
+  }
+}

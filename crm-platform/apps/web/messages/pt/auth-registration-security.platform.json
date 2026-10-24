@@ -1449,7 +1449,9 @@
             "record_assignment": "Atribui novos contatos, empresas e negócios ao responsável de vendas certo por regras de prioridade.",
             "team_hierarchy": "Equipes pai, líderes de equipe e gestores que veem sua equipe e as equipes abaixo dela.",
             "custom_roles": "Crie e edite funções e escolha um escopo (próprios, da equipe ou todos os registros) para cada permissão.",
-            "inbox_assignment_sticky": "Atribuição com prioridade ao proprietário e sincronizada, janela para contatos recorrentes e aviso ao reatribuir. Faz parte do complemento Roteamento inteligente."
+            "inbox_assignment_sticky": "Atribuição com prioridade ao proprietário e sincronizada, janela para contatos recorrentes e aviso ao reatribuir. Faz parte do complemento Roteamento inteligente.",
+            "agent_status_bar": "O controle de status Disponível / Ausente na barra superior e no topo da Caixa de entrada, com Definir como ausente / disponível e o link para Folga. A chave Disponível / Ausente do menu da conta está aberta a todos os planos.",
+            "agent_status_automation": "Horário de trabalho pessoal com fuso horário, Ausente fora dele, o aviso Fora do horário de trabalho e uma atribuição que ignora quem está fora do horário. Salvar um horário exige este recurso; sem ele, o horário salvo é mantido, mas ignorado."
           },
           "units": {
             "days": "Dias",
@@ -1644,7 +1646,9 @@
             "record_assignment": "Regras de atribuição de registros (atribuir contatos, empresas e negócios automaticamente)",
             "team_hierarchy": "Hierarquia de equipes e gestores",
             "custom_roles": "Funções personalizadas e escopos",
-            "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo"
+            "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo",
+            "agent_status_bar": "Barra de status: controle Disponível / Ausente na barra superior e na Caixa de entrada",
+            "agent_status_automation": "Automatizar status: horário de trabalho pessoal e Ausente automático"
           },
           "problems": {
             "required": "Este campo é obrigatório.",

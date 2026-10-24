@@ -18,7 +18,7 @@
         "needsAuto": "Wird nur verwendet, solange die automatische Zuweisung eingeschaltet ist.",
         "auto": {
           "title": "Automatische Zuweisung",
-          "body": "Neue Chats werden gleichmäßig auf Agenten verteilt, die Chats annehmen (nicht offline, nicht beschäftigt und nicht abwesend). Wenn alle Agenten ihr Chat-Limit erreicht haben, warten neue Chats in der Warteschlange.",
+          "body": "Neue Chats werden gleichmäßig auf Agenten verteilt, die Chats annehmen (nicht nicht verfügbar, beschäftigt oder im Urlaub). Wenn jeder Agent sein Chat-Limit erreicht hat, warten neue Chats in der Warteschlange.",
           "limitHint": "Das Chat-Limit pro Agent legst du im jeweiligen Profil unter <link>Teammitglieder</link> fest.",
           "off": "Aus: Es wird nichts automatisch zugewiesen, weder durch eine Regel noch über den Kontaktbesitzer. Chats warten in der Warteschlange, bis jemand sie übernimmt oder ein Ablauf eine Person nennt."
         },
@@ -85,7 +85,7 @@
         "notSet": "Noch nicht eingerichtet: Chats, die keine Regel übernimmt, warten in der Warteschlange.",
         "mode": "Was mit diesen Chats passiert",
         "evenly": "Gleichmäßig auf alle Agenten verteilen",
-        "evenlyHint": "Reihum oder geringste Auslastung unter allen, die den Posteingang öffnen können und verfügbar sind: nicht offline, nicht beschäftigt, nicht abwesend und noch unter dem Chat-Limit.",
+        "evenlyHint": "Round Robin oder am wenigsten ausgelastet unter allen, die den Posteingang öffnen können und verfügbar sind: nicht nicht verfügbar, beschäftigt, im Urlaub oder am Chat-Limit.",
         "listed": "Agenten oder Teams auswählen",
         "listedNow": "Aktuell: {who}.",
         "listedEdit": "Agenten oder Teams ändern",
@@ -185,11 +185,12 @@
         "skippedTitle": "Ausgeschlossen",
         "skip": {
           "on_leave": "abwesend",
-          "offline_busy_or_at_capacity": "offline, beschäftigt oder am Chat-Limit",
+          "offline_busy_or_at_capacity": "nicht verfügbar, beschäftigt oder am Chat-Limit",
           "cannot_read": "kann den Posteingang nicht öffnen",
           "no_owner": "der Kontakt hat keinen Besitzer",
           "no_previous_handler_in_window": "kein früherer Agent für diesen Kontakt",
-          "not_an_active_member": "kein aktives Mitglied"
+          "not_an_active_member": "kein aktives Mitglied",
+          "outside_working_hours": "außerhalb der Arbeitszeit"
         },
         "outside": "So tun, als wäre es außerhalb der Geschäftszeiten",
         "inside": "So tun, als wäre es innerhalb der Geschäftszeiten",

@@ -1449,7 +1449,9 @@
             "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu.",
             "team_hierarchy": "Zespoły nadrzędne, liderzy zespołów i menedżerowie, którzy widzą swój zespół i zespoły poniżej.",
             "custom_roles": "Twórz i edytuj role oraz wybierz zakres (własne, zespołu lub wszystkie rekordy) dla każdego uprawnienia.",
-            "inbox_assignment_sticky": "Przydzielanie z pierwszeństwem właściciela i synchronizacją, okno dla wracających kontaktów i pytanie przy zmianie przydziału. Część dodatku Inteligentne kierowanie."
+            "inbox_assignment_sticky": "Przydzielanie z pierwszeństwem właściciela i synchronizacją, okno dla wracających kontaktów i pytanie przy zmianie przydziału. Część dodatku Inteligentne kierowanie.",
+            "agent_status_bar": "Kontrolka statusu Dostępny / Nieobecny na górnym pasku i na początku Skrzynki odbiorczej, z opcjami Ustaw jako nieobecny / dostępny i linkiem do Urlopu. Przełącznik Dostępny / Nieobecny w menu konta jest otwarty w każdym planie.",
+            "agent_status_automation": "Osobiste godziny pracy ze strefą czasową, Nieobecny poza nimi, powiadomienie Poza godzinami pracy oraz przydzielanie, które pomija osoby poza ich godzinami. Zapis harmonogramu tego wymaga; bez tego zapisany harmonogram jest zachowany, ale ignorowany."
           },
           "units": {
             "days": "Dni",
@@ -1644,7 +1646,9 @@
             "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)",
             "team_hierarchy": "Hierarchia zespołów i menedżerowie",
             "custom_roles": "Własne role i zakresy",
-            "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent"
+            "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent",
+            "agent_status_bar": "Pasek statusu: kontrolka Dostępny / Nieobecny na górnym pasku i w Skrzynce odbiorczej",
+            "agent_status_automation": "Automatyzuj status: osobiste godziny pracy i automatyczna nieobecność"
           },
           "problems": {
             "required": "To pole jest wymagane.",

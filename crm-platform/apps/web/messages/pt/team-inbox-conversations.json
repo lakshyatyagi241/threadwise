@@ -548,17 +548,17 @@
         "onLeave": "De licença",
         "onLeaveUntil": "De licença até {date}",
         "availability": {
-          "online": "Online",
-          "away": "Ausente",
+          "online": "Disponível",
+          "away": "Ausente, fora do horário de trabalho",
           "busy": "Ocupado",
-          "offline": "Offline"
+          "offline": "Ausente"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Ausente",
+        "online": "Disponível",
+        "away": "Ausente, fora do horário de trabalho",
         "busy": "Ocupado",
-        "offline": "Offline"
+        "offline": "Ausente"
       },
       "notes": {
         "tab": "Notas do contato",

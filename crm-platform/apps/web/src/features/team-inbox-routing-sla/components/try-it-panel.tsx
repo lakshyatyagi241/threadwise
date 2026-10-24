@@ -193,6 +193,7 @@ const WHY_KEYS = new Set([
 const SKIP_WHY = new Set([
   'on_leave',
   'offline_busy_or_at_capacity',
+  'outside_working_hours',
   'cannot_read',
   'no_owner',
   'no_previous_handler_in_window',

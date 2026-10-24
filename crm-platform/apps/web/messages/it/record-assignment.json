@@ -76,7 +76,7 @@
       "unknownPerson": "Ex membro",
       "unknownTeam": "Team rimosso",
       "teamName": "Team: {name}",
-      "skipsOffline": "Salta le persone offline",
+      "skipsOffline": "Salta le persone assenti",
       "reassigns": "Riassegna all'aggiornamento",
       "activeFor": "La regola {name} è attiva",
       "dragHandle": "Trascina {name} per cambiarne la priorità",
@@ -136,7 +136,7 @@
         "noPeople": "Nessuna persona corrispondente.",
         "removePerson": "Rimuovi {name}",
         "onLeave": "in congedo",
-        "skipOffline": "Salta le persone offline",
+        "skipOffline": "Salta le persone assenti",
         "skipOfflineHint": "Le persone in congedo vengono sempre saltate.",
         "reassign": "Riassegna quando un aggiornamento fa corrispondere il record a questa regola",
         "reassignHint": "Si applica solo ai record assegnati dal motore stesso e solo finché nessuno ha cambiato il responsabile. Disattivato per impostazione predefinita: un record viene assegnato una sola volta."
@@ -220,7 +220,7 @@
         "disabled": "L'assegnazione dei record è disattivata per questo workspace, quindi non succederebbe nulla.",
         "has_owner": "{record} ha già un responsabile, quindi nessuna regola verrebbe eseguita. Un responsabile impostato da una persona non viene mai sostituito.",
         "no_rule": "Nessuna regola attiva corrisponde a {record}.",
-        "nobody_available": "Una regola corrisponde a {record}, ma tutte le persone indicate sono in congedo, offline o non ci sono più.",
+        "nobody_available": "Una regola corrisponde a {record}, ma tutte le persone indicate sono in ferie, assenti o non ci sono più.",
         "plan": "Il tuo piano non include le regole di assegnazione dei record.",
         "not_found": "Record non trovato. Potrebbe essere stato eliminato oppure non rientrare tra quelli che puoi vedere."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: non può aprire questo tipo di record",
         "inactive": "{name}: non più attivo",
         "on_leave": "{name}: in ferie oggi",
-        "offline": "{name}: offline"
+        "offline": "{name}: assente"
       }
     },
     "log": {

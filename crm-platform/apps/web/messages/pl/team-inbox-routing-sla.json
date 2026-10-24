@@ -151,7 +151,7 @@
         "outside": "Tylko poza godzinami pracy"
       },
       "thenTitle": "Przypisz do",
-      "thenHint": "Pomijani są agenci nieaktywni, offline, zajęci lub bez dostępu do skrzynki odbiorczej.",
+      "thenHint": "Agenci nieaktywni, nieobecni, zajęci lub bez dostępu do skrzynki są pomijani.",
       "strategy": "Jak wybierać",
       "strategyHint": {
         "round_robin": "Po kolei: rozmowy trafiają do wybranych agentów na zmianę, więc każdy dostaje tyle samo. Reguła pamięta, czyja kolej jest następna.",
@@ -288,10 +288,10 @@
         "lastSeen": "Ostatnio widziany"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Zaraz wracam",
+        "online": "Dostępny",
+        "away": "Nieobecny, poza godzinami pracy",
         "busy": "Zajęty",
-        "offline": "Offline"
+        "offline": "Nieobecny"
       }
     },
     "businessHours": {

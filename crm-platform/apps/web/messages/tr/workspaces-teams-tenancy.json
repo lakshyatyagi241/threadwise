@@ -66,10 +66,10 @@
       "pending": "beklemede",
       "you": "Siz",
       "presence": {
-        "online": "Çevrimiçi",
-        "away": "Uzakta",
+        "online": "Müsait",
+        "away": "Uzakta, çalışma saatleri dışında",
         "busy": "Meşgul",
-        "offline": "Çevrimdışı"
+        "offline": "Uzakta"
       },
       "inactive": "Etkin değil",
       "roleFor": "{name} rolü",
@@ -410,8 +410,8 @@
     "availability": {
       "label": "Uygunluk",
       "available": "Müsait",
-      "offline": "Çevrimdışı",
-      "hint": "Çevrimdışı olduğunuz sürece size otomatik olarak yeni sohbet atanmaz. Zaten sizde olan sohbetler sizde kalır.",
+      "offline": "Uzakta",
+      "hint": "Uzaktayken size otomatik olarak yeni sohbet atanmaz. Zaten sahip olduğunuz sohbetler sizde kalır.",
       "failed": "Değiştirilemedi"
     },
     "myLeave": {

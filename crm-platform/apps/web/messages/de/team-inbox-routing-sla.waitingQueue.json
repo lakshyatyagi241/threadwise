@@ -28,9 +28,9 @@
         "message": "Schreibe die Nachricht."
       },
       "away": "Unbeantwortete Chats zurückgeben, wenn jemand abwesend ist",
-      "awayBody": "Wenn jemand auf Offline wechselt oder eine Abwesenheit beginnt, gehen die Chats, auf die der Kunde noch wartet, zurück in die Warteschlange des Teams.",
-      "offline": "Inaktive Personen auf Offline setzen",
-      "offlineBody": "Eine verfügbare Person, die so lange nichts getan hat, wird auf Offline gesetzt. Sie schaltet sich selbst wieder auf Verfügbar."
+      "awayBody": "Wenn eine Person auf Nicht verfügbar wechselt oder einen Urlaub beginnt, gehen ihre Chats, auf die der Kunde noch wartet, zurück in die Warteschlange des Teams.",
+      "offline": "Inaktive Personen auf Nicht verfügbar setzen",
+      "offlineBody": "Eine verfügbare Person, die so lange nichts getan hat, wird auf Nicht verfügbar gesetzt. Sie kann sich selbst wieder auf Verfügbar setzen."
     }
   }
 }

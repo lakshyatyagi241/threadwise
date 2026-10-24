@@ -18,7 +18,7 @@
         "needsAuto": "Chỉ dùng khi Tự động phân công đang bật.",
         "auto": {
           "title": "Tự động phân công",
-          "body": "Chat mới được chia đều cho các nhân viên đang nhận chat (không ngoại tuyến, bận hoặc nghỉ phép). Khi mọi nhân viên đã đạt giới hạn chat, chat mới sẽ chờ trong hàng đợi.",
+          "body": "Chat mới được chia đều cho các nhân viên đang nhận chat (không vắng mặt, bận hoặc nghỉ phép). Khi mọi nhân viên đạt giới hạn chat, chat mới chờ trong hàng đợi.",
           "limitHint": "Đặt giới hạn chat cho từng nhân viên trong hồ sơ của họ tại <link>Thành viên nhóm</link>.",
           "off": "Tắt: không có gì được phân công tự động, dù bằng quy tắc hay bằng chủ sở hữu liên hệ. Chat chờ trong hàng đợi cho đến khi có người nhận hoặc một luồng chỉ định người xử lý."
         },
@@ -85,7 +85,7 @@
         "notSet": "Chưa thiết lập: chat mà không quy tắc nào nhận sẽ chờ trong hàng đợi.",
         "mode": "Những chat đó sẽ được xử lý thế nào",
         "evenly": "Chia đều cho tất cả nhân viên",
-        "evenlyHint": "Luân phiên hoặc ít việc nhất trong số mọi người có thể mở hộp thư và đang sẵn sàng: không ngoại tuyến, bận, nghỉ phép hay đạt giới hạn chat.",
+        "evenlyHint": "Xoay vòng hoặc ít bận nhất trong số những người mở được hộp thư đến và đang sẵn sàng: không vắng mặt, bận, nghỉ phép hay đạt giới hạn chat.",
         "listed": "Chọn nhân viên hoặc nhóm",
         "listedNow": "Hiện tại: {who}.",
         "listedEdit": "Đổi nhân viên hoặc nhóm",
@@ -185,11 +185,12 @@
         "skippedTitle": "Bị loại",
         "skip": {
           "on_leave": "đang nghỉ phép",
-          "offline_busy_or_at_capacity": "ngoại tuyến, bận hoặc đạt giới hạn chat",
+          "offline_busy_or_at_capacity": "vắng mặt, bận hoặc đạt giới hạn chat",
           "cannot_read": "không thể mở hộp thư",
           "no_owner": "liên hệ chưa có chủ sở hữu",
           "no_previous_handler_in_window": "liên hệ này chưa có nhân viên trước đó",
-          "not_an_active_member": "không phải thành viên đang hoạt động"
+          "not_an_active_member": "không phải thành viên đang hoạt động",
+          "outside_working_hours": "ngoài giờ làm việc của họ"
         },
         "outside": "Giả định đang ngoài giờ làm việc",
         "inside": "Giả định đang trong giờ làm việc",

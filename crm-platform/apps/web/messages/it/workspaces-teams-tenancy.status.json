@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Disponibile",
+        "away": "Assente",
+        "onLeaveUntil": "In ferie fino al {date}",
+        "onLeaveOpen": "In ferie",
+        "awayHours": "Assente fuori orario di lavoro",
+        "label": "Il tuo stato"
+      },
+      "menu": {
+        "title": "Menu stato",
+        "update": "Aggiorna stato",
+        "setAway": "Imposta come assente",
+        "setAvailable": "Imposta come disponibile",
+        "failed": "Impossibile cambiare il tuo stato.",
+        "automate": "Automatizza stato",
+        "manage": "Gestisci orario di lavoro e assenza dall’ufficio",
+        "workingHours": "Orario di lavoro",
+        "timeOff": "Assenza",
+        "outsideNotice": "Fuori orario di lavoro",
+        "locked": "La barra di stato è inclusa in un piano superiore. L’interruttore Disponibile / Assente nel menu del tuo account continua a funzionare."
+      },
+      "hours": {
+        "title": "Il tuo orario di lavoro",
+        "titleFor": "Orario di lavoro di {name}",
+        "lead": "Scegli quando sei disponibile. Fuori da questi orari il tuo stato passa automaticamente ad Assente.",
+        "leadOther": "Scegli quando questa persona è disponibile. Fuori da questi orari il suo stato passa automaticamente ad Assente.",
+        "locked": "Lo stato automatico in base all’orario di lavoro è incluso in un piano superiore.",
+        "viewOnly": "Puoi vedere questi orari ma non modificarli.",
+        "automate": "Automatizza il mio stato",
+        "automateHint": "Assente fuori da questi orari, Disponibile durante. Uno stato impostato a mano dura fino al prossimo cambio di orario.",
+        "emptyWarning": "Nessun giorno è aperto, quindi risulterai sempre Disponibile. Apri almeno un giorno.",
+        "timezone": "Fuso orario",
+        "timezoneHint": "Parte dal fuso orario del tuo spazio di lavoro ({zone}).",
+        "useWorkspaceZone": "Usa il fuso orario dello spazio di lavoro"
+      },
+      "members": {
+        "hoursAction": "Orario di lavoro"
+      }
+    }
+  }
+}

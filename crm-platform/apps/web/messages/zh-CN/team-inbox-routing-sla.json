@@ -151,7 +151,7 @@
         "outside": "仅营业时间外"
       },
       "thenTitle": "分配给",
-      "thenHint": "不活跃、离线、忙碌或无法打开收件箱的客服将被跳过。",
+      "thenHint": "不活跃、离开、忙碌或无法打开收件箱的客服会被跳过。",
       "strategy": "选择方式",
       "strategyHint": {
         "round_robin": "轮询：会话依次分配给所选客服，使每人分得的份额相同。规则会记住下一个轮到的客服。",
@@ -288,10 +288,10 @@
         "lastSeen": "最后在线"
       },
       "statuses": {
-        "online": "在线",
-        "away": "离开",
+        "online": "可接待",
+        "away": "离开，非工作时间",
         "busy": "忙碌",
-        "offline": "离线"
+        "offline": "离开"
       }
     },
     "businessHours": {

@@ -91,7 +91,9 @@
       "record_assignment": "כללי הקצאת רשומות",
       "team_hierarchy": "היררכיית צוותים ומנהלים",
       "custom_roles": "תפקידים מותאמים וטווחים",
-      "inbox_assignment_sticky": "ניתוב חכם: בעל איש הקשר והנציג הקבוע"
+      "inbox_assignment_sticky": "ניתוב חכם: בעל איש הקשר והנציג הקבוע",
+      "agent_status_bar": "סרגל סטטוס: פקד זמין / לא זמין בסרגל העליון ובתיבת הדואר",
+      "agent_status_automation": "אוטומציה של הסטטוס: שעות עבודה אישיות ו״לא זמין״ אוטומטי"
     },
     "limitGroups": {
       "messaging": "הודעות",

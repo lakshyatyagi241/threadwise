@@ -76,7 +76,7 @@
       "unknownPerson": "前成员",
       "unknownTeam": "已移除的团队",
       "teamName": "团队：{name}",
-      "skipsOffline": "跳过离线的人员",
+      "skipsOffline": "跳过离开的人员",
       "reassigns": "更新时重新分配",
       "activeFor": "规则 {name} 已启用",
       "dragHandle": "拖动 {name} 以更改其优先级",
@@ -136,7 +136,7 @@
         "noPeople": "没有匹配的人员。",
         "removePerson": "移除 {name}",
         "onLeave": "休假中",
-        "skipOffline": "跳过离线的人员",
+        "skipOffline": "跳过离开的人员",
         "skipOfflineHint": "休假中的人员始终会被跳过。",
         "reassign": "当更新使记录开始匹配此规则时重新分配",
         "reassignHint": "仅适用于本引擎自己分配的记录，并且仅在此后无人更改负责人时有效。默认关闭：一条记录只分配一次。"
@@ -220,7 +220,7 @@
         "disabled": "此工作区已关闭记录分配，因此不会发生任何操作。",
         "has_owner": "{record} 已有负责人，因此不会运行任何规则。由人工设置的负责人不会被替换。",
         "no_rule": "没有启用的规则与 {record} 匹配。",
-        "nobody_available": "有规则与 {record} 匹配，但其指定的人员都在休假、离线或已不在。",
+        "nobody_available": "有规则匹配{record}，但它指定的所有人都在休假、已离开或不在这里了。",
         "plan": "您的套餐不包含记录分配规则。",
         "not_found": "未找到该记录。它可能已被删除，或不在您可查看的范围内。"
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}：无法打开此类记录",
         "inactive": "{name}：已不再活跃",
         "on_leave": "{name}：今天休假",
-        "offline": "{name}：离线"
+        "offline": "{name}：离开"
       }
     },
     "log": {

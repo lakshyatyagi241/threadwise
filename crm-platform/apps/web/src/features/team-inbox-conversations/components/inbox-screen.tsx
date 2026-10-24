@@ -1,5 +1,6 @@
 'use client';
 
+import { AgentStatusMenu } from '@/features/workspaces-teams-tenancy/components/agent-status-menu';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTimeZone, useTranslations } from 'next-intl';
@@ -598,58 +599,63 @@ export function InboxScreen() {
             selectedId ? 'hidden md:block' : 'block',
           )}
         >
-          <ConversationList
-            list={list.state}
-            filters={filters}
-            onFilters={patchFilters}
-            channels={filterChannels}
-            channelsLoaded={channelsQ.isSuccess}
-            activeId={selectedId}
-            nowMs={nowMs}
-            onOpen={(id) => open(id)}
-            onRowPriority={can.priority ? (r, p) => void setRowPriority(r, p) : undefined}
-            onLoadMore={list.loadMore}
-            onRefresh={() => {
-              list.refresh();
-              void qc.invalidateQueries({ queryKey: KEYS.channels });
-            }}
-            searchRef={searchRef}
-            canManageChannels={can.manageChannels}
-            simulatorAvailable={simulatorAvailable}
-            onOpenSimulator={() => setSimulatorOpen((v) => !v)}
-            bulk={
-              can.bulk
-                ? {
-                    selecting: bulk.selecting,
-                    selection: bulk.selection,
-                    onToggleSelecting: bulk.toggleSelecting,
-                    onSelect: bulk.select,
-                    onPick: bulk.pick,
-                    bar: (
-                      <BulkBar
-                        count={bulk.selection.size}
-                        picked={bulk.picked}
-                        inView={list.state.rows.length}
-                        allInViewSelected={bulk.allInView}
-                        busy={bulk.busy}
-                        can={{
-                          resolve: can.resolve,
-                          assign: can.assign,
-                          assignSelf: can.assignSelf,
-                          priority: can.priority,
-                          snooze: can.snooze,
-                          tag: can.tag,
-                        }}
-                        meId={meId}
-                        onToggleAll={bulk.toggleAll}
-                        onClear={bulk.toggleSelecting}
-                        onRun={bulk.run}
-                      />
-                    ),
-                  }
-                : undefined
-            }
-          />
+          <div className="flex h-full min-h-0 flex-col">
+            <AgentStatusMenu variant="inbox" />
+            <div className="min-h-0 flex-1">
+              <ConversationList
+                list={list.state}
+                filters={filters}
+                onFilters={patchFilters}
+                channels={filterChannels}
+                channelsLoaded={channelsQ.isSuccess}
+                activeId={selectedId}
+                nowMs={nowMs}
+                onOpen={(id) => open(id)}
+                onRowPriority={can.priority ? (r, p) => void setRowPriority(r, p) : undefined}
+                onLoadMore={list.loadMore}
+                onRefresh={() => {
+                  list.refresh();
+                  void qc.invalidateQueries({ queryKey: KEYS.channels });
+                }}
+                searchRef={searchRef}
+                canManageChannels={can.manageChannels}
+                simulatorAvailable={simulatorAvailable}
+                onOpenSimulator={() => setSimulatorOpen((v) => !v)}
+                bulk={
+                  can.bulk
+                    ? {
+                        selecting: bulk.selecting,
+                        selection: bulk.selection,
+                        onToggleSelecting: bulk.toggleSelecting,
+                        onSelect: bulk.select,
+                        onPick: bulk.pick,
+                        bar: (
+                          <BulkBar
+                            count={bulk.selection.size}
+                            picked={bulk.picked}
+                            inView={list.state.rows.length}
+                            allInViewSelected={bulk.allInView}
+                            busy={bulk.busy}
+                            can={{
+                              resolve: can.resolve,
+                              assign: can.assign,
+                              assignSelf: can.assignSelf,
+                              priority: can.priority,
+                              snooze: can.snooze,
+                              tag: can.tag,
+                            }}
+                            meId={meId}
+                            onToggleAll={bulk.toggleAll}
+                            onClear={bulk.toggleSelecting}
+                            onRun={bulk.run}
+                          />
+                        ),
+                      }
+                    : undefined
+                }
+              />
+            </div>
+          </div>
         </aside>
 
         <main

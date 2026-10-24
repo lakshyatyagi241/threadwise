@@ -76,7 +76,7 @@
       "unknownPerson": "Mantan anggota",
       "unknownTeam": "Tim dihapus",
       "teamName": "Tim: {name}",
-      "skipsOffline": "Melewati orang yang offline",
+      "skipsOffline": "Melewati orang yang tidak di tempat",
       "reassigns": "Menugaskan ulang saat diperbarui",
       "activeFor": "Aturan {name} aktif",
       "dragHandle": "Seret {name} untuk mengubah prioritasnya",
@@ -136,7 +136,7 @@
         "noPeople": "Tidak ada orang yang cocok.",
         "removePerson": "Hapus {name}",
         "onLeave": "sedang cuti",
-        "skipOffline": "Lewati orang yang offline",
+        "skipOffline": "Lewati orang yang tidak di tempat",
         "skipOfflineHint": "Orang yang sedang cuti selalu dilewati.",
         "reassign": "Tugaskan ulang saat pembaruan membuat aturan ini mulai cocok",
         "reassignHint": "Hanya berlaku untuk data yang ditugaskan sendiri oleh mesin ini, dan hanya selama belum ada yang mengubah pemiliknya. Nonaktif secara default: data hanya ditugaskan sekali."
@@ -220,7 +220,7 @@
         "disabled": "Penugasan data dinonaktifkan untuk ruang kerja ini, jadi tidak akan terjadi apa-apa.",
         "has_owner": "{record} sudah memiliki pemilik, jadi tidak ada aturan yang dijalankan. Pemilik yang ditetapkan seseorang tidak pernah diganti.",
         "no_rule": "Tidak ada aturan aktif yang cocok dengan {record}.",
-        "nobody_available": "Sebuah aturan cocok dengan {record}, tetapi semua orang yang disebutkan sedang cuti, offline, atau sudah tidak ada.",
+        "nobody_available": "Sebuah aturan cocok dengan {record}, tetapi semua orang yang disebutkan sedang cuti, tidak di tempat, atau sudah tidak di sini.",
         "plan": "Paket Anda tidak menyertakan aturan penugasan data.",
         "not_found": "Data itu tidak ditemukan. Mungkin telah dihapus, atau berada di luar yang dapat Anda lihat."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: tidak dapat membuka jenis data ini",
         "inactive": "{name}: sudah tidak aktif",
         "on_leave": "{name}: cuti hari ini",
-        "offline": "{name}: offline"
+        "offline": "{name}: tidak di tempat"
       }
     },
     "log": {

@@ -28,9 +28,9 @@
         "message": "Tulis pesannya."
       },
       "away": "Kembalikan chat tanpa balasan saat seseorang tidak ada",
-      "awayBody": "Saat seseorang menjadi Offline atau mulai cuti, chat miliknya yang masih ditunggu pelanggan kembali ke antrean tim.",
-      "offline": "Jadikan Offline orang yang tidak aktif",
-      "offlineBody": "Orang yang Tersedia tetapi tidak melakukan apa pun selama ini dijadikan Offline. Mereka sendiri yang kembali ke Tersedia."
+      "awayBody": "Saat seseorang menjadi Tidak di tempat atau mulai cuti, chat yang dipegangnya dan masih ditunggu balasannya oleh pelanggan kembali ke antrean tim.",
+      "offline": "Setel orang yang tidak aktif menjadi Tidak di tempat",
+      "offlineBody": "Orang berstatus Tersedia yang tidak melakukan apa pun selama waktu ini diubah menjadi Tidak di tempat. Mereka dapat kembali ke Tersedia sendiri."
     }
   }
 }
