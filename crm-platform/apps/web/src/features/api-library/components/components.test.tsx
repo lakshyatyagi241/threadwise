@@ -25,6 +25,7 @@ const state = vi.hoisted(() => ({
   detail: {} as Record<string, unknown>,
   logs: {} as Record<string, unknown>,
   options: {} as Record<string, unknown>,
+  logApis: {} as Record<string, unknown>,
   query: '',
 }));
 
@@ -45,6 +46,7 @@ vi.mock('../api/hooks', () => ({
   useApiLogs: () => state.logs,
   useApiLog: () => q(),
   useApiLibraryOptions: () => state.options,
+  useApiLogApis: () => state.logApis,
   useContactProperties: () =>
     q({ data: { data: [{ key: 'email', label: 'Email', kind: 'system' }] } }),
 }));
@@ -128,6 +130,7 @@ beforeEach(() => {
   state.usage = q({ data: { data: [] } });
   state.logs = listOf([]);
   state.options = q({ data: { data: [] } });
+  state.logApis = q({ data: { data: [] } });
   state.detail = q();
 });
 
@@ -289,9 +292,23 @@ describe('logs', () => {
   });
 
   it('has the filters of the old drawer and the new ones', () => {
-    const out = html(<LogsPanel paging={paging} apis={[{ id: ID, name: 'Orders' }]} />);
+    const out = html(
+      <LogsPanel paging={paging} apis={[{ id: ID, name: 'Orders', deleted: false }]} />,
+    );
     for (const label of ['Search', 'Result', 'Status code', 'Source', 'From', 'To', 'All APIs'])
       expect(out).toContain(label);
+  });
+
+  it('marks a deleted API in the filter, and a run with no API name shows as not saved', () => {
+    const apis = [
+      { id: ID, name: 'Orders', deleted: false },
+      { id: '00000000-0000-4000-8000-000000000002', name: 'qatestapi', deleted: true },
+    ];
+    const out = html(<LogsPanel paging={paging} apis={apis} />);
+    expect(out).toContain('qatestapi (deleted)');
+    expect(out).toContain('>Orders<');
+    state.logs = listOf([log({ apiName: '' })]);
+    expect(html(<LogsPanel paging={paging} />)).toContain('Not saved');
   });
 
   it('shows empty and error states', () => {

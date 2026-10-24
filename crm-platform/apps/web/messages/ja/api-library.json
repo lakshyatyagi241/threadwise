@@ -137,7 +137,8 @@
         "allSources": "すべてのソース",
         "from": "開始",
         "to": "終了",
-        "clear": "フィルターをクリア"
+        "clear": "フィルターをクリア",
+        "deletedApi": "{name}（削除済み）"
       },
       "detail": {
         "title": "API ログの詳細",
@@ -168,7 +169,8 @@
         "openContact": "連絡先を開く",
         "user": "実行者（ユーザー ID）",
         "noContext": "フローや連絡先は関係していません。"
-      }
+      },
+      "unsaved": "未保存"
     },
     "variables": {
       "insertFor": "{label} に変数を挿入",
@@ -218,7 +220,8 @@
         "empty": "ペイロードを送信しない場合は空欄のままにしてください。",
         "invalid": "有効な JSON ではありません。",
         "shape": "ペイロードは JSON オブジェクトまたはリストである必要があります。",
-        "format": "JSON を整形"
+        "format": "JSON を整形",
+        "invalidAt": "有効な JSON ではありません（{line} 行目、{column} 列目付近で壊れています）。"
       },
       "responseVarsHint": "フローが '{{'ApiName.field'}}' として読み取れる応答のフィールドです。テストレスポンスから選択してください。",
       "mappingHint": "フローがこの API を実行するたびに、応答のフィールドを連絡先プロパティに保存します。",
@@ -313,7 +316,8 @@
       "tested": "テスト成功",
       "requestHint": "呼び出しの名前、メソッド、アドレスです。",
       "payloadHint": "ボディに送信される内容です。'{ }' ボタンを使うと、値に変数を挿入できます。",
-      "functionHint": "送信前に JavaScript でペイロードを整形できます。任意です。"
+      "functionHint": "送信前に JavaScript でペイロードを整形できます。任意です。",
+      "plainHttpWarning": "このアドレスは http:// で始まるため、ヘッダーのパスワードやキーが暗号化されずに送信されます。サーバーが対応していれば https:// を使ってください。"
     },
     "test": {
       "title": "レスポンス",
@@ -366,7 +370,8 @@
       "result": "結果",
       "status": "ステータス",
       "time": "時間",
-      "size": "サイズ"
+      "size": "サイズ",
+      "truncatedShown": "{kb} KB の回答の最初の部分を表示しています"
     },
     "pagination": {
       "label": "ページネーション",

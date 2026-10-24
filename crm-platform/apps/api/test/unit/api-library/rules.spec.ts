@@ -5,6 +5,7 @@ import {
   applyMapping,
   buildMultipart,
   extractByPath,
+  logFilterApis,
   logResponseText,
   maskHeaders,
   maskJson,
@@ -382,5 +383,48 @@ describe('secrets the other server repeats back', () => {
     );
     expect(h['x-echo']).not.toContain('QAFAKETOK888');
     expect(h['content-type']).toBe('application/json');
+  });
+});
+
+describe('the logs API filter', () => {
+  const SAVED = '11111111-1111-4111-8111-111111111111';
+  const GONE = '22222222-2222-4222-8222-222222222222';
+  const GONE_TWO = '33333333-3333-4333-8333-333333333333';
+
+  it('lists every saved API as not deleted, in the order given', () => {
+    expect(logFilterApis([{ uuid: SAVED, name: 'orders' }], [])).toEqual([
+      { id: SAVED, name: 'orders', deleted: false },
+    ]);
+  });
+
+  it('adds a deleted API that still has runs, named as its run kept it, after the saved ones', () => {
+    const out = logFilterApis(
+      [{ uuid: SAVED, name: 'orders' }],
+      [{ apiUuid: GONE, apiName: 'qatestapi' }],
+    );
+    expect(out).toEqual([
+      { id: SAVED, name: 'orders', deleted: false },
+      { id: GONE, name: 'qatestapi', deleted: true },
+    ]);
+  });
+
+  it('does not list a saved API twice when its runs are logged too', () => {
+    const out = logFilterApis(
+      [{ uuid: SAVED, name: 'orders' }],
+      [{ apiUuid: SAVED, apiName: 'orders' }],
+    );
+    expect(out).toEqual([{ id: SAVED, name: 'orders', deleted: false }]);
+  });
+
+  it('sorts the deleted APIs by name', () => {
+    const out = logFilterApis(
+      [],
+      [
+        { apiUuid: GONE, apiName: 'zeta' },
+        { apiUuid: GONE_TWO, apiName: 'alpha' },
+      ],
+    );
+    expect(out.map((a) => a.name)).toEqual(['alpha', 'zeta']);
+    expect(out.every((a) => a.deleted)).toBe(true);
   });
 });

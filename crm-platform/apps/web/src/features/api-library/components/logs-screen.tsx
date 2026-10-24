@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Alert } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useApiLibraryOptions } from '../api/hooks';
+import { useApiLogApis } from '../api/hooks';
 import { LogsIcon } from './icons';
 import { PageHeader } from './page-chrome';
 import { LogsPanel } from './logs-panel';
@@ -13,8 +13,8 @@ import { useUrlPaging } from './use-paging';
 export function LogsScreen() {
   const t = useTranslations('api-library.logs');
   const canRead = useCan('integ.apilibrary.read');
-  // The slim picker feed has every name (a workspace holds at most 200 APIs); the filter needs nothing else.
-  const options = useApiLibraryOptions(canRead);
+  // Every saved API and each deleted API that still has runs (a workspace holds at most 200 saved APIs); the filter needs nothing else.
+  const logApis = useApiLogApis(canRead);
   const paging = useUrlPaging();
   if (!canRead) {
     return (
@@ -31,10 +31,7 @@ export function LogsScreen() {
         subtitle={t('subtitle')}
         back={{ href: '/api-library', label: t('back') }}
       />
-      <LogsPanel
-        paging={paging}
-        apis={(options.data?.data ?? []).map((a) => ({ id: a.id, name: a.name }))}
-      />
+      <LogsPanel paging={paging} apis={logApis.data?.data ?? []} />
     </section>
   );
 }

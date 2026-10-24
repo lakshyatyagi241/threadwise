@@ -5,6 +5,7 @@ import {
   apiLibraryIsSensitiveName,
   apiLibraryRenderUrl,
   type ApiLibraryBody,
+  type ApiLibraryLogApi,
   type ApiLibraryMapping,
   type ApiLibraryVariable,
 } from '@crm/contracts';
@@ -327,6 +328,24 @@ export function extractByPath(root: unknown, path: string): { found: boolean; va
     return { found: false, value: undefined };
   };
   return walk(root, 0);
+}
+
+/**
+ * The logs' API filter: every saved API (in the order given), then each deleted API that still has runs, named as its latest run
+ * kept it. A deleted API is not in the pickers' feed, so only the logs offer it; its id is what the log rows carry.
+ */
+export function logFilterApis(
+  live: ReadonlyArray<{ uuid: string; name: string }>,
+  logged: ReadonlyArray<{ apiUuid: string; apiName: string }>,
+): ApiLibraryLogApi[] {
+  const saved = new Set(live.map((a) => a.uuid));
+  const gone = logged
+    .filter((l) => !saved.has(l.apiUuid))
+    .sort((a, b) => a.apiName.localeCompare(b.apiName));
+  return [
+    ...live.map((a) => ({ id: a.uuid, name: a.name, deleted: false })),
+    ...gone.map((l) => ({ id: l.apiUuid, name: l.apiName, deleted: true })),
+  ];
 }
 
 /** How a value is written into a contact property or a flow variable: lists of plain values are comma-joined, records are JSON. */

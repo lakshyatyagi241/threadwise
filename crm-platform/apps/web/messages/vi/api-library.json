@@ -137,7 +137,8 @@
         "allSources": "Tất cả nguồn",
         "from": "Từ",
         "to": "Đến",
-        "clear": "Xóa bộ lọc"
+        "clear": "Xóa bộ lọc",
+        "deletedApi": "{name} (đã xóa)"
       },
       "detail": {
         "title": "Chi tiết nhật ký API",
@@ -168,7 +169,8 @@
         "openContact": "Mở liên hệ",
         "user": "Chạy bởi (ID người dùng)",
         "noContext": "Không có luồng hoặc liên hệ nào liên quan."
-      }
+      },
+      "unsaved": "Chưa lưu"
     },
     "variables": {
       "insertFor": "Chèn biến vào {label}",
@@ -218,7 +220,8 @@
         "empty": "Để trống nếu không gửi payload.",
         "invalid": "Đây không phải JSON hợp lệ.",
         "shape": "Payload phải là một đối tượng hoặc danh sách JSON.",
-        "format": "Định dạng JSON"
+        "format": "Định dạng JSON",
+        "invalidAt": "Đây không phải JSON hợp lệ (lỗi gần dòng {line}, cột {column})."
       },
       "responseVarsHint": "Các trường của phản hồi mà luồng có thể đọc dưới dạng '{{'TênAPI.trường'}}'. Chọn từ phản hồi kiểm thử.",
       "mappingHint": "Lưu một trường của phản hồi vào thuộc tính liên hệ mỗi lần luồng chạy API này.",
@@ -313,7 +316,8 @@
       "tested": "Kiểm thử đạt",
       "requestHint": "Tên, phương thức và địa chỉ của lệnh gọi.",
       "payloadHint": "Nội dung được gửi trong body. Dùng nút '{ }' để chèn biến vào giá trị.",
-      "functionHint": "Định dạng lại payload bằng JavaScript trước khi gửi. Không bắt buộc."
+      "functionHint": "Định dạng lại payload bằng JavaScript trước khi gửi. Không bắt buộc.",
+      "plainHttpWarning": "Địa chỉ này bắt đầu bằng http://, nên mật khẩu hoặc khóa trong tiêu đề sẽ được gửi không mã hóa. Hãy dùng https:// nếu máy chủ hỗ trợ."
     },
     "test": {
       "title": "Phản hồi",
@@ -366,7 +370,8 @@
       "result": "Kết quả",
       "status": "Trạng thái",
       "time": "Thời gian",
-      "size": "Kích thước"
+      "size": "Kích thước",
+      "truncatedShown": "Đang hiển thị phần đầu của phản hồi {kb} KB"
     },
     "pagination": {
       "label": "Phân trang",

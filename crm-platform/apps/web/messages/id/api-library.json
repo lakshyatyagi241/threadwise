@@ -137,7 +137,8 @@
         "allSources": "Semua sumber",
         "from": "Dari",
         "to": "Sampai",
-        "clear": "Hapus filter"
+        "clear": "Hapus filter",
+        "deletedApi": "{name} (dihapus)"
       },
       "detail": {
         "title": "Detail log API",
@@ -168,7 +169,8 @@
         "openContact": "Buka kontak",
         "user": "Dijalankan oleh (ID pengguna)",
         "noContext": "Tidak ada alur atau kontak yang terlibat."
-      }
+      },
+      "unsaved": "Belum disimpan"
     },
     "variables": {
       "insertFor": "Sisipkan variabel ke {label}",
@@ -218,7 +220,8 @@
         "empty": "Kosongkan jika tidak ingin mengirim payload.",
         "invalid": "Ini bukan JSON yang valid.",
         "shape": "Payload harus berupa objek atau daftar JSON.",
-        "format": "Format JSON"
+        "format": "Format JSON",
+        "invalidAt": "Ini bukan JSON yang valid (rusak di dekat baris {line}, kolom {column})."
       },
       "responseVarsHint": "Kolom jawaban yang dapat dibaca alur sebagai '{{'NamaAPI.kolom'}}'. Pilih dari respons uji.",
       "mappingHint": "Simpan kolom jawaban ke properti kontak setiap kali alur menjalankan API ini.",
@@ -313,7 +316,8 @@
       "tested": "Uji berhasil",
       "requestHint": "Nama, metode, dan alamat panggilan.",
       "payloadHint": "Isi yang dikirim di body. Gunakan tombol '{ }' untuk memasukkan variabel ke dalam nilai.",
-      "functionHint": "Ubah bentuk payload dengan JavaScript sebelum dikirim. Opsional."
+      "functionHint": "Ubah bentuk payload dengan JavaScript sebelum dikirim. Opsional.",
+      "plainHttpWarning": "Alamat ini dimulai dengan http://, jadi kata sandi atau kunci di header Anda akan dikirim tanpa enkripsi. Gunakan https:// jika server mendukungnya."
     },
     "test": {
       "title": "Respons",
@@ -366,7 +370,8 @@
       "result": "Hasil",
       "status": "Status",
       "time": "Waktu",
-      "size": "Ukuran"
+      "size": "Ukuran",
+      "truncatedShown": "Menampilkan bagian pertama dari jawaban {kb} KB"
     },
     "pagination": {
       "label": "Paginasi",

@@ -137,7 +137,8 @@
         "allSources": "Todos los orígenes",
         "from": "Desde",
         "to": "Hasta",
-        "clear": "Quitar filtros"
+        "clear": "Quitar filtros",
+        "deletedApi": "{name} (eliminada)"
       },
       "detail": {
         "title": "Detalles del registro de API",
@@ -168,7 +169,8 @@
         "openContact": "Abrir el contacto",
         "user": "Ejecutado por (ID de usuario)",
         "noContext": "No intervino ningún flujo ni contacto."
-      }
+      },
+      "unsaved": "Sin guardar"
     },
     "variables": {
       "insertFor": "Insertar una variable en {label}",
@@ -218,7 +220,8 @@
         "empty": "Déjalo vacío para no enviar cuerpo.",
         "invalid": "Esto no es JSON válido.",
         "shape": "El cuerpo debe ser un objeto JSON o una lista.",
-        "format": "Dar formato a JSON"
+        "format": "Dar formato a JSON",
+        "invalidAt": "Esto no es JSON válido (falla cerca de la línea {line}, columna {column})."
       },
       "responseVarsHint": "Campos de la respuesta que los flujos pueden leer como '{{'NombreAPI.campo'}}'. Elígelos a partir de la respuesta de prueba.",
       "mappingHint": "Guarda un campo de la respuesta en una propiedad de contacto cada vez que un flujo ejecute esta API.",
@@ -313,7 +316,8 @@
       "tested": "Prueba superada",
       "requestHint": "El nombre, el método y la dirección de la llamada.",
       "payloadHint": "Lo que se envía en el cuerpo. Usa el botón '{ }' para poner una variable en un valor.",
-      "functionHint": "Reformatea el cuerpo con JavaScript antes de enviarlo. Opcional."
+      "functionHint": "Reformatea el cuerpo con JavaScript antes de enviarlo. Opcional.",
+      "plainHttpWarning": "Esta dirección empieza por http://, así que la contraseña o clave de tus encabezados viajaría sin cifrar. Usa https:// si el servidor lo admite."
     },
     "test": {
       "title": "Respuesta",
@@ -366,7 +370,8 @@
       "result": "Resultado",
       "status": "Estado",
       "time": "Hora",
-      "size": "Tamaño"
+      "size": "Tamaño",
+      "truncatedShown": "Se muestra la primera parte de una respuesta de {kb} KB"
     },
     "pagination": {
       "label": "Paginación",

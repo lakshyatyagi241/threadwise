@@ -137,7 +137,8 @@
         "allSources": "Toutes les sources",
         "from": "Du",
         "to": "Au",
-        "clear": "Effacer les filtres"
+        "clear": "Effacer les filtres",
+        "deletedApi": "{name} (supprimée)"
       },
       "detail": {
         "title": "Détails du journal d'API",
@@ -168,7 +169,8 @@
         "openContact": "Ouvrir le contact",
         "user": "Exécuté par (ID utilisateur)",
         "noContext": "Aucun flux ni contact n'était impliqué."
-      }
+      },
+      "unsaved": "Non enregistrée"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",
@@ -218,7 +220,8 @@
         "empty": "Laissez vide pour n'envoyer aucune charge utile.",
         "invalid": "Ce JSON n'est pas valide.",
         "shape": "La charge utile doit être un objet JSON ou une liste.",
-        "format": "Formater le JSON"
+        "format": "Formater le JSON",
+        "invalidAt": "Ce n’est pas du JSON valide (il casse près de la ligne {line}, colonne {column})."
       },
       "responseVarsHint": "Champs de la réponse que les flux peuvent lire sous la forme '{{'ApiName.field'}}'. Sélectionnez-les dans la réponse du test.",
       "mappingHint": "Enregistrer un champ de la réponse dans une propriété de contact à chaque exécution du flux qui appelle cette API.",
@@ -313,7 +316,8 @@
       "tested": "Test réussi",
       "requestHint": "Le nom, la méthode et l'adresse de l'appel.",
       "payloadHint": "Ce qui est envoyé dans le corps. Utilisez le bouton '{ }' pour insérer une variable dans une valeur.",
-      "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif."
+      "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif.",
+      "plainHttpWarning": "Cette adresse commence par http://, donc le mot de passe ou la clé dans vos en-têtes circulerait sans chiffrement. Utilisez https:// si le serveur le permet."
     },
     "test": {
       "title": "Réponse",
@@ -366,7 +370,8 @@
       "result": "Résultat",
       "status": "Statut",
       "time": "Heure",
-      "size": "Taille"
+      "size": "Taille",
+      "truncatedShown": "Affichage du début d’une réponse de {kb} Ko"
     },
     "pagination": {
       "label": "Pagination",

@@ -117,6 +117,7 @@
         "duration": "Duration"
       },
       "openLog": "Open the run of {when}",
+      "unsaved": "Not saved",
       "drawerTitle": "Logs: {name}",
       "allLogs": "Open all logs",
       "emptyTitle": "No runs yet",
@@ -130,6 +131,7 @@
         "searchPlaceholder": "URL, API name or error",
         "api": "API",
         "allApis": "All APIs",
+        "deletedApi": "{name} (deleted)",
         "status": "Result",
         "allStatus": "All results",
         "statusCode": "Status code",
