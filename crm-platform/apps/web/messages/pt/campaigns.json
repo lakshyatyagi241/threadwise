@@ -241,7 +241,8 @@
         "expiry": "A data de término deve ser posterior à data de envio, caso contrário a campanha expiraria antes de ser enviada.",
         "media": "Informe um endereço completo começando com http:// ou https://.",
         "sender": "Escolha um remetente.",
-        "subject": "Reduza o assunto para 150 caracteres ou menos."
+        "subject": "Reduza o assunto para 150 caracteres ou menos.",
+        "pacing": "Verifique a entrega inteligente: cada número deve ser um inteiro dentro da faixa permitida."
       },
       "submit": {
         "save": "Salvar alterações",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "A maior espera antes de uma mensagem.",
         "batchPauseHint": "Minutos de pausa após cada lote.",
         "retryFailed": "Tentar novamente automaticamente as mensagens com falha",
-        "retryFailedHint": "Uma mensagem que falha por um motivo temporário é reenviada algumas vezes, com uma pausa entre as tentativas. Desative para enviar cada mensagem uma única vez."
+        "retryFailedHint": "Uma mensagem que falha por um motivo temporário é reenviada algumas vezes, com uma pausa entre as tentativas. Desative para enviar cada mensagem uma única vez.",
+        "range": "Informe um número inteiro de {min} a {max}."
       },
       "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
       "draftChip": "Rascunho / não salvo",
@@ -595,7 +597,8 @@
           "expiry": "A data final deve ser posterior à data de envio; caso contrário, a campanha expiraria antes de ser enviada.",
           "media": "Digite um endereço completo começando com http:// ou https://.",
           "sender": "Escolha um remetente.",
-          "subject": "Reduza o assunto para 150 caracteres ou menos."
+          "subject": "Reduza o assunto para 150 caracteres ou menos.",
+          "pacing": "Verifique a entrega inteligente: cada número deve ser um inteiro dentro da faixa permitida."
         },
         "from": "De",
         "subject": "Assunto",
@@ -686,6 +689,7 @@
             "providerFailed": "O serviço de imagens não respondeu. Tente novamente em instantes.",
             "badJson": "O serviço de imagens enviou uma resposta inesperada. Tente novamente.",
             "imageRefused": "A OpenAI se recusou a gerar esta imagem. Altere o produto, a oferta ou as observações e tente novamente.",
+            "storageRequired": "As imagens precisam de armazenamento de objetos na nuvem: peça ao administrador da plataforma para ativá-lo. O texto da campanha foi mantido.",
             "invalid": "Verifique o briefing: o nome da empresa é obrigatório e alguns campos estão longos demais.",
             "forbidden": "Você não tem permissão para criar campanhas.",
             "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos.",
         "sequence_not_recurring": "Modelos em rodízio só funcionam com uma campanha recorrente. Escolha um agendamento recorrente ou remova os modelos extras.",
         "sequence_with_ab": "Modelos em rodízio não podem ser combinados com um teste A/B. Desative o teste A/B ou remova os modelos extras.",
-        "sequence_template_required": "Escolha um modelo para cada passo da ordem ou remova os vazios."
+        "sequence_template_required": "Escolha um modelo para cada passo da ordem ou remova os vazios.",
+        "variable_fallback_required": "Informe um valor alternativo para cada variável que vem de um campo do contato: ele é usado para os contatos sem valor.",
+        "retry_end_too_far": "As novas tentativas podem durar no máximo 7 dias a partir de hoje. Escolha uma data de término mais próxima.",
+        "template_b_same": "A variante B precisa de um modelo diferente da variante A.",
+        "pacing_out_of_range": "Verifique a entrega inteligente: um número está fora da faixa permitida."
       },
       "template": {
         "previewOnline": "online",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Versão do aviso: {version}.",
         "modePrevious": "Enviar para envios anteriores",
         "previousHint": "Redirecione para as pessoas que receberam transmissões e campanhas anteriores, opcionalmente apenas quem leu, não leu, respondeu ou clicou.",
-        "chipPrevious": "{count, plural, one {# envio anterior} many {# de envios anteriores} other {# envios anteriores}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# envio anterior} many {# de envios anteriores} other {# envios anteriores}} ({outcome})",
+        "filterNoConditions": "Adicione uma condição para ver quantos contatos correspondem."
       },
       "review": {
         "intro": "Confira o custo, diga com o que cada variável do modelo é preenchida e revise a transmissão.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Envios anteriores: {names} ({outcome})",
         "sumSplit": "Divisão entre números",
         "sumSplitCount": "{count, plural, one {# destinatário} other {# destinatários}} ({percent}%)",
-        "sumSplitPercent": "{percent}% do público"
+        "sumSplitPercent": "{percent}% do público",
+        "sumCostCharged": "Cobrado da sua carteira: {amount} (seu plano cobre o restante)"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1547,7 +1557,9 @@
         "retriesInfoCost": "Sem custo extra: você só é cobrado por uma mensagem quando ela é entregue.",
         "recurringTitle": "Transmissão recorrente",
         "recurringHint": "Enviar isto em um agendamento recorrente",
-        "occurrences": "execuções"
+        "occurrences": "execuções",
+        "recurringWarning": "Esta difusão se repete conforme a programação. Cada execução vai para o público como está naquele momento, e cada mensagem é cobrada da sua carteira.",
+        "repeatRange": "Informe um número inteiro de 1 a {max}."
       },
       "words": {
         "now": "Enviada imediatamente, uma vez.",

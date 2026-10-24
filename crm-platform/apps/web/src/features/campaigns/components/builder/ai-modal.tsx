@@ -9,6 +9,7 @@ import {
   type MarketingMedia,
 } from '@crm/contracts';
 import { aiErrorKind } from '@/lib/api/ai-error';
+import { ApiError } from '@/lib/api/errors';
 import { aiGenerateCampaign, aiImageCampaign, useAiModels } from '../../api/campaigns';
 import { SparkIcon } from './parts';
 
@@ -125,7 +126,8 @@ export function AiModal({
       onImage?.(res.image);
       return true;
     } catch (e) {
-      setPictureError(t(`picture.errors.${aiErrorKind(e)}`));
+      const storage = e instanceof ApiError && e.code === 'CAMP_AI_STORAGE_REQUIRED';
+      setPictureError(t(`picture.errors.${storage ? 'storageRequired' : aiErrorKind(e)}`));
       return false;
     }
   };

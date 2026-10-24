@@ -732,6 +732,7 @@
             "providerFailed": "The picture service did not answer. Try again in a moment.",
             "badJson": "The picture service sent something unexpected. Try again.",
             "imageRefused": "OpenAI refused to draw this picture. Change the product, offer or notes and try again.",
+            "storageRequired": "Pictures need cloud object storage: ask the platform admin to turn it on. The campaign text is kept.",
             "invalid": "Check the brief: the business name is required and some fields are too long.",
             "forbidden": "You do not have permission to create campaigns.",
             "network": "Could not reach the server. Check your connection and try again.",
