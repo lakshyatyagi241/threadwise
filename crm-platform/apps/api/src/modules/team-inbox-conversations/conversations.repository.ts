@@ -24,6 +24,8 @@ export interface InboxConversationRow {
   status: string;
   priority: string;
   archived: boolean;
+  /** The contact was erased with its history kept (see `ERASED_PEER`). */
+  erased: boolean;
   pinnedAt: string | null;
   mutedAt: string | null;
   unreadCount: number;
@@ -110,6 +112,8 @@ export interface ListFilter {
   to?: string;
   q?: string;
   archived: boolean;
+  /** The erased-contacts view: every erased thread, whatever the tab, the status or the archive flag. */
+  erased?: boolean;
   limit: number;
   cursor?: ListCursor;
 }
@@ -166,7 +170,14 @@ const SELECT_COLUMNS = sql.raw(`
             FROM conversation_tag lx JOIN tags lt ON lt.org_id = lx.org_id AND lt.id = lx.tag_id
             WHERE lx.org_id = c.org_id AND lx.conversation_id = c.id), '[]'::json) AS labels`);
 
-const SELECT_ROW = sql`${SELECT_COLUMNS}, ${channelOwnerSql('c')} AS channel_owner_user_id`;
+/**
+ * A thread whose contact was erased with its history kept. The privacy erasure rewrites the peer key to `erased:<row uuid>`
+ * (privacy/manifests/inbox.ts, `erased_uuid` in privacy/registry/sql.ts) and the title to `[erased]`. The peer key is the only column that
+ * tells it apart: a phone's digits or a channel's own thread id never start with `erased:`. Keep the prefix in step with the registry.
+ */
+const ERASED_PEER = sql`c.peer_key LIKE 'erased:%'`;
+
+const SELECT_ROW = sql`${SELECT_COLUMNS}, ${channelOwnerSql('c')} AS channel_owner_user_id, ${ERASED_PEER} AS erased`;
 
 /** The conversation's contact, on the primary key: at most one row, so joining it never repeats a conversation. */
 const CONTACT_JOIN = sql`LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id`;
@@ -197,6 +208,7 @@ function toRow(r: Raw): InboxConversationRow {
     status: r.status as string,
     priority: r.priority as string,
     archived: r.archived === true,
+    erased: r.erased === true,
     pinnedAt: str(r.pinned_at),
     mutedAt: str(r.muted_at),
     unreadCount: Number(r.unread_count),
@@ -245,6 +257,8 @@ export interface ConversationRecordRow {
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
   channelOwnerUserId: number | null;
+  /** The contact was erased with its history kept: nothing can be sent to the thread (see `ERASED_PEER`). */
+  erased: boolean;
 }
 
 const toRecord = (r: Raw): ConversationRecordRow => ({
@@ -253,6 +267,7 @@ const toRecord = (r: Raw): ConversationRecordRow => ({
   assigneeUserId: int(r.assignee_user_id),
   assigneeTeamId: int(r.assignee_team_id),
   channelOwnerUserId: int(r.channel_owner_user_id),
+  erased: r.erased === true,
 });
 
 /** Escapes the three characters that mean something to LIKE, so a search for `50%` looks for 50 followed by a percent sign. */
@@ -276,14 +291,20 @@ export class ConversationsRepository {
     f: ListFilter,
   ): Promise<InboxConversationRow[]> {
     const scope = this.scopeWhere(orgId, viewer, f);
-    const where: SQL[] = [...scope.where, sql`c.archived = ${f.archived}`];
+    const where: SQL[] = [...scope.where];
 
-    // The archive view shows everything archived whatever the tab or status (Reference rule); otherwise the tab and status narrow it.
-    if (!f.archived) {
-      const status = this.statusCondition(f);
-      if (status) where.push(status);
-      const tab = this.tabCondition(f.tab, viewer.userId);
-      if (tab) where.push(tab);
+    if (f.erased) {
+      // The erased view shows every erased thread whatever the tab, status or archive flag, as the archive view does for its rows.
+      where.push(ERASED_PEER);
+    } else {
+      where.push(sql`c.archived = ${f.archived}`);
+      // The archive view shows everything archived whatever the tab or status (Reference rule); otherwise the tab and status narrow it.
+      if (!f.archived) {
+        const status = this.statusCondition(f);
+        if (status) where.push(status);
+        const tab = this.tabCondition(f.tab, viewer.userId);
+        if (tab) where.push(tab);
+      }
     }
     const oldest = f.sort === 'old';
     if (f.cursor) where.push(this.cursorCondition(f.cursor, oldest));
@@ -323,12 +344,28 @@ export class ConversationsRepository {
     const from = sql`FROM conversations c ${f.q ? CONTACT_JOIN : sql``} ${scope.joins}`;
     const where = (extra: SQL[]) => sql.join([...scope.where, ...extra], sql` AND `);
 
-    if (f.archived) {
+    // The archived and erased counts are shown under the list whatever the view, so they are their own aggregates.
+    const archived = sql`SELECT count(*)::int AS archived ${from} WHERE ${where([sql`c.archived = TRUE`])}`;
+    const erased = sql`SELECT count(*)::int AS erased ${from} WHERE ${where([ERASED_PEER])}`;
+
+    if (f.archived || f.erased) {
+      // A view: every badge counts the view's own rows (the view ignores the tab and the status), as the archive view always did.
       const res = await tx.execute(
-        sql`SELECT count(*)::int AS n ${from} WHERE ${where([sql`c.archived`])}`,
+        sql`SELECT a.archived, e.erased FROM (${archived}) a CROSS JOIN (${erased}) e`,
       );
-      const n = Number(rowsOf(res)[0]?.n ?? 0);
-      return { all: n, mine: n, unassigned: n, unread: n, waiting: n, archived: n };
+      const side = rowsOf(res)[0] ?? {};
+      const archivedCount = Number(side.archived ?? 0);
+      const erasedCount = Number(side.erased ?? 0);
+      const n = f.erased ? erasedCount : archivedCount;
+      return {
+        all: n,
+        mine: n,
+        unassigned: n,
+        unread: n,
+        waiting: n,
+        archived: archivedCount,
+        erased: erasedCount,
+      };
     }
 
     const status = this.statusCondition(f);
@@ -343,11 +380,10 @@ export class ConversationsRepository {
         ${badge('waiting')} AS waiting
       ${from}
       WHERE ${where([sql`c.archived = FALSE`, ...(status ? [status] : [])])}`;
-    const archived = sql`SELECT count(*)::int AS archived ${from} WHERE ${where([sql`c.archived = TRUE`])}`;
 
     const res = await tx.execute(sql`
-      SELECT l."all", l.mine, l.unassigned, l.unread, l.waiting, a.archived
-      FROM (${live}) l CROSS JOIN (${archived}) a`);
+      SELECT l."all", l.mine, l.unassigned, l.unread, l.waiting, a.archived, e.erased
+      FROM (${live}) l CROSS JOIN (${archived}) a CROSS JOIN (${erased}) e`);
     const r = rowsOf(res)[0] ?? {};
     return {
       all: Number(r.all ?? 0),
@@ -356,6 +392,7 @@ export class ConversationsRepository {
       unread: Number(r.unread ?? 0),
       waiting: Number(r.waiting ?? 0),
       archived: Number(r.archived ?? 0),
+      erased: Number(r.erased ?? 0),
     };
   }
 
@@ -480,7 +517,7 @@ export class ConversationsRepository {
   /** The visibility columns of a conversation by uuid, without a lock (the cheap "may this person see it" check for reads). */
   async recordByUuid(tx: Tx, orgId: number, uuid: string): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(
-      sql`SELECT c.id, c.status, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+      sql`SELECT c.id, c.status, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id, ${ERASED_PEER} AS erased
           FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}`,
     );
     const r = rowsOf(res)[0];
@@ -497,7 +534,7 @@ export class ConversationsRepository {
     messageUuid: string,
   ): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.status, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+      SELECT c.id, c.status, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id, ${ERASED_PEER} AS erased
       FROM conversations c
       WHERE c.org_id = ${orgId}
         AND c.id = (SELECT m.conversation_id FROM messages m WHERE m.org_id = ${orgId} AND m.uuid = ${messageUuid} LIMIT 1)`);

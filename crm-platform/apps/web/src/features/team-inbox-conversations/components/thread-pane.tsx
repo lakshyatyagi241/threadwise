@@ -217,13 +217,18 @@ export function ThreadPane(props: ThreadPaneProps) {
     isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
   // A resolved or closed thread takes no message from any agent: the input is gone until someone reopens it (the API refuses too).
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  // A contact erased with its history kept: the thread is a timeline only, nothing can be written to it (the API refuses too).
+  const erased = detail?.erased === true;
+  // Shown as "Erased contact": the stored title is the tombstone, which says nothing to an agent.
+  const displayTitle = erased ? tl('erasedTitle') : detail?.title;
   // A resolved web chat is final: no reopen, no snooze and no spam mark from any control (the API refuses each).
   const finishedWebchat = detail ? isFinishedWebchat(detail.channel.kind, detail.status) : false;
-  const replyDisabled = windowClosed || channelDown || groupBlock !== null || resolved;
+  const replyDisabled = windowClosed || channelDown || groupBlock !== null || resolved || erased;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
     !resolved &&
+    !erased &&
     canReply &&
     !channelDown &&
     !groupSendBlocked &&
@@ -231,7 +236,13 @@ export function ThreadPane(props: ThreadPaneProps) {
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail && !resolved && canReply && !channelDown && !groupLimited && props.mode === 'reply'
+    detail &&
+    !resolved &&
+    !erased &&
+    canReply &&
+    !channelDown &&
+    !groupLimited &&
+    props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
@@ -250,7 +261,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   const emailSubject = isEmail ? latestEmailSubject(thread.state.messages, detail?.title) : '';
 
   return (
-    <section aria-label={detail?.title ?? t('title')} className="flex h-full min-h-0 flex-col">
+    <section aria-label={displayTitle ?? t('title')} className="flex h-full min-h-0 flex-col">
       <header
         data-testid="inbox-thread-header"
         className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-border px-3 py-2"
@@ -266,12 +277,13 @@ export function ThreadPane(props: ThreadPaneProps) {
         </button>
         {detail ? (
           <>
-            <Avatar id={detail.id} name={detail.title} />
+            <Avatar id={detail.id} name={displayTitle ?? detail.title} />
             <div className={cn('min-w-[12rem] flex-1 basis-48', searching && 'hidden')}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <h2 className="truncate text-base font-semibold" data-testid="inbox-thread-title">
-                  {detail.title}
+                  {displayTitle}
                 </h2>
+                {erased && <Badge tone="neutral">{t('erasedBadge')}</Badge>}
                 {resolved && <Badge tone="success">{t(`status.${detail.status}`)}</Badge>}
                 {detail.status === 'snoozed' && (
                   <Badge
@@ -293,7 +305,8 @@ export function ThreadPane(props: ThreadPaneProps) {
               </div>
               <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
                 {/* A website visitor's key is a generated id: it tells an agent nothing, so it is not shown. */}
-                {!UUID_KEY.test(detail.peerKey) && (
+                {/* An erased contact's key is its erase tombstone, not a number: it is not shown. */}
+                {!UUID_KEY.test(detail.peerKey) && !erased && (
                   <span dir="ltr" className="font-mono">
                     {detail.peerKey}
                   </span>
@@ -345,10 +358,10 @@ export function ThreadPane(props: ThreadPaneProps) {
             data-testid="inbox-thread-actions"
             className="ms-auto flex max-w-full shrink-0 flex-wrap items-center justify-end gap-1"
           >
-            {detail && (
+            {detail && !erased && (
               <CallButton
                 conversationId={detail.id}
-                displayName={detail.title}
+                displayName={displayTitle ?? detail.title}
                 contactId={detail.contact?.id}
               />
             )}
@@ -468,7 +481,7 @@ export function ThreadPane(props: ThreadPaneProps) {
       <MessageStream
         conversationId={props.conversationId}
         channelKind={detail?.channel.kind}
-        customerName={detail?.title}
+        customerName={displayTitle}
         state={thread.state}
         notes={props.notes}
         progress={thread.progress}
@@ -500,7 +513,15 @@ export function ThreadPane(props: ThreadPaneProps) {
         onReload={() => void thread.sync()}
       />
 
-      {resolved ? (
+      {erased ? (
+        <div
+          role="status"
+          data-testid="inbox-erased-bar"
+          className="border-t border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground"
+        >
+          <span>{t('erasedBanner')}</span>
+        </div>
+      ) : resolved ? (
         <div
           role="status"
           data-testid="inbox-resolved-bar"

@@ -153,7 +153,10 @@
         "hours": "{count} giờ",
         "days": "{count} ngày"
       },
-      "unsnoozesAt": "Mở lại lúc {time}"
+      "unsnoozesAt": "Mở lại lúc {time}",
+      "erased": "Liên hệ đã xóa",
+      "erasedHint": "Các liên hệ này đã bị xóa, còn cuộc trò chuyện được giữ lại mà không có thông tin cá nhân và nội dung tin nhắn. Thời gian hiển thị tin nhắn cuối vì ngày xóa không được ghi lại.",
+      "erasedTitle": "Liên hệ đã xóa"
     },
     "status": {
       "received": "Đã nhận",
@@ -344,7 +347,9 @@
       "searchNone": "Không có kết quả",
       "searchPrev": "Kết quả trước",
       "searchNext": "Kết quả sau",
-      "searchClose": "Đóng tìm kiếm"
+      "searchClose": "Đóng tìm kiếm",
+      "erasedBadge": "Đã xóa",
+      "erasedBanner": "Liên hệ này đã bị xóa. Nội dung và phương tiện của tin nhắn đã được gỡ bỏ, nên không thể gửi gì. Dòng thời gian và thời gian vẫn được giữ lại."
     },
     "groupThread": {
       "openGroup": "Mở nhóm",

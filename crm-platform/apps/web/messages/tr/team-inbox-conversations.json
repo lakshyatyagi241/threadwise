@@ -153,7 +153,10 @@
         "hours": "{count} saat",
         "days": "{count} gün"
       },
-      "unsnoozesAt": "{time} için yeniden açılır"
+      "unsnoozesAt": "{time} için yeniden açılır",
+      "erased": "Silinen kişiler",
+      "erasedHint": "Bu kişiler silindi; konuşmaları kişinin bilgileri ve mesaj metni olmadan saklandı. Silme tarihi kaydedilmediği için saatler son mesajı gösterir.",
+      "erasedTitle": "Silinen kişi"
     },
     "status": {
       "received": "Alındı",
@@ -344,7 +347,9 @@
       "searchNone": "Eşleşme yok",
       "searchPrev": "Önceki eşleşme",
       "searchNext": "Sonraki eşleşme",
-      "searchClose": "Aramayı kapat"
+      "searchClose": "Aramayı kapat",
+      "erasedBadge": "Silindi",
+      "erasedBanner": "Bu kişi silindi. Mesaj metni ve medya kaldırıldığı için hiçbir şey gönderilemez. Zaman çizelgesi ve saatler korunur."
     },
     "groupThread": {
       "openGroup": "Grubu aç",

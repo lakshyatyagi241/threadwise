@@ -153,7 +153,10 @@
         "hours": "{count} 小时",
         "days": "{count} 天"
       },
-      "unsnoozesAt": "{time} 恢复"
+      "unsnoozesAt": "{time} 恢复",
+      "erased": "已删除的联系人",
+      "erasedHint": "这些联系人已被删除，其会话在保留的同时已去除其个人信息和消息文本。时间显示的是最后一条消息，因为系统未记录删除日期。",
+      "erasedTitle": "已删除的联系人"
     },
     "status": {
       "received": "已接收",
@@ -344,7 +347,9 @@
       "searchNone": "无匹配项",
       "searchPrev": "上一个匹配",
       "searchNext": "下一个匹配",
-      "searchClose": "关闭搜索"
+      "searchClose": "关闭搜索",
+      "erasedBadge": "已删除",
+      "erasedBanner": "该联系人已被删除。消息文本和媒体已被移除，因此无法发送任何内容。时间线和时间已保留。"
     },
     "groupThread": {
       "openGroup": "打开群组",

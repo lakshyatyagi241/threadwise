@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# hora} other {# horas}}",
         "days": "{count, plural, one {# dia} other {# dias}}"
       },
-      "unsnoozesAt": "Reabre em {time}"
+      "unsnoozesAt": "Reabre em {time}",
+      "erased": "Contatos apagados",
+      "erasedHint": "Estes contatos foram apagados, e as conversas foram mantidas sem os dados da pessoa nem o texto das mensagens. Os horários mostram a última mensagem, porque a data da exclusão não é registrada.",
+      "erasedTitle": "Contato apagado"
     },
     "status": {
       "received": "Recebida",
@@ -344,7 +347,9 @@
       "searchNone": "Nenhum resultado",
       "searchPrev": "Resultado anterior",
       "searchNext": "Próximo resultado",
-      "searchClose": "Fechar pesquisa"
+      "searchClose": "Fechar pesquisa",
+      "erasedBadge": "Apagado",
+      "erasedBanner": "Este contato foi apagado. O texto e as mídias das mensagens foram removidos, por isso nada pode ser enviado. A linha do tempo e os horários são mantidos."
     },
     "groupThread": {
       "openGroup": "Abrir grupo",

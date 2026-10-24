@@ -153,7 +153,10 @@
         "hours": "{count}時間",
         "days": "{count}日"
       },
-      "unsnoozesAt": "{time} に再開"
+      "unsnoozesAt": "{time} に再開",
+      "erased": "削除済みの連絡先",
+      "erasedHint": "これらの連絡先は削除され、会話は相手の情報やメッセージ本文を除いて保存されています。削除日は記録されていないため、時刻は最後のメッセージを表示します。",
+      "erasedTitle": "削除済みの連絡先"
     },
     "status": {
       "received": "受信済み",
@@ -344,7 +347,9 @@
       "searchNone": "一致なし",
       "searchPrev": "前の一致",
       "searchNext": "次の一致",
-      "searchClose": "検索を閉じる"
+      "searchClose": "検索を閉じる",
+      "erasedBadge": "削除済み",
+      "erasedBanner": "この連絡先は削除されました。メッセージの本文とメディアは削除されているため、送信はできません。タイムラインと時刻は保持されています。"
     },
     "groupThread": {
       "openGroup": "グループを開く",

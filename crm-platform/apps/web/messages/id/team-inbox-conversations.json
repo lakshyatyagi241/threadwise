@@ -153,7 +153,10 @@
         "hours": "{count} jam",
         "days": "{count} hari"
       },
-      "unsnoozesAt": "Dibuka lagi {time}"
+      "unsnoozesAt": "Dibuka lagi {time}",
+      "erased": "Kontak yang dihapus",
+      "erasedHint": "Kontak ini telah dihapus, dan percakapannya disimpan tanpa data pribadi dan teks pesan. Waktu menampilkan pesan terakhir, karena tanggal penghapusan tidak dicatat.",
+      "erasedTitle": "Kontak yang dihapus"
     },
     "status": {
       "received": "Diterima",
@@ -344,7 +347,9 @@
       "searchNone": "Tidak ada yang cocok",
       "searchPrev": "Hasil sebelumnya",
       "searchNext": "Hasil berikutnya",
-      "searchClose": "Tutup pencarian"
+      "searchClose": "Tutup pencarian",
+      "erasedBadge": "Dihapus",
+      "erasedBanner": "Kontak ini telah dihapus. Teks dan media pesan sudah dihapus, sehingga tidak ada yang bisa dikirim. Linimasa dan waktu tetap disimpan."
     },
     "groupThread": {
       "openGroup": "Buka grup",

@@ -11,6 +11,8 @@ export const CONVERSATION_ERROR_CODES = {
   CONVERSATION_STATUS_INVALID: 'CONVERSATION_STATUS_INVALID',
   /** An agent reply to a `resolved` or `closed` thread: reopen it first (422). */
   CONVERSATION_RESOLVED: 'CONVERSATION_RESOLVED',
+  /** An agent message to a thread whose contact was erased (history kept without the person): nothing can be sent to it (422). */
+  CONVERSATION_ERASED: 'CONVERSATION_ERASED',
   /** The user to assign is not an active member of the workspace, or the caller may only claim for themselves. */
   CONVERSATION_ASSIGNEE_INVALID: 'CONVERSATION_ASSIGNEE_INVALID',
   /** Only a `failed` outbound message can be retried. */

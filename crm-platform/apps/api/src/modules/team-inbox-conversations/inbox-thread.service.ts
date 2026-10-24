@@ -426,6 +426,7 @@ export class InboxThreadService {
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
       this.assertNotResolved(record);
+      this.assertNotErased(record);
       this.access.assertNotAssignedToOther(ctx, record);
       return this.rebuiltComponentsOf(tx, ctx.orgId, messageUuid);
     });
@@ -472,6 +473,7 @@ export class InboxThreadService {
     this.access.assertVisible(viewer, record);
     await this.access.assertCan(tx, ctx, PERM.reply, record);
     this.assertNotResolved(record);
+    this.assertNotErased(record);
     this.access.assertNotAssignedToOther(ctx, record);
   }
 
@@ -481,6 +483,17 @@ export class InboxThreadService {
       throw new AppError(
         ERROR_CODES.CONVERSATION_RESOLVED,
         'This conversation is resolved. Reopen it to reply.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+  }
+
+  /** A thread whose contact was erased with its history kept has no person to write to: the peer key is gone (see `ERASED_PEER`). */
+  private assertNotErased(record: { erased: boolean }): void {
+    if (record.erased) {
+      throw new AppError(
+        ERROR_CODES.CONVERSATION_ERASED,
+        'This contact was erased. Nothing can be sent to this conversation.',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }

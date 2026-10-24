@@ -35,6 +35,7 @@ export function toConversationSummary(row: InboxConversationRow): ConversationSu
     status: row.status as ConversationStatus,
     priority: row.priority as ConversationSummary['priority'],
     archived: row.archived,
+    erased: row.erased,
     pinned: row.pinnedAt !== null,
     muted: row.mutedAt !== null,
     unreadCount: row.unreadCount,

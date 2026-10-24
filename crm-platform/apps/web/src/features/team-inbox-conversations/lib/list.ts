@@ -31,6 +31,8 @@ export interface ListFilters {
   /** The trimmed search text. */
   q: string;
   archived: boolean;
+  /** The erased-contacts view: threads whose contact was erased with its history kept. It ignores the tab, the status and `archived`. */
+  erased: boolean;
   /** Tag ids: threads with ANY of them (kept in the address as `?tags=a,b`; `?labels=` is its original name and is still read). */
   tags: string[];
   /** Whether `tags` is matched on the conversation's own tags or on the tags of its contact (`?tagScope=`). */
@@ -59,6 +61,7 @@ export const DEFAULT_FILTERS: ListFilters = {
   channelIds: [],
   q: '',
   archived: false,
+  erased: false,
   tags: [],
   tagScope: 'conversation',
   statuses: [],
@@ -94,6 +97,7 @@ export function listQuery(f: ListFilters): Record<string, string | boolean | und
     channelIds: f.channelIds.length > 0 ? f.channelIds.join(',') : undefined,
     q: f.q || undefined,
     archived: f.archived || undefined,
+    erased: f.erased || undefined,
     tags: f.tags.length > 0 ? f.tags.join(',') : undefined,
     tagScope: f.tags.length > 0 && f.tagScope === 'contact' ? 'contact' : undefined,
     statuses: f.statuses.length > 0 ? f.statuses.join(',') : undefined,
@@ -137,6 +141,7 @@ export const filtersKey = (f: ListFilters) =>
     f.channelIds.join(','),
     f.q,
     f.archived ? 1 : 0,
+    f.erased ? 1 : 0,
     f.tags.join(','),
     f.tagScope,
     f.statuses.join(','),
@@ -154,6 +159,7 @@ export function isFiltered(f: ListFilters): boolean {
     f.channelId !== null ||
     f.q !== '' ||
     f.archived ||
+    f.erased ||
     f.tags.length > 0 ||
     windowFilterCount(f) > 0
   );
@@ -186,13 +192,18 @@ export function matchesFilters(
   f: ListFilters,
   meId: string | null,
 ): boolean {
-  if (row.archived !== f.archived) return false;
-  if (f.statuses.length > 0) {
-    const ok = f.statuses.flatMap(statusesOf);
-    if (!ok.includes(row.status)) return false;
-  } else if (f.status === 'open') {
-    if (row.status !== 'open') return false;
-  } else if (f.status !== 'all' && !statusesOf(f.status).includes(row.status)) return false;
+  // The erased view is its own list: it takes every erased thread, whatever its tab, status or archive flag (the server's rule too).
+  if (f.erased) {
+    if (!row.erased) return false;
+  } else {
+    if (row.archived !== f.archived) return false;
+    if (f.statuses.length > 0) {
+      const ok = f.statuses.flatMap(statusesOf);
+      if (!ok.includes(row.status)) return false;
+    } else if (f.status === 'open') {
+      if (row.status !== 'open') return false;
+    } else if (f.status !== 'all' && !statusesOf(f.status).includes(row.status)) return false;
+  }
   if (f.channelId && row.channel.id !== f.channelId) return false;
   if (f.channelIds.length > 0 && !f.channelIds.includes(row.channel.id)) return false;
   // A row does not carry its contact's tags, so under the contact scope the server's answer stands (see the `upsert` case).
@@ -214,7 +225,7 @@ export function matchesFilters(
     const at = row.lastMessageAt ? row.lastMessageAt.slice(0, 10) : '';
     if ((f.from && at < f.from) || (f.to && at > f.to)) return false;
   }
-  switch (f.tab) {
+  switch (f.erased ? 'all' : f.tab) {
     case 'mine':
       if (!isMine(row, meId)) return false;
       break;
