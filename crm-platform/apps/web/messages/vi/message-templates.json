@@ -537,7 +537,6 @@
       "crumbTemplates": "Mẫu tin",
       "crumbDetail": "Chi tiết",
       "notSubmittedPill": "Chưa gửi",
-      "qualityPill": "Chất lượng · {quality}",
       "preview": {
         "title": "Xem trước",
         "hint": "Hiển thị trên WhatsApp như thế nào"

@@ -537,7 +537,6 @@
       "crumbTemplates": "Modelos",
       "crumbDetail": "Detalhe",
       "notSubmittedPill": "Não enviado",
-      "qualityPill": "Qualidade · {quality}",
       "preview": {
         "title": "Pré-visualização",
         "hint": "Como aparece no WhatsApp"

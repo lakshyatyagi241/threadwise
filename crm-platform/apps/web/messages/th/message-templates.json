@@ -537,7 +537,6 @@
       "crumbTemplates": "เทมเพลต",
       "crumbDetail": "รายละเอียด",
       "notSubmittedPill": "ยังไม่ได้ส่ง",
-      "qualityPill": "คุณภาพ · {quality}",
       "preview": {
         "title": "ตัวอย่าง",
         "hint": "ลักษณะที่ปรากฏบน WhatsApp"

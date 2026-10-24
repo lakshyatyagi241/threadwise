@@ -537,7 +537,6 @@
       "crumbTemplates": "テンプレート",
       "crumbDetail": "詳細",
       "notSubmittedPill": "未送信",
-      "qualityPill": "品質 · {quality}",
       "preview": {
         "title": "プレビュー",
         "hint": "WhatsAppでの表示イメージ"

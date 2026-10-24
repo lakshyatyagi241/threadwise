@@ -537,7 +537,6 @@
       "crumbTemplates": "템플릿",
       "crumbDetail": "상세",
       "notSubmittedPill": "제출 안 됨",
-      "qualityPill": "품질 · {quality}",
       "preview": {
         "title": "미리보기",
         "hint": "WhatsApp에서 표시되는 모습"

@@ -537,7 +537,6 @@
       "crumbTemplates": "টেমপ্লেট",
       "crumbDetail": "বিস্তারিত",
       "notSubmittedPill": "জমা দেওয়া হয়নি",
-      "qualityPill": "কোয়ালিটি · {quality}",
       "preview": {
         "title": "প্রিভিউ",
         "hint": "WhatsApp-এ যেভাবে দেখাবে"

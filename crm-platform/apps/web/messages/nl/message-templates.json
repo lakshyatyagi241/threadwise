@@ -537,7 +537,6 @@
       "crumbTemplates": "Sjablonen",
       "crumbDetail": "Details",
       "notSubmittedPill": "Niet ingediend",
-      "qualityPill": "Kwaliteit · {quality}",
       "preview": {
         "title": "Voorbeeld",
         "hint": "Zo verschijnt het op WhatsApp"

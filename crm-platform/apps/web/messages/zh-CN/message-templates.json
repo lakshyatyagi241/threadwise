@@ -537,7 +537,6 @@
       "crumbTemplates": "模板",
       "crumbDetail": "详情",
       "notSubmittedPill": "未提交",
-      "qualityPill": "质量 · {quality}",
       "preview": {
         "title": "预览",
         "hint": "在 WhatsApp 上的显示效果"
