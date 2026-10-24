@@ -335,6 +335,12 @@
       "assignedToOther": "هذه المحادثة مُسندة إلى وكيل آخر. أسندها إلى نفسك أولاً للرد.",
       "typing": "{count, plural, zero {لا أحد يكتب} one {أحد الزملاء يكتب} two {زميلان يكتبان} few {# زملاء يكتبون} many {# زميلًا يكتبون} other {# زميل يكتبون}}",
       "messagesLabel": "الرسائل",
+      "session": {
+        "header": "{range} · {count, plural, one {# رسالة} two {# رسالتان} few {# رسائل} many {# رسالة} other {# رسالة}}",
+        "span": "{date}، {from} – {to}",
+        "moment": "{date}، {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "تحميل رسائل أقدم",
       "empty": "لا توجد رسائل في هذه المحادثة بعد.",
       "newMessageAnnounce": "رسالة جديدة: {text}",

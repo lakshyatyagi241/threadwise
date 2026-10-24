@@ -335,6 +335,12 @@
       "assignedToOther": "यह चैट किसी दूसरे एजेंट को असाइन है। जवाब देने के लिए पहले इसे अपने नाम पर असाइन करें।",
       "typing": "{count, plural, one {एक साथी लिख रहा है} other {# साथी लिख रहे हैं}}",
       "messagesLabel": "संदेश",
+      "session": {
+        "header": "{range} · {count, plural, one {# संदेश} other {# संदेश}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "पहले के संदेश लोड करें",
       "empty": "इस बातचीत में अभी कोई संदेश नहीं है।",
       "newMessageAnnounce": "नया संदेश: {text}",

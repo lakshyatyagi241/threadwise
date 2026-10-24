@@ -335,6 +335,12 @@
       "assignedToOther": "এই চ্যাটটি অন্য এজেন্টকে অ্যাসাইন করা আছে। উত্তর দিতে আগে এটি নিজের নামে অ্যাসাইন করুন।",
       "typing": "{count, plural, one {একজন সহকর্মী টাইপ করছেন} other {# জন সহকর্মী টাইপ করছেন}}",
       "messagesLabel": "মেসেজ",
+      "session": {
+        "header": "{range} · {count, plural, one {# টি বার্তা} other {# টি বার্তা}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "আগের মেসেজ লোড করুন",
       "empty": "এই কথোপকথনে এখনও কোনো মেসেজ নেই।",
       "newMessageAnnounce": "নতুন মেসেজ: {text}",

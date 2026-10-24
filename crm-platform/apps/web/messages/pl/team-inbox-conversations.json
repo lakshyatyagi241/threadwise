@@ -335,6 +335,12 @@
       "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
       "messagesLabel": "Wiadomości",
+      "session": {
+        "header": "{range} · {count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Wczytaj wcześniejsze wiadomości",
       "empty": "Brak wiadomości w tej rozmowie.",
       "newMessageAnnounce": "Nowa wiadomość: {text}",

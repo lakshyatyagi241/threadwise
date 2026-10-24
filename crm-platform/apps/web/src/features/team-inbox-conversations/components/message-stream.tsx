@@ -5,7 +5,7 @@ import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from 
 import { Button, Spinner, cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
 import { agentReactions, buildItems, lastSeq, type ThreadState } from '../lib/thread';
-import { dayLabel } from '../lib/time';
+import { dayLabel, sessionRangeMessage } from '../lib/time';
 import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { ArrowDownIcon } from './icons';
 import { MessageLogDialog } from './message-log-dialog';
@@ -315,6 +315,26 @@ export function MessageStream(props: MessageStreamProps) {
                     </span>
                   </li>
                 );
+              case 'session': {
+                const range = sessionRangeMessage(item.from, item.to, locale, timeZone);
+                const label = t('session.header', {
+                  range: t(range.key, range.values),
+                  count: item.count,
+                });
+                return (
+                  <li
+                    key={item.key}
+                    role="separator"
+                    aria-label={label}
+                    data-testid="inbox-session-header"
+                    className="flex items-center gap-3 pt-2"
+                  >
+                    <span className="h-px flex-1 bg-border" aria-hidden />
+                    <span className="text-xs font-medium text-muted-foreground">{label}</span>
+                    <span className="h-px flex-1 bg-border" aria-hidden />
+                  </li>
+                );
+              }
               case 'message':
                 return (
                   <Fragment key={item.key}>

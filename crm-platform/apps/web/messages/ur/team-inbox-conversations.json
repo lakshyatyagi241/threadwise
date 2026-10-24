@@ -335,6 +335,12 @@
       "assignedToOther": "یہ چیٹ کسی دوسرے ایجنٹ کو تفویض کی گئی ہے۔ جواب دینے کے لیے پہلے اسے اپنے نام تفویض کریں۔",
       "typing": "{count, plural, one {ایک ساتھی لکھ رہا ہے} other {# ساتھی لکھ رہے ہیں}}",
       "messagesLabel": "پیغامات",
+      "session": {
+        "header": "{range} · {count, plural, one {# پیغام} other {# پیغامات}}",
+        "span": "{date}، {from} – {to}",
+        "moment": "{date}، {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "پہلے کے پیغامات لوڈ کریں",
       "empty": "اس گفتگو میں ابھی کوئی پیغام نہیں۔",
       "newMessageAnnounce": "نیا پیغام: {text}",

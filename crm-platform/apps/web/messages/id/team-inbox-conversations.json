@@ -335,6 +335,12 @@
       "assignedToOther": "Obrolan ini ditugaskan ke agen lain. Tugaskan ke diri Anda terlebih dahulu untuk membalas.",
       "typing": "{count, plural, other {# anggota tim sedang mengetik}}",
       "messagesLabel": "Pesan",
+      "session": {
+        "header": "{range} · {count, plural, other {# pesan}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Muat pesan sebelumnya",
       "empty": "Belum ada pesan dalam percakapan ini.",
       "newMessageAnnounce": "Pesan baru: {text}",

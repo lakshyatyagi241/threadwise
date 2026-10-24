@@ -335,6 +335,12 @@
       "assignedToOther": "Este chat está atribuído a outro agente. Atribua-o a você primeiro para responder.",
       "typing": "{count, plural, one {Um membro da equipe está digitando} other {# membros da equipe estão digitando}}",
       "messagesLabel": "Mensagens",
+      "session": {
+        "header": "{range} · {count, plural, one {# mensagem} other {# mensagens}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Carregar mensagens anteriores",
       "empty": "Ainda não há mensagens nesta conversa.",
       "newMessageAnnounce": "Nova mensagem: {text}",

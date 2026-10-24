@@ -13,6 +13,7 @@ import {
   pickMessage,
   threadReducer,
   type PendingSend,
+  type ThreadItem,
   type ThreadState,
 } from './thread';
 
@@ -209,7 +210,14 @@ describe('buildItems', () => {
       [],
       false,
     );
-    expect(items.map((i) => i.kind)).toEqual(['day', 'message', 'message', 'day', 'message']);
+    expect(items.map((i) => i.kind)).toEqual([
+      'day',
+      'session',
+      'message',
+      'message',
+      'day',
+      'message',
+    ]);
   });
 
   it('slots internal notes in by time and puts sends in flight last', () => {
@@ -219,13 +227,9 @@ describe('buildItems', () => {
       [pending(1, { createdAt: '2026-10-02T11:00:00.000Z' })],
       false,
     );
-    expect(items.filter((i) => i.kind !== 'day').map((i) => i.kind)).toEqual([
-      'message',
-      'message',
-      'note',
-      'message',
-      'pending',
-    ]);
+    expect(
+      items.filter((i) => i.kind !== 'day' && i.kind !== 'session').map((i) => i.kind),
+    ).toEqual(['message', 'message', 'note', 'message', 'pending']);
   });
 
   it('holds back notes older than the oldest message while earlier history is unloaded', () => {
@@ -234,6 +238,117 @@ describe('buildItems', () => {
     expect(withMore.some((i) => i.kind === 'note')).toBe(false);
     const complete = buildItems([message(5)], [early], [], false);
     expect(complete.some((i) => i.kind === 'note')).toBe(true);
+  });
+});
+
+describe('sessions', () => {
+  const sessions = (items: ThreadItem[]) =>
+    items.flatMap((i) =>
+      i.kind === 'session' ? [{ from: i.from, to: i.to, count: i.count }] : [],
+    );
+
+  it('opens one session for a chat with no gap of a day', () => {
+    const items = buildItems(
+      [
+        message(1, { createdAt: '2026-10-01T10:00:00.000Z' }),
+        message(2, { createdAt: '2026-10-01T12:30:00.000Z' }),
+        message(3, { createdAt: '2026-10-02T09:00:00.000Z' }),
+      ],
+      [],
+      [],
+      false,
+    );
+    expect(sessions(items)).toEqual([
+      { from: '2026-10-01T10:00:00.000Z', to: '2026-10-02T09:00:00.000Z', count: 3 },
+    ]);
+  });
+
+  it('starts a new session after more than 24 hours with no message', () => {
+    const items = buildItems(
+      [
+        message(1, { createdAt: '2026-10-01T10:00:00.000Z' }),
+        message(2, { createdAt: '2026-10-01T11:00:00.000Z' }),
+        message(3, { createdAt: '2026-10-03T09:00:00.000Z' }),
+      ],
+      [],
+      [],
+      false,
+    );
+    expect(sessions(items)).toEqual([
+      { from: '2026-10-01T10:00:00.000Z', to: '2026-10-01T11:00:00.000Z', count: 2 },
+      { from: '2026-10-03T09:00:00.000Z', to: '2026-10-03T09:00:00.000Z', count: 1 },
+    ]);
+    expect(items.map((i) => i.kind)).toEqual([
+      'day',
+      'session',
+      'message',
+      'message',
+      'day',
+      'session',
+      'message',
+    ]);
+  });
+
+  it('does not split on a gap of exactly 24 hours', () => {
+    const items = buildItems(
+      [
+        message(1, { createdAt: '2026-10-01T10:00:00.000Z' }),
+        message(2, { createdAt: '2026-10-02T10:00:00.000Z' }),
+      ],
+      [],
+      [],
+      false,
+    );
+    expect(sessions(items)).toHaveLength(1);
+  });
+
+  it('does not count or start a session with an agent reaction', () => {
+    const target = message(1, { createdAt: '2026-10-01T10:00:00.000Z' });
+    const reaction = outbound(2, {
+      kind: 'reaction',
+      body: '👍',
+      replyToMessageId: target.id,
+      status: 'sent',
+      createdAt: '2026-10-05T10:00:00.000Z',
+    });
+    expect(sessions(buildItems([target, reaction], [], [], false))).toEqual([
+      { from: '2026-10-01T10:00:00.000Z', to: '2026-10-01T10:00:00.000Z', count: 1 },
+    ]);
+  });
+
+  it('does not start a session with a note', () => {
+    const items = buildItems(
+      [message(1, { createdAt: '2026-10-01T10:00:00.000Z' })],
+      [note(1, '2026-10-05T10:00:00.000Z')],
+      [],
+      false,
+    );
+    expect(sessions(items)).toHaveLength(1);
+  });
+
+  it('opens a session for a send in flight after a long gap, and counts it', () => {
+    const items = buildItems(
+      [message(1, { createdAt: '2026-10-01T10:00:00.000Z' })],
+      [],
+      [pending(1, { createdAt: '2026-10-05T10:00:00.000Z' })],
+      false,
+    );
+    expect(sessions(items)).toEqual([
+      { from: '2026-10-01T10:00:00.000Z', to: '2026-10-01T10:00:00.000Z', count: 1 },
+      { from: '2026-10-05T10:00:00.000Z', to: '2026-10-05T10:00:00.000Z', count: 1 },
+    ]);
+  });
+
+  it('counts a send in flight in the session it continues', () => {
+    const items = buildItems(
+      [message(1, { createdAt: '2026-10-01T10:00:00.000Z' })],
+      [],
+      [pending(1, { createdAt: '2026-10-01T10:30:00.000Z' })],
+      false,
+    );
+    expect(sessions(items)).toEqual([
+      { from: '2026-10-01T10:00:00.000Z', to: '2026-10-01T10:30:00.000Z', count: 2 },
+    ]);
   });
 });
 

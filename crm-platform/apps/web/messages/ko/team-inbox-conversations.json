@@ -335,6 +335,12 @@
       "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "typing": "{count, plural, other {팀원 #명이 입력 중입니다}}",
       "messagesLabel": "메시지",
+      "session": {
+        "header": "{range} · {count, plural, other {메시지 #개}}",
+        "span": "{date} {from} – {to}",
+        "moment": "{date} {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "이전 메시지 불러오기",
       "empty": "이 대화에는 아직 메시지가 없습니다.",
       "newMessageAnnounce": "새 메시지: {text}",
