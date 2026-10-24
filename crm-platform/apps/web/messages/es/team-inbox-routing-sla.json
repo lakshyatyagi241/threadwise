@@ -151,7 +151,7 @@
         "outside": "Solo fuera del horario laboral"
       },
       "thenTitle": "Asignar a",
-      "thenHint": "Se omiten los agentes inactivos, sin conexión, ocupados o que no pueden abrir la bandeja.",
+      "thenHint": "Se omiten los agentes inactivos, ausentes, ocupados o que no pueden abrir la bandeja.",
       "strategy": "Cómo elegir",
       "strategyHint": {
         "round_robin": "Por turnos: las conversaciones se reparten entre los agentes elegidos por turnos, así que todos reciben la misma parte. La regla recuerda a quién le toca.",
@@ -288,10 +288,10 @@
         "lastSeen": "Última conexión"
       },
       "statuses": {
-        "online": "En línea",
-        "away": "Ausente",
+        "online": "Disponible",
+        "away": "Ausente, fuera del horario laboral",
         "busy": "Ocupado",
-        "offline": "Desconectado"
+        "offline": "Ausente"
       }
     },
     "businessHours": {

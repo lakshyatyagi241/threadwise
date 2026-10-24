@@ -18,7 +18,7 @@
         "needsAuto": "Alleen in gebruik als Automatische toewijzing aan staat.",
         "auto": {
           "title": "Automatische toewijzing",
-          "body": "Nieuwe chats worden gelijk verdeeld over medewerkers die chats accepteren (niet offline, bezig of met verlof). Zodra elke medewerker zijn chatlimiet heeft bereikt, wachten nieuwe chats in de wachtrij.",
+          "body": "Nieuwe chats worden gelijk verdeeld over agenten die chats aannemen (niet afwezig, bezet of met verlof). Als elke agent zijn chatlimiet heeft bereikt, wachten nieuwe chats in de wachtrij.",
           "limitHint": "Stel de chatlimiet per medewerker in via het profiel bij <link>Teamleden</link>.",
           "off": "Uit: er wordt niets automatisch toegewezen, niet via een regel en niet via de contacteigenaar. Chats wachten in de wachtrij tot iemand ze oppakt of een flow een persoon aanwijst."
         },
@@ -85,7 +85,7 @@
         "notSet": "Nog niet ingesteld: chats die geen regel oppakt, wachten in de wachtrij.",
         "mode": "Wat er met die chats gebeurt",
         "evenly": "Gelijk verdelen over alle medewerkers",
-        "evenlyHint": "Om de beurt of minst bezig onder iedereen die de inbox kan openen en beschikbaar is: niet offline, bezig, met verlof of op de chatlimiet.",
+        "evenlyHint": "Round robin of minst bezet onder iedereen die de inbox kan openen en beschikbaar is: niet afwezig, bezet, met verlof of op de chatlimiet.",
         "listed": "Kies medewerkers of teams",
         "listedNow": "Nu: {who}.",
         "listedEdit": "De medewerkers of teams wijzigen",
@@ -185,11 +185,12 @@
         "skippedTitle": "Overgeslagen",
         "skip": {
           "on_leave": "met verlof",
-          "offline_busy_or_at_capacity": "offline, bezig of op de chatlimiet",
+          "offline_busy_or_at_capacity": "afwezig, bezet of op de chatlimiet",
           "cannot_read": "kan de inbox niet openen",
           "no_owner": "het contact heeft geen eigenaar",
           "no_previous_handler_in_window": "geen eerdere medewerker voor dit contact",
-          "not_an_active_member": "geen actief lid"
+          "not_an_active_member": "geen actief lid",
+          "outside_working_hours": "buiten hun werktijd"
         },
         "outside": "Doen alsof het buiten de zakelijke uren is",
         "inside": "Doen alsof het binnen de zakelijke uren is",

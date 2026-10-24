@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "可接待",
+        "away": "离开",
+        "onLeaveUntil": "休假至 {date}",
+        "onLeaveOpen": "休假中",
+        "awayHours": "非工作时间离开",
+        "label": "你的状态"
+      },
+      "menu": {
+        "title": "状态菜单",
+        "update": "更新状态",
+        "setAway": "设为离开",
+        "setAvailable": "设为可用",
+        "failed": "无法更改你的状态。",
+        "automate": "自动化状态",
+        "manage": "管理工作时间和外出",
+        "workingHours": "工作时间",
+        "timeOff": "休假",
+        "outsideNotice": "非工作时间",
+        "locked": "状态栏包含在更高级的套餐中。账户菜单中的“可用 / 离开”开关仍可使用。"
+      },
+      "hours": {
+        "title": "你的工作时间",
+        "titleFor": "{name}的工作时间",
+        "lead": "选择你可用的时间。在这些时间之外，你的状态会自动切换为离开。",
+        "leadOther": "选择此人可用的时间。在这些时间之外，其状态会自动切换为离开。",
+        "locked": "按工作时间自动设置状态包含在更高级的套餐中。",
+        "viewOnly": "你可以查看这些时间，但不能更改。",
+        "automate": "自动化我的状态",
+        "automateHint": "这些时间之外为离开，之内为可用。手动设置的状态会持续到下一次时间切换。",
+        "emptyWarning": "没有开放的日期，因此你将始终显示为可用。请至少开放一天。",
+        "timezone": "时区",
+        "timezoneHint": "默认使用工作区时区（{zone}）。",
+        "useWorkspaceZone": "使用工作区时区"
+      },
+      "members": {
+        "hoursAction": "工作时间"
+      }
+    }
+  }
+}

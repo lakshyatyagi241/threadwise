@@ -151,7 +151,7 @@
         "outside": "Somente fora do horário comercial"
       },
       "thenTitle": "Atribuir a",
-      "thenHint": "Agentes inativos, offline, ocupados ou sem acesso à caixa de entrada são ignorados.",
+      "thenHint": "Agentes inativos, ausentes, ocupados ou que não podem abrir a caixa de entrada são ignorados.",
       "strategy": "Como escolher",
       "strategyHint": {
         "round_robin": "Rodízio: as conversas são distribuídas entre os agentes escolhidos, em sequência, para que todos recebam a mesma parte. A regra lembra de quem é a vez.",
@@ -288,10 +288,10 @@
         "lastSeen": "Visto por último"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Ausente",
+        "online": "Disponível",
+        "away": "Ausente, fora do horário de trabalho",
         "busy": "Ocupado",
-        "offline": "Offline"
+        "offline": "Ausente"
       }
     },
     "businessHours": {

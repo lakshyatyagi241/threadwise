@@ -151,7 +151,7 @@
         "outside": "Solo fuori dall’orario di lavoro"
       },
       "thenTitle": "Assegna a",
-      "thenHint": "Gli agenti inattivi, offline, occupati o che non possono aprire l’Inbox vengono saltati.",
+      "thenHint": "Gli agenti inattivi, assenti, occupati o che non possono aprire la posta in arrivo vengono saltati.",
       "strategy": "Come scegliere",
       "strategyHint": {
         "round_robin": "A rotazione: le conversazioni vengono assegnate a turno agli agenti scelti, così ognuno riceve la stessa quota. La regola ricorda di chi è il turno successivo.",
@@ -288,10 +288,10 @@
         "lastSeen": "Ultimo accesso"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Assente",
+        "online": "Disponibile",
+        "away": "Assente, fuori orario di lavoro",
         "busy": "Occupato",
-        "offline": "Offline"
+        "offline": "Assente"
       }
     },
     "businessHours": {

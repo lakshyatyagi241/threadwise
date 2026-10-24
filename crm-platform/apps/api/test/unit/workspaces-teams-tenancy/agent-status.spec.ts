@@ -11,7 +11,12 @@ import {
   type StatusInput,
 } from '../../../src/common/agent-status';
 
-type Day = { enabled: boolean; from: string; to: string; extra?: Array<{ from: string; to: string }> };
+type Day = {
+  enabled: boolean;
+  from: string;
+  to: string;
+  extra?: Array<{ from: string; to: string }>;
+};
 const off: Day = { enabled: false, from: '09:00', to: '17:00' };
 const on = (from = '09:00', to = '17:00', extra?: Day['extra']): Day => ({
   enabled: true,
@@ -65,7 +70,9 @@ describe('effectiveAgentStatus: precedence', () => {
   });
 
   it('plain stored online without a manual record decides nothing', () => {
-    const s = effectiveAgentStatus(input({ storedStatus: 'online', hours: weekdays(), now: MON_NIGHT }));
+    const s = effectiveAgentStatus(
+      input({ storedStatus: 'online', hours: weekdays(), now: MON_NIGHT }),
+    );
     expect(s).toMatchObject({ state: 'away', reason: 'schedule', trace: 'outside_working_hours' });
   });
 
@@ -75,7 +82,12 @@ describe('effectiveAgentStatus: precedence', () => {
         const s = effectiveAgentStatus(
           input({ storedStatus: 'offline', hours: weekdays(), leave, now }),
         );
-        expect(s).toMatchObject({ state: 'away', reason: 'manual', trace: 'away', routable: false });
+        expect(s).toMatchObject({
+          state: 'away',
+          reason: 'manual',
+          trace: 'away',
+          routable: false,
+        });
       }
     }
   });
@@ -112,7 +124,12 @@ describe('effectiveAgentStatus: precedence', () => {
         leave: { startsOn: '2026-06-01', endsOn: '2026-06-05' },
       }),
     );
-    expect(s).toMatchObject({ state: 'away', reason: 'leave', trace: 'on_leave', leaveUntil: '2026-06-05' });
+    expect(s).toMatchObject({
+      state: 'away',
+      reason: 'leave',
+      trace: 'on_leave',
+      leaveUntil: '2026-06-05',
+    });
   });
 
   it('leave beats the schedule, even inside working hours', () => {
@@ -136,6 +153,18 @@ describe('effectiveAgentStatus: precedence', () => {
   it('busy stays not routable and is never turned into anything else', () => {
     const s = effectiveAgentStatus(input({ storedStatus: 'busy', hours: weekdays() }));
     expect(s).toMatchObject({ state: 'away', busy: true, routable: false, trace: 'busy' });
+  });
+});
+
+describe('effectiveAgentStatus: the next boundary is computed only on request', () => {
+  it('routing and lists skip the scan; the status endpoints ask for it', () => {
+    const lazy = effectiveAgentStatus(input({ hours: weekdays(), now: MON_NIGHT }));
+    expect(lazy.changesAt).toBeNull();
+    const asked = effectiveAgentStatus(
+      input({ hours: weekdays(), now: MON_NIGHT, wantChangesAt: true }),
+    );
+    expect(asked.changesAt?.toISOString()).toBe('2026-06-02T09:00:00.000Z');
+    expect(asked.state).toBe(lazy.state);
   });
 });
 
@@ -164,7 +193,11 @@ describe('manual choice lasts until the next schedule boundary', () => {
   const until = '2026-06-02T09:00:00.000Z';
 
   it('Away holds until the boundary, then the schedule decides', () => {
-    const base = { storedStatus: 'offline', hours: weekdays(), manual: { status: 'offline', setAt: '2026-06-01T22:00:00Z', until } as ManualChoice };
+    const base = {
+      storedStatus: 'offline',
+      hours: weekdays(),
+      manual: { status: 'offline', setAt: '2026-06-01T22:00:00Z', until } as ManualChoice,
+    };
     const before = effectiveAgentStatus(input({ ...base, now: new Date('2026-06-02T08:59:59Z') }));
     expect(before).toMatchObject({ state: 'away', reason: 'manual', changesAt: new Date(until) });
     const after = effectiveAgentStatus(input({ ...base, now: new Date('2026-06-02T09:00:00Z') }));
@@ -177,7 +210,11 @@ describe('manual choice lasts until the next schedule boundary', () => {
       input({
         storedStatus: 'offline',
         hours: weekdays(),
-        manual: { status: 'offline', setAt: '2026-06-02T12:00:00Z', until: '2026-06-02T17:00:00.000Z' },
+        manual: {
+          status: 'offline',
+          setAt: '2026-06-02T12:00:00Z',
+          until: '2026-06-02T17:00:00.000Z',
+        },
         now,
       }),
     );
@@ -214,7 +251,11 @@ describe('manual choice lasts until the next schedule boundary', () => {
         storedStatus: 'offline',
         hours: weekdays(),
         automationAllowed: false,
-        manual: { status: 'offline', setAt: '2026-06-01T12:00:00Z', until: '2026-06-01T17:00:00.000Z' },
+        manual: {
+          status: 'offline',
+          setAt: '2026-06-01T12:00:00Z',
+          until: '2026-06-01T17:00:00.000Z',
+        },
         now: new Date('2026-06-01T20:00:00Z'),
       }),
     );
@@ -270,8 +311,13 @@ describe('schedule rules', () => {
   it('never changes: no open day, or every day all day open', () => {
     expect(nextScheduleChange(hours('UTC', {}), MON_NOON)).toBeNull();
     const always = hours('UTC', {
-      mon: on('00:00', '24:00'), tue: on('00:00', '24:00'), wed: on('00:00', '24:00'),
-      thu: on('00:00', '24:00'), fri: on('00:00', '24:00'), sat: on('00:00', '24:00'), sun: on('00:00', '24:00'),
+      mon: on('00:00', '24:00'),
+      tue: on('00:00', '24:00'),
+      wed: on('00:00', '24:00'),
+      thu: on('00:00', '24:00'),
+      fri: on('00:00', '24:00'),
+      sat: on('00:00', '24:00'),
+      sun: on('00:00', '24:00'),
     });
     expect(nextScheduleChange(always, MON_NOON)).toBeNull();
   });
@@ -307,7 +353,9 @@ describe('schedule rules', () => {
     expect(zonedInstant('2026-03-08', '02:30', 'America/New_York').toISOString()).toBe(
       '2026-03-08T06:30:00.000Z', // read with the offset in force before the change: 01:30 EST on the clock
     );
-    expect(zonedInstant('2026-06-01', '24:00', 'UTC').toISOString()).toBe('2026-06-02T00:00:00.000Z');
+    expect(zonedInstant('2026-06-01', '24:00', 'UTC').toISOString()).toBe(
+      '2026-06-02T00:00:00.000Z',
+    );
   });
 });
 

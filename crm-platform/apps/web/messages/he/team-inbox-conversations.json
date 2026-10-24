@@ -554,17 +554,17 @@
         "onLeave": "בחופשה",
         "onLeaveUntil": "בחופשה עד {date}",
         "availability": {
-          "online": "מחובר",
-          "away": "לא זמין",
+          "online": "זמין",
+          "away": "לא זמין, מחוץ לשעות העבודה",
           "busy": "עסוק",
-          "offline": "לא מחובר"
+          "offline": "לא זמין"
         }
       },
       "presence": {
-        "online": "מחובר",
-        "away": "לא זמין",
+        "online": "זמין",
+        "away": "לא זמין, מחוץ לשעות העבודה",
         "busy": "עסוק",
-        "offline": "לא מחובר"
+        "offline": "לא זמין"
       },
       "notes": {
         "tab": "הערות איש קשר",

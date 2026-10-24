@@ -554,17 +554,17 @@
         "onLeave": "On leave",
         "onLeaveUntil": "On leave until {date}",
         "availability": {
-          "online": "Online",
-          "away": "Away",
+          "online": "Available",
+          "away": "Away, outside working hours",
           "busy": "Busy",
-          "offline": "Offline"
+          "offline": "Away"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Away",
+        "online": "Available",
+        "away": "Away, outside working hours",
         "busy": "Busy",
-        "offline": "Offline"
+        "offline": "Away"
       },
       "notes": {
         "tab": "Contact notes",

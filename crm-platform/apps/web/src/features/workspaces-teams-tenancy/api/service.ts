@@ -1,7 +1,8 @@
 import {
   inviteWspMemberResponseSchema,
   wspInvitePreviewSchema,
-  wspAvailabilitySchema,
+  agentStatusSchema,
+  memberWorkingHoursSchema,
   wspMemberActionResponseSchema,
   wspMemberSchema,
   wspMembersSummarySchema,
@@ -10,6 +11,7 @@ import {
   type CreateWspTeamInput,
   type InviteWspMemberInput,
   type SetWspAvailabilityInput,
+  type UpdateMemberWorkingHoursInput,
   type UpdateWspMemberDetailsInput,
   type UpdateWspTeamInput,
   type UpdateWspTeamMemberInput,
@@ -46,14 +48,23 @@ export const wspApi = {
       body: input,
       schema: wspMemberSchema,
     }),
-  /** The caller's own Available / Offline switch (the account menu). */
+  /** The caller's own status, Available or Away and why (the status pill, the account menu). */
   myAvailability: (signal?: AbortSignal) =>
-    apiFetch(`${base}/members/me/availability`, { schema: wspAvailabilitySchema, signal }),
+    apiFetch(`${base}/members/me/availability`, { schema: agentStatusSchema, signal }),
   setMyAvailability: (input: SetWspAvailabilityInput) =>
     apiFetch(`${base}/members/me/availability`, {
       method: 'PUT',
       body: input,
-      schema: wspAvailabilitySchema,
+      schema: agentStatusSchema,
+    }),
+  /** Working hours that can automate the status: the caller's own (`me`) or, for a manager, a member's. */
+  workingHours: (id: string, signal?: AbortSignal) =>
+    apiFetch(`${base}/members/${id}/working-hours`, { schema: memberWorkingHoursSchema, signal }),
+  saveWorkingHours: (id: string, input: UpdateMemberWorkingHoursInput) =>
+    apiFetch(`${base}/members/${id}/working-hours`, {
+      method: 'PUT',
+      body: input,
+      schema: memberWorkingHoursSchema,
     }),
   removeMember: (id: string) => apiFetch(`${base}/members/${id}`, { method: 'DELETE' }),
   resetPassword: (id: string) =>

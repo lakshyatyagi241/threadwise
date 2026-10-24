@@ -554,17 +554,17 @@
         "onLeave": "Na urlopie",
         "onLeaveUntil": "Na urlopie do {date}",
         "availability": {
-          "online": "Online",
-          "away": "Zaraz wracam",
+          "online": "Dostępny",
+          "away": "Nieobecny, poza godzinami pracy",
           "busy": "Zajęty",
-          "offline": "Offline"
+          "offline": "Nieobecny"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Nieobecny",
+        "online": "Dostępny",
+        "away": "Nieobecny, poza godzinami pracy",
         "busy": "Zajęty",
-        "offline": "Offline"
+        "offline": "Nieobecny"
       },
       "notes": {
         "tab": "Notatki o kontakcie",

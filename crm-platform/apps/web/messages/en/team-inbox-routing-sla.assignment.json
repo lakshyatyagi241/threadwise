@@ -18,7 +18,7 @@
         "needsAuto": "Used only while Auto Assignment is on.",
         "auto": {
           "title": "Auto Assignment",
-          "body": "New chats are shared evenly among agents who are accepting chats (not offline, busy or on leave). When every agent has reached their chat limit, new chats wait in the queue.",
+          "body": "New chats are shared evenly among agents who are accepting chats (not away, busy or on leave). When every agent has reached their chat limit, new chats wait in the queue.",
           "limitHint": "Set each agent's chat limit in their profile under <link>Team members</link>.",
           "off": "Off: nothing is assigned automatically, not by a rule and not by the contact owner. Chats wait in the queue until someone claims them or a flow names a person."
         },
@@ -85,7 +85,7 @@
         "notSet": "Not set up yet: chats that no rule takes wait in the queue.",
         "mode": "What happens to those chats",
         "evenly": "Distribute evenly among all agents",
-        "evenlyHint": "Round robin or least busy over everyone who can open the inbox and is available: not offline, busy, on leave or at their chat limit.",
+        "evenlyHint": "Round robin or least busy over everyone who can open the inbox and is available: not away, busy, on leave or at their chat limit.",
         "listed": "Choose agents or teams",
         "listedNow": "Now: {who}.",
         "listedEdit": "Change the agents or teams",
@@ -185,11 +185,12 @@
         "skippedTitle": "Left out",
         "skip": {
           "on_leave": "on leave",
-          "offline_busy_or_at_capacity": "offline, busy or at their chat limit",
+          "offline_busy_or_at_capacity": "away, busy or at their chat limit",
           "cannot_read": "cannot open the inbox",
           "no_owner": "the contact has no owner",
           "no_previous_handler_in_window": "no earlier agent for this contact",
-          "not_an_active_member": "not an active member"
+          "not_an_active_member": "not an active member",
+          "outside_working_hours": "outside their working hours"
         },
         "outside": "Pretend it is outside business hours",
         "inside": "Pretend it is inside business hours",

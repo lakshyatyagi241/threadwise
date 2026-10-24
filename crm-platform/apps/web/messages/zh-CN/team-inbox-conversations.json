@@ -554,17 +554,17 @@
         "onLeave": "休假中",
         "onLeaveUntil": "休假至 {date}",
         "availability": {
-          "online": "在线",
-          "away": "离开",
+          "online": "可接待",
+          "away": "离开，非工作时间",
           "busy": "忙碌",
-          "offline": "离线"
+          "offline": "离开"
         }
       },
       "presence": {
-        "online": "在线",
-        "away": "离开",
+        "online": "可接待",
+        "away": "离开，非工作时间",
         "busy": "忙碌",
-        "offline": "离线"
+        "offline": "离开"
       },
       "notes": {
         "tab": "联系人备注",

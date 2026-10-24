@@ -151,7 +151,7 @@
         "outside": "Nur außerhalb der Geschäftszeiten"
       },
       "thenTitle": "Zuweisen an",
-      "thenHint": "Agenten, die inaktiv, offline, beschäftigt sind oder den Posteingang nicht öffnen können, werden übersprungen.",
+      "thenHint": "Inaktive, nicht verfügbare, beschäftigte Agenten und solche ohne Zugriff auf den Posteingang werden übersprungen.",
       "strategy": "So wird ausgewählt",
       "strategyHint": {
         "round_robin": "Reihum: Die Unterhaltungen werden der Reihe nach an die gewählten Agenten verteilt, sodass alle den gleichen Anteil erhalten. Die Regel merkt sich, wer als Nächstes an der Reihe ist.",
@@ -288,10 +288,10 @@
         "lastSeen": "Zuletzt gesehen"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Abwesend",
+        "online": "Verfügbar",
+        "away": "Nicht verfügbar, außerhalb der Arbeitszeit",
         "busy": "Beschäftigt",
-        "offline": "Offline"
+        "offline": "Nicht verfügbar"
       }
     },
     "businessHours": {

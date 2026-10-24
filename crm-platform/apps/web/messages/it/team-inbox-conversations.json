@@ -554,17 +554,17 @@
         "onLeave": "In ferie",
         "onLeaveUntil": "In ferie fino al {date}",
         "availability": {
-          "online": "Online",
-          "away": "Assente",
+          "online": "Disponibile",
+          "away": "Assente, fuori orario di lavoro",
           "busy": "Occupato",
-          "offline": "Offline"
+          "offline": "Assente"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Assente",
+        "online": "Disponibile",
+        "away": "Assente, fuori orario di lavoro",
         "busy": "Occupato",
-        "offline": "Offline"
+        "offline": "Assente"
       },
       "notes": {
         "tab": "Note del contatto",

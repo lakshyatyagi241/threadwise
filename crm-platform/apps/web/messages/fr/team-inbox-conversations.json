@@ -554,17 +554,17 @@
         "onLeave": "En congé",
         "onLeaveUntil": "En congé jusqu’au {date}",
         "availability": {
-          "online": "En ligne",
-          "away": "Absent",
+          "online": "Disponible",
+          "away": "Absent, hors des heures de travail",
           "busy": "Occupé",
-          "offline": "Hors ligne"
+          "offline": "Absent"
         }
       },
       "presence": {
-        "online": "En ligne",
-        "away": "Absent",
+        "online": "Disponible",
+        "away": "Absent, hors des heures de travail",
         "busy": "Occupé",
-        "offline": "Hors ligne"
+        "offline": "Absent"
       },
       "notes": {
         "tab": "Notes du contact",

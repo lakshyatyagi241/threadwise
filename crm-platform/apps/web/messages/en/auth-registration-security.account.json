@@ -581,6 +581,8 @@
             "inbox_sla": "Inbox SLA",
             "inbox_routing": "Smart routing",
             "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
+            "agent_status_bar": "Status bar",
+            "agent_status_automation": "Automate status",
             "waba_calling": "WhatsApp calling",
             "inbox_kanban": "Inbox Kanban",
             "team_performance": "Team performance",

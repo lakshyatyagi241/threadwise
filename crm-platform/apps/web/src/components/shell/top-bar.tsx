@@ -8,6 +8,8 @@ import type { ResolvedNavItem } from '@/features/_registry/types';
 import { useBrandName } from './brand';
 import { BrandMark, MenuIcon, NavIcon } from './nav-icons';
 import { setTheme } from './actions';
+import { AgentStatusMenu } from '@/features/workspaces-teams-tenancy/components/agent-status-menu';
+import { useOptionalShellData } from './shell-data';
 import { UserMenu, type ShellUser } from './user-menu';
 
 export interface WalletChipData {
@@ -160,6 +162,8 @@ export function TopBar({
 }: TopBarProps) {
   const t = useTranslations();
   const brand = useBrandName();
+  // The status pill needs the real shell (query client, workspace session), like the account menu's Availability row.
+  const shellData = useOptionalShellData();
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-background px-3 sm:gap-3 sm:px-4">
       <button
@@ -200,6 +204,7 @@ export function TopBar({
           ))}
         {pageHelp}
         {pageSettings}
+        {shellData && <AgentStatusMenu variant="topbar" />}
         <ThemeToggle initial={theme} />
         {bell ?? (
           <IconLink

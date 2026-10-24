@@ -554,17 +554,17 @@
         "onLeave": "휴가 중",
         "onLeaveUntil": "{date}까지 휴가 중",
         "availability": {
-          "online": "온라인",
-          "away": "자리 비움",
+          "online": "응대 가능",
+          "away": "자리 비움, 근무 시간 외",
           "busy": "바쁨",
-          "offline": "오프라인"
+          "offline": "자리 비움"
         }
       },
       "presence": {
-        "online": "온라인",
-        "away": "자리 비움",
+        "online": "응대 가능",
+        "away": "자리 비움, 근무 시간 외",
         "busy": "바쁨",
-        "offline": "오프라인"
+        "offline": "자리 비움"
       },
       "notes": {
         "tab": "연락처 메모",

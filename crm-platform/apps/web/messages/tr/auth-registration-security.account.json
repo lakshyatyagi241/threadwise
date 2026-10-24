@@ -566,7 +566,9 @@
             "record_assignment": "Kayıt atama kuralları",
             "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
             "custom_roles": "Özel roller ve kapsamlar",
-            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci"
+            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci",
+            "agent_status_bar": "Durum çubuğu",
+            "agent_status_automation": "Durumu otomatikleştir"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

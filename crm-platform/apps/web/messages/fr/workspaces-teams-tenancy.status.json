@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Disponible",
+        "away": "Absent",
+        "onLeaveUntil": "En congé jusqu'au {date}",
+        "onLeaveOpen": "En congé",
+        "awayHours": "Absent hors des heures de travail",
+        "label": "Votre statut"
+      },
+      "menu": {
+        "title": "Menu du statut",
+        "update": "Mettre à jour le statut",
+        "setAway": "Passer en absent",
+        "setAvailable": "Passer en disponible",
+        "failed": "Impossible de modifier votre statut.",
+        "automate": "Automatiser le statut",
+        "manage": "Gérer les heures de travail et l’absence du bureau",
+        "workingHours": "Heures de travail",
+        "timeOff": "Congés",
+        "outsideNotice": "Hors des heures de travail",
+        "locked": "La barre de statut est incluse dans une offre supérieure. L’interrupteur Disponible / Absent du menu de votre compte continue de fonctionner."
+      },
+      "hours": {
+        "title": "Vos heures de travail",
+        "titleFor": "Heures de travail de {name}",
+        "lead": "Choisissez quand vous êtes disponible. En dehors de ces heures, votre statut passe automatiquement à Absent.",
+        "leadOther": "Choisissez quand cette personne est disponible. En dehors de ces heures, son statut passe automatiquement à Absent.",
+        "locked": "Le statut automatique selon les heures de travail est inclus dans une offre supérieure.",
+        "viewOnly": "Vous pouvez voir ces heures, mais pas les modifier.",
+        "automate": "Automatiser mon statut",
+        "automateHint": "Absent en dehors de ces heures, Disponible pendant. Un statut défini à la main dure jusqu’au prochain changement d’horaire.",
+        "emptyWarning": "Aucun jour n’est ouvert, vous apparaîtrez donc toujours comme Disponible. Ouvrez au moins un jour.",
+        "timezone": "Fuseau horaire",
+        "timezoneHint": "Part du fuseau horaire de votre espace de travail ({zone}).",
+        "useWorkspaceZone": "Utiliser le fuseau horaire de l’espace de travail"
+      },
+      "members": {
+        "hoursAction": "Heures de travail"
+      }
+    }
+  }
+}

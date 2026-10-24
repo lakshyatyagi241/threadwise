@@ -1449,7 +1449,9 @@
             "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar.",
             "team_hierarchy": "Kendi ekibini ve altındaki ekipleri gören üst ekipler, ekip liderleri ve yöneticiler.",
             "custom_roles": "Rolleri oluşturun ve düzenleyin, her izin için bir kapsam seçin (kendi, ekip veya tüm kayıtlar).",
-            "inbox_assignment_sticky": "Önce sahip ve eşitlenmiş atama, geri dönen kişi penceresi ve yeniden atama sorusu. Akıllı yönlendirme eklentisinin parçasıdır."
+            "inbox_assignment_sticky": "Önce sahip ve eşitlenmiş atama, geri dönen kişi penceresi ve yeniden atama sorusu. Akıllı yönlendirme eklentisinin parçasıdır.",
+            "agent_status_bar": "Üst çubukta ve Gelen Kutusu’nun başında Müsait / Uzakta durum denetimi; Uzakta / Müsait olarak ayarla ve İzin bağlantısıyla birlikte. Hesap menüsündeki Müsait / Uzakta anahtarı her pakete açıktır.",
+            "agent_status_automation": "Saat dilimli kişisel çalışma saatleri, dışında Uzakta, Çalışma saatleri dışında uyarısı ve saatleri dışındaki kişileri atlayan atama. Bir takvimi kaydetmek için gerekir; olmadan kayıtlı takvim korunur ama yok sayılır."
           },
           "units": {
             "days": "Gün",
@@ -1644,7 +1646,9 @@
             "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)",
             "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
             "custom_roles": "Özel roller ve kapsamlar",
-            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci"
+            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci",
+            "agent_status_bar": "Durum çubuğu: üst çubukta ve Gelen Kutusu’nda Müsait / Uzakta denetimi",
+            "agent_status_automation": "Durumu otomatikleştir: kişisel çalışma saatleri ve otomatik Uzakta"
           },
           "problems": {
             "required": "Bu alan zorunludur.",

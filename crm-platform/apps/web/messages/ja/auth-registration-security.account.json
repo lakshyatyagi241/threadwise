@@ -566,7 +566,9 @@
             "record_assignment": "レコード割り当てルール",
             "team_hierarchy": "チーム階層とマネージャー",
             "custom_roles": "カスタムロールとスコープ",
-            "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者"
+            "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者",
+            "agent_status_bar": "ステータスバー",
+            "agent_status_automation": "ステータスを自動化"
           },
           "cta": {
             "continueFree": "無料で続ける",

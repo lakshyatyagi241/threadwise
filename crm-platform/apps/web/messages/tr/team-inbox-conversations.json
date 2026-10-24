@@ -554,17 +554,17 @@
         "onLeave": "İzinli",
         "onLeaveUntil": "{date} tarihine kadar izinli",
         "availability": {
-          "online": "Çevrimiçi",
-          "away": "Uzakta",
+          "online": "Müsait",
+          "away": "Uzakta, çalışma saatleri dışında",
           "busy": "Meşgul",
-          "offline": "Çevrimdışı"
+          "offline": "Uzakta"
         }
       },
       "presence": {
-        "online": "Çevrimiçi",
-        "away": "Uzakta",
+        "online": "Müsait",
+        "away": "Uzakta, çalışma saatleri dışında",
         "busy": "Meşgul",
-        "offline": "Çevrimdışı"
+        "offline": "Uzakta"
       },
       "notes": {
         "tab": "Kişi notları",

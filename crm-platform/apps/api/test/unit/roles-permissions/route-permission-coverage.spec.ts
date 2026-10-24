@@ -40,6 +40,8 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   // never an id from the request), so there is no one else's data to protect; a key would only make some role unable to go offline
   'modules/workspaces-teams-tenancy/members.controller.ts#myAvailability',
   'modules/workspaces-teams-tenancy/members.controller.ts#setMyAvailability',
+  // the caller's own working hours: read from the signed-in user's row only (saving is `team.leave.manage`)
+  'modules/workspaces-teams-tenancy/members.controller.ts#myWorkingHours',
   'modules/workspaces-teams-tenancy/teams.controller.ts#list',
   // the plan picker: viewing the plans is open to every member (Reference: Authenticate only); changing the plan needs plan.subscription.manage
   'modules/plans-subscriptions-trials/billing.controller.ts#plans',

@@ -151,7 +151,7 @@
         "outside": "Yalnızca çalışma saatleri dışında"
       },
       "thenTitle": "Şuna ata",
-      "thenHint": "Etkin olmayan, çevrimdışı, meşgul veya gelen kutusunu açamayan temsilciler atlanır.",
+      "thenHint": "Etkin olmayan, uzakta, meşgul olan veya gelen kutusunu açamayan temsilciler atlanır.",
       "strategy": "Nasıl seçilir",
       "strategyHint": {
         "round_robin": "Sırayla dağıtım: konuşmalar seçilen temsilcilere sırayla verilir, böylece herkes eşit pay alır. Kural sıradaki temsilciyi hatırlar.",
@@ -288,10 +288,10 @@
         "lastSeen": "Son görülme"
       },
       "statuses": {
-        "online": "Çevrimiçi",
-        "away": "Uzakta",
+        "online": "Müsait",
+        "away": "Uzakta, çalışma saatleri dışında",
         "busy": "Meşgul",
-        "offline": "Çevrimdışı"
+        "offline": "Uzakta"
       }
     },
     "businessHours": {

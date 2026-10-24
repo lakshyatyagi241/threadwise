@@ -554,17 +554,17 @@
         "onLeave": "Đang nghỉ phép",
         "onLeaveUntil": "Nghỉ phép đến {date}",
         "availability": {
-          "online": "Trực tuyến",
-          "away": "Vắng mặt",
+          "online": "Sẵn sàng",
+          "away": "Vắng mặt, ngoài giờ làm việc",
           "busy": "Bận",
-          "offline": "Ngoại tuyến"
+          "offline": "Vắng mặt"
         }
       },
       "presence": {
-        "online": "Trực tuyến",
-        "away": "Vắng mặt",
+        "online": "Sẵn sàng",
+        "away": "Vắng mặt, ngoài giờ làm việc",
         "busy": "Bận",
-        "offline": "Ngoại tuyến"
+        "offline": "Vắng mặt"
       },
       "notes": {
         "tab": "Ghi chú liên hệ",

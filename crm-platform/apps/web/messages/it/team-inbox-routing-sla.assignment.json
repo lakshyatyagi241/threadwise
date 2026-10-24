@@ -18,7 +18,7 @@
         "needsAuto": "Usato solo quando l’assegnazione automatica è attiva.",
         "auto": {
           "title": "Assegnazione automatica",
-          "body": "Le nuove conversazioni vengono distribuite in modo uniforme tra gli agenti che accettano conversazioni (non offline, occupati o in ferie). Quando tutti gli agenti hanno raggiunto il proprio limite di conversazioni, le nuove conversazioni restano in coda.",
+          "body": "Le nuove chat sono distribuite equamente tra gli agenti che accettano chat (non assenti, occupati o in ferie). Quando ogni agente ha raggiunto il limite di chat, le nuove chat attendono in coda.",
           "limitHint": "Imposta il limite di conversazioni di ogni agente nel suo profilo, in <link>Membri del team</link>.",
           "off": "Disattivata: nulla viene assegnato automaticamente, né da una regola né dal responsabile del contatto. Le conversazioni restano in coda finché qualcuno le prende in carico o un flow indica una persona."
         },
@@ -85,7 +85,7 @@
         "notSet": "Non ancora configurato: le conversazioni che nessuna regola prende restano in coda.",
         "mode": "Cosa succede a queste conversazioni",
         "evenly": "Distribuisci in modo uniforme tra tutti gli agenti",
-        "evenlyHint": "Round robin (a rotazione) o meno occupato tra tutti quelli che possono aprire l’Inbox e sono disponibili: non offline, occupati, in ferie o al limite di conversazioni.",
+        "evenlyHint": "Round robin o meno occupato tra tutti quelli che possono aprire la posta in arrivo e sono disponibili: non assenti, occupati, in ferie né al limite di chat.",
         "listed": "Scegli agenti o team",
         "listedNow": "Ora: {who}.",
         "listedEdit": "Cambia gli agenti o i team",
@@ -185,11 +185,12 @@
         "skippedTitle": "Escluso",
         "skip": {
           "on_leave": "in ferie",
-          "offline_busy_or_at_capacity": "offline, occupato o al limite di conversazioni",
+          "offline_busy_or_at_capacity": "assente, occupato o al limite di chat",
           "cannot_read": "non può aprire l’Inbox",
           "no_owner": "il contatto non ha un responsabile",
           "no_previous_handler_in_window": "nessun agente precedente per questo contatto",
-          "not_an_active_member": "non è un membro attivo"
+          "not_an_active_member": "non è un membro attivo",
+          "outside_working_hours": "fuori dal suo orario di lavoro"
         },
         "outside": "Simula un orario fuori dall’orario di lavoro",
         "inside": "Simula un orario durante l’orario di lavoro",

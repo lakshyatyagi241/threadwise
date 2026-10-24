@@ -91,7 +91,9 @@
       "record_assignment": "Regels voor recordtoewijzing",
       "team_hierarchy": "Teamhiërarchie en managers",
       "custom_roles": "Eigen rollen en bereiken",
-      "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
+      "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker",
+      "agent_status_bar": "Statusbalk: knop Beschikbaar / Afwezig in de bovenbalk en de Inbox",
+      "agent_status_automation": "Status automatiseren: persoonlijke werktijden en automatisch afwezig"
     },
     "limitGroups": {
       "messaging": "Berichten",

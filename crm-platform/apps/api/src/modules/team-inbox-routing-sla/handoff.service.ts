@@ -6,6 +6,7 @@ import {
   ERROR_CODES,
   HANDOFF_ANSWER_MAX_CHARS,
   HANDOFF_ANSWERS_MAX_KEYS,
+  AGENT_STATUS_AUTOMATION_FEATURE,
   HANDOFF_GATES,
   HANDOFF_RETURNED_TO_BOT,
   flbHandoffReturnPlan,
@@ -229,6 +230,11 @@ export class HandoffService {
       const trace: HandoffTraceLine[] = [];
       const cal: Calendar = {
         today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        now,
+        statusAutomation: await this.entitlements.featureEnabled(
+          orgId,
+          AGENT_STATUS_AUTOMATION_FEATURE,
+        ),
         blocked: new Set<number>(),
       };
 

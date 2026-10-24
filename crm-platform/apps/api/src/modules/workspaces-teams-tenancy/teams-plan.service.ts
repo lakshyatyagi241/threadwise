@@ -54,6 +54,11 @@ export class TeamsPlanService {
     );
   }
 
+  /** Whether people's own working hours count (the presence dots of a team's members follow the effective status). */
+  statusAutomationEnabled(orgId: number): Promise<boolean> {
+    return this.entitlements.featureEnabled(orgId, 'agent_status_automation');
+  }
+
   /** Whether parent teams and lead/manager scope are on for the workspace (the web hook is `usePlanFeature('team_hierarchy')`). */
   hierarchyEnabled(orgId: number): Promise<boolean> {
     return this.entitlements.featureEnabled(orgId, 'team_hierarchy');

@@ -554,17 +554,17 @@
         "onLeave": "Met verlof",
         "onLeaveUntil": "Met verlof tot {date}",
         "availability": {
-          "online": "Online",
-          "away": "Afwezig",
+          "online": "Beschikbaar",
+          "away": "Afwezig, buiten werktijd",
           "busy": "Bezet",
-          "offline": "Offline"
+          "offline": "Afwezig"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Afwezig",
+        "online": "Beschikbaar",
+        "away": "Afwezig, buiten werktijd",
         "busy": "Bezig",
-        "offline": "Offline"
+        "offline": "Afwezig"
       },
       "notes": {
         "tab": "Contactnotities",

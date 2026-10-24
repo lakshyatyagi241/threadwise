@@ -76,7 +76,7 @@
       "unknownPerson": "Ehemaliges Mitglied",
       "unknownTeam": "Entferntes Team",
       "teamName": "Team: {name}",
-      "skipsOffline": "Überspringt Offline-Personen",
+      "skipsOffline": "Überspringt nicht verfügbare Personen",
       "reassigns": "Weist bei Aktualisierung neu zu",
       "activeFor": "Regel {name} ist aktiv",
       "dragHandle": "{name} ziehen, um die Priorität zu ändern",
@@ -136,7 +136,7 @@
         "noPeople": "Keine Person gefunden.",
         "removePerson": "{name} entfernen",
         "onLeave": "abwesend",
-        "skipOffline": "Offline-Personen überspringen",
+        "skipOffline": "Nicht verfügbare Personen überspringen",
         "skipOfflineHint": "Abwesende Personen werden immer übersprungen.",
         "reassign": "Neu zuweisen, wenn ein Datensatz nach einer Aktualisierung auf diese Regel zutrifft",
         "reassignHint": "Gilt nur für Datensätze, die die Engine selbst zugewiesen hat, und nur solange der Verantwortliche seitdem nicht geändert wurde. Standardmäßig aus: Ein Datensatz wird einmal zugewiesen."
@@ -220,7 +220,7 @@
         "disabled": "Die Datensatzzuweisung ist für diesen Arbeitsbereich ausgeschaltet, daher würde nichts passieren.",
         "has_owner": "{record} hat bereits einen Verantwortlichen, daher würde keine Regel ausgeführt. Ein von einer Person festgelegter Verantwortlicher wird nie ersetzt.",
         "no_rule": "Keine aktive Regel trifft auf {record} zu.",
-        "nobody_available": "Eine Regel trifft auf {record} zu, aber alle genannten Personen sind abwesend, offline oder nicht mehr dabei.",
+        "nobody_available": "Eine Regel trifft auf {record} zu, aber alle genannten Personen sind im Urlaub, nicht verfügbar oder nicht mehr da.",
         "plan": "Ihr Tarif enthält keine Regeln zur Datensatzzuweisung.",
         "not_found": "Dieser Datensatz wurde nicht gefunden. Er wurde möglicherweise gelöscht oder liegt außerhalb dessen, was Sie sehen dürfen."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: kann diese Art von Datensatz nicht öffnen",
         "inactive": "{name}: nicht mehr aktiv",
         "on_leave": "{name}: heute abwesend",
-        "offline": "{name}: offline"
+        "offline": "{name}: nicht verfügbar"
       }
     },
     "log": {

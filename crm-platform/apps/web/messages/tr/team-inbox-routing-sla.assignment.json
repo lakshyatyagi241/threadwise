@@ -18,7 +18,7 @@
         "needsAuto": "Yalnızca Otomatik Atama açıkken kullanılır.",
         "auto": {
           "title": "Otomatik Atama",
-          "body": "Yeni konuşmalar, konuşma kabul eden temsilciler (çevrimdışı, meşgul veya izinli olmayanlar) arasında eşit olarak paylaştırılır. Tüm temsilciler konuşma sınırına ulaştığında yeni konuşmalar kuyrukta bekler.",
+          "body": "Yeni sohbetler, sohbet kabul eden temsilciler (uzakta, meşgul veya izinde olmayanlar) arasında eşit paylaştırılır. Tüm temsilciler sohbet sınırına ulaşınca yeni sohbetler kuyrukta bekler.",
           "limitHint": "Her temsilcinin konuşma sınırını, profilinde <link>Ekip üyeleri</link> bölümünden ayarlayın.",
           "off": "Kapalı: hiçbir şey otomatik atanmaz; ne bir kural ne de kişi sahibi tarafından. Konuşmalar, biri üstlenene ya da bir akış bir kişi belirleyene kadar kuyrukta bekler."
         },
@@ -85,7 +85,7 @@
         "notSet": "Henüz ayarlanmadı: hiçbir kuralın almadığı konuşmalar kuyrukta bekler.",
         "mode": "Bu konuşmalara ne olur",
         "evenly": "Tüm temsilciler arasında eşit dağıt",
-        "evenlyHint": "Gelen kutusunu açabilen ve uygun olan herkes arasında döngüsel dağıtım (round robin) veya en az meşgul: çevrimdışı, meşgul, izinli veya konuşma sınırında olanlar hariç.",
+        "evenlyHint": "Gelen kutusunu açabilen ve müsait olan herkes arasında sırayla veya en az meşgul olana: uzakta, meşgul, izinde veya sohbet sınırında olmayanlar.",
         "listed": "Temsilci veya ekip seçin",
         "listedNow": "Şu an: {who}.",
         "listedEdit": "Temsilcileri veya ekipleri değiştir",
@@ -185,11 +185,12 @@
         "skippedTitle": "Dışarıda bırakıldı",
         "skip": {
           "on_leave": "izinli",
-          "offline_busy_or_at_capacity": "çevrimdışı, meşgul veya konuşma sınırında",
+          "offline_busy_or_at_capacity": "uzakta, meşgul veya sohbet sınırında",
           "cannot_read": "gelen kutusunu açamıyor",
           "no_owner": "kişinin sahibi yok",
           "no_previous_handler_in_window": "bu kişi için önceki bir temsilci yok",
-          "not_an_active_member": "etkin bir üye değil"
+          "not_an_active_member": "etkin bir üye değil",
+          "outside_working_hours": "çalışma saatleri dışında"
         },
         "outside": "Çalışma saatleri dışındaymış gibi yap",
         "inside": "Çalışma saatleri içindeymiş gibi yap",

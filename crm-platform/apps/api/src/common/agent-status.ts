@@ -49,6 +49,11 @@ export interface StatusInput {
   leave: { startsOn: string; endsOn: string | null } | null;
   workspaceTimezone: string;
   now: Date;
+  /**
+   * Compute `changesAt` for the schedule case (the next boundary). Only the status endpoints need it; routing and the lists leave it
+   * off because finding the boundary costs a scan of the coming days per person.
+   */
+  wantChangesAt?: boolean;
 }
 
 /** What a skip is called in a trace line and in the picker text. */
@@ -84,18 +89,26 @@ export function isOutsideOwnHours(hours: PersonalWorkingHours, at: Date): boolea
 
 // --- schedule boundaries -----------------------------------------------------------------------------------------------------
 
+const OFFSET_FORMATTERS = new Map<string, Intl.DateTimeFormat>();
+
 /** The zone's offset from UTC in ms at an instant (DST-aware, from the zone's own rules). */
 function offsetMs(timeZone: string, at: Date): number {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: resolveTimezone(timeZone),
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(at);
+  const tz = resolveTimezone(timeZone);
+  let f = OFFSET_FORMATTERS.get(tz);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    });
+    OFFSET_FORMATTERS.set(tz, f);
+  }
+  const parts = f.formatToParts(at);
   const n = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
   const asUtc = Date.UTC(n('year'), n('month') - 1, n('day'), n('hour'), n('minute'), n('second'));
   return asUtc - Math.floor(at.getTime() / 1000) * 1000;
@@ -173,7 +186,9 @@ export function effectiveAgentStatus(input: StatusInput): EffectiveStatus {
 
   // An expiring manual choice: only while automation is active, `until` is honoured.
   const manualExpired =
-    automationActive && input.manual?.until != null && now.getTime() >= Date.parse(input.manual.until);
+    automationActive &&
+    input.manual?.until != null &&
+    now.getTime() >= Date.parse(input.manual.until);
   const manualChangesAt =
     automationActive && input.manual?.until != null && !manualExpired
       ? new Date(input.manual.until)
@@ -234,7 +249,7 @@ export function effectiveAgentStatus(input: StatusInput): EffectiveStatus {
 
   if (automationActive && hours) {
     const outside = isOutsideOwnHours(hours, now);
-    const changesAt = nextScheduleChange(hours, now);
+    const changesAt = input.wantChangesAt ? nextScheduleChange(hours, now) : null;
     if (outside) {
       return {
         ...base,
@@ -323,7 +338,7 @@ export async function loadAgentStatuses(
   tx: Tx,
   orgId: number,
   userIds: readonly number[],
-  opts: { automationAllowed: boolean; now?: Date },
+  opts: { automationAllowed: boolean; now?: Date; wantChangesAt?: boolean },
 ): Promise<Map<number, LoadedStatus>> {
   const out = new Map<number, LoadedStatus>();
   if (userIds.length === 0) return out;
@@ -361,8 +376,85 @@ export async function loadAgentStatuses(
       leave: leaveOf.get(id) ?? null,
       workspaceTimezone: cal.timezone,
       now,
+      wantChangesAt: opts.wantChangesAt,
     });
     out.set(id, { ...status, storedStatus: (row?.status as string | undefined) ?? null });
   }
   return out;
+}
+
+// --- writing --------------------------------------------------------------------------------------------------------------------
+
+export interface StatusRow {
+  status: string | null;
+  preferences: unknown;
+}
+
+/** The person's status row, locked for update when `lock` (two tabs saving at once must not lose each other's change). */
+export async function readStatusRow(
+  tx: Tx,
+  orgId: number,
+  userId: number,
+  lock = false,
+): Promise<StatusRow> {
+  const res = await tx.execute(
+    lock
+      ? sql`SELECT status, preferences FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId} FOR UPDATE`
+      : sql`SELECT status, preferences FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId}`,
+  );
+  const r = (res.rows as Raw[])[0];
+  return { status: (r?.status as string | undefined) ?? null, preferences: r?.preferences ?? null };
+}
+
+/**
+ * Writes the stored status (when `status` is given) and this feature's part of `preferences` in one upsert. Other keys of `preferences`
+ * are never touched; the counters and the round-robin clock of the row stay as the inbox keeps them. The heartbeat moves only when the
+ * status does.
+ */
+export async function writeAvailability(
+  tx: Tx,
+  orgId: number,
+  userId: number,
+  next: { status?: 'online' | 'offline'; availability: AvailabilityPrefs },
+): Promise<void> {
+  const availability = JSON.stringify(next.availability);
+  const statusExpr =
+    next.status === undefined ? sql`agent_statuses.status` : sql`${next.status}::text`;
+  const seenExpr = next.status === undefined ? sql`agent_statuses.last_seen_at` : sql`now()`;
+  await tx.execute(sql`
+    INSERT INTO agent_statuses (org_id, user_id, status, last_seen_at, preferences)
+    VALUES (${orgId}, ${userId}, ${next.status ?? 'online'}, now(),
+            jsonb_build_object('availability', ${availability}::jsonb))
+    ON CONFLICT (org_id, user_id) DO UPDATE SET
+      status = ${statusExpr},
+      last_seen_at = ${seenExpr},
+      preferences = COALESCE(agent_statuses.preferences, '{}'::jsonb)
+        || jsonb_build_object('availability', ${availability}::jsonb)`);
+}
+
+// --- words for the screens -------------------------------------------------------------------------------------------------------
+
+/**
+ * The four words the inbox screens know for a person: `online` = Available, `offline` = Away (their own choice, or on leave), `away` = Away
+ * because they are outside their working hours, `busy` = the legacy busy value. Used by the assignee picker and the member and team lists.
+ */
+export type PresenceWord = 'online' | 'away' | 'busy' | 'offline';
+
+export function presenceWord(
+  s: { trace: string; routable: boolean; busy: boolean } | undefined,
+): PresenceWord {
+  if (!s || s.routable) return 'online';
+  if (s.busy) return 'busy';
+  return s.trace === 'outside_working_hours' ? 'away' : 'offline';
+}
+
+/** `presenceWord` for many people at once (the member list, a team's members): three queries, whatever the count. */
+export async function presenceFor(
+  tx: Tx,
+  orgId: number,
+  userIds: readonly number[],
+  automationAllowed: boolean,
+): Promise<Map<number, PresenceWord>> {
+  const statuses = await loadAgentStatuses(tx, orgId, userIds, { automationAllowed });
+  return new Map(userIds.map((id) => [id, presenceWord(statuses.get(id))] as const));
 }

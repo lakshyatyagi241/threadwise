@@ -76,7 +76,7 @@
       "unknownPerson": "Antiguo miembro",
       "unknownTeam": "Equipo eliminado",
       "teamName": "Equipo: {name}",
-      "skipsOffline": "Omite a las personas sin conexión",
+      "skipsOffline": "Omite a las personas ausentes",
       "reassigns": "Reasigna al actualizar",
       "activeFor": "La regla {name} está activa",
       "dragHandle": "Arrastra {name} para cambiar su prioridad",
@@ -136,7 +136,7 @@
         "noPeople": "Ninguna persona coincide.",
         "removePerson": "Quitar a {name}",
         "onLeave": "de licencia",
-        "skipOffline": "Omitir a las personas sin conexión",
+        "skipOffline": "Omitir a las personas ausentes",
         "skipOfflineHint": "Las personas de licencia siempre se omiten.",
         "reassign": "Reasignar cuando una actualización haga que este registro empiece a coincidir con la regla",
         "reassignHint": "Se aplica solo a los registros que este motor asignó por sí mismo, y solo mientras nadie haya cambiado el responsable desde entonces. Desactivado por defecto: un registro se asigna una sola vez."
@@ -220,7 +220,7 @@
         "disabled": "La asignación de registros está desactivada en este espacio de trabajo, así que no pasaría nada.",
         "has_owner": "{record} ya tiene un responsable, así que no se ejecutaría ninguna regla. Un responsable establecido por alguien nunca se reemplaza.",
         "no_rule": "Ninguna regla activa coincide con {record}.",
-        "nobody_available": "Una regla coincide con {record}, pero todas las personas que nombra están de licencia, sin conexión o ya no están.",
+        "nobody_available": "Una regla coincide con {record}, pero todas las personas que nombra están de baja, ausentes o ya no están.",
         "plan": "Tu plan no incluye reglas de asignación de registros.",
         "not_found": "No se encontró ese registro. Puede que se haya eliminado o que esté fuera de lo que puedes ver."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: no puede abrir este tipo de registro",
         "inactive": "{name}: ya no está activo",
         "on_leave": "{name}: de permiso hoy",
-        "offline": "{name}: sin conexión"
+        "offline": "{name}: ausente"
       }
     },
     "log": {

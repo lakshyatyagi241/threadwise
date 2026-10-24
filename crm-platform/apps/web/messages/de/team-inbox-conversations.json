@@ -554,17 +554,17 @@
         "onLeave": "Abwesend",
         "onLeaveUntil": "Abwesend bis {date}",
         "availability": {
-          "online": "Online",
-          "away": "Abwesend",
+          "online": "Verfügbar",
+          "away": "Nicht verfügbar, außerhalb der Arbeitszeit",
           "busy": "Beschäftigt",
-          "offline": "Offline"
+          "offline": "Nicht verfügbar"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Abwesend",
+        "online": "Verfügbar",
+        "away": "Nicht verfügbar, außerhalb der Arbeitszeit",
         "busy": "Beschäftigt",
-        "offline": "Offline"
+        "offline": "Nicht verfügbar"
       },
       "notes": {
         "tab": "Kontaktnotizen",

@@ -566,7 +566,9 @@
             "record_assignment": "ریکارڈ تفویض کے اصول",
             "team_hierarchy": "ٹیم کا درجہ بندی اور مینیجرز",
             "custom_roles": "حسبِ ضرورت کردار اور دائرہ کار",
-            "inbox_assignment_sticky": "اسمارٹ روٹنگ: رابطے کا مالک اور مستقل ایجنٹ"
+            "inbox_assignment_sticky": "اسمارٹ روٹنگ: رابطے کا مالک اور مستقل ایجنٹ",
+            "agent_status_bar": "اسٹیٹس بار",
+            "agent_status_automation": "حالت کو خودکار بنائیں"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

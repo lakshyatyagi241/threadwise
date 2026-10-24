@@ -566,7 +566,9 @@
             "record_assignment": "Reguły przypisywania rekordów",
             "team_hierarchy": "Hierarchia zespołów i menedżerowie",
             "custom_roles": "Własne role i zakresy",
-            "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent"
+            "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent",
+            "agent_status_bar": "Pasek statusu",
+            "agent_status_automation": "Automatyzuj status"
           },
           "cta": {
             "continueFree": "Kontynuuj za darmo",

@@ -30,10 +30,11 @@ describe('AvailabilityRow', () => {
     expect(out).toContain('Available');
   });
 
-  it('reads Offline, unchecked, when the agent is out of automatic assignment', () => {
+  it('reads Away, unchecked, when the agent is out of automatic assignment', () => {
     const out = html('offline');
     expect(out).toContain('aria-checked="false"');
-    expect(out).toContain('Offline');
+    expect(out).toContain('Away');
+    expect(out).not.toContain('Offline');
     expect(out).toContain('no new chats are assigned');
   });
 });

@@ -554,17 +554,17 @@
         "onLeave": "Sedang cuti",
         "onLeaveUntil": "Cuti hingga {date}",
         "availability": {
-          "online": "Online",
-          "away": "Pergi",
+          "online": "Tersedia",
+          "away": "Tidak di tempat, di luar jam kerja",
           "busy": "Sibuk",
-          "offline": "Offline"
+          "offline": "Tidak di tempat"
         }
       },
       "presence": {
-        "online": "Daring",
-        "away": "Tidak di tempat",
+        "online": "Tersedia",
+        "away": "Tidak di tempat, di luar jam kerja",
         "busy": "Sibuk",
-        "offline": "Luring"
+        "offline": "Tidak di tempat"
       },
       "notes": {
         "tab": "Catatan kontak",
