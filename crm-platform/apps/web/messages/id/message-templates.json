@@ -183,7 +183,8 @@
       "confirm": "Hapus templat",
       "cancel": "Batal",
       "done": "\"{name}\" dihapus.",
-      "inUseHelp": "Buka broadcast yang memakai templat ini lalu batalkan atau pilih templat lain, kemudian hapus templat ini."
+      "inUseHelp": "Buka broadcast yang memakai templat ini lalu batalkan atau pilih templat lain, kemudian hapus templat ini.",
+      "messageDraft": "Hapus “{name}”? Templat ini belum pernah dikirim ke Meta, jadi hanya akan dihapus di sini."
     },
     "lint": {
       "title": "Pemeriksaan sebelum kirim",

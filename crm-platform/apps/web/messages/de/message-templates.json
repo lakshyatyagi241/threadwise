@@ -183,7 +183,8 @@
       "confirm": "Vorlage löschen",
       "cancel": "Abbrechen",
       "done": "„{name}“ gelöscht.",
-      "inUseHelp": "Öffnen Sie den Broadcast, der diese Vorlage verwendet, und brechen Sie ihn ab oder wählen Sie eine andere Vorlage. Löschen Sie danach diese Vorlage."
+      "inUseHelp": "Öffnen Sie den Broadcast, der diese Vorlage verwendet, und brechen Sie ihn ab oder wählen Sie eine andere Vorlage. Löschen Sie danach diese Vorlage.",
+      "messageDraft": "„{name}“ löschen? Die Vorlage wurde nie an Meta gesendet, daher wird sie nur hier entfernt."
     },
     "lint": {
       "title": "Prüfungen vor dem Einreichen",

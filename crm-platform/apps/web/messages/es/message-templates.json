@@ -183,7 +183,8 @@
       "confirm": "Eliminar plantilla",
       "cancel": "Cancelar",
       "done": "Se eliminó “{name}”.",
-      "inUseHelp": "Abre la difusión que usa esta plantilla y cancélala o elige otra plantilla; después, elimina esta."
+      "inUseHelp": "Abre la difusión que usa esta plantilla y cancélala o elige otra plantilla; después, elimina esta.",
+      "messageDraft": "¿Eliminar “{name}”? Nunca se envió a Meta, así que solo se quitará aquí."
     },
     "lint": {
       "title": "Comprobaciones previas al envío",

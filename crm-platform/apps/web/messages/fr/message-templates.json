@@ -183,7 +183,8 @@
       "confirm": "Supprimer le modèle",
       "cancel": "Annuler",
       "done": "« {name} » supprimé.",
-      "inUseHelp": "Ouvrez la diffusion qui utilise ce modèle, annulez-la ou choisissez un autre modèle, puis supprimez celui-ci."
+      "inUseHelp": "Ouvrez la diffusion qui utilise ce modèle, annulez-la ou choisissez un autre modèle, puis supprimez celui-ci.",
+      "messageDraft": "Supprimer « {name} » ? Il n’a jamais été envoyé à Meta, il est donc supprimé uniquement ici."
     },
     "lint": {
       "title": "Vérifications avant envoi",

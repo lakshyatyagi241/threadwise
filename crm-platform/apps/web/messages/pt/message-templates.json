@@ -183,7 +183,8 @@
       "confirm": "Excluir modelo",
       "cancel": "Cancelar",
       "done": "“{name}” excluído.",
-      "inUseHelp": "Abra a transmissão que usa este modelo e cancele-a ou escolha outro modelo; depois exclua este."
+      "inUseHelp": "Abra a transmissão que usa este modelo e cancele-a ou escolha outro modelo; depois exclua este.",
+      "messageDraft": "Excluir “{name}”? Ele nunca foi enviado à Meta, então será removido apenas aqui."
     },
     "lint": {
       "title": "Verificações antes do envio",

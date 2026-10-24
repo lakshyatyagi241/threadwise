@@ -183,7 +183,8 @@
       "confirm": "Usuń szablon",
       "cancel": "Anuluj",
       "done": "Usunięto „{name}”.",
-      "inUseHelp": "Otwórz wiadomość masową, która używa tego szablonu, i anuluj ją albo wybierz inny szablon, a następnie usuń ten."
+      "inUseHelp": "Otwórz wiadomość masową, która używa tego szablonu, i anuluj ją albo wybierz inny szablon, a następnie usuń ten.",
+      "messageDraft": "Usunąć „{name}”? Szablon nigdy nie został wysłany do Meta, więc zostanie usunięty tylko tutaj."
     },
     "lint": {
       "title": "Sprawdzenie przed wysłaniem",
