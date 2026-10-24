@@ -1194,15 +1194,34 @@ export type WizardSendersResponse = z.infer<typeof wizardSendersResponseSchema>;
 /** Retries run for at most this many days after today. */
 export const WIZARD_RETRY_MAX_DAYS = 7;
 
-/** The last end date (`YYYY-MM-DD`, in the draft's time zone) a retry window may have: today plus {@link WIZARD_RETRY_MAX_DAYS}. */
-export function wizardRetryEndMax(now: Date, timeZone: string): string {
-  const today = new Intl.DateTimeFormat('en-CA', {
+/** The day (`YYYY-MM-DD`) an instant falls on in `timeZone`. */
+function dayIn(instant: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat('en-CA', {
     timeZone,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).format(now);
-  const d = new Date(`${today}T00:00:00Z`);
+  }).format(instant);
+}
+
+/** The last end date (`YYYY-MM-DD`, in the draft's time zone) a retry window may have: today plus {@link WIZARD_RETRY_MAX_DAYS}. */
+export function wizardRetryEndMax(now: Date, timeZone: string): string {
+  const d = new Date(`${dayIn(now, timeZone)}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() + WIZARD_RETRY_MAX_DAYS);
   return d.toISOString().slice(0, 10);
+}
+
+/**
+ * The end dates the calendar may offer (both `YYYY-MM-DD`, in the draft's retry zone): not before today, nor before the day of the
+ * first send (the window must close after it), and not after {@link wizardRetryEndMax}. Matches the rules `draftIssues` checks.
+ */
+export function wizardRetryEndRange(
+  d: Pick<WizardDraft, 'schedule' | 'retries'>,
+  now: Date,
+): { min: string; max: string } {
+  const zoneName = d.retries.timezone ?? draftTimeZone(d);
+  const today = dayIn(now, zoneName);
+  const first = firstRunInstant(d.schedule);
+  const firstDay = first ? dayIn(first, zoneName) : today;
+  return { min: firstDay > today ? firstDay : today, max: wizardRetryEndMax(now, zoneName) };
 }
