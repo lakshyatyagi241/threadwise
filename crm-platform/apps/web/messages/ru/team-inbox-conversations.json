@@ -335,6 +335,12 @@
       "assignedToOther": "Этот чат назначен другому агенту. Сначала назначьте его себе, чтобы ответить.",
       "typing": "{count, plural, one {# коллега печатает} few {# коллеги печатают} many {# коллег печатают} other {# коллеги печатают}}",
       "messagesLabel": "Сообщения",
+      "session": {
+        "header": "{range} · {count, plural, one {# сообщение} few {# сообщения} many {# сообщений} other {# сообщения}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Загрузить более ранние сообщения",
       "empty": "В этом диалоге пока нет сообщений.",
       "newMessageAnnounce": "Новое сообщение: {text}",

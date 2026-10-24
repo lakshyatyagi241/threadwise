@@ -335,6 +335,12 @@
       "assignedToOther": "แชทนี้ถูกมอบหมายให้เอเจนต์คนอื่นแล้ว โปรดมอบหมายให้ตัวเองก่อนจึงจะตอบกลับได้",
       "typing": "{count, plural, other {มีเพื่อนร่วมทีม {count} คนกำลังพิมพ์}}",
       "messagesLabel": "ข้อความ",
+      "session": {
+        "header": "{range} · {count, plural, other {# ข้อความ}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "โหลดข้อความก่อนหน้า",
       "empty": "ยังไม่มีข้อความในการสนทนานี้",
       "newMessageAnnounce": "ข้อความใหม่: {text}",

@@ -335,6 +335,12 @@
       "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
       "messagesLabel": "Tin nhắn",
+      "session": {
+        "header": "{range} · {count, plural, other {# tin nhắn}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Tải tin nhắn trước đó",
       "empty": "Chưa có tin nhắn trong cuộc trò chuyện này.",
       "newMessageAnnounce": "Tin nhắn mới: {text}",

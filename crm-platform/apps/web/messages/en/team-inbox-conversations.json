@@ -337,6 +337,12 @@
       "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
       "messagesLabel": "Messages",
+      "session": {
+        "header": "{range} · {count, plural, one {# message} other {# messages}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Load earlier messages",
       "empty": "No messages in this conversation yet.",
       "newMessageAnnounce": "New message: {text}",

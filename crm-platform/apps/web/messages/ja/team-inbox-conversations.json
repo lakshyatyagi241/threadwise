@@ -335,6 +335,12 @@
       "assignedToOther": "このチャットは別の担当者に割り当てられています。返信するには、先に自分に割り当ててください。",
       "typing": "{count, plural, other {# 人のチームメイトが入力中}}",
       "messagesLabel": "メッセージ",
+      "session": {
+        "header": "{range} · {count, plural, other {# 件のメッセージ}}",
+        "span": "{date} {from} – {to}",
+        "moment": "{date} {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "以前のメッセージを読み込む",
       "empty": "この会話にはまだメッセージがありません。",
       "newMessageAnnounce": "新しいメッセージ: {text}",

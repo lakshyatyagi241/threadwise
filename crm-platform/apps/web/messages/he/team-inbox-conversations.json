@@ -335,6 +335,12 @@
       "assignedToOther": "הצ'אט הזה מוקצה לסוכן אחר. הקצו אותו לעצמכם קודם כדי להשיב.",
       "typing": "{count, plural, one {חבר צוות מקליד} two {# חברי צוות מקלידים} other {# חברי צוות מקלידים}}",
       "messagesLabel": "הודעות",
+      "session": {
+        "header": "{range} · {count, plural, one {# הודעה} two {שתי הודעות} other {# הודעות}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "טען הודעות קודמות",
       "empty": "אין הודעות בשיחה זו עדיין.",
       "newMessageAnnounce": "הודעה חדשה: {text}",

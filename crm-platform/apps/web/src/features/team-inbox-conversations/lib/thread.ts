@@ -275,17 +275,55 @@ export function agentReactions(messages: MessageResponse[]): Map<string, AgentRe
 
 // --- what the thread draws ------------------------------------------------------------------------------------------------
 
+/**
+ * A session is one run of conversation: a new one starts when this long passes with no message either way (ours and the customer's,
+ * a send in flight included). Notes and reactions never start one or count in one. The length is the WhatsApp service window the
+ * channels already use (24 hours). The owner chose it; change it here only.
+ */
+export const SESSION_GAP_MS = 24 * 60 * 60 * 1000;
+
 export type ThreadItem =
   | { kind: 'day'; key: string; at: string }
+  | { kind: 'session'; key: string; from: string; to: string; count: number }
   | { kind: 'message'; key: string; message: MessageResponse }
   | { kind: 'note'; key: string; note: ConversationNote }
   | { kind: 'pending'; key: string; pending: PendingSend };
 
+interface SessionSpan {
+  /** The first and last message's time: the session's time range. */
+  from: string;
+  to: string;
+  /** Messages and sends in flight in it (not notes, not reactions). */
+  count: number;
+}
+
+/**
+ * The sessions of `entries` (in thread order), each keyed by its first entry's item key. A new session starts when the gap to the
+ * entry before is longer than SESSION_GAP_MS.
+ */
+function sessionsOf(entries: ReadonlyArray<{ key: string; at: string }>): Map<string, SessionSpan> {
+  const starts = new Map<string, SessionSpan>();
+  let span: SessionSpan | null = null;
+  let prev = NaN;
+  for (const e of entries) {
+    const ms = Date.parse(e.at);
+    if (span === null || ms - prev > SESSION_GAP_MS) {
+      span = { from: e.at, to: e.at, count: 0 };
+      starts.set(e.key, span);
+    }
+    span.to = e.at;
+    span.count += 1;
+    prev = ms;
+  }
+  return starts;
+}
+
 /**
  * The thread in reading order: stored messages by seq with internal notes slotted in by time, then the sends in flight, with a
- * day separator before the first item of each calendar day. Notes older than the oldest message held are left out while older
- * history remains to be loaded (they appear in place once it is), so the top of the thread never shows a note stranded from its
- * conversation. `timeZone` is the zone the person reads times in (day separators follow it).
+ * day separator before the first item of each calendar day and a session header before the first message or send of each
+ * session. Notes older than the oldest message held are left out while older history remains to be loaded (they appear in place
+ * once it is), so the top of the thread never shows a note stranded from its conversation. `timeZone` is the zone the person reads
+ * times in (day separators follow it).
  */
 export function buildItems(
   messages: MessageResponse[],
@@ -294,6 +332,12 @@ export function buildItems(
   hasMoreBefore: boolean,
   timeZone?: string,
 ): ThreadItem[] {
+  const starts = sessionsOf([
+    ...messages
+      .filter((m) => !isAgentReaction(m))
+      .map((m) => ({ key: `m:${m.id}`, at: m.createdAt })),
+    ...pending.map((p) => ({ key: `p:${p.clientMessageId}`, at: p.createdAt })),
+  ]);
   const oldest = messages[0]?.createdAt ?? null;
   const visibleNotes = notes
     .filter((n) => !(hasMoreBefore && oldest && n.createdAt < oldest))
@@ -327,6 +371,8 @@ export function buildItems(
       day = k;
       out.push({ kind: 'day', key: `d:${k}`, at });
     }
+    const span = starts.get(item.key);
+    if (span) out.push({ kind: 'session', key: `s:${item.key}`, ...span });
     out.push(item);
   };
   for (const b of body) push(b.at, b.item);

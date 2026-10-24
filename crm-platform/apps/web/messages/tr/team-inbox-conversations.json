@@ -335,6 +335,12 @@
       "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
+      "session": {
+        "header": "{range} · {count, plural, one {# mesaj} other {# mesaj}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Önceki mesajları yükle",
       "empty": "Bu konuşmada henüz mesaj yok.",
       "newMessageAnnounce": "Yeni mesaj: {text}",

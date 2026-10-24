@@ -335,6 +335,12 @@
       "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
       "messagesLabel": "Berichten",
+      "session": {
+        "header": "{range} · {count, plural, one {# bericht} other {# berichten}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Eerdere berichten laden",
       "empty": "Nog geen berichten in dit gesprek.",
       "newMessageAnnounce": "Nieuw bericht: {text}",
