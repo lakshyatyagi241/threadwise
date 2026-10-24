@@ -1,6 +1,7 @@
 import {
   apiLibraryContactPropertiesResponseSchema,
   apiLibraryDetailSchema,
+  apiLibraryLogApisResponseSchema,
   apiLibraryLogDetailSchema,
   apiLibraryOptionsResponseSchema,
   apiLibraryUsageResponseSchema,
@@ -46,6 +47,8 @@ export const apiLibraryApi = {
     }).then((r) => normalizePage(r, query)),
   options: (signal?: AbortSignal) =>
     apiFetch(`${BASE}/apis/options`, { schema: apiLibraryOptionsResponseSchema, signal }),
+  logApis: (signal?: AbortSignal) =>
+    apiFetch(`${BASE}/logs/apis`, { schema: apiLibraryLogApisResponseSchema, signal }),
   get: (id: string, signal?: AbortSignal) =>
     apiFetch(`${BASE}/apis/${enc(id)}`, { schema: apiLibraryDetailSchema, signal }),
   create: (input: CreateApiLibraryApiInput) =>

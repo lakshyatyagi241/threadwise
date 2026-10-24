@@ -66,3 +66,15 @@ export type ListApiLibraryLogsQuery = z.infer<typeof listApiLibraryLogsQuerySche
 
 export const listApiLibraryLogsResponseSchema = numberedPageResponseSchema(apiLibraryLogItemSchema);
 export type ListApiLibraryLogsResponse = z.infer<typeof listApiLibraryLogsResponseSchema>;
+
+/** One entry of the logs' API filter: a saved API, or a deleted one whose runs are still listed. */
+export const apiLibraryLogApiSchema = z.object({
+  id: uuidSchema,
+  /** The current name; for a deleted API, the name its latest run kept. */
+  name: z.string(),
+  deleted: z.boolean(),
+});
+export type ApiLibraryLogApi = z.infer<typeof apiLibraryLogApiSchema>;
+
+export const apiLibraryLogApisResponseSchema = z.object({ data: z.array(apiLibraryLogApiSchema) });
+export type ApiLibraryLogApisResponse = z.infer<typeof apiLibraryLogApisResponseSchema>;

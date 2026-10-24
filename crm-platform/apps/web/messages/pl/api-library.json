@@ -137,7 +137,8 @@
         "allSources": "Wszystkie źródła",
         "from": "Od",
         "to": "Do",
-        "clear": "Wyczyść filtry"
+        "clear": "Wyczyść filtry",
+        "deletedApi": "{name} (usunięte)"
       },
       "detail": {
         "title": "Szczegóły dziennika API",
@@ -168,7 +169,8 @@
         "openContact": "Otwórz kontakt",
         "user": "Uruchomił (ID użytkownika)",
         "noContext": "Nie uczestniczył żaden przepływ ani kontakt."
-      }
+      },
+      "unsaved": "Niezapisane"
     },
     "variables": {
       "insertFor": "Wstaw zmienną do: {label}",
@@ -218,7 +220,8 @@
         "empty": "Pozostaw puste, aby nie wysyłać ładunku.",
         "invalid": "To nie jest poprawny JSON.",
         "shape": "Ładunek musi być obiektem JSON lub listą.",
-        "format": "Formatuj JSON"
+        "format": "Formatuj JSON",
+        "invalidAt": "To nie jest prawidłowy JSON (błąd w pobliżu wiersza {line}, kolumny {column})."
       },
       "responseVarsHint": "Pola odpowiedzi, które przepływy mogą odczytać jako '{{'ApiName.field'}}'. Wybierz je z odpowiedzi testowej.",
       "mappingHint": "Zapisz pole odpowiedzi we właściwości kontaktu za każdym razem, gdy przepływ uruchamia to API.",
@@ -313,7 +316,8 @@
       "tested": "Test zaliczony",
       "requestHint": "Nazwa, metoda i adres wywołania.",
       "payloadHint": "Co jest wysyłane w treści. Użyj przycisku '{ }', aby wstawić zmienną do wartości.",
-      "functionHint": "Przekształć ładunek za pomocą JavaScript przed wysłaniem. Opcjonalne."
+      "functionHint": "Przekształć ładunek za pomocą JavaScript przed wysłaniem. Opcjonalne.",
+      "plainHttpWarning": "Ten adres zaczyna się od http://, więc hasło lub klucz w nagłówkach zostałyby wysłane bez szyfrowania. Użyj https://, jeśli serwer to obsługuje."
     },
     "test": {
       "title": "Odpowiedź",
@@ -366,7 +370,8 @@
       "result": "Wynik",
       "status": "Stan",
       "time": "Czas",
-      "size": "Rozmiar"
+      "size": "Rozmiar",
+      "truncatedShown": "Wyświetlono pierwszą część odpowiedzi o rozmiarze {kb} KB"
     },
     "pagination": {
       "label": "Stronicowanie",

@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useDeferredValue, useState } from 'react';
+import type { ApiLibraryLogApi } from '@crm/contracts';
 import { EmptyState, cn } from '@crm/ui';
 import { useApiLogs } from '../api/hooks';
 import { errorKey } from '../lib/errors';
@@ -27,7 +28,7 @@ export function LogsPanel({
   apiId?: string;
   /** Where the page and size live: the URL on the full page, the drawer's own state on a list row. */
   paging: Paging;
-  apis?: Array<{ id: string; name: string }>;
+  apis?: ApiLibraryLogApi[];
   enabled?: boolean;
 }) {
   const t = useTranslations('api-library.logs');

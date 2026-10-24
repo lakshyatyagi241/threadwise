@@ -137,7 +137,8 @@
         "allSources": "全部来源",
         "from": "开始",
         "to": "结束",
-        "clear": "清除筛选"
+        "clear": "清除筛选",
+        "deletedApi": "{name}（已删除）"
       },
       "detail": {
         "title": "API 日志详情",
@@ -168,7 +169,8 @@
         "openContact": "打开联系人",
         "user": "运行者（用户 ID）",
         "noContext": "未涉及任何流程或联系人。"
-      }
+      },
+      "unsaved": "未保存"
     },
     "variables": {
       "insertFor": "将变量插入 {label}",
@@ -217,7 +219,8 @@
         "empty": "留空则不发送负载。",
         "invalid": "这不是有效的 JSON。",
         "shape": "负载必须是 JSON 对象或列表。",
-        "format": "格式化 JSON"
+        "format": "格式化 JSON",
+        "invalidAt": "这不是有效的 JSON（在第 {line} 行、第 {column} 列附近出错）。"
       },
       "responseVarsHint": "流程可以读取的响应字段，格式为 '{{'ApiName.field'}}'。请从测试响应中选择。",
       "mappingHint": "每次流程运行此 API 时，将响应中的某个字段保存到联系人属性中。",
@@ -313,7 +316,8 @@
       "requestHint": "调用的名称、方法和地址。",
       "functionHint": "在发送前用 JavaScript 重构负载。可选。",
       "urlHint": "使用 '{ }' 按钮可在地址中插入变量。",
-      "payloadHint": "正文中发送的内容。使用 '{ }' 按钮可在值中插入变量。"
+      "payloadHint": "正文中发送的内容。使用 '{ }' 按钮可在值中插入变量。",
+      "plainHttpWarning": "此地址以 http:// 开头，因此标头中的密码或密钥将以未加密的方式传输。如果服务器支持，请使用 https://。"
     },
     "test": {
       "title": "响应",
@@ -366,7 +370,8 @@
       "result": "结果",
       "status": "状态",
       "time": "时间",
-      "size": "大小"
+      "size": "大小",
+      "truncatedShown": "正在显示 {kb} KB 响应的前一部分"
     },
     "pagination": {
       "label": "分页",

@@ -137,7 +137,8 @@
         "allSources": "Tüm kaynaklar",
         "from": "Başlangıç",
         "to": "Bitiş",
-        "clear": "Filtreleri temizle"
+        "clear": "Filtreleri temizle",
+        "deletedApi": "{name} (silindi)"
       },
       "detail": {
         "title": "API günlük ayrıntıları",
@@ -168,7 +169,8 @@
         "openContact": "Kişiyi aç",
         "user": "Çalıştıran (kullanıcı kimliği)",
         "noContext": "Bir akış veya kişi yer almadı."
-      }
+      },
+      "unsaved": "Kaydedilmedi"
     },
     "variables": {
       "insertFor": "{label} alanına değişken ekle",
@@ -218,7 +220,8 @@
         "empty": "Yük göndermemek için boş bırakın.",
         "invalid": "Bu geçerli bir JSON değil.",
         "shape": "Yük bir JSON nesnesi ya da liste olmalıdır.",
-        "format": "JSON'u biçimlendir"
+        "format": "JSON'u biçimlendir",
+        "invalidAt": "Bu geçerli bir JSON değil ({line}. satır, {column}. sütun civarında bozuluyor)."
       },
       "responseVarsHint": "Akışların '{{'ApiName.field'}}' olarak okuyabileceği yanıt alanları. Bunları test yanıtından seçin.",
       "mappingHint": "Akış bu API'yi her çalıştırdığında yanıtın bir alanını bir kişi özelliğine kaydet.",
@@ -313,7 +316,8 @@
       "tested": "Test geçti",
       "requestHint": "Çağrının adı, yöntemi ve adresi.",
       "payloadHint": "Gövdede gönderilenler. Bir değere değişken eklemek için '{ }' düğmesini kullanın.",
-      "functionHint": "Gönderilmeden önce yükü JavaScript ile yeniden biçimlendirin. İsteğe bağlı."
+      "functionHint": "Gönderilmeden önce yükü JavaScript ile yeniden biçimlendirin. İsteğe bağlı.",
+      "plainHttpWarning": "Bu adres http:// ile başlıyor, bu yüzden başlıklarınızdaki parola veya anahtar şifrelenmeden iletilir. Sunucu destekliyorsa https:// kullanın."
     },
     "test": {
       "title": "Yanıt",
@@ -366,7 +370,8 @@
       "result": "Sonuç",
       "status": "Durum",
       "time": "Zaman",
-      "size": "Boyut"
+      "size": "Boyut",
+      "truncatedShown": "{kb} KB’lık yanıtın ilk kısmı gösteriliyor"
     },
     "pagination": {
       "label": "Sayfalama",

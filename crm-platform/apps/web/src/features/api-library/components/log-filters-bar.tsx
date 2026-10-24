@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { API_LIBRARY_LOG_SOURCES } from '@crm/contracts';
+import { API_LIBRARY_LOG_SOURCES, type ApiLibraryLogApi } from '@crm/contracts';
 import { Button, Field, Input, Select, cn } from '@crm/ui';
 import { EMPTY_LOG_FILTERS, hasLogFilters, type LogFilterForm } from '../lib/log-filters';
 import { SearchIcon } from './icons';
@@ -14,7 +14,7 @@ export function LogFiltersBar({
 }: {
   value: LogFilterForm;
   onChange: (next: LogFilterForm) => void;
-  apis?: Array<{ id: string; name: string }>;
+  apis?: ApiLibraryLogApi[];
 }) {
   const t = useTranslations('api-library.logs.filters');
   const tc = useTranslations('api-library.common');
@@ -56,7 +56,7 @@ export function LogFiltersBar({
             <option value="">{t('allApis')}</option>
             {apis.map((a) => (
               <option key={a.id} value={a.id}>
-                {a.name}
+                {a.deleted ? t('deletedApi', { name: a.name }) : a.name}
               </option>
             ))}
           </Select>

@@ -63,7 +63,13 @@ export function LogsTable({
                     {fmt(r.createdAt)}
                   </button>
                 </td>
-                {showApi && <td className={cn(TD, 'font-medium')}>{r.apiName}</td>}
+                {showApi && (
+                  <td className={cn(TD, 'font-medium')}>
+                    {r.apiName || (
+                      <span className="font-normal text-muted-foreground">{t('unsaved')}</span>
+                    )}
+                  </td>
+                )}
                 <td className={cn(TD, 'max-w-0 w-full')}>
                   <span className="flex min-w-0 items-center gap-2">
                     <MethodBadge method={r.method} />

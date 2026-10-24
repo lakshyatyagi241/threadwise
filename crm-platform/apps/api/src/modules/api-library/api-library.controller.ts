@@ -163,6 +163,15 @@ export class ApiLibraryController {
     return this.logs.list(query);
   }
 
+  @Get('logs/apis')
+  @RequirePermission('integ.apilibrary.read')
+  @ApiOperation({
+    summary: 'The APIs the logs filter offers: saved APIs, and deleted ones that still have runs',
+  })
+  logApis() {
+    return this.logs.filterApis();
+  }
+
   @Get('logs/:id')
   @RequirePermission('integ.apilibrary.read')
   @ApiOperation({ summary: 'One run: the masked request, the answer, and what ran it' })

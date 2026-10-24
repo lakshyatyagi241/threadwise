@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import type {
+  ApiLibraryLogApisResponse,
   ApiLibraryLogDetail,
   ListApiLibraryLogsQuery,
   ListApiLibraryLogsResponse,
@@ -10,7 +11,7 @@ import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { numberedPage, toLogDetail, toLogItem } from './api-library.mapper';
-import { logResponseText, maskJsonText, truncateText } from './api-library.rules';
+import { logFilterApis, logResponseText, maskJsonText, truncateText } from './api-library.rules';
 import { ApiLibraryRepository } from './api-library.repository';
 import { ApiLibraryLogsRepository, type NewLog } from './api-library-logs.repository';
 import { LOG_BODY_LIMIT, type RunOutcome } from './api-library-runner.service';
@@ -44,7 +45,12 @@ export class ApiLibraryLogsService {
   ): Promise<ListApiLibraryLogsResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      if (onlyApi && !(await this.apis.findByUuid(tx, ctx.orgId, onlyApi)))
+      // A deleted API keeps its runs, so its log stays readable; an id with neither an API nor a run is not found.
+      if (
+        onlyApi &&
+        !(await this.apis.findByUuid(tx, ctx.orgId, onlyApi)) &&
+        !(await this.repo.hasRunsOf(tx, ctx.orgId, onlyApi))
+      )
         throw AppError.notFound('API', onlyApi);
       const filter = {
         apiUuid: onlyApi ?? query.apiId,
@@ -66,6 +72,19 @@ export class ApiLibraryLogsService {
       const rows = await this.repo.list(tx, ctx.orgId, { ...filter, cursor: query.cursor });
       const { items, page } = buildPage(rows, query.limit);
       return { data: items.map(toLogItem), page };
+    });
+  }
+
+  /**
+   * The APIs the logs' filter offers: every saved API, and each deleted API that still has runs in the window, so its name stays
+   * findable after the delete. Only the logs list them; the pickers' feed (apis/options) keeps saved APIs alone.
+   */
+  async filterApis(): Promise<ApiLibraryLogApisResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const live = await this.apis.all(tx, ctx.orgId);
+      const logged = await this.repo.loggedApis(tx, ctx.orgId);
+      return { data: logFilterApis(live, logged) };
     });
   }
 
