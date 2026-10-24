@@ -537,7 +537,6 @@
       "crumbTemplates": "القوالب",
       "crumbDetail": "التفاصيل",
       "notSubmittedPill": "غير مرسل",
-      "qualityPill": "الجودة · {quality}",
       "preview": {
         "title": "معاينة",
         "hint": "كيف يظهر على WhatsApp"

@@ -134,6 +134,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
   const t = useTranslations('message-templates.detail');
   const ts = useTranslations('message-templates.status');
   const tt = useTranslations('message-templates.card.type');
+  const tq = useTranslations('message-templates.quality');
   const format = useFormatter();
   const now = useNow({ updateInterval: 60_000 });
   const { toast } = useToast();
@@ -165,6 +166,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
   const notSubmitted = !onMeta && (tpl.status === 'pending' || tpl.status === 'draft');
   const inReview = isAwaitingReview(tpl.status) && onMeta;
   const quality = (tpl.qualityScore ?? 'UNKNOWN').toUpperCase();
+  const qualityLabel = tq.has(quality) ? tq(quality) : tq('UNKNOWN');
   const typeLabel = tt.has(tpl.templateType) ? tt(tpl.templateType) : tpl.templateType;
   const crumb = [tpl.metaCategory ?? '', typeLabel].filter(Boolean).join(' · ').toUpperCase();
 
@@ -295,7 +297,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
                   data-testid="quality-badge"
                   className="rounded-full bg-muted px-2.5 py-1 text-[11px] text-muted-foreground ring-1 ring-border"
                 >
-                  {t('qualityPill', { quality })}
+                  {qualityLabel}
                 </span>
               )}
             </div>
@@ -305,7 +307,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             <p className={cn(LABEL, 'mb-1')}>{t('facts.title')}</p>
             <dl className="divide-y divide-border">
               <Fact label={t('facts.status')}>{metaStatus || '—'}</Fact>
-              <Fact label={t('facts.quality')}>{quality}</Fact>
+              <Fact label={t('facts.quality')}>{qualityLabel}</Fact>
               <Fact label={t('facts.category')}>{tpl.metaCategory ?? '—'}</Fact>
               <Fact label={t('facts.metaId')}>
                 <span className="font-mono text-xs">{tpl.metaTemplateId ?? '—'}</span>

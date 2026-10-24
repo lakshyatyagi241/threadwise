@@ -537,7 +537,6 @@
       "crumbTemplates": "Template",
       "crumbDetail": "Dettaglio",
       "notSubmittedPill": "Non inviato",
-      "qualityPill": "Qualità · {quality}",
       "preview": {
         "title": "Anteprima",
         "hint": "Come appare su WhatsApp"

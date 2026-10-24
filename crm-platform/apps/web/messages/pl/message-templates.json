@@ -537,7 +537,6 @@
       "crumbTemplates": "Szablony",
       "crumbDetail": "Szczegóły",
       "notSubmittedPill": "Nie przesłano",
-      "qualityPill": "Jakość · {quality}",
       "preview": {
         "title": "Podgląd",
         "hint": "Tak wygląda w WhatsApp"

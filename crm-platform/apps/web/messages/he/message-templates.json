@@ -537,7 +537,6 @@
       "crumbTemplates": "תבניות",
       "crumbDetail": "פרטים",
       "notSubmittedPill": "לא נשלחה",
-      "qualityPill": "איכות · {quality}",
       "preview": {
         "title": "תצוגה מקדימה",
         "hint": "כך זה נראה ב-WhatsApp"

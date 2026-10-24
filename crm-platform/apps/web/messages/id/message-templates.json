@@ -537,7 +537,6 @@
       "crumbTemplates": "Template",
       "crumbDetail": "Detail",
       "notSubmittedPill": "Belum dikirim",
-      "qualityPill": "Kualitas · {quality}",
       "preview": {
         "title": "Pratinjau",
         "hint": "Tampilannya di WhatsApp"
