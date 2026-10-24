@@ -138,7 +138,8 @@
         "from": "מ-",
         "to": "עד",
         "clear": "נקה מסננים",
-        "deletedApi": "{name} (נמחק)"
+        "deletedApi": "{name} (נמחק)",
+        "searchTooLong": "החיפוש יכול להכיל עד {max} תווים. קצרו אותו כדי לחפש."
       },
       "detail": {
         "title": "פרטי יומן API",

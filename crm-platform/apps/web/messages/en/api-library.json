@@ -129,6 +129,7 @@
         "label": "Filter runs",
         "search": "Search",
         "searchPlaceholder": "URL, API name or error",
+        "searchTooLong": "Search can be at most {max} characters. Shorten it to search.",
         "api": "API",
         "allApis": "All APIs",
         "deletedApi": "{name} (deleted)",

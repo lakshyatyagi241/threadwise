@@ -138,7 +138,8 @@
         "from": "Desde",
         "to": "Hasta",
         "clear": "Quitar filtros",
-        "deletedApi": "{name} (eliminada)"
+        "deletedApi": "{name} (eliminada)",
+        "searchTooLong": "La búsqueda puede tener como máximo {max} caracteres. Acórtala para buscar."
       },
       "detail": {
         "title": "Detalles del registro de API",

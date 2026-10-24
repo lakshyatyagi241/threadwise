@@ -138,7 +138,8 @@
         "from": "开始",
         "to": "结束",
         "clear": "清除筛选",
-        "deletedApi": "{name}（已删除）"
+        "deletedApi": "{name}（已删除）",
+        "searchTooLong": "搜索最多可以输入 {max} 个字符。请缩短后再搜索。"
       },
       "detail": {
         "title": "API 日志详情",

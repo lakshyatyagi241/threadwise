@@ -138,7 +138,8 @@
         "from": "Từ",
         "to": "Đến",
         "clear": "Xóa bộ lọc",
-        "deletedApi": "{name} (đã xóa)"
+        "deletedApi": "{name} (đã xóa)",
+        "searchTooLong": "Nội dung tìm kiếm tối đa {max} ký tự. Hãy rút ngắn để tìm kiếm."
       },
       "detail": {
         "title": "Chi tiết nhật ký API",

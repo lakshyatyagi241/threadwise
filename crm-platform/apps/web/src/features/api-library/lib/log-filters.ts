@@ -1,4 +1,4 @@
-import type { ApiLibraryLogSource } from '@crm/contracts';
+import { API_LIBRARY_LOG_SEARCH_MAX, type ApiLibraryLogSource } from '@crm/contracts';
 import type { LogFilters } from '../api/hooks';
 
 /** What the filter bar holds. Dates are the `YYYY-MM-DD` of a date input; empty strings mean "no filter". */
@@ -52,3 +52,7 @@ export function logQuery(f: LogFilterForm, fixedApiId?: string): LogFilters {
 
 export const hasLogFilters = (f: LogFilterForm): boolean =>
   (Object.keys(f) as Array<keyof LogFilterForm>).some((k) => f[k] !== '');
+
+/** A search the API would refuse (over the contract's limit after trimming). Such a search is not sent. */
+export const searchTooLong = (f: LogFilterForm): boolean =>
+  f.search.trim().length > API_LIBRARY_LOG_SEARCH_MAX;

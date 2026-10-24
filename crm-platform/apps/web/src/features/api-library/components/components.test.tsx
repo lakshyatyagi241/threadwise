@@ -54,8 +54,11 @@ vi.mock('../api/hooks', () => ({
 import { ApiFormScreen } from './api-form-screen';
 import { ApiListScreen, ApiTable } from './api-list-screen';
 import { DeleteApiDialog } from './delete-api-dialog';
+import { LogFiltersBar } from './log-filters-bar';
 import { LogsPanel } from './logs-panel';
 import { LogsScreen } from './logs-screen';
+import { EMPTY_LOG_FILTERS } from '../lib/log-filters';
+import { ApiError } from '@/lib/api/errors';
 import { MappingEditor } from './mapping-editor';
 import { PageHeader } from './page-chrome';
 import { Pagination } from './pagination';
@@ -317,6 +320,35 @@ describe('logs', () => {
     expect(html(<LogsPanel paging={paging} />)).toContain('No runs yet');
     state.logs = listOf([], { isError: true });
     expect(html(<LogsPanel paging={paging} />)).toContain('Try again');
+  });
+
+  it('marks the search field when it is over the limit, instead of a red bar', () => {
+    const out = html(
+      <LogFiltersBar
+        value={{ ...EMPTY_LOG_FILTERS, search: 'a'.repeat(201) }}
+        onChange={() => undefined}
+        searchInvalid
+      />,
+    );
+    expect(out).toContain('Search can be at most 200 characters. Shorten it to search.');
+    expect(out).toContain('aria-invalid="true"');
+  });
+
+  it('a search the API refuses marks the field and keeps the list, with no red bar', () => {
+    state.logs = listOf([], {
+      isError: true,
+      error: new ApiError(
+        422,
+        'VALIDATION_FAILED',
+        'Request payload failed validation',
+        undefined,
+        [{ path: 'search', message: 'String must contain at most 200 character(s)' }],
+      ),
+    });
+    const out = html(<LogsPanel paging={paging} />);
+    expect(out).toContain('Search can be at most 200 characters. Shorten it to search.');
+    expect(out).not.toContain('Try again');
+    expect(out).not.toContain('Some fields are not valid');
   });
 
   it('the logs page needs the read permission', () => {

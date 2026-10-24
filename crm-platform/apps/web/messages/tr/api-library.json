@@ -138,7 +138,8 @@
         "from": "Başlangıç",
         "to": "Bitiş",
         "clear": "Filtreleri temizle",
-        "deletedApi": "{name} (silindi)"
+        "deletedApi": "{name} (silindi)",
+        "searchTooLong": "Arama en fazla {max} karakter olabilir. Aramak için kısaltın."
       },
       "detail": {
         "title": "API günlük ayrıntıları",

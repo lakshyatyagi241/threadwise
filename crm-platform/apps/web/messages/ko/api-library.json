@@ -138,7 +138,8 @@
         "from": "시작",
         "to": "종료",
         "clear": "필터 지우기",
-        "deletedApi": "{name} (삭제됨)"
+        "deletedApi": "{name} (삭제됨)",
+        "searchTooLong": "검색은 최대 {max}자까지 입력할 수 있습니다. 검색하려면 줄여 주세요."
       },
       "detail": {
         "title": "API 로그 상세",
