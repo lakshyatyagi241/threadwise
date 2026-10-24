@@ -35,7 +35,8 @@ export async function startStubModel(): Promise<StubModel> {
     req.on('end', () => {
       const j = JSON.parse(body || '{}') as {
         model: string;
-        max_tokens: number;
+        max_tokens?: number;
+        max_completion_tokens?: number;
         response_format?: unknown;
         messages: Array<{ role: string; content: string }>;
       };
@@ -45,7 +46,8 @@ export async function startStubModel(): Promise<StubModel> {
         system: j.messages.find((m) => m.role === 'system')?.content ?? '',
         user: j.messages.find((m) => m.role === 'user')?.content ?? '',
         jsonMode: j.response_format !== undefined,
-        maxTokens: j.max_tokens,
+        // OpenAI takes `max_completion_tokens`; the other OpenAI-compatible stubs still read `max_tokens`.
+        maxTokens: (j.max_completion_tokens ?? j.max_tokens) as number,
       };
       stub.calls.push(call);
       const a = stub.answer(call);

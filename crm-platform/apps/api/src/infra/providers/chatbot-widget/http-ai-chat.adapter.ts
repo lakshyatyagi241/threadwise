@@ -15,6 +15,8 @@ interface Vendor {
   /** Optional environment override of `baseUrl`: an OpenAI-compatible gateway, or a stub in tests. */
   baseEnv: string;
   baseUrl: string;
+  /** OpenAI's current models reject `max_tokens` and take `max_completion_tokens`; the other vendors still take `max_tokens`. */
+  maxTokensKey: 'max_tokens' | 'max_completion_tokens';
 }
 
 /** Vendors that speak the OpenAI chat-completions dialect. */
@@ -23,21 +25,25 @@ const OPENAI_COMPATIBLE: Record<string, Vendor> = {
     keyEnv: 'WGT_AI_OPENAI_API_KEY',
     baseEnv: 'WGT_AI_OPENAI_BASE_URL',
     baseUrl: 'https://api.openai.com/v1',
+    maxTokensKey: 'max_completion_tokens',
   },
   mistral: {
     keyEnv: 'WGT_AI_MISTRAL_API_KEY',
     baseEnv: 'WGT_AI_MISTRAL_BASE_URL',
     baseUrl: 'https://api.mistral.ai/v1',
+    maxTokensKey: 'max_tokens',
   },
   deepseek: {
     keyEnv: 'WGT_AI_DEEPSEEK_API_KEY',
     baseEnv: 'WGT_AI_DEEPSEEK_BASE_URL',
     baseUrl: 'https://api.deepseek.com/v1',
+    maxTokensKey: 'max_tokens',
   },
   groq: {
     keyEnv: 'WGT_AI_GROQ_API_KEY',
     baseEnv: 'WGT_AI_GROQ_BASE_URL',
     baseUrl: 'https://api.groq.com/openai/v1',
+    maxTokensKey: 'max_tokens',
   },
 };
 
@@ -97,7 +103,7 @@ export class HttpAiChatAdapter implements AiChatPort {
       { authorization: `Bearer ${key}` },
       {
         model: req.model,
-        max_tokens: req.maxTokens,
+        [vendor.maxTokensKey]: req.maxTokens,
         temperature: req.temperature,
         messages: [
           { role: 'system', content: req.systemPrompt },

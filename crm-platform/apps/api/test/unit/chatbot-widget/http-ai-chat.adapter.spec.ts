@@ -90,4 +90,19 @@ describe('HttpAiChatAdapter (the vendor answer and what it used)', () => {
     expect(await adapter({ WGT_AI_OPENAI_API_KEY: 'k' }).complete(req('nope'))).toBeNull();
     expect(f).not.toHaveBeenCalled();
   });
+
+  it('sends OpenAI max_completion_tokens (not max_tokens); the other OpenAI-compatible vendors keep max_tokens', async () => {
+    const f = json({ choices: [{ message: { content: 'Hello' } }] });
+    vi.stubGlobal('fetch', f);
+    const a = adapter({ WGT_AI_OPENAI_API_KEY: 'k', WGT_AI_GROQ_API_KEY: 'k' });
+    await a.complete(req('openai'));
+    await a.complete(req('groq'));
+    const [openaiCall, groqCall] = f.mock.calls as unknown as Array<[string, RequestInit]>;
+    const openaiBody = JSON.parse(openaiCall![1].body as string) as Record<string, unknown>;
+    const groqBody = JSON.parse(groqCall![1].body as string) as Record<string, unknown>;
+    expect(openaiBody).toMatchObject({ model: 'm', max_completion_tokens: 50 });
+    expect(openaiBody).not.toHaveProperty('max_tokens');
+    expect(groqBody).toMatchObject({ model: 'm', max_tokens: 50 });
+    expect(groqBody).not.toHaveProperty('max_completion_tokens');
+  });
 });
