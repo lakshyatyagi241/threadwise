@@ -138,7 +138,8 @@
         "from": "Du",
         "to": "Au",
         "clear": "Effacer les filtres",
-        "deletedApi": "{name} (supprimée)"
+        "deletedApi": "{name} (supprimée)",
+        "searchTooLong": "La recherche peut comporter au maximum {max} caractères. Raccourcissez-la pour rechercher."
       },
       "detail": {
         "title": "Détails du journal d'API",

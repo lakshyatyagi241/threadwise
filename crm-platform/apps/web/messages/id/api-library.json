@@ -138,7 +138,8 @@
         "from": "Dari",
         "to": "Sampai",
         "clear": "Hapus filter",
-        "deletedApi": "{name} (dihapus)"
+        "deletedApi": "{name} (dihapus)",
+        "searchTooLong": "Pencarian maksimal {max} karakter. Persingkat untuk mencari."
       },
       "detail": {
         "title": "Detail log API",

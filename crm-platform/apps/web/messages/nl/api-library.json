@@ -138,7 +138,8 @@
         "from": "Van",
         "to": "Tot",
         "clear": "Filters wissen",
-        "deletedApi": "{name} (verwijderd)"
+        "deletedApi": "{name} (verwijderd)",
+        "searchTooLong": "Zoeken mag maximaal {max} tekens bevatten. Korter het om te zoeken."
       },
       "detail": {
         "title": "Details API-log",

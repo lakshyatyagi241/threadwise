@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { EMPTY_LOG_FILTERS, dayBound, hasLogFilters, logQuery } from './log-filters';
+import { API_LIBRARY_LOG_SEARCH_MAX } from '@crm/contracts';
+import { EMPTY_LOG_FILTERS, dayBound, hasLogFilters, logQuery, searchTooLong } from './log-filters';
 
 describe('log filters', () => {
+  it('a search is too long only past the contract limit, counted after trimming', () => {
+    const at = (search: string) => searchTooLong({ ...EMPTY_LOG_FILTERS, search });
+    expect(at('a'.repeat(API_LIBRARY_LOG_SEARCH_MAX))).toBe(false);
+    expect(at('a'.repeat(API_LIBRARY_LOG_SEARCH_MAX + 1))).toBe(true);
+    expect(at(`  ${'a'.repeat(API_LIBRARY_LOG_SEARCH_MAX)}  `)).toBe(false);
+    expect(at('')).toBe(false);
+  });
+
   it('sends nothing for an empty form', () => {
     expect(logQuery(EMPTY_LOG_FILTERS)).toEqual({
       apiId: undefined,

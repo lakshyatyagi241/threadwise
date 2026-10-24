@@ -138,7 +138,8 @@
         "from": "Od",
         "to": "Do",
         "clear": "Wyczyść filtry",
-        "deletedApi": "{name} (usunięte)"
+        "deletedApi": "{name} (usunięte)",
+        "searchTooLong": "Wyszukiwanie może mieć najwyżej {max} znaków. Skróć je, aby wyszukać."
       },
       "detail": {
         "title": "Szczegóły dziennika API",
