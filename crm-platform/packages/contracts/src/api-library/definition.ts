@@ -56,12 +56,27 @@ export function apiLibraryTokensOf(text: string): string[] {
   return out;
 }
 
-/** Replaces every token through `lookup`; a token `lookup` has no answer for becomes an empty string (as in the flow engine). */
-export function apiLibraryRender(
-  text: string,
+/** Where the part of a URL template that holds the host ends: tokens up to there are not percent-encoded, so `{{base_url}}/x` still works. */
+function apiLibraryAuthorityEnd(template: string): number {
+  const scheme = template.indexOf('://');
+  const start = scheme >= 0 ? scheme + 3 : 0;
+  const rest = template.slice(start).search(/[/?#]/);
+  return rest < 0 ? template.length : start + rest;
+}
+
+/**
+ * Fills a URL template the way the API sends it: a value in the host part goes in as typed, one in the path or the query string is
+ * percent-encoded (so `A B` becomes `A%20B`, not a broken address). A token `lookup` has no answer for becomes an empty string.
+ */
+export function apiLibraryRenderUrl(
+  template: string,
   lookup: (name: string) => string | undefined,
 ): string {
-  return text.replace(API_LIBRARY_TOKEN_RE, (_m, raw: string) => lookup(raw.trim()) ?? '');
+  const hostEnd = apiLibraryAuthorityEnd(template);
+  return template.replace(API_LIBRARY_TOKEN_RE, (_m, raw: string, offset: number) => {
+    const v = lookup(raw.trim()) ?? '';
+    return offset < hostEnd ? v : encodeURIComponent(v);
+  });
 }
 
 /** The string leaves of a JSON value (object values, array items), for token scanning and rendering. */
@@ -238,7 +253,7 @@ export function apiLibraryDefinitionProblems(
   }
 
   const lookup = (n: string) => declared.get(n.toLowerCase())?.defaultValue;
-  const rendered = apiLibraryRender(d.url, lookup);
+  const rendered = apiLibraryRenderUrl(d.url, lookup);
   // Not `new URL`: the contracts package has no DOM/Node lib. The server parses the rendered URL again before it connects.
   const m = /^(https?):\/\/([^\s/?#]*)([/?#]\S*)?$/i.exec(rendered);
   if (!m || m[2] === '') {

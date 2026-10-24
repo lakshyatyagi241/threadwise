@@ -3,6 +3,7 @@ import {
   API_LIBRARY_SECRET_MASK,
   API_LIBRARY_TOKEN_RE,
   apiLibraryIsSensitiveName,
+  apiLibraryRenderUrl,
   type ApiLibraryBody,
   type ApiLibraryMapping,
   type ApiLibraryVariable,
@@ -57,24 +58,12 @@ export function renderText(template: string, values: VariableValues): string {
   return template.replace(TOKEN_G, (_m, raw: string) => valueOf(values, raw));
 }
 
-/** Where the part of the URL that holds the host ends: tokens up to there are not percent-encoded, so `{{base_url}}/x` still works. */
-function authorityEnd(template: string): number {
-  const scheme = template.indexOf('://');
-  const start = scheme >= 0 ? scheme + 3 : 0;
-  const rest = template.slice(start).search(/[/?#]/);
-  return rest < 0 ? template.length : start + rest;
-}
-
 /**
  * Fills the URL. A value placed in the host part goes in as typed; one in the path or the query string is percent-encoded, so a
- * contact called "A & B" cannot add a parameter or end the path.
+ * contact called "A & B" cannot add a parameter or end the path. The rule lives in @crm/contracts, where the save check runs it too.
  */
 export function renderUrl(template: string, values: VariableValues): string {
-  const hostEnd = authorityEnd(template);
-  return template.replace(TOKEN_G, (_m, raw: string, offset: number) => {
-    const v = valueOf(values, raw);
-    return offset < hostEnd ? v : encodeURIComponent(v);
-  });
+  return apiLibraryRenderUrl(template, (name) => values.get(name.toLowerCase()));
 }
 
 /** Every string leaf of a JSON payload filled in; numbers, booleans and nulls stay as they are. */

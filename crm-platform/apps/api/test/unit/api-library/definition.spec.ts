@@ -100,6 +100,17 @@ describe('the definition rules', () => {
     expect(problems({ ...base, url: 'http://x.test:8080/a?b=1' })).toEqual([]);
   });
 
+  it('url: a value with a space in the path is encoded before the check, a missing scheme is still refused', () => {
+    const base = { ...ok, method: 'GET', body: null, headers: [] };
+    const variables = [{ name: 'term', defaultValue: 'abc def' }];
+    expect(problems({ ...base, url: 'https://httpbin.org/anything/{{term}}', variables })).toEqual(
+      [],
+    );
+    expect(problems({ ...base, url: 'httpbin.org/anything/{{term}}', variables })).toEqual([
+      'url: A valid URL is required',
+    ]);
+  });
+
   it('headers: no duplicates, none the server owns, no content-type on form data', () => {
     expect(
       problems({
