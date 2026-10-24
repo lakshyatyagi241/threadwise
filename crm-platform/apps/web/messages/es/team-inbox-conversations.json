@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# hora} other {# horas}}",
         "days": "{count, plural, one {# día} other {# días}}"
       },
-      "unsnoozesAt": "Se reactiva el {time}"
+      "unsnoozesAt": "Se reactiva el {time}",
+      "erased": "Contactos borrados",
+      "erasedHint": "Estos contactos se borraron y sus conversaciones se conservaron sin sus datos ni el texto de los mensajes. Las horas muestran el último mensaje, porque no se registra la fecha de borrado.",
+      "erasedTitle": "Contacto borrado"
     },
     "status": {
       "received": "Recibido",
@@ -344,7 +347,9 @@
       "searchNone": "Sin resultados",
       "searchPrev": "Coincidencia anterior",
       "searchNext": "Coincidencia siguiente",
-      "searchClose": "Cerrar búsqueda"
+      "searchClose": "Cerrar búsqueda",
+      "erasedBadge": "Borrado",
+      "erasedBanner": "Este contacto se borró. Se eliminaron el texto y los archivos de los mensajes, así que no se puede enviar nada. La cronología y las horas se conservan."
     },
     "groupThread": {
       "openGroup": "Abrir grupo",

@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# uur} other {# uur}}",
         "days": "{count, plural, one {# dag} other {# dagen}}"
       },
-      "unsnoozesAt": "Wordt weer open {time}"
+      "unsnoozesAt": "Wordt weer open {time}",
+      "erased": "Gewiste contacten",
+      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon en zonder berichttekst. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
+      "erasedTitle": "Gewist contact"
     },
     "status": {
       "received": "Ontvangen",
@@ -344,7 +347,9 @@
       "searchNone": "Geen resultaten",
       "searchPrev": "Vorige treffer",
       "searchNext": "Volgende treffer",
-      "searchClose": "Zoeken sluiten"
+      "searchClose": "Zoeken sluiten",
+      "erasedBadge": "Gewist",
+      "erasedBanner": "Dit contact is gewist. Berichttekst en media zijn verwijderd, dus er kan niets worden verzonden. De tijdlijn en tijden blijven bewaard."
     },
     "groupThread": {
       "openGroup": "Groep openen",

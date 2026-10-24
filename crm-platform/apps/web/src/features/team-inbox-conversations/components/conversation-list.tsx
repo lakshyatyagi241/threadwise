@@ -230,11 +230,11 @@ export function ConversationList(props: ConversationListProps) {
           channels={channels}
         />
 
-        {/* The archive view keeps its way back even when the filters leave no archived thread. */}
+        {/* The archive view keeps its way back even when the filters leave no archived thread. The two views are exclusive. */}
         {list.counts && (list.counts.archived > 0 || filters.archived) && (
           <button
             type="button"
-            onClick={() => props.onFilters({ archived: !filters.archived })}
+            onClick={() => props.onFilters({ archived: !filters.archived, erased: false })}
             aria-pressed={filters.archived}
             className="flex w-full items-center justify-between rounded-md px-1 py-1 text-xs text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
           >
@@ -242,7 +242,30 @@ export function ConversationList(props: ConversationListProps) {
             {!filters.archived && <span>{list.counts.archived}</span>}
           </button>
         )}
+        {/* Contacts erased with their history kept: the same way in and out as the archive view. */}
+        {list.counts && ((list.counts.erased ?? 0) > 0 || filters.erased) && (
+          <button
+            type="button"
+            data-testid="inbox-erased-toggle"
+            onClick={() => props.onFilters({ erased: !filters.erased, archived: false })}
+            aria-pressed={filters.erased}
+            className="flex w-full items-center justify-between rounded-md px-1 py-1 text-xs text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <span>{filters.erased ? t('backToInbox') : t('erased')}</span>
+            {!filters.erased && <span>{list.counts.erased ?? 0}</span>}
+          </button>
+        )}
       </div>
+
+      {filters.erased && (
+        <p
+          role="note"
+          data-testid="inbox-erased-hint"
+          className="border-b border-border px-3 py-2 text-xs text-muted-foreground"
+        >
+          {t('erasedHint')}
+        </p>
+      )}
 
       <div
         id={listId}

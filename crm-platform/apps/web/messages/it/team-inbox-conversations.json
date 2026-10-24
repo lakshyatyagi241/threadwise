@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# ora} other {# ore}}",
         "days": "{count, plural, one {# giorno} other {# giorni}}"
       },
-      "unsnoozesAt": "Riapre {time}"
+      "unsnoozesAt": "Riapre {time}",
+      "erased": "Contatti cancellati",
+      "erasedHint": "Questi contatti sono stati cancellati e le loro conversazioni sono state conservate senza i dati della persona né il testo dei messaggi. Gli orari mostrano l'ultimo messaggio, perché la data della cancellazione non viene registrata.",
+      "erasedTitle": "Contatto cancellato"
     },
     "status": {
       "received": "Ricevuto",
@@ -344,7 +347,9 @@
       "searchNone": "Nessun risultato",
       "searchPrev": "Risultato precedente",
       "searchNext": "Risultato successivo",
-      "searchClose": "Chiudi ricerca"
+      "searchClose": "Chiudi ricerca",
+      "erasedBadge": "Cancellato",
+      "erasedBanner": "Questo contatto è stato cancellato. Testo e media dei messaggi sono stati rimossi, quindi non è possibile inviare nulla. Cronologia e orari sono conservati."
     },
     "groupThread": {
       "openGroup": "Apri gruppo",

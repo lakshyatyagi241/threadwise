@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
         "days": "{count, plural, one {# dzień} other {# dni}}"
       },
-      "unsnoozesAt": "Wróci {time}"
+      "unsnoozesAt": "Wróci {time}",
+      "erased": "Usunięte kontakty",
+      "erasedHint": "Te kontakty zostały usunięte, a ich rozmowy zachowano bez danych osoby i treści wiadomości. Czasy pokazują ostatnią wiadomość, ponieważ data usunięcia nie jest zapisywana.",
+      "erasedTitle": "Usunięty kontakt"
     },
     "status": {
       "received": "Odebrano",
@@ -344,7 +347,9 @@
       "searchNone": "Brak wyników",
       "searchPrev": "Poprzedni wynik",
       "searchNext": "Następny wynik",
-      "searchClose": "Zamknij wyszukiwanie"
+      "searchClose": "Zamknij wyszukiwanie",
+      "erasedBadge": "Usunięty",
+      "erasedBanner": "Ten kontakt został usunięty. Treść i multimedia wiadomości zostały usunięte, więc nie można nic wysłać. Oś czasu i czasy są zachowane."
     },
     "groupThread": {
       "openGroup": "Otwórz grupę",

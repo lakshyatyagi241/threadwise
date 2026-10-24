@@ -307,3 +307,31 @@ describe("the Filters window's filters", () => {
     expect(compareRows(older, newer)).toBeGreaterThan(0);
   });
 });
+
+describe('the erased-contacts view', () => {
+  const erasedOpen = summary({ erased: true, status: 'open' });
+  const erasedResolvedArchived = summary({ erased: true, status: 'resolved', archived: true });
+
+  it('takes every erased thread whatever its status, archive flag or tab', () => {
+    const view = f({ erased: true, tab: 'mine', status: 'open' });
+    expect(matchesFilters(erasedResolvedArchived, view, ME)).toBe(true);
+    expect(matchesFilters(erasedOpen, view, ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'open' }), view, ME)).toBe(false);
+  });
+
+  it('leaves an open erased thread in the ordinary inbox, and keeps archived ones to the archive', () => {
+    expect(matchesFilters(erasedOpen, f(), ME)).toBe(true);
+    expect(matchesFilters(erasedResolvedArchived, f(), ME)).toBe(false);
+    expect(matchesFilters(erasedResolvedArchived, f({ archived: true, status: 'all' }), ME)).toBe(
+      true,
+    );
+  });
+
+  it('is a filter on the address and on the badges: the counts do not stand for the inbox', () => {
+    expect(listQuery(f({ erased: true }))).toMatchObject({ erased: true });
+    expect(listQuery(f()).erased).toBeUndefined();
+    expect(isFiltered(f({ erased: true }))).toBe(true);
+    expect(narrowsCounts(f({ erased: true }))).toBe(true);
+    expect(filtersKey(f({ erased: true }))).not.toBe(filtersKey(f()));
+  });
+});

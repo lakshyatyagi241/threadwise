@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# heure} other {# heures}}",
         "days": "{count, plural, one {# jour} other {# jours}}"
       },
-      "unsnoozesAt": "Revient {time}"
+      "unsnoozesAt": "Revient {time}",
+      "erased": "Contacts effacés",
+      "erasedHint": "Ces contacts ont été effacés ; leurs conversations ont été conservées sans leurs informations personnelles ni le texte des messages. Les heures indiquent le dernier message, car la date d'effacement n'est pas enregistrée.",
+      "erasedTitle": "Contact effacé"
     },
     "status": {
       "received": "Reçu",
@@ -344,7 +347,9 @@
       "searchNone": "Aucun résultat",
       "searchPrev": "Résultat précédent",
       "searchNext": "Résultat suivant",
-      "searchClose": "Fermer la recherche"
+      "searchClose": "Fermer la recherche",
+      "erasedBadge": "Effacé",
+      "erasedBanner": "Ce contact a été effacé. Le texte et les médias des messages ont été supprimés, donc aucun envoi n'est possible. La chronologie et les heures sont conservées."
     },
     "groupThread": {
       "openGroup": "Ouvrir le groupe",

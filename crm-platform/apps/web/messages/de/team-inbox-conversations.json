@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
         "days": "{count, plural, one {# Tag} other {# Tage}}"
       },
-      "unsnoozesAt": "Wird um {time} wieder geöffnet"
+      "unsnoozesAt": "Wird um {time} wieder geöffnet",
+      "erased": "Gelöschte Kontakte",
+      "erasedHint": "Diese Kontakte wurden gelöscht; ihre Unterhaltungen wurden ohne Angaben zur Person und ohne Nachrichtentext behalten. Die Zeiten zeigen die letzte Nachricht, weil das Löschdatum nicht erfasst wird.",
+      "erasedTitle": "Gelöschter Kontakt"
     },
     "status": {
       "received": "Empfangen",
@@ -344,7 +347,9 @@
       "searchNone": "Keine Treffer",
       "searchPrev": "Vorheriger Treffer",
       "searchNext": "Nächster Treffer",
-      "searchClose": "Suche schließen"
+      "searchClose": "Suche schließen",
+      "erasedBadge": "Gelöscht",
+      "erasedBanner": "Dieser Kontakt wurde gelöscht. Nachrichtentext und Medien wurden entfernt, daher kann nichts gesendet werden. Verlauf und Zeiten bleiben erhalten."
     },
     "groupThread": {
       "openGroup": "Gruppe öffnen",
