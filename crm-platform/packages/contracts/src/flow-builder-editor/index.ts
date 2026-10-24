@@ -17,5 +17,6 @@ export * from './ask-input';
 export * from './carousel';
 export * from './geta-publish';
 export * from './location';
+export * from './media-copy';
 export * from './ai-node';
 export * from './handoff-return';

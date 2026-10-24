@@ -47,7 +47,7 @@ describe('flow media upload (TW-FLB-027)', () => {
       put: () => Promise.reject(new Error('ECONNREFUSED objects:9000')),
       get: () => Promise.resolve(null),
     };
-    const svc = new FlowMediaService({} as never, policy as never, store);
+    const svc = new FlowMediaService({} as never, policy as never, store, {} as never);
     const e = (await svc
       .upload({ originalname: 'a.png', buffer: Buffer.from('x') }, 'image', 'org-1')
       .catch((x: unknown) => x)) as AppError;
@@ -64,7 +64,7 @@ describe('flow media upload (TW-FLB-027)', () => {
       put: (_o: string, name: string) => Promise.resolve({ url: `http://x/${name}` }),
       get: () => Promise.resolve(null),
     };
-    const svc = new FlowMediaService({} as never, policy as never, store);
+    const svc = new FlowMediaService({} as never, policy as never, store, {} as never);
     expect(
       await svc.upload({ originalname: 'clip.mp4', buffer: Buffer.from('x') }, 'video', 'org-1'),
     ).toEqual({

@@ -926,7 +926,11 @@
             },
             "prev": "Previous card",
             "next": "Next card",
-            "goTo": "Card {n}"
+            "goTo": "Card {n}",
+            "saveCopy": "Save a copy",
+            "saveCopyHint": "Keeps this picture on our server, so every visitor's chat can show it. A picture on a site that refuses to share it cannot be copied: upload it instead.",
+            "saving": "Saving…",
+            "copyFailed": "Could not save a copy: {message}"
           },
           "condition": {
             "info": "Add rules (a variable, a comparison and a value). Join them with AND or OR, and nest groups when you need to.",

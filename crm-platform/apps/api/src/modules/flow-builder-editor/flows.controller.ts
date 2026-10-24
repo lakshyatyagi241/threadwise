@@ -22,6 +22,7 @@ import {
   FLB_GOOGLE_PICKER_KINDS,
   flbAiGenerateRequestSchema,
   flbCommerceProductsQuerySchema,
+  flbMediaFromUrlRequest,
   importFlowRequestSchema,
   listFlowsQuerySchema,
   renameFlowRequestSchema,
@@ -33,6 +34,7 @@ import {
   uuidSchema,
   type FlbAiGenerateRequest,
   type FlbCommerceProductsQuery,
+  type FlbMediaFromUrlRequest,
   type ImportFlowRequest,
   type ListFlowsQuery,
   type PlanFeatureKey,
@@ -48,6 +50,7 @@ import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { GoogleFilesService } from '../google-account';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
+import { Throttle } from '../platform-infrastructure';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
 import { FlowMediaTooLargeInterceptor } from './flow-media-too-large.interceptor';
@@ -264,6 +267,23 @@ export class FlowsController {
       ]);
     }
     return { data: await this.media.upload(file, type.data, await this.media.orgUuid()) };
+  }
+
+  /**
+   * A carousel picture found at a web address, kept as this server's copy (the chat shows the copy, not the host's address).
+   * Throttled per user: each call makes one outbound request.
+   */
+  @Post('upload-media/from-url')
+  @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
+  @Throttle({ limit: 20, windowSeconds: 60, by: 'actor' })
+  @ApiOperation({
+    summary: 'Keep a copy of a picture found at a web address (a carousel card picture)',
+    description:
+      'The server fetches the address (public hosts only, 5 MB at most, 15 seconds) and keeps the picture as its own copy. 422 when the address cannot be used, the host refuses or does not answer, or the file is not a JPG, PNG, WebP or GIF.',
+  })
+  async copyMediaFromUrl(@Body(zodPipe(flbMediaFromUrlRequest)) body: FlbMediaFromUrlRequest) {
+    return { data: await this.media.importFromUrl(body.url, await this.media.orgUuid()) };
   }
 
   @Post()

@@ -5,6 +5,7 @@ import {
   FLB_CAROUSEL_MAX_BUTTONS,
   FLB_CAROUSEL_MAX_CARDS,
 } from '@crm/contracts';
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   AddButton,
@@ -17,6 +18,7 @@ import {
   XIcon,
 } from '../kit';
 import type { FormProps } from '../types';
+import { needsCopy, SaveCopy } from '../../picture-copy';
 import { acceptFor } from './helpers';
 import { UploadBox, UploadedFile, uploadFile } from './parts';
 import { ChoiceVariableField } from './save-to-attribute';
@@ -61,9 +63,16 @@ export function CarouselForm({ data: d, set, env }: FormProps) {
   const tu = useTranslations('flb.builder.formsCore.send');
   const tp = useTranslations('flb.builder.formsCore.parts');
   const cards = cardsOf(d.cards);
+  // A copy takes a moment; the card list may change meanwhile, so the copy is written into the latest data, by the address it replaces.
+  const latest = useRef(d);
+  useEffect(() => {
+    latest.current = d;
+  });
   const save = (next: Card[]) => set('cards', next);
   const patch = (i: number, p: Partial<Card>) =>
     save(cards.map((c, j) => (j === i ? { ...c, ...p } : c)));
+  const replacePicture = (from: string, to: string) =>
+    save(cardsOf(latest.current.cards).map((c) => (c.image === from ? { ...c, image: to } : c)));
   return (
     <>
       <Field label={t('intro')}>
@@ -98,6 +107,13 @@ export function CarouselForm({ data: d, set, env }: FormProps) {
                 onChange={(v) => patch(i, { image: v })}
               />
             </div>
+            {needsCopy(c.image) ? (
+              <SaveCopy
+                url={c.image}
+                onSaved={(copy) => replacePicture(c.image, copy)}
+                onFailed={(message) => env.toast(t('copyFailed', { message }))}
+              />
+            ) : null}
             {c.image ? <UploadedFile kind="image" url={c.image} filename="" size="sm" /> : null}
           </Field>
           <Field label={`${t('title')} (${c.title.length}/${FLB_CAROUSEL_LIMITS.title})`}>

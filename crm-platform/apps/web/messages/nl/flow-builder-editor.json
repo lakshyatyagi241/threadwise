@@ -1261,7 +1261,11 @@
             },
             "prev": "Vorige kaart",
             "next": "Volgende kaart",
-            "goTo": "Kaart {n}"
+            "goTo": "Kaart {n}",
+            "saveCopy": "Kopie opslaan",
+            "saveCopyHint": "Slaat deze afbeelding op onze server op, zodat de chat van elke bezoeker hem kan tonen. Een afbeelding van een site die delen weigert, kan niet worden gekopieerd: upload hem in plaats daarvan.",
+            "saving": "Opslaan…",
+            "copyFailed": "Kopie kon niet worden opgeslagen: {message}"
           },
           "condition": {
             "info": "Voeg regels toe (een variabele, een vergelijking en een waarde). Koppel ze met AND of OR en nest groepen als dat nodig is.",

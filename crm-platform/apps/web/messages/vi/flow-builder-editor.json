@@ -908,7 +908,11 @@
             },
             "prev": "Thẻ trước",
             "next": "Thẻ tiếp theo",
-            "goTo": "Thẻ {n}"
+            "goTo": "Thẻ {n}",
+            "saveCopy": "Lưu một bản sao",
+            "saveCopyHint": "Lưu ảnh này trên máy chủ của chúng tôi để khung chat của mọi khách truy cập đều hiển thị được. Ảnh từ trang không cho phép chia sẻ thì không sao chép được: hãy tải ảnh lên thay thế.",
+            "saving": "Đang lưu…",
+            "copyFailed": "Không thể lưu bản sao: {message}"
           },
           "condition": {
             "info": "Thêm quy tắc (một biến, một phép so sánh và một giá trị). Nối bằng AND hoặc OR và lồng nhóm khi cần.",
