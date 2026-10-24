@@ -14,6 +14,8 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { runUserCode } from '../../infra/sandbox/code-sandbox';
 import {
+  isProcessedPayload,
+  PROCESSED_PAYLOAD_PROBLEM,
   renderBody,
   renderUrl,
   resolveVariables,
@@ -170,6 +172,14 @@ export class ApiLibraryRunService {
       { functionArgs: payload },
       { timeoutMs: FUNCTION_TIMEOUT_MS },
     );
+    // The same rule as a test run (the runner): an answer that is not the payload is refused here too, never "ran without errors".
+    if (ran.ok && !isProcessedPayload(ran.result))
+      return {
+        ok: false,
+        output: null,
+        error: PROCESSED_PAYLOAD_PROBLEM,
+        durationMs: Date.now() - started,
+      };
     return {
       ok: ran.ok,
       output: ran.ok ? ran.result : null,

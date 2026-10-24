@@ -18,6 +18,8 @@ import {
   maskJsonText,
   maskResponseHeaders,
   maskUrl,
+  PROCESSED_PAYLOAD_PROBLEM,
+  isProcessedPayload,
   renderBody,
   renderHeaders,
   readAnswer,
@@ -190,12 +192,8 @@ export class ApiLibraryRunner {
               'function',
               `The processing function failed: ${ran.error ?? 'unknown error'}`,
             );
-          if (ran.result === null || typeof ran.result !== 'object')
-            return fail(
-              started,
-              'function',
-              'processPayload must return the payload (an object or a list).',
-            );
+          if (!isProcessedPayload(ran.result))
+            return fail(started, 'function', PROCESSED_PAYLOAD_PROBLEM);
           body = ran.result as ApiLibraryBody;
           processed = ran.result;
         }
