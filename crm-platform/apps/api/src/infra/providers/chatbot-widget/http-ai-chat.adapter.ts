@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { AiChatPort, AiChatReply, AiChatRequest } from './ai-chat.port';
+import { openAiOutputLimit } from '../openai-output-limit';
 
 /** A token count the vendor reported, or null when its answer has none. */
 const count = (v: unknown): number | null =>
@@ -15,8 +16,8 @@ interface Vendor {
   /** Optional environment override of `baseUrl`: an OpenAI-compatible gateway, or a stub in tests. */
   baseEnv: string;
   baseUrl: string;
-  /** OpenAI's current models reject `max_tokens` and take `max_completion_tokens`; the other vendors still take `max_tokens`. */
-  maxTokensKey: 'max_tokens' | 'max_completion_tokens';
+  /** OpenAI itself: its output-length field is `max_completion_tokens` on the default endpoint. */
+  openAi: boolean;
 }
 
 /** Vendors that speak the OpenAI chat-completions dialect. */
@@ -25,25 +26,25 @@ const OPENAI_COMPATIBLE: Record<string, Vendor> = {
     keyEnv: 'WGT_AI_OPENAI_API_KEY',
     baseEnv: 'WGT_AI_OPENAI_BASE_URL',
     baseUrl: 'https://api.openai.com/v1',
-    maxTokensKey: 'max_completion_tokens',
+    openAi: true,
   },
   mistral: {
     keyEnv: 'WGT_AI_MISTRAL_API_KEY',
     baseEnv: 'WGT_AI_MISTRAL_BASE_URL',
     baseUrl: 'https://api.mistral.ai/v1',
-    maxTokensKey: 'max_tokens',
+    openAi: false,
   },
   deepseek: {
     keyEnv: 'WGT_AI_DEEPSEEK_API_KEY',
     baseEnv: 'WGT_AI_DEEPSEEK_BASE_URL',
     baseUrl: 'https://api.deepseek.com/v1',
-    maxTokensKey: 'max_tokens',
+    openAi: false,
   },
   groq: {
     keyEnv: 'WGT_AI_GROQ_API_KEY',
     baseEnv: 'WGT_AI_GROQ_BASE_URL',
     baseUrl: 'https://api.groq.com/openai/v1',
-    maxTokensKey: 'max_tokens',
+    openAi: false,
   },
 };
 
@@ -97,13 +98,15 @@ export class HttpAiChatAdapter implements AiChatPort {
   private async openaiCompatible(req: AiChatRequest, vendor: Vendor): Promise<AiChatReply | null> {
     const key = this.key(vendor.keyEnv);
     if (!key) return null;
-    const base = (this.env(vendor.baseEnv) ?? vendor.baseUrl).replace(/\/+$/, '');
+    // A base-URL override is a gateway that may still take only `max_tokens`, so only the default endpoint gets `max_completion_tokens`.
+    const override = this.env(vendor.baseEnv);
+    const base = (override ?? vendor.baseUrl).replace(/\/+$/, '');
     const json = (await this.post(
       `${base}/chat/completions`,
       { authorization: `Bearer ${key}` },
       {
         model: req.model,
-        [vendor.maxTokensKey]: req.maxTokens,
+        ...openAiOutputLimit(req.maxTokens, vendor.openAi && !override),
         temperature: req.temperature,
         messages: [
           { role: 'system', content: req.systemPrompt },

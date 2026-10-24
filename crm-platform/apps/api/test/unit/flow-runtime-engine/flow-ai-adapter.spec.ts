@@ -25,16 +25,42 @@ const base: FlowAiRequest = {
   json: false,
 };
 
+const BASE_URL_ENV = [
+  'FLR_AI_OPENAI_BASE_URL',
+  'FLR_AI_MISTRAL_BASE_URL',
+  'FLR_AI_DEEPSEEK_BASE_URL',
+  'FLR_AI_GROQ_BASE_URL',
+] as const;
+
 describe('flow runtime AI adapter: output-length field per vendor', () => {
+  const savedEnv = new Map<string, string | undefined>();
+
   beforeEach(() => {
-    delete process.env.FLR_AI_OPENAI_BASE_URL;
-    delete process.env.FLR_AI_MISTRAL_BASE_URL;
-    delete process.env.FLR_AI_DEEPSEEK_BASE_URL;
-    delete process.env.FLR_AI_GROQ_BASE_URL;
+    for (const name of BASE_URL_ENV) {
+      savedEnv.set(name, process.env[name]);
+      delete process.env[name];
+    }
   });
 
   afterEach(() => {
+    for (const name of BASE_URL_ENV) {
+      const value = savedEnv.get(name);
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
     vi.unstubAllGlobals();
+  });
+
+  it('keeps max_tokens when FLR_AI_OPENAI_BASE_URL points at a gateway', async () => {
+    process.env.FLR_AI_OPENAI_BASE_URL = 'http://gateway.test/v1/';
+    const fetchMock = answer('ok');
+    vi.stubGlobal('fetch', fetchMock);
+    await new HttpFlowAiAdapter().complete(base);
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    const body = JSON.parse(init.body as string) as Record<string, unknown>;
+    expect(url).toBe('http://gateway.test/v1/chat/completions');
+    expect(body).toMatchObject({ max_tokens: 350 });
+    expect(body).not.toHaveProperty('max_completion_tokens');
   });
 
   it('sends OpenAI max_completion_tokens and no max_tokens (OpenAI rejects max_tokens on its current models)', async () => {

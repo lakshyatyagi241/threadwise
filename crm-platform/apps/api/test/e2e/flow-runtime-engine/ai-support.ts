@@ -10,7 +10,8 @@ export interface ModelCall {
   system: string;
   user: string;
   jsonMode: boolean;
-  maxTokens: number;
+  /** `max_completion_tokens` (OpenAI on the default endpoint) or `max_tokens` (the other vendors, and gateways). */
+  maxTokens: number | undefined;
 }
 
 /**
@@ -46,8 +47,7 @@ export async function startStubModel(): Promise<StubModel> {
         system: j.messages.find((m) => m.role === 'system')?.content ?? '',
         user: j.messages.find((m) => m.role === 'user')?.content ?? '',
         jsonMode: j.response_format !== undefined,
-        // OpenAI takes `max_completion_tokens`; the other OpenAI-compatible stubs still read `max_tokens`.
-        maxTokens: (j.max_completion_tokens ?? j.max_tokens) as number,
+        maxTokens: j.max_completion_tokens ?? j.max_tokens,
       };
       stub.calls.push(call);
       const a = stub.answer(call);

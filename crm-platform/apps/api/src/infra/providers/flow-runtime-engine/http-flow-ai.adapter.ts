@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { FlowAiPort, FlowAiRequest, FlowAiResult } from './flow-ai.port';
+import { openAiOutputLimit } from '../openai-output-limit';
 
 /** Reference's Node executor gave the Laravel endpoint 30 seconds; a vendor slower than that fails the node's turn. */
 const TIMEOUT_MS = 30_000;
@@ -7,8 +8,8 @@ const TIMEOUT_MS = 30_000;
 interface OpenAiCompatibleVendor {
   baseEnv: string;
   baseUrl: string;
-  /** OpenAI's current models reject `max_tokens` and take `max_completion_tokens`; the other vendors still take `max_tokens`. */
-  maxTokensKey: 'max_tokens' | 'max_completion_tokens';
+  /** OpenAI itself: its output-length field is `max_completion_tokens` on the default endpoint. */
+  openAi: boolean;
 }
 
 /** Vendors that speak the OpenAI chat-completions dialect, with the environment variable that overrides the base URL (tests, gateways). */
@@ -16,22 +17,22 @@ const OPENAI_COMPATIBLE: Record<string, OpenAiCompatibleVendor> = {
   openai: {
     baseEnv: 'FLR_AI_OPENAI_BASE_URL',
     baseUrl: 'https://api.openai.com/v1',
-    maxTokensKey: 'max_completion_tokens',
+    openAi: true,
   },
   mistral: {
     baseEnv: 'FLR_AI_MISTRAL_BASE_URL',
     baseUrl: 'https://api.mistral.ai/v1',
-    maxTokensKey: 'max_tokens',
+    openAi: false,
   },
   deepseek: {
     baseEnv: 'FLR_AI_DEEPSEEK_BASE_URL',
     baseUrl: 'https://api.deepseek.com/v1',
-    maxTokensKey: 'max_tokens',
+    openAi: false,
   },
   groq: {
     baseEnv: 'FLR_AI_GROQ_BASE_URL',
     baseUrl: 'https://api.groq.com/openai/v1',
-    maxTokensKey: 'max_tokens',
+    openAi: false,
   },
 };
 
@@ -68,13 +69,15 @@ export class HttpFlowAiAdapter implements FlowAiPort {
     req: FlowAiRequest,
     vendor: OpenAiCompatibleVendor,
   ): Promise<FlowAiResult> {
-    const base = (process.env[vendor.baseEnv]?.trim() || vendor.baseUrl).replace(/\/+$/, '');
+    // A base-URL override is a gateway that may still take only `max_tokens`, so only the default endpoint gets `max_completion_tokens`.
+    const override = process.env[vendor.baseEnv]?.trim();
+    const base = (override || vendor.baseUrl).replace(/\/+$/, '');
     const json = (await this.post(
       `${base}/chat/completions`,
       { authorization: `Bearer ${req.apiKey}` },
       {
         model: req.model,
-        [vendor.maxTokensKey]: req.maxTokens,
+        ...openAiOutputLimit(req.maxTokens, vendor.openAi && !override),
         temperature: req.temperature,
         ...(req.json ? { response_format: { type: 'json_object' } } : {}),
         messages: [
