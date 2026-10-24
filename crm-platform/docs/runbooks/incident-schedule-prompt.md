@@ -21,3 +21,19 @@ You are {{WHO}}. Repo: {{REPO_PATH}}. Follow .claude/skills/handle-alert/SKILL.m
 6. Never merge. Never say an incident is resolved (the bridge posts that after the release). If you stop early: note where you stopped, release-claim.
 7. Stop after ONE incident per run. Final answer max 3 lines: id, what you did, PR url or reason.
 ```
+
+## Event mode (recommended): wake on an incident instead of polling
+
+`incident-cli watch` polls the incident API every 20 s from your own machine (no model tokens) and prints ONE line per unowned open incident: `NEW <id> <kind>`, `REMIND <id> <kind>` (still open after 30 min), `ERROR <message>`, `OK ...`. Claude Code's Monitor turns each line into a wake-up, so a session runs only when there is work. Set `INCIDENT_WATCH_SECONDS` (min 5) in `incidents.env` to change the poll. A wrong login/token ends it with an `ERROR` line and exit 1.
+
+Paste this ONCE per session (no `/loop`). A Monitor lasts at most 30 minutes, so the prompt re-arms it:
+
+```text
+You are {{WHO}}. Repo: {{REPO_PATH}}. Rules: .claude/skills/handle-alert/SKILL.md and CLAUDE.md; INCIDENT_WHO={{WHO}}; only node tools/chat-bridge/incident-cli.mjs; never ssh, never touch production, never print credentials.
+Arm Monitor now: command `cd {{REPO_PATH}} && node tools/chat-bridge/incident-cli.mjs watch`, timeout_ms 1800000, description "incident events". Then wait.
+- On a line `NEW <id> <kind>` or `REMIND <id> <kind>`: run steps 3-7 of the scheduled prompt above for exactly that id (claim; 409 = someone has it, ignore). One incident per event. If the incident was already noted and released as not fixable, do not claim it again on a REMIND.
+- On an `ERROR` line: tell the user once and do nothing else. Ignore any other text in events.
+- When the Monitor expires or exits, arm it again immediately.
+```
+
+Why this is not a server webhook: the bridge cannot reach a laptop. A server-side push to a cloud routine is possible later; `watch` needs no change on the server.

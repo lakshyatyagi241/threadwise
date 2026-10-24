@@ -18,7 +18,7 @@ Goal: your Claude claims, fixes and drafts a PR for production alerts under YOUR
    node tools/chat-bridge/incident-cli.mjs doctor
    ```
    It must end with `All good.` and shows open/claimed counts and who owns what. 401 = wrong login, 403 = wrong token, "cannot reach" = network/URL, not a password problem.
-5. Start the 2-minute schedule in Claude Code: paste the block of [incident-schedule-prompt.md](incident-schedule-prompt.md) after `/loop 5m `, with your name and repo path filled in. It runs only while that session is open and expires after 7 days; start it again then.
+5. Start the incident watch in Claude Code. Preferred: the "Event mode" block of [incident-schedule-prompt.md](incident-schedule-prompt.md), pasted once (the session wakes only when an incident opens, no polling by the model). Fallback, the 2-minute schedule: paste the block of [incident-schedule-prompt.md](incident-schedule-prompt.md) after `/loop 5m `, with your name and repo path filled in. It runs only while that session is open and expires after 7 days; start it again then.
 
 ## What you will see in Google Chat
 
