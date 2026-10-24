@@ -1391,7 +1391,7 @@
           "ruleOff": "desactivada",
           "orderPlaced": "Se activa con cada pedido nuevo. El cliente del pedido se asocia a un contacto guardado y se inscribe.",
           "automatic": "Se activa automáticamente: no necesita más configuración.",
-          "away": "Se activa con cualquier mensaje entrante mientras el <b>modo Ausente</b> está ACTIVADO. Cambia el modo Ausente desde la página de <link>Respuesta automática</link>. Cada contacto se inscribe una sola vez.",
+          "away": "Se activa con cualquier mensaje entrante mientras el <b>modo Ausente</b> está ACTIVADO. Cada contacto se inscribe una sola vez.",
           "outOfHours": "Se activa con cualquier mensaje entrante que llegue <b>fuera del horario laboral de tu espacio de trabajo</b>. Define el horario laboral en los ajustes del espacio de trabajo. Cada contacto se inscribe una sola vez.",
           "manualEnroll": "Inscribirás contactos manualmente desde la <link>lista de /flows</link> con el botón <b>Inscribir</b> junto a este flujo.",
           "ext": {

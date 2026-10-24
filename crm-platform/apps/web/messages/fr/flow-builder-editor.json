@@ -1391,7 +1391,7 @@
           "ruleOff": "désactivée",
           "orderPlaced": "Se déclenche pour chaque nouvelle commande. Le client de la commande est associé à un contact enregistré et inscrit.",
           "automatic": "Se déclenche automatiquement : aucune configuration supplémentaire nécessaire.",
-          "away": "Se déclenche sur tout message entrant tant que le <b>mode Absent</b> est activé. Basculez le mode Absent depuis la page <link>Réponse automatique</link>. Chaque contact n’est inscrit qu’une fois.",
+          "away": "Se déclenche sur tout message entrant tant que le <b>mode Absent</b> est activé. Chaque contact n’est inscrit qu’une fois.",
           "outOfHours": "Se déclenche sur tout message entrant reçu <b>en dehors des heures d’ouverture de votre espace de travail</b>. Définissez les heures d’ouverture dans les réglages de l’espace de travail. Chaque contact n’est inscrit qu’une fois.",
           "manualEnroll": "Vous inscrirez les contacts manuellement depuis la <link>liste /flows</link> avec le bouton <b>Inscrire</b> à côté de ce flux.",
           "ext": {

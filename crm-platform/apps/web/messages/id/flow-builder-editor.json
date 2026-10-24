@@ -1391,7 +1391,7 @@
           "ruleOff": "nonaktif",
           "orderPlaced": "Aktif untuk setiap pesanan baru. Pelanggan pesanan dicocokkan dengan kontak tersimpan dan didaftarkan.",
           "automatic": "Aktif otomatis — tidak perlu konfigurasi tambahan.",
-          "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Ubah mode Away dari halaman <link>Balasan Otomatis</link>. Setiap kontak didaftarkan sekali.",
+          "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Setiap kontak didaftarkan sekali.",
           "outOfHours": "Aktif pada pesan masuk apa pun yang datang <b>di luar Jam Kerja workspace</b> Anda. Atur Jam Kerja di pengaturan workspace. Setiap kontak didaftarkan sekali.",
           "manualEnroll": "Anda akan mendaftarkan kontak secara manual dari <link>daftar /flows</link> melalui tombol <b>Daftarkan</b> di samping alur ini.",
           "ext": {

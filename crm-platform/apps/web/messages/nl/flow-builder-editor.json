@@ -1744,7 +1744,7 @@
           "ruleOff": "uit",
           "orderPlaced": "Wordt geactiveerd bij elke nieuwe bestelling. De klant van de bestelling wordt gekoppeld aan een opgeslagen contact en ingeschreven.",
           "automatic": "Wordt automatisch geactiveerd — geen extra instelling nodig.",
-          "away": "Wordt geactiveerd bij elk binnenkomend bericht terwijl de <b>Afwezigmodus</b> AAN staat. Schakel de Afwezigmodus in via de pagina <link>Automatisch antwoord</link>. Elk contact wordt één keer ingeschreven.",
+          "away": "Wordt geactiveerd bij elk binnenkomend bericht terwijl de <b>Afwezigmodus</b> AAN staat. Elk contact wordt één keer ingeschreven.",
           "outOfHours": "Wordt geactiveerd bij elk binnenkomend bericht dat binnenkomt <b>buiten de openingstijden van je workspace</b>. Stel de openingstijden in via je workspace-instellingen. Elk contact wordt één keer ingeschreven.",
           "manualEnroll": "Je schrijft contacten handmatig in via de <link>/flows-lijst</link> met de knop <b>Inschrijven</b> naast deze flow.",
           "ext": {

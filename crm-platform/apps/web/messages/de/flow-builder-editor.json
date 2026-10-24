@@ -1391,7 +1391,7 @@
           "ruleOff": "aus",
           "orderPlaced": "Wird für jede neue Bestellung ausgelöst. Der Kunde der Bestellung wird einem gespeicherten Kontakt zugeordnet und aufgenommen.",
           "automatic": "Wird automatisch ausgelöst, keine weitere Konfiguration nötig.",
-          "away": "Wird bei jeder eingehenden Nachricht ausgelöst, während der <b>Abwesenheitsmodus</b> AKTIV ist. Schalten Sie den Abwesenheitsmodus auf der Seite <link>Automatische Antwort</link> um. Jeder Kontakt wird einmal aufgenommen.",
+          "away": "Wird bei jeder eingehenden Nachricht ausgelöst, während der <b>Abwesenheitsmodus</b> AKTIV ist. Jeder Kontakt wird einmal aufgenommen.",
           "outOfHours": "Wird bei jeder eingehenden Nachricht ausgelöst, die <b>außerhalb der Geschäftszeiten Ihres Arbeitsbereichs</b> eingeht. Legen Sie die Geschäftszeiten in den Einstellungen Ihres Arbeitsbereichs fest. Jeder Kontakt wird einmal aufgenommen.",
           "manualEnroll": "Sie nehmen Kontakte manuell über die <link>Flows-Liste /flows</link> auf, mit der Schaltfläche <b>Aufnehmen</b> neben diesem Flow.",
           "ext": {
