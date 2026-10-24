@@ -85,7 +85,13 @@
         "title": "Delete {name}?",
         "body": "Delete this add-on? Workspaces that bought it keep it until it expires.",
         "confirm": "Delete",
-        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}"
+        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}",
+        "errors": {
+          "refused": "This add-on has purchases, including ended ones, so it cannot be deleted. Disable it instead.",
+          "forbidden": "Only a super admin can delete add-ons.",
+          "notFound": "This add-on no longer exists.",
+          "failed": "The add-on could not be deleted."
+        }
       },
       "errors": {
         "generic": "The add-on could not be saved.",

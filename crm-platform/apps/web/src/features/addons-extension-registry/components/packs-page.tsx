@@ -16,7 +16,7 @@ import { Alert, Button, Card, ConfirmDialog, ToastProvider, cn, useToast } from 
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { KEYS, fetchGrantFields, fetchPacks } from '../api';
-import { addonErrorKey } from '../lib/errors';
+import { addonErrorKey, deleteErrorKey } from '../lib/errors';
 import { planOfferSummary } from '../lib/pack-draft';
 import { Accent, ErrorBlock, LoadingBlock, PageHead } from './ui';
 
@@ -383,7 +383,9 @@ function Catalogue({
                   {t('delete.inUse', { count: deleting.activePurchases })}
                 </Alert>
               )}
-              {remove.isError && <Alert tone="danger">{te('generic')}</Alert>}
+              {remove.isError && (
+                <Alert tone="danger">{t(`delete.errors.${deleteErrorKey(remove.error)}`)}</Alert>
+              )}
             </div>
           }
           confirmLabel={t('delete.confirm')}

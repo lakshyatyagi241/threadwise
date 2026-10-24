@@ -23,6 +23,7 @@ import {
 import { KEYS, fetchGrantFields, fetchPack } from '../api';
 import { addonErrorKey } from '../lib/errors';
 import {
+  amountFlagged,
   buildPackRequest,
   buildPlanOffersRequest,
   changedPlanOfferCount,
@@ -314,7 +315,7 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
                     dir="ltr"
                     inputMode="decimal"
                     required
-                    invalid={!!problems.amount}
+                    invalid={amountFlagged(problems)}
                     value={draft.amount}
                     onChange={(e) => set('amount', e.target.value)}
                   />
