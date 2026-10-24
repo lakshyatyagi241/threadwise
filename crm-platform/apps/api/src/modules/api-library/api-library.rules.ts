@@ -81,6 +81,15 @@ export function renderBody(body: ApiLibraryBody, values: VariableValues): ApiLib
   return body === null ? null : (walk(body) as ApiLibraryBody);
 }
 
+/** The reason a processing function's answer is refused: it must hand back the payload. */
+export const PROCESSED_PAYLOAD_PROBLEM =
+  'processPayload must return the payload (an object or a list).';
+
+/** An object or a list is the payload to send; nothing (undefined, null), text and numbers are not. The Run code box and the test run both use it. */
+export function isProcessedPayload(value: unknown): boolean {
+  return value !== null && typeof value === 'object';
+}
+
 /** A header ready to send: the value is filled in and the plain text of a secret is still here (it never reaches a log). */
 export interface OutHeader {
   key: string;

@@ -5,6 +5,7 @@ import {
   applyMapping,
   buildMultipart,
   extractByPath,
+  isProcessedPayload,
   logFilterApis,
   logResponseText,
   maskHeaders,
@@ -96,6 +97,17 @@ describe('rendering', () => {
       '--XYZ\r\nContent-Disposition: form-data; name="a"\r\n\r\n1\r\n' +
         '--XYZ\r\nContent-Disposition: form-data; name="b_c"\r\n\r\n2\r\n--XYZ--\r\n',
     );
+  });
+});
+
+describe('what a processing function must hand back', () => {
+  it('is the payload only when it is an object or a list', () => {
+    expect(isProcessedPayload({ a: 1 })).toBe(true);
+    expect(isProcessedPayload([1])).toBe(true);
+    expect(isProcessedPayload(undefined)).toBe(false);
+    expect(isProcessedPayload(null)).toBe(false);
+    expect(isProcessedPayload('text')).toBe(false);
+    expect(isProcessedPayload(3)).toBe(false);
   });
 });
 

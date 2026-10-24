@@ -579,6 +579,16 @@ describe('test runs', () => {
       .post('/v2/api-library/apis/test-function')
       .send({ functionCode: 'var x = 1;', payload: {} });
     expect(missingFn.body.error).toContain('processPayload');
+    // Runs without an error but returns nothing: the Run code box refuses it like a test run does.
+    const noReturn = await api
+      .as(t.admin)
+      .post('/v2/api-library/apis/test-function')
+      .send({ functionCode: 'function processPayload(payload) { payload.x = 1; }', payload: {} });
+    expect(noReturn.body).toMatchObject({
+      ok: false,
+      output: null,
+      error: 'processPayload must return the payload (an object or a list).',
+    });
   }, 30_000);
 
   it('a non-2xx answer is a failed run, not an HTTP error of ours', async () => {
