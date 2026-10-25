@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
   deviceHealth,
@@ -109,6 +109,7 @@ export function MorePage() {
   const t = useTranslations(NS);
   const tAll = useTranslations();
   const { nav, tiles, bar, walletLabel } = useShellData();
+  const now = useNow({ updateInterval: 60_000 });
   const { org } = useSession();
   const stats = useOverviewStats();
   const s = stats.data;
@@ -149,7 +150,7 @@ export function MorePage() {
         </div>
       </header>
 
-      <StatsStrip s={s} />
+      <StatsStrip s={s} now={now} />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-5">
@@ -220,7 +221,13 @@ export function MorePage() {
               <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {cards.map((c) => (
                   <li key={c.id}>
-                    <ToolCardView card={c} stats={s} wallet={walletLabel} plan={org.plan} />
+                    <ToolCardView
+                      card={c}
+                      stats={s}
+                      now={now}
+                      wallet={walletLabel}
+                      plan={org.plan}
+                    />
                   </li>
                 ))}
               </ul>
@@ -229,7 +236,7 @@ export function MorePage() {
         </div>
 
         <aside className="space-y-4">
-          <RecentActivity s={s} />
+          <RecentActivity s={s} now={now} />
           <AffiliateCard s={s} />
           <QuickAccessCard />
           <PlanCard s={s} plan={org.plan} />
@@ -244,7 +251,7 @@ export function MorePage() {
   );
 }
 
-function StatsStrip({ s }: { s: OverviewStatsResponse | undefined }) {
+function StatsStrip({ s, now }: { s: OverviewStatsResponse | undefined; now: Date }) {
   const t = useTranslations(`${NS}.strip`);
   const f = useFormatter();
   const n = (v: number | null | undefined) => (v === null || v === undefined ? '—' : f.number(v));
@@ -269,7 +276,9 @@ function StatsStrip({ s }: { s: OverviewStatsResponse | undefined }) {
         <div className="flex items-center justify-between">
           <span className={mono}>{t('queued')}</span>
           <span className="font-mono text-[10px] text-warning">
-            {s?.nextScheduledAt ? f.relativeTime(new Date(s.nextScheduledAt)) : t('noUpcoming')}
+            {s?.nextScheduledAt
+              ? f.relativeTime(new Date(s.nextScheduledAt), now)
+              : t('noUpcoming')}
           </span>
         </div>
         <div className="mt-2 flex items-baseline gap-2">
@@ -308,11 +317,13 @@ function StatsStrip({ s }: { s: OverviewStatsResponse | undefined }) {
 function ToolCardView({
   card,
   stats,
+  now,
   wallet,
   plan,
 }: {
   card: ToolCard;
   stats: OverviewStatsResponse | undefined;
+  now: Date;
   wallet: string | undefined;
   plan: string;
 }) {
@@ -324,7 +335,7 @@ function ToolCardView({
     ? footValues(id, stats, {
         plan,
         balance: wallet ?? '—',
-        next: stats?.nextScheduledAt ? f.relativeTime(new Date(stats.nextScheduledAt)) : '—',
+        next: stats?.nextScheduledAt ? f.relativeTime(new Date(stats.nextScheduledAt), now) : '—',
       })
     : null;
   const tone = card.tone ?? 'mint';
@@ -390,7 +401,7 @@ function Panel({ children, className }: { children: ReactNode; className?: strin
   );
 }
 
-function RecentActivity({ s }: { s: OverviewStatsResponse | undefined }) {
+function RecentActivity({ s, now }: { s: OverviewStatsResponse | undefined; now: Date }) {
   const t = useTranslations(`${NS}.activity`);
   const f = useFormatter();
   const rows = s?.recentActivity ?? [];
@@ -427,7 +438,7 @@ function RecentActivity({ s }: { s: OverviewStatsResponse | undefined }) {
                   </div>
                   <div className="mt-0.5 truncate font-mono text-[11px] text-muted-foreground">
                     {r.module.charAt(0).toUpperCase() + r.module.slice(1)} /{' '}
-                    {f.relativeTime(new Date(r.at))}
+                    {f.relativeTime(new Date(r.at), now)}
                   </div>
                 </div>
               </li>
