@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Chọn mẫu",
       "noTemplates": "Không có mẫu nào được duyệt cho số này.",
       "openInInbox": "Mở cuộc trò chuyện trong hộp thư đến",
-      "notSendable": "Không thể điền mẫu này tại đây ({reason}).",
+      "notSendable": "Không thể gửi mẫu này từ đây.",
       "variables": "Biến của mẫu",
       "preview": "Xem trước",
       "slot": "Biến {key}",

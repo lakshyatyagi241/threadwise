@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "בחירת תבנית",
       "noTemplates": "אין תבניות מאושרות למספר הזה.",
       "openInInbox": "פתיחת הצ'אט בתיבת הדואר",
-      "notSendable": "לא ניתן למלא כאן את התבנית הזו ({reason}).",
+      "notSendable": "לא ניתן לשלוח את התבנית הזו מכאן.",
       "variables": "משתני תבנית",
       "preview": "תצוגה מקדימה",
       "slot": "משתנה {key}",

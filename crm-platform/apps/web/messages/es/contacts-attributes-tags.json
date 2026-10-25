@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Selecciona una plantilla",
       "noTemplates": "No hay plantillas aprobadas para este número.",
       "openInInbox": "Abrir el chat en la bandeja",
-      "notSendable": "Esta plantilla no se puede completar aquí ({reason}).",
+      "notSendable": "Esta plantilla no se puede enviar desde aquí.",
       "variables": "Variables de la plantilla",
       "preview": "Vista previa",
       "slot": "Variable {key}",

@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "テンプレートを選択",
       "noTemplates": "この番号で承認済みのテンプレートがありません。",
       "openInInbox": "受信トレイでチャットを開く",
-      "notSendable": "このテンプレートはここでは入力できません（{reason}）。",
+      "notSendable": "このテンプレートはここから送信できません。",
       "variables": "テンプレート変数",
       "preview": "プレビュー",
       "slot": "変数 {key}",
