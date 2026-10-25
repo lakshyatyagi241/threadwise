@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { MailError } from '../../../src/infra/providers/auth-registration-security/mail.port';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
+import { WalletLedgerService } from '../../../src/modules/wallet-message-billing/wallet-ledger.service';
 import { SalesDocsRepository } from '../../../src/modules/crm/sales-docs/sales-docs.repository';
 import { SalesDocExpirySweepService } from '../../../src/modules/crm/sales-docs/sales-doc-expiry-sweep.service';
 import { SalesDocsService } from '../../../src/modules/crm/sales-docs/sales-docs.service';
@@ -1001,6 +1002,13 @@ describe('sending (TW-PROP-011, D-08)', () => {
   let t: Tenant;
   beforeAll(async () => {
     t = await api.signup('ssn');
+    // A quote mailed through the platform's mailer is a billed email: this workspace is the platform's own, so the mail tests below are
+    // about the mail. The billing of the email is the last test of this block, on a workspace that pays.
+    await h.owner.query(
+      `INSERT INTO org_plan_state (org_id, platform_owned) VALUES ($1, true)
+       ON CONFLICT (org_id) DO UPDATE SET platform_owned = true`,
+      [t.orgId],
+    );
   });
 
   it('TW-PROP-011 #1: link marks a draft sent (stamp, timeline, salesdoc.sent) and returns the share link', async () => {
@@ -1144,6 +1152,45 @@ describe('sending (TW-PROP-011, D-08)', () => {
     const res = await api.as(t.admin).post(`/v2/sales-docs/${d.id}/send`).send({ channel: 'link' });
     expect(res.status).toBe(409);
     expect(code(res)).toBe('SALESDOC_INVALID_TRANSITION');
+  });
+
+  it('bills the email to the wallet: refused on an empty one before any mail leaves, reported once the mail went', async () => {
+    const payer = await api.signup('ssp');
+    const d = await make(payer.admin, { title: 'Paid mail', buyerEmail: 'pay@buyer.test' });
+    const before = h.mail.length;
+    const refused = await api
+      .as(payer.admin)
+      .post(`/v2/sales-docs/${d.id}/send`)
+      .send({ channel: 'email' });
+    expect(refused.status, JSON.stringify(refused.body)).toBe(422);
+    expect(code(refused)).toBe('WALLET_EMPTY');
+    expect(h.mail.length).toBe(before);
+
+    const ledger = h.app.get(WalletLedgerService, { strict: false });
+    const db = h.app.get(DatabaseService, { strict: false });
+    await db.txAs({ orgId: payer.orgId, userId: null }, (tx) =>
+      ledger.post(tx, {
+        orgId: payer.orgId,
+        unit: 'USD',
+        type: 'topup',
+        direction: 'in',
+        amountMinor: 1000,
+        idempotencyKey: `fund:${payer.orgId}:sales-doc-mail`,
+        source: 'topup.conversion',
+        description: 'Wallet top-up',
+      }),
+    );
+    const sent = await api
+      .as(payer.admin)
+      .post(`/v2/sales-docs/${d.id}/send`)
+      .send({ channel: 'email' });
+    expect(sent.status, JSON.stringify(sent.body)).toBe(200);
+    expect(h.mail.length).toBe(before + 1);
+    const reported = (await api.events(payer.orgId, 'usage.reported')).filter(
+      (e) => e.kind === 'email' && e.source === 'sales_doc',
+    );
+    expect(reported).toHaveLength(1);
+    expect(reported[0]).toMatchObject({ units: 1, status: 'used' });
   });
 });
 

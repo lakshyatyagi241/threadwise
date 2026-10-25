@@ -17,6 +17,7 @@ const settings: WalletUsageSettings = {
     { kind: 'voice_call', enabled: false, priceMinor: 100, unit: 'minute' },
     { kind: 'enrichment', enabled: true, priceMinor: 20, unit: 'lookup' },
     { kind: 'chat_message', enabled: true, priceMinor: 0, unit: 'message' },
+    { kind: 'webbot_message', enabled: true, priceMinor: 10, unit: 'message' },
   ],
   costPlus: [
     { kind: 'ai', enabled: true },
@@ -52,7 +53,7 @@ describe('usage price form', () => {
     expect(usageRatesDirty(d, settings)).toBe(false);
     const check = checkUsageRates(d);
     expect(check.problems).toEqual({ prices: {} });
-    expect(check.input?.prices).toHaveLength(6);
+    expect(check.input?.prices).toHaveLength(7);
     expect(check.input?.markupBps).toBe(1000);
     // "0.5" and "0.50" are the same price: typing it differently is not a change
     expect(

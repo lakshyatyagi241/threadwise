@@ -310,7 +310,8 @@
         "widget_ai": "Chatbot op de website",
         "growth": "Groei",
         "telephony": "Telefoongesprekken",
-        "translation": "Vertaling"
+        "translation": "Vertaling",
+        "widget": "Websitechatbot"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Elke gestarte minuut van een WhatsApp-gesprek. Een gesprek dat niemand opnam is gratis.",
             "voice_call": "Elke gestarte minuut van een gesprek dat de telefonieprovider van de klant meldt. Handmatig ingevoerde gesprekslogs worden nooit gerekend.",
             "enrichment": "Elk contact dat bij de dataprovider van het platform wordt opgezocht.",
-            "chat_message": "Elk bericht via Telegram, Facebook, Instagram, LINE, Viber of WeChat. Gratis tot u een prijs instelt."
+            "chat_message": "Elk bericht via Telegram, Facebook, Instagram, LINE, Viber of WeChat. Gratis tot u een prijs instelt.",
+            "webbot_message": "Elk bezoekersbericht dat de websitechatbot afhandelt nadat de gratis maandberichten van het abonnement op zijn."
           },
           "costPlus": {
             "title": "Berekend tegen de kosten van de leverancier plus een opslag",
@@ -1034,7 +1036,8 @@
       "ai": "AI",
       "translation": "Vertaling",
       "enrichment": "Contactopzoeking",
-      "chat_message": "Chatbericht"
+      "chat_message": "Chatbericht",
+      "webbot_message": "Websitechatbot-bericht"
     }
   }
 }

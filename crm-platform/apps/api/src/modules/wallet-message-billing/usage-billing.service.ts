@@ -2,7 +2,11 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type WalletReportedKind, type WalletUsageReported } from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import {
+  PlanEntitlementService,
+  resolveLimit,
+  type Entitlements,
+} from '../plans-subscriptions-trials';
 import { BillingModeService } from '../bsp-billing-engine';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -13,10 +17,12 @@ import { UsageSettingsService } from './usage-settings.service';
 import {
   USAGE_KIND_LABELS,
   freeReasonOf,
+  freeUnitsOf,
   priceUsage,
   usageStatementLabel,
   type UsagePrice,
 } from './usage-rules';
+import { monthStart, planIsActive } from './wallet-rules';
 import { WalletLedgerService } from './wallet-ledger.service';
 import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
@@ -42,6 +48,7 @@ const REFUND_TEXT: Record<WalletReportedKind, string> = {
   translation: 'Refund - translation failed',
   enrichment: 'Refund - lookup failed',
   chat_message: 'Refund - message not delivered',
+  webbot_message: 'Refund - message not delivered',
 };
 
 /**
@@ -70,18 +77,24 @@ export class UsageBillingService {
   /** Settles one usage in its own tenant transaction (the worker's path). */
   async settle(input: SettleUsage): Promise<UsageOutcome> {
     const pre = await this.precheck(input);
-    if (pre) return pre;
-    return this.db.txAs({ orgId: input.orgId, userId: null }, (tx) => this.charge(tx, input));
+    if ('outcome' in pre) return pre.outcome;
+    return this.db.txAs({ orgId: input.orgId, userId: null }, (tx) =>
+      this.charge(tx, input, pre.entitlements),
+    );
   }
 
   /** Settles one usage inside the caller's transaction (an AI call charged with the row it produced). Same rules as `settle`. */
   async settleIn(tx: Tx, input: SettleUsage): Promise<UsageOutcome> {
     const pre = await this.precheck(input);
-    if (pre) return pre;
-    return this.charge(tx, input);
+    if ('outcome' in pre) return pre.outcome;
+    return this.charge(tx, input, pre.entitlements);
   }
 
-  private async charge(tx: Tx, input: SettleUsage): Promise<UsageOutcome> {
+  private async charge(
+    tx: Tx,
+    input: SettleUsage,
+    entitlements: Entitlements,
+  ): Promise<UsageOutcome> {
     const usageId = input.usageId.trim();
     const key = `${input.kind}:${usageId}`;
     const orgId = input.orgId;
@@ -107,11 +120,21 @@ export class UsageBillingService {
     const wallet = await this.repo.lockWallet(tx, orgId, currency);
     const payPerMessage = await this.mode.isPayPerMessage(tx, orgId);
 
-    const price = priceUsage(rates, {
-      kind: input.kind,
-      units: input.units,
-      vendorCostUsd: input.vendorCostUsd ?? null,
-    });
+    // The plan's free allowance (website chatbot messages only): counted under the wallet lock, so two messages of one workspace cannot
+    // both take the last free place. A usage the allowance covers is free; one beyond it pays the price of the units it does not cover.
+    const units = Math.max(0, Math.trunc(input.units));
+    const freeUnits =
+      input.kind === 'webbot_message'
+        ? await this.countAllowance(tx, orgId, units, entitlements)
+        : 0;
+    const coveredByAllowance = freeUnits > 0 && freeUnits >= units;
+    const price: UsagePrice = coveredByAllowance
+      ? { basis: 'none', reason: 'no_units' }
+      : priceUsage(rates, {
+          kind: input.kind,
+          units: units - freeUnits,
+          vendorCostUsd: input.vendorCostUsd ?? null,
+        });
     const priceMinor = await this.priceInCurrency(price, currency);
 
     let status: 'free' | 'charged' = 'free';
@@ -122,7 +145,7 @@ export class UsageBillingService {
     let balanceAfter = wallet.balanceMinor;
 
     if (price.basis === 'none') {
-      freeReason = freeReasonOf(price);
+      freeReason = coveredByAllowance ? 'within_plan_free_quota' : freeReasonOf(price);
     } else if (wallet.balanceMinor <= 0) {
       freeReason = 'wallet_empty';
       shortfallMinor = priceMinor;
@@ -260,6 +283,13 @@ export class UsageBillingService {
     const price = priceUsage(rates, { kind, units, vendorCostUsd: 0.000001 });
     if (price.basis === 'none') return null;
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
+      // A usage the plan's free allowance still covers needs no balance at all.
+      if (
+        kind === 'webbot_message' &&
+        (await this.allowanceCovers(tx, orgId, units, entitlements))
+      ) {
+        return null;
+      }
       const unit = await this.billing.forOrg(tx, orgId);
       const balance = (await this.repo.peekWallet(tx, orgId, unit))?.balanceMinor ?? 0;
       return {
@@ -269,13 +299,15 @@ export class UsageBillingService {
     });
   }
 
-  /** Why a usage is not settled at all: no workspace, or the platform's own. Null = go on. */
-  private async precheck(input: SettleUsage): Promise<UsageOutcome | null> {
+  /** Why a usage is not settled at all (no workspace, or the platform's own), else the workspace's entitlements to settle it with. */
+  private async precheck(
+    input: SettleUsage,
+  ): Promise<{ outcome: UsageOutcome } | { entitlements: Entitlements }> {
     if (!input.usageId.trim() || input.orgId <= NO_ORG) {
-      return { status: 'skipped', reason: 'invalid_input' };
+      return { outcome: { status: 'skipped', reason: 'invalid_input' } };
     }
     const entitlements = await this.plans.forOrg(input.orgId);
-    if (!entitlements) return { status: 'skipped', reason: 'unknown_workspace' };
+    if (!entitlements) return { outcome: { status: 'skipped', reason: 'unknown_workspace' } };
     // The platform's own workspaces are never billed, in any mode, and nothing is recorded for them.
     if (entitlements.platformOwned) {
       this.log.line(
@@ -284,9 +316,55 @@ export class UsageBillingService {
         { orgId: input.orgId, kind: input.kind, usageId: input.usageId },
         'platform-owned workspace is not billed',
       );
-      return { status: 'skipped', reason: 'platform_owned' };
+      return { outcome: { status: 'skipped', reason: 'platform_owned' } };
     }
-    return null;
+    return { entitlements };
+  }
+
+  /**
+   * Counts `units` website chatbot messages against this month and says how many of them the plan's free allowance covers. Called under
+   * the wallet row lock, in the settling transaction: a rollback takes the count back with the charge.
+   */
+  private async countAllowance(
+    tx: Tx,
+    orgId: number,
+    units: number,
+    entitlements: Entitlements,
+  ): Promise<number> {
+    if (units === 0) return 0;
+    const counted = await tx.execute(sql`
+      INSERT INTO wallet_usage_months (org_id, month, webbot_messages) VALUES (${orgId}, ${monthStart(new Date())}::date, ${units})
+      ON CONFLICT (org_id, month) DO UPDATE SET webbot_messages = wallet_usage_months.webbot_messages + EXCLUDED.webbot_messages
+      RETURNING webbot_messages`);
+    const usedBefore =
+      Number((counted.rows[0] as { webbot_messages: number }).webbot_messages) - units;
+    return freeUnitsOf({
+      units,
+      usedBefore,
+      limit: resolveLimit(entitlements, 'webbot_messages'),
+      planActive: planIsActive(entitlements, new Date()),
+    });
+  }
+
+  /** Whether the plan's free allowance still covers `units` more website chatbot messages this month (read only: the pre-work gate). */
+  private async allowanceCovers(
+    tx: Tx,
+    orgId: number,
+    units: number,
+    entitlements: Entitlements,
+  ): Promise<boolean> {
+    const seen = await tx.execute(sql`
+      SELECT webbot_messages FROM wallet_usage_months WHERE org_id = ${orgId} AND month = ${monthStart(new Date())}::date`);
+    const usedBefore = Number(
+      (seen.rows[0] as { webbot_messages: number } | undefined)?.webbot_messages ?? 0,
+    );
+    const free = freeUnitsOf({
+      units,
+      usedBefore,
+      limit: resolveLimit(entitlements, 'webbot_messages'),
+      planActive: planIsActive(entitlements, new Date()),
+    });
+    return units > 0 && free >= units;
   }
 
   /** The price in hundredths of the workspace's billing currency; a real price never rounds down to 0. */

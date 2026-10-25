@@ -1597,7 +1597,8 @@
             "email_mailboxes": "E-mailpostvakken",
             "email_monthly": "E-mails per maand",
             "storage_gb": "Opslag (GB)",
-            "teams": "Teams"
+            "teams": "Teams",
+            "webbot_messages": "Gratis websitechatbot-berichten per maand"
           },
           "featureGroups": {
             "messaging": "Berichten",
@@ -1707,7 +1708,8 @@
             "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
             "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
             "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd.",
-            "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd."
+            "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd.",
+            "webbot_messages": "Websitechatbot-berichten die elke kalendermaand gratis zijn inbegrepen. Elk bericht daarboven wordt van de wallet afgeschreven. Leeg of 0 = geen inbegrepen."
           },
           "productLines": {
             "chat": "Chat",

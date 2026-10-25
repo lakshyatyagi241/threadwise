@@ -70,6 +70,8 @@ const OTHER_ENFORCEMENT: PlanLimitKey[] = [
   'email_monthly',
   // 0 is "solo", not unlimited: the Teams module's own guard (TeamsPlanService) enforces it, see teams-packaging.spec.ts.
   'teams',
+  // A free allowance the wallet spends from (usage billing): past it the wallet pays, nothing is refused.
+  'webbot_messages',
 ];
 // The request-rate cap is read by the API-key guard, it counts nothing in the database.
 // `storage_gb` is bytes held, counted by the storage meter (modules/storage-quota). Its usage-panel entry arrives with enforcement (storage quota S2).

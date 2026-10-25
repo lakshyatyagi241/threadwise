@@ -91,8 +91,8 @@ export class WalletSettingsService {
       ),
       perCountryEnabled: perCountry === true,
       payPerMessage: pay === true,
-      // Upgrades change nothing until an operator turns margin pricing on.
-      pricingMode: mode === 'margin' ? 'margin' : 'fixed',
+      // WhatsApp is priced as Meta's cost plus the plan's margin unless an operator chose fixed prices (a stored 'fixed' is kept).
+      pricingMode: mode === 'fixed' ? 'fixed' : 'margin',
     };
   }
 

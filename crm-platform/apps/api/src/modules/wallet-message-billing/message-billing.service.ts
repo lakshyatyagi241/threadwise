@@ -281,7 +281,21 @@ export class MessageBillingService {
           ON CONFLICT (org_id, provider_message_id) DO NOTHING`);
         return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
       }
-      // Free, or already refunded: nothing to reverse.
+      // A message the plan's free allowance covered failed: Meta (or the carrier) did not bill it, so it gives its place in the
+      // allowance back. Nothing was taken from the wallet, so there is no money to return.
+      if (key.status === 'free' && key.charge_id !== null && key.charge_created_at) {
+        await this.restoreAllowance(
+          tx,
+          orgId,
+          Number(key.id),
+          Number(key.charge_id),
+          key.charge_created_at,
+          // A usage report (opts given) restores a usage's place, a WhatsApp delivery report restores a message's: one cannot name the other.
+          opts !== undefined,
+        );
+        return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
+      }
+      // Already refunded, or free for another reason: nothing to reverse.
       if (key.status !== 'charged' || key.charge_id === null || !key.charge_created_at) {
         return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
       }
@@ -332,6 +346,54 @@ export class MessageBillingService {
         refundedMinor: charge.credits,
         balanceAfterMinor: wallet?.balanceMinor ?? 0,
       };
+    });
+  }
+
+  /**
+   * Gives back the allowance place a failed message took. Only a charge recorded as `within_plan_free_quota` has one to give back; the
+   * month it counted in is the month it was charged in, and the counter never goes below 0. The charge and its key are closed as
+   * `refunded`, so a second `failed` report (or a `sent` that arrives late) cannot count again.
+   */
+  private async restoreAllowance(
+    tx: Tx,
+    orgId: number,
+    keyId: number,
+    chargeId: number,
+    chargeAt: string,
+    fromUsageReport: boolean,
+  ): Promise<void> {
+    const found = await tx.execute(sql`
+      SELECT free_reason, kind, units, to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-01') AS month FROM usage_charges
+      WHERE org_id = ${orgId} AND id = ${chargeId} AND created_at = ${chargeAt}::timestamptz FOR UPDATE`);
+    const row = found.rows[0] as
+      { free_reason: string | null; kind: string; units: number; month: string } | undefined;
+    if (!row || row.free_reason !== 'within_plan_free_quota') return;
+    // Message ids and usage ids share one key space; a report may only give back a place of its own kind.
+    if ((row.kind === 'whatsapp_message') === fromUsageReport) return;
+    const month = row.month;
+    const units = Math.max(1, Number(row.units));
+    if (row.kind === 'webbot_message') {
+      await tx.execute(sql`
+        UPDATE wallet_usage_months SET webbot_messages = GREATEST(webbot_messages - ${units}, 0)
+        WHERE org_id = ${orgId} AND month = ${month}::date`);
+    } else {
+      await tx.execute(sql`
+        UPDATE wallet_usage_months SET messages = GREATEST(messages - 1, 0)
+        WHERE org_id = ${orgId} AND month = ${month}::date`);
+    }
+    await tx.execute(sql`
+      UPDATE usage_charges SET status = 'refunded', refunded_at = now()
+      WHERE org_id = ${orgId} AND id = ${chargeId} AND created_at = ${chargeAt}::timestamptz`);
+    await tx.execute(
+      sql`UPDATE usage_charge_keys SET status = 'refunded' WHERE org_id = ${orgId} AND id = ${keyId}`,
+    );
+    await this.log.event(tx, {
+      orgId,
+      event: 'wallet.allowance.restored',
+      message: 'A free message failed: its place in the plan allowance was given back',
+      subjectType: 'usage_charge',
+      subjectId: chargeId,
+      payload: { kind: row.kind, units },
     });
   }
 

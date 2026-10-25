@@ -346,6 +346,19 @@ const METERS: ReadonlyArray<{
           AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz`,
       ),
   },
+  {
+    // Website chatbot messages counted against the plan's free allowance this calendar month (`wallet_usage_months`, bumped under the wallet
+    // lock by the usage billing, keyed by the UTC month; the window start is nudged half a day so a workspace time zone cannot pick the month
+    // before). An allowance, not a block: beyond it the wallet pays for each message.
+    key: 'webbot_messages',
+    window: 'month',
+    count: (tx, orgId, from) =>
+      n(
+        tx,
+        sql`SELECT coalesce(sum(webbot_messages), 0)::int AS n FROM wallet_usage_months
+        WHERE org_id = ${orgId} AND month = date_trunc('month', (${from.toISOString()}::timestamptz + interval '12 hours') AT TIME ZONE 'UTC')::date`,
+      ),
+  },
 ];
 
 /** Keys whose enforcement is not "live row count < cap": see assertCanAdd. */
@@ -356,6 +369,8 @@ const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
   'total_campaigns',
   'broadcast_recipients',
   'ai_token_limit_monthly',
+  // An allowance the wallet spends from (usage billing): past it the wallet pays, nothing is refused.
+  'webbot_messages',
   // Bytes held, counted by the storage meter (modules/storage-quota), not rows; the cap is read there. No panel entry until phase S2.
   'storage_gb',
   // 0 is "solo", not unlimited: the create guard of the Teams module (TeamsPlanService) enforces it.

@@ -94,6 +94,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       api_keys: 1,
       webhooks: 1,
       ai_token_limit_monthly: 50000,
+      webbot_messages: 10000,
     },
     // WhatsApp groups is a paid plan feature (owner decision 2026-10-08, BL-094); the demo plans carry it so local testing works.
     // Smart routing (automatic assignment) is an upper-tier feature: the entry plan has neither flag.
@@ -148,6 +149,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       api_keys: 5,
       webhooks: 5,
       ai_token_limit_monthly: 500000,
+      webbot_messages: 20000,
     },
     features: {
       ...FEATURES_OFF,
@@ -203,6 +205,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       api_keys: 20,
       webhooks: 25,
       ai_token_limit_monthly: 5000000,
+      webbot_messages: 50000,
     },
     features: {
       automation: true,
@@ -248,6 +251,13 @@ async function seedPlans(client: Client): Promise<number> {
       ],
     );
     created += res.rowCount ?? 0;
+    // WhatsApp margin over Meta's cost: the free plan pays most, the top plan least (free 40%, second rung 30%, top 10%). Only where the
+    // plan has none yet, so an operator's own margin survives a re-run.
+    await client.query(
+      `INSERT INTO plan_message_margins (plan_slug, country_code, category, margin_bps)
+       VALUES ($1, '', '', $2) ON CONFLICT (plan_slug, country_code, category) DO NOTHING`,
+      [p.slug, p.free ? 4000 : p.slug === 'scale' ? 1000 : 3000],
+    );
   }
   await client.query(
     `INSERT INTO platform_settings (key, value, is_secret)

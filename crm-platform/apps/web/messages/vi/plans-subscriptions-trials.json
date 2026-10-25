@@ -48,7 +48,8 @@
       "email_mailboxes": "Hộp thư email",
       "email_monthly": "Email mỗi tháng",
       "storage_gb": "Dung lượng lưu trữ (GB)",
-      "teams": "Nhóm"
+      "teams": "Nhóm",
+      "webbot_messages": "Tin nhắn chatbot website miễn phí mỗi tháng"
     },
     "features": {
       "automation": "Tự động hóa",
@@ -148,7 +149,8 @@
       "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
       "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn.",
       "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả.",
-      "teams": "Số nhóm mà không gian làm việc được phép có. Để trống là không giới hạn, 0 là dùng một mình (không có nhóm). Các nhóm hiện có không bao giờ bị xóa."
+      "teams": "Số nhóm mà không gian làm việc được phép có. Để trống là không giới hạn, 0 là dùng một mình (không có nhóm). Các nhóm hiện có không bao giờ bị xóa.",
+      "webbot_messages": "Số tin nhắn chatbot trên website được tặng miễn phí mỗi tháng dương lịch. Mỗi tin nhắn vượt mức sẽ bị trừ vào ví. Để trống hoặc 0 = không có tin miễn phí."
     },
     "planAddons": {
       "title": "Tiện ích bổ sung có trong gói của bạn",

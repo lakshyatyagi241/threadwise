@@ -394,10 +394,10 @@ export function launchVerdict(f: LaunchFacts): LaunchVerdict {
 
 // --- AI features billed to the wallet -----------------------------------------------------------------------------------------
 
-/** What a workspace pays on top of the vendor's real cost for an AI call made on the platform's key: 10% (1000 basis points). */
-export const AI_MARKUP_BPS = 1000;
+/** What a workspace pays on top of the vendor's real cost for an AI call made on the platform's key: 20% (2000 basis points). */
+export const AI_MARKUP_BPS = 2000;
 
-/** The vendor's cost in USD with the markup: a call that cost us 1.00 is charged at 1.10. */
+/** The vendor's cost in USD with the markup: a call that cost us 1.00 is charged at 1.20. */
 export const aiChargeUsd = (costUsd: number, markupBps: number = AI_MARKUP_BPS): number =>
   costUsd > 0 ? costUsd * (1 + markupBps / 10_000) : 0;
 

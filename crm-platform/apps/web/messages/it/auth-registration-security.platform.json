@@ -1597,7 +1597,8 @@
             "email_mailboxes": "Caselle e-mail",
             "email_monthly": "E-mail al mese",
             "storage_gb": "Archiviazione (GB)",
-            "teams": "Team"
+            "teams": "Team",
+            "webbot_messages": "Messaggi gratuiti del chatbot del sito al mese"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1707,7 +1708,8 @@
             "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
             "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
             "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
-            "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
+            "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi.",
+            "webbot_messages": "Messaggi del chatbot del sito inclusi gratuitamente ogni mese di calendario. Ogni messaggio oltre il limite viene addebitato sul portafoglio. Vuoto o 0 = nessuno incluso."
           },
           "productLines": {
             "chat": "Chat",

@@ -3,7 +3,7 @@ import { chatWindowLocale } from './chat-window-locale';
 import { isAssetSlot } from './asset-slots';
 import { HttpException, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { HandoffService } from '../team-inbox-routing-sla';
-import { readHandoff } from './ai-prompt';
+import { ERROR_FALLBACK, readHandoff } from './ai-prompt';
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import {
@@ -55,6 +55,7 @@ import {
   widgetMediaOf,
 } from './widget-rules';
 import { WidgetAiReplyService } from './widget-ai-reply.service';
+import { WidgetUsageReporter } from './widget-usage.reporter';
 import { WidgetThrottleService, type ThrottledRoute } from './widget-throttle.service';
 import { WidgetVisitorsRepository, type VisitorRow } from './widget-visitors.repository';
 import { WidgetsRepository, type WidgetRow } from './widgets.repository';
@@ -123,6 +124,7 @@ export class WidgetPublicService {
     private readonly visitors: WidgetVisitorsRepository,
     private readonly throttle: WidgetThrottleService,
     private readonly aiReply: WidgetAiReplyService,
+    private readonly usageReporter: WidgetUsageReporter,
     private readonly media: ChatMediaStore,
     @Inject(INBOX_GATEWAY) private readonly inbox: InboxGateway,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
@@ -428,7 +430,12 @@ export class WidgetPublicService {
 
     // 2. The vendor call, with no transaction open.
     let replyText: string | null = null;
-    if (stored.assistant) {
+    // The bot's message fee: the plan's free allowance covers it, or the wallet pays. When neither can, the bot gives its fallback line and
+    // does no AI work (and no charge); the visitor's message is stored for the team either way.
+    const botMayAnswer = stored.assistant ? await this.usageReporter.canAnswer(orgId) : true;
+    if (stored.assistant && !botMayAnswer) {
+      replyText = stored.assistant.fallbackMessage || ERROR_FALLBACK;
+    } else if (stored.assistant) {
       // What the agent knows about THIS message: the few best passages of its own knowledge base (it reads the whole base only when
       // the search cannot run). Read here, with no transaction open: the search may call the embedding vendor.
       const found = await this.kb.retrieve(
@@ -452,6 +459,7 @@ export class WidgetPublicService {
         visitorMessage: data.body,
         messageId: stored.inbound.id,
       });
+      await this.usageReporter.reportMessage(orgId, widget, stored.inbound.id);
     }
 
     // The model (or the visitor's keyword) asked for a person: the same handoff a flow node makes (BL-399). The marker never reaches the visitor.
@@ -733,8 +741,9 @@ export class WidgetPublicService {
   ): Promise<WidgetMessageResponse> {
     const prepared = await this.flowPeer(orgId, widget, req, forInbox, data, age);
     const tapped = data.tap_id ? { interactive: { id: data.tap_id, title: data.body } } : undefined;
+    const providerMessageId = `wgt-${randomUUID()}`;
     await this.ingest.enqueueInbound(orgId, prepared.channelUuid, {
-      providerMessageId: `wgt-${randomUUID()}`,
+      providerMessageId,
       peerKey: prepared.peerKey,
       ...(prepared.peerName ? { peerName: prepared.peerName } : {}),
       kind: tapped ? 'interactive' : 'text',
@@ -742,6 +751,7 @@ export class WidgetPublicService {
       ...(tapped ? { meta: tapped } : {}),
       providerTimestamp: new Date(),
     });
+    await this.usageReporter.reportMessage(orgId, widget, providerMessageId);
     return { ok: true, inbound: { id: 0 }, reply: null };
   }
 
@@ -782,8 +792,9 @@ export class WidgetPublicService {
     };
     const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
     const mime = stored.mime;
+    const providerMessageId = `wgt-${randomUUID()}`;
     await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
-      providerMessageId: `wgt-${randomUUID()}`,
+      providerMessageId,
       peerKey: peer.peerKey,
       ...(peer.peerName ? { peerName: peer.peerName } : {}),
       kind: 'media',
@@ -803,6 +814,7 @@ export class WidgetPublicService {
       },
       providerTimestamp: new Date(),
     });
+    await this.usageReporter.reportMessage(orgId, widget, providerMessageId);
     return { ok: true, name: stored.name };
   }
 
@@ -952,14 +964,16 @@ export class WidgetPublicService {
       assistantUuid: widget.assistantUuid,
     };
     const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
+    const providerMessageId = `wgt-${randomUUID()}`;
     await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
-      providerMessageId: `wgt-${randomUUID()}`,
+      providerMessageId,
       peerKey: peer.peerKey,
       ...(peer.peerName ? { peerName: peer.peerName } : {}),
       kind: 'location',
       location: { latitude: parsed.data.latitude, longitude: parsed.data.longitude },
       providerTimestamp: new Date(),
     });
+    await this.usageReporter.reportMessage(orgId, widget, providerMessageId);
     return { ok: true };
   }
 

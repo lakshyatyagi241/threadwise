@@ -191,7 +191,8 @@
         "widget_ai": "Chatbot del sitio web",
         "growth": "Crecimiento",
         "telephony": "Llamadas telefónicas",
-        "translation": "Traducción"
+        "translation": "Traducción",
+        "widget": "Chatbot web"
       }
     },
     "admin": {
@@ -529,7 +530,8 @@
             "whatsapp_call": "Cada minuto iniciado de una llamada de WhatsApp. Una llamada que nadie contestó es gratis.",
             "voice_call": "Cada minuto iniciado de una llamada que informa el proveedor de telefonía del cliente. Los registros de llamadas escritos a mano nunca se cobran.",
             "enrichment": "Cada contacto consultado con el proveedor de datos de la plataforma.",
-            "chat_message": "Cada mensaje enviado por Telegram, Facebook, Instagram, LINE, Viber o WeChat. Gratis hasta que fijes un precio."
+            "chat_message": "Cada mensaje enviado por Telegram, Facebook, Instagram, LINE, Viber o WeChat. Gratis hasta que fijes un precio.",
+            "webbot_message": "Cada mensaje de un visitante que atiende el chatbot web una vez agotados los mensajes gratuitos del mes del plan."
           },
           "costPlus": {
             "title": "Se cobra al costo del proveedor más un recargo",
@@ -1034,7 +1036,8 @@
       "ai": "IA",
       "translation": "Traducción",
       "enrichment": "Consulta de contacto",
-      "chat_message": "Mensaje de chat"
+      "chat_message": "Mensaje de chat",
+      "webbot_message": "Mensaje del chatbot web"
     }
   }
 }

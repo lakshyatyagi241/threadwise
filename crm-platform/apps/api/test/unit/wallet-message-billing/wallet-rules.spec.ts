@@ -390,9 +390,9 @@ describe('statement text (TW-WALLET-021, -022)', () => {
 });
 
 describe('aiChargeUsd', () => {
-  it('adds 10% to what the vendor charged us, and nothing to a free call', () => {
-    expect(aiChargeUsd(1)).toBeCloseTo(1.1, 10);
-    expect(aiChargeUsd(0.002)).toBeCloseTo(0.0022, 10);
+  it('adds 20% to what the vendor charged us, and nothing to a free call', () => {
+    expect(aiChargeUsd(1)).toBeCloseTo(1.2, 10);
+    expect(aiChargeUsd(0.002)).toBeCloseTo(0.0024, 10);
     expect(aiChargeUsd(0)).toBe(0);
   });
 });

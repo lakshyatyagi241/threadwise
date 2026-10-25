@@ -1,4 +1,5 @@
-import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { HttpStatus, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   computeSalesDoc,
@@ -48,6 +49,8 @@ import {
   MailError,
   type MailPort,
 } from '../../../infra/providers/auth-registration-security/mail.port';
+import { emitUsageReported } from '../../../kernel/outbox/usage-report';
+import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { resolveTimezone, todayIn } from '../deals/deal-calendar';
@@ -57,6 +60,8 @@ import { stampsForKind } from '../deals/deal-rules';
 import { DealsRepository } from '../deals/deals.repository';
 import { DealsService } from '../deals/deals.service';
 import { PipelinesRepository } from '../pipelines/pipelines.repository';
+import { stableUsageId } from '../../../common/stable-usage-id';
+import { UsageBillingService } from '../../wallet-message-billing';
 import { composeQuoteMail } from './sales-doc-mail';
 import {
   SALES_DOC_INVOICE_PORT,
@@ -133,6 +138,8 @@ export class SalesDocsService {
     private readonly deals: DealsService,
     private readonly dealEngine: DealEngine,
     private readonly pipelines: PipelinesRepository,
+    private readonly usage: UsageBillingService,
+    private readonly outbox: OutboxService,
     config: ConfigService<Env, true>,
     @Optional() @Inject(MAIL_PORT) private readonly mail: MailPort | undefined,
     @Optional()
@@ -143,6 +150,7 @@ export class SalesDocsService {
   }
 
   private readonly appName: string;
+  private readonly logger = new Logger(SalesDocsService.name);
   private get repo() {
     return this.support.repo;
   }
@@ -678,6 +686,9 @@ export class SalesDocsService {
     });
 
     // Phase 2: the mail (a failure leaves the document as it was).
+    // The mail goes out through the platform's mailer, so each one is a billed email: the wallet is asked first (422 WALLET_EMPTY when it
+    // cannot pay) and the charge is reported with the transition below, under an id of its own so a resend is a second email.
+    const mailUsageId = stableUsageId('salesdoc', uuid, randomUUID());
     if (input.channel === 'email') {
       if (!this.mail) {
         throw new AppError(
@@ -686,6 +697,7 @@ export class SalesDocsService {
           HttpStatus.BAD_GATEWAY,
         );
       }
+      await this.usage.assertCanAfford(ctx.orgId, 'email', 1);
       const mail = composeQuoteMail({
         kindLabel: prep.row.kind === 'estimate' ? 'Estimate' : 'Proposal',
         number: prep.row.number,
@@ -707,6 +719,30 @@ export class SalesDocsService {
           'The email could not be sent.',
           HttpStatus.BAD_GATEWAY,
           [{ path: 'channel', message: reason }],
+        );
+      }
+      // The mail is gone: bill it now, in a transaction of its own, so a failure of the transition below cannot leave it free. A billing
+      // fault never takes the send back.
+      try {
+        await this.db.tx((tx) =>
+          emitUsageReported(this.outbox, tx, {
+            orgId: ctx.orgId,
+            aggregateModule: 'sales_docs',
+            aggregateId: prep.row.id,
+            report: {
+              kind: 'email',
+              usageId: mailUsageId,
+              units: 1,
+              label: prep.row.kind === 'estimate' ? 'Estimate email' : 'Proposal email',
+              source: 'sales_doc',
+              subjectName: prep.row.number,
+            },
+          }),
+        );
+      } catch (err) {
+        this.logger.warn(
+          { orgId: ctx.orgId, doc: uuid, err: String(err) },
+          'quote email could not be billed',
         );
       }
     }

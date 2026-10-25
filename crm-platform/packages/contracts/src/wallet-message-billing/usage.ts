@@ -17,6 +17,7 @@ export const walletUsageKindSchema = z.enum([
   'translation',
   'enrichment',
   'chat_message',
+  'webbot_message',
 ]);
 export type WalletUsageKind = z.infer<typeof walletUsageKindSchema>;
 
@@ -32,6 +33,7 @@ export const WALLET_UNIT_PRICED_KINDS = [
   'voice_call',
   'enrichment',
   'chat_message',
+  'webbot_message',
 ] as const;
 export const walletUnitPricedKindSchema = z.enum(WALLET_UNIT_PRICED_KINDS);
 export type WalletUnitPricedKind = z.infer<typeof walletUnitPricedKindSchema>;
@@ -52,13 +54,14 @@ export const WALLET_UNIT_NAMES: Record<
   voice_call: 'minute',
   enrichment: 'lookup',
   chat_message: 'message',
+  webbot_message: 'message',
 };
 
 /** Hard limits of one usage report. */
 export const WALLET_USAGE_LIMITS = {
   /** A call of more than 24 hours or a message of more than a million segments is a bug, not a bill. */
   maxUnits: 100_000,
-  /** The markup on a vendor cost, basis points: 1000 = 10%. */
+  /** The markup on a vendor cost, basis points: 2000 = 20%. */
   maxMarkupBps: 100_000,
   /** The per-unit price, hundredths: 10,000.00 a unit. */
   maxPriceMinor: 1_000_000,
@@ -124,7 +127,7 @@ export const walletUsageSettingsSchema = z.object({
   currency: z.string(),
   prices: z.array(walletUsagePriceSchema),
   costPlus: z.array(walletUsageCostPlusSchema),
-  /** The markup on a vendor cost, basis points (1000 = 10%). */
+  /** The markup on a vendor cost, basis points (2000 = 20%). */
   markupBps: z.number().int().min(0).max(WALLET_USAGE_LIMITS.maxMarkupBps),
   updatedAt: z.string().nullable(),
 });

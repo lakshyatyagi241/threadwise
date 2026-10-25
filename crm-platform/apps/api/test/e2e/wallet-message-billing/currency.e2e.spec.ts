@@ -129,7 +129,9 @@ beforeAll(async () => {
   await setReseller(h, usd.orgId, true);
   await setReseller(h, inr.orgId, true);
   await setCurrency(inr.orgId, 'INR');
-  // The platform currency is USD. Per-country pricing and margin pricing are what an INR operator would run.
+  // The platform currency is USD. Per-country pricing and margin pricing are what an INR operator would run. The expected prices are
+  // Meta's cost plus the PLATFORM default margin, so the per-plan margins an install carries are set aside for this suite.
+  await h.owner.query(`DELETE FROM plan_message_margins WHERE plan_slug <> ''`);
   await h.owner.query(
     `INSERT INTO plan_message_margins (plan_slug, country_code, category, margin_bps) VALUES ('', '', '', 2000) ON CONFLICT DO NOTHING`,
   );

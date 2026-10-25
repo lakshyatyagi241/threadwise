@@ -48,7 +48,8 @@
       "email_mailboxes": "Skrzynki e-mail",
       "email_monthly": "E-maile miesięcznie",
       "storage_gb": "Miejsce na dane (GB)",
-      "teams": "Zespoły"
+      "teams": "Zespoły",
+      "webbot_messages": "Darmowe wiadomości chatbota na stronie miesięcznie"
     },
     "features": {
       "automation": "Automatyzacja",
@@ -148,7 +149,8 @@
       "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
       "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
       "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane.",
-      "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane."
+      "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane.",
+      "webbot_messages": "Wiadomości chatbota na stronie wliczone za darmo w każdym miesiącu kalendarzowym. Każda wiadomość ponad limit jest pobierana z portfela. Puste lub 0 = brak darmowych."
     },
     "planAddons": {
       "title": "Dodatki dostępne w Twoim planie",
