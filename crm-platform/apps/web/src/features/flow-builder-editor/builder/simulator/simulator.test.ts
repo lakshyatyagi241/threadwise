@@ -1072,3 +1072,131 @@ describe('simulator: carousel (website chat)', () => {
     expect(h.awaiting()).toBe(false);
   });
 });
+
+describe('simulator: carousel answers and link buttons', () => {
+  const card = (image: string, title: string, buttons: Array<Record<string, unknown>> = []) => ({
+    image,
+    title,
+    text: `${title} text`,
+    buttons,
+  });
+  const reply = (label: string) => ({ type: 'reply', label, value: '', team: '', note: '' });
+  const link = (type: string, label: string, value: string) => ({
+    type,
+    label,
+    value,
+    team: '',
+    note: '',
+  });
+
+  it('a tap saves the label as the visitor sees it, with variables filled in', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', { var: 'choice', cards: [card('', 'Pick', [reply('Hi {{name}}')])] }),
+      node('m', 'message', { text: 'after tap' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('Hi Anya', 0);
+    await h.settle();
+    expect(h.sim.vars().choice).toBe('Hi Anya');
+    expect(h.texts()).toContain('after tap');
+  });
+
+  it('a typed answer matches the label the visitor sees, by text or by number', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        var: 'choice',
+        cards: [card('', 'A', [reply('Yes {{name}}')]), card('', 'B', [reply('No')])],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const edges = [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')];
+    const byText = harness(nodes, edges);
+    byText.sim.start();
+    byText.sim.send('go');
+    await byText.settle();
+    byText.sim.send('yes anya');
+    await byText.settle();
+    expect(byText.texts()).toContain('took yes');
+
+    const byNumber = harness(nodes, edges);
+    byNumber.sim.start();
+    byNumber.sim.send('go');
+    await byNumber.settle();
+    byNumber.sim.send('2');
+    await byNumber.settle();
+    expect(byNumber.texts()).toContain('took no');
+  });
+
+  it('a typed answer that matches no button keeps the run waiting and takes no exit', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [card('', 'A', [reply('Yes')]), card('', 'B', [reply('No')])],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('maybe');
+    await h.settle();
+    expect(h.awaiting()).toBe(true);
+    expect(h.texts()).not.toContain('took yes');
+    expect(h.texts()).not.toContain('took no');
+    expect(h.texts().at(-1)).toContain('is not one of the buttons');
+  });
+
+  it('a card with only spaces in it is not shown, but its reply still takes its own exit number', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          { image: '', title: '   ', text: '', buttons: [reply('Ghost')] },
+          card('https://cdn.example.com/a.jpg', 'Real', [reply('Go')]),
+        ],
+      }),
+      node('m0', 'message', { text: 'ghost route' }),
+      node('m1', 'message', { text: 'real route' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards!.map((c) => c.title)).toEqual(['Real']);
+    h.sim.send('Go', 1);
+    await h.settle();
+    expect(h.texts()).toContain('real route');
+    expect(h.texts()).not.toContain('ghost route');
+  });
+
+  it('a link the window may not open is left out; a phone number is written as the live runtime writes it', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          card('', 'Contact', [
+            link('url', 'Bad', 'ftp://x/y'),
+            link('phone', 'Call', '+91 98765 43210'),
+          ]),
+        ],
+      }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards![0]!.buttons).toEqual([
+      { label: 'Call', exit: null, href: 'tel:+919876543210' },
+    ]);
+  });
+});

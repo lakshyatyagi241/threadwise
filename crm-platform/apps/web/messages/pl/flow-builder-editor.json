@@ -2057,6 +2057,12 @@
           "unresolved": "Ten krótki link nie został jeszcze sprawdzony. Opuść pole lub spróbuj ponownie.",
           "resolve_failed": "Nie udało się odczytać tego linku. Sprawdź, czy otwiera się w Mapach Google, albo wpisz współrzędne."
         }
+      },
+      "flowImage": {
+        "title": "Nie załadowano obrazu",
+        "empty": "link jest pusty",
+        "notAddress": "link nie jest adresem internetowym (musi zaczynać się od https://)",
+        "failed": "nie załadowano (link może być błędny, prywatny, zablokowany lub nie być obrazem)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Symulowany zakup: {name} → wyjście „kupiono”",
       "simAbandon": "Symulowane porzucenie → wyjście „porzucono”",
       "locationSkipped": "(lokalizacja) pominięta: brak poprawnych współrzędnych",
-      "faqLine": "(symulacja) Odpowiedź z FAQ: w czacie testowym baza wiedzy nie jest przeszukiwana, wybrano „brak dopasowania”."
+      "faqLine": "(symulacja) Odpowiedź z FAQ: w czacie testowym baza wiedzy nie jest przeszukiwana, wybrano „brak dopasowania”.",
+      "carouselNoMatch": "„{value}” nie jest żadnym z przycisków. Dotknij jednego lub wpisz jego tekst dokładnie."
     }
   }
 }

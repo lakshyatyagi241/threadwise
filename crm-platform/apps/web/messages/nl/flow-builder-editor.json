@@ -1915,6 +1915,12 @@
           "unresolved": "Deze korte link is nog niet opgezocht. Verlaat het veld of probeer opnieuw.",
           "resolve_failed": "Deze link kon niet worden gelezen. Controleer of hij opent in Google Maps, of voer de coördinaten in."
         }
+      },
+      "flowImage": {
+        "title": "Afbeelding niet geladen",
+        "empty": "de link is leeg",
+        "notAddress": "de link is geen webadres (het moet beginnen met https://)",
+        "failed": "is niet geladen (de link is misschien fout, privé, geblokkeerd of geen afbeelding)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten",
-      "faqLine": "(gesimuleerd) Antwoord uit FAQ: in de testchat wordt de kennisbank niet doorzocht, \"geen match\" wordt gekozen."
+      "faqLine": "(gesimuleerd) Antwoord uit FAQ: in de testchat wordt de kennisbank niet doorzocht, \"geen match\" wordt gekozen.",
+      "carouselNoMatch": "“{value}” is geen van de knoppen. Tik op een knop, of typ de tekst ervan precies over."
     }
   }
 }

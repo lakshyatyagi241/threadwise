@@ -2057,6 +2057,12 @@
           "unresolved": "Bu kısa bağlantı henüz aranmadı. Alandan çıkın veya tekrar deneyin.",
           "resolve_failed": "Bu bağlantı okunamadı. Google Haritalar’da açıldığını kontrol edin veya koordinatları girin."
         }
+      },
+      "flowImage": {
+        "title": "Resim yüklenemedi",
+        "empty": "bağlantı boş",
+        "notAddress": "bağlantı bir web adresi değil (https:// ile başlamalıdır)",
+        "failed": "yüklenemedi (bağlantı yanlış, özel, engellenmiş ya da bir resim olmayabilir)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "locationSkipped": "(konum) atlandı: geçerli koordinat yok",
-      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir."
+      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir.",
+      "carouselNoMatch": "“{value}” düğmelerden biri değil. Birine dokunun ya da metnini aynen yazın."
     }
   }
 }

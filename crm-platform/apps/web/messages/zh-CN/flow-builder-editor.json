@@ -2057,6 +2057,12 @@
           "unresolved": "尚未查询此短链接。请点击输入框以外的地方或重试。",
           "resolve_failed": "无法读取此链接。请检查它能否在 Google 地图中打开，或改为输入坐标。"
         }
+      },
+      "flowImage": {
+        "title": "图片未加载",
+        "empty": "链接为空",
+        "notAddress": "链接不是网址（必须以 https:// 开头）",
+        "failed": "加载失败（链接可能有误、为私有、被阻止或不是图片）"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "模拟购买：{name} → 出口 \"purchased\"",
       "simAbandon": "模拟放弃 → 出口 \"abandoned\"",
       "locationSkipped": "（位置）已跳过：没有有效的坐标",
-      "faqLine": "（模拟）从常见问题回答：测试聊天不会搜索知识库，按“无匹配”处理。"
+      "faqLine": "（模拟）从常见问题回答：测试聊天不会搜索知识库，按“无匹配”处理。",
+      "carouselNoMatch": "“{value}”不是其中的按钮。请点选一个按钮，或准确输入按钮上的文字。"
     }
   }
 }

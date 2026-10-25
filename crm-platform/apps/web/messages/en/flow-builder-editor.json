@@ -1966,6 +1966,12 @@
           }
         }
       },
+      "flowImage": {
+        "title": "Image not loaded",
+        "empty": "the link is empty",
+        "notAddress": "the link is not a web address (it must start with https://)",
+        "failed": "it did not load (the link may be wrong, private, blocked, or not an image)"
+      },
       "testRunner": {
         "dialogLabel": "Test runner",
         "title": "Test runner",
@@ -2725,6 +2731,7 @@
       "waFormPrompt": "Please complete this form:",
       "selectForm": "(select a form)",
       "waFormLine": "(simulated) published Meta form {form} sent → out",
+      "carouselNoMatch": "“{value}” is not one of the buttons. Tap one, or type its text exactly.",
       "unknownNode": "(unknown node type \"{type}\" — skipping)",
       "nothingAfter": "Nothing connected after {type} — stop.",
       "canvasEmpty": "Canvas is empty. Add a trigger and at least one node, then click Restart.",

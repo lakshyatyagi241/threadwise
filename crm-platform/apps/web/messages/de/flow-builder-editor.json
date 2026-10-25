@@ -2057,6 +2057,12 @@
           "unresolved": "Dieser Kurzlink wurde noch nicht abgerufen. Verlassen Sie das Feld oder versuchen Sie es erneut.",
           "resolve_failed": "Dieser Link konnte nicht gelesen werden. Prüfen Sie, ob er in Google Maps öffnet, oder geben Sie die Koordinaten ein."
         }
+      },
+      "flowImage": {
+        "title": "Bild nicht geladen",
+        "empty": "der Link ist leer",
+        "notAddress": "der Link ist keine Webadresse (er muss mit https:// beginnen)",
+        "failed": "konnte nicht geladen werden (der Link ist möglicherweise falsch, privat, blockiert oder kein Bild)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
       "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten",
-      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\"."
+      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\".",
+      "carouselNoMatch": "„{value}“ ist keiner der Buttons. Tippen Sie auf einen oder geben Sie seinen Text genau ein."
     }
   }
 }
