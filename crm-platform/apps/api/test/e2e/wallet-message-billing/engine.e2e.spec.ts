@@ -351,7 +351,7 @@ describe('plan allowance (TW-WALLET-010)', () => {
 
   it('charges an unlimited plan too: there is no allowance to spend from', async () => {
     const t = await tenant('q3', { reseller: false });
-    await setPlan(h, t.orgId, {});
+    await setPlan(h, t.orgId, { monthly: 0 }); // 0 = unlimited, whatever the plan row itself carries
     await fund(h, t.orgId, 5000);
     for (let i = 0; i < 3; i++) await settle(t.orgId);
     expect(await balanceMinor(h, t.orgId)).toBe(5000 - 3 * 1200);
@@ -408,7 +408,8 @@ describe('settleFailed (TW-WALLET-011)', () => {
   });
 
   it('moves no money for a free message, an unknown id or a message never charged', async () => {
-    const t = await tenant('f3');
+    const t = await tenant('f3', { reseller: false });
+    await setPlan(h, t.orgId, { monthly: 1000 }); // inside the allowance the message is free
     await fund(h, t.orgId, 1000);
     const id = wamid();
     await settle(t.orgId, { id, category: 'service' });
@@ -422,6 +423,43 @@ describe('settleFailed (TW-WALLET-011)', () => {
       refundedMinor: 0,
     });
     expect(await balanceMinor(h, t.orgId)).toBe(1000);
+  });
+
+  it('gives the place in the plan allowance back when a free message fails, once', async () => {
+    const t = await tenant('f5', { reseller: false });
+    await setPlan(h, t.orgId, { monthly: 2 });
+    await fund(h, t.orgId, 5000);
+    const free = { status: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };
+    const id = wamid();
+    expect(await settle(t.orgId, { id })).toMatchObject(free);
+    const month = () =>
+      h.owner
+        .query(`SELECT messages FROM wallet_usage_months WHERE org_id = $1`, [t.orgId])
+        .then((r) => r.rows[0].messages);
+    expect(await month()).toBe(1);
+
+    const { billing } = services(h);
+    // Meta did not bill it, so it is not counted: nothing to give back in money, one place back in the allowance.
+    expect(await billing.settleFailed(t.orgId, id)).toMatchObject({
+      refunded: false,
+      refundedMinor: 0,
+    });
+    expect(await month()).toBe(0);
+    expect(await billing.settleFailed(t.orgId, id)).toMatchObject({ refunded: false });
+    expect(await month()).toBe(0);
+    expect((await charges(h, t.orgId))[0]).toMatchObject({ status: 'refunded' });
+    // A `sent` that arrives after the failure cannot count it again.
+    expect(await settle(t.orgId, { id })).toMatchObject({
+      status: 'replayed',
+      chargeStatus: 'refunded',
+    });
+    expect(await month()).toBe(0);
+
+    // Both free places are still there, and the third message pays.
+    expect(await settle(t.orgId)).toMatchObject(free);
+    expect(await settle(t.orgId)).toMatchObject(free);
+    expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
+    expect(await balanceMinor(h, t.orgId)).toBe(5000 - 1200);
   });
 
   it('a later delivery report of a refunded message does not charge it again', async () => {
@@ -617,13 +655,16 @@ describe('the launch gate (TW-WALLET-013)', () => {
 });
 
 describe('billing mode (TW-WALLET-008)', () => {
-  it('a reseller workspace is wallet-billed with the global switch off; a direct one only while it is on', async () => {
+  it('a reseller workspace is wallet-billed with the global switch off; a direct one only while it is on (inside its allowance it is free)', async () => {
     const reseller = await tenant('m1');
     const direct = await tenant('m2', { reseller: false });
     await setPlan(h, direct.orgId, { monthly: 1000 });
     await fund(h, direct.orgId, 5000);
     expect(await settle(reseller.orgId)).toMatchObject({ status: 'free', reason: 'wallet_empty' });
-    expect(await settle(direct.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
+    expect(await settle(direct.orgId)).toMatchObject({
+      status: 'free',
+      reason: 'within_plan_free_quota',
+    });
     const on = await h.api
       .http()
       .put('/v2/platform/wallet/switches')

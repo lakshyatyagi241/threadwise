@@ -48,7 +48,8 @@
       "email_mailboxes": "Boîtes e-mail",
       "email_monthly": "E-mails par mois",
       "storage_gb": "Stockage (Go)",
-      "teams": "Équipes"
+      "teams": "Équipes",
+      "webbot_messages": "Messages gratuits du chatbot du site par mois"
     },
     "features": {
       "automation": "Automatisation",
@@ -148,7 +149,8 @@
       "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
       "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
       "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
-      "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
+      "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées.",
+      "webbot_messages": "Messages du chatbot du site inclus gratuitement chaque mois civil. Chaque message au-delà est débité du portefeuille. Vide ou 0 = aucun inclus."
     },
     "planAddons": {
       "title": "Modules complémentaires disponibles avec votre forfait",

@@ -1597,7 +1597,8 @@
             "email_mailboxes": "Buzones de correo",
             "email_monthly": "Correos al mes",
             "storage_gb": "Almacenamiento (GB)",
-            "teams": "Equipos"
+            "teams": "Equipos",
+            "webbot_messages": "Mensajes gratuitos del chatbot web por mes"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1707,7 +1708,8 @@
             "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
             "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado.",
             "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada.",
-            "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan."
+            "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan.",
+            "webbot_messages": "Mensajes del chatbot web incluidos gratis cada mes natural. Cada mensaje adicional se cobra de la cartera. En blanco o 0 = ninguno incluido."
           },
           "productLines": {
             "chat": "Chat",

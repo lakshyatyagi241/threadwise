@@ -55,13 +55,23 @@ function build(opts: { sender?: { engine: string; id: number } | null; rows?: un
         }),
     })),
   };
+  const wallet = { assertCanSend: vi.fn(() => Promise.resolve()) };
+  const emitted: unknown[] = [];
+  const outbox = {
+    emit: vi.fn((_tx: unknown, e: unknown) => {
+      emitted.push(e);
+      return Promise.resolve();
+    }),
+  };
   const s = new EngineCommerceSender(
     db as never,
     resolver as never,
     outbound as never,
     engines as never,
+    wallet as never,
+    outbox as never,
   );
-  return { s, tx, resolver, outbound, engines, sent, wabaSent };
+  return { s, tx, resolver, outbound, engines, sent, wabaSent, wallet, emitted };
 }
 
 describe('the commerce sender (TW-ECOM-010)', () => {
@@ -190,5 +200,77 @@ describe('the commerce sender (TW-ECOM-010)', () => {
         c: { clientReference: 'a1', screen: { bulk: false, source: 'commerce' } },
       },
     ]);
+  });
+});
+
+describe('the commerce sender and the wallet', () => {
+  it('asks the wallet before a Cloud API template leaves and reports it sent, priced by its category', async () => {
+    const f = build({ sender: { engine: 'waba', id: 9 }, rows: [[{ default_engine: 'waba' }]] });
+    await f.s.send(7, { consent, to: '15550001', template, ctx, reference: 'r1' });
+    expect(f.wallet.assertCanSend).toHaveBeenCalledWith({
+      orgId: 7,
+      source: 'api',
+      to: '15550001',
+      category: 'utility',
+    });
+    expect(f.emitted).toEqual([
+      expect.objectContaining({
+        orgId: 7,
+        eventType: 'message.delivery_reported',
+        payload: expect.objectContaining({
+          provider: 'waba',
+          providerMessageId: 'w1',
+          status: 'sent',
+          recipient: '15550001',
+          category: 'utility',
+          source: 'api',
+          templateName: 'order_update',
+        }),
+      }),
+    ]);
+  });
+
+  it('sends nothing when the wallet refuses', async () => {
+    const f = build({ sender: { engine: 'waba', id: 9 }, rows: [[{ default_engine: 'waba' }]] });
+    f.wallet.assertCanSend.mockRejectedValueOnce(new Error('WALLET_EMPTY'));
+    await expect(
+      f.s.send(7, { consent, to: '15550001', template, ctx, reference: 'r1' }),
+    ).rejects.toThrow('WALLET_EMPTY');
+    expect(f.wabaSent).toEqual([]);
+    expect(f.emitted).toEqual([]);
+  });
+
+  it('reports a text answer too, with no category', async () => {
+    const f = build({ rows: [[{ default_engine: 'baileys' }]] });
+    await f.s.sendText(7, { to: '15550001', body: 'Thanks!', reference: 'a1' });
+    expect(f.emitted).toEqual([
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          provider: 'baileys',
+          providerMessageId: 'tx1',
+          category: null,
+        }),
+      }),
+    ]);
+  });
+
+  it('names a message the provider gave no id for by an id of its own, so two such sends are two charges', async () => {
+    const f = build({
+      sender: { engine: 'waba', id: 9 },
+      rows: [[{ default_engine: 'waba' }], [{ default_engine: 'waba' }]],
+    });
+    f.engines.get.mockReturnValue({
+      open: () => Promise.resolve({ send: () => Promise.resolve({ providerMessageId: null }) }),
+    } as never);
+    const send = () =>
+      f.s.send(7, { consent, to: '15550001', template, ctx, reference: 'same-ref' });
+    await send();
+    await send();
+    const ids = (f.emitted as Array<{ payload: { providerMessageId: string } }>).map(
+      (e) => e.payload.providerMessageId,
+    );
+    expect(ids).toHaveLength(2);
+    expect(ids[0]).toMatch(/^commerce:/);
+    expect(ids[0]).not.toBe(ids[1]);
   });
 });

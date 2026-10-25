@@ -55,7 +55,7 @@ The address `/account/plans#usage` opens the page at the usage section. The old 
 
 ## What the limits count
 
-Each bar counts what the workspace holds now, so deleting something frees its place. Two things are not given back: campaigns created in the plan period, and the invoices created this month. Monthly bars (messages, appointments, invoices, AI tokens) reset on the date shown. Broadcast recipients is the largest audience one broadcast may be sent to, not a running total.
+Each bar counts what the workspace holds now, so deleting something frees its place. Two things are not given back: campaigns created in the plan period, and the invoices created this month. Monthly bars (messages, appointments, invoices, AI tokens) reset on the date shown. Broadcast recipients is the largest audience one broadcast may be sent to, not a running total. **Free website chatbot messages per month** is an allowance, not a block: the website chatbot keeps answering past it, and each message beyond it is charged to your wallet (see [How billing works](help:how-message-billing-works)). A plan with no number there includes no free chatbot messages.
 
 When a limit is full, creating one more is refused with a message that names the limit and links to this page. A limit with no maximum is unlimited on your plan, and so is a limit set to a very large stand-in value such as 1,000,000 or more: both read **Unlimited**. The one exception is API requests per minute: with no maximum set it shows **Platform default**, meaning the platform's standard rate applies, and it is not unlimited. If a limit shows **No usage tracked**, the page has no counter for it yet.
 

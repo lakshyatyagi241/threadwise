@@ -97,6 +97,10 @@ export const PLAN_LIMIT_DEFS = [
   // PLAN_LIMITS_ZERO_IS_NONE); a plan row that predates the key, or one that stores PLAN_UNLIMITED_FROM or more, means unlimited, so no
   // existing plan changes. The Teams and permissions add-on raises it (its `teams` is a number of extra teams, -1 = unlimited).
   { key: 'teams', group: 'workspace' },
+  // Website chatbot (webbot) messages the plan includes free each calendar month; every one beyond it is charged to the wallet (usage kind
+  // `webbot_message`). Like `monthly_messages`: it is an allowance, not a block, and 0 (or an unlimited stand-in) means NO free messages, so a
+  // plan saved without a number charges every message instead of giving them away.
+  { key: 'webbot_messages', group: 'messaging' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];

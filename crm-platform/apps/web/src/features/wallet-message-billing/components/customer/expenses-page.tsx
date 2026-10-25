@@ -73,6 +73,7 @@ const EXTRA_SOURCES = [
   'kb_embedding',
   'flow_ai',
   'widget_ai',
+  'widget',
   'growth',
   'telephony',
   'translation',

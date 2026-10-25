@@ -73,8 +73,11 @@ afterAll(async () => {
 });
 
 describe('pricing mode', () => {
-  it('keeps typed prices until an operator turns margin pricing on, and says so in the preview', async () => {
-    expect((await ops('get', '/settings')).body.pricingMode).toBe('fixed');
+  it('prices as Meta cost plus margin unless an operator chose typed prices, and says so in the preview', async () => {
+    expect((await ops('get', '/settings')).body.pricingMode).toBe('margin');
+    expect((await ops('put', '/switches').send({ pricingMode: 'fixed' })).body.pricingMode).toBe(
+      'fixed',
+    );
     const before = pricePreviewSchema.parse(
       (await ops('get', `/pricing/preview?workspaceId=${tUuid}&country=LI&category=marketing`))
         .body,

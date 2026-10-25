@@ -310,7 +310,8 @@
         "widget_ai": "Web sitesi sohbet botu",
         "growth": "Büyüme",
         "telephony": "Telefon aramaları",
-        "translation": "Çeviri"
+        "translation": "Çeviri",
+        "widget": "Web sitesi sohbet botu"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Bir WhatsApp aramasının başlayan her dakikası. Kimsenin yanıtlamadığı arama ücretsizdir.",
             "voice_call": "Müşterinin telefon sağlayıcısının bildirdiği bir aramanın başlayan her dakikası. Elle girilen arama kayıtları hiçbir zaman ücretlendirilmez.",
             "enrichment": "Platformun veri sağlayıcısında sorgulanan her kişi.",
-            "chat_message": "Telegram, Facebook, Instagram, LINE, Viber veya WeChat üzerinden gönderilen her mesaj. Fiyat belirleyene kadar ücretsiz."
+            "chat_message": "Telegram, Facebook, Instagram, LINE, Viber veya WeChat üzerinden gönderilen her mesaj. Fiyat belirleyene kadar ücretsiz.",
+            "webbot_message": "Planın aylık ücretsiz mesajları bittikten sonra web sitesi sohbet botunun işlediği her ziyaretçi mesajı."
           },
           "costPlus": {
             "title": "Sağlayıcının maliyeti artı bir kâr payı üzerinden ücretlendirilir",
@@ -1034,7 +1036,8 @@
       "ai": "YZ",
       "translation": "Çeviri",
       "enrichment": "Kişi sorgusu",
-      "chat_message": "Sohbet mesajı"
+      "chat_message": "Sohbet mesajı",
+      "webbot_message": "Web sitesi sohbet botu mesajı"
     }
   }
 }

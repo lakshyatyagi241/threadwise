@@ -113,6 +113,7 @@ export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   email_monthly: 'perMonth',
   storage_gb: 'total',
   teams: 'total',
+  webbot_messages: 'perMonth',
 };
 
 /** The api rate limit is the one cap where 0 does not mean unlimited: its checkbox says "Platform default". */

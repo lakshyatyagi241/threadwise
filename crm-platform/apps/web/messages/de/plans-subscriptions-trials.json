@@ -48,7 +48,8 @@
       "email_mailboxes": "E-Mail-Postfächer",
       "email_monthly": "E-Mails pro Monat",
       "storage_gb": "Speicher (GB)",
-      "teams": "Teams"
+      "teams": "Teams",
+      "webbot_messages": "Kostenlose Website-Chatbot-Nachrichten pro Monat"
     },
     "features": {
       "automation": "Automatisierung",
@@ -148,7 +149,8 @@
       "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
       "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
       "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert.",
-      "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt."
+      "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt.",
+      "webbot_messages": "Website-Chatbot-Nachrichten, die in jedem Kalendermonat kostenlos enthalten sind. Jede weitere Nachricht wird dem Wallet belastet. Leer oder 0 = keine inklusive."
     },
     "planAddons": {
       "title": "Add-ons in Ihrem Tarif verfügbar",

@@ -48,7 +48,8 @@
       "email_mailboxes": "Caixas de e-mail",
       "email_monthly": "E-mails por mês",
       "storage_gb": "Armazenamento (GB)",
-      "teams": "Equipes"
+      "teams": "Equipes",
+      "webbot_messages": "Mensagens gratuitas do chatbot do site por mês"
     },
     "features": {
       "automation": "Automação",
@@ -148,7 +149,8 @@
       "email_mailboxes": "Caixas do Gmail conectadas (uma desconectada libera o lugar). 0 = ilimitado.",
       "email_monthly": "E-mails enviados no mês civil, respostas e e-mails de campanhas juntos. 0 = ilimitado.",
       "storage_gb": "Armazenamento que o espaço de trabalho pode manter, em GB (gravações de chamadas, mídia do chat, anexos de e-mail e arquivos). 0 = ilimitado. Por enquanto apenas medido: nada é bloqueado ainda.",
-      "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas."
+      "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas.",
+      "webbot_messages": "Mensagens do chatbot do site incluídas gratuitamente em cada mês civil. Cada mensagem além disso é cobrada da carteira. Em branco ou 0 = nenhuma incluída."
     },
     "planAddons": {
       "title": "Complementos disponíveis no seu plano",

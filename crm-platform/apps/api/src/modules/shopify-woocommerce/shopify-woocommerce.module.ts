@@ -21,6 +21,7 @@ import {
   STORE_MIRROR,
 } from './_shims/tokens';
 import { EngineCommerceSender } from './_shims/engine-commerce-sender';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { EcomPublicController } from './ecom-public.controller';
 import { EmbeddedShopifyController } from './embedded.controller';
 import { EmbeddedShopifyService } from './embedded.service';
@@ -78,6 +79,8 @@ import { WoocommerceService } from './woocommerce.service';
     SendWindowModule,
     CrmModule,
     PlatformSettingsModule,
+    // WalletGateService: a store message is a WhatsApp message and goes through the wallet like any other.
+    WalletMessageBillingModule,
   ],
   controllers: [
     EcomPlatformSettingsController,

@@ -40,7 +40,7 @@ The daily log turns many similar messages into a few lines. It has one block for
 ## What each row shows
 
 - **Date**: when the item was charged.
-- **Type**: what was billed: WhatsApp message, SMS, Email, WhatsApp call, Voice call, AI, Translation, Contact lookup or Chat message. An SMS shows its segments and a call shows its minutes.
+- **Type**: what was billed: WhatsApp message, SMS, Email, WhatsApp call, Voice call, AI, Translation, Contact lookup, Chat message or Website chatbot message. An SMS shows its segments and a call shows its minutes.
 - **Template**: the name of the template a WhatsApp message was sent with. Other types have none.
 - **Campaign, broadcast or feature**: the campaign, broadcast or schedule the item belonged to, or the AI feature that made the request, such as lead scoring. Chat and flow messages have none.
 - **Channel**: where the item came from, such as Campaign, Broadcast, Scheduled, Flow / Chatbot, Auto-reply, Chat or API, or the feature for AI, calls and reminders. Messages a team member sent from the inbox are listed under Chat.

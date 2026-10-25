@@ -310,7 +310,8 @@
         "widget_ai": "ウェブサイトのチャットボット",
         "growth": "成長",
         "telephony": "電話通話",
-        "translation": "翻訳"
+        "translation": "翻訳",
+        "widget": "ウェブサイトチャットボット"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "WhatsApp 通話の開始した分ごとに課金されます。誰も応答しなかった通話は無料です。",
             "voice_call": "顧客の電話プロバイダーが報告した通話の開始した分ごとに課金されます。手入力した通話ログは課金されません。",
             "enrichment": "プラットフォームのデータプロバイダーで検索した連絡先ごとに課金されます。",
-            "chat_message": "Telegram、Facebook、Instagram、LINE、Viber、WeChat で送信したメッセージごとに課金されます。料金を設定するまでは無料です。"
+            "chat_message": "Telegram、Facebook、Instagram、LINE、Viber、WeChat で送信したメッセージごとに課金されます。料金を設定するまでは無料です。",
+            "webbot_message": "プランの月間無料メッセージを使い切った後に、ウェブサイトチャットボットが処理する訪問者のメッセージ1件ごと。"
           },
           "costPlus": {
             "title": "ベンダーの費用に上乗せして課金",
@@ -1034,7 +1036,8 @@
       "ai": "AI",
       "translation": "翻訳",
       "enrichment": "連絡先の検索",
-      "chat_message": "チャットメッセージ"
+      "chat_message": "チャットメッセージ",
+      "webbot_message": "ウェブサイトチャットボットのメッセージ"
     }
   }
 }

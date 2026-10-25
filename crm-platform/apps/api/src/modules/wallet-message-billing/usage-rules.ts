@@ -1,5 +1,6 @@
 import {
   WALLET_COST_PLUS_KINDS,
+  isUnlimitedLimit,
   WALLET_UNIT_PRICED_KINDS,
   type WalletCostPlusKind,
   type WalletReportedKind,
@@ -39,11 +40,13 @@ const ALWAYS_CHARGED_KINDS: readonly string[] = ['sms', 'email'];
 export const USAGE_DEFAULTS: UsageRates = {
   prices: {
     sms: { enabled: true, priceMinor: 50 },
-    email: { enabled: true, priceMinor: 10 },
+    email: { enabled: true, priceMinor: 15 },
     whatsapp_call: { enabled: true, priceMinor: 100 },
     voice_call: { enabled: true, priceMinor: 100 },
     enrichment: { enabled: true, priceMinor: 20 },
     chat_message: { enabled: true, priceMinor: 0 },
+    // A website chatbot message beyond the plan's free allowance (`plans.limits.webbot_messages`).
+    webbot_message: { enabled: true, priceMinor: 10 },
   },
   costPlus: { ai: { enabled: true }, translation: { enabled: true } },
   markupBps: AI_MARKUP_BPS,
@@ -105,7 +108,7 @@ export type UsagePrice =
   /** Nothing to charge: the kind is off, the price is 0, there were no units or the vendor cost is unknown. */
   | { basis: 'none'; reason: 'switched_off' | 'price_is_zero' | 'no_units' | 'no_cost' };
 
-/** The vendor's cost in USD with the markup: a call that cost us 1.00 at 1000 basis points is charged at 1.10. */
+/** The vendor's cost in USD with the markup: a call that cost us 1.00 at 2000 basis points is charged at 1.20. */
 export const chargeUsdOf = (costUsd: number, markupBps: number): number =>
   costUsd > 0 ? costUsd * (1 + markupBps / 10_000) : 0;
 
@@ -160,6 +163,7 @@ export const USAGE_KIND_LABELS: Record<WalletReportedKind, string> = {
   translation: 'Translation',
   enrichment: 'Contact lookup',
   chat_message: 'Chat message',
+  webbot_message: 'Website chatbot message',
 };
 
 export function usageStatementLabel(
@@ -175,4 +179,22 @@ export function usageStatementLabel(
 export function billedMinutes(durationSeconds: number | null | undefined): number {
   const s = Math.trunc(Number(durationSeconds ?? 0));
   return s > 0 ? Math.ceil(s / 60) : 0;
+}
+
+/**
+ * How many of `units` a plan's free allowance covers. The allowance is a number of messages per calendar month: `limit` of them are free,
+ * counted in `usedBefore` (this month, before this usage), the rest are charged. An unlimited stand-in (0, or a million and up) and an ended
+ * plan have NO allowance: like `monthly_messages`, a missing number charges every message instead of giving them away. The allowance is
+ * the plan's promise, so it holds in every billing mode (the pay-per-message switch is about WhatsApp, where Meta bills the platform).
+ */
+export function freeUnitsOf(f: {
+  units: number;
+  usedBefore: number;
+  limit: number;
+  planActive: boolean;
+}): number {
+  const units = Math.max(0, Math.trunc(f.units));
+  if (units === 0 || !f.planActive || isUnlimitedLimit(f.limit)) return 0;
+  const left = Math.max(0, Math.trunc(f.limit) - Math.max(0, Math.trunc(f.usedBefore)));
+  return Math.min(units, left);
 }
