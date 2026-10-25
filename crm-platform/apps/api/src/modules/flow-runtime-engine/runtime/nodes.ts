@@ -3,6 +3,7 @@ import {
   flbImageUrl,
   flbParseCoordinate,
   flbSanitizeConditionGroup,
+  webLinkUrl,
 } from '@crm/contracts';
 import { evaluateConditions, evaluateConditionTree } from './condition';
 import { askItems, buttonItems, listRows, REPLY_BUTTONS_MAX } from './menus';
@@ -477,22 +478,6 @@ const cta: NodeExecutor = {
     return advance;
   },
 };
-
-/** The address a website chat button opens, or null when the value is not one the window may open (a script, a file, a wrong shape). */
-export function webLinkUrl(type: string, value: string): string | null {
-  const v = value.trim();
-  if (v === '' || v.length > 2000) return null;
-  if (type === 'phone' || type === 'call_now') {
-    const digits = v.replace(/^tel:/i, '').replace(/[^\d+]/g, '');
-    return /^\+?\d{5,15}$/.test(digits) ? `tel:${digits}` : null;
-  }
-  if (type === 'email') {
-    const mail = v.replace(/^mailto:/i, '');
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? `mailto:${mail}` : null;
-  }
-  if (type === 'url' || type === 'visit') return /^https?:\/\/\S+$/i.test(v) ? v : null;
-  return null;
-}
 
 /** Location (TW-FLR-027): the pin, or a text with a maps link when the channel cannot send one. */
 const location: NodeExecutor = {

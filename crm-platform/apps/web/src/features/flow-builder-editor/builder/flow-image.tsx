@@ -1,15 +1,21 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState, type CSSProperties, type ReactElement } from 'react';
 
 /** Why a link cannot show as an image, before the browser even tries; null when it looks fine. */
-export function imageLinkProblem(src: string): string | null {
+export function imageLinkProblem(src: string): 'empty' | 'notAddress' | null {
   const s = src.trim();
-  if (s === '') return 'the link is empty';
-  if (!/^https?:\/\//i.test(s) && !/^(\/|data:image\/|blob:)/.test(s))
-    return 'the link is not a web address (it must start with https://)';
+  if (s === '') return 'empty';
+  if (!/^https?:\/\//i.test(s) && !/^(\/|data:image\/|blob:)/.test(s)) return 'notAddress';
   return null;
 }
+
+/** The same reasons in English, for the browser console only: developer diagnostics, never shown to the user. */
+const CONSOLE_REASON = {
+  empty: 'the link is empty',
+  notAddress: 'the link is not a web address (it must start with https://)',
+} as const;
 
 /**
  * An image of a flow card or the test chat. When it cannot load it says so on the spot and writes the reason to the browser console
@@ -28,21 +34,22 @@ export function FlowImage({
   className?: string;
   style?: CSSProperties;
 }): ReactElement {
+  const t = useTranslations('flb.builder.flowImage');
   const [failed, setFailed] = useState(false);
   const problem = imageLinkProblem(src);
   if (problem || failed) {
-    const reason =
-      problem ?? 'it did not load (the link may be wrong, private, blocked, or not an image)';
-    if (problem) console.warn(`[flow-builder] image not shown in ${where}: ${problem}`, src);
+    const reason = problem ? t(problem) : t('failed');
+    if (problem)
+      console.warn(`[flow-builder] image not shown in ${where}: ${CONSOLE_REASON[problem]}`, src);
     return (
       <div
         role="img"
-        aria-label="Image not loaded"
+        aria-label={t('title')}
         title={`${reason}\n${src}`}
         data-testid="flow-image-failed"
         className="flex min-h-14 flex-col justify-center gap-0.5 rounded border border-dashed border-red-400/70 bg-red-50 px-2 py-1.5 text-[11px] leading-snug text-red-700"
       >
-        <strong>Image not loaded</strong>
+        <strong>{t('title')}</strong>
         <span className="break-all opacity-80">{reason}</span>
       </div>
     );

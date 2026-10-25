@@ -1915,6 +1915,12 @@
           "unresolved": "Questo link breve non è ancora stato verificato. Esci dal campo o riprova.",
           "resolve_failed": "Impossibile leggere questo link. Controlla che si apra in Google Maps o inserisci le coordinate."
         }
+      },
+      "flowImage": {
+        "title": "Immagine non caricata",
+        "empty": "il link è vuoto",
+        "notAddress": "il link non è un indirizzo web (deve iniziare con https://)",
+        "failed": "non si è caricata (il link potrebbe essere errato, privato, bloccato o non essere un'immagine)"
       }
     },
     "contracts": {
@@ -2607,7 +2613,8 @@
       "simPurchase": "Acquisto simulato: {name} → porta «acquistato»",
       "simAbandon": "Abbandono simulato → porta «abbandonato»",
       "locationSkipped": "(posizione) saltata: nessuna coordinata valida",
-      "faqLine": "(simulato) Rispondi dalle FAQ: nella chat di prova la base di conoscenza non viene interrogata, si usa \"nessuna corrispondenza\"."
+      "faqLine": "(simulato) Rispondi dalle FAQ: nella chat di prova la base di conoscenza non viene interrogata, si usa \"nessuna corrispondenza\".",
+      "carouselNoMatch": "“{value}” non è uno dei pulsanti. Tocca uno di essi o scrivi esattamente il suo testo."
     },
     "templates": {
       "eyebrow": "Modelli di partenza",

@@ -7,6 +7,7 @@ import {
   flbIsCondGroup,
   flbReadLocation,
   flbSanitizeConditionGroup,
+  webLinkUrl,
   type FlbCondGroup,
   type FlowEdge,
   type FlowNode,
@@ -73,14 +74,6 @@ export interface SimLocation {
 const askRetries = (d: Record<string, unknown>): number => {
   const n = Math.trunc(Number(d.retries ?? 2));
   return Math.min(10, Math.max(0, Number.isFinite(n) ? n : 2));
-};
-/** The address a Carousel link button opens in the test chat: a page, a call or an email; null when the value is empty or not a page. */
-const carouselHref = (type: string, value: string): string | null => {
-  const v = value.trim();
-  if (v === '') return null;
-  if (type === 'phone') return `tel:${v}`;
-  if (type === 'email') return `mailto:${v}`;
-  return /^https?:\/\/\S+$/i.test(v) ? v : null;
 };
 const MEDIA_KIND_OF_MIME = (mime: string): string => {
   const m = mime.toLowerCase();
@@ -318,28 +311,32 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return advance('out');
       }
       case 'carousel': {
-        // Every card's reply buttons take the exits in card order, the same numbers the graph and the runtime use. A card with
-        // nothing in it is not shown, as the runtime leaves it out; its buttons still count for the numbers.
-        let replyExits = 0;
+        // A reply button's exit is its place in `flbCarouselReplies` (card order), the same number the graph and the runtime use.
+        // A card with nothing in it, once variables are filled in, is not shown, as the runtime leaves it out. A link button the
+        // window may not open is left out, as the runtime leaves it out too.
+        const replies = flbCarouselReplies(d.cards);
+        const exitOf = new Map(replies.map((r, i) => [`${r.card}.${r.button}`, i]));
         const shown: LogCard[] = [];
-        for (const c of flbCleanCarouselCards(d.cards)) {
-          const buttons = c.buttons.map((b) =>
-            b.type === 'reply' || b.type === 'agent'
-              ? { label: interp(b.label, v), exit: replyExits++, href: null }
-              : { label: interp(b.label, v), exit: null, href: carouselHref(b.type, b.value) },
-          );
+        flbCleanCarouselCards(d.cards).forEach((c, ci) => {
+          const title = interp(c.title, v).trim();
+          const text = interp(c.text, v).trim();
           const image = flbImageUrl(c.image);
-          if (c.title === '' && c.text === '' && image === null) continue;
-          shown.push({
-            image,
-            title: interp(c.title, v),
-            text: interp(c.text, v),
-            buttons,
+          if (title === '' && text === '' && image === null) return;
+          const buttons: LogCard['buttons'] = [];
+          c.buttons.forEach((b, bi) => {
+            const label = interp(b.label, v);
+            const exit = exitOf.get(`${ci}.${bi}`);
+            if (exit !== undefined) buttons.push({ label, exit, href: null });
+            else {
+              const href = webLinkUrl(b.type, b.value);
+              if (href !== null) buttons.push({ label, exit: null, href });
+            }
           });
-        }
+          shown.push({ image, title, text, buttons });
+        });
         if (shown.length === 0) return advance('next');
         bot(interp(d.text, v), undefined, undefined, shown);
-        if (replyExits === 0) return advance('next');
+        if (replies.length === 0) return advance('next');
         opts.onAwaiting(true);
         return;
       }
@@ -914,10 +911,18 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       else if (handle) sys(tx('portNotConnected', { port: handle }));
       else sys(tx('nothingAfterAsk'));
     } else if (node.type === 'carousel') {
-      // A tap on a card's reply button names its exit; a typed answer is matched by the button's label, as a menu is.
-      const labels = flbCarouselReplies(d.cards).map((r) => r.label);
-      const idx = exit ?? pickIndex(labels, value);
-      vars[str(d.var) || 'choice'] = labels[idx] || value;
+      // A tap names its exit. A typed answer matches a button as the visitor sees it (variables filled in), by its text or its
+      // number; anything else keeps the run waiting, as a wrong answer does, instead of taking the first exit.
+      const labels = flbCarouselReplies(d.cards).map((r) => interp(r.label, vars));
+      const typed = value.trim().toLowerCase();
+      let idx = exit ?? labels.findIndex((l) => l.trim().toLowerCase() === typed);
+      const n = Number(typed);
+      if (idx < 0 && Number.isInteger(n) && n >= 1 && n <= labels.length) idx = n - 1;
+      if (idx < 0) {
+        sys(tx('carouselNoMatch', { value }));
+        return;
+      }
+      vars[str(d.var) || 'choice'] = labels[idx] ?? value;
       opts.onAwaiting(false);
       route(node, `p${idx}`, tx('optionNotConnected', { port: `p${idx}`, n: idx + 1 }));
     } else if (node.type === 'buttons' || node.type === 'list' || node.type === 'poll') {

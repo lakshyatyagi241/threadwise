@@ -2057,6 +2057,12 @@
           "unresolved": "Ce lien court n’a pas encore été consulté. Quittez le champ ou réessayez.",
           "resolve_failed": "Impossible de lire ce lien. Vérifiez qu’il s’ouvre dans Google Maps, ou saisissez les coordonnées."
         }
+      },
+      "flowImage": {
+        "title": "Image non chargée",
+        "empty": "le lien est vide",
+        "notAddress": "le lien n'est pas une adresse web (il doit commencer par https://)",
+        "failed": "n'a pas pu se charger (le lien est peut-être erroné, privé, bloqué ou ne pointe pas vers une image)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Achat simulé : {name} → sortie « achetée »",
       "simAbandon": "Abandon simulé → sortie « abandonnée »",
       "locationSkipped": "(emplacement) ignoré : aucune coordonnée valide",
-      "faqLine": "(simulé) Répondre depuis la FAQ : la base de connaissances n'est pas interrogée dans le chat de test, \"aucune correspondance\" est retenu."
+      "faqLine": "(simulé) Répondre depuis la FAQ : la base de connaissances n'est pas interrogée dans le chat de test, \"aucune correspondance\" est retenu.",
+      "carouselNoMatch": "« {value} » ne correspond à aucun bouton. Touchez-en un, ou saisissez exactement son texte."
     }
   }
 }

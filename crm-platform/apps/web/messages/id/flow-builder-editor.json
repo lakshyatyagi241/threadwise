@@ -2057,6 +2057,12 @@
           "unresolved": "Tautan pendek ini belum diperiksa. Keluar dari kolom atau coba lagi.",
           "resolve_failed": "Tautan ini tidak dapat dibaca. Pastikan tautan terbuka di Google Maps, atau masukkan koordinat."
         }
+      },
+      "flowImage": {
+        "title": "Gambar tidak dimuat",
+        "empty": "tautan kosong",
+        "notAddress": "tautan bukan alamat web (harus diawali https://)",
+        "failed": "tidak dapat dimuat (tautan mungkin salah, privat, diblokir, atau bukan gambar)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
       "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid",
-      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\"."
+      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\".",
+      "carouselNoMatch": "“{value}” bukan salah satu tombol. Ketuk salah satu, atau ketik teksnya persis."
     }
   }
 }

@@ -2057,6 +2057,12 @@
           "unresolved": "Liên kết ngắn này chưa được kiểm tra. Hãy thoát khỏi ô hoặc thử lại.",
           "resolve_failed": "Không đọc được liên kết này. Hãy kiểm tra xem nó có mở trong Google Maps không, hoặc nhập tọa độ."
         }
+      },
+      "flowImage": {
+        "title": "Không tải được ảnh",
+        "empty": "liên kết trống",
+        "notAddress": "liên kết không phải là địa chỉ web (phải bắt đầu bằng https://)",
+        "failed": "không tải được (liên kết có thể sai, riêng tư, bị chặn hoặc không phải ảnh)"
       }
     },
     "contracts": {
@@ -2749,7 +2755,8 @@
       "simPurchase": "Mô phỏng giao dịch mua: {name} → cổng \"đã mua\"",
       "simAbandon": "Mô phỏng bỏ dở → cổng \"bỏ dở\"",
       "locationSkipped": "(vị trí) đã bỏ qua: không có tọa độ hợp lệ",
-      "faqLine": "(mô phỏng) Trả lời từ FAQ: chat thử không tìm trong cơ sở kiến thức, chọn \"không khớp\"."
+      "faqLine": "(mô phỏng) Trả lời từ FAQ: chat thử không tìm trong cơ sở kiến thức, chọn \"không khớp\".",
+      "carouselNoMatch": "“{value}” không phải là một trong các nút. Chạm vào một nút, hoặc nhập đúng nội dung của nút."
     }
   }
 }
