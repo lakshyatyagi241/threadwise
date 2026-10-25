@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Selecione um modelo",
       "noTemplates": "Nenhum modelo aprovado para este número.",
       "openInInbox": "Abrir o chat na caixa de entrada",
-      "notSendable": "Este modelo não pode ser preenchido aqui ({reason}).",
+      "notSendable": "Este modelo não pode ser enviado daqui.",
       "variables": "Variáveis do modelo",
       "preview": "Pré-visualização",
       "slot": "Variável {key}",

@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Seleziona un template",
       "noTemplates": "Nessun template approvato per questo numero.",
       "openInInbox": "Apri la chat nella posta in arrivo",
-      "notSendable": "Questo template non può essere compilato qui ({reason}).",
+      "notSendable": "Questo template non può essere inviato da qui.",
       "variables": "Variabili del template",
       "preview": "Anteprima",
       "slot": "Variabile {key}",

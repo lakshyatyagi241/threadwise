@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Pilih templat",
       "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
       "openInInbox": "Buka chat di kotak masuk",
-      "notSendable": "Templat ini tidak dapat diisi di sini ({reason}).",
+      "notSendable": "Templat ini tidak dapat dikirim dari sini.",
       "variables": "Variabel templat",
       "preview": "Pratinjau",
       "slot": "Variabel {key}",

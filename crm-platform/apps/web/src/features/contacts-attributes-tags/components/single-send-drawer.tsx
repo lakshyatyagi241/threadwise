@@ -363,7 +363,7 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
         <p role="alert" className="text-sm text-danger">
           {picked.reason && REASONS.has(picked.reason)
             ? t(`reason.${picked.reason}`)
-            : t('notSendable', { reason: picked.reason ?? '-' })}
+            : t('notSendable')}
         </p>
       )}
 

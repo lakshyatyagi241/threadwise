@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Wybierz szablon",
       "noTemplates": "Brak zatwierdzonych szablonów dla tego numeru.",
       "openInInbox": "Otwórz czat w skrzynce odbiorczej",
-      "notSendable": "Tego szablonu nie można tutaj wypełnić ({reason}).",
+      "notSendable": "Tego szablonu nie można wysłać stąd.",
       "variables": "Zmienne szablonu",
       "preview": "Podgląd",
       "slot": "Zmienna {key}",

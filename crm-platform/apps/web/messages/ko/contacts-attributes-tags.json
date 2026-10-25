@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "템플릿 선택",
       "noTemplates": "이 번호에 승인된 템플릿이 없습니다.",
       "openInInbox": "받은편지함에서 채팅 열기",
-      "notSendable": "이 템플릿은 여기에서 채울 수 없습니다 ({reason}).",
+      "notSendable": "이 템플릿은 여기에서 보낼 수 없습니다.",
       "variables": "템플릿 변수",
       "preview": "미리보기",
       "slot": "변수 {key}",

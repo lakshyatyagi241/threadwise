@@ -1465,7 +1465,7 @@
       "templatePlaceholder": "Şablon seçin",
       "noTemplates": "Bu numara için onaylı şablon yok.",
       "openInInbox": "Sohbeti gelen kutusunda aç",
-      "notSendable": "Bu şablon burada doldurulamaz ({reason}).",
+      "notSendable": "Bu şablon buradan gönderilemez.",
       "variables": "Şablon değişkenleri",
       "preview": "Önizleme",
       "slot": "{key} değişkeni",
