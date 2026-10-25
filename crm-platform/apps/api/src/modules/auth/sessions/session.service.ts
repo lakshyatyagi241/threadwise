@@ -160,6 +160,7 @@ export class SessionService {
           await this.audit.record(tx, {
             event: 'auth.concurrent_sessions_evicted',
             status: 'warning',
+            orgId: input.orgId,
             actorType: 'user',
             actorId: input.userId,
             recordId: input.userId,

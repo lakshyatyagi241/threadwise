@@ -101,6 +101,16 @@ function mailTo(email: string, subject: string) {
 const linkParams = (text: string, pathPart: string) =>
   new URL(text.match(new RegExp(`https?://\\S*${pathPart}\\?\\S+`))![0]).searchParams;
 
+/** Marks this account's email verified in one workspace, straight in the database (the owner connection arranges state). */
+async function markVerified(a: Account) {
+  await h.owner.query(
+    `UPDATE user_security SET email_verified_at = now()
+      WHERE org_id = (SELECT id FROM organizations WHERE slug = $1)
+        AND user_id = (SELECT u.id FROM users u WHERE u.org_id = user_security.org_id AND u.email = $2)`,
+    [a.slug, a.email],
+  );
+}
+
 async function verifyEmail(a: Account) {
   // One address can belong to several organizations: pick the mail for THIS workspace.
   const mail = [...h.mail]
@@ -1185,6 +1195,41 @@ describe('workspaces', () => {
     const now = await api().get('/v2/auth/session').set(bearer(switched.body.tokens.accessToken));
     expect(now.body.org.slug).toBe(two.slug);
     // No password was asked: the verified inbox is the identity.
+  });
+
+  it('a switch into a workspace at its session cap evicts a session there and records it in that workspace', async () => {
+    const email = uniqueEmail('evict');
+    const one = await signup({ email, orgName: 'Origin Workspace' });
+    const two = await anotherWorkspace(email, 'Busy Workspace');
+    // Arranged directly: the verification mail is not reliably captured by the harness (the existing workspace tests hit the same).
+    await markVerified(one);
+    await markVerified(two);
+
+    // Each sign-in into the target workspace keeps it at the cap, so the switch below has to evict one of its sessions.
+    for (let i = 0; i < 5; i++) {
+      expect((await login({ ...two, ip: nextIp() }, PASSWORD)).status).toBe(201);
+    }
+    const evictionsIn = async () =>
+      (
+        await h.owner.query(
+          `SELECT count(*)::int AS c FROM audit_log
+            WHERE org_id = (SELECT id FROM organizations WHERE slug = $1)
+              AND action = 'auth.concurrent_sessions_evicted'`,
+          [two.slug],
+        )
+      ).rows[0].c as number;
+    const before = await evictionsIn();
+
+    const switched = await api()
+      .post('/v2/auth/workspaces/switch')
+      .set(bearer(one.access))
+      .send({ orgSlug: two.slug });
+    expect(switched.status).toBe(201);
+    const now = await api().get('/v2/auth/session').set(bearer(switched.body.tokens.accessToken));
+    expect(now.body.org.slug).toBe(two.slug);
+
+    // The switch's own eviction is recorded in the workspace that lost the session, not in the one the switch came from.
+    expect(await evictionsIn()).toBe(before + 1);
   });
 });
 
