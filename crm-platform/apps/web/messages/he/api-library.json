@@ -172,7 +172,9 @@
         "user": "הופעל על ידי (מזהה משתמש)",
         "noContext": "לא היו מעורבים זרימה או איש קשר."
       },
-      "unsaved": "לא נשמר"
+      "unsaved": "לא נשמר",
+      "export": "ייצוא ל-CSV",
+      "exporting": "מייצא…"
     },
     "variables": {
       "insertFor": "הוסף משתנה ל-{label}",

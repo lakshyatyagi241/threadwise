@@ -642,6 +642,37 @@ describe('test runs', () => {
 });
 
 describe('logs', () => {
+  it('exports the same runs as the list, as CSV, newest first, with the filters applied', async () => {
+    const t = await api.signup('alib14b');
+    const one = await create(t, { name: 'Exported' });
+    const two = await create(t, { name: 'Other' });
+    const call = (apiId: string, over: Record<string, unknown> = {}) =>
+      api
+        .as(t.admin)
+        .post('/v2/api-library/apis/test')
+        .send(def({ apiId, ...over }));
+    await call(one.id);
+    await call(one.id, { url: `${base}/fail`, variables: [], body: { a: 1 } });
+    await call(two.id, { url: `${base}/people` });
+
+    const all = await api.as(t.admin).get('/v2/api-library/logs/export');
+    expect(all.status).toBe(200);
+    expect(all.headers['content-type']).toContain('text/csv');
+    expect(all.headers['content-disposition']).toContain('api-library-logs.csv');
+    const lines = all.text.trim().split('\r\n');
+    expect(lines[0]).toBe(
+      'Time (UTC),API,Source,Method,URL,Result,Status code,Duration (ms),Error',
+    );
+    expect(lines).toHaveLength(4);
+    expect(lines[1]).toContain('Other');
+
+    const filtered = await api.as(t.admin).get(`/v2/api-library/logs/export?apiId=${one.id}`);
+    expect(filtered.text.trim().split('\r\n')).toHaveLength(3);
+    expect(filtered.text).not.toContain('Other');
+    const failed = await api.as(t.admin).get('/v2/api-library/logs/export?status=failed');
+    expect(failed.text.trim().split('\r\n')).toHaveLength(2);
+  });
+
   it('lists newest first with filters, per API and across APIs, and shows one in full', async () => {
     const t = await api.signup('alib14');
     const one = await create(t, { name: 'One' });

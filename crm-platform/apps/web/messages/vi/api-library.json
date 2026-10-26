@@ -172,7 +172,9 @@
         "user": "Chạy bởi (ID người dùng)",
         "noContext": "Không có luồng hoặc liên hệ nào liên quan."
       },
-      "unsaved": "Chưa lưu"
+      "unsaved": "Chưa lưu",
+      "export": "Xuất CSV",
+      "exporting": "Đang xuất…"
     },
     "variables": {
       "insertFor": "Chèn biến vào {label}",

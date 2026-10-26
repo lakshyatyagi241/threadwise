@@ -172,7 +172,9 @@
         "user": "Dijalankan oleh (ID pengguna)",
         "noContext": "Tidak ada alur atau kontak yang terlibat."
       },
-      "unsaved": "Belum disimpan"
+      "unsaved": "Belum disimpan",
+      "export": "Ekspor CSV",
+      "exporting": "Mengekspor…"
     },
     "variables": {
       "insertFor": "Sisipkan variabel ke {label}",

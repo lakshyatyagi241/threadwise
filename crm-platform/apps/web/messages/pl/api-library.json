@@ -172,7 +172,9 @@
         "user": "Uruchomił (ID użytkownika)",
         "noContext": "Nie uczestniczył żaden przepływ ani kontakt."
       },
-      "unsaved": "Niezapisane"
+      "unsaved": "Niezapisane",
+      "export": "Eksportuj CSV",
+      "exporting": "Eksportowanie…"
     },
     "variables": {
       "insertFor": "Wstaw zmienną do: {label}",

@@ -172,7 +172,9 @@
         "user": "실행한 사용자(사용자 ID)",
         "noContext": "관련된 플로우나 연락처가 없습니다."
       },
-      "unsaved": "저장되지 않음"
+      "unsaved": "저장되지 않음",
+      "export": "CSV로 내보내기",
+      "exporting": "내보내는 중…"
     },
     "variables": {
       "insertFor": "{label}에 변수 삽입",
