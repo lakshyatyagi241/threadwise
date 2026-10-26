@@ -16,6 +16,7 @@ import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
 import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
+import { WIZARD_NAME_MAX } from './wizard-limits';
 import {
   isIanaTimeZone,
   recurrenceRuleSchema,
@@ -38,8 +39,7 @@ export type WizardStep = (typeof WIZARD_STEPS)[number];
 /** 1-based, as the stepper numbers them. */
 export const WIZARD_STEP_COUNT = WIZARD_STEPS.length;
 
-/** A campaign's name: at most 100 characters (a longer one already saved in a draft is cut to this when the draft is read). */
-export const WIZARD_NAME_MAX = 100;
+export { WIZARD_NAME_MAX };
 /** Groups and segments a single broadcast may name. */
 export const WIZARD_SOURCES_MAX = 100;
 /** Test numbers per send. */
