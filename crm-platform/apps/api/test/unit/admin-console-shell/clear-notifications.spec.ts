@@ -33,7 +33,7 @@ describe('Clear all (the bell)', () => {
     const { service, publisher, ctx } = harness(3);
     const out = await RequestContextStore.run(ctx, () => service.clearNotifications());
     expect(out).toEqual({ cleared: 3 });
-    expect(publisher.read).toHaveBeenCalledWith(4, 7, 'all');
+    expect(publisher.read).toHaveBeenCalledWith(4, 7, 'all', { cleared: true });
   });
 
   it('stays silent when nothing was there to clear', async () => {
