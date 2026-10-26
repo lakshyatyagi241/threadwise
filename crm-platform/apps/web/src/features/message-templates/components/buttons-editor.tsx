@@ -187,9 +187,13 @@ export function ButtonsEditor({
                         row={r}
                         id={`${id}-flow`}
                         error={
-                          err('flowIdRequired') || err('flowIdInvalid')
+                          err('flowIdRequired')
                             ? t('issue.flowIdRequired')
-                            : undefined
+                            : err('flowIdInvalid')
+                              ? t('issue.flowIdInvalid')
+                              : err('screenRequired')
+                                ? t('issue.screenRequired')
+                                : undefined
                         }
                         onPick={(p) => patch(r.key, { flowId: p.flowId, screen: p.screen })}
                       />
