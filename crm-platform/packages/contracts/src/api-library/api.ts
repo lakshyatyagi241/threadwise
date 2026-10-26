@@ -91,6 +91,8 @@ export const apiLibraryContactPropertySchema = z.object({
   /** The property's type (`text`, `email`, `integer`, `decimal`, ...): the form warns when a text answer goes into a number. */
   type: z.string(),
   kind: z.enum(['system', 'custom']),
+  /** A contact detail a variable can read but an answer cannot be saved into (the phone, the owner, the opt-out, ...). */
+  readOnly: z.boolean().optional(),
 });
 export type ApiLibraryContactProperty = z.infer<typeof apiLibraryContactPropertySchema>;
 

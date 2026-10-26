@@ -74,6 +74,15 @@
         "published": "Published to WhatsApp."
       },
       "builder": {
+        "flowId": "Flow ID",
+        "copyFlowId": "Copy",
+        "copied": "Copied",
+        "testForm": "Test form",
+        "testing": "Preparing the preview…",
+        "previewReady": "The form is saved and ready to try on Meta's preview. Nothing is published.",
+        "openPreview": "Open the preview",
+        "moveScreenUp": "Move screen {n} up",
+        "moveScreenDown": "Move screen {n} down",
         "back": "Back to forms",
         "untitled": "Untitled form",
         "saving": "Saving…",

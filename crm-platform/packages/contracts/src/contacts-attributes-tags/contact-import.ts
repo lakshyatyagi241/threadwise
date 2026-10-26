@@ -231,7 +231,7 @@ export const IMPORT_SAMPLE_ROWS: readonly (readonly string[])[] = [
     'no',
     'no',
     'yes',
-    '1988-11-02',
+    '1988-11-22',
     'no',
   ],
 ];
@@ -306,14 +306,45 @@ const CONSENT_NO = new Set([
 ]);
 
 /**
- * One cell of the date of birth column: year first (`2010-05-04`, `2010/05/04`, `2010.05.04`), a real day that can be a birth date.
+ * One date cell as `YYYY-MM-DD`. Year first (`2010-05-04`, `2010/05/04`, `2010.05.04`) always reads. A year-last date (`14-05-1990`,
+ * `05/14/1990`, which is what a spreadsheet writes back when it reformats the cell) reads only when it cannot mean two dates: one of
+ * its first two numbers is above 12. `10-05-2026` is day first or month first, so it is refused and the person writes it year first.
+ * Null for anything else, and for a day that does not exist.
+ */
+export function normalizeImportDate(cell: string): string | null {
+  const text = cell.trim();
+  let y: string;
+  let mo: string;
+  let d: string;
+  const first = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(text);
+  if (first) {
+    [, y, mo, d] = first as unknown as [string, string, string, string];
+  } else {
+    const last = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/.exec(text);
+    if (!last) return null;
+    const a = Number(last[1]);
+    const b = Number(last[2]);
+    y = last[3]!;
+    if (a > 12 && b <= 12) {
+      d = last[1]!;
+      mo = last[2]!;
+    } else if (b > 12 && a <= 12) {
+      mo = last[1]!;
+      d = last[2]!;
+    } else return null;
+  }
+  const iso = `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  const at = new Date(`${iso}T00:00:00.000Z`);
+  return Number.isNaN(at.getTime()) || at.toISOString().slice(0, 10) !== iso ? null : iso;
+}
+
+/**
+ * One cell of the date of birth column (see `normalizeImportDate`), a real day that can be a birth date.
  * Null for anything else; a blank cell is "no date" and is the caller's to tell apart.
  */
 export function parseImportBirthDate(cell: string, now: Date = new Date()): string | null {
-  const m = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(cell.trim());
-  if (!m) return null;
-  const iso = `${m[1]}-${m[2]!.padStart(2, '0')}-${m[3]!.padStart(2, '0')}`;
-  return isPlausibleBirthDate(iso, now) ? iso : null;
+  const iso = normalizeImportDate(cell);
+  return iso !== null && isPlausibleBirthDate(iso, now) ? iso : null;
 }
 
 /** Yes / no spellings of a consent cell: case, spaces, hyphens and accents do not matter. Anything else is `unrecognised` (not granted). */
