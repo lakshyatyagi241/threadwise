@@ -89,6 +89,9 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
   // pg_stat_statements has no application name, so a backup or migration statement would pass the allow-list there. Remember the query ids the
   // activity pass excluded (by app/user), and also skip plain maintenance statements by text.
   const excludedQ = new Map(), MAINT = new RegExp(env.SLOW_EXCLUDE_STATEMENT_REGEX ?? '^\\s*(copy|vacuum|analyze|reindex|cluster|create|alter|drop|truncate|refresh\\s+materialized|checkpoint|lock\\s+table|set\\s|show\\s|begin|commit)\\b', 'i');
+  // The data-migration tool keeps its own bookkeeping in the `migration` schema (id_map, quarantine, ...): rolling an organisation back or reloading it deletes
+  // or rewrites hundreds of thousands of rows by design, so those statements are expected to be slow and are not slow-query incidents.
+  const MIGRATION_TOOL = /\b(?:from|into|update|join)\s+migration\./i, skipQ = (q) => MAINT.test(q) || MIGRATION_TOOL.test(q);
   let baselined = false, suppressed = 0, warnedNoStmts = false, offenders = [];
   metrics.set('crm_slow_query_max_seconds', 'gauge', 0);
   metrics.set('crm_slow_query_window_mean_max_seconds', 'gauge', 0);
@@ -128,7 +131,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
       const t = now(), cur = new Map();
       for (const r of (await query(WIN_SQL, [])).rows) cur.set(String(r.queryid), { calls: Number(r.calls), total: Number(r.total_exec_time), q: String(r.q ?? '') });
       while (snaps.length && t - snaps[0].t > c.windowMs) snaps.shift();
-      const w = snaps.length ? windowedMeans(snaps[0].map, cur, { minCalls: c.windowMinCalls, thresholdMs: c.windowMeanMs, skip: (id, q) => excludedQ.has(id) || MAINT.test(q) }) : { maxMs: 0, over: 0, top: [] };
+      const w = snaps.length ? windowedMeans(snaps[0].map, cur, { minCalls: c.windowMinCalls, thresholdMs: c.windowMeanMs, skip: (id, q) => excludedQ.has(id) || skipQ(q) }) : { maxMs: 0, over: 0, top: [] };
       snaps.push({ t, map: cur });
       metrics.set('crm_slow_query_window_mean_max_seconds', 'gauge', w.maxMs / 1000);
       metrics.set('crm_slow_query_window_statements_over', 'gauge', w.over);
@@ -185,7 +188,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
           const p = prev.get(key);
           prev.set(key, { calls: Number(r.calls), total: Number(r.total_exec_time) });
           if (!baselined || !p || Number(r.calls) <= p.calls) continue; // first sight or reset: baseline only
-          if (excludedQ.has(String(r.queryid)) || MAINT.test(String(r.query ?? ''))) { metrics.inc('crm_slow_query_events_total', 'kind="excluded"'); continue; } // backup, migration, maintenance
+          if (excludedQ.has(String(r.queryid)) || skipQ(String(r.query ?? ''))) { metrics.inc('crm_slow_query_events_total', 'kind="excluded"'); continue; } // backup, migration, maintenance
           const dCalls = Number(r.calls) - p.calls, dMean = (Number(r.total_exec_time) - p.total) / dCalls;
           const rc = recur.get(key);
           if (dMean < c.meanMs) { if (rc && ++rc.quiet >= c.recurPolls && resolver) { await resolver.statementRecovered(`st:${key}`); recur.delete(key); } continue; } // lifetime mean is high, but NEW calls are fast: not a live problem
