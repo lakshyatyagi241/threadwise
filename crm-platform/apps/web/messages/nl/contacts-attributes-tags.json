@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Naam van nieuwe groep",
       "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt.",
       "customProperties": "Aangepaste eigenschappen",
-      "customPropertiesHint": "Een kolom waarvan de kop de naam van de eigenschap is (of attr:key, zoals de export die schrijft), vult die eigenschap. Een lege cel behoudt de waarde die het contact al heeft."
+      "customPropertiesHint": "Een kolom waarvan de kop de naam van de eigenschap is (of attr:key, zoals de export die schrijft), vult die eigenschap. Een lege cel behoudt de waarde die het contact al heeft.",
+      "propertyFormat": {
+        "checkbox": "Vul yes of no in. Ook toegestaan: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Scheid de sleutels van de opties met een komma, puntkomma of verticale streep, bijvoorbeeld vip, new_leads. Gebruik de sleutel, niet het label. Hoofdletters maken niet uit."
+      }
     },
     "detail": {
       "back": "Alle contacten",

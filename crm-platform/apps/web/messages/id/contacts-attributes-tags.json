@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Nama grup baru",
       "groupRequiredHint": "Setiap kontak yang diimpor masuk ke satu grup ini. Kolom grup dalam file diabaikan kecuali Anda memetakannya di atas.",
       "customProperties": "Properti kustom",
-      "customPropertiesHint": "Kolom yang judul headernya adalah nama properti, atau attr:key seperti yang ditulis ekspor, mengisi properti tersebut. Sel kosong mempertahankan nilai yang sudah dimiliki kontak."
+      "customPropertiesHint": "Kolom yang judul headernya adalah nama properti, atau attr:key seperti yang ditulis ekspor, mengisi properti tersebut. Sel kosong mempertahankan nilai yang sudah dimiliki kontak.",
+      "propertyFormat": {
+        "checkbox": "Tulis yes atau no. Juga diterima: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Pisahkan kunci opsi dengan koma, titik koma, atau garis tegak, misalnya vip, new_leads. Tulis kuncinya, bukan labelnya. Huruf besar dan kecil tidak dibedakan."
+      }
     },
     "detail": {
       "back": "Semua kontak",

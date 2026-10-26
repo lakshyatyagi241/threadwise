@@ -599,6 +599,10 @@
       "notInFile": "Not in file",
       "customProperties": "Custom properties",
       "customPropertiesHint": "A column whose header is the property's name, or attr:key as the export writes it, fills that property. A blank cell keeps the value the contact already has.",
+      "propertyFormat": {
+        "checkbox": "Write yes or no. Also accepted: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Separate the option keys with a comma, semicolon or pipe, for example vip, new_leads. Use the key, not the label. Case does not matter."
+      },
       "columnN": "Column {n}",
       "applyTitle": "Apply to every imported contact",
       "status": "Status",

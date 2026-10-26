@@ -57,8 +57,8 @@ Map a column to **Date of birth** to save it on the contact. Write it as year fi
 
 A column whose header is the name of one of your [contact properties](help:contact-properties), or its key, fills that property. The export writes the header as `attr:` followed by the key, for example `attr:loyalty_points`, and that header is read the same way. The preview lists every property the import can fill, with the column it reads. Choose another column for it, or pick **Not in file** to leave it alone.
 
-- A dropdown or multi-select must hold one of its options. Capitals do not matter, and a list is separated by commas, semicolons or pipes.
-- A number must be a number. A date must be written year first, for example 2026-03-31. A checkbox takes yes or no.
+- A dropdown or multi-select takes the option **keys**, not the labels: for example `vip, new_leads`. Capitals do not matter, and a multi-select list is separated by commas, semicolons or pipes.
+- A number must be a number. A date must be written year first, for example 2026-03-31. A checkbox takes yes or no, and also true or false, y or n, 1 or 0, x, on or off.
 - A value that does not fit its property rejects that row, with the reason "custom property value does not fit its type or options". The row is not imported.
 - A blank cell does not clear what the contact already has. A file never removes a value, and a contact keeps every property the file does not name.
 - Hidden, read only, inactive and calculated properties are not listed, because an import cannot fill them.

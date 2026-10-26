@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Tên nhóm mới",
       "groupRequiredHint": "Mọi liên hệ được nhập đều vào nhóm này. Cột nhóm riêng của tệp sẽ bị bỏ qua trừ khi bạn ánh xạ nó ở trên.",
       "customProperties": "Thuộc tính tùy chỉnh",
-      "customPropertiesHint": "Cột có tiêu đề là tên thuộc tính, hoặc attr:key như tệp xuất ghi, sẽ điền vào thuộc tính đó. Ô trống giữ nguyên giá trị mà liên hệ đã có."
+      "customPropertiesHint": "Cột có tiêu đề là tên thuộc tính, hoặc attr:key như tệp xuất ghi, sẽ điền vào thuộc tính đó. Ô trống giữ nguyên giá trị mà liên hệ đã có.",
+      "propertyFormat": {
+        "checkbox": "Nhập yes hoặc no. Cũng chấp nhận: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Ngăn cách các khóa tùy chọn bằng dấu phẩy, dấu chấm phẩy hoặc gạch đứng, ví dụ vip, new_leads. Nhập khóa, không nhập nhãn. Không phân biệt chữ hoa và chữ thường."
+      }
     },
     "detail": {
       "back": "Tất cả liên hệ",
