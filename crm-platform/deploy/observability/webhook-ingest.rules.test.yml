@@ -55,10 +55,11 @@ tests:
       - eval_time: 12m
         alertname: DbPoolSaturated
         exp_alerts:
-          - exp_labels: { severity: warning, service: api, pool: webhook }
+          - exp_labels: { severity: warning, owner: vedant, service: api, pool: webhook }
             exp_annotations:
               summary: 'The webhook DB pool of api is at its maximum with no idle connection'
               description: 'Early warning: DbPoolExhausted pages when callers are already waiting. Look for slow queries or a burst on one route (webhook rate above).'
+              runbook: 'docs/runbooks/db-and-route-alerts.md#dbpoolsaturated'
       - eval_time: 12m
         alertname: WabaIngestBacklogGrowing
         exp_alerts:

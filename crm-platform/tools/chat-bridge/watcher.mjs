@@ -17,6 +17,32 @@ const STMT_SQL = `select s.queryid::text as queryid, d.datname, r.rolname, s.cal
   from pg_stat_statements s left join pg_database d on d.oid=s.dbid left join pg_roles r on r.oid=s.userid
   where s.mean_exec_time >= $1 and s.query not ilike '%pg_stat_statements%' and s.query not ilike '%pg_stat_activity%' order by s.mean_exec_time desc limit 200`;
 
+// D-04: the mean of what each statement did in the last few minutes (delta of total time over delta of calls between two snapshots), not
+// the lifetime mean, so a query that turned slow an hour ago and one that is slow right now both show up and a long-fast query that had one
+// bad call does not. Counters only; the text is cut short, it is used only to skip maintenance statements.
+const WIN_SQL = `select queryid::text as queryid, calls::float8 as calls, total_exec_time, left(query, 160) as q
+  from pg_stat_statements where calls > 0 and query not ilike '%pg_stat_statements%' and query not ilike '%pg_stat_activity%'`;
+
+/**
+ * Per-statement mean over the interval between two snapshots (Maps queryid -> {calls, total}). A statement counts only with at least
+ * `minCalls` new calls (one slow call is not a trend) and only if the counters did not reset. A statement missing from `ref` is new since then. `skip(id, text)` drops maintenance statements.
+ * -> { maxMs, over, top } where `over` counts statements whose window mean is at least `thresholdMs`.
+ */
+export function windowedMeans(ref, cur, { minCalls = 3, thresholdMs = 120, skip = () => false } = {}) {
+  let maxMs = 0, over = 0;
+  const top = [];
+  for (const [id, now] of cur) {
+    const before = ref.get(id) ?? { calls: 0, total: 0 }; // absent from the baseline: first called after it, so all its calls are in the window
+    const dCalls = now.calls - before.calls;
+    if (dCalls < minCalls || now.total < before.total || skip(id, now.q ?? '')) continue;
+    const mean = (now.total - before.total) / dCalls;
+    maxMs = Math.max(maxMs, mean);
+    if (mean >= thresholdMs) { over++; top.push({ id, mean, calls: dCalls, q: now.q ?? '' }); }
+  }
+  top.sort((a, b) => b.mean - a.mean);
+  return { maxMs, over, top: top.slice(0, 5) };
+}
+
 export const cfg = (env) => ({
   intervalMs: Number(env.SLOW_POLL_SECONDS ?? 15) * 1000,
   runningSecs: Number(env.SLOW_RUNNING_SECONDS ?? 5),
@@ -29,6 +55,9 @@ export const cfg = (env) => ({
   hardSecs: Number(env.HARD_CANCEL_SECONDS ?? 120),
   idleBlockSecs: Number(env.IDLE_BLOCKER_SECONDS ?? 60),
   recurPolls: Number(env.STMT_RECURRING_POLLS ?? 3),
+  windowMs: Number(env.SLOW_WINDOW_SECONDS ?? 300) * 1000, // D-04: window of the statement mean
+  windowMeanMs: Number(env.SLOW_WINDOW_MEAN_MS ?? 120),
+  windowMinCalls: Number(env.SLOW_WINDOW_MIN_CALLS ?? 3),
 });
 
 // Pure classification of one pg_stat_activity row. waiterSecs = longest wait among sessions blocked by this pid.
@@ -62,6 +91,8 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
   const excludedQ = new Map(), MAINT = new RegExp(env.SLOW_EXCLUDE_STATEMENT_REGEX ?? '^\\s*(copy|vacuum|analyze|reindex|cluster|create|alter|drop|truncate|refresh\\s+materialized|checkpoint|lock\\s+table|set\\s|show\\s|begin|commit)\\b', 'i');
   let baselined = false, suppressed = 0, warnedNoStmts = false, offenders = [];
   metrics.set('crm_slow_query_max_seconds', 'gauge', 0);
+  metrics.set('crm_slow_query_window_mean_max_seconds', 'gauge', 0);
+  metrics.set('crm_slow_query_window_statements_over', 'gauge', 0);
   metrics.set('pg_stat_statements_available', 'gauge', 0);
   const emit = async (kind, key, msg, opts) => {
     const g = gate.allow(key);
@@ -90,6 +121,21 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
       const s = (await query('select calls, mean_exec_time, max_exec_time from pg_stat_statements where queryid=$1::bigint limit 1', [r.query_id])).rows[0];
       return s ? `${s.calls} completed calls, mean ${fmt(s.mean_exec_time, 0)} ms, max ${fmt(s.max_exec_time, 0)} ms` : 'no completed execution recorded yet (first run)';
     } catch { return 'unavailable'; }
+  }
+  const snaps = []; // pg_stat_statements snapshots, oldest first, none older than the window
+  async function windowPoll() {
+    try {
+      const t = now(), cur = new Map();
+      for (const r of (await query(WIN_SQL, [])).rows) cur.set(String(r.queryid), { calls: Number(r.calls), total: Number(r.total_exec_time), q: String(r.q ?? '') });
+      while (snaps.length && t - snaps[0].t > c.windowMs) snaps.shift();
+      const w = snaps.length ? windowedMeans(snaps[0].map, cur, { minCalls: c.windowMinCalls, thresholdMs: c.windowMeanMs, skip: (id, q) => excludedQ.has(id) || MAINT.test(q) }) : { maxMs: 0, over: 0, top: [] };
+      snaps.push({ t, map: cur });
+      metrics.set('crm_slow_query_window_mean_max_seconds', 'gauge', w.maxMs / 1000);
+      metrics.set('crm_slow_query_window_statements_over', 'gauge', w.over);
+      if (w.over > 0) log({ evt: 'slow_statement_window_mean', over: w.over, window_s: c.windowMs / 1000, top: w.top.map((x) => ({ mean_ms: Math.round(x.mean), calls: x.calls, query: sanitizeSql(x.q, 120) })) });
+    } catch (e) {
+      if (!['42P01', '55000', '42501', '0A000'].includes(e.code)) throw e; // pg_stat_statements missing: the statement pass already warned
+    }
   }
   async function poll() {
     let maxSecs = 0;
@@ -163,6 +209,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
         await send('slowquery', { text: `${suppressed} more slow-query events were held back by the rate limit (max ${c.perMinute}/min). See the Threadwise slow queries dashboard.` });
         metrics.inc('crm_slow_query_events_total', 'kind="digest"'); suppressed = 0;
       }
+      await windowPoll();
       metrics.set('crm_slow_query_max_seconds', 'gauge', maxSecs);
       metrics.set('crm_slow_query_watcher_last_poll_timestamp', 'gauge', now() / 1000);
     } catch (e) {
