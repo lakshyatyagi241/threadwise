@@ -27,6 +27,8 @@ type Tx = TenantTx;
 const OWN = `routing_meta->'legacy'->>'source' = 'waboo'`;
 
 const ts = (iso: string | null): string | null => (iso === null ? null : `${iso.slice(0, -1)}000`);
+/** the feed cut-over (reconcile/index.ts FEED_CUTOVER) in the text form tsCol produces: a string compare orders the two */
+const LIVE_SINCE = '2026-10-21T07:13:06.165671';
 const tsCol = (c: string, alias = c): string =>
   `to_char(${c} AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US') AS ${alias}`;
 const stable = (v: unknown): string =>
@@ -688,7 +690,8 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
         r.muuid !== null &&
         Number(r.mconv) === Number(r.lconv) &&
         r.lat === r.mat,
-      live: r.src === 'broadcast',
+      // only a broadcast the app sent after the feed cut-over: an older broadcast row that maps to no migrated message is still extra
+      live: r.src === 'broadcast' && r.mat !== null && r.mat >= LIVE_SINCE,
     });
   }
   let missingLedger = 0;

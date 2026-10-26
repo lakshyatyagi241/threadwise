@@ -488,12 +488,31 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       }
     }
 
-    // --- marketing subscriptions as the consent ledger holds them: the Subscription card and the send paths read the ledger, not the columns
+    // --- marketing subscriptions as the consent ledger holds them: the Subscription card and the send paths read the ledger, not the columns.
+    // Once per organization, like the settings step: the run record is the guard, so a core-load re-run does not rescan the contacts.
     {
-      const consent = await marketingConsent(owner.db, orgId);
-      o.log(
-        `  core  marketing consent: ${consent.events} event(s), ${consent.states} state(s) from the migrated subscriptions`,
-      );
+      const consentDone =
+        (
+          await withPrivileged(owner.db, (tx) =>
+            tx.execute(
+              sql`SELECT 1 FROM migration.run_log WHERE source_client = ${o.client} AND collection = '_org' AND step = 'consent'`,
+            ),
+          )
+        ).rows.length > 0;
+      if (consentDone)
+        o.log('  core  marketing consent: already written by an earlier run, left as it is');
+      else {
+        const consent = await marketingConsent(owner.db, orgId);
+        o.log(
+          `  core  marketing consent: ${consent.events} event(s), ${consent.states} state(s) from the migrated subscriptions`,
+        );
+        await withPrivileged(owner.db, (tx) =>
+          tx.execute(sql`
+            INSERT INTO migration.run_log (source_client, collection, step, run_id, last_key, state, counts)
+            VALUES (${o.client}, '_org', 'consent', 'core', 0, 'done', ${JSON.stringify(consent)}::jsonb)
+            ON CONFLICT (source_client, collection, step) DO NOTHING`),
+        );
+      }
     }
 
     // --- chat limits against open migrated chats: the app's routing skips an agent whose open assigned chats have reached chat_limit ------
