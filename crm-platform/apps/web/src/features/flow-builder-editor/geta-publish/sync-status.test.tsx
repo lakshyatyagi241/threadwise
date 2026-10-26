@@ -76,7 +76,7 @@ describe('Geta status beside the Published badge', () => {
 
   it('no credentials: the exact setup message with a link to the settings page', () => {
     const out = render({ kind: 'not_configured' });
-    expect(out).toContain('Published here; set up Geta publishing in settings to push it live.');
+    expect(out).toContain('Your flow is published and live. Pushing it to the Geta console as well is optional: set it up in settings if you use Geta.');
     expect(out).toContain('href="/flows/geta-publishing"');
     expect(out).toContain('data-state="not_configured"');
     expect(out).toContain('Dismiss');

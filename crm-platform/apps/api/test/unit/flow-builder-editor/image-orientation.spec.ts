@@ -17,6 +17,17 @@ describe('upright', () => {
     expect(meta.orientation).toBeUndefined();
   });
 
+  it('turns a PNG that carries the tag too', async () => {
+    const png = await sharp({ create: { width: 40, height: 20, channels: 3, background: '#33c' } })
+      .png()
+      .withMetadata({ orientation: 6 })
+      .toBuffer();
+    const out = await upright(png, 'image/png');
+    const meta = await sharp(out).metadata();
+    expect([meta.width, meta.height]).toEqual([20, 40]);
+    expect(meta.format).toBe('png');
+  });
+
   it('keeps a picture with no tag byte for byte', async () => {
     const src = await photo();
     expect(await upright(src, 'image/jpeg')).toBe(src);
