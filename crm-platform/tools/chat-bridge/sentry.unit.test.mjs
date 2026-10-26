@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createResolver } from './resolver.mjs';
 import { createChatApp } from './chat-app.mjs';
-import { startSentryPoller } from './sentry-poller.mjs';
+import { startSentryPoller, mirrorToSentry } from './sentry-poller.mjs';
 
 const TOKEN = 'sntrys_SECRET_TOKEN_123', T0 = Date.UTC(2026, 9, 23, 12, 0, 0);
 const iso = (t) => new Date(t).toISOString();
@@ -10,9 +10,10 @@ const issue = (o = {}) => ({ id: '101', shortId: 'WEB-1', title: 'TypeError: x i
 const EVENT = { entries: [{ type: 'exception', data: { values: [{ stacktrace: { frames: [{ filename: 'lib/x.js', lineNo: 1, function: 'lib', inApp: false }, { filename: 'src/a.ts', lineNo: 10, function: 'run', inApp: true }, { filename: 'src/<b>.ts', lineNo: 7, function: 'inner', inApp: true }] } }] } }] };
 
 async function rig({ token = TOKEN, env = {} } = {}) {
-  let clock = T0, list = [], failList = false, detail = {}; const urls = [], logs = [], creates = [], updates = [], posts = [];
+  let clock = T0, list = [], failList = false, detail = {}, commentStatus = 200; const urls = [], logs = [], creates = [], updates = [], posts = [], comments = [];
   const fetchImpl = async (url, o) => {
     urls.push({ url, auth: o?.headers?.authorization });
+    if (o?.method === 'POST') { comments.push({ url, auth: o.headers?.authorization, body: JSON.parse(o.body) }); return commentStatus === 200 ? { ok: true, status: 200, headers: { get: () => '' }, text: async () => '{}' } : { ok: false, status: commentStatus, headers: { get: () => '' }, text: async () => '' }; }
     const ok = (j, link) => ({ ok: true, status: 200, headers: { get: () => link ?? '' }, text: async () => JSON.stringify(j) });
     if (/\/events\/latest\//.test(url)) return ok(EVENT);
     if (/\/organizations\//.test(url)) return failList ? { ok: false, status: 500, headers: { get: () => '' }, text: async () => '' } : ok(list);
@@ -23,8 +24,9 @@ async function rig({ token = TOKEN, env = {} } = {}) {
   const app = createChatApp({ env: { CHAT_APP_ENABLED: 'true' }, api, verifier: {}, resolver, webhookSend: async () => {} });
   resolver.setOwnerHook((id, o) => app.syncCard(id, o)); resolver.setCardHook((c, b, o) => app.openCard(c, b, o));
   const poller = startSentryPoller({ resolver, env: { SENTRY_ORG: 'geta-ai-cj', ...env }, fetchImpl, log: (o) => logs.push(o), now: () => clock, readFile: () => { if (token == null) throw new Error('nofile'); return `${token}\n`; } });
+  mirrorToSentry(resolver, poller);
   const incs = () => resolver.listFull().filter((i) => i.kind === 'sentry_issue');
-  return { resolver, poller, urls, logs, creates, updates, posts, incs, set: (l) => { list = l; }, fail: (v) => { failList = v; }, detail, time: (t) => { clock = t; }, now: () => clock };
+  return { comments, setCommentStatus: (v) => { commentStatus = v; }, resolver, poller, urls, logs, creates, updates, posts, incs, set: (l) => { list = l; }, fail: (v) => { failList = v; }, detail, time: (t) => { clock = t; }, now: () => clock };
 }
 
 test('no token file or empty token: feature off, nothing fetched', async () => {
@@ -102,4 +104,30 @@ test('SENTRY_CHANNEL=sentry sends every Sentry issue (fatal and plain) to the Se
   await r.poller.tick(); await r.poller.tick(); await r.resolver.settle();
   assert.equal(r.creates.length, 2);
   assert.deepEqual(r.creates.map((c) => c.ch), ['sentry', 'sentry']);
+});
+
+test('the incident lifecycle is written onto the Sentry issue as comments: claim, PR, release', async () => {
+  const r = await rig(); r.set([]); await r.poller.tick(); r.set([issue()]); await r.poller.tick(); await r.resolver.settle();
+  const id = r.incs()[0].id; await r.resolver.claim(id, 'asha'); await r.resolver.raisePr(id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/9', number: 9, summary: 'fix' });
+  await r.resolver.setRelease('abc1234', [9]); await new Promise((res) => setImmediate(res));
+  assert.ok(r.comments.length >= 3, `claim, PR and release each comment (got ${r.comments.length})`);
+  assert.ok(r.comments.every((c) => c.url === 'https://sentry.io/api/0/issues/101/comments/' && c.auth === `Bearer ${TOKEN}`));
+  const text = r.comments.map((c) => c.body.text).join('\n');
+  assert.match(text, /asha/); assert.match(text, /#9|pull\/9/); assert.ok(r.comments.every((c) => c.body.text.startsWith('Threadwise bot: ') && c.body.text.length <= 520));
+  assert.ok(!text.includes(TOKEN), 'the token is never in a comment');
+});
+test('a refused comment (read-only token) turns comments off for good; the incident flow is unaffected', async () => {
+  const r = await rig(); r.setCommentStatus(403); r.set([]); await r.poller.tick(); r.set([issue()]); await r.poller.tick(); await r.resolver.settle();
+  const id = r.incs()[0].id; await r.resolver.claim(id, 'asha'); await new Promise((res) => setImmediate(res));
+  await r.resolver.raisePr(id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/9', number: 9, summary: 'fix' }); await new Promise((res) => setImmediate(res));
+  assert.equal(r.comments.length, 1, 'one refused attempt, then no more');
+  assert.ok(r.logs.some((l) => l.evt === 'sentry_comment_disabled' && l.status === 403));
+  assert.equal(r.resolver.get(id).status, 'pr_raised');
+});
+test('only Sentry incidents are mirrored; an invalid issue id or a missing token posts nothing', async () => {
+  const r = await rig(); r.set([]); await r.poller.tick();
+  assert.equal(await r.poller.comment('../x', 'hi'), false); assert.equal(await r.poller.comment('abc', 'hi'), false); assert.equal(r.comments.length, 0);
+  const off = await rig({ token: null }); assert.equal(await off.poller.comment('101', 'hi'), false); assert.equal(off.comments.length, 0);
+  const d = await r.resolver.handle({ playbook: 'deploy_failure', kind: 'deploy_failure', key: 'deploy:abc', threadKey: 'deploy-abc', channel: 'deploy', diagnosis: 'x', message: 'x', meta: { attemptedSha: 'abc' } });
+  await r.resolver.claim(d.id, 'asha'); await new Promise((res) => setImmediate(res)); assert.equal(r.comments.length, 0, 'a deploy failure is never written to Sentry');
 });
