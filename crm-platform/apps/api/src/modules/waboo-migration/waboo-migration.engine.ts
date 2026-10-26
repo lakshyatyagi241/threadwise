@@ -9,6 +9,7 @@ import {
   type LatestDry,
   type PipelineResult,
   type RunMode,
+  type StepEvent,
 } from './waboo-migration.rules';
 
 /**
@@ -26,6 +27,8 @@ export interface RunHead {
   /** testing switch: leave the WhatsApp number out */
   skipWhatsapp: boolean;
   status: string;
+  /** the steps saved so far (a resumed run starts from them) */
+  steps?: WabooMigrationStep[];
 }
 
 export interface Finish {
@@ -49,22 +52,41 @@ export interface ExecStore {
 export type ExecOutcome = 'completed' | 'red' | 'failed' | 'blocked' | 'skipped' | 'busy';
 
 /**
+ * A step event the saved steps already show. A resumed follower replays the job's events from the start; those are skipped, so the
+ * steps keep the times they were first written with (applyStep would move a finished step's finish time to the resume).
+ */
+const alreadyApplied = (prev: WabooMigrationStep | undefined, ev: StepEvent): boolean =>
+  prev !== undefined &&
+  prev.status === ev.status &&
+  (ev.message ?? prev.message ?? null) === (prev.message ?? null) &&
+  Object.entries(ev.counts).every(([k, v]) => prev.counts[k] === v);
+
+/**
  * Runs one queued run. A load needs no earlier dry run: the pipeline starts with its own rehearsal and stops before it writes anything
  * when that is not clean, so a bad organization ends as a failed run with nothing loaded.
  */
 export async function executeRun(
-  d: { store: ExecStore; runner: Runner; now?: () => Date; timeoutMin: number },
+  d: { store: ExecStore; runner: Runner; now?: () => Date; timeoutMin: number; resume?: boolean },
   uuid: string,
 ): Promise<ExecOutcome> {
   const now = d.now ?? (() => new Date());
   const head = await d.store.peek(uuid);
-  if (!head || head.status !== 'queued') return 'skipped';
+  if (!head) return 'skipped';
+  // A remote run still running on its agent when the worker that followed it restarted: recover keeps it alive and re-enqueues it,
+  // and it is followed again from the start of the job's events (see alreadyApplied). Nothing else is ever resumed.
+  const resuming = d.resume === true && head.status === 'running';
+  if (!resuming && head.status !== 'queued') return 'skipped';
 
-  const run = await d.store.begin(uuid);
-  if (run === 'busy') return 'busy';
-  if (!run) return 'skipped';
+  let run: RunHead;
+  if (resuming) run = head;
+  else {
+    const began = await d.store.begin(uuid);
+    if (began === 'busy') return 'busy';
+    if (!began) return 'skipped';
+    run = began;
+  }
 
-  let steps: WabooMigrationStep[] = [];
+  let steps: WabooMigrationStep[] = resuming ? (head.steps ?? []) : [];
   let result: PipelineResult | null = null;
   let startError: string | null = null;
   try {
@@ -78,6 +100,8 @@ export async function executeRun(
       },
       async (ev) => {
         if (ev.event !== 'step') return;
+        const prev = steps.find((s) => s.name === ev.name);
+        if (resuming && alreadyApplied(prev, ev)) return;
         steps = applyStep(steps, ev, now());
         await d.store.saveSteps(run.id, steps);
       },
@@ -145,14 +169,20 @@ export async function runBatch(
 // ---- recovery on worker start ----
 
 export interface SweepStore {
-  /** running longer than the timeout belonged to a worker that died: failed. Returns how many. */
-  failStale(timeoutMs: number): Promise<number>;
+  /** running longer than the timeout belonged to a worker that died: failed, unless the run is in `keep`. Returns how many. */
+  failStale(timeoutMs: number, keep: string[]): Promise<number>;
+  /**
+   * Remote runner only: the running runs whose agent is still following them (its job queued, or claimed and reporting recently).
+   * They are resumed by the worker that just started instead of being failed.
+   */
+  resumableRemote?(): Promise<string[]>;
   /**
    * Remote runner only. The worker that was following a running run is gone (it just started), and the agent would keep loading with
-   * nobody reading it while the one-running-run rule lets a new run start. Fails every running run and abandons the jobs of runs that
-   * are no longer running, so the agent stops the pipeline at its next report. Returns how many runs it failed.
+   * nobody reading it while the one-running-run rule lets a new run start. Fails every running run that is not in `keep` (the ones an
+   * agent still follows) and abandons the jobs of runs that are no longer running, so the agent stops the pipeline at its next report.
+   * Returns how many runs it failed.
    */
-  failOrphanedRemote?(): Promise<number>;
+  failOrphanedRemote?(keep: string[]): Promise<number>;
   /** Standalone runs still queued. */
   pendingRuns(): Promise<Array<{ uuid: string; runAt: Date | null }>>;
   /** Batches still queued or running (resumable from their rows). */
@@ -163,7 +193,10 @@ export interface JobEnqueuer {
   ensure(kind: 'migrate' | 'batch', uuid: string, delayMs: number): Promise<boolean>;
 }
 
-/** Re-enqueues scheduled work whose job was lost (worker or Redis down at fire time) and fails stuck running runs. Safe to repeat. */
+/**
+ * Re-enqueues scheduled work whose job was lost (worker or Redis down at fire time), fails stuck running runs and resumes the remote
+ * runs an agent is still following (a release restarts the worker under a running migration; it must not kill it). Safe to repeat.
+ */
 export async function recover(
   d: {
     store: SweepStore;
@@ -176,9 +209,11 @@ export async function recover(
   delay: (runAt: Date | null, now: Date) => number,
 ): Promise<{ failed: number; requeued: number }> {
   const now = (d.now ?? (() => new Date()))();
-  let failed = await d.store.failStale(d.timeoutMs);
-  if (d.remote && d.store.failOrphanedRemote) failed += await d.store.failOrphanedRemote();
+  const keep = d.remote && d.store.resumableRemote ? await d.store.resumableRemote() : [];
+  let failed = await d.store.failStale(d.timeoutMs, keep);
+  if (d.remote && d.store.failOrphanedRemote) failed += await d.store.failOrphanedRemote(keep);
   let requeued = 0;
+  for (const uuid of keep) if (await d.jobs.ensure('migrate', uuid, 0)) requeued++;
   for (const r of await d.store.pendingRuns())
     if (await d.jobs.ensure('migrate', r.uuid, delay(r.runAt, now))) requeued++;
   for (const b of await d.store.pendingBatches())
