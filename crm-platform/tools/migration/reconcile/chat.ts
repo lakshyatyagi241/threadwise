@@ -619,7 +619,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     alarm(
       `PARTITION: ${dflt} message(s) of this organization sit in messages_default (a monthly partition is missing)`,
     );
-  const notMapped = `NOT EXISTS (SELECT 1 FROM migration.id_map i WHERE i.source_client = '${client.replace(/'/g, "''")}' AND i.source_collection = 'chathistory' AND i.target_table = 'messages' AND i.target_id = m.id AND i.target_uuid = m.uuid)`;
+  const notMapped = `NOT EXISTS (SELECT 1 FROM migration.id_map i WHERE i.source_client = '${client.replace(/'/g, "''")}' AND i.source_collection = 'chathistory' AND i.target_table = 'messages' AND i.target_id = m.id AND i.target_uuid = m.uuid AND i.target_org_id = ${orgId})`;
   const queued = await q1(
     `SELECT count(*) AS n FROM messages m WHERE m.org_id = ${orgId} AND m.status NOT IN ${a.allowExtraRows ? "('received', 'sent', 'delivered', 'read', 'failed')" : "('received', 'sent')"} AND NOT ${notMapped}`,
   );
@@ -651,13 +651,14 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     tx.execute(
       sql.raw(`
       SELECT ch.external_id AS ext, l.key, l.kind, m.uuid::text AS muuid, m.conversation_id AS mconv, l.conversation_id AS lconv,
-             ${tsCol('l.message_created_at', 'lat')}, ${tsCol('m.created_at', 'mat')}
+             COALESCE(m.meta->>'source', '') AS src, ${tsCol('l.message_created_at', 'lat')}, ${tsCol('m.created_at', 'mat')}
       FROM message_ledger l JOIN channels ch ON ch.org_id = l.org_id AND ch.id = l.channel_id
       LEFT JOIN messages m ON m.org_id = l.org_id AND m.id = l.message_id AND m.created_at = l.message_created_at
       WHERE l.org_id = ${orgId}`),
     ),
   );
-  const gotLedger = new Map<string, { muuid: string | null; ok: boolean }>();
+  // `live`: the row belongs to a broadcast the app sent after the import (its mirror writes one ledger row per send), not to the import
+  const gotLedger = new Map<string, { muuid: string | null; ok: boolean; live: boolean }>();
   for (const r of rowsOf<{
     ext: string;
     key: string;
@@ -665,6 +666,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     muuid: string | null;
     mconv: number | string | null;
     lconv: number | string;
+    src: string;
     lat: string;
     mat: string | null;
   }>(led)) {
@@ -675,6 +677,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
         r.muuid !== null &&
         Number(r.mconv) === Number(r.lconv) &&
         r.lat === r.mat,
+      live: r.src === 'broadcast',
     });
   }
   let missingLedger = 0;
@@ -689,7 +692,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       `LEDGER_MISSING: ${missingLedger} message(s) with a provider id have no message_ledger row`,
     );
   if (!a.allowExtraRows) {
-    const extra = [...gotLedger.keys()].filter((k) => !wantLedger.has(k)).length;
+    const extra = [...gotLedger].filter(([k, g]) => !wantLedger.has(k) && !g.live).length;
     if (extra > 0)
       alarm(`EXTRA_ROWS: ${extra} message_ledger row(s) belong to no migrated message`);
   }

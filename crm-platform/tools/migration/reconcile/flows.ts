@@ -711,6 +711,7 @@ export async function verifyFlows(a: Args): Promise<void> {
     'NO_PUBLISHED_VERSION',
     'VERSION_EMPTY',
     'PROPERTY_NOT_FOUND',
+    'PROPERTY_READ_ONLY',
     'DEFAULT_TRIGGER_WORD',
     'JOURNEY_DIVERGES',
   ])

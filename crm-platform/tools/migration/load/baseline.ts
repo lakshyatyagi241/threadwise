@@ -91,8 +91,12 @@ const OF_PROVISIONED_USER = (col: string): string =>
 const BASELINE_FILTER: Record<string, string> = {
   users: ` AND NOT ${MIGRATED_USER('x')}`,
   roles: ' AND x.system_key IS NOT NULL',
+  // the platform re-applies its preset baseline to every workspace in a migration (workspace_preset_baseline): a grant of a system role that
+  // the baseline holds is the platform's row, not provisioning's, so it is left out (a later platform migration adds such rows to old orgs)
   role_grants:
-    ' AND EXISTS (SELECT 1 FROM roles r WHERE r.org_id = x.org_id AND r.id = x.role_id AND r.system_key IS NOT NULL)',
+    ' AND EXISTS (SELECT 1 FROM roles r WHERE r.org_id = x.org_id AND r.id = x.role_id AND r.system_key IS NOT NULL)' +
+    ' AND NOT EXISTS (SELECT 1 FROM roles r JOIN workspace_preset_baseline b ON b.preset_key = r.system_key AND b.permission_key = x.permission_key' +
+    ' WHERE r.org_id = x.org_id AND r.id = x.role_id)',
   user_roles: OF_PROVISIONED_USER('user_id'),
   user_security: OF_PROVISIONED_USER('user_id'),
   user_profiles: OF_PROVISIONED_USER('user_id'),

@@ -153,9 +153,9 @@ export const groups: HandlerSpec = {
   update: {},
   tables: {
     contact_groups: {
-      columns: [c('name', 'text'), c('note', 'text'), c('color', 'text'), ...TS_COLS],
+      columns: [c('name', 'text'), c('note', 'text'), c('color', 'text'), c('created_by', 'bigint'), ...TS_COLS],
       fp: ['name'],
-      constants: { created_by: null, row_version: 1 },
+      constants: { row_version: 1 },
     },
   },
   fields: {
@@ -166,8 +166,8 @@ export const groups: HandlerSpec = {
     modified_time: 'col:updated_at',
     deleted_time: 'drop:soft-delete timestamp; deleted lists are excluded and counted',
     is_deleted: 'drop:soft-delete flag',
-    created_by: 'drop:a Waboo user; contact_groups.created_by is a users FK (users are phase 2)',
-    user_id: 'drop:a Waboo user; contact_groups.created_by is a users FK (users are phase 2)',
+    created_by: 'col:created_by (the migrated user, when the id resolves)',
+    user_id: 'drop:the same user as created_by under another name',
   },
   transform(doc: Doc, ctx: Ctx): Outcome {
     if (isDeleted(doc))
@@ -180,6 +180,8 @@ export const groups: HandlerSpec = {
         reason: 'list name is empty or longer than 191 characters',
       };
     const t = times(doc, ctx.fallbackAt);
+    // the creator is a migrated user when the Waboo id resolves; otherwise NULL (the list stays, the creator is not shown)
+    const creator = doc.created_by !== undefined && doc.created_by !== null ? ctx.ref('user', doc.created_by) : undefined;
     return {
       kind: 'rows',
       soft: t.soft,
@@ -187,7 +189,7 @@ export const groups: HandlerSpec = {
         {
           table: 'contact_groups',
           sub: '',
-          row: { name, note: null, color: null, created_at: t.created, updated_at: t.updated },
+          row: { name, note: null, color: null, created_by: creator?.id ?? null, created_at: t.created, updated_at: t.updated },
         },
       ],
     };

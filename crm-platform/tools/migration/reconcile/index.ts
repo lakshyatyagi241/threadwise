@@ -1295,7 +1295,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
           const counted = Number(
             (
               (
-                await tx.execute(sql`SELECT count(*)::int AS n FROM messages WHERE org_id = ${orgId}
+                await tx.execute(sql`SELECT count(*)::int AS n FROM messages WHERE org_id = ${orgId} AND deleted_at IS NULL
                   AND created_at >= ${FEED_CUTOVER}::timestamptz AND kind NOT IN ('system', 'reaction')
                   AND NOT (COALESCE(meta->>'source', '') = 'broadcast' AND meta->>'broadcast_id' IS NOT NULL)
                   AND NOT (COALESCE(meta->>'source', '') = 'campaign' AND (meta->>'campaign_id' IS NOT NULL OR COALESCE(provider_message_id, '') LIKE 'campaign:%'))`)
@@ -1303,7 +1303,8 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             ).n,
           );
           const events = Number(
-            ((await tx.execute(sql`SELECT count(*)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7`)).rows[0] as { n: number }).n,
+            // net: a message deleted or soft-deleted after the import writes a -1 event (2030_msg_feed_deletes), so the sum is what is still shown
+            ((await tx.execute(sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7`)).rows[0] as { n: number }).n,
           );
           return events === counted;
         });

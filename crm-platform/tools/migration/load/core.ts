@@ -11,7 +11,7 @@ import { docKeys, type Doc } from '../util';
 import { bumpRolesVersion, featureResolver, planRow } from './access';
 import { digest } from './baseline';
 import { DEFAULT_TIMEZONE } from './org';
-import { applySettings, planSettings, type WabooSettings } from './orgsettings';
+import { applySettings, marketingConsent, planSettings, type WabooSettings } from './orgsettings';
 import { connect, sql, withPrivileged, withTenant } from './db';
 
 /**
@@ -480,6 +480,12 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
             ON CONFLICT (source_client, collection, step) DO NOTHING`),
         );
       }
+    }
+
+    // --- marketing subscriptions as the consent ledger holds them: the Subscription card and the send paths read the ledger, not the columns
+    {
+      const consent = await marketingConsent(owner.db, orgId);
+      o.log(`  core  marketing consent: ${consent.events} event(s), ${consent.states} state(s) from the migrated subscriptions`);
     }
 
     // --- chat limits against open migrated chats: the app's routing skips an agent whose open assigned chats have reached chat_limit ------

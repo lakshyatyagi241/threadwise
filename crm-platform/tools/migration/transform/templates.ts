@@ -2,6 +2,31 @@ import { cutText, isDeleted, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
 
+const asDoc = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
+
+/**
+ * A CAROUSEL component's cards as the app stores them (apps/api message-templates/template-payload.ts, TemplateCard): the picture is
+ * Meta's copy of the example (`headerHandle`), the file is ours (`image`) and a migrated card has none. Meta's buttons are kept as they are.
+ */
+function storedCards(cards: unknown): Doc[] | null {
+  if (!Array.isArray(cards)) return null;
+  return cards.map((card) => {
+    const comps = (Array.isArray(asDoc(card).components) ? asDoc(card).components : []) as Doc[];
+    const header = asDoc(comps.find((x) => x.type === 'HEADER'));
+    const text = asDoc(comps.find((x) => x.type === 'BODY'));
+    const btns = asDoc(comps.find((x) => x.type === 'BUTTONS'));
+    const handles = asDoc(header.example).header_handle;
+    const handle = Array.isArray(handles) && typeof handles[0] === 'string' ? handles[0] : null;
+    return {
+      format: String(header.format ?? 'IMAGE').toUpperCase() === 'VIDEO' ? 'video' : 'image',
+      image: null,
+      headerHandle: handle,
+      body: str(text.text) ?? '',
+      buttons: Array.isArray(btns.buttons) ? btns.buttons : null,
+    };
+  });
+}
+
 /**
  * broadcast_templates -> wa_templates.
  *
@@ -108,7 +133,8 @@ export const templates: HandlerSpec = {
       fp: ['template_name', 'language', 'template_body', 'status', 'meta_template_id'],
       // the template-quality step (pilot/templates/quality.cjs) writes the Meta rating, and with it updated_at and row_version: its own
       // step output is the check for those columns
-      skipCompare: ['quality_score', 'updated_at', 'row_version'],
+      // provider_config_id is written by the cutover, when the number the templates belong to is connected (load/cutover.ts step 3)
+      skipCompare: ['quality_score', 'updated_at', 'row_version', 'provider_config_id'],
       constants: { row_version: 1 },
     },
   },
@@ -160,7 +186,7 @@ export const templates: HandlerSpec = {
             const { type: bt, ...rest } = b;
             return { ...rest, type: String(bt ?? '').toUpperCase() };
           });
-        } else if (type === 'CAROUSEL') carousel = comp.cards ?? null;
+        } else if (type === 'CAROUSEL') carousel = storedCards(comp.cards);
         else throw new Unsupported(`component "${type}" is not one WaDesk has`);
       }
       // AUTHENTICATION bodies are fixed by Meta and carry no text
@@ -209,7 +235,7 @@ export const templates: HandlerSpec = {
             rejection_reason: reason && reason.toUpperCase() !== 'NONE' ? reason : null,
             category: metaCategory.toLowerCase(),
             meta_category: metaCategory,
-            template_type: auth ? 'auth' : attachment ? 'media' : 'standard',
+            template_type: auth ? 'auth' : carousel ? 'carousel' : attachment ? 'media' : 'standard',
             attachment_type: attachment,
             language,
             parameter_format: named ? 'NAMED' : 'POSITIONAL',

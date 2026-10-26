@@ -92,6 +92,15 @@ export const BUILT_IN_ALIAS: Readonly<Record<string, string>> = {
   street_address: 'address',
 };
 
+/** the app's length caps for the reserved text keys the contact form keeps in customFields (apps/api crm/contacts/form-field-limits.ts) */
+export const FORM_FIELD_LIMITS: Readonly<Record<string, number>> = {
+  title: 50,
+  middle_name: 191,
+  language: 80,
+  address: 1000,
+  memo: 2000,
+};
+
 /**
  * Waboo properties whose key the app reserves (a system attribute or a contact-page key, packages/contracts attribute.ts): the app refuses
  * a custom property with that key. They are created and filled under the same key with this prefix, so their values stay visible. Not an
@@ -460,7 +469,16 @@ export const contacts: HandlerSpec = {
         });
         continue;
       }
-      setOwn(data, alias ?? target, optionValueOf(k, s.value, ctx.idx));
+      const key = alias ?? target;
+      let value = optionValueOf(k, s.value, ctx.idx);
+      // the app caps these reserved text keys (form-field-limits.ts): a longer value is cut here with a soft issue, instead of being
+      // refused by the next save of the contact
+      const cap = FORM_FIELD_LIMITS[key];
+      if (cap !== undefined && typeof value === 'string' && value.length > cap) {
+        soft.push({ code: 'TRUNCATED', reason: `${key} longer than the app's ${cap}-character limit`, detail: value });
+        value = cutText(value, cap);
+      }
+      setOwn(data, key, value);
     }
     // Waboo lists Created Time and Modified Time as contact fields; WaDesk keeps them in created_at / updated_at. The same instants are also
     // kept in data (ISO text) so the two read-only field rows of the contact page have a value to show (README, "Contact properties").

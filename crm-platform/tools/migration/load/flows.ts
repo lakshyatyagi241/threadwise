@@ -34,6 +34,14 @@ export async function contactFieldKeys(db: Database, orgId: number): Promise<Set
   return new Set((r.rows as Array<{ key: string }>).map((x) => x.key));
 }
 
+/** keys of the contact fields the app refuses a flow write to (is_read_only): see flows/plan.ts PROPERTY_READ_ONLY */
+export async function readOnlyFieldKeys(db: Database, orgId: number): Promise<Set<string>> {
+  const r = await withTenant(db, { orgId }, (tx) =>
+    tx.execute(sql`SELECT key FROM fields WHERE org_id = ${orgId} AND module_key = 'contacts' AND is_read_only`),
+  );
+  return new Set((r.rows as Array<{ key: string }>).map((x) => x.key));
+}
+
 /** The plan's caps for flows and chatbot widgets (0 = unlimited), the way PlanEntitlementService resolves a limit: override, else plan. */
 export async function planCaps(
   db: Database,
@@ -71,6 +79,7 @@ export async function planFlows(a: {
     settings: a.settings,
     fallbackAt: a.env.fallbackAt,
     contactFieldKeys: await contactFieldKeys(a.env.db, a.env.orgId),
+    readOnlyFieldKeys: await readOnlyFieldKeys(a.env.db, a.env.orgId),
   });
 }
 
