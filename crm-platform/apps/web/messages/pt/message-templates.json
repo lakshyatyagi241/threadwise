@@ -378,10 +378,13 @@
           "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões."
         },
         "catalogHint": "Abre o seu catálogo do WhatsApp. O botão diz “Ver catálogo” e deve ser o único botão.",
-        "flowId": "ID do WhatsApp Flow",
-        "flowIdHint": "O ID numérico de um WhatsApp Flow publicado, no gerenciador de Flows da Meta.",
-        "screen": "Tela inicial",
-        "screenHint": "O ID da tela em que o formulário abre, por exemplo WELCOME."
+        "flowPick": "Formulário do WhatsApp",
+        "flowPickHint": "Escolha um dos seus formulários do WhatsApp publicados. O botão o abre dentro do WhatsApp.",
+        "flowChoose": "Escolha um formulário do WhatsApp",
+        "flowLoading": "Carregando formulários…",
+        "flowNone": "Você ainda não tem formulários do WhatsApp publicados.",
+        "flowNoneLink": "Crie e publique um",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Salvo, mas a Meta recusou o modelo.",

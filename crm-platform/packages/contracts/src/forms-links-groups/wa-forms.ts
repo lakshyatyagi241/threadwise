@@ -217,6 +217,10 @@ export const waFormPickerItemSchema = z.object({
   title: z.string(),
   status: waFormStatusSchema,
   isPublished: z.boolean(),
+  /** Meta's id of the published Flow (what a template's Form button points at); null until the form is published. */
+  metaFlowId: z.string().nullable().default(null),
+  /** The screen the Flow opens on: the first one (a template's Form button needs it). */
+  firstScreenId: z.string().default('A'),
 });
 export type WaFormPickerItem = z.infer<typeof waFormPickerItemSchema>;
 export const waFormPickerListSchema = z.object({ forms: z.array(waFormPickerItemSchema) });
