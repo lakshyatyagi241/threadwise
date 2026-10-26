@@ -109,6 +109,11 @@ export function rememberVariableSource(name: string, source: ApiLibraryVariable[
   hintedSources.set(name.trim().toLowerCase(), source);
 }
 
+/** Forgets what was remembered: a form that opens starts with no hints, so one API's choice never decides another's (and never outlives the form). */
+export function forgetVariableSources(): void {
+  hintedSources.clear();
+}
+
 /** The payload as a value, or undefined when the text is not a JSON object or array. */
 /**
  * Quotes every `{{token}}` that stands alone as a JSON value (outside any string), as a string that starts with the raw mark, so the
