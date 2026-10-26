@@ -88,16 +88,47 @@ export class FieldsController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    // The browser keeps the list and asks "still current?" each time a form opens: a matching If-None-Match gets a 304 from a one-table
-    // stamp, without running the four-join query or building the body.
-    const tag = await this.fields.optionDependenciesTag(query);
+    return this.whenChanged(req, res, await this.fields.optionDependenciesTag(query), () =>
+      this.fields.listModuleOptionDependencies(query),
+    );
+  }
+
+  @Get('option-dependencies/grouped')
+  @RequirePermission(...anyPropertyPermission('read'))
+  @ApiOperation({
+    summary:
+      'The option-level (cascade) pairs of a module grouped by parent option, about a tenth of the size of the flat list',
+  })
+  async listModuleOptionDependencyGroups(
+    @Query(zodPipe(fieldUsageQuerySchema)) query: FieldUsageQuery,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.whenChanged(
+      req,
+      res,
+      await this.fields.optionDependenciesTag(query, 'grouped'),
+      () => this.fields.listModuleOptionDependencyGroups(query),
+    );
+  }
+
+  /**
+   * The pair lists can hold tens of thousands of pairs and change rarely, and every contact or company form asks for them: the browser
+   * keeps its copy and asks "still current?". A matching If-None-Match gets a 304 from a one-table stamp, without building the list.
+   */
+  private async whenChanged<T>(
+    req: Request,
+    res: Response,
+    tag: string,
+    load: () => Promise<T>,
+  ): Promise<T | undefined> {
     res.setHeader('ETag', tag);
     res.setHeader('Cache-Control', 'private, no-cache');
     if (req.headers['if-none-match'] === tag) {
       res.status(HttpStatus.NOT_MODIFIED);
       return undefined;
     }
-    return this.fields.listModuleOptionDependencies(query);
+    return load();
   }
 
   @Get(':id')

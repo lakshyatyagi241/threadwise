@@ -130,6 +130,42 @@ describe('cascading choices', () => {
     expect(after.body.length).toBeGreaterThan(0);
   });
 
+  it('the grouped list holds exactly the pairs of the flat list, and has its own ETag and 304', async () => {
+    const flat = await api.as(t.admin).get('/v2/fields/option-dependencies?moduleKey=contacts');
+    const grouped = await api
+      .as(t.admin)
+      .get('/v2/fields/option-dependencies/grouped?moduleKey=contacts');
+    expect(grouped.status, JSON.stringify(grouped.body)).toBe(200);
+
+    const key = (p: { parentOptionId: string; childFieldId: string; childOptionId: string }) =>
+      `${p.parentOptionId}|${p.childFieldId}|${p.childOptionId}`;
+    const fromGroups = (
+      grouped.body as Array<{
+        parentOptionId: string;
+        childFieldId: string;
+        childOptionIds: string[];
+      }>
+    ).flatMap((g) =>
+      g.childOptionIds.map((childOptionId) =>
+        key({ parentOptionId: g.parentOptionId, childFieldId: g.childFieldId, childOptionId }),
+      ),
+    );
+    expect(fromGroups.sort()).toEqual(
+      (flat.body as Array<Parameters<typeof key>[0]>).map(key).sort(),
+    );
+    expect(fromGroups.length).toBeGreaterThan(0);
+
+    const tag = grouped.headers.etag as string;
+    expect(tag).toMatch(/^W\/"fodg-/);
+    expect(tag).not.toBe(flat.headers.etag);
+    const same = await api
+      .as(t.admin)
+      .get('/v2/fields/option-dependencies/grouped?moduleKey=contacts')
+      .set('If-None-Match', tag);
+    expect(same.status).toBe(304);
+    expect(same.text ?? '').toBe('');
+  });
+
   it('a pair whose option is not a choice of the named field is 422, and nothing is stored', async () => {
     const res = await putCascade('city', {
       dependsOnFieldId: ids.region,
