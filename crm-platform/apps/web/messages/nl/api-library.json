@@ -16,8 +16,8 @@
       "failed": "Mislukt",
       "source": {
         "test": "Test",
-        "flow": "Flow",
-        "automation": "Automatisering"
+        "flow": "Eenvoudige flow",
+        "automation": "Geavanceerde flow"
       },
       "errorKind": {
         "blocked": "Adres geblokkeerd",
@@ -327,6 +327,7 @@
       "functionHint": "Pas de payload met JavaScript aan voordat hij wordt verzonden. Optioneel.",
       "plainHttpWarning": "Dit adres begint met http://, dus het wachtwoord of de sleutel in uw headers zou onversleuteld worden verzonden. Gebruik https:// als de server dat ondersteunt.",
       "importSkipped": "Het geplakte commando verstuurt ook een bestand ({names}). Een bestand kan hier niet worden geïmporteerd en is dus weggelaten. Al het andere is ingevuld.",
+      "importForm": "Het geplakte commando stuurt zijn gegevens als webformulier (a=1&b=2). Deze API stuurt JSON of multipart form-data, dus de formuliervelden zijn omgezet in een JSON-object. Controleer of de API die je aanroept JSON accepteert.",
       "payloadTypedHint": "Om een echt getal of ja/nee te versturen, schrijf je de variabele zonder aanhalingstekens: {example}."
     },
     "test": {

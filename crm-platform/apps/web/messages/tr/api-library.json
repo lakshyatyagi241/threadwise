@@ -16,8 +16,8 @@
       "failed": "Başarısız",
       "source": {
         "test": "Test",
-        "flow": "Akış",
-        "automation": "Otomasyon"
+        "flow": "Basit akış",
+        "automation": "Gelişmiş akış"
       },
       "errorKind": {
         "blocked": "Adres engellendi",
@@ -327,6 +327,7 @@
       "functionHint": "Gönderilmeden önce yükü JavaScript ile yeniden biçimlendirin. İsteğe bağlı.",
       "plainHttpWarning": "Bu adres http:// ile başlıyor, bu yüzden başlıklarınızdaki parola veya anahtar şifrelenmeden iletilir. Sunucu destekliyorsa https:// kullanın.",
       "importSkipped": "Yapıştırılan komut ayrıca bir dosya ({names}) gönderiyor. Burada dosya içe aktarılamaz, bu yüzden atlandı. Diğer her şey dolduruldu.",
+      "importForm": "Yapıştırılan komut verilerini web formu (a=1&b=2) olarak gönderiyor. Bu API JSON veya multipart form-data gönderir; bu yüzden form alanları bir JSON nesnesine çevrildi. Çağırdığınız API'nin JSON kabul ettiğini kontrol edin.",
       "payloadTypedHint": "Gerçek bir sayı veya evet/hayır göndermek için değişkeni tırnak işaretsiz yazın: {example}."
     },
     "test": {

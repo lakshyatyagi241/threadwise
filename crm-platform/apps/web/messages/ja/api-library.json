@@ -16,8 +16,8 @@
       "failed": "失敗",
       "source": {
         "test": "テスト",
-        "flow": "フロー",
-        "automation": "オートメーション"
+        "flow": "シンプルフロー",
+        "automation": "アドバンストフロー"
       },
       "errorKind": {
         "blocked": "アドレスがブロックされています",
@@ -327,6 +327,7 @@
       "functionHint": "送信前に JavaScript でペイロードを整形できます。任意です。",
       "plainHttpWarning": "このアドレスは http:// で始まるため、ヘッダーのパスワードやキーが暗号化されずに送信されます。サーバーが対応していれば https:// を使ってください。",
       "importSkipped": "貼り付けたコマンドはファイル（{names}）も送信します。ここではファイルを取り込めないため省略しました。それ以外はすべて入力されています。",
+      "importForm": "貼り付けたコマンドはデータをWebフォーム形式（a=1&b=2）で送ります。このAPIはJSONまたはmultipart form-dataで送るため、フォームの項目をJSONオブジェクトに変換しました。呼び出し先のAPIがJSONを受け付けるか確認してください。",
       "payloadTypedHint": "本物の数値や はい/いいえ を送るには、変数を引用符なしで書きます: {example}。"
     },
     "test": {
