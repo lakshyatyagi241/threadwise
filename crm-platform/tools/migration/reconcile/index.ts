@@ -10,6 +10,7 @@ import { ctxOf, IdMap, rowUuid } from '../load/engine';
 import { ORG_COLLECTION } from '../load/org';
 import { prepareAccess } from '../load/access';
 import { verifyAccess } from './access';
+import { tupleDiff } from './set-diff';
 import { verifyAutomations } from './automation';
 import { verifyChat } from './chat';
 import { verifyCampaigns } from './campaigns';
@@ -1036,25 +1037,24 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         ).map((r) => `${r.f}\u0000${r.v}`),
       );
       const wantO = oracleOptionDeps(fieldDocs!, optionDocs!, odeps!, opts);
-      const gotO = new Set(
-        (
-          (
-            await withTenant(db, { orgId }, (tx) =>
-              tx.execute(sql`SELECT pf.key AS pf, po.value AS pv, cf.key AS cf, co.value AS cv FROM field_option_dependencies d
+      // Postgres compares: the full list is ~50,000 rows, and shipping them here took ~2 s a run (slow-query alert). Skipped when the step did not run.
+      if (stepRan('field_option_deps')) {
+        const diff = await withTenant(db, { orgId }, (tx) =>
+          tupleDiff(
+            tx,
+            wantO,
+            sql`SELECT pf.key AS pf, po.value AS pv, cf.key AS cf, co.value AS cv FROM field_option_dependencies d
           JOIN field_options po ON po.org_id = d.org_id AND po.id = d.parent_option_id JOIN fields pf ON pf.org_id = po.org_id AND pf.id = po.field_id
           JOIN field_options co ON co.org_id = d.org_id AND co.id = d.child_option_id JOIN fields cf ON cf.org_id = co.org_id AND cf.id = co.field_id
-          WHERE d.org_id = ${orgId}`),
-            )
-          ).rows as Array<{ pf: string; pv: string; cf: string; cv: string }>
-        ).map((r) => `${r.pf}\u0000${r.pv}\u0000${r.cf}\u0000${r.cv}`),
-      );
-      if (
-        stepRan('field_option_deps') &&
-        ([...wantO].some((x) => !gotO.has(x)) || [...gotO].some((x) => !wantO.has(x)))
-      )
-        alarm(
-          'ORACLE_MISMATCH: field_option_dependencies differ from the independent dependency list',
+          WHERE d.org_id = ${orgId}`,
+            ['pf', 'pv', 'cf', 'cv'],
+          ),
         );
+        if (diff.missing + diff.unexpected > 0)
+          alarm(
+            `ORACLE_MISMATCH: field_option_dependencies differ from the independent dependency list (${diff.missing} missing, ${diff.unexpected} unexpected)`,
+          );
+      }
     }
 
     // 3d2. roles, grants, users and their per-user rows against the independent oracle; NO-ADMIN over the whole organization
