@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
 import * as Application from 'expo-application';
-import * as Linking from 'expo-linking';
 import { useRouter, type Href } from 'expo-router';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +18,6 @@ import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { modeOf } from './appearance';
 import { OPEN, SETTINGS_ITEMS } from './settings-items';
-import { helpCenterUrl } from './use-legal-links';
 import { useUpdateCheck, type UpdateState } from './use-update-check';
 
 const FADED = 0.4;
@@ -47,11 +45,9 @@ export function MenuScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const session = useSession();
-  const helpUrl = helpCenterUrl();
   const updates = useUpdateCheck();
   const [refreshing, setRefreshing] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
-  const [helpMissing, setHelpMissing] = useState(false);
   const [open, setOpen] = useState<Group | null>(null);
   const [confirming, setConfirming] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -261,11 +257,9 @@ export function MenuScreen() {
           <Row
             icon="help-circle-outline"
             label={t('menu.helpCenter')}
-            faded={helpUrl === null}
             onPress={() => {
               setNoAccess(false);
-              setHelpMissing(helpUrl === null);
-              if (helpUrl) void Linking.openURL(helpUrl);
+              router.navigate('/help');
             }}
           />
           <Row
@@ -280,11 +274,6 @@ export function MenuScreen() {
             onPress={() => (updates.state === 'ready' ? updates.apply() : void updates.check())}
           />
         </Section>
-        {helpMissing ? (
-          <View style={styles.notice}>
-            <Banner tone="warning" message={t('menu.helpUnavailable')} />
-          </View>
-        ) : null}
         <UpdateNote state={updates.state} />
 
         <View style={[styles.signOut, { borderTopColor: colors.border }]}>

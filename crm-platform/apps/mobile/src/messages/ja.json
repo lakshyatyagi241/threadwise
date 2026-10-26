@@ -537,8 +537,32 @@
       "failed": "選択内容を保存できませんでした。もう一度お試しください。"
     },
     "settings": "設定",
-    "helpCenter": "ヘルプセンター",
-    "helpUnavailable": "このアプリにはヘルプセンターのアドレスが設定されていません。"
+    "helpCenter": "ヘルプセンター"
+  },
+  "help": {
+    "title": "ヘルプ",
+    "intro": "最初の会話から設定、トラブルシューティングまで、アプリを最大限に活用するために必要なすべてがここにあります。",
+    "tipStartTitle": "すぐに始める:",
+    "tipStartBody": "はじめにガイドを読んで、数分でアカウントを設定しましょう。",
+    "tipExploreTitle": "主な機能を知る:",
+    "tipExploreBody": "受信トレイ、連絡先、タスク、ダッシュボードの使い方を確認できます。",
+    "tipHelpTitle": "お困りですか？",
+    "tipHelpBody": "ガイドを検索するか、下のグループから探してください。",
+    "closing": "さあ始めて、すべての会話を最大限に活かしましょう！",
+    "menuOpen": "ガイドメニューを開く",
+    "menuClose": "ガイドメニューを閉じる",
+    "searchClose": "検索を閉じる",
+    "searchLabel": "ヘルプガイドを検索",
+    "searchPlaceholder": "ガイドを検索",
+    "noMatch": "「{{q}}」に一致するガイドはありません。",
+    "categories": {
+      "gettingStarted": "はじめに",
+      "troubleshooting": "トラブルシューティング"
+    },
+    "fallback": "このガイドは英語のみです。",
+    "notFound": "このガイドが見つかりませんでした。",
+    "web": "ヘルプセンターをすべて開く",
+    "webHint": "ブラウザで開きます"
   },
   "settings": {
     "quickReplies": {

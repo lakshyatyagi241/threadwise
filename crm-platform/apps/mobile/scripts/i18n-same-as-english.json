@@ -973,7 +973,8 @@
     "tasks.filter.group.status",
     "tasks.filter.status.open",
     "tasks.form.contact",
-    "tasks.status.open"
+    "tasks.status.open",
+    "help.title"
   ],
   "pl": [
     "calls.summary.purposes.demo",

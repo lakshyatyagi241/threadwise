@@ -537,8 +537,32 @@
       "failed": "Pilihan Anda tidak dapat disimpan. Coba lagi."
     },
     "settings": "Pengaturan",
-    "helpCenter": "Pusat bantuan",
-    "helpUnavailable": "Alamat Pusat Bantuan belum diatur untuk aplikasi ini."
+    "helpCenter": "Pusat bantuan"
+  },
+  "help": {
+    "title": "Bantuan",
+    "intro": "Semua yang Anda perlukan untuk memanfaatkan aplikasi sebaik mungkin, dari percakapan pertama hingga pengaturan dan pemecahan masalah.",
+    "tipStartTitle": "Mulai dengan cepat:",
+    "tipStartBody": "Baca panduan memulai untuk menyiapkan akun Anda dalam hitungan menit.",
+    "tipExploreTitle": "Jelajahi fitur utama:",
+    "tipExploreBody": "Lihat cara kerja kotak masuk, kontak, tugas, dan dasbor.",
+    "tipHelpTitle": "Butuh bantuan?",
+    "tipHelpBody": "Cari di panduan, atau telusuri grup di bawah.",
+    "closing": "Mulai sekarang dan manfaatkan setiap percakapan sebaik mungkin!",
+    "menuOpen": "Buka menu panduan",
+    "menuClose": "Tutup menu panduan",
+    "searchClose": "Tutup pencarian",
+    "searchLabel": "Cari panduan bantuan",
+    "searchPlaceholder": "Cari panduan",
+    "noMatch": "Tidak ada panduan yang cocok dengan \"{{q}}\".",
+    "categories": {
+      "gettingStarted": "Memulai",
+      "troubleshooting": "Pemecahan masalah"
+    },
+    "fallback": "Panduan ini hanya tersedia dalam bahasa Inggris.",
+    "notFound": "Panduan ini tidak ditemukan.",
+    "web": "Buka Pusat Bantuan lengkap",
+    "webHint": "Dibuka di browser Anda"
   },
   "settings": {
     "quickReplies": {

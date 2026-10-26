@@ -547,8 +547,32 @@
       "failed": "Ihre Auswahl konnte nicht gespeichert werden. Versuchen Sie es erneut."
     },
     "settings": "Einstellungen",
-    "helpCenter": "Hilfecenter",
-    "helpUnavailable": "Die Adresse des Hilfe-Centers ist für diese App nicht eingerichtet."
+    "helpCenter": "Hilfecenter"
+  },
+  "help": {
+    "title": "Hilfe",
+    "intro": "Alles, was Sie brauchen, um das Beste aus der App herauszuholen, vom ersten Gespräch bis zu Einstellungen und Fehlerbehebung.",
+    "tipStartTitle": "Schnell loslegen:",
+    "tipStartBody": "Lesen Sie die Anleitungen für den Einstieg und richten Sie Ihr Konto in wenigen Minuten ein.",
+    "tipExploreTitle": "Wichtige Funktionen entdecken:",
+    "tipExploreBody": "Sehen Sie, wie Posteingang, Kontakte, Aufgaben und Übersicht funktionieren.",
+    "tipHelpTitle": "Brauchen Sie Hilfe?",
+    "tipHelpBody": "Durchsuchen Sie die Anleitungen oder stöbern Sie unten in einer Gruppe.",
+    "closing": "Legen Sie los und holen Sie aus jedem Gespräch das Beste heraus!",
+    "menuOpen": "Anleitungsmenü öffnen",
+    "menuClose": "Anleitungsmenü schließen",
+    "searchClose": "Suche schließen",
+    "searchLabel": "Hilfeanleitungen durchsuchen",
+    "searchPlaceholder": "Anleitungen durchsuchen",
+    "noMatch": "Keine Anleitung passt zu „{{q}}“.",
+    "categories": {
+      "gettingStarted": "Erste Schritte",
+      "troubleshooting": "Fehlerbehebung"
+    },
+    "fallback": "Diese Anleitung ist nur auf Englisch verfügbar.",
+    "notFound": "Diese Anleitung wurde nicht gefunden.",
+    "web": "Vollständiges Hilfezentrum öffnen",
+    "webHint": "Wird im Browser geöffnet"
   },
   "settings": {
     "quickReplies": {

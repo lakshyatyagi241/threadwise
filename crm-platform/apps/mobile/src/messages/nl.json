@@ -547,8 +547,32 @@
       "failed": "Je keuze kon niet worden opgeslagen. Probeer het opnieuw."
     },
     "settings": "Instellingen",
-    "helpCenter": "Helpcentrum",
-    "helpUnavailable": "Het adres van het Helpcentrum is niet ingesteld voor deze app."
+    "helpCenter": "Helpcentrum"
+  },
+  "help": {
+    "title": "Help",
+    "intro": "Alles wat je nodig hebt om het meeste uit de app te halen, van je eerste gesprek tot instellingen en probleemoplossing.",
+    "tipStartTitle": "Snel aan de slag:",
+    "tipStartBody": "Lees de handleidingen om aan de slag te gaan en je account in enkele minuten in te stellen.",
+    "tipExploreTitle": "Ontdek de belangrijkste functies:",
+    "tipExploreBody": "Zie hoe de inbox, contacten, taken en het overzicht werken.",
+    "tipHelpTitle": "Hulp nodig?",
+    "tipHelpBody": "Zoek in de handleidingen of blader hieronder door een groep.",
+    "closing": "Duik erin en haal het meeste uit elk gesprek!",
+    "menuOpen": "Gidsmenu openen",
+    "menuClose": "Gidsmenu sluiten",
+    "searchClose": "Zoeken sluiten",
+    "searchLabel": "Zoeken in de helpgidsen",
+    "searchPlaceholder": "Gidsen zoeken",
+    "noMatch": "Geen gids komt overeen met \"{{q}}\".",
+    "categories": {
+      "gettingStarted": "Aan de slag",
+      "troubleshooting": "Probleemoplossing"
+    },
+    "fallback": "Deze gids is alleen in het Engels beschikbaar.",
+    "notFound": "Deze gids kon niet worden gevonden.",
+    "web": "Open het volledige Helpcentrum",
+    "webHint": "Opent in je browser"
   },
   "settings": {
     "quickReplies": {

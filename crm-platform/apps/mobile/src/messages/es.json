@@ -557,8 +557,32 @@
       "failed": "No se pudo guardar tu elección. Inténtalo de nuevo."
     },
     "settings": "Ajustes",
-    "helpCenter": "Centro de ayuda",
-    "helpUnavailable": "La dirección del Centro de ayuda no está configurada para esta app."
+    "helpCenter": "Centro de ayuda"
+  },
+  "help": {
+    "title": "Ayuda",
+    "intro": "Todo lo que necesitas para sacar el máximo partido a la app, desde tu primera conversación hasta los ajustes y la solución de problemas.",
+    "tipStartTitle": "Empieza rápido:",
+    "tipStartBody": "Lee las guías de primeros pasos para configurar tu cuenta en minutos.",
+    "tipExploreTitle": "Explora las funciones clave:",
+    "tipExploreBody": "Mira cómo funcionan la bandeja de entrada, los contactos, las tareas y el panel.",
+    "tipHelpTitle": "¿Necesitas ayuda?",
+    "tipHelpBody": "Busca en las guías o explora un grupo más abajo.",
+    "closing": "¡Empieza y aprovecha al máximo cada conversación!",
+    "menuOpen": "Abrir el menú de guías",
+    "menuClose": "Cerrar el menú de guías",
+    "searchClose": "Cerrar la búsqueda",
+    "searchLabel": "Buscar guías de ayuda",
+    "searchPlaceholder": "Buscar guías",
+    "noMatch": "Ninguna guía coincide con «{{q}}».",
+    "categories": {
+      "gettingStarted": "Primeros pasos",
+      "troubleshooting": "Solución de problemas"
+    },
+    "fallback": "Esta guía solo está disponible en inglés.",
+    "notFound": "No se encontró esta guía.",
+    "web": "Abrir el Centro de ayuda completo",
+    "webHint": "Se abre en tu navegador"
   },
   "settings": {
     "quickReplies": {

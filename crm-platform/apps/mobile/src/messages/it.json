@@ -557,8 +557,32 @@
       "failed": "Impossibile salvare la scelta. Riprova."
     },
     "settings": "Impostazioni",
-    "helpCenter": "Centro assistenza",
-    "helpUnavailable": "L’indirizzo del Centro assistenza non è configurato per questa app."
+    "helpCenter": "Centro assistenza"
+  },
+  "help": {
+    "title": "Aiuto",
+    "intro": "Tutto ciò che serve per sfruttare al meglio l'app, dalla prima conversazione alle impostazioni e alla risoluzione dei problemi.",
+    "tipStartTitle": "Inizia subito:",
+    "tipStartBody": "Leggi le guide per iniziare e configura il tuo account in pochi minuti.",
+    "tipExploreTitle": "Scopri le funzioni principali:",
+    "tipExploreBody": "Vedi come funzionano la posta in arrivo, i contatti, le attività e la dashboard.",
+    "tipHelpTitle": "Serve aiuto?",
+    "tipHelpBody": "Cerca nelle guide o sfoglia un gruppo qui sotto.",
+    "closing": "Inizia e sfrutta al meglio ogni conversazione!",
+    "menuOpen": "Apri il menu delle guide",
+    "menuClose": "Chiudi il menu delle guide",
+    "searchClose": "Chiudi la ricerca",
+    "searchLabel": "Cerca nelle guide di aiuto",
+    "searchPlaceholder": "Cerca guide",
+    "noMatch": "Nessuna guida corrisponde a \"{{q}}\".",
+    "categories": {
+      "gettingStarted": "Per iniziare",
+      "troubleshooting": "Risoluzione dei problemi"
+    },
+    "fallback": "Questa guida è disponibile solo in inglese.",
+    "notFound": "Impossibile trovare questa guida.",
+    "web": "Apri il Centro assistenza completo",
+    "webHint": "Si apre nel browser"
   },
   "settings": {
     "quickReplies": {

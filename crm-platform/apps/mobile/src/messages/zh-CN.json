@@ -537,8 +537,32 @@
       "failed": "无法保存您的选择，请重试。"
     },
     "settings": "设置",
-    "helpCenter": "帮助中心",
-    "helpUnavailable": "此应用尚未设置帮助中心地址。"
+    "helpCenter": "帮助中心"
+  },
+  "help": {
+    "title": "帮助",
+    "intro": "从第一次对话到设置和故障排查，这里有充分使用应用所需的一切。",
+    "tipStartTitle": "快速上手：",
+    "tipStartBody": "阅读入门指南，几分钟内完成账户设置。",
+    "tipExploreTitle": "了解主要功能：",
+    "tipExploreBody": "看看收件箱、联系人、任务和仪表板是如何工作的。",
+    "tipHelpTitle": "需要帮助？",
+    "tipHelpBody": "搜索指南，或浏览下面的分组。",
+    "closing": "马上开始，让每一次对话都发挥最大价值！",
+    "menuOpen": "打开指南菜单",
+    "menuClose": "关闭指南菜单",
+    "searchClose": "关闭搜索",
+    "searchLabel": "搜索帮助指南",
+    "searchPlaceholder": "搜索指南",
+    "noMatch": "没有与“{{q}}”匹配的指南。",
+    "categories": {
+      "gettingStarted": "快速入门",
+      "troubleshooting": "故障排查"
+    },
+    "fallback": "此指南仅提供英文版。",
+    "notFound": "找不到此指南。",
+    "web": "打开完整的帮助中心",
+    "webHint": "将在浏览器中打开"
   },
   "settings": {
     "quickReplies": {

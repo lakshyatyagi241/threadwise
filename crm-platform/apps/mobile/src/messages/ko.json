@@ -537,8 +537,32 @@
       "failed": "선택을 저장하지 못했습니다. 다시 시도하세요."
     },
     "settings": "설정",
-    "helpCenter": "도움말 센터",
-    "helpUnavailable": "이 앱에는 도움말 센터 주소가 설정되어 있지 않습니다."
+    "helpCenter": "도움말 센터"
+  },
+  "help": {
+    "title": "도움말",
+    "intro": "첫 대화부터 설정, 문제 해결까지 앱을 최대한 활용하는 데 필요한 모든 것이 여기에 있습니다.",
+    "tipStartTitle": "빠르게 시작하기:",
+    "tipStartBody": "시작하기 가이드를 읽고 몇 분 만에 계정을 설정하세요.",
+    "tipExploreTitle": "주요 기능 살펴보기:",
+    "tipExploreBody": "받은 편지함, 연락처, 작업, 대시보드가 어떻게 작동하는지 확인하세요.",
+    "tipHelpTitle": "도움이 필요하신가요?",
+    "tipHelpBody": "가이드를 검색하거나 아래 그룹을 둘러보세요.",
+    "closing": "지금 시작해서 모든 대화를 최대한 활용하세요!",
+    "menuOpen": "가이드 메뉴 열기",
+    "menuClose": "가이드 메뉴 닫기",
+    "searchClose": "검색 닫기",
+    "searchLabel": "도움말 가이드 검색",
+    "searchPlaceholder": "가이드 검색",
+    "noMatch": "\"{{q}}\"와(과) 일치하는 가이드가 없습니다.",
+    "categories": {
+      "gettingStarted": "시작하기",
+      "troubleshooting": "문제 해결"
+    },
+    "fallback": "이 가이드는 영어로만 제공됩니다.",
+    "notFound": "이 가이드를 찾을 수 없습니다.",
+    "web": "전체 도움말 센터 열기",
+    "webHint": "브라우저에서 열립니다"
   },
   "settings": {
     "quickReplies": {

@@ -537,8 +537,32 @@
       "failed": "Không thể lưu lựa chọn của bạn. Hãy thử lại."
     },
     "settings": "Cài đặt",
-    "helpCenter": "Trung tâm trợ giúp",
-    "helpUnavailable": "Địa chỉ Trung tâm trợ giúp chưa được thiết lập cho ứng dụng này."
+    "helpCenter": "Trung tâm trợ giúp"
+  },
+  "help": {
+    "title": "Trợ giúp",
+    "intro": "Mọi thứ bạn cần để tận dụng tối đa ứng dụng, từ cuộc trò chuyện đầu tiên đến cài đặt và khắc phục sự cố.",
+    "tipStartTitle": "Bắt đầu nhanh:",
+    "tipStartBody": "Đọc các hướng dẫn bắt đầu để thiết lập tài khoản chỉ trong vài phút.",
+    "tipExploreTitle": "Khám phá các tính năng chính:",
+    "tipExploreBody": "Xem cách hộp thư, liên hệ, công việc và bảng điều khiển hoạt động.",
+    "tipHelpTitle": "Cần trợ giúp?",
+    "tipHelpBody": "Tìm trong các hướng dẫn, hoặc duyệt một nhóm bên dưới.",
+    "closing": "Bắt đầu ngay và tận dụng tối đa mỗi cuộc trò chuyện!",
+    "menuOpen": "Mở menu hướng dẫn",
+    "menuClose": "Đóng menu hướng dẫn",
+    "searchClose": "Đóng tìm kiếm",
+    "searchLabel": "Tìm trong hướng dẫn trợ giúp",
+    "searchPlaceholder": "Tìm hướng dẫn",
+    "noMatch": "Không có hướng dẫn nào khớp với \"{{q}}\".",
+    "categories": {
+      "gettingStarted": "Bắt đầu",
+      "troubleshooting": "Khắc phục sự cố"
+    },
+    "fallback": "Hướng dẫn này chỉ có bằng tiếng Anh.",
+    "notFound": "Không tìm thấy hướng dẫn này.",
+    "web": "Mở Trung tâm trợ giúp đầy đủ",
+    "webHint": "Mở trong trình duyệt của bạn"
   },
   "settings": {
     "quickReplies": {

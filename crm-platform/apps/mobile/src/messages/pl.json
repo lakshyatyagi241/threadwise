@@ -567,8 +567,32 @@
       "failed": "Nie udało się zapisać wyboru. Spróbuj ponownie."
     },
     "settings": "Ustawienia",
-    "helpCenter": "Centrum pomocy",
-    "helpUnavailable": "Adres Centrum pomocy nie jest skonfigurowany dla tej aplikacji."
+    "helpCenter": "Centrum pomocy"
+  },
+  "help": {
+    "title": "Pomoc",
+    "intro": "Wszystko, czego potrzebujesz, aby jak najlepiej korzystać z aplikacji, od pierwszej rozmowy po ustawienia i rozwiązywanie problemów.",
+    "tipStartTitle": "Szybki start:",
+    "tipStartBody": "Przeczytaj przewodniki na start, aby skonfigurować konto w kilka minut.",
+    "tipExploreTitle": "Poznaj kluczowe funkcje:",
+    "tipExploreBody": "Zobacz, jak działają skrzynka odbiorcza, kontakty, zadania i pulpit.",
+    "tipHelpTitle": "Potrzebujesz pomocy?",
+    "tipHelpBody": "Przeszukaj przewodniki lub przeglądaj grupę poniżej.",
+    "closing": "Zacznij i wykorzystaj każdą rozmowę najlepiej, jak się da!",
+    "menuOpen": "Otwórz menu przewodników",
+    "menuClose": "Zamknij menu przewodników",
+    "searchClose": "Zamknij wyszukiwanie",
+    "searchLabel": "Szukaj w przewodnikach pomocy",
+    "searchPlaceholder": "Szukaj przewodników",
+    "noMatch": "Żaden przewodnik nie pasuje do „{{q}}”.",
+    "categories": {
+      "gettingStarted": "Pierwsze kroki",
+      "troubleshooting": "Rozwiązywanie problemów"
+    },
+    "fallback": "Ten przewodnik jest dostępny tylko po angielsku.",
+    "notFound": "Nie znaleziono tego przewodnika.",
+    "web": "Otwórz pełne Centrum pomocy",
+    "webHint": "Otwiera się w przeglądarce"
   },
   "settings": {
     "quickReplies": {

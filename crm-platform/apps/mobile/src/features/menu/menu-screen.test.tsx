@@ -238,10 +238,11 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/data-security');
     });
 
-    it('opens the web Help Center in the browser, from the address of the web app', async () => {
+    it('opens the Help Center screen inside the app, not the browser', async () => {
       await show();
       await press('Help Center');
-      expect(Linking.openURL).toHaveBeenCalledWith('https://app.example.test/help');
+      expect(mockNavigate).toHaveBeenCalledWith('/help');
+      expect(Linking.openURL).not.toHaveBeenCalled();
     });
 
     it('says a build without updates does not receive them, without pretending to look', async () => {

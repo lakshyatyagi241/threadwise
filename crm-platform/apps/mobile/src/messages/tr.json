@@ -547,8 +547,32 @@
       "failed": "Seçiminiz kaydedilemedi. Yeniden deneyin."
     },
     "settings": "Ayarlar",
-    "helpCenter": "Yardım merkezi",
-    "helpUnavailable": "Yardım Merkezi adresi bu uygulama için ayarlanmamış."
+    "helpCenter": "Yardım merkezi"
+  },
+  "help": {
+    "title": "Yardım",
+    "intro": "Uygulamadan en iyi şekilde yararlanmak için ihtiyacınız olan her şey: ilk görüşmenizden ayarlara ve sorun gidermeye kadar.",
+    "tipStartTitle": "Hızlıca başlayın:",
+    "tipStartBody": "Hesabınızı dakikalar içinde kurmak için başlangıç kılavuzlarını okuyun.",
+    "tipExploreTitle": "Temel özellikleri keşfedin:",
+    "tipExploreBody": "Gelen kutusu, kişiler, görevler ve panonun nasıl çalıştığını görün.",
+    "tipHelpTitle": "Yardıma mı ihtiyacınız var?",
+    "tipHelpBody": "Kılavuzlarda arayın veya aşağıdaki bir gruba göz atın.",
+    "closing": "Hemen başlayın ve her görüşmeden en iyi şekilde yararlanın!",
+    "menuOpen": "Kılavuz menüsünü aç",
+    "menuClose": "Kılavuz menüsünü kapat",
+    "searchClose": "Aramayı kapat",
+    "searchLabel": "Yardım kılavuzlarında ara",
+    "searchPlaceholder": "Kılavuz ara",
+    "noMatch": "\"{{q}}\" ile eşleşen kılavuz yok.",
+    "categories": {
+      "gettingStarted": "Başlarken",
+      "troubleshooting": "Sorun giderme"
+    },
+    "fallback": "Bu kılavuz yalnızca İngilizce olarak mevcut.",
+    "notFound": "Bu kılavuz bulunamadı.",
+    "web": "Tam Yardım Merkezi'ni aç",
+    "webHint": "Tarayıcınızda açılır"
   },
   "settings": {
     "quickReplies": {

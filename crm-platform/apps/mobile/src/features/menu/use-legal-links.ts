@@ -25,8 +25,3 @@ export function useLegalLinks(): { terms: string | null; privacy: string | null 
     privacy: resolveLegalUrl(config.data?.links.privacy, env.webUrl, options),
   };
 }
-
-/** The web app's Help center page (`/help`), or null when the app does not know the web address. It opens in the browser. */
-export function helpCenterUrl(): string | null {
-  return resolveLegalUrl('/help', env.webUrl, { allowHttp: env.variant === 'development' });
-}

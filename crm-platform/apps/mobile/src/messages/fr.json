@@ -557,8 +557,32 @@
       "failed": "Impossible d’enregistrer votre choix. Réessayez."
     },
     "settings": "Paramètres",
-    "helpCenter": "Centre d’aide",
-    "helpUnavailable": "L’adresse du centre d’aide n’est pas configurée pour cette application."
+    "helpCenter": "Centre d’aide"
+  },
+  "help": {
+    "title": "Aide",
+    "intro": "Tout ce qu'il faut pour tirer le meilleur de l'application, de votre première conversation aux paramètres et au dépannage.",
+    "tipStartTitle": "Démarrez rapidement :",
+    "tipStartBody": "Lisez les guides de démarrage pour configurer votre compte en quelques minutes.",
+    "tipExploreTitle": "Découvrez les fonctions clés :",
+    "tipExploreBody": "Voyez comment fonctionnent la boîte de réception, les contacts, les tâches et le tableau de bord.",
+    "tipHelpTitle": "Besoin d'aide ?",
+    "tipHelpBody": "Recherchez dans les guides ou parcourez un groupe ci-dessous.",
+    "closing": "Lancez-vous et tirez le meilleur de chaque conversation !",
+    "menuOpen": "Ouvrir le menu des guides",
+    "menuClose": "Fermer le menu des guides",
+    "searchClose": "Fermer la recherche",
+    "searchLabel": "Rechercher dans les guides d'aide",
+    "searchPlaceholder": "Rechercher des guides",
+    "noMatch": "Aucun guide ne correspond à « {{q}} ».",
+    "categories": {
+      "gettingStarted": "Premiers pas",
+      "troubleshooting": "Dépannage"
+    },
+    "fallback": "Ce guide n'est disponible qu'en anglais.",
+    "notFound": "Ce guide est introuvable.",
+    "web": "Ouvrir le Centre d'aide complet",
+    "webHint": "S'ouvre dans votre navigateur"
   },
   "settings": {
     "quickReplies": {

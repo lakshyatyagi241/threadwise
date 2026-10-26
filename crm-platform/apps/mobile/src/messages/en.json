@@ -547,8 +547,32 @@
       "failed": "Couldn't save your choice. Try again."
     },
     "settings": "Settings",
-    "helpCenter": "Help Center",
-    "helpUnavailable": "The Help Center address is not set up for this app."
+    "helpCenter": "Help Center"
+  },
+  "help": {
+    "title": "Help",
+    "intro": "Everything you need to get the most out of the app, from your first conversation to settings and troubleshooting.",
+    "tipStartTitle": "Get started quickly:",
+    "tipStartBody": "Read the getting started guides to set up your account in minutes.",
+    "tipExploreTitle": "Explore key features:",
+    "tipExploreBody": "See how the inbox, contacts, tasks and dashboard work.",
+    "tipHelpTitle": "Need help?",
+    "tipHelpBody": "Search the guides, or browse a group below.",
+    "closing": "Dive in and get the most out of every conversation!",
+    "menuOpen": "Open the guide menu",
+    "menuClose": "Close the guide menu",
+    "searchClose": "Close search",
+    "searchLabel": "Search help guides",
+    "searchPlaceholder": "Search guides",
+    "noMatch": "No guide matches \"{{q}}\".",
+    "categories": {
+      "gettingStarted": "Getting started",
+      "troubleshooting": "Troubleshooting"
+    },
+    "fallback": "This guide is only available in English.",
+    "notFound": "This guide could not be found.",
+    "web": "Open the full Help Center",
+    "webHint": "Opens in your browser"
   },
   "settings": {
     "quickReplies": {
