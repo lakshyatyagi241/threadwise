@@ -30,7 +30,11 @@ export function FlowPick({
       apiFetch('/wa-forms/picker', { schema: waFormPickerListSchema, signal }),
     staleTime: 30_000,
   });
-  const published = (forms.data?.forms ?? []).filter((f) => f.isPublished && f.metaFlowId);
+  // Meta's id of a Flow is a number. A form marked published whose id is not one (a seeded or imported record) was never made at Meta,
+  // so a template cannot point at it: it is listed, greyed out, with the reason.
+  const live = (forms.data?.forms ?? []).filter((f) => f.isPublished && f.metaFlowId);
+  const published = live.filter((f) => /^\d+$/.test(f.metaFlowId ?? ''));
+  const notOnMeta = live.filter((f) => !/^\d+$/.test(f.metaFlowId ?? ''));
   const known = published.some((f) => f.metaFlowId === row.flowId);
   return (
     <Field
@@ -62,6 +66,11 @@ export function FlowPick({
         {published.map((f) => (
           <option key={f.id} value={f.metaFlowId ?? ''}>
             {f.title}
+          </option>
+        ))}
+        {notOnMeta.map((f) => (
+          <option key={f.id} value={`x:${f.id}`} disabled>
+            {t('flowNotOnMeta', { title: f.title })}
           </option>
         ))}
         {row.flowId && !known && (
