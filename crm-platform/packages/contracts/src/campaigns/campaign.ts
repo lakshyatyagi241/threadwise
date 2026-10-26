@@ -3,7 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { previousSendsAudienceSchema } from '../broadcasts/previous-sends';
 import { marketingMediaSchema } from '../broadcasts/marketing-media';
-import { WIZARD_NAME_MAX } from './broadcast-wizard';
+import { WIZARD_NAME_MAX } from './wizard-limits';
 import { WIZARD_SENDERS_MAX, senderShareSchema } from './sender-split';
 
 /**
