@@ -1077,6 +1077,7 @@
         "imported": "{steps, plural, one {# stap} other {# stappen}} geïmporteerd in {flows, plural, one {# flow} other {# flows}}. Controleer ze en sla daarna op.",
         "invalidJson": "Dat bestand is geen geldige JSON.",
         "saved": "\"{name}\" opgeslagen",
+        "nodeSaved": "Node succesvol bijgewerkt!",
         "saveFailed": "Opslaan mislukt: {error}",
         "publishedToast": "Gepubliceerd",
         "publishFailed": "Publiceren mislukt: {error}",

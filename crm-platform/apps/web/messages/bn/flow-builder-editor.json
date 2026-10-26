@@ -645,6 +645,7 @@
         "imported": "{flows, plural, one {# টি ফ্লো} other {# টি ফ্লো}}-তে {steps, plural, one {# টি ধাপ} other {# টি ধাপ}} ইমপোর্ট হয়েছে। দেখে নিন, তারপর সংরক্ষণ করুন।",
         "invalidJson": "ফাইলটি বৈধ JSON নয়।",
         "saved": "“{name}” সংরক্ষিত হয়েছে",
+        "nodeSaved": "নোড সফলভাবে আপডেট হয়েছে!",
         "saveFailed": "সংরক্ষণ ব্যর্থ: {error}",
         "publishedToast": "প্রকাশিত",
         "publishFailed": "প্রকাশ ব্যর্থ: {error}",

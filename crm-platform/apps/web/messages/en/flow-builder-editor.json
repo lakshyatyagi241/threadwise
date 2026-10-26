@@ -663,6 +663,7 @@
         "imported": "Imported {steps, plural, one {# step} other {# steps}} in {flows, plural, one {# flow} other {# flows}}. Check them, then Save.",
         "invalidJson": "That file is not valid JSON.",
         "saved": "Saved \"{name}\"",
+        "nodeSaved": "Node updated successfully!",
         "saveFailed": "Save failed: {error}",
         "publishedToast": "Published",
         "publishFailed": "Publish failed: {error}",

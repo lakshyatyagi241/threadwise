@@ -645,6 +645,7 @@
         "imported": "{flows, plural, one {# فلو} other {# فلوز}} میں {steps, plural, one {# قدم} other {# قدم}} درآمد ہوئے۔ جانچ لیں، پھر محفوظ کریں۔",
         "invalidJson": "وہ فائل درست JSON نہیں ہے۔",
         "saved": "\"{name}\" محفوظ ہو گیا",
+        "nodeSaved": "نوڈ کامیابی سے اپ ڈیٹ ہو گیا!",
         "saveFailed": "محفوظ کرنا ناکام: {error}",
         "publishedToast": "شائع ہو گیا",
         "publishFailed": "اشاعت ناکام: {error}",
