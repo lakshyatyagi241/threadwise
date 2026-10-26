@@ -618,7 +618,7 @@ export function Composer(props: ComposerProps) {
           data-testid="email-attach-button"
           disabled={disabled}
           onClick={() => input.current?.click()}
-          className="flex h-7 items-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          className="flex h-7 items-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
         >
           <PaperclipIcon className="size-3.5" />
           {t('attach')}
