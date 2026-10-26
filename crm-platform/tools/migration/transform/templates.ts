@@ -2,7 +2,8 @@ import { cutText, isDeleted, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
 
-const asDoc = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
+const asDoc = (v: unknown): Doc =>
+  v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {};
 
 /**
  * A CAROUSEL component's cards as the app stores them (apps/api message-templates/template-payload.ts, TemplateCard): the picture is
@@ -58,7 +59,8 @@ type Slot = { num: number; key: string; example?: string };
 /** {{1}} / {{name}} placeholders in order of first appearance. */
 const tokens = (text: string | null): string[] => {
   const seen: string[] = [];
-  for (const m of (text ?? '').matchAll(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g)) if (!seen.includes(m[1]!)) seen.push(m[1]!);
+  for (const m of (text ?? '').matchAll(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g))
+    if (!seen.includes(m[1]!)) seen.push(m[1]!);
   return seen;
 };
 const examplesOf = (example: unknown, key: 'body_text' | 'header_text'): string[] => {
@@ -66,7 +68,11 @@ const examplesOf = (example: unknown, key: 'body_text' | 'header_text'): string[
   const first = Array.isArray(raw) ? (Array.isArray(raw[0]) ? raw[0] : raw) : [];
   return first.filter((x: unknown): x is string => typeof x === 'string');
 };
-const slots = (text: string | null, example: unknown, key: 'body_text' | 'header_text'): Slot[] | undefined => {
+const slots = (
+  text: string | null,
+  example: unknown,
+  key: 'body_text' | 'header_text',
+): Slot[] | undefined => {
   const t = tokens(text);
   if (t.length === 0) return undefined;
   const ex = examplesOf(example, key);
@@ -85,13 +91,15 @@ const TEMPLATE_FIELDS = {
   type: 'drop:channel type, only whatsapp exists; col:channel',
   template_type: 'drop:Waboo UI label; col:template_type is derived from category and header',
   status: 'col:status and meta_status (the Meta status kept as is); DELETED is excluded',
-  components: 'col:header, template_body, footer, buttons, carousel_data, attachment_type, variable_map (a component with no exact place quarantines the template)',
+  components:
+    'col:header, template_body, footer, buttons, carousel_data, attachment_type, variable_map (a component with no exact place quarantines the template)',
   meta_template_id: 'col:meta_template_id (kept so the template matches Meta)',
   rejection_reason: 'col:rejection_reason (NONE or empty is no reason)',
   quality: 'col:quality_score',
   inputValues: 'drop:Waboo form state of the template editor',
   used_in_automation: 'drop:derived flag; WaDesk finds the flows that use a template itself',
-  used_automation_ids: 'drop:derived list of automations using the template (TEMPLATE_USAGE_DROPPED)',
+  used_automation_ids:
+    'drop:derived list of automations using the template (TEMPLATE_USAGE_DROPPED)',
   created_by: 'col:user_id (the migrated user, when the id resolves)',
   updated_by: 'drop:last editor; wa_templates has no such column',
   created_time: 'col:created_at',
@@ -140,19 +148,39 @@ export const templates: HandlerSpec = {
   },
   fields: TEMPLATE_FIELDS,
   transform(doc: Doc, ctx: Ctx): Outcome {
-    if (isDeleted(doc)) return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'is_deleted or deleted_time is set' };
+    if (isDeleted(doc))
+      return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'is_deleted or deleted_time is set' };
     const metaStatus = (str(doc.status) ?? '').toUpperCase();
-    if (metaStatus === 'DELETED') return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'the template was deleted at Meta' };
+    if (metaStatus === 'DELETED')
+      return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'the template was deleted at Meta' };
     const status = STATUS[metaStatus];
-    if (!status) return { kind: 'quarantine', code: 'STATUS_UNKNOWN', reason: `template status "${metaStatus}" has no WaDesk equivalent` };
+    if (!status)
+      return {
+        kind: 'quarantine',
+        code: 'STATUS_UNKNOWN',
+        reason: `template status "${metaStatus}" has no WaDesk equivalent`,
+      };
     const name = str(doc.name);
-    if (!name || name.length > NAME_MAX) return { kind: 'quarantine', code: 'INVALID_NAME', reason: 'template name is empty or too long' };
+    if (!name || name.length > NAME_MAX)
+      return {
+        kind: 'quarantine',
+        code: 'INVALID_NAME',
+        reason: 'template name is empty or too long',
+      };
     const language = str(doc.language);
     if (!language || !/^[a-z]{2,3}(_[A-Z]{2})?$/.test(language))
-      return { kind: 'quarantine', code: 'INVALID_LANGUAGE', reason: `language "${language ?? ''}" is not a Meta language code` };
+      return {
+        kind: 'quarantine',
+        code: 'INVALID_LANGUAGE',
+        reason: `language "${language ?? ''}" is not a Meta language code`,
+      };
     const metaCategory = (str(doc.category) ?? '').toUpperCase();
     if (!META_CATEGORIES.has(metaCategory))
-      return { kind: 'quarantine', code: 'INVALID_CATEGORY', reason: `category "${metaCategory}" is not MARKETING, UTILITY or AUTHENTICATION` };
+      return {
+        kind: 'quarantine',
+        code: 'INVALID_CATEGORY',
+        reason: `category "${metaCategory}" is not MARKETING, UTILITY or AUTHENTICATION`,
+      };
 
     let header: string | null = null;
     let headerEx: unknown;
@@ -179,9 +207,11 @@ export const templates: HandlerSpec = {
           bodyEx = comp.example;
         } else if (type === 'FOOTER') {
           footer = str(comp.text) ?? null;
-          if (typeof comp.code_expiration_minutes === 'number') codeMinutes = comp.code_expiration_minutes;
+          if (typeof comp.code_expiration_minutes === 'number')
+            codeMinutes = comp.code_expiration_minutes;
         } else if (type === 'BUTTONS') {
-          if (!Array.isArray(comp.buttons)) throw new Unsupported('a BUTTONS component without buttons');
+          if (!Array.isArray(comp.buttons))
+            throw new Unsupported('a BUTTONS component without buttons');
           buttons = comp.buttons.map((b: Doc) => {
             const { type: bt, ...rest } = b;
             return { ...rest, type: String(bt ?? '').toUpperCase() };
@@ -190,10 +220,13 @@ export const templates: HandlerSpec = {
         else throw new Unsupported(`component "${type}" is not one WaDesk has`);
       }
       // AUTHENTICATION bodies are fixed by Meta and carry no text
-      if (body === null && metaCategory !== 'AUTHENTICATION' && carousel === null) throw new Unsupported('the template has no BODY text');
-      if (body !== null && body.length > BODY_MAX) throw new Unsupported(`the body is longer than ${BODY_MAX} characters`);
+      if (body === null && metaCategory !== 'AUTHENTICATION' && carousel === null)
+        throw new Unsupported('the template has no BODY text');
+      if (body !== null && body.length > BODY_MAX)
+        throw new Unsupported(`the body is longer than ${BODY_MAX} characters`);
     } catch (e) {
-      if (e instanceof Unsupported) return { kind: 'quarantine', code: 'TEMPLATE_COMPONENT_UNSUPPORTED', reason: e.message };
+      if (e instanceof Unsupported)
+        return { kind: 'quarantine', code: 'TEMPLATE_COMPONENT_UNSUPPORTED', reason: e.message };
       throw e;
     }
 
@@ -207,11 +240,21 @@ export const templates: HandlerSpec = {
     const t = times(doc, ctx.fallbackAt);
     const soft: Soft[] = [...t.soft];
     if (doc.used_automation_ids !== undefined)
-      soft.push({ code: 'TEMPLATE_USAGE_DROPPED', reason: 'used_automation_ids (which automations use the template) was not kept' });
+      soft.push({
+        code: 'TEMPLATE_USAGE_DROPPED',
+        reason: 'used_automation_ids (which automations use the template) was not kept',
+      });
     if (attachment && attachment !== 'location')
-      soft.push({ code: 'HEADER_SAMPLE_NOT_KEPT', reason: 'the media header example is a short-lived Meta link and was not kept; the template keeps its Meta id' });
+      soft.push({
+        code: 'HEADER_SAMPLE_NOT_KEPT',
+        reason:
+          'the media header example is a short-lived Meta link and was not kept; the template keeps its Meta id',
+      });
     const createdBy = doc.created_by as Doc | null | undefined;
-    const user = createdBy?.id !== undefined && createdBy?.id !== null ? ctx.ref('user', createdBy.id) : undefined;
+    const user =
+      createdBy?.id !== undefined && createdBy?.id !== null
+        ? ctx.ref('user', createdBy.id)
+        : undefined;
     const reason = str(doc.rejection_reason);
     const auth = metaCategory === 'AUTHENTICATION';
 
@@ -235,7 +278,13 @@ export const templates: HandlerSpec = {
             rejection_reason: reason && reason.toUpperCase() !== 'NONE' ? reason : null,
             category: metaCategory.toLowerCase(),
             meta_category: metaCategory,
-            template_type: auth ? 'auth' : carousel ? 'carousel' : attachment ? 'media' : 'standard',
+            template_type: auth
+              ? 'auth'
+              : carousel
+                ? 'carousel'
+                : attachment
+                  ? 'media'
+                  : 'standard',
             attachment_type: attachment,
             language,
             parameter_format: named ? 'NAMED' : 'POSITIONAL',

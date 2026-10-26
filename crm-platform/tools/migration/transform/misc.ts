@@ -153,7 +153,13 @@ export const groups: HandlerSpec = {
   update: {},
   tables: {
     contact_groups: {
-      columns: [c('name', 'text'), c('note', 'text'), c('color', 'text'), c('created_by', 'bigint'), ...TS_COLS],
+      columns: [
+        c('name', 'text'),
+        c('note', 'text'),
+        c('color', 'text'),
+        c('created_by', 'bigint'),
+        ...TS_COLS,
+      ],
       fp: ['name'],
       constants: { row_version: 1 },
     },
@@ -181,7 +187,10 @@ export const groups: HandlerSpec = {
       };
     const t = times(doc, ctx.fallbackAt);
     // the creator is a migrated user when the Waboo id resolves; otherwise NULL (the list stays, the creator is not shown)
-    const creator = doc.created_by !== undefined && doc.created_by !== null ? ctx.ref('user', doc.created_by) : undefined;
+    const creator =
+      doc.created_by !== undefined && doc.created_by !== null
+        ? ctx.ref('user', doc.created_by)
+        : undefined;
     return {
       kind: 'rows',
       soft: t.soft,
@@ -189,7 +198,14 @@ export const groups: HandlerSpec = {
         {
           table: 'contact_groups',
           sub: '',
-          row: { name, note: null, color: null, created_by: creator?.id ?? null, created_at: t.created, updated_at: t.updated },
+          row: {
+            name,
+            note: null,
+            color: null,
+            created_by: creator?.id ?? null,
+            created_at: t.created,
+            updated_at: t.updated,
+          },
         },
       ],
     };

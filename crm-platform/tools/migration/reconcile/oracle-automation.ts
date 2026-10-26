@@ -178,7 +178,9 @@ export function oracleAutomations(
       const key3 = `${n.type}|${n.cls}|${n.fn}`;
       const supported = key3 in NODE_TYPE;
       // the same link twice (same port, same step) is one link in WaDesk: the converter keeps one (automation/convert.ts)
-      edgeCount += new Set(n.edges.filter((e) => exists.has(e.to)).map((e) => `${e.port}\u0000${e.to}`)).size;
+      edgeCount += new Set(
+        n.edges.filter((e) => exists.has(e.to)).map((e) => `${e.port}\u0000${e.to}`),
+      ).size;
       if (n.type === 'trigger' && n !== primary) {
         nodeCount += 1;
         placeholders += 1;

@@ -1304,7 +1304,13 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
           );
           const events = Number(
             // net: a message deleted or soft-deleted after the import writes a -1 event (2030_msg_feed_deletes), so the sum is what is still shown
-            ((await tx.execute(sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7`)).rows[0] as { n: number }).n,
+            (
+              (
+                await tx.execute(
+                  sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7`,
+                )
+              ).rows[0] as { n: number }
+            ).n,
           );
           return events === counted;
         });
@@ -1792,7 +1798,11 @@ async function checkOrg(
       // core-load moves the organization to the plan built from the Waboo plan (a hidden plan this tool made); that is not drift
       const closedPlan =
         String(o.plan) !== String(want.plan) &&
-        (await tx.execute(sql`SELECT 1 FROM plans WHERE slug = ${o.plan} AND detail LIKE 'Created by the Waboo migration%'`)).rows.length > 0;
+        (
+          await tx.execute(
+            sql`SELECT 1 FROM plans WHERE slug = ${o.plan} AND detail LIKE 'Created by the Waboo migration%'`,
+          )
+        ).rows.length > 0;
       for (const k of ['slug', 'name', 'status', 'plan'] as const) {
         if (k === 'plan' && closedPlan) continue;
         if (String(o[k]) !== String(want[k]))
@@ -1804,7 +1814,15 @@ async function checkOrg(
     // timezone is set at provisioning from --timezone (like signup) and is the owner's to change afterwards
     const { ownerUserId, timezone: _tz, ...rest } = o.settings as Record<string, unknown>;
     // core-load adds the Waboo business facts (plan code, provider, subscription id ...) under legacy.waboo; only the marker is compared
-    const legacyOnly = { ...rest, legacy: { waboo: { client: ((rest.legacy as { waboo?: { client?: string } } | undefined)?.waboo ?? {}).client } } };
+    const legacyOnly = {
+      ...rest,
+      legacy: {
+        waboo: {
+          client: ((rest.legacy as { waboo?: { client?: string } } | undefined)?.waboo ?? {})
+            .client,
+        },
+      },
+    };
     if (stable(legacyOnly) !== stable({ legacy: { waboo: { client } } }))
       alarm(
         'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker, ownerUserId and timezone)',

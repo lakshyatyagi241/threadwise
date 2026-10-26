@@ -141,7 +141,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   );
   // a channel is the row with the map's phone number id OR the row this tool made for it (uuid from the map's id): once the real number is
   // connected the row carries the real id, but the threads (and their uuids) were made under the map's id
-  const chanUuidOf = new Map(exts.map((e) => [uuidv5(`${client}|chat_channel|whatsapp_cloud|${e}`), e]));
+  const chanUuidOf = new Map(
+    exts.map((e) => [uuidv5(`${client}|chat_channel|whatsapp_cloud|${e}`), e]),
+  );
   const extOf = (external: string | null, chuuid: string | null): string | null =>
     external !== null && exts.includes(external)
       ? external
@@ -184,7 +186,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   if (a.source.collections(client).includes('visitor_logs'))
     for await (const d of a.source.read(client, 'visitor_logs')) {
       const sid = String(d.session_id ?? '').trim();
-      const st = String(d.conversation_status ?? '').trim().toLowerCase();
+      const st = String(d.conversation_status ?? '')
+        .trim()
+        .toLowerCase();
       if (sid === '' || (st !== 'open' && st !== 'closed')) continue;
       const raw = d.last_message_time ?? d.updatedAt;
       const t = raw instanceof Date ? raw.getTime() : Date.parse(String(raw ?? ''));
@@ -274,7 +278,12 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     const seqUnsure = new Set<string>();
     for (const m of oracle.messages.values()) {
       const p = a.plan.docs.get(m.key);
-      if (m.verdict === 'load' && m.bodyMd5 === undefined && p?.state === 'quarantine' && p.code === 'EMPTY_MESSAGE')
+      if (
+        m.verdict === 'load' &&
+        m.bodyMd5 === undefined &&
+        p?.state === 'quarantine' &&
+        p.code === 'EMPTY_MESSAGE'
+      )
         seqUnsure.add(m.thread!);
     }
     if (seqUnsure.size > 0)
@@ -311,7 +320,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       }
       if (
         m.verdict === 'load' &&
-        (!seqUnsure.has(m.thread!) && p.seq !== m.seq || p.at !== m.at || Boolean(p.ledgerKey) !== m.ledger)
+        ((!seqUnsure.has(m.thread!) && p.seq !== m.seq) ||
+          p.at !== m.at ||
+          Boolean(p.ledgerKey) !== m.ledger)
       )
         alarm(
           `ORACLE_MISMATCH: chathistory ${m.key}: seq/time/ledger differ (independent seq ${m.seq} at ${m.at} ledger ${m.ledger}; loader seq ${p.seq} at ${p.at} ledger ${Boolean(p.ledgerKey)})`,
@@ -801,7 +812,11 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     for (const r of chRows) {
       const marker = (r.settings as { legacy?: { waboo?: { client?: string } } } | null)?.legacy
         ?.waboo?.client;
-      if (marker === client && !exts.includes(String(r.external_id)) && !chanUuidOf.has(String(r.uuid)))
+      if (
+        marker === client &&
+        !exts.includes(String(r.external_id)) &&
+        !chanUuidOf.has(String(r.uuid))
+      )
         alarm(`EXTRA_ROWS: a channel carries the migration marker but is not in the channel map`);
     }
 

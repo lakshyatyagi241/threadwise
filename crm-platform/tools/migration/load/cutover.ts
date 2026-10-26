@@ -1043,7 +1043,9 @@ export async function cutover(o: CutoverOptions): Promise<number> {
       if (primary?.cfg) {
         const cfgId = primary.cfg.id;
         await withTenant(worker.db, { orgId }, (tx) =>
-          tx.execute(sql`UPDATE wa_templates SET provider_config_id = ${cfgId} WHERE org_id = ${orgId} AND provider_config_id IS NULL`),
+          tx.execute(
+            sql`UPDATE wa_templates SET provider_config_id = ${cfgId} WHERE org_id = ${orgId} AND provider_config_id IS NULL`,
+          ),
         );
         say(`  DONE  3 templates linked to the connected number ${tail(primary.ext)}`);
       }

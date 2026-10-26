@@ -37,7 +37,9 @@ export async function contactFieldKeys(db: Database, orgId: number): Promise<Set
 /** keys of the contact fields the app refuses a flow write to (is_read_only): see flows/plan.ts PROPERTY_READ_ONLY */
 export async function readOnlyFieldKeys(db: Database, orgId: number): Promise<Set<string>> {
   const r = await withTenant(db, { orgId }, (tx) =>
-    tx.execute(sql`SELECT key FROM fields WHERE org_id = ${orgId} AND module_key = 'contacts' AND is_read_only`),
+    tx.execute(
+      sql`SELECT key FROM fields WHERE org_id = ${orgId} AND module_key = 'contacts' AND is_read_only`,
+    ),
   );
   return new Set((r.rows as Array<{ key: string }>).map((x) => x.key));
 }

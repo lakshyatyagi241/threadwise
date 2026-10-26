@@ -72,13 +72,18 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
         ),
       )
     ).rows[0] as { id: number | string } | undefined;
-    if (!org) throw new Error(`FLOWSTATE_NO_ORG: no organization "${o.orgSlug}" made by this tool for ${o.client}`);
+    if (!org)
+      throw new Error(
+        `FLOWSTATE_NO_ORG: no organization "${o.orgSlug}" made by this tool for ${o.client}`,
+      );
     const orgId = Number(org.id);
 
     const src = new NdjsonDirSource(o.dumpsDir);
     const [autos, bots, versions] = await Promise.all(
       ['automation_metadata', 'chatbots', 'bot_flow_version'].map((c) =>
-        src.collections(o.client).includes(c) ? collect(src.read(o.client, c)) : Promise.resolve([] as Doc[]),
+        src.collections(o.client).includes(c)
+          ? collect(src.read(o.client, c))
+          : Promise.resolve([] as Doc[]),
       ),
     );
 
@@ -112,34 +117,63 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
     const plan: Array<{ row: FlowRow; live: boolean; why: string; at: string | null }> = [];
     for (const { row: r, keys } of byFlow.values()) {
       if (keys.size === 0) {
-        plan.push({ row: r, live: false, why: 'no source record (not made by this tool)', at: null });
+        plan.push({
+          row: r,
+          live: false,
+          why: 'no source record (not made by this tool)',
+          at: null,
+        });
         continue;
       }
       if (r.category === AUTOMATION_CATEGORY) {
         const d = autos.find((x) => docKeys(x).some((k) => keys.has(k.key)));
         const live = !!d && text(d.status).toLowerCase() === 'published' && d.is_active === true;
         const at = d ? (toDate(d.publishedOn)?.toISOString() ?? null) : null;
-        plan.push({ row: r, live, why: live ? 'published and active at the source' : `source status "${text(d?.status) || 'unknown'}"`, at });
+        plan.push({
+          row: r,
+          live,
+          why: live
+            ? 'published and active at the source'
+            : `source status "${text(d?.status) || 'unknown'}"`,
+          at,
+        });
       } else {
-        const bot = bots.find((x) => [text(x.id), text(x.bot_id), ...docKeys(x).map((k) => k.key)].some((k) => k !== '' && keys.has(k)));
+        const bot = bots.find((x) =>
+          [text(x.id), text(x.bot_id), ...docKeys(x).map((k) => k.key)].some(
+            (k) => k !== '' && keys.has(k),
+          ),
+        );
         const botIds = new Set([text(bot?.id), text(bot?.bot_id)].filter(Boolean));
         const pub = versions
           .filter((v) => botIds.has(text(v.botid)) && text(v.status).toLowerCase() === 'published')
-          .sort((a, b) => (toDate(b.publishedAt)?.getTime() ?? 0) - (toDate(a.publishedAt)?.getTime() ?? 0))[0];
+          .sort(
+            (a, b) =>
+              (toDate(b.publishedAt)?.getTime() ?? 0) - (toDate(a.publishedAt)?.getTime() ?? 0),
+          )[0];
         const converted = ![...keys].some((k) => notes.has(k));
         const live = !!bot && bot.is_active !== false && !!pub && converted;
         plan.push({
           row: r,
           live,
-          why: live ? 'bot active, published version converted' : !pub ? 'no published version at the source' : !converted ? 'the published version could not be converted (note kept)' : 'bot not active',
+          why: live
+            ? 'bot active, published version converted'
+            : !pub
+              ? 'no published version at the source'
+              : !converted
+                ? 'the published version could not be converted (note kept)'
+                : 'bot not active',
           at: pub ? (toDate(pub.publishedAt)?.toISOString() ?? null) : null,
         });
       }
     }
     for (const p of plan)
-      o.log(`  flow  ${p.live ? 'LIVE ' : 'draft'}  ${p.row.flow_name.slice(0, 42).padEnd(42)} ${p.why}`);
+      o.log(
+        `  flow  ${p.live ? 'LIVE ' : 'draft'}  ${p.row.flow_name.slice(0, 42).padEnd(42)} ${p.why}`,
+      );
     const todo = plan.filter((p) => p.live && !(p.row.is_published && p.row.is_active));
-    o.log(`  flow  ${plan.filter((p) => p.live).length} live at the source, ${todo.length} to change, ${plan.filter((p) => !p.live).length} stay draft`);
+    o.log(
+      `  flow  ${plan.filter((p) => p.live).length} live at the source, ${todo.length} to change, ${plan.filter((p) => !p.live).length} stay draft`,
+    );
     const liveIds = plan.filter((p) => p.live).map((p) => Number(p.row.id));
     if (!o.apply) {
       o.log('  flow  DRY RUN: nothing was written (add --apply --confirm-org-slug <slug>)');
@@ -150,13 +184,17 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
       (
         (
           await withTenant(worker.db, { orgId }, (tx) =>
-            tx.execute(sql`SELECT count(*)::int AS n FROM channels WHERE org_id = ${orgId} AND status = 'connected'`),
+            tx.execute(
+              sql`SELECT count(*)::int AS n FROM channels WHERE org_id = ${orgId} AND status = 'connected'`,
+            ),
           )
         ).rows[0] as { n: number }
       ).n,
     );
     if (connected > 0 && !o.allowConnected)
-      throw new Error(`FLOWSTATE_CHANNEL_CONNECTED: ${connected} WhatsApp channel(s) are connected: a live flow would answer customers. Nothing was written`);
+      throw new Error(
+        `FLOWSTATE_CHANNEL_CONNECTED: ${connected} WhatsApp channel(s) are connected: a live flow would answer customers. Nothing was written`,
+      );
 
     // One transaction: arm the flows, then copy the draft into the published copies the runtime reads (2028 and 2029 migrations), as the
     // publish path does. A live flow never exists without its copy; without one the runtime reads the draft, so a saved edit or a typed
@@ -171,14 +209,19 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
           UPDATE flows SET published_flow_data = flow_data, published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
             published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
             published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id, published_provider = provider
-          WHERE org_id = ${orgId} AND id IN (${sql.join(liveIds.map((id) => sql`${id}`), sql`, `)}) AND is_published AND published_flow_data IS NULL`);
+          WHERE org_id = ${orgId} AND id IN (${sql.join(
+            liveIds.map((id) => sql`${id}`),
+            sql`, `,
+          )}) AND is_published AND published_flow_data IS NULL`);
     });
     const armed = plan.filter((p) => p.live).map((p) => p.row.uuid);
     await worker.db.execute(sql`
       INSERT INTO migration.run_log (source_client, collection, step, run_id, last_key, state, counts)
       VALUES (${o.client}, ${FLOW_STATE_COLLECTION}, ${FLOW_STATE_STEP}, 'flow-state', 0, 'done', ${JSON.stringify({ armed, at: new Date().toISOString() })}::jsonb)
       ON CONFLICT (source_client, collection, step) DO UPDATE SET counts = EXCLUDED.counts, updated_at = now()`);
-    o.log(`  flow  done: ${todo.length} flow(s) published and active as at the source; ${armed.length} recorded for the verifier`);
+    o.log(
+      `  flow  done: ${todo.length} flow(s) published and active as at the source; ${armed.length} recorded for the verifier`,
+    );
   } finally {
     await worker.close();
     await owner.close();

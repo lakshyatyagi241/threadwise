@@ -313,7 +313,9 @@ export async function verifyFlows(a: Args): Promise<void> {
   if (!a.allowExtraRows) {
     // the flow-state step armed these on purpose (published and active as in Waboo): they are not a safety finding
     const armedNow = await armedFlowUuids(db, client);
-    const notArmed = armedNow.size ? ` AND uuid::text NOT IN (${[...armedNow].map((u) => `'${u.replace(/'/g, '')}'`).join(',')})` : '';
+    const notArmed = armedNow.size
+      ? ` AND uuid::text NOT IN (${[...armedNow].map((u) => `'${u.replace(/'/g, '')}'`).join(',')})`
+      : '';
     const probes: Array<[string, string]> = [
       ['is_published OR is_active', 'is_published OR is_active'],
       [
@@ -335,7 +337,9 @@ export async function verifyFlows(a: Args): Promise<void> {
       ],
     ];
     for (const [name, where] of probes) {
-      const n = await q1(`SELECT count(*) AS n FROM flows WHERE org_id = ${orgId} AND (${where})${notArmed}`);
+      const n = await q1(
+        `SELECT count(*) AS n FROM flows WHERE org_id = ${orgId} AND (${where})${notArmed}`,
+      );
       if (n > 0)
         alarm(
           `SENDABLE_FLOW: ${n} imported flow(s) are picked up by ${name}: an imported flow must be unpublished AND inactive`,

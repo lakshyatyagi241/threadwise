@@ -183,7 +183,11 @@ export class AccessOracle {
         preset,
         approver: Boolean(mapped && text(mapped.approvedBy) !== ''),
         allowAdmin,
-        adminByDecision: !preset && text(d.label || d.name).trim().toLowerCase() === 'admin',
+        adminByDecision:
+          !preset &&
+          text(d.label || d.name)
+            .trim()
+            .toLowerCase() === 'admin',
         name,
         created: isoOf(created),
         updated: isoOf(updated),
@@ -298,7 +302,16 @@ export class AccessOracle {
     const rk = typeof d.role_id === 'string' ? d.role_id.trim() : '';
     const r = rk ? this.roles.get(rk) : undefined;
     if (r && !r.deleted)
-      role = r.kind === 'preset' ? { kind: 'preset', preset: r.preset!, role: r } : r.adminByDecision ? { kind: 'preset', preset: 'admin', role: { ...r, kind: 'preset', preset: 'admin', approver: true } } : { kind: 'custom', role: r };
+      role =
+        r.kind === 'preset'
+          ? { kind: 'preset', preset: r.preset!, role: r }
+          : r.adminByDecision
+            ? {
+                kind: 'preset',
+                preset: 'admin',
+                role: { ...r, kind: 'preset', preset: 'admin', approver: true },
+              }
+            : { kind: 'custom', role: r };
 
     const w: Record<string, unknown> = {
       sourceUserId: text(d.user_id) || keys[0],

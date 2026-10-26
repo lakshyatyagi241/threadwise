@@ -156,16 +156,31 @@ const ORIGIN_TYPES = new Set([
 ]);
 const HEADER_MEDIA = new Set(['image', 'video', 'document']);
 
-const MEDIA_KINDS: ReadonlySet<MessageKind> = new Set(['image', 'video', 'audio', 'voice', 'document', 'sticker']);
+const MEDIA_KINDS: ReadonlySet<MessageKind> = new Set([
+  'image',
+  'video',
+  'audio',
+  'voice',
+  'document',
+  'sticker',
+]);
 
 /**
  * A file or image message whose dump holds no URL: nothing can be copied, and Waboo kept only the caption (or nothing). It is flagged, so the
  * files step counts it as a known gap instead of failing the whole step, and the inbox shows the content as unavailable.
  */
-function flagMediaWithoutFile(kind: MessageKind, url: string | null, legacy: Record<string, unknown>, soft: Soft[]): void {
+function flagMediaWithoutFile(
+  kind: MessageKind,
+  url: string | null,
+  legacy: Record<string, unknown>,
+  soft: Soft[],
+): void {
   if (url !== null || !MEDIA_KINDS.has(kind)) return;
   legacy.contentUnavailable = true;
-  soft.push({ code: 'MEDIA_UNAVAILABLE', reason: 'a file or image with no URL in the dump: kept without the file' });
+  soft.push({
+    code: 'MEDIA_UNAVAILABLE',
+    reason: 'a file or image with no URL in the dump: kept without the file',
+  });
 }
 
 const textOf = (v: unknown): string | null => {

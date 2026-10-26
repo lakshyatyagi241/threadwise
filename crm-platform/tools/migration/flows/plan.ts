@@ -556,7 +556,8 @@ export async function buildFlowPlan(a: PlanInput): Promise<FlowPlan> {
         if (locked.size > 0)
           soft.push({
             code: 'PROPERTY_READ_ONLY',
-            reason: 'an ask step saves into a read-only contact field; the step keeps the answer in the flow only',
+            reason:
+              'an ask step saves into a read-only contact field; the step keeps the answer in the flow only',
             detail: [...locked].sort(),
           });
       }

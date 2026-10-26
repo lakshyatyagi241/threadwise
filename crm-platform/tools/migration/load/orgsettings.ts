@@ -237,7 +237,10 @@ export const SUBSCRIPTION_CHANNELS = [
  * consent is never invented. The Subscription card and the send paths read the ledger, not the contact columns. Idempotent: the event key
  * is per contact and channel, and the state is written once per contact and channel.
  */
-export async function marketingConsent(ownerDb: Database, orgId: number): Promise<{ events: number; states: number }> {
+export async function marketingConsent(
+  ownerDb: Database,
+  orgId: number,
+): Promise<{ events: number; states: number }> {
   return withPrivileged(ownerDb, async (tx) => {
     for (const { channel, column } of SUBSCRIPTION_CHANNELS) {
       await tx.execute(sql`
@@ -255,10 +258,12 @@ export async function marketingConsent(ownerDb: Database, orgId: number): Promis
         FROM contact_consent_events e
        WHERE e.org_id = ${orgId} AND e.idempotency_key LIKE 'migration:marketing:%' AND e.contact_id IS NOT NULL
       ON CONFLICT (org_id, contact_id, channel, purpose) DO NOTHING`);
-    const n = (await tx.execute(sql`
+    const n = (
+      await tx.execute(sql`
       SELECT (SELECT count(*)::int FROM contact_consent_events WHERE org_id = ${orgId} AND idempotency_key LIKE 'migration:marketing:%') AS events,
              (SELECT count(*)::int FROM contact_consent_state s WHERE s.org_id = ${orgId} AND s.last_event_id IN
-               (SELECT id FROM contact_consent_events WHERE org_id = ${orgId} AND idempotency_key LIKE 'migration:marketing:%')) AS states`)).rows[0] as {
+               (SELECT id FROM contact_consent_events WHERE org_id = ${orgId} AND idempotency_key LIKE 'migration:marketing:%')) AS states`)
+    ).rows[0] as {
       events: number;
       states: number;
     };

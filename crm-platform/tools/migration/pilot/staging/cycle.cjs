@@ -1439,7 +1439,8 @@ function runExport(client, db, force = false) {
  */
 function coreSnapshot(cfg, db) {
   const bin = process.env.CORE_OPENING_BIN || path.join(HERE, 'core-opening.cjs');
-  if (!fs.existsSync(bin)) refuse(`the geta_core reader ${bin} does not exist (set CORE_OPENING_BIN)`);
+  if (!fs.existsSync(bin))
+    refuse(`the geta_core reader ${bin} does not exist (set CORE_OPENING_BIN)`);
   const out = fs.mkdtempSync(path.join(os.tmpdir(), 'core-snapshot-'));
   try {
     const r = spawnSync(

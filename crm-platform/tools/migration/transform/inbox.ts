@@ -111,7 +111,16 @@ export const inbox: HandlerSpec = {
       ],
       // the file step (copy-files) writes the stored media (key, size, type, checksum) and points meta.legacy.mediaUrl at the object: its own
       // verify checks every object and that no row still points at Waboo, so the row comparison leaves those columns to it
-      skipCompare: ['id', 'conversation_id', 'media_key', 'media_mime', 'media_name', 'media_size', 'media_sha256', 'meta'],
+      skipCompare: [
+        'id',
+        'conversation_id',
+        'media_key',
+        'media_mime',
+        'media_name',
+        'media_size',
+        'media_sha256',
+        'meta',
+      ],
       constants: MESSAGE_CONSTANTS,
       windowCol: 'created_at',
       liveColumns: [

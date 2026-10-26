@@ -555,7 +555,11 @@ export const widgetAssistants: HandlerSpec = {
       kind: 'rows',
       // the bot's "did not understand" reply lives on the agent now (the FAQ engine's faq_settings.fallback_message is retired)
       rows: [
-        { table: 'ai_chat_assistants', sub: '', row: { ...w.assistant, fallback_message: w.fallback } },
+        {
+          table: 'ai_chat_assistants',
+          sub: '',
+          row: { ...w.assistant, fallback_message: w.fallback },
+        },
       ],
     };
   },

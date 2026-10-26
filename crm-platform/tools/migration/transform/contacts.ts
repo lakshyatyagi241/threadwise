@@ -151,8 +151,10 @@ export function subscriptionStatus(raw: unknown, idx: SourceIndex, field?: strin
  */
 export function optionValueOf(field: string, raw: unknown, idx: SourceIndex): unknown {
   // Created By / Updated By hold a Waboo user id: Desk shows the person's name; Original Lifecycle Stage holds a stage id: Desk shows its label
-  if ((field === 'created_by' || field === 'updated_by') && typeof raw === 'string') return idx.userNames?.get(raw) ?? raw;
-  if (field === 'original_lifecycle_stage' && typeof raw === 'string') return idx.stageByKey.get(raw)?.label ?? raw;
+  if ((field === 'created_by' || field === 'updated_by') && typeof raw === 'string')
+    return idx.userNames?.get(raw) ?? raw;
+  if (field === 'original_lifecycle_stage' && typeof raw === 'string')
+    return idx.stageByKey.get(raw)?.label ?? raw;
   const opts = idx.optionsByField?.get(field);
   if (!opts || raw === null || raw === undefined) return raw;
   const one = (v: unknown): unknown => {
@@ -361,8 +363,9 @@ export const contacts: HandlerSpec = {
     }
 
     const ccRaw = str(doc.country_code);
-    const picked = chooseContactPhone([str(doc.mobile_phone_number), str(doc.whatsapp_phone_number)], (raw) =>
-      transformHooks.phoneOf(raw, ccRaw, ctx.defaultCountryCode),
+    const picked = chooseContactPhone(
+      [str(doc.mobile_phone_number), str(doc.whatsapp_phone_number)],
+      (raw) => transformHooks.phoneOf(raw, ccRaw, ctx.defaultCountryCode),
     );
     const phone = picked.phone;
     if (picked.rejected !== null)
@@ -446,7 +449,11 @@ export const contacts: HandlerSpec = {
       source = cutText(source, 128);
     }
 
-    const wa = subscriptionStatus(doc.whatsapp_subscription_status, ctx.idx, 'whatsapp_subscription_status');
+    const wa = subscriptionStatus(
+      doc.whatsapp_subscription_status,
+      ctx.idx,
+      'whatsapp_subscription_status',
+    );
     const data: Record<string, unknown> = {};
     const dropped: string[] = [];
     for (const [k, v] of Object.entries(doc)) {
@@ -475,7 +482,11 @@ export const contacts: HandlerSpec = {
       // refused by the next save of the contact
       const cap = FORM_FIELD_LIMITS[key];
       if (cap !== undefined && typeof value === 'string' && value.length > cap) {
-        soft.push({ code: 'TRUNCATED', reason: `${key} longer than the app's ${cap}-character limit`, detail: value });
+        soft.push({
+          code: 'TRUNCATED',
+          reason: `${key} longer than the app's ${cap}-character limit`,
+          detail: value,
+        });
         value = cutText(value, cap);
       }
       setOwn(data, key, value);
@@ -533,15 +544,24 @@ export const contacts: HandlerSpec = {
             previous_lifecycle_stage_date: previousAt,
             lost_reason: str(doc.lost_reason),
             whatsapp_subscription_status: wa,
-            sms_subscription_status: subscriptionStatus(doc.sms_subscription_status, ctx.idx, 'sms_subscription_status'),
-            email_subscription_status: subscriptionStatus(doc.email_subscription_status, ctx.idx, 'email_subscription_status'),
+            sms_subscription_status: subscriptionStatus(
+              doc.sms_subscription_status,
+              ctx.idx,
+              'sms_subscription_status',
+            ),
+            email_subscription_status: subscriptionStatus(
+              doc.email_subscription_status,
+              ctx.idx,
+              'email_subscription_status',
+            ),
             country_code: cc,
             is_unsubscribed: wa === 'unsubscribed',
             owner_id: ownerId,
             source,
             status,
             // the app keeps these two in columns of their own (the API reads them there); Waboo stores the checkbox as an option id
-            email_confirmed: optionValueOf('email_confirmed', doc.email_confirmed, ctx.idx) === true,
+            email_confirmed:
+              optionValueOf('email_confirmed', doc.email_confirmed, ctx.idx) === true,
             fax_number: str(doc.fax_number),
             created_at: t.created,
             updated_at: t.updated,
