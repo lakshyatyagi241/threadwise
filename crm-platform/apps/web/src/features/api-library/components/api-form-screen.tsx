@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import {
   API_LIBRARY_METHODS,
   API_LIBRARY_NAME_MAX,
@@ -52,6 +52,7 @@ import {
   noErrors,
   requestSignature,
   sentVariables,
+  forgetVariableSources,
   syncVariables,
   withSentVariables,
   type ApiFormState,
@@ -167,7 +168,12 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
   const canWrite = useCan(editing ? 'integ.apilibrary.update' : 'integ.apilibrary.create');
   const canTest = useCan('integ.apilibrary.test');
 
-  const [form, setFormRaw] = useState<ApiFormState>(() => syncVariables(initial));
+  const [form, setFormRaw] = useState<ApiFormState>(() => {
+    // The remembered "this name is a flow variable" belongs to the form it was added in, not to the session.
+    forgetVariableSources();
+    return syncVariables(initial);
+  });
+  useEffect(() => forgetVariableSources, []);
   const [baseline] = useState(() => fullSignature(editing ? initial : emptyForm()));
   const [showErrors, setShowErrors] = useState(false);
   const [serverErrors, setServerErrors] = useState<FormErrors>(noErrors());
@@ -623,7 +629,7 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
             <SectionCard id="alib-s-mapping" title={t('sections.mapping')} hint={t('mappingHint')}>
               <MappingEditor
                 rows={form.mapping}
-                properties={props.data?.data ?? []}
+                properties={(props.data?.data ?? []).filter((p) => !p.readOnly)}
                 propertiesState={props.isPending ? 'loading' : props.isError ? 'error' : 'ready'}
                 lastJson={lastJson}
                 errors={errors}

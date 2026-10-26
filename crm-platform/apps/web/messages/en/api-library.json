@@ -115,7 +115,8 @@
         "source": "Source",
         "result": "Result",
         "statusCode": "Status code",
-        "duration": "Duration"
+        "duration": "Duration",
+        "bot": "Bot"
       },
       "openLog": "Open the run of {when}",
       "unsaved": "Not saved",
@@ -141,7 +142,9 @@
         "allSources": "All sources",
         "from": "From",
         "to": "To",
-        "clear": "Clear filters"
+        "clear": "Clear filters",
+        "bot": "Bot",
+        "allBots": "All bots"
       },
       "detail": {
         "title": "API log details",
@@ -174,7 +177,8 @@
         "noContext": "No flow or contact was involved."
       },
       "export": "Export CSV",
-      "exporting": "Exporting…"
+      "exporting": "Exporting…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Insert a variable into {label}",

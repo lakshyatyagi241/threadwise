@@ -115,7 +115,8 @@
         "source": "Origine",
         "result": "Esito",
         "statusCode": "Codice di stato",
-        "duration": "Durata"
+        "duration": "Durata",
+        "bot": "Bot"
       },
       "openLog": "Apri l'esecuzione del {when}",
       "drawerTitle": "Log: {name}",
@@ -140,7 +141,9 @@
         "to": "A",
         "clear": "Rimuovi filtri",
         "deletedApi": "{name} (eliminata)",
-        "searchTooLong": "La ricerca può contenere al massimo {max} caratteri. Accorciala per cercare."
+        "searchTooLong": "La ricerca può contenere al massimo {max} caratteri. Accorciala per cercare.",
+        "bot": "Bot",
+        "allBots": "Tutti i bot"
       },
       "detail": {
         "title": "Dettagli log API",
@@ -174,7 +177,8 @@
       },
       "unsaved": "Non salvata",
       "export": "Esporta CSV",
-      "exporting": "Esportazione in corso…"
+      "exporting": "Esportazione in corso…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Inserisci una variabile in {label}",

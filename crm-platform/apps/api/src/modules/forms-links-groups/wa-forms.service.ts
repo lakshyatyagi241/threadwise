@@ -6,6 +6,7 @@ import {
   type WaFormList,
   type WaFormListQuery,
   type WaFormPickerList,
+  type WaFormPreview,
   type WaFormSyncResponse,
   type WaFormSubmissionList,
   type WaFormSubmissionListQuery,
@@ -232,12 +233,15 @@ export class WaFormsService {
   }
 
   /** TW-WFL-004: resolve WABA creds, create-or-reuse the Meta Flow, upload the JSON, ensure the encryption key, publish. */
-  async publish(uuid: string): Promise<WaForm> {
-    const ctx = RequestContextStore.require();
+  /**
+   * The form and the direct Meta connection its Flow lives on (or will be made on). A retry of an already-provisioned form keeps the
+   * connection that owns its Flow id.
+   */
+  private async flowTarget(orgId: number, uuid: string) {
     const { form, candidateConfigIds } = await this.db.tx(async (tx) => {
-      const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+      const row = await this.repo.findByUuid(tx, orgId, uuid);
       if (!row) throw AppError.notFound('Form', uuid);
-      const ids = await this.repo.wabaProviderConfigIds(tx, ctx.orgId);
+      const ids = await this.repo.wabaProviderConfigIds(tx, orgId);
       return { form: row, candidateConfigIds: ids };
     });
 
@@ -267,7 +271,7 @@ export class WaFormsService {
     let resolved: { configId: number; conn: WabaConnection } | null = null;
     for (const configId of orderedConfigIds) {
       const r = await this.db.tx((tx) =>
-        this.connections.resolveConnection(tx, ctx.orgId, { id: configId }),
+        this.connections.resolveConnection(tx, orgId, { id: configId }),
       );
       if (isUsableMetaConnection(r?.conn)) {
         resolved = { configId, conn: r.conn };
@@ -281,6 +285,63 @@ export class WaFormsService {
         422,
       );
     }
+
+    return { form, resolved };
+  }
+
+  /**
+   * Sends the saved form to Meta as a draft Flow (made if missing, its definition uploaded) and returns Meta's preview of it, so the
+   * form can be tried before it is published. Nothing is published and the form stays a draft here.
+   */
+  async preview(uuid: string): Promise<WaFormPreview> {
+    const ctx = RequestContextStore.require();
+    const { form, resolved } = await this.flowTarget(ctx.orgId, uuid);
+    const flowJson = buildMetaFlowJson(
+      normalizeDefinition(form.definition_json),
+      form.send_button_label,
+    );
+    const category = mapAudienceToMetaCategory(normalizeAudienceType(form.audience_type));
+    try {
+      const { flowId } = await this.flows.ensureFlow(resolved.conn, form.meta_flow_id, {
+        name: form.title,
+        categories: [category],
+      });
+      if (flowId !== form.meta_flow_id) {
+        await this.db.tx((tx) =>
+          this.repo.saveFlowId(tx, ctx.orgId, form.id, flowId, resolved.configId),
+        );
+      }
+      const { validationErrors } = await this.flows.uploadFlowJson(resolved.conn, flowId, flowJson);
+      if (validationErrors.length > 0) {
+        const first = validationErrors[0]!;
+        throw new AppError(
+          WFL_ERROR_CODES.WFL_FORM_META_VALIDATION_FAILED,
+          first.line != null ? `${first.message} (line ${first.line})` : first.message,
+          422,
+        );
+      }
+      const url = await this.flows.previewUrl(resolved.conn, flowId);
+      if (!url) {
+        throw new AppError(
+          WFL_ERROR_CODES.WFL_FORM_PREVIEW_FAILED,
+          'Meta did not give a preview for this form.',
+          422,
+        );
+      }
+      return { url, flowId };
+    } catch (err) {
+      if (err instanceof AppError) throw err;
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_PREVIEW_FAILED,
+        err instanceof WabaApiError ? (err.userMessage ?? err.message) : String(err),
+        422,
+      );
+    }
+  }
+
+  async publish(uuid: string): Promise<WaForm> {
+    const ctx = RequestContextStore.require();
+    const { form, resolved } = await this.flowTarget(ctx.orgId, uuid);
 
     const flowJson = buildMetaFlowJson(
       normalizeDefinition(form.definition_json),

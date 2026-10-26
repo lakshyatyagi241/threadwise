@@ -191,7 +191,9 @@ export function ButtonsEditor({
                             ? t('issue.flowIdRequired')
                             : err('flowIdInvalid')
                               ? t('issue.flowIdNotMeta')
-                              : undefined
+                              : err('screenRequired')
+                                ? t('issue.screenRequired')
+                                : undefined
                         }
                         onPick={(p) => patch(r.key, { flowId: p.flowId, screen: p.screen })}
                       />

@@ -38,6 +38,9 @@ export interface WaFormFlowsPort {
 
   publish(conn: WabaConnection, flowId: string): Promise<void>;
 
+  /** Meta's web preview of the flow as last uploaded (a draft works), so it can be tried before it is published; null when Meta gives none. */
+  previewUrl(conn: WabaConnection, flowId: string): Promise<string | null>;
+
   /** Every Flow of the connection's WhatsApp Business Account (all pages). */
   listFlows(conn: WabaConnection): Promise<MetaFlowSummary[]>;
 }

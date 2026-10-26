@@ -115,7 +115,8 @@
         "source": "Quelle",
         "result": "Ergebnis",
         "statusCode": "Statuscode",
-        "duration": "Dauer"
+        "duration": "Dauer",
+        "bot": "Bot"
       },
       "openLog": "Lauf von {when} öffnen",
       "drawerTitle": "Protokolle: {name}",
@@ -140,7 +141,9 @@
         "to": "Bis",
         "clear": "Filter zurücksetzen",
         "deletedApi": "{name} (gelöscht)",
-        "searchTooLong": "Die Suche darf höchstens {max} Zeichen lang sein. Kürzen Sie sie, um zu suchen."
+        "searchTooLong": "Die Suche darf höchstens {max} Zeichen lang sein. Kürzen Sie sie, um zu suchen.",
+        "bot": "Bot",
+        "allBots": "Alle Bots"
       },
       "detail": {
         "title": "Details zum API-Protokoll",
@@ -174,7 +177,8 @@
       },
       "unsaved": "Nicht gespeichert",
       "export": "CSV exportieren",
-      "exporting": "Wird exportiert…"
+      "exporting": "Wird exportiert…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Variable in {label} einfügen",

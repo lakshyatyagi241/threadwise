@@ -327,6 +327,15 @@
       },
       "audience": {
         "title": "Audience",
+        "emails": "Manual emails",
+        "emailsHint": "One per line, comma, or semicolon.",
+        "emailsPlaceholder": "One email address per line",
+        "emailsCount": "{count} addresses",
+        "emailCsvHint": "Columns: name, email. Any other column becomes a variable you can use in the message.",
+        "emailModes": {
+          "csv": { "title": "Upload CSV", "hint": "Import email addresses for this campaign." },
+          "manual": { "title": "Manual emails", "hint": "Paste one email address per line." }
+        },
         "numbers": "Manual numbers",
         "numbersHint": "One per line, comma, or semicolon. Country code required (with or without +).",
         "csv": "Upload a CSV",
@@ -352,7 +361,7 @@
         "csvRows": "{count} numbers in the file",
         "numbersPlaceholder": "One number per line — include the country code, no plus sign",
         "numbersCount": "{count} numbers",
-        "emailNote": "Emails go to the address on each contact. Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
+        "emailNote": "Emails go to the address on each contact. A typed address or a CSV row is matched to the contact with that address, or added as a new contact (it is not subscribed to anything by being on the list). Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
         "emailSkipped": "{count, plural, one {# chosen recipient has no email address and will be skipped.} other {# chosen recipients have no email address and will be skipped.}}",
         "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead.",
         "previousTitle": "Previous sends",

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { missingSlots, previewOf, sendBlock, whatsappChannels } from './single-send';
+import {
+  missingSlots,
+  previewOf,
+  resolveVariables,
+  sendBlock,
+  slotValue,
+  whatsappChannels,
+} from './single-send';
 
 const row = { phone: '+919800000001', email: 'a@b.co', optedOut: false };
 
@@ -48,5 +55,35 @@ describe('whatsappChannels', () => {
       { kind: 'simulator', status: 'connected' },
     ];
     expect(whatsappChannels(list)).toEqual([list[0]]);
+  });
+});
+
+describe('variables filled from the contact', () => {
+  const contact = { name: 'Asha Rao Nair', email: '', phone: '+911234', custom: { city: 'Pune' } };
+  const template = { slots: [{ key: '1' }, { key: '2' }, { key: '3' }] } as never;
+
+  it('takes a contact detail, and the fallback when the contact has none', () => {
+    expect(slotValue({ kind: 'field', field: 'first_name', fallback: 'there' }, contact)).toBe(
+      'Asha',
+    );
+    expect(slotValue({ kind: 'field', field: 'last_name', fallback: '' }, contact)).toBe(
+      'Rao Nair',
+    );
+    expect(slotValue({ kind: 'field', field: 'email', fallback: 'no email' }, contact)).toBe(
+      'no email',
+    );
+    expect(slotValue({ kind: 'field', field: 'city', fallback: '' }, contact)).toBe('Pune');
+  });
+  it('leaves a variable with no value out, so Send stays off until it has one', () => {
+    const vars = resolveVariables(
+      template,
+      {
+        '1': { kind: 'text', text: ' Hello ' },
+        '2': { kind: 'field', field: 'email', fallback: '' },
+      },
+      contact,
+    );
+    expect(vars).toEqual({ '1': 'Hello' });
+    expect(missingSlots(template, vars)).toEqual(['2', '3']);
   });
 });

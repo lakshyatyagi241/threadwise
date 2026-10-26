@@ -115,7 +115,8 @@
         "source": "출처",
         "result": "결과",
         "statusCode": "상태 코드",
-        "duration": "소요 시간"
+        "duration": "소요 시간",
+        "bot": "봇"
       },
       "openLog": "{when} 실행 열기",
       "drawerTitle": "로그: {name}",
@@ -140,7 +141,9 @@
         "to": "종료",
         "clear": "필터 지우기",
         "deletedApi": "{name} (삭제됨)",
-        "searchTooLong": "검색은 최대 {max}자까지 입력할 수 있습니다. 검색하려면 줄여 주세요."
+        "searchTooLong": "검색은 최대 {max}자까지 입력할 수 있습니다. 검색하려면 줄여 주세요.",
+        "bot": "봇",
+        "allBots": "모든 봇"
       },
       "detail": {
         "title": "API 로그 상세",
@@ -174,7 +177,8 @@
       },
       "unsaved": "저장되지 않음",
       "export": "CSV로 내보내기",
-      "exporting": "내보내는 중…"
+      "exporting": "내보내는 중…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "{label}에 변수 삽입",

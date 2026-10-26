@@ -131,7 +131,11 @@
         "required": "This is required.",
         "tooLong": "This is too long (at most {limit} characters).",
         "subjectLines": "The subject must be one line."
-      }
+      },
+      "bodyMode": "Body format",
+      "bodyRich": "Rich text",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>Write the HTML of the email. Use the variables below to personalise it.</p>"
     },
     "preview": {
       "title": "Preview with sample data",

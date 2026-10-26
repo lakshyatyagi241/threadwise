@@ -370,8 +370,11 @@ const SCRIPT = `
   // The header: previous, the month and the year (each opens its own list), next.
   function dpHead(box, prevFn, nextFn, parts) {
     var head = dpEl('div', 'dphead');
-    var prev = dpBtn('dpnav', '', prevFn); prev.appendChild(dpSvg('M15 6l-6 6 6 6')); prev.setAttribute('aria-label', 'Previous');
-    var next = dpBtn('dpnav', '', nextFn); next.appendChild(dpSvg('M9 6l6 6-6 6')); next.setAttribute('aria-label', 'Next');
+    // In a right-to-left page the buttons swap sides, so the arrows swap direction with them: Previous points right, Next points left.
+    var rtl = document.documentElement.dir === 'rtl';
+    var left = 'M15 6l-6 6 6 6', right = 'M9 6l6 6-6 6';
+    var prev = dpBtn('dpnav', '', prevFn); prev.appendChild(dpSvg(rtl ? right : left)); prev.setAttribute('aria-label', tx('previous', 'Previous'));
+    var next = dpBtn('dpnav', '', nextFn); next.appendChild(dpSvg(rtl ? left : right)); next.setAttribute('aria-label', tx('next', 'Next'));
     var title = dpEl('div', 'dptitle');
     parts.forEach(function (p) { var tb = dpBtn('dptb', p.text, p.fn); if (p.chev) tb.appendChild(dpSvg('M6 9l6 6 6-6')); title.appendChild(tb); });
     head.appendChild(prev); head.appendChild(title); head.appendChild(next); box.appendChild(head);
@@ -387,13 +390,19 @@ const SCRIPT = `
     var wd = new Intl.DateTimeFormat(LOC, { weekday: 'short' });
     for (var w = 0; w < 7; w++) grid.appendChild(dpEl('div', 'dpwd', wd.format(new Date(2023, 0, 1 + w)).slice(0, 2)));
     var today = new Date();
+    var dayName = new Intl.DateTimeFormat(LOC, { dateStyle: 'full' });
     var start = new Date(dp.y, dp.m, 1 - first.getDay());
     for (var c = 0; c < 42; c++) {
       var day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + c);
       var b = dpEl('button', 'dpday', String(day.getDate())); b.type = 'button';
       if (day.getMonth() !== dp.m) b.classList.add('out');
       if (day.getFullYear() === today.getFullYear() && day.getMonth() === today.getMonth() && day.getDate() === today.getDate()) b.classList.add('today');
-      if (dp.sel && dp.sel.y === day.getFullYear() && dp.sel.m === day.getMonth() && dp.sel.d === day.getDate()) b.classList.add('sel');
+      var isSel = !!(dp.sel && dp.sel.y === day.getFullYear() && dp.sel.m === day.getMonth() && dp.sel.d === day.getDate());
+      if (isSel) b.classList.add('sel');
+      // A day is read as its whole date (weekday, day, month and year) and says whether it is the chosen one, not as a bare number.
+      b.setAttribute('aria-label', dayName.format(day));
+      b.setAttribute('aria-pressed', isSel ? 'true' : 'false');
+      if (b.classList.contains('today')) b.setAttribute('aria-current', 'date');
       b.addEventListener('click', (function (dd) { return function () {
         dp.sel = { y: dd.getFullYear(), m: dd.getMonth(), d: dd.getDate() };
         dp.y = dd.getFullYear(); dp.m = dd.getMonth();
@@ -424,6 +433,7 @@ const SCRIPT = `
     var mf = new Intl.DateTimeFormat(LOC, { month: 'long' });
     for (var i = 0; i < 12; i++) {
       var b = dpBtn('dpitem' + (i === dp.m ? ' sel' : ''), mf.format(new Date(2023, i, 1)), (function (mm) { return function () { dp.m = mm; dp.view = 'days'; dpRender(); }; })(i));
+      b.setAttribute('aria-pressed', i === dp.m ? 'true' : 'false');
       list.appendChild(b);
     }
     box.appendChild(list);
@@ -434,13 +444,29 @@ const SCRIPT = `
     var list = dpEl('div', 'dplist');
     for (var i = 0; i < 12; i++) {
       var y = dp.decade + i;
-      list.appendChild(dpBtn('dpitem' + (y === dp.y ? ' sel' : ''), String(y), (function (yy) { return function () { dp.y = yy; dp.view = 'months'; dpRender(); }; })(y)));
+      var yb = dpBtn('dpitem' + (y === dp.y ? ' sel' : ''), String(y), (function (yy) { return function () { dp.y = yy; dp.view = 'months'; dpRender(); }; })(y));
+      yb.setAttribute('aria-pressed', y === dp.y ? 'true' : 'false');
+      list.appendChild(yb);
     }
     box.appendChild(list);
   }
   // The clock: the hour (1-12) and then the minute are chosen on a face; AM and PM are two buttons; the box gets the 24-hour time.
+  // Morning and afternoon as the visitor's language writes them; AM and PM where the browser cannot say.
+  function dpPeriods() {
+    try {
+      var f = new Intl.DateTimeFormat(LOC, { hour: 'numeric', hour12: true });
+      var name = function (h) {
+        var parts = f.formatToParts(new Date(2023, 0, 1, h));
+        for (var i = 0; i < parts.length; i++) if (parts[i].type === 'dayPeriod') return parts[i].value;
+        return '';
+      };
+      var am = name(9), pm = name(15);
+      if (am && pm && am !== pm) return [am, pm];
+    } catch (e) {}
+    return ['AM', 'PM'];
+  }
   function dpTime(box, type) {
-    box.appendChild(dpEl('div', 'dpcap', 'Select time'));
+    box.appendChild(dpEl('div', 'dpcap', tx('selectTime', 'Select time')));
     var h12 = dp.h % 12 === 0 ? 12 : dp.h % 12;
     var pm = dp.h >= 12;
     var digits = dpEl('div', 'dpdigits');
@@ -448,8 +474,9 @@ const SCRIPT = `
     digits.appendChild(dpEl('span', 'dpcolon', ':'));
     digits.appendChild(dpBtn('dpdig' + (dp.mode === 'minute' ? ' on' : ''), dpPad(dp.mi), function () { dp.mode = 'minute'; dpRender(); }));
     var ap = dpEl('div', 'dpampm');
-    ap.appendChild(dpBtn('dpap' + (!pm ? ' on' : ''), 'AM', function () { if (pm) dp.h -= 12; dpRender(); }));
-    ap.appendChild(dpBtn('dpap' + (pm ? ' on' : ''), 'PM', function () { if (!pm) dp.h += 12; dpRender(); }));
+    var periods = dpPeriods();
+    ap.appendChild(dpBtn('dpap' + (!pm ? ' on' : ''), periods[0], function () { if (pm) dp.h -= 12; dpRender(); }));
+    ap.appendChild(dpBtn('dpap' + (pm ? ' on' : ''), periods[1], function () { if (!pm) dp.h += 12; dpRender(); }));
     digits.appendChild(ap);
     box.appendChild(digits);
     var face = dpEl('div', 'dpface');
@@ -474,8 +501,8 @@ const SCRIPT = `
     });
     box.appendChild(face);
     var foot = dpEl('div', 'dpfoot');
-    foot.appendChild(dpBtn('dplink', 'Cancel', function () { if (type === 'datetime') { dp.view = 'days'; dpRender(); } else dpClose(); }));
-    foot.appendChild(dpBtn('dplink', 'OK', dpFill));
+    foot.appendChild(dpBtn('dplink', tx('cancel', 'Cancel'), function () { if (type === 'datetime') { dp.view = 'days'; dpRender(); } else dpClose(); }));
+    foot.appendChild(dpBtn('dplink', tx('ok', 'OK'), dpFill));
     box.appendChild(foot);
   }
   function dpPick(num) {
@@ -491,6 +518,7 @@ const SCRIPT = `
     var box = $('dp');
     if (!type) { dpClose(); return; }
     box.textContent = '';
+    box.setAttribute('aria-label', tx('datePicker', 'Choose a date'));
     if (type === 'time') dp.view = 'time';
     else if (dp.view === 'time' && type === 'date') dp.view = 'days';
     if (dp.view === 'time') dpTime(box, type);

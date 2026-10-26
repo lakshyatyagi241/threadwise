@@ -15,6 +15,7 @@ import { useFlb } from '../lib/msg';
 import { lookOf } from '../lib/node-ui';
 import { NODE_W } from '../lib/graph-ops';
 import { AskFileCardBody, AskLocationCardBody } from './ask-media/cards';
+import { InlineEditBody, INLINE_EDIT_TYPES } from './inline-edit-body';
 import { opensNodeOnDoubleClick } from './node-open';
 import { NodePreview } from './node-preview';
 import { SubflowCardBody } from './subflow-card';
@@ -189,6 +190,8 @@ export const NodeCard = memo(function NodeCard({
         <AskLocationCardBody node={node} onPatch={onPatch} />
       ) : node.type === 'subflow' ? (
         <SubflowCardBody node={node} ctx={ctx} onPatch={onPatch} />
+      ) : INLINE_EDIT_TYPES.has(node.type) && onPatch ? (
+        <InlineEditBody node={node} onPatch={onPatch} />
       ) : (
         <NodePreview node={node} ctx={ctx} />
       )}

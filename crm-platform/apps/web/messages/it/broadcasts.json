@@ -158,7 +158,11 @@
       "contactsDenied": "Non hai accesso all'elenco contatti. Scegli i contatti tramite gruppi o tag.",
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
       "colEmail": "E-mail",
-      "noEmail": "Nessun indirizzo e-mail"
+      "noEmail": "Nessun indirizzo e-mail",
+      "contactsHeading": "Contatti",
+      "matchTitle": "Corrispondenza con gruppi, tag e segmenti scelti",
+      "matchAny": "Almeno uno",
+      "matchAll": "Tutti"
     },
     "overrides": {
       "title": "Compila questo invio",

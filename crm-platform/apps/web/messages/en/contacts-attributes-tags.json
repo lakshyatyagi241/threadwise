@@ -657,7 +657,7 @@
         "tag_name_too_long": "tag name too long",
         "plan_limit_reached": "plan contact limit reached",
         "tag_limit_reached": "plan tag limit reached",
-        "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
+        "invalid_date_of_birth": "date of birth is not a clear date that can be a birth date: write it year first, like 1990-05-14",
         "duplicate_in_file": "repeated number, merged into an earlier row",
         "invalid_timezone": "invalid time zone",
         "legal_hold": "protected record, not changed",
@@ -1484,6 +1484,19 @@
         "dynamic_button": "Has a button link with a variable, which cannot be filled in from here yet.",
         "authentication": "One-time-password templates are sent by the system, not from here.",
         "named_variables": "Uses named variables, which cannot be filled in from here yet."
+      },
+      "source": "Source of {name}",
+      "sourceText": "Type text",
+      "sourceField": "Contact detail",
+      "fieldOf": "Contact detail for {name}",
+      "fallbackOf": "Fallback for {name}",
+      "fallbackPlaceholder": "Used when the contact has none",
+      "field": {
+        "name": "Full name",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "email": "Email",
+        "phone": "Phone"
       },
       "variables": "Template variables",
       "preview": "Preview",

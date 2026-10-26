@@ -131,7 +131,11 @@
         "required": "필수 항목입니다.",
         "tooLong": "너무 깁니다(최대 {limit}자).",
         "subjectLines": "제목은 한 줄이어야 합니다."
-      }
+      },
+      "bodyMode": "본문 형식",
+      "bodyRich": "서식 있는 텍스트",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>이메일의 HTML을 작성하세요. 아래 변수로 개인화할 수 있습니다.</p>"
     },
     "preview": {
       "title": "샘플 데이터로 미리보기",

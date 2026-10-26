@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import type {
   ApiLibraryLogApisResponse,
+  ApiLibraryLogBotsResponse,
   ApiLibraryLogDetail,
   ExportApiLibraryLogsQuery,
   ListApiLibraryLogsQuery,
@@ -13,7 +14,12 @@ import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { numberedPage, toLogDetail, toLogItem } from './api-library.mapper';
-import { logFilterApis, logResponseText, maskJsonText, truncateText } from './api-library.rules';
+import {
+  logFilterApis,
+  logResponseText,
+  maskResponseText,
+  truncateText,
+} from './api-library.rules';
 import { ApiLibraryRepository } from './api-library.repository';
 import { ApiLibraryLogsRepository, type NewLog } from './api-library-logs.repository';
 import { LOG_BODY_LIMIT, type RunOutcome } from './api-library-runner.service';
@@ -59,6 +65,7 @@ export class ApiLibraryLogsService {
         throw AppError.notFound('API', onlyApi);
       const filter = {
         apiUuid: onlyApi ?? query.apiId,
+        botUuid: query.botId,
         status: query.status,
         statusCode: query.statusCode,
         source: query.source,
@@ -89,6 +96,7 @@ export class ApiLibraryLogsService {
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, ctx.orgId, {
         apiUuid: query.apiId,
+        botUuid: query.botId,
         status: query.status,
         statusCode: query.statusCode,
         source: query.source,
@@ -99,12 +107,13 @@ export class ApiLibraryLogsService {
         order: 'desc',
       });
       return buildCsv(
-        ['Time (UTC)', 'API', 'Source', 'Method', 'URL', 'Result', 'Status code', 'Duration (ms)', 'Error'],
+        ['Time (UTC)', 'API', 'Bot', 'Source', 'Method', 'URL', 'Result', 'Status code', 'Duration (ms)', 'Error'],
         rows.map((row) => {
           const item = toLogItem(row);
           return [
             item.createdAt,
             item.apiName,
+            item.botName,
             item.source,
             item.method,
             item.url,
@@ -122,6 +131,15 @@ export class ApiLibraryLogsService {
    * The APIs the logs' filter offers: every saved API, and each deleted API that still has runs in the window, so its name stays
    * findable after the delete. Only the logs list them; the pickers' feed (apis/options) keeps saved APIs alone.
    */
+  /** The bots the logs' bot filter offers: each bot that has runs in the window, by its current name. */
+  async filterBots(): Promise<ApiLibraryLogBotsResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const rows = await this.repo.loggedBots(tx, ctx.orgId);
+      return { data: rows.map((r) => ({ id: r.uuid, name: r.name })) };
+    });
+  }
+
   async filterApis(): Promise<ApiLibraryLogApisResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -154,7 +172,7 @@ export class ApiLibraryLogsService {
     try {
       // A JSON answer is stored with its secret-looking keys masked (a token in the answer must not outlive the run in a log).
       const body = outcome.response
-        ? truncateText(maskJsonText(logResponseText(outcome.response)), LOG_BODY_LIMIT)
+        ? truncateText(maskResponseText(logResponseText(outcome.response)), LOG_BODY_LIMIT)
         : null;
       return await this.repo.insert(tx, orgId, {
         apiUuid: run.apiUuid,

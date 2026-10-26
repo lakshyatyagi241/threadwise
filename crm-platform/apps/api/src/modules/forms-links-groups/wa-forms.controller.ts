@@ -104,6 +104,18 @@ export class WaFormsController {
     return this.forms.publish(id);
   }
 
+  @Post(':id/preview')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('wfl.forms.manage')
+  @ApiOperation({
+    summary: 'Meta preview of the saved form, to try it before publishing',
+    description:
+      'Sends the saved form to Meta as a draft Flow and returns the address of its preview. Nothing is published.',
+  })
+  preview(@Param('id', ParseUUIDPipe) id: string) {
+    return this.forms.preview(id);
+  }
+
   @Post(':id/duplicate')
   @Idempotent()
   @RequirePermission('wfl.forms.create')

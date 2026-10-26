@@ -9,6 +9,7 @@ import {
   fromDetail,
   bodyToText,
   bodyOf,
+  forgetVariableSources,
   rememberVariableSource,
   fromImport,
   fullSignature,
@@ -466,5 +467,13 @@ describe('where a variable put in from the menu comes from', () => {
       'Orders.data.id': 'api',
       other: 'contact',
     });
+  });
+
+  it('forgets the hints when a form opens, so a name typed in another API is a contact property again', () => {
+    rememberVariableSource('city', 'flow');
+    const url = 'https://api.example.com/{{city}}';
+    expect(syncVariables({ ...emptyForm(), url }).variables[0]!.source).toBe('flow');
+    forgetVariableSources();
+    expect(syncVariables({ ...emptyForm(), url }).variables[0]!.source).toBe('contact');
   });
 });

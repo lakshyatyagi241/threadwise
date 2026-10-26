@@ -161,6 +161,15 @@ export class ApiLibraryController {
     return this.logs.list(query);
   }
 
+  @Get('logs/bots')
+  @RequirePermission('integ.apilibrary.read')
+  @ApiOperation({
+    summary: 'The bots the logs filter offers: each bot that has runs, by its current name',
+  })
+  logBots() {
+    return this.logs.filterBots();
+  }
+
   @Get('logs/apis')
   @RequirePermission('integ.apilibrary.read')
   @ApiOperation({

@@ -115,7 +115,8 @@
         "source": "Source",
         "result": "Résultat",
         "statusCode": "Code d'état",
-        "duration": "Durée"
+        "duration": "Durée",
+        "bot": "Bot"
       },
       "openLog": "Ouvrir l'exécution du {when}",
       "drawerTitle": "Journaux : {name}",
@@ -140,7 +141,9 @@
         "to": "Au",
         "clear": "Effacer les filtres",
         "deletedApi": "{name} (supprimée)",
-        "searchTooLong": "La recherche peut comporter au maximum {max} caractères. Raccourcissez-la pour rechercher."
+        "searchTooLong": "La recherche peut comporter au maximum {max} caractères. Raccourcissez-la pour rechercher.",
+        "bot": "Bot",
+        "allBots": "Tous les bots"
       },
       "detail": {
         "title": "Détails du journal d'API",
@@ -174,7 +177,8 @@
       },
       "unsaved": "Non enregistrée",
       "export": "Exporter en CSV",
-      "exporting": "Export en cours…"
+      "exporting": "Export en cours…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",

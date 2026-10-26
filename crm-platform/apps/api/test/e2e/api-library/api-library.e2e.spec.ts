@@ -642,6 +642,49 @@ describe('test runs', () => {
 });
 
 describe('logs', () => {
+  it('names the bot each run belongs to, follows a rename, and filters the log by bot', async () => {
+    const t = await api.signup('alib14c');
+    const welcome = (
+      await h.owner.query(
+        `INSERT INTO flows (org_id, flow_name, flow_data) VALUES ($1, 'Welcome bot', '{"flowNodes":[],"flowEdges":[]}'::jsonb) RETURNING id, uuid`,
+        [t.orgId],
+      )
+    ).rows[0];
+    const other = (
+      await h.owner.query(
+        `INSERT INTO flows (org_id, flow_name, flow_data) VALUES ($1, 'Other bot', '{"flowNodes":[],"flowEdges":[]}'::jsonb) RETURNING id, uuid`,
+        [t.orgId],
+      )
+    ).rows[0];
+    for (const [url, flowId] of [
+      ['https://example.test/a', welcome.id],
+      ['https://example.test/b', other.id],
+    ] as const) {
+      await h.owner.query(
+        `INSERT INTO api_library_logs (org_id, api_name, source, method, url, ok, flow_id) VALUES ($1, 'Lookup', 'flow', 'GET', $2, true, $3)`,
+        [t.orgId, url, flowId],
+      );
+    }
+
+    const bots = await api.as(t.admin).get('/v2/api-library/logs/bots');
+    expect(bots.status).toBe(200);
+    expect(bots.body.data.map((b: { name: string }) => b.name).sort()).toEqual([
+      'Other bot',
+      'Welcome bot',
+    ]);
+
+    const one = await api.as(t.admin).get(`/v2/api-library/logs?botId=${welcome.uuid}`);
+    expect(one.body.data).toHaveLength(1);
+    expect(one.body.data[0]).toMatchObject({ botId: welcome.uuid, botName: 'Welcome bot' });
+
+    // the bot's name is read live: a rename shows in the list and in the export at once
+    await h.owner.query(`UPDATE flows SET flow_name = 'Renamed bot' WHERE id = $1`, [welcome.id]);
+    const renamed = await api.as(t.admin).get(`/v2/api-library/logs?botId=${welcome.uuid}`);
+    expect(renamed.body.data[0].botName).toBe('Renamed bot');
+    const csv = await api.as(t.admin).get(`/v2/api-library/logs/export?botId=${welcome.uuid}`);
+    expect(csv.text.split('\r\n')[1]).toContain('Renamed bot');
+  });
+
   it('exports the same runs as the list, as CSV, newest first, with the filters applied', async () => {
     const t = await api.signup('alib14b');
     const one = await create(t, { name: 'Exported' });
@@ -661,7 +704,7 @@ describe('logs', () => {
     expect(all.headers['content-disposition']).toContain('api-library-logs.csv');
     const lines = all.text.trim().split('\r\n');
     expect(lines[0]).toBe(
-      'Time (UTC),API,Source,Method,URL,Result,Status code,Duration (ms),Error',
+      'Time (UTC),API,Bot,Source,Method,URL,Result,Status code,Duration (ms),Error',
     );
     expect(lines).toHaveLength(4);
     expect(lines[1]).toContain('Other');

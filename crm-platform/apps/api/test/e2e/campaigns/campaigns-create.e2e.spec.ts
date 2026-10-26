@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { DatabaseService } from '../../../src/infra/db/database.service';
+import { WalletLedgerService } from '../../../src/modules/wallet-message-billing';
 import {
   Api,
   bearer,
@@ -167,6 +169,71 @@ describe('TW-CAMP-003, 004: create and the audience', () => {
       )
     ).rows[0];
     expect(typed.name).toBe('Recipient · 5670');
+  });
+
+  it('match all keeps only the contacts in every kind picked; match any keeps the union; picked contacts are always added', async () => {
+    const t = await api.signup('cc2m');
+    // a new workspace's wallet is empty and a campaign is refused until it has money (the wallet check, not the audience)
+    await h.app.get(DatabaseService, { strict: false }).txAs({ orgId: t.orgId, userId: null }, (tx) =>
+      h.app.get(WalletLedgerService, { strict: false }).post(tx, {
+        orgId: t.orgId,
+        unit: 'USD',
+        type: 'topup',
+        direction: 'in',
+        amountMinor: 1_000_000,
+        idempotencyKey: `fund:${t.orgId}:${randomUUID()}`,
+        source: 'topup.conversion',
+        description: 'Wallet top-up',
+      }),
+    );
+    const [inBoth, onlyGroup, onlyTag, picked] = await contacts(t, 4);
+    const idOf = async (uuid: string) =>
+      Number((await h.owner.query(`SELECT id FROM contacts WHERE uuid = $1`, [uuid])).rows[0].id);
+    const group = (
+      await h.owner.query(`INSERT INTO contact_groups (org_id, name) VALUES ($1,'Both') RETURNING id, uuid`, [
+        t.orgId,
+      ])
+    ).rows[0];
+    const tag = (
+      await h.owner.query(`INSERT INTO tags (org_id, name) VALUES ($1,'hot') RETURNING id, uuid`, [t.orgId])
+    ).rows[0];
+    for (const c of [inBoth, onlyGroup]) {
+      await h.owner.query(
+        `INSERT INTO contact_group_members (org_id, group_id, contact_id) VALUES ($1,$2,$3)`,
+        [t.orgId, group.id, await idOf(c)],
+      );
+    }
+    for (const c of [inBoth, onlyTag]) {
+      await h.owner.query(`INSERT INTO contact_tags (org_id, contact_id, tag_id) VALUES ($1,$2,$3)`, [
+        t.orgId,
+        await idOf(c),
+        tag.id,
+      ]);
+    }
+
+    const any = await post(
+      t,
+      '',
+      base({ groupIds: [group.uuid], tagIds: [tag.uuid], audienceMatch: 'any' }),
+    );
+    expect(any.status, JSON.stringify(any.body)).toBe(201);
+    // the group (inBoth, onlyGroup) and the tag (inBoth, onlyTag): three people
+    expect(any.body.campaign.counts.recipients).toBe(3);
+
+    const all = await post(
+      t,
+      '',
+      base({
+        name: 'Match all',
+        groupIds: [group.uuid],
+        tagIds: [tag.uuid],
+        audienceMatch: 'all',
+        contactIds: [picked],
+      }),
+    );
+    expect(all.status, JSON.stringify(all.body)).toBe(201);
+    // in the group AND the tag: only inBoth; the contact picked by hand is added on top
+    expect(all.body.campaign.counts.recipients).toBe(2);
   });
 
   it("a segment picked as audience brings its members; another workspace's segment is not found", async () => {

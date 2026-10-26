@@ -4,6 +4,8 @@ import type { LogFilters } from '../api/hooks';
 /** What the filter bar holds. Dates are the `YYYY-MM-DD` of a date input; empty strings mean "no filter". */
 export interface LogFilterForm {
   apiId: string;
+  /** The bot (flow) whose runs to show. */
+  botId: string;
   status: '' | 'success' | 'failed';
   statusCode: string;
   source: '' | ApiLibraryLogSource;
@@ -14,6 +16,7 @@ export interface LogFilterForm {
 
 export const EMPTY_LOG_FILTERS: LogFilterForm = {
   apiId: '',
+  botId: '',
   status: '',
   statusCode: '',
   source: '',
@@ -41,6 +44,7 @@ export function logQuery(f: LogFilterForm, fixedApiId?: string): LogFilters {
   const search = f.search.trim();
   return {
     apiId: fixedApiId ?? (f.apiId !== '' ? f.apiId : undefined),
+    botId: f.botId !== '' ? f.botId : undefined,
     status: f.status !== '' ? f.status : undefined,
     statusCode: code !== undefined && code >= 100 && code <= 599 ? code : undefined,
     source: f.source !== '' ? f.source : undefined,

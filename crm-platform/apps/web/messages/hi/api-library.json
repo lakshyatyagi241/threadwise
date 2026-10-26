@@ -115,7 +115,8 @@
         "source": "स्रोत",
         "result": "परिणाम",
         "statusCode": "स्टेटस कोड",
-        "duration": "अवधि"
+        "duration": "अवधि",
+        "bot": "बॉट"
       },
       "openLog": "{when} का रन खोलें",
       "drawerTitle": "लॉग: {name}",
@@ -140,7 +141,9 @@
         "to": "तक",
         "clear": "फ़िल्टर हटाएँ",
         "deletedApi": "{name} (हटाया गया)",
-        "searchTooLong": "खोज में अधिकतम {max} अक्षर हो सकते हैं। खोजने के लिए इसे छोटा करें।"
+        "searchTooLong": "खोज में अधिकतम {max} अक्षर हो सकते हैं। खोजने के लिए इसे छोटा करें।",
+        "bot": "बॉट",
+        "allBots": "सभी बॉट"
       },
       "detail": {
         "title": "API लॉग का विवरण",
@@ -174,7 +177,8 @@
       },
       "unsaved": "सहेजा नहीं गया",
       "export": "CSV निर्यात करें",
-      "exporting": "निर्यात हो रहा है…"
+      "exporting": "निर्यात हो रहा है…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "{label} में वेरिएबल डालें",
