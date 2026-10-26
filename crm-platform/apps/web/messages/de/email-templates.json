@@ -131,7 +131,11 @@
         "required": "Pflichtfeld.",
         "tooLong": "Zu lang (höchstens {limit} Zeichen).",
         "subjectLines": "Der Betreff muss einzeilig sein."
-      }
+      },
+      "bodyMode": "Format des Textes",
+      "bodyRich": "Formatierter Text",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>HTML der E-Mail schreiben. Die Variablen unten dienen der Personalisierung.</p>"
     },
     "preview": {
       "title": "Vorschau mit Beispieldaten",

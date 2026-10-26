@@ -58,7 +58,10 @@ export function TemplateEditorModal({
   const [errors, setErrors] = useState<Partial<Record<ErrorKey, string>>>({});
   const [busy, setBusy] = useState(false);
   const [target, setTarget] = useState<'subject' | 'body'>('body');
+  // The body is written in the rich editor, or as raw HTML (the source the server sanitises on save).
+  const [bodyMode, setBodyMode] = useState<'rich' | 'html'>('rich');
   const subject = useRef<HTMLInputElement>(null);
+  const htmlBody = useRef<HTMLTextAreaElement>(null);
   const editor = useRef<RichEditorHandle>(null);
   const set = <K extends keyof TemplateFormValues>(k: K, v: TemplateFormValues[K]) =>
     setValues((s) => ({ ...s, [k]: v }));
@@ -73,6 +76,17 @@ export function TemplateEditorModal({
       const end = el.selectionEnd ?? at;
       const next = values.subject.slice(0, at) + token + values.subject.slice(end);
       set('subject', next);
+      requestAnimationFrame(() => {
+        el.focus();
+        el.setSelectionRange(at + token.length, at + token.length);
+      });
+      return;
+    }
+    if (bodyMode === 'html' && htmlBody.current) {
+      const el = htmlBody.current;
+      const at = el.selectionStart ?? values.html.length;
+      const end = el.selectionEnd ?? at;
+      set('html', values.html.slice(0, at) + token + values.html.slice(end));
       requestAnimationFrame(() => {
         el.focus();
         el.setSelectionRange(at + token.length, at + token.length);
@@ -205,19 +219,52 @@ export function TemplateEditorModal({
           />
         </Field>
         <div className="space-y-1.5 text-sm sm:col-span-2">
-          <span className="block font-medium">{t('body')}</span>
-          <div onFocusCapture={() => setTarget('body')}>
-            <RichEditor
-              handleRef={editor}
-              initialHtml={values.html}
-              resetKey={template?.id ?? 'new'}
-              onChange={(html) => set('html', html)}
-              label={t('body')}
-              placeholder={t('bodyPlaceholder')}
-              testId="email-template-editor"
-              className="min-h-40"
-            />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="block font-medium">{t('body')}</span>
+            <div role="radiogroup" aria-label={t('bodyMode')} className="flex gap-1">
+              {(['rich', 'html'] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  role="radio"
+                  aria-checked={bodyMode === m}
+                  onClick={() => setBodyMode(m)}
+                  className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                    bodyMode === m ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:bg-muted'
+                  }`}
+                >
+                  {m === 'rich' ? t('bodyRich') : t('bodyHtml')}
+                </button>
+              ))}
+            </div>
           </div>
+          {bodyMode === 'rich' ? (
+            <div onFocusCapture={() => setTarget('body')}>
+              <RichEditor
+                handleRef={editor}
+                initialHtml={values.html}
+                resetKey={template?.id ?? 'new'}
+                onChange={(html) => set('html', html)}
+                label={t('body')}
+                placeholder={t('bodyPlaceholder')}
+                testId="email-template-editor"
+                className="min-h-40"
+              />
+            </div>
+          ) : (
+            <textarea
+              ref={htmlBody}
+              aria-label={t('bodyHtml')}
+              dir="ltr"
+              spellCheck={false}
+              rows={12}
+              value={values.html}
+              placeholder={t('htmlPlaceholder')}
+              onFocus={() => setTarget('body')}
+              onChange={(e) => set('html', e.target.value)}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs leading-relaxed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            />
+          )}
           {errors.html && (
             <p role="alert" className="text-xs text-danger">
               {errors.html}

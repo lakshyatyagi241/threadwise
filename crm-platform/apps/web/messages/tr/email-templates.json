@@ -131,7 +131,11 @@
         "required": "Bu alan zorunludur.",
         "tooLong": "Çok uzun (en fazla {limit} karakter).",
         "subjectLines": "Konu tek satır olmalıdır."
-      }
+      },
+      "bodyMode": "Metin biçimi",
+      "bodyRich": "Zengin metin",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>E-postanın HTML'ini yazın. Kişiselleştirmek için aşağıdaki değişkenleri kullanın.</p>"
     },
     "preview": {
       "title": "Örnek verilerle önizleme",
