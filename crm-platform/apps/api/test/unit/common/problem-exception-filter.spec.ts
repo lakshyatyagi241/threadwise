@@ -3,9 +3,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
 import { ProblemExceptionFilter } from '../../../src/common/filters/problem-exception.filter';
-import { reportServerError } from '../../../src/modules/platform-infrastructure';
+import { reportClientError, reportServerError } from '../../../src/modules/platform-infrastructure';
 
-vi.mock('../../../src/modules/platform-infrastructure', () => ({ reportServerError: vi.fn() }));
+vi.mock('../../../src/modules/platform-infrastructure', () => ({
+  reportServerError: vi.fn(),
+  reportClientError: vi.fn(),
+}));
 
 /** Runs the filter against a fake response and returns what it sent. */
 function run(exception: unknown) {
@@ -116,6 +119,11 @@ describe('ProblemExceptionFilter expected 5xx', () => {
     expect(body).toMatchObject({ code: 'FLB_INTEGRATION_DISABLED' });
     expect(error).not.toHaveBeenCalled();
     expect(reportServerError).not.toHaveBeenCalled();
+    // Handled, so no issue, but still visible as a Sentry log.
+    expect(reportClientError).toHaveBeenCalledWith(
+      503,
+      expect.objectContaining({ code: 'FLB_INTEGRATION_DISABLED', expected: true }),
+    );
   });
 
   it('still logs and reports a 503 that is not flagged expected', () => {
@@ -130,8 +138,11 @@ describe('ProblemExceptionFilter expected 5xx', () => {
   it('still logs and reports an unknown error', () => {
     const error = vi.spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
     vi.mocked(reportServerError).mockClear();
+    vi.mocked(reportClientError).mockClear();
     run(new Error('boom'));
     expect(error).toHaveBeenCalledTimes(1);
     expect(reportServerError).toHaveBeenCalledTimes(1);
+    // A fault is an issue, not a log line as well.
+    expect(reportClientError).not.toHaveBeenCalled();
   });
 });

@@ -64,10 +64,22 @@ export function sentryOptions(
     serverName: undefined, // the container id says nothing a person can use
     dataCollection: NO_EXTRA_DATA,
     tracesSampleRate: Number.isFinite(traces) && traces > 0 && traces <= 1 ? traces : 0,
-    integrations: (defaults) =>
-      defaults.filter((i) => i.name !== 'OnUncaughtException' && i.name !== 'OnUnhandledRejection'),
+    integrations: (defaults) => [
+      ...defaults.filter(
+        (i) => i.name !== 'OnUncaughtException' && i.name !== 'OnUnhandledRejection',
+      ),
+      // Every `logger.error` / `logger.fatal` becomes an issue (a failure that was caught and logged is still a failure) and every
+      // warn-or-worse line a searchable Sentry log. `info` and `debug` stay out: the default sends them all. The integration reads
+      // the line after pino has applied its redaction and serializers (it listens to `pino_asJson` and parses the finished JSON),
+      // so what reaches Sentry is what reaches stdout.
+      Sentry.pinoIntegration({
+        error: { levels: ['error', 'fatal'] },
+        log: { levels: ['warn', 'error', 'fatal'] },
+      }),
+    ],
     initialScope: { tags: { service } },
     beforeSend: scrubSentryEvent,
+    beforeSendLog: scrubSentryLog,
     beforeSendSpan: scrubSentrySpan,
     tracePropagationTargets: [],
   };
@@ -225,6 +237,46 @@ export function reportJobFailure(
       if (job.name) scope.setTag('job', job.name);
       if (job.attemptsMade !== undefined) scope.setExtra('attemptsMade', job.attemptsMade);
       Sentry.captureException(err);
+    });
+  } catch {
+    /* reporting must never be the thing that fails */
+  }
+}
+
+interface ScrubbableLog {
+  message?: unknown;
+  attributes?: Record<string, unknown>;
+}
+
+const scrubText = (v: unknown): unknown =>
+  typeof v === 'string' ? maskSecretUrl(stripSqlParams(v)) : v;
+
+/** The same rules for a Sentry log line: bound SQL values are cut and a secret in an address is masked, in the message and every string attribute. */
+export function scrubSentryLog<T extends ScrubbableLog>(log: T): T {
+  log.message = scrubText(log.message) as T['message'];
+  const attrs = log.attributes;
+  if (attrs) for (const [key, value] of Object.entries(attrs)) attrs[key] = scrubText(value);
+  return log;
+}
+
+/**
+ * Records a response that was not a fault of ours (a 4xx, or a 5xx that is a handled state) as a Sentry log, not an issue: it is
+ * searchable and countable per status, code and module without opening an incident for a caller's typo. 401 and 404 are `info`
+ * (scanners and expired sessions make most of them); everything else a client can cause is `warn`. Never throws.
+ */
+export function reportClientError(
+  status: number,
+  context: { code?: string; path?: string; requestId?: string; expected?: boolean },
+): void {
+  if (!enabled) return;
+  try {
+    const level = context.expected || status === 401 || status === 404 ? 'info' : 'warn';
+    Sentry.logger[level](`handled response ${status}`, {
+      status,
+      code: context.code,
+      module: moduleFromPath(context.path),
+      path: context.path ? maskSecretUrl(context.path.split('?')[0] ?? context.path) : undefined,
+      requestId: context.requestId,
     });
   } catch {
     /* reporting must never be the thing that fails */
