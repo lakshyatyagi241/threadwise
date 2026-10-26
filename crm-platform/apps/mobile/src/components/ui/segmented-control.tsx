@@ -48,10 +48,10 @@ export function SegmentedControl<T extends string>({
               styles.segment,
               fit === 'content' && styles.content,
               fit === 'content' && { flexGrow: option.label.length + 3 },
-              selected && { backgroundColor: colors.primary },
+              selected && { backgroundColor: colors.action },
             ]}
           >
-            <Text variant="label" color={selected ? 'onPrimary' : 'textMuted'} numberOfLines={1}>
+            <Text variant="label" color={selected ? 'onAction' : 'textMuted'} numberOfLines={1}>
               {option.label}
             </Text>
           </Pressable>

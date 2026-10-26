@@ -209,9 +209,9 @@ function PanesBody({ title, categories, value, error, onApply, onClose }: Props)
             accessibilityRole="button"
             accessibilityLabel={t('common.filters.apply')}
             onPress={() => onApply(Object.fromEntries(categories.map((c) => [c.key, current(c)])))}
-            style={[styles.apply, { backgroundColor: colors.primary }]}
+            style={[styles.apply, { backgroundColor: colors.action }]}
           >
-            <Text variant="label" color="onPrimary">
+            <Text variant="label" color="onAction">
               {t('common.filters.apply')}
             </Text>
           </Pressable>

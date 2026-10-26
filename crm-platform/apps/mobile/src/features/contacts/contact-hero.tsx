@@ -15,14 +15,15 @@ interface Props {
 }
 
 /**
- * Who the contact is, on the same deep band the sign-in screens use (`colors.brand`, curved lower edge): the photo at the left, the
+ * Who the contact is, on a deep band with a curved lower edge (the indigo of the tab bar in the light theme, the sign-in band's navy in the dark one): the photo at the left, the
  * name and how to reach them beside it, and under them whatever the screen puts on the band (the lifecycle stage and status
  * dropdowns and the score), so the facts a person changes most are one tap from the top of the contact.
  */
 export function ContactHero({ name, line, children, style }: Props) {
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
+  const band = scheme === 'light' ? colors.logo : colors.brand;
   return (
-    <View style={[styles.band, { backgroundColor: colors.brand }, style]}>
+    <View style={[styles.band, { backgroundColor: band }, style]}>
       <View style={styles.identity}>
         <Avatar name={name} size={72} />
         <View style={styles.names}>

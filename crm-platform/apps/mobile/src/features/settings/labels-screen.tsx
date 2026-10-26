@@ -158,9 +158,9 @@ export function LabelsScreen() {
           accessibilityRole="button"
           accessibilityLabel={t('inbox.thread.labels.newLabel')}
           onPress={() => router.push('/label-form')}
-          style={[styles.fab, { backgroundColor: colors.primary, shadowColor: colors.shadow }]}
+          style={[styles.fab, { backgroundColor: colors.action, shadowColor: colors.shadow }]}
         >
-          <Icon name="add" size={24} color="onPrimary" />
+          <Icon name="add" size={24} color="onAction" />
         </Pressable>
       ) : null}
       <ConfirmDialog

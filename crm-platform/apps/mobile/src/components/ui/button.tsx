@@ -29,7 +29,7 @@ export function Button({
   const danger = variant === 'danger';
   const link = variant === 'link';
   const textColor = primary
-    ? colors.onPrimary
+    ? colors.onAction
     : danger
       ? colors.onDanger
       : link
@@ -46,8 +46,8 @@ export function Button({
         link ? styles.link : styles.base,
         link && align === 'start' && styles.linkStart,
         !link && {
-          backgroundColor: primary ? colors.primary : danger ? colors.danger : colors.surface,
-          borderColor: primary ? colors.primary : danger ? colors.danger : colors.borderStrong,
+          backgroundColor: primary ? colors.action : danger ? colors.danger : colors.surface,
+          borderColor: primary ? colors.action : danger ? colors.danger : colors.borderStrong,
         },
         { opacity: inactive ? 0.5 : pressed ? 0.85 : 1 },
       ]}

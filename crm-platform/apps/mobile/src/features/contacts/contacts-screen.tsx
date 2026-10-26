@@ -230,9 +230,9 @@ export function ContactsScreen() {
           accessibilityRole="button"
           accessibilityLabel={t('contacts.add')}
           onPress={() => router.push('/contact/new')}
-          style={[styles.fab, { backgroundColor: colors.primary, shadowColor: colors.shadow }]}
+          style={[styles.fab, { backgroundColor: colors.action, shadowColor: colors.shadow }]}
         >
-          <Icon name="add" size={24} color="onPrimary" />
+          <Icon name="add" size={24} color="onAction" />
         </Pressable>
       ) : null}
 

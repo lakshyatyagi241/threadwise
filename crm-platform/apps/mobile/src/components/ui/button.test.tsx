@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
+import { palette } from '@/lib/theme/tokens';
 import { Button } from './button';
 
 describe('Button', () => {
@@ -35,6 +37,13 @@ describe('Button', () => {
       await fireEvent.press(screen.getByRole('button', { name }));
     }
     expect(onPress).toHaveBeenCalledTimes(3);
+  });
+
+  it('fills a primary button with the action colour, the deep indigo in the light theme', async () => {
+    await render(<Button label="Save" onPress={() => undefined} />);
+    const style = StyleSheet.flatten(screen.getByRole('button', { name: 'Save' }).props.style);
+    expect(style.backgroundColor).toBe(palette.light.action);
+    expect(palette.light.action).toBe(palette.light.logo);
   });
 
   it('does nothing while loading or disabled, and says so to screen readers', async () => {

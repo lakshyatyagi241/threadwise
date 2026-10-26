@@ -67,11 +67,11 @@ export function SwipeRow({ children, onEdit, onDelete, onOpen }: Props) {
               accessibilityRole="button"
               accessibilityLabel={t('contacts.row.swipeEdit')}
               onPress={act(onEdit)}
-              style={[styles.action, { backgroundColor: colors.primary }]}
+              style={[styles.action, { backgroundColor: colors.action }]}
             >
               <View style={styles.body}>
-                <Icon name="create-outline" size={22} color="onPrimary" />
-                <Text variant="caption" color="onPrimary">
+                <Icon name="create-outline" size={22} color="onAction" />
+                <Text variant="caption" color="onAction">
                   {t('contacts.row.swipeEdit')}
                 </Text>
               </View>

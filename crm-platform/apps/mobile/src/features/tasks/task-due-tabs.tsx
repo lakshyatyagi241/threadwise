@@ -46,12 +46,12 @@ export function TaskDueTabs({ value, onChange }: Props) {
             style={[
               styles.chip,
               {
-                backgroundColor: selected ? colors.primary : colors.surface,
-                borderColor: selected ? colors.primary : colors.border,
+                backgroundColor: selected ? colors.action : colors.surface,
+                borderColor: selected ? colors.action : colors.border,
               },
             ]}
           >
-            <Text variant="label" color={selected ? 'onPrimary' : 'textMuted'} numberOfLines={1}>
+            <Text variant="label" color={selected ? 'onAction' : 'textMuted'} numberOfLines={1}>
               {label[tab]}
             </Text>
           </Pressable>

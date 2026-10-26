@@ -46,7 +46,7 @@ function Dates({
   /** The last day; null while it is still to be chosen, and `tail` says so in its place. */
   to: string | null;
   tail?: string;
-  color: 'text' | 'primary';
+  color: 'text' | 'action';
 }) {
   return (
     <>
@@ -79,14 +79,14 @@ export function DateRangePill({ range, onPress }: { range: DateRange; onPress: (
       onPress={onPress}
       style={({ pressed }) => [
         styles.pill,
-        { backgroundColor: colors.primarySoft, opacity: pressed ? 0.85 : 1 },
+        { backgroundColor: colors.actionSoft, opacity: pressed ? 0.85 : 1 },
       ]}
     >
       <View style={styles.dates}>
-        <Dates from={range.from} to={range.to} color="primary" />
+        <Dates from={range.from} to={range.to} color="action" />
       </View>
       <View style={styles.pillChevron}>
-        <Icon name="chevron-down" size={18} color="primary" />
+        <Icon name="chevron-down" size={18} color="action" />
       </View>
     </Pressable>
   );
@@ -202,11 +202,11 @@ function SheetBody({ range, today, onApply, onClose }: Omit<SheetProps, 'visible
                     style={[
                       styles.chip,
                       selected
-                        ? { backgroundColor: colors.primary, borderColor: colors.primary }
+                        ? { backgroundColor: colors.action, borderColor: colors.action }
                         : { borderColor: colors.borderStrong },
                     ]}
                   >
-                    <Text variant="label" color={selected ? 'onPrimary' : 'text'} numberOfLines={1}>
+                    <Text variant="label" color={selected ? 'onAction' : 'text'} numberOfLines={1}>
                       {t(`dashDate.preset.${preset}`)}
                     </Text>
                   </Pressable>

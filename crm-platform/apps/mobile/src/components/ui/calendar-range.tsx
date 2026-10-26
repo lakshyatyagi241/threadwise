@@ -186,7 +186,7 @@ export function CalendarRange({
                   {bandStyle ? (
                     <View
                       pointerEvents="none"
-                      style={[bandStyle, { backgroundColor: colors.primarySoft }]}
+                      style={[bandStyle, { backgroundColor: colors.actionSoft }]}
                     />
                   ) : null}
                   <Pressable
@@ -200,12 +200,12 @@ export function CalendarRange({
                     <View
                       style={[
                         styles.day,
-                        filled && { backgroundColor: colors.primary },
-                        today && { borderWidth: 2, borderColor: colors.primary },
+                        filled && { backgroundColor: colors.action },
+                        today && { borderWidth: 2, borderColor: colors.action },
                         disabled && styles.faded,
                       ]}
                     >
-                      <Text variant="label" color={filled ? 'onPrimary' : 'text'}>
+                      <Text variant="label" color={filled ? 'onAction' : 'text'}>
                         {Number(day.slice(8))}
                       </Text>
                     </View>
