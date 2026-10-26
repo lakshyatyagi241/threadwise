@@ -198,7 +198,41 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .intake label.consent a { color: var(--accent); }
 .intake .age-err { color: #b91c1c; font-size: 12px; margin: -2px 0 8px; }
 .intake button { width: 100%; padding: 10px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px; font: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; }
-.footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
+.footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; position: relative; }
+.dpbtn { flex: none; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--accent); display: grid; place-items: center; cursor: pointer; }
+.dpbtn svg { flex: none; width: 19px; height: 19px; }
+.dpbtn[hidden] { display: none; }
+.dpbtn:hover { background: var(--accent-soft); }
+.dp { position: absolute; left: 12px; right: 12px; bottom: calc(100% + 6px); z-index: 30; background: #fff; color: #222; border: 1px solid #e6e8f2; border-radius: 16px; box-shadow: 0 14px 40px rgba(30, 28, 70, .18); padding: 12px; max-width: 340px; margin: 0 auto; max-height: calc(100vh - 140px); overflow-y: auto; }
+.dp[hidden] { display: none; }
+.dp .dphead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.dp .dpnav { width: 30px; height: 30px; border: 1px solid #e3e5f0; border-radius: 9px; background: #fff; color: #444; display: grid; place-items: center; cursor: pointer; padding: 0; }
+.dp .dpnav:hover { background: var(--accent-soft); border-color: var(--accent-line); }
+.dp .dptitle { font-weight: 700; font-size: 14px; text-transform: capitalize; }
+.dp .dpgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.dp .dpwd { font-size: 10.5px; font-weight: 600; color: #8b8fa8; padding: 4px 0; text-transform: uppercase; }
+.dp .dpday { position: relative; height: 34px; border: 0; border-radius: 10px; background: transparent; font: inherit; font-size: 13.5px; color: #222; cursor: pointer; padding: 0; }
+.dp .dpday:hover { background: var(--accent-soft); }
+.dp .dpday.out { color: #b4b7cc; }
+.dp .dpday.today::after { content: ""; position: absolute; left: 50%; bottom: 4px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--accent); }
+.dp .dpday.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.dp .dpday.sel::after { background: var(--accent-ink); }
+.dp .dpfoot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eef0f7; font-size: 13px; }
+.dp .dpsel { color: #6b6f88; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dp .dpgo { border: 0; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 600; font-size: 13px; padding: 7px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.dp .dpgo:disabled { opacity: .45; cursor: default; }
+.dp .dplink { border: 0; background: transparent; color: var(--accent); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; padding: 6px 4px; }
+.dp .dptime { display: flex; align-items: center; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eef0f7; }
+.dp .dpclock { flex: none; width: 104px; height: 104px; }
+.dp .dpcols { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.dp .dplab { font-size: 10.5px; font-weight: 700; color: #8b8fa8; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px; }
+.dp .dpnums { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; }
+.dp .dpnum { height: 26px; border: 0; border-radius: 8px; background: transparent; font: inherit; font-size: 12px; color: #333; cursor: pointer; padding: 0; }
+.dp .dpnum:hover { background: var(--accent-soft); }
+.dp .dpnum.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.dp .dpmin { display: flex; align-items: center; gap: 6px; }
+.dp .dpmin input { width: 52px; border: 1px solid #e3e5f0; border-radius: 8px; padding: 5px 6px; font: inherit; font-size: 13px; text-align: center; }
+
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
 .input-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .input-row .cc { flex: none; width: 92px; max-width: 34%; border: 0; border-inline-end: 1px solid #dfe2ee; border-radius: 0; background: transparent; font: inherit; font-size: 13.5px; font-weight: 600; color: #2c2e3d; padding: 8px 4px 8px 0; text-overflow: ellipsis; cursor: pointer; outline: none; }
@@ -294,6 +328,133 @@ const SCRIPT = `
     var want = ccPicked || String((h && h.country) || 'IN').toUpperCase();
     for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
   }
+  // A date, date-and-time or time question opens a calendar (and a clock) above the box; the pick is written into the box in the question's own
+  // shape, so the answer is judged exactly as if it had been typed.
+  var LOC = document.documentElement.lang || navigator.language || 'en';
+  var dp = { m: 0, y: 0, sel: null, h: 12, mi: 0 };
+  function dpPad(n) { return (n < 10 ? '0' : '') + n; }
+  function dpType() { return hint && (hint.type === 'date' || hint.type === 'datetime' || hint.type === 'time') ? hint.type : null; }
+  function dpDateText(d) {
+    var f = String((hint && hint.format) || 'dd-mm-yyyy').toLowerCase();
+    return f.replace('yyyy', String(d.y)).replace('yy', String(d.y).slice(-2)).replace('dd', dpPad(d.d)).replace('mm', dpPad(d.m + 1));
+  }
+  function dpValue() {
+    var type = dpType();
+    var time = dpPad(dp.h) + ':' + dpPad(dp.mi);
+    if (type === 'time') return time;
+    if (!dp.sel) return '';
+    return type === 'datetime' ? dpDateText(dp.sel) + ' ' + time : dpDateText(dp.sel);
+  }
+  function dpSvg(path) { var s = svg(14, [path]); s.setAttribute('stroke-width', '2.2'); s.setAttribute('aria-hidden', 'true'); return s; }
+  function dpEl(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function dpClose() { $('dp').hidden = true; $('dpbtn').setAttribute('aria-expanded', 'false'); }
+  function dpFill() {
+    var v = dpValue();
+    if (!v) return;
+    var t = $('txt'); t.value = v; syncSend(); dpClose(); t.focus();
+  }
+  function dpClock() {
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('class', 'dpclock'); svg.setAttribute('aria-hidden', 'true');
+    function add(name, attrs) { var n = document.createElementNS(NS, name); for (var k in attrs) n.setAttribute(k, attrs[k]); svg.appendChild(n); return n; }
+    add('circle', { cx: 50, cy: 50, r: 47, fill: '#fff', stroke: 'var(--accent-line)', 'stroke-width': 3 });
+    for (var i = 0; i < 12; i++) {
+      var a = i * Math.PI / 6, big = i % 3 === 0;
+      add('line', { x1: 50 + Math.sin(a) * (big ? 36 : 40), y1: 50 - Math.cos(a) * (big ? 36 : 40), x2: 50 + Math.sin(a) * 44, y2: 50 - Math.cos(a) * 44, stroke: big ? 'var(--accent)' : '#b4b7cc', 'stroke-width': big ? 2.6 : 1.6, 'stroke-linecap': 'round' });
+    }
+    var ha = ((dp.h % 12) + dp.mi / 60) * Math.PI / 6, ma = dp.mi * Math.PI / 30;
+    add('line', { x1: 50, y1: 50, x2: 50 + Math.sin(ha) * 22, y2: 50 - Math.cos(ha) * 22, stroke: '#222', 'stroke-width': 4, 'stroke-linecap': 'round' });
+    add('line', { x1: 50, y1: 50, x2: 50 + Math.sin(ma) * 33, y2: 50 - Math.cos(ma) * 33, stroke: 'var(--accent)', 'stroke-width': 2.8, 'stroke-linecap': 'round' });
+    add('circle', { cx: 50, cy: 50, r: 3.6, fill: 'var(--accent)' });
+    return svg;
+  }
+  function dpRender() {
+    var type = dpType();
+    var box = $('dp');
+    if (!type) { dpClose(); return; }
+    box.textContent = '';
+    if (type !== 'time') {
+      var head = dpEl('div', 'dphead');
+      var prev = dpEl('button', 'dpnav'); prev.type = 'button'; prev.appendChild(dpSvg('M15 6l-6 6 6 6')); prev.setAttribute('aria-label', 'Previous month');
+      var next = dpEl('button', 'dpnav'); next.type = 'button'; next.appendChild(dpSvg('M9 6l6 6-6 6')); next.setAttribute('aria-label', 'Next month');
+      var first = new Date(dp.y, dp.m, 1);
+      var title = dpEl('div', 'dptitle', new Intl.DateTimeFormat(LOC, { month: 'long', year: 'numeric' }).format(first));
+      prev.addEventListener('click', function () { dp.m -= 1; if (dp.m < 0) { dp.m = 11; dp.y -= 1; } dpRender(); });
+      next.addEventListener('click', function () { dp.m += 1; if (dp.m > 11) { dp.m = 0; dp.y += 1; } dpRender(); });
+      head.appendChild(prev); head.appendChild(title); head.appendChild(next); box.appendChild(head);
+      var grid = dpEl('div', 'dpgrid');
+      var wd = new Intl.DateTimeFormat(LOC, { weekday: 'short' });
+      for (var w = 0; w < 7; w++) grid.appendChild(dpEl('div', 'dpwd', wd.format(new Date(2023, 0, 1 + w)).slice(0, 2)));
+      var today = new Date();
+      var start = new Date(dp.y, dp.m, 1 - first.getDay());
+      for (var c = 0; c < 42; c++) {
+        var day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + c);
+        var b = dpEl('button', 'dpday', String(day.getDate())); b.type = 'button';
+        if (day.getMonth() !== dp.m) b.classList.add('out');
+        if (day.getFullYear() === today.getFullYear() && day.getMonth() === today.getMonth() && day.getDate() === today.getDate()) b.classList.add('today');
+        if (dp.sel && dp.sel.y === day.getFullYear() && dp.sel.m === day.getMonth() && dp.sel.d === day.getDate()) b.classList.add('sel');
+        b.addEventListener('click', (function (dd) { return function () {
+          dp.sel = { y: dd.getFullYear(), m: dd.getMonth(), d: dd.getDate() };
+          dp.y = dd.getFullYear(); dp.m = dd.getMonth();
+          if (type === 'date') dpFill(); else dpRender();
+        }; })(day));
+        grid.appendChild(b);
+      }
+      box.appendChild(grid);
+    }
+    if (type !== 'date') {
+      var tm = dpEl('div', 'dptime');
+      tm.appendChild(dpClock());
+      var cols = dpEl('div', 'dpcols');
+      var hl = dpEl('div'); hl.appendChild(dpEl('div', 'dplab', 'Hour'));
+      var hn = dpEl('div', 'dpnums');
+      for (var h = 0; h < 24; h++) {
+        var hb = dpEl('button', 'dpnum' + (dp.h === h ? ' sel' : ''), dpPad(h)); hb.type = 'button';
+        hb.addEventListener('click', (function (v) { return function () { dp.h = v; dpRender(); }; })(h));
+        hn.appendChild(hb);
+      }
+      hl.appendChild(hn); cols.appendChild(hl);
+      var ml = dpEl('div'); ml.appendChild(dpEl('div', 'dplab', 'Minute'));
+      var mrow = dpEl('div', 'dpmin');
+      var mi = document.createElement('input'); mi.type = 'number'; mi.min = 0; mi.max = 59; mi.value = dpPad(dp.mi); mi.setAttribute('aria-label', 'Minute');
+      mi.addEventListener('change', function () { var v = Math.max(0, Math.min(59, parseInt(mi.value, 10) || 0)); dp.mi = v; dpRender(); });
+      mrow.appendChild(mi);
+      [0, 15, 30, 45].forEach(function (v) {
+        var q = dpEl('button', 'dpnum' + (dp.mi === v ? ' sel' : ''), dpPad(v)); q.type = 'button'; q.style.width = '34px';
+        q.addEventListener('click', function () { dp.mi = v; dpRender(); });
+        mrow.appendChild(q);
+      });
+      ml.appendChild(mrow); cols.appendChild(ml); tm.appendChild(cols); box.appendChild(tm);
+    }
+    var foot = dpEl('div', 'dpfoot');
+    var left = dpEl('div', 'dpsel');
+    if (type === 'date') {
+      var tb = dpEl('button', 'dplink', new Intl.RelativeTimeFormat(LOC, { numeric: 'auto' }).format(0, 'day')); tb.type = 'button'; tb.style.textTransform = 'capitalize';
+      tb.addEventListener('click', function () { var n = new Date(); dp.sel = { y: n.getFullYear(), m: n.getMonth(), d: n.getDate() }; dpFill(); });
+      left.appendChild(tb);
+    } else left.textContent = dpValue() || '—';
+    foot.appendChild(left);
+    if (type !== 'date') {
+      var go = dpEl('button', 'dpgo'); go.type = 'button'; go.appendChild(dpSvg('M5 12.5l4.5 4.5L19 7.5')); go.appendChild(dpEl('span', '', tx('continue', 'Continue')));
+      go.disabled = type === 'datetime' && !dp.sel;
+      go.addEventListener('click', dpFill);
+      foot.appendChild(go);
+    }
+    box.appendChild(foot);
+    box.hidden = false; $('dpbtn').setAttribute('aria-expanded', 'true');
+  }
+  function dpOpen() {
+    if (!dpType() || PREVIEW) return;
+    var n = new Date();
+    if (!dp.sel) { dp.y = n.getFullYear(); dp.m = n.getMonth(); }
+    if (dpType() === 'time' || !dp.sel) { dp.h = n.getHours(); dp.mi = Math.round(n.getMinutes() / 5) * 5 % 60; }
+    dpRender();
+  }
+  $('dpbtn').addEventListener('click', function () { if ($('dp').hidden) dpOpen(); else dpClose(); });
+  $('txt').addEventListener('focus', function () { if (dpType() && $('dp').hidden && !$('txt').value) dpOpen(); });
+  document.addEventListener('click', function (e) { var box = $('dp'); if (!box.hidden && !box.contains(e.target) && e.target !== $('txt') && !$('dpbtn').contains(e.target)) dpClose(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dpClose(); });
   function setHint(h) {
     hint = h && h.type && h.type !== 'text' && h.type !== 'alphanumeric' ? h : null;
     var t = $('txt'), row = document.querySelector('.input-row'), type = hint ? hint.type : 'text';
@@ -309,6 +470,9 @@ const SCRIPT = `
     t.setAttribute('autocomplete', type === 'name' ? 'name' : type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'off');
     t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' || type === 'time' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
     row.className = 'input-row' + (type === 'file' ? ' file' : type === 'location' ? ' loc' : '');
+    dp.sel = null;
+    $('dpbtn').hidden = !dpType();
+    if (dpType()) dpOpen(); else dpClose();
     $('locbtn').textContent = '\\uD83D\\uDCCD ' + tx('shareLocation', 'Share my location');
     var f = $('file');
     f.accept = type === 'file' && hint.accept && hint.accept.length ? hint.accept.map(function (e) { return '.' + e; }).join(',') : '';
@@ -1594,10 +1758,12 @@ export function renderChatPage(w: ChatPageWidget): string {
 <footer class="footer">
 <div class="sugg" id="sugg" hidden></div>
 <div id="intake" class="intake" style="display:none"></div>
+<div class="dp" id="dp" hidden role="dialog"></div>
 <div class="input-row">
 <select id="cc" class="cc" hidden></select>
 <button id="locbtn" class="locbtn" type="button">Share my location</button>
 <input id="txt" type="text" placeholder="Type a message…" aria-label="Type a message" autocomplete="off" />
+<button class="dpbtn" id="dpbtn" type="button" hidden aria-haspopup="dialog"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"></rect><path d="M8 3v4M16 3v4M3.5 10h17"></path></svg></button>
 <label class="att" id="att"><input id="file" type="file" hidden /><span aria-hidden="true">&#128206;</span><span>Attach a file</span></label>
 <button class="mic" id="mic" type="button" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>
 <button id="send" type="button" disabled></button>
