@@ -43,6 +43,8 @@ x-api-env: &api-env
   DATABASE_REPLICA_URL: postgres://crm_app_user:${APP_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
   MIGRATION_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
   REDIS_URL: redis://redis:6379
+  # Empty: the cache and state keys share REDIS_URL, as before. redis-cache.compose.yml sets it to its own server (runbook: docs/runbooks/redis-cache-split.md).
+  REDIS_CACHE_URL: ${REDIS_CACHE_URL:-}
   JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
   JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
   JWT_ACCESS_TTL: 15m
