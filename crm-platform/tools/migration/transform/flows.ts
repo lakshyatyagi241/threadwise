@@ -244,6 +244,10 @@ for (const k of [
 CONFIG_FIELDS.ai_configuration =
   'chatbot_widgets.mode and ai_chat_assistants (model, prompt, temperature); apiKeys / openRouterKey / normalKey are NEVER copied';
 CONFIG_FIELDS['ai_configuration '] = CONFIG_FIELDS.ai_configuration; // a key with a trailing space exists at the source
+CONFIG_FIELDS.auto_assignment =
+  'drop:the auto-assignment switch is the workspace routing rule (routing_rules), set by the settings step';
+CONFIG_FIELDS.enable_sentiment_intent_analytics =
+  'drop:the sentiment and intent analytics switch has no column in the app';
 export const THEME_FIELDS: FieldMap = {
   _id: 'id (registered in migration.id_map)',
   id: 'id (registered in migration.id_map)',
@@ -510,13 +514,7 @@ export const widgetAssistants: HandlerSpec = {
     (ctx?.flows?.widgetOrder ?? [])
       .filter((id) => ctx?.flows?.widgets.get(id)?.assistant)
       .map((id) => ({ id }) as Doc),
-  fields: {
-    id: 'the bot id (bot_id)',
-    auto_assignment:
-      'drop:the auto-assignment switch is the workspace routing rule (routing_rules), set by the settings step',
-    enable_sentiment_intent_analytics:
-      'drop:the sentiment and intent analytics switch has no column in the app',
-  },
+  fields: { id: 'the bot id (bot_id)' },
   tables: {
     ai_chat_assistants: {
       columns: [
