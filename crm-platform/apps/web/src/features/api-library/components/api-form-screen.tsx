@@ -469,7 +469,7 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
               <SectionCard
                 id="alib-s-payload"
                 title={t('sections.payload')}
-                hint={t('payloadHint')}
+                hint={`${t('payloadHint')} ${t('payloadTypedHint', { example: '{"price": {{price}}}' })}`}
               >
                 <Field
                   label={t('payloadType')}

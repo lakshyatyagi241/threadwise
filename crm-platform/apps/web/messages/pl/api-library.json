@@ -323,7 +323,8 @@
       "payloadHint": "Co jest wysyłane w treści. Użyj przycisku '{ }', aby wstawić zmienną do wartości.",
       "functionHint": "Przekształć ładunek za pomocą JavaScript przed wysłaniem. Opcjonalne.",
       "plainHttpWarning": "Ten adres zaczyna się od http://, więc hasło lub klucz w nagłówkach zostałyby wysłane bez szyfrowania. Użyj https://, jeśli serwer to obsługuje.",
-      "importSkipped": "Wklejone polecenie wysyła także plik ({names}). Pliku nie można tu zaimportować, więc go pominięto. Wszystko inne zostało wypełnione."
+      "importSkipped": "Wklejone polecenie wysyła także plik ({names}). Pliku nie można tu zaimportować, więc go pominięto. Wszystko inne zostało wypełnione.",
+      "payloadTypedHint": "Aby wysłać prawdziwą liczbę lub tak/nie, wpisz zmienną bez cudzysłowów: {example}."
     },
     "test": {
       "title": "Odpowiedź",

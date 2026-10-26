@@ -64,13 +64,51 @@ export function renderText(template: string, values: VariableValues): string {
  * contact called "A & B" cannot add a parameter or end the path. The rule lives in @crm/contracts, where the save check runs it too.
  */
 export function renderUrl(template: string, values: VariableValues): string {
-  return apiLibraryRenderUrl(template, (name) => values.get(name.toLowerCase()));
+  return withoutDotSegments(
+    apiLibraryRenderUrl(template, (name) => values.get(name.toLowerCase())),
+  );
+}
+
+/**
+ * A path segment that is `.` or `..` (also written `%2e`) is dropped by every web client before the call, so `/orders/{value}/details`
+ * with `{value}` set to `.` is really called as `/orders/details`. The address that is shown, logged and called is that real one, so
+ * nobody has to guess why the call did not go where the template said.
+ */
+export function withoutDotSegments(url: string): string {
+  const path = /^[a-z][a-z0-9+.-]*:\/\/[^/?#]*([^?#]*)/i.exec(url)?.[1] ?? '';
+  if (!path.split('/').some((s) => /^(\.|%2e){1,2}$/i.test(s))) return url;
+  try {
+    return new URL(url).href;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * A token written without quotes in the JSON (`{"price": {{price}}}`) is stored as a string that starts with this mark, so the run
+ * knows to send the value as what it looks like (a number, a yes/no) and not as text.
+ */
+export const RAW_TOKEN_MARK = '\u0001';
+const RAW_TOKEN_RE = /^\u0001\{\{\s*([^{}]+?)\s*\}\}$/;
+
+/** The text of a value as a JSON value: `19.99` is a number, `yes` or `true` is true, `no` or `false` is false, empty is null; any other text stays text. */
+export function typedValue(text: string): string | number | boolean | null {
+  const v = text.trim();
+  if (v === '') return null;
+  if (/^-?\d+(\.\d+)?$/.test(v)) return Number(v);
+  if (/^(true|yes)$/i.test(v)) return true;
+  if (/^(false|no)$/i.test(v)) return false;
+  return text;
 }
 
 /** Every string leaf of a JSON payload filled in; numbers, booleans and nulls stay as they are. */
 export function renderBody(body: ApiLibraryBody, values: VariableValues): ApiLibraryBody {
   const walk = (v: unknown): unknown => {
-    if (typeof v === 'string') return renderText(v, values);
+    if (typeof v === 'string') {
+      const raw = RAW_TOKEN_RE.exec(v);
+      if (raw) return typedValue(valueOf(values, raw[1]!));
+      return renderText(v.startsWith(RAW_TOKEN_MARK) ? v.slice(1) : v, values);
+    }
     if (Array.isArray(v)) return v.map(walk);
     if (v !== null && typeof v === 'object')
       return Object.fromEntries(
