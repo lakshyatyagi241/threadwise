@@ -12,7 +12,11 @@ export interface ErrorText {
 }
 
 /** Codes whose `detail` is the point: Meta's own reason for a publish refusal. */
-const SHOWS_DETAIL = new Set(['WFL_FORM_META_VALIDATION_FAILED', 'WFL_FORM_PUBLISH_FAILED']);
+const SHOWS_DETAIL = new Set([
+  'WFL_FORM_META_VALIDATION_FAILED',
+  'WFL_FORM_PUBLISH_FAILED',
+  'WFL_FORM_SYNC_FAILED',
+]);
 
 /** Branches on the problem `code`, never on the message. Unknown codes fall back to a generic line plus the request id. Shared by Forms and Links. */
 export function useErrorText(): (e: unknown) => ErrorText {

@@ -18,7 +18,11 @@ export function WaLinkUnavailable({ kind }: { kind: 'missing' | 'gone' | 'error'
     >
       <div style={{ maxWidth: 420 }} role="status">
         <h1 style={{ fontSize: 22, margin: '0 0 8px' }}>
-          {kind === 'gone' ? t('goneTitle') : kind === 'error' ? t('errorTitle') : t('missingTitle')}
+          {kind === 'gone'
+            ? t('goneTitle')
+            : kind === 'error'
+              ? t('errorTitle')
+              : t('missingTitle')}
         </h1>
         <p style={{ margin: 0, opacity: 0.75 }}>
           {kind === 'gone' ? t('goneBody') : kind === 'error' ? t('errorBody') : t('missingBody')}

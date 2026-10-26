@@ -97,14 +97,57 @@ export function emptyForm(): ApiFormState {
 
 /** A name with a dot reads another saved API's answer (`Orders.data.id`); everything else starts as a contact property. */
 export const variableSourceOf = (name: string): ApiLibraryVariable['source'] =>
-  name.includes('.') ? 'api' : 'contact';
+  hintedSources.get(name.toLowerCase()) ?? (name.includes('.') ? 'api' : 'contact');
+
+/**
+ * Where the person said a variable comes from, when they put it in from the menu: a name typed into the Flow variable box is a flow
+ * variable, which its spelling alone cannot tell from a contact property. Kept by name for the session, so the variable is declared
+ * with the source it was added with whichever field the token ends up in.
+ */
+const hintedSources = new Map<string, ApiLibraryVariable['source']>();
+export function rememberVariableSource(name: string, source: ApiLibraryVariable['source']): void {
+  hintedSources.set(name.trim().toLowerCase(), source);
+}
 
 /** The payload as a value, or undefined when the text is not a JSON object or array. */
+/**
+ * Quotes every `{{token}}` that stands alone as a JSON value (outside any string), as a string that starts with the raw mark, so the
+ * text parses as JSON: `{"price": {{price}}}` becomes `{"price": "\u0001{{price}}"}`. A token inside a string is left as it is.
+ */
+export function quoteBareTokens(text: string): string {
+  let out = '';
+  let inString = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]!;
+    if (inString) {
+      out += c;
+      if (c === '\\' && i + 1 < text.length) out += text[++i];
+      else if (c === '"') inString = false;
+    } else if (c === '"') {
+      inString = true;
+      out += c;
+    } else if (c === '{' && text[i + 1] === '{') {
+      const end = text.indexOf('}}', i + 2);
+      const inner = end < 0 ? '' : text.slice(i + 2, end);
+      if (end >= 0 && inner.trim() !== '' && !/[{}"]/.test(inner)) {
+        out += `"\\u0001{{${inner}}}"`;
+        i = end + 1;
+      } else out += c;
+    } else out += c;
+  }
+  return out;
+}
+
+/** The JSON text of a saved payload, a raw token written back without its quotes. */
+export function bodyToText(body: unknown): string {
+  return JSON.stringify(body, null, 2).replace(/"\\u0001(\{\{[^{}]+?\}\})"/g, '$1');
+}
+
 function parsedBody(text: string): ApiLibraryBody | undefined {
   const t = text.trim();
   if (t === '') return null;
   try {
-    const v: unknown = JSON.parse(t);
+    const v: unknown = JSON.parse(quoteBareTokens(t));
     return v !== null && typeof v === 'object' ? (v as ApiLibraryBody) : undefined;
   } catch {
     return undefined;
@@ -210,7 +253,7 @@ export function fromDetail(d: ApiLibraryDetail): ApiFormState {
       !isForm &&
       body !== null &&
       !(typeof body === 'object' && !Array.isArray(body) && Object.keys(body).length === 0)
-        ? JSON.stringify(body, null, 2)
+        ? bodyToText(body)
         : '',
     fieldRows:
       isForm && body !== null && !Array.isArray(body)
@@ -296,7 +339,7 @@ export function bodyOf(state: ApiFormState): { body: ApiLibraryBody } | { proble
   if (t === '') return { body: null };
   let v: unknown;
   try {
-    v = JSON.parse(t);
+    v = JSON.parse(quoteBareTokens(t));
   } catch {
     return { problem: 'json' };
   }

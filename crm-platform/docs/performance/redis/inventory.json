@@ -18,9 +18,9 @@
   "clients": [
     {
       "file": "apps/api/src/infra/redis/redis.module.ts",
-      "line": 30,
+      "line": 18,
       "kind": "new",
-      "options": "config.get('REDIS_URL', { infer: true }), { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
+      "options": "url, { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
     },
     {
       "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
@@ -2739,22 +2739,22 @@
       "commands": ["get", "set"],
       "writes": [
         {
-          "line": 514,
+          "line": 515,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 613,
+          "line": 614,
           "cmd": "set",
           "ttl": "EX 31 * 24 * 3600"
         },
         {
-          "line": 645,
+          "line": 646,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 671,
+          "line": 672,
           "cmd": "set",
           "ttl": "EX 7 * 24 * 3600"
         }
@@ -4061,7 +4061,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/sessions/session.service.ts",
-      "line": 643,
+      "line": 644,
       "cmd": "set"
     },
     {

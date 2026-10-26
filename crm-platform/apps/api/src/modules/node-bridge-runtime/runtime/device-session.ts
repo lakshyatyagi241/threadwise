@@ -89,6 +89,8 @@ export interface SessionIds {
 }
 
 const CONNECT_RETRY_MS = 5_000;
+/** A send to an unloaded number wakes it and waits this long for the socket (a cold connect, longer than the 8 s of a number that is just reconnecting). */
+const WAKE_WAIT_MS = 30_000;
 const MAX_CONNECT_RETRIES = 50;
 const QR_WATCH_MS = 5_000;
 
@@ -118,13 +120,23 @@ export class DeviceSession {
   private events: Promise<void> = Promise.resolve();
   /** How long a send waits for the socket to come back (the post-pairing restart race), as Reference's 8 s. */
   readyWaitMs = 8_000;
+  // Idle unloading (V-02). Off unless the runtime calls unload(): a session that is never unloaded behaves exactly as before.
+  private unloaded = false;
+  private unloadedAt: number | null = null;
+  private lastActivityAt: number;
+  /** Woken only to take the messages WhatsApp held, not by a person or a customer: it goes back to sleep sooner if nothing arrives. */
+  private syncWake = false;
+  /** While a wake reconnects, the device is not reported as connecting or open: to the screens it never stopped being connected. */
+  private quietWake = false;
 
   constructor(
     private readonly ids: SessionIds,
     private readonly factory: WaSocketFactory,
     private readonly host: SessionHost,
     private readonly clock: Clock = systemClock,
-  ) {}
+  ) {
+    this.lastActivityAt = clock.now();
+  }
 
   get isReady(): boolean {
     return this.connected;
@@ -132,6 +144,47 @@ export class DeviceSession {
   get isEnded(): boolean {
     return !this.shouldStayConnected;
   }
+  get isUnloaded(): boolean {
+    return this.unloaded;
+  }
+  /** Milliseconds since this session was unloaded; 0 when it is not. */
+  unloadedFor(): number {
+    return this.unloadedAt === null ? 0 : this.clock.now() - this.unloadedAt;
+  }
+  /** A message went in or out: the number is in use, so it stays up for the whole idle time again. */
+  private markActive(): void {
+    this.lastActivityAt = this.clock.now();
+    this.syncWake = false;
+  }
+  /** Open, past its first pairing, and quiet for `idleMs` (`syncMs` when it was woken only to take held messages). */
+  canUnload(idleMs: number, syncMs: number): boolean {
+    if (!this.connected || this.unloaded || this.shuttingDown || !this.shouldStayConnected)
+      return false;
+    if (!this.everOpened || this.isPairing) return false;
+    return this.clock.now() - this.lastActivityAt >= (this.syncWake ? syncMs : idleMs);
+  }
+  /** Closes the socket and keeps the saved session and the lease: the number is still linked, only its memory is given back. */
+  unload(): void {
+    this.clearTimers();
+    const sock = this.sock;
+    this.disposeSocket();
+    sock?.end();
+    this.connected = false;
+    this.connecting = false;
+    this.unloaded = true;
+    this.unloadedAt = this.clock.now();
+  }
+  /** Opens the socket of an unloaded session again. `sync`: the periodic pull of held messages; `activity`: someone wants to send. */
+  async wake(reason: 'sync' | 'activity'): Promise<void> {
+    if (!this.unloaded) return;
+    this.unloaded = false;
+    this.unloadedAt = null;
+    this.lastActivityAt = this.clock.now();
+    this.syncWake = reason === 'sync';
+    this.quietWake = true;
+    await this.start();
+  }
+
   /** A first pairing is in progress: a QR is showing and the device has never been open. */
   get isPairing(): boolean {
     return !this.everOpened && this.qrFirstShownAt !== null;
@@ -153,6 +206,7 @@ export class DeviceSession {
       this.sock = sock;
       sock.subscribeHistory?.(async (b) => {
         if (generation !== this.generation) return;
+        this.markActive(); // a long history import is use: it must not be unloaded half way
         await this.host.history?.(b);
       });
       sock.subscribe((e) => {
@@ -161,6 +215,9 @@ export class DeviceSession {
     } catch {
       // The proxy could not be reached or the socket could not be built: try again shortly, without a status of its own.
       this.connecting = false;
+      // A wake that cannot even build its socket is a real outage from here on: the retry must report its statuses, or a device the
+      // stale sweep has already marked disconnected would never be marked connected again.
+      this.quietWake = false;
       if (
         this.shouldStayConnected &&
         !this.shuttingDown &&
@@ -182,6 +239,9 @@ export class DeviceSession {
     this.scanned = false;
     this.connecting = false;
     this.connected = false;
+    this.unloaded = false;
+    this.unloadedAt = null;
+    this.quietWake = false;
     this.shouldStayConnected = true;
     await this.factory.deleteSession(this.ids.orgId, this.ids.deviceId);
     await this.start();
@@ -211,7 +271,11 @@ export class DeviceSession {
   }
 
   private async readySocket(): Promise<WaSocket> {
-    const until = this.clock.now() + this.readyWaitMs;
+    this.markActive();
+    // An unloaded number is woken by the send and given a cold connect's time, not the 8 s of one that is only reconnecting.
+    const wakeWait = this.unloaded || this.quietWake ? WAKE_WAIT_MS : 0;
+    if (this.unloaded) await this.wake('activity');
+    const until = this.clock.now() + Math.max(this.readyWaitMs, wakeWait);
     for (;;) {
       if (this.connected && this.sock) return this.sock;
       if (this.clock.now() >= until || !this.shouldStayConnected || this.shuttingDown) {
@@ -223,6 +287,8 @@ export class DeviceSession {
 
   /** The user unlinked the device: stop for good, unlink on the phone, forget the session. */
   async logout(): Promise<void> {
+    // An unloaded number has no socket to unlink with: wake it first (bounded), so the phone is told as well and not only our copy.
+    if (this.unloaded) await this.readySocket().catch(() => undefined);
     this.shouldStayConnected = false;
     this.clearTimers();
     const sock = this.sock;
@@ -252,7 +318,7 @@ export class DeviceSession {
    * connected but is neither connecting, connected, waiting to reconnect, nor in the middle of a first pairing is started again.
    */
   async tick(): Promise<void> {
-    if (!this.shouldStayConnected || this.shuttingDown) return;
+    if (!this.shouldStayConnected || this.shuttingDown || this.unloaded) return;
     if (this.connecting || this.connected || this.reconnectTimer !== null || this.isPairing) return;
     await this.start();
   }
@@ -263,6 +329,7 @@ export class DeviceSession {
     if (generation !== this.generation) return;
     switch (e.type) {
       case 'connecting': {
+        if (this.quietWake) return;
         const next = this.nextStatus ?? { status: 'connecting' as const, progress: 25 };
         this.nextStatus = null;
         await this.host.report(next);
@@ -280,12 +347,16 @@ export class DeviceSession {
       case 'close':
         return this.onClose(e.code, e.message);
       case 'message':
+        this.markActive();
         return this.host.inbound?.(e.normalized, e.media);
       case 'receipt':
+        this.markActive(); // the answer to a message we sent
         return this.host.receipt?.(e.receipt);
       case 'groups':
+        this.markActive();
         return this.host.groups?.(e.groups, { complete: e.complete !== false });
       case 'group_event':
+        this.markActive();
         return this.host.groupEvent?.(e.event);
     }
   }
@@ -347,6 +418,11 @@ export class DeviceSession {
     this.qrFirstShownAt = null;
     this.stopQrWatch();
     this.cancelReconnect();
+    // Back from a wake: the device was reported connected all along, so there is no new status to give.
+    if (this.quietWake) {
+      this.quietWake = false;
+      return;
+    }
     await this.host.report({ status: 'open', progress: 100 });
   }
 
@@ -354,6 +430,8 @@ export class DeviceSession {
     this.connected = false;
     this.connecting = false;
     this.sock = null;
+    // A wake that fails is an ordinary drop from here on: the normal statuses and retries apply.
+    this.quietWake = false;
     const d = decideClose({
       code,
       message,

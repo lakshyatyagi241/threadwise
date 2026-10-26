@@ -165,8 +165,23 @@ export type WaFormStats = z.infer<typeof waFormStatsSchema>;
 export const waFormListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   cursor: z.string().min(1).max(200).optional(),
+  /** Part of the title (without case); the counters above the list stay the whole workspace's. */
+  q: z.string().trim().max(100).optional(),
 });
 export type WaFormListQuery = z.infer<typeof waFormListQuerySchema>;
+
+/** `POST /v2/wa-forms/sync`: what Meta's list of Flows did to the forms here. */
+export const waFormSyncResponseSchema = z.object({
+  /** Forms that are linked to a Meta Flow and were looked up. */
+  checked: z.number().int().nonnegative(),
+  /** Of those, how many changed their status (or lost a publish error) to match Meta. */
+  updated: z.number().int().nonnegative(),
+  /** Linked forms whose Flow Meta no longer lists (deleted there). */
+  missing: z.number().int().nonnegative(),
+  /** Flows on the account that no form here is linked to (made in Meta, or by another tool); they are left alone. */
+  metaOnly: z.number().int().nonnegative(),
+});
+export type WaFormSyncResponse = z.infer<typeof waFormSyncResponseSchema>;
 
 export const waFormListSchema = z.object({
   items: z.array(waFormSchema),
@@ -202,6 +217,10 @@ export const waFormPickerItemSchema = z.object({
   title: z.string(),
   status: waFormStatusSchema,
   isPublished: z.boolean(),
+  /** Meta's id of the published Flow (what a template's Form button points at); null until the form is published. */
+  metaFlowId: z.string().nullable().default(null),
+  /** The screen the Flow opens on: the first one (a template's Form button needs it). */
+  firstScreenId: z.string().default('A'),
 });
 export type WaFormPickerItem = z.infer<typeof waFormPickerItemSchema>;
 export const waFormPickerListSchema = z.object({ forms: z.array(waFormPickerItemSchema) });
@@ -219,7 +238,7 @@ export const waFormSubmissionSchema = z.object({
 });
 export type WaFormSubmission = z.infer<typeof waFormSubmissionSchema>;
 
-export const waFormSubmissionListQuerySchema = waFormListQuerySchema;
+export const waFormSubmissionListQuerySchema = waFormListQuerySchema.omit({ q: true });
 export type WaFormSubmissionListQuery = z.infer<typeof waFormSubmissionListQuerySchema>;
 
 export const waFormSubmissionListSchema = z.object({

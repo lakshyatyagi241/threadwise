@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Ce lien est en pause ou a expiré.",
       "ROW_VERSION_CONFLICT": "Cet élément a été modifié ailleurs. Rechargez la page et réessayez.",
       "VALIDATION_FAILED": "Vérifiez les champs mis en évidence et réessayez.",
-      "PLAN_FEATURE_LOCKED": "Passez à un forfait supérieur pour utiliser cette fonctionnalité."
+      "PLAN_FEATURE_LOCKED": "Passez à un forfait supérieur pour utiliser cette fonctionnalité.",
+      "WFL_FORM_SYNC_FAILED": "Impossible de lire les formulaires depuis Meta."
     },
     "forms": {
       "heading": "Formulaires WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Aucun formulaire pour le moment",
-        "description": "Créez un formulaire, puis envoyez-le depuis une étape de formulaire WhatsApp dans un flux."
+        "description": "Créez un formulaire, puis envoyez-le depuis une étape de formulaire WhatsApp dans un flux.",
+        "noMatch": "Aucun formulaire ne correspond à « {q} »."
       },
       "table": {
         "form": "Formulaire",
@@ -143,6 +145,14 @@
           "contact": "Contact",
           "phone": "Téléphone"
         }
+      },
+      "sync": {
+        "cta": "Synchroniser avec Meta",
+        "syncing": "Synchronisation…",
+        "done": "Synchronisé avec Meta : {checked} vérifiés, {updated} mis à jour, {missing} introuvables dans Meta, {metaOnly} uniquement dans Meta."
+      },
+      "search": {
+        "placeholder": "Rechercher des formulaires"
       }
     },
     "links": {

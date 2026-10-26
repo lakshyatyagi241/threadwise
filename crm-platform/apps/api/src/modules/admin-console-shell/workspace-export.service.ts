@@ -53,15 +53,16 @@ export class WorkspaceExportService {
     return Boolean(r && (r.is_owner || (!r.has_owner && r.is_admin)));
   }
 
-  /** The three counts on the cards. Visible to any member; only the owner can download. */
+  /** The three counts on the cards. Visible to any member; only the owner can download. Counts only what the CSV holds (see `page`). */
   async counts(): Promise<ExportCountsResponse> {
     const { orgId, userId } = this.actor();
     const [res, owner] = await Promise.all([
       this.db.txAs({ orgId, userId }, (tx) =>
         tx.execute(sql`
           SELECT (SELECT count(*) FROM contacts) AS contacts,
-                 (SELECT count(*) FROM conversations) AS conversations,
-                 (SELECT count(*) FROM messages WHERE deleted_at IS NULL) AS messages`),
+                 (SELECT count(*) FROM conversations c WHERE ${channelOwnerSql('c')} IS NULL) AS conversations,
+                 (SELECT count(*) FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+                   WHERE m.deleted_at IS NULL AND ${channelOwnerSql('c')} IS NULL) AS messages`),
       ),
       this.isOwner(orgId, userId),
     ]);

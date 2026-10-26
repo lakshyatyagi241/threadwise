@@ -4,7 +4,7 @@ import { REDIS_COMMAND_TIMEOUT_MS } from '../redis/redis.module';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../../config/env.schema';
-import { DEFAULT_JOB_OPTIONS, QUEUES, jobOptionsFor } from './queues';
+import { DEFAULT_JOB_OPTIONS, QUEUES, QUEUE_STREAMS, jobOptionsFor } from './queues';
 
 /**
  * BullMQ wiring.
@@ -133,6 +133,8 @@ export function queueRedisOptions(redisUrl: string) {
         inject: [ConfigService],
         useFactory: (config: ConfigService<Env, true>) => ({
           defaultJobOptions: jobOptionsFor(name),
+          // Same value in every process that registers this queue: see QUEUE_EVENTS_MAX_LEN.
+          streams: QUEUE_STREAMS,
           connection: {
             ...queueRedisOptions(config.get('REDIS_URL', { infer: true })),
             ...PRODUCER_CONNECTION_OPTIONS,

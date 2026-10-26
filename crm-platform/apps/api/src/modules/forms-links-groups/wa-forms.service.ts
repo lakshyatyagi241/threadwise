@@ -6,6 +6,7 @@ import {
   type WaFormList,
   type WaFormListQuery,
   type WaFormPickerList,
+  type WaFormSyncResponse,
   type WaFormSubmissionList,
   type WaFormSubmissionListQuery,
 } from '@crm/contracts';
@@ -75,7 +76,7 @@ export class WaFormsService {
     const cursor = query.cursor ? decodeCursor(query.cursor) : undefined;
     return this.db.tx(async (tx) => {
       const [rows, stats] = await Promise.all([
-        this.repo.list(tx, ctx.orgId, query.limit, cursor),
+        this.repo.list(tx, ctx.orgId, query.limit, cursor, query.q),
         this.repo.stats(tx, ctx.orgId),
       ]);
       const { items, page } = buildPage(
@@ -83,6 +84,71 @@ export class WaFormsService {
         query.limit,
       );
       return { items: items.map(toWaFormResponse), stats, page };
+    });
+  }
+
+  /**
+   * Sync with Meta: reads the Flows of every connected Meta WhatsApp Business Account and makes each linked form's status the one Meta
+   * reports (published, draft, or paused for a deprecated, blocked or throttled Flow). A Flow Meta lists that no form here is linked to
+   * is counted and left alone: importing it would mean reading its JSON back into the builder, and publishing over it would replace it.
+   */
+  async syncWithMeta(): Promise<WaFormSyncResponse> {
+    const ctx = RequestContextStore.require();
+    const configIds = await this.db.tx((tx) => this.repo.wabaProviderConfigIds(tx, ctx.orgId));
+    const known = new Map<string, string>();
+    const accounts = new Set<string>();
+    try {
+      for (const configId of configIds) {
+        const r = await this.db.tx((tx) =>
+          this.connections.resolveConnection(tx, ctx.orgId, { id: configId }),
+        );
+        const conn = r?.conn;
+        if (
+          !conn ||
+          conn.registry ||
+          conn.provider !== 'meta' ||
+          !conn.wabaId ||
+          !conn.accessToken ||
+          accounts.has(conn.wabaId)
+        )
+          continue;
+        accounts.add(conn.wabaId);
+        for (const f of await this.flows.listFlows(conn)) known.set(f.id, f.status.toUpperCase());
+      }
+    } catch (err) {
+      this.logger.warn({ orgId: ctx.orgId, err: String(err) }, 'wa_form sync failed');
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_SYNC_FAILED,
+        err instanceof WabaApiError ? (err.userMessage ?? err.message) : String(err),
+        422,
+      );
+    }
+    if (accounts.size === 0) {
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_NO_WABA_CREDENTIALS,
+        'No connected WhatsApp Cloud API number has usable credentials.',
+        422,
+      );
+    }
+    return this.db.tx(async (tx) => {
+      const linked = await this.repo.linkedToMeta(tx, ctx.orgId);
+      let updated = 0;
+      let missing = 0;
+      for (const f of linked) {
+        const meta = known.get(f.metaFlowId);
+        if (meta === undefined) {
+          missing += 1;
+          continue;
+        }
+        const status = statusFromMeta(meta);
+        if (status !== f.status || (status === 'published' && f.publishError !== null)) {
+          await this.repo.setStatusFromMeta(tx, ctx.orgId, f.id, status);
+          updated += 1;
+        }
+      }
+      const linkedIds = new Set(linked.map((f) => f.metaFlowId));
+      const metaOnly = [...known.keys()].filter((id) => !linkedIds.has(id)).length;
+      return { checked: linked.length, updated, missing, metaOnly };
     });
   }
 
@@ -360,6 +426,13 @@ export class WaFormsService {
       return { filename: `${form.slug}-submissions.csv`, csv: buildCsv(header, body) };
     });
   }
+}
+
+/** Meta's Flow status as a form's status: DRAFT is a draft, PUBLISHED published, DEPRECATED / BLOCKED / THROTTLED paused. */
+export function statusFromMeta(meta: string): 'draft' | 'published' | 'paused' {
+  if (meta === 'PUBLISHED') return 'published';
+  if (meta === 'DRAFT') return 'draft';
+  return 'paused';
 }
 
 function slugify(title: string): string {

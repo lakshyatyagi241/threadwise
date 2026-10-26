@@ -323,7 +323,8 @@
       "payloadHint": "Ce qui est envoyé dans le corps. Utilisez le bouton '{ }' pour insérer une variable dans une valeur.",
       "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif.",
       "plainHttpWarning": "Cette adresse commence par http://, donc le mot de passe ou la clé dans vos en-têtes circulerait sans chiffrement. Utilisez https:// si le serveur le permet.",
-      "importSkipped": "La commande collée envoie aussi un fichier ({names}). Un fichier ne peut pas être importé ici, il a donc été laissé de côté. Tout le reste a été rempli."
+      "importSkipped": "La commande collée envoie aussi un fichier ({names}). Un fichier ne peut pas être importé ici, il a donc été laissé de côté. Tout le reste a été rempli.",
+      "payloadTypedHint": "Pour envoyer un vrai nombre ou oui/non, écrivez la variable sans guillemets : {example}."
     },
     "test": {
       "title": "Réponse",

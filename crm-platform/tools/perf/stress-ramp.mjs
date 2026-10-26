@@ -1,16 +1,19 @@
 // Closed-loop ramp test of a running API: N virtual users each send the next request as soon as the last answered, a mix of the main
 // read routes. Steps hold for STEP_S seconds; per step it reports requests/s, p50/p95/p99, errors, and (with PSQL_URL) the database
 // connections in use. The "limit" is the last step whose p95 stays under --p95 and whose error rate stays under 1%.
+//   --pid <pid>   also record the API process's CPU % (100 = one core) and RSS during each step, read from /proc (V-06)
 //   API_URL=http://localhost:3000 PERF_EMAIL=perf1@geta.ai PERF_PASSWORD=... PSQL_URL=postgres://crm@localhost:5433/crm \
 //     node tools/perf/stress-ramp.mjs [--steps 5,10,25,50,100] [--seconds 20] [--p95 500] [--out perf/stress.json]
 // Reads only (GET). One machine drives and serves, so the result is a ceiling for THIS box, not for production.
 import { execFileSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
+import { watch } from './proc-sample.mjs';
 
 const arg = (n, d) => (process.argv.includes(n) ? process.argv[process.argv.indexOf(n) + 1] : d);
 const API = process.env.API_URL ?? 'http://localhost:3000';
 const STEPS = arg('--steps', '5,10,25,50,100').split(',').map(Number);
 const STEP_S = Number(arg('--seconds', 20));
+const PID = arg('--pid', null);
 const P95_LIMIT = Number(arg('--p95', 500));
 const MIX = [
   ['/v2/inbox/conversations', 20],
@@ -67,10 +70,11 @@ async function step(vus) {
   let errors = 0;
   const codes = {};
   const end = Date.now() + STEP_S * 1000;
-  let maxActive = 0;
+  let maxActive = null;
+  const proc = PID ? watch(Number(PID), 1000) : null;
   const sampler = setInterval(() => {
     const c = dbConns();
-    if (c !== null) maxActive = Math.max(maxActive, c);
+    if (c !== null) maxActive = Math.max(maxActive ?? 0, c);
   }, 2000);
   await Promise.all(
     Array.from({ length: vus }, async (_, i) => {
@@ -98,6 +102,7 @@ async function step(vus) {
     }),
   );
   clearInterval(sampler);
+  const cpuRam = proc ? proc.stop() : null;
   lat.sort((a, b) => a - b);
   const routes = {};
   for (const [u, xs] of byRoute) {
@@ -115,6 +120,7 @@ async function step(vus) {
     errorRate: lat.length ? errors / lat.length : 0,
     codes,
     dbActiveMax: maxActive,
+    ...(cpuRam ? { process: cpuRam } : {}),
     routes,
   };
 }
@@ -124,13 +130,14 @@ for (const v of STEPS) {
   const r = await step(v);
   results.push(r);
   console.log(
-    `${String(v).padStart(4)} vus  ${r.rps.toFixed(0).padStart(5)} rps  p50 ${r.p50.toFixed(0)}  p95 ${r.p95.toFixed(0)}  p99 ${r.p99.toFixed(0)}  err ${(r.errorRate * 100).toFixed(1)}%  db-active-max ${r.dbActiveMax}`,
+    `${String(v).padStart(4)} vus  ${r.rps.toFixed(0).padStart(5)} rps  p50 ${r.p50.toFixed(0)}  p95 ${r.p95.toFixed(0)}  p99 ${r.p99.toFixed(0)}  err ${(r.errorRate * 100).toFixed(1)}%  db-active-max ${r.dbActiveMax ?? '-'}${r.process ? `  cpu avg ${r.process.cpuAvgPct}% max ${r.process.cpuMaxPct}%  rss max ${r.process.rssMaxMb} MB` : ''}`,
   );
 }
 const ok = results.filter((r) => r.p95 <= P95_LIMIT && r.errorRate < 0.01);
 const out = {
   api: API,
   stepSeconds: STEP_S,
+  pid: PID ? Number(PID) : null,
   p95LimitMs: P95_LIMIT,
   mix: MIX,
   limitVus: ok.length ? ok.at(-1).vus : null,

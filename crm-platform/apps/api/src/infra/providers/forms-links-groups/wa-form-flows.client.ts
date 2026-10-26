@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import type { WabaConnection } from '../whatsapp-cloud-api-waba/waba-admin.port';
 import { WabaHttp } from '../whatsapp-cloud-api-waba/waba-http';
-import type { FlowAssetValidationError, WaFormFlowsPort } from './wa-form-flows.port';
+import type {
+  FlowAssetValidationError,
+  MetaFlowSummary,
+  WaFormFlowsPort,
+} from './wa-form-flows.port';
 
 interface RawValidationError {
   error?: string;
@@ -65,15 +69,45 @@ export class WaFormFlowsClient implements WaFormFlowsPort {
     return { validationErrors: errors };
   }
 
+  async listFlows(conn: WabaConnection): Promise<MetaFlowSummary[]> {
+    const bearer = requireMetaBearer(conn);
+    const out: MetaFlowSummary[] = [];
+    let page = await this.http.graph<RawFlowPage>(bearer, {
+      method: 'GET',
+      path: `/${conn.wabaId}/flows`,
+      query: { fields: 'id,name,status', limit: 100 },
+    });
+    for (let i = 0; i < FLOW_PAGES_MAX; i++) {
+      for (const f of page.data ?? [])
+        if (f.id) out.push({ id: String(f.id), name: f.name ?? '', status: f.status ?? '' });
+      const next = page.paging?.next;
+      if (!next) break;
+      page = await this.http.absolute<RawFlowPage>(next, {
+        method: 'GET',
+        headers: { authorization: `Bearer ${bearer}` },
+      });
+    }
+    return out;
+  }
+
   async publish(conn: WabaConnection, flowId: string): Promise<void> {
     const bearer = requireMetaBearer(conn);
     await this.http.graph(bearer, { method: 'POST', path: `/${flowId}/publish`, json: {} });
   }
 }
 
+const FLOW_PAGES_MAX = 20;
+
+interface RawFlowPage {
+  data?: Array<{ id?: string; name?: string; status?: string }>;
+  paging?: { next?: string };
+}
+
 function requireMetaBearer(conn: WabaConnection): string {
   if (conn.registry || conn.provider !== 'meta' || !conn.accessToken) {
-    throw new Error('WhatsApp Forms needs a direct Meta Cloud API connection (Flow management is Meta-only).');
+    throw new Error(
+      'WhatsApp Forms needs a direct Meta Cloud API connection (Flow management is Meta-only).',
+    );
   }
   return conn.accessToken;
 }

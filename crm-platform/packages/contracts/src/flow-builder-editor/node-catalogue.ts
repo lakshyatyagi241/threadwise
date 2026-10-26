@@ -151,8 +151,14 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('ai_call', 'AI voice call', 'Engage', 'Call the customer with an AI voice agent'),
   def('google_meet', 'Google Meet', 'Engage', 'Create + send a Meet link'),
   def('wa_form', 'WhatsApp form', 'Engage', 'Send a published Meta form'),
-  // Not a Reference node: the owner asked for the old console's API Library to come over (docs/api/api-library.md). WhatsApp only.
-  def('api_library', 'API (from library)', 'Integrations', 'Call a saved API from the API Library'),
+  // Not a Reference node: the owner asked for the old console's API Library to come over (docs/api/api-library.md). On the chat, social and website flows.
+  def(
+    'api_library',
+    'API (from library)',
+    'Integrations',
+    'Call a saved API from the API Library',
+    WEB_CAPABLE,
+  ),
   def('google_sheets', 'Google Sheets', 'Integrations', 'Write or read a row'),
   def('google_docs', 'Google Docs', 'Integrations', 'Generate from a template'),
   def('google_form', 'Google Form', 'Integrations', 'Send link, capture answers'),

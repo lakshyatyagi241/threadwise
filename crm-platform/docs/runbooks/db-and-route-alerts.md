@@ -59,6 +59,23 @@ not a measurement (the production baseline, sheet item P-16). It needs the app m
 3. One route only: check the code path for a missing index, an N+1 or a large payload; `pnpm qa 42` runs the critical queries through EXPLAIN.
 4. A deploy in the last 15 minutes: the first requests after a restart are cold.
 
+## DbPoolAcquireSlow
+
+**What it measures.** `crm_db_pool_acquire_seconds{pool}` times every checkout from a pool: the wait for a free connection plus, when the
+pool had to open one, the time to connect. This is the time a request or job spends before its first query can start. The alert fires when
+the p95 over 10 minutes is above 5 ms for 15 minutes, with at least 0.2 checkouts a second. It fires before `DbPoolSaturated`, because a
+pool can queue briefly long before it is full for minutes.
+
+**First look.**
+
+1. `histogram_quantile(0.95, sum by (le, pool) (rate(crm_db_pool_acquire_seconds_bucket[10m])))` by pool, and `crm_db_pool_waiting` for the same pool.
+2. Mostly connects, not waits? A pool that keeps closing idle connections (`idleTimeoutMillis` 30 s) and reopening them after a quiet period pays
+   a connect on the first requests; the p50 stays near zero. Waiting shows as a high p50 as well.
+3. Slow statements or sessions holding connections: the checks in `DbPoolSaturated` above.
+4. Concurrency above the pool size: the evidence in [docs/performance/db/pool-and-pgbouncer.md](../performance/db/pool-and-pgbouncer.md)
+   shows how the wait grows as the pool gets smaller than the number of concurrent callers. Raise `DB_POOL_MAX` only inside the connection budget
+   in that document (Postgres `max_connections=100`).
+
 ## DbPoolSaturated
 
 **What it measures.** A pool (`primary`, `webhook`, ...) of a service has all its connections open and none idle for 2 minutes. This is
@@ -70,4 +87,4 @@ the early warning; `DbPoolExhausted` pages when callers are already waiting.
 2. Slow statements now (`SlowQueryMeanOver120ms`) and sessions stuck in a transaction:
    `select pid, state, now() - xact_start as open_for, left(query, 100) from pg_stat_activity where state = 'idle in transaction' order by xact_start;`
 3. A burst on one route (`WebhookRateHigh`) fills the webhook pool first.
-4. If nothing is slow and traffic is normal, the pool may be too small: see the pool-sizing review (sheet item D-07) before raising `DB_POOL_MAX`.
+4. If nothing is slow and traffic is normal, the pool may be too small: see the pool-sizing review ([docs/performance/db/pool-and-pgbouncer.md](../performance/db/pool-and-pgbouncer.md)) before raising `DB_POOL_MAX`.

@@ -1,0 +1,119 @@
+{
+  "mode": "churn",
+  "label": "before",
+  "node": "v24.19.0",
+  "at": "2026-10-26T07:58:11.437Z",
+  "rows": [
+    {
+      "cycles": 30,
+      "rssMb": 270.8,
+      "heapUsedMb": 59,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 251,
+      "nodeCaches": 250
+    },
+    {
+      "cycles": 60,
+      "rssMb": 269.9,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 401,
+      "nodeCaches": 400
+    },
+    {
+      "cycles": 90,
+      "rssMb": 270.1,
+      "heapUsedMb": 58.9,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 551,
+      "nodeCaches": 550
+    },
+    {
+      "cycles": 120,
+      "rssMb": 270.1,
+      "heapUsedMb": 59.7,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 701,
+      "nodeCaches": 700
+    },
+    {
+      "cycles": 150,
+      "rssMb": 271.2,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 851,
+      "nodeCaches": 850
+    },
+    {
+      "cycles": 180,
+      "rssMb": 271.5,
+      "heapUsedMb": 61.3,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 1001,
+      "nodeCaches": 1000
+    },
+    {
+      "cycles": 210,
+      "rssMb": 272.7,
+      "heapUsedMb": 62.2,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 1151,
+      "nodeCaches": 1150
+    },
+    {
+      "cycles": 240,
+      "rssMb": 273.5,
+      "heapUsedMb": 63.1,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 1301,
+      "nodeCaches": 1300
+    },
+    {
+      "cycles": 270,
+      "rssMb": 274.3,
+      "heapUsedMb": 63.9,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 1451,
+      "nodeCaches": 1450
+    },
+    {
+      "cycles": 300,
+      "rssMb": 275.5,
+      "heapUsedMb": 64.8,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 1601,
+      "nodeCaches": 1600
+    }
+  ],
+  "baseline": {
+    "rssMb": 446.6,
+    "heapUsedMb": 59.2,
+    "externalMb": 76.2,
+    "arrayBuffersMb": 64.4,
+    "timers": 1,
+    "nodeCaches": 0
+  },
+  "start": {
+    "rssMb": 262.9,
+    "heapUsedMb": 58,
+    "externalMb": 76.2,
+    "arrayBuffersMb": 64.4,
+    "timers": 101,
+    "nodeCaches": 100
+  },
+  "perCycleHeapKb": 23.2,
+  "perCycleRssKb": 43,
+  "perCycleTimers": 5,
+  "perCycleNodeCaches": 5,
+  "cpuSeconds": 10.9
+}

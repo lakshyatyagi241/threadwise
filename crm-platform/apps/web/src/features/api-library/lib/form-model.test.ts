@@ -7,6 +7,9 @@ import {
   emptyForm,
   emptyHeader,
   fromDetail,
+  bodyToText,
+  bodyOf,
+  rememberVariableSource,
   fromImport,
   fullSignature,
   headerIsSecret,
@@ -422,5 +425,46 @@ describe('payload and address messages', () => {
     expect(secretOverPlainHttp(form({ url: 'https://x.test/a', headers: [auth] }))).toBe(false);
     const plain = { ...emptyHeader(), key: 'Accept', value: 'json' };
     expect(secretOverPlainHttp(form({ url: 'http://x.test/a', headers: [plain] }))).toBe(false);
+  });
+});
+
+describe('a variable written without quotes in the JSON', () => {
+  it('is accepted, kept as a marked string, and written back without quotes', () => {
+    const text = '{"price": {{price}}, "note": "{{note}}", "tag": "a {{x}} b", "on": {{ active }}}';
+    const r = bodyOf({ ...emptyForm(), method: 'POST', bodyText: text });
+    expect(r).toEqual({
+      body: {
+        price: '\u0001{{price}}',
+        note: '{{note}}',
+        tag: 'a {{x}} b',
+        on: '\u0001{{ active }}',
+      },
+    });
+    const back = bodyToText({ price: '\u0001{{price}}', note: '{{note}}' });
+    expect(back).toContain('"price": {{price}}');
+    expect(back).toContain('"note": "{{note}}"');
+    expect(jsonStatus(text)).toBe('valid');
+  });
+
+  it('leaves real mistakes as invalid JSON', () => {
+    expect(jsonStatus('{"a": {{}}}')).toBe('invalid');
+    expect(jsonStatus('{"a": {{b}')).toBe('invalid');
+  });
+});
+
+describe('where a variable put in from the menu comes from', () => {
+  it('a name added from the Flow variable box is a flow variable, an existing field a contact property', () => {
+    rememberVariableSource('order_total', 'flow');
+    rememberVariableSource('first_name', 'contact');
+    const s = syncVariables({
+      ...emptyForm(),
+      url: 'https://api.example.com/x/{{order_total}}/{{first_name}}/{{Orders.data.id}}/{{other}}',
+    });
+    expect(Object.fromEntries(s.variables.map((v) => [v.name, v.source]))).toEqual({
+      order_total: 'flow',
+      first_name: 'contact',
+      'Orders.data.id': 'api',
+      other: 'contact',
+    });
   });
 });

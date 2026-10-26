@@ -1,0 +1,809 @@
+{
+  "mode": "soak",
+  "label": "after",
+  "node": "v24.19.0",
+  "at": "2026-10-26T08:01:22.804Z",
+  "rows": [
+    {
+      "t": 10,
+      "rssMb": 208.1,
+      "heapUsedMb": 59,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 21,
+      "rssMb": 208.6,
+      "heapUsedMb": 60,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 32,
+      "rssMb": 209.7,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 42,
+      "rssMb": 210.7,
+      "heapUsedMb": 60.1,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 53,
+      "rssMb": 209.9,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 63,
+      "rssMb": 210.7,
+      "heapUsedMb": 60.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 74,
+      "rssMb": 209.5,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 84,
+      "rssMb": 210.8,
+      "heapUsedMb": 60,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 19,
+      "nodeCaches": 0
+    },
+    {
+      "t": 95,
+      "rssMb": 209.3,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 106,
+      "rssMb": 210.7,
+      "heapUsedMb": 60,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 19,
+      "nodeCaches": 0
+    },
+    {
+      "t": 116,
+      "rssMb": 209.4,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 127,
+      "rssMb": 210.5,
+      "heapUsedMb": 60,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 19,
+      "nodeCaches": 0
+    },
+    {
+      "t": 137,
+      "rssMb": 209.7,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 148,
+      "rssMb": 210.5,
+      "heapUsedMb": 60.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 159,
+      "rssMb": 209.9,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 169,
+      "rssMb": 210.8,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 180,
+      "rssMb": 209.4,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 190,
+      "rssMb": 210.7,
+      "heapUsedMb": 60.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 201,
+      "rssMb": 209.5,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 211,
+      "rssMb": 210.9,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 222,
+      "rssMb": 209.6,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 232,
+      "rssMb": 210.9,
+      "heapUsedMb": 60.1,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 20,
+      "nodeCaches": 0
+    },
+    {
+      "t": 243,
+      "rssMb": 210.1,
+      "heapUsedMb": 59.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 253,
+      "rssMb": 211,
+      "heapUsedMb": 60.1,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 20,
+      "nodeCaches": 0
+    },
+    {
+      "t": 264,
+      "rssMb": 209.6,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 275,
+      "rssMb": 211,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 285,
+      "rssMb": 209.8,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 296,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 306,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 317,
+      "rssMb": 211.5,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 327,
+      "rssMb": 209.9,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 338,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 20,
+      "nodeCaches": 0
+    },
+    {
+      "t": 348,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 359,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 369,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 380,
+      "rssMb": 211.1,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 390,
+      "rssMb": 210.2,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 401,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 411,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 422,
+      "rssMb": 211.1,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 432,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 443,
+      "rssMb": 211,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 454,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 464,
+      "rssMb": 211,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 475,
+      "rssMb": 209.8,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 485,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 20,
+      "nodeCaches": 0
+    },
+    {
+      "t": 496,
+      "rssMb": 210,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 506,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 517,
+      "rssMb": 210.2,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 527,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 538,
+      "rssMb": 210.2,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 548,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 559,
+      "rssMb": 210.5,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 570,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 580,
+      "rssMb": 210,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 591,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 20,
+      "nodeCaches": 0
+    },
+    {
+      "t": 601,
+      "rssMb": 210,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 612,
+      "rssMb": 211.1,
+      "heapUsedMb": 60.1,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 18,
+      "nodeCaches": 0
+    },
+    {
+      "t": 622,
+      "rssMb": 210,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 633,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 644,
+      "rssMb": 210.2,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 654,
+      "rssMb": 211.4,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 665,
+      "rssMb": 210.4,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 676,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 686,
+      "rssMb": 210.1,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 697,
+      "rssMb": 211.4,
+      "heapUsedMb": 60.1,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 19,
+      "nodeCaches": 0
+    },
+    {
+      "t": 707,
+      "rssMb": 210.1,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 718,
+      "rssMb": 211.5,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 728,
+      "rssMb": 210.5,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 739,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 749,
+      "rssMb": 210.4,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 760,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 770,
+      "rssMb": 210.2,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 781,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 792,
+      "rssMb": 210.5,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 802,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 813,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.3,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 823,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 834,
+      "rssMb": 210.2,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 844,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.3,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 855,
+      "rssMb": 210.3,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 865,
+      "rssMb": 211.4,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 876,
+      "rssMb": 210.5,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 886,
+      "rssMb": 211.2,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 897,
+      "rssMb": 210.4,
+      "heapUsedMb": 59.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    },
+    {
+      "t": 907,
+      "rssMb": 211.3,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 21,
+      "nodeCaches": 0
+    }
+  ],
+  "baseline": {
+    "rssMb": 235.4,
+    "heapUsedMb": 58.7,
+    "externalMb": 76.2,
+    "arrayBuffersMb": 64.4,
+    "timers": 1,
+    "nodeCaches": 0
+  },
+  "sessions": 10,
+  "reconnects": 430,
+  "rssSlopeMbPerH": {
+    "n": 75,
+    "slope": 2.7478914881207706,
+    "lo": 0.7392114213504573,
+    "hi": 4.756571554891083
+  },
+  "heapSlopeMbPerH": {
+    "n": 75,
+    "slope": 0.7386484089121682,
+    "lo": -1.0172319867143194,
+    "hi": 2.494528804538656
+  },
+  "rssGrowthPctOverWindow": 0.33,
+  "heapGrowthPctOverWindow": 0.5,
+  "rssGrowthPct12hUpper": 27.1,
+  "rssGrowthPct12hPoint": 15.7,
+  "cpuSeconds": 56.4
+}
