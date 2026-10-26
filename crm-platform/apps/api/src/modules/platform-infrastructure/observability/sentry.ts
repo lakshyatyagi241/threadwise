@@ -85,8 +85,20 @@ interface ScrubbableEvent {
     data?: unknown;
     query_string?: unknown;
   };
-  breadcrumbs?: Array<{ data?: Record<string, unknown> }>;
+  breadcrumbs?: Array<{ message?: string; data?: Record<string, unknown> }>;
+  /** The error text. Sentry fills `exception.values[].value` from `err.message`, and `message` from a captured message. */
+  message?: string;
+  exception?: { values?: Array<{ value?: string }> };
 }
+
+/**
+ * Drizzle puts the bound values of a failed statement at the end of the error text (`Failed query: <sql> params: 15,{62389}`), and
+ * those are an actor id, a client address, a record id. Everything from `params:` on goes; the statement itself stays, because it
+ * is what tells a person which query failed.
+ */
+const SQL_PARAMS = /\sparams:[\s\S]*$/;
+export const stripSqlParams = (text: string): string =>
+  text.replace(SQL_PARAMS, ' params: [removed]');
 
 /**
  * Removes what must not leave the building before an event is sent: credentials in headers, cookies, the request body (it can
@@ -102,7 +114,12 @@ export function scrubSentryEvent<T extends ScrubbableEvent>(event: T): T {
     delete req.data;
     delete req.query_string;
   }
+  if (event.message) event.message = stripSqlParams(event.message);
+  for (const ex of event.exception?.values ?? []) {
+    if (ex.value) ex.value = stripSqlParams(ex.value);
+  }
   for (const crumb of event.breadcrumbs ?? []) {
+    if (crumb.message) crumb.message = stripSqlParams(crumb.message);
     const url = crumb.data?.url;
     if (typeof url === 'string' && crumb.data)
       crumb.data.url = maskSecretUrl(url.split('?')[0] ?? url);

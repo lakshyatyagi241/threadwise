@@ -145,6 +145,27 @@ describe('scrubSentryEvent', () => {
   it('copes with an event that has no request', () => {
     expect(scrubSentryEvent({})).toEqual({});
   });
+
+  it('cuts the bound values of a failed SQL statement from the error text, keeping the statement', () => {
+    const sql = `INSERT INTO audit_log (org_id, actor_id, ip) VALUES ($1, $2, $3::inet)`;
+    const event = scrubSentryEvent({
+      message: `Failed query: ${sql} params: 1,63,10.0.1.208`,
+      exception: {
+        values: [
+          { value: `Failed query: ${sql}\nparams: 1,63,10.0.1.208` },
+          { value: 'a different error' },
+          {},
+        ],
+      },
+      breadcrumbs: [{ message: `Failed query: ${sql} params: 1,63,10.0.1.208` }, {}],
+    });
+    const expected = `Failed query: ${sql} params: [removed]`;
+    expect(event.message).toBe(expected);
+    expect(event.exception?.values?.[0]?.value).toBe(expected);
+    expect(event.exception?.values?.[1]?.value).toBe('a different error');
+    expect(event.breadcrumbs?.[0]?.message).toBe(expected);
+    expect(JSON.stringify(event)).not.toContain('10.0.1.208');
+  });
 });
 
 describe('scrubSentrySpan', () => {
