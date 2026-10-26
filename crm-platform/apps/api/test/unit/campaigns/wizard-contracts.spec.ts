@@ -48,9 +48,9 @@ describe('the draft', () => {
     expect(updateWizardDraftSchema.safeParse({ name: 'x', rowVersion: 3 }).success).toBe(true);
   });
 
-  it('refuses what cannot be stored: a bad id, an oversized name, a step out of range', () => {
+  it('refuses what cannot be stored: a bad id, a step out of range; an oversized name is cut to 100', () => {
     expect(wizardDraftSchema.safeParse({ templateId: 'nope' }).success).toBe(false);
-    expect(wizardDraftSchema.safeParse({ name: 'x'.repeat(192) }).success).toBe(false);
+    expect(wizardDraftSchema.parse({ name: 'x'.repeat(192) }).name).toHaveLength(100);
     expect(wizardDraftSchema.safeParse({ step: 5 }).success).toBe(false);
   });
 

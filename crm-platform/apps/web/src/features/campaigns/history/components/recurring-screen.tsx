@@ -122,10 +122,11 @@ function SeriesRow({
         className={rowClass(mark)}
       >
         <td className={`${TD} max-w-[16rem]`}>
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2">
             <Link
               href={seriesHref(b.id)}
-              className="truncate font-medium text-brand hover:underline"
+              title={b.name}
+              className="min-w-0 truncate font-medium text-brand hover:underline"
             >
               {b.name}
             </Link>

@@ -47,7 +47,7 @@ describe('sanitizePatch', () => {
   });
 
   it('cuts a name to the limit', () => {
-    expect(sanitizePatch({ name: 'x'.repeat(300) }).name).toHaveLength(191);
+    expect(sanitizePatch({ name: 'x'.repeat(300) }).name).toHaveLength(100);
   });
 });
 
