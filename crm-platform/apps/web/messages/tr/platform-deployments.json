@@ -106,7 +106,8 @@
         "failed": "Başarısız",
         "rolled_back": "Geri alındı"
       },
-      "by": "{author} tarafından"
+      "by": "{author} tarafından",
+      "raisedIst": "Açılış {time} IST"
     }
   }
 }

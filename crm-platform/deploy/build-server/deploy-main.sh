@@ -51,14 +51,30 @@ report() {  # report <state> <step> [message]
 
 # Tells production which pull requests this release carries (number, title, author), so the release history says what was deployed. It
 # reads the first-parent history since the last released commit (the tip alone when that is unknown): a squash commit is one PR with its
-# author, a merge commit takes its title from the body and its author from the merged branch. Never stops the deploy.
+# author, a merge commit takes its title from the body and its author from the merged branch. Each also carries what the PR changes
+# (its description) and when it was raised: from the GitHub API when $CONF/github_token exists (read-only; the repo is private), else the
+# commit's own text and no raised time. Never stops the deploy.
 report_changes() {  # report_changes <last released commit or empty>
   [ -n "${ATTEMPT:-}" ] || return 0
-  python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || true
-import json, re, subprocess, sys
+  GH_TOKEN_FILE="$CONF/github_token" GH_SLUG=$(printf '%s' "$REPO_URL" | sed 's#.*github\.com[:/]##; s#\.git$##') python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || true
+import json, os, re, subprocess, sys, urllib.request
 last = sys.argv[1]
 def git(*a):
     return subprocess.run(["git", *a], capture_output=True, text=True, check=True).stdout
+def github(pr):
+    # (description, raised-at) of a PR, or (None, None) without a token or when the call fails
+    try:
+        tok = open(os.environ["GH_TOKEN_FILE"]).read().strip()
+        req = urllib.request.Request(f"https://api.github.com/repos/{os.environ['GH_SLUG']}/pulls/{pr}",
+                                     headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        d = json.load(urllib.request.urlopen(req, timeout=15))
+        return (d.get("body") or None), d.get("created_at")
+    except Exception:
+        return None, None
+def clean(t):
+    # commit trailers are not a description
+    keep = [l for l in t.splitlines() if not re.match(r"(Co-authored-by|Signed-off-by):|.*Generated with", l, re.I)]
+    return "\n".join(keep).strip() or None
 rng = [f"{last}..HEAD"] if last else ["-1", "HEAD"]
 out = []
 for sha in git("log", "--first-parent", "--max-count=30", "--format=%H", *rng).split():
@@ -67,16 +83,21 @@ for sha in git("log", "--first-parent", "--max-count=30", "--format=%H", *rng).s
         author = git("log", "-1", "--format=%an", parents[1]).strip()
         body = [l for l in git("log", "-1", "--format=%b", sha).splitlines() if l.strip()]
         title = body[0] if body else git("log", "-1", "--format=%s", sha).strip()
+        text = clean("\n".join(body[1:]))
         m = re.match(r"Merge pull request #(\d+)", git("log", "-1", "--format=%s", sha))
         pr = int(m.group(1)) if m else None
     else:
         author = git("log", "-1", "--format=%an", sha).strip()
         title = git("log", "-1", "--format=%s", sha).strip()
+        text = clean(git("log", "-1", "--format=%b", sha))
         m = re.search(r"\(#(\d+)\)\s*$", title)
         pr = int(m.group(1)) if m else None
         if m:
             title = title[: m.start()].rstrip()
-    out.append({"pr": pr, "title": title[:200], "author": author[:100]})
+    body, raised = github(pr) if pr else (None, None)
+    body = body or text
+    out.append({"pr": pr, "title": title[:200], "author": author[:100],
+                "body": body[:800] if body else None, "createdAt": raised})
 print(json.dumps(out[:20]))
 PY
 }

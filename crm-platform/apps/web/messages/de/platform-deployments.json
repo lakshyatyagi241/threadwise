@@ -106,7 +106,8 @@
         "failed": "Fehlgeschlagen",
         "rolled_back": "Zurückgerollt"
       },
-      "by": "von {author}"
+      "by": "von {author}",
+      "raisedIst": "Erstellt {time} IST"
     }
   }
 }

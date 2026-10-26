@@ -106,7 +106,8 @@
         "failed": "Gagal",
         "rolled_back": "Dikembalikan"
       },
-      "by": "oleh {author}"
+      "by": "oleh {author}",
+      "raisedIst": "Dibuat {time} IST"
     }
   }
 }

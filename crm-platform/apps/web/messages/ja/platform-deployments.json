@@ -106,7 +106,8 @@
         "failed": "失敗",
         "rolled_back": "ロールバック済み"
       },
-      "by": "{author} による"
+      "by": "{author} による",
+      "raisedIst": "作成 {time} IST"
     }
   }
 }

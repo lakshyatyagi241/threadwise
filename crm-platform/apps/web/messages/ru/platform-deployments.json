@@ -106,7 +106,8 @@
         "failed": "Ошибка",
         "rolled_back": "Откачен"
       },
-      "by": "автор: {author}"
+      "by": "автор: {author}",
+      "raisedIst": "Создан {time} IST"
     }
   }
 }

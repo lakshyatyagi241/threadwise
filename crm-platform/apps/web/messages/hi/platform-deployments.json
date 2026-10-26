@@ -106,7 +106,8 @@
         "failed": "विफल",
         "rolled_back": "वापस लौटाया गया"
       },
-      "by": "{author} द्वारा"
+      "by": "{author} द्वारा",
+      "raisedIst": "बनाया गया {time} IST"
     }
   }
 }

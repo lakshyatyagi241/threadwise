@@ -106,7 +106,8 @@
         "failed": "Nieudane",
         "rolled_back": "Cofnięte"
       },
-      "by": "autor: {author}"
+      "by": "autor: {author}",
+      "raisedIst": "Utworzono {time} IST"
     }
   }
 }

@@ -106,7 +106,8 @@
         "failed": "Falhou",
         "rolled_back": "Revertida"
       },
-      "by": "por {author}"
+      "by": "por {author}",
+      "raisedIst": "Aberto {time} IST"
     }
   }
 }

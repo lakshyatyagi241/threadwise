@@ -106,7 +106,8 @@
         "failed": "Fallita",
         "rolled_back": "Ripristinata"
       },
-      "by": "di {author}"
+      "by": "di {author}",
+      "raisedIst": "Aperta {time} IST"
     }
   }
 }

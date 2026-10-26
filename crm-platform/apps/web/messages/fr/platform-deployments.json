@@ -106,7 +106,8 @@
         "failed": "Échouée",
         "rolled_back": "Annulée"
       },
-      "by": "par {author}"
+      "by": "par {author}",
+      "raisedIst": "Créée {time} IST"
     }
   }
 }

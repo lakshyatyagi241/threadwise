@@ -134,11 +134,17 @@ export type ReleaseState = z.infer<typeof releaseStateSchema>;
 export const RELEASE_STALL_MINUTES = 45;
 export const RELEASE_LIST_MAX = 50;
 
+export const RELEASE_CHANGE_BODY_MAX_CHARS = 800;
+
 /** One pull request a release carries, as the build server read it from the git history (`pr` is null for a commit not made from a PR). */
 export const releaseChangeSchema = z.object({
   pr: z.number().int().positive().nullable(),
   title: z.string().max(200),
   author: z.string().max(100),
+  /** What the PR changes, as its author wrote it (cut to `RELEASE_CHANGE_BODY_MAX_CHARS`); null when not known. */
+  body: z.string().max(RELEASE_CHANGE_BODY_MAX_CHARS).nullable().default(null),
+  /** When the PR was raised (UTC; the console shows it in Indian time). Null when the build server could not read it from GitHub. */
+  createdAt: z.string().datetime().nullable().default(null),
 });
 export type ReleaseChange = z.infer<typeof releaseChangeSchema>;
 export const RELEASE_CHANGES_MAX = 20;

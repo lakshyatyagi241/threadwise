@@ -106,7 +106,8 @@
         "failed": "Lỗi",
         "rolled_back": "Đã hoàn lại"
       },
-      "by": "bởi {author}"
+      "by": "bởi {author}",
+      "raisedIst": "Tạo lúc {time} IST"
     }
   }
 }

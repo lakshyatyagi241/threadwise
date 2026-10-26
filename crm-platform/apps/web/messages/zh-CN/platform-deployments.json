@@ -106,7 +106,8 @@
         "failed": "失败",
         "rolled_back": "已回滚"
       },
-      "by": "作者 {author}"
+      "by": "作者 {author}",
+      "raisedIst": "创建于 {time} IST"
     }
   }
 }

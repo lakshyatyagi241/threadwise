@@ -106,7 +106,8 @@
         "failed": "Failed",
         "rolled_back": "Rolled back"
       },
-      "by": "by {author}"
+      "by": "by {author}",
+      "raisedIst": "Raised {time} IST"
     }
   }
 }

@@ -214,6 +214,47 @@ describe('DeploymentsPage', () => {
     expect(host.textContent).toContain('Akshay');
   });
 
+  it('shows what a PR changes and when it was raised in Indian time', async () => {
+    state.releases.mockResolvedValue({
+      generatedAt: '2026-10-26T10:00:05.000Z',
+      live: null,
+      inProgress: false,
+      rows: [
+        {
+          id: '11111111-2222-4333-8444-555555555555',
+          tag: 'abc123def',
+          state: 'ok',
+          step: null,
+          error: null,
+          changes: [
+            {
+              pr: 823,
+              title: 'Show PR details on releases',
+              author: 'Vedant',
+              body: 'Adds the description and raised time.',
+              createdAt: '2026-10-26T08:15:00.000Z',
+            },
+            { pr: 824, title: 'Older entry', author: 'Akshay', body: null, createdAt: null },
+          ],
+          startedAt: '2026-10-26T09:00:00.000Z',
+          updatedAt: '2026-10-26T09:05:00.000Z',
+          finishedAt: '2026-10-26T09:05:00.000Z',
+          stalled: false,
+        },
+      ],
+    });
+    state.fetch.mockResolvedValue(page([]));
+    await mount();
+    const all = (id: string) =>
+      [...host.querySelectorAll(`[data-testid="${id}"]`)].map((e) => e.textContent ?? '');
+    expect(host.textContent).toContain('#823');
+    expect(all('release-description')).toEqual(['Adds the description and raised time.']);
+    // 08:15 UTC is 13:45 in India, whatever zone the test machine is in; an entry without a time shows none.
+    expect(all('release-raised')).toHaveLength(1);
+    expect(all('release-raised')[0]).toMatch(/1:45:00/);
+    expect(all('release-raised')[0]).toContain('IST');
+  });
+
   it('lists flow publishes with their state, attempts and error', async () => {
     state.publishes.mockResolvedValue({
       generatedAt: '2026-10-19T10:00:05.000Z',

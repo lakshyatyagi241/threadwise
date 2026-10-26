@@ -106,7 +106,8 @@
         "failed": "ব্যর্থ",
         "rolled_back": "ফিরিয়ে নেওয়া হয়েছে"
       },
-      "by": "{author} কর্তৃক"
+      "by": "{author} কর্তৃক",
+      "raisedIst": "তৈরি {time} IST"
     }
   }
 }
