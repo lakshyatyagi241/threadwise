@@ -322,7 +322,9 @@
       "functionHint": "在发送前用 JavaScript 重构负载。可选。",
       "urlHint": "使用 '{ }' 按钮可在地址中插入变量。",
       "payloadHint": "正文中发送的内容。使用 '{ }' 按钮可在值中插入变量。",
-      "plainHttpWarning": "此地址以 http:// 开头，因此标头中的密码或密钥将以未加密的方式传输。如果服务器支持，请使用 https://。"
+      "plainHttpWarning": "此地址以 http:// 开头，因此标头中的密码或密钥将以未加密的方式传输。如果服务器支持，请使用 https://。",
+      "importSkipped": "粘贴的命令还会发送一个文件（{names}）。此处无法导入文件，因此已略过。其余内容均已填入。",
+      "payloadTypedHint": "要发送真正的数字或是/否，请不加引号书写变量：{example}。"
     },
     "test": {
       "title": "响应",

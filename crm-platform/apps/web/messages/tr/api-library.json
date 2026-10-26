@@ -322,7 +322,9 @@
       "requestHint": "Çağrının adı, yöntemi ve adresi.",
       "payloadHint": "Gövdede gönderilenler. Bir değere değişken eklemek için '{ }' düğmesini kullanın.",
       "functionHint": "Gönderilmeden önce yükü JavaScript ile yeniden biçimlendirin. İsteğe bağlı.",
-      "plainHttpWarning": "Bu adres http:// ile başlıyor, bu yüzden başlıklarınızdaki parola veya anahtar şifrelenmeden iletilir. Sunucu destekliyorsa https:// kullanın."
+      "plainHttpWarning": "Bu adres http:// ile başlıyor, bu yüzden başlıklarınızdaki parola veya anahtar şifrelenmeden iletilir. Sunucu destekliyorsa https:// kullanın.",
+      "importSkipped": "Yapıştırılan komut ayrıca bir dosya ({names}) gönderiyor. Burada dosya içe aktarılamaz, bu yüzden atlandı. Diğer her şey dolduruldu.",
+      "payloadTypedHint": "Gerçek bir sayı veya evet/hayır göndermek için değişkeni tırnak işaretsiz yazın: {example}."
     },
     "test": {
       "title": "Yanıt",

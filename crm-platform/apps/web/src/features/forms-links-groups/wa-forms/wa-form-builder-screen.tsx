@@ -344,7 +344,11 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                     </Field>
                   )}
                   {field.kind !== 'heading' && (
-                    <Field label={t('builder.mapsTo')} hint={t('builder.mapsToHint')} className="mt-2">
+                    <Field
+                      label={t('builder.mapsTo')}
+                      hint={t('builder.mapsToHint')}
+                      className="mt-2"
+                    >
                       <Select
                         value={field.mapsTo ?? ''}
                         onChange={(e) =>

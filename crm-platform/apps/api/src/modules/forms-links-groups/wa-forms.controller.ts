@@ -48,6 +48,17 @@ export class WaFormsController {
     return this.forms.list(query);
   }
 
+  @Post('sync')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('wfl.forms.manage')
+  @ApiOperation({
+    summary: "Sync with Meta: make each linked form's status the one Meta reports for its Flow",
+  })
+  sync() {
+    return this.forms.syncWithMeta();
+  }
+
   @Get('picker')
   @RequirePermission('wfl.forms.read')
   @ApiOperation({ summary: "Forms for the flow builder's WhatsApp Form node picker" })

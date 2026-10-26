@@ -322,7 +322,9 @@
       "requestHint": "Nama, metode, dan alamat panggilan.",
       "payloadHint": "Isi yang dikirim di body. Gunakan tombol '{ }' untuk memasukkan variabel ke dalam nilai.",
       "functionHint": "Ubah bentuk payload dengan JavaScript sebelum dikirim. Opsional.",
-      "plainHttpWarning": "Alamat ini dimulai dengan http://, jadi kata sandi atau kunci di header Anda akan dikirim tanpa enkripsi. Gunakan https:// jika server mendukungnya."
+      "plainHttpWarning": "Alamat ini dimulai dengan http://, jadi kata sandi atau kunci di header Anda akan dikirim tanpa enkripsi. Gunakan https:// jika server mendukungnya.",
+      "importSkipped": "Perintah yang ditempel juga mengirim file ({names}). File tidak dapat diimpor di sini, jadi dilewati. Semua yang lain sudah terisi.",
+      "payloadTypedHint": "Untuk mengirim angka asli atau ya/tidak, tulis variabel tanpa tanda kutip: {example}."
     },
     "test": {
       "title": "Respons",

@@ -71,13 +71,21 @@ export interface WaFormStatsRow {
  */
 @Injectable()
 export class WaFormsRepository {
-  async list(tx: Tx, orgId: number, limit: number, cursor?: Cursor): Promise<WaFormRow[]> {
+  async list(
+    tx: Tx,
+    orgId: number,
+    limit: number,
+    cursor?: Cursor,
+    q?: string,
+  ): Promise<WaFormRow[]> {
+    const like = q ? `%${q.replace(/[\\%_]/g, (c) => `\\${c}`)}%` : null;
+    const search = like ? sql`AND title ILIKE ${like}` : sql``;
     const after = cursor
       ? sql`AND (created_at, id) < (${cursor.createdAtIso ?? cursor.createdAt.toISOString()}::timestamptz, ${cursor.id})`
       : sql``;
     const res = await tx.execute(sql`
       SELECT ${COLUMNS} FROM wa_forms
-       WHERE org_id = ${orgId} ${after}
+       WHERE org_id = ${orgId} ${search} ${after}
        ORDER BY created_at DESC, id DESC
        LIMIT ${limit + 1}`);
     return res.rows.map(toRow);
@@ -219,6 +227,36 @@ export class WaFormsRepository {
     await tx.execute(sql`
       UPDATE wa_forms SET status = 'published', meta_flow_id = ${metaFlowId}, provider_config_id = ${providerConfigId},
         published_at = now(), publish_error = NULL
+       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /** The forms that are linked to a Meta Flow, for Sync with Meta. */
+  async linkedToMeta(
+    tx: Tx,
+    orgId: number,
+  ): Promise<
+    Array<{ id: number; metaFlowId: string; status: string; publishError: string | null }>
+  > {
+    const res = await tx.execute(sql`
+      SELECT id, meta_flow_id, status, publish_error FROM wa_forms
+       WHERE org_id = ${orgId} AND meta_flow_id IS NOT NULL`);
+    return res.rows.map((r) => {
+      const x = r as Record<string, unknown>;
+      return {
+        id: Number(x.id),
+        metaFlowId: String(x.meta_flow_id),
+        status: String(x.status),
+        publishError: (x.publish_error as string | null) ?? null,
+      };
+    });
+  }
+
+  /** Makes a form's status the one Meta reports; a published Flow carries no publish error. */
+  async setStatusFromMeta(tx: Tx, orgId: number, id: number, status: string): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wa_forms SET status = ${status},
+        published_at = CASE WHEN ${status} = 'published' THEN coalesce(published_at, now()) ELSE published_at END,
+        publish_error = CASE WHEN ${status} = 'published' THEN NULL ELSE publish_error END
        WHERE org_id = ${orgId} AND id = ${id}`);
   }
 

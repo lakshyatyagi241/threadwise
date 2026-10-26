@@ -481,6 +481,11 @@ services:
       <<: *api-env
       OBS_METRICS_PORT: ${OBS_METRICS_PORT_WORKER:-${OBS_METRICS_PORT:-0}}
       WORKER_MODE: 'true'
+      # The request path ends a lock wait at 5 s and a session idle in a transaction at 30 s (the app's defaults). The worker waits longer:
+      # the outbox drain claims rows in one transaction and runs every handler before recording the result on that connection, so it sits
+      # idle inside the transaction for as long as the handlers take, and inbound ingest queues behind a per-conversation advisory lock.
+      DB_LOCK_TIMEOUT_MS: ${DB_LOCK_TIMEOUT_MS_WORKER:-15000}
+      DB_IDLE_IN_TX_TIMEOUT_MS: ${DB_IDLE_IN_TX_TIMEOUT_MS_WORKER:-300000}
       OBS_RELEASE: ${IMAGE_TAG:-local}
       DATABASE_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
       DATABASE_REPLICA_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}

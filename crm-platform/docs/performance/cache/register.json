@@ -3526,6 +3526,9 @@
     },
     "modules/webhook-fanout/webhook-targets.repository.ts#cache": {
       "cache": "M16"
+    },
+    "infra/providers/node-bridge-runtime/ttl-cache.ts#entries": {
+      "allow": "Capped by the constructor's maxEntries: set() drops the oldest write past the cap and every expired entry at the front, and end() on the socket flushes it. One instance per cache of one WhatsApp socket (5 per socket), so the total follows the device count times the caps (10,000, 5,000, 10,000, 500, 5,000)."
     }
   },
   "httpPublicAllowed": {

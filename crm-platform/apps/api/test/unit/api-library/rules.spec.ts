@@ -22,6 +22,8 @@ import {
   renderHeaders,
   renderText,
   renderUrl,
+  typedValue,
+  withoutDotSegments,
   resolveVariables,
   sameOrigin,
   urlWithDefaults,
@@ -438,5 +440,57 @@ describe('the logs API filter', () => {
     );
     expect(out.map((a) => a.name)).toEqual(['alpha', 'zeta']);
     expect(out.every((a) => a.deleted)).toBe(true);
+  });
+});
+
+describe('a dot in the path and a value written without quotes', () => {
+  const v = vars({
+    value: '.',
+    up: '..',
+    price: '19.99',
+    on: 'yes',
+    off: 'false',
+    empty: '',
+    word: 'hello',
+  });
+
+  it('shows and calls the address the web really reaches when a path value is a dot', () => {
+    expect(renderUrl('https://api.example.com/orders/{{value}}/details', v)).toBe(
+      'https://api.example.com/orders/details',
+    );
+    expect(renderUrl('https://api.example.com/a/b/{{up}}/c', v)).toBe(
+      'https://api.example.com/a/c',
+    );
+    expect(withoutDotSegments('https://api.example.com/a/%2e/b')).toBe(
+      'https://api.example.com/a/b',
+    );
+    // Nothing else is touched.
+    expect(withoutDotSegments('https://API.example.com/a/b.c/../')).toBe(
+      'https://api.example.com/a/',
+    );
+    expect(renderUrl('https://api.example.com/o/{{word}}', v)).toBe(
+      'https://api.example.com/o/hello',
+    );
+  });
+
+  it('sends a marked token as a number or a yes/no, and an ordinary one as text', () => {
+    expect(typedValue('19.99')).toBe(19.99);
+    expect(typedValue('yes')).toBe(true);
+    expect(typedValue('No')).toBe(false);
+    expect(typedValue('')).toBeNull();
+    expect(typedValue('hello')).toBe('hello');
+    expect(
+      renderBody(
+        {
+          p: '\u0001{{price}}',
+          a: '\u0001{{ on }}',
+          b: '\u0001{{off}}',
+          e: '\u0001{{empty}}',
+          w: '\u0001{{word}}',
+          t: '{{price}}',
+        },
+        v,
+      ),
+    ).toEqual({ p: 19.99, a: true, b: false, e: null, w: 'hello', t: '19.99' });
   });
 });
