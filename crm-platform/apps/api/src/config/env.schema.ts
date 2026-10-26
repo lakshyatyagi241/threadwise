@@ -72,6 +72,10 @@ export const envSchema = z.object({
   /** A reserved pool for the readiness probe, so `/ready` answers truthfully while the main pool is busy. */
   HEALTH_DB_POOL_MAX: z.coerce.number().int().min(1).max(10).default(2),
   DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(1000).default(15_000),
+  // A statement that waits this long for a lock fails (55P03) instead of waiting out the statement timeout; 0 turns it off.
+  DB_LOCK_TIMEOUT_MS: z.coerce.number().int().min(0).default(5_000),
+  // A session idle inside an open transaction this long is ended (25P03), so a forgotten transaction cannot hold a connection; 0 turns it off.
+  DB_IDLE_IN_TX_TIMEOUT_MS: z.coerce.number().int().min(0).default(30_000),
 
   // --- redis ---------------------------------------------------------------
   REDIS_URL: z.string().min(1),
