@@ -405,9 +405,13 @@ describe("the leakage matrix: A's personal mailbox conversations (policy: admins
       [t.orgId],
     );
     expect(conversations.rows[0].n).toBeGreaterThanOrEqual(2);
-    // Export / REST v1 are covered by their own suites for shape; here the personal thread must not be among the exported ids.
-    const exp = await as(ADMIN).get('/v2/admin/workspace-export');
-    if (exp.status === 200) expect(JSON.stringify(exp.body)).not.toContain(personalConv.uuid);
+    // Export / REST v1 are covered by their own suites for shape. Here the personal thread must be in neither the CSV nor the count card.
+    const counts = await as(ADMIN).get('/v2/shell/workspace/export');
+    expect(counts.status).toBe(200);
+    const csv = await as(ADMIN).get('/v2/shell/workspace/export/conversations');
+    expect(csv.status).toBe(200);
+    expect(csv.text).not.toContain(personalConv.uuid);
+    expect(counts.body.conversations).toBe(csv.text.trim().split('\n').length - 1);
   });
 });
 
