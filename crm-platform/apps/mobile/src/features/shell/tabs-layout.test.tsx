@@ -101,7 +101,7 @@ beforeEach(() => {
 });
 
 describe('the look of the tab bar', () => {
-  it('is the blue of the Geta logo, with the words on it in the colour made for that blue', async () => {
+  it('is the design indigo, with the words on it in the colour made for it', async () => {
     await renderRouter(structure, { initialUrl: '/' });
     const backgrounds: unknown[] = [];
     for (let node = screen.getByLabelText('Inbox').parent; node; node = node.parent) {

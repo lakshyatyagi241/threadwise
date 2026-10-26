@@ -1366,6 +1366,7 @@
       "close": "선택 취소",
       "selectAll": "모두 선택",
       "read": "읽음으로 표시",
+      "unread": "읽지 않음으로 표시",
       "status": "상태",
       "assign": "배정",
       "label": "태그",

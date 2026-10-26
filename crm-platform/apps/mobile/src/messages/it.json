@@ -1416,6 +1416,7 @@
       "close": "Annulla selezione",
       "selectAll": "Seleziona tutto",
       "read": "Segna come letto",
+      "unread": "Segna come non letta",
       "status": "Stato",
       "assign": "Assegna",
       "label": "Tag",

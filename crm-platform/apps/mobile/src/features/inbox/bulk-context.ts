@@ -16,7 +16,7 @@ const ORDER = ['read', 'status', 'assign', 'label', 'priority', 'snooze', 'spam'
  * - every chosen one is snoozed: **Unsnooze** replaces Snooze (status Open wakes a snoozed conversation);
  * - every chosen one is spam: **Not spam** replaces Mark as spam, and Status goes (Not spam is its only way out);
  * - every chosen one is resolved or closed: **Reopen** replaces Status;
- * - none has anything unread: Mark as read goes (there is no bulk "mark as unread" on the server).
+ * - none has anything unread: **Mark as unread** replaces Mark as read (the server's bulk `mark_unread`).
  * Whatever is mixed keeps the plain action, and `allowed` (the person's rights) still decides what may show at all.
  */
 export function bulkKindsFor(
@@ -33,7 +33,7 @@ export function bulkKindsFor(
   const kinds: BulkKind[] = [];
   for (const base of ORDER) {
     let kind: BulkKind | null = base;
-    if (base === 'read' && noneUnread) kind = null;
+    if (base === 'read') kind = noneUnread ? 'unread' : 'read';
     else if (base === 'status') kind = allSpam ? null : allDone ? 'reopen' : 'status';
     else if (base === 'snooze') kind = allSpam ? null : allSnoozed ? 'unsnooze' : 'snooze';
     else if (base === 'spam') kind = allSpam ? 'notSpam' : 'spam';

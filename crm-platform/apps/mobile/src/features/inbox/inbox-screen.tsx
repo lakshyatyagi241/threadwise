@@ -92,6 +92,7 @@ export function InboxScreen() {
       ['spam', 'inbox.conversation.resolve'],
       // The undo of a status move is a move to Open: the same right as resolving.
       ['reopen', 'inbox.conversation.resolve'],
+      ['unread', 'inbox.conversation.read'],
       ['unsnooze', 'inbox.conversation.resolve'],
       ['notSpam', 'inbox.conversation.resolve'],
     ] as const
@@ -437,6 +438,7 @@ export function InboxScreen() {
           onPick={(kind) => {
             setBulkError(null);
             if (kind === 'read') bulkInstant.run(selected, { type: 'mark_read' });
+            else if (kind === 'unread') bulkInstant.run(selected, { type: 'mark_unread' });
             else if (kind === 'spam') bulkInstant.run(selected, { type: 'spam' });
             // Reopening, waking and "not spam" are all a move to Open.
             else if (kind === 'reopen' || kind === 'unsnooze' || kind === 'notSpam')

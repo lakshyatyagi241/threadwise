@@ -15,6 +15,7 @@ export type BulkKind =
   | 'snooze'
   | 'spam'
   // The undo of an action, offered in its place when every chosen conversation is in that state (see bulk-context.ts).
+  | 'unread'
   | 'reopen'
   | 'unsnooze'
   | 'notSpam';
@@ -27,6 +28,7 @@ const ICONS: Record<BulkKind, IconName> = {
   priority: 'flag-outline',
   snooze: 'alarm-outline',
   spam: 'ban-outline',
+  unread: 'mail-unread-outline',
   reopen: 'refresh-outline',
   unsnooze: 'notifications-off-outline',
   notSpam: 'checkmark-circle-outline',

@@ -1441,6 +1441,7 @@
       "close": "Anuluj zaznaczenie",
       "selectAll": "Zaznacz wszystko",
       "read": "Oznacz jako przeczytane",
+      "unread": "Oznacz jako nieprzeczytane",
       "status": "Status",
       "assign": "Przypisz",
       "label": "Tagi",

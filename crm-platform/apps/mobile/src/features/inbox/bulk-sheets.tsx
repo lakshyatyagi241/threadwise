@@ -167,7 +167,7 @@ export function BulkSheets({ kind, ids, currentStatus = null, onClose, onDone }:
   );
 }
 
-/** Runs a bulk action that has no sheet (mark as read, mark as spam) for the chosen conversations. */
+/** Runs a bulk action that has no sheet (mark as read or unread, mark as spam) for the chosen conversations. */
 export function useBulkInstant(
   onDone: (r: BulkConversationsResponse) => void,
   onFail: (message: string) => void,

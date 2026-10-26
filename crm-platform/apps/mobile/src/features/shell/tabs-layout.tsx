@@ -11,8 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const FADED = 0.4;
 
 /**
- * Light theme: the bar is the blue of the Geta logo (`logo`), with `onLogo` for the icons and words on it. A tab that is not the current
- * one is drawn a little softer than the current one (0.8 keeps its text above 4.5:1 contrast on the logo blue), and only the current one has
+ * Light theme: the bar is the deep indigo of the design (`logo`), with `onLogo` for the icons and words on it. A tab that is not the current
+ * one is drawn a little softer than the current one (0.8 keeps its text above 4.5:1 contrast on the indigo), and only the current one has
  * bold words.
  *
  * Dark theme (an experiment, to see how it looks): a light bar under the dark app, the dark palette's own near-white (`text`) with its

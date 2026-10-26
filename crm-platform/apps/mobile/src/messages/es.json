@@ -1416,6 +1416,7 @@
       "close": "Cancelar selección",
       "selectAll": "Seleccionar todo",
       "read": "Marcar como leídas",
+      "unread": "Marcar como no leído",
       "status": "Estado",
       "assign": "Asignar",
       "label": "Etiquetas",

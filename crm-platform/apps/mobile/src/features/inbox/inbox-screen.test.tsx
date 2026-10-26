@@ -765,16 +765,31 @@ describe('InboxScreen', () => {
       );
     });
 
-    it('keeps the plain actions when the chosen ones are mixed, and hides Mark as read when nothing is unread', async () => {
+    it('keeps the plain actions when the chosen ones are mixed, and offers Mark as unread when nothing is unread', async () => {
       // Rohan is open with unread messages, Meera snoozed with none: mixed, so Snooze and Status stay and Mark as read is useful.
       await chooseBoth();
       expect(await screen.findByRole('button', { name: 'Snooze' })).toBeTruthy();
       expect(screen.queryByRole('button', { name: 'Unsnooze' })).toBeNull();
       expect(screen.getByRole('button', { name: 'Mark as read' })).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Mark as unread' })).toBeNull();
       await fireEvent.press(screen.getByRole('button', { name: 'Cancel selection' }));
-      // Nothing unread among the chosen: nothing to mark.
+      // Nothing unread among the chosen: Mark as unread takes its place.
       await chooseTwo({ unreadCount: 0 });
       expect(screen.queryByRole('button', { name: 'Mark as read' })).toBeNull();
+      expect(screen.getByRole('button', { name: 'Mark as unread' })).toBeTruthy();
+    });
+
+    it('marks the chosen ones unread when none of them has anything unread', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseTwo({ unreadCount: 0 });
+      await fireEvent.press(screen.getByRole('button', { name: 'Mark as unread' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'mark_unread' },
+          expect.any(String),
+        ),
+      );
     });
 
     it('does not offer the status they all have already in the Status sheet', async () => {

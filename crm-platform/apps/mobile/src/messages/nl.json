@@ -1391,6 +1391,7 @@
       "close": "Selectie annuleren",
       "selectAll": "Alles selecteren",
       "read": "Markeren als gelezen",
+      "unread": "Markeren als ongelezen",
       "status": "Status",
       "assign": "Toewijzen",
       "label": "Tags",

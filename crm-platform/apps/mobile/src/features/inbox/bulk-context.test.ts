@@ -3,6 +3,7 @@ import type { BulkKind } from './bulk-bar';
 
 const ALL: readonly BulkKind[] = [
   'read',
+  'unread',
   'status',
   'assign',
   'label',
@@ -52,9 +53,17 @@ describe('bulkKindsFor', () => {
     expect(bulkKindsFor([row('resolved'), row('open')], ALL)).toContain('status');
   });
 
-  it('hides Mark as read when none of them has anything unread', () => {
-    expect(bulkKindsFor([row('open', 0), row('open', 0)], ALL)).not.toContain('read');
-    expect(bulkKindsFor([row('open', 0), row('open', 3)], ALL)).toContain('read');
+  it('swaps Mark as read for Mark as unread when none of them has anything unread', () => {
+    const none = bulkKindsFor([row('open', 0), row('open', 0)], ALL);
+    expect(none).toContain('unread');
+    expect(none).not.toContain('read');
+    const some = bulkKindsFor([row('open', 0), row('open', 3)], ALL);
+    expect(some).toContain('read');
+    expect(some).not.toContain('unread');
+  });
+
+  it('does not offer Mark as unread to someone who may not read', () => {
+    expect(bulkKindsFor([row('open', 0)], ['assign'])).not.toContain('unread');
   });
 
   it('only offers what the person may do, the undo included', () => {

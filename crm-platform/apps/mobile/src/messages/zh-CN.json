@@ -1366,6 +1366,7 @@
       "close": "取消选择",
       "selectAll": "全选",
       "read": "标记为已读",
+      "unread": "标为未读",
       "status": "状态",
       "assign": "分配",
       "label": "标签",

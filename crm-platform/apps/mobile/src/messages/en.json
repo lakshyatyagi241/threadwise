@@ -1391,6 +1391,7 @@
       "close": "Cancel selection",
       "selectAll": "Select all",
       "read": "Mark as read",
+      "unread": "Mark as unread",
       "status": "Status",
       "assign": "Assign",
       "label": "Tags",
