@@ -317,6 +317,30 @@ describe('the cross: end the conversation, rate it, or restart', () => {
   });
 });
 
+describe('the date and time picker of the chat window', () => {
+  const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme' });
+
+  it('says its words in the visitor language, not in English only', () => {
+    for (const k of ['previous', 'next', 'selectTime', 'cancel', 'ok', 'datePicker'])
+      expect(page).toContain(`tx('${k}'`);
+    expect(CHAT_TEXT.ar!.selectTime).not.toBe(CHAT_TEXT.en!.selectTime);
+    expect(CHAT_TEXT.hi!.cancel).not.toBe(CHAT_TEXT.en!.cancel);
+  });
+  it('names the dialog, reads each day as a whole date and says which is chosen', () => {
+    expect(page).toContain("box.setAttribute('aria-label', tx('datePicker'");
+    expect(page).toContain("dateStyle: 'full'");
+    expect(page).toContain("b.setAttribute('aria-pressed'");
+  });
+  it('points the arrows the way the buttons move in a right-to-left page', () => {
+    expect(page).toContain("document.documentElement.dir === 'rtl'");
+    expect(page).toContain('dpSvg(rtl ? right : left)');
+    expect(page).toContain('dpSvg(rtl ? left : right)');
+  });
+  it('writes AM and PM as the language does', () => {
+    expect(page).toContain("type === 'dayPeriod'");
+  });
+});
+
 describe("the chat window speaks the visitor's language", () => {
   it('has every word in all 21 languages, none empty', () => {
     expect(Object.keys(CHAT_TEXT)).toHaveLength(21);
