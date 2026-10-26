@@ -14,14 +14,16 @@ export function SaveIndicator({ status, onRetry }: { status: SaveStatus; onRetry
         ? 'saving'
         : status === 'error' || status === 'conflict'
           ? 'failed'
-          : null;
+          : status === 'nameTaken'
+            ? 'nameTaken'
+            : null;
   return (
     <span
       aria-live="polite"
       data-testid="save-indicator"
       className={cn(
         'inline-flex items-center gap-2 text-xs',
-        key === 'failed' ? 'text-danger' : 'text-muted-foreground',
+        key === 'failed' || key === 'nameTaken' ? 'text-danger' : 'text-muted-foreground',
       )}
     >
       {key && t(key)}

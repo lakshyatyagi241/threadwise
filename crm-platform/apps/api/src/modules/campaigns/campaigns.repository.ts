@@ -347,6 +347,24 @@ export class CampaignsRepository {
     return Number((res.rows[0] as { n: number }).n);
   }
 
+  /**
+   * Whether another campaign or draft of the workspace already goes by this name (without case or edge spaces). `selfId` is the one
+   * being saved: it never counts against itself, and keeps a name it already had, so a workspace that already holds two of a name can
+   * still edit them without renaming.
+   */
+  async nameTaken(tx: Tx, orgId: number, name: string, selfId: number | null): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wpcampaigns o
+      WHERE o.org_id = ${orgId}
+        AND lower(btrim(o.campaign_name)) = lower(btrim(${name}))
+        AND (${selfId}::bigint IS NULL OR o.id <> ${selfId}::bigint)
+        AND NOT EXISTS (
+          SELECT 1 FROM wpcampaigns s
+          WHERE s.org_id = ${orgId} AND s.id = ${selfId}::bigint AND lower(btrim(s.campaign_name)) = lower(btrim(${name})))
+      LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<CampaignRow | undefined> {
     const res = await tx.execute(
       sql`${SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid`,

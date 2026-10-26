@@ -116,6 +116,9 @@ export class CampaignsService {
       // The check above is the early refusal; this one is under the lock, in the inserting transaction (QA Sheet3 #15, D-05).
       await this.plan.lockCap(tx, orgId);
       await this.plan.assertWithinCap(orgId, await this.repo.count(tx, orgId));
+      if (await this.repo.nameTaken(tx, orgId, input.name, null)) {
+        throw refuse('CAMP_NAME_TAKEN', 'Same campaign name already exists', HttpStatus.CONFLICT);
+      }
       const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, input);
       if (contactIds.length === 0 && status !== 'draft') {
         throw refuse(
@@ -206,6 +209,9 @@ export class CampaignsService {
       if (!locked) throw AppError.notFound('Campaign', uuid);
       if (!(EDITABLE_STATUSES as readonly string[]).includes(locked.status)) {
         throw refuse('CAMP_NOT_EDITABLE', 'This campaign can no longer be edited.');
+      }
+      if (await this.repo.nameTaken(tx, orgId, input.name, locked.id)) {
+        throw refuse('CAMP_NAME_TAKEN', 'Same campaign name already exists', HttpStatus.CONFLICT);
       }
       const { shares, ...resolved } = await this.resolve(tx, orgId, input);
       const email = await this.forEmail(orgId, resolved.provider, input);

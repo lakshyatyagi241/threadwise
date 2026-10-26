@@ -1126,7 +1126,8 @@
         "saved": "Zapisano wersję roboczą",
         "saving": "Zapisywanie...",
         "failed": "Nie udało się zapisać",
-        "retry": "Ponów"
+        "retry": "Ponów",
+        "nameTaken": "Kampania o tej samej nazwie już istnieje"
       },
       "errors": {
         "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Zaznacz numery, z których ma iść wysyłka, i przypisz każdemu udział. Odbiorcy są dzieleni według tych udziałów, a każdy kontakt dostaje wiadomość tylko z jednego numeru. Pusty udział lub 0 liczy się jako 1.",
         "shareWeight": "Udział",
         "shareWeightLabel": "Udział numeru {name}",
-        "shareKeepOne": "Co najmniej jeden numer musi pozostać zaznaczony."
+        "shareKeepOne": "Co najmniej jeden numer musi pozostać zaznaczony.",
+        "nameTaken": "Kampania o tej samej nazwie już istnieje"
       },
       "audience": {
         "selectionTitle": "Wybrane w Centrum kontaktów",

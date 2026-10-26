@@ -1126,7 +1126,8 @@
         "saved": "Borrador guardado",
         "saving": "Guardando...",
         "failed": "No se pudo guardar",
-        "retry": "Reintentar"
+        "retry": "Reintentar",
+        "nameTaken": "Ya existe una campaña con el mismo nombre"
       },
       "errors": {
         "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Marca los números desde los que enviar y asigna una parte a cada uno. La audiencia se reparte según esas partes y cada contacto recibe el mensaje desde un solo número. Una parte vacía o 0 cuenta como 1.",
         "shareWeight": "Parte",
         "shareWeightLabel": "Parte de {name}",
-        "shareKeepOne": "Al menos un número debe quedar marcado."
+        "shareKeepOne": "Al menos un número debe quedar marcado.",
+        "nameTaken": "Ya existe una campaña con el mismo nombre"
       },
       "audience": {
         "selectionTitle": "Elegidos en el Centro de contactos",

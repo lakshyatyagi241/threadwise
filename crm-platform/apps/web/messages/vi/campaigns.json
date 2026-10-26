@@ -1126,7 +1126,8 @@
         "saved": "Đã lưu bản nháp",
         "saving": "Đang lưu...",
         "failed": "Không thể lưu",
-        "retry": "Thử lại"
+        "retry": "Thử lại",
+        "nameTaken": "Đã có chiến dịch cùng tên"
       },
       "errors": {
         "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Chọn các số dùng để gửi và đặt tỷ lệ cho từng số. Đối tượng được chia theo các tỷ lệ này và mỗi liên hệ chỉ nhận tin từ một số. Tỷ lệ để trống hoặc bằng 0 được tính là 1.",
         "shareWeight": "Tỷ lệ",
         "shareWeightLabel": "Tỷ lệ của {name}",
-        "shareKeepOne": "Phải giữ ít nhất một số được chọn."
+        "shareKeepOne": "Phải giữ ít nhất một số được chọn.",
+        "nameTaken": "Đã có chiến dịch cùng tên"
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",

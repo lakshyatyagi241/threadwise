@@ -175,7 +175,7 @@ const DYNAMIC = [
   ...['occurrence', 'runAt', 'status', 'sent', 'delivered', 'failed', 'retries'].map(
     (c) => `campaigns.wizard.status.col.${c}`,
   ),
-  ...['saved', 'saving', 'failed'].map((k) => `campaigns.wizard.save.${k}`),
+  ...['saved', 'saving', 'failed', 'nameTaken'].map((k) => `campaigns.wizard.save.${k}`),
   ...['searchGroups', 'searchSegments', 'groups', 'segments', 'noGroups', 'noSegments'].map(
     (k) => `campaigns.wizard.audience.${k}`,
   ),

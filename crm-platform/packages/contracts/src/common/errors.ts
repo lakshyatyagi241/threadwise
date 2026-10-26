@@ -458,6 +458,8 @@ export const ERROR_CODES = {
   CAMP_WIZARD_INCOMPLETE: 'CAMP_WIZARD_INCOMPLETE',
   /** The wizard draft was already launched, so it can no longer be edited or launched again. */
   CAMP_WIZARD_LAUNCHED: 'CAMP_WIZARD_LAUNCHED',
+  /** Another campaign or draft of the workspace already has this name (compared without case or edge spaces). */
+  CAMP_NAME_TAKEN: 'CAMP_NAME_TAKEN',
   /** A test send needs at least one valid E.164 number and at most ten. */
   CAMP_TEST_RECIPIENTS_INVALID: 'CAMP_TEST_RECIPIENTS_INVALID',
   /** Pause, resume or cancel asked of a broadcast whose status does not allow it. */
