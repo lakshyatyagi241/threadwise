@@ -1151,6 +1151,16 @@
       "unofficial": "Неофициальный",
       "officialFull": "Официальный (WhatsApp Cloud API)",
       "unofficialFull": "Неофициальный (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Прошлые цепочки",
+      "began": "Начата {date}",
+      "showMore": "Показать ещё {count}",
+      "showLess": "Показать меньше",
+      "loading": "Загрузка…",
+      "failed": "Не удалось загрузить цепочку.",
+      "unknown": "Неизвестный отправитель",
+      "openThread": "Открыть цепочку"
     }
   }
 }

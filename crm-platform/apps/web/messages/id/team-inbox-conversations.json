@@ -1151,6 +1151,16 @@
       "unofficial": "Tidak resmi",
       "officialFull": "Resmi (WhatsApp Cloud API)",
       "unofficialFull": "Tidak resmi (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Utas sebelumnya",
+      "began": "Dimulai {date}",
+      "showMore": "Tampilkan {count} lagi",
+      "showLess": "Tampilkan lebih sedikit",
+      "loading": "Memuat…",
+      "failed": "Utas ini tidak dapat dimuat.",
+      "unknown": "Pengirim tidak dikenal",
+      "openThread": "Buka utas"
     }
   }
 }

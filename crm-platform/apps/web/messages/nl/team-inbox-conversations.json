@@ -1151,6 +1151,16 @@
       "unofficial": "Onofficieel",
       "officialFull": "Officieel (WhatsApp Cloud API)",
       "unofficialFull": "Onofficieel (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Eerdere threads",
+      "began": "Begonnen op {date}",
+      "showMore": "Toon er {count} meer",
+      "showLess": "Toon minder",
+      "loading": "Laden…",
+      "failed": "Deze thread kon niet worden geladen.",
+      "unknown": "Onbekende afzender",
+      "openThread": "Thread openen"
     }
   }
 }

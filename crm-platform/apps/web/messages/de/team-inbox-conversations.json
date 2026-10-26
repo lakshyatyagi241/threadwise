@@ -1151,6 +1151,16 @@
       "unofficial": "Inoffiziell",
       "officialFull": "Offiziell (WhatsApp Cloud API)",
       "unofficialFull": "Inoffiziell (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Frühere Verläufe",
+      "began": "Begonnen am {date}",
+      "showMore": "{count} weitere anzeigen",
+      "showLess": "Weniger anzeigen",
+      "loading": "Wird geladen…",
+      "failed": "Dieser Verlauf konnte nicht geladen werden.",
+      "unknown": "Unbekannter Absender",
+      "openThread": "Verlauf öffnen"
     }
   }
 }

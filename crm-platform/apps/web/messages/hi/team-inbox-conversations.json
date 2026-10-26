@@ -1151,6 +1151,16 @@
       "unofficial": "अनधिकृत",
       "officialFull": "आधिकारिक (WhatsApp Cloud API)",
       "unofficialFull": "अनधिकृत (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "पिछले थ्रेड",
+      "began": "शुरू: {date}",
+      "showMore": "{count} और दिखाएं",
+      "showLess": "कम दिखाएं",
+      "loading": "लोड हो रहा है…",
+      "failed": "यह थ्रेड लोड नहीं हो सका।",
+      "unknown": "अज्ञात प्रेषक",
+      "openThread": "थ्रेड खोलें"
     }
   }
 }
