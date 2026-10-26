@@ -79,7 +79,7 @@ Select **Add a rule**, give it a name and say who should get the chats. By defau
 - **New or returning contact**: a contact is returning when it has an earlier chat, or was saved more than 10 minutes before this chat. A contact the chat itself created is new.
 - **Channel**: only chats that arrive on the channels you tick.
 - **Message words**: words or phrases in the customer's message, separated by commas; any word or every word. Capital letters do not matter.
-- **Customer language**: language codes such as en or ar. It matches only when the customer's language is known.
+- **Customer language**: language codes such as en or ar. It uses the language found in the conversation, else the **Language** saved on the contact; it matches only when one of them is known.
 - **Business hours**: only inside or only outside the business hours of your workspace (see below).
 - **Contact details**: tags, owner, lifecycle stage and other contact fields, built like a segment. This only matches contacts that already have the value saved. A brand-new contact arrives with nothing saved except the stage "New", so use New or returning contact for first-time customers.
 
