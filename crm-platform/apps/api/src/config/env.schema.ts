@@ -79,6 +79,9 @@ export const envSchema = z.object({
 
   // --- redis ---------------------------------------------------------------
   REDIS_URL: z.string().min(1),
+  // A second Redis for the cache and state keys (RBAC grants, rate limits, idempotency, locks, counters): everything that is not a BullMQ
+  // queue or a socket.io message. Unset or empty: they share REDIS_URL, as before. Set, a full cache cannot fill the queue Redis.
+  REDIS_CACHE_URL: z.preprocess((v) => (v === '' ? undefined : v), z.string().min(1).optional()),
 
   // --- auth ----------------------------------------------------------------
   JWT_ACCESS_SECRET: z.string().min(32, 'JWT_ACCESS_SECRET must be at least 32 characters'),

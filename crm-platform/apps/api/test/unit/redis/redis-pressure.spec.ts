@@ -88,6 +88,26 @@ describe('createRedisSampler', () => {
     expect(metric(text, 'crm_redis_up')).toBe(0);
     expect(metric(text, 'crm_redis_memory_used_bytes')).toBe(5_216_488);
   });
+
+  it('keeps the queue and the cache Redis apart by label (D-15), each with its own eviction baseline', async () => {
+    const registry = new Registry({ service: 'worker' });
+    const sampler = createRedisSampler(registry);
+    const cache = INFO.replace('evicted_keys:7', 'evicted_keys:100').replace(
+      'used_memory:5216488',
+      'used_memory:99',
+    );
+    await sampler.sample({ info: async () => INFO } as never, 'queue');
+    await sampler.sample({ info: async () => cache } as never, 'cache');
+    await sampler.sample(
+      { info: async () => cache.replace('evicted_keys:100', 'evicted_keys:105') } as never,
+      'cache',
+    );
+    const text = registry.render();
+    expect(text).toMatch(/crm_redis_memory_used_bytes\{[^}]*redis="queue"[^}]*\} 5216488/);
+    expect(text).toMatch(/crm_redis_memory_used_bytes\{[^}]*redis="cache"[^}]*\} 99/);
+    expect(text).toMatch(/crm_redis_evicted_keys_total\{[^}]*redis="cache"[^}]*\} 5/); // 105 - 100, not 105
+    expect(text).toMatch(/crm_redis_evicted_keys_total\{[^}]*redis="queue"[^}]*\} 0/);
+  });
 });
 
 describe('guardWorkerAgainstOom', () => {

@@ -14,13 +14,24 @@ groups:
           runbook: 'docs/runbooks/p0-failure-modes.md#redisdown'
 
       - alert: RedisMemoryNearMax
-        expr: max by (service) (crm_redis_memory_used_bytes) / (max by (service) (crm_redis_memory_max_bytes) > 0) > 0.9
+        expr: max by (service, redis) (crm_redis_memory_used_bytes{redis!="cache"}) / (max by (service, redis) (crm_redis_memory_max_bytes{redis!="cache"}) > 0) > 0.9
         for: 5m
         labels: { severity: critical }
         annotations:
           summary: 'Redis memory above 90% of maxmemory for 5 min'
           description: 'At maxmemory Redis evicts or rejects writes; BullMQ jobs can be lost or enqueue can fail.'
           runbook: 'docs/runbooks/p0-failure-modes.md#redismemorynearmax'
+
+      # D-15 (Sheet 3): the queue Redis runs noeviction, so it should stay under 70% of maxmemory; this warns 20 points before the page above.
+      # The cache Redis (REDIS_CACHE_URL, redis="cache") is meant to sit near its limit and evict, so it is left out of both alerts.
+      - alert: RedisMemoryHigh
+        expr: max by (service, redis) (crm_redis_memory_used_bytes{redis!="cache"}) / (max by (service, redis) (crm_redis_memory_max_bytes{redis!="cache"}) > 0) > 0.7
+        for: 15m
+        labels: { severity: warning, owner: vedant }
+        annotations:
+          summary: 'Redis memory above 70% of maxmemory for 15 min'
+          description: 'The queue Redis refuses writes at maxmemory (noeviction). Finished-job history is trimmed automatically from here; a growing backlog or a key without a TTL is the usual cause.'
+          runbook: 'docs/runbooks/redis-cache-split.md#redismemoryhigh'
 
       - alert: DbPoolExhausted
         expr: max by (service, pool) (crm_db_pool_waiting) > 0

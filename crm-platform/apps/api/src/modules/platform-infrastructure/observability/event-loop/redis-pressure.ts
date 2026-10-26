@@ -66,40 +66,49 @@ export function createRedisSampler(registry: Registry) {
   const ops = registry.gauge('crm_redis_ops_per_second', 'Redis instantaneous_ops_per_sec');
   const evicted = registry.counter(
     'crm_redis_evicted_keys_total',
-    'Keys Redis evicted to stay under maxmemory (expected 0 under noeviction)',
+    'Keys Redis evicted to stay under maxmemory (expected 0 on the queue Redis, which runs noeviction)',
   );
   const rejected = registry.counter(
     'crm_redis_rejected_connections_total',
     'Connections Redis refused (maxclients reached)',
   );
-  evicted.inc(0); // the series exists from the first scrape, so increase() has a starting point
-  rejected.inc(0);
-  let lastEvicted: number | null = null;
-  let lastRejected: number | null = null;
+  // Every series carries `redis`: "queue" (BullMQ, noeviction) or "cache" (REDIS_CACHE_URL, when it is a separate server).
+  const last = new Map<string, { evicted: number | null; rejected: number | null }>();
 
   return {
-    async sample(redis: { info(): Promise<string> }): Promise<RedisInfoSnapshot | null> {
+    async sample(
+      redis: { info(): Promise<string> },
+      name: 'queue' | 'cache' = 'queue',
+    ): Promise<RedisInfoSnapshot | null> {
+      const l = { redis: name };
+      let prev = last.get(name);
+      if (!prev) {
+        prev = { evicted: null, rejected: null };
+        last.set(name, prev);
+        evicted.inc(0, l); // the series exists from the first scrape, so increase() has a starting point
+        rejected.inc(0, l);
+      }
       let s: RedisInfoSnapshot;
       try {
         s = parseRedisInfo(await redis.info());
       } catch {
-        up.set(0); // the last numbers stay; the alert is on crm_redis_up
+        up.set(0, l); // the last numbers stay; the alert is on crm_redis_up
         return null;
       }
-      up.set(1);
-      used.set(s.usedMemoryBytes);
-      max.set(s.maxMemoryBytes);
-      clients.set(s.connectedClients);
-      blocked.set(s.blockedClients);
-      keys.set(s.keys);
-      ops.set(s.opsPerSecond);
+      up.set(1, l);
+      used.set(s.usedMemoryBytes, l);
+      max.set(s.maxMemoryBytes, l);
+      clients.set(s.connectedClients, l);
+      blocked.set(s.blockedClients, l);
+      keys.set(s.keys, l);
+      ops.set(s.opsPerSecond, l);
       // Redis counters are cumulative; a restart resets them, so only a positive step is added.
-      if (lastEvicted !== null && s.evictedKeys > lastEvicted)
-        evicted.inc(s.evictedKeys - lastEvicted);
-      if (lastRejected !== null && s.rejectedConnections > lastRejected)
-        rejected.inc(s.rejectedConnections - lastRejected);
-      lastEvicted = s.evictedKeys;
-      lastRejected = s.rejectedConnections;
+      if (prev.evicted !== null && s.evictedKeys > prev.evicted)
+        evicted.inc(s.evictedKeys - prev.evicted, l);
+      if (prev.rejected !== null && s.rejectedConnections > prev.rejected)
+        rejected.inc(s.rejectedConnections - prev.rejected, l);
+      prev.evicted = s.evictedKeys;
+      prev.rejected = s.rejectedConnections;
       return s;
     },
   };
