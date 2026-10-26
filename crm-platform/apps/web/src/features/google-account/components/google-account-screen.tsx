@@ -15,6 +15,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
+  refreshGoogleAccount,
   googleAccountApi,
   useGoogleAccount,
   useGoogleCalendars,
@@ -117,7 +118,7 @@ function Body({ account, canManage }: { account: GoogleAccountResponse; canManag
       '',
       `${window.location.pathname}${withoutOutcome(window.location.search)}${window.location.hash}`,
     );
-    void qc.invalidateQueries({ queryKey: KEYS.account });
+    void refreshGoogleAccount(qc);
   }, [qc]);
 
   const toggle = (key: GoogleCapability, on: boolean) =>
@@ -148,6 +149,7 @@ function Body({ account, canManage }: { account: GoogleAccountResponse; canManag
     try {
       const next = await googleAccountApi.disconnect();
       qc.setQueryData(KEYS.account, next);
+      void refreshGoogleAccount(qc);
       void qc.invalidateQueries({ queryKey: KEYS.calendars });
       setConfirmOff(false);
       toast(t('disconnected'));
