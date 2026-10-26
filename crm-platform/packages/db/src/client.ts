@@ -38,6 +38,13 @@ export interface DbClientOptions {
    */
   idleInTransactionTimeoutMs?: number;
   applicationName?: string;
+  /** Name of this pool in metrics (`primary`, `replica`, `webhook`, `health`). */
+  poolName?: string;
+  /**
+   * Called with how long each checkout took in milliseconds: the wait for a free connection plus, when the pool had to open one, the
+   * time to connect. This is the time a request or job spends before its first query can start (Sheet 3 D-07, "pool wait").
+   */
+  onAcquire?: (ms: number, poolName: string) => void;
   /** Emit every statement. Development only — it logs parameter values. */
   logQueries?: boolean;
 }
@@ -50,6 +57,28 @@ export interface DbClient {
 
 /** How long past the server's statement timeout the client waits before it gives up on a silent connection. */
 export const QUERY_TIMEOUT_GRACE_MS = 2_500;
+
+/**
+ * Wraps `pool.connect` to time every checkout. node-postgres' own `pool.query` goes through `this.connect(cb)`, so replacing the method on
+ * the instance covers `pool.query`, drizzle's direct queries and `runTransaction` alike. A failed checkout (connection timeout) is timed too.
+ */
+function timeCheckouts(pool: Pool, record: (ms: number, name: string) => void, name: string): void {
+  const connect = pool.connect.bind(pool) as (cb?: (...a: unknown[]) => void) => unknown;
+  const timed = (cb?: (...a: unknown[]) => void): unknown => {
+    const t0 = performance.now();
+    if (typeof cb === 'function') {
+      return connect((...a: unknown[]) => {
+        record(performance.now() - t0, name);
+        cb(...a);
+      });
+    }
+    const done = (): void => record(performance.now() - t0, name);
+    const p = connect() as Promise<PoolClient>;
+    p.then(done, done);
+    return p;
+  };
+  (pool as unknown as { connect: typeof timed }).connect = timed;
+}
 
 export function createDbClient(options: DbClientOptions): DbClient {
   const statementTimeoutMs = options.statementTimeoutMs ?? 15_000;
@@ -79,6 +108,7 @@ export function createDbClient(options: DbClientOptions): DbClient {
   };
 
   const pool = new Pool(config);
+  if (options.onAcquire) timeCheckouts(pool, options.onAcquire, options.poolName ?? 'primary');
 
   // An error on an *idle* pooled client is emitted here, not at a call site.
   // Without this listener Node treats it as an unhandled 'error' event and
@@ -115,13 +145,22 @@ export function createDbClientPair(
   primaryOptions: DbClientOptions,
   replicaUrl?: string,
 ): DbClientPair {
-  const primary = createDbClient({ ...primaryOptions, applicationName: 'crm-api-primary' });
+  const primary = createDbClient({
+    ...primaryOptions,
+    applicationName: 'crm-api-primary',
+    poolName: 'primary',
+  });
 
   // No replica configured (local dev, CI): fall back to the primary so the
   // read path still works. Production must set DATABASE_REPLICA_URL.
   const replica =
     replicaUrl && replicaUrl !== primaryOptions.url
-      ? createDbClient({ ...primaryOptions, url: replicaUrl, applicationName: 'crm-api-replica' })
+      ? createDbClient({
+          ...primaryOptions,
+          url: replicaUrl,
+          applicationName: 'crm-api-replica',
+          poolName: 'replica',
+        })
       : primary;
 
   return {
