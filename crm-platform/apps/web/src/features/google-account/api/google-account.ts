@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type QueryClient } from '@tanstack/react-query';
 import {
   calendarListResponseSchema,
   googleAccountResponseSchema,
@@ -17,6 +17,17 @@ export const KEYS = {
   calendars: ['google-account', 'calendars'] as const,
   consent: (id: string) => ['google-account', 'consent', id] as const,
 };
+
+/**
+ * Drops every cached answer about the workspace's Google account, here and in the flow builder (its notice and file pickers, keys
+ * `['flb', 'google', ...]`). Call it whenever a connection changes: the builder keeps its answer for 30 s and a client-side navigation
+ * back to it would otherwise still say "not connected".
+ */
+export const refreshGoogleAccount = (qc: QueryClient) =>
+  Promise.all([
+    qc.invalidateQueries({ queryKey: KEYS.account }),
+    qc.invalidateQueries({ queryKey: ['flb', 'google'] }),
+  ]);
 
 /** Every call of the Google account page. The consent address is a plain call, not a mutation: nothing of it is worth caching. */
 export const googleAccountApi = {

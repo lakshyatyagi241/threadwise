@@ -15,7 +15,9 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(state.search),
   useRouter: () => ({ replace: vi.fn() }),
 }));
+vi.mock('@tanstack/react-query', () => ({ useQueryClient: () => ({}) }));
 vi.mock('../api/google-account', () => ({
+  refreshGoogleAccount: vi.fn(),
   googleConsentApi: { confirm: vi.fn(), cancel: vi.fn() },
   useGoogleConsent: () => state.consent,
 }));

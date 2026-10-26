@@ -1,11 +1,12 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { GoogleCapability } from '@crm/contracts';
 import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
-import { googleConsentApi, useGoogleConsent } from '../api/google-account';
+import { googleConsentApi, refreshGoogleAccount, useGoogleConsent } from '../api/google-account';
 import { consentFailureOf, consentReturnAddress, readConsentId } from '../lib/model';
 
 const CARD = 'rounded-xl border border-border bg-card p-5 shadow-sm';
@@ -20,6 +21,7 @@ export function GoogleConsentConfirm() {
   const tp = useTranslations('google-account.page');
   const locale = useLocale();
   const router = useRouter();
+  const qc = useQueryClient();
   const params = useSearchParams();
   const id = readConsentId(`?${params.toString()}`);
   const consent = useGoogleConsent(id);
@@ -34,6 +36,7 @@ export function GoogleConsentConfirm() {
       const result = await (how === 'confirm'
         ? googleConsentApi.confirm(id)
         : googleConsentApi.cancel(id));
+      await refreshGoogleAccount(qc);
       router.replace(consentReturnAddress(result));
     } catch (e) {
       setError(e);
