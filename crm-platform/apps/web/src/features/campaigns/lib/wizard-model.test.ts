@@ -158,7 +158,7 @@ describe('emailSkipped: who an email campaign cannot reach, as far as the screen
     { id: 'c', email: '  ' },
   ];
 
-  it('counts picked contacts with no address, and every typed or uploaded number', () => {
+  it('counts picked contacts with no address; a typed address or CSV row is a contact, not a skip', () => {
     const f = {
       ...EMPTY_FORM,
       contactIds: ['a', 'b', 'c'],
@@ -169,7 +169,7 @@ describe('emailSkipped: who an email campaign cannot reach, as far as the screen
         { ...EMPTY_FORM, manualNumbers: '9198\n9199', csvText: 'name,phone\nA,1' },
         contacts,
       ),
-    ).toEqual({ contacts: 0, numbers: 3, total: 3 });
+    ).toEqual({ contacts: 0, numbers: 0, total: 0 });
   });
 
   it('a picked contact the loaded list does not carry is not guessed', () => {

@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import { hasPreviousSends, type PreviousSendsAudience } from '@crm/contracts';
-import { cleanNumbers, parseCsv, parseManualNumbers } from './campaign-rules';
+import {
+  cleanNumbers,
+  parseCsv,
+  parseEmailCsv,
+  parseManualEmails,
+  parseManualNumbers,
+} from './campaign-rules';
 import { ContactsService, SegmentsService } from '../crm';
 import { CampaignsRepository } from './campaigns.repository';
 
@@ -14,6 +20,8 @@ export interface AudienceInput {
   csvText?: string;
   /** Who earlier broadcasts and campaigns went to (optionally only those who read, replied...). */
   previousSends?: PreviousSendsAudience | null;
+  /** An email campaign: the typed text and the file hold email addresses, not phone numbers. */
+  email?: boolean;
 }
 
 /** Whether the form carried any audience at all (an edit that sent none leaves the recipients alone). */
@@ -54,6 +62,44 @@ export class CampaignAudienceService {
       ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
       ...(await this.repo.previousSendContactIds(tx, orgId, input.previousSends)),
     ];
+
+    if (input.email) {
+      // An email campaign: a typed or uploaded address is found as a contact (by its address), else created, the way a number is.
+      // No consent is granted by being on the list; opted-out contacts are skipped when the run starts.
+      const file = parseEmailCsv(input.csvText ?? '');
+      const addresses = [
+        ...new Set([...parseManualEmails(input.manualNumbers ?? ''), ...file.emails]),
+      ];
+      const emailRows = addresses.map((address) => {
+        const attrs = { ...(file.attrsByEmail.get(address) ?? {}) };
+        const csvName = attrs.name ?? '';
+        delete attrs.name;
+        return {
+          attrs,
+          input: {
+            kind: 'email' as const,
+            value: address,
+            name: csvName !== '' ? csvName : null,
+            createdName: address.split('@')[0] ?? address,
+            quiet: true,
+          },
+        };
+      });
+      const resolvedEmails = await this.contacts.resolveManyByIdentity(
+        tx,
+        orgId,
+        emailRows.map((r) => r.input),
+      );
+      for (const [i, resolved] of resolvedEmails.entries()) {
+        if (resolved.outcome !== 'found' && resolved.outcome !== 'created') continue;
+        await this.repo.mergeAttributes(tx, orgId, resolved.contactId, emailRows[i]!.attrs);
+        merged.push(resolved.contactId);
+      }
+      const uniqueEmail = [...new Set(merged)];
+      if (uniqueEmail.length === 0) return [];
+      const liveEmail = await this.repo.liveIds(tx, orgId, uniqueEmail);
+      return uniqueEmail.filter((id) => liveEmail.has(id));
+    }
 
     const csv = parseCsv(input.csvText ?? '');
     const numbers = cleanNumbers([

@@ -326,7 +326,7 @@ describe('an email campaign (a connected mailbox as the sender)', () => {
     expect(wa).toContain('Track link clicks');
   });
 
-  it('Recipients says contacts without an address are skipped, and typed numbers and CSV rows too', () => {
+  it('Recipients says contacts without an address are skipped, and takes typed addresses and a CSV of emails', () => {
     const lists = {
       tags: [],
       groups: [],
@@ -356,7 +356,11 @@ describe('an email campaign (a connected mailbox as the sender)', () => {
     expect(picked).toContain('2 chosen recipients have no email address and will be skipped.');
     expect(picked).toContain('>Email<');
     const typed = html(<StepRecipients {...base} mode="manual" onMode={noop} />);
-    expect(typed).toContain('have no email address, so they are skipped');
+    expect(typed).toContain('Manual emails');
+    expect(typed).toContain('One email address per line');
+    expect(typed).not.toContain('so they are skipped');
+    const file = html(<StepRecipients {...base} mode="csv" onMode={noop} />);
+    expect(file).toContain('Columns: name, email');
     const wa = html(<StepRecipients {...base} engine="baileys" mode="audience" onMode={noop} />);
     expect(wa).not.toContain('Emails go to the address');
     expect(wa).toContain('>Phone<');

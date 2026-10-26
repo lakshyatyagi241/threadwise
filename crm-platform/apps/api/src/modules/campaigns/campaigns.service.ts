@@ -119,7 +119,10 @@ export class CampaignsService {
       if (await this.repo.nameTaken(tx, orgId, input.name, null)) {
         throw refuse('CAMP_NAME_TAKEN', 'Same campaign name already exists', HttpStatus.CONFLICT);
       }
-      const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, input);
+      const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, {
+        ...input,
+        email: input.senderKey?.startsWith('email:') ?? false,
+      });
       if (contactIds.length === 0 && status !== 'draft') {
         throw refuse(
           'CAMP_NO_RECIPIENTS',
@@ -229,7 +232,10 @@ export class CampaignsService {
       // Recipients are rebuilt only when the form carried an audience and it is not empty (Reference).
       let rebuilt = false;
       if (hasAudience(input)) {
-        const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, input);
+        const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, {
+          ...input,
+          email: input.senderKey?.startsWith('email:') ?? false,
+        });
         if (contactIds.length > 0) {
           await this.repo.deleteRecipients(tx, orgId, locked.id);
           const variants = input.abTesting
