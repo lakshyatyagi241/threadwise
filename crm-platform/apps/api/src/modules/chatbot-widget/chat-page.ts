@@ -275,6 +275,7 @@ const SCRIPT = `
   function flagOf(code) {
     return code.length === 2 ? String.fromCodePoint(127397 + code.charCodeAt(0), 127397 + code.charCodeAt(1)) : '';
   }
+  var ccPicked = '';
   function paintCountries(h) {
     var cc = $('cc');
     if (!cc.options.length) {
@@ -286,8 +287,10 @@ const SCRIPT = `
         cc.appendChild(o);
       });
       cc.setAttribute('aria-label', tx('countryCode', 'Country code'));
+      cc.addEventListener('change', function () { ccPicked = cc.options[cc.selectedIndex].dataset.code || ''; });
     }
-    var want = String((h && h.country) || ((navigator.language || '').split('-')[1] || '') || 'IN').toUpperCase();
+    // The visitor's own pick wins over the default, so a wrong answer (the question is asked again) does not reset the list.
+    var want = ccPicked || String((h && h.country) || ((navigator.language || '').split('-')[1] || '') || 'IN').toUpperCase();
     for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
   }
   function setHint(h) {
