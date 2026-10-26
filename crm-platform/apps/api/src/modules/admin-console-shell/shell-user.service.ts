@@ -15,6 +15,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuthAuditService } from '../auth';
+import { NotificationPublisher } from '../notifications';
 import { SettingsService } from '../platform-settings-branding-storage';
 import { NavLayoutService } from './nav-layout.service';
 import { WorkspaceSettingsService } from './workspace-settings.service';
@@ -32,6 +33,7 @@ export class ShellUserService {
     private readonly layout: NavLayoutService,
     private readonly workspace: WorkspaceSettingsService,
     private readonly audit: AuthAuditService,
+    private readonly publisher: NotificationPublisher,
   ) {}
 
   private actor(): { orgId: number; userId: number } {
@@ -97,6 +99,8 @@ export class ShellUserService {
       });
       return res.rows.length;
     });
+    // After the commit: the person's other tabs and devices drop their badge and list too, the same event as a mark-all-read.
+    if (cleared > 0) await this.publisher.read(orgId, userId, 'all');
     return { cleared };
   }
 
