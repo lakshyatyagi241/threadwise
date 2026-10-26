@@ -41,6 +41,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   // Lifecycle line (claim, PR, release, resolved): recorded on the incident timeline. When the Chat app edited the alert card (ownerHook true) that
   // card IS the message: no thread reply, no top-level announce. Webhook mode / no card: today's thread reply (+ announce) exactly as before.
   let ownerHook = null, cardHook = null; // cardHook(channel, body, opts) -> true when the Chat app created the one editable card
+  let lifeHook = null; // lifeHook(inc, text, who): Sentry incidents only, fire and forget (the bridge writes the line onto the Sentry issue)
   const esc = (x) => String(x).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').slice(0, 200);
   // App mode: the deploy failure is ONE interactive card; unknown values are left out. Returns the channels where it could not be created.
   const openDeployCard = async (inc) => {
@@ -62,6 +63,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   };
   const life = async (inc, text, { who = 'bridge', tl, label = '', announceToo = false } = {}) => {
     inc.tl.push({ t: now(), who, text: String(tl ?? text).slice(0, 300) }); if (inc.tl.length > 40) inc.tl.shift();
+    if (inc.kind === 'sentry_issue') Promise.resolve().then(() => lifeHook?.(inc, String(tl ?? text), who)).catch(() => {});
     if (await Promise.resolve(ownerHook?.(inc.id)).catch(() => false)) return true;
     await step(inc, label, text); if (announceToo) await announce(inc, text); return false;
   };
@@ -357,7 +359,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     await life(inc, `PR #${inc.prClosed.number} was closed without merging; needs a human`, { tl: `PR #${inc.prClosed.number} closed without merging` }); return true;
   }
   return {
-    markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
+    markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, setLifeHook: (f) => { lifeHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
     setRelease, openDeployFailure, openSentryIssue, sentryStatus, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared, markCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),
