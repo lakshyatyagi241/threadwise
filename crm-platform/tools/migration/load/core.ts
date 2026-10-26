@@ -1,7 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadAccessConfig } from '../access/config';
-import { ALWAYS_OPEN_FEATURES, FEATURE_FROM_WABOO, LIMIT_FROM_WABOO, LIMITS_KEPT_FROM_BASE } from '../access/plan-map';
+import {
+  ALWAYS_OPEN_FEATURES,
+  FEATURE_FROM_WABOO,
+  LIMIT_FROM_WABOO,
+  LIMITS_KEPT_FROM_BASE,
+} from '../access/plan-map';
 import { closedKeys, loadModuleCeiling, oldWorkspaceKeys } from '../access/ceiling';
 import { permissionCatalogue } from '../extract/catalogue';
 import { mapPermissions, type KeyDef } from '../access/policy';
@@ -11,7 +16,7 @@ import { docKeys, type Doc } from '../util';
 import { bumpRolesVersion, featureResolver, planRow } from './access';
 import { digest } from './baseline';
 import { DEFAULT_TIMEZONE } from './org';
-import { applySettings, planSettings, type WabooSettings } from './orgsettings';
+import { applySettings, marketingConsent, planSettings, type WabooSettings } from './orgsettings';
 import { connect, sql, withPrivileged, withTenant } from './db';
 
 /**
@@ -133,7 +138,8 @@ export function derivePlan(
     features[feature] = codes.some(on);
   for (const feature of ALWAYS_OPEN_FEATURES) if (feature in features) features[feature] = true;
   // automatic assignment is a workspace setting in Waboo: a workspace that had it keeps it, whatever its plan lists
-  if (core.workspace?.autoAssignment === true && 'inbox_routing' in features) features.inbox_routing = true;
+  if (core.workspace?.autoAssignment === true && 'inbox_routing' in features)
+    features.inbox_routing = true;
   const limits: Record<string, number> = {};
   for (const [k, v] of Object.entries(base.limits))
     limits[k] = LIMITS_KEPT_FROM_BASE.has(k) ? v : 0;
@@ -480,6 +486,14 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
             ON CONFLICT (source_client, collection, step) DO NOTHING`),
         );
       }
+    }
+
+    // --- marketing subscriptions as the consent ledger holds them: the Subscription card and the send paths read the ledger, not the columns
+    {
+      const consent = await marketingConsent(owner.db, orgId);
+      o.log(
+        `  core  marketing consent: ${consent.events} event(s), ${consent.states} state(s) from the migrated subscriptions`,
+      );
     }
 
     // --- chat limits against open migrated chats: the app's routing skips an agent whose open assigned chats have reached chat_limit ------

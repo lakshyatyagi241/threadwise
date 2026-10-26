@@ -1287,6 +1287,33 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
           base.counts = {};
         }
         const now = await withTenant(db, { orgId }, (tx) => digest(tx, orgId, [...known]));
+        // the app's analytics trigger writes one an_events row for each counted message the import inserts at or after the feed cut-over,
+        // and the rollups from them: the app's own rows, expected, as long as the count matches the counted messages
+        const FEED_CUTOVER = '2026-10-21T07:13:06.165671Z';
+        const FEED_TABLES = new Set(['an_events', 'an_rollup_day', 'an_rollup_hour']);
+        const feedOk = await withTenant(db, { orgId }, async (tx) => {
+          const counted = Number(
+            (
+              (
+                await tx.execute(sql`SELECT count(*)::int AS n FROM messages WHERE org_id = ${orgId} AND deleted_at IS NULL
+                  AND created_at >= ${FEED_CUTOVER}::timestamptz AND kind NOT IN ('system', 'reaction')
+                  AND NOT (COALESCE(meta->>'source', '') = 'broadcast' AND meta->>'broadcast_id' IS NOT NULL)
+                  AND NOT (COALESCE(meta->>'source', '') = 'campaign' AND (meta->>'campaign_id' IS NOT NULL OR COALESCE(provider_message_id, '') LIKE 'campaign:%'))`)
+              ).rows[0] as { n: number }
+            ).n,
+          );
+          const events = Number(
+            // net: a message deleted or soft-deleted after the import writes a -1 event (2030_msg_feed_deletes), so the sum is what is still shown
+            (
+              (
+                await tx.execute(
+                  sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7`,
+                )
+              ).rows[0] as { n: number }
+            ).n,
+          );
+          return events === counted;
+        });
         for (const table of new Set([...Object.keys(base.counts), ...Object.keys(now)])) {
           const was = [...(base.counts[table] ?? [])];
           const is = [...(now[table] ?? [])];
@@ -1301,7 +1328,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             alarm(
               `BASELINE_CHANGED: ${table}: ${gone} row(s) that provisioning created were changed or deleted`,
             );
-          if (left.length > 0)
+          if (left.length > 0 && !(feedOk && FEED_TABLES.has(table)))
             alarm(
               `EXTRA_ROWS: ${table}: ${left.length} row(s) were added that this migration does not create${gone > 0 ? ' (or changed)' : ''}`,
             );
@@ -1771,7 +1798,11 @@ async function checkOrg(
       // core-load moves the organization to the plan built from the Waboo plan (a hidden plan this tool made); that is not drift
       const closedPlan =
         String(o.plan) !== String(want.plan) &&
-        (await tx.execute(sql`SELECT 1 FROM plans WHERE slug = ${o.plan} AND detail LIKE 'Created by the Waboo migration%'`)).rows.length > 0;
+        (
+          await tx.execute(
+            sql`SELECT 1 FROM plans WHERE slug = ${o.plan} AND detail LIKE 'Created by the Waboo migration%'`,
+          )
+        ).rows.length > 0;
       for (const k of ['slug', 'name', 'status', 'plan'] as const) {
         if (k === 'plan' && closedPlan) continue;
         if (String(o[k]) !== String(want[k]))
@@ -1783,7 +1814,15 @@ async function checkOrg(
     // timezone is set at provisioning from --timezone (like signup) and is the owner's to change afterwards
     const { ownerUserId, timezone: _tz, ...rest } = o.settings as Record<string, unknown>;
     // core-load adds the Waboo business facts (plan code, provider, subscription id ...) under legacy.waboo; only the marker is compared
-    const legacyOnly = { ...rest, legacy: { waboo: { client: ((rest.legacy as { waboo?: { client?: string } } | undefined)?.waboo ?? {}).client } } };
+    const legacyOnly = {
+      ...rest,
+      legacy: {
+        waboo: {
+          client: ((rest.legacy as { waboo?: { client?: string } } | undefined)?.waboo ?? {})
+            .client,
+        },
+      },
+    };
     if (stable(legacyOnly) !== stable({ legacy: { waboo: { client } } }))
       alarm(
         'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker, ownerUserId and timezone)',

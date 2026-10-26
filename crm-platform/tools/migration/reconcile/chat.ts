@@ -141,7 +141,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   );
   // a channel is the row with the map's phone number id OR the row this tool made for it (uuid from the map's id): once the real number is
   // connected the row carries the real id, but the threads (and their uuids) were made under the map's id
-  const chanUuidOf = new Map(exts.map((e) => [uuidv5(`${client}|chat_channel|whatsapp_cloud|${e}`), e]));
+  const chanUuidOf = new Map(
+    exts.map((e) => [uuidv5(`${client}|chat_channel|whatsapp_cloud|${e}`), e]),
+  );
   const extOf = (external: string | null, chuuid: string | null): string | null =>
     external !== null && exts.includes(external)
       ? external
@@ -184,7 +186,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   if (a.source.collections(client).includes('visitor_logs'))
     for await (const d of a.source.read(client, 'visitor_logs')) {
       const sid = String(d.session_id ?? '').trim();
-      const st = String(d.conversation_status ?? '').trim().toLowerCase();
+      const st = String(d.conversation_status ?? '')
+        .trim()
+        .toLowerCase();
       if (sid === '' || (st !== 'open' && st !== 'closed')) continue;
       const raw = d.last_message_time ?? d.updatedAt;
       const t = raw instanceof Date ? raw.getTime() : Date.parse(String(raw ?? ''));
@@ -274,7 +278,12 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     const seqUnsure = new Set<string>();
     for (const m of oracle.messages.values()) {
       const p = a.plan.docs.get(m.key);
-      if (m.verdict === 'load' && m.bodyMd5 === undefined && p?.state === 'quarantine' && p.code === 'EMPTY_MESSAGE')
+      if (
+        m.verdict === 'load' &&
+        m.bodyMd5 === undefined &&
+        p?.state === 'quarantine' &&
+        p.code === 'EMPTY_MESSAGE'
+      )
         seqUnsure.add(m.thread!);
     }
     if (seqUnsure.size > 0)
@@ -311,7 +320,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       }
       if (
         m.verdict === 'load' &&
-        (!seqUnsure.has(m.thread!) && p.seq !== m.seq || p.at !== m.at || Boolean(p.ledgerKey) !== m.ledger)
+        ((!seqUnsure.has(m.thread!) && p.seq !== m.seq) ||
+          p.at !== m.at ||
+          Boolean(p.ledgerKey) !== m.ledger)
       )
         alarm(
           `ORACLE_MISMATCH: chathistory ${m.key}: seq/time/ledger differ (independent seq ${m.seq} at ${m.at} ledger ${m.ledger}; loader seq ${p.seq} at ${p.at} ledger ${Boolean(p.ledgerKey)})`,
@@ -473,11 +484,26 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   const relinked = await relinkedConversations(db, client);
   // chat-status closed conversations Waboo has closed (same trigger; run_log _chat/chat_status)
   const statusChanged = await statusChangedConversations(db, client);
+  // the app's analytics trigger on messages runs for each counted message at or after the feed cut-over (the app's an_msg_feed_cutover)
+  // and then fills first_inbound_at / first_replied_at on the conversation (from its older messages too): that is an UPDATE, so it moves
+  // updated_at and row_version. So: every conversation with such a message, or with such a stamp, is touched by the app, not by the import
+  const FEED_CUTOVER = '2026-10-21T07:13:06.165671Z';
+  const feedStamped = new Set(
+    (
+      await tenant((tx) =>
+        tx.execute(sql`SELECT c.uuid::text AS uuid FROM conversations c WHERE c.org_id = ${orgId} AND (
+          c.first_inbound_at >= ${FEED_CUTOVER}::timestamptz OR c.first_replied_at >= ${FEED_CUTOVER}::timestamptz
+          OR EXISTS (SELECT 1 FROM messages m WHERE m.org_id = c.org_id AND m.conversation_id = c.id
+            AND m.created_at >= ${FEED_CUTOVER}::timestamptz AND m.kind NOT IN ('system', 'reaction')))`),
+      )
+    ).rows.map((r) => String((r as { uuid: string }).uuid)),
+  );
   const touched = (uuid: unknown): boolean =>
     reparsed.has(String(uuid)) ||
     appended.has(String(uuid)) ||
     relinked.has(String(uuid)) ||
-    statusChanged.has(String(uuid));
+    statusChanged.has(String(uuid)) ||
+    feedStamped.has(String(uuid));
   for (const th of threads) {
     const set = convOfThread.get(th.key);
     if (!set || set.size !== 1) continue;
@@ -636,13 +662,14 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     tx.execute(
       sql.raw(`
       SELECT ch.external_id AS ext, l.key, l.kind, m.uuid::text AS muuid, m.conversation_id AS mconv, l.conversation_id AS lconv,
-             ${tsCol('l.message_created_at', 'lat')}, ${tsCol('m.created_at', 'mat')}
+             COALESCE(m.meta->>'source', '') AS src, ${tsCol('l.message_created_at', 'lat')}, ${tsCol('m.created_at', 'mat')}
       FROM message_ledger l JOIN channels ch ON ch.org_id = l.org_id AND ch.id = l.channel_id
       LEFT JOIN messages m ON m.org_id = l.org_id AND m.id = l.message_id AND m.created_at = l.message_created_at
       WHERE l.org_id = ${orgId}`),
     ),
   );
-  const gotLedger = new Map<string, { muuid: string | null; ok: boolean }>();
+  // `live`: the row belongs to a broadcast the app sent after the import (its mirror writes one ledger row per send), not to the import
+  const gotLedger = new Map<string, { muuid: string | null; ok: boolean; live: boolean }>();
   for (const r of rowsOf<{
     ext: string;
     key: string;
@@ -650,6 +677,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     muuid: string | null;
     mconv: number | string | null;
     lconv: number | string;
+    src: string;
     lat: string;
     mat: string | null;
   }>(led)) {
@@ -660,6 +688,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
         r.muuid !== null &&
         Number(r.mconv) === Number(r.lconv) &&
         r.lat === r.mat,
+      live: r.src === 'broadcast',
     });
   }
   let missingLedger = 0;
@@ -674,7 +703,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       `LEDGER_MISSING: ${missingLedger} message(s) with a provider id have no message_ledger row`,
     );
   if (!a.allowExtraRows) {
-    const extra = [...gotLedger.keys()].filter((k) => !wantLedger.has(k)).length;
+    const extra = [...gotLedger].filter(([k, g]) => !wantLedger.has(k) && !g.live).length;
     if (extra > 0)
       alarm(`EXTRA_ROWS: ${extra} message_ledger row(s) belong to no migrated message`);
   }
@@ -783,7 +812,11 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
     for (const r of chRows) {
       const marker = (r.settings as { legacy?: { waboo?: { client?: string } } } | null)?.legacy
         ?.waboo?.client;
-      if (marker === client && !exts.includes(String(r.external_id)) && !chanUuidOf.has(String(r.uuid)))
+      if (
+        marker === client &&
+        !exts.includes(String(r.external_id)) &&
+        !chanUuidOf.has(String(r.uuid))
+      )
         alarm(`EXTRA_ROWS: a channel carries the migration marker but is not in the channel map`);
     }
 

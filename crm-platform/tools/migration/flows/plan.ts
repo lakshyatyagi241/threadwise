@@ -140,6 +140,8 @@ export interface PlanInput {
   fallbackAt: string;
   /** keys of the contact fields of the target (module contacts); null = not checked */
   contactFieldKeys: Set<string> | null;
+  /** keys of the contact fields the app refuses a flow write to (is_read_only); absent = not checked */
+  readOnlyFieldKeys?: Set<string>;
 }
 
 export async function buildFlowPlan(a: PlanInput): Promise<FlowPlan> {
@@ -539,6 +541,26 @@ export async function buildFlowPlan(a: PlanInput): Promise<FlowPlan> {
           reason: 'an ask step saves into a contact property that has no field in the workspace',
           detail: missing,
         });
+      // the app refuses a flow write to a read-only contact field (web analytics, created and modified time). The step still runs and
+      // keeps its answer in the flow; it is loaded with the save switched off, so the one warning says which fields that touches.
+      const readOnly = a.readOnlyFieldKeys;
+      if (readOnly && readOnly.size > 0) {
+        const locked = new Set<string>();
+        for (const n of graph.flowNodes) {
+          const k = s(n.data.propertyKey);
+          if (n.data.saveProperty === true && k !== '' && readOnly.has(k)) {
+            n.data.saveProperty = false;
+            locked.add(k);
+          }
+        }
+        if (locked.size > 0)
+          soft.push({
+            code: 'PROPERTY_READ_ONLY',
+            reason:
+              'an ask step saves into a read-only contact field; the step keeps the answer in the flow only',
+            detail: [...locked].sort(),
+          });
+      }
     }
 
     // what the conversion loses
@@ -690,6 +712,9 @@ export async function buildFlowPlan(a: PlanInput): Promise<FlowPlan> {
       trigger_config: trig.config ?? null,
       provider: 'waba',
       flow_type: 'chat',
+      // a Waboo flow is a graph the Advanced builder edits (the Simple builder refuses branches and merges); the loader writes it, the
+      // column default would make it 'simple'
+      builder: 'advanced',
       // SAFETY: an imported flow is never live. The API default for is_active is TRUE: it is overridden here and checked by reconcile.
       is_published: false,
       is_active: false,

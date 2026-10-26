@@ -92,6 +92,15 @@ export const BUILT_IN_ALIAS: Readonly<Record<string, string>> = {
   street_address: 'address',
 };
 
+/** the app's length caps for the reserved text keys the contact form keeps in customFields (apps/api crm/contacts/form-field-limits.ts) */
+export const FORM_FIELD_LIMITS: Readonly<Record<string, number>> = {
+  title: 50,
+  middle_name: 191,
+  language: 80,
+  address: 1000,
+  memo: 2000,
+};
+
 /**
  * Waboo properties whose key the app reserves (a system attribute or a contact-page key, packages/contracts attribute.ts): the app refuses
  * a custom property with that key. They are created and filled under the same key with this prefix, so their values stay visible. Not an
@@ -142,8 +151,10 @@ export function subscriptionStatus(raw: unknown, idx: SourceIndex, field?: strin
  */
 export function optionValueOf(field: string, raw: unknown, idx: SourceIndex): unknown {
   // Created By / Updated By hold a Waboo user id: Desk shows the person's name; Original Lifecycle Stage holds a stage id: Desk shows its label
-  if ((field === 'created_by' || field === 'updated_by') && typeof raw === 'string') return idx.userNames?.get(raw) ?? raw;
-  if (field === 'original_lifecycle_stage' && typeof raw === 'string') return idx.stageByKey.get(raw)?.label ?? raw;
+  if ((field === 'created_by' || field === 'updated_by') && typeof raw === 'string')
+    return idx.userNames?.get(raw) ?? raw;
+  if (field === 'original_lifecycle_stage' && typeof raw === 'string')
+    return idx.stageByKey.get(raw)?.label ?? raw;
   const opts = idx.optionsByField?.get(field);
   if (!opts || raw === null || raw === undefined) return raw;
   const one = (v: unknown): unknown => {
@@ -352,8 +363,9 @@ export const contacts: HandlerSpec = {
     }
 
     const ccRaw = str(doc.country_code);
-    const picked = chooseContactPhone([str(doc.mobile_phone_number), str(doc.whatsapp_phone_number)], (raw) =>
-      transformHooks.phoneOf(raw, ccRaw, ctx.defaultCountryCode),
+    const picked = chooseContactPhone(
+      [str(doc.mobile_phone_number), str(doc.whatsapp_phone_number)],
+      (raw) => transformHooks.phoneOf(raw, ccRaw, ctx.defaultCountryCode),
     );
     const phone = picked.phone;
     if (picked.rejected !== null)
@@ -437,7 +449,11 @@ export const contacts: HandlerSpec = {
       source = cutText(source, 128);
     }
 
-    const wa = subscriptionStatus(doc.whatsapp_subscription_status, ctx.idx, 'whatsapp_subscription_status');
+    const wa = subscriptionStatus(
+      doc.whatsapp_subscription_status,
+      ctx.idx,
+      'whatsapp_subscription_status',
+    );
     const data: Record<string, unknown> = {};
     const dropped: string[] = [];
     for (const [k, v] of Object.entries(doc)) {
@@ -460,7 +476,20 @@ export const contacts: HandlerSpec = {
         });
         continue;
       }
-      setOwn(data, alias ?? target, optionValueOf(k, s.value, ctx.idx));
+      const key = alias ?? target;
+      let value = optionValueOf(k, s.value, ctx.idx);
+      // the app caps these reserved text keys (form-field-limits.ts): a longer value is cut here with a soft issue, instead of being
+      // refused by the next save of the contact
+      const cap = FORM_FIELD_LIMITS[key];
+      if (cap !== undefined && typeof value === 'string' && value.length > cap) {
+        soft.push({
+          code: 'TRUNCATED',
+          reason: `${key} longer than the app's ${cap}-character limit`,
+          detail: value,
+        });
+        value = cutText(value, cap);
+      }
+      setOwn(data, key, value);
     }
     // Waboo lists Created Time and Modified Time as contact fields; WaDesk keeps them in created_at / updated_at. The same instants are also
     // kept in data (ISO text) so the two read-only field rows of the contact page have a value to show (README, "Contact properties").
@@ -515,15 +544,24 @@ export const contacts: HandlerSpec = {
             previous_lifecycle_stage_date: previousAt,
             lost_reason: str(doc.lost_reason),
             whatsapp_subscription_status: wa,
-            sms_subscription_status: subscriptionStatus(doc.sms_subscription_status, ctx.idx, 'sms_subscription_status'),
-            email_subscription_status: subscriptionStatus(doc.email_subscription_status, ctx.idx, 'email_subscription_status'),
+            sms_subscription_status: subscriptionStatus(
+              doc.sms_subscription_status,
+              ctx.idx,
+              'sms_subscription_status',
+            ),
+            email_subscription_status: subscriptionStatus(
+              doc.email_subscription_status,
+              ctx.idx,
+              'email_subscription_status',
+            ),
             country_code: cc,
             is_unsubscribed: wa === 'unsubscribed',
             owner_id: ownerId,
             source,
             status,
             // the app keeps these two in columns of their own (the API reads them there); Waboo stores the checkbox as an option id
-            email_confirmed: optionValueOf('email_confirmed', doc.email_confirmed, ctx.idx) === true,
+            email_confirmed:
+              optionValueOf('email_confirmed', doc.email_confirmed, ctx.idx) === true,
             fax_number: str(doc.fax_number),
             created_at: t.created,
             updated_at: t.updated,
