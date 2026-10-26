@@ -232,7 +232,9 @@ export function CampaignsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && <NewCampaignButton label={t('newCampaign')} chooserLabel={t('newCampaignAny')} />}
+              {canCreate && (
+                <NewCampaignButton label={t('newCampaign')} chooserLabel={t('newCampaignAny')} />
+              )}
             </div>
           </div>
 
