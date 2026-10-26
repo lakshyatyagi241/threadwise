@@ -115,7 +115,8 @@
         "source": "المصدر",
         "result": "النتيجة",
         "statusCode": "رمز الحالة",
-        "duration": "المدة"
+        "duration": "المدة",
+        "bot": "البوت"
       },
       "openLog": "فتح التشغيل بتاريخ {when}",
       "drawerTitle": "السجلات: {name}",
@@ -140,7 +141,9 @@
         "to": "إلى",
         "clear": "مسح التصفيات",
         "deletedApi": "{name} (محذوف)",
-        "searchTooLong": "يمكن أن يحتوي البحث على {max} حرفًا كحد أقصى. اختصره لتتمكن من البحث."
+        "searchTooLong": "يمكن أن يحتوي البحث على {max} حرفًا كحد أقصى. اختصره لتتمكن من البحث.",
+        "bot": "البوت",
+        "allBots": "كل البوتات"
       },
       "detail": {
         "title": "تفاصيل سجل واجهة API",
@@ -174,7 +177,8 @@
       },
       "unsaved": "غير محفوظ",
       "export": "تصدير CSV",
-      "exporting": "جارٍ التصدير…"
+      "exporting": "جارٍ التصدير…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "إدراج متغير في {label}",

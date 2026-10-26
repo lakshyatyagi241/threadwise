@@ -27,6 +27,7 @@ describe('log filters', () => {
   it('maps the filled fields, trimming the search and parsing the code', () => {
     const q = logQuery({
       apiId: 'a1',
+      botId: '',
       status: 'failed',
       statusCode: '404',
       source: 'flow',

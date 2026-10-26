@@ -35,6 +35,8 @@ export interface LogRow {
   userUuid: string | null;
   contactUuid: string | null;
   flowUuid: string | null;
+  /** The bot's name as it is now (read from the flow, so a rename shows at once); null when the bot is gone. */
+  flowName: string | null;
   flowRunUuid: string | null;
   flowNodeId: string | null;
   createdAtIso: string;
@@ -66,6 +68,8 @@ export interface NewLog {
 
 export interface LogFilter {
   apiUuid?: string;
+  /** Only the runs one bot (flow, by uuid) made. */
+  botUuid?: string;
   status?: 'success' | 'failed';
   statusCode?: number;
   source?: ApiLibraryLogSource;
@@ -100,6 +104,7 @@ const toLog = (r: Raw): LogRow => ({
   userUuid: (r.user_uuid ?? null) as string | null,
   contactUuid: (r.contact_uuid ?? null) as string | null,
   flowUuid: (r.flow_uuid ?? null) as string | null,
+  flowName: (r.flow_name ?? null) as string | null,
   flowRunUuid: (r.flow_run_uuid ?? null) as string | null,
   flowNodeId: (r.flow_node_id ?? null) as string | null,
   createdAtIso: r.created_at_iso as string,
@@ -108,7 +113,7 @@ const toLog = (r: Raw): LogRow => ({
 
 const SELECT = sql`
   SELECT l.*, to_char(l.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso,
-         u.uuid AS user_uuid, f.uuid AS flow_uuid
+         u.uuid AS user_uuid, f.uuid AS flow_uuid, f.flow_name AS flow_name
   FROM api_library_logs l
   LEFT JOIN users u ON u.org_id = l.org_id AND u.id = l.user_id
   LEFT JOIN flows f ON f.org_id = l.org_id AND f.id = l.flow_id`;
@@ -136,6 +141,10 @@ export class ApiLibraryLogsRepository {
   private where(orgId: number, f: LogFilter, paged: boolean): SQL[] {
     const where: SQL[] = [sql`l.org_id = ${orgId}`];
     if (f.apiUuid) where.push(sql`l.api_uuid = ${f.apiUuid}::uuid`);
+    if (f.botUuid)
+      where.push(
+        sql`l.flow_id IN (SELECT id FROM flows WHERE org_id = ${orgId} AND uuid = ${f.botUuid}::uuid)`,
+      );
     if (f.status === 'success') where.push(sql`l.ok`);
     if (f.status === 'failed') where.push(sql`NOT l.ok`);
     if (f.statusCode !== undefined) where.push(sql`l.status_code = ${f.statusCode}`);
@@ -190,6 +199,23 @@ export class ApiLibraryLogsRepository {
         AND l.created_at >= now() - make_interval(days => ${API_LIBRARY_LOG_RETENTION_DAYS + 1})
       LIMIT 1`);
     return res.rows.length > 0;
+  }
+
+  /**
+   * The bots (flows) that have runs in the log, by their current name, for the bot filter. A bot that is gone has no name here.
+   */
+  async loggedBots(tx: Tx, orgId: number): Promise<Array<{ uuid: string; name: string }>> {
+    const res = await tx.execute(sql`
+      SELECT DISTINCT f.uuid AS uuid, f.flow_name AS name
+      FROM api_library_logs l JOIN flows f ON f.org_id = l.org_id AND f.id = l.flow_id
+      WHERE l.org_id = ${orgId}
+        AND l.created_at >= now() - make_interval(days => ${API_LIBRARY_LOG_RETENTION_DAYS + 1})
+      ORDER BY f.flow_name, f.uuid
+      LIMIT 200`);
+    return (res.rows as Array<{ uuid: string; name: string | null }>).map((r) => ({
+      uuid: r.uuid,
+      name: r.name ?? '',
+    }));
   }
 
   /**

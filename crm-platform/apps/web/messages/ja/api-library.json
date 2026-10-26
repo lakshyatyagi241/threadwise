@@ -115,7 +115,8 @@
         "source": "ソース",
         "result": "結果",
         "statusCode": "ステータスコード",
-        "duration": "所要時間"
+        "duration": "所要時間",
+        "bot": "ボット"
       },
       "openLog": "{when} の実行を開く",
       "drawerTitle": "ログ: {name}",
@@ -140,7 +141,9 @@
         "to": "終了",
         "clear": "フィルターをクリア",
         "deletedApi": "{name}（削除済み）",
-        "searchTooLong": "検索は{max}文字までです。短くしてから検索してください。"
+        "searchTooLong": "検索は{max}文字までです。短くしてから検索してください。",
+        "bot": "ボット",
+        "allBots": "すべてのボット"
       },
       "detail": {
         "title": "API ログの詳細",
@@ -174,7 +177,8 @@
       },
       "unsaved": "未保存",
       "export": "CSV で書き出す",
-      "exporting": "書き出し中…"
+      "exporting": "書き出し中…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "{label} に変数を挿入",

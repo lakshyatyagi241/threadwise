@@ -26,6 +26,7 @@ const state = vi.hoisted(() => ({
   logs: {} as Record<string, unknown>,
   options: {} as Record<string, unknown>,
   logApis: {} as Record<string, unknown>,
+  logBots: {} as Record<string, unknown>,
   query: '',
 }));
 
@@ -47,6 +48,7 @@ vi.mock('../api/hooks', () => ({
   useApiLog: () => q(),
   useApiLibraryOptions: () => state.options,
   useApiLogApis: () => state.logApis,
+  useApiLogBots: () => state.logBots,
   useContactProperties: () =>
     q({ data: { data: [{ key: 'email', label: 'Email', type: 'email', kind: 'system' }] } }),
 }));
@@ -135,6 +137,7 @@ beforeEach(() => {
   state.logs = listOf([]);
   state.options = q({ data: { data: [] } });
   state.logApis = q({ data: { data: [] } });
+  state.logBots = q({ data: { data: [] } });
   state.detail = q();
 });
 
@@ -304,6 +307,8 @@ describe('logs', () => {
     id: '00000000-0000-4000-8000-0000000000aa',
     apiId: ID,
     apiName: 'Orders',
+    botId: null,
+    botName: null,
     source: 'flow',
     method: 'POST',
     url: 'https://api.example.com/orders',

@@ -115,7 +115,8 @@
         "source": "Kaynak",
         "result": "Sonuç",
         "statusCode": "Durum kodu",
-        "duration": "Süre"
+        "duration": "Süre",
+        "bot": "Bot"
       },
       "openLog": "{when} tarihli çalıştırmayı aç",
       "drawerTitle": "Günlükler: {name}",
@@ -140,7 +141,9 @@
         "to": "Bitiş",
         "clear": "Filtreleri temizle",
         "deletedApi": "{name} (silindi)",
-        "searchTooLong": "Arama en fazla {max} karakter olabilir. Aramak için kısaltın."
+        "searchTooLong": "Arama en fazla {max} karakter olabilir. Aramak için kısaltın.",
+        "bot": "Bot",
+        "allBots": "Tüm botlar"
       },
       "detail": {
         "title": "API günlük ayrıntıları",
@@ -174,7 +177,8 @@
       },
       "unsaved": "Kaydedilmedi",
       "export": "CSV olarak dışa aktar",
-      "exporting": "Dışa aktarılıyor…"
+      "exporting": "Dışa aktarılıyor…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "{label} alanına değişken ekle",

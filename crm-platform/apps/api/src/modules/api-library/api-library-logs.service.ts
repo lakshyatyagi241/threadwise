@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import type {
   ApiLibraryLogApisResponse,
+  ApiLibraryLogBotsResponse,
   ApiLibraryLogDetail,
   ExportApiLibraryLogsQuery,
   ListApiLibraryLogsQuery,
@@ -59,6 +60,7 @@ export class ApiLibraryLogsService {
         throw AppError.notFound('API', onlyApi);
       const filter = {
         apiUuid: onlyApi ?? query.apiId,
+        botUuid: query.botId,
         status: query.status,
         statusCode: query.statusCode,
         source: query.source,
@@ -89,6 +91,7 @@ export class ApiLibraryLogsService {
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, ctx.orgId, {
         apiUuid: query.apiId,
+        botUuid: query.botId,
         status: query.status,
         statusCode: query.statusCode,
         source: query.source,
@@ -99,12 +102,13 @@ export class ApiLibraryLogsService {
         order: 'desc',
       });
       return buildCsv(
-        ['Time (UTC)', 'API', 'Source', 'Method', 'URL', 'Result', 'Status code', 'Duration (ms)', 'Error'],
+        ['Time (UTC)', 'API', 'Bot', 'Source', 'Method', 'URL', 'Result', 'Status code', 'Duration (ms)', 'Error'],
         rows.map((row) => {
           const item = toLogItem(row);
           return [
             item.createdAt,
             item.apiName,
+            item.botName,
             item.source,
             item.method,
             item.url,
@@ -122,6 +126,15 @@ export class ApiLibraryLogsService {
    * The APIs the logs' filter offers: every saved API, and each deleted API that still has runs in the window, so its name stays
    * findable after the delete. Only the logs list them; the pickers' feed (apis/options) keeps saved APIs alone.
    */
+  /** The bots the logs' bot filter offers: each bot that has runs in the window, by its current name. */
+  async filterBots(): Promise<ApiLibraryLogBotsResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const rows = await this.repo.loggedBots(tx, ctx.orgId);
+      return { data: rows.map((r) => ({ id: r.uuid, name: r.name })) };
+    });
+  }
+
   async filterApis(): Promise<ApiLibraryLogApisResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {

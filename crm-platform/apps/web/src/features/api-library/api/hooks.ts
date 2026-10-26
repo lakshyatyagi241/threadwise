@@ -14,6 +14,7 @@ export const KEYS = {
   contactProperties: ['api-library', 'contact-properties'] as const,
   logs: ['api-library', 'logs'] as const,
   logApis: ['api-library', 'log-apis'] as const,
+  logBots: ['api-library', 'log-bots'] as const,
   log: (id: string) => ['api-library', 'log', id] as const,
 };
 
@@ -75,6 +76,17 @@ export function useApiLibraryOptions(enabled = true) {
  * The logs' API filter: every saved API, and each deleted API whose runs are still listed (a deleted API is not in the pickers' feed).
  * A delete refreshes it with the other API data.
  */
+/** The bots the logs' bot filter offers (each bot with runs, by its current name). */
+export function useApiLogBots(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.logBots,
+    enabled,
+    retry: false,
+    staleTime: 30_000,
+    queryFn: ({ signal }) => apiLibraryApi.logBots(signal),
+  });
+}
+
 export function useApiLogApis(enabled = true) {
   return useQuery({
     queryKey: KEYS.logApis,

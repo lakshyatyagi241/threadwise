@@ -115,7 +115,8 @@
         "source": "Nguồn",
         "result": "Kết quả",
         "statusCode": "Mã trạng thái",
-        "duration": "Thời lượng"
+        "duration": "Thời lượng",
+        "bot": "Bot"
       },
       "openLog": "Mở lần chạy lúc {when}",
       "drawerTitle": "Nhật ký: {name}",
@@ -140,7 +141,9 @@
         "to": "Đến",
         "clear": "Xóa bộ lọc",
         "deletedApi": "{name} (đã xóa)",
-        "searchTooLong": "Nội dung tìm kiếm tối đa {max} ký tự. Hãy rút ngắn để tìm kiếm."
+        "searchTooLong": "Nội dung tìm kiếm tối đa {max} ký tự. Hãy rút ngắn để tìm kiếm.",
+        "bot": "Bot",
+        "allBots": "Tất cả bot"
       },
       "detail": {
         "title": "Chi tiết nhật ký API",
@@ -174,7 +177,8 @@
       },
       "unsaved": "Chưa lưu",
       "export": "Xuất CSV",
-      "exporting": "Đang xuất…"
+      "exporting": "Đang xuất…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Chèn biến vào {label}",
