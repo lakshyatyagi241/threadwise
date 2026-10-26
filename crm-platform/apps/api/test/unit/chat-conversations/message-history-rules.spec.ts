@@ -18,6 +18,7 @@ import {
   resolveWindow,
   safeZone,
   typeFilterParts,
+  chartZone,
 } from '../../../src/modules/chat-conversations/message-history-rules';
 import {
   historyCsvLine,
@@ -331,5 +332,16 @@ describe('the export file', () => {
     expect(sel.narrow).toEqual({ dir: 'fail', source: ['flow'], q: 'x' });
     expect(() => selectionOfStored({})).toThrow();
     expect(() => selectionOfStored(null)).toThrow();
+  });
+});
+
+describe('chartZone', () => {
+  it('buckets a chosen from/to pair by UTC days, whatever zone the viewer is in', () => {
+    expect(chartZone({ from: '2026-10-20', to: '2026-10-26', tz: 'Asia/Kolkata' })).toBe('UTC');
+    expect(chartZone({ to: '2026-10-26', tz: 'Asia/Kolkata' })).toBe('UTC');
+  });
+  it('keeps the viewer zone for a preset range, and falls back to UTC for an unknown one', () => {
+    expect(chartZone({ tz: 'Asia/Kolkata' })).toBe('Asia/Kolkata');
+    expect(chartZone({ tz: 'Not/AZone' })).toBe('UTC');
   });
 });

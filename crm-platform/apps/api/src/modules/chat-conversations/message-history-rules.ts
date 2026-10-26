@@ -197,6 +197,13 @@ export type VolumeBucket = 'hourly' | 'daily' | 'weekly';
 export const bucketUnit = (b: VolumeBucket): 'hour' | 'day' | 'week' =>
   b === 'hourly' ? 'hour' : b === 'weekly' ? 'week' : 'day';
 
+/**
+ * The zone the volume chart buckets by. A chosen from/to pair is whole UTC days (see `resolveWindow`), so it is bucketed by UTC days too:
+ * in the viewer's zone the last day of the pair spills into one more bucket (20 to 26 Oct drawn as 20 to 27 Oct).
+ */
+export const chartZone = (f: { from?: string; to?: string; tz?: string }): string =>
+  f.from !== undefined || f.to !== undefined ? 'UTC' : safeZone(f.tz);
+
 /** A zone name Postgres will accept: anything `Intl` knows, else UTC. */
 export function safeZone(tz: string | undefined): string {
   if (!tz) return 'UTC';

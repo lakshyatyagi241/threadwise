@@ -264,6 +264,13 @@ describe('Message History (en)', () => {
     expect(host.querySelector('[data-testid="kpi-response"]')?.textContent).toContain('3m 20s');
     expect(host.querySelector('[data-testid="kpi-rate"]')?.textContent).toContain('91.2%');
     expect(host.querySelector('[data-testid="kpi-cost"]')?.textContent).toContain('$12.50');
+    // hovering a bar names every status of the day, not only the total
+    const bar = host.querySelector('[data-testid="volume-chart"] > div');
+    expect(bar?.getAttribute('title')?.split('\n').slice(1)).toEqual([
+      'Sent: 4',
+      'Received: 2',
+      'Failed: 1',
+    ]);
     const rows = host.querySelectorAll('[data-testid="history-row"]');
     expect(rows).toHaveLength(3);
     expect(rows[0]!.textContent).toContain('•••••••5678');
