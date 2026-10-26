@@ -82,9 +82,7 @@ describe('the WhatsApp Form builder — contact property mapping', () => {
   });
 
   it('lists the active custom attributes alongside the system fields', () => {
-    const html = render([
-      { key: 'budget', name: 'Budget', description: null, value: null },
-    ]);
+    const html = render([{ key: 'budget', name: 'Budget', description: null, value: null }]);
     expect(html).toContain('Custom properties');
     expect(html).toContain('Budget');
   });

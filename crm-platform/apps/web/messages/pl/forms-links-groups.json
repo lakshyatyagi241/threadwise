@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Ten link jest wstrzymany lub wygasł.",
       "ROW_VERSION_CONFLICT": "To zostało zmienione w innym miejscu. Odśwież i spróbuj ponownie.",
       "VALIDATION_FAILED": "Sprawdź podświetlone pola i spróbuj ponownie.",
-      "PLAN_FEATURE_LOCKED": "Przejdź na wyższy plan, aby korzystać z tej funkcji."
+      "PLAN_FEATURE_LOCKED": "Przejdź na wyższy plan, aby korzystać z tej funkcji.",
+      "WFL_FORM_SYNC_FAILED": "Nie udało się odczytać formularzy z Meta."
     },
     "forms": {
       "heading": "Formularze WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Brak formularzy",
-        "description": "Utwórz formularz, a następnie wyślij go z kroku formularza WhatsApp w automatyzacji."
+        "description": "Utwórz formularz, a następnie wyślij go z kroku formularza WhatsApp w automatyzacji.",
+        "noMatch": "Żaden formularz nie pasuje do „{q}”."
       },
       "table": {
         "form": "Formularz",
@@ -143,6 +145,14 @@
           "contact": "Kontakt",
           "phone": "Telefon"
         }
+      },
+      "sync": {
+        "cta": "Synchronizuj z Meta",
+        "syncing": "Synchronizacja…",
+        "done": "Zsynchronizowano z Meta: sprawdzono {checked}, zaktualizowano {updated}, nie znaleziono w Meta {missing}, tylko w Meta {metaOnly}."
+      },
+      "search": {
+        "placeholder": "Szukaj formularzy"
       }
     },
     "links": {

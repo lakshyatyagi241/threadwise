@@ -68,7 +68,12 @@ function fieldComponent(field: {
             : field.kind === 'number'
               ? 'number'
               : 'text';
-      return { type: 'TextInput', ...base, 'input-type': inputType, 'helper-text': field.helperText };
+      return {
+        type: 'TextInput',
+        ...base,
+        'input-type': inputType,
+        'helper-text': field.helperText,
+      };
     }
   }
 }
@@ -105,7 +110,11 @@ export function buildMetaFlowJson(definition: WaFormDefinition, sendButtonLabel:
       label: isLast ? sendButtonLabel : 'Next',
       'on-click-action': isLast
         ? { name: 'complete', payload: { ...payloadSoFar } }
-        : { name: 'navigate', next: { type: 'screen', name: screenIds[index + 1] }, payload: { ...payloadSoFar } },
+        : {
+            name: 'navigate',
+            next: { type: 'screen', name: screenIds[index + 1] },
+            payload: { ...payloadSoFar },
+          },
     };
     return {
       id: screenIds[index],
