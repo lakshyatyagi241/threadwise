@@ -402,6 +402,14 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
     alarm(
       `IDMAP_MISSING: ${pendingTok.length} credit_logs_tokens document(s) load per the dump but are in no id_map (first keys ${pendingTok.slice(0, 3).join(', ')}): not loaded yet; \`usage-charges-append\` loads them (it never touches the ledger or the wallet)`,
     );
+  // the app's own rows written after the live balance was read are real activity (wallet-history keeps them): warnings, not findings
+  const readMs = a.history ? Date.parse(a.history.asOf) : null;
+  const afterRead = (t: unknown): boolean => {
+    if (readMs === null || t === null || t === undefined) return false;
+    const ms = Date.parse(String(t).replace(/(\.\d{3})\d+/, '$1'));
+    return Number.isFinite(ms) && ms > readMs;
+  };
+  const appTok = new Map<string, { n: number; p: number; c: number; t: number }>();
   const seenTok = new Set<number>();
   let extraTok = 0;
   const monthsDb = new Map<string, { n: number; p: number; c: number; t: number }>();
@@ -422,7 +430,14 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
       b.t += Number(r.total_tokens);
       monthsDb.set(m, b);
       if (!want) {
-        extraTok++;
+        if (afterRead(r.created_at)) {
+          const x = appTok.get(m) ?? { n: 0, p: 0, c: 0, t: 0 };
+          x.n++;
+          x.p += Number(r.prompt_tokens);
+          x.c += Number(r.completion_tokens);
+          x.t += Number(r.total_tokens);
+          appTok.set(m, x);
+        } else extraTok++;
         continue;
       }
       seenTok.add(id);
@@ -440,12 +455,22 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
     alarm(
       `CREDITS_EXTRA_ROWS: ${extraTok} ai_token_usage row(s) of the organization are not in migration.id_map (a duplicate load or a row added later)`,
     );
+  // the app's rows after the read leave the month totals the dump accounts for
+  const tokenFor = (m: string): { n: number; p: number; c: number; t: number } | undefined => {
+    const g0 = monthsDb.get(m);
+    const ap = appTok.get(m);
+    return g0 && ap ? { n: g0.n - ap.n, p: g0.p - ap.p, c: g0.c - ap.c, t: g0.t - ap.t } : g0;
+  };
   if (!a.allowExtraRows)
     for (const m of monthsDb.keys())
-      if (!oracle.tokenMonths.has(m))
+      if (!oracle.tokenMonths.has(m) && (tokenFor(m)?.n ?? 0) > 0)
         alarm(`TOKEN_PARITY: month ${m} holds token rows the dump has none for`);
+  if (appTok.size > 0)
+    a.warnings.push(
+      `CREDITS APP ROWS: ${[...appTok.values()].reduce((n, x) => n + x.n, 0)} ai_token_usage row(s) were written by the application after the live balance was read (counted as activity, not findings)`,
+    );
   for (const [m, w] of oracle.tokenMonths) {
-    const g = monthsDb.get(m);
+    const g = tokenFor(m);
     if (!g || g.n !== w.n || g.p !== w.prompt || g.c !== w.completion || g.t !== w.total)
       if (!(a.allowExtraRows && g && g.n >= w.n))
         alarm(
@@ -488,6 +513,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
   }
   const seenUse = new Set<number>();
   let extraUse = 0;
+  let appUse = 0;
   for await (const rows of pages(
     db,
     orgId,
@@ -509,7 +535,8 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
           `CHARGE_WITH_MONEY: usage_charges ${id} carries money or a wallet link (a historical charge must never debit or credit the wallet)`,
         );
       if (!w) {
-        extraUse++;
+        if (afterRead(r.created_at)) appUse++;
+        else extraUse++;
         continue;
       }
       seenUse.add(id);
@@ -566,6 +593,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
   const wantKeys = new Map<string, { id: number; atMs: number }>();
   for (const [id, w] of wantUse) wantKeys.set(w.u.wamid, { id, atMs: w.u.atMs });
   let extraKeys = 0;
+  let appKeys = 0;
   for await (const rows of pages(
     db,
     orgId,
@@ -575,7 +603,8 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
     for (const r of rows) {
       const w = wantKeys.get(String(r.provider_message_id));
       if (!w) {
-        extraKeys++;
+        if (afterRead(r.charge_created_at)) appKeys++;
+        else extraKeys++;
         continue;
       }
       wantKeys.delete(String(r.provider_message_id));
@@ -590,6 +619,10 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
   if (extraKeys > 0 && !a.allowExtraRows)
     alarm(
       `CREDITS_EXTRA_ROWS: ${extraKeys} usage_charge_keys row(s) of the organization have no migrated charge`,
+    );
+  if (appUse + appKeys > 0)
+    a.warnings.push(
+      `CREDITS APP ROWS: ${appUse} usage_charges row(s) and ${appKeys} usage_charge_keys row(s) were written by the application after the live balance was read (counted as activity, not findings)`,
     );
 
   // ---- nothing the live application would have written for a wallet
