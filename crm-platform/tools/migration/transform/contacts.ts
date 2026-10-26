@@ -480,7 +480,10 @@ export const contacts: HandlerSpec = {
       let value = optionValueOf(k, s.value, ctx.idx);
       // the app caps these reserved text keys (form-field-limits.ts): a longer value is cut here with a soft issue, instead of being
       // refused by the next save of the contact
-      const cap = FORM_FIELD_LIMITS[key];
+      // an own key only: `constructor` or `toString` would otherwise read a function off Object.prototype as the cap
+      const cap = Object.prototype.hasOwnProperty.call(FORM_FIELD_LIMITS, key)
+        ? FORM_FIELD_LIMITS[key]
+        : undefined;
       if (cap !== undefined && typeof value === 'string' && value.length > cap) {
         soft.push({
           code: 'TRUNCATED',

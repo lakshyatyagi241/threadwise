@@ -1303,11 +1303,12 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             ).n,
           );
           const events = Number(
-            // net: a message deleted or soft-deleted after the import writes a -1 event (2030_msg_feed_deletes), so the sum is what is still shown
+            // net: a message deleted or soft-deleted after the import writes a -1 event (2030_msg_feed_deletes), so the sum is what is still
+            // shown. A status change (k2 set) moves one message between statuses and adds nothing to the count, so it is left out.
             (
               (
                 await tx.execute(
-                  sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7`,
+                  sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7 AND k2 IS NULL`,
                 )
               ).rows[0] as { n: number }
             ).n,

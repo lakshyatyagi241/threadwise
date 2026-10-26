@@ -9,10 +9,13 @@ const asDoc = (v: unknown): Doc =>
  * A CAROUSEL component's cards as the app stores them (apps/api message-templates/template-payload.ts, TemplateCard): the picture is
  * Meta's copy of the example (`headerHandle`), the file is ours (`image`) and a migrated card has none. Meta's buttons are kept as they are.
  */
-function storedCards(cards: unknown): Doc[] | null {
+export function storedCards(cards: unknown): Doc[] | null {
   if (!Array.isArray(cards)) return null;
   return cards.map((card) => {
-    const comps = (Array.isArray(asDoc(card).components) ? asDoc(card).components : []) as Doc[];
+    // every entry goes through asDoc, so a null entry reads as an empty component and not as a TypeError
+    const comps: Doc[] = Array.isArray(asDoc(card).components)
+      ? (asDoc(card).components as unknown[]).map(asDoc)
+      : [];
     const header = asDoc(comps.find((x) => x.type === 'HEADER'));
     const text = asDoc(comps.find((x) => x.type === 'BODY'));
     const btns = asDoc(comps.find((x) => x.type === 'BUTTONS'));
@@ -23,7 +26,13 @@ function storedCards(cards: unknown): Doc[] | null {
       image: null,
       headerHandle: handle,
       body: str(text.text) ?? '',
-      buttons: Array.isArray(btns.buttons) ? btns.buttons : null,
+      // the same type casing as a standard template's buttons (the BUTTONS branch above), so the app reads one shape
+      buttons: Array.isArray(btns.buttons)
+        ? btns.buttons.map((b) => {
+            const { type: bt, ...rest } = asDoc(b);
+            return { ...rest, type: String(bt ?? '').toUpperCase() };
+          })
+        : null,
     };
   });
 }

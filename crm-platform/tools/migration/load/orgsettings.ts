@@ -232,10 +232,11 @@ export const SUBSCRIPTION_CHANNELS = [
 ] as const;
 
 /**
- * The marketing subscriptions of the migrated contacts as the consent ledger holds them: one `granted` or `withdrawn` event per contact and
- * channel whose Waboo status is a yes or a no, and the state that follows. A contact with no status gets nothing ("No consent recorded"):
- * consent is never invented. The Subscription card and the send paths read the ledger, not the contact columns. Idempotent: the event key
- * is per contact and channel, and the state is written once per contact and channel.
+ * The marketing subscriptions of the migrated contacts as the consent ledger holds them: one `granted` event per contact and channel whose
+ * Waboo status is a yes, and the state that follows. A "no" writes nothing: Waboo does not say the contact ever opted in and then withdrew,
+ * so a withdrawn event would record an opt-out that may never have happened. A contact with no status also gets nothing ("No consent
+ * recorded"): consent is never invented. The Subscription card and the send paths read the ledger, not the contact columns. Idempotent:
+ * the event key is per contact and channel, and the state is written once per contact and channel.
  */
 export async function marketingConsent(
   ownerDb: Database,
@@ -246,10 +247,10 @@ export async function marketingConsent(
       await tx.execute(sql`
         INSERT INTO contact_consent_events (org_id, contact_id, channel, purpose, action, source, evidence, occurred_at, idempotency_key)
         SELECT c.org_id, c.id, ${channel}, 'marketing',
-               CASE WHEN c.${sql.raw(column)} = 'subscribed' THEN 'granted' ELSE 'withdrawn' END,
+               'granted',
                'import', jsonb_build_object('status', c.${sql.raw(column)}), c.created_at, ${`migration:marketing:${channel}:`} || c.uuid::text
           FROM contacts c
-         WHERE c.org_id = ${orgId} AND c.${sql.raw(column)} IN ('subscribed', 'unsubscribed')
+         WHERE c.org_id = ${orgId} AND c.${sql.raw(column)} = 'subscribed'
         ON CONFLICT (org_id, idempotency_key) DO NOTHING`);
     }
     await tx.execute(sql`
