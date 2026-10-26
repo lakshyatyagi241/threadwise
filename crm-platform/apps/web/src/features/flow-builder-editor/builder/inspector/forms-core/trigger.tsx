@@ -2,7 +2,6 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import {
-  FLB_FIELD_MATCH_OPERATORS,
   FLB_SCHEDULE_AUDIENCES,
   FLB_SCHEDULE_FREQUENCIES,
   FLB_STORE_EVENTS,
@@ -28,14 +27,8 @@ import {
   toggleId,
 } from './helpers';
 import { Link, LinkedText } from './parts';
-import { ConditionGroupEditor, type OperatorSet } from './logic';
-import { OPERATOR_OPTIONS } from '../forms-channels/workflow';
-
-/** The operators a field-match rule offers: the trigger's own list, labelled as the trigger form always has been. */
-const FIELD_MATCH_OPS: OperatorSet = {
-  ids: FLB_FIELD_MATCH_OPERATORS,
-  label: (id) => OPERATOR_OPTIONS.find((o) => o.v === id)?.l ?? id,
-};
+import { ConditionGroupEditor } from './logic';
+import { useFieldMatchOperators } from '../forms-channels/workflow';
 
 /** The rule tree the editor shows: the saved groups, or the one field, operator and value a flow saved before groups existed. */
 function fieldMatchTree(d: Record<string, unknown>): FlbCondGroup {
@@ -78,6 +71,7 @@ const KIND_OPTIONS = [
 export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.trigger');
   const th = useTranslations('flb.builder.formsCore.helpers');
+  const fieldMatchOps = useFieldMatchOperators();
   const locale = useLocale();
   const tf = useFlb();
   const { ctx, loading } = env;
@@ -222,7 +216,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         // Beyond Reference: one or more field rules joined by AND / OR groups, the same editor as the Condition node.
         <ConditionGroupEditor
           tree={fieldMatchTree(d)}
-          ops={FIELD_MATCH_OPS}
+          ops={fieldMatchOps}
           onChange={(next) => set('conditionGroup', next)}
         />
       ) : null}
