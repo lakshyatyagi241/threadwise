@@ -708,7 +708,7 @@ describe('logs', () => {
 });
 
 describe('deleting an API that flows use', () => {
-  it('is refused with the flows listed; force removes it and its log stays', async () => {
+  it('is refused with the flows listed until they stop calling it; then it goes and its log stays', async () => {
     const t = await api.signup('alib15');
     const made = await create(t);
     const flow = (
@@ -745,16 +745,21 @@ describe('deleting an API that flows use', () => {
     expect(refused.status).toBe(409);
     expect(refused.body.code).toBe('ALIB_IN_USE');
     expect(JSON.stringify(refused.body)).toContain('Order status');
+    // there is no override: a query string does not get past the refusal
+    const withQuery = await api.as(t.admin).delete(`/v2/api-library/apis/${made.id}?force=true`);
+    expect(withQuery.status).toBe(409);
     expect((await api.as(t.admin).get(`/v2/api-library/apis/${made.id}`)).status).toBe(200);
 
-    const forced = await api.as(t.admin).delete(`/v2/api-library/apis/${made.id}?force=true`);
-    expect(forced.status).toBe(204);
+    // the flow stops calling it: the delete now goes through, and the log of its runs stays
+    await h.owner.query(`UPDATE flows SET flow_data = '{"flowNodes":[],"flowEdges":[]}'::jsonb WHERE uuid = $1`, [flow]);
+    const deleted = await api.as(t.admin).delete(`/v2/api-library/apis/${made.id}`);
+    expect(deleted.status).toBe(204);
     expect((await api.as(t.admin).get(`/v2/api-library/apis/${made.id}`)).status).toBe(404);
     const logs = await api.as(t.admin).get(`/v2/api-library/logs?apiId=${made.id}`);
     expect(logs.body.data).toHaveLength(1);
     expect(logs.body.data[0]).toMatchObject({ apiName: 'GetPerson', apiId: made.id });
 
-    // an API no flow uses deletes without force
+    // an API no flow uses deletes straight away
     const free = await create(t, { name: 'Free' });
     expect((await api.as(t.admin).delete(`/v2/api-library/apis/${free.id}`)).status).toBe(204);
   });
@@ -869,7 +874,7 @@ describe('the flow node, end to end through the real services', () => {
     expect(vars['person.status']).toBe(503);
 
     // an API deleted since the flow was saved leaves by the error port too, and says so in the log
-    await api.as(t.admin).delete(`/v2/api-library/apis/${bad.id}?force=true`);
+    expect((await api.as(t.admin).delete(`/v2/api-library/apis/${bad.id}`)).status).toBe(204);
     expect(await exec(ctx)).toEqual({ kind: 'advance', port: 2, branch: true });
     const goneLogs = await api.as(t.admin).get(`/v2/api-library/logs?apiId=${bad.id}&source=flow`);
     expect(goneLogs.body.data.map((l: any) => l.error)).toContain(

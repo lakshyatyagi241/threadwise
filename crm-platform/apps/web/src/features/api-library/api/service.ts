@@ -59,8 +59,7 @@ export const apiLibraryApi = {
       body: input,
       schema: apiLibraryDetailSchema,
     }),
-  remove: (id: string, force = false) =>
-    apiFetch(`${BASE}/apis/${enc(id)}`, { method: 'DELETE', query: force ? { force: true } : {} }),
+  remove: (id: string) => apiFetch(`${BASE}/apis/${enc(id)}`, { method: 'DELETE' }),
   usage: (id: string, signal?: AbortSignal) =>
     apiFetch(`${BASE}/apis/${enc(id)}/usage`, {
       schema: apiLibraryUsageResponseSchema,
