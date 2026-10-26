@@ -537,7 +537,8 @@
       "failed": "선택을 저장하지 못했습니다. 다시 시도하세요."
     },
     "settings": "설정",
-    "helpCenter": "도움말 센터"
+    "helpCenter": "도움말 센터",
+    "feedback": "의견 보내기"
   },
   "help": {
     "title": "도움말",
@@ -568,6 +569,20 @@
     "updated": "업데이트: {{label}}",
     "effective": "시행일: {{label}}",
     "unavailable": "이 문서는 현재 사용할 수 없습니다."
+  },
+  "feedback": {
+    "title": "의견 보내기",
+    "intro": "잘 되는 점, 안 되는 점, 원하는 기능을 알려 주세요. 모든 메시지를 읽고 이메일로 답변드립니다.",
+    "subjectLabel": "제목",
+    "subjectPlaceholder": "어떤 내용인가요?",
+    "messageLabel": "의견",
+    "messagePlaceholder": "여기에 메시지를 입력하세요",
+    "subjectRequired": "제목을 입력하세요.",
+    "messageRequired": "의견을 입력하세요.",
+    "send": "의견 보내기",
+    "sentTitle": "감사합니다",
+    "sentBody": "의견이 티켓 {{number}}(으)로 전송되었습니다. {{email}}(으)로 답변드리겠습니다.",
+    "done": "완료"
   },
   "settings": {
     "quickReplies": {

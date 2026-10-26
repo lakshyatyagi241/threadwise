@@ -557,7 +557,8 @@
       "failed": "אי אפשר היה לשמור את הבחירה. נסו שוב."
     },
     "settings": "הגדרות",
-    "helpCenter": "מרכז העזרה"
+    "helpCenter": "מרכז העזרה",
+    "feedback": "משוב"
   },
   "help": {
     "title": "עזרה",
@@ -588,6 +589,20 @@
     "updated": "עודכן: {{label}}",
     "effective": "בתוקף מ: {{label}}",
     "unavailable": "המסמך הזה אינו זמין כרגע."
+  },
+  "feedback": {
+    "title": "שליחת משוב",
+    "intro": "ספר לנו מה עובד, מה לא עובד, או מה היית רוצה לראות. אנחנו קוראים כל הודעה ומשיבים בדוא\"ל.",
+    "subjectLabel": "נושא",
+    "subjectPlaceholder": "על מה מדובר?",
+    "messageLabel": "המשוב שלך",
+    "messagePlaceholder": "כתוב כאן את ההודעה שלך",
+    "subjectRequired": "הזן נושא.",
+    "messageRequired": "כתוב את המשוב שלך.",
+    "send": "שליחת משוב",
+    "sentTitle": "תודה",
+    "sentBody": "המשוב שלך נשלח כפנייה {{number}}. נשיב אל {{email}}.",
+    "done": "סיום"
   },
   "settings": {
     "quickReplies": {

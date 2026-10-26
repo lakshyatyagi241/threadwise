@@ -557,7 +557,8 @@
       "failed": "Impossibile salvare la scelta. Riprova."
     },
     "settings": "Impostazioni",
-    "helpCenter": "Centro assistenza"
+    "helpCenter": "Centro assistenza",
+    "feedback": "Feedback"
   },
   "help": {
     "title": "Aiuto",
@@ -588,6 +589,20 @@
     "updated": "Aggiornato: {{label}}",
     "effective": "In vigore da: {{label}}",
     "unavailable": "Questo documento non è disponibile al momento."
+  },
+  "feedback": {
+    "title": "Invia feedback",
+    "intro": "Dicci cosa funziona, cosa no o cosa vorresti vedere. Leggiamo ogni messaggio e rispondiamo via email.",
+    "subjectLabel": "Oggetto",
+    "subjectPlaceholder": "Di cosa si tratta?",
+    "messageLabel": "Il tuo feedback",
+    "messagePlaceholder": "Scrivi qui il tuo messaggio",
+    "subjectRequired": "Inserisci un oggetto.",
+    "messageRequired": "Scrivi il tuo feedback.",
+    "send": "Invia feedback",
+    "sentTitle": "Grazie",
+    "sentBody": "Il tuo feedback è stato inviato come ticket {{number}}. Risponderemo a {{email}}.",
+    "done": "Fatto"
   },
   "settings": {
     "quickReplies": {

@@ -537,7 +537,8 @@
       "failed": "Pilihan Anda tidak dapat disimpan. Coba lagi."
     },
     "settings": "Pengaturan",
-    "helpCenter": "Pusat bantuan"
+    "helpCenter": "Pusat bantuan",
+    "feedback": "Masukan"
   },
   "help": {
     "title": "Bantuan",
@@ -568,6 +569,20 @@
     "updated": "Diperbarui: {{label}}",
     "effective": "Berlaku sejak: {{label}}",
     "unavailable": "Dokumen ini sedang tidak tersedia."
+  },
+  "feedback": {
+    "title": "Kirim masukan",
+    "intro": "Ceritakan apa yang berjalan baik, apa yang tidak, atau apa yang ingin Anda lihat. Kami membaca setiap pesan dan membalas lewat email.",
+    "subjectLabel": "Subjek",
+    "subjectPlaceholder": "Tentang apa ini?",
+    "messageLabel": "Masukan Anda",
+    "messagePlaceholder": "Tulis pesan Anda di sini",
+    "subjectRequired": "Masukkan subjek.",
+    "messageRequired": "Tulis masukan Anda.",
+    "send": "Kirim masukan",
+    "sentTitle": "Terima kasih",
+    "sentBody": "Masukan Anda terkirim sebagai tiket {{number}}. Kami akan membalas ke {{email}}.",
+    "done": "Selesai"
   },
   "settings": {
     "quickReplies": {

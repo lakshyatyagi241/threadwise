@@ -547,7 +547,8 @@
       "failed": "آپ کا انتخاب محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔"
     },
     "settings": "ترتیبات",
-    "helpCenter": "مدد مرکز"
+    "helpCenter": "مدد مرکز",
+    "feedback": "رائے"
   },
   "help": {
     "title": "مدد",
@@ -578,6 +579,20 @@
     "updated": "تازہ کاری: {{label}}",
     "effective": "نافذ العمل: {{label}}",
     "unavailable": "یہ دستاویز اس وقت دستیاب نہیں ہے۔"
+  },
+  "feedback": {
+    "title": "رائے بھیجیں",
+    "intro": "ہمیں بتائیں کیا ٹھیک چلتا ہے، کیا نہیں، یا آپ کیا دیکھنا چاہتے ہیں۔ ہم ہر پیغام پڑھتے ہیں اور ای میل پر جواب دیتے ہیں۔",
+    "subjectLabel": "موضوع",
+    "subjectPlaceholder": "یہ کس بارے میں ہے؟",
+    "messageLabel": "آپ کی رائے",
+    "messagePlaceholder": "اپنا پیغام یہاں لکھیں",
+    "subjectRequired": "موضوع درج کریں۔",
+    "messageRequired": "اپنی رائے لکھیں۔",
+    "send": "رائے بھیجیں",
+    "sentTitle": "شکریہ",
+    "sentBody": "آپ کی رائے ٹکٹ {{number}} کے طور پر بھیج دی گئی۔ ہم {{email}} پر جواب دیں گے۔",
+    "done": "مکمل"
   },
   "settings": {
     "quickReplies": {

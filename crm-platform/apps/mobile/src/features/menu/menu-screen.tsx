@@ -17,6 +17,7 @@ import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { modeOf } from './appearance';
+import { MenuTiles } from './menu-tiles';
 import { OPEN, SETTINGS_ITEMS } from './settings-items';
 import { useUpdateCheck, type UpdateState } from './use-update-check';
 
@@ -142,6 +143,25 @@ export function MenuScreen() {
         contentContainerStyle={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
       >
+        <MenuTiles
+          settingsFaded={session.data !== undefined && !settingsOpen}
+          feedbackFaded={faded('support.ticket.create')}
+          onSettings={() => {
+            setNoAccess(!settingsOpen);
+            if (settingsOpen) router.navigate('/settings');
+          }}
+          onFeedback={() => go('support.ticket.create', '/feedback')}
+          onNotifications={() => {
+            setNoAccess(false);
+            router.navigate('/notifications');
+          }}
+        />
+        {noAccess ? (
+          <View style={styles.notice}>
+            <Banner tone="warning" message={t('menu.noAccess')} />
+          </View>
+        ) : null}
+
         <View
           accessible
           accessibilityLabel={t('menu.profileLabel', { name, email: user?.email ?? '' })}
@@ -191,11 +211,6 @@ export function MenuScreen() {
             <Children items={contactChildren} faded={faded} onOpen={go} />
           ) : null}
           <Row
-            icon="notifications-outline"
-            label={t('notifications.title')}
-            onPress={() => router.navigate('/notifications')}
-          />
-          <Row
             icon="clipboard-outline"
             label={t('menu.tasks')}
             faded={faded('record.tasks.read')}
@@ -208,22 +223,7 @@ export function MenuScreen() {
             onPress={() => go('record.deals.read', '/deals')}
           />
           {/* Social leads is hidden from the menu for now (the screen and its route, /leads, are still built). */}
-          <Row
-            icon="settings-outline"
-            label={t('menu.settings')}
-            arrow
-            faded={session.data !== undefined && !settingsOpen}
-            onPress={() => {
-              setNoAccess(!settingsOpen);
-              if (settingsOpen) router.navigate('/settings');
-            }}
-          />
         </Section>
-        {noAccess ? (
-          <View style={styles.notice}>
-            <Banner tone="warning" message={t('menu.noAccess')} />
-          </View>
-        ) : null}
 
         <Section title={t('menu.sectionAccount')}>
           <Row

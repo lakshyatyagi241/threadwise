@@ -547,7 +547,8 @@
       "failed": "Ihre Auswahl konnte nicht gespeichert werden. Versuchen Sie es erneut."
     },
     "settings": "Einstellungen",
-    "helpCenter": "Hilfecenter"
+    "helpCenter": "Hilfecenter",
+    "feedback": "Feedback"
   },
   "help": {
     "title": "Hilfe",
@@ -578,6 +579,20 @@
     "updated": "Aktualisiert: {{label}}",
     "effective": "Gültig ab: {{label}}",
     "unavailable": "Dieses Dokument ist derzeit nicht verfügbar."
+  },
+  "feedback": {
+    "title": "Feedback senden",
+    "intro": "Sagen Sie uns, was funktioniert, was nicht, oder was Sie sich wünschen. Wir lesen jede Nachricht und antworten per E-Mail.",
+    "subjectLabel": "Betreff",
+    "subjectPlaceholder": "Worum geht es?",
+    "messageLabel": "Ihr Feedback",
+    "messagePlaceholder": "Schreiben Sie hier Ihre Nachricht",
+    "subjectRequired": "Geben Sie einen Betreff ein.",
+    "messageRequired": "Schreiben Sie Ihr Feedback.",
+    "send": "Feedback senden",
+    "sentTitle": "Vielen Dank",
+    "sentBody": "Ihr Feedback wurde als Ticket {{number}} gesendet. Wir antworten an {{email}}.",
+    "done": "Fertig"
   },
   "settings": {
     "quickReplies": {

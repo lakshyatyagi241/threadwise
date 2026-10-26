@@ -587,7 +587,8 @@
       "failed": "تعذّر حفظ اختيارك. حاول مرة أخرى."
     },
     "settings": "الإعدادات",
-    "helpCenter": "مركز المساعدة"
+    "helpCenter": "مركز المساعدة",
+    "feedback": "ملاحظات"
   },
   "help": {
     "title": "المساعدة",
@@ -618,6 +619,20 @@
     "updated": "آخر تحديث: {{label}}",
     "effective": "تاريخ السريان: {{label}}",
     "unavailable": "هذا المستند غير متاح حاليًا."
+  },
+  "feedback": {
+    "title": "إرسال ملاحظات",
+    "intro": "أخبرنا بما يعمل جيدًا وما لا يعمل وما تودّ رؤيته. نقرأ كل رسالة ونردّ عبر البريد الإلكتروني.",
+    "subjectLabel": "الموضوع",
+    "subjectPlaceholder": "ما موضوع رسالتك؟",
+    "messageLabel": "ملاحظاتك",
+    "messagePlaceholder": "اكتب رسالتك هنا",
+    "subjectRequired": "أدخل موضوعًا.",
+    "messageRequired": "اكتب ملاحظاتك.",
+    "send": "إرسال الملاحظات",
+    "sentTitle": "شكرًا لك",
+    "sentBody": "تم إرسال ملاحظاتك كتذكرة {{number}}. سنردّ على {{email}}.",
+    "done": "تم"
   },
   "settings": {
     "quickReplies": {

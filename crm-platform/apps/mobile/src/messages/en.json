@@ -547,7 +547,8 @@
       "failed": "Couldn't save your choice. Try again."
     },
     "settings": "Settings",
-    "helpCenter": "Help Center"
+    "helpCenter": "Help Center",
+    "feedback": "Feedback"
   },
   "help": {
     "title": "Help",
@@ -578,6 +579,20 @@
     "updated": "Updated: {{label}}",
     "effective": "Effective: {{label}}",
     "unavailable": "This document is not available right now."
+  },
+  "feedback": {
+    "title": "Send feedback",
+    "intro": "Tell us what works, what doesn't, or what you'd like to see. We read every message and reply by email.",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "What is this about?",
+    "messageLabel": "Your feedback",
+    "messagePlaceholder": "Write your message here",
+    "subjectRequired": "Enter a subject.",
+    "messageRequired": "Write your feedback.",
+    "send": "Send feedback",
+    "sentTitle": "Thank you",
+    "sentBody": "Your feedback was sent as ticket {{number}}. We will reply to {{email}}.",
+    "done": "Done"
   },
   "settings": {
     "quickReplies": {

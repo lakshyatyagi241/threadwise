@@ -547,7 +547,8 @@
       "failed": "Seçiminiz kaydedilemedi. Yeniden deneyin."
     },
     "settings": "Ayarlar",
-    "helpCenter": "Yardım merkezi"
+    "helpCenter": "Yardım merkezi",
+    "feedback": "Geri bildirim"
   },
   "help": {
     "title": "Yardım",
@@ -578,6 +579,20 @@
     "updated": "Güncellendi: {{label}}",
     "effective": "Yürürlük tarihi: {{label}}",
     "unavailable": "Bu belge şu anda kullanılamıyor."
+  },
+  "feedback": {
+    "title": "Geri bildirim gönder",
+    "intro": "Neyin işe yaradığını, neyin yaramadığını ya da neyi görmek istediğinizi bize söyleyin. Her mesajı okuyor ve e-postayla yanıtlıyoruz.",
+    "subjectLabel": "Konu",
+    "subjectPlaceholder": "Ne hakkında?",
+    "messageLabel": "Geri bildiriminiz",
+    "messagePlaceholder": "Mesajınızı buraya yazın",
+    "subjectRequired": "Bir konu girin.",
+    "messageRequired": "Geri bildiriminizi yazın.",
+    "send": "Geri bildirim gönder",
+    "sentTitle": "Teşekkürler",
+    "sentBody": "Geri bildiriminiz {{number}} numaralı kayıt olarak gönderildi. {{email}} adresine yanıt vereceğiz.",
+    "done": "Tamam"
   },
   "settings": {
     "quickReplies": {

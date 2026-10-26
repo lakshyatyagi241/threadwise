@@ -537,7 +537,8 @@
       "failed": "選択内容を保存できませんでした。もう一度お試しください。"
     },
     "settings": "設定",
-    "helpCenter": "ヘルプセンター"
+    "helpCenter": "ヘルプセンター",
+    "feedback": "フィードバック"
   },
   "help": {
     "title": "ヘルプ",
@@ -568,6 +569,20 @@
     "updated": "更新日：{{label}}",
     "effective": "施行日：{{label}}",
     "unavailable": "この文書は現在利用できません。"
+  },
+  "feedback": {
+    "title": "フィードバックを送る",
+    "intro": "うまくいっていること、いっていないこと、追加してほしいことをお知らせください。すべてのメッセージを読み、メールで返信します。",
+    "subjectLabel": "件名",
+    "subjectPlaceholder": "どのような内容ですか？",
+    "messageLabel": "フィードバック内容",
+    "messagePlaceholder": "ここにメッセージを入力してください",
+    "subjectRequired": "件名を入力してください。",
+    "messageRequired": "フィードバックを入力してください。",
+    "send": "フィードバックを送る",
+    "sentTitle": "ありがとうございます",
+    "sentBody": "フィードバックをチケット {{number}} として送信しました。{{email}} に返信します。",
+    "done": "完了"
   },
   "settings": {
     "quickReplies": {

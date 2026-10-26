@@ -537,7 +537,8 @@
       "failed": "无法保存您的选择，请重试。"
     },
     "settings": "设置",
-    "helpCenter": "帮助中心"
+    "helpCenter": "帮助中心",
+    "feedback": "反馈"
   },
   "help": {
     "title": "帮助",
@@ -568,6 +569,20 @@
     "updated": "更新时间：{{label}}",
     "effective": "生效时间：{{label}}",
     "unavailable": "此文档目前无法查看。"
+  },
+  "feedback": {
+    "title": "发送反馈",
+    "intro": "告诉我们哪些好用、哪些不好用，或你希望看到什么。我们会阅读每条消息，并通过邮件回复。",
+    "subjectLabel": "主题",
+    "subjectPlaceholder": "这是关于什么的？",
+    "messageLabel": "你的反馈",
+    "messagePlaceholder": "在此输入你的消息",
+    "subjectRequired": "请输入主题。",
+    "messageRequired": "请填写反馈内容。",
+    "send": "发送反馈",
+    "sentTitle": "谢谢",
+    "sentBody": "你的反馈已作为工单 {{number}} 发送。我们会回复到 {{email}}。",
+    "done": "完成"
   },
   "settings": {
     "quickReplies": {

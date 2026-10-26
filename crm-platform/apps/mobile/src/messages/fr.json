@@ -557,7 +557,8 @@
       "failed": "Impossible d’enregistrer votre choix. Réessayez."
     },
     "settings": "Paramètres",
-    "helpCenter": "Centre d’aide"
+    "helpCenter": "Centre d’aide",
+    "feedback": "Commentaires"
   },
   "help": {
     "title": "Aide",
@@ -588,6 +589,20 @@
     "updated": "Mis à jour : {{label}}",
     "effective": "En vigueur : {{label}}",
     "unavailable": "Ce document n'est pas disponible pour le moment."
+  },
+  "feedback": {
+    "title": "Envoyer un commentaire",
+    "intro": "Dites-nous ce qui fonctionne, ce qui ne fonctionne pas, ou ce que vous aimeriez voir. Nous lisons chaque message et répondons par e-mail.",
+    "subjectLabel": "Objet",
+    "subjectPlaceholder": "De quoi s'agit-il ?",
+    "messageLabel": "Votre commentaire",
+    "messagePlaceholder": "Écrivez votre message ici",
+    "subjectRequired": "Saisissez un objet.",
+    "messageRequired": "Écrivez votre commentaire.",
+    "send": "Envoyer le commentaire",
+    "sentTitle": "Merci",
+    "sentBody": "Votre commentaire a été envoyé sous le ticket {{number}}. Nous répondrons à {{email}}.",
+    "done": "Terminé"
   },
   "settings": {
     "quickReplies": {

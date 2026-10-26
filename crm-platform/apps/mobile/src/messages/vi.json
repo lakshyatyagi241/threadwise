@@ -537,7 +537,8 @@
       "failed": "Không thể lưu lựa chọn của bạn. Hãy thử lại."
     },
     "settings": "Cài đặt",
-    "helpCenter": "Trung tâm trợ giúp"
+    "helpCenter": "Trung tâm trợ giúp",
+    "feedback": "Phản hồi"
   },
   "help": {
     "title": "Trợ giúp",
@@ -568,6 +569,20 @@
     "updated": "Cập nhật: {{label}}",
     "effective": "Có hiệu lực: {{label}}",
     "unavailable": "Hiện không thể xem tài liệu này."
+  },
+  "feedback": {
+    "title": "Gửi phản hồi",
+    "intro": "Hãy cho chúng tôi biết điều gì hiệu quả, điều gì chưa, hoặc điều bạn muốn thấy. Chúng tôi đọc mọi tin nhắn và trả lời qua email.",
+    "subjectLabel": "Chủ đề",
+    "subjectPlaceholder": "Nội dung về vấn đề gì?",
+    "messageLabel": "Phản hồi của bạn",
+    "messagePlaceholder": "Viết tin nhắn của bạn tại đây",
+    "subjectRequired": "Hãy nhập chủ đề.",
+    "messageRequired": "Hãy viết phản hồi của bạn.",
+    "send": "Gửi phản hồi",
+    "sentTitle": "Cảm ơn bạn",
+    "sentBody": "Phản hồi của bạn đã được gửi dưới dạng phiếu {{number}}. Chúng tôi sẽ trả lời tới {{email}}.",
+    "done": "Xong"
   },
   "settings": {
     "quickReplies": {

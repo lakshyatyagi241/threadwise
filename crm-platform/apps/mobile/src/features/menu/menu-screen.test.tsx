@@ -100,6 +100,51 @@ describe('MenuScreen', () => {
     }
   });
 
+  describe('the tiles at the top', () => {
+    it('open the Menu with Settings, Feedback and Notifications side by side, each once', async () => {
+      await show({ ...session.permissions, 'inbox.savedreply.manage': 'all' });
+      const first = screen.getAllByRole('button').slice(0, 3);
+      expect(first.map((tile) => tile.props.accessibilityLabel)).toEqual([
+        'Settings',
+        'Feedback',
+        'Notifications',
+      ]);
+      // They replace the rows these pages had in the Workspace list, so each name is there once.
+      for (const name of ['Settings', 'Feedback', 'Notifications']) {
+        expect(screen.getAllByRole('button', { name })).toHaveLength(1);
+      }
+    });
+
+    it('open Feedback and Notifications, and Settings for someone who may use it', async () => {
+      await show({
+        ...session.permissions,
+        'support.ticket.create': 'all',
+        'inbox.savedreply.manage': 'all',
+      });
+      await press('Feedback');
+      expect(mockNavigate).toHaveBeenLastCalledWith('/feedback');
+      await press('Notifications');
+      expect(mockNavigate).toHaveBeenLastCalledWith('/notifications');
+      await press('Settings');
+      expect(mockNavigate).toHaveBeenLastCalledWith('/settings');
+    });
+
+    it('keep Feedback faded, and say why, for someone without the right to send it', async () => {
+      await show({ ...session.permissions });
+      expect(
+        screen.getByRole('button', { name: 'Feedback' }).props.accessibilityState.disabled,
+      ).toBe(true);
+      // Settings lists the team too, which everyone may open; Notifications is for everyone.
+      for (const name of ['Settings', 'Notifications']) {
+        expect(screen.getByRole('button', { name }).props.accessibilityState.disabled).toBe(false);
+      }
+      mockNavigate.mockClear();
+      await press('Feedback');
+      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(await screen.findByText(/don't have access to this/i)).toBeTruthy();
+    });
+  });
+
   describe('Workspace', () => {
     it('opens the inbox and the tasks for a person who may read them', async () => {
       await show({

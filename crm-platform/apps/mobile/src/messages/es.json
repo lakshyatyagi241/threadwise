@@ -557,7 +557,8 @@
       "failed": "No se pudo guardar tu elección. Inténtalo de nuevo."
     },
     "settings": "Ajustes",
-    "helpCenter": "Centro de ayuda"
+    "helpCenter": "Centro de ayuda",
+    "feedback": "Comentarios"
   },
   "help": {
     "title": "Ayuda",
@@ -588,6 +589,20 @@
     "updated": "Actualizado: {{label}}",
     "effective": "En vigor desde: {{label}}",
     "unavailable": "Este documento no está disponible en este momento."
+  },
+  "feedback": {
+    "title": "Enviar comentarios",
+    "intro": "Cuéntanos qué funciona, qué no o qué te gustaría ver. Leemos todos los mensajes y respondemos por correo.",
+    "subjectLabel": "Asunto",
+    "subjectPlaceholder": "¿De qué se trata?",
+    "messageLabel": "Tus comentarios",
+    "messagePlaceholder": "Escribe tu mensaje aquí",
+    "subjectRequired": "Escribe un asunto.",
+    "messageRequired": "Escribe tus comentarios.",
+    "send": "Enviar comentarios",
+    "sentTitle": "Gracias",
+    "sentBody": "Tus comentarios se enviaron como ticket {{number}}. Responderemos a {{email}}.",
+    "done": "Listo"
   },
   "settings": {
     "quickReplies": {

@@ -274,7 +274,8 @@
     "tabs.dashboard",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "tasks.form.minute"
+    "tasks.form.minute",
+    "menu.feedback"
   ],
   "es": [
     "auth.emailPlaceholder",
@@ -746,7 +747,8 @@
     "signUp.orgNamePlaceholder",
     "tabs.dashboard",
     "tabs.inbox",
-    "tabs.menu"
+    "tabs.menu",
+    "menu.feedback"
   ],
   "ja": [
     "auth.emailPlaceholder",
@@ -974,7 +976,8 @@
     "tasks.filter.status.open",
     "tasks.form.contact",
     "tasks.status.open",
-    "help.title"
+    "help.title",
+    "menu.feedback"
   ],
   "pl": [
     "calls.summary.purposes.demo",
@@ -1148,7 +1151,8 @@
     "settings.teams.strategies.manual",
     "tabs.menu",
     "tasks.details.status",
-    "tasks.filter.group.status"
+    "tasks.filter.group.status",
+    "menu.feedback"
   ],
   "ru": [
     "auth.emailPlaceholder",

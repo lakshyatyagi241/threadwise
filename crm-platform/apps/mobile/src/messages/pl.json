@@ -567,7 +567,8 @@
       "failed": "Nie udało się zapisać wyboru. Spróbuj ponownie."
     },
     "settings": "Ustawienia",
-    "helpCenter": "Centrum pomocy"
+    "helpCenter": "Centrum pomocy",
+    "feedback": "Opinie"
   },
   "help": {
     "title": "Pomoc",
@@ -598,6 +599,20 @@
     "updated": "Zaktualizowano: {{label}}",
     "effective": "Obowiązuje od: {{label}}",
     "unavailable": "Ten dokument jest teraz niedostępny."
+  },
+  "feedback": {
+    "title": "Wyślij opinię",
+    "intro": "Napisz, co działa, co nie działa albo co chciałbyś zobaczyć. Czytamy każdą wiadomość i odpowiadamy e-mailem.",
+    "subjectLabel": "Temat",
+    "subjectPlaceholder": "Czego dotyczy?",
+    "messageLabel": "Twoja opinia",
+    "messagePlaceholder": "Napisz tutaj swoją wiadomość",
+    "subjectRequired": "Wpisz temat.",
+    "messageRequired": "Napisz swoją opinię.",
+    "send": "Wyślij opinię",
+    "sentTitle": "Dziękujemy",
+    "sentBody": "Twoja opinia została wysłana jako zgłoszenie {{number}}. Odpowiemy na {{email}}.",
+    "done": "Gotowe"
   },
   "settings": {
     "quickReplies": {

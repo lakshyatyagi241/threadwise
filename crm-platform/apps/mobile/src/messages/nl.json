@@ -547,7 +547,8 @@
       "failed": "Je keuze kon niet worden opgeslagen. Probeer het opnieuw."
     },
     "settings": "Instellingen",
-    "helpCenter": "Helpcentrum"
+    "helpCenter": "Helpcentrum",
+    "feedback": "Feedback"
   },
   "help": {
     "title": "Help",
@@ -578,6 +579,20 @@
     "updated": "Bijgewerkt: {{label}}",
     "effective": "Geldig vanaf: {{label}}",
     "unavailable": "Dit document is op dit moment niet beschikbaar."
+  },
+  "feedback": {
+    "title": "Feedback sturen",
+    "intro": "Vertel ons wat werkt, wat niet werkt of wat je graag zou zien. We lezen elk bericht en antwoorden per e-mail.",
+    "subjectLabel": "Onderwerp",
+    "subjectPlaceholder": "Waar gaat het over?",
+    "messageLabel": "Je feedback",
+    "messagePlaceholder": "Schrijf hier je bericht",
+    "subjectRequired": "Vul een onderwerp in.",
+    "messageRequired": "Schrijf je feedback.",
+    "send": "Feedback sturen",
+    "sentTitle": "Bedankt",
+    "sentBody": "Je feedback is verstuurd als ticket {{number}}. We antwoorden naar {{email}}.",
+    "done": "Klaar"
   },
   "settings": {
     "quickReplies": {
