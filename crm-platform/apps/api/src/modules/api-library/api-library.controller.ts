@@ -14,14 +14,12 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createApiLibraryApiSchema,
-  deleteApiLibraryApiQuerySchema,
   listApiLibraryApisQuerySchema,
   listApiLibraryLogsQuerySchema,
   testApiLibraryApiSchema,
   testApiLibraryFunctionSchema,
   updateApiLibraryApiSchema,
   type CreateApiLibraryApiInput,
-  type DeleteApiLibraryApiQuery,
   type ListApiLibraryApisQuery,
   type ListApiLibraryLogsQuery,
   type TestApiLibraryApiInput,
@@ -128,13 +126,10 @@ export class ApiLibraryController {
   @ApiOperation({
     summary: 'Delete an API',
     description:
-      '409 ALIB_IN_USE (the flows are in `details`) while a flow calls it; `?force=true` deletes it anyway. Its logs stay.',
+      '409 ALIB_IN_USE (the flows are in `details`) while a flow calls it; nothing is deleted until they stop using it. Its logs stay.',
   })
-  async remove(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Query(zodPipe(deleteApiLibraryApiQuerySchema)) query: DeleteApiLibraryApiQuery,
-  ): Promise<void> {
-    await this.apis.remove(id, query.force);
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.apis.remove(id);
   }
 
   @Get('apis/:id/usage')

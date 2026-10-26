@@ -117,14 +117,10 @@ describe('apiLibraryApi', () => {
     expect(JSON.parse(init.body as string).headers[0].value).toBe('********');
   });
 
-  it('deletes plainly first and with force=true when flows use it', async () => {
+  it('deletes with a plain DELETE, with no force override', async () => {
     vi.stubGlobal('fetch', reply(204, undefined));
     await apiLibraryApi.remove(ID);
-    await apiLibraryApi.remove(ID, true);
-    expect(calls.map((c) => c.url)).toEqual([
-      `/api/v2/api-library/apis/${ID}`,
-      `/api/v2/api-library/apis/${ID}?force=true`,
-    ]);
+    expect(calls.map((c) => c.url)).toEqual([`/api/v2/api-library/apis/${ID}`]);
     expect(calls.every((c) => c.init.method === 'DELETE')).toBe(true);
   });
 
