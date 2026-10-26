@@ -16,8 +16,8 @@
       "failed": "실패",
       "source": {
         "test": "테스트",
-        "flow": "플로우",
-        "automation": "자동화"
+        "flow": "심플 플로우",
+        "automation": "어드밴스드 플로우"
       },
       "errorKind": {
         "blocked": "차단된 주소",
@@ -327,6 +327,7 @@
       "functionHint": "보내기 전에 JavaScript로 페이로드 형태를 바꿉니다. 선택 사항입니다.",
       "plainHttpWarning": "이 주소는 http://로 시작하므로 헤더의 비밀번호나 키가 암호화되지 않은 채 전송됩니다. 서버가 지원하면 https://를 사용하세요.",
       "importSkipped": "붙여넣은 명령은 파일({names})도 전송합니다. 여기서는 파일을 가져올 수 없어 제외했습니다. 나머지는 모두 채워졌습니다.",
+      "importForm": "붙여넣은 명령은 데이터를 웹 폼(a=1&b=2)으로 보냅니다. 이 API는 JSON 또는 multipart form-data로 보내므로 폼 필드를 JSON 객체로 바꿨습니다. 호출하는 API가 JSON을 받는지 확인하세요.",
       "payloadTypedHint": "실제 숫자나 예/아니요를 보내려면 변수를 따옴표 없이 쓰세요: {example}."
     },
     "test": {

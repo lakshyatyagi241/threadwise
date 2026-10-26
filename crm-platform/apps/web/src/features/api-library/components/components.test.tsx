@@ -323,7 +323,7 @@ describe('logs', () => {
     expect(page).toContain('>API<');
     expect(page).toContain('500');
     expect(page).toContain('1.50 s');
-    expect(page).toContain('Flow');
+    expect(page).toContain('Simple flow');
     expect(page).toContain('HTTP 500');
     expect(html(<LogsPanel apiId={ID} paging={paging} />)).not.toContain('>API</th>');
   });

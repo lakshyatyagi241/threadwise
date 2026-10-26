@@ -68,8 +68,27 @@ describe('parseCurl', () => {
     });
   });
 
-  it('keeps a body that is not JSON as text', () => {
-    expect(parseCurl(`curl https://a.test -d 'a=1&b=2'`)?.body).toBe('a=1&b=2');
+  it('keeps a body that is neither JSON nor a form as text', () => {
+    expect(parseCurl(`curl https://a.test -d 'hello world'`)?.body).toBe('hello world');
+  });
+
+  it('turns a web-form body into a JSON object and says so, instead of leaving text the JSON box rejects', () => {
+    const r = parseCurl(
+      `curl -X POST https://httpbin.org/post -H 'Content-Type: application/x-www-form-urlencoded' -d 'a=1&b=2'`,
+    );
+    expect(r?.body).toEqual({ a: '1', b: '2' });
+    expect(r?.payloadType).toBe('application/json');
+    expect(r?.headers.some((h) => h.key.toLowerCase() === 'content-type')).toBe(false);
+    expect(r?.skipped).toEqual([{ code: 'form', name: 'application/x-www-form-urlencoded' }]);
+    // curl sends -d as a form when no header says otherwise, and decodes the percent signs and plus signs the same way.
+    const bare = parseCurl(`curl https://a.test -d 'q=x%20y+z&k=1'`);
+    expect(bare?.body).toEqual({ q: 'x y z', k: '1' });
+    expect(bare?.skipped).toEqual([{ code: 'form', name: 'application/x-www-form-urlencoded' }]);
+    // a JSON body, or one with its own JSON header, is untouched
+    expect(parseCurl(`curl https://a.test -d '{"a":1}'`)?.skipped).toBeUndefined();
+    expect(parseCurl(`curl https://a.test -H 'Content-Type: text/plain' -d 'a=1'`)?.body).toBe(
+      'a=1',
+    );
   });
 
   it('returns null for anything that is not a curl command with an http address', () => {
@@ -90,9 +109,10 @@ describe('parseCurl', () => {
     expect(parseCurl(`curl -G https://a.test/s --data-urlencode 'a b'`)?.url).toBe(
       'https://a.test/s?a%20b',
     );
-    expect(parseCurl(`curl https://a.test/s --data-urlencode 'q=x y' -d 'k=1'`)?.body).toBe(
-      'q=x%20y&k=1',
-    );
+    expect(parseCurl(`curl https://a.test/s --data-urlencode 'q=x y' -d 'k=1'`)?.body).toEqual({
+      q: 'x y',
+      k: '1',
+    });
   });
 
   it('keeps --form-string text and says which file parts it could not take', () => {

@@ -16,8 +16,8 @@
       "failed": "Gagal",
       "source": {
         "test": "Uji",
-        "flow": "Alur",
-        "automation": "Otomatisasi"
+        "flow": "Alur sederhana",
+        "automation": "Alur lanjutan"
       },
       "errorKind": {
         "blocked": "Alamat diblokir",
@@ -327,6 +327,7 @@
       "functionHint": "Ubah bentuk payload dengan JavaScript sebelum dikirim. Opsional.",
       "plainHttpWarning": "Alamat ini dimulai dengan http://, jadi kata sandi atau kunci di header Anda akan dikirim tanpa enkripsi. Gunakan https:// jika server mendukungnya.",
       "importSkipped": "Perintah yang ditempel juga mengirim file ({names}). File tidak dapat diimpor di sini, jadi dilewati. Semua yang lain sudah terisi.",
+      "importForm": "Perintah yang ditempel mengirim datanya sebagai formulir web (a=1&b=2). API ini mengirim JSON atau multipart form-data, sehingga kolom formulir diubah menjadi objek JSON. Pastikan API yang Anda panggil menerima JSON.",
       "payloadTypedHint": "Untuk mengirim angka asli atau ya/tidak, tulis variabel tanpa tanda kutip: {example}."
     },
     "test": {

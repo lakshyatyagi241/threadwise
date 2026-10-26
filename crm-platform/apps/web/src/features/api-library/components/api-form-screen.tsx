@@ -120,9 +120,19 @@ export function ApiFormScreen({ id }: { id?: string }) {
   }
   return imported ? (
     <>
-      {imported.skipped && imported.skipped.length > 0 && (
+      {imported.skipped?.some((n) => n.code === 'file') && (
         <Alert tone="warning" className="mb-4">
-          {t('importSkipped', { names: imported.skipped.map((n) => n.name).join(', ') })}
+          {t('importSkipped', {
+            names: imported.skipped
+              .filter((n) => n.code === 'file')
+              .map((n) => n.name)
+              .join(', '),
+          })}
+        </Alert>
+      )}
+      {imported.skipped?.some((n) => n.code === 'form') && (
+        <Alert tone="warning" className="mb-4">
+          {t('importForm')}
         </Alert>
       )}
       <ApiForm key="import" initial={fromImport(imported)} />
