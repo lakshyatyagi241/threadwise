@@ -1,11 +1,14 @@
 'use client';
 
 import type { ApiLibraryOption } from '@crm/contracts';
+import { useTranslations } from 'next-intl';
 import { useApiLibraryOptions } from '@/features/api-library';
 import { Field, Notice, SelectInput, TextInput } from '../kit';
 import type { FormComponent, FormProps } from '../types';
 import { withSavedOption } from './helpers';
 import { Mono } from './shared';
+
+const NS = 'flb.builder.formsChannels.apiLibrary';
 
 export interface NodeInput {
   name: string;
@@ -40,6 +43,7 @@ export const readInputs = (v: unknown): NodeInput[] =>
  * variable the answer is saved under. Leaves by `success` on a 2xx answer, by `error` otherwise (docs/api/api-library.md, section 6).
  */
 function Body(p: FormProps) {
+  const t = useTranslations(NS);
   const { data: d, set, setMany } = p;
   const options = useApiLibraryOptions();
   const list = options.data?.data ?? [];
@@ -52,39 +56,37 @@ function Body(p: FormProps) {
     [
       {
         v: '',
-        l: options.isPending
-          ? 'Loading APIs…'
-          : list.length
-            ? '— pick an API —'
-            : 'No saved APIs yet',
+        l: options.isPending ? t('loading') : list.length ? t('pickApi') : t('noApis'),
       },
       ...list.map((a) => ({ v: a.id, l: `${a.name} (${a.method})` })),
     ],
     apiId,
     () =>
       options.isPending
-        ? String(d.apiName || 'Loading…')
-        : `${String(d.apiName || 'Saved API')} (not found)`,
+        ? String(d.apiName || t('loadingName'))
+        : t('notFound', { name: String(d.apiName || t('savedApiName')) }),
   );
 
   return (
     <>
       <Notice>
-        Runs an API you saved in the <b>API Library</b> for the contact of this run. It leaves by{' '}
-        <Mono>success</Mono> when the API answers 2xx, and by <Mono>error</Mono> for anything else.
+        {t.rich('introNotice', {
+          b: (chunks) => <b>{chunks}</b>,
+          mono: (chunks) => <Mono>{chunks}</Mono>,
+        })}
       </Notice>
       <Field
-        label="API"
+        label={t('apiLabel')}
         hint={
           <>
-            {options.isError ? 'Your saved APIs could not be loaded. ' : null}
+            {options.isError ? `${t('loadFailed')} ` : null}
             <a
               href="/api-library"
               target="_blank"
               rel="noreferrer"
               className="text-brand underline"
             >
-              Manage APIs
+              {t('manageApis')}
             </a>
             {' · '}
             <button
@@ -92,7 +94,7 @@ function Body(p: FormProps) {
               onClick={() => void options.refetch()}
               className="text-brand underline"
             >
-              Refresh list
+              {t('refreshList')}
             </button>
           </>
         }
@@ -109,16 +111,13 @@ function Body(p: FormProps) {
       </Field>
 
       {selected && selected.variables.length > 0 && (
-        <Field
-          label="Variables"
-          hint="Leave a value empty to use the run's variable of that name, then the contact's property, then the default. Values can use {{variables}}."
-        >
+        <Field label={t('variablesLabel')} hint={t('variablesHint', { example: '{{variables}}' })}>
           {selected.variables.map((v) => (
             <div key={v.name} className="mb-2">
               <div className="mb-1 font-mono text-[11px] text-muted-foreground">{v.name}</div>
               <TextInput
                 value={inputs.find((i) => i.name === v.name)?.value ?? ''}
-                placeholder={`Default: ${v.defaultValue}`}
+                placeholder={t('defaultPlaceholder', { value: v.defaultValue })}
                 onChange={(value) =>
                   set('inputs', inputsAfterEdit(selected, inputs, v.name, value))
                 }
@@ -129,23 +128,24 @@ function Body(p: FormProps) {
       )}
 
       <Field
-        label="Save response to"
+        label={t('saveLabel')}
         hint={
           <>
-            Later nodes read the answer as <Mono>{`{{${save}}}`}</Mono>, a field as{' '}
-            <Mono>{`{{${save}.FIELD}}`}</Mono> and the status as <Mono>{`{{${save}.status}}`}</Mono>
-            .
+            {t.rich('saveHint', {
+              mono: (chunks) => <Mono>{chunks}</Mono>,
+              variable: `{{${save}}}`,
+              field: `{{${save}.FIELD}}`,
+              status: `{{${save}.status}}`,
+            })}
             {selected && selected.responseVariables.length > 0 && (
               <>
                 {' '}
-                This API also exposes{' '}
-                {selected.responseVariables.map((r, i) => (
-                  <span key={r}>
-                    {i > 0 ? ', ' : ''}
-                    <Mono>{`{{${selected.name}.${r}}}`}</Mono>
-                  </span>
-                ))}
-                .
+                {t.rich('exposes', {
+                  mono: (chunks) => <Mono>{chunks}</Mono>,
+                  list: selected.responseVariables
+                    .map((r) => `{{${selected.name}.${r}}}`)
+                    .join(', '),
+                })}
               </>
             )}
           </>
