@@ -35,6 +35,8 @@ const NOT_PRESENT_TOKENS =
 export const CREDIT_WALLET_FIELDS: FieldMap = {
   _id: 'id (wallet_transactions.uuid and idempotency_key waboo:<client>:credit_log:<_id> are derived from it; registered in migration.id_map)',
   id: 'id (registered in migration.id_map when present)',
+  template_category:
+    'drop:the template category is kept on the usage charge (usage_charges), not on the wallet posting',
   workspace_id:
     'drop:the organization is per client; more than one distinct value stops the wallet part unless --credit-workspace-id picks the one',
   credits_deducted:
@@ -60,6 +62,8 @@ export const CREDIT_TOKEN_FIELDS: FieldMap = {
   _id: 'id (registered in migration.id_map: target ai_token_usage.id, the table has no source-key column)',
   id: 'id (registered in migration.id_map when present)',
   workspace_id: 'drop:the organization is per client (see credit_wallet)',
+  template_category:
+    'drop:the template category is kept on the usage charge (usage_charges), not on the token row',
   type: 'col:provider (openai_api -> openai; else the vendor prefix of the model; else "unknown" with a soft PROVIDER_GUESS)',
   model: 'col:model',
   input_tokens: 'col:prompt_tokens',

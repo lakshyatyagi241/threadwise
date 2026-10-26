@@ -62,6 +62,8 @@ const FLOW =
 const NODE_FIELDS: FieldMap = {
   _id: 'id (registered in migration.id_map; points at the flow the step went into)',
   id: 'id (registered in migration.id_map)',
+  response_hindi:
+    'drop:the Hindi copy of a reply has no column; the app keeps one language per reply here',
   botid: 'the bot (one flow per bot)',
   nodeId: `flows.flow_data: the step id (n_ + the first 8 characters)`,
   version_id: 'selects the latest version',
@@ -508,7 +510,13 @@ export const widgetAssistants: HandlerSpec = {
     (ctx?.flows?.widgetOrder ?? [])
       .filter((id) => ctx?.flows?.widgets.get(id)?.assistant)
       .map((id) => ({ id }) as Doc),
-  fields: { id: 'the bot id (bot_id)' },
+  fields: {
+    id: 'the bot id (bot_id)',
+    auto_assignment:
+      'drop:the auto-assignment switch is the workspace routing rule (routing_rules), set by the settings step',
+    enable_sentiment_intent_analytics:
+      'drop:the sentiment and intent analytics switch has no column in the app',
+  },
   tables: {
     ai_chat_assistants: {
       columns: [
