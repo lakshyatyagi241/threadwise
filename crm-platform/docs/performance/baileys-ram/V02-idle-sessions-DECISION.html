@@ -6,9 +6,10 @@
 <h2>What was built</h2>
 <table><tr><th>Piece</th><th>Behaviour</th></tr>
 <tr><td>Switch</td><td><code>WA_IDLE_UNLOAD_MINUTES</code> (default <b>0 = never</b>) and <code>WA_IDLE_WAKE_MINUTES</code> (default 15). With 0, nothing changes: a test pins that an open number is never touched, however long it is quiet.</td></tr>
-<tr><td>Idle</td><td>No message in or out for the unload time, the number open and past its first pairing, no QR showing. Any message in, send, action or group call counts as use.</td></tr>
+<tr><td>Idle</td><td>No message in or out for the unload time, the number open and past its first pairing, no QR showing. Any message in, send, action, group call, receipt, group event or history batch counts as use.</td></tr>
 <tr><td>Unload</td><td>The socket is closed and its five caches emptied (V-01). The saved session and the lease stay, so no other worker takes the number and nothing logs it out. The screens still show it connected: the owning worker keeps its heartbeat, so the stale-device sweep does not mark it disconnected.</td></tr>
 <tr><td>Wake for held messages</td><td>Every wake interval the number reconnects, takes what WhatsApp delivers, and goes back to sleep after 2 minutes if nothing arrived. A message that arrives keeps it up for the whole idle time again. No "connecting" or "open" status is reported, so the device screen does not flicker; a wake that fails is an ordinary drop with the normal statuses and retries.</td></tr>
+<tr><td>Wake limit</td><td>At most 25 numbers are woken per 20 s pass (75 a minute, enough for a thousand numbers on a 15 minute interval); the rest wait for the next pass. This keeps a fleet that unloaded together from outlasting the 90 s device lease in one pass.</td></tr>
 <tr><td>Wake for a send</td><td>A send, action or group call to an unloaded number wakes it and waits up to 30 s for the socket (a cold connect), not the usual 8 s.</td></tr>
 <tr><td>Worker heartbeat</td><td>Adds <code>ready</code>, <code>unloaded</code> and <code>rssMb</code> to each worker's <code>wa:worker:*</code> key, so production memory per open session can be read: (rssMb minus the worker's own base) divided by ready.</td></tr></table>
 
@@ -46,7 +47,7 @@
 
 <h2>Scripts</h2>
 <pre>cd apps/api
-npx vitest run test/unit/node-bridge-runtime/device-session.spec.ts     # 8 session tests + 3 runtime-pass tests for this change
+npx vitest run test/unit/node-bridge-runtime/device-session.spec.ts     # 13 session tests + 4 runtime-pass tests for this change
 node --expose-gc --import tsx ../../tools/perf/baileys-ram.mjs --mode churn --cycles 300 --label after   # unload/wake cycles do not leak (V-01)
 # switch (off by default):  WA_IDLE_UNLOAD_MINUTES=60  WA_IDLE_WAKE_MINUTES=15
 docker exec crm-platform-redis redis-cli --scan --pattern 'wa:worker:*' | xargs -r -n1 docker exec crm-platform-redis redis-cli get   # devices, ready, unloaded, rssMb</pre>
