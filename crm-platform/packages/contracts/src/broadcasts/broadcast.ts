@@ -8,7 +8,7 @@ import { uuidSchema } from '../common/ids';
  */
 
 /** `broadcasts.name` is validated to 255 in Reference. */
-export const BROADCAST_NAME_MAX = 255;
+export const BROADCAST_NAME_MAX = 100;
 /** Reference accepted `device_share` weights 0..1000; 0 and below fall back to 1 (equal share). */
 export const BROADCAST_SHARE_MAX = 1000;
 

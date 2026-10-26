@@ -138,6 +138,7 @@ export function CampaignTable({
                 <td className="max-w-[16rem] px-3 py-3">
                   <Link
                     href={wizardDraft ? editHref : `/campaigns/${c.id}`}
+                    title={c.name}
                     className="block truncate font-semibold hover:underline"
                   >
                     {c.name}

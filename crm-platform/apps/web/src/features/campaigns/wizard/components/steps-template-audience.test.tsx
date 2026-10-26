@@ -224,10 +224,10 @@ describe('step 1: name and template', () => {
     expect(out).toContain('<option value="authentication">Authentication</option>');
   });
 
-  it('the name is required, limited to 191 characters and labelled', () => {
+  it('the name is required, limited to 100 characters and labelled', () => {
     const out = step();
     expect(out).toContain('for="wizard-name"');
-    expect(out).toContain('maxLength="191"');
+    expect(out).toContain('maxLength="100"');
     expect(step({ name: 'October offer' })).toContain('value="October offer"');
   });
 

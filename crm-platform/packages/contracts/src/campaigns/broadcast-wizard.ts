@@ -38,7 +38,8 @@ export type WizardStep = (typeof WIZARD_STEPS)[number];
 /** 1-based, as the stepper numbers them. */
 export const WIZARD_STEP_COUNT = WIZARD_STEPS.length;
 
-export const WIZARD_NAME_MAX = 191;
+/** A campaign's name: at most 100 characters (a longer one already saved in a draft is cut to this when the draft is read). */
+export const WIZARD_NAME_MAX = 100;
 /** Groups and segments a single broadcast may name. */
 export const WIZARD_SOURCES_MAX = 100;
 /** Test numbers per send. */
@@ -318,7 +319,11 @@ export type WizardSequenceTemplate = z.infer<typeof wizardSequenceTemplateSchema
 
 export const wizardDraftSchema = z.object({
   /** Step 1. */
-  name: z.string().trim().max(WIZARD_NAME_MAX).default(''),
+  name: z
+    .string()
+    .trim()
+    .default('')
+    .transform((s) => s.slice(0, WIZARD_NAME_MAX)),
   templateId: uuidSchema.nullable().default(null),
   /** The WhatsApp number it is sent from, as the broadcast composer keys it: `<engine>:<uuid>` (`waba:...`). Required to launch. */
   senderKey: senderKeySchema.nullable().default(null),

@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { previousSendsAudienceSchema } from '../broadcasts/previous-sends';
 import { marketingMediaSchema } from '../broadcasts/marketing-media';
+import { WIZARD_NAME_MAX } from './broadcast-wizard';
 import { WIZARD_SENDERS_MAX, senderShareSchema } from './sender-split';
 
 /**
@@ -69,7 +70,7 @@ const buttonSchema = z.record(z.unknown());
 
 /** Everything a campaign carries apart from its audience. */
 const campaignFields = {
-  name: z.string().trim().min(1).max(191),
+  name: z.string().trim().min(1).max(WIZARD_NAME_MAX),
   /** `<engine>:<uuid>`. None picked leaves the campaign on the workspace's default engine. */
   senderKey: senderKeySchema.nullish(),
   /**
