@@ -1,4 +1,5 @@
-import { scrubEvent } from './scrub';
+import * as Sentry from '@sentry/nextjs';
+import { scrubEvent, scrubLog } from './scrub';
 
 /**
  * Settings shared by the browser, Node and edge entry points. Errors are always on once a DSN is present. Tracing is off unless
@@ -22,7 +23,14 @@ export function sentryOptions() {
     // Said as 0, not left out: with no rate the SDK still sends a transaction per request.
     tracesSampleRate: num(process.env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE),
     sendDefaultPii: false,
+    // A `console.error` is a caught failure someone chose to print, so it is an issue; a `console.warn` is a searchable Sentry log.
+    // Both go through the same scrub as an error report before they leave.
+    integrations: [
+      Sentry.captureConsoleIntegration({ levels: ['error'] }),
+      Sentry.consoleLoggingIntegration({ levels: ['warn'] }),
+    ],
     beforeSend: scrubEvent,
     beforeSendTransaction: scrubEvent,
+    beforeSendLog: scrubLog,
   };
 }

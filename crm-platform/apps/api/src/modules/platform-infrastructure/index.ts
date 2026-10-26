@@ -57,6 +57,8 @@ export {
   sentryEnabled,
   NO_EXTRA_DATA,
   reportServerError,
+  reportClientError,
+  scrubSentryLog,
   flushSentry,
   scrubSentryEvent,
   scrubSentrySpan,

@@ -4,7 +4,10 @@ import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
 import { ProblemExceptionFilter } from '../../../src/common/filters/problem-exception.filter';
 
-vi.mock('../../../src/modules/platform-infrastructure', () => ({ reportServerError: vi.fn() }));
+vi.mock('../../../src/modules/platform-infrastructure', () => ({
+  reportServerError: vi.fn(),
+  reportClientError: vi.fn(),
+}));
 
 /** Runs the filter with a response that records its headers. `preset` is a header a limiter already set. */
 function run(exception: unknown, preset: Record<string, string> = {}) {

@@ -11,7 +11,7 @@ import { ERROR_CODES, type Problem } from '@crm/contracts';
 import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
 import { maskSecretUrl } from '../logging/mask-secret-url';
-import { reportServerError } from '../../modules/platform-infrastructure';
+import { reportClientError, reportServerError } from '../../modules/platform-infrastructure';
 import { isDependencyOutage } from '../errors/dependency-outage';
 import { isDataExceptionDbError } from '../errors/data-exception.error';
 import { LEGAL_HOLD_BLOCKED_MESSAGE, isLegalHoldDbError } from '../errors/legal-hold.error';
@@ -57,16 +57,25 @@ export class ProblemExceptionFilter implements ExceptionFilter {
     // An AppError flagged `expected` is a 5xx that is a handled state (an integration that is switched off): quiet, like a 4xx.
     const expected = exception instanceof AppError && exception.expected;
     if (problem.status >= 500 && !expected) {
+      // Reported first, with its request id, path and module: the logger below also reaches Sentry (an error line is an issue), and
+      // Sentry keeps the first of two consecutive reports of the same exception, so the one with the tags is the one that stays.
+      reportServerError(exception, { requestId, path: request.url });
       this.logger.error(
         { err: exception, path: maskSecretUrl(request.url), requestId },
         `Unhandled error: ${problem.detail}`,
       );
-      reportServerError(exception, { requestId, path: request.url });
     } else {
       this.logger.debug(
         { path: maskSecretUrl(request.url), code: problem.code, requestId },
         problem.title,
       );
+      // Not an incident, but not invisible either: a Sentry log per refused or handled response.
+      reportClientError(problem.status, {
+        code: problem.code,
+        path: request.url,
+        requestId,
+        expected,
+      });
     }
 
     if (problem.code === ERROR_CODES.SERVICE_UNAVAILABLE) response.setHeader('Retry-After', '5');

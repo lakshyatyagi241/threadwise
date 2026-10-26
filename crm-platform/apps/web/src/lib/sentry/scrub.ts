@@ -56,6 +56,35 @@ interface ScrubbableEvent {
   };
   breadcrumbs?: Array<{ data?: Record<string, unknown>; message?: string; category?: string }>;
   contexts?: { trace?: { data?: Record<string, unknown> }; nextjs?: { request_path?: unknown } };
+  message?: string;
+  exception?: { values?: Array<{ value?: string }> };
+}
+
+/** The same secret segments and credential query parameters, found anywhere inside a sentence (a console message, an error text). */
+const TEXT_SECRETS = [
+  /(\/(?:q|i|reset-password|confirm-email-change)\/|\/b\/manage\/)[^/?#\s"']+/gi,
+  /([?&](?:[\w-]*(?:token|secret|password|signature|api[_-]?key|auth|code|otp|sig)|key)=)[^&#\s"']+/gi,
+];
+
+export function scrubText(text: string): string {
+  return TEXT_SECRETS.reduce((t, pattern) => t.replace(pattern, '$1[secret]'), text);
+}
+
+interface ScrubbableLog {
+  message?: unknown;
+  attributes?: Record<string, unknown>;
+}
+
+/** A Sentry log line: the message and every string attribute go through `scrubText`. */
+export function scrubLog<T extends ScrubbableLog>(log: T): T {
+  if (typeof log.message === 'string') log.message = scrubText(log.message) as T['message'];
+  const attrs = log.attributes;
+  if (attrs) {
+    for (const [key, value] of Object.entries(attrs)) {
+      if (typeof value === 'string') attrs[key] = scrubText(value);
+    }
+  }
+  return log;
 }
 
 /**
@@ -83,7 +112,12 @@ export function scrubEvent<T extends ScrubbableEvent>(event: T): T {
     delete req.data;
     delete req.query_string;
   }
+  if (event.message) event.message = scrubText(event.message);
+  for (const ex of event.exception?.values ?? []) {
+    if (ex.value) ex.value = scrubText(ex.value);
+  }
   for (const crumb of event.breadcrumbs ?? []) {
+    if (crumb.message) crumb.message = scrubText(crumb.message);
     const d = crumb.data;
     if (!d) continue;
     for (const key of ['url', 'from', 'to']) {
