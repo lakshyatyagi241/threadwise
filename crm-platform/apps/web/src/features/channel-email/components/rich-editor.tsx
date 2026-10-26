@@ -7,6 +7,7 @@ import {
   useState,
   type ClipboardEvent,
   type KeyboardEvent,
+  type ReactNode,
   type Ref,
 } from 'react';
 import { useTranslations } from 'next-intl';
@@ -47,6 +48,7 @@ export function RichEditor({
   testId = 'email-rich-editor',
   handleRef,
   className,
+  toolbarExtra,
 }: {
   initialHtml: string;
   /** Changing it loads `initialHtml` again (after a send, a new conversation, a switch from plain text). */
@@ -63,6 +65,8 @@ export function RichEditor({
   testId?: string;
   handleRef?: Ref<RichEditorHandle>;
   className?: string;
+  /** Controls added at the end of the button row (the composer puts Attach there). */
+  toolbarExtra?: ReactNode;
 }) {
   const t = useTranslations('email.composer.editor');
   const box = useRef<HTMLDivElement>(null);
@@ -154,19 +158,20 @@ export function RichEditor({
   };
 
   const tool =
-    'flex h-7 min-w-7 items-center justify-center rounded px-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
+    'flex h-7 min-w-7 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
   // Buttons must not take the selection away from the text.
   const keep = (e: { preventDefault: () => void }) => e.preventDefault();
 
-  // The formatting buttons sit under the box, like the tool row of the other channels' composer.
+  // The formatting buttons sit under the box as one tidy bar, like the tool row of the other channels' composer.
+  const sep = <span aria-hidden="true" className="mx-1 h-4 w-px shrink-0 bg-border" />;
   const toolbar = (
     <div
       role="toolbar"
       aria-label={t('toolbar')}
       data-testid="email-editor-toolbar"
-      className="mt-1 flex flex-wrap items-center gap-0.5"
+      className="mt-2 flex flex-wrap items-center gap-0.5 rounded-lg border border-border bg-muted/40 p-0.5"
     >
-      {BUTTONS.map((b) => (
+      {BUTTONS.slice(0, 3).map((b) => (
         <button
           key={b.id}
           type="button"
@@ -176,7 +181,28 @@ export function RichEditor({
           data-testid={`email-editor-${b.id}`}
           onMouseDown={keep}
           onClick={() => run(b.command)}
-          className={cn(tool, b.id === 'italic' && 'italic', b.id === 'underline' && 'underline')}
+          className={cn(
+            tool,
+            b.id === 'bold' && 'font-bold',
+            b.id === 'italic' && 'italic',
+            b.id === 'underline' && 'underline',
+          )}
+        >
+          {b.glyph}
+        </button>
+      ))}
+      {sep}
+      {BUTTONS.slice(3).map((b) => (
+        <button
+          key={b.id}
+          type="button"
+          disabled={disabled}
+          title={t(b.label)}
+          aria-label={t(b.label)}
+          data-testid={`email-editor-${b.id}`}
+          onMouseDown={keep}
+          onClick={() => run(b.command)}
+          className={tool}
         >
           {b.glyph}
         </button>
@@ -207,7 +233,18 @@ export function RichEditor({
         }}
         className={tool}
       >
-        🔗
+        <svg
+          viewBox="0 0 16 16"
+          className="size-3.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M6.5 9.5a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.8.8M9.5 6.5a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.8-.8" />
+        </svg>
       </button>
       <button
         type="button"
@@ -221,6 +258,12 @@ export function RichEditor({
       >
         Tx
       </button>
+      {toolbarExtra && (
+        <>
+          {sep}
+          {toolbarExtra}
+        </>
+      )}
     </div>
   );
   const linkBar = (

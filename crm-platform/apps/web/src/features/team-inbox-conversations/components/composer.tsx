@@ -594,6 +594,38 @@ export function Composer(props: ComposerProps) {
     </>
   );
 
+  // Email's Attach sits in the row under the box (beside the formatting buttons), not before the box.
+  const attachControl =
+    !isNote && !groupBlocked && props.canAttach && isEmail ? (
+      <>
+        <input
+          ref={input}
+          type="file"
+          multiple
+          onChange={(e) => {
+            staged.add(Array.from(e.target.files ?? []));
+            e.target.value = '';
+          }}
+          className="sr-only"
+          tabIndex={-1}
+          data-testid="email-file-input"
+          aria-label={t('attach')}
+        />
+        <button
+          type="button"
+          title={t('attach')}
+          aria-label={t('attach')}
+          data-testid="email-attach-button"
+          disabled={disabled}
+          onClick={() => input.current?.click()}
+          className="flex h-7 items-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+        >
+          <PaperclipIcon className="size-3.5" />
+          {t('attach')}
+        </button>
+      </>
+    ) : null;
+
   return (
     <div
       className={cn(
@@ -721,7 +753,7 @@ export function Composer(props: ComposerProps) {
       {isEmail && !isNote && !groupBlocked && (
         <EmailSendProblem problem={props.email?.sendProblem ?? null} bodyTooLong={bodyTooLong} />
       )}
-      <div className={cn('relative flex gap-2 p-3', richEmail ? 'items-start pb-1' : 'items-end')}>
+      <div className={cn('relative flex gap-2 p-3', richEmail ? 'items-start pb-0' : 'items-end')}>
         {showSavedReplies && (
           <SavedReplyPicker
             key={conversationId}
@@ -759,34 +791,6 @@ export function Composer(props: ComposerProps) {
             <ShareIcon />
           </button>
         )}
-        {!isNote && !groupBlocked && props.canAttach && isEmail && (
-          <>
-            <input
-              ref={input}
-              type="file"
-              multiple
-              onChange={(e) => {
-                staged.add(Array.from(e.target.files ?? []));
-                e.target.value = '';
-              }}
-              className="sr-only"
-              tabIndex={-1}
-              data-testid="email-file-input"
-              aria-label={t('attach')}
-            />
-            <button
-              type="button"
-              title={t('attach')}
-              aria-label={t('attach')}
-              data-testid="email-attach-button"
-              disabled={disabled}
-              onClick={() => input.current?.click()}
-              className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
-            >
-              <PaperclipIcon />
-            </button>
-          </>
-        )}
         {richEmail && !groupBlocked ? (
           <RichEditor
             handleRef={editor}
@@ -801,6 +805,7 @@ export function Composer(props: ComposerProps) {
             }
             describedBy={hintId}
             testId="inbox-composer"
+            toolbarExtra={attachControl}
           />
         ) : (
           <div className="relative min-w-0 flex-1">
@@ -893,8 +898,9 @@ export function Composer(props: ComposerProps) {
       {isEmail && !isNote && !groupBlocked && (
         <div
           data-testid="email-tools"
-          className="flex flex-wrap items-center gap-x-1 gap-y-1 pe-3 ps-[3.75rem] pb-1 text-xs"
+          className="flex flex-wrap items-center gap-x-1 gap-y-1 px-3 pb-1 pt-1.5 text-xs"
         >
+          {!richEmail && attachControl}
           <EmailTemplatePicker
             conversationId={conversationId}
             hasDraft={richEmail ? !emailBodyBlank : trimmed.length > 0}
