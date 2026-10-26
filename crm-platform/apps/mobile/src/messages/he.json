@@ -584,6 +584,11 @@
     "web": "פתח את מרכז העזרה המלא",
     "webHint": "נפתח בדפדפן שלך"
   },
+  "legal": {
+    "updated": "עודכן: {{label}}",
+    "effective": "בתוקף מ: {{label}}",
+    "unavailable": "המסמך הזה אינו זמין כרגע."
+  },
   "settings": {
     "quickReplies": {
       "title": "תגובות שמורות",

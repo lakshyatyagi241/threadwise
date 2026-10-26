@@ -564,6 +564,11 @@
     "web": "전체 도움말 센터 열기",
     "webHint": "브라우저에서 열립니다"
   },
+  "legal": {
+    "updated": "업데이트: {{label}}",
+    "effective": "시행일: {{label}}",
+    "unavailable": "이 문서는 현재 사용할 수 없습니다."
+  },
   "settings": {
     "quickReplies": {
       "title": "저장된 답변",

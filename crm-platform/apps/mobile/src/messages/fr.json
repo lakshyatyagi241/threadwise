@@ -584,6 +584,11 @@
     "web": "Ouvrir le Centre d'aide complet",
     "webHint": "S'ouvre dans votre navigateur"
   },
+  "legal": {
+    "updated": "Mis à jour : {{label}}",
+    "effective": "En vigueur : {{label}}",
+    "unavailable": "Ce document n'est pas disponible pour le moment."
+  },
   "settings": {
     "quickReplies": {
       "title": "Réponses enregistrées",

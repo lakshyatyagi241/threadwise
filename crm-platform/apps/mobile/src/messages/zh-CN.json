@@ -564,6 +564,11 @@
     "web": "打开完整的帮助中心",
     "webHint": "将在浏览器中打开"
   },
+  "legal": {
+    "updated": "更新时间：{{label}}",
+    "effective": "生效时间：{{label}}",
+    "unavailable": "此文档目前无法查看。"
+  },
   "settings": {
     "quickReplies": {
       "title": "快捷回复",

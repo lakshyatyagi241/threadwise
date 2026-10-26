@@ -564,6 +564,11 @@
     "web": "ヘルプセンターをすべて開く",
     "webHint": "ブラウザで開きます"
   },
+  "legal": {
+    "updated": "更新日：{{label}}",
+    "effective": "施行日：{{label}}",
+    "unavailable": "この文書は現在利用できません。"
+  },
   "settings": {
     "quickReplies": {
       "title": "返信テンプレート",

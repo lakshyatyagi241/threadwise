@@ -614,6 +614,11 @@
     "web": "فتح مركز المساعدة الكامل",
     "webHint": "يُفتح في المتصفح"
   },
+  "legal": {
+    "updated": "آخر تحديث: {{label}}",
+    "effective": "تاريخ السريان: {{label}}",
+    "unavailable": "هذا المستند غير متاح حاليًا."
+  },
   "settings": {
     "quickReplies": {
       "title": "الردود المحفوظة",

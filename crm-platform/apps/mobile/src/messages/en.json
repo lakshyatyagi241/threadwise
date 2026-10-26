@@ -574,6 +574,11 @@
     "web": "Open the full Help Center",
     "webHint": "Opens in your browser"
   },
+  "legal": {
+    "updated": "Updated: {{label}}",
+    "effective": "Effective: {{label}}",
+    "unavailable": "This document is not available right now."
+  },
   "settings": {
     "quickReplies": {
       "title": "Saved replies",

@@ -1,4 +1,4 @@
-import { resolveLegalUrl } from './legal-url';
+import { legalSlugOf, resolveLegalUrl } from './legal-url';
 
 const WEB = 'https://app.example.com';
 
@@ -40,5 +40,26 @@ describe('resolveLegalUrl', () => {
   it('copes with nothing', () => {
     expect(resolveLegalUrl(null, WEB)).toBeNull();
     expect(resolveLegalUrl('   ', WEB)).toBeNull();
+  });
+});
+
+describe('legalSlugOf', () => {
+  it('names the document for a site path, or the same path on the web app', () => {
+    expect(legalSlugOf('/legal/terms', WEB)).toBe('terms');
+    expect(legalSlugOf(' /legal/privacy/ ', undefined)).toBe('privacy');
+    expect(legalSlugOf('/legal/acceptable-use', undefined)).toBe('acceptable-use');
+    expect(legalSlugOf('https://app.example.com/legal/cookies', WEB)).toBe('cookies');
+    expect(legalSlugOf('https://app.example.com/legal/terms#sec-3', WEB)).toBe('terms');
+  });
+
+  it("is null for anything that is not one of the platform's own documents", () => {
+    expect(legalSlugOf('https://other.example.com/legal/terms', WEB)).toBeNull();
+    expect(legalSlugOf('https://app.example.com/legal/terms', undefined)).toBeNull();
+    expect(legalSlugOf('/legal/unknown', WEB)).toBeNull();
+    expect(legalSlugOf('/terms', WEB)).toBeNull();
+    expect(legalSlugOf('//evil.example.com/legal/terms', WEB)).toBeNull();
+    expect(legalSlugOf('javascript:alert(1)', WEB)).toBeNull();
+    expect(legalSlugOf('', WEB)).toBeNull();
+    expect(legalSlugOf(null, WEB)).toBeNull();
   });
 });

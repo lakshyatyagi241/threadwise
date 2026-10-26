@@ -9,13 +9,14 @@ import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { useLegalLinks } from './use-legal-links';
+import { useLegalLinks, type LegalTarget } from './use-legal-links';
 
 const FADED = 0.4;
 
 /**
- * Data & Security (route /data-security, from the menu), as in the Geta app: the Terms of Use and the Privacy Policy, which open in
- * the browser at the addresses the platform administrator set, and the request for account deletion, which is the app's own screen
+ * Data & Security (route /data-security, from the menu), as in the Geta app: the Terms of Use and the Privacy Policy, which open on the
+ * app's own screen (`/legal/[slug]`) when they are the platform's own documents, and in the browser when the platform administrator
+ * pointed them at another address, and the request for account deletion, which is the app's own screen
  * (`/delete-account`). A policy with no address the app can open stays in the list, faded, and says so when pressed.
  */
 export function DataSecurityScreen() {
@@ -25,13 +26,16 @@ export function DataSecurityScreen() {
   const links = useLegalLinks();
   const [unavailable, setUnavailable] = useState(false);
 
-  const open = (url: string | null) => {
-    if (!url) {
+  const open = (target: LegalTarget) => {
+    if (target.slug) {
+      setUnavailable(false);
+      router.navigate({ pathname: '/legal/[slug]', params: { slug: target.slug } });
+    } else if (target.url) {
+      setUnavailable(false);
+      void Linking.openURL(target.url);
+    } else {
       setUnavailable(true);
-      return;
     }
-    setUnavailable(false);
-    void Linking.openURL(url);
   };
 
   return (
@@ -49,13 +53,13 @@ export function DataSecurityScreen() {
         <Row
           icon="document-text"
           label={t('dataSecurity.terms')}
-          faded={links.terms === null}
+          faded={!links.terms.slug && !links.terms.url}
           onPress={() => open(links.terms)}
         />
         <Row
           icon="shield-checkmark"
           label={t('dataSecurity.privacy')}
-          faded={links.privacy === null}
+          faded={!links.privacy.slug && !links.privacy.url}
           onPress={() => open(links.privacy)}
         />
         <Row

@@ -574,6 +574,11 @@
     "web": "Tam Yardım Merkezi'ni aç",
     "webHint": "Tarayıcınızda açılır"
   },
+  "legal": {
+    "updated": "Güncellendi: {{label}}",
+    "effective": "Yürürlük tarihi: {{label}}",
+    "unavailable": "Bu belge şu anda kullanılamıyor."
+  },
   "settings": {
     "quickReplies": {
       "title": "Hazır yanıtlar",

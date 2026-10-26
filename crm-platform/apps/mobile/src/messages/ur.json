@@ -574,6 +574,11 @@
     "web": "مکمل مدد مرکز کھولیں",
     "webHint": "براؤزر میں کھلتا ہے"
   },
+  "legal": {
+    "updated": "تازہ کاری: {{label}}",
+    "effective": "نافذ العمل: {{label}}",
+    "unavailable": "یہ دستاویز اس وقت دستیاب نہیں ہے۔"
+  },
   "settings": {
     "quickReplies": {
       "title": "محفوظ جوابات",

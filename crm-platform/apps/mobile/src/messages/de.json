@@ -574,6 +574,11 @@
     "web": "Vollständiges Hilfezentrum öffnen",
     "webHint": "Wird im Browser geöffnet"
   },
+  "legal": {
+    "updated": "Aktualisiert: {{label}}",
+    "effective": "Gültig ab: {{label}}",
+    "unavailable": "Dieses Dokument ist derzeit nicht verfügbar."
+  },
   "settings": {
     "quickReplies": {
       "title": "Gespeicherte Antworten",

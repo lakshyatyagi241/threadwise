@@ -564,6 +564,11 @@
     "web": "Mở Trung tâm trợ giúp đầy đủ",
     "webHint": "Mở trong trình duyệt của bạn"
   },
+  "legal": {
+    "updated": "Cập nhật: {{label}}",
+    "effective": "Có hiệu lực: {{label}}",
+    "unavailable": "Hiện không thể xem tài liệu này."
+  },
   "settings": {
     "quickReplies": {
       "title": "Trả lời nhanh",

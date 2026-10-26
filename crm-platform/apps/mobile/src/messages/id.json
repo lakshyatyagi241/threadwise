@@ -564,6 +564,11 @@
     "web": "Buka Pusat Bantuan lengkap",
     "webHint": "Dibuka di browser Anda"
   },
+  "legal": {
+    "updated": "Diperbarui: {{label}}",
+    "effective": "Berlaku sejak: {{label}}",
+    "unavailable": "Dokumen ini sedang tidak tersedia."
+  },
   "settings": {
     "quickReplies": {
       "title": "Balasan tersimpan",

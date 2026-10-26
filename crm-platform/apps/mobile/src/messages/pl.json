@@ -594,6 +594,11 @@
     "web": "Otwórz pełne Centrum pomocy",
     "webHint": "Otwiera się w przeglądarce"
   },
+  "legal": {
+    "updated": "Zaktualizowano: {{label}}",
+    "effective": "Obowiązuje od: {{label}}",
+    "unavailable": "Ten dokument jest teraz niedostępny."
+  },
   "settings": {
     "quickReplies": {
       "title": "Szablony odpowiedzi",

@@ -43,12 +43,32 @@ describe('DataSecurityScreen', () => {
     }
   });
 
-  it('opens the terms and the policy in the browser, at the addresses the administrator set', async () => {
+  it("opens the platform's own terms on the app's own screen, and a policy pointed elsewhere in the browser", async () => {
     await show();
     await press('Terms of Use');
-    expect(Linking.openURL).toHaveBeenLastCalledWith('https://app.example.test/legal/terms');
+    expect(mockNavigate).toHaveBeenLastCalledWith({
+      pathname: '/legal/[slug]',
+      params: { slug: 'terms' },
+    });
+    expect(Linking.openURL).not.toHaveBeenCalled();
     await press('Privacy Policy');
     expect(Linking.openURL).toHaveBeenLastCalledWith('https://policy.example.test/privacy');
+  });
+
+  it("opens the app's own screen for each when no address is set, or the web address of the document is", async () => {
+    linksCall.mockResolvedValue(links('', 'https://app.example.test/legal/privacy'));
+    await show();
+    await press('Terms of Use');
+    expect(mockNavigate).toHaveBeenLastCalledWith({
+      pathname: '/legal/[slug]',
+      params: { slug: 'terms' },
+    });
+    await press('Privacy Policy');
+    expect(mockNavigate).toHaveBeenLastCalledWith({
+      pathname: '/legal/[slug]',
+      params: { slug: 'privacy' },
+    });
+    expect(Linking.openURL).not.toHaveBeenCalled();
   });
 
   it('says so when an address cannot be opened, instead of opening something else', async () => {

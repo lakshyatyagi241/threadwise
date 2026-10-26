@@ -574,6 +574,11 @@
     "web": "Open het volledige Helpcentrum",
     "webHint": "Opent in je browser"
   },
+  "legal": {
+    "updated": "Bijgewerkt: {{label}}",
+    "effective": "Geldig vanaf: {{label}}",
+    "unavailable": "Dit document is op dit moment niet beschikbaar."
+  },
   "settings": {
     "quickReplies": {
       "title": "Opgeslagen antwoorden",

@@ -584,6 +584,11 @@
     "web": "Apri il Centro assistenza completo",
     "webHint": "Si apre nel browser"
   },
+  "legal": {
+    "updated": "Aggiornato: {{label}}",
+    "effective": "In vigore da: {{label}}",
+    "unavailable": "Questo documento non è disponibile al momento."
+  },
   "settings": {
     "quickReplies": {
       "title": "Risposte salvate",
