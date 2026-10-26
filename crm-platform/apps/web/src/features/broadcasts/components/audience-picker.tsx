@@ -40,6 +40,8 @@ export function AudiencePicker({
   onSegments,
   onContacts,
   email = false,
+  match,
+  onMatch,
 }: {
   tags: TagResponse[];
   groups: ContactGroupResponse[];
@@ -60,6 +62,9 @@ export function AudiencePicker({
   onContacts: (ids: string[]) => void;
   /** An email campaign: the table shows each contact's email address (and says when there is none) instead of the phone. */
   email?: boolean;
+  /** Only where the caller can choose how the picks combine: `any` (one of them) or `all` (one of each kind picked). */
+  match?: 'any' | 'all';
+  onMatch?: (match: 'any' | 'all') => void;
 }) {
   const t = useTranslations('broadcasts.compose');
   const [q, setQ] = useState('');
@@ -113,6 +118,27 @@ export function AudiencePicker({
           {t('selected', { count })}
         </span>
       </div>
+
+      {match && onMatch ? (
+        <div role="radiogroup" aria-label={t('matchTitle')} className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="text-xs text-muted-foreground">{t('matchTitle')}</span>
+          {(['any', 'all'] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              role="radio"
+              aria-checked={match === m}
+              onClick={() => onMatch(m)}
+              className={cn(
+                'rounded-full border px-3 py-1 text-xs font-medium',
+                match === m ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:bg-muted',
+              )}
+            >
+              {m === 'any' ? t('matchAny') : t('matchAll')}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <ChipRow
         label={t('segments')}
@@ -200,6 +226,7 @@ export function AudiencePicker({
         )}
       </div>
 
+      <h3 className="mb-2 mt-4 text-sm font-semibold">{t('contactsHeading')}</h3>
       <div className="relative mb-3">
         <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
         <Input

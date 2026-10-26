@@ -158,7 +158,11 @@
       "contactsDenied": "אין לכם גישה לרשימת אנשי הקשר. בחרו אנשי קשר דרך קבוצות או תגיות.",
       "unofficialDisabled": "שליחה דרך מספרי WhatsApp אישיים (ה-API הלא רשמי) אינה מופעלת בסביבת העבודה שלכם. בחרו מספר רשמי של WhatsApp Business API.",
       "colEmail": "אימייל",
-      "noEmail": "אין כתובת אימייל"
+      "noEmail": "אין כתובת אימייל",
+      "contactsHeading": "אנשי קשר",
+      "matchTitle": "התאמה לקבוצות, לתגיות ולסגמנטים שנבחרו",
+      "matchAny": "אחד מהם",
+      "matchAll": "כולם"
     },
     "overrides": {
       "title": "מילוי השליחה הזו",

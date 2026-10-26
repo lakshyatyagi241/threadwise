@@ -158,7 +158,11 @@
       "contactsDenied": "連絡先リストへのアクセス権がありません。グループまたはタグから連絡先を選択してください。",
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
       "colEmail": "メール",
-      "noEmail": "メールアドレスなし"
+      "noEmail": "メールアドレスなし",
+      "contactsHeading": "連絡先",
+      "matchTitle": "選んだグループ・タグ・セグメントに一致させる",
+      "matchAny": "いずれか",
+      "matchAll": "すべて"
     },
     "overrides": {
       "title": "この送信の内容を入力",
