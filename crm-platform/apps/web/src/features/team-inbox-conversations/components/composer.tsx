@@ -721,7 +721,7 @@ export function Composer(props: ComposerProps) {
       {isEmail && !isNote && !groupBlocked && (
         <EmailSendProblem problem={props.email?.sendProblem ?? null} bodyTooLong={bodyTooLong} />
       )}
-      <div className={cn('relative flex gap-2 p-3', richEmail ? 'items-start' : 'items-end')}>
+      <div className={cn('relative flex gap-2 p-3', richEmail ? 'items-start pb-1' : 'items-end')}>
         {showSavedReplies && (
           <SavedReplyPicker
             key={conversationId}
@@ -893,7 +893,7 @@ export function Composer(props: ComposerProps) {
       {isEmail && !isNote && !groupBlocked && (
         <div
           data-testid="email-tools"
-          className="flex flex-wrap items-start gap-x-3 gap-y-1 px-3 pb-1 text-xs"
+          className="flex flex-wrap items-center gap-x-1 gap-y-1 pe-3 ps-[3.75rem] pb-1 text-xs"
         >
           <EmailTemplatePicker
             conversationId={conversationId}

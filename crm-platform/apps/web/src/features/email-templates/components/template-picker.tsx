@@ -76,6 +76,7 @@ export function EmailTemplatePicker({
           type="button"
           variant="ghost"
           size="sm"
+          className="h-7 gap-1 px-2 text-xs font-normal leading-none text-muted-foreground hover:text-foreground [&_svg]:size-3.5"
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}

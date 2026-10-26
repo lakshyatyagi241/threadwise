@@ -49,7 +49,7 @@ export function EmailExtrasFields({
           data-testid="email-extras-toggle"
           aria-expanded={false}
           onClick={() => setOpen(true)}
-          className="rounded text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex h-7 items-center rounded px-2 text-xs text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
         >
           {t('toggle')}
         </button>
