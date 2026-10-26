@@ -290,7 +290,8 @@ const SCRIPT = `
       cc.addEventListener('change', function () { ccPicked = cc.options[cc.selectedIndex].dataset.code || ''; });
     }
     // The visitor's own pick wins over the default, so a wrong answer (the question is asked again) does not reset the list.
-    var want = ccPicked || String((h && h.country) || ((navigator.language || '').split('-')[1] || '') || 'IN').toUpperCase();
+    // Until the visitor picks one, India (or the country the question names).
+    var want = ccPicked || String((h && h.country) || 'IN').toUpperCase();
     for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
   }
   function setHint(h) {
@@ -1473,28 +1474,38 @@ const SCRIPT = `
   $('txt').addEventListener('input', syncSend);
 
   // Replies a person typed in the team inbox arrive here: every business message not drawn yet is shown once.
+  // It asks every 4 seconds while something is happening and backs off (8, 16, 32, 60 s) while nothing new arrives; it stops while the tab is hidden.
+  var POLL_BASE_MS = 4000, POLL_MAX_MS = 60000, pollMs = POLL_BASE_MS, pollTimer = null;
+  function schedulePoll() {
+    if (pollTimer) clearTimeout(pollTimer);
+    pollTimer = document.hidden ? null : setTimeout(poll, pollMs);
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { pollMs = POLL_BASE_MS; poll(); } else schedulePoll(); });
   function poll() {
     if (PREVIEW) return;
     fetch(withVid(API_HIS + '?since=' + lastSeenMsgId), { credentials: 'include' })
       .then(function (res) { return res.ok ? res.json() : { messages: [] }; })
       .then(function (json) {
         var list = json.messages || [];
+        pollMs = list.length ? POLL_BASE_MS : Math.min(pollMs * 2, POLL_MAX_MS);
         list.forEach(function (m, i) {
           if (!document.querySelector('[data-id="' + m.id + '"]')) addBubble('in', m.body || '', { id: m.id, at: m.at, cards: m.cards, links: m.links, media: m.media, input: i === list.length - 1 ? m.input : null, buttons: i === list.length - 1 ? m.buttons : null });
           if (m.id > lastSeenMsgId) lastSeenMsgId = m.id;
         });
       })
-      .catch(function () {});
+      .catch(function () { pollMs = Math.min(pollMs * 2, POLL_MAX_MS); })
+      .then(schedulePoll);
   }
   $('msgs').addEventListener('scroll', function () { $('latest').style.display = nearBottom() ? 'none' : 'flex'; }, { passive: true });
   $('latest').addEventListener('click', toBottom);
   $('mic').addEventListener('click', startVoice);
   $('vend').addEventListener('click', stopVoice);
   $('vtype').addEventListener('click', function () { stopVoice(); $('txt').focus(); });
-  setInterval(poll, 4000);
+  schedulePoll();
   var burstTimer = null;
   function burstPoll() {
     if (burstTimer) clearInterval(burstTimer);
+    pollMs = POLL_BASE_MS;
     var left = 20;
     burstTimer = setInterval(function () {
       poll();
