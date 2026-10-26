@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useDeferredValue, useState } from 'react';
-import type { ApiLibraryLogApi } from '@crm/contracts';
+import type { ApiLibraryLogApi, ApiLibraryLogBot } from '@crm/contracts';
 import { Button, EmptyState, cn, useToast } from '@crm/ui';
 import { apiLibraryApi } from '../api/service';
 import { useApiLogs } from '../api/hooks';
@@ -30,6 +30,7 @@ import { useFallBackToLastPage, type Paging } from './use-paging';
 export function LogsPanel({
   apiId,
   apis,
+  bots,
   paging,
   enabled = true,
 }: {
@@ -37,6 +38,7 @@ export function LogsPanel({
   /** Where the page and size live: the URL on the full page, the drawer's own state on a list row. */
   paging: Paging;
   apis?: ApiLibraryLogApi[];
+  bots?: ApiLibraryLogBot[];
   enabled?: boolean;
 }) {
   const t = useTranslations('api-library.logs');
@@ -83,6 +85,7 @@ export function LogsPanel({
             if (paging.page > 1) paging.setPage(1, { replace: true });
           }}
           apis={apis}
+          bots={bots}
           searchInvalid={tooLong || searchRefused}
         />
       </div>

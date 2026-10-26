@@ -115,7 +115,8 @@
         "source": "מקור",
         "result": "תוצאה",
         "statusCode": "קוד סטטוס",
-        "duration": "משך"
+        "duration": "משך",
+        "bot": "בוט"
       },
       "openLog": "פתח את הריצה מ-{when}",
       "drawerTitle": "יומנים: {name}",
@@ -140,7 +141,9 @@
         "to": "עד",
         "clear": "נקה מסננים",
         "deletedApi": "{name} (נמחק)",
-        "searchTooLong": "החיפוש יכול להכיל עד {max} תווים. קצרו אותו כדי לחפש."
+        "searchTooLong": "החיפוש יכול להכיל עד {max} תווים. קצרו אותו כדי לחפש.",
+        "bot": "בוט",
+        "allBots": "כל הבוטים"
       },
       "detail": {
         "title": "פרטי יומן API",
@@ -174,7 +177,8 @@
       },
       "unsaved": "לא נשמר",
       "export": "ייצוא ל-CSV",
-      "exporting": "מייצא…"
+      "exporting": "מייצא…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "הוסף משתנה ל-{label}",

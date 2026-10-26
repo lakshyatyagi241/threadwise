@@ -115,7 +115,8 @@
         "source": "ماخذ",
         "result": "نتیجہ",
         "statusCode": "اسٹیٹس کوڈ",
-        "duration": "دورانیہ"
+        "duration": "دورانیہ",
+        "bot": "بوٹ"
       },
       "openLog": "{when} کا رن کھولیں",
       "drawerTitle": "لاگز: {name}",
@@ -140,7 +141,9 @@
         "to": "تک",
         "clear": "فلٹرز صاف کریں",
         "deletedApi": "{name} (حذف شدہ)",
-        "searchTooLong": "تلاش زیادہ سے زیادہ {max} حروف کی ہو سکتی ہے۔ تلاش کے لیے اسے مختصر کریں۔"
+        "searchTooLong": "تلاش زیادہ سے زیادہ {max} حروف کی ہو سکتی ہے۔ تلاش کے لیے اسے مختصر کریں۔",
+        "bot": "بوٹ",
+        "allBots": "تمام بوٹس"
       },
       "detail": {
         "title": "API لاگ کی تفصیلات",
@@ -174,7 +177,8 @@
       },
       "unsaved": "محفوظ نہیں",
       "export": "CSV برآمد کریں",
-      "exporting": "برآمد ہو رہا ہے…"
+      "exporting": "برآمد ہو رہا ہے…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "{label} میں ایک متغیر داخل کریں",

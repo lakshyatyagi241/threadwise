@@ -115,7 +115,8 @@
         "source": "Bron",
         "result": "Resultaat",
         "statusCode": "Statuscode",
-        "duration": "Duur"
+        "duration": "Duur",
+        "bot": "Bot"
       },
       "openLog": "Open de uitvoering van {when}",
       "drawerTitle": "Logs: {name}",
@@ -140,7 +141,9 @@
         "to": "Tot",
         "clear": "Filters wissen",
         "deletedApi": "{name} (verwijderd)",
-        "searchTooLong": "Zoeken mag maximaal {max} tekens bevatten. Korter het om te zoeken."
+        "searchTooLong": "Zoeken mag maximaal {max} tekens bevatten. Korter het om te zoeken.",
+        "bot": "Bot",
+        "allBots": "Alle bots"
       },
       "detail": {
         "title": "Details API-log",
@@ -174,7 +177,8 @@
       },
       "unsaved": "Niet opgeslagen",
       "export": "CSV exporteren",
-      "exporting": "Bezig met exporteren…"
+      "exporting": "Bezig met exporteren…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Een variabele invoegen in {label}",

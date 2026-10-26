@@ -2,6 +2,7 @@ import {
   apiLibraryContactPropertiesResponseSchema,
   apiLibraryDetailSchema,
   apiLibraryLogApisResponseSchema,
+  apiLibraryLogBotsResponseSchema,
   apiLibraryLogDetailSchema,
   apiLibraryOptionsResponseSchema,
   apiLibraryUsageResponseSchema,
@@ -28,7 +29,10 @@ export interface PageQuery {
 export type ApisQuery = PageQuery & { search?: string; method?: ApiLibraryMethod };
 export type LogsQuery = PageQuery &
   Partial<
-    Pick<ListApiLibraryLogsQuery, 'status' | 'statusCode' | 'source' | 'from' | 'to' | 'search'>
+    Pick<
+      ListApiLibraryLogsQuery,
+      'status' | 'statusCode' | 'source' | 'from' | 'to' | 'search' | 'botId'
+    >
   >;
 
 const BASE = '/api-library';
@@ -48,6 +52,8 @@ export const apiLibraryApi = {
     }).then((r) => normalizePage(r, query)),
   options: (signal?: AbortSignal) =>
     apiFetch(`${BASE}/apis/options`, { schema: apiLibraryOptionsResponseSchema, signal }),
+  logBots: (signal?: AbortSignal) =>
+    apiFetch(`${BASE}/logs/bots`, { schema: apiLibraryLogBotsResponseSchema, signal }),
   logApis: (signal?: AbortSignal) =>
     apiFetch(`${BASE}/logs/apis`, { schema: apiLibraryLogApisResponseSchema, signal }),
   get: (id: string, signal?: AbortSignal) =>
