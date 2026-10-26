@@ -229,7 +229,15 @@ export function fromDetail(d: ApiLibraryDetail): ApiFormState {
 }
 
 /** What the old console's "Import API's" produced from a cURL command (see curl.ts). */
+/** A part of a pasted command that could not be imported (a file to upload): shown, never dropped without a word. */
+export interface ImportNote {
+  code: 'file';
+  name: string;
+}
+
 export interface ImportedRequest {
+  /** What of the command was left out. */
+  skipped?: ImportNote[];
   method: ApiLibraryMethod;
   url: string;
   headers: Array<{ key: string; value: string }>;
