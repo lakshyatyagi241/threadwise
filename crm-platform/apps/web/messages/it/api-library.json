@@ -322,7 +322,8 @@
       "requestHint": "Nome, metodo e indirizzo della chiamata.",
       "payloadHint": "Cosa viene inviato nel corpo. Usa il pulsante '{ }' per inserire una variabile in un valore.",
       "functionHint": "Rimodella il payload con JavaScript prima dell'invio. Facoltativo.",
-      "plainHttpWarning": "Questo indirizzo inizia con http://, quindi la password o la chiave negli header viaggerebbero senza crittografia. Usa https:// se il server lo supporta."
+      "plainHttpWarning": "Questo indirizzo inizia con http://, quindi la password o la chiave negli header viaggerebbero senza crittografia. Usa https:// se il server lo supporta.",
+      "importSkipped": "Il comando incollato invia anche un file ({names}). Qui non è possibile importare un file, quindi è stato escluso. Tutto il resto è stato compilato."
     },
     "test": {
       "title": "Risposta",

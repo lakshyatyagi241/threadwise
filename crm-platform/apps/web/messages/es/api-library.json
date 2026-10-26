@@ -322,7 +322,8 @@
       "requestHint": "El nombre, el método y la dirección de la llamada.",
       "payloadHint": "Lo que se envía en el cuerpo. Usa el botón '{ }' para poner una variable en un valor.",
       "functionHint": "Reformatea el cuerpo con JavaScript antes de enviarlo. Opcional.",
-      "plainHttpWarning": "Esta dirección empieza por http://, así que la contraseña o clave de tus encabezados viajaría sin cifrar. Usa https:// si el servidor lo admite."
+      "plainHttpWarning": "Esta dirección empieza por http://, así que la contraseña o clave de tus encabezados viajaría sin cifrar. Usa https:// si el servidor lo admite.",
+      "importSkipped": "El comando pegado también envía un archivo ({names}). Aquí no se puede importar un archivo, así que se omitió. Todo lo demás se rellenó."
     },
     "test": {
       "title": "Respuesta",

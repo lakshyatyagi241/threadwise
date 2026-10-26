@@ -119,7 +119,14 @@ export function ApiFormScreen({ id }: { id?: string }) {
     );
   }
   return imported ? (
-    <ApiForm key="import" initial={fromImport(imported)} />
+    <>
+      {imported.skipped && imported.skipped.length > 0 && (
+        <Alert tone="warning" className="mb-4">
+          {t('importSkipped', { names: imported.skipped.map((n) => n.name).join(', ') })}
+        </Alert>
+      )}
+      <ApiForm key="import" initial={fromImport(imported)} />
+    </>
   ) : (
     <ApiForm key="new" initial={emptyForm()} />
   );
