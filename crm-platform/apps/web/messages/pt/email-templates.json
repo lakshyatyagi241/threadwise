@@ -131,7 +131,11 @@
         "required": "Este campo é obrigatório.",
         "tooLong": "Está muito longo (no máximo {limit} caracteres).",
         "subjectLines": "O assunto deve ter uma única linha."
-      }
+      },
+      "bodyMode": "Formato do corpo",
+      "bodyRich": "Texto formatado",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>Escreva o HTML do e-mail. Use as variáveis abaixo para personalizá-lo.</p>"
     },
     "preview": {
       "title": "Prévia com dados de exemplo",
