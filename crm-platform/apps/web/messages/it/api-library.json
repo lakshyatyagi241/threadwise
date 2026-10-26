@@ -98,7 +98,9 @@
       "published": "Pubblicata",
       "draft": "Bozza",
       "nodes": "{count, plural, one {# passaggio} other {# passaggi}}",
-      "blocked": "Questa API non può essere eliminata finché dei flussi la usano. Rimuovi il suo passaggio da questi flussi, o scegli lì un'altra API, poi eliminala qui."
+      "blocked": "Questa API non può essere eliminata finché dei flussi la usano. Rimuovi il suo passaggio da questi flussi, o scegli lì un'altra API, poi eliminala qui.",
+      "publishedCopy": "La versione pubblicata la richiama ancora",
+      "republish": "Pubblica di nuovo il flusso senza questo passaggio, poi elimina l'API."
     },
     "logs": {
       "title": "Log API",
@@ -170,7 +172,9 @@
         "user": "Eseguito da (ID utente)",
         "noContext": "Nessun flusso o contatto coinvolto."
       },
-      "unsaved": "Non salvata"
+      "unsaved": "Non salvata",
+      "export": "Esporta CSV",
+      "exporting": "Esportazione in corso…"
     },
     "variables": {
       "insertFor": "Inserisci una variabile in {label}",

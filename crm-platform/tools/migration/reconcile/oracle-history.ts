@@ -92,9 +92,14 @@ const localDay = (ms: number, tz: string): string => {
   return f ? f.format(new Date(ms)) : new Date(ms).toISOString().slice(0, 10);
 };
 
-export function oracleHistory(i: OracleHistoryInput): { rows: OracleHistoryRow[]; opening: bigint } {
+export function oracleHistory(i: OracleHistoryInput): {
+  rows: OracleHistoryRow[];
+  opening: bigint;
+} {
   const asOfMs = Date.parse(i.asOf);
-  const target = fourDigits(i.balanceText);
+  // the chain ends at the live balance rounded to the cent (wallet-history does the same): the wallet holds paise
+  const live = fourDigits(i.balanceText);
+  const target = live === null ? null : ((live + 50n) / 100n) * 100n;
   if (target === null || !Number.isFinite(asOfMs))
     throw new Error('oracleHistory: no balance or no read time');
   const p = `waboo:${i.client}:`;
@@ -129,7 +134,12 @@ export function oracleHistory(i: OracleHistoryInput): { rows: OracleHistoryRow[]
     day(chargedThenReverted, localDay(at, i.timezone), cat, amt, at);
     if (back <= asOfMs) day(reverted, localDay(back, i.timezone), cat, amt, back);
   }
-  const emit = (m: Map<string, Acc>, kind: string, sign: bigint, type: 'spend' | 'refund'): void => {
+  const emit = (
+    m: Map<string, Acc>,
+    kind: string,
+    sign: bigint,
+    type: 'spend' | 'refund',
+  ): void => {
     for (const [k, a] of m)
       out.push({ key: `${p}wa:${kind}:${k}`, atMs: a.at, type, amount: sign * a.amount });
   };

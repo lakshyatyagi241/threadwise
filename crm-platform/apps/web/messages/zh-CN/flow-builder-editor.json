@@ -645,6 +645,7 @@
         "imported": "已导入 {flows, plural, other {# 个流程}}中的 {steps, plural, other {# 个步骤}}。请检查后保存。",
         "invalidJson": "该文件不是有效的 JSON。",
         "saved": "已保存“{name}”",
+        "nodeSaved": "节点更新成功！",
         "saveFailed": "保存失败：{error}",
         "publishedToast": "已发布",
         "publishFailed": "发布失败：{error}",

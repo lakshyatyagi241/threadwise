@@ -155,7 +155,8 @@ const toRow = (r: Raw): WidgetRow => ({
   headerTitle: r.header_title as string,
   headerBg: r.header_bg as string,
   headerTextColor: r.header_text_color as string,
-  welcomeMessage: (r.welcome_message as string | null) ?? null,
+  // A bot that runs a flow starts with the flow's own first message: it has no separate opening line, whatever an older save left behind.
+  welcomeMessage: r.flow_id == null ? ((r.welcome_message as string | null) ?? null) : null,
   messageBubbleColor: r.message_bubble_color as string,
   messageTextColor: r.message_text_color as string,
   bodyBgKind: r.body_bg_kind as string,

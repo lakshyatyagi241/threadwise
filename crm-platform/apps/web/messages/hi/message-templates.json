@@ -428,7 +428,9 @@
         "buttons": "बटन",
         "buttonText": "बटन का टेक्स्ट",
         "buttonUrl": "वेबसाइट URL",
-        "buttonPhone": "फ़ोन नंबर"
+        "buttonPhone": "फ़ोन नंबर",
+        "moveUp": "कार्ड {n} ऊपर ले जाएँ",
+        "moveDown": "कार्ड {n} नीचे ले जाएँ"
       },
       "offer": {
         "title": "सीमित समय का ऑफ़र",

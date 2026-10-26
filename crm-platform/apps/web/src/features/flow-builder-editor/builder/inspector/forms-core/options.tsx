@@ -39,7 +39,7 @@ import {
   LIST_DESC_MAX,
   LIST_SECTION_MAX,
   LIST_TITLE_MAX,
-  listItems,
+  listItemsAsTyped,
   patchItem,
   type ListItem,
 } from './helpers';
@@ -135,7 +135,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
   const t = useTranslations('flb.builder.formsCore.options');
   const unofficial = useUnofficialWhatsapp();
   const { whatsapp } = useContext(FlowEditorContext);
-  const items = listItems(d.options);
+  const items = listItemsAsTyped(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
     set('options', patchItem(items, i, patch));
   const groups = groupBySection(items);

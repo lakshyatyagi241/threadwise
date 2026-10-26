@@ -1,6 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { HistoryError, planHistory, text4, to4, type CoreWalletEvent, type HistoryPlan } from '../credits/history';
+import {
+  HistoryError,
+  planHistory,
+  text4,
+  to4,
+  type CoreWalletEvent,
+  type HistoryPlan,
+} from '../credits/history';
 import type { Source } from '../extract/source';
 import { badText, type Doc } from '../util';
 import { connect, sql, withPrivileged, withTenant } from './db';
@@ -58,7 +65,12 @@ const ianaOf = (z: unknown): string | null => {
  * One collection, reduced while it is read to the fields the plan uses (the charge log of a big client is tens of thousands of
  * documents with contact data: keeping them whole ran a 768 MB container out of memory). badText is judged on the WHOLE document first.
  */
-const readSlim = async (source: Source, client: string, c: string, keep: string[]): Promise<Doc[]> => {
+const readSlim = async (
+  source: Source,
+  client: string,
+  c: string,
+  keep: string[],
+): Promise<Doc[]> => {
   const out: Doc[] = [];
   if (source.collections(client).includes(c))
     for await (const d of source.read(client, c)) {
@@ -70,8 +82,26 @@ const readSlim = async (source: Source, client: string, c: string, keep: string[
   return out;
 };
 
-const KEEP_CHARGES = ['_id', 'id', 'amount', 'created_time', 'revert', 'reverted_at', 'template_category', 'origin'];
-const KEEP_CREDIT_LOGS = ['_id', 'id', 'workspace_id', 'credits_deducted', 'created_time', 'description', 'action', 'module'];
+const KEEP_CHARGES = [
+  '_id',
+  'id',
+  'amount',
+  'created_time',
+  'revert',
+  'reverted_at',
+  'template_category',
+  'origin',
+];
+const KEEP_CREDIT_LOGS = [
+  '_id',
+  'id',
+  'workspace_id',
+  'credits_deducted',
+  'created_time',
+  'description',
+  'action',
+  'module',
+];
 
 /** Reads everything the plan needs; nothing here touches the database. */
 export async function buildHistory(
@@ -86,11 +116,13 @@ export async function buildHistory(
       `WALLETHISTORY_NO_CORE: dumps/${o.client}/core.json is missing or not JSON (run core-opening.cjs, then ship): ${(e as Error).message}`,
     );
   }
-  const target = to4(core.workspace?.credits?.remaining_amounts);
-  if (target === null || target < 0n)
+  const live = to4(core.workspace?.credits?.remaining_amounts);
+  if (live === null || live < 0n)
     throw new HistoryError(
       'WALLETHISTORY_NO_BALANCE: core.json has no usable workspace.credits.remaining_amounts',
     );
+  // the wallet holds paise: the chain ends at the live balance rounded to the cent (as wallet-sync does)
+  const target = ((live + 50n) / 100n) * 100n;
   if (!Array.isArray(core.walletEvents))
     throw new HistoryError(
       'WALLETHISTORY_NO_EVENTS: core.json has no walletEvents (it was written by an older core-opening.cjs): run core-opening.cjs again, then ship',
@@ -98,7 +130,9 @@ export async function buildHistory(
   const asOf = core.readAt ?? (core.readOn ? `${core.readOn}T23:59:59Z` : '');
   const asOfMs = new Date(asOf).getTime();
   if (!Number.isFinite(asOfMs))
-    throw new HistoryError('WALLETHISTORY_NO_READAT: core.json does not say when geta_core was read');
+    throw new HistoryError(
+      'WALLETHISTORY_NO_READAT: core.json does not say when geta_core was read',
+    );
   const tzRaw = core.workspace?.timezone;
   const timezone =
     (typeof tzRaw === 'string'
@@ -205,15 +239,29 @@ export async function walletHistory(o: WalletHistoryOptions): Promise<void> {
         type: string;
         ms: string;
       }>;
-      const foreign = have.filter((r) => !r.key.startsWith(prefix));
+      // the rows the app wrote after the live balance was read (WaDesk activity during the migration) are kept as they are and added to
+      // the wallet: the chain ends at the live balance, the app's rows sit after it. Anything older that this tool did not write refuses.
+      const readMs = new Date(asOf).getTime();
+      const planned = have.filter((r) => r.key.startsWith(prefix));
+      const later = have.filter((r) => !r.key.startsWith(prefix) && Number(r.ms) > readMs);
+      const foreign = have.filter((r) => !r.key.startsWith(prefix) && Number(r.ms) <= readMs);
       if (foreign.length > 0)
         throw new Error(
           `WALLETHISTORY_FOREIGN_ROWS: the ${unit} ledger holds ${foreign.length} row(s) this migration did not write (WaDesk activity?). The rebuild is for a client that is not live on WaDesk yet; nothing was written`,
         );
+      const laterSum = later.reduce((n, r) => n + (to4(r.amount) ?? 0n), 0n);
+      const laterLo = later.reduce(
+        (lo, r) => {
+          const b = to4(r.balance_after);
+          return b !== null && (lo === null || b < lo) ? b : lo;
+        },
+        null as bigint | null,
+      );
+      const walletTarget = target + laterSum;
       const want = new Map(plan.rows.map((r) => [r.key, r]));
       const same =
-        have.length === want.size &&
-        have.every((r) => {
+        planned.length === want.size &&
+        planned.every((r) => {
           const p = want.get(r.key);
           return (
             p !== undefined &&
@@ -223,7 +271,7 @@ export async function walletHistory(o: WalletHistoryOptions): Promise<void> {
             BigInt(r.ms) === BigInt(p.atMs)
           );
         });
-      if (same && w && to4(w.balance) === target) {
+      if (same && w && to4(w.balance) === walletTarget) {
         o.log(
           `  history  already complete: ${have.length} ledger row(s) equal the plan, wallet ${w.balance} ${unit}`,
         );
@@ -236,7 +284,7 @@ export async function walletHistory(o: WalletHistoryOptions): Promise<void> {
         o.log('  history  DRY RUN: nothing was written (add --apply --confirm-org-slug <slug>)');
         return;
       }
-      const keepId = new Map(have.map((r) => [r.key, Number(r.id)]));
+      const keepId = new Map(planned.map((r) => [r.key, Number(r.id)]));
       await tx.execute(
         sql`DELETE FROM wallet_transactions WHERE org_id = ${orgId} AND coalesce(unit, '') = ${unit} AND starts_with(idempotency_key, ${prefix})`,
       );
@@ -267,23 +315,30 @@ export async function walletHistory(o: WalletHistoryOptions): Promise<void> {
                     direction text, note text, actor_type text, at timestamptz)`);
       }
       await tx.execute(sql`
-        INSERT INTO wallets (org_id, unit, balance, reserved) VALUES (${orgId}, ${unit}, ${text4(target)}::numeric, 0)
+        INSERT INTO wallets (org_id, unit, balance, reserved) VALUES (${orgId}, ${unit}, ${text4(walletTarget)}::numeric, 0)
         ON CONFLICT (org_id, unit) DO UPDATE SET balance = EXCLUDED.balance, updated_at = now(), row_version = wallets.row_version + 1`);
       const chk = (
         await tx.execute(sql`
           SELECT count(*)::int AS n, round(sum(amount), 4)::text AS sum, min(balance_after)::text AS lo FROM wallet_transactions
           WHERE org_id = ${orgId} AND coalesce(unit, '') = ${unit}`)
       ).rows[0] as { n: number; sum: string; lo: string };
-      if (chk.n !== plan.rows.length || to4(chk.sum) !== target || to4(chk.lo) !== plan.lowest)
+      const expectLo = laterLo !== null && laterLo < plan.lowest ? laterLo : plan.lowest;
+      if (
+        chk.n !== plan.rows.length + later.length ||
+        to4(chk.sum) !== walletTarget ||
+        to4(chk.lo) !== expectLo
+      )
         throw new Error(
-          `WALLETHISTORY_CHECK: after the write the ledger has ${chk.n} row(s) adding up to ${chk.sum} (lowest balance ${chk.lo}); expected ${plan.rows.length}, ${text4(target)} and a lowest balance of ${text4(plan.lowest)}. Rolled back`,
+          `WALLETHISTORY_CHECK: after the write the ledger has ${chk.n} row(s) adding up to ${chk.sum} (lowest balance ${chk.lo}); expected ${plan.rows.length + later.length}, ${text4(walletTarget)} and a lowest balance of ${text4(expectLo)}. Rolled back`,
         );
       await tx.execute(sql`
         INSERT INTO migration.run_log (source_client, collection, step, run_id, last_key, state, counts)
         VALUES (${o.client}, ${HISTORY_COLLECTION}, ${HISTORY_STEP}, 'wallet-history', 0, 'done',
                 ${JSON.stringify({ rows: plan.rows.length, fingerprint: plan.fingerprint, target: text4(target), unit, asOf, opening: text4(plan.openingMinor), at: new Date().toISOString() })}::jsonb)
         ON CONFLICT (source_client, collection, step) DO UPDATE SET counts = EXCLUDED.counts, updated_at = now()`);
-      o.log(`  history  done: ${plan.rows.length} ledger row(s), wallet ${text4(target)} ${unit}`);
+      o.log(
+        `  history  done: ${plan.rows.length} ledger row(s) plus ${later.length} app row(s) after the read, wallet ${text4(walletTarget)} ${unit}`,
+      );
     });
   } finally {
     await owner.close();

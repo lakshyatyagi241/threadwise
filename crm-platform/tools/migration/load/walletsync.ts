@@ -27,24 +27,33 @@ const SOURCE = 'waboo_migration';
 
 interface CoreSnapshot {
   readOn?: string;
+  readAt?: string;
   workspace?: { id?: string; credits?: { remaining_amounts?: number; currency?: string } };
 }
 
 const cents = centsOf;
-const text = (c: bigint): string => `${c < 0n ? '-' : ''}${(c < 0n ? -c : c) / 100n}.${String((c < 0n ? -c : c) % 100n).padStart(2, '0')}`;
+const text = (c: bigint): string =>
+  `${c < 0n ? '-' : ''}${(c < 0n ? -c : c) / 100n}.${String((c < 0n ? -c : c) % 100n).padStart(2, '0')}`;
 
 export async function walletSync(o: WalletSyncOptions): Promise<void> {
   let core: CoreSnapshot;
   try {
-    core = JSON.parse(readFileSync(join(o.dumpsDir, o.client, 'core.json'), 'utf8')) as CoreSnapshot;
+    core = JSON.parse(
+      readFileSync(join(o.dumpsDir, o.client, 'core.json'), 'utf8'),
+    ) as CoreSnapshot;
   } catch (e) {
-    throw new Error(`WALLETSYNC_NO_CORE: dumps/${o.client}/core.json is missing or not JSON (run core-opening.cjs, then ship): ${(e as Error).message}`);
+    throw new Error(
+      `WALLETSYNC_NO_CORE: dumps/${o.client}/core.json is missing or not JSON (run core-opening.cjs, then ship): ${(e as Error).message}`,
+    );
   }
   const remaining = core.workspace?.credits?.remaining_amounts;
   const unit = String(core.workspace?.credits?.currency ?? 'inr').toUpperCase();
   if (typeof remaining !== 'number' || !Number.isFinite(remaining) || remaining < 0)
-    throw new Error('WALLETSYNC_NO_BALANCE: core.json has no usable workspace.credits.remaining_amounts');
-  if (!core.readOn) throw new Error('WALLETSYNC_NO_READON: core.json does not say when geta_core was read');
+    throw new Error(
+      'WALLETSYNC_NO_BALANCE: core.json has no usable workspace.credits.remaining_amounts',
+    );
+  if (!core.readOn)
+    throw new Error('WALLETSYNC_NO_READON: core.json does not say when geta_core was read');
   const target = cents(remaining);
   const stamp = core.readOn.replace(/[^0-9TZ]/g, '').slice(0, 20);
   // readOn is a day: the target balance makes the key unique per snapshot AND per balance, so a second sync the same day can post
@@ -55,10 +64,15 @@ export async function walletSync(o: WalletSyncOptions): Promise<void> {
   try {
     const org = (
       await withPrivileged(owner.db, (tx) =>
-        tx.execute(sql`SELECT id FROM organizations WHERE slug = ${o.orgSlug} AND settings #>> '{legacy,waboo,client}' = ${o.client}`),
+        tx.execute(
+          sql`SELECT id FROM organizations WHERE slug = ${o.orgSlug} AND settings #>> '{legacy,waboo,client}' = ${o.client}`,
+        ),
       )
     ).rows[0] as { id: number | string } | undefined;
-    if (!org) throw new Error(`WALLETSYNC_NO_ORG: no organization "${o.orgSlug}" made by this tool for ${o.client}`);
+    if (!org)
+      throw new Error(
+        `WALLETSYNC_NO_ORG: no organization "${o.orgSlug}" made by this tool for ${o.client}`,
+      );
     const orgId = Number(org.id);
 
     await withTenant(worker.db, { orgId }, async (tx) => {
@@ -67,16 +81,35 @@ export async function walletSync(o: WalletSyncOptions): Promise<void> {
           sql`SELECT (balance * 100)::bigint::text AS cents FROM wallets WHERE org_id = ${orgId} AND unit = ${unit} FOR UPDATE`,
         )
       ).rows[0] as { cents: string } | undefined;
-      if (!w) throw new Error(`WALLETSYNC_NO_WALLET: no ${unit} wallet for this organization (load the credits step first)`);
+      if (!w)
+        throw new Error(
+          `WALLETSYNC_NO_WALLET: no ${unit} wallet for this organization (load the credits step first)`,
+        );
       const have = BigInt(w.cents);
-      const delta = target - have;
-      o.log(`  wallet  WaDesk ${text(have)} ${unit}, Waboo (geta_core, read ${core.readOn}) ${text(target)} ${unit}, difference ${text(delta)}`);
+      // the app's own rows written after the live balance was read (WaDesk activity during the migration) are real spend: the wallet
+      // keeps them, so the target is the Waboo balance plus those rows (they are not a difference to correct)
+      const readMs = new Date(core.readAt ?? `${core.readOn}T23:59:59Z`).getTime();
+      const rows = (
+        await tx.execute(sql`
+          SELECT (amount * 100)::bigint::text AS cents, idempotency_key AS key, (extract(epoch FROM created_at) * 1000)::bigint::text AS ms
+          FROM wallet_transactions WHERE org_id = ${orgId} AND coalesce(unit, '') = ${unit}`)
+      ).rows as Array<{ cents: string; key: string; ms: string }>;
+      const appCents = rows
+        .filter((r) => !r.key.startsWith(LEDGER_PREFIX(o.client)) && Number(r.ms) > readMs)
+        .reduce((n, r) => n + BigInt(r.cents), 0n);
+      const wanted = target + appCents;
+      const delta = wanted - have;
+      o.log(
+        `  wallet  WaDesk ${text(have)} ${unit}, Waboo (geta_core, read ${core.readOn}) ${text(target)} ${unit}${appCents !== 0n ? ` plus ${text(appCents)} WaDesk activity after the read` : ''}, difference ${text(delta)}`,
+      );
       if (delta === 0n) {
         o.log('  wallet  already equal: nothing to post');
         return;
       }
       const done = (
-        await tx.execute(sql`SELECT balance_after::text AS b FROM wallet_transactions WHERE org_id = ${orgId} AND idempotency_key = ${key}`)
+        await tx.execute(
+          sql`SELECT balance_after::text AS b FROM wallet_transactions WHERE org_id = ${orgId} AND idempotency_key = ${key}`,
+        )
       ).rows[0] as { b: string } | undefined;
       if (done)
         throw new Error(
@@ -87,7 +120,7 @@ export async function walletSync(o: WalletSyncOptions): Promise<void> {
         return;
       }
       const amount = text(delta);
-      const want = text(target);
+      const want = text(wanted);
       const meta = JSON.stringify({
         legacy: {
           waboo: {

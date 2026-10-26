@@ -645,6 +645,7 @@
         "imported": "{flows, plural, one {# akışta} other {# akışta}} {steps, plural, one {# adım} other {# adım}} içe aktarıldı. Kontrol edin, ardından Kaydedin.",
         "invalidJson": "Bu dosya geçerli bir JSON değil.",
         "saved": "\"{name}\" kaydedildi",
+        "nodeSaved": "Düğüm başarıyla güncellendi!",
         "saveFailed": "Kaydetme başarısız: {error}",
         "publishedToast": "Yayınlandı",
         "publishFailed": "Yayınlama başarısız: {error}",

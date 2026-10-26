@@ -67,6 +67,15 @@ export const listApiLibraryLogsQuerySchema = paginationQuerySchema.extend({
 });
 export type ListApiLibraryLogsQuery = z.infer<typeof listApiLibraryLogsQuerySchema>;
 
+/** The log export takes the list's filters, not its paging: the newest runs first, at most 5,000 of them in one file. */
+export const exportApiLibraryLogsQuerySchema = listApiLibraryLogsQuerySchema.omit({
+  page: true,
+  cursor: true,
+  limit: true,
+  order: true,
+});
+export type ExportApiLibraryLogsQuery = z.infer<typeof exportApiLibraryLogsQuerySchema>;
+
 export const listApiLibraryLogsResponseSchema = numberedPageResponseSchema(apiLibraryLogItemSchema);
 export type ListApiLibraryLogsResponse = z.infer<typeof listApiLibraryLogsResponseSchema>;
 

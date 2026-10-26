@@ -98,7 +98,9 @@
       "published": "Publié",
       "draft": "Brouillon",
       "nodes": "{count, plural, one {# étape} other {# étapes}}",
-      "blocked": "Cette API ne peut pas être supprimée tant que des flux l'utilisent. Retirez son étape de ces flux, ou choisissez-y une autre API, puis supprimez-la ici."
+      "blocked": "Cette API ne peut pas être supprimée tant que des flux l'utilisent. Retirez son étape de ces flux, ou choisissez-y une autre API, puis supprimez-la ici.",
+      "publishedCopy": "La version publiée l'appelle encore",
+      "republish": "Publiez de nouveau le flux sans cette étape, puis supprimez l'API."
     },
     "logs": {
       "title": "Journaux des API",
@@ -170,7 +172,9 @@
         "user": "Exécuté par (ID utilisateur)",
         "noContext": "Aucun flux ni contact n'était impliqué."
       },
-      "unsaved": "Non enregistrée"
+      "unsaved": "Non enregistrée",
+      "export": "Exporter en CSV",
+      "exporting": "Export en cours…"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",

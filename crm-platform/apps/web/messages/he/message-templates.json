@@ -428,7 +428,9 @@
         "buttons": "כפתורים",
         "buttonText": "טקסט הכפתור",
         "buttonUrl": "כתובת האתר",
-        "buttonPhone": "מספר טלפון"
+        "buttonPhone": "מספר טלפון",
+        "moveUp": "העברת כרטיס {n} למעלה",
+        "moveDown": "העברת כרטיס {n} למטה"
       },
       "offer": {
         "title": "מבצע לזמן מוגבל",

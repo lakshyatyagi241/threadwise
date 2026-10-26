@@ -98,7 +98,9 @@
       "published": "已发布",
       "draft": "草稿",
       "nodes": "{count, plural, other {# 个步骤}}",
-      "blocked": "只要还有流程在使用此 API，就无法删除。请先从这些流程中移除它的步骤，或在其中改选其他 API，然后再在此处删除。"
+      "blocked": "只要还有流程在使用此 API，就无法删除。请先从这些流程中移除它的步骤，或在其中改选其他 API，然后再在此处删除。",
+      "publishedCopy": "已发布的版本仍在调用它",
+      "republish": "请去掉此步骤后重新发布流程，然后再删除该 API。"
     },
     "logs": {
       "title": "API 日志",
@@ -170,7 +172,9 @@
         "user": "运行者（用户 ID）",
         "noContext": "未涉及任何流程或联系人。"
       },
-      "unsaved": "未保存"
+      "unsaved": "未保存",
+      "export": "导出 CSV",
+      "exporting": "正在导出…"
     },
     "variables": {
       "insertFor": "将变量插入 {label}",

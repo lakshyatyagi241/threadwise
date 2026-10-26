@@ -645,6 +645,7 @@
         "imported": "{steps, plural, one {# Schritt} other {# Schritte}} in {flows, plural, one {# Flow} other {# Flows}} importiert. Prüfen Sie sie und speichern Sie dann.",
         "invalidJson": "Diese Datei ist kein gültiges JSON.",
         "saved": "„{name}“ gespeichert",
+        "nodeSaved": "Knoten erfolgreich aktualisiert!",
         "saveFailed": "Speichern fehlgeschlagen: {error}",
         "publishedToast": "Veröffentlicht",
         "publishFailed": "Veröffentlichen fehlgeschlagen: {error}",

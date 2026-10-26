@@ -18,7 +18,7 @@ import {
 } from '../lib/form-model';
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, mediaProblem, megabytes } from '../lib/media';
 import { ErrorAlert } from './error-line';
-import { ImageIcon, PlusIcon, TrashIcon, VideoIcon } from './icons';
+import { ArrowDownIcon, ArrowUpIcon, ImageIcon, PlusIcon, TrashIcon, VideoIcon } from './icons';
 import { useErrorText } from './use-error-text';
 
 /** The button kinds a card can carry (Meta: a quick reply, a link or a phone number; up to two, the same on every card). */
@@ -45,6 +45,14 @@ export function CardsEditor({
   const base = useId();
   const patch = (key: string, p: Partial<CardRow>) =>
     onChange(cards.map((c) => (c.key === key ? { ...c, ...p } : c)));
+  /** Swaps a card with its neighbour: the order here is the order the customer swipes through. */
+  const move = (i: number, by: -1 | 1) => {
+    const j = i + by;
+    if (j < 0 || j >= cards.length) return;
+    const next = [...cards];
+    [next[i], next[j]] = [next[j]!, next[i]!];
+    onChange(next);
+  };
 
   return (
     <div className="space-y-4">
@@ -72,6 +80,9 @@ export function CardsEditor({
             card={c}
             connectionId={connectionId}
             removable={cards.length > CARDS_MIN}
+            onMove={(by) => move(i, by)}
+            canMoveUp={i > 0}
+            canMoveDown={i < cards.length - 1}
             onPatch={(p) => patch(c.key, p)}
             onRemove={() => onChange(cards.filter((x) => x.key !== c.key))}
           />
@@ -101,6 +112,9 @@ function CardItem({
   card,
   connectionId,
   removable,
+  onMove,
+  canMoveUp,
+  canMoveDown,
   onPatch,
   onRemove,
 }: {
@@ -108,6 +122,9 @@ function CardItem({
   card: CardRow;
   connectionId: string;
   removable: boolean;
+  onMove: (by: -1 | 1) => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
   onPatch: (p: Partial<CardRow>) => void;
   onRemove: () => void;
 }) {
@@ -159,17 +176,33 @@ function CardItem({
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {t('card', { n })}
         </span>
-        {removable && (
+        <div className="ms-auto flex items-center gap-1">
           <Button
             size="sm"
             variant="ghost"
-            className="ms-auto"
-            aria-label={t('remove', { n })}
-            onClick={onRemove}
+            aria-label={t('moveUp', { n })}
+            title={t('moveUp', { n })}
+            disabled={!canMoveUp}
+            onClick={() => onMove(-1)}
           >
-            <TrashIcon className="size-3.5" />
+            <ArrowUpIcon className="size-3.5" />
           </Button>
-        )}
+          <Button
+            size="sm"
+            variant="ghost"
+            aria-label={t('moveDown', { n })}
+            title={t('moveDown', { n })}
+            disabled={!canMoveDown}
+            onClick={() => onMove(1)}
+          >
+            <ArrowDownIcon className="size-3.5" />
+          </Button>
+          {removable && (
+            <Button size="sm" variant="ghost" aria-label={t('remove', { n })} onClick={onRemove}>
+              <TrashIcon className="size-3.5" />
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -251,7 +284,16 @@ function CardItem({
               <span className="pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {tb(`kind.${b.kind}`)}
               </span>
-              <Field label={t('buttonText')} htmlFor={`${base}-${b.key}-t`}>
+              <Field
+                label={t('buttonText')}
+                htmlFor={`${base}-${b.key}-t`}
+                hint={t('textCounter', { used: b.text.length, max: BUTTON_TEXT_MAX })}
+                error={
+                  b.text.trim().length > BUTTON_TEXT_MAX
+                    ? tb('issue.textTooLong', { max: BUTTON_TEXT_MAX })
+                    : undefined
+                }
+              >
                 <Input
                   id={`${base}-${b.key}-t`}
                   value={b.text}

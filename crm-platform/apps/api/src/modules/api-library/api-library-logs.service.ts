@@ -2,11 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import type {
   ApiLibraryLogApisResponse,
   ApiLibraryLogDetail,
+  ExportApiLibraryLogsQuery,
   ListApiLibraryLogsQuery,
   ListApiLibraryLogsResponse,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { buildCsv } from '../../common/csv';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -20,6 +22,9 @@ import {
 import { ApiLibraryRepository } from './api-library.repository';
 import { ApiLibraryLogsRepository, type NewLog } from './api-library-logs.repository';
 import { LOG_BODY_LIMIT, type RunOutcome } from './api-library-runner.service';
+
+/** The most runs one log export file holds. */
+export const LOG_EXPORT_MAX_ROWS = 5000;
 
 /** Where a run came from, for the log. */
 export interface RunContext {
@@ -77,6 +82,44 @@ export class ApiLibraryLogsService {
       const rows = await this.repo.list(tx, ctx.orgId, { ...filter, cursor: query.cursor });
       const { items, page } = buildPage(rows, query.limit);
       return { data: items.map(toLogItem), page };
+    });
+  }
+
+  /**
+   * The run log as CSV, with the list's filters: the newest runs first, at most LOG_EXPORT_MAX_ROWS of them. Cells are escaped by
+   * `csvCell`, so a run's error text cannot start a formula in the spreadsheet it is opened in.
+   */
+  async exportCsv(query: ExportApiLibraryLogsQuery): Promise<string> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const rows = await this.repo.list(tx, ctx.orgId, {
+        apiUuid: query.apiId,
+        status: query.status,
+        statusCode: query.statusCode,
+        source: query.source,
+        from: query.from,
+        to: query.to,
+        search: query.search || undefined,
+        limit: LOG_EXPORT_MAX_ROWS,
+        order: 'desc',
+      });
+      return buildCsv(
+        ['Time (UTC)', 'API', 'Source', 'Method', 'URL', 'Result', 'Status code', 'Duration (ms)', 'Error'],
+        rows.map((row) => {
+          const item = toLogItem(row);
+          return [
+            item.createdAt,
+            item.apiName,
+            item.source,
+            item.method,
+            item.url,
+            item.ok ? 'success' : 'failed',
+            item.statusCode,
+            item.durationMs,
+            item.error,
+          ];
+        }),
+      );
     });
   }
 

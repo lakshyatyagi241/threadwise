@@ -428,7 +428,9 @@
         "buttons": "Tombol",
         "buttonText": "Teks tombol",
         "buttonUrl": "URL situs web",
-        "buttonPhone": "Nomor telepon"
+        "buttonPhone": "Nomor telepon",
+        "moveUp": "Naikkan kartu {n}",
+        "moveDown": "Turunkan kartu {n}"
       },
       "offer": {
         "title": "Penawaran waktu terbatas",
