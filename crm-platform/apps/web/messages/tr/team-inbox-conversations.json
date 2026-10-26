@@ -620,7 +620,10 @@
           "resolved": "Çözüldü",
           "closed": "Kapalı",
           "spam": "Spam"
-        }
+        },
+        "created": "Başlangıç: {date}",
+        "showMore": "{count} tane daha göster",
+        "showLess": "Daha az göster"
       }
     },
     "simulator": {

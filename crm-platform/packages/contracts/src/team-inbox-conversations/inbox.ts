@@ -91,6 +91,8 @@ export const pastConversationSchema = z.object({
   preview: z.string().nullable(),
   status: conversationStatusSchema,
   lastMessageAt: z.string().datetime().nullable(),
+  /** When the thread began. */
+  createdAt: z.string().datetime(),
 });
 export type PastConversation = z.infer<typeof pastConversationSchema>;
 

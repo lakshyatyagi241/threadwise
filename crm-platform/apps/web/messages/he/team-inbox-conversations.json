@@ -620,7 +620,10 @@
           "resolved": "נפתרה",
           "closed": "סגורה",
           "spam": "ספאם"
-        }
+        },
+        "created": "התחילה ב-{date}",
+        "showMore": "הצג עוד {count}",
+        "showLess": "הצג פחות"
       }
     },
     "simulator": {

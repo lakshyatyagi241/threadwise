@@ -620,7 +620,10 @@
           "resolved": "Đã giải quyết",
           "closed": "Đã đóng",
           "spam": "Thư rác"
-        }
+        },
+        "created": "Bắt đầu {date}",
+        "showMore": "Hiện thêm {count}",
+        "showLess": "Thu gọn"
       }
     },
     "simulator": {

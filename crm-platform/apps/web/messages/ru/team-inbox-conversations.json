@@ -620,7 +620,10 @@
           "resolved": "Закрыт",
           "closed": "Закрыт",
           "spam": "Спам"
-        }
+        },
+        "created": "Начата {date}",
+        "showMore": "Показать ещё {count}",
+        "showLess": "Показать меньше"
       }
     },
     "simulator": {

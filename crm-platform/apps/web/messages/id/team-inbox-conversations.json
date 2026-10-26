@@ -620,7 +620,10 @@
           "resolved": "Selesai",
           "closed": "Ditutup",
           "spam": "Spam"
-        }
+        },
+        "created": "Dimulai {date}",
+        "showMore": "Tampilkan {count} lagi",
+        "showLess": "Tampilkan lebih sedikit"
       }
     },
     "simulator": {

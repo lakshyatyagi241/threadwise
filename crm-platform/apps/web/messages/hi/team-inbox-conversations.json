@@ -620,7 +620,10 @@
           "resolved": "हल की गई",
           "closed": "बंद",
           "spam": "स्पैम"
-        }
+        },
+        "created": "शुरू: {date}",
+        "showMore": "{count} और दिखाएं",
+        "showLess": "कम दिखाएं"
       }
     },
     "simulator": {
