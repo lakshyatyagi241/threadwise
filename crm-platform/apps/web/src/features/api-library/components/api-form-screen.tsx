@@ -121,19 +121,31 @@ export function ApiFormScreen({ id }: { id?: string }) {
   }
   return imported ? (
     <>
-      {imported.skipped?.some((n) => n.code === 'file') && (
+      {imported.skipped && imported.skipped.length > 0 && (
         <Alert tone="warning" className="mb-4">
-          {t('importSkipped', {
-            names: imported.skipped
-              .filter((n) => n.code === 'file')
-              .map((n) => n.name)
-              .join(', '),
-          })}
-        </Alert>
-      )}
-      {imported.skipped?.some((n) => n.code === 'form') && (
-        <Alert tone="warning" className="mb-4">
-          {t('importForm')}
+          <ul className="list-inside list-disc space-y-1">
+            {imported.skipped.some((n) => n.code === 'file') && (
+              <li>
+                {t('importSkipped', {
+                  names: imported.skipped
+                    .filter((n) => n.code === 'file')
+                    .map((n) => n.name)
+                    .join(', '),
+                })}
+              </li>
+            )}
+            {imported.skipped.some((n) => n.code === 'form') && <li>{t('importForm')}</li>}
+            {imported.skipped
+              .filter((n) => n.code === 'body')
+              .map((n) => (
+                <li key={`body-${n.name}`}>{t('importBody', { method: n.name })}</li>
+              ))}
+            {imported.skipped
+              .filter((n) => n.code === 'method')
+              .map((n) => (
+                <li key={`method-${n.name}`}>{t('importMethod', { method: n.name })}</li>
+              ))}
+          </ul>
         </Alert>
       )}
       <ApiForm key="import" initial={fromImport(imported)} />

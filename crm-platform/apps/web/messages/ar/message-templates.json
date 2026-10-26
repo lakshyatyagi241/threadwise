@@ -374,6 +374,7 @@
           "quickReplyPosition": "يجب أن تكون الردود السريعة معًا، في بداية الأزرار أو نهايتها.",
           "flowIdRequired": "أدخل معرّف Flow.",
           "flowIdInvalid": "معرّف Flow رقم.",
+          "flowIdNotMeta": "هذا النموذج ليس Flow على Meta بعد (معرّف Flow ليس رقمًا). افتح نماذج واتساب، ثم احفظه وانشره، ثم اختره هنا.",
           "screenRequired": "أدخل معرّف الشاشة.",
           "catalogAlone": "لا يمكن الجمع بين زر الكتالوج وأزرار أخرى."
         },
@@ -384,6 +385,7 @@
         "flowLoading": "جارٍ تحميل النماذج…",
         "flowNone": "ليس لديك نماذج واتساب منشورة بعد.",
         "flowNoneLink": "أنشئ نموذجًا وانشره",
+        "flowNotOnMeta": "{title} (انشره على Meta أولًا)",
         "flowById": "Flow {id}"
       },
       "result": {

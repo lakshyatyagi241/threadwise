@@ -367,6 +367,7 @@
           "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons.",
           "flowIdRequired": "Enter the Flow ID.",
           "flowIdInvalid": "The Flow ID is a number.",
+          "flowIdNotMeta": "This form is not a Meta Flow yet (its Flow ID is not a number). Open WhatsApp Forms, Save & publish it, then pick it here.",
           "screenRequired": "Enter the screen ID.",
           "catalogAlone": "A catalog button cannot be combined with other buttons."
         },
@@ -377,6 +378,7 @@
         "flowLoading": "Loading forms…",
         "flowNone": "You have no published WhatsApp Forms yet.",
         "flowNoneLink": "Create and publish one",
+        "flowNotOnMeta": "{title} (publish it to Meta first)",
         "flowById": "Flow {id}"
       },
       "result": {

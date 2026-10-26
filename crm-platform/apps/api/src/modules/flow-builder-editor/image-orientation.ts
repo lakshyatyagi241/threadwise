@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 
 /** The pictures whose files can carry an EXIF orientation that WhatsApp does not apply. */
-const ORIENTED = new Set(['image/jpeg', 'image/webp']);
+const ORIENTED = new Set(['image/jpeg', 'image/webp', 'image/png']);
 const QUALITY = 92;
 
 /**
@@ -15,9 +15,13 @@ export async function upright(buffer: Buffer, mime: string): Promise<Buffer> {
     const { orientation } = await sharp(buffer).metadata();
     if (!orientation || orientation === 1) return buffer;
     const turned = sharp(buffer).rotate().keepIccProfile();
-    return await (
-      mime === 'image/webp' ? turned.webp({ quality: QUALITY }) : turned.jpeg({ quality: QUALITY })
-    ).toBuffer();
+    const out =
+      mime === 'image/webp'
+        ? turned.webp({ quality: QUALITY })
+        : mime === 'image/png'
+          ? turned.png()
+          : turned.jpeg({ quality: QUALITY });
+    return await out.toBuffer();
   } catch {
     return buffer;
   }

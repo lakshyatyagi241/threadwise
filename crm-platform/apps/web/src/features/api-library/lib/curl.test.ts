@@ -149,3 +149,28 @@ describe('parseCurl', () => {
     });
   });
 });
+
+describe('what a pasted command has that the form cannot take is said, not dropped', () => {
+  it('says a GET with a message will not send it, and keeps the message', () => {
+    const r = parseCurl(
+      `curl -X GET https://httpbin.org/anything/search -d '{"query":"active users"}'`,
+    );
+    expect(r?.method).toBe('GET');
+    expect(r?.body).toEqual({ query: 'active users' });
+    expect(r?.skipped).toEqual([{ code: 'body', name: 'GET' }]);
+  });
+  it('says a method it does not know, and does not hide the message that came with it', () => {
+    const r = parseCurl(`curl -X PACTH https://api.example.com/x -d '{"a":1}'`);
+    expect(r?.method).toBe('GET');
+    expect(r?.skipped).toEqual([
+      { code: 'method', name: 'PACTH' },
+      { code: 'body', name: 'GET' },
+    ]);
+  });
+  it('has nothing to say about a command the form takes whole', () => {
+    expect(
+      parseCurl(`curl -X POST https://api.example.com/x -d '{"a":1}'`)?.skipped,
+    ).toBeUndefined();
+    expect(parseCurl('curl https://api.example.com/x')?.skipped).toBeUndefined();
+  });
+});

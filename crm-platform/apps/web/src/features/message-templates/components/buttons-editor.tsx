@@ -190,7 +190,7 @@ export function ButtonsEditor({
                           err('flowIdRequired')
                             ? t('issue.flowIdRequired')
                             : err('flowIdInvalid')
-                              ? t('issue.flowIdInvalid')
+                              ? t('issue.flowIdNotMeta')
                               : err('screenRequired')
                                 ? t('issue.screenRequired')
                                 : undefined
