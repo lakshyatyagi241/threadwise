@@ -116,10 +116,10 @@ describe('BuilderRoute in a Simple workspace: a saved flow opens in the editor i
     expect(h.canvas).toHaveBeenCalled();
   });
 
-  it('a new WhatsApp bot is made in the Simple builder', async () => {
+  it('a new flow with no type stays on the canvas, not the Simple builder (the Messaging (Advanced) and Workflow links)', async () => {
     await mount();
-    expect(h.replace).toHaveBeenCalledWith('/flows/simple');
-    expect(h.canvas).not.toHaveBeenCalled();
+    expect(h.replace).not.toHaveBeenCalled();
+    expect(h.canvas).toHaveBeenCalled();
   });
 
   it('a new call (?type=call) stays on the canvas', async () => {

@@ -378,10 +378,13 @@
           "catalogAlone": "ปุ่มแคตตาล็อกใช้ร่วมกับปุ่มอื่นไม่ได้"
         },
         "catalogHint": "เปิดแคตตาล็อก WhatsApp ของคุณ ปุ่มจะแสดงว่า “ดูแคตตาล็อก” และต้องเป็นปุ่มเดียวเท่านั้น",
-        "flowId": "รหัส WhatsApp Flow",
-        "flowIdHint": "รหัสตัวเลขของ WhatsApp Flow ที่เผยแพร่แล้ว จากตัวจัดการ Flows ของ Meta",
-        "screen": "หน้าจอแรก",
-        "screenHint": "รหัสของหน้าจอที่แบบฟอร์มเปิดขึ้น เช่น WELCOME"
+        "flowPick": "แบบฟอร์ม WhatsApp",
+        "flowPickHint": "เลือกแบบฟอร์ม WhatsApp ที่เผยแพร่แล้วของคุณ ปุ่มจะเปิดแบบฟอร์มนั้นใน WhatsApp",
+        "flowChoose": "เลือกแบบฟอร์ม WhatsApp",
+        "flowLoading": "กำลังโหลดแบบฟอร์ม…",
+        "flowNone": "คุณยังไม่มีแบบฟอร์ม WhatsApp ที่เผยแพร่",
+        "flowNoneLink": "สร้างและเผยแพร่หนึ่งแบบฟอร์ม",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "บันทึกแล้ว แต่ Meta ปฏิเสธเทมเพลต",

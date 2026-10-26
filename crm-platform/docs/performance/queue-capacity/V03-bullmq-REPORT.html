@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>V-03 BullMQ</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;max-width:960px;margin:2rem auto;padding:0 1rem;color:#1b1f23}table{border-collapse:collapse;width:100%;margin:.5rem 0 1.2rem}td,th{border:1px solid #d0d7de;padding:5px 9px;text-align:left}th{background:#f6f8fa}pre{background:#f6f8fa;padding:10px;overflow:auto}.note{border-left:4px solid #d4a72c;background:#fff8c5;padding:8px 12px}</style></head><body>
+<h1>V-03: BullMQ memory, payloads and concurrency</h1>
+<p>Sheet4 V-03 (owner Vishal). Target: worker RSS and Redis memory down 20%. Measured on the real BullMQ 4 variants against a private Redis 7.4.11: 12,000 ids-only jobs completed and 800 failed per variant, bytes by <code>MEMORY USAGE</code> (exact).</p>
+<h2>Verdict</h2>
+<ul>
+<li><b>Changed: the event stream of every queue is capped at 100 entries</b> (BullMQ keeps 10,000). Nothing in this code base reads it (no <code>QueueEvents</code>). One busy queue: 2798 KB to 2268 KB, <b>-18.9%</b>. No behaviour change.</li>
+<li><b>Short of the 20% target on its own (-18.9%).</b> Not done, owner decision: keep 100 completed jobs per queue instead of 1,000 (<code>removeOnComplete.count</code>): -51.1% together with the cap. It shortens the "what finished in the last hour" view of every queue on the defaults, which <code>queues.ts</code> says is the point of the 1,000, so it is not made here.</li>
+<li><b>Worst case against the Redis limit:</b> 51 queues, all full, hold about 139 MB today against 192 MB of <code>maxmemory</code> (113 MB with the cap, 68 MB with both). Real queues are rarely all full; <code>noeviction</code> means a full Redis refuses writes, not that it drops keys.</li>
+<li><b>Concurrency is oversubscribed against the DB pool.</b> The worker runs 173 job slots; 55 are database-bound queues, and production sets <code>DB_POOL_MAX</code> to 10 (<code>deploy/hostinger/docker-compose.yml</code>; default 20). Up to 55 jobs can wait on 10 connections. Not changed: no real processor has been benchmarked (see <code>worker-concurrency-recommendations.md</code>), and lowering a queue's concurrency without that can slow ingest.</li>
+<li><b>Payloads: most producers already pass ids</b> (message send is <code>{orgId, messageUuid, generation}</code>; campaign and broadcast runs pass ids; the inbound queues drop completed jobs). The ones that carry bodies are listed below; none is changed here.</li>
+</ul>
+<div class="note"><b>What this does not prove.</b> The 19% is for ids-only jobs on one Redis: larger payloads make the stream a smaller share, so the saving is a floor per queue, not a measure of production. Worker RSS was not measured: the job-slot count and payload size bear on it, but no processor was run here. Real queue fill rates need production metrics (<code>crm_queue_job_duration_seconds</code>, Redis <code>used_memory</code> per queue prefix).</div>
+<h2>Redis bytes of one queue (12000 completed run, 800 failed)</h2>
+<table><tr><th>Variant</th><th>Queue KB</th><th>vs today</th><th>Job hashes KB</th><th>Event stream KB</th><th>All 51 queues full, MB</th></tr><tr><td>today</td><td>2798</td><td>0%</td><td>2117</td><td>552</td><td>139</td></tr><tr><td>events-100</td><td>2268</td><td>-18.9%</td><td>2129</td><td>11</td><td>113</td></tr><tr><td>events-100-complete-100</td><td>1368</td><td>-51.1%</td><td>1309</td><td>14</td><td>68</td></tr><tr><td>complete-true</td><td>1790</td><td>-36%</td><td>1199</td><td>547</td><td>89</td></tr></table>
+<p><code>today</code>: completed 1,000 kept for 1 h, failed 500 for 3 days, stream cap 10,000. A job costs about 1.4 KB retained even with a two-field payload: the hash, its options and its timestamps.</p>
+<h2>Concurrency against the pool</h2>
+<table><tr><th>Queue</th><th>Slots</th><th>Kind</th></tr><tr><td>webhook-ingest</td><td>8</td><td>db</td></tr><tr><td>waba-ingest</td><td>8</td><td>db</td></tr><tr><td>flow-run</td><td>8</td><td>db</td></tr><tr><td>mkt-inbound</td><td>6</td><td>db</td></tr><tr><td>ecom-webhook</td><td>5</td><td>db</td></tr><tr><td>telephony-ingest</td><td>4</td><td>db</td></tr><tr><td>webhook-retry</td><td>4</td><td>db</td></tr><tr><td>con-import</td><td>2</td><td>db</td></tr></table>
+<p>55 database-bound slots in total against a pool of 10 in production. Next step: run the real processors of the top five behind a mock provider (<code>tools/queue-capacity/bench.mjs</code>) and set concurrency near the pool share.</p>
+<h2>Jobs that carry bodies (read from the code, not measured)</h2>
+<table><tr><th>Producer</th><th>What the job holds</th><th>Retention</th><th>Note</th></tr>
+<tr><td>shopify-woocommerce/broadcast.service.ts</td><td><code>resume.audience</code>: every held recipient (phone, name, contactId), about 66 bytes each</td><td>delayed until quiet hours end; failed kept 1,000</td><td>10,000 held people is about 0.6 MB in one job. Pass a reference to a stored list instead.</td></tr>
+<tr><td>outbound-webhooks/webhook-dispatch.consumer.ts</td><td>the whole event <code>envelope</code>, per (event, webhook)</td><td>1,000 completed, 5,000 failed</td><td>The largest retention of any queue: up to 6,000 envelopes.</td></tr>
+<tr><td>webhook-fanout/webhook-fanout.service.ts</td><td>the raw webhook <code>body</code>, once per target</td><td>dropped on completion</td><td>N copies of one body for N targets.</td></tr>
+<tr><td>whatsapp-cloud-api-waba/waba-webhook.service.ts</td><td>the changes, sealed (encrypted)</td><td>dropped on completion</td><td>Encrypted at rest in Redis; about 1.4 times the plain size.</td></tr>
+<tr><td>shopify-woocommerce/webhook.service.ts, cart.service.ts</td><td>the store event <code>data</code></td><td>dropped on completion; failed kept 1,000</td><td></td></tr></table>
+<h2>Scripts</h2>
+<pre>docker run -d --rm --name qb -p 127.0.0.1:7301:6379 redis:7-alpine redis-server --appendonly no --save ""
+node tools/queue-capacity/retention-bench.mjs --url redis://127.0.0.1:7301 --out docs/performance/queue-capacity/v03/retention-bench.json
+docker rm -f qb
+node tools/queue-capacity/v03-report.mjs
+cd apps/api &amp;&amp; npx vitest run test/integration/redis/queue-events-stream.spec.ts --testTimeout=120000</pre>
+</body></html>
