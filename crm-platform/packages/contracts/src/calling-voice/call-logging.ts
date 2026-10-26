@@ -39,7 +39,23 @@ export const CALL_OUTCOMES = [
 export type CallOutcome = (typeof CALL_OUTCOMES)[number];
 export const callOutcomeSchema = z.enum(CALL_OUTCOMES);
 
+/** What a call was for, one of a short fixed list (the web's Log a call form and the phone's "Add call" page offer the same six). */
+export const CALL_PURPOSES = [
+  'prospecting',
+  'administrative',
+  'negotiation',
+  'demo',
+  'project',
+  'desk',
+] as const;
+export type CallPurpose = (typeof CALL_PURPOSES)[number];
+export const callPurposeSchema = z.enum(CALL_PURPOSES);
+
 export const CALL_NOTES_MAX = 2000;
+/** The call's heading, also the title of its line on the contact's timeline. */
+export const CALL_SUBJECT_MAX = 191;
+/** A short line: what came of the call. */
+export const CALL_RESULT_MAX = 500;
 /** The longest call an entry may record: a day. */
 export const CALL_MAX_DURATION_SEC = 86_400;
 /** A call may not start later than this many minutes from now (clocks differ)... */
@@ -74,6 +90,12 @@ export const callLogEntrySchema = z.object({
   handlerId: uuidSchema.nullable(),
   handlerName: z.string().nullable(),
   notes: z.string().nullable(),
+  /** The call's heading, null when none was given (an entry reported by a phone or a provider has none). */
+  subject: z.string().nullable().optional(),
+  /** What the call was for, null when not said. */
+  purpose: callPurposeSchema.nullable().optional(),
+  /** What came of the call, null when not said. */
+  result: z.string().nullable().optional(),
   /** The entry points at a recording on the provider's side (the reference itself is never returned). */
   hasRecordingRef: z.boolean(),
   followUpTaskId: uuidSchema.nullable(),
@@ -115,6 +137,11 @@ export const logCallInputSchema = z
     startedAt: startedAt.optional(),
     durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
     notes: z.string().trim().max(CALL_NOTES_MAX).optional(),
+    /** The call's heading. When given it is also the title of the line the call writes on the contact's timeline. */
+    subject: z.string().trim().min(1).max(CALL_SUBJECT_MAX).optional(),
+    purpose: callPurposeSchema.optional(),
+    /** What came of the call, in a line. */
+    result: z.string().trim().min(1).max(CALL_RESULT_MAX).optional(),
     ourPhone: phoneText.optional(),
     numberLabel: z.string().trim().max(80).optional(),
     source: z.enum(['manual', 'web_click_to_call']).default('manual'),
@@ -162,6 +189,10 @@ export const updateCallLogEntryInputSchema = z.object({
   durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).optional(),
   /** `null` clears the notes. */
   notes: z.string().trim().max(CALL_NOTES_MAX).nullable().optional(),
+  /** `null` clears it. */
+  subject: z.string().trim().min(1).max(CALL_SUBJECT_MAX).nullable().optional(),
+  purpose: callPurposeSchema.nullable().optional(),
+  result: z.string().trim().min(1).max(CALL_RESULT_MAX).nullable().optional(),
   rowVersion: z.number().int().positive(),
 });
 export type UpdateCallLogEntryInput = z.infer<typeof updateCallLogEntryInputSchema>;

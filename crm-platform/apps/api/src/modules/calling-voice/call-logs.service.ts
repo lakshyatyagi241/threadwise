@@ -12,6 +12,7 @@ import {
   type CallLogRow,
   type CallLogStatus,
   type CallPlayback,
+  type CallPurpose,
   type CallRecordingConsentMethod,
   type CallRecordingLifecycle,
   type CallTimelineEntry,
@@ -88,6 +89,8 @@ export function toLogRow(r: Row): CallLogRow {
     source: ((r.source as CallLogSource | undefined) ?? 'whatsapp') as CallLogSource,
     outcome: (r.outcome as CallOutcome | null | undefined) ?? null,
     notesPreview: notesPreview(r.notes as string | null | undefined),
+    subject: (r.subject as string | null | undefined) ?? null,
+    purpose: (r.purpose as CallPurpose | null | undefined) ?? null,
   };
 }
 
@@ -218,6 +221,7 @@ export class CallLogsService {
         failureReason: null,
         conversationId: null,
         notes: (r.notes as string | null) ?? null,
+        result: (r.result as string | null) ?? null,
         followUpTaskId: (r.task_uuid as string | null) ?? null,
       },
       timeline: [

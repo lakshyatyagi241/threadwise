@@ -55,9 +55,17 @@ describe('privacy: erasing a person reaches the call-logging tables', () => {
 
   const entry = (externalId: string, contactId: number | null, phone: string) =>
     one(
-      `INSERT INTO call_log_entries (org_id, source, direction, outcome, started_at, contact_id, customer_phone, our_phone, notes, external_id)
-       VALUES ($1, 'telephony', 'outbound', 'connected', now(), $2, $3, '+911140000000', $4, $5) RETURNING id`,
-      [orgId, contactId, phone, `spoke to the customer on ${phone}`, externalId],
+      `INSERT INTO call_log_entries (org_id, source, direction, outcome, started_at, contact_id, customer_phone, our_phone, notes, subject, purpose, result, external_id)
+       VALUES ($1, 'telephony', 'outbound', 'connected', now(), $2, $3, '+911140000000', $4, $6, 'demo', $7, $5) RETURNING id`,
+      [
+        orgId,
+        contactId,
+        phone,
+        `spoke to the customer on ${phone}`,
+        externalId,
+        `Call with ${phone}`,
+        `Agreed to meet, number ${phone}`,
+      ],
     );
 
   const placementIds = async (): Promise<number[]> =>
@@ -132,7 +140,7 @@ describe('privacy: erasing a person reaches the call-logging tables', () => {
     });
   }
 
-  it('a call log entry keeps the call but loses the number, the notes and the provider call id', async () => {
+  it('a call log entry keeps the call but loses the number, the notes, the subject, the result and the provider call id', async () => {
     const rita = await person();
     const mine = await entry('provider-call-1', rita.id, rita.phone);
     const theirs = await entry('provider-call-2', other, OTHER_PHONE);
@@ -141,13 +149,17 @@ describe('privacy: erasing a person reaches the call-logging tables', () => {
 
     const row = (
       await owner.query(
-        `SELECT customer_phone, our_phone, notes, external_id, direction, outcome FROM call_log_entries WHERE id = $1`,
+        `SELECT customer_phone, our_phone, notes, subject, purpose, result, external_id, direction, outcome FROM call_log_entries WHERE id = $1`,
         [mine],
       )
     ).rows[0];
     expect(row.customer_phone).toBeNull();
     expect(row.our_phone).toBeNull();
     expect(row.notes).toBeNull();
+    // What a person wrote about the call goes with the notes; what it was for is not about anyone and stays.
+    expect(row.subject).toBeNull();
+    expect(row.result).toBeNull();
+    expect(row.purpose).toBe('demo');
     expect(row.external_id).toBeNull();
     expect(row.direction).toBe('outbound');
     expect(row.outcome).toBe('connected');

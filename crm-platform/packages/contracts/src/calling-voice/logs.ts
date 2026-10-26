@@ -5,7 +5,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
-import { callLogSourceSchema, callOutcomeSchema } from './call-logging';
+import { callLogSourceSchema, callOutcomeSchema, callPurposeSchema } from './call-logging';
 import { callRecordingLifecycleSchema } from './recording';
 
 // --- vocabulary --------------------------------------------------------------------------------------------------------
@@ -96,6 +96,9 @@ export const callLogRowSchema = z.object({
   outcome: callOutcomeSchema.nullable().optional(),
   /** The first words of the notes a person wrote on a logged call. */
   notesPreview: z.string().nullable().optional(),
+  /** The heading a person gave a logged call, and what it was for (call log entries only). */
+  subject: z.string().nullable().optional(),
+  purpose: callPurposeSchema.nullable().optional(),
 });
 export type CallLogRow = z.infer<typeof callLogRowSchema>;
 
@@ -162,6 +165,8 @@ export const callLogDetailSchema = z.object({
     conversationId: uuidSchema.nullable(),
     /** The notes on a logged call (call log entries only). */
     notes: z.string().nullable().optional(),
+    /** What came of a logged call, in a line. */
+    result: z.string().nullable().optional(),
     followUpTaskId: uuidSchema.nullable().optional(),
   }),
   timeline: z.array(callTimelineEntrySchema),

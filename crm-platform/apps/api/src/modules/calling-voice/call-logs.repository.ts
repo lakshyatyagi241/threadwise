@@ -47,7 +47,8 @@ const MISSED = sql`(w.direction = 'USER_INITIATED' AND w.status IN ('ended', 'fa
 const WA_BRANCH = sql`SELECT 'whatsapp'::text AS source, w.org_id, w.id AS row_id, w.uuid, w.direction, w.status, w.duration_sec,
     w.end_reason, w.from_phone, w.to_phone, w.started_at, w.answered_at, w.ended_at, w.handler_type, w.handler_user_id, w.contact_id,
     w.wa_provider_config_id, (w.recording_path IS NOT NULL) AS has_recording, ${STATUS} AS log_status, ${ANSWERED} AS is_answered,
-    ${MISSED} AS is_missed, NULL::text AS outcome, NULL::text AS notes, NULL::text AS number_label
+    ${MISSED} AS is_missed, NULL::text AS outcome, NULL::text AS notes, NULL::text AS number_label,
+    NULL::text AS subject, NULL::text AS purpose, NULL::text AS result
   FROM wa_calls w`;
 
 /**
@@ -72,7 +73,7 @@ const ENTRY_BRANCH = sql`SELECT e.source, e.org_id, e.id AS row_id, e.uuid,
       WHEN 'failed' THEN 'failed' WHEN 'wrong_number' THEN 'failed' ELSE 'no-answer' END AS log_status,
     (e.outcome = 'connected') AS is_answered,
     (e.direction = 'inbound' AND e.outcome <> 'connected') AS is_missed,
-    e.outcome, e.notes, e.number_label
+    e.outcome, e.notes, e.number_label, e.subject, e.purpose, e.result
   FROM call_log_entries e`;
 
 /** Both logs as one set, `w` to everything below. Entries are left out entirely when the request is for WhatsApp only. */
@@ -131,7 +132,7 @@ const WA_ROW_COLS = sql`w.uuid, w.direction, w.status AS call_status, ${STATUS} 
   u.uuid AS handler_uuid, u.full_name AS handler_name`;
 
 /** The columns of a row of the unified log, from either source. */
-const ROW_COLS = sql`w.uuid, w.source, w.outcome, w.notes, w.direction, w.status AS call_status, w.log_status, w.duration_sec,
+const ROW_COLS = sql`w.uuid, w.source, w.outcome, w.notes, w.subject, w.purpose, w.result, w.direction, w.status AS call_status, w.log_status, w.duration_sec,
   w.end_reason, w.from_phone, w.to_phone, w.started_at, w.answered_at, w.ended_at, w.handler_type, w.has_recording,
   to_char(w.started_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS started_iso,
   ct.uuid AS contact_uuid, coalesce(ct.name, ct.first_name) AS contact_name,

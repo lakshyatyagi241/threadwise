@@ -33,9 +33,9 @@ import {
   defaultStartedAt,
   e164Of,
   editVerdict,
-  notesPreview,
   stageNudge,
-  timelineTitle,
+  timelineBody,
+  timelineHeading,
 } from './call-logging.rules';
 import {
   CallLogEntriesRepository,
@@ -147,13 +147,14 @@ export class CallLogEntriesService {
       const line = await this.activities.insert(tx, orgId, {
         contactId: d.contactId,
         activityType: activityTypeOf(d.source),
-        title: timelineTitle({
+        title: timelineHeading({
           direction: d.direction,
           outcome: d.outcome,
           durationSec: d.durationSec,
           handlerName,
+          subject: d.subject,
         }),
-        body: notesPreview(d.notes, 200),
+        body: timelineBody(d),
         source: d.activitySource,
         actorId: d.handlerUserId ?? d.createdBy,
         occurredAt: d.startedAt,
@@ -177,6 +178,9 @@ export class CallLogEntriesService {
         outcome: { old: null, new: d.outcome },
         durationSec: { old: null, new: d.durationSec },
         hasNotes: { old: null, new: d.notes !== null },
+        purpose: { old: null, new: d.purpose ?? null },
+        hasSubject: { old: null, new: (d.subject ?? null) !== null },
+        hasResult: { old: null, new: (d.result ?? null) !== null },
       },
     });
     const entry = (await this.repo.byId(tx, orgId, inserted.id))!;
@@ -257,6 +261,9 @@ export class CallLogEntriesService {
         numberLabel: input.numberLabel ?? null,
         handlerUserId: ctx.userId,
         notes: input.notes ?? null,
+        subject: input.subject ?? null,
+        purpose: input.purpose ?? null,
+        result: input.result ?? null,
         externalId: input.externalId ?? null,
         telephonyConnectionId: null,
         recording: null,
@@ -349,6 +356,15 @@ export class CallLogEntriesService {
       if (notes !== undefined && notes !== row.notes) {
         delta.hasNotes = { old: row.notes !== null, new: notes !== null };
       }
+      if (input.subject !== undefined && input.subject !== row.subject) {
+        delta.hasSubject = { old: row.subject !== null, new: input.subject !== null };
+      }
+      if (input.purpose !== undefined && input.purpose !== row.purpose) {
+        delta.purpose = { old: row.purpose, new: input.purpose };
+      }
+      if (input.result !== undefined && input.result !== row.result) {
+        delta.hasResult = { old: row.result !== null, new: input.result !== null };
+      }
       if (Object.keys(delta).length === 0) {
         return this.respond(row, ctx.userId, canManage, windowHours);
       }
@@ -359,18 +375,22 @@ export class CallLogEntriesService {
         startedAt,
         durationSec: input.durationSec,
         notes,
+        subject: input.subject,
+        purpose: input.purpose,
+        result: input.result,
       });
       if (!ok) throw AppError.rowVersionConflict('Call');
       const fresh = (await this.repo.byId(tx, ctx.orgId, row.id))!;
       if (fresh.activityId !== null) {
         await this.activities.rewrite(tx, ctx.orgId, fresh.activityId, {
-          title: timelineTitle({
+          title: timelineHeading({
             direction: fresh.direction,
             outcome: fresh.outcome,
             durationSec: fresh.durationSec,
             handlerName: fresh.handlerName,
+            subject: fresh.subject,
           }),
-          body: notesPreview(fresh.notes, 200),
+          body: timelineBody(fresh),
           occurredAt: fresh.startedAt,
         });
       }
@@ -556,6 +576,9 @@ export class CallLogEntriesService {
       handlerId: r.handlerUuid,
       handlerName: r.handlerName,
       notes: r.notes,
+      subject: r.subject,
+      purpose: r.purpose,
+      result: r.result,
       hasRecordingRef: r.hasRecordingRef,
       followUpTaskId: r.followUpTaskUuid,
       createdById: r.createdByUuid,

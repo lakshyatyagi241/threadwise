@@ -129,6 +129,124 @@ describe('Log a call', () => {
     expect(JSON.stringify(audit)).not.toContain(number);
   });
 
+  it('keeps the subject, the purpose and the result as columns of their own, titles the timeline line with the subject, and answers them', async () => {
+    const { t, contactId } = await setup('lc-det');
+    const res = await post(t.admin, '/v2/calls/log', {
+      contactId,
+      direction: 'inbound',
+      outcome: 'connected',
+      durationSec: 95,
+      startedAt: iso(HOUR),
+      subject: 'Quote follow-up',
+      purpose: 'negotiation',
+      result: 'Interested in the annual plan',
+      notes: 'Send the revised quote by Friday.',
+      externalId: 'phone-call-1',
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.entry).toMatchObject({
+      direction: 'inbound',
+      subject: 'Quote follow-up',
+      purpose: 'negotiation',
+      result: 'Interested in the annual plan',
+      notes: 'Send the revised quote by Friday.',
+    });
+
+    const stored = await rows<{ subject: string; purpose: string; result: string; notes: string }>(
+      `SELECT subject, purpose, result, notes FROM call_log_entries WHERE org_id = $1`,
+      [t.orgId],
+    );
+    expect(stored).toEqual([
+      {
+        subject: 'Quote follow-up',
+        purpose: 'negotiation',
+        result: 'Interested in the annual plan',
+        notes: 'Send the revised quote by Friday.',
+      },
+    ]);
+    const line = await rows<{ title: string; body: string }>(
+      `SELECT title, body FROM contact_activities WHERE org_id = $1`,
+      [t.orgId],
+    );
+    expect(line).toEqual([
+      {
+        title: 'Quote follow-up',
+        body: 'Interested in the annual plan · Send the revised quote by Friday.',
+      },
+    ]);
+
+    // The same call again (a retry, a double press) is the first entry, untouched, and writes no second line.
+    const again = await post(t.admin, '/v2/calls/log', {
+      contactId,
+      direction: 'inbound',
+      outcome: 'connected',
+      subject: 'A different subject',
+      externalId: 'phone-call-1',
+    });
+    expect(again.body).toMatchObject({ created: false });
+    expect(again.body.entry.subject).toBe('Quote follow-up');
+    expect(
+      (await rows(`SELECT 1 FROM contact_activities WHERE org_id = $1`, [t.orgId])).length,
+    ).toBe(1);
+
+    // The audit row names the facts, never the words.
+    const audit = await rows<{ delta: Record<string, { new: unknown }> }>(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'call_log_entries' AND action = 'insert'`,
+      [t.orgId],
+    );
+    expect(audit[0]!.delta).toMatchObject({
+      purpose: { new: 'negotiation' },
+      hasSubject: { new: true },
+      hasResult: { new: true },
+    });
+    expect(JSON.stringify(audit[0]!.delta)).not.toContain('Quote follow-up');
+    expect(JSON.stringify(audit[0]!.delta)).not.toContain('annual plan');
+  });
+
+  it('shows the subject and purpose on the Call logs list and the result on the detail', async () => {
+    const { t, contactId } = await setup('lc-list');
+    const made = await post(t.admin, '/v2/calls/log', {
+      contactId,
+      direction: 'outbound',
+      outcome: 'connected',
+      durationSec: 30,
+      subject: 'Intro call',
+      purpose: 'prospecting',
+      result: 'Booked a demo',
+    });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    const list = await p.api.as(t.admin).get('/v2/calling/call-logs');
+    expect(list.status, JSON.stringify(list.body)).toBe(200);
+    const row = (list.body.rows as Array<Record<string, unknown>>).find(
+      (r) => r.id === made.body.entry.id,
+    );
+    expect(row).toMatchObject({ subject: 'Intro call', purpose: 'prospecting' });
+    const detail = await p.api.as(t.admin).get(`/v2/calling/call-logs/${made.body.entry.id}`);
+    expect(detail.status, JSON.stringify(detail.body)).toBe(200);
+    expect(detail.body.call).toMatchObject({
+      subject: 'Intro call',
+      purpose: 'prospecting',
+      result: 'Booked a demo',
+    });
+  });
+
+  it('refuses a purpose that is not on the list, and a subject or result that is too long, writing nothing', async () => {
+    const { t, contactId } = await setup('lc-bad');
+    const base = { contactId, direction: 'outbound', outcome: 'connected' };
+    for (const bad of [
+      { purpose: 'chatting' },
+      { subject: 'x'.repeat(192) },
+      { result: 'x'.repeat(501) },
+      { subject: '' },
+    ]) {
+      const res = await post(t.admin, '/v2/calls/log', { ...base, ...bad });
+      expect(res.status, JSON.stringify(bad)).toBe(422);
+    }
+    expect((await rows(`SELECT 1 FROM call_log_entries WHERE org_id = $1`, [t.orgId])).length).toBe(
+      0,
+    );
+  });
+
   it('finds the contact by the canonical number when only a number is given', async () => {
     const { t, contactId } = await setup('lc2', { phone: '+919811200777' });
     const res = await post(t.admin, '/v2/calls/log', {
@@ -437,7 +555,44 @@ describe('who may log, edit and read', () => {
     expect(line).toEqual([
       { title: 'Outbound call, Connected, 2 min, by Rep4', body: 'Reached her after all.' },
     ]);
-    expect(await p.api.auditCount(t.orgId, 'call_log_entries', 'update')).toBe(1);
+
+    // The subject, purpose and result can be edited and cleared too, and the timeline line follows.
+    const detailed = await p.api.as(rep.token).patch(`/v2/calls/log/${id}`).send({
+      subject: 'Renewal call',
+      purpose: 'demo',
+      result: 'Will renew',
+      rowVersion: patched.body.rowVersion,
+    });
+    expect(detailed.status, JSON.stringify(detailed.body)).toBe(200);
+    expect(detailed.body).toMatchObject({
+      subject: 'Renewal call',
+      purpose: 'demo',
+      result: 'Will renew',
+    });
+    expect(
+      await rows<{ title: string; body: string }>(
+        `SELECT title, body FROM contact_activities WHERE org_id = $1`,
+        [t.orgId],
+      ),
+    ).toEqual([{ title: 'Renewal call', body: 'Will renew · Reached her after all.' }]);
+    const cleared = await p.api.as(rep.token).patch(`/v2/calls/log/${id}`).send({
+      subject: null,
+      purpose: null,
+      result: null,
+      rowVersion: detailed.body.rowVersion,
+    });
+    expect(cleared.status, JSON.stringify(cleared.body)).toBe(200);
+    expect(cleared.body).toMatchObject({ subject: null, purpose: null, result: null });
+    expect(
+      (
+        await rows<{ title: string }>(`SELECT title FROM contact_activities WHERE org_id = $1`, [
+          t.orgId,
+        ])
+      )[0]!.title,
+    ).toBe('Outbound call, Connected, 2 min, by Rep4');
+    patched.body.rowVersion = cleared.body.rowVersion;
+    // The first edit, then the two that follow it (the details given, then cleared).
+    expect(await p.api.auditCount(t.orgId, 'call_log_entries', 'update')).toBe(3);
 
     const stale = await p.api
       .as(rep.token)

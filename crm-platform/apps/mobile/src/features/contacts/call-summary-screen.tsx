@@ -1,4 +1,4 @@
-import { CALL_NOTES_MAX, logCallInputSchema } from '@crm/contracts';
+import { logCallInputSchema } from '@crm/contracts';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -87,8 +87,8 @@ function FormRow({ label, required, locked, error, children }: RowProps) {
  * the call as the phone saw it (contact, type, start, length), to be completed with a subject, the outcome, a purpose, a result
  * and notes, then saved on the contact's timeline as a "call". On Android the call-monitor service opens it the moment the call
  * ends; elsewhere the app opens it when the person comes back to the app (see `use-call-return`). The length is the time from
- * dialling to hanging up, so it can be changed. It is saved as a call record (`POST /v2/calls/log`, right `call.logs.create`), which
- * the Call logs screen and the contact's timeline both show.
+ * dialling to hanging up, so it can be changed. It is saved as a call record (`POST /v2/calls/log`, right `call.logs.create`) with its subject, purpose,
+ * result and description as fields of their own; the Call logs screen and the contact's timeline both show it.
  */
 export function CallSummaryScreen() {
   const { t, i18n } = useTranslation();
@@ -147,15 +147,6 @@ export function CallSummaryScreen() {
     if (title === '') next.subject = t('calls.summary.subjectInvalid');
     const outcome = result.trim();
     const details = notes.trim();
-    // The call record has no fields of its own for these, so they are written into its notes, one per line.
-    const lines = [
-      title,
-      purpose === 'none'
-        ? null
-        : `${t('calls.summary.purpose')}: ${t(`calls.summary.purposes.${purpose}`)}`,
-      outcome ? `${t('calls.summary.result')}: ${outcome}` : null,
-      details || null,
-    ].filter((line): line is string => line !== null && line !== '');
     const parsed = logCallInputSchema.safeParse({
       contactId,
       direction: incoming ? 'inbound' : 'outbound',
@@ -163,7 +154,10 @@ export function CallSummaryScreen() {
       outcome: status === 'notAnswered' ? 'no_answer' : 'connected',
       startedAt: new Date(startedAt).toISOString(),
       durationSec: seconds ?? 0,
-      notes: lines.join('\n').slice(0, CALL_NOTES_MAX),
+      subject: title,
+      purpose: purpose === 'none' ? undefined : purpose,
+      result: outcome === '' ? undefined : outcome,
+      notes: details === '' ? undefined : details,
       source: 'manual',
     });
     if (!parsed.success && !next.subject) next.subject = t('calls.summary.subjectInvalid');

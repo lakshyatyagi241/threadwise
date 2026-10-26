@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import type { ActivityOptionRef, CallEntrySource, CallOutcome } from '@crm/contracts';
+import type { ActivityOptionRef, CallEntrySource, CallOutcome, CallPurpose } from '@crm/contracts';
 import { optionRefColumns, optionRefFrom } from '../../crm';
 
 type Row = Record<string, unknown>;
@@ -31,6 +31,9 @@ export interface EntryRow {
   handlerUuid: string | null;
   handlerName: string | null;
   notes: string | null;
+  subject: string | null;
+  purpose: CallPurpose | null;
+  result: string | null;
   externalId: string | null;
   hasRecordingRef: boolean;
   /** A telephony provider reported it (a record of what happened, not a note a person typed). */
@@ -65,6 +68,9 @@ const toEntry = (r: Row): EntryRow => ({
   handlerUuid: str(r.handler_uuid),
   handlerName: str(r.handler_name),
   notes: str(r.notes),
+  subject: str(r.subject),
+  purpose: str(r.purpose) as CallPurpose | null,
+  result: str(r.result),
   externalId: str(r.external_id),
   hasRecordingRef: r.recording_ref !== null && r.recording_ref !== undefined,
   viaConnection: r.via_connection === true,
@@ -80,7 +86,7 @@ const toEntry = (r: Row): EntryRow => ({
 
 const SELECT = sql`SELECT e.id, e.uuid, e.source, e.direction, e.outcome, e.started_at, e.duration_sec, e.contact_id, ct.uuid AS contact_uuid,
     coalesce(ct.name, ct.first_name) AS contact_name, e.customer_phone, e.our_phone, e.number_label, e.handler_user_id,
-    hu.uuid AS handler_uuid, hu.full_name AS handler_name, e.notes, e.external_id, e.recording_ref, (e.telephony_connection_id IS NOT NULL) AS via_connection, e.follow_up_task_id, e.outcome_option_id,
+    hu.uuid AS handler_uuid, hu.full_name AS handler_name, e.notes, e.subject, e.purpose, e.result, e.external_id, e.recording_ref, (e.telephony_connection_id IS NOT NULL) AS via_connection, e.follow_up_task_id, e.outcome_option_id,
     ${optionRefColumns('oo', 'oa', 'outcome_opt')},
     tk.uuid AS task_uuid, e.activity_id, e.created_by, cu.uuid AS created_by_uuid, e.created_at, e.updated_at, e.row_version
   FROM call_log_entries e
@@ -105,6 +111,10 @@ export interface NewEntry {
   numberLabel: string | null;
   handlerUserId: number | null;
   notes: string | null;
+  /** What a person said about the call: its heading, what it was for, what came of it. A phone or a provider says none of it. */
+  subject?: string | null;
+  purpose?: CallPurpose | null;
+  result?: string | null;
   externalId: string | null;
   telephonyConnectionId: number | null;
   recording: { ref: string; method: string; noticeVersion: number } | null;
@@ -119,6 +129,9 @@ export interface EntryPatch {
   startedAt?: Date;
   durationSec?: number;
   notes?: string | null;
+  subject?: string | null;
+  purpose?: CallPurpose | null;
+  result?: string | null;
 }
 
 export interface LifecycleStage {
@@ -137,11 +150,12 @@ export class CallLogEntriesRepository {
       INSERT INTO call_log_entries (org_id, source, direction, outcome, started_at, duration_sec, contact_id, customer_phone, our_phone,
                                     number_label, handler_user_id, notes, external_id, telephony_connection_id, recording_ref,
                                     recording_stored_at, recording_consent_status, recording_consent_method, recording_notice_version,
-                                    created_by, outcome_option_id)
+                                    created_by, outcome_option_id, subject, purpose, result)
       VALUES (${orgId}, ${e.source}, ${e.direction}, ${e.outcome}, ${e.startedAt.toISOString()}::timestamptz, ${e.durationSec},
               ${e.contactId}, ${e.customerPhone}, ${e.ourPhone}, ${e.numberLabel}, ${e.handlerUserId}, ${e.notes}, ${e.externalId},
               ${e.telephonyConnectionId}, ${e.recording?.ref ?? null}, ${e.recording ? sql`now()` : null},
-              ${e.recording ? 'granted' : null}, ${e.recording?.method ?? null}, ${e.recording?.noticeVersion ?? null}, ${e.createdBy}, ${e.outcomeOptionId ?? null})
+              ${e.recording ? 'granted' : null}, ${e.recording?.method ?? null}, ${e.recording?.noticeVersion ?? null}, ${e.createdBy}, ${e.outcomeOptionId ?? null},
+              ${e.subject ?? null}, ${e.purpose ?? null}, ${e.result ?? null})
       ON CONFLICT (org_id, source, external_id) DO NOTHING
       RETURNING id, uuid`);
     const r = rowsOf(res)[0];
@@ -210,7 +224,10 @@ export class CallLogEntriesRepository {
           direction = ${p.direction ?? sql`direction`},
           started_at = ${p.startedAt ? sql`${p.startedAt.toISOString()}::timestamptz` : sql`started_at`},
           duration_sec = ${p.durationSec ?? sql`duration_sec`},
-          notes = ${p.notes === undefined ? sql`notes` : p.notes}
+          notes = ${p.notes === undefined ? sql`notes` : p.notes},
+          subject = ${p.subject === undefined ? sql`subject` : p.subject},
+          purpose = ${p.purpose === undefined ? sql`purpose` : p.purpose},
+          result = ${p.result === undefined ? sql`result` : p.result}
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);
     return rowsOf(res).length === 1;

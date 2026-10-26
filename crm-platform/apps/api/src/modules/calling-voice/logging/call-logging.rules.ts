@@ -54,6 +54,26 @@ export function timelineTitle(c: {
   return name ? `${parts.join(', ')}, by ${name}` : parts.join(', ');
 }
 
+/**
+ * The title of the line a call writes on the contact's timeline: the subject a person gave it, else the generated words ("Inbound call,
+ * connected, 2 min, by Asha").
+ */
+export function timelineHeading(
+  c: Parameters<typeof timelineTitle>[0] & { subject?: string | null },
+): string {
+  const subject = c.subject?.trim();
+  return subject ? subject : timelineTitle(c);
+}
+
+/** The body of that line: what came of the call, then the notes, as one preview (null when there is neither). */
+export function timelineBody(
+  c: { result?: string | null; notes?: string | null },
+  max = 200,
+): string | null {
+  const parts = [c.result?.trim(), c.notes?.trim()].filter((p): p is string => !!p);
+  return notesPreview(parts.join(' · '), max);
+}
+
 /** The timeline's activity type of an entry: one per source, so an icon can be picked from the type alone. */
 export const activityTypeOf = (source: string): string => `call_${source}`;
 

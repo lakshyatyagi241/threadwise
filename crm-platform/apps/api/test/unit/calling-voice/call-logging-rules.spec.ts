@@ -23,11 +23,39 @@ import {
   outcomeFromTelephony,
   stageNudge,
   telephonyExternalId,
+  timelineBody,
+  timelineHeading,
   timelineTitle,
 } from '../../../src/modules/calling-voice/logging/call-logging.rules';
 
 const NOW = new Date('2026-10-17T10:00:00Z');
 const HOUR = 3_600_000;
+
+describe('the subject and the result on the timeline', () => {
+  const call = {
+    direction: 'inbound',
+    outcome: 'connected',
+    durationSec: 60,
+    handlerName: 'Priya',
+  } as const;
+
+  it('titles the line with the subject when one was given, and with the generated words when not', () => {
+    expect(timelineHeading({ ...call, subject: '  Quote follow-up ' })).toBe('Quote follow-up');
+    expect(timelineHeading({ ...call, subject: null })).toBe(timelineTitle(call));
+    expect(timelineHeading({ ...call, subject: '   ' })).toBe(timelineTitle(call));
+    expect(timelineHeading(call)).toBe('Inbound call, Connected, 1 min, by Priya');
+  });
+
+  it('puts what came of the call before the notes, in one preview, and nothing when there is neither', () => {
+    expect(timelineBody({ result: 'Interested', notes: 'Wants a demo' })).toBe(
+      'Interested · Wants a demo',
+    );
+    expect(timelineBody({ result: 'Interested', notes: null })).toBe('Interested');
+    expect(timelineBody({ result: ' ', notes: 'Only notes' })).toBe('Only notes');
+    expect(timelineBody({})).toBeNull();
+    expect(timelineBody({ result: 'x'.repeat(300) }, 50)?.length).toBeLessThanOrEqual(51);
+  });
+});
 
 describe('the words on the timeline', () => {
   it('reads "Outbound call, Connected, 4 min, by Priya"', () => {

@@ -30,7 +30,7 @@ One table, `call_log_entries`, holds every call that is **not** a WhatsApp call.
 
 Columns of `call_log_entries` (migration `20261227090000_call_log_entries.sql`): `source`, `direction` (`inbound` | `outbound`), `outcome`
 (`connected`, `no_answer`, `busy`, `left_voicemail`, `wrong_number`, `declined`, `failed`), `started_at`, `duration_sec`, `contact_id`,
-`customer_phone` (E.164), `our_phone`, `number_label`, `handler_user_id`, `notes` (2,000 characters at most), `external_id`,
+`customer_phone` (E.164), `our_phone`, `number_label`, `handler_user_id`, `notes` (2,000 characters at most), `subject` (191), `purpose` (one of six: prospecting, administrative, negotiation, demo, project, desk) and `result` (500) from migration `2034_call_log_entry_details.sql` (null on every entry that a phone or a provider reported), `external_id`,
 `telephony_connection_id`, `recording_ref` and its consent evidence, `follow_up_task_id`, `activity_id` (the timeline line),
 `created_by`. Row-level security is enabled and forced; every foreign key is composite with `org_id`.
 
@@ -63,7 +63,7 @@ Every source goes through `CallLogEntriesService.write`, in one transaction:
    icon can be chosen from the type alone) and move the contact's last activity;
 3. audit (`call_log_entries`, facts only) and the outbox event `call.logged` in the same transaction.
 
-The timeline line reads "Outbound call, Connected, 4 min, by Priya" with the first words of the notes as its body. The talk time is left
+The timeline line reads "Outbound call, Connected, 4 min, by Priya" with the first words of the notes as its body; when the call has a subject, the subject is the title instead, and the body is the result then the notes ("Interested in the annual plan · Send the revised quote"). The talk time is left
 out of a call that did not connect; "by" is left out when nobody took the call. The line is kept in step when the call is edited and
 removed when it is deleted. The text is English on the server today (BL-258).
 
