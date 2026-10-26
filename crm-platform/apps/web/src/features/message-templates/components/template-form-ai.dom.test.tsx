@@ -176,3 +176,15 @@ describe('the template form and Build with AI', () => {
     expect(document.body.textContent).not.toContain('Template draft filled from AI.');
   });
 });
+
+describe('the body of a carousel template', () => {
+  it('has the same formatting buttons as any other body', () => {
+    mount();
+    setValue(field<HTMLSelectElement>('Category'), 'MARKETING');
+    setValue(field<HTMLSelectElement>('Button type'), 'carousel');
+    const labels = [...document.querySelectorAll('[role="toolbar"] button')].map((b) =>
+      b.textContent?.trim(),
+    );
+    expect(labels).toEqual(expect.arrayContaining(['Bold', 'Italic', 'Strikethrough']));
+  });
+});

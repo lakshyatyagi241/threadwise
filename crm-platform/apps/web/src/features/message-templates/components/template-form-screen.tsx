@@ -643,6 +643,21 @@ function TemplateForm({
           ) : carousel ? (
             <>
               <Section title={t('body.title')} hint={t('body.hint')}>
+                <div role="toolbar" aria-label={t('body.toolbar')} className="flex flex-wrap gap-1">
+                  {TOOLBAR.map((b) => (
+                    <Button
+                      key={b.id}
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => toggle(b.marker)}
+                    >
+                      {t(`body.format.${b.id}`)}
+                    </Button>
+                  ))}
+                  <Button size="sm" variant="secondary" onClick={insertVariable}>
+                    {t('body.variable')}
+                  </Button>
+                </div>
                 <Field
                   label={t('body.label')}
                   htmlFor={`${base}-body`}
