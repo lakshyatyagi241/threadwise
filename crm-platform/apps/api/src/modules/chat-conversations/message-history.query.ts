@@ -223,13 +223,17 @@ function narrowConditions(ctx: HistoryContext, sel: HistorySelection, b: BranchR
     } else if (p.source) {
       out.push(b.entity === 'message' ? sql`${b.source} = ${p.source}` : none);
     } else if (p.kinds) {
+      const kinds = sql`${b.kind} IN (${sql.join(
+        p.kinds.map((k) => sql`${k}`),
+        sql`, `,
+      )})`;
+      // A wizard test send is a plain text or template message too, so those filters keep it.
       out.push(
         b.entity === 'message'
-          ? sql`${b.kind} IN (${sql.join(
-              p.kinds.map((k) => sql`${k}`),
-              sql`, `,
-            )}) AND ${b.source} NOT IN ('auto_reply', 'broadcast')`
-          : none,
+          ? sql`${kinds} AND ${b.source} NOT IN ('auto_reply', 'broadcast')`
+          : b.entity === 'test'
+            ? kinds
+            : none,
       );
     }
   }
@@ -711,7 +715,7 @@ function testBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions
     source: sql`'broadcast_test'`,
     kind: sql`CASE WHEN tt.template_id IS NULL THEN 'text' ELSE 'template' END`,
     names: [sql`k.campaign_name`],
-    text: null,
+    text: sql`tt.rendered_body`,
     phoneDigits: phone,
     phoneOpen: contactOpen(ctx, null),
     templateMatch: (t) => sql`tt.template_id = ${t}`,
@@ -743,7 +747,7 @@ function testBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions
     channel_uuid: sql`NULL::uuid`,
     channel_kind: sql`NULL::text`,
     channel_name: sql`NULL::text`,
-    body: sql`NULL::text`,
+    body: sql`tt.rendered_body`,
     media_name: sql`NULL::text`,
     template_uuid: sql`t.uuid`,
     template_name: sql`t.template_name`,
