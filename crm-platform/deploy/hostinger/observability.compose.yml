@@ -165,6 +165,10 @@ services:
       SLOW_POLL_SECONDS: ${SLOW_POLL_SECONDS:-15}
       SLOW_COOLDOWN_SECONDS: ${SLOW_COOLDOWN_SECONDS:-900}
       SLOW_MAX_PER_MINUTE: ${SLOW_MAX_PER_MINUTE:-10}
+      # D-06 weekly digest of the statements that cost the most database time (digest.mjs): Monday 09:00 UTC. SLOW_DIGEST=0 turns it off.
+      SLOW_DIGEST: ${SLOW_DIGEST:-1}
+      SLOW_DIGEST_DAY: ${SLOW_DIGEST_DAY:-1}
+      SLOW_DIGEST_HOUR: ${SLOW_DIGEST_HOUR:-9}
       # Resolver (tools/chat-bridge/resolver.mjs). dry-run: it only says what it WOULD do. `on` needs the optional secret slow_query_cancel_pg_url.
       PROMETHEUS_URL: http://prometheus:9090
       SLOW_QUERY_ESCALATE_TO_CRITICAL: ${SLOW_QUERY_ESCALATE_TO_CRITICAL:-false}
