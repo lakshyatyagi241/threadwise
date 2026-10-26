@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scrubEvent, scrubLog, scrubText, scrubUrl } from './scrub';
+import { createThrottle, scrubEvent, scrubLog, scrubText, scrubUrl, throttleKey } from './scrub';
 
 describe('scrubUrl', () => {
   it.each([
@@ -106,6 +106,32 @@ describe('scrubEvent', () => {
 
   it('copes with an event that has none of these', () => {
     expect(scrubEvent({})).toEqual({});
+  });
+});
+
+describe('createThrottle (an API outage fails every open tab the same way)', () => {
+  it('lets the first `limit` of one key through per window, refuses the rest, then starts fresh', () => {
+    let t = 0;
+    const allow = createThrottle(2, 1000, () => t);
+    expect([1, 2, 3, 4].map(() => allow('fetch failed'))).toEqual([true, true, false, false]);
+    expect(allow('another error')).toBe(true);
+    t = 1000;
+    expect(allow('fetch failed')).toBe(true);
+  });
+
+  it('stays bounded when every key is different', () => {
+    let t = 0;
+    const allow = createThrottle(1, 1000, () => t, 3);
+    for (const k of ['a', 'b', 'c', 'd', 'e']) expect(allow(k)).toBe(true);
+    t = 5000;
+    expect(allow('a')).toBe(true);
+  });
+
+  it('keys an event by exception type and the start of its text', () => {
+    expect(
+      throttleKey({ exception: { values: [{ type: 'TypeError', value: 'fetch failed' }] } }),
+    ).toBe('TypeError:fetch failed');
+    expect(throttleKey({})).toBe(':');
   });
 });
 

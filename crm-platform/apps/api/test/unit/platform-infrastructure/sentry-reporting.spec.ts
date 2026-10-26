@@ -17,11 +17,13 @@ vi.mock('@sentry/node', () => ({
 
 import { attachJobFailureReporting } from '../../../src/modules/platform-infrastructure/observability/event-loop/job-metrics';
 import {
+  createThrottle,
   initSentry,
   moduleFromPath,
   reportClientError,
   reportServerError,
   scrubSentryLog,
+  throttleKey,
 } from '../../../src/modules/platform-infrastructure/observability/sentry';
 
 describe('moduleFromPath', () => {
@@ -100,6 +102,48 @@ describe('error reporting tags', () => {
     reportClientError(status, { path: '/v2/x', expected });
     expect(logInfo).toHaveBeenCalledTimes(1);
     expect(logWarn).not.toHaveBeenCalled();
+  });
+});
+
+describe('createThrottle (a failing dependency must not flood Sentry)', () => {
+  it('lets the first `limit` of one key through in a window, refuses the rest, then starts fresh', () => {
+    let t = 0;
+    const allow = createThrottle(3, 1000, () => t);
+    expect([1, 2, 3, 4, 5, 6].map(() => allow('fetch failed'))).toEqual([
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+    ]);
+    t = 999;
+    expect(allow('fetch failed')).toBe(false);
+    t = 1000;
+    expect(allow('fetch failed')).toBe(true);
+  });
+
+  it('keeps a separate budget per error, so a noisy one cannot hide a new one', () => {
+    const allow = createThrottle(1, 1000, () => 0);
+    expect(allow('a')).toBe(true);
+    expect(allow('a')).toBe(false);
+    expect(allow('b')).toBe(true);
+  });
+
+  it('stays bounded when every key is different', () => {
+    let t = 0;
+    const allow = createThrottle(1, 1000, () => t, 3);
+    for (const k of ['a', 'b', 'c', 'd', 'e']) expect(allow(k)).toBe(true);
+    t = 5000;
+    expect(allow('a')).toBe(true);
+  });
+
+  it('keys an event by exception type and the start of its text, else by its message', () => {
+    expect(
+      throttleKey({ exception: { values: [{ type: 'TypeError', value: 'fetch failed' }] } }),
+    ).toBe('TypeError:fetch failed');
+    expect(throttleKey({ message: 'x'.repeat(500) })).toBe(`:${'x'.repeat(120)}`);
+    expect(throttleKey({})).toBe(':');
   });
 });
 
