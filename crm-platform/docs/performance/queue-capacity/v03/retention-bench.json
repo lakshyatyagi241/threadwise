@@ -1,0 +1,77 @@
+{
+  "at": "2026-10-26T10:39:54.074Z",
+  "redis": "7.4.11",
+  "results": [
+    {
+      "variant": "today",
+      "jobs": 12000,
+      "failed": 800,
+      "bytesByKind": {
+        "job": 2168000,
+        "events": 565408,
+        "completed": 87240,
+        "id": 64,
+        "stalled-check": 72,
+        "failed": 43960,
+        "meta": 120
+      },
+      "queueBytes": 2864864,
+      "usedMemoryDelta": 3954568,
+      "eventsMaxLen": 10000,
+      "vsTodayPct": 0
+    },
+    {
+      "variant": "events-100",
+      "jobs": 12000,
+      "failed": 800,
+      "bytesByKind": {
+        "job": 2180000,
+        "id": 64,
+        "meta": 128,
+        "completed": 87272,
+        "failed": 44112,
+        "stalled-check": 80,
+        "events": 10864
+      },
+      "queueBytes": 2322520,
+      "usedMemoryDelta": 2420952,
+      "eventsMaxLen": 100,
+      "vsTodayPct": -18.9
+    },
+    {
+      "variant": "events-100-complete-100",
+      "jobs": 12000,
+      "failed": 800,
+      "bytesByKind": {
+        "job": 1340000,
+        "id": 80,
+        "completed": 1624,
+        "events": 14456,
+        "stalled-check": 96,
+        "meta": 136,
+        "failed": 44016
+      },
+      "queueBytes": 1400408,
+      "usedMemoryDelta": 1416680,
+      "eventsMaxLen": 100,
+      "vsTodayPct": -51.1
+    },
+    {
+      "variant": "complete-true",
+      "jobs": 12000,
+      "failed": 800,
+      "bytesByKind": {
+        "job": 1228000,
+        "stalled-check": 80,
+        "meta": 128,
+        "events": 560556,
+        "id": 72,
+        "failed": 44152
+      },
+      "queueBytes": 1832988,
+      "usedMemoryDelta": 1775464,
+      "eventsMaxLen": 10000,
+      "vsTodayPct": -36
+    }
+  ]
+}
